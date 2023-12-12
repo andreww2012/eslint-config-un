@@ -1,0 +1,4 @@
+- [ ] `min-width: 0` for all elements?
+- [ ] disable deprecated eslint rules like https://eslint.org/docs/latest/rules/spaced-comment
+- [ ] disable @typescript-eslint/no-empty-interface?
+- [ ] unicorn/better-regex = error, optimize-regex/optimize-regex = warning 
