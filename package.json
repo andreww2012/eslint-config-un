@@ -1,0 +1,94 @@
+{
+  "version": "0.0.0",
+  "name": "eslint-config-un",
+  "description": "A universal-ish ESLint config aiming to be reasonably strict and easily configurable.",
+  "scripts": {
+    "build": "tsup --format esm,cjs --clean --dts",
+    "format:check": "prettier --check '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}'",
+    "format:fix": "prettier --write '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}'",
+    "lint:eslint": "eslint .",
+    "lint:eslint:fix": "eslint . --fix",
+    "lint:types": "tsc --noEmit",
+    "lint": "npm run lint:types && npm run format:check && npm run lint:eslint",
+    "lint:fix": "npm run format:fix && npm run lint:eslint:fix",
+    "test": "npm run lint",
+    "prepublishOnly": "npm run test && npm run build"
+  },
+  "homepage": "https://github.com/andreww2012/eslint-plugin-un",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreww2012/eslint-plugin-un.git"
+  },
+  "bugs": {
+    "url": "https://github.com/andreww2012/eslint-plugin-un/issues/new"
+  },
+  "keywords": [
+    "eslint",
+    "eslint-config"
+  ],
+  "author": "andreww2012",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "eslint": ">=9"
+  },
+  "devDependencies": {
+    "@types/eslint": "8.56.10",
+    "@types/eslint-config-prettier": "6.11.3",
+    "@types/eslint-plugin-security": "3.0.0",
+    "@types/eslint__js": "8.42.3",
+    "@types/lodash-es": "4.17.12",
+    "@types/node": "^18.19.39",
+    "cross-env": "7.0.3",
+    "eslint": "npm:eslint-ts-patch@9.5.0-0",
+    "eslint-ts-patch": "9.5.0-0",
+    "prettier": "3.3.2",
+    "release-it": "17.5.0",
+    "shx": "0.3.4",
+    "tsup": "8.1.0",
+    "typescript": "5.5.3"
+  },
+  "dependencies": {
+    "@stylistic/eslint-plugin": "2.3.0",
+    "@typescript-eslint/parser": "7.16.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-import-resolver-typescript": "3.6.1",
+    "eslint-plugin-disable-autofix": "5.0.1",
+    "eslint-plugin-import": "2.29.1",
+    "eslint-plugin-import-x": "0.5.3",
+    "eslint-plugin-n": "17.9.0",
+    "eslint-plugin-no-type-assertion": "1.3.0",
+    "eslint-plugin-pinia": "0.2.0",
+    "eslint-plugin-promise": "6.4.0",
+    "eslint-plugin-regexp": "2.6.0",
+    "eslint-plugin-security": "3.0.1",
+    "eslint-plugin-sonarjs": "1.0.3",
+    "eslint-plugin-tailwindcss": "3.17.4",
+    "eslint-plugin-unicorn": "54.0.0",
+    "eslint-plugin-vue": "9.27.0",
+    "eslint-plugin-vuejs-accessibility": "2.3.1",
+    "globals": "15.8.0",
+    "local-pkg": "0.5.0",
+    "typescript-eslint": "7.16.0",
+    "vue-eslint-parser": "9.4.3"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "eslint-plugin-disable-autofix@5.0.1": "patches/eslint-plugin-disable-autofix@5.0.1.patch"
+    }
+  }
+}

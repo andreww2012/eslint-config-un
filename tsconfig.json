@@ -1,0 +1,50 @@
+{
+  // "include": [],
+  "exclude": ["node_modules"],
+
+  // Based on https://www.totaltypescript.com/tsconfig-cheat-sheet
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    },
+
+    /* Base Options: */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "verbatimModuleSyntax": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "forceConsistentCasingInFileNames": true,
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+
+    /* If NOT transpiling with TypeScript: */
+    "moduleResolution": "Bundler",
+    "module": "ESNext",
+    "noEmit": true,
+
+    /* If transpiling with TypeScript: */
+    // "moduleResolution": "NodeNext",
+    // "module": "NodeNext",
+    // "outDir": "dist",
+
+    /* If your code runs in the DOM: */
+    "lib": ["es2022", "dom", "dom.iterable"],
+
+    /* If your code doesn't run in the DOM: */
+    // "lib": ["es2022"],
+
+    /* If you're building for a library: */
+    // "declaration": true,
+
+    /* If you're building for a library in a monorepo: */
+    // "composite": true,
+    // "sourceMap": true,
+    // "declarationMap": true
+  }
+}
