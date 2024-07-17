@@ -1,5 +1,5 @@
 {
-  // "include": [],
+  "include": ["src", "*.*"],
   "exclude": ["node_modules"],
 
   // Based on https://www.totaltypescript.com/tsconfig-cheat-sheet
