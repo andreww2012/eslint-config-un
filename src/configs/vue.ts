@@ -337,8 +337,7 @@ export const vueEslintConfig = (
     // 'vue/new-line-between-multi-line-property': OFF,
     // 'vue/next-tick-style': OFF,
     // 'vue/no-bare-strings-in-template': OFF,
-    // For explicitness (Vue uses `false` as default value automatically)
-    'vue/no-boolean-default': [ERROR, 'default-false'],
+    // 'vue/no-boolean-default': OFF,
     ...(isVue3 && {'vue/no-deprecated-model-definition': ERROR}),
     'vue/no-duplicate-attr-inheritance': ERROR,
     'vue/no-empty-component-block': ERROR,
