@@ -31,7 +31,6 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<`vue/${strin
   fullVersion?: string;
   /**
    * This being true turns on TypeScript type-aware rules for .Vue files. They are disabled by default because it applies them to plain JS <script> sections which causes tons on false positives.
-   * TODO possible to fix that behavior?
    * @default true if typescript config is enabled
    */
   enforceTypescriptInScriptSection?: boolean | Pick<FlatConfigEntry, 'files' | 'ignores'>;
@@ -72,8 +71,17 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<`vue/${strin
 
   /**
    * Enabled automatically by checking if `pinia` package is installed (at any level). Pass a false value to disable pinia-specific rules.
+   * @default true if `pinia` package is installed
    */
-  pinia?: boolean;
+  pinia?:
+    | boolean
+    | {
+        /**
+         * @default `Store`
+         * @see https://github.com/lisilinhart/eslint-plugin-pinia/blob/main/docs/rules/prefer-use-store-naming-convention.md#options
+         */
+        storesNameSuffix?: string;
+      };
   overridesPinia?: RuleOverrides<`pinia/${string}`>;
 }
 
@@ -597,6 +605,8 @@ export const vueEslintConfig = (
               ERROR,
               {
                 checkStoreNameMismatch: true,
+                storeSuffix:
+                  typeof options.pinia === 'object' ? options.pinia.storesNameSuffix : 'Store',
               },
             ],
             // 'pinia/require-setup-store-properties-export': ERROR,
