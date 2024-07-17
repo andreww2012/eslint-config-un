@@ -35,8 +35,7 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<`vue/${strin
    */
   enforceTypescriptInScriptSection?: boolean | Pick<FlatConfigEntry, 'files' | 'ignores'>;
   /**
-   * Will be merged with `['router-link', 'router-view']`
-   * This default list will include `/^nuxt-/` if `nuxtMajorVersion` if not false
+   * Will be merged with `['router-link', 'router-view']` and Nuxt-specific ones if Nuxt is enabled
    */
   knownComponentNames?: (string | RegExp)[];
   enforceApiStyle?: 'setup' | 'options';
@@ -367,9 +366,11 @@ export const vueEslintConfig = (
         ignorePatterns: [
           'router-link',
           'router-view',
-          isNuxtEnabled && /^nuxt-/,
+          isNuxtEnabled && /^(lazy-)?(nuxt-|client-only$)/,
           ...(options.knownComponentNames || []),
-        ].filter((v) => v !== false),
+        ]
+          .flat()
+          .filter((v) => v !== false),
       },
     ],
     // TODO enable if script setup is enforced and only in JS?
