@@ -35,6 +35,10 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<`vue/${strin
    * @default true if typescript config is enabled
    */
   enforceTypescriptInScriptSection?: boolean | Pick<FlatConfigEntry, 'files' | 'ignores'>;
+  /**
+   * Will be merged with `['router-link', 'router-view']`
+   * This default list will include `/^nuxt-/` if `nuxtMajorVersion` if not false
+   */
   knownComponentNames?: (string | RegExp)[];
   enforceApiStyle?: 'setup' | 'options';
   /**
@@ -95,6 +99,8 @@ export const vueEslintConfig = (
   const isLess2_5 = isVue2 && vueMajorAndMinorVersion < 2.5;
   const isLess2_6 = isVue2 && vueMajorAndMinorVersion < 2.6;
   const isLess3_1 = vueMajorAndMinorVersion < 3.1;
+
+  const isNuxtEnabled = Boolean(options.nuxtMajorVersion);
 
   const recommendedRules = // TODO report to Prettier?
     // prettier-ignore
@@ -351,10 +357,15 @@ export const vueEslintConfig = (
     'vue/no-undef-components': [
       ERROR,
       {
-        ignorePatterns: [...(options.knownComponentNames || [])],
+        ignorePatterns: [
+          'router-link',
+          'router-view',
+          isNuxtEnabled && /^nuxt-/,
+          ...(options.knownComponentNames || []),
+        ].filter((v) => v !== false),
       },
     ],
-    // TODO enable if script setup is enforced?
+    // TODO enable if script setup is enforced and only in JS?
     // 'vue/no-undef-properties': OFF,
     'vue/no-unsupported-features': [ERROR, {version: `^${options.fullVersion || majorVersion}`}],
     'vue/no-unused-emit-declarations': ERROR,
@@ -460,7 +471,6 @@ export const vueEslintConfig = (
     ...options.overrides,
   };
 
-  const isNuxtEnabled = Boolean(options.nuxtMajorVersion);
   const nuxtLayoutsFiles = `${options.nuxtOrVueProjectDir}layouts/**/*.vue`;
 
   return (
