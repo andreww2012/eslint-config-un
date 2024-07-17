@@ -1,4 +1,6 @@
+import fs from 'node:fs';
 import eslintPluginStylistic from '@stylistic/eslint-plugin';
+import eslintGitignore from 'eslint-config-flat-gitignore';
 import eslintConfigPrettier from 'eslint-config-prettier';
 // @ts-expect-error no typings
 import pluginDisableAutofix from 'eslint-plugin-disable-autofix';
@@ -36,6 +38,15 @@ export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry
   const typescriptPackageInfo = getPackageInfoSync('typescript');
   const isTypescriptEnabled =
     configsOptions.ts !== false && Boolean(configsOptions.ts || typescriptPackageInfo);
+
+  /* 🔵 GITIGNORE */
+
+  const gitignoreConfig =
+    typeof options.gitignore === 'object'
+      ? eslintGitignore(options.gitignore)
+      : fs.existsSync('.gitignore')
+        ? eslintGitignore()
+        : null;
 
   /* 🔵 JAVASCRIPT */
 
@@ -144,7 +155,11 @@ export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry
       // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
       {
         ignores: options.ignores || ['**/dist'],
-        name: genFlatConfigEntryName('global-ignores'),
+        name: genFlatConfigEntryName('ignores-global'),
+      },
+      {
+        ...gitignoreConfig,
+        name: genFlatConfigEntryName('ignores-gitignore'),
       },
       {
         plugins: {

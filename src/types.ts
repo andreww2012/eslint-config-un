@@ -1,5 +1,6 @@
 import type {TSESLint} from '@typescript-eslint/utils';
 import type Eslint from 'eslint';
+import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {ImportEslintConfigOptions} from './configs/import';
 import type {JsEslintConfigOptions} from './configs/js';
 import type {NodeEslintConfigOptions} from './configs/node';
@@ -46,6 +47,12 @@ export interface EslintConfigOptions {
    * **Global** ignore patterns
    */
   ignores?: FlatConfigEntry['ignores'];
+
+  /**
+   * Automatically add gitignore'd files to `ignores` array.
+   * @default true if `.gitignore` exists
+   */
+  gitignore?: boolean | FlatGitignoreOptions;
 
   /**
    * Enables `eslint-config-prettier` at the end of the ruleset.
