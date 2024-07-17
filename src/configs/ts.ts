@@ -4,7 +4,7 @@ import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
 // @ts-expect-error no typings
 import eslintPluginNoTypeAssertion from 'eslint-plugin-no-type-assertion';
 import {parser as parserTs, plugin as pluginTs} from 'typescript-eslint';
-import {ERROR, GLOB_TS, GLOB_TSX, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_TS, GLOB_TSX, GLOB_VUE, OFF, WARNING} from '../constants';
 import type {
   ConfigSharedOptions,
   FlatConfigEntry,
@@ -55,16 +55,38 @@ export const tsEslintConfig = (
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
   const onlyTsFiles = [GLOB_TS, GLOB_TSX];
-  const allExtraFiles = (options.extraFileExtensions || []).map((ext) => `**/*.${ext}`);
-  const extraFiles = internalOptions.vueOptions?.enforceTypescriptInScriptSection
-    ? allExtraFiles.filter((pattern) => pattern.endsWith('.vue'))
-    : [];
+  const extraFiles: FlatConfigEntry['files'] & {} = [];
+  const extraFilesToIgnore: FlatConfigEntry['ignores'] & {} = [];
 
-  const filesNonTypeAware = options.files || [...onlyTsFiles, ...extraFiles];
-  const filesTypeAware =
-    options.filesTypeAware === true || options.filesTypeAware == null
-      ? [...onlyTsFiles, ...extraFiles]
-      : options.filesTypeAware || [];
+  const {vueOptions} = internalOptions;
+  if (vueOptions) {
+    const {enforceTypescriptInScriptSection} = vueOptions;
+    const vueFilesWithTs =
+      typeof enforceTypescriptInScriptSection === 'object'
+        ? enforceTypescriptInScriptSection.files || []
+        : enforceTypescriptInScriptSection
+          ? vueOptions.files || [GLOB_VUE]
+          : [];
+    const vueFilesWithoutTs =
+      typeof enforceTypescriptInScriptSection === 'object'
+        ? enforceTypescriptInScriptSection.ignores || []
+        : [];
+    extraFiles.push(...vueFilesWithTs);
+    extraFilesToIgnore.push(...vueFilesWithoutTs);
+  }
+
+  const filesNonTypeAware = [...(options.files || onlyTsFiles), ...extraFiles];
+  const ignoresNonTypeAware = [...(options.ignores || []), ...extraFilesToIgnore];
+  const filesTypeAware = [
+    ...(options.filesTypeAware === true || options.filesTypeAware == null
+      ? onlyTsFiles
+      : options.filesTypeAware || []),
+    ...extraFiles,
+  ];
+  const ignoresTypeAware = [
+    ...(options.ignoresTypeAware === true ? options.ignores || [] : options.ignoresTypeAware || []),
+    ...extraFilesToIgnore,
+  ];
   const filesAll = [...onlyTsFiles, ...filesTypeAware];
 
   const tsVersion = options.typescriptVersion
@@ -314,7 +336,7 @@ export const tsEslintConfig = (
       {
         ...generateBaseOptions(false),
         files: filesNonTypeAware,
-        ...(options.ignores && {ignores: options.ignores}),
+        ...(ignoresNonTypeAware.length > 0 && {ignores: ignoresNonTypeAware}),
         rules: typescriptRulesRegular,
         name: genFlatConfigEntryName('ts/regular-rules'),
       },
@@ -322,10 +344,7 @@ export const tsEslintConfig = (
       filesTypeAware.length > 0 && {
         ...generateBaseOptions(true),
         files: filesTypeAware,
-        ...(options.ignoresTypeAware && {
-          ignores:
-            options.ignoresTypeAware === true ? options.ignores || [] : options.ignoresTypeAware,
-        }),
+        ...(ignoresTypeAware.length > 0 && {ignores: ignoresTypeAware}),
         rules: typescriptRulesTypeAware,
         name: genFlatConfigEntryName('ts/type-aware-rules'),
       },

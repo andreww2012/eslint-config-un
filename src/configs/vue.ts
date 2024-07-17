@@ -34,7 +34,7 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<`vue/${strin
    * TODO possible to fix that behavior?
    * @default true if typescript config is enabled
    */
-  enforceTypescriptInScriptSection?: boolean;
+  enforceTypescriptInScriptSection?: boolean | Pick<FlatConfigEntry, 'files' | 'ignores'>;
   knownComponentNames?: (string | RegExp)[];
   enforceApiStyle?: 'setup' | 'options';
   /**
@@ -261,7 +261,7 @@ export const vueEslintConfig = (
       {
         script: {
           lang: 'ts',
-          ...(!enforceTypescriptInScriptSection && {allowNoLang: true}),
+          ...(enforceTypescriptInScriptSection !== true && {allowNoLang: true}),
         },
       },
     ],
