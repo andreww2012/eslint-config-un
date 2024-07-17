@@ -251,7 +251,7 @@ export const jsEslintConfig = (
         allowUnboundThis: true,
       },
     ],
-    'prefer-const': [ERROR, {ignoreReadBeforeAssign: true}],
+    'prefer-const': [ERROR, {destructuring: 'all', ignoreReadBeforeAssign: true}],
     'prefer-destructuring': [ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS],
     'prefer-exponentiation-operator': ERROR,
     // 'prefer-named-capture-group': OFF,
