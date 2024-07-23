@@ -1,6 +1,5 @@
 import type {ParserOptions} from '@typescript-eslint/parser';
 import type Eslint from 'eslint';
-import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
 // @ts-expect-error no typings
 import eslintPluginNoTypeAssertion from 'eslint-plugin-no-type-assertion';
 import {parser as parserTs, plugin as pluginTs} from 'typescript-eslint';
@@ -112,7 +111,7 @@ export const tsEslintConfig = (
   // LEGEND:
   // ❄️ = Feature-frozen in ts-eslint
   // 👍 = Auto-checked and there's barely any need to use this rule
-  const typescriptRulesRegular: FlatConfigEntry<BuiltinEslintRules>['rules'] = {
+  const typescriptRulesRegular: FlatConfigEntry['rules'] = {
     ...pluginTs.configs?.strict?.rules,
     ...pluginTs.configs?.stylistic?.rules,
 
@@ -217,7 +216,7 @@ export const tsEslintConfig = (
 
     ...options.overrides,
   };
-  const typescriptRulesTypeAware: FlatConfigEntry<BuiltinEslintRules>['rules'] = {
+  const typescriptRulesTypeAware: FlatConfigEntry['rules'] = {
     ...pluginTs.configs?.['strict-type-checked-only']?.rules,
     ...pluginTs.configs?.['stylistic-type-checked-only']?.rules,
 

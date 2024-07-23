@@ -1,12 +1,5 @@
-##########################
-# Nuxt dev/build outputs #
-##########################
-.output
-.data
-.nuxt
-.nitro
-.cache
-dist
+dist/
+src/eslint-types.d.ts
 
 ####################
 # Nodejs gitignore #

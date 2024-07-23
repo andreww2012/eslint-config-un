@@ -2,16 +2,23 @@
 import EslintJs from '@eslint/js';
 import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
 import {ERROR} from '../constants';
-import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
+import type {
+  ConfigSharedOptions,
+  FlatConfigEntry,
+  InternalConfigOptions,
+  RulesRecord,
+} from '../types';
 import {genFlatConfigEntryName, warnUnlessForcedError} from '../utils';
 
-export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRules> {}
+type BuiltinEslintRulesFixed = Pick<RulesRecord, keyof BuiltinEslintRules>;
+
+export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRulesFixed> {}
 
 export const RULE_CAMELCASE_OPTIONS = {
-  properties: 'never',
+  properties: 'never' as const,
   ignoreGlobals: true,
   allow: [String.raw`\d_\d`],
-} as const;
+};
 
 export const RULE_EQEQEQ_OPTIONS = ['always', {null: 'ignore'}] as const;
 
@@ -40,7 +47,7 @@ export const jsEslintConfig = (
   options: JsEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const rules: FlatConfigEntry<BuiltinEslintRules>['rules'] = {
+  const rules: FlatConfigEntry<BuiltinEslintRulesFixed>['rules'] = {
     // 🔵 Recommended - Possible Problems
 
     // 'constructor-super': ERROR,
@@ -122,7 +129,6 @@ export const jsEslintConfig = (
     'no-unreachable-loop': ERROR,
     'no-use-before-define': [ERROR, RULE_NO_USE_BEFORE_DEFINE_OPTIONS],
     'no-useless-assignment': ERROR,
-    // @ts-expect-error no options typings
     'require-atomic-updates': [ERROR, {allowProperties: true}],
 
     // 🔵 Not in recommended - Suggestions
@@ -130,7 +136,6 @@ export const jsEslintConfig = (
     'accessor-pairs': ERROR,
     // 'arrow-body-style': OFF,
     'block-scoped-var': ERROR,
-    // @ts-expect-error incorrect typings
     camelcase: [ERROR, RULE_CAMELCASE_OPTIONS],
     // 'capitalized-comments': OFF,
     'class-methods-use-this': ERROR,
@@ -153,7 +158,6 @@ export const jsEslintConfig = (
     // 'id-match': OFF,
     // 'init-declarations': OFF,
     'logical-assignment-operators': [ERROR, 'always', {enforceForIfStatements: true}],
-    // @ts-expect-error incorrect typings
     'max-classes-per-file': [ERROR, {ignoreExpressions: true, max: 2}],
     // 'max-depth': OFF,
     // 'max-lines': OFF,
@@ -238,7 +242,6 @@ export const jsEslintConfig = (
     'no-useless-rename': ERROR,
     'no-useless-return': ERROR,
     'no-var': ERROR,
-    // @ts-expect-error incorrect typings
     'no-void': [ERROR, {allowAsStatement: true}],
     // 'no-warning-comments': OFF,
     'object-shorthand': ERROR,

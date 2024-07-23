@@ -11,8 +11,9 @@ import type {TailwindEslintConfigOptions} from './configs/tailwind';
 import type {TsEslintConfigOptions} from './configs/ts';
 import type {UnicornEslintConfigOptions} from './configs/unicorn';
 import type {VueEslintConfigOptions} from './configs/vue';
+import type {RuleOptions} from './eslint-types';
 
-export type RulesRecord = Eslint.Linter.RulesRecord;
+export type RulesRecord = Eslint.Linter.RulesRecord & RuleOptions;
 
 export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = Eslint.Linter.Config<T>;
 

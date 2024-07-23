@@ -88,7 +88,9 @@ export const importEslintConfig = (
     'import/no-unresolved': [
       ERROR,
       {
-        ...(noUnresolvedIgnores.length > 0 && {ignore: noUnresolvedIgnores}),
+        ...(noUnresolvedIgnores.length > 0 && {
+          ignore: noUnresolvedIgnores as [string, ...string[]],
+        }),
       },
     ],
     // 'import/no-unused-modules': OFF,

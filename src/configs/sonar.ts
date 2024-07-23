@@ -4,12 +4,14 @@ import type {
   ConfigSharedOptions,
   FlatConfigEntry,
   InternalConfigOptions,
-  RuleDefinitionsToRuleEntries,
+  RulesRecord,
 } from '../types';
 import {genFlatConfigEntryName} from '../utils';
 
+type SonarRuleNames = keyof (typeof eslintPluginSonar)['rules'];
+
 export interface SonarEslintConfigOptions
-  extends ConfigSharedOptions<RuleDefinitionsToRuleEntries<(typeof eslintPluginSonar)['rules']>> {}
+  extends ConfigSharedOptions<Pick<RulesRecord, `sonarjs/${SonarRuleNames}`>> {}
 
 export const sonarEslintConfig = (
   options: SonarEslintConfigOptions = {},
