@@ -1,4 +1,4 @@
-import eslingPluginSonar from 'eslint-plugin-sonarjs';
+import eslintPluginSonar from 'eslint-plugin-sonarjs';
 import {OFF} from '../constants';
 import type {
   ConfigSharedOptions,
@@ -9,7 +9,7 @@ import type {
 import {genFlatConfigEntryName} from '../utils';
 
 export interface SonarEslintConfigOptions
-  extends ConfigSharedOptions<RuleDefinitionsToRuleEntries<(typeof eslingPluginSonar)['rules']>> {}
+  extends ConfigSharedOptions<RuleDefinitionsToRuleEntries<(typeof eslintPluginSonar)['rules']>> {}
 
 export const sonarEslintConfig = (
   options: SonarEslintConfigOptions = {},
@@ -59,12 +59,12 @@ export const sonarEslintConfig = (
   return [
     {
       plugins: {
-        sonarjs: eslingPluginSonar as never,
+        sonarjs: eslintPluginSonar as never,
       },
       ...(options.files && {files: options.files}),
       ...(options.ignores && {ignores: options.ignores}),
       rules: {
-        ...eslingPluginSonar.configs.recommended.rules,
+        ...eslintPluginSonar.configs.recommended.rules,
         ...rules,
         ...options.overrides,
       },

@@ -1,6 +1,6 @@
 # eslint-config-un
 
-[![npm](https://img.shields.io/npm/v/eslint-config-un)](https://www.npmjs.com/package/esling-config-un)
+[![npm](https://img.shields.io/npm/v/eslint-config-un)](https://www.npmjs.com/package/eslint-config-un)
 
 Grown out of the personal collection of rules, an ESLint config aspiring to cover as many rules as possible, be reasonably strict and easily configurable. Only supports ESLint 9 and the flat config format.
 

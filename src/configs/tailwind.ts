@@ -1,5 +1,5 @@
 // @ts-expect-error no typings
-import eslingPluginTailwind from 'eslint-plugin-tailwindcss';
+import eslintPluginTailwind from 'eslint-plugin-tailwindcss';
 import {OFF} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
 import {genFlatConfigEntryName, warnUnlessForcedError} from '../utils';
@@ -25,13 +25,13 @@ export const tailwindEslintConfig = (
     {
       plugins: {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        tailwindcss: eslingPluginTailwind,
+        tailwindcss: eslintPluginTailwind,
       },
       ...(options.files && {files: options.files}),
       ...(options.ignores && {ignores: options.ignores}),
       rules: {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        ...(eslingPluginTailwind.configs.recommended.rules as FlatConfigEntry['rules']),
+        ...(eslintPluginTailwind.configs.recommended.rules as FlatConfigEntry['rules']),
         ...rules,
         ...options.overrides,
       },
