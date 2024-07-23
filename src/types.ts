@@ -14,7 +14,7 @@ import type {VueEslintConfigOptions} from './configs/vue';
 
 export type RulesRecord = Eslint.Linter.RulesRecord;
 
-export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = Eslint.Linter.FlatConfig<T>;
+export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = Eslint.Linter.Config<T>;
 
 export type RuleOverrides<T extends string | RulesRecord> = FlatConfigEntry<
   T extends string ? Record<T, Eslint.Linter.RuleEntry> : T
@@ -30,7 +30,7 @@ export type ConfigSharedOptions<T extends string | RulesRecord = RulesRecord> = 
 
 type SingleRuleDefinitionToRuleEntry<T> =
   T extends TSESLint.RuleModule<never, infer Options>
-    ? Eslint.Linter.RuleLevel | [Eslint.Linter.RuleLevel, Options]
+    ? Eslint.Linter.Severity | [Eslint.Linter.Severity, Options]
     : never;
 
 export type RuleDefinitionsToRuleEntries<

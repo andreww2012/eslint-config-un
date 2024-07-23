@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import eslintPluginStylistic from '@stylistic/eslint-plugin';
+import type {ESLint} from 'eslint';
 import eslintGitignore from 'eslint-config-flat-gitignore';
 import eslintConfigPrettier from 'eslint-config-prettier';
 // @ts-expect-error no typings
@@ -168,7 +169,7 @@ export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry
           // Used in multiple configs and we can't define plugin multiple times
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           unicorn: eslintPluginUnicorn,
-          '@stylistic': eslintPluginStylistic,
+          '@stylistic': eslintPluginStylistic as ESLint.Plugin,
         },
         languageOptions: {
           ecmaVersion: 'latest',
