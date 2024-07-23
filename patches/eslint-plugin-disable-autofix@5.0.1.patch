@@ -1,5 +1,5 @@
 diff --git a/index.js b/index.js
-index 6d1529ace6fd68521b7965a24ab9922138b4761d..05f2ba9182368b49ecf29713b05e24c5bfb0c66b 100644
+index 6d1529ace6fd68521b7965a24ab9922138b4761d..1281a6fcba519ac773fa71b3af7a61370029b379 100644
 --- a/index.js
 +++ b/index.js
 @@ -34,9 +34,26 @@ const convertPluginId = (pluginId) => {
@@ -18,7 +18,7 @@ index 6d1529ace6fd68521b7965a24ab9922138b4761d..05f2ba9182368b49ecf29713b05e24c5
 +let eslintRules = [];
 +for (const possibleEslintDirectory of pathsToCheck) {
 +  try {
-+    const rulesPath = node_path_1.default.join(possibleEslintDirectory, '../rules');
++    const rulesPath = node_path_1.default.posix.join(possibleEslintDirectory, '../rules');
 +    eslintRules = node_fs_1.default
 +      .readdirSync(rulesPath)
 +      .filter((rule) => rule.endsWith('.js') && !rule.includes('index'));
