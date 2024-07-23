@@ -1,3 +1,8 @@
+## 0.0.4
+
+- Add types to all the rules via `eslint-typegen`.
+- Update dependencies.
+
 ## 0.0.3
 
 - Automatically add files from `.gitignore` to the list of ignored files.
