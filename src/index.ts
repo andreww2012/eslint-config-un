@@ -5,7 +5,6 @@ import eslintGitignore from 'eslint-config-flat-gitignore';
 import eslintConfigPrettier from 'eslint-config-prettier';
 // @ts-expect-error no typings
 import pluginDisableAutofix from 'eslint-plugin-disable-autofix';
-// @ts-expect-error no typings
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import {getPackageInfoSync, isPackageExists} from 'local-pkg';
@@ -167,7 +166,6 @@ export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           'disable-autofix': pluginDisableAutofix,
           // Used in multiple configs and we can't define plugin multiple times
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           unicorn: eslintPluginUnicorn,
           '@stylistic': eslintPluginStylistic as ESLint.Plugin,
         },

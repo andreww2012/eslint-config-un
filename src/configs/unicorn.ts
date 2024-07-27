@@ -1,4 +1,3 @@
-// @ts-expect-error no typings
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import {ERROR, OFF} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
@@ -48,6 +47,7 @@ export const unicornEslintConfig = (
     // 'unicorn/no-invalid-fetch-options': ERROR,
     // 'unicorn/no-invalid-remove-event-listener': ERROR,
     // 'unicorn/no-keyword-prefix': OFF, // 🔴
+    // 'unicorn/no-length-as-slice-end': OFF,
     // 'unicorn/no-lonely-if': ERROR,
     // 'unicorn/no-magic-array-flat-depth': ERROR,
     // "This is an improved version of the no-negated-condition ESLint rule that makes it automatically fixable" - Unicorn docs
@@ -158,8 +158,7 @@ export const unicornEslintConfig = (
       ...(options.files && {files: options.files}),
       ...(options.ignores && {ignores: options.ignores}),
       rules: {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        ...(eslintPluginUnicorn.configs['flat/recommended'].rules as FlatConfigEntry['rules']),
+        ...eslintPluginUnicorn.configs['flat/recommended'].rules,
         ...rules,
         ...options.overrides,
       },
