@@ -45,6 +45,16 @@ export interface TsEslintConfigOptions extends ConfigSharedOptions<`@typescript-
    */
   extraFileExtensions?: string[];
   noTypeAssertion?: boolean | 'warning';
+  /**
+   * If you have too many `no-unsafe-*` reports, you can disable them all using this option. All the rules disabled by this option are:
+   * - `@typescript-eslint/no-unsafe-argument`
+   * - `@typescript-eslint/no-unsafe-assignment`
+   * - `@typescript-eslint/no-unsafe-call`
+   * - `@typescript-eslint/no-unsafe-enum-comparison`
+   * - `@typescript-eslint/no-unsafe-member-access`
+   * - `@typescript-eslint/no-unsafe-return`
+   */
+  disableNoUnsafeRules?: boolean;
 }
 
 const overrideBaseRule = genRuleOverrideFn('@typescript-eslint');
@@ -253,12 +263,21 @@ export const tsEslintConfig = (
     // Reason for disabling autofix: could remove type aliases
     ...disableAutofixForRule('@typescript-eslint/no-unnecessary-type-arguments', ERROR),
     // '@typescript-eslint/no-unnecessary-type-assertion': ERROR,
+    // TODO avoid duplication?
     ...warnUnlessForcedError(internalOptions, '@typescript-eslint/no-unsafe-argument'),
     ...warnUnlessForcedError(internalOptions, '@typescript-eslint/no-unsafe-assignment'),
     ...warnUnlessForcedError(internalOptions, '@typescript-eslint/no-unsafe-call'),
     ...warnUnlessForcedError(internalOptions, '@typescript-eslint/no-unsafe-enum-comparison'),
     ...warnUnlessForcedError(internalOptions, '@typescript-eslint/no-unsafe-member-access'),
     ...warnUnlessForcedError(internalOptions, '@typescript-eslint/no-unsafe-return'),
+    ...(options.disableNoUnsafeRules && {
+      '@typescript-eslint/no-unsafe-argument': OFF,
+      '@typescript-eslint/no-unsafe-assignment': OFF,
+      '@typescript-eslint/no-unsafe-call': OFF,
+      '@typescript-eslint/no-unsafe-enum-comparison': OFF,
+      '@typescript-eslint/no-unsafe-member-access': OFF,
+      '@typescript-eslint/no-unsafe-return': OFF,
+    }),
     'no-throw-literal': OFF, // Note: has different name
     '@typescript-eslint/only-throw-error': [
       ERROR,
