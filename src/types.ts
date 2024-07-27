@@ -15,7 +15,9 @@ import type {RuleOptions} from './eslint-types';
 
 export type RulesRecord = Eslint.Linter.RulesRecord & RuleOptions;
 
-export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = Eslint.Linter.Config<T>;
+// What's going on with this type? `FlatConfig` needs to be used to be compatible with eslint v8 types (v8's `Config` type is different from v9's `Config` so we can't just use `Config`). But `FlatConfig` was not made generic in v9 types so we need to add extra property that utilizes the generic parameter.
+export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = Eslint.Linter.FlatConfig &
+  Pick<Eslint.Linter.Config<T>, 'rules'>;
 
 export type RuleOverrides<T extends string | RulesRecord> = FlatConfigEntry<
   T extends string ? Record<T, Eslint.Linter.RuleEntry> : T
