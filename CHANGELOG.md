@@ -1,3 +1,9 @@
+## 0.0.6
+
+- Update dependencies. Highlights:
+  - Update `typescript-eslint` to v8.0.0.
+- Disable `unicorn/no-magic-array-flat-depth` rule. Disallow `Infinity` literal.
+
 ## 0.0.5
 
 - Update dependencies. Highlights:
