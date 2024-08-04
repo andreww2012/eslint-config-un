@@ -37,12 +37,9 @@ export const assignOptions = <T>(options: T, key: keyof T) => ({
   ...(typeof options[key] === 'object' && options[key]),
 });
 
-export const warnUnlessForcedError = <
-  RuleName extends string,
-  Options extends unknown[] = unknown[],
->(
+export const warnUnlessForcedError = <Options extends unknown[] = unknown[]>(
   internalOptions: InternalConfigOptions,
-  rule: RuleName,
+  rule: string,
   ...options: Options
 ) => {
   const {errorsInsteadOfWarnings} = internalOptions.globalOptions || {};

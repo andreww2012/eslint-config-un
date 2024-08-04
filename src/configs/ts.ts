@@ -1,4 +1,4 @@
-import type {ParserOptions} from '@typescript-eslint/parser';
+import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import type Eslint from 'eslint';
 // @ts-expect-error no typings
 import eslintPluginNoTypeAssertion from 'eslint-plugin-no-type-assertion';
@@ -11,7 +11,6 @@ import type {
   RuleOverrides,
 } from '../types';
 import {
-  arraify,
   disableAutofixForRule,
   genFlatConfigEntryName,
   genRuleOverrideFn,
@@ -24,9 +23,12 @@ import {
 } from './js';
 
 export interface TsEslintConfigOptions extends ConfigSharedOptions<`@typescript-eslint/${string}`> {
+  /**
+   * @deprecated Only needed for `eslint-plugin-import` now
+   */
   tsconfigPath?: string | string[];
   typescriptVersion?: string;
-  parserOptions?: Omit<ParserOptions, 'sourceType'> & {
+  parserOptions?: Omit<TsEslintParserOptions, 'sourceType'> & {
     sourceType?: Eslint.Linter.ParserOptions['sourceType'];
   };
   /**
@@ -110,11 +112,11 @@ export const tsEslintConfig = (
         extraFileExtensions: options.extraFileExtensions?.map((ext) => `.${ext}`),
         sourceType: 'module',
         ...(isTypeAware && {
-          project: arraify(options.tsconfigPath),
+          projectService: true,
           tsconfigRootDir: process.cwd(),
         }),
         ...options.parserOptions,
-      },
+      } satisfies TsEslintParserOptions,
     },
   });
 
@@ -128,17 +130,16 @@ export const tsEslintConfig = (
     // 🔵 Strict - overrides
 
     // '@typescript-eslint/ban-ts-comment': ERROR,
-    '@typescript-eslint/ban-types': [ERROR, {types: {object: false, '{}': false}}],
     ...overrideBaseRule('no-array-constructor', ERROR),
     // '@typescript-eslint/no-duplicate-enum-values': ERROR,
     ...warnUnlessForcedError(internalOptions, '@typescript-eslint/no-dynamic-delete'),
+    '@typescript-eslint/no-empty-object-type': [ERROR, {allowInterfaces: 'with-single-extends'}],
     ...warnUnlessForcedError(internalOptions, '@typescript-eslint/no-explicit-any', {
       ignoreRestArgs: true,
     }),
     // '@typescript-eslint/no-extra-non-null-assertion': ERROR,
     // '@typescript-eslint/no-extraneous-class': ERROR,
     // '@typescript-eslint/no-invalid-void-type': ERROR,
-    ...overrideBaseRule('no-loss-of-precision', ERROR),
     // '@typescript-eslint/no-misused-new': ERROR,
     // '@typescript-eslint/no-namespace': ERROR,
     // '@typescript-eslint/no-non-null-asserted-nullish-coalescing': ERROR,
@@ -147,11 +148,13 @@ export const tsEslintConfig = (
     // '@typescript-eslint/no-this-alias': ERROR,
     // '@typescript-eslint/no-unnecessary-type-constraint': ERROR,
     // '@typescript-eslint/no-unsafe-declaration-merging': ERROR,
+    // '@typescript-eslint/no-unsafe-function-type': ERROR,
     ...overrideBaseRule('no-unused-vars', ERROR, {ignoreRestSiblings: true}),
     ...overrideBaseRule('no-useless-constructor', ERROR),
-    // '@typescript-eslint/no-var-requires': ERROR,
+    // '@typescript-eslint/no-wrapper-object-types': ERROR,
     // '@typescript-eslint/prefer-as-const': ERROR,
     '@typescript-eslint/prefer-literal-enum-member': [ERROR, {allowBitwiseExpressions: true}],
+    // '@typescript-eslint/prefer-namespace-keyword': ERROR,
     // '@typescript-eslint/triple-slash-reference': ERROR,
     // '@typescript-eslint/unified-signatures': ERROR,
 
@@ -167,11 +170,9 @@ export const tsEslintConfig = (
     // '@typescript-eslint/consistent-type-definitions': ERROR,
     // '@typescript-eslint/no-confusing-non-null-assertion': ERROR,
     ...overrideBaseRule('no-empty-function', ERROR),
-    '@typescript-eslint/no-empty-interface': [ERROR, {allowSingleExtends: true}],
     // '@typescript-eslint/no-inferrable-types': ERROR,
     // '@typescript-eslint/prefer-for-of': ERROR,
     // '@typescript-eslint/prefer-function-type': ERROR,
-    // '@typescript-eslint/prefer-namespace-keyword': ERROR,
 
     // 🔵 Additional rules
 
@@ -195,20 +196,13 @@ export const tsEslintConfig = (
     // '@typescript-eslint/member-ordering': OFF, // ❄️
     '@typescript-eslint/method-signature-style': ERROR,
     // ...overrideBaseRule('no-dupe-class-members', OFF), // 👍
-    '@typescript-eslint/no-empty-object-type': [
-      ERROR,
-      {
-        allowInterfaces: 'with-single-extends',
-        allowObjectTypes: 'always',
-      },
-    ],
     '@typescript-eslint/no-import-type-side-effects': ERROR,
     // ...overrideBaseRule('no-invalid-this', OFF), // 👍
     ...overrideBaseRule('no-loop-func', ERROR),
     // ...overrideBaseRule('no-magic-numbers', OFF),
     'no-redeclare': OFF,
     // '@typescript-eslint/no-redeclare': OFF, // 👍
-    // '@typescript-eslint/no-require-imports': OFF,
+    '@typescript-eslint/no-require-imports': OFF,
     // ...overrideBaseRule('no-restricted-imports', OFF),
     ...overrideBaseRule('no-shadow', ERROR),
     '@typescript-eslint/no-unnecessary-parameter-property-assignment': ERROR,
@@ -226,6 +220,7 @@ export const tsEslintConfig = (
 
     ...options.overrides,
   };
+
   const typescriptRulesTypeAware: FlatConfigEntry['rules'] = {
     ...pluginTs.configs?.['strict-type-checked-only']?.rules,
     ...pluginTs.configs?.['stylistic-type-checked-only']?.rules,
@@ -278,6 +273,7 @@ export const tsEslintConfig = (
       '@typescript-eslint/no-unsafe-member-access': OFF,
       '@typescript-eslint/no-unsafe-return': OFF,
     }),
+    // '@typescript-eslint/no-unsafe-unary-minus': ERROR,
     'no-throw-literal': OFF, // Note: has different name
     '@typescript-eslint/only-throw-error': [
       ERROR,
@@ -285,8 +281,6 @@ export const tsEslintConfig = (
         allowThrowingUnknown: true,
       },
     ],
-    'unicorn/prefer-includes': OFF, // Note: in Unicorn
-    '@typescript-eslint/prefer-includes': ERROR,
     ...overrideBaseRule('prefer-promise-reject-errors', ERROR),
     // '@typescript-eslint/prefer-reduce-type-parameter': ERROR,
     // '@typescript-eslint/prefer-return-this-type': ERROR,
@@ -305,8 +299,12 @@ export const tsEslintConfig = (
       allowIndexSignaturePropertyAccess: true,
     }),
     // '@typescript-eslint/non-nullable-type-assertion-style': ERROR,
+    // '@typescript-eslint/prefer-find': ERROR,
+    'unicorn/prefer-includes': OFF,
+    // '@typescript-eslint/prefer-includes': ERROR,
     '@typescript-eslint/prefer-nullish-coalescing': OFF,
     // '@typescript-eslint/prefer-optional-chain': ERROR,
+    '@typescript-eslint/prefer-regexp-exec': OFF,
     '@typescript-eslint/prefer-string-starts-ends-with': [
       ERROR,
       {
@@ -323,17 +321,14 @@ export const tsEslintConfig = (
     ],
     // '@typescript-eslint/naming-convention': OFF, // ❄️
     // '@typescript-eslint/no-unnecessary-qualifier': OFF,
-    '@typescript-eslint/no-unsafe-unary-minus': ERROR,
     ...overrideBaseRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS),
     'unicorn/prefer-array-find': OFF, // Note: in Unicorn
-    '@typescript-eslint/prefer-find': ERROR,
     '@typescript-eslint/prefer-readonly': ERROR,
     // '@typescript-eslint/prefer-readonly-parameter-types': OFF,
-    // '@typescript-eslint/prefer-regexp-exec': OFF,
     // '@typescript-eslint/promise-function-async': OFF,
     // '@typescript-eslint/require-array-sort-compare': OFF,
     // Note: has different name. Also note that the original rule is deprecated and not included in this config, but we disable it anyway just for safety
-    'no-return-await': OFF,
+    'no-return-await': OFF, // Disabled by default since v8
     '@typescript-eslint/return-await': [ERROR, 'always'],
     // '@typescript-eslint/strict-boolean-expressions': OFF,
     '@typescript-eslint/switch-exhaustiveness-check': ERROR,
