@@ -49,7 +49,8 @@ export const unicornEslintConfig = (
     // 'unicorn/no-keyword-prefix': OFF, // 🔴
     // 'unicorn/no-length-as-slice-end': OFF,
     // 'unicorn/no-lonely-if': ERROR,
-    // 'unicorn/no-magic-array-flat-depth': ERROR,
+    // Passing `Infinity` doesn't work great with TypeScript
+    'unicorn/no-magic-array-flat-depth': OFF,
     // "This is an improved version of the no-negated-condition ESLint rule that makes it automatically fixable" - Unicorn docs
     // 'no-negated-condition': OFF,
     // 'unicorn/no-negated-condition': ERROR,
@@ -115,12 +116,13 @@ export const unicornEslintConfig = (
     // 'unicorn/prefer-native-coercion-functions': ERROR,
     // 'unicorn/prefer-negative-index': ERROR,
     'unicorn/prefer-node-protocol': OFF, // `n/prefer-node-protocol` seem to be better as it checks supported node versions
-    // 'unicorn/prefer-number-properties': ERROR,
+    'unicorn/prefer-number-properties': [ERROR, {checkInfinity: true}],
     // 'unicorn/prefer-object-from-entries': ERROR,
     // 'unicorn/prefer-optional-catch-binding': ERROR,
     // 'unicorn/prefer-prototype-methods': ERROR,
     'unicorn/prefer-query-selector': OFF,
     // 'unicorn/prefer-reflect-apply': ERROR,
+    // TODO disable when regexp is enabled?
     // 'unicorn/prefer-regexp-test': ERROR,
     // 'unicorn/prefer-set-has': ERROR,
     // 'unicorn/prefer-set-size': ERROR,
