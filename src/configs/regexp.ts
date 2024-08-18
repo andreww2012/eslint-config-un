@@ -3,7 +3,7 @@ import {ERROR, OFF} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
 import {genFlatConfigEntryName, genRuleOverrideFn, warnUnlessForcedError} from '../utils';
 
-export interface RegexpEslintConfigOptions extends ConfigSharedOptions<`regexp/${string}`> {}
+export interface RegexpEslintConfigOptions extends ConfigSharedOptions<'regexp'> {}
 
 const overrideBaseRule = genRuleOverrideFn('regexp');
 

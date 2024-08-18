@@ -10,7 +10,7 @@ import {
 import type {TsEslintConfigOptions} from './ts';
 
 export interface ImportEslintConfigOptions
-  extends ConfigSharedOptions<`import/${string}`>,
+  extends ConfigSharedOptions<'import'>,
     Pick<TsEslintConfigOptions, 'tsconfigPath'> {
   /**
    * @see https://github.com/import-js/eslint-plugin-import/blob/fc361a9998b14b9528d841d8349078a5af2da436/docs/rules/no-unresolved.md#ignore

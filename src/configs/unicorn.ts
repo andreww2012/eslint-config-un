@@ -3,7 +3,7 @@ import {ERROR, OFF} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
 import {disableAutofixForRule, genFlatConfigEntryName, warnUnlessForcedError} from '../utils';
 
-export interface UnicornEslintConfigOptions extends ConfigSharedOptions<`unicorn/${string}`> {}
+export interface UnicornEslintConfigOptions extends ConfigSharedOptions<'unicorn'> {}
 
 export const unicornEslintConfig = (
   options: UnicornEslintConfigOptions = {},

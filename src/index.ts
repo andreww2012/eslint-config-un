@@ -10,12 +10,12 @@ import globals from 'globals';
 import {getPackageInfoSync, isPackageExists} from 'local-pkg';
 import {type ImportEslintConfigOptions, importEslintConfig} from './configs/import';
 import {jsEslintConfig} from './configs/js';
-import {nodeEslintConfig} from './configs/node';
-import {promiseEslintConfig} from './configs/promise';
-import {regexpEslintConfig} from './configs/regexp';
-import {securityEslintConfig} from './configs/security';
-import {sonarEslintConfig} from './configs/sonar';
-import {tailwindEslintConfig} from './configs/tailwind';
+import {type NodeEslintConfigOptions, nodeEslintConfig} from './configs/node';
+import {type PromiseEslintConfigOptions, promiseEslintConfig} from './configs/promise';
+import {type RegexpEslintConfigOptions, regexpEslintConfig} from './configs/regexp';
+import {type SecurityEslintConfigOptions, securityEslintConfig} from './configs/security';
+import {type SonarEslintConfigOptions, sonarEslintConfig} from './configs/sonar';
+import {type TailwindEslintConfigOptions, tailwindEslintConfig} from './configs/tailwind';
 import {type TsEslintConfigOptions, tsEslintConfig} from './configs/ts';
 import {type UnicornEslintConfigOptions, unicornEslintConfig} from './configs/unicorn';
 import {type VueEslintConfigOptions, vueEslintConfig} from './configs/vue';
@@ -100,21 +100,21 @@ export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry
   /* 🔵 NODE */
 
   const isNodeEnabled = Boolean(configsOptions.node ?? true);
-  const nodeOptions: ImportEslintConfigOptions = {
+  const nodeOptions: NodeEslintConfigOptions = {
     ...assignOptions(configsOptions, 'node'),
   };
 
   /* 🔵 PROMISE */
 
   const isPromiseEnabled = Boolean(configsOptions.promise ?? true);
-  const promiseOptions: ImportEslintConfigOptions = {
+  const promiseOptions: PromiseEslintConfigOptions = {
     ...assignOptions(configsOptions, 'promise'),
   };
 
   /* 🔵 SONARJS */
 
   const isSonarEnabled = Boolean(configsOptions.sonar ?? true);
-  const sonarOptions: ImportEslintConfigOptions = {
+  const sonarOptions: SonarEslintConfigOptions = {
     ...assignOptions(configsOptions, 'sonar'),
   };
 
@@ -126,21 +126,21 @@ export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry
       : configsOptions.tailwind
         ? true
         : isPackageExists('tailwindcss');
-  const tailwindOptions: ImportEslintConfigOptions = {
+  const tailwindOptions: TailwindEslintConfigOptions = {
     ...assignOptions(configsOptions, 'tailwind'),
   };
 
   /* 🔵 REGEXP */
 
   const isRegexpEnabled = Boolean(configsOptions.regexp ?? true);
-  const regexpOptions: ImportEslintConfigOptions = {
+  const regexpOptions: RegexpEslintConfigOptions = {
     ...assignOptions(configsOptions, 'regexp'),
   };
 
   /* 🔵 SECURITY */
 
   const isSecurityEnabled = Boolean(configsOptions.security ?? false);
-  const securityOptions: ImportEslintConfigOptions = {
+  const securityOptions: SecurityEslintConfigOptions = {
     ...assignOptions(configsOptions, 'security'),
   };
 

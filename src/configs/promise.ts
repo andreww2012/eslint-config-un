@@ -4,7 +4,7 @@ import {ERROR} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
 import {genFlatConfigEntryName, warnUnlessForcedError} from '../utils';
 
-export interface PromiseEslintConfigOptions extends ConfigSharedOptions<`promise/${string}`> {}
+export interface PromiseEslintConfigOptions extends ConfigSharedOptions<'promise'> {}
 
 export const promiseEslintConfig = (
   options: PromiseEslintConfigOptions = {},

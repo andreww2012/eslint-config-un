@@ -1,3 +1,4 @@
+import type Eslint from 'eslint';
 import eslintPluginPinia from 'eslint-plugin-pinia';
 // @ts-expect-error no typings
 import eslintPluginVue from 'eslint-plugin-vue';
@@ -23,7 +24,7 @@ type WellKnownSfcBlocks =
   | 'style:not([scoped])'
   | 'style[scoped]';
 
-export interface VueEslintConfigOptions extends ConfigSharedOptions<`vue/${string}`> {
+export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
   /**
    * @default auto-detected
    */
@@ -57,7 +58,7 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<`vue/${strin
    * @default true
    */
   a11y?: boolean;
-  overridesA11y?: RuleOverrides<`vuejs-accessibility/${string}`>;
+  overridesA11y?: RuleOverrides<'vuejs-accessibility'>;
 
   /**
    * Enabled automatically by checking if `nuxt` package is installed (at any level). Pass a false value or a Nuxt version to explicitly disable or enable Nuxt-specific rules or tweaks.
@@ -81,7 +82,7 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<`vue/${strin
          */
         storesNameSuffix?: string;
       };
-  overridesPinia?: RuleOverrides<`pinia/${string}`>;
+  overridesPinia?: RuleOverrides<'pinia'>;
 }
 
 // prettier-ignore

@@ -13,6 +13,10 @@ import type {UnicornEslintConfigOptions} from './configs/unicorn';
 import type {VueEslintConfigOptions} from './configs/vue';
 import type {RuleOptions} from './eslint-types';
 
+type PickKeysStartingWith<O, T extends string> = {
+  [K in keyof O as K extends `${T}${string}` ? K : never]: O[K];
+};
+
 export type RulesRecord = Eslint.Linter.RulesRecord & RuleOptions;
 
 // What's going on with this type? `FlatConfig` needs to be used to be compatible with eslint v8 types (v8's `Config` type is different from v9's `Config` so we can't just use `Config`). But `FlatConfig` was not made generic in v9 types so we need to add extra property that utilizes the generic parameter.
@@ -25,7 +29,9 @@ export type RuleOverrides<T extends string | RulesRecord> = FlatConfigEntry<
 
 export type ConfigSharedOptions<T extends string | RulesRecord = RulesRecord> = Partial<
   Pick<FlatConfigEntry, 'files' | 'ignores'> & {
-    overrides?: RuleOverrides<T>;
+    overrides?: T extends string
+      ? PickKeysStartingWith<FlatConfigEntry['rules'] & {}, T | `disable-autofix/${T}`>
+      : RuleOverrides<T>;
   }
 >;
 

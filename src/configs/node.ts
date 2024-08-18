@@ -3,7 +3,7 @@ import {ERROR, OFF} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
 import {createPluginObjectRenamer, genFlatConfigEntryName} from '../utils';
 
-export interface NodeEslintConfigOptions extends ConfigSharedOptions<`node/${string}`> {}
+export interface NodeEslintConfigOptions extends ConfigSharedOptions<'node'> {}
 
 const pluginRenamer = createPluginObjectRenamer('n', 'node');
 

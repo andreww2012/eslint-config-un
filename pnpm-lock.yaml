@@ -110,6 +110,9 @@ importers:
       eslint-typegen:
         specifier: 0.3.1
         version: 0.3.1(eslint@9.9.0(jiti@1.21.6))
+      jiti:
+        specifier: 1.21.6
+        version: 1.21.6
       prettier:
         specifier: ^3.3.3
         version: 3.3.3

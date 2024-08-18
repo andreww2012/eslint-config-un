@@ -3,7 +3,7 @@ import {ERROR, OFF} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
 import {genFlatConfigEntryName, warnUnlessForcedError} from '../utils';
 
-export interface SecurityEslintConfigOptions extends ConfigSharedOptions<`security/${string}`> {}
+export interface SecurityEslintConfigOptions extends ConfigSharedOptions<'security'> {}
 
 export const securityEslintConfig = (
   options: SecurityEslintConfigOptions = {},

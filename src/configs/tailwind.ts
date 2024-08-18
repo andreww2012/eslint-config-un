@@ -4,7 +4,7 @@ import {OFF} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
 import {genFlatConfigEntryName, warnUnlessForcedError} from '../utils';
 
-export interface TailwindEslintConfigOptions extends ConfigSharedOptions<`tailwindcss/${string}`> {}
+export interface TailwindEslintConfigOptions extends ConfigSharedOptions<'tailwindcss'> {}
 
 export const tailwindEslintConfig = (
   options: TailwindEslintConfigOptions = {},

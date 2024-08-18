@@ -22,7 +22,7 @@ import {
   RULE_PREFER_DESTRUCTURING_OPTIONS,
 } from './js';
 
-export interface TsEslintConfigOptions extends ConfigSharedOptions<`@typescript-eslint/${string}`> {
+export interface TsEslintConfigOptions extends ConfigSharedOptions<'@typescript-eslint'> {
   /**
    * @deprecated Only needed for `eslint-plugin-import` now
    */
@@ -40,7 +40,7 @@ export interface TsEslintConfigOptions extends ConfigSharedOptions<`@typescript-
    * Pass `true` to ignore the same files as in `ignores`
    */
   ignoresTypeAware?: FlatConfigEntry['ignores'] | boolean;
-  overridesTypeAware?: RuleOverrides<`@typescript-eslint/${string}`>;
+  overridesTypeAware?: RuleOverrides<'@typescript-eslint'>; // TODO only type-aware rules?
   /**
    * Do not put `.` (dot) before an extension
    * @example ['vue']

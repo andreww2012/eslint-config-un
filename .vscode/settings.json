@@ -1,5 +1,7 @@
 {
-  "eslint.runtime": "node",
+  "eslint.options": {
+    "flags": ["unstable_ts_config"]
+  },
 
   "[javascript][typescript][typescriptreact][vue][css][scss][postcss][html]": {
     // Note: do NOT set `editor.formatOnSaveMode` to any value with `modifications` -
