@@ -31,6 +31,7 @@ export const promiseEslintConfig = (
     // 'promise/param-names': ERROR,
     // 'promise/prefer-await-to-callbacks': OFF,
     // 'promise/prefer-await-to-then': OFF,
+    'promise/spec-only': ERROR,
     'promise/valid-params': ERROR, // Default: warn
   };
 
