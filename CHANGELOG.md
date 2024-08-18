@@ -1,3 +1,10 @@
+## 0.0.7
+
+- Update dependencies. Highlights:
+  - Enable new rule: [`promise/spec-only`](https://github.com/eslint-community/eslint-plugin-promise/blob/main/docs/rules/spec-only.md).
+- Ensure type safety of `overrides` option.
+- Set `allowChildren: true` for `vuejs-accessibility/label-has-for`.
+
 ## 0.0.6
 
 - Update dependencies. Highlights:
