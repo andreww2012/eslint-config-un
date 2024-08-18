@@ -559,6 +559,7 @@ export const vueEslintConfig = (
       },
 
       a11y && [
+        // TODO don't have our name
         ...eslintPluginVueA11y.configs['flat/recommended'],
         {
           files,
@@ -573,7 +574,10 @@ export const vueEslintConfig = (
             // 'vuejs-accessibility/heading-has-content': ERROR,
             // 'vuejs-accessibility/iframe-has-title': ERROR,
             // 'vuejs-accessibility/interactive-supports-focus': ERROR,
-            // 'vuejs-accessibility/label-has-for': ERROR,
+            'vuejs-accessibility/label-has-for': [
+              ERROR,
+              {allowChildren: true},
+            ] satisfies Eslint.Linter.RuleEntry,
             // 'vuejs-accessibility/media-has-caption': ERROR,
             // 'vuejs-accessibility/mouse-events-have-key-events': ERROR,
             // 'vuejs-accessibility/no-access-key': ERROR,
