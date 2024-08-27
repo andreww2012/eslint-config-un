@@ -7,11 +7,12 @@ import {
   genFlatConfigEntryName,
   warnUnlessForcedError,
 } from '../utils';
-import type {TsEslintConfigOptions} from './ts';
 
-export interface ImportEslintConfigOptions
-  extends ConfigSharedOptions<'import'>,
-    Pick<TsEslintConfigOptions, 'tsconfigPath'> {
+export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'> {
+  /**
+   * Recognized automatically and normally should not be set manually
+   */
+  isTypescriptEnabled?: boolean;
   /**
    * @see https://github.com/import-js/eslint-plugin-import/blob/fc361a9998b14b9528d841d8349078a5af2da436/docs/rules/no-unresolved.md#ignore
    */
@@ -31,7 +32,7 @@ export const importEslintConfig = (
   options: ImportEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const isTsEnabled = options.tsconfigPath != null;
+  const {isTypescriptEnabled} = options;
 
   const noUnresolvedIgnores = arraify(options.importPatternsToIgnoreWhenTryingToResolve);
 
@@ -116,9 +117,9 @@ export const importEslintConfig = (
       ...(options.files && {files: options.files}),
       ...(options.ignores && {ignores: options.ignores}),
       settings: {
-        ...(isTsEnabled && eslintPluginImportX.configs.typescript.settings),
+        ...(isTypescriptEnabled && eslintPluginImportX.configs.typescript.settings),
         'import-x/resolver': {
-          ...(isTsEnabled && {
+          ...(isTypescriptEnabled && {
             typescript: {
               project: true,
               alwaysTryTypes: true,
@@ -126,7 +127,7 @@ export const importEslintConfig = (
           }),
           node: true, // TODO
         },
-        ...(isTsEnabled && {
+        ...(isTypescriptEnabled && {
           'import-x/parsers': {
             '@typescript-eslint/parser': ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'],
           },
@@ -134,7 +135,7 @@ export const importEslintConfig = (
       },
       rules: {
         ...pluginRenamer(eslintPluginImportX.configs.recommended.rules),
-        ...(isTsEnabled && pluginRenamer(eslintPluginImportX.configs.typescript.rules)),
+        ...(isTypescriptEnabled && pluginRenamer(eslintPluginImportX.configs.typescript.rules)),
         ...rules,
         ...options.overrides,
       },

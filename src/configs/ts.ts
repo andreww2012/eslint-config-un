@@ -23,10 +23,6 @@ import {
 } from './js';
 
 export interface TsEslintConfigOptions extends ConfigSharedOptions<'@typescript-eslint'> {
-  /**
-   * @deprecated Only needed for `eslint-plugin-import` now
-   */
-  tsconfigPath?: string | string[];
   typescriptVersion?: string;
   parserOptions?: Omit<TsEslintParserOptions, 'sourceType'> & {
     sourceType?: Eslint.Linter.ParserOptions['sourceType'];

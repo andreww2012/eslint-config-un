@@ -61,7 +61,6 @@ export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry
     typescriptVersion: typescriptPackageInfo?.version,
     ...assignOptions(configsOptions, 'ts'),
   };
-  tsOptions.tsconfigPath ||= './**/tsconfig*.json';
 
   /* 🔵 VUE */
 
@@ -93,7 +92,7 @@ export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry
 
   const isImportEnabled = Boolean(configsOptions.import ?? true);
   const importOptions: ImportEslintConfigOptions = {
-    ...(isTypescriptEnabled && {tsconfigPath: tsOptions.tsconfigPath}),
+    isTypescriptEnabled,
     ...assignOptions(configsOptions, 'import'),
   };
 
