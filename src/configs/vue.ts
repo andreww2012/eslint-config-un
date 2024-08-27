@@ -95,11 +95,13 @@ const DEPRECATED_HTML_TAGS = [
   'acronym', 'big', 'center', 'content', 'dir', 'font', 'frame', 'frameset', 'image', 'marquee', 'menuitem', 'nobr', 'noembed', 'noframes', 'param', 'plaintext', 'rb', 'rtc', 'shadow', 'strike', 'tt', 'xmp',
 ];
 
+const DEFAULT_PINIA_STORE_NAME_SUFFIX = 'Store';
+
 export const vueEslintConfig = (
   options: VueEslintConfigOptions,
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const {majorVersion, enforceTypescriptInScriptSection, a11y = true} = options;
+  const {majorVersion, enforceTypescriptInScriptSection, a11y = true, pinia} = options;
 
   const files = options.files || [GLOB_VUE];
 
@@ -600,23 +602,26 @@ export const vueEslintConfig = (
         },
       ],
 
-      options.pinia &&
+      pinia &&
         ({
           plugins: {
             pinia: eslintPluginPinia,
           },
           rules: {
-            ...eslintPluginPinia.configs.recommended.rules,
+            ...eslintPluginPinia.configs['recommended-flat'].rules,
             // 'pinia/never-export-initialized-store': ERROR,
             // 'pinia/no-duplicate-store-ids': ERROR,
             // 'pinia/no-return-global-properties': ERROR,
+            // 'pinia/no-store-to-refs-in-store': ERROR,
             'pinia/prefer-single-store-per-file': ERROR,
             'pinia/prefer-use-store-naming-convention': [
               ERROR,
               {
                 checkStoreNameMismatch: true,
                 storeSuffix:
-                  typeof options.pinia === 'object' ? options.pinia.storesNameSuffix : 'Store',
+                  typeof pinia === 'object' && pinia.storesNameSuffix != null
+                    ? pinia.storesNameSuffix
+                    : DEFAULT_PINIA_STORE_NAME_SUFFIX,
               },
             ],
             // 'pinia/require-setup-store-properties-export': ERROR,
