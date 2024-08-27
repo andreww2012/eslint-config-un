@@ -36,6 +36,10 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
    */
   enforceTypescriptInScriptSection?: boolean | Pick<FlatConfigEntry, 'files' | 'ignores'>;
   /**
+   * @see https://eslint.vuejs.org/rules/comment-directive#options
+   */
+  reportUnusedDisableDirectives?: boolean;
+  /**
    * Will be merged with `['router-link', 'router-view']` and Nuxt-specific ones if Nuxt is enabled
    */
   knownComponentNames?: (string | RegExp)[];
@@ -129,7 +133,8 @@ export const vueEslintConfig = (
 
     'vue/comment-directive': [
       ERROR,
-      {reportUnusedDisableDirectives: true}, // false by default
+      // false by default
+      {reportUnusedDisableDirectives: options.reportUnusedDisableDirectives ?? true},
     ],
     // 'vue/jsx-uses-vars': ERROR,
 
