@@ -232,6 +232,7 @@ export const tsEslintConfig = (
         ignoreArrowShorthand: true,
       },
     ],
+    ...warnUnlessForcedError(internalOptions, '@typescript-eslint/no-deprecated'),
     // '@typescript-eslint/no-duplicate-type-constituents': ERROR,
     '@typescript-eslint/no-floating-promises': [
       ERROR,
@@ -398,6 +399,7 @@ export const tsEslintConfig = (
           '@typescript-eslint/no-empty-object-type': OFF,
           '@typescript-eslint/no-explicit-any': OFF,
           '@typescript-eslint/no-shadow': OFF,
+          '@typescript-eslint/no-unnecessary-type-parameters': OFF,
           '@typescript-eslint/no-unused-vars': OFF,
           '@typescript-eslint/no-use-before-define': OFF,
 
