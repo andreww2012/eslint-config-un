@@ -5,9 +5,6 @@
   // Based on https://www.totaltypescript.com/tsconfig-cheat-sheet
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    },
 
     /* Base Options: */
     "esModuleInterop": true,

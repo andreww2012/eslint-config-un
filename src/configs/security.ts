@@ -1,7 +1,7 @@
 import eslintPluginSecurity from 'eslint-plugin-security';
-import {ERROR, OFF} from '../constants';
+import {ERROR, OFF, WARNING} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
-import {genFlatConfigEntryName, warnUnlessForcedError} from '../utils';
+import {ConfigEntryBuilder} from '../utils';
 
 export interface SecurityEslintConfigOptions extends ConfigSharedOptions<'security'> {}
 
@@ -9,37 +9,31 @@ export const securityEslintConfig = (
   options: SecurityEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  // By default, all rules are included in the recommended config and with the "warn" level
-  const rules: FlatConfigEntry['rules'] = {
-    'security/detect-bidi-characters': ERROR,
-    'security/detect-buffer-noassert': ERROR,
-    ...warnUnlessForcedError(internalOptions, 'security/detect-child-process'),
-    'security/detect-disable-mustache-escape': ERROR,
-    'security/detect-eval-with-expression': ERROR,
-    'security/detect-new-buffer': ERROR,
-    ...warnUnlessForcedError(internalOptions, 'security/detect-no-csrf-before-method-override'),
-    'security/detect-non-literal-fs-filename': OFF,
-    'security/detect-non-literal-regexp': OFF,
-    'security/detect-non-literal-require': OFF,
-    'security/detect-object-injection': OFF,
-    'security/detect-possible-timing-attacks': OFF,
-    ...warnUnlessForcedError(internalOptions, 'security/detect-pseudoRandomBytes'),
-    ...warnUnlessForcedError(internalOptions, 'security/detect-unsafe-regex'),
-  };
+  const builder = new ConfigEntryBuilder<'security'>(options, internalOptions);
 
-  return [
-    {
-      ...(options.files && {files: options.files}),
-      ...(options.ignores && {ignores: options.ignores}),
+  builder
+    .addConfig(['security', {includeDefaultFilesAndIgnores: true}], {
       plugins: {
         security: eslintPluginSecurity,
       },
-      rules: {
-        ...eslintPluginSecurity.configs.recommended.rules,
-        ...rules,
-        ...options.overrides,
-      },
-      name: genFlatConfigEntryName('security'),
-    },
-  ];
+    })
+    .addBulkRules(eslintPluginSecurity.configs.recommended.rules)
+    // By default, all rules are included in the recommended config and with the "warn" level
+    .addRule('security/detect-bidi-characters', ERROR)
+    .addRule('security/detect-buffer-noassert', ERROR)
+    .addRule('security/detect-child-process', WARNING)
+    .addRule('security/detect-disable-mustache-escape', ERROR)
+    .addRule('security/detect-eval-with-expression', ERROR)
+    .addRule('security/detect-new-buffer', ERROR)
+    .addRule('security/detect-no-csrf-before-method-override', WARNING)
+    .addRule('security/detect-non-literal-fs-filename', OFF)
+    .addRule('security/detect-non-literal-regexp', OFF)
+    .addRule('security/detect-non-literal-require', OFF)
+    .addRule('security/detect-object-injection', OFF)
+    .addRule('security/detect-possible-timing-attacks', OFF)
+    .addRule('security/detect-pseudoRandomBytes', WARNING)
+    .addRule('security/detect-unsafe-regex', WARNING)
+    .addOverrides();
+
+  return builder.getAllConfigs();
 };

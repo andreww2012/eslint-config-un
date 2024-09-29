@@ -1,7 +1,7 @@
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
-import {ERROR, OFF} from '../constants';
+import {ERROR, OFF, WARNING} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
-import {disableAutofixForRule, genFlatConfigEntryName, warnUnlessForcedError} from '../utils';
+import {ConfigEntryBuilder} from '../utils';
 
 export interface UnicornEslintConfigOptions extends ConfigSharedOptions<'unicorn'> {}
 
@@ -9,162 +9,145 @@ export const unicornEslintConfig = (
   options: UnicornEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
+  const builder = new ConfigEntryBuilder<'unicorn'>(options, internalOptions);
+
   // LEGEND:
   // 🔴 - not in recommended
-  const rules: FlatConfigEntry['rules'] = {
-    // 'unicorn/better-regex': ERROR,
-    'unicorn/catch-error-name': OFF,
-    ...warnUnlessForcedError(internalOptions, 'disable-autofix/unicorn/catch-error-name'),
-    // 'unicorn/catch-error-name': ERROR, // TODO warning & disable autofix?
-    // 'unicorn/consistent-destructuring': OFF, // 🔴
-    // 'unicorn/consistent-empty-array-spread': ERROR,
-    // 'unicorn/consistent-function-scoping': ERROR,
-    'unicorn/custom-error-definition': ERROR, // 🔴
-    // 'unicorn/empty-brace-spaces': ERROR, // 💅
-    // 'unicorn/error-message': ERROR,
-    // 'unicorn/escape-case': ERROR,
-    // 'unicorn/expiring-todo-comments': ERROR,
-    // Reason for disabling autofix: wrong auto-fixes
-    ...disableAutofixForRule('unicorn/explicit-length-check', ERROR),
-    'unicorn/filename-case': OFF,
-    // 'unicorn/import-style': ERROR,
-    // 'unicorn/new-for-builtins': ERROR,
-    // 'unicorn/no-abusive-eslint-disable': ERROR,
-    'unicorn/no-anonymous-default-export': OFF, // Note: there's the same rule in import plugin
-    'unicorn/no-array-callback-reference': OFF,
-    'unicorn/no-array-for-each': OFF,
-    // 'unicorn/no-array-method-this-argument': ERROR,
-    // 'unicorn/no-array-push-push': ERROR,
-    'unicorn/no-array-reduce': OFF,
-    'unicorn/no-await-expression-member': OFF,
-    // 'unicorn/no-await-in-promise-methods': ERROR,
-    // 'unicorn/no-console-spaces': ERROR,
-    // 'unicorn/no-document-cookie': ERROR,
-    // 'unicorn/no-empty-file': ERROR,
-    'unicorn/no-for-loop': OFF,
-    // 'unicorn/no-hex-escape': ERROR,
-    // 'unicorn/no-instanceof-array': ERROR,
-    // 'unicorn/no-invalid-fetch-options': ERROR,
-    // 'unicorn/no-invalid-remove-event-listener': ERROR,
-    // 'unicorn/no-keyword-prefix': OFF, // 🔴
-    // 'unicorn/no-length-as-slice-end': OFF,
-    // 'unicorn/no-lonely-if': ERROR,
-    // Passing `Infinity` doesn't work great with TypeScript
-    'unicorn/no-magic-array-flat-depth': OFF,
-    // "This is an improved version of the no-negated-condition ESLint rule that makes it automatically fixable" - Unicorn docs
-    // 'no-negated-condition': OFF,
-    // 'unicorn/no-negated-condition': ERROR,
-    // 'unicorn/no-negation-in-equality-check': ERROR,
-    'unicorn/no-nested-ternary': OFF,
-    // 'unicorn/no-new-array': ERROR,
-    // 'unicorn/no-new-buffer': ERROR,
-    'unicorn/no-null': OFF,
-    // 'unicorn/no-object-as-default-parameter': ERROR,
-    'unicorn/no-process-exit': OFF, // Used in `node` config
-    // 'unicorn/no-single-promise-in-promise-methods': ERROR,
-    // 'unicorn/no-static-only-class': ERROR,
-    // 'unicorn/no-thenable': ERROR,
-    // 'unicorn/no-this-assignment': ERROR,
-    // 'unicorn/no-typeof-undefined': ERROR,
-    // 'unicorn/no-unnecessary-await': ERROR,
-    // 'unicorn/no-unnecessary-polyfills': ERROR,
-    'unicorn/no-unreadable-array-destructuring': OFF,
-    // 'unicorn/no-unreadable-iife': ERROR,
-    // 'unicorn/no-unused-properties': OFF, // 🔴
-    // 'unicorn/no-useless-fallback-in-spread': ERROR,
-    // 'unicorn/no-useless-length-check': ERROR,
-    // 'unicorn/no-useless-promise-resolve-reject': ERROR,
-    // 'unicorn/no-useless-spread': ERROR,
-    // 'unicorn/no-useless-switch-case': ERROR,
-    // TODO reason for disabling autofix
-    ...disableAutofixForRule('unicorn/no-useless-undefined', ERROR, {
-      checkArguments: false,
-    }),
-    // 'unicorn/no-zero-fractions': ERROR,
-    // 'unicorn/number-literal-case': ERROR,
-    'unicorn/numeric-separators-style': [
-      ERROR,
-      {
-        onlyIfContainsSeparator: true,
-      },
-    ],
-    // 'unicorn/prefer-add-event-listener': ERROR,
-    // 'unicorn/prefer-array-find': ERROR,
-    // 'unicorn/prefer-array-flat-map': ERROR,
-    // 'unicorn/prefer-array-flat': ERROR,
-    // 'unicorn/prefer-array-index-of': ERROR,
-    // 'unicorn/prefer-array-some': ERROR,
-    // 'unicorn/prefer-at': ERROR,
-    // 'unicorn/prefer-blob-reading-methods': ERROR,
-    // 'unicorn/prefer-code-point': ERROR,
-    // 'unicorn/prefer-date-now': ERROR,
-    // 'unicorn/prefer-default-parameters': ERROR,
-    // 'unicorn/prefer-dom-node-append': ERROR,
-    // 'unicorn/prefer-dom-node-dataset': ERROR,
-    // 'unicorn/prefer-dom-node-remove': ERROR,
-    'unicorn/prefer-dom-node-text-content': OFF,
-    // 'unicorn/prefer-event-target': ERROR,
-    'unicorn/prefer-export-from': [ERROR, {ignoreUsedVariables: true}],
-    // 'unicorn/prefer-includes': ERROR,
-    // 'unicorn/prefer-json-parse-buffer': ERROR,
-    // 'unicorn/prefer-keyboard-event-key': ERROR,
-    // 'unicorn/prefer-logical-operator-over-ternary': ERROR,
-    // 'unicorn/prefer-math-trunc': ERROR,
-    // 'unicorn/prefer-modern-dom-apis': ERROR,
-    // 'unicorn/prefer-modern-math-apis': ERROR,
-    'unicorn/prefer-module': OFF,
-    // 'unicorn/prefer-native-coercion-functions': ERROR,
-    // 'unicorn/prefer-negative-index': ERROR,
-    'unicorn/prefer-node-protocol': OFF, // `n/prefer-node-protocol` seem to be better as it checks supported node versions
-    'unicorn/prefer-number-properties': [ERROR, {checkInfinity: true}],
-    // 'unicorn/prefer-object-from-entries': ERROR,
-    // 'unicorn/prefer-optional-catch-binding': ERROR,
-    // 'unicorn/prefer-prototype-methods': ERROR,
-    'unicorn/prefer-query-selector': OFF,
-    // 'unicorn/prefer-reflect-apply': ERROR,
-    // TODO disable when regexp is enabled?
-    // 'unicorn/prefer-regexp-test': ERROR,
-    // 'unicorn/prefer-set-has': ERROR,
-    // 'unicorn/prefer-set-size': ERROR,
-    ...disableAutofixForRule('unicorn/prefer-spread', ERROR),
-    // 'unicorn/prefer-string-raw': ERROR,
-    // 'unicorn/prefer-string-replace-all': ERROR,
-    // 'unicorn/prefer-string-slice': ERROR,
-    // 'unicorn/prefer-string-starts-ends-with': ERROR,
-    // 'unicorn/prefer-string-trim-start-end': ERROR,
-    // 'unicorn/prefer-structured-clone': ERROR,
-    'unicorn/prefer-switch': [
-      ERROR,
-      {
-        minimumCases: 4,
-        emptyDefaultCase: 'do-nothing-comment',
-      },
-    ],
-    // 'unicorn/prefer-ternary': ERROR,
-    // 'unicorn/prefer-top-level-await': ERROR,
-    // 'unicorn/prefer-type-error': ERROR,
-    'unicorn/prevent-abbreviations': OFF,
-    'unicorn/relative-url-style': [ERROR, 'always'],
-    // 'unicorn/require-array-join-separator': ERROR,
-    // 'unicorn/require-number-to-fixed-digits-argument': ERROR,
-    // 'unicorn/require-post-message-target-origin': OFF, // 🔴
-    // 'unicorn/string-content': OFF, // 🔴
-    // 'unicorn/switch-case-braces': ERROR,
-    // 'unicorn/template-indent': ERROR,
-    // 'unicorn/text-encoding-identifier-case': ERROR,
-    // 'unicorn/throw-new-error': ERROR,
-  };
 
-  return [
-    {
-      ...(options.files && {files: options.files}),
-      ...(options.ignores && {ignores: options.ignores}),
-      rules: {
-        ...eslintPluginUnicorn.configs['flat/recommended'].rules,
-        ...rules,
-        ...options.overrides,
-      },
-      name: genFlatConfigEntryName('unicorn'),
-    },
-  ];
+  builder
+    .addConfig(['unicorn', {includeDefaultFilesAndIgnores: true}])
+    .addBulkRules(eslintPluginUnicorn.configs['flat/recommended'].rules)
+    // .addRule('unicorn/better-regex', ERROR)
+    .addRule('unicorn/catch-error-name', OFF)
+    .addRule('unicorn/catch-error-name', WARNING, [], {disableAutofix: true})
+    // .addRule('unicorn/consistent-destructuring', OFF) // 🔴
+    // .addRule('unicorn/consistent-empty-array-spread', ERROR)
+    // .addRule('unicorn/consistent-function-scoping', ERROR)
+    .addRule('unicorn/custom-error-definition', ERROR) // 🔴
+    // .addRule('unicorn/empty-brace-spaces', ERROR) // 💅
+    // .addRule('unicorn/error-message', ERROR)
+    // .addRule('unicorn/escape-case', ERROR)
+    // .addRule('unicorn/expiring-todo-comments', ERROR)
+    // Reason for disabling autofix: wrong auto-fixes
+    .addRule('unicorn/explicit-length-check', ERROR, [], {disableAutofix: true})
+    .addRule('unicorn/filename-case', OFF)
+    // .addRule('unicorn/import-style', ERROR)
+    // .addRule('unicorn/new-for-builtins', ERROR)
+    // .addRule('unicorn/no-abusive-eslint-disable', ERROR)
+    .addRule('unicorn/no-anonymous-default-export', OFF) // Note: there's the same rule in import plugin
+    .addRule('unicorn/no-array-callback-reference', OFF)
+    .addRule('unicorn/no-array-for-each', OFF)
+    // .addRule('unicorn/no-array-method-this-argument', ERROR)
+    // .addRule('unicorn/no-array-push-push', ERROR)
+    .addRule('unicorn/no-array-reduce', OFF)
+    .addRule('unicorn/no-await-expression-member', OFF)
+    // .addRule('unicorn/no-await-in-promise-methods', ERROR)
+    // .addRule('unicorn/no-console-spaces', ERROR)
+    // .addRule('unicorn/no-document-cookie', ERROR)
+    // .addRule('unicorn/no-empty-file', ERROR)
+    .addRule('unicorn/no-for-loop', OFF)
+    // .addRule('unicorn/no-hex-escape', ERROR)
+    // .addRule('unicorn/no-instanceof-array', ERROR)
+    // .addRule('unicorn/no-invalid-fetch-options', ERROR)
+    // .addRule('unicorn/no-invalid-remove-event-listener', ERROR)
+    // .addRule('unicorn/no-keyword-prefix', OFF) // 🔴
+    // .addRule('unicorn/no-length-as-slice-end', OFF)
+    // .addRule('unicorn/no-lonely-if', ERROR)
+    // Passing `Infinity` doesn't work great with TypeScript
+    .addRule('unicorn/no-magic-array-flat-depth', OFF)
+    // "This is an improved version of the no-negated-condition ESLint rule that makes it automatically fixable" - Unicorn docs
+    .addRule('unicorn/no-negated-condition', ERROR, [], {overrideBaseRule: true})
+    // .addRule('unicorn/no-negation-in-equality-check', ERROR)
+    .addRule('unicorn/no-nested-ternary', OFF)
+    // .addRule('unicorn/no-new-array', ERROR)
+    // .addRule('unicorn/no-new-buffer', ERROR)
+    .addRule('unicorn/no-null', OFF)
+    // .addRule('unicorn/no-object-as-default-parameter', ERROR)
+    .addRule('unicorn/no-process-exit', OFF) // Used in `node` config
+    // .addRule('unicorn/no-single-promise-in-promise-methods', ERROR)
+    // .addRule('unicorn/no-static-only-class', ERROR)
+    // .addRule('unicorn/no-thenable', ERROR)
+    // .addRule('unicorn/no-this-assignment', ERROR)
+    // .addRule('unicorn/no-typeof-undefined', ERROR)
+    // .addRule('unicorn/no-unnecessary-await', ERROR)
+    // .addRule('unicorn/no-unnecessary-polyfills', ERROR)
+    .addRule('unicorn/no-unreadable-array-destructuring', OFF)
+    // .addRule('unicorn/no-unreadable-iife', ERROR)
+    // .addRule('unicorn/no-unused-properties', OFF) // 🔴
+    // .addRule('unicorn/no-useless-fallback-in-spread', ERROR)
+    // .addRule('unicorn/no-useless-length-check', ERROR)
+    // .addRule('unicorn/no-useless-promise-resolve-reject', ERROR)
+    // .addRule('unicorn/no-useless-spread', ERROR)
+    // .addRule('unicorn/no-useless-switch-case', ERROR)
+    // TODO reason for disabling autofix
+    .addRule('unicorn/no-useless-undefined', ERROR, [{checkArguments: false}], {
+      disableAutofix: true,
+    })
+    // .addRule('unicorn/no-zero-fractions', ERROR)
+    // .addRule('unicorn/number-literal-case', ERROR)
+    .addRule('unicorn/numeric-separators-style', ERROR, [{onlyIfContainsSeparator: true}])
+    // .addRule('unicorn/prefer-add-event-listener', ERROR)
+    // .addRule('unicorn/prefer-array-find', ERROR)
+    // .addRule('unicorn/prefer-array-flat-map', ERROR)
+    // .addRule('unicorn/prefer-array-flat', ERROR)
+    // .addRule('unicorn/prefer-array-index-of', ERROR)
+    // .addRule('unicorn/prefer-array-some', ERROR)
+    // .addRule('unicorn/prefer-at', ERROR)
+    // .addRule('unicorn/prefer-blob-reading-methods', ERROR)
+    // .addRule('unicorn/prefer-code-point', ERROR)
+    // .addRule('unicorn/prefer-date-now', ERROR)
+    // .addRule('unicorn/prefer-default-parameters', ERROR)
+    // .addRule('unicorn/prefer-dom-node-append', ERROR)
+    // .addRule('unicorn/prefer-dom-node-dataset', ERROR)
+    // .addRule('unicorn/prefer-dom-node-remove', ERROR)
+    .addRule('unicorn/prefer-dom-node-text-content', OFF)
+    // .addRule('unicorn/prefer-event-target', ERROR)
+    .addRule('unicorn/prefer-export-from', ERROR, [{ignoreUsedVariables: true}])
+    // .addRule('unicorn/prefer-includes', ERROR)
+    // .addRule('unicorn/prefer-json-parse-buffer', ERROR)
+    // .addRule('unicorn/prefer-keyboard-event-key', ERROR)
+    // .addRule('unicorn/prefer-logical-operator-over-ternary', ERROR)
+    // .addRule('unicorn/prefer-math-trunc', ERROR)
+    // .addRule('unicorn/prefer-modern-dom-apis', ERROR)
+    // .addRule('unicorn/prefer-modern-math-apis', ERROR)
+    .addRule('unicorn/prefer-module', OFF)
+    // .addRule('unicorn/prefer-native-coercion-functions', ERROR)
+    // .addRule('unicorn/prefer-negative-index', ERROR)
+    .addRule('unicorn/prefer-node-protocol', OFF) // `n/prefer-node-protocol` seem to be better as it checks supported node versions
+    .addRule('unicorn/prefer-number-properties', ERROR, [{checkInfinity: true}])
+    // .addRule('unicorn/prefer-object-from-entries', ERROR)
+    // .addRule('unicorn/prefer-optional-catch-binding', ERROR)
+    // .addRule('unicorn/prefer-prototype-methods', ERROR)
+    .addRule('unicorn/prefer-query-selector', OFF)
+    // .addRule('unicorn/prefer-reflect-apply', ERROR)
+    // TODO disable when regexp is enabled?
+    // .addRule('unicorn/prefer-regexp-test', ERROR)
+    // .addRule('unicorn/prefer-set-has', ERROR)
+    // .addRule('unicorn/prefer-set-size', ERROR)
+    .addRule('unicorn/prefer-spread', ERROR, [], {disableAutofix: true})
+    // .addRule('unicorn/prefer-string-raw', ERROR)
+    // .addRule('unicorn/prefer-string-replace-all', ERROR)
+    // .addRule('unicorn/prefer-string-slice', ERROR)
+    // .addRule('unicorn/prefer-string-starts-ends-with', ERROR)
+    // .addRule('unicorn/prefer-string-trim-start-end', ERROR)
+    // .addRule('unicorn/prefer-structured-clone', ERROR)
+    .addRule('unicorn/prefer-switch', ERROR, [
+      {minimumCases: 4, emptyDefaultCase: 'do-nothing-comment'},
+    ])
+    // .addRule('unicorn/prefer-ternary', ERROR)
+    // .addRule('unicorn/prefer-top-level-await', ERROR)
+    // .addRule('unicorn/prefer-type-error', ERROR)
+    .addRule('unicorn/prevent-abbreviations', OFF)
+    .addRule('unicorn/relative-url-style', ERROR, ['always'])
+    // .addRule('unicorn/require-array-join-separator', ERROR)
+    // .addRule('unicorn/require-number-to-fixed-digits-argument', ERROR)
+    // .addRule('unicorn/require-post-message-target-origin', OFF) // 🔴
+    // .addRule('unicorn/string-content', OFF) // 🔴
+    // .addRule('unicorn/switch-case-braces', ERROR)
+    // .addRule('unicorn/template-indent', ERROR)
+    // .addRule('unicorn/text-encoding-identifier-case', ERROR)
+    // .addRule('unicorn/throw-new-error', ERROR)
+    .addOverrides();
+
+  return builder.getAllConfigs();
 };

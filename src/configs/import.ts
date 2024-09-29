@@ -1,12 +1,7 @@
 import eslintPluginImportX from 'eslint-plugin-import-x';
-import {ERROR, OFF} from '../constants';
+import {ERROR, OFF, WARNING} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
-import {
-  arraify,
-  createPluginObjectRenamer,
-  genFlatConfigEntryName,
-  warnUnlessForcedError,
-} from '../utils';
+import {ConfigEntryBuilder, arraify, createPluginObjectRenamer, isNonEmptyArray} from '../utils';
 
 export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'> {
   /**
@@ -36,86 +31,14 @@ export const importEslintConfig = (
 
   const noUnresolvedIgnores = arraify(options.importPatternsToIgnoreWhenTryingToResolve);
 
-  const rules: FlatConfigEntry['rules'] = {
-    // 'import/consistent-type-specifier-style': OFF,
-    // 'import/default': ERROR,
-    // 'import/dynamic-import-chunkname': OFF,
-    // 'import/export': ERROR,
-    // 'import/exports-last': OFF,
-    'import/extensions': [
-      options.requireModuleExtensions ? ERROR : OFF,
-      (typeof options.requireModuleExtensions === 'object' &&
-        options.requireModuleExtensions['*']) ||
-        'ignorePackages',
-      {
-        ...(options.requireModuleExtensions === true &&
-          Object.fromEntries(
-            ['js', 'cjs', 'mjs', 'ts', 'cts', 'mts', 'jsx', 'tsx'].map((ext) => [ext, 'always']),
-          )),
-        ...(typeof options.requireModuleExtensions === 'object' && options.requireModuleExtensions),
-      },
-    ],
-    'import/first': ERROR,
-    // 'import/group-exports': OFF,
-    // 'import/max-dependencies': OFF,
-    // 'import/named': ERROR | OFF, // disabled in TS config
-    // 'import/namespace': ERROR,
-    'import/newline-after-import': ERROR,
-    'import/no-absolute-path': ERROR,
-    // 'import/no-amd': OFF,
-    // 'import/no-anonymous-default-export': OFF,
-    // 'import/no-commonjs': OFF,
-    ...warnUnlessForcedError(internalOptions, 'import/no-cycle'),
-    'import/no-default-export': ERROR,
-    ...warnUnlessForcedError(internalOptions, 'import/no-deprecated'),
-    // 'import/no-duplicates': ERROR,
-    // 'import/no-dynamic-require': OFF,
-    'import/no-empty-named-blocks': ERROR,
-    'import/no-extraneous-dependencies': [ERROR, {peerDependencies: false}],
-    // 'import/no-import-module-exports': OFF, // TODO enable?
-    // 'import/no-internal-modules': OFF,
-    ...warnUnlessForcedError(internalOptions, 'import/no-mutable-exports'),
-    'import/no-named-as-default-member': OFF,
-    'import/no-named-as-default': OFF, // Not very useful + false positives for axios@1.6.7?
-    // 'import/no-named-default': OFF,
-    // 'import/no-named-export': OFF,
-    // 'import/no-namespace': OFF,
-    // 'import/no-nodejs-modules': OFF, // TODO
-    // 'import/no-relative-packages': OFF,
-    // 'import/no-relative-parent-imports': OFF,
-    // 'import/no-restricted-paths': OFF,
-    'import/no-self-import': ERROR,
-    // 'import/no-unassigned-import': OFF,
-    'import/no-unresolved': [
-      ERROR,
-      {
-        ...(noUnresolvedIgnores.length > 0 && {
-          ignore: noUnresolvedIgnores as [string, ...string[]],
-        }),
-      },
-    ],
-    // 'import/no-unused-modules': OFF,
-    ...warnUnlessForcedError(internalOptions, 'import/no-useless-path-segments'),
-    'import/no-webpack-loader-syntax': ERROR,
-    'import/order': [
-      ERROR,
-      {
-        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-        alphabetize: {order: 'asc'},
-      },
-    ],
-    // 'import/prefer-default-export': OFF,
-    // 'import/unambiguous': OFF,
-  };
+  const builder = new ConfigEntryBuilder<'import'>(options, internalOptions);
 
-  return [
-    {
+  builder
+    .addConfig(['import', {includeDefaultFilesAndIgnores: true}], {
       plugins: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-        import: eslintPluginImportX as any,
+        // @ts-expect-error small types mismatch
+        import: eslintPluginImportX,
       },
-      ...(options.files && {files: options.files}),
-      ...(options.ignores && {ignores: options.ignores}),
       settings: {
         ...(isTypescriptEnabled && eslintPluginImportX.configs.typescript.settings),
         'import-x/resolver': {
@@ -133,13 +56,78 @@ export const importEslintConfig = (
           },
         }),
       },
-      rules: {
-        ...pluginRenamer(eslintPluginImportX.configs.recommended.rules),
-        ...(isTypescriptEnabled && pluginRenamer(eslintPluginImportX.configs.typescript.rules)),
-        ...rules,
-        ...options.overrides,
+    })
+    .addBulkRules(pluginRenamer(eslintPluginImportX.configs.recommended.rules))
+    .addBulkRules(
+      isTypescriptEnabled && pluginRenamer(eslintPluginImportX.configs.typescript.rules),
+    )
+    // .addRule('import/consistent-type-specifier-style', OFF)
+    // .addRule('import/default', ERROR)
+    // .addRule('import/dynamic-import-chunkname', OFF)
+    // .addRule('import/export', ERROR)
+    // .addRule('import/exports-last', OFF)
+    .addRule('import/extensions', options.requireModuleExtensions ? ERROR : OFF, [
+      (typeof options.requireModuleExtensions === 'object' &&
+        options.requireModuleExtensions['*']) ||
+        'ignorePackages',
+      {
+        ...(options.requireModuleExtensions === true &&
+          Object.fromEntries(
+            ['js', 'cjs', 'mjs', 'ts', 'cts', 'mts', 'jsx', 'tsx'].map((ext) => [ext, 'always']),
+          )),
+        ...(typeof options.requireModuleExtensions === 'object' && options.requireModuleExtensions),
       },
-      name: genFlatConfigEntryName('import'),
-    },
-  ];
+    ])
+    .addRule('import/first', ERROR)
+    // .addRule('import/group-exports', OFF)
+    // .addRule('import/max-dependencies', OFF)
+    // .addRule('import/named', ERROR | OFF) // disabled in TS config
+    // .addRule('import/namespace', ERROR)
+    .addRule('import/newline-after-import', ERROR)
+    .addRule('import/no-absolute-path', ERROR)
+    // .addRule('import/no-amd', OFF)
+    // .addRule('import/no-anonymous-default-export', OFF)
+    // .addRule('import/no-commonjs', OFF)
+    .addRule('import/no-cycle', WARNING)
+    .addRule('import/no-default-export', ERROR)
+    .addRule('import/no-deprecated', WARNING)
+    // .addRule('import/no-duplicates', ERROR)
+    // .addRule('import/no-dynamic-require', OFF)
+    .addRule('import/no-empty-named-blocks', ERROR)
+    .addRule('import/no-extraneous-dependencies', ERROR, [{peerDependencies: false}])
+    // .addRule('import/no-import-module-exports', OFF) // TODO enable?
+    // .addRule('import/no-internal-modules', OFF)
+    .addRule('import/no-mutable-exports', WARNING)
+    .addRule('import/no-named-as-default-member', OFF)
+    .addRule('import/no-named-as-default', OFF) // Not very useful + false positives for axios@1.6.7?
+    // .addRule('import/no-named-default', OFF)
+    // .addRule('import/no-named-export', OFF)
+    // .addRule('import/no-namespace', OFF)
+    // .addRule('import/no-nodejs-modules', OFF) // TODO
+    // .addRule('import/no-relative-packages', OFF)
+    // .addRule('import/no-relative-parent-imports', OFF)
+    // .addRule('import/no-restricted-paths', OFF)
+    .addRule('import/no-self-import', ERROR)
+    // .addRule('import/no-unassigned-import', OFF)
+    .addRule('import/no-unresolved', ERROR, [
+      {
+        ...(isNonEmptyArray(noUnresolvedIgnores) && {
+          ignore: noUnresolvedIgnores,
+        }),
+      },
+    ])
+    // .addRule('import/no-unused-modules', OFF)
+    .addRule('import/no-useless-path-segments', WARNING)
+    .addRule('import/no-webpack-loader-syntax', ERROR)
+    .addRule('import/order', ERROR, [
+      {
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+        alphabetize: {order: 'asc'},
+      },
+    ])
+    // .addRule('import/prefer-default-export', OFF)
+    // .addRule('import/unambiguous', OFF)
+    .addOverrides();
+
+  return builder.getAllConfigs();
 };

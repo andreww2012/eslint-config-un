@@ -1,230 +1,234 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import EslintJs from '@eslint/js';
 import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
-import {ERROR} from '../constants';
+import {ERROR, WARNING} from '../constants';
+import type {ConstantKeys} from '../type-utils';
 import type {
+  AllEslintRules,
   ConfigSharedOptions,
   FlatConfigEntry,
+  GetRuleOptions,
   InternalConfigOptions,
-  RulesRecord,
 } from '../types';
-import {genFlatConfigEntryName, warnUnlessForcedError} from '../utils';
+import {ConfigEntryBuilder} from '../utils';
 
-type BuiltinEslintRulesFixed = Pick<RulesRecord, keyof BuiltinEslintRules>;
+type BuiltinEslintRulesFixed = Pick<
+  AllEslintRules,
+  keyof ConstantKeys<BuiltinEslintRules> & keyof AllEslintRules
+>;
 
 export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRulesFixed> {}
 
-export const RULE_CAMELCASE_OPTIONS = {
-  properties: 'never' as const,
-  ignoreGlobals: true,
-  allow: [String.raw`\d_\d`],
-};
-
-export const RULE_EQEQEQ_OPTIONS = ['always', {null: 'ignore'}] as const;
-
-export const RULE_NO_UNUSED_EXPRESSIONS_OPTIONS = {
-  allowShortCircuit: true,
-  allowTernary: true,
-  allowTaggedTemplates: true,
-} as const;
-
-export const RULE_NO_USE_BEFORE_DEFINE_OPTIONS = {
-  functions: false,
-} as const;
-
-export const RULE_PREFER_DESTRUCTURING_OPTIONS = {
-  VariableDeclarator: {
-    array: false,
-    object: true,
+export const RULE_CAMELCASE_OPTIONS: GetRuleOptions<'camelcase'> = [
+  {
+    properties: 'never' as const,
+    ignoreGlobals: true,
+    allow: [String.raw`\d_\d`],
   },
-  AssignmentExpression: {
-    array: false,
-    object: false,
+];
+export const RULE_EQEQEQ_OPTIONS: GetRuleOptions<'eqeqeq'> = ['always', {null: 'ignore'}];
+export const RULE_NO_UNUSED_EXPRESSIONS_OPTIONS: GetRuleOptions<'no-unused-expressions'> = [
+  {
+    allowShortCircuit: true,
+    allowTernary: true,
+    allowTaggedTemplates: true,
   },
-};
+];
+export const RULE_NO_USE_BEFORE_DEFINE_OPTIONS: GetRuleOptions<'no-use-before-define'> = [
+  {
+    functions: false,
+  },
+];
+export const RULE_PREFER_DESTRUCTURING_OPTIONS: GetRuleOptions<'prefer-destructuring'> = [
+  {
+    VariableDeclarator: {
+      array: false,
+      object: true,
+    },
+    AssignmentExpression: {
+      array: false,
+      object: false,
+    },
+  },
+];
 
 export const jsEslintConfig = (
   options: JsEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const rules: FlatConfigEntry<BuiltinEslintRulesFixed>['rules'] = {
-    // 🔵 Recommended - Possible Problems
+  const builder = new ConfigEntryBuilder(options, internalOptions);
 
-    // 'constructor-super': ERROR,
-    // 'for-direction': ERROR,
-    // 'getter-return': ERROR,
-    // 'no-async-promise-executor': ERROR,
-    // 'no-class-assign': ERROR,
-    // 'no-compare-neg-zero': ERROR,
-    // 'no-cond-assign': ERROR,
-    // 'no-const-assign': ERROR,
-    // 'no-constant-binary-expression': ERROR,
-    // 'no-constant-condition': ERROR,
-    // 'no-control-regex': ERROR,
-    // 'no-debugger': ERROR,
-    // 'no-dupe-args': ERROR,
-    // 'no-dupe-class-members': ERROR,
-    // 'no-dupe-else-if': ERROR,
-    // 'no-dupe-keys': ERROR,
-    // 'no-duplicate-case': ERROR,
-    // 'no-empty-character-class': ERROR,
-    // 'no-empty-pattern': ERROR,
-    // 'no-ex-assign': ERROR,
-    // 'no-fallthrough': ERROR,
-    // 'no-func-assign': ERROR,
-    // 'no-import-assign': ERROR,
-    // 'no-invalid-regexp': ERROR,
-    // 'no-irregular-whitespace': ERROR,
-    // 'no-loss-of-precision': ERROR,
-    // 'no-misleading-character-class': ERROR,
-    // 'no-new-native-nonconstructor': ERROR,
-    // 'no-obj-calls': ERROR,
-    // 'no-prototype-builtins': ERROR,
-    // 'no-self-assign': ERROR,
-    // 'no-setter-return': ERROR,
-    // 'no-sparse-arrays': ERROR,
-    // 'no-this-before-super': ERROR,
-    // 'no-undef': ERROR,
-    // 'no-unexpected-multiline': ERROR,
-    // 'no-unreachable': ERROR,
-    // 'no-unsafe-finally': ERROR,
-    // 'no-unsafe-negation': ERROR,
-    // 'no-unsafe-optional-chaining': ERROR,
-    // 'no-unused-private-class-members': ERROR,
-    // 'no-unused-vars': ERROR,
-    // 'no-useless-backreference': ERROR,
-    // 'use-isnan': ERROR,
-    // 'valid-typeof': ERROR,
-
-    // 🔵 Recommended - Suggestions
-
-    // 'no-case-declarations': ERROR,
-    // 'no-delete-var': ERROR,
-    // 'no-empty': ERROR,
-    // 'no-empty-static-block': ERROR,
-    // 'no-extra-boolean-cast': ERROR,
-    // 'no-global-assign': ERROR,
-    // 'no-nonoctal-decimal-escape': ERROR,
-    // 'no-octal': ERROR,
-    // 'no-redeclare': ERROR,
-    // 'no-regex-spaces': ERROR,
-    // 'no-shadow-restricted-names': ERROR,
-    // 'no-unused-labels': ERROR,
-    // 'no-useless-catch': ERROR,
-    // 'no-useless-escape': ERROR,
-    // 'no-with': ERROR,
-    // 'require-yield': ERROR,
-
-    // 🔵 Not in recommended - Possible Problems
-
-    'array-callback-return': [ERROR, {checkForEach: true}],
-    ...warnUnlessForcedError(internalOptions, 'no-await-in-loop'),
-    ...warnUnlessForcedError(internalOptions, 'no-constructor-return'),
-    'no-duplicate-imports': ERROR,
-    'no-inner-declarations': ERROR,
-    'no-promise-executor-return': ERROR,
-    'no-self-compare': ERROR,
-    'no-template-curly-in-string': ERROR,
-    'no-unmodified-loop-condition': ERROR,
-    'no-unreachable-loop': ERROR,
-    'no-use-before-define': [ERROR, RULE_NO_USE_BEFORE_DEFINE_OPTIONS],
-    'no-useless-assignment': ERROR,
-    'require-atomic-updates': [ERROR, {allowProperties: true}],
-
-    // 🔵 Not in recommended - Suggestions
-
-    'accessor-pairs': ERROR,
-    // 'arrow-body-style': OFF,
-    'block-scoped-var': ERROR,
-    camelcase: [ERROR, RULE_CAMELCASE_OPTIONS],
-    // 'capitalized-comments': OFF,
-    'class-methods-use-this': ERROR,
-    // complexity: OFF,
-    'consistent-return': ERROR,
-    'consistent-this': [ERROR, 'that'],
-    curly: [ERROR, 'all' /* default */],
-    'default-case': ERROR,
-    'default-case-last': ERROR,
-    'default-param-last': ERROR,
-    'dot-notation': ERROR,
-    eqeqeq: [ERROR, ...RULE_EQEQEQ_OPTIONS],
-    'func-name-matching': [ERROR, {considerPropertyDescriptor: true}],
-    // 'func-names': OFF,
-    // 'func-style': OFF,
-    'grouped-accessor-pairs': [ERROR, 'getBeforeSet'],
-    'guard-for-in': ERROR,
-    // 'id-denylist': OFF,
-    // 'id-length': OFF,
-    // 'id-match': OFF,
-    // 'init-declarations': OFF,
-    'logical-assignment-operators': [ERROR, 'always', {enforceForIfStatements: true}],
-    'max-classes-per-file': [ERROR, {ignoreExpressions: true, max: 2}],
-    // 'max-depth': OFF,
-    // 'max-lines': OFF,
-    // 'max-lines-per-function': OFF,
-    // 'max-nested-callbacks': OFF,
-    // 'max-params': OFF,
-    // 'max-statements': OFF,
-    'new-cap': [ERROR, {properties: false, capIsNew: false}],
-    ...warnUnlessForcedError(internalOptions, 'no-alert'),
-    'no-array-constructor': ERROR,
-    // 'no-bitwise': OFF,
-    'no-caller': ERROR,
-    ...warnUnlessForcedError(internalOptions, 'no-console', {allow: ['warn', 'error']}),
-    // 'no-continue': OFF,
-    // 'no-div-regex': OFF,
-    'no-else-return': [ERROR, {allowElseIf: false}],
-    'no-empty-function': ERROR,
-    // 'no-eq-null': OFF,
-    'no-eval': ERROR,
-    'no-extend-native': ERROR,
-    'no-extra-bind': ERROR,
-    'no-extra-label': ERROR,
-    'no-implicit-coercion': [ERROR, {boolean: true, disallowTemplateShorthand: true}],
-    // 'no-implicit-globals': OFF,
-    'no-implied-eval': ERROR,
-    // 'no-inline-comments': OFF,
-    // 'no-invalid-this': OFF,
-    'no-iterator': ERROR,
-    'no-label-var': ERROR,
-    'no-labels': [ERROR, {allowLoop: false}],
-    'no-lone-blocks': ERROR,
-    'no-lonely-if': ERROR,
-    'no-loop-func': ERROR,
-    // 'no-magic-numbers': OFF,
-    'no-multi-assign': ERROR,
-    'no-multi-str': ERROR,
-    'no-negated-condition': ERROR,
-    // 'no-nested-ternary': OFF,
-    ...warnUnlessForcedError(internalOptions, 'no-new'),
-    'no-new-func': ERROR,
-    'no-new-wrappers': ERROR,
-    'no-object-constructor': ERROR,
-    'no-octal-escape': ERROR,
-    ...warnUnlessForcedError(internalOptions, 'no-param-reassign'),
-    // 'no-plusplus': OFF,
-    'no-proto': ERROR,
-    // 'no-restricted-exports': OFF,
-    'no-restricted-globals': [
-      ERROR,
+  builder
+    .addConfig(['js', {includeDefaultFilesAndIgnores: true}])
+    .addBulkRules(EslintJs.configs.recommended.rules)
+    // 🟢 Recommended - Possible Problems
+    // .addRule('constructor-super', ERROR)
+    // .addRule('for-direction', ERROR)
+    // .addRule('getter-return', ERROR)
+    // .addRule('no-async-promise-executor', ERROR)
+    // .addRule('no-class-assign', ERROR)
+    // .addRule('no-compare-neg-zero', ERROR)
+    // .addRule('no-cond-assign', ERROR)
+    // .addRule('no-const-assign', ERROR)
+    // .addRule('no-constant-binary-expression', ERROR)
+    // .addRule('no-constant-condition', ERROR)
+    // .addRule('no-control-regex', ERROR)
+    // .addRule('no-debugger', ERROR)
+    // .addRule('no-dupe-args', ERROR)
+    // .addRule('no-dupe-class-members', ERROR)
+    // .addRule('no-dupe-else-if', ERROR)
+    // .addRule('no-dupe-keys', ERROR)
+    // .addRule('no-duplicate-case', ERROR)
+    // .addRule('no-empty-character-class', ERROR)
+    // .addRule('no-empty-pattern', ERROR)
+    // .addRule('no-ex-assign', ERROR)
+    // .addRule('no-fallthrough', ERROR)
+    // .addRule('no-func-assign', ERROR)
+    // .addRule('no-import-assign', ERROR)
+    // .addRule('no-invalid-regexp', ERROR)
+    // .addRule('no-irregular-whitespace', ERROR)
+    // .addRule('no-loss-of-precision', ERROR)
+    // .addRule('no-misleading-character-class', ERROR)
+    // .addRule('no-new-native-nonconstructor', ERROR)
+    // .addRule('no-obj-calls', ERROR)
+    // .addRule('no-prototype-builtins', ERROR)
+    // .addRule('no-self-assign', ERROR)
+    // .addRule('no-setter-return', ERROR)
+    // .addRule('no-sparse-arrays', ERROR)
+    // .addRule('no-this-before-super', ERROR)
+    // .addRule('no-undef', ERROR)
+    // .addRule('no-unexpected-multiline', ERROR)
+    // .addRule('no-unreachable', ERROR)
+    // .addRule('no-unsafe-finally', ERROR)
+    // .addRule('no-unsafe-negation', ERROR)
+    // .addRule('no-unsafe-optional-chaining', ERROR)
+    // .addRule('no-unused-private-class-members', ERROR)
+    // .addRule('no-unused-vars', ERROR)
+    // .addRule('no-useless-backreference', ERROR)
+    // .addRule('use-isnan', ERROR)
+    // .addRule('valid-typeof', ERROR)
+    // 🟢 Recommended - Suggestions
+    // .addRule('no-case-declarations', ERROR)
+    // .addRule('no-delete-var', ERROR)
+    // .addRule('no-empty', ERROR)
+    // .addRule('no-empty-static-block', ERROR)
+    // .addRule('no-extra-boolean-cast', ERROR)
+    // .addRule('no-global-assign', ERROR)
+    // .addRule('no-nonoctal-decimal-escape', ERROR)
+    // .addRule('no-octal', ERROR)
+    // .addRule('no-redeclare', ERROR)
+    // .addRule('no-regex-spaces', ERROR)
+    // .addRule('no-shadow-restricted-names', ERROR)
+    // .addRule('no-unused-labels', ERROR)
+    // .addRule('no-useless-catch', ERROR)
+    // .addRule('no-useless-escape', ERROR)
+    // .addRule('no-with', ERROR)
+    // .addRule('require-yield', ERROR)
+    // 🟢 Not in recommended - Possible Problems
+    .addRule('array-callback-return', ERROR, [{checkForEach: true}])
+    .addRule('no-await-in-loop', WARNING)
+    .addRule('no-constructor-return', WARNING)
+    .addRule('no-duplicate-imports', ERROR)
+    .addRule('no-inner-declarations', ERROR)
+    .addRule('no-promise-executor-return', ERROR)
+    .addRule('no-self-compare', ERROR)
+    .addRule('no-template-curly-in-string', ERROR)
+    .addRule('no-unmodified-loop-condition', ERROR)
+    .addRule('no-unreachable-loop', ERROR)
+    .addRule('no-use-before-define', ERROR, RULE_NO_USE_BEFORE_DEFINE_OPTIONS)
+    .addRule('no-useless-assignment', ERROR)
+    .addRule('require-atomic-updates', ERROR, [{allowProperties: true}])
+    // 🟢 Not in recommended - Suggestions
+    .addRule('accessor-pairs', ERROR)
+    // .addRule('arrow-body-style', OFF)
+    .addRule('block-scoped-var', ERROR)
+    .addRule('camelcase', ERROR, RULE_CAMELCASE_OPTIONS)
+    // .addRule('capitalized-comments', OFF)
+    .addRule('class-methods-use-this', ERROR)
+    // complexity: OFF
+    .addRule('consistent-return', ERROR)
+    .addRule('consistent-this', ERROR, ['that'])
+    .addRule('curly', ERROR, ['all' /* default */])
+    .addRule('default-case', ERROR)
+    .addRule('default-case-last', ERROR)
+    .addRule('default-param-last', ERROR)
+    .addRule('dot-notation', ERROR)
+    .addRule('eqeqeq', ERROR, RULE_EQEQEQ_OPTIONS)
+    .addRule('func-name-matching', ERROR, [{considerPropertyDescriptor: true}])
+    // .addRule('func-names', OFF)
+    // .addRule('func-style', OFF)
+    .addRule('grouped-accessor-pairs', ERROR, ['getBeforeSet'])
+    .addRule('guard-for-in', ERROR)
+    // .addRule('id-denylist', OFF)
+    // .addRule('id-length', OFF)
+    // .addRule('id-match', OFF)
+    // .addRule('init-declarations', OFF)
+    .addRule('logical-assignment-operators', ERROR, ['always', {enforceForIfStatements: true}])
+    .addRule('max-classes-per-file', ERROR, [{ignoreExpressions: true, max: 2}])
+    // .addRule('max-depth', OFF)
+    // .addRule('max-lines', OFF)
+    // .addRule('max-lines-per-function', OFF)
+    // .addRule('max-nested-callbacks', OFF)
+    // .addRule('max-params', OFF)
+    // .addRule('max-statements', OFF)
+    .addRule('new-cap', ERROR, [{properties: false, capIsNew: false}])
+    .addRule('no-alert', WARNING)
+    .addRule('no-array-constructor', ERROR)
+    // .addRule('no-bitwise', OFF)
+    .addRule('no-caller', ERROR)
+    .addRule('no-console', WARNING, [{allow: ['warn', 'error']}])
+    // .addRule('no-continue', OFF)
+    // .addRule('no-div-regex', OFF)
+    .addRule('no-else-return', ERROR, [{allowElseIf: false}])
+    .addRule('no-empty-function', ERROR)
+    // .addRule('no-eq-null', OFF)
+    .addRule('no-eval', ERROR)
+    .addRule('no-extend-native', ERROR)
+    .addRule('no-extra-bind', ERROR)
+    .addRule('no-extra-label', ERROR)
+    .addRule('no-implicit-coercion', ERROR, [{boolean: true, disallowTemplateShorthand: true}])
+    // .addRule('no-implicit-globals', OFF)
+    .addRule('no-implied-eval', ERROR)
+    // .addRule('no-inline-comments', OFF)
+    // .addRule('no-invalid-this', OFF)
+    .addRule('no-iterator', ERROR)
+    .addRule('no-label-var', ERROR)
+    .addRule('no-labels', ERROR, [{allowLoop: false}])
+    .addRule('no-lone-blocks', ERROR)
+    .addRule('no-lonely-if', ERROR)
+    .addRule('no-loop-func', ERROR)
+    // .addRule('no-magic-numbers', OFF)
+    .addRule('no-multi-assign', ERROR)
+    .addRule('no-multi-str', ERROR)
+    .addRule('no-negated-condition', ERROR)
+    // .addRule('no-nested-ternary', OFF)
+    .addRule('no-new', WARNING)
+    .addRule('no-new-func', ERROR)
+    .addRule('no-new-wrappers', ERROR)
+    .addRule('no-object-constructor', ERROR)
+    .addRule('no-octal-escape', ERROR)
+    .addRule('no-param-reassign', WARNING)
+    // .addRule('no-plusplus', OFF)
+    .addRule('no-proto', ERROR)
+    // .addRule('no-restricted-exports', OFF)
+    .addRule('no-restricted-globals', ERROR, [
       {name: 'global', message: 'Use `globalThis` instead'},
       {name: 'self', message: 'Use `globalThis` instead'},
       {name: 'event', message: 'Use local parameter instead'},
-    ],
-    // 'no-restricted-imports': OFF,
-    // 'no-restricted-properties': OFF,
-    // 'no-restricted-syntax': OFF,
-    'no-return-assign': [ERROR, 'always'],
-    'no-script-url': ERROR,
-    'no-sequences': ERROR,
-    'no-shadow': ERROR,
-    // 'no-ternary': OFF,
-    'no-throw-literal': ERROR,
-    'no-undef-init': ERROR,
-    // 'no-undefined': OFF,
+    ])
+    // .addRule('no-restricted-imports', OFF)
+    // .addRule('no-restricted-properties', OFF)
+    // .addRule('no-restricted-syntax', OFF)
+    .addRule('no-return-assign', ERROR, ['always'])
+    .addRule('no-script-url', ERROR)
+    .addRule('no-sequences', ERROR)
+    .addRule('no-shadow', ERROR)
+    // .addRule('no-ternary', OFF)
+    .addRule('no-throw-literal', ERROR)
+    .addRule('no-undef-init', ERROR)
+    // .addRule('no-undefined', OFF)
     // Had a potential, but unfortunately reports accesses of object properties starting with _
-    // 'no-underscore-dangle': [
-    //   OFF,
+    // .addRule('no-underscore-dangle', ERROR, [
     //   {
     //     allow: ['__dirname', '__filename'],
     //     allowAfterThis: true,
@@ -232,79 +236,61 @@ export const jsEslintConfig = (
     //     // @ts-expect-error does not exist in typings
     //     allowAfterThisConstructor: true,
     //   },
-    // ],
-    'no-unneeded-ternary': [ERROR, {defaultAssignment: false}],
-    'no-unused-expressions': [ERROR, RULE_NO_UNUSED_EXPRESSIONS_OPTIONS],
-    'no-useless-call': ERROR,
-    'no-useless-computed-key': ERROR,
-    'no-useless-concat': ERROR,
-    'no-useless-constructor': ERROR,
-    'no-useless-rename': ERROR,
-    'no-useless-return': ERROR,
-    'no-var': ERROR,
-    'no-void': [ERROR, {allowAsStatement: true}],
-    // 'no-warning-comments': OFF,
-    'object-shorthand': ERROR,
-    'one-var': [ERROR, 'never'],
-    'operator-assignment': ERROR,
-    'prefer-arrow-callback': [
-      ERROR,
+    // ])
+    .addRule('no-unneeded-ternary', ERROR, [{defaultAssignment: false}])
+    .addRule('no-unused-expressions', ERROR, RULE_NO_UNUSED_EXPRESSIONS_OPTIONS)
+    .addRule('no-useless-call', ERROR)
+    .addRule('no-useless-computed-key', ERROR)
+    .addRule('no-useless-concat', ERROR)
+    .addRule('no-useless-constructor', ERROR)
+    .addRule('no-useless-rename', ERROR)
+    .addRule('no-useless-return', ERROR)
+    .addRule('no-var', ERROR)
+    .addRule('no-void', ERROR, [{allowAsStatement: true}])
+    // .addRule('no-warning-comments', OFF)
+    .addRule('object-shorthand', ERROR)
+    .addRule('one-var', ERROR, ['never'])
+    .addRule('operator-assignment', ERROR)
+    .addRule('prefer-arrow-callback', ERROR, [
       {
         allowNamedFunctions: false,
         allowUnboundThis: true,
       },
-    ],
-    'prefer-const': [ERROR, {destructuring: 'all', ignoreReadBeforeAssign: true}],
-    'prefer-destructuring': [ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS],
-    'prefer-exponentiation-operator': ERROR,
-    // 'prefer-named-capture-group': OFF,
-    'prefer-numeric-literals': ERROR,
+    ])
+    .addRule('prefer-const', ERROR, [{destructuring: 'all', ignoreReadBeforeAssign: true}])
+    .addRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS)
+    .addRule('prefer-exponentiation-operator', ERROR)
+    // .addRule('prefer-named-capture-group', OFF)
+    .addRule('prefer-numeric-literals', ERROR)
     // TODO disable if ecmaVersion<2022?
-    'prefer-object-has-own': ERROR,
-    'prefer-object-spread': ERROR,
-    'prefer-promise-reject-errors': ERROR,
-    'prefer-regex-literals': [ERROR, {disallowRedundantWrapping: true}],
-    'prefer-rest-params': ERROR,
-    'prefer-spread': ERROR,
-    'prefer-template': ERROR,
-    radix: ERROR,
-    'require-await': ERROR,
-    // 'require-unicode-regexp': OFF,
-    'sort-imports': [ERROR, {ignoreDeclarationSort: true}],
-    // 'sort-keys': OFF,
-    // 'sort-vars': OFF,
-    strict: [ERROR, 'never'],
-    'symbol-description': ERROR,
-    'vars-on-top': ERROR,
-    yoda: ERROR,
-
+    .addRule('prefer-object-has-own', ERROR)
+    .addRule('prefer-object-spread', ERROR)
+    .addRule('prefer-promise-reject-errors', ERROR)
+    .addRule('prefer-regex-literals', ERROR, [{disallowRedundantWrapping: true}])
+    .addRule('prefer-rest-params', ERROR)
+    .addRule('prefer-spread', ERROR)
+    .addRule('prefer-template', ERROR)
+    .addRule('radix', ERROR)
+    .addRule('require-await', ERROR)
+    // .addRule('require-unicode-regexp', OFF)
+    .addRule('sort-imports', ERROR, [{ignoreDeclarationSort: true}])
+    // .addRule('sort-keys', OFF)
+    // .addRule('sort-vars', OFF)
+    .addRule('strict', ERROR, ['never'])
+    .addRule('symbol-description', ERROR)
+    .addRule('vars-on-top', ERROR)
+    .addRule('yoda', ERROR)
     // 🔵 Not in recommended - Layout & Formatting
-
-    'unicode-bom': ERROR,
-
+    .addRule('unicode-bom', ERROR)
     // 🔵 Stylistic
-
-    '@stylistic/quotes': [
-      ERROR,
+    .addAnyRule('@stylistic/quotes', ERROR, [
       'single', // Doesn't matter since `ignoreStringLiterals` is true - BUT will be used in fixes
       {
         ignoreStringLiterals: true,
         avoidEscape: true, // TODO Doesn't have any effect `ignoreStringLiterals` is true - should propose auto-fix?
       },
-    ],
-  };
+    ])
+    .addOverrides();
 
-  return [
-    {
-      ...(options.files && {files: options.files}),
-      ...(options.ignores && {ignores: options.ignores}),
-      // https://eslint.org/docs/latest/rules/
-      rules: {
-        ...EslintJs.configs.recommended.rules,
-        ...rules,
-        ...options.overrides,
-      },
-      name: genFlatConfigEntryName('js'),
-    },
-  ];
+  return builder.getAllConfigs();
 };
