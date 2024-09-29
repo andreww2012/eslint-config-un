@@ -83,6 +83,7 @@
     "eslint-plugin-sonarjs": "^1.0.4",
     "eslint-plugin-tailwindcss": "^3.17.4",
     "eslint-plugin-unicorn": "^55.0.0",
+    "eslint-plugin-unused-imports": "4.1.4",
     "eslint-plugin-vue": "^9.28.0",
     "eslint-plugin-vuejs-accessibility": "^2.4.1",
     "globals": "^15.9.0",

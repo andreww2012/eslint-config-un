@@ -24,7 +24,7 @@ import {type TsEslintConfigOptions, tsEslintConfig} from './configs/ts';
 import {type UnicornEslintConfigOptions, unicornEslintConfig} from './configs/unicorn';
 import {type VueEslintConfigOptions, vueEslintConfig} from './configs/vue';
 import {GLOB_CONFIG_FILES, OFF} from './constants';
-import type {EslintConfigOptions, FlatConfigEntry, InternalConfigOptions} from './types';
+import type {EslintConfigUnOptions, FlatConfigEntry, InternalConfigOptions} from './types';
 import {assignOptions, genFlatConfigEntryName} from './utils';
 
 // TODO debug
@@ -33,7 +33,7 @@ import {assignOptions, genFlatConfigEntryName} from './utils';
 
 const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set(['curly', 'unicorn/template-indent']);
 
-export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry[] => {
+export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEntry[] => {
   const configsOptions = options.configs || {};
 
   const isVueEnabled =

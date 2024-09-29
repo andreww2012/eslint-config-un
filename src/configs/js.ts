@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import EslintJs from '@eslint/js';
 import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
+import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
 import {ERROR, WARNING} from '../constants';
 import type {ConstantKeys} from '../type-utils';
 import type {
@@ -17,7 +18,13 @@ type BuiltinEslintRulesFixed = Pick<
   keyof ConstantKeys<BuiltinEslintRules> & keyof AllEslintRules
 >;
 
-export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRulesFixed> {}
+export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRulesFixed> {
+  /**
+   * Enables `eslint-plugin-unused-imports` plugin. Note than the base rules (`no-unused-vars` and `@typescript-eslint/no-unused-vars` are NOT disabled for imports)
+   * @default true
+   */
+  autofixToRemoveUnusedImports?: boolean;
+}
 
 export const RULE_CAMELCASE_OPTIONS: GetRuleOptions<'camelcase'> = [
   {
@@ -294,6 +301,16 @@ export const jsEslintConfig = (
       {blankLine: 'never', prev: 'import', next: 'import'},
     ])
     .addOverrides();
+
+  if (options.autofixToRemoveUnusedImports ?? true) {
+    builder
+      .addConfig('js/disable-unused-imports', {
+        plugins: {
+          'unused-imports': eslintPluginUnusedImports,
+        },
+      })
+      .addRule('unused-imports/no-unused-imports', ERROR);
+  }
 
   return builder.getAllConfigs();
 };

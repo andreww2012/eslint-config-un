@@ -59,7 +59,7 @@ export type RuleDefinitionsToRuleEntries<
 
 /* Entrypoint options */
 
-export interface EslintConfigOptions {
+export interface EslintConfigUnOptions {
   /**
    * **Global** ignore patterns
    */
@@ -144,7 +144,7 @@ export interface EslintConfigOptions {
 }
 
 export interface InternalConfigOptions {
-  globalOptions?: Omit<EslintConfigOptions, 'configs'>;
+  globalOptions?: Omit<EslintConfigUnOptions, 'configs'>;
   isTypescriptEnabled?: boolean;
   vueOptions?: VueEslintConfigOptions;
 }
