@@ -20,6 +20,7 @@ const configs = [
       import: true,
       js: true,
       node: true,
+      preferArrowFunctions: true,
       promise: true,
       regexp: true,
       security: true,

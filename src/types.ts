@@ -4,6 +4,7 @@ import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {ImportEslintConfigOptions} from './configs/import';
 import type {JsEslintConfigOptions} from './configs/js';
 import type {NodeEslintConfigOptions} from './configs/node';
+import type {PreferArrowFunctionsEslintConfigOptions} from './configs/prefer-arrow-functions';
 import type {PromiseEslintConfigOptions} from './configs/promise';
 import type {RegexpEslintConfigOptions} from './configs/regexp';
 import type {SecurityEslintConfigOptions} from './configs/security';
@@ -12,26 +13,29 @@ import type {TsEslintConfigOptions} from './configs/ts';
 import type {UnicornEslintConfigOptions} from './configs/unicorn';
 import type {VueEslintConfigOptions} from './configs/vue';
 import type {RuleOptions} from './eslint-types';
-
-type PickKeysStartingWith<O, T extends string> = {
-  [K in keyof O as K extends `${T}${string}` ? K : never]: O[K];
-};
+import type {ConstantKeys, PickKeysStartingWith} from './type-utils';
 
 export type RulesRecord = Eslint.Linter.RulesRecord & RuleOptions;
-
 // What's going on with this type? `FlatConfig` needs to be used to be compatible with eslint v8 types (v8's `Config` type is different from v9's `Config` so we can't just use `Config`). But `FlatConfig` was not made generic in v9 types so we need to add extra property that utilizes the generic parameter.
 export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = Eslint.Linter.FlatConfig &
   Pick<Eslint.Linter.Config<T>, 'rules'>;
 
-export type RuleOverrides<T extends string | RulesRecord> = FlatConfigEntry<
-  T extends string ? Record<T, Eslint.Linter.RuleEntry> : T
->['rules'];
+export type AllEslintRules = ConstantKeys<FlatConfigEntry['rules'] & {}>;
+
+export type GetRuleOptions<RuleName extends keyof AllEslintRules> =
+  AllEslintRules[RuleName] & {} extends Eslint.Linter.RuleEntry<infer Options> ? Options : never;
+
+export type AllRulesWithPrefix<T extends string> = PickKeysStartingWith<AllEslintRules, T>;
+
+export type RuleOverrides<T extends string | RulesRecord> = T extends string
+  ? AllRulesWithPrefix<T>
+  : T extends RulesRecord
+    ? FlatConfigEntry<T>['rules']
+    : never;
 
 export type ConfigSharedOptions<T extends string | RulesRecord = RulesRecord> = Partial<
   Pick<FlatConfigEntry, 'files' | 'ignores'> & {
-    overrides?: T extends string
-      ? PickKeysStartingWith<FlatConfigEntry['rules'] & {}, T | `disable-autofix/${T}`>
-      : RuleOverrides<T>;
+    overrides?: RuleOverrides<T>;
   }
 >;
 
@@ -127,6 +131,11 @@ export interface EslintConfigOptions {
      * @default false
      */
     security?: boolean | Partial<SecurityEslintConfigOptions>;
+    /**
+     * NOTE: disabled by default
+     * @default false
+     */
+    preferArrowFunctions?: boolean | Partial<PreferArrowFunctionsEslintConfigOptions>;
   };
 }
 

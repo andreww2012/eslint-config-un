@@ -11,6 +11,10 @@ import {getPackageInfoSync, isPackageExists} from 'local-pkg';
 import {type ImportEslintConfigOptions, importEslintConfig} from './configs/import';
 import {jsEslintConfig} from './configs/js';
 import {type NodeEslintConfigOptions, nodeEslintConfig} from './configs/node';
+import {
+  type PreferArrowFunctionsEslintConfigOptions,
+  preferArrowFunctionsEslintConfig,
+} from './configs/prefer-arrow-functions';
 import {type PromiseEslintConfigOptions, promiseEslintConfig} from './configs/promise';
 import {type RegexpEslintConfigOptions, regexpEslintConfig} from './configs/regexp';
 import {type SecurityEslintConfigOptions, securityEslintConfig} from './configs/security';
@@ -24,7 +28,7 @@ import type {EslintConfigOptions, FlatConfigEntry, InternalConfigOptions} from '
 import {assignOptions, genFlatConfigEntryName} from './utils';
 
 // TODO debug
-// TODO: angular, react, eslint-plugin-vitest, eslint-plugin-deprecation, eslint-plugin-prefer-arrow-functions, eslint-plugin-html, eslint-plugin-css, json, yaml
+// TODO: angular, react, eslint-plugin-vitest, eslint-plugin-deprecation, eslint-plugin-html, eslint-plugin-css, json, yaml
 // TODO getPackageInfo async?
 
 const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set(['curly', 'unicorn/template-indent']);
@@ -143,6 +147,13 @@ export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry
     ...assignOptions(configsOptions, 'security'),
   };
 
+  /* 🔵 PREFER ARROW FUNCTIONS */
+
+  const isPreferArrowFunctionsEnabled = Boolean(configsOptions.preferArrowFunctions ?? false);
+  const preferArrowFunctionsOptions: PreferArrowFunctionsEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'preferArrowFunctions'),
+  };
+
   const internalOptions: InternalConfigOptions = {
     globalOptions: options,
     isTypescriptEnabled,
@@ -194,6 +205,8 @@ export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry
       isTailwindEnabled && tailwindEslintConfig(tailwindOptions, internalOptions),
       isRegexpEnabled && regexpEslintConfig(regexpOptions, internalOptions),
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
+      isPreferArrowFunctionsEnabled &&
+        preferArrowFunctionsEslintConfig(preferArrowFunctionsOptions, internalOptions),
       isTypescriptEnabled && tsEslintConfig(tsOptions, internalOptions), // Must come after all rulesets for vanilla JS
       isVueEnabled && vueEslintConfig(vueOptions, internalOptions), // Must come after ts
 
