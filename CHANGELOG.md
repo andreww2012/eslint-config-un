@@ -1,3 +1,23 @@
+## 0.1.0
+
+### Breaking changes
+
+- Force no empty lines between import statements by default.
+
+### Other changes
+
+- New configs: `yaml` and `prefer-arrow-functions` (both disabled by default).
+- New option to add an auto fix to remove unused imports (enabled by default).
+- Ability to set the same severity for all rules of a config.
+- Added an option to control `reportUnusedDisableDirectives` param of `vue/comment-directive` rule.
+- Dependencies:
+  - `eslint-plugin-vue`@9.28.0
+    - Enabled a new [`vue/require-default-export`](https://eslint.vuejs.org/rules/require-default-export.html) rule.
+    - Added unplugin-vue-router's [`definePage`](https://uvr.esm.is/guide/extending-routes.html#definepage) and nuxt's [`definePageMeta`](https://nuxt.com/docs/api/utils/define-page-meta) and [`defineRouteRules`](https://nuxt.com/docs/api/utils/define-route-rules) macros to `vue/define-macros-order`.
+  - `typescript-eslint`@8.7.0
+    - Enabled a new [`@typescript-eslint/no-deprecated`](https://typescript-eslint.io/rules/no-deprecated/) rule.
+- Internal code refactoring.
+
 ## 0.0.7
 
 - Update dependencies. Highlights:
