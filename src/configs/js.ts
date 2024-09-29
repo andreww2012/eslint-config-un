@@ -290,6 +290,9 @@ export const jsEslintConfig = (
         avoidEscape: true, // TODO Doesn't have any effect `ignoreStringLiterals` is true - should propose auto-fix?
       },
     ])
+    .addAnyRule('@stylistic/padding-line-between-statements', ERROR, [
+      {blankLine: 'never', prev: 'import', next: 'import'},
+    ])
     .addOverrides();
 
   return builder.getAllConfigs();
