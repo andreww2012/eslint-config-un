@@ -98,6 +98,9 @@ importers:
       '@types/eslint-plugin-security':
         specifier: ^3.0.0
         version: 3.0.0
+      '@types/eslint-plugin-tailwindcss':
+        specifier: 3.17.0
+        version: 3.17.0
       '@types/eslint__js':
         specifier: ^8.42.3
         version: 8.42.3
@@ -718,6 +721,9 @@ packages:
 
   '@types/eslint-plugin-security@3.0.0':
     resolution: {integrity: sha512-CpJ7dhqhfURdYHAlaQM4vfl75lDYnGl5+EZKoO/fW0hEREZa9+EBn1g10XLDM6n5yJSuTAPn5afkM4vNzhlyFQ==}
+
+  '@types/eslint-plugin-tailwindcss@3.17.0':
+    resolution: {integrity: sha512-ucQGf2YIdTcndYcxRU3UdZgmhUHsOlbIF4BaRtl0op+7k2JmqM2i3aXZ6XIcfZgVq1ZKov7VM5c/BR81ukmkyg==}
 
   '@types/eslint@9.6.1':
     resolution: {integrity: sha512-FXx2pKgId/WyYo2jXw63kk7/+TY7u7AziEJxJAnSFzHlqTAS3Ync6SvgYAN/k4/PQpnnVuzoMuVnByKK2qp0ag==}
@@ -3599,6 +3605,10 @@ snapshots:
   '@types/eslint-config-prettier@6.11.3': {}
 
   '@types/eslint-plugin-security@3.0.0':
+    dependencies:
+      '@types/eslint': 9.6.1
+
+  '@types/eslint-plugin-tailwindcss@3.17.0':
     dependencies:
       '@types/eslint': 9.6.1
 

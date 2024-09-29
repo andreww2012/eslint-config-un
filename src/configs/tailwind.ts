@@ -1,4 +1,3 @@
-// @ts-expect-error no typings
 import eslintPluginTailwind from 'eslint-plugin-tailwindcss';
 import {OFF, WARNING} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
