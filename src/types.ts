@@ -12,8 +12,9 @@ import type {TailwindEslintConfigOptions} from './configs/tailwind';
 import type {TsEslintConfigOptions} from './configs/ts';
 import type {UnicornEslintConfigOptions} from './configs/unicorn';
 import type {VueEslintConfigOptions} from './configs/vue';
+import type {YamlEslintConfigOptions} from './configs/yaml';
 import type {RuleOptions} from './eslint-types';
-import type {ConstantKeys, PickKeysStartingWith} from './type-utils';
+import type {ConstantKeys, PickKeysNotStartingWith, PickKeysStartingWith} from './type-utils';
 
 type EslintSeverity = Eslint.Linter.RuleSeverity;
 
@@ -22,7 +23,11 @@ export type RulesRecord = Eslint.Linter.RulesRecord & RuleOptions;
 export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = Eslint.Linter.FlatConfig &
   Pick<Eslint.Linter.Config<T>, 'rules'>;
 
-export type AllEslintRules = ConstantKeys<FlatConfigEntry['rules'] & {}>;
+// Need to exclude `disable-autofix` rules to avoid TS issues related to big unions
+export type AllEslintRules = PickKeysNotStartingWith<
+  ConstantKeys<FlatConfigEntry['rules'] & {}>,
+  'disable-autofix/'
+>;
 
 export type GetRuleOptions<RuleName extends keyof AllEslintRules> =
   AllEslintRules[RuleName] & {} extends Eslint.Linter.RuleEntry<infer Options> ? Options : never;
@@ -140,6 +145,12 @@ export interface EslintConfigUnOptions {
      * @default false
      */
     preferArrowFunctions?: boolean | Partial<PreferArrowFunctionsEslintConfigOptions>;
+    /**
+     * NOTE: disabled by default.
+     * If enabled, lockfiles (`yarn.lock`, `pnpm-lock.yaml`) will be ignored by default, and that cannot be overridden.
+     * @default false
+     */
+    yaml?: boolean | Partial<YamlEslintConfigOptions>;
   };
 }
 

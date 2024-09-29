@@ -35,6 +35,7 @@ const configs = [
         nuxtMajorVersion: 3,
         pinia: true,
       },
+      yaml: true,
     },
   }),
 ];

@@ -2,6 +2,14 @@
   "eslint.options": {
     "flags": ["unstable_ts_config"]
   },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "yaml",
+  ],
 
   "[javascript][typescript][typescriptreact][vue][css][scss][postcss][html]": {
     // Note: do NOT set `editor.formatOnSaveMode` to any value with `modifications` -
@@ -11,17 +19,4 @@
   },
 
   "typescript.tsdk": "node_modules\\typescript\\lib",
-
-  "tailwindCSS.experimental.configFile": "tailwind.config.ts",
-  "tailwindCSS.experimental.classRegex": [
-    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
-  ],
-  "tailwindCSS.classAttributes": [
-    "class",
-    "className",
-    "ngClass",
-
-    "(\\w+-)+class(es)?"
-  ],
 }

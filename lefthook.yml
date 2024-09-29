@@ -1,3 +1,4 @@
+# eslint-disable yml/key-name-casing
 pre-push:
   parallel: true
   commands:

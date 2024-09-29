@@ -23,12 +23,13 @@ import {type TailwindEslintConfigOptions, tailwindEslintConfig} from './configs/
 import {type TsEslintConfigOptions, tsEslintConfig} from './configs/ts';
 import {type UnicornEslintConfigOptions, unicornEslintConfig} from './configs/unicorn';
 import {type VueEslintConfigOptions, vueEslintConfig} from './configs/vue';
+import {type YamlEslintConfigOptions, yamlEslintConfig} from './configs/yaml';
 import {GLOB_CONFIG_FILES, OFF} from './constants';
 import type {EslintConfigUnOptions, FlatConfigEntry, InternalConfigOptions} from './types';
 import {assignOptions, genFlatConfigEntryName} from './utils';
 
 // TODO debug
-// TODO: angular, react, eslint-plugin-vitest, eslint-plugin-deprecation, eslint-plugin-html, eslint-plugin-css, json, yaml
+// TODO: angular, react, eslint-plugin-vitest, eslint-plugin-deprecation, eslint-plugin-html, eslint-plugin-css, json
 // TODO getPackageInfo async?
 
 const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set(['curly', 'unicorn/template-indent']);
@@ -154,6 +155,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'preferArrowFunctions'),
   };
 
+  /* 🔵 YAML */
+
+  const isYamlEnabled = Boolean(configsOptions.yaml ?? false);
+  const yamlOptions: YamlEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'yaml'),
+  };
+
   const internalOptions: InternalConfigOptions = {
     globalOptions: options,
     isTypescriptEnabled,
@@ -207,6 +215,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&
         preferArrowFunctionsEslintConfig(preferArrowFunctionsOptions, internalOptions),
+      isYamlEnabled && yamlEslintConfig(yamlOptions, internalOptions),
       isTypescriptEnabled && tsEslintConfig(tsOptions, internalOptions), // Must come after all rulesets for vanilla JS
       isVueEnabled && vueEslintConfig(vueOptions, internalOptions), // Must come after ts
 

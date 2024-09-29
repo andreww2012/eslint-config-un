@@ -5,5 +5,6 @@ export default eslintConfig({
     vue: {
       files: ['*.vue'],
     },
+    yaml: true,
   },
 });
