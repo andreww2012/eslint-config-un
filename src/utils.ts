@@ -99,11 +99,12 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
       ) => {
         const errorsInsteadOfWarnings = this.internalOptions.globalOptions?.errorsInsteadOfWarnings;
         const severityFinal: RuleSeverity =
-          severity === WARNING &&
+        (configOptions.forceSeverity as RuleSeverity | undefined)??
+          (severity === WARNING &&
           (errorsInsteadOfWarnings === true ||
             (Array.isArray(errorsInsteadOfWarnings) && errorsInsteadOfWarnings.includes(ruleName)))
             ? ERROR
-            : severity;
+            : severity);
         const ruleNameFinal = `${options?.disableAutofix ? 'disable-autofix/' : ''}${ruleName}`;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         configFinal.rules![ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];

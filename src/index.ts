@@ -9,7 +9,7 @@ import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import {getPackageInfoSync, isPackageExists} from 'local-pkg';
 import {type ImportEslintConfigOptions, importEslintConfig} from './configs/import';
-import {jsEslintConfig} from './configs/js';
+import {type JsEslintConfigOptions, jsEslintConfig} from './configs/js';
 import {type NodeEslintConfigOptions, nodeEslintConfig} from './configs/node';
 import {
   type PreferArrowFunctionsEslintConfigOptions,
@@ -54,7 +54,7 @@ export const eslintConfig = (options: EslintConfigOptions = {}): FlatConfigEntry
 
   /* 🔵 JAVASCRIPT */
 
-  const jsOptions: TsEslintConfigOptions = {
+  const jsOptions: JsEslintConfigOptions = {
     ...assignOptions(configsOptions, 'js'),
   };
 
