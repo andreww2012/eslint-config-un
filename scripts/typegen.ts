@@ -10,7 +10,7 @@ const configs = [
   {
     plugins: {
       '': {
-        // eslint-disable-next-line import/no-deprecated
+        // eslint-disable-next-line import/no-deprecated, @typescript-eslint/no-deprecated
         rules: Object.fromEntries(builtinRules.entries()),
       },
     },

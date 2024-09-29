@@ -337,7 +337,17 @@ export const vueEslintConfig = (
     ])
     .addRule('vue/define-macros-order', ERROR, [
       {
-        order: ['defineOptions', 'defineModel', 'defineProps', 'defineEmits', 'defineSlots'],
+        order: [
+          'definePage', // unplugin-vue-router: https://uvr.esm.is/guide/extending-routes.html#definepage
+          'definePageMeta', // Nuxt 3: https://nuxt.com/docs/api/utils/define-page-meta
+          'defineRouteRules', // Nuxt 3: https://nuxt.com/docs/api/utils/define-route-rules
+
+          'defineOptions',
+          'defineModel',
+          'defineProps',
+          'defineEmits',
+          'defineSlots',
+        ],
         ...(isMin3_4 && {defineExposeLast: true}),
       },
     ])
@@ -352,6 +362,8 @@ export const vueEslintConfig = (
     // .addRule('vue/match-component-file-name', OFF)
     // .addRule('vue/match-component-import-name', OFF)
     // .addRule('vue/max-lines-per-block', OFF)
+    // .addRule('vue/max-props', OFF) // >=9.28.0
+    // .addRule('vue/max-template-depth', OFF) // >=9.28.0
     // .addRule('vue/new-line-between-multi-line-property', OFF)
     // .addRule('vue/next-tick-style', OFF)
     // .addRule('vue/no-bare-strings-in-template', OFF)
@@ -417,6 +429,7 @@ export const vueEslintConfig = (
     .addRule('vue/prefer-prop-type-boolean-first', ERROR)
     .addRule('vue/prefer-separate-static-class', ERROR)
     .addRule('vue/prefer-true-attribute-shorthand', ERROR)
+    .addRule('vue/require-default-export', ERROR) // >=9.28.0
     .addRule('vue/require-direct-export', ERROR)
     // .addRule('vue/require-emit-validator', OFF)
     .addRule('vue/require-explicit-slots', isMin3_3 ? ERROR : OFF)
@@ -518,6 +531,9 @@ export const vueEslintConfig = (
 
   const a11yConfig = builder.addConfig('vue/a11y', {
     files,
+    plugins: {
+      'vuejs-accessibility': eslintPluginVueA11y,
+    },
   });
   if (a11y) {
     a11yConfig

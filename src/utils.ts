@@ -35,10 +35,10 @@ export const assignOptions = <T>(options: T, key: keyof T) => ({
 });
 
 export type MaybeArray<T> = T | T[];
-export const arraify = <T>(value?: MaybeArray<T> | null | undefined): T[] =>
+export const arraify = <T>(value?: MaybeArray<T> | null): T[] =>
   Array.isArray(value) ? value : value == null ? [] : [value];
 
-export const isNonEmptyArray = <T>(value?: T[] | null | undefined): value is [T, ...T[]] =>
+export const isNonEmptyArray = <T>(value?: T[] | null): value is [T, ...T[]] =>
   Array.isArray(value) && value.length > 0;
 
 export type FlatConfigEntryForBuilder = Omit<FlatConfigEntry, 'name' | 'rules'>;
