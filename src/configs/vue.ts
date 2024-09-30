@@ -156,7 +156,9 @@ export const vueEslintConfig = (
   // LEGEND:
   // 3️⃣ = Only in Vue 3 recommended
   builder
-    .addConfig(['vue', {includeDefaultFilesAndIgnores: true}])
+    .addConfig(['vue', {includeDefaultFilesAndIgnores: true}], {
+      files,
+    })
     .addBulkRules(recommendedRules)
     // 🟢 Disable deprecated rules from Recommended
     .addRule('vue/component-tags-order', OFF)

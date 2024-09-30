@@ -29,7 +29,6 @@ import type {EslintConfigUnOptions, FlatConfigEntry, InternalConfigOptions} from
 import {assignOptions, genFlatConfigEntryName} from './utils';
 
 // TODO debug
-// TODO: angular, react, eslint-plugin-vitest, eslint-plugin-deprecation, eslint-plugin-html, eslint-plugin-css, json
 // TODO getPackageInfo async?
 
 const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set(['curly', 'unicorn/template-indent']);
