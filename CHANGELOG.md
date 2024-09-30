@@ -1,3 +1,9 @@
+## 0.1.2
+
+- Dependencies:
+  - `typescript-eslint`@8.8.0
+    - Set `checkTypePredicates: true` for [`@typescript-eslint/no-unnecessary-condition`](https://typescript-eslint.io/rules/no-unnecessary-condition/#checktypepredicates) rule.
+
 ## 0.1.1
 
 - Vue: trailing slash in user-supplied paths (for example, in `nuxtOrVueProjectDir`) is now optional.
