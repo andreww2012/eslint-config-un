@@ -1,3 +1,8 @@
+## 0.1.1
+
+- Vue: trailing slash in user-supplied paths (for example, in `nuxtOrVueProjectDir`) is now optional.
+- Vue: fixed problems related to the rules applied to wrong files.
+
 ## 0.1.0
 
 ### Breaking changes
