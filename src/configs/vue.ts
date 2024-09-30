@@ -508,7 +508,9 @@ export const vueEslintConfig = (
         isNuxtEnabled && [nuxtLayoutsFiles, 'app.vue', 'error.vue'],
 
         ...arraify(options.doNotRequireComponentNamesToBeMultiWordForPatterns),
-      ].filter((v) => v !== false),
+      ]
+        .flat()
+        .filter((v) => v !== false),
     })
     .addRule('vue/multi-word-component-names', OFF);
 
@@ -527,7 +529,9 @@ export const vueEslintConfig = (
           `${options.nuxtOrVueProjectDir}plugins/**/*.*`,
           `${options.nuxtOrVueProjectDir}server/**/*.*`,
         ],
-      ].filter((v) => v !== false),
+      ]
+        .flat()
+        .filter((v) => v !== false),
     })
     .addAnyRule('import/no-default-export', OFF);
 
