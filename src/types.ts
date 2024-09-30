@@ -14,17 +14,21 @@ import type {UnicornEslintConfigOptions} from './configs/unicorn';
 import type {VueEslintConfigOptions} from './configs/vue';
 import type {YamlEslintConfigOptions} from './configs/yaml';
 import type {RuleOptions} from './eslint-types';
-import type {ConstantKeys, PickKeysNotStartingWith, PickKeysStartingWith} from './type-utils';
+import type {
+  ConstantKeys,
+  PickKeysNotStartingWith,
+  PickKeysStartingWith,
+  PrettifyShallow,
+} from './type-utils';
 
 type EslintSeverity = Eslint.Linter.RuleSeverity;
 
 export type RulesRecord = Eslint.Linter.RulesRecord & RuleOptions;
 // What's going on with this type? `FlatConfig` needs to be used to be compatible with eslint v8 types (v8's `Config` type is different from v9's `Config` so we can't just use `Config`). But `FlatConfig` was not made generic in v9 types so we need to add extra property that utilizes the generic parameter.
-export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = Omit<
-  Eslint.Linter.FlatConfig,
-  'files'
-> &
-  Pick<Eslint.Linter.Config<T>, 'rules'> & {files?: string[]};
+export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
+  Omit<Eslint.Linter.FlatConfig, 'files'> &
+    Pick<Eslint.Linter.Config<T>, 'rules'> & {files?: string[]}
+>;
 
 // Need to exclude `disable-autofix` rules to avoid TS issues related to big unions
 export type AllEslintRules = PickKeysNotStartingWith<

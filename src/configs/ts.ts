@@ -270,6 +270,7 @@ export const tsEslintConfig = (
       [
         {
           allowConstantLoopConditions: true,
+          checkTypePredicates: true, // >=8.8.0
         },
       ],
       {disableAutofix: true},

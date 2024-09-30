@@ -16,3 +16,7 @@ export type ConstantKeys<T> = {
         ? never
         : K]: T[K];
 };
+
+export type PrettifyShallow<T> = {
+  [K in keyof T]: T[K];
+};
