@@ -11,7 +11,7 @@ import type {
   InternalConfigOptions,
   RuleOverrides,
 } from '../types';
-import {ConfigEntryBuilder, arraify} from '../utils';
+import {ConfigEntryBuilder, joinPaths} from '../utils';
 import {RULE_CAMELCASE_OPTIONS, RULE_EQEQEQ_OPTIONS} from './js';
 
 type WellKnownSfcBlocks =
@@ -123,7 +123,7 @@ export const vueEslintConfig = (
         entry.name === 'vue:recommended:rules' || entry.name === 'vue:vue2-recommended:rules',
     )?.rules;
 
-  const nuxtLayoutsFiles = `${options.nuxtOrVueProjectDir}layouts/**/*.vue`;
+  const nuxtLayoutsFilesGlob: string = joinPaths([options.nuxtOrVueProjectDir, 'layouts/**/*.vue']);
 
   const builder = new ConfigEntryBuilder<'vue'>(options, internalOptions);
 
@@ -503,19 +503,19 @@ export const vueEslintConfig = (
   builder
     .addConfig('vue/allow-single-word-component-names', {
       files: [
-        `${options.nuxtOrVueProjectDir}pages/**/*.vue`,
-        `${options.nuxtOrVueProjectDir}views/**/*.vue`,
-        isNuxtEnabled && [nuxtLayoutsFiles, 'app.vue', 'error.vue'],
+        joinPaths([options.nuxtOrVueProjectDir, 'pages/**/*.vue']),
+        joinPaths([options.nuxtOrVueProjectDir, 'views/**/*.vue']),
+        isNuxtEnabled && [nuxtLayoutsFilesGlob, 'app.vue', 'error.vue'],
 
-        ...arraify(options.doNotRequireComponentNamesToBeMultiWordForPatterns),
+        options.doNotRequireComponentNamesToBeMultiWordForPatterns,
       ]
         .flat()
-        .filter((v) => v !== false),
+        .filter((v) => v !== false && v != null),
     })
     .addRule('vue/multi-word-component-names', OFF);
 
   const vueAllowImplicitSlotsConfig = builder.addConfig('vue/allow-implicit-slots', {
-    files: [nuxtLayoutsFiles],
+    files: [nuxtLayoutsFilesGlob],
   });
   if (isNuxtEnabled) {
     vueAllowImplicitSlotsConfig.addRule('vue/require-explicit-slots', OFF);
@@ -526,8 +526,8 @@ export const vueEslintConfig = (
       files: [
         GLOB_VUE,
         isNuxtEnabled && [
-          `${options.nuxtOrVueProjectDir}plugins/**/*.*`,
-          `${options.nuxtOrVueProjectDir}server/**/*.*`,
+          joinPaths([options.nuxtOrVueProjectDir, 'plugins/**/*.*']),
+          joinPaths([options.nuxtOrVueProjectDir, 'server/**/*.*']),
         ],
       ]
         .flat()

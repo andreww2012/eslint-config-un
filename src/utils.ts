@@ -1,3 +1,4 @@
+import path from 'node:path';
 import {ERROR, type RuleSeverity, WARNING} from './constants';
 import type {FalsyValue} from './type-utils';
 import type {
@@ -40,6 +41,11 @@ export const arraify = <T>(value?: MaybeArray<T> | null): T[] =>
 
 export const isNonEmptyArray = <T>(value?: T[] | null): value is [T, ...T[]] =>
   Array.isArray(value) && value.length > 0;
+
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+export const joinPaths = (paths: string | (string | FalsyValue)[] | FalsyValue) =>
+  // eslint-disable-next-line unicorn/prefer-native-coercion-functions
+  path.posix.join(...arraify(paths).filter((v): v is string => Boolean(v)));
 
 export type FlatConfigEntryForBuilder = Omit<FlatConfigEntry, 'name' | 'rules'>;
 
