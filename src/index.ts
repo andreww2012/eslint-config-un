@@ -8,6 +8,10 @@ import pluginDisableAutofix from 'eslint-plugin-disable-autofix';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import {getPackageInfoSync, isPackageExists} from 'local-pkg';
+import {
+  type EslintCommentsEslintConfigOptions,
+  eslintCommentsEslintConfig,
+} from './configs/eslint-comments';
 import {type ImportEslintConfigOptions, importEslintConfig} from './configs/import';
 import {type JsEslintConfigOptions, jsEslintConfig} from './configs/js';
 import {type NodeEslintConfigOptions, nodeEslintConfig} from './configs/node';
@@ -140,6 +144,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'regexp'),
   };
 
+  /* 🔵 ESLINT COMMENTS */
+
+  const isEslintCommentsEnabled = Boolean(configsOptions.eslintComments ?? true);
+  const eslintCommentsOptions: EslintCommentsEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'eslintComments'),
+  };
+
   /* 🔵 SECURITY */
 
   const isSecurityEnabled = Boolean(configsOptions.security ?? false);
@@ -211,6 +222,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isSonarEnabled && sonarEslintConfig(sonarOptions, internalOptions),
       isTailwindEnabled && tailwindEslintConfig(tailwindOptions, internalOptions),
       isRegexpEnabled && regexpEslintConfig(regexpOptions, internalOptions),
+      isEslintCommentsEnabled && eslintCommentsEslintConfig(eslintCommentsOptions, internalOptions),
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&
         preferArrowFunctionsEslintConfig(preferArrowFunctionsOptions, internalOptions),

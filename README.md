@@ -16,6 +16,7 @@ yarn add -D eslint-config-un
 
 Includes the rules from the following configs & plugins:
 - [Vanilla ESLint rules](https://eslint.org/docs/latest/rules/)
+- [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier) to disable Prettier-incompatible rules
 - [typescript-eslint](https://typescript-eslint.io/rules/)
 - [vue](https://eslint.vuejs.org/rules/) (+ [vuejs-accessibility](https://www.npmjs.com/package/eslint-plugin-vuejs-accessibility) and [pinia](https://www.npmjs.com/package/eslint-plugin-pinia))
 - [unicorn](https://www.npmjs.com/package/eslint-plugin-unicorn)
@@ -26,7 +27,9 @@ Includes the rules from the following configs & plugins:
 - [security](https://www.npmjs.com/package/eslint-plugin-security)
 - [sonar](https://www.npmjs.com/package/eslint-plugin-sonarjs)
 - [tailwind](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
-- [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier) to disable Prettier-incompatible rules
+- [yaml](https://www.npmjs.com/package/eslint-plugin-yaml) (since v0.1.0)
+- [prefer-arrow-functions](https://www.npmjs.com/package/eslint-plugin-prefer-arrow-functions) (since v0.1.0)
+- [eslint-comments](https://www.npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments) (since v0.1.3)
 
 ## Features
 

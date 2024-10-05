@@ -5,7 +5,7 @@ import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '
 import {ConfigEntryBuilder} from '../utils';
 
 export interface PreferArrowFunctionsEslintConfigOptions
-  extends Omit<ConfigSharedOptions<'prefer-arrow-functions'>, 'overrides'> {}
+  extends ConfigSharedOptions<'prefer-arrow-functions'> {}
 
 export const preferArrowFunctionsEslintConfig = (
   options: PreferArrowFunctionsEslintConfigOptions = {},

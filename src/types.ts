@@ -1,6 +1,7 @@
 import type {TSESLint} from '@typescript-eslint/utils';
 import type Eslint from 'eslint';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
+import type {EslintCommentsEslintConfigOptions} from './configs/eslint-comments';
 import type {ImportEslintConfigOptions} from './configs/import';
 import type {JsEslintConfigOptions} from './configs/js';
 import type {NodeEslintConfigOptions} from './configs/node';
@@ -142,6 +143,10 @@ export interface EslintConfigUnOptions {
      * @default true
      */
     regexp?: boolean | Partial<RegexpEslintConfigOptions>;
+    /**
+     * @default true
+     */
+    eslintComments?: boolean | Partial<EslintCommentsEslintConfigOptions>;
     /**
      * NOTE: disabled by default
      * @default false

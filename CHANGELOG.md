@@ -1,3 +1,7 @@
+## 0.1.3 (unreleased)
+
+- New config: `eslintComments` via [`@eslint-community/eslint-plugin-eslint-comments`](https://www.npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments).
+
 ## 0.1.2
 
 - Dependencies:
