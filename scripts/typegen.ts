@@ -37,6 +37,7 @@ const configs = [
         pinia: true,
       },
       yaml: true,
+      toml: true,
     },
   }),
 ];

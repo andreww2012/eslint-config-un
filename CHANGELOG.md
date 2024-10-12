@@ -1,6 +1,7 @@
 ## 0.1.3 (unreleased)
 
 - New config: `eslintComments` via [`@eslint-community/eslint-plugin-eslint-comments`](https://www.npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments).
+- New config: `toml` via [`eslint-plugin-toml`](https://www.npmjs.com/package/eslint-plugin-toml).
 - Dependencies:
   - `eslint-plugin-unicorn`@56.0.0
     - Enable [`unicorn/consistent-existence-index-check`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/consistent-existence-index-check.md) and [`unicorn/prefer-math-min-max`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-math-min-max.md) rules.

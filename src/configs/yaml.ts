@@ -10,13 +10,16 @@ import type {
 } from '../types';
 import {ConfigEntryBuilder} from '../utils';
 
+const DEFAULT_FILES_TO_IGNORE = ['yarn.lock', 'pnpm-lock.yaml'] as const;
+
 export interface YamlEslintConfigOptions extends ConfigSharedOptions<'yml'> {
   /**
    * @default 'yml'
    */
   enforceExtension?: (GetRuleOptions<'yml/file-extension'>[0] & {})['extension'];
+  doNotIgnoreFilesByDefault?: Partial<Record<(typeof DEFAULT_FILES_TO_IGNORE)[number], boolean>>;
   /**
-   * Will be merged with the default value (default `ignores` values will also be merged, not overriden)
+   * Will be merged with the default value (default `ignores` values will also be merged, not overridden)
    * @default {camelCase: true, ignores: ['<<']}
    */
   casing?: GetRuleOptions<'yml/key-name-casing'>[0] & {};
@@ -49,7 +52,14 @@ export const yamlEslintConfig = (
         yml: eslintPluginYaml,
       },
       files: options.files || ['*.yaml', '**/*.yaml', '*.yml', '**/*.yml'],
-      ignores: ['**/yarn.lock', '**/pnpm-lock.yaml', ...(options.ignores || [])],
+      ignores: [
+        ...DEFAULT_FILES_TO_IGNORE.map((fileToIgnore) =>
+          options.doNotIgnoreFilesByDefault?.[fileToIgnore]
+            ? undefined
+            : (`**/${fileToIgnore}` as const),
+        ).filter((v) => typeof v === 'string'),
+        ...(options.ignores || []),
+      ],
       languageOptions: {
         parser: yamlEslintParser,
       },

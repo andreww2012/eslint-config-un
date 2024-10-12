@@ -10,6 +10,7 @@ import type {PromiseEslintConfigOptions} from './configs/promise';
 import type {RegexpEslintConfigOptions} from './configs/regexp';
 import type {SecurityEslintConfigOptions} from './configs/security';
 import type {TailwindEslintConfigOptions} from './configs/tailwind';
+import type {TomlEslintConfigOptions} from './configs/toml';
 import type {TsEslintConfigOptions} from './configs/ts';
 import type {UnicornEslintConfigOptions} from './configs/unicorn';
 import type {VueEslintConfigOptions} from './configs/vue';
@@ -159,10 +160,16 @@ export interface EslintConfigUnOptions {
     preferArrowFunctions?: boolean | Partial<PreferArrowFunctionsEslintConfigOptions>;
     /**
      * NOTE: disabled by default.
-     * If enabled, lockfiles (`yarn.lock`, `pnpm-lock.yaml`) will be ignored by default, and that cannot be overridden.
+     * If enabled, lockfiles (`yarn.lock`, `pnpm-lock.yaml`) will be ignored by default
      * @default false
      */
     yaml?: boolean | Partial<YamlEslintConfigOptions>;
+    /**
+     * NOTE: disabled by default.
+     * If enabled, a Rust lockfile (`Cargo.lock`) will be ignored by default
+     * @default false
+     */
+    toml?: boolean | Partial<TomlEslintConfigOptions>;
   };
 }
 

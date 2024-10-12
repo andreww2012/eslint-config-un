@@ -24,6 +24,7 @@ import {type RegexpEslintConfigOptions, regexpEslintConfig} from './configs/rege
 import {type SecurityEslintConfigOptions, securityEslintConfig} from './configs/security';
 import {type SonarEslintConfigOptions, sonarEslintConfig} from './configs/sonar';
 import {type TailwindEslintConfigOptions, tailwindEslintConfig} from './configs/tailwind';
+import {type TomlEslintConfigOptions, tomlEslintConfig} from './configs/toml';
 import {type TsEslintConfigOptions, tsEslintConfig} from './configs/ts';
 import {type UnicornEslintConfigOptions, unicornEslintConfig} from './configs/unicorn';
 import {type VueEslintConfigOptions, vueEslintConfig} from './configs/vue';
@@ -172,6 +173,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'yaml'),
   };
 
+  /* 🔵 TOML */
+
+  const isTomlEnabled = Boolean(configsOptions.toml ?? false);
+  const tomlOptions: TomlEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'toml'),
+  };
+
   const internalOptions: InternalConfigOptions = {
     globalOptions: options,
     isTypescriptEnabled,
@@ -227,6 +235,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isPreferArrowFunctionsEnabled &&
         preferArrowFunctionsEslintConfig(preferArrowFunctionsOptions, internalOptions),
       isYamlEnabled && yamlEslintConfig(yamlOptions, internalOptions),
+      isTomlEnabled && tomlEslintConfig(tomlOptions, internalOptions),
       isTypescriptEnabled && tsEslintConfig(tsOptions, internalOptions), // Must come after all rulesets for vanilla JS
       isVueEnabled && vueEslintConfig(vueOptions, internalOptions), // Must come after ts
 

@@ -28,6 +28,7 @@ Includes the rules from the following configs & plugins:
 - [sonar](https://www.npmjs.com/package/eslint-plugin-sonarjs)
 - [tailwind](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
 - [yaml](https://www.npmjs.com/package/eslint-plugin-yaml) (since v0.1.0)
+- [toml](https://www.npmjs.com/package/eslint-plugin-toml) (since v0.1.3)
 - [prefer-arrow-functions](https://www.npmjs.com/package/eslint-plugin-prefer-arrow-functions) (since v0.1.0)
 - [eslint-comments](https://www.npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments) (since v0.1.3)
 
@@ -62,6 +63,7 @@ export default eslintConfig({
   - `prefer-arrow-functions`
   - `security`
   - `yaml`
+  - `toml`
 - Some rules are set to warn by default. You can change some or even all such rule's reporting level using `errorsInsteadOfWarnings` option. You can find all such rules by inspecting the source code of this package.
 
 ## Troubleshooting
