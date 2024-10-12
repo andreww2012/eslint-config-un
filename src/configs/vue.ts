@@ -1,5 +1,4 @@
 import eslintPluginPinia from 'eslint-plugin-pinia';
-// @ts-expect-error no typings
 import eslintPluginVue from 'eslint-plugin-vue';
 import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility';
 import globals from 'globals';
@@ -115,13 +114,14 @@ export const vueEslintConfig = (
 
   const isNuxtEnabled = Boolean(options.nuxtMajorVersion);
 
-  const recommendedRules = // TODO report to Prettier?
-    // prettier-ignore
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    (eslintPluginVue.configs[isVue3 ? 'flat/recommended' : 'flat/vue2-recommended'] as FlatConfigEntry[]).find(
-      (entry) =>
-        entry.name === 'vue:recommended:rules' || entry.name === 'vue:vue2-recommended:rules',
-    )?.rules;
+  const recommendedRules = (
+    eslintPluginVue.configs[
+      isVue3 ? 'flat/recommended' : 'flat/vue2-recommended'
+    ] as FlatConfigEntry[]
+  ).find(
+    (entry) =>
+      entry.name === 'vue:recommended:rules' || entry.name === 'vue:vue2-recommended:rules',
+  )?.rules;
 
   const nuxtLayoutsFilesGlob: string = joinPaths([options.nuxtOrVueProjectDir, 'layouts/**/*.vue']);
 
@@ -129,7 +129,6 @@ export const vueEslintConfig = (
 
   builder.addConfig('vue/setup', {
     plugins: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       vue: eslintPluginVue,
     },
   });
@@ -137,7 +136,7 @@ export const vueEslintConfig = (
   // TODO detect duplicate name
   builder.addConfig('vue/setup', {
     files: [GLOB_VUE, ...files],
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     processor: eslintPluginVue.processors['.vue'],
     languageOptions: {
       globals: globals.browser,
@@ -370,6 +369,7 @@ export const vueEslintConfig = (
     // .addRule('vue/next-tick-style', OFF)
     // .addRule('vue/no-bare-strings-in-template', OFF)
     // .addRule('vue/no-boolean-default', OFF)
+    .addRule('vue/no-deprecated-delete-set', isVue3 ? ERROR : OFF) // >=9.29.0
     .addRule('vue/no-deprecated-model-definition', isVue3 ? ERROR : OFF)
     .addRule('vue/no-duplicate-attr-inheritance', ERROR)
     .addRule('vue/no-empty-component-block', ERROR)

@@ -1,6 +1,11 @@
 ## 0.1.3 (unreleased)
 
 - New config: `eslintComments` via [`@eslint-community/eslint-plugin-eslint-comments`](https://www.npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments).
+- Dependencies:
+  - `eslint-plugin-unicorn`@56.0.0
+    - Enable [`unicorn/consistent-existence-index-check`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/consistent-existence-index-check.md) and [`unicorn/prefer-math-min-max`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-math-min-max.md) rules.
+  - `eslint-plugin-vue`@9.29.0
+    - Enable [`vue/no-deprecated-delete-set`](https://eslint.vuejs.org/rules/no-deprecated-delete-set.html) rule for Vue 3.
 
 ## 0.1.2
 

@@ -22,6 +22,7 @@ export const unicornEslintConfig = (
     .addRule('unicorn/catch-error-name', WARNING, [], {disableAutofix: true})
     // .addRule('unicorn/consistent-destructuring', OFF) // 🔴
     // .addRule('unicorn/consistent-empty-array-spread', ERROR)
+    .addRule('unicorn/consistent-existence-index-check', ERROR, [], {disableAutofix: true})
     // .addRule('unicorn/consistent-function-scoping', ERROR)
     .addRule('unicorn/custom-error-definition', ERROR) // 🔴
     // .addRule('unicorn/empty-brace-spaces', ERROR) // 💅
@@ -103,10 +104,12 @@ export const unicornEslintConfig = (
     .addRule('unicorn/prefer-dom-node-text-content', OFF)
     // .addRule('unicorn/prefer-event-target', ERROR)
     .addRule('unicorn/prefer-export-from', ERROR, [{ignoreUsedVariables: true}])
+    .addRule('unicorn/prefer-global-this', OFF) // >=56.0.0
     // .addRule('unicorn/prefer-includes', ERROR)
     // .addRule('unicorn/prefer-json-parse-buffer', ERROR)
     // .addRule('unicorn/prefer-keyboard-event-key', ERROR)
     // .addRule('unicorn/prefer-logical-operator-over-ternary', ERROR)
+    // .addRule('unicorn/prefer-math-min-max', ERROR) // >=56.0.0
     // .addRule('unicorn/prefer-math-trunc', ERROR)
     // .addRule('unicorn/prefer-modern-dom-apis', ERROR)
     // .addRule('unicorn/prefer-modern-math-apis', ERROR)
