@@ -9,6 +9,10 @@
     "typescriptreact",
     "vue",
     "yaml",
+    "toml",
+    "json",
+    "jsonc",
+    "json5",
   ],
 
   "[javascript][typescript][typescriptreact][vue][css][scss][postcss][html]": {

@@ -65,6 +65,8 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
           name: string,
           options: {
             includeDefaultFilesAndIgnores?: boolean;
+            filesFallback?: string[];
+            mergeUserFilesWithFallback?: boolean;
           },
         ],
     config?: FlatConfigEntryForBuilder,
@@ -72,16 +74,28 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
     const [name, internalOptions = {}] =
       typeof nameAndMaybeOptions === 'string' ? [nameAndMaybeOptions, {}] : nameAndMaybeOptions;
     const {options: configOptions} = this;
+
     const configName = genFlatConfigEntryName(name);
+
+    const userFiles = configOptions.files || [];
+    const files =
+      userFiles.length > 0
+        ? internalOptions.mergeUserFilesWithFallback
+          ? [...(internalOptions.filesFallback || []), ...userFiles]
+          : userFiles
+        : internalOptions.filesFallback || [];
+    const ignores = configOptions.ignores || [];
+
     const configFinal: FlatConfigEntry = {
       ...(internalOptions.includeDefaultFilesAndIgnores && {
-        ...(configOptions.files && {files: configOptions.files}),
-        ...(configOptions.ignores && {ignores: configOptions.ignores}),
+        ...(files.length > 0 && {files}),
+        ...(ignores.length > 0 && {ignores}),
       }),
       ...config,
       name: configName,
       rules: {},
     };
+
     this.configs.push(configFinal);
     this.configsDict.set(configName, configFinal);
 

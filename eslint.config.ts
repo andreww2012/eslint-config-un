@@ -6,5 +6,7 @@ export default eslintConfig({
       files: ['*.vue'],
     },
     yaml: true,
+    toml: true,
+    json: true,
   },
 });

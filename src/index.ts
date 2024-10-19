@@ -14,6 +14,7 @@ import {
 } from './configs/eslint-comments';
 import {type ImportEslintConfigOptions, importEslintConfig} from './configs/import';
 import {type JsEslintConfigOptions, jsEslintConfig} from './configs/js';
+import {type JsoncEslintConfigOptions, jsoncEslintConfig} from './configs/jsonc';
 import {type NodeEslintConfigOptions, nodeEslintConfig} from './configs/node';
 import {
   type PreferArrowFunctionsEslintConfigOptions,
@@ -180,6 +181,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'toml'),
   };
 
+  /* 🔵 JSONC */
+
+  const isJsoncEnabled = Boolean(configsOptions.json ?? false);
+  const jsoncOptions: JsoncEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'json'),
+  };
+
   const internalOptions: InternalConfigOptions = {
     globalOptions: options,
     isTypescriptEnabled,
@@ -236,6 +244,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
         preferArrowFunctionsEslintConfig(preferArrowFunctionsOptions, internalOptions),
       isYamlEnabled && yamlEslintConfig(yamlOptions, internalOptions),
       isTomlEnabled && tomlEslintConfig(tomlOptions, internalOptions),
+      isJsoncEnabled && jsoncEslintConfig(jsoncOptions, internalOptions),
       isTypescriptEnabled && tsEslintConfig(tsOptions, internalOptions), // Must come after all rulesets for vanilla JS
       isVueEnabled && vueEslintConfig(vueOptions, internalOptions), // Must come after ts
 

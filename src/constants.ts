@@ -22,3 +22,7 @@ export const GLOB_TS = '**/*.?([cm])ts';
 export const GLOB_TSX = `${GLOB_TS}x`;
 
 export const GLOB_VUE = '**/*.vue';
+
+export const GLOB_JSON = '**/*.json';
+export const GLOB_JSONC = '**/*.jsonc';
+export const GLOB_JSON5 = '**/*.json5';

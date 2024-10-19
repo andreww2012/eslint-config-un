@@ -27,6 +27,7 @@ Includes the rules from the following configs & plugins:
 - [security](https://www.npmjs.com/package/eslint-plugin-security)
 - [sonar](https://www.npmjs.com/package/eslint-plugin-sonarjs)
 - [tailwind](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
+- [jsonc](https://www.npmjs.com/package/eslint-plugin-jsonc) (since v0.1.4)
 - [yaml](https://www.npmjs.com/package/eslint-plugin-yaml) (since v0.1.0)
 - [toml](https://www.npmjs.com/package/eslint-plugin-toml) (since v0.1.3)
 - [prefer-arrow-functions](https://www.npmjs.com/package/eslint-plugin-prefer-arrow-functions) (since v0.1.0)
@@ -62,6 +63,7 @@ export default eslintConfig({
 - All plugins listed above are enabled by default or enabled automatically under certain conditions, but there is some that are *disabled* by default:
   - `prefer-arrow-functions`
   - `security`
+  - `json`
   - `yaml`
   - `toml`
 - Some rules are set to warn by default. You can change some or even all such rule's reporting level using `errorsInsteadOfWarnings` option. You can find all such rules by inspecting the source code of this package.
@@ -70,7 +72,9 @@ export default eslintConfig({
 
 ### TypeError: Key `rules`: Key `disable-autofix/<rule name>`: Could not find `<rule name>` in plugin `disable-autofix`
 
-We disable autofix for some rules in this package via `eslint-plugin-disable-autofix`. However, it requires all the configs/plugins packages to be hoisted (installed to the top level of `node_modules`). You might need to reinstall this package, re-create `node_modules` directory (do not delete your lock file!) or set `shamefully-hoist=true` in your `.npmrc` if you're using pnpm. Sometimes you'll need to manually install some packages refused to be hoisted (happens with `@typescript-eslint/eslint-plugin`: `npm i @typescript-eslint/eslint-plugin -D --legacy-peer-deps`);
+We disable autofix for some rules in this package via `eslint-plugin-disable-autofix`. However, it requires all the configs/plugins packages to be hoisted (installed to the top level of `node_modules`). You might need to reinstall this package, re-create `node_modules` directory (do not delete your lock file!) or set `shamefully-hoist=true` in your `.npmrc` if you're using pnpm. Sometimes you'll need to manually install some packages refused to be hoisted (happens with `@typescript-eslint/eslint-plugin`: `npm i @typescript-eslint/eslint-plugin -D --legacy-peer-deps`).
+
+This error could also happen if a dependency of this package is installed in your project separately.
 
 ### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace.
 

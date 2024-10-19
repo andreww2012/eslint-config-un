@@ -4,6 +4,7 @@ import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {EslintCommentsEslintConfigOptions} from './configs/eslint-comments';
 import type {ImportEslintConfigOptions} from './configs/import';
 import type {JsEslintConfigOptions} from './configs/js';
+import type {JsoncEslintConfigOptions} from './configs/jsonc';
 import type {NodeEslintConfigOptions} from './configs/node';
 import type {PreferArrowFunctionsEslintConfigOptions} from './configs/prefer-arrow-functions';
 import type {PromiseEslintConfigOptions} from './configs/promise';
@@ -170,6 +171,11 @@ export interface EslintConfigUnOptions {
      * @default false
      */
     toml?: boolean | Partial<TomlEslintConfigOptions>;
+    /**
+     * NOTE: disabled by default.
+     * @default false
+     */
+    json?: boolean | Partial<JsoncEslintConfigOptions>;
   };
 }
 

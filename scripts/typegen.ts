@@ -20,6 +20,7 @@ const configs = [
       eslintComments: true,
       import: true,
       js: true,
+      json: true,
       node: true,
       preferArrowFunctions: true,
       promise: true,
@@ -27,6 +28,7 @@ const configs = [
       security: true,
       sonar: true,
       tailwind: true,
+      toml: true,
       ts: {
         noTypeAssertion: true,
       },
@@ -37,7 +39,6 @@ const configs = [
         pinia: true,
       },
       yaml: true,
-      toml: true,
     },
   }),
 ];

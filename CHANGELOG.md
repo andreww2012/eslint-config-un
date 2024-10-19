@@ -1,3 +1,7 @@
+## 0.1.4 (unreleased)
+
+- New config: `json` (for linting .json, .jsonc, .json5 files) via [`eslint-plugin-jsonc`](https://www.npmjs.com/package/eslint-plugin-jsonc).
+
 ## 0.1.3
 
 - New config: `eslintComments` via [`@eslint-community/eslint-plugin-eslint-comments`](https://www.npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments).
