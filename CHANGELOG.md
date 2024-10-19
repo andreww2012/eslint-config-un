@@ -2,6 +2,9 @@
 
 - New config: `json` (for linting .json, .jsonc, .json5 files) via [`eslint-plugin-jsonc`](https://www.npmjs.com/package/eslint-plugin-jsonc).
 - Support for merging default files with user-specified files via `doNotMergeFilesWithDefault` option for `yaml`, `toml` and `json` configs.
+- Dependencies:
+  - `typescript-eslint`@8.10.0
+    - Support for TypeScript 5.6.
 
 ## 0.1.3
 
