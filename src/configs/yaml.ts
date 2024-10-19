@@ -1,7 +1,6 @@
 import eslintPluginYaml from 'eslint-plugin-yml';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import yamlEslintParser from 'yaml-eslint-parser';
-import {ERROR, OFF} from '../constants';
+import {ERROR, GLOB_YAML, OFF} from '../constants';
 import type {
   ConfigSharedOptions,
   FlatConfigEntry,
@@ -10,9 +9,14 @@ import type {
 } from '../types';
 import {ConfigEntryBuilder} from '../utils';
 
+const DEFAULT_FILES = [GLOB_YAML];
+
 const DEFAULT_FILES_TO_IGNORE = ['yarn.lock', 'pnpm-lock.yaml'] as const;
 
 export interface YamlEslintConfigOptions extends ConfigSharedOptions<'yml'> {
+  /** `files` specified in this config will be merged with the default of `['**\/*.y?(a)ml']`. Set this to `true` to avoid that behavior */
+  doNotMergeFilesWithDefault?: boolean;
+
   /**
    * @default 'yml'
    */
@@ -46,24 +50,33 @@ export const yamlEslintConfig = (
   // 🟣 = Included in Standard ruleset
 
   builder
-    .addConfig('yaml', {
-      plugins: {
-        // @ts-expect-error types mismatch
-        yml: eslintPluginYaml,
-      },
-      files: options.files || ['*.yaml', '**/*.yaml', '*.yml', '**/*.yml'],
-      ignores: [
-        ...DEFAULT_FILES_TO_IGNORE.map((fileToIgnore) =>
-          options.doNotIgnoreFilesByDefault?.[fileToIgnore]
-            ? undefined
-            : (`**/${fileToIgnore}` as const),
-        ).filter((v) => typeof v === 'string'),
-        ...(options.ignores || []),
+    .addConfig(
+      [
+        'yaml',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: DEFAULT_FILES,
+          mergeUserFilesWithFallback: !options.doNotMergeFilesWithDefault,
+        },
       ],
-      languageOptions: {
-        parser: yamlEslintParser,
+      {
+        plugins: {
+          // @ts-expect-error types mismatch
+          yml: eslintPluginYaml,
+        },
+        ignores: [
+          ...DEFAULT_FILES_TO_IGNORE.map((fileToIgnore) =>
+            options.doNotIgnoreFilesByDefault?.[fileToIgnore]
+              ? undefined
+              : (`**/${fileToIgnore}` as const),
+          ).filter((v) => typeof v === 'string'),
+          ...(options.ignores || []),
+        ],
+        languageOptions: {
+          parser: yamlEslintParser,
+        },
       },
-    })
+    )
     .addBulkRules(
       eslintPluginYaml.configs['flat/standard'].reduce(
         (result, config) => Object.assign(result, config.rules),

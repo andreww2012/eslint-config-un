@@ -1,7 +1,6 @@
 import eslintPluginToml from 'eslint-plugin-toml';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import tomlEslintParser from 'toml-eslint-parser';
-import {ERROR, OFF} from '../constants';
+import {ERROR, GLOB_TOML, OFF} from '../constants';
 import type {
   ConfigSharedOptions,
   FlatConfigEntry,
@@ -10,9 +9,14 @@ import type {
 } from '../types';
 import {ConfigEntryBuilder} from '../utils';
 
+const DEFAULT_FILES = [GLOB_TOML];
+
 const DEFAULT_FILES_TO_IGNORE = ['Cargo.lock'] as const;
 
 export interface TomlEslintConfigOptions extends ConfigSharedOptions<'toml'> {
+  /** `files` specified in this config will be merged with the default of `['**\/*.toml']`. Set this to `true` to avoid that behavior */
+  doNotMergeFilesWithDefault?: boolean;
+
   doNotIgnoreFilesByDefault?: Partial<Record<(typeof DEFAULT_FILES_TO_IGNORE)[number], boolean>>;
   /**
    * Mixed types in array were prohibited in TOML v0.5.0: https://toml.io/en/v0.5.0#array
@@ -47,24 +51,33 @@ export const tomlEslintConfig = (
   // 🟣 = Included in Standard ruleset
 
   builder
-    .addConfig('toml', {
-      plugins: {
-        // @ts-expect-error types mismatch
-        toml: eslintPluginToml,
-      },
-      files: options.files || ['*.toml', '**/*.toml'],
-      ignores: [
-        ...DEFAULT_FILES_TO_IGNORE.map((fileToIgnore) =>
-          options.doNotIgnoreFilesByDefault?.[fileToIgnore]
-            ? undefined
-            : (`**/${fileToIgnore}` as const),
-        ).filter((v) => typeof v === 'string'),
-        ...(options.ignores || []),
+    .addConfig(
+      [
+        'toml',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: DEFAULT_FILES,
+          mergeUserFilesWithFallback: !options.doNotMergeFilesWithDefault,
+        },
       ],
-      languageOptions: {
-        parser: tomlEslintParser,
+      {
+        plugins: {
+          // @ts-expect-error types mismatch
+          toml: eslintPluginToml,
+        },
+        ignores: [
+          ...DEFAULT_FILES_TO_IGNORE.map((fileToIgnore) =>
+            options.doNotIgnoreFilesByDefault?.[fileToIgnore]
+              ? undefined
+              : (`**/${fileToIgnore}` as const),
+          ).filter((v) => typeof v === 'string'),
+          ...(options.ignores || []),
+        ],
+        languageOptions: {
+          parser: tomlEslintParser,
+        },
       },
-    })
+    )
     .addBulkRules(
       eslintPluginToml.configs['flat/standard'].reduce(
         (result, config) => Object.assign(result, config.rules),
