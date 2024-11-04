@@ -8,5 +8,6 @@ export default eslintConfig({
     yaml: true,
     toml: true,
     json: true,
+    packageJson: true,
   },
 });

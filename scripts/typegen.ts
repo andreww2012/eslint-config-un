@@ -22,6 +22,7 @@ const configs = [
       js: true,
       json: true,
       node: true,
+      packageJson: true,
       preferArrowFunctions: true,
       promise: true,
       regexp: true,

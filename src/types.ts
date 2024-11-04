@@ -6,6 +6,7 @@ import type {ImportEslintConfigOptions} from './configs/import';
 import type {JsEslintConfigOptions} from './configs/js';
 import type {JsoncEslintConfigOptions} from './configs/jsonc';
 import type {NodeEslintConfigOptions} from './configs/node';
+import type {PackageJsonEslintConfigOptions} from './configs/package-json';
 import type {PreferArrowFunctionsEslintConfigOptions} from './configs/prefer-arrow-functions';
 import type {PromiseEslintConfigOptions} from './configs/promise';
 import type {RegexpEslintConfigOptions} from './configs/regexp';
@@ -176,6 +177,11 @@ export interface EslintConfigUnOptions {
      * @default false
      */
     json?: boolean | Partial<JsoncEslintConfigOptions>;
+    /**
+     * NOTE: disabled by default.
+     * @default false
+     */
+    packageJson?: boolean | Partial<PackageJsonEslintConfigOptions>;
   };
 }
 
