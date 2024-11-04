@@ -1,6 +1,9 @@
 ## Unreleased
 
 - New config: `packageJson` via [`eslint-plugin-package-json`](https://www.npmjs.com/package/eslint-plugin-package-json).
+- Dependencies:
+  - `eslint-plugin-import-x`@4.4.0
+    - Enable `checkTypeImports` option for [`import/extensions`](https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/extensions.md) rule.
 
 ## 0.1.4
 

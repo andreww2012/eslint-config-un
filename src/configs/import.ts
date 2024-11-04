@@ -71,6 +71,7 @@ export const importEslintConfig = (
         options.requireModuleExtensions['*']) ||
         'ignorePackages',
       {
+        checkTypeImports: true,
         ...(options.requireModuleExtensions === true &&
           Object.fromEntries(
             ['js', 'cjs', 'mjs', 'ts', 'cts', 'mts', 'jsx', 'tsx'].map((ext) => [ext, 'always']),
