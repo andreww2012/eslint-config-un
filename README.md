@@ -32,6 +32,7 @@ Includes the rules from the following configs & plugins:
 - [toml](https://www.npmjs.com/package/eslint-plugin-toml) (since v0.1.3)
 - [prefer-arrow-functions](https://www.npmjs.com/package/eslint-plugin-prefer-arrow-functions) (since v0.1.0)
 - [eslint-comments](https://www.npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments) (since v0.1.3)
+- [package-json](https://www.npmjs.com/package/eslint-plugin-package-json) (since v0.1.5)
 
 ## Features
 
@@ -66,6 +67,7 @@ export default eslintConfig({
   - `json`
   - `yaml`
   - `toml`
+  - `package-json`
 - Some rules are set to warn by default. You can change some or even all such rule's reporting level using `errorsInsteadOfWarnings` option. You can find all such rules by inspecting the source code of this package.
 
 ## Troubleshooting

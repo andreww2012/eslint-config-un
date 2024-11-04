@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-un",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A universal-ish ESLint config aiming to be reasonably strict and easily configurable.",
   "keywords": [
     "eslint",
