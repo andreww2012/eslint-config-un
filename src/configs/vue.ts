@@ -12,6 +12,7 @@ import type {
 } from '../types';
 import {ConfigEntryBuilder, joinPaths} from '../utils';
 import {RULE_CAMELCASE_OPTIONS, RULE_EQEQEQ_OPTIONS} from './js';
+import type {Linter} from 'eslint';
 
 type WellKnownSfcBlocks =
   | 'template'
@@ -114,14 +115,12 @@ export const vueEslintConfig = (
 
   const isNuxtEnabled = Boolean(options.nuxtMajorVersion);
 
-  const recommendedRules = (
-    eslintPluginVue.configs[
-      isVue3 ? 'flat/recommended' : 'flat/vue2-recommended'
-    ] as FlatConfigEntry[]
-  ).find(
-    (entry) =>
-      entry.name === 'vue:recommended:rules' || entry.name === 'vue:vue2-recommended:rules',
-  )?.rules;
+  const recommendedRules = eslintPluginVue.configs[
+    isVue3 ? 'flat/recommended' : 'flat/vue2-recommended'
+  ].reduce<Partial<Linter.RulesRecord>>(
+    (result, config) => Object.assign(result, config.rules),
+    {},
+  );
 
   const nuxtLayoutsFilesGlob: string = joinPaths([options.nuxtOrVueProjectDir, 'layouts/**/*.vue']);
 
