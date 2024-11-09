@@ -1,4 +1,9 @@
-## Unreleased
+## 0.1.6
+
+- Fixed an issue in `vue` config where recommended rules were not picked up.
+- `yaml`: do not enforce casing by default.
+
+## 0.1.5
 
 - New config: `packageJson` via [`eslint-plugin-package-json`](https://www.npmjs.com/package/eslint-plugin-package-json).
 - Dependencies:
