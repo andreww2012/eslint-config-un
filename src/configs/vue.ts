@@ -1,3 +1,4 @@
+import type {Linter} from 'eslint';
 import eslintPluginPinia from 'eslint-plugin-pinia';
 import eslintPluginVue from 'eslint-plugin-vue';
 import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility';
@@ -12,7 +13,6 @@ import type {
 } from '../types';
 import {ConfigEntryBuilder, joinPaths} from '../utils';
 import {RULE_CAMELCASE_OPTIONS, RULE_EQEQEQ_OPTIONS} from './js';
-import type {Linter} from 'eslint';
 
 type WellKnownSfcBlocks =
   | 'template'

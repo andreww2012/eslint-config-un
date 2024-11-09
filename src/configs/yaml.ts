@@ -23,8 +23,8 @@ export interface YamlEslintConfigOptions extends ConfigSharedOptions<'yml'> {
   enforceExtension?: (GetRuleOptions<'yml/file-extension'>[0] & {})['extension'];
   doNotIgnoreFilesByDefault?: Partial<Record<(typeof DEFAULT_FILES_TO_IGNORE)[number], boolean>>;
   /**
-   * Will be merged with the default value (default `ignores` values will also be merged, not overridden)
-   * @default {camelCase: true, ignores: ['<<']}
+   * Enforce a specific casing style for keys. It is not enforced by default, but passing an empty object here will enforce `camelCase` style (default value for this rule).
+   * If present, `ignores` values will be merged with `<<`
    */
   casing?: GetRuleOptions<'yml/key-name-casing'>[0] & {};
   /**
@@ -92,8 +92,8 @@ export const yamlEslintConfig = (
     // TODO why reporting here?
     .addRule('yml/file-extension', ERROR, [{extension: options.enforceExtension ?? 'yml'}]) // >=1.2.0
     .addRule('yml/indent', ERROR) // 🟣 >=0.1.0
-    .addRule('yml/key-name-casing', ERROR, [
-      {camelCase: true, ...options.casing, ignores: ['<<', ...(options.ignores || [])]},
+    .addRule('yml/key-name-casing', options.casing == null ? OFF : ERROR, [
+      {...options.casing, ignores: ['<<', ...(options.casing?.ignores || [])]},
     ]) // >=0.2.0
     // .addRule('yml/no-empty-document', ERROR) // 🟣 >=0.6.0
     // .addRule('yml/no-empty-key', ERROR) // 🟣 >=0.3.0
