@@ -43,7 +43,7 @@ export const isNonEmptyArray = <T>(value?: T[] | null): value is [T, ...T[]] =>
   Array.isArray(value) && value.length > 0;
 
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-export const joinPaths = (paths: string | (string | FalsyValue)[] | FalsyValue) =>
+export const joinPaths = (...paths: (string | FalsyValue)[]) =>
   // eslint-disable-next-line unicorn/prefer-native-coercion-functions
   path.posix.join(...arraify(paths).filter((v): v is string => Boolean(v)));
 

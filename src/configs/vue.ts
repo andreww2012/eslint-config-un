@@ -122,7 +122,8 @@ export const vueEslintConfig = (
     {},
   );
 
-  const nuxtLayoutsFilesGlob: string = joinPaths([options.nuxtOrVueProjectDir, 'layouts/**/*.vue']);
+  const inNuxtAppDir = joinPaths.bind(null, options.nuxtOrVueProjectDir);
+  const nuxtLayoutsFilesGlob: string = inNuxtAppDir('layouts/**/*.vue');
 
   const builder = new ConfigEntryBuilder<'vue'>(options, internalOptions);
 
@@ -502,14 +503,17 @@ export const vueEslintConfig = (
   builder
     .addConfig('vue/allow-single-word-component-names', {
       files: [
-        joinPaths([options.nuxtOrVueProjectDir, 'pages/**/*.vue']),
-        joinPaths([options.nuxtOrVueProjectDir, 'views/**/*.vue']),
-        isNuxtEnabled && [nuxtLayoutsFilesGlob, 'app.vue', 'error.vue'],
+        inNuxtAppDir('pages/**/*.vue'),
+        inNuxtAppDir('views/**/*.vue'),
+        isNuxtEnabled && [
+          nuxtLayoutsFilesGlob,
+          ...['app.vue', 'error.vue'].map((fileName) => inNuxtAppDir(fileName)),
+        ],
 
         options.doNotRequireComponentNamesToBeMultiWordForPatterns,
       ]
         .flat()
-        .filter((v) => v !== false && v != null),
+        .filter((v) => typeof v === 'string'),
     })
     .addRule('vue/multi-word-component-names', OFF);
 
@@ -524,10 +528,7 @@ export const vueEslintConfig = (
     .addConfig('vue/allow-default-export', {
       files: [
         GLOB_VUE,
-        isNuxtEnabled && [
-          joinPaths([options.nuxtOrVueProjectDir, 'plugins/**/*.*']),
-          joinPaths([options.nuxtOrVueProjectDir, 'server/**/*.*']),
-        ],
+        isNuxtEnabled && [inNuxtAppDir('plugins/**/*.*'), inNuxtAppDir('server/**/*.*')],
       ]
         .flat()
         .filter((v) => v !== false),
