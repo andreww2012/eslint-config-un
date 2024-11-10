@@ -1,6 +1,6 @@
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import {ERROR, OFF, WARNING} from '../constants';
-import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
+import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types/eslint';
 import {ConfigEntryBuilder} from '../utils';
 
 export interface UnicornEslintConfigOptions extends ConfigSharedOptions<'unicorn'> {}

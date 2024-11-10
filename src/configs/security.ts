@@ -1,6 +1,6 @@
 import eslintPluginSecurity from 'eslint-plugin-security';
 import {ERROR, OFF, WARNING} from '../constants';
-import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
+import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types/eslint';
 import {ConfigEntryBuilder} from '../utils';
 
 export interface SecurityEslintConfigOptions extends ConfigSharedOptions<'security'> {}

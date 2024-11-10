@@ -14,7 +14,7 @@ import type {
   InternalConfigOptions,
   RuleOverrides,
   RulesRecord,
-} from '../types';
+} from '../types/eslint';
 import {ConfigEntryBuilder, type FlatConfigEntryForBuilder} from '../utils';
 import {
   RULE_NO_UNUSED_EXPRESSIONS_OPTIONS,

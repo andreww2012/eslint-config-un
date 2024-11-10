@@ -1,7 +1,7 @@
 // @ts-expect-error no typings
 import eslintPluginPreferArrowFunctions from 'eslint-plugin-prefer-arrow-functions';
 import {WARNING} from '../constants';
-import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
+import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types/eslint';
 import {ConfigEntryBuilder} from '../utils';
 
 export interface PreferArrowFunctionsEslintConfigOptions

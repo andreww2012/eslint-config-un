@@ -1,6 +1,6 @@
 import eslintPluginNode from 'eslint-plugin-n';
 import {ERROR, OFF} from '../constants';
-import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
+import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types/eslint';
 import {ConfigEntryBuilder, createPluginObjectRenamer} from '../utils';
 
 export interface NodeEslintConfigOptions extends ConfigSharedOptions<'node'> {}

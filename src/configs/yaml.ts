@@ -6,7 +6,7 @@ import type {
   FlatConfigEntry,
   GetRuleOptions,
   InternalConfigOptions,
-} from '../types';
+} from '../types/eslint';
 import {ConfigEntryBuilder} from '../utils';
 
 const DEFAULT_FILES = [GLOB_YAML];

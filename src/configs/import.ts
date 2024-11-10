@@ -1,6 +1,6 @@
 import eslintPluginImportX from 'eslint-plugin-import-x';
 import {ERROR, OFF, WARNING} from '../constants';
-import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
+import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types/eslint';
 import {ConfigEntryBuilder, arraify, createPluginObjectRenamer, isNonEmptyArray} from '../utils';
 
 export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'> {

@@ -1,7 +1,7 @@
 // @ts-expect-error no typings
 import eslintPluginPromise from 'eslint-plugin-promise';
 import {ERROR, WARNING} from '../constants';
-import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
+import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types/eslint';
 import {ConfigEntryBuilder} from '../utils';
 
 export interface PromiseEslintConfigOptions extends ConfigSharedOptions<'promise'> {}

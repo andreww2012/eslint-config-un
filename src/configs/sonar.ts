@@ -1,6 +1,6 @@
 import eslintPluginSonar from 'eslint-plugin-sonarjs';
 import {OFF} from '../constants';
-import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
+import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types/eslint';
 import {ConfigEntryBuilder} from '../utils';
 
 export interface SonarEslintConfigOptions extends ConfigSharedOptions<'sonarjs'> {}

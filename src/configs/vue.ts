@@ -10,7 +10,7 @@ import type {
   FlatConfigEntry,
   InternalConfigOptions,
   RuleOverrides,
-} from '../types';
+} from '../types/eslint';
 import {ConfigEntryBuilder, joinPaths} from '../utils';
 import {RULE_CAMELCASE_OPTIONS, RULE_EQEQEQ_OPTIONS} from './js';
 

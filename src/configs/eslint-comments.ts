@@ -1,7 +1,7 @@
 // @ts-expect-error no typings
 import eslintPluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments';
 import {ERROR} from '../constants';
-import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types';
+import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types/eslint';
 import {ConfigEntryBuilder} from '../utils';
 
 export interface EslintCommentsEslintConfigOptions

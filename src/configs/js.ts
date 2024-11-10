@@ -3,14 +3,14 @@ import EslintJs from '@eslint/js';
 import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
 import {ERROR, WARNING} from '../constants';
-import type {ConstantKeys} from '../type-utils';
 import type {
   AllEslintRules,
   ConfigSharedOptions,
   FlatConfigEntry,
   GetRuleOptions,
   InternalConfigOptions,
-} from '../types';
+} from '../types/eslint';
+import type {ConstantKeys} from '../types/utils';
 import {ConfigEntryBuilder} from '../utils';
 
 type BuiltinEslintRulesFixed = Pick<

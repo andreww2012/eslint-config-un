@@ -1,6 +1,5 @@
 import path from 'node:path';
 import {ERROR, type RuleSeverity, WARNING} from './constants';
-import type {FalsyValue} from './type-utils';
 import type {
   AllEslintRules,
   AllRulesWithPrefix,
@@ -8,7 +7,8 @@ import type {
   FlatConfigEntry,
   GetRuleOptions,
   InternalConfigOptions,
-} from './types';
+} from './types/eslint';
+import type {FalsyValue} from './types/utils';
 
 export const genFlatConfigEntryName = (name: string) => `eslint-config-un/${name}`;
 
