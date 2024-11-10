@@ -19,10 +19,12 @@ type PackageJsonCollection =
   | 'peerDependenciesMeta'
   | 'optionalDependencies'
   | 'config'
+  | 'exports'
   | (string & {});
 
 type PackageJsonCollectionsToSort = Partial<Record<PackageJsonCollection, boolean>>;
 
+// Note: unlike the rule's default, we don't sort `scripts`, `configs` and `exports` sections
 const DEFAULT_COLLECTIONS_TO_SORT = {
   devDependencies: true,
   dependencies: true,

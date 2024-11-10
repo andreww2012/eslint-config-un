@@ -2,13 +2,18 @@ import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/pa
 import type Eslint from 'eslint';
 // @ts-expect-error no typings
 import eslintPluginNoTypeAssertion from 'eslint-plugin-no-type-assertion';
-import {parser as parserTs, plugin as pluginTs} from 'typescript-eslint';
+import {
+  parser as parserTs,
+  plugin as pluginTs,
+  configs as tsEslintConfigs,
+} from 'typescript-eslint';
 import {ERROR, GLOB_TS, GLOB_TSX, GLOB_VUE, OFF, WARNING} from '../constants';
 import type {
   ConfigSharedOptions,
   FlatConfigEntry,
   InternalConfigOptions,
   RuleOverrides,
+  RulesRecord,
 } from '../types';
 import {ConfigEntryBuilder, type FlatConfigEntryForBuilder} from '../utils';
 import {
@@ -130,8 +135,18 @@ export const tsEslintConfig = (
       files: filesNonTypeAware,
       ...(ignoresNonTypeAware.length > 0 && {ignores: ignoresNonTypeAware}),
     })
-    .addBulkRules(pluginTs.configs?.strict?.rules)
-    .addBulkRules(pluginTs.configs?.stylistic?.rules)
+    .addBulkRules(
+      tsEslintConfigs.strict.reduce<RulesRecord>(
+        (result, config) => Object.assign(result, config.rules),
+        {},
+      ),
+    )
+    .addBulkRules(
+      tsEslintConfigs.stylistic.reduce<RulesRecord>(
+        (result, config) => Object.assign(result, config.rules),
+        {},
+      ),
+    )
     // 🟢 Strict - overrides
     // .addRule('@typescript-eslint/ban-ts-comment', ERROR)
     .addRule('@typescript-eslint/no-array-constructor', ERROR, [], {overrideBaseRule: true})
@@ -238,8 +253,18 @@ export const tsEslintConfig = (
       files: filesTypeAware,
       ...(ignoresTypeAware.length > 0 && {ignores: ignoresTypeAware}),
     })
-    .addBulkRules(pluginTs.configs?.['strict-type-checked-only']?.rules)
-    .addBulkRules(pluginTs.configs?.['stylistic-type-checked-only']?.rules)
+    .addBulkRules(
+      tsEslintConfigs.strictTypeCheckedOnly.reduce<RulesRecord>(
+        (result, config) => Object.assign(result, config.rules),
+        {},
+      ),
+    )
+    .addBulkRules(
+      tsEslintConfigs.stylisticTypeCheckedOnly.reduce<RulesRecord>(
+        (result, config) => Object.assign(result, config.rules),
+        {},
+      ),
+    )
     // 🟢 Strict - overrides
     // .addRule('@typescript-eslint/await-thenable', ERROR)
     // .addRule('@typescript-eslint/no-array-delete', ERROR)
@@ -287,11 +312,7 @@ export const tsEslintConfig = (
     .addRule('@typescript-eslint/no-unsafe-return', noUnsafeRulesSeverity)
     // .addRule('@typescript-eslint/no-unsafe-unary-minus', ERROR)
     .addAnyRule('no-throw-literal', OFF) // Note: has different name
-    .addRule('@typescript-eslint/only-throw-error', ERROR, [
-      {
-        allowThrowingUnknown: true,
-      },
-    ])
+    // .addRule('@typescript-eslint/only-throw-error', ERROR)
     .addRule('@typescript-eslint/prefer-promise-reject-errors', ERROR, [], {overrideBaseRule: true})
     // .addRule('@typescript-eslint/prefer-reduce-type-parameter', ERROR)
     // .addRule('@typescript-eslint/prefer-return-this-type', ERROR)

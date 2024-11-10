@@ -1,3 +1,8 @@
+## Unreleased
+
+- Fixed an issue in `vue` config where Nuxt's `app.vue` and `error.vue` files in a custom project directory were not recognized.
+- Update dependencies.
+    
 ## 0.1.6
 
 - Fixed an issue in `vue` config where recommended rules were not picked up.
