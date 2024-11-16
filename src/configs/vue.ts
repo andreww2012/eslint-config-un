@@ -52,7 +52,7 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
    * @see https://eslint.vuejs.org/rules/block-order.html
    * @default 'template-first'
    */
-  sfcBlockOrder?: 'template-first' | 'script-first' | (WellKnownSfcBlocks & {})[];
+  sfcBlockOrder?: 'template-first' | 'script-first' | (WellKnownSfcBlocks | (string & {}))[];
   noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles?: boolean;
   doNotRequireComponentNamesToBeMultiWordForPatterns?: string | string[];
 
