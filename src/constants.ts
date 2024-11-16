@@ -34,3 +34,8 @@ export const GLOB_YAML = '**/*.y?(a)ml' as const;
 export const GLOB_TOML = '**/*.toml' as const;
 
 export const GLOB_PACKAGE_JSON = '**/package.json' as const;
+
+
+/* Misc */
+
+export const DEFAULT_GLOBAL_IGNORES = ['**/dist'] as const;

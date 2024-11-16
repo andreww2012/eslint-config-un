@@ -31,15 +31,21 @@ import {type TsEslintConfigOptions, tsEslintConfig} from './configs/ts';
 import {type UnicornEslintConfigOptions, unicornEslintConfig} from './configs/unicorn';
 import {type VueEslintConfigOptions, vueEslintConfig} from './configs/vue';
 import {type YamlEslintConfigOptions, yamlEslintConfig} from './configs/yaml';
-import {GLOB_CONFIG_FILES, OFF} from './constants';
+import {DEFAULT_GLOBAL_IGNORES, GLOB_CONFIG_FILES, OFF} from './constants';
 import type {FlatConfigEntry, InternalConfigOptions} from './types/eslint';
 import {assignOptions, genFlatConfigEntryName} from './utils';
 
 export interface EslintConfigUnOptions {
   /**
-   * **Global** ignore patterns
+   * **Global** ignore patterns. By default will be merged with our ignore patterns, unless `overrideIgnores` is set to `true`
    */
   ignores?: FlatConfigEntry['ignores'];
+
+  /**
+   * `ignores` patterns override, not merge with the ignore patterns suggested by our config
+   * @default false
+   */
+  overrideIgnores?: boolean;
 
   /**
    * Automatically add gitignore'd files to `ignores` array.
@@ -151,6 +157,12 @@ export interface EslintConfigUnOptions {
 const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set(['curly', 'unicorn/template-indent']);
 
 export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEntry[] => {
+  // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
+  const globalIgnores = [
+    ...(options.overrideIgnores ? [] : DEFAULT_GLOBAL_IGNORES),
+    ...(options.ignores || []),
+  ];
+
   const configsOptions = options.configs || {};
 
   const isVueEnabled =
@@ -160,7 +172,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
   const isTypescriptEnabled =
     configsOptions.ts !== false && Boolean(configsOptions.ts || typescriptPackageInfo);
 
-  /* 🔵 GITIGNORE */
+  /* 🟢 GITIGNORE */
 
   const gitignoreConfig =
     typeof options.gitignore === 'object'
@@ -169,13 +181,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
         ? eslintGitignore()
         : null;
 
-  /* 🔵 JAVASCRIPT */
+  /* 🟢 JAVASCRIPT */
 
   const jsOptions: JsEslintConfigOptions = {
     ...assignOptions(configsOptions, 'js'),
   };
 
-  /* 🔵 TYPESCRIPT */
+  /* 🟢 TYPESCRIPT */
 
   const tsOptions: TsEslintConfigOptions = {
     extraFileExtensions: [isVueEnabled && 'vue'].filter((v) => v !== false),
@@ -183,7 +195,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'ts'),
   };
 
-  /* 🔵 VUE */
+  /* 🟢 VUE */
 
   const vueFullVersion = getPackageInfoSync('vue')?.version;
   const vueMajorVersionStr = vueFullVersion?.split('.')[0];
@@ -202,14 +214,16 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'vue'),
   };
 
-  /* 🔵 UNICORN */
+  // 🟢🟢🟢 Enabled by default 🟢🟢🟢
+
+  /* 🟢 UNICORN */
 
   const isUnicornEnabled = Boolean(configsOptions.unicorn ?? true);
   const unicornOptions: UnicornEslintConfigOptions = {
     ...assignOptions(configsOptions, 'unicorn'),
   };
 
-  /* 🔵 IMPORT */
+  /* 🟢 IMPORT */
 
   const isImportEnabled = Boolean(configsOptions.import ?? true);
   const importOptions: ImportEslintConfigOptions = {
@@ -217,28 +231,28 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'import'),
   };
 
-  /* 🔵 NODE */
+  /* 🟢 NODE */
 
   const isNodeEnabled = Boolean(configsOptions.node ?? true);
   const nodeOptions: NodeEslintConfigOptions = {
     ...assignOptions(configsOptions, 'node'),
   };
 
-  /* 🔵 PROMISE */
+  /* 🟢 PROMISE */
 
   const isPromiseEnabled = Boolean(configsOptions.promise ?? true);
   const promiseOptions: PromiseEslintConfigOptions = {
     ...assignOptions(configsOptions, 'promise'),
   };
 
-  /* 🔵 SONARJS */
+  /* 🟢 SONARJS */
 
   const isSonarEnabled = Boolean(configsOptions.sonar ?? true);
   const sonarOptions: SonarEslintConfigOptions = {
     ...assignOptions(configsOptions, 'sonar'),
   };
 
-  /* 🔵 TAILWIND */
+  /* 🟢 TAILWIND */
 
   const isTailwindEnabled =
     configsOptions.tailwind === false
@@ -250,56 +264,58 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'tailwind'),
   };
 
-  /* 🔵 REGEXP */
+  /* 🟢 REGEXP */
 
   const isRegexpEnabled = Boolean(configsOptions.regexp ?? true);
   const regexpOptions: RegexpEslintConfigOptions = {
     ...assignOptions(configsOptions, 'regexp'),
   };
 
-  /* 🔵 ESLINT COMMENTS */
+  /* 🟢 ESLINT COMMENTS */
 
   const isEslintCommentsEnabled = Boolean(configsOptions.eslintComments ?? true);
   const eslintCommentsOptions: EslintCommentsEslintConfigOptions = {
     ...assignOptions(configsOptions, 'eslintComments'),
   };
 
-  /* 🔵 SECURITY */
+  // 🔴🔴🔴 Disabled by default 🔴🔴🔴
+
+  /* 🔴 SECURITY */
 
   const isSecurityEnabled = Boolean(configsOptions.security ?? false);
   const securityOptions: SecurityEslintConfigOptions = {
     ...assignOptions(configsOptions, 'security'),
   };
 
-  /* 🔵 PREFER ARROW FUNCTIONS */
+  /* 🔴 PREFER ARROW FUNCTIONS */
 
   const isPreferArrowFunctionsEnabled = Boolean(configsOptions.preferArrowFunctions ?? false);
   const preferArrowFunctionsOptions: PreferArrowFunctionsEslintConfigOptions = {
     ...assignOptions(configsOptions, 'preferArrowFunctions'),
   };
 
-  /* 🔵 YAML */
+  /* 🔴 YAML */
 
   const isYamlEnabled = Boolean(configsOptions.yaml ?? false);
   const yamlOptions: YamlEslintConfigOptions = {
     ...assignOptions(configsOptions, 'yaml'),
   };
 
-  /* 🔵 TOML */
+  /* 🔴 TOML */
 
   const isTomlEnabled = Boolean(configsOptions.toml ?? false);
   const tomlOptions: TomlEslintConfigOptions = {
     ...assignOptions(configsOptions, 'toml'),
   };
 
-  /* 🔵 JSONC */
+  /* 🔴 JSONC */
 
   const isJsoncEnabled = Boolean(configsOptions.json ?? false);
   const jsoncOptions: JsoncEslintConfigOptions = {
     ...assignOptions(configsOptions, 'json'),
   };
 
-  /* 🔵 PACKAGE-JSON */
+  /* 🔴 PACKAGE-JSON */
 
   const isPackageJsonEnabled = Boolean(configsOptions.packageJson ?? false);
   const packageJsonOptions: PackageJsonEslintConfigOptions = {
@@ -314,16 +330,16 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
 
   return (
     [
-      // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
-      {
-        ignores: options.ignores || ['**/dist'],
+      globalIgnores.length > 0 && {
         name: genFlatConfigEntryName('ignores-global'),
+        ignores: globalIgnores,
       },
       {
         ...gitignoreConfig,
         name: genFlatConfigEntryName('ignores-gitignore'),
       },
       {
+        name: genFlatConfigEntryName('global-setup'),
         plugins: {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           'disable-autofix': pluginDisableAutofix,
@@ -345,7 +361,6 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
             ...(isNodeEnabled && globals.node),
           },
         } as const,
-        name: genFlatConfigEntryName('global-setup'),
       },
 
       jsEslintConfig(jsOptions, internalOptions),
@@ -368,6 +383,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isVueEnabled && vueEslintConfig(vueOptions, internalOptions), // Must come after ts
 
       {
+        name: genFlatConfigEntryName('config-files'),
         files: GLOB_CONFIG_FILES,
         rules: {
           'import/no-default-export': OFF,
@@ -375,19 +391,18 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
 
           'n/no-unpublished-require': OFF,
         },
-        name: genFlatConfigEntryName('config-files'),
       },
 
       ...(options.extraConfigs || []),
 
       // MUST be last
       !options.disablePrettierIncompatibleRules && {
+        name: genFlatConfigEntryName('eslint-config-prettier'),
         rules: Object.fromEntries(
           Object.entries(eslintConfigPrettier.rules).filter(
             ([k]) => !RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER.has(k),
           ),
         ),
-        name: genFlatConfigEntryName('eslint-config-prettier'),
       },
     ]
       // eslint-disable-next-line no-implicit-coercion
@@ -395,3 +410,5 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       .flat()
   );
 };
+
+export {DEFAULT_GLOBAL_IGNORES};
