@@ -3,7 +3,61 @@ import {ERROR, OFF} from '../constants';
 import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types/eslint';
 import {ConfigEntryBuilder, createPluginObjectRenamer} from '../utils';
 
-export interface NodeEslintConfigOptions extends ConfigSharedOptions<'node'> {}
+export interface NodeEslintConfigOptions extends ConfigSharedOptions<'node'> {
+  /**
+   * @see https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/prefer-global
+   */
+  preferGlobal?: {
+    /**
+     * Enforces either `Buffer` or `require("buffer").Buffer`
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/buffer.md
+     * @default true
+     */
+    buffer?: boolean;
+
+    /**
+     * Enforce either `console` or `require("console")`
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/console.md
+     * @default true
+     */
+    console?: boolean;
+
+    /**
+     * Enforce either `process` or `require("process")`
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/process.md
+     * @default true
+     */
+    process?: boolean;
+
+    /**
+     * Enforce either `TextDecoder` or `require("util").TextDecoder`
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/text-decoder.md
+     * @default true
+     */
+    textDecoder?: boolean;
+
+    /**
+     * Enforce either `TextEncoder` or `require("util").TextEncoder`
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/text-encoder.md
+     * @default true
+     */
+    textEncoder?: boolean;
+
+    /**
+     * Enforce either `URLSearchParams` or `require("url").URLSearchParams`
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/url-search-params.md
+     * @default true
+     */
+    url?: boolean;
+
+    /**
+     * Enforce either `URL` or `require("url").URL`
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/url.md
+     * @default true
+     */
+    urlSearchParams?: boolean;
+  };
+}
 
 const pluginRenamer = createPluginObjectRenamer('n', 'node');
 
@@ -12,6 +66,8 @@ export const nodeEslintConfig = (
 
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
+  const {preferGlobal = {}} = options;
+
   const builder = new ConfigEntryBuilder<'node'>(options, internalOptions);
 
   builder
@@ -49,13 +105,25 @@ export const nodeEslintConfig = (
     // .addRule('node/no-unsupported-features/es-builtins', ERROR)
     // .addRule('node/no-unsupported-features/es-syntax', ERROR)
     // .addRule('node/no-unsupported-features/node-builtins', ERROR)
-    .addRule('node/prefer-global/buffer', ERROR)
-    .addRule('node/prefer-global/console', ERROR)
-    .addRule('node/prefer-global/process', ERROR)
-    .addRule('node/prefer-global/text-decoder', ERROR)
-    .addRule('node/prefer-global/text-encoder', ERROR)
-    .addRule('node/prefer-global/url', ERROR)
-    .addRule('node/prefer-global/url-search-params', ERROR)
+    .addRule('node/prefer-global/buffer', ERROR, [
+      preferGlobal.buffer === false ? 'never' : 'always',
+    ])
+    .addRule('node/prefer-global/console', ERROR, [
+      preferGlobal.console === false ? 'never' : 'always',
+    ])
+    .addRule('node/prefer-global/process', ERROR, [
+      preferGlobal.process === false ? 'never' : 'always',
+    ])
+    .addRule('node/prefer-global/text-decoder', ERROR, [
+      preferGlobal.textDecoder === false ? 'never' : 'always',
+    ])
+    .addRule('node/prefer-global/text-encoder', ERROR, [
+      preferGlobal.textEncoder === false ? 'never' : 'always',
+    ])
+    .addRule('node/prefer-global/url', ERROR, [preferGlobal.url === false ? 'never' : 'always'])
+    .addRule('node/prefer-global/url-search-params', ERROR, [
+      preferGlobal.urlSearchParams === false ? 'never' : 'always',
+    ])
     .addRule('node/prefer-node-protocol', ERROR)
     .addRule('node/prefer-promises/dns', OFF) // TODO enable?
     .addRule('node/prefer-promises/fs', OFF) // TODO enable?

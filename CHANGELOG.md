@@ -2,6 +2,7 @@
 
 - Fixed an issue in `vue` config where Nuxt's `app.vue` and `error.vue` files in a custom project directory were not recognized.
 - Added a boolean option `overrideIgnores` to completely override global `ignores` provided by our config.
+- Added a `node` config option to configure [`prefer-global`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/prefer-global) rule for each feature.
 - Update dependencies.
     
 ## 0.1.6
