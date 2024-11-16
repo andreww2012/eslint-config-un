@@ -1,4 +1,3 @@
-import type {Linter} from 'eslint';
 import eslintPluginPinia from 'eslint-plugin-pinia';
 import eslintPluginVue from 'eslint-plugin-vue';
 import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility';
@@ -8,9 +7,12 @@ import {ERROR, GLOB_VUE, OFF, WARNING} from '../constants';
 import type {
   ConfigSharedOptions,
   FlatConfigEntry,
+  FlatConfigEntryFilesOrIgnores,
   InternalConfigOptions,
   RuleOverrides,
+  RulesRecord,
 } from '../types/eslint';
+import type {PrettifyShallow} from '../types/utils';
 import {ConfigEntryBuilder, joinPaths} from '../utils';
 import {RULE_CAMELCASE_OPTIONS, RULE_EQEQEQ_OPTIONS} from './js';
 
@@ -33,7 +35,7 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
    * This being true turns on TypeScript type-aware rules for .Vue files. They are disabled by default because it applies them to plain JS <script> sections which causes tons on false positives.
    * @default true if typescript config is enabled
    */
-  enforceTypescriptInScriptSection?: boolean | Pick<FlatConfigEntry, 'files' | 'ignores'>;
+  enforceTypescriptInScriptSection?: boolean | PrettifyShallow<FlatConfigEntryFilesOrIgnores>;
   /**
    * @see https://eslint.vuejs.org/rules/comment-directive#options
    */
@@ -117,24 +119,20 @@ export const vueEslintConfig = (
 
   const recommendedRules = eslintPluginVue.configs[
     isVue3 ? 'flat/recommended' : 'flat/vue2-recommended'
-  ].reduce<Partial<Linter.RulesRecord>>(
-    (result, config) => Object.assign(result, config.rules),
-    {},
-  );
+  ].reduce<Partial<RulesRecord>>((result, config) => Object.assign(result, config.rules), {});
 
   const inNuxtAppDir = joinPaths.bind(null, options.nuxtOrVueProjectDir);
   const nuxtLayoutsFilesGlob: string = inNuxtAppDir('layouts/**/*.vue');
 
   const builder = new ConfigEntryBuilder<'vue'>(options, internalOptions);
 
-  builder.addConfig('vue/setup', {
+  builder.addConfig(['vue/plugin', {doNotIgnoreMarkdown: true}], {
     plugins: {
       vue: eslintPluginVue,
     },
   });
 
-  // TODO detect duplicate name
-  builder.addConfig('vue/setup', {
+  builder.addConfig(['vue/setup', {doNotIgnoreMarkdown: true}], {
     files: [GLOB_VUE, ...files],
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     processor: eslintPluginVue.processors['.vue'],
@@ -535,12 +533,20 @@ export const vueEslintConfig = (
     })
     .addAnyRule('import/no-default-export', OFF);
 
-  const a11yConfig = builder.addConfig('vue/a11y', {
-    files,
-    plugins: {
-      'vuejs-accessibility': eslintPluginVueA11y,
+  const a11yConfig = builder.addConfig(
+    [
+      'vue/a11y',
+      {
+        ignoreMarkdownCodeBlocks: true,
+      },
+    ],
+    {
+      files,
+      plugins: {
+        'vuejs-accessibility': eslintPluginVueA11y,
+      },
     },
-  });
+  );
   if (a11y) {
     a11yConfig
       .addBulkRules(
@@ -571,12 +577,21 @@ export const vueEslintConfig = (
   }
 
   const piniaBuilder = new ConfigEntryBuilder<'pinia'>({}, internalOptions);
-  const piniaConfig = piniaBuilder.addConfig(['pinia', {includeDefaultFilesAndIgnores: true}], {
-    plugins: {
-      // @ts-expect-error types mismatch
-      pinia: eslintPluginPinia,
+  const piniaConfig = piniaBuilder.addConfig(
+    [
+      'pinia',
+      {
+        includeDefaultFilesAndIgnores: true,
+        ignoreMarkdownCodeBlocks: true,
+      },
+    ],
+    {
+      plugins: {
+        // @ts-expect-error types mismatch
+        pinia: eslintPluginPinia,
+      },
     },
-  });
+  );
   if (pinia) {
     piniaConfig
       .addBulkRules(eslintPluginPinia.configs['recommended-flat'].rules)

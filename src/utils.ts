@@ -1,5 +1,11 @@
 import path from 'node:path';
-import {ERROR, type RuleSeverity, WARNING} from './constants';
+import {
+  ERROR,
+  GLOB_MARKDOWN,
+  GLOB_MARKDOWN_ALL_CODE_BLOCKS,
+  type RuleSeverity,
+  WARNING,
+} from './constants';
 import type {
   AllEslintRules,
   AllRulesWithPrefix,
@@ -67,6 +73,10 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
             includeDefaultFilesAndIgnores?: boolean;
             filesFallback?: string[];
             mergeUserFilesWithFallback?: boolean;
+            /** Some rules (for example, `regexp/no-legacy-features`) crash when linting `*.md` files (only if `language` option is specified for the markdown config). We cannot ignore such files globally as that is irreversible, so we ignore them in every single config with the option to not ignore. */
+            doNotIgnoreMarkdown?: boolean;
+            /** Do not apply this config to "fenced code blocks" inside *.md files */
+            ignoreMarkdownCodeBlocks?: boolean;
           },
         ],
     config?: FlatConfigEntryForBuilder,
@@ -84,7 +94,11 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
           ? [...(internalOptions.filesFallback || []), ...userFiles]
           : userFiles
         : internalOptions.filesFallback || [];
-    const ignores = configOptions.ignores || [];
+    const ignores = [
+      ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
+      ...(internalOptions.ignoreMarkdownCodeBlocks ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS] : []),
+      ...(configOptions.ignores || []),
+    ];
 
     const configFinal: FlatConfigEntry = {
       ...(internalOptions.includeDefaultFilesAndIgnores && {
@@ -93,7 +107,6 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
       }),
       ...config,
       name: configName,
-      rules: {},
     };
 
     this.configs.push(configFinal);
@@ -126,18 +139,15 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
             ? ERROR
             : severity);
         const ruleNameFinal = `${options?.disableAutofix ? 'disable-autofix/' : ''}${ruleName}`;
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        configFinal.rules![ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
+        (configFinal.rules ||= {})[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
         if (options?.disableAutofix) {
           // @ts-expect-error "Expression produces a union type that is too complex to represent."
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          configFinal.rules![ruleName] = 0 /* Off */;
+          (configFinal.rules ||= {})[ruleName] = 0 /* Off */;
         }
         if (options?.overrideBaseRule) {
           const baseRuleName = ruleName.split('/').slice(1).join('/');
           if (baseRuleName) {
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            configFinal.rules![baseRuleName] = 0 /* Off */;
+            (configFinal.rules ||= {})[baseRuleName] = 0 /* Off */;
           }
         }
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -149,13 +159,11 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
       addRule: generateAddRuleFn<false>(),
       addAnyRule: generateAddRuleFn<true>(),
       addOverrides: () => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        Object.assign(configFinal.rules!, this.options.overrides);
+        Object.assign((configFinal.rules ||= {}), this.options.overrides);
         return result;
       },
       addBulkRules: (rules: AllRulesWithPrefix<RulesPrefix> | FalsyValue) => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        Object.assign(configFinal.rules!, rules);
+        Object.assign((configFinal.rules ||= {}), rules);
         return result;
       },
     };

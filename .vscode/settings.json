@@ -13,6 +13,8 @@
     "json",
     "jsonc",
     "json5",
+    "markdown",
+    "md",
   ],
 
   "[javascript][typescript][typescriptreact][vue][css][scss][postcss][html]": {

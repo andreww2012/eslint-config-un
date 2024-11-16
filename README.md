@@ -33,6 +33,7 @@ Includes the rules from the following configs & plugins:
 - [prefer-arrow-functions](https://www.npmjs.com/package/eslint-plugin-prefer-arrow-functions) (since v0.1.0)
 - [eslint-comments](https://www.npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments) (since v0.1.3)
 - [package-json](https://www.npmjs.com/package/eslint-plugin-package-json) (since v0.1.5)
+- [markdown](https://www.npmjs.com/package/@eslint/markdown) (since v0.1.6) <!-- TODO -->
 
 ## Features
 
@@ -69,6 +70,12 @@ export default eslintConfig({
   - `toml`
   - `package-json`
 - Some rules are set to warn by default. You can change some or even all such rule's reporting level using `errorsInsteadOfWarnings` option. You can find all such rules by inspecting the source code of this package.
+
+### Certain rules are disabled for code blocks inside `*.md` files
+
+If `markdown` config is enabled (which is the default), the same rules provided by other configs will be applied to code blocks (\```lang ... \```) inside Markdown files. This works because under the hood the plugin [`@eslint/markdown`](https://www.npmjs.com/package/@eslint/markdown) that provides that functionality will create virtual files for each code block with the same extension as specified after ```.
+
+But applying certain rules for code blocks might not be desirable because some of them are too strict for the code that won't be executed anyway or even unfixable (like missing imports). You can find the full list of disabled rules in `src/configs/markdown.ts` file.
 
 ## Troubleshooting
 

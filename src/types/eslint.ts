@@ -12,11 +12,20 @@ import type {
 
 type EslintSeverity = Eslint.Linter.RuleSeverity;
 
+export interface FlatConfigEntryFiles {
+  files?: string[];
+}
+
+export interface FlatConfigEntryFilesOrIgnores extends FlatConfigEntryFiles {
+  ignores?: string[];
+}
+
 export type RulesRecord = Eslint.Linter.RulesRecord & RuleOptions;
 // What's going on with this type? `FlatConfig` needs to be used to be compatible with eslint v8 types (v8's `Config` type is different from v9's `Config` so we can't just use `Config`). But `FlatConfig` was not made generic in v9 types so we need to add extra property that utilizes the generic parameter.
 export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
   Omit<Eslint.Linter.FlatConfig, 'files'> &
-    Pick<Eslint.Linter.Config<T>, 'rules'> & {files?: string[]}
+    Pick<Eslint.Linter.Config<T>, 'rules'> &
+    FlatConfigEntryFilesOrIgnores
 >;
 
 // Need to exclude `disable-autofix` rules to avoid TS issues related to big unions
@@ -37,7 +46,7 @@ export type RuleOverrides<T extends string | RulesRecord> = T extends string
     : never;
 
 export type ConfigSharedOptions<T extends string | RulesRecord = RulesRecord> = Partial<
-  Pick<FlatConfigEntry, 'files' | 'ignores'> & {
+  FlatConfigEntryFilesOrIgnores & {
     overrides?: RuleOverrides<T>;
     /** If severity is forced, `errorsInsteadOfWarnings` option will be completely ignored */
     forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;

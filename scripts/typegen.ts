@@ -21,6 +21,7 @@ const configs = [
       import: true,
       js: true,
       json: true,
+      markdown: true,
       node: true,
       packageJson: true,
       preferArrowFunctions: true,

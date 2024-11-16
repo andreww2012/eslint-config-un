@@ -15,6 +15,7 @@ import {
 import {type ImportEslintConfigOptions, importEslintConfig} from './configs/import';
 import {type JsEslintConfigOptions, jsEslintConfig} from './configs/js';
 import {type JsoncEslintConfigOptions, jsoncEslintConfig} from './configs/jsonc';
+import {type MarkdownEslintConfigOptions, markdownEslintConfig} from './configs/markdown';
 import {type NodeEslintConfigOptions, nodeEslintConfig} from './configs/node';
 import {type PackageJsonEslintConfigOptions, packageJsonEslintConfig} from './configs/package-json';
 import {
@@ -116,6 +117,10 @@ export interface EslintConfigUnOptions {
      * @default true
      */
     eslintComments?: boolean | Partial<EslintCommentsEslintConfigOptions>;
+    /**
+     * @default true
+     */
+    markdown?: boolean | Partial<MarkdownEslintConfigOptions>;
     /**
      * NOTE: disabled by default
      * @default false
@@ -278,6 +283,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'eslintComments'),
   };
 
+  /* 🟢 MARKDOWN */
+
+  const isMarkdownEnabled = Boolean(configsOptions.markdown ?? true);
+  const markdownOptions: MarkdownEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'markdown'),
+  };
+
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
 
   /* 🔴 SECURITY */
@@ -381,6 +393,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isPackageJsonEnabled && packageJsonEslintConfig(packageJsonOptions, internalOptions),
       isTypescriptEnabled && tsEslintConfig(tsOptions, internalOptions), // Must come after all rulesets for vanilla JS
       isVueEnabled && vueEslintConfig(vueOptions, internalOptions), // Must come after ts
+      isMarkdownEnabled && markdownEslintConfig(markdownOptions, internalOptions), // Must be last
 
       {
         name: genFlatConfigEntryName('config-files'),

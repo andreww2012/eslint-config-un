@@ -7,7 +7,15 @@ import {
   plugin as pluginTs,
   configs as tsEslintConfigs,
 } from 'typescript-eslint';
-import {ERROR, GLOB_TS, GLOB_TSX, GLOB_VUE, OFF, WARNING} from '../constants';
+import {
+  ERROR,
+  GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
+  GLOB_TS,
+  GLOB_TSX,
+  GLOB_VUE,
+  OFF,
+  WARNING,
+} from '../constants';
 import type {
   ConfigSharedOptions,
   FlatConfigEntry,
@@ -62,6 +70,9 @@ export const tsEslintConfig = (
   const onlyTsFiles = [GLOB_TS, GLOB_TSX];
   const extraFiles: FlatConfigEntry['files'] & {} = [];
   const extraFilesToIgnore: FlatConfigEntry['ignores'] & {} = [];
+  const extraFilesToIgnoreTypeAware: FlatConfigEntry['ignores'] & {} = [
+    GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
+  ];
 
   const {vueOptions} = internalOptions;
   if (vueOptions) {
@@ -90,7 +101,7 @@ export const tsEslintConfig = (
   ];
   const ignoresTypeAware = [
     ...(options.ignoresTypeAware === true ? options.ignores || [] : options.ignoresTypeAware || []),
-    ...extraFilesToIgnore,
+    ...extraFilesToIgnoreTypeAware,
   ];
   const filesAll = [...onlyTsFiles, ...filesTypeAware];
 
