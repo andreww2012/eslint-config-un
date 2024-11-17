@@ -83,6 +83,11 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
    * @example {marquee: false, pre: true}
    */
   disallowedHtmlTags?: Partial<Record<ValidAndInvalidHtmlTags | (string & {}), boolean>>;
+  /**
+   * Whether to prefer Vue 3.5 [`useTemplateRef`](https://vuejs.org/api/composition-api-helpers.html#usetemplateref) instead of `ref` to obtain a template ref.
+   * @default true <=> vue>=3.5 is installed
+   */
+  preferUseTemplateRef?: boolean;
 
   /**
    * Enables A11Y (accessibility) rules for Vue SFC templates
@@ -129,6 +134,7 @@ export const vueEslintConfig = (
   const isVue3 = majorVersion === 3;
   const isMin3_3 = isVue3 && vueMajorAndMinorVersion >= 3.3;
   const isMin3_4 = isVue3 && vueMajorAndMinorVersion >= 3.4;
+  const isMin3_5 = isVue3 && vueMajorAndMinorVersion >= 3.5;
   const isLess2_5 = isVue2 && vueMajorAndMinorVersion < 2.5;
   const isLess2_6 = isVue2 && vueMajorAndMinorVersion < 2.6;
   const isLess3_1 = vueMajorAndMinorVersion < 3.1;
@@ -456,6 +462,10 @@ export const vueEslintConfig = (
     .addRule('vue/prefer-prop-type-boolean-first', ERROR)
     .addRule('vue/prefer-separate-static-class', ERROR)
     .addRule('vue/prefer-true-attribute-shorthand', ERROR)
+    .addRule(
+      'vue/prefer-use-template-ref',
+      (options.preferUseTemplateRef ?? isMin3_5) ? ERROR : OFF,
+    )
     .addRule('vue/require-default-export', ERROR) // >=9.28.0
     .addRule('vue/require-direct-export', ERROR)
     // .addRule('vue/require-emit-validator', OFF)
