@@ -1,4 +1,4 @@
-## Unreleased
+## 0.2.0
 
 - New config: `markdown` via [`@eslint/markdown`](https://www.npmjs.com/package/@eslint/markdown), enabled by default.
 - New config: `cssInJs` via [`eslint-plugin-css`](https://www.npmjs.com/package/eslint-plugin-css), enabled by default.

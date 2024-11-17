@@ -33,8 +33,8 @@ Includes the rules from the following configs & plugins:
 - [prefer-arrow-functions](https://www.npmjs.com/package/eslint-plugin-prefer-arrow-functions) (since v0.1.0)
 - [eslint-comments](https://www.npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments) (since v0.1.3)
 - [package-json](https://www.npmjs.com/package/eslint-plugin-package-json) (since v0.1.5)
-- [markdown](https://www.npmjs.com/package/@eslint/markdown) (since v0.1.6) <!-- TODO -->
-- [css](https://www.npmjs.com/package/eslint-plugin-css) (since v0.1.6) <!-- TODO -->
+- [markdown](https://www.npmjs.com/package/@eslint/markdown) (since v0.2.0)
+- [css](https://www.npmjs.com/package/eslint-plugin-css) (since v0.2.0)
 
 ## Features
 
