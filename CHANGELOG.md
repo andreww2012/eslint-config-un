@@ -1,3 +1,7 @@
+## 0.2.2
+
+- Fixed an issue resulting in files with any extensions being linted in Nuxt custom project directory.
+
 ## 0.2.1
 
 - Fixed an issue resulting in `markdown` processor being applied to all files, effectively ignoring other processors like `vue`.
