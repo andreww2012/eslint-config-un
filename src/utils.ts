@@ -88,23 +88,23 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
     const configName = genFlatConfigEntryName(name);
 
     const userFiles = configOptions.files || [];
+    const fallbackFiles = internalOptions.filesFallback || [];
+
     const files =
-      userFiles.length > 0
+      userFiles.length > 0 && internalOptions.includeDefaultFilesAndIgnores
         ? internalOptions.mergeUserFilesWithFallback
-          ? [...(internalOptions.filesFallback || []), ...userFiles]
+          ? [...fallbackFiles, ...userFiles]
           : userFiles
-        : internalOptions.filesFallback || [];
+        : fallbackFiles;
     const ignores = [
       ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
       ...(internalOptions.ignoreMarkdownCodeBlocks ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS] : []),
-      ...(configOptions.ignores || []),
+      ...(internalOptions.includeDefaultFilesAndIgnores ? configOptions.ignores || [] : []),
     ];
 
     const configFinal: FlatConfigEntry = {
-      ...(internalOptions.includeDefaultFilesAndIgnores && {
-        ...(files.length > 0 && {files}),
-        ...(ignores.length > 0 && {ignores}),
-      }),
+      ...(files.length > 0 && {files}),
+      ...(ignores.length > 0 && {ignores}),
       ...config,
       name: configName,
     };

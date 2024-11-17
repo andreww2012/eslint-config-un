@@ -1,3 +1,7 @@
+## 0.2.1
+
+- Fixed an issue resulting in `markdown` processor being applied to all files, effectively ignoring other processors like `vue`.
+
 ## 0.2.0
 
 - New config: `markdown` via [`@eslint/markdown`](https://www.npmjs.com/package/@eslint/markdown), enabled by default.
