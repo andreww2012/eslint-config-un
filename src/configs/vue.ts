@@ -563,7 +563,7 @@ export const vueEslintConfig = (
     .addConfig('vue/allow-default-export', {
       files: [
         GLOB_VUE,
-        isNuxtEnabled && [inNuxtAppDir('plugins/**/*.*'), inNuxtAppDir('server/**/*.*')],
+        isNuxtEnabled && [inNuxtAppDir('plugins/**/*'), inNuxtAppDir('server/**/*')],
       ]
         .flat()
         .filter((v) => v !== false),
