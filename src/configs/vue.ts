@@ -25,6 +25,27 @@ type WellKnownSfcBlocks =
   | 'style:not([scoped])'
   | 'style[scoped]';
 
+// prettier-ignore
+const INVALID_HTML_TAGS = [
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element#obsolete_and_deprecated_elements
+  'acronym', 'big', 'center', 'content', 'dir', 'font', 'frame', 'frameset', 'image', 'marquee', 'menuitem', 'nobr', 'noembed', 'noframes', 'param', 'plaintext', 'rb', 'rtc', 'shadow', 'strike', 'tt', 'xmp',
+  // https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement
+  'applet', 'bgsound', 'blink', 'isindex', 'keygen', 'multicol', 'nextid', 'spacer',
+  'basefont', 'listing',
+  // https://udn.realityripple.com/docs/Web/HTML/Element
+  'command', 'element',
+] as const;
+// prettier-ignore
+type ValidHtmlTags = 'a' | 'abbr' | 'address' | 'area' | 'article' | 'aside' | 'audio' | 'b' | 'base' | 'bdi' | 'bdo' | 'blockquote' | 'body' | 'br' | 'button' | 'canvas' | 'caption' | 'cite' | 'code' | 'col' | 'colgroup' | 'data' | 'datalist' | 'dd' | 'del' | 'details' | 'dfn' | 'dialog' | 'div' | 'dl' | 'dt' | 'em' | 'embed' | 'fieldset' | 'figcaption' | 'figure' | 'footer' | 'form' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'head' | 'header' | 'hgroup' | 'hr' | 'html' | 'i' | 'iframe' | 'img' | 'input' | 'ins' | 'kbd' | 'label' | 'legend' | 'li' | 'link' | 'main' | 'map' | 'mark' | 'math' | 'menu' | 'meta' | 'meter' | 'nav' | 'noscript' | 'object' | 'ol' | 'optgroup' | 'option' | 'output' | 'p' | 'picture' | 'pre' | 'progress' | 'q' | 'rbc' | 'rp' | 'rt' | 'ruby' | 's' | 'samp' | 'script' | 'search' | 'section' | 'select' | 'slot' | 'small' | 'source' | 'span' | 'strong' | 'style' | 'sub' | 'summary' | 'sup' | 'svg' | 'table' | 'tbody' | 'td' | 'template' | 'textarea' | 'tfoot' | 'th' | 'thead' | 'time' | 'title' | 'tr' | 'track' | 'u' | 'ul' | 'var' | 'video' | 'wbr';
+type InvalidHtmlTags = (typeof INVALID_HTML_TAGS)[number];
+type ValidAndInvalidHtmlTags = ValidHtmlTags | InvalidHtmlTags;
+
+const noRestrictedHtmlElementsDefault = Object.fromEntries(
+  INVALID_HTML_TAGS.map((tag) => [tag, true]),
+);
+
+const DEFAULT_PINIA_STORE_NAME_SUFFIX = 'Store';
+
 export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
   /**
    * @default auto-detected
@@ -57,6 +78,11 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
   sfcBlockOrder?: 'template-first' | 'script-first' | (WellKnownSfcBlocks | (string & {}))[];
   noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles?: boolean;
   doNotRequireComponentNamesToBeMultiWordForPatterns?: string | string[];
+  /**
+   * By default, all deprecated or non-standard HTML tags are disallowed. Using the object syntax, you can re-allow any of them, or disallow other tags.
+   * @example {marquee: false, pre: true}
+   */
+  disallowedHtmlTags?: Partial<Record<ValidAndInvalidHtmlTags | (string & {}), boolean>>;
 
   /**
    * Enables A11Y (accessibility) rules for Vue SFC templates
@@ -89,14 +115,6 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
       };
   overridesPinia?: RuleOverrides<'pinia'>;
 }
-
-// prettier-ignore
-// https://developer.mozilla.org/en-US/docs/Web/HTML/Element#obsolete_and_deprecated_elements
-const DEPRECATED_HTML_TAGS = [
-  'acronym', 'big', 'center', 'content', 'dir', 'font', 'frame', 'frameset', 'image', 'marquee', 'menuitem', 'nobr', 'noembed', 'noframes', 'param', 'plaintext', 'rb', 'rtc', 'shadow', 'strike', 'tt', 'xmp',
-];
-
-const DEFAULT_PINIA_STORE_NAME_SUFFIX = 'Store';
 
 export const vueEslintConfig = (
   options: VueEslintConfigOptions,
@@ -381,7 +399,16 @@ export const vueEslintConfig = (
     // .addRule('vue/no-restricted-component-names', OFF)
     // .addRule('vue/no-restricted-component-options', OFF)
     // .addRule('vue/no-restricted-custom-event', OFF)
-    .addRule('vue/no-restricted-html-elements', ERROR, DEPRECATED_HTML_TAGS)
+    .addRule(
+      'vue/no-restricted-html-elements',
+      ERROR,
+      Object.entries({
+        ...noRestrictedHtmlElementsDefault,
+        ...options.disallowedHtmlTags,
+      })
+        .filter(([, isDisallowed]) => isDisallowed)
+        .map(([tag]) => tag),
+    )
     // .addRule('vue/no-restricted-props', OFF)
     // .addRule('vue/no-restricted-static-attribute', OFF)
     // .addRule('vue/no-restricted-v-bind', OFF)
