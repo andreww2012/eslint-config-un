@@ -8,6 +8,7 @@ import pluginDisableAutofix from 'eslint-plugin-disable-autofix';
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import {getPackageInfoSync, isPackageExists} from 'local-pkg';
+import {type CssInJsEslintConfigOptions, cssInJsEslintConfig} from './configs/css-in-js';
 import {
   type EslintCommentsEslintConfigOptions,
   eslintCommentsEslintConfig,
@@ -121,6 +122,10 @@ export interface EslintConfigUnOptions {
      * @default true
      */
     markdown?: boolean | Partial<MarkdownEslintConfigOptions>;
+    /**
+     * @default true
+     */
+    cssInJs?: boolean | Partial<CssInJsEslintConfigOptions>;
     /**
      * NOTE: disabled by default
      * @default false
@@ -290,6 +295,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'markdown'),
   };
 
+  /* 🟢 CSS IN JS */
+
+  const isCssInJsEnabled = Boolean(configsOptions.cssInJs ?? true);
+  const cssInJsOptions: CssInJsEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'cssInJs'),
+  };
+
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
 
   /* 🔴 SECURITY */
@@ -384,6 +396,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isTailwindEnabled && tailwindEslintConfig(tailwindOptions, internalOptions),
       isRegexpEnabled && regexpEslintConfig(regexpOptions, internalOptions),
       isEslintCommentsEnabled && eslintCommentsEslintConfig(eslintCommentsOptions, internalOptions),
+      isCssInJsEnabled && cssInJsEslintConfig(cssInJsOptions, internalOptions),
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&
         preferArrowFunctionsEslintConfig(preferArrowFunctionsOptions, internalOptions),

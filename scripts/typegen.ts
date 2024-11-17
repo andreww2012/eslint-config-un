@@ -17,6 +17,7 @@ const configs = [
   },
   ...eslintConfig({
     configs: {
+      cssInJs: true,
       eslintComments: true,
       import: true,
       js: true,
