@@ -12,12 +12,13 @@ export type RuleSeverity = typeof ERROR | typeof WARNING | typeof OFF;
 
 /* Globs */
 
-export const GLOB_JS_TS_EXTENSION = '?([cm])[jt]s?(x)' as const;
-export const GLOB_JS_TS = `**/*.${GLOB_JS_TS_EXTENSION}` as const;
+export const GLOB_JS_TS_EXTENSION = '?([cm])[jt]s' as const;
+export const GLOB_JS_TS_X_EXTENSION = `${GLOB_JS_TS_EXTENSION}?(x)` as const;
+export const GLOB_JS_TS = `**/*.${GLOB_JS_TS_X_EXTENSION}` as const;
 
 export const GLOB_CONFIG_FILES = [
-  `**/*.config.${GLOB_JS_TS_EXTENSION}` as const,
-  `**/.*rc.${GLOB_JS_TS_EXTENSION}` as const,
+  `**/*.config.${GLOB_JS_TS_X_EXTENSION}` as const,
+  `**/.*rc.${GLOB_JS_TS_X_EXTENSION}` as const,
 ];
 
 export const GLOB_TS = '**/*.?([cm])ts' as const;
@@ -37,7 +38,7 @@ export const GLOB_TOML = '**/*.toml' as const;
 export const GLOB_PACKAGE_JSON = '**/package.json' as const;
 
 export const GLOB_SUPPORTED_EXTENSIONS = [
-  GLOB_JS_TS_EXTENSION,
+  GLOB_JS_TS_X_EXTENSION,
   'vue',
   'json',
   'jsonc',

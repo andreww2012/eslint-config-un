@@ -3,7 +3,7 @@ import eslintPluginVue from 'eslint-plugin-vue';
 import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility';
 import globals from 'globals';
 import parserVue from 'vue-eslint-parser';
-import {ERROR, GLOB_VUE, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, WARNING} from '../constants';
 import type {
   ConfigSharedOptions,
   FlatConfigEntry,
@@ -563,10 +563,14 @@ export const vueEslintConfig = (
     .addConfig('vue/allow-default-export', {
       files: [
         GLOB_VUE,
-        isNuxtEnabled && [inNuxtAppDir('plugins/**/*'), inNuxtAppDir('server/**/*')],
+        isNuxtEnabled && [
+          inNuxtAppDir('plugins/**/*'),
+          inNuxtAppDir('server/**/*'),
+          inNuxtAppDir(`app/router.options.${GLOB_JS_TS_EXTENSION}`),
+        ],
       ]
         .flat()
-        .filter((v) => v !== false),
+        .filter((v) => typeof v === 'string'),
     })
     .addAnyRule('import/no-default-export', OFF);
 
