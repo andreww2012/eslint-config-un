@@ -10,7 +10,7 @@ type OverwriteOrDeriveFromDefault<T> = T | ((defaultValue: T) => T);
 interface TailwindPluginSettings {
   callees?: OverwriteOrDeriveFromDefault<string[]>;
   ignoredKeys?: OverwriteOrDeriveFromDefault<string[]>;
-  config?: string[];
+  config?: string;
   cssFiles?: OverwriteOrDeriveFromDefault<string[]>;
   cssFilesRefreshRate?: number;
   removeDuplicates?: boolean;
