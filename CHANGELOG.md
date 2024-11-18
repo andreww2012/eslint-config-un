@@ -1,3 +1,8 @@
+## 0.2.3
+
+- Added an option to specify `eslint-plugin-tailwindcss` plugin settings.
+- Allow default export in Nuxt's `app/router.options.ts` file.
+
 ## 0.2.2
 
 - Fixed an issue resulting in files with any extensions being linted in Nuxt custom project directory.
