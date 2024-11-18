@@ -16,6 +16,8 @@ import type {
 } from './types/eslint';
 import type {FalsyValue} from './types/utils';
 
+export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
+
 export const genFlatConfigEntryName = (name: string) => `eslint-config-un/${name}`;
 
 // TODO report
@@ -52,6 +54,18 @@ export const isNonEmptyArray = <T>(value?: T[] | null): value is [T, ...T[]] =>
 export const joinPaths = (...paths: (string | FalsyValue)[]) =>
   // eslint-disable-next-line unicorn/prefer-native-coercion-functions
   path.posix.join(...arraify(paths).filter((v): v is string => Boolean(v)));
+
+export type MaybeFn<ReturnType, Args extends readonly unknown[] = []> =
+  | ((...args: Args) => ReturnType)
+  | ReturnType;
+
+export const maybeCall = <ReturnType = unknown, Args extends readonly unknown[] = []>(
+  fnOrValue: MaybeFn<ReturnType, Args>,
+  ...args: Args
+): ReturnType =>
+  typeof fnOrValue === 'function'
+    ? (fnOrValue as (...args: Args) => ReturnType)(...args)
+    : fnOrValue;
 
 export type FlatConfigEntryForBuilder = Omit<FlatConfigEntry, 'name' | 'rules'>;
 
