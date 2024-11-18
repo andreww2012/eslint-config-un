@@ -1,3 +1,7 @@
+## 0.2.4
+
+- Fixed a wrong type of `config` `eslint-plugin-tailwindcss` plugin setting.
+
 ## 0.2.3
 
 - Added an option to specify `eslint-plugin-tailwindcss` plugin settings.
