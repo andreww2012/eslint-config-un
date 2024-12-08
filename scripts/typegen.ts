@@ -20,6 +20,9 @@ const configs = [
       cssInJs: true,
       eslintComments: true,
       import: true,
+      jest: {
+        jestExtended: true,
+      },
       js: true,
       json: true,
       markdown: true,

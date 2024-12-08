@@ -14,6 +14,7 @@ import {
   eslintCommentsEslintConfig,
 } from './configs/eslint-comments';
 import {type ImportEslintConfigOptions, importEslintConfig} from './configs/import';
+import {type JestEslintConfigOptions, jestEslintConfig} from './configs/jest';
 import {type JsEslintConfigOptions, jsEslintConfig} from './configs/js';
 import {type JsoncEslintConfigOptions, jsoncEslintConfig} from './configs/jsonc';
 import {type MarkdownEslintConfigOptions, markdownEslintConfig} from './configs/markdown';
@@ -127,6 +128,10 @@ export interface EslintConfigUnOptions {
      */
     cssInJs?: boolean | Partial<CssInJsEslintConfigOptions>;
     /**
+     * @default true if `jest` package is installed
+     */
+    jest?: boolean | Partial<JestEslintConfigOptions>;
+    /**
      * NOTE: disabled by default
      * @default false
      */
@@ -224,6 +229,10 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'vue'),
   };
 
+  /* 🟢 JEST */
+
+  const jestPackageInfo = getPackageInfoSync('jest');
+
   // 🟢🟢🟢 Enabled by default 🟢🟢🟢
 
   /* 🟢 UNICORN */
@@ -300,6 +309,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
   const isCssInJsEnabled = Boolean(configsOptions.cssInJs ?? true);
   const cssInJsOptions: CssInJsEslintConfigOptions = {
     ...assignOptions(configsOptions, 'cssInJs'),
+  };
+
+  /* 🟢 JEST */
+
+  const isJestEnabled = Boolean(configsOptions.jest ?? jestPackageInfo != null);
+  const jestOptions: JestEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'jest'),
   };
 
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
@@ -397,6 +413,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isRegexpEnabled && regexpEslintConfig(regexpOptions, internalOptions),
       isEslintCommentsEnabled && eslintCommentsEslintConfig(eslintCommentsOptions, internalOptions),
       isCssInJsEnabled && cssInJsEslintConfig(cssInJsOptions, internalOptions),
+      isJestEnabled && jestEslintConfig(jestOptions, internalOptions),
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&
         preferArrowFunctionsEslintConfig(preferArrowFunctionsOptions, internalOptions),

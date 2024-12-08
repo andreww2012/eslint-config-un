@@ -140,7 +140,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
         severity: Severity,
         ruleOptions?: GetRuleOptions<RuleName>,
         options?: {
-          overrideBaseRule?: boolean;
+          overrideBaseRule?: boolean | keyof AllEslintRules;
           disableAutofix?: boolean;
         },
       ) => {
@@ -159,7 +159,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
           (configFinal.rules ||= {})[ruleName] = 0 /* Off */;
         }
         if (options?.overrideBaseRule) {
-          const baseRuleName = ruleName.split('/').slice(1).join('/');
+          const baseRuleName = typeof options.overrideBaseRule === 'string' ? options.overrideBaseRule : ruleName.split('/').slice(1).join('/');
           if (baseRuleName) {
             (configFinal.rules ||= {})[baseRuleName] = 0 /* Off */;
           }

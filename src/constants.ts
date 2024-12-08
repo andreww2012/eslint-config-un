@@ -21,7 +21,9 @@ export const GLOB_CONFIG_FILES = [
   `**/.*rc.${GLOB_JS_TS_X_EXTENSION}` as const,
 ];
 
-export const GLOB_TS = '**/*.?([cm])ts' as const;
+export const GLOB_TS_EXTENSION = '?([cm])ts' as const;
+export const GLOB_TS_X_EXTENSION = `${GLOB_TS_EXTENSION}?(x)` as const;
+export const GLOB_TS = `**/*.${GLOB_TS_EXTENSION}` as const;
 export const GLOB_TSX = `${GLOB_TS}x` as const;
 
 export const GLOB_VUE = '**/*.vue' as const;

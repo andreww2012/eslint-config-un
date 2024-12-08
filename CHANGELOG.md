@@ -1,3 +1,8 @@
+## Unreleased
+
+- New config: `jest` via [`eslint-plugin-jest`](https://www.npmjs.com/package/eslint-plugin-jest), enabled automatically if `jest` package is installed.
+- New config: `jest-extended` via [`eslint-plugin-jest-extended`](https://www.npmjs.com/package/eslint-plugin-jest-extended), enabled automatically if **both** `jest` and `jest-extended` packages are installed.
+
 ## 0.2.4
 
 - Fixed a wrong type of `config` `eslint-plugin-tailwindcss` plugin setting.
