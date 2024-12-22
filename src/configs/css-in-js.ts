@@ -1,12 +1,8 @@
 import eslintPluginCss from 'eslint-plugin-css';
 import {ERROR} from '../constants';
-import type {
-  ConfigSharedOptions,
-  FlatConfigEntry,
-  GetRuleOptions,
-  InternalConfigOptions,
-} from '../types/eslint';
-import {ConfigEntryBuilder} from '../utils';
+import type {ConfigSharedOptions, FlatConfigEntry, GetRuleOptions} from '../eslint';
+import {ConfigEntryBuilder} from '../eslint';
+import type {InternalConfigOptions} from './index';
 
 export interface CssInJsEslintConfigOptions extends ConfigSharedOptions<'css-in-js'> {
   /**

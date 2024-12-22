@@ -1,9 +1,11 @@
 import {objectKeys} from '@antfu/utils';
 import eslintPluginTailwind from 'eslint-plugin-tailwindcss';
 import {OFF, WARNING} from '../constants';
-import type {ConfigSharedOptions, FlatConfigEntry, InternalConfigOptions} from '../types/eslint';
-import type {PrettifyShallow} from '../types/utils';
-import {ConfigEntryBuilder, maybeCall} from '../utils';
+import type {ConfigSharedOptions, FlatConfigEntry} from '../eslint';
+import {ConfigEntryBuilder} from '../eslint';
+import type {PrettifyShallow} from '../types';
+import {maybeCall} from '../utils';
+import type {InternalConfigOptions} from './index';
 
 type OverwriteOrDeriveFromDefault<T> = T | ((defaultValue: T) => T);
 

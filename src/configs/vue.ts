@@ -4,17 +4,18 @@ import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility';
 import globals from 'globals';
 import parserVue from 'vue-eslint-parser';
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, WARNING} from '../constants';
+import {ConfigEntryBuilder} from '../eslint';
 import type {
   ConfigSharedOptions,
   FlatConfigEntry,
   FlatConfigEntryFilesOrIgnores,
-  InternalConfigOptions,
   RuleOverrides,
   RulesRecord,
-} from '../types/eslint';
-import type {PrettifyShallow} from '../types/utils';
-import {ConfigEntryBuilder, joinPaths} from '../utils';
+} from '../eslint';
+import type {PrettifyShallow} from '../types';
+import {joinPaths} from '../utils';
 import {RULE_CAMELCASE_OPTIONS, RULE_EQEQEQ_OPTIONS} from './js';
+import type {InternalConfigOptions} from './index';
 
 type WellKnownSfcBlocks =
   | 'template'

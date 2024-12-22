@@ -1,13 +1,9 @@
 import eslintPluginPackageJsonRecommendedConfig from 'eslint-plugin-package-json/configs/recommended';
 import jsoncEslintParser from 'jsonc-eslint-parser';
 import {ERROR, GLOB_PACKAGE_JSON} from '../constants';
-import type {
-  ConfigSharedOptions,
-  FlatConfigEntry,
-  GetRuleOptions,
-  InternalConfigOptions,
-} from '../types/eslint';
-import {ConfigEntryBuilder} from '../utils';
+import type {ConfigSharedOptions, FlatConfigEntry, GetRuleOptions} from '../eslint';
+import {ConfigEntryBuilder} from '../eslint';
+import type {InternalConfigOptions} from './index';
 
 const DEFAULT_FILES = [GLOB_PACKAGE_JSON];
 

@@ -1,13 +1,9 @@
 import eslintPluginYaml from 'eslint-plugin-yml';
 import yamlEslintParser from 'yaml-eslint-parser';
 import {ERROR, GLOB_YAML, OFF} from '../constants';
-import type {
-  ConfigSharedOptions,
-  FlatConfigEntry,
-  GetRuleOptions,
-  InternalConfigOptions,
-} from '../types/eslint';
-import {ConfigEntryBuilder} from '../utils';
+import type {ConfigSharedOptions, FlatConfigEntry, GetRuleOptions} from '../eslint';
+import {ConfigEntryBuilder} from '../eslint';
+import type {InternalConfigOptions} from './index';
 
 const DEFAULT_FILES = [GLOB_YAML];
 

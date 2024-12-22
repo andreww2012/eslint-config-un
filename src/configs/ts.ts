@@ -16,19 +16,20 @@ import {
   OFF,
   WARNING,
 } from '../constants';
-import type {
-  ConfigSharedOptions,
-  FlatConfigEntry,
-  InternalConfigOptions,
-  RuleOverrides,
-  RulesRecord,
-} from '../types/eslint';
-import {ConfigEntryBuilder, type FlatConfigEntryForBuilder} from '../utils';
+import {
+  ConfigEntryBuilder,
+  type ConfigSharedOptions,
+  type FlatConfigEntry,
+  type FlatConfigEntryForBuilder,
+  type RuleOverrides,
+  type RulesRecord,
+} from '../eslint';
 import {
   RULE_NO_UNUSED_EXPRESSIONS_OPTIONS,
   RULE_NO_USE_BEFORE_DEFINE_OPTIONS,
   RULE_PREFER_DESTRUCTURING_OPTIONS,
 } from './js';
+import type {InternalConfigOptions} from './index';
 
 export interface TsEslintConfigOptions extends ConfigSharedOptions<'@typescript-eslint'> {
   typescriptVersion?: string;

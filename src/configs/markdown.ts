@@ -7,12 +7,13 @@ import type {
   FlatConfigEntry,
   FlatConfigEntryFiles,
   FlatConfigEntryFilesOrIgnores,
-  InternalConfigOptions,
   RuleOverrides,
   RulesRecord,
-} from '../types/eslint';
-import type {PrettifyShallow} from '../types/utils';
-import {ConfigEntryBuilder, arraify} from '../utils';
+} from '../eslint';
+import {ConfigEntryBuilder} from '../eslint';
+import type {PrettifyShallow} from '../types';
+import {arraify} from '../utils';
+import type {InternalConfigOptions} from './index';
 
 type MarkdownDialect = 'commonmark' | 'gfm';
 

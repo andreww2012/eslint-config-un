@@ -5,14 +5,15 @@ import eslintPluginJest from 'eslint-plugin-jest';
 import eslintPluginJestExtended from 'eslint-plugin-jest-extended';
 import {getPackageInfoSync} from 'local-pkg';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import type {
-  ConfigSharedOptions,
-  FlatConfigEntry,
-  GetRuleOptions,
-  InternalConfigOptions,
-} from '../types/eslint';
-import type {PrettifyShallow} from '../types/utils';
-import {ConfigEntryBuilder, type FlatConfigEntryForBuilder} from '../utils';
+import {
+  ConfigEntryBuilder,
+  type ConfigSharedOptions,
+  type FlatConfigEntry,
+  type FlatConfigEntryForBuilder,
+  type GetRuleOptions,
+} from '../eslint';
+import type {PrettifyShallow} from '../types';
+import type {InternalConfigOptions} from './index';
 
 type AllJestMatchers = PrettifyShallow<keyof ReturnType<JestExpect> | keyof AsymmetricMatchers>;
 
