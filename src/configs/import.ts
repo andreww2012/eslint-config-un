@@ -1,3 +1,4 @@
+import {createTypeScriptImportResolver} from 'eslint-import-resolver-typescript';
 import eslintPluginImportX from 'eslint-plugin-import-x';
 import {ERROR, OFF, WARNING} from '../constants';
 import {
@@ -16,7 +17,7 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
    */
   isTypescriptEnabled?: boolean;
   /**
-   * @see https://github.com/import-js/eslint-plugin-import/blob/fc361a9998b14b9528d841d8349078a5af2da436/docs/rules/no-unresolved.md#ignore
+   * @see https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-unresolved.md#ignore
    */
   importPatternsToIgnoreWhenTryingToResolve?: string | string[];
   /**
@@ -54,15 +55,15 @@ export const importEslintConfig = (
       },
       settings: {
         ...(isTypescriptEnabled && eslintPluginImportX.configs.typescript.settings),
-        'import-x/resolver': {
-          ...(isTypescriptEnabled && {
-            typescript: {
-              project: true,
+        'import-x/resolver-next': [
+          // If the TS resolver goes after the node resolver, `import/no-deprecated` doesn't work
+          // TODO should report?
+          isTypescriptEnabled &&
+            createTypeScriptImportResolver({
               alwaysTryTypes: true,
-            },
-          }),
-          node: true, // TODO
-        },
+            }),
+          eslintPluginImportX.createNodeResolver(),
+        ].filter((v) => typeof v === 'object'),
         ...(isTypescriptEnabled && {
           'import-x/parsers': {
             '@typescript-eslint/parser': ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'],

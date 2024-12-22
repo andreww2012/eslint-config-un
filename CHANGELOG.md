@@ -10,6 +10,11 @@
 - New config: `jest-extended` via [`eslint-plugin-jest-extended`](https://www.npmjs.com/package/eslint-plugin-jest-extended), enabled automatically if **both** `jest` and `jest-extended` packages are installed.
 - New config: `vitest` via [`@vitest/eslint-plugin`](https://www.npmjs.com/package/@vitest/eslint-plugin), enabled automatically if `vitest` package is installed.
 
+### Dependencies
+
+- `eslint-plugin-import-x`: 4.4.2 -> 4.6.1 & `eslint-import-resolver-typescript`: 3.6.3 -> 3.7.0
+  - Start using [new `eslint-plugin-import-x` resolver interface](https://github.com/un-ts/eslint-plugin-import-x/releases/tag/v4.6.0).
+
 ## 0.2.4
 
 - Fixed a wrong type of `config` `eslint-plugin-tailwindcss` plugin setting.
