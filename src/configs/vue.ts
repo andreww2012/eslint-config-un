@@ -112,14 +112,15 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
    */
   pinia?:
     | boolean
-    | {
-        /**
-         * @default `Store`
-         * @see https://github.com/lisilinhart/eslint-plugin-pinia/blob/main/docs/rules/prefer-use-store-naming-convention.md#options
-         */
-        storesNameSuffix?: string;
-      };
-  overridesPinia?: RuleOverrides<'pinia'>;
+    | PrettifyShallow<
+        ConfigSharedOptions<'pinia'> & {
+          /**
+           * @default `Store`
+           * @see https://github.com/lisilinhart/eslint-plugin-pinia/blob/main/docs/rules/prefer-use-store-naming-convention.md#options
+           */
+          storesNameSuffix?: string;
+        }
+      >;
 }
 
 export const vueEslintConfig = (
@@ -620,23 +621,27 @@ export const vueEslintConfig = (
       .addBulkRules(options.overridesA11y);
   }
 
-  const piniaBuilder = new ConfigEntryBuilder<'pinia'>({}, internalOptions);
-  const piniaConfig = piniaBuilder.addConfig(
-    [
-      'pinia',
-      {
-        includeDefaultFilesAndIgnores: true,
-        ignoreMarkdownCodeBlocks: true,
-      },
-    ],
-    {
-      plugins: {
-        // @ts-expect-error types mismatch
-        pinia: eslintPluginPinia,
-      },
-    },
+  const piniaBuilder = new ConfigEntryBuilder<'pinia'>(
+    typeof pinia === 'object' ? pinia : {},
+    internalOptions,
   );
   if (pinia) {
+    const piniaConfig = piniaBuilder.addConfig(
+      [
+        'pinia',
+        {
+          includeDefaultFilesAndIgnores: true,
+          ignoreMarkdownCodeBlocks: true,
+        },
+      ],
+      {
+        plugins: {
+          // @ts-expect-error types mismatch
+          pinia: eslintPluginPinia,
+        },
+      },
+    );
+
     piniaConfig
       .addBulkRules(eslintPluginPinia.configs['recommended-flat'].rules)
       // .addRule('pinia/never-export-initialized-store', ERROR)
@@ -652,9 +657,8 @@ export const vueEslintConfig = (
               ? pinia.storesNameSuffix
               : DEFAULT_PINIA_STORE_NAME_SUFFIX,
         },
-      ])
-      // .addRule('pinia/require-setup-store-properties-export', ERROR)
-      .addBulkRules(options.overridesPinia);
+      ]);
+    // .addRule('pinia/require-setup-store-properties-export', ERROR)
   }
 
   return [...builder.getAllConfigs(), ...piniaBuilder.getAllConfigs()];
