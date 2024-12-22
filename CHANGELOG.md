@@ -1,11 +1,6 @@
 ## 0.3.0
 
-### Breaking changes
-
-- [`prefer-inline` option of `import/no-duplicates` rule](https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-duplicates.md#inline-type-imports) is now set to `true`. Added an new option `noDuplicatesOptions` in `import` config to override this behavior.
-
-### Other changes
-
+- [**BREAKING**] [`prefer-inline` option of `import/no-duplicates` rule](https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-duplicates.md#inline-type-imports) is now set to `true`. Added an new option `noDuplicatesOptions` in `import` config to override this behavior.
 - New config: `jest` via [`eslint-plugin-jest`](https://www.npmjs.com/package/eslint-plugin-jest), enabled automatically if `jest` package is installed.
 - New config: `jest-extended` via [`eslint-plugin-jest-extended`](https://www.npmjs.com/package/eslint-plugin-jest-extended), enabled automatically if **both** `jest` and `jest-extended` packages are installed.
 - New config: `vitest` via [`@vitest/eslint-plugin`](https://www.npmjs.com/package/@vitest/eslint-plugin), enabled automatically if `vitest` package is installed.
@@ -22,6 +17,18 @@
   - Fixes an ESLint 9.15 compatibility issue.
 - `eslint-plugin-unicorn`: 56.0.0 -> 56.0.1
   - Fixes an ESLint 9.15 compatibility issue.
+- `@stylistic/eslint-plugin`: 2.10.1 -> 2.12.1
+- `eslint-plugin-jest`: 28.9.0 -> 28.10.0
+- `eslint-plugin-n`: 17.13.2 -> 17.15.1
+- `eslint-plugin-package-json`: 0.15.6 -> 0.18.0
+  - `overrides` collection is now sorted by default.
+- `eslint-plugin-promise`: 7.1.0 -> 7.2.1
+  - [**BREAKING**] Replace `allowThen: true` with the new [`allowThenStrict: true`](https://github.com/eslint-community/eslint-plugin-promise/blob/main/docs/rules/catch-or-return.md#allowthenstrict) in `catch-or-return` rule.
+  - [**BREAKING**] Enabled a new [`prefer-catch`](https://github.com/eslint-community/eslint-plugin-promise/blob/main/docs/rules/prefer-catch.md) rule.
+- `eslint-plugin-toml`: 0.11.1 -> 0.12.0
+- `eslint-plugin-vue`: 9.31.0 -> 9.32.0
+  - [**BREAKING**] Enabled a new [`slot-name-casing`](https://eslint.vuejs.org/rules/slot-name-casing.html) rule, which enforces `camelCase` for slot names.
+- `eslint-plugin-yml`: 1.15.0 -> 1.16.0
 
 ## 0.2.4
 

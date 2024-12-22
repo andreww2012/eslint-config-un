@@ -477,6 +477,8 @@ export const vueEslintConfig = (
     // .addRule('vue/require-prop-comment', OFF)
     .addRule('vue/require-typed-object-prop', ERROR)
     .addRule('vue/require-typed-ref', ERROR)
+    // .addRule('vue/restricted-component-names', OFF) // >= 9.32.0
+    .addRule('vue/slot-name-casing', ERROR /* `camelCase` is default */) // >= 9.32.0
     // .addRule('vue/script-indent', OFF)
     // .addRule('vue/sort-keys', OFF)
     // .addRule('vue/static-class-names-order', OFF)

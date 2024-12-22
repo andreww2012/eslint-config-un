@@ -20,6 +20,7 @@ type PackageJsonCollection =
   | 'optionalDependencies'
   | 'config'
   | 'exports'
+  | 'overrides'
   | (string & {});
 
 type PackageJsonCollectionsToSort = Partial<Record<PackageJsonCollection, boolean>>;
@@ -31,6 +32,7 @@ const DEFAULT_COLLECTIONS_TO_SORT = {
   peerDependencies: true,
   peerDependenciesMeta: true,
   optionalDependencies: true,
+  overrides: true,
 } satisfies PackageJsonCollectionsToSort;
 
 export interface PackageJsonEslintConfigOptions extends ConfigSharedOptions<'package-json'> {

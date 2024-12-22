@@ -25,7 +25,7 @@ export const promiseEslintConfig = (
     // .addRule('avoid-new', OFF)
     .addRule('promise/catch-or-return', ERROR, [
       {
-        allowThen: true,
+        allowThenStrict: true,
         allowFinally: true,
       },
     ])
@@ -40,6 +40,7 @@ export const promiseEslintConfig = (
     // .addRule('promise/param-names', ERROR)
     // .addRule('promise/prefer-await-to-callbacks', OFF)
     // .addRule('promise/prefer-await-to-then', OFF)
+    .addRule('promise/prefer-catch', ERROR)
     .addRule('promise/spec-only', ERROR)
     .addRule('promise/valid-params', ERROR) // Default: warn
     .addOverrides();
