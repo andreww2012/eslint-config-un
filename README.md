@@ -35,11 +35,12 @@ Includes the rules from the following configs & plugins:
 - [package-json](https://www.npmjs.com/package/eslint-plugin-package-json) (since v0.1.5)
 - [markdown](https://www.npmjs.com/package/@eslint/markdown) (since v0.2.0)
 - [css](https://www.npmjs.com/package/eslint-plugin-css) (since v0.2.0)
-- [jest](https://www.npmjs.com/package/eslint-plugin-jest) (+ [jest-extended](https://www.npmjs.com/package/eslint-plugin-jest-extended)) (since ?)
+- [jest](https://www.npmjs.com/package/eslint-plugin-jest) (+ [jest-extended](https://www.npmjs.com/package/eslint-plugin-jest-extended)) (since v0.3.0)
+- [vitest](https://www.npmjs.com/package/@vitest/eslint-plugin) (since v0.3.0)
 
 ## Features
 
-- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest` and `jest-extended` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
+- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest`, `jest-extended` and `vitest` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
 - Every block of rules supports `overrides` for rules.
 - Designed to be used separately from Prettier: *almost* all the rules potentially conflicting with Prettier are disabled *by default*.
 - Written in TypeScript so all the options are typed.

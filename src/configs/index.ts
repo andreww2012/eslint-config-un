@@ -17,6 +17,7 @@ import type {TailwindEslintConfigOptions} from './tailwind';
 import type {TomlEslintConfigOptions} from './toml';
 import type {TsEslintConfigOptions} from './ts';
 import type {UnicornEslintConfigOptions} from './unicorn';
+import type {VitestEslintConfigOptions} from './vitest';
 import type {VueEslintConfigOptions} from './vue';
 import type {YamlEslintConfigOptions} from './yaml';
 
@@ -113,6 +114,10 @@ export interface EslintConfigUnOptions {
      * @default true if `jest` package is installed
      */
     jest?: boolean | Partial<JestEslintConfigOptions>;
+    /**
+     * @default true if `vitest` package is installed
+     */
+    vitest?: boolean | Partial<VitestEslintConfigOptions>;
     /**
      * NOTE: disabled by default
      * @default false

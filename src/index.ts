@@ -33,11 +33,11 @@ import {type TailwindEslintConfigOptions, tailwindEslintConfig} from './configs/
 import {type TomlEslintConfigOptions, tomlEslintConfig} from './configs/toml';
 import {type TsEslintConfigOptions, tsEslintConfig} from './configs/ts';
 import {type UnicornEslintConfigOptions, unicornEslintConfig} from './configs/unicorn';
+import {type VitestEslintConfigOptions, vitestEslintConfig} from './configs/vitest';
 import {type VueEslintConfigOptions, vueEslintConfig} from './configs/vue';
 import {type YamlEslintConfigOptions, yamlEslintConfig} from './configs/yaml';
 import {DEFAULT_GLOBAL_IGNORES, GLOB_CONFIG_FILES, OFF} from './constants';
-import {genFlatConfigEntryName} from './eslint';
-import type {FlatConfigEntry} from './eslint';
+import {type FlatConfigEntry, genFlatConfigEntryName} from './eslint';
 import {assignOptions} from './utils';
 
 // TODO debug
@@ -103,9 +103,9 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'vue'),
   };
 
-  /* 🟢 JEST */
-
   const jestPackageInfo = getPackageInfoSync('jest');
+
+  const vitestPackageInfo = getPackageInfoSync('vitest');
 
   // 🟢🟢🟢 Enabled by default 🟢🟢🟢
 
@@ -190,6 +190,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
   const isJestEnabled = Boolean(configsOptions.jest ?? jestPackageInfo != null);
   const jestOptions: JestEslintConfigOptions = {
     ...assignOptions(configsOptions, 'jest'),
+  };
+
+  /* 🟢 VITEST */
+
+  const isVitestEnabled = Boolean(configsOptions.vitest ?? vitestPackageInfo != null);
+  const vitestOptions: VitestEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'vitest'),
   };
 
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
@@ -288,6 +295,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isEslintCommentsEnabled && eslintCommentsEslintConfig(eslintCommentsOptions, internalOptions),
       isCssInJsEnabled && cssInJsEslintConfig(cssInJsOptions, internalOptions),
       isJestEnabled && jestEslintConfig(jestOptions, internalOptions),
+      isVitestEnabled && vitestEslintConfig(vitestOptions, internalOptions),
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&
         preferArrowFunctionsEslintConfig(preferArrowFunctionsOptions, internalOptions),

@@ -17,7 +17,7 @@ import type {InternalConfigOptions} from './index';
 
 type AllJestMatchers = PrettifyShallow<keyof ReturnType<JestExpect> | keyof AsymmetricMatchers>;
 
-const generateDefaultTestFiles = <T extends string>(extensions: T) => [
+export const generateDefaultTestFiles = <T extends string>(extensions: T) => [
   `**/*.spec.${extensions}` as const, // GitHub: 2.3M .ts files as of 2024-12-08 (https://github.com/search?q=path%3A**%2F*.spec.ts&type=code&query=path%3A%2F**%2F__tests__%2F**%2F*.ts)
   `**/*.test.${extensions}` as const, // 1.9M
   `__tests__/**/*.${extensions}` as const, // 155k

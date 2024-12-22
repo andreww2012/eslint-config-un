@@ -39,6 +39,7 @@ const configs = [
         noTypeAssertion: true,
       },
       unicorn: true,
+      vitest: true,
       vue: {
         a11y: true,
         nuxtMajorVersion: 3,
