@@ -112,8 +112,8 @@ export const tsEslintConfig = (
 
   const generateBaseOptions = (isTypeAware?: boolean): FlatConfigEntryForBuilder => ({
     languageOptions: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
-      parser: parserTs as any,
+      // @ts-expect-error small types mismatch
+      parser: parserTs,
       parserOptions: {
         extraFileExtensions: options.extraFileExtensions?.map((ext) => `.${ext}`),
         sourceType: 'module',
@@ -322,6 +322,7 @@ export const tsEslintConfig = (
     .addRule('@typescript-eslint/no-unsafe-enum-comparison', noUnsafeRulesSeverity)
     .addRule('@typescript-eslint/no-unsafe-member-access', noUnsafeRulesSeverity)
     .addRule('@typescript-eslint/no-unsafe-return', noUnsafeRulesSeverity)
+    // .addRule('@typescript-eslint/no-unsafe-type-assertion', OFF)
     // .addRule('@typescript-eslint/no-unsafe-unary-minus', ERROR)
     .addAnyRule('no-throw-literal', OFF) // Note: has different name
     // .addRule('@typescript-eslint/only-throw-error', ERROR)
@@ -366,6 +367,7 @@ export const tsEslintConfig = (
     .addRule('@typescript-eslint/prefer-readonly', ERROR)
     // .addRule('@typescript-eslint/prefer-readonly-parameter-types', OFF)
     // .addRule('@typescript-eslint/promise-function-async', OFF)
+    // .addRule('@typescript-eslint/related-getter-setter-pairs', ERROR)
     // .addRule('@typescript-eslint/require-array-sort-compare', OFF)
     // Note: has different name. Also note that the original rule is deprecated and not included in this config, but we disable it anyway just for safety
     .addAnyRule('no-return-await', OFF) // Disabled by default since v8

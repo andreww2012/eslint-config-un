@@ -14,6 +14,14 @@
 
 - `eslint-plugin-import-x`: 4.4.2 -> 4.6.1 & `eslint-import-resolver-typescript`: 3.6.3 -> 3.7.0
   - Start using [new `eslint-plugin-import-x` resolver interface](https://github.com/un-ts/eslint-plugin-import-x/releases/tag/v4.6.0).
+- `typescript-eslint`: 8.14.0 -> 8.18.1
+  - Fixes an ESLint 9.15 compatibility issue.
+  - Enabled a new [`related-getter-setter-pairs`](https://typescript-eslint.io/rules/related-getter-setter-pairs) rule.
+  - A new [`no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule **was not enabled** by default.
+- `eslint-plugin-jsonc`: 2.18.1 -> 2.18.2
+  - Fixes an ESLint 9.15 compatibility issue.
+- `eslint-plugin-unicorn`: 56.0.0 -> 56.0.1
+  - Fixes an ESLint 9.15 compatibility issue.
 
 ## 0.2.4
 
