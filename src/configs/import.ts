@@ -4,6 +4,7 @@ import {
   ConfigEntryBuilder,
   type ConfigSharedOptions,
   type FlatConfigEntry,
+  type GetRuleOptions,
   createPluginObjectRenamer,
 } from '../eslint';
 import {arraify, isNonEmptyArray} from '../utils';
@@ -25,6 +26,12 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
    * @default false
    */
   requireModuleExtensions?: boolean | Record<string, 'always' | 'never' | 'ignorePackages'>;
+  /**
+   * Will be merged with the default value. By default, type-only imports (`import type ...` from 'module') will be merged with the regular imports from the same module (`import ... from 'module'`)
+   * @default {'prefer-inline': true}
+   * @see https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-duplicates.md
+   */
+  noDuplicatesOptions?: GetRuleOptions<'import/no-duplicates'>[0];
 }
 
 const pluginRenamer = createPluginObjectRenamer('import-x', 'import');
@@ -33,7 +40,7 @@ export const importEslintConfig = (
   options: ImportEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const {isTypescriptEnabled} = options;
+  const {isTypescriptEnabled, noDuplicatesOptions} = options;
 
   const noUnresolvedIgnores = arraify(options.importPatternsToIgnoreWhenTryingToResolve);
 
@@ -98,7 +105,7 @@ export const importEslintConfig = (
     .addRule('import/no-cycle', WARNING)
     .addRule('import/no-default-export', ERROR)
     .addRule('import/no-deprecated', WARNING)
-    // .addRule('import/no-duplicates', ERROR)
+    .addRule('import/no-duplicates', ERROR, [{'prefer-inline': true, ...noDuplicatesOptions}]) // Default: warn
     // .addRule('import/no-dynamic-require', OFF)
     .addRule('import/no-empty-named-blocks', ERROR)
     .addRule('import/no-extraneous-dependencies', ERROR, [{peerDependencies: false}])

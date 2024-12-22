@@ -2,15 +2,15 @@ import eslintPluginMarkdown from '@eslint/markdown';
 import {mergeProcessors, processorPassThrough} from 'eslint-merge-processors';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
-import type {
-  ConfigSharedOptions,
-  FlatConfigEntry,
-  FlatConfigEntryFiles,
-  FlatConfigEntryFilesOrIgnores,
-  RuleOverrides,
-  RulesRecord,
+import {
+  ConfigEntryBuilder,
+  type ConfigSharedOptions,
+  type FlatConfigEntry,
+  type FlatConfigEntryFiles,
+  type FlatConfigEntryFilesOrIgnores,
+  type RuleOverrides,
+  type RulesRecord,
 } from '../eslint';
-import {ConfigEntryBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {arraify} from '../utils';
 import type {InternalConfigOptions} from './index';

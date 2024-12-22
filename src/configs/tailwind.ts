@@ -1,8 +1,7 @@
 import {objectKeys} from '@antfu/utils';
 import eslintPluginTailwind from 'eslint-plugin-tailwindcss';
 import {OFF, WARNING} from '../constants';
-import type {ConfigSharedOptions, FlatConfigEntry} from '../eslint';
-import {ConfigEntryBuilder} from '../eslint';
+import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {maybeCall} from '../utils';
 import type {InternalConfigOptions} from './index';

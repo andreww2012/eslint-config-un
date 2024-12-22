@@ -3,8 +3,13 @@ import EslintJs from '@eslint/js';
 import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
 import {ERROR, WARNING} from '../constants';
-import type {AllEslintRules, ConfigSharedOptions, FlatConfigEntry, GetRuleOptions} from '../eslint';
-import {ConfigEntryBuilder} from '../eslint';
+import {
+  type AllEslintRules,
+  ConfigEntryBuilder,
+  type ConfigSharedOptions,
+  type FlatConfigEntry,
+  type GetRuleOptions,
+} from '../eslint';
 import type {ConstantKeys} from '../types';
 import type {InternalConfigOptions} from './index';
 

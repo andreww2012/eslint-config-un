@@ -1,5 +1,11 @@
 ## Unreleased
 
+### Breaking changes
+
+- [`prefer-inline` option of `import/no-duplicates` rule](https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-duplicates.md#inline-type-imports) is now set to `true`. Added an new option `noDuplicatesOptions` in `import` config to override this behavior.
+
+### Other changes
+
 - New config: `jest` via [`eslint-plugin-jest`](https://www.npmjs.com/package/eslint-plugin-jest), enabled automatically if `jest` package is installed.
 - New config: `jest-extended` via [`eslint-plugin-jest-extended`](https://www.npmjs.com/package/eslint-plugin-jest-extended), enabled automatically if **both** `jest` and `jest-extended` packages are installed.
 

@@ -4,13 +4,13 @@ import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility';
 import globals from 'globals';
 import parserVue from 'vue-eslint-parser';
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder} from '../eslint';
-import type {
-  ConfigSharedOptions,
-  FlatConfigEntry,
-  FlatConfigEntryFilesOrIgnores,
-  RuleOverrides,
-  RulesRecord,
+import {
+  ConfigEntryBuilder,
+  type ConfigSharedOptions,
+  type FlatConfigEntry,
+  type FlatConfigEntryFilesOrIgnores,
+  type RuleOverrides,
+  type RulesRecord,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {joinPaths} from '../utils';
