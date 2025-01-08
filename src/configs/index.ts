@@ -5,6 +5,7 @@ import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
 import type {ImportEslintConfigOptions} from './import';
 import type {JestEslintConfigOptions} from './jest';
 import type {JsEslintConfigOptions} from './js';
+import type {JsdocEslintConfigOptions} from './jsdoc';
 import type {JsoncEslintConfigOptions} from './jsonc';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import type {NodeEslintConfigOptions} from './node';
@@ -118,6 +119,10 @@ export interface EslintConfigUnOptions {
      * @default true if `vitest` package is installed
      */
     vitest?: boolean | Partial<VitestEslintConfigOptions>;
+    /**
+     * @default true
+     */
+    jsdoc?: boolean | Partial<JsdocEslintConfigOptions>;
     /**
      * NOTE: disabled by default
      * @default false

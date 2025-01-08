@@ -1,5 +1,6 @@
 ## Unreleased
 
+- New config: `jsdoc` via [`eslint-plugin-jsdoc`](https://www.npmjs.com/package/eslint-plugin-jsdoc), enabled by default.
 - Change the severity of all the `eslint-plugin-vue`'s recommended rules to `error` (which turned out to be `warn` by default).
 
 ## 0.3.0

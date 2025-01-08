@@ -24,6 +24,7 @@ const configs = [
         jestExtended: true,
       },
       js: true,
+      jsdoc: true,
       json: true,
       markdown: true,
       node: true,

@@ -17,6 +17,7 @@ import {
 import {type ImportEslintConfigOptions, importEslintConfig} from './configs/import';
 import {type JestEslintConfigOptions, jestEslintConfig} from './configs/jest';
 import {type JsEslintConfigOptions, jsEslintConfig} from './configs/js';
+import {type JsdocEslintConfigOptions, jsdocEslintConfig} from './configs/jsdoc';
 import {type JsoncEslintConfigOptions, jsoncEslintConfig} from './configs/jsonc';
 import {type MarkdownEslintConfigOptions, markdownEslintConfig} from './configs/markdown';
 import {type NodeEslintConfigOptions, nodeEslintConfig} from './configs/node';
@@ -199,6 +200,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'vitest'),
   };
 
+  /* 🟢 JSDOC */
+
+  const isJsdocEnabled = Boolean(configsOptions.jsdoc ?? true);
+  const jsdocOptions: JsdocEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'jsdoc'),
+  };
+
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
 
   /* 🔴 SECURITY */
@@ -296,6 +304,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isCssInJsEnabled && cssInJsEslintConfig(cssInJsOptions, internalOptions),
       isJestEnabled && jestEslintConfig(jestOptions, internalOptions),
       isVitestEnabled && vitestEslintConfig(vitestOptions, internalOptions),
+      isJsdocEnabled && jsdocEslintConfig(jsdocOptions, internalOptions),
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&
         preferArrowFunctionsEslintConfig(preferArrowFunctionsOptions, internalOptions),
