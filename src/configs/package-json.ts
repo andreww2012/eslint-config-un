@@ -38,16 +38,18 @@ const DEFAULT_COLLECTIONS_TO_SORT = {
 export interface PackageJsonEslintConfigOptions extends ConfigSharedOptions<'package-json'> {
   /**
    * The sorting order of package properties
-   * @see https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/order-properties.md
    * @default 'sort-package-json'
+   * @see https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/order-properties.md
    */
   order?: (GetRuleOptions<'package-json/order-properties'>[0] & {})['order'];
+
   /**
    * Enforces that repository entries in a package.json use either object or shorthand notation to refer to GitHub repositories when possible.
-   * @see https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/repository-shorthand.md
    * @default 'object'
+   * @see https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/repository-shorthand.md
    */
   repositoryShorthand?: (GetRuleOptions<'package-json/repository-shorthand'>[0] & {})['form'];
+
   /**
    * Sort lexically the properties of the specified package.json collections.
    *

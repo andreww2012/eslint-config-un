@@ -18,17 +18,20 @@ export interface CssInJsEslintConfigOptions extends ConfigSharedOptions<'css-in-
      * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-attributes
      */
     attributes?: string[];
+
     /**
      * Specifies the function paths that uses the style object.
      * @see https://ota-meshi.github.io/eslint-plugin-css/settings/#target-definefunctions
      */
     defineFunctions?: Record<string, string[]>;
   };
+
   /**
    * `long` is `#RRGGBB(AA)`, short is `#RGB(A)`
    * @default 'long'
    */
   hexColorsStyle?: 'long' | 'short';
+
   /**
    * Whether to prefer named colors over their hex equivalents (`red` over `#ff0000`) or vice versa.
    *
@@ -36,11 +39,13 @@ export interface CssInJsEslintConfigOptions extends ConfigSharedOptions<'css-in-
    * @default false
    */
   preferNamedColors?: boolean | {flag: boolean; ignoreProperties?: [string, ...string[]]};
+
   /**
    * Prefer `.5` over `0.5`
    * @default false
    */
   avoidLeadingZero?: boolean;
+
   /**
    * Enforce `backgroundColor` or `background-color`
    * @default 'camelCase'

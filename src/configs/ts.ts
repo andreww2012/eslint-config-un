@@ -36,22 +36,26 @@ export interface TsEslintConfigOptions extends ConfigSharedOptions<'@typescript-
   parserOptions?: Omit<TsEslintParserOptions, 'sourceType'> & {
     sourceType?: Eslint.Linter.ParserOptions['sourceType'];
   };
+
   /**
    * Pass `true` to enable type-aware checks for all `files`
    * @default true
    */
   filesTypeAware?: FlatConfigEntry['files'] | boolean;
+
   /**
    * Pass `true` to ignore the same files as in `ignores`
    */
   ignoresTypeAware?: FlatConfigEntry['ignores'] | boolean;
   overridesTypeAware?: RuleOverrides<'@typescript-eslint'>; // TODO only type-aware rules?
+
   /**
    * Do not put `.` (dot) before an extension
    * @example ['vue']
    */
   extraFileExtensions?: string[];
   noTypeAssertion?: boolean | 'warning';
+
   /**
    * If you have too many `no-unsafe-*` reports, you can disable them all using this option. All the rules disabled by this option are:
    * - `@typescript-eslint/no-unsafe-argument`

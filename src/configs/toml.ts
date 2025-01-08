@@ -18,25 +18,29 @@ export interface TomlEslintConfigOptions extends ConfigSharedOptions<'toml'> {
   doNotMergeFilesWithDefault?: boolean;
 
   doNotIgnoreFilesByDefault?: Partial<Record<(typeof DEFAULT_FILES_TO_IGNORE)[number], boolean>>;
+
   /**
    * Mixed types in array were prohibited in TOML v0.5.0: https://toml.io/en/v0.5.0#array
    * @default false
    */
   noMixedTypeInArray?: boolean;
+
   /**
    * Will be merged with the default value
    * @default {allowHexadecimal: true}
    */
   noNonDecimalIntegerExceptions?: GetRuleOptions<'toml/no-non-decimal-integer'>[0] & {};
+
   /**
    * "Millisecond precision is required. Further precision of fractional seconds is implementation-specific."
-   * @see https://toml.io/en/v1.0.0#local-time
    * @default 3
+   * @see https://toml.io/en/v1.0.0#local-time
    */
   maxPrecisionOfFractionalSeconds?: number;
+
   /**
-   * @see https://toml.io/en/v1.0.0#integer
    * @default 64
+   * @see https://toml.io/en/v1.0.0#integer
    */
   maxIntegerPrecisionBits?: number;
 }

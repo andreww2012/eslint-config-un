@@ -22,11 +22,13 @@ export interface YamlEslintConfigOptions extends ConfigSharedOptions<'yml'> {
    */
   enforceExtension?: (GetRuleOptions<'yml/file-extension'>[0] & {})['extension'];
   doNotIgnoreFilesByDefault?: Partial<Record<(typeof DEFAULT_FILES_TO_IGNORE)[number], boolean>>;
+
   /**
    * Enforce a specific casing style for keys. It is not enforced by default, but passing an empty object here will enforce `camelCase` style (default value for this rule).
    * If present, `ignores` values will be merged with `<<`
    */
   casing?: GetRuleOptions<'yml/key-name-casing'>[0] & {};
+
   /**
    * `false` to not enforce quotes style
    * @default 'single'

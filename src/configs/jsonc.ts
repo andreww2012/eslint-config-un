@@ -12,8 +12,10 @@ export interface JsoncEslintConfigOptions extends ConfigSharedOptions<'jsonc'> {
 
   /** Config exclusively for .json files (no rules are applied by default!) */
   jsonConfig?: ConfigSharedOptions<'jsonc'>;
+
   /** Config exclusively for .jsonc files (no rules are applied by default!) */
   jsoncConfig?: ConfigSharedOptions<'jsonc'>;
+
   /** Config exclusively for .json5 files (no rules are applied by default!) */
   json5Config?: ConfigSharedOptions<'jsonc'>;
 }

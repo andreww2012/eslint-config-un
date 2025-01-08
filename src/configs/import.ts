@@ -16,10 +16,12 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
    * Recognized automatically and normally should not be set manually
    */
   isTypescriptEnabled?: boolean;
+
   /**
    * @see https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-unresolved.md#ignore
    */
   importPatternsToIgnoreWhenTryingToResolve?: string | string[];
+
   /**
    * - `false` - never require extensions
    * - `true` - require extensions for JS/TS-like files
@@ -27,6 +29,7 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
    * @default false
    */
   requireModuleExtensions?: boolean | Record<string, 'always' | 'never' | 'ignorePackages'>;
+
   /**
    * Will be merged with the default value. By default, type-only imports (`import type ...` from 'module') will be merged with the regular imports from the same module (`import ... from 'module'`)
    * @default {'prefer-inline': true}

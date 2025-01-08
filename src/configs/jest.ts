@@ -31,26 +31,30 @@ export interface JestEslintConfigOptions extends ConfigSharedOptions<'jest'> {
   settings?: {
     /**
      * Tell the plugin about any global methods you have aliased.
-     * @example {describe: ['context']}
      * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jest-globals
+     * @example {describe: ['context']}
      */
     globalAliases?: Record<string, string[]>;
+
     /**
      * Tell the plugin to treat a different package as the source of Jest globals.
-     * @example 'bun:test'
      * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jestglobals
+     * @example 'bun:test'
      */
     globalPackage?: string;
+
     /**
      * @see https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#jest-version-setting
      */
     version?: number;
   };
+
   /**
    * Explicitly specify or ignore files written in TypeScript. Will be used to enable TypeScript-specific rules like [`no-untyped-mock-factory`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-untyped-mock-factory.md) or [`unbound-method`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md).
    * @default `true` if TypeScript (`ts`) config is enabled
    */
   typescript?: boolean | PrettifyShallow<ConfigSharedOptions<'jest'>>;
+
   /**
    * Enables or specifies the configuration for the [`jest-extended`](https://github.com/jest-community/eslint-plugin-jest-extended) plugin.
    * @default `true` if `jest-extended` package is installed
@@ -69,7 +73,7 @@ export interface JestEslintConfigOptions extends ConfigSharedOptions<'jest'> {
            * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-object.md - `toBeObject`
            * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-true.md - `toBeTrue`
            * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-have-been-called-once.md - `toHaveBeenCalledOnce`
-           **/
+           */
           suggestUsing?:
             | boolean
             | Partial<
@@ -80,34 +84,40 @@ export interface JestEslintConfigOptions extends ConfigSharedOptions<'jest'> {
               >;
         }
       >;
+
   /**
    * Will be merged with the default value. `false` disables the rule.
    * @default {fn: 'it', withinDescribe: 'it'}
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/consistent-test-it.md
    */
   testDefinitionKeyword?: GetRuleOptions<'jest/consistent-test-it'>[0] | false;
+
   /**
    * @default not enforced
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/max-expects.md
    */
   maxAssertionCalls?: number;
+
   /**
    * @default not enforced
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/max-nested-describe.md
    */
   maxNestedDescribes?: number;
+
   /**
    * Restricts the use of specific Jest methods.
    * "Restrictions are expressed in the form of a map, with the value being either a string message to be shown, or `null` if a generic default message should be used." - from eslint-plugin-jest docs
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-restricted-jest-methods.md
    */
   restrictedMethods?: Partial<Record<keyof JestMethods | (string & {}), string | null>>;
+
   /**
    * Restricts the use of specific Jest matchers.
    * "Bans are expressed in the form of a map, with the value being either a string message to be shown, or `null` if the default rule message should be used." - from eslint-plugin-jest docs
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-restricted-matchers.md
    */
   restrictedMatchers?: Partial<Record<AllJestMatchers | (string & {}), string | null>>;
+
   /**
    * Enforces padding around Jest functions.
    *
@@ -129,6 +139,7 @@ export interface JestEslintConfigOptions extends ConfigSharedOptions<'jest'> {
           boolean
         >
       >;
+
   /**
    * Allows specifying which matchers return promises, and so should be considered async when checking if an `expect` should be returned or awaited.
    *
@@ -138,6 +149,7 @@ export interface JestEslintConfigOptions extends ConfigSharedOptions<'jest'> {
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect.md#asyncmatchers
    */
   asyncMatchers?: string[];
+
   /**
    * Enforces the minimum and maximum number of arguments that `expect` can take, and is required to take.
    *

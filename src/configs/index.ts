@@ -42,8 +42,8 @@ export interface EslintConfigUnOptions {
 
   /**
    * Enables `eslint-config-prettier` at the end of the ruleset.
-   * @see https://github.com/prettier/eslint-config-prettier
    * @default true
+   * @see https://github.com/prettier/eslint-config-prettier
    */
   disablePrettierIncompatibleRules?: boolean;
 
@@ -63,93 +63,114 @@ export interface EslintConfigUnOptions {
      * @default true
      */
     js?: boolean | Partial<JsEslintConfigOptions>;
+
     /**
      * @default true
      */
     ts?: boolean | Partial<TsEslintConfigOptions>;
+
     /**
      * @default true
      */
     unicorn?: boolean | Partial<UnicornEslintConfigOptions>;
+
     /**
      * @default true
      */
     import?: boolean | Partial<ImportEslintConfigOptions>;
+
     /**
      * @default true
      */
     node?: boolean | Partial<NodeEslintConfigOptions>;
+
     /**
      * @default true
      */
     promise?: boolean | Partial<PromiseEslintConfigOptions>;
+
     /**
      * @default true
      */
     sonar?: boolean | Partial<PromiseEslintConfigOptions>;
+
     /**
      * `false` (do not enable Vue rules) <=> `vue` package is not installed (at any level) or `false` is explicitly passed
      */
     vue?: boolean | Partial<VueEslintConfigOptions>;
+
     /**
      * `false` (do not enable Tailwind rules) <=> `tailwindcss` package is not installed (at any level) or `false` is explicitly passed
      */
     tailwind?: boolean | Partial<TailwindEslintConfigOptions>;
+
     /**
      * @default true
      */
     regexp?: boolean | Partial<RegexpEslintConfigOptions>;
+
     /**
      * @default true
      */
     eslintComments?: boolean | Partial<EslintCommentsEslintConfigOptions>;
+
     /**
      * @default true
      */
     markdown?: boolean | Partial<MarkdownEslintConfigOptions>;
+
     /**
      * @default true
      */
     cssInJs?: boolean | Partial<CssInJsEslintConfigOptions>;
+
     /**
      * @default true if `jest` package is installed
      */
     jest?: boolean | Partial<JestEslintConfigOptions>;
+
     /**
      * @default true if `vitest` package is installed
      */
     vitest?: boolean | Partial<VitestEslintConfigOptions>;
+
     /**
      * @default true
      */
     jsdoc?: boolean | Partial<JsdocEslintConfigOptions>;
+
     /**
      * NOTE: disabled by default
      * @default false
      */
     security?: boolean | Partial<SecurityEslintConfigOptions>;
+
     /**
      * NOTE: disabled by default
      * @default false
      */
     preferArrowFunctions?: boolean | Partial<PreferArrowFunctionsEslintConfigOptions>;
+
     /**
      * NOTE: disabled by default.
      * If enabled, lockfiles (`yarn.lock`, `pnpm-lock.yaml`) will be ignored by default
      * @default false
      */
     yaml?: boolean | Partial<YamlEslintConfigOptions>;
+
     /**
      * NOTE: disabled by default.
      * If enabled, a Rust lockfile (`Cargo.lock`) will be ignored by default
      * @default false
      */
     toml?: boolean | Partial<TomlEslintConfigOptions>;
+
     /**
      * NOTE: disabled by default.
      * @default false
      */
     json?: boolean | Partial<JsoncEslintConfigOptions>;
+
     /**
      * NOTE: disabled by default.
      * @default false

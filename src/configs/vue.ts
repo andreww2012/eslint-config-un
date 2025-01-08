@@ -54,37 +54,44 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
    */
   majorVersion: 2 | 3;
   fullVersion?: string;
+
   /**
    * This being true turns on TypeScript type-aware rules for .Vue files. They are disabled by default because it applies them to plain JS <script> sections which causes tons on false positives.
    * @default true if typescript config is enabled
    */
   enforceTypescriptInScriptSection?: boolean | PrettifyShallow<FlatConfigEntryFilesOrIgnores>;
+
   /**
    * @see https://eslint.vuejs.org/rules/comment-directive#options
    */
   reportUnusedDisableDirectives?: boolean;
+
   /**
    * Will be merged with `['router-link', 'router-view']` and Nuxt-specific ones if Nuxt is enabled
    */
   knownComponentNames?: (string | RegExp)[];
   enforceApiStyle?: 'setup' | 'options';
+
   /**
    * @default 'runtime'
    */
   enforcePropsDeclarationStyle?: 'runtime' | 'type-based';
+
   /**
    * Enforce <script> SFC section to go before <template> (<style> will still be the last)
-   * @see https://eslint.vuejs.org/rules/block-order.html
    * @default 'template-first'
+   * @see https://eslint.vuejs.org/rules/block-order.html
    */
   sfcBlockOrder?: 'template-first' | 'script-first' | (WellKnownSfcBlocks | (string & {}))[];
   noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles?: boolean;
   doNotRequireComponentNamesToBeMultiWordForPatterns?: string | string[];
+
   /**
    * By default, all deprecated or non-standard HTML tags are disallowed. Using the object syntax, you can re-allow any of them, or disallow other tags.
    * @example {marquee: false, pre: true}
    */
   disallowedHtmlTags?: Partial<Record<ValidAndInvalidHtmlTags | (string & {}), boolean>>;
+
   /**
    * Whether to prefer Vue 3.5 [`useTemplateRef`](https://vuejs.org/api/composition-api-helpers.html#usetemplateref) instead of `ref` to obtain a template ref.
    * @default true <=> vue>=3.5 is installed
@@ -102,6 +109,7 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
    * Enabled automatically by checking if `nuxt` package is installed (at any level). Pass a false value or a Nuxt version to explicitly disable or enable Nuxt-specific rules or tweaks.
    */
   nuxtMajorVersion?: false | 3;
+
   /**
    * @default ''
    */

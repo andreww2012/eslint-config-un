@@ -54,6 +54,7 @@ export type RuleOverrides<T extends string | RulesRecord> = T extends string
 export type ConfigSharedOptions<T extends string | RulesRecord = RulesRecord> = Partial<
   FlatConfigEntryFilesOrIgnores & {
     overrides?: RuleOverrides<T>;
+
     /** If severity is forced, `errorsInsteadOfWarnings` option will be completely ignored */
     forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
   }
@@ -114,8 +115,10 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
             includeDefaultFilesAndIgnores?: boolean;
             filesFallback?: string[];
             mergeUserFilesWithFallback?: boolean;
+
             /** Some rules (for example, `regexp/no-legacy-features`) crash when linting `*.md` files (only if `language` option is specified for the markdown config). We cannot ignore such files globally as that is irreversible, so we ignore them in every single config with the option to not ignore. */
             doNotIgnoreMarkdown?: boolean;
+
             /** Do not apply this config to "fenced code blocks" inside *.md files */
             ignoreMarkdownCodeBlocks?: boolean;
           },

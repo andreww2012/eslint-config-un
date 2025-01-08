@@ -28,6 +28,7 @@ export interface MarkdownEslintConfigOptions extends ConfigSharedOptions<'markdo
    * @default true
    */
   lintMarkdown?: boolean;
+
   /**
    * Choose a Markdown language dialect globally or per specific files. For each array item,
    * a config entry will be created
@@ -38,6 +39,7 @@ export interface MarkdownEslintConfigOptions extends ConfigSharedOptions<'markdo
   language?:
     | MarkdownDialect
     | PrettifyShallow<FlatConfigEntryFiles & {language: MarkdownDialect}>[];
+
   /**
    * If array, only those tags will be allowed. If `false`, no tags are allowed. If `true`, all tags are allowed (default)
    * @default true
@@ -48,16 +50,18 @@ export interface MarkdownEslintConfigOptions extends ConfigSharedOptions<'markdo
    * Lint fenced code blocks (\```lang ... ```) inside Markdown files
    *
    * You can also specify which *markdown* files should be subject to fenced code blocks linting.
-   * @example {files: ['**\/*.md'], ignores: ['CHANGELOG.md'], ignoreLanguages: ['yml']}
    * @default true
+   * @example {files: ['**\/*.md'], ignores: ['CHANGELOG.md'], ignoreLanguages: ['yml']}
    */
   lintCodeBlocks?: boolean | PrettifyShallow<FlatConfigEntryFilesOrIgnores>;
+
   /**
    * Note that these languages will be ignored disregarding of specified in `.lintCodeBlocks{files,ignores}`, i.e. this option will create a rule ignoring by `**\/*.md/**\/*.{extensions}` pattern.
    *
    * Since some language codes [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244) (`javascript` -> `js`), so specifying `javascript` instead of `js` won't have any effect.
    */
   codeBlocksIgnoredLanguages?: CodeBlockLanguage[];
+
   /**
    * Only these languages codes are allowed in fenced code blocks (\```lang ... ```)
    * By default, all languages, including no language, are allowed. To require any language to be explicitly specified, specify `any-lang-required`.
@@ -65,16 +69,17 @@ export interface MarkdownEslintConfigOptions extends ConfigSharedOptions<'markdo
    * Since some language codes [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244) (`javascript` -> `js`), so specifying `javascript` instead of `js` won't have any effect.
    *
    * There is no option to "allow only this set of languages or not specifying a language".
-   * @example ['js', 'ts', 'vue']
    * @default all languages are allowed, including no language
+   * @example ['js', 'ts', 'vue']
    */
   codeBlocksAllowedLanguages?: [CodeBlockLanguage, ...CodeBlockLanguage[]] | 'any-lang-required';
+
   /**
    * Lint fenced code blocks as if its code assumed to be running in JavaScript's [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
    *
    * Likely you don't want to change this.
-   * @see https://github.com/eslint/markdown/blob/main/docs/processors/markdown.md
    * @default true
+   * @see https://github.com/eslint/markdown/blob/main/docs/processors/markdown.md
    */
   codeBlocksImpliedStrictMode?: boolean;
   overridesCodeBlocks?: RuleOverrides<string>;
