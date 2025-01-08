@@ -37,6 +37,7 @@ Includes the rules from the following configs & plugins:
 - [css](https://www.npmjs.com/package/eslint-plugin-css) (since v0.2.0)
 - [jest](https://www.npmjs.com/package/eslint-plugin-jest) (+ [jest-extended](https://www.npmjs.com/package/eslint-plugin-jest-extended)) (since v0.3.0)
 - [vitest](https://www.npmjs.com/package/@vitest/eslint-plugin) (since v0.3.0)
+- [jsdoc](https://www.npmjs.com/package/eslint-plugin-jsdoc) (since v0.3.1)
 
 ## Features
 
