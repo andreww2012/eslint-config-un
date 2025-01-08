@@ -409,7 +409,6 @@ export const tsEslintConfig = (
     // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
     .addAnyRule('no-duplicate-imports', OFF);
 
-  // TODO add rules
   builder
     .addConfig('ts/dts', {
       files: ['**/*.d.?([cm])ts'],
@@ -423,7 +422,9 @@ export const tsEslintConfig = (
     .addRule('@typescript-eslint/no-unused-vars', OFF)
     .addRule('@typescript-eslint/no-use-before-define', OFF)
     .addAnyRule('import/newline-after-import', OFF)
-    .addAnyRule('import/no-default-export', OFF);
+    .addAnyRule('import/no-default-export', OFF)
+    .addAnyRule('vars-on-top', OFF)
+    .addAnyRule('no-var', OFF);
 
   if (options.noTypeAssertion) {
     builder
