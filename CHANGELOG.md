@@ -1,7 +1,8 @@
 ## Unreleased
 
 - New config: `jsdoc` via [`eslint-plugin-jsdoc`](https://www.npmjs.com/package/eslint-plugin-jsdoc), enabled by default.
-- Change the severity of all the `eslint-plugin-vue`'s recommended rules to `error` (which turned out to be `warn` by default).
+- Changed the severity of all the `eslint-plugin-vue`'s recommended rules to `error` (which turned out to be `warn` by default).
+- Disabled `import/no-default-export` rule for files starting with a dot and Storybook files (files inside `.storybook` directory and story files).
 
 ## 0.3.0
 

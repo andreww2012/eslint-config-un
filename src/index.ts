@@ -37,7 +37,7 @@ import {type UnicornEslintConfigOptions, unicornEslintConfig} from './configs/un
 import {type VitestEslintConfigOptions, vitestEslintConfig} from './configs/vitest';
 import {type VueEslintConfigOptions, vueEslintConfig} from './configs/vue';
 import {type YamlEslintConfigOptions, yamlEslintConfig} from './configs/yaml';
-import {DEFAULT_GLOBAL_IGNORES, GLOB_CONFIG_FILES, OFF} from './constants';
+import {DEFAULT_GLOBAL_IGNORES, GLOB_CONFIG_FILES, GLOB_JS_TS_X_EXTENSION, OFF} from './constants';
 import {type FlatConfigEntry, genFlatConfigEntryName} from './eslint';
 import {assignOptions} from './utils';
 
@@ -320,10 +320,23 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
         name: genFlatConfigEntryName('config-files'),
         files: GLOB_CONFIG_FILES,
         rules: {
-          'import/no-default-export': OFF,
           'import/no-extraneous-dependencies': OFF,
-
           'n/no-unpublished-require': OFF,
+        },
+      },
+
+      {
+        name: genFlatConfigEntryName('allow-default-export'),
+        files: [
+          ...GLOB_CONFIG_FILES,
+          // Files starting with a dot
+          `**/.*.${GLOB_JS_TS_X_EXTENSION}`,
+          // Storybook
+          `**/*.stories.${GLOB_JS_TS_X_EXTENSION}`,
+          '.storybook/**/*',
+        ],
+        rules: {
+          'import/no-default-export': OFF,
         },
       },
 
