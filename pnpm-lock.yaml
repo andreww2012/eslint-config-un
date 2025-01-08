@@ -29,8 +29,8 @@ importers:
         specifier: ^8.19.1
         version: 8.19.1(eslint@9.17.0(jiti@2.0.0))(typescript@5.7.2)
       '@vitest/eslint-plugin':
-        specifier: 1.1.20
-        version: 1.1.20(@typescript-eslint/utils@8.19.1(eslint@9.17.0(jiti@2.0.0))(typescript@5.7.2))(eslint@9.17.0(jiti@2.0.0))(typescript@5.7.2)
+        specifier: 1.1.24
+        version: 1.1.24(@typescript-eslint/utils@8.19.1(eslint@9.17.0(jiti@2.0.0))(typescript@5.7.2))(eslint@9.17.0(jiti@2.0.0))(typescript@5.7.2)
       eslint-config-flat-gitignore:
         specifier: ^0.3.0
         version: 0.3.0(eslint@9.17.0(jiti@2.0.0))
@@ -1254,8 +1254,8 @@ packages:
   '@ungap/structured-clone@1.2.0':
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
 
-  '@vitest/eslint-plugin@1.1.20':
-    resolution: {integrity: sha512-2eLsgUm+GVOpDfNyH2do//MiNO/WZkXrPi+EjDmXEdUt6Jwnziq4H221L8vJE0aJys+l1FRfSkm4QbaIyDCfBg==}
+  '@vitest/eslint-plugin@1.1.24':
+    resolution: {integrity: sha512-7IaENe4NNy33g0iuuy5bHY69JYYRjpv4lMx6H5Wp30W7ez2baLHwxsXF5TM4wa8JDYZt8ut99Ytoj7GiDO01hw==}
     peerDependencies:
       '@typescript-eslint/utils': '>= 8.0'
       eslint: '>= 8.57.0'
@@ -5302,7 +5302,7 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitest/eslint-plugin@1.1.20(@typescript-eslint/utils@8.19.1(eslint@9.17.0(jiti@2.0.0))(typescript@5.7.2))(eslint@9.17.0(jiti@2.0.0))(typescript@5.7.2)':
+  '@vitest/eslint-plugin@1.1.24(@typescript-eslint/utils@8.19.1(eslint@9.17.0(jiti@2.0.0))(typescript@5.7.2))(eslint@9.17.0(jiti@2.0.0))(typescript@5.7.2)':
     dependencies:
       '@typescript-eslint/utils': 8.19.1(eslint@9.17.0(jiti@2.0.0))(typescript@5.7.2)
       eslint: 9.17.0(jiti@2.0.0)

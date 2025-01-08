@@ -7,6 +7,7 @@
 ### Dependencies
 
 - `typescript-eslint`: 8.18.1 -> 8.19.1
+- `@vitest/eslint-plugin`: 1.1.20 -> 1.1.24
 
 ## 0.3.0
 
