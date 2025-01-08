@@ -8,6 +8,7 @@
 
 - `typescript-eslint`: 8.18.1 -> 8.19.1
 - `@vitest/eslint-plugin`: 1.1.20 -> 1.1.24
+- `eslint-plugin-package-json`: 0.18.0 -> 0.19.0
 
 ## 0.3.0
 

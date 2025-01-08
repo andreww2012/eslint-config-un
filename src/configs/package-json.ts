@@ -103,7 +103,7 @@ export const packageJsonEslintConfig = (
     // .addRule('package-json/unique-dependencies', ERROR) // 🟣
     // .addRule('package-json/valid-local-dependency', ERROR) // 🟣
     // .addRule('package-json/valid-name', ERROR) // 🟣
-    // .addRule('package-json/valid-package-def', ERROR) // 🟣
+    // .addRule('package-json/valid-package-definition', ERROR) // 🟣
     // .addRule('package-json/valid-repository-directory', ERROR) // 🟣
     // .addRule('package-json/valid-version', ERROR) // 🟣
     .addOverrides();
