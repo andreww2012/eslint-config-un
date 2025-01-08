@@ -11,6 +11,7 @@ import {
   type FlatConfigEntryFilesOrIgnores,
   type RuleOverrides,
   type RulesRecord,
+  bulkChangeRuleSeverity,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {joinPaths} from '../utils';
@@ -143,9 +144,11 @@ export const vueEslintConfig = (
 
   const isNuxtEnabled = Boolean(options.nuxtMajorVersion);
 
-  const recommendedRules = eslintPluginVue.configs[
+  const recommendedRulesRaw = eslintPluginVue.configs[
     isVue3 ? 'flat/recommended' : 'flat/vue2-recommended'
   ].reduce<Partial<RulesRecord>>((result, config) => Object.assign(result, config.rules), {});
+  // All `recommended` rules has `warn` severity by default: https://github.com/vuejs/eslint-plugin-vue/tree/a6587498e21e5bc33f22e93d46fbc2d5e66585f3/lib/configs/flat
+  const recommendedRules = bulkChangeRuleSeverity(recommendedRulesRaw, ERROR);
 
   const inNuxtAppDir = joinPaths.bind(null, options.nuxtOrVueProjectDir);
   const nuxtLayoutsFilesGlob: string = inNuxtAppDir('layouts/**/*.vue');

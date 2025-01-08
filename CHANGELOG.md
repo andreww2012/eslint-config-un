@@ -1,3 +1,7 @@
+## Unreleased
+
+- Change the severity of all the `eslint-plugin-vue`'s recommended rules to `error` (which turned out to be `warn` by default).
+
 ## 0.3.0
 
 - [**BREAKING**] [`prefer-inline` option of `import/no-duplicates` rule](https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-duplicates.md#inline-type-imports) is now set to `true`. Added an new option `noDuplicatesOptions` in `import` config to override this behavior.

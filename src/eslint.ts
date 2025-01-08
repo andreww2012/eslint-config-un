@@ -80,6 +80,20 @@ export const createPluginObjectRenamer = <From extends string, To extends string
     };
 };
 
+export const bulkChangeRuleSeverity = <T extends Partial<RulesRecord>>(
+  rules: T,
+  severity: RuleSeverity,
+): T =>
+  Object.fromEntries(
+    Object.entries(rules).map(
+      ([ruleName, ruleOptions]): [keyof RulesRecord, RulesRecord[keyof RulesRecord]] => [
+        ruleName,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        Array.isArray(ruleOptions) ? [severity, ...ruleOptions.slice(1)] : severity,
+      ],
+    ),
+  ) as T;
+
 export type FlatConfigEntryForBuilder = Omit<FlatConfigEntry, 'name' | 'rules'>;
 
 export class ConfigEntryBuilder<RulesPrefix extends string> {
