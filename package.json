@@ -39,7 +39,7 @@
     "lint:types": "tsc --noEmit",
     "lint": "npm run lint:types && npm run format:check && npm run lint:eslint",
     "lint:fix": "npm run format:fix && npm run lint:eslint:fix",
-    "test": "npm run lint",
+    "test": "npm run typegen && npm run lint",
     "prepublishOnly": "npm run test && npm run build"
   },
   "dependencies": {
