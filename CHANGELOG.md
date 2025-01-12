@@ -6,6 +6,7 @@
 - `eslint-plugin-sonarjs`: 1.0.4 -> 3.0.1
   - [**BREAKING**] Significantly changed `sonar` config: added a lot of new rules, some were disabled, some were enabled.
 - `eslint-plugin-prefer-arrow-functions`: 3.4.1 -> 3.6.0
+- `@vitest/eslint-plugin`: 1.1.24 -> 1.1.25
 
 ## 0.3.1
 
