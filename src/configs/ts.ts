@@ -424,7 +424,8 @@ export const tsEslintConfig = (
     .addAnyRule('import/newline-after-import', OFF)
     .addAnyRule('import/no-default-export', OFF)
     .addAnyRule('vars-on-top', OFF)
-    .addAnyRule('no-var', OFF);
+    .addAnyRule('no-var', OFF)
+    .addAnyRule('sonarjs/no-redundant-optional', OFF);
 
   if (options.noTypeAssertion) {
     builder

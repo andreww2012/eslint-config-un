@@ -168,6 +168,8 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
       >(
         ruleName: RuleName,
         severity: Severity,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore ignores the following error during declaration file build: "error TS2859: Excessive complexity comparing types 'RuleName' and '"curly" | "unicorn/template-indent" | "@eslint-community/eslint-comments/disable-enable-pair" | "@eslint-community/eslint-comments/no-aggregating-enable" | "@eslint-community/eslint-comments/no-duplicate-disable" | ... 1725 more ... | "yoda"'"
         ruleOptions?: GetRuleOptions<RuleName>,
         options?: {
           overrideBaseRule?: boolean | keyof AllEslintRules;
@@ -183,15 +185,16 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
             ? ERROR
             : severity);
         const ruleNameFinal = `${options?.disableAutofix ? 'disable-autofix/' : ''}${ruleName}`;
-        (configFinal.rules ||= {})[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
+        configFinal.rules ||= {};
+        configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
         if (options?.disableAutofix) {
           // @ts-expect-error "Expression produces a union type that is too complex to represent."
-          (configFinal.rules ||= {})[ruleName] = 0 /* Off */;
+          (configFinal.rules)[ruleName] = 0 /* Off */;
         }
         if (options?.overrideBaseRule) {
           const baseRuleName = typeof options.overrideBaseRule === 'string' ? options.overrideBaseRule : ruleName.split('/').slice(1).join('/');
           if (baseRuleName) {
-            (configFinal.rules ||= {})[baseRuleName] = 0 /* Off */;
+            (configFinal.rules)[baseRuleName] = 0 /* Off */;
           }
         }
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -203,11 +206,13 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
       addRule: generateAddRuleFn<false>(),
       addAnyRule: generateAddRuleFn<true>(),
       addOverrides: () => {
-        Object.assign((configFinal.rules ||= {}), this.options.overrides);
+        configFinal.rules ||= {};
+        Object.assign(configFinal.rules, this.options.overrides);
         return result;
       },
       addBulkRules: (rules: AllRulesWithPrefix<RulesPrefix> | FalsyValue) => {
-        Object.assign((configFinal.rules ||= {}), rules);
+        configFinal.rules ||= {};
+        Object.assign(configFinal.rules, rules);
         return result;
       },
     };

@@ -30,7 +30,8 @@
   ],
   "scripts": {
     "typegen": "tsx scripts/typegen.ts",
-    "build": "pnpm typegen && tsup --format esm,cjs --clean --dts",
+    "build:code": "tsup --format esm,cjs --clean --dts",
+    "build": "npm run typegen && npm run build:code",
     "format:check": "prettier --check '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}'",
     "format:fix": "prettier --write '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}'",
     "eslint:inspect": "npx @eslint/config-inspector --open false",
@@ -68,7 +69,7 @@
     "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-regexp": "^2.7.0",
     "eslint-plugin-security": "^3.0.1",
-    "eslint-plugin-sonarjs": "^1.0.4",
+    "eslint-plugin-sonarjs": "^3.0.1",
     "eslint-plugin-tailwindcss": "^3.17.5",
     "eslint-plugin-toml": "0.12.0",
     "eslint-plugin-unicorn": "^56.0.1",

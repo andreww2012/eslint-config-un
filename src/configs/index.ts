@@ -14,6 +14,7 @@ import type {PreferArrowFunctionsEslintConfigOptions} from './prefer-arrow-funct
 import type {PromiseEslintConfigOptions} from './promise';
 import type {RegexpEslintConfigOptions} from './regexp';
 import type {SecurityEslintConfigOptions} from './security';
+import type {SonarEslintConfigOptions} from './sonar';
 import type {TailwindEslintConfigOptions} from './tailwind';
 import type {TomlEslintConfigOptions} from './toml';
 import type {TsEslintConfigOptions} from './ts';
@@ -92,7 +93,7 @@ export interface EslintConfigUnOptions {
     /**
      * @default true
      */
-    sonar?: boolean | Partial<PromiseEslintConfigOptions>;
+    sonar?: boolean | Partial<SonarEslintConfigOptions>;
 
     /**
      * `false` (do not enable Vue rules) <=> `vue` package is not installed (at any level) or `false` is explicitly passed

@@ -25,7 +25,7 @@ Includes the rules from the following configs & plugins:
 - [promise](https://www.npmjs.com/package/eslint-plugin-promise)
 - [regexp](https://www.npmjs.com/package/eslint-plugin-regexp)
 - [security](https://www.npmjs.com/package/eslint-plugin-security)
-- [sonar](https://www.npmjs.com/package/eslint-plugin-sonarjs)
+- [sonar](https://www.npmjs.com/package/eslint-plugin-sonarjs) (v3 since v0.4.0, v1 before)
 - [tailwind](https://www.npmjs.com/package/eslint-plugin-tailwindcss)
 - [jsonc](https://www.npmjs.com/package/eslint-plugin-jsonc) (since v0.1.4)
 - [yaml](https://www.npmjs.com/package/eslint-plugin-yaml) (since v0.1.0)
