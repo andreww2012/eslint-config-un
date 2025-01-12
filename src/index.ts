@@ -23,6 +23,10 @@ import {type MarkdownEslintConfigOptions, markdownEslintConfig} from './configs/
 import {type NodeEslintConfigOptions, nodeEslintConfig} from './configs/node';
 import {type PackageJsonEslintConfigOptions, packageJsonEslintConfig} from './configs/package-json';
 import {
+  type PerfectionistEslintConfigOptions,
+  perfectionistEslintConfig,
+} from './configs/perfectionist';
+import {
   type PreferArrowFunctionsEslintConfigOptions,
   preferArrowFunctionsEslintConfig,
 } from './configs/prefer-arrow-functions';
@@ -251,6 +255,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'packageJson'),
   };
 
+  /* 🔴 PERFECTIONIST */
+
+  const isPerfectionistEnabled = Boolean(configsOptions.perfectionist ?? false);
+  const perfectionistOptions: PerfectionistEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'perfectionist'),
+  };
+
   const internalOptions: InternalConfigOptions = {
     globalOptions: options,
     isTypescriptEnabled,
@@ -312,6 +323,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isTomlEnabled && tomlEslintConfig(tomlOptions, internalOptions),
       isJsoncEnabled && jsoncEslintConfig(jsoncOptions, internalOptions),
       isPackageJsonEnabled && packageJsonEslintConfig(packageJsonOptions, internalOptions),
+      isPerfectionistEnabled && perfectionistEslintConfig(perfectionistOptions, internalOptions),
       isTypescriptEnabled && tsEslintConfig(tsOptions, internalOptions), // Must come after all rulesets for vanilla JS
       isVueEnabled && vueEslintConfig(vueOptions, internalOptions), // Must come after ts
       isMarkdownEnabled && markdownEslintConfig(markdownOptions, internalOptions), // Must be last

@@ -1,5 +1,7 @@
 ## 0.4.0
 
+- New config: `perfectionist` via [`eslint-plugin-perfectionist`](https://www.npmjs.com/package/eslint-plugin-perfectionist), **<u>disabled</u>** by default.
+
 ### Dependencies
 - `eslint-plugin-sonarjs`: 1.0.4 -> 3.0.1
   - [**BREAKING**] Significantly changed `sonar` config: added a lot of new rules, some were disabled, some were enabled.

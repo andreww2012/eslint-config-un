@@ -29,6 +29,7 @@ const configs = [
       markdown: true,
       node: true,
       packageJson: true,
+      perfectionist: true,
       preferArrowFunctions: true,
       promise: true,
       regexp: true,

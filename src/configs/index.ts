@@ -10,6 +10,7 @@ import type {JsoncEslintConfigOptions} from './jsonc';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import type {NodeEslintConfigOptions} from './node';
 import type {PackageJsonEslintConfigOptions} from './package-json';
+import type {PerfectionistEslintConfigOptions} from './perfectionist';
 import type {PreferArrowFunctionsEslintConfigOptions} from './prefer-arrow-functions';
 import type {PromiseEslintConfigOptions} from './promise';
 import type {RegexpEslintConfigOptions} from './regexp';
@@ -177,6 +178,14 @@ export interface EslintConfigUnOptions {
      * @default false
      */
     packageJson?: boolean | Partial<PackageJsonEslintConfigOptions>;
+
+    /**
+     * NOTE: disabled by default.
+     *
+     * NOTE: even if enabled, **all** the rules are still disabled by default.
+     * @default false
+     */
+    perfectionist?: boolean | Partial<PerfectionistEslintConfigOptions>;
   };
 }
 

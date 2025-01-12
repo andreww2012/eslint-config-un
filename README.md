@@ -38,6 +38,7 @@ Includes the rules from the following configs & plugins:
 - [jest](https://www.npmjs.com/package/eslint-plugin-jest) (+ [jest-extended](https://www.npmjs.com/package/eslint-plugin-jest-extended)) (since v0.3.0)
 - [vitest](https://www.npmjs.com/package/@vitest/eslint-plugin) (since v0.3.0)
 - [jsdoc](https://www.npmjs.com/package/eslint-plugin-jsdoc) (since v0.3.1)
+- [perfectionist](https://www.npmjs.com/package/eslint-plugin-perfectionist) (since v0.4.0)
 
 ## Features
 
@@ -73,6 +74,7 @@ export default eslintConfig({
   - `yaml`
   - `toml`
   - `package-json`
+  - `perfectionist`
 - Some rules are set to warn by default. You can change some or even all such rule's reporting level using `errorsInsteadOfWarnings` option. You can find all such rules by inspecting the source code of this package.
 
 ### Certain rules are disabled for code blocks inside `*.md` files
