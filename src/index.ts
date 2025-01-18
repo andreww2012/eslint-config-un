@@ -48,7 +48,11 @@ import {assignOptions} from './utils';
 // TODO debug
 // TODO getPackageInfo async?
 
-const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set(['curly', 'unicorn/template-indent']);
+const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set([
+  'curly',
+  'unicorn/template-indent',
+  '@stylistic/quotes',
+]);
 
 export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEntry[] => {
   // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
