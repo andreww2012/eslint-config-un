@@ -15,9 +15,8 @@ export const preferArrowFunctionsEslintConfig = (
   builder
     .addConfig(['prefer-arrow-functions', {includeDefaultFilesAndIgnores: true}], {
       plugins: {
-        // @ts-expect-error `default` does not exist, but required because the export is wrong: https://arethetypeswrong.github.io/?p=eslint-plugin-prefer-arrow-functions%403.6.0
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        'prefer-arrow-functions': eslintPluginPreferArrowFunctions.default,
+        // @ts-expect-error types mismatch
+        'prefer-arrow-functions': eslintPluginPreferArrowFunctions,
       },
     })
     .addRule('prefer-arrow-functions/prefer-arrow-functions', WARNING)

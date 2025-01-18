@@ -15,6 +15,7 @@
 - `eslint-plugin-jsdoc`: 50.6.1 -> 50.6.2
 - `eslint-plugin-package-json`: 0.19.0 -> 0.20.0
   - Enabled a new [`no-redundant-files`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/no-redundant-files.md) rule.
+- `eslint-plugin-prefer-arrow-functions`: 3.6.0 -> 3.6.2
 
 ## 0.4.0
 
