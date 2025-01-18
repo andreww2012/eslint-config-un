@@ -48,7 +48,7 @@
     "@antfu/utils": "8.1.0",
     "@eslint-community/eslint-plugin-eslint-comments": "4.4.1",
     "@eslint/markdown": "6.2.1",
-    "@stylistic/eslint-plugin": "2.12.1",
+    "@stylistic/eslint-plugin": "2.13.0",
     "@typescript-eslint/parser": "8.19.1",
     "@vitest/eslint-plugin": "1.1.25",
     "eslint-config-flat-gitignore": "1.0.0",

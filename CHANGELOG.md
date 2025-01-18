@@ -4,6 +4,9 @@
 - Added the ability to disable running type-aware rules (or even any TypeScript rules) on the files specified in `enforceTypescriptInScriptSection` option.
 - Exposed `isInEditor` utility from `is-in-editor` package that checks if the current process is running within a well known editor.
 
+### Dependencies
+- `@stylistic/eslint-plugin`: 2.12.1 -> 2.13.0
+
 ## 0.4.0
 
 - New config: `perfectionist` via [`eslint-plugin-perfectionist`](https://www.npmjs.com/package/eslint-plugin-perfectionist), **<u>disabled</u>** by default.
