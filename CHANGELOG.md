@@ -10,6 +10,7 @@
   - Enabled a new [`no-misused-spread`](https://typescript-eslint.io/rules/no-misused-spread) rule.
 - `eslint-config-prettier`: 9.1.0 -> 10.0.1
   - In v10, `@stylistic/eslint-plugin` is supported, which disables some of `@stylistic/*` rules.
+- `eslint-plugin-jest`: 28.10.0 -> 28.11.0
 
 ## 0.4.0
 
