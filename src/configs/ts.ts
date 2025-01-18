@@ -311,6 +311,7 @@ export const tsEslintConfig = (
       .addRule('@typescript-eslint/no-implied-eval', ERROR, [], {overrideBaseRule: true})
       // .addRule('@typescript-eslint/no-meaningless-void-operator', ERROR)
       // .addRule('@typescript-eslint/no-misused-promises', ERROR)
+      .addRule('@typescript-eslint/no-misused-spread', ERROR) // >=8.20.0
       // .addRule('@typescript-eslint/no-mixed-enums', ERROR)
       // .addRule('@typescript-eslint/no-redundant-type-constituents', ERROR)
       // .addRule('@typescript-eslint/no-unnecessary-boolean-literal-compare', ERROR)

@@ -6,6 +6,8 @@
 
 ### Dependencies
 - `@stylistic/eslint-plugin`: 2.12.1 -> 2.13.0
+- `typescript-eslint`: 8.19.1 -> 8.20.0
+  - Enabled a new [`no-misused-spread`](https://typescript-eslint.io/rules/no-misused-spread) rule.
 
 ## 0.4.0
 
