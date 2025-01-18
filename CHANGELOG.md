@@ -11,6 +11,7 @@
 - `eslint-config-prettier`: 9.1.0 -> 10.0.1
   - In v10, `@stylistic/eslint-plugin` is supported, which disables some of `@stylistic/*` rules.
 - `eslint-plugin-jest`: 28.10.0 -> 28.11.0
+- `eslint-plugin-jest-extended`: 2.4.0 -> 3.0.0
 
 ## 0.4.0
 
