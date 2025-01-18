@@ -13,6 +13,8 @@
 - `eslint-plugin-jest`: 28.10.0 -> 28.11.0
 - `eslint-plugin-jest-extended`: 2.4.0 -> 3.0.0
 - `eslint-plugin-jsdoc`: 50.6.1 -> 50.6.2
+- `eslint-plugin-package-json`: 0.19.0 -> 0.20.0
+  - Enabled a new [`no-redundant-files`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/no-redundant-files.md) rule.
 
 ## 0.4.0
 

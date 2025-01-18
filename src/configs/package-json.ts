@@ -86,6 +86,7 @@ export const packageJsonEslintConfig = (
       },
     )
     .addBulkRules(eslintPluginPackageJsonRecommendedConfig.rules)
+    .addRule('package-json/no-redundant-files', ERROR) // >=0.20.0
     .addRule('package-json/order-properties', ERROR, [
       {order: options.order ?? 'sort-package-json'},
     ]) // 🟣
