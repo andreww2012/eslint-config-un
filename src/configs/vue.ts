@@ -56,10 +56,22 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
   fullVersion?: string;
 
   /**
-   * This being true turns on TypeScript type-aware rules for .Vue files. They are disabled by default because it applies them to plain JS <script> sections which causes tons on false positives.
-   * @default true if typescript config is enabled
+   * Enforces the presence of `lang="ts"` in `<script>` sections, see [vue/block-lang](https://eslint.vuejs.org/rules/block-lang.html) rule for more details.
+   *
+   * Setting this option no anything but `false` also makes all `.vue` (or explicitly specified files if object syntax is used) checked by `typescript` config, and by default **BOTH non-type-aware and type-aware** rules will be applied. You can opt out of this behavior or only enable NON-type-aware rules with `typescriptRules` option. Disabling type-aware rules might be beneficial for bigger projects as these rules are known to be quite slow on Vue files.
+   * @default true <=> `typescript` config is enabled
    */
-  enforceTypescriptInScriptSection?: boolean | PrettifyShallow<FlatConfigEntryFilesOrIgnores>;
+  enforceTypescriptInScriptSection?:
+    | boolean
+    | PrettifyShallow<
+        FlatConfigEntryFilesOrIgnores & {
+          /**
+           * What `typescript` rules will be applied to the specified `files`. If you want more control over which TypeScript rules are applied to which Vue files, use `typescript` config options for that.
+           * @default true
+           */
+          typescriptRules?: boolean | 'only-non-type-aware';
+        }
+      >;
 
   /**
    * @see https://eslint.vuejs.org/rules/comment-directive#options
