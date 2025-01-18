@@ -2,6 +2,7 @@
 
 - In `typescript` config, setting `filesTypeAware: false` now fully disables the config for running type-aware rules. Same if an empty array is provided.
 - Added the ability to disable running type-aware rules (or even any TypeScript rules) on the files specified in `enforceTypescriptInScriptSection` option.
+- Exposed `isInEditor` utility from `is-in-editor` package that checks if the current process is running within a well known editor.
 
 ## 0.4.0
 

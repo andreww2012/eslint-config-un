@@ -118,6 +118,9 @@ importers:
       globals:
         specifier: 15.14.0
         version: 15.14.0
+      is-in-editor:
+        specifier: 0.2.0
+        version: 0.2.0
       jsonc-eslint-parser:
         specifier: 2.4.0
         version: 2.4.0
@@ -3239,6 +3242,9 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  is-in-editor@0.2.0:
+    resolution: {integrity: sha512-24z5DNeMfwG77Xr7qwwpJGREUFb7teEKOiOmEvpCyiwWu5Lu4aZJS8nOMTzySBscJiGU88/xeDrgFag/YNesOw==}
+
   is-inside-container@1.0.0:
     resolution: {integrity: sha512-KIYLCCJghfHZxqjYBE7rEy0OBuTd5xCHS7tHVgvCLkx7StIoaxwNW3hCALgEUjFfeRk+MG/Qxmp/vtETEF3tRA==}
     engines: {node: '>=14.16'}
@@ -4430,6 +4436,9 @@ packages:
   stack-utils@2.0.6:
     resolution: {integrity: sha512-XlkWvfIm6RmsWtNJx+uqtKLS8eqFbxUg0ZzLXqY0caEy9l7hruX8IpiDnjsLavoBgqCCR71TqWO8MaXYheJ3RQ==}
     engines: {node: '>=10'}
+
+  std-env@3.8.0:
+    resolution: {integrity: sha512-Bc3YwwCB+OzldMxOXJIIvC6cPRWr/LxOp48CdQTOkPyk/t4JWWJbrilwBd7RJzKV8QW7tJkcgAmeuLLJugl5/w==}
 
   stdin-discarder@0.2.2:
     resolution: {integrity: sha512-UhDfHmA92YAlNnCfhmq0VeNL5bDbiZGg7sZ2IvPsXubGkiNa9EC+tUTsjBRsYUAz87btI6/1wf4XoVvQ3uRnmQ==}
@@ -8371,6 +8380,10 @@ snapshots:
 
   is-in-ci@1.0.0: {}
 
+  is-in-editor@0.2.0:
+    dependencies:
+      std-env: 3.8.0
+
   is-inside-container@1.0.0:
     dependencies:
       is-docker: 3.0.0
@@ -9811,6 +9824,8 @@ snapshots:
   stack-utils@2.0.6:
     dependencies:
       escape-string-regexp: 2.0.0
+
+  std-env@3.8.0: {}
 
   stdin-discarder@0.2.2: {}
 
