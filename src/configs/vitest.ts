@@ -145,6 +145,7 @@ export const vitestEslintConfig = (
     // .addRule('vitest/prefer-snapshot-hint', OFF) // (warns in all)
     .addRule('vitest/prefer-spy-on', ERROR) // (warns in all)
     .addRule('vitest/prefer-strict-equal', WARNING) // (warns in all)
+    // .addRule('vitest/prefer-strict-boolean-matchers', OFF) // >=1.1.26
     .addRule('vitest/prefer-to-be', ERROR) // (warns in all)
     .addRule('vitest/prefer-to-be-falsy', ERROR) // (warns in all)
     .addRule('vitest/prefer-to-be-object', ERROR) // (warns in all)
@@ -154,6 +155,7 @@ export const vitestEslintConfig = (
     .addRule('vitest/prefer-todo', WARNING) // (warns in all)
     .addRule('vitest/require-hook', WARNING) // (warns in all)
     // .addRule('vitest/require-local-test-context-for-concurrent-snapshots', ERROR) // 🟢
+    .addRule('vitest/require-mock-type-parameters', WARNING) // >=1.1.27
     .addRule('vitest/require-to-throw-message', OFF) // (warns in all)
     .addRule('vitest/require-top-level-describe', OFF) // (warns in all)
     // .addRule('vitest/valid-describe-callback', ERROR) // 🟢
