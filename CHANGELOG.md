@@ -8,6 +8,7 @@
   - Enabled a new [`require-mock-type-parameters`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/require-mock-type-parameters.md) rule with ⚠️warning severity.
 - `eslint-config-flat-gitignore`: 1.0.0 -> 2.0.0
 - `eslint-merge-processors`: 1.0.0 -> 2.0.0
+- `eslint-plugin-jsdoc`: 50.6.2 -> 50.6.3
 
 ## 0.4.1
 
