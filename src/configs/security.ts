@@ -14,6 +14,7 @@ export const securityEslintConfig = (
   builder
     .addConfig(['security', {includeDefaultFilesAndIgnores: true}], {
       plugins: {
+        // @ts-expect-error types mismatch
         security: eslintPluginSecurity,
       },
     })
