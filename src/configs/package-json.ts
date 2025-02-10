@@ -86,6 +86,7 @@ export const packageJsonEslintConfig = (
       },
     )
     .addBulkRules(eslintPluginPackageJsonRecommendedConfig.rules)
+    // .addRule('package-json/no-empty-fields', ERROR) // 🟣 >=0.21.0
     .addRule('package-json/no-redundant-files', ERROR) // >=0.20.0
     .addRule('package-json/order-properties', ERROR, [
       {order: options.order ?? 'sort-package-json'},
@@ -93,6 +94,10 @@ export const packageJsonEslintConfig = (
     .addRule('package-json/repository-shorthand', ERROR, [
       {form: options.repositoryShorthand ?? 'object'},
     ]) // 🟣
+    // .addRule('package-json/require-author', OFF) // >=0.22.0
+    // .addRule('package-json/require-name', ERROR) // 🟣 >=0.24.0
+    // .addRule('package-json/require-keywords', OFF) // >=0.25.0
+    // .addRule('package-json/require-version', ERROR) // 🟣 >=0.23.0
     .addRule('package-json/sort-collections', ERROR, [
       Object.entries({
         ...DEFAULT_COLLECTIONS_TO_SORT,

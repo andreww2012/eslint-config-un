@@ -5,11 +5,18 @@
 - `@eslint/markdown`: 6.2.1 -> 6.2.2
 - `@stylistic/eslint-plugin`: 2.13.0 -> 3.1.0
 - `@vitest/eslint-plugin`: 1.1.25 -> 1.1.28
-  - Enabled a new [`require-mock-type-parameters`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/require-mock-type-parameters.md) rule with ⚠️warning severity.
+  - 🟡 (warns) [`require-mock-type-parameters`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/require-mock-type-parameters.md)
+  - 🔴 (off) [`prefer-strict-boolean-matchers`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-strict-boolean-matchers.md)
 - `eslint-config-flat-gitignore`: 1.0.0 -> 2.0.0
 - `eslint-merge-processors`: 1.0.0 -> 2.0.0
 - `eslint-plugin-jsdoc`: 50.6.2 -> 50.6.3
 - `eslint-plugin-jsonc`: 2.18.2 -> 2.19.1
+- `eslint-plugin-package-json`: 0.20.0 -> 0.25.0
+  - 🟢 (enabled) [`no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/no-empty-fields.md)
+  - 🟢 [`require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-version.md)
+  - 🟢 [`require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-name.md)
+  - 🔴 (off) [`require-author`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-author.md)
+  - 🔴 (off) [`require-keywords`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-keywords.md)
 
 ## 0.4.1
 
