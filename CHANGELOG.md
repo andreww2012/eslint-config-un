@@ -1,3 +1,8 @@
+## Unreleased
+
+### Dependencies
+- `typescript-eslint`: 8.20.0 -> 8.23.0
+
 ## 0.4.1
 
 - In `typescript` config, setting `filesTypeAware: false` now fully disables the config for running type-aware rules. Same if an empty array is provided.
