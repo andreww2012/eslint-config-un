@@ -2,6 +2,7 @@
 
 ### Dependencies
 - `typescript-eslint`: 8.20.0 -> 8.23.0
+- `@eslint/markdown`: 6.2.1 -> 6.2.2
 
 ## 0.4.1
 

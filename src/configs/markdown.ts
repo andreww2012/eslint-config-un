@@ -104,8 +104,8 @@ export const markdownEslintConfig = (
   const defaultDialect: MarkdownDialect = typeof language === 'string' ? language : 'commonmark';
   const defaultConfigLanguage = `markdown/${defaultDialect}` as const;
 
-  const recommendedConfigs = arraify(eslintPluginMarkdown.configs?.recommended);
-  const processorConfigs = arraify(eslintPluginMarkdown.configs?.processor) as FlatConfigEntry[];
+  const recommendedConfigs = arraify(eslintPluginMarkdown.configs.recommended);
+  const processorConfigs = arraify(eslintPluginMarkdown.configs.processor) as FlatConfigEntry[];
 
   const allowedFencedCodeBlocksLanguages =
     Array.isArray(codeBlocksAllowedLanguages) &&
@@ -191,8 +191,7 @@ export const markdownEslintConfig = (
   /* Processor */
 
   const processorAllowingLintingBothMarkdownAndCodeBlocks = mergeProcessors([
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    eslintPluginMarkdown.processors!.markdown!,
+    eslintPluginMarkdown.processors.markdown,
     processorPassThrough,
   ]);
 
