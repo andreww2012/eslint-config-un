@@ -9,6 +9,7 @@
 - `eslint-config-flat-gitignore`: 1.0.0 -> 2.0.0
 - `eslint-merge-processors`: 1.0.0 -> 2.0.0
 - `eslint-plugin-jsdoc`: 50.6.2 -> 50.6.3
+- `eslint-plugin-jsonc`: 2.18.2 -> 2.19.1
 
 ## 0.4.1
 
