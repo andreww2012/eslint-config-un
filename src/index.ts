@@ -14,6 +14,7 @@ import {
   type EslintCommentsEslintConfigOptions,
   eslintCommentsEslintConfig,
 } from './configs/eslint-comments';
+import {type CliEslintConfigOptions, cliEslintConfig} from './configs/extra/cli';
 import {type ImportEslintConfigOptions, importEslintConfig} from './configs/import';
 import {type JestEslintConfigOptions, jestEslintConfig} from './configs/jest';
 import {type JsEslintConfigOptions, jsEslintConfig} from './configs/js';
@@ -266,6 +267,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'perfectionist'),
   };
 
+  // 🔵🔵🔵 "Extra" configs 🔵🔵🔵
+
+  const isCliEnabled = Boolean(configsOptions.cli ?? true);
+  const cliOptions: CliEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'cli'),
+  };
+
   const internalOptions: InternalConfigOptions = {
     globalOptions: options,
     isTypescriptEnabled,
@@ -355,6 +363,8 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
           'import/no-default-export': OFF,
         },
       },
+
+      isCliEnabled && cliEslintConfig(cliOptions, internalOptions),
 
       ...(options.extraConfigs || []),
 

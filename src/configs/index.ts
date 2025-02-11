@@ -2,6 +2,7 @@ import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {FlatConfigEntry} from '../eslint';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
+import type {CliEslintConfigOptions} from './extra/cli';
 import type {ImportEslintConfigOptions} from './import';
 import type {JestEslintConfigOptions} from './jest';
 import type {JsEslintConfigOptions} from './js';
@@ -61,6 +62,14 @@ export interface EslintConfigUnOptions {
 
   // TODO note about plugins that can be used in multiple places?
   configs?: {
+    /**
+     * A config specific to files meant to be executed. By default, allows `process.exit()`
+     * and `console` methods in files placed in `bin`, `scripts` and `cli` directories
+     * (on any level).
+     * @default true
+     */
+    cli?: boolean | Partial<CliEslintConfigOptions>;
+
     /**
      * @default true
      */
