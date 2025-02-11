@@ -320,7 +320,7 @@ export const tsEslintConfig = (
         ERROR,
         [
           {
-            allowConstantLoopConditions: true,
+            allowConstantLoopConditions: 'only-allowed-literals',
             checkTypePredicates: true, // >=8.8.0
           },
         ],

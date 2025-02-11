@@ -1,7 +1,8 @@
 ## Unreleased
 
 ### Dependencies
-- `typescript-eslint`: 8.20.0 -> 8.23.0
+- `typescript-eslint`: 8.20.0 -> 8.24.0
+  - [`no-unnecessary-condition`](https://typescript-eslint.io/rules/no-unnecessary-condition): change `allowConstantLoopConditions` from `true` to [`only-allowed-literals`](https://typescript-eslint.io/rules/no-unnecessary-condition/#only-allowed-literals)
 - `@eslint/markdown`: 6.2.1 -> 6.2.2
 - `@stylistic/eslint-plugin`: 2.13.0 -> 3.1.0
 - `@vitest/eslint-plugin`: 1.1.25 -> 1.1.28
