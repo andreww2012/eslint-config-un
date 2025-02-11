@@ -12,12 +12,13 @@
 - `eslint-merge-processors`: 1.0.0 -> 2.0.0
 - `eslint-plugin-jsdoc`: 50.6.2 -> 50.6.3
 - `eslint-plugin-jsonc`: 2.18.2 -> 2.19.1
-- `eslint-plugin-package-json`: 0.20.0 -> 0.25.0
+- `eslint-plugin-package-json`: 0.20.0 -> 0.26.0
   - 🟢 (enabled) [`no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/no-empty-fields.md)
   - 🟢 [`require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-version.md)
   - 🟢 [`require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-name.md)
   - 🔴 (off) [`require-author`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-author.md)
   - 🔴 (off) [`require-keywords`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-keywords.md)
+  - 🔴 (off) [`require-files`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-files.md)
 - `eslint-plugin-perfectionist`: 4.6.0 -> 4.8.0
 
 ## 0.4.1

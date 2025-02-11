@@ -95,6 +95,7 @@ export const packageJsonEslintConfig = (
       {form: options.repositoryShorthand ?? 'object'},
     ]) // 🟣
     // .addRule('package-json/require-author', OFF) // >=0.22.0
+    // .addRule('package-json/require-files', OFF) // >=0.26.0
     // .addRule('package-json/require-name', ERROR) // 🟣 >=0.24.0
     // .addRule('package-json/require-keywords', OFF) // >=0.25.0
     // .addRule('package-json/require-version', ERROR) // 🟣 >=0.23.0
