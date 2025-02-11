@@ -1,5 +1,7 @@
 ## Unreleased
 
+- `jest`/`vitest`: by default include nested `__test(s)__` directories and `[-_].spec.*` files.
+
 ### Dependencies
 - `typescript-eslint`: 8.20.0 -> 8.24.0
   - [`no-unnecessary-condition`](https://typescript-eslint.io/rules/no-unnecessary-condition): change `allowConstantLoopConditions` from `true` to [`only-allowed-literals`](https://typescript-eslint.io/rules/no-unnecessary-condition/#only-allowed-literals)
