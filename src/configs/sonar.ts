@@ -352,7 +352,7 @@ export const sonarEslintConfig = (
     .addRule('sonarjs/prefer-read-only-props', OFF) // 🟢💭
     // ⚠️ `RegExp.prototype.exec` mutates the state of the regexp: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec#return_value
     .addRule('sonarjs/prefer-regexp-exec', OFF) // 🟢💭🔤
-    // .addRule('sonarjs/prefer-single-boolean-return', ERROR) // 🟢
+    .addRule('sonarjs/prefer-single-boolean-return', WARNING) // 🟢
     // .addRule('sonarjs/prefer-type-guard', ERROR) // 🟢
     // .addRule('sonarjs/prefer-while', ERROR) // 🟢
     // .addRule('sonarjs/process-argv', OFF) // 🔴
