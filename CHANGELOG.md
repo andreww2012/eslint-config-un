@@ -1,3 +1,5 @@
+## Unreleased
+
 ## 0.4.2
 
 - New config: `cli` to disable a few rules for files in `bin`, `scripts` and `cli` directories, enabled by default.
