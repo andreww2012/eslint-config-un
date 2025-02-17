@@ -46,7 +46,6 @@ export const sonarEslintConfig = (
 
   builder
     .addConfig(['sonar', {includeDefaultFilesAndIgnores: true}])
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     .addBulkRules(eslintPluginSonar.configs.recommended.rules)
     // .addRule('sonarjs/anchor-precedence', ERROR) // 🟢💭🔤
     // ⚠️ Handled by TypeScript
