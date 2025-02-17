@@ -3,6 +3,7 @@
 ### Dependencies
 
 - `@vitest/eslint-plugin`: 1.1.28 -> 1.1.31
+- `eslint-import-resolver-typescript`: 3.7.0 -> 3.8.0
 
 ## 0.4.2
 
