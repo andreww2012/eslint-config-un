@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Dependencies
+
+- `@vitest/eslint-plugin`: 1.1.28 -> 1.1.31
+
 ## 0.4.2
 
 - New config: `cli` to disable a few rules for files in `bin`, `scripts` and `cli` directories, enabled by default.
