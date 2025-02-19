@@ -10,6 +10,8 @@
 - `eslint-plugin-perfectionist`: 4.8.0 -> 4.9.0
 - `eslint-plugin-sonarjs`: 3.0.1 -> 3.0.2
 - `eslint-plugin-yml`: 1.16.0 -> 1.17.0
+- `@stylistic/eslint-plugin`: 3.1.0 -> 4.0.1
+  - ESM only now.
 
 ## 0.4.2
 
