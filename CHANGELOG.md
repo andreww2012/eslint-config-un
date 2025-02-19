@@ -5,6 +5,15 @@
 
 ### Dependencies
 
+- `eslint-plugin-unicorn`: 56.0.1 -> 57.0.0
+  - [**BREAKING**] Claims to support only `eslint`>=9.20.0, but we haven't enforced this version range in `peerDependencies` in case it works fine with the older versions.
+  - ESM only now.
+  - ❌ (deprecated) `no-instanceof-builtins`
+  - 🟡 (warns) [`consistent-assert`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/consistent-assert.md)
+  - 🟢 (enabled) [`consistent-date-clone`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/consistent-date-clone.md)
+  - 🟢 [`no-accessor-recursion`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-accessor-recursion.md)
+  - 🟢 [`no-instanceof-builtins`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-instanceof-builtins.md)
+  - 🟢 [`no-named-default`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-named-default.md)
 - `@vitest/eslint-plugin`: 1.1.28 -> 1.1.31
 - `eslint-import-resolver-typescript`: 3.7.0 -> 3.8.2
 - `eslint-plugin-perfectionist`: 4.8.0 -> 4.9.0

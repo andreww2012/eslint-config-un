@@ -20,6 +20,8 @@ export const unicornEslintConfig = (
     // .addRule('unicorn/better-regex', ERROR)
     .addRule('unicorn/catch-error-name', OFF)
     .addRule('unicorn/catch-error-name', WARNING, [], {disableAutofix: true})
+    .addRule('unicorn/consistent-assert', WARNING) // >=57.0.0
+    // .addRule('unicorn/consistent-date-clone', ERROR) // >=57.0.0
     // .addRule('unicorn/consistent-destructuring', OFF) // 🔴
     // .addRule('unicorn/consistent-empty-array-spread', ERROR)
     .addRule('unicorn/consistent-existence-index-check', ERROR, [], {disableAutofix: true})
@@ -35,6 +37,7 @@ export const unicornEslintConfig = (
     // .addRule('unicorn/import-style', ERROR)
     // .addRule('unicorn/new-for-builtins', ERROR)
     // .addRule('unicorn/no-abusive-eslint-disable', ERROR)
+    // .addRule('unicorn/no-accessor-recursion', ERROR) // >=57.0.0
     .addRule('unicorn/no-anonymous-default-export', OFF) // Note: there's the same rule in import plugin
     .addRule('unicorn/no-array-callback-reference', OFF)
     .addRule('unicorn/no-array-for-each', OFF)
@@ -48,7 +51,7 @@ export const unicornEslintConfig = (
     // .addRule('unicorn/no-empty-file', ERROR)
     .addRule('unicorn/no-for-loop', OFF)
     // .addRule('unicorn/no-hex-escape', ERROR)
-    // .addRule('unicorn/no-instanceof-array', ERROR)
+    // .addRule('unicorn/no-instanceof-builtins', ERROR) // >=57.0.0
     // .addRule('unicorn/no-invalid-fetch-options', ERROR)
     // .addRule('unicorn/no-invalid-remove-event-listener', ERROR)
     // .addRule('unicorn/no-keyword-prefix', OFF) // 🔴
@@ -56,6 +59,7 @@ export const unicornEslintConfig = (
     // .addRule('unicorn/no-lonely-if', ERROR)
     // Passing `Infinity` doesn't work great with TypeScript
     .addRule('unicorn/no-magic-array-flat-depth', OFF)
+    // .addRule('unicorn/no-named-default', ERROR) // >=57.0.0
     // "This is an improved version of the no-negated-condition ESLint rule that makes it automatically fixable" - Unicorn docs
     .addRule('unicorn/no-negated-condition', ERROR, [], {overrideBaseRule: true})
     // .addRule('unicorn/no-negation-in-equality-check', ERROR)
