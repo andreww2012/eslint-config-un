@@ -1,4 +1,3 @@
-import eslintPluginPerfectionist from 'eslint-plugin-perfectionist';
 import {OFF} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
 import type {InternalConfigOptions} from './index';
@@ -12,11 +11,7 @@ export const perfectionistEslintConfig = (
   const builder = new ConfigEntryBuilder<'perfectionist'>(options, internalOptions);
 
   builder
-    .addConfig(['perfectionist', {includeDefaultFilesAndIgnores: true}], {
-      plugins: {
-        perfectionist: eslintPluginPerfectionist,
-      },
-    })
+    .addConfig(['perfectionist', {includeDefaultFilesAndIgnores: true}])
     .addRule('perfectionist/sort-array-includes', OFF) // >=0.5.0
     .addRule('perfectionist/sort-classes', OFF) // >=0.11.0
     .addRule('perfectionist/sort-decorators', OFF) // >=4.0.0

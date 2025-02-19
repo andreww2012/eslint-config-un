@@ -13,12 +13,7 @@ export const promiseEslintConfig = (
   const builder = new ConfigEntryBuilder<'promise'>(options, internalOptions);
 
   builder
-    .addConfig(['promise', {includeDefaultFilesAndIgnores: true}], {
-      plugins: {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        promise: eslintPluginPromise,
-      },
-    })
+    .addConfig(['promise', {includeDefaultFilesAndIgnores: true}])
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     .addBulkRules(eslintPluginPromise.configs.recommended.rules)
     .addRule('promise/always-return', ERROR, [{ignoreLastCallback: true}])

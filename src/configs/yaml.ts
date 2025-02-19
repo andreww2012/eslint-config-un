@@ -62,10 +62,6 @@ export const yamlEslintConfig = (
         },
       ],
       {
-        plugins: {
-          // @ts-expect-error types mismatch
-          yml: eslintPluginYaml,
-        },
         ignores: [
           ...DEFAULT_FILES_TO_IGNORE.map((fileToIgnore) =>
             options.doNotIgnoreFilesByDefault?.[fileToIgnore]

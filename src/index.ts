@@ -1,11 +1,7 @@
 import fs from 'node:fs';
-import eslintPluginStylistic from '@stylistic/eslint-plugin';
 import type {ESLint} from 'eslint';
 import eslintGitignore from 'eslint-config-flat-gitignore';
 import eslintConfigPrettier from 'eslint-config-prettier';
-// @ts-expect-error no typings
-import pluginDisableAutofix from 'eslint-plugin-disable-autofix';
-import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import {getPackageInfoSync, isPackageExists} from 'local-pkg';
 import type {EslintConfigUnOptions, InternalConfigOptions} from './configs';
@@ -43,7 +39,12 @@ import {type VitestEslintConfigOptions, vitestEslintConfig} from './configs/vite
 import {type VueEslintConfigOptions, vueEslintConfig} from './configs/vue';
 import {type YamlEslintConfigOptions, yamlEslintConfig} from './configs/yaml';
 import {DEFAULT_GLOBAL_IGNORES, GLOB_CONFIG_FILES, GLOB_JS_TS_X_EXTENSION, OFF} from './constants';
-import {type FlatConfigEntry, genFlatConfigEntryName} from './eslint';
+import {
+  type FlatConfigEntry,
+  disableAutofixForAllRulesInPlugin,
+  genFlatConfigEntryName,
+} from './eslint';
+import {ALL_ESLINT_PLUGINS} from './plugins';
 import {assignOptions} from './utils';
 
 // TODO debug
@@ -291,14 +292,23 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
         name: genFlatConfigEntryName('ignores-gitignore'),
       },
       {
-        name: genFlatConfigEntryName('global-setup'),
+        name: genFlatConfigEntryName('global-setup/plugins'),
         plugins: {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          'disable-autofix': pluginDisableAutofix,
-          // Used in multiple configs and we can't define plugin multiple times
-          unicorn: eslintPluginUnicorn,
-          '@stylistic': eslintPluginStylistic as ESLint.Plugin,
+          ...ALL_ESLINT_PLUGINS,
+          'disable-autofix': {
+            meta: {
+              name: 'eslint-plugin-disable-autofix',
+            },
+            rules: Object.entries(ALL_ESLINT_PLUGINS).reduce<ESLint.Plugin['rules'] & {}>(
+              (res, [pluginNamespace, plugin]) =>
+                Object.assign(res, disableAutofixForAllRulesInPlugin(pluginNamespace, plugin)),
+              {},
+            ),
+          },
         },
+      } satisfies FlatConfigEntry,
+      {
+        name: genFlatConfigEntryName('global-setup/language-options'),
         languageOptions: {
           ecmaVersion: 'latest',
           sourceType: 'module',

@@ -38,12 +38,6 @@ export const sonarEslintConfig = (
   // ⚠️ - rule is disabled (or kept disabled) because it overlaps with other rule(s) or by other reason(s) listed hereinafter
   // 🔵 - JSX/HTML rule
 
-  builder.addConfig('sonar/setup', {
-    plugins: {
-      sonarjs: eslintPluginSonar,
-    },
-  });
-
   builder
     .addConfig(['sonar', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginSonar.configs.recommended.rules)

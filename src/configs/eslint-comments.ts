@@ -21,12 +21,7 @@ export const eslintCommentsEslintConfig = (
   // 🔴 - not in recommended
 
   builder
-    .addConfig(['eslint-comments', {includeDefaultFilesAndIgnores: true}], {
-      plugins: {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        '@eslint-community/eslint-comments': eslintPluginEslintComments,
-      },
-    })
+    .addConfig(['eslint-comments', {includeDefaultFilesAndIgnores: true}])
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     .addBulkRules(eslintPluginEslintComments.configs.recommended.rules)
     // 🟢 Best Practices

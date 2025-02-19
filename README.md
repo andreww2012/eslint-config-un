@@ -85,12 +85,6 @@ But applying certain rules for code blocks might not be desirable because some o
 
 ## Troubleshooting
 
-### TypeError: Key `rules`: Key `disable-autofix/<rule name>`: Could not find `<rule name>` in plugin `disable-autofix`
-
-We disable autofix for some rules in this package via `eslint-plugin-disable-autofix`. However, it requires all the configs/plugins packages to be hoisted (installed to the top level of `node_modules`). You might need to reinstall this package, re-create `node_modules` directory (do not delete your lock file!) or set `shamefully-hoist=true` in your `.npmrc` if you're using pnpm. Sometimes you'll need to manually install some packages refused to be hoisted (happens with `@typescript-eslint/eslint-plugin`: `npm i @typescript-eslint/eslint-plugin -D --legacy-peer-deps`).
-
-This error could also happen if a dependency of this package is installed in your project separately.
-
 ### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace.
 
 Install `globals` package as a dev dependency.

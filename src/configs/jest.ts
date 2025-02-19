@@ -213,18 +213,6 @@ export const jestEslintConfig = (
   // 🟢 - in Recommended
   // 🎨 - in Style
 
-  builder.addConfig('jest/setup', {
-    plugins: {
-      jest: eslintPluginJest,
-    },
-  });
-  builder.addConfig('jest/extended/setup', {
-    plugins: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      'jest-extended': eslintPluginJestExtended,
-    },
-  });
-
   builder
     .addConfig(
       [

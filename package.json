@@ -56,7 +56,6 @@
     "eslint-import-resolver-typescript": "3.8.2",
     "eslint-merge-processors": "2.0.0",
     "eslint-plugin-css": "0.11.0",
-    "eslint-plugin-disable-autofix": "5.0.1",
     "eslint-plugin-import-x": "4.6.1",
     "eslint-plugin-jest": "28.11.0",
     "eslint-plugin-jest-extended": "3.0.0",
@@ -79,9 +78,11 @@
     "eslint-plugin-vue": "9.32.0",
     "eslint-plugin-vuejs-accessibility": "2.4.1",
     "eslint-plugin-yml": "1.17.0",
+    "eslint-rule-composer": "0.3.0",
     "globals": "15.15.0",
     "is-in-editor": "0.2.0",
     "jsonc-eslint-parser": "2.4.0",
+    "klona": "2.0.6",
     "local-pkg": "1.0.0",
     "toml-eslint-parser": "0.10.0",
     "type-fest": "4.35.0",
@@ -116,10 +117,5 @@
   },
   "engines": {
     "node": ">=18.18.0"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "eslint-plugin-disable-autofix@5.0.1": "patches/eslint-plugin-disable-autofix@5.0.1.patch"
-    }
   }
 }

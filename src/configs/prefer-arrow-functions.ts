@@ -1,4 +1,3 @@
-import eslintPluginPreferArrowFunctions from 'eslint-plugin-prefer-arrow-functions';
 import {WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
 import type {InternalConfigOptions} from './index';
@@ -13,12 +12,7 @@ export const preferArrowFunctionsEslintConfig = (
   const builder = new ConfigEntryBuilder<'prefer-arrow-functions'>(options, internalOptions);
 
   builder
-    .addConfig(['prefer-arrow-functions', {includeDefaultFilesAndIgnores: true}], {
-      plugins: {
-        // @ts-expect-error types mismatch
-        'prefer-arrow-functions': eslintPluginPreferArrowFunctions,
-      },
-    })
+    .addConfig(['prefer-arrow-functions', {includeDefaultFilesAndIgnores: true}])
     .addRule('prefer-arrow-functions/prefer-arrow-functions', WARNING)
     .addOverrides();
 

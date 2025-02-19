@@ -47,10 +47,6 @@ export const tailwindEslintConfig = (
 
   builder
     .addConfig(['tailwind', {includeDefaultFilesAndIgnores: true}], {
-      plugins: {
-        // @ts-expect-error types mismatch
-        tailwindcss: eslintPluginTailwind,
-      },
       ...(settings && {
         settings: {
           tailwindcss: {

@@ -1,4 +1,7 @@
-## Unreleased
+## 0.5.0
+
+- [**BREAKING**] All used ESLint plugins are now loaded unconditionally, allowing the use of any of their rules without requiring that the corresponding config is enabled.
+- Abandon [`eslint-plugin-disable-autofix`](https://www.npmjs.com/package/eslint-plugin-disable-autofix) in favor of manually adding the same functionality.
 
 ### Dependencies
 

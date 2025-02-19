@@ -4,11 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  eslint-plugin-disable-autofix@5.0.1:
-    hash: j7q63r6x35ykhfswakfaiy74za
-    path: patches/eslint-plugin-disable-autofix@5.0.1.patch
-
 importers:
 
   .:
@@ -46,9 +41,6 @@ importers:
       eslint-plugin-css:
         specifier: 0.11.0
         version: 0.11.0(eslint@9.20.1(jiti@2.0.0))
-      eslint-plugin-disable-autofix:
-        specifier: 5.0.1
-        version: 5.0.1(patch_hash=j7q63r6x35ykhfswakfaiy74za)(eslint@9.20.1(jiti@2.0.0))
       eslint-plugin-import-x:
         specifier: 4.6.1
         version: 4.6.1(eslint@9.20.1(jiti@2.0.0))(typescript@5.7.3)
@@ -115,6 +107,9 @@ importers:
       eslint-plugin-yml:
         specifier: 1.17.0
         version: 1.17.0(eslint@9.20.1(jiti@2.0.0))
+      eslint-rule-composer:
+        specifier: 0.3.0
+        version: 0.3.0
       globals:
         specifier: 15.15.0
         version: 15.15.0
@@ -124,6 +119,9 @@ importers:
       jsonc-eslint-parser:
         specifier: 2.4.0
         version: 2.4.0
+      klona:
+        specifier: 2.0.6
+        version: 2.0.6
       local-pkg:
         specifier: 1.0.0
         version: 1.0.0
@@ -1431,10 +1429,6 @@ packages:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
 
-  app-root-path@3.1.0:
-    resolution: {integrity: sha512-biN3PwB2gUtjaYy/isrU3aNWI5w+fAfvHkSvCKeQGxhmYpwKFUxudR3Yya+KqVRHBmEDYh+/lTozYCFbmzX4nA==}
-    engines: {node: '>= 6.0.0'}
-
   are-docs-informative@0.0.2:
     resolution: {integrity: sha512-ixiS0nLNNG5jNQzgZJNoUpBKdo9yTYZMGJ+QgT2jmjR7G7+QHRCc4v6LQ3NgE7EBJq+o0ams3waJwkrlBom8Ig==}
     engines: {node: '>=14'}
@@ -2074,11 +2068,6 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: '>=7.0.0'
-
-  eslint-plugin-disable-autofix@5.0.1:
-    resolution: {integrity: sha512-uT2xNjHgnZezw9GlLkoxUyGwHL9NObrhR+rcRI0XzJkCUQDVLh+fV+wFD4th8O8LQp+CWH+k6gMXgJ1eMC9PCQ==}
-    peerDependencies:
-      eslint: '>= 7'
 
   eslint-plugin-es-x@7.8.0:
     resolution: {integrity: sha512-7Ds8+wAAoV3T+LAKeu39Y5BzXCrGKrcISfgKEqTS4BDN8SFEDQd0S43jiQ8vIa3wUKD07qitZdfzlenSi8/0qQ==}
@@ -2947,6 +2936,10 @@ packages:
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
+
+  klona@2.0.6:
+    resolution: {integrity: sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==}
+    engines: {node: '>= 8'}
 
   known-css-properties@0.34.0:
     resolution: {integrity: sha512-tBECoUqNFbyAY4RrbqsBQqDFpGXAEbdD5QKr8kACx3+rnArmuuR22nKQWKazvp07N9yjTyDZaw/20UIH8tL9DQ==}
@@ -5616,8 +5609,6 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  app-root-path@3.1.0: {}
-
   are-docs-informative@0.0.2: {}
 
   arg@5.0.2: {}
@@ -6329,13 +6320,6 @@ snapshots:
       eslint-compat-utils: 0.5.1(eslint@9.20.1(jiti@2.0.0))
       known-css-properties: 0.34.0
       postcss-value-parser: 4.2.0
-
-  eslint-plugin-disable-autofix@5.0.1(patch_hash=j7q63r6x35ykhfswakfaiy74za)(eslint@9.20.1(jiti@2.0.0)):
-    dependencies:
-      app-root-path: 3.1.0
-      eslint: 9.20.1(jiti@2.0.0)
-      eslint-rule-composer: 0.3.0
-      lodash: 4.17.21
 
   eslint-plugin-es-x@7.8.0(eslint@9.20.1(jiti@2.0.0)):
     dependencies:
@@ -7412,6 +7396,8 @@ snapshots:
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
+
+  klona@2.0.6: {}
 
   known-css-properties@0.34.0: {}
 

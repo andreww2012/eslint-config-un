@@ -52,10 +52,6 @@ export const importEslintConfig = (
 
   builder
     .addConfig(['import', {includeDefaultFilesAndIgnores: true}], {
-      plugins: {
-        // @ts-expect-error small types mismatch
-        import: eslintPluginImportX,
-      },
       settings: {
         ...(isTypescriptEnabled && eslintPluginImportX.configs.typescript.settings),
         'import-x/resolver-next': [

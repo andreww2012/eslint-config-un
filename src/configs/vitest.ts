@@ -71,12 +71,6 @@ export const vitestEslintConfig = (
   // Legend:
   // 🟢 - in Recommended
 
-  builder.addConfig('vitest/setup', {
-    plugins: {
-      vitest: eslintPluginVitest,
-    },
-  });
-
   // TODO sync settings with `jest` config?
   builder
     .addConfig(

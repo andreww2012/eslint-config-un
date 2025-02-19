@@ -12,11 +12,7 @@ export const regexpEslintConfig = (
   const builder = new ConfigEntryBuilder<'regexp'>(options, internalOptions);
 
   builder
-    .addConfig(['regexp', {includeDefaultFilesAndIgnores: true}], {
-      plugins: {
-        regexp: eslintPluginRegexp,
-      },
-    })
+    .addConfig(['regexp', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginRegexp.configs['flat/recommended'].rules)
     // 🟢 Possible Errors
     // .addRule('regexp/no-contradiction-with-assertion', ERROR)

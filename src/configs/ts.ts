@@ -1,12 +1,6 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import type Eslint from 'eslint';
-// @ts-expect-error no typings
-import eslintPluginNoTypeAssertion from 'eslint-plugin-no-type-assertion';
-import {
-  parser as parserTs,
-  plugin as pluginTs,
-  configs as tsEslintConfigs,
-} from 'typescript-eslint';
+import {parser as parserTs, configs as tsEslintConfigs} from 'typescript-eslint';
 import {
   ERROR,
   GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
@@ -139,13 +133,6 @@ export const tsEslintConfig = (
   });
 
   const builder = new ConfigEntryBuilder<'@typescript-eslint'>(options, internalOptions);
-
-  builder.addConfig('ts/setup', {
-    plugins: {
-      // @ts-expect-error small types mismatch
-      '@typescript-eslint': pluginTs,
-    },
-  });
 
   // LEGEND:
   // ❄️ = Feature-frozen in ts-eslint
@@ -449,12 +436,7 @@ export const tsEslintConfig = (
 
   if (options.noTypeAssertion) {
     builder
-      .addConfig('ts/no-type-assertion', {
-        plugins: {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          'no-type-assertion': eslintPluginNoTypeAssertion,
-        },
-      })
+      .addConfig('ts/no-type-assertion')
       .addAnyRule(
         'no-type-assertion/no-type-assertion',
         options.noTypeAssertion === 'warning' ? WARNING : ERROR,

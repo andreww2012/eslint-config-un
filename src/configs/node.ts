@@ -76,11 +76,7 @@ export const nodeEslintConfig = (
   const builder = new ConfigEntryBuilder<'node'>(options, internalOptions);
 
   builder
-    .addConfig(['node', {includeDefaultFilesAndIgnores: true}], {
-      plugins: {
-        node: eslintPluginNode,
-      },
-    })
+    .addConfig(['node', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(pluginRenamer(eslintPluginNode.configs['flat/recommended'].rules))
     // .addRule('node/callback-return', OFF)
     .addRule('node/exports-style', ERROR, ['module.exports', {allowBatchAssign: false}])

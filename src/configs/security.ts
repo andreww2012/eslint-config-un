@@ -12,12 +12,7 @@ export const securityEslintConfig = (
   const builder = new ConfigEntryBuilder<'security'>(options, internalOptions);
 
   builder
-    .addConfig(['security', {includeDefaultFilesAndIgnores: true}], {
-      plugins: {
-        // @ts-expect-error types mismatch
-        security: eslintPluginSecurity,
-      },
-    })
+    .addConfig(['security', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginSecurity.configs.recommended.rules)
     // By default, all rules are included in the recommended config and with the "warn" level
     .addRule('security/detect-bidi-characters', ERROR)

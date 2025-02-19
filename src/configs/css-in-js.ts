@@ -1,4 +1,3 @@
-import eslintPluginCss from 'eslint-plugin-css';
 import {ERROR} from '../constants';
 import {
   ConfigEntryBuilder,
@@ -75,13 +74,6 @@ export const cssInJsEslintConfig = (
   // Legend:
   // 🟢 - in Recommended and Standard
   // 🟣 - in Standard
-
-  builder.addConfig('css-in-js/setup', {
-    plugins: {
-      // @ts-expect-error types mismatch
-      'css-in-js': eslintPluginCss,
-    },
-  });
 
   builder
     .addConfig(['css-in-js', {includeDefaultFilesAndIgnores: true}], {

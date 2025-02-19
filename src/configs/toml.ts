@@ -65,10 +65,6 @@ export const tomlEslintConfig = (
         },
       ],
       {
-        plugins: {
-          // @ts-expect-error types mismatch
-          toml: eslintPluginToml,
-        },
         ignores: [
           ...DEFAULT_FILES_TO_IGNORE.map((fileToIgnore) =>
             options.doNotIgnoreFilesByDefault?.[fileToIgnore]

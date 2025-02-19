@@ -194,12 +194,6 @@ export const jsdocEslintConfig = (
   // 3️⃣ - in Requirements
   // 4️⃣ - in Stylistic
 
-  builder.addConfig('jsdoc/setup', {
-    plugins: {
-      jsdoc: eslintPluginJsDoc,
-    },
-  });
-
   builder
     .addConfig(['jsdoc', {includeDefaultFilesAndIgnores: true}], {
       ...(pluginSettings && {

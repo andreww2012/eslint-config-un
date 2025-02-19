@@ -115,11 +115,7 @@ export const markdownEslintConfig = (
   // Legend:
   // 🟣 - in recommended
 
-  builder.addConfig(['markdown/setup', {doNotIgnoreMarkdown: true}], {
-    plugins: {
-      markdown: eslintPluginMarkdown,
-    },
-  });
+  builder.addConfig(['markdown/setup', {doNotIgnoreMarkdown: true}]);
 
   if (lintMarkdown) {
     builder

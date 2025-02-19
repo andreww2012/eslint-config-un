@@ -40,10 +40,6 @@ export const jsoncEslintConfig = (
         },
       ],
       {
-        plugins: {
-          // @ts-expect-error types mismatch
-          jsonc: eslintPluginJsonc,
-        },
         languageOptions: {
           parser: jsoncEslintParser,
         },
@@ -108,15 +104,7 @@ export const jsoncEslintConfig = (
   if (options.jsonConfig) {
     const jsonBuilder = new ConfigEntryBuilder<'jsonc'>(options.jsonConfig, internalOptions);
     jsonBuilder
-      .addConfig(
-        ['jsonc/json', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSON]}],
-        {
-          plugins: {
-            // @ts-expect-error types mismatch
-            jsonc: eslintPluginJsonc,
-          },
-        },
-      )
+      .addConfig(['jsonc/json', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSON]}])
       .addOverrides();
     result.push(...jsonBuilder.getAllConfigs());
   }
@@ -124,15 +112,10 @@ export const jsoncEslintConfig = (
   if (options.jsoncConfig) {
     const jsoncBuilder = new ConfigEntryBuilder<'jsonc'>(options.jsoncConfig, internalOptions);
     jsoncBuilder
-      .addConfig(
-        ['jsonc/jsonc', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSONC]}],
-        {
-          plugins: {
-            // @ts-expect-error types mismatch
-            jsonc: eslintPluginJsonc,
-          },
-        },
-      )
+      .addConfig([
+        'jsonc/jsonc',
+        {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSONC]},
+      ])
       .addOverrides();
     result.push(...jsoncBuilder.getAllConfigs());
   }
@@ -140,15 +123,10 @@ export const jsoncEslintConfig = (
   if (options.json5Config) {
     const json5Builder = new ConfigEntryBuilder<'jsonc'>(options.json5Config, internalOptions);
     json5Builder
-      .addConfig(
-        ['jsonc/json5', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSON5]}],
-        {
-          plugins: {
-            // @ts-expect-error types mismatch
-            jsonc: eslintPluginJsonc,
-          },
-        },
-      )
+      .addConfig([
+        'jsonc/json5',
+        {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSON5]},
+      ])
       .addOverrides();
     result.push(...json5Builder.getAllConfigs());
   }

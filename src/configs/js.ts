@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import EslintJs from '@eslint/js';
 import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
-import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
 import {ERROR, WARNING} from '../constants';
 import {
   type AllEslintRules,
@@ -304,11 +303,7 @@ export const jsEslintConfig = (
 
   if (options.autofixToRemoveUnusedImports ?? true) {
     builder
-      .addConfig('js/disable-unused-imports', {
-        plugins: {
-          'unused-imports': eslintPluginUnusedImports,
-        },
-      })
+      .addConfig('js/disable-unused-imports')
       .addRule('unused-imports/no-unused-imports', ERROR);
   }
 

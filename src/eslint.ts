@@ -1,4 +1,7 @@
 import type Eslint from 'eslint';
+// @ts-expect-error no typings
+import ruleComposer from 'eslint-rule-composer';
+import {klona} from 'klona';
 import type {InternalConfigOptions} from './configs';
 import {
   ERROR,
@@ -94,6 +97,32 @@ export const bulkChangeRuleSeverity = <T extends Partial<RulesRecord>>(
       ],
     ),
   ) as T;
+
+export type EslintPlugin = Eslint.ESLint.Plugin;
+
+export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
+  pluginNamespace: string,
+  plugin: Plugin,
+): Plugin['rules'] & {} =>
+  Object.fromEntries(
+    Object.entries(klona(plugin.rules || {})).map(([ruleId, ruleImplementation]) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const ruleWithAutofixDisabled = ruleComposer.mapReports(
+        ruleImplementation,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (problem: any) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          delete problem.fix;
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+          return problem;
+        },
+      ) as typeof ruleImplementation;
+      if (ruleWithAutofixDisabled.meta?.fixable) {
+        delete ruleWithAutofixDisabled.meta.fixable;
+      }
+      return [`${pluginNamespace}/${ruleId}`, ruleWithAutofixDisabled];
+    }),
+  );
 
 export type FlatConfigEntryForBuilder = Omit<FlatConfigEntry, 'name' | 'rules'>;
 

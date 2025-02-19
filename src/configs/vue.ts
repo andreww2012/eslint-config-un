@@ -175,11 +175,7 @@ export const vueEslintConfig = (
 
   const builder = new ConfigEntryBuilder<'vue'>(options, internalOptions);
 
-  builder.addConfig(['vue/plugin', {doNotIgnoreMarkdown: true}], {
-    plugins: {
-      vue: eslintPluginVue,
-    },
-  });
+  builder.addConfig(['vue/plugin', {doNotIgnoreMarkdown: true}]);
 
   builder.addConfig(['vue/setup', {doNotIgnoreMarkdown: true}], {
     files: [GLOB_VUE, ...files],
@@ -610,9 +606,6 @@ export const vueEslintConfig = (
     ],
     {
       files,
-      plugins: {
-        'vuejs-accessibility': eslintPluginVueA11y,
-      },
     },
   );
   if (a11y) {
@@ -649,21 +642,13 @@ export const vueEslintConfig = (
     internalOptions,
   );
   if (pinia) {
-    const piniaConfig = piniaBuilder.addConfig(
-      [
-        'pinia',
-        {
-          includeDefaultFilesAndIgnores: true,
-          ignoreMarkdownCodeBlocks: true,
-        },
-      ],
+    const piniaConfig = piniaBuilder.addConfig([
+      'pinia',
       {
-        plugins: {
-          // @ts-expect-error types mismatch
-          pinia: eslintPluginPinia,
-        },
+        includeDefaultFilesAndIgnores: true,
+        ignoreMarkdownCodeBlocks: true,
       },
-    );
+    ]);
 
     piniaConfig
       .addBulkRules(eslintPluginPinia.configs['recommended-flat'].rules)

@@ -76,10 +76,6 @@ export const packageJsonEslintConfig = (
     .addConfig(
       ['package-json', {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_FILES}],
       {
-        plugins: {
-          // @ts-expect-error types mismatch
-          'package-json': eslintPluginPackageJsonRecommendedConfig.plugins['package-json'],
-        },
         languageOptions: {
           parser: jsoncEslintParser,
         },
