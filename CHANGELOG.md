@@ -12,6 +12,7 @@
 - `eslint-plugin-yml`: 1.16.0 -> 1.17.0
 - `@stylistic/eslint-plugin`: 3.1.0 -> 4.0.1
   - ESM only now.
+- `typescript-eslint`: 8.24.0 -> 8.24.1
 
 ## 0.4.2
 
