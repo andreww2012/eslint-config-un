@@ -2,6 +2,7 @@ import {eslintConfig} from './src';
 
 export default eslintConfig({
   configs: {
+    deMorgan: true,
     vue: {
       files: ['*.vue'],
     },

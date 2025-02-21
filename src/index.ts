@@ -6,6 +6,7 @@ import globals from 'globals';
 import {getPackageInfoSync, isPackageExists} from 'local-pkg';
 import type {EslintConfigUnOptions, InternalConfigOptions} from './configs';
 import {type CssInJsEslintConfigOptions, cssInJsEslintConfig} from './configs/css-in-js';
+import {type DeMorganEslintConfigOptions, deMorganEslintConfig} from './configs/de-morgan';
 import {
   type EslintCommentsEslintConfigOptions,
   eslintCommentsEslintConfig,
@@ -268,6 +269,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'perfectionist'),
   };
 
+  /* 🔴 DE MORGAN */
+
+  const isDeMorganEnabled = Boolean(configsOptions.deMorgan ?? false);
+  const deMorganOptions: DeMorganEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'deMorgan'),
+  };
+
   // 🔵🔵🔵 "Extra" configs 🔵🔵🔵
 
   const isCliEnabled = Boolean(configsOptions.cli ?? true);
@@ -346,6 +354,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isJsoncEnabled && jsoncEslintConfig(jsoncOptions, internalOptions),
       isPackageJsonEnabled && packageJsonEslintConfig(packageJsonOptions, internalOptions),
       isPerfectionistEnabled && perfectionistEslintConfig(perfectionistOptions, internalOptions),
+      isDeMorganEnabled && deMorganEslintConfig(deMorganOptions, internalOptions),
       isTypescriptEnabled && tsEslintConfig(tsOptions, internalOptions), // Must come after all rulesets for vanilla JS
       isVueEnabled && vueEslintConfig(vueOptions, internalOptions), // Must come after ts
       isMarkdownEnabled && markdownEslintConfig(markdownOptions, internalOptions), // Must be last

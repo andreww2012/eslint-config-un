@@ -1,6 +1,7 @@
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {FlatConfigEntry} from '../eslint';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
+import type {DeMorganEslintConfigOptions} from './de-morgan';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {ImportEslintConfigOptions} from './import';
@@ -195,6 +196,15 @@ export interface EslintConfigUnOptions {
      * @default false
      */
     perfectionist?: boolean | Partial<PerfectionistEslintConfigOptions>;
+
+    /**
+     * Enforce logical consistency by transforming negated boolean expressions according to De Morgan’s laws.
+     *
+     * NOTE: disabled by default.
+     * @default false
+     * @see https://www.npmjs.com/package/eslint-plugin-de-morgan
+     */
+    deMorgan?: boolean | Partial<DeMorganEslintConfigOptions>;
   };
 }
 

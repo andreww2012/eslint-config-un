@@ -3,6 +3,7 @@
 - [**BREAKING**] All used ESLint plugins are now loaded unconditionally, allowing the use of any of their rules without requiring that the corresponding config is enabled.
 - Abandon [`eslint-plugin-disable-autofix`](https://www.npmjs.com/package/eslint-plugin-disable-autofix) in favor of manually adding the same functionality.
 - [**BREAKING**] Disabled autofix for [`no-unnecessary-type-assertion`](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/) due to [this bug](https://github.com/typescript-eslint/typescript-eslint/issues/8721).
+- New config: `deMorgan` via [`eslint-plugin-de-morgan`](https://www.npmjs.com/package/eslint-plugin-de-morgan), **<u>disabled</u>** by default.
 
 ### Dependencies
 

@@ -4,6 +4,7 @@ import eslintPluginEslintComments from '@eslint-community/eslint-plugin-eslint-c
 import eslintPluginStylistic from '@stylistic/eslint-plugin';
 import eslintPluginVitest from '@vitest/eslint-plugin';
 import eslintPluginCss from 'eslint-plugin-css';
+import eslintPluginDeMorgan from 'eslint-plugin-de-morgan';
 import eslintPluginImportX from 'eslint-plugin-import-x';
 import eslintPluginJest from 'eslint-plugin-jest';
 // @ts-expect-error no typings
@@ -72,4 +73,5 @@ export const ALL_ESLINT_PLUGINS: FlatConfigEntry['plugins'] & {} = {
   pinia: eslintPluginPinia,
   // @ts-expect-error types mismatch
   yml: eslintPluginYaml,
+  'de-morgan': eslintPluginDeMorgan,
 };
