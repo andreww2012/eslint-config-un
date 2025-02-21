@@ -23,6 +23,7 @@
 - `@stylistic/eslint-plugin`: 3.1.0 -> 4.0.1
   - ESM only now.
 - `typescript-eslint`: 8.24.0 -> 8.24.1
+- `eslint-config-flat-gitignore`: [2.0.0 -> 2.1.0](https://github.com/antfu/eslint-config-flat-gitignore/compare/v2.0.0...v2.1.0)
 
 ## 0.4.2
 
