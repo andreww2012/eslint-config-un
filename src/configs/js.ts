@@ -169,7 +169,7 @@ export const jsEslintConfig = (
     // .addRule('id-length', OFF)
     // .addRule('id-match', OFF)
     // .addRule('init-declarations', OFF)
-    .addRule('logical-assignment-operators', ERROR, ['always', {enforceForIfStatements: true}])
+    .addRule('logical-assignment-operators', ERROR, ['always'])
     .addRule('max-classes-per-file', ERROR, [{ignoreExpressions: true, max: 2}])
     // .addRule('max-depth', OFF)
     // .addRule('max-lines', OFF)
