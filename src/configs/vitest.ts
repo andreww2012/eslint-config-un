@@ -6,7 +6,11 @@ import {
   type FlatConfigEntry,
   type FlatConfigEntryForBuilder,
 } from '../eslint';
-import {type JestEslintConfigOptions, generateDefaultTestFiles} from './jest';
+import {
+  type JestEslintConfigOptions,
+  generateConsistentTestItOptions,
+  generateDefaultTestFiles,
+} from './jest';
 import type {InternalConfigOptions} from './index';
 
 export interface VitestEslintConfigOptions
@@ -40,7 +44,6 @@ export const vitestEslintConfig = (
 ): FlatConfigEntry[] => {
   const {
     settings: pluginSettings,
-    testDefinitionKeyword,
     maxAssertionCalls,
     maxNestedDescribes,
     restrictedMethods,
@@ -87,13 +90,11 @@ export const vitestEslintConfig = (
     )
     .addBulkRules(eslintPluginVitest.configs.recommended.rules)
     // .addRule('vitest/consistent-test-filename', OFF)
-    .addRule('vitest/consistent-test-it', testDefinitionKeyword === false ? OFF : ERROR, [
-      {
-        fn: 'it',
-        withinDescribe: 'it',
-        ...testDefinitionKeyword,
-      },
-    ])
+    .addRule(
+      'vitest/consistent-test-it',
+      options.testDefinitionKeyword === false ? OFF : ERROR,
+      generateConsistentTestItOptions(options),
+    )
     // .addRule('vitest/expect-expect', ERROR) // 🟢
     .addRule('vitest/max-expects', maxAssertionCalls == null ? OFF : ERROR, [
       {max: maxAssertionCalls},

@@ -1,8 +1,9 @@
 ## Unreleased
 
-- Added a fully typed `node` config option to specify `eslint-plugin-n` plugin settings.
 - [**BREAKING**] Disabled `vitest/prefer-to-be-{falsy,truthy}` rules since their fixes don't result in the equivalent code and therefore cannot be suitable for most projects.
 - [**BREAKING**] Set [`enforceForIfStatements: false`](https://eslint.org/docs/latest/rules/logical-assignment-operators#enforceforifstatements) for `logical-assignment-operators` since code enforced by this option might be harder to read and understand.
+- Added a fully typed `node` config option to specify `eslint-plugin-n` plugin settings.
+- For `jest` and `vitest` configs, an option `testDefinitionKeyword` now accepts a string that is used to set [all the properties of the object](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/consistent-test-it.md#options).
 
 ## 0.5.0
 

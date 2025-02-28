@@ -4,6 +4,7 @@ import eslintPluginJest from 'eslint-plugin-jest';
 // @ts-expect-error no typings
 import eslintPluginJestExtended from 'eslint-plugin-jest-extended';
 import {getPackageInfoSync} from 'local-pkg';
+import type {ValueOf} from 'type-fest';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
   ConfigEntryBuilder,
@@ -91,10 +92,15 @@ export interface JestEslintConfigOptions extends ConfigSharedOptions<'jest'> {
 
   /**
    * Will be merged with the default value. `false` disables the rule.
+   *
+   * When string, will be set for the properties of the object.
    * @default {fn: 'it', withinDescribe: 'it'}
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/consistent-test-it.md
    */
-  testDefinitionKeyword?: GetRuleOptions<'jest/consistent-test-it'>[0] | false;
+  testDefinitionKeyword?:
+    | GetRuleOptions<'jest/consistent-test-it'>[0]
+    | ValueOf<GetRuleOptions<'jest/consistent-test-it'>[0] & {}>
+    | false;
 
   /**
    * @default not enforced
@@ -168,13 +174,30 @@ export interface JestEslintConfigOptions extends ConfigSharedOptions<'jest'> {
   minAndMaxExpectArgs?: [min: number | undefined, max: number | undefined];
 }
 
+export const generateConsistentTestItOptions = ({
+  testDefinitionKeyword,
+}: Pick<
+  JestEslintConfigOptions,
+  'testDefinitionKeyword'
+>): GetRuleOptions<'jest/consistent-test-it'> => [
+  typeof testDefinitionKeyword === 'string'
+    ? {
+        fn: testDefinitionKeyword,
+        withinDescribe: testDefinitionKeyword,
+      }
+    : {
+        fn: 'it',
+        withinDescribe: 'it',
+        ...testDefinitionKeyword,
+      },
+];
+
 export const jestEslintConfig = (
   options: JestEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
   const {
     settings: pluginSettings,
-    testDefinitionKeyword,
     maxAssertionCalls,
     maxNestedDescribes,
     restrictedMethods,
@@ -227,13 +250,11 @@ export const jestEslintConfig = (
       },
     )
     .addBulkRules(eslintPluginJest.configs['flat/recommended'].rules)
-    .addRule('jest/consistent-test-it', testDefinitionKeyword === false ? OFF : ERROR, [
-      {
-        fn: 'it',
-        withinDescribe: 'it',
-        ...testDefinitionKeyword,
-      },
-    ])
+    .addRule(
+      'jest/consistent-test-it',
+      options.testDefinitionKeyword === false ? OFF : ERROR,
+      generateConsistentTestItOptions(options),
+    )
     .addRule('jest/expect-expect', ERROR) // 🟢 (warns)
     .addRule('jest/max-expects', maxAssertionCalls == null ? OFF : ERROR, [
       {max: maxAssertionCalls},
