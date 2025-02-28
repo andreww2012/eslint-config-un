@@ -39,6 +39,7 @@ Includes the rules from the following configs & plugins:
 - [vitest](https://www.npmjs.com/package/@vitest/eslint-plugin) (since v0.3.0)
 - [jsdoc](https://www.npmjs.com/package/eslint-plugin-jsdoc) (since v0.3.1)
 - [perfectionist](https://www.npmjs.com/package/eslint-plugin-perfectionist) (since v0.4.0)
+- [de-morgan](https://www.npmjs.com/package/eslint-plugin-de-morgan) (since v0.5.0)
 
 ## Features
 
@@ -67,14 +68,15 @@ export default eslintConfig({
 - Packages lookup (such as `typescript` or `vue`) is performed using [`local-pkg`](https://www.npmjs.com/package/local-pkg).
 - Type-checked, or type-aware TypeScript rules are *enabled* by default which are known to be performance-demanding. It's just a little heads-up and you should make your own decision whether to keep them enabled. [More about type-aware linting](https://typescript-eslint.io/getting-started/typed-linting).
 - By default, TypeScript rules will be enabled in `.vue` files if `enforceTypescriptInScriptSection` is set to true in vue's config options which in turn is *automatically* set to true if `typescript` package found installed. If you have `.vue` files authored in both TypeScript and JavaScript, use `enforceTypescriptInScriptSection.{files,ignores}` to manually specify TS & JS Vue components respectively. It is not currently possible to apply different ESLint rules depending on the value of `lang` attribute of `<script>` SFC section.
-- All plugins listed above are enabled by default or enabled automatically under certain conditions, but there is some that are *disabled* by default:
-  - `prefer-arrow-functions`
+- All configs listed above are enabled by default or enabled automatically under certain conditions, but there is some that are *disabled* by default:
+  - `preferArrowFunctions`
   - `security`
   - `json`
   - `yaml`
   - `toml`
-  - `package-json`
+  - `packageJson`
   - `perfectionist`
+  - `deMorgan`
 - Some rules are set to warn by default. You can change some or even all such rule's reporting level using `errorsInsteadOfWarnings` option. You can find all such rules by inspecting the source code of this package.
 
 ### Certain rules are disabled for code blocks inside `*.md` files
