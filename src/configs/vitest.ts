@@ -141,9 +141,9 @@ export const vitestEslintConfig = (
     .addRule('vitest/prefer-strict-equal', WARNING) // (warns in all)
     // .addRule('vitest/prefer-strict-boolean-matchers', OFF) // >=1.1.26
     .addRule('vitest/prefer-to-be', ERROR) // (warns in all)
-    .addRule('vitest/prefer-to-be-falsy', ERROR) // (off in all)
+    // .addRule('vitest/prefer-to-be-falsy', OFF) // (warns in all)
     .addRule('vitest/prefer-to-be-object', ERROR) // (warns in all)
-    .addRule('vitest/prefer-to-be-truthy', ERROR) // (off in all)
+    // .addRule('vitest/prefer-to-be-truthy', OFF) // (warns in all)
     .addRule('vitest/prefer-to-contain', ERROR) // (warns in all)
     .addRule('vitest/prefer-to-have-length', ERROR) // (warns in all)
     .addRule('vitest/prefer-todo', WARNING) // (warns in all)

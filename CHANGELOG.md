@@ -1,6 +1,7 @@
 ## Unreleased
 
 - Added a fully typed `node` config option to specify `eslint-plugin-n` plugin settings.
+- [**BREAKING**] Disabled `vitest/prefer-to-be-{falsy,truthy}` rules since their fixes don't result in the equivalent code and therefore cannot be suitable for most projects.
 
 ## 0.5.0
 
