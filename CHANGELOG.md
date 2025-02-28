@@ -1,3 +1,7 @@
+## Unreleased
+
+- Added a fully typed `node` config option to specify `eslint-plugin-n` plugin settings.
+
 ## 0.5.0
 
 - [**BREAKING**] All used ESLint plugins are now loaded unconditionally, allowing the use of any of their rules without requiring that the corresponding config is enabled.

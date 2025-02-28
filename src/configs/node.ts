@@ -1,14 +1,120 @@
+import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
 import eslintPluginNode from 'eslint-plugin-n';
 import {ERROR, OFF} from '../constants';
 import {
   ConfigEntryBuilder,
   type ConfigSharedOptions,
   type FlatConfigEntry,
+  type GetRuleOptions,
   createPluginObjectRenamer,
 } from '../eslint';
 import type {InternalConfigOptions} from './index';
 
+interface EslintPluginNSettings {
+  /**
+   * Might be read by the following rules:
+   * - [`no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-extraneous-import.md)
+   * - [`no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-extraneous-require.md)
+   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-import.md)
+   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-require.md)
+   * - [`no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unpublished-import.md)
+   * - [`no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unpublished-require.md)
+   */
+  allowModules?: (GetRuleOptions<'node/no-extraneous-import'>['0'] & {})['allowModules'];
+
+  /**
+   * Might be read by the following rules:
+   * - [`hashbang`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/hashbang.md)
+   * - [`no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-extraneous-import.md)
+   * - [`no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-extraneous-require.md)
+   * - [`no-unpublished-bin`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unpublished-bin.md)
+   * - [`no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unpublished-import.md)
+   * - [`no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unpublished-require.md)
+   */
+  convertPath?: (GetRuleOptions<'node/hashbang'>['0'] & {})['convertPath'];
+
+  /**
+   * Might be read by the following rules:
+   * - [`no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-extraneous-import.md)
+   * - [`no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-extraneous-require.md)
+   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-import.md)
+   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-require.md)
+   * - [`no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unpublished-import.md)
+   * - [`no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unpublished-require.md)
+   */
+  resolvePaths?: (GetRuleOptions<'node/no-extraneous-import'>['0'] & {})['resolvePaths'];
+
+  /**
+   * Might be read by the following rules:
+   * - [`no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-extraneous-import.md)
+   * - [`no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-extraneous-require.md)
+   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-import.md)
+   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-require.md)
+   * - [`no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unpublished-import.md)
+   * - [`no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unpublished-require.md)
+   */
+  resolverConfig?: EnhancedResolveResolveOptions;
+
+  /**
+   * Might be read by the following rules:
+   * - [`no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-extraneous-require.md)
+   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-import.md)
+   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-require.md)
+   * - [`no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unpublished-require.md)
+   */
+  tryExtensions?: (GetRuleOptions<'node/no-extraneous-require'>['0'] & {})['tryExtensions'];
+
+  /**
+   * Might be read by the following rules:
+   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-import.md)
+   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-require.md)
+   */
+  tsconfigPath?: (GetRuleOptions<'node/no-missing-import'>['0'] & {})['tsconfigPath'];
+
+  /**
+   * Might be read by the following rules:
+   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-import.md)
+   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-missing-require.md)
+   */
+  typescriptExtensionMap?:
+    | Exclude<
+        (GetRuleOptions<'node/no-missing-import'>['0'] & {})['typescriptExtensionMap'],
+        unknown[]
+      >
+    | [string, string][];
+
+  /**
+   * Supported node version range
+   *
+   * If not explicitly specified, will be read from the closest to the currently linted file
+   * `package.json`'s `engines.node` field, or ⚠️ fall back to `>=16.0.0`.
+   *
+   * Might be read by the following rules:
+   * - [`no-deprecated-api`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-deprecated-api.md)
+   * - [`no-unsupported-features/es-builtins`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unsupported-features/es-builtins.md)
+   * - [`no-unsupported-features/es-syntax`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unsupported-features/es-syntax.md)
+   * - [`no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unsupported-features/node-builtins.md)
+   * - [`prefer-node-protocol`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/prefer-node-protocol.md)
+   */
+  version?: (GetRuleOptions<'node/no-unsupported-features/node-builtins'>['0'] & {})['version'];
+}
+
 export interface NodeEslintConfigOptions extends ConfigSharedOptions<'node'> {
+  /**
+   * [`eslint-plugin-n`](https://github.com/eslint-community/eslint-plugin-n) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `node` property and applied to the specified `files` and `ignores`.
+   *
+   * Most of the settings are used to override options simultaneously for multiple rules.
+   * The plugin reads `option` value from multiple sources in the following order, and stops when it finds a valid value:
+   * - Corresponding rule `option`
+   * - `settings.n.option`
+   * - `settings.node.option`
+   * - Option-specific source
+   * - Optional fall back value
+   */
+  settings?: EslintPluginNSettings;
+
   /**
    * @see https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/prefer-global
    */
@@ -71,12 +177,18 @@ export const nodeEslintConfig = (
 
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const {preferGlobal = {}} = options;
+  const {preferGlobal = {}, settings: pluginSettings} = options;
 
   const builder = new ConfigEntryBuilder<'node'>(options, internalOptions);
 
   builder
-    .addConfig(['node', {includeDefaultFilesAndIgnores: true}])
+    .addConfig(['node', {includeDefaultFilesAndIgnores: true}], {
+      ...(pluginSettings && {
+        settings: {
+          node: pluginSettings,
+        },
+      }),
+    })
     .addBulkRules(pluginRenamer(eslintPluginNode.configs['flat/recommended'].rules))
     // .addRule('node/callback-return', OFF)
     .addRule('node/exports-style', ERROR, ['module.exports', {allowBatchAssign: false}])
