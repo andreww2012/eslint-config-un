@@ -80,6 +80,7 @@
     "eslint-plugin-vue": "9.32.0",
     "eslint-plugin-vuejs-accessibility": "2.4.1",
     "eslint-plugin-yml": "1.17.0",
+    "eslint-processor-vue-blocks": "2.0.0",
     "eslint-rule-composer": "0.3.0",
     "globals": "16.0.0",
     "is-in-editor": "0.2.0",

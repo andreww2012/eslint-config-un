@@ -1,6 +1,11 @@
+import type Eslint from 'eslint';
+import {mergeProcessors as mergeEslintProcessors} from 'eslint-merge-processors';
 import eslintPluginPinia from 'eslint-plugin-pinia';
 import eslintPluginVue from 'eslint-plugin-vue';
 import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility';
+import eslintProcessorVueBlocks, {
+  type Options as EslintProcessorVueBlocksOptions,
+} from 'eslint-processor-vue-blocks';
 import globals from 'globals';
 import parserVue from 'vue-eslint-parser';
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, WARNING} from '../constants';
@@ -142,13 +147,29 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
           storesNameSuffix?: string;
         }
       >;
+
+  /**
+   * Whether to create virtual ESLint files for various SFC (single file component) blocks.
+   *
+   * - By default, virtual files will be created for `<style>` blocks.
+   * - If an object is passed, it will be merged with the defaults above.
+   * - If `false`, no virtual files will be created.
+   * @default true
+   */
+  processSfcBlocks?: boolean | EslintProcessorVueBlocksOptions;
 }
 
 export const vueEslintConfig = (
   options: VueEslintConfigOptions,
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const {majorVersion, enforceTypescriptInScriptSection, a11y = true, pinia} = options;
+  const {
+    majorVersion,
+    enforceTypescriptInScriptSection,
+    a11y = true,
+    pinia,
+    processSfcBlocks = true,
+  } = options;
 
   const files = options.files || [GLOB_VUE];
 
@@ -179,8 +200,24 @@ export const vueEslintConfig = (
 
   builder.addConfig(['vue/setup', {doNotIgnoreMarkdown: true}], {
     files: [GLOB_VUE, ...files],
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    processor: eslintPluginVue.processors['.vue'],
+    processor: mergeEslintProcessors(
+      [
+        eslintPluginVue.processors['.vue'] as Eslint.Linter.Processor,
+        (() => {
+          if (!processSfcBlocks) {
+            return null;
+          }
+          const processorOptions = typeof processSfcBlocks === 'object' ? processSfcBlocks : {};
+          return eslintProcessorVueBlocks({
+            ...processorOptions,
+            blocks: {
+              styles: true,
+              ...processorOptions.blocks,
+            },
+          });
+        })(),
+      ].filter((v) => v != null),
+    ),
     languageOptions: {
       globals: globals.browser,
       parser: parserVue,
