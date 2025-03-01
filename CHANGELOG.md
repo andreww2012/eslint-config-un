@@ -10,6 +10,7 @@
 
 ### Dependencies
 - `typescript-eslint`: 8.24.1 -> 8.25.0
+- `@stylistic/eslint-plugin`: 4.0.1 -> 4.1.0
 
 ## 0.5.0
 
