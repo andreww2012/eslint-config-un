@@ -8,6 +8,9 @@
 - For `jest` and `vitest` configs, an option `testDefinitionKeyword` now accepts a string that is used to set [all the properties of the object](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/consistent-test-it.md#options).
 - For Vue files virtual files for `<style>` blocks are now created via [`eslint-processor-vue-blocks`](https://www.npmjs.com/package/eslint-processor-vue-blocks). Added an option to disable or customize this behavior.
 
+### Dependencies
+- `typescript-eslint`: 8.24.1 -> 8.25.0
+
 ## 0.5.0
 
 - [**BREAKING**] All used ESLint plugins are now loaded unconditionally, allowing the use of any of their rules without requiring that the corresponding config is enabled.
