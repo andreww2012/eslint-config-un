@@ -437,3 +437,5 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
 export {DEFAULT_GLOBAL_IGNORES};
 
 export {isInEditor} from 'is-in-editor';
+
+export type {RuleOptions} from './eslint-types';
