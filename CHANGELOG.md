@@ -13,6 +13,7 @@
 - `@stylistic/eslint-plugin`: 4.0.1 -> 4.1.0
 - `@vitest/eslint-plugin`: 1.1.31 -> 1.1.36
 - `eslint-config-prettier`: 10.0.1 -> 10.0.2
+- `eslint-plugin-de-morgan`: 1.1.0 -> 1.2.0
 
 ## 0.5.0
 
