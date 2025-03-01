@@ -7,6 +7,7 @@
 - Added a fully typed `node` config option to specify `eslint-plugin-n` plugin settings.
 - For `jest` and `vitest` configs, an option `testDefinitionKeyword` now accepts a string that is used to set [all the properties of the object](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/consistent-test-it.md#options).
 - For Vue files virtual files for `<style>` blocks are now created via [`eslint-processor-vue-blocks`](https://www.npmjs.com/package/eslint-processor-vue-blocks). Added an option to disable or customize this behavior.
+- `<config>.overrides` type now includes `disable-autofix/*` rules.
 
 ### Dependencies
 - `typescript-eslint`: 8.24.1 -> 8.25.0

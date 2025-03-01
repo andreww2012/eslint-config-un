@@ -37,9 +37,10 @@ export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShall
     FlatConfigEntryFilesOrIgnores
 >;
 
+export type AllEslintRulesWithDisableAutofix = ConstantKeys<FlatConfigEntry['rules'] & {}>;
 // Need to exclude `disable-autofix` rules to avoid TS issues related to big unions
 export type AllEslintRules = PickKeysNotStartingWith<
-  ConstantKeys<FlatConfigEntry['rules'] & {}>,
+  AllEslintRulesWithDisableAutofix,
   'disable-autofix/'
 >;
 
@@ -49,7 +50,7 @@ export type GetRuleOptions<RuleName extends keyof AllEslintRules> =
 export type AllRulesWithPrefix<T extends string> = PickKeysStartingWith<AllEslintRules, T>;
 
 export type RuleOverrides<T extends string | RulesRecord> = T extends string
-  ? AllRulesWithPrefix<T>
+  ? PickKeysStartingWith<AllEslintRulesWithDisableAutofix, T | `disable-autofix/${T}`>
   : T extends RulesRecord
     ? FlatConfigEntry<T>['rules']
     : never;
