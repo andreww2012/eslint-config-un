@@ -25,6 +25,7 @@ import type {UnicornEslintConfigOptions} from './unicorn';
 import type {VitestEslintConfigOptions} from './vitest';
 import type {VueEslintConfigOptions} from './vue';
 import type {YamlEslintConfigOptions} from './yaml';
+import type {QwikEslintConfigOptions} from './qwik';
 
 export interface EslintConfigUnOptions {
   /**
@@ -150,6 +151,15 @@ export interface EslintConfigUnOptions {
      * @default true
      */
     jsdoc?: boolean | Partial<JsdocEslintConfigOptions>;
+
+    /**
+     * [qwik](https://qwik.dev/) specific rules.
+     *
+     * Used plugins:
+     * - [`eslint-plugin-qwik`](https://www.npmjs.com/package/eslint-plugin-qwik) ([docs](https://qwik.dev/docs/advanced/eslint))
+     * @default true if `@builder.io/qwik` or `@qwik.dev/core` package is installed
+     */
+    qwik?: boolean | Partial<QwikEslintConfigOptions>;
 
     /**
      * NOTE: disabled by default

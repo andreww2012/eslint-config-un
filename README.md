@@ -40,10 +40,11 @@ Includes the rules from the following configs & plugins:
 - [jsdoc](https://www.npmjs.com/package/eslint-plugin-jsdoc) (since v0.3.1)
 - [perfectionist](https://www.npmjs.com/package/eslint-plugin-perfectionist) (since v0.4.0)
 - [de-morgan](https://www.npmjs.com/package/eslint-plugin-de-morgan) (since v0.5.0)
+- [qwik](https://www.npmjs.com/package/eslint-plugin-qwik) (since v0.6.0)
 
 ## Features
 
-- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest`, `jest-extended` and `vitest` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
+- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest`, `jest-extended`, `vitest`, `@builder.io/qwik` and `@qwik.dev/core` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
 - Every block of rules supports `overrides` for rules.
 - Designed to be used separately from Prettier: *almost* all the rules potentially conflicting with Prettier are disabled *by default*.
 - Written in TypeScript so all the options are typed.

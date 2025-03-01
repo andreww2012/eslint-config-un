@@ -1,3 +1,4 @@
+import {fixupPluginRules} from '@eslint/compat';
 import eslintPluginMarkdown from '@eslint/markdown';
 // @ts-expect-error no typings
 import eslintPluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments';
@@ -20,6 +21,9 @@ import eslintPluginPinia from 'eslint-plugin-pinia';
 import eslintPluginPreferArrowFunctions from 'eslint-plugin-prefer-arrow-functions';
 // @ts-expect-error no typings
 import eslintPluginPromise from 'eslint-plugin-promise';
+// TODO it returns undefined without `* as` syntax for some reason
+// @ts-expect-error no typings
+import * as eslintPluginQwik from 'eslint-plugin-qwik';
 import * as eslintPluginRegexp from 'eslint-plugin-regexp';
 import eslintPluginSecurity from 'eslint-plugin-security';
 import eslintPluginSonar from 'eslint-plugin-sonarjs';
@@ -74,4 +78,5 @@ export const ALL_ESLINT_PLUGINS: FlatConfigEntry['plugins'] & {} = {
   // @ts-expect-error types mismatch
   yml: eslintPluginYaml,
   'de-morgan': eslintPluginDeMorgan,
+  qwik: fixupPluginRules(eslintPluginQwik as EslintPlugin), // No typings
 };

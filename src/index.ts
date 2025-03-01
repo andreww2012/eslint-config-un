@@ -47,6 +47,7 @@ import {
 } from './eslint';
 import {ALL_ESLINT_PLUGINS} from './plugins';
 import {assignOptions} from './utils';
+import {qwikEslintConfig, type QwikEslintConfigOptions} from './configs/qwik';
 
 // TODO debug
 // TODO getPackageInfo async?
@@ -118,6 +119,11 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
   const jestPackageInfo = getPackageInfoSync('jest');
 
   const vitestPackageInfo = getPackageInfoSync('vitest');
+
+  // We don't need to check for the presence of `@builder.io/qwik-city` because
+  // it requires `@builder.io/qwik` to be installed anyway
+  const qwikV1PackageInfo = getPackageInfoSync('@builder.io/qwik');
+  const qwikV2PackageInfo = getPackageInfoSync('@qwik.dev/core');
 
   // 🟢🟢🟢 Enabled by default 🟢🟢🟢
 
@@ -216,6 +222,15 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
   const isJsdocEnabled = Boolean(configsOptions.jsdoc ?? true);
   const jsdocOptions: JsdocEslintConfigOptions = {
     ...assignOptions(configsOptions, 'jsdoc'),
+  };
+
+  /* 🟢 QWIK */
+
+  const isQwikEnabled = Boolean(
+    configsOptions.qwik ?? (qwikV1PackageInfo != null || qwikV2PackageInfo != null),
+  );
+  const qwikOptions: QwikEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'qwik'),
   };
 
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
@@ -346,6 +361,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isJestEnabled && jestEslintConfig(jestOptions, internalOptions),
       isVitestEnabled && vitestEslintConfig(vitestOptions, internalOptions),
       isJsdocEnabled && jsdocEslintConfig(jsdocOptions, internalOptions),
+      isQwikEnabled && qwikEslintConfig(qwikOptions, internalOptions),
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&
         preferArrowFunctionsEslintConfig(preferArrowFunctionsOptions, internalOptions),

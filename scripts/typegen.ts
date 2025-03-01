@@ -17,7 +17,9 @@ const configs = [
   },
   ...eslintConfig({
     configs: {
+      cli: true,
       cssInJs: true,
+      deMorgan: true,
       eslintComments: true,
       import: true,
       jest: {
@@ -32,6 +34,7 @@ const configs = [
       perfectionist: true,
       preferArrowFunctions: true,
       promise: true,
+      qwik: true,
       regexp: true,
       security: true,
       sonar: true,

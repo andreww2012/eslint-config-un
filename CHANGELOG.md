@@ -1,5 +1,6 @@
-## Unreleased
+## 0.6.0
 
+- New config: `qwik` via [`eslint-plugin-qwik`](https://www.npmjs.com/package/eslint-plugin-qwik), enabled automatically if `@builder.io/qwik` or `@qwik.dev/core` package is installed.
 - [**BREAKING**] Disabled `vitest/prefer-to-be-{falsy,truthy}` rules since their fixes don't result in the equivalent code and therefore cannot be suitable for most projects.
 - [**BREAKING**] Set [`enforceForIfStatements: false`](https://eslint.org/docs/latest/rules/logical-assignment-operators#enforceforifstatements) for `logical-assignment-operators` since code enforced by this option might be harder to read and understand.
 - Added a fully typed `node` config option to specify `eslint-plugin-n` plugin settings.
