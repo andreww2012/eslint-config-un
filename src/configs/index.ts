@@ -8,6 +8,7 @@ import type {ImportEslintConfigOptions} from './import';
 import type {JestEslintConfigOptions} from './jest';
 import type {JsEslintConfigOptions} from './js';
 import type {JsdocEslintConfigOptions} from './jsdoc';
+import type {JsonSchemaValidatorEslintConfigOptions} from './json-schema-validator';
 import type {JsoncEslintConfigOptions} from './jsonc';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import type {NodeEslintConfigOptions} from './node';
@@ -15,6 +16,7 @@ import type {PackageJsonEslintConfigOptions} from './package-json';
 import type {PerfectionistEslintConfigOptions} from './perfectionist';
 import type {PreferArrowFunctionsEslintConfigOptions} from './prefer-arrow-functions';
 import type {PromiseEslintConfigOptions} from './promise';
+import type {QwikEslintConfigOptions} from './qwik';
 import type {RegexpEslintConfigOptions} from './regexp';
 import type {SecurityEslintConfigOptions} from './security';
 import type {SonarEslintConfigOptions} from './sonar';
@@ -25,7 +27,6 @@ import type {UnicornEslintConfigOptions} from './unicorn';
 import type {VitestEslintConfigOptions} from './vitest';
 import type {VueEslintConfigOptions} from './vue';
 import type {YamlEslintConfigOptions} from './yaml';
-import type {QwikEslintConfigOptions} from './qwik';
 
 export interface EslintConfigUnOptions {
   /**
@@ -215,6 +216,15 @@ export interface EslintConfigUnOptions {
      * @see https://www.npmjs.com/package/eslint-plugin-de-morgan
      */
     deMorgan?: boolean | Partial<DeMorganEslintConfigOptions>;
+
+    /**
+     * NOTE: disabled by default
+     *
+     * Used plugins:
+     * - [`eslint-plugin-json-schema-validator`](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) ([the single rule docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/docs/rules/no-invalid.md))
+     * @default false
+     */
+    jsonSchemaValidator?: boolean | Partial<JsonSchemaValidatorEslintConfigOptions>;
   };
 }
 

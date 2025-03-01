@@ -9,7 +9,7 @@ import {
 } from '../eslint';
 import type {InternalConfigOptions} from './index';
 
-const DEFAULT_FILES = [GLOB_TOML];
+export const TOML_DEFAULT_FILES = [GLOB_TOML];
 
 const DEFAULT_FILES_TO_IGNORE = ['Cargo.lock'] as const;
 
@@ -60,7 +60,7 @@ export const tomlEslintConfig = (
         'toml',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: DEFAULT_FILES,
+          filesFallback: TOML_DEFAULT_FILES,
           mergeUserFilesWithFallback: !options.doNotMergeFilesWithDefault,
         },
       ],

@@ -16,6 +16,10 @@ import {type ImportEslintConfigOptions, importEslintConfig} from './configs/impo
 import {type JestEslintConfigOptions, jestEslintConfig} from './configs/jest';
 import {type JsEslintConfigOptions, jsEslintConfig} from './configs/js';
 import {type JsdocEslintConfigOptions, jsdocEslintConfig} from './configs/jsdoc';
+import {
+  type JsonSchemaValidatorEslintConfigOptions,
+  jsonSchemaValidatorEslintConfig,
+} from './configs/json-schema-validator';
 import {type JsoncEslintConfigOptions, jsoncEslintConfig} from './configs/jsonc';
 import {type MarkdownEslintConfigOptions, markdownEslintConfig} from './configs/markdown';
 import {type NodeEslintConfigOptions, nodeEslintConfig} from './configs/node';
@@ -29,6 +33,7 @@ import {
   preferArrowFunctionsEslintConfig,
 } from './configs/prefer-arrow-functions';
 import {type PromiseEslintConfigOptions, promiseEslintConfig} from './configs/promise';
+import {type QwikEslintConfigOptions, qwikEslintConfig} from './configs/qwik';
 import {type RegexpEslintConfigOptions, regexpEslintConfig} from './configs/regexp';
 import {type SecurityEslintConfigOptions, securityEslintConfig} from './configs/security';
 import {type SonarEslintConfigOptions, sonarEslintConfig} from './configs/sonar';
@@ -47,7 +52,6 @@ import {
 } from './eslint';
 import {ALL_ESLINT_PLUGINS} from './plugins';
 import {assignOptions} from './utils';
-import {qwikEslintConfig, type QwikEslintConfigOptions} from './configs/qwik';
 
 // TODO debug
 // TODO getPackageInfo async?
@@ -291,6 +295,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'deMorgan'),
   };
 
+  /* 🔴 JSON-SCHEMA-VALIDATOR */
+
+  const isJsonSchemaValidatorEnabled = Boolean(configsOptions.jsonSchemaValidator ?? false);
+  const jsonSchemaValidatorOptions: JsonSchemaValidatorEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'jsonSchemaValidator'),
+  };
+
   // 🔵🔵🔵 "Extra" configs 🔵🔵🔵
 
   const isCliEnabled = Boolean(configsOptions.cli ?? true);
@@ -362,6 +373,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isVitestEnabled && vitestEslintConfig(vitestOptions, internalOptions),
       isJsdocEnabled && jsdocEslintConfig(jsdocOptions, internalOptions),
       isQwikEnabled && qwikEslintConfig(qwikOptions, internalOptions),
+
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&
         preferArrowFunctionsEslintConfig(preferArrowFunctionsOptions, internalOptions),
@@ -371,6 +383,9 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isPackageJsonEnabled && packageJsonEslintConfig(packageJsonOptions, internalOptions),
       isPerfectionistEnabled && perfectionistEslintConfig(perfectionistOptions, internalOptions),
       isDeMorganEnabled && deMorganEslintConfig(deMorganOptions, internalOptions),
+      isJsonSchemaValidatorEnabled &&
+        jsonSchemaValidatorEslintConfig(jsonSchemaValidatorOptions, internalOptions),
+
       isTypescriptEnabled && tsEslintConfig(tsOptions, internalOptions), // Must come after all rulesets for vanilla JS
       isVueEnabled && vueEslintConfig(vueOptions, internalOptions), // Must come after ts
       isMarkdownEnabled && markdownEslintConfig(markdownOptions, internalOptions), // Must be last

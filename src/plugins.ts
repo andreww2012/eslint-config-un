@@ -11,6 +11,7 @@ import eslintPluginJest from 'eslint-plugin-jest';
 // @ts-expect-error no typings
 import eslintPluginJestExtended from 'eslint-plugin-jest-extended';
 import eslintPluginJsDoc from 'eslint-plugin-jsdoc';
+import eslintPluginJsonSchemaValidator from 'eslint-plugin-json-schema-validator';
 import eslintPluginJsonc from 'eslint-plugin-jsonc';
 import eslintPluginNode from 'eslint-plugin-n';
 // @ts-expect-error no typings
@@ -79,4 +80,6 @@ export const ALL_ESLINT_PLUGINS: FlatConfigEntry['plugins'] & {} = {
   yml: eslintPluginYaml,
   'de-morgan': eslintPluginDeMorgan,
   qwik: fixupPluginRules(eslintPluginQwik as EslintPlugin), // No typings
+  // @ts-expect-error types mismatch
+  'json-schema-validator': eslintPluginJsonSchemaValidator,
 };

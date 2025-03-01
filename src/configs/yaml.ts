@@ -9,7 +9,7 @@ import {
 } from '../eslint';
 import type {InternalConfigOptions} from './index';
 
-const DEFAULT_FILES = [GLOB_YAML];
+export const YAML_DEFAULT_FILES = [GLOB_YAML];
 
 const DEFAULT_FILES_TO_IGNORE = ['yarn.lock', 'pnpm-lock.yaml'] as const;
 
@@ -57,7 +57,7 @@ export const yamlEslintConfig = (
         'yaml',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: DEFAULT_FILES,
+          filesFallback: YAML_DEFAULT_FILES,
           mergeUserFilesWithFallback: !options.doNotMergeFilesWithDefault,
         },
       ],

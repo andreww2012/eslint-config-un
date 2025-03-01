@@ -4,7 +4,7 @@ import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
 import type {InternalConfigOptions} from './index';
 
-const DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5];
+export const JSONC_DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5];
 
 export interface JsoncEslintConfigOptions extends ConfigSharedOptions<'jsonc'> {
   /** `files` specified in this config will be merged with the default of `['**\/*.json', '**\/*.jsonc', '**\/*.json5']`. Set this to `true` to avoid that behavior */
@@ -35,7 +35,7 @@ export const jsoncEslintConfig = (
         'jsonc/all',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: DEFAULT_FILES,
+          filesFallback: JSONC_DEFAULT_FILES,
           mergeUserFilesWithFallback: !options.doNotMergeFilesWithDefault,
         },
       ],

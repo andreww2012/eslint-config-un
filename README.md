@@ -41,6 +41,7 @@ Includes the rules from the following configs & plugins:
 - [perfectionist](https://www.npmjs.com/package/eslint-plugin-perfectionist) (since v0.4.0)
 - [de-morgan](https://www.npmjs.com/package/eslint-plugin-de-morgan) (since v0.5.0)
 - [qwik](https://www.npmjs.com/package/eslint-plugin-qwik) (since v0.6.0)
+- [json-schema-validator](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) (since v0.6.0)
 
 ## Features
 
