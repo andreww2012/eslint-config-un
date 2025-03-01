@@ -14,6 +14,7 @@
 - `@vitest/eslint-plugin`: 1.1.31 -> 1.1.36
 - `eslint-config-prettier`: 10.0.1 -> 10.0.2
 - `eslint-plugin-de-morgan`: 1.1.0 -> 1.2.0
+- `yaml-eslint-parser`: 1.2.3 -> 1.3.0
 
 ## 0.5.0
 
