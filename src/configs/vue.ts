@@ -196,8 +196,6 @@ export const vueEslintConfig = (
 
   const builder = new ConfigEntryBuilder<'vue'>(options, internalOptions);
 
-  builder.addConfig(['vue/plugin', {doNotIgnoreMarkdown: true}]);
-
   builder.addConfig(['vue/setup', {doNotIgnoreMarkdown: true}], {
     files: [GLOB_VUE, ...files],
     processor: mergeEslintProcessors(
