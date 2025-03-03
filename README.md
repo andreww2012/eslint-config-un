@@ -79,6 +79,7 @@ export default eslintConfig({
   - `packageJson`
   - `perfectionist`
   - `deMorgan`
+  - `jsonSchemaValidator`
 - Some rules are set to warn by default. You can change some or even all such rule's reporting level using `errorsInsteadOfWarnings` option. You can find all such rules by inspecting the source code of this package.
 
 ### Certain rules are disabled for code blocks inside `*.md` files
