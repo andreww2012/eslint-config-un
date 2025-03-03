@@ -1,4 +1,7 @@
-import {createTypeScriptImportResolver} from 'eslint-import-resolver-typescript';
+import {
+  type TsResolverOptions,
+  createTypeScriptImportResolver,
+} from 'eslint-import-resolver-typescript';
 import eslintPluginImportX from 'eslint-plugin-import-x';
 import {ERROR, OFF, WARNING} from '../constants';
 import {
@@ -13,9 +16,18 @@ import type {InternalConfigOptions} from './index';
 
 export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'> {
   /**
-   * Recognized automatically and normally should not be set manually
+   * Recognized automatically and normally should not be set manually.
+   *
+   * When enabled, creates a [`eslint-import-resolver-typescript`](https://www.npmjs.com/package/eslint-import-resolver-typescript) resolver with `alwaysTryTypes: true` and
+   * `project: '* /tsconfig*.json'` options (with actually no space after the asterisk),
+   * which can be overridden using `tsResolverOptions` option.
    */
   isTypescriptEnabled?: boolean;
+
+  /**
+   * Will be merged with the default TypeScript resolve options (see `isTypescriptEnabled` option docs for more info).
+   */
+  tsResolverOptions?: TsResolverOptions;
 
   /**
    * @see https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-unresolved.md#ignore
@@ -44,8 +56,7 @@ export const importEslintConfig = (
   options: ImportEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const {isTypescriptEnabled, noDuplicatesOptions} = options;
-
+  const {isTypescriptEnabled, tsResolverOptions, noDuplicatesOptions} = options;
   const noUnresolvedIgnores = arraify(options.importPatternsToIgnoreWhenTryingToResolve);
 
   const builder = new ConfigEntryBuilder<'import'>(options, internalOptions);
@@ -60,6 +71,9 @@ export const importEslintConfig = (
           isTypescriptEnabled &&
             createTypeScriptImportResolver({
               alwaysTryTypes: true,
+              // Does not resolve paths in sub-directories with their own tsconfigs after 3.8.0 w/o explicit `project`: https://github.com/import-js/eslint-import-resolver-typescript/issues/364
+              project: '*/tsconfig*.json',
+              ...tsResolverOptions,
             }),
           eslintPluginImportX.createNodeResolver(),
         ].filter((v) => typeof v === 'object'),

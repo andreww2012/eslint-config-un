@@ -1,3 +1,7 @@
+## 0.6.1
+
+- Specify `project: '*/tsconfig*.json'` by default in `eslint-import-resolver-typescript` resolver for `import` config to avoid resolution issues in repositories with multiple tsconfigs ([upstream issue](https://github.com/import-js/eslint-import-resolver-typescript/issues/364)). Added an option to override the resolver settings.
+
 ## 0.6.0
 
 - New config: `qwik` via [`eslint-plugin-qwik`](https://www.npmjs.com/package/eslint-plugin-qwik), enabled automatically if `@builder.io/qwik` or `@qwik.dev/core` package is installed.
