@@ -5,6 +5,7 @@
 ### Dependencies
 - `@stylistic/eslint-plugin`: [4.1.0 -> 4.2.0](https://github.com/eslint-stylistic/eslint-stylistic/compare/v4.1.0...v4.2.0)
 - `eslint-plugin-package-json`: [0.26.0 -> 0.26.1](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.26.0...v0.26.1)
+- `eslint-plugin-n`: [17.15.1 -> 17.16.1](https://github.com/eslint-community/eslint-plugin-n/compare/v17.15.1...v17.16.1)
 
 ## 0.6.0
 
