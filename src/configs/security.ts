@@ -9,26 +9,26 @@ export const securityEslintConfig = (
   options: SecurityEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder<'security'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('security', options, internalOptions);
 
   builder
     .addConfig(['security', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginSecurity.configs.recommended.rules)
     // By default, all rules are included in the recommended config and with the "warn" level
-    .addRule('security/detect-bidi-characters', ERROR)
-    .addRule('security/detect-buffer-noassert', ERROR)
-    .addRule('security/detect-child-process', WARNING)
-    .addRule('security/detect-disable-mustache-escape', ERROR)
-    .addRule('security/detect-eval-with-expression', ERROR)
-    .addRule('security/detect-new-buffer', ERROR)
-    .addRule('security/detect-no-csrf-before-method-override', WARNING)
-    .addRule('security/detect-non-literal-fs-filename', OFF)
-    .addRule('security/detect-non-literal-regexp', OFF)
-    .addRule('security/detect-non-literal-require', OFF)
-    .addRule('security/detect-object-injection', OFF)
-    .addRule('security/detect-possible-timing-attacks', OFF)
-    .addRule('security/detect-pseudoRandomBytes', WARNING)
-    .addRule('security/detect-unsafe-regex', WARNING)
+    .addRule('detect-bidi-characters', ERROR)
+    .addRule('detect-buffer-noassert', ERROR)
+    .addRule('detect-child-process', WARNING)
+    .addRule('detect-disable-mustache-escape', ERROR)
+    .addRule('detect-eval-with-expression', ERROR)
+    .addRule('detect-new-buffer', ERROR)
+    .addRule('detect-no-csrf-before-method-override', WARNING)
+    .addRule('detect-non-literal-fs-filename', OFF)
+    .addRule('detect-non-literal-regexp', OFF)
+    .addRule('detect-non-literal-require', OFF)
+    .addRule('detect-object-injection', OFF)
+    .addRule('detect-possible-timing-attacks', OFF)
+    .addRule('detect-pseudoRandomBytes', WARNING)
+    .addRule('detect-unsafe-regex', WARNING)
     .addOverrides();
 
   return builder.getAllConfigs();

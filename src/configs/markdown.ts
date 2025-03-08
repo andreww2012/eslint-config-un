@@ -89,7 +89,7 @@ export const markdownEslintConfig = (
   options: MarkdownEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder<'markdown'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('markdown', options, internalOptions);
 
   const {
     lintMarkdown = true,
@@ -139,7 +139,7 @@ export const markdownEslintConfig = (
         ),
       )
       .addRule(
-        'markdown/fenced-code-language',
+        'fenced-code-language',
         allowedFencedCodeBlocksLanguages || codeBlocksAllowedLanguages === 'any-lang-required'
           ? ERROR
           : OFF,
@@ -151,10 +151,10 @@ export const markdownEslintConfig = (
           },
         ],
       ) // 🟣
-      // .addRule('markdown/heading-increment', ERROR) // 🟣
-      // .addRule('markdown/no-duplicate-headings', OFF)
-      // .addRule('markdown/no-empty-links', ERROR) // 🟣
-      .addRule('markdown/no-html', allowHtmlTags === true ? OFF : ERROR, [
+      // .addRule('heading-increment', ERROR) // 🟣
+      // .addRule('no-duplicate-headings', OFF)
+      // .addRule('no-empty-links', ERROR) // 🟣
+      .addRule('no-html', allowHtmlTags === true ? OFF : ERROR, [
         {
           ...(Array.isArray(allowHtmlTags) &&
             allowHtmlTags.length > 0 && {
@@ -162,8 +162,8 @@ export const markdownEslintConfig = (
             }),
         },
       ])
-      // .addRule('markdown/no-invalid-label-refs', ERROR) // 🟣
-      // .addRule('markdown/no-missing-label-refs', ERROR) // 🟣
+      // .addRule('no-invalid-label-refs', ERROR) // 🟣
+      // .addRule('no-missing-label-refs', ERROR) // 🟣
       .addOverrides();
 
     if (Array.isArray(language)) {

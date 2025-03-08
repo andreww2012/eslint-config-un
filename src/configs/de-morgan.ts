@@ -8,12 +8,12 @@ export const deMorganEslintConfig = (
   options: DeMorganEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder<'de-morgan'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('de-morgan', options, internalOptions);
 
   builder
     .addConfig(['de-morgan', {includeDefaultFilesAndIgnores: true}])
-    .addRule('de-morgan/no-negated-conjunction', ERROR)
-    .addRule('de-morgan/no-negated-disjunction', ERROR)
+    .addRule('no-negated-conjunction', ERROR)
+    .addRule('no-negated-disjunction', ERROR)
     .addOverrides();
 
   return builder.getAllConfigs();

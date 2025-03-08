@@ -132,7 +132,7 @@ export const tsEslintConfig = (
     },
   });
 
-  const builder = new ConfigEntryBuilder<'@typescript-eslint'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('@typescript-eslint', options, internalOptions);
 
   // LEGEND:
   // ❄️ = Feature-frozen in ts-eslint
@@ -159,101 +159,90 @@ export const tsEslintConfig = (
       ),
     )
     // 🟢 Strict - overrides
-    // .addRule('@typescript-eslint/ban-ts-comment', ERROR)
-    .addRule('@typescript-eslint/no-array-constructor', ERROR, [], {overrideBaseRule: true})
-    // .addRule('@typescript-eslint/no-duplicate-enum-values', ERROR)
-    .addRule('@typescript-eslint/no-dynamic-delete', WARNING)
-    .addRule('@typescript-eslint/no-empty-object-type', ERROR, [
-      {allowInterfaces: 'with-single-extends'},
-    ])
-    .addRule('@typescript-eslint/no-explicit-any', WARNING, [{ignoreRestArgs: true}])
-    // .addRule('@typescript-eslint/no-extra-non-null-assertion', ERROR)
-    // .addRule('@typescript-eslint/no-extraneous-class', ERROR)
-    // .addRule('@typescript-eslint/no-invalid-void-type', ERROR)
-    // .addRule('@typescript-eslint/no-misused-new', ERROR)
-    // .addRule('@typescript-eslint/no-namespace', ERROR)
-    // .addRule('@typescript-eslint/no-non-null-asserted-nullish-coalescing', ERROR)
-    // .addRule('@typescript-eslint/no-non-null-asserted-optional-chain', ERROR)
-    .addRule('@typescript-eslint/no-non-null-assertion', WARNING)
-    // .addRule('@typescript-eslint/no-this-alias', ERROR)
-    // .addRule('@typescript-eslint/no-unnecessary-type-constraint', ERROR)
-    // .addRule('@typescript-eslint/no-unsafe-declaration-merging', ERROR)
-    // .addRule('@typescript-eslint/no-unsafe-function-type', ERROR)
-    .addRule('@typescript-eslint/no-unused-vars', ERROR, [{ignoreRestSiblings: true}], {
+    // .addRule('ban-ts-comment', ERROR)
+    .addRule('no-array-constructor', ERROR, [], {overrideBaseRule: true})
+    // .addRule('no-duplicate-enum-values', ERROR)
+    .addRule('no-dynamic-delete', WARNING)
+    .addRule('no-empty-object-type', ERROR, [{allowInterfaces: 'with-single-extends'}])
+    .addRule('no-explicit-any', WARNING, [{ignoreRestArgs: true}])
+    // .addRule('no-extra-non-null-assertion', ERROR)
+    // .addRule('no-extraneous-class', ERROR)
+    // .addRule('no-invalid-void-type', ERROR)
+    // .addRule('no-misused-new', ERROR)
+    // .addRule('no-namespace', ERROR)
+    // .addRule('no-non-null-asserted-nullish-coalescing', ERROR)
+    // .addRule('no-non-null-asserted-optional-chain', ERROR)
+    .addRule('no-non-null-assertion', WARNING)
+    // .addRule('no-this-alias', ERROR)
+    // .addRule('no-unnecessary-type-constraint', ERROR)
+    // .addRule('no-unsafe-declaration-merging', ERROR)
+    // .addRule('no-unsafe-function-type', ERROR)
+    .addRule('no-unused-vars', ERROR, [{ignoreRestSiblings: true}], {
       overrideBaseRule: true,
     })
-    .addRule('@typescript-eslint/no-useless-constructor', ERROR, [], {overrideBaseRule: true})
-    // .addRule('@typescript-eslint/no-wrapper-object-types', ERROR)
-    // .addRule('@typescript-eslint/prefer-as-const', ERROR)
-    .addRule('@typescript-eslint/prefer-literal-enum-member', ERROR, [
-      {allowBitwiseExpressions: true},
-    ])
-    // .addRule('@typescript-eslint/prefer-namespace-keyword', ERROR)
-    // .addRule('@typescript-eslint/triple-slash-reference', ERROR)
-    .addRule('@typescript-eslint/unified-signatures', ERROR, [
-      {ignoreOverloadsWithDifferentJSDoc: true},
-    ])
+    .addRule('no-useless-constructor', ERROR, [], {overrideBaseRule: true})
+    // .addRule('no-wrapper-object-types', ERROR)
+    // .addRule('prefer-as-const', ERROR)
+    .addRule('prefer-literal-enum-member', ERROR, [{allowBitwiseExpressions: true}])
+    // .addRule('prefer-namespace-keyword', ERROR)
+    // .addRule('triple-slash-reference', ERROR)
+    .addRule('unified-signatures', ERROR, [{ignoreOverloadsWithDifferentJSDoc: true}])
     // 🟢 Stylistic - overrides
-    // .addRule('@typescript-eslint/adjacent-overload-signatures', ERROR)
-    // .addRule('@typescript-eslint/array-type', ERROR)
-    // .addRule('@typescript-eslint/ban-tslint-comment', ERROR)
-    // .addRule('@typescript-eslint/class-literal-property-style', ERROR)
-    // .addRule('@typescript-eslint/consistent-generic-constructors', ERROR)
-    // .addRule('@typescript-eslint/consistent-indexed-object-style', ERROR)
-    // .addRule('@typescript-eslint/consistent-type-assertions', ERROR)
-    // .addRule('@typescript-eslint/consistent-type-definitions', ERROR)
-    // .addRule('@typescript-eslint/no-confusing-non-null-assertion', ERROR)
-    .addRule('@typescript-eslint/no-empty-function', ERROR, [], {overrideBaseRule: true})
-    // .addRule('@typescript-eslint/no-inferrable-types', ERROR)
-    // .addRule('@typescript-eslint/prefer-for-of', ERROR)
-    // .addRule('@typescript-eslint/prefer-function-type', OFF)
+    // .addRule('adjacent-overload-signatures', ERROR)
+    // .addRule('array-type', ERROR)
+    // .addRule('ban-tslint-comment', ERROR)
+    // .addRule('class-literal-property-style', ERROR)
+    // .addRule('consistent-generic-constructors', ERROR)
+    // .addRule('consistent-indexed-object-style', ERROR)
+    // .addRule('consistent-type-assertions', ERROR)
+    // .addRule('consistent-type-definitions', ERROR)
+    // .addRule('no-confusing-non-null-assertion', ERROR)
+    .addRule('no-empty-function', ERROR, [], {overrideBaseRule: true})
+    // .addRule('no-inferrable-types', ERROR)
+    // .addRule('prefer-for-of', ERROR)
+    // .addRule('prefer-function-type', OFF)
     // 🟢 Additional rules
     .addRule(
-      '@typescript-eslint/class-methods-use-this',
+      'class-methods-use-this',
       ERROR,
       [{ignoreOverrideMethods: true, ignoreClassesThatImplementAnInterface: true}],
       {overrideBaseRule: true},
     )
-    .addRule('@typescript-eslint/consistent-type-imports', ERROR, [
+    .addRule('consistent-type-imports', ERROR, [
       {
         ...(tsVersion && tsVersion >= 4.5 && {fixStyle: 'inline-type-imports'}),
         disallowTypeAnnotations: false,
       },
     ])
-    .addRule('@typescript-eslint/default-param-last', ERROR, [], {overrideBaseRule: true})
-    // .addRule('@typescript-eslint/explicit-function-return-type', OFF)
-    // .addRule('@typescript-eslint/explicit-member-accessibility', OFF)
-    .addRule('@typescript-eslint/explicit-module-boundary-types', OFF)
-    // .addRule('@typescript-eslint/init-declarations', OFF, [], {overrideBaseRule: true})
-    // .addRule('@typescript-eslint/max-params', OFF, [], {overrideBaseRule: true})
-    // .addRule('@typescript-eslint/member-ordering', OFF) // ❄️
-    .addRule('@typescript-eslint/method-signature-style', ERROR)
-    // .addRule('@typescript-eslint/no-dupe-class-members', OFF, [], {overrideBaseRule: true}) // 👍
-    .addRule('@typescript-eslint/no-import-type-side-effects', ERROR)
-    // .addRule('@typescript-eslint/no-invalid-this', OFF, [], {overrideBaseRule: true}) // 👍
-    .addRule('@typescript-eslint/no-loop-func', ERROR, [], {overrideBaseRule: true})
-    // .addRule('@typescript-eslint/no-magic-numbers', OFF, [], {overrideBaseRule: true})
+    .addRule('default-param-last', ERROR, [], {overrideBaseRule: true})
+    // .addRule('explicit-function-return-type', OFF)
+    // .addRule('explicit-member-accessibility', OFF)
+    .addRule('explicit-module-boundary-types', OFF)
+    // .addRule('init-declarations', OFF, [], {overrideBaseRule: true})
+    // .addRule('max-params', OFF, [], {overrideBaseRule: true})
+    // .addRule('member-ordering', OFF) // ❄️
+    .addRule('method-signature-style', ERROR)
+    // .addRule('no-dupe-class-members', OFF, [], {overrideBaseRule: true}) // 👍
+    .addRule('no-import-type-side-effects', ERROR)
+    // .addRule('no-invalid-this', OFF, [], {overrideBaseRule: true}) // 👍
+    .addRule('no-loop-func', ERROR, [], {overrideBaseRule: true})
+    // .addRule('no-magic-numbers', OFF, [], {overrideBaseRule: true})
     .addAnyRule('no-redeclare', OFF)
-    // .addRule('@typescript-eslint/no-redeclare', OFF) // 👍
-    .addRule('@typescript-eslint/no-require-imports', OFF)
-    // .addRule('@typescript-eslint/no-restricted-imports', OFF, [], {overrideBaseRule: true})
-    .addRule('@typescript-eslint/no-shadow', ERROR, [], {overrideBaseRule: true})
-    .addRule('@typescript-eslint/no-unnecessary-parameter-property-assignment', ERROR)
-    .addRule(
-      '@typescript-eslint/no-unused-expressions',
-      ERROR,
-      RULE_NO_UNUSED_EXPRESSIONS_OPTIONS,
-      {
-        overrideBaseRule: true,
-      },
-    )
-    .addRule('@typescript-eslint/no-use-before-define', ERROR, RULE_NO_USE_BEFORE_DEFINE_OPTIONS, {
+    // .addRule('no-redeclare', OFF) // 👍
+    .addRule('no-require-imports', OFF)
+    // .addRule('no-restricted-imports', OFF, [], {overrideBaseRule: true})
+    .addRule('no-shadow', ERROR, [], {overrideBaseRule: true})
+    .addRule('no-unnecessary-parameter-property-assignment', ERROR)
+    .addRule('no-unused-expressions', ERROR, RULE_NO_UNUSED_EXPRESSIONS_OPTIONS, {
       overrideBaseRule: true,
     })
-    .addRule('@typescript-eslint/no-useless-empty-export', ERROR)
-    // .addRule('@typescript-eslint/parameter-properties', OFF)
-    // .addRule('@typescript-eslint/prefer-enum-initializers', OFF)
-    // .addRule('@typescript-eslint/typedef', OFF)
+    .addRule('no-use-before-define', ERROR, RULE_NO_USE_BEFORE_DEFINE_OPTIONS, {
+      overrideBaseRule: true,
+    })
+    .addRule('no-useless-empty-export', ERROR)
+    // .addRule('parameter-properties', OFF)
+    // .addRule('prefer-enum-initializers', OFF)
+    // .addRule('typedef', OFF)
     // 🟢 Disable conflicting rules
     .addAnyRule('no-useless-constructor', OFF)
     .addAnyRule('dot-notation', OFF)
@@ -280,32 +269,32 @@ export const tsEslintConfig = (
         ),
       )
       // 🟢 Strict - overrides
-      // .addRule('@typescript-eslint/await-thenable', ERROR)
-      // .addRule('@typescript-eslint/no-array-delete', ERROR)
-      // .addRule('@typescript-eslint/no-base-to-string', ERROR)
-      .addRule('@typescript-eslint/no-confusing-void-expression', ERROR, [
+      // .addRule('await-thenable', ERROR)
+      // .addRule('no-array-delete', ERROR)
+      // .addRule('no-base-to-string', ERROR)
+      .addRule('no-confusing-void-expression', ERROR, [
         {
           ignoreArrowShorthand: true,
         },
       ])
-      .addRule('@typescript-eslint/no-deprecated', WARNING)
-      // .addRule('@typescript-eslint/no-duplicate-type-constituents', ERROR)
-      .addRule('@typescript-eslint/no-floating-promises', ERROR, [
+      .addRule('no-deprecated', WARNING)
+      // .addRule('no-duplicate-type-constituents', ERROR)
+      .addRule('no-floating-promises', ERROR, [
         {
           checkThenables: true,
           ignoreVoid: true, // Default
         },
       ])
-      // .addRule('@typescript-eslint/no-for-in-array', ERROR)
-      .addRule('@typescript-eslint/no-implied-eval', ERROR, [], {overrideBaseRule: true})
-      // .addRule('@typescript-eslint/no-meaningless-void-operator', ERROR)
-      // .addRule('@typescript-eslint/no-misused-promises', ERROR)
-      .addRule('@typescript-eslint/no-misused-spread', ERROR) // >=8.20.0
-      // .addRule('@typescript-eslint/no-mixed-enums', ERROR)
-      // .addRule('@typescript-eslint/no-redundant-type-constituents', ERROR)
-      // .addRule('@typescript-eslint/no-unnecessary-boolean-literal-compare', ERROR)
+      // .addRule('no-for-in-array', ERROR)
+      .addRule('no-implied-eval', ERROR, [], {overrideBaseRule: true})
+      // .addRule('no-meaningless-void-operator', ERROR)
+      // .addRule('no-misused-promises', ERROR)
+      .addRule('no-misused-spread', ERROR) // >=8.20.0
+      // .addRule('no-mixed-enums', ERROR)
+      // .addRule('no-redundant-type-constituents', ERROR)
+      // .addRule('no-unnecessary-boolean-literal-compare', ERROR)
       .addRule(
-        '@typescript-eslint/no-unnecessary-condition',
+        'no-unnecessary-condition',
         ERROR,
         [
           {
@@ -315,79 +304,65 @@ export const tsEslintConfig = (
         ],
         {disableAutofix: true},
       )
-      // .addRule('@typescript-eslint/no-unnecessary-template-expressions', ERROR)
+      // .addRule('no-unnecessary-template-expressions', ERROR)
       // Reason for disabling autofix: could remove type aliases
-      .addRule('@typescript-eslint/no-unnecessary-type-arguments', ERROR, [], {
+      .addRule('no-unnecessary-type-arguments', ERROR, [], {
         disableAutofix: true,
       })
-      .addRule('@typescript-eslint/no-unnecessary-type-assertion', ERROR, [], {
+      .addRule('no-unnecessary-type-assertion', ERROR, [], {
         disableAutofix: true, // Reason: https://github.com/typescript-eslint/typescript-eslint/issues/8721
       })
-      .addRule('@typescript-eslint/no-unsafe-argument', noUnsafeRulesSeverity)
-      .addRule('@typescript-eslint/no-unsafe-assignment', noUnsafeRulesSeverity)
-      .addRule('@typescript-eslint/no-unsafe-call', noUnsafeRulesSeverity)
-      .addRule('@typescript-eslint/no-unsafe-enum-comparison', noUnsafeRulesSeverity)
-      .addRule('@typescript-eslint/no-unsafe-member-access', noUnsafeRulesSeverity)
-      .addRule('@typescript-eslint/no-unsafe-return', noUnsafeRulesSeverity)
-      // .addRule('@typescript-eslint/no-unsafe-type-assertion', OFF)
-      // .addRule('@typescript-eslint/no-unsafe-unary-minus', ERROR)
+      .addRule('no-unsafe-argument', noUnsafeRulesSeverity)
+      .addRule('no-unsafe-assignment', noUnsafeRulesSeverity)
+      .addRule('no-unsafe-call', noUnsafeRulesSeverity)
+      .addRule('no-unsafe-enum-comparison', noUnsafeRulesSeverity)
+      .addRule('no-unsafe-member-access', noUnsafeRulesSeverity)
+      .addRule('no-unsafe-return', noUnsafeRulesSeverity)
+      // .addRule('no-unsafe-type-assertion', OFF)
+      // .addRule('no-unsafe-unary-minus', ERROR)
       .addAnyRule('no-throw-literal', OFF) // Note: has different name
-      // .addRule('@typescript-eslint/only-throw-error', ERROR)
-      .addRule('@typescript-eslint/prefer-promise-reject-errors', ERROR, [], {
+      // .addRule('only-throw-error', ERROR)
+      .addRule('prefer-promise-reject-errors', ERROR, [], {
         overrideBaseRule: true,
       })
-      // .addRule('@typescript-eslint/prefer-reduce-type-parameter', ERROR)
-      // .addRule('@typescript-eslint/prefer-return-this-type', ERROR)
-      .addRule('@typescript-eslint/require-await', ERROR, [], {overrideBaseRule: true})
-      // .addRule('@typescript-eslint/restrict-plus-operands', ERROR)
-      .addRule('@typescript-eslint/restrict-template-expressions', ERROR, [
-        {allowAny: false, allowRegExp: false},
-      ])
-      // .addRule('@typescript-eslint/unbound-method', ERROR)
-      // .addRule('@typescript-eslint/use-unknown-in-catch-clause', ERROR)
+      // .addRule('prefer-reduce-type-parameter', ERROR)
+      // .addRule('prefer-return-this-type', ERROR)
+      .addRule('require-await', ERROR, [], {overrideBaseRule: true})
+      // .addRule('restrict-plus-operands', ERROR)
+      .addRule('restrict-template-expressions', ERROR, [{allowAny: false, allowRegExp: false}])
+      // .addRule('unbound-method', ERROR)
+      // .addRule('use-unknown-in-catch-clause', ERROR)
       // 🟢 Stylistic - overrides
-      .addRule(
-        '@typescript-eslint/dot-notation',
-        ERROR,
-        [{allowIndexSignaturePropertyAccess: true}],
-        {overrideBaseRule: true},
-      )
-      // .addRule('@typescript-eslint/non-nullable-type-assertion-style', ERROR)
-      // .addRule('@typescript-eslint/prefer-find', ERROR)
+      .addRule('dot-notation', ERROR, [{allowIndexSignaturePropertyAccess: true}], {
+        overrideBaseRule: true,
+      })
+      // .addRule('non-nullable-type-assertion-style', ERROR)
+      // .addRule('prefer-find', ERROR)
       .addAnyRule('unicorn/prefer-includes', OFF)
-      // .addRule('@typescript-eslint/prefer-includes', ERROR)
-      .addRule('@typescript-eslint/prefer-nullish-coalescing', OFF)
-      // .addRule('@typescript-eslint/prefer-optional-chain', ERROR)
-      .addRule('@typescript-eslint/prefer-regexp-exec', OFF)
-      .addRule('@typescript-eslint/prefer-string-starts-ends-with', ERROR, [
-        {allowSingleElementEquality: 'always'},
-      ])
+      // .addRule('prefer-includes', ERROR)
+      .addRule('prefer-nullish-coalescing', OFF)
+      // .addRule('prefer-optional-chain', ERROR)
+      .addRule('prefer-regexp-exec', OFF)
+      .addRule('prefer-string-starts-ends-with', ERROR, [{allowSingleElementEquality: 'always'}])
       // 🟢 Additional rules
       // TODO: ...overrideBaseRule('consistent-return', OFF),
-      .addRule('@typescript-eslint/consistent-type-exports', ERROR, [
-        {fixMixedExportsWithInlineTypeSpecifier: true},
-      ])
-      // .addRule('@typescript-eslint/naming-convention', OFF) // ❄️
-      // .addRule('@typescript-eslint/no-unnecessary-qualifier', OFF)
-      .addRule(
-        '@typescript-eslint/prefer-destructuring',
-        ERROR,
-        RULE_PREFER_DESTRUCTURING_OPTIONS,
-        {
-          overrideBaseRule: true,
-        },
-      )
+      .addRule('consistent-type-exports', ERROR, [{fixMixedExportsWithInlineTypeSpecifier: true}])
+      // .addRule('naming-convention', OFF) // ❄️
+      // .addRule('no-unnecessary-qualifier', OFF)
+      .addRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS, {
+        overrideBaseRule: true,
+      })
       .addAnyRule('unicorn/prefer-array-find', OFF) // Note: in Unicorn
-      .addRule('@typescript-eslint/prefer-readonly', ERROR)
-      // .addRule('@typescript-eslint/prefer-readonly-parameter-types', OFF)
-      // .addRule('@typescript-eslint/promise-function-async', OFF)
-      // .addRule('@typescript-eslint/related-getter-setter-pairs', ERROR)
-      // .addRule('@typescript-eslint/require-array-sort-compare', OFF)
+      .addRule('prefer-readonly', ERROR)
+      // .addRule('prefer-readonly-parameter-types', OFF)
+      // .addRule('promise-function-async', OFF)
+      // .addRule('related-getter-setter-pairs', ERROR)
+      // .addRule('require-array-sort-compare', OFF)
       // Note: has different name. Also note that the original rule is deprecated and not included in this config, but we disable it anyway just for safety
       .addAnyRule('no-return-await', OFF) // Disabled by default since v8
-      .addRule('@typescript-eslint/return-await', ERROR, ['always'])
-      // .addRule('@typescript-eslint/strict-boolean-expressions', OFF)
-      .addRule('@typescript-eslint/switch-exhaustiveness-check', ERROR)
+      .addRule('return-await', ERROR, ['always'])
+      // .addRule('strict-boolean-expressions', OFF)
+      .addRule('switch-exhaustiveness-check', ERROR)
       .addBulkRules(options.overridesTypeAware);
   }
 
@@ -424,14 +399,14 @@ export const tsEslintConfig = (
     .addConfig('ts/dts', {
       files: ['**/*.d.?([cm])ts'],
     })
-    .addRule('@typescript-eslint/consistent-indexed-object-style', OFF)
-    .addRule('@typescript-eslint/method-signature-style', OFF)
-    .addRule('@typescript-eslint/no-empty-object-type', OFF)
-    .addRule('@typescript-eslint/no-explicit-any', OFF)
-    .addRule('@typescript-eslint/no-shadow', OFF)
-    .addRule('@typescript-eslint/no-unnecessary-type-parameters', OFF)
-    .addRule('@typescript-eslint/no-unused-vars', OFF)
-    .addRule('@typescript-eslint/no-use-before-define', OFF)
+    .addRule('consistent-indexed-object-style', OFF)
+    .addRule('method-signature-style', OFF)
+    .addRule('no-empty-object-type', OFF)
+    .addRule('no-explicit-any', OFF)
+    .addRule('no-shadow', OFF)
+    .addRule('no-unnecessary-type-parameters', OFF)
+    .addRule('no-unused-vars', OFF)
+    .addRule('no-use-before-define', OFF)
     .addAnyRule('import/newline-after-import', OFF)
     .addAnyRule('import/no-default-export', OFF)
     .addAnyRule('vars-on-top', OFF)

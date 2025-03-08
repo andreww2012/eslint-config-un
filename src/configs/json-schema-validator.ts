@@ -41,7 +41,7 @@ export const jsonSchemaValidatorEslintConfig = (
 ): FlatConfigEntry[] => {
   const {settings: pluginSettings, options: noInvalidOptions} = options;
 
-  const builder = new ConfigEntryBuilder<'json-schema-validator'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('json-schema-validator', options, internalOptions);
 
   // Legend:
   // 🟣 - in recommended
@@ -96,11 +96,7 @@ export const jsonSchemaValidatorEslintConfig = (
         },
       }),
     })
-    .addRule(
-      'json-schema-validator/no-invalid',
-      ERROR,
-      noInvalidOptions == null ? [] : [noInvalidOptions],
-    ) // 🟣 >=0.1.0
+    .addRule('no-invalid', ERROR, noInvalidOptions == null ? [] : [noInvalidOptions]) // 🟣 >=0.1.0
     .addOverrides();
 
   return builder.getAllConfigs();

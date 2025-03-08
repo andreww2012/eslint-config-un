@@ -230,7 +230,7 @@ export const jestEslintConfig = (
   const getPaddingAroundSeverity = (key: keyof (typeof paddingAround & object)) =>
     paddingAround === true || (paddingAround && paddingAround[key] !== false) ? ERROR : OFF;
 
-  const builder = new ConfigEntryBuilder<'jest'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('jest', options, internalOptions);
 
   // Legend:
   // 🟢 - in Recommended
@@ -251,75 +251,73 @@ export const jestEslintConfig = (
     )
     .addBulkRules(eslintPluginJest.configs['flat/recommended'].rules)
     .addRule(
-      'jest/consistent-test-it',
+      'consistent-test-it',
       options.testDefinitionKeyword === false ? OFF : ERROR,
       generateConsistentTestItOptions(options),
     )
-    .addRule('jest/expect-expect', ERROR) // 🟢 (warns)
-    .addRule('jest/max-expects', maxAssertionCalls == null ? OFF : ERROR, [
-      {max: maxAssertionCalls},
-    ])
-    .addRule('jest/max-nested-describe', maxNestedDescribes == null ? OFF : ERROR, [
+    .addRule('expect-expect', ERROR) // 🟢 (warns)
+    .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [{max: maxAssertionCalls}])
+    .addRule('max-nested-describe', maxNestedDescribes == null ? OFF : ERROR, [
       {max: maxNestedDescribes},
     ])
-    // .addRule('jest/no-alias-methods', ERROR) // 🟢 🎨
-    .addRule('jest/no-commented-out-tests', WARNING) // 🎨 (warns)
-    // .addRule('jest/no-conditional-expect', ERROR) // 🟢
-    // .addRule('jest/no-conditional-in-test', OFF)
-    .addRule('jest/no-confusing-set-timeout', ERROR)
-    // .addRule('jest/no-deprecated-functions', ERROR) // 🟢
-    // .addRule('jest/no-disabled-tests', WARNING) // 🟢 (warns)
-    // .addRule('jest/no-done-callback', ERROR) // 🟢
-    .addRule('jest/no-duplicate-hooks', ERROR)
-    // .addRule('jest/no-export', ERROR) // 🟢
-    // .addRule('jest/no-focused-tests', ERROR) // 🟢
-    // .addRule('jest/no-hooks', OFF)
-    // .addRule('jest/no-identical-title', ERROR) // 🟢
-    // .addRule('jest/no-interpolation-in-snapshots', ERROR) // 🟢
-    // .addRule('jest/no-jasmine-globals', ERROR) // 🟢
-    // .addRule('jest/no-large-snapshots', OFF)
-    // .addRule('jest/no-mocks-import', ERROR) // 🟢
-    .addRule('jest/no-restricted-jest-methods', hasRestrictedMethods ? ERROR : OFF, [
+    // .addRule('no-alias-methods', ERROR) // 🟢 🎨
+    .addRule('no-commented-out-tests', WARNING) // 🎨 (warns)
+    // .addRule('no-conditional-expect', ERROR) // 🟢
+    // .addRule('no-conditional-in-test', OFF)
+    .addRule('no-confusing-set-timeout', ERROR)
+    // .addRule('no-deprecated-functions', ERROR) // 🟢
+    // .addRule('no-disabled-tests', WARNING) // 🟢 (warns)
+    // .addRule('no-done-callback', ERROR) // 🟢
+    .addRule('no-duplicate-hooks', ERROR)
+    // .addRule('no-export', ERROR) // 🟢
+    // .addRule('no-focused-tests', ERROR) // 🟢
+    // .addRule('no-hooks', OFF)
+    // .addRule('no-identical-title', ERROR) // 🟢
+    // .addRule('no-interpolation-in-snapshots', ERROR) // 🟢
+    // .addRule('no-jasmine-globals', ERROR) // 🟢
+    // .addRule('no-large-snapshots', OFF)
+    // .addRule('no-mocks-import', ERROR) // 🟢
+    .addRule('no-restricted-jest-methods', hasRestrictedMethods ? ERROR : OFF, [
       restrictedMethods || {},
     ])
-    .addRule('jest/no-restricted-matchers', hasRestrictedMatchers ? ERROR : OFF, [
+    .addRule('no-restricted-matchers', hasRestrictedMatchers ? ERROR : OFF, [
       restrictedMatchers || {},
     ])
-    // .addRule('jest/no-standalone-expect', ERROR) // 🟢
-    // .addRule('jest/no-test-prefixes', ERROR) // 🟢
-    .addRule('jest/no-test-return-statement', ERROR)
-    .addRule('jest/padding-around-after-all-blocks', getPaddingAroundSeverity('afterAll'))
-    .addRule('jest/padding-around-after-each-blocks', getPaddingAroundSeverity('afterEach'))
-    // .addRule('jest/padding-around-all', OFF)
-    .addRule('jest/padding-around-before-all-blocks', getPaddingAroundSeverity('beforeAll'))
-    .addRule('jest/padding-around-before-each-blocks', getPaddingAroundSeverity('beforeEach'))
-    .addRule('jest/padding-around-describe-blocks', getPaddingAroundSeverity('describe'))
-    .addRule('jest/padding-around-expect-groups', getPaddingAroundSeverity('expect'))
-    .addRule('jest/padding-around-test-blocks', getPaddingAroundSeverity('test'))
-    // .addRule('jest/prefer-called-with', OFF)
-    .addRule('jest/prefer-comparison-matcher', ERROR)
-    .addRule('jest/prefer-each', WARNING)
-    .addRule('jest/prefer-equality-matcher', ERROR)
-    .addRule('jest/prefer-expect-assertions', OFF)
-    .addRule('jest/prefer-expect-resolves', ERROR)
-    .addRule('jest/prefer-hooks-in-order', ERROR)
-    .addRule('jest/prefer-hooks-on-top', ERROR)
-    // .addRule('jest/prefer-importing-jest-globals', OFF)
-    .addRule('jest/prefer-jest-mocked', ERROR)
-    .addRule('jest/prefer-lowercase-title', ERROR)
-    .addRule('jest/prefer-mock-promise-shorthand', ERROR)
-    // .addRule('jest/prefer-snapshot-hint', OFF)
-    .addRule('jest/prefer-spy-on', ERROR)
-    .addRule('jest/prefer-strict-equal', WARNING)
-    .addRule('jest/prefer-to-be', ERROR) // 🎨
-    .addRule('jest/prefer-to-contain', ERROR) // 🎨
-    .addRule('jest/prefer-to-have-length', ERROR) // 🎨
-    .addRule('jest/prefer-todo', WARNING)
-    .addRule('jest/require-hook', WARNING)
-    .addRule('jest/require-to-throw-message', OFF)
-    .addRule('jest/require-top-level-describe', OFF)
-    // .addRule('jest/valid-describe-callback', ERROR)
-    .addRule('jest/valid-expect', ERROR, [
+    // .addRule('no-standalone-expect', ERROR) // 🟢
+    // .addRule('no-test-prefixes', ERROR) // 🟢
+    .addRule('no-test-return-statement', ERROR)
+    .addRule('padding-around-after-all-blocks', getPaddingAroundSeverity('afterAll'))
+    .addRule('padding-around-after-each-blocks', getPaddingAroundSeverity('afterEach'))
+    // .addRule('padding-around-all', OFF)
+    .addRule('padding-around-before-all-blocks', getPaddingAroundSeverity('beforeAll'))
+    .addRule('padding-around-before-each-blocks', getPaddingAroundSeverity('beforeEach'))
+    .addRule('padding-around-describe-blocks', getPaddingAroundSeverity('describe'))
+    .addRule('padding-around-expect-groups', getPaddingAroundSeverity('expect'))
+    .addRule('padding-around-test-blocks', getPaddingAroundSeverity('test'))
+    // .addRule('prefer-called-with', OFF)
+    .addRule('prefer-comparison-matcher', ERROR)
+    .addRule('prefer-each', WARNING)
+    .addRule('prefer-equality-matcher', ERROR)
+    .addRule('prefer-expect-assertions', OFF)
+    .addRule('prefer-expect-resolves', ERROR)
+    .addRule('prefer-hooks-in-order', ERROR)
+    .addRule('prefer-hooks-on-top', ERROR)
+    // .addRule('prefer-importing-jest-globals', OFF)
+    .addRule('prefer-jest-mocked', ERROR)
+    .addRule('prefer-lowercase-title', ERROR)
+    .addRule('prefer-mock-promise-shorthand', ERROR)
+    // .addRule('prefer-snapshot-hint', OFF)
+    .addRule('prefer-spy-on', ERROR)
+    .addRule('prefer-strict-equal', WARNING)
+    .addRule('prefer-to-be', ERROR) // 🎨
+    .addRule('prefer-to-contain', ERROR) // 🎨
+    .addRule('prefer-to-have-length', ERROR) // 🎨
+    .addRule('prefer-todo', WARNING)
+    .addRule('require-hook', WARNING)
+    .addRule('require-to-throw-message', OFF)
+    .addRule('require-top-level-describe', OFF)
+    // .addRule('valid-describe-callback', ERROR)
+    .addRule('valid-expect', ERROR, [
       {
         alwaysAwait: true, // Default: false
         ...(asyncMatchers?.length && {asyncMatchers}),
@@ -333,11 +331,12 @@ export const jestEslintConfig = (
           }),
       },
     ])
-    .addRule('jest/valid-expect-in-promise', ERROR)
-    .addRule('jest/valid-title', ERROR)
+    .addRule('valid-expect-in-promise', ERROR)
+    .addRule('valid-title', ERROR)
     .addOverrides();
 
-  const tsBuilder = new ConfigEntryBuilder<'jest'>(
+  const tsBuilder = new ConfigEntryBuilder(
+    'jest',
     typeof typescriptOnlyRules === 'object' ? typescriptOnlyRules : {},
     internalOptions,
   );
@@ -356,71 +355,57 @@ export const jestEslintConfig = (
         },
       )
       // Works only on TS files
-      .addRule('jest/no-untyped-mock-factory', ERROR)
+      .addRule('no-untyped-mock-factory', ERROR)
       // Requires type checking
       // TODO auto-include test files in TS config?
-      .addRule('jest/unbound-method', internalOptions.isTypescriptEnabled ? ERROR : OFF, [], {
+      .addRule('unbound-method', internalOptions.isTypescriptEnabled ? ERROR : OFF, [], {
         // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
         overrideBaseRule: '@typescript-eslint/unbound-method',
       })
       .addOverrides();
   }
 
-  const jestExtendedBuilder = new ConfigEntryBuilder<'jest-extended'>(
+  const jestExtendedBuilder = new ConfigEntryBuilder(
+    'jest-extended',
     typeof jestExtended === 'object' ? jestExtended : {},
     internalOptions,
   );
-  if (jestExtended) {
-    const {suggestUsing} = typeof jestExtended === 'object' ? jestExtended : {};
+  const {suggestUsing} = typeof jestExtended === 'object' ? jestExtended : {};
 
-    const getSuggestUsingJestExtendedMatcherSeverity = (
-      key: keyof (typeof suggestUsing & object),
-    ) => (suggestUsing === true || (suggestUsing && suggestUsing[key] !== false) ? ERROR : OFF);
+  const getSuggestUsingJestExtendedMatcherSeverity = (key: keyof (typeof suggestUsing & object)) =>
+    suggestUsing === true || (suggestUsing && suggestUsing[key] !== false) ? ERROR : OFF;
 
-    jestExtendedBuilder
-      .addConfig(
-        [
-          'jest/extended',
-          {
-            includeDefaultFilesAndIgnores: true,
-            filesFallback: defaultJestFiles,
-          },
-        ],
+  jestExtendedBuilder
+    .addConfig(
+      [
+        'jest/extended',
         {
-          ...defaultJestEslintConfig,
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: defaultJestFiles,
         },
-      )
-      // Actually empty currently
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-      .addBulkRules(eslintPluginJestExtended.configs['flat/recommended'].rules)
-      .addRule(
-        'jest-extended/prefer-to-be-array',
-        getSuggestUsingJestExtendedMatcherSeverity('toBeArray'),
-      )
-      .addRule(
-        'jest-extended/prefer-to-be-false',
-        getSuggestUsingJestExtendedMatcherSeverity('toBeFalse'),
-      )
-      .addRule(
-        'jest-extended/prefer-to-be-object',
-        getSuggestUsingJestExtendedMatcherSeverity('toBeObject'),
-      )
-      .addRule(
-        'jest-extended/prefer-to-be-true',
-        getSuggestUsingJestExtendedMatcherSeverity('toBeTrue'),
-      )
-      .addRule(
-        'jest-extended/prefer-to-have-been-called-once',
-        getSuggestUsingJestExtendedMatcherSeverity('toHaveBeenCalledOnce'),
-      );
-  }
+      ],
+      {
+        ...defaultJestEslintConfig,
+      },
+    )
+    // Actually empty currently
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+    .addBulkRules(eslintPluginJestExtended.configs['flat/recommended'].rules)
+    .addRule('prefer-to-be-array', getSuggestUsingJestExtendedMatcherSeverity('toBeArray'))
+    .addRule('prefer-to-be-false', getSuggestUsingJestExtendedMatcherSeverity('toBeFalse'))
+    .addRule('prefer-to-be-object', getSuggestUsingJestExtendedMatcherSeverity('toBeObject'))
+    .addRule('prefer-to-be-true', getSuggestUsingJestExtendedMatcherSeverity('toBeTrue'))
+    .addRule(
+      'prefer-to-have-been-called-once',
+      getSuggestUsingJestExtendedMatcherSeverity('toHaveBeenCalledOnce'),
+    );
 
   // TODO https://www.npmjs.com/package/eslint-plugin-jest-dom ?
   // Other plugins: eslint-plugin-jest-async, eslint-plugin-jest-formatting, eslint-plugin-jest-mock-config, eslint-plugin-jest-playwright, eslint-plugin-jest-react, eslint-plugin-jest-test-each-formatting
 
   return [
     ...builder.getAllConfigs(),
-    ...tsBuilder.getAllConfigs(),
-    ...jestExtendedBuilder.getAllConfigs(),
+    ...(typescriptOnlyRules ? tsBuilder.getAllConfigs() : []),
+    ...(jestExtended ? jestExtendedBuilder.getAllConfigs() : []),
   ];
 };

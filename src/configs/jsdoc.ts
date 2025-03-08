@@ -185,7 +185,7 @@ export const jsdocEslintConfig = (
     typescript: typescriptOnlyRules = internalOptions.isTypescriptEnabled,
   } = options;
 
-  const builder = new ConfigEntryBuilder<'jsdoc'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('jsdoc', options, internalOptions);
 
   // Legend:
   // 🟢 - in Recommended
@@ -203,99 +203,98 @@ export const jsdocEslintConfig = (
       }),
     })
     .addBulkRules(eslintPluginJsDoc.configs['flat/recommended-error'].rules)
-    // .addRule('jsdoc/check-access', ERROR) // 🟢2️⃣
-    // .addRule('jsdoc/check-alignment', ERROR) // 🟢4️⃣
-    // .addRule('jsdoc/check-examples', OFF) // Doesn't work in ESLint 9
-    .addRule('jsdoc/check-indentation', ERROR)
-    .addRule('jsdoc/check-line-alignment', ERROR) // 4️⃣
-    // .addRule('jsdoc/check-param-names', ERROR) // 🟢2️⃣
-    // .addRule('jsdoc/check-property-names', ERROR) // 🟢2️⃣
-    .addRule('jsdoc/check-syntax', ERROR) // 2️⃣
-    // .addRule('jsdoc/check-tag-names', ERROR) // 🟢2️⃣
-    .addRule('jsdoc/check-template-names', ERROR) // 2️⃣
-    // .addRule('jsdoc/check-types', ERROR) // 🟢2️⃣
-    // .addRule('jsdoc/check-values', ERROR) // 🟢2️⃣
-    // .addRule('jsdoc/convert-to-jsdoc-comments', OFF) // Experimental rule
-    // .addRule('jsdoc/empty-tags', ERROR) // 🟢2️⃣
-    // .addRule('jsdoc/implements-on-classes', ERROR) // 🟢2️⃣
-    // .addRule('jsdoc/imports-as-dependencies', OFF)
-    // .addRule('jsdoc/informative-docs', OFF) // 1️⃣
-    .addRule('jsdoc/lines-before-block', ERROR) // 4️⃣
-    // .addRule('jsdoc/match-description', OFF) // 1️⃣
-    // .addRule('jsdoc/match-name', OFF)
-    // .addRule('jsdoc/multiline-blocks', ERROR) // 🟢4️⃣
-    .addRule('jsdoc/no-bad-blocks', ERROR) // 2️⃣
-    .addRule('jsdoc/no-blank-block-descriptions', ERROR) // 1️⃣
-    .addRule('jsdoc/no-blank-blocks', ERROR) // 1️⃣
+    // .addRule('check-access', ERROR) // 🟢2️⃣
+    // .addRule('check-alignment', ERROR) // 🟢4️⃣
+    // .addRule('check-examples', OFF) // Doesn't work in ESLint 9
+    .addRule('check-indentation', ERROR)
+    .addRule('check-line-alignment', ERROR) // 4️⃣
+    // .addRule('check-param-names', ERROR) // 🟢2️⃣
+    // .addRule('check-property-names', ERROR) // 🟢2️⃣
+    .addRule('check-syntax', ERROR) // 2️⃣
+    // .addRule('check-tag-names', ERROR) // 🟢2️⃣
+    .addRule('check-template-names', ERROR) // 2️⃣
+    // .addRule('check-types', ERROR) // 🟢2️⃣
+    // .addRule('check-values', ERROR) // 🟢2️⃣
+    // .addRule('convert-to-jsdoc-comments', OFF) // Experimental rule
+    // .addRule('empty-tags', ERROR) // 🟢2️⃣
+    // .addRule('implements-on-classes', ERROR) // 🟢2️⃣
+    // .addRule('imports-as-dependencies', OFF)
+    // .addRule('informative-docs', OFF) // 1️⃣
+    .addRule('lines-before-block', ERROR) // 4️⃣
+    // .addRule('match-description', OFF) // 1️⃣
+    // .addRule('match-name', OFF)
+    // .addRule('multiline-blocks', ERROR) // 🟢4️⃣
+    .addRule('no-bad-blocks', ERROR) // 2️⃣
+    .addRule('no-blank-block-descriptions', ERROR) // 1️⃣
+    .addRule('no-blank-blocks', ERROR) // 1️⃣
     // TODO why is this recommended?
-    .addRule('jsdoc/no-defaults', ERROR) // 🟢2️⃣
-    // .addRule('jsdoc/no-missing-syntax', OFF)
-    .addRule('jsdoc/no-multi-asterisks', ERROR, [{allowWhitespace: true}]) // 🟢4️⃣
-    // .addRule('jsdoc/no-restricted-syntax', OFF)
-    // .addRule('jsdoc/no-types', OFF) // 2️⃣
-    // .addRule('jsdoc/no-undefined-types', ERROR) // 🟢2️⃣
-    .addRule('jsdoc/require-asterisk-prefix', ERROR) // 4️⃣
-    // .addRule('jsdoc/require-description', OFF)
-    // .addRule('jsdoc/require-description-complete-sentence', OFF)
-    // .addRule('jsdoc/require-example', OFF) // 3️⃣
-    // .addRule('jsdoc/require-file-overview', OFF)
-    // .addRule('jsdoc/require-hyphen-before-param-description', OFF) // 4️⃣
-    .addRule('jsdoc/require-jsdoc', OFF) // 🟢3️⃣
-    .addRule('jsdoc/require-param', ERROR, [{ignoreWhenAllParamsMissing: true}]) // 🟢3️⃣
-    .addRule('jsdoc/require-param-description', WARNING) // 🟢3️⃣ (error by default)
-    // .addRule('jsdoc/require-param-name', ERROR) // 🟢3️⃣
-    // .addRule('jsdoc/require-param-type', ERROR) // 🟢
-    // .addRule('jsdoc/require-property', ERROR) // 🟢3️⃣
-    .addRule('jsdoc/require-property-description', WARNING) // 🟢3️⃣ (error by default)
-    // .addRule('jsdoc/require-property-name', ERROR) // 🟢3️⃣
-    // .addRule('jsdoc/require-property-type', ERROR) // 🟢
-    .addRule('jsdoc/require-returns', OFF) // 🟢3️⃣
-    // .addRule('jsdoc/require-returns-check', ERROR) // 🟢2️⃣
-    .addRule('jsdoc/require-returns-description', WARNING) // 🟢3️⃣ (error by default)
-    // .addRule('jsdoc/require-returns-type', ERROR) // 🟢
-    // .addRule('jsdoc/require-template', OFF)
-    // .addRule('jsdoc/require-throws', OFF)
-    // .addRule('jsdoc/require-yields', ERROR) // 🟢3️⃣
-    // .addRule('jsdoc/require-yields-check', ERROR) // 🟢2️⃣
-    .addRule('jsdoc/sort-tags', ERROR)
-    // .addRule('jsdoc/tag-lines', ERROR) // 🟢4️⃣
-    // .addRule('jsdoc/text-escaping', OFF) // 1️⃣
-    // .addRule('jsdoc/valid-types', ERROR) // 🟢2️⃣
+    .addRule('no-defaults', ERROR) // 🟢2️⃣
+    // .addRule('no-missing-syntax', OFF)
+    .addRule('no-multi-asterisks', ERROR, [{allowWhitespace: true}]) // 🟢4️⃣
+    // .addRule('no-restricted-syntax', OFF)
+    // .addRule('no-types', OFF) // 2️⃣
+    // .addRule('no-undefined-types', ERROR) // 🟢2️⃣
+    .addRule('require-asterisk-prefix', ERROR) // 4️⃣
+    // .addRule('require-description', OFF)
+    // .addRule('require-description-complete-sentence', OFF)
+    // .addRule('require-example', OFF) // 3️⃣
+    // .addRule('require-file-overview', OFF)
+    // .addRule('require-hyphen-before-param-description', OFF) // 4️⃣
+    .addRule('require-jsdoc', OFF) // 🟢3️⃣
+    .addRule('require-param', ERROR, [{ignoreWhenAllParamsMissing: true}]) // 🟢3️⃣
+    .addRule('require-param-description', WARNING) // 🟢3️⃣ (error by default)
+    // .addRule('require-param-name', ERROR) // 🟢3️⃣
+    // .addRule('require-param-type', ERROR) // 🟢
+    // .addRule('require-property', ERROR) // 🟢3️⃣
+    .addRule('require-property-description', WARNING) // 🟢3️⃣ (error by default)
+    // .addRule('require-property-name', ERROR) // 🟢3️⃣
+    // .addRule('require-property-type', ERROR) // 🟢
+    .addRule('require-returns', OFF) // 🟢3️⃣
+    // .addRule('require-returns-check', ERROR) // 🟢2️⃣
+    .addRule('require-returns-description', WARNING) // 🟢3️⃣ (error by default)
+    // .addRule('require-returns-type', ERROR) // 🟢
+    // .addRule('require-template', OFF)
+    // .addRule('require-throws', OFF)
+    // .addRule('require-yields', ERROR) // 🟢3️⃣
+    // .addRule('require-yields-check', ERROR) // 🟢2️⃣
+    .addRule('sort-tags', ERROR)
+    // .addRule('tag-lines', ERROR) // 🟢4️⃣
+    // .addRule('text-escaping', OFF) // 1️⃣
+    // .addRule('valid-types', ERROR) // 🟢2️⃣
     .addOverrides();
 
-  const tsBuilder = new ConfigEntryBuilder<'jsdoc'>(
+  const tsBuilder = new ConfigEntryBuilder(
+    'jsdoc',
     typeof typescriptOnlyRules === 'object' ? typescriptOnlyRules : {},
     internalOptions,
   );
-  if (typescriptOnlyRules) {
-    const pluginSettingsForTs =
-      (typeof typescriptOnlyRules === 'object' ? typescriptOnlyRules.settings : undefined) ||
-      pluginSettings;
+  const pluginSettingsForTs =
+    (typeof typescriptOnlyRules === 'object' ? typescriptOnlyRules.settings : undefined) ||
+    pluginSettings;
 
-    builder
-      .addConfig(
-        [
-          'jsdoc/ts',
-          {
-            includeDefaultFilesAndIgnores: true,
-            filesFallback: [GLOB_TS, GLOB_TSX],
-          },
-        ],
+  builder
+    .addConfig(
+      [
+        'jsdoc/ts',
         {
-          ...(pluginSettingsForTs && {
-            settings: {
-              jsdoc: pluginSettingsForTs,
-            },
-          }),
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: [GLOB_TS, GLOB_TSX],
         },
-      )
-      .addRule('jsdoc/no-types', ERROR)
-      .addRule('jsdoc/no-undefined-types', OFF)
-      .addRule('jsdoc/require-param-type', OFF)
-      .addRule('jsdoc/require-property-type', OFF)
-      .addRule('jsdoc/require-returns-type', OFF)
-      .addOverrides();
-  }
+      ],
+      {
+        ...(pluginSettingsForTs && {
+          settings: {
+            jsdoc: pluginSettingsForTs,
+          },
+        }),
+      },
+    )
+    .addRule('no-types', ERROR)
+    .addRule('no-undefined-types', OFF)
+    .addRule('require-param-type', OFF)
+    .addRule('require-property-type', OFF)
+    .addRule('require-returns-type', OFF)
+    .addOverrides();
 
-  return [...builder.getAllConfigs(), ...tsBuilder.getAllConfigs()];
+  return [...builder.getAllConfigs(), ...(typescriptOnlyRules ? tsBuilder.getAllConfigs() : [])];
 };

@@ -58,7 +58,7 @@ export const importEslintConfig = (
   const {isTypescriptEnabled, tsResolverOptions, noDuplicatesOptions} = options;
   const noUnresolvedIgnores = arraify(options.importPatternsToIgnoreWhenTryingToResolve);
 
-  const builder = new ConfigEntryBuilder<'import'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('import', options, internalOptions);
 
   builder
     .addConfig(['import', {includeDefaultFilesAndIgnores: true}], {
@@ -85,12 +85,12 @@ export const importEslintConfig = (
     .addBulkRules(
       isTypescriptEnabled && pluginRenamer(eslintPluginImportX.configs.typescript.rules),
     )
-    // .addRule('import/consistent-type-specifier-style', OFF)
-    // .addRule('import/default', ERROR)
-    // .addRule('import/dynamic-import-chunkname', OFF)
-    // .addRule('import/export', ERROR)
-    // .addRule('import/exports-last', OFF)
-    .addRule('import/extensions', options.requireModuleExtensions ? ERROR : OFF, [
+    // .addRule('consistent-type-specifier-style', OFF)
+    // .addRule('default', ERROR)
+    // .addRule('dynamic-import-chunkname', OFF)
+    // .addRule('export', ERROR)
+    // .addRule('exports-last', OFF)
+    .addRule('extensions', options.requireModuleExtensions ? ERROR : OFF, [
       (typeof options.requireModuleExtensions === 'object' &&
         options.requireModuleExtensions['*']) ||
         'ignorePackages',
@@ -103,55 +103,55 @@ export const importEslintConfig = (
         ...(typeof options.requireModuleExtensions === 'object' && options.requireModuleExtensions),
       },
     ])
-    .addRule('import/first', ERROR)
-    // .addRule('import/group-exports', OFF)
-    // .addRule('import/max-dependencies', OFF)
-    // .addRule('import/named', ERROR | OFF) // disabled in TS config
-    // .addRule('import/namespace', ERROR)
-    .addRule('import/newline-after-import', ERROR)
-    .addRule('import/no-absolute-path', ERROR)
-    // .addRule('import/no-amd', OFF)
-    // .addRule('import/no-anonymous-default-export', OFF)
-    // .addRule('import/no-commonjs', OFF)
-    .addRule('import/no-cycle', WARNING)
-    .addRule('import/no-default-export', ERROR)
-    .addRule('import/no-deprecated', WARNING)
-    .addRule('import/no-duplicates', ERROR, [{'prefer-inline': true, ...noDuplicatesOptions}]) // Default: warn
-    // .addRule('import/no-dynamic-require', OFF)
-    .addRule('import/no-empty-named-blocks', ERROR)
-    .addRule('import/no-extraneous-dependencies', ERROR, [{peerDependencies: false}])
-    // .addRule('import/no-import-module-exports', OFF) // TODO enable?
-    // .addRule('import/no-internal-modules', OFF)
-    .addRule('import/no-mutable-exports', WARNING)
-    .addRule('import/no-named-as-default-member', OFF)
-    .addRule('import/no-named-as-default', OFF) // Not very useful + false positives for axios@1.6.7?
-    // .addRule('import/no-named-default', OFF)
-    // .addRule('import/no-named-export', OFF)
-    // .addRule('import/no-namespace', OFF)
-    // .addRule('import/no-nodejs-modules', OFF) // TODO
-    // .addRule('import/no-relative-packages', OFF)
-    // .addRule('import/no-relative-parent-imports', OFF)
-    // .addRule('import/no-restricted-paths', OFF)
-    .addRule('import/no-self-import', ERROR)
-    // .addRule('import/no-unassigned-import', OFF)
-    .addRule('import/no-unresolved', ERROR, [
+    .addRule('first', ERROR)
+    // .addRule('group-exports', OFF)
+    // .addRule('max-dependencies', OFF)
+    // .addRule('named', ERROR | OFF) // disabled in TS config
+    // .addRule('namespace', ERROR)
+    .addRule('newline-after-import', ERROR)
+    .addRule('no-absolute-path', ERROR)
+    // .addRule('no-amd', OFF)
+    // .addRule('no-anonymous-default-export', OFF)
+    // .addRule('no-commonjs', OFF)
+    .addRule('no-cycle', WARNING)
+    .addRule('no-default-export', ERROR)
+    .addRule('no-deprecated', WARNING)
+    .addRule('no-duplicates', ERROR, [{'prefer-inline': true, ...noDuplicatesOptions}]) // Default: warn
+    // .addRule('no-dynamic-require', OFF)
+    .addRule('no-empty-named-blocks', ERROR)
+    .addRule('no-extraneous-dependencies', ERROR, [{peerDependencies: false}])
+    // .addRule('no-import-module-exports', OFF) // TODO enable?
+    // .addRule('no-internal-modules', OFF)
+    .addRule('no-mutable-exports', WARNING)
+    .addRule('no-named-as-default-member', OFF)
+    .addRule('no-named-as-default', OFF) // Not very useful + false positives for axios@1.6.7?
+    // .addRule('no-named-default', OFF)
+    // .addRule('no-named-export', OFF)
+    // .addRule('no-namespace', OFF)
+    // .addRule('no-nodejs-modules', OFF) // TODO
+    // .addRule('no-relative-packages', OFF)
+    // .addRule('no-relative-parent-imports', OFF)
+    // .addRule('no-restricted-paths', OFF)
+    .addRule('no-self-import', ERROR)
+    // .addRule('no-unassigned-import', OFF)
+    .addRule('no-unresolved', ERROR, [
       {
         ...(isNonEmptyArray(noUnresolvedIgnores) && {
           ignore: noUnresolvedIgnores,
         }),
       },
     ])
-    // .addRule('import/no-unused-modules', OFF)
-    .addRule('import/no-useless-path-segments', WARNING)
-    .addRule('import/no-webpack-loader-syntax', ERROR)
-    .addRule('import/order', ERROR, [
+    // .addRule('no-unused-modules', OFF)
+    .addRule('no-useless-path-segments', WARNING)
+    .addRule('no-webpack-loader-syntax', ERROR)
+    .addRule('order', ERROR, [
       {
         groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
         alphabetize: {order: 'asc'},
       },
     ])
-    // .addRule('import/prefer-default-export', OFF)
-    // .addRule('import/unambiguous', OFF)
+    // .addRule('prefer-default-export', OFF)
+    // .addRule('unambiguous', OFF)
     .addOverrides();
 
   return builder.getAllConfigs();

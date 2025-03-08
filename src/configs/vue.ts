@@ -194,7 +194,7 @@ export const vueEslintConfig = (
   const inNuxtAppDir = joinPaths.bind(null, options.nuxtOrVueProjectDir);
   const nuxtLayoutsFilesGlob: string = inNuxtAppDir('layouts/**/*.vue');
 
-  const builder = new ConfigEntryBuilder<'vue'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('vue', options, internalOptions);
 
   builder.addConfig(['vue/setup', {doNotIgnoreMarkdown: true}], {
     files: [GLOB_VUE, ...files],
@@ -238,102 +238,102 @@ export const vueEslintConfig = (
     })
     .addBulkRules(recommendedRules)
     // 🟢 Base
-    .addRule('vue/comment-directive', ERROR, [
+    .addRule('comment-directive', ERROR, [
       // false by default
       {reportUnusedDisableDirectives: options.reportUnusedDisableDirectives ?? true},
     ])
-    // .addRule('vue/jsx-uses-vars', ERROR)
+    // .addRule('jsx-uses-vars', ERROR)
     // 🟢 Priority A: Essential
-    // .addRule('vue/multi-word-component-names', ERROR)
-    // .addRule('vue/no-arrow-functions-in-watch', ERROR)
-    // .addRule('vue/no-async-in-computed-properties', ERROR)
-    // .addRule('vue/no-child-content', ERROR)
-    // .addRule('vue/no-computed-properties-in-data', ERROR)
-    // .addRule('vue/no-deprecated-data-object-declaration', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-destroyed-lifecycle', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-dollar-listeners-api', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-dollar-scopedslots-api', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-events-api', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-filter', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-functional-template', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-html-element-is', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-inline-template', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-props-default-this', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-router-link-tag-prop', ERROR) // 3️⃣
-    .addRule('vue/no-deprecated-scope-attribute', isLess2_5 ? OFF : ERROR) // 3️⃣ deprecated in 2.5.0
-    .addRule('vue/no-deprecated-slot-attribute', isLess2_6 ? OFF : ERROR) // 3️⃣ deprecated in 2.6.0
-    .addRule('vue/no-deprecated-slot-scope-attribute', isLess2_6 ? OFF : ERROR) // 3️⃣ deprecated in 2.6.0
-    // .addRule('vue/no-deprecated-v-bind-sync', ERROR) // 3️⃣
-    .addRule('vue/no-deprecated-v-is', isLess3_1 ? OFF : ERROR) // 3️⃣ deprecated in 3.1.0
-    // .addRule('vue/no-deprecated-v-on-native-modifier', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-v-on-number-modifiers', ERROR) // 3️⃣
-    // .addRule('vue/no-deprecated-vue-config-keycodes', ERROR) // 3️⃣
-    // .addRule('vue/no-dupe-keys', ERROR)
-    // .addRule('vue/no-dupe-v-else-if', ERROR)
-    // .addRule('vue/no-duplicate-attributes', ERROR)
-    // .addRule('vue/no-export-in-script-setup', ERROR)
-    // .addRule('vue/no-expose-after-await', ERROR) // 3️⃣
-    // .addRule('vue/no-lifecycle-after-await', ERROR) // 3️⃣
-    // .addRule('vue/no-mutating-props', ERROR)
-    // .addRule('vue/no-parsing-error', ERROR)
-    // .addRule('vue/no-ref-as-operand', ERROR)
-    // .addRule('vue/no-reserved-component-names', ERROR)
-    // .addRule('vue/no-reserved-keys', ERROR)
-    // .addRule('vue/no-reserved-props', ERROR)
-    // .addRule('vue/no-shared-component-data', ERROR)
-    // .addRule('vue/no-side-effects-in-computed-properties', ERROR)
-    // .addRule('vue/no-template-key', ERROR)
-    // .addRule('vue/no-textarea-mustache', ERROR)
-    // .addRule('vue/no-unused-components', ERROR)
-    // .addRule('vue/no-unused-vars', ERROR)
-    // .addRule('vue/no-use-computed-property-like-method', ERROR)
-    // .addRule('vue/no-use-v-if-with-v-for', ERROR)
-    // .addRule('vue/no-useless-template-attributes', ERROR)
-    // .addRule('vue/no-v-for-template-key-on-child', ERROR) // 3️⃣
-    // .addRule('vue/no-v-text-v-html-on-component', ERROR)
-    // .addRule('vue/no-watch-after-await', ERROR) // 3️⃣
-    // .addRule('vue/prefer-import-from-vue', ERROR) // 3️⃣
-    // .addRule('vue/require-component-is', ERROR)
-    // .addRule('vue/require-prop-type-constructor', ERROR)
-    // .addRule('vue/require-render-return', ERROR)
-    // .addRule('vue/require-slots-as-functions', ERROR) // 3️⃣
-    // .addRule('vue/require-toggle-inside-transition', ERROR) // 3️⃣
-    // .addRule('vue/require-v-for-key', ERROR)
-    // .addRule('vue/require-valid-default-prop', ERROR)
-    // .addRule('vue/return-in-computed-property', ERROR)
-    // .addRule('vue/return-in-emits-validator', ERROR)
-    // .addRule('vue/use-v-on-exact', ERROR)
-    // .addRule('vue/valid-attribute-name', ERROR)
-    // .addRule('vue/valid-define-emits', ERROR)
-    // .addRule('vue/valid-define-props', ERROR)
-    // .addRule('vue/valid-next-tick', ERROR)
-    // .addRule('vue/valid-template-root', ERROR)
-    // .addRule('vue/valid-v-bind', ERROR)
-    // .addRule('vue/valid-v-cloak', ERROR)
-    // .addRule('vue/valid-v-else-if', ERROR)
-    // .addRule('vue/valid-v-else', ERROR)
-    // .addRule('vue/valid-v-for', ERROR)
-    // .addRule('vue/valid-v-html', ERROR)
-    // .addRule('vue/valid-v-if', ERROR)
-    // .addRule('vue/valid-v-is', ERROR) // 3️⃣
-    // .addRule('vue/valid-v-memo', ERROR) // 3️⃣
-    // .addRule('vue/valid-v-model', ERROR)
-    // .addRule('vue/valid-v-on', ERROR)
-    // .addRule('vue/valid-v-once', ERROR)
-    // .addRule('vue/valid-v-pre', ERROR)
-    // .addRule('vue/valid-v-show', ERROR)
-    // .addRule('vue/valid-v-slot', ERROR)
-    // .addRule('vue/valid-v-text', ERROR)
+    // .addRule('multi-word-component-names', ERROR)
+    // .addRule('no-arrow-functions-in-watch', ERROR)
+    // .addRule('no-async-in-computed-properties', ERROR)
+    // .addRule('no-child-content', ERROR)
+    // .addRule('no-computed-properties-in-data', ERROR)
+    // .addRule('no-deprecated-data-object-declaration', ERROR) // 3️⃣
+    // .addRule('no-deprecated-destroyed-lifecycle', ERROR) // 3️⃣
+    // .addRule('no-deprecated-dollar-listeners-api', ERROR) // 3️⃣
+    // .addRule('no-deprecated-dollar-scopedslots-api', ERROR) // 3️⃣
+    // .addRule('no-deprecated-events-api', ERROR) // 3️⃣
+    // .addRule('no-deprecated-filter', ERROR) // 3️⃣
+    // .addRule('no-deprecated-functional-template', ERROR) // 3️⃣
+    // .addRule('no-deprecated-html-element-is', ERROR) // 3️⃣
+    // .addRule('no-deprecated-inline-template', ERROR) // 3️⃣
+    // .addRule('no-deprecated-props-default-this', ERROR) // 3️⃣
+    // .addRule('no-deprecated-router-link-tag-prop', ERROR) // 3️⃣
+    .addRule('no-deprecated-scope-attribute', isLess2_5 ? OFF : ERROR) // 3️⃣ deprecated in 2.5.0
+    .addRule('no-deprecated-slot-attribute', isLess2_6 ? OFF : ERROR) // 3️⃣ deprecated in 2.6.0
+    .addRule('no-deprecated-slot-scope-attribute', isLess2_6 ? OFF : ERROR) // 3️⃣ deprecated in 2.6.0
+    // .addRule('no-deprecated-v-bind-sync', ERROR) // 3️⃣
+    .addRule('no-deprecated-v-is', isLess3_1 ? OFF : ERROR) // 3️⃣ deprecated in 3.1.0
+    // .addRule('no-deprecated-v-on-native-modifier', ERROR) // 3️⃣
+    // .addRule('no-deprecated-v-on-number-modifiers', ERROR) // 3️⃣
+    // .addRule('no-deprecated-vue-config-keycodes', ERROR) // 3️⃣
+    // .addRule('no-dupe-keys', ERROR)
+    // .addRule('no-dupe-v-else-if', ERROR)
+    // .addRule('no-duplicate-attributes', ERROR)
+    // .addRule('no-export-in-script-setup', ERROR)
+    // .addRule('no-expose-after-await', ERROR) // 3️⃣
+    // .addRule('no-lifecycle-after-await', ERROR) // 3️⃣
+    // .addRule('no-mutating-props', ERROR)
+    // .addRule('no-parsing-error', ERROR)
+    // .addRule('no-ref-as-operand', ERROR)
+    // .addRule('no-reserved-component-names', ERROR)
+    // .addRule('no-reserved-keys', ERROR)
+    // .addRule('no-reserved-props', ERROR)
+    // .addRule('no-shared-component-data', ERROR)
+    // .addRule('no-side-effects-in-computed-properties', ERROR)
+    // .addRule('no-template-key', ERROR)
+    // .addRule('no-textarea-mustache', ERROR)
+    // .addRule('no-unused-components', ERROR)
+    // .addRule('no-unused-vars', ERROR)
+    // .addRule('no-use-computed-property-like-method', ERROR)
+    // .addRule('no-use-v-if-with-v-for', ERROR)
+    // .addRule('no-useless-template-attributes', ERROR)
+    // .addRule('no-v-for-template-key-on-child', ERROR) // 3️⃣
+    // .addRule('no-v-text-v-html-on-component', ERROR)
+    // .addRule('no-watch-after-await', ERROR) // 3️⃣
+    // .addRule('prefer-import-from-vue', ERROR) // 3️⃣
+    // .addRule('require-component-is', ERROR)
+    // .addRule('require-prop-type-constructor', ERROR)
+    // .addRule('require-render-return', ERROR)
+    // .addRule('require-slots-as-functions', ERROR) // 3️⃣
+    // .addRule('require-toggle-inside-transition', ERROR) // 3️⃣
+    // .addRule('require-v-for-key', ERROR)
+    // .addRule('require-valid-default-prop', ERROR)
+    // .addRule('return-in-computed-property', ERROR)
+    // .addRule('return-in-emits-validator', ERROR)
+    // .addRule('use-v-on-exact', ERROR)
+    // .addRule('valid-attribute-name', ERROR)
+    // .addRule('valid-define-emits', ERROR)
+    // .addRule('valid-define-props', ERROR)
+    // .addRule('valid-next-tick', ERROR)
+    // .addRule('valid-template-root', ERROR)
+    // .addRule('valid-v-bind', ERROR)
+    // .addRule('valid-v-cloak', ERROR)
+    // .addRule('valid-v-else-if', ERROR)
+    // .addRule('valid-v-else', ERROR)
+    // .addRule('valid-v-for', ERROR)
+    // .addRule('valid-v-html', ERROR)
+    // .addRule('valid-v-if', ERROR)
+    // .addRule('valid-v-is', ERROR) // 3️⃣
+    // .addRule('valid-v-memo', ERROR) // 3️⃣
+    // .addRule('valid-v-model', ERROR)
+    // .addRule('valid-v-on', ERROR)
+    // .addRule('valid-v-once', ERROR)
+    // .addRule('valid-v-pre', ERROR)
+    // .addRule('valid-v-show', ERROR)
+    // .addRule('valid-v-slot', ERROR)
+    // .addRule('valid-v-text', ERROR)
     // 🟢 Priority B: Strongly Recommended
-    // .addRule('vue/attribute-hyphenation', ERROR)
-    // .addRule('vue/component-definition-name-casing', ERROR)
-    // .addRule('vue/first-attribute-linebreak', ERROR)
-    // .addRule('vue/html-closing-bracket-newline', ERROR)
-    // .addRule('vue/html-closing-bracket-spacing', ERROR)
-    // .addRule('vue/html-end-tags', ERROR)
-    // .addRule('vue/html-indent', ERROR)
-    // .addRule('vue/html-quotes', ERROR)
-    .addRule('vue/html-self-closing', ERROR, [
+    // .addRule('attribute-hyphenation', ERROR)
+    // .addRule('component-definition-name-casing', ERROR)
+    // .addRule('first-attribute-linebreak', ERROR)
+    // .addRule('html-closing-bracket-newline', ERROR)
+    // .addRule('html-closing-bracket-spacing', ERROR)
+    // .addRule('html-end-tags', ERROR)
+    // .addRule('html-indent', ERROR)
+    // .addRule('html-quotes', ERROR)
+    .addRule('html-self-closing', ERROR, [
       {
         html: {
           void: 'any', // TODO Setting other value here for `void` would conflict with Prettier, default is `never`
@@ -342,36 +342,36 @@ export const vueEslintConfig = (
         },
       },
     ])
-    // .addRule('vue/max-attributes-per-line', ERROR)
-    // .addRule('vue/multiline-html-element-content-newline', ERROR)
-    // .addRule('vue/mustache-interpolation-spacing', ERROR)
-    // .addRule('vue/no-multi-spaces', ERROR)
-    // .addRule('vue/no-spaces-around-equal-signs-in-attribute', ERROR)
-    // .addRule('vue/no-template-shadow', ERROR)
-    // .addRule('vue/one-component-per-file', ERROR)
-    // .addRule('vue/prop-name-casing', ERROR)
-    .addRule('vue/require-default-prop', OFF)
-    // .addRule('vue/require-explicit-emits', ERROR) // 3️⃣
-    // .addRule('vue/require-prop-types', ERROR)
-    // .addRule('vue/singleline-html-element-content-newline', ERROR)
-    .addRule('vue/v-bind-style', ERROR, [
+    // .addRule('max-attributes-per-line', ERROR)
+    // .addRule('multiline-html-element-content-newline', ERROR)
+    // .addRule('mustache-interpolation-spacing', ERROR)
+    // .addRule('no-multi-spaces', ERROR)
+    // .addRule('no-spaces-around-equal-signs-in-attribute', ERROR)
+    // .addRule('no-template-shadow', ERROR)
+    // .addRule('one-component-per-file', ERROR)
+    // .addRule('prop-name-casing', ERROR)
+    .addRule('require-default-prop', OFF)
+    // .addRule('require-explicit-emits', ERROR) // 3️⃣
+    // .addRule('require-prop-types', ERROR)
+    // .addRule('singleline-html-element-content-newline', ERROR)
+    .addRule('v-bind-style', ERROR, [
       'shorthand',
       {
         ...(isMin3_4 && {sameNameShorthand: 'always'}),
       },
     ])
-    // .addRule('vue/v-on-event-hyphenation', ERROR) // 3️⃣
-    // .addRule('vue/v-on-style', ERROR)
-    // .addRule('vue/v-slot-style', ERROR)
+    // .addRule('v-on-event-hyphenation', ERROR) // 3️⃣
+    // .addRule('v-on-style', ERROR)
+    // .addRule('v-slot-style', ERROR)
     // 🟢 Priority C: Recommended
-    // .addRule('vue/attributes-order', ERROR)
-    // .addRule('vue/no-lone-template', ERROR)
-    // .addRule('vue/no-multiple-slot-args', ERROR)
-    // .addRule('vue/no-v-html', ERROR)
-    // .addRule('vue/order-in-components', ERROR)
-    // .addRule('vue/this-in-template', ERROR)
+    // .addRule('attributes-order', ERROR)
+    // .addRule('no-lone-template', ERROR)
+    // .addRule('no-multiple-slot-args', ERROR)
+    // .addRule('no-v-html', ERROR)
+    // .addRule('order-in-components', ERROR)
+    // .addRule('this-in-template', ERROR)
     // 🟢 Uncategorized
-    .addRule('vue/block-lang', ERROR, [
+    .addRule('block-lang', ERROR, [
       {
         script: {
           lang: 'ts',
@@ -379,7 +379,7 @@ export const vueEslintConfig = (
         },
       },
     ])
-    .addRule('vue/block-order', ERROR, [
+    .addRule('block-order', ERROR, [
       {
         order: [
           ...(Array.isArray(options.sfcBlockOrder)
@@ -392,27 +392,27 @@ export const vueEslintConfig = (
         ],
       },
     ])
-    // .addRule('vue/block-tag-newline', OFF)
-    .addRule('vue/component-api-style', options.enforceApiStyle == null ? OFF : ERROR, [
+    // .addRule('block-tag-newline', OFF)
+    .addRule('component-api-style', options.enforceApiStyle == null ? OFF : ERROR, [
       [
         options.enforceApiStyle === 'setup' ? 'script-setup' : 'options',
         // allows Composition API (not <script setup>)
         isVue2 ? 'composition-vue2' : 'composition',
       ],
     ])
-    .addRule('vue/component-name-in-template-casing', ERROR, [
+    .addRule('component-name-in-template-casing', ERROR, [
       'kebab-case',
       {
         registeredComponentsOnly: false,
         ignores: ['/^[A-Z][a-z]+$/' /* Single word components must start with a capital letter */],
       },
     ])
-    .addRule('vue/component-options-name-casing', ERROR, ['PascalCase' /* default */])
-    .addRule('vue/custom-event-name-casing', ERROR, ['kebab-case' /* default is `camelCase` */])
-    .addRule('vue/define-emits-declaration', ERROR, [
+    .addRule('component-options-name-casing', ERROR, ['PascalCase' /* default */])
+    .addRule('custom-event-name-casing', ERROR, ['kebab-case' /* default is `camelCase` */])
+    .addRule('define-emits-declaration', ERROR, [
       isMin3_3 ? 'type-literal' /* shorter syntax */ : 'type-based' /* default */,
     ])
-    .addRule('vue/define-macros-order', ERROR, [
+    .addRule('define-macros-order', ERROR, [
       {
         order: [
           'definePage', // unplugin-vue-router: https://uvr.esm.is/guide/extending-routes.html#definepage
@@ -428,40 +428,38 @@ export const vueEslintConfig = (
         ...(isMin3_4 && {defineExposeLast: true}),
       },
     ])
-    .addRule('vue/define-props-declaration', ERROR, [
-      options.enforcePropsDeclarationStyle ?? 'runtime',
-    ])
-    // .addRule('vue/enforce-style-attribute', OFF)
-    .addRule('vue/html-button-has-type', ERROR)
-    // .addRule('vue/html-comment-content-newline', OFF)
-    // .addRule('vue/html-comment-content-spacing', OFF)
-    // .addRule('vue/html-comment-indent', OFF)
-    // .addRule('vue/match-component-file-name', OFF)
-    // .addRule('vue/match-component-import-name', OFF)
-    // .addRule('vue/max-lines-per-block', OFF)
-    // .addRule('vue/max-props', OFF) // >=9.28.0
-    // .addRule('vue/max-template-depth', OFF) // >=9.28.0
-    // .addRule('vue/new-line-between-multi-line-property', OFF)
-    // .addRule('vue/next-tick-style', OFF)
-    // .addRule('vue/no-bare-strings-in-template', OFF)
-    // .addRule('vue/no-boolean-default', OFF)
-    .addRule('vue/no-deprecated-delete-set', isVue3 ? ERROR : OFF) // >=9.29.0
-    .addRule('vue/no-deprecated-model-definition', isVue3 ? ERROR : OFF)
-    .addRule('vue/no-duplicate-attr-inheritance', ERROR)
-    .addRule('vue/no-empty-component-block', ERROR)
-    .addRule('vue/no-import-compiler-macros', ERROR) // >=10.0.0
-    .addRule('vue/no-multiple-objects-in-class', ERROR)
-    .addRule('vue/no-potential-component-option-typo', ERROR)
-    .addRule('vue/no-ref-object-reactivity-loss', ERROR)
-    // .addRule('vue/no-required-prop-with-default', ERROR)
-    // .addRule('vue/no-restricted-block', OFF)
-    // .addRule('vue/no-restricted-call-after-await', OFF)
-    // .addRule('vue/no-restricted-class', OFF)
-    // .addRule('vue/no-restricted-component-names', OFF)
-    // .addRule('vue/no-restricted-component-options', OFF)
-    // .addRule('vue/no-restricted-custom-event', OFF)
+    .addRule('define-props-declaration', ERROR, [options.enforcePropsDeclarationStyle ?? 'runtime'])
+    // .addRule('enforce-style-attribute', OFF)
+    .addRule('html-button-has-type', ERROR)
+    // .addRule('html-comment-content-newline', OFF)
+    // .addRule('html-comment-content-spacing', OFF)
+    // .addRule('html-comment-indent', OFF)
+    // .addRule('match-component-file-name', OFF)
+    // .addRule('match-component-import-name', OFF)
+    // .addRule('max-lines-per-block', OFF)
+    // .addRule('max-props', OFF) // >=9.28.0
+    // .addRule('max-template-depth', OFF) // >=9.28.0
+    // .addRule('new-line-between-multi-line-property', OFF)
+    // .addRule('next-tick-style', OFF)
+    // .addRule('no-bare-strings-in-template', OFF)
+    // .addRule('no-boolean-default', OFF)
+    .addRule('no-deprecated-delete-set', isVue3 ? ERROR : OFF) // >=9.29.0
+    .addRule('no-deprecated-model-definition', isVue3 ? ERROR : OFF)
+    .addRule('no-duplicate-attr-inheritance', ERROR)
+    .addRule('no-empty-component-block', ERROR)
+    .addRule('no-import-compiler-macros', ERROR) // >=10.0.0
+    .addRule('no-multiple-objects-in-class', ERROR)
+    .addRule('no-potential-component-option-typo', ERROR)
+    .addRule('no-ref-object-reactivity-loss', ERROR)
+    // .addRule('no-required-prop-with-default', ERROR)
+    // .addRule('no-restricted-block', OFF)
+    // .addRule('no-restricted-call-after-await', OFF)
+    // .addRule('no-restricted-class', OFF)
+    // .addRule('no-restricted-component-names', OFF)
+    // .addRule('no-restricted-component-options', OFF)
+    // .addRule('no-restricted-custom-event', OFF)
     .addRule(
-      'vue/no-restricted-html-elements',
+      'no-restricted-html-elements',
       ERROR,
       Object.entries({
         ...noRestrictedHtmlElementsDefault,
@@ -470,16 +468,16 @@ export const vueEslintConfig = (
         .filter(([, isDisallowed]) => isDisallowed)
         .map(([tag]) => tag),
     )
-    // .addRule('vue/no-restricted-props', OFF)
-    // .addRule('vue/no-restricted-static-attribute', OFF)
-    // .addRule('vue/no-restricted-v-bind', OFF)
-    // .addRule('vue/no-restricted-v-on', OFF)
-    // .addRule('vue/no-root-v-if', OFF)
-    .addRule('vue/no-setup-props-reactivity-loss', ERROR)
-    // .addRule('vue/no-static-inline-styles', OFF)
-    // .addRule('vue/no-template-target-blank', OFF)
-    .addRule('vue/no-this-in-before-route-enter', ERROR)
-    .addRule('vue/no-undef-components', ERROR, [
+    // .addRule('no-restricted-props', OFF)
+    // .addRule('no-restricted-static-attribute', OFF)
+    // .addRule('no-restricted-v-bind', OFF)
+    // .addRule('no-restricted-v-on', OFF)
+    // .addRule('no-root-v-if', OFF)
+    .addRule('no-setup-props-reactivity-loss', ERROR)
+    // .addRule('no-static-inline-styles', OFF)
+    // .addRule('no-template-target-blank', OFF)
+    .addRule('no-this-in-before-route-enter', ERROR)
+    .addRule('no-undef-components', ERROR, [
       {
         ignorePatterns: [
           'router-link',
@@ -492,20 +490,20 @@ export const vueEslintConfig = (
       },
     ])
     // TODO enable if script setup is enforced and only in JS?
-    // .addRule('vue/no-undef-properties', OFF)
-    .addRule('vue/no-unsupported-features', ERROR, [
+    // .addRule('no-undef-properties', OFF)
+    .addRule('no-unsupported-features', ERROR, [
       {version: `^${options.fullVersion || majorVersion}`},
     ])
-    .addRule('vue/no-unused-emit-declarations', ERROR)
-    // .addRule('vue/no-unused-properties', OFF)
-    .addRule('vue/no-unused-refs', ERROR)
-    .addRule('vue/no-use-v-else-with-v-for', ERROR)
-    .addRule('vue/no-useless-mustaches', ERROR)
-    .addRule('vue/no-useless-v-bind', ERROR)
-    // .addRule('vue/no-v-text', OFF)
-    .addRule('vue/padding-line-between-blocks', ERROR)
-    // .addRule('vue/padding-line-between-tags', OFF)
-    .addRule('vue/padding-lines-in-component-definition', ERROR, [
+    .addRule('no-unused-emit-declarations', ERROR)
+    // .addRule('no-unused-properties', OFF)
+    .addRule('no-unused-refs', ERROR)
+    .addRule('no-use-v-else-with-v-for', ERROR)
+    .addRule('no-useless-mustaches', ERROR)
+    .addRule('no-useless-v-bind', ERROR)
+    // .addRule('no-v-text', OFF)
+    .addRule('padding-line-between-blocks', ERROR)
+    // .addRule('padding-line-between-tags', OFF)
+    .addRule('padding-lines-in-component-definition', ERROR, [
       {
         withinOption: {
           // TODO understand the difference between `betweenItems` and `withinEach`: https://eslint.vuejs.org/rules/padding-lines-in-component-definition.html
@@ -513,77 +511,74 @@ export const vueEslintConfig = (
         },
       },
     ])
-    .addRule('vue/prefer-define-options', isMin3_3 ? ERROR : OFF)
-    .addRule('vue/prefer-prop-type-boolean-first', ERROR)
-    .addRule('vue/prefer-separate-static-class', ERROR)
-    .addRule('vue/prefer-true-attribute-shorthand', ERROR)
-    .addRule(
-      'vue/prefer-use-template-ref',
-      (options.preferUseTemplateRef ?? isMin3_5) ? ERROR : OFF,
-    )
-    .addRule('vue/require-default-export', ERROR) // >=9.28.0
-    .addRule('vue/require-direct-export', ERROR)
-    // .addRule('vue/require-emit-validator', OFF)
-    .addRule('vue/require-explicit-slots', isMin3_3 ? ERROR : OFF)
-    // .addRule('vue/require-expose', OFF)
-    .addRule('vue/require-macro-variable-name', ERROR)
-    // .addRule('vue/require-name-property', OFF)
-    // .addRule('vue/require-prop-comment', OFF)
-    .addRule('vue/require-typed-object-prop', ERROR)
-    .addRule('vue/require-typed-ref', ERROR)
-    // .addRule('vue/restricted-component-names', OFF) // >= 9.32.0
-    .addRule('vue/slot-name-casing', ERROR /* `camelCase` is default */) // >= 9.32.0
-    // .addRule('vue/script-indent', OFF)
-    // .addRule('vue/sort-keys', OFF)
-    // .addRule('vue/static-class-names-order', OFF)
-    .addRule('vue/v-for-delimiter-style', ERROR, ['in' /* default */])
+    .addRule('prefer-define-options', isMin3_3 ? ERROR : OFF)
+    .addRule('prefer-prop-type-boolean-first', ERROR)
+    .addRule('prefer-separate-static-class', ERROR)
+    .addRule('prefer-true-attribute-shorthand', ERROR)
+    .addRule('prefer-use-template-ref', (options.preferUseTemplateRef ?? isMin3_5) ? ERROR : OFF)
+    .addRule('require-default-export', ERROR) // >=9.28.0
+    .addRule('require-direct-export', ERROR)
+    // .addRule('require-emit-validator', OFF)
+    .addRule('require-explicit-slots', isMin3_3 ? ERROR : OFF)
+    // .addRule('require-expose', OFF)
+    .addRule('require-macro-variable-name', ERROR)
+    // .addRule('require-name-property', OFF)
+    // .addRule('require-prop-comment', OFF)
+    .addRule('require-typed-object-prop', ERROR)
+    .addRule('require-typed-ref', ERROR)
+    // .addRule('restricted-component-names', OFF) // >= 9.32.0
+    .addRule('slot-name-casing', ERROR /* `camelCase` is default */) // >= 9.32.0
+    // .addRule('script-indent', OFF)
+    // .addRule('sort-keys', OFF)
+    // .addRule('static-class-names-order', OFF)
+    .addRule('v-for-delimiter-style', ERROR, ['in' /* default */])
     // This rule is not required in Vue 3, as the key is automatically assigned to the elements.
-    .addRule('vue/v-for-delimiter-style', isVue2 ? ERROR : OFF)
+    .addRule('v-for-delimiter-style', isVue2 ? ERROR : OFF)
     // TODO change to [inline, inline-function] once this is landed: https://github.com/vuejs/eslint-plugin-vue/issues/2460
-    .addRule('vue/v-on-handler-style', ERROR, ['inline'])
-    .addRule('vue/valid-define-options', isMin3_3 ? ERROR : OFF)
+    .addRule('v-on-handler-style', ERROR, ['inline'])
+    .addRule('valid-define-options', isMin3_3 ? ERROR : OFF)
     // 🟢 Extension Rules
-    // .addRule('vue/array-bracket-newline', OFF)
-    // .addRule('vue/array-bracket-spacing', OFF)
-    // .addRule('vue/array-element-newline', OFF)
-    // .addRule('vue/arrow-spacing', OFF)
-    // .addRule('vue/block-spacing', OFF)
-    // .addRule('vue/brace-style', OFF)
-    .addRule('vue/camelcase', ERROR, RULE_CAMELCASE_OPTIONS)
-    // .addRule('vue/comma-dangle', OFF)
-    // .addRule('vue/comma-spacing', OFF)
-    // .addRule('vue/comma-style', OFF)
-    // .addRule('vue/dot-location', OFF)
+    // .addRule('array-bracket-newline', OFF)
+    // .addRule('array-bracket-spacing', OFF)
+    // .addRule('array-element-newline', OFF)
+    // .addRule('arrow-spacing', OFF)
+    // .addRule('block-spacing', OFF)
+    // .addRule('brace-style', OFF)
+    .addRule('camelcase', ERROR, RULE_CAMELCASE_OPTIONS)
+    // .addRule('comma-dangle', OFF)
+    // .addRule('comma-spacing', OFF)
+    // .addRule('comma-style', OFF)
+    // .addRule('dot-location', OFF)
     .addRule(
-      'vue/dot-notation',
+      'dot-notation',
       options.noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles ? OFF : ERROR,
     )
-    .addRule('vue/eqeqeq', ERROR, RULE_EQEQEQ_OPTIONS)
-    // .addRule('vue/func-call-spacing', OFF)
-    // .addRule('vue/key-spacing', OFF)
-    // .addRule('vue/keyword-spacing', OFF)
-    // .addRule('vue/max-len', OFF)
-    // .addRule('vue/multiline-ternary', OFF)
-    .addRule('vue/no-console', ERROR)
-    .addRule('vue/no-constant-condition', WARNING)
-    .addRule('vue/no-empty-pattern', ERROR)
-    // .addRule('vue/no-extra-parens', OFF)
-    .addRule('vue/no-irregular-whitespace', ERROR)
-    .addRule('vue/no-loss-of-precision', ERROR)
-    // .addRule('vue/no-restricted-syntax', OFF)
-    .addRule('vue/no-sparse-arrays', ERROR)
-    .addRule('vue/no-useless-concat', ERROR)
-    // .addRule('vue/object-curly-newline', OFF)
-    // .addRule('vue/object-curly-spacing', OFF)
-    // .addRule('vue/object-property-newline', OFF)
-    .addRule('vue/object-shorthand', ERROR)
-    // .addRule('vue/operator-linebreak', OFF)
-    .addRule('vue/prefer-template', ERROR)
-    // .addRule('vue/quote-props', OFF)
-    // .addRule('vue/space-in-parens', OFF)
-    // .addRule('vue/space-infix-ops', OFF)
-    // .addRule('vue/space-unary-ops', OFF)
-    // .addRule('vue/template-curly-spacing', OFF)
+    .addRule('eqeqeq', ERROR, RULE_EQEQEQ_OPTIONS)
+    // .addRule('func-call-spacing', OFF)
+    // .addRule('key-spacing', OFF)
+    // .addRule('keyword-spacing', OFF)
+    // .addRule('max-len', OFF)
+    // .addRule('multiline-ternary', OFF)
+    .addRule('no-console', ERROR)
+    .addRule('no-constant-condition', WARNING)
+    .addRule('no-empty-pattern', ERROR)
+    // .addRule('no-extra-parens', OFF)
+    .addRule('no-irregular-whitespace', ERROR)
+    .addRule('no-loss-of-precision', ERROR)
+    // .addRule('no-restricted-syntax', OFF)
+    .addRule('no-sparse-arrays', ERROR)
+    .addRule('no-useless-concat', ERROR)
+    // .addRule('object-curly-newline', OFF)
+    // .addRule('object-curly-spacing', OFF)
+    // .addRule('object-property-newline', OFF)
+    .addRule('object-shorthand', ERROR)
+    // .addRule('operator-linebreak', OFF)
+    .addRule('prefer-template', ERROR)
+    // .addRule('quote-props', OFF)
+    // .addRule('space-in-parens', OFF)
+    // .addRule('space-infix-ops', OFF)
+    // .addRule('space-unary-ops', OFF)
+    // .addRule('template-curly-spacing', OFF)
     // 🔵 Not working great in Vue files
     .addAnyRule('@typescript-eslint/prefer-function-type', OFF)
     .addAnyRule('@typescript-eslint/unified-signatures', OFF)
@@ -607,13 +602,13 @@ export const vueEslintConfig = (
         .flat()
         .filter((v) => typeof v === 'string'),
     })
-    .addRule('vue/multi-word-component-names', OFF);
+    .addRule('multi-word-component-names', OFF);
 
   const vueAllowImplicitSlotsConfig = builder.addConfig('vue/allow-implicit-slots', {
     files: [nuxtLayoutsFilesGlob],
   });
   if (isNuxtEnabled) {
-    vueAllowImplicitSlotsConfig.addRule('vue/require-explicit-slots', OFF);
+    vueAllowImplicitSlotsConfig.addRule('require-explicit-slots', OFF);
   }
 
   builder
@@ -631,7 +626,8 @@ export const vueEslintConfig = (
     })
     .addAnyRule('import/no-default-export', OFF);
 
-  const a11yConfig = builder.addConfig(
+  const builderA11y = new ConfigEntryBuilder('vuejs-accessibility', {}, internalOptions);
+  const a11yConfig = builderA11y.addConfig(
     [
       'vue/a11y',
       {
@@ -642,66 +638,64 @@ export const vueEslintConfig = (
       files,
     },
   );
-  if (a11y) {
-    a11yConfig
-      .addBulkRules(
-        eslintPluginVueA11y.configs['flat/recommended'].find((v) => 'rules' in v)?.rules,
-      )
-      // .addRule('vuejs-accessibility/alt-text', ERROR)
-      // .addRule('vuejs-accessibility/anchor-has-content', ERROR)
-      // .addRule('vuejs-accessibility/aria-props', ERROR)
-      // .addRule('vuejs-accessibility/aria-role', ERROR)
-      // .addRule('vuejs-accessibility/aria-unsupported-elements', ERROR)
-      // .addRule('vuejs-accessibility/click-events-have-key-events', ERROR)
-      // .addRule('vuejs-accessibility/form-control-has-label', ERROR)
-      // .addRule('vuejs-accessibility/heading-has-content', ERROR)
-      // .addRule('vuejs-accessibility/iframe-has-title', ERROR)
-      // .addRule('vuejs-accessibility/interactive-supports-focus', ERROR)
-      .addRule('vuejs-accessibility/label-has-for', ERROR, [{allowChildren: true}])
-      // .addRule('vuejs-accessibility/media-has-caption', ERROR)
-      // .addRule('vuejs-accessibility/mouse-events-have-key-events', ERROR)
-      // .addRule('vuejs-accessibility/no-access-key', ERROR)
-      // .addRule('vuejs-accessibility/no-autofocus', ERROR)
-      // .addRule('vuejs-accessibility/no-distracting-elements', ERROR)
-      // .addRule('vuejs-accessibility/no-onchange', ERROR)
-      // .addRule('vuejs-accessibility/no-redundant-roles', ERROR)
-      // .addRule('vuejs-accessibility/no-static-element-interactions', ERROR)
-      // .addRule('vuejs-accessibility/role-has-required-aria-props', ERROR)
-      // .addRule('vuejs-accessibility/tabindex-no-positive', ERROR)
-      .addBulkRules(options.overridesA11y);
-  }
+  a11yConfig
+    .addBulkRules(eslintPluginVueA11y.configs['flat/recommended'].find((v) => 'rules' in v)?.rules)
+    // .addRule('alt-text', ERROR)
+    // .addRule('anchor-has-content', ERROR)
+    // .addRule('aria-props', ERROR)
+    // .addRule('aria-role', ERROR)
+    // .addRule('aria-unsupported-elements', ERROR)
+    // .addRule('click-events-have-key-events', ERROR)
+    // .addRule('form-control-has-label', ERROR)
+    // .addRule('heading-has-content', ERROR)
+    // .addRule('iframe-has-title', ERROR)
+    // .addRule('interactive-supports-focus', ERROR)
+    .addRule('label-has-for', ERROR, [{allowChildren: true}])
+    // .addRule('media-has-caption', ERROR)
+    // .addRule('mouse-events-have-key-events', ERROR)
+    // .addRule('no-access-key', ERROR)
+    // .addRule('no-autofocus', ERROR)
+    // .addRule('no-distracting-elements', ERROR)
+    // .addRule('no-onchange', ERROR)
+    // .addRule('no-redundant-roles', ERROR)
+    // .addRule('no-static-element-interactions', ERROR)
+    // .addRule('role-has-required-aria-props', ERROR)
+    // .addRule('tabindex-no-positive', ERROR)
+    .addBulkRules(options.overridesA11y);
 
-  const piniaBuilder = new ConfigEntryBuilder<'pinia'>(
+  const piniaBuilder = new ConfigEntryBuilder(
+    'pinia',
     typeof pinia === 'object' ? pinia : {},
     internalOptions,
   );
-  if (pinia) {
-    const piniaConfig = piniaBuilder.addConfig([
-      'pinia',
+  const piniaConfig = piniaBuilder.addConfig([
+    'pinia',
+    {
+      includeDefaultFilesAndIgnores: true,
+      ignoreMarkdownCodeBlocks: true,
+    },
+  ]);
+  piniaConfig
+    .addBulkRules(eslintPluginPinia.configs['recommended-flat'].rules)
+    // .addRule('never-export-initialized-store', ERROR)
+    // .addRule('no-duplicate-store-ids', ERROR)
+    // .addRule('no-return-global-properties', ERROR)
+    // .addRule('no-store-to-refs-in-store', ERROR)
+    .addRule('prefer-single-store-per-file', ERROR)
+    .addRule('prefer-use-store-naming-convention', ERROR, [
       {
-        includeDefaultFilesAndIgnores: true,
-        ignoreMarkdownCodeBlocks: true,
+        checkStoreNameMismatch: true,
+        storeSuffix:
+          typeof pinia === 'object' && pinia.storesNameSuffix != null
+            ? pinia.storesNameSuffix
+            : DEFAULT_PINIA_STORE_NAME_SUFFIX,
       },
     ]);
+  // .addRule('require-setup-store-properties-export', ERROR)
 
-    piniaConfig
-      .addBulkRules(eslintPluginPinia.configs['recommended-flat'].rules)
-      // .addRule('pinia/never-export-initialized-store', ERROR)
-      // .addRule('pinia/no-duplicate-store-ids', ERROR)
-      // .addRule('pinia/no-return-global-properties', ERROR)
-      // .addRule('pinia/no-store-to-refs-in-store', ERROR)
-      .addRule('pinia/prefer-single-store-per-file', ERROR)
-      .addRule('pinia/prefer-use-store-naming-convention', ERROR, [
-        {
-          checkStoreNameMismatch: true,
-          storeSuffix:
-            typeof pinia === 'object' && pinia.storesNameSuffix != null
-              ? pinia.storesNameSuffix
-              : DEFAULT_PINIA_STORE_NAME_SUFFIX,
-        },
-      ]);
-    // .addRule('pinia/require-setup-store-properties-export', ERROR)
-  }
-
-  return [...builder.getAllConfigs(), ...piniaBuilder.getAllConfigs()];
+  return [
+    ...builder.getAllConfigs(),
+    ...(a11y ? builderA11y.getAllConfigs() : []),
+    ...(pinia ? piniaBuilder.getAllConfigs() : []),
+  ];
 };

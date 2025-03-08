@@ -17,6 +17,7 @@ import type {
   PickKeysNotStartingWith,
   PickKeysStartingWith,
   PrettifyShallow,
+  RemovePrefix,
 } from './types';
 
 type EslintSeverity = Eslint.Linter.RuleSeverity;
@@ -129,6 +130,7 @@ export type FlatConfigEntryForBuilder = Omit<FlatConfigEntry, 'name' | 'rules'>;
 
 export class ConfigEntryBuilder<RulesPrefix extends string> {
   constructor(
+    private readonly rulesPrefix: RulesPrefix,
     private readonly options: ConfigSharedOptions<RulesPrefix>,
     private readonly internalOptions: InternalConfigOptions,
   ) {}
@@ -187,44 +189,54 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
     this.configsDict.set(configName, configFinal);
 
     const generateAddRuleFn =
-      // prettier-ignore
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
-      <AllowAnyRule extends boolean>() =>
+      <AllowAnyRule extends boolean>(allowAnyRule: AllowAnyRule) =>
       <
-        RuleName extends AllowAnyRule extends true
+        // prettier-ignore
+        RuleName extends (AllowAnyRule extends true
           ? keyof AllEslintRules
-          : keyof AllRulesWithPrefix<RulesPrefix>,
+          : RemovePrefix<keyof AllRulesWithPrefix<RulesPrefix>, `${RulesPrefix}/`>),
         Severity extends RuleSeverity,
       >(
         ruleName: RuleName,
         severity: Severity,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore ignores the following error during declaration file build: "error TS2859: Excessive complexity comparing types 'RuleName' and '"curly" | "unicorn/template-indent" | "@eslint-community/eslint-comments/disable-enable-pair" | "@eslint-community/eslint-comments/no-aggregating-enable" | "@eslint-community/eslint-comments/no-duplicate-disable" | ... 1725 more ... | "yoda"'"
-        ruleOptions?: GetRuleOptions<RuleName>,
+        ruleOptions?: GetRuleOptions<
+          (AllowAnyRule extends true ? RuleName : `${RulesPrefix}/${RuleName}`) &
+            keyof AllEslintRules
+        >,
         options?: {
           overrideBaseRule?: boolean | keyof AllEslintRules;
           disableAutofix?: boolean;
         },
       ) => {
+        const ruleNameWithPrefix =
+          allowAnyRule || !this.rulesPrefix
+            ? ruleName
+            : (`${this.rulesPrefix}/${ruleName}` as const);
         const errorsInsteadOfWarnings = this.internalOptions.globalOptions?.errorsInsteadOfWarnings;
         const severityFinal: RuleSeverity =
-        (configOptions.forceSeverity as RuleSeverity | undefined)??
+          (configOptions.forceSeverity as RuleSeverity | undefined) ??
           (severity === WARNING &&
           (errorsInsteadOfWarnings === true ||
-            (Array.isArray(errorsInsteadOfWarnings) && errorsInsteadOfWarnings.includes(ruleName)))
+            (Array.isArray(errorsInsteadOfWarnings) &&
+              errorsInsteadOfWarnings.includes(ruleNameWithPrefix)))
             ? ERROR
             : severity);
-        const ruleNameFinal = `${options?.disableAutofix ? 'disable-autofix/' : ''}${ruleName}`;
+        const ruleNameFinal =
+          `${options?.disableAutofix ? 'disable-autofix/' : ''}${ruleNameWithPrefix}` as const;
         configFinal.rules ||= {};
         configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
         if (options?.disableAutofix) {
-          // @ts-expect-error "Expression produces a union type that is too complex to represent."
-          (configFinal.rules)[ruleName] = 0 /* Off */;
+          configFinal.rules[ruleNameWithPrefix] = 0 /* Off */;
         }
         if (options?.overrideBaseRule) {
-          const baseRuleName = typeof options.overrideBaseRule === 'string' ? options.overrideBaseRule : ruleName.split('/').slice(1).join('/');
+          const baseRuleName =
+            typeof options.overrideBaseRule === 'string'
+              ? options.overrideBaseRule
+              : ruleNameWithPrefix.split('/').slice(1).join('/');
           if (baseRuleName) {
-            (configFinal.rules)[baseRuleName] = 0 /* Off */;
+            configFinal.rules[baseRuleName] = 0 /* Off */;
           }
         }
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -233,8 +245,8 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
 
     const result = {
       config: configFinal,
-      addRule: generateAddRuleFn<false>(),
-      addAnyRule: generateAddRuleFn<true>(),
+      addRule: generateAddRuleFn(false),
+      addAnyRule: generateAddRuleFn(true),
       addOverrides: () => {
         configFinal.rules ||= {};
         Object.assign(configFinal.rules, this.options.overrides);

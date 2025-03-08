@@ -62,7 +62,7 @@ export const jsEslintConfig = (
   options: JsEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder(options, internalOptions);
+  const builder = new ConfigEntryBuilder('', options, internalOptions);
 
   builder
     .addConfig(['js', {includeDefaultFilesAndIgnores: true}])

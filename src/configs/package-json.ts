@@ -67,7 +67,7 @@ export const packageJsonEslintConfig = (
   options: PackageJsonEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder<'package-json'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('package-json', options, internalOptions);
 
   // Legend:
   // 🟣 - in recommended
@@ -82,20 +82,16 @@ export const packageJsonEslintConfig = (
       },
     )
     .addBulkRules(eslintPluginPackageJsonRecommendedConfig.rules)
-    // .addRule('package-json/no-empty-fields', ERROR) // 🟣 >=0.21.0
-    .addRule('package-json/no-redundant-files', ERROR) // >=0.20.0
-    .addRule('package-json/order-properties', ERROR, [
-      {order: options.order ?? 'sort-package-json'},
-    ]) // 🟣
-    .addRule('package-json/repository-shorthand', ERROR, [
-      {form: options.repositoryShorthand ?? 'object'},
-    ]) // 🟣
-    // .addRule('package-json/require-author', OFF) // >=0.22.0
-    // .addRule('package-json/require-files', OFF) // >=0.26.0
-    // .addRule('package-json/require-name', ERROR) // 🟣 >=0.24.0
-    // .addRule('package-json/require-keywords', OFF) // >=0.25.0
-    // .addRule('package-json/require-version', ERROR) // 🟣 >=0.23.0
-    .addRule('package-json/sort-collections', ERROR, [
+    // .addRule('no-empty-fields', ERROR) // 🟣 >=0.21.0
+    .addRule('no-redundant-files', ERROR) // >=0.20.0
+    .addRule('order-properties', ERROR, [{order: options.order ?? 'sort-package-json'}]) // 🟣
+    .addRule('repository-shorthand', ERROR, [{form: options.repositoryShorthand ?? 'object'}]) // 🟣
+    // .addRule('require-author', OFF) // >=0.22.0
+    // .addRule('require-files', OFF) // >=0.26.0
+    // .addRule('require-name', ERROR) // 🟣 >=0.24.0
+    // .addRule('require-keywords', OFF) // >=0.25.0
+    // .addRule('require-version', ERROR) // 🟣 >=0.23.0
+    .addRule('sort-collections', ERROR, [
       Object.entries({
         ...DEFAULT_COLLECTIONS_TO_SORT,
         ...options.collectionsToSort,
@@ -103,12 +99,12 @@ export const packageJsonEslintConfig = (
         .filter(([, v]) => v)
         .map(([k]) => k),
     ]) // 🟣
-    // .addRule('package-json/unique-dependencies', ERROR) // 🟣
-    // .addRule('package-json/valid-local-dependency', ERROR) // 🟣
-    // .addRule('package-json/valid-name', ERROR) // 🟣
-    // .addRule('package-json/valid-package-definition', ERROR) // 🟣
-    // .addRule('package-json/valid-repository-directory', ERROR) // 🟣
-    // .addRule('package-json/valid-version', ERROR) // 🟣
+    // .addRule('unique-dependencies', ERROR) // 🟣
+    // .addRule('valid-local-dependency', ERROR) // 🟣
+    // .addRule('valid-name', ERROR) // 🟣
+    // .addRule('valid-package-definition', ERROR) // 🟣
+    // .addRule('valid-repository-directory', ERROR) // 🟣
+    // .addRule('valid-version', ERROR) // 🟣
     .addOverrides();
 
   return builder.getAllConfigs();

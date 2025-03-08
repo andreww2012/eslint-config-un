@@ -49,7 +49,7 @@ export const tomlEslintConfig = (
   options: TomlEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder<'toml'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('toml', options, internalOptions);
 
   // LEGEND:
   // 🟣 = Included in Standard ruleset
@@ -85,32 +85,32 @@ export const tomlEslintConfig = (
       ),
     )
     // 🟢 Base rules
-    // .addRule('toml/indent', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/keys-order', ERROR) // 🟣 >=0.1.0
-    .addRule('toml/no-mixed-type-in-array', options.noMixedTypeInArray ? ERROR : OFF) // >=0.1.0
-    .addRule('toml/no-non-decimal-integer', ERROR, [
+    // .addRule('indent', ERROR) // 🟣 >=0.1.0
+    // .addRule('keys-order', ERROR) // 🟣 >=0.1.0
+    .addRule('no-mixed-type-in-array', options.noMixedTypeInArray ? ERROR : OFF) // >=0.1.0
+    .addRule('no-non-decimal-integer', ERROR, [
       {allowHexadecimal: true, ...options.noNonDecimalIntegerExceptions},
     ]) //  >=0.1.0
-    // .addRule('toml/no-space-dots', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/no-unreadable-number-separator', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/padding-line-between-pairs', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/padding-line-between-tables', ERROR) // 🟣 >=0.1.0
-    .addRule('toml/precision-of-fractional-seconds', ERROR, [
+    // .addRule('no-space-dots', ERROR) // 🟣 >=0.1.0
+    // .addRule('no-unreadable-number-separator', ERROR) // 🟣 >=0.1.0
+    // .addRule('padding-line-between-pairs', ERROR) // 🟣 >=0.1.0
+    // .addRule('padding-line-between-tables', ERROR) // 🟣 >=0.1.0
+    .addRule('precision-of-fractional-seconds', ERROR, [
       {max: options.maxPrecisionOfFractionalSeconds ?? 3},
     ]) // 🟣 >=0.1.0
-    .addRule('toml/precision-of-integer', ERROR, [{maxBit: options.maxIntegerPrecisionBits ?? 64}]) // 🟣 >=0.1.0
-    // .addRule('toml/quoted-keys', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/tables-order', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/vue-custom-block/no-parsing-error', ERROR) // 🟣 >=0.1.0
+    .addRule('precision-of-integer', ERROR, [{maxBit: options.maxIntegerPrecisionBits ?? 64}]) // 🟣 >=0.1.0
+    // .addRule('quoted-keys', ERROR) // 🟣 >=0.1.0
+    // .addRule('tables-order', ERROR) // 🟣 >=0.1.0
+    // .addRule('vue-custom-block/no-parsing-error', ERROR) // 🟣 >=0.1.0
     // 🟢 Extension rules
-    // .addRule('toml/array-bracket-newline', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/array-bracket-spacing', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/array-element-newline', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/comma-style', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/inline-table-curly-spacing', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/key-spacing', ERROR) // 🟣 >=0.2.0
-    // .addRule('toml/spaced-comment', ERROR) // 🟣 >=0.1.0
-    // .addRule('toml/table-bracket-spacing', ERROR) // 🟣 >=0.1.0
+    // .addRule('array-bracket-newline', ERROR) // 🟣 >=0.1.0
+    // .addRule('array-bracket-spacing', ERROR) // 🟣 >=0.1.0
+    // .addRule('array-element-newline', ERROR) // 🟣 >=0.1.0
+    // .addRule('comma-style', ERROR) // 🟣 >=0.1.0
+    // .addRule('inline-table-curly-spacing', ERROR) // 🟣 >=0.1.0
+    // .addRule('key-spacing', ERROR) // 🟣 >=0.2.0
+    // .addRule('spaced-comment', ERROR) // 🟣 >=0.1.0
+    // .addRule('table-bracket-spacing', ERROR) // 🟣 >=0.1.0
     .addOverrides();
 
   return builder.getAllConfigs();

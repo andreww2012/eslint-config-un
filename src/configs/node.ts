@@ -179,7 +179,7 @@ export const nodeEslintConfig = (
 ): FlatConfigEntry[] => {
   const {preferGlobal = {}, settings: pluginSettings} = options;
 
-  const builder = new ConfigEntryBuilder<'node'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('node', options, internalOptions);
 
   builder
     .addConfig(['node', {includeDefaultFilesAndIgnores: true}], {
@@ -190,57 +190,51 @@ export const nodeEslintConfig = (
       }),
     })
     .addBulkRules(pluginRenamer(eslintPluginNode.configs['flat/recommended'].rules))
-    // .addRule('node/callback-return', OFF)
-    .addRule('node/exports-style', ERROR, ['module.exports', {allowBatchAssign: false}])
-    // .addRule('node/file-extension-in-import', OFF),
-    // .addRule('node/global-require', OFF),
-    // .addRule('node/handle-callback-err', OFF),
-    // .addRule('node/hashbang', ERROR),
-    // .addRule('node/no-callback-literal', OFF),
-    // .addRule('node/no-deprecated-api', ERROR),
-    // .addRule('node/no-exports-assign', ERROR),
-    .addRule('node/no-extraneous-import', OFF) // TODO only disable when import plugin is enabled?
-    // .addRule('node/no-extraneous-require', ERROR) // TODO handled by import plugin too?
-    .addRule('node/no-missing-import', OFF) // TODO only disable when import plugin is enabled?
-    // .addRule('node/no-missing-require', ERROR) // TODO handled by import plugin too?
-    // .addRule('node/no-mixed-requires', OFF)
-    .addRule('node/no-new-require', ERROR)
-    .addRule('node/no-path-concat', ERROR)
-    // .addRule('node/no-process-env', OFF)
-    .addRule('node/no-process-exit', OFF) // The corresponding Unicorn rule is better: https://github.com/sindresorhus/eslint-plugin-unicorn/blob/1deb9bb5edf27fdb2f656add11c924dfa59fdac9/docs/rules/no-process-exit.md
+    // .addRule('callback-return', OFF)
+    .addRule('exports-style', ERROR, ['module.exports', {allowBatchAssign: false}])
+    // .addRule('file-extension-in-import', OFF),
+    // .addRule('global-require', OFF),
+    // .addRule('handle-callback-err', OFF),
+    // .addRule('hashbang', ERROR),
+    // .addRule('no-callback-literal', OFF),
+    // .addRule('no-deprecated-api', ERROR),
+    // .addRule('no-exports-assign', ERROR),
+    .addRule('no-extraneous-import', OFF) // TODO only disable when import plugin is enabled?
+    // .addRule('no-extraneous-require', ERROR) // TODO handled by import plugin too?
+    .addRule('no-missing-import', OFF) // TODO only disable when import plugin is enabled?
+    // .addRule('no-missing-require', ERROR) // TODO handled by import plugin too?
+    // .addRule('no-mixed-requires', OFF)
+    .addRule('no-new-require', ERROR)
+    .addRule('no-path-concat', ERROR)
+    // .addRule('no-process-env', OFF)
+    .addRule('no-process-exit', OFF) // The corresponding Unicorn rule is better: https://github.com/sindresorhus/eslint-plugin-unicorn/blob/1deb9bb5edf27fdb2f656add11c924dfa59fdac9/docs/rules/no-process-exit.md
     .addAnyRule('unicorn/no-process-exit', ERROR) // TODO
-    // .addRule('node/no-restricted-import', OFF)
-    // .addRule('node/no-restricted-require', OFF)
-    // .addRule('node/no-sync', OFF)
-    // .addRule('node/no-unpublished-bin', ERROR)
-    .addRule('node/no-unpublished-import', OFF) // TODO only disable when import plugin is enabled?
-    // .addRule('node/no-unpublished-require', ERROR) // TODO handled by import plugin too?
-    // .addRule('node/no-unsupported-features/es-builtins', ERROR)
-    // .addRule('node/no-unsupported-features/es-syntax', ERROR)
-    // .addRule('node/no-unsupported-features/node-builtins', ERROR)
-    .addRule('node/prefer-global/buffer', ERROR, [
-      preferGlobal.buffer === false ? 'never' : 'always',
-    ])
-    .addRule('node/prefer-global/console', ERROR, [
-      preferGlobal.console === false ? 'never' : 'always',
-    ])
-    .addRule('node/prefer-global/process', ERROR, [
-      preferGlobal.process === false ? 'never' : 'always',
-    ])
-    .addRule('node/prefer-global/text-decoder', ERROR, [
+    // .addRule('no-restricted-import', OFF)
+    // .addRule('no-restricted-require', OFF)
+    // .addRule('no-sync', OFF)
+    // .addRule('no-unpublished-bin', ERROR)
+    .addRule('no-unpublished-import', OFF) // TODO only disable when import plugin is enabled?
+    // .addRule('no-unpublished-require', ERROR) // TODO handled by import plugin too?
+    // .addRule('no-unsupported-features/es-builtins', ERROR)
+    // .addRule('no-unsupported-features/es-syntax', ERROR)
+    // .addRule('no-unsupported-features/node-builtins', ERROR)
+    .addRule('prefer-global/buffer', ERROR, [preferGlobal.buffer === false ? 'never' : 'always'])
+    .addRule('prefer-global/console', ERROR, [preferGlobal.console === false ? 'never' : 'always'])
+    .addRule('prefer-global/process', ERROR, [preferGlobal.process === false ? 'never' : 'always'])
+    .addRule('prefer-global/text-decoder', ERROR, [
       preferGlobal.textDecoder === false ? 'never' : 'always',
     ])
-    .addRule('node/prefer-global/text-encoder', ERROR, [
+    .addRule('prefer-global/text-encoder', ERROR, [
       preferGlobal.textEncoder === false ? 'never' : 'always',
     ])
-    .addRule('node/prefer-global/url', ERROR, [preferGlobal.url === false ? 'never' : 'always'])
-    .addRule('node/prefer-global/url-search-params', ERROR, [
+    .addRule('prefer-global/url', ERROR, [preferGlobal.url === false ? 'never' : 'always'])
+    .addRule('prefer-global/url-search-params', ERROR, [
       preferGlobal.urlSearchParams === false ? 'never' : 'always',
     ])
-    .addRule('node/prefer-node-protocol', ERROR)
-    .addRule('node/prefer-promises/dns', OFF) // TODO enable?
-    .addRule('node/prefer-promises/fs', OFF) // TODO enable?
-    .addRule('node/process-exit-as-throw', ERROR) // Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-node/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
+    .addRule('prefer-node-protocol', ERROR)
+    .addRule('prefer-promises/dns', OFF) // TODO enable?
+    .addRule('prefer-promises/fs', OFF) // TODO enable?
+    .addRule('process-exit-as-throw', ERROR) // Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-node/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
     .addOverrides();
 
   return builder.getAllConfigs();

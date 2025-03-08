@@ -43,7 +43,7 @@ export const tailwindEslintConfig = (
 ): FlatConfigEntry[] => {
   const {settings} = options;
 
-  const builder = new ConfigEntryBuilder<'tailwindcss'>(options, internalOptions);
+  const builder = new ConfigEntryBuilder('tailwindcss', options, internalOptions);
 
   builder
     .addConfig(['tailwind', {includeDefaultFilesAndIgnores: true}], {
@@ -68,14 +68,14 @@ export const tailwindEslintConfig = (
       }),
     })
     .addBulkRules(eslintPluginTailwind.configs.recommended.rules)
-    .addRule('tailwindcss/classnames-order', WARNING)
-    .addRule('tailwindcss/enforces-negative-arbitrary-values', WARNING)
-    .addRule('tailwindcss/enforces-shorthand', WARNING)
-    .addRule('tailwindcss/migration-from-tailwind-2', WARNING)
-    // .addRule('tailwindcss/no-arbitrary-value', OFF)
-    // .addRule('tailwindcss/no-contradicting-classname', ERROR)
-    .addRule('tailwindcss/no-custom-classname', OFF)
-    .addRule('tailwindcss/no-unnecessary-arbitrary-value', WARNING)
+    .addRule('classnames-order', WARNING)
+    .addRule('enforces-negative-arbitrary-values', WARNING)
+    .addRule('enforces-shorthand', WARNING)
+    .addRule('migration-from-tailwind-2', WARNING)
+    // .addRule('no-arbitrary-value', OFF)
+    // .addRule('no-contradicting-classname', ERROR)
+    .addRule('no-custom-classname', OFF)
+    .addRule('no-unnecessary-arbitrary-value', WARNING)
     .addOverrides();
 
   return builder.getAllConfigs();

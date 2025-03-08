@@ -11,7 +11,8 @@ export const eslintCommentsEslintConfig = (
   options: EslintCommentsEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder<'@eslint-community/eslint-comments'>(
+  const builder = new ConfigEntryBuilder(
+    '@eslint-community/eslint-comments',
     options,
     internalOptions,
   );
@@ -25,18 +26,16 @@ export const eslintCommentsEslintConfig = (
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     .addBulkRules(eslintPluginEslintComments.configs.recommended.rules)
     // 🟢 Best Practices
-    .addRule('@eslint-community/eslint-comments/disable-enable-pair', ERROR, [
-      {allowWholeFile: true},
-    ]) // 🟣
-    // .addRule('@eslint-community/eslint-comments/no-aggregating-enable', ERROR) // 🟣
-    // .addRule('@eslint-community/eslint-comments/no-duplicate-disable', ERROR) // 🟣
-    // .addRule('@eslint-community/eslint-comments/no-unlimited-disable', ERROR) // 🟣
-    // .addRule('@eslint-community/eslint-comments/no-unused-disable', OFF) // Handled by ESLint natively
-    // .addRule('@eslint-community/eslint-comments/no-unused-enable', ERROR) // 🟣
+    .addRule('disable-enable-pair', ERROR, [{allowWholeFile: true}]) // 🟣
+    // .addRule('no-aggregating-enable', ERROR) // 🟣
+    // .addRule('no-duplicate-disable', ERROR) // 🟣
+    // .addRule('no-unlimited-disable', ERROR) // 🟣
+    // .addRule('no-unused-disable', OFF) // Handled by ESLint natively
+    // .addRule('no-unused-enable', ERROR) // 🟣
     // 🟢 Stylistic
-    // .addRule('@eslint-community/eslint-comments/no-restricted-disable', OFF)
-    // .addRule('@eslint-community/eslint-comments/no-use', OFF)
-    // .addRule('@eslint-community/eslint-comments/require-description', OFF)
+    // .addRule('no-restricted-disable', OFF)
+    // .addRule('no-use', OFF)
+    // .addRule('require-description', OFF)
     .addOverrides();
 
   return builder.getAllConfigs();
