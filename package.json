@@ -56,7 +56,7 @@
     "enhanced-resolve": "5.18.1",
     "eslint-config-flat-gitignore": "2.1.0",
     "eslint-config-prettier": "10.0.2",
-    "eslint-import-resolver-typescript": "3.8.3",
+    "eslint-import-resolver-typescript": "3.7.0",
     "eslint-merge-processors": "2.0.0",
     "eslint-plugin-css": "0.11.0",
     "eslint-plugin-de-morgan": "1.2.0",

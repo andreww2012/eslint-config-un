@@ -18,14 +18,13 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
   /**
    * Recognized automatically and normally should not be set manually.
    *
-   * When enabled, creates a [`eslint-import-resolver-typescript`](https://www.npmjs.com/package/eslint-import-resolver-typescript) resolver with `alwaysTryTypes: true` and
-   * `project: '* /tsconfig*.json'` options (with actually no space after the asterisk),
-   * which can be overridden using `tsResolverOptions` option.
+   * When enabled, creates a [`eslint-import-resolver-typescript`](https://www.npmjs.com/package/eslint-import-resolver-typescript) resolver, which settings can be overridden
+   * using `tsResolverOptions` option.
    */
   isTypescriptEnabled?: boolean;
 
   /**
-   * Will be merged with the default TypeScript resolve options (see `isTypescriptEnabled` option docs for more info).
+   * Will be merged with the default TypeScript resolver options, if it is enabled.
    */
   tsResolverOptions?: TsResolverOptions;
 
@@ -71,8 +70,6 @@ export const importEslintConfig = (
           isTypescriptEnabled &&
             createTypeScriptImportResolver({
               alwaysTryTypes: true,
-              // Does not resolve paths in sub-directories with their own tsconfigs after 3.8.0 w/o explicit `project`: https://github.com/import-js/eslint-import-resolver-typescript/issues/364
-              project: '*/tsconfig*.json',
               ...tsResolverOptions,
             }),
           eslintPluginImportX.createNodeResolver(),

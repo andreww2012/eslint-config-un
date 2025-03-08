@@ -1,3 +1,11 @@
+## 0.6.2
+
+- Revert `eslint-import-resolver-typescript` to v3.7.0 due to [this issue](https://github.com/import-js/eslint-import-resolver-typescript/issues/364).
+
+### Dependencies
+<!-- eslint-disable-next-line markdown/no-missing-label-refs -->
+- [Downgrade] `@stylistic/eslint-plugin`: [3.8.3 -> 3.7.0](https://github.com/import-js/eslint-import-resolver-typescript/compare/v3.8.3..v3.7.0)
+
 ## 0.6.1
 
 - Specify `project: '*/tsconfig*.json'` by default in `eslint-import-resolver-typescript` resolver for `import` config to avoid resolution issues in repositories with multiple tsconfigs ([upstream issue](https://github.com/import-js/eslint-import-resolver-typescript/issues/364)). Added an option to override the resolver settings.
