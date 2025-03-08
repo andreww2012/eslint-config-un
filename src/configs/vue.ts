@@ -237,8 +237,6 @@ export const vueEslintConfig = (
       files,
     })
     .addBulkRules(recommendedRules)
-    // 🟢 Disable deprecated rules from Recommended
-    .addRule('vue/component-tags-order', OFF)
     // 🟢 Base
     .addRule('vue/comment-directive', ERROR, [
       // false by default
@@ -454,7 +452,7 @@ export const vueEslintConfig = (
     .addRule('vue/no-multiple-objects-in-class', ERROR)
     .addRule('vue/no-potential-component-option-typo', ERROR)
     .addRule('vue/no-ref-object-reactivity-loss', ERROR)
-    .addRule('vue/no-required-prop-with-default', ERROR)
+    // .addRule('vue/no-required-prop-with-default', ERROR)
     // .addRule('vue/no-restricted-block', OFF)
     // .addRule('vue/no-restricted-call-after-await', OFF)
     // .addRule('vue/no-restricted-class', OFF)
