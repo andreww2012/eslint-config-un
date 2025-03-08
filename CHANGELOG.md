@@ -9,6 +9,7 @@
 - `typescript-eslint`: [8.25.0 -> 8.26.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.25.0...v8.26.0)
 - `@eslint/markdown`: [6.2.2 -> 6.3.0](https://github.com/eslint/markdown/compare/v6.2.2...v6.3.0)
 - `eslint-config-prettier`: [10.0.2 -> 10.1.1](https://github.com/prettier/eslint-config-prettier/compare/v10.0.2...v10.1.1)
+- `eslint-plugin-n:` [17.16.1 -> 17.16.2](https://github.com/eslint-community/eslint-plugin-n/compare/v17.16.1...v17.16.2)
 
 ## 0.6.1
 
