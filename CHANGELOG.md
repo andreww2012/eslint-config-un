@@ -10,6 +10,7 @@
 - `@eslint/markdown`: [6.2.2 -> 6.3.0](https://github.com/eslint/markdown/compare/v6.2.2...v6.3.0)
 - `eslint-config-prettier`: [10.0.2 -> 10.1.1](https://github.com/prettier/eslint-config-prettier/compare/v10.0.2...v10.1.1)
 - `eslint-plugin-n:` [17.16.1 -> 17.16.2](https://github.com/eslint-community/eslint-plugin-n/compare/v17.16.1...v17.16.2)
+- `eslint-plugin-package-json`: [0.26.1 -> 0.26.3](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.26.1...v0.26.3)
 
 ## 0.6.1
 
