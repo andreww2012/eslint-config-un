@@ -7,6 +7,7 @@
 <!-- eslint-disable-next-line markdown/no-missing-label-refs -->
 - [Downgrade] `@stylistic/eslint-plugin`: [3.8.3 -> 3.7.0](https://github.com/import-js/eslint-import-resolver-typescript/compare/v3.8.3..v3.7.0)
 - `typescript-eslint`: [8.25.0 -> 8.26.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.25.0...v8.26.0)
+- `@eslint/markdown`: [6.2.2 -> 6.3.0](https://github.com/eslint/markdown/compare/v6.2.2...v6.3.0)
 
 ## 0.6.1
 
