@@ -190,7 +190,9 @@ export const tsEslintConfig = (
     ])
     // .addRule('@typescript-eslint/prefer-namespace-keyword', ERROR)
     // .addRule('@typescript-eslint/triple-slash-reference', ERROR)
-    // .addRule('@typescript-eslint/unified-signatures', ERROR)
+    .addRule('@typescript-eslint/unified-signatures', ERROR, [
+      {ignoreOverloadsWithDifferentJSDoc: true},
+    ])
     // 🟢 Stylistic - overrides
     // .addRule('@typescript-eslint/adjacent-overload-signatures', ERROR)
     // .addRule('@typescript-eslint/array-type', ERROR)

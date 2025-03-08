@@ -1,6 +1,7 @@
 ## 0.6.2
 
 - Revert `eslint-import-resolver-typescript` to v3.7.0 due to [this issue](https://github.com/import-js/eslint-import-resolver-typescript/issues/364).
+- Set newly added `ignoreOverloadsWithDifferentJSDoc: true` for [`@typescript-eslint/unified-signatures`](https://typescript-eslint.io/rules/unified-signatures) rule.
 
 ### Dependencies
 <!-- eslint-disable-next-line markdown/no-missing-label-refs -->
