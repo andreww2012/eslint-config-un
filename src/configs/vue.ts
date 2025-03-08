@@ -449,6 +449,7 @@ export const vueEslintConfig = (
     .addRule('vue/no-deprecated-model-definition', isVue3 ? ERROR : OFF)
     .addRule('vue/no-duplicate-attr-inheritance', ERROR)
     .addRule('vue/no-empty-component-block', ERROR)
+    .addRule('vue/no-import-compiler-macros', ERROR) // >=10.0.0
     .addRule('vue/no-multiple-objects-in-class', ERROR)
     .addRule('vue/no-potential-component-option-typo', ERROR)
     .addRule('vue/no-ref-object-reactivity-loss', ERROR)
