@@ -1,14 +1,17 @@
+import {defineConfig} from 'eslint/config';
 import {eslintConfig} from './src';
 
-export default eslintConfig({
-  configs: {
-    deMorgan: true,
-    vue: {
-      files: ['*.vue'],
+export default defineConfig(
+  eslintConfig({
+    configs: {
+      deMorgan: true,
+      vue: {
+        files: ['*.vue'],
+      },
+      yaml: true,
+      toml: true,
+      json: true,
+      packageJson: true,
     },
-    yaml: true,
-    toml: true,
-    json: true,
-    packageJson: true,
-  },
-});
+  }),
+);
