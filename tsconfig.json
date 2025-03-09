@@ -1,5 +1,6 @@
 {
   "include": ["src", "scripts", "*.*"],
+  "files": ["type-decls.d.ts"],
   "exclude": ["node_modules"],
 
   // Based on https://www.totaltypescript.com/tsconfig-cheat-sheet

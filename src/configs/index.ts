@@ -1,5 +1,6 @@
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {FlatConfigEntry} from '../eslint';
+import type {AngularEslintConfigOptions} from './angular';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
@@ -163,6 +164,13 @@ export interface EslintConfigUnOptions {
     qwik?: boolean | Partial<QwikEslintConfigOptions>;
 
     /**
+     * [angular](https://angular.io/) specific rules. Supported versions: 13 to 19 (inclusive).
+     *
+     * Enabled automatically if `@angular/core` package of the supported version is installed.
+     */
+    angular?: boolean | Partial<AngularEslintConfigOptions>;
+
+    /**
      * NOTE: disabled by default
      * @default false
      */
@@ -229,7 +237,7 @@ export interface EslintConfigUnOptions {
 }
 
 export interface InternalConfigOptions {
-  globalOptions?: Omit<EslintConfigUnOptions, 'configs'>;
+  globalOptions?: EslintConfigUnOptions;
   isTypescriptEnabled?: boolean;
   vueOptions?: VueEslintConfigOptions;
 }

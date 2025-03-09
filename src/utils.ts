@@ -1,4 +1,5 @@
 import path from 'node:path';
+import type {getPackageInfoSync} from 'local-pkg';
 import type {FalsyValue} from './types';
 
 export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
@@ -30,3 +31,11 @@ export const maybeCall = <ReturnType = unknown, Args extends readonly unknown[] 
   typeof fnOrValue === 'function'
     ? (fnOrValue as (...args: Args) => ReturnType)(...args)
     : fnOrValue;
+
+export const getPackageMajorVersion = (packageInfo: ReturnType<typeof getPackageInfoSync>) => {
+  const majorVersion = Number(packageInfo?.version?.split('.')[0]);
+  return Number.isNaN(majorVersion) ? null : majorVersion;
+};
+
+export const interopDefault = <T>(module: T | {default: T}) =>
+  module && typeof module === 'object' && 'default' in module ? module.default : module;

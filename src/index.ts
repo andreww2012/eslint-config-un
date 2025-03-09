@@ -5,6 +5,7 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 import {getPackageInfoSync, isPackageExists} from 'local-pkg';
 import type {EslintConfigUnOptions, InternalConfigOptions} from './configs';
+import {type AngularEslintConfigOptions, angularEslintConfig} from './configs/angular';
 import {type CssInJsEslintConfigOptions, cssInJsEslintConfig} from './configs/css-in-js';
 import {type DeMorganEslintConfigOptions, deMorganEslintConfig} from './configs/de-morgan';
 import {
@@ -51,7 +52,7 @@ import {
   genFlatConfigEntryName,
 } from './eslint';
 import {ALL_ESLINT_PLUGINS} from './plugins';
-import {assignOptions} from './utils';
+import {assignOptions, getPackageMajorVersion} from './utils';
 
 // TODO debug
 // TODO getPackageInfo async?
@@ -103,18 +104,16 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
 
   /* 🟢 VUE */
 
-  const vueFullVersion = getPackageInfoSync('vue')?.version;
-  const vueMajorVersionStr = vueFullVersion?.split('.')[0];
-  const vueMajorVersion =
-    vueMajorVersionStr === '2' ? 2 : vueMajorVersionStr === '3' ? 3 : undefined;
+  const vuePackageInfo = getPackageInfoSync('vue');
+  const vueMajorVersion = getPackageMajorVersion(vuePackageInfo);
 
-  const nuxtMajorVersionStr = getPackageInfoSync('nuxt')?.version?.split('.')[0];
-  const nuxtMajorVersion = nuxtMajorVersionStr === '3' ? 3 : undefined;
+  const nuxtPackageInfo = getPackageInfoSync('nuxt');
+  const nuxtMajorVersion = getPackageMajorVersion(nuxtPackageInfo);
 
   const vueOptions: VueEslintConfigOptions = {
-    majorVersion: vueMajorVersion ?? 3,
-    fullVersion: vueFullVersion,
-    nuxtMajorVersion,
+    majorVersion: vueMajorVersion === 2 ? 2 : 3, // TODO bad logic
+    fullVersion: vuePackageInfo?.version,
+    nuxtMajorVersion: nuxtMajorVersion === 3 ? 3 : undefined,
     pinia: isPackageExists('pinia'),
     enforceTypescriptInScriptSection: isTypescriptEnabled,
     ...assignOptions(configsOptions, 'vue'),
@@ -235,6 +234,12 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
   );
   const qwikOptions: QwikEslintConfigOptions = {
     ...assignOptions(configsOptions, 'qwik'),
+  };
+
+  /* 🟢 ANGULAR */
+
+  const angularOptions: AngularEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'angular'),
   };
 
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
@@ -373,6 +378,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isVitestEnabled && vitestEslintConfig(vitestOptions, internalOptions),
       isJsdocEnabled && jsdocEslintConfig(jsdocOptions, internalOptions),
       isQwikEnabled && qwikEslintConfig(qwikOptions, internalOptions),
+      angularEslintConfig(angularOptions, internalOptions),
 
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&

@@ -17,6 +17,7 @@ const configs = [
   },
   ...eslintConfig({
     configs: {
+      angular: true,
       cli: true,
       cssInJs: true,
       deMorgan: true,
