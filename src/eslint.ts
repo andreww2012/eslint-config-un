@@ -46,7 +46,9 @@ export type AllEslintRules = PickKeysNotStartingWith<
 >;
 
 export type GetRuleOptions<RuleName extends keyof AllEslintRules> =
-  AllEslintRules[RuleName] & {} extends Eslint.Linter.RuleEntry<infer Options> ? Options : never;
+  Exclude<AllEslintRules[RuleName], undefined> extends Eslint.Linter.RuleEntry<infer Options>
+    ? Options
+    : never;
 
 export type AllRulesWithPrefix<T extends string> = PickKeysStartingWith<AllEslintRules, T>;
 
