@@ -1,21 +1,14 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import EslintJs from '@eslint/js';
-import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
 import {ERROR, WARNING} from '../constants';
 import {
-  type AllEslintRules,
+  type BuiltinEslintRulesFixed,
   ConfigEntryBuilder,
   type ConfigSharedOptions,
   type FlatConfigEntry,
   type GetRuleOptions,
 } from '../eslint';
-import type {ConstantKeys} from '../types';
 import type {InternalConfigOptions} from './index';
-
-type BuiltinEslintRulesFixed = Pick<
-  AllEslintRules,
-  keyof ConstantKeys<BuiltinEslintRules> & keyof AllEslintRules
->;
 
 export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRulesFixed> {
   /**
@@ -304,7 +297,7 @@ export const jsEslintConfig = (
   if (options.autofixToRemoveUnusedImports ?? true) {
     builder
       .addConfig('js/disable-unused-imports')
-      .addRule('unused-imports/no-unused-imports', ERROR);
+      .addAnyRule('unused-imports/no-unused-imports', ERROR);
   }
 
   return builder.getAllConfigs();

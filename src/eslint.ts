@@ -1,4 +1,5 @@
 import type Eslint from 'eslint';
+import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
 // @ts-expect-error no typings
 import ruleComposer from 'eslint-rule-composer';
 import {klona} from 'klona';
@@ -38,27 +39,50 @@ export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShall
     FlatConfigEntryFilesOrIgnores
 >;
 
+export type DisableAutofixPrefix = 'disable-autofix';
+
 export type AllEslintRulesWithDisableAutofix = ConstantKeys<FlatConfigEntry['rules'] & {}>;
 // Need to exclude `disable-autofix` rules to avoid TS issues related to big unions
-export type AllEslintRules = PickKeysNotStartingWith<
+export type AllEslintRulesWithoutDisableAutofix = PickKeysNotStartingWith<
   AllEslintRulesWithDisableAutofix,
-  'disable-autofix/'
+  `${DisableAutofixPrefix}/`
 >;
 
-export type GetRuleOptions<RuleName extends keyof AllEslintRules> =
-  Exclude<AllEslintRules[RuleName], undefined> extends Eslint.Linter.RuleEntry<infer Options>
+export type BuiltinEslintRulesFixed = Pick<
+  AllEslintRulesWithoutDisableAutofix,
+  keyof ConstantKeys<BuiltinEslintRules>
+>;
+
+export type GetRuleOptions<RuleName extends keyof AllEslintRulesWithoutDisableAutofix> =
+  Exclude<AllEslintRulesWithoutDisableAutofix[RuleName], undefined> extends Eslint.Linter.RuleEntry<
+    infer Options
+  >
     ? Options
     : never;
 
-export type AllRulesWithPrefix<T extends string> = PickKeysStartingWith<AllEslintRules, T>;
+export type AllRulesWithPrefix<
+  Prefix extends string | null,
+  IncludeDisableAutofix = false,
+> = PickKeysStartingWith<
+  Prefix extends ''
+    ? BuiltinEslintRulesFixed
+    : IncludeDisableAutofix extends true
+      ? AllEslintRulesWithDisableAutofix
+      : AllEslintRulesWithoutDisableAutofix,
+  Prefix extends null | ''
+    ? string
+    :
+        | `${Prefix}/`
+        | (IncludeDisableAutofix extends true ? `${DisableAutofixPrefix}/${Prefix}` : never)
+>;
 
-export type RuleOverrides<T extends string | RulesRecord> = T extends string
-  ? PickKeysStartingWith<AllEslintRulesWithDisableAutofix, T | `disable-autofix/${T}`>
+export type RuleOverrides<T extends null | string | RulesRecord> = T extends string
+  ? AllRulesWithPrefix<T, true>
   : T extends RulesRecord
     ? FlatConfigEntry<T>['rules']
     : never;
 
-export type ConfigSharedOptions<T extends string | RulesRecord = RulesRecord> = Partial<
+export type ConfigSharedOptions<T extends null | string | RulesRecord = RulesRecord> = Partial<
   FlatConfigEntryFilesOrIgnores & {
     overrides?: RuleOverrides<T>;
 
@@ -130,10 +154,12 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
 
 export type FlatConfigEntryForBuilder = Omit<FlatConfigEntry, 'name' | 'rules'>;
 
-export class ConfigEntryBuilder<RulesPrefix extends string> {
+export class ConfigEntryBuilder<RulesPrefix extends string | null> {
   constructor(
     private readonly rulesPrefix: RulesPrefix,
-    private readonly options: ConfigSharedOptions<RulesPrefix>,
+    private readonly options: ConfigSharedOptions<
+      RulesPrefix extends null ? RulesRecord : RulesPrefix
+    >,
     private readonly internalOptions: InternalConfigOptions,
   ) {}
 
@@ -195,8 +221,9 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
       <
         // prettier-ignore
         RuleName extends (AllowAnyRule extends true
-          ? keyof AllEslintRules
-          : RemovePrefix<keyof AllRulesWithPrefix<RulesPrefix>, `${RulesPrefix}/`>),
+          ? keyof AllEslintRulesWithoutDisableAutofix
+          // I don't know why `& string` is required. TypeScript thinks that `AllRulesWithPrefix` (after I've added `Prefix extends ''` branch to it) may return non-string keys
+          : RemovePrefix<keyof AllRulesWithPrefix<RulesPrefix> & string, `${RulesPrefix}/`>),
         Severity extends RuleSeverity,
       >(
         ruleName: RuleName,
@@ -205,10 +232,10 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
         // @ts-ignore ignores the following error during declaration file build: "error TS2859: Excessive complexity comparing types 'RuleName' and '"curly" | "unicorn/template-indent" | "@eslint-community/eslint-comments/disable-enable-pair" | "@eslint-community/eslint-comments/no-aggregating-enable" | "@eslint-community/eslint-comments/no-duplicate-disable" | ... 1725 more ... | "yoda"'"
         ruleOptions?: GetRuleOptions<
           (AllowAnyRule extends true ? RuleName : `${RulesPrefix}/${RuleName}`) &
-            keyof AllEslintRules
+            keyof AllEslintRulesWithoutDisableAutofix
         >,
         options?: {
-          overrideBaseRule?: boolean | keyof AllEslintRules;
+          overrideBaseRule?: boolean | keyof AllEslintRulesWithoutDisableAutofix;
           disableAutofix?: boolean;
         },
       ) => {
@@ -226,7 +253,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string> {
             ? ERROR
             : severity);
         const ruleNameFinal =
-          `${options?.disableAutofix ? 'disable-autofix/' : ''}${ruleNameWithPrefix}` as const;
+          `${options?.disableAutofix ? ('disable-autofix/' satisfies `${DisableAutofixPrefix}/`) : ''}${ruleNameWithPrefix}` as const;
         configFinal.rules ||= {};
         configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
         if (options?.disableAutofix) {

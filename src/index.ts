@@ -47,6 +47,7 @@ import {type VueEslintConfigOptions, vueEslintConfig} from './configs/vue';
 import {type YamlEslintConfigOptions, yamlEslintConfig} from './configs/yaml';
 import {DEFAULT_GLOBAL_IGNORES, GLOB_CONFIG_FILES, GLOB_JS_TS_X_EXTENSION, OFF} from './constants';
 import {
+  type DisableAutofixPrefix,
   type FlatConfigEntry,
   disableAutofixForAllRulesInPlugin,
   genFlatConfigEntryName,
@@ -334,7 +335,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
         name: genFlatConfigEntryName('global-setup/plugins'),
         plugins: {
           ...ALL_ESLINT_PLUGINS,
-          'disable-autofix': {
+          ['disable-autofix' satisfies DisableAutofixPrefix]: {
             meta: {
               name: 'eslint-plugin-disable-autofix',
             },

@@ -18,7 +18,7 @@ export const cliEslintConfig = (
 ): FlatConfigEntry[] => {
   const {onlyTopLevelDirs} = options;
 
-  const builder = new ConfigEntryBuilder('', options, internalOptions);
+  const builder = new ConfigEntryBuilder(null, options, internalOptions);
 
   builder
     .addConfig([
