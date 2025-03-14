@@ -238,8 +238,8 @@ importers:
         specifier: 4.17.12
         version: 4.17.12
       '@types/node':
-        specifier: 18.19.78
-        version: 18.19.78
+        specifier: 18.19.80
+        version: 18.19.80
       cross-env:
         specifier: 7.0.3
         version: 7.0.3
@@ -247,17 +247,17 @@ importers:
         specifier: 9.22.0
         version: 9.22.0(jiti@2.0.0)
       eslint-typegen:
-        specifier: 2.0.0
-        version: 2.0.0(eslint@9.22.0(jiti@2.0.0))
+        specifier: 2.1.0
+        version: 2.1.0(eslint@9.22.0(jiti@2.0.0))
       prettier:
         specifier: 3.5.3
         version: 3.5.3
       release-it:
         specifier: 18.1.2
-        version: 18.1.2(@types/node@18.19.78)(typescript@5.8.2)
+        version: 18.1.2(@types/node@18.19.80)(typescript@5.8.2)
       shiki:
-        specifier: 3.1.0
-        version: 3.1.0
+        specifier: 3.2.1
+        version: 3.2.1
       shx:
         specifier: 0.3.4
         version: 0.3.4
@@ -1372,23 +1372,23 @@ packages:
   '@sec-ant/readable-stream@0.4.1':
     resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
 
-  '@shikijs/core@3.1.0':
-    resolution: {integrity: sha512-1ppAOyg3F18N8Ge9DmJjGqRVswihN33rOgPovR6gUHW17Hw1L4RlRhnmVQcsacSHh0A8IO1FIgNbtTxUFwodmg==}
+  '@shikijs/core@3.2.1':
+    resolution: {integrity: sha512-FhsdxMWYu/C11sFisEp7FMGBtX/OSSbnXZDMBhGuUDBNTdsoZlMSgQv5f90rwvzWAdWIW6VobD+G3IrazxA6dQ==}
 
-  '@shikijs/engine-javascript@3.1.0':
-    resolution: {integrity: sha512-/LwkhW17jYi7uPcdaaSQQDNW+xgrHXarkrxYPoC6WPzH2xW5mFMw12doHXJBqxmYvtcTbaatcv2MkH9+3PU1FA==}
+  '@shikijs/engine-javascript@3.2.1':
+    resolution: {integrity: sha512-eMdcUzN3FMQYxOmRf2rmU8frikzoSHbQDFH2hIuXsrMO+IBOCI9BeeRkCiBkcLDHeRKbOCtYMJK3D6U32ooU9Q==}
 
-  '@shikijs/engine-oniguruma@3.1.0':
-    resolution: {integrity: sha512-reRgy8VzDPdiDocuGDD60Rk/jLxgcgy+6H4n6jYLeN2Yw5ikasRjQQx8ERXtDM35yg2v/d6KolDBcK8hYYhcmw==}
+  '@shikijs/engine-oniguruma@3.2.1':
+    resolution: {integrity: sha512-wZZAkayEn6qu2+YjenEoFqj0OyQI64EWsNR6/71d1EkG4sxEOFooowKivsWPpaWNBu3sxAG+zPz5kzBL/SsreQ==}
 
-  '@shikijs/langs@3.1.0':
-    resolution: {integrity: sha512-hAM//sExPXAXG3ZDWjrmV6Vlw4zlWFOcT1ZXNhFRBwPP27scZu/ZIdZ+TdTgy06zSvyF4KIjnF8j6+ScKGu6ww==}
+  '@shikijs/langs@3.2.1':
+    resolution: {integrity: sha512-If0iDHYRSGbihiA8+7uRsgb1er1Yj11pwpX1c6HLYnizDsKAw5iaT3JXj5ZpaimXSWky/IhxTm7C6nkiYVym+A==}
 
-  '@shikijs/themes@3.1.0':
-    resolution: {integrity: sha512-A4MJmy9+ydLNbNCtkmdTp8a+ON+MMXoUe1KTkELkyu0+pHGOcbouhNuobhZoK59cL4cOST6CCz1x+kUdkp9UZA==}
+  '@shikijs/themes@3.2.1':
+    resolution: {integrity: sha512-k5DKJUT8IldBvAm8WcrDT5+7GA7se6lLksR+2E3SvyqGTyFMzU2F9Gb7rmD+t+Pga1MKrYFxDIeyWjMZWM6uBQ==}
 
-  '@shikijs/types@3.1.0':
-    resolution: {integrity: sha512-F8e7Fy4ihtcNpJG572BZZC1ErYrBrzJ5Cbc9Zi3REgWry43gIvjJ9lFAoUnuy7Bvy4IFz7grUSxL5edfrrjFEA==}
+  '@shikijs/types@3.2.1':
+    resolution: {integrity: sha512-/NTWAk4KE2M8uac0RhOsIhYQf4pdU0OywQuYDGIGAJ6Mjunxl2cGiuLkvu4HLCMn+OTTLRWkjZITp+aYJv60yA==}
 
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
@@ -1477,8 +1477,8 @@ packages:
   '@types/ms@0.7.34':
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
 
-  '@types/node@18.19.78':
-    resolution: {integrity: sha512-m1ilZCTwKLkk9rruBJXFeYN0Bc5SbjirwYX/Td3MqPfioYbgun3IvK/m8dQxMCnrPGZPg1kvXjp3SIekCN/ynw==}
+  '@types/node@18.19.80':
+    resolution: {integrity: sha512-kEWeMwMeIvxYkeg1gTc01awpwLbfMRZXdIhwRcakd/KlK53jmRC26LqcbIt7fnAQTu5GzlnWmzA3H6+l1u6xxQ==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -2885,8 +2885,8 @@ packages:
     resolution: {integrity: sha512-pUNxi75F8MJ/GdeKtVLSbYg4ZI34J6C0C7sbL4YOp2exGwen7ZsuBqKzUhXd0qMQ362yET3z+uPwKeg/0C2XCQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  eslint-typegen@2.0.0:
-    resolution: {integrity: sha512-70TEVfim9XxuVWQ104cv4x9d3XJt/t7i0u8/m+/6B/Kc21fnznLjF63M/L4/1VtquCoAUw9+N97VzbENuLlexw==}
+  eslint-typegen@2.1.0:
+    resolution: {integrity: sha512-tY9TTx07InS+mQ/+zYnCMHkdsS00GPaQy84PwHiQd2XWwXIptRExKcz1kI8eG1CGg1sBs9mONwSfbGMbvI4fNA==}
     peerDependencies:
       eslint: ^9.0.0
 
@@ -4065,8 +4065,8 @@ packages:
     resolution: {integrity: sha512-yBYjY9QX2hnRmZHAjG/f13MzmBzxzYgQhFrke06TTyKY5zSTEqkOeukBzIdVA3j3ulu8Qa3MbVFShV7T2RmGtQ==}
     engines: {node: '>= 0.4'}
 
-  ohash@1.1.4:
-    resolution: {integrity: sha512-FlDryZAahJmEF3VR3w1KogSEdWX3WhA5GPakFx4J81kEAiHyLMpdLLElS8n8dfNadMgAne/MywcvmogzscVt4g==}
+  ohash@2.0.11:
+    resolution: {integrity: sha512-RdR9FQrFwNBNXAr4GixM8YaRZRJ5PUWbKYbE5eOsrwAjJW0q2REGcf79oYPsLyskQCZG1PLN+S/K1V00joZAoQ==}
 
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
@@ -4079,8 +4079,11 @@ packages:
     resolution: {integrity: sha512-VXJjc87FScF88uafS3JllDgvAm+c/Slfz06lorj2uAY34rlUu0Nt+v8wreiImcrgAjjIHp1rXpTDlLOGw29WwQ==}
     engines: {node: '>=18'}
 
-  oniguruma-to-es@3.1.1:
-    resolution: {integrity: sha512-bUH8SDvPkH3ho3dvwJwfonjlQ4R80vjyvrU8YpxuROddv55vAEJrTuCuCVUhhsHbtlD9tGGbaNApGQckXhS8iQ==}
+  oniguruma-parser@0.5.4:
+    resolution: {integrity: sha512-yNxcQ8sKvURiTwP0mV6bLQCYE7NKfKRRWunhbZnXgxSmB1OXa1lHrN3o4DZd+0Si0kU5blidK7BcROO8qv5TZA==}
+
+  oniguruma-to-es@4.1.0:
+    resolution: {integrity: sha512-SNwG909cSLo4vPyyPbU/VJkEc9WOXqu2ycBlfd1UCXLqk1IijcQktSBb2yRQ2UFPsDhpkaf+C1dtT3PkLK/yWA==}
 
   open@10.1.0:
     resolution: {integrity: sha512-mnkeQ1qP5Ue2wd+aivTD3NHd/lZ96Lu0jgf0pwktLPtx6cTZiH7tyeGRRHs0zX0rbrahXPnXlUnbeXyaBBuIaw==}
@@ -4558,8 +4561,8 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
 
-  shiki@3.1.0:
-    resolution: {integrity: sha512-LdTNyWQlC5zdCaHdcp1zPA1OVA2ivb+KjGOOnGcy02tGaF5ja+dGibWFH7Ar8YlngUgK/scDqworK18Ys9cbYA==}
+  shiki@3.2.1:
+    resolution: {integrity: sha512-VML/2o1/KGYkEf/stJJ+s9Ypn7jUKQPomGLGYso4JJFMFxVDyPNsjsI3MB3KLjlMOeH44gyaPdXC6rik2WXvUQ==}
 
   shx@0.3.4:
     resolution: {integrity: sha512-N6A9MLVqjxZYcVn8hLmtneQWIJtp8IKzMP4eMnx+nqkvXoqinUPCbUFLp2UcWTEIUONhlk0ewxr/jaVGlc+J+g==}
@@ -5917,25 +5920,25 @@ snapshots:
 
   '@iarna/toml@2.2.5': {}
 
-  '@inquirer/checkbox@4.0.4(@types/node@18.19.78)':
+  '@inquirer/checkbox@4.0.4(@types/node@18.19.80)':
     dependencies:
-      '@inquirer/core': 10.1.2(@types/node@18.19.78)
+      '@inquirer/core': 10.1.2(@types/node@18.19.80)
       '@inquirer/figures': 1.0.9
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
+      '@types/node': 18.19.80
       ansi-escapes: 4.3.2
       yoctocolors-cjs: 2.1.2
 
-  '@inquirer/confirm@5.1.1(@types/node@18.19.78)':
+  '@inquirer/confirm@5.1.1(@types/node@18.19.80)':
     dependencies:
-      '@inquirer/core': 10.1.2(@types/node@18.19.78)
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/core': 10.1.2(@types/node@18.19.80)
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
+      '@types/node': 18.19.80
 
-  '@inquirer/core@10.1.2(@types/node@18.19.78)':
+  '@inquirer/core@10.1.2(@types/node@18.19.80)':
     dependencies:
       '@inquirer/figures': 1.0.9
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
       ansi-escapes: 4.3.2
       cli-width: 4.1.0
       mute-stream: 2.0.0
@@ -5946,82 +5949,82 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@inquirer/editor@4.2.1(@types/node@18.19.78)':
+  '@inquirer/editor@4.2.1(@types/node@18.19.80)':
     dependencies:
-      '@inquirer/core': 10.1.2(@types/node@18.19.78)
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/core': 10.1.2(@types/node@18.19.80)
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
+      '@types/node': 18.19.80
       external-editor: 3.1.0
 
-  '@inquirer/expand@4.0.4(@types/node@18.19.78)':
+  '@inquirer/expand@4.0.4(@types/node@18.19.80)':
     dependencies:
-      '@inquirer/core': 10.1.2(@types/node@18.19.78)
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/core': 10.1.2(@types/node@18.19.80)
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
+      '@types/node': 18.19.80
       yoctocolors-cjs: 2.1.2
 
   '@inquirer/figures@1.0.9': {}
 
-  '@inquirer/input@4.1.1(@types/node@18.19.78)':
+  '@inquirer/input@4.1.1(@types/node@18.19.80)':
     dependencies:
-      '@inquirer/core': 10.1.2(@types/node@18.19.78)
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/core': 10.1.2(@types/node@18.19.80)
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
+      '@types/node': 18.19.80
 
-  '@inquirer/number@3.0.4(@types/node@18.19.78)':
+  '@inquirer/number@3.0.4(@types/node@18.19.80)':
     dependencies:
-      '@inquirer/core': 10.1.2(@types/node@18.19.78)
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/core': 10.1.2(@types/node@18.19.80)
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
+      '@types/node': 18.19.80
 
-  '@inquirer/password@4.0.4(@types/node@18.19.78)':
+  '@inquirer/password@4.0.4(@types/node@18.19.80)':
     dependencies:
-      '@inquirer/core': 10.1.2(@types/node@18.19.78)
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/core': 10.1.2(@types/node@18.19.80)
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
+      '@types/node': 18.19.80
       ansi-escapes: 4.3.2
 
-  '@inquirer/prompts@7.2.1(@types/node@18.19.78)':
+  '@inquirer/prompts@7.2.1(@types/node@18.19.80)':
     dependencies:
-      '@inquirer/checkbox': 4.0.4(@types/node@18.19.78)
-      '@inquirer/confirm': 5.1.1(@types/node@18.19.78)
-      '@inquirer/editor': 4.2.1(@types/node@18.19.78)
-      '@inquirer/expand': 4.0.4(@types/node@18.19.78)
-      '@inquirer/input': 4.1.1(@types/node@18.19.78)
-      '@inquirer/number': 3.0.4(@types/node@18.19.78)
-      '@inquirer/password': 4.0.4(@types/node@18.19.78)
-      '@inquirer/rawlist': 4.0.4(@types/node@18.19.78)
-      '@inquirer/search': 3.0.4(@types/node@18.19.78)
-      '@inquirer/select': 4.0.4(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/checkbox': 4.0.4(@types/node@18.19.80)
+      '@inquirer/confirm': 5.1.1(@types/node@18.19.80)
+      '@inquirer/editor': 4.2.1(@types/node@18.19.80)
+      '@inquirer/expand': 4.0.4(@types/node@18.19.80)
+      '@inquirer/input': 4.1.1(@types/node@18.19.80)
+      '@inquirer/number': 3.0.4(@types/node@18.19.80)
+      '@inquirer/password': 4.0.4(@types/node@18.19.80)
+      '@inquirer/rawlist': 4.0.4(@types/node@18.19.80)
+      '@inquirer/search': 3.0.4(@types/node@18.19.80)
+      '@inquirer/select': 4.0.4(@types/node@18.19.80)
+      '@types/node': 18.19.80
 
-  '@inquirer/rawlist@4.0.4(@types/node@18.19.78)':
+  '@inquirer/rawlist@4.0.4(@types/node@18.19.80)':
     dependencies:
-      '@inquirer/core': 10.1.2(@types/node@18.19.78)
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/core': 10.1.2(@types/node@18.19.80)
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
+      '@types/node': 18.19.80
       yoctocolors-cjs: 2.1.2
 
-  '@inquirer/search@3.0.4(@types/node@18.19.78)':
+  '@inquirer/search@3.0.4(@types/node@18.19.80)':
     dependencies:
-      '@inquirer/core': 10.1.2(@types/node@18.19.78)
+      '@inquirer/core': 10.1.2(@types/node@18.19.80)
       '@inquirer/figures': 1.0.9
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
+      '@types/node': 18.19.80
       yoctocolors-cjs: 2.1.2
 
-  '@inquirer/select@4.0.4(@types/node@18.19.78)':
+  '@inquirer/select@4.0.4(@types/node@18.19.80)':
     dependencies:
-      '@inquirer/core': 10.1.2(@types/node@18.19.78)
+      '@inquirer/core': 10.1.2(@types/node@18.19.80)
       '@inquirer/figures': 1.0.9
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
+      '@types/node': 18.19.80
       ansi-escapes: 4.3.2
       yoctocolors-cjs: 2.1.2
 
-  '@inquirer/type@3.0.2(@types/node@18.19.78)':
+  '@inquirer/type@3.0.2(@types/node@18.19.80)':
     dependencies:
-      '@types/node': 18.19.78
+      '@types/node': 18.19.80
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -6046,7 +6049,7 @@ snapshots:
     dependencies:
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 18.19.78
+      '@types/node': 18.19.80
       jest-mock: 29.7.0
 
   '@jest/expect-utils@29.7.0':
@@ -6064,7 +6067,7 @@ snapshots:
     dependencies:
       '@jest/types': 29.6.3
       '@sinonjs/fake-timers': 10.3.0
-      '@types/node': 18.19.78
+      '@types/node': 18.19.80
       jest-message-util: 29.7.0
       jest-mock: 29.7.0
       jest-util: 29.7.0
@@ -6098,7 +6101,7 @@ snapshots:
       '@jest/schemas': 29.6.3
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 18.19.78
+      '@types/node': 18.19.80
       '@types/yargs': 17.0.33
       chalk: 4.1.2
 
@@ -6292,33 +6295,33 @@ snapshots:
 
   '@sec-ant/readable-stream@0.4.1': {}
 
-  '@shikijs/core@3.1.0':
+  '@shikijs/core@3.2.1':
     dependencies:
-      '@shikijs/types': 3.1.0
+      '@shikijs/types': 3.2.1
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.4
       hast-util-to-html: 9.0.5
 
-  '@shikijs/engine-javascript@3.1.0':
+  '@shikijs/engine-javascript@3.2.1':
     dependencies:
-      '@shikijs/types': 3.1.0
+      '@shikijs/types': 3.2.1
       '@shikijs/vscode-textmate': 10.0.2
-      oniguruma-to-es: 3.1.1
+      oniguruma-to-es: 4.1.0
 
-  '@shikijs/engine-oniguruma@3.1.0':
+  '@shikijs/engine-oniguruma@3.2.1':
     dependencies:
-      '@shikijs/types': 3.1.0
+      '@shikijs/types': 3.2.1
       '@shikijs/vscode-textmate': 10.0.2
 
-  '@shikijs/langs@3.1.0':
+  '@shikijs/langs@3.2.1':
     dependencies:
-      '@shikijs/types': 3.1.0
+      '@shikijs/types': 3.2.1
 
-  '@shikijs/themes@3.1.0':
+  '@shikijs/themes@3.2.1':
     dependencies:
-      '@shikijs/types': 3.1.0
+      '@shikijs/types': 3.2.1
 
-  '@shikijs/types@3.1.0':
+  '@shikijs/types@3.2.1':
     dependencies:
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.4
@@ -6380,7 +6383,7 @@ snapshots:
 
   '@types/graceful-fs@4.1.9':
     dependencies:
-      '@types/node': 18.19.78
+      '@types/node': 18.19.80
 
   '@types/hast@3.0.4':
     dependencies:
@@ -6413,7 +6416,7 @@ snapshots:
 
   '@types/ms@0.7.34': {}
 
-  '@types/node@18.19.78':
+  '@types/node@18.19.80':
     dependencies:
       undici-types: 5.26.5
 
@@ -8193,11 +8196,11 @@ snapshots:
       esrecurse: 4.3.0
       estraverse: 5.3.0
 
-  eslint-typegen@2.0.0(eslint@9.22.0(jiti@2.0.0)):
+  eslint-typegen@2.1.0(eslint@9.22.0(jiti@2.0.0)):
     dependencies:
       eslint: 9.22.0(jiti@2.0.0)
       json-schema-to-typescript-lite: 14.1.0
-      ohash: 1.1.4
+      ohash: 2.0.11
 
   eslint-utils@3.0.0(eslint@9.22.0(jiti@2.0.0)):
     dependencies:
@@ -8689,12 +8692,12 @@ snapshots:
 
   ini@4.1.1: {}
 
-  inquirer@12.3.0(@types/node@18.19.78):
+  inquirer@12.3.0(@types/node@18.19.80):
     dependencies:
-      '@inquirer/core': 10.1.2(@types/node@18.19.78)
-      '@inquirer/prompts': 7.2.1(@types/node@18.19.78)
-      '@inquirer/type': 3.0.2(@types/node@18.19.78)
-      '@types/node': 18.19.78
+      '@inquirer/core': 10.1.2(@types/node@18.19.80)
+      '@inquirer/prompts': 7.2.1(@types/node@18.19.80)
+      '@inquirer/type': 3.0.2(@types/node@18.19.80)
+      '@types/node': 18.19.80
       ansi-escapes: 4.3.2
       mute-stream: 2.0.0
       run-async: 3.0.0
@@ -8904,7 +8907,7 @@ snapshots:
     dependencies:
       '@jest/types': 29.6.3
       '@types/graceful-fs': 4.1.9
-      '@types/node': 18.19.78
+      '@types/node': 18.19.80
       anymatch: 3.1.3
       fb-watchman: 2.0.2
       graceful-fs: 4.2.11
@@ -8938,7 +8941,7 @@ snapshots:
   jest-mock@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 18.19.78
+      '@types/node': 18.19.80
       jest-util: 29.7.0
 
   jest-regex-util@29.6.3: {}
@@ -8971,7 +8974,7 @@ snapshots:
   jest-util@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 18.19.78
+      '@types/node': 18.19.80
       chalk: 4.1.2
       ci-info: 3.9.0
       graceful-fs: 4.2.11
@@ -8979,7 +8982,7 @@ snapshots:
 
   jest-worker@29.7.0:
     dependencies:
-      '@types/node': 18.19.78
+      '@types/node': 18.19.80
       jest-util: 29.7.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
@@ -9618,7 +9621,7 @@ snapshots:
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
 
-  ohash@1.1.4: {}
+  ohash@2.0.11: {}
 
   once@1.4.0:
     dependencies:
@@ -9632,9 +9635,12 @@ snapshots:
     dependencies:
       mimic-function: 5.0.1
 
-  oniguruma-to-es@3.1.1:
+  oniguruma-parser@0.5.4: {}
+
+  oniguruma-to-es@4.1.0:
     dependencies:
       emoji-regex-xs: 1.0.0
+      oniguruma-parser: 0.5.4
       regex: 6.0.1
       regex-recursion: 6.0.2
 
@@ -10000,7 +10006,7 @@ snapshots:
     dependencies:
       jsesc: 3.0.2
 
-  release-it@18.1.2(@types/node@18.19.78)(typescript@5.8.2):
+  release-it@18.1.2(@types/node@18.19.80)(typescript@5.8.2):
     dependencies:
       '@iarna/toml': 2.2.5
       '@octokit/rest': 21.0.2
@@ -10011,7 +10017,7 @@ snapshots:
       execa: 9.5.2
       git-url-parse: 16.0.0
       globby: 14.0.2
-      inquirer: 12.3.0(@types/node@18.19.78)
+      inquirer: 12.3.0(@types/node@18.19.80)
       issue-parser: 7.0.1
       lodash: 4.17.21
       mime-types: 2.1.35
@@ -10155,14 +10161,14 @@ snapshots:
       interpret: 1.4.0
       rechoir: 0.6.2
 
-  shiki@3.1.0:
+  shiki@3.2.1:
     dependencies:
-      '@shikijs/core': 3.1.0
-      '@shikijs/engine-javascript': 3.1.0
-      '@shikijs/engine-oniguruma': 3.1.0
-      '@shikijs/langs': 3.1.0
-      '@shikijs/themes': 3.1.0
-      '@shikijs/types': 3.1.0
+      '@shikijs/core': 3.2.1
+      '@shikijs/engine-javascript': 3.2.1
+      '@shikijs/engine-oniguruma': 3.2.1
+      '@shikijs/langs': 3.2.1
+      '@shikijs/themes': 3.2.1
+      '@shikijs/types': 3.2.1
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.4
 
