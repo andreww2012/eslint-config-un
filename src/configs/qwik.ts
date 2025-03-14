@@ -1,4 +1,3 @@
-// @ts-expect-error no typings
 import * as eslintPluginQwik from 'eslint-plugin-qwik';
 import {ERROR, GLOB_JS_TS_X, OFF} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
@@ -28,7 +27,8 @@ export const qwikEslintConfig = (
         filesFallback: [GLOB_JS_TS_X],
       },
     ])
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+    // @ts-expect-error no proper types
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     .addBulkRules(eslintPluginQwik.configs.strict.rules)
     // .addRule('use-method-usage', ERROR) // 🟣🟢
     // .addRule('valid-lexical-scope', ERROR) // 🟣🟢

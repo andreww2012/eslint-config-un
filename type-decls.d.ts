@@ -34,20 +34,32 @@ declare module 'angular-eslint-plugin15' {
   export = value;
 }
 
-declare module 'angular-eslint-template-parser13' {
+declare module '@eslint-community/eslint-plugin-eslint-comments' {
   import type ESLint from 'eslint';
-  declare const value: ESLint.Linter.Parser;
+  declare const value: ESLint.ESLint.Plugin;
   export = value;
 }
 
-declare module 'angular-eslint-template-parser14' {
+declare module 'eslint-plugin-jest-extended' {
   import type ESLint from 'eslint';
-  declare const value: ESLint.Linter.Parser;
+  declare const value: ESLint.ESLint.Plugin;
   export = value;
 }
 
-declare module 'angular-eslint-template-parser15' {
+declare module 'eslint-plugin-no-type-assertion' {
   import type ESLint from 'eslint';
-  declare const value: ESLint.Linter.Parser;
+  declare const value: ESLint.ESLint.Plugin;
+  export = value;
+}
+
+declare module 'eslint-plugin-promise' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
+  export = value;
+}
+
+declare module 'eslint-plugin-qwik' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
   export = value;
 }

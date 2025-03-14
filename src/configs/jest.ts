@@ -1,7 +1,6 @@
 import type {Jest as JestMethods} from '@jest/environment';
 import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import eslintPluginJest from 'eslint-plugin-jest';
-// @ts-expect-error no typings
 import eslintPluginJestExtended from 'eslint-plugin-jest-extended';
 import {getPackageInfoSync} from 'local-pkg';
 import type {ValueOf} from 'type-fest';
@@ -389,7 +388,8 @@ export const jestEslintConfig = (
       },
     )
     // Actually empty currently
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+    // @ts-expect-error no proper types
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     .addBulkRules(eslintPluginJestExtended.configs['flat/recommended'].rules)
     .addRule('prefer-to-be-array', getSuggestUsingJestExtendedMatcherSeverity('toBeArray'))
     .addRule('prefer-to-be-false', getSuggestUsingJestExtendedMatcherSeverity('toBeFalse'))

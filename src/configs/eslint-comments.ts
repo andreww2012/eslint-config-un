@@ -1,4 +1,3 @@
-// @ts-expect-error no typings
 import eslintPluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments';
 import {ERROR} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
@@ -23,7 +22,8 @@ export const eslintCommentsEslintConfig = (
 
   builder
     .addConfig(['eslint-comments', {includeDefaultFilesAndIgnores: true}])
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+    // @ts-expect-error no proper types
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     .addBulkRules(eslintPluginEslintComments.configs.recommended.rules)
     // 🟢 Best Practices
     .addRule('disable-enable-pair', ERROR, [{allowWholeFile: true}]) // 🟣

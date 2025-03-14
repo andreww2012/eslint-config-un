@@ -1,4 +1,3 @@
-// @ts-expect-error no typings
 import eslintPluginPromise from 'eslint-plugin-promise';
 import {ERROR, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
@@ -14,7 +13,8 @@ export const promiseEslintConfig = (
 
   builder
     .addConfig(['promise', {includeDefaultFilesAndIgnores: true}])
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+    // @ts-expect-error no proper types
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     .addBulkRules(eslintPluginPromise.configs.recommended.rules)
     .addRule('always-return', ERROR, [{ignoreLastCallback: true}])
     // .addRule('avoid-new', OFF)
