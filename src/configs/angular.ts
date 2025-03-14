@@ -1,3 +1,4 @@
+import angularTemplateParser from '@angular-eslint/template-parser';
 import {fixupRule} from '@eslint/compat';
 import eslintPluginAngularTemplate13 from 'angular-eslint-plugin-template13';
 import eslintPluginAngularTemplate14 from 'angular-eslint-plugin-template14';
@@ -13,14 +14,6 @@ import eslintPluginAngular16 from 'angular-eslint-plugin16';
 import eslintPluginAngular17 from 'angular-eslint-plugin17';
 import eslintPluginAngular18 from 'angular-eslint-plugin18';
 import eslintPluginAngular19 from 'angular-eslint-plugin19';
-import angularTemplateParser13 from 'angular-eslint-template-parser13';
-import angularTemplateParser14 from 'angular-eslint-template-parser14';
-import angularTemplateParser15 from 'angular-eslint-template-parser15';
-import angularTemplateParser16 from 'angular-eslint-template-parser16';
-import angularTemplateParser17 from 'angular-eslint-template-parser17';
-import angularTemplateParser18 from 'angular-eslint-template-parser18';
-import angularTemplateParser19 from 'angular-eslint-template-parser19';
-import type Eslint from 'eslint';
 import {klona} from 'klona';
 import {getPackageInfoSync} from 'local-pkg';
 import type {SetRequired} from 'type-fest';
@@ -53,60 +46,49 @@ const PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS: Record<
   {
     plugin: EslintPlugin;
     pluginTemplate: EslintPlugin;
-    templateParser: Eslint.Linter.Parser;
   }
 > = {
   13: {
     plugin: eslintPluginAngular13,
     pluginTemplate: eslintPluginAngularTemplate13,
-    templateParser: angularTemplateParser13,
   },
   14: {
     plugin: eslintPluginAngular14,
     pluginTemplate: eslintPluginAngularTemplate14,
-    templateParser: angularTemplateParser14,
   },
   15: {
     plugin: eslintPluginAngular15,
     pluginTemplate: eslintPluginAngularTemplate15,
-    templateParser: angularTemplateParser15,
   },
   16: {
     // @ts-expect-error types mismatch
     plugin: eslintPluginAngular16,
     // @ts-expect-error types mismatch
     pluginTemplate: eslintPluginAngularTemplate16,
-    templateParser: angularTemplateParser16,
   },
   17: {
     // @ts-expect-error types mismatch
     plugin: eslintPluginAngular17,
     // @ts-expect-error types mismatch
     pluginTemplate: eslintPluginAngularTemplate17,
-    templateParser: angularTemplateParser17,
   },
   18: {
     // @ts-expect-error types mismatch
     plugin: eslintPluginAngular18,
     // @ts-expect-error types mismatch
     pluginTemplate: eslintPluginAngularTemplate18,
-    templateParser: angularTemplateParser18,
   },
   19: {
     // @ts-expect-error types mismatch
     plugin: eslintPluginAngular19,
     // @ts-expect-error types mismatch
     pluginTemplate: eslintPluginAngularTemplate19,
-    templateParser: angularTemplateParser19,
   },
 };
 
 const generateMergedAngularPlugins = (installedVersion: SupportedAngularVersion) => {
-  const {
-    plugin: pluginGeneral,
-    pluginTemplate,
-    templateParser,
-  } = PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS[installedVersion];
+  const {plugin: pluginGeneral, pluginTemplate} =
+    PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS[installedVersion];
 
   type EslintPluginWithRequiredRules = SetRequired<EslintPlugin, 'rules'>;
   const mergedPluginGeneral: EslintPluginWithRequiredRules = {
@@ -180,19 +162,9 @@ const generateMergedAngularPlugins = (installedVersion: SupportedAngularVersion)
     }
   });
 
-  if (!templateParser.meta) {
-    // Required for serialization, missing in old versions: https://github.com/eslint/eslint/blob/83e24f5be4d5723b5f79512b46ab68bc97a23247/messages/config-serialize-function.js#L17
-    templateParser.meta = klona({
-      ...PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS[LATEST_SUPPORTED_ANGULAR_VERSION].templateParser
-        .meta,
-      version: String(installedVersion),
-    });
-  }
-
   return {
     pluginGeneral: mergedPluginGeneral,
     pluginTemplate: mergedPluginTemplate,
-    templateParser,
   };
 };
 
@@ -404,11 +376,8 @@ export const angularEslintConfig = (
     };
   }
 
-  const {
-    pluginGeneral: eslintPluginAngular,
-    pluginTemplate: eslintPluginAngularTemplate,
-    templateParser: angularTemplateParser,
-  } = generateMergedAngularPlugins(angularVersion);
+  const {pluginGeneral: eslintPluginAngular, pluginTemplate: eslintPluginAngularTemplate} =
+    generateMergedAngularPlugins(angularVersion);
 
   const {
     configTemplate = true,

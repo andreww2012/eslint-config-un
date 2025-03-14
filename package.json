@@ -45,6 +45,7 @@
     "prepublishOnly": "npm run test && npm run build && npm run lint:public-types"
   },
   "dependencies": {
+    "@angular-eslint/template-parser": "19.2.1",
     "@antfu/utils": "9.1.0",
     "@eslint-community/eslint-plugin-eslint-comments": "4.4.1",
     "@eslint/compat": "1.2.7",
@@ -67,13 +68,6 @@
     "angular-eslint-plugin17": "npm:@angular-eslint/eslint-plugin@17.5.3",
     "angular-eslint-plugin18": "npm:@angular-eslint/eslint-plugin@18.4.3",
     "angular-eslint-plugin19": "npm:@angular-eslint/eslint-plugin@19.2.0",
-    "angular-eslint-template-parser13": "npm:@angular-eslint/template-parser@13.5.0",
-    "angular-eslint-template-parser14": "npm:@angular-eslint/template-parser@14.4.0",
-    "angular-eslint-template-parser15": "npm:@angular-eslint/template-parser@15.2.1",
-    "angular-eslint-template-parser16": "npm:@angular-eslint/template-parser@16.3.1",
-    "angular-eslint-template-parser17": "npm:@angular-eslint/template-parser@17.5.3",
-    "angular-eslint-template-parser18": "npm:@angular-eslint/template-parser@18.4.3",
-    "angular-eslint-template-parser19": "npm:@angular-eslint/template-parser@19.2.0",
     "enhanced-resolve": "5.18.1",
     "eslint-config-flat-gitignore": "2.1.0",
     "eslint-config-prettier": "10.1.1",
