@@ -166,7 +166,11 @@ export const tsEslintConfig = (
     .addRule('no-empty-object-type', ERROR, [{allowInterfaces: 'with-single-extends'}])
     .addRule('no-explicit-any', WARNING, [{ignoreRestArgs: true}])
     // .addRule('no-extra-non-null-assertion', ERROR)
-    // .addRule('no-extraneous-class', ERROR)
+    .addRule('no-extraneous-class', ERROR, [
+      {
+        allowWithDecorator: true, // Primarily for Angular
+      },
+    ])
     // .addRule('no-invalid-void-type', ERROR)
     // .addRule('no-misused-new', ERROR)
     // .addRule('no-namespace', ERROR)
