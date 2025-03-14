@@ -38,6 +38,8 @@ export const GLOB_YAML = `**/*.${GLOB_YAML_EXTENSION}` as const;
 
 export const GLOB_TOML = '**/*.toml' as const;
 
+export const GLOB_HTML = '**/*.html' as const;
+
 export const GLOB_PACKAGE_JSON = '**/package.json' as const;
 
 export const GLOB_SUPPORTED_EXTENSIONS = [

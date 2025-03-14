@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import type {ESLint} from 'eslint';
 import eslintGitignore from 'eslint-config-flat-gitignore';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
@@ -48,6 +47,7 @@ import {type YamlEslintConfigOptions, yamlEslintConfig} from './configs/yaml';
 import {DEFAULT_GLOBAL_IGNORES, GLOB_CONFIG_FILES, GLOB_JS_TS_X_EXTENSION, OFF} from './constants';
 import {
   type DisableAutofixPrefix,
+  type EslintPlugin,
   type FlatConfigEntry,
   disableAutofixForAllRulesInPlugin,
   genFlatConfigEntryName,
@@ -321,6 +321,16 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     vueOptions,
   };
 
+  const {plugins: angularPlugins, configs: angularConfig} = angularEslintConfig(
+    angularOptions,
+    internalOptions,
+  );
+
+  const allPlugins: Record<string, EslintPlugin> = {
+    ...ALL_ESLINT_PLUGINS,
+    ...angularPlugins,
+  };
+
   return (
     [
       globalIgnores.length > 0 && {
@@ -334,12 +344,12 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       {
         name: genFlatConfigEntryName('global-setup/plugins'),
         plugins: {
-          ...ALL_ESLINT_PLUGINS,
+          ...allPlugins,
           ['disable-autofix' satisfies DisableAutofixPrefix]: {
             meta: {
               name: 'eslint-plugin-disable-autofix',
             },
-            rules: Object.entries(ALL_ESLINT_PLUGINS).reduce<ESLint.Plugin['rules'] & {}>(
+            rules: Object.entries(allPlugins).reduce<EslintPlugin['rules'] & {}>(
               (res, [pluginNamespace, plugin]) =>
                 Object.assign(res, disableAutofixForAllRulesInPlugin(pluginNamespace, plugin)),
               {},
@@ -379,7 +389,6 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isVitestEnabled && vitestEslintConfig(vitestOptions, internalOptions),
       isJsdocEnabled && jsdocEslintConfig(jsdocOptions, internalOptions),
       isQwikEnabled && qwikEslintConfig(qwikOptions, internalOptions),
-      angularEslintConfig(angularOptions, internalOptions),
 
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&
@@ -395,6 +404,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
 
       isTypescriptEnabled && tsEslintConfig(tsOptions, internalOptions), // Must come after all rulesets for vanilla JS
       isVueEnabled && vueEslintConfig(vueOptions, internalOptions), // Must come after ts
+      angularConfig, // Must come after ts
       isMarkdownEnabled && markdownEslintConfig(markdownOptions, internalOptions), // Must be last
 
       {

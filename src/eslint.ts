@@ -6,6 +6,7 @@ import {klona} from 'klona';
 import type {InternalConfigOptions} from './configs';
 import {
   ERROR,
+  GLOB_HTML,
   GLOB_MARKDOWN,
   GLOB_MARKDOWN_ALL_CODE_BLOCKS,
   type RuleSeverity,
@@ -179,6 +180,11 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
             /** Some rules (for example, `regexp/no-legacy-features`) crash when linting `*.md` files (only if `language` option is specified for the markdown config). We cannot ignore such files globally as that is irreversible, so we ignore them in every single config with the option to not ignore. */
             doNotIgnoreMarkdown?: boolean;
 
+            /**
+             * TypeError: node.body is not iterable
+             */
+            doNotIgnoreHtml?: boolean;
+
             /** Do not apply this config to "fenced code blocks" inside *.md files */
             ignoreMarkdownCodeBlocks?: boolean;
           },
@@ -202,6 +208,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
         : fallbackFiles;
     const ignores = [
       ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
+      ...(internalOptions.doNotIgnoreHtml ? [] : [GLOB_HTML]),
       ...(internalOptions.ignoreMarkdownCodeBlocks ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS] : []),
       ...(internalOptions.includeDefaultFilesAndIgnores ? configOptions.ignores || [] : []),
     ];
