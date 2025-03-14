@@ -115,8 +115,6 @@ export const markdownEslintConfig = (
   // Legend:
   // 🟣 - in recommended
 
-  builder.addConfig(['markdown/setup', {doNotIgnoreMarkdown: true}]);
-
   if (lintMarkdown) {
     builder
       .addConfig(

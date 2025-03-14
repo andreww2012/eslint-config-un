@@ -3,6 +3,7 @@ import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
 // @ts-expect-error no typings
 import ruleComposer from 'eslint-rule-composer';
 import {klona} from 'klona';
+import type {SetRequired} from 'type-fest';
 import type {InternalConfigOptions} from './configs';
 import {
   ERROR,
@@ -167,6 +168,12 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
   private readonly configs: FlatConfigEntry[] = [];
   private readonly configsDict = new Map<string, FlatConfigEntry>();
 
+  /**
+   * Note: `rules` will **always** be added to the resulting config, meaning that this method
+   * is not able to create a ["global ignores" config](https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores).
+   *
+   * `rules` and `name` keys cannot be overridden.
+   */
   addConfig(
     nameAndMaybeOptions:
       | string
@@ -181,7 +188,10 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
             doNotIgnoreMarkdown?: boolean;
 
             /**
-             * TypeError: node.body is not iterable
+             * Some rules (for example, [`strict`](https://eslint.org/docs/latest/rules/strict))
+             * crash when linting `*.html` files, so they are ignored by default.
+             *
+             * Set this to `true` if you're actually writing a config for `*.html` files.
              */
             doNotIgnoreHtml?: boolean;
 
@@ -213,11 +223,15 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
       ...(internalOptions.includeDefaultFilesAndIgnores ? configOptions.ignores || [] : []),
     ];
 
-    const configFinal: FlatConfigEntry = {
+    // We require the presence of `rules`:
+    // - to avoid likely adding it anyway later on
+    // - to avoid (mostly likely accidental) "global ignores" configs (https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores)
+    const configFinal: SetRequired<FlatConfigEntry, 'rules'> = {
       ...(files.length > 0 && {files}),
       ...(ignores.length > 0 && {ignores}),
       ...config,
       name: configName,
+      rules: {},
     };
 
     this.configs.push(configFinal);
@@ -261,7 +275,6 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
             : severity);
         const ruleNameFinal =
           `${options?.disableAutofix ? ('disable-autofix/' satisfies `${DisableAutofixPrefix}/`) : ''}${ruleNameWithPrefix}` as const;
-        configFinal.rules ||= {};
         configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
         if (options?.disableAutofix) {
           configFinal.rules[ruleNameWithPrefix] = 0 /* Off */;
@@ -284,12 +297,10 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
       addRule: generateAddRuleFn(false),
       addAnyRule: generateAddRuleFn(true),
       addOverrides: () => {
-        configFinal.rules ||= {};
         Object.assign(configFinal.rules, this.options.overrides);
         return result;
       },
       addBulkRules: (rules: AllRulesWithPrefix<RulesPrefix> | FalsyValue) => {
-        configFinal.rules ||= {};
         Object.assign(configFinal.rules, rules);
         return result;
       },
