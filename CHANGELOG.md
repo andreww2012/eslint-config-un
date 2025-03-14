@@ -2,6 +2,7 @@
 
 - New config: `angular` (TODO).
 - Set `allowWithDecorator: true` for [`@typescript-eslint/no-extraneous-class`](https://typescript-eslint.io/rules/no-extraneous-class) rule, mostly to avoid unfixable reports in Angular projects.
+- If TypeScript config (`ts`) is enabled, [`import/no-deprecated`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-deprecated.md) is now disabled because [the corresponding `@typescript-eslint` rule](https://typescript-eslint.io/rules/no-deprecated) works better (in particular, it accounts for function overloads).
 
 ## 0.6.2
 

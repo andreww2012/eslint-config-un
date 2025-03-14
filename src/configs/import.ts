@@ -115,7 +115,8 @@ export const importEslintConfig = (
     // .addRule('no-commonjs', OFF)
     .addRule('no-cycle', WARNING)
     .addRule('no-default-export', ERROR)
-    .addRule('no-deprecated', WARNING)
+    // Disabled when `typescript` config is enabled because it has a similar rule which works better (for example, is not triggered on `rxjs` operators)
+    .addRule('no-deprecated', internalOptions.isTypescriptEnabled ? OFF : WARNING)
     .addRule('no-duplicates', ERROR, [{'prefer-inline': true, ...noDuplicatesOptions}]) // Default: warn
     // .addRule('no-dynamic-require', OFF)
     .addRule('no-empty-named-blocks', ERROR)
