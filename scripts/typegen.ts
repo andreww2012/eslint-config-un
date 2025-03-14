@@ -1,17 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import url from 'node:url';
-import {builtinRules} from 'eslint/use-at-your-own-risk';
 import {flatConfigsToRulesDTS} from 'eslint-typegen/core';
 import {eslintConfig} from '../src';
+import {eslintPluginVanillaRules} from '../src/eslint';
 
 const configs = [
   {
     plugins: {
-      '': {
-        // eslint-disable-next-line @typescript-eslint/no-deprecated
-        rules: Object.fromEntries(builtinRules.entries()),
-      },
+      '': eslintPluginVanillaRules,
     },
   },
   ...eslintConfig({

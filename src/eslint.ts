@@ -1,5 +1,6 @@
 import type Eslint from 'eslint';
 import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
+import {builtinRules} from 'eslint/use-at-your-own-risk';
 // @ts-expect-error no typings
 import ruleComposer from 'eslint-rule-composer';
 import {klona} from 'klona';
@@ -130,6 +131,11 @@ export const bulkChangeRuleSeverity = <T extends Partial<RulesRecord>>(
 
 export type EslintPlugin = Eslint.ESLint.Plugin;
 
+export const eslintPluginVanillaRules: EslintPlugin = Object.freeze({
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
+  rules: Object.fromEntries(builtinRules.entries()),
+});
+
 export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
   pluginNamespace: string,
   plugin: Plugin,
@@ -150,7 +156,7 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
       if (ruleWithAutofixDisabled.meta?.fixable) {
         delete ruleWithAutofixDisabled.meta.fixable;
       }
-      return [`${pluginNamespace}/${ruleId}`, ruleWithAutofixDisabled];
+      return [`${pluginNamespace ? `${pluginNamespace}/` : ''}${ruleId}`, ruleWithAutofixDisabled];
     }),
   );
 

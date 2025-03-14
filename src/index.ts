@@ -50,6 +50,7 @@ import {
   type EslintPlugin,
   type FlatConfigEntry,
   disableAutofixForAllRulesInPlugin,
+  eslintPluginVanillaRules,
   genFlatConfigEntryName,
 } from './eslint';
 import {ALL_ESLINT_PLUGINS} from './plugins';
@@ -349,7 +350,10 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
             meta: {
               name: 'eslint-plugin-disable-autofix',
             },
-            rules: Object.entries(allPlugins).reduce<EslintPlugin['rules'] & {}>(
+            rules: Object.entries({
+              ...allPlugins,
+              '': eslintPluginVanillaRules,
+            }).reduce<EslintPlugin['rules'] & {}>(
               (res, [pluginNamespace, plugin]) =>
                 Object.assign(res, disableAutofixForAllRulesInPlugin(pluginNamespace, plugin)),
               {},
