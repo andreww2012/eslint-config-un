@@ -5,6 +5,7 @@
 - If TypeScript config (`ts`) is enabled, [`import/no-deprecated`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-deprecated.md) is now disabled because [the corresponding `@typescript-eslint` rule](https://typescript-eslint.io/rules/no-deprecated) works better (in particular, it accounts for function overloads).
 - Override `@typescript-eslint/eslint-plugin` peer dependency of `eslint-plugin-jest` and `eslint-plugin-unused-imports` to avoid loading a wrong version of it.
 - "Disable autofix" rules are now generated for all the vanilla ESLint rules.
+- [**BREAKING**] "Disable autofix" rules are no longer generated for rules that do not provide fixes.
 
 ## 0.6.2
 

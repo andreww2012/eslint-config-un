@@ -141,23 +141,29 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
   plugin: Plugin,
 ): Plugin['rules'] & {} =>
   Object.fromEntries(
-    Object.entries(klona(plugin.rules || {})).map(([ruleId, ruleImplementation]) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      const ruleWithAutofixDisabled = ruleComposer.mapReports(
-        ruleImplementation,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (problem: any) => {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-          delete problem.fix;
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-          return problem;
-        },
-      ) as typeof ruleImplementation;
-      if (ruleWithAutofixDisabled.meta?.fixable) {
-        delete ruleWithAutofixDisabled.meta.fixable;
-      }
-      return [`${pluginNamespace ? `${pluginNamespace}/` : ''}${ruleId}`, ruleWithAutofixDisabled];
-    }),
+    Object.entries(klona(plugin.rules || {}))
+      .map(([ruleId, ruleImplementation]) => {
+        if (!ruleImplementation.meta?.fixable) {
+          return null;
+        }
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+        const ruleWithAutofixDisabled = ruleComposer.mapReports(
+          ruleImplementation,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (problem: any) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            delete problem.fix;
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            return problem;
+          },
+        ) as typeof ruleImplementation;
+        delete ruleWithAutofixDisabled.meta?.fixable;
+        return [
+          `${pluginNamespace ? `${pluginNamespace}/` : ''}${ruleId}`,
+          ruleWithAutofixDisabled,
+        ] as const;
+      })
+      .filter((v) => v != null),
   );
 
 export type FlatConfigEntryForBuilder = Omit<FlatConfigEntry, 'name' | 'rules'>;
