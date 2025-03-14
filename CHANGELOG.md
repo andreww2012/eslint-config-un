@@ -1,4 +1,4 @@
-## Unreleased
+## 0.7.0
 
 - New config: `angular` (TODO).
 - Set `allowWithDecorator: true` for [`@typescript-eslint/no-extraneous-class`](https://typescript-eslint.io/rules/no-extraneous-class) rule, mostly to avoid unfixable reports in Angular projects.
@@ -6,6 +6,7 @@
 - Override `@typescript-eslint/eslint-plugin` peer dependency of `eslint-plugin-jest` and `eslint-plugin-unused-imports` to avoid loading a wrong version of it.
 - "Disable autofix" rules are now generated for all the vanilla ESLint rules.
 - [**BREAKING**] "Disable autofix" rules are no longer generated for rules that do not provide fixes.
+- Set [`sonarjs/no-clear-text-protocols`](https://sonarsource.github.io/rspec/#/rspec/S5332/javascript) rule severity to `warning` because it might produce many false positives.
 
 ## 0.6.2
 

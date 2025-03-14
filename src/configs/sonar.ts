@@ -179,7 +179,7 @@ export const sonarEslintConfig = (
     // Reason for keeping disabled: should mostly be covered by `no-global-assign`
     // .addRule('no-built-in-override', OFF)
     // .addRule('no-case-label-in-switch', ERROR) // 🟢
-    // .addRule('no-clear-text-protocols', ERROR) // 🟢 📦 `nodemailer`, `ftp`, `telnet-client`, `aws-cdk-lib`
+    .addRule('no-clear-text-protocols', WARNING) // 🟢 📦 `nodemailer`, `ftp`, `telnet-client`, `aws-cdk-lib`
     .addRule('no-code-after-done', testsRulesSeverity) // 🟢🧪 📦 `chai`
     // .addRule('no-collapsible-if', OFF)
     // TODO disable autofix?
