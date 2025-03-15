@@ -42,10 +42,11 @@ Includes the rules from the following configs & plugins:
 - [de-morgan](https://www.npmjs.com/package/eslint-plugin-de-morgan) (since v0.5.0)
 - [qwik](https://www.npmjs.com/package/eslint-plugin-qwik) (since v0.6.0)
 - [json-schema-validator](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) (since v0.6.0)
+- `angular` (since v0.7.0), using [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template)
 
 ## Features
 
-- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest`, `jest-extended`, `vitest`, `@builder.io/qwik` and `@qwik.dev/core` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
+- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest`, `jest-extended`, `vitest`, `@builder.io/qwik`, `@qwik.dev/core` and `@angular/core` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
 - Every block of rules supports `overrides` for rules.
 - Designed to be used separately from Prettier: *almost* all the rules potentially conflicting with Prettier are disabled *by default*.
 - Written in TypeScript so all the options are typed.

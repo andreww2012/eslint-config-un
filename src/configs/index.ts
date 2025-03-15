@@ -164,12 +164,43 @@ export interface EslintConfigUnOptions {
      */
     qwik?: boolean | Partial<QwikEslintConfigOptions>;
 
+    /* eslint-disable jsdoc/check-indentation */
+
     /**
-     * [angular](https://angular.io/) specific rules. Supported versions: 13 to 19 (inclusive).
+     * [Angular](https://angular.dev/) specific rules. Supported versions: 13 to 19 (inclusive).
      *
-     * Enabled automatically if `@angular/core` package of the supported version is installed.
+     * Resolved Angular version is the most important factor for determining
+     * which rules are enabled and how they are configured.
+     *
+     * The resolve algorithm is as follows:
+     * - By default, the major version of the installed `@angular/core` package is used.
+     * - If it's not installed or not within the supported range, the config will be disabled.
+     * - If the config is explicitly enabled by passing `true` or options but the package is not installed, the latest supported version will be used.
+     * - You can also manually specify the version using `angularVersion` option, which always takes precedence.
+     *
+     * Under the hood the config uses [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template) packages, but not directly.
+     *
+     * All the rules from all the supported versions of each of the plugins are merged
+     * into one plugin, but only those that are available in the same major version
+     * of the corresponding plugin will actually work. Others will be present, but do nothing, unless specified in `portRules` option.
+     *
+     * If the rule is present in multiple major versions of its plugin, the implementation
+     * from the most recent version will be used.
+     *
+     * **NOTE**: if the config is disabled, despite the rules being available in
+     * TypeScript types, the plugin will not be generated and they cannot be used.
+     *
+     * Examples:
+     * - If the resolved Angular version is 18:
+     *   - Any rule from `@angular-eslint/eslint-plugin(-template)` of version 18 will be available.
+     *    - [`@angular-eslint/prefer-signals`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-signals.md) will do nothing, since it was added in v19 of `@angular-eslint/eslint-plugin`. Specify it in `portRules` to make it work for Angular 18 code.
+     *     - [`@angular-eslint/component-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-class-suffix.md) will use the implementation from v19 of `@angular-eslint/eslint-plugin`.
+     * - If the resolved Angular version is 19:
+     *   - Any rule from `@angular-eslint/eslint-plugin(-template)` of version 19 will be available.
+     *   - [`@angular-eslint/no-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/v18.4.3/packages/eslint-plugin/docs/rules/no-host-metadata-property.md) rule will do nothing, since it was removed in v18 of `@angular-eslint/eslint-plugin`. Specify it in `portRules` to make it work again.
      */
     angular?: boolean | Partial<AngularEslintConfigOptions>;
+    /* eslint-enable jsdoc/check-indentation */
 
     /**
      * NOTE: disabled by default
