@@ -1,7 +1,9 @@
 import angularTemplateParser from '@angular-eslint/template-parser';
+import eslintPluginAngularTemplate17 from 'angular-eslint-plugin-template17';
 import eslintPluginAngularTemplate19 from 'angular-eslint-plugin-template19';
 import eslintPluginAngular18 from 'angular-eslint-plugin18';
 import eslintPluginAngular19 from 'angular-eslint-plugin19';
+import type Eslint from 'eslint';
 import {klona} from 'klona';
 import {getPackageInfoSync} from 'local-pkg';
 import type {ReadonlyDeep, SetRequired, Subtract} from 'type-fest';
@@ -15,7 +17,7 @@ import {
   type GetRuleOptions,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {type MaybeArray, getPackageMajorVersion} from '../utils';
+import {type MaybeArray, getPackageMajorVersion, getPackageSemverVersion} from '../utils';
 import type {InternalConfigOptions} from './index';
 
 // Please keep ascending order
@@ -401,7 +403,7 @@ export interface AngularEslintConfigOptions
    * - [`@angular-eslint/no-inputs-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-inputs-metadata-property.md)
    * - [`@angular-eslint/no-outputs-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-outputs-metadata-property.md)
    * - [`@angular-eslint/no-queries-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-queries-metadata-property.md)
-   * - [`@angular-eslint/no-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-host-metadata-property.md) (available until Angular 18, deprecated in Angular 18)
+   * - [`@angular-eslint/no-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/v18.4.3/packages/eslint-plugin/docs/rules/no-host-metadata-property.md) (available until Angular 18, deprecated in Angular 18)
    * @default {inputs: true, outputs: true, queries: true}
    */
   forbiddenMetadataProperties?: Partial<Record<'host' | 'inputs' | 'outputs' | 'queries', boolean>>;
@@ -505,6 +507,25 @@ export const angularEslintConfig = (
   // 🔴 - deprecated
   // Check rule usage: https://github.com/search?q=%22%40angular-eslint%2Fno-input-prefix%22+path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F&type=code&p=1
 
+  // Since v18, the processor uses `getDecorators` from `typescript` which does not exist prior to
+  // v4.8 of `typescript`, which might be used in older projects
+  const extractInlineHtmlProcessorLatest = eslintPluginAngularTemplate19.processors[
+    'extract-inline-html'
+  ] as Eslint.Linter.Processor;
+  const extractInlineHtmlProcessorV17 = eslintPluginAngularTemplate17.processors[
+    'extract-inline-html'
+  ] as Eslint.Linter.Processor;
+  const extractInlineHtmlProcessor = klona(
+    angularVersion < 18 ||
+      (getPackageSemverVersion(internalOptions.typescriptPackageInfo) || Number.POSITIVE_INFINITY) <
+        4.8
+      ? extractInlineHtmlProcessorV17
+      : extractInlineHtmlProcessorLatest,
+  );
+  if (!extractInlineHtmlProcessor.meta) {
+    extractInlineHtmlProcessor.meta = klona(extractInlineHtmlProcessorLatest.meta);
+  }
+
   builderGeneral
     .addConfig(
       [
@@ -515,10 +536,8 @@ export const angularEslintConfig = (
         },
       ],
       {
-        // TODO
-        // ConfigError: Config "eslint-config-un/angular/general": Key "processor": Expected an object or a string.
         ...(processInlineTemplates && {
-          processor: eslintPluginAngularTemplate.processors?.['extract-inline-html'],
+          processor: extractInlineHtmlProcessor,
         }),
       },
     )

@@ -319,6 +319,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
   const internalOptions: InternalConfigOptions = {
     globalOptions: options,
     isTypescriptEnabled,
+    typescriptPackageInfo,
     vueOptions,
   };
 

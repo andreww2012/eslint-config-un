@@ -1,5 +1,6 @@
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {FlatConfigEntry} from '../eslint';
+import type {PackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
@@ -239,5 +240,6 @@ export interface EslintConfigUnOptions {
 export interface InternalConfigOptions {
   globalOptions?: EslintConfigUnOptions;
   isTypescriptEnabled?: boolean;
+  typescriptPackageInfo?: PackageInfo;
   vueOptions?: VueEslintConfigOptions;
 }

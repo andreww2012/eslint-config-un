@@ -32,8 +32,15 @@ export const maybeCall = <ReturnType = unknown, Args extends readonly unknown[] 
     ? (fnOrValue as (...args: Args) => ReturnType)(...args)
     : fnOrValue;
 
-export const getPackageMajorVersion = (packageInfo: ReturnType<typeof getPackageInfoSync>) => {
-  const majorVersion = Number(packageInfo?.version?.split('.')[0]);
+export type PackageInfo = ReturnType<typeof getPackageInfoSync>;
+
+export const getPackageMajorVersion = (packageInfo: PackageInfo) => {
+  const majorVersion = Number.parseInt(packageInfo?.version || '', 10);
+  return Number.isNaN(majorVersion) ? null : majorVersion;
+};
+
+export const getPackageSemverVersion = (packageInfo: PackageInfo) => {
+  const majorVersion = Number.parseFloat(packageInfo?.version || '');
   return Number.isNaN(majorVersion) ? null : majorVersion;
 };
 
