@@ -34,7 +34,7 @@ Includes the rules from the following configs & plugins:
 - [eslint-comments](https://www.npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments) (since v0.1.3)
 - [package-json](https://www.npmjs.com/package/eslint-plugin-package-json) (since v0.1.5)
 - [markdown](https://www.npmjs.com/package/@eslint/markdown) (since v0.2.0)
-- [css](https://www.npmjs.com/package/eslint-plugin-css) (since v0.2.0)
+- `cssInJs` (since v0.2.0), using [`eslint-plugin-css`](https://www.npmjs.com/package/eslint-plugin-css)
 - [jest](https://www.npmjs.com/package/eslint-plugin-jest) (+ [jest-extended](https://www.npmjs.com/package/eslint-plugin-jest-extended)) (since v0.3.0)
 - [vitest](https://www.npmjs.com/package/@vitest/eslint-plugin) (since v0.3.0)
 - [jsdoc](https://www.npmjs.com/package/eslint-plugin-jsdoc) (since v0.3.1)
@@ -43,6 +43,7 @@ Includes the rules from the following configs & plugins:
 - [qwik](https://www.npmjs.com/package/eslint-plugin-qwik) (since v0.6.0)
 - [json-schema-validator](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) (since v0.6.0)
 - `angular` (since v0.7.0), using [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template)
+- `css` (since v0.7.0), using [`@eslint/css`](https://www.npmjs.com/package/@eslint/css)
 
 ## Features
 

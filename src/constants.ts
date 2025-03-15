@@ -40,6 +40,8 @@ export const GLOB_TOML = '**/*.toml' as const;
 
 export const GLOB_HTML = '**/*.html' as const;
 
+export const GLOB_CSS = '**/*.css' as const;
+
 export const GLOB_PACKAGE_JSON = '**/package.json' as const;
 
 export const GLOB_SUPPORTED_EXTENSIONS = [
@@ -50,6 +52,8 @@ export const GLOB_SUPPORTED_EXTENSIONS = [
   'json5',
   GLOB_YAML_EXTENSION,
   'toml',
+  'html',
+  'css',
 ].join(',');
 export const GLOB_MARKDOWN = '**/*.md' as const;
 export const GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS =

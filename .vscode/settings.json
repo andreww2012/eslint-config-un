@@ -12,6 +12,8 @@
     "json5",
     "markdown",
     "md",
+    "css",
+    "postcss",
   ],
 
   "[javascript][typescript][typescriptreact][vue][css][scss][postcss][html]": {

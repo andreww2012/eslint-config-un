@@ -8,6 +8,7 @@ import type {SetRequired} from 'type-fest';
 import type {InternalConfigOptions} from './configs';
 import {
   ERROR,
+  GLOB_CSS,
   GLOB_HTML,
   GLOB_MARKDOWN,
   GLOB_MARKDOWN_ALL_CODE_BLOCKS,
@@ -207,6 +208,14 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
              */
             doNotIgnoreHtml?: boolean;
 
+            /**
+             * Some rules (for example, [`no-irregular-whitespace`](https://eslint.org/docs/latest/rules/no-irregular-whitespace))
+             * crash when linting `*.css` files, so they are ignored by default.
+             *
+             * Set this to `true` if you're actually writing a config for `*.css` files.
+             */
+            doNotIgnoreCss?: boolean;
+
             /** Do not apply this config to "fenced code blocks" inside *.md files */
             ignoreMarkdownCodeBlocks?: boolean;
           },
@@ -231,6 +240,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
     const ignores = [
       ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
       ...(internalOptions.doNotIgnoreHtml ? [] : [GLOB_HTML]),
+      ...(internalOptions.doNotIgnoreCss ? [] : [GLOB_CSS]),
       ...(internalOptions.ignoreMarkdownCodeBlocks ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS] : []),
       ...(internalOptions.includeDefaultFilesAndIgnores ? configOptions.ignores || [] : []),
     ];

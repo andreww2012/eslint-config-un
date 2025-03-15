@@ -1,9 +1,10 @@
 import {fixupPluginRules} from '@eslint/compat';
+import eslintPluginCss from '@eslint/css';
 import eslintPluginMarkdown from '@eslint/markdown';
 import eslintPluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments';
 import eslintPluginStylistic from '@stylistic/eslint-plugin';
 import eslintPluginVitest from '@vitest/eslint-plugin';
-import eslintPluginCss from 'eslint-plugin-css';
+import eslintPluginCssInJs from 'eslint-plugin-css';
 import eslintPluginDeMorgan from 'eslint-plugin-de-morgan';
 import eslintPluginImportX from 'eslint-plugin-import-x';
 import eslintPluginJest from 'eslint-plugin-jest';
@@ -39,7 +40,7 @@ export const ALL_ESLINT_PLUGINS: FlatConfigEntry['plugins'] & {} = {
   // @ts-expect-error types mismatch
   '@typescript-eslint': typescriptEslintPlugin,
   // @ts-expect-error types mismatch
-  'css-in-js': eslintPluginCss,
+  'css-in-js': eslintPluginCssInJs,
   '@eslint-community/eslint-comments': eslintPluginEslintComments,
   // @ts-expect-error types mismatch
   import: eslintPluginImportX,
@@ -77,4 +78,5 @@ export const ALL_ESLINT_PLUGINS: FlatConfigEntry['plugins'] & {} = {
   qwik: fixupPluginRules(eslintPluginQwik),
   // @ts-expect-error types mismatch
   'json-schema-validator': eslintPluginJsonSchemaValidator,
+  css: eslintPluginCss,
 };

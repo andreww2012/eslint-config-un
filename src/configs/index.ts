@@ -158,7 +158,7 @@ export interface EslintConfigUnOptions {
     /**
      * [qwik](https://qwik.dev/) specific rules.
      *
-     * Used plugins:
+     * Used plugin:
      * - [`eslint-plugin-qwik`](https://www.npmjs.com/package/eslint-plugin-qwik) ([docs](https://qwik.dev/docs/advanced/eslint))
      * @default true if `@builder.io/qwik` or `@qwik.dev/core` package is installed
      */
@@ -201,6 +201,15 @@ export interface EslintConfigUnOptions {
      */
     angular?: boolean | Partial<AngularEslintConfigOptions>;
     /* eslint-enable jsdoc/check-indentation */
+
+    /**
+     * CSS specific rules.
+     *
+     * Used plugin:
+     * - [`@eslint/css`](https://www.npmjs.com/package/@eslint/css)
+     * @default true unless `stylelint` package is installed
+     */
+    css?: boolean | Partial<AngularEslintConfigOptions>;
 
     /**
      * NOTE: disabled by default
@@ -273,4 +282,5 @@ export interface InternalConfigOptions {
   isTypescriptEnabled?: boolean;
   typescriptPackageInfo?: PackageInfo;
   vueOptions?: VueEslintConfigOptions;
+  isTailwindEnabled?: boolean;
 }

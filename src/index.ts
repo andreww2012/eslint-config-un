@@ -5,6 +5,7 @@ import globals from 'globals';
 import {getPackageInfoSync, isPackageExists} from 'local-pkg';
 import type {EslintConfigUnOptions, InternalConfigOptions} from './configs';
 import {type AngularEslintConfigOptions, angularEslintConfig} from './configs/angular';
+import {type CssEslintConfigOptions, cssEslintConfig} from './configs/css';
 import {type CssInJsEslintConfigOptions, cssInJsEslintConfig} from './configs/css-in-js';
 import {type DeMorganEslintConfigOptions, deMorganEslintConfig} from './configs/de-morgan';
 import {
@@ -244,6 +245,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'angular'),
   };
 
+  /* 🟢 CSS */
+
+  const isCssEnabled = Boolean(configsOptions.css ?? getPackageInfoSync('stylelint') == null);
+  const cssOptions: CssEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'css'),
+  };
+
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
 
   /* 🔴 SECURITY */
@@ -321,6 +329,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     isTypescriptEnabled,
     typescriptPackageInfo,
     vueOptions,
+    isTailwindEnabled,
   };
 
   const {plugins: angularPlugins, configs: angularConfig} = angularEslintConfig(
@@ -394,6 +403,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isVitestEnabled && vitestEslintConfig(vitestOptions, internalOptions),
       isJsdocEnabled && jsdocEslintConfig(jsdocOptions, internalOptions),
       isQwikEnabled && qwikEslintConfig(qwikOptions, internalOptions),
+      isCssEnabled && cssEslintConfig(cssOptions, internalOptions),
 
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&
