@@ -29,6 +29,8 @@
     "dist"
   ],
   "scripts": {
+    "u": "ncu -i -t minor",
+    "ua": "ncu -i",
     "format:check": "prettier --check '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}' --log-level warn",
     "format:fix": "prettier --write '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}' --log-level warn",
     "eslint:inspect": "npx @eslint/config-inspector --open false",
@@ -117,6 +119,7 @@
     "cross-env": "7.0.3",
     "eslint": "9.22.0",
     "eslint-typegen": "2.1.0",
+    "npm-check-updates": "17.1.15",
     "prettier": "3.5.3",
     "release-it": "18.1.2",
     "shiki": "3.2.1",
