@@ -11,11 +11,12 @@ import {
   WARNING,
 } from '../constants';
 import {
+  type AllRulesWithPrefix,
   ConfigEntryBuilder,
   type ConfigSharedOptions,
+  type DisableAutofixPrefix,
   type FlatConfigEntry,
   type FlatConfigEntryForBuilder,
-  type RuleOverrides,
   type RulesRecord,
 } from '../eslint';
 import {
@@ -25,29 +26,98 @@ import {
 } from './js';
 import type {InternalConfigOptions} from './index';
 
-export interface TsEslintConfigOptions extends ConfigSharedOptions<'@typescript-eslint'> {
+// https://typescript-eslint.io/rules/?=typeInformation
+//  [...document.querySelector('table[class^=rulesTable]').tBodies[0].rows].map((row) => row.cells[0].querySelector('a').textContent).map((n) => `'${n.split('/')[1]}'`).join(' | ')
+type TypeAwareRules =
+  | 'await-thenable'
+  | 'consistent-return'
+  | 'consistent-type-exports'
+  | 'dot-notation'
+  | 'naming-convention'
+  | 'no-array-delete'
+  | 'no-base-to-string'
+  | 'no-confusing-void-expression'
+  | 'no-deprecated'
+  | 'no-duplicate-type-constituents'
+  | 'no-floating-promises'
+  | 'no-for-in-array'
+  | 'no-implied-eval'
+  | 'no-meaningless-void-operator'
+  | 'no-misused-promises'
+  | 'no-misused-spread'
+  | 'no-mixed-enums'
+  | 'no-redundant-type-constituents'
+  | 'no-unnecessary-boolean-literal-compare'
+  | 'no-unnecessary-condition'
+  | 'no-unnecessary-qualifier'
+  | 'no-unnecessary-template-expression'
+  | 'no-unnecessary-type-arguments'
+  | 'no-unnecessary-type-assertion'
+  | 'no-unnecessary-type-parameters'
+  | 'no-unsafe-argument'
+  | 'no-unsafe-assignment'
+  | 'no-unsafe-call'
+  | 'no-unsafe-enum-comparison'
+  | 'no-unsafe-member-access'
+  | 'no-unsafe-return'
+  | 'no-unsafe-type-assertion'
+  | 'no-unsafe-unary-minus'
+  | 'non-nullable-type-assertion-style'
+  | 'only-throw-error'
+  | 'prefer-destructuring'
+  | 'prefer-find'
+  | 'prefer-includes'
+  | 'prefer-nullish-coalescing'
+  | 'prefer-optional-chain'
+  | 'prefer-promise-reject-errors'
+  | 'prefer-readonly'
+  | 'prefer-readonly-parameter-types'
+  | 'prefer-reduce-type-parameter'
+  | 'prefer-regexp-exec'
+  | 'prefer-return-this-type'
+  | 'prefer-string-starts-ends-with'
+  | 'promise-function-async'
+  | 'related-getter-setter-pairs'
+  | 'require-array-sort-compare'
+  | 'require-await'
+  | 'restrict-plus-operands'
+  | 'restrict-template-expressions'
+  | 'return-await'
+  | 'strict-boolean-expressions'
+  | 'switch-exhaustiveness-check'
+  | 'unbound-method'
+  | 'use-unknown-in-catch-callback-variable';
+
+type AllTypescriptEslintRules = AllRulesWithPrefix<'@typescript-eslint', true>;
+type TypeAwareRulesWithPrefixes =
+  `${'' | `${DisableAutofixPrefix}/`}@typescript-eslint/${TypeAwareRules}`;
+
+export interface TsEslintConfigOptions
+  extends ConfigSharedOptions<Omit<AllTypescriptEslintRules, TypeAwareRulesWithPrefixes>> {
   typescriptVersion?: string;
+
   parserOptions?: Omit<TsEslintParserOptions, 'sourceType'> & {
     sourceType?: Eslint.Linter.ParserOptions['sourceType'];
   };
 
   /**
-   * Pass `true` to enable type-aware checks for all `files`
+   * Applies rules requiring type information on the specified `files`.
+   *
+   * By default uses `ignores` from the parent config.
    * @default true
    */
-  filesTypeAware?: FlatConfigEntry['files'] | boolean;
-
-  /**
-   * Pass `true` to ignore the same files as in `ignores`
-   */
-  ignoresTypeAware?: FlatConfigEntry['ignores'] | boolean;
-  overridesTypeAware?: RuleOverrides<'@typescript-eslint'>; // TODO only type-aware rules?
+  configTypeAware?:
+    | boolean
+    | ConfigSharedOptions<
+        Pick<AllTypescriptEslintRules, TypeAwareRulesWithPrefixes & keyof AllTypescriptEslintRules>
+      >;
 
   /**
    * Do not put `.` (dot) before an extension
    * @example ['vue']
    */
   extraFileExtensions?: string[];
+
   noTypeAssertion?: boolean | 'warning';
 
   /**
@@ -68,6 +138,8 @@ export const tsEslintConfig = (
   options: TsEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
+  const {configTypeAware = true} = options;
+
   const extraFilesNONTypeAware: FlatConfigEntry['files'] & {} = [];
   const extraFilesTypeAware: FlatConfigEntry['files'] & {} = [];
   const extraFilesToIgnoreNONTypeAware: FlatConfigEntry['ignores'] & {} = [];
@@ -98,17 +170,15 @@ export const tsEslintConfig = (
   const filesNONTypeAwareDefault = [...(options.files || TS_FILES_DEFAULT)];
   const filesNONTypeAware = [...filesNONTypeAwareDefault, ...extraFilesNONTypeAware];
   const ignoresNONTypeAware = [...(options.ignores || []), ...extraFilesToIgnoreNONTypeAware];
-  const filesTypeAware =
-    options.filesTypeAware === false
-      ? []
-      : [
-          ...(Array.isArray(options.filesTypeAware)
-            ? options.filesTypeAware
-            : filesNONTypeAwareDefault), // Lint the same files, excluding extra non-TA ones
-          ...extraFilesTypeAware,
-        ];
+
+  const configTypeAwareOptions = typeof configTypeAware === 'object' ? configTypeAware : {};
+  const {files: userFilesTypeAware, ignores: userIgnoresTypeAware} = configTypeAwareOptions;
+  const filesTypeAware = [
+    ...(userFilesTypeAware || filesNONTypeAwareDefault), // Lint the same files, excluding extra non-TA ones
+    ...extraFilesTypeAware,
+  ];
   const ignoresTypeAware = [
-    ...(options.ignoresTypeAware === true ? options.ignores || [] : options.ignoresTypeAware || []),
+    ...(userIgnoresTypeAware || options.ignores || []),
     ...extraFilesToIgnoreTypeAware,
   ];
 
@@ -252,12 +322,17 @@ export const tsEslintConfig = (
     .addAnyRule('dot-notation', OFF)
     .addOverrides();
 
-  // TODO add rules
-  if (filesTypeAware.length > 0) {
-    builder
+  const builderTypeAware = new ConfigEntryBuilder(
+    '@typescript-eslint',
+    configTypeAwareOptions,
+    internalOptions,
+  );
+
+  if (configTypeAware !== false) {
+    builderTypeAware
       .addConfig('ts/rules-type-aware', {
         ...generateBaseOptions(true),
-        files: filesTypeAware,
+        ...(filesTypeAware.length > 0 && {files: filesTypeAware}),
         ...(ignoresTypeAware.length > 0 && {ignores: ignoresTypeAware}),
       })
       .addBulkRules(
@@ -274,6 +349,7 @@ export const tsEslintConfig = (
       )
       // 🟢 Strict - overrides
       // .addRule('await-thenable', ERROR)
+      .addRule('consistent-return', ERROR, [], {overrideBaseRule: true})
       // .addRule('no-array-delete', ERROR)
       // .addRule('no-base-to-string', ERROR)
       .addRule('no-confusing-void-expression', ERROR, [
@@ -308,7 +384,7 @@ export const tsEslintConfig = (
         ],
         {disableAutofix: true},
       )
-      // .addRule('no-unnecessary-template-expressions', ERROR)
+      // .addRule('no-unnecessary-template-expression', ERROR)
       // Reason for disabling autofix: could remove type aliases
       .addRule('no-unnecessary-type-arguments', ERROR, [], {
         disableAutofix: true,
@@ -316,6 +392,7 @@ export const tsEslintConfig = (
       .addRule('no-unnecessary-type-assertion', ERROR, [], {
         disableAutofix: true, // Reason: https://github.com/typescript-eslint/typescript-eslint/issues/8721
       })
+      // .addRule('no-unnecessary-type-parameters', ERROR)
       .addRule('no-unsafe-argument', noUnsafeRulesSeverity)
       .addRule('no-unsafe-assignment', noUnsafeRulesSeverity)
       .addRule('no-unsafe-call', noUnsafeRulesSeverity)
@@ -335,7 +412,7 @@ export const tsEslintConfig = (
       // .addRule('restrict-plus-operands', ERROR)
       .addRule('restrict-template-expressions', ERROR, [{allowAny: false, allowRegExp: false}])
       // .addRule('unbound-method', ERROR)
-      // .addRule('use-unknown-in-catch-clause', ERROR)
+      // .addRule('use-unknown-in-catch-callback-variable', ERROR)
       // 🟢 Stylistic - overrides
       .addRule('dot-notation', ERROR, [{allowIndexSignaturePropertyAccess: true}], {
         overrideBaseRule: true,
@@ -349,7 +426,6 @@ export const tsEslintConfig = (
       .addRule('prefer-regexp-exec', OFF)
       .addRule('prefer-string-starts-ends-with', ERROR, [{allowSingleElementEquality: 'always'}])
       // 🟢 Additional rules
-      // TODO: ...overrideBaseRule('consistent-return', OFF),
       .addRule('consistent-type-exports', ERROR, [{fixMixedExportsWithInlineTypeSpecifier: true}])
       // .addRule('naming-convention', OFF) // ❄️
       // .addRule('no-unnecessary-qualifier', OFF)
@@ -367,7 +443,7 @@ export const tsEslintConfig = (
       .addRule('return-await', ERROR, ['always'])
       // .addRule('strict-boolean-expressions', OFF)
       .addRule('switch-exhaustiveness-check', ERROR)
-      .addBulkRules(options.overridesTypeAware);
+      .addOverrides();
   }
 
   // TODO add rules
@@ -426,5 +502,5 @@ export const tsEslintConfig = (
       );
   }
 
-  return builder.getAllConfigs();
+  return [...builder.getAllConfigs(), ...builderTypeAware.getAllConfigs()];
 };
