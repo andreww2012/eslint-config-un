@@ -29,6 +29,8 @@
 - `eslint-plugin-de-morgan`: [1.2.0 -> 1.2.1](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.0...v1.2.1)
 - `eslint-plugin-jsdoc`: [50.6.3 -> 50.6.6](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.3...v50.6.6)
 - `eslint-plugin-perfectionist`: [4.9.0 -> 4.10.1](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.9.0...v4.10.1)
+- `eslint-import-resolver-typescript`: [3.7.0 -> 3.9.1](https://github.com/import-js/eslint-import-resolver-typescript/compare/v3.7.0...v3.9.1)
+- `eslint-plugin-import-x`: [4.6.1 -> 4.8.0](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.6.1...v4.8.0)
 
 ## 0.6.2
 
