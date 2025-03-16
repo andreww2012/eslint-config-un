@@ -11,13 +11,13 @@ export interface JsoncEslintConfigOptions extends ConfigSharedOptions<'jsonc'> {
   doNotMergeFilesWithDefault?: boolean;
 
   /** Config exclusively for .json files (no rules are applied by default!) */
-  jsonConfig?: ConfigSharedOptions<'jsonc'>;
+  configJson?: ConfigSharedOptions<'jsonc'>;
 
   /** Config exclusively for .jsonc files (no rules are applied by default!) */
-  jsoncConfig?: ConfigSharedOptions<'jsonc'>;
+  configJsonc?: ConfigSharedOptions<'jsonc'>;
 
   /** Config exclusively for .json5 files (no rules are applied by default!) */
-  json5Config?: ConfigSharedOptions<'jsonc'>;
+  configJson5?: ConfigSharedOptions<'jsonc'>;
 }
 
 export const jsoncEslintConfig = (
@@ -101,16 +101,16 @@ export const jsoncEslintConfig = (
 
   const result = builder.getAllConfigs();
 
-  if (options.jsonConfig) {
-    const jsonBuilder = new ConfigEntryBuilder('jsonc', options.jsonConfig, internalOptions);
+  if (options.configJson) {
+    const jsonBuilder = new ConfigEntryBuilder('jsonc', options.configJson, internalOptions);
     jsonBuilder
       .addConfig(['jsonc/json', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSON]}])
       .addOverrides();
     result.push(...jsonBuilder.getAllConfigs());
   }
 
-  if (options.jsoncConfig) {
-    const jsoncBuilder = new ConfigEntryBuilder('jsonc', options.jsoncConfig, internalOptions);
+  if (options.configJsonc) {
+    const jsoncBuilder = new ConfigEntryBuilder('jsonc', options.configJsonc, internalOptions);
     jsoncBuilder
       .addConfig([
         'jsonc/jsonc',
@@ -120,8 +120,8 @@ export const jsoncEslintConfig = (
     result.push(...jsoncBuilder.getAllConfigs());
   }
 
-  if (options.json5Config) {
-    const json5Builder = new ConfigEntryBuilder('jsonc', options.json5Config, internalOptions);
+  if (options.configJson5) {
+    const json5Builder = new ConfigEntryBuilder('jsonc', options.configJson5, internalOptions);
     json5Builder
       .addConfig([
         'jsonc/json5',

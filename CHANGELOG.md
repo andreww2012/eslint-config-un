@@ -14,6 +14,13 @@
 - [**BREAKING**] Removed `autofixToRemoveUnusedImports` option from `js` config in favor of a separate `unusedImports` config.
 - [**BREAKING**] `vue` config: added `configA11y` sub-config to replace `a11y` and `overridesA11y` options.
 - [**BREAKING**] `vue` config: added `configPinia` sub-config to replace `pinia` option.
+- [**BREAKING**] In pursuit of consistent naming of sub-configs, renamed the following options:
+  - `typescript` to `configTypescript` in `jsdoc` config
+  - `jsonConfig` to `configJson` in `jsonc` config
+  - `jsoncConfig` to `configJsonc` in `jsonc` config
+  - `json5Config` to `configJson5` in `jsonc` config
+  - `jestExtended` to `configJestExtended` in `jest` config
+  - `typescript` to `configTypescript` in `jest` config
 
 ## 0.6.2
 

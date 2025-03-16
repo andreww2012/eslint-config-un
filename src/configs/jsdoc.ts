@@ -171,7 +171,7 @@ export interface JsdocEslintConfigOptions extends ConfigSharedOptions<'jsdoc'> {
    * Will create a separate ESLint config which by default will use `settings` from the root `jsdoc` config, if specified, and will only be applied to TypeScript files.
    * @default `true` if TypeScript (`ts`) config is enabled
    */
-  typescript?:
+  configTypescript?:
     | boolean
     | PrettifyShallow<ConfigSharedOptions<'jsdoc'> & Pick<JsdocEslintConfigOptions, 'settings'>>;
 }
@@ -182,7 +182,7 @@ export const jsdocEslintConfig = (
 ): FlatConfigEntry[] => {
   const {
     settings: pluginSettings,
-    typescript: typescriptOnlyRules = internalOptions.isTypescriptEnabled,
+    configTypescript = internalOptions.isTypescriptEnabled ?? false,
   } = options;
 
   const builder = new ConfigEntryBuilder('jsdoc', options, internalOptions);
@@ -263,14 +263,9 @@ export const jsdocEslintConfig = (
     // .addRule('valid-types', ERROR) // 🟢2️⃣
     .addOverrides();
 
-  const tsBuilder = new ConfigEntryBuilder(
-    'jsdoc',
-    typeof typescriptOnlyRules === 'object' ? typescriptOnlyRules : {},
-    internalOptions,
-  );
-  const pluginSettingsForTs =
-    (typeof typescriptOnlyRules === 'object' ? typescriptOnlyRules.settings : undefined) ||
-    pluginSettings;
+  const configTypescriptOptions = typeof configTypescript === 'object' ? configTypescript : {};
+  const tsBuilder = new ConfigEntryBuilder('jsdoc', configTypescriptOptions, internalOptions);
+  const pluginSettingsForTs = configTypescriptOptions.settings || pluginSettings;
 
   builder
     .addConfig(
@@ -296,5 +291,8 @@ export const jsdocEslintConfig = (
     .addRule('require-returns-type', OFF)
     .addOverrides();
 
-  return [...builder.getAllConfigs(), ...(typescriptOnlyRules ? tsBuilder.getAllConfigs() : [])];
+  return [
+    ...builder.getAllConfigs(),
+    ...(configTypescript === false ? [] : tsBuilder.getAllConfigs()),
+  ];
 };

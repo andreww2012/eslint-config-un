@@ -2,7 +2,7 @@ import type {Jest as JestMethods} from '@jest/environment';
 import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import eslintPluginJest from 'eslint-plugin-jest';
 import eslintPluginJestExtended from 'eslint-plugin-jest-extended';
-import {getPackageInfoSync} from 'local-pkg';
+import {isPackageExists} from 'local-pkg';
 import type {ValueOf} from 'type-fest';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
@@ -57,13 +57,13 @@ export interface JestEslintConfigOptions extends ConfigSharedOptions<'jest'> {
    * Explicitly specify or ignore files written in TypeScript. Will be used to enable TypeScript-specific rules like [`no-untyped-mock-factory`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-untyped-mock-factory.md) or [`unbound-method`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md).
    * @default `true` if TypeScript (`ts`) config is enabled
    */
-  typescript?: boolean | PrettifyShallow<ConfigSharedOptions<'jest'>>;
+  configTypescript?: boolean | PrettifyShallow<ConfigSharedOptions<'jest'>>;
 
   /**
    * Enables or specifies the configuration for the [`jest-extended`](https://github.com/jest-community/eslint-plugin-jest-extended) plugin.
    * @default `true` if `jest-extended` package is installed
    */
-  jestExtended?:
+  configJestExtended?:
     | boolean
     | PrettifyShallow<
         ConfigSharedOptions<'jest-extended'> & {
@@ -204,8 +204,8 @@ export const jestEslintConfig = (
     paddingAround = true,
     asyncMatchers,
     minAndMaxExpectArgs,
-    typescript: typescriptOnlyRules = internalOptions.isTypescriptEnabled,
-    jestExtended = getPackageInfoSync('jest-extended') != null,
+    configTypescript = internalOptions.isTypescriptEnabled ?? false,
+    configJestExtended = isPackageExists('jest-extended'),
   } = options;
 
   const defaultJestEslintConfig: FlatConfigEntryForBuilder = {
@@ -336,10 +336,10 @@ export const jestEslintConfig = (
 
   const tsBuilder = new ConfigEntryBuilder(
     'jest',
-    typeof typescriptOnlyRules === 'object' ? typescriptOnlyRules : {},
+    typeof configTypescript === 'object' ? configTypescript : {},
     internalOptions,
   );
-  if (typescriptOnlyRules) {
+  if (configTypescript !== false) {
     builder
       .addConfig(
         [
@@ -366,10 +366,10 @@ export const jestEslintConfig = (
 
   const jestExtendedBuilder = new ConfigEntryBuilder(
     'jest-extended',
-    typeof jestExtended === 'object' ? jestExtended : {},
+    typeof configJestExtended === 'object' ? configJestExtended : {},
     internalOptions,
   );
-  const {suggestUsing} = typeof jestExtended === 'object' ? jestExtended : {};
+  const {suggestUsing} = typeof configJestExtended === 'object' ? configJestExtended : {};
 
   const getSuggestUsingJestExtendedMatcherSeverity = (key: keyof (typeof suggestUsing & object)) =>
     suggestUsing === true || (suggestUsing && suggestUsing[key] !== false) ? ERROR : OFF;
@@ -405,7 +405,7 @@ export const jestEslintConfig = (
 
   return [
     ...builder.getAllConfigs(),
-    ...(typescriptOnlyRules ? tsBuilder.getAllConfigs() : []),
-    ...(jestExtended ? jestExtendedBuilder.getAllConfigs() : []),
+    ...(configTypescript === false ? [] : tsBuilder.getAllConfigs()),
+    ...(configJestExtended === false ? [] : jestExtendedBuilder.getAllConfigs()),
   ];
 };
