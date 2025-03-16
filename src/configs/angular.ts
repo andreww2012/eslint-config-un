@@ -56,7 +56,7 @@ const PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS: Record<
   },
 };
 
-type OldRules =
+type RulesWithPartialAvailability =
   | 'consistent-component-styles'
   | 'no-async-lifecycle-method'
   | 'no-duplicates-in-metadata-arrays'
@@ -134,7 +134,7 @@ const RULES_AVAILABILITY: Record<string, RuleAvailability> = {
   'role-has-required-aria': [[16]],
   'table-scope': [[16]],
   'valid-aria': [[16]],
-} satisfies Record<OldRules, RuleAvailability>;
+} satisfies Record<RulesWithPartialAvailability, RuleAvailability>;
 
 const oldRuleNames = new Map<string, string[]>();
 Object.entries(RULES_AVAILABILITY).forEach(([oldName, [, newName]]) => {
@@ -277,7 +277,7 @@ export interface AngularEslintConfigOptions
    * If say you're using Angular 18, specify this rule here to make it work.
    */
   portRules?: (keyof AllRulesWithPrefix<'@angular-eslint'> &
-    `@angular-eslint/${'template/' | ''}${OldRules}`)[];
+    `@angular-eslint/${'template/' | ''}${RulesWithPartialAvailability}`)[];
 
   /**
    * Enables or specifies the configuration for the [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template) plugin,
