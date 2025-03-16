@@ -121,7 +121,6 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     majorVersion: vueMajorVersion === 2 ? 2 : 3, // TODO bad logic
     fullVersion: vuePackageInfo?.version,
     nuxtMajorVersion: nuxtMajorVersion === 3 ? 3 : undefined,
-    pinia: isPackageExists('pinia'),
     enforceTypescriptInScriptSection: isTypescriptEnabled,
     ...assignOptions(configsOptions, 'vue'),
   };

@@ -7,6 +7,7 @@ import eslintProcessorVueBlocks, {
   type Options as EslintProcessorVueBlocksOptions,
 } from 'eslint-processor-vue-blocks';
 import globals from 'globals';
+import {isPackageExists} from 'local-pkg';
 import parserVue from 'vue-eslint-parser';
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, WARNING} from '../constants';
 import {
@@ -14,7 +15,6 @@ import {
   type ConfigSharedOptions,
   type FlatConfigEntry,
   type FlatConfigEntryFilesOrIgnores,
-  type RuleOverrides,
   type RulesRecord,
   bulkChangeRuleSeverity,
 } from '../eslint';
@@ -117,10 +117,11 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
 
   /**
    * Enables A11Y (accessibility) rules for Vue SFC templates
+   *
+   * By default, uses `files` and `ignores` from the parent config.
    * @default true
    */
-  a11y?: boolean;
-  overridesA11y?: RuleOverrides<'vuejs-accessibility'>;
+  configA11y?: boolean | ConfigSharedOptions<'vuejs-accessibility'>;
 
   /**
    * Enabled automatically by checking if `nuxt` package is installed (at any level). Pass a false value or a Nuxt version to explicitly disable or enable Nuxt-specific rules or tweaks.
@@ -136,7 +137,7 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
    * Enabled automatically by checking if `pinia` package is installed (at any level). Pass a false value to disable pinia-specific rules.
    * @default true if `pinia` package is installed
    */
-  pinia?:
+  configPinia?:
     | boolean
     | PrettifyShallow<
         ConfigSharedOptions<'pinia'> & {
@@ -166,8 +167,8 @@ export const vueEslintConfig = (
   const {
     majorVersion,
     enforceTypescriptInScriptSection,
-    a11y = true,
-    pinia,
+    configA11y = true,
+    configPinia = isPackageExists('pinia'),
     processSfcBlocks = true,
   } = options;
 
@@ -626,19 +627,24 @@ export const vueEslintConfig = (
     })
     .disableAnyRule('import/no-default-export');
 
-  const builderA11y = new ConfigEntryBuilder('vuejs-accessibility', {}, internalOptions);
-  const a11yConfig = builderA11y.addConfig(
-    [
+  const configA11yOptions: typeof configA11y & {} = {
+    files,
+    ignores: options.ignores,
+    ...(typeof configA11y === 'object' ? configA11y : {}),
+  };
+  const builderA11y = new ConfigEntryBuilder(
+    'vuejs-accessibility',
+    configA11yOptions,
+    internalOptions,
+  );
+  builderA11y
+    .addConfig([
       'vue/a11y',
       {
+        includeDefaultFilesAndIgnores: true,
         ignoreMarkdownCodeBlocks: true,
       },
-    ],
-    {
-      files,
-    },
-  );
-  a11yConfig
+    ])
     .addBulkRules(eslintPluginVueA11y.configs['flat/recommended'].find((v) => 'rules' in v)?.rules)
     // .addRule('alt-text', ERROR)
     // .addRule('anchor-has-content', ERROR)
@@ -661,21 +667,22 @@ export const vueEslintConfig = (
     // .addRule('no-static-element-interactions', ERROR)
     // .addRule('role-has-required-aria-props', ERROR)
     // .addRule('tabindex-no-positive', ERROR)
-    .addBulkRules(options.overridesA11y);
+    .addOverrides();
 
   const piniaBuilder = new ConfigEntryBuilder(
     'pinia',
-    typeof pinia === 'object' ? pinia : {},
+    typeof configPinia === 'object' ? configPinia : {},
     internalOptions,
   );
-  const piniaConfig = piniaBuilder.addConfig([
-    'pinia',
-    {
-      includeDefaultFilesAndIgnores: true,
-      ignoreMarkdownCodeBlocks: true,
-    },
-  ]);
-  piniaConfig
+
+  piniaBuilder
+    .addConfig([
+      'pinia',
+      {
+        includeDefaultFilesAndIgnores: true,
+        ignoreMarkdownCodeBlocks: true,
+      },
+    ])
     .addBulkRules(eslintPluginPinia.configs['recommended-flat'].rules)
     // .addRule('never-export-initialized-store', ERROR)
     // .addRule('no-duplicate-store-ids', ERROR)
@@ -686,16 +693,17 @@ export const vueEslintConfig = (
       {
         checkStoreNameMismatch: true,
         storeSuffix:
-          typeof pinia === 'object' && pinia.storesNameSuffix != null
-            ? pinia.storesNameSuffix
+          typeof configPinia === 'object' && configPinia.storesNameSuffix != null
+            ? configPinia.storesNameSuffix
             : DEFAULT_PINIA_STORE_NAME_SUFFIX,
       },
-    ]);
-  // .addRule('require-setup-store-properties-export', ERROR)
+    ])
+    // .addRule('require-setup-store-properties-export', ERROR)
+    .addOverrides();
 
   return [
     ...builder.getAllConfigs(),
-    ...(a11y ? builderA11y.getAllConfigs() : []),
-    ...(pinia ? piniaBuilder.getAllConfigs() : []),
+    ...(configA11y === false ? [] : builderA11y.getAllConfigs()),
+    ...(configPinia === false ? [] : piniaBuilder.getAllConfigs()),
   ];
 };

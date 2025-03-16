@@ -12,6 +12,8 @@
 - [**BREAKING**] `ts` config: added `configNoTypeAssertion` sub-config to replace `noTypeAssertion` option.
 - [**BREAKING**] Enabled [`@typescript-eslint/consistent-return`](https://typescript-eslint.io/rules/consistent-return) rule in `ts` config and disabled the same base rule [`consistent-return`](https://eslint.org/docs/latest/rules/consistent-return).
 - [**BREAKING**] Removed `autofixToRemoveUnusedImports` option from `js` config in favor of a separate `unusedImports` config.
+- [**BREAKING**] `vue` config: added `configA11y` sub-config to replace `a11y` and `overridesA11y` options.
+- [**BREAKING**] `vue` config: added `configPinia` sub-config to replace `pinia` option.
 
 ## 0.6.2
 
