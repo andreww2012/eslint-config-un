@@ -232,101 +232,101 @@ export const markdownEslintConfig = (
         ),
       )
       // 🟣 - in the default processor config
-      // .addAnyRule('eol-last', OFF) // 🟣
-      .addAnyRule('max-classes-per-file', OFF) // [too-strict]
-      .addAnyRule('no-alert', OFF) // [runtime-only]
-      .addAnyRule('no-await-in-loop', OFF) // [runtime-only]
-      .addAnyRule('no-console', OFF) // [runtime-only]
-      .addAnyRule('no-duplicate-imports', OFF) // [imports]
-      .addAnyRule('no-empty-function', OFF) // [emptiness]
-      .addAnyRule('no-eval', OFF) // [eval]
-      .addAnyRule('no-extend-native', OFF) // [runtime-only]
-      .addAnyRule('no-implied-eval', OFF) // [eval]
-      .addAnyRule('no-lone-blocks', OFF) // [emptiness]
-      .addAnyRule('no-new-func', OFF) // [eval]
-      .addAnyRule('no-new', OFF) // [runtime-only]
-      .addAnyRule('no-unused-labels', OFF) // [unused]
-      .addAnyRule('no-unused-private-class-members', OFF) // [unused]
-      .addAnyRule('no-useless-assignment', OFF) // [unused]
-      .addAnyRule('prefer-const', OFF) // [too-strict]
-      // .addAnyRule('strict', OFF) // 🟣
-      // .addAnyRule("no-undef", OFF) // 🟣
-      // .addAnyRule("no-unused-expressions", OFF) // 🟣
-      // .addAnyRule("no-unused-vars", OFF) // 🟣
-      // .addAnyRule("padded-blocks", OFF) // 🟣
-      // .addAnyRule("unicode-bom", OFF) // 🟣
+      .disableAnyRule('eol-last') // 🟣
+      .disableAnyRule('max-classes-per-file') // [too-strict]
+      .disableAnyRule('no-alert') // [runtime-only]
+      .disableAnyRule('no-await-in-loop') // [runtime-only]
+      .disableAnyRule('no-console') // [runtime-only]
+      .disableAnyRule('no-duplicate-imports') // [imports]
+      .disableAnyRule('no-empty-function') // [emptiness]
+      .disableAnyRule('no-eval') // [eval]
+      .disableAnyRule('no-extend-native') // [runtime-only]
+      .disableAnyRule('no-implied-eval') // [eval]
+      .disableAnyRule('no-lone-blocks') // [emptiness]
+      .disableAnyRule('no-new-func') // [eval]
+      .disableAnyRule('no-new') // [runtime-only]
+      .disableAnyRule('no-unused-labels') // [unused]
+      .disableAnyRule('no-unused-private-class-members') // [unused]
+      .disableAnyRule('no-useless-assignment') // [unused]
+      .disableAnyRule('prefer-const') // [too-strict]
+      .disableAnyRule('strict') // 🟣
+      .disableAnyRule('no-undef') // 🟣
+      .disableAnyRule('no-unused-expressions') // 🟣
+      .disableAnyRule('no-unused-vars') // 🟣
+      .disableAnyRule('padded-blocks') // 🟣
+      .disableAnyRule('unicode-bom') // 🟣
 
       // ts
       // won't disable: @typescript-eslint/consistent-type-imports, @typescript-eslint/no-useless-empty-export
-      .addAnyRule('@typescript-eslint/ban-ts-comment', OFF) // [runtime-only]
-      .addAnyRule('@typescript-eslint/class-methods-use-this', OFF) // [runtime-only]
-      .addAnyRule('@typescript-eslint/explicit-function-return-type', OFF) // [too-strict]
-      .addAnyRule('@typescript-eslint/no-empty-function', OFF) // [emptiness]
-      .addAnyRule('@typescript-eslint/no-explicit-any', OFF) // [too-strict]
-      .addAnyRule('@typescript-eslint/no-extraneous-class', OFF) // [too-strict]
-      .addAnyRule('@typescript-eslint/no-import-type-side-effects', OFF) // [runtime-only]
-      .addAnyRule('@typescript-eslint/no-namespace', OFF) // [too-strict]
-      .addAnyRule('@typescript-eslint/no-non-null-assertion', OFF) // [too-strict]
-      .addAnyRule('@typescript-eslint/no-require-imports', OFF) // [runtime-only]
-      .addAnyRule('@typescript-eslint/no-unused-expressions', OFF) // [unused]
-      .addAnyRule('@typescript-eslint/no-unused-vars', OFF) // [unused]
-      .addAnyRule('@typescript-eslint/no-use-before-define', OFF) // [runtime-only]
-      .addAnyRule('@typescript-eslint/no-unsafe-function-type', OFF) // [too-strict]
+      .disableAnyRule('@typescript-eslint/ban-ts-comment') // [runtime-only]
+      .disableAnyRule('@typescript-eslint/class-methods-use-this') // [runtime-only]
+      .disableAnyRule('@typescript-eslint/explicit-function-return-type') // [too-strict]
+      .disableAnyRule('@typescript-eslint/no-empty-function') // [emptiness]
+      .disableAnyRule('@typescript-eslint/no-explicit-any') // [too-strict]
+      .disableAnyRule('@typescript-eslint/no-extraneous-class') // [too-strict]
+      .disableAnyRule('@typescript-eslint/no-import-type-side-effects') // [runtime-only]
+      .disableAnyRule('@typescript-eslint/no-namespace') // [too-strict]
+      .disableAnyRule('@typescript-eslint/no-non-null-assertion') // [too-strict]
+      .disableAnyRule('@typescript-eslint/no-require-imports') // [runtime-only]
+      .disableAnyRule('@typescript-eslint/no-unused-expressions') // [unused]
+      .disableAnyRule('@typescript-eslint/no-unused-vars') // [unused]
+      .disableAnyRule('@typescript-eslint/no-use-before-define') // [runtime-only]
+      .disableAnyRule('@typescript-eslint/no-unsafe-function-type') // [too-strict]
 
       // vue
       // TODO maybe disable?: vue/valid-define-emits, vue/valid-define-props, vue/no-duplicate-attr-inheritance
       // won't disable: vue/require-v-for-key, vue/no-setup-props-reactivity-loss, vue/require-macro-variable-name
-      .addAnyRule('vue/block-lang', OFF) // [too-strict]
-      .addAnyRule('vue/define-props-declaration', OFF) // [too-strict]
-      .addAnyRule('vue/no-console', OFF) // [runtime-only]
-      .addAnyRule('vue/no-undef-components', OFF) // [runtime-only]
-      .addAnyRule('vue/no-unsupported-features', OFF) // [runtime-only]
-      .addAnyRule('vue/no-unused-components', OFF) // [unused]
-      .addAnyRule('vue/no-unused-emit-declarations', OFF) // [unused]
-      .addAnyRule('vue/no-unused-properties', OFF) // [unused]
-      .addAnyRule('vue/no-unused-refs', OFF) // [unused]
-      .addAnyRule('vue/no-unused-vars', OFF) // [unused]
-      .addAnyRule('vue/require-prop-types', OFF) // [too-strict]
+      .disableAnyRule('vue/block-lang') // [too-strict]
+      .disableAnyRule('vue/define-props-declaration') // [too-strict]
+      .disableAnyRule('vue/no-console') // [runtime-only]
+      .disableAnyRule('vue/no-undef-components') // [runtime-only]
+      .disableAnyRule('vue/no-unsupported-features') // [runtime-only]
+      .disableAnyRule('vue/no-unused-components') // [unused]
+      .disableAnyRule('vue/no-unused-emit-declarations') // [unused]
+      .disableAnyRule('vue/no-unused-properties') // [unused]
+      .disableAnyRule('vue/no-unused-refs') // [unused]
+      .disableAnyRule('vue/no-unused-vars') // [unused]
+      .disableAnyRule('vue/require-prop-types') // [too-strict]
 
       // vue a11y, pinia - ignored all rules in corresponding configs
 
       // import
       // won't disable: import/no-absolute-path
-      .addAnyRule('import/dynamic-import-chunkname', OFF) // [imports]
-      .addAnyRule('import/max-dependencies', OFF) // [imports]
-      .addAnyRule('import/no-default-export', OFF) // [imports]
-      .addAnyRule('import/no-duplicates', OFF) // [imports]
-      .addAnyRule('import/no-extraneous-dependencies', OFF) // [imports]
-      .addAnyRule('import/no-mutable-exports', OFF) // [imports]
-      .addAnyRule('import/no-unresolved', OFF) // [imports]
+      .disableAnyRule('import/dynamic-import-chunkname') // [imports]
+      .disableAnyRule('import/max-dependencies') // [imports]
+      .disableAnyRule('import/no-default-export') // [imports]
+      .disableAnyRule('import/no-duplicates') // [imports]
+      .disableAnyRule('import/no-extraneous-dependencies') // [imports]
+      .disableAnyRule('import/no-mutable-exports') // [imports]
+      .disableAnyRule('import/no-unresolved') // [imports]
 
       // node
       // TODO disable?: node/no-deprecated-api
       // won't disable: node/exports-style, import/no-webpack-loader-syntax
-      .addAnyRule('node/hashbang', OFF) // [runtime-only]
-      .addAnyRule('node/no-extraneous-require', OFF) // [imports]
-      .addAnyRule('node/no-missing-require', OFF) // [imports]
-      .addAnyRule('node/no-missing-import', OFF) // [imports]
-      .addAnyRule('node/no-process-exit', OFF) // [runtime-only]
-      .addAnyRule('node/no-unsupported-features/es-builtins', OFF) // [runtime-only]
-      .addAnyRule('node/no-unsupported-features/es-syntax', OFF) // [runtime-only]
-      .addAnyRule('node/no-unsupported-features/node-builtins', OFF) // [runtime-only]
+      .disableAnyRule('node/hashbang') // [runtime-only]
+      .disableAnyRule('node/no-extraneous-require') // [imports]
+      .disableAnyRule('node/no-missing-require') // [imports]
+      .disableAnyRule('node/no-missing-import') // [imports]
+      .disableAnyRule('node/no-process-exit') // [runtime-only]
+      .disableAnyRule('node/no-unsupported-features/es-builtins') // [runtime-only]
+      .disableAnyRule('node/no-unsupported-features/es-syntax') // [runtime-only]
+      .disableAnyRule('node/no-unsupported-features/node-builtins') // [runtime-only]
 
       // unicorn
       // won't disable: unicorn/no-abusive-eslint-disable, unicorn/relative-url-style, unicorn/prefer-string-replace-all, unicorn/prefer-string-starts-ends-with, unicorn/prefer-code-point
-      .addAnyRule('unicorn/no-process-exit', OFF) // [runtime-only]
-      .addAnyRule('unicorn/prefer-top-level-await', OFF) // [runtime-only]
-      .addAnyRule('unicorn/no-static-only-class', OFF) // [too-strict]
+      .disableAnyRule('unicorn/no-process-exit') // [runtime-only]
+      .disableAnyRule('unicorn/prefer-top-level-await') // [runtime-only]
+      .disableAnyRule('unicorn/no-static-only-class') // [too-strict]
 
       // regexp
-      .addAnyRule('regexp/no-unused-capturing-group', OFF) // [runtime-only]
-      .addAnyRule('regexp/no-useless-flag', OFF) // [runtime-only]
-      .addAnyRule('regexp/no-super-linear-backtracking', OFF) // [runtime-only]
-      .addAnyRule('regexp/optimal-quantifier-concatenation', OFF) // [runtime-only]
+      .disableAnyRule('regexp/no-unused-capturing-group') // [runtime-only]
+      .disableAnyRule('regexp/no-useless-flag') // [runtime-only]
+      .disableAnyRule('regexp/no-super-linear-backtracking') // [runtime-only]
+      .disableAnyRule('regexp/optimal-quantifier-concatenation') // [runtime-only]
 
       // misc
       // won't disable: yml/file-extension, sonarjs/no-identical-functions, @eslint-community/eslint-comments/no-unlimited-disable
-      .addAnyRule('unused-imports/no-unused-imports', OFF) // [too-strict]
+      .disableAnyRule('unused-imports/no-unused-imports') // [too-strict]
       .addBulkRules(options.overridesCodeBlocks);
 
     if (codeBlocksIgnoredLanguages?.length) {

@@ -318,6 +318,13 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
       config: configFinal,
       addRule: generateAddRuleFn(false),
       addAnyRule: generateAddRuleFn(true),
+      disableAnyRule: (ruleName: keyof AllEslintRulesWithoutDisableAutofix) => {
+        Object.assign(configFinal.rules, {
+          [ruleName]: 0,
+          [`${'disable-autofix' satisfies DisableAutofixPrefix}/${ruleName}`]: 0,
+        });
+        return result;
+      },
       addOverrides: () => {
         Object.assign(configFinal.rules, this.options.overrides);
         return result;

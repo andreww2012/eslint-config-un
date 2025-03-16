@@ -1,4 +1,4 @@
-import {ERROR, OFF} from '../constants';
+import {ERROR} from '../constants';
 import {
   type AllRulesWithPrefix,
   ConfigEntryBuilder,
@@ -56,9 +56,9 @@ export const unusedImportsEslintConfig = (
 
     noUnusedVarsBuilder
       .addConfig(['unused-imports/no-unused-vars', {includeDefaultFilesAndIgnores: true}])
-      .addAnyRule('no-unused-vars', OFF)
-      .addAnyRule('sonarjs/no-unused-vars', OFF)
-      .addAnyRule('@typescript-eslint/no-unused-vars', OFF)
+      .disableAnyRule('no-unused-vars')
+      .disableAnyRule('sonarjs/no-unused-vars')
+      .disableAnyRule('@typescript-eslint/no-unused-vars')
       .addRule('no-unused-vars', ERROR, ruleOptions === undefined ? [] : [ruleOptions]);
   }
 

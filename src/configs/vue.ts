@@ -580,11 +580,11 @@ export const vueEslintConfig = (
     // .addRule('space-unary-ops', OFF)
     // .addRule('template-curly-spacing', OFF)
     // 🔵 Not working great in Vue files
-    .addAnyRule('@typescript-eslint/prefer-function-type', OFF)
-    .addAnyRule('@typescript-eslint/unified-signatures', OFF)
-    .addAnyRule('import/first', OFF) // May be wrong if multiple <script> blocks are present
-    .addAnyRule('import/no-default-export', OFF)
-    .addAnyRule('no-useless-assignment', OFF) // False positives in script setup
+    .disableAnyRule('@typescript-eslint/prefer-function-type')
+    .disableAnyRule('@typescript-eslint/unified-signatures')
+    .disableAnyRule('import/first') // May be wrong if multiple <script> blocks are present
+    .disableAnyRule('import/no-default-export')
+    .disableAnyRule('no-useless-assignment') // False positives in script setup
     .addOverrides();
 
   builder
@@ -624,7 +624,7 @@ export const vueEslintConfig = (
         .flat()
         .filter((v) => typeof v === 'string'),
     })
-    .addAnyRule('import/no-default-export', OFF);
+    .disableAnyRule('import/no-default-export');
 
   const builderA11y = new ConfigEntryBuilder('vuejs-accessibility', {}, internalOptions);
   const a11yConfig = builderA11y.addConfig(

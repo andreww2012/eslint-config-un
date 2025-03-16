@@ -301,7 +301,7 @@ export const tsEslintConfig = (
     // .addRule('no-invalid-this', OFF, [], {overrideBaseRule: true}) // 👍
     .addRule('no-loop-func', ERROR, [], {overrideBaseRule: true})
     // .addRule('no-magic-numbers', OFF, [], {overrideBaseRule: true})
-    .addAnyRule('no-redeclare', OFF)
+    .disableAnyRule('no-redeclare')
     // .addRule('no-redeclare', OFF) // 👍
     .addRule('no-require-imports', OFF)
     // .addRule('no-restricted-imports', OFF, [], {overrideBaseRule: true})
@@ -318,8 +318,8 @@ export const tsEslintConfig = (
     // .addRule('prefer-enum-initializers', OFF)
     // .addRule('typedef', OFF)
     // 🟢 Disable conflicting rules
-    .addAnyRule('no-useless-constructor', OFF)
-    .addAnyRule('dot-notation', OFF)
+    .disableAnyRule('no-useless-constructor')
+    .disableAnyRule('dot-notation')
     .addOverrides();
 
   const builderTypeAware = new ConfigEntryBuilder(
@@ -401,7 +401,7 @@ export const tsEslintConfig = (
       .addRule('no-unsafe-return', noUnsafeRulesSeverity)
       // .addRule('no-unsafe-type-assertion', OFF)
       // .addRule('no-unsafe-unary-minus', ERROR)
-      .addAnyRule('no-throw-literal', OFF) // Note: has different name
+      .disableAnyRule('no-throw-literal') // Note: has different name
       // .addRule('only-throw-error', ERROR)
       .addRule('prefer-promise-reject-errors', ERROR, [], {
         overrideBaseRule: true,
@@ -419,7 +419,7 @@ export const tsEslintConfig = (
       })
       // .addRule('non-nullable-type-assertion-style', ERROR)
       // .addRule('prefer-find', ERROR)
-      .addAnyRule('unicorn/prefer-includes', OFF)
+      .disableAnyRule('unicorn/prefer-includes')
       // .addRule('prefer-includes', ERROR)
       .addRule('prefer-nullish-coalescing', OFF)
       // .addRule('prefer-optional-chain', ERROR)
@@ -432,14 +432,14 @@ export const tsEslintConfig = (
       .addRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS, {
         overrideBaseRule: true,
       })
-      .addAnyRule('unicorn/prefer-array-find', OFF) // Note: in Unicorn
+      .disableAnyRule('unicorn/prefer-array-find') // Note: in Unicorn
       .addRule('prefer-readonly', ERROR)
       // .addRule('prefer-readonly-parameter-types', OFF)
       // .addRule('promise-function-async', OFF)
       // .addRule('related-getter-setter-pairs', ERROR)
       // .addRule('require-array-sort-compare', OFF)
       // Note: has different name. Also note that the original rule is deprecated and not included in this config, but we disable it anyway just for safety
-      .addAnyRule('no-return-await', OFF) // Disabled by default since v8
+      .disableAnyRule('no-return-await') // Disabled by default since v8
       .addRule('return-await', ERROR, ['always'])
       // .addRule('strict-boolean-expressions', OFF)
       .addRule('switch-exhaustiveness-check', ERROR)
@@ -451,29 +451,29 @@ export const tsEslintConfig = (
     .addConfig('ts/disable-handled-by-ts-compiler-rules', {
       files: [...TS_FILES_DEFAULT, ...filesNONTypeAware, ...filesTypeAware],
     })
-    .addAnyRule('constructor-super', OFF)
-    .addAnyRule('getter-return', OFF)
-    .addAnyRule('no-const-assign', OFF)
-    .addAnyRule('no-dupe-args', OFF)
-    .addAnyRule('no-dupe-class-members', OFF)
-    .addAnyRule('no-dupe-keys', OFF)
-    .addAnyRule('no-func-assign', OFF)
+    .disableAnyRule('constructor-super')
+    .disableAnyRule('getter-return')
+    .disableAnyRule('no-const-assign')
+    .disableAnyRule('no-dupe-args')
+    .disableAnyRule('no-dupe-class-members')
+    .disableAnyRule('no-dupe-keys')
+    .disableAnyRule('no-func-assign')
     // "Note that the compiler will not catch the Object.assign() case. Thus, if you use Object.assign() in your codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-import-assign#handled_by_typescript
     // .addRule('no-import-assign', OFF)
     // "Note that, technically, TypeScript will only catch this if you have the strict or noImplicitThis flags enabled. These are enabled in most TypeScript projects, since they are considered to be best practice." - https://eslint.org/docs/latest/rules/no-invalid-this#rule-details
     // .addRule('no-invalid-this', OFF)
-    .addAnyRule('no-new-native-nonconstructor', OFF) // successor of no-new-symbol
-    .addAnyRule('no-obj-calls', OFF)
+    .disableAnyRule('no-new-native-nonconstructor') // successor of no-new-symbol
+    .disableAnyRule('no-obj-calls')
     // "Note that while TypeScript will catch let redeclares and const redeclares, it will not catch var redeclares. Thus, if you use the legacy var keyword in your TypeScript codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-redeclare#handled_by_typescript
     // .addRule('no-redeclare', OFF)
-    .addAnyRule('no-setter-return', OFF)
-    .addAnyRule('no-this-before-super', OFF)
-    .addAnyRule('no-undef', OFF)
+    .disableAnyRule('no-setter-return')
+    .disableAnyRule('no-this-before-super')
+    .disableAnyRule('no-undef')
     // "TypeScript must be configured with allowUnreachableCode: false for it to consider unreachable code an error." - https://eslint.org/docs/latest/rules/no-unreachable#handled_by_typescript
     // .addRule('no-unreachable', OFF)
-    .addAnyRule('no-unsafe-negation', OFF)
+    .disableAnyRule('no-unsafe-negation')
     // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
-    .addAnyRule('no-duplicate-imports', OFF);
+    .disableAnyRule('no-duplicate-imports');
 
   builder
     .addConfig('ts/dts', {
@@ -487,11 +487,11 @@ export const tsEslintConfig = (
     .addRule('no-unnecessary-type-parameters', OFF)
     .addRule('no-unused-vars', OFF)
     .addRule('no-use-before-define', OFF)
-    .addAnyRule('import/newline-after-import', OFF)
-    .addAnyRule('import/no-default-export', OFF)
-    .addAnyRule('vars-on-top', OFF)
-    .addAnyRule('no-var', OFF)
-    .addAnyRule('sonarjs/no-redundant-optional', OFF);
+    .disableAnyRule('import/newline-after-import')
+    .disableAnyRule('import/no-default-export')
+    .disableAnyRule('vars-on-top')
+    .disableAnyRule('no-var')
+    .disableAnyRule('sonarjs/no-redundant-optional');
 
   if (options.noTypeAssertion) {
     builder
