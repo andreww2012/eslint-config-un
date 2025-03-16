@@ -10,13 +10,7 @@ import {
 } from '../eslint';
 import type {InternalConfigOptions} from './index';
 
-export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRulesFixed> {
-  /**
-   * Enables `eslint-plugin-unused-imports` plugin. Note than the base rules (`no-unused-vars` and `@typescript-eslint/no-unused-vars` are NOT disabled for imports)
-   * @default true
-   */
-  autofixToRemoveUnusedImports?: boolean;
-}
+export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRulesFixed> {}
 
 export const RULE_CAMELCASE_OPTIONS: GetRuleOptions<'camelcase'> = [
   {
@@ -293,12 +287,6 @@ export const jsEslintConfig = (
       {blankLine: 'never', prev: 'import', next: 'import'},
     ])
     .addOverrides();
-
-  if (options.autofixToRemoveUnusedImports ?? true) {
-    builder
-      .addConfig('js/disable-unused-imports')
-      .addAnyRule('unused-imports/no-unused-imports', ERROR);
-  }
 
   return builder.getAllConfigs();
 };

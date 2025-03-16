@@ -42,6 +42,10 @@ import {type TailwindEslintConfigOptions, tailwindEslintConfig} from './configs/
 import {type TomlEslintConfigOptions, tomlEslintConfig} from './configs/toml';
 import {type TsEslintConfigOptions, tsEslintConfig} from './configs/ts';
 import {type UnicornEslintConfigOptions, unicornEslintConfig} from './configs/unicorn';
+import {
+  type UnusedImportsEslintConfigOptions,
+  unusedImportsEslintConfig,
+} from './configs/unused-imports';
 import {type VitestEslintConfigOptions, vitestEslintConfig} from './configs/vitest';
 import {type VueEslintConfigOptions, vueEslintConfig} from './configs/vue';
 import {type YamlEslintConfigOptions, yamlEslintConfig} from './configs/yaml';
@@ -252,6 +256,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'css'),
   };
 
+  /* 🟢 UNUSED IMPORTS */
+
+  const isUnusedImportsEnabled = Boolean(configsOptions.unusedImports ?? true);
+  const unusedImportsOptions: UnusedImportsEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'unusedImports'),
+  };
+
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
 
   /* 🔴 SECURITY */
@@ -404,6 +415,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isJsdocEnabled && jsdocEslintConfig(jsdocOptions, internalOptions),
       isQwikEnabled && qwikEslintConfig(qwikOptions, internalOptions),
       isCssEnabled && cssEslintConfig(cssOptions, internalOptions),
+      isUnusedImportsEnabled && unusedImportsEslintConfig(unusedImportsOptions, internalOptions),
 
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&

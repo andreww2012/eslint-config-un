@@ -10,6 +10,7 @@
 - Set [`sonarjs/no-clear-text-protocols`](https://sonarsource.github.io/rspec/#/rspec/S5332/javascript) rule severity to `warning` because it might produce many false positives.
 - [**BREAKING**] `ts` config: added `configTypeAware` sub-config to replace `filesTypeAware`, `ignoresTypeAware` and `overridesTypeAware` options. Unless explicitly specified, it will use the same `ignores` as the parent config.
 - [**BREAKING**] Enabled [`@typescript-eslint/consistent-return`](https://typescript-eslint.io/rules/consistent-return) rule in `ts` config and disabled the same base rule [`consistent-return`](https://eslint.org/docs/latest/rules/consistent-return).
+- [**BREAKING**] Removed `autofixToRemoveUnusedImports` option from `js` config in favor of a separate `unusedImports` config.
 
 ## 0.6.2
 

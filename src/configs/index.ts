@@ -26,6 +26,7 @@ import type {TailwindEslintConfigOptions} from './tailwind';
 import type {TomlEslintConfigOptions} from './toml';
 import type {TsEslintConfigOptions} from './ts';
 import type {UnicornEslintConfigOptions} from './unicorn';
+import type {UnusedImportsEslintConfigOptions} from './unused-imports';
 import type {VitestEslintConfigOptions} from './vitest';
 import type {VueEslintConfigOptions} from './vue';
 import type {YamlEslintConfigOptions} from './yaml';
@@ -210,6 +211,15 @@ export interface EslintConfigUnOptions {
      * @default true unless `stylelint` package is installed
      */
     css?: boolean | Partial<AngularEslintConfigOptions>;
+
+    /**
+     * Provides an autofix to remove unused imports.
+     *
+     * Used plugin:
+     * - [`eslint-plugin-unused-imports`](https://www.npmjs.com/package/eslint-plugin-unused-imports)
+     * @default true
+     */
+    unusedImports?: boolean | Partial<UnusedImportsEslintConfigOptions>;
 
     /**
      * NOTE: disabled by default

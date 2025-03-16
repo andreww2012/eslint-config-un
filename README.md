@@ -44,6 +44,7 @@ Includes the rules from the following configs & plugins:
 - [json-schema-validator](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) (since v0.6.0)
 - `angular` (since v0.7.0), using [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template)
 - `css` (since v0.7.0), using [`@eslint/css`](https://www.npmjs.com/package/@eslint/css)
+- `noUnusedImports` (since v0.7.0), using [`eslint-plugin-unused-imports`](https://www.npmjs.com/package/eslint-plugin-unused-imports)
 
 ## Features
 
