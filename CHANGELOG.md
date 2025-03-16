@@ -28,6 +28,7 @@
 - `@vitest/eslint-plugin`: [1.1.36 -> 1.1.37](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.36...v1.1.37)
 - `eslint-plugin-de-morgan`: [1.2.0 -> 1.2.1](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.0...v1.2.1)
 - `eslint-plugin-jsdoc`: [50.6.3 -> 50.6.6](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.3...v50.6.6)
+- `eslint-plugin-perfectionist`: [4.9.0 -> 4.10.1](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.9.0...v4.10.1)
 
 ## 0.6.2
 
