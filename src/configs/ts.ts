@@ -118,7 +118,13 @@ export interface TsEslintConfigOptions
    */
   extraFileExtensions?: string[];
 
-  noTypeAssertion?: boolean | 'warning';
+  /**
+   * Disallows any type assertions via [`eslint-plugin-no-type-assertion`](https://www.npmjs.com/package/eslint-plugin-no-type-assertion) plugin.
+   *
+   * If you'd like to disallow only unsafe type assertions, enable [`@typescript-eslint/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule instead.
+   * @default false
+   */
+  configNoTypeAssertion?: boolean | ConfigSharedOptions<'no-type-assertion'>;
 
   /**
    * If you have too many `no-unsafe-*` reports, you can disable them all using this option. All the rules disabled by this option are:
@@ -128,6 +134,8 @@ export interface TsEslintConfigOptions
    * - `@typescript-eslint/no-unsafe-enum-comparison`
    * - `@typescript-eslint/no-unsafe-member-access`
    * - `@typescript-eslint/no-unsafe-return`
+   *
+   * Note: this option does not affect [`@typescript-eslint/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule, which is disabled by default.
    */
   disableNoUnsafeRules?: boolean;
 }
@@ -138,7 +146,7 @@ export const tsEslintConfig = (
   options: TsEslintConfigOptions = {},
   internalOptions: InternalConfigOptions = {},
 ): FlatConfigEntry[] => {
-  const {configTypeAware = true} = options;
+  const {configTypeAware = true, configNoTypeAssertion = false} = options;
 
   const extraFilesNONTypeAware: FlatConfigEntry['files'] & {} = [];
   const extraFilesTypeAware: FlatConfigEntry['files'] & {} = [];
@@ -493,14 +501,21 @@ export const tsEslintConfig = (
     .disableAnyRule('no-var')
     .disableAnyRule('sonarjs/no-redundant-optional');
 
-  if (options.noTypeAssertion) {
-    builder
-      .addConfig('ts/no-type-assertion')
-      .addAnyRule(
-        'no-type-assertion/no-type-assertion',
-        options.noTypeAssertion === 'warning' ? WARNING : ERROR,
-      );
+  const configNoTypeAssertionsOptions =
+    typeof configNoTypeAssertion === 'object' ? configNoTypeAssertion : {};
+  const builderNoTypeAssertions = new ConfigEntryBuilder(
+    'no-type-assertion',
+    configNoTypeAssertionsOptions,
+    internalOptions,
+  );
+
+  if (configNoTypeAssertion !== false) {
+    builderNoTypeAssertions.addConfig('no-type-assertion').addRule('no-type-assertion', ERROR);
   }
 
-  return [...builder.getAllConfigs(), ...builderTypeAware.getAllConfigs()];
+  return [
+    ...builder.getAllConfigs(),
+    ...builderTypeAware.getAllConfigs(),
+    ...builderNoTypeAssertions.getAllConfigs(),
+  ];
 };
