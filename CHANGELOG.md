@@ -26,6 +26,7 @@
 - `typescript-eslint`: [8.26.0 -> 8.26.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.26.0...v8.26.1)
 - `@angular-eslint/*`: [19.2.0 -> 19.2.1](https://github.com/angular-eslint/angular-eslint/compare/v19.2.0...v19.2.1)
 - `@vitest/eslint-plugin`: [1.1.36 -> 1.1.37](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.36...v1.1.37)
+- `eslint-plugin-de-morgan`: [1.2.0 -> 1.2.1](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.0...v1.2.1)
 
 ## 0.6.2
 

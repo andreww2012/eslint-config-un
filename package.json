@@ -69,7 +69,7 @@
     "eslint-import-resolver-typescript": "3.7.0",
     "eslint-merge-processors": "2.0.0",
     "eslint-plugin-css": "0.11.0",
-    "eslint-plugin-de-morgan": "1.2.0",
+    "eslint-plugin-de-morgan": "1.2.1",
     "eslint-plugin-import-x": "4.6.1",
     "eslint-plugin-jest": "28.11.0",
     "eslint-plugin-jest-extended": "3.0.0",
