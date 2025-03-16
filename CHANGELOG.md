@@ -22,6 +22,9 @@
   - `jestExtended` to `configJestExtended` in `jest` config
   - `typescript` to `configTypescript` in `jest` config
 
+### Dependencies
+- `typescript-eslint`: [8.26.0 -> 8.26.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.26.0...v8.26.1)
+
 ## 0.6.2
 
 - Revert `eslint-import-resolver-typescript` to v3.7.0 due to [this issue](https://github.com/import-js/eslint-import-resolver-typescript/issues/364).
