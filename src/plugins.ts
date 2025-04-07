@@ -22,6 +22,7 @@ import eslintPluginPromise from 'eslint-plugin-promise';
 // TODO it returns undefined without `* as` syntax for some reason
 import * as eslintPluginQwik from 'eslint-plugin-qwik';
 import eslintPluginReact from 'eslint-plugin-react';
+import * as eslintPluginReactHooks from 'eslint-plugin-react-hooks';
 import * as eslintPluginRegexp from 'eslint-plugin-regexp';
 import eslintPluginSecurity from 'eslint-plugin-security';
 import eslintPluginSonar from 'eslint-plugin-sonarjs';
@@ -81,4 +82,5 @@ export const ALL_ESLINT_PLUGINS: FlatConfigEntry['plugins'] & {} = {
   'json-schema-validator': eslintPluginJsonSchemaValidator,
   css: eslintPluginCss,
   react: eslintPluginReact,
+  'react-hooks': eslintPluginReactHooks,
 };

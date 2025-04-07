@@ -195,6 +195,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
           options: {
             includeDefaultFilesAndIgnores?: boolean;
             filesFallback?: string[];
+            ignoresFallback?: string[];
             mergeUserFilesWithFallback?: boolean;
 
             /** Some rules (for example, `regexp/no-legacy-features`) crash when linting `*.md` files (only if `language` option is specified for the markdown config). We cannot ignore such files globally as that is irreversible, so we ignore them in every single config with the option to not ignore. */
@@ -230,19 +231,23 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
 
     const userFiles = configOptions.files || [];
     const fallbackFiles = internalOptions.filesFallback || [];
-
     const files =
       userFiles.length > 0 && internalOptions.includeDefaultFilesAndIgnores
         ? internalOptions.mergeUserFilesWithFallback
           ? [...fallbackFiles, ...userFiles]
           : userFiles
         : fallbackFiles;
+
+    const userIgnores = configOptions.ignores || [];
+    const fallbackIgnores = internalOptions.ignoresFallback || [];
     const ignores = [
       ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
       ...(internalOptions.doNotIgnoreHtml ? [] : [GLOB_HTML]),
       ...(internalOptions.doNotIgnoreCss ? [] : [GLOB_CSS]),
       ...(internalOptions.ignoreMarkdownCodeBlocks ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS] : []),
-      ...(internalOptions.includeDefaultFilesAndIgnores ? configOptions.ignores || [] : []),
+      ...(userIgnores.length > 0 && internalOptions.includeDefaultFilesAndIgnores
+        ? userIgnores
+        : fallbackIgnores),
     ];
 
     // We require the presence of `rules`:

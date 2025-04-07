@@ -92,6 +92,14 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
   };
 
   /**
+   * Enables or specifies the configuration for the [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) plugin.
+   *
+   * By default will use the same `files` and `ignores` as the parent config.
+   * @default true
+   */
+  configHooks?: boolean | ConfigSharedOptions<'react-hooks'>;
+
+  /**
    * Detected automatically from a major version of the installed version of
    * `react` package, but can also be specified manually here.
    */
@@ -129,7 +137,13 @@ export const reactEslintConfig = (
     options.reactVersion ?? reactPackageInfo?.version ?? LATEST_REACT_VERSION,
   );
 
-  const {settings: pluginSettings, newJsxTransform = reactMajorVersion >= 17} = options;
+  const {
+    files: parentConfigFiles,
+    ignores: parentConfigIgnores,
+    settings: pluginSettings,
+    newJsxTransform = reactMajorVersion >= 17,
+    configHooks = true,
+  } = options;
 
   const builder = new ConfigEntryBuilder('react', options, internalOptions);
 
@@ -312,5 +326,22 @@ export const reactEslintConfig = (
     ])
     .addAnyRule('import/no-default-export', OFF);
 
-  return builder.getAllConfigs();
+  const configHooksOptions = typeof configHooks === 'object' ? configHooks : {};
+  const builderHooks = new ConfigEntryBuilder('react-hooks', configHooksOptions, internalOptions);
+  builderHooks
+    .addConfig([
+      'react/hooks',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: parentConfigFiles || [GLOB_JS_TS_X],
+        ignoresFallback: parentConfigIgnores,
+      },
+    ])
+    .addRule('exhaustive-deps', ERROR)
+    .addRule('rules-of-hooks', ERROR);
+
+  return [
+    ...builder.getAllConfigs(),
+    ...(configHooks === false ? [] : builderHooks.getAllConfigs()),
+  ];
 };
