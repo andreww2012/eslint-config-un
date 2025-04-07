@@ -35,6 +35,7 @@ import {
 } from './configs/prefer-arrow-functions';
 import {type PromiseEslintConfigOptions, promiseEslintConfig} from './configs/promise';
 import {type QwikEslintConfigOptions, qwikEslintConfig} from './configs/qwik';
+import {type ReactEslintConfigOptions, reactEslintConfig} from './configs/react';
 import {type RegexpEslintConfigOptions, regexpEslintConfig} from './configs/regexp';
 import {type SecurityEslintConfigOptions, securityEslintConfig} from './configs/security';
 import {type SonarEslintConfigOptions, sonarEslintConfig} from './configs/sonar';
@@ -262,6 +263,15 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'unusedImports'),
   };
 
+  /* 🟢 REACT */
+
+  const reactPackageInfo = getPackageInfoSync('react');
+
+  const isReactEnabled = Boolean(configsOptions.react ?? reactPackageInfo != null);
+  const reactOptions: ReactEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'react'),
+  };
+
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
 
   /* 🔴 SECURITY */
@@ -415,6 +425,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isQwikEnabled && qwikEslintConfig(qwikOptions, internalOptions),
       isCssEnabled && cssEslintConfig(cssOptions, internalOptions),
       isUnusedImportsEnabled && unusedImportsEslintConfig(unusedImportsOptions, internalOptions),
+      isReactEnabled && reactEslintConfig(reactOptions, internalOptions),
 
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&

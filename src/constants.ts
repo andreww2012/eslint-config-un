@@ -13,9 +13,13 @@ export type RuleSeverity = typeof ERROR | typeof WARNING | typeof OFF;
 /* Globs */
 
 export const GLOB_JS_TS_EXTENSION = '?([cm])[jt]s' as const;
-export const GLOB_JS_TS_X_EXTENSION = `${GLOB_JS_TS_EXTENSION}?(x)` as const;
 export const GLOB_JS_TS = `**/*.${GLOB_JS_TS_EXTENSION}` as const;
+
+export const GLOB_JS_TS_X_EXTENSION = `${GLOB_JS_TS_EXTENSION}?(x)` as const;
 export const GLOB_JS_TS_X = `**/*.${GLOB_JS_TS_X_EXTENSION}` as const;
+
+export const GLOB_JS_TS_X_ONLY_EXTENSION = `${GLOB_JS_TS_EXTENSION}x` as const;
+export const GLOB_JS_TS_X_ONLY = `**/*.${GLOB_JS_TS_X_ONLY_EXTENSION}` as const;
 
 export const GLOB_CONFIG_FILES = [
   `**/*.config.${GLOB_JS_TS_X_EXTENSION}` as const,

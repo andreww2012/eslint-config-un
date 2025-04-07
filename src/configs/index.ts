@@ -19,6 +19,7 @@ import type {PerfectionistEslintConfigOptions} from './perfectionist';
 import type {PreferArrowFunctionsEslintConfigOptions} from './prefer-arrow-functions';
 import type {PromiseEslintConfigOptions} from './promise';
 import type {QwikEslintConfigOptions} from './qwik';
+import type {ReactEslintConfigOptions} from './react';
 import type {RegexpEslintConfigOptions} from './regexp';
 import type {SecurityEslintConfigOptions} from './security';
 import type {SonarEslintConfigOptions} from './sonar';
@@ -220,6 +221,15 @@ export interface EslintConfigUnOptions {
      * @default true
      */
     unusedImports?: boolean | Partial<UnusedImportsEslintConfigOptions>;
+
+    /**
+     * [React](https://react.dev/) specific rules.
+     *
+     * Used plugin:
+     * - [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react)
+     * @default true if `react` package is installed
+     */
+    react?: boolean | Partial<ReactEslintConfigOptions>;
 
     /**
      * NOTE: disabled by default

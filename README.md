@@ -45,10 +45,11 @@ Includes the rules from the following configs & plugins:
 - `angular` (since v0.7.0), using [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template)
 - `css` (since v0.7.0), using [`@eslint/css`](https://www.npmjs.com/package/@eslint/css)
 - `noUnusedImports` (since v0.7.0), using [`eslint-plugin-unused-imports`](https://www.npmjs.com/package/eslint-plugin-unused-imports)
+- `react` (since v?.?.?), using [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react)
 
 ## Features
 
-- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest`, `jest-extended`, `vitest`, `@builder.io/qwik`, `@qwik.dev/core` and `@angular/core` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
+- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest`, `jest-extended`, `vitest`, `@builder.io/qwik`, `@qwik.dev/core`, `@angular/core` and `react` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
 - Every block of rules supports `overrides` for rules.
 - Designed to be used separately from Prettier: *almost* all the rules potentially conflicting with Prettier are disabled *by default*.
 - Written in TypeScript so all the options are typed.

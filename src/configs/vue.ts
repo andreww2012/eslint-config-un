@@ -47,7 +47,7 @@ type ValidHtmlTags = 'a' | 'abbr' | 'address' | 'area' | 'article' | 'aside' | '
 type InvalidHtmlTags = (typeof INVALID_HTML_TAGS)[number];
 type ValidAndInvalidHtmlTags = ValidHtmlTags | InvalidHtmlTags;
 
-const noRestrictedHtmlElementsDefault = Object.fromEntries(
+export const noRestrictedHtmlElementsDefault = Object.fromEntries(
   INVALID_HTML_TAGS.map((tag) => [tag, true]),
 );
 

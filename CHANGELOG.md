@@ -1,3 +1,7 @@
+## Unreleased
+
+- New config: `react` via [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react), enabled automatically if `react` package is installed.
+
 ## 0.7.0
 
 - New config: `angular` via [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template), enabled automatically if `@angular/core` package is installed and is within the supported version range (from 13 to 19).
