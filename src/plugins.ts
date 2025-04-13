@@ -2,6 +2,7 @@ import {fixupPluginRules} from '@eslint/compat';
 import eslintPluginCss from '@eslint/css';
 import eslintPluginMarkdown from '@eslint/markdown';
 import eslintPluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments';
+import eslintPluginReactX from '@eslint-react/eslint-plugin';
 import eslintPluginStylistic from '@stylistic/eslint-plugin';
 import eslintPluginVitest from '@vitest/eslint-plugin';
 import eslintPluginCssInJs from 'eslint-plugin-css';
@@ -83,4 +84,5 @@ export const ALL_ESLINT_PLUGINS: FlatConfigEntry['plugins'] & {} = {
   css: eslintPluginCss,
   react: eslintPluginReact,
   'react-hooks': eslintPluginReactHooks,
+  ...eslintPluginReactX.configs.all.plugins,
 };

@@ -5,6 +5,147 @@ import {getPackageMajorVersion} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './vue';
 import type {InternalConfigOptions} from './index';
 
+// Copied from https://eslint-react.xyz/docs/configuration/configure-analyzer#properties
+interface CustomReactComponent {
+  name: string;
+  as?: string;
+  attributes?: {
+    name: string;
+    as?: string;
+    defaultValue?: string;
+  }[];
+}
+
+// Copied from https://eslint-react.xyz/docs/configuration/configure-analyzer#properties
+type ReactBuiltInHookName =
+  | 'use'
+  | 'useActionState'
+  | 'useCallback'
+  | 'useContext'
+  | 'useDebugValue'
+  | 'useDeferredValue'
+  | 'useEffect'
+  | 'useFormStatus'
+  | 'useId'
+  | 'useImperativeHandle'
+  | 'useInsertionEffect'
+  | 'useLayoutEffect'
+  | 'useMemo'
+  | 'useOptimistic'
+  | 'useReducer'
+  | 'useRef'
+  | 'useState'
+  | 'useSyncExternalStore'
+  | 'useTransition';
+
+interface EslintPluginReactSettings {
+  /**
+   * Regex for Component Factory to use, default to `createReactClass`
+   */
+  createClass?: string;
+
+  /**
+   * Pragma to use, default to `React`
+   */
+  pragma?: string;
+
+  /**
+   * Fragment to use (may be a property of `pragma`), default to `Fragment`
+   */
+  fragment?: string;
+
+  /**
+   * React version. `detect` automatically picks the version you have installed.
+   * You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
+   * Defaults to the `defaultVersion` setting and warns if missing, and to `detect` in the future
+   */
+  version?: string;
+
+  /**
+   * Default React version to use when the version you have installed cannot be detected.
+   * If not provided, defaults to the latest React version.
+   */
+  defaultVersion?: string;
+
+  /**
+   * Flow version
+   */
+  flowVersion?: string;
+
+  /**
+   * The names of any function used to wrap `propTypes`, e.g. `forbidExtraProps`. If this isn't set, any `propTypes` wrapped in a function will be skipped.
+   */
+  propWrapperFunctions?: (
+    | string
+    | {
+        property: string;
+        object?: string;
+
+        /**
+         * For rules that check exact prop wrappers
+         */
+        exact?: boolean;
+      }
+  )[];
+
+  /**
+   * The name of any function used to wrap components, e.g. Mobx `observer` function. If this isn't set, components wrapped by these functions will be skipped.
+   */
+  componentWrapperFunctions?: (
+    | string
+    | {
+        property: string;
+
+        /**
+         * Using `<pragma>` sets `object` to whatever value `settings.react.pragma` is set to
+         */
+        object?: string;
+      }
+  )[];
+
+  /**
+   * Components used as alternatives to `<form>` for forms, eg. `<Form endpoint={ url } />`
+   */
+  formComponents?: (string | {name: string; formAttribute: string | string[]})[];
+
+  /**
+   * Components used as alternatives to `<a>` for linking, eg. `<Link to={ url } />`
+   */
+  linkComponents?: (string | {name: string; linkAttribute: string | string[]})[];
+}
+
+interface EslintPluginReactXSettings {
+  /**
+   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#version
+   */
+  version?: string;
+
+  /**
+   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#importsource
+   */
+  importSource?: string;
+
+  /**
+   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#skipimportcheck
+   */
+  skipImportCheck?: boolean;
+
+  /**
+   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#polymorphicpropname
+   */
+  polymorphicPropName?: string;
+
+  /**
+   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#additionalcomponents-experimental
+   */
+  additionalComponents?: CustomReactComponent[];
+
+  /**
+   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#additionalhooks-experimental
+   */
+  additionalHooks?: Record<ReactBuiltInHookName, string[]>;
+}
+
 export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
   /**
    * [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react) plugin
@@ -15,81 +156,62 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
    * `Warning: React version not specified in eslint-plugin-react settings.` log message
    * when running ESLint.
    */
-  settings?: {
-    /**
-     * Regex for Component Factory to use, default to `createReactClass`
-     */
-    createClass?: string;
+  settings?: EslintPluginReactSettings;
 
-    /**
-     * Pragma to use, default to `React`
-     */
-    pragma?: string;
+  /**
+   * Enables or specifies the configuration for the [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) plugin.
+   *
+   * By default will use the same `files` and `ignores` as the parent config.
+   * @default true
+   */
+  configReactX?:
+    | boolean
+    | (ConfigSharedOptions<'@eslint-react'> & {
+        /**
+         * [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) plugin
+         * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+         * that will be assigned to `react-x` property and applied to the specified `files` and `ignores`.
+         *
+         * Note that they will be merged with `{version: <detected by us React version>}`.
+         */
+        settings?: EslintPluginReactXSettings;
 
-    /**
-     * Fragment to use (may be a property of `pragma`), default to `Fragment`
-     */
-    fragment?: string;
-
-    /**
-     * React version. `detect` automatically picks the version you have installed.
-     * You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
-     * Defaults to the `defaultVersion` setting and warns if missing, and to `detect` in the future
-     */
-    version?: string;
-
-    /**
-     * Default React version to use when the version you have installed cannot be detected.
-     * If not provided, defaults to the latest React version.
-     */
-    defaultVersion?: string;
-
-    /**
-     * Flow version
-     */
-    flowVersion?: string;
-
-    /**
-     * The names of any function used to wrap `propTypes`, e.g. `forbidExtraProps`. If this isn't set, any `propTypes` wrapped in a function will be skipped.
-     */
-    propWrapperFunctions?: (
-      | string
-      | {
-          property: string;
-          object?: string;
-
-          /**
-           * For rules that check exact prop wrappers
-           */
-          exact?: boolean;
-        }
-    )[];
-
-    /**
-     * The name of any function used to wrap components, e.g. Mobx `observer` function. If this isn't set, components wrapped by these functions will be skipped.
-     */
-    componentWrapperFunctions?: (
-      | string
-      | {
-          property: string;
-
-          /**
-           * Using `<pragma>` sets `object` to whatever value `settings.react.pragma` is set to
-           */
-          object?: string;
-        }
-    )[];
-
-    /**
-     * Components used as alternatives to `<form>` for forms, eg. `<Form endpoint={ url } />`
-     */
-    formComponents?: (string | {name: string; formAttribute: string | string[]})[];
-
-    /**
-     * Components used as alternatives to `<a>` for linking, eg. `<Link to={ url } />`
-     */
-    linkComponents?: (string | {name: string; linkAttribute: string | string[]})[];
-  };
+        /**
+         * By default, usage of [any of the legacy React APIs](https://react.dev/reference/react/legacy),
+         * including [deprecated lifecycle methods](https://react.dev/reference/react/Component#componentwillmount),
+         * will be reported. Using this option, you can allow some of them or change
+         * the severity of the problems.
+         *
+         * The default severity is `error`, with the only exception of `classComponent`, which
+         * is `warn`.
+         *
+         * Affects the following rules (`@eslint-react` prefix is implied):
+         * - `Children`: [`no-children-count`](https://eslint-react.xyz/docs/rules/no-children-count), [`no-children-for-each`](https://eslint-react.xyz/docs/rules/no-children-for-each), [`no-children-map`](https://eslint-react.xyz/docs/rules/no-children-map), [`no-children-only`](https://eslint-react.xyz/docs/rules/no-children-only), [`no-children-to-array`](https://eslint-react.xyz/docs/rules/no-children-to-array)
+         * - `cloneElement`: [`no-clone-element`](https://eslint-react.xyz/docs/rules/no-clone-element)
+         * - `classComponent`: [`no-class-component`](https://eslint-react.xyz/docs/rules/no-class-component)
+         * - `createRef`: [`no-create-ref`](https://eslint-react.xyz/docs/rules/no-create-ref)
+         * - `forwardRef`: [`no-forward-ref`](https://eslint-react.xyz/docs/rules/no-forward-ref)
+         * - `componentWillMount`: [`no-component-will-mount`](https://eslint-react.xyz/docs/rules/no-component-will-mount)
+         * - `componentWillReceiveProps`: [`no-component-will-receive-props`](https://eslint-react.xyz/docs/rules/no-component-will-receive-props)
+         * - `componentWillUpdate`: [`no-component-will-update`](https://eslint-react.xyz/docs/rules/no-component-will-update)
+         */
+        noLegacyApis?: Partial<
+          Record<
+            | 'Children'
+            | 'cloneElement'
+            | 'classComponent'
+            // | 'createElement'
+            | 'createRef'
+            | 'forwardRef'
+            // | 'isValidElement'
+            // | 'PureComponent'
+            | 'componentWillMount'
+            | 'componentWillReceiveProps'
+            | 'componentWillUpdate',
+            boolean | 'warn'
+          >
+        >;
+      });
 
   /**
    * Enables or specifies the configuration for the [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) plugin.
@@ -125,6 +247,10 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
 }
 
 const LATEST_REACT_VERSION = 19;
+const JSX_FILE_EXTENSIONS = ['.jsx', '.tsx', '.cjsx', '.mjsx', '.ctsx', '.mtsx'];
+
+const getSeverity = (severity: boolean | 'warn' = true) =>
+  severity === 'warn' ? WARNING : severity ? ERROR : OFF;
 
 export const reactEslintConfig = (
   options: ReactEslintConfigOptions = {},
@@ -137,13 +263,19 @@ export const reactEslintConfig = (
     options.reactVersion ?? reactPackageInfo?.version ?? LATEST_REACT_VERSION,
   );
 
+  const isMinVersion17 = reactMajorVersion >= 17;
+  const isMinVersion19 = reactMajorVersion >= 19;
+
   const {
     files: parentConfigFiles,
     ignores: parentConfigIgnores,
     settings: pluginSettings,
-    newJsxTransform = reactMajorVersion >= 17,
+    newJsxTransform = isMinVersion17,
     configHooks = true,
+    configReactX = true,
   } = options;
+
+  const isXDisabled = options.configReactX === false;
 
   const builder = new ConfigEntryBuilder('react', options, internalOptions);
 
@@ -166,7 +298,7 @@ export const reactEslintConfig = (
           react: {
             version: reactFullVersion,
             ...pluginSettings,
-          },
+          } satisfies EslintPluginReactSettings,
         },
         // Copied from https://github.com/jsx-eslint/eslint-plugin-react/blob/e6b5b41191690ee166d0cca1e9db27092b910f03/index.js#L86
         ...(newJsxTransform && {
@@ -183,7 +315,7 @@ export const reactEslintConfig = (
     .addRule('checked-requires-onchange-or-readonly', ERROR, [{ignoreMissingProperties: true}])
     .addRule('default-props-match-prop-types', ERROR)
     .addRule('destructuring-assignment', OFF)
-    .addRule('display-name', ERROR) // 🟢
+    .addRule('display-name', WARNING) // 🟢
     .addRule('forbid-component-props', OFF)
     .addRule('forbid-dom-props', OFF)
     .addRule('forbid-elements', ERROR, [
@@ -225,14 +357,15 @@ export const reactEslintConfig = (
     .addRule('jsx-equals-spacing', OFF) // 💅
     .addRule('jsx-filename-extension', WARNING, [
       {
-        extensions: ['.jsx', '.tsx', '.cjsx', '.mjsx', '.ctsx', '.mtsx'],
+        extensions: JSX_FILE_EXTENSIONS,
+        ignoreFilesWithoutCode: true,
       },
     ])
     .addRule('jsx-first-prop-new-line', OFF) // 💅
     .addRule('jsx-fragments', WARNING)
     .addRule('jsx-handler-names', OFF)
-    .addRule('jsx-indent', OFF) // 💅
     .addRule('jsx-indent-props', OFF) // 💅
+    .addRule('jsx-indent', OFF) // 💅
     .addRule('jsx-key', ERROR, [
       {
         checkFragmentShorthand: true,
@@ -282,21 +415,21 @@ export const reactEslintConfig = (
     .addRule('no-is-mounted', ERROR) // 🟢
     .addRule('no-multi-comp', ERROR)
     .addRule('no-namespace', ERROR)
-    .addRule('no-object-type-as-default-prop', ERROR)
+    .addRule('no-object-type-as-default-prop', WARNING)
     .addRule('no-redundant-should-component-update', ERROR)
     .addRule('no-render-return-value', ERROR) // 🟢
     .addRule('no-set-state', OFF)
-    .addRule('no-string-refs', ERROR) // 🟢
+    .addRule('no-string-refs', ERROR, [{noTemplateLiterals: true}]) // 🟢
     .addRule('no-this-in-sfc', ERROR)
     .addRule('no-typos', ERROR)
     .addRule('no-unescaped-entities', OFF) // 🟢
     .addRule('no-unknown-property', ERROR, [{requireDataLowercase: true}]) // 🟢
-    .addRule('no-unsafe', reactMajorVersion >= 17 ? ERROR : OFF) // 🟢(off)
+    .addRule('no-unsafe', isMinVersion17 ? WARNING : OFF) // 🟢(off)
     .addRule('no-unstable-nested-components', ERROR, [{allowAsProps: true}])
     .addRule('no-unused-class-component-methods', WARNING)
     .addRule('no-unused-prop-types', WARNING)
     .addRule('no-unused-state', WARNING)
-    .addRule('no-will-update-set-state', ERROR)
+    .addRule('no-will-update-set-state', WARNING)
     .addRule('prefer-es6-class', ERROR)
     .addRule('prefer-exact-props', OFF)
     .addRule('prefer-read-only-props', OFF)
@@ -340,8 +473,154 @@ export const reactEslintConfig = (
     .addRule('exhaustive-deps', ERROR)
     .addRule('rules-of-hooks', ERROR);
 
+  // Legend:
+  // 🟢 - in Recommended, severity is `error`
+  // 🟡 - in Recommended, severity is `warn`
+  // 🔄️ - Name of the same rule in `eslint-plugin-react` that will be disabled if `configReactX` is enabled (name is also same if it is not specified)
+  // 💭 - Requires type information
+  // 🔢 - min React version in which the rule works (otherwise does nothing)
+
+  const configReactXOptions = typeof configReactX === 'object' ? configReactX : {};
+  const {noLegacyApis = {}} = configReactXOptions;
+
+  const builderReactX = new ConfigEntryBuilder(
+    '@eslint-react',
+    configReactXOptions,
+    internalOptions,
+  );
+  builderReactX
+    .addConfig(
+      [
+        'react/x',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: parentConfigFiles || [GLOB_JS_TS_X],
+          ignoresFallback: parentConfigIgnores,
+        },
+      ],
+      {
+        settings: {
+          'react-x': {
+            version: reactFullVersion,
+            ...configReactXOptions.settings,
+          } satisfies EslintPluginReactXSettings,
+        },
+      },
+    )
+    // === X rules ===
+    .addRule('jsx-no-duplicate-props', ERROR) // 🟡 🔄️
+    .addRule('jsx-no-undef', ERROR) // 🔄️
+    // "This rule does nothing when using the New JSX Transform or if the no-unused-vars rule is not enabled."
+    .addRule('jsx-uses-react', ERROR) // 🟡 🔄️
+    // "This rule only has an effect when the no-unused-vars rule is enabled."
+    .addRule('jsx-uses-vars', ERROR) // 🟡 🔄️
+    .addRule('no-access-state-in-setstate', ERROR) // 🟢 🔄️
+    .addRule('no-array-index-key', WARNING) // 🟡 🔄️
+    .addRule('no-children-count', getSeverity(noLegacyApis.Children)) // 🟡
+    .addRule('no-children-for-each', getSeverity(noLegacyApis.Children)) // 🟡
+    .addRule('no-children-map', getSeverity(noLegacyApis.Children)) // 🟡
+    .addRule('no-children-only', getSeverity(noLegacyApis.Children)) // 🟡
+    .addRule('no-children-prop', ERROR) // 🔄️
+    .addRule('no-children-to-array', getSeverity(noLegacyApis.Children)) // 🟡
+    .addRule('no-class-component', getSeverity(noLegacyApis.classComponent ?? 'warn'))
+    .addRule('no-clone-element', getSeverity(noLegacyApis.cloneElement)) // 🟡
+    .addRule('no-comment-textnodes', ERROR) // 🟡 🔄️
+    .addRule('no-complex-conditional-rendering', OFF)
+    .addRule('no-component-will-mount', getSeverity(noLegacyApis.componentWillMount)) // 🟢
+    .addRule('no-component-will-receive-props', getSeverity(noLegacyApis.componentWillReceiveProps)) // 🟢
+    .addRule('no-component-will-update', getSeverity(noLegacyApis.componentWillUpdate)) // 🟢
+    .addRule('no-context-provider', ERROR) // 🟡 🔢19.0.0
+    .addRule('no-create-ref', getSeverity(noLegacyApis.createRef)) // 🟢
+    // `defaultProps` removed in v19 (will be silently ignored)
+    .addRule('no-default-props', isMinVersion19 ? ERROR : WARNING) // 🟢
+    .addRule('no-direct-mutation-state', ERROR) // 🟢 🔄️
+    .addRule('no-duplicate-key', ERROR) // 🟢 🔄️`jsx-key` (`warnOnDuplicates` option)
+    // "In React 19, forwardRef is no longer necessary. Pass ref as a prop instead."
+    .addRule('no-forward-ref', getSeverity(noLegacyApis.forwardRef)) // 🟡 🔢19.0.0
+    .addRule('no-implicit-key', WARNING) // 🟡
+    .addRule('no-leaked-conditional-rendering', ERROR) // 🟡 🔄️`jsx-no-leaked-render` 💭
+    .addRule('no-missing-component-display-name', WARNING) // 🔄️`display-name`
+    .addRule('no-missing-context-display-name', WARNING) // 🔄️`display-name` (`checkContextObjects` option)
+    .addRule('no-missing-key', ERROR) // 🟢 🔄️`jsx-key`
+    .addRule('no-misused-capture-owner-stack', ERROR)
+    .addRule('no-nested-component-definitions', ERROR) // 🟢 🔄️`no-unstable-nested-components`
+    .addRule('no-nested-lazy-component-declarations', ERROR) // 🟢
+    // `propTypes` removed in v19 (will be silently ignored)
+    .addRule('no-prop-types', isMinVersion19 ? ERROR : WARNING) // 🟢
+    .addRule('no-redundant-should-component-update', ERROR) // 🟢 🔄️
+    .addRule('no-set-state-in-component-did-mount', WARNING) // 🟡 🔄️`no-did-mount-set-state`
+    .addRule('no-set-state-in-component-did-update', WARNING) // 🟡 🔄️`no-did-update-set-state`
+    .addRule('no-set-state-in-component-will-update', WARNING) // 🟡 🔄️`no-will-update-set-state`
+    .addRule('no-string-refs', ERROR) // 🟢 🔄️
+    .addRule('no-unsafe-component-will-mount', isMinVersion17 ? WARNING : OFF) // 🟡 🔄️`no-unsafe`
+    .addRule('no-unsafe-component-will-receive-props', isMinVersion17 ? WARNING : OFF) // 🟡 🔄️`no-unsafe`
+    .addRule('no-unsafe-component-will-update', isMinVersion17 ? WARNING : OFF) // 🟡 🔄️`no-unsafe`
+    .addRule('no-unstable-context-value', WARNING) // 🟡 🔄️`jsx-no-constructed-context-values`
+    .addRule('no-unstable-default-props', WARNING) // 🟡 🔄️`no-object-type-as-default-prop`
+    .addRule('no-unused-class-component-members', WARNING) // 🟡 🔄️`no-unused-class-component-methods`
+    .addRule('no-unused-state', WARNING) // 🟡 🔄️
+    .addRule('no-use-context', WARNING) // 🟡 🔢19.0.0
+    .addRule('no-useless-forward-ref', ERROR) // 🟡 🔄️`forward-ref-uses-ref`
+    .addRule('no-useless-fragment', WARNING) // 🔄️`jsx-no-useless-fragment`
+    .addRule('prefer-destructuring-assignment', OFF) // 🔄️`destructuring-assignment`
+    // TODO why?
+    .addRule('prefer-react-namespace-import', OFF)
+    .addRule('prefer-read-only-props', OFF) // 🔄️ 💭
+    .addRule('prefer-shorthand-boolean', WARNING) // 🔄️`jsx-boolean-value`
+    .addRule('prefer-shorthand-fragment', WARNING) // 🔄️`jsx-fragments`
+    .addRule('avoid-shorthand-boolean', OFF) // 🔄️`jsx-boolean-value`
+    .addRule('avoid-shorthand-fragment', OFF) // 🔄️`jsx-fragments`
+    // === DOM rules ===
+    .addRule('dom/no-dangerously-set-innerhtml', ERROR) // 🟡 🔄️`no-danger`
+    .addRule('dom/no-dangerously-set-innerhtml-with-children', ERROR) // 🟢 🔄️`no-danger-with-children`
+    // TODO deprecated API, removed in v19
+    .addRule('dom/no-find-dom-node', ERROR) // 🟢 🔄️
+    .addRule('dom/no-flush-sync', ERROR) // 🟢
+    // TODO deprecated API, removed in v19
+    .addRule('dom/no-hydrate', ERROR) // 🟢 🔢18.0.0
+    .addRule('dom/no-missing-button-type', ERROR) // 🟡 🔄️`button-has-type`
+    .addRule('dom/no-missing-iframe-sandbox', ERROR) // 🟡 🔄️`iframe-missing-sandbox`
+    .addRule('dom/no-namespace', ERROR) // 🟢 🔄️
+    // TODO deprecated API, removed in v19
+    .addRule('dom/no-render', ERROR) // 🟢 🔢18.0.0
+    .addRule('dom/no-render-return-value', ERROR) // 🟢 🔄️
+    .addRule('dom/no-script-url', ERROR) // 🟡 🔄️
+    .addRule('dom/no-unknown-property', ERROR, [{requireDataLowercase: true}]) // 🔄️
+    .addRule('dom/no-unsafe-iframe-sandbox', ERROR) // 🟡 🔄️`iframe-missing-sandbox`
+    .addRule('dom/no-unsafe-target-blank', ERROR) // 🟡 🔄️`jsx-no-target-blank`
+    // React 19 docs: "In earlier React Canary versions, this API was part of React DOM and called useFormState."
+    .addRule('dom/no-use-form-state', ERROR) // 🟢 🔢19.0.0
+    .addRule('dom/no-void-elements-with-children', ERROR) // 🟢 🔄️`void-dom-elements-no-children`
+    // === Web API rules ===
+    .addRule('web-api/no-leaked-event-listener', ERROR) // 🟡
+    .addRule('web-api/no-leaked-interval', ERROR) // 🟡
+    .addRule('web-api/no-leaked-resize-observer', ERROR) // 🟡
+    .addRule('web-api/no-leaked-timeout', ERROR) // 🟡
+    // === Hooks Extra rules ===
+    .addRule('hooks-extra/no-direct-set-state-in-use-effect', WARNING) // 🟡
+    .addRule('hooks-extra/no-direct-set-state-in-use-layout-effect', WARNING)
+    .addRule('hooks-extra/no-unnecessary-use-callback', ERROR)
+    .addRule('hooks-extra/no-unnecessary-use-memo', ERROR)
+    .addRule('hooks-extra/no-unnecessary-use-prefix', OFF) // 🟡
+    .addRule('hooks-extra/prefer-use-state-lazy-initialization', WARNING) // 🟡
+    // === Naming Convention rules ===
+    .addRule('naming-convention/component-name', WARNING) // 🔄️`jsx-pascal-case`
+    .addRule('naming-convention/context-name', WARNING) // 🟡
+    .addRule('naming-convention/filename', OFF)
+    .addRule('naming-convention/filename-extension', WARNING, [
+      {allow: 'always', extensions: JSX_FILE_EXTENSIONS},
+    ]) // 🔄️`jsx-filename-extension`
+    .addRule('naming-convention/use-state', ERROR) // 🔄️`hook-use-state`
+    // === Debug rules ===
+    .addRule('debug/class-component', OFF)
+    .addRule('debug/function-component', OFF)
+    .addRule('debug/hook', OFF)
+    .addRule('debug/is-from-react', OFF)
+    .addRule('debug/jsx', OFF);
+
   return [
     ...builder.getAllConfigs(),
     ...(configHooks === false ? [] : builderHooks.getAllConfigs()),
+    ...(isXDisabled ? [] : builderReactX.getAllConfigs()),
   ];
 };

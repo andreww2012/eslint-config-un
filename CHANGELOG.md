@@ -1,6 +1,6 @@
 ## Unreleased
 
-- New config: `react` via [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react) and [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks), enabled automatically if `react` package is installed.
+- New config: `react` via [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react), [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) and [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin), enabled automatically if `react` package is installed.
 
 ## 0.7.0
 

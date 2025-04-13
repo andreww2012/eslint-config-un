@@ -227,7 +227,8 @@ export interface EslintConfigUnOptions {
      *
      * Used plugins:
      * - [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react)
-     * - [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks)
+     * - [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) (`configReactX` sub-config)
+     * - [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) (`configHooks` sub-config)
      * @default true if `react` package is installed
      */
     react?: boolean | Partial<ReactEslintConfigOptions>;

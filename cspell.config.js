@@ -37,6 +37,8 @@ export default {
     'lockfiles',
     'worklet',
     'nums',
+    'textnodes',
+    'multilines',
 
     // Misc
     'multicol',
@@ -44,12 +46,15 @@ export default {
     'noembed',
     'scopedslots',
     'setstate',
-    'mtsx',
     'ctsx',
+    'cjsx',
+    'mtsx',
+    'mjsx',
     'rrggbb',
     'ngsrc',
     'ngmodule',
     'andreww',
+    'innerhtml',
 
     // Actual English words
     'uncategorized',
