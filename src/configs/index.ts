@@ -225,10 +225,22 @@ export interface EslintConfigUnOptions {
     /**
      * [React](https://react.dev/) specific rules.
      *
-     * Used plugins:
+     * ### Used plugins
      * - [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react)
-     * - [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) (`configReactX` sub-config)
-     * - [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) (`configHooks` sub-config)
+     * - [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin)
+     * **with `@eslint-react` prefix**
+     * - [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks)
+     *
+     * Since `eslint-plugin-react` and `@eslint-react/eslint-plugin` have some overlapping rules,
+     * and `eslint-plugin-react` has some rules that are not relevant in modern codebases,
+     * there exists an option to control which rules from which plugins, if any, will be used.
+     * Refer to `pluginX` option JSDoc for more details.
+     *
+     * ### Sub-configs
+     * - `reactX`: runtime agnostic ("X") and "Name Convention" rules from `@eslint-react/eslint-plugin`.
+     * - `hooks`: rules from `eslint-plugin-react-hooks` as well as "Hooks Extra" rules from `@eslint-react/eslint-plugin`.
+     * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and `eslint-plugin-react`.
+     * - `allowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
      * @default true if `react` package is installed
      */
     react?: boolean | Partial<ReactEslintConfigOptions>;

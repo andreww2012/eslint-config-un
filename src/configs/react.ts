@@ -8,6 +8,7 @@ import {
   WARNING,
 } from '../constants';
 import {
+  type AllEslintRulesWithDisableAutofix,
   type AllEslintRulesWithoutDisableAutofix,
   type AllRulesWithPrefix,
   type AllRulesWithPrefixUnprefixedNames,
@@ -182,9 +183,21 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
   settings?: EslintPluginReactSettings;
 
   /**
+   * By default, default exports will be allowed in all JSX files
+   * @default true
+   */
+  configAllowDefaultExportsInJsxFiles?:
+    | boolean
+    | ConfigSharedOptions<Pick<AllEslintRulesWithDisableAutofix, 'import/no-default-export'>>;
+
+  /**
    * Enables or specifies the configuration for the [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) plugin.
    *
-   * Only includes [runtime agnostic ("X") rules](https://eslint-react.xyz/docs/rules/overview#x-rules).
+   * Only includes [runtime agnostic ("X")](https://eslint-react.xyz/docs/rules/overview#x-rules) and ["Naming Convention"](https://eslint-react.xyz/docs/rules/overview#naming-convention-rules) rules.
+   *
+   * Disabling this sub-config does not stop all the rules from `@eslint-react/eslint-plugin`
+   * from being used in other sub-configs. If you for some reason do not want to use this plugin's
+   * rules altogether, set `pluginX` option to `never` on `react` config.
    *
    * By default will use the same `files` and `ignores` as the parent config.
    * @default true
@@ -239,7 +252,8 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
       });
 
   /**
-   * Enables or specifies the configuration for the [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) plugin, as well as [hooks rules from `@eslint-react/eslint-plugin`](https://eslint-react.xyz/docs/rules/overview#hooks-extra-rules).
+   * Enables or specifies the configuration for the [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) plugin, as well as ["Hooks Extra" rules from `@eslint-react/eslint-plugin`](https://eslint-react.xyz/docs/rules/overview#hooks-extra-rules)
+   * (unless `pluginX` option is set to `never` on `react` config).
    *
    * By default will use the same `files` and `ignores` as the parent config.
    * @default true
@@ -248,6 +262,10 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
 
   /**
    * Enables or specifies the configuration for DOM specific rules from [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react).
+   *
+   * To avoid including the rules from any of these plugins, set `pluginX` option to
+   * `never` or `avoid` to completely ignore `@eslint-react/eslint-plugin` or
+   * `eslint-plugin-react` rules respectively.
    *
    * By default will use the same `files` and `ignores` as the parent config.
    * @default true <=> `react-dom` package is installed
@@ -266,11 +284,58 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
   /**
    * Controls how rules from [@eslint-react/eslint-plugin](https://www.npmjs.com/package/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react) are used.
    * - `prefer`: if the same(-ish) rule exists both in `@eslint-react/eslint-plugin`
-   * and `eslint-plugin-react`, use the one from `@eslint-react/eslint-plugin`.
-   * Use all the other unique rules from both of these plugins.
+   * and `eslint-plugin-react` (the full list is below), use the one from
+   * `@eslint-react/eslint-plugin`. Use all the other unique rules from both of these plugins.
    * - `avoid`: same as `prefer`, but `eslint-plugin-react`'s version is preferred.
    * - `only`: do not use `eslint-plugin-react` at all.
    * - `never`: do not use `@eslint-react/eslint-plugin` at all.
+   *
+   * ### The list of "double implementation" rules
+   * `@eslint-react/eslint-plugin` name(s)                   | `eslint-plugin-react` name(s)
+   * ------------------------------------------------------- | -----------------------------
+   * `jsx-no-duplicate-props`                                | `jsx-no-duplicate-props`
+   * `jsx-no-undef`                                          | `jsx-no-undef`
+   * `jsx-uses-react`                                        | `jsx-uses-react`
+   * `jsx-uses-vars`                                         | `jsx-uses-vars`
+   * `no-access-state-in-setstate`                           | `no-access-state-in-setstate`
+   * `no-array-index-key`                                    | `no-array-index-key`
+   * `no-children-prop`                                      | `no-children-prop`
+   * `no-comment-textnodes`                                  | `jsx-no-comment-textnodes`
+   * `no-direct-mutation-state`                              | `no-direct-mutation-state`
+   * `no-duplicate-key`, `no-missing-key`                    | `jsx-key`
+   * `no-leaked-conditional-rendering`                       | `jsx-no-leaked-render`
+   * `no-missing-{component,context}-display-name`           | `display-name`
+   * `no-nested-component-definitions`                       | `no-unstable-nested-components`
+   * `no-redundant-should-component-update`                  | `no-redundant-should-component-update`
+   * `no-set-state-in-component-did-mount`                   | `no-did-mount-set-state`
+   * `no-set-state-in-component-did-update`                  | `no-did-update-set-state`
+   * `no-set-state-in-component-will-update`                 | `no-will-update-set-state`
+   * `no-string-refs`                                        | `no-string-refs`
+   * `no-unstable-context-value`                             | `jsx-no-constructed-context-values`
+   * `no-unstable-default-props`                             | `no-object-type-as-default-prop`
+   * `no-unused-class-component-members`                     | `no-unused-class-component-methods`
+   * `no-unused-state`                                       | `no-unused-state`
+   * `no-useless-forward-ref`                                | `forward-ref-uses-ref`
+   * `no-useless-fragment`                                   | `jsx-no-useless-fragment`
+   * `prefer-destructuring-assignment`                       | `destructuring-assignment`
+   * `prefer-read-only-props`                                | `prefer-read-only-props`
+   * `prefer-shorthand-boolean`, `avoid-shorthand-boolean`   | `jsx-boolean-value`
+   * `prefer-shorthand-fragment`, `avoid-shorthand-fragment` | `jsx-fragments`
+   * `naming-convention/component-name`                      | `jsx-pascal-case`
+   * `naming-convention/filename-extension`                  | `jsx-filename-extension`
+   * `naming-convention/use-state`                           | `hook-use-state`
+   * `dom/no-dangerously-set-innerhtml`                      | `no-danger`
+   * `dom/no-dangerously-set-innerhtml-with-children`        | `no-danger-with-children`
+   * `dom/no-find-dom-node`                                  | `no-find-dom-node`
+   * `dom/no-missing-button-type`                            | `button-has-type`
+   * `dom/no-missing-iframe-sandbox`                         | `iframe-missing-sandbox`
+   * `dom/no-namespace`                                      | `no-namespace`
+   * `dom/no-render-return-value`                            | `no-render-return-value`
+   * `dom/no-script-url`                                     | `jsx-no-script-url`
+   * `dom/no-unknown-property`                               | `no-unknown-property`
+   * `dom/no-unsafe-iframe-sandbox`                          | `iframe-missing-sandbox`
+   * `dom/no-unsafe-target-blank`                            | `jsx-no-target-blank`
+   * `dom/no-void-elements-with-children`                    | `void-dom-elements-no-children`
    * @default 'prefer'
    */
   pluginX?: 'prefer' | 'avoid' | 'only' | 'never';
@@ -298,6 +363,34 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
    * @example {center: false, pre: true, button: 'use <Button> instead'}
    */
   disallowedElements?: Partial<Record<string, boolean | string>>;
+
+  /**
+   * Whether to prefer or avoid boolean shorthand syntax in JSX (i.e. `<foo bar />` over `<foo bar={true} />`).
+   * - `prefer`/`avoid`: prefer/avoid boolean shorthand syntax, use `warn` severity.
+   * - `prefer-error`/`avoid-error`: prefer/avoid boolean shorthand syntax, use `error` severity.
+   * - `off`: allow both syntaxes.
+   *
+   * Affects the following rules:
+   * - [`@eslint-react/prefer-shorthand-boolean`](https://eslint-react.xyz/docs/rules/prefer-shorthand-boolean)
+   * - [`@eslint-react/avoid-shorthand-boolean`](https://eslint-react.xyz/docs/rules/avoid-shorthand-boolean)
+   * - [`jsx-boolean-value`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-boolean-value.md)
+   * @default 'prefer'
+   */
+  shorthandBoolean?: 'prefer' | 'prefer-error' | 'avoid' | 'avoid-error' | 'off';
+
+  /**
+   * Whether to prefer or avoid Fragment shorthand syntax in JSX (i.e. `<>...</>` over `<Fragment>...</Fragment>`).
+   * - `prefer`/`avoid`: prefer/avoid Fragment shorthand syntax, use `warn` severity.
+   * - `prefer-error`/`avoid-error`: prefer/avoid Fragment shorthand syntax, use `error` severity.
+   * - `off`: allow both syntaxes.
+   *
+   * Affects the following rules:
+   * - [`@eslint-react/prefer-shorthand-fragment`](https://eslint-react.xyz/docs/rules/prefer-shorthand-fragment)
+   * - [`@eslint-react/avoid-shorthand-fragment`](https://eslint-react.xyz/docs/rules/avoid-shorthand-fragment)
+   * - [`jsx-fragments`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-fragments.md)
+   * @default true
+   */
+  shorthandFragment?: 'prefer' | 'prefer-error' | 'avoid' | 'avoid-error' | 'off';
 }
 
 const LATEST_REACT_VERSION = 19;
@@ -332,8 +425,6 @@ const NO_USELESS_FORWARD_REF_SEVERITY = ERROR;
 const NO_USELESS_FRAGMENT_SEVERITY = WARNING;
 const PREFER_DESTRUCTURING_ASSIGNMENT_SEVERITY = OFF;
 const PREFER_READ_ONLY_PROPS_SEVERITY = OFF;
-const PREFER_SHORTHAND_BOOLEAN_SEVERITY = WARNING;
-const PREFER_SHORTHAND_FRAGMENT_SEVERITY = WARNING;
 const COMPONENT_NAME_SEVERITY = WARNING;
 const FILENAME_EXTENSION_SEVERITY = WARNING;
 const USE_STATE_SEVERITY = ERROR;
@@ -357,10 +448,13 @@ export const reactEslintConfig = (
     ignores: parentConfigIgnores,
     settings: pluginSettings,
     newJsxTransform = isMinVersion17,
+    configAllowDefaultExportsInJsxFiles = true,
     configHooks = true,
     configReactX = true,
     configDom = isPackageExists('react-dom'),
     pluginX = 'prefer',
+    shorthandBoolean = 'prefer',
+    shorthandFragment = 'prefer',
   } = options;
 
   const isConfigXDisabled = configReactX === false;
@@ -388,13 +482,13 @@ export const reactEslintConfig = (
   const getDoubleRuleSeverity = (severity: RuleSeverity, isXRule?: boolean) =>
     (isReactXPreferred && !isReactXEnabled) ||
     (isReactPreferred && !isReactEnabled) ||
-    (!isReactXEnabled && isXRule === true) ||
-    (!isReactEnabled && isXRule === false)
+    (!isReactXPreferred && isXRule === true) ||
+    (!isReactPreferred && isXRule === false)
       ? OFF
       : severity;
   const getXRuleSeverity = (severity: RuleSeverity) => (isReactXEnabled ? severity : OFF);
 
-  const NO_UNSAFE_CLASS_COMPONENT_METHODS_SEVERITY = isMinVersion17 ? WARNING : OFF;
+  const noUnsafeClassComponentMethodsSeverity = isMinVersion17 ? WARNING : OFF;
 
   const configReactXOptions = typeof configReactX === 'object' ? configReactX : {};
 
@@ -479,7 +573,18 @@ export const reactEslintConfig = (
     .addRule('hook-use-state', getDoubleRuleSeverity(USE_STATE_SEVERITY, false), [
       {allowDestructuredState: true},
     ])
-    .addRule('jsx-boolean-value', getDoubleRuleSeverity(PREFER_SHORTHAND_BOOLEAN_SEVERITY, false))
+    .addRule(
+      'jsx-boolean-value',
+      getDoubleRuleSeverity(
+        shorthandBoolean === 'prefer-error' || shorthandBoolean === 'avoid-error'
+          ? ERROR
+          : shorthandBoolean === 'prefer' || shorthandBoolean === 'avoid'
+            ? WARNING
+            : OFF,
+        false,
+      ),
+      [shorthandBoolean === 'prefer-error' || shorthandBoolean === 'prefer' ? 'never' : 'always'],
+    )
     .addRule('jsx-child-element-spacing', OFF) // 💅
     .addRule('jsx-closing-bracket-location', OFF) // 💅
     .addRule('jsx-closing-tag-location', OFF) // 💅
@@ -496,7 +601,22 @@ export const reactEslintConfig = (
       },
     ])
     .addRule('jsx-first-prop-new-line', OFF) // 💅
-    .addRule('jsx-fragments', getDoubleRuleSeverity(PREFER_SHORTHAND_FRAGMENT_SEVERITY, false))
+    .addRule(
+      'jsx-fragments',
+      getDoubleRuleSeverity(
+        shorthandBoolean === 'prefer-error' || shorthandFragment === 'avoid-error'
+          ? ERROR
+          : shorthandFragment === 'prefer' || shorthandFragment === 'avoid'
+            ? WARNING
+            : OFF,
+        false,
+      ),
+      [
+        shorthandFragment === 'prefer-error' || shorthandFragment === 'prefer'
+          ? 'syntax'
+          : 'element',
+      ],
+    )
     .addRule('jsx-handler-names', OFF)
     .addRule('jsx-indent-props', OFF) // 💅
     .addRule('jsx-indent', OFF) // 💅
@@ -593,7 +713,7 @@ export const reactEslintConfig = (
     .addRule('no-this-in-sfc', ERROR)
     .addRule('no-typos', ERROR)
     .addRule('no-unescaped-entities', OFF) // 🟢
-    .addRule('no-unsafe', getDoubleRuleSeverity(NO_UNSAFE_CLASS_COMPONENT_METHODS_SEVERITY, false)) // 🟢(off)
+    .addRule('no-unsafe', getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, false)) // 🟢(off)
     .addRule(
       'no-unstable-nested-components',
       getDoubleRuleSeverity(NO_NESTED_COMPONENT_DEFINITIONS_SEVERITY, false),
@@ -631,7 +751,15 @@ export const reactEslintConfig = (
     .addRule('style-prop-object', OFF)
     .addOverrides();
 
-  // TODO
+  const configAllowDefaultExportsInJsxFilesOptions =
+    typeof configAllowDefaultExportsInJsxFiles === 'object'
+      ? configAllowDefaultExportsInJsxFiles
+      : {};
+  const builderAllowDefaultExportsInJsxFiles = new ConfigEntryBuilder(
+    null,
+    configAllowDefaultExportsInJsxFilesOptions,
+    internalOptions,
+  );
   builderReactOriginal
     .addConfig([
       'react/allow-default-export-in-jsx-files',
@@ -640,7 +768,8 @@ export const reactEslintConfig = (
         filesFallback: [GLOB_JS_TS_X_ONLY],
       },
     ])
-    .addAnyRule('import/no-default-export', OFF);
+    .addAnyRule('import/no-default-export', OFF)
+    .addOverrides();
 
   const configHooksOptions = typeof configHooks === 'object' ? configHooks : {};
   const builderHooks = new ConfigEntryBuilder(null, configHooksOptions, internalOptions);
@@ -772,15 +901,15 @@ export const reactEslintConfig = (
     .addRule('no-string-refs', getDoubleRuleSeverity(NO_STRING_REFS_SEVERITY, true)) // 🟢 🔄️
     .addRule(
       'no-unsafe-component-will-mount',
-      getDoubleRuleSeverity(NO_UNSAFE_CLASS_COMPONENT_METHODS_SEVERITY, true),
+      getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, true),
     ) // 🟡 🔄️`no-unsafe`
     .addRule(
       'no-unsafe-component-will-receive-props',
-      getDoubleRuleSeverity(NO_UNSAFE_CLASS_COMPONENT_METHODS_SEVERITY, true),
+      getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, true),
     ) // 🟡 🔄️`no-unsafe`
     .addRule(
       'no-unsafe-component-will-update',
-      getDoubleRuleSeverity(NO_UNSAFE_CLASS_COMPONENT_METHODS_SEVERITY, true),
+      getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, true),
     ) // 🟡 🔄️`no-unsafe`
     .addRule(
       'no-unstable-context-value',
@@ -807,15 +936,36 @@ export const reactEslintConfig = (
     .addRule('prefer-read-only-props', getDoubleRuleSeverity(PREFER_READ_ONLY_PROPS_SEVERITY, true)) // 🔄️ 💭
     .addRule(
       'prefer-shorthand-boolean',
-      getDoubleRuleSeverity(PREFER_SHORTHAND_BOOLEAN_SEVERITY, true),
+      getDoubleRuleSeverity(
+        shorthandBoolean === 'prefer-error' ? ERROR : shorthandBoolean === 'prefer' ? WARNING : OFF,
+        true,
+      ),
     ) // 🔄️`jsx-boolean-value`
     .addRule(
       'prefer-shorthand-fragment',
-      getDoubleRuleSeverity(PREFER_SHORTHAND_FRAGMENT_SEVERITY, true),
+      getDoubleRuleSeverity(
+        shorthandFragment === 'prefer-error'
+          ? ERROR
+          : shorthandFragment === 'prefer'
+            ? WARNING
+            : OFF,
+        true,
+      ),
     ) // 🔄️`jsx-fragments`
-    .addRule('avoid-shorthand-boolean', OFF) // 🔄️`jsx-boolean-value`
-    .addRule('avoid-shorthand-fragment', OFF) // 🔄️`jsx-fragments`
-    // TODO
+    .addRule(
+      'avoid-shorthand-boolean',
+      getDoubleRuleSeverity(
+        shorthandBoolean === 'avoid-error' ? ERROR : shorthandBoolean === 'avoid' ? WARNING : OFF,
+        true,
+      ),
+    ) // 🔄️`jsx-boolean-value`
+    .addRule(
+      'avoid-shorthand-fragment',
+      getDoubleRuleSeverity(
+        shorthandFragment === 'avoid-error' ? ERROR : shorthandFragment === 'avoid' ? WARNING : OFF,
+        true,
+      ),
+    ) // 🔄️`jsx-fragments`
     // === Naming Convention rules ===
     .addRule(
       'naming-convention/component-name',
@@ -859,10 +1009,10 @@ export const reactEslintConfig = (
       ),
       getDoubleRuleSeverity(ERROR),
     ) // 🟢 🔄️`no-danger-with-children`
-    // TODO deprecated API, removed in v19
+    // Deprecated API, removed in v19
     .addRule(getDoubleRuleName('dom/no-find-dom-node'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
     .addRule('@eslint-react/dom/no-flush-sync', getXRuleSeverity(ERROR)) // 🟢
-    // TODO deprecated API, removed in v19
+    // Deprecated API, removed in v19
     .addRule('@eslint-react/dom/no-hydrate', getXRuleSeverity(ERROR)) // 🟢 🔢18.0.0
     .addRule(
       getDoubleRuleName('dom/no-missing-button-type', 'button-has-type'),
@@ -873,14 +1023,13 @@ export const reactEslintConfig = (
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`iframe-missing-sandbox`
     .addRule(getDoubleRuleName('dom/no-namespace'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
-    // TODO deprecated API, removed in v19
+    // Deprecated API, removed in v19
     .addRule('@eslint-react/dom/no-render', getXRuleSeverity(ERROR)) // 🟢 🔢18.0.0
     .addRule(getDoubleRuleName('dom/no-render-return-value'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
     .addRule(
       getDoubleRuleName('dom/no-script-url', 'jsx-no-script-url'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`jsx-no-script-url`
-    // TODO `options` type is `any[]`
     .addRule(getDoubleRuleName('dom/no-unknown-property'), getDoubleRuleSeverity(ERROR), [
       {requireDataLowercase: true},
     ]) // 🔄️
@@ -914,7 +1063,10 @@ export const reactEslintConfig = (
 
   return [
     ...builderSetup.getAllConfigs(),
-    ...builderReactOriginal.getAllConfigs(),
+    ...(isReactEnabled ? builderReactOriginal.getAllConfigs() : []),
+    ...(configAllowDefaultExportsInJsxFiles === false
+      ? []
+      : builderAllowDefaultExportsInJsxFiles.getAllConfigs()),
     ...(configHooks === false ? [] : builderHooks.getAllConfigs()),
     ...(isConfigXDisabled ? [] : builderReactX.getAllConfigs()),
     ...(configDom === false ? [] : builderDom.getAllConfigs()),
