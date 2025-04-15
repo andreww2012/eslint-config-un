@@ -80,6 +80,17 @@ export type AllRulesWithPrefix<
         | (IncludeDisableAutofix extends true ? `${DisableAutofixPrefix}/${Prefix}` : never)
 >;
 
+export type AllRulesWithPrefixNames<
+  Prefix extends string | null,
+  IncludeDisableAutofix = false,
+> = keyof AllRulesWithPrefix<Prefix, IncludeDisableAutofix>;
+
+export type AllRulesWithPrefixUnprefixedNames<
+  Prefix extends string | null,
+  IncludeDisableAutofix = false,
+  // I don't know why `& string` is required. TypeScript thinks that `AllRulesWithPrefix` (after I've added `Prefix extends ''` branch to it) may return non-string keys
+> = RemovePrefix<AllRulesWithPrefixNames<Prefix, IncludeDisableAutofix> & string, `${Prefix}/`>;
+
 export type RuleOverrides<T extends null | string | RulesRecord> = T extends string
   ? AllRulesWithPrefix<T, true>
   : T extends RulesRecord
@@ -270,8 +281,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
         // prettier-ignore
         RuleName extends (AllowAnyRule extends true
           ? keyof AllEslintRulesWithoutDisableAutofix
-          // I don't know why `& string` is required. TypeScript thinks that `AllRulesWithPrefix` (after I've added `Prefix extends ''` branch to it) may return non-string keys
-          : RemovePrefix<keyof AllRulesWithPrefix<RulesPrefix> & string, `${RulesPrefix}/`>),
+          : AllRulesWithPrefixUnprefixedNames<RulesPrefix>),
         Severity extends RuleSeverity,
       >(
         ruleName: RuleName,

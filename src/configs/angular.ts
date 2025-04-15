@@ -10,6 +10,7 @@ import type {ReadonlyDeep, SetRequired, Subtract} from 'type-fest';
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, WARNING} from '../constants';
 import {
   type AllRulesWithPrefix,
+  type AllRulesWithPrefixNames,
   ConfigEntryBuilder,
   type ConfigSharedOptions,
   type EslintPlugin,
@@ -247,7 +248,7 @@ export interface AngularEslintConfigOptions
   extends ConfigSharedOptions<
     Omit<
       AllRulesWithPrefix<'@angular-eslint', true>,
-      keyof AllRulesWithPrefix<'@angular-eslint/template', true>
+      AllRulesWithPrefixNames<'@angular-eslint/template', true>
     >
   > {
   /**
@@ -276,7 +277,7 @@ export interface AngularEslintConfigOptions
    *
    * If say you're using Angular 18, specify this rule here to make it work.
    */
-  portRules?: (keyof AllRulesWithPrefix<'@angular-eslint'> &
+  portRules?: (AllRulesWithPrefixNames<'@angular-eslint'> &
     `@angular-eslint/${'template/' | ''}${RulesWithPartialAvailability}`)[];
 
   /**
