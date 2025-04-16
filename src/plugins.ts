@@ -24,6 +24,7 @@ import eslintPluginPromise from 'eslint-plugin-promise';
 import * as eslintPluginQwik from 'eslint-plugin-qwik';
 import eslintPluginReact from 'eslint-plugin-react';
 import * as eslintPluginReactHooks from 'eslint-plugin-react-hooks';
+import eslintPluginReactRefresh from 'eslint-plugin-react-refresh';
 import * as eslintPluginRegexp from 'eslint-plugin-regexp';
 import eslintPluginSecurity from 'eslint-plugin-security';
 import eslintPluginSonar from 'eslint-plugin-sonarjs';
@@ -85,4 +86,5 @@ export const ALL_ESLINT_PLUGINS: FlatConfigEntry['plugins'] & {} = {
   react: eslintPluginReact,
   'react-hooks': eslintPluginReactHooks,
   ...eslintPluginReactX.configs.all.plugins,
+  'react-refresh': eslintPluginReactRefresh,
 };
