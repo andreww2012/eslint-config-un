@@ -319,6 +319,14 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
       >;
 
   /**
+   * Enables or specifies the configuration for the [`eslint-plugin-react-compiler`](https://www.npmjs.com/package/eslint-plugin-react-compiler) plugin.
+   *
+   * By default will use the same `files` and `ignores` as the parent config.
+   * @default true <=> React version is 19 or higher
+   */
+  configCompiler?: boolean | ConfigSharedOptions<'react-compiler'>;
+
+  /**
    * Controls how rules from [@eslint-react/eslint-plugin](https://www.npmjs.com/package/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react) are used.
    * - `prefer`: if the same(-ish) rule exists both in `@eslint-react/eslint-plugin`
    * and `eslint-plugin-react` (the full list is below), use the one from
@@ -527,6 +535,7 @@ export const reactEslintConfig = (
     pluginX = 'prefer',
     shorthandBoolean = 'prefer',
     shorthandFragment = 'prefer',
+    configCompiler = isMinVersion19,
   } = options;
 
   const isConfigXDisabled = configReactX === false;
@@ -1165,6 +1174,24 @@ export const reactEslintConfig = (
     ])
     .addOverrides();
 
+  const configReactCompilerOptions = typeof configCompiler === 'object' ? configCompiler : {};
+  const builderCompiler = new ConfigEntryBuilder(
+    'react-compiler',
+    configReactCompilerOptions,
+    internalOptions,
+  );
+  builderCompiler
+    .addConfig([
+      'react/compiler',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: parentConfigFiles || [GLOB_JS_TS_X],
+        ignoresFallback: parentConfigIgnores,
+      },
+    ])
+    .addRule('react-compiler', ERROR)
+    .addOverrides();
+
   return [
     ...builderSetup.getAllConfigs(),
     ...(isReactEnabled ? builderReactOriginal.getAllConfigs() : []),
@@ -1175,5 +1202,6 @@ export const reactEslintConfig = (
     ...(isConfigXDisabled ? [] : builderReactX.getAllConfigs()),
     ...(configDom === false ? [] : builderDom.getAllConfigs()),
     ...(configRefresh === false ? [] : builderRefresh.getAllConfigs()),
+    ...(configCompiler === false ? [] : builderCompiler.getAllConfigs()),
   ];
 };
