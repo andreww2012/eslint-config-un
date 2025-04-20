@@ -289,7 +289,11 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore ignores the following error during declaration file build: "error TS2859: Excessive complexity comparing types 'RuleName' and '"curly" | "unicorn/template-indent" | "@eslint-community/eslint-comments/disable-enable-pair" | "@eslint-community/eslint-comments/no-aggregating-enable" | "@eslint-community/eslint-comments/no-duplicate-disable" | ... 1725 more ... | "yoda"'"
         ruleOptions?: GetRuleOptions<
-          (AllowAnyRule extends true ? RuleName : `${RulesPrefix}/${RuleName}`) &
+          (AllowAnyRule extends true
+            ? RuleName
+            : RulesPrefix extends '' | null
+              ? RuleName
+              : `${RulesPrefix}/${RuleName}`) &
             keyof AllEslintRulesWithoutDisableAutofix
         >,
         options?: {
