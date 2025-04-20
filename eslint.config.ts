@@ -15,9 +15,9 @@ export default defineConfig(
       yaml: true,
       toml: true,
       json: true,
+      jsxA11y: false,
       packageJson: true,
       vue: true,
-      react: true,
     },
 
     extraConfigs: [

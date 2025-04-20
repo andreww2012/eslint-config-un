@@ -249,6 +249,8 @@ export interface EslintConfigUnOptions {
     /**
      * Provides accessibility rules for JSX. Applied to all JSX files by default.
      *
+     * Note: you may want to disable this config if you're not using JSX for performance reasons.
+     *
      * Used plugin:
      * - [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
      * @default true
