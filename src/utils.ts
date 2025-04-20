@@ -1,4 +1,5 @@
 import path from 'node:path';
+import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
 import type {getPackageInfoSync} from 'local-pkg';
 import type {FalsyValue} from './types';
 
@@ -46,3 +47,22 @@ export const getPackageSemverVersion = (packageInfo: PackageInfo) => {
 
 export const interopDefault = <T>(module: T | {default: T}) =>
   module && typeof module === 'object' && 'default' in module ? module.default : module;
+
+export function getKeysOfTruthyValues<T extends Record<string, boolean>>(object: T): (keyof T)[];
+export function getKeysOfTruthyValues<T extends Record<string, unknown>>(
+  object: T,
+  requireAtLeastOneTruthyValue: true,
+): [keyof T, ...(keyof T)[]] | undefined;
+export function getKeysOfTruthyValues<T extends Record<string, unknown>>(
+  object: T,
+  requireAtLeastOneTruthyValue?: boolean,
+) {
+  const result = objectEntriesUnsafe(object)
+    .filter(([, value]) => value)
+    .map(([key]) => key);
+  if (requireAtLeastOneTruthyValue && result.length === 0) {
+    // eslint-disable-next-line disable-autofix/unicorn/no-useless-undefined
+    return undefined;
+  }
+  return result;
+}

@@ -13,6 +13,7 @@ import eslintPluginJestExtended from 'eslint-plugin-jest-extended';
 import eslintPluginJsDoc from 'eslint-plugin-jsdoc';
 import eslintPluginJsonSchemaValidator from 'eslint-plugin-json-schema-validator';
 import eslintPluginJsonc from 'eslint-plugin-jsonc';
+import eslintPluginJsxA11y from 'eslint-plugin-jsx-a11y';
 import eslintPluginNode from 'eslint-plugin-n';
 import eslintPluginNoTypeAssertion from 'eslint-plugin-no-type-assertion';
 import eslintPluginPackageJson from 'eslint-plugin-package-json';
@@ -89,4 +90,6 @@ export const ALL_ESLINT_PLUGINS: FlatConfigEntry['plugins'] & {} = {
   ...eslintPluginReactX.configs.all.plugins,
   'react-refresh': eslintPluginReactRefresh,
   'react-compiler': eslintPluginReactCompiler,
+  // @ts-expect-error types mismatch
+  'jsx-a11y': eslintPluginJsxA11y,
 };

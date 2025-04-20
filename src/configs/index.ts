@@ -12,6 +12,7 @@ import type {JsEslintConfigOptions} from './js';
 import type {JsdocEslintConfigOptions} from './jsdoc';
 import type {JsonSchemaValidatorEslintConfigOptions} from './json-schema-validator';
 import type {JsoncEslintConfigOptions} from './jsonc';
+import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import type {NodeEslintConfigOptions} from './node';
 import type {PackageJsonEslintConfigOptions} from './package-json';
@@ -244,6 +245,15 @@ export interface EslintConfigUnOptions {
      * @default true if `react` package is installed
      */
     react?: boolean | Partial<ReactEslintConfigOptions>;
+
+    /**
+     * Provides accessibility rules for JSX. Applied to all JSX files by default.
+     *
+     * Used plugin:
+     * - [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
+     * @default true
+     */
+    jsxA11y?: boolean | Partial<JsxA11yEslintConfigOptions>;
 
     /**
      * NOTE: disabled by default

@@ -22,6 +22,7 @@ import {
   jsonSchemaValidatorEslintConfig,
 } from './configs/json-schema-validator';
 import {type JsoncEslintConfigOptions, jsoncEslintConfig} from './configs/jsonc';
+import {type JsxA11yEslintConfigOptions, jsxA11yEslintConfig} from './configs/jsx-a11y';
 import {type MarkdownEslintConfigOptions, markdownEslintConfig} from './configs/markdown';
 import {type NodeEslintConfigOptions, nodeEslintConfig} from './configs/node';
 import {type PackageJsonEslintConfigOptions, packageJsonEslintConfig} from './configs/package-json';
@@ -272,6 +273,13 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'react'),
   };
 
+  /* 🟢 JSX-A11Y */
+
+  const isJsxA11yEnabled = Boolean(configsOptions.jsxA11y ?? true);
+  const jsxA11yOptions: JsxA11yEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'jsxA11y'),
+  };
+
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
 
   /* 🔴 SECURITY */
@@ -426,6 +434,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isCssEnabled && cssEslintConfig(cssOptions, internalOptions),
       isUnusedImportsEnabled && unusedImportsEslintConfig(unusedImportsOptions, internalOptions),
       isReactEnabled && reactEslintConfig(reactOptions, internalOptions),
+      isJsxA11yEnabled && jsxA11yEslintConfig(jsxA11yOptions, internalOptions),
 
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&

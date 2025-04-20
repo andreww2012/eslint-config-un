@@ -55,6 +55,7 @@ export default {
     'ngmodule',
     'andreww',
     'innerhtml',
+    'labelledby',
 
     // Actual English words
     'uncategorized',

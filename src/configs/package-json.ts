@@ -7,6 +7,7 @@ import {
   type FlatConfigEntry,
   type GetRuleOptions,
 } from '../eslint';
+import {getKeysOfTruthyValues} from '../utils';
 import type {InternalConfigOptions} from './index';
 
 const DEFAULT_FILES = [GLOB_PACKAGE_JSON];
@@ -92,12 +93,10 @@ export const packageJsonEslintConfig = (
     // .addRule('require-keywords', OFF) // >=0.25.0
     // .addRule('require-version', ERROR) // 🟣 >=0.23.0
     .addRule('sort-collections', ERROR, [
-      Object.entries({
+      getKeysOfTruthyValues({
         ...DEFAULT_COLLECTIONS_TO_SORT,
         ...options.collectionsToSort,
-      })
-        .filter(([, v]) => v)
-        .map(([k]) => k),
+      }),
     ]) // 🟣
     // .addRule('unique-dependencies', ERROR) // 🟣
     // .addRule('valid-local-dependency', ERROR) // 🟣

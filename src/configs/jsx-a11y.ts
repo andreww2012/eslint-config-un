@@ -1,0 +1,546 @@
+import type {OmitIndexSignature} from 'type-fest';
+import {ERROR, GLOB_JS_TS_X_ONLY, OFF, WARNING} from '../constants';
+import {
+  ConfigEntryBuilder,
+  type ConfigSharedOptions,
+  type FlatConfigEntry,
+  type GetRuleOptions,
+} from '../eslint';
+import {type MaybeFn, getKeysOfTruthyValues, maybeCall} from '../utils';
+import type {InternalConfigOptions} from './index';
+
+const DEFAULT_AMBIGUOUS_WORDS = ['click here', 'here', 'link', 'a link', 'learn more'];
+
+interface WordsListAndOptionalSeverity {
+  words: string[];
+  severity?: 'error' | 'warn';
+}
+
+type AltTextCheckDefaultElements = keyof Omit<
+  OmitIndexSignature<GetRuleOptions<'jsx-a11y/alt-text'>[0] & {}>,
+  'elements'
+>;
+const altTextCheckDefaultElements: Record<AltTextCheckDefaultElements, true> = {
+  img: true,
+  object: true,
+  area: true,
+  'input[type="image"]': true,
+};
+
+type AnchorIsValidAspectsToCheck =
+  ((GetRuleOptions<'jsx-a11y/anchor-is-valid'>[0] & {})['aspects'] & {})[number];
+const anchorIsValidDefaultAspectsToCheck: Partial<Record<AnchorIsValidAspectsToCheck, true>> = {
+  noHref: true,
+  invalidHref: true,
+};
+
+type PossibleTabbableRoles =
+  ((GetRuleOptions<'jsx-a11y/interactive-supports-focus'>[0] & {})['tabbable'] & {})[number];
+// From `recommended` config
+const defaultTabbableRoles: Partial<Record<PossibleTabbableRoles, true>> = {
+  button: true,
+  checkbox: true,
+  link: true,
+  searchbox: true,
+  // cspell:ignore spinbutton
+  spinbutton: true,
+  switch: true,
+  textbox: true,
+};
+
+const defaultHoverInHandlersRequiringOnFocus: Record<`on${string}`, true> = {
+  onMouseOver: true,
+  onMouseEnter: true,
+  onPointerOver: true,
+  onPointerEnter: true,
+};
+
+const defaultHoverOutHandlersRequiringOnBlur: Record<`on${string}`, true> = {
+  onMouseOut: true,
+  onMouseLeave: true,
+  onPointerOut: true,
+  onPointerLeave: true,
+};
+
+export interface JsxA11yEslintConfigOptions extends ConfigSharedOptions<'jsx-a11y'> {
+  /**
+   * [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `jsx-a11y` property and applied to the specified `files` and `ignores`.
+   */
+  settings?: {
+    attributes?: {
+      for?: string[];
+    };
+
+    /**
+     * Keys are custom component names that render an HTML element specified in the value.
+     */
+    components?: Record<string, string>;
+
+    /**
+     * "Defines the prop your code uses to create polymorphic components. This setting will be used determine the element type in rules that require semantic context. To restrict polymorphic linting to specified components, additionally set `polymorphicAllowList` to an array of component names." - [plugin docs](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y#polymorphic-components).
+     */
+    polymorphicPropName?: string;
+
+    /**
+     * See `polymorphicPropName` docs.
+     */
+    polymorphicAllowList?: string[];
+  };
+
+  /**
+   * Elements to check for `alt` attribute on by [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md) rule.
+   *
+   * By default, `<img>`, `<area>`, `<input type="image">`, and `<object>` elements are checked.
+   * Using the object syntax, you can disable the default checks or specify additional elements.
+   * Setting to `false` will disable the rule.
+   */
+  altTextCheckForElements?:
+    | false
+    | Partial<Record<AltTextCheckDefaultElements | (string & {}), boolean>>;
+
+  /**
+   * Anchor aspects to check by [`anchor-is-valid`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md) rule.
+   *
+   * By default, `noHref` and `invalidHref` aspects are checked.
+   * Using the object syntax, you can disable the default checks or specify additional aspects.
+   * Setting to `false` will disable the rule.
+   */
+  anchorIsValidCheckedAspects?: false | Partial<Record<AnchorIsValidAspectsToCheck, boolean>>;
+
+  /**
+   * List of words that will be considered ambiguous and will be flagged by
+   * [`anchor-ambiguous-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-ambiguous-text.md) rule.
+   *
+   * Can be either an array or a function to which the default words will be passed
+   * as the only argument. Setting to `false` will disable the rule.
+   *
+   * Default rule severity is `warn` and the list of words is the same as listed in the rule docs.
+   */
+  ambiguousWordsForAnchorText?: MaybeFn<
+    false | WordsListAndOptionalSeverity,
+    [defaultWords: string[]]
+  >;
+
+  /**
+   * List of handlers that must be accompanied with `onFocus` handler.
+   *
+   * The default list is `['onMouseOver', 'onMouseEnter', 'onPointerOver', 'onPointerEnter']`.
+   *
+   * Using the object syntax, you can disable the default handlers or specify additional ones.
+   * Setting to `false` will disable the rule.
+   */
+  hoverInHandlersRequiringOnFocus?: Record<`on${string}`, boolean>;
+
+  /**
+   * List of handlers that must be accompanied with `onBlur` handler.
+   *
+   * The default list is `['onMouseOut', 'onMouseLeave', 'onPointerOut', 'onPointerLeave']`.
+   *
+   * Using the object syntax, you can disable the default handlers or specify additional ones.
+   * Setting to `false` will disable the rule.
+   */
+  hoverOutHandlersRequiringOnBlur?: Record<`on${string}`, boolean>;
+
+  /**
+   * List of words like "image", "picture" or "photo" that will be flagged by
+   * [`img-redundant-alt`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/img-redundant-alt.md) rule.
+   * if contained in the image alt text.
+   *
+   * Will be merged with the default words listed in the rule docs, and this behavior
+   * cannot be changed. Setting to `false` will disable the rule.
+   *
+   * Default rule severity is `warn`.
+   */
+  imageWords?: false | WordsListAndOptionalSeverity;
+
+  /**
+   * "A list of attributes to check on the label component and its children for a label. Use this if you have a custom component that uses a string passed on a prop to render an HTML label, for example." - plugin docs.
+   *
+   * Will be merged with the built-ins `['alt', 'aria-label', 'aria-labelledby']`.
+   *
+   * Used in rules:
+   * - [`control-has-associated-label`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/control-has-associated-label.md)
+   * - [`label-has-associated-control`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/label-has-associated-control.md)
+   */
+  labelAttributes?: string[];
+
+  /**
+   * The list of roles that will be checked by [`interactive-supports-focus`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/interactive-supports-focus.md) rule.
+   *
+   * The default list of roles is `['button', 'checkbox', 'link', 'searchbox', 'spinbutton', 'switch', 'textbox']`.
+   *
+   * Using the object syntax, you can disable the default roles or specify additional ones.
+   * Setting to `false` will disable the rule.
+   */
+  tabbableRoles?: false | Partial<Record<PossibleTabbableRoles, boolean>>;
+
+  /**
+   * Various custom components that will be checked by various rules.
+   */
+  customComponents?: {
+    /**
+     * List of components that render an `<area>` element.
+     *
+     * Used in rules:
+     * - [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
+     */
+    areaElements?: string[];
+
+    /**
+     * List of components that render an `<audio>` element.
+     *
+     * Used in rules:
+     * - [`media-has-caption`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/media-has-caption.md)
+     */
+    audioElements?: string[];
+
+    /**
+     * List of components that render a control (an interactive element).
+     *
+     * Used in rules:
+     * - [`control-has-associated-label`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/control-has-associated-label.md)
+     * - [`label-has-associated-control`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/label-has-associated-control.md)
+     */
+    controls?: string[];
+
+    /**
+     * List of components that render a heading (`<h1>`, `<h2>`, etc.).
+     *
+     * Used in rules:
+     * - [`heading-has-content`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/heading-has-content.md)
+     */
+    headings?: string[];
+
+    /**
+     * List of components that render an `<img>` element.
+     *
+     * Used in rules:
+     * - [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
+     * - [`img-redundant-alt`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/img-redundant-alt.md)
+     */
+    imgElements?: string[];
+
+    /**
+     * List of components that render an `<input>` element with `type="image"`.
+     *
+     * Used in rules:
+     * - [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
+     */
+    inputTypeImageElements?: string[];
+
+    /**
+     * List of components that render an `<input>` element which accepts text input.
+     *
+     * Used in rules:
+     * - [`autocomplete-valid`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/autocomplete-valid.md)
+     */
+    inputs?: string[];
+
+    /**
+     * List of components that render a `<label>` element.
+     *
+     * Used in rules:
+     * - [`label-has-associated-control`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/label-has-associated-control.md)
+     */
+    labels?: string[];
+
+    /**
+     * List of components that render a link.
+     *
+     * Used in rules:
+     * - [`anchor-is-valid`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md)
+     * - [`anchor-has-content`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-has-content.md)
+     */
+    links?: string[];
+
+    /**
+     * List of components that render an `<object>` element.
+     *
+     * Used in rules:
+     * - [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
+     */
+    objectElements?: string[];
+
+    /**
+     * List of components that render a `<track>` element.
+     *
+     * Used in rules:
+     * - [`media-has-caption`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/media-has-caption.md)
+     */
+    trackElements?: string[];
+
+    /**
+     * List of components that render a `<video>` element.
+     *
+     * Used in rules:
+     * - [`media-has-caption`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/media-has-caption.md)
+     */
+    videoElements?: string[];
+  };
+}
+
+export const jsxA11yEslintConfig = (
+  options: JsxA11yEslintConfigOptions = {},
+  internalOptions: InternalConfigOptions = {},
+): FlatConfigEntry[] => {
+  const {
+    settings: pluginSettings,
+    altTextCheckForElements,
+    anchorIsValidCheckedAspects,
+    ambiguousWordsForAnchorText = {words: DEFAULT_AMBIGUOUS_WORDS},
+    imageWords,
+    hoverInHandlersRequiringOnFocus,
+    hoverOutHandlersRequiringOnBlur,
+    labelAttributes,
+    tabbableRoles,
+    customComponents = {},
+  } = options;
+
+  const ambiguousWords = maybeCall(ambiguousWordsForAnchorText, DEFAULT_AMBIGUOUS_WORDS);
+  const anchorIsValidFinalCheckedAspects = getKeysOfTruthyValues(
+    {
+      ...anchorIsValidDefaultAspectsToCheck,
+      ...anchorIsValidCheckedAspects,
+    },
+    true,
+  );
+
+  const builder = new ConfigEntryBuilder('jsx-a11y', options, internalOptions);
+
+  // Legend:
+  // 🔴 - NOT in Recommended
+
+  builder
+    .addConfig(
+      [
+        'jsx-a11y',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: [GLOB_JS_TS_X_ONLY],
+        },
+      ],
+      {
+        ...(pluginSettings && {
+          settings: {
+            'jsx-a11y': pluginSettings,
+          },
+        }),
+      },
+    )
+    .addRule('alt-text', altTextCheckForElements === false ? OFF : ERROR, [
+      {
+        elements: getKeysOfTruthyValues({
+          ...altTextCheckDefaultElements,
+          ...altTextCheckForElements,
+        }),
+        ...(customComponents.imgElements?.length && {img: customComponents.imgElements}),
+        ...(customComponents.objectElements?.length && {object: customComponents.objectElements}),
+        ...(customComponents.areaElements?.length && {area: customComponents.areaElements}),
+        ...(customComponents.inputTypeImageElements?.length && {
+          'input[type="image"]': customComponents.inputTypeImageElements,
+        }),
+      },
+    ])
+    .addRule(
+      'anchor-ambiguous-text',
+      ambiguousWords === false ? OFF : ambiguousWords.severity === 'error' ? ERROR : WARNING,
+      [
+        {
+          ...(ambiguousWords && ambiguousWords.words.length > 0 && {words: ambiguousWords.words}),
+        },
+      ],
+    ) // 🔴
+    .addRule('anchor-has-content', ERROR, [
+      {
+        ...(customComponents.links?.length && {components: customComponents.links}),
+      },
+    ])
+    .addRule(
+      'anchor-is-valid',
+      anchorIsValidCheckedAspects === false || anchorIsValidFinalCheckedAspects == null
+        ? OFF
+        : ERROR,
+      [
+        {
+          ...(customComponents.links?.length && {components: customComponents.links}),
+          aspects: anchorIsValidFinalCheckedAspects,
+        },
+      ],
+    )
+    // cspell:ignore activedescendant
+    .addRule('aria-activedescendant-has-tabindex', ERROR)
+    .addRule('aria-props', ERROR)
+    // cspell:ignore proptypes
+    .addRule('aria-proptypes', ERROR)
+    .addRule('aria-role', ERROR)
+    .addRule('aria-unsupported-elements', ERROR)
+    .addRule('autocomplete-valid', ERROR, [
+      {
+        ...(customComponents.inputs?.length && {inputComponents: customComponents.inputs}),
+      },
+    ])
+    .addRule('click-events-have-key-events', ERROR)
+    .addRule('control-has-associated-label', ERROR, [
+      {
+        ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
+        ...(labelAttributes?.length && {labelAttributes}),
+        // Copied from `recommended` config (but removed `includeRoles` because it's not supported)
+        ignoreElements: [
+          'audio',
+          'canvas',
+          'embed',
+          'input',
+          'textarea',
+          'tr',
+          'video',
+          // Included these two to avoid https://github.com/airbnb/javascript/issues/3069
+          'th',
+          'td',
+        ],
+        ignoreRoles: [
+          'grid',
+          'listbox',
+          'menu',
+          'menubar',
+          'radiogroup',
+          'row',
+          'tablist',
+          'toolbar',
+          'tree',
+          // cspell:ignore treegrid
+          'treegrid',
+        ],
+      },
+    ]) // 🔴
+    .addRule('heading-has-content', ERROR, [
+      {
+        ...(customComponents.headings?.length && {inputComponents: customComponents.headings}),
+      },
+    ])
+    // Disabled because "This rule is largely superseded by the `lang` rule"
+    .addRule('html-has-lang', OFF)
+    .addRule('iframe-has-title', ERROR)
+    .addRule(
+      'img-redundant-alt',
+      imageWords === false || (imageWords && imageWords.words.length === 0)
+        ? OFF
+        : imageWords?.severity === 'error'
+          ? ERROR
+          : WARNING,
+      [
+        {
+          ...(imageWords && imageWords.words.length > 0 && {words: imageWords.words}),
+          ...(customComponents.imgElements?.length && {components: customComponents.imgElements}),
+        },
+      ],
+    )
+    .addRule('interactive-supports-focus', ERROR, [
+      {
+        tabbable: getKeysOfTruthyValues({
+          ...defaultTabbableRoles,
+          ...tabbableRoles,
+        }),
+      },
+    ])
+    .addRule('label-has-associated-control', ERROR, [
+      {
+        ...(labelAttributes?.length && {labelAttributes}),
+        ...(customComponents.labels?.length && {labelComponents: customComponents.labels}),
+        ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
+      },
+    ])
+    .addRule('lang', ERROR) // 🔴
+    .addRule('media-has-caption', WARNING, [
+      {
+        ...(customComponents.audioElements?.length && {audio: customComponents.audioElements}),
+        ...(customComponents.videoElements?.length && {video: customComponents.videoElements}),
+        ...(customComponents.trackElements?.length && {track: customComponents.trackElements}),
+      },
+    ])
+    .addRule('mouse-events-have-key-events', ERROR, [
+      {
+        hoverInHandlers: getKeysOfTruthyValues({
+          ...defaultHoverInHandlersRequiringOnFocus,
+          ...hoverInHandlersRequiringOnFocus,
+        }),
+        hoverOutHandlers: getKeysOfTruthyValues({
+          ...defaultHoverOutHandlersRequiringOnBlur,
+          ...hoverOutHandlersRequiringOnBlur,
+        }),
+      },
+    ])
+    .addRule('no-access-key', ERROR)
+    .addRule('no-aria-hidden-on-focusable', WARNING) // 🔴
+    .addRule('no-autofocus', WARNING, [{ignoreNonDOM: true}])
+    .addRule('no-distracting-elements', ERROR)
+    .addRule('no-interactive-element-to-noninteractive-role', ERROR, [
+      {
+        // Copied from `recommended` config
+        // "The recommended options for this rule allow the `tr` element to be given a role of `presentation` (or its semantic equivalent none). Under normal circumstances, an element with an interactive role should not be semantically neutralized with `presentation` (or `none`)." - rule docs
+        tr: ['none', 'presentation'],
+        canvas: ['img'],
+      },
+    ])
+    .addRule('no-noninteractive-element-interactions', ERROR, [
+      {
+        // TODO copied from `recommended` config
+        handlers: [
+          'onClick',
+          'onError',
+          'onLoad',
+          'onMouseDown',
+          'onMouseUp',
+          'onKeyPress',
+          'onKeyDown',
+          'onKeyUp',
+        ],
+        alert: ['onKeyUp', 'onKeyDown', 'onKeyPress'],
+        body: ['onError', 'onLoad'],
+        dialog: ['onKeyUp', 'onKeyDown', 'onKeyPress'],
+        iframe: ['onError', 'onLoad'],
+        img: ['onError', 'onLoad'],
+      },
+    ])
+    .addRule('no-noninteractive-element-to-interactive-role', ERROR, [
+      {
+        // TODO copied from `recommended` config
+        ul: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
+        ol: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
+        // cspell:ignore menuitemradio menuitemcheckbox
+        li: ['menuitem', 'menuitemradio', 'menuitemcheckbox', 'option', 'row', 'tab', 'treeitem'],
+        table: ['grid'],
+        td: ['gridcell'],
+        fieldset: ['radiogroup', 'presentation'],
+      },
+    ])
+    .addRule('no-noninteractive-tabindex', ERROR, [
+      // TODO copied from `recommended` config
+      {
+        tags: [],
+        roles: ['tabpanel'],
+        allowExpressionValues: true,
+      },
+    ])
+    .addRule('no-redundant-roles', ERROR)
+    .addRule('no-static-element-interactions', ERROR, [
+      // TODO copied from `recommended` config
+      {
+        allowExpressionValues: true,
+        handlers: ['onClick', 'onMouseDown', 'onMouseUp', 'onKeyPress', 'onKeyDown', 'onKeyUp'],
+      },
+    ])
+    .addRule('prefer-tag-over-role', OFF) // 🔴
+    .addRule('role-has-required-aria-props', ERROR)
+    .addRule('role-supports-aria-props', ERROR)
+    .addRule('scope', ERROR)
+    .addRule('tabindex-no-positive', ERROR)
+    // Deprecated rules:
+    // .addRule('accessible-emoji', OFF)
+    // .addRule('label-has-for', OFF)
+    // .addRule('no-onchange', OFF)
+    .addOverrides();
+
+  return builder.getAllConfigs();
+};

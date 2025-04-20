@@ -19,7 +19,7 @@ import {
   bulkChangeRuleSeverity,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {joinPaths} from '../utils';
+import {getKeysOfTruthyValues, joinPaths} from '../utils';
 import {RULE_CAMELCASE_OPTIONS, RULE_EQEQEQ_OPTIONS} from './js';
 import type {InternalConfigOptions} from './index';
 
@@ -462,12 +462,10 @@ export const vueEslintConfig = (
     .addRule(
       'no-restricted-html-elements',
       ERROR,
-      Object.entries({
+      getKeysOfTruthyValues({
         ...noRestrictedHtmlElementsDefault,
         ...options.disallowedHtmlTags,
-      })
-        .filter(([, isDisallowed]) => isDisallowed)
-        .map(([tag]) => tag),
+      }),
     )
     // .addRule('no-restricted-props', OFF)
     // .addRule('no-restricted-static-attribute', OFF)

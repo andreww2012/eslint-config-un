@@ -46,6 +46,7 @@ Includes the rules from the following configs & plugins:
 - `css` (since v0.7.0), using [`@eslint/css`](https://www.npmjs.com/package/@eslint/css)
 - `noUnusedImports` (since v0.7.0), using [`eslint-plugin-unused-imports`](https://www.npmjs.com/package/eslint-plugin-unused-imports)
 - `react` (since v?.?.?), using [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin), [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react), [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks), [`eslint-plugin-react-refresh`](https://www.npmjs.com/package/eslint-plugin-react-refresh) and [`eslint-plugin-react-compiler`](https://www.npmjs.com/package/eslint-plugin-react-compiler)
+- `jsxA11y` (since v?.?.?), using [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
 
 ## Features
 
