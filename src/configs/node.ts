@@ -173,9 +173,9 @@ export interface NodeEslintConfigOptions extends ConfigSharedOptions<'node'> {
 const pluginRenamer = createPluginObjectRenamer('n', 'node');
 
 export const nodeEslintConfig = (
-  options: NodeEslintConfigOptions = {},
+  options: NodeEslintConfigOptions,
 
-  internalOptions: InternalConfigOptions = {},
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {preferGlobal = {}, settings: pluginSettings} = options;
 

@@ -5,8 +5,8 @@ import type {InternalConfigOptions} from './index';
 export interface PerfectionistEslintConfigOptions extends ConfigSharedOptions<'perfectionist'> {}
 
 export const perfectionistEslintConfig = (
-  options: PerfectionistEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: PerfectionistEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('perfectionist', options, internalOptions);
 

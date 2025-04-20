@@ -46,8 +46,8 @@ export interface TomlEslintConfigOptions extends ConfigSharedOptions<'toml'> {
 }
 
 export const tomlEslintConfig = (
-  options: TomlEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: TomlEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('toml', options, internalOptions);
 

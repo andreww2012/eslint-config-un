@@ -46,8 +46,8 @@ export const RULE_PREFER_DESTRUCTURING_OPTIONS: GetRuleOptions<'prefer-destructu
 ];
 
 export const jsEslintConfig = (
-  options: JsEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: JsEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('', options, internalOptions);
 

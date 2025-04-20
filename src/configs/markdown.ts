@@ -86,8 +86,8 @@ export interface MarkdownEslintConfigOptions extends ConfigSharedOptions<'markdo
 }
 
 export const markdownEslintConfig = (
-  options: MarkdownEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: MarkdownEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('markdown', options, internalOptions);
 

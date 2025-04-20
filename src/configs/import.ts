@@ -52,8 +52,8 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
 const pluginRenamer = createPluginObjectRenamer('import-x', 'import');
 
 export const importEslintConfig = (
-  options: ImportEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: ImportEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {isTypescriptEnabled, tsResolverOptions, noDuplicatesOptions} = options;
   const noUnresolvedIgnores = arraify(options.importPatternsToIgnoreWhenTryingToResolve);

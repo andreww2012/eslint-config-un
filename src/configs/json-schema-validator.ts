@@ -36,8 +36,8 @@ export interface JsonSchemaValidatorEslintConfigOptions
 }
 
 export const jsonSchemaValidatorEslintConfig = (
-  options: JsonSchemaValidatorEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: JsonSchemaValidatorEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {settings: pluginSettings, options: noInvalidOptions} = options;
 

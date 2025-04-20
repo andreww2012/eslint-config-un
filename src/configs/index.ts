@@ -323,7 +323,7 @@ export interface EslintConfigUnOptions {
 
 export interface InternalConfigOptions {
   globalOptions?: EslintConfigUnOptions;
-  isTypescriptEnabled?: boolean;
+  isTypescriptEnabled: boolean;
   typescriptPackageInfo?: PackageInfo;
   vueOptions?: VueEslintConfigOptions;
   isTailwindEnabled?: boolean;

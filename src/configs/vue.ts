@@ -162,7 +162,7 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
 
 export const vueEslintConfig = (
   options: VueEslintConfigOptions,
-  internalOptions: InternalConfigOptions = {},
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {
     majorVersion,

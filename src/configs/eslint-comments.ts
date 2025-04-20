@@ -7,8 +7,8 @@ export interface EslintCommentsEslintConfigOptions
   extends ConfigSharedOptions<'@eslint-community/eslint-comments'> {}
 
 export const eslintCommentsEslintConfig = (
-  options: EslintCommentsEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: EslintCommentsEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder(
     '@eslint-community/eslint-comments',

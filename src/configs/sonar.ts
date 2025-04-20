@@ -18,8 +18,8 @@ export interface SonarEslintConfigOptions extends ConfigSharedOptions<'sonarjs'>
 }
 
 export const sonarEslintConfig = (
-  options: SonarEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: SonarEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {enableAwsRules = true, testsRules = true} = options;
 

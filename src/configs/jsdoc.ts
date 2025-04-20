@@ -1,5 +1,5 @@
 import eslintPluginJsDoc from 'eslint-plugin-jsdoc';
-import {ERROR, GLOB_TS, GLOB_TSX, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_TSX, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
 import type {PrettifyShallow} from '../types';
 import type {InternalConfigOptions} from './index';
@@ -177,13 +177,11 @@ export interface JsdocEslintConfigOptions extends ConfigSharedOptions<'jsdoc'> {
 }
 
 export const jsdocEslintConfig = (
-  options: JsdocEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: JsdocEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
-  const {
-    settings: pluginSettings,
-    configTypescript = internalOptions.isTypescriptEnabled ?? false,
-  } = options;
+  const {settings: pluginSettings, configTypescript = internalOptions.isTypescriptEnabled} =
+    options;
 
   const builder = new ConfigEntryBuilder('jsdoc', options, internalOptions);
 
@@ -273,7 +271,7 @@ export const jsdocEslintConfig = (
         'jsdoc/ts',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_TS, GLOB_TSX],
+          filesFallback: [GLOB_TSX],
         },
       ],
       {

@@ -30,8 +30,8 @@ export interface UnusedImportsEslintConfigOptions extends ConfigSharedOptions<'u
 }
 
 export const unusedImportsEslintConfig = (
-  options: UnusedImportsEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: UnusedImportsEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {configNoUnusedVars = false} = options;
 

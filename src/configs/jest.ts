@@ -192,8 +192,8 @@ export const generateConsistentTestItOptions = ({
 ];
 
 export const jestEslintConfig = (
-  options: JestEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: JestEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {
     settings: pluginSettings,
@@ -204,7 +204,7 @@ export const jestEslintConfig = (
     paddingAround = true,
     asyncMatchers,
     minAndMaxExpectArgs,
-    configTypescript = internalOptions.isTypescriptEnabled ?? false,
+    configTypescript = internalOptions.isTypescriptEnabled,
     configJestExtended = isPackageExists('jest-extended'),
   } = options;
 

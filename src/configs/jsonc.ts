@@ -21,8 +21,8 @@ export interface JsoncEslintConfigOptions extends ConfigSharedOptions<'jsonc'> {
 }
 
 export const jsoncEslintConfig = (
-  options: JsoncEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: JsoncEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('jsonc', options, internalOptions);
 

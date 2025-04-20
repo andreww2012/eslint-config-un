@@ -65,8 +65,8 @@ export interface PackageJsonEslintConfigOptions extends ConfigSharedOptions<'pac
 }
 
 export const packageJsonEslintConfig = (
-  options: PackageJsonEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: PackageJsonEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('package-json', options, internalOptions);
 

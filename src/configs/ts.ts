@@ -4,7 +4,6 @@ import {parser as parserTs, configs as tsEslintConfigs} from 'typescript-eslint'
 import {
   ERROR,
   GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
-  GLOB_TS,
   GLOB_TSX,
   GLOB_VUE,
   OFF,
@@ -140,11 +139,11 @@ export interface TsEslintConfigOptions
   disableNoUnsafeRules?: boolean;
 }
 
-const TS_FILES_DEFAULT = [GLOB_TS, GLOB_TSX];
+const TS_FILES_DEFAULT = [GLOB_TSX];
 
 export const tsEslintConfig = (
-  options: TsEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: TsEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {configTypeAware = true, configNoTypeAssertion = false} = options;
 

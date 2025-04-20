@@ -282,8 +282,8 @@ export interface JsxA11yEslintConfigOptions extends ConfigSharedOptions<'jsx-a11
 }
 
 export const jsxA11yEslintConfig = (
-  options: JsxA11yEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: JsxA11yEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {
     settings: pluginSettings,

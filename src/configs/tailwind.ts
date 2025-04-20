@@ -38,8 +38,8 @@ export interface TailwindEslintConfigOptions extends ConfigSharedOptions<'tailwi
 }
 
 export const tailwindEslintConfig = (
-  options: TailwindEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: TailwindEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {settings} = options;
 

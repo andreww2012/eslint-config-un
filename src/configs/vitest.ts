@@ -39,8 +39,8 @@ export interface VitestEslintConfigOptions
 }
 
 export const vitestEslintConfig = (
-  options: VitestEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: VitestEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {
     settings: pluginSettings,

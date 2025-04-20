@@ -443,8 +443,8 @@ export interface AngularEslintConfigOptions
 }
 
 export const angularEslintConfig = (
-  options: AngularEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: AngularEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): {
   configs: FlatConfigEntry[];
   plugins: Record<string, EslintPlugin>;

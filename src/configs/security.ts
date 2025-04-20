@@ -6,8 +6,8 @@ import type {InternalConfigOptions} from './index';
 export interface SecurityEslintConfigOptions extends ConfigSharedOptions<'security'> {}
 
 export const securityEslintConfig = (
-  options: SecurityEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: SecurityEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('security', options, internalOptions);
 

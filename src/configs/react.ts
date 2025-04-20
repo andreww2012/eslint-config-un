@@ -3,6 +3,7 @@ import {
   ERROR,
   GLOB_JS_TS_X,
   GLOB_JS_TS_X_ONLY,
+  GLOB_TSX,
   OFF,
   type RuleSeverity,
   WARNING,
@@ -172,6 +173,8 @@ type EslintPluginReactDomRules =
   | 'no-invalid-html-attribute'
   | 'no-is-mounted';
 
+type ReactXTypeAwareRules = 'no-leaked-conditional-rendering' | 'prefer-read-only-props';
+
 export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
   /**
    * [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react) plugin
@@ -206,7 +209,12 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
    */
   configReactX?:
     | boolean
-    | (ConfigSharedOptions<'@eslint-react'> & {
+    | (ConfigSharedOptions<
+        Omit<
+          AllRulesWithPrefix<'@eslint-react', true>,
+          `${'' | `${DisableAutofixPrefix}/`}@eslint-react/${ReactXTypeAwareRules}`
+        >
+      > & {
         /**
          * [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) plugin
          * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -251,6 +259,20 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
             boolean | 'warn'
           >
         >;
+
+        /**
+         * By default will be applied to all TS(X) files.
+         * @default true <=> `ts` config is enabled
+         */
+        typeAwareRules?:
+          | boolean
+          | ConfigSharedOptions<
+              Pick<
+                AllEslintRulesWithDisableAutofix,
+                `${'' | `${DisableAutofixPrefix}/`}@eslint-react/${ReactXTypeAwareRules}` &
+                  keyof AllEslintRulesWithDisableAutofix
+              >
+            >;
       });
 
   /**
@@ -509,8 +531,8 @@ const NEXT_EXPORTS: readonly string[] = [
 ];
 
 export const reactEslintConfig = (
-  options: ReactEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: ReactEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const reactPackageInfo = getPackageInfoSync('react');
   const reactMajorVersion: number =
@@ -889,7 +911,10 @@ export const reactEslintConfig = (
   // 💭 - Requires type information
   // 🔢 - min React version in which the rule works (otherwise does nothing)
 
-  const {noLegacyApis = {}} = configReactXOptions;
+  const {
+    noLegacyApis = {},
+    typeAwareRules: reactXTypeAwareRules = internalOptions.isTypescriptEnabled,
+  } = configReactXOptions;
 
   const builderReactX = new ConfigEntryBuilder(
     '@eslint-react',
@@ -942,10 +967,6 @@ export const reactEslintConfig = (
     // "In React 19, forwardRef is no longer necessary. Pass ref as a prop instead."
     .addRule('no-forward-ref', getSeverity(noLegacyApis.forwardRef)) // 🟡 🔢19.0.0
     .addRule('no-implicit-key', WARNING) // 🟡
-    .addRule(
-      'no-leaked-conditional-rendering',
-      getDoubleRuleSeverity(NO_LEAKED_CONDITIONAL_RENDERING_SEVERITY, true),
-    ) // 🟡 🔄️`jsx-no-leaked-render` (worse) 💭
     .addRule(
       'no-missing-component-display-name',
       getDoubleRuleSeverity(NO_MISSING_COMPONENT_OR_CONTEXT_DISPLAY_NAME_SEVERITY, true),
@@ -1014,7 +1035,6 @@ export const reactEslintConfig = (
     ) // 🔄️`destructuring-assignment`
     // TODO why?
     .addRule('prefer-react-namespace-import', OFF)
-    .addRule('prefer-read-only-props', getDoubleRuleSeverity(PREFER_READ_ONLY_PROPS_SEVERITY, true)) // 🔄️ 💭
     .addRule(
       'prefer-shorthand-boolean',
       getDoubleRuleSeverity(
@@ -1066,6 +1086,29 @@ export const reactEslintConfig = (
     .addRule('debug/hook', OFF)
     .addRule('debug/is-from-react', OFF)
     .addRule('debug/jsx', OFF)
+    .addOverrides();
+
+  const configReactXTypeAwareOptions =
+    typeof reactXTypeAwareRules === 'object' ? reactXTypeAwareRules : {};
+
+  const builderReactXTypeAware = new ConfigEntryBuilder(
+    '@eslint-react',
+    configReactXTypeAwareOptions,
+    internalOptions,
+  );
+  builderReactXTypeAware
+    .addConfig([
+      'react/x/rules-type-aware',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: [GLOB_TSX],
+      },
+    ])
+    .addRule(
+      'no-leaked-conditional-rendering',
+      getDoubleRuleSeverity(NO_LEAKED_CONDITIONAL_RENDERING_SEVERITY, true),
+    ) // 🟡 🔄️`jsx-no-leaked-render` (worse) 💭
+    .addRule('prefer-read-only-props', getDoubleRuleSeverity(PREFER_READ_ONLY_PROPS_SEVERITY, true)) // 🔄️ 💭
     .addOverrides();
 
   const configReactDomOptions = typeof configDom === 'object' ? configDom : {};
@@ -1200,6 +1243,7 @@ export const reactEslintConfig = (
       : builderAllowDefaultExportsInJsxFiles.getAllConfigs()),
     ...(configHooks === false ? [] : builderHooks.getAllConfigs()),
     ...(isConfigXDisabled ? [] : builderReactX.getAllConfigs()),
+    ...(reactXTypeAwareRules === false ? [] : builderReactXTypeAware.getAllConfigs()),
     ...(configDom === false ? [] : builderDom.getAllConfigs()),
     ...(configRefresh === false ? [] : builderRefresh.getAllConfigs()),
     ...(configCompiler === false ? [] : builderCompiler.getAllConfigs()),

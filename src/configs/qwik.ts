@@ -8,8 +8,8 @@ export interface QwikEslintConfigOptions extends ConfigSharedOptions<'qwik'> {
 }
 
 export const qwikEslintConfig = (
-  options: QwikEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: QwikEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {routesDir} = options;
 

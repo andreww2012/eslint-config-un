@@ -6,8 +6,8 @@ import type {InternalConfigOptions} from './index';
 export interface PromiseEslintConfigOptions extends ConfigSharedOptions<'promise'> {}
 
 export const promiseEslintConfig = (
-  options: PromiseEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: PromiseEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('promise', options, internalOptions);
 

@@ -53,8 +53,8 @@ export interface CssInJsEslintConfigOptions extends ConfigSharedOptions<'css-in-
 }
 
 export const cssInJsEslintConfig = (
-  options: CssInJsEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: CssInJsEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {
     settings: pluginSettings,

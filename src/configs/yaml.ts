@@ -43,8 +43,8 @@ export interface YamlEslintConfigOptions extends ConfigSharedOptions<'yml'> {
 }
 
 export const yamlEslintConfig = (
-  options: YamlEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: YamlEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('yml', options, internalOptions);
 

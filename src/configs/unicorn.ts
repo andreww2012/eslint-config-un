@@ -6,8 +6,8 @@ import type {InternalConfigOptions} from './index';
 export interface UnicornEslintConfigOptions extends ConfigSharedOptions<'unicorn'> {}
 
 export const unicornEslintConfig = (
-  options: UnicornEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: UnicornEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('unicorn', options, internalOptions);
 

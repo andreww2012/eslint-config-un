@@ -5,8 +5,8 @@ import type {InternalConfigOptions} from './index';
 export interface DeMorganEslintConfigOptions extends ConfigSharedOptions<'de-morgan'> {}
 
 export const deMorganEslintConfig = (
-  options: DeMorganEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: DeMorganEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('de-morgan', options, internalOptions);
 

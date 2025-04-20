@@ -28,8 +28,8 @@ export interface CssEslintConfigOptions extends ConfigSharedOptions<'css'> {
 }
 
 export const cssEslintConfig = (
-  options: CssEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: CssEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {isTailwindEnabled} = internalOptions;
   const {tolerantMode = false, customSyntax} = options;

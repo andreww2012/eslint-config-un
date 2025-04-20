@@ -13,8 +13,8 @@ export interface CliEslintConfigOptions extends ConfigSharedOptions {
 const DEFAULT_CLI_DIRS = ['bin', 'scripts', 'cli'] as const;
 
 export const cliEslintConfig = (
-  options: CliEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: CliEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const {onlyTopLevelDirs} = options;
 

@@ -6,8 +6,8 @@ import type {InternalConfigOptions} from './index';
 export interface RegexpEslintConfigOptions extends ConfigSharedOptions<'regexp'> {}
 
 export const regexpEslintConfig = (
-  options: RegexpEslintConfigOptions = {},
-  internalOptions: InternalConfigOptions = {},
+  options: RegexpEslintConfigOptions,
+  internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('regexp', options, internalOptions);
 
