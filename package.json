@@ -128,7 +128,7 @@
     "@types/node": "18.19.80",
     "cross-env": "7.0.3",
     "cspell": "8.17.5",
-    "eslint": "9.22.0",
+    "eslint": "9.25.0",
     "eslint-typegen": "2.1.0",
     "npm-check-updates": "17.1.15",
     "prettier": "3.5.3",
@@ -139,7 +139,7 @@
     "typescript": "5.8.2"
   },
   "peerDependencies": {
-    "eslint": ">=9"
+    "eslint": "^9"
   },
   "engines": {
     "node": ">=18.18.0"
