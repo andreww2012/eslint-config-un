@@ -8,6 +8,8 @@
 
 ### Dependencies
 - `typescript-eslint`: [8.26.1 -> 8.30.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.26.1...v8.30.1)
+- `angular-eslint`: [19.2.1 -> 19.3.0](https://github.com/angular-eslint/angular-eslint/compare/v19.2.1...v19.3.0)
+  - 🟢 (enabled) [`prefer-contextual-for-variables`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-contextual-for-variables.md)
 
 ## 0.7.0
 

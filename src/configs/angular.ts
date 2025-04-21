@@ -677,6 +677,7 @@ export const angularEslintConfig = (
     .addRule('no-interpolation-in-attributes', ERROR) // [>=15]
     .addRule('no-negated-async', ERROR) // [all] 🟢
     .addRule('no-positive-tabindex', ERROR) // [all]
+    .addRule('prefer-contextual-for-variables', ERROR) // [>=19.3]
     .addRule('prefer-control-flow', preferControlFlow ? ERROR : OFF) // [>=17]
     .addRule('prefer-ngsrc', preferNgSrc ? ERROR : OFF) // [>=16]
     .addRule('prefer-self-closing-tags', OFF) // [>=16]
