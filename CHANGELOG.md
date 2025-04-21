@@ -18,6 +18,8 @@
 - `@vitest/eslint-plugin`: [1.1.37 -> 1.1.43](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.37...v1.1.43)
   - 🟢 (enabled) [`prefer-describe-function-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-describe-function-title.md)
 - `eslint-config-prettier`: [10.1.1 -> 10.1.2](https://github.com/prettier/eslint-config-prettier/compare/v10.1.1...v10.1.2)
+- `eslint-import-resolver-typescript`: [3.9.1 -> 4.3.3](https://github.com/import-js/eslint-import-resolver-typescript/compare/v3.9.1...v4.3.3)
+- `eslint-plugin-import-x`: [4.8.0 -> 4.10.6](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.8.0...v4.10.6)
 
 ## 0.7.0
 

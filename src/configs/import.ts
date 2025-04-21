@@ -1,5 +1,5 @@
 import {
-  type TsResolverOptions,
+  type TypeScriptResolverOptions,
   createTypeScriptImportResolver,
 } from 'eslint-import-resolver-typescript';
 import eslintPluginImportX from 'eslint-plugin-import-x';
@@ -26,7 +26,7 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
   /**
    * Will be merged with the default TypeScript resolver options, if it is enabled.
    */
-  tsResolverOptions?: TsResolverOptions;
+  tsResolverOptions?: TypeScriptResolverOptions;
 
   /**
    * @see https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-unresolved.md#ignore
@@ -67,11 +67,7 @@ export const importEslintConfig = (
         'import-x/resolver-next': [
           // If the TS resolver goes after the node resolver, `import/no-deprecated` doesn't work
           // TODO should report?
-          isTypescriptEnabled &&
-            createTypeScriptImportResolver({
-              alwaysTryTypes: true,
-              ...tsResolverOptions,
-            }),
+          isTypescriptEnabled && createTypeScriptImportResolver(tsResolverOptions),
           eslintPluginImportX.createNodeResolver(),
         ].filter((v) => typeof v === 'object'),
         ...(isTypescriptEnabled && {
