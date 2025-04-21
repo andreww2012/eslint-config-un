@@ -3,6 +3,7 @@ import eslintGitignore from 'eslint-config-flat-gitignore';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 import {getPackageInfoSync, isPackageExists} from 'local-pkg';
+import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {EslintConfigUnOptions, InternalConfigOptions} from './configs';
 import {type AngularEslintConfigOptions, angularEslintConfig} from './configs/angular';
 import {type CssEslintConfigOptions, cssEslintConfig} from './configs/css';
@@ -30,6 +31,7 @@ import {
   type PerfectionistEslintConfigOptions,
   perfectionistEslintConfig,
 } from './configs/perfectionist';
+import {type PnpmEslintConfigOptions, pnpmEslintConfig} from './configs/pnpm';
 import {
   type PreferArrowFunctionsEslintConfigOptions,
   preferArrowFunctionsEslintConfig,
@@ -72,7 +74,9 @@ const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set([
   '@stylistic/quotes',
 ]);
 
-export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEntry[] => {
+export const eslintConfig = async (
+  options: EslintConfigUnOptions = {},
+): Promise<FlatConfigEntry[]> => {
   // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
   const globalIgnores = [
     ...(options.overrideIgnores ? [] : DEFAULT_GLOBAL_IGNORES),
@@ -280,6 +284,15 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
     ...assignOptions(configsOptions, 'jsxA11y'),
   };
 
+  /* 🟢 PNPM */
+
+  const usedPackageManager = await detectPackageManager();
+
+  const isPnpmEnabled = Boolean(configsOptions.pnpm ?? usedPackageManager?.name === 'pnpm');
+  const pnpmOptions: PnpmEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'pnpm'),
+  };
+
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
 
   /* 🔴 SECURITY */
@@ -435,6 +448,7 @@ export const eslintConfig = (options: EslintConfigUnOptions = {}): FlatConfigEnt
       isUnusedImportsEnabled && unusedImportsEslintConfig(unusedImportsOptions, internalOptions),
       isReactEnabled && reactEslintConfig(reactOptions, internalOptions),
       isJsxA11yEnabled && jsxA11yEslintConfig(jsxA11yOptions, internalOptions),
+      isPnpmEnabled && pnpmEslintConfig(pnpmOptions, internalOptions),
 
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&

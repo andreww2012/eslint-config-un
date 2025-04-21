@@ -19,6 +19,7 @@ import eslintPluginNoTypeAssertion from 'eslint-plugin-no-type-assertion';
 import eslintPluginPackageJson from 'eslint-plugin-package-json';
 import eslintPluginPerfectionist from 'eslint-plugin-perfectionist';
 import eslintPluginPinia from 'eslint-plugin-pinia';
+import eslintPluginPnpm from 'eslint-plugin-pnpm';
 import eslintPluginPreferArrowFunctions from 'eslint-plugin-prefer-arrow-functions';
 import eslintPluginPromise from 'eslint-plugin-promise';
 // TODO it returns undefined without `* as` syntax for some reason
@@ -92,4 +93,5 @@ export const ALL_ESLINT_PLUGINS: FlatConfigEntry['plugins'] & {} = {
   'react-compiler': eslintPluginReactCompiler,
   // @ts-expect-error types mismatch
   'jsx-a11y': eslintPluginJsxA11y,
+  pnpm: eslintPluginPnpm,
 };

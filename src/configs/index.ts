@@ -17,6 +17,7 @@ import type {MarkdownEslintConfigOptions} from './markdown';
 import type {NodeEslintConfigOptions} from './node';
 import type {PackageJsonEslintConfigOptions} from './package-json';
 import type {PerfectionistEslintConfigOptions} from './perfectionist';
+import type {PnpmEslintConfigOptions} from './pnpm';
 import type {PreferArrowFunctionsEslintConfigOptions} from './prefer-arrow-functions';
 import type {PromiseEslintConfigOptions} from './promise';
 import type {QwikEslintConfigOptions} from './qwik';
@@ -256,6 +257,15 @@ export interface EslintConfigUnOptions {
      * @default true
      */
     jsxA11y?: boolean | Partial<JsxA11yEslintConfigOptions>;
+
+    /**
+     * Rules specific to pnpm package manager.
+     *
+     * Used plugin:
+     * - [`eslint-plugin-pnpm`](https://www.npmjs.com/package/eslint-plugin-pnpm)
+     * @default true <=> pnpm is detected as a used package manager by [`package-manager-detector`](https://www.npmjs.com/package/package-manager-detector)
+     */
+    pnpm?: boolean | Partial<PnpmEslintConfigOptions>;
 
     /**
      * NOTE: disabled by default

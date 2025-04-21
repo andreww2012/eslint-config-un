@@ -11,12 +11,12 @@ const configs = [
       '': eslintPluginVanillaRules,
     },
   },
-  ...eslintConfig({
+  ...(await eslintConfig({
     configs: {
       // If Angular is not found installed, plugin is not generated
       angular: true,
     },
-  }),
+  })),
 ];
 
 const output = await flatConfigsToRulesDTS(configs as Parameters<typeof flatConfigsToRulesDTS>[0], {

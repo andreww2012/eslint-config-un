@@ -65,6 +65,7 @@ export type GetRuleOptions<RuleName extends keyof AllEslintRulesWithoutDisableAu
 export type AllRulesWithPrefix<
   Prefix extends string | null,
   IncludeDisableAutofix = false,
+  AutoIncludeSlashAfterPrefix = true,
 > = PickKeysStartingWith<
   Prefix extends ''
     ? BuiltinEslintRulesFixed
@@ -73,9 +74,7 @@ export type AllRulesWithPrefix<
       : AllEslintRulesWithoutDisableAutofix,
   Prefix extends null | ''
     ? string
-    :
-        | `${Prefix}/`
-        | (IncludeDisableAutofix extends true ? `${DisableAutofixPrefix}/${Prefix}` : never)
+    : `${IncludeDisableAutofix extends true ? `${DisableAutofixPrefix}/` | '' : ''}${Prefix}${AutoIncludeSlashAfterPrefix extends true ? '/' : ''}`
 >;
 
 export type AllRulesWithPrefixNames<
