@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import EslintJs from '@eslint/js';
+import {getPackageInfoSync} from 'local-pkg';
 import {ERROR, WARNING} from '../constants';
 import {
   type BuiltinEslintRulesFixed,
@@ -8,6 +9,7 @@ import {
   type FlatConfigEntry,
   type GetRuleOptions,
 } from '../eslint';
+import {getPackageSemverVersion} from '../utils';
 import type {InternalConfigOptions} from './index';
 
 export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRulesFixed> {}
@@ -50,6 +52,8 @@ export const jsEslintConfig = (
   internalOptions: InternalConfigOptions,
 ): FlatConfigEntry[] => {
   const builder = new ConfigEntryBuilder('', options, internalOptions);
+
+  const eslintVersion = getPackageSemverVersion(getPackageInfoSync('eslint')) || 0;
 
   builder
     .addConfig(['js', {includeDefaultFilesAndIgnores: true}])
@@ -137,7 +141,14 @@ export const jsEslintConfig = (
     .addRule('block-scoped-var', ERROR)
     .addRule('camelcase', ERROR, RULE_CAMELCASE_OPTIONS)
     // .addRule('capitalized-comments', OFF)
-    .addRule('class-methods-use-this', ERROR)
+    .addRule('class-methods-use-this', ERROR, [
+      {
+        ...(eslintVersion >= 9.24 && {
+          ignoreOverrideMethods: true,
+          ignoreClassesWithImplements: 'all',
+        }),
+      },
+    ])
     // complexity: OFF
     .addRule('consistent-return', ERROR)
     .addRule('consistent-this', ERROR, ['that'])
