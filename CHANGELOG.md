@@ -6,6 +6,9 @@
 - Set new options `ignoreOverrideMethods: true` and `ignoreClassesWithImplements: 'all'` to the base [`class-methods-use-this` rule](https://eslint.org/docs/latest/rules/class-methods-use-this).
 - `overrides` can now accept a function that receives the severity and options possibly set by our config.
 
+### Dependencies
+- `typescript-eslint`: [8.26.1 -> 8.30.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.26.1...v8.30.1)
+
 ## 0.7.0
 
 - New config: `angular` via [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template), enabled automatically if `@angular/core` package is installed and is within the supported version range (from 13 to 19).
