@@ -21,7 +21,15 @@ export const eslintCommentsEslintConfig = (
   // 🔴 - not in recommended
 
   builder
-    .addConfig(['eslint-comments', {includeDefaultFilesAndIgnores: true}])
+    .addConfig([
+      'eslint-comments',
+      {
+        includeDefaultFilesAndIgnores: true,
+        // Supports official markdown, css and json plugins: https://github.com/eslint-community/eslint-plugin-eslint-comments/issues/256
+        doNotIgnoreCss: true,
+        doNotIgnoreMarkdown: true,
+      },
+    ])
     // @ts-expect-error no proper types
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     .addBulkRules(eslintPluginEslintComments.configs.recommended.rules)
