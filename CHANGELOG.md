@@ -11,6 +11,8 @@
 - `angular-eslint`: [19.2.1 -> 19.3.0](https://github.com/angular-eslint/angular-eslint/compare/v19.2.1...v19.3.0)
   - 🟢 (enabled) [`prefer-contextual-for-variables`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-contextual-for-variables.md)
 - `@eslint-community/eslint-plugin-eslint-comments`: [4.4.1 -> 4.5.0](https://github.com/eslint-community/eslint-plugin-eslint-comments/compare/v4.4.1...v4.5.0)
+- `@eslint/css`: [0.5.0 -> 0.7.0](https://github.com/eslint/css/compare/css-v0.5.0...css-v0.7.0)
+  - [**BREAKING**] Includes the same breaking changes as outlined in release notes for [v0.6.0](https://github.com/eslint/css/releases/tag/css-v0.6.0) and [v0.7.0](https://github.com/eslint/css/releases/tag/css-v0.7.0).
 
 ## 0.7.0
 

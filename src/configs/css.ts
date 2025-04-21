@@ -66,7 +66,8 @@ export const cssEslintConfig = (
     // .addRule('no-invalid-at-rules', ERROR) // 🟢
     // .addRule('no-invalid-properties', ERROR) // 🟢
     // .addRule('prefer-logical-properties', OFF) // >=0.5.0
-    // .addRule('require-baseline', ERROR) // 🟢
+    // We're keeping `warn` severity, see the discussion in this issue and specifically this comment https://github.com/eslint/css/issues/80#issuecomment-2787414430
+    // .addRule('use-baseline', WARNING) // 🟢
     // .addRule('use-layers', OFF)
     .addOverrides();
 
