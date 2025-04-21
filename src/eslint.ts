@@ -4,7 +4,7 @@ import {builtinRules} from 'eslint/use-at-your-own-risk';
 // @ts-expect-error no typings
 import ruleComposer from 'eslint-rule-composer';
 import {klona} from 'klona';
-import type {SetRequired} from 'type-fest';
+import type {OmitIndexSignature, ReadonlyDeep, SetRequired} from 'type-fest';
 import type {InternalConfigOptions} from './configs';
 import {
   ERROR,
@@ -17,13 +17,13 @@ import {
 } from './constants';
 import type {RuleOptions} from './eslint-types';
 import type {
-  ConstantKeys,
   FalsyValue,
   PickKeysNotStartingWith,
   PickKeysStartingWith,
   PrettifyShallow,
   RemovePrefix,
 } from './types';
+import {type MaybeFn, maybeCall, objectEntriesUnsafe} from './utils';
 
 type EslintSeverity = Eslint.Linter.RuleSeverity;
 
@@ -45,7 +45,7 @@ export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShall
 
 export type DisableAutofixPrefix = 'disable-autofix';
 
-export type AllEslintRulesWithDisableAutofix = ConstantKeys<FlatConfigEntry['rules'] & {}>;
+export type AllEslintRulesWithDisableAutofix = OmitIndexSignature<FlatConfigEntry['rules'] & {}>;
 // Need to exclude `disable-autofix` rules to avoid TS issues related to big unions
 export type AllEslintRulesWithoutDisableAutofix = PickKeysNotStartingWith<
   AllEslintRulesWithDisableAutofix,
@@ -54,13 +54,11 @@ export type AllEslintRulesWithoutDisableAutofix = PickKeysNotStartingWith<
 
 export type BuiltinEslintRulesFixed = Pick<
   AllEslintRulesWithoutDisableAutofix,
-  keyof ConstantKeys<BuiltinEslintRules>
+  keyof OmitIndexSignature<BuiltinEslintRules>
 >;
 
 export type GetRuleOptions<RuleName extends keyof AllEslintRulesWithoutDisableAutofix> =
-  Exclude<AllEslintRulesWithoutDisableAutofix[RuleName], undefined> extends Eslint.Linter.RuleEntry<
-    infer Options
-  >
+  AllEslintRulesWithoutDisableAutofix[RuleName] & {} extends Eslint.Linter.RuleEntry<infer Options>
     ? Options
     : never;
 
@@ -97,9 +95,14 @@ export type RuleOverrides<T extends null | string | RulesRecord> = T extends str
     ? FlatConfigEntry<T>['rules']
     : never;
 
+type OverridesWithMaybeFunction<T extends object> = {
+  [K in keyof T]: T[K] & {} extends Eslint.Linter.RuleEntry<infer Options>
+    ? MaybeFn<T[K] & {}, [severity: EslintSeverity & number, options?: ReadonlyDeep<Options>]>
+    : never;
+};
 export type ConfigSharedOptions<T extends null | string | RulesRecord = RulesRecord> = Partial<
   FlatConfigEntryFilesOrIgnores & {
-    overrides?: RuleOverrides<T>;
+    overrides?: OverridesWithMaybeFunction<OmitIndexSignature<RuleOverrides<T>>>;
 
     /** If severity is forced, `errorsInsteadOfWarnings` option will be completely ignored */
     forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
@@ -179,6 +182,12 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
   );
 
 export type FlatConfigEntryForBuilder = Omit<FlatConfigEntry, 'name' | 'rules'>;
+
+const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, EslintSeverity & number> = {
+  off: 0,
+  warn: 1,
+  error: 2,
+};
 
 export class ConfigEntryBuilder<RulesPrefix extends string | null> {
   constructor(
@@ -345,7 +354,29 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
         return result;
       },
       addOverrides: () => {
-        Object.assign(configFinal.rules, this.options.overrides);
+        const ourRules = configFinal.rules;
+        Object.assign(
+          ourRules,
+          Object.fromEntries(
+            // Need to use "!" here to not break the type
+            // eslint-disable-next-line disable-autofix/@typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-non-null-assertion
+            objectEntriesUnsafe(this.options.overrides! || {}).map(([k, v]) => {
+              const existingRuleRecord = ourRules[k];
+              const rawSeverity = Array.isArray(existingRuleRecord)
+                ? existingRuleRecord[0]
+                : existingRuleRecord;
+              const severity =
+                typeof rawSeverity === 'string'
+                  ? // eslint-disable-next-line disable-autofix/@typescript-eslint/no-unnecessary-type-assertion
+                    STRING_SEVERITY_TO_NUMERIC[rawSeverity as EslintSeverity & string]
+                  : (rawSeverity as EslintSeverity & number);
+              const options = Array.isArray(existingRuleRecord)
+                ? existingRuleRecord.slice(1)
+                : undefined;
+              return [k, maybeCall(v, severity, options)];
+            }),
+          ),
+        );
         return result;
       },
       addBulkRules: (rules: AllRulesWithPrefix<RulesPrefix> | FalsyValue) => {

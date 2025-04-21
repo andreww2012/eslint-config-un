@@ -12,16 +12,6 @@ export type RemovePrefix<
 
 export type FalsyValue = false | 0 | 0n | '' | null | undefined;
 
-export type ConstantKeys<T> = {
-  [K in keyof T as string extends K
-    ? never
-    : number extends K
-      ? never
-      : symbol extends K
-        ? never
-        : K]: T[K];
-};
-
 export type PrettifyShallow<T> = {
   [K in keyof T]: T[K];
 } & {};
