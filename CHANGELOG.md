@@ -22,6 +22,7 @@
 - `eslint-plugin-import-x`: [4.8.0 -> 4.10.6](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.8.0...v4.10.6)
 - `eslint-plugin-jsdoc`: [50.6.6 -> 50.6.9](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.6...v50.6.9)
 - `eslint-plugin-json-schema-validator`: [5.3.1 -> 5.4.0](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v5.3.1...v5.4.0)
+- `eslint-plugin-jsonc`: [2.19.1 -> 2.20.0](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v2.19.1...v2.20.0)
 
 ## 0.7.0
 
