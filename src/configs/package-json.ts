@@ -1,4 +1,4 @@
-import eslintPluginPackageJsonRecommendedConfig from 'eslint-plugin-package-json/configs/recommended';
+import eslintPluginPackageJson from 'eslint-plugin-package-json';
 import jsoncEslintParser from 'jsonc-eslint-parser';
 import {ERROR, GLOB_PACKAGE_JSON} from '../constants';
 import {
@@ -82,15 +82,18 @@ export const packageJsonEslintConfig = (
         },
       },
     )
-    .addBulkRules(eslintPluginPackageJsonRecommendedConfig.rules)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+    .addBulkRules((eslintPluginPackageJson as any).configs.recommended.rules)
     // .addRule('no-empty-fields', ERROR) // 🟣 >=0.21.0
     .addRule('no-redundant-files', ERROR) // >=0.20.0
     .addRule('order-properties', ERROR, [{order: options.order ?? 'sort-package-json'}]) // 🟣
     .addRule('repository-shorthand', ERROR, [{form: options.repositoryShorthand ?? 'object'}]) // 🟣
     // .addRule('require-author', OFF) // >=0.22.0
+    // .addRule('require-engines', OFF) // >=0.28.0
     // .addRule('require-files', OFF) // >=0.26.0
     // .addRule('require-name', ERROR) // 🟣 >=0.24.0
     // .addRule('require-keywords', OFF) // >=0.25.0
+    // .addRule('require-types', OFF) // >=0.29.0
     // .addRule('require-version', ERROR) // 🟣 >=0.23.0
     .addRule('sort-collections', ERROR, [
       getKeysOfTruthyValues({

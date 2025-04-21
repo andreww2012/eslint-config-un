@@ -24,6 +24,9 @@
 - `eslint-plugin-json-schema-validator`: [5.3.1 -> 5.4.0](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v5.3.1...v5.4.0)
 - `eslint-plugin-jsonc`: [2.19.1 -> 2.20.0](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v2.19.1...v2.20.0)
 - `eslint-plugin-n:` [17.16.2 -> 17.17.0](https://github.com/eslint-community/eslint-plugin-n/compare/v17.16.2...v17.17.0)
+- `eslint-plugin-package-json`: [0.26.3 -> 0.29.1](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.26.3...v0.29.1)
+  - 🔴 (off) [`require-engines`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-engines.md)
+  - 🔴 (off) [`require-types`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-types.md)
 
 ## 0.7.0
 
