@@ -13,6 +13,8 @@
 - `@eslint-community/eslint-plugin-eslint-comments`: [4.4.1 -> 4.5.0](https://github.com/eslint-community/eslint-plugin-eslint-comments/compare/v4.4.1...v4.5.0)
 - `@eslint/css`: [0.5.0 -> 0.7.0](https://github.com/eslint/css/compare/css-v0.5.0...css-v0.7.0)
   - [**BREAKING**] Includes the same breaking changes as outlined in release notes for [v0.6.0](https://github.com/eslint/css/releases/tag/css-v0.6.0) and [v0.7.0](https://github.com/eslint/css/releases/tag/css-v0.7.0).
+- `@eslint/markdown`: [6.3.0 -> 6.4.0](https://github.com/eslint/markdown/compare/v6.3.0...v6.4.0)
+  - Enabled parsing of Front Matter in YAML format by default.
 
 ## 0.7.0
 

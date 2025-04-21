@@ -1,4 +1,5 @@
 import eslintPluginMarkdown from '@eslint/markdown';
+import type {MarkdownLanguageOptions} from '@eslint/markdown/types';
 import {mergeProcessors, processorPassThrough} from 'eslint-merge-processors';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
@@ -82,7 +83,14 @@ export interface MarkdownEslintConfigOptions extends ConfigSharedOptions<'markdo
    * @see https://github.com/eslint/markdown/blob/main/docs/processors/markdown.md
    */
   codeBlocksImpliedStrictMode?: boolean;
+
   overridesCodeBlocks?: RuleOverrides<string>;
+
+  /**
+   * Enables Front Matter parsing in both `commonmark` and `gfm` dialects.
+   * @default 'yaml'
+   */
+  parseFrontmatter?: MarkdownLanguageOptions['frontmatter'];
 }
 
 export const markdownEslintConfig = (
@@ -99,6 +107,8 @@ export const markdownEslintConfig = (
     lintCodeBlocks = true,
     codeBlocksIgnoredLanguages,
     codeBlocksAllowedLanguages,
+
+    parseFrontmatter = 'yaml',
   } = options;
 
   const defaultDialect: MarkdownDialect = typeof language === 'string' ? language : 'commonmark';
@@ -128,6 +138,9 @@ export const markdownEslintConfig = (
         ],
         {
           language: defaultConfigLanguage,
+          languageOptions: {
+            frontmatter: parseFrontmatter,
+          },
         },
       )
       .addBulkRules(
