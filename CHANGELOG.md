@@ -15,6 +15,8 @@
   - [**BREAKING**] Includes the same breaking changes as outlined in release notes for [v0.6.0](https://github.com/eslint/css/releases/tag/css-v0.6.0) and [v0.7.0](https://github.com/eslint/css/releases/tag/css-v0.7.0).
 - `@eslint/markdown`: [6.3.0 -> 6.4.0](https://github.com/eslint/markdown/compare/v6.3.0...v6.4.0)
   - Enabled parsing of Front Matter in YAML format by default.
+- `@vitest/eslint-plugin`: [1.1.37 -> 1.1.43](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.37...v1.1.43)
+  - 🟢 (enabled) [`prefer-describe-function-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-describe-function-title.md)
 
 ## 0.7.0
 

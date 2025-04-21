@@ -13,6 +13,8 @@ import {
 } from './jest';
 import type {InternalConfigOptions} from './index';
 
+// prefer-describe-function-title 1.1.41
+//
 export interface VitestEslintConfigOptions
   extends ConfigSharedOptions<'vitest'>,
     // TODO options jsdocs contain jest-related information
@@ -127,6 +129,7 @@ export const vitestEslintConfig = (
     .addRule('no-test-return-statement', ERROR) // (warns in all)
     // .addRule('prefer-called-with', OFF) // (warns in all)
     .addRule('prefer-comparison-matcher', ERROR) // (warns in all)
+    .addRule('prefer-describe-function-title', ERROR) // >=1.1.41
     .addRule('prefer-each', WARNING) // (warns in all)
     .addRule('prefer-equality-matcher', ERROR) // (warns in all)
     // .addRule('prefer-expect-assertions', OFF) // (warns in all)
