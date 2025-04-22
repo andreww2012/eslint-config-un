@@ -19,7 +19,7 @@
 - `@vitest/eslint-plugin`: [1.1.37 -> 1.1.43](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.37...v1.1.43)
   - 🟢 (enabled) [`prefer-describe-function-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-describe-function-title.md)
 - `eslint-config-prettier`: [10.1.1 -> 10.1.2](https://github.com/prettier/eslint-config-prettier/compare/v10.1.1...v10.1.2)
-- `eslint-import-resolver-typescript`: [3.9.1 -> 4.3.3](https://github.com/import-js/eslint-import-resolver-typescript/compare/v3.9.1...v4.3.3)
+- `eslint-import-resolver-typescript`: [3.9.1 -> 4.3.4](https://github.com/import-js/eslint-import-resolver-typescript/compare/v3.9.1...v4.3.4)
 - `eslint-plugin-import-x`: [4.8.0 -> 4.10.6](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.8.0...v4.10.6)
 - `eslint-plugin-jsdoc`: [50.6.6 -> 50.6.9](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.6...v50.6.9)
 - `eslint-plugin-json-schema-validator`: [5.3.1 -> 5.4.0](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v5.3.1...v5.4.0)
