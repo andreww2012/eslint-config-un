@@ -32,6 +32,7 @@
 - `eslint-plugin-qwik`: [1.12.1 -> 1.13.0](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik%401.12.1...eslint-plugin-qwik%401.13.0)
 - `eslint-plugin-react-compiler`: 19.0.0-beta-ebf51a3-20250411 -> 19.1.0-rc.1
 - `eslint-plugin-react-refresh`: [0.4.19 -> 0.4.20](https://github.com/ArnaudBarre/eslint-plugin-react-refresh/compare/v0.4.19...v0.4.20)
+- `vue-eslint-parser`: [10.1.1 -> 10.1.3](https://github.com/vuejs/vue-eslint-parser/compare/v10.1.1...v10.1.3)
 
 ## 0.7.0
 
