@@ -1,5 +1,4 @@
 // See https://github.com/typescript-eslint/typescript-eslint/issues/8721
-/* eslint-disable disable-autofix/@typescript-eslint/no-unnecessary-type-assertion */
 import type {Tagged} from 'type-fest';
 
 /* Error levels */

@@ -7,7 +7,8 @@
 - `overrides` can now accept a function that receives the severity and options possibly set by our config.
 
 ### Dependencies
-- `typescript-eslint`: [8.26.1 -> 8.30.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.26.1...v8.30.1)
+- `typescript-eslint`: [8.26.1 -> 8.31.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.26.1...v8.31.0)
+  - [**BREAKING**] Disabled autofix for [`no-unnecessary-type-assertion`](https://typescript-eslint.io/rules/no-unnecessary-type-assertion) since [literal const assertions are now allowed by default](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/#checkliteralconstassertions).
 - `angular-eslint`: [19.2.1 -> 19.3.0](https://github.com/angular-eslint/angular-eslint/compare/v19.2.1...v19.3.0)
   - 🟢 (enabled) [`prefer-contextual-for-variables`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-contextual-for-variables.md)
 - `@eslint-community/eslint-plugin-eslint-comments`: [4.4.1 -> 4.5.0](https://github.com/eslint-community/eslint-plugin-eslint-comments/compare/v4.4.1...v4.5.0)

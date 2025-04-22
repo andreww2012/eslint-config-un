@@ -366,7 +366,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
                 : existingRuleRecord;
               const severity =
                 typeof rawSeverity === 'string'
-                  ? // eslint-disable-next-line disable-autofix/@typescript-eslint/no-unnecessary-type-assertion
+                  ? // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                     STRING_SEVERITY_TO_NUMERIC[rawSeverity as EslintSeverity & string]
                   : (rawSeverity as EslintSeverity & number);
               const options = Array.isArray(existingRuleRecord)

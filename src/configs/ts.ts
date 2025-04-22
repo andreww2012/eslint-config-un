@@ -396,9 +396,7 @@ export const tsEslintConfig = (
       .addRule('no-unnecessary-type-arguments', ERROR, [], {
         disableAutofix: true,
       })
-      .addRule('no-unnecessary-type-assertion', ERROR, [], {
-        disableAutofix: true, // Reason: https://github.com/typescript-eslint/typescript-eslint/issues/8721
-      })
+      .addRule('no-unnecessary-type-assertion', ERROR, [])
       // .addRule('no-unnecessary-type-parameters', ERROR)
       .addRule('no-unsafe-argument', noUnsafeRulesSeverity)
       .addRule('no-unsafe-assignment', noUnsafeRulesSeverity)
