@@ -579,7 +579,7 @@ export const reactEslintConfig = (
   ) => {
     const nameXUnprefixed = nameX.match(/^(?:[^/]+\/)?(.*)$/)?.[1] as A;
     const result =
-      `${isReactXPreferred ? '@eslint-react/' : 'react/'}${isReactXPreferred ? nameXUnprefixed : (nameOriginal ?? nameXUnprefixed)}` as const;
+      `${isReactXPreferred ? '@eslint-react/' : 'react/'}${isReactXPreferred ? nameX : (nameOriginal ?? nameXUnprefixed)}` as const;
     return result as typeof result & keyof AllEslintRulesWithoutDisableAutofix;
   };
   const getDoubleRuleSeverity = (severity: RuleSeverity, isXRule?: boolean) =>
