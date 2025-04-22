@@ -28,6 +28,7 @@
 - `eslint-plugin-package-json`: [0.26.3 -> 0.29.1](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.26.3...v0.29.1)
   - 🔴 (off) [`require-engines`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-engines.md)
   - 🔴 (off) [`require-types`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-types.md)
+- `eslint-plugin-unicorn`: [57.0.0 -> 58.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v57.0.0...v58.0.0)
 
 ## 0.7.0
 
