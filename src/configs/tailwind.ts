@@ -1,6 +1,5 @@
 import {objectKeys} from '@antfu/utils';
-import eslintPluginTailwind from 'eslint-plugin-tailwindcss';
-import {OFF, WARNING} from '../constants';
+import {ERROR, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {maybeCall} from '../utils';
@@ -45,13 +44,17 @@ export const tailwindEslintConfig = (
 
   const builder = new ConfigEntryBuilder('tailwindcss', options, internalOptions);
 
+  // Legend:
+  // 🟢 - in Recommended (error)
+  // 🟡 - in Recommended (warning)
+
   builder
     .addConfig(['tailwind', {includeDefaultFilesAndIgnores: true}], {
       ...(settings && {
         settings: {
           tailwindcss: {
             ...settings,
-            ...objectKeys(DEFAULT_PLUGIN_SETTINGS).reduce<Record<string, unknown>>(
+            ...objectKeys(DEFAULT_PLUGIN_SETTINGS).reduce<TailwindPluginSettings>(
               (acc, settingKey) => {
                 if (settings[settingKey]) {
                   acc[settingKey] = maybeCall(
@@ -63,19 +66,18 @@ export const tailwindEslintConfig = (
               },
               {},
             ),
-          },
+          } satisfies TailwindPluginSettings,
         },
       }),
     })
-    .addBulkRules(eslintPluginTailwind.configs.recommended.rules)
-    .addRule('classnames-order', WARNING)
-    .addRule('enforces-negative-arbitrary-values', WARNING)
-    .addRule('enforces-shorthand', WARNING)
-    .addRule('migration-from-tailwind-2', WARNING)
-    // .addRule('no-arbitrary-value', OFF)
-    // .addRule('no-contradicting-classname', ERROR)
-    .addRule('no-custom-classname', OFF)
-    .addRule('no-unnecessary-arbitrary-value', WARNING)
+    .addRule('classnames-order', WARNING) // 🟡
+    .addRule('enforces-negative-arbitrary-values', WARNING) // 🟡
+    .addRule('enforces-shorthand', WARNING) // 🟡
+    .addRule('migration-from-tailwind-2', WARNING) // 🟡
+    .addRule('no-arbitrary-value', OFF)
+    .addRule('no-contradicting-classname', ERROR) // 🟢
+    .addRule('no-custom-classname', OFF) // 🟡
+    .addRule('no-unnecessary-arbitrary-value', WARNING) // 🟡
     .addOverrides();
 
   return builder.getAllConfigs();

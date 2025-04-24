@@ -1,3 +1,7 @@
+## 0.8.2
+
+- Prevented a crash when Tailwind v4 is installed by completely disabling `tailwind` config and `eslint-plugin-tailwindcss` plugin, which tries to import `tailwindcss/resolveConfig` which doesn't exist anymore in v4.
+
 ## 0.8.1
 
 - Fixed incorrect `@eslint-react/dom` rule name generation.

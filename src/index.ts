@@ -62,7 +62,7 @@ import {
   eslintPluginVanillaRules,
   genFlatConfigEntryName,
 } from './eslint';
-import {ALL_ESLINT_PLUGINS} from './plugins';
+import {allEslintPlugins} from './plugins';
 import {assignOptions, getPackageMajorVersion} from './utils';
 
 // TODO debug
@@ -91,6 +91,11 @@ export const eslintConfig = async (
   const typescriptPackageInfo = getPackageInfoSync('typescript');
   const isTypescriptEnabled =
     configsOptions.ts !== false && Boolean(configsOptions.ts || typescriptPackageInfo);
+
+  const [usedPackageManager, allLoadedEslintPlugins] = await Promise.all([
+    detectPackageManager(),
+    allEslintPlugins(),
+  ]);
 
   /* 🟢 GITIGNORE */
 
@@ -180,12 +185,14 @@ export const eslintConfig = async (
 
   /* 🟢 TAILWIND */
 
+  const tailwindcssPackageInfo = getPackageInfoSync('tailwindcss');
   const isTailwindEnabled =
-    configsOptions.tailwind === false
-      ? false
-      : configsOptions.tailwind
-        ? true
-        : isPackageExists('tailwindcss');
+    'tailwindcss' in allLoadedEslintPlugins &&
+    Boolean(
+      configsOptions.tailwind ??
+        (tailwindcssPackageInfo != null &&
+          (getPackageMajorVersion(tailwindcssPackageInfo) ?? Number.POSITIVE_INFINITY) < 4),
+    );
   const tailwindOptions: TailwindEslintConfigOptions = {
     ...assignOptions(configsOptions, 'tailwind'),
   };
@@ -286,8 +293,6 @@ export const eslintConfig = async (
 
   /* 🟢 PNPM */
 
-  const usedPackageManager = await detectPackageManager();
-
   const isPnpmEnabled = Boolean(configsOptions.pnpm ?? usedPackageManager?.name === 'pnpm');
   const pnpmOptions: PnpmEslintConfigOptions = {
     ...assignOptions(configsOptions, 'pnpm'),
@@ -379,7 +384,7 @@ export const eslintConfig = async (
   );
 
   const allPlugins: Record<string, EslintPlugin> = {
-    ...ALL_ESLINT_PLUGINS,
+    ...allLoadedEslintPlugins,
     ...angularPlugins,
   };
 
