@@ -16,6 +16,7 @@ export default eslintConfig({
     jsxA11y: false,
     packageJson: true,
     vue: true,
+    casePolice: true,
   },
 
   extraConfigs: [

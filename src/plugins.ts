@@ -6,6 +6,7 @@ import eslintPluginReactX from '@eslint-react/eslint-plugin';
 import eslintPluginNext from '@next/eslint-plugin-next';
 import eslintPluginStylistic from '@stylistic/eslint-plugin';
 import eslintPluginVitest from '@vitest/eslint-plugin';
+import eslintPluginCasePolice from 'eslint-plugin-case-police';
 import eslintPluginCssInJs from 'eslint-plugin-css';
 import eslintPluginDeMorgan from 'eslint-plugin-de-morgan';
 import eslintPluginImportX from 'eslint-plugin-import-x';
@@ -39,10 +40,12 @@ import eslintPluginVue from 'eslint-plugin-vue';
 import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility';
 import eslintPluginYaml from 'eslint-plugin-yml';
 import {plugin as typescriptEslintPlugin} from 'typescript-eslint';
-import type {FlatConfigEntry} from './eslint';
+import {type FlatConfigEntry, disableAutofixForAllRulesInPlugin} from './eslint';
 import {interopDefault} from './utils';
 
-export const allEslintPlugins = async (): Promise<FlatConfigEntry['plugins'] & {}> => {
+export const allEslintPlugins = async ({
+  disableAutofixesForPlugins,
+}: {disableAutofixesForPlugins?: string[]} = {}) => {
   const eslintPluginTailwind = await import('eslint-plugin-tailwindcss')
     .then(interopDefault)
     .catch((error: unknown) => {
@@ -58,7 +61,7 @@ export const allEslintPlugins = async (): Promise<FlatConfigEntry['plugins'] & {
       throw error;
     });
 
-  return {
+  const result: FlatConfigEntry['plugins'] & {} = {
     unicorn: eslintPluginUnicorn,
     '@stylistic': eslintPluginStylistic,
     // @ts-expect-error types mismatch
@@ -111,5 +114,18 @@ export const allEslintPlugins = async (): Promise<FlatConfigEntry['plugins'] & {
     'jsx-a11y': eslintPluginJsxA11y,
     pnpm: eslintPluginPnpm,
     '@next/next': eslintPluginNext,
+    // @ts-expect-error types mismatch
+    'case-police': eslintPluginCasePolice,
   };
+
+  Object.entries(result).forEach(([pluginNamespace, plugin]) => {
+    if (disableAutofixesForPlugins?.includes(pluginNamespace)) {
+      result[pluginNamespace] = {
+        ...result[pluginNamespace],
+        rules: disableAutofixForAllRulesInPlugin('', plugin),
+      };
+    }
+  });
+
+  return result;
 };

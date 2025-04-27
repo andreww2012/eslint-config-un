@@ -6,6 +6,7 @@ import {getPackageInfo, getPackageInfoSync, isPackageExists} from 'local-pkg';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {EslintConfigUnOptions, InternalConfigOptions} from './configs';
 import {type AngularEslintConfigOptions, angularEslintConfig} from './configs/angular';
+import {type CasePoliceEslintConfigOptions, casePoliceEslintConfig} from './configs/case-police';
 import {type CssEslintConfigOptions, cssEslintConfig} from './configs/css';
 import {type CssInJsEslintConfigOptions, cssInJsEslintConfig} from './configs/css-in-js';
 import {type DeMorganEslintConfigOptions, deMorganEslintConfig} from './configs/de-morgan';
@@ -84,13 +85,22 @@ export const eslintConfig = async (
     ...(options.ignores || []),
   ];
 
+  const configsOptions = options.configs || {};
+
+  const casePoliceOptions: CasePoliceEslintConfigOptions = assignOptions(
+    configsOptions,
+    'casePolice',
+  );
+
   const [usedPackageManager, allLoadedEslintPlugins, nextJsPackageInfo] = await Promise.all([
     detectPackageManager(),
-    allEslintPlugins(),
+    allEslintPlugins({
+      disableAutofixesForPlugins: [
+        (casePoliceOptions.disableAutofix ?? true) ? 'case-police' : '',
+      ].filter(Boolean),
+    }),
     getPackageInfo('next'),
   ]);
-
-  const configsOptions = options.configs || {};
 
   const isVueEnabled =
     configsOptions.vue !== false && (Boolean(configsOptions.vue) || isPackageExists('vue'));
@@ -304,6 +314,7 @@ export const eslintConfig = async (
 
   const isNextJsEnabled = Boolean(configsOptions.nextJs ?? nextJsPackageInfo != null);
   const nextJsOptions: NextJsEslintConfigOptions = {
+    // eslint-disable-next-line case-police/string-check
     ...assignOptions(configsOptions, 'nextJs'),
   };
 
@@ -371,6 +382,10 @@ export const eslintConfig = async (
   const jsonSchemaValidatorOptions: JsonSchemaValidatorEslintConfigOptions = {
     ...assignOptions(configsOptions, 'jsonSchemaValidator'),
   };
+
+  /* 🔴 CASE-POLICE */
+
+  const isCasePoliceEnabled = Boolean(configsOptions.casePolice ?? false);
 
   // 🔵🔵🔵 "Extra" configs 🔵🔵🔵
 
@@ -477,6 +492,7 @@ export const eslintConfig = async (
       isDeMorganEnabled && deMorganEslintConfig(deMorganOptions, internalOptions),
       isJsonSchemaValidatorEnabled &&
         jsonSchemaValidatorEslintConfig(jsonSchemaValidatorOptions, internalOptions),
+      isCasePoliceEnabled && casePoliceEslintConfig(casePoliceOptions, internalOptions),
 
       isTypescriptEnabled && tsEslintConfig(tsOptions, internalOptions), // Must come after all rulesets for vanilla JS
       isVueEnabled && vueEslintConfig(vueOptions, internalOptions), // Must come after ts

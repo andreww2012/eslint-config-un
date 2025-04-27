@@ -49,6 +49,7 @@ Includes the rules from the following configs & plugins:
 - `jsxA11y` (since v0.8.0), using [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
 - `pnpm` (since v0.8.0), using [`eslint-plugin-pnpm`](https://www.npmjs.com/package/eslint-plugin-pnpm)
 - `nextJs` (since v?.?.?), using [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next)
+- `casePolice` (since v?.?.?), using [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police)
 
 ## Features
 
@@ -87,6 +88,7 @@ export default eslintConfig({
   - `perfectionist`
   - `deMorgan`
   - `jsonSchemaValidator`
+  - `casePolice`
 - Some rules are set to warn by default. You can change some or even all such rule's reporting level using `errorsInsteadOfWarnings` option. You can find all such rules by inspecting the source code of this package.
 
 ### Certain rules are disabled for code blocks inside `*.md` files

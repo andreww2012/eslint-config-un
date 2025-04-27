@@ -2,6 +2,7 @@ import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {FlatConfigEntry} from '../eslint';
 import type {PackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
+import type {CasePoliceEslintConfigOptions} from './case-police';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
@@ -340,6 +341,15 @@ export interface EslintConfigUnOptions {
      * @default false
      */
     jsonSchemaValidator?: boolean | Partial<JsonSchemaValidatorEslintConfigOptions>;
+
+    /**
+     * NOTE: disabled by default
+     *
+     * Used plugins:
+     * - [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police) ([docs](https://github.com/antfu/case-police?tab=coc-ov-file))
+     * @default false
+     */
+    casePolice?: boolean | Partial<CasePoliceEslintConfigOptions>;
   };
 }
 
