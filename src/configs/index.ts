@@ -14,6 +14,7 @@ import type {JsonSchemaValidatorEslintConfigOptions} from './json-schema-validat
 import type {JsoncEslintConfigOptions} from './jsonc';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {MarkdownEslintConfigOptions} from './markdown';
+import type {NextJsEslintConfigOptions} from './nextjs';
 import type {NodeEslintConfigOptions} from './node';
 import type {PackageJsonEslintConfigOptions} from './package-json';
 import type {PerfectionistEslintConfigOptions} from './perfectionist';
@@ -268,6 +269,15 @@ export interface EslintConfigUnOptions {
     pnpm?: boolean | Partial<PnpmEslintConfigOptions>;
 
     /**
+     * [Next.js](https://nextjs.org/) specific rules.
+     *
+     * Used plugin:
+     * - [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next) ([docs](https://nextjs.org/docs/app/api-reference/config/eslint))
+     * @default true <=> `next` package is installed
+     */
+    nextJs?: boolean | Partial<NextJsEslintConfigOptions>;
+
+    /**
      * NOTE: disabled by default
      * @default false
      */
@@ -339,4 +349,5 @@ export interface InternalConfigOptions {
   typescriptPackageInfo?: PackageInfo;
   vueOptions?: VueEslintConfigOptions;
   isTailwindEnabled?: boolean;
+  nextJsPackageInfo: PackageInfo | null;
 }

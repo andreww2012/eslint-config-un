@@ -3,6 +3,7 @@ import eslintPluginCss from '@eslint/css';
 import eslintPluginMarkdown from '@eslint/markdown';
 import eslintPluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments';
 import eslintPluginReactX from '@eslint-react/eslint-plugin';
+import eslintPluginNext from '@next/eslint-plugin-next';
 import eslintPluginStylistic from '@stylistic/eslint-plugin';
 import eslintPluginVitest from '@vitest/eslint-plugin';
 import eslintPluginCssInJs from 'eslint-plugin-css';
@@ -109,5 +110,6 @@ export const allEslintPlugins = async (): Promise<FlatConfigEntry['plugins'] & {
     // @ts-expect-error types mismatch
     'jsx-a11y': eslintPluginJsxA11y,
     pnpm: eslintPluginPnpm,
+    '@next/next': eslintPluginNext,
   };
 };

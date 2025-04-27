@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import eslintGitignore from 'eslint-config-flat-gitignore';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
-import {getPackageInfoSync, isPackageExists} from 'local-pkg';
+import {getPackageInfo, getPackageInfoSync, isPackageExists} from 'local-pkg';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {EslintConfigUnOptions, InternalConfigOptions} from './configs';
 import {type AngularEslintConfigOptions, angularEslintConfig} from './configs/angular';
@@ -25,6 +25,7 @@ import {
 import {type JsoncEslintConfigOptions, jsoncEslintConfig} from './configs/jsonc';
 import {type JsxA11yEslintConfigOptions, jsxA11yEslintConfig} from './configs/jsx-a11y';
 import {type MarkdownEslintConfigOptions, markdownEslintConfig} from './configs/markdown';
+import {type NextJsEslintConfigOptions, nextJsEslintConfig} from './configs/nextjs';
 import {type NodeEslintConfigOptions, nodeEslintConfig} from './configs/node';
 import {type PackageJsonEslintConfigOptions, packageJsonEslintConfig} from './configs/package-json';
 import {
@@ -83,6 +84,12 @@ export const eslintConfig = async (
     ...(options.ignores || []),
   ];
 
+  const [usedPackageManager, allLoadedEslintPlugins, nextJsPackageInfo] = await Promise.all([
+    detectPackageManager(),
+    allEslintPlugins(),
+    getPackageInfo('next'),
+  ]);
+
   const configsOptions = options.configs || {};
 
   const isVueEnabled =
@@ -91,11 +98,6 @@ export const eslintConfig = async (
   const typescriptPackageInfo = getPackageInfoSync('typescript');
   const isTypescriptEnabled =
     configsOptions.ts !== false && Boolean(configsOptions.ts || typescriptPackageInfo);
-
-  const [usedPackageManager, allLoadedEslintPlugins] = await Promise.all([
-    detectPackageManager(),
-    allEslintPlugins(),
-  ]);
 
   /* 🟢 GITIGNORE */
 
@@ -298,6 +300,13 @@ export const eslintConfig = async (
     ...assignOptions(configsOptions, 'pnpm'),
   };
 
+  /* 🟢 NEXTJS */
+
+  const isNextJsEnabled = Boolean(configsOptions.nextJs ?? nextJsPackageInfo != null);
+  const nextJsOptions: NextJsEslintConfigOptions = {
+    ...assignOptions(configsOptions, 'nextJs'),
+  };
+
   // 🔴🔴🔴 Disabled by default 🔴🔴🔴
 
   /* 🔴 SECURITY */
@@ -376,6 +385,7 @@ export const eslintConfig = async (
     typescriptPackageInfo,
     vueOptions,
     isTailwindEnabled,
+    nextJsPackageInfo,
   };
 
   const {plugins: angularPlugins, configs: angularConfig} = angularEslintConfig(
@@ -454,6 +464,7 @@ export const eslintConfig = async (
       isReactEnabled && reactEslintConfig(reactOptions, internalOptions),
       isJsxA11yEnabled && jsxA11yEslintConfig(jsxA11yOptions, internalOptions),
       isPnpmEnabled && pnpmEslintConfig(pnpmOptions, internalOptions),
+      isNextJsEnabled && nextJsEslintConfig(nextJsOptions, internalOptions),
 
       isSecurityEnabled && securityEslintConfig(securityOptions, internalOptions),
       isPreferArrowFunctionsEnabled &&

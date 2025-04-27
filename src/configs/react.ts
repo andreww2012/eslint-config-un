@@ -502,7 +502,6 @@ const REMIX_PACKAGES: readonly string[] = ['react', 'node', 'serve', 'dev'].map(
 const REACT_ROUTER_PACKAGES: readonly string[] = ['react', 'node', 'serve', 'dev'].map(
   (packageName) => `@react-router/${packageName}`,
 );
-const NEXT_PACKAGES: readonly string[] = ['next'];
 
 const REMIX_AND_REACT_ROUTER_EXPORTS: readonly string[] = [
   'action',
@@ -1206,9 +1205,7 @@ export const reactEslintConfig = (
           REACT_ROUTER_PACKAGES.some((packageName) => isPackageExists(packageName))
             ? REMIX_AND_REACT_ROUTER_EXPORTS
             : []),
-          ...(NEXT_PACKAGES.some((packageName) => isPackageExists(packageName))
-            ? NEXT_EXPORTS
-            : []),
+          ...(internalOptions.nextJsPackageInfo ? NEXT_EXPORTS : []),
           ...(configReactRefreshOptions.allowExportNames || []),
         ],
         allowConstantExport: isPackageExists('vite'),

@@ -27,3 +27,9 @@ declare module 'eslint-plugin-qwik' {
   declare const value: ESLint.ESLint.Plugin;
   export = value;
 }
+
+declare module '@next/eslint-plugin-next' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
+  export = value;
+}
