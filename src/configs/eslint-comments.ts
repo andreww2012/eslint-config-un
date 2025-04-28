@@ -1,26 +1,30 @@
 import eslintPluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments';
 import {ERROR} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface EslintCommentsEslintConfigOptions
   extends ConfigSharedOptions<'@eslint-community/eslint-comments'> {}
 
-export const eslintCommentsEslintConfig = (
-  options: EslintCommentsEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder(
+export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.eslintComments;
+  const optionsResolved = assignDefaults(
+    optionsRaw,
+    {} satisfies EslintCommentsEslintConfigOptions,
+  );
+
+  const configBuilder = new ConfigEntryBuilder(
     '@eslint-community/eslint-comments',
-    options,
-    internalOptions,
+    optionsResolved,
+    context,
   );
 
   // Legend:
   // 🟣 - in recommended
   // 🔴 - not in recommended
 
-  builder
+  configBuilder
     .addConfig([
       'eslint-comments',
       {
@@ -46,5 +50,8 @@ export const eslintCommentsEslintConfig = (
     // .addRule('require-description', OFF)
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

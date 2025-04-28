@@ -66,3 +66,21 @@ export const GLOB_MARKDOWN_ALL_CODE_BLOCKS = `${GLOB_MARKDOWN}/**/*.*` as const;
 /* Misc */
 
 export const DEFAULT_GLOBAL_IGNORES = ['**/dist'] as const;
+
+export const PACKAGES_TO_GET_INFO_FOR = [
+  'typescript',
+
+  'vue',
+  'react',
+  'next',
+
+  // We don't need to check for the presence of `@builder.io/qwik-city` because
+  // it requires `@builder.io/qwik` to be installed anyway
+  '@builder.io/qwik',
+  '@qwik.dev/core',
+
+  'jest',
+  'vitest',
+
+  'tailwindcss',
+] as const;

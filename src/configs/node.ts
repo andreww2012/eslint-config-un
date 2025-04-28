@@ -4,11 +4,11 @@ import {ERROR, OFF} from '../constants';
 import {
   ConfigEntryBuilder,
   type ConfigSharedOptions,
-  type FlatConfigEntry,
   type GetRuleOptions,
   createPluginObjectRenamer,
 } from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 interface EslintPluginNSettings {
   /**
@@ -172,16 +172,17 @@ export interface NodeEslintConfigOptions extends ConfigSharedOptions<'node'> {
 
 const pluginRenamer = createPluginObjectRenamer('n', 'node');
 
-export const nodeEslintConfig = (
-  options: NodeEslintConfigOptions,
+export const nodeUnConfig: UnConfigFn<'node'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.node;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    preferGlobal: {} as NodeEslintConfigOptions['preferGlobal'] & {},
+  } satisfies NodeEslintConfigOptions);
 
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {preferGlobal = {}, settings: pluginSettings} = options;
+  const {settings: pluginSettings, preferGlobal} = optionsResolved;
 
-  const builder = new ConfigEntryBuilder('node', options, internalOptions);
+  const configBuilder = new ConfigEntryBuilder('node', optionsResolved, context);
 
-  builder
+  configBuilder
     .addConfig(['node', {includeDefaultFilesAndIgnores: true}], {
       ...(pluginSettings && {
         settings: {
@@ -237,5 +238,8 @@ export const nodeEslintConfig = (
     .addRule('process-exit-as-throw', ERROR) // Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-node/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

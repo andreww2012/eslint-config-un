@@ -3,15 +3,15 @@ import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
   ConfigEntryBuilder,
   type ConfigSharedOptions,
-  type FlatConfigEntry,
   type FlatConfigEntryForBuilder,
 } from '../eslint';
+import {assignDefaults} from '../utils';
 import {
   type JestEslintConfigOptions,
   generateConsistentTestItOptions,
   generateDefaultTestFiles,
 } from './jest';
-import type {InternalConfigOptions} from './index';
+import type {UnConfigFn} from './index';
 
 // prefer-describe-function-title 1.1.41
 //
@@ -40,10 +40,10 @@ export interface VitestEslintConfigOptions
   };
 }
 
-export const vitestEslintConfig = (
-  options: VitestEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
+export const vitestUnConfig: UnConfigFn<'vitest'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.vitest;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies VitestEslintConfigOptions);
+
   const {
     settings: pluginSettings,
     maxAssertionCalls,
@@ -52,7 +52,7 @@ export const vitestEslintConfig = (
     restrictedMatchers,
     asyncMatchers,
     minAndMaxExpectArgs,
-  } = options;
+  } = optionsResolved;
 
   const defaultVitestEslintConfig: FlatConfigEntryForBuilder = {
     ...(pluginSettings && {
@@ -71,13 +71,13 @@ export const vitestEslintConfig = (
   const hasRestrictedMethods = Object.keys(restrictedMethods || {}).length > 0;
   const hasRestrictedMatchers = Object.keys(restrictedMatchers || {}).length > 0;
 
-  const builder = new ConfigEntryBuilder('vitest', options, internalOptions);
+  const configBuilder = new ConfigEntryBuilder('vitest', optionsResolved, context);
 
   // Legend:
   // 🟢 - in Recommended
 
   // TODO sync settings with `jest` config?
-  builder
+  configBuilder
     .addConfig(
       [
         'vitest',
@@ -94,8 +94,8 @@ export const vitestEslintConfig = (
     // .addRule('consistent-test-filename', OFF)
     .addRule(
       'consistent-test-it',
-      options.testDefinitionKeyword === false ? OFF : ERROR,
-      generateConsistentTestItOptions(options),
+      optionsResolved.testDefinitionKeyword === false ? OFF : ERROR,
+      generateConsistentTestItOptions(optionsResolved),
     )
     // .addRule('expect-expect', ERROR) // 🟢
     .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [{max: maxAssertionCalls}])
@@ -172,5 +172,8 @@ export const vitestEslintConfig = (
     // .addRule('valid-title', ERROR) // 🟢
     .addRule('valid-expect-in-promise', ERROR); // (warns in all)
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

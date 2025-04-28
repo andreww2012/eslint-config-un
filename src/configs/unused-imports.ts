@@ -4,11 +4,11 @@ import {
   ConfigEntryBuilder,
   type ConfigSharedOptions,
   type DisableAutofixPrefix,
-  type FlatConfigEntry,
   type GetRuleOptions,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import type {InternalConfigOptions} from './index';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface UnusedImportsEslintConfigOptions extends ConfigSharedOptions<'unused-imports'> {
   /**
@@ -29,15 +29,21 @@ export interface UnusedImportsEslintConfigOptions extends ConfigSharedOptions<'u
       >;
 }
 
-export const unusedImportsEslintConfig = (
-  options: UnusedImportsEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {configNoUnusedVars = false} = options;
+export const unusedImportsUnConfig: UnConfigFn<'unusedImports'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.unusedImports;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    configNoUnusedVars: false,
+  } satisfies UnusedImportsEslintConfigOptions);
 
-  const noUnusedImportsBuilder = new ConfigEntryBuilder('unused-imports', options, internalOptions);
+  const {configNoUnusedVars} = optionsResolved;
 
-  noUnusedImportsBuilder
+  const configBuilderNoUnusedImports = new ConfigEntryBuilder(
+    'unused-imports',
+    optionsResolved,
+    context,
+  );
+
+  configBuilderNoUnusedImports
     .addConfig(['unused-imports/no-unused-imports', {includeDefaultFilesAndIgnores: true}])
     .addRule('no-unused-imports', ERROR)
     .addOverrides();
@@ -45,16 +51,16 @@ export const unusedImportsEslintConfig = (
   const configNoUnusedVarsOptions =
     typeof configNoUnusedVars === 'object' ? configNoUnusedVars : {};
 
-  const noUnusedVarsBuilder = new ConfigEntryBuilder(
+  const configBuilderNoUnusedVars = new ConfigEntryBuilder(
     'unused-imports',
     configNoUnusedVarsOptions,
-    internalOptions,
+    context,
   );
 
   if (configNoUnusedVars !== false) {
     const {ruleOptions} = configNoUnusedVarsOptions;
 
-    noUnusedVarsBuilder
+    configBuilderNoUnusedVars
       .addConfig(['unused-imports/no-unused-vars', {includeDefaultFilesAndIgnores: true}])
       .disableAnyRule('no-unused-vars')
       .disableAnyRule('sonarjs/no-unused-vars')
@@ -62,5 +68,11 @@ export const unusedImportsEslintConfig = (
       .addRule('no-unused-vars', ERROR, ruleOptions === undefined ? [] : [ruleOptions]);
   }
 
-  return [...noUnusedImportsBuilder.getAllConfigs(), ...noUnusedVarsBuilder.getAllConfigs()];
+  return {
+    configs: [
+      ...configBuilderNoUnusedImports.getAllConfigs(),
+      ...configBuilderNoUnusedVars.getAllConfigs(),
+    ],
+    optionsResolved,
+  };
 };

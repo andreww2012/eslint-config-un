@@ -1,6 +1,7 @@
 import {ERROR} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface CasePoliceEslintConfigOptions extends ConfigSharedOptions<'case-police'> {
   /**
@@ -13,13 +14,15 @@ export interface CasePoliceEslintConfigOptions extends ConfigSharedOptions<'case
   disableAutofix?: boolean;
 }
 
-export const casePoliceEslintConfig = (
-  options: CasePoliceEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('case-police', options, internalOptions);
+export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.casePolice;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    disableAutofix: true,
+  } satisfies CasePoliceEslintConfigOptions);
 
-  builder
+  const configBuilder = new ConfigEntryBuilder('case-police', optionsResolved, context);
+
+  configBuilder
     .addConfig([
       'case-police',
       {
@@ -32,5 +35,8 @@ export const casePoliceEslintConfig = (
     .addRule('string-check', ERROR)
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

@@ -7,21 +7,26 @@ import eslintProcessorVueBlocks, {
   type Options as EslintProcessorVueBlocksOptions,
 } from 'eslint-processor-vue-blocks';
 import globals from 'globals';
-import {isPackageExists} from 'local-pkg';
+import {getPackageInfo, isPackageExists} from 'local-pkg';
 import parserVue from 'vue-eslint-parser';
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, WARNING} from '../constants';
 import {
   ConfigEntryBuilder,
   type ConfigSharedOptions,
-  type FlatConfigEntry,
   type FlatConfigEntryFilesOrIgnores,
   type RulesRecord,
   bulkChangeRuleSeverity,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {getKeysOfTruthyValues, joinPaths} from '../utils';
+import {
+  assignDefaults,
+  getKeysOfTruthyValues,
+  getPackageMajorVersion,
+  getPackageSemverVersion,
+  joinPaths,
+} from '../utils';
 import {RULE_CAMELCASE_OPTIONS, RULE_EQEQEQ_OPTIONS} from './js';
-import type {InternalConfigOptions} from './index';
+import type {UnConfigFn} from './index';
 
 type WellKnownSfcBlocks =
   | 'template'
@@ -57,21 +62,20 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
   /**
    * @default auto-detected
    */
-  majorVersion: 2 | 3;
-  fullVersion?: string;
+  majorVersion?: 2 | 3;
 
   /**
    * Enforces the presence of `lang="ts"` in `<script>` sections, see [vue/block-lang](https://eslint.vuejs.org/rules/block-lang.html) rule for more details.
    *
-   * Setting this option no anything but `false` also makes all `.vue` (or explicitly specified files if object syntax is used) checked by `typescript` config, and by default **BOTH non-type-aware and type-aware** rules will be applied. You can opt out of this behavior or only enable NON-type-aware rules with `typescriptRules` option. Disabling type-aware rules might be beneficial for bigger projects as these rules are known to be quite slow on Vue files.
-   * @default true <=> `typescript` config is enabled
+   * Setting this option no anything but `false` also makes all `.vue` (or explicitly specified files if object syntax is used) checked by `ts` config, and by default **BOTH non-type-aware and type-aware** rules will be applied. You can opt out of this behavior or only enable NON-type-aware rules with `typescriptRules` option. Disabling type-aware rules might be beneficial for bigger projects as these rules are known to be quite slow on Vue files.
+   * @default true <=> `ts` config is enabled
    */
   enforceTypescriptInScriptSection?:
     | boolean
     | PrettifyShallow<
         FlatConfigEntryFilesOrIgnores & {
           /**
-           * What `typescript` rules will be applied to the specified `files`. If you want more control over which TypeScript rules are applied to which Vue files, use `typescript` config options for that.
+           * What `ts` rules will be applied to the specified `files`. If you want more control over which TypeScript rules are applied to which Vue files, use `ts` config options for that.
            * @default true
            */
           typescriptRules?: boolean | 'only-non-type-aware';
@@ -160,31 +164,60 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
   processSfcBlocks?: boolean | EslintProcessorVueBlocksOptions;
 }
 
-export const vueEslintConfig = (
-  options: VueEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
+export const DEFAULT_VUE_FILES: string[] = [GLOB_VUE];
+
+export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
+  const isTypescriptEnabled = context.enabledConfigs.ts;
+
+  const optionsRaw = context.globalOptions.configs?.vue;
+
+  const vuePackageInfo = context.packagesInfo.vue;
+  const vuePackageMajorVersion = getPackageMajorVersion(vuePackageInfo);
+
+  const optionsResolved = assignDefaults(optionsRaw, {
+    files: DEFAULT_VUE_FILES,
+    majorVersion:
+      vuePackageMajorVersion === 2 || vuePackageMajorVersion === 3 ? vuePackageMajorVersion : 3,
+    enforceTypescriptInScriptSection: isTypescriptEnabled,
+    configA11y: true,
+    configPinia: isPackageExists('pinia'),
+    processSfcBlocks: true,
+    reportUnusedDisableDirectives: true,
+    enforcePropsDeclarationStyle: 'runtime',
+  } satisfies VueEslintConfigOptions);
+
+  const nuxtPackageInfo = await getPackageInfo('nuxt');
+  const nuxtMajorVersion =
+    optionsResolved.nuxtMajorVersion ??
+    (nuxtPackageInfo ? getPackageMajorVersion(nuxtPackageInfo) : null);
+
   const {
-    majorVersion,
+    majorVersion: vueMajorVersion,
     enforceTypescriptInScriptSection,
-    configA11y = true,
-    configPinia = isPackageExists('pinia'),
-    processSfcBlocks = true,
-  } = options;
+    configA11y,
+    configPinia,
+    processSfcBlocks,
+    reportUnusedDisableDirectives,
+    sfcBlockOrder,
+    enforceApiStyle,
+    enforcePropsDeclarationStyle,
+  } = optionsResolved;
 
-  const files = options.files || [GLOB_VUE];
+  const vuePackageFullVersion = getPackageSemverVersion(vuePackageInfo) ?? vueMajorVersion;
 
-  const vueMajorAndMinorVersion = Number.parseFloat(options.fullVersion || '');
-  const isVue2 = majorVersion === 2;
-  const isVue3 = majorVersion === 3;
-  const isMin3_3 = isVue3 && vueMajorAndMinorVersion >= 3.3;
-  const isMin3_4 = isVue3 && vueMajorAndMinorVersion >= 3.4;
-  const isMin3_5 = isVue3 && vueMajorAndMinorVersion >= 3.5;
-  const isLess2_5 = isVue2 && vueMajorAndMinorVersion < 2.5;
-  const isLess2_6 = isVue2 && vueMajorAndMinorVersion < 2.6;
-  const isLess3_1 = vueMajorAndMinorVersion < 3.1;
+  const isVue2 = vueMajorVersion === 2;
+  const isVue3 = vueMajorVersion === 3;
+  const isMin3_3 = isVue3 && vuePackageFullVersion >= 3.3;
+  const isMin3_4 = isVue3 && vuePackageFullVersion >= 3.4;
+  const isMin3_5 = isVue3 && vuePackageFullVersion >= 3.5;
+  const isLess2_5 = isVue2 && vuePackageFullVersion < 2.5;
+  const isLess2_6 = isVue2 && vuePackageFullVersion < 2.6;
+  const isLess3_1 = vuePackageFullVersion < 3.1;
 
-  const isNuxtEnabled = Boolean(options.nuxtMajorVersion);
+  optionsResolved.preferUseTemplateRef ??= isMin3_5;
+  const {preferUseTemplateRef} = optionsResolved;
+
+  const isNuxtEnabled = Boolean(nuxtMajorVersion);
 
   const recommendedRulesRaw = eslintPluginVue.configs[
     isVue3 ? 'flat/recommended' : 'flat/vue2-recommended'
@@ -192,13 +225,13 @@ export const vueEslintConfig = (
   // All `recommended` rules has `warn` severity by default: https://github.com/vuejs/eslint-plugin-vue/tree/a6587498e21e5bc33f22e93d46fbc2d5e66585f3/lib/configs/flat
   const recommendedRules = bulkChangeRuleSeverity(recommendedRulesRaw, ERROR);
 
-  const inNuxtAppDir = joinPaths.bind(null, options.nuxtOrVueProjectDir);
+  const inNuxtAppDir = joinPaths.bind(null, optionsResolved.nuxtOrVueProjectDir);
   const nuxtLayoutsFilesGlob: string = inNuxtAppDir('layouts/**/*.vue');
 
-  const builder = new ConfigEntryBuilder('vue', options, internalOptions);
+  const configBuilder = new ConfigEntryBuilder('vue', optionsResolved, context);
 
-  builder.addConfig(['vue/setup', {doNotIgnoreMarkdown: true}], {
-    files: [GLOB_VUE, ...files],
+  configBuilder.addConfig(['vue/setup', {doNotIgnoreMarkdown: true}], {
+    files: [GLOB_VUE, ...optionsResolved.files],
     processor: mergeEslintProcessors(
       [
         eslintPluginVue.processors['.vue'] as Eslint.Linter.Processor,
@@ -225,7 +258,7 @@ export const vueEslintConfig = (
           jsx: true,
         },
         extraFileExtensions: ['.vue'],
-        parser: internalOptions.isTypescriptEnabled ? '@typescript-eslint/parser' : undefined,
+        parser: isTypescriptEnabled ? '@typescript-eslint/parser' : undefined,
         sourceType: 'module' as const,
       },
     },
@@ -233,15 +266,13 @@ export const vueEslintConfig = (
 
   // LEGEND:
   // 3️⃣ = Only in Vue 3 recommended
-  builder
-    .addConfig(['vue', {includeDefaultFilesAndIgnores: true}], {
-      files,
-    })
+  configBuilder
+    .addConfig(['vue', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(recommendedRules)
     // 🟢 Base
     .addRule('comment-directive', ERROR, [
       // false by default
-      {reportUnusedDisableDirectives: options.reportUnusedDisableDirectives ?? true},
+      {reportUnusedDisableDirectives},
     ])
     // .addRule('jsx-uses-vars', ERROR)
     // 🟢 Priority A: Essential
@@ -376,16 +407,16 @@ export const vueEslintConfig = (
       {
         script: {
           lang: 'ts',
-          ...(enforceTypescriptInScriptSection !== true && {allowNoLang: true}),
+          ...(enforceTypescriptInScriptSection === false && {allowNoLang: true}),
         },
       },
     ])
     .addRule('block-order', ERROR, [
       {
         order: [
-          ...(Array.isArray(options.sfcBlockOrder)
-            ? options.sfcBlockOrder
-            : options.sfcBlockOrder === 'script-first'
+          ...(Array.isArray(sfcBlockOrder)
+            ? sfcBlockOrder
+            : sfcBlockOrder === 'script-first'
               ? ['script:not([setup])', 'script[setup]', 'template']
               : ['template', 'script:not([setup])', 'script[setup]']),
           'style:not([scoped])', // TODO move to top?
@@ -394,9 +425,9 @@ export const vueEslintConfig = (
       },
     ])
     // .addRule('block-tag-newline', OFF)
-    .addRule('component-api-style', options.enforceApiStyle == null ? OFF : ERROR, [
+    .addRule('component-api-style', enforceApiStyle == null ? OFF : ERROR, [
       [
-        options.enforceApiStyle === 'setup' ? 'script-setup' : 'options',
+        enforceApiStyle === 'setup' ? 'script-setup' : 'options',
         // allows Composition API (not <script setup>)
         isVue2 ? 'composition-vue2' : 'composition',
       ],
@@ -429,7 +460,7 @@ export const vueEslintConfig = (
         ...(isMin3_4 && {defineExposeLast: true}),
       },
     ])
-    .addRule('define-props-declaration', ERROR, [options.enforcePropsDeclarationStyle ?? 'runtime'])
+    .addRule('define-props-declaration', ERROR, [enforcePropsDeclarationStyle])
     // .addRule('enforce-style-attribute', OFF)
     .addRule('html-button-has-type', ERROR)
     // .addRule('html-comment-content-newline', OFF)
@@ -464,7 +495,7 @@ export const vueEslintConfig = (
       ERROR,
       getKeysOfTruthyValues({
         ...noRestrictedHtmlElementsDefault,
-        ...options.disallowedHtmlTags,
+        ...optionsResolved.disallowedHtmlTags,
       }),
     )
     // .addRule('no-restricted-props', OFF)
@@ -482,7 +513,7 @@ export const vueEslintConfig = (
           'router-link',
           'router-view',
           isNuxtEnabled && /^(lazy-)?(nuxt-|client-only$)/,
-          ...(options.knownComponentNames || []),
+          ...(optionsResolved.knownComponentNames || []),
         ]
           .flat()
           .filter((v) => v !== false),
@@ -491,7 +522,7 @@ export const vueEslintConfig = (
     // TODO enable if script setup is enforced and only in JS?
     // .addRule('no-undef-properties', OFF)
     .addRule('no-unsupported-features', ERROR, [
-      {version: `^${options.fullVersion || majorVersion}`},
+      {version: `^${vuePackageInfo?.version || vuePackageMajorVersion}`},
     ])
     .addRule('no-unused-emit-declarations', ERROR)
     // .addRule('no-unused-properties', OFF)
@@ -514,7 +545,7 @@ export const vueEslintConfig = (
     .addRule('prefer-prop-type-boolean-first', ERROR)
     .addRule('prefer-separate-static-class', ERROR)
     .addRule('prefer-true-attribute-shorthand', ERROR)
-    .addRule('prefer-use-template-ref', (options.preferUseTemplateRef ?? isMin3_5) ? ERROR : OFF)
+    .addRule('prefer-use-template-ref', preferUseTemplateRef ? ERROR : OFF)
     .addRule('require-default-export', ERROR) // >=9.28.0
     .addRule('require-direct-export', ERROR)
     // .addRule('require-emit-validator', OFF)
@@ -550,7 +581,7 @@ export const vueEslintConfig = (
     // .addRule('dot-location', OFF)
     .addRule(
       'dot-notation',
-      options.noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles ? OFF : ERROR,
+      optionsResolved.noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles ? OFF : ERROR,
     )
     .addRule('eqeqeq', ERROR, RULE_EQEQEQ_OPTIONS)
     // .addRule('func-call-spacing', OFF)
@@ -586,7 +617,7 @@ export const vueEslintConfig = (
     .disableAnyRule('no-useless-assignment') // False positives in script setup
     .addOverrides();
 
-  builder
+  configBuilder
     .addConfig('vue/allow-single-word-component-names', {
       files: [
         inNuxtAppDir('pages/**/*.vue'),
@@ -596,21 +627,21 @@ export const vueEslintConfig = (
           ...['app.vue', 'error.vue'].map((fileName) => inNuxtAppDir(fileName)),
         ],
 
-        options.doNotRequireComponentNamesToBeMultiWordForPatterns,
+        optionsResolved.doNotRequireComponentNamesToBeMultiWordForPatterns,
       ]
         .flat()
         .filter((v) => typeof v === 'string'),
     })
     .addRule('multi-word-component-names', OFF);
 
-  const vueAllowImplicitSlotsConfig = builder.addConfig('vue/allow-implicit-slots', {
+  const vueAllowImplicitSlotsConfig = configBuilder.addConfig('vue/allow-implicit-slots', {
     files: [nuxtLayoutsFilesGlob],
   });
   if (isNuxtEnabled) {
     vueAllowImplicitSlotsConfig.addRule('require-explicit-slots', OFF);
   }
 
-  builder
+  configBuilder
     .addConfig('vue/allow-default-export', {
       files: [
         GLOB_VUE,
@@ -625,22 +656,20 @@ export const vueEslintConfig = (
     })
     .disableAnyRule('import/no-default-export');
 
-  const configA11yOptions: typeof configA11y & {} = {
-    files,
-    ignores: options.ignores,
-    ...(typeof configA11y === 'object' ? configA11y : {}),
-  };
-  const builderA11y = new ConfigEntryBuilder(
+  const configA11yOptions = typeof configA11y === 'object' ? configA11y : {};
+  const configBuilderA11y = new ConfigEntryBuilder(
     'vuejs-accessibility',
     configA11yOptions,
-    internalOptions,
+    context,
   );
-  builderA11y
+  configBuilderA11y
     .addConfig([
       'vue/a11y',
       {
         includeDefaultFilesAndIgnores: true,
         ignoreMarkdownCodeBlocks: true,
+        filesFallback: optionsResolved.ignores || [GLOB_VUE],
+        ignoresFallback: optionsResolved.ignores,
       },
     ])
     .addBulkRules(eslintPluginVueA11y.configs['flat/recommended'].find((v) => 'rules' in v)?.rules)
@@ -667,13 +696,13 @@ export const vueEslintConfig = (
     // .addRule('tabindex-no-positive', ERROR)
     .addOverrides();
 
-  const piniaBuilder = new ConfigEntryBuilder(
+  const configBuilderPinia = new ConfigEntryBuilder(
     'pinia',
     typeof configPinia === 'object' ? configPinia : {},
-    internalOptions,
+    context,
   );
 
-  piniaBuilder
+  configBuilderPinia
     .addConfig([
       'pinia',
       {
@@ -699,9 +728,12 @@ export const vueEslintConfig = (
     // .addRule('require-setup-store-properties-export', ERROR)
     .addOverrides();
 
-  return [
-    ...builder.getAllConfigs(),
-    ...(configA11y === false ? [] : builderA11y.getAllConfigs()),
-    ...(configPinia === false ? [] : piniaBuilder.getAllConfigs()),
-  ];
+  return {
+    configs: [
+      ...configBuilder.getAllConfigs(),
+      ...(configA11y === false ? [] : configBuilderA11y.getAllConfigs()),
+      ...(configPinia === false ? [] : configBuilderPinia.getAllConfigs()),
+    ],
+    optionsResolved,
+  };
 };

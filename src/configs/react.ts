@@ -1,4 +1,4 @@
-import {getPackageInfoSync, isPackageExists} from 'local-pkg';
+import {isPackageExists} from 'local-pkg';
 import {
   ERROR,
   GLOB_JS_TS_X,
@@ -16,13 +16,12 @@ import {
   ConfigEntryBuilder,
   type ConfigSharedOptions,
   type DisableAutofixPrefix,
-  type FlatConfigEntry,
   type GetRuleOptions,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {getPackageMajorVersion} from '../utils';
+import {assignDefaults, getPackageMajorVersion} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './vue';
-import type {InternalConfigOptions} from './index';
+import type {UnConfigFn} from './index';
 
 // Copied from https://eslint-react.xyz/docs/configuration/configure-analyzer#properties
 interface CustomReactComponent {
@@ -529,35 +528,49 @@ const NEXT_EXPORTS: readonly string[] = [
   'viewport', // https://nextjs.org/docs/app/api-reference/functions/generate-viewport
 ];
 
-export const reactEslintConfig = (
-  options: ReactEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const reactPackageInfo = getPackageInfoSync('react');
-  const reactMajorVersion: number =
-    options.reactVersion ?? getPackageMajorVersion(reactPackageInfo) ?? LATEST_REACT_VERSION;
-  const reactFullVersion = String(
-    options.reactVersion ?? reactPackageInfo?.version ?? LATEST_REACT_VERSION,
-  );
+export const reactUnConfig: UnConfigFn<'react'> = (context) => {
+  const reactPackageInfo = context.packagesInfo.react;
 
-  const isMinVersion17 = reactMajorVersion >= 17;
-  const isMinVersion19 = reactMajorVersion >= 19;
+  const optionsRaw = context.globalOptions.configs?.react;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    configAllowDefaultExportsInJsxFiles: true,
+    configHooks: true,
+    configReactX: true,
+    configDom: isPackageExists('react-dom'),
+    configRefresh: true,
+    pluginX: 'prefer',
+    shorthandBoolean: 'prefer',
+    shorthandFragment: 'prefer',
+    reactVersion: getPackageMajorVersion(reactPackageInfo) ?? LATEST_REACT_VERSION,
+  } satisfies ReactEslintConfigOptions);
 
   const {
     files: parentConfigFiles,
     ignores: parentConfigIgnores,
     settings: pluginSettings,
-    newJsxTransform = isMinVersion17,
-    configAllowDefaultExportsInJsxFiles = true,
-    configHooks = true,
-    configReactX = true,
-    configDom = isPackageExists('react-dom'),
-    configRefresh = true,
-    pluginX = 'prefer',
-    shorthandBoolean = 'prefer',
-    shorthandFragment = 'prefer',
-    configCompiler = isMinVersion19,
-  } = options;
+    configAllowDefaultExportsInJsxFiles,
+    configHooks,
+    configReactX,
+    configDom,
+    configRefresh,
+    pluginX,
+    shorthandBoolean,
+    shorthandFragment,
+    reactVersion: reactMajorVersion,
+  } = optionsResolved;
+
+  const reactFullVersion = String(
+    (optionsRaw && typeof optionsRaw === 'object' ? optionsRaw.reactVersion : null) ??
+      reactPackageInfo?.version ??
+      optionsResolved.reactVersion,
+  );
+
+  const isMinVersion17 = reactMajorVersion >= 17;
+  const isMinVersion19 = reactMajorVersion >= 19;
+
+  optionsResolved.newJsxTransform ??= isMinVersion17;
+  optionsResolved.configCompiler ??= isMinVersion19;
+  const {newJsxTransform, configCompiler} = optionsResolved;
 
   const isConfigXDisabled = configReactX === false;
   const isReactEnabled = pluginX !== 'only';
@@ -594,8 +607,8 @@ export const reactEslintConfig = (
 
   const configReactXOptions = typeof configReactX === 'object' ? configReactX : {};
 
-  const builderSetup = new ConfigEntryBuilder(null, {}, internalOptions);
-  builderSetup.addConfig('react/setup', {
+  const configBuilderSetup = new ConfigEntryBuilder(null, {}, context);
+  configBuilderSetup.addConfig('react/setup', {
     settings: {
       ...(isReactEnabled && {
         react: {
@@ -626,9 +639,9 @@ export const reactEslintConfig = (
   // 💅 - Stylistic rule disabled in `eslint-config-prettier`: https://github.com/prettier/eslint-config-prettier/blob/f12309bbca9fb051b53fcece9a8491a1222235c8/index.js#L234
   // Check rule usage: https://github.com/search?q=path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F+%22react%2Fboolean-prop-naming%22&type=code
 
-  const builderReactOriginal = new ConfigEntryBuilder('react', options, internalOptions);
+  const configBuilderReactOriginal = new ConfigEntryBuilder('react', optionsResolved, context);
 
-  builderReactOriginal
+  configBuilderReactOriginal
     .addConfig([
       'react/plugin-original',
       {
@@ -651,7 +664,7 @@ export const reactEslintConfig = (
       {
         forbid: Object.entries({
           ...noRestrictedHtmlElementsDefault,
-          ...options.disallowedElements,
+          ...optionsResolved.disallowedElements,
         })
           .map(([element, isDisallowedOrErrorMessage]) =>
             typeof isDisallowedOrErrorMessage === 'string'
@@ -857,12 +870,12 @@ export const reactEslintConfig = (
     typeof configAllowDefaultExportsInJsxFiles === 'object'
       ? configAllowDefaultExportsInJsxFiles
       : {};
-  const builderAllowDefaultExportsInJsxFiles = new ConfigEntryBuilder(
+  const configBuilderAllowDefaultExportsInJsxFiles = new ConfigEntryBuilder(
     null,
     configAllowDefaultExportsInJsxFilesOptions,
-    internalOptions,
+    context,
   );
-  builderReactOriginal
+  configBuilderReactOriginal
     .addConfig([
       'react/allow-default-export-in-jsx-files',
       {
@@ -874,8 +887,8 @@ export const reactEslintConfig = (
     .addOverrides();
 
   const configHooksOptions = typeof configHooks === 'object' ? configHooks : {};
-  const builderHooks = new ConfigEntryBuilder(null, configHooksOptions, internalOptions);
-  builderHooks
+  const configBuilderHooks = new ConfigEntryBuilder(null, configHooksOptions, context);
+  configBuilderHooks
     .addConfig([
       'react/hooks',
       {
@@ -910,17 +923,11 @@ export const reactEslintConfig = (
   // 💭 - Requires type information
   // 🔢 - min React version in which the rule works (otherwise does nothing)
 
-  const {
-    noLegacyApis = {},
-    typeAwareRules: reactXTypeAwareRules = internalOptions.isTypescriptEnabled,
-  } = configReactXOptions;
+  const {noLegacyApis = {}, typeAwareRules: reactXTypeAwareRules = context.enabledConfigs.ts} =
+    configReactXOptions;
 
-  const builderReactX = new ConfigEntryBuilder(
-    '@eslint-react',
-    configReactXOptions,
-    internalOptions,
-  );
-  builderReactX
+  const configBuilderReactX = new ConfigEntryBuilder('@eslint-react', configReactXOptions, context);
+  configBuilderReactX
     .addConfig([
       'react/x',
       {
@@ -1090,12 +1097,12 @@ export const reactEslintConfig = (
   const configReactXTypeAwareOptions =
     typeof reactXTypeAwareRules === 'object' ? reactXTypeAwareRules : {};
 
-  const builderReactXTypeAware = new ConfigEntryBuilder(
+  const configBuilderReactXTypeAware = new ConfigEntryBuilder(
     '@eslint-react',
     configReactXTypeAwareOptions,
-    internalOptions,
+    context,
   );
-  builderReactXTypeAware
+  configBuilderReactXTypeAware
     .addConfig([
       'react/x/rules-type-aware',
       {
@@ -1111,8 +1118,8 @@ export const reactEslintConfig = (
     .addOverrides();
 
   const configReactDomOptions = typeof configDom === 'object' ? configDom : {};
-  const builderDom = new ConfigEntryBuilder(null, configReactDomOptions, internalOptions);
-  builderDom
+  const configBuilderDom = new ConfigEntryBuilder(null, configReactDomOptions, context);
+  configBuilderDom
     .addConfig([
       'react/dom',
       {
@@ -1185,12 +1192,12 @@ export const reactEslintConfig = (
     .addOverrides();
 
   const configReactRefreshOptions = typeof configRefresh === 'object' ? configRefresh : {};
-  const builderRefresh = new ConfigEntryBuilder(
+  const configBuilderRefresh = new ConfigEntryBuilder(
     'react-refresh',
     configReactRefreshOptions,
-    internalOptions,
+    context,
   );
-  builderRefresh
+  configBuilderRefresh
     .addConfig([
       'react/refresh',
       {
@@ -1205,7 +1212,7 @@ export const reactEslintConfig = (
           REACT_ROUTER_PACKAGES.some((packageName) => isPackageExists(packageName))
             ? REMIX_AND_REACT_ROUTER_EXPORTS
             : []),
-          ...(internalOptions.nextJsPackageInfo ? NEXT_EXPORTS : []),
+          ...(context.packagesInfo.next ? NEXT_EXPORTS : []),
           ...(configReactRefreshOptions.allowExportNames || []),
         ],
         allowConstantExport: isPackageExists('vite'),
@@ -1215,12 +1222,12 @@ export const reactEslintConfig = (
     .addOverrides();
 
   const configReactCompilerOptions = typeof configCompiler === 'object' ? configCompiler : {};
-  const builderCompiler = new ConfigEntryBuilder(
+  const configBuilderCompiler = new ConfigEntryBuilder(
     'react-compiler',
     configReactCompilerOptions,
-    internalOptions,
+    context,
   );
-  builderCompiler
+  configBuilderCompiler
     .addConfig([
       'react/compiler',
       {
@@ -1232,17 +1239,20 @@ export const reactEslintConfig = (
     .addRule('react-compiler', ERROR)
     .addOverrides();
 
-  return [
-    ...builderSetup.getAllConfigs(),
-    ...(isReactEnabled ? builderReactOriginal.getAllConfigs() : []),
-    ...(configAllowDefaultExportsInJsxFiles === false
-      ? []
-      : builderAllowDefaultExportsInJsxFiles.getAllConfigs()),
-    ...(configHooks === false ? [] : builderHooks.getAllConfigs()),
-    ...(isConfigXDisabled ? [] : builderReactX.getAllConfigs()),
-    ...(reactXTypeAwareRules === false ? [] : builderReactXTypeAware.getAllConfigs()),
-    ...(configDom === false ? [] : builderDom.getAllConfigs()),
-    ...(configRefresh === false ? [] : builderRefresh.getAllConfigs()),
-    ...(configCompiler === false ? [] : builderCompiler.getAllConfigs()),
-  ];
+  return {
+    configs: [
+      ...configBuilderSetup.getAllConfigs(),
+      ...(isReactEnabled ? configBuilderReactOriginal.getAllConfigs() : []),
+      ...(configAllowDefaultExportsInJsxFiles === false
+        ? []
+        : configBuilderAllowDefaultExportsInJsxFiles.getAllConfigs()),
+      ...(configHooks === false ? [] : configBuilderHooks.getAllConfigs()),
+      ...(isConfigXDisabled ? [] : configBuilderReactX.getAllConfigs()),
+      ...(reactXTypeAwareRules === false ? [] : configBuilderReactXTypeAware.getAllConfigs()),
+      ...(configDom === false ? [] : configBuilderDom.getAllConfigs()),
+      ...(configRefresh === false ? [] : configBuilderRefresh.getAllConfigs()),
+      ...(configCompiler === false ? [] : configBuilderCompiler.getAllConfigs()),
+    ],
+    optionsResolved,
+  };
 };

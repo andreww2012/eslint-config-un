@@ -1,14 +1,7 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import type Eslint from 'eslint';
 import {parser as parserTs, configs as tsEslintConfigs} from 'typescript-eslint';
-import {
-  ERROR,
-  GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
-  GLOB_TSX,
-  GLOB_VUE,
-  OFF,
-  WARNING,
-} from '../constants';
+import {ERROR, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, GLOB_TSX, OFF, WARNING} from '../constants';
 import {
   type AllRulesWithPrefix,
   ConfigEntryBuilder,
@@ -18,12 +11,14 @@ import {
   type FlatConfigEntryForBuilder,
   type RulesRecord,
 } from '../eslint';
+import {assignDefaults, getPackageSemverVersion} from '../utils';
 import {
   RULE_NO_UNUSED_EXPRESSIONS_OPTIONS,
   RULE_NO_USE_BEFORE_DEFINE_OPTIONS,
   RULE_PREFER_DESTRUCTURING_OPTIONS,
 } from './js';
-import type {InternalConfigOptions} from './index';
+import type {VueEslintConfigOptions} from './vue';
+import type {UnConfigFn} from './index';
 
 // https://typescript-eslint.io/rules/?=typeInformation
 //  [...document.querySelector('table[class^=rulesTable]').tBodies[0].rows].map((row) => row.cells[0].querySelector('a').textContent).map((n) => `'${n.split('/')[1]}'`).join(' | ')
@@ -93,7 +88,12 @@ type TypeAwareRulesWithPrefixes =
 
 export interface TsEslintConfigOptions
   extends ConfigSharedOptions<Omit<AllTypescriptEslintRules, TypeAwareRulesWithPrefixes>> {
-  typescriptVersion?: string;
+  /**
+   * By default it will be auto-detected from the installed `typescript` package.
+   * It will contain major and minor version numbers, e.g. even if you installed
+   * TypeScript 5.8.1, `typescriptVersion` will be `5.8`.
+   */
+  typescriptVersion?: number;
 
   parserOptions?: Omit<TsEslintParserOptions, 'sourceType'> & {
     sourceType?: Eslint.Linter.ParserOptions['sourceType'];
@@ -141,11 +141,28 @@ export interface TsEslintConfigOptions
 
 const TS_FILES_DEFAULT = [GLOB_TSX];
 
-export const tsEslintConfig = (
-  options: TsEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {configTypeAware = true, configNoTypeAssertion = false} = options;
+export const tsUnConfig: UnConfigFn<
+  'ts',
+  unknown,
+  [
+    {
+      vueResolvedOptions: VueEslintConfigOptions | null;
+    },
+  ]
+> = (context, {vueResolvedOptions}) => {
+  const typescriptPackageInfo = context.packagesInfo.typescript;
+  const optionsRaw = context.globalOptions.configs?.ts;
+
+  const typescriptPackageSemverVersion = getPackageSemverVersion(typescriptPackageInfo);
+
+  const optionsResolved = assignDefaults(optionsRaw, {
+    configTypeAware: true,
+    configNoTypeAssertion: false,
+    extraFileExtensions: [context.enabledConfigs.vue && 'vue'].filter((v) => v !== false),
+  } satisfies TsEslintConfigOptions);
+  optionsResolved.typescriptVersion ??= typescriptPackageSemverVersion ?? undefined;
+  const {configTypeAware, configNoTypeAssertion, extraFileExtensions, typescriptVersion} =
+    optionsResolved;
 
   const extraFilesNONTypeAware: FlatConfigEntry['files'] & {} = [];
   const extraFilesTypeAware: FlatConfigEntry['files'] & {} = [];
@@ -154,29 +171,33 @@ export const tsEslintConfig = (
     GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
   ];
 
-  const {vueOptions} = internalOptions;
-  const enforceTsInVueOptions = vueOptions?.enforceTypescriptInScriptSection;
+  const enforceTsInVueOptions = vueResolvedOptions?.enforceTypescriptInScriptSection;
   if (enforceTsInVueOptions) {
     const tsInVueOptions =
       typeof enforceTsInVueOptions === 'object'
         ? enforceTsInVueOptions
-        : {files: vueOptions.files || [GLOB_VUE]};
+        : {files: vueResolvedOptions.files};
 
     if (tsInVueOptions.typescriptRules !== false) {
       const vueFilesWithTs = tsInVueOptions.files || [];
+      const vueIgnoredFilesWithTs = tsInVueOptions.ignores || [];
+
       extraFilesNONTypeAware.push(...vueFilesWithTs);
       if (tsInVueOptions.typescriptRules !== 'only-non-type-aware') {
         extraFilesTypeAware.push(...vueFilesWithTs);
       }
 
-      extraFilesToIgnoreNONTypeAware.push(...(tsInVueOptions.ignores || []));
-      extraFilesToIgnoreTypeAware.push(...(tsInVueOptions.ignores || []));
+      extraFilesToIgnoreNONTypeAware.push(...vueIgnoredFilesWithTs);
+      extraFilesToIgnoreTypeAware.push(...vueIgnoredFilesWithTs);
     }
   }
 
-  const filesNONTypeAwareDefault = [...(options.files || TS_FILES_DEFAULT)];
+  const filesNONTypeAwareDefault = [...(optionsResolved.files || TS_FILES_DEFAULT)];
   const filesNONTypeAware = [...filesNONTypeAwareDefault, ...extraFilesNONTypeAware];
-  const ignoresNONTypeAware = [...(options.ignores || []), ...extraFilesToIgnoreNONTypeAware];
+  const ignoresNONTypeAware = [
+    ...(optionsResolved.ignores || []),
+    ...extraFilesToIgnoreNONTypeAware,
+  ];
 
   const configTypeAwareOptions = typeof configTypeAware === 'object' ? configTypeAware : {};
   const {files: userFilesTypeAware, ignores: userIgnoresTypeAware} = configTypeAwareOptions;
@@ -185,39 +206,35 @@ export const tsEslintConfig = (
     ...extraFilesTypeAware,
   ];
   const ignoresTypeAware = [
-    ...(userIgnoresTypeAware || options.ignores || []),
+    ...(userIgnoresTypeAware || optionsResolved.ignores || []),
     ...extraFilesToIgnoreTypeAware,
   ];
-
-  const tsVersion = options.typescriptVersion
-    ? Number.parseFloat(options.typescriptVersion)
-    : undefined;
 
   const generateBaseOptions = (isTypeAware?: boolean): FlatConfigEntryForBuilder => ({
     languageOptions: {
       // @ts-expect-error small types mismatch
       parser: parserTs,
       parserOptions: {
-        extraFileExtensions: options.extraFileExtensions?.map((ext) => `.${ext}`),
+        extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
         sourceType: 'module',
         ...(isTypeAware && {
           projectService: true,
           tsconfigRootDir: process.cwd(),
         }),
-        ...options.parserOptions,
+        ...optionsResolved.parserOptions,
       } satisfies TsEslintParserOptions,
     },
   });
 
-  const builder = new ConfigEntryBuilder('@typescript-eslint', options, internalOptions);
+  const configBuilder = new ConfigEntryBuilder('@typescript-eslint', optionsResolved, context);
 
   // LEGEND:
   // ❄️ = Feature-frozen in ts-eslint
   // 👍 = Auto-checked and there's barely any need to use this rule
 
-  const noUnsafeRulesSeverity = options.disableNoUnsafeRules ? OFF : WARNING;
+  const noUnsafeRulesSeverity = optionsResolved.disableNoUnsafeRules ? OFF : WARNING;
   // TODO add rules
-  builder
+  configBuilder
     .addConfig('ts/rules-regular', {
       ...generateBaseOptions(false),
       files: filesNONTypeAware,
@@ -291,7 +308,7 @@ export const tsEslintConfig = (
     )
     .addRule('consistent-type-imports', ERROR, [
       {
-        ...(tsVersion && tsVersion >= 4.5 && {fixStyle: 'inline-type-imports'}),
+        ...(typescriptVersion && typescriptVersion >= 4.5 && {fixStyle: 'inline-type-imports'}),
         disallowTypeAnnotations: false,
       },
     ])
@@ -329,14 +346,14 @@ export const tsEslintConfig = (
     .disableAnyRule('dot-notation')
     .addOverrides();
 
-  const builderTypeAware = new ConfigEntryBuilder(
+  const configBuilderTypeAware = new ConfigEntryBuilder(
     '@typescript-eslint',
     configTypeAwareOptions,
-    internalOptions,
+    context,
   );
 
   if (configTypeAware !== false) {
-    builderTypeAware
+    configBuilderTypeAware
       .addConfig('ts/rules-type-aware', {
         ...generateBaseOptions(true),
         ...(filesTypeAware.length > 0 && {files: filesTypeAware}),
@@ -452,7 +469,7 @@ export const tsEslintConfig = (
   }
 
   // TODO add rules
-  builder
+  configBuilder
     .addConfig('ts/disable-handled-by-ts-compiler-rules', {
       files: [...TS_FILES_DEFAULT, ...filesNONTypeAware, ...filesTypeAware],
     })
@@ -480,7 +497,7 @@ export const tsEslintConfig = (
     // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
     .disableAnyRule('no-duplicate-imports');
 
-  builder
+  configBuilder
     .addConfig('ts/dts', {
       files: ['**/*.d.?([cm])ts'],
     })
@@ -500,19 +517,24 @@ export const tsEslintConfig = (
 
   const configNoTypeAssertionsOptions =
     typeof configNoTypeAssertion === 'object' ? configNoTypeAssertion : {};
-  const builderNoTypeAssertions = new ConfigEntryBuilder(
+  const configBuilderNoTypeAssertions = new ConfigEntryBuilder(
     'no-type-assertion',
     configNoTypeAssertionsOptions,
-    internalOptions,
+    context,
   );
 
   if (configNoTypeAssertion !== false) {
-    builderNoTypeAssertions.addConfig('no-type-assertion').addRule('no-type-assertion', ERROR);
+    configBuilderNoTypeAssertions
+      .addConfig('no-type-assertion')
+      .addRule('no-type-assertion', ERROR);
   }
 
-  return [
-    ...builder.getAllConfigs(),
-    ...builderTypeAware.getAllConfigs(),
-    ...builderNoTypeAssertions.getAllConfigs(),
-  ];
+  return {
+    configs: [
+      ...configBuilder.getAllConfigs(),
+      ...configBuilderTypeAware.getAllConfigs(),
+      ...configBuilderNoTypeAssertions.getAllConfigs(),
+    ],
+    optionsResolved,
+  };
 };

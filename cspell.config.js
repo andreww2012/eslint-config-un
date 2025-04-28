@@ -7,7 +7,7 @@ export default {
   useGitignore: true,
   ignorePaths: ['**/pnpm-lock.yaml'],
   words: [
-    // Product names
+    // Names
     'qwik',
     'sonarjs',
     'klona',
@@ -21,6 +21,7 @@ export default {
     'opensearchservice',
     'commonmark',
     'shiki',
+    'defu',
 
     // Technical words/terms
     'arraify',
@@ -57,9 +58,10 @@ export default {
     'innerhtml',
     'labelledby',
 
-    // Actual English words
+    // Actual English words-ish
     'uncategorized',
     'mischeck',
     'unthrown',
+    'promisable',
   ],
 };

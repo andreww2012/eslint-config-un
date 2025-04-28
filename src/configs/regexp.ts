@@ -1,17 +1,18 @@
 import * as eslintPluginRegexp from 'eslint-plugin-regexp';
 import {ERROR, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface RegexpEslintConfigOptions extends ConfigSharedOptions<'regexp'> {}
 
-export const regexpEslintConfig = (
-  options: RegexpEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('regexp', options, internalOptions);
+export const regexpUnConfig: UnConfigFn<'regexp'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.regexp;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies RegexpEslintConfigOptions);
 
-  builder
+  const configBuilder = new ConfigEntryBuilder('regexp', optionsResolved, context);
+
+  configBuilder
     .addConfig(['regexp', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginRegexp.configs['flat/recommended'].rules)
     // 🟢 Possible Errors
@@ -111,5 +112,8 @@ export const regexpEslintConfig = (
     .addRule('unicode-property', ERROR)
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

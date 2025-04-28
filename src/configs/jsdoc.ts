@@ -1,8 +1,9 @@
 import eslintPluginJsDoc from 'eslint-plugin-jsdoc';
 import {ERROR, GLOB_TSX, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
 import type {PrettifyShallow} from '../types';
-import type {InternalConfigOptions} from './index';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 interface EslintPluginJsdocSettings {
   /**
@@ -176,14 +177,15 @@ export interface JsdocEslintConfigOptions extends ConfigSharedOptions<'jsdoc'> {
     | PrettifyShallow<ConfigSharedOptions<'jsdoc'> & Pick<JsdocEslintConfigOptions, 'settings'>>;
 }
 
-export const jsdocEslintConfig = (
-  options: JsdocEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {settings: pluginSettings, configTypescript = internalOptions.isTypescriptEnabled} =
-    options;
+export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.jsdoc;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    configTypescript: context.enabledConfigs.ts,
+  } satisfies JsdocEslintConfigOptions);
 
-  const builder = new ConfigEntryBuilder('jsdoc', options, internalOptions);
+  const {settings: pluginSettings, configTypescript} = optionsResolved;
+
+  const configBuilder = new ConfigEntryBuilder('jsdoc', optionsResolved, context);
 
   // Legend:
   // 🟢 - in Recommended
@@ -192,7 +194,7 @@ export const jsdocEslintConfig = (
   // 3️⃣ - in Requirements
   // 4️⃣ - in Stylistic
 
-  builder
+  configBuilder
     .addConfig(['jsdoc', {includeDefaultFilesAndIgnores: true}], {
       ...(pluginSettings && {
         settings: {
@@ -262,10 +264,10 @@ export const jsdocEslintConfig = (
     .addOverrides();
 
   const configTypescriptOptions = typeof configTypescript === 'object' ? configTypescript : {};
-  const tsBuilder = new ConfigEntryBuilder('jsdoc', configTypescriptOptions, internalOptions);
+  const configBuilderTypescript = new ConfigEntryBuilder('jsdoc', configTypescriptOptions, context);
   const pluginSettingsForTs = configTypescriptOptions.settings || pluginSettings;
 
-  builder
+  configBuilder
     .addConfig(
       [
         'jsdoc/ts',
@@ -289,8 +291,11 @@ export const jsdocEslintConfig = (
     .addRule('require-returns-type', OFF)
     .addOverrides();
 
-  return [
-    ...builder.getAllConfigs(),
-    ...(configTypescript === false ? [] : tsBuilder.getAllConfigs()),
-  ];
+  return {
+    configs: [
+      ...configBuilder.getAllConfigs(),
+      ...(configTypescript === false ? [] : configBuilderTypescript.getAllConfigs()),
+    ],
+    optionsResolved,
+  };
 };

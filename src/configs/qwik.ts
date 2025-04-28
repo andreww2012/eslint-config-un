@@ -1,25 +1,26 @@
 import * as eslintPluginQwik from 'eslint-plugin-qwik';
 import {ERROR, GLOB_JS_TS_X, OFF} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface QwikEslintConfigOptions extends ConfigSharedOptions<'qwik'> {
   routesDir?: string;
 }
 
-export const qwikEslintConfig = (
-  options: QwikEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {routesDir} = options;
+export const qwikUnConfig: UnConfigFn<'qwik'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.qwik;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies QwikEslintConfigOptions);
 
-  const builder = new ConfigEntryBuilder('qwik', options, internalOptions);
+  const {routesDir} = optionsResolved;
+
+  const configBuilder = new ConfigEntryBuilder('qwik', optionsResolved, context);
 
   // Legend:
   // 🟣 - error in recommended
   // 🟢 - error in strict
 
-  builder
+  configBuilder
     .addConfig([
       'qwik',
       {
@@ -50,5 +51,8 @@ export const qwikEslintConfig = (
     // .addRule('no-use-visible-task', ERROR) // 🟢
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

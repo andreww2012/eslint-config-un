@@ -1,13 +1,9 @@
 import jsoncEslintParser from 'jsonc-eslint-parser';
 import yamlEslintParser from 'yaml-eslint-parser';
 import {ERROR, OFF} from '../constants';
-import {
-  type AllRulesWithPrefix,
-  ConfigEntryBuilder,
-  type ConfigSharedOptions,
-  type FlatConfigEntry,
-} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {type AllRulesWithPrefix, ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface PnpmEslintConfigOptions {
   /**
@@ -43,21 +39,24 @@ export interface PnpmEslintConfigOptions {
     | ConfigSharedOptions<AllRulesWithPrefix<'pnpm/yaml-', true, false>>;
 }
 
-export const pnpmEslintConfig = (
-  options: PnpmEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {configPackageJson = true, configPnpmWorkspace = true} = options;
+export const pnpmUnConfig: UnConfigFn<'pnpm'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.pnpm;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    configPackageJson: true,
+    configPnpmWorkspace: true,
+  } satisfies PnpmEslintConfigOptions);
+
+  const {configPackageJson, configPnpmWorkspace} = optionsResolved;
 
   const configPackageJsonOptions = typeof configPackageJson === 'object' ? configPackageJson : {};
   const {enforceCatalog = false, preferSettingsInPnpmWorkspaceYaml = false} =
     configPackageJsonOptions;
-  const builderPackageJson = new ConfigEntryBuilder(
+  const configBuilderPackageJson = new ConfigEntryBuilder(
     'pnpm',
     configPackageJsonOptions,
-    internalOptions,
+    context,
   );
-  builderPackageJson
+  configBuilderPackageJson
     .addConfig(
       [
         'pnpm/package.json',
@@ -79,12 +78,12 @@ export const pnpmEslintConfig = (
 
   const configPnpmWorkspaceOptions =
     typeof configPnpmWorkspace === 'object' ? configPnpmWorkspace : {};
-  const builderPnpmWorkspace = new ConfigEntryBuilder(
+  const configBuilderPnpmWorkspace = new ConfigEntryBuilder(
     'pnpm',
     configPnpmWorkspaceOptions,
-    internalOptions,
+    context,
   );
-  builderPnpmWorkspace
+  configBuilderPnpmWorkspace
     .addConfig(
       [
         'pnpm/pnpm-workspace-yaml',
@@ -103,8 +102,11 @@ export const pnpmEslintConfig = (
     .addRule('yaml-no-unused-catalog-item', ERROR)
     .addOverrides();
 
-  return [
-    ...(configPackageJson === false ? [] : builderPackageJson.getAllConfigs()),
-    ...(configPnpmWorkspace === false ? [] : builderPnpmWorkspace.getAllConfigs()),
-  ];
+  return {
+    configs: [
+      ...(configPackageJson === false ? [] : configBuilderPackageJson.getAllConfigs()),
+      ...(configPnpmWorkspace === false ? [] : configBuilderPnpmWorkspace.getAllConfigs()),
+    ],
+    optionsResolved,
+  };
 };

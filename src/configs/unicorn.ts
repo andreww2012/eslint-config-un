@@ -1,20 +1,21 @@
 import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import {ERROR, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface UnicornEslintConfigOptions extends ConfigSharedOptions<'unicorn'> {}
 
-export const unicornEslintConfig = (
-  options: UnicornEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('unicorn', options, internalOptions);
+export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.unicorn;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies UnicornEslintConfigOptions);
+
+  const configBuilder = new ConfigEntryBuilder('unicorn', optionsResolved, context);
 
   // LEGEND:
   // 🔴 - not in recommended
 
-  builder
+  configBuilder
     .addConfig(['unicorn', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginUnicorn.configs['flat/recommended'].rules)
     // .addRule('better-regex', ERROR)
@@ -154,5 +155,8 @@ export const unicornEslintConfig = (
     // .addRule('throw-new-error', ERROR)
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

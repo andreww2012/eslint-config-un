@@ -6,11 +6,10 @@ import {
   type BuiltinEslintRulesFixed,
   ConfigEntryBuilder,
   type ConfigSharedOptions,
-  type FlatConfigEntry,
   type GetRuleOptions,
 } from '../eslint';
-import {getPackageSemverVersion} from '../utils';
-import type {InternalConfigOptions} from './index';
+import {assignDefaults, getPackageSemverVersion} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRulesFixed> {}
 
@@ -47,15 +46,15 @@ export const RULE_PREFER_DESTRUCTURING_OPTIONS: GetRuleOptions<'prefer-destructu
   },
 ];
 
-export const jsEslintConfig = (
-  options: JsEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('', options, internalOptions);
+export const jsUnConfig: UnConfigFn<'js'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.js;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsEslintConfigOptions);
+
+  const configBuilder = new ConfigEntryBuilder('', optionsResolved, context);
 
   const eslintVersion = getPackageSemverVersion(getPackageInfoSync('eslint')) || 0;
 
-  builder
+  configBuilder
     .addConfig(['js', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(EslintJs.configs.recommended.rules)
     // 🟢 Recommended - Possible Problems
@@ -299,5 +298,8 @@ export const jsEslintConfig = (
     ])
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

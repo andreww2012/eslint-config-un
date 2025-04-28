@@ -5,6 +5,8 @@ import type {FalsyValue} from './types';
 
 export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
 
+export {defu as assignDefaults} from 'defu';
+
 export const assignOptions = <T>(options: T, key: keyof T) => ({
   ...(typeof options[key] === 'object' && options[key]),
 });

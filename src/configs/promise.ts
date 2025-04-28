@@ -1,17 +1,18 @@
 import eslintPluginPromise from 'eslint-plugin-promise';
 import {ERROR, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface PromiseEslintConfigOptions extends ConfigSharedOptions<'promise'> {}
 
-export const promiseEslintConfig = (
-  options: PromiseEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('promise', options, internalOptions);
+export const promiseUnConfig: UnConfigFn<'promise'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.promise;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies PromiseEslintConfigOptions);
 
-  builder
+  const configBuilder = new ConfigEntryBuilder('promise', optionsResolved, context);
+
+  configBuilder
     .addConfig(['promise', {includeDefaultFilesAndIgnores: true}])
     // @ts-expect-error no proper types
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -40,5 +41,8 @@ export const promiseEslintConfig = (
     .addRule('valid-params', ERROR) // Default: warn
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

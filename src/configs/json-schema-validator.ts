@@ -3,16 +3,12 @@ import jsoncEslintParser from 'jsonc-eslint-parser';
 import tomlEslintParser from 'toml-eslint-parser';
 import yamlEslintParser from 'yaml-eslint-parser';
 import {ERROR} from '../constants';
-import {
-  ConfigEntryBuilder,
-  type ConfigSharedOptions,
-  type FlatConfigEntry,
-  type GetRuleOptions,
-} from '../eslint';
+import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {assignDefaults} from '../utils';
 import {JSONC_DEFAULT_FILES} from './jsonc';
 import {TOML_DEFAULT_FILES} from './toml';
 import {YAML_DEFAULT_FILES} from './yaml';
-import type {InternalConfigOptions} from './index';
+import type {UnConfigFn} from './index';
 
 export interface JsonSchemaValidatorEslintConfigOptions
   extends ConfigSharedOptions<'json-schema-validator'> {
@@ -35,18 +31,21 @@ export interface JsonSchemaValidatorEslintConfigOptions
   options?: GetRuleOptions<'json-schema-validator/no-invalid'>[0];
 }
 
-export const jsonSchemaValidatorEslintConfig = (
-  options: JsonSchemaValidatorEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {settings: pluginSettings, options: noInvalidOptions} = options;
+export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.jsonSchemaValidator;
+  const optionsResolved = assignDefaults(
+    optionsRaw,
+    {} satisfies JsonSchemaValidatorEslintConfigOptions,
+  );
 
-  const builder = new ConfigEntryBuilder('json-schema-validator', options, internalOptions);
+  const {settings: pluginSettings, options: noInvalidOptions} = optionsResolved;
+
+  const configBuilder = new ConfigEntryBuilder('json-schema-validator', optionsResolved, context);
 
   // Legend:
   // 🟣 - in recommended
 
-  builder.addConfig(
+  configBuilder.addConfig(
     [
       'json-schema-validator/setup/jsonc',
       {
@@ -60,7 +59,7 @@ export const jsonSchemaValidatorEslintConfig = (
     },
   );
 
-  builder.addConfig(
+  configBuilder.addConfig(
     [
       'json-schema-validator/setup/yaml',
       {
@@ -74,7 +73,7 @@ export const jsonSchemaValidatorEslintConfig = (
     },
   );
 
-  builder.addConfig(
+  configBuilder.addConfig(
     [
       'json-schema-validator/setup/toml',
       {
@@ -88,7 +87,7 @@ export const jsonSchemaValidatorEslintConfig = (
     },
   );
 
-  builder
+  configBuilder
     .addConfig(['json-schema-validator', {includeDefaultFilesAndIgnores: true}], {
       ...(pluginSettings && {
         settings: {
@@ -99,5 +98,8 @@ export const jsonSchemaValidatorEslintConfig = (
     .addRule('no-invalid', ERROR, noInvalidOptions == null ? [] : [noInvalidOptions]) // 🟣 >=0.1.0
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

@@ -8,12 +8,12 @@ import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '
 import {
   ConfigEntryBuilder,
   type ConfigSharedOptions,
-  type FlatConfigEntry,
   type FlatConfigEntryForBuilder,
   type GetRuleOptions,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import type {InternalConfigOptions} from './index';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 type AllJestMatchers = PrettifyShallow<keyof ReturnType<JestExpect> | keyof AsymmetricMatchers>;
 
@@ -191,22 +191,28 @@ export const generateConsistentTestItOptions = ({
       },
 ];
 
-export const jestEslintConfig = (
-  options: JestEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
+export const jestUnConfig: UnConfigFn<'jest'> = (context) => {
+  const isTypescriptEnabled = context.enabledConfigs.ts;
+
+  const optionsRaw = context.globalOptions.configs?.jest;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    paddingAround: true,
+    configTypescript: isTypescriptEnabled,
+    configJestExtended: isPackageExists('jest-extended'),
+  } satisfies JestEslintConfigOptions);
+
   const {
     settings: pluginSettings,
     maxAssertionCalls,
     maxNestedDescribes,
     restrictedMethods,
     restrictedMatchers,
-    paddingAround = true,
+    paddingAround,
     asyncMatchers,
     minAndMaxExpectArgs,
-    configTypescript = internalOptions.isTypescriptEnabled,
-    configJestExtended = isPackageExists('jest-extended'),
-  } = options;
+    configTypescript,
+    configJestExtended,
+  } = optionsResolved;
 
   const defaultJestEslintConfig: FlatConfigEntryForBuilder = {
     ...(pluginSettings && {
@@ -229,13 +235,13 @@ export const jestEslintConfig = (
   const getPaddingAroundSeverity = (key: keyof (typeof paddingAround & object)) =>
     paddingAround === true || (paddingAround && paddingAround[key] !== false) ? ERROR : OFF;
 
-  const builder = new ConfigEntryBuilder('jest', options, internalOptions);
+  const configBuilder = new ConfigEntryBuilder('jest', optionsResolved, context);
 
   // Legend:
   // 🟢 - in Recommended
   // 🎨 - in Style
 
-  builder
+  configBuilder
     .addConfig(
       [
         'jest',
@@ -251,8 +257,8 @@ export const jestEslintConfig = (
     .addBulkRules(eslintPluginJest.configs['flat/recommended'].rules)
     .addRule(
       'consistent-test-it',
-      options.testDefinitionKeyword === false ? OFF : ERROR,
-      generateConsistentTestItOptions(options),
+      optionsResolved.testDefinitionKeyword === false ? OFF : ERROR,
+      generateConsistentTestItOptions(optionsResolved),
     )
     .addRule('expect-expect', ERROR) // 🟢 (warns)
     .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [{max: maxAssertionCalls}])
@@ -334,13 +340,13 @@ export const jestEslintConfig = (
     .addRule('valid-title', ERROR)
     .addOverrides();
 
-  const tsBuilder = new ConfigEntryBuilder(
+  const configBuilderTypescript = new ConfigEntryBuilder(
     'jest',
     typeof configTypescript === 'object' ? configTypescript : {},
-    internalOptions,
+    context,
   );
   if (configTypescript !== false) {
-    builder
+    configBuilder
       .addConfig(
         [
           'jest/ts',
@@ -357,24 +363,24 @@ export const jestEslintConfig = (
       .addRule('no-untyped-mock-factory', ERROR)
       // Requires type checking
       // TODO auto-include test files in TS config?
-      .addRule('unbound-method', internalOptions.isTypescriptEnabled ? ERROR : OFF, [], {
+      .addRule('unbound-method', isTypescriptEnabled ? ERROR : OFF, [], {
         // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
         overrideBaseRule: '@typescript-eslint/unbound-method',
       })
       .addOverrides();
   }
 
-  const jestExtendedBuilder = new ConfigEntryBuilder(
+  const configBuilderJestExtended = new ConfigEntryBuilder(
     'jest-extended',
     typeof configJestExtended === 'object' ? configJestExtended : {},
-    internalOptions,
+    context,
   );
   const {suggestUsing} = typeof configJestExtended === 'object' ? configJestExtended : {};
 
   const getSuggestUsingJestExtendedMatcherSeverity = (key: keyof (typeof suggestUsing & object)) =>
     suggestUsing === true || (suggestUsing && suggestUsing[key] !== false) ? ERROR : OFF;
 
-  jestExtendedBuilder
+  configBuilderJestExtended
     .addConfig(
       [
         'jest/extended',
@@ -403,9 +409,12 @@ export const jestEslintConfig = (
   // TODO https://www.npmjs.com/package/eslint-plugin-jest-dom ?
   // Other plugins: eslint-plugin-jest-async, eslint-plugin-jest-formatting, eslint-plugin-jest-mock-config, eslint-plugin-jest-playwright, eslint-plugin-jest-react, eslint-plugin-jest-test-each-formatting
 
-  return [
-    ...builder.getAllConfigs(),
-    ...(configTypescript === false ? [] : tsBuilder.getAllConfigs()),
-    ...(configJestExtended === false ? [] : jestExtendedBuilder.getAllConfigs()),
-  ];
+  return {
+    configs: [
+      ...configBuilder.getAllConfigs(),
+      ...(configTypescript === false ? [] : configBuilderTypescript.getAllConfigs()),
+      ...(configJestExtended === false ? [] : configBuilderJestExtended.getAllConfigs()),
+    ],
+    optionsResolved,
+  };
 };

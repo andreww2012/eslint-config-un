@@ -1,8 +1,12 @@
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
+import type {getPackageInfo} from 'local-pkg';
+import type {Promisable} from 'type-fest';
+import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {FlatConfigEntry} from '../eslint';
-import type {PackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
+import type {AstroEslintConfigOptions} from './astro';
 import type {CasePoliceEslintConfigOptions} from './case-police';
+import type {CssEslintConfigOptions} from './css';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
@@ -72,292 +76,321 @@ export interface EslintConfigUnOptions {
   extraConfigs?: FlatConfigEntry[];
 
   // TODO note about plugins that can be used in multiple places?
-  configs?: {
-    /**
-     * A config specific to files meant to be executed. By default, allows `process.exit()`
-     * and `console` methods in files placed in `bin`, `scripts` and `cli` directories
-     * (on any level).
-     * @default true
-     */
-    cli?: boolean | Partial<CliEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    js?: boolean | Partial<JsEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    ts?: boolean | Partial<TsEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    unicorn?: boolean | Partial<UnicornEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    import?: boolean | Partial<ImportEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    node?: boolean | Partial<NodeEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    promise?: boolean | Partial<PromiseEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    sonar?: boolean | Partial<SonarEslintConfigOptions>;
-
-    /**
-     * `false` (do not enable Vue rules) <=> `vue` package is not installed (at any level) or `false` is explicitly passed
-     */
-    vue?: boolean | Partial<VueEslintConfigOptions>;
-
-    /**
-     * `false` (do not enable Tailwind rules) <=> `tailwindcss` package is not installed (at any level) or `false` is explicitly passed
-     */
-    tailwind?: boolean | Partial<TailwindEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    regexp?: boolean | Partial<RegexpEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    eslintComments?: boolean | Partial<EslintCommentsEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    markdown?: boolean | Partial<MarkdownEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    cssInJs?: boolean | Partial<CssInJsEslintConfigOptions>;
-
-    /**
-     * @default true if `jest` package is installed
-     */
-    jest?: boolean | Partial<JestEslintConfigOptions>;
-
-    /**
-     * @default true if `vitest` package is installed
-     */
-    vitest?: boolean | Partial<VitestEslintConfigOptions>;
-
-    /**
-     * @default true
-     */
-    jsdoc?: boolean | Partial<JsdocEslintConfigOptions>;
-
-    /**
-     * [qwik](https://qwik.dev/) specific rules.
-     *
-     * Used plugin:
-     * - [`eslint-plugin-qwik`](https://www.npmjs.com/package/eslint-plugin-qwik) ([docs](https://qwik.dev/docs/advanced/eslint))
-     * @default true if `@builder.io/qwik` or `@qwik.dev/core` package is installed
-     */
-    qwik?: boolean | Partial<QwikEslintConfigOptions>;
-
-    /* eslint-disable jsdoc/check-indentation */
-
-    /**
-     * [Angular](https://angular.dev/) specific rules. Supported versions: 13 to 19 (inclusive).
-     *
-     * Resolved Angular version is the most important factor for determining
-     * which rules are enabled and how they are configured.
-     *
-     * The resolve algorithm is as follows:
-     * - By default, the major version of the installed `@angular/core` package is used.
-     * - If it's not installed or not within the supported range, the config will be disabled.
-     * - If the config is explicitly enabled by passing `true` or options but the package is not installed, the latest supported version will be used.
-     * - You can also manually specify the version using `angularVersion` option, which always takes precedence.
-     *
-     * Under the hood the config uses [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template) packages, but not directly.
-     *
-     * All the rules from all the supported versions of each of the plugins are merged
-     * into one plugin, but only those that are available in the same major version
-     * of the corresponding plugin will actually work. Others will be present, but do nothing, unless specified in `portRules` option.
-     *
-     * If the rule is present in multiple major versions of its plugin, the implementation
-     * from the most recent version will be used.
-     *
-     * **NOTE**: if the config is disabled, despite the rules being available in
-     * TypeScript types, the plugin will not be generated and they cannot be used.
-     *
-     * Examples:
-     * - If the resolved Angular version is 18:
-     *   - Any rule from `@angular-eslint/eslint-plugin(-template)` of version 18 will be available.
-     *    - [`@angular-eslint/prefer-signals`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-signals.md) will do nothing, since it was added in v19 of `@angular-eslint/eslint-plugin`. Specify it in `portRules` to make it work for Angular 18 code.
-     *     - [`@angular-eslint/component-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-class-suffix.md) will use the implementation from v19 of `@angular-eslint/eslint-plugin`.
-     * - If the resolved Angular version is 19:
-     *   - Any rule from `@angular-eslint/eslint-plugin(-template)` of version 19 will be available.
-     *   - [`@angular-eslint/no-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/v18.4.3/packages/eslint-plugin/docs/rules/no-host-metadata-property.md) rule will do nothing, since it was removed in v18 of `@angular-eslint/eslint-plugin`. Specify it in `portRules` to make it work again.
-     */
-    angular?: boolean | Partial<AngularEslintConfigOptions>;
-    /* eslint-enable jsdoc/check-indentation */
-
-    /**
-     * CSS specific rules.
-     *
-     * Used plugin:
-     * - [`@eslint/css`](https://www.npmjs.com/package/@eslint/css)
-     * @default true unless `stylelint` package is installed
-     */
-    css?: boolean | Partial<AngularEslintConfigOptions>;
-
-    /**
-     * Provides an autofix to remove unused imports.
-     *
-     * Used plugin:
-     * - [`eslint-plugin-unused-imports`](https://www.npmjs.com/package/eslint-plugin-unused-imports)
-     * @default true
-     */
-    unusedImports?: boolean | Partial<UnusedImportsEslintConfigOptions>;
-
-    /**
-     * [React](https://react.dev/) specific rules.
-     *
-     * ### Used plugins
-     * - [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react)
-     * - [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin)
-     * **with `@eslint-react` prefix**
-     * - [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks)
-     *
-     * Since `eslint-plugin-react` and `@eslint-react/eslint-plugin` have some overlapping rules,
-     * and `eslint-plugin-react` has some rules that are not relevant in modern codebases,
-     * there exists an option to control which rules from which plugins, if any, will be used.
-     * Refer to `pluginX` option JSDoc for more details.
-     *
-     * ### Sub-configs
-     * - `reactX`: runtime agnostic ("X") and "Name Convention" rules from `@eslint-react/eslint-plugin`.
-     * - `hooks`: rules from `eslint-plugin-react-hooks` as well as "Hooks Extra" rules from `@eslint-react/eslint-plugin`.
-     * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and `eslint-plugin-react`.
-     * - `allowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
-     * @default true if `react` package is installed
-     */
-    react?: boolean | Partial<ReactEslintConfigOptions>;
-
-    /**
-     * Provides accessibility rules for JSX. Applied to all JSX files by default.
-     *
-     * Note: you may want to disable this config if you're not using JSX for performance reasons.
-     *
-     * Used plugin:
-     * - [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
-     * @default true
-     */
-    jsxA11y?: boolean | Partial<JsxA11yEslintConfigOptions>;
-
-    /**
-     * Rules specific to pnpm package manager.
-     *
-     * Used plugin:
-     * - [`eslint-plugin-pnpm`](https://www.npmjs.com/package/eslint-plugin-pnpm)
-     * @default true <=> pnpm is detected as a used package manager by [`package-manager-detector`](https://www.npmjs.com/package/package-manager-detector)
-     */
-    pnpm?: boolean | Partial<PnpmEslintConfigOptions>;
-
-    /**
-     * [Next.js](https://nextjs.org/) specific rules.
-     *
-     * Used plugin:
-     * - [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next) ([docs](https://nextjs.org/docs/app/api-reference/config/eslint))
-     * @default true <=> `next` package is installed
-     */
-    nextJs?: boolean | Partial<NextJsEslintConfigOptions>;
-
-    /**
-     * NOTE: disabled by default
-     * @default false
-     */
-    security?: boolean | Partial<SecurityEslintConfigOptions>;
-
-    /**
-     * NOTE: disabled by default
-     * @default false
-     */
-    preferArrowFunctions?: boolean | Partial<PreferArrowFunctionsEslintConfigOptions>;
-
-    /**
-     * NOTE: disabled by default.
-     * If enabled, lockfiles (`yarn.lock`, `pnpm-lock.yaml`) will be ignored by default
-     * @default false
-     */
-    yaml?: boolean | Partial<YamlEslintConfigOptions>;
-
-    /**
-     * NOTE: disabled by default.
-     * If enabled, a Rust lockfile (`Cargo.lock`) will be ignored by default
-     * @default false
-     */
-    toml?: boolean | Partial<TomlEslintConfigOptions>;
-
-    /**
-     * NOTE: disabled by default.
-     * @default false
-     */
-    json?: boolean | Partial<JsoncEslintConfigOptions>;
-
-    /**
-     * NOTE: disabled by default.
-     * @default false
-     */
-    packageJson?: boolean | Partial<PackageJsonEslintConfigOptions>;
-
-    /**
-     * NOTE: disabled by default.
-     *
-     * NOTE: even if enabled, **all** the rules are still disabled by default.
-     * @default false
-     */
-    perfectionist?: boolean | Partial<PerfectionistEslintConfigOptions>;
-
-    /**
-     * Enforce logical consistency by transforming negated boolean expressions according to De Morgan’s laws.
-     *
-     * NOTE: disabled by default.
-     * @default false
-     * @see https://www.npmjs.com/package/eslint-plugin-de-morgan
-     */
-    deMorgan?: boolean | Partial<DeMorganEslintConfigOptions>;
-
-    /**
-     * NOTE: disabled by default
-     *
-     * Used plugins:
-     * - [`eslint-plugin-json-schema-validator`](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) ([the single rule docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/docs/rules/no-invalid.md))
-     * @default false
-     */
-    jsonSchemaValidator?: boolean | Partial<JsonSchemaValidatorEslintConfigOptions>;
-
-    /**
-     * NOTE: disabled by default
-     *
-     * Used plugins:
-     * - [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police) ([docs](https://github.com/antfu/case-police?tab=coc-ov-file))
-     * @default false
-     */
-    casePolice?: boolean | Partial<CasePoliceEslintConfigOptions>;
-  };
+  configs?: Partial<UnConfigs>;
 }
 
-export interface InternalConfigOptions {
-  globalOptions?: EslintConfigUnOptions;
-  isTypescriptEnabled: boolean;
-  typescriptPackageInfo?: PackageInfo;
-  vueOptions?: VueEslintConfigOptions;
-  isTailwindEnabled?: boolean;
-  nextJsPackageInfo: PackageInfo | null;
+type UnConfigOptions<T extends object> = boolean | Partial<T>;
+
+interface UnConfigs {
+  /**
+   * A config specific to files meant to be executed. By default, allows `process.exit()`
+   * and `console` methods in files placed in `bin`, `scripts` and `cli` directories
+   * (on any level).
+   * @default true
+   */
+  cli: UnConfigOptions<CliEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  js: UnConfigOptions<JsEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  ts: UnConfigOptions<TsEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  unicorn: UnConfigOptions<UnicornEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  import: UnConfigOptions<ImportEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  node: UnConfigOptions<NodeEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  promise: UnConfigOptions<PromiseEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  sonar: UnConfigOptions<SonarEslintConfigOptions>;
+
+  /**
+   * `false` (do not enable Vue rules) <=> `vue` package is not installed (at any level) or `false` is explicitly passed
+   */
+  vue: UnConfigOptions<VueEslintConfigOptions>;
+
+  /**
+   * `false` (do not enable Tailwind rules) <=> `tailwindcss` package is not installed (at any level) or `false` is explicitly passed
+   */
+  tailwind: UnConfigOptions<TailwindEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  regexp: UnConfigOptions<RegexpEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  eslintComments: UnConfigOptions<EslintCommentsEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  markdown: UnConfigOptions<MarkdownEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  cssInJs: UnConfigOptions<CssInJsEslintConfigOptions>;
+
+  /**
+   * @default true if `jest` package is installed
+   */
+  jest: UnConfigOptions<JestEslintConfigOptions>;
+
+  /**
+   * @default true if `vitest` package is installed
+   */
+  vitest: UnConfigOptions<VitestEslintConfigOptions>;
+
+  /**
+   * @default true
+   */
+  jsdoc: UnConfigOptions<JsdocEslintConfigOptions>;
+
+  /**
+   * [qwik](https://qwik.dev/) specific rules.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-qwik`](https://www.npmjs.com/package/eslint-plugin-qwik) ([docs](https://qwik.dev/docs/advanced/eslint))
+   * @default true if `@builder.io/qwik` or `@qwik.dev/core` package is installed
+   */
+  qwik: UnConfigOptions<QwikEslintConfigOptions>;
+
+  /* eslint-disable jsdoc/check-indentation */
+
+  /**
+   * [Angular](https://angular.dev/) specific rules. Supported versions: 13 to 19 (inclusive).
+   *
+   * Resolved Angular version is the most important factor for determining
+   * which rules are enabled and how they are configured.
+   *
+   * The resolve algorithm is as follows:
+   * - By default, the major version of the installed `@angular/core` package is used.
+   * - If it's not installed or not within the supported range, the config will be disabled.
+   * - If the config is explicitly enabled by passing `true` or options but the package is not installed, the latest supported version will be used.
+   * - You can also manually specify the version using `angularVersion` option, which always takes precedence.
+   *
+   * Under the hood the config uses [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template) packages, but not directly.
+   *
+   * All the rules from all the supported versions of each of the plugins are merged
+   * into one plugin, but only those that are available in the same major version
+   * of the corresponding plugin will actually work. Others will be present, but do nothing, unless specified in `portRules` option.
+   *
+   * If the rule is present in multiple major versions of its plugin, the implementation
+   * from the most recent version will be used.
+   *
+   * **NOTE**: if the config is disabled, despite the rules being available in
+   * TypeScript types, the plugin will not be generated and they cannot be used.
+   *
+   * Examples:
+   * - If the resolved Angular version is 18:
+   *   - Any rule from `@angular-eslint/eslint-plugin(-template)` of version 18 will be available.
+   *    - [`@angular-eslint/prefer-signals`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-signals.md) will do nothing, since it was added in v19 of `@angular-eslint/eslint-plugin`. Specify it in `portRules` to make it work for Angular 18 code.
+   *     - [`@angular-eslint/component-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-class-suffix.md) will use the implementation from v19 of `@angular-eslint/eslint-plugin`.
+   * - If the resolved Angular version is 19:
+   *   - Any rule from `@angular-eslint/eslint-plugin(-template)` of version 19 will be available.
+   *   - [`@angular-eslint/no-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/v18.4.3/packages/eslint-plugin/docs/rules/no-host-metadata-property.md) rule will do nothing, since it was removed in v18 of `@angular-eslint/eslint-plugin`. Specify it in `portRules` to make it work again.
+   */
+  angular: UnConfigOptions<AngularEslintConfigOptions>;
+  /* eslint-enable jsdoc/check-indentation */
+
+  /**
+   * CSS specific rules.
+   *
+   * Used plugin:
+   * - [`@eslint/css`](https://www.npmjs.com/package/@eslint/css)
+   * @default true unless `stylelint` package is installed
+   */
+  css: UnConfigOptions<CssEslintConfigOptions>;
+
+  /**
+   * Provides an autofix to remove unused imports.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-unused-imports`](https://www.npmjs.com/package/eslint-plugin-unused-imports)
+   * @default true
+   */
+  unusedImports: UnConfigOptions<UnusedImportsEslintConfigOptions>;
+
+  /**
+   * [React](https://react.dev/) specific rules.
+   *
+   * ### Used plugins
+   * - [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react)
+   * - [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin)
+   * **with `@eslint-react` prefix**
+   * - [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks)
+   *
+   * Since `eslint-plugin-react` and `@eslint-react/eslint-plugin` have some overlapping rules,
+   * and `eslint-plugin-react` has some rules that are not relevant in modern codebases,
+   * there exists an option to control which rules from which plugins, if any, will be used.
+   * Refer to `pluginX` option JSDoc for more details.
+   *
+   * ### Sub-configs
+   * - `reactX`: runtime agnostic ("X") and "Name Convention" rules from `@eslint-react/eslint-plugin`.
+   * - `hooks`: rules from `eslint-plugin-react-hooks` as well as "Hooks Extra" rules from `@eslint-react/eslint-plugin`.
+   * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and `eslint-plugin-react`.
+   * - `allowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
+   * @default true if `react` package is installed
+   */
+  react: UnConfigOptions<ReactEslintConfigOptions>;
+
+  /**
+   * Provides accessibility rules for JSX. Applied to all JSX files by default.
+   *
+   * Note: you may want to disable this config if you're not using JSX for performance reasons.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
+   * @default true
+   */
+  jsxA11y: UnConfigOptions<JsxA11yEslintConfigOptions>;
+
+  /**
+   * Rules specific to pnpm package manager.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-pnpm`](https://www.npmjs.com/package/eslint-plugin-pnpm)
+   * @default true <=> pnpm is detected as a used package manager by [`package-manager-detector`](https://www.npmjs.com/package/package-manager-detector)
+   */
+  pnpm: UnConfigOptions<PnpmEslintConfigOptions>;
+
+  /**
+   * [Next.js](https://nextjs.org/) specific rules.
+   *
+   * Used plugin:
+   * - [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next) ([docs](https://nextjs.org/docs/app/api-reference/config/eslint))
+   * @default true <=> `next` package is installed
+   */
+  nextJs: UnConfigOptions<NextJsEslintConfigOptions>;
+
+  /**
+   * [Astro](https://astro.build/) specific rules.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-astro`](https://www.npmjs.com/package/eslint-plugin-astro) ([docs](https://ota-meshi.github.io/eslint-plugin-astro/))
+   * @default true <=> `astro` package is installed
+   */
+  astro: UnConfigOptions<AstroEslintConfigOptions>;
+
+  /**
+   * NOTE: disabled by default
+   * @default false
+   */
+  security: UnConfigOptions<SecurityEslintConfigOptions>;
+
+  /**
+   * NOTE: disabled by default
+   * @default false
+   */
+  preferArrowFunctions: UnConfigOptions<PreferArrowFunctionsEslintConfigOptions>;
+
+  /**
+   * NOTE: disabled by default.
+   * If enabled, lockfiles (`yarn.lock`, `pnpm-lock.yaml`) will be ignored by default
+   * @default false
+   */
+  yaml: UnConfigOptions<YamlEslintConfigOptions>;
+
+  /**
+   * NOTE: disabled by default.
+   * If enabled, a Rust lockfile (`Cargo.lock`) will be ignored by default
+   * @default false
+   */
+  toml: UnConfigOptions<TomlEslintConfigOptions>;
+
+  /**
+   * NOTE: disabled by default.
+   * @default false
+   */
+  json: UnConfigOptions<JsoncEslintConfigOptions>;
+
+  /**
+   * NOTE: disabled by default.
+   * @default false
+   */
+  packageJson: UnConfigOptions<PackageJsonEslintConfigOptions>;
+
+  /**
+   * NOTE: disabled by default.
+   *
+   * NOTE: even if enabled, **all** the rules are still disabled by default.
+   * @default false
+   */
+  perfectionist: UnConfigOptions<PerfectionistEslintConfigOptions>;
+
+  /**
+   * Enforce logical consistency by transforming negated boolean expressions according to De Morgan’s laws.
+   *
+   * NOTE: disabled by default.
+   * @default false
+   * @see https://www.npmjs.com/package/eslint-plugin-de-morgan
+   */
+  deMorgan: UnConfigOptions<DeMorganEslintConfigOptions>;
+
+  /**
+   * NOTE: disabled by default
+   *
+   * Used plugins:
+   * - [`eslint-plugin-json-schema-validator`](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) ([the single rule docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/docs/rules/no-invalid.md))
+   * @default false
+   */
+  jsonSchemaValidator: UnConfigOptions<JsonSchemaValidatorEslintConfigOptions>;
+
+  /**
+   * NOTE: disabled by default
+   *
+   * Used plugins:
+   * - [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police) ([docs](https://github.com/antfu/case-police?tab=coc-ov-file))
+   * @default false
+   */
+  casePolice: UnConfigOptions<CasePoliceEslintConfigOptions>;
 }
+
+export interface UnConfigContext {
+  packagesInfo: Record<
+    (typeof PACKAGES_TO_GET_INFO_FOR)[number],
+    Awaited<ReturnType<typeof getPackageInfo>>
+  >;
+  globalOptions: EslintConfigUnOptions;
+  enabledConfigs: Record<keyof UnConfigs, boolean>;
+  resolvedConfigs?: Partial<UnConfigs>;
+}
+
+export type UnConfigFn<
+  T extends keyof UnConfigs,
+  ExtraReturnedData = unknown,
+  ExtraArguments extends readonly unknown[] = unknown[],
+> = (
+  context: UnConfigContext,
+  ...extraArg: ExtraArguments
+) => Promisable<
+  | null
+  | ({
+      configs: FlatConfigEntry[];
+      optionsResolved: UnConfigs[T] & object & {};
+    } & ExtraReturnedData)
+>;

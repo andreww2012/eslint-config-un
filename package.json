@@ -65,6 +65,7 @@
     "angular-eslint-plugin-template19": "npm:@angular-eslint/eslint-plugin-template@19.3.0",
     "angular-eslint-plugin18": "npm:@angular-eslint/eslint-plugin@18.4.3",
     "angular-eslint-plugin19": "npm:@angular-eslint/eslint-plugin@19.3.0",
+    "defu": "6.1.4",
     "enhanced-resolve": "5.18.1",
     "eslint-config-flat-gitignore": "2.1.0",
     "eslint-config-prettier": "10.1.2",

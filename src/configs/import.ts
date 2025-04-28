@@ -7,12 +7,11 @@ import {ERROR, OFF, WARNING} from '../constants';
 import {
   ConfigEntryBuilder,
   type ConfigSharedOptions,
-  type FlatConfigEntry,
   type GetRuleOptions,
   createPluginObjectRenamer,
 } from '../eslint';
-import {arraify, isNonEmptyArray} from '../utils';
-import type {InternalConfigOptions} from './index';
+import {arraify, assignDefaults, isNonEmptyArray} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'> {
   /**
@@ -51,16 +50,19 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
 
 const pluginRenamer = createPluginObjectRenamer('import-x', 'import');
 
-export const importEslintConfig = (
-  options: ImportEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {isTypescriptEnabled, tsResolverOptions, noDuplicatesOptions} = options;
-  const noUnresolvedIgnores = arraify(options.importPatternsToIgnoreWhenTryingToResolve);
+export const importUnConfig: UnConfigFn<'import'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.import;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    isTypescriptEnabled: context.enabledConfigs.ts,
+  } satisfies ImportEslintConfigOptions);
 
-  const builder = new ConfigEntryBuilder('import', options, internalOptions);
+  const {isTypescriptEnabled, tsResolverOptions, noDuplicatesOptions, requireModuleExtensions} =
+    optionsResolved;
+  const noUnresolvedIgnores = arraify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve);
 
-  builder
+  const configBuilder = new ConfigEntryBuilder('import', optionsResolved, context);
+
+  configBuilder
     .addConfig(['import', {includeDefaultFilesAndIgnores: true}], {
       settings: {
         ...(isTypescriptEnabled && eslintPluginImportX.configs.typescript.settings),
@@ -86,17 +88,16 @@ export const importEslintConfig = (
     // .addRule('dynamic-import-chunkname', OFF)
     // .addRule('export', ERROR)
     // .addRule('exports-last', OFF)
-    .addRule('extensions', options.requireModuleExtensions ? ERROR : OFF, [
-      (typeof options.requireModuleExtensions === 'object' &&
-        options.requireModuleExtensions['*']) ||
+    .addRule('extensions', requireModuleExtensions ? ERROR : OFF, [
+      (typeof requireModuleExtensions === 'object' && requireModuleExtensions['*']) ||
         'ignorePackages',
       {
         checkTypeImports: true,
-        ...(options.requireModuleExtensions === true &&
+        ...(requireModuleExtensions === true &&
           Object.fromEntries(
             ['js', 'cjs', 'mjs', 'ts', 'cts', 'mts', 'jsx', 'tsx'].map((ext) => [ext, 'always']),
           )),
-        ...(typeof options.requireModuleExtensions === 'object' && options.requireModuleExtensions),
+        ...(typeof requireModuleExtensions === 'object' && requireModuleExtensions),
       },
     ])
     .addRule('first', ERROR)
@@ -112,7 +113,7 @@ export const importEslintConfig = (
     .addRule('no-cycle', WARNING)
     .addRule('no-default-export', ERROR)
     // Disabled when `typescript` config is enabled because it has a similar rule which works better (for example, is not triggered on `rxjs` operators)
-    .addRule('no-deprecated', internalOptions.isTypescriptEnabled ? OFF : WARNING)
+    .addRule('no-deprecated', isTypescriptEnabled ? OFF : WARNING)
     .addRule('no-duplicates', ERROR, [{'prefer-inline': true, ...noDuplicatesOptions}]) // Default: warn
     // .addRule('no-dynamic-require', OFF)
     .addRule('no-empty-named-blocks', ERROR)
@@ -151,5 +152,8 @@ export const importEslintConfig = (
     // .addRule('unambiguous', OFF)
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

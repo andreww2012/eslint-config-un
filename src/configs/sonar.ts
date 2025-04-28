@@ -1,7 +1,8 @@
 import eslintPluginSonar from 'eslint-plugin-sonarjs';
 import {ERROR, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface SonarEslintConfigOptions extends ConfigSharedOptions<'sonarjs'> {
   /**
@@ -17,16 +18,19 @@ export interface SonarEslintConfigOptions extends ConfigSharedOptions<'sonarjs'>
   testsRules?: boolean;
 }
 
-export const sonarEslintConfig = (
-  options: SonarEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {enableAwsRules = true, testsRules = true} = options;
+export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.sonar;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    enableAwsRules: true,
+    testsRules: true,
+  } satisfies SonarEslintConfigOptions);
+
+  const {enableAwsRules, testsRules} = optionsResolved;
 
   const awsRulesSeverity = enableAwsRules ? ERROR : OFF;
   const testsRulesSeverity = testsRules ? ERROR : OFF;
 
-  const builder = new ConfigEntryBuilder('sonarjs', options, internalOptions);
+  const configBuilder = new ConfigEntryBuilder('sonarjs', optionsResolved, context);
 
   // Legend:
   // 🟢 - in Recommended
@@ -38,7 +42,7 @@ export const sonarEslintConfig = (
   // ⚠️ - rule is disabled (or kept disabled) because it overlaps with other rule(s) or by other reason(s) listed hereinafter
   // 🔵 - JSX/HTML rule
 
-  builder
+  configBuilder
     .addConfig(['sonar', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginSonar.configs.recommended.rules)
     // .addRule('anchor-precedence', ERROR) // 🟢💭🔤
@@ -407,5 +411,8 @@ export const sonarEslintConfig = (
     // .addRule('xpath', OFF) // 🔴 📦 `xpath`, `xmldom`
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

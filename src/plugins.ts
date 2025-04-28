@@ -41,26 +41,10 @@ import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility';
 import eslintPluginYaml from 'eslint-plugin-yml';
 import {plugin as typescriptEslintPlugin} from 'typescript-eslint';
 import {type FlatConfigEntry, disableAutofixForAllRulesInPlugin} from './eslint';
-import {interopDefault} from './utils';
 
-export const allEslintPlugins = async ({
+export const loadEslintPlugins = ({
   disableAutofixesForPlugins,
 }: {disableAutofixesForPlugins?: string[]} = {}) => {
-  const eslintPluginTailwind = await import('eslint-plugin-tailwindcss')
-    .then(interopDefault)
-    .catch((error: unknown) => {
-      // Tries to import `tailwindcss/resolveConfig` which doesn't exist anymore in v4
-      if (
-        error &&
-        typeof error === 'object' &&
-        'code' in error &&
-        error.code === 'ERR_PACKAGE_PATH_NOT_EXPORTED'
-      ) {
-        return null;
-      }
-      throw error;
-    });
-
   const result: FlatConfigEntry['plugins'] & {} = {
     unicorn: eslintPluginUnicorn,
     '@stylistic': eslintPluginStylistic,
@@ -89,7 +73,6 @@ export const allEslintPlugins = async ({
     // @ts-expect-error types mismatch
     security: eslintPluginSecurity,
     sonarjs: eslintPluginSonar,
-    ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind}),
     // @ts-expect-error types mismatch
     toml: eslintPluginToml,
     'no-type-assertion': eslintPluginNoTypeAssertion,

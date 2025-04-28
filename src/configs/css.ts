@@ -1,8 +1,9 @@
 import eslintPluginCss, {type CSSLanguageOptions} from '@eslint/css';
 import {tailwindSyntax} from '@eslint/css/syntax';
 import {GLOB_CSS} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface CssEslintConfigOptions extends ConfigSharedOptions<'css'> {
   /**
@@ -27,19 +28,22 @@ export interface CssEslintConfigOptions extends ConfigSharedOptions<'css'> {
   customSyntax?: CSSLanguageOptions['customSyntax'];
 }
 
-export const cssEslintConfig = (
-  options: CssEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {isTailwindEnabled} = internalOptions;
-  const {tolerantMode = false, customSyntax} = options;
+export const cssUnConfig: UnConfigFn<'css'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.css;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    tolerantMode: false,
+  } satisfies CssEslintConfigOptions);
 
-  const builder = new ConfigEntryBuilder('css', options, internalOptions);
+  const {tolerantMode, customSyntax} = optionsResolved;
+
+  const configBuilder = new ConfigEntryBuilder('css', optionsResolved, context);
+
+  const isTailwindEnabled = context.enabledConfigs.tailwind;
 
   // Legend:
   // 🟢 - in Recommended
 
-  builder
+  configBuilder
     .addConfig(
       [
         'css',
@@ -71,5 +75,8 @@ export const cssEslintConfig = (
     // .addRule('use-layers', OFF)
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

@@ -13,8 +13,8 @@ import {
   type RulesRecord,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {arraify} from '../utils';
-import type {InternalConfigOptions} from './index';
+import {arraify, assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 type MarkdownDialect = 'commonmark' | 'gfm';
 
@@ -93,23 +93,31 @@ export interface MarkdownEslintConfigOptions extends ConfigSharedOptions<'markdo
   parseFrontmatter?: MarkdownLanguageOptions['frontmatter'];
 }
 
-export const markdownEslintConfig = (
-  options: MarkdownEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('markdown', options, internalOptions);
+export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.markdown;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    lintMarkdown: true,
+    language: 'commonmark',
+    allowHtmlTags: true,
+    lintCodeBlocks: true,
+    parseFrontmatter: 'yaml',
+    codeBlocksImpliedStrictMode: true,
+  } satisfies MarkdownEslintConfigOptions);
 
   const {
-    lintMarkdown = true,
-    language = 'commonmark',
-    allowHtmlTags = true,
+    lintMarkdown,
+    language,
+    allowHtmlTags,
 
-    lintCodeBlocks = true,
+    lintCodeBlocks,
     codeBlocksIgnoredLanguages,
     codeBlocksAllowedLanguages,
+    codeBlocksImpliedStrictMode,
 
-    parseFrontmatter = 'yaml',
-  } = options;
+    parseFrontmatter,
+  } = optionsResolved;
+
+  const configBuilder = new ConfigEntryBuilder('markdown', optionsResolved, context);
 
   const defaultDialect: MarkdownDialect = typeof language === 'string' ? language : 'commonmark';
   const defaultConfigLanguage = `markdown/${defaultDialect}` as const;
@@ -126,7 +134,7 @@ export const markdownEslintConfig = (
   // 🟣 - in recommended
 
   if (lintMarkdown) {
-    builder
+    configBuilder
       .addConfig(
         [
           'markdown/markdown',
@@ -179,7 +187,7 @@ export const markdownEslintConfig = (
 
     if (Array.isArray(language)) {
       language.forEach((markdownLanguageSettings, i) => {
-        builder.addConfig(
+        configBuilder.addConfig(
           [
             `markdown/language-override/${i}`,
             {
@@ -202,7 +210,7 @@ export const markdownEslintConfig = (
     processorPassThrough,
   ]);
 
-  builder.addConfig(
+  configBuilder.addConfig(
     [
       'markdown/setup/code-blocks-processor',
       {
@@ -217,7 +225,7 @@ export const markdownEslintConfig = (
   );
 
   if (lintCodeBlocks) {
-    builder
+    configBuilder
       .addConfig(
         [
           'markdown/code-blocks',
@@ -231,7 +239,7 @@ export const markdownEslintConfig = (
           languageOptions: {
             parserOptions: {
               ecmaFeatures: {
-                impliedStrict: options.codeBlocksImpliedStrictMode ?? true,
+                impliedStrict: codeBlocksImpliedStrictMode,
               },
             },
           },
@@ -340,14 +348,17 @@ export const markdownEslintConfig = (
       // misc
       // won't disable: yml/file-extension, sonarjs/no-identical-functions, @eslint-community/eslint-comments/no-unlimited-disable
       .disableAnyRule('unused-imports/no-unused-imports') // [too-strict]
-      .addBulkRules(options.overridesCodeBlocks);
+      .addBulkRules(optionsResolved.overridesCodeBlocks);
 
     if (codeBlocksIgnoredLanguages?.length) {
-      builder.addConfig('markdown/code-blocks/ignore', {
+      configBuilder.addConfig('markdown/code-blocks/ignore', {
         ignores: [`**/*.md/**/*.{${codeBlocksIgnoredLanguages.join(',')}}`],
       });
     }
   }
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

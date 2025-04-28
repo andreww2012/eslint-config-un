@@ -1,13 +1,9 @@
 import eslintPluginToml from 'eslint-plugin-toml';
 import tomlEslintParser from 'toml-eslint-parser';
 import {ERROR, GLOB_TOML, OFF} from '../constants';
-import {
-  ConfigEntryBuilder,
-  type ConfigSharedOptions,
-  type FlatConfigEntry,
-  type GetRuleOptions,
-} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export const TOML_DEFAULT_FILES = [GLOB_TOML];
 
@@ -45,33 +41,38 @@ export interface TomlEslintConfigOptions extends ConfigSharedOptions<'toml'> {
   maxIntegerPrecisionBits?: number;
 }
 
-export const tomlEslintConfig = (
-  options: TomlEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('toml', options, internalOptions);
+export const tomlUnConfig: UnConfigFn<'toml'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.toml;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    maxPrecisionOfFractionalSeconds: 3,
+    maxIntegerPrecisionBits: 64,
+  } satisfies TomlEslintConfigOptions);
+
+  const {maxPrecisionOfFractionalSeconds, maxIntegerPrecisionBits} = optionsResolved;
+
+  const configBuilder = new ConfigEntryBuilder('toml', optionsResolved, context);
 
   // LEGEND:
   // 🟣 = Included in Standard ruleset
 
-  builder
+  configBuilder
     .addConfig(
       [
         'toml',
         {
           includeDefaultFilesAndIgnores: true,
           filesFallback: TOML_DEFAULT_FILES,
-          mergeUserFilesWithFallback: !options.doNotMergeFilesWithDefault,
+          mergeUserFilesWithFallback: !optionsResolved.doNotMergeFilesWithDefault,
         },
       ],
       {
         ignores: [
           ...DEFAULT_FILES_TO_IGNORE.map((fileToIgnore) =>
-            options.doNotIgnoreFilesByDefault?.[fileToIgnore]
+            optionsResolved.doNotIgnoreFilesByDefault?.[fileToIgnore]
               ? undefined
               : (`**/${fileToIgnore}` as const),
           ).filter((v) => typeof v === 'string'),
-          ...(options.ignores || []),
+          ...(optionsResolved.ignores || []),
         ],
         languageOptions: {
           parser: tomlEslintParser,
@@ -87,18 +88,16 @@ export const tomlEslintConfig = (
     // 🟢 Base rules
     // .addRule('indent', ERROR) // 🟣 >=0.1.0
     // .addRule('keys-order', ERROR) // 🟣 >=0.1.0
-    .addRule('no-mixed-type-in-array', options.noMixedTypeInArray ? ERROR : OFF) // >=0.1.0
+    .addRule('no-mixed-type-in-array', optionsResolved.noMixedTypeInArray ? ERROR : OFF) // >=0.1.0
     .addRule('no-non-decimal-integer', ERROR, [
-      {allowHexadecimal: true, ...options.noNonDecimalIntegerExceptions},
+      {allowHexadecimal: true, ...optionsResolved.noNonDecimalIntegerExceptions},
     ]) //  >=0.1.0
     // .addRule('no-space-dots', ERROR) // 🟣 >=0.1.0
     // .addRule('no-unreadable-number-separator', ERROR) // 🟣 >=0.1.0
     // .addRule('padding-line-between-pairs', ERROR) // 🟣 >=0.1.0
     // .addRule('padding-line-between-tables', ERROR) // 🟣 >=0.1.0
-    .addRule('precision-of-fractional-seconds', ERROR, [
-      {max: options.maxPrecisionOfFractionalSeconds ?? 3},
-    ]) // 🟣 >=0.1.0
-    .addRule('precision-of-integer', ERROR, [{maxBit: options.maxIntegerPrecisionBits ?? 64}]) // 🟣 >=0.1.0
+    .addRule('precision-of-fractional-seconds', ERROR, [{max: maxPrecisionOfFractionalSeconds}]) // 🟣 >=0.1.0
+    .addRule('precision-of-integer', ERROR, [{maxBit: maxIntegerPrecisionBits}]) // 🟣 >=0.1.0
     // .addRule('quoted-keys', ERROR) // 🟣 >=0.1.0
     // .addRule('tables-order', ERROR) // 🟣 >=0.1.0
     // .addRule('vue-custom-block/no-parsing-error', ERROR) // 🟣 >=0.1.0
@@ -113,5 +112,8 @@ export const tomlEslintConfig = (
     // .addRule('table-bracket-spacing', ERROR) // 🟣 >=0.1.0
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

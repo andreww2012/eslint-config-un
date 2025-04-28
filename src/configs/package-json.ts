@@ -1,14 +1,9 @@
 import eslintPluginPackageJson from 'eslint-plugin-package-json';
 import jsoncEslintParser from 'jsonc-eslint-parser';
 import {ERROR, GLOB_PACKAGE_JSON} from '../constants';
-import {
-  ConfigEntryBuilder,
-  type ConfigSharedOptions,
-  type FlatConfigEntry,
-  type GetRuleOptions,
-} from '../eslint';
-import {getKeysOfTruthyValues} from '../utils';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {assignDefaults, getKeysOfTruthyValues} from '../utils';
+import type {UnConfigFn} from './index';
 
 const DEFAULT_FILES = [GLOB_PACKAGE_JSON];
 
@@ -64,16 +59,21 @@ export interface PackageJsonEslintConfigOptions extends ConfigSharedOptions<'pac
   collectionsToSort?: PackageJsonCollectionsToSort;
 }
 
-export const packageJsonEslintConfig = (
-  options: PackageJsonEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('package-json', options, internalOptions);
+export const packageJsonUnConfig: UnConfigFn<'packageJson'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.packageJson;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    order: 'sort-package-json',
+    repositoryShorthand: 'object',
+  } satisfies PackageJsonEslintConfigOptions);
+
+  const {order, repositoryShorthand} = optionsResolved;
+
+  const configBuilder = new ConfigEntryBuilder('package-json', optionsResolved, context);
 
   // Legend:
   // 🟣 - in recommended
 
-  builder
+  configBuilder
     .addConfig(
       ['package-json', {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_FILES}],
       {
@@ -86,8 +86,8 @@ export const packageJsonEslintConfig = (
     .addBulkRules((eslintPluginPackageJson as any).configs.recommended.rules)
     // .addRule('no-empty-fields', ERROR) // 🟣 >=0.21.0
     .addRule('no-redundant-files', ERROR) // >=0.20.0
-    .addRule('order-properties', ERROR, [{order: options.order ?? 'sort-package-json'}]) // 🟣
-    .addRule('repository-shorthand', ERROR, [{form: options.repositoryShorthand ?? 'object'}]) // 🟣
+    .addRule('order-properties', ERROR, [{order}]) // 🟣
+    .addRule('repository-shorthand', ERROR, [{form: repositoryShorthand}]) // 🟣
     // .addRule('require-author', OFF) // >=0.22.0
     // .addRule('require-engines', OFF) // >=0.28.0
     // .addRule('require-files', OFF) // >=0.26.0
@@ -98,7 +98,7 @@ export const packageJsonEslintConfig = (
     .addRule('sort-collections', ERROR, [
       getKeysOfTruthyValues({
         ...DEFAULT_COLLECTIONS_TO_SORT,
-        ...options.collectionsToSort,
+        ...optionsResolved.collectionsToSort,
       }),
     ]) // 🟣
     // .addRule('unique-dependencies', ERROR) // 🟣
@@ -109,5 +109,8 @@ export const packageJsonEslintConfig = (
     // .addRule('valid-version', ERROR) // 🟣
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

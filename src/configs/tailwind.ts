@@ -1,9 +1,9 @@
 import {objectKeys} from '@antfu/utils';
 import {ERROR, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {maybeCall} from '../utils';
-import type {InternalConfigOptions} from './index';
+import {assignDefaults, maybeCall} from '../utils';
+import type {UnConfigFn} from './index';
 
 type OverwriteOrDeriveFromDefault<T> = T | ((defaultValue: T) => T);
 
@@ -36,29 +36,29 @@ export interface TailwindEslintConfigOptions extends ConfigSharedOptions<'tailwi
   settings?: PrettifyShallow<TailwindPluginSettings>;
 }
 
-export const tailwindEslintConfig = (
-  options: TailwindEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {settings} = options;
+export const tailwindUnConfig: UnConfigFn<'tailwind'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.tailwind;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies TailwindEslintConfigOptions);
 
-  const builder = new ConfigEntryBuilder('tailwindcss', options, internalOptions);
+  const {settings: pluginSettings} = optionsResolved;
+
+  const configBuilder = new ConfigEntryBuilder('tailwindcss', optionsResolved, context);
 
   // Legend:
   // 🟢 - in Recommended (error)
   // 🟡 - in Recommended (warning)
 
-  builder
+  configBuilder
     .addConfig(['tailwind', {includeDefaultFilesAndIgnores: true}], {
-      ...(settings && {
+      ...(pluginSettings && {
         settings: {
           tailwindcss: {
-            ...settings,
+            ...pluginSettings,
             ...objectKeys(DEFAULT_PLUGIN_SETTINGS).reduce<TailwindPluginSettings>(
               (acc, settingKey) => {
-                if (settings[settingKey]) {
+                if (pluginSettings[settingKey]) {
                   acc[settingKey] = maybeCall(
-                    settings[settingKey],
+                    pluginSettings[settingKey],
                     DEFAULT_PLUGIN_SETTINGS[settingKey],
                   );
                 }
@@ -80,5 +80,8 @@ export const tailwindEslintConfig = (
     .addRule('no-unnecessary-arbitrary-value', WARNING) // 🟡
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

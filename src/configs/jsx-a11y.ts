@@ -1,13 +1,9 @@
+// cspell:ignore activedescendant proptypes
 import type {OmitIndexSignature} from 'type-fest';
 import {ERROR, GLOB_JS_TS_X_ONLY, OFF, WARNING} from '../constants';
-import {
-  ConfigEntryBuilder,
-  type ConfigSharedOptions,
-  type FlatConfigEntry,
-  type GetRuleOptions,
-} from '../eslint';
-import {type MaybeFn, getKeysOfTruthyValues, maybeCall} from '../utils';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {type MaybeFn, assignDefaults, getKeysOfTruthyValues, maybeCall} from '../utils';
+import type {UnConfigFn} from './index';
 
 const DEFAULT_AMBIGUOUS_WORDS = ['click here', 'here', 'link', 'a link', 'learn more'];
 
@@ -281,22 +277,27 @@ export interface JsxA11yEslintConfigOptions extends ConfigSharedOptions<'jsx-a11
   };
 }
 
-export const jsxA11yEslintConfig = (
-  options: JsxA11yEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
+export const jsxA11yUnConfig: UnConfigFn<'jsxA11y'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.jsxA11y;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    ambiguousWordsForAnchorText: {
+      words: DEFAULT_AMBIGUOUS_WORDS,
+    } as JsxA11yEslintConfigOptions['ambiguousWordsForAnchorText'] & {},
+    customComponents: {} as JsxA11yEslintConfigOptions['customComponents'] & {},
+  } satisfies JsxA11yEslintConfigOptions);
+
   const {
     settings: pluginSettings,
     altTextCheckForElements,
     anchorIsValidCheckedAspects,
-    ambiguousWordsForAnchorText = {words: DEFAULT_AMBIGUOUS_WORDS},
+    ambiguousWordsForAnchorText,
     imageWords,
     hoverInHandlersRequiringOnFocus,
     hoverOutHandlersRequiringOnBlur,
     labelAttributes,
     tabbableRoles,
-    customComponents = {},
-  } = options;
+    customComponents,
+  } = optionsResolved;
 
   const ambiguousWords = maybeCall(ambiguousWordsForAnchorText, DEFAULT_AMBIGUOUS_WORDS);
   const anchorIsValidFinalCheckedAspects = getKeysOfTruthyValues(
@@ -307,12 +308,12 @@ export const jsxA11yEslintConfig = (
     true,
   );
 
-  const builder = new ConfigEntryBuilder('jsx-a11y', options, internalOptions);
+  const configBuilder = new ConfigEntryBuilder('jsx-a11y', optionsResolved, context);
 
   // Legend:
   // 🔴 - NOT in Recommended
 
-  builder
+  configBuilder
     .addConfig(
       [
         'jsx-a11y',
@@ -369,10 +370,8 @@ export const jsxA11yEslintConfig = (
         },
       ],
     )
-    // cspell:ignore activedescendant
     .addRule('aria-activedescendant-has-tabindex', ERROR)
     .addRule('aria-props', ERROR)
-    // cspell:ignore proptypes
     .addRule('aria-proptypes', ERROR)
     .addRule('aria-role', ERROR)
     .addRule('aria-unsupported-elements', ERROR)
@@ -542,5 +541,8 @@ export const jsxA11yEslintConfig = (
     // .addRule('no-onchange', OFF)
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

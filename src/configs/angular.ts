@@ -14,12 +14,16 @@ import {
   ConfigEntryBuilder,
   type ConfigSharedOptions,
   type EslintPlugin,
-  type FlatConfigEntry,
   type GetRuleOptions,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {type MaybeArray, getPackageMajorVersion, getPackageSemverVersion} from '../utils';
-import type {InternalConfigOptions} from './index';
+import {
+  type MaybeArray,
+  assignDefaults,
+  getPackageMajorVersion,
+  getPackageSemverVersion,
+} from '../utils';
+import type {UnConfigFn} from './index';
 
 // Please keep ascending order
 const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19] as const;
@@ -442,16 +446,26 @@ export interface AngularEslintConfigOptions
   preferStandaloneComponents?: boolean;
 }
 
-export const angularEslintConfig = (
-  options: AngularEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): {
-  configs: FlatConfigEntry[];
-  plugins: Record<string, EslintPlugin>;
-} => {
-  const isAngularManuallyEnabled = internalOptions.globalOptions?.configs?.angular === true;
+export const angularUnConfig: UnConfigFn<'angular', {plugins: Record<string, EslintPlugin>}> = (
+  context,
+) => {
+  const optionsRaw = context.globalOptions.configs?.angular;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    configTemplate: true,
+    processInlineTemplates: true,
+    componentClassSuffixes: ['Component'],
+    componentSelector: true,
+    componentStylesStyle: true,
+    directiveClassSuffixes: ['Directive'],
+    directiveSelector: true,
+    disallowedInputPrefixes: ['on'],
+    disallowAttributeDecorator: false,
+    disallowForwardRef: false,
+  } satisfies AngularEslintConfigOptions);
+
+  const isAngularManuallyEnabled = optionsRaw === true;
   const angularVersion: SupportedAngularVersion | null =
-    options.angularVersion ??
+    optionsResolved.angularVersion ??
     (() => {
       const packageInfo = getPackageInfoSync('@angular/core');
       const majorVersion = getPackageMajorVersion(packageInfo);
@@ -466,38 +480,36 @@ export const angularEslintConfig = (
     })();
 
   if (angularVersion == null) {
-    return {
-      configs: [],
-      plugins: {},
-    };
+    return null;
   }
 
-  const {pluginGeneral: eslintPluginAngular, pluginTemplate: eslintPluginAngularTemplate} =
-    generateAngularPlugins(options, angularVersion);
-
   const {
-    configTemplate = true,
-    processInlineTemplates = true,
-    componentClassSuffixes = ['Component'],
-    componentSelector = true,
-    componentStylesStyle = true,
-    directiveClassSuffixes = ['Directive'],
-    directiveSelector = true,
-    disallowedInputPrefixes = ['on'],
-    disallowAttributeDecorator = false,
-    disallowForwardRef = false,
+    configTemplate,
+    processInlineTemplates,
+    componentClassSuffixes,
+    componentSelector,
+    componentStylesStyle,
+    directiveClassSuffixes,
+    directiveSelector,
+    disallowedInputPrefixes,
+    disallowAttributeDecorator,
+    disallowForwardRef,
     pipePrefixes,
-    preferStandaloneComponents = angularVersion >= 19,
-  } = options;
+  } = optionsResolved;
+  optionsResolved.preferStandaloneComponents ??= angularVersion >= 19;
+  const {preferStandaloneComponents} = optionsResolved;
 
-  const forbiddenMetadataProperties: typeof options.forbiddenMetadataProperties = {
+  const {pluginGeneral: eslintPluginAngular, pluginTemplate: eslintPluginAngularTemplate} =
+    generateAngularPlugins(optionsResolved, angularVersion);
+
+  const forbiddenMetadataProperties: typeof optionsResolved.forbiddenMetadataProperties = {
     inputs: true,
     outputs: true,
     queries: true,
-    ...options.forbiddenMetadataProperties,
+    ...optionsResolved.forbiddenMetadataProperties,
   };
 
-  const builderGeneral = new ConfigEntryBuilder('@angular-eslint', options, internalOptions);
+  const configBuilderGeneral = new ConfigEntryBuilder('@angular-eslint', optionsResolved, context);
 
   // TODO backport rules?
 
@@ -518,8 +530,7 @@ export const angularEslintConfig = (
   ] as Eslint.Linter.Processor;
   const extractInlineHtmlProcessor = klona(
     angularVersion < 18 ||
-      (getPackageSemverVersion(internalOptions.typescriptPackageInfo) || Number.POSITIVE_INFINITY) <
-        4.8
+      (getPackageSemverVersion(context.packagesInfo.typescript) || Number.POSITIVE_INFINITY) < 4.8
       ? extractInlineHtmlProcessorV17
       : extractInlineHtmlProcessorLatest,
   );
@@ -527,7 +538,7 @@ export const angularEslintConfig = (
     extractInlineHtmlProcessor.meta = klona(extractInlineHtmlProcessorLatest.meta);
   }
 
-  builderGeneral
+  configBuilderGeneral
     .addConfig(
       [
         'angular/general',
@@ -625,13 +636,13 @@ export const angularEslintConfig = (
 
   const a11yRulesSeverity = a11yRules === true ? ERROR : a11yRules === 'warn' ? WARNING : OFF;
 
-  const builderTemplate = new ConfigEntryBuilder(
+  const configBuilderTemplate = new ConfigEntryBuilder(
     '@angular-eslint/template',
     configTemplateOptions,
-    internalOptions,
+    context,
   );
 
-  builderTemplate
+  configBuilderTemplate
     .addConfig(
       [
         'angular/template',
@@ -690,9 +701,10 @@ export const angularEslintConfig = (
 
   return {
     configs: [
-      ...builderGeneral.getAllConfigs(),
-      ...(configTemplate === false ? [] : builderTemplate.getAllConfigs()),
+      ...configBuilderGeneral.getAllConfigs(),
+      ...(configTemplate === false ? [] : configBuilderTemplate.getAllConfigs()),
     ],
+    optionsResolved,
     plugins: {
       '@angular-eslint': eslintPluginAngular,
       '@angular-eslint/template': eslintPluginAngularTemplate,

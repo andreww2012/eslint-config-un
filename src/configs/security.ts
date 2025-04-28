@@ -1,17 +1,18 @@
 import eslintPluginSecurity from 'eslint-plugin-security';
 import {ERROR, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface SecurityEslintConfigOptions extends ConfigSharedOptions<'security'> {}
 
-export const securityEslintConfig = (
-  options: SecurityEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('security', options, internalOptions);
+export const securityUnConfig: UnConfigFn<'security'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.security;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies SecurityEslintConfigOptions);
 
-  builder
+  const configBuilder = new ConfigEntryBuilder('security', optionsResolved, context);
+
+  configBuilder
     .addConfig(['security', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginSecurity.configs.recommended.rules)
     // By default, all rules are included in the recommended config and with the "warn" level
@@ -31,5 +32,8 @@ export const securityEslintConfig = (
     .addRule('detect-unsafe-regex', WARNING)
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

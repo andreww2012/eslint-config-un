@@ -1,20 +1,24 @@
 import {ERROR} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface DeMorganEslintConfigOptions extends ConfigSharedOptions<'de-morgan'> {}
 
-export const deMorganEslintConfig = (
-  options: DeMorganEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('de-morgan', options, internalOptions);
+export const deMorganUnConfig: UnConfigFn<'deMorgan'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.deMorgan;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies DeMorganEslintConfigOptions);
 
-  builder
+  const configBuilder = new ConfigEntryBuilder('de-morgan', optionsResolved, context);
+
+  configBuilder
     .addConfig(['de-morgan', {includeDefaultFilesAndIgnores: true}])
     .addRule('no-negated-conjunction', ERROR)
     .addRule('no-negated-disjunction', ERROR)
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

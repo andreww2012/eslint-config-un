@@ -1,13 +1,9 @@
 import eslintPluginYaml from 'eslint-plugin-yml';
 import yamlEslintParser from 'yaml-eslint-parser';
 import {ERROR, GLOB_YAML, OFF} from '../constants';
-import {
-  ConfigEntryBuilder,
-  type ConfigSharedOptions,
-  type FlatConfigEntry,
-  type GetRuleOptions,
-} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export const YAML_DEFAULT_FILES = [GLOB_YAML];
 
@@ -42,33 +38,37 @@ export interface YamlEslintConfigOptions extends ConfigSharedOptions<'yml'> {
   };
 }
 
-export const yamlEslintConfig = (
-  options: YamlEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('yml', options, internalOptions);
+export const yamlUnConfig: UnConfigFn<'yaml'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.yaml;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    enforceExtension: 'yml',
+  } satisfies YamlEslintConfigOptions);
+
+  const {enforceExtension} = optionsResolved;
+
+  const configBuilder = new ConfigEntryBuilder('yml', optionsResolved, context);
 
   // LEGEND:
   // 🟣 = Included in Standard ruleset
 
-  builder
+  configBuilder
     .addConfig(
       [
         'yaml',
         {
           includeDefaultFilesAndIgnores: true,
           filesFallback: YAML_DEFAULT_FILES,
-          mergeUserFilesWithFallback: !options.doNotMergeFilesWithDefault,
+          mergeUserFilesWithFallback: !optionsResolved.doNotMergeFilesWithDefault,
         },
       ],
       {
         ignores: [
           ...DEFAULT_FILES_TO_IGNORE.map((fileToIgnore) =>
-            options.doNotIgnoreFilesByDefault?.[fileToIgnore]
+            optionsResolved.doNotIgnoreFilesByDefault?.[fileToIgnore]
               ? undefined
               : (`**/${fileToIgnore}` as const),
           ).filter((v) => typeof v === 'string'),
-          ...(options.ignores || []),
+          ...(optionsResolved.ignores || []),
         ],
         languageOptions: {
           parser: yamlEslintParser,
@@ -88,10 +88,10 @@ export const yamlEslintConfig = (
     // .addRule('block-sequence-hyphen-indicator-newline', ERROR) // 🟣 >=0.5.0
     // .addRule('block-sequence', ERROR) // 🟣 >=0.1.0
     // TODO why reporting here?
-    .addRule('file-extension', ERROR, [{extension: options.enforceExtension ?? 'yml'}]) // >=1.2.0
+    .addRule('file-extension', ERROR, [{extension: enforceExtension}]) // >=1.2.0
     .addRule('indent', ERROR) // 🟣 >=0.1.0
-    .addRule('key-name-casing', options.casing == null ? OFF : ERROR, [
-      {...options.casing, ignores: ['<<', ...(options.casing?.ignores || [])]},
+    .addRule('key-name-casing', optionsResolved.casing == null ? OFF : ERROR, [
+      {...optionsResolved.casing, ignores: ['<<', ...(optionsResolved.casing?.ignores || [])]},
     ]) // >=0.2.0
     // .addRule('no-empty-document', ERROR) // 🟣 >=0.6.0
     // .addRule('no-empty-key', ERROR) // 🟣 >=0.3.0
@@ -101,8 +101,8 @@ export const yamlEslintConfig = (
     // .addRule('no-trailing-zeros', OFF) // >=1.6.0
     // TODO option to ignore if a string is ISO 8601 date?
     // .addRule('plain-scalar', ERROR) // 🟣 >=0.3.0
-    .addRule('quotes', options.quotes === false ? OFF : ERROR, [
-      {prefer: options.quotes || 'single'},
+    .addRule('quotes', optionsResolved.quotes === false ? OFF : ERROR, [
+      {prefer: optionsResolved.quotes || 'single'},
     ]) // 🟣 >=0.3.0
     // .addRule('require-string-key', OFF) // >=0.3.0
     // .addRule('sort-keys', OFF) // >=0.3.0
@@ -119,5 +119,8 @@ export const yamlEslintConfig = (
     .addRule('spaced-comment', ERROR) // 🟣 >=0.1.0
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

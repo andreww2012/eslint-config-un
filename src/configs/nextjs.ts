@@ -1,7 +1,8 @@
 // cspell:ignore polyfillio
 import {ERROR, GLOB_JS_TS_X, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface NextJsEslintConfigOptions extends ConfigSharedOptions<'@next/next'> {
   /**
@@ -19,20 +20,21 @@ export interface NextJsEslintConfigOptions extends ConfigSharedOptions<'@next/ne
   };
 }
 
-export const nextJsEslintConfig = (
-  options: NextJsEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {settings: pluginSettings} = options;
+// eslint-disable-next-line case-police/string-check
+export const nextJsUnConfig: UnConfigFn<'nextJs'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.nextJs;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies NextJsEslintConfigOptions);
 
-  const builder = new ConfigEntryBuilder('@next/next', options, internalOptions);
+  const {settings: pluginSettings} = optionsResolved;
+
+  const configBuilder = new ConfigEntryBuilder('@next/next', optionsResolved, context);
 
   // Legend:
   // 🟢 - in Recommended (error)
   // 🟡 - in Recommended (warning)
   // 🔵 - in Core Web Vitals (error)
 
-  builder
+  configBuilder
     .addConfig(
       [
         'nextjs',
@@ -73,5 +75,8 @@ export const nextJsEslintConfig = (
     .addRule('no-unwanted-polyfillio', ERROR) // 🟡
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

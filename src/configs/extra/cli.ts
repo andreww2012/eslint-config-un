@@ -1,6 +1,7 @@
 import {GLOB_JS_TS_X_EXTENSION, OFF} from '../../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../../eslint';
-import type {InternalConfigOptions} from '../index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../../eslint';
+import {assignDefaults} from '../../utils';
+import type {UnConfigFn} from '../index';
 
 export interface CliEslintConfigOptions extends ConfigSharedOptions {
   /**
@@ -12,15 +13,15 @@ export interface CliEslintConfigOptions extends ConfigSharedOptions {
 
 const DEFAULT_CLI_DIRS = ['bin', 'scripts', 'cli'] as const;
 
-export const cliEslintConfig = (
-  options: CliEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const {onlyTopLevelDirs} = options;
+export const cliEslintConfig: UnConfigFn<'cli'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.cli;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies CliEslintConfigOptions);
 
-  const builder = new ConfigEntryBuilder(null, options, internalOptions);
+  const {onlyTopLevelDirs} = optionsResolved;
 
-  builder
+  const configBuilder = new ConfigEntryBuilder(null, optionsResolved, context);
+
+  configBuilder
     .addConfig([
       'cli',
       {
@@ -34,5 +35,8 @@ export const cliEslintConfig = (
     .addRule('unicorn/no-process-exit', OFF)
     .addRule('no-console', OFF);
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

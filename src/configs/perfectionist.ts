@@ -1,16 +1,17 @@
 import {OFF} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type FlatConfigEntry} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface PerfectionistEslintConfigOptions extends ConfigSharedOptions<'perfectionist'> {}
 
-export const perfectionistEslintConfig = (
-  options: PerfectionistEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
-  const builder = new ConfigEntryBuilder('perfectionist', options, internalOptions);
+export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.perfectionist;
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies PerfectionistEslintConfigOptions);
 
-  builder
+  const configBuilder = new ConfigEntryBuilder('perfectionist', optionsResolved, context);
+
+  configBuilder
     .addConfig(['perfectionist', {includeDefaultFilesAndIgnores: true}])
     .addRule('sort-array-includes', OFF) // >=0.5.0
     .addRule('sort-classes', OFF) // >=0.11.0
@@ -34,5 +35,8 @@ export const perfectionistEslintConfig = (
     .addRule('sort-variable-declarations', OFF) // >=3.0.0
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

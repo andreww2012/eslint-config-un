@@ -1,11 +1,7 @@
 import {ERROR} from '../constants';
-import {
-  ConfigEntryBuilder,
-  type ConfigSharedOptions,
-  type FlatConfigEntry,
-  type GetRuleOptions,
-} from '../eslint';
-import type {InternalConfigOptions} from './index';
+import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {assignDefaults} from '../utils';
+import type {UnConfigFn} from './index';
 
 export interface CssInJsEslintConfigOptions extends ConfigSharedOptions<'css-in-js'> {
   /**
@@ -52,30 +48,34 @@ export interface CssInJsEslintConfigOptions extends ConfigSharedOptions<'css-in-
   propertyCasing?: GetRuleOptions<'css-in-js/property-casing'>[0];
 }
 
-export const cssInJsEslintConfig = (
-  options: CssInJsEslintConfigOptions,
-  internalOptions: InternalConfigOptions,
-): FlatConfigEntry[] => {
+export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {
+  const optionsRaw = context.globalOptions.configs?.cssInJs;
+  const optionsResolved = assignDefaults(optionsRaw, {
+    hexColorsStyle: 'long',
+    avoidLeadingZero: false,
+    propertyCasing: 'camelCase',
+  } satisfies CssInJsEslintConfigOptions);
+
   const {
     settings: pluginSettings,
-    hexColorsStyle = 'long',
+    hexColorsStyle,
     preferNamedColors: preferNamedColorsRaw,
-    avoidLeadingZero = false,
-    propertyCasing = 'camelCase',
-  } = options;
+    avoidLeadingZero,
+    propertyCasing,
+  } = optionsResolved;
 
   const preferNamedColors =
     typeof preferNamedColorsRaw === 'object'
       ? preferNamedColorsRaw
       : {flag: preferNamedColorsRaw ?? false};
 
-  const builder = new ConfigEntryBuilder('css-in-js', options, internalOptions);
+  const configBuilder = new ConfigEntryBuilder('css-in-js', optionsResolved, context);
 
   // Legend:
   // 🟢 - in Recommended and Standard
   // 🟣 - in Standard
 
-  builder
+  configBuilder
     .addConfig(['css-in-js', {includeDefaultFilesAndIgnores: true}], {
       ...(pluginSettings && {
         settings: {
@@ -105,5 +105,8 @@ export const cssInJsEslintConfig = (
     .addRule('property-casing', ERROR, [propertyCasing]) // 🟣 >= 0.1.0
     .addOverrides();
 
-  return builder.getAllConfigs();
+  return {
+    configs: configBuilder.getAllConfigs(),
+    optionsResolved,
+  };
 };

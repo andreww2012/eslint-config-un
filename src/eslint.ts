@@ -5,7 +5,7 @@ import {builtinRules} from 'eslint/use-at-your-own-risk';
 import ruleComposer from 'eslint-rule-composer';
 import {klona} from 'klona';
 import type {OmitIndexSignature, ReadonlyDeep, SetRequired} from 'type-fest';
-import type {InternalConfigOptions} from './configs';
+import type {UnConfigContext} from './configs';
 import {
   ERROR,
   GLOB_CSS,
@@ -194,7 +194,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
     private readonly options: ConfigSharedOptions<
       RulesPrefix extends null ? RulesRecord : RulesPrefix
     >,
-    private readonly internalOptions: InternalConfigOptions,
+    private readonly context: UnConfigContext,
   ) {}
 
   private readonly configs: FlatConfigEntry[] = [];
@@ -313,7 +313,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
           allowAnyRule || !this.rulesPrefix
             ? ruleName
             : (`${this.rulesPrefix}/${ruleName}` as const);
-        const errorsInsteadOfWarnings = this.internalOptions.globalOptions?.errorsInsteadOfWarnings;
+        const {errorsInsteadOfWarnings} = this.context.globalOptions;
         const severityFinal: RuleSeverity =
           (configOptions.forceSeverity as RuleSeverity | undefined) ??
           (severity === WARNING &&
