@@ -3,6 +3,7 @@
 - New config: `nextJs` via [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next), enabled automatically if `next` package is installed.
 - New config: `casePolice` via [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police), **<u>disabled</u>** by default.
 - New config: `astro` via [`eslint-plugin-astro`](https://www.npmjs.com/package/eslint-plugin-astro), enabled automatically if `astro` package is installed.
+- `packageJson` config: added `requireFields` option to require the specified fields to be present in the package.json file.
 
 ### Dependencies
 - `eslint-plugin-unicorn`: [58.0.0 -> 59.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v58.0.0...v59.0.0)

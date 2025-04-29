@@ -1,6 +1,6 @@
 import eslintPluginPackageJson from 'eslint-plugin-package-json';
 import jsoncEslintParser from 'jsonc-eslint-parser';
-import {ERROR, GLOB_PACKAGE_JSON} from '../constants';
+import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
 import {assignDefaults, getKeysOfTruthyValues} from '../utils';
 import type {UnConfigFn} from './index';
@@ -31,6 +31,16 @@ const DEFAULT_COLLECTIONS_TO_SORT = {
   overrides: true,
 } satisfies PackageJsonCollectionsToSort;
 
+type PackageJsonRequirableFields =
+  | 'author'
+  | 'description'
+  | 'engines'
+  | 'files'
+  | 'keywords'
+  | 'name'
+  | 'types'
+  | 'version';
+
 export interface PackageJsonEslintConfigOptions extends ConfigSharedOptions<'package-json'> {
   /**
    * The sorting order of package properties
@@ -57,6 +67,14 @@ export interface PackageJsonEslintConfigOptions extends ConfigSharedOptions<'pac
    * @see https://docs.npmjs.com/cli/configuring-npm/package-json
    */
   collectionsToSort?: PackageJsonCollectionsToSort;
+
+  /**
+   * Require the specified fields to be present in the package.json file.
+   *
+   * The provided value will be **MERGED** with the default list.
+   * @default {name: true, version: true}
+   */
+  requireFields?: Partial<Record<PackageJsonRequirableFields, boolean>>;
 }
 
 export const packageJsonUnConfig: UnConfigFn<'packageJson'> = (context) => {
@@ -66,7 +84,16 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = (context) => {
     repositoryShorthand: 'object',
   } satisfies PackageJsonEslintConfigOptions);
 
-  const {order, repositoryShorthand} = optionsResolved;
+  optionsResolved.requireFields = {
+    name: true,
+    version: true,
+    ...optionsResolved.requireFields,
+  };
+
+  const {order, repositoryShorthand, requireFields} = optionsResolved;
+
+  const getRequireFieldSeverity = (field: PackageJsonRequirableFields) =>
+    requireFields[field] ? ERROR : OFF;
 
   const configBuilder = new ConfigEntryBuilder('package-json', optionsResolved, context);
 
@@ -89,14 +116,14 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = (context) => {
     .addRule('order-properties', ERROR, [{order}]) // 🟣
     .addRule('repository-shorthand', ERROR, [{form: repositoryShorthand}]) // 🟣
     // .addRule('restrict-dependency-ranges', OFF) // >=0.30.0
-    // .addRule('require-description', OFF) // >=0.31.0
-    // .addRule('require-author', OFF) // >=0.22.0
-    // .addRule('require-engines', OFF) // >=0.28.0
-    // .addRule('require-files', OFF) // >=0.26.0
-    // .addRule('require-name', ERROR) // 🟣 >=0.24.0
-    // .addRule('require-keywords', OFF) // >=0.25.0
-    // .addRule('require-types', OFF) // >=0.29.0
-    // .addRule('require-version', ERROR) // 🟣 >=0.23.0
+    .addRule('require-author', getRequireFieldSeverity('author')) // >=0.22.0
+    .addRule('require-description', getRequireFieldSeverity('description')) // >=0.31.0
+    .addRule('require-engines', getRequireFieldSeverity('engines')) // >=0.28.0
+    .addRule('require-files', getRequireFieldSeverity('files')) // >=0.26.0
+    .addRule('require-keywords', getRequireFieldSeverity('keywords')) // >=0.25.0
+    .addRule('require-name', getRequireFieldSeverity('name')) // 🟣 >=0.24.0
+    .addRule('require-types', getRequireFieldSeverity('types')) // >=0.29.0
+    .addRule('require-version', getRequireFieldSeverity('version')) // 🟣 >=0.23.0
     .addRule('sort-collections', ERROR, [
       getKeysOfTruthyValues({
         ...DEFAULT_COLLECTIONS_TO_SORT,

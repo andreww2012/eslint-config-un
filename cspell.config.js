@@ -65,5 +65,6 @@ export default {
     'mischeck',
     'unthrown',
     'promisable',
+    'requirable',
   ],
 };
