@@ -11,6 +11,7 @@
   - 🟢 [`no-unnecessary-array-splice-count`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unnecessary-array-splice-count.md)
   - [**BREAKING**] `no-array-push-push` renamed to [`prefer-single-call`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-single-call.md)
   - [**BREAKING**] `no-length-as-slice-end` renamed to [`no-unnecessary-slice-end`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unnecessary-slice-end.md)
+- `@eslint-react/eslint-plugin`: [1.48.4 -> 1.48.5](https://github.com/Rel1cx/eslint-react/compare/v1.48.4...v1.48.5)
 
 ## 0.8.2
 
