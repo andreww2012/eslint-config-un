@@ -79,7 +79,7 @@ export interface EslintConfigUnOptions {
   configs?: Partial<UnConfigs>;
 }
 
-type UnConfigOptions<T extends object> = boolean | Partial<T>;
+export type UnConfigOptions<T extends object> = boolean | Partial<T>;
 
 interface UnConfigs {
   /**

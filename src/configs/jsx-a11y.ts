@@ -1,9 +1,8 @@
-// cspell:ignore activedescendant proptypes
 import type {OmitIndexSignature} from 'type-fest';
 import {ERROR, GLOB_JS_TS_X_ONLY, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
 import {type MaybeFn, assignDefaults, getKeysOfTruthyValues, maybeCall} from '../utils';
-import type {UnConfigFn} from './index';
+import type {UnConfigFn, UnConfigOptions} from './index';
 
 const DEFAULT_AMBIGUOUS_WORDS = ['click here', 'here', 'link', 'a link', 'learn more'];
 
@@ -277,8 +276,17 @@ export interface JsxA11yEslintConfigOptions extends ConfigSharedOptions<'jsx-a11
   };
 }
 
-export const jsxA11yUnConfig: UnConfigFn<'jsxA11y'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.jsxA11y;
+export const jsxA11yUnConfig: UnConfigFn<
+  'jsxA11y',
+  unknown,
+  [
+    customConfig?: {
+      prefix: 'astro/jsx-a11y';
+      options: UnConfigOptions<JsxA11yEslintConfigOptions & ConfigSharedOptions<string>>;
+    },
+  ]
+> = (context, customConfig) => {
+  const optionsRaw = customConfig?.options ?? context.globalOptions.configs?.jsxA11y;
   const optionsResolved = assignDefaults(optionsRaw, {
     ambiguousWordsForAnchorText: {
       words: DEFAULT_AMBIGUOUS_WORDS,
@@ -308,7 +316,10 @@ export const jsxA11yUnConfig: UnConfigFn<'jsxA11y'> = (context) => {
     true,
   );
 
-  const configBuilder = new ConfigEntryBuilder('jsx-a11y', optionsResolved, context);
+  const prefixFinal = customConfig?.prefix ?? 'jsx-a11y';
+  const isForAstro = prefixFinal === 'astro/jsx-a11y';
+
+  const configBuilder = new ConfigEntryBuilder(prefixFinal, optionsResolved, context);
 
   // Legend:
   // 🔴 - NOT in Recommended
@@ -316,7 +327,7 @@ export const jsxA11yUnConfig: UnConfigFn<'jsxA11y'> = (context) => {
   configBuilder
     .addConfig(
       [
-        'jsx-a11y',
+        prefixFinal,
         {
           includeDefaultFilesAndIgnores: true,
           filesFallback: [GLOB_JS_TS_X_ONLY],
@@ -380,7 +391,8 @@ export const jsxA11yUnConfig: UnConfigFn<'jsxA11y'> = (context) => {
         ...(customComponents.inputs?.length && {inputComponents: customComponents.inputs}),
       },
     ])
-    .addRule('click-events-have-key-events', ERROR)
+    // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/click-events-have-key-events/
+    .addRule('click-events-have-key-events', isForAstro ? OFF : ERROR)
     .addRule('control-has-associated-label', ERROR, [
       {
         ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
@@ -458,7 +470,8 @@ export const jsxA11yUnConfig: UnConfigFn<'jsxA11y'> = (context) => {
         ...(customComponents.trackElements?.length && {track: customComponents.trackElements}),
       },
     ])
-    .addRule('mouse-events-have-key-events', ERROR, [
+    // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/mouse-events-have-key-events/
+    .addRule('mouse-events-have-key-events', isForAstro ? OFF : ERROR, [
       {
         hoverInHandlers: getKeysOfTruthyValues({
           ...defaultHoverInHandlersRequiringOnFocus,
@@ -523,7 +536,8 @@ export const jsxA11yUnConfig: UnConfigFn<'jsxA11y'> = (context) => {
       },
     ])
     .addRule('no-redundant-roles', ERROR)
-    .addRule('no-static-element-interactions', ERROR, [
+    // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/no-static-element-interactions/
+    .addRule('no-static-element-interactions', isForAstro ? OFF : ERROR, [
       // TODO copied from `recommended` config
       {
         allowExpressionValues: true,

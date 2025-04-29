@@ -12,6 +12,7 @@ import {
   type RulesRecord,
 } from '../eslint';
 import {assignDefaults, getPackageSemverVersion} from '../utils';
+import type {AstroEslintConfigOptions} from './astro';
 import {
   RULE_NO_UNUSED_EXPRESSIONS_OPTIONS,
   RULE_NO_USE_BEFORE_DEFINE_OPTIONS,
@@ -146,10 +147,11 @@ export const tsUnConfig: UnConfigFn<
   unknown,
   [
     {
+      astroResolvedOptions: AstroEslintConfigOptions | null;
       vueResolvedOptions: VueEslintConfigOptions | null;
     },
   ]
-> = (context, {vueResolvedOptions}) => {
+> = (context, {astroResolvedOptions, vueResolvedOptions}) => {
   const typescriptPackageInfo = context.packagesInfo.typescript;
   const optionsRaw = context.globalOptions.configs?.ts;
 
@@ -158,7 +160,10 @@ export const tsUnConfig: UnConfigFn<
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypeAware: true,
     configNoTypeAssertion: false,
-    extraFileExtensions: [context.enabledConfigs.vue && 'vue'].filter((v) => v !== false),
+    extraFileExtensions: [
+      context.enabledConfigs.vue && 'vue',
+      context.enabledConfigs.astro && 'astro',
+    ].filter((v) => v !== false),
   } satisfies TsEslintConfigOptions);
   optionsResolved.typescriptVersion ??= typescriptPackageSemverVersion ?? undefined;
   const {configTypeAware, configNoTypeAssertion, extraFileExtensions, typescriptVersion} =
@@ -190,6 +195,16 @@ export const tsUnConfig: UnConfigFn<
       extraFilesToIgnoreNONTypeAware.push(...vueIgnoredFilesWithTs);
       extraFilesToIgnoreTypeAware.push(...vueIgnoredFilesWithTs);
     }
+  }
+
+  if (astroResolvedOptions) {
+    const astroFilesWithTs = astroResolvedOptions.files || [];
+    const astroIgnoredFilesWithTs = astroResolvedOptions.ignores || [];
+
+    extraFilesNONTypeAware.push(...astroFilesWithTs);
+    extraFilesTypeAware.push(...astroFilesWithTs);
+    extraFilesToIgnoreNONTypeAware.push(...astroIgnoredFilesWithTs);
+    extraFilesToIgnoreTypeAware.push(...astroIgnoredFilesWithTs);
   }
 
   const filesNONTypeAwareDefault = [...(optionsResolved.files || TS_FILES_DEFAULT)];

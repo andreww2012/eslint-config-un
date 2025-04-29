@@ -7,6 +7,7 @@ import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {Promisable} from 'type-fest';
 import type {EslintConfigUnOptions, UnConfigContext} from './configs';
 import {angularUnConfig} from './configs/angular';
+import {astroUnConfig} from './configs/astro';
 import {casePoliceUnConfig} from './configs/case-police';
 import {cssUnConfig} from './configs/css';
 import {cssInJsUnConfig} from './configs/css-in-js';
@@ -103,6 +104,7 @@ export const eslintConfig = async (
     ]);
   const packagesInfo = packagesInfoRaw as UnConfigContext['packagesInfo'];
 
+  const isAstroEnabled = Boolean(configsOptions.astro ?? packagesInfo.astro);
   const isCasePoliceEnabled = Boolean(configsOptions.casePolice ?? false);
   const isCliEnabled = Boolean(configsOptions.cli ?? true);
   const isCssEnabled = Boolean(configsOptions.css ?? getPackageInfoSync('stylelint') == null);
@@ -152,6 +154,7 @@ export const eslintConfig = async (
     globalOptions: options,
     enabledConfigs: {
       angular: true, // TODO
+      astro: isAstroEnabled,
       casePolice: isCasePoliceEnabled,
       cli: isCliEnabled,
       css: isCssEnabled,
@@ -189,12 +192,17 @@ export const eslintConfig = async (
     },
   };
 
-  const [angularEslintConfigResult, casePoliceEslintConfigResult, vueEslintConfigResult] =
-    await Promise.all([
-      angularUnConfig(context),
-      isCasePoliceEnabled && casePoliceUnConfig(context),
-      isVueEnabled && vueUnConfig(context),
-    ]);
+  const [
+    angularEslintConfigResult,
+    astroEslintConfigResult,
+    casePoliceEslintConfigResult,
+    vueEslintConfigResult,
+  ] = await Promise.all([
+    angularUnConfig(context),
+    isAstroEnabled && astroUnConfig(context),
+    isCasePoliceEnabled && casePoliceUnConfig(context),
+    isVueEnabled && vueUnConfig(context),
+  ]);
 
   const allLoadedEslintPlugins = loadEslintPlugins({
     disableAutofixesForPlugins: [
@@ -294,9 +302,13 @@ export const eslintConfig = async (
 
     isTypescriptEnabled &&
       tsUnConfig(context, {
+        astroResolvedOptions: astroEslintConfigResult
+          ? astroEslintConfigResult.optionsResolved
+          : null,
         vueResolvedOptions: vueEslintConfigResult ? vueEslintConfigResult.optionsResolved : null,
       }), // Must come after all rulesets for vanilla JS
     vueEslintConfigResult && vueEslintConfigResult.configs, // Must come after ts
+    astroEslintConfigResult && astroEslintConfigResult.configs, // Must come after ts
     angularEslintConfigResult?.configs, // Must come after ts
     isMarkdownEnabled && markdownUnConfig(context), // Must be last
 

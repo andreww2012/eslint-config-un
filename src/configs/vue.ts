@@ -556,8 +556,8 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     // .addRule('require-prop-comment', OFF)
     .addRule('require-typed-object-prop', ERROR)
     .addRule('require-typed-ref', ERROR)
-    // .addRule('restricted-component-names', OFF) // >= 9.32.0
-    .addRule('slot-name-casing', ERROR /* `camelCase` is default */) // >= 9.32.0
+    // .addRule('restricted-component-names', OFF) // >=9.32.0
+    .addRule('slot-name-casing', ERROR /* `camelCase` is default */) // >=9.32.0
     // .addRule('script-indent', OFF)
     // .addRule('sort-keys', OFF)
     // .addRule('static-class-names-order', OFF)

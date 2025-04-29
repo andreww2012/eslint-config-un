@@ -50,10 +50,11 @@ Includes the rules from the following configs & plugins:
 - `pnpm` (since v0.8.0), using [`eslint-plugin-pnpm`](https://www.npmjs.com/package/eslint-plugin-pnpm)
 - `nextJs` (since v?.?.?), using [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next)
 - `casePolice` (since v?.?.?), using [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police)
+- `astro` (since v?.?.?), using [`eslint-plugin-astro`](https://www.npmjs.com/package/eslint-plugin-astro)
 
 ## Features
 
-- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest`, `jest-extended`, `vitest`, `@builder.io/qwik`, `@qwik.dev/core`, `@angular/core`, `react` and `next` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
+- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest`, `jest-extended`, `vitest`, `@builder.io/qwik`, `@qwik.dev/core`, `@angular/core`, `react`, `next` and `astro` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
 - Every block of rules supports `overrides` for rules.
 - Designed to be used separately from Prettier: *almost* all the rules potentially conflicting with Prettier are disabled *by default*.
 - Written in TypeScript so all the options are typed.

@@ -46,6 +46,7 @@ export const GLOB_HTML = '**/*.html' as const;
 export const GLOB_CSS = '**/*.css' as const;
 
 export const GLOB_PACKAGE_JSON = '**/package.json' as const;
+export const GLOB_ASTRO = '**/*.astro' as const;
 
 export const GLOB_SUPPORTED_EXTENSIONS = [
   GLOB_JS_TS_X_EXTENSION,
@@ -57,6 +58,7 @@ export const GLOB_SUPPORTED_EXTENSIONS = [
   'toml',
   'html',
   'css',
+  'astro',
 ].join(',');
 export const GLOB_MARKDOWN = '**/*.md' as const;
 export const GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS =
@@ -70,6 +72,7 @@ export const DEFAULT_GLOBAL_IGNORES = ['**/dist'] as const;
 export const PACKAGES_TO_GET_INFO_FOR = [
   'typescript',
 
+  'astro',
   'vue',
   'react',
   'next',

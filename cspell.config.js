@@ -5,7 +5,7 @@
  */
 export default {
   useGitignore: true,
-  ignorePaths: ['**/pnpm-lock.yaml'],
+  ignorePaths: ['**/pnpm-lock.yaml', 'test/**/*'],
   words: [
     // Names
     'qwik',
@@ -57,6 +57,8 @@ export default {
     'andreww',
     'innerhtml',
     'labelledby',
+    'activedescendant',
+    'proptypes',
 
     // Actual English words-ish
     'uncategorized',

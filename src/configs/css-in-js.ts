@@ -83,7 +83,7 @@ export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {
         },
       }),
     })
-    .addRule('color-hex-style', ERROR, [hexColorsStyle === 'long' ? 'RRGGBB' : 'RGB']) // 🟣 >= 0.4.0
+    .addRule('color-hex-style', ERROR, [hexColorsStyle === 'long' ? 'RRGGBB' : 'RGB']) // 🟣 >=0.4.0
     .addRule('named-color', ERROR, [
       preferNamedColors.flag ? 'always' : 'never',
       {
@@ -91,18 +91,18 @@ export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {
           ignoreProperties: preferNamedColors.ignoreProperties,
         }),
       },
-    ]) // >= 0.4.0
-    .addRule('no-dupe-properties', ERROR) // 🟢 >= 0.2.0
-    .addRule('no-invalid-color-hex', ERROR) // 🟢 >= 0.2.0
-    .addRule('no-length-zero-unit', ERROR) // 🟣 >= 0.1.0
-    .addRule('no-number-trailing-zeros', ERROR) // 🟣 >= 0.3.0
-    .addRule('no-shorthand-property-overrides', ERROR) // 🟢 >= 0.3.0
-    .addRule('no-unknown-property', ERROR) // 🟢 >= 0.1.0
-    .addRule('no-unknown-unit', ERROR) // 🟢 >= 0.2.0
-    .addRule('no-useless-color-alpha', ERROR) // 🟢 >= 0.4.0
-    .addRule('number-leading-zero', ERROR, [avoidLeadingZero ? 'never' : 'always']) // 🟣 >= 0.3.0
-    .addRule('prefer-reduce-shorthand-property-box-values', ERROR) // 🟣 >= 0.3.0
-    .addRule('property-casing', ERROR, [propertyCasing]) // 🟣 >= 0.1.0
+    ]) // >=0.4.0
+    .addRule('no-dupe-properties', ERROR) // 🟢 >=0.2.0
+    .addRule('no-invalid-color-hex', ERROR) // 🟢 >=0.2.0
+    .addRule('no-length-zero-unit', ERROR) // 🟣 >=0.1.0
+    .addRule('no-number-trailing-zeros', ERROR) // 🟣 >=0.3.0
+    .addRule('no-shorthand-property-overrides', ERROR) // 🟢 >=0.3.0
+    .addRule('no-unknown-property', ERROR) // 🟢 >=0.1.0
+    .addRule('no-unknown-unit', ERROR) // 🟢 >=0.2.0
+    .addRule('no-useless-color-alpha', ERROR) // 🟢 >=0.4.0
+    .addRule('number-leading-zero', ERROR, [avoidLeadingZero ? 'never' : 'always']) // 🟣 >=0.3.0
+    .addRule('prefer-reduce-shorthand-property-box-values', ERROR) // 🟣 >=0.3.0
+    .addRule('property-casing', ERROR, [propertyCasing]) // 🟣 >=0.1.0
     .addOverrides();
 
   return {

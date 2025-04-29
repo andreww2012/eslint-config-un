@@ -6,6 +6,7 @@ import eslintPluginReactX from '@eslint-react/eslint-plugin';
 import eslintPluginNext from '@next/eslint-plugin-next';
 import eslintPluginStylistic from '@stylistic/eslint-plugin';
 import eslintPluginVitest from '@vitest/eslint-plugin';
+import eslintPluginAstro from 'eslint-plugin-astro';
 import eslintPluginCasePolice from 'eslint-plugin-case-police';
 import eslintPluginCssInJs from 'eslint-plugin-css';
 import eslintPluginDeMorgan from 'eslint-plugin-de-morgan';
@@ -99,6 +100,7 @@ export const loadEslintPlugins = ({
     '@next/next': eslintPluginNext,
     // @ts-expect-error types mismatch
     'case-police': eslintPluginCasePolice,
+    astro: eslintPluginAstro,
   };
 
   Object.entries(result).forEach(([pluginNamespace, plugin]) => {

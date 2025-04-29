@@ -2,6 +2,7 @@
 
 - New config: `nextJs` via [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next), enabled automatically if `next` package is installed.
 - New config: `casePolice` via [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police), **<u>disabled</u>** by default.
+- New config: `astro` via [`eslint-plugin-astro`](https://www.npmjs.com/package/eslint-plugin-astro), enabled automatically if `astro` package is installed.
 
 ## 0.8.2
 

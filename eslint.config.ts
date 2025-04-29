@@ -17,6 +17,9 @@ export default eslintConfig({
     packageJson: true,
     vue: true,
     casePolice: true,
+    import: {
+      ignores: TEST_DIR_GLOB,
+    },
   },
 
   extraConfigs: [
@@ -35,6 +38,11 @@ export default eslintConfig({
         '@typescript-eslint/consistent-type-imports': 0,
         '@typescript-eslint/no-explicit-any': 0,
         '@stylistic/quotes': 0,
+        curly: 0,
+        'jsdoc/lines-before-block': 0,
+        'prefer-template': 0,
+        'astro/sort-attributes': 0,
+        'astro/prefer-class-list-directive': 0,
       },
     },
   ],
