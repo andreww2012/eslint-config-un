@@ -14,6 +14,7 @@
 - `@eslint-react/eslint-plugin`: [1.48.4 -> 1.48.5](https://github.com/Rel1cx/eslint-react/compare/v1.48.4...v1.48.5)
 - `typescript-eslint`: [8.31.0 -> 8.31.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.31.0...v8.31.1)
   - [**BREAKING**] [`no-unnecessary-condition`](https://typescript-eslint.io/rules/no-unnecessary-condition) autofix was previously disabled, but it's now downgraded to a suggestion, as a result it have lost the `disable-autofix` prefix.
+- `eslint-plugin-import-x`: [4.10.6 -> 4.11.0](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.10.6...v4.11.0)
 
 ## 0.8.2
 
