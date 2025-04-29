@@ -20,6 +20,7 @@
 - `eslint-plugin-package-json`: [0.29.1 -> 0.31.0](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.29.1...v0.31.0)
   - 🔴 (off) [`restrict-dependency-ranges`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/restrict-dependency-ranges.md)
   - 🔴 [`require-description`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-description.md)
+- `eslint-plugin-perfectionist`: [4.10.1 -> 4.12.3](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.10.1...v4.12.3)
 
 ## 0.8.2
 
