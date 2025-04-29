@@ -1,3 +1,4 @@
+// cspell:ignore spinbutton treegrid menuitemradio menuitemcheckbox
 import type {OmitIndexSignature} from 'type-fest';
 import {ERROR, GLOB_JS_TS_X_ONLY, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
@@ -37,7 +38,6 @@ const defaultTabbableRoles: Partial<Record<PossibleTabbableRoles, true>> = {
   checkbox: true,
   link: true,
   searchbox: true,
-  // cspell:ignore spinbutton
   spinbutton: true,
   switch: true,
   textbox: true,
@@ -420,7 +420,6 @@ export const jsxA11yUnConfig: UnConfigFn<
           'tablist',
           'toolbar',
           'tree',
-          // cspell:ignore treegrid
           'treegrid',
         ],
       },
@@ -520,7 +519,6 @@ export const jsxA11yUnConfig: UnConfigFn<
         // TODO copied from `recommended` config
         ul: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
         ol: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
-        // cspell:ignore menuitemradio menuitemcheckbox
         li: ['menuitem', 'menuitemradio', 'menuitemcheckbox', 'option', 'row', 'tab', 'treeitem'],
         table: ['grid'],
         td: ['gridcell'],
