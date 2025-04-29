@@ -1,5 +1,7 @@
 import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
 import eslintPluginNode from 'eslint-plugin-n';
+import {readPackageUp as readClosestPackageJson} from 'read-package-up';
+import {Range, subset as isFirstSemverRangeIsSubsetOfSecond} from 'semver';
 import {ERROR, OFF} from '../constants';
 import {
   ConfigEntryBuilder,
@@ -172,13 +174,18 @@ export interface NodeEslintConfigOptions extends ConfigSharedOptions<'node'> {
 
 const pluginRenamer = createPluginObjectRenamer('n', 'node');
 
-export const nodeUnConfig: UnConfigFn<'node'> = (context) => {
+const IMPORT_META_PROPERTIES_AVAILABLE_SINCE = '>=20.11';
+
+export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
   const optionsRaw = context.globalOptions.configs?.node;
   const optionsResolved = assignDefaults(optionsRaw, {
     preferGlobal: {} as NodeEslintConfigOptions['preferGlobal'] & {},
   } satisfies NodeEslintConfigOptions);
 
   const {settings: pluginSettings, preferGlobal} = optionsResolved;
+
+  const closestPackageJson = await readClosestPackageJson();
+  const userNodeVersion = new Range(closestPackageJson?.packageJson.engines?.node || '');
 
   const configBuilder = new ConfigEntryBuilder('node', optionsResolved, context);
 
@@ -236,6 +243,12 @@ export const nodeUnConfig: UnConfigFn<'node'> = (context) => {
     .addRule('prefer-promises/dns', OFF) // TODO enable?
     .addRule('prefer-promises/fs', OFF) // TODO enable?
     .addRule('process-exit-as-throw', ERROR) // Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-node/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
+    .addAnyRule(
+      'unicorn/prefer-import-meta-properties',
+      isFirstSemverRangeIsSubsetOfSecond(userNodeVersion, IMPORT_META_PROPERTIES_AVAILABLE_SINCE)
+        ? ERROR
+        : OFF,
+    )
     .addOverrides();
 
   return {

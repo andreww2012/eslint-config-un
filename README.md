@@ -48,9 +48,9 @@ Includes the rules from the following configs & plugins:
 - `react` (since v0.8.0), using [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin), [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react), [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks), [`eslint-plugin-react-refresh`](https://www.npmjs.com/package/eslint-plugin-react-refresh) and [`eslint-plugin-react-compiler`](https://www.npmjs.com/package/eslint-plugin-react-compiler)
 - `jsxA11y` (since v0.8.0), using [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
 - `pnpm` (since v0.8.0), using [`eslint-plugin-pnpm`](https://www.npmjs.com/package/eslint-plugin-pnpm)
-- `nextJs` (since v?.?.?), using [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next)
-- `casePolice` (since v?.?.?), using [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police)
-- `astro` (since v?.?.?), using [`eslint-plugin-astro`](https://www.npmjs.com/package/eslint-plugin-astro)
+- `nextJs` (since v0.9.0), using [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next)
+- `casePolice` (since v0.9.0), using [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police)
+- `astro` (since v0.9.0), using [`eslint-plugin-astro`](https://www.npmjs.com/package/eslint-plugin-astro)
 
 ## Features
 

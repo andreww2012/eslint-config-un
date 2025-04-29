@@ -1,8 +1,16 @@
-## Unreleased
+## 0.9.0
 
 - New config: `nextJs` via [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next), enabled automatically if `next` package is installed.
 - New config: `casePolice` via [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police), **<u>disabled</u>** by default.
 - New config: `astro` via [`eslint-plugin-astro`](https://www.npmjs.com/package/eslint-plugin-astro), enabled automatically if `astro` package is installed.
+
+### Dependencies
+- `eslint-plugin-unicorn`: [58.0.0 -> 59.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v58.0.0...v59.0.0)
+  - 🟢 (enabled) [`prefer-import-meta-properties`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-import-meta-properties.md) enabled in `node` config if detected supported Node.js version is a subset of `>=20.11` version range.
+  - 🟢 [`no-unnecessary-array-flat-depth`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unnecessary-array-flat-depth.md)
+  - 🟢 [`no-unnecessary-array-splice-count`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unnecessary-array-splice-count.md)
+  - [**BREAKING**] `no-array-push-push` renamed to [`prefer-single-call`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-single-call.md)
+  - [**BREAKING**] `no-length-as-slice-end` renamed to [`no-unnecessary-slice-end`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unnecessary-slice-end.md)
 
 ## 0.8.2
 

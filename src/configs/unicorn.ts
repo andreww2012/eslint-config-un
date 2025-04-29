@@ -43,7 +43,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('no-array-callback-reference', OFF)
     .addRule('no-array-for-each', OFF)
     // .addRule('no-array-method-this-argument', ERROR)
-    // .addRule('no-array-push-push', ERROR)
+    // .addRule('prefer-single-call', ERROR)
     .addRule('no-array-reduce', OFF)
     .addRule('no-await-expression-member', OFF)
     // .addRule('no-await-in-promise-methods', ERROR)
@@ -56,7 +56,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     // .addRule('no-invalid-fetch-options', ERROR)
     // .addRule('no-invalid-remove-event-listener', ERROR)
     // .addRule('no-keyword-prefix', OFF) // 🔴
-    // .addRule('no-length-as-slice-end', OFF)
+    // .addRule('no-unnecessary-slice-end', ERROR)
     // .addRule('no-lonely-if', ERROR)
     // Passing `Infinity` doesn't work great with TypeScript
     .addRule('no-magic-array-flat-depth', OFF)
@@ -75,6 +75,8 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     // .addRule('no-thenable', ERROR)
     // .addRule('no-this-assignment', ERROR)
     // .addRule('no-typeof-undefined', ERROR)
+    // .addRule('no-unnecessary-array-flat-depth', ERROR)
+    // .addRule('no-unnecessary-array-splice-count', ERROR)
     // .addRule('no-unnecessary-await', ERROR)
     // .addRule('no-unnecessary-polyfills', ERROR)
     .addRule('no-unreadable-array-destructuring', OFF)
@@ -110,6 +112,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     // .addRule('prefer-event-target', ERROR)
     .addRule('prefer-export-from', ERROR, [{ignoreUsedVariables: true}])
     .addRule('prefer-global-this', OFF) // >=56.0.0
+    // .addRule('prefer-import-meta-properties', OFF) // 🔴 used in `node` config
     // .addRule('prefer-includes', ERROR)
     // .addRule('prefer-json-parse-buffer', ERROR)
     // .addRule('prefer-keyboard-event-key', ERROR)
