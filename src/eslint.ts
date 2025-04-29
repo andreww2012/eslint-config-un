@@ -358,7 +358,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
           ourRules,
           Object.fromEntries(
             // Need to use "!" here to not break the type
-            // eslint-disable-next-line disable-autofix/@typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-non-null-assertion
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-non-null-assertion
             objectEntriesUnsafe(this.options.overrides! || {}).map(([k, v]) => {
               const existingRuleRecord = ourRules[k];
               const rawSeverity = Array.isArray(existingRuleRecord)

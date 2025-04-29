@@ -12,6 +12,8 @@
   - [**BREAKING**] `no-array-push-push` renamed to [`prefer-single-call`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-single-call.md)
   - [**BREAKING**] `no-length-as-slice-end` renamed to [`no-unnecessary-slice-end`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unnecessary-slice-end.md)
 - `@eslint-react/eslint-plugin`: [1.48.4 -> 1.48.5](https://github.com/Rel1cx/eslint-react/compare/v1.48.4...v1.48.5)
+- `typescript-eslint`: [8.31.0 -> 8.31.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.31.0...v8.31.1)
+  - [**BREAKING**] [`no-unnecessary-condition`](https://typescript-eslint.io/rules/no-unnecessary-condition) autofix was previously disabled, but it's now downgraded to a suggestion, as a result it have lost the `disable-autofix` prefix.
 
 ## 0.8.2
 
@@ -31,7 +33,7 @@
 
 ### Dependencies
 - `typescript-eslint`: [8.26.1 -> 8.31.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.26.1...v8.31.0)
-  - [**BREAKING**] Disabled autofix for [`no-unnecessary-type-assertion`](https://typescript-eslint.io/rules/no-unnecessary-type-assertion) since [literal const assertions are now allowed by default](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/#checkliteralconstassertions).
+  - [**BREAKING**] Re-enabled autofix for [`no-unnecessary-type-assertion`](https://typescript-eslint.io/rules/no-unnecessary-type-assertion) since [literal const assertions are now allowed by default](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/#checkliteralconstassertions).
 - `angular-eslint`: [19.2.1 -> 19.3.0](https://github.com/angular-eslint/angular-eslint/compare/v19.2.1...v19.3.0)
   - 🟢 (enabled) [`prefer-contextual-for-variables`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-contextual-for-variables.md)
 - `@eslint-community/eslint-plugin-eslint-comments`: [4.4.1 -> 4.5.0](https://github.com/eslint-community/eslint-plugin-eslint-comments/compare/v4.4.1...v4.5.0)

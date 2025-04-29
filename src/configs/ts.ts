@@ -412,23 +412,18 @@ export const tsUnConfig: UnConfigFn<
       // .addRule('no-mixed-enums', ERROR)
       // .addRule('no-redundant-type-constituents', ERROR)
       // .addRule('no-unnecessary-boolean-literal-compare', ERROR)
-      .addRule(
-        'no-unnecessary-condition',
-        ERROR,
-        [
-          {
-            allowConstantLoopConditions: 'only-allowed-literals',
-            checkTypePredicates: true, // >=8.8.0
-          },
-        ],
-        {disableAutofix: true},
-      )
+      .addRule('no-unnecessary-condition', ERROR, [
+        {
+          allowConstantLoopConditions: 'only-allowed-literals',
+          checkTypePredicates: true, // >=8.8.0
+        },
+      ])
       // .addRule('no-unnecessary-template-expression', ERROR)
       // Reason for disabling autofix: could remove type aliases
       .addRule('no-unnecessary-type-arguments', ERROR, [], {
         disableAutofix: true,
       })
-      .addRule('no-unnecessary-type-assertion', ERROR, [])
+      .addRule('no-unnecessary-type-assertion', ERROR)
       // .addRule('no-unnecessary-type-parameters', ERROR)
       .addRule('no-unsafe-argument', noUnsafeRulesSeverity)
       .addRule('no-unsafe-assignment', noUnsafeRulesSeverity)
