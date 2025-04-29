@@ -88,6 +88,8 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = (context) => {
     .addRule('no-redundant-files', ERROR) // >=0.20.0
     .addRule('order-properties', ERROR, [{order}]) // 🟣
     .addRule('repository-shorthand', ERROR, [{form: repositoryShorthand}]) // 🟣
+    // .addRule('restrict-dependency-ranges', OFF) // >=0.30.0
+    // .addRule('require-description', OFF) // >=0.31.0
     // .addRule('require-author', OFF) // >=0.22.0
     // .addRule('require-engines', OFF) // >=0.28.0
     // .addRule('require-files', OFF) // >=0.26.0
