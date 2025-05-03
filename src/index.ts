@@ -34,6 +34,7 @@ import {reactUnConfig} from './configs/react';
 import {regexpUnConfig} from './configs/regexp';
 import {securityUnConfig} from './configs/security';
 import {sonarUnConfig} from './configs/sonar';
+import {svelteUnConfig} from './configs/svelte';
 import {tailwindUnConfig} from './configs/tailwind';
 import {tomlUnConfig} from './configs/toml';
 import {tsUnConfig} from './configs/ts';
@@ -80,28 +81,31 @@ export const eslintConfig = async (
 
   const configsOptions = options.configs || {};
 
-  const [packagesInfoRaw, usedPackageManager, gitignoreFile, eslintPluginTailwind] =
-    await Promise.all([
-      Object.fromEntries(
-        await Promise.all(
-          PACKAGES_TO_GET_INFO_FOR.map(async (name) => [name, await getPackageInfo(name)] as const),
-        ),
+  const [
+    packagesInfoRaw,
+    usedPackageManager,
+    gitignoreFile,
+    eslintPluginTailwind,
+    eslintPluginSvelte,
+  ] = await Promise.all([
+    Object.fromEntries(
+      await Promise.all(
+        PACKAGES_TO_GET_INFO_FOR.map(async (name) => [name, await getPackageInfo(name)] as const),
       ),
-      detectPackageManager(),
-      fs.readFile('.gitignore', 'utf8'),
-      import('eslint-plugin-tailwindcss').then(interopDefault).catch((error: unknown) => {
-        // Tries to import `tailwindcss/resolveConfig` which doesn't exist anymore in v4
-        if (
-          error &&
-          typeof error === 'object' &&
-          'code' in error &&
-          error.code === 'ERR_PACKAGE_PATH_NOT_EXPORTED'
-        ) {
-          return null;
-        }
-        throw error;
-      }),
-    ]);
+    ),
+    detectPackageManager(),
+    fs.readFile('.gitignore', 'utf8'),
+    interopDefault(
+      import('eslint-plugin-tailwindcss'),
+      // Tries to import `tailwindcss/resolveConfig` which doesn't exist anymore in v4
+      'ERR_PACKAGE_PATH_NOT_EXPORTED',
+    ),
+    interopDefault(
+      import('eslint-plugin-svelte'),
+      // Hard-depends on `svelte` package, uses it at least in `lib/utils/svelte-context.js`
+      ['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'],
+    ),
+  ]);
   const packagesInfo = packagesInfoRaw as UnConfigContext['packagesInfo'];
 
   const isAstroEnabled = Boolean(configsOptions.astro ?? packagesInfo.astro);
@@ -133,6 +137,9 @@ export const eslintConfig = async (
   const isRegexpEnabled = Boolean(configsOptions.regexp ?? true);
   const isSecurityEnabled = Boolean(configsOptions.security ?? false);
   const isSonarEnabled = Boolean(configsOptions.sonar ?? true);
+  const isSvelteEnabled = Boolean(
+    eslintPluginSvelte && (configsOptions.svelte ?? packagesInfo.svelte),
+  );
   const isTailwindEnabled = Boolean(
     eslintPluginTailwind &&
       (configsOptions.tailwind ??
@@ -181,6 +188,7 @@ export const eslintConfig = async (
       regexp: isRegexpEnabled,
       security: isSecurityEnabled,
       sonar: isSonarEnabled,
+      svelte: isSvelteEnabled,
       tailwind: isTailwindEnabled,
       toml: isTomlEnabled,
       ts: isTypescriptEnabled,
@@ -197,11 +205,13 @@ export const eslintConfig = async (
     astroEslintConfigResult,
     casePoliceEslintConfigResult,
     vueEslintConfigResult,
+    svelteEslintConfigResult,
   ] = await Promise.all([
     angularUnConfig(context),
     isAstroEnabled && astroUnConfig(context),
     isCasePoliceEnabled && casePoliceUnConfig(context),
     isVueEnabled && vueUnConfig(context),
+    isSvelteEnabled && eslintPluginSvelte && svelteUnConfig(context, {plugin: eslintPluginSvelte}),
   ]);
 
   const allLoadedEslintPlugins = loadEslintPlugins({
@@ -215,6 +225,7 @@ export const eslintConfig = async (
   const allPlugins: Record<string, EslintPlugin> = {
     ...allLoadedEslintPlugins,
     ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
+    ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
     ...angularEslintConfigResult?.plugins,
   };
 
@@ -306,10 +317,14 @@ export const eslintConfig = async (
           ? astroEslintConfigResult.optionsResolved
           : null,
         vueResolvedOptions: vueEslintConfigResult ? vueEslintConfigResult.optionsResolved : null,
+        svelteResolvedOptions: svelteEslintConfigResult
+          ? svelteEslintConfigResult.optionsResolved
+          : null,
       }), // Must come after all rulesets for vanilla JS
     vueEslintConfigResult && vueEslintConfigResult.configs, // Must come after ts
     astroEslintConfigResult && astroEslintConfigResult.configs, // Must come after ts
     angularEslintConfigResult?.configs, // Must come after ts
+    svelteEslintConfigResult && svelteEslintConfigResult.configs, // Must be after ts
     isMarkdownEnabled && markdownUnConfig(context), // Must be last
 
     {
@@ -317,7 +332,7 @@ export const eslintConfig = async (
       files: GLOB_CONFIG_FILES,
       rules: {
         'import/no-extraneous-dependencies': OFF,
-        'n/no-unpublished-require': OFF,
+        'node/no-unpublished-require': OFF,
       },
     },
 

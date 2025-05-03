@@ -1,5 +1,5 @@
 import type Eslint from 'eslint';
-import type {ESLintRules as BuiltinEslintRules} from 'eslint/rules';
+import type {ESLintRules as BuiltinEslintRulesMaybeAugmented} from 'eslint/rules';
 import {builtinRules} from 'eslint/use-at-your-own-risk';
 // @ts-expect-error no typings
 import ruleComposer from 'eslint-rule-composer';
@@ -31,16 +31,14 @@ export interface FlatConfigEntryFiles {
   files?: string[];
 }
 
+// TODO should deprecate?
 export interface FlatConfigEntryFilesOrIgnores extends FlatConfigEntryFiles {
   ignores?: string[];
 }
 
-export type RulesRecord = Eslint.Linter.RulesRecord & RuleOptions;
-// What's going on with this type? `FlatConfig` needs to be used to be compatible with eslint v8 types (v8's `Config` type is different from v9's `Config` so we can't just use `Config`). But `FlatConfig` was not made generic in v9 types so we need to add extra property that utilizes the generic parameter.
+export type RulesRecord = Record<string, Eslint.Linter.RuleEntry> & RuleOptions;
 export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
-  Omit<Eslint.Linter.FlatConfig, 'files'> &
-    Pick<Eslint.Linter.Config<T>, 'rules'> &
-    FlatConfigEntryFilesOrIgnores
+  Eslint.Linter.Config<T>
 >;
 
 export type DisableAutofixPrefix = 'disable-autofix';
@@ -54,7 +52,8 @@ export type AllEslintRulesWithoutDisableAutofix = PickKeysNotStartingWith<
 
 export type BuiltinEslintRulesFixed = Pick<
   AllEslintRulesWithoutDisableAutofix,
-  keyof OmitIndexSignature<BuiltinEslintRules>
+  // Some plugins, like `eslint-plugin-svelte` may augment `Eslint.Linter.RulesRecord` type with custom rules, which we must exclude for this type
+  keyof PickKeysNotStartingWith<OmitIndexSignature<BuiltinEslintRulesMaybeAugmented>, `${string}/`>
 >;
 
 export type GetRuleOptions<RuleName extends keyof AllEslintRulesWithoutDisableAutofix> =
@@ -96,7 +95,10 @@ export type RuleOverrides<T extends null | string | RulesRecord> = T extends str
 
 type OverridesWithMaybeFunction<T extends object> = {
   [K in keyof T]: T[K] & {} extends Eslint.Linter.RuleEntry<infer Options>
-    ? MaybeFn<T[K] & {}, [severity: EslintSeverity & number, options?: ReadonlyDeep<Options>]>
+    ? MaybeFn<
+        ReadonlyDeep<T[K] & {}>,
+        [severity: EslintSeverity & number, options?: ReadonlyDeep<Options>]
+      >
     : never;
 };
 export type ConfigSharedOptions<T extends null | string | RulesRecord = RulesRecord> = Partial<
@@ -378,7 +380,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
         );
         return result;
       },
-      addBulkRules: (rules: AllRulesWithPrefix<RulesPrefix> | FalsyValue) => {
+      addBulkRules: (rules: AllRulesWithPrefix<null> | FalsyValue) => {
         Object.assign(configFinal.rules, rules);
         return result;
       },

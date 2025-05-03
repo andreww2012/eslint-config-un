@@ -1,6 +1,7 @@
 import path from 'node:path';
 import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
 import type {getPackageInfoSync} from 'local-pkg';
+import type {Promisable} from 'type-fest';
 import type {FalsyValue} from './types';
 
 export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
@@ -47,8 +48,31 @@ export const getPackageSemverVersion = (packageInfo: PackageInfo) => {
   return Number.isNaN(majorVersion) ? null : majorVersion;
 };
 
-export const interopDefault = <T>(module: T | {default: T}) =>
-  module && typeof module === 'object' && 'default' in module ? module.default : module;
+export const interopDefault = async <T>(
+  module: Promisable<T | {default: T}>,
+  ignoreErrors?: MaybeArray<string>,
+) => {
+  try {
+    const resolvedModule = await module;
+    // TODO report?
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    return resolvedModule && typeof resolvedModule === 'object' && 'default' in resolvedModule
+      ? resolvedModule.default
+      : resolvedModule;
+  } catch (error: unknown) {
+    const ignoreErrorsArray = arraify(ignoreErrors);
+    if (
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      typeof error.code === 'string' &&
+      ignoreErrorsArray.includes(error.code)
+    ) {
+      return null;
+    }
+    throw error;
+  }
+};
 
 export function getKeysOfTruthyValues<T extends Record<string, boolean>>(object: T): (keyof T)[];
 export function getKeysOfTruthyValues<T extends Record<string, unknown>>(

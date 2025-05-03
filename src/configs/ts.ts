@@ -18,6 +18,7 @@ import {
   RULE_NO_USE_BEFORE_DEFINE_OPTIONS,
   RULE_PREFER_DESTRUCTURING_OPTIONS,
 } from './js';
+import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
 import type {UnConfigFn} from './index';
 
@@ -149,9 +150,10 @@ export const tsUnConfig: UnConfigFn<
     {
       astroResolvedOptions: AstroEslintConfigOptions | null;
       vueResolvedOptions: VueEslintConfigOptions | null;
+      svelteResolvedOptions: SvelteEslintConfigOptions | null;
     },
   ]
-> = (context, {astroResolvedOptions, vueResolvedOptions}) => {
+> = (context, {astroResolvedOptions, vueResolvedOptions, svelteResolvedOptions}) => {
   const typescriptPackageInfo = context.packagesInfo.typescript;
   const optionsRaw = context.globalOptions.configs?.ts;
 
@@ -163,6 +165,7 @@ export const tsUnConfig: UnConfigFn<
     extraFileExtensions: [
       context.enabledConfigs.vue && 'vue',
       context.enabledConfigs.astro && 'astro',
+      context.enabledConfigs.svelte && 'svelte',
     ].filter((v) => v !== false),
   } satisfies TsEslintConfigOptions);
   optionsResolved.typescriptVersion ??= typescriptPackageSemverVersion ?? undefined;
@@ -175,6 +178,8 @@ export const tsUnConfig: UnConfigFn<
   const extraFilesToIgnoreTypeAware: FlatConfigEntry['ignores'] & {} = [
     GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
   ];
+
+  // TODO the following 3 sections are copy-pasty
 
   const enforceTsInVueOptions = vueResolvedOptions?.enforceTypescriptInScriptSection;
   if (enforceTsInVueOptions) {
@@ -205,6 +210,16 @@ export const tsUnConfig: UnConfigFn<
     extraFilesTypeAware.push(...astroFilesWithTs);
     extraFilesToIgnoreNONTypeAware.push(...astroIgnoredFilesWithTs);
     extraFilesToIgnoreTypeAware.push(...astroIgnoredFilesWithTs);
+  }
+
+  if (svelteResolvedOptions) {
+    const svelteFilesWithTs = svelteResolvedOptions.files || [];
+    const svelteIgnoredFilesWithTs = svelteResolvedOptions.ignores || [];
+
+    extraFilesNONTypeAware.push(...svelteFilesWithTs);
+    extraFilesTypeAware.push(...svelteFilesWithTs);
+    extraFilesToIgnoreNONTypeAware.push(...svelteIgnoredFilesWithTs);
+    extraFilesToIgnoreTypeAware.push(...svelteIgnoredFilesWithTs);
   }
 
   const filesNONTypeAwareDefault = [...(optionsResolved.files || TS_FILES_DEFAULT)];

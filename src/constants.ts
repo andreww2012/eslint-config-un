@@ -46,7 +46,10 @@ export const GLOB_HTML = '**/*.html' as const;
 export const GLOB_CSS = '**/*.css' as const;
 
 export const GLOB_PACKAGE_JSON = '**/package.json' as const;
+
 export const GLOB_ASTRO = '**/*.astro' as const;
+
+export const GLOB_SVELTE = '**/*.svelte' as const;
 
 export const GLOB_SUPPORTED_EXTENSIONS = [
   GLOB_JS_TS_X_EXTENSION,
@@ -59,6 +62,7 @@ export const GLOB_SUPPORTED_EXTENSIONS = [
   'html',
   'css',
   'astro',
+  'svelte',
 ].join(',');
 export const GLOB_MARKDOWN = '**/*.md' as const;
 export const GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS =
@@ -76,6 +80,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'vue',
   'react',
   'next',
+  'svelte',
 
   // We don't need to check for the presence of `@builder.io/qwik-city` because
   // it requires `@builder.io/qwik` to be installed anyway

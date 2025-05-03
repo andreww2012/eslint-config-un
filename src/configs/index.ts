@@ -31,6 +31,7 @@ import type {ReactEslintConfigOptions} from './react';
 import type {RegexpEslintConfigOptions} from './regexp';
 import type {SecurityEslintConfigOptions} from './security';
 import type {SonarEslintConfigOptions} from './sonar';
+import type {SvelteEslintConfigOptions} from './svelte';
 import type {TailwindEslintConfigOptions} from './tailwind';
 import type {TomlEslintConfigOptions} from './toml';
 import type {TsEslintConfigOptions} from './ts';
@@ -295,6 +296,15 @@ interface UnConfigs {
    * @default true <=> `astro` package is installed
    */
   astro: UnConfigOptions<AstroEslintConfigOptions>;
+
+  /**
+   * [Svelte](https://svelte.dev/) specific rules.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-svelte`](https://www.npmjs.com/package/eslint-plugin-svelte) ([docs](https://sveltejs.github.io/eslint-plugin-svelte/))
+   * @default true <=> `svelte` package is installed
+   */
+  svelte: UnConfigOptions<SvelteEslintConfigOptions>;
 
   /**
    * NOTE: disabled by default

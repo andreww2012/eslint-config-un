@@ -1,3 +1,7 @@
+## Unreleased
+
+- New config: `svelte` via [`eslint-plugin-svelte`](https://www.npmjs.com/package/eslint-plugin-svelte), enabled automatically if `svelte` package is installed.
+
 ## 0.9.0
 
 - New config: `nextJs` via [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next), enabled automatically if `next` package is installed.
