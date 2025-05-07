@@ -1,6 +1,7 @@
 ## Unreleased
 
 - New config: `svelte` via [`eslint-plugin-svelte`](https://www.npmjs.com/package/eslint-plugin-svelte), enabled automatically if `svelte` package is installed.
+- New config: `es` via [`eslint-plugin-es-x`](https://www.npmjs.com/package/eslint-plugin-es-x), **<u>disabled</u>** by default.
 
 ## 0.9.0
 

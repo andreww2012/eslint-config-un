@@ -12,6 +12,7 @@ import {casePoliceUnConfig} from './configs/case-police';
 import {cssUnConfig} from './configs/css';
 import {cssInJsUnConfig} from './configs/css-in-js';
 import {deMorganUnConfig} from './configs/de-morgan';
+import {esUnConfig} from './configs/es';
 import {eslintCommentsUnConfig} from './configs/eslint-comments';
 import {cliEslintConfig} from './configs/extra/cli';
 import {importUnConfig} from './configs/import';
@@ -114,6 +115,7 @@ export const eslintConfig = async (
   const isCssEnabled = Boolean(configsOptions.css ?? getPackageInfoSync('stylelint') == null);
   const isCssInJsEnabled = Boolean(configsOptions.cssInJs ?? true);
   const isDeMorganEnabled = Boolean(configsOptions.deMorgan ?? false);
+  const isEsEnabled = Boolean(configsOptions.es ?? false);
   const isEslintCommentsEnabled = Boolean(configsOptions.eslintComments ?? true);
   const isImportEnabled = Boolean(configsOptions.import ?? true);
   const isJestEnabled = Boolean(configsOptions.jest ?? packagesInfo.jest);
@@ -167,6 +169,7 @@ export const eslintConfig = async (
       css: isCssEnabled,
       cssInJs: isCssInJsEnabled,
       deMorgan: isDeMorganEnabled,
+      es: isEsEnabled,
       eslintComments: isEslintCommentsEnabled,
       import: isImportEnabled,
       jest: isJestEnabled,
@@ -321,6 +324,7 @@ export const eslintConfig = async (
           ? svelteEslintConfigResult.optionsResolved
           : null,
       }), // Must come after all rulesets for vanilla JS
+    isEsEnabled && esUnConfig(context), // Must come after ts
     vueEslintConfigResult && vueEslintConfigResult.configs, // Must come after ts
     astroEslintConfigResult && astroEslintConfigResult.configs, // Must come after ts
     angularEslintConfigResult?.configs, // Must come after ts

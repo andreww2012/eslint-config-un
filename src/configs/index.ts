@@ -9,6 +9,7 @@ import type {CasePoliceEslintConfigOptions} from './case-police';
 import type {CssEslintConfigOptions} from './css';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
+import type {EsEslintConfigOptions} from './es';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {ImportEslintConfigOptions} from './import';
@@ -378,6 +379,15 @@ interface UnConfigs {
    * @default false
    */
   casePolice: UnConfigOptions<CasePoliceEslintConfigOptions>;
+
+  /**
+   * NOTE: disabled by default
+   *
+   * Used plugins:
+   * - [`eslint-plugin-es-x`](https://www.npmjs.com/package/eslint-plugin-es-x) ([docs](https://eslint-community.github.io/eslint-plugin-es-x/))
+   * @default false
+   */
+  es: UnConfigOptions<EsEslintConfigOptions>;
 }
 
 export interface UnConfigContext {

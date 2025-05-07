@@ -10,6 +10,7 @@ import eslintPluginAstro from 'eslint-plugin-astro';
 import eslintPluginCasePolice from 'eslint-plugin-case-police';
 import eslintPluginCssInJs from 'eslint-plugin-css';
 import eslintPluginDeMorgan from 'eslint-plugin-de-morgan';
+import eslintPluginEsX from 'eslint-plugin-es-x';
 import eslintPluginImportX from 'eslint-plugin-import-x';
 import eslintPluginJest from 'eslint-plugin-jest';
 import eslintPluginJestExtended from 'eslint-plugin-jest-extended';
@@ -101,6 +102,7 @@ export const loadEslintPlugins = ({
     // @ts-expect-error types mismatch
     'case-police': eslintPluginCasePolice,
     astro: eslintPluginAstro,
+    es: eslintPluginEsX,
   };
 
   Object.entries(result).forEach(([pluginNamespace, plugin]) => {

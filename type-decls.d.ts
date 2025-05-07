@@ -33,3 +33,9 @@ declare module '@next/eslint-plugin-next' {
   declare const value: ESLint.ESLint.Plugin;
   export = value;
 }
+
+declare module 'eslint-plugin-es-x' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
+  export = value;
+}
