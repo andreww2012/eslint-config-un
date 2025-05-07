@@ -2,7 +2,7 @@ import {
   type TypeScriptResolverOptions,
   createTypeScriptImportResolver,
 } from 'eslint-import-resolver-typescript';
-import eslintPluginImportX from 'eslint-plugin-import-x';
+import eslintPluginImportX, {type PluginSettings} from 'eslint-plugin-import-x';
 import {ERROR, OFF, WARNING} from '../constants';
 import {
   ConfigEntryBuilder,
@@ -14,6 +14,16 @@ import {arraify, assignDefaults, isNonEmptyArray} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'> {
+  /**
+   * [`eslint-plugin-import-x`](https://www.npmjs.com/package/eslint-plugin-import-x) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `settings` object as-is and applied to the specified `files` and `ignores`.
+   *
+   * Some settings are set by our config, and the settings you provide here will be merged with ours.
+   * @see https://github.com/un-ts/eslint-plugin-import-x/tree/HEAD?tab=readme-ov-file#settings
+   */
+  settings?: PluginSettings;
+
   /**
    * Recognized automatically and normally should not be set manually.
    *
@@ -56,8 +66,13 @@ export const importUnConfig: UnConfigFn<'import'> = (context) => {
     isTypescriptEnabled: context.enabledConfigs.ts,
   } satisfies ImportEslintConfigOptions);
 
-  const {isTypescriptEnabled, tsResolverOptions, noDuplicatesOptions, requireModuleExtensions} =
-    optionsResolved;
+  const {
+    settings: pluginSettings,
+    isTypescriptEnabled,
+    tsResolverOptions,
+    noDuplicatesOptions,
+    requireModuleExtensions,
+  } = optionsResolved;
   const noUnresolvedIgnores = arraify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve);
 
   const configBuilder = new ConfigEntryBuilder('import', optionsResolved, context);
@@ -77,6 +92,7 @@ export const importUnConfig: UnConfigFn<'import'> = (context) => {
             '@typescript-eslint/parser': ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'],
           },
         }),
+        ...pluginSettings,
       },
     })
     .addBulkRules(pluginRenamer(eslintPluginImportX.configs.recommended.rules))
