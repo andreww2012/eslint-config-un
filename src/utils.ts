@@ -1,12 +1,15 @@
 import path from 'node:path';
 import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
-import type {getPackageInfoSync} from 'local-pkg';
-import type {Promisable} from 'type-fest';
-import type {FalsyValue} from './types';
+import {getPackageInfo, isPackageExists} from 'local-pkg';
+import type {FalsyValue, Promisable} from './types';
 
 export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
 
 export {defu as assignDefaults} from 'defu';
+
+export {klona as cloneDeep} from 'klona';
+
+export {memoize} from 'es-toolkit';
 
 export const assignOptions = <T>(options: T, key: keyof T) => ({
   ...(typeof options[key] === 'object' && options[key]),
@@ -36,17 +39,34 @@ export const maybeCall = <ReturnType = unknown, Args extends readonly unknown[] 
     ? (fnOrValue as (...args: Args) => ReturnType)(...args)
     : fnOrValue;
 
-export type PackageInfo = ReturnType<typeof getPackageInfoSync>;
+export const fetchPackageInfo = async (packageName: string) => {
+  const packageInfo = await getPackageInfo(packageName);
+  if (!packageInfo) {
+    return null;
+  }
 
-export const getPackageMajorVersion = (packageInfo: PackageInfo) => {
-  const majorVersion = Number.parseInt(packageInfo?.version || '', 10);
-  return Number.isNaN(majorVersion) ? null : majorVersion;
+  const fullVersion = packageInfo.version || '';
+
+  const majorVersionRaw = Number.parseInt(fullVersion, 10);
+  const majorVersion = Number.isNaN(majorVersionRaw) ? null : majorVersionRaw;
+
+  const majorAndMinorVersionRaw = Number.parseFloat(fullVersion);
+  const majorAndMinorVersion = Number.isNaN(majorAndMinorVersionRaw)
+    ? null
+    : majorAndMinorVersionRaw;
+
+  return {
+    info: packageInfo,
+    versions: {
+      full: fullVersion,
+      major: majorVersion,
+      majorAndMinor: majorAndMinorVersion,
+    },
+  };
 };
 
-export const getPackageSemverVersion = (packageInfo: PackageInfo) => {
-  const majorVersion = Number.parseFloat(packageInfo?.version || '');
-  return Number.isNaN(majorVersion) ? null : majorVersion;
-};
+export const doesPackageExist = (packageName: string) =>
+  Promise.resolve(isPackageExists(packageName));
 
 export const interopDefault = async <T>(
   module: Promisable<T | {default: T}>,

@@ -1,9 +1,8 @@
 // cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed matchall replaceall trimstart trimend subclassing weakrefs
-import {memoize} from 'es-toolkit';
 import {ERROR, OFF} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults} from '../utils';
+import {assignDefaults, memoize} from '../utils';
 import type {UnConfigFn, UnConfigOptions} from './index';
 
 interface EcmaFeatures {

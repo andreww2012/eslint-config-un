@@ -2,8 +2,6 @@ import type {Jest as JestMethods} from '@jest/environment';
 import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import eslintPluginJest from 'eslint-plugin-jest';
 import eslintPluginJestExtended from 'eslint-plugin-jest-extended';
-import {isPackageExists} from 'local-pkg';
-import type {ValueOf} from 'type-fest';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
   ConfigEntryBuilder,
@@ -11,8 +9,8 @@ import {
   type FlatConfigEntryForBuilder,
   type GetRuleOptions,
 } from '../eslint';
-import type {PrettifyShallow} from '../types';
-import {assignDefaults} from '../utils';
+import type {PrettifyShallow, ValueOf} from '../types';
+import {assignDefaults, doesPackageExist} from '../utils';
 import type {UnConfigFn} from './index';
 
 type AllJestMatchers = PrettifyShallow<keyof ReturnType<JestExpect> | keyof AsymmetricMatchers>;
@@ -191,14 +189,14 @@ export const generateConsistentTestItOptions = ({
       },
 ];
 
-export const jestUnConfig: UnConfigFn<'jest'> = (context) => {
+export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
   const optionsRaw = context.rootOptions.configs?.jest;
   const optionsResolved = assignDefaults(optionsRaw, {
     paddingAround: true,
     configTypescript: isTypescriptEnabled,
-    configJestExtended: isPackageExists('jest-extended'),
+    configJestExtended: await doesPackageExist('jest-extended'),
   } satisfies JestEslintConfigOptions);
 
   const {

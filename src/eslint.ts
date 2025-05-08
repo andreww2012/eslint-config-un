@@ -3,8 +3,6 @@ import type {ESLintRules as BuiltinEslintRulesMaybeAugmented} from 'eslint/rules
 import {builtinRules} from 'eslint/use-at-your-own-risk';
 // @ts-expect-error no typings
 import ruleComposer from 'eslint-rule-composer';
-import {klona} from 'klona';
-import type {OmitIndexSignature, ReadonlyDeep, SetRequired} from 'type-fest';
 import type {UnConfigContext} from './configs';
 import {
   ERROR,
@@ -19,12 +17,15 @@ import {
 import type {RuleOptions} from './eslint-types';
 import type {
   FalsyValue,
+  OmitIndexSignature,
   PickKeysNotStartingWith,
   PickKeysStartingWith,
   PrettifyShallow,
+  ReadonlyDeep,
   RemovePrefix,
+  SetRequired,
 } from './types';
-import {type MaybeFn, maybeCall, objectEntriesUnsafe} from './utils';
+import {type MaybeFn, cloneDeep, maybeCall, objectEntriesUnsafe} from './utils';
 
 type EslintSeverity = Eslint.Linter.RuleSeverity;
 
@@ -158,7 +159,7 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
   plugin: Plugin,
 ): Plugin['rules'] & {} =>
   Object.fromEntries(
-    Object.entries(klona(plugin.rules || {}))
+    Object.entries(cloneDeep(plugin.rules || {}))
       .map(([ruleId, ruleImplementation]) => {
         if (!ruleImplementation.meta?.fixable) {
           return null;

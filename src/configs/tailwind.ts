@@ -1,8 +1,7 @@
-import {objectKeys} from '@antfu/utils';
 import {ERROR, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults, maybeCall} from '../utils';
+import {assignDefaults, maybeCall, objectKeysUnsafe} from '../utils';
 import type {UnConfigFn} from './index';
 
 type OverwriteOrDeriveFromDefault<T> = T | ((defaultValue: T) => T);
@@ -54,7 +53,7 @@ export const tailwindUnConfig: UnConfigFn<'tailwind'> = (context) => {
         settings: {
           tailwindcss: {
             ...pluginSettings,
-            ...objectKeys(DEFAULT_PLUGIN_SETTINGS).reduce<TailwindPluginSettings>(
+            ...objectKeysUnsafe(DEFAULT_PLUGIN_SETTINGS).reduce<TailwindPluginSettings>(
               (acc, settingKey) => {
                 if (pluginSettings[settingKey]) {
                   acc[settingKey] = maybeCall(

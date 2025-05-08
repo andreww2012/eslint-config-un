@@ -1,8 +1,8 @@
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
-import type {getPackageInfo} from 'local-pkg';
-import type {Promisable} from 'type-fest';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {FlatConfigEntry} from '../eslint';
+import type {Promisable} from '../types';
+import type {fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
 import type {AstroEslintConfigOptions} from './astro';
 import type {CasePoliceEslintConfigOptions} from './case-police';
@@ -412,7 +412,7 @@ interface UnConfigs {
 export interface UnConfigContext {
   packagesInfo: Record<
     (typeof PACKAGES_TO_GET_INFO_FOR)[number],
-    Awaited<ReturnType<typeof getPackageInfo>>
+    Awaited<ReturnType<typeof fetchPackageInfo>>
   >;
   rootOptions: EslintConfigUnOptions;
   configsMeta: Record<keyof UnConfigs, {enabled: boolean}>;

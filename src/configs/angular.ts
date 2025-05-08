@@ -4,9 +4,6 @@ import eslintPluginAngularTemplate19 from 'angular-eslint-plugin-template19';
 import eslintPluginAngular18 from 'angular-eslint-plugin18';
 import eslintPluginAngular19 from 'angular-eslint-plugin19';
 import type Eslint from 'eslint';
-import {klona} from 'klona';
-import {getPackageInfoSync} from 'local-pkg';
-import type {ReadonlyDeep, SetRequired, Subtract} from 'type-fest';
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, WARNING} from '../constants';
 import {
   type AllRulesWithPrefix,
@@ -16,13 +13,8 @@ import {
   type EslintPlugin,
   type GetRuleOptions,
 } from '../eslint';
-import type {PrettifyShallow} from '../types';
-import {
-  type MaybeArray,
-  assignDefaults,
-  getPackageMajorVersion,
-  getPackageSemverVersion,
-} from '../utils';
+import type {PrettifyShallow, ReadonlyDeep, SetRequired, Subtract} from '../types';
+import {type MaybeArray, assignDefaults, cloneDeep, fetchPackageInfo} from '../utils';
 import type {UnConfigFn} from './index';
 
 // Please keep ascending order
@@ -188,7 +180,7 @@ const generateAngularPlugins = (
         return;
       }
 
-      Object.entries(klona(originalPlugin.rules || {})).forEach(([currentRuleName, rule]) => {
+      Object.entries(cloneDeep(originalPlugin.rules || {})).forEach(([currentRuleName, rule]) => {
         [currentRuleName, ...(oldRuleNames.get(currentRuleName) || [])].forEach((ruleName) => {
           let shouldDisableRule = false;
 
@@ -446,9 +438,10 @@ export interface AngularEslintConfigOptions
   preferStandaloneComponents?: boolean;
 }
 
-export const angularUnConfig: UnConfigFn<'angular', {plugins: Record<string, EslintPlugin>}> = (
-  context,
-) => {
+export const angularUnConfig: UnConfigFn<
+  'angular',
+  {plugins: Record<string, EslintPlugin>}
+> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.angular;
   const optionsResolved = assignDefaults(optionsRaw, {
     configTemplate: true,
@@ -466,9 +459,8 @@ export const angularUnConfig: UnConfigFn<'angular', {plugins: Record<string, Esl
   const isAngularManuallyEnabled = optionsRaw === true;
   const angularVersion: SupportedAngularVersion | null =
     optionsResolved.angularVersion ??
-    (() => {
-      const packageInfo = getPackageInfoSync('@angular/core');
-      const majorVersion = getPackageMajorVersion(packageInfo);
+    (await (async () => {
+      const majorVersion = (await fetchPackageInfo('@angular/core'))?.versions.major;
       if (
         majorVersion != null &&
         majorVersion >= SUPPORTED_ANGULAR_VERSIONS[0] &&
@@ -477,7 +469,7 @@ export const angularUnConfig: UnConfigFn<'angular', {plugins: Record<string, Esl
         return majorVersion as SupportedAngularVersion;
       }
       return isAngularManuallyEnabled ? LATEST_SUPPORTED_ANGULAR_VERSION : null;
-    })();
+    })());
 
   if (angularVersion == null) {
     return null;
@@ -528,14 +520,14 @@ export const angularUnConfig: UnConfigFn<'angular', {plugins: Record<string, Esl
   const extractInlineHtmlProcessorV17 = eslintPluginAngularTemplate17.processors[
     'extract-inline-html'
   ] as Eslint.Linter.Processor;
-  const extractInlineHtmlProcessor = klona(
+  const extractInlineHtmlProcessor = cloneDeep(
     angularVersion < 18 ||
-      (getPackageSemverVersion(context.packagesInfo.typescript) || Number.POSITIVE_INFINITY) < 4.8
+      (context.packagesInfo.typescript?.versions.majorAndMinor || Number.POSITIVE_INFINITY) < 4.8
       ? extractInlineHtmlProcessorV17
       : extractInlineHtmlProcessorLatest,
   );
   if (!extractInlineHtmlProcessor.meta) {
-    extractInlineHtmlProcessor.meta = klona(extractInlineHtmlProcessorLatest.meta);
+    extractInlineHtmlProcessor.meta = cloneDeep(extractInlineHtmlProcessorLatest.meta);
   }
 
   configBuilderGeneral

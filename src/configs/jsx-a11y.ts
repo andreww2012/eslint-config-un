@@ -1,7 +1,7 @@
 // cspell:ignore spinbutton treegrid menuitemradio menuitemcheckbox
-import type {OmitIndexSignature} from 'type-fest';
 import {ERROR, GLOB_JS_TS_X_ONLY, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import type {OmitIndexSignature} from '../types';
 import {type MaybeFn, assignDefaults, getKeysOfTruthyValues, maybeCall} from '../utils';
 import type {UnConfigFn, UnConfigOptions} from './index';
 

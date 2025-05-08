@@ -2,9 +2,7 @@ import fs from 'node:fs/promises';
 import eslintGitignore from 'eslint-config-flat-gitignore';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
-import {getPackageInfo, isPackageExists} from 'local-pkg';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
-import type {Promisable} from 'type-fest';
 import type {EslintConfigUnOptions, UnConfigContext} from './configs';
 import {angularUnConfig} from './configs/angular';
 import {astroUnConfig} from './configs/astro';
@@ -61,8 +59,8 @@ import {
   genFlatConfigEntryName,
 } from './eslint';
 import {pluginsLoaders} from './plugins';
-import type {FalsyValue} from './types';
-import {type MaybeArray, assignDefaults, getPackageMajorVersion} from './utils';
+import type {FalsyValue, Promisable} from './types';
+import {type MaybeArray, assignDefaults, doesPackageExist, fetchPackageInfo} from './utils';
 
 // TODO debug
 
@@ -100,7 +98,7 @@ export const eslintConfig = async (
   ] = await Promise.all([
     Object.fromEntries(
       await Promise.all(
-        PACKAGES_TO_GET_INFO_FOR.map(async (name) => [name, await getPackageInfo(name)] as const),
+        PACKAGES_TO_GET_INFO_FOR.map(async (name) => [name, await fetchPackageInfo(name)] as const),
       ),
     ),
     detectPackageManager(),
@@ -114,7 +112,7 @@ export const eslintConfig = async (
   const isCasePoliceEnabled = Boolean(configsOptions.casePolice ?? false);
   const isCliEnabled = Boolean(configsOptions.cli ?? true);
   const isCloudfrontFunctionsEnabled = Boolean(configsOptions.cloudfrontFunctions ?? false);
-  const isCssEnabled = Boolean(configsOptions.css ?? !isPackageExists('stylelint'));
+  const isCssEnabled = Boolean(configsOptions.css ?? !(await doesPackageExist('stylelint')));
   const isCssInJsEnabled = Boolean(configsOptions.cssInJs ?? true);
   const isDeMorganEnabled = Boolean(configsOptions.deMorgan ?? false);
   const isEsEnabled = Boolean(configsOptions.es ?? false);
@@ -148,7 +146,7 @@ export const eslintConfig = async (
     eslintPluginTailwind &&
       (configsOptions.tailwind ??
         (packagesInfo.tailwindcss != null &&
-          (getPackageMajorVersion(packagesInfo.tailwindcss) ?? Number.POSITIVE_INFINITY) < 4)),
+          (packagesInfo.tailwindcss.versions.major ?? Number.POSITIVE_INFINITY) < 4)),
   );
   const isTomlEnabled = Boolean(configsOptions.toml ?? false);
   const isTypescriptEnabled =

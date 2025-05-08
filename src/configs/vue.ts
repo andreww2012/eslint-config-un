@@ -7,7 +7,6 @@ import eslintProcessorVueBlocks, {
   type Options as EslintProcessorVueBlocksOptions,
 } from 'eslint-processor-vue-blocks';
 import globals from 'globals';
-import {getPackageInfo, isPackageExists} from 'local-pkg';
 import parserVue from 'vue-eslint-parser';
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, WARNING} from '../constants';
 import {
@@ -20,9 +19,9 @@ import {
 import type {PrettifyShallow} from '../types';
 import {
   assignDefaults,
+  doesPackageExist,
+  fetchPackageInfo,
   getKeysOfTruthyValues,
-  getPackageMajorVersion,
-  getPackageSemverVersion,
   joinPaths,
 } from '../utils';
 import {RULE_CAMELCASE_OPTIONS, RULE_EQEQEQ_OPTIONS} from './js';
@@ -172,7 +171,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.vue;
 
   const vuePackageInfo = context.packagesInfo.vue;
-  const vuePackageMajorVersion = getPackageMajorVersion(vuePackageInfo);
+  const vuePackageMajorVersion = vuePackageInfo?.versions.major;
 
   const optionsResolved = assignDefaults(optionsRaw, {
     files: DEFAULT_VUE_FILES,
@@ -180,16 +179,15 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
       vuePackageMajorVersion === 2 || vuePackageMajorVersion === 3 ? vuePackageMajorVersion : 3,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
     configA11y: true,
-    configPinia: isPackageExists('pinia'),
+    configPinia: await doesPackageExist('pinia'),
     processSfcBlocks: true,
     reportUnusedDisableDirectives: true,
     enforcePropsDeclarationStyle: 'runtime',
   } satisfies VueEslintConfigOptions);
 
-  const nuxtPackageInfo = await getPackageInfo('nuxt');
+  const nuxtPackageInfo = await fetchPackageInfo('nuxt');
   const nuxtMajorVersion =
-    optionsResolved.nuxtMajorVersion ??
-    (nuxtPackageInfo ? getPackageMajorVersion(nuxtPackageInfo) : null);
+    optionsResolved.nuxtMajorVersion ?? nuxtPackageInfo?.versions.major ?? null;
 
   const {
     majorVersion: vueMajorVersion,
@@ -203,7 +201,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     enforcePropsDeclarationStyle,
   } = optionsResolved;
 
-  const vuePackageFullVersion = getPackageSemverVersion(vuePackageInfo) ?? vueMajorVersion;
+  const vuePackageFullVersion = vuePackageInfo?.versions.majorAndMinor ?? vueMajorVersion;
 
   const isVue2 = vueMajorVersion === 2;
   const isVue3 = vueMajorVersion === 3;
@@ -522,7 +520,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     // TODO enable if script setup is enforced and only in JS?
     // .addRule('no-undef-properties', OFF)
     .addRule('no-unsupported-features', ERROR, [
-      {version: `^${vuePackageInfo?.version || vuePackageMajorVersion}`},
+      {version: `^${vuePackageInfo?.versions.full || vuePackageMajorVersion}`},
     ])
     .addRule('no-unused-emit-declarations', ERROR)
     // .addRule('no-unused-properties', OFF)

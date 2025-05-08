@@ -11,7 +11,7 @@ import {
   type FlatConfigEntryForBuilder,
   type RulesRecord,
 } from '../eslint';
-import {assignDefaults, getPackageSemverVersion} from '../utils';
+import {assignDefaults} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import {
   RULE_NO_UNUSED_EXPRESSIONS_OPTIONS,
@@ -157,8 +157,6 @@ export const tsUnConfig: UnConfigFn<
   const typescriptPackageInfo = context.packagesInfo.typescript;
   const optionsRaw = context.rootOptions.configs?.ts;
 
-  const typescriptPackageSemverVersion = getPackageSemverVersion(typescriptPackageInfo);
-
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypeAware: true,
     configNoTypeAssertion: false,
@@ -168,7 +166,7 @@ export const tsUnConfig: UnConfigFn<
       context.configsMeta.svelte.enabled && 'svelte',
     ].filter((v) => v !== false),
   } satisfies TsEslintConfigOptions);
-  optionsResolved.typescriptVersion ??= typescriptPackageSemverVersion ?? undefined;
+  optionsResolved.typescriptVersion ??= typescriptPackageInfo?.versions.majorAndMinor ?? undefined;
   const {configTypeAware, configNoTypeAssertion, extraFileExtensions, typescriptVersion} =
     optionsResolved;
 

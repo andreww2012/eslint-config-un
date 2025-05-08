@@ -1,5 +1,5 @@
 // See https://github.com/typescript-eslint/typescript-eslint/issues/8721
-import type {Tagged} from 'type-fest';
+import type {Tagged} from './types';
 
 /* Error levels */
 

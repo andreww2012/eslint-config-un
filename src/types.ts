@@ -18,3 +18,13 @@ export type PrettifyShallow<T> = {
 export type Prettify<T> = {
   [K in keyof T]: Prettify<T[K]>;
 } & {};
+
+export type {
+  Tagged,
+  ReadonlyDeep,
+  SetRequired,
+  Subtract,
+  Promisable,
+  ValueOf,
+  OmitIndexSignature,
+} from 'type-fest';

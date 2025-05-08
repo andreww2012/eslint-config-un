@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import EslintJs from '@eslint/js';
-import {getPackageInfoSync} from 'local-pkg';
 import {ERROR, WARNING} from '../constants';
 import {
   type BuiltinEslintRulesFixed,
@@ -8,7 +7,7 @@ import {
   type ConfigSharedOptions,
   type GetRuleOptions,
 } from '../eslint';
-import {assignDefaults, getPackageSemverVersion} from '../utils';
+import {assignDefaults, fetchPackageInfo} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRulesFixed> {}
@@ -46,13 +45,13 @@ export const RULE_PREFER_DESTRUCTURING_OPTIONS: GetRuleOptions<'prefer-destructu
   },
 ];
 
-export const jsUnConfig: UnConfigFn<'js'> = (context) => {
+export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.js;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsEslintConfigOptions);
 
   const configBuilder = new ConfigEntryBuilder('', optionsResolved, context);
 
-  const eslintVersion = getPackageSemverVersion(getPackageInfoSync('eslint')) || 0;
+  const eslintVersion = (await fetchPackageInfo('eslint'))?.versions.majorAndMinor || 0;
 
   configBuilder
     .addConfig(['js', {includeDefaultFilesAndIgnores: true}])

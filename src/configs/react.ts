@@ -1,4 +1,3 @@
-import {isPackageExists} from 'local-pkg';
 import {
   ERROR,
   GLOB_JS_TS_X,
@@ -19,7 +18,7 @@ import {
   type GetRuleOptions,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults, getPackageMajorVersion} from '../utils';
+import {assignDefaults, doesPackageExist} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './vue';
 import type {UnConfigFn} from './index';
 
@@ -528,7 +527,7 @@ const NEXT_EXPORTS: readonly string[] = [
   'viewport', // https://nextjs.org/docs/app/api-reference/functions/generate-viewport
 ];
 
-export const reactUnConfig: UnConfigFn<'react'> = (context) => {
+export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
   const reactPackageInfo = context.packagesInfo.react;
 
   const optionsRaw = context.rootOptions.configs?.react;
@@ -536,12 +535,12 @@ export const reactUnConfig: UnConfigFn<'react'> = (context) => {
     configAllowDefaultExportsInJsxFiles: true,
     configHooks: true,
     configReactX: true,
-    configDom: isPackageExists('react-dom'),
+    configDom: await doesPackageExist('react-dom'),
     configRefresh: true,
     pluginX: 'prefer',
     shorthandBoolean: 'prefer',
     shorthandFragment: 'prefer',
-    reactVersion: getPackageMajorVersion(reactPackageInfo) ?? LATEST_REACT_VERSION,
+    reactVersion: reactPackageInfo?.versions.major ?? LATEST_REACT_VERSION,
   } satisfies ReactEslintConfigOptions);
 
   const {
@@ -561,7 +560,7 @@ export const reactUnConfig: UnConfigFn<'react'> = (context) => {
 
   const reactFullVersion = String(
     (optionsRaw && typeof optionsRaw === 'object' ? optionsRaw.reactVersion : null) ??
-      reactPackageInfo?.version ??
+      reactPackageInfo?.versions.full ??
       optionsResolved.reactVersion,
   );
 
@@ -1191,6 +1190,12 @@ export const reactUnConfig: UnConfigFn<'react'> = (context) => {
     .addRule('react/no-is-mounted', ERROR) // 🟢
     .addOverrides();
 
+  const isRemixOrReactRouterInstalled = (
+    await Promise.all(
+      [...REMIX_PACKAGES, ...REACT_ROUTER_PACKAGES].map((module) => doesPackageExist(module)),
+    )
+  ).some(Boolean);
+
   const configReactRefreshOptions = typeof configRefresh === 'object' ? configRefresh : {};
   const configBuilderRefresh = new ConfigEntryBuilder(
     'react-refresh',
@@ -1208,14 +1213,11 @@ export const reactUnConfig: UnConfigFn<'react'> = (context) => {
     .addRule('only-export-components', ERROR, [
       {
         allowExportNames: [
-          ...(REMIX_PACKAGES.some((packageName) => isPackageExists(packageName)) ||
-          REACT_ROUTER_PACKAGES.some((packageName) => isPackageExists(packageName))
-            ? REMIX_AND_REACT_ROUTER_EXPORTS
-            : []),
+          ...(isRemixOrReactRouterInstalled ? REMIX_AND_REACT_ROUTER_EXPORTS : []),
           ...(context.packagesInfo.next ? NEXT_EXPORTS : []),
           ...(configReactRefreshOptions.allowExportNames || []),
         ],
-        allowConstantExport: isPackageExists('vite'),
+        allowConstantExport: await doesPackageExist('vite'),
         ...configReactRefreshOptions.options,
       },
     ])

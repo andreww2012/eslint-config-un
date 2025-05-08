@@ -56,5 +56,23 @@ export default eslintConfig({
         'svelte/sort-attributes': 0,
       },
     },
+    {
+      name: 'forbid-utility-package-imports',
+      ignores: ['src/utils.ts', 'src/types.ts'],
+      rules: {
+        'no-restricted-imports': [
+          2,
+          {
+            patterns: [
+              {
+                regex: '^local-pkg|type-fest|klona|@antfu/utils|defu|es-toolkit$',
+                message:
+                  'Please do not use this package directly, import utility functions from `utils.ts` instead',
+              },
+            ],
+          },
+        ],
+      },
+    },
   ],
 });

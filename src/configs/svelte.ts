@@ -1,10 +1,9 @@
 // cspell:ignore curlies
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
-import {isPackageExists} from 'local-pkg';
 import svelteEslintParser from 'svelte-eslint-parser';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
-import {assignDefaults, getKeysOfTruthyValues, getPackageSemverVersion} from '../utils';
+import {assignDefaults, doesPackageExist, getKeysOfTruthyValues} from '../utils';
 import {type VueEslintConfigOptions, noRestrictedHtmlElementsDefault} from './vue';
 import type {UnConfigFn} from './index';
 
@@ -102,17 +101,16 @@ export const svelteUnConfig: UnConfigFn<
       plugin: (typeof import('eslint-plugin-svelte'))['default'];
     },
   ]
-> = (context, {plugin: eslintPluginSvelte}) => {
+> = async (context, {plugin: eslintPluginSvelte}) => {
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
-
-  const svelteVersionDetected = getPackageSemverVersion(context.packagesInfo.svelte);
 
   const optionsRaw = context.rootOptions.configs?.svelte;
   const optionsResolved = assignDefaults(optionsRaw, {
     files: DEFAULT_SVELTE_FILES,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
-    svelteVersion: svelteVersionDetected ?? LATEST_SVELTE_MAJOR_VERSION,
-    isPrettierPluginSvelteUsed: isPackageExists('prettier-plugin-svelte'),
+    svelteVersion:
+      context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,
+    isPrettierPluginSvelteUsed: await doesPackageExist('prettier-plugin-svelte'),
   } satisfies SvelteEslintConfigOptions);
 
   const {
