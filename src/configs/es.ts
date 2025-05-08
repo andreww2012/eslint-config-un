@@ -630,9 +630,11 @@ export const esUnConfig: UnConfigFn<
       .addRule('no-string-fromcodepoint', grs(2015, 'stringFromCodePoint')) // >=1.2.0
       .addRule('no-string-prototype-codepointat', grs(2015, 'stringPrototypeCodePointAt')) // >=5.0.0
       .addRule('no-string-prototype-endswith', grs(2015, 'stringPrototypeEndsWith')) // >=5.0.0
+      .addRule('no-string-prototype-endswith', grs(2015, 'stringPrototypeEndsWith')) // >=5.0.0
       .addRule('no-string-prototype-includes', grs(2015, 'stringPrototypeIncludes')) // >=5.0.0
       .addRule('no-string-prototype-normalize', grs(2015, 'stringPrototypeNormalize')) // >=5.0.0
       .addRule('no-string-prototype-repeat', grs(2015, 'stringPrototypeRepeat')) // >=5.0.0
+      .addRule('no-string-prototype-startswith', grs(2015, 'stringPrototypeStartsWith')) // >=5.0.0
       .addRule('no-string-prototype-startswith', grs(2015, 'stringPrototypeStartsWith')) // >=5.0.0
       .addRule('no-string-raw', grs(2015, 'stringRaw')) // >=1.2.0
       .addRule('no-subclassing-builtins', grs(2015, 'subclassingBuiltins')) // >=1.2.0

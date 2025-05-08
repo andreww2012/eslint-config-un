@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import eslintGitignore from 'eslint-config-flat-gitignore';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
-import {getPackageInfo, getPackageInfoSync} from 'local-pkg';
+import {getPackageInfo, isPackageExists} from 'local-pkg';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {Promisable} from 'type-fest';
 import type {EslintConfigUnOptions, UnConfigContext} from './configs';
@@ -15,6 +15,7 @@ import {deMorganUnConfig} from './configs/de-morgan';
 import {esUnConfig} from './configs/es';
 import {eslintCommentsUnConfig} from './configs/eslint-comments';
 import {cliEslintConfig} from './configs/extra/cli';
+import {cloudfrontFunctionsEslintConfig} from './configs/extra/cloudfront-functions';
 import {importUnConfig} from './configs/import';
 import {jestUnConfig} from './configs/jest';
 import {jsUnConfig} from './configs/js';
@@ -112,7 +113,8 @@ export const eslintConfig = async (
   const isAstroEnabled = Boolean(configsOptions.astro ?? packagesInfo.astro);
   const isCasePoliceEnabled = Boolean(configsOptions.casePolice ?? false);
   const isCliEnabled = Boolean(configsOptions.cli ?? true);
-  const isCssEnabled = Boolean(configsOptions.css ?? getPackageInfoSync('stylelint') == null);
+  const isCloudfrontFunctionsEnabled = Boolean(configsOptions.cloudfrontFunctions ?? false);
+  const isCssEnabled = Boolean(configsOptions.css ?? !isPackageExists('stylelint'));
   const isCssInJsEnabled = Boolean(configsOptions.cssInJs ?? true);
   const isDeMorganEnabled = Boolean(configsOptions.deMorgan ?? false);
   const isEsEnabled = Boolean(configsOptions.es ?? false);
@@ -166,6 +168,7 @@ export const eslintConfig = async (
       astro: isAstroEnabled,
       casePolice: isCasePoliceEnabled,
       cli: isCliEnabled,
+      cloudfrontFunctions: isCloudfrontFunctionsEnabled,
       css: isCssEnabled,
       cssInJs: isCssInJsEnabled,
       deMorgan: isDeMorganEnabled,
@@ -356,6 +359,7 @@ export const eslintConfig = async (
     },
 
     isCliEnabled && cliEslintConfig(context),
+    isCloudfrontFunctionsEnabled && cloudfrontFunctionsEslintConfig(context),
 
     ...(options.extraConfigs || []),
 

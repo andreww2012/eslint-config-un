@@ -33,7 +33,8 @@ export const cliEslintConfig: UnConfigFn<'cli'> = (context) => {
     ])
     .addRule('node/no-process-exit', OFF)
     .addRule('unicorn/no-process-exit', OFF)
-    .addRule('no-console', OFF);
+    .addRule('no-console', OFF)
+    .addOverrides();
 
   return {
     configs: configBuilder.getAllConfigs(),

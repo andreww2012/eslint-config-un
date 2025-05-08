@@ -12,6 +12,7 @@ import type {DeMorganEslintConfigOptions} from './de-morgan';
 import type {EsEslintConfigOptions} from './es';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
 import type {CliEslintConfigOptions} from './extra/cli';
+import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-functions';
 import type {ImportEslintConfigOptions} from './import';
 import type {JestEslintConfigOptions} from './jest';
 import type {JsEslintConfigOptions} from './js';
@@ -84,14 +85,6 @@ export interface EslintConfigUnOptions {
 export type UnConfigOptions<T extends object> = boolean | Partial<T>;
 
 interface UnConfigs {
-  /**
-   * A config specific to files meant to be executed. By default, allows `process.exit()`
-   * and `console` methods in files placed in `bin`, `scripts` and `cli` directories
-   * (on any level).
-   * @default true
-   */
-  cli: UnConfigOptions<CliEslintConfigOptions>;
-
   /**
    * @default true
    */
@@ -388,6 +381,26 @@ interface UnConfigs {
    * @default false
    */
   es: UnConfigOptions<EsEslintConfigOptions>;
+
+  /**
+   * A config specific to files meant to be executed. By default, allows `process.exit()`
+   * and `console` methods in files placed in `bin`, `scripts` and `cli` directories
+   * (on any level).
+   * @default true
+   */
+  cli: UnConfigOptions<CliEslintConfigOptions>;
+
+  /**
+   * Rules specific to [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html).
+   * [JavaScript runtime 2.0](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-20.html) is assumed by default.
+   * For functions written for [JavaScript runtime 1.0](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-10.html),
+   * use `configV1` sub-config.
+   *
+   * Note that if neither `files` or `ignores` are specified or is an empty array in the main
+   * or a sub-config, the config won't be generated.
+   * @default false
+   */
+  cloudfrontFunctions: UnConfigOptions<CloudfrontFunctionsEslintConfigOptions>;
 }
 
 export interface UnConfigContext {

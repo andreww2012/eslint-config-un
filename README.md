@@ -53,6 +53,7 @@ Includes the rules from the following configs & plugins:
 - `astro` (since v0.9.0), using [`eslint-plugin-astro`](https://www.npmjs.com/package/eslint-plugin-astro)
 - `svelte` (since v?.?.?), using [`eslint-plugin-svelte`](https://www.npmjs.com/package/eslint-plugin-svelte)
 - `es` (since v?.?.?), using [`eslint-plugin-es-x`](https://www.npmjs.com/package/eslint-plugin-es-x)
+- `cloudfrontFunctions` (since v?.?.?) for [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html)
 
 ## Features
 
