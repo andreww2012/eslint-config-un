@@ -19,6 +19,7 @@
   - 🟢 [`prefer-output-emitter-ref`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-output-emitter-ref.md)
 - `eslint-plugin-vue`: [10.0.1 -> 10.1.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.0.1...v10.1.0)
   - 🟢 (enabled) [`define-props-destructuring`](https://eslint.vuejs.org/rules/define-props-destructuring.html). Enforced **no props destructuring** by default.
+- `eslint-plugin-unicorn`: [59.0.0 -> 59.0.1](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v59.0.0...v59.0.1)
 
 ## 0.9.0
 
