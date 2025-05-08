@@ -22,6 +22,7 @@
 - `eslint-plugin-unicorn`: [59.0.0 -> 59.0.1](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v59.0.0...v59.0.1)
 - `@eslint-react/eslint-plugin`: [1.48.5 -> 1.49.0](https://github.com/Rel1cx/eslint-react/compare/v1.48.5...v1.49.0)
   - 🟢 (enabled) [`jsx-key-before-spread`](https://eslint-react.xyz/docs/rules/jsx-key-before-spread)
+- `@next/eslint-plugin-next`: [15.3.1 -> 15.3.2](https://github.com/vercel/next.js/compare/v15.3.1...v15.3.2)
 
 ## 0.9.0
 
