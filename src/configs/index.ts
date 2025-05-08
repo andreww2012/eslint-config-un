@@ -97,6 +97,10 @@ interface UnConfigs {
   js: UnConfigOptions<JsEslintConfigOptions>;
 
   /**
+   * TypeScript specific rules.
+   *
+   * Note that if `files` is empty array, `typeAware` sub-config will be disabled too,
+   * unless its `files` are explicitly specified.
    * @default true
    */
   ts: UnConfigOptions<TsEslintConfigOptions>;
@@ -319,15 +323,17 @@ interface UnConfigs {
   preferArrowFunctions: UnConfigOptions<PreferArrowFunctionsEslintConfigOptions>;
 
   /**
-   * NOTE: disabled by default.
    * If enabled, lockfiles (`yarn.lock`, `pnpm-lock.yaml`) will be ignored by default
+   *
+   * NOTE: disabled by default.
    * @default false
    */
   yaml: UnConfigOptions<YamlEslintConfigOptions>;
 
   /**
-   * NOTE: disabled by default.
    * If enabled, a Rust lockfile (`Cargo.lock`) will be ignored by default
+   *
+   * NOTE: disabled by default.
    * @default false
    */
   toml: UnConfigOptions<TomlEslintConfigOptions>;
@@ -345,9 +351,9 @@ interface UnConfigs {
   packageJson: UnConfigOptions<PackageJsonEslintConfigOptions>;
 
   /**
-   * NOTE: disabled by default.
-   *
    * NOTE: even if enabled, **all** the rules are still disabled by default.
+   *
+   * NOTE: disabled by default.
    * @default false
    */
   perfectionist: UnConfigOptions<PerfectionistEslintConfigOptions>;
@@ -362,28 +368,28 @@ interface UnConfigs {
   deMorgan: UnConfigOptions<DeMorganEslintConfigOptions>;
 
   /**
-   * NOTE: disabled by default
-   *
    * Used plugins:
    * - [`eslint-plugin-json-schema-validator`](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) ([the single rule docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/docs/rules/no-invalid.md))
+   *
+   * NOTE: disabled by default
    * @default false
    */
   jsonSchemaValidator: UnConfigOptions<JsonSchemaValidatorEslintConfigOptions>;
 
   /**
-   * NOTE: disabled by default
-   *
    * Used plugins:
    * - [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police) ([docs](https://github.com/antfu/case-police?tab=coc-ov-file))
+   *
+   * NOTE: disabled by default
    * @default false
    */
   casePolice: UnConfigOptions<CasePoliceEslintConfigOptions>;
 
   /**
-   * NOTE: disabled by default
-   *
    * Used plugins:
    * - [`eslint-plugin-es-x`](https://www.npmjs.com/package/eslint-plugin-es-x) ([docs](https://eslint-community.github.io/eslint-plugin-es-x/))
+   *
+   * NOTE: disabled by default
    * @default false
    */
   es: UnConfigOptions<EsEslintConfigOptions>;

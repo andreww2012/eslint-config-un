@@ -254,7 +254,35 @@ export const tsUnConfig: UnConfigFn<
     },
   });
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, '@typescript-eslint');
+  const configBuilderNONTypeAwareSetup = createConfigBuilder(
+    context,
+    optionsResolved,
+    '@typescript-eslint',
+    false,
+  );
+  configBuilderNONTypeAwareSetup
+    ?.addConfig(
+      [
+        'ts/non-type-aware/setup',
+        {
+          // Applying this generally to all files is unacceptable
+          filesFallback: filesNONTypeAware.length === 0 ? TS_FILES_DEFAULT : filesNONTypeAware,
+          ignoresFallback: ignoresNONTypeAware,
+        },
+      ],
+      generateBaseOptions(false),
+    )
+    // The following rules have many false positives in TS files, so it's safe (and correct) to always disable them
+    .disableAnyRule('no-unused-vars')
+    .disableAnyRule('no-use-before-define')
+    .disableAnyRule('no-shadow')
+    .disableAnyRule('no-redeclare');
+
+  const configBuilderNONTypeAware = createConfigBuilder(
+    context,
+    optionsResolved,
+    '@typescript-eslint',
+  );
 
   // LEGEND:
   // ❄️ = Feature-frozen in ts-eslint
@@ -262,17 +290,14 @@ export const tsUnConfig: UnConfigFn<
 
   const noUnsafeRulesSeverity = optionsResolved.disableNoUnsafeRules ? OFF : WARNING;
   // TODO add rules
-  configBuilder
-    ?.addConfig(
-      [
-        'ts/rules-regular',
-        {
-          filesFallback: optionsResolved.files?.length === 0 ? [] : filesNONTypeAware,
-          ignoresFallback: ignoresNONTypeAware,
-        },
-      ],
-      generateBaseOptions(false),
-    )
+  configBuilderNONTypeAware
+    ?.addConfig([
+      'ts/non-type-aware/rules',
+      {
+        filesFallback: optionsResolved.files?.length === 0 ? [] : filesNONTypeAware,
+        ignoresFallback: ignoresNONTypeAware,
+      },
+    ])
     .addBulkRules(
       tsEslintConfigs.strict.reduce<RulesRecord>(
         (result, config) => Object.assign(result, config.rules),
@@ -379,22 +404,45 @@ export const tsUnConfig: UnConfigFn<
     .disableAnyRule('dot-notation')
     .addOverrides();
 
-  const configBuilderTypeAware = createConfigBuilder(
+  // CONFIG TYPE AWARE
+
+  const configBuilderTypeAwareSetup = createConfigBuilder(
     context,
     configTypeAware,
     '@typescript-eslint',
+    false,
+  );
+  configBuilderTypeAwareSetup?.addConfig(
+    [
+      'ts/type-aware/setup',
+      {
+        // Applying this generally to all files is unacceptable
+        filesFallback: filesTypeAware.length === 0 ? TS_FILES_DEFAULT : filesTypeAware,
+        ignoresFallback: ignoresTypeAware,
+      },
+    ],
+    generateBaseOptions(true),
+  );
+
+  const configBuilderTypeAware = createConfigBuilder(
+    context,
+    configTypeAware === false
+      ? false
+      : {
+          ...(typeof configTypeAware === 'object' ? configTypeAware : {}),
+          // This is an exception for "files is empty array disables only one config" rule. If parent config gets an empty array, we must disable type-aware rules too
+          ...(optionsResolved.files?.length === 0 && {files: []}),
+        },
+    '@typescript-eslint',
   );
   configBuilderTypeAware
-    ?.addConfig(
-      [
-        'ts/rules-type-aware',
-        {
-          filesFallback: filesTypeAware,
-          ignoresFallback: ignoresTypeAware,
-        },
-      ],
-      generateBaseOptions(true),
-    )
+    ?.addConfig([
+      'ts/type-aware/rules',
+      {
+        filesFallback: filesTypeAware,
+        ignoresFallback: ignoresTypeAware,
+      },
+    ])
     .addBulkRules(
       tsEslintConfigs.strictTypeCheckedOnly.reduce<RulesRecord>(
         (result, config) => Object.assign(result, config.rules),
@@ -499,7 +547,7 @@ export const tsUnConfig: UnConfigFn<
     .addOverrides();
 
   // TODO add rules
-  configBuilder
+  configBuilderNONTypeAware
     ?.addConfig('ts/disable-handled-by-ts-compiler-rules', {
       files: [...TS_FILES_DEFAULT, ...filesNONTypeAware, ...filesTypeAware],
     })
@@ -556,8 +604,12 @@ export const tsUnConfig: UnConfigFn<
 
   return {
     configs: [
-      configBuilder,
+      configBuilderNONTypeAwareSetup,
+      configBuilderNONTypeAware,
+
+      configBuilderTypeAwareSetup,
       configBuilderTypeAware,
+
       configBuilderDts,
       configBuilderNoTypeAssertions,
     ],
