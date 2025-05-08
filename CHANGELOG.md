@@ -7,6 +7,12 @@
 - ESLint plugins are now loaded on demand, i.e. only if they are actually used anywhere in the config. You can opt out of this behavior by setting `loadPluginsOnDemand` option to `false`.
 - Added an option to `import` config to specify `eslint-plugin-import-x` plugin settings.
 - [**BREAKING**] Passing empty array to `files` will now disable the config.
+- Set a new option `allowRethrowing: true` for [`@typescript-eslint/only-throw-error`](https://typescript-eslint.io/rules/only-throw-error) rule.
+
+### Dependencies
+
+- `typescript-eslint`: [8.31.1 -> 8.32.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.31.1...v8.32.0)
+  - 🟢 (enabled) [`no-unnecessary-type-conversion`](https://typescript-eslint.io/rules/no-unnecessary-type-conversion).
 
 ## 0.9.0
 

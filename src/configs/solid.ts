@@ -24,7 +24,7 @@ export const solidUnConfig: UnConfigFn<'solid'> = (context) => {
     .addRule('event-handlers', WARNING, [
       {
         // Docs say "Enable for Solid < v1.6"
-        warnOnSpread: Boolean((solidParsedVersion ?? Number.POSITIVE_INFINITY) < 1.6),
+        warnOnSpread: (solidParsedVersion ?? Number.POSITIVE_INFINITY) < 1.6,
       },
     ]) // 🟡
     .addRule('imports', ERROR) // 🟡

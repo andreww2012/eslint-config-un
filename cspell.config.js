@@ -66,5 +66,6 @@ export default {
     'unthrown',
     'promisable',
     'requirable',
+    'rethrowing',
   ],
 };

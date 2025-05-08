@@ -49,6 +49,7 @@ type TypeAwareRules =
   | 'no-unnecessary-template-expression'
   | 'no-unnecessary-type-arguments'
   | 'no-unnecessary-type-assertion'
+  | 'no-unnecessary-type-conversion'
   | 'no-unnecessary-type-parameters'
   | 'no-unsafe-argument'
   | 'no-unsafe-assignment'
@@ -493,6 +494,7 @@ export const tsUnConfig: UnConfigFn<
       disableAutofix: true,
     })
     .addRule('no-unnecessary-type-assertion', ERROR)
+    .addRule('no-unnecessary-type-conversion', ERROR)
     // .addRule('no-unnecessary-type-parameters', ERROR)
     .addRule('no-unsafe-argument', noUnsafeRulesSeverity)
     .addRule('no-unsafe-assignment', noUnsafeRulesSeverity)
@@ -503,7 +505,11 @@ export const tsUnConfig: UnConfigFn<
     // .addRule('no-unsafe-type-assertion', OFF)
     // .addRule('no-unsafe-unary-minus', ERROR)
     .disableAnyRule('no-throw-literal') // Note: has different name
-    // .addRule('only-throw-error', ERROR)
+    .addRule('only-throw-error', ERROR, [
+      {
+        allowRethrowing: true,
+      },
+    ])
     .addRule('prefer-promise-reject-errors', ERROR, [], {
       overrideBaseRule: true,
     })
