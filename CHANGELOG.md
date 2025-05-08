@@ -17,6 +17,8 @@
 - `angular-eslint`: [19.3.0 -> 19.4.0](https://github.com/angular-eslint/angular-eslint/compare/v19.3.0...v19.4.0)
   - 🟢 (enabled) [`prefer-template-literal`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-template-literal.md)
   - 🟢 [`prefer-output-emitter-ref`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-output-emitter-ref.md)
+- `eslint-plugin-vue`: [10.0.1 -> 10.1.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.0.1...v10.1.0)
+  - 🟢 (enabled) [`define-props-destructuring`](https://eslint.vuejs.org/rules/define-props-destructuring.html). Enforced **no props destructuring** by default.
 
 ## 0.9.0
 

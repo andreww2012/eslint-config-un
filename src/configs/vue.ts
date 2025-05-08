@@ -476,6 +476,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
       },
     ])
     .addRule('define-props-declaration', ERROR, [enforcePropsDeclarationStyle])
+    .addRule('define-props-destructuring', ERROR, [{destructure: 'never'}])
     // .addRule('enforce-style-attribute', OFF)
     .addRule('html-button-has-type', ERROR)
     // .addRule('html-comment-content-newline', OFF)
