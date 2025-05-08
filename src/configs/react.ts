@@ -931,6 +931,7 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
       },
     ])
     // === X rules ===
+    .addRule('jsx-key-before-spread', ERROR) // 🟡
     .addRule('jsx-no-duplicate-props', getDoubleRuleSeverity(JSX_NO_DUPLICATE_PROPS_SEVERITY, true)) // 🟡 🔄️
     .addRule('jsx-no-undef', getDoubleRuleSeverity(JSX_NO_UNDEF_SEVERITY, true)) // 🔄️
     // "This rule does nothing when using the New JSX Transform or if the `no-unused-vars` rule is not enabled."

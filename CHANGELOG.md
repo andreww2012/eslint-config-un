@@ -20,6 +20,8 @@
 - `eslint-plugin-vue`: [10.0.1 -> 10.1.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.0.1...v10.1.0)
   - 🟢 (enabled) [`define-props-destructuring`](https://eslint.vuejs.org/rules/define-props-destructuring.html). Enforced **no props destructuring** by default.
 - `eslint-plugin-unicorn`: [59.0.0 -> 59.0.1](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v59.0.0...v59.0.1)
+- `@eslint-react/eslint-plugin`: [1.48.5 -> 1.49.0](https://github.com/Rel1cx/eslint-react/compare/v1.48.5...v1.49.0)
+  - 🟢 (enabled) [`jsx-key-before-spread`](https://eslint-react.xyz/docs/rules/jsx-key-before-spread)
 
 ## 0.9.0
 
