@@ -39,7 +39,7 @@ export interface YamlEslintConfigOptions extends ConfigSharedOptions<'yml'> {
 }
 
 export const yamlUnConfig: UnConfigFn<'yaml'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.yaml;
+  const optionsRaw = context.rootOptions.configs?.yaml;
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceExtension: 'yml',
   } satisfies YamlEslintConfigOptions);

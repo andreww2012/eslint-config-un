@@ -286,7 +286,7 @@ export const jsxA11yUnConfig: UnConfigFn<
     },
   ]
 > = (context, customConfig) => {
-  const optionsRaw = customConfig?.options ?? context.globalOptions.configs?.jsxA11y;
+  const optionsRaw = customConfig?.options ?? context.rootOptions.configs?.jsxA11y;
   const optionsResolved = assignDefaults(optionsRaw, {
     ambiguousWordsForAnchorText: {
       words: DEFAULT_AMBIGUOUS_WORDS,

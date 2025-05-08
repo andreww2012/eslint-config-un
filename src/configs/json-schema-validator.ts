@@ -32,7 +32,7 @@ export interface JsonSchemaValidatorEslintConfigOptions
 }
 
 export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.jsonSchemaValidator;
+  const optionsRaw = context.rootOptions.configs?.jsonSchemaValidator;
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies JsonSchemaValidatorEslintConfigOptions,

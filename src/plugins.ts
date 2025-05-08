@@ -1,118 +1,120 @@
 import {fixupPluginRules} from '@eslint/compat';
-import eslintPluginCss from '@eslint/css';
-import eslintPluginMarkdown from '@eslint/markdown';
-import eslintPluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments';
-import eslintPluginReactX from '@eslint-react/eslint-plugin';
-import eslintPluginNext from '@next/eslint-plugin-next';
-import eslintPluginStylistic from '@stylistic/eslint-plugin';
-import eslintPluginVitest from '@vitest/eslint-plugin';
-import eslintPluginAstro from 'eslint-plugin-astro';
-import eslintPluginCasePolice from 'eslint-plugin-case-police';
-import eslintPluginCssInJs from 'eslint-plugin-css';
-import eslintPluginDeMorgan from 'eslint-plugin-de-morgan';
-import eslintPluginEsX from 'eslint-plugin-es-x';
-import eslintPluginImportX from 'eslint-plugin-import-x';
-import eslintPluginJest from 'eslint-plugin-jest';
-import eslintPluginJestExtended from 'eslint-plugin-jest-extended';
-import eslintPluginJsDoc from 'eslint-plugin-jsdoc';
-import eslintPluginJsonSchemaValidator from 'eslint-plugin-json-schema-validator';
-import eslintPluginJsonc from 'eslint-plugin-jsonc';
-import eslintPluginJsxA11y from 'eslint-plugin-jsx-a11y';
-import eslintPluginNode from 'eslint-plugin-n';
-import eslintPluginNoTypeAssertion from 'eslint-plugin-no-type-assertion';
-import eslintPluginPackageJson from 'eslint-plugin-package-json';
-import eslintPluginPerfectionist from 'eslint-plugin-perfectionist';
-import eslintPluginPinia from 'eslint-plugin-pinia';
-import eslintPluginPnpm from 'eslint-plugin-pnpm';
-import eslintPluginPreferArrowFunctions from 'eslint-plugin-prefer-arrow-functions';
-import eslintPluginPromise from 'eslint-plugin-promise';
-// TODO it returns undefined without `* as` syntax for some reason
-import * as eslintPluginQwik from 'eslint-plugin-qwik';
-import eslintPluginReact from 'eslint-plugin-react';
-import * as eslintPluginReactCompiler from 'eslint-plugin-react-compiler';
-import * as eslintPluginReactHooks from 'eslint-plugin-react-hooks';
-import eslintPluginReactRefresh from 'eslint-plugin-react-refresh';
-import * as eslintPluginRegexp from 'eslint-plugin-regexp';
-import eslintPluginSecurity from 'eslint-plugin-security';
-import eslintPluginSonar from 'eslint-plugin-sonarjs';
-import eslintPluginToml from 'eslint-plugin-toml';
-import eslintPluginUnicorn from 'eslint-plugin-unicorn';
-import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
-import eslintPluginVue from 'eslint-plugin-vue';
-import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility';
-import eslintPluginYaml from 'eslint-plugin-yml';
-import {plugin as typescriptEslintPlugin} from 'typescript-eslint';
-import {type FlatConfigEntry, disableAutofixForAllRulesInPlugin} from './eslint';
+import type {EslintPlugin} from './eslint';
+import {interopDefault} from './utils';
 
-export const loadEslintPlugins = ({
-  disableAutofixesForPlugins,
-}: {disableAutofixesForPlugins?: string[]} = {}) => {
-  const result: FlatConfigEntry['plugins'] & {} = {
-    unicorn: eslintPluginUnicorn,
-    '@stylistic': eslintPluginStylistic,
+export const pluginsLoaders = {
+  '@eslint-community/eslint-comments': () =>
+    interopDefault(import('@eslint-community/eslint-plugin-eslint-comments')),
+  '@eslint-react': () =>
     // @ts-expect-error types mismatch
-    '@typescript-eslint': typescriptEslintPlugin,
+    interopDefault(import('@eslint-react/eslint-plugin')).then(
+      (m) => m?.configs.all.plugins['@eslint-react'],
+    ),
+  '@eslint-react/debug': () =>
     // @ts-expect-error types mismatch
-    'css-in-js': eslintPluginCssInJs,
-    '@eslint-community/eslint-comments': eslintPluginEslintComments,
+    interopDefault(import('@eslint-react/eslint-plugin')).then(
+      (m) => m?.configs.all.plugins['@eslint-react/debug'],
+    ),
+  '@eslint-react/dom': () =>
     // @ts-expect-error types mismatch
-    import: eslintPluginImportX,
-    jest: eslintPluginJest,
-    'jest-extended': eslintPluginJestExtended,
-    'unused-imports': eslintPluginUnusedImports,
-    jsdoc: eslintPluginJsDoc,
+    interopDefault(import('@eslint-react/eslint-plugin')).then(
+      (m) => m?.configs.all.plugins['@eslint-react/dom'],
+    ),
+  '@eslint-react/hooks-extra': () =>
     // @ts-expect-error types mismatch
-    jsonc: eslintPluginJsonc,
-    markdown: eslintPluginMarkdown,
-    node: eslintPluginNode,
+    interopDefault(import('@eslint-react/eslint-plugin')).then(
+      (m) => m?.configs.all.plugins['@eslint-react/hooks-extra'],
+    ),
+  '@eslint-react/naming-convention': () =>
     // @ts-expect-error types mismatch
-    'package-json': eslintPluginPackageJson,
-    perfectionist: eslintPluginPerfectionist,
+    interopDefault(import('@eslint-react/eslint-plugin')).then(
+      (m) => m?.configs.all.plugins['@eslint-react/naming-convention'],
+    ),
+  '@eslint-react/web-api': () =>
     // @ts-expect-error types mismatch
-    'prefer-arrow-functions': eslintPluginPreferArrowFunctions,
-    promise: eslintPluginPromise,
-    regexp: eslintPluginRegexp,
+    interopDefault(import('@eslint-react/eslint-plugin')).then(
+      (m) => m?.configs.all.plugins['@eslint-react/web-api'],
+    ),
+  '@next/next': () => interopDefault(import('@next/eslint-plugin-next')),
+  '@stylistic': () => interopDefault(import('@stylistic/eslint-plugin')),
+  '@typescript-eslint': () =>
     // @ts-expect-error types mismatch
-    security: eslintPluginSecurity,
-    sonarjs: eslintPluginSonar,
+    interopDefault(import('typescript-eslint').then((m) => m.plugin)),
+  astro: () => interopDefault(import('eslint-plugin-astro')),
+  'case-police': () =>
     // @ts-expect-error types mismatch
-    toml: eslintPluginToml,
-    'no-type-assertion': eslintPluginNoTypeAssertion,
-    vitest: eslintPluginVitest,
-    vue: eslintPluginVue,
-    'vuejs-accessibility': eslintPluginVueA11y,
+    interopDefault(import('eslint-plugin-case-police')),
+  css: () => interopDefault(import('@eslint/css')),
+  'css-in-js': () =>
     // @ts-expect-error types mismatch
-    pinia: eslintPluginPinia,
+    interopDefault(import('eslint-plugin-css')),
+  'de-morgan': () => interopDefault(import('eslint-plugin-de-morgan')),
+  es: () => interopDefault(import('eslint-plugin-es-x')),
+  import: () =>
     // @ts-expect-error types mismatch
-    yml: eslintPluginYaml,
-    'de-morgan': eslintPluginDeMorgan,
-    qwik: fixupPluginRules(eslintPluginQwik),
+    interopDefault(import('eslint-plugin-import-x')),
+  jest: () => interopDefault(import('eslint-plugin-jest')),
+  'jest-extended': () => interopDefault(import('eslint-plugin-jest-extended')),
+  jsdoc: () => interopDefault(import('eslint-plugin-jsdoc')),
+  'json-schema-validator': () =>
     // @ts-expect-error types mismatch
-    'json-schema-validator': eslintPluginJsonSchemaValidator,
-    css: eslintPluginCss,
-    react: eslintPluginReact,
-    'react-hooks': eslintPluginReactHooks,
-    ...eslintPluginReactX.configs.all.plugins,
-    'react-refresh': eslintPluginReactRefresh,
-    'react-compiler': eslintPluginReactCompiler,
+    interopDefault(import('eslint-plugin-json-schema-validator')),
+  jsonc: () =>
     // @ts-expect-error types mismatch
-    'jsx-a11y': eslintPluginJsxA11y,
-    pnpm: eslintPluginPnpm,
-    '@next/next': eslintPluginNext,
+    interopDefault(import('eslint-plugin-jsonc')),
+  'jsx-a11y': () =>
     // @ts-expect-error types mismatch
-    'case-police': eslintPluginCasePolice,
-    astro: eslintPluginAstro,
-    es: eslintPluginEsX,
-  };
+    interopDefault(import('eslint-plugin-jsx-a11y')),
+  markdown: () => interopDefault(import('@eslint/markdown')),
+  'no-type-assertion': () => interopDefault(import('eslint-plugin-no-type-assertion')),
+  node: () => interopDefault(import('eslint-plugin-n')),
+  'package-json': () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('eslint-plugin-package-json')),
+  perfectionist: () => interopDefault(import('eslint-plugin-perfectionist')),
+  pinia: () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('eslint-plugin-pinia')),
+  pnpm: () => interopDefault(import('eslint-plugin-pnpm')),
+  'prefer-arrow-functions': () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('eslint-plugin-prefer-arrow-functions')),
+  promise: () => interopDefault(import('eslint-plugin-promise')),
+  qwik: () =>
+    interopDefault(import('eslint-plugin-qwik')).then((m) => (m ? fixupPluginRules(m) : null)),
+  react: () => interopDefault(import('eslint-plugin-react')),
+  'react-compiler': () => interopDefault(import('eslint-plugin-react-compiler')),
+  'react-hooks': () => interopDefault(import('eslint-plugin-react-hooks')),
+  'react-refresh': () => interopDefault(import('eslint-plugin-react-refresh')),
+  regexp: () => interopDefault(import('eslint-plugin-regexp')),
+  security: () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('eslint-plugin-security')),
+  sonarjs: () => interopDefault(import('eslint-plugin-sonarjs')),
+  svelte: () =>
+    interopDefault(
+      import('eslint-plugin-svelte'),
+      // Hard-depends on `svelte` package, uses it at least in `lib/utils/svelte-context.js`
+      ['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'],
+    ),
+  tailwindcss: () =>
+    // @ts-expect-error types mismatch
+    interopDefault(
+      import('eslint-plugin-tailwindcss'),
+      // Tries to import `tailwindcss/resolveConfig` which doesn't exist anymore in v4
+      'ERR_PACKAGE_PATH_NOT_EXPORTED',
+    ),
+  toml: () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('eslint-plugin-toml')),
+  unicorn: () => interopDefault(import('eslint-plugin-unicorn')),
+  'unused-imports': () => interopDefault(import('eslint-plugin-unused-imports')),
+  vitest: () => interopDefault(import('@vitest/eslint-plugin')),
+  vue: () => interopDefault(import('eslint-plugin-vue')),
+  'vuejs-accessibility': () => interopDefault(import('eslint-plugin-vuejs-accessibility')),
+  yml: () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('eslint-plugin-yml')),
+} satisfies Record<string, () => Promise<EslintPlugin | null>>;
 
-  Object.entries(result).forEach(([pluginNamespace, plugin]) => {
-    if (disableAutofixesForPlugins?.includes(pluginNamespace)) {
-      result[pluginNamespace] = {
-        ...result[pluginNamespace],
-        rules: disableAutofixForAllRulesInPlugin('', plugin),
-      };
-    }
-  });
-
-  return result;
-};
+export type LoadablePluginPrefix = keyof typeof pluginsLoaders;

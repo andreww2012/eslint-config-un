@@ -21,7 +21,7 @@ const getAllowedImports = (isV2 = true): string[] =>
 export const cloudfrontFunctionsEslintConfig: UnConfigFn<'cloudfrontFunctions'> = async (
   context,
 ) => {
-  const optionsRaw = context.globalOptions.configs?.cloudfrontFunctions;
+  const optionsRaw = context.rootOptions.configs?.cloudfrontFunctions;
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies CloudfrontFunctionsEslintConfigOptions,

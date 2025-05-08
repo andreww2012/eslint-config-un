@@ -531,7 +531,7 @@ const NEXT_EXPORTS: readonly string[] = [
 export const reactUnConfig: UnConfigFn<'react'> = (context) => {
   const reactPackageInfo = context.packagesInfo.react;
 
-  const optionsRaw = context.globalOptions.configs?.react;
+  const optionsRaw = context.rootOptions.configs?.react;
   const optionsResolved = assignDefaults(optionsRaw, {
     configAllowDefaultExportsInJsxFiles: true,
     configHooks: true,
@@ -923,7 +923,7 @@ export const reactUnConfig: UnConfigFn<'react'> = (context) => {
   // 💭 - Requires type information
   // 🔢 - min React version in which the rule works (otherwise does nothing)
 
-  const {noLegacyApis = {}, typeAwareRules: reactXTypeAwareRules = context.enabledConfigs.ts} =
+  const {noLegacyApis = {}, typeAwareRules: reactXTypeAwareRules = context.configsMeta.ts.enabled} =
     configReactXOptions;
 
   const configBuilderReactX = new ConfigEntryBuilder('@eslint-react', configReactXOptions, context);

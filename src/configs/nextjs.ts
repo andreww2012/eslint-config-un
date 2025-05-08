@@ -22,7 +22,7 @@ export interface NextJsEslintConfigOptions extends ConfigSharedOptions<'@next/ne
 
 // eslint-disable-next-line case-police/string-check
 export const nextJsUnConfig: UnConfigFn<'nextJs'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.nextJs;
+  const optionsRaw = context.rootOptions.configs?.nextJs;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies NextJsEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;

@@ -6,7 +6,7 @@ import type {UnConfigFn} from './index';
 export interface DeMorganEslintConfigOptions extends ConfigSharedOptions<'de-morgan'> {}
 
 export const deMorganUnConfig: UnConfigFn<'deMorgan'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.deMorgan;
+  const optionsRaw = context.rootOptions.configs?.deMorgan;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies DeMorganEslintConfigOptions);
 
   const configBuilder = new ConfigEntryBuilder('de-morgan', optionsResolved, context);

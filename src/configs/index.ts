@@ -80,6 +80,12 @@ export interface EslintConfigUnOptions {
 
   // TODO note about plugins that can be used in multiple places?
   configs?: Partial<UnConfigs>;
+
+  /**
+   * Only load ESLint plugins if they are actually used.
+   * @default true
+   */
+  loadPluginsOnDemand?: boolean;
 }
 
 export type UnConfigOptions<T extends object> = boolean | Partial<T>;
@@ -408,8 +414,8 @@ export interface UnConfigContext {
     (typeof PACKAGES_TO_GET_INFO_FOR)[number],
     Awaited<ReturnType<typeof getPackageInfo>>
   >;
-  globalOptions: EslintConfigUnOptions;
-  enabledConfigs: Record<keyof UnConfigs, boolean>;
+  rootOptions: EslintConfigUnOptions;
+  configsMeta: Record<keyof UnConfigs, {enabled: boolean}>;
   resolvedConfigs?: Partial<UnConfigs>;
 }
 

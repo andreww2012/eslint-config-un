@@ -31,7 +31,7 @@ export interface AstroEslintConfigOptions
 const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
 
 export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
-  const optionsRaw = context.globalOptions.configs?.astro;
+  const optionsRaw = context.rootOptions.configs?.astro;
   const optionsResolved = assignDefaults(optionsRaw, {
     files: DEFAULT_ASTRO_FILES,
     configJsxA11y: true,
@@ -41,6 +41,7 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
 
   const configBuilder = new ConfigEntryBuilder('astro', optionsResolved, context);
 
+  const isTypescriptEnabled = context.configsMeta.ts.enabled;
   configBuilder.addConfig(
     [
       'astro/setup',
@@ -54,12 +55,12 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
         globals: eslintPluginAstro.environments.astro.globals,
         parser: astroEslintParser,
         parserOptions: {
-          parser: context.enabledConfigs.ts ? '@typescript-eslint/parser' : undefined,
+          parser: isTypescriptEnabled ? '@typescript-eslint/parser' : undefined,
           extraFileExtensions: ['.astro'],
         },
         sourceType: 'module',
       },
-      ...(context.enabledConfigs.ts && {
+      ...(isTypescriptEnabled && {
         processor: eslintPluginAstro.processors['client-side-ts'],
       }),
     },

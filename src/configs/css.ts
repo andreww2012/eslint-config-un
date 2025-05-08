@@ -29,7 +29,7 @@ export interface CssEslintConfigOptions extends ConfigSharedOptions<'css'> {
 }
 
 export const cssUnConfig: UnConfigFn<'css'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.css;
+  const optionsRaw = context.rootOptions.configs?.css;
   const optionsResolved = assignDefaults(optionsRaw, {
     tolerantMode: false,
   } satisfies CssEslintConfigOptions);
@@ -38,7 +38,7 @@ export const cssUnConfig: UnConfigFn<'css'> = (context) => {
 
   const configBuilder = new ConfigEntryBuilder('css', optionsResolved, context);
 
-  const isTailwindEnabled = context.enabledConfigs.tailwind;
+  const isTailwindEnabled = context.configsMeta.tailwind.enabled;
 
   // Legend:
   // 🟢 - in Recommended

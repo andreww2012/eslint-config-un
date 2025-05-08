@@ -60,9 +60,9 @@ import {
   eslintPluginVanillaRules,
   genFlatConfigEntryName,
 } from './eslint';
-import {loadEslintPlugins} from './plugins';
+import {pluginsLoaders} from './plugins';
 import type {FalsyValue} from './types';
-import {type MaybeArray, getPackageMajorVersion, interopDefault} from './utils';
+import {type MaybeArray, assignDefaults, getPackageMajorVersion} from './utils';
 
 // TODO debug
 
@@ -75,13 +75,21 @@ const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set([
 export const eslintConfig = async (
   options: EslintConfigUnOptions = {},
 ): Promise<FlatConfigEntry[]> => {
-  // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
-  const globalIgnores = [
-    ...(options.overrideIgnores ? [] : DEFAULT_GLOBAL_IGNORES),
-    ...(options.ignores || []),
-  ];
+  const optionsResolved = assignDefaults(options, {
+    extraConfigs: [],
+    loadPluginsOnDemand: true,
+  } satisfies EslintConfigUnOptions);
 
-  const configsOptions = options.configs || {};
+  const {
+    configs: configsOptions = {},
+    extraConfigs,
+    ignores,
+    overrideIgnores,
+    loadPluginsOnDemand,
+  } = optionsResolved;
+
+  // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
+  const globalIgnores = [...(overrideIgnores ? [] : DEFAULT_GLOBAL_IGNORES), ...(ignores || [])];
 
   const [
     packagesInfoRaw,
@@ -97,16 +105,8 @@ export const eslintConfig = async (
     ),
     detectPackageManager(),
     fs.readFile('.gitignore', 'utf8'),
-    interopDefault(
-      import('eslint-plugin-tailwindcss'),
-      // Tries to import `tailwindcss/resolveConfig` which doesn't exist anymore in v4
-      'ERR_PACKAGE_PATH_NOT_EXPORTED',
-    ),
-    interopDefault(
-      import('eslint-plugin-svelte'),
-      // Hard-depends on `svelte` package, uses it at least in `lib/utils/svelte-context.js`
-      ['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'],
-    ),
+    pluginsLoaders.tailwindcss(),
+    pluginsLoaders.svelte(),
   ]);
   const packagesInfo = packagesInfoRaw as UnConfigContext['packagesInfo'];
 
@@ -162,47 +162,55 @@ export const eslintConfig = async (
 
   const context: UnConfigContext = {
     packagesInfo,
-    globalOptions: options,
-    enabledConfigs: {
-      angular: true, // TODO
-      astro: isAstroEnabled,
-      casePolice: isCasePoliceEnabled,
-      cli: isCliEnabled,
-      cloudfrontFunctions: isCloudfrontFunctionsEnabled,
-      css: isCssEnabled,
-      cssInJs: isCssInJsEnabled,
-      deMorgan: isDeMorganEnabled,
-      es: isEsEnabled,
-      eslintComments: isEslintCommentsEnabled,
-      import: isImportEnabled,
-      jest: isJestEnabled,
-      js: true,
-      jsdoc: isJsdocEnabled,
-      json: isJsoncEnabled,
-      jsonSchemaValidator: isJsonSchemaValidatorEnabled,
-      jsxA11y: isJsxA11yEnabled,
-      markdown: isMarkdownEnabled,
-      nextJs: isNextJsEnabled,
-      node: isNodeEnabled,
-      packageJson: isPackageJsonEnabled,
-      perfectionist: isPerfectionistEnabled,
-      pnpm: isPnpmEnabled,
-      preferArrowFunctions: isPreferArrowFunctionsEnabled,
-      promise: isPromiseEnabled,
-      qwik: isQwikEnabled,
-      react: isReactEnabled,
-      regexp: isRegexpEnabled,
-      security: isSecurityEnabled,
-      sonar: isSonarEnabled,
-      svelte: isSvelteEnabled,
-      tailwind: isTailwindEnabled,
-      toml: isTomlEnabled,
-      ts: isTypescriptEnabled,
-      unicorn: isUnicornEnabled,
-      unusedImports: isUnusedImportsEnabled,
-      vitest: isVitestEnabled,
-      vue: isVueEnabled,
-      yaml: isYamlEnabled,
+    rootOptions: optionsResolved,
+    configsMeta: {
+      angular: {enabled: true}, // TODO
+      astro: {enabled: isAstroEnabled},
+      casePolice: {enabled: isCasePoliceEnabled},
+      cli: {enabled: isCliEnabled},
+      cloudfrontFunctions: {enabled: isCloudfrontFunctionsEnabled},
+      css: {enabled: isCssEnabled},
+      cssInJs: {enabled: isCssInJsEnabled},
+      deMorgan: {enabled: isDeMorganEnabled},
+      es: {enabled: isEsEnabled},
+      eslintComments: {
+        enabled: isEslintCommentsEnabled,
+      },
+      import: {enabled: isImportEnabled},
+      jest: {enabled: isJestEnabled},
+      js: {enabled: true},
+      jsdoc: {enabled: isJsdocEnabled},
+      json: {enabled: isJsoncEnabled},
+      jsonSchemaValidator: {
+        enabled: isJsonSchemaValidatorEnabled,
+      },
+      jsxA11y: {enabled: isJsxA11yEnabled},
+      markdown: {enabled: isMarkdownEnabled},
+      nextJs: {enabled: isNextJsEnabled},
+      node: {enabled: isNodeEnabled},
+      packageJson: {enabled: isPackageJsonEnabled},
+      perfectionist: {enabled: isPerfectionistEnabled},
+      pnpm: {enabled: isPnpmEnabled},
+      preferArrowFunctions: {
+        enabled: isPreferArrowFunctionsEnabled,
+      },
+      promise: {enabled: isPromiseEnabled},
+      qwik: {enabled: isQwikEnabled},
+      react: {
+        enabled: isReactEnabled,
+      },
+      regexp: {enabled: isRegexpEnabled},
+      security: {enabled: isSecurityEnabled},
+      sonar: {enabled: isSonarEnabled},
+      svelte: {enabled: isSvelteEnabled},
+      tailwind: {enabled: isTailwindEnabled},
+      toml: {enabled: isTomlEnabled},
+      ts: {enabled: isTypescriptEnabled},
+      unicorn: {enabled: isUnicornEnabled},
+      unusedImports: {enabled: isUnusedImportsEnabled},
+      vitest: {enabled: isVitestEnabled},
+      vue: {enabled: isVueEnabled},
+      yaml: {enabled: isYamlEnabled},
     },
   };
 
@@ -220,53 +228,19 @@ export const eslintConfig = async (
     isSvelteEnabled && eslintPluginSvelte && svelteUnConfig(context, {plugin: eslintPluginSvelte}),
   ]);
 
-  const allLoadedEslintPlugins = loadEslintPlugins({
-    disableAutofixesForPlugins: [
-      casePoliceEslintConfigResult && casePoliceEslintConfigResult.optionsResolved.disableAutofix
-        ? 'case-police'
-        : '',
-    ].filter(Boolean),
-  });
-
-  const allPlugins: Record<string, EslintPlugin> = {
-    ...allLoadedEslintPlugins,
-    ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
-    ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
-    ...angularEslintConfigResult?.plugins,
-  };
-
-  const resolvedConfigs = await Promise.all([
+  const unresolvedConfigs = Promise.all([
     globalIgnores.length > 0 && {
       name: genFlatConfigEntryName('ignores-global'),
       ignores: globalIgnores,
     },
     {
       name: genFlatConfigEntryName('ignores-gitignore'),
-      ...(typeof options.gitignore === 'object'
-        ? eslintGitignore(options.gitignore)
+      ...(typeof optionsResolved.gitignore === 'object'
+        ? eslintGitignore(optionsResolved.gitignore)
         : gitignoreFile
           ? eslintGitignore()
           : null),
     },
-    {
-      name: genFlatConfigEntryName('global-setup/plugins'),
-      plugins: {
-        ...allPlugins,
-        ['disable-autofix' satisfies DisableAutofixPrefix]: {
-          meta: {
-            name: 'eslint-plugin-disable-autofix',
-          },
-          rules: Object.entries({
-            ...allPlugins,
-            '': eslintPluginVanillaRules,
-          }).reduce<EslintPlugin['rules'] & {}>(
-            (res, [pluginNamespace, plugin]) =>
-              Object.assign(res, disableAutofixForAllRulesInPlugin(pluginNamespace, plugin)),
-            {},
-          ),
-        },
-      },
-    } satisfies FlatConfigEntry,
     {
       name: genFlatConfigEntryName('global-setup/language-options'),
       languageOptions: {
@@ -361,10 +335,10 @@ export const eslintConfig = async (
     isCliEnabled && cliEslintConfig(context),
     isCloudfrontFunctionsEnabled && cloudfrontFunctionsEslintConfig(context),
 
-    ...(options.extraConfigs || []),
+    ...extraConfigs,
 
     // MUST be last
-    !options.disablePrettierIncompatibleRules && {
+    !optionsResolved.disablePrettierIncompatibleRules && {
       name: genFlatConfigEntryName('eslint-config-prettier'),
       rules: Object.fromEntries(
         Object.entries(eslintConfigPrettier.rules).filter(
@@ -376,12 +350,94 @@ export const eslintConfig = async (
     MaybeArray<FlatConfigEntry | FalsyValue> | {configs: FlatConfigEntry[]}
   >[]);
 
-  return (
-    resolvedConfigs
-      // eslint-disable-next-line no-implicit-coercion
-      .filter((v) => !!v)
-      .flatMap((v) => ('configs' in v ? v.configs : v))
+  const resolvedConfigs: FlatConfigEntry[] = (await unresolvedConfigs)
+    // eslint-disable-next-line no-implicit-coercion
+    .filter((v) => !!v)
+    .flatMap((v) => ('configs' in v ? v.configs : v));
+
+  const usedPluginPrefixes = loadPluginsOnDemand
+    ? [
+        ...new Set(
+          resolvedConfigs
+            .map((config) => {
+              return Object.entries(config.rules || {}).map(([ruleName, ruleEntry]) => {
+                const severity = Array.isArray(ruleEntry) ? ruleEntry[0] : ruleEntry;
+                if (
+                  severity === OFF ||
+                  severity === 'off' ||
+                  ruleName.startsWith('disable-autofix/' satisfies `${DisableAutofixPrefix}/`)
+                ) {
+                  return null;
+                }
+                const ruleNameSplitted = ruleName.split('/');
+                return ruleNameSplitted.map((_, i) =>
+                  i > 0 ? ruleNameSplitted.slice(0, i).join('/') : null,
+                );
+              });
+            })
+            .flat(2)
+            .filter((v) => v != null),
+        ),
+      ]
+    : Object.keys(pluginsLoaders);
+
+  const disableAutofixesForPlugins = new Set([
+    casePoliceEslintConfigResult && casePoliceEslintConfigResult.optionsResolved.disableAutofix
+      ? 'case-police'
+      : '',
+  ]);
+
+  const loadedPlugins = Object.fromEntries(
+    (
+      await Promise.all(
+        usedPluginPrefixes.map(async (pluginPrefix) => {
+          if (!(pluginPrefix in pluginsLoaders)) {
+            return null;
+          }
+          let plugin = await pluginsLoaders[pluginPrefix as keyof typeof pluginsLoaders]();
+          if (!plugin) {
+            return null;
+          }
+          if (disableAutofixesForPlugins.has(pluginPrefix)) {
+            plugin = {
+              ...plugin,
+              rules: disableAutofixForAllRulesInPlugin('', plugin as EslintPlugin),
+            } as typeof plugin;
+          }
+          return [pluginPrefix, plugin] as const;
+        }),
+      )
+    ).filter((v) => v != null),
   );
+
+  const allPlugins: Record<string, EslintPlugin> = {
+    ...loadedPlugins,
+    ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
+    ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
+    ...angularEslintConfigResult?.plugins,
+  };
+
+  resolvedConfigs.unshift({
+    name: genFlatConfigEntryName('global-setup/plugins'),
+    plugins: {
+      ...allPlugins,
+      ['disable-autofix' satisfies DisableAutofixPrefix]: {
+        meta: {
+          name: 'eslint-plugin-disable-autofix',
+        },
+        rules: Object.entries({
+          ...allPlugins,
+          '': eslintPluginVanillaRules,
+        }).reduce<EslintPlugin['rules'] & {}>(
+          (res, [pluginNamespace, plugin]) =>
+            Object.assign(res, disableAutofixForAllRulesInPlugin(pluginNamespace, plugin)),
+          {},
+        ),
+      },
+    },
+  } satisfies FlatConfigEntry);
+
+  return resolvedConfigs;
 };
 
 export {DEFAULT_GLOBAL_IGNORES};

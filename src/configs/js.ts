@@ -47,7 +47,7 @@ export const RULE_PREFER_DESTRUCTURING_OPTIONS: GetRuleOptions<'prefer-destructu
 ];
 
 export const jsUnConfig: UnConfigFn<'js'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.js;
+  const optionsRaw = context.rootOptions.configs?.js;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsEslintConfigOptions);
 
   const configBuilder = new ConfigEntryBuilder('', optionsResolved, context);

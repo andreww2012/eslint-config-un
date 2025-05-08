@@ -155,7 +155,7 @@ export const tsUnConfig: UnConfigFn<
   ]
 > = (context, {astroResolvedOptions, vueResolvedOptions, svelteResolvedOptions}) => {
   const typescriptPackageInfo = context.packagesInfo.typescript;
-  const optionsRaw = context.globalOptions.configs?.ts;
+  const optionsRaw = context.rootOptions.configs?.ts;
 
   const typescriptPackageSemverVersion = getPackageSemverVersion(typescriptPackageInfo);
 
@@ -163,9 +163,9 @@ export const tsUnConfig: UnConfigFn<
     configTypeAware: true,
     configNoTypeAssertion: false,
     extraFileExtensions: [
-      context.enabledConfigs.vue && 'vue',
-      context.enabledConfigs.astro && 'astro',
-      context.enabledConfigs.svelte && 'svelte',
+      context.configsMeta.vue.enabled && 'vue',
+      context.configsMeta.astro.enabled && 'astro',
+      context.configsMeta.svelte.enabled && 'svelte',
     ].filter((v) => v !== false),
   } satisfies TsEslintConfigOptions);
   optionsResolved.typescriptVersion ??= typescriptPackageSemverVersion ?? undefined;

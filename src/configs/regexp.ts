@@ -7,7 +7,7 @@ import type {UnConfigFn} from './index';
 export interface RegexpEslintConfigOptions extends ConfigSharedOptions<'regexp'> {}
 
 export const regexpUnConfig: UnConfigFn<'regexp'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.regexp;
+  const optionsRaw = context.rootOptions.configs?.regexp;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies RegexpEslintConfigOptions);
 
   const configBuilder = new ConfigEntryBuilder('regexp', optionsResolved, context);

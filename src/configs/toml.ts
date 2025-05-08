@@ -42,7 +42,7 @@ export interface TomlEslintConfigOptions extends ConfigSharedOptions<'toml'> {
 }
 
 export const tomlUnConfig: UnConfigFn<'toml'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.toml;
+  const optionsRaw = context.rootOptions.configs?.toml;
   const optionsResolved = assignDefaults(optionsRaw, {
     maxPrecisionOfFractionalSeconds: 3,
     maxIntegerPrecisionBits: 64,

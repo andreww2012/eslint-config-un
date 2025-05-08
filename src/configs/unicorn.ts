@@ -7,7 +7,7 @@ import type {UnConfigFn} from './index';
 export interface UnicornEslintConfigOptions extends ConfigSharedOptions<'unicorn'> {}
 
 export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.unicorn;
+  const optionsRaw = context.rootOptions.configs?.unicorn;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies UnicornEslintConfigOptions);
 
   const configBuilder = new ConfigEntryBuilder('unicorn', optionsResolved, context);

@@ -78,7 +78,7 @@ export interface PackageJsonEslintConfigOptions extends ConfigSharedOptions<'pac
 }
 
 export const packageJsonUnConfig: UnConfigFn<'packageJson'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.packageJson;
+  const optionsRaw = context.rootOptions.configs?.packageJson;
   const optionsResolved = assignDefaults(optionsRaw, {
     order: 'sort-package-json',
     repositoryShorthand: 'object',

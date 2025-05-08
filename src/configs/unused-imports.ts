@@ -30,7 +30,7 @@ export interface UnusedImportsEslintConfigOptions extends ConfigSharedOptions<'u
 }
 
 export const unusedImportsUnConfig: UnConfigFn<'unusedImports'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.unusedImports;
+  const optionsRaw = context.rootOptions.configs?.unusedImports;
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoUnusedVars: false,
   } satisfies UnusedImportsEslintConfigOptions);

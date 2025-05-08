@@ -192,9 +192,9 @@ export const generateConsistentTestItOptions = ({
 ];
 
 export const jestUnConfig: UnConfigFn<'jest'> = (context) => {
-  const isTypescriptEnabled = context.enabledConfigs.ts;
+  const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
-  const optionsRaw = context.globalOptions.configs?.jest;
+  const optionsRaw = context.rootOptions.configs?.jest;
   const optionsResolved = assignDefaults(optionsRaw, {
     paddingAround: true,
     configTypescript: isTypescriptEnabled,

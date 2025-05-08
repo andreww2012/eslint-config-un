@@ -9,7 +9,7 @@ export interface QwikEslintConfigOptions extends ConfigSharedOptions<'qwik'> {
 }
 
 export const qwikUnConfig: UnConfigFn<'qwik'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.qwik;
+  const optionsRaw = context.rootOptions.configs?.qwik;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies QwikEslintConfigOptions);
 
   const {routesDir} = optionsResolved;

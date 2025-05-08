@@ -449,7 +449,7 @@ export interface AngularEslintConfigOptions
 export const angularUnConfig: UnConfigFn<'angular', {plugins: Record<string, EslintPlugin>}> = (
   context,
 ) => {
-  const optionsRaw = context.globalOptions.configs?.angular;
+  const optionsRaw = context.rootOptions.configs?.angular;
   const optionsResolved = assignDefaults(optionsRaw, {
     configTemplate: true,
     processInlineTemplates: true,

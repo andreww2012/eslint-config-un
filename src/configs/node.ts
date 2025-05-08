@@ -177,7 +177,7 @@ const pluginRenamer = createPluginObjectRenamer('n', 'node');
 const IMPORT_META_PROPERTIES_AVAILABLE_SINCE = '>=20.11';
 
 export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
-  const optionsRaw = context.globalOptions.configs?.node;
+  const optionsRaw = context.rootOptions.configs?.node;
   const optionsResolved = assignDefaults(optionsRaw, {
     preferGlobal: {} as NodeEslintConfigOptions['preferGlobal'] & {},
   } satisfies NodeEslintConfigOptions);

@@ -41,7 +41,7 @@ export interface VitestEslintConfigOptions
 }
 
 export const vitestUnConfig: UnConfigFn<'vitest'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.vitest;
+  const optionsRaw = context.rootOptions.configs?.vitest;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies VitestEslintConfigOptions);
 
   const {

@@ -167,9 +167,9 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
 export const DEFAULT_VUE_FILES: string[] = [GLOB_VUE];
 
 export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
-  const isTypescriptEnabled = context.enabledConfigs.ts;
+  const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
-  const optionsRaw = context.globalOptions.configs?.vue;
+  const optionsRaw = context.rootOptions.configs?.vue;
 
   const vuePackageInfo = context.packagesInfo.vue;
   const vuePackageMajorVersion = getPackageMajorVersion(vuePackageInfo);

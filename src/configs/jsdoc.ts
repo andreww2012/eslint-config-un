@@ -178,9 +178,9 @@ export interface JsdocEslintConfigOptions extends ConfigSharedOptions<'jsdoc'> {
 }
 
 export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.jsdoc;
+  const optionsRaw = context.rootOptions.configs?.jsdoc;
   const optionsResolved = assignDefaults(optionsRaw, {
-    configTypescript: context.enabledConfigs.ts,
+    configTypescript: context.configsMeta.ts.enabled,
   } satisfies JsdocEslintConfigOptions);
 
   const {settings: pluginSettings, configTypescript} = optionsResolved;

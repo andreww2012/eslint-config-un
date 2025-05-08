@@ -7,7 +7,7 @@ import type {UnConfigFn} from './index';
 export interface SecurityEslintConfigOptions extends ConfigSharedOptions<'security'> {}
 
 export const securityUnConfig: UnConfigFn<'security'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.security;
+  const optionsRaw = context.rootOptions.configs?.security;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies SecurityEslintConfigOptions);
 
   const configBuilder = new ConfigEntryBuilder('security', optionsResolved, context);

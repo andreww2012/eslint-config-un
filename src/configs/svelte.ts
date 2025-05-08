@@ -103,11 +103,11 @@ export const svelteUnConfig: UnConfigFn<
     },
   ]
 > = (context, {plugin: eslintPluginSvelte}) => {
-  const isTypescriptEnabled = context.enabledConfigs.ts;
+  const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
   const svelteVersionDetected = getPackageSemverVersion(context.packagesInfo.svelte);
 
-  const optionsRaw = context.globalOptions.configs?.svelte;
+  const optionsRaw = context.rootOptions.configs?.svelte;
   const optionsResolved = assignDefaults(optionsRaw, {
     files: DEFAULT_SVELTE_FILES,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
@@ -143,7 +143,7 @@ export const svelteUnConfig: UnConfigFn<
         languageOptions: {
           parser: svelteEslintParser,
           parserOptions: {
-            parser: context.enabledConfigs.ts ? '@typescript-eslint/parser' : undefined,
+            parser: isTypescriptEnabled ? '@typescript-eslint/parser' : undefined,
             extraFileExtensions: ['.svelte'],
             ...(svelteKitConfig && {svelteConfig: svelteKitConfig}),
           },

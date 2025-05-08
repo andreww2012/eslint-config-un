@@ -22,7 +22,7 @@ export interface JsoncEslintConfigOptions extends ConfigSharedOptions<'jsonc'> {
 }
 
 export const jsoncUnConfig: UnConfigFn<'json'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.json;
+  const optionsRaw = context.rootOptions.configs?.json;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsoncEslintConfigOptions);
 
   const configBuilder = new ConfigEntryBuilder('jsonc', optionsResolved, context);

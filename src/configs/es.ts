@@ -296,7 +296,7 @@ export const esUnConfig: UnConfigFn<
     },
   ]
 > = (context, customConfig) => {
-  const optionsRaw = customConfig?.options ?? context.globalOptions.configs?.es;
+  const optionsRaw = customConfig?.options ?? context.rootOptions.configs?.es;
   const optionsResolved = assignDefaults(optionsRaw, {
     ecmaVersion: 'latest',
   } satisfies EsEslintConfigOptions);

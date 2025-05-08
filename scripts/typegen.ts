@@ -12,6 +12,7 @@ const configs = [
     },
   },
   ...(await eslintConfig({
+    loadPluginsOnDemand: false,
     configs: {
       // If Angular is not found installed, plugin is not generated
       angular: true,

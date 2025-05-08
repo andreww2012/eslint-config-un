@@ -40,7 +40,7 @@ export interface PnpmEslintConfigOptions {
 }
 
 export const pnpmUnConfig: UnConfigFn<'pnpm'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.pnpm;
+  const optionsRaw = context.rootOptions.configs?.pnpm;
   const optionsResolved = assignDefaults(optionsRaw, {
     configPackageJson: true,
     configPnpmWorkspace: true,

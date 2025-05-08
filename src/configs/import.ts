@@ -61,9 +61,9 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
 const pluginRenamer = createPluginObjectRenamer('import-x', 'import');
 
 export const importUnConfig: UnConfigFn<'import'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.import;
+  const optionsRaw = context.rootOptions.configs?.import;
   const optionsResolved = assignDefaults(optionsRaw, {
-    isTypescriptEnabled: context.enabledConfigs.ts,
+    isTypescriptEnabled: context.configsMeta.ts.enabled,
   } satisfies ImportEslintConfigOptions);
 
   const {

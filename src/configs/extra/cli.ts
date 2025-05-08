@@ -14,7 +14,7 @@ export interface CliEslintConfigOptions extends ConfigSharedOptions {
 const DEFAULT_CLI_DIRS = ['bin', 'scripts', 'cli'] as const;
 
 export const cliEslintConfig: UnConfigFn<'cli'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.cli;
+  const optionsRaw = context.rootOptions.configs?.cli;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies CliEslintConfigOptions);
 
   const {onlyTopLevelDirs} = optionsResolved;

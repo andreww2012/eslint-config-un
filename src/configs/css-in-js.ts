@@ -49,7 +49,7 @@ export interface CssInJsEslintConfigOptions extends ConfigSharedOptions<'css-in-
 }
 
 export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.cssInJs;
+  const optionsRaw = context.rootOptions.configs?.cssInJs;
   const optionsResolved = assignDefaults(optionsRaw, {
     hexColorsStyle: 'long',
     avoidLeadingZero: false,

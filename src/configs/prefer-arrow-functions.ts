@@ -7,7 +7,7 @@ export interface PreferArrowFunctionsEslintConfigOptions
   extends ConfigSharedOptions<'prefer-arrow-functions'> {}
 
 export const preferArrowFunctionsUnConfig: UnConfigFn<'preferArrowFunctions'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.preferArrowFunctions;
+  const optionsRaw = context.rootOptions.configs?.preferArrowFunctions;
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies PreferArrowFunctionsEslintConfigOptions,

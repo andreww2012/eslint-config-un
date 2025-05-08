@@ -8,7 +8,7 @@ export interface EslintCommentsEslintConfigOptions
   extends ConfigSharedOptions<'@eslint-community/eslint-comments'> {}
 
 export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.eslintComments;
+  const optionsRaw = context.rootOptions.configs?.eslintComments;
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies EslintCommentsEslintConfigOptions,

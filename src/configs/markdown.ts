@@ -94,7 +94,7 @@ export interface MarkdownEslintConfigOptions extends ConfigSharedOptions<'markdo
 }
 
 export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.markdown;
+  const optionsRaw = context.rootOptions.configs?.markdown;
   const optionsResolved = assignDefaults(optionsRaw, {
     lintMarkdown: true,
     language: 'commonmark',

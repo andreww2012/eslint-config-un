@@ -37,7 +37,7 @@ export interface TailwindEslintConfigOptions extends ConfigSharedOptions<'tailwi
 }
 
 export const tailwindUnConfig: UnConfigFn<'tailwind'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.tailwind;
+  const optionsRaw = context.rootOptions.configs?.tailwind;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies TailwindEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;

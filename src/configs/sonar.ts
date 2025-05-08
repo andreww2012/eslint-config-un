@@ -19,7 +19,7 @@ export interface SonarEslintConfigOptions extends ConfigSharedOptions<'sonarjs'>
 }
 
 export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.sonar;
+  const optionsRaw = context.rootOptions.configs?.sonar;
   const optionsResolved = assignDefaults(optionsRaw, {
     enableAwsRules: true,
     testsRules: true,

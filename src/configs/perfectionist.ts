@@ -6,7 +6,7 @@ import type {UnConfigFn} from './index';
 export interface PerfectionistEslintConfigOptions extends ConfigSharedOptions<'perfectionist'> {}
 
 export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.perfectionist;
+  const optionsRaw = context.rootOptions.configs?.perfectionist;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies PerfectionistEslintConfigOptions);
 
   const configBuilder = new ConfigEntryBuilder('perfectionist', optionsResolved, context);

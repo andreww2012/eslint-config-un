@@ -7,7 +7,7 @@ import type {UnConfigFn} from './index';
 export interface PromiseEslintConfigOptions extends ConfigSharedOptions<'promise'> {}
 
 export const promiseUnConfig: UnConfigFn<'promise'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.promise;
+  const optionsRaw = context.rootOptions.configs?.promise;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies PromiseEslintConfigOptions);
 
   const configBuilder = new ConfigEntryBuilder('promise', optionsResolved, context);

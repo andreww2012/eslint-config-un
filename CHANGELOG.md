@@ -1,8 +1,9 @@
-## Unreleased
+## 0.10.0
 
 - New config: `svelte` via [`eslint-plugin-svelte`](https://www.npmjs.com/package/eslint-plugin-svelte), enabled automatically if `svelte` package is installed.
 - New config: `es` via [`eslint-plugin-es-x`](https://www.npmjs.com/package/eslint-plugin-es-x), **<u>disabled</u>** by default.
 - New config: `cloudfrontFunctions` for [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html), **<u>disabled</u>** by default.
+- ESLint plugins are now loaded on demand, i.e. only if they are actually used anywhere in the config. You can opt out of this behavior by setting `loadPluginsOnDemand` option to `false`.
 
 ## 0.9.0
 

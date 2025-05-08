@@ -317,7 +317,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
           return result;
         }
 
-        const {errorsInsteadOfWarnings} = this.context.globalOptions;
+        const {errorsInsteadOfWarnings} = this.context.rootOptions;
 
         const ruleNameWithPrefix =
           allowAnyRule || !this.rulesPrefix

@@ -15,7 +15,7 @@ export interface CasePoliceEslintConfigOptions extends ConfigSharedOptions<'case
 }
 
 export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
-  const optionsRaw = context.globalOptions.configs?.casePolice;
+  const optionsRaw = context.rootOptions.configs?.casePolice;
   const optionsResolved = assignDefaults(optionsRaw, {
     disableAutofix: true,
   } satisfies CasePoliceEslintConfigOptions);
