@@ -1,8 +1,6 @@
-import jsoncEslintParser from 'jsonc-eslint-parser';
-import yamlEslintParser from 'yaml-eslint-parser';
 import {ERROR, OFF} from '../constants';
 import {type AllRulesWithPrefix, ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
-import {assignDefaults} from '../utils';
+import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface PnpmEslintConfigOptions {
@@ -39,7 +37,12 @@ export interface PnpmEslintConfigOptions {
     | ConfigSharedOptions<AllRulesWithPrefix<'pnpm/yaml-', true, false>>;
 }
 
-export const pnpmUnConfig: UnConfigFn<'pnpm'> = (context) => {
+export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
+  const [jsoncEslintParser, yamlEslintParser] = await Promise.all([
+    interopDefault(import('jsonc-eslint-parser')),
+    interopDefault(import('yaml-eslint-parser')),
+  ]);
+
   const optionsRaw = context.rootOptions.configs?.pnpm;
   const optionsResolved = assignDefaults(optionsRaw, {
     configPackageJson: true,

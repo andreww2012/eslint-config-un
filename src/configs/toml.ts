@@ -1,8 +1,7 @@
-import eslintPluginToml from 'eslint-plugin-toml';
-import tomlEslintParser from 'toml-eslint-parser';
 import {ERROR, GLOB_TOML, OFF} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
-import {assignDefaults} from '../utils';
+import {pluginsLoaders} from '../plugins';
+import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
 export const TOML_DEFAULT_FILES = [GLOB_TOML];
@@ -41,7 +40,12 @@ export interface TomlEslintConfigOptions extends ConfigSharedOptions<'toml'> {
   maxIntegerPrecisionBits?: number;
 }
 
-export const tomlUnConfig: UnConfigFn<'toml'> = (context) => {
+export const tomlUnConfig: UnConfigFn<'toml'> = async (context) => {
+  const [eslintPluginToml, tomlEslintParser] = await Promise.all([
+    pluginsLoaders.toml(),
+    interopDefault(import('toml-eslint-parser')),
+  ]);
+
   const optionsRaw = context.rootOptions.configs?.toml;
   const optionsResolved = assignDefaults(optionsRaw, {
     maxPrecisionOfFractionalSeconds: 3,

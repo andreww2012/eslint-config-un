@@ -1,6 +1,6 @@
-import eslintPluginSonar from 'eslint-plugin-sonarjs';
 import {ERROR, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -18,7 +18,9 @@ export interface SonarEslintConfigOptions extends ConfigSharedOptions<'sonarjs'>
   testsRules?: boolean;
 }
 
-export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
+export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
+  const eslintPluginSonar = await pluginsLoaders.sonarjs();
+
   const optionsRaw = context.rootOptions.configs?.sonar;
   const optionsResolved = assignDefaults(optionsRaw, {
     enableAwsRules: true,

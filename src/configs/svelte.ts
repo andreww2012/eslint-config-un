@@ -1,9 +1,9 @@
 // cspell:ignore curlies
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
-import svelteEslintParser from 'svelte-eslint-parser';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
-import {assignDefaults, doesPackageExist, getKeysOfTruthyValues} from '../utils';
+import {pluginsLoaders} from '../plugins';
+import {assignDefaults, doesPackageExist, getKeysOfTruthyValues, interopDefault} from '../utils';
 import {type VueEslintConfigOptions, noRestrictedHtmlElementsDefault} from './vue';
 import type {UnConfigFn} from './index';
 
@@ -93,15 +93,15 @@ const LATEST_SVELTE_MAJOR_VERSION = 5;
 const DEFAULT_SVELTE_FILES: string[] = [GLOB_SVELTE];
 const DEFAULT_SVELTE_SCRIPT_FILES: string[] = ['**/*.svelte.{js,ts}'];
 
-export const svelteUnConfig: UnConfigFn<
-  'svelte',
-  unknown,
-  [
-    {
-      plugin: (typeof import('eslint-plugin-svelte'))['default'];
-    },
-  ]
-> = async (context, {plugin: eslintPluginSvelte}) => {
+export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
+  const [eslintPluginSvelte, svelteEslintParser] = await Promise.all([
+    pluginsLoaders.svelte(),
+    interopDefault(import('svelte-eslint-parser')),
+  ]);
+  if (!eslintPluginSvelte) {
+    return null;
+  }
+
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
   const optionsRaw = context.rootOptions.configs?.svelte;

@@ -1,12 +1,14 @@
-import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import {ERROR, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface UnicornEslintConfigOptions extends ConfigSharedOptions<'unicorn'> {}
 
-export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
+export const unicornUnConfig: UnConfigFn<'unicorn'> = async (context) => {
+  const eslintPluginUnicorn = await pluginsLoaders.unicorn();
+
   const optionsRaw = context.rootOptions.configs?.unicorn;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies UnicornEslintConfigOptions);
 

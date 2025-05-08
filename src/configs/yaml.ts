@@ -1,8 +1,7 @@
-import eslintPluginYaml from 'eslint-plugin-yml';
-import yamlEslintParser from 'yaml-eslint-parser';
 import {ERROR, GLOB_YAML, OFF} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
-import {assignDefaults} from '../utils';
+import {pluginsLoaders} from '../plugins';
+import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
 export const YAML_DEFAULT_FILES = [GLOB_YAML];
@@ -38,7 +37,12 @@ export interface YamlEslintConfigOptions extends ConfigSharedOptions<'yml'> {
   };
 }
 
-export const yamlUnConfig: UnConfigFn<'yaml'> = (context) => {
+export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
+  const [eslintPluginYaml, yamlEslintParser] = await Promise.all([
+    pluginsLoaders.yml(),
+    interopDefault(import('yaml-eslint-parser')),
+  ]);
+
   const optionsRaw = context.rootOptions.configs?.yaml;
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceExtension: 'yml',

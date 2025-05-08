@@ -1,5 +1,4 @@
 import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
-import eslintPluginNode from 'eslint-plugin-n';
 import {readPackageUp as readClosestPackageJson} from 'read-package-up';
 import {Range, subset as isFirstSemverRangeIsSubsetOfSecond} from 'semver';
 import {ERROR, OFF} from '../constants';
@@ -9,6 +8,7 @@ import {
   type GetRuleOptions,
   createPluginObjectRenamer,
 } from '../eslint';
+import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -177,6 +177,11 @@ const pluginRenamer = createPluginObjectRenamer('n', 'node');
 const IMPORT_META_PROPERTIES_AVAILABLE_SINCE = '>=20.11';
 
 export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
+  const [eslintPluginNode, closestPackageJson] = await Promise.all([
+    pluginsLoaders.node(),
+    readClosestPackageJson(),
+  ]);
+
   const optionsRaw = context.rootOptions.configs?.node;
   const optionsResolved = assignDefaults(optionsRaw, {
     preferGlobal: {} as NodeEslintConfigOptions['preferGlobal'] & {},
@@ -184,7 +189,6 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
 
   const {settings: pluginSettings, preferGlobal} = optionsResolved;
 
-  const closestPackageJson = await readClosestPackageJson();
   const userNodeVersion = new Range(closestPackageJson?.packageJson.engines?.node || '');
 
   const configBuilder = new ConfigEntryBuilder('node', optionsResolved, context);

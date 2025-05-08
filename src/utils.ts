@@ -68,10 +68,15 @@ export const fetchPackageInfo = async (packageName: string) => {
 export const doesPackageExist = (packageName: string) =>
   Promise.resolve(isPackageExists(packageName));
 
-export const interopDefault = async <T>(
+export function interopDefault<T>(module: Promisable<T | {default: T}>): Promise<T>;
+export function interopDefault<T>(
+  module: Promisable<T | {default: T}>,
+  ignoreErrors: MaybeArray<string>,
+): Promise<T | null>;
+export async function interopDefault<T>(
   module: Promisable<T | {default: T}>,
   ignoreErrors?: MaybeArray<string>,
-) => {
+): Promise<T | null> {
   try {
     const resolvedModule = await module;
     // TODO report?
@@ -92,7 +97,7 @@ export const interopDefault = async <T>(
     }
     throw error;
   }
-};
+}
 
 export function getKeysOfTruthyValues<T extends Record<string, boolean>>(object: T): (keyof T)[];
 export function getKeysOfTruthyValues<T extends Record<string, unknown>>(

@@ -1,12 +1,14 @@
-import * as eslintPluginRegexp from 'eslint-plugin-regexp';
 import {ERROR, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface RegexpEslintConfigOptions extends ConfigSharedOptions<'regexp'> {}
 
-export const regexpUnConfig: UnConfigFn<'regexp'> = (context) => {
+export const regexpUnConfig: UnConfigFn<'regexp'> = async (context) => {
+  const eslintPluginRegexp = await pluginsLoaders.regexp();
+
   const optionsRaw = context.rootOptions.configs?.regexp;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies RegexpEslintConfigOptions);
 

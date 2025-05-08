@@ -2,7 +2,7 @@ import {
   type TypeScriptResolverOptions,
   createTypeScriptImportResolver,
 } from 'eslint-import-resolver-typescript';
-import eslintPluginImportX, {type PluginSettings} from 'eslint-plugin-import-x';
+import type {PluginSettings} from 'eslint-plugin-import-x';
 import {ERROR, OFF, WARNING} from '../constants';
 import {
   ConfigEntryBuilder,
@@ -10,6 +10,7 @@ import {
   type GetRuleOptions,
   createPluginObjectRenamer,
 } from '../eslint';
+import {pluginsLoaders} from '../plugins';
 import {arraify, assignDefaults, isNonEmptyArray} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -60,7 +61,9 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
 
 const pluginRenamer = createPluginObjectRenamer('import-x', 'import');
 
-export const importUnConfig: UnConfigFn<'import'> = (context) => {
+export const importUnConfig: UnConfigFn<'import'> = async (context) => {
+  const eslintPluginImportX = await pluginsLoaders.import();
+
   const optionsRaw = context.rootOptions.configs?.import;
   const optionsResolved = assignDefaults(optionsRaw, {
     isTypescriptEnabled: context.configsMeta.ts.enabled,

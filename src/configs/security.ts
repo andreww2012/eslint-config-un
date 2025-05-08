@@ -1,12 +1,14 @@
-import eslintPluginSecurity from 'eslint-plugin-security';
 import {ERROR, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface SecurityEslintConfigOptions extends ConfigSharedOptions<'security'> {}
 
-export const securityUnConfig: UnConfigFn<'security'> = (context) => {
+export const securityUnConfig: UnConfigFn<'security'> = async (context) => {
+  const eslintPluginSecurity = await pluginsLoaders.security();
+
   const optionsRaw = context.rootOptions.configs?.security;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies SecurityEslintConfigOptions);
 

@@ -223,7 +223,7 @@ export const eslintConfig = async (
     isAstroEnabled && astroUnConfig(context),
     isCasePoliceEnabled && casePoliceUnConfig(context),
     isVueEnabled && vueUnConfig(context),
-    isSvelteEnabled && eslintPluginSvelte && svelteUnConfig(context, {plugin: eslintPluginSvelte}),
+    isSvelteEnabled && svelteUnConfig(context),
   ]);
 
   const unresolvedConfigs = Promise.all([

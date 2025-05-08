@@ -1,6 +1,6 @@
-import eslintPluginJsDoc from 'eslint-plugin-jsdoc';
 import {ERROR, GLOB_TSX, OFF, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
@@ -177,7 +177,9 @@ export interface JsdocEslintConfigOptions extends ConfigSharedOptions<'jsdoc'> {
     | PrettifyShallow<ConfigSharedOptions<'jsdoc'> & Pick<JsdocEslintConfigOptions, 'settings'>>;
 }
 
-export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
+export const jsdocUnConfig: UnConfigFn<'jsdoc'> = async (context) => {
+  const eslintPluginJsDoc = await pluginsLoaders.jsdoc();
+
   const optionsRaw = context.rootOptions.configs?.jsdoc;
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypescript: context.configsMeta.ts.enabled,

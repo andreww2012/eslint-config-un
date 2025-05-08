@@ -1,6 +1,6 @@
-import * as eslintPluginQwik from 'eslint-plugin-qwik';
 import {ERROR, GLOB_JS_TS_X, OFF} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -8,7 +8,9 @@ export interface QwikEslintConfigOptions extends ConfigSharedOptions<'qwik'> {
   routesDir?: string;
 }
 
-export const qwikUnConfig: UnConfigFn<'qwik'> = (context) => {
+export const qwikUnConfig: UnConfigFn<'qwik'> = async (context) => {
+  const eslintPluginQwik = await pluginsLoaders.qwik();
+
   const optionsRaw = context.rootOptions.configs?.qwik;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies QwikEslintConfigOptions);
 

@@ -1,8 +1,7 @@
-import eslintPluginPackageJson from 'eslint-plugin-package-json';
-import jsoncEslintParser from 'jsonc-eslint-parser';
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
-import {assignDefaults, getKeysOfTruthyValues} from '../utils';
+import {pluginsLoaders} from '../plugins';
+import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
 const DEFAULT_FILES = [GLOB_PACKAGE_JSON];
@@ -77,7 +76,12 @@ export interface PackageJsonEslintConfigOptions extends ConfigSharedOptions<'pac
   requireFields?: Partial<Record<PackageJsonRequirableFields, boolean>>;
 }
 
-export const packageJsonUnConfig: UnConfigFn<'packageJson'> = (context) => {
+export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) => {
+  const [eslintPluginPackageJson, jsoncEslintParser] = await Promise.all([
+    pluginsLoaders['package-json'](),
+    interopDefault(import('jsonc-eslint-parser')),
+  ]);
+
   const optionsRaw = context.rootOptions.configs?.packageJson;
   const optionsResolved = assignDefaults(optionsRaw, {
     order: 'sort-package-json',

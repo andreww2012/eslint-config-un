@@ -8,32 +8,32 @@ export const pluginsLoaders = {
   '@eslint-react': () =>
     // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m?.configs.all.plugins['@eslint-react'],
+      (m) => m.configs.all.plugins['@eslint-react'],
     ),
   '@eslint-react/debug': () =>
     // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m?.configs.all.plugins['@eslint-react/debug'],
+      (m) => m.configs.all.plugins['@eslint-react/debug'],
     ),
   '@eslint-react/dom': () =>
     // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m?.configs.all.plugins['@eslint-react/dom'],
+      (m) => m.configs.all.plugins['@eslint-react/dom'],
     ),
   '@eslint-react/hooks-extra': () =>
     // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m?.configs.all.plugins['@eslint-react/hooks-extra'],
+      (m) => m.configs.all.plugins['@eslint-react/hooks-extra'],
     ),
   '@eslint-react/naming-convention': () =>
     // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m?.configs.all.plugins['@eslint-react/naming-convention'],
+      (m) => m.configs.all.plugins['@eslint-react/naming-convention'],
     ),
   '@eslint-react/web-api': () =>
     // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m?.configs.all.plugins['@eslint-react/web-api'],
+      (m) => m.configs.all.plugins['@eslint-react/web-api'],
     ),
   '@next/next': () => interopDefault(import('@next/eslint-plugin-next')),
   '@stylistic': () => interopDefault(import('@stylistic/eslint-plugin')),
@@ -80,8 +80,7 @@ export const pluginsLoaders = {
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-prefer-arrow-functions')),
   promise: () => interopDefault(import('eslint-plugin-promise')),
-  qwik: () =>
-    interopDefault(import('eslint-plugin-qwik')).then((m) => (m ? fixupPluginRules(m) : null)),
+  qwik: () => interopDefault(import('eslint-plugin-qwik')).then((m) => fixupPluginRules(m)),
   react: () => interopDefault(import('eslint-plugin-react')),
   'react-compiler': () => interopDefault(import('eslint-plugin-react-compiler')),
   'react-hooks': () => interopDefault(import('eslint-plugin-react-hooks')),

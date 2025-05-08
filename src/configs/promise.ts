@@ -1,12 +1,14 @@
-import eslintPluginPromise from 'eslint-plugin-promise';
 import {ERROR, WARNING} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface PromiseEslintConfigOptions extends ConfigSharedOptions<'promise'> {}
 
-export const promiseUnConfig: UnConfigFn<'promise'> = (context) => {
+export const promiseUnConfig: UnConfigFn<'promise'> = async (context) => {
+  const eslintPluginPromise = await pluginsLoaders.promise();
+
   const optionsRaw = context.rootOptions.configs?.promise;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies PromiseEslintConfigOptions);
 

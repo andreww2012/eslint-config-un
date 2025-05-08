@@ -1,13 +1,6 @@
 import type Eslint from 'eslint';
-import {mergeProcessors as mergeEslintProcessors} from 'eslint-merge-processors';
-import eslintPluginPinia from 'eslint-plugin-pinia';
-import eslintPluginVue from 'eslint-plugin-vue';
-import eslintPluginVueA11y from 'eslint-plugin-vuejs-accessibility';
-import eslintProcessorVueBlocks, {
-  type Options as EslintProcessorVueBlocksOptions,
-} from 'eslint-processor-vue-blocks';
+import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-vue-blocks';
 import globals from 'globals';
-import parserVue from 'vue-eslint-parser';
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, WARNING} from '../constants';
 import {
   ConfigEntryBuilder,
@@ -16,12 +9,14 @@ import {
   type RulesRecord,
   bulkChangeRuleSeverity,
 } from '../eslint';
+import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
 import {
   assignDefaults,
   doesPackageExist,
   fetchPackageInfo,
   getKeysOfTruthyValues,
+  interopDefault,
   joinPaths,
 } from '../utils';
 import {RULE_CAMELCASE_OPTIONS, RULE_EQEQEQ_OPTIONS} from './js';
@@ -166,6 +161,26 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
 export const DEFAULT_VUE_FILES: string[] = [GLOB_VUE];
 
 export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
+  const [
+    {mergeProcessors: mergeEslintProcessors},
+    eslintProcessorVueBlocks,
+    eslintPluginVue,
+    eslintPluginVueA11y,
+    eslintPluginPinia,
+    eslintParserVue,
+    isPiniaPackageInstalled,
+    nuxtPackageInfo,
+  ] = await Promise.all([
+    interopDefault(import('eslint-merge-processors')),
+    interopDefault(import('eslint-processor-vue-blocks')),
+    pluginsLoaders.vue(),
+    pluginsLoaders['vuejs-accessibility'](),
+    pluginsLoaders.pinia(),
+    interopDefault(import('vue-eslint-parser')),
+    doesPackageExist('pinia'),
+    fetchPackageInfo('nuxt'),
+  ]);
+
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
   const optionsRaw = context.rootOptions.configs?.vue;
@@ -179,13 +194,12 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
       vuePackageMajorVersion === 2 || vuePackageMajorVersion === 3 ? vuePackageMajorVersion : 3,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
     configA11y: true,
-    configPinia: await doesPackageExist('pinia'),
+    configPinia: isPiniaPackageInstalled,
     processSfcBlocks: true,
     reportUnusedDisableDirectives: true,
     enforcePropsDeclarationStyle: 'runtime',
   } satisfies VueEslintConfigOptions);
 
-  const nuxtPackageInfo = await fetchPackageInfo('nuxt');
   const nuxtMajorVersion =
     optionsResolved.nuxtMajorVersion ?? nuxtPackageInfo?.versions.major ?? null;
 
@@ -250,7 +264,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     ),
     languageOptions: {
       globals: globals.browser,
-      parser: parserVue,
+      parser: eslintParserVue,
       parserOptions: {
         ecmaFeatures: {
           jsx: true,

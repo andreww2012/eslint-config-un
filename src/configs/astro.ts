@@ -1,10 +1,9 @@
 // cspell:ignore canonicalurl fetchcontent getentrybyslug
-import astroEslintParser from 'astro-eslint-parser';
-import eslintPluginAstro from 'eslint-plugin-astro';
 import {ERROR, GLOB_ASTRO, OFF, WARNING} from '../constants';
 import {type AllRulesWithPrefix, ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults} from '../utils';
+import {assignDefaults, interopDefault} from '../utils';
 import {type JsxA11yEslintConfigOptions, jsxA11yUnConfig} from './jsx-a11y';
 import type {UnConfigFn} from './index';
 
@@ -31,6 +30,11 @@ export interface AstroEslintConfigOptions
 const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
 
 export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
+  const [eslintPluginAstro, astroEslintParser] = await Promise.all([
+    pluginsLoaders.astro(),
+    interopDefault(import('astro-eslint-parser')),
+  ]);
+
   const optionsRaw = context.rootOptions.configs?.astro;
   const optionsResolved = assignDefaults(optionsRaw, {
     files: DEFAULT_ASTRO_FILES,

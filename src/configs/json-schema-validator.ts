@@ -1,10 +1,7 @@
 import type {RequestOptions} from 'node:https';
-import jsoncEslintParser from 'jsonc-eslint-parser';
-import tomlEslintParser from 'toml-eslint-parser';
-import yamlEslintParser from 'yaml-eslint-parser';
 import {ERROR} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
-import {assignDefaults} from '../utils';
+import {assignDefaults, interopDefault} from '../utils';
 import {JSONC_DEFAULT_FILES} from './jsonc';
 import {TOML_DEFAULT_FILES} from './toml';
 import {YAML_DEFAULT_FILES} from './yaml';
@@ -31,7 +28,13 @@ export interface JsonSchemaValidatorEslintConfigOptions
   options?: GetRuleOptions<'json-schema-validator/no-invalid'>[0];
 }
 
-export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = (context) => {
+export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = async (context) => {
+  const [jsoncEslintParser, tomlEslintParser, yamlEslintParser] = await Promise.all([
+    interopDefault(import('jsonc-eslint-parser')),
+    interopDefault(import('toml-eslint-parser')),
+    interopDefault(import('yaml-eslint-parser')),
+  ]);
+
   const optionsRaw = context.rootOptions.configs?.jsonSchemaValidator;
   const optionsResolved = assignDefaults(
     optionsRaw,

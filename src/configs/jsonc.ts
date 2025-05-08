@@ -1,8 +1,7 @@
-import eslintPluginJsonc from 'eslint-plugin-jsonc';
-import jsoncEslintParser from 'jsonc-eslint-parser';
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC} from '../constants';
 import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
-import {assignDefaults} from '../utils';
+import {pluginsLoaders} from '../plugins';
+import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
 export const JSONC_DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5];
@@ -21,7 +20,12 @@ export interface JsoncEslintConfigOptions extends ConfigSharedOptions<'jsonc'> {
   configJson5?: ConfigSharedOptions<'jsonc'>;
 }
 
-export const jsoncUnConfig: UnConfigFn<'json'> = (context) => {
+export const jsoncUnConfig: UnConfigFn<'json'> = async (context) => {
+  const [eslintPluginJsonc, jsoncEslintParser] = await Promise.all([
+    pluginsLoaders.jsonc(),
+    interopDefault(import('jsonc-eslint-parser')),
+  ]);
+
   const optionsRaw = context.rootOptions.configs?.json;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsoncEslintConfigOptions);
 
