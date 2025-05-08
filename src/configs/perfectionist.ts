@@ -1,5 +1,5 @@
 import {OFF} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -9,10 +9,10 @@ export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.perfectionist;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies PerfectionistEslintConfigOptions);
 
-  const configBuilder = new ConfigEntryBuilder('perfectionist', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'perfectionist');
 
   configBuilder
-    .addConfig(['perfectionist', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['perfectionist', {includeDefaultFilesAndIgnores: true}])
     .addRule('sort-array-includes', OFF) // >=0.5.0
     .addRule('sort-classes', OFF) // >=0.11.0
     .addRule('sort-decorators', OFF) // >=4.0.0
@@ -36,7 +36,7 @@ export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

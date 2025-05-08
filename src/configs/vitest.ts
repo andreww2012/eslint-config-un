@@ -1,9 +1,9 @@
 import eslintPluginVitest from '@vitest/eslint-plugin';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
-  ConfigEntryBuilder,
   type ConfigSharedOptions,
   type FlatConfigEntryForBuilder,
+  createConfigBuilder,
 } from '../eslint';
 import {assignDefaults} from '../utils';
 import {
@@ -71,14 +71,14 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = (context) => {
   const hasRestrictedMethods = Object.keys(restrictedMethods || {}).length > 0;
   const hasRestrictedMatchers = Object.keys(restrictedMatchers || {}).length > 0;
 
-  const configBuilder = new ConfigEntryBuilder('vitest', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'vitest');
 
   // Legend:
   // 🟢 - in Recommended
 
   // TODO sync settings with `jest` config?
   configBuilder
-    .addConfig(
+    ?.addConfig(
       [
         'vitest',
         {
@@ -173,7 +173,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = (context) => {
     .addRule('valid-expect-in-promise', ERROR); // (warns in all)
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

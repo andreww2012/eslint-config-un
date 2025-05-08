@@ -1,7 +1,7 @@
 import eslintPluginCss, {type CSSLanguageOptions} from '@eslint/css';
 import {tailwindSyntax} from '@eslint/css/syntax';
 import {GLOB_CSS} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -36,7 +36,7 @@ export const cssUnConfig: UnConfigFn<'css'> = (context) => {
 
   const {tolerantMode, customSyntax} = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('css', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'css');
 
   const isTailwindEnabled = context.configsMeta.tailwind.enabled;
 
@@ -44,7 +44,7 @@ export const cssUnConfig: UnConfigFn<'css'> = (context) => {
   // 🟢 - in Recommended
 
   configBuilder
-    .addConfig(
+    ?.addConfig(
       [
         'css',
         {
@@ -76,7 +76,7 @@ export const cssUnConfig: UnConfigFn<'css'> = (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

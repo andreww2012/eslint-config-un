@@ -1,5 +1,5 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
@@ -12,13 +12,13 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.unicorn;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies UnicornEslintConfigOptions);
 
-  const configBuilder = new ConfigEntryBuilder('unicorn', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'unicorn');
 
   // LEGEND:
   // 🔴 - not in recommended
 
   configBuilder
-    .addConfig(['unicorn', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['unicorn', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginUnicorn.configs['flat/recommended'].rules)
     // .addRule('better-regex', ERROR)
     .addRule('catch-error-name', OFF)
@@ -161,7 +161,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

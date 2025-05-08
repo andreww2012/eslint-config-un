@@ -1,6 +1,6 @@
 // cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed matchall replaceall trimstart trimend subclassing weakrefs
 import {ERROR, OFF} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults, memoize} from '../utils';
 import type {UnConfigFn, UnConfigOptions} from './index';
@@ -324,9 +324,9 @@ export const esUnConfig: UnConfigFn<
     return isFeatureSupported ? OFF : ERROR;
   };
 
-  const configBuilder = new ConfigEntryBuilder('es', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'es');
 
-  const mainConfig = configBuilder.addConfig(
+  const mainConfig = configBuilder?.addConfig(
     [customConfig?.prefix || 'es', {includeDefaultFilesAndIgnores: true}],
     {
       ...(pluginSettings && {
@@ -340,7 +340,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES2025 */
   if (!isEsVersionFullySupported(2025)) {
     mainConfig
-      .addRule(
+      ?.addRule(
         'no-dataview-prototype-getfloat16-setfloat16',
         grs(2025, 'dataviewPrototypeGetFloat16SetFloat16'),
       ) // >=8.5.0
@@ -383,7 +383,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES2024 */
   if (!isEsVersionFullySupported(2024)) {
     mainConfig
-      .addRule('no-arraybuffer-prototype-transfer', grs(2024, 'arrayBufferPrototypeTransfer')) // >=7.6.0
+      ?.addRule('no-arraybuffer-prototype-transfer', grs(2024, 'arrayBufferPrototypeTransfer')) // >=7.6.0
       .addRule('no-atomics-waitasync', grs(2024, 'atomicsWaitAsync')) // >=7.1.0
       .addRule('no-map-groupby', grs(2024, 'mapGroupBy')) // >=8.0.0
       .addRule('no-object-groupby', grs(2024, 'objectGroupBy')) // >=8.0.0
@@ -400,7 +400,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES2023 */
   if (!isEsVersionFullySupported(2023)) {
     mainConfig
-      .addRule(
+      ?.addRule(
         'no-array-prototype-findlast-findlastindex',
         grs(2023, 'arrayPrototypeFindlastFindLastIndex'),
       ) // >=5.3.0
@@ -431,7 +431,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES2022 */
   if (!isEsVersionFullySupported(2022)) {
     mainConfig
-      .addRule('no-arbitrary-module-namespace-names', grs(2022, 'arbitraryModuleNamespaceNames')) // >=5.0.0
+      ?.addRule('no-arbitrary-module-namespace-names', grs(2022, 'arbitraryModuleNamespaceNames')) // >=5.0.0
       .addRule('no-array-prototype-at', grs(2022, 'arrayPrototypeAt')) // >=8.0.0
       .addRule('no-class-instance-fields', grs(2022, 'classInstanceFields')) // >=8.0.0
       .addRule('no-class-private-fields', grs(2022, 'classPrivateFields')) // >=8.0.0
@@ -456,7 +456,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES2021 */
   if (!isEsVersionFullySupported(2021)) {
     mainConfig
-      .addRule('no-logical-assignment-operators', grs(2021, 'logicalAssignmentOperators')) // >=4.0.0
+      ?.addRule('no-logical-assignment-operators', grs(2021, 'logicalAssignmentOperators')) // >=4.0.0
       .addRule('no-numeric-separators', grs(2021, 'numericSeparators')) // >=4.0.0
       .addRule('no-promise-any', grs(2021, 'promiseAny')) // >=4.0.0
       .addRule(
@@ -477,7 +477,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES2020 */
   if (!isEsVersionFullySupported(2020)) {
     mainConfig
-      .addRule('no-bigint', grs(2020, 'bigint')) // >=2.0.0
+      ?.addRule('no-bigint', grs(2020, 'bigint')) // >=2.0.0
       .addRule('no-dynamic-import', grs(2020, 'dynamicImport')) // >=2.0.0
       .addRule('no-export-ns-from', grs(2020, 'exportNsFrom')) // >=4.0.0
       .addRule('no-global-this', grs(2020, 'globalThis')) // >=3.0.0
@@ -498,7 +498,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES2019 */
   if (!isEsVersionFullySupported(2019)) {
     mainConfig
-      .addRule('no-array-prototype-flat', grs(2019, 'arrayPrototypeFlat')) // >=5.0.0
+      ?.addRule('no-array-prototype-flat', grs(2019, 'arrayPrototypeFlat')) // >=5.0.0
       .addRule('no-json-superset', grs(2019, 'jsonSuperset')) // >=1.3.0
       .addRule('no-object-fromentries', grs(2019, 'objectFromEntries')) // >=4.0.0
       .addRule('no-optional-catch-binding', grs(2019, 'optionalCatchBinding')) // >=1.3.0
@@ -516,7 +516,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES2018 */
   if (!isEsVersionFullySupported(2018)) {
     mainConfig
-      .addRule('no-async-iteration', grs(2018, 'asyncIteration')) // >=1.0.0
+      ?.addRule('no-async-iteration', grs(2018, 'asyncIteration')) // >=1.0.0
       .addRule('no-malformed-template-literals', grs(2018, 'malformedTemplateLiterals')) // >=1.0.0
       .addRule('no-promise-prototype-finally', grs(2018, 'promisePrototypeFinally')) // >=5.0.0
       .addRule('no-regexp-lookbehind-assertions', grs(2018, 'regexpLookbehindAssertions')) // >=1.0.0
@@ -535,7 +535,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES2017 */
   if (!isEsVersionFullySupported(2017)) {
     mainConfig
-      .addRule('no-async-functions', grs(2017, 'asyncFunctions')) // >=1.0.0
+      ?.addRule('no-async-functions', grs(2017, 'asyncFunctions')) // >=1.0.0
       .addRule('no-atomics', grs(2017, 'atomics')) // >=1.2.0
       .addRule('no-object-entries', grs(2017, 'objectEntries')) // >=1.2.0
       .addRule('no-object-getownpropertydescriptors', grs(2017, 'objectGetOwnPropertyDescriptors')) // >=1.2.0
@@ -553,7 +553,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES2016 */
   if (!isEsVersionFullySupported(2016)) {
     mainConfig
-      .addRule('no-array-prototype-includes', grs(2016, 'arrayPrototypeIncludes')) // >=5.0.0
+      ?.addRule('no-array-prototype-includes', grs(2016, 'arrayPrototypeIncludes')) // >=5.0.0
       .addRule('no-exponential-operators', grs(2016, 'exponentialOperators')) // >=1.0.0
       /* Category: ES2016 Intl API */
       .addRule('no-intl-getcanonicallocales', grs(2016, 'intlGetCanonicalLocales')); // >=6.0.0
@@ -562,7 +562,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES2015 */
   if (!isEsVersionFullySupported(2015)) {
     mainConfig
-      .addRule('no-array-from', grs(2015, 'arrayFrom')) // >=1.2.0
+      ?.addRule('no-array-from', grs(2015, 'arrayFrom')) // >=1.2.0
       .addRule('no-array-of', grs(2015, 'arrayOf')) // >=1.2.0
       .addRule('no-array-prototype-copywithin', grs(2015, 'arrayPrototypeCopyWithin')) // >=5.0.0
       .addRule('no-array-prototype-entries', grs(2015, 'arrayPrototypeEntries')) // >=5.0.0
@@ -648,7 +648,7 @@ export const esUnConfig: UnConfigFn<
   /* Category: ES5 */
   if (!isEsVersionFullySupported(5)) {
     mainConfig
-      .addRule('no-accessor-properties', grs(5, 'accessorProperties')) // >=1.1.0
+      ?.addRule('no-accessor-properties', grs(5, 'accessorProperties')) // >=1.1.0
       .addRule('no-array-isarray', grs(5, 'arrayIsArray')) // >=3.0.0
       .addRule('no-array-prototype-every', grs(5, 'arrayPrototypeEvery')) // >=5.0.0
       .addRule('no-array-prototype-filter', grs(5, 'arrayPrototypeFilter')) // >=5.0.0
@@ -768,10 +768,10 @@ export const esUnConfig: UnConfigFn<
     // .addRule('no-class-fields', OFF) // >=5.0.0
     // .addRule('no-object-map-groupby', OFF) // >=7.5.0
     // .addRule('no-string-prototype-iswellformed-towellformed', OFF) // >=7.1.0
-    .addOverrides();
+    ?.addOverrides();
 
   return {
-    configs: [...configBuilder.getAllConfigs()],
+    configs: [configBuilder],
     optionsResolved,
   };
 };

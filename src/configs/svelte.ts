@@ -1,7 +1,7 @@
 // cspell:ignore curlies
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults, doesPackageExist, getKeysOfTruthyValues, interopDefault} from '../utils';
 import {type VueEslintConfigOptions, noRestrictedHtmlElementsDefault} from './vue';
@@ -106,7 +106,6 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
 
   const optionsRaw = context.rootOptions.configs?.svelte;
   const optionsResolved = assignDefaults(optionsRaw, {
-    files: DEFAULT_SVELTE_FILES,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
     svelteVersion:
       context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,
@@ -115,17 +114,17 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
 
   const {
     settings: pluginSettings,
-    files: parentConfigFiles,
+    files: parentConfigFiles = DEFAULT_SVELTE_FILES,
     svelteKitConfig,
     enforceTypescriptInScriptSection,
     svelteVersion,
     isPrettierPluginSvelteUsed,
   } = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('svelte', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'svelte');
 
   configBuilder
-    .addConfig(
+    ?.addConfig(
       [
         'svelte/setup',
         {
@@ -167,7 +166,10 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
   // 💅 - included in Prettier config: https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts
 
   configBuilder
-    .addConfig(['svelte', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig([
+      'svelte',
+      {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_SVELTE_FILES},
+    ])
     /* CATEGORY: Possible Errors */
     .addRule('infinite-reactive-loop', ERROR) // 🟢4️⃣ >=2.16.0
     .addRule('no-dom-manipulating', ERROR) // 🟢 >=2.13.0
@@ -290,11 +292,11 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
       throw new Error('Failed to find built-in config which disables Prettier incompatible rules');
     }
 
-    configBuilder.addConfig('svelte/prettier').addBulkRules(disabledRuleConfig.rules);
+    configBuilder?.addConfig('svelte/prettier').addBulkRules(disabledRuleConfig.rules);
   }
 
   return {
-    configs: [...configBuilder.getAllConfigs()],
+    configs: [configBuilder],
     optionsResolved,
   };
 };

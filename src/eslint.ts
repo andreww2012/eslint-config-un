@@ -30,10 +30,12 @@ import {type MaybeFn, cloneDeep, maybeCall, objectEntriesUnsafe} from './utils';
 type EslintSeverity = Eslint.Linter.RuleSeverity;
 
 export interface FlatConfigEntryFiles {
+  /**
+   * Pass an empty array to disable the config.
+   */
   files?: string[];
 }
 
-// TODO should deprecate?
 export interface FlatConfigEntryFilesOrIgnores extends FlatConfigEntryFiles {
   ignores?: string[];
 }
@@ -192,14 +194,22 @@ const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, EslintSeverity
   error: 2,
 };
 
-export class ConfigEntryBuilder<RulesPrefix extends string | null> {
+export class ConfigEntryBuilder<RulesPrefix extends string | null = string | null> {
+  private readonly rulesPrefix: RulesPrefix;
+  private readonly options: ConfigSharedOptions<
+    RulesPrefix extends null ? RulesRecord : RulesPrefix
+  >;
+  private readonly context: UnConfigContext;
+
   constructor(
-    private readonly rulesPrefix: RulesPrefix,
-    private readonly options: ConfigSharedOptions<
-      RulesPrefix extends null ? RulesRecord : RulesPrefix
-    >,
-    private readonly context: UnConfigContext,
-  ) {}
+    rulesPrefix: RulesPrefix,
+    options: ConfigSharedOptions<RulesPrefix extends null ? RulesRecord : RulesPrefix>,
+    context: UnConfigContext,
+  ) {
+    this.rulesPrefix = rulesPrefix;
+    this.options = options;
+    this.context = context;
+  }
 
   private readonly configs: FlatConfigEntry[] = [];
   private readonly configsDict = new Map<string, FlatConfigEntry>();
@@ -417,3 +427,26 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
     return this.configs;
   }
 }
+
+export const createConfigBuilder = <RulesPrefix extends string | null>(
+  context: UnConfigContext,
+  options: ConfigSharedOptions<RulesPrefix extends null ? RulesRecord : RulesPrefix> | boolean,
+  rulesPrefix: RulesPrefix,
+  disabledIfEmptyFiles = true,
+) => {
+  const optionsResolved = typeof options === 'object' ? options : {};
+  if (
+    !options ||
+    (Array.isArray(optionsResolved.files) &&
+      optionsResolved.files.length === 0 &&
+      disabledIfEmptyFiles)
+  ) {
+    return null;
+  }
+  return new ConfigEntryBuilder(
+    rulesPrefix,
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    options && typeof options === 'object' ? options : {},
+    context,
+  );
+};

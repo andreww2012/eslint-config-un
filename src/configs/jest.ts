@@ -2,10 +2,10 @@ import type {Jest as JestMethods} from '@jest/environment';
 import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
-  ConfigEntryBuilder,
   type ConfigSharedOptions,
   type FlatConfigEntryForBuilder,
   type GetRuleOptions,
+  createConfigBuilder,
 } from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow, ValueOf} from '../types';
@@ -238,14 +238,14 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
   const getPaddingAroundSeverity = (key: keyof (typeof paddingAround & object)) =>
     paddingAround === true || (paddingAround && paddingAround[key] !== false) ? ERROR : OFF;
 
-  const configBuilder = new ConfigEntryBuilder('jest', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'jest');
 
   // Legend:
   // 🟢 - in Recommended
   // 🎨 - in Style
 
   configBuilder
-    .addConfig(
+    ?.addConfig(
       [
         'jest',
         {
@@ -343,40 +343,34 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     .addRule('valid-title', ERROR)
     .addOverrides();
 
-  const configBuilderTypescript = new ConfigEntryBuilder(
-    'jest',
-    typeof configTypescript === 'object' ? configTypescript : {},
-    context,
-  );
-  if (configTypescript !== false) {
-    configBuilder
-      .addConfig(
-        [
-          'jest/ts',
-          {
-            includeDefaultFilesAndIgnores: true,
-            filesFallback: defaultJestTypescriptFiles,
-          },
-        ],
+  const configBuilderTypescript = createConfigBuilder(context, configTypescript, 'jest');
+  configBuilderTypescript
+    ?.addConfig(
+      [
+        'jest/ts',
         {
-          ...defaultJestEslintConfig,
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: defaultJestTypescriptFiles,
         },
-      )
-      // Works only on TS files
-      .addRule('no-untyped-mock-factory', ERROR)
-      // Requires type checking
-      // TODO auto-include test files in TS config?
-      .addRule('unbound-method', isTypescriptEnabled ? ERROR : OFF, [], {
-        // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
-        overrideBaseRule: '@typescript-eslint/unbound-method',
-      })
-      .addOverrides();
-  }
+      ],
+      {
+        ...defaultJestEslintConfig,
+      },
+    )
+    // Works only on TS files
+    .addRule('no-untyped-mock-factory', ERROR)
+    // Requires type checking
+    // TODO auto-include test files in TS config?
+    .addRule('unbound-method', isTypescriptEnabled ? ERROR : OFF, [], {
+      // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
+      overrideBaseRule: '@typescript-eslint/unbound-method',
+    })
+    .addOverrides();
 
-  const configBuilderJestExtended = new ConfigEntryBuilder(
-    'jest-extended',
-    typeof configJestExtended === 'object' ? configJestExtended : {},
+  const configBuilderJestExtended = createConfigBuilder(
     context,
+    configJestExtended,
+    'jest-extended',
   );
   const {suggestUsing} = typeof configJestExtended === 'object' ? configJestExtended : {};
 
@@ -384,7 +378,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     suggestUsing === true || (suggestUsing && suggestUsing[key] !== false) ? ERROR : OFF;
 
   configBuilderJestExtended
-    .addConfig(
+    ?.addConfig(
       [
         'jest/extended',
         {
@@ -413,11 +407,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
   // Other plugins: eslint-plugin-jest-async, eslint-plugin-jest-formatting, eslint-plugin-jest-mock-config, eslint-plugin-jest-playwright, eslint-plugin-jest-react, eslint-plugin-jest-test-each-formatting
 
   return {
-    configs: [
-      ...configBuilder.getAllConfigs(),
-      ...(configTypescript === false ? [] : configBuilderTypescript.getAllConfigs()),
-      ...(configJestExtended === false ? [] : configBuilderJestExtended.getAllConfigs()),
-    ],
+    configs: [configBuilder, configBuilderTypescript, configBuilderJestExtended],
     optionsResolved,
   };
 };

@@ -1,5 +1,5 @@
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
@@ -7,17 +7,30 @@ import type {UnConfigFn} from './index';
 export const JSONC_DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5];
 
 export interface JsoncEslintConfigOptions extends ConfigSharedOptions<'jsonc'> {
-  /** `files` specified in this config will be merged with the default of `['**\/*.json', '**\/*.jsonc', '**\/*.json5']`. Set this to `true` to avoid that behavior */
+  /**
+   * `files` specified in this config will be merged with the default of
+   * `['**\/*.json', '**\/*.jsonc', '**\/*.json5']`. Set this to `true` to avoid that behavior
+   * @default false
+   */
   doNotMergeFilesWithDefault?: boolean;
 
-  /** Config exclusively for .json files (no rules are applied by default!) */
-  configJson?: ConfigSharedOptions<'jsonc'>;
+  /**
+   * Config exclusively for .json files (no rules are applied by default!)
+   * @default false
+   */
+  configJson?: boolean | ConfigSharedOptions<'jsonc'>;
 
-  /** Config exclusively for .jsonc files (no rules are applied by default!) */
-  configJsonc?: ConfigSharedOptions<'jsonc'>;
+  /**
+   * Config exclusively for .jsonc files (no rules are applied by default!)
+   * @default false
+   */
+  configJsonc?: boolean | ConfigSharedOptions<'jsonc'>;
 
-  /** Config exclusively for .json5 files (no rules are applied by default!) */
-  configJson5?: ConfigSharedOptions<'jsonc'>;
+  /**
+   * Config exclusively for .jsonc5 files (no rules are applied by default!)
+   * @default false
+   */
+  configJson5?: boolean | ConfigSharedOptions<'jsonc'>;
 }
 
 export const jsoncUnConfig: UnConfigFn<'json'> = async (context) => {
@@ -27,21 +40,27 @@ export const jsoncUnConfig: UnConfigFn<'json'> = async (context) => {
   ]);
 
   const optionsRaw = context.rootOptions.configs?.json;
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsoncEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {
+    doNotMergeFilesWithDefault: false,
+    configJson: false,
+    configJsonc: false,
+    configJson5: false,
+  } satisfies JsoncEslintConfigOptions);
+  const {doNotMergeFilesWithDefault, configJson, configJsonc, configJson5} = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('jsonc', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'jsonc');
 
   // LEGEND:
   // 🟣 = Included in the main ruleset
 
   configBuilder
-    .addConfig(
+    ?.addConfig(
       [
         'jsonc/all',
         {
           includeDefaultFilesAndIgnores: true,
           filesFallback: JSONC_DEFAULT_FILES,
-          mergeUserFilesWithFallback: !optionsResolved.doNotMergeFilesWithDefault,
+          mergeUserFilesWithFallback: !doNotMergeFilesWithDefault,
         },
       ],
       {
@@ -104,48 +123,23 @@ export const jsoncUnConfig: UnConfigFn<'json'> = async (context) => {
     .addRule('space-unary-ops', ERROR) // 🟣 >=0.2.0
     .addOverrides();
 
-  const result = configBuilder.getAllConfigs();
+  const configBuilderJson = createConfigBuilder(context, configJson, 'jsonc');
+  configBuilderJson
+    ?.addConfig(['jsonc/json', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSON]}])
+    .addOverrides();
 
-  if (optionsResolved.configJson) {
-    const configBuilderJson = new ConfigEntryBuilder('jsonc', optionsResolved.configJson, context);
-    configBuilderJson
-      .addConfig(['jsonc/json', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSON]}])
-      .addOverrides();
-    result.push(...configBuilderJson.getAllConfigs());
-  }
+  const configBuilderJsonc = createConfigBuilder(context, configJsonc, 'jsonc');
+  configBuilderJsonc
+    ?.addConfig(['jsonc/jsonc', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSONC]}])
+    .addOverrides();
 
-  if (optionsResolved.configJsonc) {
-    const configBuilderJsonc = new ConfigEntryBuilder(
-      'jsonc',
-      optionsResolved.configJsonc,
-      context,
-    );
-    configBuilderJsonc
-      .addConfig([
-        'jsonc/jsonc',
-        {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSONC]},
-      ])
-      .addOverrides();
-    result.push(...configBuilderJsonc.getAllConfigs());
-  }
-
-  if (optionsResolved.configJson5) {
-    const configBuilderJson5 = new ConfigEntryBuilder(
-      'jsonc',
-      optionsResolved.configJson5,
-      context,
-    );
-    configBuilderJson5
-      .addConfig([
-        'jsonc/json5',
-        {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSON5]},
-      ])
-      .addOverrides();
-    result.push(...configBuilderJson5.getAllConfigs());
-  }
+  const configBuilderJson5 = createConfigBuilder(context, configJson5, 'jsonc');
+  configBuilderJson5
+    ?.addConfig(['jsonc/json5', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSON5]}])
+    .addOverrides();
 
   return {
-    configs: result,
+    configs: [configBuilder, configBuilderJson, configBuilderJsonc, configBuilderJson5],
     optionsResolved,
   };
 };

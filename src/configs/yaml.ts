@@ -1,5 +1,5 @@
 import {ERROR, GLOB_YAML, OFF} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
@@ -50,13 +50,13 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
 
   const {enforceExtension} = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('yml', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'yml');
 
   // LEGEND:
   // 🟣 = Included in Standard ruleset
 
   configBuilder
-    .addConfig(
+    ?.addConfig(
       [
         'yaml',
         {
@@ -124,7 +124,7 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

@@ -3,11 +3,11 @@ import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-
 import globals from 'globals';
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, WARNING} from '../constants';
 import {
-  ConfigEntryBuilder,
   type ConfigSharedOptions,
   type FlatConfigEntryFilesOrIgnores,
   type RulesRecord,
   bulkChangeRuleSeverity,
+  createConfigBuilder,
 } from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
@@ -189,7 +189,6 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
   const vuePackageMajorVersion = vuePackageInfo?.versions.major;
 
   const optionsResolved = assignDefaults(optionsRaw, {
-    files: DEFAULT_VUE_FILES,
     majorVersion:
       vuePackageMajorVersion === 2 || vuePackageMajorVersion === 3 ? vuePackageMajorVersion : 3,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
@@ -240,10 +239,10 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
   const inNuxtAppDir = joinPaths.bind(null, optionsResolved.nuxtOrVueProjectDir);
   const nuxtLayoutsFilesGlob: string = inNuxtAppDir('layouts/**/*.vue');
 
-  const configBuilder = new ConfigEntryBuilder('vue', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'vue');
 
-  configBuilder.addConfig(['vue/setup', {doNotIgnoreMarkdown: true}], {
-    files: [GLOB_VUE, ...optionsResolved.files],
+  configBuilder?.addConfig(['vue/setup', {doNotIgnoreMarkdown: true}], {
+    files: [...DEFAULT_VUE_FILES, ...(optionsResolved.files || [])],
     processor: mergeEslintProcessors(
       [
         eslintPluginVue.processors['.vue'] as Eslint.Linter.Processor,
@@ -279,7 +278,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
   // LEGEND:
   // 3️⃣ = Only in Vue 3 recommended
   configBuilder
-    .addConfig(['vue', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['vue', {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_VUE_FILES}])
     .addBulkRules(recommendedRules)
     // 🟢 Base
     .addRule('comment-directive', ERROR, [
@@ -630,7 +629,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     .addOverrides();
 
   configBuilder
-    .addConfig('vue/allow-single-word-component-names', {
+    ?.addConfig('vue/allow-single-word-component-names', {
       files: [
         inNuxtAppDir('pages/**/*.vue'),
         inNuxtAppDir('views/**/*.vue'),
@@ -646,17 +645,16 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     })
     .addRule('multi-word-component-names', OFF);
 
-  const vueAllowImplicitSlotsConfig = configBuilder.addConfig('vue/allow-implicit-slots', {
-    files: [nuxtLayoutsFilesGlob],
-  });
-  if (isNuxtEnabled) {
-    vueAllowImplicitSlotsConfig.addRule('require-explicit-slots', OFF);
-  }
+  configBuilder
+    ?.addConfig('vue/allow-implicit-slots', {
+      files: [nuxtLayoutsFilesGlob],
+    })
+    .addRule('require-explicit-slots', isNuxtEnabled ? OFF : null);
 
   configBuilder
-    .addConfig('vue/allow-default-export', {
+    ?.addConfig('vue/allow-default-export', {
       files: [
-        GLOB_VUE,
+        ...DEFAULT_VUE_FILES,
         isNuxtEnabled && [
           inNuxtAppDir('plugins/**/*'),
           inNuxtAppDir('server/**/*'),
@@ -668,19 +666,14 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     })
     .disableAnyRule('import/no-default-export');
 
-  const configA11yOptions = typeof configA11y === 'object' ? configA11y : {};
-  const configBuilderA11y = new ConfigEntryBuilder(
-    'vuejs-accessibility',
-    configA11yOptions,
-    context,
-  );
+  const configBuilderA11y = createConfigBuilder(context, configA11y, 'vuejs-accessibility');
   configBuilderA11y
-    .addConfig([
+    ?.addConfig([
       'vue/a11y',
       {
         includeDefaultFilesAndIgnores: true,
         ignoreMarkdownCodeBlocks: true,
-        filesFallback: optionsResolved.ignores || [GLOB_VUE],
+        filesFallback: optionsResolved.files || DEFAULT_VUE_FILES,
         ignoresFallback: optionsResolved.ignores,
       },
     ])
@@ -708,14 +701,10 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     // .addRule('tabindex-no-positive', ERROR)
     .addOverrides();
 
-  const configBuilderPinia = new ConfigEntryBuilder(
-    'pinia',
-    typeof configPinia === 'object' ? configPinia : {},
-    context,
-  );
+  const configBuilderPinia = createConfigBuilder(context, configPinia, 'pinia');
 
   configBuilderPinia
-    .addConfig([
+    ?.addConfig([
       'pinia',
       {
         includeDefaultFilesAndIgnores: true,
@@ -741,11 +730,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: [
-      ...configBuilder.getAllConfigs(),
-      ...(configA11y === false ? [] : configBuilderA11y.getAllConfigs()),
-      ...(configPinia === false ? [] : configBuilderPinia.getAllConfigs()),
-    ],
+    configs: [configBuilder, configBuilderA11y, configBuilderPinia],
     optionsResolved,
   };
 };

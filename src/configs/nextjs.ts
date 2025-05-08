@@ -1,6 +1,6 @@
 // cspell:ignore polyfillio
 import {ERROR, GLOB_JS_TS_X, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -27,7 +27,7 @@ export const nextJsUnConfig: UnConfigFn<'nextJs'> = (context) => {
 
   const {settings: pluginSettings} = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('@next/next', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, '@next/next');
 
   // Legend:
   // 🟢 - in Recommended (error)
@@ -35,7 +35,7 @@ export const nextJsUnConfig: UnConfigFn<'nextJs'> = (context) => {
   // 🔵 - in Core Web Vitals (error)
 
   configBuilder
-    .addConfig(
+    ?.addConfig(
       [
         'nextjs',
         {
@@ -76,7 +76,7 @@ export const nextJsUnConfig: UnConfigFn<'nextJs'> = (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

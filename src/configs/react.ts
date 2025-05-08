@@ -12,10 +12,10 @@ import {
   type AllEslintRulesWithoutDisableAutofix,
   type AllRulesWithPrefix,
   type AllRulesWithPrefixUnprefixedNames,
-  ConfigEntryBuilder,
   type ConfigSharedOptions,
   type DisableAutofixPrefix,
   type GetRuleOptions,
+  createConfigBuilder,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults, doesPackageExist} from '../utils';
@@ -606,8 +606,8 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
 
   const configReactXOptions = typeof configReactX === 'object' ? configReactX : {};
 
-  const configBuilderSetup = new ConfigEntryBuilder(null, {}, context);
-  configBuilderSetup.addConfig('react/setup', {
+  const configBuilderSetup = createConfigBuilder(context, {}, null, false);
+  configBuilderSetup?.addConfig('react/setup', {
     settings: {
       ...(isReactEnabled && {
         react: {
@@ -638,10 +638,10 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
   // 💅 - Stylistic rule disabled in `eslint-config-prettier`: https://github.com/prettier/eslint-config-prettier/blob/f12309bbca9fb051b53fcece9a8491a1222235c8/index.js#L234
   // Check rule usage: https://github.com/search?q=path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F+%22react%2Fboolean-prop-naming%22&type=code
 
-  const configBuilderReactOriginal = new ConfigEntryBuilder('react', optionsResolved, context);
+  const configBuilderReactOriginal = createConfigBuilder(context, optionsResolved, 'react');
 
   configBuilderReactOriginal
-    .addConfig([
+    ?.addConfig([
       'react/plugin-original',
       {
         includeDefaultFilesAndIgnores: true,
@@ -865,17 +865,13 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
     .addRule('style-prop-object', OFF)
     .addOverrides();
 
-  const configAllowDefaultExportsInJsxFilesOptions =
-    typeof configAllowDefaultExportsInJsxFiles === 'object'
-      ? configAllowDefaultExportsInJsxFiles
-      : {};
-  const configBuilderAllowDefaultExportsInJsxFiles = new ConfigEntryBuilder(
-    null,
-    configAllowDefaultExportsInJsxFilesOptions,
+  const configBuilderAllowDefaultExportsInJsxFiles = createConfigBuilder(
     context,
+    configAllowDefaultExportsInJsxFiles,
+    null,
   );
-  configBuilderReactOriginal
-    .addConfig([
+  configBuilderAllowDefaultExportsInJsxFiles
+    ?.addConfig([
       'react/allow-default-export-in-jsx-files',
       {
         includeDefaultFilesAndIgnores: true,
@@ -885,10 +881,9 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
     .addAnyRule('import/no-default-export', OFF)
     .addOverrides();
 
-  const configHooksOptions = typeof configHooks === 'object' ? configHooks : {};
-  const configBuilderHooks = new ConfigEntryBuilder(null, configHooksOptions, context);
+  const configBuilderHooks = createConfigBuilder(context, configHooks, null);
   configBuilderHooks
-    .addConfig([
+    ?.addConfig([
       'react/hooks',
       {
         includeDefaultFilesAndIgnores: true,
@@ -925,9 +920,9 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
   const {noLegacyApis = {}, typeAwareRules: reactXTypeAwareRules = context.configsMeta.ts.enabled} =
     configReactXOptions;
 
-  const configBuilderReactX = new ConfigEntryBuilder('@eslint-react', configReactXOptions, context);
+  const configBuilderReactX = createConfigBuilder(context, configReactX, '@eslint-react');
   configBuilderReactX
-    .addConfig([
+    ?.addConfig([
       'react/x',
       {
         includeDefaultFilesAndIgnores: true,
@@ -1093,16 +1088,13 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
     .addRule('debug/jsx', OFF)
     .addOverrides();
 
-  const configReactXTypeAwareOptions =
-    typeof reactXTypeAwareRules === 'object' ? reactXTypeAwareRules : {};
-
-  const configBuilderReactXTypeAware = new ConfigEntryBuilder(
-    '@eslint-react',
-    configReactXTypeAwareOptions,
+  const configBuilderReactXTypeAware = createConfigBuilder(
     context,
+    reactXTypeAwareRules,
+    '@eslint-react',
   );
   configBuilderReactXTypeAware
-    .addConfig([
+    ?.addConfig([
       'react/x/rules-type-aware',
       {
         includeDefaultFilesAndIgnores: true,
@@ -1116,10 +1108,9 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
     .addRule('prefer-read-only-props', getDoubleRuleSeverity(PREFER_READ_ONLY_PROPS_SEVERITY, true)) // 🔄️ 💭
     .addOverrides();
 
-  const configReactDomOptions = typeof configDom === 'object' ? configDom : {};
-  const configBuilderDom = new ConfigEntryBuilder(null, configReactDomOptions, context);
+  const configBuilderDom = createConfigBuilder(context, configDom, null);
   configBuilderDom
-    .addConfig([
+    ?.addConfig([
       'react/dom',
       {
         includeDefaultFilesAndIgnores: true,
@@ -1196,14 +1187,10 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
     )
   ).some(Boolean);
 
+  const configBuilderRefresh = createConfigBuilder(context, configRefresh, 'react-refresh');
   const configReactRefreshOptions = typeof configRefresh === 'object' ? configRefresh : {};
-  const configBuilderRefresh = new ConfigEntryBuilder(
-    'react-refresh',
-    configReactRefreshOptions,
-    context,
-  );
   configBuilderRefresh
-    .addConfig([
+    ?.addConfig([
       'react/refresh',
       {
         includeDefaultFilesAndIgnores: true,
@@ -1223,14 +1210,9 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
     ])
     .addOverrides();
 
-  const configReactCompilerOptions = typeof configCompiler === 'object' ? configCompiler : {};
-  const configBuilderCompiler = new ConfigEntryBuilder(
-    'react-compiler',
-    configReactCompilerOptions,
-    context,
-  );
+  const configBuilderCompiler = createConfigBuilder(context, configCompiler, 'react-compiler');
   configBuilderCompiler
-    .addConfig([
+    ?.addConfig([
       'react/compiler',
       {
         includeDefaultFilesAndIgnores: true,
@@ -1243,17 +1225,15 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
 
   return {
     configs: [
-      ...configBuilderSetup.getAllConfigs(),
-      ...(isReactEnabled ? configBuilderReactOriginal.getAllConfigs() : []),
-      ...(configAllowDefaultExportsInJsxFiles === false
-        ? []
-        : configBuilderAllowDefaultExportsInJsxFiles.getAllConfigs()),
-      ...(configHooks === false ? [] : configBuilderHooks.getAllConfigs()),
-      ...(isConfigXDisabled ? [] : configBuilderReactX.getAllConfigs()),
-      ...(reactXTypeAwareRules === false ? [] : configBuilderReactXTypeAware.getAllConfigs()),
-      ...(configDom === false ? [] : configBuilderDom.getAllConfigs()),
-      ...(configRefresh === false ? [] : configBuilderRefresh.getAllConfigs()),
-      ...(configCompiler === false ? [] : configBuilderCompiler.getAllConfigs()),
+      configBuilderSetup,
+      configBuilderReactOriginal,
+      configBuilderAllowDefaultExportsInJsxFiles,
+      configBuilderHooks,
+      configBuilderReactX,
+      configBuilderReactXTypeAware,
+      configBuilderDom,
+      configBuilderRefresh,
+      configBuilderCompiler,
     ],
     optionsResolved,
   };

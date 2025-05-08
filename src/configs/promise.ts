@@ -1,5 +1,5 @@
 import {ERROR, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
@@ -12,10 +12,10 @@ export const promiseUnConfig: UnConfigFn<'promise'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.promise;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies PromiseEslintConfigOptions);
 
-  const configBuilder = new ConfigEntryBuilder('promise', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'promise');
 
   configBuilder
-    .addConfig(['promise', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['promise', {includeDefaultFilesAndIgnores: true}])
     // @ts-expect-error no proper types
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     .addBulkRules(eslintPluginPromise.configs.recommended.rules)
@@ -44,7 +44,7 @@ export const promiseUnConfig: UnConfigFn<'promise'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

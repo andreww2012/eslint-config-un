@@ -39,7 +39,7 @@
     "lint:eslint:fix": "nr lint:eslint --fix",
     "lint:types": "tsc --noEmit",
     "lint": "nr lint:types && nr format:check && nr lint:eslint",
-    "lint:fix": "nr format:fix && nr lint:eslint:fix",
+    "lint:fix": "nr lint:eslint:fix && nr format:fix",
     "test": "nr typegen && nr spellcheck && nr lint",
     "typegen": "tsx scripts/typegen.ts",
     "build:code": "tsup --format esm,cjs --clean --dts",

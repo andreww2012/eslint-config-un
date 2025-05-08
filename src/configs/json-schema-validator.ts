@@ -1,6 +1,6 @@
 import type {RequestOptions} from 'node:https';
 import {ERROR} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import {JSONC_DEFAULT_FILES} from './jsonc';
 import {TOML_DEFAULT_FILES} from './toml';
@@ -43,12 +43,12 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = as
 
   const {settings: pluginSettings, options: noInvalidOptions} = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('json-schema-validator', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'json-schema-validator');
 
   // Legend:
   // 🟣 - in recommended
 
-  configBuilder.addConfig(
+  configBuilder?.addConfig(
     [
       'json-schema-validator/setup/jsonc',
       {
@@ -62,7 +62,7 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = as
     },
   );
 
-  configBuilder.addConfig(
+  configBuilder?.addConfig(
     [
       'json-schema-validator/setup/yaml',
       {
@@ -76,7 +76,7 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = as
     },
   );
 
-  configBuilder.addConfig(
+  configBuilder?.addConfig(
     [
       'json-schema-validator/setup/toml',
       {
@@ -91,7 +91,7 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = as
   );
 
   configBuilder
-    .addConfig(['json-schema-validator', {includeDefaultFilesAndIgnores: true}], {
+    ?.addConfig(['json-schema-validator', {includeDefaultFilesAndIgnores: true}], {
       ...(pluginSettings && {
         settings: {
           'json-schema-validator': pluginSettings,
@@ -102,7 +102,7 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = as
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

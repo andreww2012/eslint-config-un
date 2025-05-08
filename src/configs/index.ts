@@ -1,6 +1,6 @@
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
-import type {FlatConfigEntry} from '../eslint';
+import type {ConfigEntryBuilder, FlatConfigEntry} from '../eslint';
 import type {Promisable} from '../types';
 import type {fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
@@ -429,7 +429,8 @@ export type UnConfigFn<
 ) => Promisable<
   | null
   | ({
-      configs: FlatConfigEntry[];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      configs: (ConfigEntryBuilder<any> | null)[];
       optionsResolved: UnConfigs[T] & object & {};
     } & ExtraReturnedData)
 >;

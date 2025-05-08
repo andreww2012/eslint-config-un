@@ -1,5 +1,5 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
@@ -12,10 +12,10 @@ export const regexpUnConfig: UnConfigFn<'regexp'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.regexp;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies RegexpEslintConfigOptions);
 
-  const configBuilder = new ConfigEntryBuilder('regexp', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'regexp');
 
   configBuilder
-    .addConfig(['regexp', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['regexp', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginRegexp.configs['flat/recommended'].rules)
     // 🟢 Possible Errors
     // .addRule('no-contradiction-with-assertion', ERROR)
@@ -115,7 +115,7 @@ export const regexpUnConfig: UnConfigFn<'regexp'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

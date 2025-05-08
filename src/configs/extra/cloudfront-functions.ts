@@ -1,5 +1,5 @@
 import {ERROR, OFF} from '../../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../../eslint';
 import {assignDefaults} from '../../utils';
 import {esUnConfig} from '../es';
 import type {UnConfigFn} from '../index';
@@ -145,11 +145,10 @@ export const cloudfrontFunctionsEslintConfig: UnConfigFn<'cloudfrontFunctions'> 
 
       const allowedImports = getAllowedImports(isV2);
 
-      const configBuilder = new ConfigEntryBuilder(null, options, context);
+      const configBuilder = createConfigBuilder(context, options, null);
 
-      // TODO disable-autofix
       configBuilder
-        .addConfig([
+        ?.addConfig([
           `cloudfront-functions/v${runtimeVersion}`,
           {includeDefaultFilesAndIgnores: true},
         ])
@@ -227,7 +226,7 @@ export const cloudfrontFunctionsEslintConfig: UnConfigFn<'cloudfrontFunctions'> 
         ])
         .addOverrides();
 
-      return [...configsEs, ...configBuilder.getAllConfigs()];
+      return [...configsEs, configBuilder];
     }),
   );
 

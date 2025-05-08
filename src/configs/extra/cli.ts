@@ -1,5 +1,5 @@
 import {GLOB_JS_TS_X_EXTENSION, OFF} from '../../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../../eslint';
 import {assignDefaults} from '../../utils';
 import type {UnConfigFn} from '../index';
 
@@ -19,10 +19,10 @@ export const cliEslintConfig: UnConfigFn<'cli'> = (context) => {
 
   const {onlyTopLevelDirs} = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder(null, optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, null);
 
   configBuilder
-    .addConfig([
+    ?.addConfig([
       'cli',
       {
         includeDefaultFilesAndIgnores: true,
@@ -37,7 +37,7 @@ export const cliEslintConfig: UnConfigFn<'cli'> = (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

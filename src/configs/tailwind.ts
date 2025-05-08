@@ -1,5 +1,5 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults, maybeCall, objectKeysUnsafe} from '../utils';
 import type {UnConfigFn} from './index';
@@ -41,14 +41,14 @@ export const tailwindUnConfig: UnConfigFn<'tailwind'> = (context) => {
 
   const {settings: pluginSettings} = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('tailwindcss', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'tailwindcss');
 
   // Legend:
   // 🟢 - in Recommended (error)
   // 🟡 - in Recommended (warning)
 
   configBuilder
-    .addConfig(['tailwind', {includeDefaultFilesAndIgnores: true}], {
+    ?.addConfig(['tailwind', {includeDefaultFilesAndIgnores: true}], {
       ...(pluginSettings && {
         settings: {
           tailwindcss: {
@@ -80,7 +80,7 @@ export const tailwindUnConfig: UnConfigFn<'tailwind'> = (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

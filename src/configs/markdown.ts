@@ -4,13 +4,13 @@ import {mergeProcessors, processorPassThrough} from 'eslint-merge-processors';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
 import {
-  ConfigEntryBuilder,
   type ConfigSharedOptions,
   type FlatConfigEntry,
   type FlatConfigEntryFiles,
   type FlatConfigEntryFilesOrIgnores,
   type RuleOverrides,
   type RulesRecord,
+  createConfigBuilder,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {arraify, assignDefaults} from '../utils';
@@ -117,7 +117,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
     parseFrontmatter,
   } = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('markdown', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'markdown');
 
   const defaultDialect: MarkdownDialect = typeof language === 'string' ? language : 'commonmark';
   const defaultConfigLanguage = `markdown/${defaultDialect}` as const;
@@ -135,7 +135,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
 
   if (lintMarkdown) {
     configBuilder
-      .addConfig(
+      ?.addConfig(
         [
           'markdown/markdown',
           {
@@ -187,15 +187,15 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
 
     if (Array.isArray(language)) {
       language.forEach((markdownLanguageSettings, i) => {
-        configBuilder.addConfig(
+        configBuilder?.addConfig(
           [
             `markdown/language-override/${i}`,
             {
               doNotIgnoreMarkdown: true,
+              filesFallback: markdownLanguageSettings.files,
             },
           ],
           {
-            files: markdownLanguageSettings.files,
             language: `markdown/${markdownLanguageSettings.language}`,
           },
         );
@@ -210,7 +210,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
     processorPassThrough,
   ]);
 
-  configBuilder.addConfig(
+  configBuilder?.addConfig(
     [
       'markdown/setup/code-blocks-processor',
       {
@@ -226,16 +226,16 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
 
   if (lintCodeBlocks) {
     configBuilder
-      .addConfig(
+      ?.addConfig(
         [
           'markdown/code-blocks',
           {
             doNotIgnoreMarkdown: true,
+            filesFallback: DEFAULT_FILES_FOR_CODE_BLOCKS,
           },
         ],
         // TODO way to ignore ````js some-property`? way to allow using `with`, which is not allowed in the strict mode?
         {
-          files: DEFAULT_FILES_FOR_CODE_BLOCKS,
           languageOptions: {
             parserOptions: {
               ecmaFeatures: {
@@ -351,14 +351,14 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
       .addBulkRules(optionsResolved.overridesCodeBlocks);
 
     if (codeBlocksIgnoredLanguages?.length) {
-      configBuilder.addConfig('markdown/code-blocks/ignore', {
+      configBuilder?.addConfig('markdown/code-blocks/ignore', {
         ignores: [`**/*.md/**/*.{${codeBlocksIgnoredLanguages.join(',')}}`],
       });
     }
   }
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

@@ -3,9 +3,9 @@ import {readPackageUp as readClosestPackageJson} from 'read-package-up';
 import {Range, subset as isFirstSemverRangeIsSubsetOfSecond} from 'semver';
 import {ERROR, OFF} from '../constants';
 import {
-  ConfigEntryBuilder,
   type ConfigSharedOptions,
   type GetRuleOptions,
+  createConfigBuilder,
   createPluginObjectRenamer,
 } from '../eslint';
 import {pluginsLoaders} from '../plugins';
@@ -191,10 +191,10 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
 
   const userNodeVersion = new Range(closestPackageJson?.packageJson.engines?.node || '');
 
-  const configBuilder = new ConfigEntryBuilder('node', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'node');
 
   configBuilder
-    .addConfig(['node', {includeDefaultFilesAndIgnores: true}], {
+    ?.addConfig(['node', {includeDefaultFilesAndIgnores: true}], {
       ...(pluginSettings && {
         settings: {
           node: pluginSettings,
@@ -256,7 +256,7 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

@@ -1,5 +1,5 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
@@ -12,10 +12,10 @@ export const securityUnConfig: UnConfigFn<'security'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.security;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies SecurityEslintConfigOptions);
 
-  const configBuilder = new ConfigEntryBuilder('security', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'security');
 
   configBuilder
-    .addConfig(['security', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['security', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginSecurity.configs.recommended.rules)
     // By default, all rules are included in the recommended config and with the "warn" level
     .addRule('detect-bidi-characters', ERROR)
@@ -35,7 +35,7 @@ export const securityUnConfig: UnConfigFn<'security'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

@@ -1,5 +1,5 @@
 import {ERROR, GLOB_TOML, OFF} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
@@ -54,13 +54,13 @@ export const tomlUnConfig: UnConfigFn<'toml'> = async (context) => {
 
   const {maxPrecisionOfFractionalSeconds, maxIntegerPrecisionBits} = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('toml', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'toml');
 
   // LEGEND:
   // 🟣 = Included in Standard ruleset
 
   configBuilder
-    .addConfig(
+    ?.addConfig(
       [
         'toml',
         {
@@ -117,7 +117,7 @@ export const tomlUnConfig: UnConfigFn<'toml'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

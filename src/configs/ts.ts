@@ -4,12 +4,12 @@ import {parser as parserTs, configs as tsEslintConfigs} from 'typescript-eslint'
 import {ERROR, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, GLOB_TSX, OFF, WARNING} from '../constants';
 import {
   type AllRulesWithPrefix,
-  ConfigEntryBuilder,
   type ConfigSharedOptions,
   type DisableAutofixPrefix,
   type FlatConfigEntry,
   type FlatConfigEntryForBuilder,
   type RulesRecord,
+  createConfigBuilder,
 } from '../eslint';
 import {assignDefaults} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
@@ -221,7 +221,7 @@ export const tsUnConfig: UnConfigFn<
   }
 
   const filesNONTypeAwareDefault = [...(optionsResolved.files || TS_FILES_DEFAULT)];
-  const filesNONTypeAware = [...filesNONTypeAwareDefault, ...extraFilesNONTypeAware];
+  const filesNONTypeAware = [...filesNONTypeAwareDefault, ...extraFilesNONTypeAware].flat();
   const ignoresNONTypeAware = [
     ...(optionsResolved.ignores || []),
     ...extraFilesToIgnoreNONTypeAware,
@@ -232,7 +232,7 @@ export const tsUnConfig: UnConfigFn<
   const filesTypeAware = [
     ...(userFilesTypeAware || filesNONTypeAwareDefault), // Lint the same files, excluding extra non-TA ones
     ...extraFilesTypeAware,
-  ];
+  ].flat();
   const ignoresTypeAware = [
     ...(userIgnoresTypeAware || optionsResolved.ignores || []),
     ...extraFilesToIgnoreTypeAware,
@@ -254,7 +254,7 @@ export const tsUnConfig: UnConfigFn<
     },
   });
 
-  const configBuilder = new ConfigEntryBuilder('@typescript-eslint', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, '@typescript-eslint');
 
   // LEGEND:
   // ❄️ = Feature-frozen in ts-eslint
@@ -263,11 +263,16 @@ export const tsUnConfig: UnConfigFn<
   const noUnsafeRulesSeverity = optionsResolved.disableNoUnsafeRules ? OFF : WARNING;
   // TODO add rules
   configBuilder
-    .addConfig('ts/rules-regular', {
-      ...generateBaseOptions(false),
-      files: filesNONTypeAware,
-      ...(ignoresNONTypeAware.length > 0 && {ignores: ignoresNONTypeAware}),
-    })
+    ?.addConfig(
+      [
+        'ts/rules-regular',
+        {
+          filesFallback: optionsResolved.files?.length === 0 ? [] : filesNONTypeAware,
+          ignoresFallback: ignoresNONTypeAware,
+        },
+      ],
+      generateBaseOptions(false),
+    )
     .addBulkRules(
       tsEslintConfigs.strict.reduce<RulesRecord>(
         (result, config) => Object.assign(result, config.rules),
@@ -374,126 +379,128 @@ export const tsUnConfig: UnConfigFn<
     .disableAnyRule('dot-notation')
     .addOverrides();
 
-  const configBuilderTypeAware = new ConfigEntryBuilder(
-    '@typescript-eslint',
-    configTypeAwareOptions,
+  const configBuilderTypeAware = createConfigBuilder(
     context,
+    configTypeAware,
+    '@typescript-eslint',
   );
-
-  if (configTypeAware !== false) {
-    configBuilderTypeAware
-      .addConfig('ts/rules-type-aware', {
-        ...generateBaseOptions(true),
-        ...(filesTypeAware.length > 0 && {files: filesTypeAware}),
-        ...(ignoresTypeAware.length > 0 && {ignores: ignoresTypeAware}),
-      })
-      .addBulkRules(
-        tsEslintConfigs.strictTypeCheckedOnly.reduce<RulesRecord>(
-          (result, config) => Object.assign(result, config.rules),
-          {},
-        ),
-      )
-      .addBulkRules(
-        tsEslintConfigs.stylisticTypeCheckedOnly.reduce<RulesRecord>(
-          (result, config) => Object.assign(result, config.rules),
-          {},
-        ),
-      )
-      // 🟢 Strict - overrides
-      // .addRule('await-thenable', ERROR)
-      .addRule('consistent-return', ERROR, [], {overrideBaseRule: true})
-      // .addRule('no-array-delete', ERROR)
-      // .addRule('no-base-to-string', ERROR)
-      .addRule('no-confusing-void-expression', ERROR, [
+  configBuilderTypeAware
+    ?.addConfig(
+      [
+        'ts/rules-type-aware',
         {
-          ignoreArrowShorthand: true,
+          filesFallback: filesTypeAware,
+          ignoresFallback: ignoresTypeAware,
         },
-      ])
-      .addRule('no-deprecated', WARNING)
-      // .addRule('no-duplicate-type-constituents', ERROR)
-      .addRule('no-floating-promises', ERROR, [
-        {
-          checkThenables: true,
-          ignoreVoid: true, // Default
-        },
-      ])
-      // .addRule('no-for-in-array', ERROR)
-      .addRule('no-implied-eval', ERROR, [], {overrideBaseRule: true})
-      // .addRule('no-meaningless-void-operator', ERROR)
-      // .addRule('no-misused-promises', ERROR)
-      .addRule('no-misused-spread', ERROR) // >=8.20.0
-      // .addRule('no-mixed-enums', ERROR)
-      // .addRule('no-redundant-type-constituents', ERROR)
-      // .addRule('no-unnecessary-boolean-literal-compare', ERROR)
-      .addRule('no-unnecessary-condition', ERROR, [
-        {
-          allowConstantLoopConditions: 'only-allowed-literals',
-          checkTypePredicates: true, // >=8.8.0
-        },
-      ])
-      // .addRule('no-unnecessary-template-expression', ERROR)
-      // Reason for disabling autofix: could remove type aliases
-      .addRule('no-unnecessary-type-arguments', ERROR, [], {
-        disableAutofix: true,
-      })
-      .addRule('no-unnecessary-type-assertion', ERROR)
-      // .addRule('no-unnecessary-type-parameters', ERROR)
-      .addRule('no-unsafe-argument', noUnsafeRulesSeverity)
-      .addRule('no-unsafe-assignment', noUnsafeRulesSeverity)
-      .addRule('no-unsafe-call', noUnsafeRulesSeverity)
-      .addRule('no-unsafe-enum-comparison', noUnsafeRulesSeverity)
-      .addRule('no-unsafe-member-access', noUnsafeRulesSeverity)
-      .addRule('no-unsafe-return', noUnsafeRulesSeverity)
-      // .addRule('no-unsafe-type-assertion', OFF)
-      // .addRule('no-unsafe-unary-minus', ERROR)
-      .disableAnyRule('no-throw-literal') // Note: has different name
-      // .addRule('only-throw-error', ERROR)
-      .addRule('prefer-promise-reject-errors', ERROR, [], {
-        overrideBaseRule: true,
-      })
-      // .addRule('prefer-reduce-type-parameter', ERROR)
-      // .addRule('prefer-return-this-type', ERROR)
-      .addRule('require-await', ERROR, [], {overrideBaseRule: true})
-      // .addRule('restrict-plus-operands', ERROR)
-      .addRule('restrict-template-expressions', ERROR, [{allowAny: false, allowRegExp: false}])
-      // .addRule('unbound-method', ERROR)
-      // .addRule('use-unknown-in-catch-callback-variable', ERROR)
-      // 🟢 Stylistic - overrides
-      .addRule('dot-notation', ERROR, [{allowIndexSignaturePropertyAccess: true}], {
-        overrideBaseRule: true,
-      })
-      // .addRule('non-nullable-type-assertion-style', ERROR)
-      // .addRule('prefer-find', ERROR)
-      .disableAnyRule('unicorn/prefer-includes')
-      // .addRule('prefer-includes', ERROR)
-      .addRule('prefer-nullish-coalescing', OFF)
-      // .addRule('prefer-optional-chain', ERROR)
-      .addRule('prefer-regexp-exec', OFF)
-      .addRule('prefer-string-starts-ends-with', ERROR, [{allowSingleElementEquality: 'always'}])
-      // 🟢 Additional rules
-      .addRule('consistent-type-exports', ERROR, [{fixMixedExportsWithInlineTypeSpecifier: true}])
-      // .addRule('naming-convention', OFF) // ❄️
-      // .addRule('no-unnecessary-qualifier', OFF)
-      .addRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS, {
-        overrideBaseRule: true,
-      })
-      .disableAnyRule('unicorn/prefer-array-find') // Note: in Unicorn
-      .addRule('prefer-readonly', ERROR)
-      // .addRule('prefer-readonly-parameter-types', OFF)
-      // .addRule('promise-function-async', OFF)
-      // .addRule('related-getter-setter-pairs', ERROR)
-      // .addRule('require-array-sort-compare', OFF)
-      // Note: has different name. Also note that the original rule is deprecated and not included in this config, but we disable it anyway just for safety
-      .disableAnyRule('no-return-await') // Disabled by default since v8
-      .addRule('return-await', ERROR, ['always'])
-      // .addRule('strict-boolean-expressions', OFF)
-      .addRule('switch-exhaustiveness-check', ERROR)
-      .addOverrides();
-  }
+      ],
+      generateBaseOptions(true),
+    )
+    .addBulkRules(
+      tsEslintConfigs.strictTypeCheckedOnly.reduce<RulesRecord>(
+        (result, config) => Object.assign(result, config.rules),
+        {},
+      ),
+    )
+    .addBulkRules(
+      tsEslintConfigs.stylisticTypeCheckedOnly.reduce<RulesRecord>(
+        (result, config) => Object.assign(result, config.rules),
+        {},
+      ),
+    )
+    // 🟢 Strict - overrides
+    // .addRule('await-thenable', ERROR)
+    .addRule('consistent-return', ERROR, [], {overrideBaseRule: true})
+    // .addRule('no-array-delete', ERROR)
+    // .addRule('no-base-to-string', ERROR)
+    .addRule('no-confusing-void-expression', ERROR, [
+      {
+        ignoreArrowShorthand: true,
+      },
+    ])
+    .addRule('no-deprecated', WARNING)
+    // .addRule('no-duplicate-type-constituents', ERROR)
+    .addRule('no-floating-promises', ERROR, [
+      {
+        checkThenables: true,
+        ignoreVoid: true, // Default
+      },
+    ])
+    // .addRule('no-for-in-array', ERROR)
+    .addRule('no-implied-eval', ERROR, [], {overrideBaseRule: true})
+    // .addRule('no-meaningless-void-operator', ERROR)
+    // .addRule('no-misused-promises', ERROR)
+    .addRule('no-misused-spread', ERROR) // >=8.20.0
+    // .addRule('no-mixed-enums', ERROR)
+    // .addRule('no-redundant-type-constituents', ERROR)
+    // .addRule('no-unnecessary-boolean-literal-compare', ERROR)
+    .addRule('no-unnecessary-condition', ERROR, [
+      {
+        allowConstantLoopConditions: 'only-allowed-literals',
+        checkTypePredicates: true, // >=8.8.0
+      },
+    ])
+    // .addRule('no-unnecessary-template-expression', ERROR)
+    // Reason for disabling autofix: could remove type aliases
+    .addRule('no-unnecessary-type-arguments', ERROR, [], {
+      disableAutofix: true,
+    })
+    .addRule('no-unnecessary-type-assertion', ERROR)
+    // .addRule('no-unnecessary-type-parameters', ERROR)
+    .addRule('no-unsafe-argument', noUnsafeRulesSeverity)
+    .addRule('no-unsafe-assignment', noUnsafeRulesSeverity)
+    .addRule('no-unsafe-call', noUnsafeRulesSeverity)
+    .addRule('no-unsafe-enum-comparison', noUnsafeRulesSeverity)
+    .addRule('no-unsafe-member-access', noUnsafeRulesSeverity)
+    .addRule('no-unsafe-return', noUnsafeRulesSeverity)
+    // .addRule('no-unsafe-type-assertion', OFF)
+    // .addRule('no-unsafe-unary-minus', ERROR)
+    .disableAnyRule('no-throw-literal') // Note: has different name
+    // .addRule('only-throw-error', ERROR)
+    .addRule('prefer-promise-reject-errors', ERROR, [], {
+      overrideBaseRule: true,
+    })
+    // .addRule('prefer-reduce-type-parameter', ERROR)
+    // .addRule('prefer-return-this-type', ERROR)
+    .addRule('require-await', ERROR, [], {overrideBaseRule: true})
+    // .addRule('restrict-plus-operands', ERROR)
+    .addRule('restrict-template-expressions', ERROR, [{allowAny: false, allowRegExp: false}])
+    // .addRule('unbound-method', ERROR)
+    // .addRule('use-unknown-in-catch-callback-variable', ERROR)
+    // 🟢 Stylistic - overrides
+    .addRule('dot-notation', ERROR, [{allowIndexSignaturePropertyAccess: true}], {
+      overrideBaseRule: true,
+    })
+    // .addRule('non-nullable-type-assertion-style', ERROR)
+    // .addRule('prefer-find', ERROR)
+    .disableAnyRule('unicorn/prefer-includes')
+    // .addRule('prefer-includes', ERROR)
+    .addRule('prefer-nullish-coalescing', OFF)
+    // .addRule('prefer-optional-chain', ERROR)
+    .addRule('prefer-regexp-exec', OFF)
+    .addRule('prefer-string-starts-ends-with', ERROR, [{allowSingleElementEquality: 'always'}])
+    // 🟢 Additional rules
+    .addRule('consistent-type-exports', ERROR, [{fixMixedExportsWithInlineTypeSpecifier: true}])
+    // .addRule('naming-convention', OFF) // ❄️
+    // .addRule('no-unnecessary-qualifier', OFF)
+    .addRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS, {
+      overrideBaseRule: true,
+    })
+    .disableAnyRule('unicorn/prefer-array-find') // Note: in Unicorn
+    .addRule('prefer-readonly', ERROR)
+    // .addRule('prefer-readonly-parameter-types', OFF)
+    // .addRule('promise-function-async', OFF)
+    // .addRule('related-getter-setter-pairs', ERROR)
+    // .addRule('require-array-sort-compare', OFF)
+    // Note: has different name. Also note that the original rule is deprecated and not included in this config, but we disable it anyway just for safety
+    .disableAnyRule('no-return-await') // Disabled by default since v8
+    .addRule('return-await', ERROR, ['always'])
+    // .addRule('strict-boolean-expressions', OFF)
+    .addRule('switch-exhaustiveness-check', ERROR)
+    .addOverrides();
 
   // TODO add rules
   configBuilder
-    .addConfig('ts/disable-handled-by-ts-compiler-rules', {
+    ?.addConfig('ts/disable-handled-by-ts-compiler-rules', {
       files: [...TS_FILES_DEFAULT, ...filesNONTypeAware, ...filesTypeAware],
     })
     .disableAnyRule('constructor-super')
@@ -521,7 +528,7 @@ export const tsUnConfig: UnConfigFn<
     .disableAnyRule('no-duplicate-imports');
 
   configBuilder
-    .addConfig('ts/dts', {
+    ?.addConfig('ts/dts', {
       files: ['**/*.d.?([cm])ts'],
     })
     .addRule('consistent-indexed-object-style', OFF)
@@ -538,26 +545,15 @@ export const tsUnConfig: UnConfigFn<
     .disableAnyRule('no-var')
     .disableAnyRule('sonarjs/no-redundant-optional');
 
-  const configNoTypeAssertionsOptions =
-    typeof configNoTypeAssertion === 'object' ? configNoTypeAssertion : {};
-  const configBuilderNoTypeAssertions = new ConfigEntryBuilder(
-    'no-type-assertion',
-    configNoTypeAssertionsOptions,
+  const configBuilderNoTypeAssertions = createConfigBuilder(
     context,
+    configNoTypeAssertion,
+    'no-type-assertion',
   );
-
-  if (configNoTypeAssertion !== false) {
-    configBuilderNoTypeAssertions
-      .addConfig('no-type-assertion')
-      .addRule('no-type-assertion', ERROR);
-  }
+  configBuilderNoTypeAssertions?.addConfig('no-type-assertion').addRule('no-type-assertion', ERROR);
 
   return {
-    configs: [
-      ...configBuilder.getAllConfigs(),
-      ...configBuilderTypeAware.getAllConfigs(),
-      ...configBuilderNoTypeAssertions.getAllConfigs(),
-    ],
+    configs: [configBuilder, configBuilderTypeAware, configBuilderNoTypeAssertions],
     optionsResolved,
   };
 };

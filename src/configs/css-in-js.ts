@@ -1,5 +1,5 @@
 import {ERROR} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -69,14 +69,14 @@ export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {
       ? preferNamedColorsRaw
       : {flag: preferNamedColorsRaw ?? false};
 
-  const configBuilder = new ConfigEntryBuilder('css-in-js', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'css-in-js');
 
   // Legend:
   // 🟢 - in Recommended and Standard
   // 🟣 - in Standard
 
   configBuilder
-    .addConfig(['css-in-js', {includeDefaultFilesAndIgnores: true}], {
+    ?.addConfig(['css-in-js', {includeDefaultFilesAndIgnores: true}], {
       ...(pluginSettings && {
         settings: {
           css: pluginSettings,
@@ -106,7 +106,7 @@ export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

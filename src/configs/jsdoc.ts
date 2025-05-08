@@ -1,5 +1,5 @@
 import {ERROR, GLOB_TSX, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults} from '../utils';
@@ -187,7 +187,7 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = async (context) => {
 
   const {settings: pluginSettings, configTypescript} = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('jsdoc', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'jsdoc');
 
   // Legend:
   // 🟢 - in Recommended
@@ -197,7 +197,7 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = async (context) => {
   // 4️⃣ - in Stylistic
 
   configBuilder
-    .addConfig(['jsdoc', {includeDefaultFilesAndIgnores: true}], {
+    ?.addConfig(['jsdoc', {includeDefaultFilesAndIgnores: true}], {
       ...(pluginSettings && {
         settings: {
           jsdoc: pluginSettings,
@@ -265,12 +265,12 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = async (context) => {
     // .addRule('valid-types', ERROR) // 🟢2️⃣
     .addOverrides();
 
+  const configBuilderTypescript = createConfigBuilder(context, configTypescript, 'jsdoc');
   const configTypescriptOptions = typeof configTypescript === 'object' ? configTypescript : {};
-  const configBuilderTypescript = new ConfigEntryBuilder('jsdoc', configTypescriptOptions, context);
   const pluginSettingsForTs = configTypescriptOptions.settings || pluginSettings;
 
-  configBuilder
-    .addConfig(
+  configBuilderTypescript
+    ?.addConfig(
       [
         'jsdoc/ts',
         {
@@ -294,10 +294,7 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: [
-      ...configBuilder.getAllConfigs(),
-      ...(configTypescript === false ? [] : configBuilderTypescript.getAllConfigs()),
-    ],
+    configs: [configBuilder, configBuilderTypescript],
     optionsResolved,
   };
 };

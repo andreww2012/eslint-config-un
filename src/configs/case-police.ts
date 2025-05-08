@@ -1,5 +1,5 @@
 import {ERROR} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -20,10 +20,10 @@ export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
     disableAutofix: true,
   } satisfies CasePoliceEslintConfigOptions);
 
-  const configBuilder = new ConfigEntryBuilder('case-police', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'case-police');
 
   configBuilder
-    .addConfig([
+    ?.addConfig([
       'case-police',
       {
         includeDefaultFilesAndIgnores: true,
@@ -36,7 +36,7 @@ export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

@@ -1,6 +1,6 @@
 import eslintPluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments';
 import {ERROR} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -14,10 +14,10 @@ export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) =>
     {} satisfies EslintCommentsEslintConfigOptions,
   );
 
-  const configBuilder = new ConfigEntryBuilder(
-    '@eslint-community/eslint-comments',
-    optionsResolved,
+  const configBuilder = createConfigBuilder(
     context,
+    optionsResolved,
+    '@eslint-community/eslint-comments',
   );
 
   // Legend:
@@ -25,7 +25,7 @@ export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) =>
   // 🔴 - not in recommended
 
   configBuilder
-    .addConfig([
+    ?.addConfig([
       'eslint-comments',
       {
         includeDefaultFilesAndIgnores: true,
@@ -51,7 +51,7 @@ export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) =>
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

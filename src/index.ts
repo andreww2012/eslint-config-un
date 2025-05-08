@@ -51,6 +51,7 @@ import {
   PACKAGES_TO_GET_INFO_FOR,
 } from './constants';
 import {
+  ConfigEntryBuilder,
   type DisableAutofixPrefix,
   type EslintPlugin,
   type FlatConfigEntry,
@@ -345,13 +346,22 @@ export const eslintConfig = async (
       ),
     },
   ] satisfies Promisable<
-    MaybeArray<FlatConfigEntry | FalsyValue> | {configs: FlatConfigEntry[]}
+    | MaybeArray<FlatConfigEntry | ConfigEntryBuilder | FalsyValue>
+    | {configs: (ConfigEntryBuilder | null)[]}
   >[]);
 
   const resolvedConfigs: FlatConfigEntry[] = (await unresolvedConfigs)
+    .flat()
+    .map((c) =>
+      c && 'configs' in c && !(c instanceof ConfigEntryBuilder)
+        ? c.configs.map((cc) => cc?.getAllConfigs())
+        : c instanceof ConfigEntryBuilder
+          ? c.getAllConfigs()
+          : c,
+    )
+    .flat(2)
     // eslint-disable-next-line no-implicit-coercion
-    .filter((v) => !!v)
-    .flatMap((v) => ('configs' in v ? v.configs : v));
+    .filter((v) => !!v);
 
   const usedPluginPrefixes = loadPluginsOnDemand
     ? [

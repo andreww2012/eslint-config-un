@@ -1,6 +1,6 @@
 // cspell:ignore spinbutton treegrid menuitemradio menuitemcheckbox
 import {ERROR, GLOB_JS_TS_X_ONLY, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
 import type {OmitIndexSignature} from '../types';
 import {type MaybeFn, assignDefaults, getKeysOfTruthyValues, maybeCall} from '../utils';
 import type {UnConfigFn, UnConfigOptions} from './index';
@@ -319,13 +319,13 @@ export const jsxA11yUnConfig: UnConfigFn<
   const prefixFinal = customConfig?.prefix ?? 'jsx-a11y';
   const isForAstro = prefixFinal === 'astro/jsx-a11y';
 
-  const configBuilder = new ConfigEntryBuilder(prefixFinal, optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, prefixFinal);
 
   // Legend:
   // 🔴 - NOT in Recommended
 
   configBuilder
-    .addConfig(
+    ?.addConfig(
       [
         prefixFinal,
         {
@@ -554,7 +554,7 @@ export const jsxA11yUnConfig: UnConfigFn<
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

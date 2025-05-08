@@ -5,9 +5,9 @@ import {
 import type {PluginSettings} from 'eslint-plugin-import-x';
 import {ERROR, OFF, WARNING} from '../constants';
 import {
-  ConfigEntryBuilder,
   type ConfigSharedOptions,
   type GetRuleOptions,
+  createConfigBuilder,
   createPluginObjectRenamer,
 } from '../eslint';
 import {pluginsLoaders} from '../plugins';
@@ -78,10 +78,10 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
   } = optionsResolved;
   const noUnresolvedIgnores = arraify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve);
 
-  const configBuilder = new ConfigEntryBuilder('import', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'import');
 
   configBuilder
-    .addConfig(['import', {includeDefaultFilesAndIgnores: true}], {
+    ?.addConfig(['import', {includeDefaultFilesAndIgnores: true}], {
       settings: {
         ...(isTypescriptEnabled && eslintPluginImportX.configs.typescript.settings),
         'import-x/resolver-next': [
@@ -172,7 +172,7 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

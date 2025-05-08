@@ -1,5 +1,5 @@
 import {ERROR, GLOB_JS_TS_X, OFF} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
@@ -16,14 +16,14 @@ export const qwikUnConfig: UnConfigFn<'qwik'> = async (context) => {
 
   const {routesDir} = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('qwik', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'qwik');
 
   // Legend:
   // 🟣 - error in recommended
   // 🟢 - error in strict
 
   configBuilder
-    .addConfig([
+    ?.addConfig([
       'qwik',
       {
         includeDefaultFilesAndIgnores: true,
@@ -54,7 +54,7 @@ export const qwikUnConfig: UnConfigFn<'qwik'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

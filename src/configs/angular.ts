@@ -8,10 +8,10 @@ import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, WARNING} from '../constants';
 import {
   type AllRulesWithPrefix,
   type AllRulesWithPrefixNames,
-  ConfigEntryBuilder,
   type ConfigSharedOptions,
   type EslintPlugin,
   type GetRuleOptions,
+  createConfigBuilder,
 } from '../eslint';
 import type {PrettifyShallow, ReadonlyDeep, SetRequired, Subtract} from '../types';
 import {type MaybeArray, assignDefaults, cloneDeep, fetchPackageInfo} from '../utils';
@@ -501,7 +501,7 @@ export const angularUnConfig: UnConfigFn<
     ...optionsResolved.forbiddenMetadataProperties,
   };
 
-  const configBuilderGeneral = new ConfigEntryBuilder('@angular-eslint', optionsResolved, context);
+  const configBuilderGeneral = createConfigBuilder(context, optionsResolved, '@angular-eslint');
 
   // TODO backport rules?
 
@@ -531,7 +531,7 @@ export const angularUnConfig: UnConfigFn<
   }
 
   configBuilderGeneral
-    .addConfig(
+    ?.addConfig(
       [
         'angular/general',
         {
@@ -618,24 +618,24 @@ export const angularUnConfig: UnConfigFn<
 
   // TEMPLATE CONFIG
 
-  const configTemplateOptions = typeof configTemplate === 'object' ? configTemplate : {};
-  const {
-    a11yRules = true,
-    preferControlFlow = angularVersion >= 19,
-    preferNgSrc = false,
-    requireLoopIndexes = false,
-  } = configTemplateOptions;
+  const configTemplateOptions = assignDefaults(configTemplate, {
+    a11yRules: true,
+    preferControlFlow: angularVersion >= 19,
+    preferNgSrc: false,
+    requireLoopIndexes: false,
+  } satisfies typeof configTemplate & object);
+  const {a11yRules, preferControlFlow, preferNgSrc, requireLoopIndexes} = configTemplateOptions;
 
   const a11yRulesSeverity = a11yRules === true ? ERROR : a11yRules === 'warn' ? WARNING : OFF;
 
-  const configBuilderTemplate = new ConfigEntryBuilder(
-    '@angular-eslint/template',
-    configTemplateOptions,
+  const configBuilderTemplate = createConfigBuilder(
     context,
+    configTemplate,
+    '@angular-eslint/template',
   );
 
   configBuilderTemplate
-    .addConfig(
+    ?.addConfig(
       [
         'angular/template',
         {
@@ -692,10 +692,7 @@ export const angularUnConfig: UnConfigFn<
     .addOverrides();
 
   return {
-    configs: [
-      ...configBuilderGeneral.getAllConfigs(),
-      ...(configTemplate === false ? [] : configBuilderTemplate.getAllConfigs()),
-    ],
+    configs: [configBuilderGeneral, configBuilderTemplate],
     optionsResolved,
     plugins: {
       '@angular-eslint': eslintPluginAngular,

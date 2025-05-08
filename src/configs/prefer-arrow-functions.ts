@@ -1,5 +1,5 @@
 import {WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -13,15 +13,15 @@ export const preferArrowFunctionsUnConfig: UnConfigFn<'preferArrowFunctions'> = 
     {} satisfies PreferArrowFunctionsEslintConfigOptions,
   );
 
-  const configBuilder = new ConfigEntryBuilder('prefer-arrow-functions', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'prefer-arrow-functions');
 
   configBuilder
-    .addConfig(['prefer-arrow-functions', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['prefer-arrow-functions', {includeDefaultFilesAndIgnores: true}])
     .addRule('prefer-arrow-functions', WARNING)
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

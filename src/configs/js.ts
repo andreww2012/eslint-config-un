@@ -3,9 +3,9 @@ import EslintJs from '@eslint/js';
 import {ERROR, WARNING} from '../constants';
 import {
   type BuiltinEslintRulesFixed,
-  ConfigEntryBuilder,
   type ConfigSharedOptions,
   type GetRuleOptions,
+  createConfigBuilder,
 } from '../eslint';
 import {assignDefaults, fetchPackageInfo} from '../utils';
 import type {UnConfigFn} from './index';
@@ -49,12 +49,12 @@ export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.js;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsEslintConfigOptions);
 
-  const configBuilder = new ConfigEntryBuilder('', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, '');
 
   const eslintVersion = (await fetchPackageInfo('eslint'))?.versions.majorAndMinor || 0;
 
   configBuilder
-    .addConfig(['js', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['js', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(EslintJs.configs.recommended.rules)
     // 🟢 Recommended - Possible Problems
     // .addRule('constructor-super', ERROR)
@@ -298,7 +298,7 @@ export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

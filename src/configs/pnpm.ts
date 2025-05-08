@@ -1,5 +1,5 @@
 import {ERROR, OFF} from '../constants';
-import {type AllRulesWithPrefix, ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type AllRulesWithPrefix, type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -51,16 +51,15 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
 
   const {configPackageJson, configPnpmWorkspace} = optionsResolved;
 
-  const configPackageJsonOptions = typeof configPackageJson === 'object' ? configPackageJson : {};
-  const {enforceCatalog = false, preferSettingsInPnpmWorkspaceYaml = false} =
-    configPackageJsonOptions;
-  const configBuilderPackageJson = new ConfigEntryBuilder(
-    'pnpm',
-    configPackageJsonOptions,
-    context,
-  );
+  const configPackageJsonOptions = assignDefaults(configPackageJson, {
+    enforceCatalog: false,
+    preferSettingsInPnpmWorkspaceYaml: false,
+  } satisfies typeof configPackageJson & object);
+  const {enforceCatalog, preferSettingsInPnpmWorkspaceYaml} = configPackageJsonOptions;
+
+  const configBuilderPackageJson = createConfigBuilder(context, configPackageJson, 'pnpm');
   configBuilderPackageJson
-    .addConfig(
+    ?.addConfig(
       [
         'pnpm/package.json',
         {
@@ -79,15 +78,9 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
     .addRule('json-valid-catalog', ERROR)
     .addOverrides();
 
-  const configPnpmWorkspaceOptions =
-    typeof configPnpmWorkspace === 'object' ? configPnpmWorkspace : {};
-  const configBuilderPnpmWorkspace = new ConfigEntryBuilder(
-    'pnpm',
-    configPnpmWorkspaceOptions,
-    context,
-  );
+  const configBuilderPnpmWorkspace = createConfigBuilder(context, configPnpmWorkspace, 'pnpm');
   configBuilderPnpmWorkspace
-    .addConfig(
+    ?.addConfig(
       [
         'pnpm/pnpm-workspace-yaml',
         {
@@ -106,10 +99,7 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: [
-      ...(configPackageJson === false ? [] : configBuilderPackageJson.getAllConfigs()),
-      ...(configPnpmWorkspace === false ? [] : configBuilderPnpmWorkspace.getAllConfigs()),
-    ],
+    configs: [configBuilderPackageJson, configBuilderPnpmWorkspace],
     optionsResolved,
   };
 };

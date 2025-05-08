@@ -1,5 +1,5 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
@@ -32,7 +32,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
   const awsRulesSeverity = enableAwsRules ? ERROR : OFF;
   const testsRulesSeverity = testsRules ? ERROR : OFF;
 
-  const configBuilder = new ConfigEntryBuilder('sonarjs', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'sonarjs');
 
   // Legend:
   // 🟢 - in Recommended
@@ -45,7 +45,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
   // 🔵 - JSX/HTML rule
 
   configBuilder
-    .addConfig(['sonar', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['sonar', {includeDefaultFilesAndIgnores: true}])
     .addBulkRules(eslintPluginSonar.configs.recommended.rules)
     // .addRule('anchor-precedence', ERROR) // 🟢💭🔤
     // ⚠️ Handled by TypeScript
@@ -414,7 +414,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };

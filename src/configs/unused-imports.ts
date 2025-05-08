@@ -1,10 +1,10 @@
 import {ERROR} from '../constants';
 import {
   type AllRulesWithPrefix,
-  ConfigEntryBuilder,
   type ConfigSharedOptions,
   type DisableAutofixPrefix,
   type GetRuleOptions,
+  createConfigBuilder,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults} from '../utils';
@@ -37,42 +37,35 @@ export const unusedImportsUnConfig: UnConfigFn<'unusedImports'> = (context) => {
 
   const {configNoUnusedVars} = optionsResolved;
 
-  const configBuilderNoUnusedImports = new ConfigEntryBuilder(
-    'unused-imports',
-    optionsResolved,
+  const configBuilderNoUnusedImports = createConfigBuilder(
     context,
+    optionsResolved,
+    'unused-imports',
   );
 
   configBuilderNoUnusedImports
-    .addConfig(['unused-imports/no-unused-imports', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['unused-imports/no-unused-imports', {includeDefaultFilesAndIgnores: true}])
     .addRule('no-unused-imports', ERROR)
     .addOverrides();
 
+  const configBuilderNoUnusedVars = createConfigBuilder(
+    context,
+    configNoUnusedVars,
+    'unused-imports',
+  );
   const configNoUnusedVarsOptions =
     typeof configNoUnusedVars === 'object' ? configNoUnusedVars : {};
+  const {ruleOptions} = configNoUnusedVarsOptions;
 
-  const configBuilderNoUnusedVars = new ConfigEntryBuilder(
-    'unused-imports',
-    configNoUnusedVarsOptions,
-    context,
-  );
-
-  if (configNoUnusedVars !== false) {
-    const {ruleOptions} = configNoUnusedVarsOptions;
-
-    configBuilderNoUnusedVars
-      .addConfig(['unused-imports/no-unused-vars', {includeDefaultFilesAndIgnores: true}])
-      .disableAnyRule('no-unused-vars')
-      .disableAnyRule('sonarjs/no-unused-vars')
-      .disableAnyRule('@typescript-eslint/no-unused-vars')
-      .addRule('no-unused-vars', ERROR, ruleOptions === undefined ? [] : [ruleOptions]);
-  }
+  configBuilderNoUnusedVars
+    ?.addConfig(['unused-imports/no-unused-vars', {includeDefaultFilesAndIgnores: true}])
+    .disableAnyRule('no-unused-vars')
+    .disableAnyRule('sonarjs/no-unused-vars')
+    .disableAnyRule('@typescript-eslint/no-unused-vars')
+    .addRule('no-unused-vars', ERROR, ruleOptions === undefined ? [] : [ruleOptions]);
 
   return {
-    configs: [
-      ...configBuilderNoUnusedImports.getAllConfigs(),
-      ...configBuilderNoUnusedVars.getAllConfigs(),
-    ],
+    configs: [configBuilderNoUnusedImports, configBuilderNoUnusedVars],
     optionsResolved,
   };
 };

@@ -1,6 +1,6 @@
 // cspell:ignore canonicalurl fetchcontent getentrybyslug
 import {ERROR, GLOB_ASTRO, OFF, WARNING} from '../constants';
-import {type AllRulesWithPrefix, ConfigEntryBuilder, type ConfigSharedOptions} from '../eslint';
+import {type AllRulesWithPrefix, type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults, interopDefault} from '../utils';
@@ -37,16 +37,19 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
 
   const optionsRaw = context.rootOptions.configs?.astro;
   const optionsResolved = assignDefaults(optionsRaw, {
-    files: DEFAULT_ASTRO_FILES,
     configJsxA11y: true,
   } satisfies AstroEslintConfigOptions);
 
-  const {files: parentConfigFiles, ignores: parentConfigIgnores, configJsxA11y} = optionsResolved;
+  const {
+    files: parentConfigFiles = DEFAULT_ASTRO_FILES,
+    ignores: parentConfigIgnores,
+    configJsxA11y,
+  } = optionsResolved;
 
-  const configBuilder = new ConfigEntryBuilder('astro', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'astro');
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
-  configBuilder.addConfig(
+  configBuilder?.addConfig(
     [
       'astro/setup',
       {
@@ -74,7 +77,14 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
   // 🟢 - in Recommended
 
   configBuilder
-    .addConfig(['astro', {doNotIgnoreMarkdown: true, includeDefaultFilesAndIgnores: true}])
+    ?.addConfig([
+      'astro',
+      {
+        doNotIgnoreMarkdown: true,
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: DEFAULT_ASTRO_FILES,
+      },
+    ])
     /* CATEGORY: Possible Errors */
     .addRule('missing-client-only-directive-value', ERROR) // 🟢 >=0.33.0
     .addRule('no-conflict-set-directives', ERROR) // 🟢 >=0.7.0
@@ -103,7 +113,7 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
 
   return {
     configs: [
-      ...configBuilder.getAllConfigs(),
+      configBuilder,
       ...(configJsxA11y === false
         ? []
         : (

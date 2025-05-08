@@ -1,5 +1,5 @@
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
-import {ConfigEntryBuilder, type ConfigSharedOptions, type GetRuleOptions} from '../eslint';
+import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
@@ -99,13 +99,13 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
   const getRequireFieldSeverity = (field: PackageJsonRequirableFields) =>
     requireFields[field] ? ERROR : OFF;
 
-  const configBuilder = new ConfigEntryBuilder('package-json', optionsResolved, context);
+  const configBuilder = createConfigBuilder(context, optionsResolved, 'package-json');
 
   // Legend:
   // 🟣 - in recommended
 
   configBuilder
-    .addConfig(
+    ?.addConfig(
       ['package-json', {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_FILES}],
       {
         languageOptions: {
@@ -143,7 +143,7 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
     .addOverrides();
 
   return {
-    configs: configBuilder.getAllConfigs(),
+    configs: [configBuilder],
     optionsResolved,
   };
 };
