@@ -32,6 +32,7 @@ import type {QwikEslintConfigOptions} from './qwik';
 import type {ReactEslintConfigOptions} from './react';
 import type {RegexpEslintConfigOptions} from './regexp';
 import type {SecurityEslintConfigOptions} from './security';
+import type {SolidEslintConfigOptions} from './solid';
 import type {SonarEslintConfigOptions} from './sonar';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {TailwindEslintConfigOptions} from './tailwind';
@@ -309,6 +310,15 @@ interface UnConfigs {
    * @default true <=> `svelte` package is installed
    */
   svelte: UnConfigOptions<SvelteEslintConfigOptions>;
+
+  /**
+   * [SolidJS](https://svelte.dev/) specific rules.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-solid`](https://www.npmjs.com/package/eslint-plugin-solid) ([docs](https://github.com/solidjs-community/eslint-plugin-solid/tree/main?tab=readme-ov-file))
+   * @default true <=> `solid-js` package is installed
+   */
+  solid: UnConfigOptions<SolidEslintConfigOptions>;
 
   /**
    * NOTE: disabled by default

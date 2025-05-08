@@ -33,6 +33,7 @@ import {qwikUnConfig} from './configs/qwik';
 import {reactUnConfig} from './configs/react';
 import {regexpUnConfig} from './configs/regexp';
 import {securityUnConfig} from './configs/security';
+import {solidUnConfig} from './configs/solid';
 import {sonarUnConfig} from './configs/sonar';
 import {svelteUnConfig} from './configs/svelte';
 import {tailwindUnConfig} from './configs/tailwind';
@@ -139,6 +140,7 @@ export const eslintConfig = async (
   const isReactEnabled = Boolean(configsOptions.react ?? packagesInfo.react);
   const isRegexpEnabled = Boolean(configsOptions.regexp ?? true);
   const isSecurityEnabled = Boolean(configsOptions.security ?? false);
+  const isSolidEnabled = Boolean(configsOptions.solid ?? packagesInfo['solid-js'] != null);
   const isSonarEnabled = Boolean(configsOptions.sonar ?? true);
   const isSvelteEnabled = Boolean(
     eslintPluginSvelte && (configsOptions.svelte ?? packagesInfo.svelte),
@@ -200,6 +202,7 @@ export const eslintConfig = async (
       },
       regexp: {enabled: isRegexpEnabled},
       security: {enabled: isSecurityEnabled},
+      solid: {enabled: isSolidEnabled},
       sonar: {enabled: isSonarEnabled},
       svelte: {enabled: isSvelteEnabled},
       tailwind: {enabled: isTailwindEnabled},
@@ -278,6 +281,7 @@ export const eslintConfig = async (
     isJsxA11yEnabled && jsxA11yUnConfig(context),
     isPnpmEnabled && pnpmUnConfig(context),
     isNextJsEnabled && nextJsUnConfig(context),
+    isSolidEnabled && solidUnConfig(context),
 
     isSecurityEnabled && securityUnConfig(context),
     isPreferArrowFunctionsEnabled && preferArrowFunctionsUnConfig(context),

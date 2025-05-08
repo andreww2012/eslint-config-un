@@ -54,10 +54,11 @@ Includes the rules from the following configs & plugins:
 - `svelte` (since v0.10.0), using [`eslint-plugin-svelte`](https://www.npmjs.com/package/eslint-plugin-svelte)
 - `es` (since v0.10.0), using [`eslint-plugin-es-x`](https://www.npmjs.com/package/eslint-plugin-es-x)
 - `cloudfrontFunctions` (since v0.10.0) for [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html)
+- `solid` (since v0.10.0), using [`eslint-plugin-solid`](https://www.npmjs.com/package/eslint-plugin-solid)
 
 ## Features
 
-- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest`, `jest-extended`, `vitest`, `@builder.io/qwik`, `@qwik.dev/core`, `@angular/core`, `react`, `next`, `astro` and `svelte` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
+- Automatically detects the presence of `typescript`, `vue`, `nuxt`, `pinia`, `jest`, `jest-extended`, `vitest`, `@builder.io/qwik`, `@qwik.dev/core`, `@angular/core`, `react`, `next`, `astro`, `svelte` and `solid-js` packages and enables corresponding configurations (which can also be enabled or disabled explicitly).
 - Every block of rules supports `overrides` for rules.
 - Designed to be used separately from Prettier: *almost* all the rules potentially conflicting with Prettier are disabled *by default*.
 - Written in TypeScript so all the options are typed.

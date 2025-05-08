@@ -114,6 +114,9 @@ export const pluginsLoaders = {
   yml: () =>
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-yml')),
+  solid: () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('eslint-plugin-solid')),
 } satisfies Record<string, () => Promise<EslintPlugin | null>>;
 
 export type LoadablePluginPrefix = keyof typeof pluginsLoaders;

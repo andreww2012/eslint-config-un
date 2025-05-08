@@ -81,6 +81,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'react',
   'next',
   'svelte',
+  'solid-js',
 
   // We don't need to check for the presence of `@builder.io/qwik-city` because
   // it requires `@builder.io/qwik` to be installed anyway
