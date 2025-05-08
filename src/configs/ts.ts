@@ -527,7 +527,8 @@ export const tsUnConfig: UnConfigFn<
     // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
     .disableAnyRule('no-duplicate-imports');
 
-  configBuilder
+  const configBuilderDts = createConfigBuilder(context, {}, '@typescript-eslint');
+  configBuilderDts
     ?.addConfig('ts/dts', {
       files: ['**/*.d.?([cm])ts'],
     })
@@ -543,7 +544,8 @@ export const tsUnConfig: UnConfigFn<
     .disableAnyRule('import/no-default-export')
     .disableAnyRule('vars-on-top')
     .disableAnyRule('no-var')
-    .disableAnyRule('sonarjs/no-redundant-optional');
+    .disableAnyRule('sonarjs/no-redundant-optional')
+    .disableAnyRule('no-duplicate-imports');
 
   const configBuilderNoTypeAssertions = createConfigBuilder(
     context,
@@ -553,7 +555,12 @@ export const tsUnConfig: UnConfigFn<
   configBuilderNoTypeAssertions?.addConfig('no-type-assertion').addRule('no-type-assertion', ERROR);
 
   return {
-    configs: [configBuilder, configBuilderTypeAware, configBuilderNoTypeAssertions],
+    configs: [
+      configBuilder,
+      configBuilderTypeAware,
+      configBuilderDts,
+      configBuilderNoTypeAssertions,
+    ],
     optionsResolved,
   };
 };
