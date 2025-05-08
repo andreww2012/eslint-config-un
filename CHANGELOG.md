@@ -24,6 +24,7 @@
   - 🟢 (enabled) [`jsx-key-before-spread`](https://eslint-react.xyz/docs/rules/jsx-key-before-spread)
 - `@next/eslint-plugin-next`: [15.3.1 -> 15.3.2](https://github.com/vercel/next.js/compare/v15.3.1...v15.3.2)
 - `@vitest/eslint-plugin`: [1.1.43 -> 1.1.44](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.43...v1.1.44)
+- `eslint-config-prettier`: [10.1.2 -> 10.1.5](https://github.com/prettier/eslint-config-prettier/compare/v10.1.2...v10.1.5)
 
 ## 0.9.0
 
