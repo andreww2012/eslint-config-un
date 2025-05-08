@@ -13,6 +13,9 @@
 
 - `typescript-eslint`: [8.31.1 -> 8.32.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.31.1...v8.32.0)
   - 🟢 (enabled) [`no-unnecessary-type-conversion`](https://typescript-eslint.io/rules/no-unnecessary-type-conversion).
+- `angular-eslint`: [19.3.0 -> 19.4.0](https://github.com/angular-eslint/angular-eslint/compare/v19.3.0...v19.4.0)
+  - 🟢 (enabled) [`prefer-template-literal`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-template-literal.md)
+  - 🟢 [`prefer-output-emitter-ref`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-output-emitter-ref.md)
 
 ## 0.9.0
 
@@ -60,7 +63,7 @@
 - `typescript-eslint`: [8.26.1 -> 8.31.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.26.1...v8.31.0)
   - [**BREAKING**] Re-enabled autofix for [`no-unnecessary-type-assertion`](https://typescript-eslint.io/rules/no-unnecessary-type-assertion) since [literal const assertions are now allowed by default](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/#checkliteralconstassertions).
 - `angular-eslint`: [19.2.1 -> 19.3.0](https://github.com/angular-eslint/angular-eslint/compare/v19.2.1...v19.3.0)
-  - 🟢 (enabled) [`prefer-contextual-for-variables`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-contextual-for-variables.md)
+  - 🟢 (enabled) [`prefer-contextual-for-variables`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-contextual-for-variables.md)
 - `@eslint-community/eslint-plugin-eslint-comments`: [4.4.1 -> 4.5.0](https://github.com/eslint-community/eslint-plugin-eslint-comments/compare/v4.4.1...v4.5.0)
 - `@eslint/css`: [0.5.0 -> 0.7.0](https://github.com/eslint/css/compare/css-v0.5.0...css-v0.7.0)
   - [**BREAKING**] Includes the same breaking changes as outlined in release notes for [v0.6.0](https://github.com/eslint/css/releases/tag/css-v0.6.0) and [v0.7.0](https://github.com/eslint/css/releases/tag/css-v0.7.0).

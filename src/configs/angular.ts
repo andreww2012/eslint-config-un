@@ -58,6 +58,7 @@ type RulesWithPartialAvailability =
   | 'no-async-lifecycle-method'
   | 'no-duplicates-in-metadata-arrays'
   | 'no-host-metadata-property'
+  | 'prefer-output-emitter-ref'
   | 'prefer-signals'
   | 'prefer-standalone'
   | 'prefer-standalone-component'
@@ -83,6 +84,7 @@ type RulesWithPartialAvailability =
   | 'no-interpolation-in-attributes'
   | 'prefer-control-flow'
   | 'prefer-ngsrc'
+  | 'prefer-template-literal'
   | 'prefer-self-closing-tags'
   | 'prefer-static-string-properties'
   | 'role-has-required-aria'
@@ -103,6 +105,7 @@ const RULES_AVAILABILITY: Record<string, RuleAvailability> = {
   'prefer-signals': [[19]],
   'prefer-standalone': [[17]],
   'prefer-standalone-component': [[16, 18]],
+  'prefer-template-literal': [[19]],
   'require-lifecycle-on-prototype': [[19]],
   'require-localize-metadata': [[16]],
   'runtime-localize': [[18]],
@@ -126,6 +129,7 @@ const RULES_AVAILABILITY: Record<string, RuleAvailability> = {
   'no-interpolation-in-attributes': [[15]],
   'prefer-control-flow': [[17]],
   'prefer-ngsrc': [[16]],
+  'prefer-output-emitter-ref': [[19]],
   'prefer-self-closing-tags': [[16]],
   'prefer-static-string-properties': [[19]],
   'role-has-required-aria': [[16]],
@@ -583,6 +587,7 @@ export const angularUnConfig: UnConfigFn<
     .addRule('no-forward-ref', disallowForwardRef ? ERROR : OFF) // [all]
     // See https://github.com/angular/angular/pull/54084, https://angular.dev/guide/components/host-elements
     .addRule('no-host-metadata-property', forbiddenMetadataProperties.host ? ERROR : OFF) // [<=18] 🔴(18)
+    .addRule('prefer-output-emitter-ref', ERROR) // [>=19.4]
     .addRule('no-input-prefix', ERROR, [{prefixes: disallowedInputPrefixes}]) // [all]
     .addRule('no-input-rename', ERROR) // [all] 🟢
     .addRule('no-inputs-metadata-property', forbiddenMetadataProperties.inputs ? ERROR : OFF) // [all] 🟢
@@ -683,6 +688,7 @@ export const angularUnConfig: UnConfigFn<
     .addRule('prefer-contextual-for-variables', ERROR) // [>=19.3]
     .addRule('prefer-control-flow', preferControlFlow ? ERROR : OFF) // [>=17]
     .addRule('prefer-ngsrc', preferNgSrc ? ERROR : OFF) // [>=16]
+    .addRule('prefer-template-literal', ERROR) // [>=19.4]
     .addRule('prefer-self-closing-tags', OFF) // [>=16]
     .addRule('prefer-static-string-properties', ERROR) // [>=19]
     .addRule('role-has-required-aria', a11yRulesSeverity) // [>=16] ♿
