@@ -275,8 +275,10 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     },
   });
 
-  // LEGEND:
+  // Legend:
   // 3️⃣ = Only in Vue 3 recommended
+  // 2️⃣ = Only in Vue 2 recommended
+
   configBuilder
     ?.addConfig(['vue', {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_VUE_FILES}])
     .addBulkRules(recommendedRules)
@@ -292,6 +294,8 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     // .addRule('no-async-in-computed-properties', ERROR)
     // .addRule('no-child-content', ERROR)
     // .addRule('no-computed-properties-in-data', ERROR)
+    .addRule('no-custom-modifiers-on-v-model', isVue2 ? ERROR : OFF) // 2️⃣
+    .addRule('no-multiple-template-root', isVue2 ? ERROR : OFF) // 2️⃣
     // .addRule('no-deprecated-data-object-declaration', ERROR) // 3️⃣
     // .addRule('no-deprecated-destroyed-lifecycle', ERROR) // 3️⃣
     // .addRule('no-deprecated-dollar-listeners-api', ERROR) // 3️⃣

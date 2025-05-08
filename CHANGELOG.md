@@ -8,6 +8,7 @@
 - Added an option to `import` config to specify `eslint-plugin-import-x` plugin settings.
 - [**BREAKING**] Passing empty array to `files` will now disable the config.
 - Set a new option `allowRethrowing: true` for [`@typescript-eslint/only-throw-error`](https://typescript-eslint.io/rules/only-throw-error) rule.
+- Enabled [`vue/no-custom-modifiers-on-v-model`](https://eslint.vuejs.org/rules/no-custom-modifiers-on-v-model.html) and [`vue/no-multiple-template-root`](https://eslint.vuejs.org/rules/no-multiple-template-root.html) rules for Vue 2 codebases.
 
 ### Dependencies
 
