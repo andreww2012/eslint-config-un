@@ -20,6 +20,9 @@ export default eslintConfig({
     import: {
       ignores: TEST_DIR_GLOB,
     },
+    perfectionist: {
+      files: ['src/plugins.ts'],
+    },
   },
 
   extraConfigs: [
