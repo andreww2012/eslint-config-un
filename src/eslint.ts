@@ -295,7 +295,7 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
         Severity extends RuleSeverity,
       >(
         ruleName: RuleName,
-        severity: Severity,
+        severity: Severity | null,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore ignores the following error during declaration file build: "error TS2859: Excessive complexity comparing types 'RuleName' and '"curly" | "unicorn/template-indent" | "@eslint-community/eslint-comments/disable-enable-pair" | "@eslint-community/eslint-comments/no-aggregating-enable" | "@eslint-community/eslint-comments/no-duplicate-disable" | ... 1725 more ... | "yoda"'"
         ruleOptions?: GetRuleOptions<
@@ -311,6 +311,10 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
           disableAutofix?: boolean;
         },
       ) => {
+        if (severity == null) {
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          return result;
+        }
         const ruleNameWithPrefix =
           allowAnyRule || !this.rulesPrefix
             ? ruleName
