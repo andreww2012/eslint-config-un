@@ -12,6 +12,7 @@ import {
   GLOB_HTML,
   GLOB_MARKDOWN,
   GLOB_MARKDOWN_ALL_CODE_BLOCKS,
+  OFF,
   type RuleSeverity,
   WARNING,
 } from './constants';
@@ -315,11 +316,13 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
           return result;
         }
+
+        const {errorsInsteadOfWarnings} = this.context.globalOptions;
+
         const ruleNameWithPrefix =
           allowAnyRule || !this.rulesPrefix
             ? ruleName
             : (`${this.rulesPrefix}/${ruleName}` as const);
-        const {errorsInsteadOfWarnings} = this.context.globalOptions;
         const severityFinal: RuleSeverity =
           (configOptions.forceSeverity as RuleSeverity | undefined) ??
           (severity === WARNING &&
@@ -328,12 +331,24 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null> {
               errorsInsteadOfWarnings.includes(ruleNameWithPrefix)))
             ? ERROR
             : severity);
+
         const ruleNameFinal =
           `${options?.disableAutofix ? ('disable-autofix/' satisfies `${DisableAutofixPrefix}/`) : ''}${ruleNameWithPrefix}` as const;
         configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
+        // If the rule is disabled, disable its autofix counterpart rule as well
+        if (
+          severityFinal === OFF &&
+          !ruleNameFinal.startsWith('disable-autofix/' satisfies `${DisableAutofixPrefix}/`)
+        ) {
+          configFinal.rules[
+            `${'disable-autofix/' satisfies `${DisableAutofixPrefix}/`}${ruleNameFinal}`
+          ] = OFF;
+        }
+
         if (options?.disableAutofix) {
           configFinal.rules[ruleNameWithPrefix] = 0 /* Off */;
         }
+
         if (options?.overrideBaseRule) {
           const baseRuleName =
             typeof options.overrideBaseRule === 'string'
