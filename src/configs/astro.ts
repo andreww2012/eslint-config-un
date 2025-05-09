@@ -37,14 +37,11 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
 
   const optionsRaw = context.rootOptions.configs?.astro;
   const optionsResolved = assignDefaults(optionsRaw, {
+    files: DEFAULT_ASTRO_FILES,
     configJsxA11y: true,
   } satisfies AstroEslintConfigOptions);
 
-  const {
-    files: parentConfigFiles = DEFAULT_ASTRO_FILES,
-    ignores: parentConfigIgnores,
-    configJsxA11y,
-  } = optionsResolved;
+  const {files: parentConfigFiles, ignores: parentConfigIgnores, configJsxA11y} = optionsResolved;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'astro');
 

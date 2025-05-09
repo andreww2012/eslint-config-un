@@ -189,6 +189,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
   const vuePackageMajorVersion = vuePackageInfo?.versions.major;
 
   const optionsResolved = assignDefaults(optionsRaw, {
+    files: DEFAULT_VUE_FILES,
     majorVersion:
       vuePackageMajorVersion === 2 || vuePackageMajorVersion === 3 ? vuePackageMajorVersion : 3,
     enforceTypescriptInScriptSection: isTypescriptEnabled,

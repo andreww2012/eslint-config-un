@@ -25,7 +25,14 @@ import type {
   RemovePrefix,
   SetRequired,
 } from './types';
-import {type MaybeFn, cloneDeep, maybeCall, objectEntriesUnsafe} from './utils';
+import {
+  type MaybeArray,
+  type MaybeFn,
+  arraify,
+  cloneDeep,
+  maybeCall,
+  objectEntriesUnsafe,
+} from './utils';
 
 type EslintSeverity = Eslint.Linter.RuleSeverity;
 
@@ -381,10 +388,12 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null = string | nul
       config: configFinal,
       addRule: generateAddRuleFn(false),
       addAnyRule: generateAddRuleFn(true),
-      disableAnyRule: (ruleName: keyof AllEslintRulesWithoutDisableAutofix) => {
-        Object.assign(configFinal.rules, {
-          [ruleName]: 0,
-          [`${'disable-autofix' satisfies DisableAutofixPrefix}/${ruleName}`]: 0,
+      disableAnyRule: (ruleNames: MaybeArray<keyof AllEslintRulesWithoutDisableAutofix>) => {
+        arraify(ruleNames).forEach((ruleName) => {
+          Object.assign(configFinal.rules, {
+            [ruleName]: 0,
+            [`${'disable-autofix' satisfies DisableAutofixPrefix}/${ruleName}`]: 0,
+          });
         });
         return result;
       },

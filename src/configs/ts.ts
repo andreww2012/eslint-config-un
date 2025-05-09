@@ -7,7 +7,6 @@ import {
   type ConfigSharedOptions,
   type DisableAutofixPrefix,
   type FlatConfigEntry,
-  type FlatConfigEntryForBuilder,
   type RulesRecord,
   createConfigBuilder,
 } from '../eslint';
@@ -180,14 +179,14 @@ export const tsUnConfig: UnConfigFn<
 
   // TODO the following 3 sections are copy-pasty
 
-  const enforceTsInVueOptions = vueResolvedOptions?.enforceTypescriptInScriptSection;
-  if (enforceTsInVueOptions) {
+  if (vueResolvedOptions) {
+    const {enforceTypescriptInScriptSection} = vueResolvedOptions;
     const tsInVueOptions =
-      typeof enforceTsInVueOptions === 'object'
-        ? enforceTsInVueOptions
+      typeof enforceTypescriptInScriptSection === 'object'
+        ? enforceTypescriptInScriptSection
         : {files: vueResolvedOptions.files};
 
-    if (tsInVueOptions.typescriptRules !== false) {
+    if (enforceTypescriptInScriptSection && tsInVueOptions.typescriptRules !== false) {
       const vueFilesWithTs = tsInVueOptions.files || [];
       const vueIgnoredFilesWithTs = tsInVueOptions.ignores || [];
 
@@ -221,7 +220,8 @@ export const tsUnConfig: UnConfigFn<
     extraFilesToIgnoreTypeAware.push(...svelteIgnoredFilesWithTs);
   }
 
-  const filesNONTypeAwareDefault = [...(optionsResolved.files || TS_FILES_DEFAULT)];
+  const filesNONTypeAwareDefault =
+    optionsResolved.files?.length === 0 ? [] : [...(optionsResolved.files || TS_FILES_DEFAULT)];
   const filesNONTypeAware = [...filesNONTypeAwareDefault, ...extraFilesNONTypeAware].flat();
   const ignoresNONTypeAware = [
     ...(optionsResolved.ignores || []),
@@ -231,7 +231,7 @@ export const tsUnConfig: UnConfigFn<
   const configTypeAwareOptions = typeof configTypeAware === 'object' ? configTypeAware : {};
   const {files: userFilesTypeAware, ignores: userIgnoresTypeAware} = configTypeAwareOptions;
   const filesTypeAware = [
-    ...(userFilesTypeAware || filesNONTypeAwareDefault), // Lint the same files, excluding extra non-TA ones
+    ...(userFilesTypeAware?.length === 0 ? [] : [userFilesTypeAware || filesNONTypeAwareDefault]), // Lint the same files, excluding extra non-TA ones
     ...extraFilesTypeAware,
   ].flat();
   const ignoresTypeAware = [
@@ -239,49 +239,52 @@ export const tsUnConfig: UnConfigFn<
     ...extraFilesToIgnoreTypeAware,
   ];
 
-  const generateBaseOptions = (isTypeAware?: boolean): FlatConfigEntryForBuilder => ({
-    languageOptions: {
-      // @ts-expect-error small types mismatch
-      parser: parserTs,
-      parserOptions: {
-        extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
-        sourceType: 'module',
-        ...(isTypeAware && {
-          projectService: true,
-          tsconfigRootDir: process.cwd(),
-        }),
-        ...optionsResolved.parserOptions,
-      } satisfies TsEslintParserOptions,
-    },
-  });
+  const generateSetupConfigBuilder = (files: string[], ignores: string[], isTypeAware: boolean) => {
+    const configBuilderSetup = createConfigBuilder(context, {}, '@typescript-eslint');
+    configBuilderSetup
+      ?.addConfig(
+        [
+          `ts/${isTypeAware ? '' : 'non-'}type-aware/setup`,
+          {
+            // Applying this generally to all files is unacceptable
+            filesFallback: files.length > 0 ? files : TS_FILES_DEFAULT,
+            ignoresFallback: ignores,
+          },
+        ],
+        {
+          languageOptions: {
+            // @ts-expect-error small types mismatch
+            parser: parserTs,
+            parserOptions: {
+              extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
+              sourceType: 'module',
+              ...(isTypeAware && {
+                projectService: true,
+                tsconfigRootDir: process.cwd(),
+              }),
+              ...optionsResolved.parserOptions,
+            } satisfies TsEslintParserOptions,
+          },
+        },
+      )
+      .disableAnyRule(['no-unused-vars', 'no-use-before-define', 'no-shadow', 'no-redeclare']);
 
-  const configBuilderNONTypeAwareSetup = createConfigBuilder(
-    context,
-    optionsResolved,
-    '@typescript-eslint',
+    return configBuilderSetup;
+  };
+
+  const configBuilderNONTypeAwareSetup = generateSetupConfigBuilder(
+    filesNONTypeAware,
+    ignoresNONTypeAware,
     false,
   );
-  configBuilderNONTypeAwareSetup
-    ?.addConfig(
-      [
-        'ts/non-type-aware/setup',
-        {
-          // Applying this generally to all files is unacceptable
-          filesFallback: filesNONTypeAware.length === 0 ? TS_FILES_DEFAULT : filesNONTypeAware,
-          ignoresFallback: ignoresNONTypeAware,
-        },
-      ],
-      generateBaseOptions(false),
-    )
-    // The following rules have many false positives in TS files, so it's safe (and correct) to always disable them
-    .disableAnyRule('no-unused-vars')
-    .disableAnyRule('no-use-before-define')
-    .disableAnyRule('no-shadow')
-    .disableAnyRule('no-redeclare');
 
   const configBuilderNONTypeAware = createConfigBuilder(
     context,
-    optionsResolved,
+    {
+      ...optionsResolved,
+      files: filesNONTypeAware,
+      ignores: ignoresNONTypeAware,
+    },
     '@typescript-eslint',
   );
 
@@ -295,8 +298,7 @@ export const tsUnConfig: UnConfigFn<
     ?.addConfig([
       'ts/non-type-aware/rules',
       {
-        filesFallback: optionsResolved.files?.length === 0 ? [] : filesNONTypeAware,
-        ignoresFallback: ignoresNONTypeAware,
+        includeDefaultFilesAndIgnores: true,
       },
     ])
     .addBulkRules(
@@ -407,22 +409,10 @@ export const tsUnConfig: UnConfigFn<
 
   // CONFIG TYPE AWARE
 
-  const configBuilderTypeAwareSetup = createConfigBuilder(
-    context,
-    configTypeAware,
-    '@typescript-eslint',
-    false,
-  );
-  configBuilderTypeAwareSetup?.addConfig(
-    [
-      'ts/type-aware/setup',
-      {
-        // Applying this generally to all files is unacceptable
-        filesFallback: filesTypeAware.length === 0 ? TS_FILES_DEFAULT : filesTypeAware,
-        ignoresFallback: ignoresTypeAware,
-      },
-    ],
-    generateBaseOptions(true),
+  const configBuilderTypeAwareSetup = generateSetupConfigBuilder(
+    filesTypeAware,
+    ignoresTypeAware,
+    true,
   );
 
   const configBuilderTypeAware = createConfigBuilder(
@@ -440,6 +430,7 @@ export const tsUnConfig: UnConfigFn<
     ?.addConfig([
       'ts/type-aware/rules',
       {
+        includeDefaultFilesAndIgnores: true,
         filesFallback: filesTypeAware,
         ignoresFallback: ignoresTypeAware,
       },

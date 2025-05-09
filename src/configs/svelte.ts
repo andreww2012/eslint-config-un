@@ -106,6 +106,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
 
   const optionsRaw = context.rootOptions.configs?.svelte;
   const optionsResolved = assignDefaults(optionsRaw, {
+    files: DEFAULT_SVELTE_FILES,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
     svelteVersion:
       context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,
@@ -114,7 +115,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
 
   const {
     settings: pluginSettings,
-    files: parentConfigFiles = DEFAULT_SVELTE_FILES,
+    files: parentConfigFiles,
     svelteKitConfig,
     enforceTypescriptInScriptSection,
     svelteVersion,
