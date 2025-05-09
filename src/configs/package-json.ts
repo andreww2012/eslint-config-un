@@ -113,7 +113,7 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
         },
       },
     )
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line ts/no-unsafe-argument, ts/no-explicit-any, ts/no-unsafe-member-access
     .addBulkRules((eslintPluginPackageJson as any).configs.recommended.rules)
     // .addRule('no-empty-fields', ERROR) // 🟣 >=0.21.0
     .addRule('no-redundant-files', ERROR) // >=0.20.0

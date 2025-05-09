@@ -35,7 +35,7 @@ export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) =>
       },
     ])
     // @ts-expect-error no proper types
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    // eslint-disable-next-line ts/no-unsafe-argument
     .addBulkRules(eslintPluginEslintComments.configs.recommended.rules)
     // 🟢 Best Practices
     .addRule('disable-enable-pair', ERROR, [{allowWholeFile: true}]) // 🟣

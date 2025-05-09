@@ -124,7 +124,7 @@ export type ConfigSharedOptions<T extends null | string | RulesRecord = RulesRec
 export const genFlatConfigEntryName = (name: string) => `eslint-config-un/${name}`;
 
 // TODO report
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
+// eslint-disable-next-line ts/no-unnecessary-type-parameters
 export const createPluginObjectRenamer = <From extends string, To extends string>(
   from: From,
   to: To,
@@ -150,7 +150,7 @@ export const bulkChangeRuleSeverity = <T extends Partial<RulesRecord>>(
     Object.entries(rules).map(
       ([ruleName, ruleOptions]): [keyof RulesRecord, RulesRecord[keyof RulesRecord]] => [
         ruleName,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        // eslint-disable-next-line ts/no-unsafe-assignment
         Array.isArray(ruleOptions) ? [severity, ...ruleOptions.slice(1)] : severity,
       ],
     ),
@@ -159,7 +159,7 @@ export const bulkChangeRuleSeverity = <T extends Partial<RulesRecord>>(
 export type EslintPlugin = Eslint.ESLint.Plugin;
 
 export const eslintPluginVanillaRules: EslintPlugin = Object.freeze({
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
+  // eslint-disable-next-line ts/no-deprecated
   rules: Object.fromEntries(builtinRules.entries()),
 });
 
@@ -173,14 +173,14 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
         if (!ruleImplementation.meta?.fixable) {
           return null;
         }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+        // eslint-disable-next-line ts/no-unsafe-call, ts/no-unsafe-member-access
         const ruleWithAutofixDisabled = ruleComposer.mapReports(
           ruleImplementation,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          // eslint-disable-next-line ts/no-explicit-any
           (problem: any) => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            // eslint-disable-next-line ts/no-unsafe-member-access
             delete problem.fix;
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            // eslint-disable-next-line ts/no-unsafe-return
             return problem;
           },
         ) as typeof ruleImplementation;
@@ -247,7 +247,7 @@ export const resolveOverrides = (
     ),
   );
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line ts/no-explicit-any
 export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null = any> {
   private readonly rulesPrefix: PluginPrefix;
   private readonly options: ConfigSharedOptions<
@@ -356,13 +356,13 @@ export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null
     const addRule = <RuleName extends keyof AllEslintRulesWithoutDisableAutofix>(
       ruleName: RuleName,
       severity: RuleSeverity | null,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // eslint-disable-next-line ts/ban-ts-comment
       // @ts-ignore ignores the following error during declaration file build: "error TS2859: Excessive complexity comparing types 'RuleName' and '"curly" | "unicorn/template-indent" | "@eslint-community/eslint-comments/disable-enable-pair" | "@eslint-community/eslint-comments/no-aggregating-enable" | "@eslint-community/eslint-comments/no-duplicate-disable" | ... 1725 more ... | "yoda"'"
       ruleOptions?: GetRuleOptions<RuleName & keyof AllEslintRulesWithoutDisableAutofix>,
       options?: AddRuleOptions,
     ) => {
       if (severity == null) {
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        // eslint-disable-next-line ts/no-use-before-define
         return result;
       }
 
@@ -398,7 +398,7 @@ export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null
           configFinal.rules[baseRuleName] = 0 /* Off */;
         }
       }
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      // eslint-disable-next-line ts/no-use-before-define
       return result;
     };
 
@@ -512,7 +512,7 @@ export const createConfigBuilder = <PluginPrefix extends LoadablePluginPrefix | 
   }
   return new ConfigEntryBuilder(
     rulesPrefix,
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    // eslint-disable-next-line ts/no-unnecessary-condition
     options && typeof options === 'object' ? options : {},
     context,
   );

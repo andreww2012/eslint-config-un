@@ -17,7 +17,7 @@ export const promiseUnConfig: UnConfigFn<'promise'> = async (context) => {
   configBuilder
     ?.addConfig(['promise', {includeDefaultFilesAndIgnores: true}])
     // @ts-expect-error no proper types
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    // eslint-disable-next-line ts/no-unsafe-argument
     .addBulkRules(eslintPluginPromise.configs.recommended.rules)
     .addRule('always-return', ERROR, [{ignoreLastCallback: true}])
     // .addRule('avoid-new', OFF)

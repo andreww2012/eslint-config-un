@@ -1,6 +1,5 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import type Eslint from 'eslint';
-import {parser as parserTs, configs as tsEslintConfigs} from 'typescript-eslint';
 import {ERROR, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, GLOB_TSX, OFF, WARNING} from '../constants';
 import {
   type AllRulesWithPrefix,
@@ -10,7 +9,7 @@ import {
   type RulesRecord,
   createConfigBuilder,
 } from '../eslint';
-import {assignDefaults} from '../utils';
+import {assignDefaults, interopDefault} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import {
   RULE_NO_UNUSED_EXPRESSIONS_OPTIONS,
@@ -153,7 +152,11 @@ export const tsUnConfig: UnConfigFn<
       svelteResolvedOptions: SvelteEslintConfigOptions | null;
     },
   ]
-> = (context, {astroResolvedOptions, vueResolvedOptions, svelteResolvedOptions}) => {
+> = async (context, {astroResolvedOptions, vueResolvedOptions, svelteResolvedOptions}) => {
+  const {parser: typescriptEslintParser, configs: typescriptEslintConfigs} = await interopDefault(
+    import('typescript-eslint'),
+  );
+
   const typescriptPackageInfo = context.packagesInfo.typescript;
   const optionsRaw = context.rootOptions.configs?.ts;
 
@@ -254,7 +257,7 @@ export const tsUnConfig: UnConfigFn<
         {
           languageOptions: {
             // @ts-expect-error small types mismatch
-            parser: parserTs,
+            parser: typescriptEslintParser,
             parserOptions: {
               extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
               sourceType: 'module',
@@ -305,13 +308,13 @@ export const tsUnConfig: UnConfigFn<
       },
     ])
     .addBulkRules(
-      tsEslintConfigs.strict.reduce<RulesRecord>(
+      typescriptEslintConfigs.strict.reduce<RulesRecord>(
         (result, config) => Object.assign(result, config.rules),
         {},
       ),
     )
     .addBulkRules(
-      tsEslintConfigs.stylistic.reduce<RulesRecord>(
+      typescriptEslintConfigs.stylistic.reduce<RulesRecord>(
         (result, config) => Object.assign(result, config.rules),
         {},
       ),
@@ -439,13 +442,13 @@ export const tsUnConfig: UnConfigFn<
       },
     ])
     .addBulkRules(
-      tsEslintConfigs.strictTypeCheckedOnly.reduce<RulesRecord>(
+      typescriptEslintConfigs.strictTypeCheckedOnly.reduce<RulesRecord>(
         (result, config) => Object.assign(result, config.rules),
         {},
       ),
     )
     .addBulkRules(
-      tsEslintConfigs.stylisticTypeCheckedOnly.reduce<RulesRecord>(
+      typescriptEslintConfigs.stylisticTypeCheckedOnly.reduce<RulesRecord>(
         (result, config) => Object.assign(result, config.rules),
         {},
       ),

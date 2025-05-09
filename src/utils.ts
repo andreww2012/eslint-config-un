@@ -22,7 +22,7 @@ export const arraify = <T>(value?: MaybeArray<T> | null): T[] =>
 export const isNonEmptyArray = <T>(value?: T[] | null): value is [T, ...T[]] =>
   Array.isArray(value) && value.length > 0;
 
-// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+// eslint-disable-next-line ts/no-redundant-type-constituents
 export const joinPaths = (...paths: (string | FalsyValue)[]) =>
   // eslint-disable-next-line unicorn/prefer-native-coercion-functions
   path.posix.join(...arraify(paths).filter((v): v is string => Boolean(v)));
@@ -89,7 +89,7 @@ export async function interopDefault<T>(
   try {
     const resolvedModule = await module;
     // TODO report?
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    // eslint-disable-next-line ts/no-unnecessary-condition
     return resolvedModule && typeof resolvedModule === 'object' && 'default' in resolvedModule
       ? resolvedModule.default
       : resolvedModule;

@@ -319,7 +319,7 @@ export const esUnConfig: UnConfigFn<
   // `grs` means "get rule severity"
   const grs = <Version extends EcmaVersion>(version: Version, feature: EcmaFeatures[Version]) => {
     const esFeatures = getEsVersionFeatures(version);
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    // eslint-disable-next-line ts/no-unnecessary-condition
     const isFeatureSupported = esFeatures[feature as keyof typeof esFeatures] ?? esFeatures.default;
     return isFeatureSupported ? OFF : ERROR;
   };

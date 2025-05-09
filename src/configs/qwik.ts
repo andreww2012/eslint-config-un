@@ -31,7 +31,7 @@ export const qwikUnConfig: UnConfigFn<'qwik'> = async (context) => {
       },
     ])
     // @ts-expect-error no proper types
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    // eslint-disable-next-line ts/no-unsafe-argument
     .addBulkRules(eslintPluginQwik.configs.strict.rules)
     // .addRule('use-method-usage', ERROR) // 🟣🟢
     // .addRule('valid-lexical-scope', ERROR) // 🟣🟢

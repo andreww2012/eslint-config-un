@@ -4,6 +4,9 @@ const TEST_DIR_GLOB = ['test/**/*'];
 
 export default eslintConfig({
   mode: 'lib',
+  pluginRenames: {
+    '@typescript-eslint': 'ts',
+  },
 
   configs: {
     ts: {

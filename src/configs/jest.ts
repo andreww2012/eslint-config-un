@@ -392,7 +392,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     )
     // Actually empty currently
     // @ts-expect-error no proper types
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    // eslint-disable-next-line ts/no-unsafe-argument
     .addBulkRules(eslintPluginJestExtended.configs['flat/recommended'].rules)
     .addRule('prefer-to-be-array', getSuggestUsingJestExtendedMatcherSeverity('toBeArray'))
     .addRule('prefer-to-be-false', getSuggestUsingJestExtendedMatcherSeverity('toBeFalse'))
