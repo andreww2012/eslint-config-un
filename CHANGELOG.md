@@ -56,6 +56,7 @@
 - `eslint-plugin-perfectionist`: [4.10.1 -> 4.12.3](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.10.1...v4.12.3)
 - `eslint-plugin-vue`: [10.0.0 -> 10.0.1](https://github.com/vuejs/eslint-plugin-vue/compare/v10.0.0...v10.0.1)
 - `eslint-plugin-yml`: [1.17.0 -> 1.18.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v1.17.0...v1.18.0)
+- `eslint-plugin-n`: [17.16.1 -> 17.18.0](https://github.com/eslint-community/eslint-plugin-n/compare/v17.16.1...v17.18.0)
 
 ## 0.8.2
 
