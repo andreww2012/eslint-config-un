@@ -878,7 +878,7 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
         filesFallback: [GLOB_JS_TS_X_ONLY],
       },
     ])
-    .addAnyRule('import/no-default-export', OFF)
+    .disableAnyRule('import/no-default-export')
     .addOverrides();
 
   const configBuilderHooks = createConfigBuilder(context, configHooks, null);

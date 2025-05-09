@@ -57,6 +57,7 @@ import {
   type DisableAutofixPrefix,
   type EslintPlugin,
   type FlatConfigEntry,
+  createConfigBuilder,
   disableAutofixForAllRulesInPlugin,
   eslintPluginVanillaRules,
   genFlatConfigEntryName,
@@ -232,6 +233,25 @@ export const eslintConfig = async (
     isSvelteEnabled && svelteUnConfig(context),
   ]);
 
+  const rootConfigBuilder = createConfigBuilder(context, {}, null);
+  rootConfigBuilder
+    ?.addConfig('config-files', {
+      files: GLOB_CONFIG_FILES,
+    })
+    .disableAnyRule(['import/no-extraneous-dependencies', 'node/no-unpublished-require']);
+  rootConfigBuilder
+    ?.addConfig('allow-default-export', {
+      files: [
+        ...GLOB_CONFIG_FILES,
+        // Files starting with a dot
+        `**/.*.${GLOB_JS_TS_X_EXTENSION}`,
+        // Storybook
+        `**/*.stories.${GLOB_JS_TS_X_EXTENSION}`,
+        '.storybook/**/*',
+      ],
+    })
+    .disableAnyRule('import/no-default-export');
+
   const unresolvedConfigs = Promise.all([
     globalIgnores.length > 0 && {
       name: genFlatConfigEntryName('ignores-global'),
@@ -313,29 +333,7 @@ export const eslintConfig = async (
     svelteEslintConfigResult && svelteEslintConfigResult.configs, // Must be after ts
     isMarkdownEnabled && markdownUnConfig(context), // Must be last
 
-    {
-      name: genFlatConfigEntryName('config-files'),
-      files: GLOB_CONFIG_FILES,
-      rules: {
-        'import/no-extraneous-dependencies': OFF,
-        'node/no-unpublished-require': OFF,
-      },
-    },
-
-    {
-      name: genFlatConfigEntryName('allow-default-export'),
-      files: [
-        ...GLOB_CONFIG_FILES,
-        // Files starting with a dot
-        `**/.*.${GLOB_JS_TS_X_EXTENSION}`,
-        // Storybook
-        `**/*.stories.${GLOB_JS_TS_X_EXTENSION}`,
-        '.storybook/**/*',
-      ],
-      rules: {
-        'import/no-default-export': OFF,
-      },
-    },
+    rootConfigBuilder,
 
     isCliEnabled && cliEslintConfig(context),
     isCloudfrontFunctionsEnabled && cloudfrontFunctionsEslintConfig(context),

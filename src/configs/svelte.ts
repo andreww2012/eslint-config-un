@@ -159,7 +159,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     // "This rule is a system rule for working the this plugin. This rule does not report any errors, but make sure the rule is enabled for the this plugin to work properly"
     .addRule('system', ERROR) // 🟢 >=0.0.13
     // Crashes on `statement.expression.type` (`expression` is null)
-    .addAnyRule('sonarjs/no-unused-collection', OFF);
+    .disableAnyRule('sonarjs/no-unused-collection');
 
   // Legend:
   // 🟢 - in Recommended

@@ -627,11 +627,13 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     // .addRule('space-unary-ops', OFF)
     // .addRule('template-curly-spacing', OFF)
     // 🔵 Not working great in Vue files
-    .disableAnyRule('@typescript-eslint/prefer-function-type')
-    .disableAnyRule('@typescript-eslint/unified-signatures')
-    .disableAnyRule('import/first') // May be wrong if multiple <script> blocks are present
-    .disableAnyRule('import/no-default-export')
-    .disableAnyRule('no-useless-assignment') // False positives in script setup
+    .disableAnyRule([
+      '@typescript-eslint/prefer-function-type',
+      '@typescript-eslint/unified-signatures',
+      'import/first', // May be wrong if multiple <script> blocks are present
+      'import/no-default-export',
+      'no-useless-assignment', // False positives in script setup
+    ])
     .addOverrides();
 
   configBuilder

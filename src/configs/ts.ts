@@ -403,8 +403,7 @@ export const tsUnConfig: UnConfigFn<
     // .addRule('prefer-enum-initializers', OFF)
     // .addRule('typedef', OFF)
     // 🟢 Disable conflicting rules
-    .disableAnyRule('no-useless-constructor')
-    .disableAnyRule('dot-notation')
+    .disableAnyRule(['no-useless-constructor', 'dot-notation'])
     .addOverrides();
 
   // CONFIG TYPE AWARE
@@ -548,24 +547,26 @@ export const tsUnConfig: UnConfigFn<
     ?.addConfig('ts/disable-handled-by-ts-compiler-rules', {
       files: [...TS_FILES_DEFAULT, ...filesNONTypeAware, ...filesTypeAware],
     })
-    .disableAnyRule('constructor-super')
-    .disableAnyRule('getter-return')
-    .disableAnyRule('no-const-assign')
-    .disableAnyRule('no-dupe-args')
-    .disableAnyRule('no-dupe-class-members')
-    .disableAnyRule('no-dupe-keys')
-    .disableAnyRule('no-func-assign')
+    .disableAnyRule([
+      'constructor-super',
+      'getter-return',
+      'no-const-assign',
+      'no-dupe-args',
+      'no-dupe-class-members',
+      'no-dupe-keys',
+      'no-func-assign',
+    ])
     // "Note that the compiler will not catch the Object.assign() case. Thus, if you use Object.assign() in your codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-import-assign#handled_by_typescript
     // .addRule('no-import-assign', OFF)
     // "Note that, technically, TypeScript will only catch this if you have the strict or noImplicitThis flags enabled. These are enabled in most TypeScript projects, since they are considered to be best practice." - https://eslint.org/docs/latest/rules/no-invalid-this#rule-details
     // .addRule('no-invalid-this', OFF)
-    .disableAnyRule('no-new-native-nonconstructor') // successor of no-new-symbol
-    .disableAnyRule('no-obj-calls')
+    .disableAnyRule([
+      'no-new-native-nonconstructor', // successor of no-new-symbol
+      'no-obj-calls',
+    ])
     // "Note that while TypeScript will catch let redeclares and const redeclares, it will not catch var redeclares. Thus, if you use the legacy var keyword in your TypeScript codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-redeclare#handled_by_typescript
     // .addRule('no-redeclare', OFF)
-    .disableAnyRule('no-setter-return')
-    .disableAnyRule('no-this-before-super')
-    .disableAnyRule('no-undef')
+    .disableAnyRule(['no-setter-return', 'no-this-before-super', 'no-undef'])
     // "TypeScript must be configured with allowUnreachableCode: false for it to consider unreachable code an error." - https://eslint.org/docs/latest/rules/no-unreachable#handled_by_typescript
     // .addRule('no-unreachable', OFF)
     .disableAnyRule('no-unsafe-negation')
@@ -585,12 +586,14 @@ export const tsUnConfig: UnConfigFn<
     .addRule('no-unnecessary-type-parameters', OFF)
     .addRule('no-unused-vars', OFF)
     .addRule('no-use-before-define', OFF)
-    .disableAnyRule('import/newline-after-import')
-    .disableAnyRule('import/no-default-export')
-    .disableAnyRule('vars-on-top')
-    .disableAnyRule('no-var')
-    .disableAnyRule('sonarjs/no-redundant-optional')
-    .disableAnyRule('no-duplicate-imports');
+    .disableAnyRule([
+      'import/newline-after-import',
+      'import/no-default-export',
+      'vars-on-top',
+      'no-var',
+      'sonarjs/no-redundant-optional',
+      'no-duplicate-imports',
+    ]);
 
   const configBuilderNoTypeAssertions = createConfigBuilder(
     context,
