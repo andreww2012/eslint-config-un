@@ -6,34 +6,28 @@ export const pluginsLoaders = {
   '@eslint-community/eslint-comments': () =>
     interopDefault(import('@eslint-community/eslint-plugin-eslint-comments')),
   '@eslint-react': () =>
-    // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react'],
+      (m) => m.configs.all.plugins['@eslint-react'] as unknown as EslintPlugin,
     ),
   '@eslint-react/debug': () =>
-    // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/debug'],
+      (m) => m.configs.all.plugins['@eslint-react/debug'] as unknown as EslintPlugin,
     ),
   '@eslint-react/dom': () =>
-    // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/dom'],
+      (m) => m.configs.all.plugins['@eslint-react/dom'] as unknown as EslintPlugin,
     ),
   '@eslint-react/hooks-extra': () =>
-    // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/hooks-extra'],
+      (m) => m.configs.all.plugins['@eslint-react/hooks-extra'] as unknown as EslintPlugin,
     ),
   '@eslint-react/naming-convention': () =>
-    // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/naming-convention'],
+      (m) => m.configs.all.plugins['@eslint-react/naming-convention'] as unknown as EslintPlugin,
     ),
   '@eslint-react/web-api': () =>
-    // @ts-expect-error types mismatch
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/web-api'],
+      (m) => m.configs.all.plugins['@eslint-react/web-api'] as unknown as EslintPlugin,
     ),
   '@next/next': () => interopDefault(import('@next/eslint-plugin-next')),
   '@stylistic': () => interopDefault(import('@stylistic/eslint-plugin')),
@@ -43,16 +37,16 @@ export const pluginsLoaders = {
   astro: () => interopDefault(import('eslint-plugin-astro')),
   'case-police': () =>
     // @ts-expect-error types mismatch
-    interopDefault(import('eslint-plugin-case-police')),
+    interopDefault<EslintPlugin>(import('eslint-plugin-case-police')),
   css: () => interopDefault(import('@eslint/css')),
   'css-in-js': () =>
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-css')),
-  'de-morgan': () => interopDefault(import('eslint-plugin-de-morgan')),
+  'de-morgan': () => interopDefault<EslintPlugin>(import('eslint-plugin-de-morgan')),
   es: () => interopDefault(import('eslint-plugin-es-x')),
   import: () =>
     // @ts-expect-error types mismatch
-    interopDefault(import('eslint-plugin-import-x')),
+    interopDefault<EslintPlugin>(import('eslint-plugin-import-x')),
   jest: () => interopDefault(import('eslint-plugin-jest')),
   'jest-extended': () => interopDefault(import('eslint-plugin-jest-extended')),
   jsdoc: () => interopDefault(import('eslint-plugin-jsdoc')),
@@ -71,7 +65,7 @@ export const pluginsLoaders = {
   'package-json': () =>
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-package-json')),
-  perfectionist: () => interopDefault(import('eslint-plugin-perfectionist')),
+  perfectionist: () => interopDefault<EslintPlugin>(import('eslint-plugin-perfectionist')),
   pinia: () =>
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-pinia')),
@@ -116,7 +110,7 @@ export const pluginsLoaders = {
     interopDefault(import('eslint-plugin-yml')),
   solid: () =>
     // @ts-expect-error types mismatch
-    interopDefault(import('eslint-plugin-solid')),
+    interopDefault<EslintPlugin>(import('eslint-plugin-solid')),
 } satisfies Record<string, () => Promise<EslintPlugin | null>>;
 
 export type LoadablePluginPrefix = keyof typeof pluginsLoaders;

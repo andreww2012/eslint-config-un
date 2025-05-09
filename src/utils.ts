@@ -39,7 +39,16 @@ export const maybeCall = <ReturnType = unknown, Args extends readonly unknown[] 
     ? (fnOrValue as (...args: Args) => ReturnType)(...args)
     : fnOrValue;
 
-export const fetchPackageInfo = async (packageName: string) => {
+export const fetchPackageInfo = async (
+  packageName: string,
+): Promise<{
+  info: Awaited<ReturnType<typeof getPackageInfo>> & {};
+  versions: {
+    full: string;
+    major: number | null;
+    majorAndMinor: number | null;
+  };
+} | null> => {
   const packageInfo = await getPackageInfo(packageName);
   if (!packageInfo) {
     return null;

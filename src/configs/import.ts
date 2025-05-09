@@ -62,7 +62,8 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
 const pluginRenamer = createPluginObjectRenamer('import-x', 'import');
 
 export const importUnConfig: UnConfigFn<'import'> = async (context) => {
-  const eslintPluginImportX = await pluginsLoaders.import();
+  const eslintPluginImportX =
+    (await pluginsLoaders.import()) as unknown as typeof import('eslint-plugin-import-x');
 
   const optionsRaw = context.rootOptions.configs?.import;
   const optionsResolved = assignDefaults(optionsRaw, {
