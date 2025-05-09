@@ -77,6 +77,7 @@ export const eslintConfig = async (
   options: EslintConfigUnOptions = {},
 ): Promise<FlatConfigEntry[]> => {
   const optionsResolved = assignDefaults(options, {
+    mode: 'app',
     extraConfigs: [],
     loadPluginsOnDemand: true,
   } satisfies EslintConfigUnOptions);

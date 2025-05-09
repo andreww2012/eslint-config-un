@@ -137,7 +137,11 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
     .addRule('no-duplicates', ERROR, [{'prefer-inline': true, ...noDuplicatesOptions}]) // Default: warn
     // .addRule('no-dynamic-require', OFF)
     .addRule('no-empty-named-blocks', ERROR)
-    .addRule('no-extraneous-dependencies', ERROR, [{peerDependencies: false}])
+    .addRule('no-extraneous-dependencies', ERROR, [
+      {
+        devDependencies: context.rootOptions.mode !== 'lib',
+      },
+    ])
     // .addRule('no-import-module-exports', OFF) // TODO enable?
     // .addRule('no-internal-modules', OFF)
     .addRule('no-mutable-exports', WARNING)

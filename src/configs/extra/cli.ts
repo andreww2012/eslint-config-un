@@ -1,4 +1,4 @@
-import {GLOB_JS_TS_X_EXTENSION, OFF} from '../../constants';
+import {GLOB_JS_TS_X_EXTENSION} from '../../constants';
 import {type ConfigSharedOptions, createConfigBuilder} from '../../eslint';
 import {assignDefaults} from '../../utils';
 import type {UnConfigFn} from '../index';
@@ -31,9 +31,12 @@ export const cliEslintConfig: UnConfigFn<'cli'> = (context) => {
         ),
       },
     ])
-    .addRule('node/no-process-exit', OFF)
-    .addRule('unicorn/no-process-exit', OFF)
-    .addRule('no-console', OFF)
+    .disableAnyRule([
+      'node/no-process-exit',
+      'unicorn/no-process-exit',
+      'no-console',
+      'import/no-extraneous-dependencies',
+    ])
     .addOverrides();
 
   return {

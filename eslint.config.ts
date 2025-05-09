@@ -3,6 +3,8 @@ import {eslintConfig} from './src';
 const TEST_DIR_GLOB = ['test/**/*'];
 
 export default eslintConfig({
+  mode: 'lib',
+
   configs: {
     ts: {
       configTypeAware: {

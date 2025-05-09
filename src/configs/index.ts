@@ -63,6 +63,13 @@ export interface EslintConfigUnOptions {
   gitignore?: boolean | FlatGitignoreOptions;
 
   /**
+   * Type of your project. Depending on the value, will affect the following rules:
+   * - [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md): importing from `devDependencies` will be forbidden in `lib` mode.
+   * @default 'app'
+   */
+  mode?: 'app' | 'lib';
+
+  /**
    * Enables `eslint-config-prettier` at the end of the ruleset.
    * @default true
    * @see https://github.com/prettier/eslint-config-prettier
