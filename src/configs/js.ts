@@ -113,7 +113,11 @@ export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
     // .addRule('no-octal', ERROR)
     // .addRule('no-redeclare', ERROR)
     // .addRule('no-regex-spaces', ERROR)
-    // .addRule('no-shadow-restricted-names', ERROR)
+    .addRule('no-shadow-restricted-names', ERROR, [
+      {
+        ...(eslintVersion >= 9.26 && {reportGlobalThis: true}),
+      },
+    ])
     // .addRule('no-unused-labels', ERROR)
     // .addRule('no-useless-catch', ERROR)
     // .addRule('no-useless-escape', ERROR)

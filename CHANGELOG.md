@@ -13,6 +13,7 @@
 - [**BREAKING**] Importing from `peerDependencies` is now allowed by default (rule: [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md)). Also disabled this rule in `cli` config.
 - Added the ability to change plugin prefixes.
 - `extraConfigs` now always get a name in the form of `eslint-config-un/extra-config/<provided name or "unnamed<config index>">`.
+- Set a new option `reportGlobalThis: true` for [`no-shadow-restricted-names`](https://eslint.org/docs/latest/rules/no-shadow-restricted-names) rule.
 
 ### Dependencies
 
