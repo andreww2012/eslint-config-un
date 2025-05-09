@@ -14,6 +14,7 @@
 - Added the ability to change plugin prefixes.
 - `extraConfigs` now always get a name in the form of `eslint-config-un/extra-config/<provided name or "unnamed<config index>">`.
 - Set a new option `reportGlobalThis: true` for [`no-shadow-restricted-names`](https://eslint.org/docs/latest/rules/no-shadow-restricted-names) rule.
+- [**BREAKING**] Set the minimum supported Node.js version to 20.
 
 ### Dependencies
 
