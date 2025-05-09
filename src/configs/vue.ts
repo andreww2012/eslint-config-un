@@ -141,7 +141,7 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
         ConfigSharedOptions<'pinia'> & {
           /**
            * @default `Store`
-           * @see https://github.com/lisilinhart/eslint-plugin-pinia/blob/main/docs/rules/prefer-use-store-naming-convention.md#options
+           * @see https://github.com/lisilinhart/eslint-plugin-pinia/HEAD/main/docs/rules/prefer-use-store-naming-convention.md#options
            */
           storesNameSuffix?: string;
         }

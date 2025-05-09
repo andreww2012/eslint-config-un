@@ -124,49 +124,49 @@ export interface NodeEslintConfigOptions extends ConfigSharedOptions<'node'> {
     /**
      * Enforces either `Buffer` or `require("buffer").Buffer`
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/buffer.md
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/buffer.md
      */
     buffer?: boolean;
 
     /**
      * Enforce either `console` or `require("console")`
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/console.md
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/console.md
      */
     console?: boolean;
 
     /**
      * Enforce either `process` or `require("process")`
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/process.md
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/process.md
      */
     process?: boolean;
 
     /**
      * Enforce either `TextDecoder` or `require("util").TextDecoder`
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/text-decoder.md
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/text-decoder.md
      */
     textDecoder?: boolean;
 
     /**
      * Enforce either `TextEncoder` or `require("util").TextEncoder`
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/text-encoder.md
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/text-encoder.md
      */
     textEncoder?: boolean;
 
     /**
      * Enforce either `URLSearchParams` or `require("url").URLSearchParams`
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/url-search-params.md
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/url-search-params.md
      */
     url?: boolean;
 
     /**
      * Enforce either `URL` or `require("url").URL`
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/master/docs/rules/prefer-global/url.md
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/url.md
      */
     urlSearchParams?: boolean;
   };

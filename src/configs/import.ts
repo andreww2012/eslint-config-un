@@ -39,7 +39,7 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
   tsResolverOptions?: TypeScriptResolverOptions;
 
   /**
-   * @see https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-unresolved.md#ignore
+   * @see https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-unresolved.md#ignore
    */
   importPatternsToIgnoreWhenTryingToResolve?: string | string[];
 
@@ -54,7 +54,7 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
   /**
    * Will be merged with the default value. By default, type-only imports (`import type ...` from 'module') will be merged with the regular imports from the same module (`import ... from 'module'`)
    * @default {'prefer-inline': true}
-   * @see https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-duplicates.md
+   * @see https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-duplicates.md
    */
   noDuplicatesOptions?: GetRuleOptions<'import/no-duplicates'>[0];
 }

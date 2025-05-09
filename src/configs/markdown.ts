@@ -80,7 +80,7 @@ export interface MarkdownEslintConfigOptions extends ConfigSharedOptions<'markdo
    *
    * Likely you don't want to change this.
    * @default true
-   * @see https://github.com/eslint/markdown/blob/main/docs/processors/markdown.md
+   * @see https://github.com/eslint/markdown/HEAD/main/docs/processors/markdown.md
    */
   codeBlocksImpliedStrictMode?: boolean;
 

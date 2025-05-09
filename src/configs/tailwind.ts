@@ -30,7 +30,7 @@ export interface TailwindEslintConfigOptions extends ConfigSharedOptions<'tailwi
   /**
    * Will be merged with the default [`eslint-plugin-tailwindcss` settings](https://github.com/francoismassart/eslint-plugin-tailwindcss?tab=readme-ov-file#more-settings).
    *
-   * Actual default values can be found [here](https://github.com/francoismassart/eslint-plugin-tailwindcss/blob/master/lib/util/settings.js).
+   * Actual default values can be found [here](https://github.com/francoismassart/eslint-plugin-tailwindcss/blob/HEAD/lib/util/settings.js).
    */
   settings?: PrettifyShallow<TailwindPluginSettings>;
 }
