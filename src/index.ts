@@ -53,6 +53,7 @@ import {
 } from './constants';
 import {
   ConfigEntryBuilder,
+  DISABLE_AUTOFIX_WITH_SLASH,
   type DisableAutofixPrefix,
   type EslintPlugin,
   type FlatConfigEntry,
@@ -374,14 +375,14 @@ export const eslintConfig = async (
             .map((config) => {
               return Object.entries(config.rules || {}).map(([ruleName, ruleEntry]) => {
                 const severity = Array.isArray(ruleEntry) ? ruleEntry[0] : ruleEntry;
-                if (
-                  severity === OFF ||
-                  severity === 'off' ||
-                  ruleName.startsWith('disable-autofix/' satisfies `${DisableAutofixPrefix}/`)
-                ) {
+                if (severity === OFF || severity === 'off') {
                   return null;
                 }
-                const ruleNameSplitted = ruleName.split('/');
+                const ruleNameSplitted = (
+                  ruleName.startsWith(DISABLE_AUTOFIX_WITH_SLASH)
+                    ? ruleName.slice(0, DISABLE_AUTOFIX_WITH_SLASH.length)
+                    : ruleName
+                ).split('/');
                 return ruleNameSplitted.map((_, i) =>
                   i > 0 ? ruleNameSplitted.slice(0, i).join('/') : null,
                 );

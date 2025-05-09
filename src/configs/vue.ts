@@ -243,7 +243,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
   const configBuilder = createConfigBuilder(context, optionsResolved, 'vue');
 
   configBuilder?.addConfig(['vue/setup', {doNotIgnoreMarkdown: true}], {
-    files: [...DEFAULT_VUE_FILES, ...(optionsResolved.files || [])],
+    files: [...DEFAULT_VUE_FILES, ...optionsResolved.files],
     processor: mergeEslintProcessors(
       [
         eslintPluginVue.processors['.vue'] as Eslint.Linter.Processor,
@@ -679,7 +679,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
       {
         includeDefaultFilesAndIgnores: true,
         ignoreMarkdownCodeBlocks: true,
-        filesFallback: optionsResolved.files || DEFAULT_VUE_FILES,
+        filesFallback: optionsResolved.files,
         ignoresFallback: optionsResolved.ignores,
       },
     ])

@@ -57,6 +57,7 @@ export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShall
 >;
 
 export type DisableAutofixPrefix = 'disable-autofix';
+export const DISABLE_AUTOFIX_WITH_SLASH = `${'disable-autofix' satisfies DisableAutofixPrefix}/`;
 
 export type AllEslintRulesWithDisableAutofix = OmitIndexSignature<FlatConfigEntry['rules'] & {}>;
 // Need to exclude `disable-autofix` rules to avoid TS issues related to big unions
@@ -355,16 +356,11 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null = string | nul
             : severity);
 
         const ruleNameFinal =
-          `${options?.disableAutofix ? ('disable-autofix/' satisfies `${DisableAutofixPrefix}/`) : ''}${ruleNameWithPrefix}` as const;
+          `${options?.disableAutofix ? DISABLE_AUTOFIX_WITH_SLASH : ''}${ruleNameWithPrefix}` as const;
         configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
         // If the rule is disabled, disable its autofix counterpart rule as well
-        if (
-          severityFinal === OFF &&
-          !ruleNameFinal.startsWith('disable-autofix/' satisfies `${DisableAutofixPrefix}/`)
-        ) {
-          configFinal.rules[
-            `${'disable-autofix/' satisfies `${DisableAutofixPrefix}/`}${ruleNameFinal}`
-          ] = OFF;
+        if (severityFinal === OFF && !ruleNameFinal.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {
+          configFinal.rules[`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameFinal}`] = OFF;
         }
 
         if (options?.disableAutofix) {
