@@ -285,14 +285,14 @@ export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
     // 🔵 Not in recommended - Layout & Formatting
     .addRule('unicode-bom', ERROR)
     // 🔵 Stylistic
-    .addAnyRule('@stylistic/quotes', ERROR, [
+    .addAnyRule('@stylistic', 'quotes', ERROR, [
       'single', // Doesn't matter since `ignoreStringLiterals` is true - BUT will be used in fixes
       {
         ignoreStringLiterals: true,
         avoidEscape: true, // TODO Doesn't have any effect `ignoreStringLiterals` is true - should propose auto-fix?
       },
     ])
-    .addAnyRule('@stylistic/padding-line-between-statements', ERROR, [
+    .addAnyRule('@stylistic', 'padding-line-between-statements', ERROR, [
       {blankLine: 'never', prev: 'import', next: 'import'},
     ])
     .addOverrides();

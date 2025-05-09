@@ -281,7 +281,7 @@ export const jsxA11yUnConfig: UnConfigFn<
   unknown,
   [
     customConfig?: {
-      prefix: 'astro/jsx-a11y';
+      prefix: 'astro';
       options: UnConfigOptions<JsxA11yEslintConfigOptions & ConfigSharedOptions<string>>;
     },
   ]
@@ -317,7 +317,11 @@ export const jsxA11yUnConfig: UnConfigFn<
   );
 
   const prefixFinal = customConfig?.prefix ?? 'jsx-a11y';
-  const isForAstro = prefixFinal === 'astro/jsx-a11y';
+  const isForAstro = prefixFinal === 'astro'; // TODO
+
+  // `rn` means "rule name"
+  const rn = <T extends string>(ruleName: T) =>
+    `${isForAstro ? 'jsx-a11y/' : ''}${ruleName}` as const;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, prefixFinal);
 
@@ -341,7 +345,7 @@ export const jsxA11yUnConfig: UnConfigFn<
         }),
       },
     )
-    .addRule('alt-text', altTextCheckForElements === false ? OFF : ERROR, [
+    .addRule(rn('alt-text'), altTextCheckForElements === false ? OFF : ERROR, [
       {
         elements: getKeysOfTruthyValues({
           ...altTextCheckDefaultElements,
@@ -356,7 +360,7 @@ export const jsxA11yUnConfig: UnConfigFn<
       },
     ])
     .addRule(
-      'anchor-ambiguous-text',
+      rn('anchor-ambiguous-text'),
       ambiguousWords === false ? OFF : ambiguousWords.severity === 'error' ? ERROR : WARNING,
       [
         {
@@ -364,13 +368,13 @@ export const jsxA11yUnConfig: UnConfigFn<
         },
       ],
     ) // 🔴
-    .addRule('anchor-has-content', ERROR, [
+    .addRule(rn('anchor-has-content'), ERROR, [
       {
         ...(customComponents.links?.length && {components: customComponents.links}),
       },
     ])
     .addRule(
-      'anchor-is-valid',
+      rn('anchor-is-valid'),
       anchorIsValidCheckedAspects === false || anchorIsValidFinalCheckedAspects == null
         ? OFF
         : ERROR,
@@ -381,19 +385,19 @@ export const jsxA11yUnConfig: UnConfigFn<
         },
       ],
     )
-    .addRule('aria-activedescendant-has-tabindex', ERROR)
-    .addRule('aria-props', ERROR)
-    .addRule('aria-proptypes', ERROR)
-    .addRule('aria-role', ERROR)
-    .addRule('aria-unsupported-elements', ERROR)
-    .addRule('autocomplete-valid', ERROR, [
+    .addRule(rn('aria-activedescendant-has-tabindex'), ERROR)
+    .addRule(rn('aria-props'), ERROR)
+    .addRule(rn('aria-proptypes'), ERROR)
+    .addRule(rn('aria-role'), ERROR)
+    .addRule(rn('aria-unsupported-elements'), ERROR)
+    .addRule(rn('autocomplete-valid'), ERROR, [
       {
         ...(customComponents.inputs?.length && {inputComponents: customComponents.inputs}),
       },
     ])
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/click-events-have-key-events/
-    .addRule('click-events-have-key-events', isForAstro ? OFF : ERROR)
-    .addRule('control-has-associated-label', ERROR, [
+    .addRule(rn('click-events-have-key-events'), isForAstro ? OFF : ERROR)
+    .addRule(rn('control-has-associated-label'), ERROR, [
       {
         ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
         ...(labelAttributes?.length && {labelAttributes}),
@@ -424,16 +428,16 @@ export const jsxA11yUnConfig: UnConfigFn<
         ],
       },
     ]) // 🔴
-    .addRule('heading-has-content', ERROR, [
+    .addRule(rn('heading-has-content'), ERROR, [
       {
         ...(customComponents.headings?.length && {inputComponents: customComponents.headings}),
       },
     ])
     // Disabled because "This rule is largely superseded by the `lang` rule"
-    .addRule('html-has-lang', OFF)
-    .addRule('iframe-has-title', ERROR)
+    .addRule(rn('html-has-lang'), OFF)
+    .addRule(rn('iframe-has-title'), ERROR)
     .addRule(
-      'img-redundant-alt',
+      rn('img-redundant-alt'),
       imageWords === false || (imageWords && imageWords.words.length === 0)
         ? OFF
         : imageWords?.severity === 'error'
@@ -446,7 +450,7 @@ export const jsxA11yUnConfig: UnConfigFn<
         },
       ],
     )
-    .addRule('interactive-supports-focus', ERROR, [
+    .addRule(rn('interactive-supports-focus'), ERROR, [
       {
         tabbable: getKeysOfTruthyValues({
           ...defaultTabbableRoles,
@@ -454,15 +458,15 @@ export const jsxA11yUnConfig: UnConfigFn<
         }),
       },
     ])
-    .addRule('label-has-associated-control', ERROR, [
+    .addRule(rn('label-has-associated-control'), ERROR, [
       {
         ...(labelAttributes?.length && {labelAttributes}),
         ...(customComponents.labels?.length && {labelComponents: customComponents.labels}),
         ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
       },
     ])
-    .addRule('lang', ERROR) // 🔴
-    .addRule('media-has-caption', WARNING, [
+    .addRule(rn('lang'), ERROR) // 🔴
+    .addRule(rn('media-has-caption'), WARNING, [
       {
         ...(customComponents.audioElements?.length && {audio: customComponents.audioElements}),
         ...(customComponents.videoElements?.length && {video: customComponents.videoElements}),
@@ -470,7 +474,7 @@ export const jsxA11yUnConfig: UnConfigFn<
       },
     ])
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/mouse-events-have-key-events/
-    .addRule('mouse-events-have-key-events', isForAstro ? OFF : ERROR, [
+    .addRule(rn('mouse-events-have-key-events'), isForAstro ? OFF : ERROR, [
       {
         hoverInHandlers: getKeysOfTruthyValues({
           ...defaultHoverInHandlersRequiringOnFocus,
@@ -482,11 +486,11 @@ export const jsxA11yUnConfig: UnConfigFn<
         }),
       },
     ])
-    .addRule('no-access-key', ERROR)
-    .addRule('no-aria-hidden-on-focusable', WARNING) // 🔴
-    .addRule('no-autofocus', WARNING, [{ignoreNonDOM: true}])
-    .addRule('no-distracting-elements', ERROR)
-    .addRule('no-interactive-element-to-noninteractive-role', ERROR, [
+    .addRule(rn('no-access-key'), ERROR)
+    .addRule(rn('no-aria-hidden-on-focusable'), WARNING) // 🔴
+    .addRule(rn('no-autofocus'), WARNING, [{ignoreNonDOM: true}])
+    .addRule(rn('no-distracting-elements'), ERROR)
+    .addRule(rn('no-interactive-element-to-noninteractive-role'), ERROR, [
       {
         // Copied from `recommended` config
         // "The recommended options for this rule allow the `tr` element to be given a role of `presentation` (or its semantic equivalent none). Under normal circumstances, an element with an interactive role should not be semantically neutralized with `presentation` (or `none`)." - rule docs
@@ -494,7 +498,7 @@ export const jsxA11yUnConfig: UnConfigFn<
         canvas: ['img'],
       },
     ])
-    .addRule('no-noninteractive-element-interactions', ERROR, [
+    .addRule(rn('no-noninteractive-element-interactions'), ERROR, [
       {
         // TODO copied from `recommended` config
         handlers: [
@@ -514,7 +518,7 @@ export const jsxA11yUnConfig: UnConfigFn<
         img: ['onError', 'onLoad'],
       },
     ])
-    .addRule('no-noninteractive-element-to-interactive-role', ERROR, [
+    .addRule(rn('no-noninteractive-element-to-interactive-role'), ERROR, [
       {
         // TODO copied from `recommended` config
         ul: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
@@ -525,7 +529,7 @@ export const jsxA11yUnConfig: UnConfigFn<
         fieldset: ['radiogroup', 'presentation'],
       },
     ])
-    .addRule('no-noninteractive-tabindex', ERROR, [
+    .addRule(rn('no-noninteractive-tabindex'), ERROR, [
       // TODO copied from `recommended` config
       {
         tags: [],
@@ -533,24 +537,24 @@ export const jsxA11yUnConfig: UnConfigFn<
         allowExpressionValues: true,
       },
     ])
-    .addRule('no-redundant-roles', ERROR)
+    .addRule(rn('no-redundant-roles'), ERROR)
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/no-static-element-interactions/
-    .addRule('no-static-element-interactions', isForAstro ? OFF : ERROR, [
+    .addRule(rn('no-static-element-interactions'), isForAstro ? OFF : ERROR, [
       // TODO copied from `recommended` config
       {
         allowExpressionValues: true,
         handlers: ['onClick', 'onMouseDown', 'onMouseUp', 'onKeyPress', 'onKeyDown', 'onKeyUp'],
       },
     ])
-    .addRule('prefer-tag-over-role', OFF) // 🔴
-    .addRule('role-has-required-aria-props', ERROR)
-    .addRule('role-supports-aria-props', ERROR)
-    .addRule('scope', ERROR)
-    .addRule('tabindex-no-positive', ERROR)
+    .addRule(rn('prefer-tag-over-role'), OFF) // 🔴
+    .addRule(rn('role-has-required-aria-props'), ERROR)
+    .addRule(rn('role-supports-aria-props'), ERROR)
+    .addRule(rn('scope'), ERROR)
+    .addRule(rn('tabindex-no-positive'), ERROR)
     // Deprecated rules:
-    // .addRule('accessible-emoji', OFF)
-    // .addRule('label-has-for', OFF)
-    // .addRule('no-onchange', OFF)
+    // .addRule(rn('accessible-emoji'), OFF)
+    // .addRule(rn('label-has-for'), OFF)
+    // .addRule(rn('no-onchange'), OFF)
     .addOverrides();
 
   return {

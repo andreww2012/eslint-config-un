@@ -145,14 +145,14 @@ export const cloudfrontFunctionsEslintConfig: UnConfigFn<'cloudfrontFunctions'> 
 
       const allowedImports = getAllowedImports(isV2);
 
-      const configBuilder = createConfigBuilder(context, options, null);
+      const configBuilder = createConfigBuilder(context, options, '');
 
       configBuilder
         ?.addConfig([
           `cloudfront-functions/v${runtimeVersion}`,
           {includeDefaultFilesAndIgnores: true},
         ])
-        .addRule('no-unused-vars', ERROR, [
+        .addAnyRule('', 'no-unused-vars', ERROR, [
           {
             varsIgnorePattern: '^handler$',
           },
@@ -161,8 +161,8 @@ export const cloudfrontFunctionsEslintConfig: UnConfigFn<'cloudfrontFunctions'> 
         .addRule('prefer-destructuring', OFF)
         .addRule('prefer-object-has-own', OFF)
         .addRule('vars-on-top', isV2 ? null : OFF)
-        .addRule('unicorn/prefer-logical-operator-over-ternary', OFF)
-        .addRule('node/prefer-node-protocol', OFF)
+        .addAnyRule('unicorn', 'prefer-logical-operator-over-ternary', OFF)
+        .addAnyRule('node', 'prefer-node-protocol', OFF)
         .addRule('no-restricted-syntax', ERROR, [
           {
             selector: 'ExportNamedDeclaration',
@@ -214,12 +214,12 @@ export const cloudfrontFunctionsEslintConfig: UnConfigFn<'cloudfrontFunctions'> 
             message: genSyntaxNotAllowedErrorMessage('Use of the `process` global'),
           },
         ])
-        .addRule('node/no-missing-import', ERROR, [
+        .addAnyRule('node', 'no-missing-import', ERROR, [
           {
             allowModules: allowedImports,
           },
         ])
-        .addRule('node/no-missing-require', ERROR, [
+        .addAnyRule('node', 'no-missing-require', ERROR, [
           {
             allowModules: allowedImports,
           },

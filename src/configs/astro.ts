@@ -30,10 +30,12 @@ export interface AstroEslintConfigOptions
 const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
 
 export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
-  const [eslintPluginAstro, astroEslintParser] = await Promise.all([
-    pluginsLoaders.astro(),
-    interopDefault(import('astro-eslint-parser')),
-  ]);
+  const [eslintPluginAstro, astroEslintParser, {parser: typescriptEslintParser}] =
+    await Promise.all([
+      pluginsLoaders.astro(),
+      interopDefault(import('astro-eslint-parser')),
+      interopDefault(import('typescript-eslint')),
+    ]);
 
   const optionsRaw = context.rootOptions.configs?.astro;
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -59,8 +61,7 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
         globals: eslintPluginAstro.environments.astro.globals,
         parser: astroEslintParser,
         parserOptions: {
-          parser: isTypescriptEnabled ? '@typescript-eslint/parser' : undefined,
-          extraFileExtensions: ['.astro'],
+          parser: isTypescriptEnabled ? typescriptEslintParser : undefined,
         },
         sourceType: 'module',
       },
@@ -115,7 +116,7 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
         ? []
         : (
             await jsxA11yUnConfig(context, {
-              prefix: 'astro/jsx-a11y',
+              prefix: 'astro',
               options: {
                 files: parentConfigFiles,
                 ignores: parentConfigIgnores,

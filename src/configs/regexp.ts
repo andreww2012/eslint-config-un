@@ -20,7 +20,7 @@ export const regexpUnConfig: UnConfigFn<'regexp'> = async (context) => {
     // 🟢 Possible Errors
     // .addRule('no-contradiction-with-assertion', ERROR)
     // "This rule is inspired by the no-control-regex rule. The positions of reports are improved over the core rule and suggestions are provided in some cases"
-    .disableAnyRule('no-control-regex')
+    .disableAnyRule('', 'no-control-regex')
     .addRule('no-control-character', ERROR)
     // .addRule('no-dupe-disjunctions', ERROR)
     .addRule('no-empty-alternative', ERROR) // Default: warn
@@ -77,7 +77,7 @@ export const regexpUnConfig: UnConfigFn<'regexp'> = async (context) => {
     // .addRule('prefer-range', ERROR)
     // Same (?) as `@typescript-eslint/prefer-regexp-exec` which is turned off by default
     // .addRule('prefer-regexp-exec', OFF)
-    .disableAnyRule('unicorn/prefer-regexp-test')
+    .disableAnyRule('unicorn', 'prefer-regexp-test')
     .addRule('prefer-regexp-test', ERROR) // TODO better than the unicorn rule? Off by default
     // .addRule('prefer-set-operation', ERROR)
     // "This rule is inspired by the require-unicode-regexp rule. The position of the report is improved over the core rule and arguments of new RegExp() are also checked"

@@ -94,10 +94,12 @@ const DEFAULT_SVELTE_FILES: string[] = [GLOB_SVELTE];
 const DEFAULT_SVELTE_SCRIPT_FILES: string[] = ['**/*.svelte.{js,ts}'];
 
 export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
-  const [eslintPluginSvelte, svelteEslintParser] = await Promise.all([
-    pluginsLoaders.svelte(),
-    interopDefault(import('svelte-eslint-parser')),
-  ]);
+  const [eslintPluginSvelte, svelteEslintParser, {parser: typescriptEslintParser}] =
+    await Promise.all([
+      pluginsLoaders.svelte(),
+      interopDefault(import('svelte-eslint-parser')),
+      interopDefault(import('typescript-eslint')),
+    ]);
   if (!eslintPluginSvelte) {
     return null;
   }
@@ -141,8 +143,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
         languageOptions: {
           parser: svelteEslintParser,
           parserOptions: {
-            parser: isTypescriptEnabled ? '@typescript-eslint/parser' : undefined,
-            extraFileExtensions: ['.svelte'],
+            parser: isTypescriptEnabled ? typescriptEslintParser : undefined,
             ...(svelteKitConfig && {svelteConfig: svelteKitConfig}),
           },
           sourceType: 'module',
@@ -159,7 +160,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     // "This rule is a system rule for working the this plugin. This rule does not report any errors, but make sure the rule is enabled for the this plugin to work properly"
     .addRule('system', ERROR) // 🟢 >=0.0.13
     // Crashes on `statement.expression.type` (`expression` is null)
-    .disableAnyRule('sonarjs/no-unused-collection');
+    .disableAnyRule('sonarjs', 'no-unused-collection');
 
   // Legend:
   // 🟢 - in Recommended

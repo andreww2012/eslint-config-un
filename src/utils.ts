@@ -9,7 +9,7 @@ export {defu as assignDefaults} from 'defu';
 
 export {klona as cloneDeep} from 'klona';
 
-export {memoize} from 'es-toolkit';
+export {invert as invertObject, mapKeys, memoize} from 'es-toolkit';
 
 export const assignOptions = <T>(options: T, key: keyof T) => ({
   ...(typeof options[key] === 'object' && options[key]),

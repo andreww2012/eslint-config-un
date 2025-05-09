@@ -15,6 +15,7 @@ import {
   WARNING,
 } from './constants';
 import type {RuleOptions} from './eslint-types';
+import type {LoadablePluginPrefix} from './plugins';
 import type {
   FalsyValue,
   OmitIndexSignature,
@@ -25,14 +26,7 @@ import type {
   RemovePrefix,
   SetRequired,
 } from './types';
-import {
-  type MaybeArray,
-  type MaybeFn,
-  arraify,
-  cloneDeep,
-  maybeCall,
-  objectEntriesUnsafe,
-} from './utils';
+import {type MaybeFn, cloneDeep, maybeCall, objectEntriesUnsafe} from './utils';
 
 type EslintSeverity = Eslint.Linter.RuleSeverity;
 
@@ -57,7 +51,8 @@ export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShall
 >;
 
 export type DisableAutofixPrefix = 'disable-autofix';
-export const DISABLE_AUTOFIX_WITH_SLASH = `${'disable-autofix' satisfies DisableAutofixPrefix}/`;
+export const DISABLE_AUTOFIX = 'disable-autofix' satisfies DisableAutofixPrefix;
+export const DISABLE_AUTOFIX_WITH_SLASH = `${DISABLE_AUTOFIX}/`;
 
 export type AllEslintRulesWithDisableAutofix = OmitIndexSignature<FlatConfigEntry['rules'] & {}>;
 // Need to exclude `disable-autofix` rules to avoid TS issues related to big unions
@@ -206,19 +201,68 @@ const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, EslintSeverity
   error: 2,
 };
 
-export class ConfigEntryBuilder<RulesPrefix extends string | null = string | null> {
-  private readonly rulesPrefix: RulesPrefix;
+interface AddRuleOptions {
+  overrideBaseRule?: boolean | keyof AllEslintRulesWithoutDisableAutofix;
+  disableAutofix?: boolean;
+}
+
+export const resolveOverrides = (
+  context: UnConfigContext,
+  overrides: OverridesWithMaybeFunction<object>,
+  existingRules?: Partial<RulesRecord>,
+) =>
+  Object.fromEntries(
+    objectEntriesUnsafe(overrides).map(
+      ([ruleNameRaw, ruleOptions]: [string, Eslint.Linter.RuleEntry]) => {
+        const pluginRenames = Object.entries(context.rootOptions.pluginRenames || {});
+        let ruleName = ruleNameRaw;
+        for (const [from, to] of pluginRenames) {
+          const isStartsWithFrom = ruleNameRaw.startsWith(`${from}/`);
+          if (isStartsWithFrom) {
+            ruleName = `${to}/${ruleNameRaw.slice(from.length + 1)}`;
+            break;
+          }
+          const isStartsWithFromAndDisableAutofix = ruleNameRaw.startsWith(
+            `${DISABLE_AUTOFIX}/${from}/`,
+          );
+          if (isStartsWithFromAndDisableAutofix) {
+            ruleName = `${DISABLE_AUTOFIX}/${to}/${ruleNameRaw.slice(DISABLE_AUTOFIX.length + 1 + from.length + 1)}`;
+            break;
+          }
+        }
+
+        const existingRuleRecord = existingRules?.[ruleName];
+
+        const rawSeverity = Array.isArray(existingRuleRecord)
+          ? existingRuleRecord[0]
+          : existingRuleRecord;
+        const severity =
+          typeof rawSeverity === 'string'
+            ? STRING_SEVERITY_TO_NUMERIC[rawSeverity as EslintSeverity & string]
+            : rawSeverity;
+
+        const options = Array.isArray(existingRuleRecord) ? existingRuleRecord.slice(1) : undefined;
+        return [ruleName, maybeCall(ruleOptions, severity, options)];
+      },
+    ),
+  );
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null = any> {
+  private readonly rulesPrefix: PluginPrefix;
   private readonly options: ConfigSharedOptions<
-    RulesPrefix extends null ? RulesRecord : RulesPrefix
+    PluginPrefix extends null ? RulesRecord : PluginPrefix
   >;
   private readonly context: UnConfigContext;
 
   constructor(
-    rulesPrefix: RulesPrefix,
-    options: ConfigSharedOptions<RulesPrefix extends null ? RulesRecord : RulesPrefix>,
+    rulesPrefix: PluginPrefix,
+    options: ConfigSharedOptions<PluginPrefix extends null ? RulesRecord : PluginPrefix>,
     context: UnConfigContext,
   ) {
-    this.rulesPrefix = rulesPrefix;
+    this.rulesPrefix = rulesPrefix
+      ? (context.rootOptions.pluginRenames?.[rulesPrefix] as PluginPrefix) || rulesPrefix
+      : rulesPrefix;
     this.options = options;
     this.context = context;
   }
@@ -309,118 +353,132 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null = string | nul
     this.configs.push(configFinal);
     this.configsDict.set(configName, configFinal);
 
-    const generateAddRuleFn =
-      <AllowAnyRule extends boolean>(allowAnyRule: AllowAnyRule) =>
-      <
-        // prettier-ignore
-        RuleName extends (AllowAnyRule extends true
-          ? keyof AllEslintRulesWithoutDisableAutofix
-          : AllRulesWithPrefixUnprefixedNames<RulesPrefix>),
-        Severity extends RuleSeverity,
-      >(
-        ruleName: RuleName,
-        severity: Severity | null,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore ignores the following error during declaration file build: "error TS2859: Excessive complexity comparing types 'RuleName' and '"curly" | "unicorn/template-indent" | "@eslint-community/eslint-comments/disable-enable-pair" | "@eslint-community/eslint-comments/no-aggregating-enable" | "@eslint-community/eslint-comments/no-duplicate-disable" | ... 1725 more ... | "yoda"'"
-        ruleOptions?: GetRuleOptions<
-          (AllowAnyRule extends true
-            ? RuleName
-            : RulesPrefix extends '' | null
-              ? RuleName
-              : `${RulesPrefix}/${RuleName}`) &
-            keyof AllEslintRulesWithoutDisableAutofix
-        >,
-        options?: {
-          overrideBaseRule?: boolean | keyof AllEslintRulesWithoutDisableAutofix;
-          disableAutofix?: boolean;
-        },
-      ) => {
-        if (severity == null) {
-          // eslint-disable-next-line @typescript-eslint/no-use-before-define
-          return result;
-        }
-
-        const {errorsInsteadOfWarnings} = this.context.rootOptions;
-
-        const ruleNameWithPrefix =
-          allowAnyRule || !this.rulesPrefix
-            ? ruleName
-            : (`${this.rulesPrefix}/${ruleName}` as const);
-        const severityFinal: RuleSeverity =
-          (configOptions.forceSeverity as RuleSeverity | undefined) ??
-          (severity === WARNING &&
-          (errorsInsteadOfWarnings === true ||
-            (Array.isArray(errorsInsteadOfWarnings) &&
-              errorsInsteadOfWarnings.includes(ruleNameWithPrefix)))
-            ? ERROR
-            : severity);
-
-        const ruleNameFinal =
-          `${options?.disableAutofix ? DISABLE_AUTOFIX_WITH_SLASH : ''}${ruleNameWithPrefix}` as const;
-        configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
-        // If the rule is disabled, disable its autofix counterpart rule as well
-        if (severityFinal === OFF && !ruleNameFinal.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {
-          configFinal.rules[`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameFinal}`] = OFF;
-        }
-
-        if (options?.disableAutofix) {
-          configFinal.rules[ruleNameWithPrefix] = 0 /* Off */;
-        }
-
-        if (options?.overrideBaseRule) {
-          const baseRuleName =
-            typeof options.overrideBaseRule === 'string'
-              ? options.overrideBaseRule
-              : ruleNameWithPrefix.split('/').slice(1).join('/');
-          if (baseRuleName) {
-            configFinal.rules[baseRuleName] = 0 /* Off */;
-          }
-        }
+    const addRule = <RuleName extends keyof AllEslintRulesWithoutDisableAutofix>(
+      ruleName: RuleName,
+      severity: RuleSeverity | null,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore ignores the following error during declaration file build: "error TS2859: Excessive complexity comparing types 'RuleName' and '"curly" | "unicorn/template-indent" | "@eslint-community/eslint-comments/disable-enable-pair" | "@eslint-community/eslint-comments/no-aggregating-enable" | "@eslint-community/eslint-comments/no-duplicate-disable" | ... 1725 more ... | "yoda"'"
+      ruleOptions?: GetRuleOptions<RuleName & keyof AllEslintRulesWithoutDisableAutofix>,
+      options?: AddRuleOptions,
+    ) => {
+      if (severity == null) {
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
         return result;
-      };
+      }
+
+      const {errorsInsteadOfWarnings} = this.context.rootOptions;
+
+      const severityFinal: RuleSeverity =
+        (configOptions.forceSeverity as RuleSeverity | undefined) ??
+        (severity === WARNING &&
+        (errorsInsteadOfWarnings === true ||
+          (Array.isArray(errorsInsteadOfWarnings) && errorsInsteadOfWarnings.includes(ruleName)))
+          ? ERROR
+          : severity);
+
+      const ruleNameFinal =
+        `${options?.disableAutofix ? DISABLE_AUTOFIX_WITH_SLASH : ''}${ruleName}` as const;
+      configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
+      // If the rule is disabled, disable its autofix counterpart rule as well
+      if (severityFinal === OFF && !ruleNameFinal.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {
+        configFinal.rules[`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameFinal}`] = OFF;
+      }
+
+      if (options?.disableAutofix) {
+        // @ts-expect-error "Expression produces a union type that is too complex to represent.ts(2590)"
+        configFinal.rules[ruleName] = 0 /* Off */;
+      }
+
+      if (options?.overrideBaseRule) {
+        const baseRuleName =
+          typeof options.overrideBaseRule === 'string'
+            ? options.overrideBaseRule
+            : ruleName.split('/').slice(1).join('/');
+        if (baseRuleName) {
+          configFinal.rules[baseRuleName] = 0 /* Off */;
+        }
+      }
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      return result;
+    };
 
     const result = {
       config: configFinal,
-      addRule: generateAddRuleFn(false),
-      addAnyRule: generateAddRuleFn(true),
-      disableAnyRule: (ruleNames: MaybeArray<keyof AllEslintRulesWithoutDisableAutofix>) => {
-        arraify(ruleNames).forEach((ruleName) => {
-          Object.assign(configFinal.rules, {
-            [ruleName]: 0,
-            [`${'disable-autofix' satisfies DisableAutofixPrefix}/${ruleName}`]: 0,
-          });
+
+      addRule: <
+        N extends AllRulesWithPrefixUnprefixedNames<PluginPrefix>,
+        Severity extends RuleSeverity,
+      >(
+        ruleName: N,
+        severity: Severity | null,
+        ruleOptions?: NoInfer<
+          GetRuleOptions<
+            (PluginPrefix extends '' ? N : `${PluginPrefix}/${N}`) &
+              keyof AllEslintRulesWithoutDisableAutofix
+          >
+        >,
+        options?: AddRuleOptions,
+      ) =>
+        // @ts-expect-error "Expression produces a union type that is too complex to represent"
+        addRule(
+          (this.rulesPrefix
+            ? `${this.rulesPrefix}/${ruleName}`
+            : ruleName) as keyof AllEslintRulesWithoutDisableAutofix,
+          severity,
+          ruleOptions,
+          options,
+        ),
+
+      addAnyRule: <
+        P extends LoadablePluginPrefix,
+        N extends AllRulesWithPrefixUnprefixedNames<P>,
+        Severity extends RuleSeverity,
+      >(
+        prefix: P,
+        ruleName: N,
+        severity: Severity,
+        ruleOptions?: NoInfer<
+          GetRuleOptions<
+            (P extends '' ? N : `${P}/${N}`) & keyof AllEslintRulesWithoutDisableAutofix
+          >
+        >,
+        options?: AddRuleOptions,
+      ) => {
+        const prefixFinal = (this.context.rootOptions.pluginRenames?.[prefix] || prefix) as P;
+        return addRule(
+          (prefixFinal
+            ? `${prefixFinal}/${ruleName}`
+            : ruleName) as keyof AllEslintRulesWithoutDisableAutofix,
+          severity,
+          ruleOptions,
+          options,
+        );
+      },
+
+      disableAnyRule: <P extends LoadablePluginPrefix>(
+        prefix: P,
+        ruleName: AllRulesWithPrefixUnprefixedNames<P>,
+      ) => {
+        const prefixFinal = this.context.rootOptions.pluginRenames?.[prefix] || prefix;
+        const ruleNameFinal = prefixFinal ? `${prefixFinal}/${ruleName}` : ruleName;
+        Object.assign(configFinal.rules, {
+          [ruleNameFinal]: 0,
+          [`${DISABLE_AUTOFIX}/${ruleNameFinal}`]: 0,
         });
         return result;
       },
+
       addOverrides: () => {
         const ourRules = configFinal.rules;
         Object.assign(
           ourRules,
-          Object.fromEntries(
-            // Need to use "!" here to not break the type
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-non-null-assertion
-            objectEntriesUnsafe(this.options.overrides! || {}).map(([k, v]) => {
-              const existingRuleRecord = ourRules[k];
-              const rawSeverity = Array.isArray(existingRuleRecord)
-                ? existingRuleRecord[0]
-                : existingRuleRecord;
-              const severity =
-                typeof rawSeverity === 'string'
-                  ? // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-                    STRING_SEVERITY_TO_NUMERIC[rawSeverity as EslintSeverity & string]
-                  : (rawSeverity as EslintSeverity & number);
-              const options = Array.isArray(existingRuleRecord)
-                ? existingRuleRecord.slice(1)
-                : undefined;
-              return [k, maybeCall(v, severity, options)];
-            }),
-          ),
+          resolveOverrides(this.context, this.options.overrides || {}, ourRules),
         );
         return result;
       },
+
       addBulkRules: (rules: AllRulesWithPrefix<null> | FalsyValue) => {
-        Object.assign(configFinal.rules, rules);
+        Object.assign(configFinal.rules, resolveOverrides(this.context, rules || {}));
         return result;
       },
     };
@@ -437,10 +495,10 @@ export class ConfigEntryBuilder<RulesPrefix extends string | null = string | nul
   }
 }
 
-export const createConfigBuilder = <RulesPrefix extends string | null>(
+export const createConfigBuilder = <PluginPrefix extends LoadablePluginPrefix | null>(
   context: UnConfigContext,
-  options: ConfigSharedOptions<RulesPrefix extends null ? RulesRecord : RulesPrefix> | boolean,
-  rulesPrefix: RulesPrefix,
+  options: ConfigSharedOptions<PluginPrefix extends null ? RulesRecord : PluginPrefix> | boolean,
+  rulesPrefix: PluginPrefix,
   disabledIfEmptyFiles = true,
 ) => {
   const optionsResolved = typeof options === 'object' ? options : {};

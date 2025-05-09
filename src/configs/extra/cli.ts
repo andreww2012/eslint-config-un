@@ -31,12 +31,10 @@ export const cliEslintConfig: UnConfigFn<'cli'> = (context) => {
         ),
       },
     ])
-    .disableAnyRule([
-      'node/no-process-exit',
-      'unicorn/no-process-exit',
-      'no-console',
-      'import/no-extraneous-dependencies',
-    ])
+    .disableAnyRule('node', 'no-process-exit')
+    .disableAnyRule('unicorn', 'no-process-exit')
+    .disableAnyRule('', 'no-console')
+    .disableAnyRule('import', 'no-extraneous-dependencies')
     .addOverrides();
 
   return {

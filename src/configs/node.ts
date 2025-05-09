@@ -220,7 +220,7 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
     .addRule('no-path-concat', ERROR)
     // .addRule('no-process-env', OFF)
     .addRule('no-process-exit', OFF) // The corresponding Unicorn rule is better: https://github.com/sindresorhus/eslint-plugin-unicorn/blob/1deb9bb5edf27fdb2f656add11c924dfa59fdac9/docs/rules/no-process-exit.md
-    .addAnyRule('unicorn/no-process-exit', ERROR) // TODO
+    .addAnyRule('unicorn', 'no-process-exit', ERROR) // TODO
     // .addRule('no-restricted-import', OFF)
     // .addRule('no-restricted-require', OFF)
     // .addRule('no-sync', OFF)
@@ -248,7 +248,8 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
     .addRule('prefer-promises/fs', OFF) // TODO enable?
     .addRule('process-exit-as-throw', ERROR) // Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-node/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
     .addAnyRule(
-      'unicorn/prefer-import-meta-properties',
+      'unicorn',
+      'prefer-import-meta-properties',
       isFirstSemverRangeIsSubsetOfSecond(userNodeVersion, IMPORT_META_PROPERTIES_AVAILABLE_SINCE)
         ? ERROR
         : OFF,

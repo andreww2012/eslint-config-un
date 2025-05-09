@@ -113,4 +113,8 @@ export const pluginsLoaders = {
     interopDefault<EslintPlugin>(import('eslint-plugin-solid')),
 } satisfies Record<string, () => Promise<EslintPlugin | null>>;
 
-export type LoadablePluginPrefix = keyof typeof pluginsLoaders;
+export type LoadablePluginPrefix =
+  | keyof typeof pluginsLoaders
+  | ''
+  | '@angular-eslint'
+  | '@angular-eslint/template';

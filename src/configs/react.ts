@@ -9,7 +9,6 @@ import {
 } from '../constants';
 import {
   type AllEslintRulesWithDisableAutofix,
-  type AllEslintRulesWithoutDisableAutofix,
   type AllRulesWithPrefix,
   type AllRulesWithPrefixUnprefixedNames,
   type ConfigSharedOptions,
@@ -589,9 +588,12 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
     nameOriginal?: B,
   ) => {
     const nameXUnprefixed = nameX.match(/^(?:[^/]+\/)?(.*)$/)?.[1] as A;
-    const result =
-      `${isReactXPreferred ? '@eslint-react/' : 'react/'}${isReactXPreferred ? nameX : (nameOriginal ?? nameXUnprefixed)}` as const;
-    return result as typeof result & keyof AllEslintRulesWithoutDisableAutofix;
+    const prefix = isReactXPreferred ? '@eslint-react' : 'react';
+    const name = isReactXPreferred ? nameX : (nameOriginal ?? nameXUnprefixed);
+    return [prefix, name] as const;
+    // const result =
+    //   `${isReactXPreferred ? '@eslint-react/' : 'react/'}${isReactXPreferred ? nameX : (nameOriginal ?? nameXUnprefixed)}` as const;
+    // return result as typeof result & keyof AllEslintRulesWithoutDisableAutofix;
   };
   const getDoubleRuleSeverity = (severity: RuleSeverity, isXRule?: boolean) =>
     (isReactXPreferred && !isReactXEnabled) ||
@@ -606,7 +608,7 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
 
   const configReactXOptions = typeof configReactX === 'object' ? configReactX : {};
 
-  const configBuilderSetup = createConfigBuilder(context, {}, null, false);
+  const configBuilderSetup = createConfigBuilder(context, {}, '', false);
   configBuilderSetup?.addConfig('react/setup', {
     settings: {
       ...(isReactEnabled && {
@@ -878,7 +880,7 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
         filesFallback: [GLOB_JS_TS_X_ONLY],
       },
     ])
-    .disableAnyRule('import/no-default-export')
+    .disableAnyRule('import', 'no-default-export')
     .addOverrides();
 
   const configBuilderHooks = createConfigBuilder(context, configHooks, null);
@@ -891,21 +893,24 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
         ignoresFallback: parentConfigIgnores,
       },
     ])
-    .addRule('react-hooks/exhaustive-deps', ERROR)
-    .addRule('react-hooks/rules-of-hooks', ERROR)
-    .addRule(
-      '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect',
+    .addAnyRule('react-hooks', 'exhaustive-deps', ERROR)
+    .addAnyRule('react-hooks', 'rules-of-hooks', ERROR)
+    .addAnyRule(
+      '@eslint-react/hooks-extra',
+      'no-direct-set-state-in-use-effect',
       getXRuleSeverity(WARNING),
     ) // 🟡
-    .addRule(
-      '@eslint-react/hooks-extra/no-direct-set-state-in-use-layout-effect',
+    .addAnyRule(
+      '@eslint-react/hooks-extra',
+      'no-direct-set-state-in-use-layout-effect',
       getXRuleSeverity(WARNING),
     )
-    .addRule('@eslint-react/hooks-extra/no-unnecessary-use-callback', getXRuleSeverity(ERROR))
-    .addRule('@eslint-react/hooks-extra/no-unnecessary-use-memo', getXRuleSeverity(ERROR))
-    .addRule('@eslint-react/hooks-extra/no-unnecessary-use-prefix', getXRuleSeverity(OFF)) // 🟡
-    .addRule(
-      '@eslint-react/hooks-extra/prefer-use-state-lazy-initialization',
+    .addAnyRule('@eslint-react/hooks-extra', 'no-unnecessary-use-callback', getXRuleSeverity(ERROR))
+    .addAnyRule('@eslint-react/hooks-extra', 'no-unnecessary-use-memo', getXRuleSeverity(ERROR))
+    .addAnyRule('@eslint-react/hooks-extra', 'no-unnecessary-use-prefix', getXRuleSeverity(OFF)) // 🟡
+    .addAnyRule(
+      '@eslint-react/hooks-extra',
+      'prefer-use-state-lazy-initialization',
       getXRuleSeverity(WARNING),
     ) // 🟡
     .addOverrides();
@@ -1119,67 +1124,67 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
         ignoresFallback: parentConfigIgnores,
       },
     ])
-    .addRule(
-      getDoubleRuleName('dom/no-dangerously-set-innerhtml', 'no-danger'),
+    .addAnyRule(
+      ...getDoubleRuleName('dom/no-dangerously-set-innerhtml', 'no-danger'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`no-danger`
-    .addRule(
-      getDoubleRuleName(
+    .addAnyRule(
+      ...getDoubleRuleName(
         'dom/no-dangerously-set-innerhtml-with-children',
         'no-danger-with-children',
       ),
       getDoubleRuleSeverity(ERROR),
     ) // 🟢 🔄️`no-danger-with-children`
     // Deprecated API, removed in v19
-    .addRule(getDoubleRuleName('dom/no-find-dom-node'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
-    .addRule('@eslint-react/dom/no-flush-sync', getXRuleSeverity(ERROR)) // 🟢
+    .addAnyRule(...getDoubleRuleName('dom/no-find-dom-node'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
+    .addAnyRule('@eslint-react/dom', 'no-flush-sync', getXRuleSeverity(ERROR)) // 🟢
     // Deprecated API, removed in v19
-    .addRule('@eslint-react/dom/no-hydrate', getXRuleSeverity(ERROR)) // 🟢 🔢18.0.0
-    .addRule(
-      getDoubleRuleName('dom/no-missing-button-type', 'button-has-type'),
+    .addAnyRule('@eslint-react/dom', 'no-hydrate', getXRuleSeverity(ERROR)) // 🟢 🔢18.0.0
+    .addAnyRule(
+      ...getDoubleRuleName('dom/no-missing-button-type', 'button-has-type'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`button-has-type`
-    .addRule(
-      getDoubleRuleName('dom/no-missing-iframe-sandbox', 'iframe-missing-sandbox'),
+    .addAnyRule(
+      ...getDoubleRuleName('dom/no-missing-iframe-sandbox', 'iframe-missing-sandbox'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`iframe-missing-sandbox`
-    .addRule(getDoubleRuleName('dom/no-namespace'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
+    .addAnyRule(...getDoubleRuleName('dom/no-namespace'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
     // Deprecated API, removed in v19
-    .addRule('@eslint-react/dom/no-render', getXRuleSeverity(ERROR)) // 🟢 🔢18.0.0
-    .addRule(getDoubleRuleName('dom/no-render-return-value'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
-    .addRule(
-      getDoubleRuleName('dom/no-script-url', 'jsx-no-script-url'),
+    .addAnyRule('@eslint-react/dom', 'no-render', getXRuleSeverity(ERROR)) // 🟢 🔢18.0.0
+    .addAnyRule(...getDoubleRuleName('dom/no-render-return-value'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
+    .addAnyRule(
+      ...getDoubleRuleName('dom/no-script-url', 'jsx-no-script-url'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`jsx-no-script-url`
-    .addRule(getDoubleRuleName('dom/no-unknown-property'), getDoubleRuleSeverity(ERROR), [
+    .addAnyRule(...getDoubleRuleName('dom/no-unknown-property'), getDoubleRuleSeverity(ERROR), [
       {requireDataLowercase: true},
     ]) // 🔄️
-    .addRule(
-      getDoubleRuleName('dom/no-unsafe-iframe-sandbox', 'iframe-missing-sandbox'),
+    .addAnyRule(
+      ...getDoubleRuleName('dom/no-unsafe-iframe-sandbox', 'iframe-missing-sandbox'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`iframe-missing-sandbox`
-    .addRule(
-      getDoubleRuleName('dom/no-unsafe-target-blank', 'jsx-no-target-blank'),
+    .addAnyRule(
+      ...getDoubleRuleName('dom/no-unsafe-target-blank', 'jsx-no-target-blank'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`jsx-no-target-blank`
     // React 19 docs: "In earlier React Canary versions, this API was part of React DOM and called useFormState."
-    .addRule('@eslint-react/dom/no-use-form-state', getXRuleSeverity(ERROR)) // 🟢 🔢19.0.0
-    .addRule(
-      getDoubleRuleName('dom/no-void-elements-with-children', 'void-dom-elements-no-children'),
+    .addAnyRule('@eslint-react/dom', 'no-use-form-state', getXRuleSeverity(ERROR)) // 🟢 🔢19.0.0
+    .addAnyRule(
+      ...getDoubleRuleName('dom/no-void-elements-with-children', 'void-dom-elements-no-children'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟢 🔄️`void-dom-elements-no-children`
     // === Web API rules ===
-    .addRule('@eslint-react/web-api/no-leaked-event-listener', getXRuleSeverity(ERROR)) // 🟡
-    .addRule('@eslint-react/web-api/no-leaked-interval', getXRuleSeverity(ERROR)) // 🟡
-    .addRule('@eslint-react/web-api/no-leaked-resize-observer', getXRuleSeverity(ERROR)) // 🟡
-    .addRule('@eslint-react/web-api/no-leaked-timeout', getXRuleSeverity(ERROR)) // 🟡
+    .addAnyRule('@eslint-react/web-api', 'no-leaked-event-listener', getXRuleSeverity(ERROR)) // 🟡
+    .addAnyRule('@eslint-react/web-api', 'no-leaked-interval', getXRuleSeverity(ERROR)) // 🟡
+    .addAnyRule('@eslint-react/web-api', 'no-leaked-resize-observer', getXRuleSeverity(ERROR)) // 🟡
+    .addAnyRule('@eslint-react/web-api', 'no-leaked-timeout', getXRuleSeverity(ERROR)) // 🟡
     // === eslint-plugin-react DOM rules ===
-    .addRule('react/checked-requires-onchange-or-readonly', ERROR, [
+    .addAnyRule('react', 'checked-requires-onchange-or-readonly', ERROR, [
       {ignoreMissingProperties: true},
     ])
-    .addRule('react/forbid-dom-props', OFF)
-    .addRule('react/no-invalid-html-attribute', ERROR)
-    .addRule('react/no-is-mounted', ERROR) // 🟢
+    .addAnyRule('react', 'forbid-dom-props', OFF)
+    .addAnyRule('react', 'no-invalid-html-attribute', ERROR)
+    .addAnyRule('react', 'no-is-mounted', ERROR) // 🟢
     .addOverrides();
 
   const isRemixOrReactRouterInstalled = (

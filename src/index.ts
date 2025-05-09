@@ -61,10 +61,18 @@ import {
   disableAutofixForAllRulesInPlugin,
   eslintPluginVanillaRules,
   genFlatConfigEntryName,
+  resolveOverrides,
 } from './eslint';
 import {pluginsLoaders} from './plugins';
 import type {FalsyValue, Promisable} from './types';
-import {type MaybeArray, assignDefaults, doesPackageExist, fetchPackageInfo} from './utils';
+import {
+  type MaybeArray,
+  assignDefaults,
+  doesPackageExist,
+  fetchPackageInfo,
+  invertObject,
+  mapKeys,
+} from './utils';
 
 // TODO debug
 
@@ -233,12 +241,13 @@ export const eslintConfig = async (
     isSvelteEnabled && svelteUnConfig(context),
   ]);
 
-  const rootConfigBuilder = createConfigBuilder(context, {}, null);
+  const rootConfigBuilder = createConfigBuilder(context, {}, '');
   rootConfigBuilder
     ?.addConfig('config-files', {
       files: GLOB_CONFIG_FILES,
     })
-    .disableAnyRule(['import/no-extraneous-dependencies', 'node/no-unpublished-require']);
+    .disableAnyRule('import', 'no-extraneous-dependencies')
+    .disableAnyRule('node', 'no-unpublished-require');
   rootConfigBuilder
     ?.addConfig('allow-default-export', {
       files: [
@@ -250,7 +259,7 @@ export const eslintConfig = async (
         '.storybook/**/*',
       ],
     })
-    .disableAnyRule('import/no-default-export');
+    .disableAnyRule('import', 'no-default-export');
 
   const unresolvedConfigs = Promise.all([
     globalIgnores.length > 0 && {
@@ -338,7 +347,11 @@ export const eslintConfig = async (
     isCliEnabled && cliEslintConfig(context),
     isCloudfrontFunctionsEnabled && cloudfrontFunctionsEslintConfig(context),
 
-    ...extraConfigs,
+    ...extraConfigs.map((config, configIndex) => ({
+      ...config,
+      ...(config.rules && {rules: resolveOverrides(context, config.rules)}),
+      name: genFlatConfigEntryName(`extra-config/${config.name || `unnamed${configIndex}`}`),
+    })),
 
     // MUST be last
     !optionsResolved.disablePrettierIncompatibleRules && {
@@ -399,10 +412,16 @@ export const eslintConfig = async (
       : '',
   ]);
 
+  const reversePluginRenames = invertObject(
+    // @ts-expect-error `invertObject` type could be better
+    optionsResolved.pluginRenames || {},
+  );
+
   const loadedPlugins = Object.fromEntries(
     (
       await Promise.all(
-        usedPluginPrefixes.map(async (pluginPrefix) => {
+        usedPluginPrefixes.map(async (pluginPrefixRaw) => {
+          const pluginPrefix = reversePluginRenames[pluginPrefixRaw] || pluginPrefixRaw;
           if (!(pluginPrefix in pluginsLoaders)) {
             return null;
           }
@@ -422,12 +441,15 @@ export const eslintConfig = async (
     ).filter((v) => v != null),
   );
 
-  const allPlugins: Record<string, EslintPlugin> = {
-    ...loadedPlugins,
-    ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
-    ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
-    ...angularEslintConfigResult?.plugins,
-  };
+  const allPlugins = mapKeys(
+    {
+      ...loadedPlugins,
+      ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
+      ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
+      ...angularEslintConfigResult?.plugins,
+    } satisfies Record<string, EslintPlugin>,
+    (_, k) => optionsResolved.pluginRenames?.[k] || k,
+  );
 
   resolvedConfigs.unshift({
     name: genFlatConfigEntryName('global-setup/plugins'),

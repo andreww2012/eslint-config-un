@@ -1,6 +1,7 @@
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {ConfigEntryBuilder, FlatConfigEntry} from '../eslint';
+import type {LoadablePluginPrefix} from '../plugins';
 import type {Promisable} from '../types';
 import type {fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
@@ -84,16 +85,28 @@ export interface EslintConfigUnOptions {
    */
   errorsInsteadOfWarnings?: boolean | string[];
 
-  extraConfigs?: FlatConfigEntry[];
-
-  // TODO note about plugins that can be used in multiple places?
   configs?: Partial<UnConfigs>;
+
+  extraConfigs?: FlatConfigEntry[];
 
   /**
    * Only load ESLint plugins if they are actually used.
    * @default true
    */
   loadPluginsOnDemand?: boolean;
+
+  /**
+   * Allows to change a plugin prefix. Keys are the default prefixes, value cannot be empty
+   * string (or it will be ignored anyway).
+   *
+   * You have to still use **OLD** prefixes in `overrides`, and they will be automatically renamed.
+   * @example
+   * ```ts
+   * // To make all the rules from `typescript-eslint` plugin have `ts` prefix:
+   * {'@typescript-eslint': 'ts'}
+   * ```
+   */
+  pluginRenames?: Partial<Record<LoadablePluginPrefix, string>>;
 }
 
 export type UnConfigOptions<T extends object> = boolean | Partial<T>;
@@ -452,8 +465,7 @@ export type UnConfigFn<
 ) => Promisable<
   | null
   | ({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      configs: (ConfigEntryBuilder<any> | null)[];
+      configs: (ConfigEntryBuilder | null)[];
       optionsResolved: UnConfigs[T] & object & {};
     } & ExtraReturnedData)
 >;
