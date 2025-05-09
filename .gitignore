@@ -2,6 +2,7 @@ dist/
 src/eslint-types.d.ts
 test/*
 TODO.md
+temp/
 
 ####################
 # Nodejs gitignore #
