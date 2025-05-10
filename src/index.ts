@@ -63,7 +63,7 @@ import {
   genFlatConfigEntryName,
   resolveOverrides,
 } from './eslint';
-import {pluginsLoaders} from './plugins';
+import {type LoadablePluginPrefix, PLUGIN_PREFIXES_LIST, pluginsLoaders} from './plugins';
 import type {FalsyValue, Promisable} from './types';
 import {
   type MaybeArray,
@@ -96,8 +96,19 @@ export const eslintConfig = async (
     extraConfigs,
     ignores,
     overrideIgnores,
+    pluginRenames = {},
     loadPluginsOnDemand,
   } = optionsResolved;
+
+  const pluginRenamesList = Object.values(pluginRenames);
+  if (
+    new Set(pluginRenamesList).size !== pluginRenamesList.length ||
+    pluginRenamesList.some((v) => PLUGIN_PREFIXES_LIST.includes(v as LoadablePluginPrefix))
+  ) {
+    throw new Error(
+      'Invalid plugin renames: new names must be unique and different from the default plugin prefixes',
+    );
+  }
 
   // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
   const globalIgnores = [...(overrideIgnores ? [] : DEFAULT_GLOBAL_IGNORES), ...(ignores || [])];
@@ -414,7 +425,7 @@ export const eslintConfig = async (
 
   const reversePluginRenames = invertObject(
     // @ts-expect-error `invertObject` type could be better
-    optionsResolved.pluginRenames || {},
+    pluginRenames,
   );
 
   const loadedPlugins = Object.fromEntries(
@@ -448,7 +459,7 @@ export const eslintConfig = async (
       ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
       ...angularEslintConfigResult?.plugins,
     } satisfies Record<string, EslintPlugin>,
-    (_, k) => optionsResolved.pluginRenames?.[k] || k,
+    (_, k) => pluginRenames[k] || k,
   );
 
   resolvedConfigs.unshift({

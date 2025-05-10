@@ -1,6 +1,6 @@
 import {fixupPluginRules} from '@eslint/compat';
 import type {EslintPlugin} from './eslint';
-import {interopDefault} from './utils';
+import {interopDefault, objectKeysUnsafe} from './utils';
 
 export const pluginsLoaders = {
   '@eslint-community/eslint-comments': () =>
@@ -118,3 +118,9 @@ export type LoadablePluginPrefix =
   | ''
   | '@angular-eslint'
   | '@angular-eslint/template';
+
+export const PLUGIN_PREFIXES_LIST: LoadablePluginPrefix[] = [
+  ...objectKeysUnsafe(pluginsLoaders),
+  '@angular-eslint',
+  '@angular-eslint/template',
+];
