@@ -126,7 +126,12 @@ export const eslintConfig = async (
       ),
     ),
     detectPackageManager(),
-    fs.readFile('.gitignore', 'utf8'),
+    fs.readFile('.gitignore', 'utf8').catch((error: unknown) => {
+      if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
+        return null;
+      }
+      throw error;
+    }),
     pluginsLoaders.tailwindcss(),
     pluginsLoaders.svelte(),
   ]);
