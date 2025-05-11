@@ -166,7 +166,7 @@
   },
   "packageManager": "pnpm@10.10.0",
   "engines": {
-    "node": ">=20"
+    "node": "^20.10 || >=21.1.0"
   },
   "overrides": {
     "eslint-plugin-jest": {
