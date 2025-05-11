@@ -1,6 +1,5 @@
 import {ERROR, GLOB_JS_TS_X, OFF} from '../constants';
 import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
-import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -8,9 +7,7 @@ export interface QwikEslintConfigOptions extends ConfigSharedOptions<'qwik'> {
   routesDir?: string;
 }
 
-export const qwikUnConfig: UnConfigFn<'qwik'> = async (context) => {
-  const eslintPluginQwik = await pluginsLoaders.qwik();
-
+export const qwikUnConfig: UnConfigFn<'qwik'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.qwik;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies QwikEslintConfigOptions);
 
@@ -19,8 +16,8 @@ export const qwikUnConfig: UnConfigFn<'qwik'> = async (context) => {
   const configBuilder = createConfigBuilder(context, optionsResolved, 'qwik');
 
   // Legend:
-  // 🟣 - error in recommended
-  // 🟢 - error in strict
+  // 🟢 - in recommended
+  // 🟣 - in strict
 
   configBuilder
     ?.addConfig([
@@ -30,27 +27,24 @@ export const qwikUnConfig: UnConfigFn<'qwik'> = async (context) => {
         filesFallback: [GLOB_JS_TS_X],
       },
     ])
-    // @ts-expect-error no proper types
-    // eslint-disable-next-line ts/no-unsafe-argument
-    .addBulkRules(eslintPluginQwik.configs.strict.rules)
-    // .addRule('use-method-usage', ERROR) // 🟣🟢
-    // .addRule('valid-lexical-scope', ERROR) // 🟣🟢
-    .addRule('loader-location', ERROR, [{routesDir}]) // 🟢
-    // .addRule('no-react-props', ERROR) // 🟣🟢
-    // .addRule('prefer-classlist', ERROR) // 🟢
-    // .addRule('jsx-no-script-url', ERROR) // 🟢
     .addRule('jsx-key', ERROR, [
       {
         checkFragmentShorthand: true, // Default: false
         // checkKeyMustBeforeSpread: true, // Doesn't do anything :)
         warnOnDuplicates: true, // Default: false
       },
-    ]) // 🟢
+    ]) // 🟣
+    .addRule('jsx-a', ERROR) // 🟣
+    .addRule('jsx-img', OFF) // 🟣
+    .addRule('jsx-no-script-url', ERROR) // 🟣
+    .addRule('loader-location', ERROR, [{routesDir}]) // 🟣
+    .addRule('no-react-props', ERROR) // 🟢🟣
+    .addRule('no-use-visible-task', ERROR) // 🟣
+    .addRule('prefer-classlist', ERROR) // 🟣
     // TODO not sure if this is useful - `no-unused-vars` should catch the same problems?
-    // .addRule('unused-server', ERROR) // 🟣🟢
-    .addRule('jsx-img', OFF) // 🟢
-    // .addRule('jsx-a', ERROR) // 🟢
-    // .addRule('no-use-visible-task', ERROR) // 🟢
+    .addRule('unused-server', ERROR) // 🟢🟣
+    .addRule('use-method-usage', ERROR) // 🟢🟣
+    .addRule('valid-lexical-scope', ERROR) // 🟢🟣
     .addOverrides();
 
   return {

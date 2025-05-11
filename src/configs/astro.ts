@@ -72,7 +72,7 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
   );
 
   // Legend:
-  // 🟢 - in Recommended
+  // 🟢 - in recommended
 
   configBuilder
     ?.addConfig([

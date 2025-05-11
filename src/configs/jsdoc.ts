@@ -1,6 +1,5 @@
 import {ERROR, GLOB_TSX, OFF, WARNING} from '../constants';
 import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
-import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
@@ -177,9 +176,7 @@ export interface JsdocEslintConfigOptions extends ConfigSharedOptions<'jsdoc'> {
     | PrettifyShallow<ConfigSharedOptions<'jsdoc'> & Pick<JsdocEslintConfigOptions, 'settings'>>;
 }
 
-export const jsdocUnConfig: UnConfigFn<'jsdoc'> = async (context) => {
-  const eslintPluginJsDoc = await pluginsLoaders.jsdoc();
-
+export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.jsdoc;
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypescript: context.configsMeta.ts.enabled,
@@ -190,7 +187,8 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = async (context) => {
   const configBuilder = createConfigBuilder(context, optionsResolved, 'jsdoc');
 
   // Legend:
-  // 🟢 - in Recommended
+  // 🟢 - in recommended
+  // 🔵 - in recommended-typescript
   // 1️⃣ - in Contents
   // 2️⃣ - in Logical
   // 3️⃣ - in Requirements
@@ -204,65 +202,63 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = async (context) => {
         },
       }),
     })
-    .addBulkRules(eslintPluginJsDoc.configs['flat/recommended-error'].rules)
-    // .addRule('check-access', ERROR) // 🟢2️⃣
-    // .addRule('check-alignment', ERROR) // 🟢4️⃣
-    // .addRule('check-examples', OFF) // Doesn't work in ESLint 9
+    .addRule('check-access', ERROR) // 🟢2️⃣
+    .addRule('check-alignment', ERROR) // 🟢4️⃣
+    .addRule('check-examples', OFF) // Doesn't work in ESLint 9
     .addRule('check-indentation', ERROR)
     .addRule('check-line-alignment', ERROR) // 4️⃣
-    // .addRule('check-param-names', ERROR) // 🟢2️⃣
-    // .addRule('check-property-names', ERROR) // 🟢2️⃣
+    .addRule('check-param-names', ERROR) // 🟢2️⃣
+    .addRule('check-property-names', ERROR) // 🟢2️⃣
     .addRule('check-syntax', ERROR) // 2️⃣
-    // .addRule('check-tag-names', ERROR) // 🟢2️⃣
+    .addRule('check-tag-names', ERROR) // 🟢2️⃣
     .addRule('check-template-names', ERROR) // 2️⃣
-    // .addRule('check-types', ERROR) // 🟢2️⃣
-    // .addRule('check-values', ERROR) // 🟢2️⃣
-    // .addRule('convert-to-jsdoc-comments', OFF) // Experimental rule
-    // .addRule('empty-tags', ERROR) // 🟢2️⃣
-    // .addRule('implements-on-classes', ERROR) // 🟢2️⃣
-    // .addRule('imports-as-dependencies', OFF)
-    // .addRule('informative-docs', OFF) // 1️⃣
+    .addRule('check-types', ERROR) // 🟢2️⃣
+    .addRule('check-values', ERROR) // 🟢2️⃣
+    .addRule('convert-to-jsdoc-comments', OFF) // Experimental rule
+    .addRule('empty-tags', ERROR) // 🟢2️⃣
+    .addRule('implements-on-classes', ERROR) // 🟢2️⃣
+    .addRule('imports-as-dependencies', OFF)
+    .addRule('informative-docs', OFF) // 1️⃣
     .addRule('lines-before-block', ERROR) // 4️⃣
-    // .addRule('match-description', OFF) // 1️⃣
-    // .addRule('match-name', OFF)
-    // .addRule('multiline-blocks', ERROR) // 🟢4️⃣
+    .addRule('match-description', OFF) // 1️⃣
+    .addRule('match-name', OFF)
+    .addRule('multiline-blocks', ERROR) // 🟢4️⃣
     .addRule('no-bad-blocks', ERROR) // 2️⃣
     .addRule('no-blank-block-descriptions', ERROR) // 1️⃣
     .addRule('no-blank-blocks', ERROR) // 1️⃣
-    // TODO why is this recommended?
-    .addRule('no-defaults', ERROR) // 🟢2️⃣
-    // .addRule('no-missing-syntax', OFF)
+    .addRule('no-defaults', ERROR) // TODO why is this recommended? 🟢2️⃣
+    .addRule('no-missing-syntax', OFF)
     .addRule('no-multi-asterisks', ERROR, [{allowWhitespace: true}]) // 🟢4️⃣
-    // .addRule('no-restricted-syntax', OFF)
-    // .addRule('no-types', OFF) // 2️⃣
-    // .addRule('no-undefined-types', ERROR) // 🟢2️⃣
+    .addRule('no-restricted-syntax', OFF)
+    .addRule('no-types', OFF) // 2️⃣
+    .addRule('no-undefined-types', ERROR) // 🟢2️⃣
     .addRule('require-asterisk-prefix', ERROR) // 4️⃣
-    // .addRule('require-description', OFF)
-    // .addRule('require-description-complete-sentence', OFF)
-    // .addRule('require-example', OFF) // 3️⃣
-    // .addRule('require-file-overview', OFF)
-    // .addRule('require-hyphen-before-param-description', OFF) // 4️⃣
+    .addRule('require-description-complete-sentence', OFF)
+    .addRule('require-description', OFF)
+    .addRule('require-example', OFF) // 3️⃣
+    .addRule('require-file-overview', OFF)
+    .addRule('require-hyphen-before-param-description', OFF) // 4️⃣
     .addRule('require-jsdoc', OFF) // 🟢3️⃣
-    .addRule('require-param', ERROR, [{ignoreWhenAllParamsMissing: true}]) // 🟢3️⃣
     .addRule('require-param-description', WARNING) // 🟢3️⃣ (error by default)
-    // .addRule('require-param-name', ERROR) // 🟢3️⃣
-    // .addRule('require-param-type', ERROR) // 🟢
-    // .addRule('require-property', ERROR) // 🟢3️⃣
+    .addRule('require-param-name', ERROR) // 🟢3️⃣
+    .addRule('require-param-type', ERROR) // 🟢
+    .addRule('require-param', ERROR, [{ignoreWhenAllParamsMissing: true}]) // 🟢3️⃣
     .addRule('require-property-description', WARNING) // 🟢3️⃣ (error by default)
-    // .addRule('require-property-name', ERROR) // 🟢3️⃣
-    // .addRule('require-property-type', ERROR) // 🟢
-    .addRule('require-returns', OFF) // 🟢3️⃣
-    // .addRule('require-returns-check', ERROR) // 🟢2️⃣
+    .addRule('require-property-name', ERROR) // 🟢3️⃣
+    .addRule('require-property-type', ERROR) // 🟢
+    .addRule('require-property', ERROR) // 🟢3️⃣
+    .addRule('require-returns-check', ERROR) // 🟢2️⃣
     .addRule('require-returns-description', WARNING) // 🟢3️⃣ (error by default)
-    // .addRule('require-returns-type', ERROR) // 🟢
-    // .addRule('require-template', OFF)
-    // .addRule('require-throws', OFF)
-    // .addRule('require-yields', ERROR) // 🟢3️⃣
-    // .addRule('require-yields-check', ERROR) // 🟢2️⃣
+    .addRule('require-returns-type', ERROR) // 🟢
+    .addRule('require-returns', OFF) // 🟢3️⃣
+    .addRule('require-template', OFF)
+    .addRule('require-throws', OFF)
+    .addRule('require-yields-check', ERROR) // 🟢2️⃣
+    .addRule('require-yields', ERROR) // 🟢3️⃣
     .addRule('sort-tags', ERROR)
-    // .addRule('tag-lines', ERROR) // 🟢4️⃣
-    // .addRule('text-escaping', OFF) // 1️⃣
-    // .addRule('valid-types', ERROR) // 🟢2️⃣
+    .addRule('tag-lines', ERROR) // 🟢4️⃣
+    .addRule('text-escaping', OFF) // 1️⃣
+    .addRule('valid-types', ERROR) // 🟢2️⃣
     .addOverrides();
 
   const configBuilderTypescript = createConfigBuilder(context, configTypescript, 'jsdoc');
@@ -286,11 +282,11 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = async (context) => {
         }),
       },
     )
-    .addRule('no-types', ERROR)
-    .addRule('no-undefined-types', OFF)
-    .addRule('require-param-type', OFF)
-    .addRule('require-property-type', OFF)
-    .addRule('require-returns-type', OFF)
+    .addRule('no-types', ERROR) // 🔵
+    .addRule('no-undefined-types', OFF) // 🔵(off)
+    .addRule('require-param-type', OFF) // 🔵(off)
+    .addRule('require-property-type', OFF) // 🔵(off)
+    .addRule('require-returns-type', OFF) // 🔵(off)
     .addOverrides();
 
   return {

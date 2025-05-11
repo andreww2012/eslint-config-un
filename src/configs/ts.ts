@@ -6,7 +6,6 @@ import {
   type ConfigSharedOptions,
   type DisableAutofixPrefix,
   type FlatConfigEntry,
-  type RulesRecord,
   createConfigBuilder,
 } from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
@@ -153,9 +152,7 @@ export const tsUnConfig: UnConfigFn<
     },
   ]
 > = async (context, {astroResolvedOptions, vueResolvedOptions, svelteResolvedOptions}) => {
-  const {parser: typescriptEslintParser, configs: typescriptEslintConfigs} = await interopDefault(
-    import('typescript-eslint'),
-  );
+  const {parser: typescriptEslintParser} = await interopDefault(import('typescript-eslint'));
 
   const typescriptPackageInfo = context.packagesInfo.typescript;
   const optionsRaw = context.rootOptions.configs?.ts;
@@ -294,121 +291,114 @@ export const tsUnConfig: UnConfigFn<
     '@typescript-eslint',
   );
 
-  // LEGEND:
+  const noUnsafeRulesSeverity = optionsResolved.disableNoUnsafeRules ? OFF : WARNING;
+
+  // Legend:
+  // 🟣 - in strict
+  // 💅 - in stylistic
   // ❄️ = Feature-frozen in ts-eslint
   // 👍 = Auto-checked and there's barely any need to use this rule
 
-  const noUnsafeRulesSeverity = optionsResolved.disableNoUnsafeRules ? OFF : WARNING;
   // TODO add rules
   configBuilderNONTypeAware
-    ?.addConfig([
-      'ts/non-type-aware/rules',
-      {
-        includeDefaultFilesAndIgnores: true,
-      },
-    ])
-    .addBulkRules(
-      typescriptEslintConfigs.strict.reduce<RulesRecord>(
-        (result, config) => Object.assign(result, config.rules),
-        {},
-      ),
-    )
-    .addBulkRules(
-      typescriptEslintConfigs.stylistic.reduce<RulesRecord>(
-        (result, config) => Object.assign(result, config.rules),
-        {},
-      ),
-    )
-    // 🟢 Strict - overrides
-    // .addRule('ban-ts-comment', ERROR)
-    .addRule('no-array-constructor', ERROR, [], {overrideBaseRule: true})
-    // .addRule('no-duplicate-enum-values', ERROR)
-    .addRule('no-dynamic-delete', WARNING)
-    .addRule('no-empty-object-type', ERROR, [{allowInterfaces: 'with-single-extends'}])
-    .addRule('no-explicit-any', WARNING, [{ignoreRestArgs: true}])
-    // .addRule('no-extra-non-null-assertion', ERROR)
+    ?.addConfig(['ts/non-type-aware/rules', {includeDefaultFilesAndIgnores: true}])
+    /* Category: Strict */
+    .addRule('ban-ts-comment', ERROR) // 🟣
+    .addRule('no-array-constructor', ERROR) // 🟣
+    .disableAnyRule('', 'no-array-constructor') // 🟣
+    .addRule('no-duplicate-enum-values', ERROR) // 🟣
+    .addRule('no-dynamic-delete', WARNING) // 🟣
+    .addRule('no-empty-object-type', ERROR, [{allowInterfaces: 'with-single-extends'}]) // 🟣
+    .addRule('no-explicit-any', WARNING, [{ignoreRestArgs: true}]) // 🟣
+    .addRule('no-extra-non-null-assertion', ERROR) // 🟣
     .addRule('no-extraneous-class', ERROR, [
       {
         allowWithDecorator: true, // Primarily for Angular
       },
+    ]) // 🟣
+    .addRule('no-invalid-void-type', ERROR) // 🟣
+    .addRule('no-misused-new', ERROR) // 🟣
+    .addRule('no-namespace', ERROR) // 🟣
+    .addRule('no-non-null-asserted-nullish-coalescing', ERROR) // 🟣
+    .addRule('no-non-null-asserted-optional-chain', ERROR) // 🟣
+    .addRule('no-non-null-assertion', WARNING) // 🟣
+    .addRule('no-this-alias', ERROR) // 🟣
+    .addRule('no-unnecessary-type-constraint', ERROR) // 🟣
+    .addRule('no-unsafe-declaration-merging', ERROR) // 🟣
+    .addRule('no-unsafe-function-type', ERROR) // 🟣
+    .addRule('no-unused-vars', ERROR, [{ignoreRestSiblings: true}]) // 🟣
+    .disableAnyRule('', 'no-unused-vars') // 🟣
+    .addRule('no-useless-constructor', ERROR) // 🟣
+    .disableAnyRule('', 'no-useless-constructor') // 🟣
+    .addRule('no-wrapper-object-types', ERROR) // 🟣
+    .addRule('prefer-as-const', ERROR) // 🟣
+    .addRule('prefer-literal-enum-member', ERROR, [{allowBitwiseExpressions: true}]) // 🟣
+    .addRule('prefer-namespace-keyword', ERROR) // 🟣
+    .addRule('triple-slash-reference', ERROR) // 🟣
+    .addRule('unified-signatures', ERROR, [{ignoreOverloadsWithDifferentJSDoc: true}]) // 🟣
+    /* Category: Stylistic */
+    .addRule('adjacent-overload-signatures', ERROR) // 💅
+    .addRule('array-type', ERROR) // 💅
+    .addRule('ban-tslint-comment', ERROR) // 💅
+    .addRule('class-literal-property-style', ERROR) // 💅
+    .addRule('consistent-generic-constructors', ERROR) // 💅
+    .addRule('consistent-indexed-object-style', ERROR) // 💅
+    .addRule('consistent-type-assertions', ERROR) // 💅
+    .addRule('consistent-type-definitions', ERROR) // 💅
+    .addRule('no-confusing-non-null-assertion', ERROR) // 💅
+    .addRule('no-empty-function', ERROR) // 💅
+    .disableAnyRule('', 'no-empty-function') // 💅
+    .addRule('no-inferrable-types', ERROR) // 💅
+    .addRule('prefer-for-of', ERROR) // 💅
+    .addRule('prefer-function-type', OFF) // 💅
+    /* Category: Additional rules */
+    .addRule('class-methods-use-this', ERROR, [
+      {ignoreOverrideMethods: true, ignoreClassesThatImplementAnInterface: true},
     ])
-    // .addRule('no-invalid-void-type', ERROR)
-    // .addRule('no-misused-new', ERROR)
-    // .addRule('no-namespace', ERROR)
-    // .addRule('no-non-null-asserted-nullish-coalescing', ERROR)
-    // .addRule('no-non-null-asserted-optional-chain', ERROR)
-    .addRule('no-non-null-assertion', WARNING)
-    // .addRule('no-this-alias', ERROR)
-    // .addRule('no-unnecessary-type-constraint', ERROR)
-    // .addRule('no-unsafe-declaration-merging', ERROR)
-    // .addRule('no-unsafe-function-type', ERROR)
-    .addRule('no-unused-vars', ERROR, [{ignoreRestSiblings: true}], {
-      overrideBaseRule: true,
-    })
-    .addRule('no-useless-constructor', ERROR, [], {overrideBaseRule: true})
-    // .addRule('no-wrapper-object-types', ERROR)
-    // .addRule('prefer-as-const', ERROR)
-    .addRule('prefer-literal-enum-member', ERROR, [{allowBitwiseExpressions: true}])
-    // .addRule('prefer-namespace-keyword', ERROR)
-    // .addRule('triple-slash-reference', ERROR)
-    .addRule('unified-signatures', ERROR, [{ignoreOverloadsWithDifferentJSDoc: true}])
-    // 🟢 Stylistic - overrides
-    // .addRule('adjacent-overload-signatures', ERROR)
-    // .addRule('array-type', ERROR)
-    // .addRule('ban-tslint-comment', ERROR)
-    // .addRule('class-literal-property-style', ERROR)
-    // .addRule('consistent-generic-constructors', ERROR)
-    // .addRule('consistent-indexed-object-style', ERROR)
-    // .addRule('consistent-type-assertions', ERROR)
-    // .addRule('consistent-type-definitions', ERROR)
-    // .addRule('no-confusing-non-null-assertion', ERROR)
-    .addRule('no-empty-function', ERROR, [], {overrideBaseRule: true})
-    // .addRule('no-inferrable-types', ERROR)
-    // .addRule('prefer-for-of', ERROR)
-    // .addRule('prefer-function-type', OFF)
-    // 🟢 Additional rules
-    .addRule(
-      'class-methods-use-this',
-      ERROR,
-      [{ignoreOverrideMethods: true, ignoreClassesThatImplementAnInterface: true}],
-      {overrideBaseRule: true},
-    )
+    .disableAnyRule('', 'class-methods-use-this')
     .addRule('consistent-type-imports', ERROR, [
       {
         ...(typescriptVersion && typescriptVersion >= 4.5 && {fixStyle: 'inline-type-imports'}),
         disallowTypeAnnotations: false,
       },
     ])
-    .addRule('default-param-last', ERROR, [], {overrideBaseRule: true})
-    // .addRule('explicit-function-return-type', OFF)
-    // .addRule('explicit-member-accessibility', OFF)
+    .addRule('default-param-last', ERROR)
+    .disableAnyRule('', 'default-param-last')
+    .addRule('explicit-function-return-type', OFF)
+    .addRule('explicit-member-accessibility', OFF)
     .addRule('explicit-module-boundary-types', OFF)
-    // .addRule('init-declarations', OFF, [], {overrideBaseRule: true})
-    // .addRule('max-params', OFF, [], {overrideBaseRule: true})
-    // .addRule('member-ordering', OFF) // ❄️
+    .addRule('init-declarations', OFF)
+    .disableAnyRule('', 'init-declarations')
+    .addRule('max-params', OFF)
+    .disableAnyRule('', 'max-params')
+    .addRule('member-ordering', OFF) // ❄️
     .addRule('method-signature-style', ERROR)
-    // .addRule('no-dupe-class-members', OFF, [], {overrideBaseRule: true}) // 👍
+    .addRule('no-dupe-class-members', OFF) // 👍
+    .disableAnyRule('', 'no-dupe-class-members') // 🟣
     .addRule('no-import-type-side-effects', ERROR)
-    // .addRule('no-invalid-this', OFF, [], {overrideBaseRule: true}) // 👍
-    .addRule('no-loop-func', ERROR, [], {overrideBaseRule: true})
-    // .addRule('no-magic-numbers', OFF, [], {overrideBaseRule: true})
+    .addRule('no-invalid-this', OFF) // 👍
+    .disableAnyRule('', 'no-invalid-this')
+    .addRule('no-loop-func', ERROR)
+    .disableAnyRule('', 'no-loop-func')
+    .addRule('no-magic-numbers', OFF)
+    .disableAnyRule('', 'no-magic-numbers')
+    .addRule('no-redeclare', OFF) // 👍
     .disableAnyRule('', 'no-redeclare')
-    // .addRule('no-redeclare', OFF) // 👍
-    .addRule('no-require-imports', OFF)
-    // .addRule('no-restricted-imports', OFF, [], {overrideBaseRule: true})
-    .addRule('no-shadow', ERROR, [], {overrideBaseRule: true})
+    .addRule('no-require-imports', OFF) // 🟣
+    .addRule('no-restricted-imports', OFF)
+    .disableAnyRule('', 'no-restricted-imports')
+    .addRule('no-shadow', ERROR)
+    .disableAnyRule('', 'no-shadow')
     .addRule('no-unnecessary-parameter-property-assignment', ERROR)
-    .addRule('no-unused-expressions', ERROR, RULE_NO_UNUSED_EXPRESSIONS_OPTIONS, {
-      overrideBaseRule: true,
-    })
-    .addRule('no-use-before-define', ERROR, RULE_NO_USE_BEFORE_DEFINE_OPTIONS, {
-      overrideBaseRule: true,
-    })
+    .addRule('no-unused-expressions', ERROR, RULE_NO_UNUSED_EXPRESSIONS_OPTIONS) // 🟣
+    .disableAnyRule('', 'no-unused-expressions') // 🟣
+    .addRule('no-use-before-define', ERROR, RULE_NO_USE_BEFORE_DEFINE_OPTIONS)
+    .disableAnyRule('', 'no-use-before-define')
     .addRule('no-useless-empty-export', ERROR)
-    // .addRule('parameter-properties', OFF)
-    // .addRule('prefer-enum-initializers', OFF)
-    // .addRule('typedef', OFF)
-    // 🟢 Disable conflicting rules
+    .addRule('parameter-properties', OFF)
+    .addRule('prefer-enum-initializers', OFF)
+    .addRule('typedef', OFF)
+    /* Category: Disable conflicting rules */
     .disableAnyRule('', 'no-useless-constructor')
     .disableAnyRule('', 'dot-notation')
     .addOverrides();
@@ -432,6 +422,7 @@ export const tsUnConfig: UnConfigFn<
         },
     '@typescript-eslint',
   );
+
   configBuilderTypeAware
     ?.addConfig([
       'ts/type-aware/rules',
@@ -441,111 +432,91 @@ export const tsUnConfig: UnConfigFn<
         ignoresFallback: ignoresTypeAware,
       },
     ])
-    .addBulkRules(
-      typescriptEslintConfigs.strictTypeCheckedOnly.reduce<RulesRecord>(
-        (result, config) => Object.assign(result, config.rules),
-        {},
-      ),
-    )
-    .addBulkRules(
-      typescriptEslintConfigs.stylisticTypeCheckedOnly.reduce<RulesRecord>(
-        (result, config) => Object.assign(result, config.rules),
-        {},
-      ),
-    )
-    // 🟢 Strict - overrides
-    // .addRule('await-thenable', ERROR)
-    .addRule('consistent-return', ERROR, [], {overrideBaseRule: true})
-    // .addRule('no-array-delete', ERROR)
-    // .addRule('no-base-to-string', ERROR)
-    .addRule('no-confusing-void-expression', ERROR, [
-      {
-        ignoreArrowShorthand: true,
-      },
-    ])
-    .addRule('no-deprecated', WARNING)
-    // .addRule('no-duplicate-type-constituents', ERROR)
+    /* Category: Strict */
+    .addRule('await-thenable', ERROR) // 🟣
+    .addRule('consistent-return', ERROR)
+    .disableAnyRule('', 'consistent-return')
+    .addRule('no-array-delete', ERROR) // 🟣
+    .addRule('no-base-to-string', ERROR) // 🟣
+    .addRule('no-confusing-void-expression', ERROR, [{ignoreArrowShorthand: true}]) // 🟣
+    .addRule('no-deprecated', WARNING) // 🟣
+    .addRule('no-duplicate-type-constituents', ERROR) // 🟣
     .addRule('no-floating-promises', ERROR, [
       {
         checkThenables: true,
         ignoreVoid: true, // Default
       },
-    ])
-    // .addRule('no-for-in-array', ERROR)
-    .addRule('no-implied-eval', ERROR, [], {overrideBaseRule: true})
-    // .addRule('no-meaningless-void-operator', ERROR)
-    // .addRule('no-misused-promises', ERROR)
-    .addRule('no-misused-spread', ERROR) // >=8.20.0
-    // .addRule('no-mixed-enums', ERROR)
-    // .addRule('no-redundant-type-constituents', ERROR)
-    // .addRule('no-unnecessary-boolean-literal-compare', ERROR)
+    ]) // 🟣
+    .addRule('no-for-in-array', ERROR) // 🟣
+    .addRule('no-implied-eval', ERROR) // 🟣
+    .disableAnyRule('', 'no-implied-eval') // 🟣
+    .addRule('no-meaningless-void-operator', ERROR) // 🟣
+    .addRule('no-misused-promises', ERROR) // 🟣
+    .addRule('no-misused-spread', ERROR) // 🟣 >=8.20.0
+    .addRule('no-mixed-enums', ERROR) // 🟣
+    .addRule('no-redundant-type-constituents', ERROR) // 🟣
+    .addRule('no-unnecessary-boolean-literal-compare', ERROR) // 🟣
     .addRule('no-unnecessary-condition', ERROR, [
       {
         allowConstantLoopConditions: 'only-allowed-literals',
         checkTypePredicates: true, // >=8.8.0
       },
-    ])
-    // .addRule('no-unnecessary-template-expression', ERROR)
+    ]) // 🟣
+    .addRule('no-unnecessary-template-expression', ERROR) // 🟣
     // Reason for disabling autofix: could remove type aliases
     .addRule('no-unnecessary-type-arguments', ERROR, [], {
       disableAutofix: true,
-    })
-    .addRule('no-unnecessary-type-assertion', ERROR)
+    }) // 🟣
+    .addRule('no-unnecessary-type-assertion', ERROR) // 🟣
     .addRule('no-unnecessary-type-conversion', ERROR)
-    // .addRule('no-unnecessary-type-parameters', ERROR)
-    .addRule('no-unsafe-argument', noUnsafeRulesSeverity)
-    .addRule('no-unsafe-assignment', noUnsafeRulesSeverity)
-    .addRule('no-unsafe-call', noUnsafeRulesSeverity)
-    .addRule('no-unsafe-enum-comparison', noUnsafeRulesSeverity)
-    .addRule('no-unsafe-member-access', noUnsafeRulesSeverity)
-    .addRule('no-unsafe-return', noUnsafeRulesSeverity)
-    // .addRule('no-unsafe-type-assertion', OFF)
-    // .addRule('no-unsafe-unary-minus', ERROR)
+    .addRule('no-unnecessary-type-parameters', ERROR) // 🟣
+    .addRule('no-unsafe-argument', noUnsafeRulesSeverity) // 🟣
+    .addRule('no-unsafe-assignment', noUnsafeRulesSeverity) // 🟣
+    .addRule('no-unsafe-call', noUnsafeRulesSeverity) // 🟣
+    .addRule('no-unsafe-enum-comparison', noUnsafeRulesSeverity) // 🟣
+    .addRule('no-unsafe-member-access', noUnsafeRulesSeverity) // 🟣
+    .addRule('no-unsafe-return', noUnsafeRulesSeverity) // 🟣
+    .addRule('no-unsafe-type-assertion', OFF)
+    .addRule('no-unsafe-unary-minus', ERROR) // 🟣
+    .addRule('only-throw-error', ERROR, [{allowRethrowing: true}]) // 🟣
     .disableAnyRule('', 'no-throw-literal') // Note: has different name
-    .addRule('only-throw-error', ERROR, [
-      {
-        allowRethrowing: true,
-      },
-    ])
-    .addRule('prefer-promise-reject-errors', ERROR, [], {
-      overrideBaseRule: true,
-    })
-    // .addRule('prefer-reduce-type-parameter', ERROR)
-    // .addRule('prefer-return-this-type', ERROR)
-    .addRule('require-await', ERROR, [], {overrideBaseRule: true})
-    // .addRule('restrict-plus-operands', ERROR)
-    .addRule('restrict-template-expressions', ERROR, [{allowAny: false, allowRegExp: false}])
-    // .addRule('unbound-method', ERROR)
-    // .addRule('use-unknown-in-catch-callback-variable', ERROR)
-    // 🟢 Stylistic - overrides
-    .addRule('dot-notation', ERROR, [{allowIndexSignaturePropertyAccess: true}], {
-      overrideBaseRule: true,
-    })
-    // .addRule('non-nullable-type-assertion-style', ERROR)
-    // .addRule('prefer-find', ERROR)
+    .addRule('prefer-promise-reject-errors', ERROR) // 🟣
+    .disableAnyRule('', 'prefer-promise-reject-errors') // 🟣
+    .addRule('prefer-reduce-type-parameter', ERROR) // 🟣
+    .addRule('prefer-return-this-type', ERROR) // 🟣
+    .addRule('require-await', ERROR) // 🟣
+    .disableAnyRule('', 'require-await') // 🟣
+    .addRule('restrict-plus-operands', ERROR) // 🟣
+    .addRule('restrict-template-expressions', ERROR, [{allowAny: false, allowRegExp: false}]) // 🟣
+    .addRule('unbound-method', ERROR) // 🟣
+    .addRule('use-unknown-in-catch-callback-variable', ERROR) // 🟣
+    /* Category: Stylistic */
+    .addRule('dot-notation', ERROR, [{allowIndexSignaturePropertyAccess: true}]) // 💅
+    .disableAnyRule('', 'dot-notation') // 💅
+    .addRule('non-nullable-type-assertion-style', ERROR) // 💅
+    .addRule('prefer-find', ERROR) // 💅
+    .addRule('prefer-includes', ERROR) // 💅
     .disableAnyRule('unicorn', 'prefer-includes')
-    // .addRule('prefer-includes', ERROR)
-    .addRule('prefer-nullish-coalescing', OFF)
-    // .addRule('prefer-optional-chain', ERROR)
-    .addRule('prefer-regexp-exec', OFF)
-    .addRule('prefer-string-starts-ends-with', ERROR, [{allowSingleElementEquality: 'always'}])
-    // 🟢 Additional rules
+    .addRule('prefer-nullish-coalescing', OFF) // 💅
+    .addRule('prefer-optional-chain', ERROR) // 💅
+    .addRule('prefer-regexp-exec', OFF) // 💅
+    .addRule('prefer-string-starts-ends-with', ERROR, [{allowSingleElementEquality: 'always'}]) // 💅
+    /* Category: Additional rules */
     .addRule('consistent-type-exports', ERROR, [{fixMixedExportsWithInlineTypeSpecifier: true}])
-    // .addRule('naming-convention', OFF) // ❄️
-    // .addRule('no-unnecessary-qualifier', OFF)
-    .addRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS, {
-      overrideBaseRule: true,
-    })
-    .disableAnyRule('unicorn', 'prefer-array-find') // Note: in Unicorn
+    .addRule('naming-convention', OFF) // ❄️
+    .addRule('no-unnecessary-qualifier', OFF)
+    .addRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS)
+    .disableAnyRule('', 'prefer-destructuring')
+    .disableAnyRule('unicorn', 'prefer-array-find')
     .addRule('prefer-readonly', ERROR)
-    // .addRule('prefer-readonly-parameter-types', OFF)
-    // .addRule('promise-function-async', OFF)
-    // .addRule('related-getter-setter-pairs', ERROR)
-    // .addRule('require-array-sort-compare', OFF)
+    .addRule('prefer-readonly-parameter-types', OFF)
+    .addRule('promise-function-async', OFF)
+    .addRule('related-getter-setter-pairs', ERROR) // 🟣
+    .addRule('require-array-sort-compare', OFF)
+    .addRule('return-await', ERROR, ['always']) // 🟣
     // Note: has different name. Also note that the original rule is deprecated and not included in this config, but we disable it anyway just for safety
-    .disableAnyRule('', 'no-return-await') // Disabled by default since v8
-    .addRule('return-await', ERROR, ['always'])
-    // .addRule('strict-boolean-expressions', OFF)
+    .disableAnyRule('', 'no-return-await') // 🟣
+    .addRule('strict-boolean-expressions', OFF)
     .addRule('switch-exhaustiveness-check', ERROR)
     .addOverrides();
 
@@ -562,18 +533,18 @@ export const tsUnConfig: UnConfigFn<
     .disableAnyRule('', 'no-dupe-keys')
     .disableAnyRule('', 'no-func-assign')
     // "Note that the compiler will not catch the Object.assign() case. Thus, if you use Object.assign() in your codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-import-assign#handled_by_typescript
-    // .addRule('no-import-assign', OFF)
+    // .disableAnyRule('', 'no-import-assign')
     // "Note that, technically, TypeScript will only catch this if you have the strict or noImplicitThis flags enabled. These are enabled in most TypeScript projects, since they are considered to be best practice." - https://eslint.org/docs/latest/rules/no-invalid-this#rule-details
-    // .addRule('no-invalid-this', OFF)
+    // .disableAnyRule('', 'no-invalid-this')
     .disableAnyRule('', 'no-new-native-nonconstructor') // successor of no-new-symbol
     .disableAnyRule('', 'no-obj-calls')
     // "Note that while TypeScript will catch let redeclares and const redeclares, it will not catch var redeclares. Thus, if you use the legacy var keyword in your TypeScript codebase, this rule will still provide some value." - https://eslint.org/docs/latest/rules/no-redeclare#handled_by_typescript
-    // .addRule('no-redeclare', OFF)
+    // .disableAnyRule('', 'no-redeclare')
     .disableAnyRule('', 'no-setter-return')
     .disableAnyRule('', 'no-this-before-super')
     .disableAnyRule('', 'no-undef')
     // "TypeScript must be configured with allowUnreachableCode: false for it to consider unreachable code an error." - https://eslint.org/docs/latest/rules/no-unreachable#handled_by_typescript
-    // .addRule('no-unreachable', OFF)
+    // .disableAnyRule('', 'no-unreachable')
     .disableAnyRule('', 'no-unsafe-negation')
     // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
     .disableAnyRule('', 'no-duplicate-imports');
@@ -603,7 +574,10 @@ export const tsUnConfig: UnConfigFn<
     configNoTypeAssertion,
     'no-type-assertion',
   );
-  configBuilderNoTypeAssertions?.addConfig('no-type-assertion').addRule('no-type-assertion', ERROR);
+  configBuilderNoTypeAssertions
+    ?.addConfig('no-type-assertion')
+    .addRule('no-type-assertion', ERROR)
+    .addOverrides();
 
   return {
     configs: [

@@ -53,7 +53,6 @@
       "\t\t\t\t},",
       "\t\t\t}),",
       "\t\t})",
-      "\t\t.addBulkRules(eslintPlugin${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.configs.recommended.rules)",
       "\t\t.addRule('', ERROR)",
       "\t\t.addRule('', ERROR)",
       "\t\t.addOverrides();",

@@ -72,8 +72,8 @@ export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {
   const configBuilder = createConfigBuilder(context, optionsResolved, 'css-in-js');
 
   // Legend:
-  // 🟢 - in Recommended and Standard
-  // 🟣 - in Standard
+  // 🟢 - in recommended and standard
+  // 🟣 - in standard
 
   configBuilder
     ?.addConfig(['css-in-js', {includeDefaultFilesAndIgnores: true}], {

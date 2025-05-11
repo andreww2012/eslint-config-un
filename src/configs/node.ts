@@ -1,15 +1,7 @@
 import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
-import {readPackageUp as readClosestPackageJson} from 'read-package-up';
-import {Range, subset as isFirstSemverRangeIsSubsetOfSecond} from 'semver';
 import {ERROR, OFF} from '../constants';
-import {
-  type ConfigSharedOptions,
-  type GetRuleOptions,
-  createConfigBuilder,
-  createPluginObjectRenamer,
-} from '../eslint';
-import {pluginsLoaders} from '../plugins';
-import {assignDefaults} from '../utils';
+import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
+import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
 interface EslintPluginNSettings {
@@ -172,15 +164,14 @@ export interface NodeEslintConfigOptions extends ConfigSharedOptions<'node'> {
   };
 }
 
-const pluginRenamer = createPluginObjectRenamer('n', 'node');
-
 const IMPORT_META_PROPERTIES_AVAILABLE_SINCE = '>=20.11';
 
 export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
-  const [eslintPluginNode, closestPackageJson] = await Promise.all([
-    pluginsLoaders.node(),
-    readClosestPackageJson(),
-  ]);
+  const [closestPackageJson, {Range, subset: isFirstSemverRangeIsSubsetOfSecond}] =
+    await Promise.all([
+      interopDefault(import('read-package-up')).then((m) => m.readPackageUp()),
+      interopDefault(import('semver')),
+    ]);
 
   const optionsRaw = context.rootOptions.configs?.node;
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -193,6 +184,9 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'node');
 
+  // Legend:
+  // 🟢 - in recommended
+
   configBuilder
     ?.addConfig(['node', {includeDefaultFilesAndIgnores: true}], {
       ...(pluginSettings && {
@@ -201,35 +195,34 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
         },
       }),
     })
-    .addBulkRules(pluginRenamer(eslintPluginNode.configs['flat/recommended'].rules))
-    // .addRule('callback-return', OFF)
+    .addRule('callback-return', OFF)
     .addRule('exports-style', ERROR, ['module.exports', {allowBatchAssign: false}])
-    // .addRule('file-extension-in-import', OFF),
-    // .addRule('global-require', OFF),
-    // .addRule('handle-callback-err', OFF),
-    // .addRule('hashbang', ERROR),
-    // .addRule('no-callback-literal', OFF),
-    // .addRule('no-deprecated-api', ERROR),
-    // .addRule('no-exports-assign', ERROR),
-    .addRule('no-extraneous-import', OFF) // TODO only disable when import plugin is enabled?
-    // .addRule('no-extraneous-require', ERROR) // TODO handled by import plugin too?
-    .addRule('no-missing-import', OFF) // TODO only disable when import plugin is enabled?
-    // .addRule('no-missing-require', ERROR) // TODO handled by import plugin too?
-    // .addRule('no-mixed-requires', OFF)
+    .addRule('file-extension-in-import', OFF)
+    .addRule('global-require', OFF)
+    .addRule('handle-callback-err', OFF)
+    .addRule('hashbang', ERROR) // 🟢
+    .addRule('no-callback-literal', OFF)
+    .addRule('no-deprecated-api', ERROR) // 🟢
+    .addRule('no-exports-assign', ERROR) // 🟢
+    .addRule('no-extraneous-import', OFF) // TODO 🟢 only disable when import plugin is enabled?
+    .addRule('no-extraneous-require', ERROR) // TODO 🟢 handled by import plugin too?
+    .addRule('no-missing-import', OFF) // TODO 🟢 only disable when import plugin is enabled?
+    .addRule('no-missing-require', ERROR) // TODO 🟢 handled by import plugin too?
+    .addRule('no-mixed-requires', OFF)
     .addRule('no-new-require', ERROR)
     .addRule('no-path-concat', ERROR)
-    // .addRule('no-process-env', OFF)
-    .addRule('no-process-exit', OFF) // The corresponding Unicorn rule is better: https://github.com/sindresorhus/eslint-plugin-unicorn/blob/1deb9bb5edf27fdb2f656add11c924dfa59fdac9/docs/rules/no-process-exit.md
-    .addAnyRule('unicorn', 'no-process-exit', ERROR) // TODO
-    // .addRule('no-restricted-import', OFF)
-    // .addRule('no-restricted-require', OFF)
-    // .addRule('no-sync', OFF)
-    // .addRule('no-unpublished-bin', ERROR)
-    .addRule('no-unpublished-import', OFF) // TODO only disable when import plugin is enabled?
-    // .addRule('no-unpublished-require', ERROR) // TODO handled by import plugin too?
-    // .addRule('no-unsupported-features/es-builtins', ERROR)
-    // .addRule('no-unsupported-features/es-syntax', ERROR)
-    // .addRule('no-unsupported-features/node-builtins', ERROR)
+    .addRule('no-process-env', OFF)
+    .addRule('no-process-exit', OFF) // 🟢 The corresponding Unicorn rule is better: https://github.com/sindresorhus/eslint-plugin-unicorn/blob/1deb9bb5edf27fdb2f656add11c924dfa59fdac9/docs/rules/no-process-exit.md
+    .addAnyRule('unicorn', 'no-process-exit', ERROR) // TODO 🟢
+    .addRule('no-restricted-import', OFF)
+    .addRule('no-restricted-require', OFF)
+    .addRule('no-sync', OFF)
+    .addRule('no-unpublished-bin', ERROR) // 🟢
+    .addRule('no-unpublished-import', OFF) // TODO 🟢 only disable when import plugin is enabled?
+    .addRule('no-unpublished-require', ERROR) // TODO 🟢 handled by import plugin too?
+    .addRule('no-unsupported-features/es-builtins', ERROR) // 🟢
+    .addRule('no-unsupported-features/es-syntax', ERROR)
+    .addRule('no-unsupported-features/node-builtins', ERROR) //  🟢
     .addRule('prefer-global/buffer', ERROR, [preferGlobal.buffer === false ? 'never' : 'always'])
     .addRule('prefer-global/console', ERROR, [preferGlobal.console === false ? 'never' : 'always'])
     .addRule('prefer-global/process', ERROR, [preferGlobal.process === false ? 'never' : 'always'])
@@ -246,7 +239,7 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
     .addRule('prefer-node-protocol', ERROR)
     .addRule('prefer-promises/dns', OFF) // TODO enable?
     .addRule('prefer-promises/fs', OFF) // TODO enable?
-    .addRule('process-exit-as-throw', ERROR) // Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-node/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
+    .addRule('process-exit-as-throw', ERROR) // 🟢 Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-node/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
     .addAnyRule(
       'unicorn',
       'prefer-import-meta-properties',

@@ -1,17 +1,9 @@
-import {
-  type TypeScriptResolverOptions,
-  createTypeScriptImportResolver,
-} from 'eslint-import-resolver-typescript';
+import type {TypeScriptResolverOptions} from 'eslint-import-resolver-typescript';
 import type {PluginSettings} from 'eslint-plugin-import-x';
 import {ERROR, OFF, WARNING} from '../constants';
-import {
-  type ConfigSharedOptions,
-  type GetRuleOptions,
-  createConfigBuilder,
-  createPluginObjectRenamer,
-} from '../eslint';
+import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
-import {arraify, assignDefaults, isNonEmptyArray} from '../utils';
+import {arraify, assignDefaults, interopDefault, isNonEmptyArray} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'> {
@@ -59,11 +51,11 @@ export interface ImportEslintConfigOptions extends ConfigSharedOptions<'import'>
   noDuplicatesOptions?: GetRuleOptions<'import/no-duplicates'>[0];
 }
 
-const pluginRenamer = createPluginObjectRenamer('import-x', 'import');
-
 export const importUnConfig: UnConfigFn<'import'> = async (context) => {
-  const eslintPluginImportX =
-    (await pluginsLoaders.import()) as unknown as typeof import('eslint-plugin-import-x');
+  const [eslintPluginImportX, {createTypeScriptImportResolver}] = await Promise.all([
+    pluginsLoaders.import() as unknown as Promise<typeof import('eslint-plugin-import-x')>,
+    interopDefault(import('eslint-import-resolver-typescript')),
+  ]);
 
   const optionsRaw = context.rootOptions.configs?.import;
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -80,6 +72,11 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
   const noUnresolvedIgnores = arraify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve);
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'import');
+
+  // Legend:
+  // 🟢 - in recommended
+  // 🟡 - in recommended (warns)
+  // 🔵 - in recommended/typescript
 
   configBuilder
     ?.addConfig(['import', {includeDefaultFilesAndIgnores: true}], {
@@ -99,15 +96,11 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
         ...pluginSettings,
       },
     })
-    .addBulkRules(pluginRenamer(eslintPluginImportX.configs.recommended.rules))
-    .addBulkRules(
-      isTypescriptEnabled && pluginRenamer(eslintPluginImportX.configs.typescript.rules),
-    )
-    // .addRule('consistent-type-specifier-style', OFF)
-    // .addRule('default', ERROR)
-    // .addRule('dynamic-import-chunkname', OFF)
-    // .addRule('export', ERROR)
-    // .addRule('exports-last', OFF)
+    .addRule('consistent-type-specifier-style', OFF)
+    .addRule('default', ERROR) // 🟢
+    .addRule('dynamic-import-chunkname', OFF)
+    .addRule('export', ERROR) // 🟢
+    .addRule('exports-last', OFF)
     .addRule('extensions', requireModuleExtensions ? ERROR : OFF, [
       (typeof requireModuleExtensions === 'object' && requireModuleExtensions['*']) ||
         'ignorePackages',
@@ -121,49 +114,50 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
       },
     ])
     .addRule('first', ERROR)
-    // .addRule('group-exports', OFF)
-    // .addRule('max-dependencies', OFF)
-    // .addRule('named', ERROR | OFF) // disabled in TS config
-    // .addRule('namespace', ERROR)
+    .addRule('group-exports', OFF)
+    .addRule('max-dependencies', OFF)
+    .addRule('named', isTypescriptEnabled ? OFF : ERROR) // 🔵(disabled)
+    .addRule('namespace', ERROR) // 🟢
     .addRule('newline-after-import', ERROR)
     .addRule('no-absolute-path', ERROR)
-    // .addRule('no-amd', OFF)
-    // .addRule('no-anonymous-default-export', OFF)
-    // .addRule('no-commonjs', OFF)
+    .addRule('no-amd', OFF)
+    .addRule('no-anonymous-default-export', OFF)
+    .addRule('no-commonjs', OFF)
     .addRule('no-cycle', WARNING)
     .addRule('no-default-export', ERROR)
     // Disabled when `typescript` config is enabled because it has a similar rule which works better (for example, is not triggered on `rxjs` operators)
     .addRule('no-deprecated', isTypescriptEnabled ? OFF : WARNING)
-    .addRule('no-duplicates', ERROR, [{'prefer-inline': true, ...noDuplicatesOptions}]) // Default: warn
-    // .addRule('no-dynamic-require', OFF)
+    .addRule('no-duplicates', ERROR, [{'prefer-inline': true, ...noDuplicatesOptions}]) // 🟡
+    .addRule('no-dynamic-require', OFF)
     .addRule('no-empty-named-blocks', ERROR)
     .addRule('no-extraneous-dependencies', ERROR, [
       {
         devDependencies: context.rootOptions.mode !== 'lib',
       },
     ])
-    // .addRule('no-import-module-exports', OFF) // TODO enable?
-    // .addRule('no-internal-modules', OFF)
+    .addRule('no-import-module-exports', OFF) // TODO enable?
+    .addRule('no-internal-modules', OFF)
     .addRule('no-mutable-exports', WARNING)
-    .addRule('no-named-as-default-member', OFF)
-    .addRule('no-named-as-default', OFF) // Not very useful + false positives for axios@1.6.7?
-    // .addRule('no-named-default', OFF)
-    // .addRule('no-named-export', OFF)
-    // .addRule('no-namespace', OFF)
-    // .addRule('no-nodejs-modules', OFF) // TODO
-    // .addRule('no-relative-packages', OFF)
-    // .addRule('no-relative-parent-imports', OFF)
-    // .addRule('no-restricted-paths', OFF)
+    .addRule('no-named-as-default-member', OFF) // 🟡
+    // Not very useful + false positives for axios@1.6.7?
+    .addRule('no-named-as-default', OFF) // 🟡
+    .addRule('no-named-default', OFF)
+    .addRule('no-named-export', OFF)
+    .addRule('no-namespace', OFF)
+    .addRule('no-nodejs-modules', OFF) // TODO
+    .addRule('no-relative-packages', OFF)
+    .addRule('no-relative-parent-imports', OFF)
+    .addRule('no-restricted-paths', OFF)
     .addRule('no-self-import', ERROR)
-    // .addRule('no-unassigned-import', OFF)
+    .addRule('no-unassigned-import', OFF)
     .addRule('no-unresolved', ERROR, [
       {
         ...(isNonEmptyArray(noUnresolvedIgnores) && {
           ignore: noUnresolvedIgnores,
         }),
       },
-    ])
-    // .addRule('no-unused-modules', OFF)
+    ]) // 🟢
+    .addRule('no-unused-modules', OFF)
     .addRule('no-useless-path-segments', WARNING)
     .addRule('no-webpack-loader-syntax', ERROR)
     .addRule('order', ERROR, [
@@ -172,8 +166,8 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
         alphabetize: {order: 'asc'},
       },
     ])
-    // .addRule('prefer-default-export', OFF)
-    // .addRule('unambiguous', OFF)
+    .addRule('prefer-default-export', OFF)
+    .addRule('unambiguous', OFF)
     .addOverrides();
 
   return {

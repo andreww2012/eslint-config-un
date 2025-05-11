@@ -1,8 +1,7 @@
-import eslintPluginCss, {type CSSLanguageOptions} from '@eslint/css';
-import {tailwindSyntax} from '@eslint/css/syntax';
-import {GLOB_CSS} from '../constants';
+import type {CSSLanguageOptions} from '@eslint/css';
+import {ERROR, GLOB_CSS, OFF, WARNING} from '../constants';
 import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
+import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface CssEslintConfigOptions extends ConfigSharedOptions<'css'> {
@@ -28,7 +27,9 @@ export interface CssEslintConfigOptions extends ConfigSharedOptions<'css'> {
   customSyntax?: CSSLanguageOptions['customSyntax'];
 }
 
-export const cssUnConfig: UnConfigFn<'css'> = (context) => {
+export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
+  const {tailwindSyntax} = await interopDefault(import('@eslint/css/syntax'));
+
   const optionsRaw = context.rootOptions.configs?.css;
   const optionsResolved = assignDefaults(optionsRaw, {
     tolerantMode: false,
@@ -41,7 +42,8 @@ export const cssUnConfig: UnConfigFn<'css'> = (context) => {
   const isTailwindEnabled = context.configsMeta.tailwind.enabled;
 
   // Legend:
-  // 🟢 - in Recommended
+  // 🟢 - in recommended
+  // 🟡 - in recommended (warns)
 
   configBuilder
     ?.addConfig(
@@ -64,15 +66,14 @@ export const cssUnConfig: UnConfigFn<'css'> = (context) => {
         },
       },
     )
-    .addBulkRules(eslintPluginCss.configs.recommended.rules)
-    // .addRule('no-duplicate-imports', ERROR) // 🟢
-    // .addRule('no-empty-blocks', ERROR) // 🟢
-    // .addRule('no-invalid-at-rules', ERROR) // 🟢
-    // .addRule('no-invalid-properties', ERROR) // 🟢
-    // .addRule('prefer-logical-properties', OFF) // >=0.5.0
+    .addRule('no-duplicate-imports', ERROR) // 🟢
+    .addRule('no-empty-blocks', ERROR) // 🟢
+    .addRule('no-invalid-at-rules', ERROR) // 🟢
+    .addRule('no-invalid-properties', ERROR) // 🟢
+    .addRule('prefer-logical-properties', OFF) // >=0.5.0
     // We're keeping `warn` severity, see the discussion in this issue and specifically this comment https://github.com/eslint/css/issues/80#issuecomment-2787414430
-    // .addRule('use-baseline', WARNING) // 🟢
-    // .addRule('use-layers', OFF)
+    .addRule('use-baseline', WARNING) // 🟡
+    .addRule('use-layers', OFF)
     .addOverrides();
 
   return {

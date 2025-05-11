@@ -510,8 +510,8 @@ export const angularUnConfig: UnConfigFn<
   // TODO backport rules?
 
   // Legend:
-  // 🟢 - in Recommended (latest version)
-  // ♿ - in Accessibility (latest version)
+  // 🟢 - in recommended (latest version)
+  // ♿ - in accessibility (latest version)
   // 🌐 - i18n related rules
   // 🔴 - deprecated
   // Check rule usage: https://github.com/search?q=%22%40angular-eslint%2Fno-input-prefix%22+path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F&type=code&p=1
@@ -554,7 +554,7 @@ export const angularUnConfig: UnConfigFn<
         ...(componentClassSuffixes.length > 0 && {suffixes: componentClassSuffixes}),
       },
     ]) // [all] 🟢
-    // .addRule('component-max-inline-declarations', OFF) // [all]
+    .addRule('component-max-inline-declarations', OFF) // [all]
     .addRule('component-selector', componentSelector === false ? OFF : ERROR, [
       {
         type: ['element'],

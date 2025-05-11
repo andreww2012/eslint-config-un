@@ -44,8 +44,8 @@ export const tailwindUnConfig: UnConfigFn<'tailwind'> = (context) => {
   const configBuilder = createConfigBuilder(context, optionsResolved, 'tailwindcss');
 
   // Legend:
-  // 🟢 - in Recommended (error)
-  // 🟡 - in Recommended (warning)
+  // 🟢 - in recommended
+  // 🟡 - in recommended (warns)
 
   configBuilder
     ?.addConfig(['tailwind', {includeDefaultFilesAndIgnores: true}], {

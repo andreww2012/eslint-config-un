@@ -15,8 +15,8 @@ export const solidUnConfig: UnConfigFn<'solid'> = (context) => {
   const solidParsedVersion = solidPackageInfo?.versions.majorAndMinor;
 
   // Legend:
-  // 🟢 - in Recommended
-  // 🟡 - in Recommended (warns)
+  // 🟢 - in recommended
+  // 🟡 - in recommended (warns)
 
   configBuilder
     ?.addConfig(['solid', {includeDefaultFilesAndIgnores: true}])
@@ -59,8 +59,8 @@ export const solidUnConfig: UnConfigFn<'solid'> = (context) => {
       },
     ]) // 🟡
     .addRule('style-prop', WARNING) // 🟡
-    // Category: Deprecated
-    // .addRule('prefer-classlist', OFF)
+    /* Category: Deprecated */
+    .addRule('prefer-classlist', OFF)
     .addOverrides();
 
   return {

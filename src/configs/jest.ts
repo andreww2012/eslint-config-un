@@ -189,9 +189,8 @@ export const generateConsistentTestItOptions = ({
 ];
 
 export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
-  const [eslintPluginJest, eslintPluginJestExtended, isJestExtendedInstalled] = await Promise.all([
+  const [eslintPluginJest, isJestExtendedInstalled] = await Promise.all([
     pluginsLoaders.jest(),
-    pluginsLoaders['jest-extended'](),
     doesPackageExist('jest-extended'),
   ]);
 
@@ -241,8 +240,9 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
   const configBuilder = createConfigBuilder(context, optionsResolved, 'jest');
 
   // Legend:
-  // 🟢 - in Recommended
-  // 🎨 - in Style
+  // 🟢 - in recommended
+  // 🟡 - in recommended (warns)
+  // 🎨 - in style
 
   configBuilder
     ?.addConfig(
@@ -253,56 +253,53 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
           filesFallback: defaultJestFiles,
         },
       ],
-      {
-        ...defaultJestEslintConfig,
-      },
+      defaultJestEslintConfig,
     )
-    .addBulkRules(eslintPluginJest.configs['flat/recommended'].rules)
     .addRule(
       'consistent-test-it',
       optionsResolved.testDefinitionKeyword === false ? OFF : ERROR,
       generateConsistentTestItOptions(optionsResolved),
     )
-    .addRule('expect-expect', ERROR) // 🟢 (warns)
+    .addRule('expect-expect', ERROR) // 🟡
     .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [{max: maxAssertionCalls}])
     .addRule('max-nested-describe', maxNestedDescribes == null ? OFF : ERROR, [
       {max: maxNestedDescribes},
     ])
-    // .addRule('no-alias-methods', ERROR) // 🟢 🎨
-    .addRule('no-commented-out-tests', WARNING) // 🎨 (warns)
-    // .addRule('no-conditional-expect', ERROR) // 🟢
-    // .addRule('no-conditional-in-test', OFF)
+    .addRule('no-alias-methods', ERROR) // 🟢 🎨
+    .addRule('no-commented-out-tests', WARNING) // 🟡🎨(warns)
+    .addRule('no-conditional-expect', ERROR) // 🟢
+    .addRule('no-conditional-in-test', OFF)
     .addRule('no-confusing-set-timeout', ERROR)
-    // .addRule('no-deprecated-functions', ERROR) // 🟢
-    // .addRule('no-disabled-tests', WARNING) // 🟢 (warns)
-    // .addRule('no-done-callback', ERROR) // 🟢
+    .addRule('no-deprecated-functions', ERROR) // 🟢
+    .addRule('no-disabled-tests', WARNING) // 🟡
+    .addRule('no-done-callback', ERROR) // 🟢
     .addRule('no-duplicate-hooks', ERROR)
-    // .addRule('no-export', ERROR) // 🟢
-    // .addRule('no-focused-tests', ERROR) // 🟢
-    // .addRule('no-hooks', OFF)
-    // .addRule('no-identical-title', ERROR) // 🟢
-    // .addRule('no-interpolation-in-snapshots', ERROR) // 🟢
-    // .addRule('no-jasmine-globals', ERROR) // 🟢
-    // .addRule('no-large-snapshots', OFF)
-    // .addRule('no-mocks-import', ERROR) // 🟢
+    .addRule('no-export', ERROR) // 🟢
+    .addRule('no-focused-tests', ERROR) // 🟢
+    .addRule('no-hooks', OFF)
+    .addRule('no-identical-title', ERROR) // 🟢
+    .addRule('no-interpolation-in-snapshots', ERROR) // 🟢
+    .addRule('no-jasmine-globals', ERROR) // 🟢
+    .addRule('no-large-snapshots', OFF)
+    .addRule('no-mocks-import', ERROR) // 🟢
     .addRule('no-restricted-jest-methods', hasRestrictedMethods ? ERROR : OFF, [
       restrictedMethods || {},
     ])
     .addRule('no-restricted-matchers', hasRestrictedMatchers ? ERROR : OFF, [
       restrictedMatchers || {},
     ])
-    // .addRule('no-standalone-expect', ERROR) // 🟢
-    // .addRule('no-test-prefixes', ERROR) // 🟢
+    .addRule('no-standalone-expect', ERROR) // 🟢
+    .addRule('no-test-prefixes', ERROR) // 🟢
     .addRule('no-test-return-statement', ERROR)
     .addRule('padding-around-after-all-blocks', getPaddingAroundSeverity('afterAll'))
     .addRule('padding-around-after-each-blocks', getPaddingAroundSeverity('afterEach'))
-    // .addRule('padding-around-all', OFF)
+    .addRule('padding-around-all', OFF)
     .addRule('padding-around-before-all-blocks', getPaddingAroundSeverity('beforeAll'))
     .addRule('padding-around-before-each-blocks', getPaddingAroundSeverity('beforeEach'))
     .addRule('padding-around-describe-blocks', getPaddingAroundSeverity('describe'))
     .addRule('padding-around-expect-groups', getPaddingAroundSeverity('expect'))
     .addRule('padding-around-test-blocks', getPaddingAroundSeverity('test'))
-    // .addRule('prefer-called-with', OFF)
+    .addRule('prefer-called-with', OFF)
     .addRule('prefer-comparison-matcher', ERROR)
     .addRule('prefer-each', WARNING)
     .addRule('prefer-equality-matcher', ERROR)
@@ -310,11 +307,11 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     .addRule('prefer-expect-resolves', ERROR)
     .addRule('prefer-hooks-in-order', ERROR)
     .addRule('prefer-hooks-on-top', ERROR)
-    // .addRule('prefer-importing-jest-globals', OFF)
+    .addRule('prefer-importing-jest-globals', OFF)
     .addRule('prefer-jest-mocked', ERROR)
     .addRule('prefer-lowercase-title', ERROR)
     .addRule('prefer-mock-promise-shorthand', ERROR)
-    // .addRule('prefer-snapshot-hint', OFF)
+    .addRule('prefer-snapshot-hint', OFF)
     .addRule('prefer-spy-on', ERROR)
     .addRule('prefer-strict-equal', WARNING)
     .addRule('prefer-to-be', ERROR) // 🎨
@@ -324,7 +321,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     .addRule('require-hook', WARNING)
     .addRule('require-to-throw-message', OFF)
     .addRule('require-top-level-describe', OFF)
-    // .addRule('valid-describe-callback', ERROR)
+    .addRule('valid-describe-callback', ERROR)
     .addRule('valid-expect', ERROR, [
       {
         alwaysAwait: true, // Default: false
@@ -339,8 +336,8 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
           }),
       },
     ])
-    .addRule('valid-expect-in-promise', ERROR)
-    .addRule('valid-title', ERROR)
+    .addRule('valid-expect-in-promise', ERROR) // 🟢
+    .addRule('valid-title', ERROR) // 🟢
     .addOverrides();
 
   const configBuilderTypescript = createConfigBuilder(context, configTypescript, 'jest');
@@ -386,14 +383,8 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
           filesFallback: defaultJestFiles,
         },
       ],
-      {
-        ...defaultJestEslintConfig,
-      },
+      defaultJestEslintConfig,
     )
-    // Actually empty currently
-    // @ts-expect-error no proper types
-    // eslint-disable-next-line ts/no-unsafe-argument
-    .addBulkRules(eslintPluginJestExtended.configs['flat/recommended'].rules)
     .addRule('prefer-to-be-array', getSuggestUsingJestExtendedMatcherSeverity('toBeArray'))
     .addRule('prefer-to-be-false', getSuggestUsingJestExtendedMatcherSeverity('toBeFalse'))
     .addRule('prefer-to-be-object', getSuggestUsingJestExtendedMatcherSeverity('toBeObject'))

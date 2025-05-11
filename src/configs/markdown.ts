@@ -1,19 +1,15 @@
-import eslintPluginMarkdown from '@eslint/markdown';
 import type {MarkdownLanguageOptions} from '@eslint/markdown/types';
-import {mergeProcessors, processorPassThrough} from 'eslint-merge-processors';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
 import {
   type ConfigSharedOptions,
-  type FlatConfigEntry,
   type FlatConfigEntryFiles,
   type FlatConfigEntryFilesOrIgnores,
   type RuleOverrides,
-  type RulesRecord,
   createConfigBuilder,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {arraify, assignDefaults} from '../utils';
+import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
 type MarkdownDialect = 'commonmark' | 'gfm';
@@ -93,7 +89,12 @@ export interface MarkdownEslintConfigOptions extends ConfigSharedOptions<'markdo
   parseFrontmatter?: MarkdownLanguageOptions['frontmatter'];
 }
 
-export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
+export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
+  const [eslintPluginMarkdown, {mergeProcessors, processorPassThrough}] = await Promise.all([
+    interopDefault(import('@eslint/markdown')),
+    interopDefault(import('eslint-merge-processors')),
+  ]);
+
   const optionsRaw = context.rootOptions.configs?.markdown;
   const optionsResolved = assignDefaults(optionsRaw, {
     lintMarkdown: true,
@@ -122,16 +123,13 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
   const defaultDialect: MarkdownDialect = typeof language === 'string' ? language : 'commonmark';
   const defaultConfigLanguage = `markdown/${defaultDialect}` as const;
 
-  const recommendedConfigs = arraify(eslintPluginMarkdown.configs.recommended);
-  const processorConfigs = arraify(eslintPluginMarkdown.configs.processor) as FlatConfigEntry[];
-
   const allowedFencedCodeBlocksLanguages =
     Array.isArray(codeBlocksAllowedLanguages) &&
     codeBlocksAllowedLanguages.length > 0 &&
     codeBlocksAllowedLanguages;
 
   // Legend:
-  // 🟣 - in recommended
+  // 🟢 - in recommended
 
   if (lintMarkdown) {
     configBuilder
@@ -151,12 +149,6 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
           },
         },
       )
-      .addBulkRules(
-        recommendedConfigs.reduce<RulesRecord>(
-          (result, config) => Object.assign(result, config.rules),
-          {},
-        ),
-      )
       .addRule(
         'fenced-code-language',
         allowedFencedCodeBlocksLanguages || codeBlocksAllowedLanguages === 'any-lang-required'
@@ -169,10 +161,10 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
             }),
           },
         ],
-      ) // 🟣
-      // .addRule('heading-increment', ERROR) // 🟣
-      // .addRule('no-duplicate-headings', OFF)
-      // .addRule('no-empty-links', ERROR) // 🟣
+      ) // 🟢
+      .addRule('heading-increment', ERROR) // 🟢
+      .addRule('no-duplicate-headings', OFF)
+      .addRule('no-empty-links', ERROR) // 🟢
       .addRule('no-html', allowHtmlTags === true ? OFF : ERROR, [
         {
           ...(Array.isArray(allowHtmlTags) &&
@@ -181,8 +173,8 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
             }),
         },
       ])
-      // .addRule('no-invalid-label-refs', ERROR) // 🟣
-      // .addRule('no-missing-label-refs', ERROR) // 🟣
+      .addRule('no-invalid-label-refs', ERROR) // 🟢
+      .addRule('no-missing-label-refs', ERROR) // 🟢
       .addOverrides();
 
     if (Array.isArray(language)) {
@@ -224,6 +216,9 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
     },
   );
 
+  // Legend:
+  // 🟣 - in the default processor config
+
   if (lintCodeBlocks) {
     configBuilder
       ?.addConfig(
@@ -245,14 +240,6 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
           },
         },
       )
-      .addBulkRules(
-        // https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/index.js#L107
-        processorConfigs.reduce<RulesRecord>(
-          (result, config) => Object.assign(result, config.rules),
-          {},
-        ),
-      )
-      // 🟣 - in the default processor config
       .disableAnyRule('', 'eol-last') // 🟣
       .disableAnyRule('', 'max-classes-per-file') // [too-strict]
       .disableAnyRule('', 'no-alert') // [runtime-only]
@@ -348,7 +335,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
       // misc
       // won't disable: yml/file-extension, sonarjs/no-identical-functions, @eslint-community/eslint-comments/no-unlimited-disable
       .disableAnyRule('unused-imports', 'no-unused-imports') // [too-strict]
-      .addBulkRules(optionsResolved.overridesCodeBlocks);
+      .addBulkRules(optionsResolved.overridesCodeBlocks); // TODO
 
     if (codeBlocksIgnoredLanguages?.length) {
       configBuilder?.addConfig('markdown/code-blocks/ignore', {

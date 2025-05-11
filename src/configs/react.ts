@@ -635,12 +635,12 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
       }),
   });
 
-  // Legend:
-  // 🟢 - in Recommended
-  // 💅 - Stylistic rule disabled in `eslint-config-prettier`: https://github.com/prettier/eslint-config-prettier/blob/f12309bbca9fb051b53fcece9a8491a1222235c8/index.js#L234
-  // Check rule usage: https://github.com/search?q=path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F+%22react%2Fboolean-prop-naming%22&type=code
-
   const configBuilderReactOriginal = createConfigBuilder(context, optionsResolved, 'react');
+
+  // Legend:
+  // 🟢 - in recommended
+  // 💅 - stylistic rule disabled in `eslint-config-prettier`: https://github.com/prettier/eslint-config-prettier/blob/f12309bbca9fb051b53fcece9a8491a1222235c8/index.js#L234
+  // Check rule usage: https://github.com/search?q=path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F+%22react%2Fboolean-prop-naming%22&type=code
 
   configBuilderReactOriginal
     ?.addConfig([
@@ -915,17 +915,18 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
     ) // 🟡
     .addOverrides();
 
-  // Legend:
-  // 🟢 - in Recommended, severity is `error`
-  // 🟡 - in Recommended, severity is `warn`
-  // 🔄️ - Name of the same rule in `eslint-plugin-react` that will be disabled if `configReactX` is enabled (name is also same if it is not specified)
-  // 💭 - Requires type information
-  // 🔢 - min React version in which the rule works (otherwise does nothing)
-
   const {noLegacyApis = {}, typeAwareRules: reactXTypeAwareRules = context.configsMeta.ts.enabled} =
     configReactXOptions;
 
   const configBuilderReactX = createConfigBuilder(context, configReactX, '@eslint-react');
+
+  // Legend:
+  // 🟢 - in recommended, severity is `error`
+  // 🟡 - in recommended, severity is `warn`
+  // 🔄️ - Name of the same rule in `eslint-plugin-react` that will be disabled if `configReactX` is enabled (name is also same if it is not specified)
+  // 💭 - Requires type information
+  // 🔢 - min React version in which the rule works (otherwise does nothing)
+
   configBuilderReactX
     ?.addConfig([
       'react/x',

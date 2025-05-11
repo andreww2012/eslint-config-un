@@ -1,5 +1,4 @@
-import eslintPluginEslintComments from '@eslint-community/eslint-plugin-eslint-comments';
-import {ERROR} from '../constants';
+import {ERROR, OFF} from '../constants';
 import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
@@ -21,8 +20,7 @@ export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) =>
   );
 
   // Legend:
-  // 🟣 - in recommended
-  // 🔴 - not in recommended
+  // 🟢 - in recommended
 
   configBuilder
     ?.addConfig([
@@ -34,20 +32,17 @@ export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) =>
         doNotIgnoreMarkdown: true,
       },
     ])
-    // @ts-expect-error no proper types
-    // eslint-disable-next-line ts/no-unsafe-argument
-    .addBulkRules(eslintPluginEslintComments.configs.recommended.rules)
-    // 🟢 Best Practices
-    .addRule('disable-enable-pair', ERROR, [{allowWholeFile: true}]) // 🟣
-    // .addRule('no-aggregating-enable', ERROR) // 🟣
-    // .addRule('no-duplicate-disable', ERROR) // 🟣
-    // .addRule('no-unlimited-disable', ERROR) // 🟣
-    // .addRule('no-unused-disable', OFF) // Handled by ESLint natively
-    // .addRule('no-unused-enable', ERROR) // 🟣
-    // 🟢 Stylistic
-    // .addRule('no-restricted-disable', OFF)
-    // .addRule('no-use', OFF)
-    // .addRule('require-description', OFF)
+    /* Category: Best Practices */
+    .addRule('disable-enable-pair', ERROR, [{allowWholeFile: true}]) // 🟢
+    .addRule('no-aggregating-enable', ERROR) // 🟢
+    .addRule('no-duplicate-disable', ERROR) // 🟢
+    .addRule('no-unlimited-disable', ERROR) // 🟢
+    .addRule('no-unused-disable', OFF) // Handled by ESLint natively
+    .addRule('no-unused-enable', ERROR) // 🟢
+    /* Category: Stylistic */
+    .addRule('no-restricted-disable', OFF)
+    .addRule('no-use', OFF)
+    .addRule('require-description', OFF)
     .addOverrides();
 
   return {

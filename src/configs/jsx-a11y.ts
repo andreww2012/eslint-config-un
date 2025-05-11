@@ -326,7 +326,7 @@ export const jsxA11yUnConfig: UnConfigFn<
   const configBuilder = createConfigBuilder(context, optionsResolved, prefixFinal);
 
   // Legend:
-  // 🔴 - NOT in Recommended
+  // 🔴 - NOT in recommended
 
   configBuilder
     ?.addConfig(
@@ -551,10 +551,6 @@ export const jsxA11yUnConfig: UnConfigFn<
     .addRule(rn('role-supports-aria-props'), ERROR)
     .addRule(rn('scope'), ERROR)
     .addRule(rn('tabindex-no-positive'), ERROR)
-    // Deprecated rules:
-    // .addRule(rn('accessible-emoji'), OFF)
-    // .addRule(rn('label-has-for'), OFF)
-    // .addRule(rn('no-onchange'), OFF)
     .addOverrides();
 
   return {

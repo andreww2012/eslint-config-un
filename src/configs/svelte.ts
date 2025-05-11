@@ -163,7 +163,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     .disableAnyRule('sonarjs', 'no-unused-collection');
 
   // Legend:
-  // 🟢 - in Recommended
+  // 🟢 - in recommended
   // 4️⃣ - not relevant in Svelte >=5, unless legacy features are used
   // 💅 - included in Prettier config: https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts
 
@@ -193,7 +193,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     /* CATEGORY: Security Vulnerability */
     .addRule('no-at-html-tags', ERROR) // 🟢 >=0.0.1
     // TODO should also set to `off` in `react` config, like in `vue`?
-    // .addRule('no-target-blank', OFF) // >=0.0.4
+    .addRule('no-target-blank', OFF) // >=0.0.4
     /* CATEGORY: Best Practices */
     .addRule('block-lang', ERROR, [
       {
@@ -281,20 +281,27 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     /* CATEGORY: System */
     // Added in the setup config
     /* CATEGORY: Deprecated */
-    // .addRule('@typescript-eslint/no-unnecessary-condition', OFF) // >=2.9.0
-    // .addRule('no-dynamic-slot-name', OFF) // >=0.14.0
-    // .addRule('no-goto-without-base', OFF) // >=2.36.0-next.9
+    .addRule('@typescript-eslint/no-unnecessary-condition', OFF) // >=2.9.0
+    .addRule('no-dynamic-slot-name', OFF) // >=0.14.0
+    .addRule('no-goto-without-base', OFF) // >=2.36.0-next.9
     .addOverrides();
 
   if (isPrettierPluginSvelteUsed) {
-    const disabledRuleConfig = eslintPluginSvelte.configs.prettier.find(
-      (config) => 'name' in config && config.name === 'svelte:prettier:turn-off-rules',
-    );
-    if (!disabledRuleConfig) {
-      throw new Error('Failed to find built-in config which disables Prettier incompatible rules');
-    }
-
-    configBuilder?.addConfig('svelte/prettier').addBulkRules(disabledRuleConfig.rules);
+    // From `prettier` config
+    configBuilder
+      ?.addConfig('svelte/prettier')
+      .addRule('first-attribute-linebreak', OFF)
+      .addRule('html-closing-bracket-new-line', OFF)
+      .addRule('html-closing-bracket-spacing', OFF)
+      .addRule('html-quotes', OFF)
+      .addRule('html-self-closing', OFF)
+      .addRule('indent', OFF)
+      .addRule('max-attributes-per-line', OFF)
+      .addRule('mustache-spacing', OFF)
+      .addRule('no-spaces-around-equal-signs-in-attribute', OFF)
+      .addRule('no-trailing-spaces', OFF)
+      .addRule('shorthand-attribute', OFF)
+      .addRule('shorthand-directive', OFF);
   }
 
   return {

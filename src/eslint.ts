@@ -123,39 +123,6 @@ export type ConfigSharedOptions<T extends null | string | RulesRecord = RulesRec
 
 export const genFlatConfigEntryName = (name: string) => `eslint-config-un/${name}`;
 
-// TODO report
-// eslint-disable-next-line ts/no-unnecessary-type-parameters
-export const createPluginObjectRenamer = <From extends string, To extends string>(
-  from: From,
-  to: To,
-) => {
-  const fromRegex = new RegExp(`^${from}/`);
-
-  return <T extends Record<string, unknown>>(object: T | FalsyValue) =>
-    Object.fromEntries(
-      Object.entries(object || {}).map(([ruleName, v]) => [
-        ruleName.replace(fromRegex, `${to}/`),
-        v,
-      ]),
-    ) as {
-      [Key in keyof T as Key extends `${From}/${infer Rest}` ? `${To}/${Rest}` : Key]: T[Key];
-    };
-};
-
-export const bulkChangeRuleSeverity = <T extends Partial<RulesRecord>>(
-  rules: T,
-  severity: RuleSeverity,
-): T =>
-  Object.fromEntries(
-    Object.entries(rules).map(
-      ([ruleName, ruleOptions]): [keyof RulesRecord, RulesRecord[keyof RulesRecord]] => [
-        ruleName,
-        // eslint-disable-next-line ts/no-unsafe-assignment
-        Array.isArray(ruleOptions) ? [severity, ...ruleOptions.slice(1)] : severity,
-      ],
-    ),
-  ) as T;
-
 export type EslintPlugin = Eslint.ESLint.Plugin;
 
 export const eslintPluginVanillaRules: EslintPlugin = Object.freeze({

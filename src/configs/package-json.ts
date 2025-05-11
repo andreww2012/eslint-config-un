@@ -1,6 +1,5 @@
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
-import {pluginsLoaders} from '../plugins';
 import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -77,10 +76,7 @@ export interface PackageJsonEslintConfigOptions extends ConfigSharedOptions<'pac
 }
 
 export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) => {
-  const [eslintPluginPackageJson, jsoncEslintParser] = await Promise.all([
-    pluginsLoaders['package-json'](),
-    interopDefault(import('jsonc-eslint-parser')),
-  ]);
+  const jsoncEslintParser = await interopDefault(import('jsonc-eslint-parser'));
 
   const optionsRaw = context.rootOptions.configs?.packageJson;
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -102,7 +98,7 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
   const configBuilder = createConfigBuilder(context, optionsResolved, 'package-json');
 
   // Legend:
-  // 🟣 - in recommended
+  // 🟢 - in recommended
 
   configBuilder
     ?.addConfig(
@@ -113,33 +109,31 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
         },
       },
     )
-    // eslint-disable-next-line ts/no-unsafe-argument, ts/no-explicit-any, ts/no-unsafe-member-access
-    .addBulkRules((eslintPluginPackageJson as any).configs.recommended.rules)
-    // .addRule('no-empty-fields', ERROR) // 🟣 >=0.21.0
+    .addRule('no-empty-fields', ERROR) // 🟢 >=0.21.0
     .addRule('no-redundant-files', ERROR) // >=0.20.0
-    .addRule('order-properties', ERROR, [{order}]) // 🟣
-    .addRule('repository-shorthand', ERROR, [{form: repositoryShorthand}]) // 🟣
-    // .addRule('restrict-dependency-ranges', OFF) // >=0.30.0
+    .addRule('order-properties', ERROR, [{order}]) // 🟢
+    .addRule('repository-shorthand', ERROR, [{form: repositoryShorthand}]) // 🟢
     .addRule('require-author', getRequireFieldSeverity('author')) // >=0.22.0
-    .addRule('require-description', getRequireFieldSeverity('description')) // >=0.31.0
+    .addRule('require-description', getRequireFieldSeverity('description')) // 🟢 >=0.31.0
     .addRule('require-engines', getRequireFieldSeverity('engines')) // >=0.28.0
     .addRule('require-files', getRequireFieldSeverity('files')) // >=0.26.0
     .addRule('require-keywords', getRequireFieldSeverity('keywords')) // >=0.25.0
-    .addRule('require-name', getRequireFieldSeverity('name')) // 🟣 >=0.24.0
+    .addRule('require-name', getRequireFieldSeverity('name')) // 🟢 >=0.24.0
     .addRule('require-types', getRequireFieldSeverity('types')) // >=0.29.0
-    .addRule('require-version', getRequireFieldSeverity('version')) // 🟣 >=0.23.0
+    .addRule('require-version', getRequireFieldSeverity('version')) // 🟢 >=0.23.0
+    .addRule('restrict-dependency-ranges', OFF) // >=0.30.0
     .addRule('sort-collections', ERROR, [
       getKeysOfTruthyValues({
         ...DEFAULT_COLLECTIONS_TO_SORT,
         ...optionsResolved.collectionsToSort,
       }),
-    ]) // 🟣
-    // .addRule('unique-dependencies', ERROR) // 🟣
-    // .addRule('valid-local-dependency', ERROR) // 🟣
-    // .addRule('valid-name', ERROR) // 🟣
-    // .addRule('valid-package-definition', ERROR) // 🟣
-    // .addRule('valid-repository-directory', ERROR) // 🟣
-    // .addRule('valid-version', ERROR) // 🟣
+    ]) // 🟢
+    .addRule('unique-dependencies', ERROR) // 🟢
+    .addRule('valid-local-dependency', ERROR) // 🟢
+    .addRule('valid-name', ERROR) // 🟢
+    .addRule('valid-package-definition', ERROR) // 🟢
+    .addRule('valid-repository-directory', ERROR) // 🟢
+    .addRule('valid-version', ERROR) // 🟢
     .addOverrides();
 
   return {

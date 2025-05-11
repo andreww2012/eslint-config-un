@@ -46,7 +46,7 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = as
   const configBuilder = createConfigBuilder(context, optionsResolved, 'json-schema-validator');
 
   // Legend:
-  // 🟣 - in recommended
+  // 🟢 - in recommended
 
   configBuilder?.addConfig(
     [
@@ -98,7 +98,7 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = as
         },
       }),
     })
-    .addRule('no-invalid', ERROR, noInvalidOptions == null ? [] : [noInvalidOptions]) // 🟣 >=0.1.0
+    .addRule('no-invalid', ERROR, noInvalidOptions == null ? [] : [noInvalidOptions]) // 🟢 >=0.1.0
     .addOverrides();
 
   return {

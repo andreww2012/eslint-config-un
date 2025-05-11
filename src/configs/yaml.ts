@@ -1,6 +1,5 @@
 import {ERROR, GLOB_YAML, OFF} from '../constants';
 import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
-import {pluginsLoaders} from '../plugins';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -38,10 +37,7 @@ export interface YamlEslintConfigOptions extends ConfigSharedOptions<'yml'> {
 }
 
 export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
-  const [eslintPluginYaml, yamlEslintParser] = await Promise.all([
-    pluginsLoaders.yml(),
-    interopDefault(import('yaml-eslint-parser')),
-  ]);
+  const yamlEslintParser = await interopDefault(import('yaml-eslint-parser'));
 
   const optionsRaw = context.rootOptions.configs?.yaml;
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -52,8 +48,8 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'yml');
 
-  // LEGEND:
-  // 🟣 = Included in Standard ruleset
+  // Legend:
+  // 🟣 = in standard
 
   configBuilder
     ?.addConfig(
@@ -79,48 +75,45 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
         },
       },
     )
-    .addBulkRules(
-      eslintPluginYaml.configs['flat/standard'].reduce(
-        (result, config) => Object.assign(result, config.rules),
-        {},
-      ),
-    )
-    // 🟢 Base rules
+    /* Category: Base rules */
     .addRule('block-mapping-colon-indicator-newline', ERROR) // >=1.2.0
-    // .addRule('block-mapping-question-indicator-newline', ERROR) // 🟣 >=0.5.0
-    // .addRule('block-mapping', ERROR) // 🟣 >=0.1.0
-    // .addRule('block-sequence-hyphen-indicator-newline', ERROR) // 🟣 >=0.5.0
-    // .addRule('block-sequence', ERROR) // 🟣 >=0.1.0
+    .addRule('block-mapping-question-indicator-newline', ERROR) // 🟣 >=0.5.0
+    .addRule('block-mapping', ERROR) // 🟣 >=0.1.0
+    .addRule('block-sequence-hyphen-indicator-newline', ERROR) // 🟣 >=0.5.0
+    .addRule('block-sequence', ERROR) // 🟣 >=0.1.0
     // TODO why reporting here?
     .addRule('file-extension', ERROR, [{extension: enforceExtension}]) // >=1.2.0
     .addRule('indent', ERROR) // 🟣 >=0.1.0
     .addRule('key-name-casing', optionsResolved.casing == null ? OFF : ERROR, [
       {...optionsResolved.casing, ignores: ['<<', ...(optionsResolved.casing?.ignores || [])]},
     ]) // >=0.2.0
-    // .addRule('no-empty-document', ERROR) // 🟣 >=0.6.0
-    // .addRule('no-empty-key', ERROR) // 🟣 >=0.3.0
-    // .addRule('no-empty-mapping-value', ERROR) // 🟣 >=0.3.0
-    // .addRule('no-empty-sequence-entry', ERROR) // 🟣 >=0.3.0
-    // .addRule('no-tab-indent', ERROR) // 🟣 >=0.1.0
-    // .addRule('no-trailing-zeros', OFF) // >=1.6.0
+    .addRule('no-empty-document', ERROR) // 🟣 >=0.6.0
+    .addRule('no-empty-key', ERROR) // 🟣 >=0.3.0
+    .addRule('no-empty-mapping-value', ERROR) // 🟣 >=0.3.0
+    .addRule('no-empty-sequence-entry', ERROR) // 🟣 >=0.3.0
+    .addRule('no-tab-indent', ERROR) // 🟣 >=0.1.0
+    .addRule('no-trailing-zeros', OFF) // >=1.6.0
     // TODO option to ignore if a string is ISO 8601 date?
-    // .addRule('plain-scalar', ERROR) // 🟣 >=0.3.0
+    .addRule('plain-scalar', ERROR) // 🟣 >=0.3.0
     .addRule('quotes', optionsResolved.quotes === false ? OFF : ERROR, [
       {prefer: optionsResolved.quotes || 'single'},
     ]) // 🟣 >=0.3.0
-    // .addRule('require-string-key', OFF) // >=0.3.0
-    // .addRule('sort-keys', OFF) // >=0.3.0
-    // .addRule('sort-sequence-values', OFF) // >=0.14.0
-    // .addRule('vue-custom-block/no-parsing-error', ERROR) // >=0.2.0
-    // 🟢 Extension rules
-    // .addRule('flow-mapping-curly-newline', ERROR) // 🟣 >=0.1.0
-    // .addRule('flow-mapping-curly-spacing', ERROR) // 🟣 >=0.1.0
-    // .addRule('flow-sequence-bracket-newline', ERROR) // 🟣 >=0.1.0
-    // .addRule('flow-sequence-bracket-spacing', ERROR) // 🟣 >=0.1.0
-    // .addRule('key-spacing', ERROR) // 🟣 >=0.3.0
-    // .addRule('no-irregular-whitespace', ERROR) // 🟣 >=0.1.0
+    .addRule('require-string-key', OFF) // >=0.3.0
+    .addRule('sort-keys', OFF) // >=0.3.0
+    .addRule('sort-sequence-values', OFF) // >=0.14.0
+    .addRule('vue-custom-block/no-parsing-error', ERROR) // >=0.2.0
+    /* Category: Extension rules */
+    .addRule('flow-mapping-curly-newline', ERROR) // 🟣 >=0.1.0
+    .addRule('flow-mapping-curly-spacing', ERROR) // 🟣 >=0.1.0
+    .addRule('flow-sequence-bracket-newline', ERROR) // 🟣 >=0.1.0
+    .addRule('flow-sequence-bracket-spacing', ERROR) // 🟣 >=0.1.0
+    .addRule('key-spacing', ERROR) // 🟣 >=0.3.0
+    .addRule('no-irregular-whitespace', ERROR) // 🟣 >=0.1.0
     .addRule('no-multiple-empty-lines', ERROR) // >=0.12.0
     .addRule('spaced-comment', ERROR) // 🟣 >=0.1.0
+    .disableAnyRule('', 'no-irregular-whitespace') // 🟣
+    .disableAnyRule('', 'no-unused-vars') // 🟣
+    .disableAnyRule('', 'spaced-comment') // 🟣
     .addOverrides();
 
   return {

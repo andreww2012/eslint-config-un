@@ -30,8 +30,8 @@ export const nextJsUnConfig: UnConfigFn<'nextJs'> = (context) => {
   const configBuilder = createConfigBuilder(context, optionsResolved, '@next/next');
 
   // Legend:
-  // 🟢 - in Recommended (error)
-  // 🟡 - in Recommended (warning)
+  // 🟢 - in recommended
+  // 🟡 - in recommended (warns)
   // 🔵 - in Core Web Vitals (error)
 
   configBuilder
