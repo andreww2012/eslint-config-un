@@ -12,7 +12,7 @@ export const deMorganUnConfig: UnConfigFn<'deMorgan'> = (context) => {
   const configBuilder = createConfigBuilder(context, optionsResolved, 'de-morgan');
 
   configBuilder
-    ?.addConfig(['de-morgan', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['de-morgan', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
     .addRule('no-negated-conjunction', ERROR)
     .addRule('no-negated-disjunction', ERROR)
     .addOverrides();

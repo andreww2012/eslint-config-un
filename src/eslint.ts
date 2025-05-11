@@ -7,7 +7,7 @@ import type {UnConfigContext} from './configs';
 import {
   ERROR,
   GLOB_CSS,
-  GLOB_HTML,
+  GLOB_HTML_ALL,
   GLOB_MARKDOWN,
   GLOB_MARKDOWN_ALL_CODE_BLOCKS,
   OFF,
@@ -298,7 +298,7 @@ export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null
     const fallbackIgnores = internalOptions.ignoresFallback || [];
     const ignores = [
       ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
-      ...(internalOptions.doNotIgnoreHtml ? [] : [GLOB_HTML]),
+      ...(internalOptions.doNotIgnoreHtml ? [] : GLOB_HTML_ALL),
       ...(internalOptions.doNotIgnoreCss ? [] : [GLOB_CSS]),
       ...(internalOptions.ignoreMarkdownCodeBlocks ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS] : []),
       ...(userIgnores.length > 0 && internalOptions.includeDefaultFilesAndIgnores

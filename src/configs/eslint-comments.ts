@@ -30,6 +30,7 @@ export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) =>
         // Supports official markdown, css and json plugins: https://github.com/eslint-community/eslint-plugin-eslint-comments/issues/256
         doNotIgnoreCss: true,
         doNotIgnoreMarkdown: true,
+        doNotIgnoreHtml: true,
       },
     ])
     /* Category: Best Practices */

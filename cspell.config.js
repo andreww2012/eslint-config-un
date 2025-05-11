@@ -60,12 +60,13 @@ export default {
     'activedescendant',
     'proptypes',
 
-    // Actual English words-ish
+    // Actual English-ish words
     'uncategorized',
     'mischeck',
     'unthrown',
     'promisable',
     'requirable',
     'rethrowing',
+    'dedented',
   ],
 };

@@ -15,6 +15,7 @@
     "css",
     "postcss",
     "svelte",
+    "html",
   ],
 
   "[javascript][typescript][typescriptreact][vue][css][scss][postcss][html][svelte]": {

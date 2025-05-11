@@ -17,6 +17,7 @@ import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-fu
 import type {ImportEslintConfigOptions} from './import';
 import type {JestEslintConfigOptions} from './jest';
 import type {JsEslintConfigOptions} from './js';
+import type {JsInlineEslintConfigOptions} from './js-inline';
 import type {JsdocEslintConfigOptions} from './jsdoc';
 import type {JsonSchemaValidatorEslintConfigOptions} from './json-schema-validator';
 import type {JsoncEslintConfigOptions} from './jsonc';
@@ -340,6 +341,16 @@ interface UnConfigs {
    * @default true <=> `solid-js` package is installed
    */
   solid: UnConfigOptions<SolidEslintConfigOptions>;
+
+  /**
+   * Plugin for linting `<script>` blocks inside HTML files. It does not have any
+   * actual rules.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-html`](https://www.npmjs.com/package/eslint-plugin-html) ([docs](https://github.com/BenoitZugmeyer/eslint-plugin-html?tab=ISC-1-ov-file#))
+   * @default true
+   */
+  jsInline: UnConfigOptions<JsInlineEslintConfigOptions>;
 
   /**
    * NOTE: disabled by default

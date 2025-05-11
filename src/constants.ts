@@ -42,6 +42,8 @@ export const GLOB_YAML = `**/*.${GLOB_YAML_EXTENSION}` as const;
 export const GLOB_TOML = '**/*.toml' as const;
 
 export const GLOB_HTML = '**/*.html' as const;
+export const GLOB_HTM = '**/*.htm' as const;
+export const GLOB_HTML_ALL = [GLOB_HTML, GLOB_HTM];
 
 export const GLOB_CSS = '**/*.css' as const;
 

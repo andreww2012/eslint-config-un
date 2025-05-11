@@ -15,7 +15,7 @@ export const securityUnConfig: UnConfigFn<'security'> = (context) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(['security', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['security', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
     .addRule('detect-bidi-characters', ERROR) // 🟡
     .addRule('detect-buffer-noassert', ERROR) // 🟡
     .addRule('detect-child-process', WARNING) // 🟡

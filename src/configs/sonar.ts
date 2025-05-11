@@ -42,7 +42,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
   // 🔵 - JSX/HTML rule
 
   configBuilder
-    ?.addConfig(['sonar', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['sonar', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
     .addRule('anchor-precedence', ERROR) // 🟢💭🔤
     // ⚠️ Handled by TypeScript
     .addRule('argument-type', OFF) // 🟢💭

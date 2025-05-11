@@ -12,7 +12,7 @@ export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
   const configBuilder = createConfigBuilder(context, optionsResolved, 'perfectionist');
 
   configBuilder
-    ?.addConfig(['perfectionist', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['perfectionist', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
     .addRule('sort-array-includes', OFF) // >=0.5.0
     .addRule('sort-classes', OFF) // >=0.11.0
     .addRule('sort-decorators', OFF) // >=4.0.0

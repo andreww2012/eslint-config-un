@@ -16,7 +16,7 @@ export const promiseUnConfig: UnConfigFn<'promise'> = (context) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(['promise', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['promise', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
     .addRule('always-return', ERROR, [{ignoreLastCallback: true}]) // 🟢
     .addRule('avoid-new', OFF)
     .addRule('catch-or-return', ERROR, [{allowThenStrict: true, allowFinally: true}]) // 🟢

@@ -5,6 +5,7 @@
 - New config: `cloudfrontFunctions` for [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html), **<u>disabled</u>** by default.
 - New config: `solid` via [`eslint-plugin-solid`](https://www.npmjs.com/package/eslint-plugin-solid), enabled automatically if `solid-js` package is installed.
 - New config: `nodeDependencies` via [`eslint-plugin-node-dependencies`](https://www.npmjs.com/package/eslint-plugin-node-dependencies), **<u>disabled</u>** by default.
+- New config: `jsInline` via [`eslint-plugin-html`](https://www.npmjs.com/package/eslint-plugin-html), enabled by default.
 - ESLint plugins are now loaded on demand, i.e. only if they are actually used anywhere in the config. You can opt out of this behavior by setting `loadPluginsOnDemand` option to `false`.
 - Added an option to `import` config to specify `eslint-plugin-import-x` plugin settings.
 - [**BREAKING**] Passing empty array to `files` will now disable the config.

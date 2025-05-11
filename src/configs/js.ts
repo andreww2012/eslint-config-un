@@ -55,7 +55,7 @@ export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['js', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['js', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
     /* Category: Possible Problems */
     .addRule('array-callback-return', ERROR, [{checkForEach: true}])
     .addRule('constructor-super', ERROR) // 🟢

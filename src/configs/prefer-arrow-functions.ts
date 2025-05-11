@@ -16,7 +16,10 @@ export const preferArrowFunctionsUnConfig: UnConfigFn<'preferArrowFunctions'> = 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'prefer-arrow-functions');
 
   configBuilder
-    ?.addConfig(['prefer-arrow-functions', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig([
+      'prefer-arrow-functions',
+      {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true},
+    ])
     .addRule('prefer-arrow-functions', WARNING)
     .addOverrides();
 

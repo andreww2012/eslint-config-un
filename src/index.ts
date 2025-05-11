@@ -17,6 +17,7 @@ import {cloudfrontFunctionsEslintConfig} from './configs/extra/cloudfront-functi
 import {importUnConfig} from './configs/import';
 import {jestUnConfig} from './configs/jest';
 import {jsUnConfig} from './configs/js';
+import {jsInlineUnConfig} from './configs/js-inline';
 import {jsdocUnConfig} from './configs/jsdoc';
 import {jsonSchemaValidatorUnConfig} from './configs/json-schema-validator';
 import {jsoncUnConfig} from './configs/jsonc';
@@ -147,6 +148,7 @@ export const eslintConfig = async (
   const isDeMorganEnabled = Boolean(configsOptions.deMorgan ?? false);
   const isEsEnabled = Boolean(configsOptions.es ?? false);
   const isEslintCommentsEnabled = Boolean(configsOptions.eslintComments ?? true);
+  const isJsInlineEnabled = Boolean(configsOptions.jsInline ?? true);
   const isImportEnabled = Boolean(configsOptions.import ?? true);
   const isJestEnabled = Boolean(configsOptions.jest ?? packagesInfo.jest);
   const isJsdocEnabled = Boolean(configsOptions.jsdoc ?? true);
@@ -209,6 +211,7 @@ export const eslintConfig = async (
       import: {enabled: isImportEnabled},
       jest: {enabled: isJestEnabled},
       js: {enabled: true},
+      jsInline: {enabled: isJsInlineEnabled},
       jsdoc: {enabled: isJsdocEnabled},
       json: {enabled: isJsoncEnabled},
       jsonSchemaValidator: {
@@ -333,6 +336,7 @@ export const eslintConfig = async (
     isPnpmEnabled && pnpmUnConfig(context),
     isNextJsEnabled && nextJsUnConfig(context),
     isSolidEnabled && solidUnConfig(context),
+    isJsInlineEnabled && jsInlineUnConfig(context),
 
     /* Disabled by default */
     isSecurityEnabled && securityUnConfig(context),

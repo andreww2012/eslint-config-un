@@ -195,7 +195,7 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
   // 4️⃣ - in Stylistic
 
   configBuilder
-    ?.addConfig(['jsdoc', {includeDefaultFilesAndIgnores: true}], {
+    ?.addConfig(['jsdoc', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}], {
       ...(pluginSettings && {
         settings: {
           jsdoc: pluginSettings,

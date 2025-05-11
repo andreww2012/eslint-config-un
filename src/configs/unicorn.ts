@@ -15,7 +15,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
   // 🔴 - not in recommended
 
   configBuilder
-    ?.addConfig(['unicorn', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig(['unicorn', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
     .addRule('better-regex', OFF) // 🔴
     .addRule('catch-error-name', OFF)
     .addRule('catch-error-name', WARNING, [], {disableAutofix: true})

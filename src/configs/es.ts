@@ -327,7 +327,7 @@ export const esUnConfig: UnConfigFn<
   const configBuilder = createConfigBuilder(context, optionsResolved, 'es');
 
   const mainConfig = configBuilder?.addConfig(
-    [customConfig?.prefix || 'es', {includeDefaultFilesAndIgnores: true}],
+    [customConfig?.prefix || 'es', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}],
     {
       ...(pluginSettings && {
         settings: {
