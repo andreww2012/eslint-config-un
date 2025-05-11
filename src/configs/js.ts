@@ -121,14 +121,13 @@ export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
     .addRule('block-scoped-var', ERROR)
     .addRule('camelcase', ERROR, RULE_CAMELCASE_OPTIONS)
     .addRule('capitalized-comments', OFF)
-    .addRule('class-methods-use-this', ERROR, [
-      {
-        ...(eslintVersion >= 9.24 && {
-          ignoreOverrideMethods: true,
-          ignoreClassesWithImplements: 'all',
-        }),
-      },
-    ])
+    .addRule(
+      'class-methods-use-this',
+      ERROR,
+      eslintVersion >= 9.24
+        ? [{ignoreOverrideMethods: true, ignoreClassesWithImplements: 'all'}]
+        : [],
+    )
     .addRule('complexity', OFF)
     .addRule('consistent-return', ERROR)
     .addRule('consistent-this', ERROR, ['that'])
@@ -172,9 +171,11 @@ export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
     .addRule('no-octal', ERROR) // 🟢
     .addRule('no-redeclare', ERROR) // 🟢
     .addRule('no-regex-spaces', ERROR) // 🟢
-    .addRule('no-shadow-restricted-names', ERROR, [
-      {...(eslintVersion >= 9.26 && {reportGlobalThis: true})},
-    ]) // 🟢
+    .addRule(
+      'no-shadow-restricted-names',
+      ERROR,
+      eslintVersion >= 9.26 ? [{reportGlobalThis: true}] : [],
+    ) // 🟢
     .addRule('no-div-regex', OFF)
     .addRule('no-else-return', ERROR, [{allowElseIf: false}])
     .addRule('no-empty-function', ERROR)
