@@ -113,6 +113,9 @@ export const pluginsLoaders = {
   solid: () =>
     // @ts-expect-error types mismatch
     interopDefault<EslintPlugin>(import('eslint-plugin-solid')),
+  'node-dependencies': () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('eslint-plugin-node-dependencies')),
 } satisfies Record<string, () => Promise<EslintPlugin | null>>;
 
 export type LoadablePluginPrefix =

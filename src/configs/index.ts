@@ -24,6 +24,7 @@ import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import type {NextJsEslintConfigOptions} from './nextjs';
 import type {NodeEslintConfigOptions} from './node';
+import type {NodeDependenciesEslintConfigOptions} from './node-dependencies';
 import type {PackageJsonEslintConfigOptions} from './package-json';
 import type {PerfectionistEslintConfigOptions} from './perfectionist';
 import type {PnpmEslintConfigOptions} from './pnpm';
@@ -423,6 +424,20 @@ interface UnConfigs {
    * @default false
    */
   es: UnConfigOptions<EsEslintConfigOptions>;
+
+  /**
+   * Used plugins:
+   * - [`eslint-plugin-node-dependencies`](https://www.npmjs.com/package/eslint-plugin-node-dependencies) ([docs](https://ota-meshi.github.io/eslint-plugin-node-dependencies))
+   *
+   * Note that this plugin is considered experimental.
+   *
+   * By default will be applied to all `package.json` files.
+   * You may only specify JSON files for this config.
+   *
+   * NOTE: disabled by default
+   * @default false
+   */
+  nodeDependencies: UnConfigOptions<NodeDependenciesEslintConfigOptions>;
 
   /**
    * A config specific to files meant to be executed. By default, allows `process.exit()`

@@ -3,7 +3,7 @@ import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from
 import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
-const DEFAULT_FILES = [GLOB_PACKAGE_JSON];
+export const DEFAULT_FILES_PACKAGE_JSON = [GLOB_PACKAGE_JSON];
 
 type PackageJsonCollection =
   | 'scripts'
@@ -102,7 +102,10 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
 
   configBuilder
     ?.addConfig(
-      ['package-json', {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_FILES}],
+      [
+        'package-json',
+        {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_FILES_PACKAGE_JSON},
+      ],
       {
         languageOptions: {
           parser: jsoncEslintParser,

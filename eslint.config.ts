@@ -30,6 +30,7 @@ export default eslintConfig({
     perfectionist: {
       files: ['src/plugins.ts'],
     },
+    nodeDependencies: true,
   },
 
   extraConfigs: [

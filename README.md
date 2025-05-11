@@ -55,6 +55,7 @@ Includes the rules from the following configs & plugins:
 - `es` (since v0.10.0), using [`eslint-plugin-es-x`](https://www.npmjs.com/package/eslint-plugin-es-x)
 - `cloudfrontFunctions` (since v0.10.0) for [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html)
 - `solid` (since v0.10.0), using [`eslint-plugin-solid`](https://www.npmjs.com/package/eslint-plugin-solid)
+- `nodeDependencies` (since v0.10.0), using [`eslint-plugin-node-dependencies`](https://www.npmjs.com/package/eslint-plugin-node-dependencies)
 
 ## Features
 

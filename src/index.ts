@@ -24,6 +24,7 @@ import {jsxA11yUnConfig} from './configs/jsx-a11y';
 import {markdownUnConfig} from './configs/markdown';
 import {nextJsUnConfig} from './configs/nextjs';
 import {nodeUnConfig} from './configs/node';
+import {nodeDependenciesUnConfig} from './configs/node-dependencies';
 import {packageJsonUnConfig} from './configs/package-json';
 import {perfectionistUnConfig} from './configs/perfectionist';
 import {pnpmUnConfig} from './configs/pnpm';
@@ -155,6 +156,7 @@ export const eslintConfig = async (
   const isMarkdownEnabled = Boolean(configsOptions.markdown ?? true);
   const isNextJsEnabled = Boolean(configsOptions.nextJs ?? packagesInfo.next);
   const isNodeEnabled = Boolean(configsOptions.node ?? true);
+  const isNodeDependenciesEnabled = Boolean(configsOptions.nodeDependencies ?? false);
   const isPackageJsonEnabled = Boolean(configsOptions.packageJson ?? false);
   const isPerfectionistEnabled = Boolean(configsOptions.perfectionist ?? false);
   const isPnpmEnabled = Boolean(configsOptions.pnpm ?? usedPackageManager?.name === 'pnpm');
@@ -216,6 +218,7 @@ export const eslintConfig = async (
       markdown: {enabled: isMarkdownEnabled},
       nextJs: {enabled: isNextJsEnabled},
       node: {enabled: isNodeEnabled},
+      nodeDependencies: {enabled: isNodeDependenciesEnabled},
       packageJson: {enabled: isPackageJsonEnabled},
       perfectionist: {enabled: isPerfectionistEnabled},
       pnpm: {enabled: isPnpmEnabled},
@@ -308,6 +311,7 @@ export const eslintConfig = async (
       } as const,
     },
 
+    /* Enabled by default or conditionally */
     jsUnConfig(context),
     isUnicornEnabled && unicornUnConfig(context),
     isImportEnabled && importUnConfig(context),
@@ -330,6 +334,7 @@ export const eslintConfig = async (
     isNextJsEnabled && nextJsUnConfig(context),
     isSolidEnabled && solidUnConfig(context),
 
+    /* Disabled by default */
     isSecurityEnabled && securityUnConfig(context),
     isPreferArrowFunctionsEnabled && preferArrowFunctionsUnConfig(context),
     isYamlEnabled && yamlUnConfig(context),
@@ -340,7 +345,9 @@ export const eslintConfig = async (
     isDeMorganEnabled && deMorganUnConfig(context),
     isJsonSchemaValidatorEnabled && jsonSchemaValidatorUnConfig(context),
     casePoliceEslintConfigResult && casePoliceEslintConfigResult.configs,
+    isNodeDependenciesEnabled && nodeDependenciesUnConfig(context),
 
+    /* Other configs */
     isTypescriptEnabled &&
       tsUnConfig(context, {
         astroResolvedOptions: astroEslintConfigResult
