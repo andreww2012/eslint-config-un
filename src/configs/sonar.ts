@@ -82,7 +82,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     .addRule('bool-param-default', OFF)
     // ⚠️ Prettier
     .addRule('call-argument-line', OFF) // 🟢
-    .addRule('certificate-transparency', ERROR) // 🟢 📦 `helmet`
+    .addRule('certificate-transparency', OFF) // 🟢 📦 `helmet` Deprecated
     .addRule('chai-determinate-assertion', testsRulesSeverity) // 🟢🧪 📦 `chai`
     // ⚠️ `camelcase`
     .addRule('class-name', OFF) // 🟢

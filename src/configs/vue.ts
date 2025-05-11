@@ -691,7 +691,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     .addRule('no-access-key', ERROR) // 🟢
     .addRule('no-autofocus', ERROR) // 🟢
     .addRule('no-distracting-elements', ERROR) // 🟢
-    .addRule('no-onchange', ERROR)
+    .addRule('no-onchange', OFF) // Deprecated
     .addRule('no-redundant-roles', ERROR) // 🟢
     .addRule('no-static-element-interactions', ERROR) // 🟢
     .addRule('role-has-required-aria-props', ERROR) // 🟢
