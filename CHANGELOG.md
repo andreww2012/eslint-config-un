@@ -35,6 +35,7 @@
 - `@vitest/eslint-plugin`: [1.1.43 -> 1.1.44](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.43...v1.1.44)
 - `eslint-config-prettier`: [10.1.2 -> 10.1.5](https://github.com/prettier/eslint-config-prettier/compare/v10.1.2...v10.1.5)
 - `eslint-plugin-import-x`: [4.11.0 -> 4.11.1](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.11.0...v4.11.1)
+- `eslint-plugin-jsdoc`: [50.6.11 -> 50.6.14](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.11...v50.6.14)
 
 ## 0.9.0
 
