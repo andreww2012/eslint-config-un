@@ -1,7 +1,7 @@
 import type Eslint from 'eslint';
 import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-vue-blocks';
 import globals from 'globals';
-import {type RuleSeverity, ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, type RuleSeverity, WARNING} from '../constants';
 import {
   type ConfigSharedOptions,
   type FlatConfigEntryFilesOrIgnores,
