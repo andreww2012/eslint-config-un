@@ -14,6 +14,7 @@ import {esUnConfig} from './configs/es';
 import {eslintCommentsUnConfig} from './configs/eslint-comments';
 import {cliEslintConfig} from './configs/extra/cli';
 import {cloudfrontFunctionsEslintConfig} from './configs/extra/cloudfront-functions';
+import {htmlUnConfig} from './configs/html';
 import {importUnConfig} from './configs/import';
 import {jestUnConfig} from './configs/jest';
 import {jsUnConfig} from './configs/js';
@@ -139,6 +140,7 @@ export const eslintConfig = async (
   ]);
   const packagesInfo = packagesInfoRaw as UnConfigContext['packagesInfo'];
 
+  const isAngularEnabled = Boolean(configsOptions.angular ?? packagesInfo['@angular/core']);
   const isAstroEnabled = Boolean(configsOptions.astro ?? packagesInfo.astro);
   const isCasePoliceEnabled = Boolean(configsOptions.casePolice ?? false);
   const isCliEnabled = Boolean(configsOptions.cli ?? true);
@@ -150,6 +152,8 @@ export const eslintConfig = async (
   const isEslintCommentsEnabled = Boolean(configsOptions.eslintComments ?? true);
   const isJsInlineEnabled = Boolean(configsOptions.jsInline ?? true);
   const isImportEnabled = Boolean(configsOptions.import ?? true);
+  // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
+  const isHtmlEnabled = Boolean(configsOptions.html ?? !isAngularEnabled);
   const isJestEnabled = Boolean(configsOptions.jest ?? packagesInfo.jest);
   const isJsdocEnabled = Boolean(configsOptions.jsdoc ?? true);
   const isJsoncEnabled = Boolean(configsOptions.json ?? false);
@@ -196,7 +200,7 @@ export const eslintConfig = async (
     packagesInfo,
     rootOptions: optionsResolved,
     configsMeta: {
-      angular: {enabled: true}, // TODO
+      angular: {enabled: isAngularEnabled},
       astro: {enabled: isAstroEnabled},
       casePolice: {enabled: isCasePoliceEnabled},
       cli: {enabled: isCliEnabled},
@@ -205,18 +209,15 @@ export const eslintConfig = async (
       cssInJs: {enabled: isCssInJsEnabled},
       deMorgan: {enabled: isDeMorganEnabled},
       es: {enabled: isEsEnabled},
-      eslintComments: {
-        enabled: isEslintCommentsEnabled,
-      },
+      eslintComments: {enabled: isEslintCommentsEnabled},
+      html: {enabled: isHtmlEnabled},
       import: {enabled: isImportEnabled},
       jest: {enabled: isJestEnabled},
       js: {enabled: true},
       jsInline: {enabled: isJsInlineEnabled},
       jsdoc: {enabled: isJsdocEnabled},
       json: {enabled: isJsoncEnabled},
-      jsonSchemaValidator: {
-        enabled: isJsonSchemaValidatorEnabled,
-      },
+      jsonSchemaValidator: {enabled: isJsonSchemaValidatorEnabled},
       jsxA11y: {enabled: isJsxA11yEnabled},
       markdown: {enabled: isMarkdownEnabled},
       nextJs: {enabled: isNextJsEnabled},
@@ -225,14 +226,10 @@ export const eslintConfig = async (
       packageJson: {enabled: isPackageJsonEnabled},
       perfectionist: {enabled: isPerfectionistEnabled},
       pnpm: {enabled: isPnpmEnabled},
-      preferArrowFunctions: {
-        enabled: isPreferArrowFunctionsEnabled,
-      },
+      preferArrowFunctions: {enabled: isPreferArrowFunctionsEnabled},
       promise: {enabled: isPromiseEnabled},
       qwik: {enabled: isQwikEnabled},
-      react: {
-        enabled: isReactEnabled,
-      },
+      react: {enabled: isReactEnabled},
       regexp: {enabled: isRegexpEnabled},
       security: {enabled: isSecurityEnabled},
       solid: {enabled: isSolidEnabled},
@@ -256,7 +253,7 @@ export const eslintConfig = async (
     vueEslintConfigResult,
     svelteEslintConfigResult,
   ] = await Promise.all([
-    angularUnConfig(context),
+    isAngularEnabled && angularUnConfig(context),
     isAstroEnabled && astroUnConfig(context),
     isCasePoliceEnabled && casePoliceUnConfig(context),
     isVueEnabled && vueUnConfig(context),
@@ -337,6 +334,7 @@ export const eslintConfig = async (
     isNextJsEnabled && nextJsUnConfig(context),
     isSolidEnabled && solidUnConfig(context),
     isJsInlineEnabled && jsInlineUnConfig(context),
+    isHtmlEnabled && htmlUnConfig(context),
 
     /* Disabled by default */
     isSecurityEnabled && securityUnConfig(context),
@@ -365,7 +363,7 @@ export const eslintConfig = async (
     isEsEnabled && esUnConfig(context), // Must come after ts
     vueEslintConfigResult && vueEslintConfigResult.configs, // Must come after ts
     astroEslintConfigResult && astroEslintConfigResult.configs, // Must come after ts
-    angularEslintConfigResult?.configs, // Must come after ts
+    angularEslintConfigResult && angularEslintConfigResult.configs, // Must come after ts
     svelteEslintConfigResult && svelteEslintConfigResult.configs, // Must be after ts
     isMarkdownEnabled && markdownUnConfig(context), // Must be last
 
@@ -473,7 +471,7 @@ export const eslintConfig = async (
       ...loadedPlugins,
       ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
       ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
-      ...angularEslintConfigResult?.plugins,
+      ...(angularEslintConfigResult && angularEslintConfigResult.plugins),
     } satisfies Record<string, EslintPlugin>,
     (_, k) => pluginRenames[k] || k,
   );

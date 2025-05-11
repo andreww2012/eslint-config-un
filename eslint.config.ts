@@ -29,6 +29,9 @@ export default eslintConfig({
     },
     perfectionist: {
       files: ['src/plugins.ts'],
+      overrides: {
+        'perfectionist/sort-objects': 2,
+      },
     },
     nodeDependencies: true,
   },

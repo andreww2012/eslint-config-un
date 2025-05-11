@@ -14,7 +14,7 @@ import {
   createConfigBuilder,
 } from '../eslint';
 import type {PrettifyShallow, ReadonlyDeep, SetRequired, Subtract} from '../types';
-import {type MaybeArray, assignDefaults, cloneDeep, fetchPackageInfo} from '../utils';
+import {type MaybeArray, assignDefaults, cloneDeep} from '../utils';
 import type {UnConfigFn} from './index';
 
 // Please keep ascending order
@@ -442,10 +442,9 @@ export interface AngularEslintConfigOptions
   preferStandaloneComponents?: boolean;
 }
 
-export const angularUnConfig: UnConfigFn<
-  'angular',
-  {plugins: Record<string, EslintPlugin>}
-> = async (context) => {
+export const angularUnConfig: UnConfigFn<'angular', {plugins: Record<string, EslintPlugin>}> = (
+  context,
+) => {
   const optionsRaw = context.rootOptions.configs?.angular;
   const optionsResolved = assignDefaults(optionsRaw, {
     configTemplate: true,
@@ -460,11 +459,10 @@ export const angularUnConfig: UnConfigFn<
     disallowForwardRef: false,
   } satisfies AngularEslintConfigOptions);
 
-  const isAngularManuallyEnabled = optionsRaw === true;
   const angularVersion: SupportedAngularVersion | null =
     optionsResolved.angularVersion ??
-    (await (async () => {
-      const majorVersion = (await fetchPackageInfo('@angular/core'))?.versions.major;
+    (() => {
+      const majorVersion = context.packagesInfo['@angular/core']?.versions.major;
       if (
         majorVersion != null &&
         majorVersion >= SUPPORTED_ANGULAR_VERSIONS[0] &&
@@ -472,8 +470,8 @@ export const angularUnConfig: UnConfigFn<
       ) {
         return majorVersion as SupportedAngularVersion;
       }
-      return isAngularManuallyEnabled ? LATEST_SUPPORTED_ANGULAR_VERSION : null;
-    })());
+      return optionsRaw === true ? LATEST_SUPPORTED_ANGULAR_VERSION : null;
+    })();
 
   if (angularVersion == null) {
     return null;

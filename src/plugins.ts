@@ -30,6 +30,9 @@ export const pluginsLoaders = {
     interopDefault(import('@eslint-react/eslint-plugin')).then(
       (m) => m.configs.all.plugins['@eslint-react/web-api'] as unknown as EslintPlugin,
     ),
+  '@html-eslint': () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('@html-eslint/eslint-plugin')),
   '@next/next': () => interopDefault(import('@next/eslint-plugin-next')),
   // We can't `import()` `@stylistic/eslint-plugin` because it's `require()`d by eslint-plugin-vue: https://github.com/vuejs/eslint-plugin-vue/blob/1b634549a9e91231e5ea79313763c69f93e678c1/lib/utils/index.js#L113 and `import()`ing after `require()`ing causes `ERR_INTERNAL_ASSERTION` error, see https://github.com/nodejs/node/issues/54577
   '@stylistic': () => Promise.resolve(stylistic),
@@ -46,6 +49,7 @@ export const pluginsLoaders = {
     interopDefault(import('eslint-plugin-css')),
   'de-morgan': () => interopDefault<EslintPlugin>(import('eslint-plugin-de-morgan')),
   es: () => interopDefault(import('eslint-plugin-es-x')),
+  html: () => interopDefault(import('eslint-plugin-html')),
   import: () =>
     // @ts-expect-error types mismatch
     interopDefault<EslintPlugin>(import('eslint-plugin-import-x')),
@@ -64,6 +68,9 @@ export const pluginsLoaders = {
   markdown: () => interopDefault(import('@eslint/markdown')),
   'no-type-assertion': () => interopDefault(import('eslint-plugin-no-type-assertion')),
   node: () => interopDefault(import('eslint-plugin-n')),
+  'node-dependencies': () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('eslint-plugin-node-dependencies')),
   'package-json': () =>
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-package-json')),
@@ -85,6 +92,9 @@ export const pluginsLoaders = {
   security: () =>
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-security')),
+  solid: () =>
+    // @ts-expect-error types mismatch
+    interopDefault<EslintPlugin>(import('eslint-plugin-solid')),
   sonarjs: () => interopDefault(import('eslint-plugin-sonarjs')),
   svelte: () =>
     interopDefault(
@@ -110,12 +120,6 @@ export const pluginsLoaders = {
   yml: () =>
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-yml')),
-  solid: () =>
-    // @ts-expect-error types mismatch
-    interopDefault<EslintPlugin>(import('eslint-plugin-solid')),
-  'node-dependencies': () =>
-    // @ts-expect-error types mismatch
-    interopDefault(import('eslint-plugin-node-dependencies')),
 } satisfies Record<string, () => Promise<EslintPlugin | null>>;
 
 export type LoadablePluginPrefix =

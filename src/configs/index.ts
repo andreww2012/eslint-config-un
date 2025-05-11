@@ -14,6 +14,7 @@ import type {EsEslintConfigOptions} from './es';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-functions';
+import type {HtmlEslintConfigOptions} from './html';
 import type {ImportEslintConfigOptions} from './import';
 import type {JestEslintConfigOptions} from './jest';
 import type {JsEslintConfigOptions} from './js';
@@ -351,6 +352,15 @@ interface UnConfigs {
    * @default true
    */
   jsInline: UnConfigOptions<JsInlineEslintConfigOptions>;
+
+  /**
+   * Rules for linting plain HTML files.
+   *
+   * Used plugins:
+   * - [`@html-eslint/eslint-plugin`](https://www.npmjs.com/package/@html-eslint/eslint-plugin) ([docs](https://html-eslint.org/docs/getting-started))
+   * @default true <=> `angular` config is **disabled**
+   */
+  html: UnConfigOptions<HtmlEslintConfigOptions>;
 
   /**
    * NOTE: disabled by default

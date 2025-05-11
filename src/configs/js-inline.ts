@@ -117,7 +117,7 @@ export const jsInlineUnConfig: UnConfigFn<'jsInline'> = async (context) => {
   configBuilder
     ?.addConfig(
       [
-        'html',
+        'js-inline',
         {
           includeDefaultFilesAndIgnores: true,
           filesFallback: GLOB_HTML_ALL,

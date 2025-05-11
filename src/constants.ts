@@ -84,6 +84,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'next',
   'svelte',
   'solid-js',
+  '@angular/core',
 
   // We don't need to check for the presence of `@builder.io/qwik-city` because
   // it requires `@builder.io/qwik` to be installed anyway
