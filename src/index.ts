@@ -405,6 +405,7 @@ export const eslintConfig = async (
     // eslint-disable-next-line no-implicit-coercion
     .filter((v) => !!v);
 
+  const usedDisableAutofixPluginPrefixes = new Set<string>();
   const usedPluginPrefixes = loadPluginsOnDemand
     ? [
         ...new Set(
@@ -415,14 +416,20 @@ export const eslintConfig = async (
                 if (severity === OFF || severity === 'off') {
                   return null;
                 }
+                const isDisableAutofix = ruleName.startsWith(DISABLE_AUTOFIX_WITH_SLASH);
                 const ruleNameSplitted = (
-                  ruleName.startsWith(DISABLE_AUTOFIX_WITH_SLASH)
-                    ? ruleName.slice(0, DISABLE_AUTOFIX_WITH_SLASH.length)
-                    : ruleName
+                  isDisableAutofix ? ruleName.slice(DISABLE_AUTOFIX_WITH_SLASH.length) : ruleName
                 ).split('/');
-                return ruleNameSplitted.map((_, i) =>
-                  i > 0 ? ruleNameSplitted.slice(0, i).join('/') : null,
-                );
+                return ruleNameSplitted.map((_, i) => {
+                  const possiblePluginPrefix = ruleNameSplitted.slice(0, i).join('/');
+                  if (i === 0 || !possiblePluginPrefix) {
+                    return null;
+                  }
+                  if (isDisableAutofix) {
+                    usedDisableAutofixPluginPrefixes.add(possiblePluginPrefix);
+                  }
+                  return possiblePluginPrefix;
+                });
               });
             })
             .flat(2)
@@ -487,11 +494,12 @@ export const eslintConfig = async (
         rules: Object.entries({
           ...allPlugins,
           '': eslintPluginVanillaRules,
-        }).reduce<EslintPlugin['rules'] & {}>(
-          (res, [pluginNamespace, plugin]) =>
-            Object.assign(res, disableAutofixForAllRulesInPlugin(pluginNamespace, plugin)),
-          {},
-        ),
+        }).reduce<EslintPlugin['rules'] & {}>((res, [pluginPrefix, plugin]) => {
+          if (loadPluginsOnDemand && !usedDisableAutofixPluginPrefixes.has(pluginPrefix)) {
+            return res;
+          }
+          return Object.assign(res, disableAutofixForAllRulesInPlugin(pluginPrefix, plugin));
+        }, {}),
       },
     },
   } satisfies FlatConfigEntry);
