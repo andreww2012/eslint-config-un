@@ -4,49 +4,7 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {EslintConfigUnOptions, UnConfigContext} from './configs';
-import {angularUnConfig} from './configs/angular';
-import {astroUnConfig} from './configs/astro';
-import {casePoliceUnConfig} from './configs/case-police';
-import {cssUnConfig} from './configs/css';
-import {cssInJsUnConfig} from './configs/css-in-js';
-import {deMorganUnConfig} from './configs/de-morgan';
-import {esUnConfig} from './configs/es';
-import {eslintCommentsUnConfig} from './configs/eslint-comments';
-import {cliEslintConfig} from './configs/extra/cli';
-import {cloudfrontFunctionsEslintConfig} from './configs/extra/cloudfront-functions';
-import {htmlUnConfig} from './configs/html';
-import {importUnConfig} from './configs/import';
-import {jestUnConfig} from './configs/jest';
 import {jsUnConfig} from './configs/js';
-import {jsInlineUnConfig} from './configs/js-inline';
-import {jsdocUnConfig} from './configs/jsdoc';
-import {jsonSchemaValidatorUnConfig} from './configs/json-schema-validator';
-import {jsoncUnConfig} from './configs/jsonc';
-import {jsxA11yUnConfig} from './configs/jsx-a11y';
-import {markdownUnConfig} from './configs/markdown';
-import {nextJsUnConfig} from './configs/nextjs';
-import {nodeUnConfig} from './configs/node';
-import {nodeDependenciesUnConfig} from './configs/node-dependencies';
-import {packageJsonUnConfig} from './configs/package-json';
-import {perfectionistUnConfig} from './configs/perfectionist';
-import {pnpmUnConfig} from './configs/pnpm';
-import {preferArrowFunctionsUnConfig} from './configs/prefer-arrow-functions';
-import {promiseUnConfig} from './configs/promise';
-import {qwikUnConfig} from './configs/qwik';
-import {reactUnConfig} from './configs/react';
-import {regexpUnConfig} from './configs/regexp';
-import {securityUnConfig} from './configs/security';
-import {solidUnConfig} from './configs/solid';
-import {sonarUnConfig} from './configs/sonar';
-import {svelteUnConfig} from './configs/svelte';
-import {tailwindUnConfig} from './configs/tailwind';
-import {tomlUnConfig} from './configs/toml';
-import {tsUnConfig} from './configs/ts';
-import {unicornUnConfig} from './configs/unicorn';
-import {unusedImportsUnConfig} from './configs/unused-imports';
-import {vitestUnConfig} from './configs/vitest';
-import {vueUnConfig} from './configs/vue';
-import {yamlUnConfig} from './configs/yaml';
 import {
   DEFAULT_GLOBAL_IGNORES,
   GLOB_CONFIG_FILES,
@@ -253,11 +211,12 @@ export const eslintConfig = async (
     vueEslintConfigResult,
     svelteEslintConfigResult,
   ] = await Promise.all([
-    isAngularEnabled && angularUnConfig(context),
-    isAstroEnabled && astroUnConfig(context),
-    isCasePoliceEnabled && casePoliceUnConfig(context),
-    isVueEnabled && vueUnConfig(context),
-    isSvelteEnabled && svelteUnConfig(context),
+    isAngularEnabled && import('./configs/angular').then((m) => m.angularUnConfig(context)),
+    isAstroEnabled && import('./configs/astro').then((m) => m.astroUnConfig(context)),
+    isCasePoliceEnabled &&
+      import('./configs/case-police').then((m) => m.casePoliceUnConfig(context)),
+    isVueEnabled && import('./configs/vue').then((m) => m.vueUnConfig(context)),
+    isSvelteEnabled && import('./configs/svelte').then((m) => m.svelteUnConfig(context)),
   ]);
 
   const rootConfigBuilder = createConfigBuilder(context, {}, '');
@@ -313,64 +272,78 @@ export const eslintConfig = async (
 
     /* Enabled by default or conditionally */
     jsUnConfig(context),
-    isUnicornEnabled && unicornUnConfig(context),
-    isImportEnabled && importUnConfig(context),
-    isNodeEnabled && nodeUnConfig(context),
-    isPromiseEnabled && promiseUnConfig(context),
-    isSonarEnabled && sonarUnConfig(context),
-    isTailwindEnabled && tailwindUnConfig(context),
-    isRegexpEnabled && regexpUnConfig(context),
-    isEslintCommentsEnabled && eslintCommentsUnConfig(context),
-    isCssInJsEnabled && cssInJsUnConfig(context),
-    isJestEnabled && jestUnConfig(context),
-    isVitestEnabled && vitestUnConfig(context),
-    isJsdocEnabled && jsdocUnConfig(context),
-    isQwikEnabled && qwikUnConfig(context),
-    isCssEnabled && cssUnConfig(context),
-    isUnusedImportsEnabled && unusedImportsUnConfig(context),
-    isReactEnabled && reactUnConfig(context),
-    isJsxA11yEnabled && jsxA11yUnConfig(context),
-    isPnpmEnabled && pnpmUnConfig(context),
-    isNextJsEnabled && nextJsUnConfig(context),
-    isSolidEnabled && solidUnConfig(context),
-    isJsInlineEnabled && jsInlineUnConfig(context),
-    isHtmlEnabled && htmlUnConfig(context),
+    isUnicornEnabled && import('./configs/unicorn').then((m) => m.unicornUnConfig(context)),
+    isImportEnabled && import('./configs/import').then((m) => m.importUnConfig(context)),
+    isNodeEnabled && import('./configs/node').then((m) => m.nodeUnConfig(context)),
+    isPromiseEnabled && import('./configs/promise').then((m) => m.promiseUnConfig(context)),
+    isSonarEnabled && import('./configs/sonar').then((m) => m.sonarUnConfig(context)),
+    isTailwindEnabled && import('./configs/tailwind').then((m) => m.tailwindUnConfig(context)),
+    isRegexpEnabled && import('./configs/regexp').then((m) => m.regexpUnConfig(context)),
+    isEslintCommentsEnabled &&
+      import('./configs/eslint-comments').then((m) => m.eslintCommentsUnConfig(context)),
+    isCssInJsEnabled && import('./configs/css-in-js').then((m) => m.cssInJsUnConfig(context)),
+    isJestEnabled && import('./configs/jest').then((m) => m.jestUnConfig(context)),
+    isVitestEnabled && import('./configs/vitest').then((m) => m.vitestUnConfig(context)),
+    isJsdocEnabled && import('./configs/jsdoc').then((m) => m.jsdocUnConfig(context)),
+    isQwikEnabled && import('./configs/qwik').then((m) => m.qwikUnConfig(context)),
+    isCssEnabled && import('./configs/css').then((m) => m.cssUnConfig(context)),
+    isUnusedImportsEnabled &&
+      import('./configs/unused-imports').then((m) => m.unusedImportsUnConfig(context)),
+    isReactEnabled && import('./configs/react').then((m) => m.reactUnConfig(context)),
+    isJsxA11yEnabled && import('./configs/jsx-a11y').then((m) => m.jsxA11yUnConfig(context)),
+    isPnpmEnabled && import('./configs/pnpm').then((m) => m.pnpmUnConfig(context)),
+    isNextJsEnabled && import('./configs/nextjs').then((m) => m.nextJsUnConfig(context)),
+    isSolidEnabled && import('./configs/solid').then((m) => m.solidUnConfig(context)),
+    isJsInlineEnabled && import('./configs/js-inline').then((m) => m.jsInlineUnConfig(context)),
+    isHtmlEnabled && import('./configs/html').then((m) => m.htmlUnConfig(context)),
 
     /* Disabled by default */
-    isSecurityEnabled && securityUnConfig(context),
-    isPreferArrowFunctionsEnabled && preferArrowFunctionsUnConfig(context),
-    isYamlEnabled && yamlUnConfig(context),
-    isTomlEnabled && tomlUnConfig(context),
-    isJsoncEnabled && jsoncUnConfig(context),
-    isPackageJsonEnabled && packageJsonUnConfig(context),
-    isPerfectionistEnabled && perfectionistUnConfig(context),
-    isDeMorganEnabled && deMorganUnConfig(context),
-    isJsonSchemaValidatorEnabled && jsonSchemaValidatorUnConfig(context),
+    isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),
+    isPreferArrowFunctionsEnabled &&
+      import('./configs/prefer-arrow-functions').then((m) =>
+        m.preferArrowFunctionsUnConfig(context),
+      ),
+    isYamlEnabled && import('./configs/yaml').then((m) => m.yamlUnConfig(context)),
+    isTomlEnabled && import('./configs/toml').then((m) => m.tomlUnConfig(context)),
+    isJsoncEnabled && import('./configs/jsonc').then((m) => m.jsoncUnConfig(context)),
+    isPackageJsonEnabled &&
+      import('./configs/package-json').then((m) => m.packageJsonUnConfig(context)),
+    isPerfectionistEnabled &&
+      import('./configs/perfectionist').then((m) => m.perfectionistUnConfig(context)),
+    isDeMorganEnabled && import('./configs/de-morgan').then((m) => m.deMorganUnConfig(context)),
+    isJsonSchemaValidatorEnabled &&
+      import('./configs/json-schema-validator').then((m) => m.jsonSchemaValidatorUnConfig(context)),
     casePoliceEslintConfigResult && casePoliceEslintConfigResult.configs,
-    isNodeDependenciesEnabled && nodeDependenciesUnConfig(context),
+    isNodeDependenciesEnabled &&
+      import('./configs/node-dependencies').then((m) => m.nodeDependenciesUnConfig(context)),
 
     /* Other configs */
     isTypescriptEnabled &&
-      tsUnConfig(context, {
-        astroResolvedOptions: astroEslintConfigResult
-          ? astroEslintConfigResult.optionsResolved
-          : null,
-        vueResolvedOptions: vueEslintConfigResult ? vueEslintConfigResult.optionsResolved : null,
-        svelteResolvedOptions: svelteEslintConfigResult
-          ? svelteEslintConfigResult.optionsResolved
-          : null,
-      }), // Must come after all rulesets for vanilla JS
-    isEsEnabled && esUnConfig(context), // Must come after ts
+      import('./configs/ts').then((m) =>
+        m.tsUnConfig(context, {
+          astroResolvedOptions: astroEslintConfigResult
+            ? astroEslintConfigResult.optionsResolved
+            : null,
+          vueResolvedOptions: vueEslintConfigResult ? vueEslintConfigResult.optionsResolved : null,
+          svelteResolvedOptions: svelteEslintConfigResult
+            ? svelteEslintConfigResult.optionsResolved
+            : null,
+        }),
+      ), // Must come after all rulesets for vanilla JS
+    isEsEnabled && import('./configs/es').then((m) => m.esUnConfig(context)), // Must come after ts
     vueEslintConfigResult && vueEslintConfigResult.configs, // Must come after ts
     astroEslintConfigResult && astroEslintConfigResult.configs, // Must come after ts
     angularEslintConfigResult && angularEslintConfigResult.configs, // Must come after ts
     svelteEslintConfigResult && svelteEslintConfigResult.configs, // Must be after ts
-    isMarkdownEnabled && markdownUnConfig(context), // Must be last
+    isMarkdownEnabled && import('./configs/markdown').then((m) => m.markdownUnConfig(context)), // Must be last
 
     rootConfigBuilder,
 
-    isCliEnabled && cliEslintConfig(context),
-    isCloudfrontFunctionsEnabled && cloudfrontFunctionsEslintConfig(context),
+    isCliEnabled && import('./configs/extra/cli').then((m) => m.cliUnConfig(context)),
+    isCloudfrontFunctionsEnabled &&
+      import('./configs/extra/cloudfront-functions').then((m) =>
+        m.cloudfrontFunctionsEslintConfig(context),
+      ),
 
     ...extraConfigs.map((config, configIndex) => ({
       ...config,
