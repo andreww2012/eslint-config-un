@@ -1,3 +1,7 @@
+## Unreleased
+
+- New config: `depend` via [`eslint-plugin-depend`](https://www.npmjs.com/package/eslint-plugin-depend), **<u>disabled</u>** by default.
+
 ## 0.10.0
 
 - New config: `svelte` via [`eslint-plugin-svelte`](https://www.npmjs.com/package/eslint-plugin-svelte), enabled automatically if `svelte` package is installed.

@@ -97,6 +97,10 @@ export default eslintConfig({
   - `deMorgan`
   - `jsonSchemaValidator`
   - `casePolice`
+  - `es`
+  - `cloudfrontFunctions`
+  - `nodeDependencies`
+  - `depend`
 - Some rules are set to warn by default. You can change some or even all such rule's reporting level using `errorsInsteadOfWarnings` option. You can find all such rules by inspecting the source code of this package.
 
 ### Certain rules are disabled for code blocks inside `*.md` files

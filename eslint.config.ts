@@ -34,6 +34,11 @@ export default eslintConfig({
       },
     },
     nodeDependencies: true,
+    depend: {
+      options: {
+        allowed: ['eslint-plugin-react'],
+      },
+    },
   },
 
   extraConfigs: [

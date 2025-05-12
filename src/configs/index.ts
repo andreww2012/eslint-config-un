@@ -10,6 +10,7 @@ import type {CasePoliceEslintConfigOptions} from './case-police';
 import type {CssEslintConfigOptions} from './css';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
+import type {DependEslintConfigOptions} from './depend';
 import type {EsEslintConfigOptions} from './es';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
 import type {CliEslintConfigOptions} from './extra/cli';
@@ -459,6 +460,17 @@ interface UnConfigs {
    * @default false
    */
   nodeDependencies: UnConfigOptions<NodeDependenciesEslintConfigOptions>;
+
+  /**
+   * Enables rules from a plugin to help suggest alternatives to various dependencies.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-depend`](https://www.npmjs.com/package/eslint-plugin-depend) ([docs](https://github.com/es-tooling/eslint-plugin-depend?tab=MIT-1-ov-file))
+   *
+   * NOTE: disabled by default
+   * @default false
+   */
+  depend: UnConfigOptions<DependEslintConfigOptions>;
 
   /**
    * A config specific to files meant to be executed. By default, allows `process.exit()`

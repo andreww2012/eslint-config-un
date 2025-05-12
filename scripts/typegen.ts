@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import chalk from 'chalk';
+// eslint-disable-next-line node/no-unsupported-features/node-builtins
+import {styleText} from 'node:util';
 import * as diff from 'diff';
 import {flatConfigsToRulesDTS} from 'eslint-typegen/core';
 import {eslintConfig} from '../src';
@@ -27,11 +28,11 @@ if (mostRecentRuleTypesFileName) {
   if (mostRecentRuleTypes) {
     diffString =
       mostRecentRuleTypes === ruleTypes
-        ? chalk.gray('No changes between the current and the most recent rule types')
+        ? styleText('gray', 'No changes between the current and the most recent rule types')
         : getDiffAsPatch(mostRecentRuleTypes, ruleTypes).join('\n');
   }
 }
-console.log(diffString || chalk.gray('No most recent rule types found'));
+console.log(diffString || styleText('gray', 'No most recent rule types found'));
 
 await Promise.all([
   fs.writeFile(path.join(__dirname, '../src/eslint-types.d.ts'), ruleTypes),
@@ -73,13 +74,13 @@ function getDiffAsPatch(a: string, b: string) {
     .slice(4)
     .map((line) => {
       if (line.startsWith('+') && !line.startsWith('+++')) {
-        return chalk.green(line);
+        return styleText('green', line);
       }
       if (line.startsWith('-') && !line.startsWith('---')) {
-        return chalk.red(line);
+        return styleText('red', line);
       }
       if (line.startsWith('@@')) {
-        return chalk.cyan(line);
+        return styleText('cyan', line);
       }
       return line;
     });

@@ -48,6 +48,7 @@ export const pluginsLoaders = {
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-css')),
   'de-morgan': () => interopDefault<EslintPlugin>(import('eslint-plugin-de-morgan')),
+  depend: () => interopDefault(import('eslint-plugin-depend')),
   es: () => interopDefault(import('eslint-plugin-es-x')),
   html: () => interopDefault(import('eslint-plugin-html')),
   import: () =>

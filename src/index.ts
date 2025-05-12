@@ -106,6 +106,7 @@ export const eslintConfig = async (
   const isCssEnabled = Boolean(configsOptions.css ?? !(await doesPackageExist('stylelint')));
   const isCssInJsEnabled = Boolean(configsOptions.cssInJs ?? true);
   const isDeMorganEnabled = Boolean(configsOptions.deMorgan ?? false);
+  const isDependEnabled = Boolean(configsOptions.depend ?? false);
   const isEsEnabled = Boolean(configsOptions.es ?? false);
   const isEslintCommentsEnabled = Boolean(configsOptions.eslintComments ?? true);
   const isJsInlineEnabled = Boolean(configsOptions.jsInline ?? true);
@@ -166,6 +167,7 @@ export const eslintConfig = async (
       css: {enabled: isCssEnabled},
       cssInJs: {enabled: isCssInJsEnabled},
       deMorgan: {enabled: isDeMorganEnabled},
+      depend: {enabled: isDependEnabled},
       es: {enabled: isEsEnabled},
       eslintComments: {enabled: isEslintCommentsEnabled},
       html: {enabled: isHtmlEnabled},
@@ -316,6 +318,7 @@ export const eslintConfig = async (
     casePoliceEslintConfigResult && casePoliceEslintConfigResult.configs,
     isNodeDependenciesEnabled &&
       import('./configs/node-dependencies').then((m) => m.nodeDependenciesUnConfig(context)),
+    isDependEnabled && import('./configs/depend').then((m) => m.dependUnConfig(context)),
 
     /* Other configs */
     isTypescriptEnabled &&
