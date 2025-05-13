@@ -58,6 +58,7 @@ Includes the rules from the following configs & plugins:
 - `nodeDependencies` (since v0.10.0), using [`eslint-plugin-node-dependencies`](https://www.npmjs.com/package/eslint-plugin-node-dependencies)
 - `jsInline` (since v0.10.0), using [`eslint-plugin-html`](https://www.npmjs.com/package/eslint-plugin-html)
 - `html` (since v0.10.0), using [`@html-eslint/eslint-plugin`](https://www.npmjs.com/package/@html-eslint/eslint-plugin)
+- `math` (since v0.?.?), using [`eslint-plugin-math`](https://www.npmjs.com/package/eslint-plugin-math)
 
 ## Features
 

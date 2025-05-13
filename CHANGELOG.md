@@ -1,6 +1,7 @@
 ## Unreleased
 
 - New config: `depend` via [`eslint-plugin-depend`](https://www.npmjs.com/package/eslint-plugin-depend), **<u>disabled</u>** by default.
+- New config: `math` via [`eslint-plugin-math`](https://www.npmjs.com/package/eslint-plugin-math), enabled by default.
 
 ## 0.10.0
 

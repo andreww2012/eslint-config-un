@@ -67,6 +67,9 @@ export const pluginsLoaders = {
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-jsx-a11y')),
   markdown: () => interopDefault(import('@eslint/markdown')),
+  math: () =>
+    // @ts-expect-error types mismatch
+    interopDefault<EslintPlugin>(import('eslint-plugin-math')),
   'no-type-assertion': () => interopDefault(import('eslint-plugin-no-type-assertion')),
   node: () => interopDefault(import('eslint-plugin-n')),
   'node-dependencies': () =>

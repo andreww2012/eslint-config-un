@@ -19,7 +19,7 @@
     "prefix": "un-new-config",
     "body": [
       "import {ERROR, OFF, WARNING} from '../constants';",
-      "import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';",
+      "import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';",
       "import {pluginsLoaders} from '../plugins';",
       "import {assignDefaults, interopDefault} from '../utils';",
       "import type {UnConfigFn} from './index';",

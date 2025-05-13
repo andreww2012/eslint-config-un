@@ -25,6 +25,7 @@ import type {JsonSchemaValidatorEslintConfigOptions} from './json-schema-validat
 import type {JsoncEslintConfigOptions} from './jsonc';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {MarkdownEslintConfigOptions} from './markdown';
+import type {MathEslintConfigOptions} from './math';
 import type {NextJsEslintConfigOptions} from './nextjs';
 import type {NodeEslintConfigOptions} from './node';
 import type {NodeDependenciesEslintConfigOptions} from './node-dependencies';
@@ -362,6 +363,15 @@ interface UnConfigs {
    * @default true <=> `angular` config is **disabled**
    */
   html: UnConfigOptions<HtmlEslintConfigOptions>;
+
+  /**
+   * ESLint rules related to `Math` and `Number` objects.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-math`](https://www.npmjs.com/package/eslint-plugin-math) ([docs](https://ota-meshi.github.io/eslint-plugin-math/))
+   * @default true
+   */
+  math: UnConfigOptions<MathEslintConfigOptions>;
 
   /**
    * NOTE: disabled by default

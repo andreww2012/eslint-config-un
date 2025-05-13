@@ -119,6 +119,7 @@ export const eslintConfig = async (
   const isJsonSchemaValidatorEnabled = Boolean(configsOptions.jsonSchemaValidator ?? false);
   const isJsxA11yEnabled = Boolean(configsOptions.jsxA11y ?? true);
   const isMarkdownEnabled = Boolean(configsOptions.markdown ?? true);
+  const isMathEnabled = Boolean(configsOptions.math ?? true);
   const isNextJsEnabled = Boolean(configsOptions.nextJs ?? packagesInfo.next);
   const isNodeEnabled = Boolean(configsOptions.node ?? true);
   const isNodeDependenciesEnabled = Boolean(configsOptions.nodeDependencies ?? false);
@@ -180,6 +181,7 @@ export const eslintConfig = async (
       jsonSchemaValidator: {enabled: isJsonSchemaValidatorEnabled},
       jsxA11y: {enabled: isJsxA11yEnabled},
       markdown: {enabled: isMarkdownEnabled},
+      math: {enabled: isMathEnabled},
       nextJs: {enabled: isNextJsEnabled},
       node: {enabled: isNodeEnabled},
       nodeDependencies: {enabled: isNodeDependenciesEnabled},
@@ -298,6 +300,7 @@ export const eslintConfig = async (
     isSolidEnabled && import('./configs/solid').then((m) => m.solidUnConfig(context)),
     isJsInlineEnabled && import('./configs/js-inline').then((m) => m.jsInlineUnConfig(context)),
     isHtmlEnabled && import('./configs/html').then((m) => m.htmlUnConfig(context)),
+    isMathEnabled && import('./configs/math').then((m) => m.mathUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),
