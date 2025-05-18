@@ -1,9 +1,9 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface UnicornEslintConfigOptions extends ConfigSharedOptions<'unicorn'> {}
+export interface UnicornEslintConfigOptions extends UnConfigOptions<'unicorn'> {}
 
 export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.unicorn;

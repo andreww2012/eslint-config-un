@@ -1,9 +1,9 @@
 import {ERROR, GLOB_JS_TS_X, OFF} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface QwikEslintConfigOptions extends ConfigSharedOptions<'qwik'> {
+export interface QwikEslintConfigOptions extends UnConfigOptions<'qwik'> {
   routesDir?: string;
 }
 

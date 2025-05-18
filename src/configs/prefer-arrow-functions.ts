@@ -1,10 +1,10 @@
 import {WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface PreferArrowFunctionsEslintConfigOptions
-  extends ConfigSharedOptions<'prefer-arrow-functions'> {}
+  extends UnConfigOptions<'prefer-arrow-functions'> {}
 
 export const preferArrowFunctionsUnConfig: UnConfigFn<'preferArrowFunctions'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.preferArrowFunctions;

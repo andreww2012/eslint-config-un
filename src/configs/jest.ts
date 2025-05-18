@@ -2,9 +2,10 @@ import type {Jest as JestMethods} from '@jest/environment';
 import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
-  type ConfigSharedOptions,
+  type AllRulesWithPrefix,
   type FlatConfigEntryForBuilder,
   type GetRuleOptions,
+  type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
 import {pluginsLoaders} from '../plugins';
@@ -25,7 +26,7 @@ export const generateDefaultTestFiles = <T extends string>(extensions: T) => [
   `**/__test__/**/*.${extensions}` as const, // 14k
 ];
 
-export interface JestEslintConfigOptions extends ConfigSharedOptions<'jest'> {
+export interface JestEslintConfigOptions extends UnConfigOptions<'jest'> {
   /**
    * [`eslint-plugin-jest` plugin settings](https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jest-globals) that will be applied to the specified `files` and `ignores`.
    */
@@ -51,19 +52,14 @@ export interface JestEslintConfigOptions extends ConfigSharedOptions<'jest'> {
   };
 
   /**
-   * Explicitly specify or ignore files written in TypeScript. Will be used to enable TypeScript-specific rules like [`no-untyped-mock-factory`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-untyped-mock-factory.md) or [`unbound-method`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md).
-   * @default `true` if TypeScript (`ts`) config is enabled
-   */
-  configTypescript?: boolean | PrettifyShallow<ConfigSharedOptions<'jest'>>;
-
-  /**
-   * Enables or specifies the configuration for the [`jest-extended`](https://github.com/jest-community/eslint-plugin-jest-extended) plugin.
-   * @default `true` if `jest-extended` package is installed
+   * Enables or specifies the configuration for the [`eslint-plugin-jest-extended`](https://npmjs.com/eslint-plugin-jest-extended) plugin.
+   * @default true <=> `jest-extended` package is installed
    */
   configJestExtended?:
     | boolean
-    | PrettifyShallow<
-        ConfigSharedOptions<'jest-extended'> & {
+    | UnConfigOptions<
+        'jest-extended',
+        {
           /**
            * Suggests using various `jest-extended` methods instead of some assertion forms.
            *
@@ -84,6 +80,16 @@ export interface JestEslintConfigOptions extends ConfigSharedOptions<'jest'> {
                 >
               >;
         }
+      >;
+
+  /**
+   * Explicitly specify or ignore files written in TypeScript. Will be used to enable TypeScript-specific rules like [`no-untyped-mock-factory`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-untyped-mock-factory.md) or [`unbound-method`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md).
+   * @default true <=> `ts` config is enabled
+   */
+  configTypescript?:
+    | boolean
+    | UnConfigOptions<
+        AllRulesWithPrefix<`jest/${'no-untyped-mock-factory' | 'unbound-method'}`, true, false>
       >;
 
   /**

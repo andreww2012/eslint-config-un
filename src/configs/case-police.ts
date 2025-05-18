@@ -1,9 +1,9 @@
 import {ERROR} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface CasePoliceEslintConfigOptions extends ConfigSharedOptions<'case-police'> {
+export interface CasePoliceEslintConfigOptions extends UnConfigOptions<'case-police'> {
   /**
    * Autofix of this plugin's single rule may be unsafe to automatically apply.
    * Since it's the single rule in this plugin, we offer disabling autofix functionality

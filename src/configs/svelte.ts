@@ -1,14 +1,14 @@
 // cspell:ignore curlies
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults, doesPackageExist, getKeysOfTruthyValues, interopDefault} from '../utils';
 import {type VueEslintConfigOptions, noRestrictedHtmlElementsDefault} from './vue';
 import type {UnConfigFn} from './index';
 
 export interface SvelteEslintConfigOptions
-  extends ConfigSharedOptions<'svelte'>,
+  extends UnConfigOptions<'svelte'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
    * [`eslint-plugin-svelte`](https://www.npmjs.com/package/eslint-plugin-svelte) plugin

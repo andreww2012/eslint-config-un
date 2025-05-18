@@ -1,9 +1,9 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface RegexpEslintConfigOptions extends ConfigSharedOptions<'regexp'> {}
+export interface RegexpEslintConfigOptions extends UnConfigOptions<'regexp'> {}
 
 export const regexpUnConfig: UnConfigFn<'regexp'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.regexp;

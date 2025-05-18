@@ -1,9 +1,9 @@
 import {ERROR} from '../constants';
-import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
+import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface CssInJsEslintConfigOptions extends ConfigSharedOptions<'css-in-js'> {
+export interface CssInJsEslintConfigOptions extends UnConfigOptions<'css-in-js'> {
   /**
    * [`eslint-plugin-css` plugin settings](https://ota-meshi.github.io/eslint-plugin-css/settings/) that will be applied to the specified `files` and `ignores`.
    */

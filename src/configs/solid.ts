@@ -1,9 +1,9 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface SolidEslintConfigOptions extends ConfigSharedOptions<'solid'> {}
+export interface SolidEslintConfigOptions extends UnConfigOptions<'solid'> {}
 
 export const solidUnConfig: UnConfigFn<'solid'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.solid;

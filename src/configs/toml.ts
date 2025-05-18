@@ -1,5 +1,5 @@
 import {ERROR, GLOB_TOML, OFF} from '../constants';
-import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
+import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -7,7 +7,7 @@ export const TOML_DEFAULT_FILES = [GLOB_TOML];
 
 const DEFAULT_FILES_TO_IGNORE = ['Cargo.lock'] as const;
 
-export interface TomlEslintConfigOptions extends ConfigSharedOptions<'toml'> {
+export interface TomlEslintConfigOptions extends UnConfigOptions<'toml'> {
   /** `files` specified in this config will be merged with the default of `['**\/*.toml']`. Set this to `true` to avoid that behavior */
   doNotMergeFilesWithDefault?: boolean;
 

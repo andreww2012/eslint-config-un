@@ -1,14 +1,13 @@
 // cspell:ignore canonicalurl fetchcontent getentrybyslug
 import {ERROR, GLOB_ASTRO, OFF, WARNING} from '../constants';
-import {type AllRulesWithPrefix, type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type AllRulesWithPrefix, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
-import type {PrettifyShallow} from '../types';
 import {assignDefaults, interopDefault} from '../utils';
 import {type JsxA11yEslintConfigOptions, jsxA11yUnConfig} from './jsx-a11y';
 import type {UnConfigFn} from './index';
 
 export interface AstroEslintConfigOptions
-  extends ConfigSharedOptions<
+  extends UnConfigOptions<
     Omit<AllRulesWithPrefix<'astro', true>, keyof AllRulesWithPrefix<'astro/jsx-a11y', true>>
   > {
   /**
@@ -21,9 +20,9 @@ export interface AstroEslintConfigOptions
    */
   configJsxA11y?:
     | boolean
-    | PrettifyShallow<
-        ConfigSharedOptions<'astro/jsx-a11y'> &
-          Omit<JsxA11yEslintConfigOptions, 'settings' | keyof ConfigSharedOptions>
+    | UnConfigOptions<
+        'astro/jsx-a11y',
+        Omit<JsxA11yEslintConfigOptions, 'settings' | keyof UnConfigOptions>
       >;
 }
 

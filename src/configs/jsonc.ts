@@ -1,35 +1,35 @@
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, OFF} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
 export const JSONC_DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5];
 
-export interface JsoncEslintConfigOptions extends ConfigSharedOptions<'jsonc'> {
+export interface JsoncEslintConfigOptions extends UnConfigOptions<'jsonc'> {
+  /**
+   * Config exclusively for .json files (no rules are applied by default!)
+   * @default false
+   */
+  configJson?: boolean | UnConfigOptions<'jsonc'>;
+
+  /**
+   * Config exclusively for .jsonc files (no rules are applied by default!)
+   * @default false
+   */
+  configJsonc?: boolean | UnConfigOptions<'jsonc'>;
+
+  /**
+   * Config exclusively for .jsonc5 files (no rules are applied by default!)
+   * @default false
+   */
+  configJson5?: boolean | UnConfigOptions<'jsonc'>;
+
   /**
    * `files` specified in this config will be merged with the default of
    * `['**\/*.json', '**\/*.jsonc', '**\/*.json5']`. Set this to `true` to avoid that behavior
    * @default false
    */
   doNotMergeFilesWithDefault?: boolean;
-
-  /**
-   * Config exclusively for .json files (no rules are applied by default!)
-   * @default false
-   */
-  configJson?: boolean | ConfigSharedOptions<'jsonc'>;
-
-  /**
-   * Config exclusively for .jsonc files (no rules are applied by default!)
-   * @default false
-   */
-  configJsonc?: boolean | ConfigSharedOptions<'jsonc'>;
-
-  /**
-   * Config exclusively for .jsonc5 files (no rules are applied by default!)
-   * @default false
-   */
-  configJson5?: boolean | ConfigSharedOptions<'jsonc'>;
 }
 
 export const jsoncUnConfig: UnConfigFn<'json'> = async (context) => {

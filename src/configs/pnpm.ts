@@ -1,5 +1,5 @@
 import {ERROR, OFF} from '../constants';
-import {type AllRulesWithPrefix, type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type AllRulesWithPrefix, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -9,32 +9,33 @@ export interface PnpmEslintConfigOptions {
    */
   configPackageJson?:
     | boolean
-    | (ConfigSharedOptions<AllRulesWithPrefix<'pnpm/jsonc-', true, false>> & {
-        /**
-         * Enforces that all dependencies are coming from [pnpm catalogs](https://pnpm.io/catalogs).
-         *
-         * Used by the following rules:
-         * - `json-enforce-catalog`
-         * @default false
-         */
-        enforceCatalog?: boolean;
+    | UnConfigOptions<
+        AllRulesWithPrefix<'pnpm/jsonc-', true, false>,
+        {
+          /**
+           * Enforces that all dependencies are coming from [pnpm catalogs](https://pnpm.io/catalogs).
+           *
+           * Used by the following rules:
+           * - `json-enforce-catalog`
+           * @default false
+           */
+          enforceCatalog?: boolean;
 
-        /**
-         * "Prefer having pnpm settings in `pnpm-workspace.yaml` instead of `package.json`. This would requires pnpm v10.6+, see https://github.com/orgs/pnpm/discussions/9037." - plugin docs
-         *
-         * Used by the following rules:
-         * - `json-prefer-workspace-settings`
-         * @default false
-         */
-        preferSettingsInPnpmWorkspaceYaml?: boolean;
-      });
+          /**
+           * "Prefer having pnpm settings in `pnpm-workspace.yaml` instead of `package.json`. This would requires pnpm v10.6+, see https://github.com/orgs/pnpm/discussions/9037." - plugin docs
+           *
+           * Used by the following rules:
+           * - `json-prefer-workspace-settings`
+           * @default false
+           */
+          preferSettingsInPnpmWorkspaceYaml?: boolean;
+        }
+      >;
 
   /**
    * Rules for `pnpm-workspace.yaml` file.
    */
-  configPnpmWorkspace?:
-    | boolean
-    | ConfigSharedOptions<AllRulesWithPrefix<'pnpm/yaml-', true, false>>;
+  configPnpmWorkspace?: boolean | UnConfigOptions<AllRulesWithPrefix<'pnpm/yaml-', true, false>>;
 }
 
 export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {

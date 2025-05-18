@@ -1,9 +1,5 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import {
-  type ConfigSharedOptions,
-  type FlatConfigEntryForBuilder,
-  createConfigBuilder,
-} from '../eslint';
+import {type FlatConfigEntryForBuilder, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import {
@@ -15,7 +11,7 @@ import type {UnConfigFn} from './index';
 
 // prefer-describe-function-title 1.1.41
 export interface VitestEslintConfigOptions
-  extends ConfigSharedOptions<'vitest'>,
+  extends UnConfigOptions<'vitest'>,
     // TODO options jsdocs contain jest-related information
     Pick<
       JestEslintConfigOptions,

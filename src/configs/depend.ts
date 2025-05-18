@@ -1,10 +1,10 @@
 import {ERROR} from '../constants';
-import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
+import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import {DEFAULT_FILES_PACKAGE_JSON} from './package-json';
 import type {UnConfigFn} from './index';
 
-export interface DependEslintConfigOptions extends ConfigSharedOptions<'depend'> {
+export interface DependEslintConfigOptions extends UnConfigOptions<'depend'> {
   /**
    * [Options of the only rule (`ban-dependencies`)](https://github.com/es-tooling/eslint-plugin-depend/blob/HEAD/docs/rules/ban-dependencies.md).
    */

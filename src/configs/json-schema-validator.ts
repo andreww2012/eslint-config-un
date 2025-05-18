@@ -1,6 +1,6 @@
 import type {RequestOptions} from 'node:https';
 import {ERROR} from '../constants';
-import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
+import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import {JSONC_DEFAULT_FILES} from './jsonc';
 import {TOML_DEFAULT_FILES} from './toml';
@@ -8,7 +8,7 @@ import {YAML_DEFAULT_FILES} from './yaml';
 import type {UnConfigFn} from './index';
 
 export interface JsonSchemaValidatorEslintConfigOptions
-  extends ConfigSharedOptions<'json-schema-validator'> {
+  extends UnConfigOptions<'json-schema-validator'> {
   /**
    * [`eslint-plugin-json-schema-validator`](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

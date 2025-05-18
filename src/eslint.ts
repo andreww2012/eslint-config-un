@@ -87,16 +87,11 @@ export type AllRulesWithPrefix<
     : `${IncludeDisableAutofix extends true ? `${DisableAutofixPrefix}/` | '' : ''}${Prefix}${AutoIncludeSlashAfterPrefix extends true ? '/' : ''}`
 >;
 
-export type AllRulesWithPrefixNames<
-  Prefix extends string | null,
-  IncludeDisableAutofix = false,
-> = keyof AllRulesWithPrefix<Prefix, IncludeDisableAutofix>;
-
 export type AllRulesWithPrefixUnprefixedNames<
   Prefix extends string | null,
   IncludeDisableAutofix = false,
   // I don't know why `& string` is required. TypeScript thinks that `AllRulesWithPrefix` (after I've added `Prefix extends ''` branch to it) may return non-string keys
-> = RemovePrefix<AllRulesWithPrefixNames<Prefix, IncludeDisableAutofix> & string, `${Prefix}/`>;
+> = RemovePrefix<keyof AllRulesWithPrefix<Prefix, IncludeDisableAutofix> & string, `${Prefix}/`>;
 
 export type RuleOverrides<T extends null | string | RulesRecord> = T extends string
   ? AllRulesWithPrefix<T, true>
@@ -112,13 +107,21 @@ type OverridesWithMaybeFunction<T extends object> = {
       >
     : never;
 };
-export type ConfigSharedOptions<T extends null | string | RulesRecord = RulesRecord> = Partial<
-  FlatConfigEntryFilesOrIgnores & {
-    overrides?: OverridesWithMaybeFunction<OmitIndexSignature<RuleOverrides<T>>>;
+export type UnConfigOptions<
+  T extends null | string | RulesRecord = RulesRecord,
+  // eslint-disable-next-line ts/no-empty-object-type
+  ExtraOptions = {},
+> = PrettifyShallow<
+  // eslint-disable-next-line ts/no-empty-object-type
+  (ExtraOptions extends object ? ExtraOptions : {}) &
+    Partial<
+      FlatConfigEntryFilesOrIgnores & {
+        overrides?: OverridesWithMaybeFunction<OmitIndexSignature<RuleOverrides<T>>>;
 
-    /** If severity is forced, `errorsInsteadOfWarnings` option will be completely ignored */
-    forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
-  }
+        /** If severity is forced, `errorsInsteadOfWarnings` option will be completely ignored */
+        forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
+      }
+    >
 >;
 
 export const genFlatConfigEntryName = (name: string) => `eslint-config-un/${name}`;
@@ -217,14 +220,12 @@ export const resolveOverrides = (
 // eslint-disable-next-line ts/no-explicit-any
 export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null = any> {
   private readonly rulesPrefix: PluginPrefix;
-  private readonly options: ConfigSharedOptions<
-    PluginPrefix extends null ? RulesRecord : PluginPrefix
-  >;
+  private readonly options: UnConfigOptions<PluginPrefix extends null ? RulesRecord : PluginPrefix>;
   private readonly context: UnConfigContext;
 
   constructor(
     rulesPrefix: PluginPrefix,
-    options: ConfigSharedOptions<PluginPrefix extends null ? RulesRecord : PluginPrefix>,
+    options: UnConfigOptions<PluginPrefix extends null ? RulesRecord : PluginPrefix>,
     context: UnConfigContext,
   ) {
     this.rulesPrefix = rulesPrefix
@@ -464,7 +465,7 @@ export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null
 
 export const createConfigBuilder = <PluginPrefix extends LoadablePluginPrefix | null>(
   context: UnConfigContext,
-  options: ConfigSharedOptions<PluginPrefix extends null ? RulesRecord : PluginPrefix> | boolean,
+  options: UnConfigOptions<PluginPrefix extends null ? RulesRecord : PluginPrefix> | boolean,
   rulesPrefix: PluginPrefix,
   disabledIfEmptyFiles = true,
 ) => {

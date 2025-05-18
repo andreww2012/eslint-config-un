@@ -1,6 +1,6 @@
 import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
 import {ERROR, OFF} from '../constants';
-import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
+import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -93,7 +93,7 @@ interface EslintPluginNSettings {
   version?: (GetRuleOptions<'node/no-unsupported-features/node-builtins'>['0'] & {})['version'];
 }
 
-export interface NodeEslintConfigOptions extends ConfigSharedOptions<'node'> {
+export interface NodeEslintConfigOptions extends UnConfigOptions<'node'> {
   /**
    * [`eslint-plugin-n`](https://github.com/eslint-community/eslint-plugin-n) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

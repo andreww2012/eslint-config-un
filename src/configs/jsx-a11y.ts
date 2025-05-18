@@ -1,9 +1,9 @@
 // cspell:ignore spinbutton treegrid menuitemradio menuitemcheckbox
 import {ERROR, GLOB_JS_TS_X_ONLY, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
+import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {OmitIndexSignature} from '../types';
 import {type MaybeFn, assignDefaults, getKeysOfTruthyValues, maybeCall} from '../utils';
-import type {UnConfigFn, UnConfigOptions} from './index';
+import type {UnConfigFn} from './index';
 
 const DEFAULT_AMBIGUOUS_WORDS = ['click here', 'here', 'link', 'a link', 'learn more'];
 
@@ -57,7 +57,7 @@ const defaultHoverOutHandlersRequiringOnBlur: Record<`on${string}`, true> = {
   onPointerLeave: true,
 };
 
-export interface JsxA11yEslintConfigOptions extends ConfigSharedOptions<'jsx-a11y'> {
+export interface JsxA11yEslintConfigOptions extends UnConfigOptions<'jsx-a11y'> {
   /**
    * [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -282,7 +282,7 @@ export const jsxA11yUnConfig: UnConfigFn<
   [
     customConfig?: {
       prefix: 'astro';
-      options: UnConfigOptions<JsxA11yEslintConfigOptions & ConfigSharedOptions<string>>;
+      options: JsxA11yEslintConfigOptions & UnConfigOptions<string>;
     },
   ]
 > = (context, customConfig) => {

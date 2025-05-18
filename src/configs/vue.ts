@@ -3,8 +3,8 @@ import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-
 import globals from 'globals';
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, type RuleSeverity, WARNING} from '../constants';
 import {
-  type ConfigSharedOptions,
   type FlatConfigEntryFilesOrIgnores,
+  type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
 import {pluginsLoaders} from '../plugins';
@@ -50,7 +50,32 @@ export const noRestrictedHtmlElementsDefault = Object.fromEntries(
 
 const DEFAULT_PINIA_STORE_NAME_SUFFIX = 'Store';
 
-export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
+export interface VueEslintConfigOptions extends UnConfigOptions<'vue'> {
+  /**
+   * Enables A11Y (accessibility) rules for Vue SFC templates
+   *
+   * By default, uses `files` and `ignores` from the parent config.
+   * @default true
+   */
+  configA11y?: boolean | UnConfigOptions<'vuejs-accessibility'>;
+
+  /**
+   * Enabled automatically by checking if `pinia` package is installed (at any level). Pass a false value to disable pinia-specific rules.
+   * @default true <=> `pinia` package is installed
+   */
+  configPinia?:
+    | boolean
+    | UnConfigOptions<
+        'pinia',
+        {
+          /**
+           * @default `Store`
+           * @see https://github.com/lisilinhart/eslint-plugin-pinia/blob/HEAD/docs/rules/prefer-use-store-naming-convention.md
+           */
+          storesNameSuffix?: string;
+        }
+      >;
+
   /**
    * @default auto-detected
    */
@@ -112,14 +137,6 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
   preferUseTemplateRef?: boolean;
 
   /**
-   * Enables A11Y (accessibility) rules for Vue SFC templates
-   *
-   * By default, uses `files` and `ignores` from the parent config.
-   * @default true
-   */
-  configA11y?: boolean | ConfigSharedOptions<'vuejs-accessibility'>;
-
-  /**
    * Enabled automatically by checking if `nuxt` package is installed (at any level). Pass a false value or a Nuxt version to explicitly disable or enable Nuxt-specific rules or tweaks.
    */
   nuxtMajorVersion?: false | 3;
@@ -128,22 +145,6 @@ export interface VueEslintConfigOptions extends ConfigSharedOptions<'vue'> {
    * @default ''
    */
   nuxtOrVueProjectDir?: string;
-
-  /**
-   * Enabled automatically by checking if `pinia` package is installed (at any level). Pass a false value to disable pinia-specific rules.
-   * @default true if `pinia` package is installed
-   */
-  configPinia?:
-    | boolean
-    | PrettifyShallow<
-        ConfigSharedOptions<'pinia'> & {
-          /**
-           * @default `Store`
-           * @see https://github.com/lisilinhart/eslint-plugin-pinia/HEAD/main/docs/rules/prefer-use-store-naming-convention.md#options
-           */
-          storesNameSuffix?: string;
-        }
-      >;
 
   /**
    * Whether to create virtual ESLint files for various SFC (single file component) blocks.

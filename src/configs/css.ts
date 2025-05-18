@@ -1,10 +1,10 @@
 import type {CSSLanguageOptions} from '@eslint/css';
 import {ERROR, GLOB_CSS, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface CssEslintConfigOptions extends ConfigSharedOptions<'css'> {
+export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
   /**
    * From `@eslint/css` plugin docs:
    * > By default, the CSS parser runs in strict mode, which reports all parsing errors. If you'd like to allow recoverable parsing errors (those that the browser automatically fixes on its own), you can set the `tolerant` option to `true`.

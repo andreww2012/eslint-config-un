@@ -1,13 +1,7 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import type Eslint from 'eslint';
 import {ERROR, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, GLOB_TSX, OFF, WARNING} from '../constants';
-import {
-  type AllRulesWithPrefix,
-  type ConfigSharedOptions,
-  type DisableAutofixPrefix,
-  type FlatConfigEntry,
-  createConfigBuilder,
-} from '../eslint';
+import {type AllRulesWithPrefix, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import {
@@ -19,8 +13,7 @@ import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
 import type {UnConfigFn} from './index';
 
-// https://typescript-eslint.io/rules/?=typeInformation
-//  [...document.querySelector('table[class^=rulesTable]').tBodies[0].rows].map((row) => row.cells[0].querySelector('a').textContent).map((n) => `'${n.split('/')[1]}'`).join(' | ')
+// TODO generate automatically?
 type TypeAwareRules =
   | 'await-thenable'
   | 'consistent-return'
@@ -82,12 +75,32 @@ type TypeAwareRules =
   | 'unbound-method'
   | 'use-unknown-in-catch-callback-variable';
 
-type AllTypescriptEslintRules = AllRulesWithPrefix<'@typescript-eslint', true>;
-type TypeAwareRulesWithPrefixes =
-  `${'' | `${DisableAutofixPrefix}/`}@typescript-eslint/${TypeAwareRules}`;
+type TypeAwareRulesWithPrefixes = AllRulesWithPrefix<
+  `@typescript-eslint/${TypeAwareRules}`,
+  true,
+  false
+>;
 
 export interface TsEslintConfigOptions
-  extends ConfigSharedOptions<Omit<AllTypescriptEslintRules, TypeAwareRulesWithPrefixes>> {
+  extends UnConfigOptions<
+    Omit<AllRulesWithPrefix<'@typescript-eslint', true>, keyof TypeAwareRulesWithPrefixes>
+  > {
+  /**
+   * Applies rules requiring type information on the specified `files`.
+   *
+   * By default uses `ignores` from the parent config.
+   * @default true
+   */
+  configTypeAware?: boolean | UnConfigOptions<TypeAwareRulesWithPrefixes>;
+
+  /**
+   * Disallows any type assertions via [`eslint-plugin-no-type-assertion`](https://www.npmjs.com/package/eslint-plugin-no-type-assertion) plugin.
+   *
+   * If you'd like to disallow only unsafe type assertions, enable [`@typescript-eslint/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule instead.
+   * @default false
+   */
+  configNoTypeAssertion?: boolean | UnConfigOptions<'no-type-assertion'>;
+
   /**
    * By default it will be auto-detected from the installed `typescript` package.
    * It will contain major and minor version numbers, e.g. even if you installed
@@ -100,30 +113,10 @@ export interface TsEslintConfigOptions
   };
 
   /**
-   * Applies rules requiring type information on the specified `files`.
-   *
-   * By default uses `ignores` from the parent config.
-   * @default true
-   */
-  configTypeAware?:
-    | boolean
-    | ConfigSharedOptions<
-        Pick<AllTypescriptEslintRules, TypeAwareRulesWithPrefixes & keyof AllTypescriptEslintRules>
-      >;
-
-  /**
    * Do not put `.` (dot) before an extension
    * @example ['vue']
    */
   extraFileExtensions?: string[];
-
-  /**
-   * Disallows any type assertions via [`eslint-plugin-no-type-assertion`](https://www.npmjs.com/package/eslint-plugin-no-type-assertion) plugin.
-   *
-   * If you'd like to disallow only unsafe type assertions, enable [`@typescript-eslint/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule instead.
-   * @default false
-   */
-  configNoTypeAssertion?: boolean | ConfigSharedOptions<'no-type-assertion'>;
 
   /**
    * If you have too many `no-unsafe-*` reports, you can disable them all using this option. All the rules disabled by this option are:

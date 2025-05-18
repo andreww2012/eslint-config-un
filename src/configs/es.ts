@@ -1,9 +1,9 @@
 // cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed matchall replaceall trimstart trimend subclassing weakrefs
 import {ERROR, OFF} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults, memoize} from '../utils';
-import type {UnConfigFn, UnConfigOptions} from './index';
+import type {UnConfigFn} from './index';
 
 interface EcmaFeatures {
   2025:
@@ -244,7 +244,7 @@ interface EcmaFeatures {
 
 type EcmaVersion = keyof EcmaFeatures;
 
-export interface EsEslintConfigOptions extends ConfigSharedOptions<'es'> {
+export interface EsEslintConfigOptions extends UnConfigOptions<'es'> {
   /**
    * [`eslint-plugin-es-x`](https://www.npmjs.com/package/eslint-plugin-es-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -291,7 +291,7 @@ export const esUnConfig: UnConfigFn<
   [
     customConfig?: {
       prefix: string;
-      options: UnConfigOptions<EsEslintConfigOptions>;
+      options: EsEslintConfigOptions;
     },
   ]
 > = (context, customConfig) => {

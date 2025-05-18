@@ -2,7 +2,7 @@ import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {ConfigEntryBuilder, FlatConfigEntry} from '../eslint';
 import type {LoadablePluginPrefix} from '../plugins';
-import type {Promisable} from '../types';
+import type {PrettifyShallow, Promisable} from '../types';
 import type {fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
 import type {AstroEslintConfigOptions} from './astro';
@@ -64,7 +64,7 @@ export interface EslintConfigUnOptions {
 
   /**
    * Automatically add gitignore'd files to `ignores` array.
-   * @default true if `.gitignore` exists
+   * @default true <=> `.gitignore` exists
    */
   gitignore?: boolean | FlatGitignoreOptions;
 
@@ -90,7 +90,9 @@ export interface EslintConfigUnOptions {
    */
   errorsInsteadOfWarnings?: boolean | string[];
 
-  configs?: Partial<UnConfigs>;
+  configs?: {
+    [Key in keyof UnConfigs]?: boolean | PrettifyShallow<UnConfigs[Key]>;
+  };
 
   extraConfigs?: FlatConfigEntry[];
 
@@ -114,13 +116,11 @@ export interface EslintConfigUnOptions {
   pluginRenames?: Partial<Record<LoadablePluginPrefix, string>>;
 }
 
-export type UnConfigOptions<T extends object> = boolean | Partial<T>;
-
 interface UnConfigs {
   /**
    * @default true
    */
-  js: UnConfigOptions<JsEslintConfigOptions>;
+  js: JsEslintConfigOptions;
 
   /**
    * TypeScript specific rules.
@@ -129,86 +129,86 @@ interface UnConfigs {
    * unless its `files` are explicitly specified.
    * @default true
    */
-  ts: UnConfigOptions<TsEslintConfigOptions>;
+  ts: TsEslintConfigOptions;
 
   /**
    * @default true
    */
-  unicorn: UnConfigOptions<UnicornEslintConfigOptions>;
+  unicorn: UnicornEslintConfigOptions;
 
   /**
    * @default true
    */
-  import: UnConfigOptions<ImportEslintConfigOptions>;
+  import: ImportEslintConfigOptions;
 
   /**
    * @default true
    */
-  node: UnConfigOptions<NodeEslintConfigOptions>;
+  node: NodeEslintConfigOptions;
 
   /**
    * @default true
    */
-  promise: UnConfigOptions<PromiseEslintConfigOptions>;
+  promise: PromiseEslintConfigOptions;
 
   /**
    * @default true
    */
-  sonar: UnConfigOptions<SonarEslintConfigOptions>;
+  sonar: SonarEslintConfigOptions;
 
   /**
    * `false` (do not enable Vue rules) <=> `vue` package is not installed (at any level) or `false` is explicitly passed
    */
-  vue: UnConfigOptions<VueEslintConfigOptions>;
+  vue: VueEslintConfigOptions;
 
   /**
    * `false` (do not enable Tailwind rules) <=> `tailwindcss` package is not installed (at any level) or `false` is explicitly passed
    */
-  tailwind: UnConfigOptions<TailwindEslintConfigOptions>;
+  tailwind: TailwindEslintConfigOptions;
 
   /**
    * @default true
    */
-  regexp: UnConfigOptions<RegexpEslintConfigOptions>;
+  regexp: RegexpEslintConfigOptions;
 
   /**
    * @default true
    */
-  eslintComments: UnConfigOptions<EslintCommentsEslintConfigOptions>;
+  eslintComments: EslintCommentsEslintConfigOptions;
 
   /**
    * @default true
    */
-  markdown: UnConfigOptions<MarkdownEslintConfigOptions>;
+  markdown: MarkdownEslintConfigOptions;
 
   /**
    * @default true
    */
-  cssInJs: UnConfigOptions<CssInJsEslintConfigOptions>;
+  cssInJs: CssInJsEslintConfigOptions;
 
   /**
-   * @default true if `jest` package is installed
+   * @default true <=> `jest` package is installed
    */
-  jest: UnConfigOptions<JestEslintConfigOptions>;
+  jest: JestEslintConfigOptions;
 
   /**
-   * @default true if `vitest` package is installed
+   * @default true <=> `vitest` package is installed
    */
-  vitest: UnConfigOptions<VitestEslintConfigOptions>;
+  vitest: VitestEslintConfigOptions;
 
   /**
    * @default true
    */
-  jsdoc: UnConfigOptions<JsdocEslintConfigOptions>;
+  jsdoc: JsdocEslintConfigOptions;
 
   /**
    * [qwik](https://qwik.dev/) specific rules.
    *
    * Used plugin:
    * - [`eslint-plugin-qwik`](https://www.npmjs.com/package/eslint-plugin-qwik) ([docs](https://qwik.dev/docs/advanced/eslint))
-   * @default true if `@builder.io/qwik` or `@qwik.dev/core` package is installed
+   * @default true <=> `@builder.io/qwik` or `@qwik.dev/core` package is installed
    */
-  qwik: UnConfigOptions<QwikEslintConfigOptions>;
+  qwik: QwikEslintConfigOptions;
 
   /* eslint-disable jsdoc/check-indentation */
 
@@ -245,7 +245,7 @@ interface UnConfigs {
    *   - Any rule from `@angular-eslint/eslint-plugin(-template)` of version 19 will be available.
    *   - [`@angular-eslint/no-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/v18.4.3/packages/eslint-plugin/docs/rules/no-host-metadata-property.md) rule will do nothing, since it was removed in v18 of `@angular-eslint/eslint-plugin`. Specify it in `portRules` to make it work again.
    */
-  angular: UnConfigOptions<AngularEslintConfigOptions>;
+  angular: AngularEslintConfigOptions;
   /* eslint-enable jsdoc/check-indentation */
 
   /**
@@ -255,7 +255,7 @@ interface UnConfigs {
    * - [`@eslint/css`](https://www.npmjs.com/package/@eslint/css)
    * @default true unless `stylelint` package is installed
    */
-  css: UnConfigOptions<CssEslintConfigOptions>;
+  css: CssEslintConfigOptions;
 
   /**
    * Provides an autofix to remove unused imports.
@@ -264,7 +264,7 @@ interface UnConfigs {
    * - [`eslint-plugin-unused-imports`](https://www.npmjs.com/package/eslint-plugin-unused-imports)
    * @default true
    */
-  unusedImports: UnConfigOptions<UnusedImportsEslintConfigOptions>;
+  unusedImports: UnusedImportsEslintConfigOptions;
 
   /**
    * [React](https://react.dev/) specific rules.
@@ -285,9 +285,9 @@ interface UnConfigs {
    * - `hooks`: rules from `eslint-plugin-react-hooks` as well as "Hooks Extra" rules from `@eslint-react/eslint-plugin`.
    * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and `eslint-plugin-react`.
    * - `allowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
-   * @default true if `react` package is installed
+   * @default true <=> `react` package is installed
    */
-  react: UnConfigOptions<ReactEslintConfigOptions>;
+  react: ReactEslintConfigOptions;
 
   /**
    * Provides accessibility rules for JSX. Applied to all JSX files by default.
@@ -298,7 +298,7 @@ interface UnConfigs {
    * - [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
    * @default true
    */
-  jsxA11y: UnConfigOptions<JsxA11yEslintConfigOptions>;
+  jsxA11y: JsxA11yEslintConfigOptions;
 
   /**
    * Rules specific to pnpm package manager.
@@ -307,7 +307,7 @@ interface UnConfigs {
    * - [`eslint-plugin-pnpm`](https://www.npmjs.com/package/eslint-plugin-pnpm)
    * @default true <=> pnpm is detected as a used package manager by [`package-manager-detector`](https://www.npmjs.com/package/package-manager-detector)
    */
-  pnpm: UnConfigOptions<PnpmEslintConfigOptions>;
+  pnpm: PnpmEslintConfigOptions;
 
   /**
    * [Next.js](https://nextjs.org/) specific rules.
@@ -316,7 +316,7 @@ interface UnConfigs {
    * - [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next) ([docs](https://nextjs.org/docs/app/api-reference/config/eslint))
    * @default true <=> `next` package is installed
    */
-  nextJs: UnConfigOptions<NextJsEslintConfigOptions>;
+  nextJs: NextJsEslintConfigOptions;
 
   /**
    * [Astro](https://astro.build/) specific rules.
@@ -325,7 +325,7 @@ interface UnConfigs {
    * - [`eslint-plugin-astro`](https://www.npmjs.com/package/eslint-plugin-astro) ([docs](https://ota-meshi.github.io/eslint-plugin-astro/))
    * @default true <=> `astro` package is installed
    */
-  astro: UnConfigOptions<AstroEslintConfigOptions>;
+  astro: AstroEslintConfigOptions;
 
   /**
    * [Svelte](https://svelte.dev/) specific rules.
@@ -334,7 +334,7 @@ interface UnConfigs {
    * - [`eslint-plugin-svelte`](https://www.npmjs.com/package/eslint-plugin-svelte) ([docs](https://sveltejs.github.io/eslint-plugin-svelte/))
    * @default true <=> `svelte` package is installed
    */
-  svelte: UnConfigOptions<SvelteEslintConfigOptions>;
+  svelte: SvelteEslintConfigOptions;
 
   /**
    * [SolidJS](https://svelte.dev/) specific rules.
@@ -343,7 +343,7 @@ interface UnConfigs {
    * - [`eslint-plugin-solid`](https://www.npmjs.com/package/eslint-plugin-solid) ([docs](https://github.com/solidjs-community/eslint-plugin-solid/tree/main?tab=readme-ov-file))
    * @default true <=> `solid-js` package is installed
    */
-  solid: UnConfigOptions<SolidEslintConfigOptions>;
+  solid: SolidEslintConfigOptions;
 
   /**
    * Plugin for linting `<script>` blocks inside HTML files. It does not have any
@@ -353,7 +353,7 @@ interface UnConfigs {
    * - [`eslint-plugin-html`](https://www.npmjs.com/package/eslint-plugin-html) ([docs](https://github.com/BenoitZugmeyer/eslint-plugin-html?tab=ISC-1-ov-file#))
    * @default true
    */
-  jsInline: UnConfigOptions<JsInlineEslintConfigOptions>;
+  jsInline: JsInlineEslintConfigOptions;
 
   /**
    * Rules for linting plain HTML files.
@@ -362,7 +362,7 @@ interface UnConfigs {
    * - [`@html-eslint/eslint-plugin`](https://www.npmjs.com/package/@html-eslint/eslint-plugin) ([docs](https://html-eslint.org/docs/getting-started))
    * @default true <=> `angular` config is **disabled**
    */
-  html: UnConfigOptions<HtmlEslintConfigOptions>;
+  html: HtmlEslintConfigOptions;
 
   /**
    * ESLint rules related to `Math` and `Number` objects.
@@ -371,19 +371,19 @@ interface UnConfigs {
    * - [`eslint-plugin-math`](https://www.npmjs.com/package/eslint-plugin-math) ([docs](https://ota-meshi.github.io/eslint-plugin-math/))
    * @default true
    */
-  math: UnConfigOptions<MathEslintConfigOptions>;
+  math: MathEslintConfigOptions;
 
   /**
    * NOTE: disabled by default
    * @default false
    */
-  security: UnConfigOptions<SecurityEslintConfigOptions>;
+  security: SecurityEslintConfigOptions;
 
   /**
    * NOTE: disabled by default
    * @default false
    */
-  preferArrowFunctions: UnConfigOptions<PreferArrowFunctionsEslintConfigOptions>;
+  preferArrowFunctions: PreferArrowFunctionsEslintConfigOptions;
 
   /**
    * If enabled, lockfiles (`yarn.lock`, `pnpm-lock.yaml`) will be ignored by default
@@ -391,7 +391,7 @@ interface UnConfigs {
    * NOTE: disabled by default.
    * @default false
    */
-  yaml: UnConfigOptions<YamlEslintConfigOptions>;
+  yaml: YamlEslintConfigOptions;
 
   /**
    * If enabled, a Rust lockfile (`Cargo.lock`) will be ignored by default
@@ -399,19 +399,19 @@ interface UnConfigs {
    * NOTE: disabled by default.
    * @default false
    */
-  toml: UnConfigOptions<TomlEslintConfigOptions>;
+  toml: TomlEslintConfigOptions;
 
   /**
    * NOTE: disabled by default.
    * @default false
    */
-  json: UnConfigOptions<JsoncEslintConfigOptions>;
+  json: JsoncEslintConfigOptions;
 
   /**
    * NOTE: disabled by default.
    * @default false
    */
-  packageJson: UnConfigOptions<PackageJsonEslintConfigOptions>;
+  packageJson: PackageJsonEslintConfigOptions;
 
   /**
    * NOTE: even if enabled, **all** the rules are still disabled by default.
@@ -419,7 +419,7 @@ interface UnConfigs {
    * NOTE: disabled by default.
    * @default false
    */
-  perfectionist: UnConfigOptions<PerfectionistEslintConfigOptions>;
+  perfectionist: PerfectionistEslintConfigOptions;
 
   /**
    * Enforce logical consistency by transforming negated boolean expressions according to De Morgan’s laws.
@@ -428,7 +428,7 @@ interface UnConfigs {
    * @default false
    * @see https://www.npmjs.com/package/eslint-plugin-de-morgan
    */
-  deMorgan: UnConfigOptions<DeMorganEslintConfigOptions>;
+  deMorgan: DeMorganEslintConfigOptions;
 
   /**
    * Used plugins:
@@ -437,7 +437,7 @@ interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  jsonSchemaValidator: UnConfigOptions<JsonSchemaValidatorEslintConfigOptions>;
+  jsonSchemaValidator: JsonSchemaValidatorEslintConfigOptions;
 
   /**
    * Used plugins:
@@ -446,7 +446,7 @@ interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  casePolice: UnConfigOptions<CasePoliceEslintConfigOptions>;
+  casePolice: CasePoliceEslintConfigOptions;
 
   /**
    * Used plugins:
@@ -455,7 +455,7 @@ interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  es: UnConfigOptions<EsEslintConfigOptions>;
+  es: EsEslintConfigOptions;
 
   /**
    * Used plugins:
@@ -469,7 +469,7 @@ interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  nodeDependencies: UnConfigOptions<NodeDependenciesEslintConfigOptions>;
+  nodeDependencies: NodeDependenciesEslintConfigOptions;
 
   /**
    * Enables rules from a plugin to help suggest alternatives to various dependencies.
@@ -480,7 +480,7 @@ interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  depend: UnConfigOptions<DependEslintConfigOptions>;
+  depend: DependEslintConfigOptions;
 
   /**
    * A config specific to files meant to be executed. By default, allows `process.exit()`
@@ -488,7 +488,7 @@ interface UnConfigs {
    * (on any level).
    * @default true
    */
-  cli: UnConfigOptions<CliEslintConfigOptions>;
+  cli: CliEslintConfigOptions;
 
   /**
    * Rules specific to [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html).
@@ -500,7 +500,7 @@ interface UnConfigs {
    * or a sub-config, the config won't be generated.
    * @default false
    */
-  cloudfrontFunctions: UnConfigOptions<CloudfrontFunctionsEslintConfigOptions>;
+  cloudfrontFunctions: CloudfrontFunctionsEslintConfigOptions;
 }
 
 export interface UnConfigContext {
@@ -524,6 +524,6 @@ export type UnConfigFn<
   | null
   | ({
       configs: (ConfigEntryBuilder | null)[];
-      optionsResolved: UnConfigs[T] & object & {};
+      optionsResolved: UnConfigs[T] & {};
     } & ExtraReturnedData)
 >;

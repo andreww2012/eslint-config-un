@@ -11,9 +11,8 @@ import {
   type AllEslintRulesWithDisableAutofix,
   type AllRulesWithPrefix,
   type AllRulesWithPrefixUnprefixedNames,
-  type ConfigSharedOptions,
-  type DisableAutofixPrefix,
   type GetRuleOptions,
+  type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
@@ -162,8 +161,6 @@ interface EslintPluginReactXSettings {
   additionalHooks?: Record<ReactBuiltInHookName, string[]>;
 }
 
-type AllReactEslintRules = AllRulesWithPrefix<'react', true>;
-
 type EslintPluginReactDomRules =
   | 'checked-requires-onchange-or-readonly'
   | 'forbid-dom-props'
@@ -172,7 +169,7 @@ type EslintPluginReactDomRules =
 
 type ReactXTypeAwareRules = 'no-leaked-conditional-rendering' | 'prefer-read-only-props';
 
-export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
+export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
   /**
    * [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -183,14 +180,6 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
    * when running ESLint.
    */
   settings?: EslintPluginReactSettings;
-
-  /**
-   * By default, default exports will be allowed in all JSX files
-   * @default true
-   */
-  configAllowDefaultExportsInJsxFiles?:
-    | boolean
-    | ConfigSharedOptions<Pick<AllEslintRulesWithDisableAutofix, 'import/no-default-export'>>;
 
   /**
    * Enables or specifies the configuration for the [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) plugin.
@@ -206,71 +195,68 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
    */
   configReactX?:
     | boolean
-    | (ConfigSharedOptions<
+    | UnConfigOptions<
         Omit<
           AllRulesWithPrefix<'@eslint-react', true>,
-          `${'' | `${DisableAutofixPrefix}/`}@eslint-react/${ReactXTypeAwareRules}`
-        >
-      > & {
-        /**
-         * [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) plugin
-         * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-         * that will be assigned to `react-x` property and applied to the specified `files` and `ignores`.
-         *
-         * Note that they will be merged with `{version: <detected by us React version>}`.
-         */
-        settings?: EslintPluginReactXSettings;
+          keyof AllRulesWithPrefix<`@eslint-react/${ReactXTypeAwareRules}`, true, false>
+        >,
+        {
+          /**
+           * [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) plugin
+           * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+           * that will be assigned to `react-x` property and applied to the specified `files` and `ignores`.
+           *
+           * Note that they will be merged with `{version: <detected by us React version>}`.
+           */
+          settings?: EslintPluginReactXSettings;
 
-        /**
-         * By default, usage of [any of the legacy React APIs](https://react.dev/reference/react/legacy),
-         * including [deprecated lifecycle methods](https://react.dev/reference/react/Component#componentwillmount),
-         * will be reported. Using this option, you can allow some of them or change
-         * the severity of the problems.
-         *
-         * The default severity is `error`, with the only exception of `classComponent`, which
-         * is `warn`.
-         *
-         * Affects the following rules (`@eslint-react` prefix is implied):
-         * - `Children`: [`no-children-count`](https://eslint-react.xyz/docs/rules/no-children-count), [`no-children-for-each`](https://eslint-react.xyz/docs/rules/no-children-for-each), [`no-children-map`](https://eslint-react.xyz/docs/rules/no-children-map), [`no-children-only`](https://eslint-react.xyz/docs/rules/no-children-only), [`no-children-to-array`](https://eslint-react.xyz/docs/rules/no-children-to-array)
-         * - `cloneElement`: [`no-clone-element`](https://eslint-react.xyz/docs/rules/no-clone-element)
-         * - `classComponent`: [`no-class-component`](https://eslint-react.xyz/docs/rules/no-class-component)
-         * - `createRef`: [`no-create-ref`](https://eslint-react.xyz/docs/rules/no-create-ref)
-         * - `forwardRef`: [`no-forward-ref`](https://eslint-react.xyz/docs/rules/no-forward-ref)
-         * - `componentWillMount`: [`no-component-will-mount`](https://eslint-react.xyz/docs/rules/no-component-will-mount)
-         * - `componentWillReceiveProps`: [`no-component-will-receive-props`](https://eslint-react.xyz/docs/rules/no-component-will-receive-props)
-         * - `componentWillUpdate`: [`no-component-will-update`](https://eslint-react.xyz/docs/rules/no-component-will-update)
-         */
-        noLegacyApis?: Partial<
-          Record<
-            | 'Children'
-            | 'cloneElement'
-            | 'classComponent'
-            // | 'createElement'
-            | 'createRef'
-            | 'forwardRef'
-            // | 'isValidElement'
-            // | 'PureComponent'
-            | 'componentWillMount'
-            | 'componentWillReceiveProps'
-            | 'componentWillUpdate',
-            boolean | 'warn'
-          >
-        >;
+          /**
+           * By default, usage of [any of the legacy React APIs](https://react.dev/reference/react/legacy),
+           * including [deprecated lifecycle methods](https://react.dev/reference/react/Component#componentwillmount),
+           * will be reported. Using this option, you can allow some of them or change
+           * the severity of the problems.
+           *
+           * The default severity is `error`, with the only exception of `classComponent`, which
+           * is `warn`.
+           *
+           * Affects the following rules (`@eslint-react` prefix is implied):
+           * - `Children`: [`no-children-count`](https://eslint-react.xyz/docs/rules/no-children-count), [`no-children-for-each`](https://eslint-react.xyz/docs/rules/no-children-for-each), [`no-children-map`](https://eslint-react.xyz/docs/rules/no-children-map), [`no-children-only`](https://eslint-react.xyz/docs/rules/no-children-only), [`no-children-to-array`](https://eslint-react.xyz/docs/rules/no-children-to-array)
+           * - `cloneElement`: [`no-clone-element`](https://eslint-react.xyz/docs/rules/no-clone-element)
+           * - `classComponent`: [`no-class-component`](https://eslint-react.xyz/docs/rules/no-class-component)
+           * - `createRef`: [`no-create-ref`](https://eslint-react.xyz/docs/rules/no-create-ref)
+           * - `forwardRef`: [`no-forward-ref`](https://eslint-react.xyz/docs/rules/no-forward-ref)
+           * - `componentWillMount`: [`no-component-will-mount`](https://eslint-react.xyz/docs/rules/no-component-will-mount)
+           * - `componentWillReceiveProps`: [`no-component-will-receive-props`](https://eslint-react.xyz/docs/rules/no-component-will-receive-props)
+           * - `componentWillUpdate`: [`no-component-will-update`](https://eslint-react.xyz/docs/rules/no-component-will-update)
+           */
+          noLegacyApis?: Partial<
+            Record<
+              | 'Children'
+              | 'cloneElement'
+              | 'classComponent'
+              // | 'createElement'
+              | 'createRef'
+              | 'forwardRef'
+              // | 'isValidElement'
+              // | 'PureComponent'
+              | 'componentWillMount'
+              | 'componentWillReceiveProps'
+              | 'componentWillUpdate',
+              boolean | 'warn'
+            >
+          >;
 
-        /**
-         * By default will be applied to all TS(X) files.
-         * @default true <=> `ts` config is enabled
-         */
-        typeAwareRules?:
-          | boolean
-          | ConfigSharedOptions<
-              Pick<
-                AllEslintRulesWithDisableAutofix,
-                `${'' | `${DisableAutofixPrefix}/`}@eslint-react/${ReactXTypeAwareRules}` &
-                  keyof AllEslintRulesWithDisableAutofix
-              >
-            >;
-      });
+          /**
+           * By default will be applied to all TS(X) files.
+           * @default true <=> `ts` config is enabled
+           */
+          typeAwareRules?:
+            | boolean
+            | UnConfigOptions<
+                AllRulesWithPrefix<`@eslint-react/${ReactXTypeAwareRules}`, true, false>
+              >;
+        }
+      >;
 
   /**
    * Enables or specifies the configuration for the [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) plugin, as well as ["Hooks Extra" rules from `@eslint-react/eslint-plugin`](https://eslint-react.xyz/docs/rules/overview#hooks-extra-rules)
@@ -279,7 +265,7 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
    * By default will use the same `files` and `ignores` as the parent config.
    * @default true
    */
-  configHooks?: boolean | ConfigSharedOptions<'react-hooks' | '@eslint-react/hooks-extra'>;
+  configHooks?: boolean | UnConfigOptions<'react-hooks' | '@eslint-react/hooks-extra'>;
 
   /**
    * Enables or specifies the configuration for DOM specific rules from [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react).
@@ -293,13 +279,8 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
    */
   configDom?:
     | boolean
-    | ConfigSharedOptions<
-        | '@eslint-react/dom'
-        | Pick<
-            AllReactEslintRules,
-            `${'' | `${DisableAutofixPrefix}/`}react/${EslintPluginReactDomRules}` &
-              keyof AllReactEslintRules
-          >
+    | UnConfigOptions<
+        '@eslint-react/dom' | AllRulesWithPrefix<`react/${EslintPluginReactDomRules}`, true, false>
       >;
 
   /**
@@ -311,8 +292,9 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
    */
   configRefresh?:
     | boolean
-    | PrettifyShallow<
-        ConfigSharedOptions<'react-refresh'> & {
+    | UnConfigOptions<
+        'react-refresh',
+        {
           /**
            * "If you use a framework that handles HMR of some specific exports, you can use this option to avoid warning for them." - plugin docs
            *
@@ -343,7 +325,15 @@ export interface ReactEslintConfigOptions extends ConfigSharedOptions<'react'> {
    * By default will use the same `files` and `ignores` as the parent config.
    * @default true <=> React version is 19 or higher
    */
-  configCompiler?: boolean | ConfigSharedOptions<'react-compiler'>;
+  configCompiler?: boolean | UnConfigOptions<'react-compiler'>;
+
+  /**
+   * By default, default exports will be allowed in all JSX files
+   * @default true
+   */
+  configAllowDefaultExportsInJsxFiles?:
+    | boolean
+    | UnConfigOptions<Pick<AllEslintRulesWithDisableAutofix, 'import/no-default-export'>>;
 
   /**
    * Controls how rules from [@eslint-react/eslint-plugin](https://www.npmjs.com/package/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react) are used.

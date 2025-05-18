@@ -1,9 +1,9 @@
 import {GLOB_JS_TS_X_EXTENSION} from '../../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../../eslint';
 import {assignDefaults} from '../../utils';
 import type {UnConfigFn} from '../index';
 
-export interface CliEslintConfigOptions extends ConfigSharedOptions {
+export interface CliEslintConfigOptions extends UnConfigOptions {
   /**
    * By default, files in directories on all levels are accounted for by this config. Set this to true to only account for files in the top-level directories.
    * @default false

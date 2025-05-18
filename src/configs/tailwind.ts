@@ -1,5 +1,5 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults, maybeCall, objectKeysUnsafe} from '../utils';
 import type {UnConfigFn} from './index';
@@ -26,7 +26,7 @@ const DEFAULT_PLUGIN_SETTINGS = {
   cssFiles: ['**/*.css', '!**/node_modules', '!**/.*', '!**/dist', '!**/build'],
 };
 
-export interface TailwindEslintConfigOptions extends ConfigSharedOptions<'tailwindcss'> {
+export interface TailwindEslintConfigOptions extends UnConfigOptions<'tailwindcss'> {
   /**
    * Will be merged with the default [`eslint-plugin-tailwindcss` settings](https://github.com/francoismassart/eslint-plugin-tailwindcss?tab=readme-ov-file#more-settings).
    *

@@ -1,6 +1,5 @@
 import {ERROR, GLOB_TSX, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
-import type {PrettifyShallow} from '../types';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -159,7 +158,7 @@ interface EslintPluginJsdocSettings {
   exemptDestructuredRootsFromChecks?: boolean;
 }
 
-export interface JsdocEslintConfigOptions extends ConfigSharedOptions<'jsdoc'> {
+export interface JsdocEslintConfigOptions extends UnConfigOptions<'jsdoc'> {
   /**
    * [`eslint-plugin-jsdoc` plugin settings](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md) that will be applied to the specified `files` and `ignores`.
    */
@@ -169,11 +168,9 @@ export interface JsdocEslintConfigOptions extends ConfigSharedOptions<'jsdoc'> {
    * Explicitly specify or ignore files written in TypeScript. Will be used to disable certain rules like [`no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md) or [`require-param-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-type.md), and enable some rules like [`no-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-types.md).
    *
    * Will create a separate ESLint config which by default will use `settings` from the root `jsdoc` config, if specified, and will only be applied to TypeScript files.
-   * @default `true` if TypeScript (`ts`) config is enabled
+   * @default true <=> `ts` config is enabled
    */
-  configTypescript?:
-    | boolean
-    | PrettifyShallow<ConfigSharedOptions<'jsdoc'> & Pick<JsdocEslintConfigOptions, 'settings'>>;
+  configTypescript?: boolean | UnConfigOptions<'jsdoc', Pick<JsdocEslintConfigOptions, 'settings'>>;
 }
 
 export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {

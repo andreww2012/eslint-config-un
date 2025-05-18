@@ -1,11 +1,10 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import {DEFAULT_FILES_PACKAGE_JSON} from './package-json';
 import type {UnConfigFn} from './index';
 
-export interface NodeDependenciesEslintConfigOptions
-  extends ConfigSharedOptions<'node-dependencies'> {}
+export interface NodeDependenciesEslintConfigOptions extends UnConfigOptions<'node-dependencies'> {}
 
 export const nodeDependenciesUnConfig: UnConfigFn<'nodeDependencies'> = async (context) => {
   const jsoncEslintParser = await interopDefault(import('jsonc-eslint-parser'));

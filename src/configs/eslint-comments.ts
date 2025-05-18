@@ -1,10 +1,10 @@
 import {ERROR, OFF} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface EslintCommentsEslintConfigOptions
-  extends ConfigSharedOptions<'@eslint-community/eslint-comments'> {}
+  extends UnConfigOptions<'@eslint-community/eslint-comments'> {}
 
 export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.eslintComments;

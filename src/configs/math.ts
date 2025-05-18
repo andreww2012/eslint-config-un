@@ -1,9 +1,9 @@
 import {ERROR, OFF} from '../constants';
-import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
+import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface MathEslintConfigOptions extends ConfigSharedOptions<'math'> {
+export interface MathEslintConfigOptions extends UnConfigOptions<'math'> {
   /**
    * Enforces the method of conversion to absolute values. Set to `false` not not enforce it.
    * @default 'Math.abs'

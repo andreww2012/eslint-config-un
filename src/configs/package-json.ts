@@ -1,5 +1,5 @@
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
-import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
+import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -39,7 +39,7 @@ type PackageJsonRequirableFields =
   | 'types'
   | 'version';
 
-export interface PackageJsonEslintConfigOptions extends ConfigSharedOptions<'package-json'> {
+export interface PackageJsonEslintConfigOptions extends UnConfigOptions<'package-json'> {
   /**
    * The sorting order of package properties
    * @default 'sort-package-json'

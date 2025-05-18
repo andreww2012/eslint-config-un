@@ -1,10 +1,10 @@
 // cspell:ignore polyfillio
 import {ERROR, GLOB_JS_TS_X, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface NextJsEslintConfigOptions extends ConfigSharedOptions<'@next/next'> {
+export interface NextJsEslintConfigOptions extends UnConfigOptions<'@next/next'> {
   /**
    * [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

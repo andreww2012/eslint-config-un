@@ -1,5 +1,5 @@
 import {ERROR, GLOB_YAML, OFF} from '../constants';
-import {type ConfigSharedOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';
+import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -7,7 +7,7 @@ export const YAML_DEFAULT_FILES = [GLOB_YAML];
 
 const DEFAULT_FILES_TO_IGNORE = ['yarn.lock', 'pnpm-lock.yaml'] as const;
 
-export interface YamlEslintConfigOptions extends ConfigSharedOptions<'yml'> {
+export interface YamlEslintConfigOptions extends UnConfigOptions<'yml'> {
   /** `files` specified in this config will be merged with the default of `['**\/*.y?(a)ml']`. Set this to `true` to avoid that behavior */
   doNotMergeFilesWithDefault?: boolean;
 

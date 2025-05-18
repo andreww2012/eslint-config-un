@@ -1,7 +1,7 @@
 import type Eslint from 'eslint';
 import globals from 'globals';
 import {GLOB_HTML_ALL} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults, getKeysOfTruthyValues} from '../utils';
 import type {UnConfigFn} from './index';
@@ -23,7 +23,7 @@ const DEFAULT_HTML_EXTENSIONS = [
 ];
 const DEFAULT_XML_EXTENSIONS = ['.xhtml', '.xml'];
 
-export interface JsInlineEslintConfigOptions extends ConfigSharedOptions<'html'> {
+export interface JsInlineEslintConfigOptions extends UnConfigOptions<'html'> {
   /**
    * [`eslint-plugin-html`](https://www.npmjs.com/package/eslint-plugin-html) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

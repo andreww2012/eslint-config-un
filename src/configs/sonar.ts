@@ -1,9 +1,9 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface SonarEslintConfigOptions extends ConfigSharedOptions<'sonarjs'> {
+export interface SonarEslintConfigOptions extends UnConfigOptions<'sonarjs'> {
   /**
    * Enables rules that are specific to AWS
    * @default true

@@ -1,15 +1,15 @@
 import {ERROR, OFF} from '../../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../../eslint';
 import {assignDefaults} from '../../utils';
 import {esUnConfig} from '../es';
 import type {UnConfigFn} from '../index';
 
-export interface CloudfrontFunctionsEslintConfigOptions extends ConfigSharedOptions {
+export interface CloudfrontFunctionsEslintConfigOptions extends UnConfigOptions {
   /**
    * By default, the runtime version is assumed to be 2.
    * This is a sub-config for functions written for the v1 runtime.
    */
-  configV1?: ConfigSharedOptions;
+  configV1?: UnConfigOptions;
 }
 
 const genSyntaxNotAllowedErrorMessage = (syntax: string, isPlural = false) =>
@@ -32,7 +32,7 @@ export const cloudfrontFunctionsEslintConfig: UnConfigFn<'cloudfrontFunctions'> 
       [
         [1, optionsResolved.configV1 || {}],
         [2, optionsResolved],
-      ] satisfies [1 | 2, ConfigSharedOptions][]
+      ] satisfies [1 | 2, UnConfigOptions][]
     ).map(async ([runtimeVersion, options]) => {
       const isV2 = runtimeVersion === 2;
 

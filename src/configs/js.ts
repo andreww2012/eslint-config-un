@@ -1,14 +1,14 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import {
   type BuiltinEslintRulesFixed,
-  type ConfigSharedOptions,
   type GetRuleOptions,
+  type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
 import {assignDefaults, fetchPackageInfo} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface JsEslintConfigOptions extends ConfigSharedOptions<BuiltinEslintRulesFixed> {}
+export interface JsEslintConfigOptions extends UnConfigOptions<BuiltinEslintRulesFixed> {}
 
 export const RULE_CAMELCASE_OPTIONS: GetRuleOptions<'camelcase'> = [
   {

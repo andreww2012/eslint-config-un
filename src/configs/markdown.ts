@@ -2,10 +2,10 @@ import type {MarkdownLanguageOptions} from '@eslint/markdown/types';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
 import {
-  type ConfigSharedOptions,
   type FlatConfigEntryFiles,
   type FlatConfigEntryFilesOrIgnores,
   type RuleOverrides,
+  type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
@@ -19,7 +19,7 @@ type CodeBlockLanguage = ShikiLanguageCodesList | (string & {});
 const DEFAULT_FILES = [GLOB_MARKDOWN];
 const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS];
 
-export interface MarkdownEslintConfigOptions extends ConfigSharedOptions<'markdown'> {
+export interface MarkdownEslintConfigOptions extends UnConfigOptions<'markdown'> {
   /**
    * Lint Markdown files themselves (***not*** fenced code blocks inside them)
    * @default true

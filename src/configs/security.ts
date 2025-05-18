@@ -1,9 +1,9 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface SecurityEslintConfigOptions extends ConfigSharedOptions<'security'> {}
+export interface SecurityEslintConfigOptions extends UnConfigOptions<'security'> {}
 
 export const securityUnConfig: UnConfigFn<'security'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.security;

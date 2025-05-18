@@ -1,9 +1,9 @@
 import {ERROR, GLOB_HTML_ALL, OFF, WARNING} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface HtmlEslintConfigOptions extends ConfigSharedOptions<'@html-eslint'> {
+export interface HtmlEslintConfigOptions extends UnConfigOptions<'@html-eslint'> {
   /**
    * [`@html-eslint/eslint-plugin`](https://www.npmjs.com/package/@html-eslint/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

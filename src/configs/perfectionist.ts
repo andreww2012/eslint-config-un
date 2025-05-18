@@ -1,9 +1,9 @@
 import {OFF} from '../constants';
-import {type ConfigSharedOptions, createConfigBuilder} from '../eslint';
+import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface PerfectionistEslintConfigOptions extends ConfigSharedOptions<'perfectionist'> {}
+export interface PerfectionistEslintConfigOptions extends UnConfigOptions<'perfectionist'> {}
 
 export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.perfectionist;
