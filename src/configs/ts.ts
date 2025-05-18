@@ -170,12 +170,10 @@ export const tsUnConfig: UnConfigFn<
   const {configTypeAware, configNoTypeAssertion, extraFileExtensions, typescriptVersion} =
     optionsResolved;
 
-  const extraFilesNONTypeAware: FlatConfigEntry['files'] & {} = [];
-  const extraFilesTypeAware: FlatConfigEntry['files'] & {} = [];
-  const extraFilesToIgnoreNONTypeAware: FlatConfigEntry['ignores'] & {} = [];
-  const extraFilesToIgnoreTypeAware: FlatConfigEntry['ignores'] & {} = [
-    GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
-  ];
+  const extraFilesNONTypeAware: string[] = [];
+  const extraFilesTypeAware: string[] = [];
+  const extraFilesToIgnoreNONTypeAware: string[] = [];
+  const extraFilesToIgnoreTypeAware: string[] = [GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS];
 
   // TODO the following 3 sections are copy-pasty
 
@@ -242,31 +240,24 @@ export const tsUnConfig: UnConfigFn<
   const generateSetupConfigBuilder = (files: string[], ignores: string[], isTypeAware: boolean) => {
     const configBuilderSetup = createConfigBuilder(context, {}, '@typescript-eslint');
     configBuilderSetup
-      ?.addConfig(
-        [
-          `ts/${isTypeAware ? '' : 'non-'}type-aware/setup`,
-          {
-            // Applying this generally to all files is unacceptable
-            filesFallback: files.length > 0 ? files : TS_FILES_DEFAULT,
-            ignoresFallback: ignores,
-          },
-        ],
-        {
-          languageOptions: {
-            // @ts-expect-error small types mismatch
-            parser: typescriptEslintParser,
-            parserOptions: {
-              extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
-              sourceType: 'module',
-              ...(isTypeAware && {
-                projectService: true,
-                tsconfigRootDir: process.cwd(),
-              }),
-              ...optionsResolved.parserOptions,
-            } satisfies TsEslintParserOptions,
-          },
+      ?.addConfig(`ts/${isTypeAware ? '' : 'non-'}type-aware/setup`, {
+        // Applying this generally to all files is unacceptable
+        files: files.length > 0 ? files : TS_FILES_DEFAULT,
+        ignores,
+        languageOptions: {
+          // @ts-expect-error small types mismatch
+          parser: typescriptEslintParser,
+          parserOptions: {
+            extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
+            sourceType: 'module',
+            ...(isTypeAware && {
+              projectService: true,
+              tsconfigRootDir: process.cwd(),
+            }),
+            ...optionsResolved.parserOptions,
+          } satisfies TsEslintParserOptions,
         },
-      )
+      })
       .disableAnyRule('', 'no-unused-vars')
       .disableAnyRule('', 'no-use-before-define')
       .disableAnyRule('', 'no-shadow')
@@ -284,9 +275,8 @@ export const tsUnConfig: UnConfigFn<
   const configBuilderNONTypeAware = createConfigBuilder(
     context,
     {
-      ...optionsResolved,
-      files: filesNONTypeAware,
-      ignores: ignoresNONTypeAware,
+      ...(filesNONTypeAware.length > 0 && {files: filesNONTypeAware}),
+      ...(ignoresNONTypeAware.length > 0 && {ignores: ignoresNONTypeAware}),
     },
     '@typescript-eslint',
   );
@@ -424,14 +414,10 @@ export const tsUnConfig: UnConfigFn<
   );
 
   configBuilderTypeAware
-    ?.addConfig([
-      'ts/type-aware/rules',
-      {
-        includeDefaultFilesAndIgnores: true,
-        filesFallback: filesTypeAware,
-        ignoresFallback: ignoresTypeAware,
-      },
-    ])
+    ?.addConfig('ts/type-aware/rules', {
+      ...(filesTypeAware.length > 0 && {files: filesTypeAware}),
+      ...(ignoresTypeAware.length > 0 && {ignores: ignoresTypeAware}),
+    })
     /* Category: Strict */
     .addRule('await-thenable', ERROR) // 🟣
     .addRule('consistent-return', ERROR)
