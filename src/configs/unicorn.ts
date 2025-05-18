@@ -60,7 +60,8 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('no-magic-array-flat-depth', OFF)
     .addRule('no-named-default', ERROR) // >=57.0.0
     // "This is an improved version of the no-negated-condition ESLint rule that makes it automatically fixable" - Unicorn docs
-    .addRule('no-negated-condition', ERROR, [], {overrideBaseRule: true})
+    .addRule('no-negated-condition', ERROR)
+    .disableAnyRule('', 'no-negated-condition')
     .addRule('no-negation-in-equality-check', ERROR)
     .addRule('no-nested-ternary', OFF)
     .addRule('no-new-array', ERROR)

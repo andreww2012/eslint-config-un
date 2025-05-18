@@ -172,7 +172,6 @@ const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, EslintSeverity
 };
 
 interface AddRuleOptions {
-  overrideBaseRule?: boolean | keyof AllEslintRulesWithoutDisableAutofix;
   disableAutofix?: boolean;
 }
 
@@ -357,15 +356,6 @@ export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null
         configFinal.rules[ruleName] = 0 /* Off */;
       }
 
-      if (options?.overrideBaseRule) {
-        const baseRuleName =
-          typeof options.overrideBaseRule === 'string'
-            ? options.overrideBaseRule
-            : ruleName.split('/').slice(1).join('/');
-        if (baseRuleName) {
-          configFinal.rules[baseRuleName] = 0 /* Off */;
-        }
-      }
       // eslint-disable-next-line ts/no-use-before-define
       return result;
     };

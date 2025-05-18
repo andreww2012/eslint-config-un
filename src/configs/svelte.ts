@@ -219,9 +219,8 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
       {ignoreIncludesComment: true, ignoreStringEscape: true},
     ]) // 🟢 >=0.0.4
     // "This rule reports the same as the base ESLint `prefer-const` rule, except that ignores Svelte reactive values such as `$derived` and `$props` as default. If this rule is active, make sure to disable the base `prefer-const` rule, as it will conflict with this rule."
-    .addRule('prefer-const', ERROR, [{destructuring: 'all', ignoreReadBeforeAssign: true}], {
-      overrideBaseRule: true,
-    }) // >=3.0.0-next.6
+    .addRule('prefer-const', ERROR, [{destructuring: 'all', ignoreReadBeforeAssign: true}]) // >=3.0.0-next.6
+    .disableAnyRule('', 'prefer-const')
     .addRule('prefer-destructured-store-props', OFF) // >=2.10.0
     .addRule('require-each-key', ERROR) // 🟢 >=2.28.0
     .addRule('require-event-dispatcher-types', ERROR) // 🟢 >=2.16.0
@@ -269,7 +268,8 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     .addRule('sort-attributes', ERROR) // >=2.4.0
     .addRule('spaced-html-comment', ERROR) // >=0.0.1 Yes, not supported by `prettier-plugin-svelte`
     /* CATEGORY: Extension Rules */
-    .addRule('no-inner-declarations', ERROR, [], {overrideBaseRule: true}) // 🟢 >=0.0.8
+    .addRule('no-inner-declarations', ERROR) // 🟢 >=0.0.8
+    .disableAnyRule('', 'no-inner-declarations')
     .addRule('no-trailing-spaces', OFF) // 💅 >=2.7.0
     /* CATEGORY: SvelteKit */
     .addRule('no-export-load-in-svelte-module-in-kit-pages', ERROR) // 🟢 >=2.12.0
