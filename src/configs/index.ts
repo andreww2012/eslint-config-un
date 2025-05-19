@@ -1,7 +1,7 @@
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
-import type {ConfigEntryBuilder, FlatConfigEntry} from '../eslint';
-import type {LoadablePluginPrefix} from '../plugins';
+import type {ConfigEntryBuilder, UnFlatConfigEntry} from '../eslint';
+import type {PluginPrefix} from '../plugins';
 import type {PrettifyShallow, Promisable, SetRequired} from '../types';
 import type {fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
@@ -54,7 +54,7 @@ export interface EslintConfigUnOptions {
   /**
    * **Global** ignore patterns. By default will be merged with our ignore patterns, unless `overrideIgnores` is set to `true`
    */
-  ignores?: FlatConfigEntry['ignores'];
+  ignores?: UnFlatConfigEntry['ignores'];
 
   /**
    * `ignores` patterns override, not merge with the ignore patterns suggested by our config
@@ -94,7 +94,7 @@ export interface EslintConfigUnOptions {
     [Key in keyof UnConfigs]?: boolean | PrettifyShallow<UnConfigs[Key]>;
   };
 
-  extraConfigs?: FlatConfigEntry[];
+  extraConfigs?: UnFlatConfigEntry[];
 
   /**
    * Only load ESLint plugins if they are actually used.
@@ -113,7 +113,7 @@ export interface EslintConfigUnOptions {
    * {'@typescript-eslint': 'ts'}
    * ```
    */
-  pluginRenames?: PrettifyShallow<Partial<Record<LoadablePluginPrefix, string>>>;
+  pluginRenames?: PrettifyShallow<Partial<Record<PluginPrefix, string>>>;
 
   /**
    * Defines a method of disabling autofix of plugins' fixable rules:
@@ -129,11 +129,11 @@ export interface EslintConfigUnOptions {
    * @default {default: 'plugin-copy'}
    */
   disableAutofixMethod?: PrettifyShallow<
-    Partial<Record<'default' | LoadablePluginPrefix, DisableAutofixMethod>>
+    Partial<Record<'default' | PluginPrefix, DisableAutofixMethod>>
   >;
 }
 
-type DisableAutofixMethod = 'plugin-copy' | 'rules-copy';
+export type DisableAutofixMethod = 'plugin-copy' | 'rules-copy';
 
 interface UnConfigs {
   /**
@@ -537,6 +537,18 @@ export interface UnConfigContext {
   >;
   configsMeta: Record<keyof UnConfigs, {enabled: boolean}>;
   resolvedConfigs?: Partial<UnConfigs>;
+
+  /**
+   * NOTE: mutable. Rule names must be UNprefixed
+   */
+  disabledAutofixes: Partial<
+    Record<PluginPrefix, (string | {ruleName: string; method: DisableAutofixMethod})[]>
+  >;
+
+  /**
+   * NOTE: mutable
+   */
+  usedPlugins: Set<PluginPrefix>;
 }
 
 export type UnConfigFn<

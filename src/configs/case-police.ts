@@ -3,22 +3,11 @@ import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface CasePoliceEslintConfigOptions extends UnConfigOptions<'case-police'> {
-  /**
-   * Autofix of this plugin's single rule may be unsafe to automatically apply.
-   * Since it's the single rule in this plugin, we offer disabling autofix functionality
-   * without prefixing the rule with `disable-autofix/`.
-   * You may opt out of this behavior by setting this option to `false`.
-   * @default true
-   */
-  disableAutofix?: boolean;
-}
+export interface CasePoliceEslintConfigOptions extends UnConfigOptions<'case-police'> {}
 
 export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.casePolice;
-  const optionsResolved = assignDefaults(optionsRaw, {
-    disableAutofix: true,
-  } satisfies CasePoliceEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies CasePoliceEslintConfigOptions);
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'case-police');
 

@@ -118,8 +118,8 @@ export interface JsxA11yEslintConfigOptions extends UnConfigOptions<'jsx-a11y'> 
    * Default rule severity is `warn` and the list of words is the same as listed in the rule docs.
    */
   ambiguousWordsForAnchorText?: MaybeFn<
-    false | WordsListAndOptionalSeverity,
-    [defaultWords: string[]]
+    [defaultWords: string[]],
+    false | WordsListAndOptionalSeverity
   >;
 
   /**

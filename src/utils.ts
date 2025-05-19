@@ -9,7 +9,7 @@ export {defu as assignDefaults} from 'defu';
 
 export {klona as cloneDeep} from 'klona';
 
-export {invert as invertObject, mapKeys, memoize} from 'es-toolkit';
+export {memoize} from 'es-toolkit';
 
 export const assignOptions = <T>(options: T, key: keyof T) => ({
   ...(typeof options[key] === 'object' && options[key]),
@@ -27,12 +27,12 @@ export const joinPaths = (...paths: (string | FalsyValue)[]) =>
   // eslint-disable-next-line unicorn/prefer-native-coercion-functions
   path.posix.join(...arraify(paths).filter((v): v is string => Boolean(v)));
 
-export type MaybeFn<ReturnType, Args extends readonly unknown[] = []> =
+export type MaybeFn<Args extends readonly unknown[], ReturnType> =
   | ((...args: Args) => ReturnType)
   | ReturnType;
 
-export const maybeCall = <ReturnType = unknown, Args extends readonly unknown[] = []>(
-  fnOrValue: MaybeFn<ReturnType, Args>,
+export const maybeCall = <Args extends readonly unknown[], ReturnType>(
+  fnOrValue: MaybeFn<Args, ReturnType>,
   ...args: Args
 ): ReturnType =>
   typeof fnOrValue === 'function'
@@ -121,7 +121,7 @@ export function getKeysOfTruthyValues<T extends Record<string, unknown>>(
     .filter(([, value]) => value)
     .map(([key]) => key);
   if (requireAtLeastOneTruthyValue && result.length === 0) {
-    // eslint-disable-next-line disable-autofix/unicorn/no-useless-undefined
+    // eslint-disable-next-line unicorn/no-useless-undefined
     return undefined;
   }
   return result;

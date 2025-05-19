@@ -4,7 +4,7 @@ import path from 'node:path';
 import {styleText} from 'node:util';
 import * as diff from 'diff';
 import {flatConfigsToRulesDTS} from 'eslint-typegen/core';
-import {eslintConfig} from '../src';
+import {eslintConfig, eslintConfigInternal} from '../src';
 import {eslintPluginVanillaRules} from '../src/eslint';
 
 // eslint-disable-next-line node/no-unsupported-features/node-builtins
@@ -12,7 +12,7 @@ const __dirname = import.meta.dirname;
 
 await fs.mkdir(resolveInOutDir(), {recursive: true});
 
-const ruleTypes = await generateRuleTypes();
+const {main: ruleTypes, fixableRulesOnly: ruleTypesFixableRulesOnly} = await generateRuleTypes();
 
 const mostRecentRuleTypesFileName = (await fs.readdir(resolveInOutDir())).sort().at(-1);
 let diffString = '';
@@ -37,30 +37,52 @@ console.log(diffString || styleText('gray', 'No most recent rule types found'));
 await Promise.all([
   fs.writeFile(path.join(__dirname, '../src/eslint-types.d.ts'), ruleTypes),
   fs.writeFile(
+    path.join(__dirname, '../src/eslint-types-fixable-only.d.ts'),
+    ruleTypesFixableRulesOnly,
+  ),
+  fs.writeFile(
     resolveInOutDir(`eslint-types.${new Date().toISOString().replaceAll(':', '')}.d.ts`),
     ruleTypes,
   ),
 ]);
 
-async function generateRuleTypes(): Promise<string> {
-  const configs = [
-    {
-      plugins: {
-        '': eslintPluginVanillaRules,
-      },
-    },
-    ...(await eslintConfig({
-      loadPluginsOnDemand: false,
-      configs: {
-        // If Angular is not found installed, plugin is not generated
-        angular: true,
-      },
-    })),
-  ];
+async function generateRuleTypes() {
+  const [main, fixableRulesOnly] = await Promise.all([
+    flatConfigsToRulesDTS(
+      [
+        {plugins: {'': eslintPluginVanillaRules}},
+        ...(await eslintConfig({
+          loadPluginsOnDemand: false,
+          configs: {
+            // If Angular is not found installed, plugin is not generated
+            angular: true,
+          },
+        })),
+      ],
+      {includeAugmentation: false},
+    ),
+    flatConfigsToRulesDTS(
+      [
+        ...(await eslintConfigInternal(
+          {
+            loadPluginsOnDemand: false,
+            disableAutofixMethod: {default: 'rules-copy'},
+            configs: {
+              // If Angular is not found installed, plugin is not generated
+              angular: true,
+            },
+          },
+          {disableAutofixOnly: true},
+        )),
+      ],
+      {includeAugmentation: false},
+    ),
+  ]);
 
-  return await flatConfigsToRulesDTS(configs as Parameters<typeof flatConfigsToRulesDTS>[0], {
-    includeAugmentation: false,
-  });
+  return {
+    main,
+    fixableRulesOnly,
+  };
 }
 
 function resolveInOutDir(...paths: string[]) {

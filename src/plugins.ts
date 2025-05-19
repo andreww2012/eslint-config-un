@@ -126,13 +126,16 @@ export const pluginsLoaders = {
     interopDefault(import('eslint-plugin-yml')),
 } satisfies Record<string, () => Promise<EslintPlugin | null>>;
 
-export type LoadablePluginPrefix =
-  | keyof typeof pluginsLoaders
+export type LoadablePluginPrefix = keyof typeof pluginsLoaders;
+export const LOADABLE_PLUGIN_PREFIXES_LIST = objectKeysUnsafe(pluginsLoaders);
+
+export type PluginPrefix =
+  | LoadablePluginPrefix
   | ''
   | '@angular-eslint'
   | '@angular-eslint/template';
 
-export const PLUGIN_PREFIXES_LIST: LoadablePluginPrefix[] = [
+export const PLUGIN_PREFIXES_LIST: readonly PluginPrefix[] = [
   ...objectKeysUnsafe(pluginsLoaders),
   '@angular-eslint',
   '@angular-eslint/template',

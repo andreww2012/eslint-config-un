@@ -3,36 +3,38 @@ import eslintGitignore from 'eslint-config-flat-gitignore';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
-import type {EslintConfigUnOptions, UnConfigContext} from './configs';
+import type {DisableAutofixMethod, EslintConfigUnOptions, UnConfigContext} from './configs';
 import {jsUnConfig} from './configs/js';
 import {
   DEFAULT_GLOBAL_IGNORES,
   GLOB_CONFIG_FILES,
   GLOB_JS_TS_X_EXTENSION,
-  OFF,
   PACKAGES_TO_GET_INFO_FOR,
 } from './constants';
 import {
   ConfigEntryBuilder,
-  DISABLE_AUTOFIX_WITH_SLASH,
   type DisableAutofixPrefix,
   type EslintPlugin,
-  type FlatConfigEntry,
+  type UnFlatConfigEntry,
   createConfigBuilder,
   disableAutofixForAllRulesInPlugin,
   eslintPluginVanillaRules,
   genFlatConfigEntryName,
   resolveOverrides,
 } from './eslint';
-import {type LoadablePluginPrefix, PLUGIN_PREFIXES_LIST, pluginsLoaders} from './plugins';
+import {
+  LOADABLE_PLUGIN_PREFIXES_LIST,
+  PLUGIN_PREFIXES_LIST,
+  type PluginPrefix,
+  pluginsLoaders,
+} from './plugins';
 import type {FalsyValue, Promisable} from './types';
 import {
   type MaybeArray,
   assignDefaults,
   doesPackageExist,
   fetchPackageInfo,
-  invertObject,
-  mapKeys,
+  objectEntriesUnsafe,
 } from './utils';
 
 // TODO debug
@@ -43,9 +45,11 @@ const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set([
   '@stylistic/quotes',
 ]);
 
-export const eslintConfig = async (
+// TODO move to a separate file
+export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
-): Promise<FlatConfigEntry[]> => {
+  internalOptions: {disableAutofixOnly?: boolean} = {},
+): Promise<UnFlatConfigEntry[]> => {
   const optionsResolved = assignDefaults(options, {
     mode: 'app',
     extraConfigs: [],
@@ -64,7 +68,7 @@ export const eslintConfig = async (
   const pluginRenamesList = Object.values(pluginRenames);
   if (
     new Set(pluginRenamesList).size !== pluginRenamesList.length ||
-    pluginRenamesList.some((v) => PLUGIN_PREFIXES_LIST.includes(v as LoadablePluginPrefix))
+    pluginRenamesList.some((v) => PLUGIN_PREFIXES_LIST.includes(v as PluginPrefix))
   ) {
     throw new Error(
       'Invalid plugin renames: new names must be unique and different from the default plugin prefixes',
@@ -212,19 +216,18 @@ export const eslintConfig = async (
       vue: {enabled: isVueEnabled},
       yaml: {enabled: isYamlEnabled},
     },
+    disabledAutofixes: {},
+    usedPlugins: new Set(),
   };
 
   const [
     angularEslintConfigResult,
     astroEslintConfigResult,
-    casePoliceEslintConfigResult,
     vueEslintConfigResult,
     svelteEslintConfigResult,
   ] = await Promise.all([
     isAngularEnabled && import('./configs/angular').then((m) => m.angularUnConfig(context)),
     isAstroEnabled && import('./configs/astro').then((m) => m.astroUnConfig(context)),
-    isCasePoliceEnabled &&
-      import('./configs/case-police').then((m) => m.casePoliceUnConfig(context)),
     isVueEnabled && import('./configs/vue').then((m) => m.vueUnConfig(context)),
     isSvelteEnabled && import('./configs/svelte').then((m) => m.svelteUnConfig(context)),
   ]);
@@ -324,7 +327,8 @@ export const eslintConfig = async (
     isDeMorganEnabled && import('./configs/de-morgan').then((m) => m.deMorganUnConfig(context)),
     isJsonSchemaValidatorEnabled &&
       import('./configs/json-schema-validator').then((m) => m.jsonSchemaValidatorUnConfig(context)),
-    casePoliceEslintConfigResult && casePoliceEslintConfigResult.configs,
+    isCasePoliceEnabled &&
+      import('./configs/case-police').then((m) => m.casePoliceUnConfig(context)),
     isNodeDependenciesEnabled &&
       import('./configs/node-dependencies').then((m) => m.nodeDependenciesUnConfig(context)),
     isDependEnabled && import('./configs/depend').then((m) => m.dependUnConfig(context)),
@@ -373,11 +377,11 @@ export const eslintConfig = async (
       ),
     },
   ] satisfies Promisable<
-    | MaybeArray<FlatConfigEntry | ConfigEntryBuilder | FalsyValue>
+    | MaybeArray<UnFlatConfigEntry | ConfigEntryBuilder | FalsyValue>
     | {configs: (ConfigEntryBuilder | null)[]}
   >[]);
 
-  const resolvedConfigs: FlatConfigEntry[] = (await unresolvedConfigs)
+  const resolvedConfigs: UnFlatConfigEntry[] = (await unresolvedConfigs)
     .flat()
     .map((c) =>
       c && 'configs' in c && !(c instanceof ConfigEntryBuilder)
@@ -390,107 +394,105 @@ export const eslintConfig = async (
     // eslint-disable-next-line no-implicit-coercion
     .filter((v) => !!v);
 
-  const usedDisableAutofixPluginPrefixes = new Set<string>();
-  const usedPluginPrefixes = loadPluginsOnDemand
-    ? [
-        ...new Set(
-          resolvedConfigs
-            .map((config) => {
-              return Object.entries(config.rules || {}).map(([ruleName, ruleEntry]) => {
-                const severity = Array.isArray(ruleEntry) ? ruleEntry[0] : ruleEntry;
-                if (severity === OFF || severity === 'off') {
-                  return null;
-                }
-                const isDisableAutofix = ruleName.startsWith(DISABLE_AUTOFIX_WITH_SLASH);
-                const ruleNameSplitted = (
-                  isDisableAutofix ? ruleName.slice(DISABLE_AUTOFIX_WITH_SLASH.length) : ruleName
-                ).split('/');
-                return ruleNameSplitted.map((_, i) => {
-                  const possiblePluginPrefix = ruleNameSplitted.slice(0, i).join('/');
-                  if (i === 0 || !possiblePluginPrefix) {
-                    return null;
-                  }
-                  if (isDisableAutofix) {
-                    usedDisableAutofixPluginPrefixes.add(possiblePluginPrefix);
-                  }
-                  return possiblePluginPrefix;
-                });
-              });
-            })
-            .flat(2)
-            .filter((v) => v != null),
-        ),
-      ]
-    : Object.keys(pluginsLoaders);
-
-  const disableAutofixesForPlugins = new Set([
-    casePoliceEslintConfigResult && casePoliceEslintConfigResult.optionsResolved.disableAutofix
-      ? 'case-police'
-      : '',
-  ]);
-
-  const reversePluginRenames = invertObject(
-    // @ts-expect-error `invertObject` type could be better
-    pluginRenames,
+  const disabledAutofixesList = objectEntriesUnsafe(context.disabledAutofixes);
+  const defaultDisableAutofixMethod = context.rootOptions.disableAutofixMethod.default;
+  const [
+    disableAutofixPluginsWithPluginCopyMethod = [],
+    disableAutofixPluginsWithRulesCopyMethod = [],
+  ] = (['plugin-copy', 'rules-copy'] satisfies DisableAutofixMethod[]).map(
+    (autofixDisablingMethod) =>
+      disabledAutofixesList
+        .map(([pluginPrefix, rules]) => {
+          const defaultMethodForPlugin =
+            context.rootOptions.disableAutofixMethod[pluginPrefix] ?? defaultDisableAutofixMethod;
+          return rules?.some((entry) => {
+            const method = typeof entry === 'object' ? entry.method : defaultMethodForPlugin;
+            return method === autofixDisablingMethod;
+          })
+            ? pluginPrefix
+            : null;
+        })
+        .filter((v) => v != null),
   );
+  const usedPluginPrefixes: readonly PluginPrefix[] = loadPluginsOnDemand
+    ? [...context.usedPlugins]
+    : LOADABLE_PLUGIN_PREFIXES_LIST;
 
   const loadedPlugins = Object.fromEntries(
     (
       await Promise.all(
-        usedPluginPrefixes.map(async (pluginPrefixRaw) => {
-          const pluginPrefix = reversePluginRenames[pluginPrefixRaw] || pluginPrefixRaw;
-          if (!(pluginPrefix in pluginsLoaders)) {
-            return null;
-          }
-          let plugin = await pluginsLoaders[pluginPrefix as keyof typeof pluginsLoaders]();
-          if (!plugin) {
-            return null;
-          }
-          if (disableAutofixesForPlugins.has(pluginPrefix)) {
-            plugin = {
-              ...plugin,
-              rules: disableAutofixForAllRulesInPlugin('', plugin as EslintPlugin),
-            } as typeof plugin;
-          }
-          return [pluginPrefix, plugin] as const;
+        usedPluginPrefixes.map(async (pluginPrefix) => {
+          const plugin =
+            pluginPrefix in pluginsLoaders
+              ? await pluginsLoaders[pluginPrefix as keyof typeof pluginsLoaders]()
+              : null;
+          return plugin ? ([pluginPrefix, plugin] as const) : null;
         }),
       )
     ).filter((v) => v != null),
   );
 
-  const allPlugins = mapKeys(
-    {
-      ...loadedPlugins,
-      ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
-      ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
-      ...(angularEslintConfigResult && angularEslintConfigResult.plugins),
-    } satisfies Record<string, EslintPlugin>,
-    (_, k) => pluginRenames[k] || k,
-  );
+  const allPlugins = {
+    ...loadedPlugins,
+    ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
+    ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
+    ...(angularEslintConfigResult && angularEslintConfigResult.plugins),
+  } satisfies Record<string, EslintPlugin> as Partial<Record<PluginPrefix, EslintPlugin>>;
+
+  const disableAutofixPlugin: EslintPlugin = {
+    meta: {
+      name: 'eslint-plugin-disable-autofix',
+    },
+    rules: objectEntriesUnsafe({
+      ...allPlugins,
+      '': eslintPluginVanillaRules,
+    }).reduce<EslintPlugin['rules'] & {}>((res, [pluginPrefixCanonical, plugin]) => {
+      if (
+        plugin &&
+        (disableAutofixPluginsWithRulesCopyMethod.includes(pluginPrefixCanonical) ||
+          (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'rules-copy'))
+      ) {
+        const pluginPrefix =
+          context.rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
+        return Object.assign(res, disableAutofixForAllRulesInPlugin(pluginPrefix, plugin));
+      }
+      return res;
+    }, {}),
+  };
 
   resolvedConfigs.unshift({
     name: genFlatConfigEntryName('global-setup/plugins'),
     plugins: {
-      ...allPlugins,
-      ['disable-autofix' satisfies DisableAutofixPrefix]: {
-        meta: {
-          name: 'eslint-plugin-disable-autofix',
-        },
-        rules: Object.entries({
-          ...allPlugins,
-          '': eslintPluginVanillaRules,
-        }).reduce<EslintPlugin['rules'] & {}>((res, [pluginPrefix, plugin]) => {
-          if (loadPluginsOnDemand && !usedDisableAutofixPluginPrefixes.has(pluginPrefix)) {
-            return res;
-          }
-          return Object.assign(res, disableAutofixForAllRulesInPlugin(pluginPrefix, plugin));
-        }, {}),
-      },
+      ...(!internalOptions.disableAutofixOnly &&
+        Object.fromEntries(
+          objectEntriesUnsafe(allPlugins).map(([pluginPrefixCanonical, plugin]) => {
+            const pluginPrefix =
+              context.rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
+            if (
+              plugin &&
+              (disableAutofixPluginsWithPluginCopyMethod.includes(pluginPrefixCanonical) ||
+                (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'plugin-copy'))
+            ) {
+              return [
+                pluginPrefix,
+                {
+                  ...plugin,
+                  rules: disableAutofixForAllRulesInPlugin('', plugin, false),
+                } as typeof plugin,
+              ];
+            }
+            return [pluginPrefix, plugin];
+          }),
+        )),
+
+      ['disable-autofix' satisfies DisableAutofixPrefix]: disableAutofixPlugin,
     },
-  } satisfies FlatConfigEntry);
+  } satisfies UnFlatConfigEntry);
 
   return resolvedConfigs;
 };
+
+export const eslintConfig = (options: EslintConfigUnOptions = {}) => eslintConfigInternal(options);
 
 export {DEFAULT_GLOBAL_IGNORES};
 
