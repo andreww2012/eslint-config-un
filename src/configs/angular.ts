@@ -1,8 +1,4 @@
 import angularTemplateParser from '@angular-eslint/template-parser';
-import eslintPluginAngularTemplate17 from 'angular-eslint-plugin-template17';
-import eslintPluginAngularTemplate19 from 'angular-eslint-plugin-template19';
-import eslintPluginAngular18 from 'angular-eslint-plugin18';
-import eslintPluginAngular19 from 'angular-eslint-plugin19';
 import type Eslint from 'eslint';
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, WARNING} from '../constants';
 import {
@@ -13,7 +9,7 @@ import {
   createConfigBuilder,
 } from '../eslint';
 import type {PrettifyShallow, ReadonlyDeep, SetRequired, Subtract} from '../types';
-import {type MaybeArray, assignDefaults, cloneDeep} from '../utils';
+import {type MaybeArray, assignDefaults, cloneDeep, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
 // Please keep ascending order
@@ -27,10 +23,10 @@ const LATEST_SUPPORTED_ANGULAR_VERSION = SUPPORTED_ANGULAR_VERSIONS.at(
   -1,
 ) as LatestSupportedAngularVersion;
 
-interface AngularEslintPackagesForVersion {
-  plugin: EslintPlugin;
-  pluginTemplate: EslintPlugin;
-}
+type AngularEslintPackagesForVersion = Record<
+  'plugin' | 'pluginTemplate',
+  () => Promise<EslintPlugin>
+>;
 
 const PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS: Record<
   LatestSupportedAngularVersion,
@@ -44,11 +40,16 @@ const PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS: Record<
   > = {
   // All plugins' types have type mismatches with the eslint plugin type. We don't use `@ts-expect-error` here because it may prevent other errors from being reported (for example, about a missing object property).
   18: {
-    plugin: eslintPluginAngular18 as unknown as EslintPlugin,
+    plugin: () =>
+      interopDefault(import('angular-eslint-plugin18')).then((m) => m as unknown as EslintPlugin),
   },
   19: {
-    plugin: eslintPluginAngular19 as unknown as EslintPlugin,
-    pluginTemplate: eslintPluginAngularTemplate19 as unknown as EslintPlugin,
+    plugin: () =>
+      interopDefault(import('angular-eslint-plugin19')).then((m) => m as unknown as EslintPlugin),
+    pluginTemplate: () =>
+      interopDefault(import('angular-eslint-plugin-template19')).then(
+        (m) => m as unknown as EslintPlugin,
+      ),
   },
 };
 
@@ -153,72 +154,84 @@ Object.entries(RULES_AVAILABILITY).forEach(([oldName, [, newName]]) => {
  * If a rule does not exist in a plugin corresponding to the installed Angular version,
  * its implementation is nullified.
  */
-const generateAngularPlugins = (
+const generateAngularPlugins = async (
   configOptions: ReadonlyDeep<AngularEslintConfigOptions>,
   installedVersion: SupportedAngularVersion,
 ) => {
   const latestPlugins = PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS[LATEST_SUPPORTED_ANGULAR_VERSION];
+  const [latestPlugin, latestPluginTemplate] = await Promise.all([
+    latestPlugins.plugin(),
+    latestPlugins.pluginTemplate(),
+  ]);
 
   type EslintPluginWithRequiredRules = SetRequired<EslintPlugin, 'rules'>;
   const pluginGeneral: EslintPluginWithRequiredRules = {
-    ...latestPlugins.plugin,
+    ...(latestPlugin as unknown as EslintPlugin),
     rules: {},
   };
   const pluginTemplate: EslintPluginWithRequiredRules = {
-    ...latestPlugins.pluginTemplate,
+    ...(latestPluginTemplate as unknown as EslintPlugin),
     rules: {},
   };
 
   const ruleSchemas = new Map<string, object[]>();
 
-  SUPPORTED_ANGULAR_VERSIONS.forEach((angularVersion) => {
-    (
-      [
-        ['plugin', pluginGeneral],
-        ['pluginTemplate', pluginTemplate],
-      ] as const
-    ).forEach(([pluginType, mergedPlugin]) => {
-      const originalPlugin = PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS[angularVersion]?.[pluginType];
-      if (!originalPlugin) {
-        return;
-      }
-
-      Object.entries(cloneDeep(originalPlugin.rules || {})).forEach(([currentRuleName, rule]) => {
-        [currentRuleName, ...(oldRuleNames.get(currentRuleName) || [])].forEach((ruleName) => {
-          let shouldDisableRule = false;
-
-          const ruleAvailability = RULES_AVAILABILITY[ruleName];
-          if (ruleAvailability) {
-            const [[from, to]] = ruleAvailability;
-            const ruleNotExistsForInstalledVersion =
-              installedVersion < from || (to != null && installedVersion > to);
-            shouldDisableRule = ruleNotExistsForInstalledVersion;
+  await Promise.all(
+    SUPPORTED_ANGULAR_VERSIONS.map((angularVersion) =>
+      Promise.all(
+        (
+          [
+            ['plugin', pluginGeneral],
+            ['pluginTemplate', pluginTemplate],
+          ] as const
+        ).map(async ([pluginType, mergedPlugin]) => {
+          const originalPlugin =
+            await PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS[angularVersion]?.[pluginType]?.();
+          if (!originalPlugin) {
+            return;
           }
 
-          const ruleNameOfficial = `@angular-eslint${pluginType === 'pluginTemplate' ? '/template' : ''}/${ruleName}`;
-          if (
-            shouldDisableRule &&
-            !configOptions.portRules?.includes(
-              // @ts-expect-error includes type is narrower
-              ruleNameOfficial,
-            )
-          ) {
-            rule.create = () => ({});
-          }
+          Object.entries(cloneDeep(originalPlugin.rules || {})).forEach(
+            ([currentRuleName, rule]) => {
+              [currentRuleName, ...(oldRuleNames.get(currentRuleName) || [])].forEach(
+                (ruleName) => {
+                  let shouldDisableRule = false;
 
-          mergedPlugin.rules[ruleName] = rule;
+                  const ruleAvailability = RULES_AVAILABILITY[ruleName];
+                  if (ruleAvailability) {
+                    const [[from, to]] = ruleAvailability;
+                    const ruleNotExistsForInstalledVersion =
+                      installedVersion < from || (to != null && installedVersion > to);
+                    shouldDisableRule = ruleNotExistsForInstalledVersion;
+                  }
 
-          const schemas = [...(ruleSchemas.get(ruleName) || []), rule.meta?.schema].filter(
-            (v) => v != null && typeof v === 'object',
+                  const ruleNameOfficial = `@angular-eslint${pluginType === 'pluginTemplate' ? '/template' : ''}/${ruleName}`;
+                  if (
+                    shouldDisableRule &&
+                    !configOptions.portRules?.includes(
+                      // @ts-expect-error includes type is narrower
+                      ruleNameOfficial,
+                    )
+                  ) {
+                    rule.create = () => ({});
+                  }
+
+                  mergedPlugin.rules[ruleName] = rule;
+
+                  const schemas = [...(ruleSchemas.get(ruleName) || []), rule.meta?.schema].filter(
+                    (v) => v != null && typeof v === 'object',
+                  );
+                  if (schemas.length > 0) {
+                    ruleSchemas.set(ruleName, schemas);
+                  }
+                },
+              );
+            },
           );
-          if (schemas.length > 0) {
-            ruleSchemas.set(ruleName, schemas);
-          }
-        });
-      });
-    });
-  });
-
+        }),
+      ),
+    ),
+  );
   [pluginGeneral, pluginTemplate].forEach((plugin) => {
     Object.entries(plugin.rules).forEach(([ruleName, rule]) => {
       const schemas = ruleSchemas.get(ruleName) || [];
@@ -444,9 +457,10 @@ export interface AngularEslintConfigOptions
   preferStandaloneComponents?: boolean;
 }
 
-export const angularUnConfig: UnConfigFn<'angular', {plugins: Record<string, EslintPlugin>}> = (
-  context,
-) => {
+export const angularUnConfig: UnConfigFn<
+  'angular',
+  {plugins: Record<string, EslintPlugin>}
+> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.angular;
   const optionsResolved = assignDefaults(optionsRaw, {
     configTemplate: true,
@@ -495,8 +509,21 @@ export const angularUnConfig: UnConfigFn<'angular', {plugins: Record<string, Esl
   optionsResolved.preferStandaloneComponents ??= angularVersion >= 19;
   const {preferStandaloneComponents} = optionsResolved;
 
-  const {pluginGeneral: eslintPluginAngular, pluginTemplate: eslintPluginAngularTemplate} =
-    generateAngularPlugins(optionsResolved, angularVersion);
+  const [
+    {pluginGeneral: eslintPluginAngular, pluginTemplate: eslintPluginAngularTemplate},
+    extractInlineHtmlProcessorLatest,
+    extractInlineHtmlProcessorV17,
+  ] = await Promise.all([
+    generateAngularPlugins(optionsResolved, angularVersion),
+    // Since v18, the processor uses `getDecorators` from `typescript` which does not exist prior to
+    // v4.8 of `typescript`, which might be used in older projects
+    interopDefault(import('angular-eslint-plugin-template19')).then(
+      (m) => m.processors['extract-inline-html'] as Eslint.Linter.Processor,
+    ),
+    interopDefault(import('angular-eslint-plugin-template17')).then(
+      (m) => m.processors['extract-inline-html'] as Eslint.Linter.Processor,
+    ),
+  ]);
 
   const forbiddenMetadataProperties: typeof optionsResolved.forbiddenMetadataProperties = {
     inputs: true,
@@ -516,14 +543,6 @@ export const angularUnConfig: UnConfigFn<'angular', {plugins: Record<string, Esl
   // 🔴 - deprecated
   // Check rule usage: https://github.com/search?q=%22%40angular-eslint%2Fno-input-prefix%22+path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F&type=code&p=1
 
-  // Since v18, the processor uses `getDecorators` from `typescript` which does not exist prior to
-  // v4.8 of `typescript`, which might be used in older projects
-  const extractInlineHtmlProcessorLatest = eslintPluginAngularTemplate19.processors[
-    'extract-inline-html'
-  ] as Eslint.Linter.Processor;
-  const extractInlineHtmlProcessorV17 = eslintPluginAngularTemplate17.processors[
-    'extract-inline-html'
-  ] as Eslint.Linter.Processor;
   const extractInlineHtmlProcessor = cloneDeep(
     angularVersion < 18 ||
       (context.packagesInfo.typescript?.versions.majorAndMinor || Number.POSITIVE_INFINITY) < 4.8
