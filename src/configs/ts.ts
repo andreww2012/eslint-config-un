@@ -267,6 +267,7 @@ export const tsUnConfig: UnConfigFn<
   const configBuilderNONTypeAware = createConfigBuilder(
     context,
     {
+      ...optionsResolved,
       ...(filesNONTypeAware.length > 0 && {files: filesNONTypeAware}),
       ...(ignoresNONTypeAware.length > 0 && {ignores: ignoresNONTypeAware}),
     },

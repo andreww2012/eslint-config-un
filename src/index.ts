@@ -402,15 +402,23 @@ export const eslintConfigInternal = async (
   ] = (['plugin-copy', 'rules-copy'] satisfies DisableAutofixMethod[]).map(
     (autofixDisablingMethod) =>
       disabledAutofixesList
-        .map(([pluginPrefix, rules]) => {
+        .map(([pluginPrefix, rules = []]) => {
           const defaultMethodForPlugin =
             context.rootOptions.disableAutofixMethod[pluginPrefix] ?? defaultDisableAutofixMethod;
-          return rules?.some((entry) => {
+          const ruleNames: string[] = rules.map((entry) =>
+            typeof entry === 'object' ? entry.ruleName : entry,
+          );
+          const hasRules = rules.some((entry) => {
             const method = typeof entry === 'object' ? entry.method : defaultMethodForPlugin;
             return method === autofixDisablingMethod;
-          })
-            ? pluginPrefix
-            : null;
+          });
+          if (!hasRules) {
+            return null;
+          }
+          return {
+            pluginPrefix,
+            ruleNames,
+          };
         })
         .filter((v) => v != null),
   );
@@ -449,7 +457,9 @@ export const eslintConfigInternal = async (
     }).reduce<EslintPlugin['rules'] & {}>((res, [pluginPrefixCanonical, plugin]) => {
       if (
         plugin &&
-        (disableAutofixPluginsWithRulesCopyMethod.includes(pluginPrefixCanonical) ||
+        (disableAutofixPluginsWithRulesCopyMethod.some(
+          (v) => v.pluginPrefix === pluginPrefixCanonical,
+        ) ||
           (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'rules-copy'))
       ) {
         const pluginPrefix =
@@ -468,16 +478,21 @@ export const eslintConfigInternal = async (
           objectEntriesUnsafe(allPlugins).map(([pluginPrefixCanonical, plugin]) => {
             const pluginPrefix =
               context.rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
+            const rulesInfo = disableAutofixPluginsWithPluginCopyMethod.find(
+              (v) => v.pluginPrefix === pluginPrefixCanonical,
+            );
             if (
               plugin &&
-              (disableAutofixPluginsWithPluginCopyMethod.includes(pluginPrefixCanonical) ||
-                (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'plugin-copy'))
+              (rulesInfo || (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'plugin-copy'))
             ) {
               return [
                 pluginPrefix,
                 {
                   ...plugin,
-                  rules: disableAutofixForAllRulesInPlugin('', plugin, false),
+                  rules: disableAutofixForAllRulesInPlugin('', plugin, {
+                    includeRulesWithoutAutofix: true,
+                    onlyRules: rulesInfo?.ruleNames,
+                  }),
                 } as typeof plugin,
               ];
             }

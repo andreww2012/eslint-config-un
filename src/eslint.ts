@@ -166,14 +166,24 @@ export const eslintPluginVanillaRules: EslintPlugin = Object.freeze({
 export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
   pluginNamespace: string,
   plugin: Plugin,
-  onlyFixableRules = true,
+  {
+    includeRulesWithoutAutofix,
+    onlyRules,
+  }: {includeRulesWithoutAutofix?: boolean; onlyRules?: string[]} = {},
 ): Plugin['rules'] & {} =>
   Object.fromEntries(
     Object.entries(cloneDeep(plugin.rules || {}))
       .map(([ruleId, ruleImplementation]) => {
         const fullRuleName = `${pluginNamespace ? `${pluginNamespace}/` : ''}${ruleId}`;
-        if (!ruleImplementation.meta?.fixable) {
-          return onlyFixableRules ? null : ([fullRuleName, ruleImplementation] as const);
+        const isFixable = ruleImplementation.meta?.fixable;
+        if (
+          includeRulesWithoutAutofix &&
+          (!isFixable || (onlyRules && !onlyRules.includes(fullRuleName)))
+        ) {
+          return [fullRuleName, ruleImplementation] as const;
+        }
+        if (!isFixable && !includeRulesWithoutAutofix) {
+          return null;
         }
         // eslint-disable-next-line ts/no-unsafe-call, ts/no-unsafe-member-access
         const ruleImplementationWithAutofixDisabled = ruleComposer.mapReports(
@@ -255,7 +265,11 @@ export const resolveOverrides = (
       let ruleEntry: EslintRuleEntry;
       let disableAutofix: boolean | DisableAutofixMethod = false;
       if (ruleEntryRaw && typeof ruleEntryRaw === 'object' && 'severity' in ruleEntryRaw) {
-        ruleEntry = [ruleEntryRaw.severity, ruleEntryRaw.options];
+        ruleEntry =
+          // eslint-disable-next-line ts/no-unnecessary-condition -- wrong types for `options`
+          ruleEntryRaw.options == null
+            ? ruleEntryRaw.severity
+            : [ruleEntryRaw.severity, ruleEntryRaw.options];
         if (ruleEntryRaw.disableAutofix && pluginPrefix != null) {
           const disableAutofixMethod: DisableAutofixMethod =
             typeof ruleEntryRaw.disableAutofix === 'string'
