@@ -158,7 +158,13 @@ export const eslintConfig = async (
 
   const context: UnConfigContext = {
     packagesInfo,
-    rootOptions: optionsResolved,
+    rootOptions: {
+      ...optionsResolved,
+      disableAutofixMethod: {
+        default: 'plugin-copy',
+        ...optionsResolved.disableAutofixMethod,
+      },
+    },
     configsMeta: {
       angular: {enabled: isAngularEnabled},
       astro: {enabled: isAstroEnabled},

@@ -1,7 +1,7 @@
 import {ERROR} from '../constants';
 import {
-  type AllRulesWithPrefix,
   type GetRuleOptions,
+  type RulesRecordPartial,
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
@@ -16,9 +16,9 @@ export interface UnusedImportsEslintConfigOptions extends UnConfigOptions<'unuse
   configNoUnusedVars?:
     | boolean
     | UnConfigOptions<
-        AllRulesWithPrefix<'unused-imports/no-unused-vars', true, false>,
+        Pick<RulesRecordPartial<'unused-imports'>, 'unused-imports/no-unused-vars'>,
         {
-          ruleOptions?: GetRuleOptions<'unused-imports/no-unused-vars'>[0];
+          ruleOptions?: GetRuleOptions<'unused-imports', 'no-unused-vars'>[0];
         }
       >;
 }

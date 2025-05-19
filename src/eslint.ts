@@ -23,8 +23,8 @@ import type {
   PickKeysStartingWith,
   PrettifyShallow,
   ReadonlyDeep,
-  RemovePrefix,
   SetRequired,
+  UnionToIntersection,
 } from './types';
 import {type MaybeFn, cloneDeep, maybeCall, objectEntriesUnsafe} from './utils';
 
@@ -60,68 +60,89 @@ export type AllEslintRulesWithoutDisableAutofix = PickKeysNotStartingWith<
   AllEslintRulesWithDisableAutofix,
   `${DisableAutofixPrefix}/`
 >;
-
-export type BuiltinEslintRulesFixed = Pick<
-  AllEslintRulesWithoutDisableAutofix,
-  // Some plugins, like `eslint-plugin-svelte` may augment `Eslint.Linter.RulesRecord` type with custom rules, which we must exclude for this type
-  keyof PickKeysNotStartingWith<OmitIndexSignature<BuiltinEslintRulesMaybeAugmented>, `${string}/`>
+export type BuiltinEslintRulesFixed = OmitIndexSignature<
+  Pick<
+    AllEslintRulesWithDisableAutofix,
+    // Some plugins, like `eslint-plugin-svelte` may augment `Eslint.Linter.RulesRecord` type with custom rules, which we must exclude for this type
+    keyof PickKeysNotStartingWith<
+      OmitIndexSignature<BuiltinEslintRulesMaybeAugmented>,
+      `${string}/`
+    >
+  >
 >;
 
-export type GetRuleOptions<RuleName extends keyof AllEslintRulesWithoutDisableAutofix> =
-  AllEslintRulesWithoutDisableAutofix[RuleName] & {} extends Eslint.Linter.RuleEntry<infer Options>
-    ? Options
-    : never;
-
-export type AllRulesWithPrefix<
-  Prefix extends string | null,
-  IncludeDisableAutofix = false,
-  AutoIncludeSlashAfterPrefix = true,
-> = PickKeysStartingWith<
-  Prefix extends ''
-    ? BuiltinEslintRulesFixed
-    : IncludeDisableAutofix extends true
-      ? AllEslintRulesWithDisableAutofix
-      : AllEslintRulesWithoutDisableAutofix,
-  Prefix extends null | ''
-    ? string
-    : `${IncludeDisableAutofix extends true ? `${DisableAutofixPrefix}/` | '' : ''}${Prefix}${AutoIncludeSlashAfterPrefix extends true ? '/' : ''}`
->;
-
-export type AllRulesWithPrefixUnprefixedNames<
-  Prefix extends string | null,
-  IncludeDisableAutofix = false,
-  // I don't know why `& string` is required. TypeScript thinks that `AllRulesWithPrefix` (after I've added `Prefix extends ''` branch to it) may return non-string keys
-> = RemovePrefix<keyof AllRulesWithPrefix<Prefix, IncludeDisableAutofix> & string, `${Prefix}/`>;
-
-export type RuleOverrides<T extends null | string | RulesRecord> = T extends string
-  ? AllRulesWithPrefix<T, true>
-  : T extends RulesRecord
-    ? FlatConfigEntry<T>['rules']
-    : never;
-
-type OverridesWithMaybeFunction<T extends object> = {
-  [K in keyof T]: T[K] & {} extends Eslint.Linter.RuleEntry<infer Options>
-    ? MaybeFn<
-        ReadonlyDeep<T[K] & {}>,
-        [severity: EslintSeverity & number, options?: ReadonlyDeep<Options>]
+type RemovePrefixAndGetRuleOptions<
+  T extends Record<string, Eslint.Linter.RuleEntry | undefined>,
+  P extends string,
+> = {
+  [K in keyof T as K extends `${P}${infer Rest}`
+    ? Rest
+    : K & string]-?: T[K] & {} extends Eslint.Linter.RuleEntry<infer Options> ? Options : never;
+};
+// TODO @angular-eslint
+type RulesByPlugin = {
+  [P in LoadablePluginPrefix]: PrettifyShallow<
+    OmitIndexSignature<
+      RemovePrefixAndGetRuleOptions<
+        P extends '' ? BuiltinEslintRulesFixed : PickKeysStartingWith<RuleOptions, `${P}/`>,
+        `${P}/`
       >
+    >
+  >;
+};
+export type RuleNamesForPlugin<P extends LoadablePluginPrefix | null> = P extends null
+  ? // eslint-disable-next-line ts/no-redundant-type-constituents
+    keyof RulesByPlugin[keyof RulesByPlugin] & string
+  : keyof RulesByPlugin[P & keyof RulesByPlugin] & string;
+export type GetRuleOptions<
+  Prefix extends LoadablePluginPrefix,
+  RuleName extends keyof RulesByPlugin[Prefix],
+> = RulesByPlugin[Prefix][RuleName] & unknown[];
+type PluginAndPrefixToFullRuleName<P extends LoadablePluginPrefix, N extends string> = P extends ''
+  ? N
+  : `${P}/${N}`;
+
+/** ✅ */
+export type RulesRecordPartial<
+  P extends null | LoadablePluginPrefix | RulesRecord = LoadablePluginPrefix,
+> = P extends LoadablePluginPrefix
+  ? {
+      [N in keyof OmitIndexSignature<RulesByPlugin[P]> as PluginAndPrefixToFullRuleName<
+        P,
+        N
+      >]?: RulesByPlugin[P][N] extends unknown[]
+        ? Eslint.Linter.RuleEntry<RulesByPlugin[P][N]>
+        : never;
+    } // TODO disable-autofix
+  : P extends RulesRecord
+    ? FlatConfigEntry<P>['rules'] & {}
     : never;
+export type UnConfigOptionsOverrides<T extends Record<string, unknown>> = {
+  [RuleName in keyof T]?: MaybeFn<
+    ReadonlyDeep<T[RuleName]>,
+    [
+      severity: EslintSeverity & number,
+      options?: T extends Eslint.Linter.RuleEntry<infer Options> ? ReadonlyDeep<Options> : never,
+    ]
+  >;
 };
 export type UnConfigOptions<
-  T extends null | string | RulesRecord = RulesRecord,
+  T extends null | LoadablePluginPrefix | RulesRecord = RulesRecord,
   // eslint-disable-next-line ts/no-empty-object-type
   ExtraOptions = {},
 > = PrettifyShallow<
   // eslint-disable-next-line ts/no-empty-object-type
   (ExtraOptions extends object ? ExtraOptions : {}) &
-    Partial<
-      FlatConfigEntryFilesOrIgnores & {
-        overrides?: OverridesWithMaybeFunction<OmitIndexSignature<RuleOverrides<T>>>;
+    FlatConfigEntryFilesOrIgnores & {
+      overrides?: PrettifyShallow<
+        UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial<T>>>
+      >;
 
-        /** If severity is forced, `errorsInsteadOfWarnings` option will be completely ignored */
-        forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
-      }
-    >
+      /**
+       * If severity is forced, `errorsInsteadOfWarnings` option will be completely ignored
+       */
+      forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
+    }
 >;
 
 export const genFlatConfigEntryName = (name: string) => `eslint-config-un/${name}`;
@@ -177,7 +198,7 @@ interface AddRuleOptions {
 
 export const resolveOverrides = (
   context: UnConfigContext,
-  overrides: OverridesWithMaybeFunction<object>,
+  overrides: RulesRecordPartial,
   existingRules?: Partial<RulesRecord>,
 ) =>
   Object.fromEntries(
@@ -218,7 +239,7 @@ export const resolveOverrides = (
 
 // eslint-disable-next-line ts/no-explicit-any
 export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null = any> {
-  private readonly rulesPrefix: PluginPrefix;
+  private readonly pluginPrefix: PluginPrefix;
   private readonly options: UnConfigOptions<PluginPrefix extends null ? RulesRecord : PluginPrefix>;
   private readonly context: UnConfigContext;
 
@@ -227,9 +248,7 @@ export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null
     options: UnConfigOptions<PluginPrefix extends null ? RulesRecord : PluginPrefix>,
     context: UnConfigContext,
   ) {
-    this.rulesPrefix = rulesPrefix
-      ? (context.rootOptions.pluginRenames?.[rulesPrefix] as PluginPrefix) || rulesPrefix
-      : rulesPrefix;
+    this.pluginPrefix = rulesPrefix;
     this.options = options;
     this.context = context;
   }
@@ -320,12 +339,13 @@ export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null
     this.configs.push(configFinal);
     this.configsDict.set(configName, configFinal);
 
-    const addRule = <RuleName extends keyof AllEslintRulesWithoutDisableAutofix>(
-      ruleName: RuleName,
+    const addRule = <P extends LoadablePluginPrefix, N extends RuleNamesForPlugin<P>>(
+      prefix: P,
+      ruleNameUnprefixed: N,
       severity: RuleSeverity | null,
       // eslint-disable-next-line ts/ban-ts-comment
       // @ts-ignore ignores the following error during declaration file build: "error TS2859: Excessive complexity comparing types 'RuleName' and '"curly" | "unicorn/template-indent" | "@eslint-community/eslint-comments/disable-enable-pair" | "@eslint-community/eslint-comments/no-aggregating-enable" | "@eslint-community/eslint-comments/no-duplicate-disable" | ... 1725 more ... | "yoda"'"
-      ruleOptions?: GetRuleOptions<RuleName & keyof AllEslintRulesWithoutDisableAutofix>,
+      ruleOptions?: GetRuleOptions<P, N>,
       options?: AddRuleOptions,
     ) => {
       if (severity == null) {
@@ -335,16 +355,22 @@ export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null
 
       const {errorsInsteadOfWarnings} = this.context.rootOptions;
 
+      const ruleNameWithRawPrefix =
+        `${prefix === '' ? '' : `${prefix}/`}${ruleNameUnprefixed}` as const;
+
       const severityFinal: RuleSeverity =
         (configOptions.forceSeverity as RuleSeverity | undefined) ??
         (severity === WARNING &&
         (errorsInsteadOfWarnings === true ||
-          (Array.isArray(errorsInsteadOfWarnings) && errorsInsteadOfWarnings.includes(ruleName)))
+          (Array.isArray(errorsInsteadOfWarnings) &&
+            errorsInsteadOfWarnings.includes(ruleNameWithRawPrefix)))
           ? ERROR
           : severity);
 
+      const ruleNameWithResolvedPrefix =
+        `${prefix === '' ? '' : `${(prefix ? this.context.rootOptions.pluginRenames?.[prefix] : null) || prefix}/`}${ruleNameUnprefixed}` as const;
       const ruleNameFinal =
-        `${options?.disableAutofix ? DISABLE_AUTOFIX_WITH_SLASH : ''}${ruleName}` as const;
+        `${options?.disableAutofix ? DISABLE_AUTOFIX_WITH_SLASH : ''}${ruleNameWithResolvedPrefix}` as const;
       configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
       // If the rule is disabled, disable its autofix counterpart rule as well
       if (severityFinal === OFF && !ruleNameFinal.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {
@@ -352,8 +378,7 @@ export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null
       }
 
       if (options?.disableAutofix) {
-        // @ts-expect-error "Expression produces a union type that is too complex to represent.ts(2590)"
-        configFinal.rules[ruleName] = 0 /* Off */;
+        configFinal.rules[ruleNameWithResolvedPrefix] = 0 /* Off */;
       }
 
       // eslint-disable-next-line ts/no-use-before-define
@@ -363,59 +388,36 @@ export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null
     const result = {
       config: configFinal,
 
-      addRule: <
-        N extends AllRulesWithPrefixUnprefixedNames<PluginPrefix>,
-        Severity extends RuleSeverity,
-      >(
+      addRule: <N extends RuleNamesForPlugin<PluginPrefix>, Severity extends RuleSeverity>(
         ruleName: N,
         severity: Severity | null,
-        ruleOptions?: NoInfer<
-          GetRuleOptions<
-            (PluginPrefix extends '' ? N : `${PluginPrefix}/${N}`) &
-              keyof AllEslintRulesWithoutDisableAutofix
-          >
-        >,
+        ruleOptions?: NoInfer<GetRuleOptions<PluginPrefix & LoadablePluginPrefix, N>>,
         options?: AddRuleOptions,
-      ) =>
-        // @ts-expect-error "Expression produces a union type that is too complex to represent"
-        addRule(
-          (this.rulesPrefix
-            ? `${this.rulesPrefix}/${ruleName}`
-            : ruleName) as keyof AllEslintRulesWithoutDisableAutofix,
-          severity,
-          ruleOptions,
-          options,
-        ),
+      ) => {
+        if (this.pluginPrefix == null) {
+          throw new Error('Cannot use `addRule` when `pluginPrefix` is `null`');
+        }
+        // @ts-expect-error "TS2589: Type instantiation is excessively deep and possibly infinite"
+        return addRule(this.pluginPrefix, ruleName, severity, ruleOptions, options);
+      },
 
       addAnyRule: <
         P extends LoadablePluginPrefix,
-        N extends AllRulesWithPrefixUnprefixedNames<P>,
+        N extends RuleNamesForPlugin<P>,
         Severity extends RuleSeverity,
       >(
         prefix: P,
         ruleName: N,
         severity: Severity,
-        ruleOptions?: NoInfer<
-          GetRuleOptions<
-            (P extends '' ? N : `${P}/${N}`) & keyof AllEslintRulesWithoutDisableAutofix
-          >
-        >,
+        ruleOptions?: NoInfer<GetRuleOptions<P, N>>,
         options?: AddRuleOptions,
       ) => {
-        const prefixFinal = (this.context.rootOptions.pluginRenames?.[prefix] || prefix) as P;
-        return addRule(
-          (prefixFinal
-            ? `${prefixFinal}/${ruleName}`
-            : ruleName) as keyof AllEslintRulesWithoutDisableAutofix,
-          severity,
-          ruleOptions,
-          options,
-        );
+        return addRule(prefix, ruleName, severity, ruleOptions, options);
       },
 
       disableAnyRule: <P extends LoadablePluginPrefix>(
         prefix: P,
-        ruleName: AllRulesWithPrefixUnprefixedNames<P>,
+        ruleName: RuleNamesForPlugin<P>,
       ) => {
         const prefixFinal = this.context.rootOptions.pluginRenames?.[prefix] || prefix;
         const ruleNameFinal = prefixFinal ? `${prefixFinal}/${ruleName}` : ruleName;
@@ -435,7 +437,7 @@ export class ConfigEntryBuilder<PluginPrefix extends LoadablePluginPrefix | null
         return result;
       },
 
-      addBulkRules: (rules: AllRulesWithPrefix<null> | FalsyValue) => {
+      addBulkRules: (rules: AllEslintRulesWithDisableAutofix | FalsyValue) => {
         Object.assign(configFinal.rules, resolveOverrides(this.context, rules || {}));
         return result;
       },

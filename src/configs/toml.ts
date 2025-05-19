@@ -23,7 +23,7 @@ export interface TomlEslintConfigOptions extends UnConfigOptions<'toml'> {
    * Will be merged with the default value
    * @default {allowHexadecimal: true}
    */
-  noNonDecimalIntegerExceptions?: GetRuleOptions<'toml/no-non-decimal-integer'>[0] & {};
+  noNonDecimalIntegerExceptions?: GetRuleOptions<'toml', 'no-non-decimal-integer'>[0] & {};
 
   /**
    * "Millisecond precision is required. Further precision of fractional seconds is implementation-specific."

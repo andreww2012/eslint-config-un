@@ -8,7 +8,7 @@ export interface DependEslintConfigOptions extends UnConfigOptions<'depend'> {
   /**
    * [Options of the only rule (`ban-dependencies`)](https://github.com/es-tooling/eslint-plugin-depend/blob/HEAD/docs/rules/ban-dependencies.md).
    */
-  options?: GetRuleOptions<'depend/ban-dependencies'>[0];
+  options?: GetRuleOptions<'depend', 'ban-dependencies'>[0];
 }
 
 export const dependUnConfig: UnConfigFn<'depend'> = async (context) => {

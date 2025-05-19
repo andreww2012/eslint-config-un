@@ -13,7 +13,7 @@ interface WordsListAndOptionalSeverity {
 }
 
 type AltTextCheckDefaultElements = keyof Omit<
-  OmitIndexSignature<GetRuleOptions<'jsx-a11y/alt-text'>[0] & {}>,
+  OmitIndexSignature<GetRuleOptions<'jsx-a11y', 'alt-text'>[0] & {}>,
   'elements'
 >;
 const altTextCheckDefaultElements: Record<AltTextCheckDefaultElements, true> = {
@@ -23,15 +23,19 @@ const altTextCheckDefaultElements: Record<AltTextCheckDefaultElements, true> = {
   'input[type="image"]': true,
 };
 
-type AnchorIsValidAspectsToCheck =
-  ((GetRuleOptions<'jsx-a11y/anchor-is-valid'>[0] & {})['aspects'] & {})[number];
+type AnchorIsValidAspectsToCheck = ((GetRuleOptions<
+  'jsx-a11y',
+  'anchor-is-valid'
+>[0] & {})['aspects'] & {})[number];
 const anchorIsValidDefaultAspectsToCheck: Partial<Record<AnchorIsValidAspectsToCheck, true>> = {
   noHref: true,
   invalidHref: true,
 };
 
-type PossibleTabbableRoles =
-  ((GetRuleOptions<'jsx-a11y/interactive-supports-focus'>[0] & {})['tabbable'] & {})[number];
+type PossibleTabbableRoles = ((GetRuleOptions<
+  'jsx-a11y',
+  'interactive-supports-focus'
+>[0] & {})['tabbable'] & {})[number];
 // From `recommended` config
 const defaultTabbableRoles: Partial<Record<PossibleTabbableRoles, true>> = {
   button: true,
@@ -282,7 +286,7 @@ export const jsxA11yUnConfig: UnConfigFn<
   [
     customConfig?: {
       prefix: 'astro';
-      options: JsxA11yEslintConfigOptions & UnConfigOptions<string>;
+      options: JsxA11yEslintConfigOptions & UnConfigOptions;
     },
   ]
 > = (context, customConfig) => {

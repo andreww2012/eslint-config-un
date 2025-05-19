@@ -4,7 +4,7 @@ import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '..
 import {
   type FlatConfigEntryFiles,
   type FlatConfigEntryFilesOrIgnores,
-  type RuleOverrides,
+  type RulesRecordPartial,
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
@@ -80,7 +80,7 @@ export interface MarkdownEslintConfigOptions extends UnConfigOptions<'markdown'>
    */
   codeBlocksImpliedStrictMode?: boolean;
 
-  overridesCodeBlocks?: RuleOverrides<string>;
+  overridesCodeBlocks?: RulesRecordPartial;
 
   /**
    * Enables Front Matter parsing in both `commonmark` and `gfm` dialects.

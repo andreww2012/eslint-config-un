@@ -6,9 +6,9 @@ import eslintPluginAngular19 from 'angular-eslint-plugin19';
 import type Eslint from 'eslint';
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, WARNING} from '../constants';
 import {
-  type AllRulesWithPrefix,
   type EslintPlugin,
   type GetRuleOptions,
+  type RulesRecordPartial,
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
@@ -246,8 +246,8 @@ const generateAngularPlugins = (
 export interface AngularEslintConfigOptions
   extends UnConfigOptions<
     Omit<
-      AllRulesWithPrefix<'@angular-eslint', true>,
-      keyof AllRulesWithPrefix<'@angular-eslint/template', true>
+      RulesRecordPartial<'@angular-eslint'>,
+      keyof RulesRecordPartial<'@angular-eslint/template'>
     >
   > {
   /**
@@ -333,7 +333,7 @@ export interface AngularEslintConfigOptions
    *
    * If say you're using Angular 18, specify this rule here to make it work.
    */
-  portRules?: (keyof AllRulesWithPrefix<'@angular-eslint'> &
+  portRules?: (keyof RulesRecordPartial<'@angular-eslint'> &
     `@angular-eslint/${'template/' | ''}${RulesWithPartialAvailability}`)[];
 
   /**
@@ -360,7 +360,7 @@ export interface AngularEslintConfigOptions
   componentSelector?:
     | boolean
     | PrettifyShallow<
-        Omit<GetRuleOptions<'@angular-eslint/component-selector'>[0] & {}, 'type' | 'prefix'> & {
+        Omit<GetRuleOptions<'@angular-eslint', 'component-selector'>[0] & {}, 'type' | 'prefix'> & {
           type?: MaybeArray<'element' | 'attribute'>;
           prefix?: MaybeArray<string>;
         }
@@ -373,7 +373,7 @@ export interface AngularEslintConfigOptions
    * @default true
    * @see [`@angular-eslint/consistent-component-styles`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/consistent-component-styles.md)
    */
-  componentStylesStyle?: boolean | GetRuleOptions<'@angular-eslint/consistent-component-styles'>;
+  componentStylesStyle?: boolean | GetRuleOptions<'@angular-eslint', 'consistent-component-styles'>;
 
   /**
    * Valid class name suffixes for classes decorated with `@Directive`.
@@ -393,7 +393,7 @@ export interface AngularEslintConfigOptions
   directiveSelector?:
     | boolean
     | PrettifyShallow<
-        Omit<GetRuleOptions<'@angular-eslint/directive-selector'>[0] & {}, 'type' | 'prefix'> & {
+        Omit<GetRuleOptions<'@angular-eslint', 'directive-selector'>[0] & {}, 'type' | 'prefix'> & {
           type?: MaybeArray<'element' | 'attribute'>;
           prefix?: MaybeArray<string>;
         }

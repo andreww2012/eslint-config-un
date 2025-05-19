@@ -1,15 +1,14 @@
 // cspell:ignore canonicalurl fetchcontent getentrybyslug
 import {ERROR, GLOB_ASTRO, OFF, WARNING} from '../constants';
-import {type AllRulesWithPrefix, type UnConfigOptions, createConfigBuilder} from '../eslint';
+import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
+import type {PickKeysNotStartingWith, PickKeysStartingWith} from '../types';
 import {assignDefaults, interopDefault} from '../utils';
 import {type JsxA11yEslintConfigOptions, jsxA11yUnConfig} from './jsx-a11y';
 import type {UnConfigFn} from './index';
 
 export interface AstroEslintConfigOptions
-  extends UnConfigOptions<
-    Omit<AllRulesWithPrefix<'astro', true>, keyof AllRulesWithPrefix<'astro/jsx-a11y', true>>
-  > {
+  extends UnConfigOptions<PickKeysNotStartingWith<RulesRecordPartial<'astro'>, 'astro/jsx-a11y'>> {
   /**
    * A11Y (accessibility) specific rules for Astro components.
    * By default, uses `files` and `ignores` from the parent config.
@@ -21,7 +20,7 @@ export interface AstroEslintConfigOptions
   configJsxA11y?:
     | boolean
     | UnConfigOptions<
-        'astro/jsx-a11y',
+        PickKeysStartingWith<RulesRecordPartial<'astro'>, 'astro/jsx-a11y'>,
         Omit<JsxA11yEslintConfigOptions, 'settings' | keyof UnConfigOptions>
       >;
 }

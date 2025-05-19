@@ -48,7 +48,7 @@ export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
    * @default {'prefer-inline': true}
    * @see https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-duplicates.md
    */
-  noDuplicatesOptions?: GetRuleOptions<'import/no-duplicates'>[0];
+  noDuplicatesOptions?: GetRuleOptions<'import', 'no-duplicates'>[0];
 }
 
 export const importUnConfig: UnConfigFn<'import'> = async (context) => {

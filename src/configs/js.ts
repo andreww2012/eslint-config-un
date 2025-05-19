@@ -10,27 +10,27 @@ import type {UnConfigFn} from './index';
 
 export interface JsEslintConfigOptions extends UnConfigOptions<BuiltinEslintRulesFixed> {}
 
-export const RULE_CAMELCASE_OPTIONS: GetRuleOptions<'camelcase'> = [
+export const RULE_CAMELCASE_OPTIONS: GetRuleOptions<'', 'camelcase'> = [
   {
     properties: 'never' as const,
     ignoreGlobals: true,
     allow: [String.raw`\d_\d`],
   },
 ];
-export const RULE_EQEQEQ_OPTIONS: GetRuleOptions<'eqeqeq'> = ['always', {null: 'ignore'}];
-export const RULE_NO_UNUSED_EXPRESSIONS_OPTIONS: GetRuleOptions<'no-unused-expressions'> = [
+export const RULE_EQEQEQ_OPTIONS: GetRuleOptions<'', 'eqeqeq'> = ['always', {null: 'ignore'}];
+export const RULE_NO_UNUSED_EXPRESSIONS_OPTIONS: GetRuleOptions<'', 'no-unused-expressions'> = [
   {
     allowShortCircuit: true,
     allowTernary: true,
     allowTaggedTemplates: true,
   },
 ];
-export const RULE_NO_USE_BEFORE_DEFINE_OPTIONS: GetRuleOptions<'no-use-before-define'> = [
+export const RULE_NO_USE_BEFORE_DEFINE_OPTIONS: GetRuleOptions<'', 'no-use-before-define'> = [
   {
     functions: false,
   },
 ];
-export const RULE_PREFER_DESTRUCTURING_OPTIONS: GetRuleOptions<'prefer-destructuring'> = [
+export const RULE_PREFER_DESTRUCTURING_OPTIONS: GetRuleOptions<'', 'prefer-destructuring'> = [
   {
     VariableDeclarator: {
       array: false,

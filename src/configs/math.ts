@@ -8,7 +8,7 @@ export interface MathEslintConfigOptions extends UnConfigOptions<'math'> {
    * Enforces the method of conversion to absolute values. Set to `false` not not enforce it.
    * @default 'Math.abs'
    */
-  absoluteValuesConversionMethod?: false | (GetRuleOptions<'math/abs'>[0] & {})['prefer'];
+  absoluteValuesConversionMethod?: false | (GetRuleOptions<'math', 'abs'>[0] & {})['prefer'];
 }
 
 export const mathUnConfig: UnConfigFn<'math'> = (context) => {

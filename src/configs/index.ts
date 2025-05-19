@@ -2,7 +2,7 @@ import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {ConfigEntryBuilder, FlatConfigEntry} from '../eslint';
 import type {LoadablePluginPrefix} from '../plugins';
-import type {PrettifyShallow, Promisable} from '../types';
+import type {PrettifyShallow, Promisable, SetRequired} from '../types';
 import type {fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
 import type {AstroEslintConfigOptions} from './astro';
@@ -108,13 +108,32 @@ export interface EslintConfigUnOptions {
    *
    * You have to still use **OLD** prefixes in `overrides`, and they will be automatically renamed.
    * @example
+   * To make all the rules from `typescript-eslint` plugin have `ts` prefix:
    * ```ts
-   * // To make all the rules from `typescript-eslint` plugin have `ts` prefix:
    * {'@typescript-eslint': 'ts'}
    * ```
    */
-  pluginRenames?: Partial<Record<LoadablePluginPrefix, string>>;
+  pluginRenames?: PrettifyShallow<Partial<Record<LoadablePluginPrefix, string>>>;
+
+  /**
+   * Defines a method of disabling autofix of plugins' fixable rules:
+   * - `plugin-copy`: will deeply copy the plugin and disable autofixes of all or specified rules.
+   * This allows to disable autofix without changing the full rule name you won't be able
+   * to re-enable autofix on per file basis.
+   * - `rules-copy`: will create a plugin with `disable-autofix` prefix and copy the rules into it.
+   * Rules with disabled autofixes will have names starting with `disable-autofix/`.
+   *
+   * Empty key is a plugin with core ESLint rules.
+   *
+   * `default` specifies a default disabling method for all plugins.
+   * @default {default: 'plugin-copy'}
+   */
+  disableAutofixMethod?: PrettifyShallow<
+    Partial<Record<'default' | LoadablePluginPrefix, DisableAutofixMethod>>
+  >;
 }
+
+type DisableAutofixMethod = 'plugin-copy' | 'rules-copy';
 
 interface UnConfigs {
   /**
@@ -504,11 +523,18 @@ interface UnConfigs {
 }
 
 export interface UnConfigContext {
+  rootOptions: PrettifyShallow<
+    EslintConfigUnOptions & {
+      disableAutofixMethod: SetRequired<
+        EslintConfigUnOptions['disableAutofixMethod'] & {},
+        'default'
+      >;
+    }
+  >;
   packagesInfo: Record<
     (typeof PACKAGES_TO_GET_INFO_FOR)[number],
     Awaited<ReturnType<typeof fetchPackageInfo>>
   >;
-  rootOptions: EslintConfigUnOptions;
   configsMeta: Record<keyof UnConfigs, {enabled: boolean}>;
   resolvedConfigs?: Partial<UnConfigs>;
 }

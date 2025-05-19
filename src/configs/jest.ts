@@ -2,9 +2,9 @@ import type {Jest as JestMethods} from '@jest/environment';
 import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
-  type AllRulesWithPrefix,
   type FlatConfigEntryForBuilder,
   type GetRuleOptions,
+  type RulesRecordPartial,
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
@@ -89,7 +89,7 @@ export interface JestEslintConfigOptions extends UnConfigOptions<'jest'> {
   configTypescript?:
     | boolean
     | UnConfigOptions<
-        AllRulesWithPrefix<`jest/${'no-untyped-mock-factory' | 'unbound-method'}`, true, false>
+        Pick<RulesRecordPartial<'jest'>, `jest/${'no-untyped-mock-factory' | 'unbound-method'}`>
       >;
 
   /**
@@ -100,8 +100,8 @@ export interface JestEslintConfigOptions extends UnConfigOptions<'jest'> {
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/consistent-test-it.md
    */
   testDefinitionKeyword?:
-    | GetRuleOptions<'jest/consistent-test-it'>[0]
-    | ValueOf<GetRuleOptions<'jest/consistent-test-it'>[0] & {}>
+    | GetRuleOptions<'jest', 'consistent-test-it'>[0]
+    | ValueOf<GetRuleOptions<'jest', 'consistent-test-it'>[0] & {}>
     | false;
 
   /**
@@ -178,10 +178,10 @@ export interface JestEslintConfigOptions extends UnConfigOptions<'jest'> {
 
 export const generateConsistentTestItOptions = ({
   testDefinitionKeyword,
-}: Pick<
-  JestEslintConfigOptions,
-  'testDefinitionKeyword'
->): GetRuleOptions<'jest/consistent-test-it'> => [
+}: Pick<JestEslintConfigOptions, 'testDefinitionKeyword'>): GetRuleOptions<
+  'jest',
+  'consistent-test-it'
+> => [
   typeof testDefinitionKeyword === 'string'
     ? {
         fn: testDefinitionKeyword,

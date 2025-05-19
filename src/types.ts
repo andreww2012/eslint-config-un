@@ -27,4 +27,6 @@ export type {
   Promisable,
   ValueOf,
   OmitIndexSignature,
+  DistributedPick,
+  UnionToIntersection,
 } from 'type-fest';

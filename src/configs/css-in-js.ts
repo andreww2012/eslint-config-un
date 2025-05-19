@@ -45,7 +45,7 @@ export interface CssInJsEslintConfigOptions extends UnConfigOptions<'css-in-js'>
    * Enforce `backgroundColor` or `background-color`
    * @default 'camelCase'
    */
-  propertyCasing?: GetRuleOptions<'css-in-js/property-casing'>[0];
+  propertyCasing?: GetRuleOptions<'css-in-js', 'property-casing'>[0];
 }
 
 export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {

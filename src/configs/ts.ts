@@ -1,7 +1,7 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import type Eslint from 'eslint';
 import {ERROR, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, GLOB_TSX, OFF, WARNING} from '../constants';
-import {type AllRulesWithPrefix, type UnConfigOptions, createConfigBuilder} from '../eslint';
+import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import {
@@ -75,15 +75,14 @@ type TypeAwareRules =
   | 'unbound-method'
   | 'use-unknown-in-catch-callback-variable';
 
-type TypeAwareRulesWithPrefixes = AllRulesWithPrefix<
-  `@typescript-eslint/${TypeAwareRules}`,
-  true,
-  false
+type TypeAwareRulesWithPrefixes = Pick<
+  RulesRecordPartial<'@typescript-eslint'>,
+  `@typescript-eslint/${TypeAwareRules}`
 >;
 
 export interface TsEslintConfigOptions
   extends UnConfigOptions<
-    Omit<AllRulesWithPrefix<'@typescript-eslint', true>, keyof TypeAwareRulesWithPrefixes>
+    Omit<RulesRecordPartial<'@typescript-eslint'>, keyof TypeAwareRulesWithPrefixes>
   > {
   /**
    * Applies rules requiring type information on the specified `files`.

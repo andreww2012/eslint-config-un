@@ -25,7 +25,7 @@ export interface JsonSchemaValidatorEslintConfigOptions
   /**
    * The single [rule (`no-invalid`)](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/HEAD/docs/rules/no-invalid.md) options.
    */
-  options?: GetRuleOptions<'json-schema-validator/no-invalid'>[0];
+  options?: GetRuleOptions<'json-schema-validator', 'no-invalid'>[0];
 }
 
 export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = async (context) => {

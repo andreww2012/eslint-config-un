@@ -1,5 +1,6 @@
 import {ERROR, OFF} from '../constants';
-import {type AllRulesWithPrefix, type UnConfigOptions, createConfigBuilder} from '../eslint';
+import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from '../eslint';
+import type {PickKeysStartingWith} from '../types';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -10,7 +11,7 @@ export interface PnpmEslintConfigOptions {
   configPackageJson?:
     | boolean
     | UnConfigOptions<
-        AllRulesWithPrefix<'pnpm/jsonc-', true, false>,
+        PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/json-'>,
         {
           /**
            * Enforces that all dependencies are coming from [pnpm catalogs](https://pnpm.io/catalogs).
@@ -35,7 +36,9 @@ export interface PnpmEslintConfigOptions {
   /**
    * Rules for `pnpm-workspace.yaml` file.
    */
-  configPnpmWorkspace?: boolean | UnConfigOptions<AllRulesWithPrefix<'pnpm/yaml-', true, false>>;
+  configPnpmWorkspace?:
+    | boolean
+    | UnConfigOptions<PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/yaml-'>>;
 }
 
 export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
