@@ -1,6 +1,6 @@
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
-import type {ConfigEntryBuilder, UnFlatConfigEntry} from '../eslint';
+import type {ConfigEntryBuilder, EslintSeverity, UnFlatConfigEntry} from '../eslint';
 import type {PluginPrefix} from '../plugins';
 import type {PrettifyShallow, Promisable, SetRequired} from '../types';
 import type {fetchPackageInfo} from '../utils';
@@ -83,12 +83,10 @@ export interface EslintConfigUnOptions {
   disablePrettierIncompatibleRules?: boolean;
 
   /**
-   * Some rules have "warning" level set by default.
-   * - Passing here `true` would change the level to "error" for all such rules.
-   * - You can also pass an array with rule names to change their level to "error".
-   * - Passing `false` does nothing.
+   * Force non-zero severity of all the rules to be `error` or `warning`.
+   * This can also be configured per-config.
    */
-  errorsInsteadOfWarnings?: boolean | string[];
+  forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
 
   configs?: {
     [Key in keyof UnConfigs]?: boolean | PrettifyShallow<UnConfigs[Key]>;

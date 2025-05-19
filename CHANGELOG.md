@@ -4,6 +4,7 @@
 - New config: `math` via [`eslint-plugin-math`](https://www.npmjs.com/package/eslint-plugin-math), enabled by default.
 - [**BREAKING**] You can now specify the method of disabling autofix: `rules-copy` would create a plugin named `disable-autofix` and copy the rules for which the autofix is disabled. `plugin-copy` would copy an entire plugin and replace the origin plugin with the copy. The default method is now `plugin-copy`, which leaves full rule names unchanged. You can control the overall or per-plugin autofix disabling method via the `disableAutofixMethod` option.
 - [**BREAKING**] Removed the ability to disable rule autofix by enabling `disable-autofix/*` rules. Instead, when configuring a rule, you can now return an object and set `disableAutofix: true` in it.
+- [**BREAKING**] Removed the `errorsInsteadOfWarnings` root option in favor of `forceSeverity` that can now be set globally.
 
 ## 0.10.0
 
