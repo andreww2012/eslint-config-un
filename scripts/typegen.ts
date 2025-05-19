@@ -4,7 +4,7 @@ import path from 'node:path';
 import {styleText} from 'node:util';
 import * as diff from 'diff';
 import {flatConfigsToRulesDTS} from 'eslint-typegen/core';
-import {eslintConfig, eslintConfigInternal} from '../src';
+import {eslintConfigInternal} from '../src/config';
 import {eslintPluginVanillaRules} from '../src/eslint';
 
 // eslint-disable-next-line node/no-unsupported-features/node-builtins
@@ -51,7 +51,7 @@ async function generateRuleTypes() {
     flatConfigsToRulesDTS(
       [
         {plugins: {'': eslintPluginVanillaRules}},
-        ...(await eslintConfig({
+        ...(await eslintConfigInternal({
           loadPluginsOnDemand: false,
           configs: {
             // If Angular is not found installed, plugin is not generated
