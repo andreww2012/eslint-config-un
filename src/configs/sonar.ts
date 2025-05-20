@@ -1,14 +1,20 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
+import {assignDefaults, doesPackageExist} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface SonarEslintConfigOptions extends UnConfigOptions<'sonarjs'> {
   /**
-   * Enables rules that are specific to AWS
-   * @default true
+   * Enables rules that are specific to [aws-cdk-lib](https://www.npmjs.com/package/aws-cdk-lib)
+   * @default true <=> `aws-cdk-lib` package is installed
    */
   enableAwsRules?: boolean;
+
+  /**
+   * Enables rules that are specific to [helmet](https://www.npmjs.com/package/helmet)
+   * @default true <=> `helmet` package is installed
+   */
+  enableHelmetRules?: boolean;
 
   /**
    * Enables rules that are specific to test or assertion libraries
@@ -17,16 +23,23 @@ export interface SonarEslintConfigOptions extends UnConfigOptions<'sonarjs'> {
   testsRules?: boolean;
 }
 
-export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
+export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
+  const [awsCdkLibInstalled, helmetInstalled] = await Promise.all([
+    doesPackageExist('aws-cdk-lib'),
+    doesPackageExist('helmet'),
+  ]);
+
   const optionsRaw = context.rootOptions.configs?.sonar;
   const optionsResolved = assignDefaults(optionsRaw, {
-    enableAwsRules: true,
+    enableAwsRules: awsCdkLibInstalled,
+    enableHelmetRules: helmetInstalled,
     testsRules: true,
   } satisfies SonarEslintConfigOptions);
 
-  const {enableAwsRules, testsRules} = optionsResolved;
+  const {enableAwsRules, enableHelmetRules, testsRules} = optionsResolved;
 
   const awsRulesSeverity = enableAwsRules ? ERROR : OFF;
+  const helmetRulesSeverity = enableHelmetRules ? ERROR : OFF;
   const testsRulesSeverity = testsRules ? ERROR : OFF;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'sonarjs');
@@ -55,7 +68,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     .addRule('array-constructor', OFF)
     // ⚠️ Prettier
     .addRule('arrow-function-convention', OFF)
-    .addRule('assertions-in-tests', testsRulesSeverity) // 🟢🧪
+    .addRule('assertions-in-tests', testsRulesSeverity) // 🟢🧪 📦 `chai`, `sinon`, `supertest`, `vitest`
     .addRule('aws-apigateway-public-api', awsRulesSeverity) // 🟢 📦 `aws-cdk-lib`
     .addRule('aws-ec2-rds-dms-public', awsRulesSeverity) // 🟢 📦 `aws-cdk-lib`
     .addRule('aws-ec2-unencrypted-ebs-volume', awsRulesSeverity) // 🟢 📦 `aws-cdk-lib`
@@ -100,7 +113,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     // ⚠️ `no-new`
     .addRule('constructor-for-side-effects', OFF) // 🟢
     .addRule('content-length', ERROR) // 🟢 📦 `formidable`, `multer`, `body-parser`
-    .addRule('content-security-policy', ERROR) // 🟢 📦 `helmet`
+    .addRule('content-security-policy', helmetRulesSeverity) // 🟢 📦 `helmet`
     .addRule('cookie-no-httponly', ERROR) // 🟢 📦 `cookie-session`, `express-session`, `cookies`, `csurf`
     .addRule('cookies', OFF) // 🔴
     .addRule('cors', ERROR) // 🟢 📦 `node:http`, `cors`
@@ -114,7 +127,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     .addRule('different-types-comparison', OFF) // 🟢💭
     .addRule('disabled-auto-escaping', ERROR) // 🟢💭 📦 `mustache`, `handlebars`, `markdown-it`, `marked`, `kramed`
     .addRule('disabled-resource-integrity', ERROR) // 🟢💭
-    .addRule('disabled-timeout', testsRulesSeverity) // 🟢🧪
+    .addRule('disabled-timeout', testsRulesSeverity) // 🟢🧪 📦 `chai`
     .addRule('dns-prefetching', OFF) // 🔴
     // ⚠️ `regexp/no-dupe-characters-character-class`
     .addRule('duplicates-in-character-class', OFF) // 🟢💭🔤
@@ -136,7 +149,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     // Reason for not enabling: covered by `guard-for-in` rule
     .addRule('for-in', OFF)
     .addRule('for-loop-increment-sign', ERROR) // 🟢
-    .addRule('frame-ancestors', ERROR) // 🟢 📦 `helmet`
+    .addRule('frame-ancestors', helmetRulesSeverity) // 🟢 📦 `helmet`
     // ⚠️ IMHO too restrictive + some cases covered by `unicorn/consistent-function-scoping`
     .addRule('function-inside-loop', OFF) // 🟢
     .addRule('function-name', OFF)
@@ -153,7 +166,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     .addRule('index-of-compare-to-positive-number', ERROR) // 🟢💭
     .addRule('insecure-cookie', ERROR) // 🟢 📦 `cookie-session`, `express-session`, `cookies`, `csurf`
     .addRule('insecure-jwt-token', ERROR) // 🟢 📦 `jsonwebtoken`
-    .addRule('inverted-assertion-arguments', testsRulesSeverity) // 🟢🧪 📦 `chai`
+    .addRule('inverted-assertion-arguments', testsRulesSeverity) // 🟢🧪 📦 `mocha`
     .addRule('jsx-no-leaked-render', ERROR) // 🟢💭🔵
     // ⚠️ `no-labels`
     .addRule('label-position', OFF) // 🟢
@@ -182,7 +195,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     .addRule('no-built-in-override', OFF)
     .addRule('no-case-label-in-switch', ERROR) // 🟢
     .addRule('no-clear-text-protocols', WARNING) // 🟢 📦 `nodemailer`, `ftp`, `telnet-client`, `aws-cdk-lib`
-    .addRule('no-code-after-done', testsRulesSeverity) // 🟢🧪 📦 `chai`
+    .addRule('no-code-after-done', testsRulesSeverity) // 🟢🧪 📦 `mocha`
     .addRule('no-collapsible-if', OFF)
     // TODO disable autofix?
     .addRule('no-collection-size-mischeck', ERROR) // 🟢💭
@@ -208,10 +221,10 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     // ⚠️ `regexp/no-empty-group`
     .addRule('no-empty-group', OFF) // 🟢💭🔤
     // ⚠️ It seems fragile to me that this rule does not give the control over which files to consider as test files: "This rule flags any file that has .test or .spec as part of its suffix but does not contain any test cases defined using the different forms of the it and test functions from Jasmine, Jest, Mocha, or Node.js testing API."
-    .addRule('no-empty-test-file', OFF) // 🟢🧪
+    .addRule('no-empty-test-file', OFF) // 🟢🧪 `jasmine`, `jest`, `mocha`, node.js (only assertions patterns are checked, not package imports: https://github.com/SonarSource/SonarJS/blob/b8ba1ad28ef481a6f9bae2f9c42ea18a14668adb/packages/jsts/src/rules/S2187/rule.ts#L24)
     .addRule('no-equals-in-for-termination', ERROR) // 🟢
     // ⚠️ `jest/no-focused-tests`, `vitest/no-focused-tests`. For other testing frameworks, one can enable this rule manually
-    .addRule('no-exclusive-tests', OFF) // 🟢🧪
+    .addRule('no-exclusive-tests', OFF) // 🟢🧪 (only patterns are checked, not package imports)
     .addRule('no-extra-arguments', ERROR) // 🟢
     // ⚠️ `no-fallthrough`
     .addRule('no-fallthrough', OFF) // 🟢
@@ -238,7 +251,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     .addRule('no-implicit-dependencies', OFF)
     .addRule('no-implicit-global', ERROR) // 🟢
     .addRule('no-in-misuse', ERROR) // 🟢💭
-    .addRule('no-incomplete-assertions', testsRulesSeverity) // 🟢🧪 📦 `chai`
+    .addRule('no-incomplete-assertions', testsRulesSeverity) // 🟢🧪 (only patterns are checked, not package imports)
     // ⚠️ `consistent-return`
     .addRule('no-inconsistent-returns', OFF)
     // ⚠️ `@typescript-eslint/restrict-plus-operands`
@@ -256,11 +269,11 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     .addRule('no-labels', OFF) // 🟢
     // Note: seems usable in .js files only
     .addRule('no-literal-call', ERROR) // 🟢
-    .addRule('no-mime-sniff', ERROR) // 🟢 📦 `helmet`
+    .addRule('no-mime-sniff', helmetRulesSeverity) // 🟢 📦 `helmet`
     .addRule('no-misleading-array-reverse', ERROR) // 🟢💭
     // ⚠️ `regexp/no-misleading-unicode-character`
     .addRule('no-misleading-character-class', OFF) // 🟢💭🔤
-    .addRule('no-mixed-content', ERROR) // 🟢 📦 `helmet`
+    .addRule('no-mixed-content', helmetRulesSeverity) // 🟢 📦 `helmet`
     // ⚠️ Too noisy in practice
     .addRule('no-nested-assignment', OFF) // 🟢
     // ⚠️ Too noisy in practice
@@ -283,7 +296,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     .addRule('no-redundant-optional', ERROR) // 🟢💭
     .addRule('no-redundant-parentheses', OFF) // 🔴
     .addRule('no-reference-error', OFF)
-    .addRule('no-referrer-policy', ERROR) // 🟢 📦 `helmet`
+    .addRule('no-referrer-policy', helmetRulesSeverity) // 🟢 📦 `helmet`
     // ⚠️ `no-regex-spaces`, `regexp/prefer-quantifier`
     .addRule('no-regex-spaces', OFF) // 🟢💭🔤
     .addRule('no-require-or-define', OFF) // 💭
@@ -294,7 +307,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     // ⚠️ Unsure about this one, it seems to me that it might disallow "normal" code which could be hard to "fix"
     .addRule('no-selector-parameter', OFF) // 🟢💭
     // ⚠️ `jest/no-disabled-tests`, `vitest/no-disabled-tests`
-    .addRule('no-skipped-tests', OFF) // 🟢🧪
+    .addRule('no-skipped-tests', OFF) // 🟢🧪 `jasmine`, `jest`, `mocha`, node.js (only patterns are checked, not package imports)
     .addRule('no-small-switch', ERROR) // 🟢
     .addRule('no-sonar-comments', OFF)
     .addRule('no-tab', OFF) // 🔴
@@ -374,13 +387,13 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = (context) => {
     .addRule('stable-tests', testsRulesSeverity) // 🟢
     .addRule('standard-input', OFF) // 🔴
     .addRule('stateful-regex', ERROR) // 🟢🔤
-    .addRule('strict-transport-security', ERROR) // 🟢 📦 `helmet`
+    .addRule('strict-transport-security', helmetRulesSeverity) // 🟢 📦 `helmet`
     .addRule('strings-comparison', WARNING) // 💭
     // ⚠️ `constructor-super`
     .addRule('super-invocation', OFF) // 🟢
     .addRule('table-header', WARNING) // 🟢🔵
     .addRule('table-header-reference', WARNING) // 🟢🔵
-    .addRule('test-check-exception', ERROR) // 🟢🧪 📦 `chai`
+    .addRule('test-check-exception', ERROR) // 🟢🧪 (only patterns are checked, not package imports)
     // Reason for disabling: completely forbids TODO comments and has false positives
     .addRule('todo-tag', OFF) // 🟢
     .addRule('too-many-break-or-continue-in-loop', OFF)
