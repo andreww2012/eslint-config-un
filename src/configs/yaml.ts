@@ -116,6 +116,14 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
     .disableAnyRule('', 'spaced-comment') // 🟣
     .addOverrides();
 
+  if (context.usedPackageManager?.name === 'pnpm') {
+    configBuilder
+      ?.addConfig('yaml/pnpm-workspace.yaml', {
+        files: ['**/pnpm-workspace.yaml'],
+      })
+      .addRule('file-extension', OFF);
+  }
+
   return {
     configs: [configBuilder],
     optionsResolved,

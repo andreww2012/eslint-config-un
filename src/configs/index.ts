@@ -1,4 +1,5 @@
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
+import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {ConfigEntryBuilder, EslintSeverity, UnFlatConfigEntry} from '../eslint';
 import type {PluginPrefix} from '../plugins';
@@ -547,6 +548,8 @@ export interface UnConfigContext {
    * NOTE: mutable
    */
   usedPlugins: Set<PluginPrefix>;
+
+  usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;
 }
 
 export type UnConfigFn<

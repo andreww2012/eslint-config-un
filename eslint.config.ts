@@ -15,9 +15,7 @@ export default eslintConfig({
       },
     },
     deMorgan: true,
-    yaml: {
-      ignores: ['pnpm-workspace.yaml'],
-    },
+    yaml: true,
     toml: true,
     json: true,
     jsxA11y: false,

@@ -218,6 +218,7 @@ export const eslintConfigInternal = async (
     },
     disabledAutofixes: {},
     usedPlugins: new Set(),
+    usedPackageManager,
   };
 
   const [
