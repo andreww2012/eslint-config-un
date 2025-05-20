@@ -4,7 +4,6 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {DisableAutofixMethod, EslintConfigUnOptions, UnConfigContext} from './configs';
-import {jsUnConfig} from './configs/js';
 import {
   DEFAULT_GLOBAL_IGNORES,
   GLOB_CONFIG_FILES,
@@ -118,6 +117,7 @@ export const eslintConfigInternal = async (
   // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
   const isHtmlEnabled = Boolean(configsOptions.html ?? !isAngularEnabled);
   const isJestEnabled = Boolean(configsOptions.jest ?? packagesInfo.jest);
+  const isJsEnabled = Boolean(configsOptions.js ?? true);
   const isJsdocEnabled = Boolean(configsOptions.jsdoc ?? true);
   const isJsoncEnabled = Boolean(configsOptions.json ?? false);
   const isJsonSchemaValidatorEnabled = Boolean(configsOptions.jsonSchemaValidator ?? false);
@@ -184,7 +184,7 @@ export const eslintConfigInternal = async (
       html: {enabled: isHtmlEnabled},
       import: {enabled: isImportEnabled},
       jest: {enabled: isJestEnabled},
-      js: {enabled: true},
+      js: {enabled: isJsEnabled},
       jsInline: {enabled: isJsInlineEnabled},
       jsdoc: {enabled: isJsdocEnabled},
       json: {enabled: isJsoncEnabled},
@@ -285,7 +285,7 @@ export const eslintConfigInternal = async (
     },
 
     /* Enabled by default or conditionally */
-    jsUnConfig(context),
+    isJsEnabled && import('./configs/js').then((m) => m.jsUnConfig(context)),
     isUnicornEnabled && import('./configs/unicorn').then((m) => m.unicornUnConfig(context)),
     isImportEnabled && import('./configs/import').then((m) => m.importUnConfig(context)),
     isNodeEnabled && import('./configs/node').then((m) => m.nodeUnConfig(context)),
