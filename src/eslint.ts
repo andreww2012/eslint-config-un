@@ -433,7 +433,8 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
         (this.context.rootOptions.forceSeverity as RuleSeverity | undefined) ??
         severity;
 
-      const ruleNameWithResolvedPrefix = `${prefix === '' ? '' : `${(prefix ? this.context.rootOptions.pluginRenames?.[prefix] : null) || prefix}/`}${ruleNameUnprefixed}`;
+      // eslint-disable-next-line ts/no-unnecessary-type-assertion
+      const ruleNameWithResolvedPrefix = `${prefix === '' ? '' : `${(prefix === '' ? '' : this.context.rootOptions.pluginRenames?.[prefix as Exclude<PluginPrefix, ''>] || null) || prefix}/`}${ruleNameUnprefixed}`;
       let ruleNameFinal = ruleNameWithResolvedPrefix;
       if (options?.disableAutofix) {
         const disableAutofixMethod: DisableAutofixMethod =
@@ -502,7 +503,12 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
       },
 
       disableAnyRule: <P extends PluginPrefix>(prefix: P, ruleName: RuleNamesForPlugin<P>) => {
-        const prefixFinal = this.context.rootOptions.pluginRenames?.[prefix] || prefix;
+        const prefixFinal =
+          prefix === ''
+            ? ''
+            : // eslint-disable-next-line ts/no-unnecessary-type-assertion
+              this.context.rootOptions.pluginRenames?.[prefix as Exclude<PluginPrefix, ''>] ||
+              prefix;
         const ruleNameFinal = prefixFinal ? `${prefixFinal}/${ruleName}` : ruleName;
         Object.assign(configFinal.rules, {
           [ruleNameFinal]: 0,

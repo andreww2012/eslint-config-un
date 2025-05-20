@@ -464,7 +464,9 @@ export const eslintConfigInternal = async (
           (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'rules-copy'))
       ) {
         const pluginPrefix =
-          context.rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
+          pluginPrefixCanonical === ''
+            ? ''
+            : context.rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
         return Object.assign(res, disableAutofixForAllRulesInPlugin(pluginPrefix, plugin));
       }
       return res;
@@ -478,7 +480,10 @@ export const eslintConfigInternal = async (
         Object.fromEntries(
           objectEntriesUnsafe(allPlugins).map(([pluginPrefixCanonical, plugin]) => {
             const pluginPrefix =
-              context.rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
+              pluginPrefixCanonical === ''
+                ? ''
+                : context.rootOptions.pluginRenames?.[pluginPrefixCanonical] ||
+                  pluginPrefixCanonical;
             const rulesInfo = disableAutofixPluginsWithPluginCopyMethod.find(
               (v) => v.pluginPrefix === pluginPrefixCanonical,
             );

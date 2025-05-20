@@ -112,7 +112,7 @@ export interface EslintConfigUnOptions {
    * {'@typescript-eslint': 'ts'}
    * ```
    */
-  pluginRenames?: PrettifyShallow<Partial<Record<PluginPrefix, string>>>;
+  pluginRenames?: PrettifyShallow<Partial<Record<Exclude<PluginPrefix, ''>, string>>>;
 
   /**
    * Defines a method of disabling autofix of plugins' fixable rules:
