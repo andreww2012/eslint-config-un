@@ -287,8 +287,6 @@ export const tsUnConfig: UnConfigFn<
     ?.addConfig(['ts/non-type-aware/rules', {includeDefaultFilesAndIgnores: true}])
     /* Category: Strict */
     .addRule('ban-ts-comment', ERROR) // 🟣
-    .addRule('no-array-constructor', ERROR) // 🟣
-    .disableAnyRule('', 'no-array-constructor') // 🟣
     .addRule('no-duplicate-enum-values', ERROR) // 🟣
     .addRule('no-dynamic-delete', WARNING) // 🟣
     .addRule('no-empty-object-type', ERROR, [{allowInterfaces: 'with-single-extends'}]) // 🟣
@@ -309,10 +307,6 @@ export const tsUnConfig: UnConfigFn<
     .addRule('no-unnecessary-type-constraint', ERROR) // 🟣
     .addRule('no-unsafe-declaration-merging', ERROR) // 🟣
     .addRule('no-unsafe-function-type', ERROR) // 🟣
-    .addRule('no-unused-vars', ERROR, [{ignoreRestSiblings: true}]) // 🟣
-    .disableAnyRule('', 'no-unused-vars') // 🟣
-    .addRule('no-useless-constructor', ERROR) // 🟣
-    .disableAnyRule('', 'no-useless-constructor') // 🟣
     .addRule('no-wrapper-object-types', ERROR) // 🟣
     .addRule('prefer-as-const', ERROR) // 🟣
     .addRule('prefer-literal-enum-member', ERROR, [{allowBitwiseExpressions: true}]) // 🟣
@@ -329,36 +323,45 @@ export const tsUnConfig: UnConfigFn<
     .addRule('consistent-type-assertions', ERROR) // 💅
     .addRule('consistent-type-definitions', ERROR) // 💅
     .addRule('no-confusing-non-null-assertion', ERROR) // 💅
-    .addRule('no-empty-function', ERROR) // 💅
-    .disableAnyRule('', 'no-empty-function') // 💅
     .addRule('no-inferrable-types', ERROR) // 💅
     .addRule('prefer-for-of', ERROR) // 💅
     .addRule('prefer-function-type', OFF) // 💅
     /* Category: Additional rules */
-    .addRule('class-methods-use-this', ERROR, [
-      {ignoreOverrideMethods: true, ignoreClassesThatImplementAnInterface: true},
-    ])
-    .disableAnyRule('', 'class-methods-use-this')
     .addRule('consistent-type-imports', ERROR, [
       {
         ...(typescriptVersion && typescriptVersion >= 4.5 && {fixStyle: 'inline-type-imports'}),
         disallowTypeAnnotations: false,
       },
     ])
-    .addRule('default-param-last', ERROR)
-    .disableAnyRule('', 'default-param-last')
     .addRule('explicit-function-return-type', OFF)
     .addRule('explicit-member-accessibility', OFF)
     .addRule('explicit-module-boundary-types', OFF)
+    .addRule('member-ordering', OFF) // ❄️
+    .addRule('method-signature-style', ERROR)
+    .addRule('no-import-type-side-effects', ERROR)
+    .addRule('no-require-imports', OFF) // 🟣
+    .addRule('no-unnecessary-parameter-property-assignment', ERROR)
+    .addRule('no-useless-empty-export', ERROR)
+    .addRule('parameter-properties', OFF)
+    .addRule('prefer-enum-initializers', OFF)
+    .addRule('typedef', OFF)
+    /* Category: Extension rules */
+    .addRule('class-methods-use-this', ERROR, [
+      {ignoreOverrideMethods: true, ignoreClassesThatImplementAnInterface: true},
+    ])
+    .disableAnyRule('', 'class-methods-use-this')
+    .addRule('default-param-last', ERROR)
+    .disableAnyRule('', 'default-param-last')
     .addRule('init-declarations', OFF)
     .disableAnyRule('', 'init-declarations')
     .addRule('max-params', OFF)
     .disableAnyRule('', 'max-params')
-    .addRule('member-ordering', OFF) // ❄️
-    .addRule('method-signature-style', ERROR)
+    .addRule('no-array-constructor', ERROR) // 🟣
+    .disableAnyRule('', 'no-array-constructor') // 🟣
     .addRule('no-dupe-class-members', OFF) // 👍
     .disableAnyRule('', 'no-dupe-class-members') // 🟣
-    .addRule('no-import-type-side-effects', ERROR)
+    .addRule('no-empty-function', ERROR) // 💅
+    .disableAnyRule('', 'no-empty-function') // 💅
     .addRule('no-invalid-this', OFF) // 👍
     .disableAnyRule('', 'no-invalid-this')
     .addRule('no-loop-func', ERROR)
@@ -367,23 +370,21 @@ export const tsUnConfig: UnConfigFn<
     .disableAnyRule('', 'no-magic-numbers')
     .addRule('no-redeclare', OFF) // 👍
     .disableAnyRule('', 'no-redeclare')
-    .addRule('no-require-imports', OFF) // 🟣
     .addRule('no-restricted-imports', OFF)
     .disableAnyRule('', 'no-restricted-imports')
     .addRule('no-shadow', ERROR)
     .disableAnyRule('', 'no-shadow')
-    .addRule('no-unnecessary-parameter-property-assignment', ERROR)
     .addRule('no-unused-expressions', ERROR, RULE_NO_UNUSED_EXPRESSIONS_OPTIONS) // 🟣
     .disableAnyRule('', 'no-unused-expressions') // 🟣
-    .addRule('no-use-before-define', ERROR, RULE_NO_USE_BEFORE_DEFINE_OPTIONS)
-    .disableAnyRule('', 'no-use-before-define')
-    .addRule('no-useless-empty-export', ERROR)
-    .addRule('parameter-properties', OFF)
-    .addRule('prefer-enum-initializers', OFF)
-    .addRule('typedef', OFF)
+    .addRule('no-unused-vars', ERROR, [{ignoreRestSiblings: true}]) // 🟣
+    .disableAnyRule('', 'no-unused-vars') // 🟣
     /* Category: Disable conflicting rules */
     .disableAnyRule('', 'no-useless-constructor')
     .disableAnyRule('', 'dot-notation')
+    .addRule('no-use-before-define', ERROR, RULE_NO_USE_BEFORE_DEFINE_OPTIONS)
+    .disableAnyRule('', 'no-use-before-define')
+    .addRule('no-useless-constructor', ERROR) // 🟣
+    .disableAnyRule('', 'no-useless-constructor') // 🟣
     .addOverrides();
 
   // CONFIG TYPE AWARE
@@ -413,8 +414,6 @@ export const tsUnConfig: UnConfigFn<
     })
     /* Category: Strict */
     .addRule('await-thenable', ERROR) // 🟣
-    .addRule('consistent-return', ERROR)
-    .disableAnyRule('', 'consistent-return')
     .addRule('no-array-delete', ERROR) // 🟣
     .addRule('no-base-to-string', ERROR) // 🟣
     .addRule('no-confusing-void-expression', ERROR, [{ignoreArrowShorthand: true}]) // 🟣
@@ -427,8 +426,6 @@ export const tsUnConfig: UnConfigFn<
       },
     ]) // 🟣
     .addRule('no-for-in-array', ERROR) // 🟣
-    .addRule('no-implied-eval', ERROR) // 🟣
-    .disableAnyRule('', 'no-implied-eval') // 🟣
     .addRule('no-meaningless-void-operator', ERROR) // 🟣
     .addRule('no-misused-promises', ERROR) // 🟣
     .addRule('no-misused-spread', ERROR) // 🟣 >=8.20.0
@@ -457,21 +454,13 @@ export const tsUnConfig: UnConfigFn<
     .addRule('no-unsafe-return', noUnsafeRulesSeverity) // 🟣
     .addRule('no-unsafe-type-assertion', OFF)
     .addRule('no-unsafe-unary-minus', ERROR) // 🟣
-    .addRule('only-throw-error', ERROR, [{allowRethrowing: true}]) // 🟣
-    .disableAnyRule('', 'no-throw-literal') // Note: has different name
-    .addRule('prefer-promise-reject-errors', ERROR) // 🟣
-    .disableAnyRule('', 'prefer-promise-reject-errors') // 🟣
     .addRule('prefer-reduce-type-parameter', ERROR) // 🟣
     .addRule('prefer-return-this-type', ERROR) // 🟣
-    .addRule('require-await', ERROR) // 🟣
-    .disableAnyRule('', 'require-await') // 🟣
     .addRule('restrict-plus-operands', ERROR) // 🟣
     .addRule('restrict-template-expressions', ERROR, [{allowAny: false, allowRegExp: false}]) // 🟣
     .addRule('unbound-method', ERROR) // 🟣
     .addRule('use-unknown-in-catch-callback-variable', ERROR) // 🟣
     /* Category: Stylistic */
-    .addRule('dot-notation', ERROR, [{allowIndexSignaturePropertyAccess: true}]) // 💅
-    .disableAnyRule('', 'dot-notation') // 💅
     .addRule('non-nullable-type-assertion-style', ERROR) // 💅
     .addRule('prefer-find', ERROR) // 💅
     .addRule('prefer-includes', ERROR) // 💅
@@ -484,9 +473,6 @@ export const tsUnConfig: UnConfigFn<
     .addRule('consistent-type-exports', ERROR, [{fixMixedExportsWithInlineTypeSpecifier: true}])
     .addRule('naming-convention', OFF) // ❄️
     .addRule('no-unnecessary-qualifier', OFF)
-    .addRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS)
-    .disableAnyRule('', 'prefer-destructuring')
-    .disableAnyRule('unicorn', 'prefer-array-find')
     .addRule('prefer-readonly', ERROR)
     .addRule('prefer-readonly-parameter-types', OFF)
     .addRule('promise-function-async', OFF)
@@ -497,6 +483,22 @@ export const tsUnConfig: UnConfigFn<
     .disableAnyRule('', 'no-return-await') // 🟣
     .addRule('strict-boolean-expressions', OFF)
     .addRule('switch-exhaustiveness-check', ERROR)
+    /* Category: Extension rules */
+    .addRule('consistent-return', ERROR)
+    .disableAnyRule('', 'consistent-return')
+    .addRule('dot-notation', ERROR, [{allowIndexSignaturePropertyAccess: true}]) // 💅
+    .disableAnyRule('', 'dot-notation') // 💅
+    .addRule('no-implied-eval', ERROR) // 🟣
+    .disableAnyRule('', 'no-implied-eval') // 🟣
+    .addRule('only-throw-error', ERROR, [{allowRethrowing: true}]) // 🟣
+    .disableAnyRule('', 'no-throw-literal') // Note: has different name
+    .addRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS)
+    .disableAnyRule('', 'prefer-destructuring')
+    .disableAnyRule('unicorn', 'prefer-array-find')
+    .addRule('prefer-promise-reject-errors', ERROR) // 🟣
+    .disableAnyRule('', 'prefer-promise-reject-errors') // 🟣
+    .addRule('require-await', ERROR) // 🟣
+    .disableAnyRule('', 'require-await') // 🟣
     .addOverrides();
 
   // TODO add rules
