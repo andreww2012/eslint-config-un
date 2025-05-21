@@ -223,6 +223,9 @@ export const eslintConfigInternal = async (
 
   const jsEslintConfigResult =
     isJsEnabled && (await import('./configs/js').then((m) => m.jsUnConfig(context)));
+  const vanillaFinalFlatConfigRules =
+    // eslint-disable-next-line ts/no-unnecessary-condition -- TODO report?
+    (jsEslintConfigResult && jsEslintConfigResult.finalFlatConfigRules) || {};
   const [
     angularEslintConfigResult,
     astroEslintConfigResult,
@@ -232,13 +235,7 @@ export const eslintConfigInternal = async (
     isAngularEnabled && import('./configs/angular').then((m) => m.angularUnConfig(context)),
     isAstroEnabled && import('./configs/astro').then((m) => m.astroUnConfig(context)),
     isVueEnabled &&
-      import('./configs/vue').then((m) =>
-        m.vueUnConfig(context, {
-          vanillaFinalFlatConfigRules:
-            // eslint-disable-next-line ts/no-unnecessary-condition -- TODO report?
-            (jsEslintConfigResult && jsEslintConfigResult.finalFlatConfigRules) || {},
-        }),
-      ),
+      import('./configs/vue').then((m) => m.vueUnConfig(context, {vanillaFinalFlatConfigRules})),
     isSvelteEnabled && import('./configs/svelte').then((m) => m.svelteUnConfig(context)),
   ]);
 
@@ -347,6 +344,7 @@ export const eslintConfigInternal = async (
     isTypescriptEnabled &&
       import('./configs/ts').then((m) =>
         m.tsUnConfig(context, {
+          vanillaFinalFlatConfigRules,
           astroResolvedOptions: astroEslintConfigResult
             ? astroEslintConfigResult.optionsResolved
             : null,

@@ -1,14 +1,16 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import type Eslint from 'eslint';
 import {ERROR, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, GLOB_TSX, OFF, WARNING} from '../constants';
-import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, interopDefault} from '../utils';
-import type {AstroEslintConfigOptions} from './astro';
 import {
-  RULE_NO_UNUSED_EXPRESSIONS_OPTIONS,
-  RULE_NO_USE_BEFORE_DEFINE_OPTIONS,
-  RULE_PREFER_DESTRUCTURING_OPTIONS,
-} from './js';
+  type GetRuleOptions,
+  type RulesRecord,
+  type RulesRecordPartial,
+  type UnConfigOptions,
+  createConfigBuilder,
+  getRuleUnSeverityAndOptionsFromEntry,
+} from '../eslint';
+import {assignDefaults, interopDefault, omit} from '../utils';
+import type {AstroEslintConfigOptions} from './astro';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
 import type {UnConfigFn} from './index';
@@ -101,6 +103,12 @@ export interface TsEslintConfigOptions
   configNoTypeAssertion?: boolean | UnConfigOptions<'no-type-assertion'>;
 
   /**
+   * TODO
+   * @default true
+   */
+  inheritBaseRuleSeverityAndOptionsForExtensionRules?: boolean;
+
+  /**
    * By default it will be auto-detected from the installed `typescript` package.
    * It will contain major and minor version numbers, e.g. even if you installed
    * TypeScript 5.8.1, `typescriptVersion` will be `5.8`.
@@ -138,12 +146,16 @@ export const tsUnConfig: UnConfigFn<
   unknown,
   [
     {
+      vanillaFinalFlatConfigRules: Partial<RulesRecord>;
       astroResolvedOptions: AstroEslintConfigOptions | null;
       vueResolvedOptions: VueEslintConfigOptions | null;
       svelteResolvedOptions: SvelteEslintConfigOptions | null;
     },
   ]
-> = async (context, {astroResolvedOptions, vueResolvedOptions, svelteResolvedOptions}) => {
+> = async (
+  context,
+  {vanillaFinalFlatConfigRules, astroResolvedOptions, vueResolvedOptions, svelteResolvedOptions},
+) => {
   const {parser: typescriptEslintParser} = await interopDefault(import('typescript-eslint'));
 
   const typescriptPackageInfo = context.packagesInfo.typescript;
@@ -157,10 +169,16 @@ export const tsUnConfig: UnConfigFn<
       context.configsMeta.astro.enabled && 'astro',
       context.configsMeta.svelte.enabled && 'svelte',
     ].filter((v) => v !== false),
+    inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
   } satisfies TsEslintConfigOptions);
   optionsResolved.typescriptVersion ??= typescriptPackageInfo?.versions.majorAndMinor ?? undefined;
-  const {configTypeAware, configNoTypeAssertion, extraFileExtensions, typescriptVersion} =
-    optionsResolved;
+  const {
+    configTypeAware,
+    configNoTypeAssertion,
+    extraFileExtensions,
+    inheritBaseRuleSeverityAndOptionsForExtensionRules: inheritFromBase,
+    typescriptVersion,
+  } = optionsResolved;
 
   const extraFilesNONTypeAware: string[] = [];
   const extraFilesTypeAware: string[] = [];
@@ -276,6 +294,68 @@ export const tsUnConfig: UnConfigFn<
 
   const noUnsafeRulesSeverity = optionsResolved.disableNoUnsafeRules ? OFF : WARNING;
 
+  const classMethodUseThisOptions: GetRuleOptions<'@typescript-eslint', 'class-methods-use-this'> =
+    [
+      {
+        ignoreOverrideMethods: true,
+        ignoreClassesThatImplementAnInterface: true,
+      },
+    ];
+  const classMethodUseThisUnEntry = getRuleUnSeverityAndOptionsFromEntry(
+    vanillaFinalFlatConfigRules['class-methods-use-this'] ?? ERROR,
+    inheritFromBase ? undefined : [ERROR, classMethodUseThisOptions],
+  );
+  classMethodUseThisUnEntry[1][0] = {
+    ...omit(classMethodUseThisUnEntry[1][0] || {}, ['ignoreClassesWithImplements']),
+    ...classMethodUseThisOptions[0],
+  } satisfies GetRuleOptions<'@typescript-eslint', 'class-methods-use-this'>[0] & {};
+
+  const maxParamsBaseUnEntry = getRuleUnSeverityAndOptionsFromEntry(
+    vanillaFinalFlatConfigRules['max-params'] ?? OFF,
+    inheritFromBase ? undefined : [OFF],
+  );
+  const maxParamsOptions: GetRuleOptions<'@typescript-eslint', 'max-params'> =
+    maxParamsBaseUnEntry[1][0] == null
+      ? []
+      : [
+          {
+            ...(typeof maxParamsBaseUnEntry[1][0] === 'object'
+              ? {
+                  ...omit(maxParamsBaseUnEntry[1][0], ['maximum']),
+                  ...(() => {
+                    const max =
+                      maxParamsBaseUnEntry[1][0].maximum ?? maxParamsBaseUnEntry[1][0].max;
+                    return max != null && {max};
+                  })(),
+                }
+              : {max: maxParamsBaseUnEntry[1][0]}),
+          },
+        ];
+
+  const noEmptyFunctionBaseUnEntry = getRuleUnSeverityAndOptionsFromEntry(
+    vanillaFinalFlatConfigRules['no-empty-function'] ?? ERROR,
+    inheritFromBase ? undefined : [ERROR],
+  );
+  const noEmptyFunctionOptions: GetRuleOptions<'@typescript-eslint', 'no-empty-function'> =
+    noEmptyFunctionBaseUnEntry[1][0]?.allow?.length
+      ? [
+          {
+            allow: (() => {
+              const allowBase = noEmptyFunctionBaseUnEntry[1][0].allow;
+              const hasPrivateConstructors = allowBase.includes('privateConstructors');
+              const hasProtectedConstructors = allowBase.includes('protectedConstructors');
+              return [
+                ...allowBase.filter(
+                  (v) => v !== 'privateConstructors' && v !== 'protectedConstructors',
+                ),
+                ...(hasPrivateConstructors ? (['private-constructors'] as const) : []),
+                ...(hasProtectedConstructors ? (['protected-constructors'] as const) : []),
+              ];
+            })(),
+          },
+        ]
+      : [];
+
   // Legend:
   // 🟣 - in strict
   // 💅 - in stylistic
@@ -346,48 +426,141 @@ export const tsUnConfig: UnConfigFn<
     .addRule('prefer-enum-initializers', OFF)
     .addRule('typedef', OFF)
     /* Category: Extension rules */
-    .addRule('class-methods-use-this', ERROR, [
-      {ignoreOverrideMethods: true, ignoreClassesThatImplementAnInterface: true},
-    ])
+    .addRule('class-methods-use-this', ...classMethodUseThisUnEntry)
     .disableAnyRule('', 'class-methods-use-this')
-    .addRule('default-param-last', ERROR)
+    .addRule(
+      'default-param-last',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['default-param-last'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .disableAnyRule('', 'default-param-last')
-    .addRule('init-declarations', OFF)
+    .addRule(
+      'init-declarations',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['init-declarations'] ?? OFF,
+        inheritFromBase ? undefined : [OFF],
+      ),
+    )
     .disableAnyRule('', 'init-declarations')
-    .addRule('max-params', OFF)
+    .addRule('max-params', maxParamsBaseUnEntry[0], maxParamsOptions)
     .disableAnyRule('', 'max-params')
-    .addRule('no-array-constructor', ERROR) // 🟣
+    .addRule(
+      'no-array-constructor',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-array-constructor'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    ) // 🟣
     .disableAnyRule('', 'no-array-constructor') // 🟣
-    .addRule('no-dupe-class-members', OFF) // 👍
+    .addRule(
+      'no-dupe-class-members',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-dupe-class-members'] ?? OFF,
+        inheritFromBase ? undefined : [OFF],
+      ),
+    ) // 👍
     .disableAnyRule('', 'no-dupe-class-members') // 🟣
-    .addRule('no-empty-function', ERROR) // 💅
+    .addRule('no-empty-function', noEmptyFunctionBaseUnEntry[0], noEmptyFunctionOptions) // 💅
     .disableAnyRule('', 'no-empty-function') // 💅
-    .addRule('no-invalid-this', OFF) // 👍
+    .addRule(
+      'no-invalid-this',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-invalid-this'] ?? OFF,
+        inheritFromBase ? undefined : [OFF],
+      ),
+    ) // 👍
     .disableAnyRule('', 'no-invalid-this')
-    .addRule('no-loop-func', ERROR)
+    .addRule(
+      'no-loop-func',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-loop-func'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .disableAnyRule('', 'no-loop-func')
-    .addRule('no-magic-numbers', OFF)
+    .addRule(
+      'no-magic-numbers',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-magic-numbers'] ?? OFF,
+        inheritFromBase ? undefined : [OFF],
+      ),
+    )
     .disableAnyRule('', 'no-magic-numbers')
-    .addRule('no-redeclare', OFF) // 👍
+    .addRule(
+      'no-redeclare',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-redeclare'] ?? OFF,
+        inheritFromBase ? undefined : [OFF],
+      ),
+    ) // 👍
     .disableAnyRule('', 'no-redeclare')
-    .addRule('no-restricted-imports', OFF)
+    .addRule(
+      'no-restricted-imports',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-restricted-imports'] ?? OFF,
+        inheritFromBase ? undefined : [OFF],
+      ),
+    )
     .disableAnyRule('', 'no-restricted-imports')
-    .addRule('no-shadow', ERROR)
+    .addRule(
+      'no-shadow',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-shadow'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .disableAnyRule('', 'no-shadow')
-    .addRule('no-unused-expressions', ERROR, RULE_NO_UNUSED_EXPRESSIONS_OPTIONS) // 🟣
+    .addRule(
+      'no-unused-expressions',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-unused-expressions'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    ) // 🟣
     .disableAnyRule('', 'no-unused-expressions') // 🟣
-    .addRule('no-unused-vars', ERROR, [{ignoreRestSiblings: true}]) // 🟣
+    .addRule(
+      'no-unused-vars',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-unused-vars'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    ) // 🟣
     .disableAnyRule('', 'no-unused-vars') // 🟣
-    /* Category: Disable conflicting rules */
-    .disableAnyRule('', 'no-useless-constructor')
-    .disableAnyRule('', 'dot-notation')
-    .addRule('no-use-before-define', ERROR, RULE_NO_USE_BEFORE_DEFINE_OPTIONS)
+    .addRule(
+      'no-use-before-define',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-use-before-define'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .disableAnyRule('', 'no-use-before-define')
-    .addRule('no-useless-constructor', ERROR) // 🟣
+    .addRule(
+      'no-useless-constructor',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-useless-constructor'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    ) // 🟣
     .disableAnyRule('', 'no-useless-constructor') // 🟣
     .addOverrides();
 
   // CONFIG TYPE AWARE
+
+  const dotNotationBaseUnEntry = getRuleUnSeverityAndOptionsFromEntry(
+    vanillaFinalFlatConfigRules['dot-notation'] ?? ERROR,
+    inheritFromBase ? undefined : [ERROR],
+  );
+  const dotNotationOptions: GetRuleOptions<'@typescript-eslint', 'dot-notation'> =
+    dotNotationBaseUnEntry[1][0] == null
+      ? []
+      : [
+          {
+            ...dotNotationBaseUnEntry[1][0],
+            allowIndexSignaturePropertyAccess: true,
+          },
+        ];
 
   const configBuilderTypeAwareSetup = generateSetupConfigBuilder(
     filesTypeAware,
@@ -484,20 +657,57 @@ export const tsUnConfig: UnConfigFn<
     .addRule('strict-boolean-expressions', OFF)
     .addRule('switch-exhaustiveness-check', ERROR)
     /* Category: Extension rules */
-    .addRule('consistent-return', ERROR)
+    .addRule(
+      'consistent-return',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['consistent-return'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .disableAnyRule('', 'consistent-return')
-    .addRule('dot-notation', ERROR, [{allowIndexSignaturePropertyAccess: true}]) // 💅
+    .addRule('dot-notation', dotNotationBaseUnEntry[0], dotNotationOptions) // 💅
     .disableAnyRule('', 'dot-notation') // 💅
-    .addRule('no-implied-eval', ERROR) // 🟣
+    .addRule(
+      'no-implied-eval',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-implied-eval'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    ) // 🟣
     .disableAnyRule('', 'no-implied-eval') // 🟣
-    .addRule('only-throw-error', ERROR, [{allowRethrowing: true}]) // 🟣
+    .addRule(
+      'only-throw-error',
+      getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-throw-literal'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      )[0],
+      [{allowRethrowing: true}], // the base rule has no options
+    ) // 🟣
     .disableAnyRule('', 'no-throw-literal') // Note: has different name
-    .addRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS)
+    .addRule(
+      'prefer-destructuring',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['prefer-destructuring'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .disableAnyRule('', 'prefer-destructuring')
-    .disableAnyRule('unicorn', 'prefer-array-find')
-    .addRule('prefer-promise-reject-errors', ERROR) // 🟣
+    .disableAnyRule('unicorn', 'prefer-array-find') // TODO why it's here?
+    .addRule(
+      'prefer-promise-reject-errors',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['prefer-promise-reject-errors'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    ) // 🟣
     .disableAnyRule('', 'prefer-promise-reject-errors') // 🟣
-    .addRule('require-await', ERROR) // 🟣
+    .addRule(
+      'require-await',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['require-await'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    ) // 🟣
     .disableAnyRule('', 'require-await') // 🟣
     .addOverrides();
 

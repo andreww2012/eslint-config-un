@@ -1,7 +1,6 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import {
   type BuiltinEslintRulesFixed,
-  type GetRuleOptions,
   type RulesRecord,
   type UnConfigOptions,
   createConfigBuilder,
@@ -10,31 +9,6 @@ import {assignDefaults, fetchPackageInfo} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface JsEslintConfigOptions extends UnConfigOptions<BuiltinEslintRulesFixed> {}
-
-export const RULE_NO_UNUSED_EXPRESSIONS_OPTIONS: GetRuleOptions<'', 'no-unused-expressions'> = [
-  {
-    allowShortCircuit: true,
-    allowTernary: true,
-    allowTaggedTemplates: true,
-  },
-];
-export const RULE_NO_USE_BEFORE_DEFINE_OPTIONS: GetRuleOptions<'', 'no-use-before-define'> = [
-  {
-    functions: false,
-  },
-];
-export const RULE_PREFER_DESTRUCTURING_OPTIONS: GetRuleOptions<'', 'prefer-destructuring'> = [
-  {
-    VariableDeclarator: {
-      array: false,
-      object: true,
-    },
-    AssignmentExpression: {
-      array: false,
-      object: false,
-    },
-  },
-];
 
 export const jsUnConfig: UnConfigFn<
   'js',
@@ -106,8 +80,8 @@ export const jsUnConfig: UnConfigFn<
     .addRule('no-unsafe-negation', ERROR) // 🟢
     .addRule('no-unsafe-optional-chaining', ERROR) // 🟢
     .addRule('no-unused-private-class-members', ERROR) // 🟢
-    .addRule('no-unused-vars', ERROR) // 🟢
-    .addRule('no-use-before-define', ERROR, RULE_NO_USE_BEFORE_DEFINE_OPTIONS)
+    .addRule('no-unused-vars', ERROR, [{ignoreRestSiblings: true}]) // 🟢
+    .addRule('no-use-before-define', ERROR, [{functions: false}])
     .addRule('no-useless-assignment', ERROR)
     .addRule('no-useless-backreference', ERROR) // 🟢
     .addRule('require-atomic-updates', ERROR, [{allowProperties: true}])
@@ -244,7 +218,13 @@ export const jsUnConfig: UnConfigFn<
       },
     ])
     .addRule('no-unneeded-ternary', ERROR, [{defaultAssignment: false}])
-    .addRule('no-unused-expressions', ERROR, RULE_NO_UNUSED_EXPRESSIONS_OPTIONS)
+    .addRule('no-unused-expressions', ERROR, [
+      {
+        allowShortCircuit: true,
+        allowTernary: true,
+        allowTaggedTemplates: true,
+      },
+    ])
     .addRule('no-useless-call', ERROR)
     .addRule('no-useless-computed-key', ERROR)
     .addRule('no-useless-concat', ERROR)
@@ -259,7 +239,12 @@ export const jsUnConfig: UnConfigFn<
     .addRule('operator-assignment', ERROR)
     .addRule('prefer-arrow-callback', ERROR, [{allowNamedFunctions: false, allowUnboundThis: true}])
     .addRule('prefer-const', ERROR, [{destructuring: 'all', ignoreReadBeforeAssign: true}])
-    .addRule('prefer-destructuring', ERROR, RULE_PREFER_DESTRUCTURING_OPTIONS)
+    .addRule('prefer-destructuring', ERROR, [
+      {
+        VariableDeclarator: {array: false, object: true},
+        AssignmentExpression: {array: false, object: false},
+      },
+    ])
     .addRule('prefer-exponentiation-operator', ERROR)
     .addRule('prefer-named-capture-group', OFF)
     .addRule('prefer-numeric-literals', ERROR)
