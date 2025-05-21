@@ -268,10 +268,30 @@ export const tsUnConfig: UnConfigFn<
           } satisfies TsEslintParserOptions,
         },
       })
-      .disableAnyRule('', 'no-unused-vars')
-      .disableAnyRule('', 'no-use-before-define')
+      .disableAnyRule('', 'class-methods-use-this')
+      .disableAnyRule('', 'default-param-last')
+      .disableAnyRule('', 'init-declarations')
+      .disableAnyRule('', 'max-params')
+      .disableAnyRule('', 'no-array-constructor') // 🟣
+      .disableAnyRule('', 'no-dupe-class-members') // 🟣
+      .disableAnyRule('', 'no-empty-function') // 💅
+      .disableAnyRule('', 'no-invalid-this')
+      .disableAnyRule('', 'no-loop-func')
+      .disableAnyRule('', 'no-magic-numbers')
+      .disableAnyRule('', 'no-redeclare')
+      .disableAnyRule('', 'no-restricted-imports')
       .disableAnyRule('', 'no-shadow')
-      .disableAnyRule('', 'no-redeclare');
+      .disableAnyRule('', 'no-unused-expressions') // 🟣
+      .disableAnyRule('', 'no-unused-vars') // 🟣
+      .disableAnyRule('', 'no-use-before-define')
+      .disableAnyRule('', 'no-useless-constructor') // 🟣
+      .disableAnyRule('', 'consistent-return')
+      .disableAnyRule('', 'dot-notation') // 💅
+      .disableAnyRule('', 'no-implied-eval') // 🟣
+      .disableAnyRule('', 'no-throw-literal') // Note: has different name
+      .disableAnyRule('', 'prefer-destructuring')
+      .disableAnyRule('', 'prefer-promise-reject-errors') // 🟣
+      .disableAnyRule('', 'require-await'); // 🟣
 
     return configBuilderSetup;
   };
@@ -427,7 +447,6 @@ export const tsUnConfig: UnConfigFn<
     .addRule('typedef', OFF)
     /* Category: Extension rules */
     .addRule('class-methods-use-this', ...classMethodUseThisUnEntry)
-    .disableAnyRule('', 'class-methods-use-this')
     .addRule(
       'default-param-last',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -435,7 +454,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .disableAnyRule('', 'default-param-last')
     .addRule(
       'init-declarations',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -443,9 +461,7 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [OFF],
       ),
     )
-    .disableAnyRule('', 'init-declarations')
     .addRule('max-params', maxParamsBaseUnEntry[0], maxParamsOptions)
-    .disableAnyRule('', 'max-params')
     .addRule(
       'no-array-constructor',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -453,7 +469,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) // 🟣
-    .disableAnyRule('', 'no-array-constructor') // 🟣
     .addRule(
       'no-dupe-class-members',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -461,9 +476,7 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [OFF],
       ),
     ) // 👍
-    .disableAnyRule('', 'no-dupe-class-members') // 🟣
     .addRule('no-empty-function', noEmptyFunctionBaseUnEntry[0], noEmptyFunctionOptions) // 💅
-    .disableAnyRule('', 'no-empty-function') // 💅
     .addRule(
       'no-invalid-this',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -471,7 +484,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [OFF],
       ),
     ) // 👍
-    .disableAnyRule('', 'no-invalid-this')
     .addRule(
       'no-loop-func',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -479,7 +491,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .disableAnyRule('', 'no-loop-func')
     .addRule(
       'no-magic-numbers',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -487,7 +498,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [OFF],
       ),
     )
-    .disableAnyRule('', 'no-magic-numbers')
     .addRule(
       'no-redeclare',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -495,7 +505,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [OFF],
       ),
     ) // 👍
-    .disableAnyRule('', 'no-redeclare')
     .addRule(
       'no-restricted-imports',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -503,7 +512,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [OFF],
       ),
     )
-    .disableAnyRule('', 'no-restricted-imports')
     .addRule(
       'no-shadow',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -511,7 +519,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .disableAnyRule('', 'no-shadow')
     .addRule(
       'no-unused-expressions',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -519,7 +526,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) // 🟣
-    .disableAnyRule('', 'no-unused-expressions') // 🟣
     .addRule(
       'no-unused-vars',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -527,7 +533,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) // 🟣
-    .disableAnyRule('', 'no-unused-vars') // 🟣
     .addRule(
       'no-use-before-define',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -535,7 +540,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .disableAnyRule('', 'no-use-before-define')
     .addRule(
       'no-useless-constructor',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -543,7 +547,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) // 🟣
-    .disableAnyRule('', 'no-useless-constructor') // 🟣
     .addOverrides();
 
   // CONFIG TYPE AWARE
@@ -664,9 +667,7 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .disableAnyRule('', 'consistent-return')
     .addRule('dot-notation', dotNotationBaseUnEntry[0], dotNotationOptions) // 💅
-    .disableAnyRule('', 'dot-notation') // 💅
     .addRule(
       'no-implied-eval',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -674,7 +675,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) // 🟣
-    .disableAnyRule('', 'no-implied-eval') // 🟣
     .addRule(
       'only-throw-error',
       getRuleUnSeverityAndOptionsFromEntry(
@@ -683,7 +683,6 @@ export const tsUnConfig: UnConfigFn<
       )[0],
       [{allowRethrowing: true}], // the base rule has no options
     ) // 🟣
-    .disableAnyRule('', 'no-throw-literal') // Note: has different name
     .addRule(
       'prefer-destructuring',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -691,7 +690,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .disableAnyRule('', 'prefer-destructuring')
     .disableAnyRule('unicorn', 'prefer-array-find') // TODO why it's here?
     .addRule(
       'prefer-promise-reject-errors',
@@ -700,7 +698,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) // 🟣
-    .disableAnyRule('', 'prefer-promise-reject-errors') // 🟣
     .addRule(
       'require-await',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -708,7 +705,6 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) // 🟣
-    .disableAnyRule('', 'require-await') // 🟣
     .addOverrides();
 
   // TODO add rules
