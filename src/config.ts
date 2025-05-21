@@ -165,7 +165,7 @@ export const eslintConfigInternal = async (
     rootOptions: {
       ...optionsResolved,
       disableAutofixMethod: {
-        default: 'plugin-copy',
+        default: 'unprefixed',
         ...optionsResolved.disableAutofixMethod,
       },
     },
@@ -405,30 +405,29 @@ export const eslintConfigInternal = async (
   const disabledAutofixesList = objectEntriesUnsafe(context.disabledAutofixes);
   const defaultDisableAutofixMethod = context.rootOptions.disableAutofixMethod.default;
   const [
-    disableAutofixPluginsWithPluginCopyMethod = [],
-    disableAutofixPluginsWithRulesCopyMethod = [],
-  ] = (['plugin-copy', 'rules-copy'] satisfies DisableAutofixMethod[]).map(
-    (autofixDisablingMethod) =>
-      disabledAutofixesList
-        .map(([pluginPrefix, rules = []]) => {
-          const defaultMethodForPlugin =
-            context.rootOptions.disableAutofixMethod[pluginPrefix] ?? defaultDisableAutofixMethod;
-          const ruleNames: string[] = rules.map((entry) =>
-            typeof entry === 'object' ? entry.ruleName : entry,
-          );
-          const hasRules = rules.some((entry) => {
-            const method = typeof entry === 'object' ? entry.method : defaultMethodForPlugin;
-            return method === autofixDisablingMethod;
-          });
-          if (!hasRules) {
-            return null;
-          }
-          return {
-            pluginPrefix,
-            ruleNames,
-          };
-        })
-        .filter((v) => v != null),
+    disableAutofixPluginsWithUnprefixedMethod = [],
+    disableAutofixPluginsWithPrefixedMethod = [],
+  ] = (['unprefixed', 'prefixed'] satisfies DisableAutofixMethod[]).map((autofixDisablingMethod) =>
+    disabledAutofixesList
+      .map(([pluginPrefix, rules = []]) => {
+        const defaultMethodForPlugin =
+          context.rootOptions.disableAutofixMethod[pluginPrefix] ?? defaultDisableAutofixMethod;
+        const ruleNames: string[] = rules.map((entry) =>
+          typeof entry === 'object' ? entry.ruleName : entry,
+        );
+        const hasRules = rules.some((entry) => {
+          const method = typeof entry === 'object' ? entry.method : defaultMethodForPlugin;
+          return method === autofixDisablingMethod;
+        });
+        if (!hasRules) {
+          return null;
+        }
+        return {
+          pluginPrefix,
+          ruleNames,
+        };
+      })
+      .filter((v) => v != null),
   );
   const usedPluginPrefixes: readonly PluginPrefix[] = loadPluginsOnDemand
     ? [...context.usedPlugins]
@@ -465,10 +464,10 @@ export const eslintConfigInternal = async (
     }).reduce<EslintPlugin['rules'] & {}>((res, [pluginPrefixCanonical, plugin]) => {
       if (
         plugin &&
-        (disableAutofixPluginsWithRulesCopyMethod.some(
+        (disableAutofixPluginsWithPrefixedMethod.some(
           (v) => v.pluginPrefix === pluginPrefixCanonical,
         ) ||
-          (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'rules-copy'))
+          (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'prefixed'))
       ) {
         const pluginPrefix =
           pluginPrefixCanonical === ''
@@ -491,12 +490,12 @@ export const eslintConfigInternal = async (
                 ? ''
                 : context.rootOptions.pluginRenames?.[pluginPrefixCanonical] ||
                   pluginPrefixCanonical;
-            const rulesInfo = disableAutofixPluginsWithPluginCopyMethod.find(
+            const rulesInfo = disableAutofixPluginsWithUnprefixedMethod.find(
               (v) => v.pluginPrefix === pluginPrefixCanonical,
             );
             if (
               plugin &&
-              (rulesInfo || (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'plugin-copy'))
+              (rulesInfo || (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'unprefixed'))
             ) {
               return [
                 pluginPrefix,

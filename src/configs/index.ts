@@ -116,23 +116,23 @@ export interface EslintConfigUnOptions {
 
   /**
    * Defines a method of disabling autofix of plugins' fixable rules:
-   * - `plugin-copy`: will deeply copy the plugin and disable autofixes of all or specified rules.
+   * - `unprefixed`: will deeply copy the plugin and disable autofixes of all or specified rules.
    * This allows to disable autofix without changing the full rule name you won't be able
    * to re-enable autofix on per file basis.
-   * - `rules-copy`: will create a plugin with `disable-autofix` prefix and copy the rules into it.
+   * - `prefixed`: will create a plugin with `disable-autofix` prefix and copy the rules into it.
    * Rules with disabled autofixes will have names starting with `disable-autofix/`.
    *
    * Empty key is a plugin with core ESLint rules.
    *
    * `default` specifies a default disabling method for all plugins.
-   * @default {default: 'plugin-copy'}
+   * @default {default: 'unprefixed'}
    */
   disableAutofixMethod?: PrettifyShallow<
     Partial<Record<'default' | PluginPrefix, DisableAutofixMethod>>
   >;
 }
 
-export type DisableAutofixMethod = 'plugin-copy' | 'rules-copy';
+export type DisableAutofixMethod = 'unprefixed' | 'prefixed';
 
 interface UnConfigs {
   /**

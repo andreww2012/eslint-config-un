@@ -128,7 +128,7 @@ export type UnConfigOptionsOverrides<T extends Record<string, unknown>> = {
          * of files *without* the `disable-autofix` prefix in the rule name.
          *
          * If you set this to `true`, the autofix method is going to be the one resulting from
-         * `disableAutofixMethod` root option, and if it is `plugin-copy` (create a copy of
+         * `disableAutofixMethod` root option, and if it is `unprefixed` (create a copy of
          * the plugin and disable autofix for the specified rules), autofix for this rule
          * will be disabled for **all** files.
          */
@@ -276,7 +276,7 @@ export const resolveOverrides = (
               ? ruleEntryRaw.disableAutofix
               : (context.rootOptions.disableAutofixMethod[pluginPrefix] ??
                 context.rootOptions.disableAutofixMethod.default);
-          if (disableAutofixMethod === 'rules-copy') {
+          if (disableAutofixMethod === 'prefixed') {
             result.push([ruleName, OFF]);
             ruleName = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`;
           }
@@ -458,7 +458,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
             ? options.disableAutofix
             : (this.context.rootOptions.disableAutofixMethod[prefix] ??
               this.context.rootOptions.disableAutofixMethod.default);
-        if (disableAutofixMethod === 'rules-copy') {
+        if (disableAutofixMethod === 'prefixed') {
           configFinal.rules[ruleNameFinal] = OFF;
           ruleNameFinal = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameFinal}`;
         }
