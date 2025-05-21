@@ -310,6 +310,22 @@ export const resolveOverrides = (
   );
 };
 
+export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
+  entry: Eslint.Linter.RuleEntry<Options>,
+  severityOrOptionsOverride?: [RuleSeverity?, Options?],
+): [severity: RuleSeverity, options: Options | []] => {
+  const severityRaw = Array.isArray(entry) ? entry[0] : entry;
+  const severity =
+    severityOrOptionsOverride?.[0] ??
+    ((typeof severityRaw === 'string'
+      ? STRING_SEVERITY_TO_NUMERIC[severityRaw]
+      : severityRaw) as RuleSeverity);
+  return [
+    severity,
+    severityOrOptionsOverride?.[1] ?? (Array.isArray(entry) ? (entry.slice(1) as Options) : []),
+  ];
+};
+
 // eslint-disable-next-line ts/no-explicit-any
 export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any> {
   private readonly pluginPrefix: DefaultPrefix;

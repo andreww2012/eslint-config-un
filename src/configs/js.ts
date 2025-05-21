@@ -2,6 +2,7 @@ import {ERROR, OFF, WARNING} from '../constants';
 import {
   type BuiltinEslintRulesFixed,
   type GetRuleOptions,
+  type RulesRecord,
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
@@ -10,14 +11,6 @@ import type {UnConfigFn} from './index';
 
 export interface JsEslintConfigOptions extends UnConfigOptions<BuiltinEslintRulesFixed> {}
 
-export const RULE_CAMELCASE_OPTIONS: GetRuleOptions<'', 'camelcase'> = [
-  {
-    properties: 'never' as const,
-    ignoreGlobals: true,
-    allow: [String.raw`\d_\d`],
-  },
-];
-export const RULE_EQEQEQ_OPTIONS: GetRuleOptions<'', 'eqeqeq'> = ['always', {null: 'ignore'}];
 export const RULE_NO_UNUSED_EXPRESSIONS_OPTIONS: GetRuleOptions<'', 'no-unused-expressions'> = [
   {
     allowShortCircuit: true,
@@ -43,7 +36,12 @@ export const RULE_PREFER_DESTRUCTURING_OPTIONS: GetRuleOptions<'', 'prefer-destr
   },
 ];
 
-export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
+export const jsUnConfig: UnConfigFn<
+  'js',
+  {
+    finalFlatConfigRules: Partial<RulesRecord>;
+  }
+> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.js;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsEslintConfigOptions);
 
@@ -54,7 +52,7 @@ export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
   // Legend:
   // 🟢 - in recommended
 
-  configBuilder
+  const config = configBuilder
     ?.addConfig(['js', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
     /* Category: Possible Problems */
     .addRule('array-callback-return', ERROR, [{checkForEach: true}])
@@ -119,7 +117,13 @@ export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
     .addRule('accessor-pairs', ERROR)
     .addRule('arrow-body-style', OFF)
     .addRule('block-scoped-var', ERROR)
-    .addRule('camelcase', ERROR, RULE_CAMELCASE_OPTIONS)
+    .addRule('camelcase', ERROR, [
+      {
+        properties: 'never' as const,
+        ignoreGlobals: true,
+        allow: [String.raw`\d_\d`],
+      },
+    ])
     .addRule('capitalized-comments', OFF)
     .addRule(
       'class-methods-use-this',
@@ -136,7 +140,7 @@ export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
     .addRule('default-case', ERROR)
     .addRule('default-param-last', ERROR)
     .addRule('dot-notation', ERROR)
-    .addRule('eqeqeq', ERROR, RULE_EQEQEQ_OPTIONS)
+    .addRule('eqeqeq', ERROR, ['always', {null: 'ignore'}])
     .addRule('func-name-matching', ERROR, [{considerPropertyDescriptor: true}])
     .addRule('func-names', OFF)
     .addRule('func-style', OFF)
@@ -294,5 +298,6 @@ export const jsUnConfig: UnConfigFn<'js'> = async (context) => {
   return {
     configs: [configBuilder],
     optionsResolved,
+    finalFlatConfigRules: config?.config.rules || {},
   };
 };

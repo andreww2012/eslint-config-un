@@ -221,6 +221,8 @@ export const eslintConfigInternal = async (
     usedPackageManager,
   };
 
+  const jsEslintConfigResult =
+    isJsEnabled && (await import('./configs/js').then((m) => m.jsUnConfig(context)));
   const [
     angularEslintConfigResult,
     astroEslintConfigResult,
@@ -229,7 +231,14 @@ export const eslintConfigInternal = async (
   ] = await Promise.all([
     isAngularEnabled && import('./configs/angular').then((m) => m.angularUnConfig(context)),
     isAstroEnabled && import('./configs/astro').then((m) => m.astroUnConfig(context)),
-    isVueEnabled && import('./configs/vue').then((m) => m.vueUnConfig(context)),
+    isVueEnabled &&
+      import('./configs/vue').then((m) =>
+        m.vueUnConfig(context, {
+          vanillaFinalFlatConfigRules:
+            // eslint-disable-next-line ts/no-unnecessary-condition -- TODO report?
+            (jsEslintConfigResult && jsEslintConfigResult.finalFlatConfigRules) || {},
+        }),
+      ),
     isSvelteEnabled && import('./configs/svelte').then((m) => m.svelteUnConfig(context)),
   ]);
 
@@ -285,7 +294,7 @@ export const eslintConfigInternal = async (
     },
 
     /* Enabled by default or conditionally */
-    isJsEnabled && import('./configs/js').then((m) => m.jsUnConfig(context)),
+    jsEslintConfigResult,
     isUnicornEnabled && import('./configs/unicorn').then((m) => m.unicornUnConfig(context)),
     isImportEnabled && import('./configs/import').then((m) => m.importUnConfig(context)),
     isNodeEnabled && import('./configs/node').then((m) => m.nodeUnConfig(context)),
@@ -348,10 +357,10 @@ export const eslintConfigInternal = async (
         }),
       ), // Must come after all rulesets for vanilla JS
     isEsEnabled && import('./configs/es').then((m) => m.esUnConfig(context)), // Must come after ts
-    vueEslintConfigResult && vueEslintConfigResult.configs, // Must come after ts
-    astroEslintConfigResult && astroEslintConfigResult.configs, // Must come after ts
-    angularEslintConfigResult && angularEslintConfigResult.configs, // Must come after ts
-    svelteEslintConfigResult && svelteEslintConfigResult.configs, // Must be after ts
+    vueEslintConfigResult, // Must come after ts
+    astroEslintConfigResult, // Must come after ts
+    angularEslintConfigResult, // Must come after ts
+    svelteEslintConfigResult, // Must be after ts
     isMarkdownEnabled && import('./configs/markdown').then((m) => m.markdownUnConfig(context)), // Must be last
 
     rootConfigBuilder,

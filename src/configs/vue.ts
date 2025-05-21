@@ -1,11 +1,13 @@
 import type Eslint from 'eslint';
 import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-vue-blocks';
 import globals from 'globals';
-import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, type RuleSeverity, WARNING} from '../constants';
+import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, type RuleSeverity} from '../constants';
 import {
   type FlatConfigEntryFilesOrIgnores,
+  type RulesRecord,
   type UnConfigOptions,
   createConfigBuilder,
+  getRuleUnSeverityAndOptionsFromEntry,
 } from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
@@ -17,7 +19,6 @@ import {
   interopDefault,
   joinPaths,
 } from '../utils';
-import {RULE_CAMELCASE_OPTIONS, RULE_EQEQEQ_OPTIONS} from './js';
 import type {UnConfigFn} from './index';
 
 type WellKnownSfcBlocks =
@@ -100,6 +101,23 @@ export interface VueEslintConfigOptions extends UnConfigOptions<'vue'> {
       >;
 
   /**
+   * Almost all [extension rules](https://eslint.vuejs.org/rules/#extension-rules)
+   * (with the exceptions listed below) will smartly inherit the corresponding
+   * base rule's severity and options. If you want to disable this behavior,
+   * set this option to `false`.
+   *
+   * ### Exceptions
+   * - [`no-console`](https://eslint.vuejs.org/rules/no-console.html): all `console` calls
+   * are forbidden within the template.
+   * - [`dot-notation`](https://eslint.vuejs.org/rules/dot-notation.html) will inherit
+   * severity and options unless `noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles`
+   * is set to `true`, in which case the rule will be turned off.
+   * - All "stylistic" rules are always turned off: [array-bracket-newline](https://eslint.vuejs.org/rules/array-bracket-newline.html), [array-bracket-spacing](https://eslint.vuejs.org/rules/array-bracket-spacing.html), [array-element-newline](https://eslint.vuejs.org/rules/array-element-newline.html), [arrow-spacing](https://eslint.vuejs.org/rules/arrow-spacing.html), [block-spacing](https://eslint.vuejs.org/rules/block-spacing.html), [brace-style](https://eslint.vuejs.org/rules/brace-style.html), [comma-dangle](https://eslint.vuejs.org/rules/comma-dangle.html), [comma-spacing](https://eslint.vuejs.org/rules/comma-spacing.html), [comma-style](https://eslint.vuejs.org/rules/comma-style.html), [dot-location](https://eslint.vuejs.org/rules/dot-location.html), [func-call-spacing](https://eslint.vuejs.org/rules/func-call-spacing.html), [key-spacing](https://eslint.vuejs.org/rules/key-spacing.html), [keyword-spacing](https://eslint.vuejs.org/rules/keyword-spacing.html), [max-len](https://eslint.vuejs.org/rules/max-len.html), [multiline-ternary](https://eslint.vuejs.org/rules/multiline-ternary.html), [no-extra-parens](https://eslint.vuejs.org/rules/no-extra-parens.html), [object-curly-newline](https://eslint.vuejs.org/rules/object-curly-newline.html), [object-curly-spacing](https://eslint.vuejs.org/rules/object-curly-spacing.html), [object-property-newline](https://eslint.vuejs.org/rules/object-property-newline.html), [operator-linebreak](https://eslint.vuejs.org/rules/operator-linebreak.html), [quote-props](https://eslint.vuejs.org/rules/quote-props.html), [space-in-parens](https://eslint.vuejs.org/rules/space-in-parens.html), [space-infix-ops](https://eslint.vuejs.org/rules/space-infix-ops.html), [space-unary-ops](https://eslint.vuejs.org/rules/space-unary-ops.html), [template-curly-spacing](https://eslint.vuejs.org/rules/template-curly-spacing.html)
+   * @default true
+   */
+  inheritBaseRuleSeverityAndOptionsForExtensionRules?: boolean;
+
+  /**
    * @see https://eslint.vuejs.org/rules/comment-directive#options
    */
   reportUnusedDisableDirectives?: boolean;
@@ -159,7 +177,11 @@ export interface VueEslintConfigOptions extends UnConfigOptions<'vue'> {
 
 const DEFAULT_VUE_FILES: string[] = [GLOB_VUE];
 
-export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
+export const vueUnConfig: UnConfigFn<
+  'vue',
+  unknown,
+  [data: {vanillaFinalFlatConfigRules: Partial<RulesRecord>}]
+> = async (context, {vanillaFinalFlatConfigRules}) => {
   const [
     {mergeProcessors: mergeEslintProcessors},
     eslintProcessorVueBlocks,
@@ -195,6 +217,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     processSfcBlocks: true,
     reportUnusedDisableDirectives: true,
     enforcePropsDeclarationStyle: 'runtime',
+    inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
   } satisfies VueEslintConfigOptions);
 
   const nuxtMajorVersion =
@@ -210,6 +233,7 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     sfcBlockOrder,
     enforceApiStyle,
     enforcePropsDeclarationStyle,
+    inheritBaseRuleSeverityAndOptionsForExtensionRules: inheritFromBase,
   } = optionsResolved;
 
   const vuePackageFullVersion = vuePackageInfo?.versions.majorAndMinor ?? vueMajorVersion;
@@ -580,36 +604,108 @@ export const vueUnConfig: UnConfigFn<'vue'> = async (context) => {
     .addRule('arrow-spacing', OFF)
     .addRule('block-spacing', OFF)
     .addRule('brace-style', OFF)
-    .addRule('camelcase', ERROR, RULE_CAMELCASE_OPTIONS)
+    .addRule(
+      'camelcase',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules.camelcase ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .addRule('comma-dangle', OFF)
     .addRule('comma-spacing', OFF)
     .addRule('comma-style', OFF)
     .addRule('dot-location', OFF)
     .addRule(
       'dot-notation',
-      optionsResolved.noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles ? OFF : ERROR,
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['dot-notation'] ?? ERROR,
+        [
+          optionsResolved.noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles ? OFF : ERROR,
+          inheritFromBase ? undefined : [],
+        ],
+      ),
     )
-    .addRule('eqeqeq', ERROR, RULE_EQEQEQ_OPTIONS)
+    .addRule(
+      'eqeqeq',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules.eqeqeq ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .addRule('func-call-spacing', OFF)
     .addRule('key-spacing', OFF)
     .addRule('keyword-spacing', OFF)
     .addRule('max-len', OFF)
     .addRule('multiline-ternary', OFF)
-    .addRule('no-console', ERROR)
-    .addRule('no-constant-condition', WARNING)
-    .addRule('no-empty-pattern', ERROR)
+    .addRule('no-console', ERROR) // Do not inherit severity and options
+    .addRule(
+      'no-constant-condition',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-constant-condition'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
+    .addRule(
+      'no-empty-pattern',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-empty-pattern'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .addRule('no-extra-parens', OFF)
-    .addRule('no-irregular-whitespace', ERROR)
-    .addRule('no-loss-of-precision', ERROR)
-    .addRule('no-restricted-syntax', OFF)
-    .addRule('no-sparse-arrays', ERROR)
-    .addRule('no-useless-concat', ERROR)
+    .addRule(
+      'no-irregular-whitespace',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-irregular-whitespace'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
+    .addRule(
+      'no-loss-of-precision',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-loss-of-precision'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
+    .addRule(
+      'no-restricted-syntax',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-restricted-syntax'] ?? OFF,
+        inheritFromBase ? undefined : [OFF],
+      ),
+    )
+    .addRule(
+      'no-sparse-arrays',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-sparse-arrays'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
+    .addRule(
+      'no-useless-concat',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-useless-concat'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .addRule('object-curly-newline', OFF)
     .addRule('object-curly-spacing', OFF)
     .addRule('object-property-newline', OFF)
-    .addRule('object-shorthand', ERROR)
+    .addRule(
+      'object-shorthand',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['object-shorthand'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .addRule('operator-linebreak', OFF)
-    .addRule('prefer-template', ERROR)
+    .addRule(
+      'prefer-template',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['prefer-template'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    )
     .addRule('quote-props', OFF)
     .addRule('space-in-parens', OFF)
     .addRule('space-infix-ops', OFF)
