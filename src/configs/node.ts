@@ -1,6 +1,7 @@
 import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
 import {ERROR, OFF} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
+import type {PrettifyShallow} from '../types';
 import {assignDefaults, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -90,7 +91,7 @@ interface EslintPluginNSettings {
    * - [`no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/no-unsupported-features/node-builtins.md)
    * - [`prefer-node-protocol`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/prefer-node-protocol.md)
    */
-  version?: (GetRuleOptions<'node', 'no-unsupported-features/node-builtins'>['0'] & {})['version'];
+  version?: string;
 }
 
 export interface NodeEslintConfigOptions extends UnConfigOptions<'node'> {
@@ -108,6 +109,19 @@ export interface NodeEslintConfigOptions extends UnConfigOptions<'node'> {
    * - Optional fall back value
    */
   settings?: EslintPluginNSettings;
+
+  /**
+   * Specifies which features will not be reported if detected as supported
+   * by `no-unsupported-features/*` rules.
+   */
+  noUnsupportedFeaturesIgnores?: PrettifyShallow<{
+    esBuiltins?: (GetRuleOptions<'node', 'no-unsupported-features/es-builtins'>[0] & {})['ignores'];
+    esSyntax?: (GetRuleOptions<'node', 'no-unsupported-features/es-syntax'>[0] & {})['ignores'];
+    nodeBuiltins?: (GetRuleOptions<
+      'node',
+      'no-unsupported-features/node-builtins'
+    >[0] & {})['ignores'];
+  }>;
 
   /**
    * @see https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/prefer-global
@@ -176,9 +190,11 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.node;
   const optionsResolved = assignDefaults(optionsRaw, {
     preferGlobal: {} as NodeEslintConfigOptions['preferGlobal'] & {},
+    noUnsupportedFeaturesIgnores:
+      {} as NodeEslintConfigOptions['noUnsupportedFeaturesIgnores'] & {},
   } satisfies NodeEslintConfigOptions);
 
-  const {settings: pluginSettings, preferGlobal} = optionsResolved;
+  const {settings: pluginSettings, preferGlobal, noUnsupportedFeaturesIgnores} = optionsResolved;
 
   const userNodeVersion = new Range(closestPackageJson?.packageJson.engines?.node || '');
 
@@ -220,9 +236,27 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
     .addRule('no-unpublished-bin', ERROR) // 🟢
     .addRule('no-unpublished-import', OFF) // TODO 🟢 only disable when import plugin is enabled?
     .addRule('no-unpublished-require', ERROR) // TODO 🟢 handled by import plugin too?
-    .addRule('no-unsupported-features/es-builtins', ERROR) // 🟢
-    .addRule('no-unsupported-features/es-syntax', ERROR)
-    .addRule('no-unsupported-features/node-builtins', ERROR) //  🟢
+    .addRule(
+      'no-unsupported-features/es-builtins',
+      ERROR,
+      noUnsupportedFeaturesIgnores.esBuiltins?.length
+        ? [{ignores: noUnsupportedFeaturesIgnores.esBuiltins}]
+        : [],
+    ) // 🟢
+    .addRule(
+      'no-unsupported-features/es-syntax',
+      ERROR,
+      noUnsupportedFeaturesIgnores.esSyntax?.length
+        ? [{ignores: noUnsupportedFeaturesIgnores.esSyntax}]
+        : [],
+    )
+    .addRule(
+      'no-unsupported-features/node-builtins',
+      ERROR,
+      noUnsupportedFeaturesIgnores.nodeBuiltins?.length
+        ? [{ignores: noUnsupportedFeaturesIgnores.nodeBuiltins}]
+        : [],
+    ) //  🟢
     .addRule('prefer-global/buffer', ERROR, [preferGlobal.buffer === false ? 'never' : 'always'])
     .addRule('prefer-global/console', ERROR, [preferGlobal.console === false ? 'never' : 'always'])
     .addRule('prefer-global/process', ERROR, [preferGlobal.process === false ? 'never' : 'always'])
