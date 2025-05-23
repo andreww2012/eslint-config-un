@@ -257,12 +257,7 @@ const generateAngularPlugins = async (
 };
 
 export interface AngularEslintConfigOptions
-  extends UnConfigOptions<
-    Omit<
-      RulesRecordPartial<'@angular-eslint'>,
-      keyof RulesRecordPartial<'@angular-eslint/template'>
-    >
-  > {
+  extends UnConfigOptions<RulesRecordPartial<'@angular-eslint'>> {
   /**
    * Enables or specifies the configuration for the [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template) plugin,
    * which includes template-specific rules.

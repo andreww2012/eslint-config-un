@@ -567,22 +567,15 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
   const isReactXPreferred = pluginX === 'prefer' || pluginX === 'only';
 
   const getDoubleRuleName = <
-    A extends RuleNamesForPlugin<'@eslint-react'>,
-    B extends RuleNamesForPlugin<'react'> = (A extends `${string}/${infer UnprefixedRuleName}`
-      ? UnprefixedRuleName
-      : A) &
-      RuleNamesForPlugin<'react'>,
+    A extends RuleNamesForPlugin<'@eslint-react/dom'>,
+    B extends RuleNamesForPlugin<'react'> = A & RuleNamesForPlugin<'react'>,
   >(
-    nameX: A,
+    nameXUnprefixed: A,
     nameOriginal?: B,
   ) => {
-    const nameXUnprefixed = nameX.match(/^(?:[^/]+\/)?(.*)$/)?.[1] as A;
-    const prefix = isReactXPreferred ? '@eslint-react' : 'react';
-    const name = isReactXPreferred ? nameX : (nameOriginal ?? nameXUnprefixed);
+    const prefix = isReactXPreferred ? '@eslint-react/dom' : 'react';
+    const name = isReactXPreferred ? nameXUnprefixed : (nameOriginal ?? nameXUnprefixed);
     return [prefix, name] as const;
-    // const result =
-    //   `${isReactXPreferred ? '@eslint-react/' : 'react/'}${isReactXPreferred ? nameX : (nameOriginal ?? nameXUnprefixed)}` as const;
-    // return result as typeof result & keyof AllEslintRulesWithoutDisableAutofix;
   };
   const getDoubleRuleSeverity = (severity: RuleSeverity, isXRule?: boolean) =>
     (isReactXPreferred && !isReactXEnabled) ||
@@ -1064,24 +1057,30 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
       ),
     ) // 🔄️`jsx-fragments`
     // === Naming Convention rules ===
-    .addRule(
-      'naming-convention/component-name',
+    .addAnyRule(
+      '@eslint-react/naming-convention',
+      'component-name',
       getDoubleRuleSeverity(COMPONENT_NAME_SEVERITY, true),
     ) // 🔄️`jsx-pascal-case`
-    .addRule('naming-convention/context-name', WARNING) // 🟡
-    .addRule('naming-convention/filename', OFF)
-    .addRule(
-      'naming-convention/filename-extension',
+    .addAnyRule('@eslint-react/naming-convention', 'context-name', WARNING) // 🟡
+    .addAnyRule('@eslint-react/naming-convention', 'filename', OFF)
+    .addAnyRule(
+      '@eslint-react/naming-convention',
+      'filename-extension',
       getDoubleRuleSeverity(FILENAME_EXTENSION_SEVERITY, true),
       [{allow: 'always', extensions: JSX_FILE_EXTENSIONS}],
     ) // 🔄️`jsx-filename-extension`
-    .addRule('naming-convention/use-state', getDoubleRuleSeverity(USE_STATE_SEVERITY, true)) // 🔄️`hook-use-state`
+    .addAnyRule(
+      '@eslint-react/naming-convention',
+      'use-state',
+      getDoubleRuleSeverity(USE_STATE_SEVERITY, true),
+    ) // 🔄️`hook-use-state`
     // === Debug rules ===
-    .addRule('debug/class-component', OFF)
-    .addRule('debug/function-component', OFF)
-    .addRule('debug/hook', OFF)
-    .addRule('debug/is-from-react', OFF)
-    .addRule('debug/jsx', OFF)
+    .addAnyRule('@eslint-react/debug', 'class-component', OFF)
+    .addAnyRule('@eslint-react/debug', 'function-component', OFF)
+    .addAnyRule('@eslint-react/debug', 'hook', OFF)
+    .addAnyRule('@eslint-react/debug', 'is-from-react', OFF)
+    .addAnyRule('@eslint-react/debug', 'jsx', OFF)
     .addOverrides();
 
   const configBuilderReactXTypeAware = createConfigBuilder(
@@ -1115,52 +1114,49 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
       },
     ])
     .addAnyRule(
-      ...getDoubleRuleName('dom/no-dangerously-set-innerhtml', 'no-danger'),
+      ...getDoubleRuleName('no-dangerously-set-innerhtml', 'no-danger'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`no-danger`
     .addAnyRule(
-      ...getDoubleRuleName(
-        'dom/no-dangerously-set-innerhtml-with-children',
-        'no-danger-with-children',
-      ),
+      ...getDoubleRuleName('no-dangerously-set-innerhtml-with-children', 'no-danger-with-children'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟢 🔄️`no-danger-with-children`
     // Deprecated API, removed in v19
-    .addAnyRule(...getDoubleRuleName('dom/no-find-dom-node'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
+    .addAnyRule(...getDoubleRuleName('no-find-dom-node'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
     .addAnyRule('@eslint-react/dom', 'no-flush-sync', getXRuleSeverity(ERROR)) // 🟢
     // Deprecated API, removed in v19
     .addAnyRule('@eslint-react/dom', 'no-hydrate', getXRuleSeverity(ERROR)) // 🟢 🔢18.0.0
     .addAnyRule(
-      ...getDoubleRuleName('dom/no-missing-button-type', 'button-has-type'),
+      ...getDoubleRuleName('no-missing-button-type', 'button-has-type'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`button-has-type`
     .addAnyRule(
-      ...getDoubleRuleName('dom/no-missing-iframe-sandbox', 'iframe-missing-sandbox'),
+      ...getDoubleRuleName('no-missing-iframe-sandbox', 'iframe-missing-sandbox'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`iframe-missing-sandbox`
-    .addAnyRule(...getDoubleRuleName('dom/no-namespace'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
+    .addAnyRule(...getDoubleRuleName('no-namespace'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
     // Deprecated API, removed in v19
     .addAnyRule('@eslint-react/dom', 'no-render', getXRuleSeverity(ERROR)) // 🟢 🔢18.0.0
-    .addAnyRule(...getDoubleRuleName('dom/no-render-return-value'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
+    .addAnyRule(...getDoubleRuleName('no-render-return-value'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
     .addAnyRule(
-      ...getDoubleRuleName('dom/no-script-url', 'jsx-no-script-url'),
+      ...getDoubleRuleName('no-script-url', 'jsx-no-script-url'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`jsx-no-script-url`
-    .addAnyRule(...getDoubleRuleName('dom/no-unknown-property'), getDoubleRuleSeverity(ERROR), [
+    .addAnyRule(...getDoubleRuleName('no-unknown-property'), getDoubleRuleSeverity(ERROR), [
       {requireDataLowercase: true},
     ]) // 🔄️
     .addAnyRule(
-      ...getDoubleRuleName('dom/no-unsafe-iframe-sandbox', 'iframe-missing-sandbox'),
+      ...getDoubleRuleName('no-unsafe-iframe-sandbox', 'iframe-missing-sandbox'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`iframe-missing-sandbox`
     .addAnyRule(
-      ...getDoubleRuleName('dom/no-unsafe-target-blank', 'jsx-no-target-blank'),
+      ...getDoubleRuleName('no-unsafe-target-blank', 'jsx-no-target-blank'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟡 🔄️`jsx-no-target-blank`
     // React 19 docs: "In earlier React Canary versions, this API was part of React DOM and called useFormState."
     .addAnyRule('@eslint-react/dom', 'no-use-form-state', getXRuleSeverity(ERROR)) // 🟢 🔢19.0.0
     .addAnyRule(
-      ...getDoubleRuleName('dom/no-void-elements-with-children', 'void-dom-elements-no-children'),
+      ...getDoubleRuleName('no-void-elements-with-children', 'void-dom-elements-no-children'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟢 🔄️`void-dom-elements-no-children`
     // === Web API rules ===

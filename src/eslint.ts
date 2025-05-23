@@ -13,16 +13,15 @@ import {
   type RuleSeverity,
 } from './constants';
 import type {RuleOptions} from './eslint-types';
-import type {RuleOptions as RuleOptionsFixableOnly} from './eslint-types-fixable-only';
+import type {FixableRuleNames} from './eslint-types-fixable-only';
+import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin';
 import {PLUGIN_PREFIXES_LIST, type PluginPrefix} from './plugins';
 import type {
   FalsyValue,
   OmitIndexSignature,
   PickKeysNotStartingWith,
-  PickKeysStartingWith,
   PrettifyShallow,
   ReadonlyDeep,
-  RemovePrefix,
   SetRequired,
   UnionToIntersection,
 } from './types';
@@ -54,7 +53,7 @@ export type UnFlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifySha
 >;
 
 export type DisableAutofixPrefix = 'disable-autofix';
-const DISABLE_AUTOFIX = 'disable-autofix' satisfies DisableAutofixPrefix;
+export const DISABLE_AUTOFIX = 'disable-autofix' satisfies DisableAutofixPrefix;
 const DISABLE_AUTOFIX_WITH_SLASH = `${DISABLE_AUTOFIX}/`;
 
 export type AllEslintRules = OmitIndexSignature<UnFlatConfigEntry['rules'] & {}>;
@@ -69,33 +68,13 @@ export type BuiltinEslintRulesFixed = OmitIndexSignature<
   >
 >;
 
-type RemovePrefixAndGetRuleOptions<
-  T extends Record<string, EslintRuleEntry | undefined>,
-  P extends string,
-> = {
-  [K in keyof T as K extends `${P}${infer Rest}`
-    ? Rest
-    : K & string]-?: T[K] & {} extends EslintRuleEntry<infer Options> ? Options : never;
-};
-// TODO @angular-eslint
-type RulesByPlugin = {
-  [P in PluginPrefix]: PrettifyShallow<
-    OmitIndexSignature<
-      RemovePrefixAndGetRuleOptions<
-        P extends '' ? BuiltinEslintRulesFixed : PickKeysStartingWith<RuleOptions, `${P}/`>,
-        `${P}/`
-      >
-    >
-  >;
-};
 export type RuleNamesForPlugin<P extends PluginPrefix | null> = P extends null
-  ? // eslint-disable-next-line ts/no-redundant-type-constituents
-    keyof RulesByPlugin[keyof RulesByPlugin] & string
-  : keyof RulesByPlugin[P & keyof RulesByPlugin] & string;
+  ? keyof RuleOptionsPerPlugin[keyof RuleOptionsPerPlugin]
+  : keyof OmitIndexSignature<RuleOptionsPerPlugin[P & keyof RuleOptionsPerPlugin]>;
 export type GetRuleOptions<
   Prefix extends PluginPrefix,
-  RuleName extends keyof RulesByPlugin[Prefix],
-> = RulesByPlugin[Prefix][RuleName] & unknown[];
+  RuleName extends keyof RuleOptionsPerPlugin[Prefix],
+> = RuleOptionsPerPlugin[Prefix][RuleName] & unknown[];
 type PluginAndPrefixToFullRuleName<P extends PluginPrefix, N extends string> = P extends ''
   ? N
   : `${P}/${N}`;
@@ -103,15 +82,16 @@ type PluginAndPrefixToFullRuleName<P extends PluginPrefix, N extends string> = P
 export type RulesRecordPartial<P extends null | PluginPrefix | RulesRecord = PluginPrefix> =
   P extends PluginPrefix
     ? {
-        [N in keyof OmitIndexSignature<RulesByPlugin[P]> as PluginAndPrefixToFullRuleName<
+        [N in keyof OmitIndexSignature<RuleOptionsPerPlugin[P]> as PluginAndPrefixToFullRuleName<
           P,
           N
-        >]?: RulesByPlugin[P][N] extends unknown[] ? EslintRuleEntry<RulesByPlugin[P][N]> : never;
+        >]?: RuleOptionsPerPlugin[P][N] extends unknown[]
+          ? EslintRuleEntry<RuleOptionsPerPlugin[P][N]>
+          : never;
       }
     : P extends RulesRecord
       ? UnFlatConfigEntry<P>['rules'] & {}
       : never;
-type FixableRuleNames = RemovePrefix<keyof RuleOptionsFixableOnly, `${DisableAutofixPrefix}/`>;
 export type UnConfigOptionsOverrides<T extends Record<string, unknown>> = {
   [RuleName in keyof T]?: MaybeFn<
     [
@@ -500,7 +480,6 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
         if (this.pluginPrefix == null) {
           throw new Error('Cannot use `addRule` when `pluginPrefix` is `null`');
         }
-        // @ts-expect-error "TS2589: Type instantiation is excessively deep and possibly infinite"
         return addRule(this.pluginPrefix, ruleName, severity, ruleOptions, options);
       },
 
