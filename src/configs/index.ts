@@ -12,6 +12,7 @@ import type {CssEslintConfigOptions} from './css';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
 import type {DependEslintConfigOptions} from './depend';
+import type {ErasableSyntaxOnlyEslintConfigOptions} from './erasable-syntax-only';
 import type {EsEslintConfigOptions} from './es';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
 import type {CliEslintConfigOptions} from './extra/cli';
@@ -499,6 +500,19 @@ interface UnConfigs {
    * @default false
    */
   depend: DependEslintConfigOptions;
+
+  /**
+   * ESLint plugin to granularly enforce TypeScript's [`erasableSyntaxOnly`](https://devblogs.microsoft.com/typescript/announcing-typescript-5-8-rc/#the---erasablesyntaxonly-option) flag.
+   *
+   * By default, applied to all TypeScript files.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-erasable-syntax-only`](https://www.npmjs.com/package/eslint-plugin-erasable-syntax-only) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only?tab=coc-ov-file))
+   *
+   * NOTE: disabled by default
+   * @default false
+   */
+  erasableSyntaxOnly: ErasableSyntaxOnlyEslintConfigOptions;
 
   /**
    * A config specific to files meant to be executed. By default, allows `process.exit()`

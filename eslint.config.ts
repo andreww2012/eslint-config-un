@@ -6,9 +6,7 @@ export default eslintConfig({
   mode: 'lib',
 
   configs: {
-    ts: {
-      configTypeAware: {
-        ignores: TEST_DIR_GLOB,
+    erasableSyntaxOnly: true,
       },
     },
     deMorgan: true,

@@ -110,6 +110,7 @@ export const eslintConfigInternal = async (
   const isCssInJsEnabled = Boolean(configsOptions.cssInJs ?? true);
   const isDeMorganEnabled = Boolean(configsOptions.deMorgan ?? false);
   const isDependEnabled = Boolean(configsOptions.depend ?? false);
+  const isErasableSyntaxOnlyEnabled = Boolean(configsOptions.erasableSyntaxOnly ?? false);
   const isEsEnabled = Boolean(configsOptions.es ?? false);
   const isEslintCommentsEnabled = Boolean(configsOptions.eslintComments ?? true);
   const isJsInlineEnabled = Boolean(configsOptions.jsInline ?? true);
@@ -179,6 +180,7 @@ export const eslintConfigInternal = async (
       cssInJs: {enabled: isCssInJsEnabled},
       deMorgan: {enabled: isDeMorganEnabled},
       depend: {enabled: isDependEnabled},
+      erasableSyntaxOnly: {enabled: isErasableSyntaxOnlyEnabled},
       es: {enabled: isEsEnabled},
       eslintComments: {enabled: isEslintCommentsEnabled},
       html: {enabled: isHtmlEnabled},
@@ -339,6 +341,8 @@ export const eslintConfigInternal = async (
     isNodeDependenciesEnabled &&
       import('./configs/node-dependencies').then((m) => m.nodeDependenciesUnConfig(context)),
     isDependEnabled && import('./configs/depend').then((m) => m.dependUnConfig(context)),
+    isErasableSyntaxOnlyEnabled &&
+      import('./configs/erasable-syntax-only').then((m) => m.erasableSyntaxOnlyUnConfig(context)),
 
     /* Other configs */
     isTypescriptEnabled &&
