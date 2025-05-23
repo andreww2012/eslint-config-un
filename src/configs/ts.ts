@@ -77,15 +77,10 @@ type TypeAwareRules =
   | 'unbound-method'
   | 'use-unknown-in-catch-callback-variable';
 
-type TypeAwareRulesWithPrefixes = Pick<
-  RulesRecordPartial<'@typescript-eslint'>,
-  `@typescript-eslint/${TypeAwareRules}`
->;
+type TypeAwareRulesWithPrefixes = Pick<RulesRecordPartial<'ts'>, `ts/${TypeAwareRules}`>;
 
 export interface TsEslintConfigOptions
-  extends UnConfigOptions<
-    Omit<RulesRecordPartial<'@typescript-eslint'>, keyof TypeAwareRulesWithPrefixes>
-  > {
+  extends UnConfigOptions<Omit<RulesRecordPartial<'ts'>, keyof TypeAwareRulesWithPrefixes>> {
   /**
    * Applies rules requiring type information on the specified `files`.
    *
@@ -248,7 +243,7 @@ export const tsUnConfig: UnConfigFn<
   ];
 
   const generateSetupConfigBuilder = (files: string[], ignores: string[], isTypeAware: boolean) => {
-    const configBuilderSetup = createConfigBuilder(context, {}, '@typescript-eslint');
+    const configBuilderSetup = createConfigBuilder(context, {}, 'ts');
     configBuilderSetup
       ?.addConfig(`ts/${isTypeAware ? '' : 'non-'}type-aware/setup`, {
         // Applying this generally to all files is unacceptable
@@ -309,18 +304,17 @@ export const tsUnConfig: UnConfigFn<
       ...(filesNONTypeAware.length > 0 && {files: filesNONTypeAware}),
       ...(ignoresNONTypeAware.length > 0 && {ignores: ignoresNONTypeAware}),
     },
-    '@typescript-eslint',
+    'ts',
   );
 
   const noUnsafeRulesSeverity = optionsResolved.disableNoUnsafeRules ? OFF : WARNING;
 
-  const classMethodUseThisOptions: GetRuleOptions<'@typescript-eslint', 'class-methods-use-this'> =
-    [
-      {
-        ignoreOverrideMethods: true,
-        ignoreClassesThatImplementAnInterface: true,
-      },
-    ];
+  const classMethodUseThisOptions: GetRuleOptions<'ts', 'class-methods-use-this'> = [
+    {
+      ignoreOverrideMethods: true,
+      ignoreClassesThatImplementAnInterface: true,
+    },
+  ];
   const classMethodUseThisUnEntry = getRuleUnSeverityAndOptionsFromEntry(
     vanillaFinalFlatConfigRules['class-methods-use-this'] ?? ERROR,
     inheritFromBase ? undefined : [ERROR, classMethodUseThisOptions],
@@ -328,13 +322,13 @@ export const tsUnConfig: UnConfigFn<
   classMethodUseThisUnEntry[1][0] = {
     ...omit(classMethodUseThisUnEntry[1][0] || {}, ['ignoreClassesWithImplements']),
     ...classMethodUseThisOptions[0],
-  } satisfies GetRuleOptions<'@typescript-eslint', 'class-methods-use-this'>[0] & {};
+  } satisfies GetRuleOptions<'ts', 'class-methods-use-this'>[0] & {};
 
   const maxParamsBaseUnEntry = getRuleUnSeverityAndOptionsFromEntry(
     vanillaFinalFlatConfigRules['max-params'] ?? OFF,
     inheritFromBase ? undefined : [OFF],
   );
-  const maxParamsOptions: GetRuleOptions<'@typescript-eslint', 'max-params'> =
+  const maxParamsOptions: GetRuleOptions<'ts', 'max-params'> =
     maxParamsBaseUnEntry[1][0] == null
       ? []
       : [
@@ -356,7 +350,7 @@ export const tsUnConfig: UnConfigFn<
     vanillaFinalFlatConfigRules['no-empty-function'] ?? ERROR,
     inheritFromBase ? undefined : [ERROR],
   );
-  const noEmptyFunctionOptions: GetRuleOptions<'@typescript-eslint', 'no-empty-function'> =
+  const noEmptyFunctionOptions: GetRuleOptions<'ts', 'no-empty-function'> =
     noEmptyFunctionBaseUnEntry[1][0]?.allow?.length
       ? [
           {
@@ -555,7 +549,7 @@ export const tsUnConfig: UnConfigFn<
     vanillaFinalFlatConfigRules['dot-notation'] ?? ERROR,
     inheritFromBase ? undefined : [ERROR],
   );
-  const dotNotationOptions: GetRuleOptions<'@typescript-eslint', 'dot-notation'> =
+  const dotNotationOptions: GetRuleOptions<'ts', 'dot-notation'> =
     dotNotationBaseUnEntry[1][0] == null
       ? []
       : [
@@ -580,7 +574,7 @@ export const tsUnConfig: UnConfigFn<
           // This is an exception for "files is empty array disables only one config" rule. If parent config gets an empty array, we must disable type-aware rules too
           ...(optionsResolved.files?.length === 0 && {files: []}),
         },
-    '@typescript-eslint',
+    'ts',
   );
 
   configBuilderTypeAware
@@ -736,7 +730,7 @@ export const tsUnConfig: UnConfigFn<
     // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
     .disableAnyRule('', 'no-duplicate-imports');
 
-  const configBuilderDts = createConfigBuilder(context, {}, '@typescript-eslint');
+  const configBuilderDts = createConfigBuilder(context, {}, 'ts');
   configBuilderDts
     ?.addConfig('ts/dts', {
       files: ['**/*.d.?([cm])ts'],

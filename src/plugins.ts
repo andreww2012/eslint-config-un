@@ -36,9 +36,6 @@ export const pluginsLoaders = {
   '@next/next': () => interopDefault(import('@next/eslint-plugin-next')),
   // We can't `import()` `@stylistic/eslint-plugin` because it's `require()`d by eslint-plugin-vue: https://github.com/vuejs/eslint-plugin-vue/blob/1b634549a9e91231e5ea79313763c69f93e678c1/lib/utils/index.js#L113 and `import()`ing after `require()`ing causes `ERR_INTERNAL_ASSERTION` error, see https://github.com/nodejs/node/issues/54577
   '@stylistic': () => Promise.resolve(stylistic),
-  '@typescript-eslint': () =>
-    // @ts-expect-error types mismatch
-    interopDefault(import('typescript-eslint').then((m) => m.plugin)),
   astro: () => interopDefault(import('eslint-plugin-astro')),
   'case-police': () =>
     // @ts-expect-error types mismatch
@@ -116,6 +113,9 @@ export const pluginsLoaders = {
   toml: () =>
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-toml')),
+  ts: () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('typescript-eslint').then((m) => m.plugin)),
   unicorn: () => interopDefault(import('eslint-plugin-unicorn')),
   'unused-imports': () => interopDefault(import('eslint-plugin-unused-imports')),
   vitest: () => interopDefault(import('@vitest/eslint-plugin')),

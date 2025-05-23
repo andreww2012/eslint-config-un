@@ -366,7 +366,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     // TODO auto-include test files in TS config?
     .addRule('unbound-method', isTypescriptEnabled ? ERROR : OFF)
     // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
-    .disableAnyRule('@typescript-eslint', 'unbound-method')
+    .disableAnyRule('ts', 'unbound-method')
     .addOverrides();
 
   const configBuilderJestExtended = createConfigBuilder(

@@ -4,9 +4,6 @@ const TEST_DIR_GLOB = ['test/**/*'];
 
 export default eslintConfig({
   mode: 'lib',
-  pluginRenames: {
-    '@typescript-eslint': 'ts',
-  },
 
   configs: {
     ts: {
@@ -54,11 +51,11 @@ export default eslintConfig({
         'import/newline-after-import': 0,
         'import/no-duplicates': 0,
 
-        '@typescript-eslint/consistent-type-imports': 0,
-        '@typescript-eslint/no-explicit-any': 0,
-        '@typescript-eslint/no-non-null-assertion': 0,
-        '@typescript-eslint/no-shadow': 0,
-        '@typescript-eslint/no-unused-vars': 0,
+        'ts/consistent-type-imports': 0,
+        'ts/no-explicit-any': 0,
+        'ts/no-non-null-assertion': 0,
+        'ts/no-shadow': 0,
+        'ts/no-unused-vars': 0,
 
         '@stylistic/padding-line-between-statements': 0,
         '@stylistic/quotes': 0,

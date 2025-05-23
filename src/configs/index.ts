@@ -107,9 +107,9 @@ export interface EslintConfigUnOptions {
    *
    * You have to still use **OLD** prefixes in `overrides`, and they will be automatically renamed.
    * @example
-   * To make all the rules from `typescript-eslint` plugin have `ts` prefix:
+   * To make all the rules from `@eslint-react` plugin have `react-x` prefix:
    * ```ts
-   * {'@typescript-eslint': 'ts'}
+   * {'@eslint-react': 'react-x'}
    * ```
    */
   pluginRenames?: PrettifyShallow<Partial<Record<Exclude<PluginPrefix, ''>, string>>>;

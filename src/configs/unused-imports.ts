@@ -55,7 +55,7 @@ export const unusedImportsUnConfig: UnConfigFn<'unusedImports'> = (context) => {
     ?.addConfig(['unused-imports/no-unused-vars', {includeDefaultFilesAndIgnores: true}])
     .disableAnyRule('', 'no-unused-vars')
     .disableAnyRule('sonarjs', 'no-unused-vars')
-    .disableAnyRule('@typescript-eslint', 'no-unused-vars')
+    .disableAnyRule('ts', 'no-unused-vars')
     .addRule('no-unused-vars', ERROR, ruleOptions === undefined ? [] : [ruleOptions]);
 
   return {

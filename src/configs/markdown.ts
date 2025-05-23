@@ -266,20 +266,20 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
 
       // ts
       // won't disable: @typescript-eslint/consistent-type-imports, @typescript-eslint/no-useless-empty-export
-      .disableAnyRule('@typescript-eslint', 'ban-ts-comment') // [runtime-only]
-      .disableAnyRule('@typescript-eslint', 'class-methods-use-this') // [runtime-only]
-      .disableAnyRule('@typescript-eslint', 'explicit-function-return-type') // [too-strict]
-      .disableAnyRule('@typescript-eslint', 'no-empty-function') // [emptiness]
-      .disableAnyRule('@typescript-eslint', 'no-explicit-any') // [too-strict]
-      .disableAnyRule('@typescript-eslint', 'no-extraneous-class') // [too-strict]
-      .disableAnyRule('@typescript-eslint', 'no-import-type-side-effects') // [runtime-only]
-      .disableAnyRule('@typescript-eslint', 'no-namespace') // [too-strict]
-      .disableAnyRule('@typescript-eslint', 'no-non-null-assertion') // [too-strict]
-      .disableAnyRule('@typescript-eslint', 'no-require-imports') // [runtime-only]
-      .disableAnyRule('@typescript-eslint', 'no-unused-expressions') // [unused]
-      .disableAnyRule('@typescript-eslint', 'no-unused-vars') // [unused]
-      .disableAnyRule('@typescript-eslint', 'no-use-before-define') // [runtime-only]
-      .disableAnyRule('@typescript-eslint', 'no-unsafe-function-type') // [too-strict]
+      .disableAnyRule('ts', 'ban-ts-comment') // [runtime-only]
+      .disableAnyRule('ts', 'class-methods-use-this') // [runtime-only]
+      .disableAnyRule('ts', 'explicit-function-return-type') // [too-strict]
+      .disableAnyRule('ts', 'no-empty-function') // [emptiness]
+      .disableAnyRule('ts', 'no-explicit-any') // [too-strict]
+      .disableAnyRule('ts', 'no-extraneous-class') // [too-strict]
+      .disableAnyRule('ts', 'no-import-type-side-effects') // [runtime-only]
+      .disableAnyRule('ts', 'no-namespace') // [too-strict]
+      .disableAnyRule('ts', 'no-non-null-assertion') // [too-strict]
+      .disableAnyRule('ts', 'no-require-imports') // [runtime-only]
+      .disableAnyRule('ts', 'no-unused-expressions') // [unused]
+      .disableAnyRule('ts', 'no-unused-vars') // [unused]
+      .disableAnyRule('ts', 'no-use-before-define') // [runtime-only]
+      .disableAnyRule('ts', 'no-unsafe-function-type') // [too-strict]
 
       // vue
       // TODO maybe disable?: vue/valid-define-emits, vue/valid-define-props, vue/no-duplicate-attr-inheritance
