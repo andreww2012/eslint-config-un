@@ -92,28 +92,34 @@ export type RulesRecordPartial<P extends null | PluginPrefix | RulesRecord = Plu
     : P extends RulesRecord
       ? UnFlatConfigEntry<P>['rules'] & {}
       : never;
-export type UnConfigOptionsOverrides<T extends Record<string, unknown>> = {
-  [RuleName in keyof T]?: MaybeFn<
-    [
-      severity: EslintSeverity & number,
-      options?: T extends EslintRuleEntry<infer Options> ? ReadonlyDeep<Options> : never,
-    ],
-    | ReadonlyDeep<T[RuleName]>
-    | {
-        severity: EslintSeverity;
-        options?: T extends EslintRuleEntry<infer Options> ? ReadonlyDeep<Options> : never;
+type UnConfigOptionsOverridesEntry<
+  RuleName extends string,
+  EslintEntry extends EslintRuleEntry,
+  Options,
+> = MaybeFn<
+  [severity: EslintSeverity & number, options?: ReadonlyDeep<Options>],
+  | ReadonlyDeep<EslintEntry>
+  | {
+      severity: EslintSeverity;
+      options?: ReadonlyDeep<Options>;
 
-        /**
-         * This option has a caveat: it's not possible to disable autofix only on subset
-         * of files *without* the `disable-autofix` prefix in the rule name.
-         *
-         * If you set this to `true`, the autofix method is going to be the one resulting from
-         * `disableAutofixMethod` root option, and if it is `unprefixed` (create a copy of
-         * the plugin and disable autofix for the specified rules), autofix for this rule
-         * will be disabled for **all** files.
-         */
-        disableAutofix?: RuleName extends FixableRuleNames ? boolean | DisableAutofixMethod : false;
-      }
+      /**
+       * This option has a caveat: it's not possible to disable autofix only on subset
+       * of files *without* the `disable-autofix` prefix in the rule name.
+       *
+       * If you set this to `true`, the autofix method is going to be the one resulting from
+       * `disableAutofixMethod` root option, and if it is `unprefixed` (create a copy of
+       * the plugin and disable autofix for the specified rules), autofix for this rule
+       * will be disabled for **all** files.
+       */
+      disableAutofix?: RuleName extends FixableRuleNames ? boolean | DisableAutofixMethod : false;
+    }
+>;
+export type UnConfigOptionsOverrides<T extends Partial<Record<string, EslintRuleEntry>>> = {
+  [RuleName in keyof T]?: UnConfigOptionsOverridesEntry<
+    RuleName & string,
+    T[RuleName] & {},
+    T[RuleName] & {} extends EslintRuleEntry<infer Options> ? ReadonlyDeep<Options> : never
   >;
 };
 export type UnConfigOptions<
@@ -124,8 +130,8 @@ export type UnConfigOptions<
   // eslint-disable-next-line ts/no-empty-object-type
   (ExtraOptions extends object ? ExtraOptions : {}) &
     FlatConfigEntryFilesOrIgnores & {
-      overrides?: PrettifyShallow<
-        UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial<T>>>
+      overrides?: OmitIndexSignature<
+        PrettifyShallow<UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial<T>>>>
       >;
 
       /**
@@ -246,10 +252,9 @@ export const resolveOverrides = (
       let disableAutofix: boolean | DisableAutofixMethod = false;
       if (ruleEntryRaw && typeof ruleEntryRaw === 'object' && 'severity' in ruleEntryRaw) {
         ruleEntry =
-          // eslint-disable-next-line ts/no-unnecessary-condition -- wrong types for `options`
           ruleEntryRaw.options == null
             ? ruleEntryRaw.severity
-            : [ruleEntryRaw.severity, ruleEntryRaw.options];
+            : [ruleEntryRaw.severity, ...ruleEntryRaw.options];
         if (ruleEntryRaw.disableAutofix && pluginPrefix != null) {
           const disableAutofixMethod: DisableAutofixMethod =
             typeof ruleEntryRaw.disableAutofix === 'string'
@@ -263,7 +268,7 @@ export const resolveOverrides = (
           disableAutofix = ruleEntryRaw.disableAutofix;
         }
       } else {
-        ruleEntry = ruleEntryRaw == null ? 0 : (ruleEntryRaw as EslintRuleEntry);
+        ruleEntry = ruleEntryRaw as EslintRuleEntry;
       }
       result.push([ruleName, ruleEntry]);
 
@@ -516,12 +521,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
         const ourRules = configFinal.rules;
         Object.assign(
           ourRules,
-          resolveOverrides(
-            this.context,
-            // @ts-expect-error just a weird error
-            this.options.overrides || {},
-            ourRules,
-          ),
+          resolveOverrides(this.context, this.options.overrides || {}, ourRules),
         );
         return result;
       },
