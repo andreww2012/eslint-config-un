@@ -7,8 +7,9 @@
 - [**BREAKING**] Removed the ability to disable rule autofix by enabling `disable-autofix/*` rules. Instead, when configuring a rule, you can now return an object and set `disableAutofix: true` in it.
 - [**BREAKING**] Removed the `errorsInsteadOfWarnings` root option in favor of `forceSeverity` that can now be set globally.
 - [**BREAKING**] Changed the prefix of [`typescript-eslint` plugin](https://npmjs.org/typescript-eslint) from `@typescript-eslint` to `ts`.
+- [**BREAKING**] **unicorn, cli** [`prefer-top-level-await`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-top-level-await.md) rule is now off by default and enabled in `cli` config.
 - **ts, vue** configs: for extension rules, base rule options and severity are now smartly inherited from the corresponding base rules. Added an option to disable this behavior.
-- **packageJson** config: `require-name` and `require-version` rules are now enabled by default only for libraries.
+- **packageJson** config: [`require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md) and [`require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-version.md) rules are now enabled by default only for libraries.
 
 ## 0.10.0
 

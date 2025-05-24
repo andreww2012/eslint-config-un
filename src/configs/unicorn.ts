@@ -142,7 +142,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('prefer-structured-clone', ERROR)
     .addRule('prefer-switch', ERROR, [{minimumCases: 4, emptyDefaultCase: 'do-nothing-comment'}])
     .addRule('prefer-ternary', ERROR)
-    .addRule('prefer-top-level-await', ERROR)
+    .addRule('prefer-top-level-await', OFF)
     .addRule('prefer-type-error', ERROR)
     .addRule('prevent-abbreviations', OFF)
     .addRule('relative-url-style', ERROR, ['always'])
