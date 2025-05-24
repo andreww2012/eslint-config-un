@@ -1,6 +1,5 @@
 import fs from 'node:fs/promises';
 import eslintGitignore from 'eslint-config-flat-gitignore';
-import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {DisableAutofixMethod, EslintConfigUnOptions, UnConfigContext} from './configs';
@@ -11,6 +10,7 @@ import {
   PACKAGES_TO_GET_INFO_FOR,
 } from './constants';
 import {
+  type AllRulesRecordKeys,
   ConfigEntryBuilder,
   type DisableAutofixPrefix,
   type EslintPlugin,
@@ -33,51 +33,23 @@ import {
   assignDefaults,
   doesPackageExist,
   fetchPackageInfo,
+  interopDefault,
   objectEntriesUnsafe,
   omit,
 } from './utils';
 
 // TODO debug
 
-const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set([
+const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
   'curly',
-  'unicorn/template-indent',
   '@stylistic/quotes',
-]);
+  'unicorn/template-indent',
+] satisfies AllRulesRecordKeys[]);
 
-// TODO move to a separate file
 export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
   internalOptions: {disableAutofixOnly?: boolean} = {},
 ): Promise<FlatConfigEntry[]> => {
-  const optionsResolved = assignDefaults(options, {
-    mode: 'app',
-    extraConfigs: [],
-    loadPluginsOnDemand: true,
-  } satisfies EslintConfigUnOptions);
-
-  const {
-    configs: configsOptions = {},
-    extraConfigs,
-    ignores,
-    overrideIgnores,
-    pluginRenames = {},
-    loadPluginsOnDemand,
-  } = optionsResolved;
-
-  const pluginRenamesList = Object.values(pluginRenames);
-  if (
-    new Set(pluginRenamesList).size !== pluginRenamesList.length ||
-    pluginRenamesList.some((v) => PLUGIN_PREFIXES_LIST.includes(v as PluginPrefix))
-  ) {
-    throw new Error(
-      'Invalid plugin renames: new names must be unique and different from the default plugin prefixes',
-    );
-  }
-
-  // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
-  const globalIgnores = [...(overrideIgnores ? [] : DEFAULT_GLOBAL_IGNORES), ...(ignores || [])];
-
   const [
     packagesInfoRaw,
     usedPackageManager,
@@ -101,6 +73,33 @@ export const eslintConfigInternal = async (
     pluginsLoaders.svelte(),
   ]);
   const packagesInfo = packagesInfoRaw as UnConfigContext['packagesInfo'];
+
+  const optionsResolved = assignDefaults(options, {
+    mode: 'app',
+    extraConfigs: [],
+    loadPluginsOnDemand: true,
+    disablePrettierIncompatibleRules: packagesInfo.prettier != null,
+  } satisfies EslintConfigUnOptions);
+
+  const {
+    configs: configsOptions = {},
+    extraConfigs,
+    ignores,
+    overrideIgnores,
+    pluginRenames = {},
+    loadPluginsOnDemand,
+    disablePrettierIncompatibleRules,
+  } = optionsResolved;
+
+  const pluginRenamesList = Object.values(pluginRenames);
+  if (
+    new Set(pluginRenamesList).size !== pluginRenamesList.length ||
+    pluginRenamesList.some((v) => PLUGIN_PREFIXES_LIST.includes(v as PluginPrefix))
+  ) {
+    throw new Error(
+      'Invalid plugin renames: new names must be unique and different from the default plugin prefixes',
+    );
+  }
 
   const isAngularEnabled = Boolean(configsOptions.angular ?? packagesInfo['@angular/core']);
   const isAstroEnabled = Boolean(configsOptions.astro ?? packagesInfo.astro);
@@ -264,6 +263,9 @@ export const eslintConfigInternal = async (
     })
     .disableAnyRule('import', 'no-default-export');
 
+  // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
+  const globalIgnores = [...(overrideIgnores ? [] : DEFAULT_GLOBAL_IGNORES), ...(ignores || [])];
+
   const unresolvedConfigs = Promise.all([
     globalIgnores.length > 0 && {
       name: genFlatConfigEntryName('ignores-global'),
@@ -384,14 +386,15 @@ export const eslintConfigInternal = async (
     })),
 
     // MUST be last
-    !optionsResolved.disablePrettierIncompatibleRules && {
-      name: genFlatConfigEntryName('eslint-config-prettier'),
-      rules: Object.fromEntries(
-        Object.entries(eslintConfigPrettier.rules).filter(
-          ([k]) => !RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER.has(k),
+    disablePrettierIncompatibleRules &&
+      interopDefault(import('eslint-config-prettier')).then((eslintConfigPrettier) => ({
+        name: genFlatConfigEntryName('eslint-config-prettier'),
+        rules: Object.fromEntries(
+          Object.entries(eslintConfigPrettier.rules).filter(
+            ([k]) => !RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER.has(k),
+          ),
         ),
-      ),
-    },
+      })),
   ] satisfies Promisable<
     | MaybeArray<FlatConfigEntry | ConfigEntryBuilder | FalsyValue>
     | {configs: (ConfigEntryBuilder | null)[]}

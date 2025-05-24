@@ -375,6 +375,7 @@ export const tsUnConfig: UnConfigFn<
   // 💅 - in stylistic
   // ❄️ = Feature-frozen in ts-eslint
   // 👍 = Auto-checked and there's barely any need to use this rule
+  // 🟠 - rule from `eslint-config-prettier`
 
   // TODO add rules
   configBuilderNONTypeAware

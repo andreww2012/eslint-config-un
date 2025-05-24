@@ -621,7 +621,7 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
 
   // Legend:
   // 🟢 - in recommended
-  // 💅 - stylistic rule disabled in `eslint-config-prettier`: https://github.com/prettier/eslint-config-prettier/blob/f12309bbca9fb051b53fcece9a8491a1222235c8/index.js#L234
+  // 🟠 - rule from `eslint-config-prettier`
   // Check rule usage: https://github.com/search?q=path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F+%22react%2Fboolean-prop-naming%22&type=code
 
   configBuilderReactOriginal
@@ -683,22 +683,22 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
       ),
       [shorthandBoolean === 'prefer-error' || shorthandBoolean === 'prefer' ? 'never' : 'always'],
     )
-    .addRule('jsx-child-element-spacing', OFF) // 💅
-    .addRule('jsx-closing-bracket-location', OFF) // 💅
-    .addRule('jsx-closing-tag-location', OFF) // 💅
+    .addRule('jsx-child-element-spacing', OFF) // 🟠
+    .addRule('jsx-closing-bracket-location', OFF) // 🟠
+    .addRule('jsx-closing-tag-location', OFF) // 🟠
     .addRule('jsx-curly-brace-presence', WARNING, [
       {props: 'never', children: 'never', propElementValues: 'always'},
     ])
-    .addRule('jsx-curly-spacing', OFF) // 💅
-    .addRule('jsx-curly-newline', OFF) // 💅
-    .addRule('jsx-equals-spacing', OFF) // 💅
+    .addRule('jsx-curly-spacing', OFF) // 🟠
+    .addRule('jsx-curly-newline', OFF) // 🟠
+    .addRule('jsx-equals-spacing', OFF) // 🟠
     .addRule('jsx-filename-extension', getDoubleRuleSeverity(FILENAME_EXTENSION_SEVERITY, false), [
       {
         extensions: JSX_FILE_EXTENSIONS,
         ignoreFilesWithoutCode: true,
       },
     ])
-    .addRule('jsx-first-prop-new-line', OFF) // 💅
+    .addRule('jsx-first-prop-new-line', OFF) // 🟠
     .addRule(
       'jsx-fragments',
       getDoubleRuleSeverity(
@@ -716,8 +716,8 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
       ],
     )
     .addRule('jsx-handler-names', OFF)
-    .addRule('jsx-indent-props', OFF) // 💅
-    .addRule('jsx-indent', OFF) // 💅
+    .addRule('jsx-indent-props', OFF) // 🟠
+    .addRule('jsx-indent', OFF) // 🟠
     .addRule('jsx-key', getDoubleRuleSeverity(NO_DUPLICATE_OR_MISSING_KEY_SEVERITY, true), [
       {
         checkFragmentShorthand: true,
@@ -726,8 +726,8 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
       },
     ]) // 🟢
     .addRule('jsx-max-depth', OFF)
-    .addRule('jsx-max-props-per-line', OFF) // 💅
-    .addRule('jsx-newline', OFF) // 💅
+    .addRule('jsx-max-props-per-line', OFF) // 🟠
+    .addRule('jsx-newline', OFF) // 🟠
     .addRule('jsx-no-bind', ERROR, [{allowArrowFunctions: true, ignoreRefs: true}])
     .addRule(
       'jsx-no-comment-textnodes',
@@ -756,23 +756,23 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
       getDoubleRuleSeverity(NO_USELESS_FRAGMENT_SEVERITY, false),
       [{allowExpressions: true}],
     )
-    .addRule('jsx-one-expression-per-line', OFF) // 💅
+    .addRule('jsx-one-expression-per-line', OFF) // 🟠
     .addRule('jsx-pascal-case', getDoubleRuleSeverity(COMPONENT_NAME_SEVERITY, false), [
       {allowNamespace: true},
     ])
-    .addRule('jsx-props-no-multi-spaces', OFF) // 💅
+    .addRule('jsx-props-no-multi-spaces', OFF) // 🟠
     .addRule('jsx-props-no-spread-multi', ERROR)
     .addRule('jsx-props-no-spreading', ERROR, [
       {custom: 'ignore' /* Only enforced on HTML elements */},
     ])
     .addRule('jsx-sort-props', OFF)
-    .addRule('jsx-tag-spacing', OFF) // 💅
+    .addRule('jsx-tag-spacing', OFF) // 🟠
     .addRule(
       'jsx-uses-react',
       newJsxTransform ? OFF : getDoubleRuleSeverity(JSX_USES_REACT_SEVERITY, false),
     ) // 🟢
     .addRule('jsx-uses-vars', getDoubleRuleSeverity(JSX_USES_VARS_SEVERITY, false)) // 🟢
-    .addRule('jsx-wrap-multilines', OFF) // 💅
+    .addRule('jsx-wrap-multilines', OFF) // 🟠
     .addRule(
       'no-access-state-in-setstate',
       getDoubleRuleSeverity(NO_ACCESS_STATE_IN_SETSTATE_SEVERITY, false),

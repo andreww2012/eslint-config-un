@@ -84,6 +84,8 @@ export const GLOB_MARKDOWN_ALL_CODE_BLOCKS = `${GLOB_MARKDOWN}/**/*.*` as const;
 export const DEFAULT_GLOBAL_IGNORES = ['**/dist'] as const;
 
 export const PACKAGES_TO_GET_INFO_FOR = [
+  'prettier',
+
   'typescript',
   'graphql',
 

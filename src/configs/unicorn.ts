@@ -13,6 +13,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
 
   // Legend:
   // 🔴 - not in recommended
+  // 🟠 - rule from `eslint-config-prettier`
 
   configBuilder
     ?.addConfig(['unicorn', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
@@ -26,7 +27,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('consistent-existence-index-check', ERROR, [], {disableAutofix: true})
     .addRule('consistent-function-scoping', ERROR)
     .addRule('custom-error-definition', ERROR) // 🔴
-    .addRule('empty-brace-spaces', ERROR) // 💅
+    .addRule('empty-brace-spaces', OFF) // 🟠
     .addRule('error-message', ERROR)
     .addRule('escape-case', ERROR)
     .addRule('expiring-todo-comments', ERROR)
@@ -63,7 +64,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('no-negated-condition', ERROR)
     .disableAnyRule('', 'no-negated-condition')
     .addRule('no-negation-in-equality-check', ERROR)
-    .addRule('no-nested-ternary', OFF)
+    .addRule('no-nested-ternary', OFF) // 🟠
     .addRule('no-new-array', ERROR)
     .addRule('no-new-buffer', ERROR)
     .addRule('no-null', OFF)
@@ -91,7 +92,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
       disableAutofix: true,
     })
     .addRule('no-zero-fractions', ERROR)
-    .addRule('number-literal-case', ERROR)
+    .addRule('number-literal-case', OFF) // 🟠
     .addRule('numeric-separators-style', ERROR, [{onlyIfContainsSeparator: true}])
     .addRule('prefer-add-event-listener', ERROR)
     .addRule('prefer-array-find', ERROR)
@@ -151,7 +152,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('require-post-message-target-origin', OFF) // 🔴
     .addRule('string-content', OFF) // 🔴
     .addRule('switch-case-braces', ERROR)
-    .addRule('template-indent', ERROR)
+    .addRule('template-indent', ERROR) // 🟠
     .addRule('text-encoding-identifier-case', ERROR)
     .addRule('throw-new-error', ERROR)
     .addOverrides();

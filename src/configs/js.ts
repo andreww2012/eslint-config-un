@@ -25,6 +25,7 @@ export const jsUnConfig: UnConfigFn<
 
   // Legend:
   // 🟢 - in recommended
+  // 🟠 - rule from `eslint-config-prettier`
 
   const config = configBuilder
     ?.addConfig(['js', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
@@ -72,7 +73,7 @@ export const jsUnConfig: UnConfigFn<
     .addRule('no-template-curly-in-string', ERROR)
     .addRule('no-this-before-super', ERROR) // 🟢
     .addRule('no-undef', ERROR) // 🟢
-    .addRule('no-unexpected-multiline', ERROR) // 🟢
+    .addRule('no-unexpected-multiline', OFF) // 🟢💅
     .addRule('no-unmodified-loop-condition', ERROR)
     .addRule('no-unreachable-loop', ERROR)
     .addRule('no-unreachable', ERROR) // 🟢
@@ -109,7 +110,7 @@ export const jsUnConfig: UnConfigFn<
     .addRule('complexity', OFF)
     .addRule('consistent-return', ERROR)
     .addRule('consistent-this', ERROR, ['that'])
-    .addRule('curly', ERROR, ['all' /* default */])
+    .addRule('curly', ERROR, ['all' /* default */]) // 🟠
     .addRule('default-case-last', ERROR)
     .addRule('default-case', ERROR)
     .addRule('default-param-last', ERROR)
@@ -274,7 +275,7 @@ export const jsUnConfig: UnConfigFn<
         ignoreStringLiterals: true,
         avoidEscape: true, // TODO Doesn't have any effect `ignoreStringLiterals` is true - should propose auto-fix?
       },
-    ])
+    ]) // 🟠
     .addAnyRule('@stylistic', 'padding-line-between-statements', ERROR, [
       {blankLine: 'never', prev: 'import', next: 'import'},
     ])

@@ -47,6 +47,7 @@ export interface FlatConfigEntryFilesOrIgnores extends FlatConfigEntryFiles {
   ignores?: string[];
 }
 
+export type AllRulesRecordKeys = keyof RuleOptions;
 export type RulesRecord = Record<string, EslintRuleEntry> & RuleOptions;
 export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
   Eslint.Linter.Config<T>
