@@ -183,6 +183,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `jsonSchemaValidator`                                      | ❌ | [eslint-plugin-json-schema-validator](https://npmjs.com/eslint-plugin-json-schema-validator) (`json-schema-validator`) | Since v0.6.0 |
 | ![TOML](./assets/tabler-toml.svg) `toml`                   | ❌ | [eslint-plugin-toml](https://npmjs.com/eslint-plugin-toml) (`toml`) | Since v0.1.3 |
 | ![HTML](./assets/devicon-html5.svg) `html`                 | ✅ | [@html-eslint/eslint-plugin](https://npmjs.com/@html-eslint/eslint-plugin) (`@html-eslint`) | Since v0.10.0 |
+| ![GraphQL](./assets/logos-graphql.svg) `graphql`           | ✅ (`graphql` is installed) | [@graphql-eslint/eslint-plugin](https://npmjs.com/@graphql-eslint/eslint-plugin) (`graphql`) | Since v1.0.0 |
 
 ### JS/TS - Miscellaneous
 

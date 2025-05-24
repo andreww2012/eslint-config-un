@@ -22,6 +22,7 @@ import type {EsEslintConfigOptions} from './es';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-functions';
+import type {GraphqlEslintConfigOptions} from './graphql';
 import type {HtmlEslintConfigOptions} from './html';
 import type {ImportEslintConfigOptions} from './import';
 import type {JestEslintConfigOptions} from './jest';
@@ -78,7 +79,7 @@ export interface EslintConfigUnOptions {
   /**
    * Type of your project. Depending on the value, will affect the following rules:
    * - [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md): importing from `devDependencies` will be forbidden in `lib` mode.
-   * - [`package-json/require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md), [`package-json/require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md): enabled by default only in `lib` mode.
+   * - [`package-json/require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md), [`package-json/require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-version.md): enabled by default only in `lib` mode.
    * @default 'app'
    */
   mode?: 'app' | 'lib';
@@ -397,6 +398,15 @@ interface UnConfigs {
    * @default true
    */
   math: MathEslintConfigOptions;
+
+  /**
+   * ESLint rules related to [GraphQL](https://graphql.org/).
+   *
+   * Used plugins:
+   * - [`eslint-plugin-graphql`](https://npmjs.com/@graphql-eslint/eslint-plugin) ([docs](https://the-guild.dev/graphql/eslint))
+   * @default true <=> `graphql` package is installed
+   */
+  graphql: GraphqlEslintConfigOptions;
 
   /**
    * NOTE: disabled by default

@@ -1,5 +1,6 @@
 import {fixupPluginRules} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
+import type Eslint from 'eslint';
 import type {EslintPlugin} from './eslint';
 import {interopDefault, objectKeysUnsafe} from './utils';
 
@@ -50,6 +51,15 @@ export const pluginsLoaders = {
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-erasable-syntax-only')),
   es: () => interopDefault(import('eslint-plugin-es-x')),
+  graphql: () =>
+    interopDefault(
+      import('@graphql-eslint/eslint-plugin') as Promise<{
+        default: EslintPlugin & {
+          processor: Eslint.Linter.Processor;
+          parser: Eslint.Linter.Parser;
+        };
+      }>,
+    ),
   html: () => interopDefault(import('eslint-plugin-html')),
   import: () =>
     // @ts-expect-error types mismatch

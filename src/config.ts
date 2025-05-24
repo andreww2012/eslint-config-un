@@ -114,12 +114,13 @@ export const eslintConfigInternal = async (
   const isErasableSyntaxOnlyEnabled = Boolean(configsOptions.erasableSyntaxOnly ?? false);
   const isEsEnabled = Boolean(configsOptions.es ?? false);
   const isEslintCommentsEnabled = Boolean(configsOptions.eslintComments ?? true);
-  const isJsInlineEnabled = Boolean(configsOptions.jsInline ?? true);
+  const isGraphqlEnabled = Boolean(configsOptions.graphql ?? packagesInfo.graphql);
   const isImportEnabled = Boolean(configsOptions.import ?? true);
   // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
   const isHtmlEnabled = Boolean(configsOptions.html ?? !isAngularEnabled);
   const isJestEnabled = Boolean(configsOptions.jest ?? packagesInfo.jest);
   const isJsEnabled = Boolean(configsOptions.js ?? true);
+  const isJsInlineEnabled = Boolean(configsOptions.jsInline ?? true);
   const isJsdocEnabled = Boolean(configsOptions.jsdoc ?? true);
   const isJsoncEnabled = Boolean(configsOptions.json ?? false);
   const isJsonSchemaValidatorEnabled = Boolean(configsOptions.jsonSchemaValidator ?? false);
@@ -184,6 +185,7 @@ export const eslintConfigInternal = async (
       erasableSyntaxOnly: {enabled: isErasableSyntaxOnlyEnabled},
       es: {enabled: isEsEnabled},
       eslintComments: {enabled: isEslintCommentsEnabled},
+      graphql: {enabled: isGraphqlEnabled},
       html: {enabled: isHtmlEnabled},
       import: {enabled: isImportEnabled},
       jest: {enabled: isJestEnabled},
@@ -364,6 +366,7 @@ export const eslintConfigInternal = async (
     astroEslintConfigResult, // Must come after ts
     angularEslintConfigResult, // Must come after ts
     svelteEslintConfigResult, // Must be after ts
+    isGraphqlEnabled && import('./configs/graphql').then((m) => m.graphqlUnConfig(context)),
     isMarkdownEnabled && import('./configs/markdown').then((m) => m.markdownUnConfig(context)), // Must be last
 
     rootConfigBuilder,

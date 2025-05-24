@@ -53,6 +53,12 @@ export const GLOB_ASTRO = '**/*.astro' as const;
 
 export const GLOB_SVELTE = '**/*.svelte' as const;
 
+export const GLOB_GRAPHQL = '**/*.{graphql,gql}' as const;
+
+export const GLOB_FLOW = '**/*.flow' as const;
+
+export const GLOB_EMBER_GLIMMER = '**/*.{gjs,gts}' as const;
+
 export const GLOB_SUPPORTED_EXTENSIONS = [
   GLOB_JS_TS_X_EXTENSION,
   'vue',
@@ -65,6 +71,8 @@ export const GLOB_SUPPORTED_EXTENSIONS = [
   'css',
   'astro',
   'svelte',
+  'graphql',
+  'gql',
 ].join(',');
 export const GLOB_MARKDOWN = '**/*.md' as const;
 export const GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS =
@@ -77,6 +85,7 @@ export const DEFAULT_GLOBAL_IGNORES = ['**/dist'] as const;
 
 export const PACKAGES_TO_GET_INFO_FOR = [
   'typescript',
+  'graphql',
 
   'astro',
   'vue',

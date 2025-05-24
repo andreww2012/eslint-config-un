@@ -22,7 +22,7 @@
       "import {type UnConfigOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';",
       "import {pluginsLoaders} from '../plugins';",
       "import type {Prettify, PrettifyShallow} from '../types';",
-      "import {assignDefaults, interopDefault} from '../utils';",
+      "import {assignDefaults, doesPackageExist, fetchPackageInfo, interopDefault} from '../utils';",
       "import type {UnConfigFn} from './index';",
       "",
       "export interface ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}EslintConfigOptions extends UnConfigOptions<'$TM_FILENAME_BASE'> {",
