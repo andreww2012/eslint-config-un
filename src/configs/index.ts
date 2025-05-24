@@ -78,6 +78,7 @@ export interface EslintConfigUnOptions {
   /**
    * Type of your project. Depending on the value, will affect the following rules:
    * - [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md): importing from `devDependencies` will be forbidden in `lib` mode.
+   * - [`package-json/require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md), [`package-json/require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md): enabled by default only in `lib` mode.
    * @default 'app'
    */
   mode?: 'app' | 'lib';

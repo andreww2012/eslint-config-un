@@ -8,6 +8,7 @@
 - [**BREAKING**] Removed the `errorsInsteadOfWarnings` root option in favor of `forceSeverity` that can now be set globally.
 - [**BREAKING**] Changed the prefix of [`typescript-eslint` plugin](https://npmjs.org/typescript-eslint) from `@typescript-eslint` to `ts`.
 - **ts, vue** configs: for extension rules, base rule options and severity are now smartly inherited from the corresponding base rules. Added an option to disable this behavior.
+- **packageJson** config: `require-name` and `require-version` rules are now enabled by default only for libraries.
 
 ## 0.10.0
 

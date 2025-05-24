@@ -70,7 +70,7 @@ export interface PackageJsonEslintConfigOptions extends UnConfigOptions<'package
    * Require the specified fields to be present in the package.json file.
    *
    * The provided value will be **MERGED** with the default list.
-   * @default {name: true, version: true}
+   * @default {name: true, version: true} if root option `mode` is set to `lib`
    */
   requireFields?: Partial<Record<PackageJsonRequirableFields, boolean>>;
 }
@@ -85,8 +85,10 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
   } satisfies PackageJsonEslintConfigOptions);
 
   optionsResolved.requireFields = {
-    name: true,
-    version: true,
+    ...(context.rootOptions.mode === 'lib' && {
+      name: true,
+      version: true,
+    }),
     ...optionsResolved.requireFields,
   };
 
