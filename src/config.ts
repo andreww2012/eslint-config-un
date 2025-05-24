@@ -1,5 +1,4 @@
 import fs from 'node:fs/promises';
-import eslintGitignore from 'eslint-config-flat-gitignore';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {DisableAutofixMethod, EslintConfigUnOptions, UnConfigContext} from './configs';
@@ -272,14 +271,15 @@ export const eslintConfigInternal = async (
       name: genFlatConfigEntryName('ignores-global'),
       ignores: globalIgnores,
     },
-    {
-      name: genFlatConfigEntryName('ignores-gitignore'),
-      ...(typeof optionsResolved.gitignore === 'object'
-        ? eslintGitignore(optionsResolved.gitignore)
-        : gitignoreFile
-          ? eslintGitignore()
-          : null),
-    },
+    (typeof optionsResolved.gitignore === 'object' || gitignoreFile) &&
+      interopDefault(import('eslint-config-flat-gitignore')).then((eslintGitignore) => ({
+        name: genFlatConfigEntryName('ignores-gitignore'),
+        ...(typeof optionsResolved.gitignore === 'object'
+          ? eslintGitignore(optionsResolved.gitignore)
+          : gitignoreFile
+            ? eslintGitignore()
+            : null),
+      })),
     {
       name: genFlatConfigEntryName('global-setup/language-options'),
       languageOptions: {
