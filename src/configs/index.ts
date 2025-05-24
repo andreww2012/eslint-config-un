@@ -1,7 +1,12 @@
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
-import type {ConfigEntryBuilder, EslintSeverity, UnFlatConfigEntry} from '../eslint';
+import type {
+  ConfigEntryBuilder,
+  EslintSeverity,
+  FlatConfigEntry,
+  UnFlagConfigEntry,
+} from '../eslint';
 import type {PluginPrefix} from '../plugins';
 import type {PrettifyShallow, Promisable, SetRequired} from '../types';
 import type {fetchPackageInfo} from '../utils';
@@ -56,7 +61,7 @@ export interface EslintConfigUnOptions {
   /**
    * **Global** ignore patterns. By default will be merged with our ignore patterns, unless `overrideIgnores` is set to `true`
    */
-  ignores?: UnFlatConfigEntry['ignores'];
+  ignores?: FlatConfigEntry['ignores'];
 
   /**
    * `ignores` patterns override, not merge with the ignore patterns suggested by our config
@@ -94,7 +99,7 @@ export interface EslintConfigUnOptions {
     [Key in keyof UnConfigs]?: boolean | PrettifyShallow<UnConfigs[Key]>;
   };
 
-  extraConfigs?: UnFlatConfigEntry[];
+  extraConfigs?: UnFlagConfigEntry[];
 
   /**
    * Only load ESLint plugins if they are actually used.

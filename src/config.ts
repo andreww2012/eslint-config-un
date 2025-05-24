@@ -14,7 +14,7 @@ import {
   ConfigEntryBuilder,
   type DisableAutofixPrefix,
   type EslintPlugin,
-  type UnFlatConfigEntry,
+  type FlatConfigEntry,
   createConfigBuilder,
   disableAutofixForAllRulesInPlugin,
   eslintPluginVanillaRules,
@@ -34,6 +34,7 @@ import {
   doesPackageExist,
   fetchPackageInfo,
   objectEntriesUnsafe,
+  omit,
 } from './utils';
 
 // TODO debug
@@ -48,7 +49,7 @@ const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set([
 export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
   internalOptions: {disableAutofixOnly?: boolean} = {},
-): Promise<UnFlatConfigEntry[]> => {
+): Promise<FlatConfigEntry[]> => {
   const optionsResolved = assignDefaults(options, {
     mode: 'app',
     extraConfigs: [],
@@ -374,7 +375,7 @@ export const eslintConfigInternal = async (
       ),
 
     ...extraConfigs.map((config, configIndex) => ({
-      ...config,
+      ...omit(config, ['rules']),
       ...(config.rules && {rules: resolveOverrides(context, config.rules)}),
       name: genFlatConfigEntryName(`extra-config/${config.name || `unnamed${configIndex}`}`),
     })),
@@ -389,11 +390,11 @@ export const eslintConfigInternal = async (
       ),
     },
   ] satisfies Promisable<
-    | MaybeArray<UnFlatConfigEntry | ConfigEntryBuilder | FalsyValue>
+    | MaybeArray<FlatConfigEntry | ConfigEntryBuilder | FalsyValue>
     | {configs: (ConfigEntryBuilder | null)[]}
   >[]);
 
-  const resolvedConfigs: UnFlatConfigEntry[] = (await unresolvedConfigs)
+  const resolvedConfigs: FlatConfigEntry[] = (await unresolvedConfigs)
     .flat()
     .map((c) =>
       c && 'configs' in c && !(c instanceof ConfigEntryBuilder)
@@ -518,7 +519,7 @@ export const eslintConfigInternal = async (
 
       ['disable-autofix' satisfies DisableAutofixPrefix]: disableAutofixPlugin,
     },
-  } satisfies UnFlatConfigEntry);
+  } satisfies FlatConfigEntry);
 
   return resolvedConfigs;
 };

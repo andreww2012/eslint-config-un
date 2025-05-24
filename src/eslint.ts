@@ -48,15 +48,20 @@ export interface FlatConfigEntryFilesOrIgnores extends FlatConfigEntryFiles {
 }
 
 export type RulesRecord = Record<string, EslintRuleEntry> & RuleOptions;
-export type UnFlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
+export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
   Eslint.Linter.Config<T>
+>;
+export type UnFlagConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
+  Omit<FlatConfigEntry<T>, 'rules'> & {
+    rules?: UnConfigOptionsOverrides<T>;
+  }
 >;
 
 export type DisableAutofixPrefix = 'disable-autofix';
 export const DISABLE_AUTOFIX = 'disable-autofix' satisfies DisableAutofixPrefix;
 const DISABLE_AUTOFIX_WITH_SLASH = `${DISABLE_AUTOFIX}/`;
 
-export type AllEslintRules = OmitIndexSignature<UnFlatConfigEntry['rules'] & {}>;
+export type AllEslintRules = OmitIndexSignature<FlatConfigEntry['rules'] & {}>;
 export type BuiltinEslintRulesFixed = OmitIndexSignature<
   Pick<
     AllEslintRules,
@@ -90,7 +95,7 @@ export type RulesRecordPartial<P extends null | PluginPrefix | RulesRecord = Plu
           : never;
       }
     : P extends RulesRecord
-      ? UnFlatConfigEntry<P>['rules'] & {}
+      ? FlatConfigEntry<P>['rules'] & {}
       : never;
 type UnConfigOptionsOverridesEntry<
   RuleName extends string,
@@ -188,7 +193,7 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
       .filter((v) => v != null),
   );
 
-export type FlatConfigEntryForBuilder = Omit<UnFlatConfigEntry, 'name' | 'rules'>;
+export type FlatConfigEntryForBuilder = Omit<FlatConfigEntry, 'name' | 'rules'>;
 
 const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, EslintSeverity & number> = {
   off: 0,
@@ -329,8 +334,8 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
     this.context = context;
   }
 
-  private readonly configs: UnFlatConfigEntry[] = [];
-  private readonly configsDict = new Map<string, UnFlatConfigEntry>();
+  private readonly configs: FlatConfigEntry[] = [];
+  private readonly configsDict = new Map<string, FlatConfigEntry>();
 
   /**
    * Note: `rules` will **always** be added to the resulting config, meaning that this method
@@ -404,7 +409,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
     // We require the presence of `rules`:
     // - to avoid likely adding it anyway later on
     // - to avoid (mostly likely accidental) "global ignores" configs (https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores)
-    const configFinal: SetRequired<UnFlatConfigEntry, 'rules'> = {
+    const configFinal: SetRequired<FlatConfigEntry, 'rules'> = {
       ...(files.length > 0 && {files}),
       ...(ignores.length > 0 && {ignores}),
       ...config,
