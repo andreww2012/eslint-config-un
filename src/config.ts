@@ -44,6 +44,7 @@ const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
   'curly',
   '@stylistic/quotes',
   'unicorn/template-indent',
+  'vue/html-self-closing',
 ] satisfies AllRulesRecordKeys[]);
 
 export const eslintConfigInternal = async (

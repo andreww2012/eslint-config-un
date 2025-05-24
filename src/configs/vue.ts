@@ -293,6 +293,7 @@ export const vueUnConfig: UnConfigFn<
   // Legend:
   // 3️⃣ = in recommended/vue-3
   // 2️⃣ = in recommended/vue-2
+  // 🟠 - rule from `eslint-config-prettier`
 
   configBuilder
     ?.addConfig(['vue', {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_VUE_FILES}])
@@ -389,32 +390,33 @@ export const vueUnConfig: UnConfigFn<
     .addRule('attribute-hyphenation', ERROR) // 3️⃣2️⃣
     .addRule('component-definition-name-casing', ERROR) // 3️⃣2️⃣
     .addRule('first-attribute-linebreak', ERROR) // 3️⃣2️⃣
-    .addRule('html-closing-bracket-newline', ERROR) // 3️⃣2️⃣
-    .addRule('html-closing-bracket-spacing', ERROR) // 3️⃣2️⃣
-    .addRule('html-end-tags', ERROR) // 3️⃣2️⃣
-    .addRule('html-indent', ERROR) // 3️⃣2️⃣
-    .addRule('html-quotes', ERROR) // 3️⃣2️⃣
+    .addRule('html-closing-bracket-newline', OFF) // 3️⃣2️⃣🟠
+    .addRule('html-closing-bracket-spacing', ERROR) // 3️⃣2️⃣🟠
+    .addRule('html-end-tags', ERROR) // 3️⃣2️⃣🟠
+    .addRule('html-indent', OFF) // 3️⃣2️⃣🟠
+    .addRule('html-quotes', ERROR) // 3️⃣2️⃣🟠
     .addRule('html-self-closing', ERROR, [
       {
         html: {
-          void: 'any', // TODO Setting other value here for `void` would conflict with Prettier, default is `never`
+          // TODO change to `never` once prettier does not `/` to the end of void elements: https://github.com/prettier/prettier/issues/15336
+          void: context.packagesInfo.prettier ? 'any' : 'never',
           normal: 'never',
           component: 'never',
         },
       },
-    ]) // 3️⃣2️⃣
-    .addRule('max-attributes-per-line', ERROR) // 3️⃣2️⃣
-    .addRule('multiline-html-element-content-newline', ERROR) // 3️⃣2️⃣
-    .addRule('mustache-interpolation-spacing', ERROR) // 3️⃣2️⃣
-    .addRule('no-multi-spaces', ERROR) // 3️⃣2️⃣
-    .addRule('no-spaces-around-equal-signs-in-attribute', ERROR) // 3️⃣2️⃣
+    ]) // 3️⃣2️⃣🟠
+    .addRule('max-attributes-per-line', OFF) // 3️⃣2️⃣🟠
+    .addRule('multiline-html-element-content-newline', OFF) // 3️⃣2️⃣🟠
+    .addRule('mustache-interpolation-spacing', ERROR) // 3️⃣2️⃣🟠
+    .addRule('no-multi-spaces', ERROR) // 3️⃣2️⃣🟠
+    .addRule('no-spaces-around-equal-signs-in-attribute', ERROR) // 3️⃣2️⃣🟠
     .addRule('no-template-shadow', ERROR) // 3️⃣2️⃣
     .addRule('one-component-per-file', ERROR) // 3️⃣2️⃣
     .addRule('prop-name-casing', ERROR) // 3️⃣2️⃣
     .addRule('require-default-prop', OFF) // 3️⃣2️⃣
     .addRule('require-explicit-emits', vue3Severity(ERROR)) // 3️⃣
     .addRule('require-prop-types', ERROR) // 3️⃣2️⃣
-    .addRule('singleline-html-element-content-newline', ERROR) // 3️⃣2️⃣
+    .addRule('singleline-html-element-content-newline', OFF) // 3️⃣2️⃣🟠
     .addRule('v-bind-style', ERROR, [
       'shorthand',
       {
@@ -453,7 +455,7 @@ export const vueUnConfig: UnConfigFn<
         ],
       },
     ]) // 3️⃣2️⃣
-    .addRule('block-tag-newline', OFF)
+    .addRule('block-tag-newline', OFF) // 🟠
     .addRule('component-api-style', enforceApiStyle == null ? OFF : ERROR, [
       [
         enforceApiStyle === 'setup' ? 'script-setup' : 'options',
@@ -588,7 +590,7 @@ export const vueUnConfig: UnConfigFn<
     .addRule('require-typed-ref', ERROR)
     .addRule('restricted-component-names', OFF) // >=9.32.0
     .addRule('slot-name-casing', ERROR /* `camelCase` is default */) // >=9.32.0
-    .addRule('script-indent', OFF)
+    .addRule('script-indent', OFF) // 🟠
     .addRule('sort-keys', OFF)
     .addRule('static-class-names-order', OFF)
     .addRule('v-for-delimiter-style', ERROR, ['in' /* default */])
@@ -598,12 +600,12 @@ export const vueUnConfig: UnConfigFn<
     .addRule('v-on-handler-style', ERROR, ['inline'])
     .addRule('valid-define-options', isMin3_3 ? ERROR : OFF) // 3️⃣
     /* Category: Extension Rules */
-    .addRule('array-bracket-newline', OFF)
-    .addRule('array-bracket-spacing', OFF)
-    .addRule('array-element-newline', OFF)
-    .addRule('arrow-spacing', OFF)
-    .addRule('block-spacing', OFF)
-    .addRule('brace-style', OFF)
+    .addRule('array-bracket-newline', OFF) // 🟠
+    .addRule('array-bracket-spacing', OFF) // 🟠
+    .addRule('array-element-newline', OFF) // 🟠
+    .addRule('arrow-spacing', OFF) // 🟠
+    .addRule('block-spacing', OFF) // 🟠
+    .addRule('brace-style', OFF) // 🟠
     .addRule(
       'camelcase',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -611,10 +613,10 @@ export const vueUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .addRule('comma-dangle', OFF)
-    .addRule('comma-spacing', OFF)
-    .addRule('comma-style', OFF)
-    .addRule('dot-location', OFF)
+    .addRule('comma-dangle', OFF) // 🟠
+    .addRule('comma-spacing', OFF) // 🟠
+    .addRule('comma-style', OFF) // 🟠
+    .addRule('dot-location', OFF) // 🟠
     .addRule(
       'dot-notation',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -632,11 +634,11 @@ export const vueUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .addRule('func-call-spacing', OFF)
-    .addRule('key-spacing', OFF)
-    .addRule('keyword-spacing', OFF)
-    .addRule('max-len', OFF)
-    .addRule('multiline-ternary', OFF)
+    .addRule('func-call-spacing', OFF) // 🟠
+    .addRule('key-spacing', OFF) // 🟠
+    .addRule('keyword-spacing', OFF) // 🟠
+    .addRule('max-len', OFF) // 🟠
+    .addRule('multiline-ternary', OFF) // 🟠
     .addRule('no-console', ERROR) // Do not inherit severity and options
     .addRule(
       'no-constant-condition',
@@ -652,7 +654,7 @@ export const vueUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .addRule('no-extra-parens', OFF)
+    .addRule('no-extra-parens', OFF) // 🟠
     .addRule(
       'no-irregular-whitespace',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -688,9 +690,9 @@ export const vueUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .addRule('object-curly-newline', OFF)
-    .addRule('object-curly-spacing', OFF)
-    .addRule('object-property-newline', OFF)
+    .addRule('object-curly-newline', OFF) // 🟠
+    .addRule('object-curly-spacing', OFF) // 🟠
+    .addRule('object-property-newline', OFF) // 🟠
     .addRule(
       'object-shorthand',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -698,7 +700,7 @@ export const vueUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .addRule('operator-linebreak', OFF)
+    .addRule('operator-linebreak', OFF) // 🟠
     .addRule(
       'prefer-template',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -706,11 +708,11 @@ export const vueUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     )
-    .addRule('quote-props', OFF)
-    .addRule('space-in-parens', OFF)
-    .addRule('space-infix-ops', OFF)
-    .addRule('space-unary-ops', OFF)
-    .addRule('template-curly-spacing', OFF)
+    .addRule('quote-props', OFF) // 🟠
+    .addRule('space-in-parens', OFF) // 🟠
+    .addRule('space-infix-ops', OFF) // 🟠
+    .addRule('space-unary-ops', OFF) // 🟠
+    .addRule('template-curly-spacing', OFF) // 🟠
     // 🔵 Not working great in Vue files
     .disableAnyRule('ts', 'prefer-function-type')
     .disableAnyRule('ts', 'unified-signatures')
