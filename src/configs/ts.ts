@@ -1,3 +1,4 @@
+// cspell:ignore Pocock's
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import type Eslint from 'eslint';
 import {ERROR, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, GLOB_TSX, OFF, WARNING} from '../constants';
@@ -9,7 +10,8 @@ import {
   createConfigBuilder,
   getRuleUnSeverityAndOptionsFromEntry,
 } from '../eslint';
-import {assignDefaults, interopDefault, omit} from '../utils';
+import type {ObjectValues} from '../types';
+import {assignDefaults, interopDefault, omit, unique} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
@@ -79,6 +81,297 @@ type TypeAwareRules =
 
 type TypeAwareRulesWithPrefixes = Pick<RulesRecordPartial<'ts'>, `ts/${TypeAwareRules}`>;
 
+type TsconfigTopLevelKeys =
+  | 'files'
+  | 'include'
+  | 'exclude'
+  | 'compilerOptions'
+  | 'references'
+  | 'watchOptions'
+  | 'typeAcquisition'
+  | 'compileOnSave'
+  // Non-standard
+  | 'vueCompilerOptions'
+  | 'angularCompilerOptions'
+  | 'ts-node'
+  | (string & {});
+const DEFAULT_TSCONFIG_TOP_LEVEL_ORDER: TsconfigTopLevelKeys[] = [
+  'extends',
+  'references',
+  'files',
+  'include',
+  'exclude',
+  'compilerOptions',
+  'vueCompilerOptions',
+  'angularCompilerOptions',
+  'ts-node',
+];
+// ⚠️ Must be sorted
+const TSCONFIG_COMPILER_OPTIONS_KEYS = {
+  typeChecking: [
+    'allowUnreachableCode',
+    'allowUnusedLabels',
+    'alwaysStrict',
+    'exactOptionalPropertyTypes',
+    'noFallthroughCasesInSwitch',
+    'noImplicitAny',
+    'noImplicitOverride',
+    'noImplicitReturns',
+    'noImplicitThis',
+    'noPropertyAccessFromIndexSignature',
+    'noUncheckedIndexedAccess',
+    'noUnusedLocals',
+    'noUnusedParameters',
+    'strict',
+    'strictBindCallApply',
+    'strictFunctionTypes',
+    'strictNullChecks',
+    'strictPropertyInitialization',
+    'useUnknownInCatchVariables',
+  ],
+  modules: [
+    'allowArbitraryExtensions',
+    'allowImportingTsExtensions',
+    'allowUmdGlobalAccess',
+    'baseUrl',
+    'customConditions',
+    'module',
+    'moduleResolution',
+    'moduleSuffixes',
+    'noResolve',
+    'paths',
+    'resolveJsonModule',
+    'resolvePackageJsonExports',
+    'resolvePackageJsonImports',
+    'rootDir',
+    'rootDirs',
+    'typeRoots',
+    'types',
+  ],
+  emit: [
+    'declaration',
+    'declarationDir',
+    'declarationMap',
+    'downlevelIteration',
+    'emitBOM',
+    'emitDeclarationOnly',
+    'importHelpers',
+    'importsNotUsedAsValues',
+    'inlineSourceMap',
+    'inlineSources',
+    'mapRoot',
+    'newLine',
+    'noEmit',
+    'noEmitHelpers',
+    'noEmitOnError',
+    'outDir',
+    'outFile',
+    'preserveConstEnums',
+    'preserveValueImports',
+    'removeComments',
+    'sourceMap',
+    'sourceRoot',
+    'stripInternal',
+  ],
+  javascriptSupport: ['allowJs', 'checkJs', 'maxNodeModuleJsDepth'],
+  editorSupport: ['disableSizeLimit', 'plugins'],
+  interopConstraints: [
+    'allowSyntheticDefaultImports',
+    'erasableSyntaxOnly',
+    'esModuleInterop',
+    'forceConsistentCasingInFileNames',
+    'isolatedDeclarations',
+    'isolatedModules',
+    'preserveSymlinks',
+    'verbatimModuleSyntax',
+  ],
+  backwardsCompatibility: [
+    'charset',
+    'importsNotUsedAsValues',
+    'keyofStringsOnly',
+    'noImplicitUseStrict',
+    'noStrictGenericChecks',
+    'out',
+    'preserveValueImports',
+    'suppressExcessPropertyErrors',
+    'suppressImplicitAnyIndexErrors',
+  ],
+  languageAndEnvironment: [
+    'emitDecoratorMetadata',
+    'experimentalDecorators',
+    'jsx',
+    'jsxFactory',
+    'jsxFragmentFactory',
+    'jsxImportSource',
+    'lib',
+    'libReplacement',
+    'moduleDetection',
+    'noLib',
+    'reactNamespace',
+    'target',
+    'useDefineForClassFields',
+  ],
+  compilerDiagnostics: [
+    'diagnostics',
+    'explainFiles',
+    'extendedDiagnostics',
+    'generateCpuProfile',
+    'generateTrace',
+    'listEmittedFiles',
+    'listFiles',
+    'noCheck',
+    'traceResolution',
+  ],
+  projects: [
+    'composite',
+    'disableReferencedProjectLoad',
+    'disableSolutionSearching',
+    'disableSourceOfProjectReferenceRedirect',
+    'incremental',
+    'tsBuildInfoFile',
+  ],
+  outputFormatting: ['noErrorTruncation', 'preserveWatchOutput', 'pretty'],
+  completeness: ['skipDefaultLibCheck', 'skipLibCheck'],
+  watchOptions: ['assumeChangesOnlyAffectDirectDependencies'],
+} as const satisfies Record<string, string[]>;
+type TsconfigCompilerOptionsGroups = keyof typeof TSCONFIG_COMPILER_OPTIONS_KEYS;
+type TsconfigCompilerOptionsKeys = ObjectValues<typeof TSCONFIG_COMPILER_OPTIONS_KEYS>[number];
+
+const TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS = {
+  // Source: https://github.com/antfu/eslint-config/blob/56262ef7962ce310d29348060d8941d420f410fc/src/configs/sort.ts#L138
+  antfu: [
+    /* Projects */
+    'incremental',
+    'composite',
+    'tsBuildInfoFile',
+    'disableSourceOfProjectReferenceRedirect',
+    'disableSolutionSearching',
+    'disableReferencedProjectLoad',
+    /* Language and Environment */
+    'target',
+    'jsx',
+    'jsxFactory',
+    'jsxFragmentFactory',
+    'jsxImportSource',
+    'lib',
+    'moduleDetection',
+    'noLib',
+    'reactNamespace',
+    'useDefineForClassFields',
+    'emitDecoratorMetadata',
+    'experimentalDecorators',
+    'libReplacement',
+    /* Modules */
+    'baseUrl',
+    'rootDir',
+    'rootDirs',
+    'customConditions',
+    'module',
+    'moduleResolution',
+    'moduleSuffixes',
+    'noResolve',
+    'paths',
+    'resolveJsonModule',
+    'resolvePackageJsonExports',
+    'resolvePackageJsonImports',
+    'typeRoots',
+    'types',
+    'allowArbitraryExtensions',
+    'allowImportingTsExtensions',
+    'allowUmdGlobalAccess',
+    /* JavaScript Support */
+    'allowJs',
+    'checkJs',
+    'maxNodeModuleJsDepth',
+    /* Type Checking */
+    'strict',
+    'strictBindCallApply',
+    'strictFunctionTypes',
+    'strictNullChecks',
+    'strictPropertyInitialization',
+    'allowUnreachableCode',
+    'allowUnusedLabels',
+    'alwaysStrict',
+    'exactOptionalPropertyTypes',
+    'noFallthroughCasesInSwitch',
+    'noImplicitAny',
+    'noImplicitOverride',
+    'noImplicitReturns',
+    'noImplicitThis',
+    'noPropertyAccessFromIndexSignature',
+    'noUncheckedIndexedAccess',
+    'noUnusedLocals',
+    'noUnusedParameters',
+    'useUnknownInCatchVariables',
+    /* Emit */
+    'declaration',
+    'declarationDir',
+    'declarationMap',
+    'downlevelIteration',
+    'emitBOM',
+    'emitDeclarationOnly',
+    'importHelpers',
+    'importsNotUsedAsValues',
+    'inlineSourceMap',
+    'inlineSources',
+    'mapRoot',
+    'newLine',
+    'noEmit',
+    'noEmitHelpers',
+    'noEmitOnError',
+    'outDir',
+    'outFile',
+    'preserveConstEnums',
+    'preserveValueImports',
+    'removeComments',
+    'sourceMap',
+    'sourceRoot',
+    'stripInternal',
+    /* Interop Constraints */
+    'allowSyntheticDefaultImports',
+    'esModuleInterop',
+    'forceConsistentCasingInFileNames',
+    'isolatedDeclarations',
+    'isolatedModules',
+    'preserveSymlinks',
+    'verbatimModuleSyntax',
+    'erasableSyntaxOnly',
+    /* Completeness */
+    'skipDefaultLibCheck',
+    'skipLibCheck',
+  ],
+  // Source: https://www.totaltypescript.com/tsconfig-cheat-sheet
+  totalTypescript: [
+    /* Base Options: */
+    'esModuleInterop',
+    'skipLibCheck',
+    'target',
+    'allowJs',
+    'resolveJsonModule',
+    'moduleDetection',
+    'isolatedModules',
+    'verbatimModuleSyntax',
+    /* Strictness */
+    'strict',
+    'noUncheckedIndexedAccess',
+    'noImplicitOverride',
+    /* If transpiling with TypeScript: */
+    'module',
+    'outDir',
+    'sourceMap',
+    /* AND if you're building for a library: */
+    'declaration',
+    /* AND if you're building for a library in a monorepo: */
+    'composite',
+    'declarationMap',
+    /* If NOT transpiling with TypeScript: */
+    'module',
+    'noEmit',
+    /* If your code runs/doesn't run in the DOM: */
+    'lib',
+  ],
+} satisfies Record<string, TsconfigCompilerOptionsKeys[]>;
+
 export interface TsEslintConfigOptions
   extends UnConfigOptions<Omit<RulesRecordPartial<'ts'>, keyof TypeAwareRulesWithPrefixes>> {
   /**
@@ -96,6 +389,62 @@ export interface TsEslintConfigOptions
    * @default false
    */
   configNoTypeAssertion?: boolean | UnConfigOptions<'no-type-assertion'>;
+
+  /**
+   * Sorts the keys of `tsconfig.json` files.
+   * @default false
+   */
+  configSortTsconfigKeys?:
+    | boolean
+    | UnConfigOptions<
+        RulesRecord,
+        {
+          /**
+           * @default ['extends', 'references', 'files', 'include', 'exclude', 'compilerOptions', 'vueCompilerOptions', 'angularCompilerOptions', 'ts-node']
+           */
+          orderTopLevel?: boolean | (TsconfigTopLevelKeys | (string & {}))[];
+
+          /**
+           * By default `antfu` preset will be used.
+           * @default true
+           */
+          orderCompilerOptions?:
+            | boolean
+            | 'alphabetical'
+            | {
+                /**
+                 * - `antfu`: use [Anthony Fu's order](https://github.com/antfu/eslint-config/blob/56262ef7962ce310d29348060d8941d420f410fc/src/configs/sort.ts#L138).
+                 * - `totalTypescript`: use the order from [Matt Pocock's TSConfig Cheat Sheet](https://www.totaltypescript.com/tsconfig-cheat-sheet).
+                 */
+                preset: keyof typeof TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS;
+              }
+            | {
+                type: 'order-groups';
+
+                /**
+                 * Unless overridden, order from `antfu` present will be used *within* groups.
+                 */
+                order: (TsconfigCompilerOptionsGroups | (string & {}))[];
+                orderWithinGroup?: {
+                  [Group in TsconfigCompilerOptionsGroups | (string & {})]?:
+                    | 'alphabetical'
+                    | (Group extends keyof typeof TSCONFIG_COMPILER_OPTIONS_KEYS
+                        ? (typeof TSCONFIG_COMPILER_OPTIONS_KEYS)[Group][number] | (string & {})
+                        : string)[];
+                };
+              }
+            | {
+                type: 'order-keys';
+                order: (TsconfigCompilerOptionsKeys | (string & {}))[];
+              };
+
+          /**
+           * Extra configs for [`jsonc/sort-keys`](https://ota-meshi.github.io/eslint-plugin-jsonc/rules/sort-keys.html) rule
+           * that will be appended to the resulting config array.
+           */
+          extraSortKeysConfigs?: (GetRuleOptions<'jsonc', 'sort-keys'>[0] & object)[];
+        }
+      >;
 
   /**
    * TODO
@@ -151,14 +500,13 @@ export const tsUnConfig: UnConfigFn<
   context,
   {vanillaFinalFlatConfigRules, astroResolvedOptions, vueResolvedOptions, svelteResolvedOptions},
 ) => {
-  const {parser: typescriptEslintParser} = await interopDefault(import('typescript-eslint'));
-
   const typescriptPackageInfo = context.packagesInfo.typescript;
   const optionsRaw = context.rootOptions.configs?.ts;
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypeAware: true,
     configNoTypeAssertion: false,
+    configSortTsconfigKeys: false,
     extraFileExtensions: [
       context.configsMeta.vue.enabled && 'vue',
       context.configsMeta.astro.enabled && 'astro',
@@ -170,10 +518,16 @@ export const tsUnConfig: UnConfigFn<
   const {
     configTypeAware,
     configNoTypeAssertion,
+    configSortTsconfigKeys,
     extraFileExtensions,
     inheritBaseRuleSeverityAndOptionsForExtensionRules: inheritFromBase,
     typescriptVersion,
   } = optionsResolved;
+
+  const [{parser: typescriptEslintParser}, jsoncEslintParser] = await Promise.all([
+    interopDefault(import('typescript-eslint')),
+    configSortTsconfigKeys ? interopDefault(import('jsonc-eslint-parser')) : null,
+  ]);
 
   const extraFilesNONTypeAware: string[] = [];
   const extraFilesTypeAware: string[] = [];
@@ -761,6 +1115,83 @@ export const tsUnConfig: UnConfigFn<
     .addRule('no-type-assertion', ERROR)
     .addOverrides();
 
+  const configBuilderSortTsconfigKeys = createConfigBuilder(context, configSortTsconfigKeys, null);
+  if (configSortTsconfigKeys) {
+    const configSortTsconfigKeysOptions = assignDefaults(configSortTsconfigKeys, {
+      orderTopLevel: true,
+    } satisfies TsEslintConfigOptions['configSortTsconfigKeys'] & {});
+
+    const {orderTopLevel, orderCompilerOptions, extraSortKeysConfigs} =
+      configSortTsconfigKeysOptions;
+
+    const topLevelOptionsOrder: string[] = Array.isArray(orderTopLevel)
+      ? orderTopLevel
+      : orderTopLevel
+        ? DEFAULT_TSCONFIG_TOP_LEVEL_ORDER
+        : [];
+
+    const compilerOptionsOrder: string[] =
+      typeof orderCompilerOptions === 'object'
+        ? 'preset' in orderCompilerOptions
+          ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS[orderCompilerOptions.preset]
+          : orderCompilerOptions.type === 'order-keys'
+            ? orderCompilerOptions.order
+            : // eslint-disable-next-line ts/no-unnecessary-condition
+              orderCompilerOptions.type === 'order-groups'
+              ? orderCompilerOptions.order.flatMap((group) =>
+                  orderCompilerOptions.orderWithinGroup &&
+                  group in orderCompilerOptions.orderWithinGroup
+                    ? orderCompilerOptions.orderWithinGroup[group] === 'alphabetical'
+                      ? group in TSCONFIG_COMPILER_OPTIONS_KEYS
+                        ? TSCONFIG_COMPILER_OPTIONS_KEYS[
+                            group as keyof typeof TSCONFIG_COMPILER_OPTIONS_KEYS
+                          ]
+                        : []
+                      : orderCompilerOptions.orderWithinGroup[group] || []
+                    : group in TSCONFIG_COMPILER_OPTIONS_KEYS
+                      ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS.antfu.filter((v) =>
+                          TSCONFIG_COMPILER_OPTIONS_KEYS[
+                            group as keyof typeof TSCONFIG_COMPILER_OPTIONS_KEYS
+                          ].includes(v as never),
+                        )
+                      : [],
+                )
+              : []
+        : orderCompilerOptions
+          ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS.antfu
+          : [];
+
+    configBuilderSortTsconfigKeys
+      ?.addConfig(
+        [
+          'sort-tsconfig-keys',
+          {
+            includeDefaultFilesAndIgnores: true,
+            filesFallback: ['**/tsconfig.json', '**/*.tsconfig.json', '**/tsconfig.*.json'],
+          },
+        ],
+        {
+          ...(jsoncEslintParser && {
+            languageOptions: {
+              parser: jsoncEslintParser,
+            },
+          }),
+        },
+      )
+      .addAnyRule('jsonc', 'sort-keys', ERROR, [
+        {
+          pathPattern: '^$',
+          order: unique(topLevelOptionsOrder),
+        },
+        {
+          pathPattern: '^compilerOptions$',
+          order: unique(compilerOptionsOrder),
+        },
+        ...(extraSortKeysConfigs || []),
+      ])
+      .addOverrides();
+  }
+
   return {
     configs: [
       configBuilderNONTypeAwareSetup,
@@ -771,6 +1202,7 @@ export const tsUnConfig: UnConfigFn<
 
       configBuilderDts,
       configBuilderNoTypeAssertions,
+      configBuilderSortTsconfigKeys,
     ],
     optionsResolved,
   };

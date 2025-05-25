@@ -29,4 +29,5 @@ export type {
   OmitIndexSignature,
   DistributedPick,
   UnionToIntersection,
+  ValueOf as ObjectValues,
 } from 'type-fest';

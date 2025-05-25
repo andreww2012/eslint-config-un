@@ -9,7 +9,7 @@ import {
   createConfigBuilder,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults, interopDefault, unique} from '../utils';
 import type {UnConfigFn} from './index';
 
 type MarkdownDialect = 'commonmark' | 'gfm';
@@ -165,7 +165,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
         [
           {
             ...(allowedFencedCodeBlocksLanguages && {
-              required: [...new Set(codeBlocksAllowedLanguages satisfies string[])],
+              required: unique(codeBlocksAllowedLanguages satisfies string[]),
             }),
           },
         ],
@@ -177,7 +177,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
         {
           ...(Array.isArray(allowHtmlTags) &&
             allowHtmlTags.length > 0 && {
-              allowed: [...new Set(allowHtmlTags)],
+              allowed: unique(allowHtmlTags),
             }),
         },
       ])

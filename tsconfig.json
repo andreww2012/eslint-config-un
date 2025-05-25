@@ -1,6 +1,6 @@
 {
-  "include": ["src", "scripts", "*.*", "test/eslint.config.test.ts"],
   "files": ["type-decls.d.ts"],
+  "include": ["src", "scripts", "*.*", "test/eslint.config.test.ts"],
   "exclude": ["node_modules"],
 
   // Based on https://www.totaltypescript.com/tsconfig-cheat-sheet
@@ -9,10 +9,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "es2022",
-    "verbatimModuleSyntax": true,
     "allowJs": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
+    "verbatimModuleSyntax": true,
     "forceConsistentCasingInFileNames": true,
 
     /* Strictness */

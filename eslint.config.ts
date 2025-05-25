@@ -6,6 +6,13 @@ export default eslintConfig({
   mode: 'lib',
 
   configs: {
+    ts: {
+      configSortTsconfigKeys: {
+        orderCompilerOptions: {
+          preset: 'totalTypescript',
+        },
+      },
+    },
     erasableSyntaxOnly: true,
       },
     },
@@ -70,7 +77,7 @@ export default eslintConfig({
     },
     {
       name: 'forbid-utility-package-imports',
-      ignores: ['src/utils.ts', 'src/types.ts'],
+      ignores: ['src/utils.ts', 'src/types.ts', 'scripts/**'],
       rules: {
         'no-restricted-imports': [
           2,

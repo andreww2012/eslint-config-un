@@ -116,18 +116,19 @@ Sub-config is a Config located within Config's options. If the parent config is 
 
 | Un config name | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`) | Description/Notes |
 | -------------- | ------------------------------------------- | ------------------------------------ | ----------------- |
-| ![JavaScript](./assets/devicon-javascript.svg) `js`                 | ✅ | [Vanilla ESLint rules](https://eslint.org/docs/latest/rules) | - |
-| ![TypeScript](./assets/devicon-typescript.svg) `ts`                 | ✅ | [typescript-eslint](https://npmjs.com/typescript-eslint) (`ts`) | Only rules **not** requiring type information. |
-| ![TypeScript](./assets/devicon-typescript.svg) `ts/typeAware`       | ✅ | ^ | Only rules requiring type information. |
-| ![TypeScript](./assets/devicon-typescript.svg) `ts/noTypeAssertion` | ✅ | [eslint-plugin-no-type-assertion](https://npmjs.com/eslint-plugin-no-type-assertion) (`no-type-assertion`) | - |
-| 🦄 `unicorn`                                                       | ✅ | [eslint-plugin-unicorn](https://npmjs.com/eslint-plugin-unicorn) (`unicorn`) | - |
-| ⭐ `regexp`                                                         | ✅ | [eslint-plugin-regexp](https://npmjs.com/eslint-plugin-regexp) (`regexp`) | - |
-| `promise`                                                           | ✅ | [eslint-plugin-promise](https://npmjs.com/eslint-plugin-promise) (`promise`) | - |
-| `import`                                                            | ✅ | [eslint-plugin-import-x](https://npmjs.com/eslint-plugin-import-x) (`import`) | - |
-| `sonarjs`                                                           | ✅ | [eslint-plugin-sonarjs](https://npmjs.com/eslint-plugin-sonarjs) (`sonarjs`) | - |
-| `eslintComments`                                                    | ✅ | [@eslint-community/eslint-plugin-eslint-comments](https://npmjs.com/@eslint-community/eslint-plugin-eslint-comments) (`@eslint-community/eslint-comments`) | Since v0.1.3 |
-| `jsdoc`                                                             | ✅ | [eslint-plugin-jsdoc](https://npmjs.com/eslint-plugin-jsdoc) (`jsdoc`) | Since v0.3.1 |
-| `jsdoc/typescript`                                                  | ✅ (`ts` config is enabled) | - | Config for disabling or disabling certain rules for TypeScript files |
+| ![JavaScript](./assets/devicon-javascript.svg) `js`                  | ✅ | [Vanilla ESLint rules](https://eslint.org/docs/latest/rules) | - |
+| ![TypeScript](./assets/devicon-typescript.svg) `ts`                  | ✅ | [typescript-eslint](https://npmjs.com/typescript-eslint) (`ts`) | Only rules **not** requiring type information. |
+| ![TypeScript](./assets/devicon-typescript.svg) `ts/typeAware`        | ✅ | ^ | Only rules requiring type information. |
+| ![TypeScript](./assets/devicon-typescript.svg) `ts/noTypeAssertion`  | ✅ | [eslint-plugin-no-type-assertion](https://npmjs.com/eslint-plugin-no-type-assertion) (`no-type-assertion`) | - |
+| ![TypeScript](./assets/devicon-typescript.svg) `ts/sortTsconfigKeys` | ❌ | - | Sort type-level and `compilerOptions` keys in tsconfig files. |
+| 🦄 `unicorn`                                                        | ✅ | [eslint-plugin-unicorn](https://npmjs.com/eslint-plugin-unicorn) (`unicorn`) | - |
+| ⭐ `regexp`                                                          | ✅ | [eslint-plugin-regexp](https://npmjs.com/eslint-plugin-regexp) (`regexp`) | - |
+| `promise`                                                            | ✅ | [eslint-plugin-promise](https://npmjs.com/eslint-plugin-promise) (`promise`) | - |
+| `import`                                                             | ✅ | [eslint-plugin-import-x](https://npmjs.com/eslint-plugin-import-x) (`import`) | - |
+| `sonarjs`                                                            | ✅ | [eslint-plugin-sonarjs](https://npmjs.com/eslint-plugin-sonarjs) (`sonarjs`) | - |
+| `eslintComments`                                                     | ✅ | [@eslint-community/eslint-plugin-eslint-comments](https://npmjs.com/@eslint-community/eslint-plugin-eslint-comments) (`@eslint-community/eslint-comments`) | Since v0.1.3 |
+| `jsdoc`                                                              | ✅ | [eslint-plugin-jsdoc](https://npmjs.com/eslint-plugin-jsdoc) (`jsdoc`) | Since v0.3.1 |
+| `jsdoc/typescript`                                                   | ✅ (`ts` config is enabled) | - | Config for disabling or disabling certain rules for TypeScript files |
 
 ### Web frameworks & related
 
