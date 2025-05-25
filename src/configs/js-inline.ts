@@ -158,6 +158,21 @@ export const jsInlineUnConfig: UnConfigFn<'jsInline'> = async (context) => {
     )
     .addOverrides();
 
+  configBuilder?.addConfig(
+    [
+      'js-inline/js-inside-html-inside-markdown',
+      {
+        doNotIgnoreHtml: true,
+        filesFallback: GLOB_HTML_ALL.map((htmlGlob) => `**/*.md/${htmlGlob}`),
+      },
+    ],
+    {
+      languageOptions: {
+        sourceType: 'module', // Allows `import` statements
+      },
+    },
+  );
+
   return {
     configs: [configBuilder],
     optionsResolved,
