@@ -259,7 +259,7 @@ const generateAngularPlugins = async (
 export interface AngularEslintConfigOptions
   extends UnConfigOptions<RulesRecordPartial<'@angular-eslint'>> {
   /**
-   * Enables or specifies the configuration for the [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template) plugin,
+   * Enables or specifies the configuration for the [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template) plugin,
    * which includes template-specific rules.
    * @default true
    */
@@ -320,14 +320,14 @@ export interface AngularEslintConfigOptions
    * `@angular/core` package, but can also be specified manually here.
    *
    * Used to determine which rules will be available based on its availability
-   * in the same major version of the [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template) packages.
+   * in the same major version of the [`@angular-eslint/eslint-plugin`](https://npmjs.com/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template) packages.
    *
    * Unavailable rules can be ported by specifying them in `portRules` option.
    */
   angularVersion?: SupportedAngularVersion;
 
   /**
-   * By default, all rules from [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template) packages of versions 13 until 19
+   * By default, all rules from [`@angular-eslint/eslint-plugin`](https://npmjs.com/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template) packages of versions 13 until 19
    * are present in our config, but the ones that are unavailable in the same major version
    * of these plugins as the detected (or specified in `angularVersion`) version of Angular
    * will simply do nothing. If you wish them to actually work, specify them here.

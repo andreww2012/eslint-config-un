@@ -231,7 +231,7 @@ interface UnConfigs {
    * [qwik](https://qwik.dev/) specific rules.
    *
    * Used plugin:
-   * - [`eslint-plugin-qwik`](https://www.npmjs.com/package/eslint-plugin-qwik) ([docs](https://qwik.dev/docs/advanced/eslint))
+   * - [`eslint-plugin-qwik`](https://npmjs.com/eslint-plugin-qwik) ([docs](https://qwik.dev/docs/advanced/eslint))
    * @default true <=> `@builder.io/qwik` or `@qwik.dev/core` package is installed
    */
   qwik: QwikEslintConfigOptions;
@@ -250,7 +250,7 @@ interface UnConfigs {
    * - If the config is explicitly enabled by passing `true` or options but the package is not installed, the latest supported version will be used.
    * - You can also manually specify the version using `angularVersion` option, which always takes precedence.
    *
-   * Under the hood the config uses [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template) packages, but not directly.
+   * Under the hood the config uses [`@angular-eslint/eslint-plugin`](https://npmjs.com/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template) packages, but not directly.
    *
    * All the rules from all the supported versions of each of the plugins are merged
    * into one plugin, but only those that are available in the same major version
@@ -278,7 +278,7 @@ interface UnConfigs {
    * CSS specific rules.
    *
    * Used plugin:
-   * - [`@eslint/css`](https://www.npmjs.com/package/@eslint/css)
+   * - [`@eslint/css`](https://npmjs.com/@eslint/css)
    * @default true unless `stylelint` package is installed
    */
   css: CssEslintConfigOptions;
@@ -287,7 +287,7 @@ interface UnConfigs {
    * Provides an autofix to remove unused imports.
    *
    * Used plugin:
-   * - [`eslint-plugin-unused-imports`](https://www.npmjs.com/package/eslint-plugin-unused-imports)
+   * - [`eslint-plugin-unused-imports`](https://npmjs.com/eslint-plugin-unused-imports)
    * @default true
    */
   unusedImports: UnusedImportsEslintConfigOptions;
@@ -296,10 +296,10 @@ interface UnConfigs {
    * [React](https://react.dev/) specific rules.
    *
    * ### Used plugins
-   * - [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react)
-   * - [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin)
+   * - [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react)
+   * - [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin)
    * **with `@eslint-react` prefix**
-   * - [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks)
+   * - [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks)
    *
    * Since `eslint-plugin-react` and `@eslint-react/eslint-plugin` have some overlapping rules,
    * and `eslint-plugin-react` has some rules that are not relevant in modern codebases,
@@ -321,7 +321,7 @@ interface UnConfigs {
    * Note: you may want to disable this config if you're not using JSX for performance reasons.
    *
    * Used plugin:
-   * - [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y)
+   * - [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y)
    * @default true
    */
   jsxA11y: JsxA11yEslintConfigOptions;
@@ -330,8 +330,8 @@ interface UnConfigs {
    * Rules specific to pnpm package manager.
    *
    * Used plugin:
-   * - [`eslint-plugin-pnpm`](https://www.npmjs.com/package/eslint-plugin-pnpm)
-   * @default true <=> pnpm is detected as a used package manager by [`package-manager-detector`](https://www.npmjs.com/package/package-manager-detector)
+   * - [`eslint-plugin-pnpm`](https://npmjs.com/eslint-plugin-pnpm)
+   * @default true <=> pnpm is detected as a used package manager by [`package-manager-detector`](https://npmjs.com/package-manager-detector)
    */
   pnpm: PnpmEslintConfigOptions;
 
@@ -339,7 +339,7 @@ interface UnConfigs {
    * [Next.js](https://nextjs.org/) specific rules.
    *
    * Used plugin:
-   * - [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next) ([docs](https://nextjs.org/docs/app/api-reference/config/eslint))
+   * - [`@next/eslint-plugin-next`](https://npmjs.com/@next/eslint-plugin-next) ([docs](https://nextjs.org/docs/app/api-reference/config/eslint))
    * @default true <=> `next` package is installed
    */
   nextJs: NextJsEslintConfigOptions;
@@ -348,7 +348,7 @@ interface UnConfigs {
    * [Astro](https://astro.build/) specific rules.
    *
    * Used plugin:
-   * - [`eslint-plugin-astro`](https://www.npmjs.com/package/eslint-plugin-astro) ([docs](https://ota-meshi.github.io/eslint-plugin-astro/))
+   * - [`eslint-plugin-astro`](https://npmjs.com/eslint-plugin-astro) ([docs](https://ota-meshi.github.io/eslint-plugin-astro/))
    * @default true <=> `astro` package is installed
    */
   astro: AstroEslintConfigOptions;
@@ -357,7 +357,7 @@ interface UnConfigs {
    * [Svelte](https://svelte.dev/) specific rules.
    *
    * Used plugin:
-   * - [`eslint-plugin-svelte`](https://www.npmjs.com/package/eslint-plugin-svelte) ([docs](https://sveltejs.github.io/eslint-plugin-svelte/))
+   * - [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte) ([docs](https://sveltejs.github.io/eslint-plugin-svelte/))
    * @default true <=> `svelte` package is installed
    */
   svelte: SvelteEslintConfigOptions;
@@ -366,7 +366,7 @@ interface UnConfigs {
    * [SolidJS](https://svelte.dev/) specific rules.
    *
    * Used plugin:
-   * - [`eslint-plugin-solid`](https://www.npmjs.com/package/eslint-plugin-solid) ([docs](https://github.com/solidjs-community/eslint-plugin-solid/tree/main?tab=readme-ov-file))
+   * - [`eslint-plugin-solid`](https://npmjs.com/eslint-plugin-solid) ([docs](https://github.com/solidjs-community/eslint-plugin-solid/tree/main?tab=readme-ov-file))
    * @default true <=> `solid-js` package is installed
    */
   solid: SolidEslintConfigOptions;
@@ -376,7 +376,7 @@ interface UnConfigs {
    * actual rules.
    *
    * Used plugins:
-   * - [`eslint-plugin-html`](https://www.npmjs.com/package/eslint-plugin-html) ([docs](https://github.com/BenoitZugmeyer/eslint-plugin-html?tab=ISC-1-ov-file#))
+   * - [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html) ([docs](https://github.com/BenoitZugmeyer/eslint-plugin-html?tab=ISC-1-ov-file#))
    * @default true
    */
   jsInline: JsInlineEslintConfigOptions;
@@ -385,7 +385,7 @@ interface UnConfigs {
    * Rules for linting plain HTML files.
    *
    * Used plugins:
-   * - [`@html-eslint/eslint-plugin`](https://www.npmjs.com/package/@html-eslint/eslint-plugin) ([docs](https://html-eslint.org/docs/getting-started))
+   * - [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin) ([docs](https://html-eslint.org/docs/getting-started))
    * @default true <=> `angular` config is **disabled**
    */
   html: HtmlEslintConfigOptions;
@@ -394,7 +394,7 @@ interface UnConfigs {
    * ESLint rules related to `Math` and `Number` objects.
    *
    * Used plugins:
-   * - [`eslint-plugin-math`](https://www.npmjs.com/package/eslint-plugin-math) ([docs](https://ota-meshi.github.io/eslint-plugin-math/))
+   * - [`eslint-plugin-math`](https://npmjs.com/eslint-plugin-math) ([docs](https://ota-meshi.github.io/eslint-plugin-math/))
    * @default true
    */
   math: MathEslintConfigOptions;
@@ -461,13 +461,13 @@ interface UnConfigs {
    *
    * NOTE: disabled by default.
    * @default false
-   * @see https://www.npmjs.com/package/eslint-plugin-de-morgan
+   * @see https://npmjs.com/eslint-plugin-de-morgan
    */
   deMorgan: DeMorganEslintConfigOptions;
 
   /**
    * Used plugins:
-   * - [`eslint-plugin-json-schema-validator`](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) ([the single rule docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/HEAD/docs/rules/no-invalid.md))
+   * - [`eslint-plugin-json-schema-validator`](https://npmjs.com/eslint-plugin-json-schema-validator) ([the single rule docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/HEAD/docs/rules/no-invalid.md))
    *
    * NOTE: disabled by default
    * @default false
@@ -476,7 +476,7 @@ interface UnConfigs {
 
   /**
    * Used plugins:
-   * - [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police) ([docs](https://github.com/antfu/case-police?tab=coc-ov-file))
+   * - [`eslint-plugin-case-police`](https://npmjs.com/eslint-plugin-case-police) ([docs](https://github.com/antfu/case-police?tab=coc-ov-file))
    *
    * NOTE: disabled by default
    * @default false
@@ -485,7 +485,7 @@ interface UnConfigs {
 
   /**
    * Used plugins:
-   * - [`eslint-plugin-es-x`](https://www.npmjs.com/package/eslint-plugin-es-x) ([docs](https://eslint-community.github.io/eslint-plugin-es-x/))
+   * - [`eslint-plugin-es-x`](https://npmjs.com/eslint-plugin-es-x) ([docs](https://eslint-community.github.io/eslint-plugin-es-x/))
    *
    * NOTE: disabled by default
    * @default false
@@ -494,7 +494,7 @@ interface UnConfigs {
 
   /**
    * Used plugins:
-   * - [`eslint-plugin-node-dependencies`](https://www.npmjs.com/package/eslint-plugin-node-dependencies) ([docs](https://ota-meshi.github.io/eslint-plugin-node-dependencies))
+   * - [`eslint-plugin-node-dependencies`](https://npmjs.com/eslint-plugin-node-dependencies) ([docs](https://ota-meshi.github.io/eslint-plugin-node-dependencies))
    *
    * Note that this plugin is considered experimental.
    *
@@ -510,7 +510,7 @@ interface UnConfigs {
    * Enables rules from a plugin to help suggest alternatives to various dependencies.
    *
    * Used plugins:
-   * - [`eslint-plugin-depend`](https://www.npmjs.com/package/eslint-plugin-depend) ([docs](https://github.com/es-tooling/eslint-plugin-depend?tab=MIT-1-ov-file))
+   * - [`eslint-plugin-depend`](https://npmjs.com/eslint-plugin-depend) ([docs](https://github.com/es-tooling/eslint-plugin-depend?tab=MIT-1-ov-file))
    *
    * NOTE: disabled by default
    * @default false
@@ -523,7 +523,7 @@ interface UnConfigs {
    * By default, applied to all TypeScript files.
    *
    * Used plugins:
-   * - [`eslint-plugin-erasable-syntax-only`](https://www.npmjs.com/package/eslint-plugin-erasable-syntax-only) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only?tab=coc-ov-file))
+   * - [`eslint-plugin-erasable-syntax-only`](https://npmjs.com/eslint-plugin-erasable-syntax-only) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only?tab=coc-ov-file))
    *
    * NOTE: disabled by default
    * @default false

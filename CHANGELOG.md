@@ -7,7 +7,7 @@
 - [**BREAKING**] You can now specify the method of disabling autofix: `prefixed` would create a plugin named `disable-autofix` and copy the rules for which the autofix is disabled. `unprefixed` would copy an entire plugin and replace the origin plugin with the copy. The default method is now `unprefixed`, which leaves full rule names unchanged. You can control the overall or per-plugin autofix disabling method via the `disableAutofixMethod` option.
 - [**BREAKING**] Removed the ability to disable rule autofix by enabling `disable-autofix/*` rules. Instead, when configuring a rule, you can now return an object and set `disableAutofix: true` in it.
 - [**BREAKING**] Removed the `errorsInsteadOfWarnings` root option in favor of `forceSeverity` that can now be set globally.
-- [**BREAKING**] Changed the prefix of [`typescript-eslint` plugin](https://npmjs.org/typescript-eslint) from `@typescript-eslint` to `ts`.
+- [**BREAKING**] Changed the prefix of [`typescript-eslint` plugin](https://npmjs.com/typescript-eslint) from `@typescript-eslint` to `ts`.
 - [**BREAKING**] **unicorn, cli** [`prefer-top-level-await`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-top-level-await.md) rule is now off by default and enabled in `cli` config.
 - **ts, vue** configs: for extension rules, base rule options and severity are now smartly inherited from the corresponding base rules. Added an option to disable this behavior.
 - **packageJson** config: [`require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md) and [`require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-version.md) rules are now enabled by default only for libraries.
@@ -16,13 +16,13 @@
 
 ## 0.10.0
 
-- New config: `svelte` via [`eslint-plugin-svelte`](https://www.npmjs.com/package/eslint-plugin-svelte), enabled automatically if `svelte` package is installed.
-- New config: `es` via [`eslint-plugin-es-x`](https://www.npmjs.com/package/eslint-plugin-es-x), **<u>disabled</u>** by default.
+- New config: `svelte` via [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte), enabled automatically if `svelte` package is installed.
+- New config: `es` via [`eslint-plugin-es-x`](https://npmjs.com/eslint-plugin-es-x), **<u>disabled</u>** by default.
 - New config: `cloudfrontFunctions` for [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html), **<u>disabled</u>** by default.
-- New config: `solid` via [`eslint-plugin-solid`](https://www.npmjs.com/package/eslint-plugin-solid), enabled automatically if `solid-js` package is installed.
-- New config: `nodeDependencies` via [`eslint-plugin-node-dependencies`](https://www.npmjs.com/package/eslint-plugin-node-dependencies), **<u>disabled</u>** by default.
-- New config: `jsInline` via [`eslint-plugin-html`](https://www.npmjs.com/package/eslint-plugin-html), enabled by default.
-- New config: `html` via [`@html-eslint/eslint-plugin`](https://www.npmjs.com/package/@html-eslint/eslint-plugin), enabled by default unless `angular` config is enabled.
+- New config: `solid` via [`eslint-plugin-solid`](https://npmjs.com/eslint-plugin-solid), enabled automatically if `solid-js` package is installed.
+- New config: `nodeDependencies` via [`eslint-plugin-node-dependencies`](https://npmjs.com/eslint-plugin-node-dependencies), **<u>disabled</u>** by default.
+- New config: `jsInline` via [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html), enabled by default.
+- New config: `html` via [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin), enabled by default unless `angular` config is enabled.
 - [**BREAKING**] Minimum supported ESLint version is now `^9.15.0` as support for `meta.defaultOptions` is necessary for some rules to work.
 - [**BREAKING**] Set the minimum supported Node.js version to 20.
 - ESLint plugins are now loaded on demand, i.e. only if they are actually used anywhere in the config. You can opt out of this behavior by setting `loadPluginsOnDemand` option to `false`.
@@ -56,9 +56,9 @@
 
 ## 0.9.0
 
-- New config: `nextJs` via [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next), enabled automatically if `next` package is installed.
-- New config: `casePolice` via [`eslint-plugin-case-police`](https://www.npmjs.com/package/eslint-plugin-case-police), **<u>disabled</u>** by default.
-- New config: `astro` via [`eslint-plugin-astro`](https://www.npmjs.com/package/eslint-plugin-astro), enabled automatically if `astro` package is installed.
+- New config: `nextJs` via [`@next/eslint-plugin-next`](https://npmjs.com/@next/eslint-plugin-next), enabled automatically if `next` package is installed.
+- New config: `casePolice` via [`eslint-plugin-case-police`](https://npmjs.com/eslint-plugin-case-police), **<u>disabled</u>** by default.
+- New config: `astro` via [`eslint-plugin-astro`](https://npmjs.com/eslint-plugin-astro), enabled automatically if `astro` package is installed.
 - `packageJson` config: added `requireFields` option to require the specified fields to be present in the package.json file.
 
 ### Dependencies
@@ -91,9 +91,9 @@
 
 ## 0.8.0
 
-- New config: `react` via [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin), [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react), [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks), [`eslint-plugin-react-refresh`](https://www.npmjs.com/package/eslint-plugin-react-refresh) and [`eslint-plugin-react-compiler`](https://www.npmjs.com/package/eslint-plugin-react-compiler), enabled automatically if `react` package is installed.
-- New config: `jsx-a11y` via [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y), enabled by default.
-- New config: `pnpm` via [`eslint-plugin-pnpm`](https://www.npmjs.com/package/eslint-plugin-pnpm), enabled automatically if `pnpm` is detected as a used package manager by [`package-manager-detector`](https://www.npmjs.com/package/package-manager-detector).
+- New config: `react` via [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin), [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react), [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks), [`eslint-plugin-react-refresh`](https://npmjs.com/eslint-plugin-react-refresh) and [`eslint-plugin-react-compiler`](https://npmjs.com/eslint-plugin-react-compiler), enabled automatically if `react` package is installed.
+- New config: `jsx-a11y` via [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y), enabled by default.
+- New config: `pnpm` via [`eslint-plugin-pnpm`](https://npmjs.com/eslint-plugin-pnpm), enabled automatically if `pnpm` is detected as a used package manager by [`package-manager-detector`](https://npmjs.com/package-manager-detector).
 - Set new options `ignoreOverrideMethods: true` and `ignoreClassesWithImplements: 'all'` to the base [`class-methods-use-this` rule](https://eslint.org/docs/latest/rules/class-methods-use-this).
 - `overrides` can now accept a function that receives the severity and options possibly set by our config.
 
@@ -127,8 +127,8 @@
 
 ## 0.7.0
 
-- New config: `angular` via [`@angular-eslint/eslint-plugin`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://www.npmjs.com/package/@angular-eslint/eslint-plugin-template), enabled automatically if `@angular/core` package is installed and is within the supported version range (from 13 to 19).
-- New config: `css` via [`@eslint/css`](https://www.npmjs.com/package/@eslint/css), enabled by default unless `stylelint` package is installed.
+- New config: `angular` via [`@angular-eslint/eslint-plugin`](https://npmjs.com/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template), enabled automatically if `@angular/core` package is installed and is within the supported version range (from 13 to 19).
+- New config: `css` via [`@eslint/css`](https://npmjs.com/@eslint/css), enabled by default unless `stylelint` package is installed.
 - Set `allowWithDecorator: true` for [`@typescript-eslint/no-extraneous-class`](https://typescript-eslint.io/rules/no-extraneous-class) rule, mostly to avoid unfixable reports in Angular projects.
 - If TypeScript config (`ts`) is enabled, [`import/no-deprecated`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-deprecated.md) is now disabled because [the corresponding `@typescript-eslint` rule](https://typescript-eslint.io/rules/no-deprecated) works better (in particular, it accounts for function overloads).
 - Override `@typescript-eslint/eslint-plugin` peer dependency of `eslint-plugin-jest` and `eslint-plugin-unused-imports` to avoid loading a wrong version of it.
@@ -188,13 +188,13 @@
 
 ## 0.6.0
 
-- New config: `qwik` via [`eslint-plugin-qwik`](https://www.npmjs.com/package/eslint-plugin-qwik), enabled automatically if `@builder.io/qwik` or `@qwik.dev/core` package is installed.
-- New config: `jsonSchemaValidator` via [`eslint-plugin-json-schema-validator`](https://www.npmjs.com/package/eslint-plugin-json-schema-validator), **<u>disabled</u>** by default.
+- New config: `qwik` via [`eslint-plugin-qwik`](https://npmjs.com/eslint-plugin-qwik), enabled automatically if `@builder.io/qwik` or `@qwik.dev/core` package is installed.
+- New config: `jsonSchemaValidator` via [`eslint-plugin-json-schema-validator`](https://npmjs.com/eslint-plugin-json-schema-validator), **<u>disabled</u>** by default.
 - [**BREAKING**] Disabled `vitest/prefer-to-be-{falsy,truthy}` rules since their fixes don't result in the equivalent code and therefore cannot be suitable for most projects.
 - [**BREAKING**] Set [`enforceForIfStatements: false`](https://eslint.org/docs/latest/rules/logical-assignment-operators#enforceforifstatements) for `logical-assignment-operators` since code enforced by this option might be harder to read and understand.
 - Added a fully typed `node` config option to specify `eslint-plugin-n` plugin settings.
 - For `jest` and `vitest` configs, an option `testDefinitionKeyword` now accepts a string that is used to set [all the properties of the object](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/consistent-test-it.md#options).
-- For Vue files virtual files for `<style>` blocks are now created via [`eslint-processor-vue-blocks`](https://www.npmjs.com/package/eslint-processor-vue-blocks). Added an option to disable or customize this behavior.
+- For Vue files virtual files for `<style>` blocks are now created via [`eslint-processor-vue-blocks`](https://npmjs.com/eslint-processor-vue-blocks). Added an option to disable or customize this behavior.
 - `<config>.overrides` type now includes `disable-autofix/*` rules.
 
 ### Dependencies
@@ -208,9 +208,9 @@
 ## 0.5.0
 
 - [**BREAKING**] All used ESLint plugins are now loaded unconditionally, allowing the use of any of their rules without requiring that the corresponding config is enabled.
-- Abandon [`eslint-plugin-disable-autofix`](https://www.npmjs.com/package/eslint-plugin-disable-autofix) in favor of manually adding the same functionality.
+- Abandon [`eslint-plugin-disable-autofix`](https://npmjs.com/eslint-plugin-disable-autofix) in favor of manually adding the same functionality.
 - [**BREAKING**] Disabled autofix for [`no-unnecessary-type-assertion`](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/) due to [this bug](https://github.com/typescript-eslint/typescript-eslint/issues/8721).
-- New config: `deMorgan` via [`eslint-plugin-de-morgan`](https://www.npmjs.com/package/eslint-plugin-de-morgan), **<u>disabled</u>** by default.
+- New config: `deMorgan` via [`eslint-plugin-de-morgan`](https://npmjs.com/eslint-plugin-de-morgan), **<u>disabled</u>** by default.
 
 ### Dependencies
 
@@ -282,7 +282,7 @@
 
 ## 0.4.0
 
-- New config: `perfectionist` via [`eslint-plugin-perfectionist`](https://www.npmjs.com/package/eslint-plugin-perfectionist), **<u>disabled</u>** by default.
+- New config: `perfectionist` via [`eslint-plugin-perfectionist`](https://npmjs.com/eslint-plugin-perfectionist), **<u>disabled</u>** by default.
 - All dependency versions are now pinned (removed `^`).
 
 ### Dependencies
@@ -293,7 +293,7 @@
 
 ## 0.3.1
 
-- New config: `jsdoc` via [`eslint-plugin-jsdoc`](https://www.npmjs.com/package/eslint-plugin-jsdoc), enabled by default.
+- New config: `jsdoc` via [`eslint-plugin-jsdoc`](https://npmjs.com/eslint-plugin-jsdoc), enabled by default.
 - Changed the severity of all the `eslint-plugin-vue`'s recommended rules to `error` (which turned out to be `warn` by default).
 - Disabled `import/no-default-export` rule for files starting with a dot and Storybook files (files inside `.storybook` directory and story files).
 
@@ -307,9 +307,9 @@
 
 - [**BREAKING**] [`prefer-inline` option of `import/no-duplicates` rule](https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-duplicates.md#inline-type-imports) is now set to `true`. Added an new option `noDuplicatesOptions` in `import` config to override this behavior.
 - [**BREAKING**] Removed `overridesPinia` option from `vue` config in favor of adding the ability to pass more usual config options in `pinia` option.
-- New config: `jest` via [`eslint-plugin-jest`](https://www.npmjs.com/package/eslint-plugin-jest), enabled automatically if `jest` package is installed.
-- New config: `jest-extended` via [`eslint-plugin-jest-extended`](https://www.npmjs.com/package/eslint-plugin-jest-extended), enabled automatically if **both** `jest` and `jest-extended` packages are installed.
-- New config: `vitest` via [`@vitest/eslint-plugin`](https://www.npmjs.com/package/@vitest/eslint-plugin), enabled automatically if `vitest` package is installed.
+- New config: `jest` via [`eslint-plugin-jest`](https://npmjs.com/eslint-plugin-jest), enabled automatically if `jest` package is installed.
+- New config: `jest-extended` via [`eslint-plugin-jest-extended`](https://npmjs.com/eslint-plugin-jest-extended), enabled automatically if **both** `jest` and `jest-extended` packages are installed.
+- New config: `vitest` via [`@vitest/eslint-plugin`](https://npmjs.com/@vitest/eslint-plugin), enabled automatically if `vitest` package is installed.
 
 ### Dependencies
 
@@ -355,8 +355,8 @@
 
 ## 0.2.0
 
-- New config: `markdown` via [`@eslint/markdown`](https://www.npmjs.com/package/@eslint/markdown), enabled by default.
-- New config: `cssInJs` via [`eslint-plugin-css`](https://www.npmjs.com/package/eslint-plugin-css), enabled by default.
+- New config: `markdown` via [`@eslint/markdown`](https://npmjs.com/@eslint/markdown), enabled by default.
+- New config: `cssInJs` via [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css), enabled by default.
 - Added a boolean option `overrideIgnores` to completely override global `ignores` provided by our config.
 - Added a `node` config option to configure [`prefer-global`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/prefer-global) rule for each feature.
 - Fixed an issue in `vue` config where Nuxt's `app.vue` and `error.vue` files in a custom project directory were not recognized.
@@ -371,14 +371,14 @@
 
 ## 0.1.5
 
-- New config: `packageJson` via [`eslint-plugin-package-json`](https://www.npmjs.com/package/eslint-plugin-package-json).
+- New config: `packageJson` via [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json).
 - Dependencies:
   - `eslint-plugin-import-x`@4.4.0
     - Enable `checkTypeImports` option for [`import/extensions`](https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/extensions.md) rule.
 
 ## 0.1.4
 
-- New config: `json` (for linting .json, .jsonc, .json5 files) via [`eslint-plugin-jsonc`](https://www.npmjs.com/package/eslint-plugin-jsonc).
+- New config: `json` (for linting .json, .jsonc, .json5 files) via [`eslint-plugin-jsonc`](https://npmjs.com/eslint-plugin-jsonc).
 - Support for merging default files with user-specified files via `doNotMergeFilesWithDefault` option for `yaml`, `toml` and `json` configs.
 - Dependencies:
   - `typescript-eslint`@8.10.0
@@ -386,8 +386,8 @@
 
 ## 0.1.3
 
-- New config: `eslintComments` via [`@eslint-community/eslint-plugin-eslint-comments`](https://www.npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments).
-- New config: `toml` via [`eslint-plugin-toml`](https://www.npmjs.com/package/eslint-plugin-toml).
+- New config: `eslintComments` via [`@eslint-community/eslint-plugin-eslint-comments`](https://npmjs.com/@eslint-community/eslint-plugin-eslint-comments).
+- New config: `toml` via [`eslint-plugin-toml`](https://npmjs.com/eslint-plugin-toml).
 - Dependencies:
   - `eslint-plugin-unicorn`@56.0.0
     - Enable [`unicorn/consistent-existence-index-check`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/consistent-existence-index-check.md) and [`unicorn/prefer-math-min-max`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-math-min-max.md) rules.

@@ -63,7 +63,7 @@ const defaultHoverOutHandlersRequiringOnBlur: Record<`on${string}`, true> = {
 
 export interface JsxA11yEslintConfigOptions extends UnConfigOptions<'jsx-a11y'> {
   /**
-   * [`eslint-plugin-jsx-a11y`](https://www.npmjs.com/package/eslint-plugin-jsx-a11y) plugin
+   * [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `jsx-a11y` property and applied to the specified `files` and `ignores`.
    */

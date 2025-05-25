@@ -5,13 +5,13 @@ import type {UnConfigFn} from './index';
 
 export interface SonarEslintConfigOptions extends UnConfigOptions<'sonarjs'> {
   /**
-   * Enables rules that are specific to [aws-cdk-lib](https://www.npmjs.com/package/aws-cdk-lib)
+   * Enables rules that are specific to [aws-cdk-lib](https://npmjs.com/aws-cdk-lib)
    * @default true <=> `aws-cdk-lib` package is installed
    */
   enableAwsRules?: boolean;
 
   /**
-   * Enables rules that are specific to [helmet](https://www.npmjs.com/package/helmet)
+   * Enables rules that are specific to [helmet](https://npmjs.com/helmet)
    * @default true <=> `helmet` package is installed
    */
   enableHelmetRules?: boolean;

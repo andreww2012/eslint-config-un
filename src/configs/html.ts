@@ -5,7 +5,7 @@ import type {UnConfigFn} from './index';
 
 export interface HtmlEslintConfigOptions extends UnConfigOptions<'@html-eslint'> {
   /**
-   * [`@html-eslint/eslint-plugin`](https://www.npmjs.com/package/@html-eslint/eslint-plugin) plugin
+   * [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `html` property and applied to the specified `files` and `ignores`.
    */

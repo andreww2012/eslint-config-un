@@ -6,7 +6,7 @@ import type {UnConfigFn} from './index';
 
 export interface NextJsEslintConfigOptions extends UnConfigOptions<'@next/next'> {
   /**
-   * [`@next/eslint-plugin-next`](https://www.npmjs.com/package/@next/eslint-plugin-next) plugin
+   * [`@next/eslint-plugin-next`](https://npmjs.com/@next/eslint-plugin-next) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `next` property and applied to the specified `files` and `ignores`.
    */

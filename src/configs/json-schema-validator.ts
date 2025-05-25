@@ -10,7 +10,7 @@ import type {UnConfigFn} from './index';
 export interface JsonSchemaValidatorEslintConfigOptions
   extends UnConfigOptions<'json-schema-validator'> {
   /**
-   * [`eslint-plugin-json-schema-validator`](https://www.npmjs.com/package/eslint-plugin-json-schema-validator) plugin
+   * [`eslint-plugin-json-schema-validator`](https://npmjs.com/eslint-plugin-json-schema-validator) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `json-schema-validator` property and applied to the specified `files` and `ignores`.
    * @see [Docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/tree/main#settings)

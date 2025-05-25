@@ -165,7 +165,7 @@ export interface JestEslintConfigOptions extends UnConfigOptions<'jest'> {
   /**
    * Enforces the minimum and maximum number of arguments that `expect` can take, and is required to take.
    *
-   * This is useful when you're using libraries that increase the number of arguments supported by expect, such as [jest-expect-message](https://www.npmjs.com/package/jest-expect-message).
+   * This is useful when you're using libraries that increase the number of arguments supported by expect, such as [jest-expect-message](https://npmjs.com/jest-expect-message).
    *
    * *(from Jest docs)*
    *
@@ -399,7 +399,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
       getSuggestUsingJestExtendedMatcherSeverity('toHaveBeenCalledOnce'),
     );
 
-  // TODO https://www.npmjs.com/package/eslint-plugin-jest-dom ?
+  // TODO https://npmjs.com/eslint-plugin-jest-dom ?
   // Other plugins: eslint-plugin-jest-async, eslint-plugin-jest-formatting, eslint-plugin-jest-mock-config, eslint-plugin-jest-playwright, eslint-plugin-jest-react, eslint-plugin-jest-test-each-formatting
 
   return {

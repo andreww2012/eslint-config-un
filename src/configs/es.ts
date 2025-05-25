@@ -246,7 +246,7 @@ type EcmaVersion = keyof EcmaFeatures;
 
 export interface EsEslintConfigOptions extends UnConfigOptions<'es'> {
   /**
-   * [`eslint-plugin-es-x`](https://www.npmjs.com/package/eslint-plugin-es-x) plugin
+   * [`eslint-plugin-es-x`](https://npmjs.com/eslint-plugin-es-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `es-x` property and applied to the specified `files` and `ignores`.
    */

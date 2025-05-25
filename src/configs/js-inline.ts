@@ -25,7 +25,7 @@ const DEFAULT_XML_EXTENSIONS = ['.xhtml', '.xml'];
 
 export interface JsInlineEslintConfigOptions extends UnConfigOptions<'html'> {
   /**
-   * [`eslint-plugin-html`](https://www.npmjs.com/package/eslint-plugin-html) plugin
+   * [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `html` property and applied to the specified `files` and `ignores`.
    */

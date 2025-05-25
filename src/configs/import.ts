@@ -8,7 +8,7 @@ import type {UnConfigFn} from './index';
 
 export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
   /**
-   * [`eslint-plugin-import-x`](https://www.npmjs.com/package/eslint-plugin-import-x) plugin
+   * [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `settings` object as-is and applied to the specified `files` and `ignores`.
    *
@@ -20,7 +20,7 @@ export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
   /**
    * Recognized automatically and normally should not be set manually.
    *
-   * When enabled, creates a [`eslint-import-resolver-typescript`](https://www.npmjs.com/package/eslint-import-resolver-typescript) resolver, which settings can be overridden
+   * When enabled, creates a [`eslint-import-resolver-typescript`](https://npmjs.com/eslint-import-resolver-typescript) resolver, which settings can be overridden
    * using `tsResolverOptions` option.
    */
   isTypescriptEnabled?: boolean;

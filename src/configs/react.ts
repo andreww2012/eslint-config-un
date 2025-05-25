@@ -170,7 +170,7 @@ type ReactXTypeAwareRules = 'no-leaked-conditional-rendering' | 'prefer-read-onl
 
 export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
   /**
-   * [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react) plugin
+   * [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `react` property and applied to the specified `files` and `ignores`.
    *
@@ -181,7 +181,7 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
   settings?: EslintPluginReactSettings;
 
   /**
-   * Enables or specifies the configuration for the [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) plugin.
+   * Enables or specifies the configuration for the [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) plugin.
    *
    * Only includes [runtime agnostic ("X")](https://eslint-react.xyz/docs/rules/overview#x-rules) and ["Naming Convention"](https://eslint-react.xyz/docs/rules/overview#naming-convention-rules) rules.
    *
@@ -198,7 +198,7 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
         Omit<RulesRecordPartial<'@eslint-react'>, `@eslint-react/${ReactXTypeAwareRules}`>,
         {
           /**
-           * [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) plugin
+           * [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) plugin
            * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
            * that will be assigned to `react-x` property and applied to the specified `files` and `ignores`.
            *
@@ -255,7 +255,7 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
       >;
 
   /**
-   * Enables or specifies the configuration for the [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) plugin, as well as ["Hooks Extra" rules from `@eslint-react/eslint-plugin`](https://eslint-react.xyz/docs/rules/overview#hooks-extra-rules)
+   * Enables or specifies the configuration for the [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks) plugin, as well as ["Hooks Extra" rules from `@eslint-react/eslint-plugin`](https://eslint-react.xyz/docs/rules/overview#hooks-extra-rules)
    * (unless `pluginX` option is set to `never` on `react` config).
    *
    * By default will use the same `files` and `ignores` as the parent config.
@@ -264,7 +264,7 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
   configHooks?: boolean | UnConfigOptions<'react-hooks' | '@eslint-react/hooks-extra'>;
 
   /**
-   * Enables or specifies the configuration for DOM specific rules from [`@eslint-react/eslint-plugin`](https://www.npmjs.com/package/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react).
+   * Enables or specifies the configuration for DOM specific rules from [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react).
    *
    * To avoid including the rules from any of these plugins, set `pluginX` option to
    * `never` or `avoid` to completely ignore `@eslint-react/eslint-plugin` or
@@ -281,7 +281,7 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
       >;
 
   /**
-   * Enables or specifies the configuration for the [`eslint-plugin-react-refresh`](https://www.npmjs.com/package/eslint-plugin-react-refresh) plugin.
+   * Enables or specifies the configuration for the [`eslint-plugin-react-refresh`](https://npmjs.com/eslint-plugin-react-refresh) plugin.
    *
    * - By default will be applied to JSX files only, as per the plugin recommendation.
    * - Will set `allowConstantExport: true` if `vite` package is installed.
@@ -320,7 +320,7 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
       >;
 
   /**
-   * Enables or specifies the configuration for the [`eslint-plugin-react-compiler`](https://www.npmjs.com/package/eslint-plugin-react-compiler) plugin.
+   * Enables or specifies the configuration for the [`eslint-plugin-react-compiler`](https://npmjs.com/eslint-plugin-react-compiler) plugin.
    *
    * By default will use the same `files` and `ignores` as the parent config.
    * @default true <=> React version is 19 or higher
@@ -336,7 +336,7 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
     | UnConfigOptions<DistributedPick<RulesRecordPartial, 'import/no-default-export'>>;
 
   /**
-   * Controls how rules from [@eslint-react/eslint-plugin](https://www.npmjs.com/package/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react) are used.
+   * Controls how rules from [@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react) are used.
    * - `prefer`: if the same(-ish) rule exists both in `@eslint-react/eslint-plugin`
    * and `eslint-plugin-react` (the full list is below), use the one from
    * `@eslint-react/eslint-plugin`. Use all the other unique rules from both of these plugins.
