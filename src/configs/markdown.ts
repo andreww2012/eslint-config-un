@@ -80,6 +80,12 @@ export interface MarkdownEslintConfigOptions extends UnConfigOptions<'markdown'>
    */
   codeBlocksImpliedStrictMode?: boolean;
 
+  /**
+   * Format fenced code blocks with Prettier.
+   * @default true <=> `prettier` package is installed
+   */
+  configFormatFencedCodeBlocks?: boolean | UnConfigOptions<'prettier'>;
+
   overridesCodeBlocks?: RulesRecordPartial;
 
   /**
@@ -103,6 +109,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
     lintCodeBlocks: true,
     parseFrontmatter: 'yaml',
     codeBlocksImpliedStrictMode: true,
+    configFormatFencedCodeBlocks: context.packagesInfo.prettier != null,
   } satisfies MarkdownEslintConfigOptions);
 
   const {
@@ -116,6 +123,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
     codeBlocksImpliedStrictMode,
 
     parseFrontmatter,
+    configFormatFencedCodeBlocks,
   } = optionsResolved;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'markdown');
@@ -206,8 +214,8 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
     [
       'markdown/setup/code-blocks-processor',
       {
-        filesFallback: DEFAULT_FILES,
         doNotIgnoreMarkdown: true,
+        filesFallback: DEFAULT_FILES,
       },
     ],
     {
@@ -225,6 +233,8 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
         [
           'markdown/code-blocks',
           {
+            doNotIgnoreCss: true,
+            doNotIgnoreHtml: true,
             doNotIgnoreMarkdown: true,
             filesFallback: DEFAULT_FILES_FOR_CODE_BLOCKS,
           },
@@ -344,8 +354,27 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
     }
   }
 
+  const configFormatFencedCodeBlocksBuilder = createConfigBuilder(
+    context,
+    configFormatFencedCodeBlocks,
+    'prettier',
+  );
+
+  configFormatFencedCodeBlocksBuilder
+    ?.addConfig([
+      'markdown/format-fenced-code-blocks',
+      {
+        doNotIgnoreCss: true,
+        doNotIgnoreHtml: true,
+        doNotIgnoreMarkdown: true,
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: DEFAULT_FILES_FOR_CODE_BLOCKS,
+      },
+    ])
+    .addRule('prettier', ERROR, [{}, {eslintTakeoverMode: true}]);
+
   return {
-    configs: [configBuilder],
+    configs: [configBuilder, configFormatFencedCodeBlocksBuilder],
     optionsResolved,
   };
 };

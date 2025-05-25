@@ -1,0 +1,83 @@
+diff --git a/eslint-plugin-prettier.js b/eslint-plugin-prettier.js
+index 4b5c8c9a9fafc20ecc7b354bebbf53d9c1054ac9..16679fbe936074b927586028cf2d0e98c7a56d73 100644
+--- a/eslint-plugin-prettier.js
++++ b/eslint-plugin-prettier.js
+@@ -17,6 +17,7 @@
+  *   parserMeta?: ESLint.ObjectMetaProperties['meta'];
+  *   parserPath?: string;
+  *   usePrettierrc?: boolean;
++ *   eslintTakeoverMode?: boolean;
+  * }} Options
+  *
+  *
+@@ -24,6 +25,7 @@
+  *   source: string,
+  *   options: Options,
+  *   fileInfoOptions: FileInfoOptions,
++ *   eslintTakeoverMode: boolean,
+  * ) => string} PrettierFormat
+  */
+ 
+@@ -128,6 +130,7 @@ const eslintPluginPrettier = {
+                 properties: {},
+                 additionalProperties: true,
+               },
++              eslintTakeoverMode: { type: 'boolean', description: "Use ESLint parser and ignore list instead of Prettier's. This allows this plugin to be used to [lint fenced code blocks inside Markdown](https://github.com/prettier/eslint-plugin-prettier/pull/613). The original author is Anthony Fu (@antfu)." },
+             },
+             additionalProperties: true,
+           },
+@@ -143,6 +146,7 @@ const eslintPluginPrettier = {
+         const usePrettierrc = !options || options.usePrettierrc !== false;
+         /** @type {FileInfoOptions} */
+         const fileInfoOptions = options?.fileInfoOptions || {};
++        const eslintTakeoverMode = options?.eslintTakeoverMode ?? false;
+ 
+         // `context.getSourceCode()` was deprecated in ESLint v8.40.0 and replaced
+         // with the `sourceCode` property.
+@@ -210,6 +214,7 @@ const eslintPluginPrettier = {
+                   usePrettierrc,
+                 },
+                 fileInfoOptions,
++                eslintTakeoverMode,
+               );
+             } catch (err) {
+               if (!(err instanceof SyntaxError)) {
+diff --git a/worker.mjs b/worker.mjs
+index b76274ce25cfcd59bd8004ed59e2329e8da6beb8..01bf8fb7d6f06593d0f7aab14d984c20014898a6 100644
+--- a/worker.mjs
++++ b/worker.mjs
+@@ -32,6 +32,7 @@ runAsWorker(
+       ...eslintPrettierOptions
+     },
+     eslintFileInfoOptions,
++    eslintTakeoverMode = false,
+   ) => {
+     const prettierRcOptions = usePrettierrc
+       ? await prettier.resolveConfig(onDiskFilepath, {
+@@ -39,6 +40,9 @@ runAsWorker(
+         })
+       : null;
+ 
++    const initialOptions = {};
++
++    if(!eslintTakeoverMode) {
+     const { ignored, inferredParser } = await prettier.getFileInfo(
+       onDiskFilepath,
+       {
+@@ -57,7 +61,7 @@ runAsWorker(
+       return;
+     }
+ 
+-    const initialOptions = { parser: inferredParser ?? 'babel' };
++    initialOptions.parser = inferredParser ?? 'babel';
+ 
+     // ESLint supports processors that let you extract and lint JS
+     // fragments within a non-JS language. In the cases where prettier
+@@ -172,6 +176,7 @@ runAsWorker(
+         return;
+       }
+     }
++    }
+ 
+     /** @type {PrettierOptions} */
+     const prettierOptions = {

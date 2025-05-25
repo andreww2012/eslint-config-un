@@ -5,7 +5,7 @@
  */
 export default {
   useGitignore: true,
-  ignorePaths: ['**/pnpm-lock.yaml', 'test/**/*', 'pnpm-workspace.yaml', '**/*.svg'],
+  ignorePaths: ['**/pnpm-lock.yaml', 'test/**/*', 'pnpm-workspace.yaml', '**/*.svg', 'patches/**'],
   words: [
     // Names
     'qwik',

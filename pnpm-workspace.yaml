@@ -1,3 +1,5 @@
 onlyBuiltDependencies:
   - esbuild
   - unrs-resolver
+patchedDependencies:
+  eslint-plugin-prettier: patches/eslint-plugin-prettier.patch

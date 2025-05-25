@@ -76,7 +76,7 @@ type UnConfig =
       files?: string[];
       ignores?: string[];
 
-      [RuleName in 'overrides' | 'overridesAny']?: {
+      [RuleName in ('overrides' | 'overridesAny')]?: {
         [RuleName in string]:
           | Severity
           | [Severity, RuleOptions[RuleName]]
@@ -171,19 +171,20 @@ Sub-config is a Config located within Config's options. If the parent config is 
 
 | Un config name | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`) | Description/Notes |
 | -------------- | ------------------------------------------- | ------------------------------------ | ----------------- |
-| ![Markdown](./assets/mdi-language-markdown.svg) `markdown` | ✅ | [@eslint/markdown](https://npmjs.com/@eslint/markdown) (`markdown`) | Since v0.7.0<br>Configured to also lint fenced code blocks |
-| ![CSS](./assets/devicon-css3.svg) `css`                    | ✅ (unless `stylelint` is installed) | [@eslint/css](https://npmjs.com/@eslint/css) (`css`) | Since v0.7.0 |
-| ![CSS](./assets/devicon-css3.svg) `cssInJs`                | ✅ | [eslint-plugin-css](https://npmjs.com/eslint-plugin-css) (`css-in-js`) | Since v0.2.0<br>Lints inlined CSS |
-| `jsxA11y`                                                  | ✅ | [eslint-plugin-jsx-a11y](https://npmjs.com/eslint-plugin-jsx-a11y) (`jsx-a11y`) | Since v0.8.0 |
-| ![YAML](./assets/devicon-yaml.svg) `yaml`                  | ❌ | [eslint-plugin-yaml](https://npmjs.com/eslint-plugin-yaml) (`yaml`) | Since v0.1.0 |
-| ![JSON](./assets/devicon-json.svg) `jsonc`                 | ❌ | [eslint-plugin-jsonc](https://npmjs.com/eslint-plugin-jsonc) (`jsonc`) | Since v0.1.4<br>Supports JSON, JSON5, JSONC |
-| `jsonc/json`                                               | ❌ | ^ | Config exclusively for `.json` files, does nothing by default |
-| `jsonc/jsonc`                                              | ❌ | ^ | Config exclusively for `.jsonc` files, does nothing by default |
-| `jsonc/json5`                                              | ❌ | ^ | Config exclusively for `.json5` files, does nothing by default |
-| `jsonSchemaValidator`                                      | ❌ | [eslint-plugin-json-schema-validator](https://npmjs.com/eslint-plugin-json-schema-validator) (`json-schema-validator`) | Since v0.6.0 |
-| ![TOML](./assets/tabler-toml.svg) `toml`                   | ❌ | [eslint-plugin-toml](https://npmjs.com/eslint-plugin-toml) (`toml`) | Since v0.1.3 |
-| ![HTML](./assets/devicon-html5.svg) `html`                 | ✅ | [@html-eslint/eslint-plugin](https://npmjs.com/@html-eslint/eslint-plugin) (`@html-eslint`) | Since v0.10.0 |
-| ![GraphQL](./assets/logos-graphql.svg) `graphql`           | ✅ (`graphql` is installed) | [@graphql-eslint/eslint-plugin](https://npmjs.com/@graphql-eslint/eslint-plugin) (`graphql`) | Since v1.0.0 |
+| ![Markdown](./assets/mdi-language-markdown.svg) `markdown`                        | ✅ | [@eslint/markdown](https://npmjs.com/@eslint/markdown) (`markdown`) | Since v0.7.0<br>Configured to also lint fenced code blocks |
+| ![Markdown](./assets/mdi-language-markdown.svg) `markdown/formatFencedCodeBlocks` | ✅ (`prettier` is installed) | [eslint-plugin-prettier](https://npmjs.com/eslint-plugin-prettier) (`prettier`) | Since v1.0.0<br>Format fenced code blocks inside Markdown files using Prettier |
+| ![CSS](./assets/devicon-css3.svg) `css`                                           | ✅ (unless `stylelint` is installed) | [@eslint/css](https://npmjs.com/@eslint/css) (`css`) | Since v0.7.0 |
+| ![CSS](./assets/devicon-css3.svg) `cssInJs`                                       | ✅ | [eslint-plugin-css](https://npmjs.com/eslint-plugin-css) (`css-in-js`) | Since v0.2.0<br>Lints inlined CSS |
+| `jsxA11y`                                                                         | ✅ | [eslint-plugin-jsx-a11y](https://npmjs.com/eslint-plugin-jsx-a11y) (`jsx-a11y`) | Since v0.8.0 |
+| ![YAML](./assets/devicon-yaml.svg) `yaml`                                         | ❌ | [eslint-plugin-yaml](https://npmjs.com/eslint-plugin-yaml) (`yaml`) | Since v0.1.0 |
+| ![JSON](./assets/devicon-json.svg) `jsonc`                                        | ❌ | [eslint-plugin-jsonc](https://npmjs.com/eslint-plugin-jsonc) (`jsonc`) | Since v0.1.4<br>Supports JSON, JSON5, JSONC |
+| `jsonc/json`                                                                      | ❌ | ^ | Config exclusively for `.json` files, does nothing by default |
+| `jsonc/jsonc`                                                                     | ❌ | ^ | Config exclusively for `.jsonc` files, does nothing by default |
+| `jsonc/json5`                                                                     | ❌ | ^ | Config exclusively for `.json5` files, does nothing by default |
+| `jsonSchemaValidator`                                                             | ❌ | [eslint-plugin-json-schema-validator](https://npmjs.com/eslint-plugin-json-schema-validator) (`json-schema-validator`) | Since v0.6.0 |
+| ![TOML](./assets/tabler-toml.svg) `toml`                                          | ❌ | [eslint-plugin-toml](https://npmjs.com/eslint-plugin-toml) (`toml`) | Since v0.1.3 |
+| ![HTML](./assets/devicon-html5.svg) `html`                                        | ✅ | [@html-eslint/eslint-plugin](https://npmjs.com/@html-eslint/eslint-plugin) (`@html-eslint`) | Since v0.10.0 |
+| ![GraphQL](./assets/logos-graphql.svg) `graphql`                                  | ✅ (`graphql` is installed) | [@graphql-eslint/eslint-plugin](https://npmjs.com/@graphql-eslint/eslint-plugin) (`graphql`) | Since v1.0.0 |
 
 ### JS/TS - Miscellaneous
 
@@ -229,7 +230,7 @@ export default eslintConfig({
     // This is a Config
     node: {
       // By default `node` rules are applied to all files, so let's narrow the file list down
-      files: ['backend/**'], 
+      files: ['backend/**'],
     },
     vue: {
       // For some reason we're not ready to lint *.vue files
@@ -251,7 +252,7 @@ export default eslintConfig({
     // This plugin is conversely disabled by default, but we want to use it
     security: true,
   },
-})
+});
 ```
 
 #### Providing user defined flag configs
@@ -264,7 +265,9 @@ Example:
 import {eslintConfig} from 'eslint-config-un';
 
 export default eslintConfig({
-  configs: { /* ... */ },
+  configs: {
+    /* ... */
+  },
 
   extraConfigs: [
     {

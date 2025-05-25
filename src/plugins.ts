@@ -96,6 +96,7 @@ export const pluginsLoaders = {
   'prefer-arrow-functions': () =>
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-prefer-arrow-functions')),
+  prettier: () => interopDefault(import('eslint-plugin-prettier')),
   promise: () => interopDefault(import('eslint-plugin-promise')),
   qwik: () => interopDefault(import('eslint-plugin-qwik')).then((m) => fixupPluginRules(m)),
   react: () => interopDefault(import('eslint-plugin-react')),
