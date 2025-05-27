@@ -152,6 +152,9 @@ export const eslintConfigInternal = async (
         (packagesInfo.tailwindcss != null &&
           (packagesInfo.tailwindcss.versions.major ?? Number.POSITIVE_INFINITY) < 4)),
   );
+  const isTanstackQueryEnabled = Boolean(
+    configsOptions.solid ?? packagesInfo['@tanstack/query-core'] != null,
+  );
   const isTomlEnabled = Boolean(configsOptions.toml ?? false);
   const isTypescriptEnabled =
     configsOptions.ts !== false && Boolean(configsOptions.ts || packagesInfo.typescript);
@@ -212,6 +215,7 @@ export const eslintConfigInternal = async (
       sonar: {enabled: isSonarEnabled},
       svelte: {enabled: isSvelteEnabled},
       tailwind: {enabled: isTailwindEnabled},
+      tanstackQuery: {enabled: isTanstackQueryEnabled},
       toml: {enabled: isTomlEnabled},
       ts: {enabled: isTypescriptEnabled},
       unicorn: {enabled: isUnicornEnabled},
@@ -325,6 +329,8 @@ export const eslintConfigInternal = async (
     isJsInlineEnabled && import('./configs/js-inline').then((m) => m.jsInlineUnConfig(context)),
     isHtmlEnabled && import('./configs/html').then((m) => m.htmlUnConfig(context)),
     isMathEnabled && import('./configs/math').then((m) => m.mathUnConfig(context)),
+    isTanstackQueryEnabled &&
+      import('./configs/tanstack-query').then((m) => m.tanstackQueryUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

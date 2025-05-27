@@ -210,6 +210,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `jest/extended`   | ✅ (`jest-extended` is installed) | [eslint-plugin-jest-extended](https://npmjs.com/eslint-plugin-jest-extended) (`jest-extended`) | - |
 | `jest/typescript` | ✅ (`ts` config is enabled) | [eslint-plugin-jest](https://npmjs.com/eslint-plugin-jest) (`jest`) | Only TypeScript-specific rules from `eslint-plugin-jest` |
 | `vitest`          | ✅ (`vitest` is installed) | [@vitest/eslint-plugin](https://npmjs.com/@vitest/eslint-plugin) (`vitest`) | Since v0.3.0 |
+| `tanstackQuery`   | ✅ (`@tanstack/query-core` is installed) | [@tanstack/eslint-plugin-query](https://npmjs.com/@tanstack/eslint-plugin-query) (`@tanstack/query`) | Since v1.0.0 |
 
 ### Miscellaneous
 

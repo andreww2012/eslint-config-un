@@ -50,6 +50,7 @@ import type {SolidEslintConfigOptions} from './solid';
 import type {SonarEslintConfigOptions} from './sonar';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {TailwindEslintConfigOptions} from './tailwind';
+import type {TanstackQueryEslintConfigOptions} from './tanstack-query';
 import type {TomlEslintConfigOptions} from './toml';
 import type {TsEslintConfigOptions} from './ts';
 import type {UnicornEslintConfigOptions} from './unicorn';
@@ -407,6 +408,15 @@ interface UnConfigs {
    * @default true <=> `graphql` package is installed
    */
   graphql: GraphqlEslintConfigOptions;
+
+  /**
+   * ESLint rules related to [TanStack Query](https://tanstack.com/query).
+   *
+   * Used plugins:
+   * - [`@tanstack/eslint-plugin-query`](https://npmjs.com/@tanstack/eslint-plugin-query) ([docs](https://tanstack.com/query/v5/docs/eslint/eslint-plugin-query))
+   * @default true <=> `@tanstack/query-core` package is installed (dependency of all `@tanstack/*-query` packages)
+   */
+  tanstackQuery: TanstackQueryEslintConfigOptions;
 
   /**
    * NOTE: disabled by default

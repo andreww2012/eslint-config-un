@@ -88,6 +88,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
 
   'typescript',
   'graphql',
+  '@tanstack/query-core',
 
   'astro',
   'vue',
