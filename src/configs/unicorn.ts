@@ -114,7 +114,8 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('prefer-global-this', OFF) // >=56.0.0
     .addRule('prefer-import-meta-properties', OFF) // 🔴 used in `node` config
     .addRule('prefer-includes', ERROR)
-    .addRule('prefer-json-parse-buffer', ERROR) // 🔴
+    // Reason for disabling: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2565
+    .addRule('prefer-json-parse-buffer', OFF) // 🔴
     .addRule('prefer-keyboard-event-key', ERROR)
     .addRule('prefer-logical-operator-over-ternary', ERROR)
     .addRule('prefer-math-min-max', ERROR) // >=56.0.0

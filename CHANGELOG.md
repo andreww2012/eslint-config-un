@@ -15,6 +15,7 @@
 - **packageJson** config: [`require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md) and [`require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-version.md) rules are now enabled by default only for libraries.
 - **markdown** config: added a new sub-config, `formatFencedCodeBlocks`, to use a patched version of [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) to lint fenced code blocks inside Markdown files. 
 - **ts** config: added a new sub-config, `sortTsconfigKeys`, to sort top-level and `compilerOptions` keys in tsconfig files.
+- **unicorn** config: disabled [`prefer-json-parse-buffer`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-json-parse-buffer.md) rule as it [suggests bad fixes in TypeScript code](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2565).
 
 ## 0.10.0
 
