@@ -12,6 +12,7 @@ export interface CliEslintConfigOptions extends UnConfigOptions {
 }
 
 const DEFAULT_CLI_DIRS = ['bin', 'scripts', 'cli'] as const;
+const DEFAULT_CLI_FILES = ['cli'] as const;
 
 export const cliUnConfig: UnConfigFn<'cli'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.cli;
@@ -26,9 +27,14 @@ export const cliUnConfig: UnConfigFn<'cli'> = (context) => {
       'cli',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: DEFAULT_CLI_DIRS.map(
-          (dir) => `${onlyTopLevelDirs ? '' : '**/'}${dir}/**/*.${GLOB_JS_TS_X_EXTENSION}`,
-        ),
+        filesFallback: [
+          ...DEFAULT_CLI_DIRS.map(
+            (dir) => `${onlyTopLevelDirs ? '' : '**/'}${dir}/**/*.${GLOB_JS_TS_EXTENSION}`,
+          ),
+          ...DEFAULT_CLI_FILES.map(
+            (file) => `${onlyTopLevelDirs ? '' : '**/'}${file}.${GLOB_JS_TS_EXTENSION}`,
+          ),
+        ],
       },
     ])
     .disableAnyRule('node', 'no-process-exit')
