@@ -171,6 +171,14 @@ export interface JsdocEslintConfigOptions extends UnConfigOptions<'jsdoc'> {
    * @default true <=> `ts` config is enabled
    */
   configTypescript?: boolean | UnConfigOptions<'jsdoc', Pick<JsdocEslintConfigOptions, 'settings'>>;
+
+  /**
+   * With be merged with the default list: `['ts-check', 'ts-expect-error', 'ts-ignore', 'ts-nocheck', '__PURE__', '__NO_SIDE_EFFECTS__']`.
+   *
+   * Used in rules:
+   * - [`no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md)
+   */
+  extraMultilineCommentsStartingWithToIgnore?: string[];
 }
 
 export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
@@ -179,7 +187,11 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     configTypescript: context.configsMeta.ts.enabled,
   } satisfies JsdocEslintConfigOptions);
 
-  const {settings: pluginSettings, configTypescript} = optionsResolved;
+  const {
+    settings: pluginSettings,
+    configTypescript,
+    extraMultilineCommentsStartingWithToIgnore,
+  } = optionsResolved;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'jsdoc');
 
@@ -220,7 +232,21 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     .addRule('match-description', OFF) // 1️⃣
     .addRule('match-name', OFF)
     .addRule('multiline-blocks', ERROR) // 🟢4️⃣
-    .addRule('no-bad-blocks', ERROR) // 2️⃣
+    .addRule('no-bad-blocks', ERROR, [
+      {
+        ignore: [
+          // TypeScript directives
+          'ts-check',
+          'ts-expect-error',
+          'ts-ignore',
+          'ts-nocheck',
+          // https://github.com/javascript-compiler-hints/compiler-notations-spec
+          '__PURE__',
+          '__NO_SIDE_EFFECTS__',
+          ...(extraMultilineCommentsStartingWithToIgnore || []),
+        ],
+      },
+    ]) // 2️⃣
     .addRule('no-blank-block-descriptions', ERROR) // 1️⃣
     .addRule('no-blank-blocks', ERROR) // 1️⃣
     .addRule('no-defaults', ERROR) // TODO why is this recommended? 🟢2️⃣
