@@ -1,7 +1,12 @@
 import fs from 'node:fs/promises';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
-import type {DisableAutofixMethod, EslintConfigUnOptions, UnConfigContext} from './configs';
+import type {
+  DisableAutofixMethod,
+  EslintConfigUnOptions,
+  UnConfigContext,
+  UnConfigs,
+} from './configs';
 import {
   DEFAULT_GLOBAL_IGNORES,
   GLOB_CONFIG_FILES,
@@ -30,7 +35,6 @@ import type {FalsyValue, Promisable} from './types';
 import {
   type MaybeArray,
   assignDefaults,
-  doesPackageExist,
   fetchPackageInfo,
   interopDefault,
   objectEntriesUnsafe,
@@ -45,6 +49,18 @@ const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
   'unicorn/template-indent',
   'vue/html-self-closing',
 ] satisfies AllRulesRecordKeys[]);
+
+const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
+  'security',
+  'yaml',
+  'toml',
+  'json',
+  'packageJson',
+  'jsonSchemaValidator',
+  'casePolice',
+  'nodeDependencies',
+  'depend',
+]);
 
 export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
@@ -89,6 +105,7 @@ export const eslintConfigInternal = async (
     pluginRenames = {},
     loadPluginsOnDemand,
     disablePrettierIncompatibleRules,
+    defaultConfigsStatus,
   } = optionsResolved;
 
   const pluginRenamesList = Object.values(pluginRenames);
@@ -101,70 +118,82 @@ export const eslintConfigInternal = async (
     );
   }
 
-  const isAngularEnabled = Boolean(configsOptions.angular ?? packagesInfo['@angular/core']);
-  const isAstroEnabled = Boolean(configsOptions.astro ?? packagesInfo.astro);
-  const isCasePoliceEnabled = Boolean(configsOptions.casePolice ?? false);
-  const isCliEnabled = Boolean(configsOptions.cli ?? true);
-  const isCloudfrontFunctionsEnabled = Boolean(configsOptions.cloudfrontFunctions ?? false);
-  const isCssEnabled = Boolean(configsOptions.css ?? !(await doesPackageExist('stylelint')));
-  const isCssInJsEnabled = Boolean(configsOptions.cssInJs ?? true);
-  const isDeMorganEnabled = Boolean(configsOptions.deMorgan ?? false);
-  const isDependEnabled = Boolean(configsOptions.depend ?? false);
-  const isErasableSyntaxOnlyEnabled = Boolean(configsOptions.erasableSyntaxOnly ?? false);
-  const isEsEnabled = Boolean(configsOptions.es ?? false);
-  const isEslintCommentsEnabled = Boolean(configsOptions.eslintComments ?? true);
-  const isGraphqlEnabled = Boolean(configsOptions.graphql ?? packagesInfo.graphql);
-  const isImportEnabled = Boolean(configsOptions.import ?? true);
+  const getIsConfigEnabled = (
+    configName: keyof UnConfigs,
+    defaultConditionOrPackageInstalled: boolean | (typeof PACKAGES_TO_GET_INFO_FOR)[number] = true,
+  ): boolean =>
+    Boolean(
+      configsOptions[configName] ??
+        (defaultConfigsStatus === 'all-disabled'
+          ? false
+          : defaultConfigsStatus === 'misc-enabled' &&
+              CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT.has(configName)
+            ? true
+            : typeof defaultConditionOrPackageInstalled === 'string'
+              ? packagesInfo[defaultConditionOrPackageInstalled]
+              : defaultConditionOrPackageInstalled),
+    );
+
+  const isAngularEnabled = getIsConfigEnabled('angular', '@angular/core');
+  const isAstroEnabled = getIsConfigEnabled('astro', 'astro');
+  const isCasePoliceEnabled = getIsConfigEnabled('casePolice', false);
+  const isCliEnabled = getIsConfigEnabled('cli');
+  const isCloudfrontFunctionsEnabled = getIsConfigEnabled('cloudfrontFunctions', false);
+  const isCssEnabled = getIsConfigEnabled('css', !packagesInfo.stylelint);
+  const isCssInJsEnabled = getIsConfigEnabled('cssInJs');
+  const isDeMorganEnabled = getIsConfigEnabled('deMorgan', false);
+  const isDependEnabled = getIsConfigEnabled('depend', false);
+  const isErasableSyntaxOnlyEnabled = getIsConfigEnabled('erasableSyntaxOnly', false);
+  const isEsEnabled = getIsConfigEnabled('es', false);
+  const isEslintCommentsEnabled = getIsConfigEnabled('eslintComments');
+  const isGraphqlEnabled = getIsConfigEnabled('graphql', 'graphql');
+  const isImportEnabled = getIsConfigEnabled('import');
   // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
-  const isHtmlEnabled = Boolean(configsOptions.html ?? !isAngularEnabled);
-  const isJestEnabled = Boolean(configsOptions.jest ?? packagesInfo.jest);
-  const isJsEnabled = Boolean(configsOptions.js ?? true);
-  const isJsInlineEnabled = Boolean(configsOptions.jsInline ?? true);
-  const isJsdocEnabled = Boolean(configsOptions.jsdoc ?? true);
-  const isJsoncEnabled = Boolean(configsOptions.json ?? false);
-  const isJsonSchemaValidatorEnabled = Boolean(configsOptions.jsonSchemaValidator ?? false);
-  const isJsxA11yEnabled = Boolean(configsOptions.jsxA11y ?? true);
-  const isMarkdownEnabled = Boolean(configsOptions.markdown ?? true);
-  const isMathEnabled = Boolean(configsOptions.math ?? true);
-  const isNextJsEnabled = Boolean(configsOptions.nextJs ?? packagesInfo.next);
-  const isNodeEnabled = Boolean(configsOptions.node ?? true);
-  const isNodeDependenciesEnabled = Boolean(configsOptions.nodeDependencies ?? false);
-  const isPackageJsonEnabled = Boolean(configsOptions.packageJson ?? false);
-  const isPerfectionistEnabled = Boolean(configsOptions.perfectionist ?? false);
-  const isPnpmEnabled = Boolean(configsOptions.pnpm ?? usedPackageManager?.name === 'pnpm');
-  const isPreferArrowFunctionsEnabled = Boolean(configsOptions.preferArrowFunctions ?? false);
-  const isPromiseEnabled = Boolean(configsOptions.promise ?? true);
-  const isQwikEnabled = Boolean(
-    configsOptions.qwik ??
-      (packagesInfo['@builder.io/qwik'] != null || packagesInfo['@qwik.dev/core'] != null),
+  const isHtmlEnabled = getIsConfigEnabled('html', !isAngularEnabled);
+  const isJestEnabled = getIsConfigEnabled('jest', 'jest');
+  const isJsEnabled = getIsConfigEnabled('js');
+  const isJsInlineEnabled = getIsConfigEnabled('jsInline');
+  const isJsdocEnabled = getIsConfigEnabled('jsdoc');
+  const isJsoncEnabled = getIsConfigEnabled('json', false);
+  const isJsonSchemaValidatorEnabled = getIsConfigEnabled('jsonSchemaValidator', false);
+  const isJsxA11yEnabled = getIsConfigEnabled('jsxA11y');
+  const isMarkdownEnabled = getIsConfigEnabled('markdown');
+  const isMathEnabled = getIsConfigEnabled('math');
+  // eslint-disable-next-line case-police/string-check
+  const isNextJsEnabled = getIsConfigEnabled('nextJs', 'next');
+  const isNodeEnabled = getIsConfigEnabled('node');
+  const isNodeDependenciesEnabled = getIsConfigEnabled('nodeDependencies', false);
+  const isPackageJsonEnabled = getIsConfigEnabled('packageJson', false);
+  const isPerfectionistEnabled = getIsConfigEnabled('perfectionist', false);
+  const isPnpmEnabled = getIsConfigEnabled('pnpm', usedPackageManager?.name === 'pnpm');
+  const isPreferArrowFunctionsEnabled = getIsConfigEnabled('preferArrowFunctions', false);
+  const isPromiseEnabled = getIsConfigEnabled('promise');
+  const isQwikEnabled = getIsConfigEnabled(
+    'qwik',
+    packagesInfo['@builder.io/qwik'] != null || packagesInfo['@qwik.dev/core'] != null,
   );
-  const isReactEnabled = Boolean(configsOptions.react ?? packagesInfo.react);
-  const isRegexpEnabled = Boolean(configsOptions.regexp ?? true);
-  const isSecurityEnabled = Boolean(configsOptions.security ?? false);
-  const isSolidEnabled = Boolean(configsOptions.solid ?? packagesInfo['solid-js'] != null);
-  const isSonarEnabled = Boolean(configsOptions.sonar ?? true);
-  const isStorybookEnabled = Boolean(configsOptions.storybook ?? packagesInfo.storybook != null);
-  const isSvelteEnabled = Boolean(
-    eslintPluginSvelte && (configsOptions.svelte ?? packagesInfo.svelte),
-  );
-  const isTailwindEnabled = Boolean(
-    eslintPluginTailwind &&
-      (configsOptions.tailwind ??
-        (packagesInfo.tailwindcss != null &&
-          (packagesInfo.tailwindcss.versions.major ?? Number.POSITIVE_INFINITY) < 4)),
-  );
-  const isTanstackQueryEnabled = Boolean(
-    configsOptions.solid ?? packagesInfo['@tanstack/query-core'] != null,
-  );
-  const isTomlEnabled = Boolean(configsOptions.toml ?? false);
-  const isTypescriptEnabled =
-    configsOptions.ts !== false && Boolean(configsOptions.ts || packagesInfo.typescript);
-  const isUnicornEnabled = Boolean(configsOptions.unicorn ?? true);
-  const isUnusedImportsEnabled = Boolean(configsOptions.unusedImports ?? true);
-  const isVitestEnabled = Boolean(configsOptions.vitest ?? packagesInfo.vitest);
-  const isVueEnabled =
-    configsOptions.vue !== false && Boolean(configsOptions.vue || packagesInfo.vue);
-  const isYamlEnabled = Boolean(configsOptions.yaml ?? false);
+  const isReactEnabled = getIsConfigEnabled('react', 'react');
+  const isRegexpEnabled = getIsConfigEnabled('regexp');
+  const isSecurityEnabled = getIsConfigEnabled('security', false);
+  const isSolidEnabled = getIsConfigEnabled('solid', 'solid-js');
+  const isSonarEnabled = getIsConfigEnabled('sonar');
+  const isStorybookEnabled = getIsConfigEnabled('storybook', 'storybook');
+  const isSvelteEnabled = eslintPluginSvelte != null && getIsConfigEnabled('svelte', 'svelte');
+  const isTailwindEnabled =
+    eslintPluginTailwind != null &&
+    getIsConfigEnabled(
+      'tailwind',
+      packagesInfo.tailwindcss != null &&
+        (packagesInfo.tailwindcss.versions.major ?? Number.POSITIVE_INFINITY) < 4,
+    );
+  const isTanstackQueryEnabled = getIsConfigEnabled('tanstackQuery', '@tanstack/query-core');
+  const isTomlEnabled = getIsConfigEnabled('toml', false);
+  const isTypescriptEnabled = getIsConfigEnabled('ts', 'typescript');
+  const isUnicornEnabled = getIsConfigEnabled('unicorn');
+  const isUnusedImportsEnabled = getIsConfigEnabled('unusedImports');
+  const isVitestEnabled = getIsConfigEnabled('vitest', 'vitest');
+  const isVueEnabled = getIsConfigEnabled('vue', 'vue');
+  const isYamlEnabled = getIsConfigEnabled('yaml', false);
 
   const context: UnConfigContext = {
     packagesInfo,

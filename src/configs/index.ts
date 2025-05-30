@@ -140,11 +140,18 @@ export interface EslintConfigUnOptions {
   disableAutofixMethod?: PrettifyShallow<
     Partial<Record<'default' | PluginPrefix, DisableAutofixMethod>>
   >;
+
+  /**
+   * This option overrides if certain configs are enabled or disabled by default.
+   * - `all-disabled`: consider all top level configs disabled unless explicitly enabled.
+   * - `misc-enabled`: consider some configs disabled by default, conversely enabled: `security`, `yaml`,  `toml`, `json`, `packageJson`, `jsonSchemaValidator`, `casePolice`, `nodeDependencies`, `depend`.
+   */
+  defaultConfigsStatus?: 'all-disabled' | 'misc-enabled';
 }
 
 export type DisableAutofixMethod = 'unprefixed' | 'prefixed';
 
-interface UnConfigs {
+export interface UnConfigs {
   /**
    * @default true
    */
@@ -424,7 +431,7 @@ interface UnConfigs {
    *
    * Used plugins:
    * - [`eslint-plugin-storybook`](https://npmjs.com/eslint-plugin-storybook) ([docs](https://storybook.js.org/docs/configure/integration/eslint-plugin))
-   * @default true
+   * @default true <=> `storybook` package is installed
    */
   storybook: StorybookEslintConfigOptions;
 
@@ -566,6 +573,8 @@ interface UnConfigs {
    *
    * Note that if neither `files` or `ignores` are specified or is an empty array in the main
    * or a sub-config, the config won't be generated.
+   *
+   * NOTE: disabled by default
    * @default false
    */
   cloudfrontFunctions: CloudfrontFunctionsEslintConfigOptions;

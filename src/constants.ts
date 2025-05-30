@@ -85,11 +85,14 @@ export const DEFAULT_GLOBAL_IGNORES = ['**/dist'] as const;
 
 export const PACKAGES_TO_GET_INFO_FOR = [
   'prettier',
-
   'typescript',
   'graphql',
   '@tanstack/query-core',
   'storybook',
+  'tailwindcss',
+  'stylelint',
+  'jest',
+  'vitest',
 
   'astro',
   'vue',
@@ -98,14 +101,8 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'svelte',
   'solid-js',
   '@angular/core',
-
   // We don't need to check for the presence of `@builder.io/qwik-city` because
   // it requires `@builder.io/qwik` to be installed anyway
   '@builder.io/qwik',
   '@qwik.dev/core',
-
-  'jest',
-  'vitest',
-
-  'tailwindcss',
 ] as const;
