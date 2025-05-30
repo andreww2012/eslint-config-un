@@ -37,6 +37,7 @@ export const cliUnConfig: UnConfigFn<'cli'> = (context) => {
         ],
       },
     ])
+    .disableAnyRule('node', 'hashbang')
     .disableAnyRule('node', 'no-process-exit')
     .disableAnyRule('unicorn', 'no-process-exit')
     .disableAnyRule('', 'no-await-in-loop')
