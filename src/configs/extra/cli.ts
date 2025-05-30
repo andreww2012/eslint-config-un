@@ -1,4 +1,4 @@
-import {ERROR, GLOB_JS_TS_X_EXTENSION} from '../../constants';
+import {ERROR, GLOB_JS_TS_EXTENSION} from '../../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../../eslint';
 import {assignDefaults} from '../../utils';
 import type {UnConfigFn} from '../index';
@@ -39,6 +39,7 @@ export const cliUnConfig: UnConfigFn<'cli'> = (context) => {
     ])
     .disableAnyRule('node', 'no-process-exit')
     .disableAnyRule('unicorn', 'no-process-exit')
+    .disableAnyRule('', 'no-await-in-loop')
     .disableAnyRule('', 'no-console')
     .disableAnyRule('import', 'no-extraneous-dependencies')
     .addAnyRule('unicorn', 'prefer-top-level-await', ERROR)
