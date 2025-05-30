@@ -125,7 +125,7 @@ export const pluginsLoaders = {
     interopDefault(
       import('eslint-plugin-tailwindcss'),
       // Tries to import `tailwindcss/resolveConfig` which doesn't exist anymore in v4
-      'ERR_PACKAGE_PATH_NOT_EXPORTED',
+      ['ERR_PACKAGE_PATH_NOT_EXPORTED', 'ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'],
     ),
   toml: () =>
     // @ts-expect-error types mismatch
