@@ -3,3 +3,4 @@ onlyBuiltDependencies:
   - unrs-resolver
 patchedDependencies:
   eslint-plugin-prettier: patches/eslint-plugin-prettier.patch
+nodeLinker: hoisted

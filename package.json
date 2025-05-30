@@ -173,6 +173,9 @@
   "peerDependencies": {
     "eslint": "^9.15.0"
   },
+  "bundleDependencies": [
+    "eslint-plugin-prettier"
+  ],
   "packageManager": "pnpm@10.10.0",
   "engines": {
     "node": "^20.10 || >=21.1.0"

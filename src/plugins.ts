@@ -76,9 +76,7 @@ export const pluginsLoaders = {
   jsonc: () =>
     // @ts-expect-error types mismatch
     interopDefault(import('eslint-plugin-jsonc')),
-  'jsx-a11y': () =>
-    // @ts-expect-error types mismatch
-    interopDefault(import('eslint-plugin-jsx-a11y')),
+  'jsx-a11y': () => interopDefault(import('eslint-plugin-jsx-a11y')),
   markdown: () => interopDefault(import('@eslint/markdown')),
   math: () =>
     // @ts-expect-error types mismatch
@@ -107,9 +105,7 @@ export const pluginsLoaders = {
   'react-hooks': () => interopDefault(import('eslint-plugin-react-hooks')),
   'react-refresh': () => interopDefault(import('eslint-plugin-react-refresh')),
   regexp: () => interopDefault(import('eslint-plugin-regexp')),
-  security: () =>
-    // @ts-expect-error types mismatch
-    interopDefault(import('eslint-plugin-security')),
+  security: () => interopDefault(import('eslint-plugin-security')),
   solid: () =>
     // @ts-expect-error types mismatch
     interopDefault<EslintPlugin>(import('eslint-plugin-solid')),
@@ -124,7 +120,6 @@ export const pluginsLoaders = {
       ['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'],
     ),
   tailwindcss: () =>
-    // @ts-expect-error types mismatch
     interopDefault(
       import('eslint-plugin-tailwindcss'),
       // Tries to import `tailwindcss/resolveConfig` which doesn't exist anymore in v4

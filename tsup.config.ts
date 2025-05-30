@@ -5,5 +5,4 @@ export default defineConfig({
   format: 'esm',
   shims: true,
   dts: true,
-  noExternal: ['eslint-plugin-prettier'],
 });

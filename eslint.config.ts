@@ -14,8 +14,6 @@ export default eslintConfig({
       },
     },
     erasableSyntaxOnly: true,
-      },
-    },
     deMorgan: true,
     yaml: true,
     toml: true,
