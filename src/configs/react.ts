@@ -2,7 +2,6 @@ import {
   ERROR,
   GLOB_JS_TS_X,
   GLOB_JS_TS_X_ONLY,
-  GLOB_TSX,
   OFF,
   type RuleSeverity,
   WARNING,
@@ -243,10 +242,10 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
           >;
 
           /**
-           * By default will be applied to all TS(X) files.
+           * By default will be applied to same files specified in `ts/configTypeAware` sub-config.
            * @default true <=> `ts` config is enabled
            */
-          typeAwareRules?:
+          configTypeAwareRules?:
             | boolean
             | UnConfigOptions<
                 Pick<RulesRecordPartial<'@eslint-react'>, `@eslint-react/${ReactXTypeAwareRules}`>
@@ -516,7 +515,16 @@ const NEXT_EXPORTS: readonly string[] = [
   'viewport', // https://nextjs.org/docs/app/api-reference/functions/generate-viewport
 ];
 
-export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
+export const reactUnConfig: UnConfigFn<
+  'react',
+  unknown,
+  [
+    {
+      tsFilesTypeAware: string[];
+      tsIgnoresTypeAware: string[];
+    },
+  ]
+> = async (context, {tsFilesTypeAware, tsIgnoresTypeAware}) => {
   const reactPackageInfo = context.packagesInfo.react;
 
   const optionsRaw = context.rootOptions.configs?.react;
@@ -897,8 +905,10 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
     ) // 🟡
     .addOverrides();
 
-  const {noLegacyApis = {}, typeAwareRules: reactXTypeAwareRules = context.configsMeta.ts.enabled} =
-    configReactXOptions;
+  const {
+    noLegacyApis = {},
+    configTypeAwareRules: configReactXTypeAwareRules = context.configsMeta.ts.enabled,
+  } = configReactXOptions;
 
   const configBuilderReactX = createConfigBuilder(context, configReactX, '@eslint-react');
 
@@ -1085,7 +1095,7 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
 
   const configBuilderReactXTypeAware = createConfigBuilder(
     context,
-    reactXTypeAwareRules,
+    tsFilesTypeAware.length === 0 ? false : configReactXTypeAwareRules,
     '@eslint-react',
   );
   configBuilderReactXTypeAware
@@ -1093,7 +1103,8 @@ export const reactUnConfig: UnConfigFn<'react'> = async (context) => {
       'react/x/rules-type-aware',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_TSX],
+        filesFallback: tsFilesTypeAware,
+        ignoresFallback: tsIgnoresTypeAware,
       },
     ])
     .addRule(

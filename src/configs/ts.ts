@@ -487,7 +487,10 @@ const TS_FILES_DEFAULT = [GLOB_TSX];
 
 export const tsUnConfig: UnConfigFn<
   'ts',
-  unknown,
+  {
+    filesTypeAware: string[];
+    ignoresTypeAware: string[];
+  },
   [
     {
       vanillaFinalFlatConfigRules: Partial<RulesRecord>;
@@ -922,13 +925,8 @@ export const tsUnConfig: UnConfigFn<
 
   const configBuilderTypeAware = createConfigBuilder(
     context,
-    configTypeAware === false
-      ? false
-      : {
-          ...(typeof configTypeAware === 'object' ? configTypeAware : {}),
-          // This is an exception for "files is empty array disables only one config" rule. If parent config gets an empty array, we must disable type-aware rules too
-          ...(optionsResolved.files?.length === 0 && {files: []}),
-        },
+    // This is an exception for "files is empty array disables only one config" rule. If parent config gets an empty array, we must disable type-aware rules too
+    optionsResolved.files?.length === 0 ? false : configTypeAware,
     'ts',
   );
 
@@ -1205,5 +1203,7 @@ export const tsUnConfig: UnConfigFn<
       configBuilderSortTsconfigKeys,
     ],
     optionsResolved,
+    filesTypeAware,
+    ignoresTypeAware,
   };
 };

@@ -277,6 +277,20 @@ export const eslintConfigInternal = async (
       import('./configs/vue').then((m) => m.vueUnConfig(context, {vanillaFinalFlatConfigRules})),
     isSvelteEnabled && import('./configs/svelte').then((m) => m.svelteUnConfig(context)),
   ]);
+  const tsEslintConfigResult =
+    isTypescriptEnabled &&
+    (await import('./configs/ts').then((m) =>
+      m.tsUnConfig(context, {
+        vanillaFinalFlatConfigRules,
+        astroResolvedOptions: astroEslintConfigResult
+          ? astroEslintConfigResult.optionsResolved
+          : null,
+        vueResolvedOptions: vueEslintConfigResult ? vueEslintConfigResult.optionsResolved : null,
+        svelteResolvedOptions: svelteEslintConfigResult
+          ? svelteEslintConfigResult.optionsResolved
+          : null,
+      }),
+    ));
 
   const rootConfigBuilder = createConfigBuilder(context, {}, '');
   rootConfigBuilder
@@ -352,7 +366,19 @@ export const eslintConfigInternal = async (
     isCssEnabled && import('./configs/css').then((m) => m.cssUnConfig(context)),
     isUnusedImportsEnabled &&
       import('./configs/unused-imports').then((m) => m.unusedImportsUnConfig(context)),
-    isReactEnabled && import('./configs/react').then((m) => m.reactUnConfig(context)),
+    isReactEnabled &&
+      import('./configs/react').then((m) =>
+        m.reactUnConfig(context, {
+          tsFilesTypeAware:
+            typeof tsEslintConfigResult === 'object' && tsEslintConfigResult
+              ? tsEslintConfigResult.filesTypeAware
+              : [],
+          tsIgnoresTypeAware:
+            typeof tsEslintConfigResult === 'object' && tsEslintConfigResult
+              ? tsEslintConfigResult.ignoresTypeAware
+              : [],
+        }),
+      ),
     isJsxA11yEnabled && import('./configs/jsx-a11y').then((m) => m.jsxA11yUnConfig(context)),
     isPnpmEnabled && import('./configs/pnpm').then((m) => m.pnpmUnConfig(context)),
     isNextJsEnabled && import('./configs/nextjs').then((m) => m.nextJsUnConfig(context)),
@@ -389,19 +415,7 @@ export const eslintConfigInternal = async (
     isStorybookEnabled && import('./configs/storybook').then((m) => m.storybookUnConfig(context)),
 
     /* Other configs */
-    isTypescriptEnabled &&
-      import('./configs/ts').then((m) =>
-        m.tsUnConfig(context, {
-          vanillaFinalFlatConfigRules,
-          astroResolvedOptions: astroEslintConfigResult
-            ? astroEslintConfigResult.optionsResolved
-            : null,
-          vueResolvedOptions: vueEslintConfigResult ? vueEslintConfigResult.optionsResolved : null,
-          svelteResolvedOptions: svelteEslintConfigResult
-            ? svelteEslintConfigResult.optionsResolved
-            : null,
-        }),
-      ), // Must come after all rulesets for vanilla JS
+    tsEslintConfigResult, // Must come after all rulesets for vanilla JS
     isEsEnabled && import('./configs/es').then((m) => m.esUnConfig(context)), // Must come after ts
     vueEslintConfigResult, // Must come after ts
     astroEslintConfigResult, // Must come after ts
