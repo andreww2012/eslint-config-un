@@ -21,7 +21,7 @@ export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
         doNotIgnoreHtml: true,
       },
     ])
-    .addRule('string-check', ERROR)
+    .addRule('string-check', ERROR, [], {disableAutofix: true})
     .addOverrides();
 
   return {

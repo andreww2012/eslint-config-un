@@ -20,6 +20,7 @@
 - **cli** config: included `**/cli.*` files by default and disabled [`no-await-in-loop`](https://eslint.org/docs/latest/rules/no-await-in-loop) rule. Disabled [`node/hashbang`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/hashbang.md) rule.
 - **js** config: added a new option `allowedConsoleMethods` to control which `console` methods are allowed.
 - **jsdoc** config: added a new option `extraMultilineCommentsStartingWithToIgnore` to control which multiline comments should be ignored by [`no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md) rule. Added `__PURE__` and `__NO_SIDE_EFFECTS__` to the default list.
+- **casePolice** config: autofix is now disabled by default.
 
 ## 0.10.0
 
