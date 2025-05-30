@@ -114,6 +114,9 @@ export const pluginsLoaders = {
     // @ts-expect-error types mismatch
     interopDefault<EslintPlugin>(import('eslint-plugin-solid')),
   sonarjs: () => interopDefault(import('eslint-plugin-sonarjs')),
+  storybook: () =>
+    // @ts-expect-error types mismatch
+    interopDefault(import('eslint-plugin-storybook')),
   svelte: () =>
     interopDefault(
       import('eslint-plugin-svelte'),

@@ -19,7 +19,7 @@
     "prefix": "un-new-config",
     "body": [
       "import {ERROR, OFF, WARNING} from '../constants';",
-      "import {type UnConfigOptions, type GetRuleOptions, createConfigBuilder} from '../eslint';",
+      "import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';",
       "import {pluginsLoaders} from '../plugins';",
       "import type {Prettify, PrettifyShallow} from '../types';",
       "import {assignDefaults, doesPackageExist, fetchPackageInfo, interopDefault} from '../utils';",

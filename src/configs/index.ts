@@ -48,6 +48,7 @@ import type {RegexpEslintConfigOptions} from './regexp';
 import type {SecurityEslintConfigOptions} from './security';
 import type {SolidEslintConfigOptions} from './solid';
 import type {SonarEslintConfigOptions} from './sonar';
+import type {StorybookEslintConfigOptions} from './storybook';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {TailwindEslintConfigOptions} from './tailwind';
 import type {TanstackQueryEslintConfigOptions} from './tanstack-query';
@@ -417,6 +418,15 @@ interface UnConfigs {
    * @default true <=> `@tanstack/query-core` package is installed (dependency of all `@tanstack/*-query` packages)
    */
   tanstackQuery: TanstackQueryEslintConfigOptions;
+
+  /**
+   * ESLint rules related to [Storybook](https://storybook.js.org/).
+   *
+   * Used plugins:
+   * - [`eslint-plugin-storybook`](https://npmjs.com/eslint-plugin-storybook) ([docs](https://storybook.js.org/docs/configure/integration/eslint-plugin))
+   * @default true
+   */
+  storybook: StorybookEslintConfigOptions;
 
   /**
    * NOTE: disabled by default

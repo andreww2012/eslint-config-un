@@ -143,6 +143,7 @@ export const eslintConfigInternal = async (
   const isSecurityEnabled = Boolean(configsOptions.security ?? false);
   const isSolidEnabled = Boolean(configsOptions.solid ?? packagesInfo['solid-js'] != null);
   const isSonarEnabled = Boolean(configsOptions.sonar ?? true);
+  const isStorybookEnabled = Boolean(configsOptions.storybook ?? packagesInfo.storybook != null);
   const isSvelteEnabled = Boolean(
     eslintPluginSvelte && (configsOptions.svelte ?? packagesInfo.svelte),
   );
@@ -213,6 +214,7 @@ export const eslintConfigInternal = async (
       security: {enabled: isSecurityEnabled},
       solid: {enabled: isSolidEnabled},
       sonar: {enabled: isSonarEnabled},
+      storybook: {enabled: isStorybookEnabled},
       svelte: {enabled: isSvelteEnabled},
       tailwind: {enabled: isTailwindEnabled},
       tanstackQuery: {enabled: isTanstackQueryEnabled},
@@ -355,6 +357,7 @@ export const eslintConfigInternal = async (
     isDependEnabled && import('./configs/depend').then((m) => m.dependUnConfig(context)),
     isErasableSyntaxOnlyEnabled &&
       import('./configs/erasable-syntax-only').then((m) => m.erasableSyntaxOnlyUnConfig(context)),
+    isStorybookEnabled && import('./configs/storybook').then((m) => m.storybookUnConfig(context)),
 
     /* Other configs */
     isTypescriptEnabled &&
