@@ -5,10 +5,16 @@ import {
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
-import {assignDefaults, fetchPackageInfo} from '../utils';
+import {assignDefaults, fetchPackageInfo, getKeysOfTruthyValues} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface JsEslintConfigOptions extends UnConfigOptions<BuiltinEslintRulesFixed> {}
+export interface JsEslintConfigOptions extends UnConfigOptions<BuiltinEslintRulesFixed> {
+  /**
+   * Will be merged with the default value
+   * @default {warn: true, error: true}
+   */
+  allowedConsoleMethods?: Partial<Record<keyof Console | (string & {}), boolean>>;
+}
 
 export const jsUnConfig: UnConfigFn<
   'js',
@@ -22,6 +28,15 @@ export const jsUnConfig: UnConfigFn<
   const configBuilder = createConfigBuilder(context, optionsResolved, '');
 
   const eslintVersion = (await fetchPackageInfo('eslint'))?.versions.majorAndMinor || 0;
+
+  const allowedConsoleMethods = getKeysOfTruthyValues(
+    {
+      warn: true,
+      error: true,
+      ...optionsResolved.allowedConsoleMethods,
+    },
+    true,
+  );
 
   // Legend:
   // 🟢 - in recommended
@@ -139,7 +154,11 @@ export const jsUnConfig: UnConfigFn<
     .addRule('no-bitwise', OFF)
     .addRule('no-caller', ERROR)
     .addRule('no-case-declarations', ERROR) // 🟢
-    .addRule('no-console', WARNING, [{allow: ['warn', 'error']}])
+    .addRule('no-console', WARNING, [
+      {
+        ...(allowedConsoleMethods?.length && {allow: allowedConsoleMethods}),
+      },
+    ])
     .addRule('no-continue', OFF)
     .addRule('no-delete-var', ERROR) // 🟢
     .addRule('no-empty-static-block', ERROR) // 🟢
