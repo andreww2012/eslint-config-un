@@ -413,8 +413,19 @@ It's too much to document, so please have a look at the source code of our confi
 
 We use [`local-pkg`](https://npmjs.com/local-pkg) package to detect if a package is installed.
 
-## Troubleshooting
+## Troubleshooting & caveats
 
 ### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace.
 
 Install `globals` package as a dev dependency.
+
+### Some dependencies are [bundled with `bundleDependencies` feature](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#bundledependencies)
+
+If you would like not to wait until the dependencies of `eslint-config-un` are updated or by whatever other reason you need to install a different version of a dependency, you can do that using your package manager's settings for all but the following packages:
+
+| Package name | Reason |
+| ------------ | ------ |
+| [`eslint-plugin-prettier`](https://npmjs.com/eslint-plugin-prettier) | Patched by us to enable formatting of "fenced code blocks" inside Markdown files |
+| [`eslint-plugin-no-type-assertion`](https://npmjs.com/eslint-plugin-no-type-assertion) | Has outdated requirements of peer dependencies |
+| [`@angular-eslint/eslint-plugin-template@17.5.3`](https://npmjs.com/package/@angular-eslint/eslint-plugin-template/v/17.5.3) | Old version with outdated requirements of peer dependencies |
+| [`@angular-eslint/eslint-plugin@18.4.3`](https://npmjs.com/package/@angular-eslint/eslint-plugin-template/v/18.4.3) | ^ |
