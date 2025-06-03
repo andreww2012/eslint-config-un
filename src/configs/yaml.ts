@@ -8,13 +8,16 @@ export const YAML_DEFAULT_FILES = [GLOB_YAML];
 const DEFAULT_FILES_TO_IGNORE = ['yarn.lock', 'pnpm-lock.yaml'] as const;
 
 export interface YamlEslintConfigOptions extends UnConfigOptions<'yml'> {
-  /** `files` specified in this config will be merged with the default of `['**\/*.y?(a)ml']`. Set this to `true` to avoid that behavior */
+  /**
+   * `files` specified in this config will be merged with the default of `['**\/*.y?(a)ml']`. Set this to `true` to avoid that behavior
+   */
   doNotMergeFilesWithDefault?: boolean;
 
   /**
    * @default 'yml'
    */
-  enforceExtension?: (GetRuleOptions<'yml', 'file-extension'>[0] & {})['extension'];
+  enforceExtension?: 'yml' | 'yaml';
+
   doNotIgnoreFilesByDefault?: Partial<Record<(typeof DEFAULT_FILES_TO_IGNORE)[number], boolean>>;
 
   /**
@@ -27,7 +30,8 @@ export interface YamlEslintConfigOptions extends UnConfigOptions<'yml'> {
    * `false` to not enforce quotes style
    * @default 'single'
    */
-  quotes?: (GetRuleOptions<'yml', 'quotes'>[0] & {})['prefer'] | false;
+  quotes?: 'single' | 'double' | false;
+
   parseOptions?: {
     /**
      * @see https://github.com/ota-meshi/yaml-eslint-parser?tab=readme-ov-file#advanced-configuration
@@ -123,6 +127,13 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
       })
       .addRule('file-extension', OFF);
   }
+
+  configBuilder
+    ?.addConfig('yaml/github-actions', {
+      files: ['**/.github/workflows/*.{yml,yaml}'],
+    })
+    // Example: `pull_request:` may be empty
+    .addRule('no-empty-mapping-value', OFF);
 
   return {
     configs: [configBuilder],
