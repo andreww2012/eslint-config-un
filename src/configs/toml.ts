@@ -1,9 +1,8 @@
-import {ERROR, GLOB_TOML, OFF} from '../constants';
+import {ERROR, OFF} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
+import {TOML_DEFAULT_FILES} from './shared';
 import type {UnConfigFn} from './index';
-
-export const TOML_DEFAULT_FILES = [GLOB_TOML];
 
 const DEFAULT_FILES_TO_IGNORE = ['Cargo.lock'] as const;
 

@@ -11,20 +11,10 @@ import {
 import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow, ValueOf} from '../types';
 import {assignDefaults, doesPackageExist} from '../utils';
+import {generateConsistentTestItOptions, generateDefaultTestFiles} from './shared';
 import type {UnConfigFn} from './index';
 
 type AllJestMatchers = PrettifyShallow<keyof ReturnType<JestExpect> | keyof AsymmetricMatchers>;
-
-export const generateDefaultTestFiles = <T extends string>(extensions: T) => [
-  `**/*.spec.${extensions}` as const, // GitHub: 2.3M .ts files as of 2024-12-08 (https://github.com/search?q=path%3A**%2F*.spec.ts&type=code&query=path%3A%2F**%2F__tests__%2F**%2F*.ts)
-  `**/-spec.${extensions}` as const, // 165k
-  `**/_spec.${extensions}` as const, // 40k
-
-  `**/*.test.${extensions}` as const, // 1.9M
-
-  `**/__tests__/**/*.${extensions}` as const, // 155k
-  `**/__test__/**/*.${extensions}` as const, // 14k
-];
 
 export interface JestEslintConfigOptions extends UnConfigOptions<'jest'> {
   /**
@@ -175,24 +165,6 @@ export interface JestEslintConfigOptions extends UnConfigOptions<'jest'> {
    */
   minAndMaxExpectArgs?: [min: number | undefined, max: number | undefined];
 }
-
-export const generateConsistentTestItOptions = ({
-  testDefinitionKeyword,
-}: Pick<JestEslintConfigOptions, 'testDefinitionKeyword'>): GetRuleOptions<
-  'jest',
-  'consistent-test-it'
-> => [
-  typeof testDefinitionKeyword === 'string'
-    ? {
-        fn: testDefinitionKeyword,
-        withinDescribe: testDefinitionKeyword,
-      }
-    : {
-        fn: 'it',
-        withinDescribe: 'it',
-        ...testDefinitionKeyword,
-      },
-];
 
 export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
   const [eslintPluginJest, isJestExtendedInstalled] = await Promise.all([

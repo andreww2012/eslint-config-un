@@ -15,7 +15,7 @@ import {
 } from '../eslint';
 import type {DistributedPick, PrettifyShallow} from '../types';
 import {assignDefaults, doesPackageExist} from '../utils';
-import {noRestrictedHtmlElementsDefault} from './vue';
+import {noRestrictedHtmlElementsDefault} from './shared';
 import type {UnConfigFn} from './index';
 
 // Copied from https://eslint-react.xyz/docs/configuration/configure-analyzer#properties

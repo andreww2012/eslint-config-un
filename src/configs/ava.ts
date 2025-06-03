@@ -1,7 +1,7 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
-import {generateDefaultTestFiles} from './jest';
+import {generateDefaultTestFiles} from './shared';
 import type {UnConfigFn} from './index';
 
 export interface AvaEslintConfigOptions extends UnConfigOptions<'ava'> {

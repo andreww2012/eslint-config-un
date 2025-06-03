@@ -40,7 +40,7 @@
       "const eslintPlugin${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} = await pluginsLoaders['$TM_FILENAME_BASE']();",
       "",
       "// eslint-disable-next-line no-console",
-      "console.log('${TM_FILENAME_BASE/(.*)/${1:/camelcase}/} rules', Object.keys(eslintPlugin${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.rules).sort());",
+      "console.log('${TM_FILENAME_BASE/(.*)/${1:/camelcase}/} rules', Object.keys(eslintPlugin${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.rules || {}).sort());",
       "",
       "// eslint-disable-next-line jsdoc/no-bad-blocks",
       "/*",

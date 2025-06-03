@@ -4,7 +4,8 @@ import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults, doesPackageExist, getKeysOfTruthyValues, interopDefault} from '../utils';
-import {type VueEslintConfigOptions, noRestrictedHtmlElementsDefault} from './vue';
+import {noRestrictedHtmlElementsDefault} from './shared';
+import type {VueEslintConfigOptions} from './vue';
 import type {UnConfigFn} from './index';
 
 export interface SvelteEslintConfigOptions

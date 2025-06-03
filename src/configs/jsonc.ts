@@ -1,9 +1,8 @@
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, OFF} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
+import {JSONC_DEFAULT_FILES} from './shared';
 import type {UnConfigFn} from './index';
-
-export const JSONC_DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5];
 
 export interface JsoncEslintConfigOptions extends UnConfigOptions<'jsonc'> {
   /**

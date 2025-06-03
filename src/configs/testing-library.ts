@@ -9,7 +9,7 @@ import type {
   PrettifyShallow,
 } from '../types';
 import {assignDefaults, doesPackageExist} from '../utils';
-import {generateDefaultTestFiles} from './jest';
+import {generateDefaultTestFiles} from './shared';
 import type {UnConfigFn} from './index';
 
 type SharedConfigOptions = PrettifyShallow<

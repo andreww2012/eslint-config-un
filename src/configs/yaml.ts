@@ -1,9 +1,8 @@
-import {ERROR, GLOB_YAML, OFF} from '../constants';
+import {ERROR, OFF} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
+import {YAML_DEFAULT_FILES} from './shared';
 import type {UnConfigFn} from './index';
-
-export const YAML_DEFAULT_FILES = [GLOB_YAML];
 
 const DEFAULT_FILES_TO_IGNORE = ['yarn.lock', 'pnpm-lock.yaml'] as const;
 

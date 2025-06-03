@@ -2,9 +2,7 @@ import type {RequestOptions} from 'node:https';
 import {ERROR} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
-import {JSONC_DEFAULT_FILES} from './jsonc';
-import {TOML_DEFAULT_FILES} from './toml';
-import {YAML_DEFAULT_FILES} from './yaml';
+import {JSONC_DEFAULT_FILES, TOML_DEFAULT_FILES, YAML_DEFAULT_FILES} from './shared';
 import type {UnConfigFn} from './index';
 
 export interface JsonSchemaValidatorEslintConfigOptions

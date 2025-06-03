@@ -19,6 +19,7 @@ import {
   interopDefault,
   joinPaths,
 } from '../utils';
+import {type ValidAndInvalidHtmlTags, noRestrictedHtmlElementsDefault} from './shared';
 import type {UnConfigFn} from './index';
 
 type WellKnownSfcBlocks =
@@ -29,25 +30,6 @@ type WellKnownSfcBlocks =
   | 'style'
   | 'style:not([scoped])'
   | 'style[scoped]';
-
-// prettier-ignore
-const INVALID_HTML_TAGS = [
-  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element#obsolete_and_deprecated_elements
-  'acronym', 'big', 'center', 'content', 'dir', 'font', 'frame', 'frameset', 'image', 'marquee', 'menuitem', 'nobr', 'noembed', 'noframes', 'param', 'plaintext', 'rb', 'rtc', 'shadow', 'strike', 'tt', 'xmp',
-  // https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement
-  'applet', 'bgsound', 'blink', 'isindex', 'keygen', 'multicol', 'nextid', 'spacer',
-  'basefont', 'listing',
-  // https://udn.realityripple.com/docs/Web/HTML/Element
-  'command', 'element',
-] as const;
-// prettier-ignore
-type ValidHtmlTags = 'a' | 'abbr' | 'address' | 'area' | 'article' | 'aside' | 'audio' | 'b' | 'base' | 'bdi' | 'bdo' | 'blockquote' | 'body' | 'br' | 'button' | 'canvas' | 'caption' | 'cite' | 'code' | 'col' | 'colgroup' | 'data' | 'datalist' | 'dd' | 'del' | 'details' | 'dfn' | 'dialog' | 'div' | 'dl' | 'dt' | 'em' | 'embed' | 'fieldset' | 'figcaption' | 'figure' | 'footer' | 'form' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'head' | 'header' | 'hgroup' | 'hr' | 'html' | 'i' | 'iframe' | 'img' | 'input' | 'ins' | 'kbd' | 'label' | 'legend' | 'li' | 'link' | 'main' | 'map' | 'mark' | 'math' | 'menu' | 'meta' | 'meter' | 'nav' | 'noscript' | 'object' | 'ol' | 'optgroup' | 'option' | 'output' | 'p' | 'picture' | 'pre' | 'progress' | 'q' | 'rbc' | 'rp' | 'rt' | 'ruby' | 's' | 'samp' | 'script' | 'search' | 'section' | 'select' | 'slot' | 'small' | 'source' | 'span' | 'strong' | 'style' | 'sub' | 'summary' | 'sup' | 'svg' | 'table' | 'tbody' | 'td' | 'template' | 'textarea' | 'tfoot' | 'th' | 'thead' | 'time' | 'title' | 'tr' | 'track' | 'u' | 'ul' | 'var' | 'video' | 'wbr';
-type InvalidHtmlTags = (typeof INVALID_HTML_TAGS)[number];
-type ValidAndInvalidHtmlTags = ValidHtmlTags | InvalidHtmlTags;
-
-export const noRestrictedHtmlElementsDefault = Object.fromEntries(
-  INVALID_HTML_TAGS.map((tag) => [tag, true]),
-);
 
 const DEFAULT_PINIA_STORE_NAME_SUFFIX = 'Store';
 
