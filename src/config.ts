@@ -188,6 +188,7 @@ export const eslintConfigInternal = async (
         (packagesInfo.tailwindcss.versions.major ?? Number.POSITIVE_INFINITY) < 4,
     );
   const isTanstackQueryEnabled = getIsConfigEnabled('tanstackQuery', '@tanstack/query-core');
+  const isTestingLibraryEnabled = getIsConfigEnabled('testingLibrary', '@testing-library/dom');
   const isTomlEnabled = getIsConfigEnabled('toml', false);
   const isTypescriptEnabled = getIsConfigEnabled('ts', 'typescript');
   const isUnicornEnabled = getIsConfigEnabled('unicorn');
@@ -249,6 +250,7 @@ export const eslintConfigInternal = async (
       svelte: {enabled: isSvelteEnabled},
       tailwind: {enabled: isTailwindEnabled},
       tanstackQuery: {enabled: isTanstackQueryEnabled},
+      testingLibrary: {enabled: isTestingLibraryEnabled},
       toml: {enabled: isTomlEnabled},
       ts: {enabled: isTypescriptEnabled},
       unicorn: {enabled: isUnicornEnabled},
@@ -391,6 +393,8 @@ export const eslintConfigInternal = async (
     isTanstackQueryEnabled &&
       import('./configs/tanstack-query').then((m) => m.tanstackQueryUnConfig(context)),
     isAvaEnabled && import('./configs/ava').then((m) => m.avaUnConfig(context)),
+    isTestingLibraryEnabled &&
+      import('./configs/testing-library').then((m) => m.testingLibraryUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

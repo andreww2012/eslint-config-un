@@ -53,6 +53,7 @@ import type {StorybookEslintConfigOptions} from './storybook';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {TailwindEslintConfigOptions} from './tailwind';
 import type {TanstackQueryEslintConfigOptions} from './tanstack-query';
+import type {TestingLibraryEslintConfigOptions} from './testing-library';
 import type {TomlEslintConfigOptions} from './toml';
 import type {TsEslintConfigOptions} from './ts';
 import type {UnicornEslintConfigOptions} from './unicorn';
@@ -428,6 +429,15 @@ export interface UnConfigs {
   tanstackQuery: TanstackQueryEslintConfigOptions;
 
   /**
+   * ESLint rules related to [Storybook](https://storybook.js.org/).
+   *
+   * Used plugins:
+   * - [`eslint-plugin-storybook`](https://npmjs.com/eslint-plugin-storybook) ([docs](https://storybook.js.org/docs/configure/integration/eslint-plugin))
+   * @default true <=> `storybook` package is installed
+   */
+  storybook: StorybookEslintConfigOptions;
+
+  /**
    * ESLint rules related to [ava test runner](https://avajs.dev).
    *
    * Used plugins:
@@ -437,13 +447,13 @@ export interface UnConfigs {
   ava: AvaEslintConfigOptions;
 
   /**
-   * ESLint rules related to [Storybook](https://storybook.js.org/).
+   * ESLint rules related to [Testing Library](https://testing-library.com/).
    *
    * Used plugins:
-   * - [`eslint-plugin-storybook`](https://npmjs.com/eslint-plugin-storybook) ([docs](https://storybook.js.org/docs/configure/integration/eslint-plugin))
-   * @default true <=> `storybook` package is installed
+   * - [`eslint-plugin-testing-library`](https://npmjs.com/eslint-plugin-testing-library) ([docs](https://github.com/testing-library/eslint-plugin-testing-library?tab=coc-ov-file#))
+   * @default true <=> `@testing-library/dom` package is installed
    */
-  storybook: StorybookEslintConfigOptions;
+  testingLibrary: TestingLibraryEslintConfigOptions;
 
   /**
    * NOTE: disabled by default

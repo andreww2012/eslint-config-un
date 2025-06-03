@@ -94,6 +94,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'jest',
   'vitest',
   'ava',
+  '@testing-library/dom',
 
   'astro',
   'vue',
