@@ -93,6 +93,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'stylelint',
   'jest',
   'vitest',
+  'ava',
 
   'astro',
   'vue',

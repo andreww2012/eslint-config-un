@@ -12,6 +12,7 @@ import type {PrettifyShallow, Promisable, SetRequired} from '../types';
 import type {fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
 import type {AstroEslintConfigOptions} from './astro';
+import type {AvaEslintConfigOptions} from './ava';
 import type {CasePoliceEslintConfigOptions} from './case-police';
 import type {CssEslintConfigOptions} from './css';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
@@ -425,6 +426,15 @@ export interface UnConfigs {
    * @default true <=> `@tanstack/query-core` package is installed (dependency of all `@tanstack/*-query` packages)
    */
   tanstackQuery: TanstackQueryEslintConfigOptions;
+
+  /**
+   * ESLint rules related to [ava test runner](https://avajs.dev).
+   *
+   * Used plugins:
+   * - [`eslint-plugin-ava`](https://npmjs.com/eslint-plugin-ava) ([docs](https://github.com/avajs/eslint-plugin-ava?tab=MIT-1-ov-file))
+   * @default true <=> `ava` package is installed
+   */
+  ava: AvaEslintConfigOptions;
 
   /**
    * ESLint rules related to [Storybook](https://storybook.js.org/).

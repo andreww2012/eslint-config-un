@@ -41,6 +41,7 @@ export const pluginsLoaders = {
     // @ts-expect-error types mismatch
     interopDefault(import('@tanstack/eslint-plugin-query')),
   astro: () => interopDefault(import('eslint-plugin-astro')),
+  ava: () => interopDefault(import('eslint-plugin-ava')),
   'case-police': () =>
     // @ts-expect-error types mismatch
     interopDefault<EslintPlugin>(import('eslint-plugin-case-police')),

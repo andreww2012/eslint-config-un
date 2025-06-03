@@ -136,6 +136,7 @@ export const eslintConfigInternal = async (
 
   const isAngularEnabled = getIsConfigEnabled('angular', '@angular/core');
   const isAstroEnabled = getIsConfigEnabled('astro', 'astro');
+  const isAvaEnabled = getIsConfigEnabled('ava', 'ava');
   const isCasePoliceEnabled = getIsConfigEnabled('casePolice', false);
   const isCliEnabled = getIsConfigEnabled('cli');
   const isCloudfrontFunctionsEnabled = getIsConfigEnabled('cloudfrontFunctions', false);
@@ -207,6 +208,7 @@ export const eslintConfigInternal = async (
     configsMeta: {
       angular: {enabled: isAngularEnabled},
       astro: {enabled: isAstroEnabled},
+      ava: {enabled: isAvaEnabled},
       casePolice: {enabled: isCasePoliceEnabled},
       cli: {enabled: isCliEnabled},
       cloudfrontFunctions: {enabled: isCloudfrontFunctionsEnabled},
@@ -388,6 +390,7 @@ export const eslintConfigInternal = async (
     isMathEnabled && import('./configs/math').then((m) => m.mathUnConfig(context)),
     isTanstackQueryEnabled &&
       import('./configs/tanstack-query').then((m) => m.tanstackQueryUnConfig(context)),
+    isAvaEnabled && import('./configs/ava').then((m) => m.avaUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),
