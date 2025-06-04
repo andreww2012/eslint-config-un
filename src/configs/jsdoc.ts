@@ -173,7 +173,7 @@ export interface JsdocEslintConfigOptions extends UnConfigOptions<'jsdoc'> {
   configTypescript?: boolean | UnConfigOptions<'jsdoc', Pick<JsdocEslintConfigOptions, 'settings'>>;
 
   /**
-   * With be merged with the default list: `['ts-check', 'ts-expect-error', 'ts-ignore', 'ts-nocheck', '__PURE__', '__NO_SIDE_EFFECTS__']`.
+   * With be merged with the default list: `['ts-check', 'ts-expect-error', 'ts-ignore', 'ts-nocheck', '__PURE__', '__NO_SIDE_EFFECTS__', 'vite-ignore]`.
    *
    * Used in rules:
    * - [`no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md)
@@ -243,6 +243,7 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
           // https://github.com/javascript-compiler-hints/compiler-notations-spec
           '__PURE__',
           '__NO_SIDE_EFFECTS__',
+          'vite-ignore',
           ...(extraMultilineCommentsStartingWithToIgnore || []),
         ],
       },
