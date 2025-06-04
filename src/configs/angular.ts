@@ -41,7 +41,6 @@ const PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS: Record<
   // All plugins' types have type mismatches with the eslint plugin type. We don't use `@ts-expect-error` here because it may prevent other errors from being reported (for example, about a missing object property).
   18: {
     plugin: () =>
-      // eslint-disable-next-line import/no-extraneous-dependencies -- bundled
       interopDefault(import('angular-eslint-plugin18')).then((m) => m as unknown as EslintPlugin),
   },
   19: {
@@ -516,7 +515,6 @@ export const angularUnConfig: UnConfigFn<
     interopDefault(import('angular-eslint-plugin-template19')).then(
       (m) => m.processors['extract-inline-html'] as Eslint.Linter.Processor,
     ),
-    // eslint-disable-next-line import/no-extraneous-dependencies -- bundled
     interopDefault(import('angular-eslint-plugin-template17')).then(
       (m) => m.processors['extract-inline-html'] as Eslint.Linter.Processor,
     ),

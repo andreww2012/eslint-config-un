@@ -244,7 +244,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
       {max: maxNestedDescribes},
     ])
     .addRule('no-alias-methods', ERROR) // 🟢 🎨
-    .addRule('no-commented-out-tests', WARNING) // 🟡🎨(warns)
+    .addRule('no-commented-out-tests', WARNING) // 🟡
     .addRule('no-conditional-expect', ERROR) // 🟢
     .addRule('no-conditional-in-test', OFF)
     .addRule('no-confusing-set-timeout', ERROR)

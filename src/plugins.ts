@@ -97,7 +97,6 @@ export const pluginsLoaders = {
   pnpm: () => interopDefault(import('eslint-plugin-pnpm')),
   'prefer-arrow-functions': () =>
     // @ts-expect-error types mismatch
-    // eslint-disable-next-line import/no-extraneous-dependencies -- bundled
     interopDefault(import('eslint-plugin-prefer-arrow-functions')),
   prettier: () => interopDefault(import('eslint-plugin-prettier')),
   promise: () => interopDefault(import('eslint-plugin-promise')),
