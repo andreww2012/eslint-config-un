@@ -350,6 +350,15 @@ export const eslintConfigInternal = async (
         },
       } as const,
     },
+    {
+      name: genFlatConfigEntryName('global-setup/language-options/commonjs'),
+      files: ['**/*.c[jt]s?(x)'],
+      languageOptions: {
+        globals: {
+          ...globals.commonjs,
+        },
+      },
+    },
 
     /* Enabled by default or conditionally */
     jsEslintConfigResult,
