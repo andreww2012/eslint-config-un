@@ -32,6 +32,15 @@ const DEPENDENCIES_TO_SKIP = new Set<string>([
   '@eslint/config-inspector',
 ] satisfies (keyof typeof packageJson.devDependencies)[]);
 
+const WELL_KNOWN_PEER_DEPENDENCIES = new Set<string>([
+  'eslint',
+  'typescript',
+  '@typescript-eslint/eslint-plugin',
+  '@typescript-eslint/utils',
+  '@typescript-eslint/parser',
+  '@typescript-eslint/types',
+]);
+
 for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
   if (
     !packageInfo?.packageJson ||
@@ -51,7 +60,20 @@ for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
     for (const [peerDependencyName, peerDependencyRange] of Object.entries(
       peerDependencies || {},
     )) {
-      console.log(`\t${peerDependencyName}`, styleText('gray', peerDependencyRange));
+      // eslint-disable-next-line ts/no-unsafe-assignment
+      const isOptional =
+        // eslint-disable-next-line ts/no-unsafe-member-access
+        packageInfo.packageJson.peerDependenciesMeta?.[peerDependencyName]?.optional;
+      console.log(
+        '\t',
+        WELL_KNOWN_PEER_DEPENDENCIES.has(peerDependencyName)
+          ? styleText('gray', peerDependencyName)
+          : isOptional
+            ? peerDependencyName
+            : styleText('red', peerDependencyName),
+        styleText('gray', peerDependencyRange),
+        styleText('greenBright', isOptional ? '[optional]' : ''),
+      );
     }
   }
 }
