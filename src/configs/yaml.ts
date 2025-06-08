@@ -129,7 +129,7 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
 
   configBuilder
     ?.addConfig('yaml/github-actions', {
-      files: ['**/.github/workflows/*.{yml,yaml}'],
+      files: ['**/.github/workflows/**/*.{yml,yaml}'],
     })
     // Example: `pull_request:` may be empty
     .addRule('no-empty-mapping-value', OFF);
