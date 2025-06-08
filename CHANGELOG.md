@@ -1,5 +1,6 @@
 ## 1.0.0
 
+- New config: `noStylisticRules` which allows to (temporarily) disable most of the stylistic rules, which can be handy if this config is added to an existing project with big codebase.
 - New config: `graphql` via [`@graphql-eslint/eslint-plugin`](https://npmjs.com/@graphql-eslint/eslint-plugin), enabled automatically if `graphql` package is installed.
 - New config: `depend` via [`eslint-plugin-depend`](https://npmjs.com/eslint-plugin-depend), **<u>disabled</u>** by default.
 - New config: `math` via [`eslint-plugin-math`](https://npmjs.com/eslint-plugin-math), enabled by default.

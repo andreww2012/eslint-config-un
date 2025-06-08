@@ -23,6 +23,7 @@ import type {EsEslintConfigOptions} from './es';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-functions';
+import type {NoStylisticRulesEslintConfigOptions} from './extra/no-stylistic-rules';
 import type {GraphqlEslintConfigOptions} from './graphql';
 import type {HtmlEslintConfigOptions} from './html';
 import type {ImportEslintConfigOptions} from './import';
@@ -598,6 +599,18 @@ export interface UnConfigs {
    * @default false
    */
   cloudfrontFunctions: CloudfrontFunctionsEslintConfigOptions;
+
+  /**
+   * If you integrate eslint-config-un into an existing project, you might encounter a lot of
+   * reports from rules that are merely about stylistic and other choices, not the ones
+   * that can potentially find bugs and other kind of problems in your code.
+   * Use this config to globally disable all such rules, or conversely enable only them,
+   * or some of them.
+   *
+   * NOTE: disabled by default
+   * @default false
+   */
+  noStylisticRules: NoStylisticRulesEslintConfigOptions;
 }
 
 export interface UnConfigContext {

@@ -164,6 +164,7 @@ export const eslintConfigInternal = async (
   const isNextJsEnabled = getIsConfigEnabled('nextJs', 'next');
   const isNodeEnabled = getIsConfigEnabled('node');
   const isNodeDependenciesEnabled = getIsConfigEnabled('nodeDependencies', false);
+  const isNoStylisticRulesEnabled = getIsConfigEnabled('noStylisticRules', false);
   const isPackageJsonEnabled = getIsConfigEnabled('packageJson', false);
   const isPerfectionistEnabled = getIsConfigEnabled('perfectionist', false);
   const isPnpmEnabled = getIsConfigEnabled('pnpm', usedPackageManager?.name === 'pnpm');
@@ -235,6 +236,7 @@ export const eslintConfigInternal = async (
       nextJs: {enabled: isNextJsEnabled},
       node: {enabled: isNodeEnabled},
       nodeDependencies: {enabled: isNodeDependenciesEnabled},
+      noStylisticRules: {enabled: isNoStylisticRulesEnabled},
       packageJson: {enabled: isPackageJsonEnabled},
       perfectionist: {enabled: isPerfectionistEnabled},
       pnpm: {enabled: isPnpmEnabled},
@@ -455,6 +457,8 @@ export const eslintConfigInternal = async (
     })),
 
     // MUST be last
+    isNoStylisticRulesEnabled &&
+      import('./configs/extra/no-stylistic-rules').then((m) => m.noStylisticRulesUnConfig(context)),
     disablePrettierIncompatibleRules &&
       interopDefault(import('eslint-config-prettier')).then((eslintConfigPrettier) => ({
         name: genFlatConfigEntryName('eslint-config-prettier'),

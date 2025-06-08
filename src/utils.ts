@@ -9,7 +9,7 @@ export {defu as assignDefaults} from 'defu';
 
 export {klona as cloneDeep} from 'klona';
 
-export {memoize, omit, pickBy, uniq as unique} from 'es-toolkit';
+export {memoize, omit, pickBy, uniq as unique, uniqBy as uniqueBy} from 'es-toolkit';
 
 export const assignOptions = <T>(options: T, key: keyof T) => ({
   ...(typeof options[key] === 'object' && options[key]),

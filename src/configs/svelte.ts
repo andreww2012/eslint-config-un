@@ -1,4 +1,3 @@
-// cspell:ignore curlies
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';

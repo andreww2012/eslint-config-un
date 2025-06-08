@@ -60,7 +60,7 @@ export default {
     'activedescendant',
     'proptypes',
 
-    // Actual English-ish words
+    // Actual-ish English words
     'uncategorized',
     'mischeck',
     'unthrown',
@@ -68,5 +68,6 @@ export default {
     'requirable',
     'rethrowing',
     'dedented',
+    'curlies',
   ],
 };

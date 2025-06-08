@@ -8,6 +8,7 @@ import {flatConfigsToRulesDTS, pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
 import {eslintConfigInternal} from '../src/config';
 import {DISABLE_AUTOFIX, eslintPluginVanillaRules} from '../src/eslint';
+import {uniqueBy} from '../src/utils';
 
 // eslint-disable-next-line node/no-unsupported-features/node-builtins
 const __dirname = import.meta.dirname;
@@ -16,19 +17,21 @@ await fs.mkdir(resolveInOutDir(), {recursive: true});
 
 const {
   main: ruleTypes,
-  perPlugin: ruleTypesPerPlugin,
-  fixableRulesOnly: ruleTypesFixableRulesOnly,
+  perPluginCode,
+  fixableRulesOnlyCode,
+  allRulesCode,
 } = await generateRuleTypes();
 
 await printDiffBetweenMostRecentAndCurrentRuleTypes(ruleTypes);
 
 await Promise.all([
-  fs.writeFile(path.join(__dirname, '../src/eslint-types.d.ts'), ruleTypes),
-  fs.writeFile(path.join(__dirname, '../src/eslint-types-per-plugin.d.ts'), ruleTypesPerPlugin),
+  fs.writeFile(path.join(__dirname, '../src/eslint-types.gen.d.ts'), ruleTypes),
+  fs.writeFile(path.join(__dirname, '../src/eslint-types-per-plugin.gen.d.ts'), perPluginCode),
   fs.writeFile(
-    path.join(__dirname, '../src/eslint-types-fixable-only.d.ts'),
-    ruleTypesFixableRulesOnly,
+    path.join(__dirname, '../src/eslint-types-fixable-only.gen.d.ts'),
+    fixableRulesOnlyCode,
   ),
+  fs.writeFile(path.join(__dirname, '../src/eslint-rules.gen.ts'), allRulesCode),
   fs.writeFile(
     resolveInOutDir(`eslint-types.${new Date().toISOString().replaceAll(':', '')}.d.ts`),
     ruleTypes,
@@ -43,9 +46,12 @@ async function generateRuleTypes() {
       angular: true,
     },
   });
-  const allRealPlugins = unFlatConfigs
-    .flatMap((v) => Object.entries(v.plugins || {}))
-    .filter(([pluginName]) => pluginName !== DISABLE_AUTOFIX);
+  const allRealPlugins = uniqueBy(
+    unFlatConfigs
+      .flatMap((v) => Object.entries(v.plugins || {}))
+      .filter(([pluginName]) => pluginName !== DISABLE_AUTOFIX),
+    ([pluginName]) => pluginName, // `html` is duplicated
+  );
   allRealPlugins.push(['', eslintPluginVanillaRules]);
 
   const [main, fixableRulesOnlyCodeRaw, perPluginCodeRaw] = await Promise.all([
@@ -88,23 +94,68 @@ async function generateRuleTypes() {
           code,
           exportTypeName,
           pluginName,
+          plugin,
+          ruleNamesSorted: Object.keys(plugin.rules || {}).sort(),
         };
       }),
     ),
   ]);
 
+  // eslint-disable-next-line ts/no-shadow
   const perPluginCode = `${perPluginCodeRaw.map((v) => v.code).join('\n\n')}
 
 export type RuleOptionsPerPlugin = {
 ${perPluginCodeRaw.map((v) => `  '${v.pluginName}': ${v.exportTypeName};`).join('\n')}
 }\n`.replaceAll(/: Linter.RuleEntry<([^>]*)>/g, ': $1;');
 
+  // eslint-disable-next-line ts/no-shadow
   const fixableRulesOnlyCode = `export type FixableRuleNames = ${[...fixableRulesOnlyCodeRaw.matchAll(/'disable-autofix\/([^']*)'/g)].map((match) => `'${match[1]}'`).join(' | ')};\n`;
+
+  // eslint-disable-next-line ts/no-shadow
+  const allRulesCode = `export const ALL_RULES_PER_PLUGIN = /* ${perPluginCodeRaw.length} plugin${perPluginCodeRaw.length === 1 ? '' : 's'} */ {
+${perPluginCodeRaw
+  .map(({pluginName, plugin}) => {
+    const pluginRules = Object.entries(plugin.rules || {});
+    const rulesCount = pluginRules.length;
+    return `  '${pluginName}': /* ${rulesCount} rule${rulesCount === 1 ? '' : 's'} */ [\n${pluginRules
+      .map(([ruleName, ruleDefinition]) => {
+        const {
+          deprecated,
+          fixable,
+          hasSuggestions,
+          schema,
+          language,
+          type: ruleType,
+          dialects,
+        } = ruleDefinition.meta || {};
+        const comment = [
+          [
+            ruleType === 'problem' && '💥',
+            ruleType === 'suggestion' && '🤔',
+            ruleType === 'layout' && '💅',
+          ],
+          [language],
+          [dialects?.join(',')],
+          // eslint-disable-next-line de-morgan/no-negated-conjunction
+          [schema && !(Array.isArray(schema) && schema.length === 0) && '📄'],
+          [deprecated && '⛔', fixable && '🔧', hasSuggestions && '💡'],
+        ]
+          .map((v) => v.filter(Boolean).join(''))
+          .filter(Boolean)
+          .join('|');
+        return `    '${ruleName}',${comment ? ` // ${comment}` : ''}`;
+      })
+      .join('\n')}\n  ],`;
+  })
+  .join('\n')}
+} as const;
+`;
 
   return {
     main,
-    perPlugin: perPluginCode,
-    fixableRulesOnly: fixableRulesOnlyCode,
+    perPluginCode,
+    fixableRulesOnlyCode,
+    allRulesCode,
   };
 }
 

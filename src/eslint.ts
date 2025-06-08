@@ -12,9 +12,9 @@ import {
   OFF,
   type RuleSeverity,
 } from './constants';
-import type {RuleOptions} from './eslint-types';
-import type {FixableRuleNames} from './eslint-types-fixable-only';
-import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin';
+import type {FixableRuleNames} from './eslint-types-fixable-only.gen';
+import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin.gen';
+import type {RuleOptions} from './eslint-types.gen';
 import {PLUGIN_PREFIXES_LIST, type PluginPrefix} from './plugins';
 import type {
   FalsyValue,
@@ -534,6 +534,25 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
 
       addBulkRules: (rules: AllEslintRules | FalsyValue) => {
         Object.assign(configFinal.rules, resolveOverrides(this.context, rules || {}));
+        return result;
+      },
+
+      disableBulkRules: (rules: (keyof AllEslintRules | (string & {}))[] | FalsyValue) => {
+        Object.assign(
+          configFinal.rules,
+          resolveOverrides(
+            this.context,
+            Object.fromEntries(
+              (rules || []).flatMap(
+                (ruleName) =>
+                  [
+                    [ruleName, OFF],
+                    [`${DISABLE_AUTOFIX}/${ruleName}`, OFF],
+                  ] as const,
+              ),
+            ),
+          ),
+        );
         return result;
       },
     };

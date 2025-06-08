@@ -3,7 +3,7 @@ import type {EslintConfigUnOptions} from './configs';
 
 export const eslintConfig = (options: EslintConfigUnOptions = {}) => eslintConfigInternal(options);
 
-export type {RuleOptions} from './eslint-types';
+export type {RuleOptions} from './eslint-types.gen';
 export {DEFAULT_GLOBAL_IGNORES} from './constants';
 
 export {default as globals} from 'globals';

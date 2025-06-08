@@ -1,5 +1,6 @@
 dist/
-src/eslint-types*.d.ts
+src/**/*.gen.d.ts
+src/**/*.gen.ts
 test/*
 TODO.md
 temp/
