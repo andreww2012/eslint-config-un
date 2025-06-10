@@ -10,6 +10,7 @@
 - New config: `ava` via [`eslint-plugin-ava`](https://npmjs.com/eslint-plugin-ava), enabled automatically if `ava` package is installed.
 - New config: `testingLibrary` via [`eslint-plugin-testing-library`](https://npmjs.com/eslint-plugin-testing-library), enabled automatically if `@testing-library/dom` package is installed.
 - [**BREAKING**] eslint-config-un package is now distributed as ESM only.
+- [**BREAKING**] the following plugins are now not direct dependencies of this package, but its' optional peer dependencies: `@graphql-eslint/eslint-plugin`, `eslint-plugin-storybook` and `eslint-plugin-tailwindcss`.
 - [**BREAKING**] You can now specify the method of disabling autofix: `prefixed` would create a plugin named `disable-autofix` and copy the rules for which the autofix is disabled. `unprefixed` would copy an entire plugin and replace the origin plugin with the copy. The default method is now `unprefixed`, which leaves full rule names unchanged. You can control the overall or per-plugin autofix disabling method via the `disableAutofixMethod` option.
 - [**BREAKING**] Removed the ability to disable rule autofix by enabling `disable-autofix/*` rules. Instead, when configuring a rule, you can now return an object and set `disableAutofix: true` in it.
 - [**BREAKING**] Removed the `errorsInsteadOfWarnings` root option in favor of `forceSeverity` that can now be set globally.

@@ -77,36 +77,14 @@ export const fetchPackageInfo = async (
 export const doesPackageExist = (packageName: string) =>
   Promise.resolve(isPackageExists(packageName));
 
-export function interopDefault<T>(module: Promisable<T | {default: T}>): Promise<T>;
-export function interopDefault<T>(
-  module: Promisable<T | {default: T}>,
-  ignoreErrors: MaybeArray<string>,
-): Promise<T | null>;
-export async function interopDefault<T>(
-  module: Promisable<T | {default: T}>,
-  ignoreErrors?: MaybeArray<string>,
-): Promise<T | null> {
-  try {
-    const resolvedModule = await module;
-    // TODO report?
-    // eslint-disable-next-line ts/no-unnecessary-condition
-    return resolvedModule && typeof resolvedModule === 'object' && 'default' in resolvedModule
-      ? resolvedModule.default
-      : resolvedModule;
-  } catch (error: unknown) {
-    const ignoreErrorsArray = arraify(ignoreErrors);
-    if (
-      error &&
-      typeof error === 'object' &&
-      'code' in error &&
-      typeof error.code === 'string' &&
-      ignoreErrorsArray.includes(error.code)
-    ) {
-      return null;
-    }
-    throw error;
-  }
-}
+export const interopDefault = async <T>(module: Promisable<T | {default: T}>): Promise<T> => {
+  const resolvedModule = await module;
+  // TODO report?
+  // eslint-disable-next-line ts/no-unnecessary-condition
+  return resolvedModule && typeof resolvedModule === 'object' && 'default' in resolvedModule
+    ? resolvedModule.default
+    : resolvedModule;
+};
 
 export function getKeysOfTruthyValues<T extends Record<string, boolean>>(object: T): (keyof T)[];
 export function getKeysOfTruthyValues<T extends Record<string, unknown>>(

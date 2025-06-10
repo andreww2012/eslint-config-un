@@ -56,7 +56,6 @@
     "@eslint/compat": "1.2.9",
     "@eslint/css": "0.7.0",
     "@eslint/markdown": "6.4.0",
-    "@graphql-eslint/eslint-plugin": "4.4.0",
     "@html-eslint/eslint-plugin": "0.40.2",
     "@html-eslint/parser": "0.40.0",
     "@next/eslint-plugin-next": "15.3.2",
@@ -100,7 +99,6 @@
     "eslint-plugin-pinia": "0.4.1",
     "eslint-plugin-pnpm": "0.3.1",
     "eslint-plugin-prefer-arrow-functions": "3.6.2",
-    "eslint-plugin-prettier": "5.4.0",
     "eslint-plugin-promise": "7.2.1",
     "eslint-plugin-qwik": "1.13.0",
     "eslint-plugin-react": "7.37.5",
@@ -111,9 +109,7 @@
     "eslint-plugin-security": "3.0.1",
     "eslint-plugin-solid": "0.14.5",
     "eslint-plugin-sonarjs": "3.0.2",
-    "eslint-plugin-storybook": "9.0.1",
     "eslint-plugin-svelte": "3.5.1",
-    "eslint-plugin-tailwindcss": "3.18.0",
     "eslint-plugin-testing-library": "7.3.0",
     "eslint-plugin-toml": "0.12.0",
     "eslint-plugin-unicorn": "59.0.1",
@@ -142,6 +138,7 @@
     "@antfu/ni": "24.3.0",
     "@arethetypeswrong/cli": "0.18.0",
     "@eslint/config-inspector": "1.0.2",
+    "@graphql-eslint/eslint-plugin": "4.4.0",
     "@jest/environment": "29.7.0",
     "@jest/expect": "29.7.0",
     "@sveltejs/kit": "2.20.8",
@@ -160,6 +157,9 @@
     "diff": "7.0.0",
     "eslint": "9.26.0",
     "eslint-plugin-no-type-assertion": "1.3.0",
+    "eslint-plugin-prettier": "5.4.0",
+    "eslint-plugin-storybook": "9.0.1",
+    "eslint-plugin-tailwindcss": "3.18.0",
     "eslint-typegen": "2.1.0",
     "npm-check-updates": "18.0.1",
     "prettier": "3.5.3",
@@ -173,7 +173,21 @@
     "typescript": "5.8.3"
   },
   "peerDependencies": {
-    "eslint": "^9.15.0"
+    "@graphql-eslint/eslint-plugin": "^4.4.0",
+    "eslint": "^9.15.0",
+    "eslint-plugin-storybook": "^9.0.1",
+    "eslint-plugin-tailwindcss": "^3.18.0"
+  },
+  "peerDependenciesMeta": {
+    "@graphql-eslint/eslint-plugin": {
+      "optional": true
+    },
+    "eslint-plugin-storybook": {
+      "optional": true
+    },
+    "eslint-plugin-tailwindcss": {
+      "optional": true
+    }
   },
   "bundleDependencies": [
     "eslint-plugin-prettier",

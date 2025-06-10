@@ -40,7 +40,21 @@ pnpm i -D eslint-config-un eslint@latest
 yarn add -D eslint-config-un eslint@latest
 ```
 
-All the used plugins are direct dependencies of this package, you don't need to install them separately. We aim to update the dependencies within 1 month after their release.
+Almost all the used plugins are direct dependencies of this package, you don't need to install them separately. We aim to update the dependencies within 1 month after their release.
+
+Certain plugins are optional peer dependencies, which means that you need to install them manually if they are end up being used.
+
+<details>
+<summary>Optional peer dependencies & reason</summary>
+
+The reason for making these plugins not coming with this package is because they have heavy non-optional peer dependencies, such as `graphql`, `storybook` and `tailwindcss`. Not only that they're heavy, but having those peer dependencies installed would make this package think that the corresponding config is used.
+
+| Default plugin prefix | Package name |
+| --------------------- | ------------ |
+| `graphql`             | `@graphql-eslint/eslint-plugin` |
+| `storybook`           | `eslint-plugin-storybook` |
+| `tailwindcss`         | `eslint-plugin-tailwindcss` |
+</details>
 
 ### Usage
 
