@@ -51,3 +51,15 @@ declare module 'eslint-plugin-ava' {
   declare const value: ESLint.ESLint.Plugin;
   export = value;
 }
+
+declare module 'eslint-plugin-ember' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
+  export = value;
+}
+
+declare module 'ember-eslint-parser' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.Linter.Parser;
+  export = value;
+}

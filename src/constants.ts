@@ -73,6 +73,8 @@ export const GLOB_SUPPORTED_EXTENSIONS = [
   'svelte',
   'graphql',
   'gql',
+  'gjs',
+  'gts',
 ].join(',');
 export const GLOB_MARKDOWN = '**/*.md' as const;
 export const GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS =
@@ -107,4 +109,5 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   // it requires `@builder.io/qwik` to be installed anyway
   '@builder.io/qwik',
   '@qwik.dev/core',
+  'ember-source',
 ] as const;

@@ -166,6 +166,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | ![Astro](./assets/devicon-astro.svg) `astro`                | ✅ (`astro` is installed) | [eslint-plugin-astro](https://npmjs.com/eslint-plugin-astro) (`astro`) | Since v0.9.0<br>Without A11Y rules |
 | ![Astro](./assets/devicon-astro.svg) `astro/jsxA11y`        | ✅ | ^ | Only A11Y rules from `eslint-plugin-astro` |
 | ![Svelte](./assets/devicon-svelte.svg) `svelte`             | ✅ (`svelte` is installed) | [eslint-plugin-svelte](https://npmjs.com/eslint-plugin-svelte) (`svelte`) | Since v0.10.0 |
+| ![Ember](./assets/devicon-ember.svg) `ember`                | ✅ (`ember-source` is installed) | [eslint-plugin-ember](https://npmjs.com/eslint-plugin-ember) (`ember`) | Since v1.0.0 |
 | ![TailwindCSS](./assets/devicon-tailwindcss.svg) `tailwind` | ✅ (`tailwindcss` is installed) | [eslint-plugin-tailwindcss](https://npmjs.com/eslint-plugin-tailwindcss) (`tailwindcss`) | - |
 
 ### Runtimes & related

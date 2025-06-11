@@ -18,6 +18,7 @@ import type {CssEslintConfigOptions} from './css';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
 import type {DependEslintConfigOptions} from './depend';
+import type {EmberEslintConfigOptions} from './ember';
 import type {ErasableSyntaxOnlyEslintConfigOptions} from './erasable-syntax-only';
 import type {EsEslintConfigOptions} from './es';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
@@ -451,10 +452,19 @@ export interface UnConfigs {
    * ESLint rules related to [Testing Library](https://testing-library.com/).
    *
    * Used plugins:
-   * - [`eslint-plugin-testing-library`](https://npmjs.com/eslint-plugin-testing-library) ([docs](https://github.com/testing-library/eslint-plugin-testing-library?tab=coc-ov-file#))
+   * - [`eslint-plugin-testing-library`](https://npmjs.com/eslint-plugin-testing-library) ([docs](https://github.com/testing-library/eslint-plugin-testing-library?tab=coc-ov-file))
    * @default true <=> `@testing-library/dom` package is installed
    */
   testingLibrary: TestingLibraryEslintConfigOptions;
+
+  /**
+   * ESLint rules related to [Ember](https://emberjs.com/).
+   *
+   * Used plugins:
+   * - [`eslint-plugin-ember`](https://npmjs.com/eslint-plugin-ember) ([docs](https://github.com/ember-cli/eslint-plugin-ember?tab=MIT-1-ov-file))
+   * @default true <=> `ember-source` package is installed
+   */
+  ember: EmberEslintConfigOptions;
 
   /**
    * NOTE: disabled by default

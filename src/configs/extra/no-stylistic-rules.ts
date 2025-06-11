@@ -160,6 +160,20 @@ const ALL_STYLISTIC_RULES = {
   depend: {
     // None
   },
+  ember: {
+    'no-implicit-service-injection-argument': true,
+    'no-unnecessary-index-route': true,
+    'no-unnecessary-route-path-option': true,
+    'no-unnecessary-service-injection-argument': true,
+    'order-in-components': true,
+    'order-in-controllers': true,
+    'order-in-models': true,
+    'order-in-routes': true,
+    'route-path-style': true,
+    'routes-segments-snake-case': true,
+    'template-indent': true,
+    'use-brace-expansion': true,
+  },
   'erasable-syntax-only': {
     // None
   },

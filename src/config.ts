@@ -144,6 +144,7 @@ export const eslintConfigInternal = async (
   const isCssInJsEnabled = getIsConfigEnabled('cssInJs');
   const isDeMorganEnabled = getIsConfigEnabled('deMorgan', false);
   const isDependEnabled = getIsConfigEnabled('depend', false);
+  const isEmberEnabled = getIsConfigEnabled('ember', 'ember-source');
   const isErasableSyntaxOnlyEnabled = getIsConfigEnabled('erasableSyntaxOnly', false);
   const isEsEnabled = getIsConfigEnabled('es', false);
   const isEslintCommentsEnabled = getIsConfigEnabled('eslintComments');
@@ -218,6 +219,7 @@ export const eslintConfigInternal = async (
       cssInJs: {enabled: isCssInJsEnabled},
       deMorgan: {enabled: isDeMorganEnabled},
       depend: {enabled: isDependEnabled},
+      ember: {enabled: isEmberEnabled},
       erasableSyntaxOnly: {enabled: isErasableSyntaxOnlyEnabled},
       es: {enabled: isEsEnabled},
       eslintComments: {enabled: isEslintCommentsEnabled},
@@ -431,6 +433,7 @@ export const eslintConfigInternal = async (
     isErasableSyntaxOnlyEnabled &&
       import('./configs/erasable-syntax-only').then((m) => m.erasableSyntaxOnlyUnConfig(context)),
     isStorybookEnabled && import('./configs/storybook').then((m) => m.storybookUnConfig(context)),
+    isEmberEnabled && import('./configs/ember').then((m) => m.emberUnConfig(context)),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

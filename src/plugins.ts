@@ -103,6 +103,7 @@ export const pluginsLoaders = {
   'de-morgan': () =>
     loadPlugin<EslintPlugin>('eslint-plugin-de-morgan', import('eslint-plugin-de-morgan')),
   depend: () => loadPlugin('eslint-plugin-depend', import('eslint-plugin-depend')),
+  ember: () => loadPlugin('eslint-plugin-ember', import('eslint-plugin-ember')),
   'erasable-syntax-only': () =>
     // @ts-expect-error types mismatch
     loadPlugin('eslint-plugin-erasable-syntax-only', import('eslint-plugin-erasable-syntax-only')),
