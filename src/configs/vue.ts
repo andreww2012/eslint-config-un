@@ -43,6 +43,26 @@ export interface VueEslintConfigOptions extends UnConfigOptions<'vue'> {
   configA11y?: boolean | UnConfigOptions<'vuejs-accessibility'>;
 
   /**
+   * Nuxt-specific rules and tweaks.
+   * @default true <=> `nuxt` package is installed
+   */
+  configNuxt?:
+    | boolean
+    | {
+        /**
+         * @default auto-detected
+         */
+        nuxtMajorVersion?: 3 | 4;
+
+        /**
+         * You may need to set this manually to `true` if you're using
+         * [Nuxt 4 directory structure](https://nuxt.com/docs/4.x/getting-started/upgrade#new-directory-structure) in Nuxt 3.
+         * @default true <=> Nuxt version is 4
+         */
+        v4DirectoryStructure?: boolean;
+      };
+
+  /**
    * Enabled automatically by checking if `pinia` package is installed (at any level). Pass a false value to disable pinia-specific rules.
    * @default true <=> `pinia` package is installed
    */
@@ -137,16 +157,6 @@ export interface VueEslintConfigOptions extends UnConfigOptions<'vue'> {
   preferUseTemplateRef?: boolean;
 
   /**
-   * Enabled automatically by checking if `nuxt` package is installed (at any level). Pass a false value or a Nuxt version to explicitly disable or enable Nuxt-specific rules or tweaks.
-   */
-  nuxtMajorVersion?: false | 3;
-
-  /**
-   * @default ''
-   */
-  nuxtOrVueProjectDir?: string;
-
-  /**
    * Whether to create virtual ESLint files for various SFC (single file component) blocks.
    *
    * - By default, virtual files will be created for `<style>` blocks.
@@ -155,6 +165,13 @@ export interface VueEslintConfigOptions extends UnConfigOptions<'vue'> {
    * @default true
    */
   processSfcBlocks?: boolean | EslintProcessorVueBlocksOptions;
+
+  /**
+   * A relative path to your Vue or Nuxt project, i.e. where the app's entry point (`app.vue`),
+   * `pages` and nuxt's `layouts` directories are located.
+   * By default, it is the current directory `''` or `app` for Nuxt 4.
+   */
+  vueOrNuxtProjectDir?: string;
 }
 
 const DEFAULT_VUE_FILES: string[] = [GLOB_VUE];
@@ -195,6 +212,7 @@ export const vueUnConfig: UnConfigFn<
       vuePackageMajorVersion === 2 || vuePackageMajorVersion === 3 ? vuePackageMajorVersion : 3,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
     configA11y: true,
+    configNuxt: nuxtPackageInfo != null,
     configPinia: isPiniaPackageInstalled,
     processSfcBlocks: true,
     reportUnusedDisableDirectives: true,
@@ -202,13 +220,11 @@ export const vueUnConfig: UnConfigFn<
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
   } satisfies VueEslintConfigOptions);
 
-  const nuxtMajorVersion =
-    optionsResolved.nuxtMajorVersion ?? nuxtPackageInfo?.versions.major ?? null;
-
   const {
     majorVersion: vueMajorVersion,
     enforceTypescriptInScriptSection,
     configA11y,
+    configNuxt,
     configPinia,
     processSfcBlocks,
     reportUnusedDisableDirectives,
@@ -232,10 +248,17 @@ export const vueUnConfig: UnConfigFn<
   optionsResolved.preferUseTemplateRef ??= isMin3_5;
   const {preferUseTemplateRef} = optionsResolved;
 
-  const isNuxtEnabled = Boolean(nuxtMajorVersion);
+  const nuxtPackageMajorVersion = nuxtPackageInfo?.versions.major;
+  const optionsNuxtResolved = assignDefaults(configNuxt, {
+    nuxtMajorVersion: nuxtPackageMajorVersion === 4 ? 4 : 3,
+  } satisfies VueEslintConfigOptions['configNuxt'] & object);
+  optionsNuxtResolved.v4DirectoryStructure ??= optionsNuxtResolved.nuxtMajorVersion === 4;
+  const {v4DirectoryStructure: nuxtV4DirectoryStructure} = optionsNuxtResolved;
 
-  const inNuxtAppDir = joinPaths.bind(null, optionsResolved.nuxtOrVueProjectDir);
-  const nuxtLayoutsFilesGlob: string = inNuxtAppDir('layouts/**/*.vue');
+  optionsResolved.vueOrNuxtProjectDir ??= nuxtV4DirectoryStructure ? 'app' : '';
+  const {vueOrNuxtProjectDir} = optionsResolved;
+
+  const resolvePathInVueOrNuxtProjectDir = joinPaths.bind(null, vueOrNuxtProjectDir);
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'vue');
 
@@ -526,11 +549,11 @@ export const vueUnConfig: UnConfigFn<
         ignorePatterns: [
           'router-link',
           'router-view',
-          isNuxtEnabled && /^(lazy-)?(nuxt-|client-only$)/,
+          configNuxt && /^(lazy-)?(nuxt-|client-only$)/,
           ...(optionsResolved.knownComponentNames || []),
         ]
           .flat()
-          .filter((v) => v !== false),
+          .filter(Boolean),
       },
     ]) // >=8.4.0
     // TODO enable if script setup is enforced and only in JS?
@@ -710,14 +733,16 @@ export const vueUnConfig: UnConfigFn<
     .disableAnyRule('', 'no-useless-assignment') // False positives in script setup
     .addOverrides();
 
+  const nuxtLayoutsFilesGlob = resolvePathInVueOrNuxtProjectDir('layouts/**/*.vue');
+
   configBuilder
     ?.addConfig('vue/allow-single-word-component-names', {
       files: [
-        inNuxtAppDir('pages/**/*.vue'),
-        inNuxtAppDir('views/**/*.vue'),
-        isNuxtEnabled && [
+        resolvePathInVueOrNuxtProjectDir('pages/**/*.vue'),
+        resolvePathInVueOrNuxtProjectDir('views/**/*.vue'),
+        configNuxt && [
           nuxtLayoutsFilesGlob,
-          ...['app.vue', 'error.vue'].map((fileName) => inNuxtAppDir(fileName)),
+          ...['app.vue', 'error.vue'].map((fileName) => resolvePathInVueOrNuxtProjectDir(fileName)),
         ],
 
         optionsResolved.doNotRequireComponentNamesToBeMultiWordForPatterns,
@@ -731,16 +756,19 @@ export const vueUnConfig: UnConfigFn<
     ?.addConfig('vue/allow-implicit-slots', {
       files: [nuxtLayoutsFilesGlob],
     })
-    .addRule('require-explicit-slots', isNuxtEnabled ? OFF : null);
+    .addRule('require-explicit-slots', configNuxt ? OFF : null);
 
   configBuilder
     ?.addConfig('vue/allow-default-export', {
       files: [
         ...DEFAULT_VUE_FILES,
-        isNuxtEnabled && [
-          inNuxtAppDir('plugins/**/*'),
-          inNuxtAppDir('server/**/*'),
-          inNuxtAppDir(`app/router.options.${GLOB_JS_TS_EXTENSION}`),
+        configNuxt && [
+          ...['plugins', 'server'].map((dir) =>
+            resolvePathInVueOrNuxtProjectDir(`${nuxtV4DirectoryStructure ? '../' : ''}${dir}/**/*`),
+          ),
+          resolvePathInVueOrNuxtProjectDir(
+            `${nuxtV4DirectoryStructure ? '' : 'app/'}router.options.${GLOB_JS_TS_EXTENSION}`,
+          ),
         ],
       ]
         .flat()
