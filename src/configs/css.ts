@@ -68,6 +68,7 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
     )
     .addRule('no-duplicate-imports', ERROR) // 🟢
     .addRule('no-empty-blocks', ERROR) // 🟢
+    .addRule('no-important', WARNING) // 🟢
     .addRule('no-invalid-at-rules', ERROR) // 🟢
     .addRule('no-invalid-properties', ERROR) // 🟢
     .addRule('prefer-logical-properties', OFF) // >=0.5.0

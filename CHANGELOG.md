@@ -42,6 +42,8 @@
   - 🟢 [`sort-keys-in-type-decorator`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/sort-keys-in-type-decorator.md)
   - 🟢 [`no-nested-tags`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/no-nested-tags.md)
   - 🟢 [`prefer-at-empty`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-at-empty.md)
+- `@eslint/css`: [0.7.0 -> 0.8.1](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.8.1)
+  - 🟡 (enabled, warns) [`no-important`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-important.md)
 
 
 ## 0.10.0
