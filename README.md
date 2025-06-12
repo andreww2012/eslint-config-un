@@ -54,6 +54,7 @@ The reason for making these plugins not coming with this package is because they
 | `graphql`             | `@graphql-eslint/eslint-plugin` |
 | `storybook`           | `eslint-plugin-storybook` |
 | `tailwindcss`         | `eslint-plugin-tailwindcss` |
+| `turbo`               | `eslint-plugin-turbo` |
 </details>
 
 ### Usage
@@ -230,6 +231,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `tanstackQuery`                                                         | ✅ (`@tanstack/query-core` is installed) | [@tanstack/eslint-plugin-query](https://npmjs.com/@tanstack/eslint-plugin-query) (`@tanstack/query`) | Since v1.0.0 |
 | ![Storybook](./assets/logos-storybook-icon.svg) `storybook`             | ✅ (`storybook` is installed) | [eslint-plugin-storybook](https://npmjs.com/eslint-plugin-storybook) (`storybook`) | Since v1.0.0 |
 | ![Cypress](./assets/vscode-icons-file-type-light-cypress.svg) `cypress` | ✅ (`cypress` is installed) | [eslint-plugin-cypress](https://npmjs.com/eslint-plugin-cypress) (`cypress`) | Since v1.0.0 |
+| ![Turborepo](./assets/material-icon-theme-turborepo.svg) `turbo`        | ✅ (`turbo` is installed) | [eslint-plugin-turbo](https://npmjs.com/eslint-plugin-turbo) (`turbo`) | Since v1.0.0 |
 
 ### Miscellaneous
 

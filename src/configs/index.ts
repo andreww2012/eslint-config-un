@@ -59,6 +59,7 @@ import type {TanstackQueryEslintConfigOptions} from './tanstack-query';
 import type {TestingLibraryEslintConfigOptions} from './testing-library';
 import type {TomlEslintConfigOptions} from './toml';
 import type {TsEslintConfigOptions} from './ts';
+import type {TurboEslintConfigOptions} from './turbo';
 import type {UnicornEslintConfigOptions} from './unicorn';
 import type {UnusedImportsEslintConfigOptions} from './unused-imports';
 import type {VitestEslintConfigOptions} from './vitest';
@@ -475,6 +476,15 @@ export interface UnConfigs {
    * @default true
    */
   cypress: CypressEslintConfigOptions;
+
+  /**
+   * ESLint rules related to [Turborepo](https://turborepo.com).
+   *
+   * Used plugins:
+   * - [`eslint-plugin-turbo`](https://npmjs.com/eslint-plugin-turbo) ([docs](https://turborepo.com/docs/reference/eslint-plugin-turbo))
+   * @default true
+   */
+  turbo: TurboEslintConfigOptions;
 
   /**
    * NOTE: disabled by default

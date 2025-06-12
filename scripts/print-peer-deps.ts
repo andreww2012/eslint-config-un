@@ -53,7 +53,7 @@ for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
   const {peerDependencies} = packageInfo.packageJson;
   if (Object.keys(peerDependencies || {}).length > 0) {
     console.log(
-      styleText('yellow', packageName),
+      styleText('blue', packageName),
       styleText('bgGray', packageInfo.version || '[version unknown]'),
       isDev ? styleText('bgGreenBright', ' DEV ') : '',
     );
@@ -70,7 +70,7 @@ for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
           ? styleText('gray', peerDependencyName)
           : isOptional
             ? peerDependencyName
-            : styleText('red', peerDependencyName),
+            : styleText(isDev ? 'yellow' : 'red', peerDependencyName),
         styleText('gray', peerDependencyRange),
         styleText('greenBright', isOptional ? '[optional]' : ''),
       );

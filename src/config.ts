@@ -193,6 +193,7 @@ export const eslintConfigInternal = async (
   const isTanstackQueryEnabled = getIsConfigEnabled('tanstackQuery', '@tanstack/query-core');
   const isTestingLibraryEnabled = getIsConfigEnabled('testingLibrary', '@testing-library/dom');
   const isTomlEnabled = getIsConfigEnabled('toml', false);
+  const isTurboEnabled = getIsConfigEnabled('turbo', 'turbo');
   const isTypescriptEnabled = getIsConfigEnabled('ts', 'typescript');
   const isUnicornEnabled = getIsConfigEnabled('unicorn');
   const isUnusedImportsEnabled = getIsConfigEnabled('unusedImports');
@@ -259,6 +260,7 @@ export const eslintConfigInternal = async (
       testingLibrary: {enabled: isTestingLibraryEnabled},
       toml: {enabled: isTomlEnabled},
       ts: {enabled: isTypescriptEnabled},
+      turbo: {enabled: isTurboEnabled},
       unicorn: {enabled: isUnicornEnabled},
       unusedImports: {enabled: isUnusedImportsEnabled},
       vitest: {enabled: isVitestEnabled},
@@ -413,6 +415,7 @@ export const eslintConfigInternal = async (
     isStorybookEnabled && import('./configs/storybook').then((m) => m.storybookUnConfig(context)),
     isEmberEnabled && import('./configs/ember').then((m) => m.emberUnConfig(context)),
     isCypressEnabled && import('./configs/cypress').then((m) => m.cypressUnConfig(context)),
+    isTurboEnabled && import('./configs/turbo').then((m) => m.turboUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

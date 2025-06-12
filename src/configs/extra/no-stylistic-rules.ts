@@ -492,6 +492,9 @@ const ALL_STYLISTIC_RULES = {
     'unified-signatures': true,
     'use-unknown-in-catch-callback-variable': true,
   },
+  turbo: {
+    // None
+  },
   // Won't include: no-console-spaces, prefer-array-find, prefer-array-some, prefer-math-trunc, prefer-modern-math-apis, prefer-string-starts-ends-with
   unicorn: {
     'better-regex': true,

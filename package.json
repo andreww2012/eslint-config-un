@@ -163,6 +163,7 @@
     "eslint-plugin-prettier": "5.4.0",
     "eslint-plugin-storybook": "9.0.1",
     "eslint-plugin-tailwindcss": "3.18.0",
+    "eslint-plugin-turbo": "2.5.4",
     "eslint-typegen": "2.1.0",
     "npm-check-updates": "18.0.1",
     "prettier": "3.5.3",
@@ -179,7 +180,8 @@
     "@graphql-eslint/eslint-plugin": "^4.4.0",
     "eslint": "^9.15.0",
     "eslint-plugin-storybook": "^9.0.1",
-    "eslint-plugin-tailwindcss": "^3.18.0"
+    "eslint-plugin-tailwindcss": "^3.18.0",
+    "eslint-plugin-turbo": "^2.5.4"
   },
   "peerDependenciesMeta": {
     "@graphql-eslint/eslint-plugin": {
@@ -189,6 +191,9 @@
       "optional": true
     },
     "eslint-plugin-tailwindcss": {
+      "optional": true
+    },
+    "eslint-plugin-turbo": {
       "optional": true
     }
   },

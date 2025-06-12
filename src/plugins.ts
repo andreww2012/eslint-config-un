@@ -206,6 +206,7 @@ export const pluginsLoaders = {
       'typescript-eslint',
       import('typescript-eslint').then((m) => m.plugin),
     ),
+  turbo: () => loadPlugin('eslint-plugin-turbo', import('eslint-plugin-turbo')),
   unicorn: () => loadPlugin('eslint-plugin-unicorn', import('eslint-plugin-unicorn')),
   'unused-imports': () =>
     loadPlugin('eslint-plugin-unused-imports', import('eslint-plugin-unused-imports')),
