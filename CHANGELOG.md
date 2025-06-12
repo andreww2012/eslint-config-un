@@ -44,7 +44,7 @@
   - 🟢 [`prefer-at-empty`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-at-empty.md)
 - `@eslint/css`: [0.7.0 -> 0.8.1](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.8.1)
   - 🟡 (enabled, warns) [`no-important`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-important.md)
-
+- `typescript-eslint`: [8.32.0 -> 8.34.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.32.0...v8.34.0)
 
 ## 0.10.0
 

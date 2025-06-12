@@ -796,7 +796,6 @@ export const tsUnConfig: UnConfigFn<
     .addRule('no-useless-empty-export', ERROR)
     .addRule('parameter-properties', OFF)
     .addRule('prefer-enum-initializers', OFF)
-    .addRule('typedef', OFF)
     /* Category: Extension rules */
     .addRule('class-methods-use-this', ...classMethodUseThisUnEntry)
     .addRule(

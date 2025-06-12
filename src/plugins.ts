@@ -203,9 +203,9 @@ export const pluginsLoaders = {
     // @ts-expect-error types mismatch
     loadPlugin('eslint-plugin-toml', import('eslint-plugin-toml')),
   ts: () =>
-    // @ts-expect-error types mismatch
-    loadPlugin(
+    loadPlugin<EslintPlugin>(
       'typescript-eslint',
+      // @ts-expect-error types mismatch
       import('typescript-eslint').then((m) => m.plugin),
     ),
   turbo: () => loadPlugin('eslint-plugin-turbo', import('eslint-plugin-turbo')),
