@@ -1,7 +1,7 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
-import {generateDefaultTestFiles} from './shared';
+import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
 import type {UnConfigFn} from './index';
 
 export interface CypressEslintConfigOptions extends UnConfigOptions<'cypress'> {}
@@ -37,6 +37,7 @@ export const cypressUnConfig: UnConfigFn<'cypress'> = (context) => {
     .addRule('no-xpath', OFF)
     .addRule('require-data-selectors', OFF)
     .addRule('unsafe-to-chain-command', ERROR) // 🟢
+    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
   return {

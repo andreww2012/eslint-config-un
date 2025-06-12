@@ -1,5 +1,5 @@
 import {GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YAML} from '../constants';
-import type {GetRuleOptions} from '../eslint';
+import type {AllEslintRules, GetRuleOptions} from '../eslint';
 import type {JestEslintConfigOptions} from './jest';
 
 export const generateDefaultTestFiles = <T extends string>(
@@ -16,6 +16,17 @@ export const generateDefaultTestFiles = <T extends string>(
   `**/__test__/**/*.${extensions}` as const, // 14k
 
   ...(includeCypressTests ? [`**/*.cy.${extensions}` as const] : []),
+];
+
+export const RULES_TO_DISABLE_IN_TEST_FILES: (keyof AllEslintRules)[] = [
+  'no-empty-function',
+  'sonarjs/no-hardcoded-ip',
+  'sonarjs/no-hardcoded-passwords',
+  'sonarjs/no-hardcoded-secrets',
+  'sonarjs/no-clear-text-protocols',
+  'ts/no-extraneous-class',
+  'ts/no-empty-function',
+  'unicorn/template-indent', // triggered on inline snapshots
 ];
 
 export const generateConsistentTestItOptions = ({

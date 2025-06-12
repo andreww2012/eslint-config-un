@@ -697,8 +697,8 @@ export const reactUnConfig: UnConfigFn<
     .addRule('jsx-curly-brace-presence', WARNING, [
       {props: 'never', children: 'never', propElementValues: 'always'},
     ])
-    .addRule('jsx-curly-spacing', OFF) // 🟠
     .addRule('jsx-curly-newline', OFF) // 🟠
+    .addRule('jsx-curly-spacing', OFF) // 🟠
     .addRule('jsx-equals-spacing', OFF) // 🟠
     .addRule('jsx-filename-extension', getDoubleRuleSeverity(FILENAME_EXTENSION_SEVERITY, false), [
       {

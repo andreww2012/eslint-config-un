@@ -9,7 +9,7 @@ import type {
   PrettifyShallow,
 } from '../types';
 import {assignDefaults, doesPackageExist} from '../utils';
-import {generateDefaultTestFiles} from './shared';
+import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
 import type {UnConfigFn} from './index';
 
 type SharedConfigOptions = PrettifyShallow<
@@ -239,6 +239,7 @@ export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (conte
         typeof preferUserEventOverFireEvent === 'object' ? [preferUserEventOverFireEvent] : [],
       )
       .addRule('render-result-naming-convention', isForFramework ? ERROR : OFF) // 💚
+      .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
       .addOverrides();
 
     return configBuilder;

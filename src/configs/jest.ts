@@ -11,7 +11,11 @@ import {
 import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow, ValueOf} from '../types';
 import {assignDefaults, doesPackageExist} from '../utils';
-import {generateConsistentTestItOptions, generateDefaultTestFiles} from './shared';
+import {
+  RULES_TO_DISABLE_IN_TEST_FILES,
+  generateConsistentTestItOptions,
+  generateDefaultTestFiles,
+} from './shared';
 import type {UnConfigFn} from './index';
 
 type AllJestMatchers = PrettifyShallow<keyof ReturnType<JestExpect> | keyof AsymmetricMatchers>;
@@ -316,6 +320,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     ])
     .addRule('valid-expect-in-promise', ERROR) // 🟢
     .addRule('valid-title', ERROR) // 🟢
+    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
   const configBuilderTypescript = createConfigBuilder(context, configTypescript, 'jest');
@@ -339,6 +344,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     .addRule('unbound-method', isTypescriptEnabled ? ERROR : OFF)
     // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
     .disableAnyRule('ts', 'unbound-method')
+    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
   const configBuilderJestExtended = createConfigBuilder(
@@ -369,7 +375,9 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     .addRule(
       'prefer-to-have-been-called-once',
       getSuggestUsingJestExtendedMatcherSeverity('toHaveBeenCalledOnce'),
-    );
+    )
+    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
+    .addOverrides();
 
   // TODO https://npmjs.com/eslint-plugin-jest-dom ?
   // Other plugins: eslint-plugin-jest-async, eslint-plugin-jest-formatting, eslint-plugin-jest-mock-config, eslint-plugin-jest-playwright, eslint-plugin-jest-react, eslint-plugin-jest-test-each-formatting

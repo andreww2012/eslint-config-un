@@ -2,7 +2,7 @@
 import {ERROR, GLOB_JS_TS, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
-import {generateDefaultTestFiles} from './shared';
+import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
 import type {UnConfigFn} from './index';
 
 export interface EmberEslintConfigOptions extends UnConfigOptions<'ember'> {
@@ -204,6 +204,7 @@ export const emberUnConfig: UnConfigFn<'ember'> = async (context) => {
     .addRule('no-test-this-render', ERROR) // 🟢
     .addRule('prefer-ember-test-helpers', ERROR) // 🟢
     .addRule('require-valid-css-selector-in-test-helpers', ERROR) // 🟢
+    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
   return {

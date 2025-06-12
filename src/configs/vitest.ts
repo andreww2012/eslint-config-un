@@ -3,7 +3,11 @@ import {type FlatConfigEntryForBuilder, type UnConfigOptions, createConfigBuilde
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
-import {generateConsistentTestItOptions, generateDefaultTestFiles} from './shared';
+import {
+  RULES_TO_DISABLE_IN_TEST_FILES,
+  generateConsistentTestItOptions,
+  generateDefaultTestFiles,
+} from './shared';
 import type {UnConfigFn} from './index';
 
 // prefer-describe-function-title 1.1.41
@@ -156,13 +160,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     ]) // 🟢
     .addRule('valid-title', ERROR) // 🟢
     .addRule('valid-expect-in-promise', ERROR) // (warns in all)
-    .disableAnyRule('sonarjs', 'no-hardcoded-ip')
-    .disableAnyRule('sonarjs', 'no-hardcoded-passwords')
-    .disableAnyRule('sonarjs', 'no-hardcoded-secrets')
-    .disableAnyRule('sonarjs', 'no-clear-text-protocols')
-    .disableAnyRule('ts', 'no-extraneous-class')
-    .disableAnyRule('ts', 'no-empty-function')
-    .disableAnyRule('', 'no-empty-function')
+    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
   return {
