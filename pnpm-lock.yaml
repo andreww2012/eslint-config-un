@@ -106,6 +106,9 @@ importers:
       eslint-plugin-css:
         specifier: 0.11.0
         version: 0.11.0(eslint@9.26.0(jiti@2.4.2))
+      eslint-plugin-cypress:
+        specifier: 5.1.0
+        version: 5.1.0(eslint@9.26.0(jiti@2.4.2))
       eslint-plugin-de-morgan:
         specifier: 1.2.1
         version: 1.2.1(eslint@9.26.0(jiti@2.4.2))
@@ -3714,6 +3717,11 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
+  eslint-plugin-cypress@5.1.0:
+    resolution: {integrity: sha512-tdLXm4aq9vX2hTtKJTUFD3gdNseMKqsf8+P6hI4TtOPdz1LU4xvTpQBd1++qPAsPZP2lyYh71B5mvzu2lBr4Ow==}
+    peerDependencies:
+      eslint: '>=9'
+
   eslint-plugin-de-morgan@1.2.1:
     resolution: {integrity: sha512-lzh5DWqdogO6kasbGdWNHy6XOMajv4CRQnEiv/XJFpL1xxG0hxF2uxF+KAkcTzR+w85l4nWoqGbI39ZF+sk4+g==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -4489,6 +4497,10 @@ packages:
 
   globals@16.1.0:
     resolution: {integrity: sha512-aibexHNbb/jiUSObBgpHLj+sIuUmJnYcgXBlrfsiDZ9rt4aF2TFRbyLgZ2iFQuVZ1K5Mx3FVkbKRSgKrbK3K2g==}
+    engines: {node: '>=18'}
+
+  globals@16.2.0:
+    resolution: {integrity: sha512-O+7l9tPdHCU320IigZZPj5zmRCFG9xHmx9cU8FqU2Rp+JN714seHV+2S9+JslCpY4gJwU2vOGox0wzgae/MCEg==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -11035,6 +11047,11 @@ snapshots:
       known-css-properties: 0.34.0
       postcss-value-parser: 4.2.0
 
+  eslint-plugin-cypress@5.1.0(eslint@9.26.0(jiti@2.4.2)):
+    dependencies:
+      eslint: 9.26.0(jiti@2.4.2)
+      globals: 16.2.0
+
   eslint-plugin-de-morgan@1.2.1(eslint@9.26.0(jiti@2.4.2)):
     dependencies:
       eslint: 9.26.0(jiti@2.4.2)
@@ -12122,6 +12139,8 @@ snapshots:
   globals@15.15.0: {}
 
   globals@16.1.0: {}
+
+  globals@16.2.0: {}
 
   globalthis@1.0.4:
     dependencies:

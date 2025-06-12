@@ -142,6 +142,7 @@ export const eslintConfigInternal = async (
   const isCloudfrontFunctionsEnabled = getIsConfigEnabled('cloudfrontFunctions', false);
   const isCssEnabled = getIsConfigEnabled('css', !packagesInfo.stylelint);
   const isCssInJsEnabled = getIsConfigEnabled('cssInJs');
+  const isCypressEnabled = getIsConfigEnabled('cypress', 'cypress');
   const isDeMorganEnabled = getIsConfigEnabled('deMorgan', false);
   const isDependEnabled = getIsConfigEnabled('depend', false);
   const isEmberEnabled = getIsConfigEnabled('ember', 'ember-source');
@@ -217,6 +218,7 @@ export const eslintConfigInternal = async (
       cloudfrontFunctions: {enabled: isCloudfrontFunctionsEnabled},
       css: {enabled: isCssEnabled},
       cssInJs: {enabled: isCssInJsEnabled},
+      cypress: {enabled: isCypressEnabled},
       deMorgan: {enabled: isDeMorganEnabled},
       depend: {enabled: isDependEnabled},
       ember: {enabled: isEmberEnabled},
@@ -408,6 +410,9 @@ export const eslintConfigInternal = async (
     isAvaEnabled && import('./configs/ava').then((m) => m.avaUnConfig(context)),
     isTestingLibraryEnabled &&
       import('./configs/testing-library').then((m) => m.testingLibraryUnConfig(context)),
+    isStorybookEnabled && import('./configs/storybook').then((m) => m.storybookUnConfig(context)),
+    isEmberEnabled && import('./configs/ember').then((m) => m.emberUnConfig(context)),
+    isCypressEnabled && import('./configs/cypress').then((m) => m.cypressUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),
@@ -432,8 +437,6 @@ export const eslintConfigInternal = async (
     isDependEnabled && import('./configs/depend').then((m) => m.dependUnConfig(context)),
     isErasableSyntaxOnlyEnabled &&
       import('./configs/erasable-syntax-only').then((m) => m.erasableSyntaxOnlyUnConfig(context)),
-    isStorybookEnabled && import('./configs/storybook').then((m) => m.storybookUnConfig(context)),
-    isEmberEnabled && import('./configs/ember').then((m) => m.emberUnConfig(context)),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

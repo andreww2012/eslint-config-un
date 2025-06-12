@@ -60,6 +60,12 @@ declare module 'eslint-plugin-ember' {
 
 declare module 'ember-eslint-parser' {
   import type ESLint from 'eslint';
-  declare const value: ESLint.Linter.Parser;
+  declare const value: ESLint.Linter.Parser; // (!) parser
+  export = value;
+}
+
+declare module 'eslint-plugin-cypress' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
   export = value;
 }

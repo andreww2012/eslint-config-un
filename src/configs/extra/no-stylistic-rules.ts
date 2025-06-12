@@ -153,6 +153,9 @@ const ALL_STYLISTIC_RULES = {
   'css-in-js': {
     'property-casing': true,
   },
+  cypress: {
+    // None
+  },
   'de-morgan': {
     'no-negated-conjunction': true,
     'no-negated-disjunction': true,

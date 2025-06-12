@@ -100,6 +100,7 @@ export const pluginsLoaders = {
   'css-in-js': () =>
     // @ts-expect-error types mismatch
     loadPlugin('eslint-plugin-css', import('eslint-plugin-css')),
+  cypress: () => loadPlugin('eslint-plugin-cypress', import('eslint-plugin-cypress')),
   'de-morgan': () =>
     loadPlugin<EslintPlugin>('eslint-plugin-de-morgan', import('eslint-plugin-de-morgan')),
   depend: () => loadPlugin('eslint-plugin-depend', import('eslint-plugin-depend')),

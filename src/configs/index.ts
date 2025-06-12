@@ -16,6 +16,7 @@ import type {AvaEslintConfigOptions} from './ava';
 import type {CasePoliceEslintConfigOptions} from './case-police';
 import type {CssEslintConfigOptions} from './css';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
+import type {CypressEslintConfigOptions} from './cypress';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
 import type {DependEslintConfigOptions} from './depend';
 import type {EmberEslintConfigOptions} from './ember';
@@ -465,6 +466,15 @@ export interface UnConfigs {
    * @default true <=> `ember-source` package is installed
    */
   ember: EmberEslintConfigOptions;
+
+  /**
+   * ESLint rules related to [Cypress](https://www.cypress.io/).
+   *
+   * Used plugins:
+   * - [`eslint-plugin-cypress`](https://npmjs.com/eslint-plugin-cypress) ([docs](https://github.com/cypress-io/eslint-plugin-cypress?tab=coc-ov-file))
+   * @default true
+   */
+  cypress: CypressEslintConfigOptions;
 
   /**
    * NOTE: disabled by default
