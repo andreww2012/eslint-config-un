@@ -154,6 +154,9 @@ importers:
       eslint-plugin-n:
         specifier: 17.18.0
         version: 17.18.0(eslint@9.26.0(jiti@2.4.2))
+      eslint-plugin-no-unsanitized:
+        specifier: 4.1.2
+        version: 4.1.2(eslint@9.26.0(jiti@2.4.2))
       eslint-plugin-node-dependencies:
         specifier: 1.0.1
         version: 1.0.1(eslint@9.26.0(jiti@2.4.2))
@@ -3838,6 +3841,11 @@ packages:
     engines: {node: '>=12.0.0', yarn: ^1.13.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0
+
+  eslint-plugin-no-unsanitized@4.1.2:
+    resolution: {integrity: sha512-ydF3PMFKEIkP71ZbLHFvu6/FW8SvRv6VV/gECfrQkqyD5+5oCAtPz8ZHy0GRuMDtNe2jsNdPCQXX4LSbkapAVQ==}
+    peerDependencies:
+      eslint: ^8 || ^9
 
   eslint-plugin-node-dependencies@1.0.1:
     resolution: {integrity: sha512-OxlKY5h/xY6zYhvuHoLAQgP39sgnkUhTm25W2tTqtBzPJsgAU6oc9cbEV3+A0zWcKNtmqu7jr8LVKfxmgHFtvQ==}
@@ -11279,6 +11287,10 @@ snapshots:
       semver: 7.7.1
 
   eslint-plugin-no-type-assertion@1.3.0(eslint@9.26.0(jiti@2.4.2)):
+    dependencies:
+      eslint: 9.26.0(jiti@2.4.2)
+
+  eslint-plugin-no-unsanitized@4.1.2(eslint@9.26.0(jiti@2.4.2)):
     dependencies:
       eslint: 9.26.0(jiti@2.4.2)
 

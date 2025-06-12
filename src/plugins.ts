@@ -143,6 +143,8 @@ export const pluginsLoaders = {
     loadPlugin<EslintPlugin>('eslint-plugin-math', import('eslint-plugin-math')),
   'no-type-assertion': () =>
     loadPlugin('eslint-plugin-no-type-assertion', import('eslint-plugin-no-type-assertion')),
+  'no-unsanitized': () =>
+    loadPlugin('eslint-plugin-no-unsanitized', import('eslint-plugin-no-unsanitized')),
   node: () => loadPlugin('eslint-plugin-n', import('eslint-plugin-n')),
   'node-dependencies': () =>
     // @ts-expect-error types mismatch

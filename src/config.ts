@@ -167,6 +167,7 @@ export const eslintConfigInternal = async (
   const isNodeEnabled = getIsConfigEnabled('node');
   const isNodeDependenciesEnabled = getIsConfigEnabled('nodeDependencies', false);
   const isNoStylisticRulesEnabled = getIsConfigEnabled('noStylisticRules', false);
+  const isNoUnsanitizedEnabled = getIsConfigEnabled('noUnsanitized');
   const isPackageJsonEnabled = getIsConfigEnabled('packageJson', false);
   const isPerfectionistEnabled = getIsConfigEnabled('perfectionist', false);
   const isPnpmEnabled = getIsConfigEnabled('pnpm', usedPackageManager?.name === 'pnpm');
@@ -242,6 +243,7 @@ export const eslintConfigInternal = async (
       node: {enabled: isNodeEnabled},
       nodeDependencies: {enabled: isNodeDependenciesEnabled},
       noStylisticRules: {enabled: isNoStylisticRulesEnabled},
+      noUnsanitized: {enabled: isNoUnsanitizedEnabled},
       packageJson: {enabled: isPackageJsonEnabled},
       perfectionist: {enabled: isPerfectionistEnabled},
       pnpm: {enabled: isPnpmEnabled},
@@ -416,6 +418,8 @@ export const eslintConfigInternal = async (
     isEmberEnabled && import('./configs/ember').then((m) => m.emberUnConfig(context)),
     isCypressEnabled && import('./configs/cypress').then((m) => m.cypressUnConfig(context)),
     isTurboEnabled && import('./configs/turbo').then((m) => m.turboUnConfig(context)),
+    isNoUnsanitizedEnabled &&
+      import('./configs/no-unsanitized').then((m) => m.noUnsanitizedUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

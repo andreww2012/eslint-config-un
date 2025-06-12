@@ -275,6 +275,9 @@ const ALL_STYLISTIC_RULES = {
   'no-type-assertion': {
     'no-type-assertion': true,
   },
+  'no-unsanitized': {
+    // None
+  },
   node: {
     'prefer-global/buffer': true,
     'prefer-global/console': true,

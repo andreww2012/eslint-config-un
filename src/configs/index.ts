@@ -39,6 +39,7 @@ import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import type {MathEslintConfigOptions} from './math';
 import type {NextJsEslintConfigOptions} from './nextjs';
+import type {NoUnsanitizedEslintConfigOptions} from './no-unsanitized';
 import type {NodeEslintConfigOptions} from './node';
 import type {NodeDependenciesEslintConfigOptions} from './node-dependencies';
 import type {PackageJsonEslintConfigOptions} from './package-json';
@@ -342,6 +343,13 @@ export interface UnConfigs {
   jsxA11y: JsxA11yEslintConfigOptions;
 
   /**
+   * Used plugins:
+   * - [`eslint-plugin-no-unsanitized`](https://npmjs.com/eslint-plugin-no-unsanitized) ([docs](https://github.com/mozilla/eslint-plugin-no-unsanitized?tab=coc-ov-file))
+   * @default true
+   */
+  noUnsanitized: NoUnsanitizedEslintConfigOptions;
+
+  /**
    * Rules specific to pnpm package manager.
    *
    * Used plugin:
@@ -473,7 +481,7 @@ export interface UnConfigs {
    *
    * Used plugins:
    * - [`eslint-plugin-cypress`](https://npmjs.com/eslint-plugin-cypress) ([docs](https://github.com/cypress-io/eslint-plugin-cypress?tab=coc-ov-file))
-   * @default true
+   * @default true <=> `cypress` package is installed
    */
   cypress: CypressEslintConfigOptions;
 
@@ -482,7 +490,7 @@ export interface UnConfigs {
    *
    * Used plugins:
    * - [`eslint-plugin-turbo`](https://npmjs.com/eslint-plugin-turbo) ([docs](https://turborepo.com/docs/reference/eslint-plugin-turbo))
-   * @default true
+   * @default true <=> `turbo` package is installed
    */
   turbo: TurboEslintConfigOptions;
 

@@ -70,5 +70,6 @@ export default {
     'rethrowing',
     'dedented',
     'curlies',
+    'unsanitized',
   ],
 };

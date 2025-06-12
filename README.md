@@ -239,6 +239,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | -------------- | ------------------------------------------- | ------------------------------------ | ----------------- |
 | `casePolice`       | ❌ | [eslint-plugin-case-police](https://npmjs.com/eslint-plugin-case-police) (`case-police`) | Since v0.9.0 |
 | `noStylisticRules` | ❌ | - | Since v1.0.0<br>Config to disable most of the stylistic rules. Can be useful when integrating eslint-config-un into an existing project. |
+| `noUnsanitized`    | ✅ | [eslint-plugin-no-unsanitized](https://npmjs.com/eslint-plugin-no-unsanitized) (`no-unsanitized`)  | Since v1.0.0 |
 
 ## How to use
 
