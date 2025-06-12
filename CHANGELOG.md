@@ -34,6 +34,16 @@
 - **vue** config: support Nuxt 4 new directory structure.
 - Added a new root option, `defaultConfigsStatus`, to control what configs are enabled or disabled by default.
 
+### Dependencies
+
+- `angular-eslint`: [19.4.0 -> 20.0.0](https://github.com/angular-eslint/angular-eslint/compare/v19.4.0...v20.0.0)
+  - 🟢 (enabled) [`no-uncalled-signals`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-uncalled-signals.md)
+  - 🟢 [`prefer-inject`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-inject.md)
+  - 🟢 [`sort-keys-in-type-decorator`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/sort-keys-in-type-decorator.md)
+  - 🟢 [`no-nested-tags`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/no-nested-tags.md)
+  - 🟢 [`prefer-at-empty`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-at-empty.md)
+
+
 ## 0.10.0
 
 - New config: `svelte` via [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte), enabled automatically if `svelte` package is installed.

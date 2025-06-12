@@ -82,6 +82,7 @@ const ALL_STYLISTIC_RULES = {
     'directive-class-suffix': true,
     'directive-selector': true,
     'pipe-prefix': true,
+    'sort-keys-in-type-decorator': true,
     'sort-lifecycle-methods': true,
   },
   '@angular-eslint/template': {

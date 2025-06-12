@@ -13,7 +13,7 @@ import {type MaybeArray, assignDefaults, cloneDeep, interopDefault} from '../uti
 import type {UnConfigFn} from './index';
 
 // Please keep ascending order
-const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19] as const;
+const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20] as const;
 type SupportedAngularVersion = (typeof SUPPORTED_ANGULAR_VERSIONS)[number];
 type LatestSupportedAngularVersion = (typeof SUPPORTED_ANGULAR_VERSIONS)[Subtract<
   (typeof SUPPORTED_ANGULAR_VERSIONS)['length'],
@@ -43,11 +43,13 @@ const PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS: Record<
     plugin: () =>
       interopDefault(import('angular-eslint-plugin18')).then((m) => m as unknown as EslintPlugin),
   },
-  19: {
+  20: {
     plugin: () =>
-      interopDefault(import('angular-eslint-plugin19')).then((m) => m as unknown as EslintPlugin),
+      interopDefault(import('@angular-eslint/eslint-plugin')).then(
+        (m) => m as unknown as EslintPlugin,
+      ),
     pluginTemplate: () =>
-      interopDefault(import('angular-eslint-plugin-template19')).then(
+      interopDefault(import('@angular-eslint/eslint-plugin-template')).then(
         (m) => m as unknown as EslintPlugin,
       ),
   },
@@ -58,6 +60,8 @@ type RulesWithPartialAvailability =
   | 'no-async-lifecycle-method'
   | 'no-duplicates-in-metadata-arrays'
   | 'no-host-metadata-property'
+  | 'no-uncalled-signals'
+  | 'prefer-inject'
   | 'prefer-output-emitter-ref'
   | 'prefer-signals'
   | 'prefer-standalone'
@@ -65,6 +69,7 @@ type RulesWithPartialAvailability =
   | 'require-lifecycle-on-prototype'
   | 'require-localize-metadata'
   | 'runtime-localize'
+  | 'sort-keys-in-type-decorator'
   | 'sort-lifecycle-methods'
   | 'sort-ngmodule-metadata-arrays'
   | 'accessibility-alt-text'
@@ -82,6 +87,8 @@ type RulesWithPartialAvailability =
   | 'label-has-associated-control'
   | 'no-inline-styles'
   | 'no-interpolation-in-attributes'
+  | 'no-nested-tags'
+  | 'prefer-at-empty'
   | 'prefer-control-flow'
   | 'prefer-ngsrc'
   | 'prefer-template-literal'
@@ -102,6 +109,8 @@ const RULES_AVAILABILITY: Record<string, RuleAvailability> = {
   'no-async-lifecycle-method': [[17]],
   'no-duplicates-in-metadata-arrays': [[17]],
   'no-host-metadata-property': [[13, 18]],
+  'no-uncalled-signals': [[20]],
+  'prefer-inject': [[20]],
   'prefer-signals': [[19]],
   'prefer-standalone': [[17]],
   'prefer-standalone-component': [[16, 18]],
@@ -109,6 +118,7 @@ const RULES_AVAILABILITY: Record<string, RuleAvailability> = {
   'require-lifecycle-on-prototype': [[19]],
   'require-localize-metadata': [[16]],
   'runtime-localize': [[18]],
+  'sort-keys-in-type-decorator': [[20]],
   'sort-lifecycle-methods': [[16]],
   'sort-ngmodule-metadata-arrays': [[13, 18]],
 
@@ -127,6 +137,8 @@ const RULES_AVAILABILITY: Record<string, RuleAvailability> = {
   'label-has-associated-control': [[16]],
   'no-inline-styles': [[14]],
   'no-interpolation-in-attributes': [[15]],
+  'no-nested-tags': [[20]],
+  'prefer-at-empty': [[20]],
   'prefer-control-flow': [[17]],
   'prefer-ngsrc': [[16]],
   'prefer-output-emitter-ref': [[19]],
@@ -512,7 +524,7 @@ export const angularUnConfig: UnConfigFn<
     generateAngularPlugins(optionsResolved, angularVersion),
     // Since v18, the processor uses `getDecorators` from `typescript` which does not exist prior to
     // v4.8 of `typescript`, which might be used in older projects
-    interopDefault(import('angular-eslint-plugin-template19')).then(
+    interopDefault(import('@angular-eslint/eslint-plugin-template')).then(
       (m) => m.processors['extract-inline-html'] as Eslint.Linter.Processor,
     ),
     interopDefault(import('angular-eslint-plugin-template17')).then(
@@ -567,7 +579,7 @@ export const angularUnConfig: UnConfigFn<
       {
         ...(componentClassSuffixes.length > 0 && {suffixes: componentClassSuffixes}),
       },
-    ]) // [all] 🟢
+    ]) // [all]
     .addRule('component-max-inline-declarations', OFF) // [all]
     .addRule('component-selector', componentSelector === false ? OFF : ERROR, [
       {
@@ -580,12 +592,12 @@ export const angularUnConfig: UnConfigFn<
       typeof componentStylesStyle === 'string' ? componentStylesStyle : 'string',
     ]) // [>=17]
     .addRule('contextual-decorator', ERROR) // [all]
-    .addRule('contextual-lifecycle', ERROR) // [all] 🟢
+    .addRule('contextual-lifecycle', ERROR) // 🟢[all]
     .addRule('directive-class-suffix', directiveClassSuffixes.length === 0 ? OFF : ERROR, [
       {
         ...(directiveClassSuffixes.length > 0 && {suffixes: directiveClassSuffixes}),
       },
-    ]) // [all] 🟢
+    ]) // [all]
     .addRule('directive-selector', directiveSelector === false ? OFF : ERROR, [
       {
         type: ['attribute'],
@@ -597,23 +609,25 @@ export const angularUnConfig: UnConfigFn<
     .addRule('no-attribute-decorator', disallowAttributeDecorator ? ERROR : OFF) // [all]
     .addRule('no-conflicting-lifecycle', ERROR) // [all]
     .addRule('no-duplicates-in-metadata-arrays', ERROR) // [>=17]
-    .addRule('no-empty-lifecycle-method', ERROR) // [all] 🟢
+    .addRule('no-empty-lifecycle-method', ERROR) // 🟢[all]
     .addRule('no-forward-ref', disallowForwardRef ? ERROR : OFF) // [all]
     // See https://github.com/angular/angular/pull/54084, https://angular.dev/guide/components/host-elements
     .addRule('no-host-metadata-property', forbiddenMetadataProperties.host ? ERROR : OFF) // [<=18] 🔴(18)
     .addRule('prefer-output-emitter-ref', ERROR) // [>=19.4]
     .addRule('no-input-prefix', ERROR, [{prefixes: disallowedInputPrefixes}]) // [all]
-    .addRule('no-input-rename', ERROR) // [all] 🟢
-    .addRule('no-inputs-metadata-property', forbiddenMetadataProperties.inputs ? ERROR : OFF) // [all] 🟢
+    .addRule('no-input-rename', ERROR) // 🟢[all]
+    .addRule('no-inputs-metadata-property', forbiddenMetadataProperties.inputs ? ERROR : OFF) // 🟢[all]
     .addRule('no-lifecycle-call', ERROR) // [all]
-    .addRule('no-output-native', ERROR) // [all] 🟢
-    .addRule('no-output-on-prefix', ERROR) // [all] 🟢
-    .addRule('no-output-rename', ERROR) // [all] 🟢
-    .addRule('no-outputs-metadata-property', forbiddenMetadataProperties.outputs ? ERROR : OFF) // [all] 🟢
+    .addRule('no-output-native', ERROR) // 🟢[all]
+    .addRule('no-output-on-prefix', ERROR) // 🟢[all]
+    .addRule('no-output-rename', ERROR) // 🟢[all]
+    .addRule('no-outputs-metadata-property', forbiddenMetadataProperties.outputs ? ERROR : OFF) // 🟢[all]
     .addRule('no-pipe-impure', ERROR) // [all]
     // https://github.com/angular/angular/blob/12.1.1/packages/core/src/metadata/directives.ts#L221-L258
     .addRule('no-queries-metadata-property', forbiddenMetadataProperties.queries ? ERROR : OFF) // [all]
+    .addRule('no-uncalled-signals', ERROR) // [>=20]
     .addRule('pipe-prefix', ERROR, [{prefixes: pipePrefixes}]) // [all]
+    .addRule('prefer-inject', ERROR) // 🟢[>=20]
     .addRule('prefer-on-push-component-change-detection', OFF) // [all]
     .addRule('prefer-output-readonly', ERROR) // [all]
     .addRule('prefer-signals', OFF) // [>=19]
@@ -626,13 +640,14 @@ export const angularUnConfig: UnConfigFn<
     .addRule('require-lifecycle-on-prototype', ERROR) // [>=19]
     .addRule('require-localize-metadata', ERROR) // [>=16] 🌐
     .addRule('runtime-localize', ERROR) // [>=18] 🌐
+    .addRule('sort-keys-in-type-decorator', ERROR) // [>=20]
     .addRule('sort-lifecycle-methods', ERROR) // [>=16]
     .addRule('sort-ngmodule-metadata-arrays', OFF) // [<=18] 🔴(>=17)
     .addRule('use-component-selector', ERROR) // [all]
     .addRule('use-component-view-encapsulation', ERROR) // [all]
     .addRule('use-injectable-provided-in', ERROR) // [all]
-    .addRule('use-lifecycle-interface', ERROR) // [all] 🟢(warns)
-    .addRule('use-pipe-transform-interface', ERROR) // [all] 🟢
+    .addRule('use-lifecycle-interface', ERROR) // 🟢[all] (warns)
+    .addRule('use-pipe-transform-interface', ERROR) // 🟢[all]
     .addOverrides();
 
   // TEMPLATE CONFIG
@@ -679,13 +694,13 @@ export const angularUnConfig: UnConfigFn<
     .addRule('accessibility-valid-aria', a11yRulesSeverity) // [<=15] ♿
     .addRule('alt-text', a11yRulesSeverity) // [>=16] ♿
     .addRule('attributes-order', ERROR) /// [>=14]
-    .addRule('banana-in-box', ERROR) // [all] 🟢
+    .addRule('banana-in-box', ERROR) // 🟢[all]
     .addRule('button-has-type', ERROR) // [all]
     .addRule('click-events-have-key-events', a11yRulesSeverity) // [all] ♿
     .addRule('conditional-complexity', OFF) // [all]
     .addRule('cyclomatic-complexity', OFF) // [all]
     .addRule('elements-content', a11yRulesSeverity) // [>=16] ♿
-    .addRule('eqeqeq', ERROR, [{allowNullOrUndefined: true}]) // [all] 🟢
+    .addRule('eqeqeq', ERROR, [{allowNullOrUndefined: true}]) // 🟢[all]
     .addRule('i18n', OFF) // [all]
     .addRule('interactive-supports-focus', a11yRulesSeverity) // [>=16] ♿
     .addRule('label-has-associated-control', a11yRulesSeverity) // [>=16] ♿
@@ -697,8 +712,10 @@ export const angularUnConfig: UnConfigFn<
     .addRule('no-duplicate-attributes', ERROR) // [all]
     .addRule('no-inline-styles', OFF) // [>=14]
     .addRule('no-interpolation-in-attributes', ERROR) // [>=15]
-    .addRule('no-negated-async', ERROR) // [all] 🟢
+    .addRule('no-negated-async', ERROR) // 🟢[all]
+    .addRule('no-nested-tags', ERROR) // [>=20]
     .addRule('no-positive-tabindex', ERROR) // [all]
+    .addRule('prefer-at-empty', ERROR) // [>=20]
     .addRule('prefer-contextual-for-variables', ERROR) // [>=19.3]
     .addRule('prefer-control-flow', preferControlFlow ? ERROR : OFF) // [>=17]
     .addRule('prefer-ngsrc', preferNgSrc ? ERROR : OFF) // [>=16]
