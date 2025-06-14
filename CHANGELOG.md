@@ -58,6 +58,7 @@
 - `eslint-plugin-import-x`: [4.11.1 -> 4.15.2](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.11.1...v4.15.2)
 - `eslint-import-resolver-typescript`: [4.3.4 -> 4.4.3](https://github.com/import-js/eslint-import-resolver-typescript/compare/v4.3.4...v4.4.3)
 - `@html-eslint/eslint-plugin`: [0.40.2 -> 0.41.0](https://github.com/yeonjuan/html-eslint/compare/v0.40.2...v0.41.0)
+- `@next/eslint-plugin-next`: [15.3.2 -> 15.3.3](https://github.com/vercel/next.js/compare/v15.3.2...v15.3.3)
 
 ## 0.10.0
 
