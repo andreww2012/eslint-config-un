@@ -45,6 +45,8 @@
 - `@eslint/css`: [0.7.0 -> 0.8.1](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.8.1)
   - 🟡 (enabled, warns) [`no-important`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-important.md)
 - `typescript-eslint`: [8.32.0 -> 8.34.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.32.0...v8.34.0)
+- `@eslint-react/eslint-plugin`: [1.49.0 -> 1.52.1](https://github.com/Rel1cx/eslint-react/compare/v1.49.0...v1.52.1)
+  - 🔴 (not enabled) [`jsx-no-iife`](https://eslint-react.xyz/docs/rules/jsx-no-iife)
 
 ## 0.10.0
 
