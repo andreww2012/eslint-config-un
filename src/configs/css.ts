@@ -1,7 +1,7 @@
 import type {CSSLanguageOptions} from '@eslint/css';
 import {ERROR, GLOB_CSS, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, interopDefault} from '../utils';
+import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
+import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
@@ -25,6 +25,14 @@ export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
    * > Note: The Tailwind syntax doesn't currently provide for the `theme()` function. This is a limitation of `CSSTree` that we hope will be resolved soon.
    */
   customSyntax?: CSSLanguageOptions['customSyntax'];
+
+  /**
+   * Will be merged with the default value.
+   * @default {rem: true, em: true}
+   */
+  allowedFontUnits?: Partial<
+    Record<(GetRuleOptions<'css', 'relative-font-units'>[0]['allowUnits'] & {})[number], boolean>
+  >;
 }
 
 export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
@@ -35,7 +43,7 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
     tolerantMode: false,
   } satisfies CssEslintConfigOptions);
 
-  const {tolerantMode, customSyntax} = optionsResolved;
+  const {tolerantMode, customSyntax, allowedFontUnits} = optionsResolved;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'css');
 
@@ -68,9 +76,18 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
     )
     .addRule('no-duplicate-imports', ERROR) // 🟢
     .addRule('no-empty-blocks', ERROR) // 🟢
-    .addRule('no-important', WARNING) // 🟢
+    .addRule('no-important', WARNING) // 🟢 >=0.8.0
     .addRule('no-invalid-at-rules', ERROR) // 🟢
     .addRule('no-invalid-properties', ERROR) // 🟢
+    .addRule('relative-font-units', ERROR, [
+      {
+        allowUnits: getKeysOfTruthyValues({
+          rem: true,
+          em: true,
+          ...allowedFontUnits,
+        }),
+      },
+    ]) // >=0.9.0
     .addRule('prefer-logical-properties', OFF) // >=0.5.0
     // We're keeping `warn` severity, see the discussion in this issue and specifically this comment https://github.com/eslint/css/issues/80#issuecomment-2787414430
     .addRule('use-baseline', WARNING) // 🟡
