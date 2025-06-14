@@ -34,13 +34,25 @@ export interface VitestEslintConfigOptions
      */
     typecheck?: boolean;
   };
+
+  /**
+   * Enforces whether importing [Vitest globals](https://vitest.dev/config/#globals) is required
+   * or disallowed.
+   * Affected rules:
+   * - [`no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
+   * - [`prefer-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-importing-vitest-globals.md)
+   * @default 'disallow'
+   */
+  vitestGlobalsImporting?: 'disallow' | 'enforce' | 'any';
 }
 
 export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
   const eslintPluginVitest = await pluginsLoaders.vitest();
 
   const optionsRaw = context.rootOptions.configs?.vitest;
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies VitestEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {
+    vitestGlobalsImporting: 'disallow',
+  } satisfies VitestEslintConfigOptions);
 
   const {
     settings: pluginSettings,
@@ -50,6 +62,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     restrictedMatchers,
     asyncMatchers,
     minAndMaxExpectArgs,
+    vitestGlobalsImporting,
   } = optionsResolved;
 
   const defaultVitestEslintConfig: FlatConfigEntryForBuilder = {
@@ -86,6 +99,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
       optionsResolved.testDefinitionKeyword === false ? OFF : ERROR,
       generateConsistentTestItOptions(optionsResolved),
     )
+    .addRule('consistent-vitest-vi', ERROR) // (warns in all) >=1.2.5
     .addRule('expect-expect', ERROR) // 🟢
     .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [{max: maxAssertionCalls}])
     .addRule('max-nested-describe', maxNestedDescribes == null ? OFF : ERROR, [
@@ -104,6 +118,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     .addRule('no-hooks', OFF) // (warns in all)
     .addRule('no-identical-title', ERROR) // 🟢
     .addRule('no-import-node-test', ERROR) // 🟢
+    .addRule('no-importing-vitest-globals', vitestGlobalsImporting === 'disallow' ? ERROR : OFF) // (warns in all) >=1.2.3
     .addRule('no-interpolation-in-snapshots', ERROR) // (warns in all)
     .addRule('no-large-snapshots', OFF) // (warns in all)
     .addRule('no-mocks-import', ERROR) // (warns in all)
@@ -125,6 +140,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     .addRule('prefer-expect-resolves', ERROR) // (warns in all)
     .addRule('prefer-hooks-in-order', ERROR) // (warns in all)
     .addRule('prefer-hooks-on-top', ERROR) // (warns in all)
+    .addRule('prefer-importing-vitest-globals', vitestGlobalsImporting === 'enforce' ? ERROR : OFF) // (warns in all) >=1.2.3
     .addRule('prefer-lowercase-title', ERROR) // (warns in all)
     .addRule('prefer-mock-promise-shorthand', ERROR) // (warns in all)
     .addRule('prefer-snapshot-hint', OFF) // (warns in all)

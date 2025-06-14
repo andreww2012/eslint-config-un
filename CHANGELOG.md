@@ -60,6 +60,10 @@
 - `eslint-import-resolver-typescript`: [4.3.4 -> 4.4.3](https://github.com/import-js/eslint-import-resolver-typescript/compare/v4.3.4...v4.4.3)
 - `@html-eslint/eslint-plugin`: [0.40.2 -> 0.41.0](https://github.com/yeonjuan/html-eslint/compare/v0.40.2...v0.41.0)
 - `@next/eslint-plugin-next`: [15.3.2 -> 15.3.3](https://github.com/vercel/next.js/compare/v15.3.2...v15.3.3)
+- `@vitest/eslint-plugin`: [1.1.44 -> 1.2.5](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.44...v1.2.5)
+  - 🟢 (enabled) [`consistent-vitest-vi`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/consistent-vitest-vi.md)
+  - ❓ (enabled conditionally) [`no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
+  - ❓ (enabled conditionally) [`prefer-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-importing-vitest-globals.md)
 
 ## 0.10.0
 
