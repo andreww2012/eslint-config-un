@@ -64,6 +64,7 @@
   - 🟢 (enabled) [`consistent-vitest-vi`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/consistent-vitest-vi.md)
   - ❓ (enabled conditionally) [`no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
   - ❓ (enabled conditionally) [`prefer-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-importing-vitest-globals.md)
+- `eslint-plugin-de-morgan`: [1.2.1 -> 1.3.0](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.1...v1.3.0)
 
 ## 0.10.0
 
