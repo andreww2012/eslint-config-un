@@ -47,6 +47,14 @@
 - `typescript-eslint`: [8.32.0 -> 8.34.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.32.0...v8.34.0)
 - `@eslint-react/eslint-plugin`: [1.49.0 -> 1.52.1](https://github.com/Rel1cx/eslint-react/compare/v1.49.0...v1.52.1)
   - 🔴 (not enabled) [`jsx-no-iife`](https://eslint-react.xyz/docs/rules/jsx-no-iife)
+- `@eslint/markdown`: [6.4.0 -> 6.5.0](https://github.com/eslint/markdown/compare/v6.4.0...v6.5.0)
+  - 🟢 (enabled) [`no-duplicate-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-duplicate-definitions.md)
+  - 🟢 [`no-empty-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-empty-definitions.md)
+  - 🟢 [`no-empty-images`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-empty-images.md)
+  - 🟢 [`no-missing-atx-heading-space`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-atx-heading-space.md)
+  - 🟢 [`no-multiple-h1`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-multiple-h1.md)
+  - 🟢 [`require-alt-text`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/require-alt-text.md)
+  - 🟢 [`table-column-count`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/table-column-count.md)
 
 ## 0.10.0
 

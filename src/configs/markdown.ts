@@ -171,7 +171,10 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
         ],
       ) // 🟢
       .addRule('heading-increment', ERROR) // 🟢
+      .addRule('no-duplicate-definitions', ERROR) // 🟢
       .addRule('no-duplicate-headings', OFF)
+      .addRule('no-empty-definitions', ERROR) // 🟢
+      .addRule('no-empty-images', ERROR) // 🟢
       .addRule('no-empty-links', ERROR) // 🟢
       .addRule('no-html', allowHtmlTags === true ? OFF : ERROR, [
         {
@@ -182,7 +185,11 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
         },
       ])
       .addRule('no-invalid-label-refs', ERROR) // 🟢
+      .addRule('no-missing-atx-heading-space', ERROR) // 🟢
       .addRule('no-missing-label-refs', ERROR) // 🟢
+      .addRule('no-multiple-h1', ERROR, [{frontmatterTitle: ''}]) // 🟢
+      .addRule('require-alt-text', ERROR) // 🟢
+      .addRule('table-column-count', ERROR) // 🟢
       .addOverrides();
 
     if (Array.isArray(language)) {
