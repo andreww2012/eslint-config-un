@@ -1,4 +1,4 @@
-// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed matchall replaceall trimstart trimend subclassing weakrefs
+// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed matchall replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror
 import {ERROR, OFF} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
@@ -6,6 +6,13 @@ import {assignDefaults, memoize} from '../utils';
 import type {UnConfigFn} from './index';
 
 interface EcmaFeatures {
+  2026:
+    | 'arrayFromAsync'
+    | 'asyncDisposableStack'
+    | 'disposableStack'
+    | 'errorIsError'
+    | 'suppressedError'
+    | 'usingDeclarations';
   2025:
     | 'dataviewPrototypeGetFloat16SetFloat16'
     | 'dynamicImportOptions'
@@ -337,6 +344,16 @@ export const esUnConfig: UnConfigFn<
     },
   );
 
+  /* Category: ES2026 */
+  if (!isEsVersionFullySupported(2026)) {
+    mainConfig
+      ?.addRule('no-array-fromasync', grs(2026, 'arrayFromAsync')) // >=8.7.0
+      .addRule('no-asyncdisposablestack', grs(2026, 'asyncDisposableStack')) // >=8.7.0
+      .addRule('no-disposablestack', grs(2026, 'disposableStack')) // >=8.7.0
+      .addRule('no-error-iserror', grs(2026, 'errorIsError')) // >=8.7.0
+      .addRule('no-suppressederror', grs(2026, 'suppressedError')) // >=8.7.0
+      .addRule('no-using-declarations', grs(2026, 'usingDeclarations')); // >=8.7.0
+  }
   /* Category: ES2025 */
   if (!isEsVersionFullySupported(2025)) {
     mainConfig
@@ -699,6 +716,8 @@ export const esUnConfig: UnConfigFn<
     .addRule('no-nonstandard-array-prototype-properties', OFF) // >=8.2.0
     .addRule('no-nonstandard-arraybuffer-properties', OFF) // >=8.2.0
     .addRule('no-nonstandard-arraybuffer-prototype-properties', OFF) // >=8.2.0
+    .addRule('no-nonstandard-asyncdisposablestack-properties', OFF) // >=8.7.0
+    .addRule('no-nonstandard-asyncdisposablestack-prototype-properties', OFF) // >=8.7.0
     .addRule('no-nonstandard-atomics-properties', OFF) // >=8.2.0
     .addRule('no-nonstandard-bigint-properties', OFF) // >=8.2.0
     .addRule('no-nonstandard-bigint-prototype-properties', OFF) // >=8.2.0
@@ -708,6 +727,9 @@ export const esUnConfig: UnConfigFn<
     .addRule('no-nonstandard-dataview-prototype-properties', OFF) // >=8.2.0
     .addRule('no-nonstandard-date-properties', OFF) // >=8.2.0
     .addRule('no-nonstandard-date-prototype-properties', OFF) // >=8.2.0
+    .addRule('no-nonstandard-disposablestack-properties', OFF) // >=8.7.0
+    .addRule('no-nonstandard-disposablestack-prototype-properties', OFF) // >=8.7.0
+    .addRule('no-nonstandard-error-properties', OFF) // >=8.7.0
     .addRule('no-nonstandard-finalizationregistry-properties', OFF) // >=8.4.0
     .addRule('no-nonstandard-finalizationregistry-prototype-properties', OFF) // >=8.2.0
     .addRule('no-nonstandard-function-properties', OFF) // >=8.2.0

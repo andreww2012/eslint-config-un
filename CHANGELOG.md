@@ -1,3 +1,5 @@
+<!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror -->
+
 ## 1.0.0
 
 - New config: `noStylisticRules` which allows to (temporarily) disable most of the stylistic rules, which can be handy if this config is added to an existing project with big codebase.
@@ -65,6 +67,18 @@
   - ❓ (enabled conditionally) [`no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
   - ❓ (enabled conditionally) [`prefer-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-importing-vitest-globals.md)
 - `eslint-plugin-de-morgan`: [1.2.1 -> 1.3.0](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.1...v1.3.0)
+- `eslint-plugin-es-x`: [8.6.2 -> 8.7.0](https://github.com/eslint-community/eslint-plugin-es-x/compare/v8.6.2...v8.7.0)
+  - ❓(enabled conditionally) [`no-array-fromasync`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-array-fromasync.html)
+  - ❓(enabled conditionally) [`no-asyncdisposablestack`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-asyncdisposablestack.html)
+  - ❓(enabled conditionally) [`no-disposablestack`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-disposablestack.html)
+  - ❓(enabled conditionally) [`no-error-iserror`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-error-iserror.html)
+  - ❓(enabled conditionally) [`no-suppressederror`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-suppressederror.html)
+  - ❓(enabled conditionally) [`no-using-declarations`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-using-declarations.html)
+  - 🔴 (not enabled) [`no-nonstandard-asyncdisposablestack-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-asyncdisposablestack-properties.html)
+  - 🔴 (not enabled) [`no-nonstandard-asyncdisposablestack-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-asyncdisposablestack-prototype-properties.html)
+  - 🔴 (not enabled) [`no-nonstandard-disposablestack-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-disposablestack-properties.html)
+  - 🔴 (not enabled) [`no-nonstandard-disposablestack-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-disposablestack-prototype-properties.html)
+  - 🔴 (not enabled) [`no-nonstandard-error-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-error-properties.html)
 
 ## 0.10.0
 

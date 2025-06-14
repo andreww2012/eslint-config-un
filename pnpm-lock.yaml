@@ -122,8 +122,8 @@ importers:
         specifier: 0.3.1
         version: 0.3.1(@typescript-eslint/parser@8.34.0(eslint@9.26.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.26.0(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-es-x:
-        specifier: 8.6.2
-        version: 8.6.2(eslint@9.26.0(jiti@2.4.2))
+        specifier: 8.7.0
+        version: 8.7.0(eslint@9.26.0(jiti@2.4.2))
       eslint-plugin-html:
         specifier: 8.1.2
         version: 8.1.2
@@ -3755,8 +3755,8 @@ packages:
     peerDependencies:
       eslint: '>=8'
 
-  eslint-plugin-es-x@8.6.2:
-    resolution: {integrity: sha512-gROvFUd66sbYLexe1w/jm+6YhrFrI9TTa2AHqdtAeqyfpVkJk3Sbx7kquyiwz7fD4/heejJIFEOn83zzsmowzA==}
+  eslint-plugin-es-x@8.7.0:
+    resolution: {integrity: sha512-Du5Sb067sjqzmglaPhsfcEQgE1EYfL8sko+4jOMcAB/XKGoCxntSrOmTYuVzswA1rzM9+MZwH6+GOp0G3/wVCg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       eslint: '>=8'
@@ -9636,7 +9636,7 @@ snapshots:
 
   '@typescript-eslint/utils@8.31.0(eslint@9.26.0(jiti@2.4.2))(typescript@5.8.3)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.1(eslint@9.26.0(jiti@2.4.2))
+      '@eslint-community/eslint-utils': 4.7.0(eslint@9.26.0(jiti@2.4.2))
       '@typescript-eslint/scope-manager': 8.31.0
       '@typescript-eslint/types': 8.31.0
       '@typescript-eslint/typescript-estree': 8.31.0(typescript@5.8.3)
@@ -11186,9 +11186,9 @@ snapshots:
       eslint: 9.26.0(jiti@2.4.2)
       eslint-compat-utils: 0.5.1(eslint@9.26.0(jiti@2.4.2))
 
-  eslint-plugin-es-x@8.6.2(eslint@9.26.0(jiti@2.4.2)):
+  eslint-plugin-es-x@8.7.0(eslint@9.26.0(jiti@2.4.2)):
     dependencies:
-      '@eslint-community/eslint-utils': 4.6.1(eslint@9.26.0(jiti@2.4.2))
+      '@eslint-community/eslint-utils': 4.7.0(eslint@9.26.0(jiti@2.4.2))
       '@eslint-community/regexpp': 4.12.1
       eslint: 9.26.0(jiti@2.4.2)
       eslint-compat-utils: 0.6.5(eslint@9.26.0(jiti@2.4.2))
