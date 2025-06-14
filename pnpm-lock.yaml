@@ -41,11 +41,11 @@ importers:
         specifier: 6.5.0
         version: 6.5.0
       '@html-eslint/eslint-plugin':
-        specifier: 0.40.2
-        version: 0.40.2
+        specifier: 0.41.0
+        version: 0.41.0(eslint@9.26.0(jiti@2.4.2))
       '@html-eslint/parser':
-        specifier: 0.40.0
-        version: 0.40.0
+        specifier: 0.41.0
+        version: 0.41.0
       '@next/eslint-plugin-next':
         specifier: 15.3.2
         version: 15.3.2
@@ -1496,17 +1496,20 @@ packages:
   '@handlebars/parser@2.0.0':
     resolution: {integrity: sha512-EP9uEDZv/L5Qh9IWuMUGJRfwhXJ4h1dqKTT4/3+tY0eu7sPis7xh23j61SYUnNF4vqCQvvUXpDo9Bh/+q1zASA==}
 
-  '@html-eslint/eslint-plugin@0.40.2':
-    resolution: {integrity: sha512-QAegURUH7utcjePoVgi0hLZ+0J5yaWhRLkXJ/J//1QZ/glu5KhqaJ2YIf1aPbhJGNCRHKFwvcUNLhT068HZ5AQ==}
+  '@html-eslint/eslint-plugin@0.41.0':
+    resolution: {integrity: sha512-kZhOdLOx5xGogw9CE/uGKkoo8t7fNK9PxU6kosIvu9Yveir3r2VhGYC4II/2OEGQ+O4cPk2LxV1fCpYt7XFMtQ==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.0.0 || ^9.0.0
 
-  '@html-eslint/parser@0.40.0':
-    resolution: {integrity: sha512-xvySQLPogafK2aTOPBD6V7+4qpr1AnOZXO8zM2z0b4i3BB9ISk5PTWu5+ofOekKxjxUh7Z+QWaoezu1SIi33YA==}
+  '@html-eslint/parser@0.41.0':
+    resolution: {integrity: sha512-QQJeq2G11T/SGYcG09+XOajm+X8XX6bVVSouB3SVlGmm3exvJis0B6tBnb+5Rz2kC/q3C21z1ZuCc/AXcFKzIA==}
 
-  '@html-eslint/template-parser@0.40.0':
-    resolution: {integrity: sha512-f1S70T88yRe3zStT0CiDDgRw24Fgi1wgbW74YNUocEVuXvh2snxBEufY46Yg2udGlOz+SnQaygshacW45L+JWw==}
+  '@html-eslint/template-parser@0.41.0':
+    resolution: {integrity: sha512-ntZNMh+G13lPvwSSkr2U0XqWWDFLSZPeidcztgVCjxthwgSMdefL4au/YicnlB+h1WNBw8Pk0bAjczJXEbp85g==}
 
-  '@html-eslint/template-syntax-parser@0.40.0':
-    resolution: {integrity: sha512-Rq3UmjiWreKnXrN95Nt6vLlKgQrV8PhoYrlADn3u7X7vtgCccTmjV6aUHJCw7AyNXmcSNNpN2KPsBmQfH3y58A==}
+  '@html-eslint/template-syntax-parser@0.41.0':
+    resolution: {integrity: sha512-dgiE30uXWCoD89chi6KdjYOF+143bImJ3GNl3j2iy6/ZM8enTqCQVHZ48+Esf6Tx2rLBBBdxx4Rb0fG11myHsw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -8609,23 +8612,24 @@ snapshots:
 
   '@handlebars/parser@2.0.0': {}
 
-  '@html-eslint/eslint-plugin@0.40.2':
+  '@html-eslint/eslint-plugin@0.41.0(eslint@9.26.0(jiti@2.4.2))':
     dependencies:
-      '@eslint/plugin-kit': 0.2.8
-      '@html-eslint/parser': 0.40.0
-      '@html-eslint/template-parser': 0.40.0
-      '@html-eslint/template-syntax-parser': 0.40.0
+      '@eslint/plugin-kit': 0.3.2
+      '@html-eslint/parser': 0.41.0
+      '@html-eslint/template-parser': 0.41.0
+      '@html-eslint/template-syntax-parser': 0.41.0
+      eslint: 9.26.0(jiti@2.4.2)
 
-  '@html-eslint/parser@0.40.0':
+  '@html-eslint/parser@0.41.0':
     dependencies:
-      '@html-eslint/template-syntax-parser': 0.40.0
+      '@html-eslint/template-syntax-parser': 0.41.0
       es-html-parser: 0.2.0
 
-  '@html-eslint/template-parser@0.40.0':
+  '@html-eslint/template-parser@0.41.0':
     dependencies:
       es-html-parser: 0.2.0
 
-  '@html-eslint/template-syntax-parser@0.40.0': {}
+  '@html-eslint/template-syntax-parser@0.41.0': {}
 
   '@humanfs/core@0.19.1': {}
 
@@ -9209,7 +9213,7 @@ snapshots:
   '@sveltejs/vite-plugin-svelte-inspector@4.0.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.28.2)(vite@6.3.4(@types/node@20.17.46)(jiti@2.4.2)(tsx@4.19.4)(yaml@2.7.1)))(svelte@5.28.2)(vite@6.3.4(@types/node@20.17.46)(jiti@2.4.2)(tsx@4.19.4)(yaml@2.7.1))':
     dependencies:
       '@sveltejs/vite-plugin-svelte': 5.0.3(svelte@5.28.2)(vite@6.3.4(@types/node@20.17.46)(jiti@2.4.2)(tsx@4.19.4)(yaml@2.7.1))
-      debug: 4.4.0
+      debug: 4.4.1
       svelte: 5.28.2
       vite: 6.3.4(@types/node@20.17.46)(jiti@2.4.2)(tsx@4.19.4)(yaml@2.7.1)
     transitivePeerDependencies:
@@ -9218,7 +9222,7 @@ snapshots:
   '@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.28.2)(vite@6.3.4(@types/node@20.17.46)(jiti@2.4.2)(tsx@4.19.4)(yaml@2.7.1))':
     dependencies:
       '@sveltejs/vite-plugin-svelte-inspector': 4.0.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.28.2)(vite@6.3.4(@types/node@20.17.46)(jiti@2.4.2)(tsx@4.19.4)(yaml@2.7.1)))(svelte@5.28.2)(vite@6.3.4(@types/node@20.17.46)(jiti@2.4.2)(tsx@4.19.4)(yaml@2.7.1))
-      debug: 4.4.0
+      debug: 4.4.1
       deepmerge: 4.3.1
       kleur: 4.1.5
       magic-string: 0.30.17
@@ -10960,7 +10964,7 @@ snapshots:
 
   esbuild-register@3.6.0(esbuild@0.25.0):
     dependencies:
-      debug: 4.4.0
+      debug: 4.4.1
       esbuild: 0.25.0
     transitivePeerDependencies:
       - supports-color
@@ -15175,7 +15179,7 @@ snapshots:
       picomatch: 4.0.2
       postcss: 8.5.3
       rollup: 4.40.1
-      tinyglobby: 0.2.13
+      tinyglobby: 0.2.14
     optionalDependencies:
       '@types/node': 20.17.46
       fsevents: 2.3.3
