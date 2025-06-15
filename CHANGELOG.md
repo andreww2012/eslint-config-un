@@ -16,6 +16,7 @@
 - New config: `turbo` via [`eslint-plugin-turbo`](https://npmjs.com/eslint-plugin-turbo), enabled automatically if `turbo` package is installed.
 - New config: `noUnsanitized` via [`eslint-plugin-no-unsanitized`](https://npmjs.com/eslint-plugin-no-unsanitized), enabled by default.
 - [**BREAKING**] eslint-config-un package is now distributed as ESM only.
+- [**BREAKING**] Set the minimum supported Node.js version to 20.11.
 - [**BREAKING**] the following plugins are now not direct dependencies of this package, but its' optional peer dependencies: `@graphql-eslint/eslint-plugin`, `eslint-plugin-storybook` and `eslint-plugin-tailwindcss`.
 - [**BREAKING**] You can now specify the method of disabling autofix: `prefixed` would create a plugin named `disable-autofix` and copy the rules for which the autofix is disabled. `unprefixed` would copy an entire plugin and replace the origin plugin with the copy. The default method is now `unprefixed`, which leaves full rule names unchanged. You can control the overall or per-plugin autofix disabling method via the `disableAutofixMethod` option.
 - [**BREAKING**] Removed the ability to disable rule autofix by enabling `disable-autofix/*` rules. Instead, when configuring a rule, you can now return an object and set `disableAutofix: true` in it.
@@ -82,6 +83,7 @@
 - `eslint-plugin-html`: [8.1.2 -> 8.1.3](https://github.com/BenoitZugmeyer/eslint-plugin-html/compare/v8.1.2...v8.1.3)
 - `eslint-plugin-jest`: [28.11.0 -> 28.13.5](https://github.com/jest-community/eslint-plugin-jest/compare/v28.11.0...v28.13.5)
   - 🟡 (enabled, warns) [`prefer-ending-with-an-expect`](https://github.com/jest-community/eslint-plugin-jest/blob/main/docs/rules/prefer-ending-with-an-expect.md)
+- `eslint-plugin-jsdoc`: [50.6.14 -> 51.0.1](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.14...v51.0.1)
 
 ## 0.10.0
 
