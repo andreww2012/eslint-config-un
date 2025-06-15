@@ -44,6 +44,7 @@ export const cliUnConfig: UnConfigFn<'cli'> = (context) => {
     .disableAnyRule('', 'no-console')
     .disableAnyRule('import', 'no-extraneous-dependencies')
     .addAnyRule('unicorn', 'prefer-top-level-await', ERROR)
+    .disableAnyRule('node', 'no-top-level-await')
     .addOverrides();
 
   return {

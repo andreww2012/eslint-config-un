@@ -233,6 +233,7 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
     .addRule('no-restricted-import', OFF)
     .addRule('no-restricted-require', OFF)
     .addRule('no-sync', OFF)
+    .addRule('no-top-level-await', ERROR, [{ignoreBin: true}]) // >=17.19.0
     .addRule('no-unpublished-bin', ERROR) // 🟢
     .addRule('no-unpublished-import', OFF) // TODO 🟢 only disable when import plugin is enabled?
     .addRule('no-unpublished-require', ERROR) // TODO 🟢 handled by import plugin too?
