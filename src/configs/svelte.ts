@@ -185,6 +185,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     .addRule('no-reactive-reassign', ERROR) // 🟢4️⃣ >=2.27.0
     .addRule('no-shorthand-style-property-overrides', ERROR) // 🟢 >=0.31.0
     .addRule('no-store-async', ERROR) // 🟢 >=2.7.0
+    .addRule('no-top-level-browser-globals', ERROR) // 🟢 >=3.8.0
     .addRule('no-unknown-style-directive-property', ERROR) // 🟢 >=0.31.0
     .addRule('require-store-callbacks-use-set-param', ERROR) // >=2.12.0
     .addRule('require-store-reactive-access', ERROR) // 🟢 >=2.12.0
@@ -202,6 +203,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
       },
     ]) // >=2.18.0
     .addRule('button-has-type', ERROR) // >=0.0.4
+    .addRule('no-add-event-listener', ERROR) // >=3.6.0
     .addRule('no-at-debug-tags', ERROR) // 🟢 >=0.0.1
     .addRule('no-ignored-unsubscribe', ERROR) // >=2.34.0
     .addRule('no-immutable-reactive-statements', ERROR) // 🟢 >=2.27.0
@@ -222,6 +224,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     .addRule('prefer-const', ERROR, [{destructuring: 'all', ignoreReadBeforeAssign: true}]) // >=3.0.0-next.6
     .disableAnyRule('', 'prefer-const')
     .addRule('prefer-destructured-store-props', OFF) // >=2.10.0
+    .addRule('prefer-writable-derived', ERROR) // >=3.6.0
     .addRule('require-each-key', ERROR) // 🟢 >=2.28.0
     .addRule('require-event-dispatcher-types', ERROR) // 🟢 >=2.16.0
     .addRule('require-optimized-style-attribute', ERROR) // >=0.32.0
@@ -263,6 +266,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     .addRule('prefer-class-directive', ERROR) // >=0.0.1
     // "Style directive were added in Svelte v3.46"
     .addRule('prefer-style-directive', svelteVersion >= 3.46 ? WARNING : OFF) // >=0.22.0
+    .addRule('require-event-prefix', svelteVersion >= 5 ? ERROR : OFF) // 💅 >=3.6.0
     .addRule('shorthand-attribute', ERROR) // 💅 >=0.5.0
     .addRule('shorthand-directive', ERROR) // 💅 >=0.24.0
     .addRule('sort-attributes', ERROR) // >=2.4.0

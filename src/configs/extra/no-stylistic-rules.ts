@@ -430,6 +430,7 @@ const ALL_STYLISTIC_RULES = {
     'no-trailing-spaces': true,
     'prefer-class-directive': true,
     'prefer-style-directive': true,
+    'require-event-prefix': true,
     'shorthand-attribute': true,
     'shorthand-directive': true,
     'sort-attributes': true,
