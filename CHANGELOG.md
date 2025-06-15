@@ -91,6 +91,7 @@
 - `eslint-plugin-jsonc`: [2.20.0 -> 2.20.1](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v2.20.0...v2.20.1)
 - `eslint-plugin-n`: [17.18.0 -> 17.20.0](https://github.com/eslint-community/eslint-plugin-n/compare/v17.18.0...v17.20.0)
   - 🟢 (enabled) [`no-top-level-await`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-top-level-await.md)
+- `eslint-plugin-node-dependencies`: [1.0.1 -> 1.1.2](https://github.com/ota-meshi/eslint-plugin-node-dependencies/compare/v1.0.1...v1.1.2)
 
 ## 0.10.0
 
