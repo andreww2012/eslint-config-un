@@ -86,6 +86,7 @@
 - `eslint-plugin-jsdoc`: [50.6.14 -> 51.0.1](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.14...v51.0.1)
 - `@stylistic/eslint-plugin`: [4.2.0 -> 4.4.1](https://github.com/eslint-stylistic/eslint-stylistic/compare/v4.2.0...v4.4.1)
 - `eslint-plugin-json-schema-validator`: [5.4.0 -> 5.4.1](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v5.4.0...v5.4.1)
+- `eslint-plugin-jsonc`: [2.20.0 -> 2.20.1](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v2.20.0...v2.20.1)
 
 ## 0.10.0
 
