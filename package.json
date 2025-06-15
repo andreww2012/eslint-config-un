@@ -114,7 +114,7 @@
     "eslint-plugin-solid": "0.14.5",
     "eslint-plugin-sonarjs": "3.0.2",
     "eslint-plugin-svelte": "3.9.2",
-    "eslint-plugin-testing-library": "7.3.0",
+    "eslint-plugin-testing-library": "7.5.3",
     "eslint-plugin-toml": "0.12.0",
     "eslint-plugin-unicorn": "59.0.1",
     "eslint-plugin-unused-imports": "4.1.4",
