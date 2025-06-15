@@ -152,6 +152,8 @@ const ALL_STYLISTIC_RULES = {
     // None
   },
   'css-in-js': {
+    'color-hex-style': true,
+    'named-color': true,
     'property-casing': true,
   },
   cypress: {
@@ -295,6 +297,7 @@ const ALL_STYLISTIC_RULES = {
   'package-json': {
     'no-empty-fields': true,
     'order-properties': true,
+    'sort-collections': true,
   },
   perfectionist: markAllPluginRulesAsStylistic('perfectionist'),
   pinia: {
@@ -458,6 +461,7 @@ const ALL_STYLISTIC_RULES = {
     'quoted-keys': true,
     'spaced-comment': true,
     'table-bracket-spacing': true,
+    'tables-order': true,
   },
   // Won't include: prefer-find, no-unnecessary-type-assertion
   ts: {
