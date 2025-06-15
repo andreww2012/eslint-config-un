@@ -93,6 +93,7 @@
   - 🟢 (enabled) [`no-top-level-await`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-top-level-await.md)
 - `eslint-plugin-node-dependencies`: [1.0.1 -> 1.1.2](https://github.com/ota-meshi/eslint-plugin-node-dependencies/compare/v1.0.1...v1.1.2)
 - `eslint-plugin-perfectionist`: [4.12.3 -> 4.14.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.12.3...v4.14.0)
+- `eslint-plugin-prettier`: [5.4.0 -> 5.4.1](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.0...v5.4.1)
 
 ## 0.10.0
 
