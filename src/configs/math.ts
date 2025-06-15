@@ -57,6 +57,7 @@ export const mathUnConfig: UnConfigFn<'math'> = (context) => {
     .addRule('prefer-number-max-safe-integer', ERROR) // 🟢 >=0.3.0
     .addRule('prefer-number-max-value', ERROR) // 🟢 >=0.5.0
     .addRule('prefer-number-min-safe-integer', ERROR) // 🟢 >=0.3.0
+    .addRule('prefer-number-min-value', ERROR) // 🟢 >=0.7.0
     .addOverrides();
 
   return {
