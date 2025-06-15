@@ -257,7 +257,9 @@ export const resolveOverrides = (
       let ruleEntry: EslintRuleEntry;
       let disableAutofix: boolean | DisableAutofixMethod = false;
       if (ruleEntryRaw && typeof ruleEntryRaw === 'object' && 'severity' in ruleEntryRaw) {
+        // eslint-disable-next-line ts/no-unsafe-assignment
         ruleEntry =
+          // @ts-expect-error "Expression produces a union type that is too complex to represent"
           ruleEntryRaw.options == null
             ? ruleEntryRaw.severity
             : [ruleEntryRaw.severity, ...ruleEntryRaw.options];
