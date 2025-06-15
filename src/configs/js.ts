@@ -87,6 +87,7 @@ export const jsUnConfig: UnConfigFn<
     .addRule('no-sparse-arrays', ERROR) // 🟢
     .addRule('no-template-curly-in-string', ERROR)
     .addRule('no-this-before-super', ERROR) // 🟢
+    .addRule('no-unassigned-vars', eslintVersion >= 9.27 ? ERROR : OFF)
     .addRule('no-undef', ERROR) // 🟢
     .addRule('no-unexpected-multiline', OFF) // 🟢💅
     .addRule('no-unmodified-loop-condition', ERROR)
