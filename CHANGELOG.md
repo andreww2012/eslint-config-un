@@ -80,6 +80,8 @@
   - 🔴 (not enabled) [`no-nonstandard-disposablestack-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-disposablestack-prototype-properties.html)
   - 🔴 (not enabled) [`no-nonstandard-error-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-error-properties.html)
 - `eslint-plugin-html`: [8.1.2 -> 8.1.3](https://github.com/BenoitZugmeyer/eslint-plugin-html/compare/v8.1.2...v8.1.3)
+- `eslint-plugin-jest`: [28.11.0 -> 28.13.5](https://github.com/jest-community/eslint-plugin-jest/compare/v28.11.0...v28.13.5)
+  - 🟡 (enabled, warns) [`prefer-ending-with-an-expect`](https://github.com/jest-community/eslint-plugin-jest/blob/main/docs/rules/prefer-ending-with-an-expect.md)
 
 ## 0.10.0
 

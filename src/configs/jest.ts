@@ -284,6 +284,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     .addRule('prefer-called-with', OFF)
     .addRule('prefer-comparison-matcher', ERROR)
     .addRule('prefer-each', WARNING)
+    .addRule('prefer-ending-with-an-expect', WARNING) // >=28.13.0
     .addRule('prefer-equality-matcher', ERROR)
     .addRule('prefer-expect-assertions', OFF)
     .addRule('prefer-expect-resolves', ERROR)
