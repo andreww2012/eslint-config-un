@@ -102,6 +102,7 @@
   - 🟢 [`no-add-event-listener`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-add-event-listener)
   - 🟢 [`prefer-writable-derived`](https://sveltejs.github.io/eslint-plugin-svelte/rules/prefer-writable-derived)
   - ❓(enabled conditionally) [`require-event-prefix`](https://sveltejs.github.io/eslint-plugin-svelte/rules/require-event-prefix)
+- `eslint-plugin-vue`: [10.1.0 -> 10.2.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.1.0...v10.2.0)
 
 ## 0.10.0
 
