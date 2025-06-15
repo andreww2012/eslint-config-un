@@ -24,7 +24,7 @@
 - [**BREAKING**] Changed the prefix of [`typescript-eslint` plugin](https://npmjs.com/typescript-eslint) from `@typescript-eslint` to `ts`.
 - [**BREAKING**] **unicorn, cli** [`prefer-top-level-await`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-top-level-await.md) rule is now off by default and enabled in `cli` config.
 - **ts, vue** configs: for extension rules, base rule options and severity are now smartly inherited from the corresponding base rules. Added an option to disable this behavior.
-- **packageJson** config: [`require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md) and [`require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-version.md) rules are now enabled by default only for libraries.
+- **packageJson** config: added a new sub-config, `publishedPackageJson`, to enforce the presence of `name` and `version` fields in published `package.json`s.
 - **markdown** config: added a new sub-config, `formatFencedCodeBlocks`, to use a patched version of [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) to lint fenced code blocks inside Markdown files. 
 - **ts** config: added a new sub-config, `sortTsconfigKeys`, to sort top-level and `compilerOptions` keys in tsconfig files.
 - **unicorn** config: disabled [`prefer-json-parse-buffer`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-json-parse-buffer.md) rule as it [suggests bad fixes in TypeScript code](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2565).
@@ -103,6 +103,10 @@
   - 🟢 [`prefer-writable-derived`](https://sveltejs.github.io/eslint-plugin-svelte/rules/prefer-writable-derived)
   - ❓(enabled conditionally) [`require-event-prefix`](https://sveltejs.github.io/eslint-plugin-svelte/rules/require-event-prefix)
 - `eslint-plugin-vue`: [10.1.0 -> 10.2.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.1.0...v10.2.0)
+- `eslint-plugin-package-json`: [0.31.0 -> 0.39.2](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.31.0...v0.39.2)
+  - 🟢 (enabled) [`valid-author`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/valid-author.md)
+  - 🟢 [`valid-bin`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/valid-bin.md)
+  - ❓(enabled conditionally) [`require-type`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-type.md)
 
 ## 0.10.0
 

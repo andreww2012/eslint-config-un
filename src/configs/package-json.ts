@@ -36,10 +36,27 @@ type PackageJsonRequirableFields =
   | 'files'
   | 'keywords'
   | 'name'
+  | 'type'
   | 'types'
   | 'version';
 
-export interface PackageJsonEslintConfigOptions extends UnConfigOptions<'package-json'> {
+interface RequireFieldsOption {
+  /**
+   * Require the specified fields to be present in the package.json file.
+   */
+  requireFields?: Partial<Record<PackageJsonRequirableFields, boolean>>;
+}
+
+export interface PackageJsonEslintConfigOptions
+  extends UnConfigOptions<'package-json'>,
+    RequireFieldsOption {
+  /**
+   * Specify which `package.json`s are published to a registry. `name` and `version` fields
+   * will be required for all of them. If `true`, this will apply to all `package.json`s.
+   * @default true
+   */
+  configPublishedPackageJson?: boolean | UnConfigOptions<'package-json', RequireFieldsOption>;
+
   /**
    * The sorting order of package properties
    * @default 'sort-package-json'
@@ -65,14 +82,6 @@ export interface PackageJsonEslintConfigOptions extends UnConfigOptions<'package
    * @see https://docs.npmjs.com/cli/configuring-npm/package-json
    */
   collectionsToSort?: PackageJsonCollectionsToSort;
-
-  /**
-   * Require the specified fields to be present in the package.json file.
-   *
-   * The provided value will be **MERGED** with the default list.
-   * @default {name: true, version: true} if root option `mode` is set to `lib`
-   */
-  requireFields?: Partial<Record<PackageJsonRequirableFields, boolean>>;
 }
 
 export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) => {
@@ -80,22 +89,36 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
 
   const optionsRaw = context.rootOptions.configs?.packageJson;
   const optionsResolved = assignDefaults(optionsRaw, {
+    configPublishedPackageJson: true,
     order: 'sort-package-json',
     repositoryShorthand: 'object',
   } satisfies PackageJsonEslintConfigOptions);
 
-  optionsResolved.requireFields = {
-    ...(context.rootOptions.mode === 'lib' && {
+  const {configPublishedPackageJson, order, repositoryShorthand} = optionsResolved;
+
+  const optionsPublishedPackageJsonResolved = assignDefaults(
+    configPublishedPackageJson,
+    {} satisfies PackageJsonEslintConfigOptions['configPublishedPackageJson'] & object,
+  );
+
+  const getRequiredFields = (isPublishedPackageJson = false) => ({
+    ...(isPublishedPackageJson && {
       name: true,
       version: true,
     }),
-    ...optionsResolved.requireFields,
-  };
+    ...(isPublishedPackageJson
+      ? optionsPublishedPackageJsonResolved.requireFields
+      : optionsResolved.requireFields),
+  });
 
-  const {order, repositoryShorthand, requireFields} = optionsResolved;
+  const requiredFields = getRequiredFields();
+  const requiredFieldsRootPackageJson = getRequiredFields(true);
 
-  const getRequireFieldSeverity = (field: PackageJsonRequirableFields) =>
-    requireFields[field] ? ERROR : OFF;
+  const getRequireFieldSeverity = (
+    field: PackageJsonRequirableFields,
+    isPublishedPackageJson = false,
+  ) =>
+    (isPublishedPackageJson ? requiredFieldsRootPackageJson : requiredFields)[field] ? ERROR : OFF;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'package-json');
 
@@ -124,6 +147,7 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
     .addRule('require-files', getRequireFieldSeverity('files')) // >=0.26.0
     .addRule('require-keywords', getRequireFieldSeverity('keywords')) // >=0.25.0
     .addRule('require-name', getRequireFieldSeverity('name')) // 🟢 >=0.24.0
+    .addRule('require-type', getRequireFieldSeverity('type')) // 🟢 >=0.33.0
     .addRule('require-types', getRequireFieldSeverity('types')) // >=0.29.0
     .addRule('require-version', getRequireFieldSeverity('version')) // 🟢 >=0.23.0
     .addRule('restrict-dependency-ranges', OFF) // >=0.30.0
@@ -134,15 +158,47 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
       }),
     ]) // 🟢
     .addRule('unique-dependencies', ERROR) // 🟢
-    .addRule('valid-local-dependency', ERROR) // 🟢
+    .addRule('valid-author', ERROR) // 🟢 >=0.38.0
+    .addRule('valid-bin', ERROR) // 🟢 >=0.37.0
     .addRule('valid-name', ERROR) // 🟢
     .addRule('valid-package-definition', ERROR) // 🟢
     .addRule('valid-repository-directory', ERROR) // 🟢
     .addRule('valid-version', ERROR) // 🟢
     .addOverrides();
 
+  const configBuilderPublishedPackageJson = createConfigBuilder(
+    context,
+    configPublishedPackageJson,
+    'package-json',
+  );
+  configBuilder
+    ?.addConfig(
+      [
+        'package-json/published',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: DEFAULT_FILES_PACKAGE_JSON,
+        },
+      ],
+      {
+        languageOptions: {
+          parser: jsoncEslintParser,
+        },
+      },
+    )
+    .addRule('require-author', getRequireFieldSeverity('author', true))
+    .addRule('require-description', getRequireFieldSeverity('description', true))
+    .addRule('require-engines', getRequireFieldSeverity('engines', true))
+    .addRule('require-files', getRequireFieldSeverity('files', true))
+    .addRule('require-keywords', getRequireFieldSeverity('keywords', true))
+    .addRule('require-name', getRequireFieldSeverity('name', true))
+    .addRule('require-type', getRequireFieldSeverity('type', true))
+    .addRule('require-types', getRequireFieldSeverity('types', true))
+    .addRule('require-version', getRequireFieldSeverity('version', true))
+    .addOverrides();
+
   return {
-    configs: [configBuilder],
+    configs: [configBuilder, configBuilderPublishedPackageJson],
     optionsResolved,
   };
 };
