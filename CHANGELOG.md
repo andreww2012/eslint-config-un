@@ -84,6 +84,7 @@
 - `eslint-plugin-jest`: [28.11.0 -> 28.13.5](https://github.com/jest-community/eslint-plugin-jest/compare/v28.11.0...v28.13.5)
   - 🟡 (enabled, warns) [`prefer-ending-with-an-expect`](https://github.com/jest-community/eslint-plugin-jest/blob/main/docs/rules/prefer-ending-with-an-expect.md)
 - `eslint-plugin-jsdoc`: [50.6.14 -> 51.0.1](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.14...v51.0.1)
+- `@stylistic/eslint-plugin`: [4.2.0 -> 4.4.1](https://github.com/eslint-stylistic/eslint-stylistic/compare/v4.2.0...v4.4.1)
 
 ## 0.10.0
 
