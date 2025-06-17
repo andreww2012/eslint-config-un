@@ -29,7 +29,7 @@
     "dist"
   ],
   "scripts": {
-    "u": "nr ua -t minor",
+    "u": "ncu -i -t minor && nr typegen",
     "ua": "ncu -i && nr typegen",
     "print-peer-deps": "tsx scripts/print-peer-deps.ts",
     "spellcheck": "cspell --no-progress --no-summary .",
