@@ -15,6 +15,15 @@ type PackageJsonCollection =
   | 'config'
   | 'exports'
   | 'overrides'
+  // yarn
+  | 'resolutions'
+  // pnpm
+  | 'dependenciesMeta'
+  | 'pnpm.allowedDeprecatedVersions'
+  | 'pnpm.overrides'
+  | 'pnpm.packageExtensions'
+  | 'pnpm.patchedDependencies'
+  | 'pnpm.peerDependencyRules.allowedVersions'
   | (string & {});
 
 type PackageJsonCollectionsToSort = Partial<Record<PackageJsonCollection, boolean>>;
@@ -27,6 +36,13 @@ const DEFAULT_COLLECTIONS_TO_SORT = {
   peerDependenciesMeta: true,
   optionalDependencies: true,
   overrides: true,
+  resolutions: true,
+  dependenciesMeta: true,
+  'pnpm.allowedDeprecatedVersions': true,
+  'pnpm.overrides': true,
+  'pnpm.packageExtensions': true,
+  'pnpm.patchedDependencies': true,
+  'pnpm.peerDependencyRules.allowedVersions': true,
 } satisfies PackageJsonCollectionsToSort;
 
 type PackageJsonRequirableFields =
@@ -77,7 +93,7 @@ export interface PackageJsonEslintConfigOptions
    * NOTE: "our" default value is not the same as the actual default value of the rule. Namely, we don't sort `scripts` and `configs` sections, but do sort `peerDependenciesMeta` and `optionalDependencies`.
    *
    * The provided value will be **MERGED** with the default list.
-   * @default {devDependencies: true, dependencies: true, peerDependencies: true, peerDependenciesMeta: true, optionalDependencies: true}
+   * @default {devDependencies: true, dependencies: true, peerDependencies: true, peerDependenciesMeta: true, optionalDependencies: true, overrides: true, resolutions: true, dependenciesMeta: true, 'pnpm.allowedDeprecatedVersions': true, 'pnpm.overrides': true, 'pnpm.packageExtensions': true, 'pnpm.patchedDependencies': true, 'pnpm.peerDependencyRules.allowedVersions': true}
    * @see https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/sort-collections.md
    * @see https://docs.npmjs.com/cli/configuring-npm/package-json
    */
@@ -159,7 +175,7 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
     ]) // 🟢
     .addRule('unique-dependencies', ERROR) // 🟢
     .addRule('valid-author', ERROR) // 🟢 >=0.38.0
-    .addRule('valid-bin', ERROR) // 🟢 >=0.37.0
+    .addRule('valid-bin', ERROR, [{enforceCase: true}]) // 🟢 >=0.37.0
     .addRule('valid-name', ERROR) // 🟢
     .addRule('valid-package-definition', ERROR) // 🟢
     .addRule('valid-repository-directory', ERROR) // 🟢
