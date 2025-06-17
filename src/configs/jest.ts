@@ -172,7 +172,7 @@ export interface JestEslintConfigOptions extends UnConfigOptions<'jest'> {
 
 export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
   const [eslintPluginJest, isJestExtendedInstalled] = await Promise.all([
-    pluginsLoaders.jest(),
+    pluginsLoaders.jest(context),
     doesPackageExist('jest-extended'),
   ]);
 

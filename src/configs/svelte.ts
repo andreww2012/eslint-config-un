@@ -96,7 +96,7 @@ const DEFAULT_SVELTE_SCRIPT_FILES: string[] = ['**/*.svelte.{js,ts}'];
 export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
   const [eslintPluginSvelte, svelteEslintParser, {parser: typescriptEslintParser}] =
     await Promise.all([
-      pluginsLoaders.svelte(),
+      pluginsLoaders.svelte(context),
       interopDefault(import('svelte-eslint-parser')),
       interopDefault(import('typescript-eslint')),
     ]);

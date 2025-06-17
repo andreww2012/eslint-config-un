@@ -15,6 +15,7 @@
 - New config: `cypress` via [`eslint-plugin-cypress`](https://npmjs.com/eslint-plugin-cypress), enabled automatically if `cypress` package is installed.
 - New config: `turbo` via [`eslint-plugin-turbo`](https://npmjs.com/eslint-plugin-turbo), enabled automatically if `turbo` package is installed.
 - New config: `noUnsanitized` via [`eslint-plugin-no-unsanitized`](https://npmjs.com/eslint-plugin-no-unsanitized), enabled by default.
+- [**BREAKING**] New config: `betterTailwind` via [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss), enabled automatically if `tailwindcss` package is installed, which replaces the old `tailwind` config (via `eslint-plugin-tailwindcss`), which is now **disabled** by default.
 - [**BREAKING**] eslint-config-un package is now distributed as ESM only.
 - [**BREAKING**] Set the minimum supported Node.js version to 20.11.
 - [**BREAKING**] the following plugins are now not direct dependencies of this package, but its' optional peer dependencies: `@graphql-eslint/eslint-plugin`, `eslint-plugin-storybook` and `eslint-plugin-tailwindcss`.

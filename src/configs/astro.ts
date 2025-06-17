@@ -30,7 +30,7 @@ const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
 export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
   const [eslintPluginAstro, astroEslintParser, {parser: typescriptEslintParser}] =
     await Promise.all([
-      pluginsLoaders.astro(),
+      pluginsLoaders.astro(context),
       interopDefault(import('astro-eslint-parser')),
       interopDefault(import('typescript-eslint')),
     ]);

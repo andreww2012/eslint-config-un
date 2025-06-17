@@ -1,3 +1,4 @@
+import type {ConsolaInstance} from 'consola';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
@@ -13,6 +14,7 @@ import type {fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
 import type {AstroEslintConfigOptions} from './astro';
 import type {AvaEslintConfigOptions} from './ava';
+import type {BetterTailwindEslintConfigOptions} from './better-tailwind';
 import type {CasePoliceEslintConfigOptions} from './case-police';
 import type {CssEslintConfigOptions} from './css';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
@@ -202,11 +204,6 @@ export interface UnConfigs {
    * `false` (do not enable Vue rules) <=> `vue` package is not installed (at any level) or `false` is explicitly passed
    */
   vue: VueEslintConfigOptions;
-
-  /**
-   * `false` (do not enable Tailwind rules) <=> `tailwindcss` package is not installed (at any level) or `false` is explicitly passed
-   */
-  tailwind: TailwindEslintConfigOptions;
 
   /**
    * @default true
@@ -495,6 +492,26 @@ export interface UnConfigs {
   turbo: TurboEslintConfigOptions;
 
   /**
+   * ESLint rules related to [Tailwind CSS](https://tailwindcss.com/), alternative plugin.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss) ([docs](https://github.com/schoero/eslint-plugin-better-tailwindcss?tab=MIT-1-ov-file))
+   * @default true <=> `tailwindcss` package is installed
+   */
+  betterTailwind: BetterTailwindEslintConfigOptions;
+
+  /**
+   * ESLint rules related to [Tailwind CSS](https://tailwindcss.com/), "original" plugin.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-tailwindcss`](https://npmjs.com/eslint-plugin-tailwindcss) ([docs](https://github.com/francoismassart/eslint-plugin-tailwindcss?tab=coc-ov-file))
+   *
+   * NOTE: disabled by default, superseded by `betterTailwind` config
+   * @default false
+   */
+  tailwind: TailwindEslintConfigOptions;
+
+  /**
    * NOTE: disabled by default
    * @default false
    */
@@ -680,6 +697,8 @@ export interface UnConfigContext {
   usedPlugins: Set<PluginPrefix>;
 
   usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;
+
+  logger: ConsolaInstance;
 }
 
 export type UnConfigFn<

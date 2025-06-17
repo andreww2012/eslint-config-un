@@ -52,6 +52,7 @@ The reason for making these plugins not coming with this package is because they
 | Default plugin prefix | Package name |
 | --------------------- | ------------ |
 | `graphql`             | `@graphql-eslint/eslint-plugin` |
+| `betterTailwindcss`   | `eslint-plugin-better-tailwindcss` |
 | `storybook`           | `eslint-plugin-storybook` |
 | `tailwindcss`         | `eslint-plugin-tailwindcss` |
 | `turbo`               | `eslint-plugin-turbo` |
@@ -149,26 +150,27 @@ Sub-config is a Config located within Config's options. If the parent config is 
 
 | Un config name | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`) | Description/Notes |
 | -------------- | ------------------------------------------- | ------------------------------------ | ----------------- |
-| ![VueJS](./assets/devicon-vuejs.svg) `vue`                  | ✅ (`vue` is installed) | [eslint-plugin-vue](https://npmjs.com/eslint-plugin-vue) (`vue`) | - |
-| ![VueJS](./assets/devicon-vuejs.svg) `vue/a11y`             | ✅ | [eslint-plugin-vuejs-accessibility](https://npmjs.com/eslint-plugin-vuejs-accessibility) (`vuejs-accessibility`) | - |
-| ![Pinia](./assets/logos-pinia.svg) `vue/pinia`              | ✅ | [eslint-plugin-pinia](https://npmjs.com/eslint-plugin-pinia) (`pinia`) | - |
-| ![Angular](./assets/devicon-angular.svg) `angular`          | ✅ (`@angular/core` is installed) | [@angular-eslint/eslint-plugin](https://npmjs.com/@angular-eslint/eslint-plugin) (`@angular-eslint`) | Since v0.78.0 |
-| ![Angular](./assets/devicon-angular.svg) `angular/template` | ✅ | [@angular-eslint/eslint-plugin/template](https://npmjs.com/@angular-eslint/eslint-plugin/template) (`@angular-eslint/template`) | - |
-| ![ReactJS](./assets/devicon-react.svg) `react`              | ✅ (`react` is installed) | [eslint-plugin-react](https://npmjs.com/eslint-plugin-react) (`react`) | Since v0.8.0 |
-| ![ReactJS](./assets/devicon-react.svg) `react/reactX`       | ✅ | [@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) (`@eslint-react`) | - |
-| ![ReactJS](./assets/devicon-react.svg) `react/hooks`        | ✅ | [eslint-plugin-react-hooks](https://npmjs.com/eslint-plugin-react-hooks) (`react-hooks`)<br>[@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) (`@eslint-react`) | Includes rules with `@eslint-react/hooks-extra` prefix from `@eslint-react/eslint-plugin` |
-| ![ReactJS](./assets/devicon-react.svg) `react/dom`          | ✅ (`react-dom` is installed) | [@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) (`@eslint-react`)<br>[eslint-plugin-react](https://npmjs.com/eslint-plugin-react) | Includes rules with `@eslint-react/dom` prefix from `@eslint-react/eslint-plugin` and DOM related rules from `eslint-plugin-react` |
-| ![ReactJS](./assets/devicon-react.svg) `react/refresh`      | ✅ | [eslint-plugin-react-refresh](https://npmjs.com/eslint-plugin-react-refresh) (`react-refresh`) | - |
-| ![ReactJS](./assets/devicon-react.svg) `react/compiler`     | ✅ (if React version is at least 19) | [eslint-plugin-react-compiler](https://npmjs.com/eslint-plugin-react-compiler) (`react-compiler`) | - |
-| ![ReactJS](./assets/devicon-react.svg) `react/allowDefaultExportsInJsxFiles`     | ✅ | - | Config that allows default exports in all JSX files |
-| ![NextJS](./assets/devicon-nextjs.svg) `nextJs`             | ✅ (`next` is installed) | [@next/eslint-plugin-next](https://npmjs.com/@next/eslint-plugin-next) (`@next/next`) | Since v0.9.0 |
-| ![SolidJS](./assets/devicon-solidjs.svg) `solid`            | ✅ (`solid-js` is installed) | [eslint-plugin-solid](https://npmjs.com/eslint-plugin-solid) (`solid`) | Since v0.10.0 |
-| ![SolidJS](./assets/devicon-qwik.svg) `qwik`                | ✅ (`@builder.io/qwik` or `@qwik.dev/core` is installed) | [eslint-plugin-qwik](https://npmjs.com/eslint-plugin-qwik) (`qwik`) | Since v0.6.0 |
-| ![Astro](./assets/devicon-astro.svg) `astro`                | ✅ (`astro` is installed) | [eslint-plugin-astro](https://npmjs.com/eslint-plugin-astro) (`astro`) | Since v0.9.0<br>Without A11Y rules |
-| ![Astro](./assets/devicon-astro.svg) `astro/jsxA11y`        | ✅ | ^ | Only A11Y rules from `eslint-plugin-astro` |
-| ![Svelte](./assets/devicon-svelte.svg) `svelte`             | ✅ (`svelte` is installed) | [eslint-plugin-svelte](https://npmjs.com/eslint-plugin-svelte) (`svelte`) | Since v0.10.0 |
-| ![Ember](./assets/devicon-ember.svg) `ember`                | ✅ (`ember-source` is installed) | [eslint-plugin-ember](https://npmjs.com/eslint-plugin-ember) (`ember`) | Since v1.0.0 |
-| ![TailwindCSS](./assets/devicon-tailwindcss.svg) `tailwind` | ✅ (`tailwindcss` is installed) | [eslint-plugin-tailwindcss](https://npmjs.com/eslint-plugin-tailwindcss) (`tailwindcss`) | - |
+| ![VueJS](./assets/devicon-vuejs.svg) `vue`                                   | ✅ (`vue` is installed) | [eslint-plugin-vue](https://npmjs.com/eslint-plugin-vue) (`vue`) | - |
+| ![VueJS](./assets/devicon-vuejs.svg) `vue/a11y`                              | ✅ | [eslint-plugin-vuejs-accessibility](https://npmjs.com/eslint-plugin-vuejs-accessibility) (`vuejs-accessibility`) | - |
+| ![Pinia](./assets/logos-pinia.svg) `vue/pinia`                               | ✅ | [eslint-plugin-pinia](https://npmjs.com/eslint-plugin-pinia) (`pinia`) | - |
+| ![Angular](./assets/devicon-angular.svg) `angular`                           | ✅ (`@angular/core` is installed) | [@angular-eslint/eslint-plugin](https://npmjs.com/@angular-eslint/eslint-plugin) (`@angular-eslint`) | Since v0.78.0 |
+| ![Angular](./assets/devicon-angular.svg) `angular/template`                  | ✅ | [@angular-eslint/eslint-plugin/template](https://npmjs.com/@angular-eslint/eslint-plugin/template) (`@angular-eslint/template`) | - |
+| ![ReactJS](./assets/devicon-react.svg) `react`                               | ✅ (`react` is installed) | [eslint-plugin-react](https://npmjs.com/eslint-plugin-react) (`react`) | Since v0.8.0 |
+| ![ReactJS](./assets/devicon-react.svg) `react/reactX`                        | ✅ | [@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) (`@eslint-react`) | - |
+| ![ReactJS](./assets/devicon-react.svg) `react/hooks`                         | ✅ | [eslint-plugin-react-hooks](https://npmjs.com/eslint-plugin-react-hooks) (`react-hooks`)<br>[@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) (`@eslint-react`) | Includes rules with `@eslint-react/hooks-extra` prefix from `@eslint-react/eslint-plugin` |
+| ![ReactJS](./assets/devicon-react.svg) `react/dom`                           | ✅ (`react-dom` is installed) | [@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) (`@eslint-react`)<br>[eslint-plugin-react](https://npmjs.com/eslint-plugin-react) | Includes rules with `@eslint-react/dom` prefix from `@eslint-react/eslint-plugin` and DOM related rules from `eslint-plugin-react` |
+| ![ReactJS](./assets/devicon-react.svg) `react/refresh`                       | ✅ | [eslint-plugin-react-refresh](https://npmjs.com/eslint-plugin-react-refresh) (`react-refresh`) | - |
+| ![ReactJS](./assets/devicon-react.svg) `react/compiler`                      | ✅ (if React version is at least 19) | [eslint-plugin-react-compiler](https://npmjs.com/eslint-plugin-react-compiler) (`react-compiler`) | - |
+| ![ReactJS](./assets/devicon-react.svg) `react/allowDefaultExportsInJsxFiles` | ✅ | - | Config that allows default exports in all JSX files |
+| ![NextJS](./assets/devicon-nextjs.svg) `nextJs`                              | ✅ (`next` is installed) | [@next/eslint-plugin-next](https://npmjs.com/@next/eslint-plugin-next) (`@next/next`) | Since v0.9.0 |
+| ![SolidJS](./assets/devicon-solidjs.svg) `solid`                             | ✅ (`solid-js` is installed) | [eslint-plugin-solid](https://npmjs.com/eslint-plugin-solid) (`solid`) | Since v0.10.0 |
+| ![SolidJS](./assets/devicon-qwik.svg) `qwik`                                 | ✅ (`@builder.io/qwik` or `@qwik.dev/core` is installed) | [eslint-plugin-qwik](https://npmjs.com/eslint-plugin-qwik) (`qwik`) | Since v0.6.0 |
+| ![Astro](./assets/devicon-astro.svg) `astro`                                 | ✅ (`astro` is installed) | [eslint-plugin-astro](https://npmjs.com/eslint-plugin-astro) (`astro`) | Since v0.9.0<br>Without A11Y rules |
+| ![Astro](./assets/devicon-astro.svg) `astro/jsxA11y`                         | ✅ | ^ | Only A11Y rules from `eslint-plugin-astro` |
+| ![Svelte](./assets/devicon-svelte.svg) `svelte`                              | ✅ (`svelte` is installed) | [eslint-plugin-svelte](https://npmjs.com/eslint-plugin-svelte) (`svelte`) | Since v0.10.0 |
+| ![Ember](./assets/devicon-ember.svg) `ember`                                 | ✅ (`ember-source` is installed) | [eslint-plugin-ember](https://npmjs.com/eslint-plugin-ember) (`ember`) | Since v1.0.0 |
+| ![TailwindCSS](./assets/devicon-tailwindcss.svg) `betterTailwind`            | ✅ (`tailwindcss` is installed) | [eslint-plugin-better-tailwindcss](https://npmjs.com/eslint-plugin-better-tailwindcss) (`better-tailwindcss`) | Since v1.0.0<br>Supports v4 and v3 |
+| ![TailwindCSS](./assets/devicon-tailwindcss.svg) `tailwind`                  | ❌ | [eslint-plugin-tailwindcss](https://npmjs.com/eslint-plugin-tailwindcss) (`tailwindcss`) | Only supports v3 |
 
 ### Runtimes & related
 

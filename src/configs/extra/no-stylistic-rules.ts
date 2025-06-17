@@ -145,6 +145,13 @@ const ALL_STYLISTIC_RULES = {
   ava: {
     'hooks-order': true,
   },
+  'better-tailwindcss': {
+    'enforce-consistent-variable-syntax': true,
+    multiline: true,
+    'no-duplicate-classes': true,
+    'no-unnecessary-whitespace': true,
+    'sort-classes': true,
+  },
   'case-police': {
     'string-check': true,
   },

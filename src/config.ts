@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import consola from 'consola';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {
@@ -66,6 +67,16 @@ export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
   internalOptions: {disableAutofixOnly?: boolean} = {},
 ): Promise<FlatConfigEntry[]> => {
+  const logger = consola.withTag('eslint-config-un');
+  logger.addReporter({
+    log(logObj) {
+      if (logObj.type === 'fatal') {
+        // eslint-disable-next-line unicorn/no-process-exit
+        process.exit(1);
+      }
+    },
+  });
+
   const [
     packagesInfoRaw,
     usedPackageManager,
@@ -85,8 +96,8 @@ export const eslintConfigInternal = async (
       }
       throw error;
     }),
-    pluginsLoaders.tailwindcss(),
-    pluginsLoaders.svelte(),
+    pluginsLoaders.tailwindcss({logger} as UnConfigContext, {doNotThrowIfNotFound: true}),
+    pluginsLoaders.svelte({logger} as UnConfigContext),
   ]);
   const packagesInfo = packagesInfoRaw as UnConfigContext['packagesInfo'];
 
@@ -113,7 +124,7 @@ export const eslintConfigInternal = async (
     new Set(pluginRenamesList).size !== pluginRenamesList.length ||
     pluginRenamesList.some((v) => PLUGIN_PREFIXES_LIST.includes(v as PluginPrefix))
   ) {
-    throw new Error(
+    logger.fatal(
       'Invalid plugin renames: new names must be unique and different from the default plugin prefixes',
     );
   }
@@ -137,6 +148,7 @@ export const eslintConfigInternal = async (
   const isAngularEnabled = getIsConfigEnabled('angular', '@angular/core');
   const isAstroEnabled = getIsConfigEnabled('astro', 'astro');
   const isAvaEnabled = getIsConfigEnabled('ava', 'ava');
+  const isBetterTailwindEnabled = getIsConfigEnabled('betterTailwind', 'tailwindcss');
   const isCasePoliceEnabled = getIsConfigEnabled('casePolice', false);
   const isCliEnabled = getIsConfigEnabled('cli');
   const isCloudfrontFunctionsEnabled = getIsConfigEnabled('cloudfrontFunctions', false);
@@ -184,13 +196,7 @@ export const eslintConfigInternal = async (
   const isSonarEnabled = getIsConfigEnabled('sonar');
   const isStorybookEnabled = getIsConfigEnabled('storybook', 'storybook');
   const isSvelteEnabled = eslintPluginSvelte != null && getIsConfigEnabled('svelte', 'svelte');
-  const isTailwindEnabled =
-    eslintPluginTailwind != null &&
-    getIsConfigEnabled(
-      'tailwind',
-      packagesInfo.tailwindcss != null &&
-        (packagesInfo.tailwindcss.versions.major ?? Number.POSITIVE_INFINITY) < 4,
-    );
+  const isTailwindEnabled = eslintPluginTailwind != null && getIsConfigEnabled('tailwind', false);
   const isTanstackQueryEnabled = getIsConfigEnabled('tanstackQuery', '@tanstack/query-core');
   const isTestingLibraryEnabled = getIsConfigEnabled('testingLibrary', '@testing-library/dom');
   const isTomlEnabled = getIsConfigEnabled('toml', false);
@@ -215,6 +221,7 @@ export const eslintConfigInternal = async (
       angular: {enabled: isAngularEnabled},
       astro: {enabled: isAstroEnabled},
       ava: {enabled: isAvaEnabled},
+      betterTailwind: {enabled: isBetterTailwindEnabled},
       casePolice: {enabled: isCasePoliceEnabled},
       cli: {enabled: isCliEnabled},
       cloudfrontFunctions: {enabled: isCloudfrontFunctionsEnabled},
@@ -272,6 +279,7 @@ export const eslintConfigInternal = async (
     disabledAutofixes: {},
     usedPlugins: new Set(),
     usedPackageManager,
+    logger,
   };
 
   const jsEslintConfigResult =
@@ -420,6 +428,8 @@ export const eslintConfigInternal = async (
     isTurboEnabled && import('./configs/turbo').then((m) => m.turboUnConfig(context)),
     isNoUnsanitizedEnabled &&
       import('./configs/no-unsanitized').then((m) => m.noUnsanitizedUnConfig(context)),
+    isBetterTailwindEnabled &&
+      import('./configs/better-tailwind').then((m) => m.betterTailwindUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),
@@ -536,7 +546,7 @@ export const eslintConfigInternal = async (
         usedPluginPrefixes.map(async (pluginPrefix) => {
           const plugin =
             pluginPrefix in pluginsLoaders
-              ? await pluginsLoaders[pluginPrefix as keyof typeof pluginsLoaders]()
+              ? await pluginsLoaders[pluginPrefix as keyof typeof pluginsLoaders](context)
               : null;
           return plugin ? ([pluginPrefix, plugin] as const) : null;
         }),

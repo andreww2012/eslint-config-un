@@ -47,7 +47,7 @@ export interface VitestEslintConfigOptions
 }
 
 export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
-  const eslintPluginVitest = await pluginsLoaders.vitest();
+  const eslintPluginVitest = await pluginsLoaders.vitest(context);
 
   const optionsRaw = context.rootOptions.configs?.vitest;
   const optionsResolved = assignDefaults(optionsRaw, {

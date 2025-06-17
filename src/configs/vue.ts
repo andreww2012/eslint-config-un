@@ -192,7 +192,7 @@ export const vueUnConfig: UnConfigFn<
   ] = await Promise.all([
     interopDefault(import('eslint-merge-processors')),
     interopDefault(import('eslint-processor-vue-blocks')),
-    pluginsLoaders.vue(),
+    pluginsLoaders.vue(context),
     interopDefault(import('vue-eslint-parser')),
     doesPackageExist('pinia'),
     fetchPackageInfo('nuxt'),
