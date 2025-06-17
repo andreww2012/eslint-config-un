@@ -225,8 +225,11 @@ export const pluginsLoaders = {
   // @ts-expect-error types mismatch
   solid: genPluginLoader<EslintPlugin>('eslint-plugin-solid', () => import('eslint-plugin-solid')),
   sonarjs: genPluginLoader('eslint-plugin-sonarjs', () => import('eslint-plugin-sonarjs')),
-  // @ts-expect-error types mismatch
-  storybook: genPluginLoader('eslint-plugin-storybook', () => import('eslint-plugin-storybook')),
+  storybook: genPluginLoader<EslintPlugin>(
+    'eslint-plugin-storybook',
+    // @ts-expect-error types mismatch
+    () => import('eslint-plugin-storybook'),
+  ),
   svelte: genPluginLoader(
     'eslint-plugin-svelte',
     () => import('eslint-plugin-svelte'),
