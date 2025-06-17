@@ -438,6 +438,12 @@ It's too much to document, so please have a look at the source code of our confi
 
 We use [`local-pkg`](https://npmjs.com/local-pkg) package to detect if a package is installed.
 
+### How can I know which configs will be enabled, for which rules autofix will be disabled, etc.?
+
+You can enable the debug mode by setting `DEBUG=eslint-config-un` environment variable when running ESLint command.
+
+Alternatively, you can use [`@eslint/config-inspector`](https://npmjs.com/package/@eslint/config-inspector) to inspect the final config.
+
 ## Troubleshooting & caveats
 
 ### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace.

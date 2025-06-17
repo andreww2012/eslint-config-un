@@ -1,5 +1,8 @@
 import fs from 'node:fs/promises';
+// eslint-disable-next-line node/no-unsupported-features/node-builtins
+import {styleText} from 'node:util';
 import consola from 'consola';
+import createDebug from 'debug';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {
@@ -76,6 +79,9 @@ export const eslintConfigInternal = async (
       }
     },
   });
+  const debug = createDebug('eslint-config-un');
+
+  debug('Initialization');
 
   const [
     packagesInfoRaw,
@@ -101,11 +107,14 @@ export const eslintConfigInternal = async (
   ]);
   const packagesInfo = packagesInfoRaw as UnConfigContext['packagesInfo'];
 
+  debug(`Detected package manager: ${usedPackageManager?.name ?? '<not detected>'}`);
+  debug(`Found .gitignore file: ${gitignoreFile != null}`);
+
   const optionsResolved = assignDefaults(options, {
     mode: 'app',
     extraConfigs: [],
-    loadPluginsOnDemand: true,
     disablePrettierIncompatibleRules: packagesInfo.prettier != null,
+    loadPluginsOnDemand: true,
   } satisfies EslintConfigUnOptions);
 
   const {
@@ -132,18 +141,45 @@ export const eslintConfigInternal = async (
   const getIsConfigEnabled = (
     configName: keyof UnConfigs,
     defaultConditionOrPackageInstalled: boolean | (typeof PACKAGES_TO_GET_INFO_FOR)[number] = true,
-  ): boolean =>
-    Boolean(
-      configsOptions[configName] ??
-        (defaultConfigsStatus === 'all-disabled'
-          ? false
-          : defaultConfigsStatus === 'misc-enabled' &&
-              CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT.has(configName)
-            ? true
-            : typeof defaultConditionOrPackageInstalled === 'string'
-              ? packagesInfo[defaultConditionOrPackageInstalled]
-              : defaultConditionOrPackageInstalled),
+    preCondition?: {condition: boolean; reason: string},
+  ): boolean => {
+    let enabled: boolean | undefined;
+    let reason: string | undefined;
+
+    if (preCondition) {
+      enabled ??= preCondition.condition;
+      reason ??= preCondition.reason;
+    }
+    const providedConfig = configsOptions[configName];
+    if (providedConfig != null) {
+      enabled ??= Boolean(providedConfig);
+      reason ??= 'provided by the user';
+    }
+    if (defaultConfigsStatus === 'all-disabled') {
+      enabled ??= false;
+      reason ??= '`defaultConfigsStatus` is set to `all-disabled`';
+    }
+    if (
+      defaultConfigsStatus === 'misc-enabled' &&
+      CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT.has(configName)
+    ) {
+      enabled ??= true;
+      reason ??=
+        '`defaultConfigsStatus` is set to `misc-enabled` and the config is in the misc group';
+    }
+    if (typeof defaultConditionOrPackageInstalled === 'string') {
+      const isInstalled = Boolean(packagesInfo[defaultConditionOrPackageInstalled]);
+      enabled ??= isInstalled;
+      reason ??= `package \`${defaultConditionOrPackageInstalled}\` is ${isInstalled ? 'installed' : 'not installed'}`;
+    } else {
+      enabled ??= defaultConditionOrPackageInstalled;
+      reason ??= `config is ${defaultConditionOrPackageInstalled ? 'enabled' : 'disabled'} by default`;
+    }
+    debug(
+      `Config \`${styleText('blue', configName)}\` is ${enabled ? styleText('green', 'enabled') : styleText('red', 'disabled')} because ${reason}`,
     );
+    return enabled;
+  };
 
   const isAngularEnabled = getIsConfigEnabled('angular', '@angular/core');
   const isAstroEnabled = getIsConfigEnabled('astro', 'astro');
@@ -196,8 +232,14 @@ export const eslintConfigInternal = async (
   const isSolidEnabled = getIsConfigEnabled('solid', 'solid-js');
   const isSonarEnabled = getIsConfigEnabled('sonar');
   const isStorybookEnabled = getIsConfigEnabled('storybook', 'storybook');
-  const isSvelteEnabled = eslintPluginSvelte != null && getIsConfigEnabled('svelte', 'svelte');
-  const isTailwindEnabled = eslintPluginTailwind != null && getIsConfigEnabled('tailwind', false);
+  const isSvelteEnabled = getIsConfigEnabled('svelte', 'svelte', {
+    condition: eslintPluginSvelte != null,
+    reason: '`eslint-plugin-svelte` cannot be loaded',
+  });
+  const isTailwindEnabled = getIsConfigEnabled('tailwind', false, {
+    condition: eslintPluginTailwind != null,
+    reason: '`eslint-plugin-tailwindcss` cannot be loaded',
+  });
   const isTanstackQueryEnabled = getIsConfigEnabled('tanstackQuery', '@tanstack/query-core');
   const isTestingLibraryEnabled = getIsConfigEnabled('testingLibrary', '@testing-library/dom');
   const isTomlEnabled = getIsConfigEnabled('toml', false);
@@ -282,6 +324,7 @@ export const eslintConfigInternal = async (
     usedPlugins: new Set(),
     usedPackageManager,
     logger,
+    debug,
   };
 
   const jsEslintConfigResult =
@@ -338,6 +381,8 @@ export const eslintConfigInternal = async (
 
   // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores
   const globalIgnores = [...(overrideIgnores ? [] : DEFAULT_GLOBAL_IGNORES), ...(ignores || [])];
+
+  debug(`Globally ignored files: ${JSON.stringify(globalIgnores)}`);
 
   const unresolvedConfigs = Promise.all([
     globalIgnores.length > 0 && {
@@ -551,6 +596,11 @@ export const eslintConfigInternal = async (
             pluginPrefix in pluginsLoaders
               ? await pluginsLoaders[pluginPrefix as keyof typeof pluginsLoaders](context)
               : null;
+          if (pluginPrefix) {
+            debug(
+              `Plugin \`${styleText('blue', pluginPrefix)}\` loaded, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
+            );
+          }
           return plugin ? ([pluginPrefix, plugin] as const) : null;
         }),
       )
@@ -583,6 +633,9 @@ export const eslintConfigInternal = async (
           pluginPrefixCanonical === ''
             ? ''
             : context.rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
+        debug(
+          `Created a copy of \`${styleText('blue', pluginPrefix || '<builtin>')}\` plugin's rules with \`disable-autofix\` prefix`,
+        );
         return Object.assign(res, disableAutofixForAllRulesInPlugin(pluginPrefix, plugin));
       }
       return res;
@@ -607,6 +660,17 @@ export const eslintConfigInternal = async (
               plugin &&
               (rulesInfo || (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'unprefixed'))
             ) {
+              if (rulesInfo?.ruleNames) {
+                rulesInfo.ruleNames.forEach((ruleNameToDisableAutofixFor) => {
+                  debug(
+                    `Globally disabling autofix for \`${styleText('blue', pluginPrefix)}/${styleText('green', ruleNameToDisableAutofixFor)}\``,
+                  );
+                });
+              } else {
+                debug(
+                  `Globally disabling autofix for all rules in plugin \`${styleText('blue', pluginPrefix)}\``,
+                );
+              }
               return [
                 pluginPrefix,
                 {
@@ -625,6 +689,8 @@ export const eslintConfigInternal = async (
       ['disable-autofix' satisfies DisableAutofixPrefix]: disableAutofixPlugin,
     },
   } satisfies FlatConfigEntry);
+
+  debug(`Final config resolved: ${resolvedConfigs.length} flat config items`);
 
   return resolvedConfigs;
 };

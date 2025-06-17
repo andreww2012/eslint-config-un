@@ -711,6 +711,7 @@ export interface UnConfigContext {
   usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;
 
   logger: ConsolaInstance;
+  debug: debug.Debugger;
 }
 
 export type UnConfigFn<
