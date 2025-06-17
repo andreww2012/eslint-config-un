@@ -1,8 +1,8 @@
 diff --git a/eslint-plugin-prettier.js b/eslint-plugin-prettier.js
-index 4b5c8c9a9fafc20ecc7b354bebbf53d9c1054ac9..16679fbe936074b927586028cf2d0e98c7a56d73 100644
+index 46cb34484c1d26b7fc1bf06c0840bdbf77d6c774..efaec258f972b80530e7ce268a3ea65b2732cc82 100644
 --- a/eslint-plugin-prettier.js
 +++ b/eslint-plugin-prettier.js
-@@ -17,6 +17,7 @@
+@@ -18,6 +18,7 @@
   *   parserMeta?: ESLint.ObjectMetaProperties['meta'];
   *   parserPath?: string;
   *   usePrettierrc?: boolean;
@@ -10,7 +10,7 @@ index 4b5c8c9a9fafc20ecc7b354bebbf53d9c1054ac9..16679fbe936074b927586028cf2d0e98
   * }} Options
   *
   *
-@@ -24,6 +25,7 @@
+@@ -25,6 +26,7 @@
   *   source: string,
   *   options: Options,
   *   fileInfoOptions: FileInfoOptions,
@@ -18,7 +18,7 @@ index 4b5c8c9a9fafc20ecc7b354bebbf53d9c1054ac9..16679fbe936074b927586028cf2d0e98
   * ) => string} PrettierFormat
   */
  
-@@ -128,6 +130,7 @@ const eslintPluginPrettier = {
+@@ -165,6 +167,7 @@ const eslintPluginPrettier = {
                  properties: {},
                  additionalProperties: true,
                },
@@ -26,7 +26,7 @@ index 4b5c8c9a9fafc20ecc7b354bebbf53d9c1054ac9..16679fbe936074b927586028cf2d0e98
              },
              additionalProperties: true,
            },
-@@ -143,6 +146,7 @@ const eslintPluginPrettier = {
+@@ -180,6 +183,7 @@ const eslintPluginPrettier = {
          const usePrettierrc = !options || options.usePrettierrc !== false;
          /** @type {FileInfoOptions} */
          const fileInfoOptions = options?.fileInfoOptions || {};
@@ -34,7 +34,7 @@ index 4b5c8c9a9fafc20ecc7b354bebbf53d9c1054ac9..16679fbe936074b927586028cf2d0e98
  
          // `context.getSourceCode()` was deprecated in ESLint v8.40.0 and replaced
          // with the `sourceCode` property.
-@@ -210,6 +214,7 @@ const eslintPluginPrettier = {
+@@ -248,6 +252,7 @@ const eslintPluginPrettier = {
                    usePrettierrc,
                  },
                  fileInfoOptions,
