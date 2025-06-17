@@ -213,7 +213,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `unusedImports`              | ❌ | [eslint-plugin-unused-imports](https://npmjs.com/eslint-plugin-unused-imports) (`unused-imports`) | Since v0.7.0 |
 | `unusedImports/noUnusedVars` | ❌ | ^ | Disables [`no-unused-vars`](https://eslint.org/docs/latest/rules/no-unused-vars), [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) and [`sonarjs/no-unused-vars`](https://sonarsource.github.io/rspec/#/rspec/S1481/javascript) rules in favor of `unused-imports/no-unused-vars` |
 | `prefer-arrow-functions`     | ❌ | [eslint-plugin-prefer-arrow-functions](https://npmjs.com/eslint-plugin-prefer-arrow-functions) (`prefer-arrow-functions`) | Since v0.1.0 |
-| `perfectionist`              | ❌ | [eslint-plugin-perfectionist](https://npmjs.com/eslint-plugin-perfectionist) (`perfectionist`) | Since v0.4.0 |
+| `perfectionist`              | ❌ | [eslint-plugin-perfectionist](https://npmjs.com/eslint-plugin-perfectionist) (`perfectionist`) | Since v0.4.0<br>Supports sub-configs for each rule from the plugin since v1.0.0 |
 | `de-morgan`                  | ❌ | [eslint-plugin-de-morgan](https://npmjs.com/eslint-plugin-de-morgan) (`de-morgan`) | Since v0.5.0 |
 | `es`                         | ❌ | [eslint-plugin-es-x](https://npmjs.com/eslint-plugin-es-x) (`es-x`) | Since v0.10.0 |
 | `jsInline`                   | ✅ | [eslint-plugin-html](https://npmjs.com/eslint-plugin-html) (`html`) | Since v0.10.0<br>For linting inlined JS in HTML files |

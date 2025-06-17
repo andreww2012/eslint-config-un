@@ -26,9 +26,8 @@ export default eslintConfig({
       ignores: TEST_DIR_GLOB,
     },
     perfectionist: {
-      files: ['src/plugins.ts'],
-      overrides: {
-        'perfectionist/sort-objects': 2,
+      configSortObjects: {
+        files: ['src/plugins.ts'],
       },
     },
     nodeDependencies: true,

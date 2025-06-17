@@ -74,6 +74,7 @@ export type BuiltinEslintRulesFixed = OmitIndexSignature<
   >
 >;
 
+export type {RuleOptionsPerPlugin};
 export type RuleNamesForPlugin<P extends PluginPrefix | null> = P extends null
   ? keyof RuleOptionsPerPlugin[keyof RuleOptionsPerPlugin]
   : keyof OmitIndexSignature<RuleOptionsPerPlugin[P & keyof RuleOptionsPerPlugin]>;

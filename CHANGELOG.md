@@ -38,6 +38,7 @@
 - **react** config: `configTypeAwareRules` now uses `files` and `ignores` from `ts` config by default.
 - **yaml** config: add a new config to target GitHub Actions workflow files, currently only disabling [`no-empty-mapping-value`](https://ota-meshi.github.io/eslint-plugin-yml/rules/no-empty-mapping-value.html) rule.
 - **vue** config: support Nuxt 4 new directory structure.
+- **perfectionist** config: added a bunch of new sub-configs, corresponding to each rule of the plugin. Plugin shared settings are now also configurable via `settings` option.
 - Added a new root option, `defaultConfigsStatus`, to control what configs are enabled or disabled by default.
 
 ### Dependencies
