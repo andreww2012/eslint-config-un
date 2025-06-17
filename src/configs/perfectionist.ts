@@ -1,18 +1,59 @@
 import {OFF} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
+import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
+import type {PrettifyShallow} from '../types';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface PerfectionistEslintConfigOptions extends UnConfigOptions<'perfectionist'> {}
+export interface PerfectionistEslintConfigOptions extends UnConfigOptions<'perfectionist'> {
+  /**
+   * [`eslint-plugin-perfectionist`](https://npmjs.com/eslint-plugin-perfectionist) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `perfectionist` property and applied to the specified `files` and `ignores`.
+   * @see https://perfectionist.dev/guide/getting-started#settings
+   */
+  settings?: PrettifyShallow<
+    Pick<
+      GetRuleOptions<'perfectionist'>[0],
+      | 'type'
+      | 'order'
+      | 'fallbackSort'
+      | 'alphabet'
+      | 'ignoreCase'
+      | 'specialCharacters'
+      | 'locales'
+    > &
+      Pick<
+        GetRuleOptions<'perfectionist', 'sort-objects'>[0],
+        'ignorePattern' | 'partitionByComment' | 'partitionByNewLine'
+      >
+  >;
+}
 
 export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.perfectionist;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies PerfectionistEslintConfigOptions);
 
+  const {settings: pluginSettings} = optionsResolved;
+
   const configBuilder = createConfigBuilder(context, optionsResolved, 'perfectionist');
 
   configBuilder
-    ?.addConfig(['perfectionist', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
+    ?.addConfig(
+      [
+        'perfectionist',
+        {
+          includeDefaultFilesAndIgnores: true,
+          doNotIgnoreHtml: true,
+        },
+      ],
+      {
+        ...(pluginSettings && {
+          settings: {
+            perfectionist: pluginSettings,
+          },
+        }),
+      },
+    )
     .addRule('sort-array-includes', OFF) // >=0.5.0
     .addRule('sort-classes', OFF) // >=0.11.0
     .addRule('sort-decorators', OFF) // >=4.0.0

@@ -79,7 +79,7 @@ export type RuleNamesForPlugin<P extends PluginPrefix | null> = P extends null
   : keyof OmitIndexSignature<RuleOptionsPerPlugin[P & keyof RuleOptionsPerPlugin]>;
 export type GetRuleOptions<
   Prefix extends PluginPrefix,
-  RuleName extends keyof RuleOptionsPerPlugin[Prefix],
+  RuleName extends keyof RuleOptionsPerPlugin[Prefix] = keyof RuleOptionsPerPlugin[Prefix],
 > = RuleOptionsPerPlugin[Prefix][RuleName] & unknown[];
 type PluginAndPrefixToFullRuleName<P extends PluginPrefix, N extends string> = P extends ''
   ? N
