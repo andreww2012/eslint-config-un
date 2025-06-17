@@ -113,6 +113,7 @@
   - 🟢 (enabled) [`valid-author`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/valid-author.md)
   - 🟢 [`valid-bin`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/valid-bin.md)
   - ❓(enabled conditionally) [`require-type`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-type.md)
+- `eslint-plugin-jest`: [28.13.5 -> 28.14.0](https://github.com/jest-community/eslint-plugin-jest/compare/v28.13.5...v28.14.0)
 
 ## 0.10.0
 
