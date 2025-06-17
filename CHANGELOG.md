@@ -56,7 +56,7 @@
 - `@eslint/css`: [0.7.0 -> 0.9.0](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.9.0)
   - 🟢 (enabled) [`relative-font-units`](https://github.com/eslint/css/blob/HEAD/docs/rules/relative-font-units.md)
   - 🟡 (enabled, warns) [`no-important`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-important.md)
-- `typescript-eslint`: [8.32.0 -> 8.34.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.32.0...v8.34.0)
+- `typescript-eslint`: [8.32.0 -> 8.34.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.32.0...v8.34.1)
 - `@eslint-react/eslint-plugin`: [1.49.0 -> 1.52.2](https://github.com/Rel1cx/eslint-react/compare/v1.49.0...v1.52.2)
   - 🔴 (not enabled) [`jsx-no-iife`](https://eslint-react.xyz/docs/rules/jsx-no-iife)
 - `@eslint/markdown`: [6.4.0 -> 6.5.0](https://github.com/eslint/markdown/compare/v6.4.0...v6.5.0)
