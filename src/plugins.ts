@@ -61,6 +61,7 @@ export function genPluginLoader<T>(
 }
 
 export const pluginsLoaders = {
+  '@cspell': genPluginLoader('@cspell/eslint-plugin', () => import('@cspell/eslint-plugin')),
   '@eslint-community/eslint-comments': genPluginLoader(
     '@eslint-community/eslint-plugin-eslint-comments',
     () => import('@eslint-community/eslint-plugin-eslint-comments'),

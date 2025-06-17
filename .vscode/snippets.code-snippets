@@ -37,7 +37,7 @@
       "export const ${TM_FILENAME_BASE/(.*)/${1:/camelcase}/}UnConfig: UnConfigFn<'${TM_FILENAME_BASE/(.*)/${1:/camelcase}/}'> = async (",
       "\tcontext,",
       ") => {",
-      "const eslintPlugin${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} = await pluginsLoaders['$TM_FILENAME_BASE']();",
+      "const eslintPlugin${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} = await pluginsLoaders['$TM_FILENAME_BASE'](context);",
       "",
       "// eslint-disable-next-line no-console",
       "console.log('${TM_FILENAME_BASE/(.*)/${1:/camelcase}/} rules', Object.keys(eslintPlugin${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.rules || {}).sort());",

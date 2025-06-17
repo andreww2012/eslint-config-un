@@ -154,6 +154,7 @@ export const eslintConfigInternal = async (
   const isCloudfrontFunctionsEnabled = getIsConfigEnabled('cloudfrontFunctions', false);
   const isCssEnabled = getIsConfigEnabled('css', !packagesInfo.stylelint);
   const isCssInJsEnabled = getIsConfigEnabled('cssInJs');
+  const isCspellEnabled = getIsConfigEnabled('cspell', false);
   const isCypressEnabled = getIsConfigEnabled('cypress', 'cypress');
   const isDeMorganEnabled = getIsConfigEnabled('deMorgan', false);
   const isDependEnabled = getIsConfigEnabled('depend', false);
@@ -227,6 +228,7 @@ export const eslintConfigInternal = async (
       cloudfrontFunctions: {enabled: isCloudfrontFunctionsEnabled},
       css: {enabled: isCssEnabled},
       cssInJs: {enabled: isCssInJsEnabled},
+      cspell: {enabled: isCspellEnabled},
       cypress: {enabled: isCypressEnabled},
       deMorgan: {enabled: isDeMorganEnabled},
       depend: {enabled: isDependEnabled},
@@ -454,6 +456,7 @@ export const eslintConfigInternal = async (
     isDependEnabled && import('./configs/depend').then((m) => m.dependUnConfig(context)),
     isErasableSyntaxOnlyEnabled &&
       import('./configs/erasable-syntax-only').then((m) => m.erasableSyntaxOnlyUnConfig(context)),
+    isCspellEnabled && import('./configs/cspell').then((m) => m.cspellUnConfig(context)),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

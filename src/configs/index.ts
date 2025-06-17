@@ -16,6 +16,7 @@ import type {AstroEslintConfigOptions} from './astro';
 import type {AvaEslintConfigOptions} from './ava';
 import type {BetterTailwindEslintConfigOptions} from './better-tailwind';
 import type {CasePoliceEslintConfigOptions} from './case-police';
+import type {CspellEslintConfigOptions} from './cspell';
 import type {CssEslintConfigOptions} from './css';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
 import type {CypressEslintConfigOptions} from './cypress';
@@ -666,6 +667,17 @@ export interface UnConfigs {
    * @default false
    */
   noStylisticRules: NoStylisticRulesEslintConfigOptions;
+
+  /**
+   * CSpell spell checker.
+   *
+   * Used plugins:
+   * - [`@cspell/eslint-plugin`](https://npmjs.com/package/@cspell/eslint-plugin) ([docs](https://github.com/streetsidesoftware/cspell/tree/HEAD/packages/cspell-eslint-plugin#readme))
+   *
+   * NOTE: disabled by default
+   * @default false
+   */
+  cspell: CspellEslintConfigOptions;
 }
 
 export interface UnConfigContext {

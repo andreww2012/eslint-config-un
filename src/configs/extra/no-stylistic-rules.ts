@@ -90,6 +90,9 @@ const ALL_STYLISTIC_RULES = {
     'prefer-contextual-for-variables': true,
     'prefer-self-closing-tags': true,
   },
+  '@cspell': {
+    // None
+  },
   '@eslint-community/eslint-comments': {
     // None
   },
