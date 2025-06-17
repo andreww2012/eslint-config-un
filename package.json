@@ -19,8 +19,7 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.js"
     }
   },
   "main": "./dist/index.js",
@@ -47,7 +46,7 @@
     "build:code:test": "tsup --silent --out-dir temp",
     "build": "nr typegen && nr build:code",
     "test": "nr typegen && nr knip && nr spellcheck && nr lint && nr build:code:test",
-    "lint:public-types": "npx @arethetypeswrong/cli --pack .",
+    "lint:public-types": "npx @arethetypeswrong/cli --pack . --profile esm-only",
     "prepublishOnly": "nr test && nr build && nr lint:public-types"
   },
   "overrides": {
