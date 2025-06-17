@@ -60,6 +60,7 @@ export default {
     'labelledby',
     'activedescendant',
     'proptypes',
+    'knipignore',
 
     // Actual-ish English words
     'uncategorized',

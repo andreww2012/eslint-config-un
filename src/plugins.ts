@@ -268,7 +268,7 @@ export const pluginsLoaders = {
   (context: UnConfigContext, options?: LoadPluginOptions) => Promise<EslintPlugin | null>
 >;
 
-export type LoadablePluginPrefix = keyof typeof pluginsLoaders;
+type LoadablePluginPrefix = keyof typeof pluginsLoaders;
 export const LOADABLE_PLUGIN_PREFIXES_LIST = objectKeysUnsafe(pluginsLoaders);
 
 export type PluginPrefix =

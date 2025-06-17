@@ -5,11 +5,6 @@ export type PickKeysNotStartingWith<O, T extends string> = {
   [K in keyof O as K extends `${T}${string}` ? never : K]: O[K];
 };
 
-export type RemovePrefix<
-  T extends string,
-  Prefix extends string,
-> = T extends `${Prefix}${infer Rest}` ? Rest : T;
-
 export type FalsyValue = false | 0 | 0n | '' | null | undefined;
 
 export type PrettifyShallow<T> = {

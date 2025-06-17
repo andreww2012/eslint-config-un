@@ -28,8 +28,7 @@ import type {
 import {type MaybeFn, cloneDeep, maybeCall} from './utils';
 
 export type EslintSeverity = Eslint.Linter.RuleSeverity;
-export type EslintRuleEntry<Options extends unknown[] = unknown[]> =
-  Eslint.Linter.RuleEntry<Options>;
+type EslintRuleEntry<Options extends unknown[] = unknown[]> = Eslint.Linter.RuleEntry<Options>;
 export type EslintPlugin = Eslint.ESLint.Plugin;
 
 export interface FlatConfigEntryFiles {
@@ -122,7 +121,7 @@ type UnConfigOptionsOverridesEntry<
       disableAutofix?: RuleName extends FixableRuleNames ? boolean | DisableAutofixMethod : false;
     }
 >;
-export type UnConfigOptionsOverrides<T extends Partial<Record<string, EslintRuleEntry>>> = {
+type UnConfigOptionsOverrides<T extends Partial<Record<string, EslintRuleEntry>>> = {
   [RuleName in keyof T]?: UnConfigOptionsOverridesEntry<
     RuleName & string,
     T[RuleName] & {},

@@ -36,6 +36,11 @@ export default eslintConfig({
         allowed: ['eslint-plugin-react'],
       },
     },
+    jsdoc: {
+      overrides: {
+        'jsdoc/check-tag-names': (ruleSeverity) => [ruleSeverity, {definedTags: ['knipignore']}],
+      },
+    },
   },
 
   extraConfigs: [

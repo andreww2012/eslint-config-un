@@ -17,7 +17,7 @@ export const GLOB_JS_TS = `**/*.${GLOB_JS_TS_EXTENSION}` as const;
 export const GLOB_JS_TS_X_EXTENSION = `${GLOB_JS_TS_EXTENSION}?(x)` as const;
 export const GLOB_JS_TS_X = `**/*.${GLOB_JS_TS_X_EXTENSION}` as const;
 
-export const GLOB_JS_TS_X_ONLY_EXTENSION = `${GLOB_JS_TS_EXTENSION}x` as const;
+const GLOB_JS_TS_X_ONLY_EXTENSION = `${GLOB_JS_TS_EXTENSION}x` as const;
 export const GLOB_JS_TS_X_ONLY = `**/*.${GLOB_JS_TS_X_ONLY_EXTENSION}` as const;
 
 export const GLOB_CONFIG_FILES = [
@@ -25,9 +25,9 @@ export const GLOB_CONFIG_FILES = [
   `**/.*rc.${GLOB_JS_TS_X_EXTENSION}` as const,
 ];
 
-export const GLOB_TS_EXTENSION = '?([cm])ts' as const;
+const GLOB_TS_EXTENSION = '?([cm])ts' as const;
 export const GLOB_TS_X_EXTENSION = `${GLOB_TS_EXTENSION}?(x)` as const;
-export const GLOB_TS = `**/*.${GLOB_TS_EXTENSION}` as const;
+const GLOB_TS = `**/*.${GLOB_TS_EXTENSION}` as const;
 export const GLOB_TSX = `${GLOB_TS}?(x)` as const;
 
 export const GLOB_VUE = '**/*.vue' as const;
@@ -36,13 +36,13 @@ export const GLOB_JSON = '**/*.json' as const;
 export const GLOB_JSONC = '**/*.jsonc' as const;
 export const GLOB_JSON5 = '**/*.json5' as const;
 
-export const GLOB_YAML_EXTENSION = 'y?(a)ml' as const;
+const GLOB_YAML_EXTENSION = 'y?(a)ml' as const;
 export const GLOB_YAML = `**/*.${GLOB_YAML_EXTENSION}` as const;
 
 export const GLOB_TOML = '**/*.toml' as const;
 
 export const GLOB_HTML = '**/*.html' as const;
-export const GLOB_HTM = '**/*.htm' as const;
+const GLOB_HTM = '**/*.htm' as const;
 export const GLOB_HTML_ALL = [GLOB_HTML, GLOB_HTM];
 
 export const GLOB_CSS = '**/*.css' as const;
@@ -59,7 +59,7 @@ export const GLOB_FLOW = '**/*.flow' as const;
 
 export const GLOB_EMBER_GLIMMER = '**/*.{gjs,gts}' as const;
 
-export const GLOB_SUPPORTED_EXTENSIONS = [
+const GLOB_SUPPORTED_EXTENSIONS = [
   GLOB_JS_TS_X_EXTENSION,
   'vue',
   'json',
