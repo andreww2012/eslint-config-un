@@ -51,9 +51,9 @@
     "prepublishOnly": "nr test && nr build && nr lint:public-types"
   },
   "dependencies": {
-    "@angular-eslint/eslint-plugin": "20.0.0",
-    "@angular-eslint/eslint-plugin-template": "20.0.0",
-    "@angular-eslint/template-parser": "20.0.0",
+    "@angular-eslint/eslint-plugin": "20.1.0",
+    "@angular-eslint/eslint-plugin-template": "20.1.0",
+    "@angular-eslint/template-parser": "20.1.0",
     "@antfu/utils": "9.2.0",
     "@cspell/eslint-plugin": "9.1.1",
     "@eslint-community/eslint-plugin-eslint-comments": "4.5.0",

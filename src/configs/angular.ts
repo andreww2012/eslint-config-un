@@ -58,7 +58,9 @@ const PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS: Record<
 type RulesWithPartialAvailability =
   | 'consistent-component-styles'
   | 'no-async-lifecycle-method'
+  | 'no-developer-preview'
   | 'no-duplicates-in-metadata-arrays'
+  | 'no-experimental'
   | 'no-host-metadata-property'
   | 'no-uncalled-signals'
   | 'prefer-inject'
@@ -107,7 +109,9 @@ type RuleAvailability = [
 const RULES_AVAILABILITY: Record<string, RuleAvailability> = {
   'consistent-component-styles': [[17]],
   'no-async-lifecycle-method': [[17]],
+  'no-developer-preview': [[20]],
   'no-duplicates-in-metadata-arrays': [[17]],
+  'no-experimental': [[20]],
   'no-host-metadata-property': [[13, 18]],
   'no-uncalled-signals': [[20]],
   'prefer-inject': [[20]],
@@ -608,8 +612,10 @@ export const angularUnConfig: UnConfigFn<
     .addRule('no-async-lifecycle-method', ERROR) // [>=17]
     .addRule('no-attribute-decorator', disallowAttributeDecorator ? ERROR : OFF) // [all]
     .addRule('no-conflicting-lifecycle', ERROR) // [all]
+    .addRule('no-developer-preview', WARNING) // [>=20.1]
     .addRule('no-duplicates-in-metadata-arrays', ERROR) // [>=17]
     .addRule('no-empty-lifecycle-method', ERROR) // 🟢[all]
+    .addRule('no-experimental', WARNING) // [>=20.1]
     .addRule('no-forward-ref', disallowForwardRef ? ERROR : OFF) // [all]
     // See https://github.com/angular/angular/pull/54084, https://angular.dev/guide/components/host-elements
     .addRule('no-host-metadata-property', forbiddenMetadataProperties.host ? ERROR : OFF) // [<=18] 🔴(18)
