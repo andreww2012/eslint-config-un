@@ -289,6 +289,9 @@ const ALL_STYLISTIC_RULES = {
   math: {
     'prefer-exponentiation-operator': true,
   },
+  mdx: {
+    // None
+  },
   'no-type-assertion': {
     'no-type-assertion': true,
   },
@@ -713,6 +716,7 @@ export const noStylisticRulesUnConfig: UnConfigFn<'noStylisticRules'> = (context
         doNotIgnoreCss: true,
         doNotIgnoreHtml: true,
         doNotIgnoreMarkdown: true,
+        doNotIgnoreMdx: true,
         includeDefaultFilesAndIgnores: true,
       },
     ])
@@ -740,6 +744,7 @@ export const noStylisticRulesUnConfig: UnConfigFn<'noStylisticRules'> = (context
           doNotIgnoreCss: true,
           doNotIgnoreHtml: true,
           doNotIgnoreMarkdown: true,
+          doNotIgnoreMdx: true,
           includeDefaultFilesAndIgnores: true,
         },
       ])

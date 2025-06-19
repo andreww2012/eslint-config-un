@@ -9,6 +9,7 @@ import {
   GLOB_HTML_ALL,
   GLOB_MARKDOWN,
   GLOB_MARKDOWN_ALL_CODE_BLOCKS,
+  GLOB_MDX,
   OFF,
   type RuleSeverity,
 } from './constants';
@@ -357,8 +358,18 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
             ignoresFallback?: string[];
             mergeUserFilesWithFallback?: boolean;
 
+            /**
+             * Some rules (for example, [`no-irregular-whitespace`](https://eslint.org/docs/latest/rules/no-irregular-whitespace))
+             * crash when linting `*.css` files, so they are ignored by default.
+             *
+             * Set this to `true` if you're actually writing a config for `*.css` files.
+             */
+            doNotIgnoreCss?: boolean;
+
             /** Some rules (for example, `regexp/no-legacy-features`) crash when linting `*.md` files (only if `language` option is specified for the markdown config). We cannot ignore such files globally as that is irreversible, so we ignore them in every single config with the option to not ignore. */
             doNotIgnoreMarkdown?: boolean;
+
+            doNotIgnoreMdx?: boolean;
 
             /**
              * Some rules (for example, [`strict`](https://eslint.org/docs/latest/rules/strict))
@@ -367,14 +378,6 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
              * Set this to `true` if you're actually writing a config for `*.html` files.
              */
             doNotIgnoreHtml?: boolean;
-
-            /**
-             * Some rules (for example, [`no-irregular-whitespace`](https://eslint.org/docs/latest/rules/no-irregular-whitespace))
-             * crash when linting `*.css` files, so they are ignored by default.
-             *
-             * Set this to `true` if you're actually writing a config for `*.css` files.
-             */
-            doNotIgnoreCss?: boolean;
 
             /** Do not apply this config to "fenced code blocks" inside *.md files */
             ignoreMarkdownCodeBlocks?: boolean;
@@ -401,6 +404,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
     const fallbackIgnores = internalOptions.ignoresFallback || [];
     const ignores = [
       ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
+      ...(internalOptions.doNotIgnoreMdx ? [] : [GLOB_MDX]),
       ...(internalOptions.doNotIgnoreHtml ? [] : GLOB_HTML_ALL),
       ...(internalOptions.doNotIgnoreCss ? [] : [GLOB_CSS]),
       ...(internalOptions.ignoreMarkdownCodeBlocks ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS] : []),

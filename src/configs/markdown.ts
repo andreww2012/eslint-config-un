@@ -10,6 +10,7 @@ import {
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults, interopDefault, unique} from '../utils';
+import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';
 import type {UnConfigFn} from './index';
 
 type MarkdownDialect = 'commonmark' | 'gfm';
@@ -55,7 +56,7 @@ export interface MarkdownEslintConfigOptions extends UnConfigOptions<'markdown'>
   /**
    * Note that these languages will be ignored disregarding of specified in `.lintCodeBlocks{files,ignores}`, i.e. this option will create a rule ignoring by `**\/*.md/**\/*.{extensions}` pattern.
    *
-   * Since some language codes [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244) (`javascript` -> `js`), so specifying `javascript` instead of `js` won't have any effect.
+   * [Markdown only] Since some language codes [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244) (`javascript` -> `js`), so specifying `javascript` instead of `js` won't have any effect.
    */
   codeBlocksIgnoredLanguages?: CodeBlockLanguage[];
 
@@ -231,9 +232,6 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
     },
   );
 
-  // Legend:
-  // 🟣 - in the default processor config
-
   if (lintCodeBlocks) {
     configBuilder
       ?.addConfig(
@@ -243,6 +241,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
             doNotIgnoreCss: true,
             doNotIgnoreHtml: true,
             doNotIgnoreMarkdown: true,
+            doNotIgnoreMdx: true,
             filesFallback: DEFAULT_FILES_FOR_CODE_BLOCKS,
           },
         ],
@@ -257,103 +256,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
           },
         },
       )
-      .disableAnyRule('', 'eol-last') // 🟣
-      .disableAnyRule('', 'max-classes-per-file') // [too-strict]
-      .disableAnyRule('', 'no-alert') // [runtime-only]
-      .disableAnyRule('', 'no-await-in-loop') // [runtime-only]
-      .disableAnyRule('', 'no-console') // [runtime-only]
-      .disableAnyRule('', 'no-duplicate-imports') // [imports]
-      .disableAnyRule('', 'no-empty-function') // [emptiness]
-      .disableAnyRule('', 'no-eval') // [eval]
-      .disableAnyRule('', 'no-extend-native') // [runtime-only]
-      .disableAnyRule('', 'no-implied-eval') // [eval]
-      .disableAnyRule('', 'no-lone-blocks') // [emptiness]
-      .disableAnyRule('', 'no-new-func') // [eval]
-      .disableAnyRule('', 'no-new') // [runtime-only]
-      .disableAnyRule('', 'no-unused-labels') // [unused]
-      .disableAnyRule('', 'no-unused-private-class-members') // [unused]
-      .disableAnyRule('', 'no-useless-assignment') // [unused]
-      .disableAnyRule('', 'prefer-const') // [too-strict]
-      .disableAnyRule('', 'strict') // 🟣
-      .disableAnyRule('', 'no-undef') // 🟣
-      .disableAnyRule('', 'no-unused-expressions') // 🟣
-      .disableAnyRule('', 'no-unused-vars') // 🟣
-      .disableAnyRule('', 'padded-blocks') // 🟣
-      .disableAnyRule('', 'unicode-bom') // 🟣
-
-      // ts
-      // won't disable: @typescript-eslint/consistent-type-imports, @typescript-eslint/no-useless-empty-export
-      .disableAnyRule('ts', 'ban-ts-comment') // [runtime-only]
-      .disableAnyRule('ts', 'class-methods-use-this') // [runtime-only]
-      .disableAnyRule('ts', 'explicit-function-return-type') // [too-strict]
-      .disableAnyRule('ts', 'no-empty-function') // [emptiness]
-      .disableAnyRule('ts', 'no-explicit-any') // [too-strict]
-      .disableAnyRule('ts', 'no-extraneous-class') // [too-strict]
-      .disableAnyRule('ts', 'no-import-type-side-effects') // [runtime-only]
-      .disableAnyRule('ts', 'no-namespace') // [too-strict]
-      .disableAnyRule('ts', 'no-non-null-assertion') // [too-strict]
-      .disableAnyRule('ts', 'no-require-imports') // [runtime-only]
-      .disableAnyRule('ts', 'no-unused-expressions') // [unused]
-      .disableAnyRule('ts', 'no-unused-vars') // [unused]
-      .disableAnyRule('ts', 'no-use-before-define') // [runtime-only]
-      .disableAnyRule('ts', 'no-unsafe-function-type') // [too-strict]
-
-      // vue
-      // TODO maybe disable?: vue/valid-define-emits, vue/valid-define-props, vue/no-duplicate-attr-inheritance
-      // won't disable: vue/require-v-for-key, vue/no-setup-props-reactivity-loss, vue/require-macro-variable-name
-      .disableAnyRule('vue', 'block-lang') // [too-strict]
-      .disableAnyRule('vue', 'define-props-declaration') // [too-strict]
-      .disableAnyRule('vue', 'no-console') // [runtime-only]
-      .disableAnyRule('vue', 'no-undef-components') // [runtime-only]
-      .disableAnyRule('vue', 'no-unsupported-features') // [runtime-only]
-      .disableAnyRule('vue', 'no-unused-components') // [unused]
-      .disableAnyRule('vue', 'no-unused-emit-declarations') // [unused]
-      .disableAnyRule('vue', 'no-unused-properties') // [unused]
-      .disableAnyRule('vue', 'no-unused-refs') // [unused]
-      .disableAnyRule('vue', 'no-unused-vars') // [unused]
-      .disableAnyRule('vue', 'require-prop-types') // [too-strict]
-
-      // vue a11y, pinia - ignored all rules in corresponding configs
-
-      // import
-      // won't disable: import/no-absolute-path
-      .disableAnyRule('import', 'dynamic-import-chunkname') // [imports]
-      .disableAnyRule('import', 'max-dependencies') // [imports]
-      .disableAnyRule('import', 'no-default-export') // [imports]
-      .disableAnyRule('import', 'no-duplicates') // [imports]
-      .disableAnyRule('import', 'no-extraneous-dependencies') // [imports]
-      .disableAnyRule('import', 'no-mutable-exports') // [imports]
-      .disableAnyRule('import', 'no-unresolved') // [imports]
-
-      // node
-      // TODO disable?: node/no-deprecated-api
-      // won't disable: node/exports-style, import/no-webpack-loader-syntax
-      .disableAnyRule('node', 'hashbang') // [runtime-only]
-      .disableAnyRule('node', 'no-extraneous-require') // [imports]
-      .disableAnyRule('node', 'no-missing-require') // [imports]
-      .disableAnyRule('node', 'no-missing-import') // [imports]
-      .disableAnyRule('node', 'no-process-exit') // [runtime-only]
-      .disableAnyRule('node', 'no-unsupported-features/es-builtins') // [runtime-only]
-      .disableAnyRule('node', 'no-unsupported-features/es-syntax') // [runtime-only]
-      .disableAnyRule('node', 'no-unsupported-features/node-builtins') // [runtime-only]
-
-      // unicorn
-      // won't disable: unicorn/no-abusive-eslint-disable, unicorn/relative-url-style, unicorn/prefer-string-replace-all, unicorn/prefer-string-starts-ends-with, unicorn/prefer-code-point
-      .disableAnyRule('unicorn', 'no-process-exit') // [runtime-only]
-      .disableAnyRule('unicorn', 'prefer-top-level-await') // [runtime-only]
-      .disableAnyRule('unicorn', 'no-static-only-class') // [too-strict]
-
-      // regexp
-      .disableAnyRule('regexp', 'no-unused-capturing-group') // [runtime-only]
-      .disableAnyRule('regexp', 'no-useless-flag') // [runtime-only]
-      .disableAnyRule('regexp', 'no-super-linear-backtracking') // [runtime-only]
-      .disableAnyRule('regexp', 'optimal-quantifier-concatenation') // [runtime-only]
-
-      // misc
-      // won't disable: yml/file-extension, sonarjs/no-identical-functions, @eslint-community/eslint-comments/no-unlimited-disable
-      .disableAnyRule('unused-imports', 'no-unused-imports') // [too-strict]
-      .disableAnyRule('turbo', 'no-undeclared-env-vars') // [runtime-only]
-      .disableAnyRule('eslint-plugin', 'no-property-in-node') // [type-aware]
+      .disableBulkRules(RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS)
       .addBulkRules(optionsResolved.overridesCodeBlocks); // TODO
 
     if (codeBlocksIgnoredLanguages?.length) {
@@ -376,6 +279,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
         doNotIgnoreCss: true,
         doNotIgnoreHtml: true,
         doNotIgnoreMarkdown: true,
+        doNotIgnoreMdx: true,
         includeDefaultFilesAndIgnores: true,
         filesFallback: DEFAULT_FILES_FOR_CODE_BLOCKS,
       },

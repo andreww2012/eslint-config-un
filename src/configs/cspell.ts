@@ -29,6 +29,7 @@ export const cspellUnConfig: UnConfigFn<'cspell'> = (context) => {
         doNotIgnoreCss: true,
         doNotIgnoreHtml: true,
         doNotIgnoreMarkdown: true,
+        doNotIgnoreMdx: true,
       },
     ])
     .addRule('spellchecker', ERROR, options ? [options] : []) // 🟢

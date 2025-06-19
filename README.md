@@ -143,7 +143,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `promise`                                                            | ✅ | [eslint-plugin-promise](https://npmjs.com/eslint-plugin-promise) (`promise`) | - |
 | `import`                                                             | ✅ | [eslint-plugin-import-x](https://npmjs.com/eslint-plugin-import-x) (`import`) | - |
 | `sonarjs`                                                            | ✅ | [eslint-plugin-sonarjs](https://npmjs.com/eslint-plugin-sonarjs) (`sonarjs`) | - |
-| `eslintComments`                                                     | ✅ | [@eslint-community/eslint-plugin-eslint-comments](https://npmjs.com/@eslint-community/eslint-plugin-eslint-comments) (`@eslint-community/eslint-comments`) | Since v0.1.3 |
+| `eslintComments`                                                     | ✅ | [@eslint-community/eslint-plugin-eslint-comments](https://npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments) (`@eslint-community/eslint-comments`) | Since v0.1.3 |
 | `jsdoc`                                                              | ✅ | [eslint-plugin-jsdoc](https://npmjs.com/eslint-plugin-jsdoc) (`jsdoc`) | Since v0.3.1 |
 | `jsdoc/typescript`                                                   | ✅ (`ts` config is enabled) | - | Config for disabling or disabling certain rules for TypeScript files |
 
@@ -154,16 +154,16 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | ![VueJS](./assets/devicon-vuejs.svg) `vue`                                   | ✅ (`vue` is installed) | [eslint-plugin-vue](https://npmjs.com/eslint-plugin-vue) (`vue`) | - |
 | ![VueJS](./assets/devicon-vuejs.svg) `vue/a11y`                              | ✅ | [eslint-plugin-vuejs-accessibility](https://npmjs.com/eslint-plugin-vuejs-accessibility) (`vuejs-accessibility`) | - |
 | ![Pinia](./assets/logos-pinia.svg) `vue/pinia`                               | ✅ | [eslint-plugin-pinia](https://npmjs.com/eslint-plugin-pinia) (`pinia`) | - |
-| ![Angular](./assets/devicon-angular.svg) `angular`                           | ✅ (`@angular/core` is installed) | [@angular-eslint/eslint-plugin](https://npmjs.com/@angular-eslint/eslint-plugin) (`@angular-eslint`) | Since v0.78.0 |
-| ![Angular](./assets/devicon-angular.svg) `angular/template`                  | ✅ | [@angular-eslint/eslint-plugin/template](https://npmjs.com/@angular-eslint/eslint-plugin/template) (`@angular-eslint/template`) | - |
+| ![Angular](./assets/devicon-angular.svg) `angular`                           | ✅ (`@angular/core` is installed) | [@angular-eslint/eslint-plugin](https://npmjs.com/package/@angular-eslint/eslint-plugin) (`@angular-eslint`) | Since v0.78.0 |
+| ![Angular](./assets/devicon-angular.svg) `angular/template`                  | ✅ | [@angular-eslint/eslint-plugin/template](https://npmjs.com/package/@angular-eslint/eslint-plugin/template) (`@angular-eslint/template`) | - |
 | ![ReactJS](./assets/devicon-react.svg) `react`                               | ✅ (`react` is installed) | [eslint-plugin-react](https://npmjs.com/eslint-plugin-react) (`react`) | Since v0.8.0 |
-| ![ReactJS](./assets/devicon-react.svg) `react/reactX`                        | ✅ | [@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) (`@eslint-react`) | - |
-| ![ReactJS](./assets/devicon-react.svg) `react/hooks`                         | ✅ | [eslint-plugin-react-hooks](https://npmjs.com/eslint-plugin-react-hooks) (`react-hooks`)<br>[@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) (`@eslint-react`) | Includes rules with `@eslint-react/hooks-extra` prefix from `@eslint-react/eslint-plugin` |
-| ![ReactJS](./assets/devicon-react.svg) `react/dom`                           | ✅ (`react-dom` is installed) | [@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) (`@eslint-react`)<br>[eslint-plugin-react](https://npmjs.com/eslint-plugin-react) | Includes rules with `@eslint-react/dom` prefix from `@eslint-react/eslint-plugin` and DOM related rules from `eslint-plugin-react` |
+| ![ReactJS](./assets/devicon-react.svg) `react/reactX`                        | ✅ | [@eslint-react/eslint-plugin](https://npmjs.com/package/@eslint-react/eslint-plugin) (`@eslint-react`) | - |
+| ![ReactJS](./assets/devicon-react.svg) `react/hooks`                         | ✅ | [eslint-plugin-react-hooks](https://npmjs.com/eslint-plugin-react-hooks) (`react-hooks`)<br>[@eslint-react/eslint-plugin](https://npmjs.com/package/@eslint-react/eslint-plugin) (`@eslint-react`) | Includes rules with `@eslint-react/hooks-extra` prefix from `@eslint-react/eslint-plugin` |
+| ![ReactJS](./assets/devicon-react.svg) `react/dom`                           | ✅ (`react-dom` is installed) | [@eslint-react/eslint-plugin](https://npmjs.com/package/@eslint-react/eslint-plugin) (`@eslint-react`)<br>[eslint-plugin-react](https://npmjs.com/eslint-plugin-react) | Includes rules with `@eslint-react/dom` prefix from `@eslint-react/eslint-plugin` and DOM related rules from `eslint-plugin-react` |
 | ![ReactJS](./assets/devicon-react.svg) `react/refresh`                       | ✅ | [eslint-plugin-react-refresh](https://npmjs.com/eslint-plugin-react-refresh) (`react-refresh`) | - |
 | ![ReactJS](./assets/devicon-react.svg) `react/compiler`                      | ✅ (if React version is at least 19) | [eslint-plugin-react-compiler](https://npmjs.com/eslint-plugin-react-compiler) (`react-compiler`) | - |
 | ![ReactJS](./assets/devicon-react.svg) `react/allowDefaultExportsInJsxFiles` | ✅ | - | Config that allows default exports in all JSX files |
-| ![NextJS](./assets/devicon-nextjs.svg) `nextJs`                              | ✅ (`next` is installed) | [@next/eslint-plugin-next](https://npmjs.com/@next/eslint-plugin-next) (`@next/next`) | Since v0.9.0 |
+| ![NextJS](./assets/devicon-nextjs.svg) `nextJs`                              | ✅ (`next` is installed) | [@next/eslint-plugin-next](https://npmjs.com/package/@next/eslint-plugin-next) (`@next/next`) | Since v0.9.0 |
 | ![SolidJS](./assets/devicon-solidjs.svg) `solid`                             | ✅ (`solid-js` is installed) | [eslint-plugin-solid](https://npmjs.com/eslint-plugin-solid) (`solid`) | Since v0.10.0 |
 | ![SolidJS](./assets/devicon-qwik.svg) `qwik`                                 | ✅ (`@builder.io/qwik` or `@qwik.dev/core` is installed) | [eslint-plugin-qwik](https://npmjs.com/eslint-plugin-qwik) (`qwik`) | Since v0.6.0 |
 | ![Astro](./assets/devicon-astro.svg) `astro`                                 | ✅ (`astro` is installed) | [eslint-plugin-astro](https://npmjs.com/eslint-plugin-astro) (`astro`) | Since v0.9.0<br>Without A11Y rules |
@@ -191,9 +191,10 @@ Sub-config is a Config located within Config's options. If the parent config is 
 
 | Un config name | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`) | Description/Notes |
 | -------------- | ------------------------------------------- | ------------------------------------ | ----------------- |
-| ![Markdown](./assets/mdi-language-markdown.svg) `markdown`                        | ✅ | [@eslint/markdown](https://npmjs.com/@eslint/markdown) (`markdown`) | Since v0.7.0<br>Configured to also lint fenced code blocks |
+| ![Markdown](./assets/mdi-language-markdown.svg) `markdown`                        | ✅ | [@eslint/markdown](https://npmjs.com/package/@eslint/markdown) (`markdown`) | Since v0.7.0<br>Configured to also lint fenced code blocks inside .md files |
 | ![Markdown](./assets/mdi-language-markdown.svg) `markdown/formatFencedCodeBlocks` | ✅ (`prettier` is installed) | [eslint-plugin-prettier](https://npmjs.com/eslint-plugin-prettier) (`prettier`) | Since v1.0.0<br>Format fenced code blocks inside Markdown files using Prettier |
-| ![CSS](./assets/devicon-css3.svg) `css`                                           | ✅ (unless `stylelint` is installed) | [@eslint/css](https://npmjs.com/@eslint/css) (`css`) | Since v0.7.0 |
+| ![MDX](./assets/vscode-icons-file-type-mdx.svg) `mdx`                             | ✅ | [eslint-plugin-mdx](https://npmjs.com/eslint-plugin-mdx) (`mdx`) | Since v1.0.0<br>Configured to also lint fenced code blocks inside .mdx files |
+| ![CSS](./assets/devicon-css3.svg) `css`                                           | ✅ (unless `stylelint` is installed) | [@eslint/css](https://npmjs.com/package/@eslint/css) (`css`) | Since v0.7.0 |
 | ![CSS](./assets/devicon-css3.svg) `cssInJs`                                       | ✅ | [eslint-plugin-css](https://npmjs.com/eslint-plugin-css) (`css-in-js`) | Since v0.2.0<br>Lints inlined CSS |
 | `jsxA11y`                                                                         | ✅ | [eslint-plugin-jsx-a11y](https://npmjs.com/eslint-plugin-jsx-a11y) (`jsx-a11y`) | Since v0.8.0 |
 | ![YAML](./assets/devicon-yaml.svg) `yaml`                                         | ❌ | [eslint-plugin-yaml](https://npmjs.com/eslint-plugin-yaml) (`yaml`) | Since v0.1.0 |
@@ -203,8 +204,8 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `jsonc/json5`                                                                     | ❌ | ^ | Config exclusively for `.json5` files, does nothing by default |
 | `jsonSchemaValidator`                                                             | ❌ | [eslint-plugin-json-schema-validator](https://npmjs.com/eslint-plugin-json-schema-validator) (`json-schema-validator`) | Since v0.6.0 |
 | ![TOML](./assets/tabler-toml.svg) `toml`                                          | ❌ | [eslint-plugin-toml](https://npmjs.com/eslint-plugin-toml) (`toml`) | Since v0.1.3 |
-| ![HTML](./assets/devicon-html5.svg) `html`                                        | ✅ | [@html-eslint/eslint-plugin](https://npmjs.com/@html-eslint/eslint-plugin) (`@html-eslint`) | Since v0.10.0 |
-| ![GraphQL](./assets/logos-graphql.svg) `graphql`                                  | ✅ (`graphql` is installed) | [@graphql-eslint/eslint-plugin](https://npmjs.com/@graphql-eslint/eslint-plugin) (`graphql`) | Since v1.0.0 |
+| ![HTML](./assets/devicon-html5.svg) `html`                                        | ✅ | [@html-eslint/eslint-plugin](https://npmjs.com/package/@html-eslint/eslint-plugin) (`@html-eslint`) | Since v0.10.0 |
+| ![GraphQL](./assets/logos-graphql.svg) `graphql`                                  | ✅ (`graphql` is installed) | [@graphql-eslint/eslint-plugin](https://npmjs.com/package/@graphql-eslint/eslint-plugin) (`graphql`) | Since v1.0.0 |
 
 ### JS/TS - Miscellaneous
 
@@ -228,10 +229,10 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `jest`                                                                  | ✅ (`jest` is installed) | [eslint-plugin-jest](https://npmjs.com/eslint-plugin-jest) (`jest`) | Since v0.3.0 |
 | `jest/extended`                                                         | ✅ (`jest-extended` is installed) | [eslint-plugin-jest-extended](https://npmjs.com/eslint-plugin-jest-extended) (`jest-extended`) | - |
 | `jest/typescript`                                                       | ✅ (`ts` config is enabled) | [eslint-plugin-jest](https://npmjs.com/eslint-plugin-jest) (`jest`) | Only TypeScript-specific rules from `eslint-plugin-jest` |
-| `vitest`                                                                | ✅ (`vitest` is installed) | [@vitest/eslint-plugin](https://npmjs.com/@vitest/eslint-plugin) (`vitest`) | Since v0.3.0 |
+| `vitest`                                                                | ✅ (`vitest` is installed) | [@vitest/eslint-plugin](https://npmjs.com/package/@vitest/eslint-plugin) (`vitest`) | Since v0.3.0 |
 | `ava`                                                                   | ✅ (`ava` is installed) | [eslint-plugin-ava](https://npmjs.com/eslint-plugin-ava) (`ava`) | Since v1.0.0 |
 | ![Testing Library](./assets/logos-testing-library.svg) `testingLibrary` | ✅ (`@testing-library/dom` is installed) | [eslint-plugin-testing-library](https://npmjs.com/eslint-plugin-testing-library) (`testing-library`) | Since v1.0.0 |
-| `tanstackQuery`                                                         | ✅ (`@tanstack/query-core` is installed) | [@tanstack/eslint-plugin-query](https://npmjs.com/@tanstack/eslint-plugin-query) (`@tanstack/query`) | Since v1.0.0 |
+| `tanstackQuery`                                                         | ✅ (`@tanstack/query-core` is installed) | [@tanstack/eslint-plugin-query](https://npmjs.com/package/@tanstack/eslint-plugin-query) (`@tanstack/query`) | Since v1.0.0 |
 | ![Storybook](./assets/logos-storybook-icon.svg) `storybook`             | ✅ (`storybook` is installed) | [eslint-plugin-storybook](https://npmjs.com/eslint-plugin-storybook) (`storybook`) | Since v1.0.0 |
 | ![Cypress](./assets/vscode-icons-file-type-light-cypress.svg) `cypress` | ✅ (`cypress` is installed) | [eslint-plugin-cypress](https://npmjs.com/eslint-plugin-cypress) (`cypress`) | Since v1.0.0 |
 | ![Turborepo](./assets/material-icon-theme-turborepo.svg) `turbo`        | ✅ (`turbo` is installed) | [eslint-plugin-turbo](https://npmjs.com/eslint-plugin-turbo) (`turbo`) | Since v1.0.0 |
@@ -326,7 +327,7 @@ eslint-config-un provides the ability to change any registered plugin prefix. Ad
 | [`typescript-eslint`](https://npmjs.com/typescript-eslint)           | `@typescript-eslint` | `ts`        | More concise and convenient to use                                                                                   |
 | [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) | `import-x`           | `import`    | This plugin is a fork and is meant to replace the original plugin with `import` prefix                               |
 | [`eslint-plugin-n`](https://npmjs.com/eslint-plugin-n)               | `n`                  | `node`      | Same ^                                                                                                               |
-| [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css)           | `css`                | `css-in-js` | Conflicts with [`@eslint/css`](https://npmjs.com/@eslint/css) and our name better captures the essence of the plugin |
+| [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css)           | `css`                | `css-in-js` | Conflicts with [`@eslint/css`](https://npmjs.com/package/@eslint/css) and our name better captures the essence of the plugin |
 
 <!-- eslint-disable-next-line markdown/no-missing-label-refs -->
 > [!NOTE]
@@ -390,7 +391,7 @@ We use rules from several plugins to lint your React code. You will be able to c
 
 ### Markdown
 
-If `markdown` config is enabled (which is the default), the same rules provided by other configs will be applied to code blocks (\```lang ... \```) inside Markdown files. This works because under the hood the plugin [`@eslint/markdown`](https://npmjs.com/@eslint/markdown) that provides that functionality will create virtual files for each code block with the same extension as specified after ```.
+If `markdown` config is enabled (which is the default), the same rules provided by other configs will be applied to code blocks (\```lang ... \```) inside Markdown files. This works because under the hood the plugin [`@eslint/markdown`](https://npmjs.com/package/@eslint/markdown) that provides that functionality will create virtual files for each code block with the same extension as specified after ```.
 
 But applying certain rules for code blocks might not be desirable because some of them are too strict for the code that won't be executed anyway or even unfixable (like missing imports). You can find the full list of disabled rules in `src/configs/markdown.ts` file.
 

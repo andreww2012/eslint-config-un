@@ -175,6 +175,7 @@ export const pluginsLoaders = {
   markdown: genPluginLoader('@eslint/markdown', () => import('@eslint/markdown')),
   // @ts-expect-error types mismatch
   math: genPluginLoader<EslintPlugin>('eslint-plugin-math', () => import('eslint-plugin-math')),
+  mdx: genPluginLoader('eslint-plugin-mdx', () => import('eslint-plugin-mdx')),
   'no-type-assertion': genPluginLoader(
     'eslint-plugin-no-type-assertion',
     () => import('eslint-plugin-no-type-assertion'),

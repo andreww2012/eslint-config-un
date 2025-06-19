@@ -17,8 +17,9 @@ export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
       {
         includeDefaultFilesAndIgnores: true,
         doNotIgnoreCss: true,
-        doNotIgnoreMarkdown: true,
         doNotIgnoreHtml: true,
+        doNotIgnoreMarkdown: true,
+        doNotIgnoreMdx: true,
       },
     ])
     .addRule('string-check', ERROR, [], {disableAutofix: true})

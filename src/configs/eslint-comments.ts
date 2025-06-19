@@ -29,8 +29,8 @@ export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) =>
         includeDefaultFilesAndIgnores: true,
         // Supports official markdown, css and json plugins: https://github.com/eslint-community/eslint-plugin-eslint-comments/issues/256
         doNotIgnoreCss: true,
-        doNotIgnoreMarkdown: true,
         doNotIgnoreHtml: true,
+        doNotIgnoreMarkdown: true,
       },
     ])
     /* Category: Best Practices */

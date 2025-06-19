@@ -79,6 +79,9 @@ const GLOB_SUPPORTED_EXTENSIONS = [
 export const GLOB_MARKDOWN = '**/*.md' as const;
 export const GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS =
   `${GLOB_MARKDOWN}/**/*.{${GLOB_SUPPORTED_EXTENSIONS}}` as const;
+export const GLOB_MDX = '**/*.mdx' as const;
+export const GLOB_MDX_SUPPORTED_CODE_BLOCKS =
+  `${GLOB_MDX}/**/*.{${GLOB_SUPPORTED_EXTENSIONS}}` as const;
 export const GLOB_MARKDOWN_ALL_CODE_BLOCKS = `${GLOB_MARKDOWN}/**/*.*` as const;
 
 /* Misc */

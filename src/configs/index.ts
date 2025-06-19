@@ -42,6 +42,7 @@ import type {JsoncEslintConfigOptions} from './jsonc';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import type {MathEslintConfigOptions} from './math';
+import type {MdxEslintConfigOptions} from './mdx';
 import type {NextJsEslintConfigOptions} from './nextjs';
 import type {NoUnsanitizedEslintConfigOptions} from './no-unsanitized';
 import type {NodeEslintConfigOptions} from './node';
@@ -221,6 +222,15 @@ export interface UnConfigs {
    * @default true
    */
   markdown: MarkdownEslintConfigOptions;
+
+  /**
+   * [MDX](https://mdxjs.com/) specific rules.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-mdx`](https://npmjs.com/eslint-plugin-mdx) ([docs](https://github.com/mdx-js/eslint-mdx?tab=coc-ov-file))
+   * @default true
+   */
+  mdx: MdxEslintConfigOptions;
 
   /**
    * @default true

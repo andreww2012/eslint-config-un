@@ -1,6 +1,13 @@
 // cspell:ignore Pocock's
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
-import {ERROR, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, GLOB_TSX, OFF, WARNING} from '../constants';
+import {
+  ERROR,
+  GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
+  GLOB_MDX_SUPPORTED_CODE_BLOCKS,
+  GLOB_TSX,
+  OFF,
+  WARNING,
+} from '../constants';
 import {
   type GetRuleOptions,
   type RulesRecord,
@@ -553,7 +560,10 @@ export const tsUnConfig: UnConfigFn<
   const extraFilesNONTypeAware: string[] = [];
   const extraFilesTypeAware: string[] = [];
   const extraFilesToIgnoreNONTypeAware: string[] = [];
-  const extraFilesToIgnoreTypeAware: string[] = [GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS];
+  const extraFilesToIgnoreTypeAware: string[] = [
+    GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
+    GLOB_MDX_SUPPORTED_CODE_BLOCKS,
+  ];
 
   // TODO the following 3 sections are copy-pasty
 

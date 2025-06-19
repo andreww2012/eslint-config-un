@@ -212,6 +212,7 @@ export const eslintConfigInternal = async (
   const isJsxA11yEnabled = getIsConfigEnabled('jsxA11y');
   const isMarkdownEnabled = getIsConfigEnabled('markdown');
   const isMathEnabled = getIsConfigEnabled('math');
+  const isMdxEnabled = getIsConfigEnabled('mdx');
   // eslint-disable-next-line case-police/string-check
   const isNextJsEnabled = getIsConfigEnabled('nextJs', 'next');
   const isNodeEnabled = getIsConfigEnabled('node');
@@ -292,6 +293,7 @@ export const eslintConfigInternal = async (
       jsxA11y: {enabled: isJsxA11yEnabled},
       markdown: {enabled: isMarkdownEnabled},
       math: {enabled: isMathEnabled},
+      mdx: {enabled: isMdxEnabled},
       nextJs: {enabled: isNextJsEnabled},
       node: {enabled: isNodeEnabled},
       nodeDependencies: {enabled: isNodeDependenciesEnabled},
@@ -479,6 +481,7 @@ export const eslintConfigInternal = async (
       import('./configs/no-unsanitized').then((m) => m.noUnsanitizedUnConfig(context)),
     isBetterTailwindEnabled &&
       import('./configs/better-tailwind').then((m) => m.betterTailwindUnConfig(context)),
+    isMdxEnabled && import('./configs/mdx').then((m) => m.mdxUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),
