@@ -9,5 +9,6 @@ export default defineConfig({
     'angular-eslint-plugin-template17',
     'angular-eslint-plugin18',
     'eslint-plugin-no-type-assertion',
+    'eslint-plugin-prettier',
   ],
 });
