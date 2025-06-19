@@ -223,6 +223,12 @@
       "optional": true
     }
   },
+  "bundleDependencies": [
+    "eslint-plugin-prettier",
+    "angular-eslint-plugin-template17",
+    "angular-eslint-plugin18",
+    "eslint-plugin-no-type-assertion"
+  ],
   "packageManager": "pnpm@10.12.1",
   "engines": {
     "node": "^20.11 || >=21.2.0"
