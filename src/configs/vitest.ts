@@ -133,7 +133,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     .addRule('no-test-return-statement', ERROR) // (warns in all)
     .addRule('prefer-called-with', OFF) // (warns in all)
     .addRule('prefer-comparison-matcher', ERROR) // (warns in all)
-    .addRule('prefer-describe-function-title', ERROR) // >=1.1.41
+    .addRule('prefer-describe-function-title', OFF) // >=1.1.41
     .addRule('prefer-each', WARNING) // (warns in all)
     .addRule('prefer-equality-matcher', ERROR) // (warns in all)
     .addRule('prefer-expect-assertions', OFF) // (warns in all)
