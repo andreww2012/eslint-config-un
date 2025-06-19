@@ -200,6 +200,9 @@ const ALL_STYLISTIC_RULES = {
     'meta-property-ordering': true,
     'test-case-property-ordering': true,
   },
+  'file-progress': {
+    // None
+  },
   graphql: {
     alphabetize: true,
     'description-style': true,

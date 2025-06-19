@@ -142,6 +142,10 @@ export const pluginsLoaders = {
     'eslint-plugin-eslint-plugin',
     () => import('eslint-plugin-eslint-plugin'),
   ),
+  'file-progress': genPluginLoader(
+    'eslint-plugin-file-progress',
+    () => import('eslint-plugin-file-progress'),
+  ),
   graphql: genPluginLoader(
     '@graphql-eslint/eslint-plugin',
     () =>

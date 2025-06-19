@@ -246,6 +246,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `noUnsanitized`                                                | ✅ | [eslint-plugin-no-unsanitized](https://npmjs.com/eslint-plugin-no-unsanitized) (`no-unsanitized`)  | Since v1.0.0 |
 | ![CSpell](./assets/vscode-icons-file-type-cspell.svg) `cspell` | ❌ | [@cspell/eslint-plugin](https://npmjs.com/package/@cspell/eslint-plugin) (`@cspell`) | Since v1.0.0 |
 | ![ESLint](./assets/devicon-eslint.svg) `eslintPlugin`          | ❌ | [eslint-plugin-eslint-plugin](https://npmjs.com/eslint-plugin-eslint-plugin) (`eslint-plugin`) | Since v1.0.0<br>For linting ESLint plugins |
+| `fileProgress`                                                 | ❌ | [eslint-plugin-file-progress](https://npmjs.com/eslint-plugin-file-progress) (`file-progress`) | Since v1.0.0<br>An ESlint plugin to print file progress |
 
 ## How to use
 

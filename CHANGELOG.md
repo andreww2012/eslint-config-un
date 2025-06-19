@@ -19,6 +19,7 @@
 - New config: `cspell` via [`@cspell/eslint-plugin`](https://npmjs.com/package/@cspell/eslint-plugin), **<u>disabled</u>** by default.
 - New config: `eslintPlugin` via [`eslint-plugin-eslint-plugin`](https://npmjs.com/eslint-plugin-eslint-plugin), **<u>disabled</u>** by default.
 - New config: `mdx` via [`eslint-plugin-mdx`](https://npmjs.com/eslint-plugin-mdx), enabled by default.
+- New config: `fileProgress` via [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress), **<u>disabled</u>** by default.
 - [**BREAKING**] eslint-config-un package is now distributed as ESM only.
 - [**BREAKING**] Set the minimum supported Node.js version to 20.11.
 - [**BREAKING**] the following plugins are now not direct dependencies of this package, but its' optional peer dependencies: `@graphql-eslint/eslint-plugin`, `eslint-plugin-storybook` and `eslint-plugin-tailwindcss`.

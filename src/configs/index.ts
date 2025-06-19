@@ -30,6 +30,7 @@ import type {EslintPluginEslintConfigOptions} from './eslint-plugin';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-functions';
 import type {NoStylisticRulesEslintConfigOptions} from './extra/no-stylistic-rules';
+import type {FileProgressEslintConfigOptions} from './file-progress';
 import type {GraphqlEslintConfigOptions} from './graphql';
 import type {HtmlEslintConfigOptions} from './html';
 import type {ImportEslintConfigOptions} from './import';
@@ -698,6 +699,15 @@ export interface UnConfigs {
    * @default true
    */
   eslintPlugin: EslintPluginEslintConfigOptions;
+
+  /**
+   * An ESlint plugin to print file progress.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress) ([docs](https://github.com/sibiraj-s/eslint-plugin-file-progress?tab=MIT-1-ov-file))
+   * @default false
+   */
+  fileProgress: FileProgressEslintConfigOptions;
 }
 
 export interface UnConfigContext {

@@ -6,6 +6,8 @@ export default eslintConfig({
   mode: 'lib',
 
   configs: {
+    fileProgress: true,
+    turbo: false,
     ts: {
       configSortTsconfigKeys: {
         orderCompilerOptions: {

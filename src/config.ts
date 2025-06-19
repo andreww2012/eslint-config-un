@@ -199,6 +199,7 @@ export const eslintConfigInternal = async (
   const isEsEnabled = getIsConfigEnabled('es', false);
   const isEslintCommentsEnabled = getIsConfigEnabled('eslintComments');
   const isEslintPluginEnabled = getIsConfigEnabled('eslintPlugin', false);
+  const isFileProgressEnabled = getIsConfigEnabled('fileProgress', false);
   const isGraphqlEnabled = getIsConfigEnabled('graphql', 'graphql');
   const isImportEnabled = getIsConfigEnabled('import');
   // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
@@ -281,6 +282,7 @@ export const eslintConfigInternal = async (
       es: {enabled: isEsEnabled},
       eslintComments: {enabled: isEslintCommentsEnabled},
       eslintPlugin: {enabled: isEslintPluginEnabled},
+      fileProgress: {enabled: isFileProgressEnabled},
       graphql: {enabled: isGraphqlEnabled},
       html: {enabled: isHtmlEnabled},
       import: {enabled: isImportEnabled},
@@ -509,6 +511,8 @@ export const eslintConfigInternal = async (
     isCspellEnabled && import('./configs/cspell').then((m) => m.cspellUnConfig(context)),
     isEslintPluginEnabled &&
       import('./configs/eslint-plugin').then((m) => m.eslintPluginUnConfig(context)),
+    isFileProgressEnabled &&
+      import('./configs/file-progress').then((m) => m.fileProgressUnConfig(context)),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS
