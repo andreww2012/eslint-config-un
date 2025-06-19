@@ -31,8 +31,8 @@ and many more;
 ## Installation
 
 Minimum supported versions:
-- NodeJS: 20.10 or 21.1
-- ESLint: 9.15.0 (peer dependency)
+- NodeJS: ^20.10 or >=21.2
+- ESLint: ^9.15.0 (peer dependency)
 
 ```shell
 npm i -D eslint-config-un eslint@latest

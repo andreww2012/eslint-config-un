@@ -10,7 +10,6 @@ import {eslintConfigInternal} from '../src/config';
 import {DISABLE_AUTOFIX, eslintPluginVanillaRules} from '../src/eslint';
 import {uniqueBy} from '../src/utils';
 
-// eslint-disable-next-line node/no-unsupported-features/node-builtins
 const __dirname = import.meta.dirname;
 
 await fs.mkdir(resolveInOutDir(), {recursive: true});

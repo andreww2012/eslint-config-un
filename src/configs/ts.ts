@@ -1,6 +1,5 @@
 // cspell:ignore Pocock's
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
-import type Eslint from 'eslint';
 import {ERROR, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, GLOB_TSX, OFF, WARNING} from '../constants';
 import {
   type GetRuleOptions,
@@ -11,7 +10,7 @@ import {
   getRuleUnSeverityAndOptionsFromEntry,
 } from '../eslint';
 import type {ObjectValues} from '../types';
-import {assignDefaults, interopDefault, omit, unique} from '../utils';
+import {type MaybeFn, assignDefaults, interopDefault, maybeCall, omit, unique} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
@@ -447,7 +446,8 @@ export interface TsEslintConfigOptions
       >;
 
   /**
-   * TODO
+   * For [extension rules](https://typescript-eslint.io/rules/?=extension), try to smartly inherit
+   * corresponding base rule's severity and options.
    * @default true
    */
   inheritBaseRuleSeverityAndOptionsForExtensionRules?: boolean;
@@ -459,9 +459,25 @@ export interface TsEslintConfigOptions
    */
   typescriptVersion?: number;
 
-  parserOptions?: Omit<TsEslintParserOptions, 'sourceType'> & {
-    sourceType?: Eslint.Linter.ParserOptions['sourceType'];
-  };
+  /**
+   * Globs of files to allow running with the default project compiler options
+   * despite not being matched by the project service.
+   * @default ['*.config.*s', '.*.*s']
+   * @see https://typescript-eslint.io/packages/parser#allowdefaultproject
+   */
+  allowDefaultProject?: (TsEslintParserOptions['projectService'] & object)['allowDefaultProject'];
+
+  /**
+   * Will be merged with the default parser options set by us. These options will be
+   * passed to two setup configs for applying non-type-aware and type-aware rules.
+   * If a function is provided, it will receive the flag telling to which config the
+   * options will be applied.
+   *
+   * Note that if you only need to set [`projectService.allowDefaultProject`](https://typescript-eslint.io/packages/parser#allowdefaultproject), we recommend you using a separate
+   * `allowDefaultProject` option instead.
+   * @see https://typescript-eslint.io/packages/parser#configuration
+   */
+  parserOptions?: MaybeFn<[isForTypeAwareConfig: boolean], TsEslintParserOptions>;
 
   /**
    * Do not put `.` (dot) before an extension
@@ -516,6 +532,7 @@ export const tsUnConfig: UnConfigFn<
       context.configsMeta.svelte.enabled && 'svelte',
     ].filter((v) => v !== false),
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
+    allowDefaultProject: ['*.config.*s', '.*.*s'],
   } satisfies TsEslintConfigOptions);
   optionsResolved.typescriptVersion ??= typescriptPackageInfo?.versions.majorAndMinor ?? undefined;
   const {
@@ -525,6 +542,7 @@ export const tsUnConfig: UnConfigFn<
     extraFileExtensions,
     inheritBaseRuleSeverityAndOptionsForExtensionRules: inheritFromBase,
     typescriptVersion,
+    allowDefaultProject,
   } = optionsResolved;
 
   const [{parser: typescriptEslintParser}, jsoncEslintParser] = await Promise.all([
@@ -613,10 +631,9 @@ export const tsUnConfig: UnConfigFn<
             extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
             sourceType: 'module',
             ...(isTypeAware && {
-              projectService: true,
-              tsconfigRootDir: process.cwd(),
+              projectService: allowDefaultProject.length > 0 ? {allowDefaultProject} : true,
             }),
-            ...optionsResolved.parserOptions,
+            ...maybeCall(optionsResolved.parserOptions, isTypeAware),
           } satisfies TsEslintParserOptions,
         },
       })
