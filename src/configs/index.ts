@@ -26,6 +26,7 @@ import type {EmberEslintConfigOptions} from './ember';
 import type {ErasableSyntaxOnlyEslintConfigOptions} from './erasable-syntax-only';
 import type {EsEslintConfigOptions} from './es';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
+import type {EslintPluginEslintConfigOptions} from './eslint-plugin';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-functions';
 import type {NoStylisticRulesEslintConfigOptions} from './extra/no-stylistic-rules';
@@ -678,6 +679,15 @@ export interface UnConfigs {
    * @default false
    */
   cspell: CspellEslintConfigOptions;
+
+  /**
+   * An ESLint plugin for linting ESLint plugins.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-eslint-plugin`](https://npmjs.com/eslint-plugin-eslint-plugin) ([docs](https://github.com/eslint-community/eslint-plugin-eslint-plugin?tab=coc-ov-file#))
+   * @default true
+   */
+  eslintPlugin: EslintPluginEslintConfigOptions;
 }
 
 export interface UnConfigContext {

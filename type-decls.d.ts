@@ -75,3 +75,9 @@ declare module 'eslint-plugin-no-unsanitized' {
   declare const value: ESLint.ESLint.Plugin;
   export = value;
 }
+
+declare module 'eslint-plugin-eslint-plugin' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
+  export = value;
+}

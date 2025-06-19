@@ -49,13 +49,14 @@ Certain plugins are optional peer dependencies, which means that you need to ins
 
 The reason for making these plugins not coming with this package is because they have heavy non-optional peer dependencies, such as `graphql`, `storybook` and `tailwindcss`. Not only that they're heavy, but having those peer dependencies installed would make this package think that the corresponding config is used.
 
-| Default plugin prefix | Package name |
-| --------------------- | ------------ |
-| `graphql`             | `@graphql-eslint/eslint-plugin` |
-| `betterTailwindcss`   | `eslint-plugin-better-tailwindcss` |
-| `storybook`           | `eslint-plugin-storybook` |
-| `tailwindcss`         | `eslint-plugin-tailwindcss` |
-| `turbo`               | `eslint-plugin-turbo` |
+| Default plugin prefix | Package name | Reason |
+| --------------------- | ------------ | ------ |
+| `graphql`             | `@graphql-eslint/eslint-plugin` | Heavy dependency `graphql` |
+| `betterTailwindcss`   | `eslint-plugin-better-tailwindcss` | Heavy dependency `tailwindcss` |
+| `storybook`           | `eslint-plugin-storybook` | Heavy dependency `storybook` |
+| `tailwindcss`         | `eslint-plugin-tailwindcss` | Heavy dependency `tailwindcss` |
+| `turbo`               | `eslint-plugin-turbo` | Heavy dependency `turbo` |
+| `eslintPlugin`        | `eslint-plugin-eslint-plugin` | Very specific plugin |
 </details>
 
 ### Usage
@@ -72,7 +73,7 @@ export default eslintConfig({
 
 <!-- eslint-disable-next-line markdown/no-missing-label-refs -->
 > [!NOTE]
-> We highly recommend using TypeScript config file, which is supported since eslint v9.18.0, or [`@ts-check` directive](https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#ts-check) at the start of the file otherwise.
+> We highly recommend using TypeScript config file, which is supported since ESLint v9.18.0, or [`@ts-check` directive](https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#ts-check) at the start of the file otherwise.
 
 ## List of configs
 
@@ -243,6 +244,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `noStylisticRules`                                             | ❌ | - | Since v1.0.0<br>Config to disable most of the stylistic rules. Can be useful when integrating eslint-config-un into an existing project. |
 | `noUnsanitized`                                                | ✅ | [eslint-plugin-no-unsanitized](https://npmjs.com/eslint-plugin-no-unsanitized) (`no-unsanitized`)  | Since v1.0.0 |
 | ![CSpell](./assets/vscode-icons-file-type-cspell.svg) `cspell` | ❌ | [@cspell/eslint-plugin](https://npmjs.com/package/@cspell/eslint-plugin) (`@cspell`) | Since v1.0.0 |
+| ![ESLint](./assets/devicon-eslint.svg) `eslintPlugin`          | ❌ | [eslint-plugin-eslint-plugin](https://npmjs.com/eslint-plugin-eslint-plugin) (`eslint-plugin`) | Since v1.0.0<br>For linting ESLint plugins |
 
 ## How to use
 

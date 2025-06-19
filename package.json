@@ -173,6 +173,7 @@
     "diff": "8.0.2",
     "eslint": "9.29.0",
     "eslint-plugin-better-tailwindcss": "3.2.1",
+    "eslint-plugin-eslint-plugin": "6.5.0",
     "eslint-plugin-no-type-assertion": "1.3.0",
     "eslint-plugin-prettier": "5.5.0",
     "eslint-plugin-storybook": "9.0.11",
@@ -193,6 +194,7 @@
     "@graphql-eslint/eslint-plugin": "^4.4.0",
     "eslint": "^9.15.0",
     "eslint-plugin-better-tailwindcss": "^3.2.0",
+    "eslint-plugin-eslint-plugin": "^6.5.0",
     "eslint-plugin-storybook": "^9.0.9",
     "eslint-plugin-tailwindcss": "^3.18.0",
     "eslint-plugin-turbo": "^2.5.4"
@@ -202,6 +204,9 @@
       "optional": true
     },
     "eslint-plugin-better-tailwindcss": {
+      "optional": true
+    },
+    "eslint-plugin-eslint-plugin": {
       "optional": true
     },
     "eslint-plugin-storybook": {

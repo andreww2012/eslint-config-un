@@ -196,6 +196,10 @@ const ALL_STYLISTIC_RULES = {
   es: {
     // None
   },
+  'eslint-plugin': {
+    'meta-property-ordering': true,
+    'test-case-property-ordering': true,
+  },
   graphql: {
     alphabetize: true,
     'description-style': true,

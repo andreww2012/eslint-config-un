@@ -15,6 +15,7 @@ export type Prettify<T> = {
 } & {};
 
 export type {
+  ConditionalKeys,
   Tagged,
   ReadonlyDeep,
   SetRequired,

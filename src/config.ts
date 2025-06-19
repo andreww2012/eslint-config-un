@@ -198,6 +198,7 @@ export const eslintConfigInternal = async (
   const isErasableSyntaxOnlyEnabled = getIsConfigEnabled('erasableSyntaxOnly', false);
   const isEsEnabled = getIsConfigEnabled('es', false);
   const isEslintCommentsEnabled = getIsConfigEnabled('eslintComments');
+  const isEslintPluginEnabled = getIsConfigEnabled('eslintPlugin', false);
   const isGraphqlEnabled = getIsConfigEnabled('graphql', 'graphql');
   const isImportEnabled = getIsConfigEnabled('import');
   // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
@@ -278,6 +279,7 @@ export const eslintConfigInternal = async (
       erasableSyntaxOnly: {enabled: isErasableSyntaxOnlyEnabled},
       es: {enabled: isEsEnabled},
       eslintComments: {enabled: isEslintCommentsEnabled},
+      eslintPlugin: {enabled: isEslintPluginEnabled},
       graphql: {enabled: isGraphqlEnabled},
       html: {enabled: isHtmlEnabled},
       import: {enabled: isImportEnabled},
@@ -502,6 +504,8 @@ export const eslintConfigInternal = async (
     isErasableSyntaxOnlyEnabled &&
       import('./configs/erasable-syntax-only').then((m) => m.erasableSyntaxOnlyUnConfig(context)),
     isCspellEnabled && import('./configs/cspell').then((m) => m.cspellUnConfig(context)),
+    isEslintPluginEnabled &&
+      import('./configs/eslint-plugin').then((m) => m.eslintPluginUnConfig(context)),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

@@ -138,6 +138,10 @@ export const pluginsLoaders = {
     () => import('eslint-plugin-erasable-syntax-only'),
   ),
   es: genPluginLoader('eslint-plugin-es-x', () => import('eslint-plugin-es-x')),
+  'eslint-plugin': genPluginLoader(
+    'eslint-plugin-eslint-plugin',
+    () => import('eslint-plugin-eslint-plugin'),
+  ),
   graphql: genPluginLoader(
     '@graphql-eslint/eslint-plugin',
     () =>

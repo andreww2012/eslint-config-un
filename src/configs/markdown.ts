@@ -353,6 +353,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
       // won't disable: yml/file-extension, sonarjs/no-identical-functions, @eslint-community/eslint-comments/no-unlimited-disable
       .disableAnyRule('unused-imports', 'no-unused-imports') // [too-strict]
       .disableAnyRule('turbo', 'no-undeclared-env-vars') // [runtime-only]
+      .disableAnyRule('eslint-plugin', 'no-property-in-node') // [type-aware]
       .addBulkRules(optionsResolved.overridesCodeBlocks); // TODO
 
     if (codeBlocksIgnoredLanguages?.length) {
