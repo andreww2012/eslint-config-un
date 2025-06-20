@@ -228,7 +228,7 @@
       "optional": true
     }
   },
-  "bundleDependencies": [
+  "bundledDependencies": [
     "eslint-plugin-prettier",
     "angular-eslint-plugin-template17",
     "angular-eslint-plugin18",
