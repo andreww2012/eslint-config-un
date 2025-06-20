@@ -49,6 +49,12 @@
     "test": "nr typegen && nr knip && nr spellcheck && nr lint && nr build:code:test",
     "lint:public-types": "npx @arethetypeswrong/cli --pack . --profile esm-only"
   },
+  "resolutions": {
+    "angular-eslint-plugin-template17": "file:./deps/angular-eslint-eslint-plugin-template-17.5.3.tgz",
+    "angular-eslint-plugin18": "file:./deps/angular-eslint-eslint-plugin-18.4.3.tgz",
+    "eslint-plugin-no-type-assertion": "file:./deps/eslint-plugin-no-type-assertion-1.3.0.tgz",
+    "eslint-plugin-prettier": "file:./deps/eslint-plugin-prettier-5.5.0.tgz"
+  },
   "overrides": {
     "eslint-plugin-jest": {
       "@typescript-eslint/eslint-plugin": "$@typescript-eslint/eslint-plugin"
