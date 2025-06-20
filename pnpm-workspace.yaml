@@ -2,3 +2,4 @@ onlyBuiltDependencies:
   - esbuild
   - unrs-resolver
 nodeLinker: hoisted
+packageImportMethod: clone-or-copy
