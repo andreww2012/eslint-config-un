@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-un",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "A universal-ish ESLint config aiming to be reasonably strict and easily configurable.",
   "keywords": [
     "eslint",
@@ -47,8 +47,7 @@
     "build:code:test": "tsup --silent --out-dir temp",
     "build": "nr typegen && nr build:code",
     "test": "nr typegen && nr knip && nr spellcheck && nr lint && nr build:code:test",
-    "lint:public-types": "npx @arethetypeswrong/cli --pack . --profile esm-only",
-    "prepublishOnly": "nr test && nr build && nr lint:public-types"
+    "lint:public-types": "npx @arethetypeswrong/cli --pack . --profile esm-only"
   },
   "overrides": {
     "eslint-plugin-jest": {
@@ -223,6 +222,12 @@
       "optional": true
     }
   },
+  "bundleDependencies": [
+    "eslint-plugin-prettier",
+    "angular-eslint-plugin-template17",
+    "angular-eslint-plugin18",
+    "eslint-plugin-no-type-assertion"
+  ],
   "packageManager": "pnpm@10.12.1",
   "engines": {
     "node": "^20.11 || >=21.2.0"
