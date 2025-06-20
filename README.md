@@ -37,12 +37,24 @@ Minimum supported versions:
 ```shell
 npm i -D eslint-config-un eslint@latest
 pnpm i -D eslint-config-un eslint@latest
-yarn add -D eslint-config-un eslint@latest
+yarn add -D eslint-config-un eslint@latest # Yarn Berry only (v2+)
 ```
 
 Almost all the used plugins are direct dependencies of this package, you don't need to install them separately. We aim to update the dependencies within 1 month after their release.
 
 Certain plugins are optional peer dependencies, which means that you need to install them manually if they are end up being used.
+
+<details>
+<summary>Installation with Yarn Classic (v1)</summary>
+
+Yarn Classic (v1) does not support installing packages by npm name that have dependencies referenced by `file:` protocol - which we're using in this package. It fails with "Tarball is not in network and can not be located in cache" error. Installing directly from the tarball do work:
+
+```shell
+yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERSION>.tgz eslint@latest
+```
+</details>
+
+
 
 <details>
 <summary>Optional peer dependencies & reason</summary>
