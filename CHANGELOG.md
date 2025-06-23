@@ -113,7 +113,7 @@
 - `eslint-plugin-qwik`: [1.13.0 -> 1.14.1](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik%401.13.0...eslint-plugin-qwik%401.14.1)
 - `eslint-plugin-react-compiler`: 19.1.0-rc.1 -> 19.1.0-rc.2
 - `eslint-plugin-regexp`: [2.7.0 -> 2.9.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v2.7.0...v2.9.0)
-- `eslint-plugin-svelte`: [3.5.1 -> 3.9.2](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte%403.5.1...eslint-plugin-svelte%403.9.2)
+- `eslint-plugin-svelte`: [3.5.1 -> 3.9.3](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte%403.5.1...eslint-plugin-svelte%403.9.3)
   - 🟢 (enabled) [`no-top-level-browser-globals`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-top-level-browser-globals)
   - 🟢 [`no-add-event-listener`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-add-event-listener)
   - 🟢 [`prefer-writable-derived`](https://sveltejs.github.io/eslint-plugin-svelte/rules/prefer-writable-derived)
