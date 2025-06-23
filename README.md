@@ -75,6 +75,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `turbo`               | `eslint-plugin-turbo`              |
 | `vitest`              | `@vitest/eslint-plugin`            |
 | `@next/next`          | `@next/eslint-plugin-next`         |
+| `astro`               | `eslint-plugin-astro`              |
 </details>
 
 ### Usage
