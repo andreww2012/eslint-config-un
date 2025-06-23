@@ -61,6 +61,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | --------------------- | ---------------------------------- |
 | `@eslint-react`       | `@eslint-react/eslint-plugin`      |
 | `@next/next`          | `@next/eslint-plugin-next`         |
+| `@tanstack/query`     | `@tanstack/eslint-plugin-query`    |
 | `astro`               | `eslint-plugin-astro`              |
 | `betterTailwindcss`   | `eslint-plugin-better-tailwindcss` |
 | `eslintPlugin`        | `eslint-plugin-eslint-plugin`      |
