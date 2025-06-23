@@ -78,6 +78,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `storybook`           | `eslint-plugin-storybook`          |
 | `svelte`              | `eslint-plugin-svelte`             |
 | `tailwindcss`         | `eslint-plugin-tailwindcss`        |
+| `testing-library`     | `eslint-plugin-testing-library`    |
 | `turbo`               | `eslint-plugin-turbo`              |
 | `vitest`              | `@vitest/eslint-plugin`            |
 </details>
