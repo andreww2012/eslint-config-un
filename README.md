@@ -65,6 +65,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `astro`               | `eslint-plugin-astro`              |
 | `ava`                 | `eslint-plugin-ava`                |
 | `betterTailwindcss`   | `eslint-plugin-better-tailwindcss` |
+| `ember`               | `eslint-plugin-ember`              |
 | `eslintPlugin`        | `eslint-plugin-eslint-plugin`      |
 | `graphql`             | `@graphql-eslint/eslint-plugin`    |
 | `jest`                | `eslint-plugin-jest`               |
