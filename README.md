@@ -59,15 +59,20 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 
 | Default plugin prefix | Package name                       |
 | --------------------- | ---------------------------------- |
-| `graphql`             | `@graphql-eslint/eslint-plugin`    |
+| `@eslint-react`       | `@eslint-react/eslint-plugin`      |
 | `betterTailwindcss`   | `eslint-plugin-better-tailwindcss` |
+| `eslintPlugin`        | `eslint-plugin-eslint-plugin`      |
+| `graphql`             | `@graphql-eslint/eslint-plugin`    |
+| `jest`                | `eslint-plugin-jest`               |
+| `qwik`                | `eslint-plugin-qwik`               |
+| `react-compiler`      | `eslint-plugin-react-compiler`     |
+| `react-hooks`         | `eslint-plugin-react-hooks`        |
+| `react-refresh`       | `eslint-plugin-react-refresh`      |
+| `react`               | `eslint-plugin-react`              |
 | `storybook`           | `eslint-plugin-storybook`          |
 | `tailwindcss`         | `eslint-plugin-tailwindcss`        |
 | `turbo`               | `eslint-plugin-turbo`              |
-| `eslintPlugin`        | `eslint-plugin-eslint-plugin`      |
-| `jest`                | `eslint-plugin-jest`               |
 | `vitest`              | `@vitest/eslint-plugin`            |
-| `qwik`                | `eslint-plugin-qwik`               |
 </details>
 
 ### Usage
