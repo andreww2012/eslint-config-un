@@ -40,9 +40,9 @@ pnpm i -D eslint-config-un eslint@latest
 yarn add -D eslint-config-un eslint@latest # Yarn Berry only (v2+)
 ```
 
-Almost all the used plugins are direct dependencies of this package, you don't need to install them separately. We aim to update the dependencies within 1 month after their release.
+Commonly used plugins are direct dependencies of this package, you don't need to install them separately. We aim to update the dependencies within 1 month after their release.
 
-Certain plugins are optional peer dependencies, which means that you need to install them manually if they are end up being used.
+Certain plugins (usually framework/library specific ones) are optional peer dependencies, which means that you need to install them manually if they are end up being used. You need to run ESLint with our config once to find out which plugins should be installed manually.
 
 <details>
 <summary>Installation with Yarn Classic (v1)</summary>
@@ -54,21 +54,18 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 ```
 </details>
 
-
-
 <details>
-<summary>Optional peer dependencies & reason</summary>
+<summary>List of optional peer dependencies</summary>
 
-The reason for making these plugins not coming with this package is because they have heavy non-optional peer dependencies, such as `graphql`, `storybook` and `tailwindcss`. Not only that they're heavy, but having those peer dependencies installed would make this package think that the corresponding config is used.
-
-| Default plugin prefix | Package name | Reason |
-| --------------------- | ------------ | ------ |
-| `graphql`             | `@graphql-eslint/eslint-plugin` | Heavy dependency `graphql` |
-| `betterTailwindcss`   | `eslint-plugin-better-tailwindcss` | Heavy dependency `tailwindcss` |
-| `storybook`           | `eslint-plugin-storybook` | Heavy dependency `storybook` |
-| `tailwindcss`         | `eslint-plugin-tailwindcss` | Heavy dependency `tailwindcss` |
-| `turbo`               | `eslint-plugin-turbo` | Heavy dependency `turbo` |
-| `eslintPlugin`        | `eslint-plugin-eslint-plugin` | Very specific plugin |
+| Default plugin prefix | Package name                       |
+| --------------------- | ---------------------------------- |
+| `graphql`             | `@graphql-eslint/eslint-plugin`    |
+| `betterTailwindcss`   | `eslint-plugin-better-tailwindcss` |
+| `storybook`           | `eslint-plugin-storybook`          |
+| `tailwindcss`         | `eslint-plugin-tailwindcss`        |
+| `turbo`               | `eslint-plugin-turbo`              |
+| `eslintPlugin`        | `eslint-plugin-eslint-plugin`      |
+| `jest`                | `eslint-plugin-jest`               |
 </details>
 
 ### Usage

@@ -206,7 +206,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     }),
     languageOptions: {
       // Yes, `globals.globals` is required
-      globals: eslintPluginJest.environments.globals.globals,
+      globals: eslintPluginJest?.environments.globals.globals,
     },
   };
 
