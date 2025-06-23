@@ -152,7 +152,7 @@
     "@jest/environment": "30.0.2",
     "@jest/expect": "30.0.2",
     "@next/eslint-plugin-next": "15.3.4",
-    "@sveltejs/kit": "2.21.5",
+    "@sveltejs/kit": "2.22.0",
     "@tanstack/eslint-plugin-query": "5.78.0",
     "@types/debug": "4.1.12",
     "@types/eslint-plugin-jsx-a11y": "6.10.0",
