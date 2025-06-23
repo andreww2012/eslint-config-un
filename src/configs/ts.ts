@@ -391,7 +391,7 @@ export interface TsEslintConfigOptions
   /**
    * Disallows any type assertions via [`eslint-plugin-no-type-assertion`](https://npmjs.com/eslint-plugin-no-type-assertion) plugin.
    *
-   * If you'd like to disallow only unsafe type assertions, enable [`@typescript-eslint/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule instead.
+   * If you'd like to disallow only unsafe type assertions, enable [`no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule instead.
    * @default false
    */
   configNoTypeAssertion?: boolean | UnConfigOptions<'no-type-assertion'>;
@@ -494,14 +494,14 @@ export interface TsEslintConfigOptions
 
   /**
    * If you have too many `no-unsafe-*` reports, you can disable them all using this option. All the rules disabled by this option are:
-   * - `@typescript-eslint/no-unsafe-argument`
-   * - `@typescript-eslint/no-unsafe-assignment`
-   * - `@typescript-eslint/no-unsafe-call`
-   * - `@typescript-eslint/no-unsafe-enum-comparison`
-   * - `@typescript-eslint/no-unsafe-member-access`
-   * - `@typescript-eslint/no-unsafe-return`
+   * - [`no-unsafe-argument`](https://typescript-eslint.io/rules/no-unsafe-argument)
+   * - [`no-unsafe-assignment`](https://typescript-eslint.io/rules/no-unsafe-assignment)
+   * - [`no-unsafe-call`](https://typescript-eslint.io/rules/no-unsafe-call)
+   * - [`no-unsafe-enum-comparison`](https://typescript-eslint.io/rules/no-unsafe-enum-comparison)
+   * - [`no-unsafe-member-access`](https://typescript-eslint.io/rules/no-unsafe-member-access)
+   * - [`no-unsafe-return`](https://typescript-eslint.io/rules/no-unsafe-return)
    *
-   * Note: this option does not affect [`@typescript-eslint/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule, which is disabled by default.
+   * Note: this option does not affect [`no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule, which is disabled by default.
    */
   disableNoUnsafeRules?: boolean;
 }

@@ -100,7 +100,7 @@ export const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS: (keyof AllEslintRules)[] 
   'unicode-bom', // 🟣
 
   // ts
-  // won't disable: @typescript-eslint/consistent-type-imports, @typescript-eslint/no-useless-empty-export
+  // won't disable: ts/consistent-type-imports, ts/no-useless-empty-export
   'ts/ban-ts-comment', // [runtime-only]
   'ts/class-methods-use-this', // [runtime-only]
   'ts/explicit-function-return-type', // [too-strict]

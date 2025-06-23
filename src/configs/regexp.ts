@@ -78,7 +78,7 @@ export const regexpUnConfig: UnConfigFn<'regexp'> = (context) => {
     .addRule('prefer-predefined-assertion', ERROR) // 🟢
     .addRule('prefer-quantifier', ERROR)
     .addRule('prefer-range', ERROR) // 🟢
-    // Same (?) as `@typescript-eslint/prefer-regexp-exec` which is turned off by default
+    // Same (?) as `ts/prefer-regexp-exec` which is turned off by default
     .addRule('prefer-regexp-exec', OFF)
     .disableAnyRule('unicorn', 'prefer-regexp-test')
     .addRule('prefer-regexp-test', ERROR) // TODO better than the unicorn rule? Off by default

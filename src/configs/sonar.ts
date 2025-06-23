@@ -121,7 +121,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('csrf', ERROR) // [S4502] 🟢 📦 `csurf`
     .addRule('cyclomatic-complexity', OFF) // [S1541]
     .addRule('declarations-in-global-scope', OFF) // [S3798]
-    // ⚠️ `import/no-deprecated`, `@typescript-eslint/no-deprecated` which also likely do the job better
+    // ⚠️ `import/no-deprecated`, ts/no-deprecated` which also likely do the job better
     .addRule('deprecation', OFF) // [S1874] 🟢💭
     .addRule('destructuring-assignment-syntax', OFF) // [S3514]
     // ⚠️ Other rules & TypeScript itself; has false positives
@@ -186,7 +186,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     // ⚠️ Seems too restrictive for me, alphabetical sorting is not a very rare requirement
     .addRule('no-alphabetical-sort', OFF) // [S2871] 🟢💭
     .addRule('no-angular-bypass-sanitization', ERROR) // [S6268] 🟢 📦 `@angular/*`
-    // ⚠️ `@typescript-eslint/no-array-delete`; works on TS code only anyway
+    // ⚠️ ts/no-array-delete`; works on TS code only anyway
     .addRule('no-array-delete', OFF) // [S2870] 🟢💭
     // ⚠️ Handled by TypeScript
     .addRule('no-associative-arrays', OFF) // [S3579] 🟢💭
@@ -207,7 +207,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     // ⚠️ `no-useless-assignment`
     .addRule('no-dead-store', OFF) // [S1854] 🟢
     .addRule('no-delete-var', ERROR) // [S3001] 🟢
-    // ⚠️ `@typescript-eslint/no-duplicate-type-constituents`
+    // ⚠️ ts/no-duplicate-type-constituents`
     .addRule('no-duplicate-in-composite', OFF) // [S4621] 🟢
     .addRule('no-duplicate-string', OFF) // [S1192]
     .addRule('no-duplicated-branches', ERROR) // [S1871] 🟢
@@ -255,11 +255,11 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('no-incomplete-assertions', testsRulesSeverity) // [S2970] 🟢🧪 (only patterns are checked, not package imports)
     // ⚠️ `consistent-return`
     .addRule('no-inconsistent-returns', OFF) // [S3801]
-    // ⚠️ `@typescript-eslint/restrict-plus-operands`
+    // ⚠️ ts/restrict-plus-operands`
     .addRule('no-incorrect-string-concat', OFF) // [S3402] 💭
     .addRule('no-internal-api-use', ERROR) // [S6627] 🟢
     .addRule('no-intrusive-permissions', ERROR) // [S5604] 🟢
-    // ⚠️ `@typescript-eslint/await-thenable`, `unicorn/no-unnecessary-await`
+    // ⚠️ ts/await-thenable`, `unicorn/no-unnecessary-await`
     .addRule('no-invalid-await', OFF) // [S4123] 🟢💭
     // ⚠️ `regexp/no-invalid-regexp`
     .addRule('no-invalid-regexp', OFF) // [S5856] 🟢💭🔤
@@ -400,7 +400,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('too-many-break-or-continue-in-loop', OFF) // [S135]
     // ⚠️ TypeScript
     .addRule('unicode-aware-regex', OFF) // [S5867] 🔤💭
-    // `unused-imports/no-unused-imports`, `@typescript-eslint/no-unused-vars`, `no-unused-vars`
+    // `unused-imports/no-unused-imports`, ts/no-unused-vars`, `no-unused-vars`
     .addRule('unused-import', OFF) // [S1128] 🟢💭
     .addRule('unused-named-groups', ERROR) // [S5860] 🟢💭🔤
     .addRule('unverified-certificate', ERROR) // [S4830] 🟢 📦 `node:https`, `node:tls`
