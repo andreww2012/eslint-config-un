@@ -67,6 +67,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `eslintPlugin`        | `eslint-plugin-eslint-plugin`      |
 | `jest`                | `eslint-plugin-jest`               |
 | `vitest`              | `@vitest/eslint-plugin`            |
+| `qwik`                | `eslint-plugin-qwik`               |
 </details>
 
 ### Usage

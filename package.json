@@ -125,7 +125,6 @@
     "eslint-plugin-prefer-arrow-functions": "3.6.2",
     "eslint-plugin-prettier": "file:./deps/eslint-plugin-prettier-5.5.0.tgz",
     "eslint-plugin-promise": "7.2.1",
-    "eslint-plugin-qwik": "1.14.1",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-compiler": "19.1.0-rc.2",
     "eslint-plugin-react-hooks": "5.2.0",
@@ -180,6 +179,7 @@
     "eslint-plugin-better-tailwindcss": "3.2.1",
     "eslint-plugin-eslint-plugin": "6.5.0",
     "eslint-plugin-jest": "28.14.0",
+    "eslint-plugin-qwik": "1.14.1",
     "eslint-plugin-storybook": "9.0.11",
     "eslint-plugin-tailwindcss": "3.18.0",
     "eslint-plugin-turbo": "2.5.4",
@@ -201,6 +201,7 @@
     "eslint-plugin-better-tailwindcss": "^3.2.0",
     "eslint-plugin-eslint-plugin": "^6.5.0",
     "eslint-plugin-jest": "^28.14.0",
+    "eslint-plugin-qwik": "^1.14.1",
     "eslint-plugin-storybook": "^9.0.9",
     "eslint-plugin-tailwindcss": "^3.18.0",
     "eslint-plugin-turbo": "^2.5.4"
@@ -219,6 +220,9 @@
       "optional": true
     },
     "eslint-plugin-jest": {
+      "optional": true
+    },
+    "eslint-plugin-qwik": {
       "optional": true
     },
     "eslint-plugin-storybook": {
