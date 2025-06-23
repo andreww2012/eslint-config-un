@@ -80,7 +80,7 @@
   - 🟢 (enabled) [`no-aria-hidden-on-focusable`](https://html-eslint.org/docs/rules/no-aria-hidden-on-focusable)
   - 🟢 [`no-duplicate-in-head`](https://html-eslint.org/docs/rules/no-duplicate-in-head)
   - 🟢 [`no-empty-headings`](https://html-eslint.org/docs/rules/no-empty-headings)
-- `@next/eslint-plugin-next`: [15.3.2 -> 15.3.3](https://github.com/vercel/next.js/compare/v15.3.2...v15.3.3)
+- `@next/eslint-plugin-next`: [15.3.2 -> 15.3.4](https://github.com/vercel/next.js/compare/v15.3.2...v15.3.4)
 - `@vitest/eslint-plugin`: [1.1.44 -> 1.2.7](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.44...v1.2.7)
   - 🟢 (enabled) [`consistent-vitest-vi`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/consistent-vitest-vi.md)
   - ❓ (enabled conditionally) [`no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
