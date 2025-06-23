@@ -72,6 +72,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `react-hooks`         | `eslint-plugin-react-hooks`        |
 | `react-refresh`       | `eslint-plugin-react-refresh`      |
 | `react`               | `eslint-plugin-react`              |
+| `solid`               | `eslint-plugin-solid`              |
 | `storybook`           | `eslint-plugin-storybook`          |
 | `svelte`              | `eslint-plugin-svelte`             |
 | `tailwindcss`         | `eslint-plugin-tailwindcss`        |
