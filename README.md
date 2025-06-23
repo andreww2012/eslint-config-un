@@ -64,6 +64,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `eslintPlugin`        | `eslint-plugin-eslint-plugin`      |
 | `graphql`             | `@graphql-eslint/eslint-plugin`    |
 | `jest`                | `eslint-plugin-jest`               |
+| `pnpm`                | `eslint-plugin-pnpm`               |
 | `qwik`                | `eslint-plugin-qwik`               |
 | `react-compiler`      | `eslint-plugin-react-compiler`     |
 | `react-hooks`         | `eslint-plugin-react-hooks`        |

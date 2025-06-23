@@ -182,9 +182,6 @@ importers:
       eslint-plugin-pinia:
         specifier: 0.4.1
         version: 0.4.1(@typescript-eslint/utils@8.34.1(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.29.0(jiti@2.4.2))
-      eslint-plugin-pnpm:
-        specifier: 0.3.1
-        version: 0.3.1(eslint@9.29.0(jiti@2.4.2))
       eslint-plugin-prefer-arrow-functions:
         specifier: 3.6.2
         version: 3.6.2(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
@@ -342,6 +339,9 @@ importers:
       eslint-plugin-jest:
         specifier: 28.14.0
         version: 28.14.0(@typescript-eslint/eslint-plugin@8.34.1(@typescript-eslint/parser@8.34.1(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
+      eslint-plugin-pnpm:
+        specifier: 0.3.1
+        version: 0.3.1(eslint@9.29.0(jiti@2.4.2))
       eslint-plugin-qwik:
         specifier: 1.14.1
         version: 1.14.1(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)

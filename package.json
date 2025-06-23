@@ -120,7 +120,6 @@
     "eslint-plugin-package-json": "0.40.0",
     "eslint-plugin-perfectionist": "4.14.0",
     "eslint-plugin-pinia": "0.4.1",
-    "eslint-plugin-pnpm": "0.3.1",
     "eslint-plugin-prefer-arrow-functions": "3.6.2",
     "eslint-plugin-prettier": "file:./deps/eslint-plugin-prettier-5.5.0.tgz",
     "eslint-plugin-promise": "7.2.1",
@@ -175,6 +174,7 @@
     "eslint-plugin-better-tailwindcss": "3.2.1",
     "eslint-plugin-eslint-plugin": "6.5.0",
     "eslint-plugin-jest": "28.14.0",
+    "eslint-plugin-pnpm": "0.3.1",
     "eslint-plugin-qwik": "1.14.1",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-compiler": "19.1.0-rc.2",
@@ -202,6 +202,7 @@
     "eslint-plugin-better-tailwindcss": "^3.2.0",
     "eslint-plugin-eslint-plugin": "^6.5.0",
     "eslint-plugin-jest": "^28.14.0",
+    "eslint-plugin-pnpm": "^0.3.1",
     "eslint-plugin-qwik": "^1.14.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
@@ -228,6 +229,9 @@
       "optional": true
     },
     "eslint-plugin-jest": {
+      "optional": true
+    },
+    "eslint-plugin-pnpm": {
       "optional": true
     },
     "eslint-plugin-qwik": {
