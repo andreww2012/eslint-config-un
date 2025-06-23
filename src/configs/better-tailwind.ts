@@ -111,13 +111,13 @@ export const betterTailwindUnConfig: UnConfigFn<'betterTailwind'> = (context) =>
       tailwindMajorVersion === 3 ? OFF : WARNING,
     )
     .addRule(
-      'multiline',
+      'enforce-consistent-line-wrapping',
       breakUpClassesIntoMultipleLines ? WARNING : OFF,
       breakUpClassesIntoMultipleLines ? [breakUpClassesIntoMultipleLines] : [],
     ) // 🟢
     .addRule('no-duplicate-classes', WARNING) // 🟢
     .addRule('no-unnecessary-whitespace', WARNING) // 🟢
-    .addRule('sort-classes', WARNING) // 🟢
+    .addRule('enforce-consistent-class-order', WARNING) // 🟢
     /* Category: Correctness rules */
     .addRule('no-conflicting-classes', ERROR)
     .addRule(
