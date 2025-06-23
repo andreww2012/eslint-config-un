@@ -74,6 +74,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `tailwindcss`         | `eslint-plugin-tailwindcss`        |
 | `turbo`               | `eslint-plugin-turbo`              |
 | `vitest`              | `@vitest/eslint-plugin`            |
+| `@next/next`          | `@next/eslint-plugin-next`         |
 </details>
 
 ### Usage
