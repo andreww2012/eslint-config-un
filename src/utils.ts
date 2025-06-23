@@ -100,3 +100,6 @@ export function getKeysOfTruthyValues<T extends Record<string, unknown>>(
   }
   return result;
 }
+
+export const isIn = <T extends object>(key: PropertyKey, object: T): key is keyof T =>
+  key in object;

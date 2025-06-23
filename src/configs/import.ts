@@ -53,7 +53,11 @@ export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
 
 export const importUnConfig: UnConfigFn<'import'> = async (context) => {
   const [eslintPluginImportX, {createTypeScriptImportResolver}] = await Promise.all([
-    pluginsLoaders.import(context) as unknown as Promise<typeof import('eslint-plugin-import-x')>,
+    pluginsLoaders
+      .import(context)
+      .then(
+        ({contents}) => contents as unknown as Promise<typeof import('eslint-plugin-import-x')>,
+      ),
     interopDefault(import('eslint-import-resolver-typescript')),
   ]);
 

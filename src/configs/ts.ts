@@ -17,7 +17,15 @@ import {
   getRuleUnSeverityAndOptionsFromEntry,
 } from '../eslint';
 import type {ObjectValues} from '../types';
-import {type MaybeFn, assignDefaults, interopDefault, maybeCall, omit, unique} from '../utils';
+import {
+  type MaybeFn,
+  assignDefaults,
+  interopDefault,
+  isIn,
+  maybeCall,
+  omit,
+  unique,
+} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
@@ -1166,17 +1174,13 @@ export const tsUnConfig: UnConfigFn<
                   orderCompilerOptions.orderWithinGroup &&
                   group in orderCompilerOptions.orderWithinGroup
                     ? orderCompilerOptions.orderWithinGroup[group] === 'alphabetical'
-                      ? group in TSCONFIG_COMPILER_OPTIONS_KEYS
-                        ? TSCONFIG_COMPILER_OPTIONS_KEYS[
-                            group as keyof typeof TSCONFIG_COMPILER_OPTIONS_KEYS
-                          ]
+                      ? isIn(group, TSCONFIG_COMPILER_OPTIONS_KEYS)
+                        ? TSCONFIG_COMPILER_OPTIONS_KEYS[group]
                         : []
                       : orderCompilerOptions.orderWithinGroup[group] || []
-                    : group in TSCONFIG_COMPILER_OPTIONS_KEYS
+                    : isIn(group, TSCONFIG_COMPILER_OPTIONS_KEYS)
                       ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS.antfu.filter((v) =>
-                          TSCONFIG_COMPILER_OPTIONS_KEYS[
-                            group as keyof typeof TSCONFIG_COMPILER_OPTIONS_KEYS
-                          ].includes(v as never),
+                          TSCONFIG_COMPILER_OPTIONS_KEYS[group].includes(v as never),
                         )
                       : [],
                 )

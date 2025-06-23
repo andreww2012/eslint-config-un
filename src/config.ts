@@ -31,6 +31,7 @@ import {
 } from './eslint';
 import {
   LOADABLE_PLUGIN_PREFIXES_LIST,
+  OPTIONAL_PLUGINS_PACKAGE_NAMES,
   PLUGIN_PREFIXES_LIST,
   type PluginPrefix,
   pluginsLoaders,
@@ -41,6 +42,7 @@ import {
   assignDefaults,
   fetchPackageInfo,
   interopDefault,
+  isIn,
   objectEntriesUnsafe,
   omit,
 } from './utils';
@@ -102,8 +104,8 @@ export const eslintConfigInternal = async (
       }
       throw error;
     }),
-    pluginsLoaders.tailwindcss({logger} as UnConfigContext, {doNotThrowIfNotFound: true}),
-    pluginsLoaders.svelte({logger} as UnConfigContext),
+    pluginsLoaders.tailwindcss({logger} as UnConfigContext).then(({contents}) => contents),
+    pluginsLoaders.svelte({logger} as UnConfigContext).then(({contents}) => contents),
   ]);
   const packagesInfo = packagesInfoRaw as UnConfigContext['packagesInfo'];
 
@@ -599,14 +601,26 @@ export const eslintConfigInternal = async (
     ? [...context.usedPlugins]
     : LOADABLE_PLUGIN_PREFIXES_LIST;
 
+  const packagesThatNeedsToBeManuallyInstalled: {
+    name: string;
+    pluginPrefix: string;
+    versionRange: string;
+  }[] = [];
   const loadedPlugins = Object.fromEntries(
     (
       await Promise.all(
         usedPluginPrefixes.map(async (pluginPrefix) => {
-          const plugin =
-            pluginPrefix in pluginsLoaders
-              ? await pluginsLoaders[pluginPrefix as keyof typeof pluginsLoaders](context)
-              : null;
+          const result = isIn(pluginPrefix, pluginsLoaders)
+            ? await pluginsLoaders[pluginPrefix](context)
+            : null;
+          const plugin = result?.contents;
+          if (result && !plugin && isIn(result.packageName, OPTIONAL_PLUGINS_PACKAGE_NAMES)) {
+            packagesThatNeedsToBeManuallyInstalled.push({
+              name: result.packageName,
+              pluginPrefix,
+              versionRange: OPTIONAL_PLUGINS_PACKAGE_NAMES[result.packageName],
+            });
+          }
           if (pluginPrefix) {
             debug(
               `Plugin \`${styleText('blue', pluginPrefix)}\` loaded, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
@@ -617,6 +631,17 @@ export const eslintConfigInternal = async (
       )
     ).filter((v) => v != null),
   );
+  if (packagesThatNeedsToBeManuallyInstalled.length > 0) {
+    context.logger.fatal(
+      `Plugin${packagesThatNeedsToBeManuallyInstalled.length === 1 ? '' : 's'} that listed in optional peer dependencies ${packagesThatNeedsToBeManuallyInstalled.length === 1 ? 'was' : 'were'} used, but not installed. Please install ${packagesThatNeedsToBeManuallyInstalled.length === 1 ? 'it' : 'them'} by yourself or disable corresponding config${packagesThatNeedsToBeManuallyInstalled.length === 1 ? '' : 's'} in order for this error to disappear:
+${packagesThatNeedsToBeManuallyInstalled
+  .map(
+    ({name, versionRange}) =>
+      `  "${styleText('yellow', name)}": "${styleText('green', versionRange)}",`,
+  )
+  .join('\n')}`,
+    );
+  }
 
   const allPlugins = {
     ...loadedPlugins,

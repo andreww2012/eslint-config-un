@@ -1,5 +1,3 @@
-// eslint-disable-next-line node/no-unsupported-features/node-builtins
-import {styleText} from 'node:util';
 import {fixupPluginRules} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
 import type Eslint from 'eslint';
@@ -9,33 +7,45 @@ import type {EslintPlugin} from './eslint';
 import type {Promisable} from './types';
 import {type MaybeArray, arraify, interopDefault, objectKeysUnsafe, omit} from './utils';
 
-const OPTIONAL_PLUGINS_PACKAGE_NAMES = omit(ourPackageJson.peerDependencies, ['eslint']);
+export const OPTIONAL_PLUGINS_PACKAGE_NAMES = omit(ourPackageJson.peerDependencies, ['eslint']);
 
 const MODULE_NOT_FOUND_ERROR_CODES = ['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'];
 
 interface LoadPluginOptions {
-  doNotThrowIfNotFound?: boolean;
+  throwIfNotFound?: boolean;
 }
 
-export function genPluginLoader<T>(
-  packageName: string,
+export function genPluginLoader<T, N extends string>(
+  packageName: N,
   module: () => Promisable<T | {default: T}>,
   ignoreErrors?: undefined,
-): (context: UnConfigContext, options?: LoadPluginOptions) => Promise<T>;
-export function genPluginLoader<T>(
-  packageName: string,
+): (
+  context: UnConfigContext,
+  options?: LoadPluginOptions,
+) => Promise<{
+  packageName: N;
+  contents: T | (N extends keyof typeof OPTIONAL_PLUGINS_PACKAGE_NAMES ? null : never);
+}>;
+export function genPluginLoader<T, N extends string>(
+  packageName: N,
   module: () => Promisable<T | {default: T}>,
   ignoreErrors: MaybeArray<string>,
-): (context: UnConfigContext, options?: LoadPluginOptions) => Promise<T | null>;
-export function genPluginLoader<T>(
-  packageName: string,
+): (
+  context: UnConfigContext,
+  options?: LoadPluginOptions,
+) => Promise<{packageName: N; contents: T | null}>;
+export function genPluginLoader<T, N extends string>(
+  packageName: N,
   module: () => Promisable<T | {default: T}>,
   ignoreErrors?: MaybeArray<string>,
-): (context: UnConfigContext, options?: LoadPluginOptions) => Promise<T | null> {
+): (
+  context: UnConfigContext,
+  options?: LoadPluginOptions,
+) => Promise<{packageName: N; contents: T | null}> {
   return async (context, options) => {
     const isPluginOptionalPeerDependency = packageName in OPTIONAL_PLUGINS_PACKAGE_NAMES;
     try {
-      return await interopDefault(module());
+      return {contents: await interopDefault(module()), packageName};
     } catch (error: unknown) {
       const ignoredErrors: string[] = [
         ...arraify(ignoreErrors),
@@ -46,14 +56,10 @@ export function genPluginLoader<T>(
         typeof error === 'object' &&
         'code' in error &&
         typeof error.code === 'string' &&
-        ignoredErrors.includes(error.code)
+        ignoredErrors.includes(error.code) &&
+        !options?.throwIfNotFound
       ) {
-        if (isPluginOptionalPeerDependency && !options?.doNotThrowIfNotFound) {
-          context.logger.fatal(
-            `A plugin that listed in optional peer dependencies was used. Please install ${styleText('yellow', packageName)} package by yourself in order for this error to disappear. Its version must satisfy the following semver range: ${styleText('green', OPTIONAL_PLUGINS_PACKAGE_NAMES[packageName as keyof typeof OPTIONAL_PLUGINS_PACKAGE_NAMES])}`,
-          );
-        }
-        return null;
+        return {contents: null, packageName};
       }
       throw error;
     }
@@ -117,18 +123,17 @@ export const pluginsLoaders = {
     'eslint-plugin-better-tailwindcss',
     () => import('eslint-plugin-better-tailwindcss'),
   ),
-  'case-police': genPluginLoader<EslintPlugin>(
+  'case-police': genPluginLoader(
     'eslint-plugin-case-police',
-    // @ts-expect-error types mismatch
-    () => import('eslint-plugin-case-police'),
+    () => import('eslint-plugin-case-police') as Promise<EslintPlugin>,
   ),
   css: genPluginLoader('@eslint/css', () => import('@eslint/css')),
   // @ts-expect-error types mismatch
   'css-in-js': genPluginLoader('eslint-plugin-css', () => import('eslint-plugin-css')),
   cypress: genPluginLoader('eslint-plugin-cypress', () => import('eslint-plugin-cypress')),
-  'de-morgan': genPluginLoader<EslintPlugin>(
+  'de-morgan': genPluginLoader(
     'eslint-plugin-de-morgan',
-    () => import('eslint-plugin-de-morgan'),
+    () => import('eslint-plugin-de-morgan') as Promise<EslintPlugin>,
   ),
   depend: genPluginLoader('eslint-plugin-depend', () => import('eslint-plugin-depend')),
   ember: genPluginLoader('eslint-plugin-ember', () => import('eslint-plugin-ember')),
@@ -157,10 +162,9 @@ export const pluginsLoaders = {
       }>,
   ),
   html: genPluginLoader('eslint-plugin-html', () => import('eslint-plugin-html')),
-  import: genPluginLoader<EslintPlugin>(
+  import: genPluginLoader(
     'eslint-plugin-import-x',
-    // @ts-expect-error types mismatch
-    () => import('eslint-plugin-import-x'),
+    () => import('eslint-plugin-import-x') as unknown as Promise<EslintPlugin>,
   ),
   jest: genPluginLoader('eslint-plugin-jest', () => import('eslint-plugin-jest')),
   'jest-extended': genPluginLoader(
@@ -199,9 +203,9 @@ export const pluginsLoaders = {
     'eslint-plugin-package-json',
     () => import('eslint-plugin-package-json'),
   ),
-  perfectionist: genPluginLoader<EslintPlugin>(
+  perfectionist: genPluginLoader(
     'eslint-plugin-perfectionist',
-    () => import('eslint-plugin-perfectionist'),
+    () => import('eslint-plugin-perfectionist') as Promise<EslintPlugin>,
   ),
   // @ts-expect-error types mismatch
   pinia: genPluginLoader('eslint-plugin-pinia', () => import('eslint-plugin-pinia')),
@@ -231,13 +235,14 @@ export const pluginsLoaders = {
   ),
   regexp: genPluginLoader('eslint-plugin-regexp', () => import('eslint-plugin-regexp')),
   security: genPluginLoader('eslint-plugin-security', () => import('eslint-plugin-security')),
-  // @ts-expect-error types mismatch
-  solid: genPluginLoader<EslintPlugin>('eslint-plugin-solid', () => import('eslint-plugin-solid')),
+  solid: genPluginLoader(
+    'eslint-plugin-solid',
+    () => import('eslint-plugin-solid') as Promise<EslintPlugin>,
+  ),
   sonarjs: genPluginLoader('eslint-plugin-sonarjs', () => import('eslint-plugin-sonarjs')),
-  storybook: genPluginLoader<EslintPlugin>(
+  storybook: genPluginLoader(
     'eslint-plugin-storybook',
-    // @ts-expect-error types mismatch
-    () => import('eslint-plugin-storybook'),
+    () => import('eslint-plugin-storybook') as Promise<EslintPlugin>,
   ),
   svelte: genPluginLoader(
     'eslint-plugin-svelte',
@@ -257,9 +262,9 @@ export const pluginsLoaders = {
   ),
   // @ts-expect-error types mismatch
   toml: genPluginLoader('eslint-plugin-toml', () => import('eslint-plugin-toml')),
-  ts: genPluginLoader<EslintPlugin>('typescript-eslint', () =>
-    // @ts-expect-error types mismatch
-    import('typescript-eslint').then((m) => m.plugin),
+  ts: genPluginLoader(
+    'typescript-eslint',
+    () => import('typescript-eslint').then((m) => m.plugin) as Promise<EslintPlugin>,
   ),
   turbo: genPluginLoader('eslint-plugin-turbo', () => import('eslint-plugin-turbo')),
   unicorn: genPluginLoader('eslint-plugin-unicorn', () => import('eslint-plugin-unicorn')),
@@ -277,7 +282,10 @@ export const pluginsLoaders = {
   yml: genPluginLoader('eslint-plugin-yml', () => import('eslint-plugin-yml')),
 } satisfies Record<
   string,
-  (context: UnConfigContext, options?: LoadPluginOptions) => Promise<EslintPlugin | null>
+  (
+    context: UnConfigContext,
+    options?: LoadPluginOptions,
+  ) => Promise<{packageName: string; contents: EslintPlugin | null}>
 >;
 
 type LoadablePluginPrefix = keyof typeof pluginsLoaders;
