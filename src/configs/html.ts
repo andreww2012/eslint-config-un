@@ -66,6 +66,7 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
     .addRule('no-duplicate-attrs', ERROR) // 🟢
     .addRule('no-duplicate-class', ERROR)
     .addRule('no-duplicate-id', ERROR) // 🟢
+    .addRule('no-duplicate-in-head', ERROR) // >=0.42.0
     .addRule('no-extra-spacing-text', WARNING, [{skip: ['pre']}])
     .addRule('no-inline-styles', OFF)
     .addRule('no-nested-interactive', ERROR)
@@ -93,6 +94,8 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
     .addRule('no-abstract-roles', ERROR)
     .addRule('no-accesskey-attrs', ERROR)
     .addRule('no-aria-hidden-body', ERROR)
+    .addRule('no-aria-hidden-on-focusable', ERROR) // >=0.42.0
+    .addRule('no-empty-headings', ERROR) // >=0.42.0
     .addRule('no-heading-inside-button', ERROR)
     .addRule('no-invalid-role', ERROR)
     .addRule('no-non-scalable-viewport', ERROR)
