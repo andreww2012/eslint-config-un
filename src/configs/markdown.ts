@@ -188,7 +188,9 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
       .addRule('no-invalid-label-refs', ERROR) // 🟢
       .addRule('no-missing-atx-heading-space', ERROR) // 🟢
       .addRule('no-missing-label-refs', ERROR) // 🟢
+      .addRule('no-missing-link-fragments', ERROR) // 🟢
       .addRule('no-multiple-h1', ERROR, [{frontmatterTitle: ''}]) // 🟢
+      .addRule('no-reversed-media-syntax', ERROR) // 🟢
       .addRule('require-alt-text', ERROR) // 🟢
       .addRule('table-column-count', ERROR) // 🟢
       .addOverrides();
