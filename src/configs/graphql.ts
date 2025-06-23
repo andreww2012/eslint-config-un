@@ -73,6 +73,9 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
     pluginsLoaders.graphql(context, {throwIfNotFound: true}).then(({contents}) => contents),
     doesPackageExist('relay-runtime'),
   ]);
+  if (!eslintPluginGraphql) {
+    return null;
+  }
 
   const {
     configJsProcessor,
@@ -94,7 +97,7 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
       },
     ],
     {
-      processor: eslintPluginGraphql?.processor,
+      processor: eslintPluginGraphql.processor,
     },
   );
 
@@ -125,7 +128,7 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
       ],
       {
         languageOptions: {
-          parser: eslintPluginGraphql?.parser,
+          parser: eslintPluginGraphql.parser,
           ...(graphqlConfig && {
             parserOptions: {
               graphQLConfig: graphqlConfig,

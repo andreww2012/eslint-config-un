@@ -34,6 +34,9 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
       interopDefault(import('astro-eslint-parser')),
       interopDefault(import('typescript-eslint')),
     ]);
+  if (!eslintPluginAstro) {
+    return null;
+  }
 
   const optionsRaw = context.rootOptions.configs?.astro;
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -56,7 +59,7 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
     ],
     {
       languageOptions: {
-        globals: eslintPluginAstro?.environments.astro.globals,
+        globals: eslintPluginAstro.environments.astro.globals,
         parser: astroEslintParser,
         parserOptions: {
           parser: isTypescriptEnabled ? typescriptEslintParser : undefined,
@@ -64,7 +67,7 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
         sourceType: 'module',
       },
       ...(isTypescriptEnabled && {
-        processor: eslintPluginAstro?.processors['client-side-ts'],
+        processor: eslintPluginAstro.processors['client-side-ts'],
       }),
     },
   );

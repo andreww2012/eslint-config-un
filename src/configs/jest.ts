@@ -175,6 +175,9 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     pluginsLoaders.jest(context).then(({contents}) => contents),
     doesPackageExist('jest-extended'),
   ]);
+  if (!eslintPluginJest) {
+    return null;
+  }
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
@@ -206,7 +209,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     }),
     languageOptions: {
       // Yes, `globals.globals` is required
-      globals: eslintPluginJest?.environments.globals.globals,
+      globals: eslintPluginJest.environments.globals.globals,
     },
   };
 

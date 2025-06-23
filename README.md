@@ -60,6 +60,8 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | Default plugin prefix | Package name                       |
 | --------------------- | ---------------------------------- |
 | `@eslint-react`       | `@eslint-react/eslint-plugin`      |
+| `@next/next`          | `@next/eslint-plugin-next`         |
+| `astro`               | `eslint-plugin-astro`              |
 | `betterTailwindcss`   | `eslint-plugin-better-tailwindcss` |
 | `eslintPlugin`        | `eslint-plugin-eslint-plugin`      |
 | `graphql`             | `@graphql-eslint/eslint-plugin`    |
@@ -71,11 +73,10 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `react-refresh`       | `eslint-plugin-react-refresh`      |
 | `react`               | `eslint-plugin-react`              |
 | `storybook`           | `eslint-plugin-storybook`          |
+| `svelte`              | `eslint-plugin-svelte`             |
 | `tailwindcss`         | `eslint-plugin-tailwindcss`        |
 | `turbo`               | `eslint-plugin-turbo`              |
 | `vitest`              | `@vitest/eslint-plugin`            |
-| `@next/next`          | `@next/eslint-plugin-next`         |
-| `astro`               | `eslint-plugin-astro`              |
 </details>
 
 ### Usage

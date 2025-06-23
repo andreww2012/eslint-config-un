@@ -48,6 +48,9 @@ export interface VitestEslintConfigOptions
 
 export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
   const eslintPluginVitest = await pluginsLoaders.vitest(context).then(({contents}) => contents);
+  if (!eslintPluginVitest) {
+    return null;
+  }
 
   const optionsRaw = context.rootOptions.configs?.vitest;
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -73,7 +76,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     }),
     languageOptions: {
       // TODO why `eslint-plugin-vitest-globals` is used instead of this?
-      globals: eslintPluginVitest?.environments.env.globals,
+      globals: eslintPluginVitest.environments.env.globals,
     },
   };
 
