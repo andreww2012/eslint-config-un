@@ -70,6 +70,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `eslintPlugin`        | `eslint-plugin-eslint-plugin`      |
 | `graphql`             | `@graphql-eslint/eslint-plugin`    |
 | `jest`                | `eslint-plugin-jest`               |
+| `playwright`          | `eslint-plugin-playwright`         |
 | `pnpm`                | `eslint-plugin-pnpm`               |
 | `qwik`                | `eslint-plugin-qwik`               |
 | `react-compiler`      | `eslint-plugin-react-compiler`     |
@@ -262,6 +263,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | ![Storybook](./assets/logos-storybook-icon.svg) `storybook`             | ✅ (`storybook` is installed) | [eslint-plugin-storybook](https://npmjs.com/eslint-plugin-storybook) (`storybook`) | Since v1.0.0 |
 | ![Cypress](./assets/vscode-icons-file-type-light-cypress.svg) `cypress` | ✅ (`cypress` is installed) | [eslint-plugin-cypress](https://npmjs.com/eslint-plugin-cypress) (`cypress`) | Since v1.0.0 |
 | ![Turborepo](./assets/material-icon-theme-turborepo.svg) `turbo`        | ✅ (`turbo` is installed) | [eslint-plugin-turbo](https://npmjs.com/eslint-plugin-turbo) (`turbo`) | Since v1.0.0 |
+| ![Playwright](./assets/devicon-playwright.svg) `playwright`                  | ✅ (`playwright` is installed) | [eslint-plugin-playwright](https://npmjs.com/eslint-plugin-playwright) (`playwright`) | Since v1.0.0 |
 
 ### Miscellaneous
 

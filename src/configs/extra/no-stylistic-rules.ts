@@ -323,6 +323,18 @@ const ALL_STYLISTIC_RULES = {
   pinia: {
     'prefer-use-store-naming-convention': true,
   },
+  playwright: {
+    'no-useless-not': true,
+    'prefer-comparison-matcher': true,
+    'prefer-equality-matcher': true,
+    'prefer-hooks-in-order': true,
+    'prefer-hooks-on-top': true,
+    'prefer-lowercase-title': true,
+    'prefer-to-be': true,
+    'prefer-to-contain': true,
+    'prefer-to-have-count': true,
+    'prefer-to-have-length': true,
+  },
   pnpm: {
     // None
   },

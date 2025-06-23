@@ -209,6 +209,7 @@ export const pluginsLoaders = {
   ),
   // @ts-expect-error types mismatch
   pinia: genPluginLoader('eslint-plugin-pinia', () => import('eslint-plugin-pinia')),
+  playwright: genPluginLoader('eslint-plugin-playwright', () => import('eslint-plugin-playwright')),
   pnpm: genPluginLoader('eslint-plugin-pnpm', () => import('eslint-plugin-pnpm')),
   // @ts-expect-error types mismatch
   'prefer-arrow-functions': genPluginLoader(

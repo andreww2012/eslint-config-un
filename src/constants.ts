@@ -102,6 +102,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   '@testing-library/dom',
   'cypress',
   'turbo',
+  'playwright',
 
   'astro',
   'vue',

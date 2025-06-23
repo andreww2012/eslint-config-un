@@ -224,6 +224,7 @@ export const eslintConfigInternal = async (
   const isNoUnsanitizedEnabled = getIsConfigEnabled('noUnsanitized');
   const isPackageJsonEnabled = getIsConfigEnabled('packageJson', false);
   const isPerfectionistEnabled = getIsConfigEnabled('perfectionist', false);
+  const isPlaywrightEnabled = getIsConfigEnabled('playwright', 'playwright');
   const isPnpmEnabled = getIsConfigEnabled('pnpm', usedPackageManager?.name === 'pnpm');
   const isPreferArrowFunctionsEnabled = getIsConfigEnabled('preferArrowFunctions', false);
   const isPromiseEnabled = getIsConfigEnabled('promise');
@@ -305,6 +306,7 @@ export const eslintConfigInternal = async (
       noUnsanitized: {enabled: isNoUnsanitizedEnabled},
       packageJson: {enabled: isPackageJsonEnabled},
       perfectionist: {enabled: isPerfectionistEnabled},
+      playwright: {enabled: isPlaywrightEnabled},
       pnpm: {enabled: isPnpmEnabled},
       preferArrowFunctions: {enabled: isPreferArrowFunctionsEnabled},
       promise: {enabled: isPromiseEnabled},
@@ -486,6 +488,8 @@ export const eslintConfigInternal = async (
     isBetterTailwindEnabled &&
       import('./configs/better-tailwind').then((m) => m.betterTailwindUnConfig(context)),
     isMdxEnabled && import('./configs/mdx').then((m) => m.mdxUnConfig(context)),
+    isPlaywrightEnabled &&
+      import('./configs/playwright').then((m) => m.playwrightUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

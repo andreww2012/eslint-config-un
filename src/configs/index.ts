@@ -52,6 +52,7 @@ import type {NodeEslintConfigOptions} from './node';
 import type {NodeDependenciesEslintConfigOptions} from './node-dependencies';
 import type {PackageJsonEslintConfigOptions} from './package-json';
 import type {PerfectionistEslintConfigOptions} from './perfectionist';
+import type {PlaywrightEslintConfigOptions} from './playwright';
 import type {PnpmEslintConfigOptions} from './pnpm';
 import type {PreferArrowFunctionsEslintConfigOptions} from './prefer-arrow-functions';
 import type {PromiseEslintConfigOptions} from './promise';
@@ -557,6 +558,15 @@ export interface UnConfigs {
    * @default false
    */
   perfectionist: PerfectionistEslintConfigOptions;
+
+  /**
+   * [Playwright](https://playwright.dev) specific rules.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright) ([docs](https://github.com/playwright-community/eslint-plugin-playwright))
+   * @default true <=> `playwright` package is installed
+   */
+  playwright: PlaywrightEslintConfigOptions;
 
   /**
    * Rules specific to pnpm package manager.
