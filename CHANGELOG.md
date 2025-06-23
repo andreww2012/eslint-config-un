@@ -119,7 +119,7 @@
   - 🟢 [`prefer-writable-derived`](https://sveltejs.github.io/eslint-plugin-svelte/rules/prefer-writable-derived)
   - ❓(enabled conditionally) [`require-event-prefix`](https://sveltejs.github.io/eslint-plugin-svelte/rules/require-event-prefix)
 - `eslint-plugin-vue`: [10.1.0 -> 10.2.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.1.0...v10.2.0)
-- `eslint-plugin-package-json`: [0.31.0 -> 0.40.0](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.31.0...v0.40.0)
+- `eslint-plugin-package-json`: [0.31.0 -> 0.40.4](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.31.0...v0.40.4)
   - 🟢 (enabled) [`valid-author`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/valid-author.md)
   - 🟢 [`valid-bin`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/valid-bin.md)
   - ❓(enabled conditionally) [`require-type`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-type.md)
