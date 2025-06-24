@@ -649,7 +649,7 @@ export const tsUnConfig: UnConfigFn<
             extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
             sourceType: 'module',
             ...(isTypeAware && {
-              projectService: allowDefaultProject.length > 0 ? {allowDefaultProject} : true,
+              projectService: {allowDefaultProject},
             }),
             ...maybeCall(optionsResolved.parserOptions, isTypeAware),
           } satisfies TsEslintParserOptions,
