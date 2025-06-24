@@ -1,5 +1,4 @@
 // cspell:ignore jsons
-// eslint-disable-next-line node/no-unsupported-features/node-builtins
 import {styleText} from 'node:util';
 import {uniqBy} from 'es-toolkit';
 import {getPackageInfo} from 'local-pkg';

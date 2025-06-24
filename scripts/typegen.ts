@@ -1,6 +1,5 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-// eslint-disable-next-line node/no-unsupported-features/node-builtins
 import {styleText} from 'node:util';
 import * as diff from 'diff';
 import {capitalize} from 'es-toolkit';

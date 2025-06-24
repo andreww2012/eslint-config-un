@@ -1,5 +1,4 @@
 import fs from 'node:fs/promises';
-// eslint-disable-next-line node/no-unsupported-features/node-builtins
 import {styleText} from 'node:util';
 import consola from 'consola';
 import createDebug from 'debug';
