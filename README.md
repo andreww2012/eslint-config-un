@@ -71,6 +71,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `graphql`             | `@graphql-eslint/eslint-plugin`    |
 | `jest`                | `eslint-plugin-jest`               |
 | `jestExtended`        | `eslint-plugin-jest-extended`      |
+| `pinia`               | `eslint-plugin-pinia`              |
 | `playwright`          | `eslint-plugin-playwright`         |
 | `pnpm`                | `eslint-plugin-pnpm`               |
 | `qwik`                | `eslint-plugin-qwik`               |
