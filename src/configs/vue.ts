@@ -199,6 +199,10 @@ export const vueUnConfig: UnConfigFn<
     interopDefault(import('typescript-eslint')),
   ]);
 
+  if (!eslintPluginVue) {
+    return null;
+  }
+
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
   const optionsRaw = context.rootOptions.configs?.vue;
