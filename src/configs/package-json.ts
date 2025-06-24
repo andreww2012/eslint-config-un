@@ -179,6 +179,7 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
     .addRule('valid-name', ERROR) // 🟢
     .addRule('valid-package-definition', ERROR) // 🟢
     .addRule('valid-repository-directory', ERROR) // 🟢
+    .addRule('valid-type', ERROR) // 🟢 >=0.41.0
     .addRule('valid-version', ERROR) // 🟢
     .addOverrides();
 
