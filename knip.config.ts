@@ -1,8 +1,9 @@
+// cspell:ignore ncurc
 import type {KnipConfig} from 'knip';
 import packageJson from './package.json' with {type: 'json'};
 
 const config: KnipConfig = {
-  ignore: ['test/**', '@graphql-eslint/eslint-plugin'],
+  ignore: ['test/**', '.ncurc.cjs'],
   ignoreDependencies: Object.entries(packageJson.peerDependenciesMeta)
     .filter(([, meta]) => meta.optional)
     .map(([name]) => name),
