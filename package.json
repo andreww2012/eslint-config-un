@@ -66,7 +66,6 @@
     "@angular-eslint/eslint-plugin-template": "20.1.1",
     "@angular-eslint/template-parser": "20.1.1",
     "@antfu/utils": "9.2.0",
-    "@cspell/eslint-plugin": "9.1.1",
     "@eslint-community/eslint-plugin-eslint-comments": "4.5.0",
     "@eslint/compat": "1.3.0",
     "@eslint/css": "0.9.0",
@@ -142,6 +141,7 @@
   "devDependencies": {
     "@antfu/ni": "25.0.0",
     "@arethetypeswrong/cli": "0.18.2",
+    "@cspell/eslint-plugin": "9.1.1",
     "@eslint-react/eslint-plugin": "1.52.2",
     "@eslint/config-inspector": "1.1.0",
     "@graphql-eslint/eslint-plugin": "4.4.0",
@@ -194,6 +194,7 @@
     "typescript": "5.8.3"
   },
   "peerDependencies": {
+    "@cspell/eslint-plugin": "^9.1.1",
     "@eslint-react/eslint-plugin": "^1.52.2",
     "@graphql-eslint/eslint-plugin": "^4.4.0",
     "@next/eslint-plugin-next": "^15.3.3",
@@ -226,6 +227,9 @@
     "eslint-plugin-vuejs-accessibility": "^2.4.1"
   },
   "peerDependenciesMeta": {
+    "@cspell/eslint-plugin": {
+      "optional": true
+    },
     "@eslint-react/eslint-plugin": {
       "optional": true
     },
