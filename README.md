@@ -60,13 +60,13 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | Default plugin prefix | Package name                       |
 | --------------------- | ---------------------------------- |
 | `@eslint-react`       | `@eslint-react/eslint-plugin`      |
+| `@cspell`             | `@cspell/eslint-plugin`            |
 | `@next/next`          | `@next/eslint-plugin-next`         |
 | `@tanstack/query`     | `@tanstack/eslint-plugin-query`    |
 | `astro`               | `eslint-plugin-astro`              |
 | `ava`                 | `eslint-plugin-ava`                |
 | `betterTailwindcss`   | `eslint-plugin-better-tailwindcss` |
-| `@cspell`             | `@cspell/eslint-plugin`            |
-| `ember`               | `eslint-plugin-ember`              |
+| `deMorgan`            | `eslint-plugin-de-morgan`          |
 | `ember`               | `eslint-plugin-ember`              |
 | `eslintPlugin`        | `eslint-plugin-eslint-plugin`      |
 | `graphql`             | `@graphql-eslint/eslint-plugin`    |
