@@ -59,8 +59,8 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 
 | Default plugin prefix  | Package name                         |
 | ---------------------- | ------------------------------------ |
-| `@eslint-react`        | `@eslint-react/eslint-plugin`        |
 | `@cspell`              | `@cspell/eslint-plugin`              |
+| `@eslint-react`        | `@eslint-react/eslint-plugin`        |
 | `@next/next`           | `@next/eslint-plugin-next`           |
 | `@tanstack/query`      | `@tanstack/eslint-plugin-query`      |
 | `astro`                | `eslint-plugin-astro`                |
@@ -69,10 +69,11 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `de-morgan`            | `eslint-plugin-de-morgan`            |
 | `ember`                | `eslint-plugin-ember`                |
 | `erasable-syntax-only` | `eslint-plugin-erasable-syntax-only` |
+| `es`                   | `eslint-plugin-es-x`                 |
 | `eslint-plugin`        | `eslint-plugin-eslint-plugin`        |
 | `graphql`              | `@graphql-eslint/eslint-plugin`      |
-| `jest`                 | `eslint-plugin-jest`                 |
 | `jest-extended`        | `eslint-plugin-jest-extended`        |
+| `jest`                 | `eslint-plugin-jest`                 |
 | `pinia`                | `eslint-plugin-pinia`                |
 | `playwright`           | `eslint-plugin-playwright`           |
 | `pnpm`                 | `eslint-plugin-pnpm`                 |
