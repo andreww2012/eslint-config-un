@@ -159,7 +159,7 @@ export interface EslintConfigUnOptions {
   /**
    * This option overrides if certain configs are enabled or disabled by default.
    * - `all-disabled`: consider all top level configs disabled unless explicitly enabled.
-   * - `misc-enabled`: consider some configs disabled by default, conversely enabled: `security`, `yaml`,  `toml`, `json`, `packageJson`, `jsonSchemaValidator`, `casePolice`, `nodeDependencies`, `depend`.
+   * - `misc-enabled`: consider some configs disabled by default, conversely enabled: `security`, `yaml`,  `toml`, `json`, `packageJson`, `jsonSchemaValidator`, `nodeDependencies`, `depend`.
    */
   defaultConfigsStatus?: 'all-disabled' | 'misc-enabled';
 }
@@ -238,7 +238,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-case-police`](https://npmjs.com/eslint-plugin-case-police) ([docs](https://github.com/antfu/case-police))
    *
    * NOTE: disabled by default
-   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
+   * @default false
    */
   casePolice: CasePoliceEslintConfigOptions;
 

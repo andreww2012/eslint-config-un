@@ -66,6 +66,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `astro`                  | `eslint-plugin-astro`                  |
 | `ava`                    | `eslint-plugin-ava`                    |
 | `better-tailwindcss`     | `eslint-plugin-better-tailwindcss`     |
+| `case-police`            | `eslint-plugin-case-police`            |
 | `de-morgan`              | `eslint-plugin-de-morgan`              |
 | `ember`                  | `eslint-plugin-ember`                  |
 | `erasable-syntax-only`   | `eslint-plugin-erasable-syntax-only`   |
