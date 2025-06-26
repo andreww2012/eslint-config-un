@@ -562,7 +562,7 @@ export interface UnConfigs {
   /**
    * [Playwright](https://playwright.dev) specific rules.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright) ([docs](https://github.com/playwright-community/eslint-plugin-playwright))
    * @default true <=> `playwright` package is installed
    */
