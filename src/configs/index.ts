@@ -238,7 +238,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-case-police`](https://npmjs.com/eslint-plugin-case-police) ([docs](https://github.com/antfu/case-police))
    *
    * NOTE: disabled by default
-   * @default false
+   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   casePolice: CasePoliceEslintConfigOptions;
 
@@ -319,7 +319,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-depend`](https://npmjs.com/eslint-plugin-depend) ([docs](https://github.com/es-tooling/eslint-plugin-depend))
    *
    * NOTE: disabled by default
-   * @default false
+   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   depend: DependEslintConfigOptions;
 
@@ -439,7 +439,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-jsonc`](https://npmjs.com/eslint-plugin-jsonc) ([docs](https://ota-meshi.github.io/eslint-plugin-jsonc))
    *
    * NOTE: disabled by default.
-   * @default false
+   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   json: JsoncEslintConfigOptions;
 
@@ -448,7 +448,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-json-schema-validator`](https://npmjs.com/eslint-plugin-json-schema-validator) ([the single rule docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/HEAD/docs/rules/no-invalid.md))
    *
    * NOTE: disabled by default
-   * @default false
+   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   jsonSchemaValidator: JsonSchemaValidatorEslintConfigOptions;
 
@@ -516,7 +516,7 @@ export interface UnConfigs {
    * You may only specify JSON files for this config.
    *
    * NOTE: disabled by default
-   * @default false
+   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   nodeDependencies: NodeDependenciesEslintConfigOptions;
 
@@ -544,7 +544,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json))
    *
    * NOTE: disabled by default.
-   * @default false
+   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   packageJson: PackageJsonEslintConfigOptions;
 
@@ -637,7 +637,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-security`](https://npmjs.com/eslint-plugin-security) ([docs](https://github.com/eslint-community/eslint-plugin-security))
    *
    * NOTE: disabled by default
-   * @default false
+   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   security: SecurityEslintConfigOptions;
 
@@ -713,7 +713,7 @@ export interface UnConfigs {
    * If enabled, a Rust lockfile (`Cargo.lock`) will be ignored by default
    *
    * NOTE: disabled by default.
-   * @default false
+   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   toml: TomlEslintConfigOptions;
 
@@ -777,7 +777,7 @@ export interface UnConfigs {
    * If enabled, lockfiles (`yarn.lock`, `pnpm-lock.yaml`) will be ignored by default
    *
    * NOTE: disabled by default.
-   * @default false
+   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   yaml: YamlEslintConfigOptions;
 }
