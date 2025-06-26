@@ -45,6 +45,7 @@
 - **perfectionist** config: added a bunch of new sub-configs, corresponding to each rule of the plugin. Plugin shared settings are now also configurable via `settings` option.
 - **vitest** config: rule [`prefer-describe-function-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-describe-function-title.md) is now disabled by default.
 - Added a new root option, `defaultConfigsStatus`, to control what configs are enabled or disabled by default.
+- Added the ability to override any of the used plugins via `pluginsOverrides` option.
 
 ### Dependencies
 

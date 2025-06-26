@@ -70,7 +70,7 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
   } satisfies GraphqlEslintConfigOptions);
 
   const [eslintPluginGraphql, isRelayInstalled] = await Promise.all([
-    pluginsLoaders.graphql(context, {throwIfNotFound: true}).then(({contents}) => contents),
+    pluginsLoaders.graphql(context, {throwIfNotFound: true}).then(({module}) => module),
     doesPackageExist('relay-runtime'),
   ]);
   if (!eslintPluginGraphql) {

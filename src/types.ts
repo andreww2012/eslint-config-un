@@ -21,7 +21,6 @@ export type {
   SetRequired,
   Subtract,
   Promisable,
-  ValueOf,
   OmitIndexSignature,
   DistributedPick,
   UnionToIntersection,

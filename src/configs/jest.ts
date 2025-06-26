@@ -9,7 +9,7 @@ import {
   createConfigBuilder,
 } from '../eslint';
 import {pluginsLoaders} from '../plugins';
-import type {PrettifyShallow, ValueOf} from '../types';
+import type {ObjectValues, PrettifyShallow} from '../types';
 import {assignDefaults, doesPackageExist} from '../utils';
 import {
   RULES_TO_DISABLE_IN_TEST_FILES,
@@ -95,7 +95,7 @@ export interface JestEslintConfigOptions extends UnConfigOptions<'jest'> {
    */
   testDefinitionKeyword?:
     | GetRuleOptions<'jest', 'consistent-test-it'>[0]
-    | ValueOf<GetRuleOptions<'jest', 'consistent-test-it'>[0] & {}>
+    | ObjectValues<GetRuleOptions<'jest', 'consistent-test-it'>[0] & {}>
     | false;
 
   /**
@@ -172,7 +172,7 @@ export interface JestEslintConfigOptions extends UnConfigOptions<'jest'> {
 
 export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
   const [eslintPluginJest, isJestExtendedInstalled] = await Promise.all([
-    pluginsLoaders.jest(context).then(({contents}) => contents),
+    pluginsLoaders.jest(context).then(({module}) => module),
     doesPackageExist('jest-extended'),
   ]);
   if (!eslintPluginJest) {

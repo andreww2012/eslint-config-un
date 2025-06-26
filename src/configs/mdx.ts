@@ -42,7 +42,7 @@ const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MDX_SUPPORTED_CODE_BLOCKS];
 
 export const mdxUnConfig: UnConfigFn<'mdx'> = async (context) => {
   const [eslintPluginMdx, eslintParserMdx] = await Promise.all([
-    pluginsLoaders.mdx(context).then(({contents}) => contents),
+    pluginsLoaders.mdx(context).then(({module}) => module),
     interopDefault(import('eslint-mdx')),
   ]);
 

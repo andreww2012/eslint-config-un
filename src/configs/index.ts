@@ -6,11 +6,12 @@ import type {detect as detectPackageManager} from 'package-manager-detector/dete
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {
   ConfigEntryBuilder,
+  EslintPlugin,
   EslintSeverity,
   FlatConfigEntry,
   UnFlagConfigEntry,
 } from '../eslint';
-import type {PluginPrefix} from '../plugins';
+import type {PluginPrefix, pluginsLoaders} from '../plugins';
 import type {PrettifyShallow, Promisable, SetRequired} from '../types';
 import type {fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
@@ -162,6 +163,17 @@ export interface EslintConfigUnOptions {
    * - `misc-enabled`: consider some configs disabled by default, conversely enabled: `security`, `yaml`,  `toml`, `json`, `packageJson`, `jsonSchemaValidator`, `nodeDependencies`, `depend`.
    */
   defaultConfigsStatus?: 'all-disabled' | 'misc-enabled';
+
+  /**
+   * This option allows you to override any of the used plugins. This can be useful in case
+   * this config is used to lint a repository itself of one of the plugins to provide
+   * development version of the plugin.
+   */
+  pluginsOverrides?: {
+    [Plugin in Exclude<PluginPrefix, ''>]: Plugin extends keyof typeof pluginsLoaders
+      ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
+      : EslintPlugin;
+  };
 }
 
 export type DisableAutofixMethod = 'unprefixed' | 'prefixed';

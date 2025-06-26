@@ -83,6 +83,7 @@ export const eslintConfigInternal = async (
 
   debug('Initialization');
 
+  const preUnConfigContext = {logger, rootOptions: options} as UnConfigContext;
   const [
     packagesInfoRaw,
     usedPackageManager,
@@ -102,8 +103,8 @@ export const eslintConfigInternal = async (
       }
       throw error;
     }),
-    pluginsLoaders.tailwindcss({logger} as UnConfigContext).then(({contents}) => contents),
-    pluginsLoaders.svelte({logger} as UnConfigContext).then(({contents}) => contents),
+    pluginsLoaders.tailwindcss(preUnConfigContext).then(({module}) => module),
+    pluginsLoaders.svelte(preUnConfigContext).then(({module}) => module),
   ]);
   const packagesInfo = packagesInfoRaw as UnConfigContext['packagesInfo'];
 
@@ -615,7 +616,7 @@ export const eslintConfigInternal = async (
           const result = isIn(pluginPrefix, pluginsLoaders)
             ? await pluginsLoaders[pluginPrefix](context)
             : null;
-          const plugin = result?.contents;
+          const plugin = result?.module;
           if (result && !plugin && isIn(result.packageName, OPTIONAL_PLUGINS_PACKAGE_NAMES)) {
             packagesThatNeedsToBeManuallyInstalled.push({
               name: result.packageName,
@@ -624,8 +625,9 @@ export const eslintConfigInternal = async (
             });
           }
           if (pluginPrefix) {
+            const isProvided = optionsResolved.pluginsOverrides?.[pluginPrefix] != null;
             debug(
-              `Plugin \`${styleText('blue', pluginPrefix)}\` loaded, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
+              `Plugin \`${styleText('blue', pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginsOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
             );
           }
           return plugin ? ([pluginPrefix, plugin] as const) : null;

@@ -10,7 +10,7 @@ import {
 } from '../eslint';
 import type {PrettifyShallow, ReadonlyDeep, SetRequired, Subtract} from '../types';
 import {type MaybeArray, assignDefaults, cloneDeep, interopDefault} from '../utils';
-import type {UnConfigFn} from './index';
+import type {UnConfigContext, UnConfigFn} from './index';
 
 // Please keep ascending order
 const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20] as const;
@@ -171,13 +171,15 @@ Object.entries(RULES_AVAILABILITY).forEach(([oldName, [, newName]]) => {
  * its implementation is nullified.
  */
 const generateAngularPlugins = async (
+  context: UnConfigContext,
   configOptions: ReadonlyDeep<AngularEslintConfigOptions>,
   installedVersion: SupportedAngularVersion,
 ) => {
   const latestPlugins = PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS[LATEST_SUPPORTED_ANGULAR_VERSION];
   const [latestPlugin, latestPluginTemplate] = await Promise.all([
-    latestPlugins.plugin(),
-    latestPlugins.pluginTemplate(),
+    context.rootOptions.pluginsOverrides?.['@angular-eslint'] || latestPlugins.plugin(),
+    context.rootOptions.pluginsOverrides?.['@angular-eslint/template'] ||
+      latestPlugins.pluginTemplate(),
   ]);
 
   type EslintPluginWithRequiredRules = SetRequired<EslintPlugin, 'rules'>;
@@ -525,7 +527,7 @@ export const angularUnConfig: UnConfigFn<
     extractInlineHtmlProcessorLatest,
     extractInlineHtmlProcessorV17,
   ] = await Promise.all([
-    generateAngularPlugins(optionsResolved, angularVersion),
+    generateAngularPlugins(context, optionsResolved, angularVersion),
     // Since v18, the processor uses `getDecorators` from `typescript` which does not exist prior to
     // v4.8 of `typescript`, which might be used in older projects
     interopDefault(import('@angular-eslint/eslint-plugin-template')).then(

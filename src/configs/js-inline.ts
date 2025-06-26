@@ -105,7 +105,7 @@ export interface JsInlineEslintConfigOptions extends UnConfigOptions<'html'> {
 }
 
 export const jsInlineUnConfig: UnConfigFn<'jsInline'> = async (context) => {
-  const eslintPluginHtml = await pluginsLoaders.html(context).then(({contents}) => contents);
+  const eslintPluginHtml = await pluginsLoaders.html(context).then(({module}) => module);
 
   const optionsRaw = context.rootOptions.configs?.jsInline;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsInlineEslintConfigOptions);

@@ -55,9 +55,7 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
   const [eslintPluginImportX, {createTypeScriptImportResolver}] = await Promise.all([
     pluginsLoaders
       .import(context)
-      .then(
-        ({contents}) => contents as unknown as Promise<typeof import('eslint-plugin-import-x')>,
-      ),
+      .then(({module}) => module as unknown as Promise<typeof import('eslint-plugin-import-x')>),
     interopDefault(import('eslint-import-resolver-typescript')),
   ]);
 
