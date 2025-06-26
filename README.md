@@ -57,41 +57,42 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 <details>
 <summary>List of optional peer dependencies</summary>
 
-| Default plugin prefix  | Package name                         |
-| ---------------------- | ------------------------------------ |
-| `@cspell`              | `@cspell/eslint-plugin`              |
-| `@eslint-react`        | `@eslint-react/eslint-plugin`        |
-| `@next/next`           | `@next/eslint-plugin-next`           |
-| `@tanstack/query`      | `@tanstack/eslint-plugin-query`      |
-| `astro`                | `eslint-plugin-astro`                |
-| `ava`                  | `eslint-plugin-ava`                  |
-| `better-tailwindcss`   | `eslint-plugin-better-tailwindcss`   |
-| `de-morgan`            | `eslint-plugin-de-morgan`            |
-| `ember`                | `eslint-plugin-ember`                |
-| `erasable-syntax-only` | `eslint-plugin-erasable-syntax-only` |
-| `es`                   | `eslint-plugin-es-x`                 |
-| `eslint-plugin`        | `eslint-plugin-eslint-plugin`        |
-| `graphql`              | `@graphql-eslint/eslint-plugin`      |
-| `jest-extended`        | `eslint-plugin-jest-extended`        |
-| `jest`                 | `eslint-plugin-jest`                 |
-| `perfectionist`        | `eslint-plugin-perfectionist`        |
-| `pinia`                | `eslint-plugin-pinia`                |
-| `playwright`           | `eslint-plugin-playwright`           |
-| `pnpm`                 | `eslint-plugin-pnpm`                 |
-| `qwik`                 | `eslint-plugin-qwik`                 |
-| `react-compiler`       | `eslint-plugin-react-compiler`       |
-| `react-hooks`          | `eslint-plugin-react-hooks`          |
-| `react-refresh`        | `eslint-plugin-react-refresh`        |
-| `react`                | `eslint-plugin-react`                |
-| `solid`                | `eslint-plugin-solid`                |
-| `storybook`            | `eslint-plugin-storybook`            |
-| `svelte`               | `eslint-plugin-svelte`               |
-| `tailwindcss`          | `eslint-plugin-tailwindcss`          |
-| `testing-library`      | `eslint-plugin-testing-library`      |
-| `turbo`                | `eslint-plugin-turbo`                |
-| `vitest`               | `@vitest/eslint-plugin`              |
-| `vue`                  | `eslint-plugin-vue`                  |
-| `vuejs-accessibility`  | `eslint-plugin-vuejs-accessibility`  |
+| Default plugin prefix    | Package name                           |
+| ------------------------ | -------------------------------------- |
+| `@cspell`                | `@cspell/eslint-plugin`                |
+| `@eslint-react`          | `@eslint-react/eslint-plugin`          |
+| `@next/next`             | `@next/eslint-plugin-next`             |
+| `@tanstack/query`        | `@tanstack/eslint-plugin-query`        |
+| `astro`                  | `eslint-plugin-astro`                  |
+| `ava`                    | `eslint-plugin-ava`                    |
+| `better-tailwindcss`     | `eslint-plugin-better-tailwindcss`     |
+| `de-morgan`              | `eslint-plugin-de-morgan`              |
+| `ember`                  | `eslint-plugin-ember`                  |
+| `erasable-syntax-only`   | `eslint-plugin-erasable-syntax-only`   |
+| `es`                     | `eslint-plugin-es-x`                   |
+| `eslint-plugin`          | `eslint-plugin-eslint-plugin`          |
+| `graphql`                | `@graphql-eslint/eslint-plugin`        |
+| `jest-extended`          | `eslint-plugin-jest-extended`          |
+| `jest`                   | `eslint-plugin-jest`                   |
+| `perfectionist`          | `eslint-plugin-perfectionist`          |
+| `pinia`                  | `eslint-plugin-pinia`                  |
+| `playwright`             | `eslint-plugin-playwright`             |
+| `pnpm`                   | `eslint-plugin-pnpm`                   |
+| `prefer-arrow-functions` | `eslint-plugin-prefer-arrow-functions` |
+| `qwik`                   | `eslint-plugin-qwik`                   |
+| `react-compiler`         | `eslint-plugin-react-compiler`         |
+| `react-hooks`            | `eslint-plugin-react-hooks`            |
+| `react-refresh`          | `eslint-plugin-react-refresh`          |
+| `react`                  | `eslint-plugin-react`                  |
+| `solid`                  | `eslint-plugin-solid`                  |
+| `storybook`              | `eslint-plugin-storybook`              |
+| `svelte`                 | `eslint-plugin-svelte`                 |
+| `tailwindcss`            | `eslint-plugin-tailwindcss`            |
+| `testing-library`        | `eslint-plugin-testing-library`        |
+| `turbo`                  | `eslint-plugin-turbo`                  |
+| `vitest`                 | `@vitest/eslint-plugin`                |
+| `vue`                    | `eslint-plugin-vue`                    |
+| `vuejs-accessibility`    | `eslint-plugin-vuejs-accessibility`    |
 </details>
 
 ### Usage

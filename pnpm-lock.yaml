@@ -143,9 +143,6 @@ importers:
       eslint-plugin-package-json:
         specifier: 0.41.0
         version: 0.41.0(@types/estree@1.0.8)(eslint@9.29.0(jiti@2.4.2))(jsonc-eslint-parser@2.4.0)
-      eslint-plugin-prefer-arrow-functions:
-        specifier: 3.6.2
-        version: 3.6.2(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-prettier:
         specifier: file:./deps/eslint-plugin-prettier-5.5.0.tgz
         version: file:deps/eslint-plugin-prettier-5.5.0.tgz(@types/eslint@9.6.1)(eslint-config-prettier@10.1.5(eslint@9.29.0(jiti@2.4.2)))(eslint@9.29.0(jiti@2.4.2))(prettier@3.6.0)
@@ -336,6 +333,9 @@ importers:
       eslint-plugin-pnpm:
         specifier: 0.3.1
         version: 0.3.1(eslint@9.29.0(jiti@2.4.2))
+      eslint-plugin-prefer-arrow-functions:
+        specifier: 3.6.2
+        version: 3.6.2(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-qwik:
         specifier: 1.14.1
         version: 1.14.1(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
