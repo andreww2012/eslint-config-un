@@ -101,9 +101,6 @@ importers:
       eslint-plugin-depend:
         specifier: 1.2.0
         version: 1.2.0
-      eslint-plugin-erasable-syntax-only:
-        specifier: 0.3.1
-        version: 0.3.1(@typescript-eslint/parser@8.34.1(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-es-x:
         specifier: 8.7.0
         version: 8.7.0(eslint@9.29.0(jiti@2.4.2))
@@ -318,6 +315,9 @@ importers:
       eslint-plugin-ember:
         specifier: 12.5.0
         version: 12.5.0(@babel/core@7.27.4)(@typescript-eslint/parser@8.34.1(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.29.0(jiti@2.4.2))
+      eslint-plugin-erasable-syntax-only:
+        specifier: 0.3.1
+        version: 0.3.1(@typescript-eslint/parser@8.34.1(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-eslint-plugin:
         specifier: 6.5.0
         version: 6.5.0(eslint@9.29.0(jiti@2.4.2))
