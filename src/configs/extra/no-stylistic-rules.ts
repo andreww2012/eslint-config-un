@@ -289,6 +289,9 @@ const ALL_STYLISTIC_RULES = {
   lit: {
     'quoted-expressions': true,
   },
+  'lit-a11y': {
+    // None
+  },
   markdown: {
     // None
   },

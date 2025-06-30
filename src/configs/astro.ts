@@ -4,7 +4,7 @@ import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from
 import {pluginsLoaders} from '../plugins';
 import type {PickKeysNotStartingWith, PickKeysStartingWith} from '../types';
 import {assignDefaults, interopDefault} from '../utils';
-import {type JsxA11yEslintConfigOptions, jsxA11yUnConfig} from './jsx-a11y';
+import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {UnConfigFn} from './index';
 
 export interface AstroEslintConfigOptions
@@ -13,7 +13,7 @@ export interface AstroEslintConfigOptions
    * A11Y (accessibility) specific rules for Astro components.
    * By default, uses `files` and `ignores` from the parent config.
    *
-   * Since it uses [`eslint-plugin-jsx-a11y`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y)
+   * Since it uses [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y)
    * under the hood, this config also accepts the same options as `jsxA11y` config.
    * @default true
    */
@@ -108,23 +108,23 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
     .addRule('semi', OFF) // >=0.19.0
     .addOverrides();
 
-  const optionsA11y = typeof configJsxA11y === 'object' ? configJsxA11y : {};
-
   return {
     configs: [
       configBuilder,
       ...(configJsxA11y === false
         ? []
-        : (
-            await jsxA11yUnConfig(context, {
+        : await (async () => {
+            const {jsxA11yUnConfig} = await import('./jsx-a11y');
+            const result = await jsxA11yUnConfig(context, {
               prefix: 'astro',
               options: {
                 files: parentConfigFiles,
                 ignores: parentConfigIgnores,
-                ...optionsA11y,
+                ...(typeof configJsxA11y === 'object' && configJsxA11y),
               },
-            })
-          )?.configs || []),
+            });
+            return result?.configs || [];
+          })()),
     ],
     optionsResolved,
   };

@@ -1,16 +1,54 @@
 // cspell:ignore classfield
 import {ERROR, OFF} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
+import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
+import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {UnConfigFn} from './index';
 
-export interface LitEslintConfigOptions extends UnConfigOptions<'lit'> {}
+export interface LitEslintConfigOptions extends UnConfigOptions<'lit'> {
+  /**
+   * A11Y (accessibility) specific rules for Lit components.
+   * By default, uses `files` and `ignores` from the parent config.
+   *
+   * Since most of the rules are ported from
+   * [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y),
+   * this config also accepts the same options as `jsxA11y` config.
+   * @default true
+   */
+  configA11y?:
+    | boolean
+    | UnConfigOptions<
+        RulesRecordPartial<'lit-a11y'>,
+        Omit<
+          JsxA11yEslintConfigOptions,
+          | 'settings'
+          | keyof UnConfigOptions
+          | 'ambiguousWordsForAnchorText'
+          | 'customComponents'
+          | 'labelAttributes'
+          | 'tabbableRoles'
+        > & {
+          customComponents?: Pick<
+            JsxA11yEslintConfigOptions['customComponents'] & {},
+            | 'areaElements'
+            | 'headings'
+            | 'imgElements'
+            | 'inputTypeImageElements'
+            | 'inputs'
+            | 'links'
+            | 'objectElements'
+          >;
+        }
+      >;
+}
 
-export const litUnConfig: UnConfigFn<'lit'> = (context) => {
+export const litUnConfig: UnConfigFn<'lit'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.lit;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies LitEslintConfigOptions);
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'lit');
+
+  const {files: parentConfigFiles, ignores: parentConfigIgnores, configA11y} = optionsResolved;
 
   // Legend:
   // 🟢 - in recommended
@@ -44,7 +82,23 @@ export const litUnConfig: UnConfigFn<'lit'> = (context) => {
     .addOverrides();
 
   return {
-    configs: [configBuilder],
+    configs: [
+      configBuilder,
+      ...(configA11y === false
+        ? []
+        : await (async () => {
+            const {jsxA11yUnConfig} = await import('./jsx-a11y');
+            const result = await jsxA11yUnConfig(context, {
+              prefix: 'lit',
+              options: {
+                files: parentConfigFiles,
+                ignores: parentConfigIgnores,
+                ...(typeof configA11y === 'object' && configA11y),
+              },
+            });
+            return result?.configs || [];
+          })()),
+    ],
     optionsResolved,
   };
 };

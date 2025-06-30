@@ -167,6 +167,7 @@
     "eslint-plugin-jest": "29.0.1",
     "eslint-plugin-jest-extended": "3.0.0",
     "eslint-plugin-lit": "2.1.1",
+    "eslint-plugin-lit-a11y": "5.1.0",
     "eslint-plugin-perfectionist": "4.15.0",
     "eslint-plugin-pinia": "0.4.1",
     "eslint-plugin-playwright": "2.2.0",
@@ -217,6 +218,7 @@
     "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-jest-extended": "^3.0.0",
     "eslint-plugin-lit": "^2.1.1",
+    "eslint-plugin-lit-a11y": "^5.1.0",
     "eslint-plugin-perfectionist": "^4.15.0",
     "eslint-plugin-pinia": "^0.4.1",
     "eslint-plugin-playwright": "^2.2.0",
@@ -294,6 +296,9 @@
       "optional": true
     },
     "eslint-plugin-lit": {
+      "optional": true
+    },
+    "eslint-plugin-lit-a11y": {
       "optional": true
     },
     "eslint-plugin-perfectionist": {

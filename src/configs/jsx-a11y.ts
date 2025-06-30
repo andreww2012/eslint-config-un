@@ -285,7 +285,7 @@ export const jsxA11yUnConfig: UnConfigFn<
   unknown,
   [
     customConfig?: {
-      prefix: 'astro';
+      prefix: 'astro' | 'lit';
       options: JsxA11yEslintConfigOptions & UnConfigOptions;
     },
   ]
@@ -320,8 +320,10 @@ export const jsxA11yUnConfig: UnConfigFn<
     true,
   );
 
-  const prefixFinal = customConfig?.prefix ?? 'jsx-a11y';
-  const isForAstro = prefixFinal === 'astro'; // TODO
+  const prefix = customConfig?.prefix;
+  const prefixFinal = (prefix === 'lit' ? 'lit-a11y' : prefix) ?? 'jsx-a11y';
+  const isForAstro = prefixFinal === 'astro';
+  const isForLit = prefix === 'lit';
 
   // `rn` means "rule name"
   const rn = <T extends string>(ruleName: T) =>
@@ -365,7 +367,11 @@ export const jsxA11yUnConfig: UnConfigFn<
     ])
     .addRule(
       rn('anchor-ambiguous-text'),
-      ambiguousWords === false ? OFF : ambiguousWords.severity === 'error' ? ERROR : WARNING,
+      ambiguousWords === false || isForLit
+        ? OFF
+        : ambiguousWords.severity === 'error'
+          ? ERROR
+          : WARNING,
       [
         {
           ...(ambiguousWords && ambiguousWords.words.length > 0 && {words: ambiguousWords.words}),
@@ -390,8 +396,8 @@ export const jsxA11yUnConfig: UnConfigFn<
       ],
     )
     .addRule(rn('aria-activedescendant-has-tabindex'), ERROR)
-    .addRule(rn('aria-props'), ERROR)
-    .addRule(rn('aria-proptypes'), ERROR)
+    .addRule(isForLit ? 'aria-attrs' : rn('aria-props'), ERROR)
+    .addRule(isForLit ? 'aria-attr-valid-value' : rn('aria-proptypes'), ERROR)
     .addRule(rn('aria-role'), ERROR)
     .addRule(rn('aria-unsupported-elements'), ERROR)
     .addRule(rn('autocomplete-valid'), ERROR, [
@@ -401,7 +407,7 @@ export const jsxA11yUnConfig: UnConfigFn<
     ])
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/click-events-have-key-events/
     .addRule(rn('click-events-have-key-events'), isForAstro ? OFF : ERROR)
-    .addRule(rn('control-has-associated-label'), ERROR, [
+    .addRule(rn('control-has-associated-label'), isForLit ? OFF : ERROR, [
       {
         ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
         ...(labelAttributes?.length && {labelAttributes}),
@@ -438,8 +444,9 @@ export const jsxA11yUnConfig: UnConfigFn<
       },
     ])
     // Disabled because "This rule is largely superseded by the `lang` rule"
-    .addRule(rn('html-has-lang'), OFF)
-    .addRule(rn('iframe-has-title'), ERROR)
+    // eslint-disable-next-line sonarjs/no-all-duplicated-branches
+    .addRule(rn('html-has-lang'), isForLit ? OFF : OFF)
+    .addRule(isForLit ? 'iframe-title' : rn('iframe-has-title'), ERROR)
     .addRule(
       rn('img-redundant-alt'),
       imageWords === false || (imageWords && imageWords.words.length === 0)
@@ -454,7 +461,7 @@ export const jsxA11yUnConfig: UnConfigFn<
         },
       ],
     )
-    .addRule(rn('interactive-supports-focus'), ERROR, [
+    .addRule(rn('interactive-supports-focus'), isForLit ? OFF : ERROR, [
       {
         tabbable: getKeysOfTruthyValues({
           ...defaultTabbableRoles,
@@ -462,15 +469,16 @@ export const jsxA11yUnConfig: UnConfigFn<
         }),
       },
     ])
-    .addRule(rn('label-has-associated-control'), ERROR, [
+    .addRule(rn('label-has-associated-control'), isForLit ? OFF : ERROR, [
       {
         ...(labelAttributes?.length && {labelAttributes}),
         ...(customComponents.labels?.length && {labelComponents: customComponents.labels}),
         ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
       },
     ])
-    .addRule(rn('lang'), ERROR) // 🔴
-    .addRule(rn('media-has-caption'), WARNING, [
+    .addRule(isForLit ? 'valid-lang' : rn('lang'), ERROR) // 🔴
+    .addRule('list', isForLit ? ERROR : OFF)
+    .addRule(rn('media-has-caption'), isForLit ? OFF : WARNING, [
       {
         ...(customComponents.audioElements?.length && {audio: customComponents.audioElements}),
         ...(customComponents.videoElements?.length && {video: customComponents.videoElements}),
@@ -491,10 +499,10 @@ export const jsxA11yUnConfig: UnConfigFn<
       },
     ])
     .addRule(rn('no-access-key'), ERROR)
-    .addRule(rn('no-aria-hidden-on-focusable'), WARNING) // 🔴
+    .addRule(rn('no-aria-hidden-on-focusable'), isForLit ? OFF : WARNING) // 🔴
     .addRule(rn('no-autofocus'), WARNING, [{ignoreNonDOM: true}])
     .addRule(rn('no-distracting-elements'), ERROR)
-    .addRule(rn('no-interactive-element-to-noninteractive-role'), ERROR, [
+    .addRule(rn('no-interactive-element-to-noninteractive-role'), isForLit ? OFF : ERROR, [
       {
         // Copied from `recommended` config
         // "The recommended options for this rule allow the `tr` element to be given a role of `presentation` (or its semantic equivalent none). Under normal circumstances, an element with an interactive role should not be semantically neutralized with `presentation` (or `none`)." - rule docs
@@ -502,7 +510,7 @@ export const jsxA11yUnConfig: UnConfigFn<
         canvas: ['img'],
       },
     ])
-    .addRule(rn('no-noninteractive-element-interactions'), ERROR, [
+    .addRule(rn('no-noninteractive-element-interactions'), isForLit ? OFF : ERROR, [
       {
         // TODO copied from `recommended` config
         handlers: [
@@ -522,7 +530,7 @@ export const jsxA11yUnConfig: UnConfigFn<
         img: ['onError', 'onLoad'],
       },
     ])
-    .addRule(rn('no-noninteractive-element-to-interactive-role'), ERROR, [
+    .addRule(rn('no-noninteractive-element-to-interactive-role'), isForLit ? OFF : ERROR, [
       {
         // TODO copied from `recommended` config
         ul: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
@@ -533,7 +541,7 @@ export const jsxA11yUnConfig: UnConfigFn<
         fieldset: ['radiogroup', 'presentation'],
       },
     ])
-    .addRule(rn('no-noninteractive-tabindex'), ERROR, [
+    .addRule(rn('no-noninteractive-tabindex'), isForLit ? OFF : ERROR, [
       // TODO copied from `recommended` config
       {
         tags: [],
@@ -541,18 +549,19 @@ export const jsxA11yUnConfig: UnConfigFn<
         allowExpressionValues: true,
       },
     ])
-    .addRule(rn('no-redundant-roles'), ERROR)
+    .addRule(isForLit ? 'no-redundant-role' : rn('no-redundant-roles'), ERROR)
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/no-static-element-interactions/
-    .addRule(rn('no-static-element-interactions'), isForAstro ? OFF : ERROR, [
+    .addRule(rn('no-static-element-interactions'), isForAstro || isForLit ? OFF : ERROR, [
       // TODO copied from `recommended` config
       {
         allowExpressionValues: true,
         handlers: ['onClick', 'onMouseDown', 'onMouseUp', 'onKeyPress', 'onKeyDown', 'onKeyUp'],
       },
     ])
-    .addRule(rn('prefer-tag-over-role'), OFF) // 🔴
-    .addRule(rn('role-has-required-aria-props'), ERROR)
-    .addRule(rn('role-supports-aria-props'), ERROR)
+    // eslint-disable-next-line sonarjs/no-all-duplicated-branches
+    .addRule(rn('prefer-tag-over-role'), isForLit ? OFF : OFF) // 🔴
+    .addRule(isForLit ? 'role-has-required-aria-attrs' : rn('role-has-required-aria-props'), ERROR)
+    .addRule(isForLit ? 'role-supports-aria-attr' : rn('role-supports-aria-props'), ERROR)
     .addRule(rn('scope'), ERROR)
     .addRule(rn('tabindex-no-positive'), ERROR)
     .addOverrides();

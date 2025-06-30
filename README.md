@@ -209,6 +209,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | ![Svelte](./assets/devicon-svelte.svg) `svelte`                              | ✅ (`svelte` is installed) | [eslint-plugin-svelte](https://npmjs.com/eslint-plugin-svelte) (`svelte`) | Since v0.10.0 |
 | ![Ember](./assets/devicon-ember.svg) `ember`                                 | ✅ (`ember-source` is installed) | [eslint-plugin-ember](https://npmjs.com/eslint-plugin-ember) (`ember`) | Since v1.0.0 |
 | ![Lit](./assets/logos-lit-icon.svg) `lit`                                    | ✅ (`lit` is installed) | [eslint-plugin-lit](https://npmjs.com/eslint-plugin-lit) (`lit`) | Since v1.0.0 |
+| ![Lit](./assets/logos-lit-icon.svg) `lit/a11y`                               | ✅ | [eslint-plugin-lit-a11y](https://npmjs.com/eslint-plugin-lit-a11y) (`lit-a11y`) | Since v1.0.0 |
 | ![TailwindCSS](./assets/devicon-tailwindcss.svg) `betterTailwind`            | ✅ (`tailwindcss` is installed) | [eslint-plugin-better-tailwindcss](https://npmjs.com/eslint-plugin-better-tailwindcss) (`better-tailwindcss`) | Since v1.0.0<br>Supports v4 and v3 |
 | ![TailwindCSS](./assets/devicon-tailwindcss.svg) `tailwind`                  | ❌ | [eslint-plugin-tailwindcss](https://npmjs.com/eslint-plugin-tailwindcss) (`tailwindcss`) | Only supports v3 |
 

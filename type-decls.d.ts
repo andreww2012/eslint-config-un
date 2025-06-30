@@ -87,3 +87,9 @@ declare module 'eslint-plugin-you-dont-need-lodash-underscore' {
   declare const value: ESLint.ESLint.Plugin;
   export = value;
 }
+
+declare module 'eslint-plugin-lit-a11y' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
+  export = value;
+}
