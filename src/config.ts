@@ -11,6 +11,7 @@ import type {
   UnConfigs,
 } from './configs';
 import {
+  CHECKED_LODASH_METHODS,
   DEFAULT_GLOBAL_IGNORES,
   GLOB_CONFIG_FILES,
   GLOB_JS_TS_X_EXTENSION,
@@ -38,6 +39,7 @@ import {
 import type {FalsyValue, Promisable} from './types';
 import {
   type MaybeArray,
+  arraify,
   assignDefaults,
   fetchPackageInfo,
   interopDefault,
@@ -141,7 +143,9 @@ export const eslintConfigInternal = async (
 
   const getIsConfigEnabled = (
     configName: keyof UnConfigs,
-    defaultConditionOrPackageInstalled: boolean | (typeof PACKAGES_TO_GET_INFO_FOR)[number] = true,
+    defaultConditionOrPackageInstalled:
+      | boolean
+      | MaybeArray<(typeof PACKAGES_TO_GET_INFO_FOR)[number]> = true,
     preCondition?: {condition: boolean; reason: string},
   ): boolean => {
     let enabled: boolean | undefined;
@@ -168,10 +172,16 @@ export const eslintConfigInternal = async (
       reason ??=
         '`defaultConfigsStatus` is set to `misc-enabled` and the config is in the misc group';
     }
-    if (typeof defaultConditionOrPackageInstalled === 'string') {
-      const isInstalled = Boolean(packagesInfo[defaultConditionOrPackageInstalled]);
-      enabled ??= isInstalled;
-      reason ??= `package \`${defaultConditionOrPackageInstalled}\` is ${isInstalled ? 'installed' : 'not installed'}`;
+    if (
+      typeof defaultConditionOrPackageInstalled === 'string' ||
+      Array.isArray(defaultConditionOrPackageInstalled)
+    ) {
+      arraify(defaultConditionOrPackageInstalled).some((packageName) => {
+        const isInstalled = Boolean(packagesInfo[packageName]);
+        enabled ??= isInstalled;
+        reason ??= `package \`${packageName}\` is ${isInstalled ? 'installed' : 'not installed'}`;
+        return isInstalled;
+      });
     } else {
       enabled ??= defaultConditionOrPackageInstalled;
       reason ??= `config is ${defaultConditionOrPackageInstalled ? 'enabled' : 'disabled'} by default`;
@@ -179,7 +189,7 @@ export const eslintConfigInternal = async (
     debug(
       `Config \`${styleText('blue', configName)}\` is ${enabled ? styleText('green', 'enabled') : styleText('red', 'disabled')} because ${reason}`,
     );
-    return enabled;
+    return enabled ?? false;
   };
 
   const isAngularEnabled = getIsConfigEnabled('angular', '@angular/core');
@@ -227,10 +237,7 @@ export const eslintConfigInternal = async (
   const isPnpmEnabled = getIsConfigEnabled('pnpm', usedPackageManager?.name === 'pnpm');
   const isPreferArrowFunctionsEnabled = getIsConfigEnabled('preferArrowFunctions', false);
   const isPromiseEnabled = getIsConfigEnabled('promise');
-  const isQwikEnabled = getIsConfigEnabled(
-    'qwik',
-    packagesInfo['@builder.io/qwik'] != null || packagesInfo['@qwik.dev/core'] != null,
-  );
+  const isQwikEnabled = getIsConfigEnabled('qwik', ['@builder.io/qwik', '@qwik.dev/core']);
   const isReactEnabled = getIsConfigEnabled('react', 'react');
   const isRegexpEnabled = getIsConfigEnabled('regexp');
   const isSecurityEnabled = getIsConfigEnabled('security', false);
@@ -255,6 +262,11 @@ export const eslintConfigInternal = async (
   const isVitestEnabled = getIsConfigEnabled('vitest', 'vitest');
   const isVueEnabled = getIsConfigEnabled('vue', 'vue');
   const isYamlEnabled = getIsConfigEnabled('yaml', false);
+  const isYouDontNeedLodashUnderscoreEnabled = getIsConfigEnabled('youDontNeedLodashUnderscore', [
+    'lodash',
+    'lodash-es',
+    ...CHECKED_LODASH_METHODS.map((method) => `lodash.${method}` as const),
+  ]);
 
   const context: UnConfigContext = {
     packagesInfo,
@@ -328,6 +340,7 @@ export const eslintConfigInternal = async (
       vitest: {enabled: isVitestEnabled},
       vue: {enabled: isVueEnabled},
       yaml: {enabled: isYamlEnabled},
+      youDontNeedLodashUnderscore: {enabled: isYouDontNeedLodashUnderscoreEnabled},
     },
     disabledAutofixes: {},
     usedPlugins: new Set(),
@@ -489,6 +502,10 @@ export const eslintConfigInternal = async (
     isMdxEnabled && import('./configs/mdx').then((m) => m.mdxUnConfig(context)),
     isPlaywrightEnabled &&
       import('./configs/playwright').then((m) => m.playwrightUnConfig(context)),
+    isYouDontNeedLodashUnderscoreEnabled &&
+      import('./configs/you-dont-need-lodash-underscore').then((m) =>
+        m.youDontNeedLodashUnderscoreUnConfig(context),
+      ),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

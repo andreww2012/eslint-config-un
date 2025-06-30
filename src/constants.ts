@@ -88,6 +88,43 @@ export const GLOB_MARKDOWN_ALL_CODE_BLOCKS = `${GLOB_MARKDOWN}/**/*.*` as const;
 
 export const DEFAULT_GLOBAL_IGNORES = ['**/dist'] as const;
 
+export const CHECKED_LODASH_METHODS = [
+  'assign',
+  'bind',
+  'capitalize',
+  'concat',
+  'contains',
+  'defaults',
+  'drop',
+  'every',
+  'fill',
+  'filter',
+  'find',
+  'first',
+  'flatten',
+  'get',
+  'head',
+  'includes',
+  'join',
+  'keys',
+  'last',
+  'map',
+  'omit',
+  'pairs',
+  'reduce',
+  'repeat',
+  'replace',
+  'reverse',
+  'size',
+  'slice',
+  'some',
+  'split',
+  'throttle',
+  'trim',
+  'uniq',
+  'values',
+] as const;
+
 export const PACKAGES_TO_GET_INFO_FOR = [
   'prettier',
   'typescript',
@@ -103,6 +140,9 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'cypress',
   'turbo',
   'playwright',
+  'lodash',
+  'lodash-es',
+  ...CHECKED_LODASH_METHODS.map((method) => `lodash.${method}` as const),
 
   'astro',
   'vue',

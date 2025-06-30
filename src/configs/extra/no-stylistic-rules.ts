@@ -686,6 +686,9 @@ const ALL_STYLISTIC_RULES = {
     'require-string-key': true,
     'spaced-comment': true,
   },
+  'you-dont-need-lodash-underscore': {
+    // None
+  },
 } as const satisfies {
   [Plugin in PluginPrefix]: Partial<Record<RuleNamesForPlugin<Plugin>, true>>;
 };

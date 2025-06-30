@@ -369,6 +369,11 @@ export const pluginsLoaders = {
     // @ts-expect-error types mismatch
     () => import('eslint-plugin-yml') satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
+  ...genPluginLoader(
+    'you-dont-need-lodash-underscore',
+    'eslint-plugin-you-dont-need-lodash-underscore',
+    () => import('eslint-plugin-you-dont-need-lodash-underscore'),
+  ),
 } satisfies Record<string, ObjectValues<PluginLoader<EslintPlugin, string, string>>>;
 
 type LoadablePluginPrefix = keyof typeof pluginsLoaders;

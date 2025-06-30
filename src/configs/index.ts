@@ -76,6 +76,7 @@ import type {UnusedImportsEslintConfigOptions} from './unused-imports';
 import type {VitestEslintConfigOptions} from './vitest';
 import type {VueEslintConfigOptions} from './vue';
 import type {YamlEslintConfigOptions} from './yaml';
+import type {YouDontNeedLodashUnderscoreEslintConfigOptions} from './you-dont-need-lodash-underscore';
 
 export interface EslintConfigUnOptions {
   /**
@@ -792,6 +793,15 @@ export interface UnConfigs {
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   yaml: YamlEslintConfigOptions;
+
+  /**
+   * Helps in identifying places in your codebase where you don't (may not) need Lodash/Underscore.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-you-dont-need-lodash-underscore`](https://npmjs.com/eslint-plugin-you-dont-need-lodash-underscore) ([docs](https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore))
+   * @default true <=> Any of the following packages are installed: `lodash`, `lodash-es`, `lodash.{assign,bind,capitalize,concat,contains,defaults,drop,every,fill,filter,find,first,flatten,get,head,includes,join,keys,last,map,omit,pairs,reduce,repeat,replace,reverse,size,slice,some,split,throttle,trim,uniq,values}`
+   */
+  youDontNeedLodashUnderscore: YouDontNeedLodashUnderscoreEslintConfigOptions;
 }
 /* eslint-disable perfectionist/sort-interfaces */
 

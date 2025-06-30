@@ -263,17 +263,18 @@ Sub-config is a Config located within Config's options. If the parent config is 
 
 | Un config name | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`) | Description/Notes |
 | -------------- | ------------------------------------------- | ------------------------------------ | ----------------- |
-| `jest`                                                                  | ✅ (`jest` is installed) | [eslint-plugin-jest](https://npmjs.com/eslint-plugin-jest) (`jest`) | Since v0.3.0 |
-| `jest/extended`                                                         | ✅ (`jest-extended` is installed) | [eslint-plugin-jest-extended](https://npmjs.com/eslint-plugin-jest-extended) (`jest-extended`) | - |
-| `jest/typescript`                                                       | ✅ (`ts` config is enabled) | [eslint-plugin-jest](https://npmjs.com/eslint-plugin-jest) (`jest`) | Only TypeScript-specific rules from `eslint-plugin-jest` |
-| `vitest`                                                                | ✅ (`vitest` is installed) | [@vitest/eslint-plugin](https://npmjs.com/package/@vitest/eslint-plugin) (`vitest`) | Since v0.3.0 |
-| `ava`                                                                   | ✅ (`ava` is installed) | [eslint-plugin-ava](https://npmjs.com/eslint-plugin-ava) (`ava`) | Since v1.0.0 |
-| ![Testing Library](./assets/logos-testing-library.svg) `testingLibrary` | ✅ (`@testing-library/dom` is installed) | [eslint-plugin-testing-library](https://npmjs.com/eslint-plugin-testing-library) (`testing-library`) | Since v1.0.0 |
-| `tanstackQuery`                                                         | ✅ (`@tanstack/query-core` is installed) | [@tanstack/eslint-plugin-query](https://npmjs.com/package/@tanstack/eslint-plugin-query) (`@tanstack/query`) | Since v1.0.0 |
-| ![Storybook](./assets/logos-storybook-icon.svg) `storybook`             | ✅ (`storybook` is installed) | [eslint-plugin-storybook](https://npmjs.com/eslint-plugin-storybook) (`storybook`) | Since v1.0.0 |
-| ![Cypress](./assets/vscode-icons-file-type-light-cypress.svg) `cypress` | ✅ (`cypress` is installed) | [eslint-plugin-cypress](https://npmjs.com/eslint-plugin-cypress) (`cypress`) | Since v1.0.0 |
-| ![Turborepo](./assets/material-icon-theme-turborepo.svg) `turbo`        | ✅ (`turbo` is installed) | [eslint-plugin-turbo](https://npmjs.com/eslint-plugin-turbo) (`turbo`) | Since v1.0.0 |
+| `jest`                                                                       | ✅ (`jest` is installed) | [eslint-plugin-jest](https://npmjs.com/eslint-plugin-jest) (`jest`) | Since v0.3.0 |
+| `jest/extended`                                                              | ✅ (`jest-extended` is installed) | [eslint-plugin-jest-extended](https://npmjs.com/eslint-plugin-jest-extended) (`jest-extended`) | - |
+| `jest/typescript`                                                            | ✅ (`ts` config is enabled) | [eslint-plugin-jest](https://npmjs.com/eslint-plugin-jest) (`jest`) | Only TypeScript-specific rules from `eslint-plugin-jest` |
+| `vitest`                                                                     | ✅ (`vitest` is installed) | [@vitest/eslint-plugin](https://npmjs.com/package/@vitest/eslint-plugin) (`vitest`) | Since v0.3.0 |
+| `ava`                                                                        | ✅ (`ava` is installed) | [eslint-plugin-ava](https://npmjs.com/eslint-plugin-ava) (`ava`) | Since v1.0.0 |
+| ![Testing Library](./assets/logos-testing-library.svg) `testingLibrary`      | ✅ (`@testing-library/dom` is installed) | [eslint-plugin-testing-library](https://npmjs.com/eslint-plugin-testing-library) (`testing-library`) | Since v1.0.0 |
+| `tanstackQuery`                                                              | ✅ (`@tanstack/query-core` is installed) | [@tanstack/eslint-plugin-query](https://npmjs.com/package/@tanstack/eslint-plugin-query) (`@tanstack/query`) | Since v1.0.0 |
+| ![Storybook](./assets/logos-storybook-icon.svg) `storybook`                  | ✅ (`storybook` is installed) | [eslint-plugin-storybook](https://npmjs.com/eslint-plugin-storybook) (`storybook`) | Since v1.0.0 |
+| ![Cypress](./assets/vscode-icons-file-type-light-cypress.svg) `cypress`      | ✅ (`cypress` is installed) | [eslint-plugin-cypress](https://npmjs.com/eslint-plugin-cypress) (`cypress`) | Since v1.0.0 |
+| ![Turborepo](./assets/material-icon-theme-turborepo.svg) `turbo`             | ✅ (`turbo` is installed) | [eslint-plugin-turbo](https://npmjs.com/eslint-plugin-turbo) (`turbo`) | Since v1.0.0 |
 | ![Playwright](./assets/devicon-playwright.svg) `playwright`                  | ✅ (`playwright` is installed) | [eslint-plugin-playwright](https://npmjs.com/eslint-plugin-playwright) (`playwright`) | Since v1.0.0 |
+| ![Lodash](./assets/devicon-plain-lodash.svg) `youDontNeedLodashUnderscore` | ✅ (`lodash`, `lodash-es` or `lodash.*` is installed) | [eslint-plugin-you-dont-need-lodash-underscore](https://npmjs.com/eslint-plugin-you-dont-need-lodash-underscore) (`you-dont-need-lodash-underscore`) | Since v1.0.0 |
 
 ### Miscellaneous
 

@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  eslint-typegen:
+    hash: a7979631477b2e81054f584a4172b80fb3c23fb596b49802373fe07c9b2f526b
+    path: patches/eslint-typegen.patch
+
 importers:
 
   .:
@@ -369,9 +374,12 @@ importers:
       eslint-plugin-turbo:
         specifier: 2.5.4
         version: 2.5.4(eslint@9.29.0(jiti@2.4.2))(turbo@2.5.4)
+      eslint-plugin-you-dont-need-lodash-underscore:
+        specifier: 6.14.0
+        version: 6.14.0
       eslint-typegen:
         specifier: 2.2.0
-        version: 2.2.0(eslint@9.29.0(jiti@2.4.2))
+        version: 2.2.0(patch_hash=a7979631477b2e81054f584a4172b80fb3c23fb596b49802373fe07c9b2f526b)(eslint@9.29.0(jiti@2.4.2))
       json-schema-to-typescript-lite:
         specifier: 14.1.0
         version: 14.1.0
@@ -3792,6 +3800,10 @@ packages:
     engines: {node: ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: '>=6.0.0'
+
+  eslint-plugin-you-dont-need-lodash-underscore@6.14.0:
+    resolution: {integrity: sha512-3zkkU/O1agczP7szJGHmisZJS/AknfVl6mb0Zqoc95dvFsdmfK+cbhrn+Ffy0UWB1pgDJwQr7kIO3rPstWs3Dw==}
+    engines: {node: '>=4.0'}
 
   eslint-processor-vue-blocks@2.0.0:
     resolution: {integrity: sha512-u4W0CJwGoWY3bjXAuFpc/b6eK3NQEI8MoeW7ritKj3G3z/WtHrKjkqf+wk8mPEy5rlMGS+k6AZYOw2XBoN/02Q==}
@@ -10873,6 +10885,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  eslint-plugin-you-dont-need-lodash-underscore@6.14.0:
+    dependencies:
+      kebab-case: 1.0.2
+
   eslint-processor-vue-blocks@2.0.0(@vue/compiler-sfc@3.5.17)(eslint@9.29.0(jiti@2.4.2)):
     dependencies:
       '@vue/compiler-sfc': 3.5.17
@@ -10900,7 +10916,7 @@ snapshots:
       '@eslint-community/eslint-utils': 4.7.0(eslint@9.29.0(jiti@2.4.2))
       eslint: 9.29.0(jiti@2.4.2)
 
-  eslint-typegen@2.2.0(eslint@9.29.0(jiti@2.4.2)):
+  eslint-typegen@2.2.0(patch_hash=a7979631477b2e81054f584a4172b80fb3c23fb596b49802373fe07c9b2f526b)(eslint@9.29.0(jiti@2.4.2)):
     dependencies:
       eslint: 9.29.0(jiti@2.4.2)
       json-schema-to-typescript-lite: 14.1.0

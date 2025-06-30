@@ -1,5 +1,10 @@
+nodeLinker: hoisted
+
 onlyBuiltDependencies:
   - esbuild
   - unrs-resolver
-nodeLinker: hoisted
+
 packageImportMethod: clone-or-copy
+
+patchedDependencies:
+  eslint-typegen: patches/eslint-typegen.patch

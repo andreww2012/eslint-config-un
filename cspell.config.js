@@ -72,5 +72,6 @@ export default {
     'dedented',
     'curlies',
     'unsanitized',
+    'dont',
   ],
 };
