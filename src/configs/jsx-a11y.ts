@@ -346,7 +346,11 @@ export const jsxA11yUnConfig: UnConfigFn<
       {
         ...(pluginSettings && {
           settings: {
-            'jsx-a11y': pluginSettings,
+            ...(isForLit
+              ? pluginSettings
+              : {
+                  'jsx-a11y': pluginSettings,
+                }),
           },
         }),
       },
