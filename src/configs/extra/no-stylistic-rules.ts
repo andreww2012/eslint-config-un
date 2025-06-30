@@ -397,6 +397,9 @@ const ALL_STYLISTIC_RULES = {
   'react-refresh': {
     // None
   },
+  'react-you-might-not-need-an-effect': {
+    // None
+  },
   regexp: {
     'grapheme-string-literal': true,
     'hexadecimal-escape': true,

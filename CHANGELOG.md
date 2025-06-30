@@ -22,6 +22,7 @@
 - New config: `fileProgress` via [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress), **<u>disabled</u>** by default.
 - New config: `playwright` via [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright), enabled automatically if `playwright` package is installed.
 - New config: `youDontNeedLodashUnderscore` via [`eslint-plugin-you-dont-need-lodash-underscore`](https://npmjs.com/eslint-plugin-you-dont-need-lodash-underscore), enabled automatically if `lodash`, `lodash-es` or `lodash.*` package is installed.
+- New `react` sub-config: `youMightNotNeedAnEffect` via [`eslint-plugin-react-you-might-not-need-an-effect`](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect), enabled by default.
 - [**BREAKING**] eslint-config-un package is now distributed as ESM only.
 - [**BREAKING**] Set the minimum supported Node.js version to 20.11.
 - [**BREAKING**] the following plugins are now not direct dependencies of this package, but its' optional peer dependencies: `@graphql-eslint/eslint-plugin`, `eslint-plugin-storybook` and `eslint-plugin-tailwindcss`.

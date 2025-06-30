@@ -630,10 +630,13 @@ export interface UnConfigs {
    * Refer to `pluginX` option JSDoc for more details.
    *
    * ### Sub-configs
+   * - `allowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
    * - `reactX`: runtime agnostic ("X") and "Name Convention" rules from `@eslint-react/eslint-plugin`.
    * - `hooks`: rules from `eslint-plugin-react-hooks` as well as "Hooks Extra" rules from `@eslint-react/eslint-plugin`.
    * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and `eslint-plugin-react`.
-   * - `allowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
+   * - `compiler`: rules from `eslint-plugin-react-compiler`.
+   * - `refresh`: rules from `eslint-plugin-react-refresh`.
+   * - `youMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
    * @default true <=> `react` package is installed
    */
   react: ReactEslintConfigOptions;

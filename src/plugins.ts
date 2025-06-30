@@ -306,6 +306,11 @@ export const pluginsLoaders = {
     'eslint-plugin-react-refresh',
     () => import('eslint-plugin-react-refresh'),
   ),
+  ...genPluginLoader(
+    'react-you-might-not-need-an-effect',
+    'eslint-plugin-react-you-might-not-need-an-effect',
+    () => import('eslint-plugin-react-you-might-not-need-an-effect'),
+  ),
   ...genPluginLoader('regexp', 'eslint-plugin-regexp', () => import('eslint-plugin-regexp')),
   ...genPluginLoader('security', 'eslint-plugin-security', () => import('eslint-plugin-security')),
   ...genPluginLoader(

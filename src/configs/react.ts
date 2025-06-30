@@ -335,6 +335,14 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
     | UnConfigOptions<DistributedPick<RulesRecordPartial, 'import/no-default-export'>>;
 
   /**
+   * Enables or specifies the configuration for the [`eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme`](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme) plugin.
+   *
+   * By default will use the same `files` and `ignores` as the parent config.
+   * @default true
+   */
+  configYouMightNotNeedAnEffect?: boolean | UnConfigOptions<'react-you-might-not-need-an-effect'>;
+
+  /**
    * Controls how rules from [@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react) are used.
    * - `prefer`: if the same(-ish) rule exists both in `@eslint-react/eslint-plugin`
    * and `eslint-plugin-react` (the full list is below), use the one from
@@ -515,6 +523,8 @@ const NEXT_EXPORTS: readonly string[] = [
   'viewport', // https://nextjs.org/docs/app/api-reference/functions/generate-viewport
 ];
 
+const DEFAULT_FILES = [GLOB_JS_TS_X];
+
 export const reactUnConfig: UnConfigFn<
   'react',
   unknown,
@@ -534,6 +544,7 @@ export const reactUnConfig: UnConfigFn<
     configReactX: true,
     configDom: await doesPackageExist('react-dom'),
     configRefresh: true,
+    configYouMightNotNeedAnEffect: true,
     pluginX: 'prefer',
     shorthandBoolean: 'prefer',
     shorthandFragment: 'prefer',
@@ -549,6 +560,7 @@ export const reactUnConfig: UnConfigFn<
     configReactX,
     configDom,
     configRefresh,
+    configYouMightNotNeedAnEffect,
     pluginX,
     shorthandBoolean,
     shorthandFragment,
@@ -637,7 +649,7 @@ export const reactUnConfig: UnConfigFn<
       'react/plugin-original',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JS_TS_X],
+        filesFallback: DEFAULT_FILES,
       },
     ])
     .addRule('boolean-prop-naming', OFF)
@@ -879,7 +891,7 @@ export const reactUnConfig: UnConfigFn<
       'react/hooks',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: parentConfigFiles || [GLOB_JS_TS_X],
+        filesFallback: parentConfigFiles || DEFAULT_FILES,
         ignoresFallback: parentConfigIgnores,
       },
     ])
@@ -924,7 +936,7 @@ export const reactUnConfig: UnConfigFn<
       'react/x',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: parentConfigFiles || [GLOB_JS_TS_X],
+        filesFallback: parentConfigFiles || DEFAULT_FILES,
         ignoresFallback: parentConfigIgnores,
       },
     ])
@@ -1121,7 +1133,7 @@ export const reactUnConfig: UnConfigFn<
       'react/dom',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: parentConfigFiles || [GLOB_JS_TS_X],
+        filesFallback: parentConfigFiles || DEFAULT_FILES,
         ignoresFallback: parentConfigIgnores,
       },
     ])
@@ -1220,11 +1232,28 @@ export const reactUnConfig: UnConfigFn<
       'react/compiler',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: parentConfigFiles || [GLOB_JS_TS_X],
+        filesFallback: parentConfigFiles || DEFAULT_FILES,
         ignoresFallback: parentConfigIgnores,
       },
     ])
     .addRule('react-compiler', ERROR)
+    .addOverrides();
+
+  const configBuilderYouMightNotNeedAnEffect = createConfigBuilder(
+    context,
+    configYouMightNotNeedAnEffect,
+    'react-you-might-not-need-an-effect',
+  );
+  configBuilderYouMightNotNeedAnEffect
+    ?.addConfig([
+      'react/you-might-not-need-an-effect',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: parentConfigFiles || DEFAULT_FILES,
+        ignoresFallback: parentConfigIgnores,
+      },
+    ])
+    .addRule('you-might-not-need-an-effect', ERROR)
     .addOverrides();
 
   return {
@@ -1238,6 +1267,7 @@ export const reactUnConfig: UnConfigFn<
       configBuilderDom,
       configBuilderRefresh,
       configBuilderCompiler,
+      configBuilderYouMightNotNeedAnEffect,
     ],
     optionsResolved,
   };
