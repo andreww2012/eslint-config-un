@@ -326,6 +326,9 @@ importers:
       eslint-plugin-jest-extended:
         specifier: 3.0.0
         version: 3.0.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
+      eslint-plugin-lit:
+        specifier: 2.1.1
+        version: 2.1.1(eslint@9.29.0(jiti@2.4.2))
       eslint-plugin-perfectionist:
         specifier: 4.15.0
         version: 4.15.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
@@ -3517,6 +3520,12 @@ packages:
     engines: {node: '>=4.0'}
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
+
+  eslint-plugin-lit@2.1.1:
+    resolution: {integrity: sha512-qmyAOnnTCdS+vDnNxtCoF0icSKIio4GUv6ZLnaCtTX6G/YezRa6Ag6tOQ+MfV5Elvtw9CIXeliRX4mIBSwrPIA==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      eslint: '>= 8'
 
   eslint-plugin-math@0.10.1:
     resolution: {integrity: sha512-c/EiceIC5yz2BsHhkJMbzAd2K/HYEFlOEjyLelwurQuijtYxFFTbg5KskBrb14eO5HBSuXiiAtoqqIlwmYn5zQ==}
@@ -10432,6 +10441,12 @@ snapshots:
       object.fromentries: 2.0.8
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
+
+  eslint-plugin-lit@2.1.1(eslint@9.29.0(jiti@2.4.2)):
+    dependencies:
+      eslint: 9.29.0(jiti@2.4.2)
+      parse5: 6.0.1
+      parse5-htmlparser2-tree-adapter: 6.0.1
 
   eslint-plugin-math@0.10.1(eslint@9.29.0(jiti@2.4.2)):
     dependencies:

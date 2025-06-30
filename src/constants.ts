@@ -156,4 +156,5 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   '@builder.io/qwik',
   '@qwik.dev/core',
   'ember-source',
+  'lit',
 ] as const;

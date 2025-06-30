@@ -44,6 +44,7 @@ import type {JsdocEslintConfigOptions} from './jsdoc';
 import type {JsonSchemaValidatorEslintConfigOptions} from './json-schema-validator';
 import type {JsoncEslintConfigOptions} from './jsonc';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
+import type {LitEslintConfigOptions} from './lit';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import type {MathEslintConfigOptions} from './math';
 import type {MdxEslintConfigOptions} from './mdx';
@@ -475,6 +476,15 @@ export interface UnConfigs {
    * @default true
    */
   jsxA11y: JsxA11yEslintConfigOptions;
+
+  /**
+   * [Lit](https://lit.dev) specific rules.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit) ([docs](https://github.com/43081j/eslint-plugin-lit))
+   * @default true <=> `lit` package is installed
+   */
+  lit: LitEslintConfigOptions;
 
   /**
    * Used plugin:

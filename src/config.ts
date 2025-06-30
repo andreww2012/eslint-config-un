@@ -222,6 +222,7 @@ export const eslintConfigInternal = async (
   const isJsoncEnabled = getIsConfigEnabled('json', false);
   const isJsonSchemaValidatorEnabled = getIsConfigEnabled('jsonSchemaValidator', false);
   const isJsxA11yEnabled = getIsConfigEnabled('jsxA11y');
+  const isLitEnabled = getIsConfigEnabled('lit', 'lit');
   const isMarkdownEnabled = getIsConfigEnabled('markdown');
   const isMathEnabled = getIsConfigEnabled('math');
   const isMdxEnabled = getIsConfigEnabled('mdx');
@@ -307,6 +308,7 @@ export const eslintConfigInternal = async (
       json: {enabled: isJsoncEnabled},
       jsonSchemaValidator: {enabled: isJsonSchemaValidatorEnabled},
       jsxA11y: {enabled: isJsxA11yEnabled},
+      lit: {enabled: isLitEnabled},
       markdown: {enabled: isMarkdownEnabled},
       math: {enabled: isMathEnabled},
       mdx: {enabled: isMdxEnabled},
@@ -506,6 +508,7 @@ export const eslintConfigInternal = async (
       import('./configs/you-dont-need-lodash-underscore').then((m) =>
         m.youDontNeedLodashUnderscoreUnConfig(context),
       ),
+    isLitEnabled && import('./configs/lit').then((m) => m.litUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

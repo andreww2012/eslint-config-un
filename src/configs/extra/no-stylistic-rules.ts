@@ -286,6 +286,9 @@ const ALL_STYLISTIC_RULES = {
   'jsx-a11y': {
     // None
   },
+  lit: {
+    'quoted-expressions': true,
+  },
   markdown: {
     // None
   },
