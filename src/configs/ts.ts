@@ -972,7 +972,7 @@ export const tsUnConfig: UnConfigFn<
     /* Category: Strict */
     .addRule('await-thenable', ERROR) // 🟣
     .addRule('no-array-delete', ERROR) // 🟣
-    .addRule('no-base-to-string', ERROR) // 🟣
+    .addRule('no-base-to-string', ERROR, [{checkUnknown: true}]) // 🟣
     .addRule('no-confusing-void-expression', ERROR, [{ignoreArrowShorthand: true}]) // 🟣
     .addRule('no-deprecated', WARNING) // 🟣
     .addRule('no-duplicate-type-constituents', ERROR) // 🟣
