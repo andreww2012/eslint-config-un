@@ -227,6 +227,7 @@ export const eslintConfigInternal = async (
   const isMarkdownEnabled = getIsConfigEnabled('markdown');
   const isMathEnabled = getIsConfigEnabled('math');
   const isMdxEnabled = getIsConfigEnabled('mdx');
+  const isMochaEnabled = getIsConfigEnabled('mocha', 'mocha');
   // eslint-disable-next-line case-police/string-check
   const isNextJsEnabled = getIsConfigEnabled('nextJs', 'next');
   const isNodeEnabled = getIsConfigEnabled('node');
@@ -315,6 +316,7 @@ export const eslintConfigInternal = async (
       markdown: {enabled: isMarkdownEnabled},
       math: {enabled: isMathEnabled},
       mdx: {enabled: isMdxEnabled},
+      mocha: {enabled: isMochaEnabled},
       nextJs: {enabled: isNextJsEnabled},
       node: {enabled: isNodeEnabled},
       nodeDependencies: {enabled: isNodeDependenciesEnabled},
@@ -513,6 +515,7 @@ export const eslintConfigInternal = async (
         m.youDontNeedLodashUnderscoreUnConfig(context),
       ),
     isLitEnabled && import('./configs/lit').then((m) => m.litUnConfig(context)),
+    isMochaEnabled && import('./configs/mocha').then((m) => m.mochaUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

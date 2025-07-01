@@ -288,6 +288,8 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | ![Storybook](./assets/logos-storybook-icon.svg) `storybook`                           | ✅ (`storybook` is installed) | [eslint-plugin-storybook](https://npmjs.com/eslint-plugin-storybook) (`storybook`) | Since v1.0.0 |
 | ![Cypress](./assets/vscode-icons-file-type-light-cypress.svg) `cypress`               | ✅ (`cypress` is installed) | [eslint-plugin-cypress](https://npmjs.com/eslint-plugin-cypress) (`cypress`) | Since v1.0.0 |
 | ![Cypress](./assets/vscode-icons-file-type-light-cypress.svg) `cypress/noOnlyTests`   | ✅ | [eslint-plugin-no-only-tests](https://npmjs.com/eslint-plugin-no-only-tests) (`no-only-tests`) | Since v1.0.0 |
+| ![Mocha](./assets/devicon-mocha.svg) `mocha`                                          | ✅ (`mocha` is installed) | [eslint-plugin-mocha](https://npmjs.com/eslint-plugin-mocha) (`mocha`) | Since v1.0.0 |
+| ![Mocha](./assets/devicon-mocha.svg) `mocha/noOnlyTests`                              | ✅ | [eslint-plugin-no-only-tests](https://npmjs.com/eslint-plugin-no-only-tests) (`no-only-tests`) | Since v1.0.0 |
 | ![Turborepo](./assets/material-icon-theme-turborepo.svg) `turbo`                      | ✅ (`turbo` is installed) | [eslint-plugin-turbo](https://npmjs.com/eslint-plugin-turbo) (`turbo`) | Since v1.0.0 |
 | ![Playwright](./assets/devicon-playwright.svg) `playwright`                           | ✅ (`playwright` is installed) | [eslint-plugin-playwright](https://npmjs.com/eslint-plugin-playwright) (`playwright`) | Since v1.0.0 |
 | ![Playwright](./assets/devicon-playwright.svg) `playwright/noOnlyTests`               | ❌ | [eslint-plugin-no-only-tests](https://npmjs.com/eslint-plugin-no-only-tests) (`no-only-tests`) | Since v1.0.0 |

@@ -304,6 +304,9 @@ const ALL_STYLISTIC_RULES = {
   mdx: {
     // None
   },
+  mocha: {
+    'consistent-spacing-between-blocks': true,
+  },
   'no-only-tests': {
     // None
   },

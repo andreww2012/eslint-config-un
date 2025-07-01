@@ -49,6 +49,7 @@ import type {LitEslintConfigOptions} from './lit';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import type {MathEslintConfigOptions} from './math';
 import type {MdxEslintConfigOptions} from './mdx';
+import type {MochaEslintConfigOptions} from './mocha';
 import type {NextJsEslintConfigOptions} from './nextjs';
 import type {NoOnlyTestsEslintConfigOptions} from './no-only-tests';
 import type {NoUnsanitizedEslintConfigOptions} from './no-unsanitized';
@@ -523,6 +524,15 @@ export interface UnConfigs {
    * @default true
    */
   mdx: MdxEslintConfigOptions;
+
+  /**
+   * [Mocha](https://mochajs.org) specific rules.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha) ([docs](https://github.com/lo1tuma/eslint-plugin-mocha))
+   * @default true
+   */
+  mocha: MochaEslintConfigOptions;
 
   /**
    * [Next.js](https://nextjs.org) specific rules.

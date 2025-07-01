@@ -138,6 +138,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'ava',
   '@testing-library/dom',
   'cypress',
+  'mocha',
   'turbo',
   'playwright',
   'lodash',
