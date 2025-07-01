@@ -4,7 +4,9 @@ import {pluginsLoaders} from '../plugins';
 import {assignDefaults} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import {
+  type NoOnlyTestsSubConfigDisabledByDefault,
   RULES_TO_DISABLE_IN_TEST_FILES,
+  generateConfigNoOnlyTestsBuilder,
   generateConsistentTestItOptions,
   generateDefaultTestFiles,
 } from './shared';
@@ -23,7 +25,8 @@ export interface VitestEslintConfigOptions
       | 'restrictedMatchers'
       | 'asyncMatchers'
       | 'minAndMaxExpectArgs'
-    > {
+    >,
+    NoOnlyTestsSubConfigDisabledByDefault {
   /**
    * `@vitest/eslint-plugin` plugin settings that will be applied to the specified `files` and `ignores`.
    */
@@ -54,11 +57,13 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
 
   const optionsRaw = context.rootOptions.configs?.vitest;
   const optionsResolved = assignDefaults(optionsRaw, {
+    configNoOnlyTests: false,
     vitestGlobalsImporting: 'disallow',
   } satisfies VitestEslintConfigOptions);
 
   const {
     settings: pluginSettings,
+    configNoOnlyTests,
     maxAssertionCalls,
     maxNestedDescribes,
     restrictedMethods,
@@ -93,7 +98,13 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
   // TODO sync settings with `jest` config?
   configBuilder
     ?.addConfig(
-      ['vitest', {includeDefaultFilesAndIgnores: true, filesFallback: defaultVitestFiles}],
+      [
+        'vitest',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: defaultVitestFiles,
+        },
+      ],
       defaultVitestEslintConfig,
     )
     .addRule('consistent-test-filename', OFF)
@@ -182,8 +193,16 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
+  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
+    context,
+    'vitest',
+    configNoOnlyTests,
+    optionsResolved,
+    {filesFallback: defaultVitestFiles},
+  );
+
   return {
-    configs: [configBuilder],
+    configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
 };

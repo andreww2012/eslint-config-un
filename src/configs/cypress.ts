@@ -1,16 +1,31 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
-import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
+import {
+  type NoOnlyTestsSubConfigEnabledByDefault,
+  RULES_TO_DISABLE_IN_TEST_FILES,
+  generateConfigNoOnlyTestsBuilder,
+  generateDefaultTestFiles,
+} from './shared';
 import type {UnConfigFn} from './index';
 
-export interface CypressEslintConfigOptions extends UnConfigOptions<'cypress'> {}
+export interface CypressEslintConfigOptions
+  extends UnConfigOptions<'cypress'>,
+    NoOnlyTestsSubConfigEnabledByDefault {}
 
 export const cypressUnConfig: UnConfigFn<'cypress'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.cypress;
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies CypressEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {
+    configNoOnlyTests: true,
+  } satisfies CypressEslintConfigOptions);
+
+  const {configNoOnlyTests} = optionsResolved;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'cypress');
+
+  const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
+    includeCypressTests: true,
+  });
 
   // Legend:
   // 🟢 - in recommended
@@ -20,9 +35,7 @@ export const cypressUnConfig: UnConfigFn<'cypress'> = (context) => {
       'cypress',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
-          includeCypressTests: true,
-        }),
+        filesFallback: configFilesFallback,
       },
     ])
     .addRule('assertion-before-screenshot', WARNING)
@@ -40,8 +53,16 @@ export const cypressUnConfig: UnConfigFn<'cypress'> = (context) => {
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
+  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
+    context,
+    'cypress',
+    configNoOnlyTests,
+    optionsResolved,
+    {filesFallback: configFilesFallback},
+  );
+
   return {
-    configs: [configBuilder],
+    configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
 };

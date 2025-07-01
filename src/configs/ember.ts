@@ -2,14 +2,19 @@
 import {ERROR, GLOB_JS_TS, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
-import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
+import {
+  type NoOnlyTestsSubConfigEnabledByDefault,
+  RULES_TO_DISABLE_IN_TEST_FILES,
+  generateConfigNoOnlyTestsBuilder,
+  generateDefaultTestFiles,
+} from './shared';
 import type {UnConfigFn} from './index';
 
 export interface EmberEslintConfigOptions extends UnConfigOptions<'ember'> {
   /**
    * Rules specific to files with tests.
    */
-  configTestFiles?: boolean | UnConfigOptions<'ember'>;
+  configTestFiles?: boolean | UnConfigOptions<'ember', NoOnlyTestsSubConfigEnabledByDefault>;
 
   /**
    * Affected rules:
@@ -180,12 +185,14 @@ export const emberUnConfig: UnConfigFn<'ember'> = async (context) => {
 
   const configBuilderTests = createConfigBuilder(context, configTestFiles, 'ember');
 
+  const configTestsFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_EXTENSION);
+
   configBuilderTests
     ?.addConfig([
       'ember/tests',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: generateDefaultTestFiles(GLOB_JS_TS_EXTENSION),
+        filesFallback: configTestsFilesFallback,
       },
     ])
     .addRule('no-current-route-name', ERROR)
@@ -207,8 +214,16 @@ export const emberUnConfig: UnConfigFn<'ember'> = async (context) => {
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
+  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
+    context,
+    'ember',
+    (typeof configTestFiles === 'object' ? configTestFiles.configNoOnlyTests : null) ?? true,
+    configTestFiles,
+    {filesFallback: configTestsFilesFallback},
+  );
+
   return {
-    configs: [configBuilder, configBuilderTests],
+    configs: [configBuilder, configBuilderTests, configBuilderNoOnlyTests],
     optionsResolved,
   };
 };

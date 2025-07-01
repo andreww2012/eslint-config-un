@@ -9,7 +9,12 @@ import type {
   PrettifyShallow,
 } from '../types';
 import {assignDefaults, doesPackageExist} from '../utils';
-import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
+import {
+  type NoOnlyTestsSubConfigEnabledByDefault,
+  RULES_TO_DISABLE_IN_TEST_FILES,
+  generateConfigNoOnlyTestsBuilder,
+  generateDefaultTestFiles,
+} from './shared';
 import type {UnConfigFn} from './index';
 
 type SharedConfigOptions = PrettifyShallow<
@@ -71,12 +76,12 @@ export interface TestingLibraryEslintConfigOptions
   /**
    * @default <=> `angular` config is enabled
    */
-  configAngular?: boolean | SharedConfigOptions;
+  configAngular?: boolean | (SharedConfigOptions & NoOnlyTestsSubConfigEnabledByDefault);
 
   /**
    * @default <=> `marko` package is installed
    */
-  configMarko?: boolean | SharedConfigOptions;
+  configMarko?: boolean | (SharedConfigOptions & NoOnlyTestsSubConfigEnabledByDefault);
 
   /**
    * @default <=> `react` config is enabled
@@ -90,18 +95,18 @@ export interface TestingLibraryEslintConfigOptions
            * - [`consistent-data-testid`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/consistent-data-testid.md)
            */
           consistentDataTestId?: GetRuleOptions<'testing-library', 'consistent-data-testid'>[0];
-        } & SharedConfigOptions
+        } & (SharedConfigOptions & NoOnlyTestsSubConfigEnabledByDefault)
       >;
 
   /**
    * @default <=> `svelte` config is enabled
    */
-  configSvelte?: boolean | SharedConfigOptions;
+  configSvelte?: boolean | (SharedConfigOptions & NoOnlyTestsSubConfigEnabledByDefault);
 
   /**
    * @default <=> `vue` config is enabled
    */
-  configVue?: boolean | SharedConfigOptions;
+  configVue?: boolean | (SharedConfigOptions & NoOnlyTestsSubConfigEnabledByDefault);
 
   /**
    * Disable root (DOM) config if any framework config is enabled.
@@ -141,11 +146,13 @@ export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (conte
     const isFireEvenAsync = module === 'marko' || module === 'svelte' || module === 'vue';
 
     const moduleOptionsResolved = assignDefaults(options, {
+      configNoOnlyTests: true,
       allowContainerFirstChild: true,
       preferUserEventOverFireEvent: true,
     } satisfies AllPossibleOptions);
 
     const {
+      configNoOnlyTests,
       allowContainerFirstChild,
       allowTestingFrameworkSetupHook,
       preferQueryMatchers,
@@ -153,6 +160,8 @@ export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (conte
     } = moduleOptionsResolved;
 
     const configBuilder = createConfigBuilder(context, moduleOptionsResolved, 'testing-library');
+
+    const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
 
     // Legend:
     // 🟣 - in dom
@@ -166,10 +175,10 @@ export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (conte
 
     configBuilder
       ?.addConfig([
-        'testing-library',
+        `testing-library/${module}`,
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION),
+          filesFallback: configFilesFallback,
         },
       ])
       .addRule('await-async-events', ERROR, [
@@ -242,7 +251,15 @@ export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (conte
       .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
       .addOverrides();
 
-    return configBuilder;
+    const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
+      context,
+      `testing-library/${module}`,
+      configNoOnlyTests,
+      moduleOptionsResolved,
+      {filesFallback: configFilesFallback},
+    );
+
+    return [configBuilder, configBuilderNoOnlyTests];
   };
 
   const isAnyFrameworkConfigEnabled = Boolean(
@@ -251,17 +268,17 @@ export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (conte
 
   return {
     configs: [
-      generateConfigsForModule(
+      ...generateConfigsForModule(
         'dom',
         isAnyFrameworkConfigEnabled && disableRootConfigIfFrameworkConfigIsEnabled
           ? false
           : optionsResolved,
       ),
-      generateConfigsForModule('angular', configAngular),
-      generateConfigsForModule('marko', configMarko),
-      generateConfigsForModule('react', configReact),
-      generateConfigsForModule('svelte', configSvelte),
-      generateConfigsForModule('vue', configVue),
+      ...generateConfigsForModule('angular', configAngular),
+      ...generateConfigsForModule('marko', configMarko),
+      ...generateConfigsForModule('react', configReact),
+      ...generateConfigsForModule('svelte', configSvelte),
+      ...generateConfigsForModule('vue', configVue),
     ],
     optionsResolved,
   };

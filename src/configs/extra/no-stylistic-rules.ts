@@ -301,6 +301,9 @@ const ALL_STYLISTIC_RULES = {
   mdx: {
     // None
   },
+  'no-only-tests': {
+    // None
+  },
   'no-type-assertion': {
     'no-type-assertion': true,
   },

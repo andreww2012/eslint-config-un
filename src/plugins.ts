@@ -225,6 +225,11 @@ export const pluginsLoaders = {
   ),
   ...genPluginLoader('jsx-a11y', 'eslint-plugin-jsx-a11y', () => import('eslint-plugin-jsx-a11y')),
   ...genPluginLoader('markdown', '@eslint/markdown', () => import('@eslint/markdown')),
+  ...genPluginLoader(
+    'no-only-tests',
+    'eslint-plugin-no-only-tests',
+    () => import('eslint-plugin-no-only-tests'),
+  ),
   ...genPluginLoader('lit', 'eslint-plugin-lit', () => import('eslint-plugin-lit')),
   ...genPluginLoader('lit-a11y', 'eslint-plugin-lit-a11y', () => import('eslint-plugin-lit-a11y')),
   ...genPluginLoader(

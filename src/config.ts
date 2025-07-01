@@ -230,6 +230,7 @@ export const eslintConfigInternal = async (
   const isNextJsEnabled = getIsConfigEnabled('nextJs', 'next');
   const isNodeEnabled = getIsConfigEnabled('node');
   const isNodeDependenciesEnabled = getIsConfigEnabled('nodeDependencies', false);
+  const isNoOnlyTestsEnabled = getIsConfigEnabled('noOnlyTests', false);
   const isNoStylisticRulesEnabled = getIsConfigEnabled('noStylisticRules', false);
   const isNoUnsanitizedEnabled = getIsConfigEnabled('noUnsanitized');
   const isPackageJsonEnabled = getIsConfigEnabled('packageJson', false);
@@ -315,6 +316,7 @@ export const eslintConfigInternal = async (
       nextJs: {enabled: isNextJsEnabled},
       node: {enabled: isNodeEnabled},
       nodeDependencies: {enabled: isNodeDependenciesEnabled},
+      noOnlyTests: {enabled: isNoOnlyTestsEnabled},
       noStylisticRules: {enabled: isNoStylisticRulesEnabled},
       noUnsanitized: {enabled: isNoUnsanitizedEnabled},
       packageJson: {enabled: isPackageJsonEnabled},
@@ -538,6 +540,8 @@ export const eslintConfigInternal = async (
       import('./configs/eslint-plugin').then((m) => m.eslintPluginUnConfig(context)),
     isFileProgressEnabled &&
       import('./configs/file-progress').then((m) => m.fileProgressUnConfig(context)),
+    isNoOnlyTestsEnabled &&
+      import('./configs/no-only-tests').then((m) => m.noOnlyTestsUnConfig(context)),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

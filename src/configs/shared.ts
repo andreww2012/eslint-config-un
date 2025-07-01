@@ -1,6 +1,13 @@
-import {GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YAML} from '../constants';
-import type {AllEslintRules, GetRuleOptions} from '../eslint';
+import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YAML} from '../constants';
+import {
+  type AllEslintRules,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  createConfigBuilder,
+} from '../eslint';
+import {pick} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
+import type {UnConfigContext} from '.';
 
 export const generateDefaultTestFiles = <T extends string>(
   extensions: T,
@@ -17,6 +24,64 @@ export const generateDefaultTestFiles = <T extends string>(
 
   ...(includeCypressTests ? [`**/*.cy.${extensions}` as const] : []),
 ];
+
+type ConfigNoOnlyTests = boolean | UnConfigOptions<'no-only-tests'>;
+
+export interface NoOnlyTestsSubConfigEnabledByDefault {
+  /**
+   * Enables [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/no-only-tests) rule
+   * on the test files.
+   *
+   * By default will be applied to the same `files` and `ignores` as the parent config.
+   * @default true
+   */
+  configNoOnlyTests?: ConfigNoOnlyTests;
+}
+
+export interface NoOnlyTestsSubConfigDisabledByDefault {
+  /**
+   * Enables [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/no-only-tests) rule
+   * on the test files.
+   *
+   * By default will be applied to the same `files` and `ignores` as the parent config.
+   * @default false
+   */
+  configNoOnlyTests?: ConfigNoOnlyTests;
+}
+
+export const generateConfigNoOnlyTestsBuilder = (
+  context: UnConfigContext,
+  prefix: string,
+  configNoOnlyTests: NoOnlyTestsSubConfigEnabledByDefault['configNoOnlyTests'] & {},
+  parentConfig: boolean | UnConfigOptions,
+  {
+    filesFallback,
+  }: {
+    filesFallback?: string[];
+  } = {},
+) => {
+  const configBuilderNoOnlyTests = createConfigBuilder(
+    context,
+    configNoOnlyTests
+      ? {
+          ...(typeof parentConfig === 'object' && pick(parentConfig, ['files', 'ignores'])),
+          ...(typeof configNoOnlyTests === 'object' && configNoOnlyTests),
+        }
+      : configNoOnlyTests,
+    'no-only-tests',
+  );
+  configBuilderNoOnlyTests
+    ?.addConfig([
+      `${prefix}/no-only-tests`,
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesFallback,
+      },
+    ])
+    .addRule('no-only-tests', ERROR)
+    .addOverrides();
+  return configBuilderNoOnlyTests;
+};
 
 export const RULES_TO_DISABLE_IN_TEST_FILES: (keyof AllEslintRules)[] = [
   'no-empty-function',

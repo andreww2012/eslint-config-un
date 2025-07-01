@@ -1,10 +1,17 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
-import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
+import {
+  type NoOnlyTestsSubConfigDisabledByDefault,
+  RULES_TO_DISABLE_IN_TEST_FILES,
+  generateConfigNoOnlyTestsBuilder,
+  generateDefaultTestFiles,
+} from './shared';
 import type {UnConfigFn} from './index';
 
-export interface AvaEslintConfigOptions extends UnConfigOptions<'ava'> {
+export interface AvaEslintConfigOptions
+  extends UnConfigOptions<'ava'>,
+    NoOnlyTestsSubConfigDisabledByDefault {
   /**
    * If `true`, all assertions will need to have an assertion message.
    * If set to `false`, no assertion may have an assertion message.
@@ -26,11 +33,15 @@ export interface AvaEslintConfigOptions extends UnConfigOptions<'ava'> {
 
 export const avaUnConfig: UnConfigFn<'ava'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.ava;
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies AvaEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {
+    configNoOnlyTests: false, // has `no-only-test` rule
+  } satisfies AvaEslintConfigOptions);
 
-  const {enforceAssertionMessage, enforceMaxAssertions} = optionsResolved;
+  const {configNoOnlyTests, enforceAssertionMessage, enforceMaxAssertions} = optionsResolved;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'ava');
+
+  const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
 
   // Legend:
   // 🟢 - in recommended
@@ -41,7 +52,7 @@ export const avaUnConfig: UnConfigFn<'ava'> = (context) => {
       'ava',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION),
+        filesFallback: configFilesFallback,
       },
     ])
     .addRule(
@@ -84,8 +95,16 @@ export const avaUnConfig: UnConfigFn<'ava'> = (context) => {
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
+  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
+    context,
+    'ava',
+    configNoOnlyTests,
+    optionsResolved,
+    {filesFallback: configFilesFallback},
+  );
+
   return {
-    configs: [configBuilder],
+    configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
 };

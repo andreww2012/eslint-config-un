@@ -93,3 +93,9 @@ declare module 'eslint-plugin-lit-a11y' {
   declare const value: ESLint.ESLint.Plugin;
   export = value;
 }
+
+declare module 'eslint-plugin-no-only-tests' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
+  export = value;
+}

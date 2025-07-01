@@ -2,10 +2,17 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
-import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
+import {
+  type NoOnlyTestsSubConfigDisabledByDefault,
+  RULES_TO_DISABLE_IN_TEST_FILES,
+  generateConfigNoOnlyTestsBuilder,
+  generateDefaultTestFiles,
+} from './shared';
 import type {UnConfigFn} from './index';
 
-export interface PlaywrightEslintConfigOptions extends UnConfigOptions<'playwright'> {
+export interface PlaywrightEslintConfigOptions
+  extends UnConfigOptions<'playwright'>,
+    NoOnlyTestsSubConfigDisabledByDefault {
   /**
    * [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -47,15 +54,20 @@ export interface PlaywrightEslintConfigOptions extends UnConfigOptions<'playwrig
 
 export const playwrightUnConfig: UnConfigFn<'playwright'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.playwright;
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies PlaywrightEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {
+    configNoOnlyTests: false,
+  } satisfies PlaywrightEslintConfigOptions);
 
   const {
     settings: pluginSettings,
+    configNoOnlyTests,
     customAssertFunctionNames,
     customAsyncExpectMatches,
   } = optionsResolved;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'playwright');
+
+  const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
 
   // Legend:
   // 🟢 - in recommended
@@ -67,7 +79,7 @@ export const playwrightUnConfig: UnConfigFn<'playwright'> = (context) => {
         'playwright',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION),
+          filesFallback: configFilesFallback,
         },
       ],
       {
@@ -140,8 +152,16 @@ export const playwrightUnConfig: UnConfigFn<'playwright'> = (context) => {
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
+  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
+    context,
+    'playwright',
+    configNoOnlyTests,
+    optionsResolved,
+    {filesFallback: configFilesFallback},
+  );
+
   return {
-    configs: [configBuilder],
+    configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
 };

@@ -12,7 +12,9 @@ import {pluginsLoaders} from '../plugins';
 import type {ObjectValues, PrettifyShallow} from '../types';
 import {assignDefaults, doesPackageExist} from '../utils';
 import {
+  type NoOnlyTestsSubConfigDisabledByDefault,
   RULES_TO_DISABLE_IN_TEST_FILES,
+  generateConfigNoOnlyTestsBuilder,
   generateConsistentTestItOptions,
   generateDefaultTestFiles,
 } from './shared';
@@ -20,7 +22,9 @@ import type {UnConfigFn} from './index';
 
 type AllJestMatchers = PrettifyShallow<keyof ReturnType<JestExpect> | keyof AsymmetricMatchers>;
 
-export interface JestEslintConfigOptions extends UnConfigOptions<'jest'> {
+export interface JestEslintConfigOptions
+  extends UnConfigOptions<'jest'>,
+    NoOnlyTestsSubConfigDisabledByDefault {
   /**
    * [`eslint-plugin-jest` plugin settings](https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jest-globals) that will be applied to the specified `files` and `ignores`.
    */
@@ -183,13 +187,17 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
 
   const optionsRaw = context.rootOptions.configs?.jest;
   const optionsResolved = assignDefaults(optionsRaw, {
-    paddingAround: true,
-    configTypescript: isTypescriptEnabled,
     configJestExtended: isJestExtendedInstalled,
+    configNoOnlyTests: false,
+    configTypescript: isTypescriptEnabled,
+    paddingAround: true,
   } satisfies JestEslintConfigOptions);
 
   const {
     settings: pluginSettings,
+    configJestExtended,
+    configNoOnlyTests,
+    configTypescript,
     maxAssertionCalls,
     maxNestedDescribes,
     restrictedMethods,
@@ -197,8 +205,6 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     paddingAround,
     asyncMatchers,
     minAndMaxExpectArgs,
-    configTypescript,
-    configJestExtended,
   } = optionsResolved;
 
   const defaultJestEslintConfig: FlatConfigEntryForBuilder = {
@@ -327,6 +333,14 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
+  const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
+    context,
+    'jest',
+    configNoOnlyTests,
+    optionsResolved,
+    {filesFallback: defaultJestFiles},
+  );
+
   const configBuilderTypescript = createConfigBuilder(context, configTypescript, 'jest');
   configBuilderTypescript
     ?.addConfig(
@@ -387,7 +401,12 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
   // Other plugins: eslint-plugin-jest-async, eslint-plugin-jest-formatting, eslint-plugin-jest-mock-config, eslint-plugin-jest-playwright, eslint-plugin-jest-react, eslint-plugin-jest-test-each-formatting
 
   return {
-    configs: [configBuilder, configBuilderTypescript, configBuilderJestExtended],
+    configs: [
+      configBuilder,
+      configBuilderNoOnlyTests,
+      configBuilderTypescript,
+      configBuilderJestExtended,
+    ],
     optionsResolved,
   };
 };

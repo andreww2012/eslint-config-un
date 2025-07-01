@@ -23,6 +23,7 @@ export default {
     'shiki',
     'defu',
     'turborepo',
+    'marko',
 
     // Technical words/terms
     'arraify',

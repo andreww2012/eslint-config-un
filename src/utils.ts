@@ -9,7 +9,7 @@ export {defu as assignDefaults} from 'defu';
 
 export {klona as cloneDeep} from 'klona';
 
-export {memoize, omit, pickBy, uniq as unique, uniqBy as uniqueBy} from 'es-toolkit';
+export {memoize, omit, pick, pickBy, uniq as unique, uniqBy as uniqueBy} from 'es-toolkit';
 
 export type MaybeArray<T> = T | T[];
 export const arraify = <T>(value?: MaybeArray<T> | null): T[] =>

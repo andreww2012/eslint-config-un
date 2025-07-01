@@ -49,6 +49,7 @@ import type {MarkdownEslintConfigOptions} from './markdown';
 import type {MathEslintConfigOptions} from './math';
 import type {MdxEslintConfigOptions} from './mdx';
 import type {NextJsEslintConfigOptions} from './nextjs';
+import type {NoOnlyTestsEslintConfigOptions} from './no-only-tests';
 import type {NoUnsanitizedEslintConfigOptions} from './no-unsanitized';
 import type {NodeEslintConfigOptions} from './node';
 import type {NodeDependenciesEslintConfigOptions} from './node-dependencies';
@@ -542,6 +543,20 @@ export interface UnConfigs {
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   nodeDependencies: NodeDependenciesEslintConfigOptions;
+
+  /**
+   * An ESLint plugin to prevent focused (`.only`) tests. Also included in
+   * testing framework's configs as a sub-config.
+   *
+   * If enabled, by default will be applied to all test files.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-no-only-tests`](https://npmjs.com/eslint-plugin-no-only-tests) ([docs](https://github.com/levibuzolic/no-only-tests))
+   *
+   * NOTE: disabled by default
+   * @default false
+   */
+  noOnlyTests: NoOnlyTestsEslintConfigOptions;
 
   /**
    * If you integrate eslint-config-un into an existing project, you might encounter a lot of
