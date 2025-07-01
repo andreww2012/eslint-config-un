@@ -19,6 +19,7 @@ import type {AstroEslintConfigOptions} from './astro';
 import type {AvaEslintConfigOptions} from './ava';
 import type {BetterTailwindEslintConfigOptions} from './better-tailwind';
 import type {CasePoliceEslintConfigOptions} from './case-police';
+import type {CompatEslintConfigOptions} from './compat';
 import type {CspellEslintConfigOptions} from './cspell';
 import type {CssEslintConfigOptions} from './css';
 import type {CssInJsEslintConfigOptions} from './css-in-js';
@@ -279,6 +280,17 @@ export interface UnConfigs {
    * @default false
    */
   cloudfrontFunctions: CloudfrontFunctionsEslintConfigOptions;
+
+  /**
+   * An ESLint plugin to lint the browser compatibility of the code.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat) ([docs](https://github.com/amilajack/eslint-plugin-compat))
+   *
+   * NOTE: disabled by default
+   * @default false
+   */
+  compat: CompatEslintConfigOptions;
 
   /**
    * CSpell spell checker.

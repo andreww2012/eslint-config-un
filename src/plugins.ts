@@ -149,6 +149,7 @@ export const pluginsLoaders = {
     'eslint-plugin-case-police',
     () => import('eslint-plugin-case-police') as Promise<EslintPlugin>,
   ),
+  ...genPluginLoader('compat', 'eslint-plugin-compat', () => import('eslint-plugin-compat')),
   ...genPluginLoader('css', '@eslint/css', () => import('@eslint/css')),
   ...genPluginLoader(
     'css-in-js',

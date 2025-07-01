@@ -25,6 +25,7 @@
 - New `react` sub-config: `youMightNotNeedAnEffect` via [`eslint-plugin-react-you-might-not-need-an-effect`](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect), enabled by default.
 - New config: `lit` via [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit), enabled automatically if `lit` package is installed. Also, a new sub-config `lit/a11y` via [`eslint-plugin-lit-a11y`](https://npmjs.com/eslint-plugin-lit-a11y) is enabled by default.
 - New config: `noOnlyTests` via [`eslint-plugin-no-only-tests`](https://npmjs.com/eslint-plugin-no-only-tests), **<u>disabled</u>** by default. Also, the following sub-configs were added: `{ava,cypress,ember,jest,playwright,testingLibrary/{dom,angular,marko,react,svelte,vue},vitest}/noOnlyTests`.
+- New config: `compat` via [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat), **<u>disabled</u>** by default.
 - [**BREAKING**] eslint-config-un package is now distributed as ESM only.
 - [**BREAKING**] Set the minimum supported Node.js version to 20.11.
 - [**BREAKING**] the following plugins are now not direct dependencies of this package, but its' optional peer dependencies: `@graphql-eslint/eslint-plugin`, `eslint-plugin-storybook` and `eslint-plugin-tailwindcss`.

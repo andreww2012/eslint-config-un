@@ -158,6 +158,9 @@ const ALL_STYLISTIC_RULES = {
   'case-police': {
     'string-check': true,
   },
+  compat: {
+    // None
+  },
   css: {
     // None
   },

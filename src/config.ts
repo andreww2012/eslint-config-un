@@ -199,6 +199,7 @@ export const eslintConfigInternal = async (
   const isCasePoliceEnabled = getIsConfigEnabled('casePolice', false);
   const isCliEnabled = getIsConfigEnabled('cli');
   const isCloudfrontFunctionsEnabled = getIsConfigEnabled('cloudfrontFunctions', false);
+  const isCompatEnabled = getIsConfigEnabled('compat', false);
   const isCssEnabled = getIsConfigEnabled('css', !packagesInfo.stylelint);
   const isCssInJsEnabled = getIsConfigEnabled('cssInJs');
   const isCspellEnabled = getIsConfigEnabled('cspell', false);
@@ -287,6 +288,7 @@ export const eslintConfigInternal = async (
       casePolice: {enabled: isCasePoliceEnabled},
       cli: {enabled: isCliEnabled},
       cloudfrontFunctions: {enabled: isCloudfrontFunctionsEnabled},
+      compat: {enabled: isCompatEnabled},
       css: {enabled: isCssEnabled},
       cssInJs: {enabled: isCssInJsEnabled},
       cspell: {enabled: isCspellEnabled},
@@ -542,6 +544,7 @@ export const eslintConfigInternal = async (
       import('./configs/file-progress').then((m) => m.fileProgressUnConfig(context)),
     isNoOnlyTestsEnabled &&
       import('./configs/no-only-tests').then((m) => m.noOnlyTestsUnConfig(context)),
+    isCompatEnabled && import('./configs/compat').then((m) => m.compatUnConfig(context)),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS
