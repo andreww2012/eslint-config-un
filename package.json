@@ -379,7 +379,7 @@
     "angular-eslint-plugin18",
     "eslint-plugin-no-type-assertion"
   ],
-  "packageManager": "pnpm@10.12.2",
+  "packageManager": "pnpm@10.12.4",
   "engines": {
     "node": "^20.12 || >=21.7.0"
   }
