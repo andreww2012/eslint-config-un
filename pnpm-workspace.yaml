@@ -5,3 +5,6 @@ onlyBuiltDependencies:
   - unrs-resolver
 
 packageImportMethod: clone-or-copy
+
+patchedDependencies:
+  eslint-plugin-prettier: patches/eslint-plugin-prettier.patch
