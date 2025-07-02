@@ -5,6 +5,3 @@ onlyBuiltDependencies:
   - unrs-resolver
 
 packageImportMethod: clone-or-copy
-
-patchedDependencies:
-  eslint-typegen: patches/eslint-typegen.patch

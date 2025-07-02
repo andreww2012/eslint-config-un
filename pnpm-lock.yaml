@@ -5,9 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  eslint-typegen:
-    hash: a7979631477b2e81054f584a4172b80fb3c23fb596b49802373fe07c9b2f526b
-    path: patches/eslint-typegen.patch
+  eslint-plugin-prettier:
+    hash: ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495
+    path: patches/eslint-plugin-prettier.patch
 
 importers:
 
@@ -150,7 +150,7 @@ importers:
         version: 0.41.0(@types/estree@1.0.8)(eslint@9.29.0(jiti@2.4.2))(jsonc-eslint-parser@2.4.0)
       eslint-plugin-prettier:
         specifier: file:./deps/eslint-plugin-prettier-5.5.0.tgz
-        version: file:deps/eslint-plugin-prettier-5.5.0.tgz(@types/eslint@9.6.1)(eslint-config-prettier@10.1.5(eslint@9.29.0(jiti@2.4.2)))(eslint@9.29.0(jiti@2.4.2))(prettier@3.6.2)
+        version: file:deps/eslint-plugin-prettier-5.5.0.tgz(patch_hash=ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.5(eslint@9.29.0(jiti@2.4.2)))(eslint@9.29.0(jiti@2.4.2))(prettier@3.6.2)
       eslint-plugin-promise:
         specifier: 7.2.1
         version: 7.2.1(eslint@9.29.0(jiti@2.4.2))
@@ -396,8 +396,8 @@ importers:
         specifier: 6.14.0
         version: 6.14.0
       eslint-typegen:
-        specifier: 2.2.0
-        version: 2.2.0(patch_hash=a7979631477b2e81054f584a4172b80fb3c23fb596b49802373fe07c9b2f526b)(eslint@9.29.0(jiti@2.4.2))
+        specifier: 2.2.1
+        version: 2.2.1(eslint@9.29.0(jiti@2.4.2))
       json-schema-to-typescript-lite:
         specifier: 14.1.0
         version: 14.1.0
@@ -3950,8 +3950,8 @@ packages:
     peerDependencies:
       eslint: '>=8'
 
-  eslint-typegen@2.2.0:
-    resolution: {integrity: sha512-OVgibKnRNnlSs4MhMz8uTRLSSIsvTXjH7a1gzXvyDIVU/txX1t8Zr9I/vOSwWIhtACX5DCPLo9CuyvA9usyjyw==}
+  eslint-typegen@2.2.1:
+    resolution: {integrity: sha512-DMx6fMxSsou1wiT2dviHvKRevCx6O7axogtl2WE0Pjq/p2D3rAx9ubsmQWMTmYyT/vmBWZ1yxZyAXhx1u7QpiA==}
     peerDependencies:
       eslint: ^9.0.0
 
@@ -10791,7 +10791,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-prettier@file:deps/eslint-plugin-prettier-5.5.0.tgz(@types/eslint@9.6.1)(eslint-config-prettier@10.1.5(eslint@9.29.0(jiti@2.4.2)))(eslint@9.29.0(jiti@2.4.2))(prettier@3.6.2):
+  eslint-plugin-prettier@file:deps/eslint-plugin-prettier-5.5.0.tgz(patch_hash=ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.5(eslint@9.29.0(jiti@2.4.2)))(eslint@9.29.0(jiti@2.4.2))(prettier@3.6.2):
     dependencies:
       eslint: 9.29.0(jiti@2.4.2)
       prettier: 3.6.2
@@ -11175,7 +11175,7 @@ snapshots:
       '@eslint-community/eslint-utils': 4.7.0(eslint@9.29.0(jiti@2.4.2))
       eslint: 9.29.0(jiti@2.4.2)
 
-  eslint-typegen@2.2.0(patch_hash=a7979631477b2e81054f584a4172b80fb3c23fb596b49802373fe07c9b2f526b)(eslint@9.29.0(jiti@2.4.2)):
+  eslint-typegen@2.2.1(eslint@9.29.0(jiti@2.4.2)):
     dependencies:
       eslint: 9.29.0(jiti@2.4.2)
       json-schema-to-typescript-lite: 14.1.0
