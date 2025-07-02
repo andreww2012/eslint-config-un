@@ -177,8 +177,8 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
     .addRule('valid-author', ERROR) // 🟢 >=0.38.0
     .addRule('valid-bin', ERROR, [{enforceCase: true}]) // 🟢 >=0.37.0
     .addRule('valid-name', ERROR) // 🟢
-    .addRule('valid-package-definition', ERROR) // 🟢
     .addRule('valid-repository-directory', ERROR) // 🟢
+    .addRule('valid-scripts', ERROR) // 🟢 >=0.43.0
     .addRule('valid-type', ERROR) // 🟢 >=0.41.0
     .addRule('valid-version', ERROR) // 🟢
     .addOverrides();
