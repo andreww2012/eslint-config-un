@@ -156,7 +156,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     .addRule('no-standalone-expect', ERROR) // (warns in all)
     .addRule('no-test-prefixes', ERROR) // (warns in all)
     .addRule('no-test-return-statement', ERROR) // (warns in all)
-    .addRule('prefer-called-once', enforceToBeCalledStyle === 'once' ? ERROR : OFF) // (warns in all)
+    .addRule('prefer-called-once', enforceToBeCalledStyle === 'once' ? ERROR : OFF) // (off in all)
     .addRule('prefer-called-times', enforceToBeCalledStyle === 'times' ? ERROR : OFF) // (warns in all)
     .addRule('prefer-called-with', OFF) // (warns in all)
     .addRule('prefer-comparison-matcher', ERROR) // (warns in all)
