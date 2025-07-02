@@ -39,6 +39,15 @@ export interface VitestEslintConfigOptions
   };
 
   /**
+   * - `once`: prefer `toBeCalledOnce()` or `toHaveBeenCalledOnce()` over `toBeCalledTimes(1)`
+   * or `toHaveBeenCalledTimes(1)`.
+   * - `times`: prefer the opposite.
+   * - `false`: do not enforce any style.
+   * @default 'once'
+   */
+  enforceToBeCalledStyle?: false | 'once' | 'times';
+
+  /**
    * Enforces whether importing [Vitest globals](https://vitest.dev/config/#globals) is required
    * or disallowed.
    * Affected rules:
@@ -58,12 +67,14 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.vitest;
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false,
+    enforceToBeCalledStyle: 'once',
     vitestGlobalsImporting: 'disallow',
   } satisfies VitestEslintConfigOptions);
 
   const {
     settings: pluginSettings,
     configNoOnlyTests,
+    enforceToBeCalledStyle,
     maxAssertionCalls,
     maxNestedDescribes,
     restrictedMethods,
@@ -81,7 +92,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     }),
     languageOptions: {
       // TODO why `eslint-plugin-vitest-globals` is used instead of this?
-      globals: eslintPluginVitest.environments.env.globals,
+      globals: eslintPluginVitest.environments?.env?.globals,
     },
   };
 
@@ -145,6 +156,8 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     .addRule('no-standalone-expect', ERROR) // (warns in all)
     .addRule('no-test-prefixes', ERROR) // (warns in all)
     .addRule('no-test-return-statement', ERROR) // (warns in all)
+    .addRule('prefer-called-once', enforceToBeCalledStyle === 'once' ? ERROR : OFF) // (warns in all)
+    .addRule('prefer-called-times', enforceToBeCalledStyle === 'times' ? ERROR : OFF) // (warns in all)
     .addRule('prefer-called-with', OFF) // (warns in all)
     .addRule('prefer-comparison-matcher', ERROR) // (warns in all)
     .addRule('prefer-describe-function-title', OFF) // >=1.1.41
@@ -190,6 +203,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     ]) // 🟢
     .addRule('valid-title', ERROR) // 🟢
     .addRule('valid-expect-in-promise', ERROR) // (warns in all)
+    .addRule('warn-todo', WARNING)
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 

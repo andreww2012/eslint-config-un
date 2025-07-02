@@ -370,7 +370,12 @@ export const pluginsLoaders = {
     'eslint-plugin-unused-imports',
     () => import('eslint-plugin-unused-imports'),
   ),
-  ...genPluginLoader('vitest', '@vitest/eslint-plugin', () => import('@vitest/eslint-plugin')),
+  ...genPluginLoader(
+    'vitest',
+    '@vitest/eslint-plugin',
+    // @ts-expect-error types mismatch
+    () => import('@vitest/eslint-plugin') satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
   ...genPluginLoader('vue', 'eslint-plugin-vue', () => import('eslint-plugin-vue')),
   ...genPluginLoader(
     'vuejs-accessibility',

@@ -639,6 +639,8 @@ const ALL_STYLISTIC_RULES = {
     'no-alias-methods': true,
     'no-importing-vitest-globals': true,
     'no-interpolation-in-snapshots': true,
+    'prefer-called-once': true,
+    'prefer-called-times': true,
     'prefer-each': true,
     'prefer-expect-resolves': true,
     'prefer-hooks-in-order': true,
