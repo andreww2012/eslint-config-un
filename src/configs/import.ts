@@ -18,6 +18,14 @@ export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
   settings?: PluginSettings;
 
   /**
+   * Whether the use of dependencies from `devDependencies` is not going to be reported by
+   * the [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md) rule. You can specify glob patterns or allow
+   * universally by setting this option to `true`.
+   * @default false <=> `mode` root option is set to `lib`
+   */
+  allowDevDependencies?: string[] | boolean;
+
+  /**
    * Recognized automatically and normally should not be set manually.
    *
    * When enabled, creates a [`eslint-import-resolver-typescript`](https://npmjs.com/eslint-import-resolver-typescript) resolver, which settings can be overridden
@@ -62,10 +70,12 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.import;
   const optionsResolved = assignDefaults(optionsRaw, {
     isTypescriptEnabled: context.configsMeta.ts.enabled,
+    allowDevDependencies: context.rootOptions.mode !== 'lib',
   } satisfies ImportEslintConfigOptions);
 
   const {
     settings: pluginSettings,
+    allowDevDependencies,
     isTypescriptEnabled,
     tsResolverOptions,
     noDuplicatesOptions,
@@ -132,11 +142,7 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
     .addRule('no-duplicates', ERROR, [{'prefer-inline': true, ...noDuplicatesOptions}]) // 🟡
     .addRule('no-dynamic-require', OFF)
     .addRule('no-empty-named-blocks', ERROR)
-    .addRule('no-extraneous-dependencies', ERROR, [
-      {
-        devDependencies: context.rootOptions.mode !== 'lib',
-      },
-    ])
+    .addRule('no-extraneous-dependencies', ERROR, [{devDependencies: allowDevDependencies}])
     .addRule('no-import-module-exports', OFF) // TODO enable?
     .addRule('no-internal-modules', OFF)
     .addRule('no-mutable-exports', WARNING)
