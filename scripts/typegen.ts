@@ -1,12 +1,17 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
+import angularEslintPlugin from '@angular-eslint/eslint-plugin';
+import angularTemplateEslintPlugin from '@angular-eslint/eslint-plugin-template';
+import angularTemplateEslintPlugin15 from 'angular-eslint-plugin-template15';
+import angularTemplateEslintPlugin17 from 'angular-eslint-plugin-template17';
+import angularEslintPlugin18 from 'angular-eslint-plugin18';
 import * as diff from 'diff';
 import {capitalize} from 'es-toolkit';
 import {flatConfigsToRulesDTS, pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
 import {eslintConfigInternal} from '../src/config';
-import {DISABLE_AUTOFIX, eslintPluginVanillaRules} from '../src/eslint';
+import {DISABLE_AUTOFIX, type EslintPlugin, eslintPluginVanillaRules} from '../src/eslint';
 import {uniqueBy} from '../src/utils';
 
 const __dirname = import.meta.dirname;
@@ -39,18 +44,40 @@ await Promise.all([
 async function generateRuleTypes() {
   const unFlatConfigs = await eslintConfigInternal({
     loadPluginsOnDemand: false,
-    configs: {
-      // If Angular is not found installed, plugin is not generated
-      angular: true,
-    },
   });
+  const SKIPPED_PLUGINS = new Set<string>([
+    DISABLE_AUTOFIX,
+    '@angular-eslint',
+    '@angular-eslint/template',
+  ]);
   const allRealPlugins = uniqueBy(
     unFlatConfigs
       .flatMap((v) => Object.entries(v.plugins || {}))
-      .filter(([pluginName]) => pluginName !== DISABLE_AUTOFIX),
+      .filter(([pluginName]) => !SKIPPED_PLUGINS.has(pluginName)),
     ([pluginName]) => pluginName, // `html` is duplicated
   );
-  allRealPlugins.push(['', eslintPluginVanillaRules]);
+  const angularEslintPluginWithOldRules: EslintPlugin = {
+    ...angularEslintPlugin,
+    // @ts-expect-error types mismatch
+    rules: {
+      ...angularEslintPlugin18.rules,
+      ...angularEslintPlugin.rules,
+    },
+  };
+  const angularTemplateEslintPluginWithOldRules: EslintPlugin = {
+    ...angularTemplateEslintPlugin,
+    // @ts-expect-error types mismatch
+    rules: {
+      ...angularTemplateEslintPlugin15.rules,
+      ...angularTemplateEslintPlugin17.rules,
+      ...angularTemplateEslintPlugin.rules,
+    },
+  };
+  allRealPlugins.push(
+    ['', eslintPluginVanillaRules],
+    ['@angular-eslint', angularEslintPluginWithOldRules],
+    ['@angular-eslint/template', angularTemplateEslintPluginWithOldRules],
+  );
 
   const [main, fixableRulesOnlyCodeRaw, perPluginCodeRaw] = await Promise.all([
     pluginsToRulesDTS(Object.fromEntries(allRealPlugins), {

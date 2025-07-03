@@ -57,43 +57,45 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 <details>
 <summary>List of optional peer dependencies</summary>
 
-| Default plugin prefix    | Package name                           |
-| ------------------------ | -------------------------------------- |
-| `@cspell`                | `@cspell/eslint-plugin`                |
-| `@eslint-react`          | `@eslint-react/eslint-plugin`          |
-| `@next/next`             | `@next/eslint-plugin-next`             |
-| `@tanstack/query`        | `@tanstack/eslint-plugin-query`        |
-| `astro`                  | `eslint-plugin-astro`                  |
-| `ava`                    | `eslint-plugin-ava`                    |
-| `better-tailwindcss`     | `eslint-plugin-better-tailwindcss`     |
-| `case-police`            | `eslint-plugin-case-police`            |
-| `de-morgan`              | `eslint-plugin-de-morgan`              |
-| `ember`                  | `eslint-plugin-ember`                  |
-| `erasable-syntax-only`   | `eslint-plugin-erasable-syntax-only`   |
-| `es`                     | `eslint-plugin-es-x`                   |
-| `eslint-plugin`          | `eslint-plugin-eslint-plugin`          |
-| `graphql`                | `@graphql-eslint/eslint-plugin`        |
-| `jest-extended`          | `eslint-plugin-jest-extended`          |
-| `jest`                   | `eslint-plugin-jest`                   |
-| `perfectionist`          | `eslint-plugin-perfectionist`          |
-| `pinia`                  | `eslint-plugin-pinia`                  |
-| `playwright`             | `eslint-plugin-playwright`             |
-| `pnpm`                   | `eslint-plugin-pnpm`                   |
-| `prefer-arrow-functions` | `eslint-plugin-prefer-arrow-functions` |
-| `qwik`                   | `eslint-plugin-qwik`                   |
-| `react-compiler`         | `eslint-plugin-react-compiler`         |
-| `react-hooks`            | `eslint-plugin-react-hooks`            |
-| `react-refresh`          | `eslint-plugin-react-refresh`          |
-| `react`                  | `eslint-plugin-react`                  |
-| `solid`                  | `eslint-plugin-solid`                  |
-| `storybook`              | `eslint-plugin-storybook`              |
-| `svelte`                 | `eslint-plugin-svelte`                 |
-| `tailwindcss`            | `eslint-plugin-tailwindcss`            |
-| `testing-library`        | `eslint-plugin-testing-library`        |
-| `turbo`                  | `eslint-plugin-turbo`                  |
-| `vitest`                 | `@vitest/eslint-plugin`                |
-| `vue`                    | `eslint-plugin-vue`                    |
-| `vuejs-accessibility`    | `eslint-plugin-vuejs-accessibility`    |
+| Default plugin prefix      | Package name                             |
+| -------------------------- | ---------------------------------------- |
+| `@angular-eslint`          | `@angular-eslint/eslint-plugin`          |
+| `@angular-eslint/template` | `@angular-eslint/eslint-plugin-template` |
+| `@cspell`                  | `@cspell/eslint-plugin`                  |
+| `@eslint-react`            | `@eslint-react/eslint-plugin`            |
+| `@next/next`               | `@next/eslint-plugin-next`               |
+| `@tanstack/query`          | `@tanstack/eslint-plugin-query`          |
+| `astro`                    | `eslint-plugin-astro`                    |
+| `ava`                      | `eslint-plugin-ava`                      |
+| `better-tailwindcss`       | `eslint-plugin-better-tailwindcss`       |
+| `case-police`              | `eslint-plugin-case-police`              |
+| `de-morgan`                | `eslint-plugin-de-morgan`                |
+| `ember`                    | `eslint-plugin-ember`                    |
+| `erasable-syntax-only`     | `eslint-plugin-erasable-syntax-only`     |
+| `es`                       | `eslint-plugin-es-x`                     |
+| `eslint-plugin`            | `eslint-plugin-eslint-plugin`            |
+| `graphql`                  | `@graphql-eslint/eslint-plugin`          |
+| `jest-extended`            | `eslint-plugin-jest-extended`            |
+| `jest`                     | `eslint-plugin-jest`                     |
+| `perfectionist`            | `eslint-plugin-perfectionist`            |
+| `pinia`                    | `eslint-plugin-pinia`                    |
+| `playwright`               | `eslint-plugin-playwright`               |
+| `pnpm`                     | `eslint-plugin-pnpm`                     |
+| `prefer-arrow-functions`   | `eslint-plugin-prefer-arrow-functions`   |
+| `qwik`                     | `eslint-plugin-qwik`                     |
+| `react-compiler`           | `eslint-plugin-react-compiler`           |
+| `react-hooks`              | `eslint-plugin-react-hooks`              |
+| `react-refresh`            | `eslint-plugin-react-refresh`            |
+| `react`                    | `eslint-plugin-react`                    |
+| `solid`                    | `eslint-plugin-solid`                    |
+| `storybook`                | `eslint-plugin-storybook`                |
+| `svelte`                   | `eslint-plugin-svelte`                   |
+| `tailwindcss`              | `eslint-plugin-tailwindcss`              |
+| `testing-library`          | `eslint-plugin-testing-library`          |
+| `turbo`                    | `eslint-plugin-turbo`                    |
+| `vitest`                   | `@vitest/eslint-plugin`                  |
+| `vue`                      | `eslint-plugin-vue`                      |
+| `vuejs-accessibility`      | `eslint-plugin-vuejs-accessibility`      |
 </details>
 
 ### Usage
@@ -441,9 +443,7 @@ By default, TypeScript rules will be enabled in `.vue` files if `enforceTypescri
 
 #### Angular
 
-We support Angular versions from 13 to 19, all at once. This is achieved by generating an ESLint plugin specifically for the detected Angular version. Internally, `@angular-eslint/eslint-plugin` of versions 19 and 18, and `@angular-eslint/eslint-plugin-template` of versions 17 and 19 are used. We smartly enable the appropriate rules for each Angular version.
-
-With this approach, we offer a unique ability to port the rules added in newer versions of `@angular-eslint/eslint-plugin*` and use them with older rules on older Angular codebases. Use `portRules` option to control which rules will be ported.
+We support Angular versions from 13 to 20, all at once. You are expected to install `@angular-eslint/eslint-plugin` and `@angular-eslint/eslint-plugin-template` packages of the same major version as your Angular version, but installing a greater version would also likely work. With the latter, you can use the rules added in newer versions of `@angular-eslint/eslint-plugin*` on older Angular codebases.
 
 #### React
 

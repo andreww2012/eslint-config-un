@@ -362,18 +362,13 @@ export const eslintConfigInternal = async (
   const vanillaFinalFlatConfigRules =
     // eslint-disable-next-line ts/no-unnecessary-condition -- TODO report?
     (jsEslintConfigResult && jsEslintConfigResult.finalFlatConfigRules) || {};
-  const [
-    angularEslintConfigResult,
-    astroEslintConfigResult,
-    vueEslintConfigResult,
-    svelteEslintConfigResult,
-  ] = await Promise.all([
-    isAngularEnabled && import('./configs/angular').then((m) => m.angularUnConfig(context)),
-    isAstroEnabled && import('./configs/astro').then((m) => m.astroUnConfig(context)),
-    isVueEnabled &&
-      import('./configs/vue').then((m) => m.vueUnConfig(context, {vanillaFinalFlatConfigRules})),
-    isSvelteEnabled && import('./configs/svelte').then((m) => m.svelteUnConfig(context)),
-  ]);
+  const [astroEslintConfigResult, vueEslintConfigResult, svelteEslintConfigResult] =
+    await Promise.all([
+      isAstroEnabled && import('./configs/astro').then((m) => m.astroUnConfig(context)),
+      isVueEnabled &&
+        import('./configs/vue').then((m) => m.vueUnConfig(context, {vanillaFinalFlatConfigRules})),
+      isSvelteEnabled && import('./configs/svelte').then((m) => m.svelteUnConfig(context)),
+    ]);
   const tsEslintConfigResult =
     isTypescriptEnabled &&
     (await import('./configs/ts').then((m) =>
@@ -554,7 +549,7 @@ export const eslintConfigInternal = async (
     isEsEnabled && import('./configs/es').then((m) => m.esUnConfig(context)), // Must come after ts
     vueEslintConfigResult, // Must come after ts
     astroEslintConfigResult, // Must come after ts
-    angularEslintConfigResult, // Must come after ts
+    isAngularEnabled && import('./configs/angular').then((m) => m.angularUnConfig(context)), // Must come after ts
     svelteEslintConfigResult, // Must be after ts
     isGraphqlEnabled && import('./configs/graphql').then((m) => m.graphqlUnConfig(context)),
     isMarkdownEnabled && import('./configs/markdown').then((m) => m.markdownUnConfig(context)), // Must be last
@@ -681,7 +676,6 @@ ${packagesThatNeedsToBeManuallyInstalled
     ...loadedPlugins,
     ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
     ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
-    ...(angularEslintConfigResult && angularEslintConfigResult.plugins),
   } satisfies Record<string, EslintPlugin> as Partial<Record<PluginPrefix, EslintPlugin>>;
 
   const disableAutofixPlugin: EslintPlugin = {

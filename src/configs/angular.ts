@@ -1,16 +1,23 @@
 import angularTemplateParser from '@angular-eslint/template-parser';
 import type Eslint from 'eslint';
-import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import {
-  type EslintPlugin,
   type GetRuleOptions,
+  type RuleNamesForPlugin,
   type RulesRecordPartial,
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
-import type {PrettifyShallow, ReadonlyDeep, SetRequired, Subtract} from '../types';
-import {type MaybeArray, assignDefaults, cloneDeep, interopDefault} from '../utils';
-import type {UnConfigContext, UnConfigFn} from './index';
+import {pluginsLoaders} from '../plugins';
+import type {NonEmptyTuple, PrettifyShallow, Subtract} from '../types';
+import {
+  type MaybeArray,
+  assignDefaults,
+  cloneDeep,
+  fetchPackageInfo,
+  interopDefault,
+} from '../utils';
+import type {UnConfigFn} from './index';
 
 // Please keep ascending order
 const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20] as const;
@@ -22,257 +29,6 @@ type LatestSupportedAngularVersion = (typeof SUPPORTED_ANGULAR_VERSIONS)[Subtrac
 const LATEST_SUPPORTED_ANGULAR_VERSION = SUPPORTED_ANGULAR_VERSIONS.at(
   -1,
 ) as LatestSupportedAngularVersion;
-
-type AngularEslintPackagesForVersion = Record<
-  'plugin' | 'pluginTemplate',
-  () => Promise<EslintPlugin>
->;
-
-const PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS: Record<
-  LatestSupportedAngularVersion,
-  AngularEslintPackagesForVersion
-> &
-  Partial<
-    Record<
-      Exclude<SupportedAngularVersion, LatestSupportedAngularVersion>,
-      Partial<AngularEslintPackagesForVersion>
-    >
-  > = {
-  // All plugins' types have type mismatches with the eslint plugin type. We don't use `@ts-expect-error` here because it may prevent other errors from being reported (for example, about a missing object property).
-  18: {
-    plugin: () =>
-      interopDefault(import('angular-eslint-plugin18')).then((m) => m as unknown as EslintPlugin),
-  },
-  20: {
-    plugin: () =>
-      interopDefault(import('@angular-eslint/eslint-plugin')).then(
-        (m) => m as unknown as EslintPlugin,
-      ),
-    pluginTemplate: () =>
-      interopDefault(import('@angular-eslint/eslint-plugin-template')).then(
-        (m) => m as unknown as EslintPlugin,
-      ),
-  },
-};
-
-type RulesWithPartialAvailability =
-  | 'consistent-component-styles'
-  | 'no-async-lifecycle-method'
-  | 'no-developer-preview'
-  | 'no-duplicates-in-metadata-arrays'
-  | 'no-experimental'
-  | 'no-host-metadata-property'
-  | 'no-uncalled-signals'
-  | 'prefer-inject'
-  | 'prefer-output-emitter-ref'
-  | 'prefer-signals'
-  | 'prefer-standalone'
-  | 'prefer-standalone-component'
-  | 'require-lifecycle-on-prototype'
-  | 'require-localize-metadata'
-  | 'runtime-localize'
-  | 'sort-keys-in-type-decorator'
-  | 'sort-lifecycle-methods'
-  | 'sort-ngmodule-metadata-arrays'
-  | 'accessibility-alt-text'
-  | 'accessibility-elements-content'
-  | 'accessibility-interactive-supports-focus'
-  | 'accessibility-label-for'
-  | 'accessibility-label-has-associated-control'
-  | 'accessibility-role-has-required-aria'
-  | 'accessibility-table-scope'
-  | 'accessibility-valid-aria'
-  | 'alt-text'
-  | 'attributes-order'
-  | 'elements-content'
-  | 'interactive-supports-focus'
-  | 'label-has-associated-control'
-  | 'no-inline-styles'
-  | 'no-interpolation-in-attributes'
-  | 'no-nested-tags'
-  | 'prefer-at-empty'
-  | 'prefer-control-flow'
-  | 'prefer-ngsrc'
-  | 'prefer-template-literal'
-  | 'prefer-self-closing-tags'
-  | 'prefer-static-string-properties'
-  | 'role-has-required-aria'
-  | 'table-scope'
-  | 'valid-aria';
-
-type RuleAvailability = [
-  existedInVersions: [from: SupportedAngularVersion, to?: SupportedAngularVersion],
-  newName?: string,
-];
-
-// TODO generate from plugins?
-const RULES_AVAILABILITY: Record<string, RuleAvailability> = {
-  'consistent-component-styles': [[17]],
-  'no-async-lifecycle-method': [[17]],
-  'no-developer-preview': [[20]],
-  'no-duplicates-in-metadata-arrays': [[17]],
-  'no-experimental': [[20]],
-  'no-host-metadata-property': [[13, 18]],
-  'no-uncalled-signals': [[20]],
-  'prefer-inject': [[20]],
-  'prefer-signals': [[19]],
-  'prefer-standalone': [[17]],
-  'prefer-standalone-component': [[16, 18]],
-  'prefer-template-literal': [[19]],
-  'require-lifecycle-on-prototype': [[19]],
-  'require-localize-metadata': [[16]],
-  'runtime-localize': [[18]],
-  'sort-keys-in-type-decorator': [[20]],
-  'sort-lifecycle-methods': [[16]],
-  'sort-ngmodule-metadata-arrays': [[13, 18]],
-
-  'accessibility-alt-text': [[13, 15], 'alt-text'],
-  'accessibility-elements-content': [[13, 15], 'elements-content'],
-  'accessibility-interactive-supports-focus': [[14, 15], 'interactive-supports-focus'],
-  'accessibility-label-for': [[13, 15], 'label-has-associated-control'], // deprecated since v13
-  'accessibility-label-has-associated-control': [[13, 15], 'label-has-associated-control'],
-  'accessibility-role-has-required-aria': [[14, 15], 'role-has-required-aria'],
-  'accessibility-table-scope': [[13, 15], 'table-scope'],
-  'accessibility-valid-aria': [[13, 15], 'valid-aria'],
-  'alt-text': [[16]],
-  'attributes-order': [[14]],
-  'elements-content': [[16]],
-  'interactive-supports-focus': [[16]],
-  'label-has-associated-control': [[16]],
-  'no-inline-styles': [[14]],
-  'no-interpolation-in-attributes': [[15]],
-  'no-nested-tags': [[20]],
-  'prefer-at-empty': [[20]],
-  'prefer-control-flow': [[17]],
-  'prefer-ngsrc': [[16]],
-  'prefer-output-emitter-ref': [[19]],
-  'prefer-self-closing-tags': [[16]],
-  'prefer-static-string-properties': [[19]],
-  'role-has-required-aria': [[16]],
-  'table-scope': [[16]],
-  'valid-aria': [[16]],
-} satisfies Record<RulesWithPartialAvailability, RuleAvailability>;
-
-const oldRuleNames = new Map<string, string[]>();
-Object.entries(RULES_AVAILABILITY).forEach(([oldName, [, newName]]) => {
-  if (newName) {
-    oldRuleNames.set(newName, [...(oldRuleNames.get(newName) || []), oldName]);
-  }
-});
-
-/**
- * Generates a ESLint plugin composed of all the rules in Angular ESLint plugins
- * from v13 to the latest version.
- *
- * If a rule with the same name exists in multiple plugins, implementation
- * from the latest version is used.
- *
- * If a rule does not exist in a plugin corresponding to the installed Angular version,
- * its implementation is nullified.
- */
-const generateAngularPlugins = async (
-  context: UnConfigContext,
-  configOptions: ReadonlyDeep<AngularEslintConfigOptions>,
-  installedVersion: SupportedAngularVersion,
-) => {
-  const latestPlugins = PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS[LATEST_SUPPORTED_ANGULAR_VERSION];
-  const [latestPlugin, latestPluginTemplate] = await Promise.all([
-    context.rootOptions.pluginsOverrides?.['@angular-eslint'] || latestPlugins.plugin(),
-    context.rootOptions.pluginsOverrides?.['@angular-eslint/template'] ||
-      latestPlugins.pluginTemplate(),
-  ]);
-
-  type EslintPluginWithRequiredRules = SetRequired<EslintPlugin, 'rules'>;
-  const pluginGeneral: EslintPluginWithRequiredRules = {
-    ...(latestPlugin as unknown as EslintPlugin),
-    rules: {},
-  };
-  const pluginTemplate: EslintPluginWithRequiredRules = {
-    ...(latestPluginTemplate as unknown as EslintPlugin),
-    rules: {},
-  };
-
-  const ruleSchemas = new Map<string, object[]>();
-
-  await Promise.all(
-    SUPPORTED_ANGULAR_VERSIONS.map((angularVersion) =>
-      Promise.all(
-        (
-          [
-            ['plugin', pluginGeneral],
-            ['pluginTemplate', pluginTemplate],
-          ] as const
-        ).map(async ([pluginType, mergedPlugin]) => {
-          const originalPlugin =
-            await PACKAGES_FOR_SUPPORTED_ANGULAR_VERSIONS[angularVersion]?.[pluginType]?.();
-          if (!originalPlugin) {
-            return;
-          }
-
-          Object.entries(cloneDeep(originalPlugin.rules || {})).forEach(
-            ([currentRuleName, rule]) => {
-              [currentRuleName, ...(oldRuleNames.get(currentRuleName) || [])].forEach(
-                (ruleName) => {
-                  let shouldDisableRule = false;
-
-                  const ruleAvailability = RULES_AVAILABILITY[ruleName];
-                  if (ruleAvailability) {
-                    const [[from, to]] = ruleAvailability;
-                    const ruleNotExistsForInstalledVersion =
-                      installedVersion < from || (to != null && installedVersion > to);
-                    shouldDisableRule = ruleNotExistsForInstalledVersion;
-                  }
-
-                  const ruleNameOfficial = `@angular-eslint${pluginType === 'pluginTemplate' ? '/template' : ''}/${ruleName}`;
-                  if (
-                    shouldDisableRule &&
-                    !configOptions.portRules?.includes(
-                      // @ts-expect-error includes type is narrower
-                      ruleNameOfficial,
-                    )
-                  ) {
-                    rule.create = () => ({});
-                  }
-
-                  mergedPlugin.rules[ruleName] = rule;
-
-                  const schemas = [...(ruleSchemas.get(ruleName) || []), rule.meta?.schema].filter(
-                    (v) => v != null && typeof v === 'object',
-                  );
-                  if (schemas.length > 0) {
-                    ruleSchemas.set(ruleName, schemas);
-                  }
-                },
-              );
-            },
-          );
-        }),
-      ),
-    ),
-  );
-  [pluginGeneral, pluginTemplate].forEach((plugin) => {
-    Object.entries(plugin.rules).forEach(([ruleName, rule]) => {
-      const schemas = ruleSchemas.get(ruleName) || [];
-      if (schemas.length === 0) {
-        return;
-      }
-
-      (rule.meta ||= {}).schema = {
-        anyOf: schemas.map((schema) => {
-          if (Array.isArray(schema)) {
-            return {type: 'array', minItems: 0, maxItems: schema.length, items: schema};
-          }
-          return schema;
-        }),
-      };
-    });
-  });
-
-  return {
-    pluginGeneral,
-    pluginTemplate,
-  };
-};
 
 export interface AngularEslintConfigOptions
   extends UnConfigOptions<RulesRecordPartial<'@angular-eslint'>> {
@@ -343,24 +99,6 @@ export interface AngularEslintConfigOptions
    * Unavailable rules can be ported by specifying them in `portRules` option.
    */
   angularVersion?: SupportedAngularVersion;
-
-  /**
-   * By default, all rules from [`@angular-eslint/eslint-plugin`](https://npmjs.com/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template) packages of versions 13 until 19
-   * are present in our config, but the ones that are unavailable in the same major version
-   * of these plugins as the detected (or specified in `angularVersion`) version of Angular
-   * will simply do nothing. If you wish them to actually work, specify them here.
-   *
-   * The most common use case is to make rules added in higher major versions of the aforementioned
-   * plugins work on your Angular version.
-   *
-   * For example, [`@angular-eslint/prefer-signals`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-signals.md)
-   * was added in v19 of `@angular-eslint/eslint-plugin`, and will only be activated
-   * in our config if the Angular version is at least 19.
-   *
-   * If say you're using Angular 18, specify this rule here to make it work.
-   */
-  portRules?: (keyof RulesRecordPartial<'@angular-eslint'> &
-    `@angular-eslint/${'template/' | ''}${RulesWithPartialAvailability}`)[];
 
   /**
    * Process inline templates in order to lint them.
@@ -470,10 +208,7 @@ export interface AngularEslintConfigOptions
   preferStandaloneComponents?: boolean;
 }
 
-export const angularUnConfig: UnConfigFn<
-  'angular',
-  {plugins: Record<string, EslintPlugin>}
-> = async (context) => {
+export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.angular;
   const optionsResolved = assignDefaults(optionsRaw, {
     configTemplate: true,
@@ -522,22 +257,6 @@ export const angularUnConfig: UnConfigFn<
   optionsResolved.preferStandaloneComponents ??= angularVersion >= 19;
   const {preferStandaloneComponents} = optionsResolved;
 
-  const [
-    {pluginGeneral: eslintPluginAngular, pluginTemplate: eslintPluginAngularTemplate},
-    extractInlineHtmlProcessorLatest,
-    extractInlineHtmlProcessorV17,
-  ] = await Promise.all([
-    generateAngularPlugins(context, optionsResolved, angularVersion),
-    // Since v18, the processor uses `getDecorators` from `typescript` which does not exist prior to
-    // v4.8 of `typescript`, which might be used in older projects
-    interopDefault(import('@angular-eslint/eslint-plugin-template')).then(
-      (m) => m.processors['extract-inline-html'] as Eslint.Linter.Processor,
-    ),
-    interopDefault(import('angular-eslint-plugin-template17')).then(
-      (m) => m.processors['extract-inline-html'] as Eslint.Linter.Processor,
-    ),
-  ]);
-
   const forbiddenMetadataProperties: typeof optionsResolved.forbiddenMetadataProperties = {
     inputs: true,
     outputs: true,
@@ -547,8 +266,6 @@ export const angularUnConfig: UnConfigFn<
 
   const configBuilderGeneral = createConfigBuilder(context, optionsResolved, '@angular-eslint');
 
-  // TODO backport rules?
-
   // Legend:
   // 🟢 - in recommended (latest version)
   // ♿ - in accessibility (latest version)
@@ -556,15 +273,56 @@ export const angularUnConfig: UnConfigFn<
   // 🔴 - deprecated
   // Check rule usage: https://github.com/search?q=%22%40angular-eslint%2Fno-input-prefix%22+path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F&type=code&p=1
 
-  const extractInlineHtmlProcessor = cloneDeep(
-    angularVersion < 18 ||
-      (context.packagesInfo.typescript?.versions.majorAndMinor || Number.POSITIVE_INFINITY) < 4.8
-      ? extractInlineHtmlProcessorV17
-      : extractInlineHtmlProcessorLatest,
-  );
-  if (!extractInlineHtmlProcessor.meta) {
-    extractInlineHtmlProcessor.meta = cloneDeep(extractInlineHtmlProcessorLatest.meta);
+  const [
+    angularEslintPlugin,
+    angularEslintPluginPackageInfo,
+    angularTemplateEslintPlugin,
+    angularTemplateEslintPluginPackageInfo,
+    extractInlineHtmlProcessor,
+  ] = await Promise.all([
+    pluginsLoaders['@angular-eslint'](context).then(({module}) => module),
+    fetchPackageInfo('@angular-eslint/eslint-plugin'),
+    pluginsLoaders['@angular-eslint/template'](context).then(({module}) => module),
+    fetchPackageInfo('@angular-eslint/eslint-plugin-template'),
+    interopDefault(import('@angular-eslint/eslint-plugin-template'))
+      .then((m) => m.processors['extract-inline-html'] as Eslint.Linter.Processor)
+      .then((processor) => {
+        const fixedProcessor = cloneDeep(processor);
+        fixedProcessor.meta ||= {
+          name: 'extract-inline-html',
+        };
+        return fixedProcessor;
+      }),
+  ]);
+
+  if (
+    angularEslintPluginPackageInfo?.versions.major != null &&
+    angularEslintPluginPackageInfo.versions.major !== angularVersion
+  ) {
+    context.logger.warn(
+      `Your \`@angular-eslint/eslint-plugin\` major version (${angularEslintPluginPackageInfo.versions.major}) might not be compatible with the configured (or detected) Angular major version (${angularVersion}).`,
+    );
   }
+  if (
+    angularTemplateEslintPluginPackageInfo?.versions.major != null &&
+    angularTemplateEslintPluginPackageInfo.versions.major !== angularVersion
+  ) {
+    context.logger.warn(
+      `Your \`@angular-eslint/eslint-plugin-template\` major version (${angularTemplateEslintPluginPackageInfo.versions.major}) might not be compatible with the configured (or detected) Angular major version (${angularVersion}).`,
+    );
+  }
+
+  const angularEslintPluginRules = Object.keys(angularEslintPlugin?.rules || {});
+  const getAngularEslintPluginRuleSeverity = <
+    RuleName extends RuleNamesForPlugin<'@angular-eslint'>,
+  >(
+    ruleName: RuleName,
+    severity: RuleSeverity,
+  ) =>
+    [
+      ruleName satisfies RuleName,
+      angularEslintPlugin && !angularEslintPluginRules.includes(ruleName) ? OFF : severity,
+    ] satisfies NonEmptyTuple;
 
   configBuilderGeneral
     ?.addConfig(
@@ -581,84 +339,166 @@ export const angularUnConfig: UnConfigFn<
         }),
       },
     )
-    .addRule('component-class-suffix', componentClassSuffixes.length === 0 ? OFF : ERROR, [
-      {
-        ...(componentClassSuffixes.length > 0 && {suffixes: componentClassSuffixes}),
-      },
-    ]) // [all]
-    .addRule('component-max-inline-declarations', OFF) // [all]
-    .addRule('component-selector', componentSelector === false ? OFF : ERROR, [
-      {
-        type: ['element'],
-        style: 'kebab-case',
-        ...(typeof componentSelector === 'object' && componentSelector),
-      },
-    ]) // [all]
-    .addRule('consistent-component-styles', componentStylesStyle === false ? OFF : ERROR, [
-      typeof componentStylesStyle === 'string' ? componentStylesStyle : 'string',
-    ]) // [>=17]
-    .addRule('contextual-decorator', ERROR) // [all]
-    .addRule('contextual-lifecycle', ERROR) // 🟢[all]
-    .addRule('directive-class-suffix', directiveClassSuffixes.length === 0 ? OFF : ERROR, [
-      {
-        ...(directiveClassSuffixes.length > 0 && {suffixes: directiveClassSuffixes}),
-      },
-    ]) // [all]
-    .addRule('directive-selector', directiveSelector === false ? OFF : ERROR, [
-      {
-        type: ['attribute'],
-        style: 'camelCase',
-        ...(typeof directiveSelector === 'object' && directiveSelector),
-      },
-    ]) // [all]
-    .addRule('no-async-lifecycle-method', ERROR) // [>=17]
-    .addRule('no-attribute-decorator', disallowAttributeDecorator ? ERROR : OFF) // [all]
-    .addRule('no-conflicting-lifecycle', ERROR) // [all]
-    .addRule('no-developer-preview', WARNING) // [>=20.1]
-    .addRule('no-duplicates-in-metadata-arrays', ERROR) // [>=17]
-    .addRule('no-empty-lifecycle-method', ERROR) // 🟢[all]
-    .addRule('no-experimental', WARNING) // [>=20.1]
-    .addRule('no-forward-ref', disallowForwardRef ? ERROR : OFF) // [all]
-    // See https://github.com/angular/angular/pull/54084, https://angular.dev/guide/components/host-elements
-    .addRule('no-host-metadata-property', forbiddenMetadataProperties.host ? ERROR : OFF) // [<=18] 🔴(18)
-    .addRule('prefer-output-emitter-ref', ERROR) // [>=19.4]
-    .addRule('no-input-prefix', ERROR, [{prefixes: disallowedInputPrefixes}]) // [all]
-    .addRule('no-input-rename', ERROR) // 🟢[all]
-    .addRule('no-inputs-metadata-property', forbiddenMetadataProperties.inputs ? ERROR : OFF) // 🟢[all]
-    .addRule('no-lifecycle-call', ERROR) // [all]
-    .addRule('no-output-native', ERROR) // 🟢[all]
-    .addRule('no-output-on-prefix', ERROR) // 🟢[all]
-    .addRule('no-output-rename', ERROR) // 🟢[all]
-    .addRule('no-outputs-metadata-property', forbiddenMetadataProperties.outputs ? ERROR : OFF) // 🟢[all]
-    .addRule('no-pipe-impure', ERROR) // [all]
-    // https://github.com/angular/angular/blob/12.1.1/packages/core/src/metadata/directives.ts#L221-L258
-    .addRule('no-queries-metadata-property', forbiddenMetadataProperties.queries ? ERROR : OFF) // [all]
-    .addRule('no-uncalled-signals', ERROR) // [>=20]
-    .addRule('pipe-prefix', ERROR, [{prefixes: pipePrefixes}]) // [all]
-    .addRule('prefer-inject', ERROR) // 🟢[>=20]
-    .addRule('prefer-on-push-component-change-detection', OFF) // [all]
-    .addRule('prefer-output-readonly', ERROR) // [all]
-    .addRule('prefer-signals', OFF) // [>=19]
-    .addRule('prefer-standalone', preferStandaloneComponents && angularVersion >= 17 ? ERROR : OFF) // [>=17] 🟢(>=19)
     .addRule(
-      'prefer-standalone-component',
-      preferStandaloneComponents && angularVersion < 17 ? ERROR : OFF,
+      ...getAngularEslintPluginRuleSeverity(
+        'component-class-suffix',
+        componentClassSuffixes.length === 0 ? OFF : ERROR,
+      ),
+      [
+        {
+          ...(componentClassSuffixes.length > 0 && {suffixes: componentClassSuffixes}),
+        },
+      ],
+    ) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('component-max-inline-declarations', OFF)) // [all]
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity(
+        'component-selector',
+        componentSelector === false ? OFF : ERROR,
+      ),
+      [
+        {
+          type: ['element'],
+          style: 'kebab-case',
+          ...(typeof componentSelector === 'object' && componentSelector),
+        },
+      ],
+    ) // [all]
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity(
+        'consistent-component-styles',
+        componentStylesStyle === false ? OFF : ERROR,
+      ),
+      [typeof componentStylesStyle === 'string' ? componentStylesStyle : 'string'],
+    ) // [>=17]
+    .addRule(...getAngularEslintPluginRuleSeverity('contextual-decorator', ERROR)) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('contextual-lifecycle', ERROR)) // 🟢[all]
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity(
+        'directive-class-suffix',
+        directiveClassSuffixes.length === 0 ? OFF : ERROR,
+      ),
+      [
+        {
+          ...(directiveClassSuffixes.length > 0 && {suffixes: directiveClassSuffixes}),
+        },
+      ],
+    ) // [all]
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity(
+        'directive-selector',
+        directiveSelector === false ? OFF : ERROR,
+      ),
+      [
+        {
+          type: ['attribute'],
+          style: 'camelCase',
+          ...(typeof directiveSelector === 'object' && directiveSelector),
+        },
+      ],
+    ) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-async-lifecycle-method', ERROR)) // [>=17]
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity(
+        'no-attribute-decorator',
+        disallowAttributeDecorator ? ERROR : OFF,
+      ),
+    ) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-conflicting-lifecycle', ERROR)) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-developer-preview', WARNING)) // [>=20.1]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-duplicates-in-metadata-arrays', ERROR)) // [>=17]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-empty-lifecycle-method', ERROR)) // 🟢[all]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-experimental', WARNING)) // [>=20.1]
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity('no-forward-ref', disallowForwardRef ? ERROR : OFF),
+    ) // [all]
+    // See https://github.com/angular/angular/pull/54084, https://angular.dev/guide/components/host-elements
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity(
+        'no-host-metadata-property',
+        forbiddenMetadataProperties.host ? ERROR : OFF,
+      ),
+    ) // [<=18] 🔴(18)
+    .addRule(...getAngularEslintPluginRuleSeverity('prefer-output-emitter-ref', ERROR)) // [>=19.4]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-input-prefix', ERROR), [
+      {prefixes: disallowedInputPrefixes},
+    ]) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-input-rename', ERROR)) // 🟢[all]
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity(
+        'no-inputs-metadata-property',
+        forbiddenMetadataProperties.inputs ? ERROR : OFF,
+      ),
+    ) // 🟢[all]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-lifecycle-call', ERROR)) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-output-native', ERROR)) // 🟢[all]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-output-on-prefix', ERROR)) // 🟢[all]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-output-rename', ERROR)) // 🟢[all]
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity(
+        'no-outputs-metadata-property',
+        forbiddenMetadataProperties.outputs ? ERROR : OFF,
+      ),
+    ) // 🟢[all]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-pipe-impure', ERROR)) // [all]
+    // https://github.com/angular/angular/blob/12.1.1/packages/core/src/metadata/directives.ts#L221-L258
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity(
+        'no-queries-metadata-property',
+        forbiddenMetadataProperties.queries ? ERROR : OFF,
+      ),
+    ) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('no-uncalled-signals', ERROR)) // [>=20]
+    .addRule(...getAngularEslintPluginRuleSeverity('pipe-prefix', ERROR), [
+      {prefixes: pipePrefixes},
+    ]) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('prefer-inject', ERROR)) // 🟢[>=20]
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity('prefer-on-push-component-change-detection', OFF),
+    ) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('prefer-output-readonly', ERROR)) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('prefer-signals', OFF)) // [>=19]
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity(
+        'prefer-standalone',
+        preferStandaloneComponents && angularVersion >= 17 ? ERROR : OFF,
+      ),
+    ) // [>=17] 🟢(>=19)
+    .addRule(
+      ...getAngularEslintPluginRuleSeverity(
+        'prefer-standalone-component',
+        preferStandaloneComponents && angularVersion < 17 ? ERROR : OFF,
+      ),
     ) // [>=16<=18] 🔴(>=17)
-    .addRule('relative-url-prefix', ERROR) // [all]
-    .addRule('require-lifecycle-on-prototype', ERROR) // [>=19]
-    .addRule('require-localize-metadata', ERROR) // [>=16] 🌐
-    .addRule('runtime-localize', ERROR) // [>=18] 🌐
-    .addRule('sort-keys-in-type-decorator', ERROR) // [>=20]
-    .addRule('sort-lifecycle-methods', ERROR) // [>=16]
-    .addRule('sort-ngmodule-metadata-arrays', OFF) // [<=18] 🔴(>=17)
-    .addRule('use-component-selector', ERROR) // [all]
-    .addRule('use-component-view-encapsulation', ERROR) // [all]
-    .addRule('use-injectable-provided-in', ERROR) // [all]
-    .addRule('use-lifecycle-interface', ERROR) // 🟢[all] (warns)
-    .addRule('use-pipe-transform-interface', ERROR) // 🟢[all]
+    .addRule(...getAngularEslintPluginRuleSeverity('relative-url-prefix', ERROR)) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('require-lifecycle-on-prototype', ERROR)) // [>=19]
+    .addRule(...getAngularEslintPluginRuleSeverity('require-localize-metadata', ERROR)) // [>=16] 🌐
+    .addRule(...getAngularEslintPluginRuleSeverity('runtime-localize', ERROR)) // [>=18] 🌐
+    .addRule(...getAngularEslintPluginRuleSeverity('sort-keys-in-type-decorator', ERROR)) // [>=20]
+    .addRule(...getAngularEslintPluginRuleSeverity('sort-lifecycle-methods', ERROR)) // [>=16]
+    .addRule(...getAngularEslintPluginRuleSeverity('sort-ngmodule-metadata-arrays', OFF)) // [<=18] 🔴(>=17)
+    .addRule(...getAngularEslintPluginRuleSeverity('use-component-selector', ERROR)) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('use-component-view-encapsulation', ERROR)) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('use-injectable-provided-in', ERROR)) // [all]
+    .addRule(...getAngularEslintPluginRuleSeverity('use-lifecycle-interface', ERROR)) // 🟢[all] (warns)
+    .addRule(...getAngularEslintPluginRuleSeverity('use-pipe-transform-interface', ERROR)) // 🟢[all]
     .addOverrides();
 
   // TEMPLATE CONFIG
+
+  const angularTemplateEslintPluginRules = Object.keys(angularTemplateEslintPlugin?.rules || {});
+  const getAngularEslintTemplatePluginRuleSeverity = <
+    RuleName extends RuleNamesForPlugin<'@angular-eslint/template'>,
+  >(
+    ruleName: RuleName,
+    severity: RuleSeverity,
+  ) =>
+    [
+      ruleName satisfies RuleName,
+      angularTemplateEslintPlugin && !angularTemplateEslintPluginRules.includes(ruleName)
+        ? OFF
+        : severity,
+    ] satisfies NonEmptyTuple;
 
   const configTemplateOptions = assignDefaults(configTemplate, {
     a11yRules: true,
@@ -692,56 +532,122 @@ export const angularUnConfig: UnConfigFn<
         },
       },
     )
-    .addRule('accessibility-alt-text', a11yRulesSeverity) // [<=15] ♿
-    .addRule('accessibility-elements-content', a11yRulesSeverity) // [<=15] ♿
-    .addRule('accessibility-interactive-supports-focus', a11yRulesSeverity) // [>=14<=15] ♿
-    .addRule('accessibility-label-for', a11yRulesSeverity) // [<=15] ♿
-    .addRule('accessibility-label-has-associated-control', a11yRulesSeverity) // [<=15] ♿
-    .addRule('accessibility-role-has-required-aria', a11yRulesSeverity) // [>=14<=15] ♿
-    .addRule('accessibility-table-scope', a11yRulesSeverity) // [<=15] ♿
-    .addRule('accessibility-valid-aria', a11yRulesSeverity) // [<=15] ♿
-    .addRule('alt-text', a11yRulesSeverity) // [>=16] ♿
-    .addRule('attributes-order', ERROR) /// [>=14]
-    .addRule('banana-in-box', ERROR) // 🟢[all]
-    .addRule('button-has-type', ERROR) // [all]
-    .addRule('click-events-have-key-events', a11yRulesSeverity) // [all] ♿
-    .addRule('conditional-complexity', OFF) // [all]
-    .addRule('cyclomatic-complexity', OFF) // [all]
-    .addRule('elements-content', a11yRulesSeverity) // [>=16] ♿
-    .addRule('eqeqeq', ERROR, [{allowNullOrUndefined: true}]) // 🟢[all]
-    .addRule('i18n', OFF) // [all]
-    .addRule('interactive-supports-focus', a11yRulesSeverity) // [>=16] ♿
-    .addRule('label-has-associated-control', a11yRulesSeverity) // [>=16] ♿
-    .addRule('mouse-events-have-key-events', a11yRulesSeverity) // [all] ♿
-    .addRule('no-any', WARNING) // [all]
-    .addRule('no-autofocus', a11yRulesSeverity) // [all] ♿
-    .addRule('no-call-expression', OFF) // [all]
-    .addRule('no-distracting-elements', a11yRulesSeverity) // [all] ♿
-    .addRule('no-duplicate-attributes', ERROR) // [all]
-    .addRule('no-inline-styles', OFF) // [>=14]
-    .addRule('no-interpolation-in-attributes', ERROR) // [>=15]
-    .addRule('no-negated-async', ERROR) // 🟢[all]
-    .addRule('no-nested-tags', ERROR) // [>=20]
-    .addRule('no-positive-tabindex', ERROR) // [all]
-    .addRule('prefer-at-empty', ERROR) // [>=20]
-    .addRule('prefer-contextual-for-variables', ERROR) // [>=19.3]
-    .addRule('prefer-control-flow', preferControlFlow ? ERROR : OFF) // [>=17]
-    .addRule('prefer-ngsrc', preferNgSrc ? ERROR : OFF) // [>=16]
-    .addRule('prefer-template-literal', ERROR) // [>=19.4]
-    .addRule('prefer-self-closing-tags', OFF) // [>=16]
-    .addRule('prefer-static-string-properties', ERROR) // [>=19]
-    .addRule('role-has-required-aria', a11yRulesSeverity) // [>=16] ♿
-    .addRule('table-scope', a11yRulesSeverity) // [>=16] ♿
-    .addRule('use-track-by-function', requireLoopIndexes ? ERROR : OFF) // [all]
-    .addRule('valid-aria', a11yRulesSeverity) // [>=16] ♿
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity('accessibility-alt-text', a11yRulesSeverity),
+    ) // [<=15] ♿
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity(
+        'accessibility-elements-content',
+        a11yRulesSeverity,
+      ),
+    ) // [<=15] ♿
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity(
+        'accessibility-interactive-supports-focus',
+        a11yRulesSeverity,
+      ),
+    ) // [>=14<=15] ♿
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity('accessibility-label-for', a11yRulesSeverity),
+    ) // [<=15] ♿
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity(
+        'accessibility-label-has-associated-control',
+        a11yRulesSeverity,
+      ),
+    ) // [<=15] ♿
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity(
+        'accessibility-role-has-required-aria',
+        a11yRulesSeverity,
+      ),
+    ) // [>=14<=15] ♿
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity('accessibility-table-scope', a11yRulesSeverity),
+    ) // [<=15] ♿
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity('accessibility-valid-aria', a11yRulesSeverity),
+    ) // [<=15] ♿
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('alt-text', a11yRulesSeverity)) // [>=16] ♿
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('attributes-order', ERROR)) /// [>=14]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('banana-in-box', ERROR)) // 🟢[all]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('button-has-type', ERROR)) // [all]
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity(
+        'click-events-have-key-events',
+        a11yRulesSeverity,
+      ),
+    ) // [all] ♿
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('conditional-complexity', OFF)) // [all]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('cyclomatic-complexity', OFF)) // [all]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('elements-content', a11yRulesSeverity)) // [>=16] ♿
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('eqeqeq', ERROR), [
+      {allowNullOrUndefined: true},
+    ]) // 🟢[all]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('i18n', OFF)) // [all]
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity(
+        'interactive-supports-focus',
+        a11yRulesSeverity,
+      ),
+    ) // [>=16] ♿
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity(
+        'label-has-associated-control',
+        a11yRulesSeverity,
+      ),
+    ) // [>=16] ♿
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity(
+        'mouse-events-have-key-events',
+        a11yRulesSeverity,
+      ),
+    ) // [all] ♿
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-any', WARNING)) // [all]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-autofocus', a11yRulesSeverity)) // [all] ♿
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-call-expression', OFF)) // [all]
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity('no-distracting-elements', a11yRulesSeverity),
+    ) // [all] ♿
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-duplicate-attributes', ERROR)) // [all]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-inline-styles', OFF)) // [>=14]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-interpolation-in-attributes', ERROR)) // [>=15]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-negated-async', ERROR)) // 🟢[all]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-nested-tags', ERROR)) // [>=20]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-positive-tabindex', ERROR)) // [all]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('prefer-at-empty', ERROR)) // [>=20]
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity('prefer-contextual-for-variables', ERROR),
+    ) // [>=19.3]
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity(
+        'prefer-control-flow',
+        preferControlFlow ? ERROR : OFF,
+      ),
+    ) // [>=17]
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity('prefer-ngsrc', preferNgSrc ? ERROR : OFF),
+    ) // [>=16]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('prefer-template-literal', ERROR)) // [>=19.4]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('prefer-self-closing-tags', OFF)) // [>=16]
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity('prefer-static-string-properties', ERROR),
+    ) // [>=19]
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity('role-has-required-aria', a11yRulesSeverity),
+    ) // [>=16] ♿
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('table-scope', a11yRulesSeverity)) // [>=16] ♿
+    .addRule(
+      ...getAngularEslintTemplatePluginRuleSeverity(
+        'use-track-by-function',
+        requireLoopIndexes ? ERROR : OFF,
+      ),
+    ) // [all]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('valid-aria', a11yRulesSeverity)) // [>=16] ♿
     .addOverrides();
 
   return {
     configs: [configBuilderGeneral, configBuilderTemplate],
     optionsResolved,
-    plugins: {
-      '@angular-eslint': eslintPluginAngular,
-      '@angular-eslint/template': eslintPluginAngularTemplate,
-    },
   };
 };

@@ -80,6 +80,24 @@ export function genPluginLoader<T, Prefix extends string, N extends string>(
 }
 
 export const pluginsLoaders = {
+  ...genPluginLoader(
+    '@angular-eslint',
+    '@angular-eslint/eslint-plugin',
+    () =>
+      import(
+        '@angular-eslint/eslint-plugin'
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
+  ...genPluginLoader(
+    '@angular-eslint/template',
+    '@angular-eslint/eslint-plugin-template',
+    () =>
+      import(
+        '@angular-eslint/eslint-plugin-template'
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   ...genPluginLoader('@cspell', '@cspell/eslint-plugin', () => import('@cspell/eslint-plugin')),
   ...genPluginLoader(
     '@eslint-community/eslint-comments',
@@ -398,14 +416,6 @@ export const pluginsLoaders = {
 type LoadablePluginPrefix = keyof typeof pluginsLoaders;
 export const LOADABLE_PLUGIN_PREFIXES_LIST = objectKeysUnsafe(pluginsLoaders);
 
-export type PluginPrefix =
-  | LoadablePluginPrefix
-  | ''
-  | '@angular-eslint'
-  | '@angular-eslint/template';
+export type PluginPrefix = LoadablePluginPrefix | '';
 
-export const PLUGIN_PREFIXES_LIST: readonly PluginPrefix[] = [
-  ...objectKeysUnsafe(pluginsLoaders),
-  '@angular-eslint',
-  '@angular-eslint/template',
-];
+export const PLUGIN_PREFIXES_LIST: readonly PluginPrefix[] = [...objectKeysUnsafe(pluginsLoaders)];

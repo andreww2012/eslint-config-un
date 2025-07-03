@@ -99,3 +99,9 @@ declare module 'eslint-plugin-no-only-tests' {
   declare const value: ESLint.ESLint.Plugin;
   export = value;
 }
+
+declare module 'angular-eslint-plugin-template15' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
+  export = value;
+}
