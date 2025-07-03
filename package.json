@@ -103,6 +103,7 @@
     "eslint-plugin-no-unsanitized": "4.1.2",
     "eslint-plugin-node-dependencies": "1.1.2",
     "eslint-plugin-package-json": "0.43.0",
+    "eslint-plugin-pnpm": "1.0.0",
     "eslint-plugin-prettier": "file:./deps/eslint-plugin-prettier-5.5.0.tgz",
     "eslint-plugin-promise": "7.2.1",
     "eslint-plugin-regexp": "2.9.0",
@@ -175,7 +176,6 @@
     "eslint-plugin-perfectionist": "4.15.0",
     "eslint-plugin-pinia": "0.4.1",
     "eslint-plugin-playwright": "2.2.0",
-    "eslint-plugin-pnpm": "1.0.0",
     "eslint-plugin-prefer-arrow-functions": "3.6.2",
     "eslint-plugin-qwik": "1.14.1",
     "eslint-plugin-react": "7.37.5",
@@ -232,7 +232,6 @@
     "eslint-plugin-perfectionist": "^4.15.0",
     "eslint-plugin-pinia": "^0.4.1",
     "eslint-plugin-playwright": "^2.2.0",
-    "eslint-plugin-pnpm": "^1.0.0",
     "eslint-plugin-prefer-arrow-functions": "^3.6.2",
     "eslint-plugin-qwik": "^1.14.1",
     "eslint-plugin-react": "^7.37.5",
@@ -324,9 +323,6 @@
       "optional": true
     },
     "eslint-plugin-playwright": {
-      "optional": true
-    },
-    "eslint-plugin-pnpm": {
       "optional": true
     },
     "eslint-plugin-prefer-arrow-functions": {

@@ -80,7 +80,6 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `perfectionist`            | `eslint-plugin-perfectionist`            |
 | `pinia`                    | `eslint-plugin-pinia`                    |
 | `playwright`               | `eslint-plugin-playwright`               |
-| `pnpm`                     | `eslint-plugin-pnpm`                     |
 | `prefer-arrow-functions`   | `eslint-plugin-prefer-arrow-functions`   |
 | `qwik`                     | `eslint-plugin-qwik`                     |
 | `react-compiler`           | `eslint-plugin-react-compiler`           |

@@ -136,6 +136,9 @@ importers:
       eslint-plugin-package-json:
         specifier: 0.43.0
         version: 0.43.0(@types/estree@1.0.8)(eslint@9.29.0(jiti@2.4.2))(jsonc-eslint-parser@2.4.0)
+      eslint-plugin-pnpm:
+        specifier: 1.0.0
+        version: 1.0.0(eslint@9.29.0(jiti@2.4.2))
       eslint-plugin-prettier:
         specifier: file:./deps/eslint-plugin-prettier-5.5.0.tgz
         version: file:deps/eslint-plugin-prettier-5.5.0.tgz(patch_hash=ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.5(eslint@9.29.0(jiti@2.4.2)))(eslint@9.29.0(jiti@2.4.2))(prettier@3.6.2)
@@ -347,9 +350,6 @@ importers:
       eslint-plugin-playwright:
         specifier: 2.2.0
         version: 2.2.0(eslint@9.29.0(jiti@2.4.2))
-      eslint-plugin-pnpm:
-        specifier: 1.0.0
-        version: 1.0.0(eslint@9.29.0(jiti@2.4.2))
       eslint-plugin-prefer-arrow-functions:
         specifier: 3.6.2
         version: 3.6.2(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
