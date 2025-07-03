@@ -583,7 +583,6 @@ const ALL_STYLISTIC_RULES = {
     'no-unreadable-array-destructuring': true,
     'no-unreadable-iife': true,
     'no-useless-fallback-in-spread': true,
-    'no-useless-undefined': true,
     'no-zero-fractions': true,
     'number-literal-case': true,
     'numeric-separators-style': true,
