@@ -69,7 +69,6 @@ const ALL_STYLISTIC_RULES = {
     'prefer-regex-literals': true,
     'prefer-spread': true,
     'prefer-template': true,
-    radix: true,
     'sort-imports': true,
     'sort-keys': true,
     'sort-vars': true,
