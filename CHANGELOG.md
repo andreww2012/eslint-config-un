@@ -48,7 +48,9 @@
 - **jsdoc** config: added a new option `extraMultilineCommentsStartingWithToIgnore` to control which multiline comments should be ignored by [`no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md) rule. Added `__PURE__`, `__NO_SIDE_EFFECTS__` and `vite-ignore` to the default list.
 - **casePolice** config: autofix is now disabled by default.
 - **react** config: `configTypeAwareRules` now uses `files` and `ignores` from `ts` config by default.
-- **yaml** config: add a new config to target GitHub Actions workflow files, currently only disabling [`no-empty-mapping-value`](https://ota-meshi.github.io/eslint-plugin-yml/rules/no-empty-mapping-value.html) rule.
+- **yaml** config:
+  - Added a new config to target GitHub Actions workflow files, currently only disabling [`no-empty-mapping-value`](https://ota-meshi.github.io/eslint-plugin-yml/rules/no-empty-mapping-value.html) rule.
+  - Added an option to not enforce the file extension.
 - **vue** config: support Nuxt 4 new directory structure.
 - **perfectionist** config: added a bunch of new sub-configs, corresponding to each rule of the plugin. Plugin shared settings are now also configurable via `settings` option.
 - **vitest** config: rule [`prefer-describe-function-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-describe-function-title.md) is now disabled by default.

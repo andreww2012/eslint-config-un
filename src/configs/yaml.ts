@@ -13,9 +13,10 @@ export interface YamlEslintConfigOptions extends UnConfigOptions<'yml'> {
   doNotMergeFilesWithDefault?: boolean;
 
   /**
+   * Set to `false` to not enforce the extension.
    * @default 'yml'
    */
-  enforceExtension?: 'yml' | 'yaml';
+  enforceExtension?: 'yml' | 'yaml' | false;
 
   doNotIgnoreFilesByDefault?: Partial<Record<(typeof DEFAULT_FILES_TO_IGNORE)[number], boolean>>;
 
@@ -85,7 +86,11 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
     .addRule('block-sequence-hyphen-indicator-newline', ERROR) // 🟣 >=0.5.0
     .addRule('block-sequence', ERROR) // 🟣 >=0.1.0
     // TODO why reporting here?
-    .addRule('file-extension', ERROR, [{extension: enforceExtension}]) // >=1.2.0
+    .addRule(
+      'file-extension',
+      enforceExtension ? ERROR : OFF,
+      enforceExtension ? [{extension: enforceExtension}] : [],
+    ) // >=1.2.0
     .addRule('indent', ERROR) // 🟣 >=0.1.0
     .addRule('key-name-casing', optionsResolved.casing == null ? OFF : ERROR, [
       {...optionsResolved.casing, ignores: ['<<', ...(optionsResolved.casing?.ignores || [])]},
