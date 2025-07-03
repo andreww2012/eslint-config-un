@@ -88,9 +88,12 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('no-useless-spread', ERROR)
     .addRule('no-useless-switch-case', ERROR)
     // TODO reason for disabling autofix
-    .addRule('no-useless-undefined', ERROR, [{checkArguments: false}], {
-      disableAutofix: true,
-    })
+    .addRule(
+      'no-useless-undefined',
+      ERROR,
+      [{checkArguments: false, checkArrowFunctionBody: false}],
+      {disableAutofix: true},
+    )
     .addRule('no-zero-fractions', ERROR)
     .addRule('number-literal-case', OFF) // 🟠
     .addRule('numeric-separators-style', ERROR, [{onlyIfContainsSeparator: true}])
