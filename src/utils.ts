@@ -1,15 +1,23 @@
 import path from 'node:path';
 import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
+import {createDefu, type defu} from 'defu';
 import {getPackageInfo, isPackageExists} from 'local-pkg';
 import type {FalsyValue, Promisable} from './types';
 
 export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
 
-export {defu as assignDefaults} from 'defu';
-
 export {klona as cloneDeep} from 'klona';
 
 export {memoize, omit, pick, pickBy, uniq as unique, uniqBy as uniqueBy} from 'es-toolkit';
+
+export const assignDefaults = createDefu((object, key, value) => {
+  if (Array.isArray(object[key]) && Array.isArray(value)) {
+    // @ts-expect-error this is fine
+    object[key] = [...value];
+    return true;
+  }
+  return false;
+}) as typeof defu;
 
 export type MaybeArray<T> = T | T[];
 export const arraify = <T>(value?: MaybeArray<T> | null): T[] =>
