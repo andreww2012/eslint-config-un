@@ -314,6 +314,7 @@ export const pluginsLoaders = {
   ),
   ...genPluginLoader('prettier', 'eslint-plugin-prettier', () => import('eslint-plugin-prettier')),
   ...genPluginLoader('promise', 'eslint-plugin-promise', () => import('eslint-plugin-promise')),
+  ...genPluginLoader('qunit', 'eslint-plugin-qunit', () => import('eslint-plugin-qunit')),
   ...genPluginLoader('qwik', 'eslint-plugin-qwik', () =>
     interopDefault(import('eslint-plugin-qwik')).then((m) => fixupPluginRules(m)),
   ),

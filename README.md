@@ -81,6 +81,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `pinia`                    | `eslint-plugin-pinia`                    |
 | `playwright`               | `eslint-plugin-playwright`               |
 | `prefer-arrow-functions`   | `eslint-plugin-prefer-arrow-functions`   |
+| `qunit`                    | `eslint-plugin-qunit`                    |
 | `qwik`                     | `eslint-plugin-qwik`                     |
 | `react-compiler`           | `eslint-plugin-react-compiler`           |
 | `react-hooks`              | `eslint-plugin-react-hooks`              |
@@ -277,6 +278,8 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `vitest/noOnlyTests`                                                                  | ❌ | [eslint-plugin-no-only-tests](https://npmjs.com/eslint-plugin-no-only-tests) (`no-only-tests`) | Since v1.0.0 |
 | `ava`                                                                                 | ✅ (`ava` is installed) | [eslint-plugin-ava](https://npmjs.com/eslint-plugin-ava) (`ava`) | Since v1.0.0 |
 | `ava/noOnlyTests`                                                                     | ❌ | [eslint-plugin-no-only-tests](https://npmjs.com/eslint-plugin-no-only-tests) (`no-only-tests`) | Since v1.0.0 |
+| `qunit`                                                                               | ✅ (`qunit` is installed) | [eslint-plugin-qunit](https://npmjs.com/eslint-plugin-qunit) (`qunit`) | Since v1.0.0 |
+| `qunit/noOnlyTests`                                                                   | ❌ | [eslint-plugin-no-only-tests](https://npmjs.com/eslint-plugin-no-only-tests) (`no-only-tests`) | Since v1.0.0 |
 | ![Testing Library](./assets/logos-testing-library.svg) `testingLibrary`               | ✅ (`@testing-library/dom` is installed) | [eslint-plugin-testing-library](https://npmjs.com/eslint-plugin-testing-library) (`testing-library`) | Since v1.0.0 |
 | ![Testing Library](./assets/logos-testing-library.svg) `testingLibrary/angular`       | ✅ (`angular` config is enabled) | ^ | Since v1.0.0 |
 | ![Testing Library](./assets/logos-testing-library.svg) `testingLibrary/marko`         | ✅ (`marko` is installed) | ^ | Since v1.0.0 |

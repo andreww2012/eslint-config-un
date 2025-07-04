@@ -361,6 +361,9 @@ const ALL_STYLISTIC_RULES = {
   promise: {
     'param-names': true,
   },
+  qunit: {
+    // None
+  },
   qwik: {
     'prefer-classlist': true,
   },

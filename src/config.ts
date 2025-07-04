@@ -241,6 +241,7 @@ export const eslintConfigInternal = async (
   const isPnpmEnabled = getIsConfigEnabled('pnpm', usedPackageManager?.name === 'pnpm');
   const isPreferArrowFunctionsEnabled = getIsConfigEnabled('preferArrowFunctions', false);
   const isPromiseEnabled = getIsConfigEnabled('promise');
+  const isQunitEnabled = getIsConfigEnabled('qunit', 'qunit');
   const isQwikEnabled = getIsConfigEnabled('qwik', ['@builder.io/qwik', '@qwik.dev/core']);
   const isReactEnabled = getIsConfigEnabled('react', 'react');
   const isRegexpEnabled = getIsConfigEnabled('regexp');
@@ -329,6 +330,7 @@ export const eslintConfigInternal = async (
       pnpm: {enabled: isPnpmEnabled},
       preferArrowFunctions: {enabled: isPreferArrowFunctionsEnabled},
       promise: {enabled: isPromiseEnabled},
+      qunit: {enabled: isQunitEnabled},
       qwik: {enabled: isQwikEnabled},
       react: {enabled: isReactEnabled},
       regexp: {enabled: isRegexpEnabled},
@@ -511,6 +513,7 @@ export const eslintConfigInternal = async (
       ),
     isLitEnabled && import('./configs/lit').then((m) => m.litUnConfig(context)),
     isMochaEnabled && import('./configs/mocha').then((m) => m.mochaUnConfig(context)),
+    isQunitEnabled && import('./configs/qunit').then((m) => m.qunitUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

@@ -61,6 +61,7 @@ import type {PlaywrightEslintConfigOptions} from './playwright';
 import type {PnpmEslintConfigOptions} from './pnpm';
 import type {PreferArrowFunctionsEslintConfigOptions} from './prefer-arrow-functions';
 import type {PromiseEslintConfigOptions} from './promise';
+import type {QunitEslintConfigOptions} from './qunit';
 import type {QwikEslintConfigOptions} from './qwik';
 import type {ReactEslintConfigOptions} from './react';
 import type {RegexpEslintConfigOptions} from './regexp';
@@ -626,6 +627,15 @@ export interface UnConfigs {
    * @default true
    */
   promise: PromiseEslintConfigOptions;
+
+  /**
+   * [QUnit](https://qunitjs.com) specific rules.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-qunit`](https://npmjs.com/eslint-plugin-qunit) ([docs](https://github.com/platinumazure/eslint-plugin-qunit))
+   * @default true <=> `qunit` package is installed
+   */
+  qunit: QunitEslintConfigOptions;
 
   /**
    * [qwik](https://qwik.dev) specific rules.
