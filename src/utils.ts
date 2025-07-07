@@ -8,7 +8,15 @@ export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} fr
 
 export {klona as cloneDeep} from 'klona';
 
-export {memoize, omit, pick, pickBy, uniq as unique, uniqBy as uniqueBy} from 'es-toolkit';
+export {
+  memoize,
+  omit,
+  partition,
+  pick,
+  pickBy,
+  uniq as unique,
+  uniqBy as uniqueBy,
+} from 'es-toolkit';
 
 export const assignDefaults = createDefu((object, key, value) => {
   if (Array.isArray(object[key]) && Array.isArray(value)) {

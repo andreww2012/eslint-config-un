@@ -4,6 +4,7 @@ import consola from 'consola';
 import createDebug from 'debug';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
+import semver from 'semver';
 import type {
   DisableAutofixMethod,
   EslintConfigUnOptions,
@@ -46,6 +47,7 @@ import {
   isIn,
   objectEntriesUnsafe,
   omit,
+  partition,
 } from './utils';
 
 // TODO debug
@@ -151,10 +153,6 @@ export const eslintConfigInternal = async (
     let enabled: boolean | undefined;
     let reason: string | undefined;
 
-    if (preCondition) {
-      enabled ??= preCondition.condition;
-      reason ??= preCondition.reason;
-    }
     const providedConfig = configsOptions[configName];
     if (providedConfig != null) {
       enabled ??= Boolean(providedConfig);
@@ -185,6 +183,10 @@ export const eslintConfigInternal = async (
     } else {
       enabled ??= defaultConditionOrPackageInstalled;
       reason ??= `config is ${defaultConditionOrPackageInstalled ? 'enabled' : 'disabled'} by default`;
+    }
+    if (preCondition) {
+      enabled &&= preCondition.condition;
+      reason = [reason, preCondition.reason].filter(Boolean).join(' and ');
     }
     debug(
       `Config \`${styleText('blue', configName)}\` is ${enabled ? styleText('green', 'enabled') : styleText('red', 'disabled')} because ${reason}`,
@@ -632,25 +634,36 @@ export const eslintConfigInternal = async (
     ? [...context.usedPlugins]
     : LOADABLE_PLUGIN_PREFIXES_LIST;
 
-  const packagesThatNeedsToBeManuallyInstalled: {
+  const packagesToManuallyInstallOrUpdate: {
     name: string;
     pluginPrefix: string;
     versionRange: string;
+    installedVersion?: string;
   }[] = [];
   const loadedPlugins = Object.fromEntries(
     (
       await Promise.all(
         usedPluginPrefixes.map(async (pluginPrefix) => {
-          const result = isIn(pluginPrefix, pluginsLoaders)
+          const pluginResult = isIn(pluginPrefix, pluginsLoaders)
             ? await pluginsLoaders[pluginPrefix](context)
             : null;
-          const plugin = result?.module;
-          if (result && !plugin && isIn(result.packageName, OPTIONAL_PLUGINS_PACKAGE_NAMES)) {
-            packagesThatNeedsToBeManuallyInstalled.push({
-              name: result.packageName,
-              pluginPrefix,
-              versionRange: OPTIONAL_PLUGINS_PACKAGE_NAMES[result.packageName],
-            });
+          const plugin = pluginResult?.module;
+          if (pluginResult && isIn(pluginResult.packageName, OPTIONAL_PLUGINS_PACKAGE_NAMES)) {
+            const installedPluginVersion = plugin
+              ? (await fetchPackageInfo(pluginResult.packageName))?.versions.full
+              : null;
+            const versionRange = OPTIONAL_PLUGINS_PACKAGE_NAMES[pluginResult.packageName];
+            if (
+              !plugin ||
+              (installedPluginVersion && !semver.satisfies(installedPluginVersion, versionRange))
+            ) {
+              packagesToManuallyInstallOrUpdate.push({
+                name: pluginResult.packageName,
+                pluginPrefix,
+                versionRange,
+                ...(installedPluginVersion && {installedVersion: installedPluginVersion}),
+              });
+            }
           }
           if (pluginPrefix) {
             const isProvided = optionsResolved.pluginsOverrides?.[pluginPrefix] != null;
@@ -663,15 +676,24 @@ export const eslintConfigInternal = async (
       )
     ).filter((v) => v != null),
   );
-  if (packagesThatNeedsToBeManuallyInstalled.length > 0) {
-    context.logger.fatal(
-      `Plugin${packagesThatNeedsToBeManuallyInstalled.length === 1 ? '' : 's'} that listed in optional peer dependencies ${packagesThatNeedsToBeManuallyInstalled.length === 1 ? 'was' : 'were'} used, but not installed. Please install ${packagesThatNeedsToBeManuallyInstalled.length === 1 ? 'it' : 'them'} by yourself or disable corresponding config${packagesThatNeedsToBeManuallyInstalled.length === 1 ? '' : 's'} in order for this error to disappear:
-${packagesThatNeedsToBeManuallyInstalled
-  .map(
-    ({name, versionRange}) =>
-      `  "${styleText('yellow', name)}": "${styleText('green', versionRange)}",`,
-  )
-  .join('\n')}`,
+  if (packagesToManuallyInstallOrUpdate.length > 0) {
+    partition(packagesToManuallyInstallOrUpdate, (item) => item.installedVersion != null).forEach(
+      (packages, index) => {
+        if (packages.length === 0) {
+          return;
+        }
+        const isUpdates = index === 0;
+        context.logger[isUpdates ? 'warn' : 'fatal'](
+          `Plugin${packages.length === 1 ? '' : 's'} that listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${isUpdates ? 'does not satisfy the supported version range' : 'not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} by yourself or disable corresponding config${packages.length === 1 ? '' : 's'} in order for this error to disappear:
+  ${packages
+    .toSorted((a, b) => a.name.localeCompare(b.name))
+    .map(
+      ({name, versionRange}) =>
+        `  "${styleText('yellow', name)}": "${styleText('green', versionRange)}",`,
+    )
+    .join('\n')}`,
+        );
+      },
     );
   }
 

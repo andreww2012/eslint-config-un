@@ -1,4 +1,5 @@
 import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
+import {Range, subset as isFirstSemverRangeIsSubsetOfSecond} from 'semver';
 import {ERROR, OFF} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
@@ -181,11 +182,9 @@ export interface NodeEslintConfigOptions extends UnConfigOptions<'node'> {
 const IMPORT_META_PROPERTIES_AVAILABLE_SINCE = '>=20.11';
 
 export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
-  const [closestPackageJson, {Range, subset: isFirstSemverRangeIsSubsetOfSecond}] =
-    await Promise.all([
-      interopDefault(import('read-package-up')).then((m) => m.readPackageUp()),
-      interopDefault(import('semver')),
-    ]);
+  const closestPackageJson = await interopDefault(import('read-package-up')).then((m) =>
+    m.readPackageUp(),
+  );
 
   const optionsRaw = context.rootOptions.configs?.node;
   const optionsResolved = assignDefaults(optionsRaw, {
