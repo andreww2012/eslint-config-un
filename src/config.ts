@@ -32,9 +32,10 @@ import {
 } from './eslint';
 import {
   LOADABLE_PLUGIN_PREFIXES_LIST,
-  OPTIONAL_PLUGINS_PACKAGE_NAMES,
+  OPTIONAL_PEER_DEPENDENCIES,
   PLUGIN_PREFIXES_LIST,
   type PluginPrefix,
+  parsersLoaders,
   pluginsLoaders,
 } from './plugins';
 import type {FalsyValue, Promisable} from './types';
@@ -42,6 +43,7 @@ import {
   type MaybeArray,
   arraify,
   assignDefaults,
+  capitalize,
   fetchPackageInfo,
   interopDefault,
   isIn,
@@ -69,6 +71,29 @@ const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
   'nodeDependencies',
   'depend',
 ]);
+
+const checkIfModuleCorrectlyLoaded = async (
+  moduleResult: {packageName: string; module: unknown} | null,
+) => {
+  const plugin = moduleResult?.module;
+  if (moduleResult && isIn(moduleResult.packageName, OPTIONAL_PEER_DEPENDENCIES)) {
+    const installedPluginVersion = plugin
+      ? (await fetchPackageInfo(moduleResult.packageName))?.versions.full
+      : null;
+    const versionRange = OPTIONAL_PEER_DEPENDENCIES[moduleResult.packageName];
+    if (
+      !plugin ||
+      (installedPluginVersion && !semver.satisfies(installedPluginVersion, versionRange))
+    ) {
+      return {
+        name: moduleResult.packageName,
+        versionRange,
+        ...(installedPluginVersion && {installedVersion: installedPluginVersion}),
+      };
+    }
+  }
+  return null;
+};
 
 export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
@@ -356,6 +381,7 @@ export const eslintConfigInternal = async (
     },
     disabledAutofixes: {},
     usedPlugins: new Set(),
+    usedParsers: new Map(),
     usedPackageManager,
     logger,
     debug,
@@ -630,52 +656,62 @@ export const eslintConfigInternal = async (
       })
       .filter((v) => v != null),
   );
+
   const usedPluginPrefixes: readonly PluginPrefix[] = loadPluginsOnDemand
     ? [...context.usedPlugins]
     : LOADABLE_PLUGIN_PREFIXES_LIST;
+  const usedParserPrefixes = [...context.usedParsers.keys()];
 
   const packagesToManuallyInstallOrUpdate: {
     name: string;
-    pluginPrefix: string;
     versionRange: string;
     installedVersion?: string;
+    isParser?: boolean;
   }[] = [];
-  const loadedPlugins = Object.fromEntries(
-    (
-      await Promise.all(
-        usedPluginPrefixes.map(async (pluginPrefix) => {
-          const pluginResult = isIn(pluginPrefix, pluginsLoaders)
-            ? await pluginsLoaders[pluginPrefix](context)
-            : null;
-          const plugin = pluginResult?.module;
-          if (pluginResult && isIn(pluginResult.packageName, OPTIONAL_PLUGINS_PACKAGE_NAMES)) {
-            const installedPluginVersion = plugin
-              ? (await fetchPackageInfo(pluginResult.packageName))?.versions.full
+  const [loadedPlugins] = await Promise.all([
+    Object.fromEntries(
+      (
+        await Promise.all(
+          usedPluginPrefixes.map(async (pluginPrefix) => {
+            const pluginResult = isIn(pluginPrefix, pluginsLoaders)
+              ? await pluginsLoaders[pluginPrefix](context)
               : null;
-            const versionRange = OPTIONAL_PLUGINS_PACKAGE_NAMES[pluginResult.packageName];
-            if (
-              !plugin ||
-              (installedPluginVersion && !semver.satisfies(installedPluginVersion, versionRange))
-            ) {
-              packagesToManuallyInstallOrUpdate.push({
-                name: pluginResult.packageName,
-                pluginPrefix,
-                versionRange,
-                ...(installedPluginVersion && {installedVersion: installedPluginVersion}),
-              });
+            const plugin = pluginResult?.module;
+            const packageToInstall = await checkIfModuleCorrectlyLoaded(pluginResult);
+            if (packageToInstall) {
+              packagesToManuallyInstallOrUpdate.push(packageToInstall);
             }
-          }
-          if (pluginPrefix) {
-            const isProvided = optionsResolved.pluginsOverrides?.[pluginPrefix] != null;
-            debug(
-              `Plugin \`${styleText('blue', pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginsOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
-            );
-          }
-          return plugin ? ([pluginPrefix, plugin] as const) : null;
-        }),
-      )
-    ).filter((v) => v != null),
-  );
+            if (pluginPrefix) {
+              const isProvided = optionsResolved.pluginsOverrides?.[pluginPrefix] != null;
+              debug(
+                `Plugin \`${styleText('blue', pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginsOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
+              );
+            }
+            return plugin ? ([pluginPrefix, plugin] as const) : null;
+          }),
+        )
+      ).filter((v) => v != null),
+    ),
+
+    Promise.all(
+      usedParserPrefixes.map(async (parserPrefix) => {
+        const parserResult = await parsersLoaders[parserPrefix](context);
+        const parser = parserResult.module;
+        const packageToInstall = await checkIfModuleCorrectlyLoaded(parserResult);
+        if (packageToInstall) {
+          packagesToManuallyInstallOrUpdate.push({...packageToInstall, isParser: true});
+        }
+        if (parser) {
+          context.usedParsers.get(parserPrefix)?.forEach((config) => {
+            config.languageOptions = {
+              ...config.languageOptions,
+              parser,
+            };
+          });
+        }
+      }),
+    ),
+  ]);
   if (packagesToManuallyInstallOrUpdate.length > 0) {
     partition(packagesToManuallyInstallOrUpdate, (item) => item.installedVersion != null).forEach(
       (packages, index) => {
@@ -683,15 +719,23 @@ export const eslintConfigInternal = async (
           return;
         }
         const isUpdates = index === 0;
+        const packageTypes = partition(packages, (item) => !item.isParser)
+          .map(
+            (packagesOfType, i) =>
+              packagesOfType.length > 0 &&
+              `${i === 0 ? 'plugin' : 'package'}${packagesOfType.length === 1 ? '' : 's'}`,
+          )
+          .filter(Boolean)
+          .join(' and ');
         context.logger[isUpdates ? 'warn' : 'fatal'](
-          `Plugin${packages.length === 1 ? '' : 's'} that listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${isUpdates ? 'does not satisfy the supported version range' : 'not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} by yourself or disable corresponding config${packages.length === 1 ? '' : 's'} in order for this error to disappear:
-  ${packages
-    .toSorted((a, b) => a.name.localeCompare(b.name))
-    .map(
-      ({name, versionRange}) =>
-        `  "${styleText('yellow', name)}": "${styleText('green', versionRange)}",`,
-    )
-    .join('\n')}`,
+          `${capitalize(packageTypes)} that listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${isUpdates ? 'does not satisfy the supported version range' : 'not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} by yourself or disable corresponding config${packages.length === 1 ? '' : 's'} in order for this error to disappear:
+${packages
+  .toSorted((a, b) => a.name.localeCompare(b.name))
+  .map(
+    ({name, versionRange}) =>
+      `  "${styleText('yellow', name)}": "${styleText('green', versionRange)}",`,
+  )
+  .join('\n')}`,
         );
       },
     );

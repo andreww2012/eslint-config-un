@@ -26,7 +26,13 @@ export const dependUnConfig: UnConfigFn<'depend'> = async (context) => {
 
   configBuilder
     ?.addConfig(
-      ['depend', {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_FILES_PACKAGE_JSON}],
+      [
+        'depend',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: DEFAULT_FILES_PACKAGE_JSON,
+        },
+      ],
       {
         languageOptions: {
           parser: jsoncEslintParser,

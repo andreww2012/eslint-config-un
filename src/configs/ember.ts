@@ -1,7 +1,7 @@
 // cspell:ignore runloop tagless
 import {ERROR, GLOB_JS_TS, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   RULES_TO_DISABLE_IN_TEST_FILES,
@@ -32,9 +32,7 @@ export interface EmberEslintConfigOptions extends UnConfigOptions<'ember'> {
 
 const GLIMMER_TEMPLATES_FILES = ['**/*.{gjs,gts}'] as const;
 
-export const emberUnConfig: UnConfigFn<'ember'> = async (context) => {
-  const emberEslintParser = await interopDefault(import('ember-eslint-parser'));
-
+export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.ember;
   const optionsResolved = assignDefaults(optionsRaw, {
     configTestFiles: true,
@@ -46,19 +44,13 @@ export const emberUnConfig: UnConfigFn<'ember'> = async (context) => {
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'ember');
 
-  configBuilder?.addConfig(
-    [
-      'ember/glimmer-templates',
-      {
-        filesFallback: [...GLIMMER_TEMPLATES_FILES],
-      },
-    ],
+  configBuilder?.addConfig([
+    'ember/glimmer-templates',
     {
-      languageOptions: {
-        parser: emberEslintParser,
-      },
+      filesFallback: [...GLIMMER_TEMPLATES_FILES],
+      parser: 'ember-eslint-parser',
     },
-  );
+  ]);
 
   // Legend:
   // 🟢 - in recommended

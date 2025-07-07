@@ -1,6 +1,6 @@
 import {ERROR, OFF} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults} from '../utils';
 import {YAML_DEFAULT_FILES} from './shared';
 import type {UnConfigFn} from './index';
 
@@ -40,9 +40,7 @@ export interface YamlEslintConfigOptions extends UnConfigOptions<'yml'> {
   };
 }
 
-export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
-  const yamlEslintParser = await interopDefault(import('yaml-eslint-parser'));
-
+export const yamlUnConfig: UnConfigFn<'yaml'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.yaml;
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceExtension: 'yml',
@@ -63,6 +61,7 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
           includeDefaultFilesAndIgnores: true,
           filesFallback: YAML_DEFAULT_FILES,
           mergeUserFilesWithFallback: !optionsResolved.doNotMergeFilesWithDefault,
+          parser: 'yaml-eslint-parser',
         },
       ],
       {
@@ -74,9 +73,6 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = async (context) => {
           ).filter((v) => typeof v === 'string'),
           ...(optionsResolved.ignores || []),
         ],
-        languageOptions: {
-          parser: yamlEslintParser,
-        },
       },
     )
     /* Category: Base rules */

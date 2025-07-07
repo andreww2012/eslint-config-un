@@ -9,6 +9,7 @@ export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} fr
 export {klona as cloneDeep} from 'klona';
 
 export {
+  capitalize,
   memoize,
   omit,
   partition,

@@ -1,6 +1,6 @@
 import {ERROR, OFF} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults} from '../utils';
 import {TOML_DEFAULT_FILES} from './shared';
 import type {UnConfigFn} from './index';
 
@@ -38,9 +38,7 @@ export interface TomlEslintConfigOptions extends UnConfigOptions<'toml'> {
   maxIntegerPrecisionBits?: number;
 }
 
-export const tomlUnConfig: UnConfigFn<'toml'> = async (context) => {
-  const tomlEslintParser = await interopDefault(import('toml-eslint-parser'));
-
+export const tomlUnConfig: UnConfigFn<'toml'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.toml;
   const optionsResolved = assignDefaults(optionsRaw, {
     maxPrecisionOfFractionalSeconds: 3,
@@ -62,6 +60,7 @@ export const tomlUnConfig: UnConfigFn<'toml'> = async (context) => {
           includeDefaultFilesAndIgnores: true,
           filesFallback: TOML_DEFAULT_FILES,
           mergeUserFilesWithFallback: !optionsResolved.doNotMergeFilesWithDefault,
+          parser: 'toml-eslint-parser',
         },
       ],
       {
@@ -73,9 +72,6 @@ export const tomlUnConfig: UnConfigFn<'toml'> = async (context) => {
           ).filter((v) => typeof v === 'string'),
           ...(optionsResolved.ignores || []),
         ],
-        languageOptions: {
-          parser: tomlEslintParser,
-        },
       },
     )
     /* Category: Base rules */

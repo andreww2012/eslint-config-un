@@ -94,12 +94,10 @@ const DEFAULT_SVELTE_FILES: string[] = [GLOB_SVELTE];
 const DEFAULT_SVELTE_SCRIPT_FILES: string[] = ['**/*.svelte.{js,ts}'];
 
 export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
-  const [eslintPluginSvelte, svelteEslintParser, {parser: typescriptEslintParser}] =
-    await Promise.all([
-      pluginsLoaders.svelte(context).then(({module}) => module),
-      interopDefault(import('svelte-eslint-parser')),
-      interopDefault(import('typescript-eslint')),
-    ]);
+  const [eslintPluginSvelte, {parser: typescriptEslintParser}] = await Promise.all([
+    pluginsLoaders.svelte(context).then(({module}) => module),
+    interopDefault(import('typescript-eslint')),
+  ]);
   if (!eslintPluginSvelte) {
     return null;
   }
@@ -136,12 +134,12 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
             ...DEFAULT_SVELTE_SCRIPT_FILES,
             ...parentConfigFiles,
           ],
+          parser: 'svelte-eslint-parser',
           doNotIgnoreMarkdown: true,
         },
       ],
       {
         languageOptions: {
-          parser: svelteEslintParser,
           parserOptions: {
             parser: isTypescriptEnabled ? typescriptEslintParser : undefined,
             ...(svelteKitConfig && {svelteConfig: svelteKitConfig}),

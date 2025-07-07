@@ -28,12 +28,10 @@ export interface AstroEslintConfigOptions
 const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
 
 export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
-  const [eslintPluginAstro, astroEslintParser, {parser: typescriptEslintParser}] =
-    await Promise.all([
-      pluginsLoaders.astro(context).then(({module}) => module),
-      interopDefault(import('astro-eslint-parser')),
-      interopDefault(import('typescript-eslint')),
-    ]);
+  const [eslintPluginAstro, {parser: typescriptEslintParser}] = await Promise.all([
+    pluginsLoaders.astro(context).then(({module}) => module),
+    interopDefault(import('typescript-eslint')),
+  ]);
   if (!eslintPluginAstro) {
     return null;
   }
@@ -55,12 +53,12 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
       {
         filesFallback: [...DEFAULT_ASTRO_FILES, ...parentConfigFiles],
         doNotIgnoreMarkdown: true,
+        parser: 'astro-eslint-parser',
       },
     ],
     {
       languageOptions: {
         globals: eslintPluginAstro.environments.astro.globals,
-        parser: astroEslintParser,
         parserOptions: {
           parser: isTypescriptEnabled ? typescriptEslintParser : undefined,
         },

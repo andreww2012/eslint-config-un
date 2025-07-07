@@ -185,7 +185,6 @@ export const vueUnConfig: UnConfigFn<
     {mergeProcessors: mergeEslintProcessors},
     eslintProcessorVueBlocks,
     eslintPluginVue,
-    eslintParserVue,
     isPiniaPackageInstalled,
     nuxtPackageInfo,
     {parser: typescriptEslintParser},
@@ -193,7 +192,6 @@ export const vueUnConfig: UnConfigFn<
     interopDefault(import('eslint-merge-processors')),
     interopDefault(import('eslint-processor-vue-blocks')),
     pluginsLoaders.vue(context).then(({module}) => module),
-    interopDefault(import('vue-eslint-parser')),
     doesPackageExist('pinia'),
     fetchPackageInfo('nuxt'),
     interopDefault(import('typescript-eslint')),
@@ -266,35 +264,43 @@ export const vueUnConfig: UnConfigFn<
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'vue');
 
-  configBuilder?.addConfig(['vue/setup', {doNotIgnoreMarkdown: true}], {
-    files: [...DEFAULT_VUE_FILES, ...optionsResolved.files],
-    processor: mergeEslintProcessors(
-      [
-        eslintPluginVue.processors['.vue'] as Eslint.Linter.Processor,
-        (() => {
-          if (!processSfcBlocks) {
-            return null;
-          }
-          const processorOptions = typeof processSfcBlocks === 'object' ? processSfcBlocks : {};
-          return eslintProcessorVueBlocks({
-            ...processorOptions,
-            blocks: {
-              styles: true,
-              ...processorOptions.blocks,
-            },
-          });
-        })(),
-      ].filter((v) => v != null),
-    ),
-    languageOptions: {
-      globals: globals.browser,
-      parser: eslintParserVue,
-      parserOptions: {
-        parser: isTypescriptEnabled ? typescriptEslintParser : undefined,
-        sourceType: 'module' as const,
+  configBuilder?.addConfig(
+    [
+      'vue/setup',
+      {
+        doNotIgnoreMarkdown: true,
+        parser: 'vue-eslint-parser',
+      },
+    ],
+    {
+      files: [...DEFAULT_VUE_FILES, ...optionsResolved.files],
+      processor: mergeEslintProcessors(
+        [
+          eslintPluginVue.processors['.vue'] as Eslint.Linter.Processor,
+          (() => {
+            if (!processSfcBlocks) {
+              return null;
+            }
+            const processorOptions = typeof processSfcBlocks === 'object' ? processSfcBlocks : {};
+            return eslintProcessorVueBlocks({
+              ...processorOptions,
+              blocks: {
+                styles: true,
+                ...processorOptions.blocks,
+              },
+            });
+          })(),
+        ].filter((v) => v != null),
+      ),
+      languageOptions: {
+        globals: globals.browser,
+        parserOptions: {
+          parser: isTypescriptEnabled ? typescriptEslintParser : undefined,
+          sourceType: 'module' as const,
+        },
       },
     },
-  });
+  );
 
   const vue2Severity = (severity: RuleSeverity) => (isVue2 ? severity : OFF);
   const vue3Severity = (severity: RuleSeverity) => (isVue3 ? severity : OFF);

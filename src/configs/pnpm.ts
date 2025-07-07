@@ -1,7 +1,7 @@
 import {ERROR, OFF} from '../constants';
 import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {PickKeysStartingWith} from '../types';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface PnpmEslintConfigOptions {
@@ -42,10 +42,7 @@ export interface PnpmEslintConfigOptions {
 }
 
 export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
-  const [jsoncEslintParser, yamlEslintParser] = await Promise.all([
-    interopDefault(import('jsonc-eslint-parser')),
-    interopDefault(import('yaml-eslint-parser')),
-  ]);
+  const jsoncEslintParser = await import('jsonc-eslint-parser');
 
   const optionsRaw = context.rootOptions.configs?.pnpm;
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -84,20 +81,14 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
 
   const configBuilderPnpmWorkspace = createConfigBuilder(context, configPnpmWorkspace, 'pnpm');
   configBuilderPnpmWorkspace
-    ?.addConfig(
-      [
-        'pnpm/pnpm-workspace-yaml',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesFallback: ['pnpm-workspace.yaml'],
-        },
-      ],
+    ?.addConfig([
+      'pnpm/pnpm-workspace-yaml',
       {
-        languageOptions: {
-          parser: yamlEslintParser,
-        },
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: ['pnpm-workspace.yaml'],
+        parser: 'yaml-eslint-parser',
       },
-    )
+    ])
     .addRule('yaml-no-duplicate-catalog-item', ERROR)
     .addRule('yaml-no-unused-catalog-item', ERROR)
     .addOverrides();

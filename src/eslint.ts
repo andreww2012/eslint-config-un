@@ -16,7 +16,7 @@ import {
 import type {FixableRuleNames} from './eslint-types-fixable-only.gen';
 import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin.gen';
 import type {RuleOptions} from './eslint-types.gen';
-import {PLUGIN_PREFIXES_LIST, type PluginPrefix} from './plugins';
+import {PLUGIN_PREFIXES_LIST, type ParserPrefix, type PluginPrefix} from './plugins';
 import type {
   FalsyValue,
   OmitIndexSignature,
@@ -358,6 +358,8 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
             ignoresFallback?: string[];
             mergeUserFilesWithFallback?: boolean;
 
+            parser?: ParserPrefix;
+
             /**
              * Some rules (for example, [`no-irregular-whitespace`](https://eslint.org/docs/latest/rules/no-irregular-whitespace))
              * crash when linting `*.css` files, so they are ignored by default.
@@ -426,6 +428,14 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
 
     this.configs.push(configFinal);
     this.configsDict.set(configName, configFinal);
+
+    const {parser} = internalOptions;
+    if (parser != null) {
+      this.context.usedParsers.set(parser, [
+        ...(this.context.usedParsers.get(parser) || []),
+        configFinal,
+      ]);
+    }
 
     const addRule = <P extends PluginPrefix, N extends RuleNamesForPlugin<P>>(
       prefix: P,

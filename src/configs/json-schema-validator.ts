@@ -27,11 +27,7 @@ export interface JsonSchemaValidatorEslintConfigOptions
 }
 
 export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = async (context) => {
-  const [jsoncEslintParser, tomlEslintParser, yamlEslintParser] = await Promise.all([
-    interopDefault(import('jsonc-eslint-parser')),
-    interopDefault(import('toml-eslint-parser')),
-    interopDefault(import('yaml-eslint-parser')),
-  ]);
+  const jsoncEslintParser = await interopDefault(import('jsonc-eslint-parser'));
 
   const optionsRaw = context.rootOptions.configs?.jsonSchemaValidator;
   const optionsResolved = assignDefaults(
@@ -60,33 +56,21 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = as
     },
   );
 
-  configBuilder?.addConfig(
-    [
-      'json-schema-validator/setup/yaml',
-      {
-        filesFallback: YAML_DEFAULT_FILES,
-      },
-    ],
+  configBuilder?.addConfig([
+    'json-schema-validator/setup/yaml',
     {
-      languageOptions: {
-        parser: yamlEslintParser,
-      },
+      filesFallback: YAML_DEFAULT_FILES,
+      parser: 'yaml-eslint-parser',
     },
-  );
+  ]);
 
-  configBuilder?.addConfig(
-    [
-      'json-schema-validator/setup/toml',
-      {
-        filesFallback: TOML_DEFAULT_FILES,
-      },
-    ],
+  configBuilder?.addConfig([
+    'json-schema-validator/setup/toml',
     {
-      languageOptions: {
-        parser: tomlEslintParser,
-      },
+      filesFallback: TOML_DEFAULT_FILES,
+      parser: 'toml-eslint-parser',
     },
-  );
+  ]);
 
   configBuilder
     ?.addConfig(['json-schema-validator', {includeDefaultFilesAndIgnores: true}], {

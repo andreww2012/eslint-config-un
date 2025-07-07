@@ -1,4 +1,3 @@
-import angularTemplateParser from '@angular-eslint/template-parser';
 import type Eslint from 'eslint';
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import {
@@ -517,21 +516,15 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
   );
 
   configBuilderTemplate
-    ?.addConfig(
-      [
-        'angular/template',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_HTML],
-          doNotIgnoreHtml: true,
-        },
-      ],
+    ?.addConfig([
+      'angular/template',
       {
-        languageOptions: {
-          parser: angularTemplateParser,
-        },
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: [GLOB_HTML],
+        parser: '@angular-eslint/template-parser',
+        doNotIgnoreHtml: true,
       },
-    )
+    ])
     .addRule(
       ...getAngularEslintTemplatePluginRuleSeverity('accessibility-alt-text', a11yRulesSeverity),
     ) // [<=15] ♿

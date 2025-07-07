@@ -11,7 +11,7 @@ import type {
   FlatConfigEntry,
   UnFlagConfigEntry,
 } from '../eslint';
-import type {PluginPrefix, pluginsLoaders} from '../plugins';
+import type {ParserPrefix, PluginPrefix, pluginsLoaders} from '../plugins';
 import type {PrettifyShallow, Promisable, SetRequired} from '../types';
 import type {fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
@@ -866,6 +866,11 @@ export interface UnConfigContext {
    * NOTE: mutable
    */
   usedPlugins: Set<PluginPrefix>;
+
+  /**
+   * NOTE: mutable
+   */
+  usedParsers: Map<ParserPrefix, FlatConfigEntry[]>;
 
   usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;
 
