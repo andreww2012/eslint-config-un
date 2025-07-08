@@ -1253,7 +1253,14 @@ export const reactUnConfig: UnConfigFn<
         ignoresFallback: parentConfigIgnores,
       },
     ])
-    .addRule('you-might-not-need-an-effect', ERROR)
+    .addRule('no-chain-state-updates', ERROR) // 🟡
+    .addRule('no-derived-state', ERROR) // 🟡
+    .addRule('no-empty-effect', ERROR) // 🟡
+    .addRule('no-event-handler', ERROR) // 🟡
+    .addRule('no-initialize-state', ERROR) // 🟡
+    .addRule('no-manage-parent', ERROR) // 🟡
+    .addRule('no-pass-live-state-to-parent', ERROR) // 🟡
+    .addRule('no-reset-all-state-when-a-prop-changes', ERROR) // 🟡
     .addOverrides();
 
   return {
