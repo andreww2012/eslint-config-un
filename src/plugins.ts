@@ -438,16 +438,6 @@ export const parsersLoaders = {
     () => import('astro-eslint-parser'),
   ),
   ...genModuleLoader(
-    'toml-eslint-parser',
-    'toml-eslint-parser',
-    () => import('toml-eslint-parser'),
-  ),
-  ...genModuleLoader(
-    'yaml-eslint-parser',
-    'yaml-eslint-parser',
-    () => import('yaml-eslint-parser'),
-  ),
-  ...genModuleLoader(
     'ember-eslint-parser',
     'ember-eslint-parser',
     () => import('ember-eslint-parser'),
@@ -456,6 +446,16 @@ export const parsersLoaders = {
     'svelte-eslint-parser',
     'svelte-eslint-parser',
     () => import('svelte-eslint-parser'),
+  ),
+  ...genModuleLoader(
+    'toml-eslint-parser',
+    'toml-eslint-parser',
+    () => import('toml-eslint-parser'),
+  ),
+  ...genModuleLoader(
+    'yaml-eslint-parser',
+    'yaml-eslint-parser',
+    () => import('yaml-eslint-parser'),
   ),
   ...genModuleLoader('vue-eslint-parser', 'vue-eslint-parser', () => import('vue-eslint-parser')),
 } satisfies Record<string, ObjectValues<ModuleLoader<Eslint.Linter.Parser>>>;
