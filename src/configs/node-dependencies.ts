@@ -6,7 +6,7 @@ import type {UnConfigFn} from './index';
 
 export interface NodeDependenciesEslintConfigOptions extends UnConfigOptions<'node-dependencies'> {
   /**
-   * - `true`: enforces to use the absolute version.
+   * - `true`: enforces to use the absolute version only on `dependencies` and `devDependencies`.
    * - `'never'`: enforces not to use the absolute version.
    * - `false`: do not enforce anything.
    * @default false
@@ -53,7 +53,14 @@ export const nodeDependenciesUnConfig: UnConfigFn<'nodeDependencies'> = async (c
       'absolute-version',
       enforceAbsoluteVersion ? ERROR : OFF,
       enforceAbsoluteVersion
-        ? [enforceAbsoluteVersion === true ? 'always' : enforceAbsoluteVersion]
+        ? [
+            enforceAbsoluteVersion === true
+              ? {
+                  optionalDependencies: 'ignore',
+                  peerDependencies: 'ignore',
+                }
+              : enforceAbsoluteVersion,
+          ]
         : [],
     ) // >=0.7.0
     .addRule('no-deprecated', WARNING, [{devDependencies: true}]) // >=0.2.0
