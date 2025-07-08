@@ -277,12 +277,14 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     angularEslintPluginPackageInfo,
     angularTemplateEslintPlugin,
     angularTemplateEslintPluginPackageInfo,
+    angularTemplateParserPackageInfo,
     extractInlineHtmlProcessor,
   ] = await Promise.all([
     pluginsLoaders['@angular-eslint'](context).then(({module}) => module),
     fetchPackageInfo('@angular-eslint/eslint-plugin'),
     pluginsLoaders['@angular-eslint/template'](context).then(({module}) => module),
     fetchPackageInfo('@angular-eslint/eslint-plugin-template'),
+    fetchPackageInfo('@angular-eslint/template-parser'),
     interopDefault(import('@angular-eslint/eslint-plugin-template'))
       .then((m) => m.processors['extract-inline-html'] as Eslint.Linter.Processor)
       .then((processor) => {
@@ -294,22 +296,19 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
       }),
   ]);
 
-  if (
-    angularEslintPluginPackageInfo?.versions.major != null &&
-    angularEslintPluginPackageInfo.versions.major !== angularVersion
-  ) {
-    context.logger.warn(
-      `Your \`@angular-eslint/eslint-plugin\` major version (${angularEslintPluginPackageInfo.versions.major}) might not be compatible with the configured (or detected) Angular major version (${angularVersion}).`,
-    );
-  }
-  if (
-    angularTemplateEslintPluginPackageInfo?.versions.major != null &&
-    angularTemplateEslintPluginPackageInfo.versions.major !== angularVersion
-  ) {
-    context.logger.warn(
-      `Your \`@angular-eslint/eslint-plugin-template\` major version (${angularTemplateEslintPluginPackageInfo.versions.major}) might not be compatible with the configured (or detected) Angular major version (${angularVersion}).`,
-    );
-  }
+  (
+    [
+      [angularEslintPluginPackageInfo, '@angular-eslint/eslint-plugin'],
+      [angularTemplateEslintPluginPackageInfo, '@angular-eslint/eslint-plugin-template'],
+      [angularTemplateParserPackageInfo, '@angular-eslint/template-parser'],
+    ] satisfies [Awaited<ReturnType<typeof fetchPackageInfo>>, string][]
+  ).forEach(([packageInfo, packageName]) => {
+    if (packageInfo?.versions.major != null && packageInfo.versions.major !== angularVersion) {
+      context.logger.warn(
+        `Your \`${packageName}\` major version (${packageInfo.versions.major}) might not be compatible with the configured (or detected) Angular major version (${angularVersion}).`,
+      );
+    }
+  });
 
   const angularEslintPluginRules = Object.keys(angularEslintPlugin?.rules || {});
   const getAngularEslintPluginRuleSeverity = <
