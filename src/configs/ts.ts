@@ -477,7 +477,6 @@ export interface TsEslintConfigOptions
   /**
    * Globs of files to allow running with the default project compiler options
    * despite not being matched by the project service.
-   * @default ['*.config.*s', '.*.*s']
    * @see https://typescript-eslint.io/packages/parser#allowdefaultproject
    */
   allowDefaultProject?: (TsEslintParserOptions['projectService'] & object)['allowDefaultProject'];
@@ -547,7 +546,6 @@ export const tsUnConfig: UnConfigFn<
       context.configsMeta.svelte.enabled && 'svelte',
     ].filter((v) => v !== false),
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
-    allowDefaultProject: ['*.config.*s', '.*.*s'],
   } satisfies TsEslintConfigOptions);
   optionsResolved.typescriptVersion ??= typescriptPackageInfo?.versions.majorAndMinor ?? undefined;
   const {

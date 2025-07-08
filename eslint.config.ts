@@ -9,6 +9,7 @@ export default eslintConfig({
     fileProgress: true,
     turbo: false,
     ts: {
+      allowDefaultProject: ['*.config.*s', '.*.*s'],
       configSortTsconfigKeys: {
         orderCompilerOptions: {
           preset: 'totalTypescript',
