@@ -175,23 +175,24 @@ export const eslintConfigInternal = async (
       | MaybeArray<(typeof PACKAGES_TO_GET_INFO_FOR)[number]> = true,
     preCondition?: {condition: boolean; reason: string},
   ): boolean => {
-    let enabled: boolean | undefined;
+    let enabledByUser: boolean | undefined;
+    let enabledBySystem: boolean | undefined;
     let reason: string | undefined;
 
     const providedConfig = configsOptions[configName];
     if (providedConfig != null) {
-      enabled ??= Boolean(providedConfig);
+      enabledByUser ??= Boolean(providedConfig);
       reason ??= 'provided by the user';
     }
     if (defaultConfigsStatus === 'all-disabled') {
-      enabled ??= false;
+      enabledBySystem ??= false;
       reason ??= '`defaultConfigsStatus` is set to `all-disabled`';
     }
     if (
       defaultConfigsStatus === 'misc-enabled' &&
       CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT.has(configName)
     ) {
-      enabled ??= true;
+      enabledBySystem ??= true;
       reason ??=
         '`defaultConfigsStatus` is set to `misc-enabled` and the config is in the misc group';
     }
@@ -201,22 +202,36 @@ export const eslintConfigInternal = async (
     ) {
       arraify(defaultConditionOrPackageInstalled).some((packageName) => {
         const isInstalled = Boolean(packagesInfo[packageName]);
-        enabled ??= isInstalled;
+        enabledBySystem ??= isInstalled;
         reason ??= `package \`${packageName}\` is ${isInstalled ? 'installed' : 'not installed'}`;
         return isInstalled;
       });
     } else {
-      enabled ??= defaultConditionOrPackageInstalled;
+      enabledBySystem ??= defaultConditionOrPackageInstalled;
       reason ??= `config is ${defaultConditionOrPackageInstalled ? 'enabled' : 'disabled'} by default`;
     }
     if (preCondition) {
-      enabled &&= preCondition.condition;
+      enabledBySystem &&= preCondition.condition;
       reason = [reason, preCondition.reason].filter(Boolean).join(' and ');
     }
+
+    enabledBySystem ??= false;
+
+    if (
+      typeof enabledByUser === 'boolean' &&
+      typeof providedConfig === 'boolean' &&
+      enabledByUser === enabledBySystem
+    ) {
+      logger.warn(
+        `There is no need to ${enabledByUser ? 'enable' : 'disable'} \`${styleText('blue', configName)}\` config because this is the default`,
+      );
+    }
+
     debug(
-      `Config \`${styleText('blue', configName)}\` is ${enabled ? styleText('green', 'enabled') : styleText('red', 'disabled')} because ${reason}`,
+      `Config \`${styleText('blue', configName)}\` is ${enabledBySystem ? styleText('green', 'enabled') : styleText('red', 'disabled')} because ${reason}`,
     );
-    return enabled ?? false;
+
+    return enabledByUser ?? enabledBySystem;
   };
 
   const isAngularEnabled = getIsConfigEnabled('angular', '@angular/core');
