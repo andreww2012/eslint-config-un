@@ -57,6 +57,7 @@
 - **vitest** config: rule [`prefer-describe-function-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-describe-function-title.md) is now disabled by default.
 - **angular** config: you are now expected to install `@angular-eslint/eslint-plugin` and `@angular-eslint/eslint-plugin-template` packages manually and only the rules from the installed packages will be used.
 - **import** config: added a new option `allowDevDependencies` to control if dev dependencies usage will be reported and where.
+- **nodeDependencies** config: added a new option `enforceAbsoluteVersion` to enforce to use or not to use absolute versions for dependencies.
 - Added a new root option, `defaultConfigsStatus`, to control what configs are enabled or disabled by default.
 - Added the ability to override any of the used plugins via `pluginsOverrides` option.
 

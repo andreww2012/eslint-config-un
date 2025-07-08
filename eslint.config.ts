@@ -32,7 +32,13 @@ export default eslintConfig({
         files: ['src/plugins.ts'],
       },
     },
-    nodeDependencies: true,
+    nodeDependencies: {
+      enforceAbsoluteVersion: {
+        dependencies: 'always',
+        devDependencies: 'always',
+        peerDependencies: 'never',
+      },
+    },
     depend: {
       options: {
         allowed: ['eslint-plugin-react'],
