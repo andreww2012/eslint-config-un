@@ -80,6 +80,7 @@ import type {UnicornEslintConfigOptions} from './unicorn';
 import type {UnusedImportsEslintConfigOptions} from './unused-imports';
 import type {VitestEslintConfigOptions} from './vitest';
 import type {VueEslintConfigOptions} from './vue';
+import type {WebComponentsEslintConfigOptions} from './web-components';
 import type {YamlEslintConfigOptions} from './yaml';
 import type {YouDontNeedLodashUnderscoreEslintConfigOptions} from './you-dont-need-lodash-underscore';
 
@@ -814,6 +815,15 @@ export interface UnConfigs {
    * @default true <=> `vue` package is installed
    */
   vue: VueEslintConfigOptions;
+
+  /**
+   * Web components specific rules.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc) ([docs](https://github.com/43081j/eslint-plugin-wc))
+   * @default false
+   */
+  webComponents: WebComponentsEslintConfigOptions;
 
   /**
    * YAML specific rules.

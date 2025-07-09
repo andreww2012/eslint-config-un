@@ -311,6 +311,7 @@ export const eslintConfigInternal = async (
   const isUnusedImportsEnabled = getIsConfigEnabled('unusedImports');
   const isVitestEnabled = getIsConfigEnabled('vitest', 'vitest');
   const isVueEnabled = getIsConfigEnabled('vue', 'vue');
+  const isWebComponentsEnabled = getIsConfigEnabled('webComponents', false);
   const isYamlEnabled = getIsConfigEnabled('yaml', false);
   const isYouDontNeedLodashUnderscoreEnabled = getIsConfigEnabled('youDontNeedLodashUnderscore', [
     'lodash',
@@ -394,6 +395,7 @@ export const eslintConfigInternal = async (
       unusedImports: {enabled: isUnusedImportsEnabled},
       vitest: {enabled: isVitestEnabled},
       vue: {enabled: isVueEnabled},
+      webComponents: {enabled: isWebComponentsEnabled},
       yaml: {enabled: isYamlEnabled},
       youDontNeedLodashUnderscore: {enabled: isYouDontNeedLodashUnderscoreEnabled},
     },
@@ -592,6 +594,8 @@ export const eslintConfigInternal = async (
     isNoOnlyTestsEnabled &&
       import('./configs/no-only-tests').then((m) => m.noOnlyTestsUnConfig(context)),
     isCompatEnabled && import('./configs/compat').then((m) => m.compatUnConfig(context)),
+    isWebComponentsEnabled &&
+      import('./configs/web-components').then((m) => m.webComponentsUnConfig(context)),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

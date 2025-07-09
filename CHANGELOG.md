@@ -28,6 +28,7 @@
 - New config: `compat` via [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat), **<u>disabled</u>** by default.
 - New config: `mocha` via [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha), enabled automatically if `mocha` package is installed.
 - New config: `qunit` via [`eslint-plugin-qunit`](https://npmjs.com/eslint-plugin-qunit), enabled automatically if `qunit` package is installed.
+- New config: `webComponents` via [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc), **<u>disabled</u>** by default.
 - [**BREAKING**] eslint-config-un package is now distributed as ESM only.
 - [**BREAKING**] Set the minimum supported Node.js version to 20.12.
 - [**BREAKING**] many plugins are now not direct dependencies of this package, but its' optional peer dependencies, for example, `@graphql-eslint/eslint-plugin`, `eslint-plugin-storybook` and `eslint-plugin-tailwindcss` to name a few.

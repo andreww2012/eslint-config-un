@@ -188,6 +188,7 @@
     "eslint-plugin-turbo": "2.5.4",
     "eslint-plugin-vue": "10.3.0",
     "eslint-plugin-vuejs-accessibility": "2.4.1",
+    "eslint-plugin-wc": "3.0.1",
     "eslint-plugin-you-dont-need-lodash-underscore": "6.14.0",
     "eslint-typegen": "2.2.1",
     "json-schema-to-typescript-lite": "14.1.0",
@@ -252,6 +253,7 @@
     "eslint-plugin-turbo": "^2.5.4",
     "eslint-plugin-vue": "^10.3.0",
     "eslint-plugin-vuejs-accessibility": "^2.4.1",
+    "eslint-plugin-wc": "^3.0.1",
     "eslint-plugin-you-dont-need-lodash-underscore": "^6.14.0",
     "svelte-eslint-parser": "^1.2.0",
     "toml-eslint-parser": "^0.10.0",
@@ -395,6 +397,9 @@
       "optional": true
     },
     "eslint-plugin-vuejs-accessibility": {
+      "optional": true
+    },
+    "eslint-plugin-wc": {
       "optional": true
     },
     "eslint-plugin-you-dont-need-lodash-underscore": {

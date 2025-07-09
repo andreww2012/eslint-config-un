@@ -687,6 +687,10 @@ const ALL_STYLISTIC_RULES = {
   'vuejs-accessibility': {
     // None
   },
+  wc: {
+    'file-name-matches-element': true,
+    'max-elements-per-file': true,
+  },
   yml: {
     'block-mapping': true,
     'block-mapping-colon-indicator-newline': true,

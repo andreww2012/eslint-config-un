@@ -403,6 +403,7 @@ export const pluginsLoaders = {
     'eslint-plugin-vuejs-accessibility',
     () => import('eslint-plugin-vuejs-accessibility'),
   ),
+  ...genModuleLoader('wc', 'eslint-plugin-wc', () => import('eslint-plugin-wc')),
   ...genModuleLoader(
     'yml',
     'eslint-plugin-yml',
