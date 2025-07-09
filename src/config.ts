@@ -48,6 +48,7 @@ import {
   interopDefault,
   isIn,
   objectEntriesUnsafe,
+  objectKeysUnsafe,
   omit,
   partition,
 } from './utils';
@@ -158,13 +159,15 @@ export const eslintConfigInternal = async (
     defaultConfigsStatus,
   } = optionsResolved;
 
+  const renamedPlugins = objectKeysUnsafe(pluginRenames);
   const pluginRenamesList = Object.values(pluginRenames);
-  if (
-    new Set(pluginRenamesList).size !== pluginRenamesList.length ||
-    pluginRenamesList.some((v) => PLUGIN_PREFIXES_LIST.includes(v as PluginPrefix))
-  ) {
+  const pluginPrefixesAfterRenames = [
+    ...PLUGIN_PREFIXES_LIST.filter((prefix) => prefix === '' || !renamedPlugins.includes(prefix)),
+    ...pluginRenamesList,
+  ];
+  if (new Set(pluginPrefixesAfterRenames).size !== pluginPrefixesAfterRenames.length) {
     logger.fatal(
-      'Invalid plugin renames: new names must be unique and different from the default plugin prefixes',
+      'Invalid plugin renames: new names must not clash with the default plugin prefixes, have duplicates or be empty. If you happen to have a duplicate new prefix, please choose a different name. If you happen to rename some plugin to one of the default prefixes, you must also rename the plugin corresponding to that prefix.',
     );
   }
 

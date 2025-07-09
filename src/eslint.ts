@@ -211,7 +211,7 @@ const getPluginPrefixByFullRuleName = (ruleName: string) => {
   const ruleNameSplitted = ruleName.split('/');
   for (let i = 0; i < ruleNameSplitted.length; i++) {
     const possiblePrefix = ruleNameSplitted.slice(0, ruleNameSplitted.length - i - 1).join('/');
-    if (PLUGIN_PREFIXES_LIST.includes(possiblePrefix as PluginPrefix)) {
+    if (possiblePrefix && PLUGIN_PREFIXES_LIST.includes(possiblePrefix as PluginPrefix)) {
       return possiblePrefix as PluginPrefix;
     }
   }

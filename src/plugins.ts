@@ -421,7 +421,10 @@ export const LOADABLE_PLUGIN_PREFIXES_LIST = objectKeysUnsafe(pluginsLoaders);
 
 export type PluginPrefix = LoadablePluginPrefix | '';
 
-export const PLUGIN_PREFIXES_LIST: readonly PluginPrefix[] = [...objectKeysUnsafe(pluginsLoaders)];
+export const PLUGIN_PREFIXES_LIST: readonly PluginPrefix[] = [
+  '',
+  ...objectKeysUnsafe(pluginsLoaders),
+];
 
 // Not included because they're often used:
 // - jsonc-eslint-parser
