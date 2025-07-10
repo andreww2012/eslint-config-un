@@ -214,6 +214,9 @@ const ALL_STYLISTIC_RULES = {
     'no-hashtag-description': true,
     'no-typename-prefix': true,
   },
+  header: {
+    // None
+  },
   html: {
     // None
   },

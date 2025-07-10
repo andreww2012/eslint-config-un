@@ -216,6 +216,9 @@ export const pluginsLoaders = {
         };
       }>,
   ),
+  ...genModuleLoader('header', 'eslint-plugin-header', () =>
+    interopDefault(import('eslint-plugin-header')).then((m) => fixupPluginRules(m)),
+  ),
   ...genModuleLoader('html', 'eslint-plugin-html', () => import('eslint-plugin-html')),
   ...genModuleLoader(
     'import',

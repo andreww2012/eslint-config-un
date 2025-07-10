@@ -36,6 +36,7 @@ import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-fu
 import type {NoStylisticRulesEslintConfigOptions} from './extra/no-stylistic-rules';
 import type {FileProgressEslintConfigOptions} from './file-progress';
 import type {GraphqlEslintConfigOptions} from './graphql';
+import type {HeaderEslintConfigOptions} from './header';
 import type {HtmlEslintConfigOptions} from './html';
 import type {ImportEslintConfigOptions} from './import';
 import type {JestEslintConfigOptions} from './jest';
@@ -391,6 +392,15 @@ export interface UnConfigs {
    * @default true <=> `graphql` package is installed
    */
   graphql: GraphqlEslintConfigOptions;
+
+  /**
+   * An ESLint plugin to ensure that files begin with the given comment.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header) ([docs](https://github.com/Stuk/eslint-plugin-header))
+   * @default false
+   */
+  header: HeaderEslintConfigOptions;
 
   /**
    * Rules for linting plain HTML files.
