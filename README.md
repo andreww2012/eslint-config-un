@@ -312,6 +312,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `compat`                                                       | ❌ | [eslint-plugin-compat](https://npmjs.com/eslint-plugin-compat) (`compat`) | Since v1.0.0 |
 | `webComponents`                                                | ❌ | [eslint-plugin-wc](https://npmjs.com/eslint-plugin-wc) (`wc`) | Since v1.0.0 |
 | `header`                                                       | ❌ | [eslint-plugin-header](https://npmjs.com/eslint-plugin-header) (`header`) | Since v1.0.0 |
+| `headers`                                                      | ❌ | [eslint-plugin-headers](https://npmjs.com/eslint-plugin-headers) (`headers`) | Since v1.0.0 |
 
 ## How to use
 

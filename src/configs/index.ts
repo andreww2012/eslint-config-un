@@ -37,6 +37,7 @@ import type {NoStylisticRulesEslintConfigOptions} from './extra/no-stylistic-rul
 import type {FileProgressEslintConfigOptions} from './file-progress';
 import type {GraphqlEslintConfigOptions} from './graphql';
 import type {HeaderEslintConfigOptions} from './header';
+import type {HeadersEslintConfigOptions} from './headers';
 import type {HtmlEslintConfigOptions} from './html';
 import type {ImportEslintConfigOptions} from './import';
 import type {JestEslintConfigOptions} from './jest';
@@ -396,11 +397,24 @@ export interface UnConfigs {
   /**
    * An ESLint plugin to ensure that files begin with the given comment.
    *
+   * There is also an alternative config, `headers`, which is powered by [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers).
+   *
    * Used plugins:
    * - [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header) ([docs](https://github.com/Stuk/eslint-plugin-header))
    * @default false
    */
   header: HeaderEslintConfigOptions;
+
+  /**
+   * An ESLint plugin to ensure that files begin with the given comment.
+   *
+   * There is also an alternative config, `header`, which is powered by [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header).
+   *
+   * Used plugins:
+   * - [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers) ([docs](https://github.com/robmisasi/eslint-plugin-headers))
+   * @default false
+   */
+  headers: HeadersEslintConfigOptions;
 
   /**
    * Rules for linting plain HTML files.

@@ -260,6 +260,7 @@ export const eslintConfigInternal = async (
   const isGraphqlEnabled = getIsConfigEnabled('graphql', 'graphql');
   const isImportEnabled = getIsConfigEnabled('import');
   const isHeaderEnabled = getIsConfigEnabled('header', false);
+  const isHeadersEnabled = getIsConfigEnabled('headers', false);
   // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
   const isHtmlEnabled = getIsConfigEnabled('html', !isAngularEnabled);
   const isJestEnabled = getIsConfigEnabled('jest', 'jest');
@@ -352,6 +353,7 @@ export const eslintConfigInternal = async (
       fileProgress: {enabled: isFileProgressEnabled},
       graphql: {enabled: isGraphqlEnabled},
       header: {enabled: isHeaderEnabled},
+      headers: {enabled: isHeadersEnabled},
       html: {enabled: isHtmlEnabled},
       import: {enabled: isImportEnabled},
       jest: {enabled: isJestEnabled},
@@ -599,6 +601,7 @@ export const eslintConfigInternal = async (
     isWebComponentsEnabled &&
       import('./configs/web-components').then((m) => m.webComponentsUnConfig(context)),
     isHeaderEnabled && import('./configs/header').then((m) => m.headerUnConfig(context)),
+    isHeadersEnabled && import('./configs/headers').then((m) => m.headerUnConfig(context)),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

@@ -217,6 +217,9 @@ const ALL_STYLISTIC_RULES = {
   header: {
     // None
   },
+  headers: {
+    // None
+  },
   html: {
     // None
   },
