@@ -163,7 +163,7 @@ export interface YouDontNeedLodashUnderscoreEslintConfigOptions
   extends UnConfigOptions<'you-dont-need-lodash-underscore'> {
   /**
    * Lodash methods that will be exempted from the check. Will be merged with the default value.
-   * @example {cloneDeep: true, omit: true, throttle: true}
+   * @example {capitalize: true, cloneDeep: true, get: true, omit: true, throttle: true}
    */
   ignoredMethods?: Partial<Record<LodashMethods, boolean>>;
 }
@@ -178,7 +178,9 @@ export const youDontNeedLodashUnderscoreUnConfig: UnConfigFn<'youDontNeedLodashU
   );
 
   const ignoredMethods = {
+    capitalize: true,
     cloneDeep: true,
+    get: true,
     omit: true,
     throttle: true,
     ...optionsResolved.ignoredMethods,
