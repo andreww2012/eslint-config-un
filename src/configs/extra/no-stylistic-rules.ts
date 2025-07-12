@@ -130,6 +130,9 @@ const ALL_STYLISTIC_RULES = {
   '@html-eslint': {
     quotes: true,
   },
+  '@intlify/vue-i18n': {
+    'prefer-linked-key-with-paren': true,
+  },
   '@next/next': {
     // None
   },

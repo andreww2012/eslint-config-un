@@ -63,6 +63,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `@angular-eslint/template` | `@angular-eslint/eslint-plugin-template` |
 | `@cspell`                  | `@cspell/eslint-plugin`                  |
 | `@eslint-react`            | `@eslint-react/eslint-plugin`            |
+| `@intlify/vue-i18n`        | `@intlify/eslint-plugin-vue-i18n`        |
 | `@next/next`               | `@next/eslint-plugin-next`               |
 | `@tanstack/query`          | `@tanstack/eslint-plugin-query`          |
 | `astro`                    | `eslint-plugin-astro`                    |
@@ -75,6 +76,8 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `es`                       | `eslint-plugin-es-x`                     |
 | `eslint-plugin`            | `eslint-plugin-eslint-plugin`            |
 | `graphql`                  | `@graphql-eslint/eslint-plugin`          |
+| `header`                   | `eslint-plugin-header`                   |
+| `headers`                  | `eslint-plugin-headers`                  |
 | `jest-extended`            | `eslint-plugin-jest-extended`            |
 | `jest`                     | `eslint-plugin-jest`                     |
 | `perfectionist`            | `eslint-plugin-perfectionist`            |

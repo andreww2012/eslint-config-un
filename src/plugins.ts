@@ -142,6 +142,15 @@ export const pluginsLoaders = {
     () => import('@html-eslint/eslint-plugin'),
   ),
   ...genModuleLoader(
+    '@intlify/vue-i18n',
+    '@intlify/eslint-plugin-vue-i18n',
+    () =>
+      import(
+        '@intlify/eslint-plugin-vue-i18n'
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
+  ...genModuleLoader(
     '@next/next',
     '@next/eslint-plugin-next',
     () => import('@next/eslint-plugin-next'),

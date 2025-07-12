@@ -24,6 +24,7 @@ export default {
     'defu',
     'turborepo',
     'marko',
+    'intlify',
 
     // Technical words/terms
     'arraify',

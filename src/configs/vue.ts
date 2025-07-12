@@ -1,7 +1,7 @@
 import type Eslint from 'eslint';
 import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-vue-blocks';
 import globals from 'globals';
-import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, type RuleSeverity} from '../constants';
+import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, type RuleSeverity, WARNING} from '../constants';
 import {
   type FlatConfigEntryFilesOrIgnores,
   type RulesRecord,
@@ -12,6 +12,7 @@ import {
 import {pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
 import {
+  type MaybeArray,
   assignDefaults,
   doesPackageExist,
   fetchPackageInfo,
@@ -41,6 +42,75 @@ export interface VueEslintConfigOptions extends UnConfigOptions<'vue'> {
    * @default true
    */
   configA11y?: boolean | UnConfigOptions<'vuejs-accessibility'>;
+
+  /**
+   * [`vue-i18n`](https://npmjs.com/vue-i18n) specific rules.
+   *
+   * By default, uses `files` and `ignores` from the parent config.
+   * @default true <=> `vue-i18n` package is installed
+   */
+  configI18n?:
+    | boolean
+    | PrettifyShallow<
+        {
+          /**
+           * [`@intlify/eslint-plugin-vue-i18n`](https://npmjs.com/@intlify/eslint-plugin-vue-i18n) plugin
+           * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+           * that will be assigned to `vue-i18n` property and applied to the specified `files` and `ignores`.
+           */
+          settings?: {
+            /**
+             * - **string**: a glob for specifying files that store localization messages of project
+             *
+             * Source: plugin docs
+             */
+            localeDir?: MaybeArray<
+              | string
+              | ((
+                  | {
+                      /**
+                       * - `file`: determine the locale name from the filename. The resource file should only contain messages for that locale. Use this option if you use `vue-cli-plugin-i18n`. This option is also used when String option is specified
+                       * - `key`: determine the locale name from the root key name of the file contents. The value of that key should only contain messages for that locale. Used when the resource file is in the format given to the `messages` option of the `VueI18n` constructor option.
+                       *
+                       * Source: plugin docs
+                       */
+                      localeKey: 'file' | 'key';
+                    }
+                  | {
+                      /**
+                       * Determine the locale name from the path. In this case, the locale must be had structured with your rule on the path. It can be captured with the regular expression named capture. The resource file should only contain messages for that locale.
+                       *
+                       * Source: plugin docs
+                       */
+                      localeKey: 'path';
+
+                      /**
+                       * Specifies how to determine pattern the locale for localization messages. This option means, when `localeKey` is `'path'`, you will need to capture the locale using a regular expression. You need to use the locale capture as a named capture `?<locale>`, so it’s be able to capture from the path of the locale resources. If you omit it, it will be captured from the resource path with the same regular expression pattern as `vue-cli-plugin-i18n`.
+                       *
+                       * Source: plugin docs
+                       */
+                      localePattern?: RegExp;
+                    }
+                ) & {
+                  /**
+                   * A glob for specifying files that store localization messages of project
+                   *
+                   * Source: plugin docs
+                   */
+                  pattern?: string;
+                })
+            >;
+
+            /**
+             * Specify the version of `vue-i18n` you are using.
+             * If not specified, the message will be parsed twice.
+             *
+             * Source: plugin docs
+             */
+            messageSyntaxVersion?: string;
+          };
+        } & UnConfigOptions<'@intlify/vue-i18n'>
+      >;
 
   /**
    * Nuxt-specific rules and tweaks.
@@ -186,6 +256,7 @@ export const vueUnConfig: UnConfigFn<
     eslintProcessorVueBlocks,
     eslintPluginVue,
     isPiniaPackageInstalled,
+    vueI18nPackageInfo,
     nuxtPackageInfo,
     {parser: typescriptEslintParser},
   ] = await Promise.all([
@@ -193,6 +264,7 @@ export const vueUnConfig: UnConfigFn<
     interopDefault(import('eslint-processor-vue-blocks')),
     pluginsLoaders.vue(context).then(({module}) => module),
     doesPackageExist('pinia'),
+    fetchPackageInfo('vue-i18n'),
     fetchPackageInfo('nuxt'),
     interopDefault(import('typescript-eslint')),
   ]);
@@ -214,6 +286,7 @@ export const vueUnConfig: UnConfigFn<
       vuePackageMajorVersion === 2 || vuePackageMajorVersion === 3 ? vuePackageMajorVersion : 3,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
     configA11y: true,
+    configI18n: vueI18nPackageInfo != null,
     configNuxt: nuxtPackageInfo != null,
     configPinia: isPiniaPackageInstalled,
     processSfcBlocks: true,
@@ -226,6 +299,7 @@ export const vueUnConfig: UnConfigFn<
     majorVersion: vueMajorVersion,
     enforceTypescriptInScriptSection,
     configA11y,
+    configI18n,
     configNuxt,
     configPinia,
     processSfcBlocks,
@@ -854,8 +928,69 @@ export const vueUnConfig: UnConfigFn<
     .addRule('require-setup-store-properties-export', ERROR) // 🟢
     .addOverrides();
 
+  const optionsI18nResolved = assignDefaults(
+    configI18n,
+    {} satisfies VueEslintConfigOptions['configI18n'] & object,
+  );
+
+  const {settings: pluginI18nSettings} = optionsI18nResolved;
+
+  const configBuilderI18n = createConfigBuilder(context, configI18n, '@intlify/vue-i18n');
+
+  // Legend:
+  // 🟢 - in recommended
+
+  const vueI18nMajorVersion = vueI18nPackageInfo?.versions.major;
+  const [isMinVueI18nVersion9, isMinVueI18nVersion10] = [9, 10].map(
+    (minVersion) => (vueI18nMajorVersion || 0) >= minVersion,
+  );
+
+  configBuilderI18n
+    ?.addConfig(
+      [
+        'vue/i18n',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: optionsResolved.files,
+          ignoresFallback: optionsResolved.ignores,
+        },
+      ],
+      {
+        ...(pluginI18nSettings && {
+          settings: {
+            'vue-i18n': pluginI18nSettings,
+          },
+        }),
+      },
+    )
+    /* Category: Recommended */
+    .addRule('no-deprecated-i18n-component', isMinVueI18nVersion9 ? ERROR : OFF) // 🟢 >=0.11.0
+    .addRule('no-deprecated-i18n-place-attr', isMinVueI18nVersion9 ? ERROR : OFF) // 🟢 >=0.11.0
+    .addRule('no-deprecated-i18n-places-prop', isMinVueI18nVersion9 ? ERROR : OFF) // 🟢 >=0.11.0
+    .addRule('no-deprecated-modulo-syntax', ERROR) // 🟢 >=3.0.0
+    .addRule('no-deprecated-tc', isMinVueI18nVersion10 ? ERROR : OFF) // 🟢 >=3.0.0
+    .addRule('no-deprecated-v-t', isMinVueI18nVersion10 ? ERROR : OFF) // 🟢 >=3.2.0
+    .addRule('no-html-messages', ERROR) // 🟢 >=0.1.0
+    .addRule('no-i18n-t-path-prop', ERROR) // 🟢 >=0.11.0
+    .addRule('no-missing-keys', ERROR) // 🟢 >=0.1.0
+    .addRule('no-raw-text', ERROR) // 🟢 >=0.2.0
+    .addRule('no-v-html', ERROR) // 🟢 >=0.1.0
+    .addRule('valid-message-syntax', ERROR) // 🟢 >=0.10.0
+    /* Category: Best Practices */
+    .addRule('key-format-style', WARNING) // >=0.9.0
+    .addRule('no-duplicate-keys-in-locale', ERROR) // >=0.9.0
+    .addRule('no-dynamic-keys', WARNING) // >=0.1.0
+    .addRule('no-missing-keys-in-other-locales', ERROR) // >=0.10.0
+    .addRule('no-unknown-locale', ERROR) // >=1.3.0
+    .addRule('no-unused-keys', ERROR) // >=0.1.0
+    .addRule('prefer-sfc-lang-attr', ERROR) // >=1.2.0
+    /* Category: Stylistic Issues */
+    .addRule('prefer-linked-key-with-paren', WARNING) // >=0.10.0
+    .addRule('sfc-locale-attr', ERROR) // >=1.3.0
+    .addOverrides();
+
   return {
-    configs: [configBuilder, configBuilderA11y, configBuilderPinia],
+    configs: [configBuilder, configBuilderA11y, configBuilderPinia, configBuilderI18n],
     optionsResolved,
   };
 };
