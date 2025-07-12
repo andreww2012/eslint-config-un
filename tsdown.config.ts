@@ -5,10 +5,5 @@ export default defineConfig({
   format: 'esm',
   shims: true,
   dts: true,
-  external: [
-    'angular-eslint-plugin-template17',
-    'angular-eslint-plugin18',
-    'eslint-plugin-no-type-assertion',
-    'eslint-plugin-prettier',
-  ],
+  external: ['eslint-plugin-no-type-assertion', 'eslint-plugin-prettier'],
 });

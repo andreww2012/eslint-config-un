@@ -435,8 +435,6 @@
   },
   "bundleDependencies": [
     "eslint-plugin-prettier",
-    "angular-eslint-plugin-template17",
-    "angular-eslint-plugin18",
     "eslint-plugin-no-type-assertion"
   ],
   "packageManager": "pnpm@10.12.4",
