@@ -25,6 +25,7 @@ export default {
     'turborepo',
     'marko',
     'intlify',
+    'csstree',
 
     // Technical words/terms
     'arraify',

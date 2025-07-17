@@ -76,9 +76,13 @@
   - 🟢 [`prefer-at-empty`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-at-empty.md)
   - 🟡 (enabled, warns) [`no-developer-preview`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-developer-preview.md)
   - 🟡 [`no-experimental`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-experimental.md)
-- `@eslint/css`: [0.7.0 → 0.9.0](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.9.0)
+- `@eslint/css`: [0.7.0 → 0.10.0](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.10.0)
   - 🟢 (enabled) [`relative-font-units`](https://github.com/eslint/css/blob/HEAD/docs/rules/relative-font-units.md)
+  - 🟢 (enabled) [`no-invalid-at-rule-placement`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-at-rule-placement.md)
+  - 🟢 (enabled) [`no-invalid-named-grid-areas`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-named-grid-areas.md)
   - 🟡 (enabled, warns) [`no-important`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-important.md)
+  - Set `allowUnknownVariables: true` to [`no-invalid-properties`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-properties.md)
+  - Depending on the installed Tailwind version, enabled v3 or v4 Tailwind syntax support.
 - `typescript-eslint`: [8.32.0 → 8.36.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.32.0...v8.36.0)
   - Set [`checkUnknown: true`](https://typescript-eslint.io/rules/no-base-to-string/#checkunknown) for [`no-base-to-string`](https://typescript-eslint.io/rules/no-base-to-string) rule.
 - `@eslint-react/eslint-plugin`: [1.49.0 → 1.52.2](https://github.com/Rel1cx/eslint-react/compare/v1.49.0...v1.52.2)

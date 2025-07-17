@@ -36,7 +36,9 @@ export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
 }
 
 export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
-  const {tailwindSyntax} = await interopDefault(import('@eslint/css/syntax'));
+  const {tailwind3: tailwind3Syntax, tailwind4: tailwind4Syntax} = await interopDefault(
+    import('tailwind-csstree'),
+  );
 
   const optionsRaw = context.rootOptions.configs?.css;
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -47,8 +49,8 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'css');
 
-  const isTailwindEnabled =
-    context.configsMeta.betterTailwind.enabled || context.configsMeta.tailwind.enabled;
+  const tailwindPackageInfo = context.packagesInfo.tailwindcss;
+  const tailwindMajorVersion = tailwindPackageInfo?.versions.major;
 
   // Legend:
   // 🟢 - in recommended
@@ -69,7 +71,12 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
         languageOptions: {
           ...(tolerantMode && {tolerant: true}),
           customSyntax: {
-            ...(isTailwindEnabled && tailwindSyntax),
+            ...(tailwindPackageInfo &&
+              (tailwindMajorVersion === 4
+                ? tailwind4Syntax
+                : tailwindMajorVersion === 3
+                  ? tailwind3Syntax
+                  : null)),
             ...customSyntax,
           },
         },
@@ -79,7 +86,13 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
     .addRule('no-empty-blocks', ERROR) // 🟢
     .addRule('no-important', WARNING) // 🟢 >=0.8.0
     .addRule('no-invalid-at-rules', ERROR) // 🟢
-    .addRule('no-invalid-properties', ERROR) // 🟢
+    .addRule('no-invalid-at-rule-placement', ERROR) // 🟢 >=0.10.0
+    .addRule('no-invalid-named-grid-areas', ERROR) // 🟢 >=0.10.0
+    .addRule('no-invalid-properties', ERROR, [
+      {
+        allowUnknownVariables: true, // >= 0.10.0
+      },
+    ]) // 🟢
     .addRule('relative-font-units', ERROR, [
       {
         allowUnits: getKeysOfTruthyValues({
