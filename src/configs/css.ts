@@ -47,7 +47,8 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'css');
 
-  const isTailwindEnabled = context.configsMeta.tailwind.enabled;
+  const isTailwindEnabled =
+    context.configsMeta.betterTailwind.enabled || context.configsMeta.tailwind.enabled;
 
   // Legend:
   // 🟢 - in recommended

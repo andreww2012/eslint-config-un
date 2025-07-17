@@ -191,6 +191,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
       .addRule('no-missing-link-fragments', ERROR) // 🟢
       .addRule('no-multiple-h1', ERROR, [{frontmatterTitle: ''}]) // 🟢
       .addRule('no-reversed-media-syntax', ERROR) // 🟢
+      .addRule('no-unused-definitions', ERROR) // 🟢
       .addRule('require-alt-text', ERROR) // 🟢
       .addRule('table-column-count', ERROR) // 🟢
       .addOverrides();

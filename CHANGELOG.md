@@ -83,7 +83,7 @@
   - Set [`checkUnknown: true`](https://typescript-eslint.io/rules/no-base-to-string/#checkunknown) for [`no-base-to-string`](https://typescript-eslint.io/rules/no-base-to-string) rule.
 - `@eslint-react/eslint-plugin`: [1.49.0 → 1.52.2](https://github.com/Rel1cx/eslint-react/compare/v1.49.0...v1.52.2)
   - 🔴 (not enabled) [`jsx-no-iife`](https://eslint-react.xyz/docs/rules/jsx-no-iife)
-- `@eslint/markdown`: [6.4.0 → 6.6.0](https://github.com/eslint/markdown/compare/v6.4.0...v6.6.0)
+- `@eslint/markdown`: [6.4.0 → 7.0.0](https://github.com/eslint/markdown/compare/v6.4.0...v7.0.0)
   - 🟢 (enabled) [`no-duplicate-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-duplicate-definitions.md)
   - 🟢 [`no-empty-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-empty-definitions.md)
   - 🟢 [`no-empty-images`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-empty-images.md)
@@ -93,6 +93,7 @@
   - 🟢 [`table-column-count`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/table-column-count.md)
   - 🟢 [`no-missing-link-fragments`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-link-fragments.md)
   - 🟢 [`no-reversed-media-syntax`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-reversed-media-syntax.md)
+  - 🟢 [`no-unused-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-unused-definitions.md)
 - `eslint-plugin-import-x`: [4.11.1 → 4.16.1](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.11.1...v4.15.2)
 - `eslint-import-resolver-typescript`: [4.3.4 → 4.4.4](https://github.com/import-js/eslint-import-resolver-typescript/compare/v4.3.4...v4.4.4)
 - `@html-eslint/eslint-plugin`: [0.40.2 → 0.42.0](https://github.com/yeonjuan/html-eslint/compare/v0.40.2...v0.42.0)
