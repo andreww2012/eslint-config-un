@@ -1,5 +1,6 @@
 import {eslintConfig} from './src';
 
+export const foo = 'bar';
 const TEST_DIR_GLOB = ['test/**/*'];
 
 export default eslintConfig({

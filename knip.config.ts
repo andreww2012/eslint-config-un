@@ -7,7 +7,7 @@ const config: KnipConfig = {
   ignoreDependencies: Object.entries(packageJson.peerDependenciesMeta)
     .filter(([, meta]) => meta.optional)
     .map(([name]) => name),
-  tags: ['knipignore'],
+  tags: ['-knipignore'],
 };
 
 export default config;

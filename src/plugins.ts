@@ -15,7 +15,7 @@ interface LoadModuleOptions {
   throwIfNotFound?: boolean;
 }
 
-export type ModuleLoader<
+type ModuleLoader<
   T,
   Property extends string = string,
   N extends string = string,
@@ -31,19 +31,19 @@ export type ModuleLoader<
   }>
 >;
 
-export function genModuleLoader<T, Property extends string, N extends string>(
+function genModuleLoader<T, Property extends string, N extends string>(
   property: Property,
   packageName: N,
   module: () => Promisable<T | {default: T}>,
   ignoreErrors?: undefined,
 ): ModuleLoader<T, Property, N, N extends keyof typeof OPTIONAL_PEER_DEPENDENCIES ? true : false>;
-export function genModuleLoader<T, Property extends string, N extends string>(
+function genModuleLoader<T, Property extends string, N extends string>(
   property: Property,
   packageName: N,
   module: () => Promisable<T | {default: T}>,
   ignoreErrors: MaybeArray<string>,
 ): ModuleLoader<T, Property, N>;
-export function genModuleLoader<T, Property extends string, N extends string>(
+function genModuleLoader<T, Property extends string, N extends string>(
   property: Property,
   packageName: N,
   module: () => Promisable<T | {default: T}>,
