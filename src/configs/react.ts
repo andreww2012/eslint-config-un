@@ -1253,14 +1253,15 @@ export const reactUnConfig: UnConfigFn<
         ignoresFallback: parentConfigIgnores,
       },
     ])
-    .addRule('no-chain-state-updates', ERROR) // 🟡
-    .addRule('no-derived-state', ERROR) // 🟡
-    .addRule('no-empty-effect', ERROR) // 🟡
-    .addRule('no-event-handler', ERROR) // 🟡
-    .addRule('no-initialize-state', ERROR) // 🟡
-    .addRule('no-manage-parent', ERROR) // 🟡
-    .addRule('no-pass-live-state-to-parent', ERROR) // 🟡
-    .addRule('no-reset-all-state-when-a-prop-changes', ERROR) // 🟡
+    .addRule('no-chain-state-updates', ERROR) // 🟡 >=0.3.0
+    .addRule('no-derived-state', ERROR) // 🟡 >=0.3.0
+    .addRule('no-empty-effect', ERROR) // 🟡 >=0.3.0
+    .addRule('no-event-handler', ERROR) // 🟡 >=0.3.0
+    .addRule('no-initialize-state', ERROR) // 🟡 >=0.3.0
+    .addRule('no-manage-parent', ERROR) // 🟡 >=0.3.1
+    .addRule('no-pass-data-to-parent', ERROR) // 🟡 >=0.4.0
+    .addRule('no-pass-live-state-to-parent', ERROR) // 🟡 >=0.3.0
+    .addRule('no-reset-all-state-when-a-prop-changes', ERROR) // 🟡 >=0.3.0
     .addOverrides();
 
   return {
