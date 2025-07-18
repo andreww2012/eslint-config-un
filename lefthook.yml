@@ -7,3 +7,5 @@ pre-push:
     prettier:
       glob: '*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}'
       run: npx prettier --check {push_files}
+    spellcheck:
+      run: npx cspell --exclude '**/.*' --no-must-find-files {push_files}
