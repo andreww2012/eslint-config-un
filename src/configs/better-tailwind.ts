@@ -56,19 +56,30 @@ export interface BetterTailwindEslintConfigOptions extends UnConfigOptions<'bett
    */
   breakUpClassesIntoMultipleLines?: GetRuleOptions<'better-tailwindcss', 'multiline'>[0];
 
+  /**
+   * Enforces consistent Tailwind class order. `false` disables the corresponding rule.
+   *
+   * Affected rules:
+   * - [`enforce-consistent-class-order`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-consistent-class-order.md)
+   * @default 'official'
+   */
+  classOrder?:
+    | (GetRuleOptions<'better-tailwindcss', 'enforce-consistent-class-order'>[0] & {})['order']
+    | false;
+
   restrictedClasses?: string[];
 }
 
 export const betterTailwindUnConfig: UnConfigFn<'betterTailwind'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.betterTailwind;
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies Partial<BetterTailwindEslintConfigOptions>,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {
+    classOrder: 'official',
+  } satisfies Partial<BetterTailwindEslintConfigOptions>);
 
   const {
     settings: pluginSettings,
     breakUpClassesIntoMultipleLines,
+    classOrder,
     restrictedClasses,
   } = optionsResolved;
 
@@ -117,7 +128,11 @@ export const betterTailwindUnConfig: UnConfigFn<'betterTailwind'> = (context) =>
     ) // 🟢
     .addRule('no-duplicate-classes', WARNING) // 🟢
     .addRule('no-unnecessary-whitespace', WARNING) // 🟢
-    .addRule('enforce-consistent-class-order', WARNING) // 🟢
+    .addRule(
+      'enforce-consistent-class-order',
+      typeof classOrder === 'string' ? WARNING : OFF,
+      typeof classOrder === 'string' ? [{order: classOrder}] : [],
+    ) // 🟢
     /* Category: Correctness rules */
     .addRule('no-conflicting-classes', ERROR)
     .addRule(
