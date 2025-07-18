@@ -600,8 +600,9 @@ export interface UnConfigs {
   noUnsanitized: NoUnsanitizedEslintConfigOptions;
 
   /**
-   * Used plugin:
+   * Used plugins:
    * - [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json))
+   * - (if `enforceAbsoluteVersion` option is used) [`eslint-plugin-node-dependencies`](https://npmjs.com/eslint-plugin-node-dependencies) ([docs](https://ota-meshi.github.io/eslint-plugin-node-dependencies))
    *
    * NOTE: disabled by default.
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`

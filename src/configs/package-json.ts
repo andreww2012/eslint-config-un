@@ -98,6 +98,20 @@ export interface PackageJsonEslintConfigOptions
    * @see https://docs.npmjs.com/cli/configuring-npm/package-json
    */
   collectionsToSort?: PackageJsonCollectionsToSort;
+
+  /**
+   * - `true`: enforces to use the absolute version only on `dependencies` and `devDependencies`.
+   * - `'never'`: enforces not to use the absolute version.
+   * - `false`: do not enforce anything.
+   *
+   * Affected rules:
+   * - [`node-dependencies/absolute-version`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/absolute-version.html) (yes, it will use the rule from another plugin, [`eslint-plugin-node-dependencies`](https://npmjs.com/eslint-plugin-node-dependencies), for simplicity)
+   * @default false
+   */
+  enforceAbsoluteVersion?:
+    | boolean
+    | 'never'
+    | (GetRuleOptions<'node-dependencies', 'absolute-version'>[0] & object);
 }
 
 export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) => {
@@ -106,11 +120,13 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
   const optionsRaw = context.rootOptions.configs?.packageJson;
   const optionsResolved = assignDefaults(optionsRaw, {
     configPublishedPackageJson: true,
+    enforceAbsoluteVersion: false,
     order: 'sort-package-json',
     repositoryShorthand: 'object',
   } satisfies PackageJsonEslintConfigOptions);
 
-  const {configPublishedPackageJson, order, repositoryShorthand} = optionsResolved;
+  const {configPublishedPackageJson, enforceAbsoluteVersion, order, repositoryShorthand} =
+    optionsResolved;
 
   const optionsPublishedPackageJsonResolved = assignDefaults(
     configPublishedPackageJson,
@@ -183,6 +199,21 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
     .addRule('valid-scripts', ERROR) // 🟢 >=0.43.0
     .addRule('valid-type', ERROR) // 🟢 >=0.41.0
     .addRule('valid-version', ERROR) // 🟢
+    .addAnyRule(
+      'node-dependencies',
+      'absolute-version',
+      enforceAbsoluteVersion ? ERROR : OFF,
+      enforceAbsoluteVersion
+        ? [
+            enforceAbsoluteVersion === true
+              ? {
+                  optionalDependencies: 'ignore',
+                  peerDependencies: 'ignore',
+                }
+              : enforceAbsoluteVersion,
+          ]
+        : [],
+    ) // >=0.7.0
     .addOverrides();
 
   const configBuilderPublishedPackageJson = createConfigBuilder(
