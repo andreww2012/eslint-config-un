@@ -1026,7 +1026,12 @@ export const tsUnConfig: UnConfigFn<
     .addRule('prefer-string-starts-ends-with', ERROR, [{allowSingleElementEquality: 'always'}]) // 💅
     /* Category: Additional rules */
     .addRule('consistent-type-exports', ERROR, [{fixMixedExportsWithInlineTypeSpecifier: true}])
-    .addRule('naming-convention', OFF) // ❄️
+    .addRule('naming-convention', ERROR, [
+      {selector: 'enum', format: ['PascalCase']},
+      {selector: 'enumMember', format: ['PascalCase']},
+      {selector: 'interface', format: ['PascalCase']},
+      {selector: 'typeLike', format: ['PascalCase']},
+    ])
     .addRule('no-unnecessary-qualifier', OFF)
     .addRule('prefer-readonly', ERROR)
     .addRule('prefer-readonly-parameter-types', OFF)

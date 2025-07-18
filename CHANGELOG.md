@@ -43,7 +43,9 @@
 - **packageJson** config: added a new sub-config, `publishedPackageJson`, to enforce the presence of `name` and `version` fields in published `package.json`s.
 - **packageJson** config: sort more package.json collections by default: added `resolutions`, `dependenciesMeta`, `pnpm.allowedDeprecatedVersions`, `pnpm.overrides`, `pnpm.packageExtensions`, `pnpm.patchedDependencies` and `pnpm.peerDependencyRules.allowedVersions`.
 - **markdown** config: added a new sub-config, `formatFencedCodeBlocks`, to use a patched version of [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) to lint fenced code blocks inside Markdown files. 
-- **ts** config: added a new sub-config, `sortTsconfigKeys`, to sort top-level and `compilerOptions` keys in tsconfig files.
+- **ts** config:
+  - Added a new sub-config, `sortTsconfigKeys`, to sort top-level and `compilerOptions` keys in tsconfig files.
+  - [**BREAKING**] Enforced `PascalCase` for enum, enum members, interfaces and types.
 - **unicorn** config:
   - Disabled [`prefer-json-parse-buffer`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-json-parse-buffer.md) rule as it [suggests bad fixes in TypeScript code](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2565).
   - Set [`checkArrowFunctionBody: false`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-undefined.md#checkarrowfunctionbody) for [`no-useless-undefined`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-undefined.md) rule.
