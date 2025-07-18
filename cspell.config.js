@@ -64,6 +64,8 @@ export default {
     'activedescendant',
     'proptypes',
     'knipignore',
+    'asyncdispose',
+    'matchall',
 
     // Actual-ish English words
     'uncategorized',

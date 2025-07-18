@@ -315,8 +315,8 @@ importers:
         specifier: 0.3.1
         version: 0.3.1(@typescript-eslint/parser@8.36.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-es-x:
-        specifier: 8.7.0
-        version: 8.7.0(eslint@9.29.0(jiti@2.4.2))
+        specifier: 9.0.0
+        version: 9.0.0(eslint@9.29.0(jiti@2.4.2))
       eslint-plugin-eslint-plugin:
         specifier: 6.5.0
         version: 6.5.0(eslint@9.29.0(jiti@2.4.2))
@@ -3880,11 +3880,11 @@ packages:
     peerDependencies:
       eslint: '>=8'
 
-  eslint-plugin-es-x@8.7.0:
-    resolution: {integrity: sha512-Du5Sb067sjqzmglaPhsfcEQgE1EYfL8sko+4jOMcAB/XKGoCxntSrOmTYuVzswA1rzM9+MZwH6+GOp0G3/wVCg==}
-    engines: {node: ^14.18.0 || >=16.0.0}
+  eslint-plugin-es-x@9.0.0:
+    resolution: {integrity: sha512-Z7zemBrzn0RA1M/RrUSq/a/Xb0xEyp5Qu+ow+RUOHTGaQihp8OxmvTD/JvLyzEjyodz1RRadLfvhRNQ9lwvdsw==}
+    engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
-      eslint: '>=8'
+      eslint: '>=9.29.0'
 
   eslint-plugin-eslint-plugin@6.5.0:
     resolution: {integrity: sha512-DT8YpcXDtMBcBZN39JlkHGurHKU8eYFLavTrnowQLeNwqe/diRUsllsftgD/7dZ2/ItabNLLF2/EYapE1H+G7Q==}
@@ -4326,6 +4326,12 @@ packages:
 
   eslint-type-tracer@0.3.0:
     resolution: {integrity: sha512-sLoG2/A8A+9ItSOYBG3/kAkyO4KAsrre37u5PeSigBiv59az0bhtznhZX4TidmxYGQxdpXJFVUnhzsVk6ZE1gQ==}
+    engines: {node: ^18 || >=20}
+    peerDependencies:
+      eslint: '>=8'
+
+  eslint-type-tracer@0.4.0:
+    resolution: {integrity: sha512-SmCKyT/435tmJC1p9rnaqvx7UtJJjUPI3G5mS0BXaWYxDlzB/N2EZqF98xEjJ1PWe4+ZzhUEW5rWuIrEYSrAww==}
     engines: {node: ^18 || >=20}
     peerDependencies:
       eslint: '>=8'
@@ -11274,12 +11280,12 @@ snapshots:
       eslint: 9.29.0(jiti@2.4.2)
       eslint-compat-utils: 0.5.1(eslint@9.29.0(jiti@2.4.2))
 
-  eslint-plugin-es-x@8.7.0(eslint@9.29.0(jiti@2.4.2)):
+  eslint-plugin-es-x@9.0.0(eslint@9.29.0(jiti@2.4.2)):
     dependencies:
       '@eslint-community/eslint-utils': 4.7.0(eslint@9.29.0(jiti@2.4.2))
       '@eslint-community/regexpp': 4.12.1
       eslint: 9.29.0(jiti@2.4.2)
-      eslint-compat-utils: 0.6.5(eslint@9.29.0(jiti@2.4.2))
+      eslint-type-tracer: 0.4.0(eslint@9.29.0(jiti@2.4.2))
 
   eslint-plugin-eslint-plugin@6.5.0(eslint@9.29.0(jiti@2.4.2)):
     dependencies:
@@ -11948,6 +11954,11 @@ snapshots:
       estraverse: 5.3.0
 
   eslint-type-tracer@0.3.0(eslint@9.29.0(jiti@2.4.2)):
+    dependencies:
+      '@eslint-community/eslint-utils': 4.7.0(eslint@9.29.0(jiti@2.4.2))
+      eslint: 9.29.0(jiti@2.4.2)
+
+  eslint-type-tracer@0.4.0(eslint@9.29.0(jiti@2.4.2)):
     dependencies:
       '@eslint-community/eslint-utils': 4.7.0(eslint@9.29.0(jiti@2.4.2))
       eslint: 9.29.0(jiti@2.4.2)

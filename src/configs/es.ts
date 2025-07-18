@@ -1,4 +1,4 @@
-// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed matchall replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror
+// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror
 import {ERROR, OFF} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
@@ -12,6 +12,8 @@ interface EcmaFeatures {
     | 'disposableStack'
     | 'errorIsError'
     | 'suppressedError'
+    | 'symbolAsyncDispose'
+    | 'symbolDispose'
     | 'usingDeclarations';
   2025:
     | 'dataviewPrototypeGetFloat16SetFloat16'
@@ -104,6 +106,7 @@ interface EcmaFeatures {
     | 'promiseAllSettled'
     | 'regexpUnicodePropertyEscapes2020'
     | 'stringPrototypeMatchAll'
+    | 'symbolMatchAll'
     | 'intlLocale'
     | 'intlRelativeTimeFormat';
   2019:
@@ -352,6 +355,8 @@ export const esUnConfig: UnConfigFn<
       .addRule('no-disposablestack', grs(2026, 'disposableStack')) // >=8.7.0
       .addRule('no-error-iserror', grs(2026, 'errorIsError')) // >=8.7.0
       .addRule('no-suppressederror', grs(2026, 'suppressedError')) // >=8.7.0
+      .addRule('no-symbol-asyncdispose', grs(2026, 'symbolAsyncDispose')) // >=9.0.0
+      .addRule('no-symbol-dispose', grs(2026, 'symbolDispose')) // >=9.0.0
       .addRule('no-using-declarations', grs(2026, 'usingDeclarations')); // >=8.7.0
   }
   /* Category: ES2025 */
@@ -507,6 +512,7 @@ export const esUnConfig: UnConfigFn<
         grs(2020, 'regexpUnicodePropertyEscapes2020'),
       ) // >=6.0.0
       .addRule('no-string-prototype-matchall', grs(2020, 'stringPrototypeMatchAll')) // >=5.0.0
+      .addRule('no-symbol-matchall', grs(2020, 'symbolMatchAll')) // >=9.0.0
       /* Category: ES2020 Intl API */
       .addRule('no-intl-locale', grs(2020, 'intlLocale')) // >=6.0.0
       .addRule('no-intl-relativetimeformat', grs(2020, 'intlRelativeTimeFormat')); // >=6.0.0
