@@ -354,8 +354,8 @@ importers:
         specifier: 3.6.2
         version: 3.6.2(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
       eslint-plugin-qunit:
-        specifier: 8.2.2
-        version: 8.2.2(eslint@9.29.0(jiti@2.4.2))
+        specifier: 8.2.4
+        version: 8.2.4(eslint@9.29.0(jiti@2.4.2))
       eslint-plugin-qwik:
         specifier: 1.14.1
         version: 1.14.1(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
@@ -4082,8 +4082,8 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
 
-  eslint-plugin-qunit@8.2.2:
-    resolution: {integrity: sha512-C56SpGPyUOgXWaTiQbwKaDQHEF7MbKUmWtKkIybK5vL3Dqk+4U3ng0wARIUxsk2YNPFzPvlQcMMP6jlQz2NlvQ==}
+  eslint-plugin-qunit@8.2.4:
+    resolution: {integrity: sha512-rKlLQ/AIKFBNd9Ga8Cg058+iS0xqx2SE5rByyhAga2/ORDAHArfvc3tatAxUvaHzqUsDL0gIez3l2zcFQ9x7Vg==}
     engines: {node: ^16.0.0 || ^18.0.0 || >=20.0.0}
 
   eslint-plugin-qwik@1.14.1:
@@ -11561,7 +11561,7 @@ snapshots:
       '@eslint-community/eslint-utils': 4.7.0(eslint@9.29.0(jiti@2.4.2))
       eslint: 9.29.0(jiti@2.4.2)
 
-  eslint-plugin-qunit@8.2.2(eslint@9.29.0(jiti@2.4.2)):
+  eslint-plugin-qunit@8.2.4(eslint@9.29.0(jiti@2.4.2)):
     dependencies:
       eslint-utils: 3.0.0(eslint@9.29.0(jiti@2.4.2))
       requireindex: 1.2.0
