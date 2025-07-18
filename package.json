@@ -187,7 +187,7 @@
     "eslint-plugin-solid": "0.14.5",
     "eslint-plugin-storybook": "9.0.17",
     "eslint-plugin-svelte": "3.11.0",
-    "eslint-plugin-tailwindcss": "3.18.0",
+    "eslint-plugin-tailwindcss": "3.18.2",
     "eslint-plugin-testing-library": "7.5.3",
     "eslint-plugin-turbo": "2.5.4",
     "eslint-plugin-vue": "10.3.0",
