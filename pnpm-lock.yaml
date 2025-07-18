@@ -71,8 +71,8 @@ importers:
         specifier: 4.4.4
         version: 4.4.4(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.37.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3))(eslint-import-resolver-node@0.3.9)(eslint@9.29.0(jiti@2.4.2)))(eslint@9.29.0(jiti@2.4.2))
       eslint-mdx:
-        specifier: 3.5.0
-        version: 3.5.0(eslint@9.29.0(jiti@2.4.2))
+        specifier: 3.6.2
+        version: 3.6.2(eslint@9.29.0(jiti@2.4.2))
       eslint-merge-processors:
         specifier: 2.0.0
         version: 2.0.0(eslint@9.29.0(jiti@2.4.2))
@@ -107,8 +107,8 @@ importers:
         specifier: 0.10.1
         version: 0.10.1(eslint@9.29.0(jiti@2.4.2))
       eslint-plugin-mdx:
-        specifier: 3.5.0
-        version: 3.5.0(eslint@9.29.0(jiti@2.4.2))
+        specifier: 3.6.2
+        version: 3.6.2(eslint@9.29.0(jiti@2.4.2))
       eslint-plugin-n:
         specifier: 17.20.0
         version: 17.20.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
@@ -3787,8 +3787,8 @@ packages:
       '@eslint/json':
         optional: true
 
-  eslint-mdx@3.5.0:
-    resolution: {integrity: sha512-3iFgW201z26bnFJelrrG2D8YXx1jk9JzXBp2pN32EMIpg47ZBM20mkdneLXn2CBKp27ZMHTygEA1DJNpqMu4Pg==}
+  eslint-mdx@3.6.2:
+    resolution: {integrity: sha512-5hczn5iSSEcwtNtVXFwCKIk6iLEDaZpwc3vjYDl/B779OzaAAK/ou16J2xVdO6ecOLEO1WZqp7MRCQ/WsKDUig==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: '>=8.0.0'
@@ -3982,8 +3982,8 @@ packages:
     peerDependencies:
       eslint: '>=8.57.0'
 
-  eslint-plugin-mdx@3.5.0:
-    resolution: {integrity: sha512-pxXH/a2eH3Pxkmp1LSTqFfizIF1ZEUJjEm99gy+k/c+rK+SITEHg04LbPZBqG0T3Z4x0tPtY7zm9miqypcPxuw==}
+  eslint-plugin-mdx@3.6.2:
+    resolution: {integrity: sha512-RfMd5HYD/9+cqANhVWJbuBRg3huWUsAoGJNGmPsyiRD2X6BaG6bvt1omyk1ORlg81GK8ST7Ojt5fNAuwWhWU8A==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: '>=8.0.0'
@@ -11126,7 +11126,7 @@ snapshots:
       esquery: 1.6.0
       jsonc-eslint-parser: 2.4.0
 
-  eslint-mdx@3.5.0(eslint@9.29.0(jiti@2.4.2)):
+  eslint-mdx@3.6.2(eslint@9.29.0(jiti@2.4.2)):
     dependencies:
       acorn: 8.15.0
       acorn-jsx: 5.3.2(acorn@8.15.0)
@@ -11430,10 +11430,10 @@ snapshots:
       eslint: 9.29.0(jiti@2.4.2)
       eslint-type-tracer: 0.3.0(eslint@9.29.0(jiti@2.4.2))
 
-  eslint-plugin-mdx@3.5.0(eslint@9.29.0(jiti@2.4.2)):
+  eslint-plugin-mdx@3.6.2(eslint@9.29.0(jiti@2.4.2)):
     dependencies:
       eslint: 9.29.0(jiti@2.4.2)
-      eslint-mdx: 3.5.0(eslint@9.29.0(jiti@2.4.2))
+      eslint-mdx: 3.6.2(eslint@9.29.0(jiti@2.4.2))
       mdast-util-from-markdown: 2.0.2
       mdast-util-mdx: 3.0.0
       micromark-extension-mdxjs: 3.0.0
@@ -12142,6 +12142,10 @@ snapshots:
   fdir@6.4.6(picomatch@4.0.2):
     optionalDependencies:
       picomatch: 4.0.2
+
+  fdir@6.4.6(picomatch@4.0.3):
+    optionalDependencies:
+      picomatch: 4.0.3
 
   fetch-blob@3.2.0:
     dependencies:
@@ -15369,8 +15373,8 @@ snapshots:
   vite@6.3.5(@types/node@20.19.1)(jiti@2.4.2)(tsx@4.20.3)(yaml@2.8.0):
     dependencies:
       esbuild: 0.25.5
-      fdir: 6.4.6(picomatch@4.0.2)
-      picomatch: 4.0.2
+      fdir: 6.4.6(picomatch@4.0.3)
+      picomatch: 4.0.3
       postcss: 8.5.6
       rollup: 4.43.0
       tinyglobby: 0.2.14
