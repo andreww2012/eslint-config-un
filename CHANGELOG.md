@@ -51,7 +51,9 @@
   - Set [`checkArrowFunctionBody: false`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-undefined.md#checkarrowfunctionbody) for [`no-useless-undefined`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-undefined.md) rule.
 - **cli** config: included `**/cli.*` files by default and disabled [`no-await-in-loop`](https://eslint.org/docs/latest/rules/no-await-in-loop) rule. Disabled [`node/hashbang`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/hashbang.md) rule.
 - **js** config: added a new option `allowedConsoleMethods` to control which `console` methods are allowed.
-- **jsdoc** config: added a new option `extraMultilineCommentsStartingWithToIgnore` to control which multiline comments should be ignored by [`no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md) rule. Added `__PURE__`, `__NO_SIDE_EFFECTS__` and `vite-ignore` to the default list.
+- **jsdoc** config:
+  - Added a new option `extraMultilineCommentsStartingWithToIgnore` to control which multiline comments should be ignored by [`no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md) rule. Added `__PURE__`, `__NO_SIDE_EFFECTS__` and `vite-ignore` to the default list.
+  - Added a new option `customTags` to specify custom tags to be recognized as valid JSDoc tags.
 - **casePolice** config: autofix is now disabled by default.
 - **react** config: `configTypeAwareRules` now uses `files` and `ignores` from `ts` config by default.
 - **yaml** config:

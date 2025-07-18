@@ -173,6 +173,14 @@ export interface JsdocEslintConfigOptions extends UnConfigOptions<'jsdoc'> {
   configTypescript?: boolean | UnConfigOptions<'jsdoc', Pick<JsdocEslintConfigOptions, 'settings'>>;
 
   /**
+   * Recognize the following tags as valid JSDoc tags.
+   *
+   * Affected rules:
+   * - [`check-tag-names`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/check-tag-names.md)
+   */
+  customTags?: string[];
+
+  /**
    * With be merged with the default list: `['ts-check', 'ts-expect-error', 'ts-ignore', 'ts-nocheck', '__PURE__', '__NO_SIDE_EFFECTS__', 'vite-ignore]`.
    *
    * Used in rules:
@@ -190,6 +198,7 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
   const {
     settings: pluginSettings,
     configTypescript,
+    customTags,
     extraMultilineCommentsStartingWithToIgnore,
   } = optionsResolved;
 
@@ -219,7 +228,7 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     .addRule('check-param-names', ERROR) // 🟢2️⃣
     .addRule('check-property-names', ERROR) // 🟢2️⃣
     .addRule('check-syntax', ERROR) // 2️⃣
-    .addRule('check-tag-names', ERROR) // 🟢2️⃣
+    .addRule('check-tag-names', ERROR, customTags?.length ? [{definedTags: customTags}] : []) // 🟢2️⃣
     .addRule('check-template-names', ERROR) // 2️⃣
     .addRule('check-types', ERROR) // 🟢2️⃣
     .addRule('check-values', ERROR) // 🟢2️⃣
