@@ -145,10 +145,11 @@
 - `eslint-plugin-qwik`: [1.13.0 → 1.14.1](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik%401.13.0...eslint-plugin-qwik%401.14.1)
 - `eslint-plugin-react-compiler`: 19.1.0-rc.1 → 19.1.0-rc.2
 - `eslint-plugin-regexp`: [2.7.0 → 2.9.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v2.7.0...v2.9.0)
-- `eslint-plugin-svelte`: [3.5.1 → 3.10.1](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte%403.5.1...eslint-plugin-svelte%403.10.1)
+- `eslint-plugin-svelte`: [3.5.1 → 3.11.0](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte%403.5.1...eslint-plugin-svelte%403.11.0)
   - 🟢 (enabled) [`no-top-level-browser-globals`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-top-level-browser-globals)
   - 🟢 [`no-add-event-listener`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-add-event-listener)
   - 🟢 [`prefer-writable-derived`](https://sveltejs.github.io/eslint-plugin-svelte/rules/prefer-writable-derived)
+  - 🟢 [`prefer-svelte-reactivity`](https://sveltejs.github.io/eslint-plugin-svelte/rules/prefer-svelte-reactivity)
   - ❓(enabled conditionally) [`require-event-prefix`](https://sveltejs.github.io/eslint-plugin-svelte/rules/require-event-prefix)
 - `eslint-plugin-vue`: [10.1.0 → 10.3.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.1.0...v10.3.0)
 - `eslint-plugin-package-json`: [0.31.0 → 0.45.1](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.31.0...v0.45.1)

@@ -185,6 +185,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     .addRule('no-store-async', ERROR) // 🟢 >=2.7.0
     .addRule('no-top-level-browser-globals', ERROR) // 🟢 >=3.8.0
     .addRule('no-unknown-style-directive-property', ERROR) // 🟢 >=0.31.0
+    .addRule('prefer-svelte-reactivity', ERROR) // 🟢 >=3.11.0
     .addRule('require-store-callbacks-use-set-param', ERROR) // >=2.12.0
     .addRule('require-store-reactive-access', ERROR) // 🟢 >=2.12.0
     .addRule('valid-compile', ERROR) // >=0.7.0
