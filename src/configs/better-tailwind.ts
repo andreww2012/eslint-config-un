@@ -27,6 +27,12 @@ export interface BetterTailwindEslintConfigOptions extends UnConfigOptions<'bett
     tailwindConfig?: string;
 
     /**
+     * From plugin docs:
+     * The path to the `tsconfig.json` file. If not specified, the plugin will try to find it automatically.
+     */
+    tsconfig?: string;
+
+    /**
      * The name of the attribute that contains the tailwind classes.
      * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#attributes
      */
