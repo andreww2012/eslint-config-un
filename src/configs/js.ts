@@ -1,4 +1,4 @@
-import {ERROR, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_TSX, OFF, WARNING} from '../constants';
 import {
   type BuiltinEslintRulesFixed,
   type RulesRecord,
@@ -43,7 +43,14 @@ export const jsUnConfig: UnConfigFn<
   // 🟠 - rule from `eslint-config-prettier`
 
   const config = configBuilder
-    ?.addConfig(['js', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
+    ?.addConfig([
+      'js',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: [GLOB_TSX],
+        doNotIgnoreHtml: true, // TODO required?
+      },
+    ])
     /* Category: Possible Problems */
     .addRule('array-callback-return', ERROR, [{checkForEach: true}])
     .addRule('constructor-super', ERROR) // 🟢
@@ -298,6 +305,14 @@ export const jsUnConfig: UnConfigFn<
     ]) // 🟠
     .addAnyRule('@stylistic', 'padding-line-between-statements', ERROR, [
       {blankLine: 'never', prev: 'import', next: 'import'},
+    ])
+    .addAnyRule('@stylistic', 'spaced-comment', ERROR, [
+      'always',
+      {
+        block: {
+          balanced: true,
+        },
+      },
     ])
     .addOverrides();
 

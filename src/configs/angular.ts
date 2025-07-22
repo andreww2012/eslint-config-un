@@ -561,7 +561,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
       ...getAngularEslintTemplatePluginRuleSeverity('accessibility-valid-aria', a11yRulesSeverity),
     ) // [<=15] ♿
     .addRule(...getAngularEslintTemplatePluginRuleSeverity('alt-text', a11yRulesSeverity)) // [>=16] ♿
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('attributes-order', ERROR)) /// [>=14]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('attributes-order', ERROR)) // [>=14]
     .addRule(...getAngularEslintTemplatePluginRuleSeverity('banana-in-box', ERROR)) // 🟢[all]
     .addRule(...getAngularEslintTemplatePluginRuleSeverity('button-has-type', ERROR)) // [all]
     .addRule(
