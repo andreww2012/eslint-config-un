@@ -7,6 +7,7 @@ export default eslintConfig({
   mode: 'lib',
 
   configs: {
+    rxjs: false,
     fileProgress: true,
     turbo: false,
     ts: {

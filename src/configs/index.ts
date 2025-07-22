@@ -67,6 +67,7 @@ import type {QunitEslintConfigOptions} from './qunit';
 import type {QwikEslintConfigOptions} from './qwik';
 import type {ReactEslintConfigOptions} from './react';
 import type {RegexpEslintConfigOptions} from './regexp';
+import type {RxjsEslintConfigOptions} from './rxjs';
 import type {SecurityEslintConfigOptions} from './security';
 import type {SolidEslintConfigOptions} from './solid';
 import type {SonarEslintConfigOptions} from './sonar';
@@ -704,6 +705,15 @@ export interface UnConfigs {
    * @default true
    */
   regexp: RegexpEslintConfigOptions;
+
+  /**
+   * [RxJS](https://rxjs.dev) specific rules.
+   *
+   * Used plugins:
+   * - [`@smarttools/eslint-plugin-rxjs`](https://npmjs.com/@smarttools/eslint-plugin-rxjs) ([docs](https://github.com/DaveMBush/eslint-plugin-rxjs))
+   * @default true <=> `rxjs` package is installed
+   */
+  rxjs: RxjsEslintConfigOptions;
 
   /**
    * Used plugin:

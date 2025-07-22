@@ -26,6 +26,7 @@ export default {
     'marko',
     'intlify',
     'csstree',
+    'smarttools',
 
     // Technical words/terms
     'arraify',

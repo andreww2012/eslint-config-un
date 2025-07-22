@@ -292,6 +292,7 @@ export const eslintConfigInternal = async (
   const isQwikEnabled = getIsConfigEnabled('qwik', ['@builder.io/qwik', '@qwik.dev/core']);
   const isReactEnabled = getIsConfigEnabled('react', 'react');
   const isRegexpEnabled = getIsConfigEnabled('regexp');
+  const isRxjsEnabled = getIsConfigEnabled('rxjs', 'rxjs');
   const isSecurityEnabled = getIsConfigEnabled('security', false);
   const isSolidEnabled = getIsConfigEnabled('solid', 'solid-js');
   const isSonarEnabled = getIsConfigEnabled('sonar');
@@ -384,6 +385,7 @@ export const eslintConfigInternal = async (
       qwik: {enabled: isQwikEnabled},
       react: {enabled: isReactEnabled},
       regexp: {enabled: isRegexpEnabled},
+      rxjs: {enabled: isRxjsEnabled},
       security: {enabled: isSecurityEnabled},
       solid: {enabled: isSolidEnabled},
       sonar: {enabled: isSonarEnabled},
@@ -566,6 +568,7 @@ export const eslintConfigInternal = async (
     isLitEnabled && import('./configs/lit').then((m) => m.litUnConfig(context)),
     isMochaEnabled && import('./configs/mocha').then((m) => m.mochaUnConfig(context)),
     isQunitEnabled && import('./configs/qunit').then((m) => m.qunitUnConfig(context)),
+    isRxjsEnabled && import('./configs/rxjs').then((m) => m.rxjsUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

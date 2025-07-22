@@ -236,6 +236,9 @@ importers:
       '@next/eslint-plugin-next':
         specifier: 15.4.2
         version: 15.4.2
+      '@smarttools/eslint-plugin-rxjs':
+        specifier: 1.0.22
+        version: 1.0.22(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)
       '@sveltejs/kit':
         specifier: 2.25.1
         version: 2.25.1(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.3)(vite@6.3.5(@types/node@20.19.1)(jiti@2.4.2)(stylus@0.57.0)(tsx@4.20.3)(yaml@2.8.0)))(svelte@5.34.3)(vite@6.3.5(@types/node@20.19.1)(jiti@2.4.2)(stylus@0.57.0)(tsx@4.20.3)(yaml@2.8.0))
@@ -2240,6 +2243,11 @@ packages:
 
   '@sinonjs/fake-timers@13.0.5':
     resolution: {integrity: sha512-36/hTbH2uaWuGVERyC6da9YwGWnzUZXuPro/F2LfsdOsLnCojz/iSH8MxUt/FD2S5XBSVPhmArFUXcpCQ2Hkiw==}
+
+  '@smarttools/eslint-plugin-rxjs@1.0.22':
+    resolution: {integrity: sha512-uxKH15xTSuvKK2R+LAnxP2yYhnE2ZHn6RRyJNlQFokqAmiJ3s242aYxLwQeeE5TLpco4brAvW2wwvNpg9wJVow==}
+    peerDependencies:
+      typescript: '>=4.0.0'
 
   '@storybook/global@5.0.0':
     resolution: {integrity: sha512-FcOqPAXACP0I3oJ/ws6/rrPT9WGhu915Cg8D02a9YxLo0DE9zI+a9A5gRGvmQ09fiWPukqI8ZAEoQEdWUKMQdQ==}
@@ -9561,6 +9569,15 @@ snapshots:
   '@sinonjs/fake-timers@13.0.5':
     dependencies:
       '@sinonjs/commons': 3.0.1
+
+  '@smarttools/eslint-plugin-rxjs@1.0.22(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)':
+    dependencies:
+      '@typescript-eslint/utils': 8.38.0(eslint@9.31.0(jiti@2.4.2))(typescript@5.8.3)
+      ts-api-utils: 2.1.0(typescript@5.8.3)
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - eslint
+      - supports-color
 
   '@storybook/global@5.0.0': {}
 

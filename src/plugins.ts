@@ -357,6 +357,15 @@ export const pluginsLoaders = {
     () => import('eslint-plugin-react-you-might-not-need-an-effect'),
   ),
   ...genModuleLoader('regexp', 'eslint-plugin-regexp', () => import('eslint-plugin-regexp')),
+  ...genModuleLoader(
+    'rxjs',
+    '@smarttools/eslint-plugin-rxjs',
+    () =>
+      import(
+        '@smarttools/eslint-plugin-rxjs'
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   ...genModuleLoader('security', 'eslint-plugin-security', () => import('eslint-plugin-security')),
   ...genModuleLoader(
     'solid',

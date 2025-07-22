@@ -90,6 +90,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `react-hooks`              | `eslint-plugin-react-hooks`              |
 | `react-refresh`            | `eslint-plugin-react-refresh`            |
 | `react`                    | `eslint-plugin-react`                    |
+| `rxjs`                     | `@smarttools/eslint-plugin-rxjs`         |
 | `solid`                    | `eslint-plugin-solid`                    |
 | `storybook`                | `eslint-plugin-storybook`                |
 | `svelte`                   | `eslint-plugin-svelte`                   |
@@ -302,6 +303,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | ![Playwright](./assets/devicon-playwright.svg) `playwright`                           | ✅ (`playwright` is installed) | [eslint-plugin-playwright](https://npmjs.com/eslint-plugin-playwright) (`playwright`) | Since v1.0.0 |
 | ![Playwright](./assets/devicon-playwright.svg) `playwright/noOnlyTests`               | ❌ | [eslint-plugin-no-only-tests](https://npmjs.com/eslint-plugin-no-only-tests) (`no-only-tests`) | Since v1.0.0 |
 | ![Lodash](./assets/devicon-plain-lodash.svg) `youDontNeedLodashUnderscore`            | ✅ (`lodash`, `lodash-es` or `lodash.*` is installed) | [eslint-plugin-you-dont-need-lodash-underscore](https://npmjs.com/eslint-plugin-you-dont-need-lodash-underscore) (`you-dont-need-lodash-underscore`) | Since v1.0.0 |
+| ![RxJS](./assets/devicon-rxjs.svg) `rxjs`                                             | ✅ (`rxjs` is installed) | [@smarttools/eslint-plugin-rxjs](https://npmjs.com/@smarttools/eslint-plugin-rxjs) (`rxjs`) | Since v1.0.0 |
 
 ### Miscellaneous
 

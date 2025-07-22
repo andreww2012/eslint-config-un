@@ -439,6 +439,11 @@ const ALL_STYLISTIC_RULES = {
     'unicode-escape': true,
     'use-ignore-case': true,
   },
+  rxjs: {
+    finnish: true,
+    'no-finnish': true,
+    'suffix-subjects': true,
+  },
   security: {
     // None
   },
