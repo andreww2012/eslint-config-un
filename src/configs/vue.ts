@@ -4,6 +4,7 @@ import globals from 'globals';
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, type RuleSeverity, WARNING} from '../constants';
 import {
   type FlatConfigEntryFilesOrIgnores,
+  type GetRuleOptions,
   type RulesRecord,
   type UnConfigOptions,
   createConfigBuilder,
@@ -150,6 +151,33 @@ export interface VueEslintConfigOptions extends UnConfigOptions<'vue'> {
       >;
 
   /**
+   * Scoped CSS in Vue.js related rules.
+   * @default true
+   */
+  configScopedCss?:
+    | boolean
+    | UnConfigOptions<
+        'vue-scoped-css',
+        {
+          /**
+           * Will be merged with the default value. `true` does not restrict the style type.
+           * @default {plain: true, scoped: true}
+           */
+          allowedStyleType?:
+            | true
+            | Partial<
+                Record<
+                  ((GetRuleOptions<
+                    'vue-scoped-css',
+                    'enforce-style-type'
+                  >[0] & {})['allows'] & {})[number],
+                  boolean
+                >
+              >;
+        }
+      >;
+
+  /**
    * @default auto-detected
    */
   majorVersion?: 2 | 3;
@@ -289,6 +317,7 @@ export const vueUnConfig: UnConfigFn<
     configI18n: vueI18nPackageInfo != null,
     configNuxt: nuxtPackageInfo != null,
     configPinia: isPiniaPackageInstalled,
+    configScopedCss: true,
     processSfcBlocks: true,
     reportUnusedDisableDirectives: true,
     enforcePropsDeclarationStyle: 'runtime',
@@ -302,6 +331,7 @@ export const vueUnConfig: UnConfigFn<
     configI18n,
     configNuxt,
     configPinia,
+    configScopedCss,
     processSfcBlocks,
     reportUnusedDisableDirectives,
     sfcBlockOrder,
@@ -989,8 +1019,64 @@ export const vueUnConfig: UnConfigFn<
     .addRule('sfc-locale-attr', ERROR) // >=1.3.0
     .addOverrides();
 
+  const optionsScopedCssResolved = assignDefaults(
+    configScopedCss,
+    {} satisfies VueEslintConfigOptions['configScopedCss'] & object,
+  );
+
+  const configBuilderScopedCss = createConfigBuilder(context, configScopedCss, 'vue-scoped-css');
+
+  // Legend:
+  // 3️⃣ = in recommended/vue-3
+  // 2️⃣ = in recommended/vue-2
+
+  configBuilderScopedCss
+    ?.addConfig([
+      'vue/scoped-css',
+      {
+        includeDefaultFilesAndIgnores: true,
+      },
+    ])
+    .addRule(
+      'enforce-style-type',
+      typeof optionsScopedCssResolved.allowedStyleType === 'object' ? ERROR : OFF,
+      [
+        {
+          allows: getKeysOfTruthyValues(
+            {
+              ...(typeof optionsScopedCssResolved.allowedStyleType === 'object' &&
+                optionsScopedCssResolved.allowedStyleType),
+              plain: true,
+              scoped: true,
+            },
+            true,
+          ),
+        },
+      ],
+    ) // 3️⃣2️⃣
+    .addRule('no-deprecated-deep-combinator', ERROR) // 3️⃣
+    .addRule('no-deprecated-v-enter-v-leave-class', isVue2 ? OFF : ERROR)
+    .addRule('no-parent-of-v-global', ERROR) // 3️⃣
+    .addRule('no-parsing-error', ERROR) // 3️⃣2️⃣
+    .addRule('no-unused-keyframes', ERROR) // 3️⃣2️⃣
+    .addRule('no-unused-selector', ERROR) // 3️⃣2️⃣
+    .addRule('require-selector-used-inside', OFF)
+    .addRule('require-v-deep-argument', ERROR) // 3️⃣
+    .addRule('require-v-global-argument', ERROR) // 3️⃣
+    .addRule('require-v-slotted-argument', ERROR) // 3️⃣
+    .addRule('v-deep-pseudo-style', ERROR) // 3️⃣
+    .addRule('v-global-pseudo-style', ERROR) // 3️⃣
+    .addRule('v-slotted-pseudo-style', ERROR) // 3️⃣
+    .addOverrides();
+
   return {
-    configs: [configBuilder, configBuilderA11y, configBuilderPinia, configBuilderI18n],
+    configs: [
+      configBuilder,
+      configBuilderA11y,
+      configBuilderPinia,
+      configBuilderI18n,
+      configBuilderScopedCss,
+    ],
     optionsResolved,
   };
 };

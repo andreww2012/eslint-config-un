@@ -98,6 +98,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `turbo`                    | `eslint-plugin-turbo`                    |
 | `vitest`                   | `@vitest/eslint-plugin`                  |
 | `vue`                      | `eslint-plugin-vue`                      |
+| `vue-scoped-css`           | `eslint-plugin-vue-scoped-css`           |
 | `vuejs-accessibility`      | `eslint-plugin-vuejs-accessibility`      |
 </details>
 

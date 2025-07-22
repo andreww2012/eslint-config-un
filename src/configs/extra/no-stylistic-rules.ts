@@ -693,6 +693,11 @@ const ALL_STYLISTIC_RULES = {
     'v-on-handler-style': true,
     'v-slot-style': true,
   },
+  'vue-scoped-css': {
+    'v-deep-pseudo-style': true,
+    'v-global-pseudo-style': true,
+    'v-slotted-pseudo-style': true,
+  },
   'vuejs-accessibility': {
     // None
   },

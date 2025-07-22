@@ -414,6 +414,15 @@ export const pluginsLoaders = {
   ),
   ...genModuleLoader('vue', 'eslint-plugin-vue', () => import('eslint-plugin-vue')),
   ...genModuleLoader(
+    'vue-scoped-css',
+    'eslint-plugin-vue-scoped-css',
+    () =>
+      import(
+        'eslint-plugin-vue-scoped-css'
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
+  ...genModuleLoader(
     'vuejs-accessibility',
     'eslint-plugin-vuejs-accessibility',
     () => import('eslint-plugin-vuejs-accessibility'),
