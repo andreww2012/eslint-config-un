@@ -1,3 +1,4 @@
+# cspell:ignore knip
 pre-push:
   parallel: true
   commands:
@@ -9,3 +10,7 @@ pre-push:
       run: npx prettier --check {push_files}
     spellcheck:
       run: npx cspell --exclude '**/.*' --no-must-find-files {push_files}
+    knip:
+      run: nr knip
+    types:
+      run: nr lint:types
