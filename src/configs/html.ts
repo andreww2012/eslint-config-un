@@ -116,7 +116,7 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
     .addRule('no-extra-spacing-attrs', OFF) // 🟢💅
     .addRule('no-multiple-empty-lines', WARNING)
     .addRule('no-trailing-spaces', WARNING)
-    .addRule('quotes', ERROR) // 🟢
+    .addRule('quotes', ERROR, ['double', {enforceTemplatedAttrValue: true}]) // 🟢
     .addRule('sort-attrs', OFF) // TODO find and enforce a good sorting order?
     .addOverrides();
 
