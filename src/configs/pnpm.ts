@@ -6,6 +6,19 @@ import type {UnConfigFn} from './index';
 
 export interface PnpmEslintConfigOptions {
   /**
+   * [`eslint-plugin-pnpm`](https://npmjs.com/eslint-plugin-pnpm) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `pnpm` property and applied to the specified `files` and `ignores`.
+   */
+  settings?: {
+    /**
+     * Whether to create `pnpm-workspace.yaml` if it doesn't exist
+     * @default false
+     */
+    ensureWorkspaceFile?: boolean;
+  };
+
+  /**
    * Rules for `package.json` files.
    */
   configPackageJson?:
@@ -50,7 +63,7 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
     configPnpmWorkspace: true,
   } satisfies PnpmEslintConfigOptions);
 
-  const {configPackageJson, configPnpmWorkspace} = optionsResolved;
+  const {settings: pluginSettings, configPackageJson, configPnpmWorkspace} = optionsResolved;
 
   const configPackageJsonOptions = assignDefaults(configPackageJson, {
     enforceCatalog: false,
@@ -66,6 +79,11 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesFallback: ['package.json', '**/package.json'],
+          ...(pluginSettings && {
+            settings: {
+              pnpm: pluginSettings,
+            },
+          }),
         },
       ],
       {
