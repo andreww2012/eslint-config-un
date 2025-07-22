@@ -44,6 +44,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('no-array-method-this-argument', ERROR)
     .addRule('prefer-single-call', ERROR)
     .addRule('no-array-reduce', OFF)
+    .addRule('no-array-reverse', ERROR)
     .addRule('no-await-expression-member', OFF)
     .addRule('no-await-in-promise-methods', ERROR)
     .addRule('no-console-spaces', ERROR)
@@ -82,6 +83,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('no-unreadable-array-destructuring', OFF)
     .addRule('no-unreadable-iife', ERROR)
     .addRule('no-unused-properties', OFF) // 🔴
+    .addRule('no-useless-error-capture-stack-trace', ERROR)
     .addRule('no-useless-fallback-in-spread', ERROR)
     .addRule('no-useless-length-check', ERROR)
     .addRule('no-useless-promise-resolve-reject', ERROR)
@@ -105,6 +107,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('prefer-array-some', ERROR)
     .addRule('prefer-at', ERROR)
     .addRule('prefer-blob-reading-methods', ERROR)
+    .addRule('prefer-class-fields', ERROR)
     .addRule('prefer-code-point', ERROR)
     .addRule('prefer-date-now', ERROR)
     .addRule('prefer-default-parameters', ERROR)
@@ -152,6 +155,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('prevent-abbreviations', OFF)
     .addRule('relative-url-style', ERROR, ['always'])
     .addRule('require-array-join-separator', ERROR)
+    .addRule('require-module-specifiers', ERROR)
     .addRule('require-number-to-fixed-digits-argument', ERROR)
     .addRule('require-post-message-target-origin', OFF) // 🔴
     .addRule('string-content', OFF) // 🔴

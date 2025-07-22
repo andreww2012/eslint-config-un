@@ -169,6 +169,11 @@
 - `eslint-plugin-prettier`: [5.4.1 → 5.5.0](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.1...v5.5.0)
 - `eslint-plugin-pnpm`: [0.3.1 → 1.1.0](https://github.com/antfu/pnpm-workspace-utils/compare/v0.3.1...v1.1.0)
 - `eslint-plugin-tailwindcss`: [3.18.0 → 3.18.2](https://github.com/francoismassart/eslint-plugin-tailwindcss/compare/v3.18.0...v3.18.2)
+- `eslint-plugin-unicorn`: [59.0.1 → 60.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v59.0.1...v60.0.0)
+  - 🟢 (enabled) [`no-array-reverse`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-array-reverse.md)
+  - 🟢 [`no-useless-error-capture-stack-trace`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-useless-error-capture-stack-trace.md)
+  - 🟢 [`prefer-class-fields`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-class-fields.md)
+  - 🟢 [`require-module-specifiers`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/require-module-specifiers.md)
 
 ## 0.10.0
 
