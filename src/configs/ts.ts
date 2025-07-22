@@ -1138,7 +1138,9 @@ export const tsUnConfig: UnConfigFn<
     .disableAnyRule('', 'vars-on-top')
     .disableAnyRule('', 'no-var')
     .disableAnyRule('sonarjs', 'no-redundant-optional')
-    .disableAnyRule('', 'no-duplicate-imports');
+    .disableAnyRule('', 'no-duplicate-imports')
+    // Allow `export {}` to be present to ensure the file is a module
+    .disableAnyRule('unicorn', 'require-module-specifiers');
 
   const configBuilderNoTypeAssertions = createConfigBuilder(
     context,
