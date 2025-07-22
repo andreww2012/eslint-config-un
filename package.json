@@ -79,7 +79,7 @@
     "enhanced-resolve": "5.18.2",
     "es-toolkit": "1.39.7",
     "eslint-config-flat-gitignore": "2.1.0",
-    "eslint-config-prettier": "10.1.5",
+    "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-typescript": "4.4.4",
     "eslint-mdx": "3.6.2",
     "eslint-merge-processors": "2.0.0",
