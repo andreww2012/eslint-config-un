@@ -337,6 +337,9 @@ const ALL_STYLISTIC_RULES = {
   'node-dependencies': {
     // None
   },
+  nx: {
+    // None
+  },
   'package-json': {
     'no-empty-fields': true,
     'order-properties': true,

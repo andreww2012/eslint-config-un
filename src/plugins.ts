@@ -297,6 +297,12 @@ export const pluginsLoaders = {
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   ...genModuleLoader(
+    'nx',
+    '@nx/eslint-plugin',
+    // @ts-expect-error types mismatch
+    () => import('@nx/eslint-plugin') satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
+  ...genModuleLoader(
     'package-json',
     'eslint-plugin-package-json',
     () =>

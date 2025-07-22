@@ -146,6 +146,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'qunit',
   ...CHECKED_LODASH_METHODS.map((method) => `lodash.${method}` as const),
   'rxjs',
+  'nx',
 
   'astro',
   'vue',

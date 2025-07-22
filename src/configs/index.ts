@@ -57,6 +57,7 @@ import type {NoOnlyTestsEslintConfigOptions} from './no-only-tests';
 import type {NoUnsanitizedEslintConfigOptions} from './no-unsanitized';
 import type {NodeEslintConfigOptions} from './node';
 import type {NodeDependenciesEslintConfigOptions} from './node-dependencies';
+import type {NxEslintConfigOptions} from './nx';
 import type {PackageJsonEslintConfigOptions} from './package-json';
 import type {PerfectionistEslintConfigOptions} from './perfectionist';
 import type {PlaywrightEslintConfigOptions} from './playwright';
@@ -599,6 +600,15 @@ export interface UnConfigs {
    * @default true
    */
   noUnsanitized: NoUnsanitizedEslintConfigOptions;
+
+  /**
+   * [Nx](https://nx.dev) specific rules.
+   *
+   * Used plugins:
+   * - [`@nx/eslint-plugin`](https://npmjs.com/@nx/eslint-plugin) ([docs](https://nx.dev/technologies/eslint/eslint-plugin))
+   * @default true <=> `nx` package is installed
+   */
+  nx: NxEslintConfigOptions;
 
   /**
    * Used plugins:

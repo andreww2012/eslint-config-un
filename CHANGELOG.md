@@ -32,6 +32,7 @@
 - New config: `header` via [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header), **<u>disabled</u>** by default.
 - New config: `headers` via [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers), **<u>disabled</u>** by default.
 - New config: `rxjs` via [`@smarttools/eslint-plugin-rxjs`](https://npmjs.com/@smarttools/eslint-plugin-rxjs), enabled automatically if `rxjs` package is installed.
+- New config: `nx` via [`@nx/eslint-plugin`](https://npmjs.com/@nx/eslint-plugin), enabled automatically if `nx` package is installed.
 - [**BREAKING**] eslint-config-un package is now distributed as ESM only.
 - [**BREAKING**] Set the minimum supported Node.js version to 20.12.
 - [**BREAKING**] many plugins are now not direct dependencies of this package, but its' optional peer dependencies, for example, `@graphql-eslint/eslint-plugin`, `eslint-plugin-storybook` and `eslint-plugin-tailwindcss` to name a few.

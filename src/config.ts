@@ -282,6 +282,7 @@ export const eslintConfigInternal = async (
   const isNoOnlyTestsEnabled = getIsConfigEnabled('noOnlyTests', false);
   const isNoStylisticRulesEnabled = getIsConfigEnabled('noStylisticRules', false);
   const isNoUnsanitizedEnabled = getIsConfigEnabled('noUnsanitized');
+  const isNxEnabled = getIsConfigEnabled('nx', 'nx');
   const isPackageJsonEnabled = getIsConfigEnabled('packageJson', false);
   const isPerfectionistEnabled = getIsConfigEnabled('perfectionist', false);
   const isPlaywrightEnabled = getIsConfigEnabled('playwright', 'playwright');
@@ -375,6 +376,7 @@ export const eslintConfigInternal = async (
       noOnlyTests: {enabled: isNoOnlyTestsEnabled},
       noStylisticRules: {enabled: isNoStylisticRulesEnabled},
       noUnsanitized: {enabled: isNoUnsanitizedEnabled},
+      nx: {enabled: isNxEnabled},
       packageJson: {enabled: isPackageJsonEnabled},
       perfectionist: {enabled: isPerfectionistEnabled},
       playwright: {enabled: isPlaywrightEnabled},
@@ -569,6 +571,7 @@ export const eslintConfigInternal = async (
     isMochaEnabled && import('./configs/mocha').then((m) => m.mochaUnConfig(context)),
     isQunitEnabled && import('./configs/qunit').then((m) => m.qunitUnConfig(context)),
     isRxjsEnabled && import('./configs/rxjs').then((m) => m.rxjsUnConfig(context)),
+    isNxEnabled && import('./configs/nx').then((m) => m.nxUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

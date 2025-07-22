@@ -7,9 +7,7 @@ export default eslintConfig({
   mode: 'lib',
 
   configs: {
-    rxjs: false,
     fileProgress: true,
-    turbo: false,
     ts: {
       allowDefaultProject: ['*.config.*s', '.*.*s'],
       configSortTsconfigKeys: {
@@ -48,10 +46,11 @@ export default eslintConfig({
       },
     },
     jsdoc: {
-      overrides: {
-        'jsdoc/check-tag-names': (ruleSeverity) => [ruleSeverity, {definedTags: ['knipignore']}],
-      },
+      customTags: ['knipignore'],
     },
+    nx: false,
+    rxjs: false,
+    turbo: false,
   },
 
   extraConfigs: [
