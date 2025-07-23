@@ -57,6 +57,7 @@
 - **js** config:
   - Added a new option `allowedConsoleMethods` to control which `console` methods are allowed.
   - Enforced spaces around comments via [`@stylistic/spaced-comment`](https://eslint.style/rules/spaced-comment) rule.
+  - Set [`no-console`](https://eslint.org/docs/latest/rules/no-console) rule severity to `error`.
 - **jsdoc** config:
   - Added a new option `extraMultilineCommentsStartingWithToIgnore` to control which multiline comments should be ignored by [`no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md) rule. Added `__PURE__`, `__NO_SIDE_EFFECTS__` and `vite-ignore` to the default list.
   - Added a new option `customTags` to specify custom tags to be recognized as valid JSDoc tags.

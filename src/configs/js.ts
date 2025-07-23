@@ -162,7 +162,7 @@ export const jsUnConfig: UnConfigFn<
     .addRule('no-bitwise', OFF)
     .addRule('no-caller', ERROR)
     .addRule('no-case-declarations', ERROR) // 🟢
-    .addRule('no-console', WARNING, [
+    .addRule('no-console', ERROR, [
       {
         ...(allowedConsoleMethods?.length && {allow: allowedConsoleMethods}),
       },
