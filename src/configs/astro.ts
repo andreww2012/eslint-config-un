@@ -32,6 +32,8 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
     pluginsLoaders.astro(context).then(({module}) => module),
     interopDefault(import('typescript-eslint')),
   ]);
+
+  context.usedPlugins.add('astro');
   if (!eslintPluginAstro) {
     return null;
   }

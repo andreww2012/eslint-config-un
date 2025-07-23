@@ -98,6 +98,8 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     pluginsLoaders.svelte(context).then(({module}) => module),
     interopDefault(import('typescript-eslint')),
   ]);
+
+  context.usedPlugins.add('svelte');
   if (!eslintPluginSvelte) {
     return null;
   }

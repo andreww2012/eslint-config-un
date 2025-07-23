@@ -297,6 +297,7 @@ export const vueUnConfig: UnConfigFn<
     interopDefault(import('typescript-eslint')),
   ]);
 
+  context.usedPlugins.add('vue');
   if (!eslintPluginVue) {
     return null;
   }

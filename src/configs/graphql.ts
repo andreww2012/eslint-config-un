@@ -73,6 +73,8 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
     pluginsLoaders.graphql(context, {throwIfNotFound: true}).then(({module}) => module),
     doesPackageExist('relay-runtime'),
   ]);
+
+  context.usedPlugins.add('graphql');
   if (!eslintPluginGraphql) {
     return null;
   }

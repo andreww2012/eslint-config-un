@@ -60,6 +60,8 @@ export interface VitestEslintConfigOptions
 
 export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
   const eslintPluginVitest = await pluginsLoaders.vitest(context).then(({module}) => module);
+
+  context.usedPlugins.add('vitest');
   if (!eslintPluginVitest) {
     return null;
   }

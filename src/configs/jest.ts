@@ -179,6 +179,8 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     pluginsLoaders.jest(context).then(({module}) => module),
     doesPackageExist('jest-extended'),
   ]);
+
+  context.usedPlugins.add('jest');
   if (!eslintPluginJest) {
     return null;
   }
