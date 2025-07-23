@@ -193,7 +193,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
       .addRule('no-reversed-media-syntax', ERROR) // 🟢
       .addRule('no-unused-definitions', ERROR) // 🟢
       .addRule('require-alt-text', ERROR) // 🟢
-      .addRule('table-column-count', ERROR) // 🟢
+      .addRule('table-column-count', ERROR, [{checkMissingCells: true}]) // 🟢
       .addOverrides();
 
     if (Array.isArray(language)) {
