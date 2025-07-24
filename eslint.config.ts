@@ -1,5 +1,5 @@
-import {eslintConfig} from './src';
 import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
+import {eslintConfig, isInEditor} from './src';
 
 export const foo = 'bar';
 const TEST_DIR_GLOB = ['test/**/*'];
@@ -8,7 +8,7 @@ export default eslintConfig({
   mode: 'lib',
 
   configs: {
-    fileProgress: true,
+    fileProgress: !isInEditor(),
     ts: {
       allowDefaultProject: ['*.config.*s', '.*.*s'],
       configSortTsconfigKeys: {

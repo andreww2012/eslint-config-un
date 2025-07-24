@@ -96,6 +96,10 @@ const checkIfModuleCorrectlyLoaded = async (
   return null;
 };
 
+const CONFIGS_TO_NOT_REPORT_IF_UNNECESSARILY_ENABLED_OR_DISABLED = new Set<keyof UnConfigs>([
+  'fileProgress',
+]);
+
 export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
   internalOptions: {disableAutofixOnly?: boolean} = {},
@@ -223,7 +227,8 @@ export const eslintConfigInternal = async (
     if (
       typeof enabledByUser === 'boolean' &&
       typeof providedConfig === 'boolean' &&
-      enabledByUser === enabledBySystem
+      enabledByUser === enabledBySystem &&
+      !CONFIGS_TO_NOT_REPORT_IF_UNNECESSARILY_ENABLED_OR_DISABLED.has(configName)
     ) {
       logger.warn(
         `There is no need to ${enabledByUser ? 'enable' : 'disable'} \`${styleText('blue', configName)}\` config because this is the default`,
