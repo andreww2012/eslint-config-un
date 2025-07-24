@@ -68,6 +68,7 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     /* Category: Components */
     .addRule('no-attrs-in-components', ERROR) // 🟢
     .addRule('no-attrs-snapshot', ERROR) // 🟢
+    .addRule('no-builtin-form-components', WARNING) // >=12.7.0
     .addRule('no-classic-components', enforceGlimmerComponents ? ERROR : OFF) // 🟢
     .addRule('no-component-lifecycle-hooks', ERROR) // 🟢
     .addRule('no-on-calls-in-components', ERROR) // 🟢
