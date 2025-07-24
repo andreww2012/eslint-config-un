@@ -27,6 +27,7 @@ export default {
     'intlify',
     'csstree',
     'smarttools',
+    'destr',
 
     // Technical words/terms
     'arraify',

@@ -1,6 +1,6 @@
 {
   "files": ["type-decls.d.ts"],
-  "include": ["src", "scripts"],
+  "include": ["src", "scripts", "eslint-local-rules"],
   "exclude": ["node_modules"],
 
   // Based on https://www.totaltypescript.com/tsconfig-cheat-sheet

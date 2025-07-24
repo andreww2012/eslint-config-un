@@ -1,4 +1,5 @@
 import {eslintConfig} from './src';
+import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
 
 export const foo = 'bar';
 const TEST_DIR_GLOB = ['test/**/*'];
@@ -48,12 +49,38 @@ export default eslintConfig({
     jsdoc: {
       customTags: ['knipignore'],
     },
+    eslintPlugin: {
+      files: ['eslint-local-rules/**'],
+    },
     nx: false,
     rxjs: false,
     turbo: false,
   },
 
   extraConfigs: [
+    {
+      files: ['package.json'],
+      plugins: {
+        'local-rules': {
+          rules: {
+            'optional-peer-dependency-version-should-match-installed-version':
+              optionalPeerDependencyVersionShouldMatchInstalledVersion,
+          },
+        },
+      },
+      rules: {
+        'local-rules/optional-peer-dependency-version-should-match-installed-version': [
+          2,
+          {
+            ignore: [
+              '@angular-eslint/eslint-plugin',
+              '@angular-eslint/eslint-plugin-template',
+              '@angular-eslint/template-parser',
+            ],
+          },
+        ],
+      },
+    },
     {
       files: TEST_DIR_GLOB,
       rules: {
