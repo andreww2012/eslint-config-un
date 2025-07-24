@@ -2,50 +2,54 @@
 
 ## 1.0.0
 
-- New config: `noStylisticRules` which allows to (temporarily) disable most of the stylistic rules, which can be handy if this config is added to an existing project with big codebase.
-- New config: `graphql` via [`@graphql-eslint/eslint-plugin`](https://npmjs.com/@graphql-eslint/eslint-plugin), enabled automatically if `graphql` package is installed.
-- New config: `depend` via [`eslint-plugin-depend`](https://npmjs.com/eslint-plugin-depend), **<u>disabled</u>** by default.
-- New config: `math` via [`eslint-plugin-math`](https://npmjs.com/eslint-plugin-math), enabled by default.
-- New config: `erasableSyntaxOnly` via [`eslint-plugin-erasable-syntax-only`](https://npmjs.com/eslint-plugin-erasable-syntax-only), **<u>disabled</u>** by default.
-- New config: `tanstackQuery` via [`@tanstack/eslint-plugin-query`](https://npmjs.com/@tanstack/eslint-plugin-query), enabled automatically if `@tanstack/query-core` package is installed.
-- New config: `storybook` via [`eslint-plugin-storybook`](https://npmjs.com/eslint-plugin-storybook), enabled automatically if `storybook` package is installed.
-- New config: `ava` via [`eslint-plugin-ava`](https://npmjs.com/eslint-plugin-ava), enabled automatically if `ava` package is installed.
-- New config: `testingLibrary` via [`eslint-plugin-testing-library`](https://npmjs.com/eslint-plugin-testing-library), enabled automatically if `@testing-library/dom` package is installed.
-- New config: `ember` via [`eslint-plugin-ember`](https://npmjs.com/eslint-plugin-ember), enabled automatically if `ember-source` package is installed.
-- New config: `cypress` via [`eslint-plugin-cypress`](https://npmjs.com/eslint-plugin-cypress), enabled automatically if `cypress` package is installed.
-- New config: `turbo` via [`eslint-plugin-turbo`](https://npmjs.com/eslint-plugin-turbo), enabled automatically if `turbo` package is installed.
-- New config: `noUnsanitized` via [`eslint-plugin-no-unsanitized`](https://npmjs.com/eslint-plugin-no-unsanitized), enabled by default.
-- [**BREAKING**] New config: `betterTailwind` via [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss), enabled automatically if `tailwindcss` package is installed, which replaces the old `tailwind` config (via `eslint-plugin-tailwindcss`), which is now **disabled** by default.
-- New config: `cspell` via [`@cspell/eslint-plugin`](https://npmjs.com/package/@cspell/eslint-plugin), **<u>disabled</u>** by default.
-- New config: `eslintPlugin` via [`eslint-plugin-eslint-plugin`](https://npmjs.com/eslint-plugin-eslint-plugin), **<u>disabled</u>** by default.
-- New config: `mdx` via [`eslint-plugin-mdx`](https://npmjs.com/eslint-plugin-mdx), enabled by default.
-- New config: `fileProgress` via [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress), **<u>disabled</u>** by default.
-- New config: `playwright` via [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright), enabled automatically if `playwright` package is installed.
-- New config: `youDontNeedLodashUnderscore` via [`eslint-plugin-you-dont-need-lodash-underscore`](https://npmjs.com/eslint-plugin-you-dont-need-lodash-underscore), enabled automatically if `lodash`, `lodash-es` or `lodash.*` package is installed.
-- New `react` sub-config: `youMightNotNeedAnEffect` via [`eslint-plugin-react-you-might-not-need-an-effect`](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect), enabled by default.
-- New config: `lit` via [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit), enabled automatically if `lit` package is installed. Also, a new sub-config `lit/a11y` via [`eslint-plugin-lit-a11y`](https://npmjs.com/eslint-plugin-lit-a11y) is enabled by default.
-- New config: `noOnlyTests` via [`eslint-plugin-no-only-tests`](https://npmjs.com/eslint-plugin-no-only-tests), **<u>disabled</u>** by default. Also, the following sub-configs were added: `{ava,cypress,ember,jest,playwright,testingLibrary/{dom,angular,marko,react,svelte,vue},vitest}/noOnlyTests`.
-- New config: `compat` via [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat), **<u>disabled</u>** by default.
-- New config: `mocha` via [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha), enabled automatically if `mocha` package is installed.
-- New config: `qunit` via [`eslint-plugin-qunit`](https://npmjs.com/eslint-plugin-qunit), enabled automatically if `qunit` package is installed.
-- New config: `webComponents` via [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc), **<u>disabled</u>** by default.
-- New config: `header` via [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header), **<u>disabled</u>** by default.
-- New config: `headers` via [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers), **<u>disabled</u>** by default.
-- New config: `rxjs` via [`@smarttools/eslint-plugin-rxjs`](https://npmjs.com/@smarttools/eslint-plugin-rxjs), enabled automatically if `rxjs` package is installed.
-- New config: `nx` via [`@nx/eslint-plugin`](https://npmjs.com/@nx/eslint-plugin), enabled automatically if `nx` package is installed.
+### New configs
+
+- `noStylisticRules` which allows to (temporarily) disable most of the stylistic rules, which can be handy if this config is added to an existing project with big codebase.
+- `graphql` via [`@graphql-eslint/eslint-plugin`](https://npmjs.com/@graphql-eslint/eslint-plugin), enabled automatically if `graphql` package is installed.
+- `depend` via [`eslint-plugin-depend`](https://npmjs.com/eslint-plugin-depend), **<u>disabled</u>** by default.
+- `math` via [`eslint-plugin-math`](https://npmjs.com/eslint-plugin-math), enabled by default.
+- `erasableSyntaxOnly` via [`eslint-plugin-erasable-syntax-only`](https://npmjs.com/eslint-plugin-erasable-syntax-only), **<u>disabled</u>** by default.
+- `tanstackQuery` via [`@tanstack/eslint-plugin-query`](https://npmjs.com/@tanstack/eslint-plugin-query), enabled automatically if `@tanstack/query-core` package is installed.
+- `storybook` via [`eslint-plugin-storybook`](https://npmjs.com/eslint-plugin-storybook), enabled automatically if `storybook` package is installed.
+- `ava` via [`eslint-plugin-ava`](https://npmjs.com/eslint-plugin-ava), enabled automatically if `ava` package is installed.
+- `testingLibrary` via [`eslint-plugin-testing-library`](https://npmjs.com/eslint-plugin-testing-library), enabled automatically if `@testing-library/dom` package is installed.
+- `ember` via [`eslint-plugin-ember`](https://npmjs.com/eslint-plugin-ember), enabled automatically if `ember-source` package is installed.
+- `cypress` via [`eslint-plugin-cypress`](https://npmjs.com/eslint-plugin-cypress), enabled automatically if `cypress` package is installed.
+- `turbo` via [`eslint-plugin-turbo`](https://npmjs.com/eslint-plugin-turbo), enabled automatically if `turbo` package is installed.
+- `noUnsanitized` via [`eslint-plugin-no-unsanitized`](https://npmjs.com/eslint-plugin-no-unsanitized), enabled by default.
+- [**BREAKING**] `betterTailwind` via [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss), enabled automatically if `tailwindcss` package is installed, which replaces the old `tailwind` config (via `eslint-plugin-tailwindcss`), which is now **disabled** by default.
+- `cspell` via [`@cspell/eslint-plugin`](https://npmjs.com/package/@cspell/eslint-plugin), **<u>disabled</u>** by default.
+- `eslintPlugin` via [`eslint-plugin-eslint-plugin`](https://npmjs.com/eslint-plugin-eslint-plugin), **<u>disabled</u>** by default.
+- `mdx` via [`eslint-plugin-mdx`](https://npmjs.com/eslint-plugin-mdx), enabled by default.
+- `fileProgress` via [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress), **<u>disabled</u>** by default.
+- `playwright` via [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright), enabled automatically if `playwright` package is installed.
+- `youDontNeedLodashUnderscore` via [`eslint-plugin-you-dont-need-lodash-underscore`](https://npmjs.com/eslint-plugin-you-dont-need-lodash-underscore), enabled automatically if `lodash`, `lodash-es` or `lodash.*` package is installed.
+- `lit` via [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit), enabled automatically if `lit` package is installed. Also, a new sub-config `lit/a11y` via [`eslint-plugin-lit-a11y`](https://npmjs.com/eslint-plugin-lit-a11y) is enabled by default.
+- `noOnlyTests` via [`eslint-plugin-no-only-tests`](https://npmjs.com/eslint-plugin-no-only-tests), **<u>disabled</u>** by default. Also, the following sub-configs were added: `{ava,cypress,ember,jest,playwright,testingLibrary/{dom,angular,marko,react,svelte,vue},vitest}/noOnlyTests`.
+- `compat` via [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat), **<u>disabled</u>** by default.
+- `mocha` via [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha), enabled automatically if `mocha` package is installed.
+- `qunit` via [`eslint-plugin-qunit`](https://npmjs.com/eslint-plugin-qunit), enabled automatically if `qunit` package is installed.
+- `webComponents` via [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc), **<u>disabled</u>** by default.
+- `header` via [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header), **<u>disabled</u>** by default.
+- `headers` via [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers), **<u>disabled</u>** by default.
+- `rxjs` via [`@smarttools/eslint-plugin-rxjs`](https://npmjs.com/@smarttools/eslint-plugin-rxjs), enabled automatically if `rxjs` package is installed.
+- `nx` via [`@nx/eslint-plugin`](https://npmjs.com/@nx/eslint-plugin), enabled automatically if `nx` package is installed.
+
+### Changes
+
 - [**BREAKING**] eslint-config-un package is now distributed as ESM only.
 - [**BREAKING**] Set the minimum supported Node.js version to 20.12.
-- [**BREAKING**] many plugins are now not direct dependencies of this package, but its' optional peer dependencies, for example, `@graphql-eslint/eslint-plugin`, `eslint-plugin-storybook` and `eslint-plugin-tailwindcss` to name a few.
+- [**BREAKING**] Many plugins are now not direct dependencies of this package, but its' optional peer dependencies, for example, `@graphql-eslint/eslint-plugin`, `eslint-plugin-storybook` and `eslint-plugin-tailwindcss` to name a few.
 - [**BREAKING**] You can now specify the method of disabling autofix: `prefixed` would create a plugin named `disable-autofix` and copy the rules for which the autofix is disabled. `unprefixed` would copy an entire plugin and replace the origin plugin with the copy. The default method is now `unprefixed`, which leaves full rule names unchanged. You can control the overall or per-plugin autofix disabling method via the `disableAutofixMethod` option.
 - [**BREAKING**] Removed the ability to disable rule autofix by enabling `disable-autofix/*` rules. Instead, when configuring a rule, you can now return an object and set `disableAutofix: true` in it.
 - [**BREAKING**] Removed the `errorsInsteadOfWarnings` root option in favor of `forceSeverity` that can now be set globally.
 - [**BREAKING**] Changed the prefix of [`typescript-eslint` plugin](https://npmjs.com/typescript-eslint) from `@typescript-eslint` to `ts`.
 - [**BREAKING**] **unicorn, cli** configs: [`prefer-top-level-await`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-top-level-await.md) rule is now off by default and enabled in `cli` config.
 - **ts, vue** configs: for extension rules, base rule options and severity are now smartly inherited from the corresponding base rules. Added an option to disable this behavior.
-- **packageJson** config: added a new sub-config, `publishedPackageJson`, to enforce the presence of `name` and `version` fields in published `package.json`s.
 - **packageJson** config:
   - Sort more package.json collections by default: added `resolutions`, `dependenciesMeta`, `pnpm.allowedDeprecatedVersions`, `pnpm.overrides`, `pnpm.packageExtensions`, `pnpm.patchedDependencies` and `pnpm.peerDependencyRules.allowedVersions`.
   - Added a new option `enforceAbsoluteVersion` to enforce to use or not to use absolute versions for dependencies.
+  - Added a new sub-config, `publishedPackageJson`, to enforce the presence of `name` and `version` fields in published `package.json`s
 - **markdown** config: added a new sub-config, `formatFencedCodeBlocks`, to use a patched version of [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) to lint fenced code blocks inside Markdown files. 
 - **ts** config:
   - Added a new sub-config, `sortTsconfigKeys`, to sort top-level and `compilerOptions` keys in tsconfig files.
@@ -62,7 +66,9 @@
   - Added a new option `extraMultilineCommentsStartingWithToIgnore` to control which multiline comments should be ignored by [`no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md) rule. Added `__PURE__`, `__NO_SIDE_EFFECTS__` and `vite-ignore` to the default list.
   - Added a new option `customTags` to specify custom tags to be recognized as valid JSDoc tags.
 - **casePolice** config: autofix is now disabled by default.
-- **react** config: `configTypeAwareRules` now uses `files` and `ignores` from `ts` config by default.
+- **react** config:
+  - `configTypeAwareRules` now uses `files` and `ignores` from `ts` config by default.
+  - Added a new sub-config, `youMightNotNeedAnEffect` via [`eslint-plugin-react-you-might-not-need-an-effect`](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect), enabled by default.
 - **yaml** config:
   - Added a new config to target GitHub Actions workflow files, currently only disabling [`no-empty-mapping-value`](https://ota-meshi.github.io/eslint-plugin-yml/rules/no-empty-mapping-value.html) rule.
   - Added an option to not enforce the file extension.
@@ -76,6 +82,7 @@
 - **nodeDependencies** config: added a new option `enforceAbsoluteVersion` to enforce to use or not to use absolute versions for dependencies.
 - Added a new root option, `defaultConfigsStatus`, to control what configs are enabled or disabled by default.
 - Added the ability to override any of the used plugins via `pluginsOverrides` option.
+- Exported `isInCi` helper from `ci-info` package.
 
 ### Dependencies
 

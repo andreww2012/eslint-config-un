@@ -8,3 +8,4 @@ export {DEFAULT_GLOBAL_IGNORES} from './constants';
 
 export {default as globals} from 'globals';
 export {isInEditor} from 'is-in-editor';
+export {isCI as isInCi} from 'ci-info';
