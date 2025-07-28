@@ -126,6 +126,7 @@ export const playwrightUnConfig: UnConfigFn<'playwright'> = (context) => {
     .addRule('no-unsafe-references', ERROR) // 🟢
     .addRule('no-useless-await', ERROR) // 🟡
     .addRule('no-useless-not', ERROR) // 🟡
+    .addRule('no-wait-for-navigation', ERROR) // 🟢
     .addRule('no-wait-for-selector', OFF) // 🟡
     .addRule('no-wait-for-timeout', OFF) // 🟡
     .addRule('prefer-comparison-matcher', ERROR)
@@ -148,6 +149,7 @@ export const playwrightUnConfig: UnConfigFn<'playwright'> = (context) => {
     .addRule('valid-describe-callback', ERROR) // 🟢
     .addRule('valid-expect', ERROR) // 🟢
     .addRule('valid-expect-in-promise', ERROR) // 🟢
+    .addRule('valid-test-tags', ERROR) // 🟢
     .addRule('valid-title', ERROR) // 🟢
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
