@@ -80,6 +80,7 @@ import type {TestingLibraryEslintConfigOptions} from './testing-library';
 import type {TomlEslintConfigOptions} from './toml';
 import type {TsEslintConfigOptions} from './ts';
 import type {TurboEslintConfigOptions} from './turbo';
+import type {UnEslintConfigOptions} from './un';
 import type {UnicornEslintConfigOptions} from './unicorn';
 import type {UnusedImportsEslintConfigOptions} from './unused-imports';
 import type {VitestEslintConfigOptions} from './vitest';
@@ -830,6 +831,15 @@ export interface UnConfigs {
    * @default true <=> `turbo` package is installed
    */
   turbo: TurboEslintConfigOptions;
+
+  /**
+   * Rules not included in any other plugins, provided by us and collected under `un` prefix.
+   *
+   * Used plugins:
+   * - Built-in eslint-plugin-un
+   * @default true
+   */
+  un: UnEslintConfigOptions;
 
   /**
    * Used plugin:

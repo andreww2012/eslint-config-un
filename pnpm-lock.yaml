@@ -263,6 +263,9 @@ importers:
       '@types/eslint-plugin-tailwindcss':
         specifier: 3.17.0
         version: 3.17.0
+      '@types/estree':
+        specifier: 1.0.8
+        version: 1.0.8
       '@types/node':
         specifier: 20.19.1
         version: 20.19.1

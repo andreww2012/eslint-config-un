@@ -50,7 +50,7 @@ export default eslintConfig({
       customTags: ['knipignore'],
     },
     eslintPlugin: {
-      files: ['eslint-local-rules/**'],
+      files: ['eslint-local-rules/**', 'src/plugin-un/rules/**'],
     },
     nx: false,
     rxjs: false,

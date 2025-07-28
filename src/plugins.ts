@@ -415,6 +415,7 @@ export const pluginsLoaders = {
     () => import('typescript-eslint').then((m) => m.plugin) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader('turbo', 'eslint-plugin-turbo', () => import('eslint-plugin-turbo')),
+  ...genModuleLoader('un', '', () => import('./plugin-un')),
   ...genModuleLoader('unicorn', 'eslint-plugin-unicorn', () => import('eslint-plugin-unicorn')),
   ...genModuleLoader(
     'unused-imports',

@@ -316,6 +316,7 @@ export const eslintConfigInternal = async (
   const isTomlEnabled = getIsConfigEnabled('toml', false);
   const isTurboEnabled = getIsConfigEnabled('turbo', 'turbo');
   const isTypescriptEnabled = getIsConfigEnabled('ts', 'typescript');
+  const isUnEnabled = getIsConfigEnabled('un');
   const isUnicornEnabled = getIsConfigEnabled('unicorn');
   const isUnusedImportsEnabled = getIsConfigEnabled('unusedImports');
   const isVitestEnabled = getIsConfigEnabled('vitest', 'vitest');
@@ -405,6 +406,7 @@ export const eslintConfigInternal = async (
       ts: {enabled: isTypescriptEnabled},
       turbo: {enabled: isTurboEnabled},
       unicorn: {enabled: isUnicornEnabled},
+      un: {enabled: isUnEnabled},
       unusedImports: {enabled: isUnusedImportsEnabled},
       vitest: {enabled: isVitestEnabled},
       vue: {enabled: isVueEnabled},
@@ -577,6 +579,7 @@ export const eslintConfigInternal = async (
     isQunitEnabled && import('./configs/qunit').then((m) => m.qunitUnConfig(context)),
     isRxjsEnabled && import('./configs/rxjs').then((m) => m.rxjsUnConfig(context)),
     isNxEnabled && import('./configs/nx').then((m) => m.nxUnConfig(context)),
+    isUnEnabled && import('./configs/un').then((m) => m.unUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

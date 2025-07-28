@@ -573,6 +573,9 @@ const ALL_STYLISTIC_RULES = {
   turbo: {
     // None
   },
+  un: {
+    // None
+  },
   // Won't include: no-console-spaces, prefer-array-find, prefer-array-some, prefer-math-trunc, prefer-modern-math-apis, prefer-string-starts-ends-with
   unicorn: {
     'better-regex': true,
