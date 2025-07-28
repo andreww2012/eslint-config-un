@@ -112,6 +112,15 @@ export interface PackageJsonEslintConfigOptions
     | boolean
     | 'never'
     | (GetRuleOptions<'node-dependencies', 'absolute-version'>[0] & object);
+
+  /**
+   * The list of top-level properties that won't be reported by `no-empty-fields` rule if empty.
+   *
+   * Affected rule:
+   * - [`no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md)
+   * @default `['browserslist']`
+   */
+  propertiesAllowedToBeEmpty?: string[];
 }
 
 export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) => {
@@ -123,10 +132,16 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
     enforceAbsoluteVersion: false,
     order: 'sort-package-json',
     repositoryShorthand: 'object',
+    propertiesAllowedToBeEmpty: ['browserslist'],
   } satisfies PackageJsonEslintConfigOptions);
 
-  const {configPublishedPackageJson, enforceAbsoluteVersion, order, repositoryShorthand} =
-    optionsResolved;
+  const {
+    configPublishedPackageJson,
+    enforceAbsoluteVersion,
+    order,
+    repositoryShorthand,
+    propertiesAllowedToBeEmpty,
+  } = optionsResolved;
 
   const optionsPublishedPackageJsonResolved = assignDefaults(
     configPublishedPackageJson,
@@ -169,7 +184,17 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
         },
       },
     )
-    .addRule('no-empty-fields', ERROR) // 🟢 >=0.21.0
+    .addRule(
+      'no-empty-fields',
+      ERROR,
+      propertiesAllowedToBeEmpty.length > 0
+        ? [
+            {
+              ignoreProperties: propertiesAllowedToBeEmpty, // >=0.47.0
+            },
+          ]
+        : [],
+    ) // 🟢 >=0.21.0
     .addRule('no-redundant-files', ERROR) // >=0.20.0
     .addRule('order-properties', ERROR, [{order}]) // 🟢
     .addRule('repository-shorthand', ERROR, [{form: repositoryShorthand}]) // 🟢
