@@ -128,7 +128,6 @@
   - 🟢 [`no-duplicate-in-head`](https://html-eslint.org/docs/rules/no-duplicate-in-head)
   - 🟢 [`no-empty-headings`](https://html-eslint.org/docs/rules/no-empty-headings)
   - Set `enforceTemplatedAttrValue: true` for [`quotes`](https://html-eslint.org/docs/rules/quotes) rule.
-- `@next/eslint-plugin-next`: [15.3.2 → 15.4.2](https://github.com/vercel/next.js/compare/v15.3.2...v15.4.2)
 - `@vitest/eslint-plugin`: [1.1.44 → 1.3.4](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.44...v1.3.4)
   - 🟢 (enabled) [`consistent-vitest-vi`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/consistent-vitest-vi.md)
   - 🟡 (enabled, warns) [`warn-todo`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/warn-todo.md)
@@ -227,7 +226,7 @@
 - `eslint-plugin-unicorn`: [59.0.0 → 59.0.1](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v59.0.0...v59.0.1)
 - `@eslint-react/eslint-plugin`: [1.48.5 → 1.49.0](https://github.com/Rel1cx/eslint-react/compare/v1.48.5...v1.49.0)
   - 🟢 (enabled) [`jsx-key-before-spread`](https://eslint-react.xyz/docs/rules/jsx-key-before-spread)
-- `@next/eslint-plugin-next`: [15.3.1 → 15.3.2](https://github.com/vercel/next.js/compare/v15.3.1...v15.3.2)
+- `@next/eslint-plugin-next`: [15.3.1 → 15.4.4](https://github.com/vercel/next.js/compare/v15.3.1...v15.4.4)
 - `@vitest/eslint-plugin`: [1.1.43 → 1.1.44](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.43...v1.1.44)
 - `eslint-config-prettier`: [10.1.2 → 10.1.5](https://github.com/prettier/eslint-config-prettier/compare/v10.1.2...v10.1.5)
 - `eslint-plugin-import-x`: [4.11.0 → 4.11.1](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.11.0...v4.11.1)
