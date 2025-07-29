@@ -180,7 +180,11 @@ export const eslintConfigInternal = async (
     defaultConditionOrPackageInstalled:
       | boolean
       | MaybeArray<(typeof PACKAGES_TO_GET_INFO_FOR)[number]> = true,
-    preCondition?: {condition: boolean; reason: string},
+    {
+      preCondition,
+    }: {
+      preCondition?: [condition: boolean, description: string];
+    } = {},
   ): boolean => {
     let enabledByUser: boolean | undefined;
     let enabledBySystem: boolean | undefined;
@@ -217,9 +221,10 @@ export const eslintConfigInternal = async (
       enabledBySystem ??= defaultConditionOrPackageInstalled;
       reason ??= `config is ${defaultConditionOrPackageInstalled ? 'enabled' : 'disabled'} by default`;
     }
+
     if (preCondition) {
-      enabledBySystem &&= preCondition.condition;
-      reason = [reason, preCondition.reason].filter(Boolean).join(' and ');
+      enabledBySystem &&= preCondition[0];
+      reason = `${reason} and the following condition was${enabledBySystem ? '' : styleText('redBright', ' not')} met: ${preCondition[1]}`;
     }
 
     enabledBySystem ??= false;
@@ -235,11 +240,13 @@ export const eslintConfigInternal = async (
       );
     }
 
+    const isEnabled = enabledByUser ?? enabledBySystem;
+
     debug(
-      `Config \`${styleText('blue', configName)}\` is ${enabledBySystem ? styleText('green', 'enabled') : styleText('red', 'disabled')} because ${reason}`,
+      `Config \`${styleText('blue', configName)}\` is ${isEnabled ? styleText('green', 'enabled') : styleText('red', 'disabled')} because ${reason}`,
     );
 
-    return enabledByUser ?? enabledBySystem;
+    return isEnabled;
   };
 
   const isAngularEnabled = getIsConfigEnabled('angular', '@angular/core');
@@ -304,12 +311,10 @@ export const eslintConfigInternal = async (
   const isSonarEnabled = getIsConfigEnabled('sonar');
   const isStorybookEnabled = getIsConfigEnabled('storybook', 'storybook');
   const isSvelteEnabled = getIsConfigEnabled('svelte', 'svelte', {
-    condition: eslintPluginSvelte != null,
-    reason: '`eslint-plugin-svelte` cannot be loaded',
+    preCondition: [eslintPluginSvelte != null, '`eslint-plugin-svelte` can be loaded'],
   });
   const isTailwindEnabled = getIsConfigEnabled('tailwind', false, {
-    condition: eslintPluginTailwind != null,
-    reason: '`eslint-plugin-tailwindcss` cannot be loaded',
+    preCondition: [eslintPluginTailwind != null, '`eslint-plugin-tailwindcss` can be loaded'],
   });
   const isTanstackQueryEnabled = getIsConfigEnabled('tanstackQuery', '@tanstack/query-core');
   const isTestingLibraryEnabled = getIsConfigEnabled('testingLibrary', '@testing-library/dom');
