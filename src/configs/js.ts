@@ -1,4 +1,4 @@
-import {ERROR, GLOB_TSX, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_YAML, OFF, WARNING} from '../constants';
 import {
   type BuiltinEslintRulesFixed,
   type RulesRecord,
@@ -47,7 +47,6 @@ export const jsUnConfig: UnConfigFn<
       'js',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_TSX],
         doNotIgnoreHtml: true, // TODO required?
       },
     ])
@@ -315,6 +314,16 @@ export const jsUnConfig: UnConfigFn<
       },
     ])
     .addOverrides();
+
+  configBuilder
+    ?.addConfig([
+      'js/disable-@stylistic_spaced-comment-for-yaml',
+      {
+        filesFallback: [GLOB_YAML],
+      },
+    ])
+    // Triggered on all YAML comments because they all are considered Block for whatever reason: https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581
+    .disableAnyRule('@stylistic', 'spaced-comment');
 
   return {
     configs: [configBuilder],
