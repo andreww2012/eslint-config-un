@@ -305,6 +305,15 @@ export const jsUnConfig: UnConfigFn<
     .addAnyRule('@stylistic', 'padding-line-between-statements', ERROR, [
       {blankLine: 'never', prev: 'import', next: 'import'},
     ])
+    .addOverrides();
+
+  configBuilder
+    ?.addConfig('js/@stylistic_spaced-comment', {
+      ...(optionsResolved.files?.length && {files: optionsResolved.files}),
+      // TODO possible to do anything with this?
+      // Triggered on all YAML comments because they all are considered Block for whatever reason: https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581
+      ignores: [GLOB_YAML, ...(optionsResolved.ignores || [])],
+    })
     .addAnyRule('@stylistic', 'spaced-comment', ERROR, [
       'always',
       {
@@ -312,18 +321,7 @@ export const jsUnConfig: UnConfigFn<
           balanced: true,
         },
       },
-    ])
-    .addOverrides();
-
-  configBuilder
-    ?.addConfig([
-      'js/disable-@stylistic_spaced-comment-for-yaml',
-      {
-        filesFallback: [GLOB_YAML],
-      },
-    ])
-    // Triggered on all YAML comments because they all are considered Block for whatever reason: https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581
-    .disableAnyRule('@stylistic', 'spaced-comment');
+    ]);
 
   return {
     configs: [configBuilder],
