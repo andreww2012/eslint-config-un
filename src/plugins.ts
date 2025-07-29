@@ -246,6 +246,15 @@ export const pluginsLoaders = {
     'eslint-plugin-import-x',
     () => interopDefault(import('eslint-plugin-import-x')) as unknown as Promise<EslintPlugin>,
   ),
+  ...genModuleLoader(
+    'import-zod',
+    'eslint-plugin-import-zod',
+    () =>
+      interopDefault(
+        import('eslint-plugin-import-zod'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   ...genModuleLoader('jest', 'eslint-plugin-jest', () =>
     interopDefault(import('eslint-plugin-jest')),
   ),

@@ -55,6 +55,7 @@ export default eslintConfig({
     nx: false,
     rxjs: false,
     turbo: false,
+    importZod: true,
   },
 
   extraConfigs: [

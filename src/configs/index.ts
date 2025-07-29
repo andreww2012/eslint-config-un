@@ -40,6 +40,7 @@ import type {HeaderEslintConfigOptions} from './header';
 import type {HeadersEslintConfigOptions} from './headers';
 import type {HtmlEslintConfigOptions} from './html';
 import type {ImportEslintConfigOptions} from './import';
+import type {ImportZodEslintConfigOptions} from './import-zod';
 import type {JestEslintConfigOptions} from './jest';
 import type {JsEslintConfigOptions} from './js';
 import type {JsInlineEslintConfigOptions} from './js-inline';
@@ -434,6 +435,16 @@ export interface UnConfigs {
    * @default true
    */
   import: ImportEslintConfigOptions;
+
+  /**
+   * An ESLint plugin to enforce namespace imports for zod.
+   * See [this Zod issue comment](https://github.com/colinhacks/zod/issues/4433#issuecomment-2921500831) why this might be needed.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-import-zod`](https://npmjs.com/eslint-plugin-import-zod) ([docs](https://github.com/samchungy/eslint-plugin-import-zod))
+   * @default true <=> `zod` and `next` are installed
+   */
+  importZod: ImportZodEslintConfigOptions;
 
   /**
    * Used plugin:

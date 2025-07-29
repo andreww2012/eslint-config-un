@@ -237,6 +237,9 @@ const ALL_STYLISTIC_RULES = {
     'no-useless-path-segments': true,
     order: true,
   },
+  'import-zod': {
+    // None
+  },
   jest: {
     'consistent-test-it': true,
     'no-alias-methods': true,

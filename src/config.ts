@@ -182,8 +182,10 @@ export const eslintConfigInternal = async (
       | MaybeArray<(typeof PACKAGES_TO_GET_INFO_FOR)[number]> = true,
     {
       preCondition,
+      requireAllListedPackagesToBeInstalled,
     }: {
       preCondition?: [condition: boolean, description: string];
+      requireAllListedPackagesToBeInstalled?: boolean;
     } = {},
   ): boolean => {
     let enabledByUser: boolean | undefined;
@@ -209,15 +211,34 @@ export const eslintConfigInternal = async (
     }
     if (
       typeof defaultConditionOrPackageInstalled === 'string' ||
-      Array.isArray(defaultConditionOrPackageInstalled)
+      (Array.isArray(defaultConditionOrPackageInstalled) &&
+        defaultConditionOrPackageInstalled.length > 0)
     ) {
-      arraify(defaultConditionOrPackageInstalled).some((packageName) => {
-        const isInstalled = Boolean(packagesInfo[packageName]);
-        enabledBySystem ??= isInstalled;
-        reason ??= `package \`${packageName}\` is ${isInstalled ? 'installed' : 'not installed'}`;
-        return isInstalled;
-      });
-    } else {
+      const packagesList = arraify(defaultConditionOrPackageInstalled);
+      if (requireAllListedPackagesToBeInstalled && packagesList.length > 1) {
+        const notInstalledPackages = packagesList.filter(
+          (packageName) => !packagesInfo[packageName],
+        );
+        enabledBySystem ??= notInstalledPackages.length === 0;
+        reason ??= `${
+          enabledBySystem
+            ? 'all of these packages were installed'
+            : `the following package${notInstalledPackages.length === 1 ? ' is' : 's are'} not installed`
+        }: ${(enabledBySystem ? packagesList : notInstalledPackages).map((packageName) => styleText('yellow', packageName)).join(', ')}`;
+      } else {
+        enabledBySystem ??= packagesList.some((packageName) => {
+          const isInstalled = Boolean(packagesInfo[packageName]);
+          if (isInstalled) {
+            reason ??= `package ${styleText('yellow', packageName)} is installed`;
+          }
+          return isInstalled;
+        });
+        reason ??=
+          packagesList.length > 1
+            ? `neither of these packages are installed: ${packagesList.map((packageName) => styleText('yellow', packageName)).join(', ')}`
+            : `package ${styleText('yellow', packagesList[0] || '')} is not installed`;
+      }
+    } else if (typeof defaultConditionOrPackageInstalled === 'boolean') {
       enabledBySystem ??= defaultConditionOrPackageInstalled;
       reason ??= `config is ${defaultConditionOrPackageInstalled ? 'enabled' : 'disabled'} by default`;
     }
@@ -271,6 +292,9 @@ export const eslintConfigInternal = async (
   const isFileProgressEnabled = getIsConfigEnabled('fileProgress', false);
   const isGraphqlEnabled = getIsConfigEnabled('graphql', 'graphql');
   const isImportEnabled = getIsConfigEnabled('import');
+  const isImportZodEnabled = getIsConfigEnabled('importZod', ['zod', 'next'], {
+    requireAllListedPackagesToBeInstalled: true,
+  });
   const isHeaderEnabled = getIsConfigEnabled('header', false);
   const isHeadersEnabled = getIsConfigEnabled('headers', false);
   // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
@@ -369,6 +393,7 @@ export const eslintConfigInternal = async (
       headers: {enabled: isHeadersEnabled},
       html: {enabled: isHtmlEnabled},
       import: {enabled: isImportEnabled},
+      importZod: {enabled: isImportZodEnabled},
       jest: {enabled: isJestEnabled},
       js: {enabled: isJsEnabled},
       jsInline: {enabled: isJsInlineEnabled},
@@ -585,6 +610,7 @@ export const eslintConfigInternal = async (
     isRxjsEnabled && import('./configs/rxjs').then((m) => m.rxjsUnConfig(context)),
     isNxEnabled && import('./configs/nx').then((m) => m.nxUnConfig(context)),
     isUnEnabled && import('./configs/un').then((m) => m.unUnConfig(context)),
+    isImportZodEnabled && import('./configs/import-zod').then((m) => m.importZodUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),
