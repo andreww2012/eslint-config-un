@@ -39,6 +39,7 @@
     "lint:eslint": "eslint --cache",
     "lint:eslint:fix": "nr lint:eslint --fix",
     "lint:types": "tsc --noEmit",
+    "lint:deps": "pnpm dedupe --check",
     "lint": "nr lint:types && nr format:check && nr lint:eslint",
     "lint:fix": "nr lint:eslint:fix && nr format:fix",
     "typegen": "tsx scripts/typegen.ts",
