@@ -219,6 +219,7 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
     .addRule('valid-bin', ERROR, [{enforceCase: true}]) // 🟢 >=0.37.0
     .addRule('valid-bundleDependencies', ERROR) // 🟢 >=0.44.0
     .addRule('valid-config', ERROR) // 🟢 >=0.46.0
+    .addRule('valid-cpu', ERROR) // 🟢 >=0.47.0
     .addRule('valid-license', ERROR) // 🟢 >=0.45.0
     .addRule('valid-name', ERROR) // 🟢
     .addRule('valid-repository-directory', ERROR) // 🟢
