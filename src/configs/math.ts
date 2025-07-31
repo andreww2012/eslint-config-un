@@ -48,6 +48,7 @@ export const mathUnConfig: UnConfigFn<'math'> = (context) => {
     .addRule('prefer-math-sqrt', ERROR) // 🟢 >=0.3.0
     .addRule('prefer-math-sqrt1-2', ERROR) // 🟢 >=0.4.0
     .addRule('prefer-math-sqrt2', ERROR) // 🟢 >=0.4.0
+    .addRule('prefer-math-sum-precise', OFF) // >=0.11.0
     .addRule('prefer-math-trunc', ERROR) // 🟢 >=0.4.0
     .addRule('prefer-number-epsilon', ERROR) // 🟢 >=0.5.0
     .addRule('prefer-number-is-finite', ERROR) // 🟢 >=0.4.0
