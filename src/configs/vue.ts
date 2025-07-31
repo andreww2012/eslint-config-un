@@ -633,6 +633,7 @@ export const vueUnConfig: UnConfigFn<
     .addRule('no-empty-component-block', ERROR) // >=7.0.0
     .addRule('no-import-compiler-macros', ERROR) // >=10.0.0
     .addRule('no-multiple-objects-in-class', ERROR) // >=7.0.0
+    .addRule('no-negated-v-if-condition', ERROR) // >=10.4.0
     .addRule('no-potential-component-option-typo', ERROR) // >=7.0.0
     .addRule('no-ref-object-reactivity-loss', ERROR) // >=9.17.0
     .addRule('no-required-prop-with-default', ERROR) // 3️⃣2️⃣ >=9.6.0
@@ -796,6 +797,13 @@ export const vueUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       ),
     ) // >=8.0.0
+    .addRule(
+      'no-negated-condition',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-negated-condition'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    ) // >=10.4.0
     .addRule(
       'no-restricted-syntax',
       ...getRuleUnSeverityAndOptionsFromEntry(
