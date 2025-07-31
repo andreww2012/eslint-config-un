@@ -164,6 +164,15 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
+  ...genModuleLoader(
+    '@unocss',
+    '@unocss/eslint-plugin',
+    () =>
+      interopDefault(
+        import('@unocss/eslint-plugin'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   ...genModuleLoader('astro', 'eslint-plugin-astro', () =>
     interopDefault(import('eslint-plugin-astro')),
   ),

@@ -28,6 +28,7 @@ export default {
     'csstree',
     'smarttools',
     'destr',
+    'unocss',
 
     // Technical words/terms
     'arraify',

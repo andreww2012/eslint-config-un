@@ -148,6 +148,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'rxjs',
   'nx',
   'zod',
+  'unocss',
 
   'astro',
   'vue',

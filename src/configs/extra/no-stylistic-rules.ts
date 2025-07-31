@@ -1,3 +1,4 @@
+// cspell:ignore attributify
 /* eslint perfectionist/sort-objects: "error" */
 import {type RuleNamesForPlugin, type UnConfigOptions, createConfigBuilder} from '../../eslint';
 import {ALL_RULES_PER_PLUGIN} from '../../eslint-rules.gen';
@@ -139,6 +140,10 @@ const ALL_STYLISTIC_RULES = {
   '@stylistic': markAllPluginRulesAsStylistic('@stylistic'),
   '@tanstack/query': {
     // None
+  },
+  '@unocss': {
+    order: true,
+    'order-attributify': true,
   },
   astro: {
     'prefer-class-list-directive': true,

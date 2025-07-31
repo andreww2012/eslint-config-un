@@ -307,6 +307,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | ![RxJS](./assets/devicon-rxjs.svg) `rxjs`                                             | ✅ (`rxjs` is installed) | [@smarttools/eslint-plugin-rxjs](https://npmjs.com/@smarttools/eslint-plugin-rxjs) (`rxjs`) | Since v1.0.0 |
 | ![Nx](./assets/vscode-icons-file-type-light-nx.svg) `nx`                              | ✅ (`nx` is installed) | [@nx/eslint-plugin](https://npmjs.com/@nx/eslint-plugin) (`nx`) | Since v1.0.0 |
 | `importZod`                                                                           | ✅ (`zod` and `next` are installed) | [eslint-plugin-import-zod](https://npmjs.com/eslint-plugin-import-zod) (`import-zod`) | Enforces namespace imports for `zod`<br>Since v1.0.0 | 
+| ![UnoCSS](./assets/logos-unocss.svg) `unocss`                                         | ✅ (`unocss` is installed) | [@unocss/eslint-plugin](https://npmjs.com/@unocss/eslint-plugin) (`unocss`) | Since v1.0.0 |
 
 ### Miscellaneous
 

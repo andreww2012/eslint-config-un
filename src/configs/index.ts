@@ -83,6 +83,7 @@ import type {TsEslintConfigOptions} from './ts';
 import type {TurboEslintConfigOptions} from './turbo';
 import type {UnEslintConfigOptions} from './un';
 import type {UnicornEslintConfigOptions} from './unicorn';
+import type {UnocssEslintConfigOptions} from './unocss';
 import type {UnusedImportsEslintConfigOptions} from './unused-imports';
 import type {VitestEslintConfigOptions} from './vitest';
 import type {VueEslintConfigOptions} from './vue';
@@ -858,6 +859,15 @@ export interface UnConfigs {
    * @default true
    */
   unicorn: UnicornEslintConfigOptions;
+
+  /**
+   * [UnoCSS](https://unocss.dev) specific rules.
+   *
+   * Used plugins:
+   * - [`@unocss/eslint-plugin`](https://npmjs.com/@unocss/eslint-plugin) ([docs](https://unocss.dev/integrations/eslint))
+   * @default true <=> `unocss` package is installed
+   */
+  unocss: UnocssEslintConfigOptions;
 
   /**
    * Provides an autofix to remove unused imports.
