@@ -259,8 +259,6 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('no-incorrect-string-concat', OFF) // [S3402] 💭
     .addRule('no-internal-api-use', ERROR) // [S6627] 🟢
     .addRule('no-intrusive-permissions', ERROR) // [S5604] 🟢
-    // ⚠️ ts/await-thenable`, `unicorn/no-unnecessary-await`
-    .addRule('no-invalid-await', OFF) // [S4123] 🟢💭
     // ⚠️ `regexp/no-invalid-regexp`
     .addRule('no-invalid-regexp', OFF) // [S5856] 🟢💭🔤
     .addRule('no-invariant-returns', ERROR) // [S3516] 🟢
