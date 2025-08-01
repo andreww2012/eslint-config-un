@@ -78,7 +78,7 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
     .addRule('prefer-https', ERROR)
     .addRule('require-attrs', OFF)
     .addRule('require-button-type', ERROR)
-    .addRule('require-closing-tags', ERROR, [{selfClosing: 'always'}]) // 🟢
+    .addRule('require-closing-tags', ERROR) // 🟢
     .addRule('require-doctype', ERROR) // 🟢
     .addRule('require-explicit-size', ERROR)
     .addRule('require-li-container', ERROR) // 🟢
