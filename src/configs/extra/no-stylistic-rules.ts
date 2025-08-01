@@ -682,6 +682,7 @@ const ALL_STYLISTIC_RULES = {
   },
   vue: {
     'attribute-hyphenation': true,
+    'attributes-order': true,
     'block-lang': true,
     'block-order': true,
     'component-name-in-template-casing': true,
