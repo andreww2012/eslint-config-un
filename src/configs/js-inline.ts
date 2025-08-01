@@ -129,7 +129,6 @@ export const jsInlineUnConfig: UnConfigFn<'jsInline'> = async (context) => {
           html: eslintPluginHtml,
         },
         languageOptions: {
-          sourceType: 'script',
           globals: {
             ...globals.browser,
           },
