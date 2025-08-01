@@ -31,6 +31,8 @@ type ModuleLoader<
   }>
 >;
 
+const MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP = /^Cannot find module '([^']+)'/;
+
 function genModuleLoader<T, Property extends string, N extends string>(
   property: Property,
   packageName: N,
@@ -71,6 +73,26 @@ function genModuleLoader<T, Property extends string, N extends string>(
         ignoredErrors.includes(error.code) &&
         !options?.throwIfNotFound
       ) {
+        // `eslint-plugin-vue` might be installed, but `vue-eslint-parser`, which is tried to load, might be not
+        if (
+          MODULE_NOT_FOUND_ERROR_CODES.includes(error.code) &&
+          'message' in error &&
+          typeof error.message === 'string'
+        ) {
+          const missingPackageNameMatch = error.message.match(
+            MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP,
+          );
+          const missingPackageName = missingPackageNameMatch?.[1] as ParserPrefix | undefined;
+          if (
+            missingPackageName &&
+            // eslint-disable-next-line ts/no-use-before-define
+            LOADABLE_PARSERS_NAMES.includes(missingPackageName) &&
+            !context.usedParsers.has(missingPackageName)
+          ) {
+            context.usedParsers.set(missingPackageName, []);
+          }
+        }
+
         return {module: null, packageName};
       }
       throw error;
@@ -566,4 +588,6 @@ export const parsersLoaders = {
   ),
   ...genModuleLoader('vue-eslint-parser', 'vue-eslint-parser', () => import('vue-eslint-parser')),
 } satisfies Record<string, ObjectValues<ModuleLoader<Eslint.Linter.Parser>>>;
+
 export type ParserPrefix = keyof typeof parsersLoaders;
+const LOADABLE_PARSERS_NAMES = objectKeysUnsafe(parsersLoaders);
