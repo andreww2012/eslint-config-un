@@ -402,17 +402,15 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
           : userFiles
         : fallbackFiles;
 
-    const userIgnores = configOptions.ignores || [];
-    const fallbackIgnores = internalOptions.ignoresFallback || [];
-    const ignores = [
+    const ignores = (internalOptions.includeDefaultFilesAndIgnores
+      ? configOptions.ignores
+      : null) || [
       ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
       ...(internalOptions.doNotIgnoreMdx ? [] : [GLOB_MDX]),
       ...(internalOptions.doNotIgnoreHtml ? [] : GLOB_HTML_ALL),
       ...(internalOptions.doNotIgnoreCss ? [] : [GLOB_CSS]),
       ...(internalOptions.ignoreMarkdownCodeBlocks ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS] : []),
-      ...(userIgnores.length > 0 && internalOptions.includeDefaultFilesAndIgnores
-        ? userIgnores
-        : fallbackIgnores),
+      ...(internalOptions.ignoresFallback || []),
     ];
 
     // We require the presence of `rules`:

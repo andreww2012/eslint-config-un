@@ -163,7 +163,7 @@ type Severity = 0 | 1 | 2 | 'off' | 'warn' | 'error';
 - Sub-configs are the same as Configs, but configured within Config options. All Sub-configs use `configXXX` naming convention.
 - After evaluating all the flat configs, eslint-config-un will **load only those plugins that were actually used**, unless `loadPluginsOnDemand` option is set to `false`.
 - `files` is an array of file globs to which this Config will be applied. If you specify an empty array `[]`, the Config **will be disabled**, but not its Sub-configs.
-- `ignores` is exactly the same as ESLint's `ignores`.
+- `ignores` is exactly the same as ESLint's `ignores`.  If you specify an empty array `[]`, the default ignore list won't be used.
 - `overrides`/`overridesAny` is similar to ESLint's `rules`, but with a very important advantage: you can provide a function that will be called with the rule severity and options set by eslint-config-un, which allows you to **granularly override the options** or change the severity of each rule.
 - The only difference between `overrides` and `overridesAny` is that `overridesAny` will allow any rule to be overridden (from TypeScript's stand point; technically you can pass any rule to `overrides` too), while `overrides` will only allow those rules which are tied to the config.
 - `overridesAny` will be applied **after** `overrides`.
