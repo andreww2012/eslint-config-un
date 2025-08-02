@@ -56,6 +56,8 @@ export const jsoncUnConfig: UnConfigFn<'json'> = async (context) => {
           includeDefaultFilesAndIgnores: true,
           filesFallback: JSONC_DEFAULT_FILES,
           mergeUserFilesWithFallback: !doNotMergeFilesWithDefault,
+          doNotIgnoreMarkdown: true,
+          doNotIgnoreMdx: true,
         },
       ],
       {
@@ -118,17 +120,41 @@ export const jsoncUnConfig: UnConfigFn<'json'> = async (context) => {
 
   const configBuilderJson = createConfigBuilder(context, configJson, 'jsonc');
   configBuilderJson
-    ?.addConfig(['jsonc/json', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSON]}])
+    ?.addConfig([
+      'jsonc/json',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: [GLOB_JSON],
+        doNotIgnoreMarkdown: true,
+        doNotIgnoreMdx: true,
+      },
+    ])
     .addOverrides();
 
   const configBuilderJsonc = createConfigBuilder(context, configJsonc, 'jsonc');
   configBuilderJsonc
-    ?.addConfig(['jsonc/jsonc', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSONC]}])
+    ?.addConfig([
+      'jsonc/jsonc',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: [GLOB_JSONC],
+        doNotIgnoreMarkdown: true,
+        doNotIgnoreMdx: true,
+      },
+    ])
     .addOverrides();
 
   const configBuilderJson5 = createConfigBuilder(context, configJson5, 'jsonc');
   configBuilderJson5
-    ?.addConfig(['jsonc/json5', {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_JSON5]}])
+    ?.addConfig([
+      'jsonc/json5',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: [GLOB_JSON5],
+        doNotIgnoreMarkdown: true,
+        doNotIgnoreMdx: true,
+      },
+    ])
     .addOverrides();
 
   return {
