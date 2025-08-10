@@ -212,6 +212,7 @@
   - Removed `no-invalid-await` rule.
 - `tailwind-csstree`: [0.1.2 → 0.1.3](https://github.com/humanwhocodes/tailwind-csstree/compare/tailwind-csstree-v0.1.2...tailwind-csstree-v0.1.3)
 - `svelte-eslint-parser`: [1.3.0 → 1.3.1](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.3.0...v1.3.1)
+- `@next/eslint-plugin-next`: [15.3.2 → 15.4.6](https://github.com/vercel/next.js/compare/v15.3.2...v15.4.6)
 
 ## 0.10.0
 
@@ -247,7 +248,7 @@
 - `eslint-plugin-unicorn`: [59.0.0 → 59.0.1](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v59.0.0...v59.0.1)
 - `@eslint-react/eslint-plugin`: [1.48.5 → 1.49.0](https://github.com/Rel1cx/eslint-react/compare/v1.48.5...v1.49.0)
   - 🟢 (enabled) [`jsx-key-before-spread`](https://eslint-react.xyz/docs/rules/jsx-key-before-spread)
-- `@next/eslint-plugin-next`: [15.3.1 → 15.4.4](https://github.com/vercel/next.js/compare/v15.3.1...v15.4.4)
+- `@next/eslint-plugin-next`: [15.3.1 → 15.3.2](https://github.com/vercel/next.js/compare/v15.3.1...v15.3.2)
 - `@vitest/eslint-plugin`: [1.1.43 → 1.1.44](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.43...v1.1.44)
 - `eslint-config-prettier`: [10.1.2 → 10.1.5](https://github.com/prettier/eslint-config-prettier/compare/v10.1.2...v10.1.5)
 - `eslint-plugin-import-x`: [4.11.0 → 4.11.1](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.11.0...v4.11.1)
