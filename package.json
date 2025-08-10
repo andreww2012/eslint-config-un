@@ -144,7 +144,7 @@
     "@next/eslint-plugin-next": "15.4.5",
     "@nx/eslint-plugin": "21.3.10",
     "@smarttools/eslint-plugin-rxjs": "1.0.22",
-    "@sveltejs/kit": "2.26.1",
+    "@sveltejs/kit": "2.27.3",
     "@tanstack/eslint-plugin-query": "5.83.1",
     "@types/debug": "4.1.12",
     "@types/eslint-plugin-jsx-a11y": "6.10.0",
