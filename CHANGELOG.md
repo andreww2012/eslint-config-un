@@ -211,6 +211,7 @@
 - `eslint-plugin-sonarjs`: 3.0.2 → 3.0.4
   - Removed `no-invalid-await` rule.
 - `tailwind-csstree`: [0.1.2 → 0.1.3](https://github.com/humanwhocodes/tailwind-csstree/compare/tailwind-csstree-v0.1.2...tailwind-csstree-v0.1.3)
+- `svelte-eslint-parser`: [1.3.0 → 1.3.1](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.3.0...v1.3.1)
 
 ## 0.10.0
 
