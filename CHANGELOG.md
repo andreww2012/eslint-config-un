@@ -167,7 +167,7 @@
 - `eslint-plugin-prettier`: [5.4.0 → 5.4.1](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.0...v5.4.1)
 - `eslint-plugin-qwik`: [1.13.0 → 1.15.0](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik%401.13.0...eslint-plugin-qwik%401.15.0)
 - `eslint-plugin-react-compiler`: 19.1.0-rc.1 → 19.1.0-rc.2
-- `eslint-plugin-regexp`: [2.7.0 → 2.9.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v2.7.0...v2.9.0)
+- `eslint-plugin-regexp`: [2.7.0 → 2.10.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v2.7.0...v2.10.0)
 - `eslint-plugin-svelte`: [3.5.1 → 3.11.0](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte%403.5.1...eslint-plugin-svelte%403.11.0)
   - 🟢 (enabled) [`no-top-level-browser-globals`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-top-level-browser-globals)
   - 🟢 [`no-add-event-listener`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-add-event-listener)
