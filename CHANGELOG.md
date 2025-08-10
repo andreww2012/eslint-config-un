@@ -52,8 +52,8 @@
 - **packageJson** config:
   - Sort more package.json collections by default: added `resolutions`, `dependenciesMeta`, `pnpm.allowedDeprecatedVersions`, `pnpm.overrides`, `pnpm.packageExtensions`, `pnpm.patchedDependencies` and `pnpm.peerDependencyRules.allowedVersions`.
   - Added a new option `enforceAbsoluteVersion` to enforce to use or not to use absolute versions for dependencies.
-  - Added a new sub-config, `publishedPackageJson`, to enforce the presence of `name` and `version` fields in published `package.json`s.
   - Added a new option, `propertiesAllowedToBeEmpty`, passed to [`no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md)'s [`ignoreProperties`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md#ignoreproperties), and set to `['browserslist']` by default.
+  - [`require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md) and [`require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-version.md) rules are now enabled by default, while all the other `require-*` rules are disabled, because the ones that are enabled now ignore the corresponding properties in package.json files with `"private": true`.
 - **markdown** config: added a new sub-config, `formatFencedCodeBlocks`, to use a patched version of [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) to lint fenced code blocks inside Markdown files. 
 - **ts** config:
   - Added a new sub-config, `sortTsconfigKeys`, to sort top-level and `compilerOptions` keys in tsconfig files.
@@ -177,16 +177,27 @@
 - `eslint-plugin-vue`: [10.1.0 → 10.4.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.1.0...v10.4.0)
   - 🟢 (enabled) [`no-negated-v-if-condition`](https://eslint.vuejs.org/rules/no-negated-v-if-condition.html)
   - 🟢 [`no-negated-condition`](https://eslint.vuejs.org/rules/no-negated-condition.html)
-- `eslint-plugin-package-json`: [0.31.0 → 0.47.0](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.31.0...v0.47.0)
-  - 🟢 (enabled) [`valid-author`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-author.md)
-  - 🟢 [`valid-bin`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-bin.md)
+- `eslint-plugin-package-json`: [0.31.0 → 0.52.1](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.31.0...v0.52.1)
+  - 🟢 (enabled) [`valid-bin`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-bin.md)
+  - 🟢 [`valid-author`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-author.md)
   - 🟢 [`valid-type`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-type.md)
   - 🟢 [`valid-scripts`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-scripts.md)
   - 🟢 [`valid-bundleDependencies`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-bundleDependencies.md)
-  - 🟢 [`valid-license`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-license.md)
   - 🟢 [`valid-config`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-config.md)
+  - 🟢 [`valid-license`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-license.md)
   - 🟢 [`valid-cpu`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-cpu.md)
+  - 🟢 [`valid-dependencies`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-dependencies.md)
+  - 🟢 [`valid-devDependencies`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-devDependencies.md)
+  - 🟢 [`valid-optionalDependencies`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-optionalDependencies.md)
+  - 🟢 [`valid-peerDependencies`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-peerDependencies.md)
+  - 🟢 [`valid-description`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-description.md)
   - ❓(enabled conditionally) [`require-type`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-type.md)
+  - ❓[`require-bugs`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-bugs.md)
+  - ❓[`require-bundleDependencies`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-bundleDependencies.md)
+  - ❓[`require-dependencies`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-dependencies.md)
+  - ❓[`require-devDependencies`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-devDependencies.md)
+  - ❓[`require-optionalDependencies`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-optionalDependencies.md)
+  - ❓[`require-peerDependencies`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-peerDependencies.md)
 - `eslint-plugin-jest`: [28.13.5 → 28.14.0](https://github.com/jest-community/eslint-plugin-jest/compare/v28.13.5...v28.14.0)
 - `eslint-plugin-prettier`: [5.4.1 → 5.5.0](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.1...v5.5.0)
 - `eslint-plugin-pnpm`: [0.3.1 → 1.1.0](https://github.com/antfu/pnpm-workspace-utils/compare/v0.3.1...v1.1.0)
