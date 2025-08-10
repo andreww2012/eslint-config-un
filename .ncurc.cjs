@@ -11,6 +11,7 @@ const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
  * @type {import('npm-check-updates').RunOptions}
  */
 module.exports = {
+  dep: ['prod', 'dev', 'optional'],
   filterResults: (packageName, {currentVersionSemver, upgradedVersionSemver, upgradedVersion}) => {
     const currentMajorVersion = currentVersionSemver.find((v) => 'major' in v)?.major;
     const upgradedMajorVersion =
