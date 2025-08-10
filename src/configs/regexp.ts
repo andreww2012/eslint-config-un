@@ -76,7 +76,7 @@ export const regexpUnConfig: UnConfigFn<'regexp'> = (context) => {
     .addRule('optimal-quantifier-concatenation', ERROR) // 🟢
     .addRule('prefer-escape-replacement-dollar-char', OFF)
     .addRule('prefer-predefined-assertion', ERROR) // 🟢
-    .addRule('prefer-quantifier', ERROR)
+    .addRule('prefer-quantifier', ERROR, [{allows: ['www', String.raw`\d\d`]}])
     .addRule('prefer-range', ERROR) // 🟢
     // Same (?) as `ts/prefer-regexp-exec` which is turned off by default
     .addRule('prefer-regexp-exec', OFF)
