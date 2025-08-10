@@ -137,7 +137,7 @@
   - ❓ [`prefer-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-importing-vitest-globals.md)
   - ❓ [`prefer-called-once`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-once.md)
   - ❓ [`prefer-called-times`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-times.md)
-- `eslint-plugin-de-morgan`: [1.2.1 → 1.3.0](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.1...v1.3.0)
+- `eslint-plugin-de-morgan`: [1.2.1 → 1.3.1](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.1...v1.3.1)
 - `eslint-plugin-es-x`: [8.6.2 → 9.0.0](https://github.com/eslint-community/eslint-plugin-es-x/compare/v8.6.2...v9.0.0)
   - ❓(enabled conditionally) [`no-array-fromasync`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-array-fromasync.html)
   - ❓[`no-asyncdisposablestack`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-asyncdisposablestack.html)
