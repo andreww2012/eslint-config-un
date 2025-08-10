@@ -555,7 +555,6 @@ const ALL_STYLISTIC_RULES = {
     'dot-notation': true,
     'max-params': true,
     'member-ordering': true,
-    'method-signature-style': true,
     'naming-convention': true,
     'no-confusing-non-null-assertion': true,
     'no-inferrable-types': true,
