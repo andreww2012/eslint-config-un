@@ -120,7 +120,8 @@ async function getDependencyRepoUrl(dependency: string) {
     return '';
   }
 
-  return normalizeRepoUrl(repoUrl);
+  // Non-https protocol is used: https://github.com/webpack/enhanced-resolve/blob/v5.18.3/package.json
+  return normalizeRepoUrl(`https://github.com${repoUrlParsed.pathname}`);
 }
 
 async function main() {
