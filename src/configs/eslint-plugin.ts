@@ -96,12 +96,12 @@ export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
     .addRule('no-deprecated-context-methods', ERROR) // 🟢
     .addRule('no-deprecated-report-api', ERROR) // 🟢
     // `meta.deprecated` supported since ESLint 9.21.0
-    .addRule('no-meta-replaced-by', getRuleDisallowingMetaPropertySeverity('replacedBy'))
+    .addRule('no-meta-replaced-by', getRuleDisallowingMetaPropertySeverity('replacedBy')) // 🟢(since 7.0.0)
     // `meta.defaultOptions` supported since ESLint 9.15.0
     .addRule(
       'no-meta-schema-default',
       getRuleDisallowingMetaPropertySeverity('schemaDefaultProperties'),
-    )
+    ) // 🟢(since 7.0.0)
     .addRule('no-missing-message-ids', ERROR) // 🟢
     .addRule('no-missing-placeholders', ERROR) // 🟢
     .addRule('no-property-in-node', ERROR) // 💭
@@ -114,7 +114,7 @@ export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
     .addRule('prefer-replace-text', ERROR)
     .addRule('report-message-format', ERROR, ['^[A-Z]'])
     // ESLint >=9.15.0
-    .addRule('require-meta-default-options', getRuleEnforcingMetaPropertySeverity('defaultOptions'))
+    .addRule('require-meta-default-options', getRuleEnforcingMetaPropertySeverity('defaultOptions')) // 🟢(since 7.0.0)
     .addRule(
       'require-meta-docs-description',
       getRuleEnforcingMetaPropertySeverity('docsDescription'),
@@ -133,7 +133,7 @@ export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
     .addRule(
       'require-meta-schema-description',
       getRuleEnforcingMetaPropertySeverity('schemaDescriptions'),
-    )
+    ) // 🟢(since 7.0.0)
     .addRule('require-meta-type', getRuleEnforcingMetaPropertySeverity('type', 'enforce')) // 🟢
     .addOverrides();
 
