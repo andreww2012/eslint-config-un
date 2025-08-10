@@ -6,21 +6,7 @@ import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
 import type {AST as JsonAST} from 'jsonc-eslint-parser';
 import {minVersion as minSemverVersion, eq as semverVersionsEqual} from 'semver';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import * as z from 'zod/mini';
-
-const PACKAGE_JSON_SCHEMA = z.partial(
-  z.object({
-    devDependencies: z.record(z.string(), z.string()),
-    peerDependenciesMeta: z.record(
-      z.string(),
-      z.partial(
-        z.object({
-          optional: z.boolean(),
-        }),
-      ),
-    ),
-  }),
-);
+import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 
 const RULE_OPTIONS_SCHEMA = {
   type: 'object',
@@ -48,7 +34,7 @@ const rule: Eslint.Rule.RuleModule = {
     },
   },
   create: (context) => {
-    const packageJsonParseResult = PACKAGE_JSON_SCHEMA.safeParse(destr(context.sourceCode.text));
+    const packageJsonParseResult = PackageJsonZod.safeParse(destr(context.sourceCode.text));
     const packageJson = packageJsonParseResult.data;
     if (!packageJsonParseResult.success || !packageJson) {
       return {};

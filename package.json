@@ -29,8 +29,10 @@
     "deps"
   ],
   "scripts": {
-    "u": "ncu -i -t minor && nr typegen",
-    "ua": "ncu -i && nr typegen",
+    "u:after": "nr u:info && nr typegen",
+    "u:info": "tsx scripts/updated-packages-info.ts",
+    "u": "ncu -i -t minor && nr u:after",
+    "u:a": "ncu -i && nr u:after",
     "print-peer-deps": "tsx scripts/print-peer-deps.ts",
     "spellcheck": "cspell --no-progress --no-summary .",
     "format:check": "prettier --check '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}' --log-level warn",
@@ -219,7 +221,7 @@
     "typescript": "5.9.2",
     "vue-eslint-parser": "10.2.0",
     "yaml-eslint-parser": "1.3.0",
-    "zod": "4.0.14"
+    "zod-package-json": "2.0.0"
   },
   "peerDependencies": {
     "@angular-eslint/eslint-plugin": ">=13 <21",
