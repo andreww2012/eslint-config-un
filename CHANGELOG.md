@@ -209,6 +209,7 @@
   - 🟢 [`require-module-specifiers`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/require-module-specifiers.md)
 - `eslint-plugin-sonarjs`: 3.0.2 → 3.0.4
   - Removed `no-invalid-await` rule.
+- `tailwind-csstree`: [0.1.2 → 0.1.3](https://github.com/humanwhocodes/tailwind-csstree/compare/tailwind-csstree-v0.1.2...tailwind-csstree-v0.1.3)
 
 ## 0.10.0
 

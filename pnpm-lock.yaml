@@ -191,8 +191,8 @@ importers:
         specifier: 7.7.2
         version: 7.7.2
       tailwind-csstree:
-        specifier: 0.1.2
-        version: 0.1.2
+        specifier: 0.1.3
+        version: 0.1.3
       type-fest:
         specifier: 4.41.0
         version: 4.41.0
@@ -7541,8 +7541,8 @@ packages:
     resolution: {integrity: sha512-MeQTA1r0litLUf0Rp/iisCaL8761lKAZHaimlbGK4j0HysC4PLfqygQj9srcs0m2RdtDYnF8UuYyKpbjHYp7Jw==}
     engines: {node: ^14.18.0 || >=16.0.0}
 
-  tailwind-csstree@0.1.2:
-    resolution: {integrity: sha512-SP36MjhkSGa0Yux/B863QyxljQku+WbGH5f+dqyFJXvdexemcC0Fwj/2du2DoXVkboO5Rc1Pd4i45EmFJual6w==}
+  tailwind-csstree@0.1.3:
+    resolution: {integrity: sha512-LfOT807005OVfyxAjHpOajlIgoEaE894jqjkrhONC/HqBLS8OAhhNifnNs3Y5wD26eIdf0vk1zu9gja2oI3/1Q==}
     engines: {node: '>=18.18'}
 
   tailwindcss@3.4.17:
@@ -12791,7 +12791,7 @@ snapshots:
       postcss: 8.5.6
       postcss-import: 16.1.1(postcss@8.5.6)
       synckit: 0.11.11
-      tailwind-csstree: 0.1.2
+      tailwind-csstree: 0.1.3
       tailwindcss: 3.4.17
       tsconfig-paths-webpack-plugin: 4.2.0
 
@@ -16768,7 +16768,7 @@ snapshots:
     dependencies:
       '@pkgr/core': 0.2.9
 
-  tailwind-csstree@0.1.2: {}
+  tailwind-csstree@0.1.3: {}
 
   tailwindcss@3.4.17:
     dependencies:
