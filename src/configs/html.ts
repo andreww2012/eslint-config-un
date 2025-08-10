@@ -1,3 +1,4 @@
+import type {ParserOptions as HtmlEslintParserOptions} from '@html-eslint/parser';
 import {ERROR, GLOB_HTML_ALL, OFF, WARNING} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults, interopDefault} from '../utils';
@@ -25,6 +26,19 @@ export interface HtmlEslintConfigOptions extends UnConfigOptions<'@html-eslint'>
       comments?: string[];
     };
   };
+
+  /**
+   * HTML parser options:
+   * - `templateEngineSyntax`: to configure template engine syntax to support different
+   * template engines (such as Twig or Handlebars).
+   * - `frontmatter`: tells the parser to ignore the frontmatter part if you're using one.
+   * - `rawContentTags`: the list of HTML tags for which contents should be treated as raw text.
+   *
+   * Will be assigned to `languageOptions.parserOptions` in the resulting flat config
+   * and applied to the specified `files` and `ignores`.
+   * @see https://github.com/yeonjuan/html-eslint/blob/main/docs/integrating-template-engine.md
+   */
+  parserOptions?: HtmlEslintParserOptions;
 }
 
 export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
@@ -33,7 +47,7 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.html;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies HtmlEslintConfigOptions);
 
-  const {settings: pluginSettings} = optionsResolved;
+  const {settings: pluginSettings, parserOptions} = optionsResolved;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, '@html-eslint');
 
@@ -54,6 +68,7 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
       {
         languageOptions: {
           parser: eslintParserHtml,
+          ...(parserOptions && {parserOptions}),
         },
         ...(pluginSettings && {
           settings: {

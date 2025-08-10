@@ -48,6 +48,9 @@
 - [**BREAKING**] Removed the `errorsInsteadOfWarnings` root option in favor of `forceSeverity` that can now be set globally.
 - [**BREAKING**] Changed the prefix of [`typescript-eslint` plugin](https://npmjs.com/typescript-eslint) from `@typescript-eslint` to `ts`.
 - [**BREAKING**] **unicorn, cli** configs: [`prefer-top-level-await`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-top-level-await.md) rule is now off by default and enabled in `cli` config.
+- Added a new root option, `defaultConfigsStatus`, to control what configs are enabled or disabled by default.
+- Added the ability to override any of the used plugins via `pluginsOverrides` option.
+- Exported `isInCi` helper from `ci-info` package.
 - **ts, vue** configs: for extension rules, base rule options and severity are now smartly inherited from the corresponding base rules. Added an option to disable this behavior.
 - **packageJson** config:
   - Sort more package.json collections by default: added `resolutions`, `dependenciesMeta`, `pnpm.allowedDeprecatedVersions`, `pnpm.overrides`, `pnpm.packageExtensions`, `pnpm.patchedDependencies` and `pnpm.peerDependencyRules.allowedVersions`.
@@ -84,9 +87,7 @@
 - **angular** config: you are now expected to install `@angular-eslint/eslint-plugin` and `@angular-eslint/eslint-plugin-template` packages manually and only the rules from the installed packages will be used.
 - **import** config: added a new option `allowDevDependencies` to control if dev dependencies usage will be reported and where.
 - **nodeDependencies** config: added a new option `enforceAbsoluteVersion` to enforce to use or not to use absolute versions for dependencies.
-- Added a new root option, `defaultConfigsStatus`, to control what configs are enabled or disabled by default.
-- Added the ability to override any of the used plugins via `pluginsOverrides` option.
-- Exported `isInCi` helper from `ci-info` package.
+- **html** config: added a new option `parserOptions` to configure HTML parser options.
 
 ### Dependencies
 
@@ -125,7 +126,7 @@
   - Set `checkMissingCells: true` for [`table-column-count`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/table-column-count.md) rule.
 - `eslint-plugin-import-x`: [4.11.1 → 4.16.1](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.11.1...v4.15.2)
 - `eslint-import-resolver-typescript`: [4.3.4 → 4.4.4](https://github.com/import-js/eslint-import-resolver-typescript/compare/v4.3.4...v4.4.4)
-- `@html-eslint/eslint-plugin`: [0.40.2 → 0.43.1](https://github.com/yeonjuan/html-eslint/compare/v0.40.2...v0.43.1)
+- `@html-eslint/eslint-plugin`: [0.40.2 → 0.44.0](https://github.com/yeonjuan/html-eslint/compare/v0.40.2...v0.44.0)
   - 🟢 (enabled) [`no-aria-hidden-on-focusable`](https://html-eslint.org/docs/rules/no-aria-hidden-on-focusable)
   - 🟢 [`no-duplicate-in-head`](https://html-eslint.org/docs/rules/no-duplicate-in-head)
   - 🟢 [`no-empty-headings`](https://html-eslint.org/docs/rules/no-empty-headings)
