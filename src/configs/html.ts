@@ -78,10 +78,12 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
       },
     )
     /* Category: Best Practice */
+    .addRule('max-element-depth', OFF)
     .addRule('no-duplicate-attrs', ERROR) // 🟢
     .addRule('no-duplicate-class', ERROR)
     .addRule('no-duplicate-id', ERROR) // 🟢
     .addRule('no-duplicate-in-head', ERROR) // >=0.42.0
+    .addRule('no-ineffective-attrs', ERROR) // >=0.45.0
     .addRule('no-extra-spacing-text', WARNING, [{skip: ['pre']}])
     .addRule('no-inline-styles', OFF)
     .addRule('no-nested-interactive', ERROR)
@@ -127,7 +129,6 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
     .addRule('id-naming-convention', OFF)
     .addRule('indent', OFF) // 🟢
     .addRule('lowercase', ERROR)
-    .addRule('max-element-depth', OFF)
     .addRule('no-extra-spacing-attrs', OFF) // 🟢💅
     .addRule('no-multiple-empty-lines', WARNING)
     .addRule('no-trailing-spaces', WARNING)
