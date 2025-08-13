@@ -347,6 +347,7 @@ export const eslintConfigInternal = async (
   const isTypescriptEnabled = getIsConfigEnabled('ts', 'typescript');
   const isUnEnabled = getIsConfigEnabled('un');
   const isUnicornEnabled = getIsConfigEnabled('unicorn');
+  const isUnnecessaryAbstractionsEnabled = getIsConfigEnabled('unnecessaryAbstractions');
   const isUnocssEnabled = getIsConfigEnabled('unocss', 'unocss');
   const isUnusedImportsEnabled = getIsConfigEnabled('unusedImports');
   const isVitestEnabled = getIsConfigEnabled('vitest', 'vitest');
@@ -437,6 +438,7 @@ export const eslintConfigInternal = async (
       ts: {enabled: isTypescriptEnabled},
       turbo: {enabled: isTurboEnabled},
       unicorn: {enabled: isUnicornEnabled},
+      unnecessaryAbstractions: {enabled: isUnnecessaryAbstractionsEnabled},
       unocss: {enabled: isUnocssEnabled},
       un: {enabled: isUnEnabled},
       unusedImports: {enabled: isUnusedImportsEnabled},
@@ -614,6 +616,10 @@ export const eslintConfigInternal = async (
     isUnEnabled && import('./configs/un').then((m) => m.unUnConfig(context)),
     isImportZodEnabled && import('./configs/import-zod').then((m) => m.importZodUnConfig(context)),
     isUnocssEnabled && import('./configs/unocss').then((m) => m.unocssUnConfig(context)),
+    isUnnecessaryAbstractionsEnabled &&
+      import('./configs/unnecessary-abstractions').then((m) =>
+        m.unnecessaryAbstractionsUnConfig(context),
+      ),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

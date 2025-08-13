@@ -271,6 +271,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `jsInline`                   | ✅ | [eslint-plugin-html](https://npmjs.com/eslint-plugin-html) (`html`) | Since v0.10.0<br>For linting inlined JS in HTML files |
 | `math`                       | ✅ | [eslint-plugin-math](https://npmjs.com/eslint-plugin-math) (`math`) | Since v1.0.0 |
 | `erasableSyntaxOnly`         | ❌ | [eslint-plugin-erasable-syntax-only](https://npmjs.com/eslint-plugin-erasable-syntax-only) (`erasable-syntax-only`) | Since v1.0.0 |
+| `noUnnecessaryAbstractions`  | ✅ | [eslint-plugin-unnecessary-abstractions](https://npmjs.com/eslint-plugin-unnecessary-abstractions) (`unnecessary-abstractions`) | Since v1.0.0 |
 
 ### Libraries
 

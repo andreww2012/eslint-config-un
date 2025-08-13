@@ -154,6 +154,9 @@ importers:
       eslint-plugin-unicorn:
         specifier: 60.0.0
         version: 60.0.0(eslint@9.33.0(jiti@2.5.1))
+      eslint-plugin-unnecessary-abstractions:
+        specifier: 1.0.0
+        version: 1.0.0
       eslint-plugin-unused-imports:
         specifier: 4.1.4
         version: 4.1.4(@typescript-eslint/eslint-plugin@8.39.1(@typescript-eslint/parser@8.39.1(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2))(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2))(eslint@9.33.0(jiti@2.5.1))
@@ -4907,6 +4910,9 @@ packages:
     engines: {node: ^20.10.0 || >=21.0.0}
     peerDependencies:
       eslint: '>=9.29.0'
+
+  eslint-plugin-unnecessary-abstractions@1.0.0:
+    resolution: {integrity: sha512-Brd3EUWUl4CQxDLvFEWWDl5BblTHqd45Sf+xJsh7sBq/TzG25pQFX3e27OZJG5c5CnXGlNt7QlkHz/8JfsGNyA==}
 
   eslint-plugin-unused-imports@4.1.4:
     resolution: {integrity: sha512-YptD6IzQjDardkl0POxnnRBhU1OEePMV0nd6siHaRBbd+lyh6NAhFEobiznKU7kTsSsDeSD62Pe7kAM1b7dAZQ==}
@@ -13623,6 +13629,8 @@ snapshots:
       regjsparser: 0.12.0
       semver: 7.7.2
       strip-indent: 4.0.0
+
+  eslint-plugin-unnecessary-abstractions@1.0.0: {}
 
   eslint-plugin-unused-imports@4.1.4(@typescript-eslint/eslint-plugin@8.39.1(@typescript-eslint/parser@8.39.1(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2))(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2))(eslint@9.33.0(jiti@2.5.1)):
     dependencies:

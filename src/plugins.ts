@@ -500,6 +500,9 @@ export const pluginsLoaders = {
   ...genModuleLoader('unicorn', 'eslint-plugin-unicorn', () =>
     interopDefault(import('eslint-plugin-unicorn')),
   ),
+  ...genModuleLoader('unnecessary-abstractions', 'eslint-plugin-unnecessary-abstractions', () =>
+    interopDefault(import('eslint-plugin-unnecessary-abstractions')),
+  ),
   ...genModuleLoader('unused-imports', 'eslint-plugin-unused-imports', () =>
     interopDefault(import('eslint-plugin-unused-imports')),
   ),

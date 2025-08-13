@@ -83,6 +83,7 @@ import type {TsEslintConfigOptions} from './ts';
 import type {TurboEslintConfigOptions} from './turbo';
 import type {UnEslintConfigOptions} from './un';
 import type {UnicornEslintConfigOptions} from './unicorn';
+import type {UnnecessaryAbstractionsEslintConfigOptions} from './unnecessary-abstractions';
 import type {UnocssEslintConfigOptions} from './unocss';
 import type {UnusedImportsEslintConfigOptions} from './unused-imports';
 import type {VitestEslintConfigOptions} from './vitest';
@@ -859,6 +860,15 @@ export interface UnConfigs {
    * @default true
    */
   unicorn: UnicornEslintConfigOptions;
+
+  /**
+   * An ESLint plugin with rules to detect and prevent some unnecessary code abstractions.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-unnecessary-abstractions`](https://npmjs.com/eslint-plugin-unnecessary-abstractions) ([docs](https://github.com/personalyisus/eslint-plugin-unnecessary-abstractions#readme))
+   * @default true
+   */
+  unnecessaryAbstractions: UnnecessaryAbstractionsEslintConfigOptions;
 
   /**
    * [UnoCSS](https://unocss.dev) specific rules.

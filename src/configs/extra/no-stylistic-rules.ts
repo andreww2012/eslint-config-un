@@ -658,6 +658,9 @@ const ALL_STYLISTIC_RULES = {
     'template-indent': true,
     'text-encoding-identifier-case': true,
   },
+  'unnecessary-abstractions': {
+    // None
+  },
   'unused-imports': {
     // None
   },

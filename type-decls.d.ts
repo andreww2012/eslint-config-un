@@ -111,3 +111,9 @@ declare module 'eslint-plugin-headers' {
   declare const value: ESLint.ESLint.Plugin;
   export = value;
 }
+
+declare module 'eslint-plugin-unnecessary-abstractions' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
+  export = value;
+}

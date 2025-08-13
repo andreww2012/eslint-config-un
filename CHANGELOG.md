@@ -37,6 +37,7 @@
 - `nx` via [`@nx/eslint-plugin`](https://npmjs.com/@nx/eslint-plugin), enabled automatically if `nx` package is installed.
 - `importZod` via [`eslint-plugin-import-zod`](https://npmjs.com/eslint-plugin-import-zod), enabled automatically if both `zod` and `next` packages are installed.
 - `unocss` via [`@unocss/eslint-plugin`](https://npmjs.com/@unocss/eslint-plugin), enabled automatically if `unocss` package is installed.
+- `unnecessaryAbstractions` via [`eslint-plugin-unnecessary-abstractions`](https://npmjs.com/eslint-plugin-unnecessary-abstractions), enabled by default.
 
 ### Changes
 
