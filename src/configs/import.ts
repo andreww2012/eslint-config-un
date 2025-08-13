@@ -1,6 +1,6 @@
 import type {TypeScriptResolverOptions} from 'eslint-import-resolver-typescript';
 import type {PluginSettings} from 'eslint-plugin-import-x';
-import {ERROR, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_MARKDOWN_ALL_CODE_BLOCKS, OFF, WARNING} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {arraify, assignDefaults, interopDefault, isNonEmptyArray} from '../utils';
@@ -91,23 +91,36 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
   // 🔵 - in recommended/typescript
 
   configBuilder
-    ?.addConfig(['import', {includeDefaultFilesAndIgnores: true}], {
-      settings: {
-        ...(isTypescriptEnabled && eslintPluginImportX.configs.typescript.settings),
-        'import-x/resolver-next': [
-          // If the TS resolver goes after the node resolver, `import/no-deprecated` doesn't work
-          // TODO should report?
-          isTypescriptEnabled && createTypeScriptImportResolver(tsResolverOptions),
-          eslintPluginImportX.createNodeResolver(),
-        ].filter((v) => typeof v === 'object'),
-        ...(isTypescriptEnabled && {
-          'import-x/parsers': {
-            '@typescript-eslint/parser': ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'],
-          },
-        }),
-        ...pluginSettings,
+    ?.addConfig(
+      [
+        'import',
+        {
+          includeDefaultFilesAndIgnores: true,
+          // For some reason running this plugin on fenced code blocks takes a lot of memory
+          // (+300-500 MB when running on our codebase w/o cache as of time of writing this)
+          // TODO investigate that?
+          ignoresFallback: [GLOB_MARKDOWN_ALL_CODE_BLOCKS],
+          mergeUserIgnoresWithFallback: true,
+        },
+      ],
+      {
+        settings: {
+          ...(isTypescriptEnabled && eslintPluginImportX.configs.typescript.settings),
+          'import-x/resolver-next': [
+            // If the TS resolver goes after the node resolver, `import/no-deprecated` doesn't work
+            // TODO should report?
+            isTypescriptEnabled && createTypeScriptImportResolver(tsResolverOptions),
+            eslintPluginImportX.createNodeResolver(),
+          ].filter((v) => typeof v === 'object'),
+          ...(isTypescriptEnabled && {
+            'import-x/parsers': {
+              '@typescript-eslint/parser': ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'],
+            },
+          }),
+          ...pluginSettings,
+        },
       },
-    })
+    )
     .addRule('consistent-type-specifier-style', OFF)
     .addRule('default', ERROR) // 🟢
     .addRule('dynamic-import-chunkname', OFF)

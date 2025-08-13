@@ -357,6 +357,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
             filesFallback?: string[];
             ignoresFallback?: string[];
             mergeUserFilesWithFallback?: boolean;
+            mergeUserIgnoresWithFallback?: boolean;
 
             parser?: ParserPrefix;
 
@@ -402,8 +403,13 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
           : userFiles
         : fallbackFiles;
 
+    const userIgnores = configOptions.ignores;
+    const fallbackIgnores = internalOptions.ignoresFallback || [];
     const ignores = (internalOptions.includeDefaultFilesAndIgnores
-      ? configOptions.ignores
+      ? internalOptions.mergeUserIgnoresWithFallback &&
+        fallbackIgnores.length + (userIgnores?.length || 0) > 0
+        ? [...fallbackIgnores, ...(userIgnores || [])]
+        : userIgnores
       : null) || [
       ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
       ...(internalOptions.doNotIgnoreMdx ? [] : [GLOB_MDX]),
