@@ -214,28 +214,28 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
     }
   }
 
-  /* Processor */
-
-  const processorAllowingLintingBothMarkdownAndCodeBlocks = mergeProcessors([
-    eslintPluginMarkdown.processors.markdown,
-    processorPassThrough,
-  ]);
-
-  configBuilder?.addConfig(
-    [
-      'markdown/setup/code-blocks-processor',
-      {
-        doNotIgnoreMarkdown: true,
-        filesFallback: DEFAULT_FILES,
-      },
-    ],
-    {
-      ...(typeof lintCodeBlocks === 'object' && lintCodeBlocks),
-      processor: processorAllowingLintingBothMarkdownAndCodeBlocks,
-    },
-  );
-
   if (lintCodeBlocks) {
+    const processorAllowingLintingBothMarkdownAndCodeBlocks = mergeProcessors([
+      eslintPluginMarkdown.processors.markdown,
+      processorPassThrough,
+    ]);
+
+    configBuilder?.addConfig(
+      [
+        'markdown/setup/code-blocks-processor',
+        {
+          doNotIgnoreMarkdown: true,
+          filesFallback: DEFAULT_FILES,
+        },
+      ],
+      {
+        // TODO report
+        // eslint-disable-next-line sonarjs/no-gratuitous-expressions
+        ...(typeof lintCodeBlocks === 'object' && lintCodeBlocks),
+        processor: processorAllowingLintingBothMarkdownAndCodeBlocks,
+      },
+    );
+
     configBuilder
       ?.addConfig(
         [
