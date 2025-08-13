@@ -12,6 +12,9 @@ const RULE_OPTIONS_SCHEMA = {
     maximumStatements: {
       type: 'integer',
     },
+    onlyReportIfSingleStatement: {
+      type: 'boolean',
+    },
   },
   additionalProperties: false,
 } as const satisfies JSONSchema4;
@@ -26,6 +29,7 @@ const rule: Eslint.Rule.RuleModule = {
         'Prefer early returns over full-body conditional wrapping in function declarations.',
       url: 'https://github.com/Shopify/web-configs/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-early-return.md',
     },
+    fixable: 'code',
     schema: [RULE_OPTIONS_SCHEMA],
     messages: {
       preferEarlyReturn: 'Prefer an early return to a conditionally-wrapped function body',
@@ -34,17 +38,14 @@ const rule: Eslint.Rule.RuleModule = {
 
   create(context) {
     const options = context.options[0] as RuleOptions | undefined;
+    const {sourceCode} = context;
 
     const maxStatements: number = options?.maximumStatements ?? DEFAULT_MAXIMUM_STATEMENTS;
+    const onlyReportIfSingleStatement = options?.onlyReportIfSingleStatement ?? false;
 
     const isOffendingConsequent = (consequent: ESTree.Statement) =>
       (consequent.type === 'ExpressionStatement' && maxStatements === 0) ||
       (consequent.type === 'BlockStatement' && consequent.body.length > maxStatements);
-
-    const isOffendingIfStatement = (statement: ESTree.Statement | undefined) =>
-      statement?.type === 'IfStatement' &&
-      statement.alternate == null &&
-      isOffendingConsequent(statement.consequent);
 
     const checkFunctionBody = (
       functionNode:
@@ -52,16 +53,50 @@ const rule: Eslint.Rule.RuleModule = {
         | ESTree.FunctionExpression
         | ESTree.ArrowFunctionExpression,
     ) => {
-      const {body} = functionNode;
+      const functionBody = functionNode.body;
+      if (functionBody.type !== 'BlockStatement') {
+        return;
+      }
 
+      const bodyStatements = functionBody.body;
+      const lastBodyStatement = bodyStatements.at(-1);
       if (
-        body.type === 'BlockStatement' &&
-        body.body.length === 1 &&
-        isOffendingIfStatement(body.body[0])
+        lastBodyStatement &&
+        // eslint-disable-next-line de-morgan/no-negated-conjunction
+        !(onlyReportIfSingleStatement && bodyStatements.length > 1) &&
+        lastBodyStatement.type === 'IfStatement' &&
+        lastBodyStatement.alternate == null &&
+        isOffendingConsequent(lastBodyStatement.consequent)
       ) {
         context.report({
-          node: body,
+          node: lastBodyStatement,
           messageId: 'preferEarlyReturn',
+          fix: (fixer) => {
+            const conditionText = sourceCode.getText(lastBodyStatement.test);
+            const consequentText = sourceCode.getText(lastBodyStatement.consequent);
+
+            const indent = ' '.repeat(lastBodyStatement.loc?.start.column || 0);
+
+            const consequentIndentLength = consequentText.match(/^\s+/m)?.[0]?.length || 0;
+            const indentInsideConsequent = ' '.repeat(
+              Math.max(0, consequentIndentLength - indent.length),
+            );
+
+            const expressionsAfterConditionText = consequentText
+              .slice(1, -1) // strip braces
+              .trim()
+              .split('\n')
+              .map((line) => `${indent}${line.trim()}`)
+              .join('\n');
+
+            return fixer.replaceText(
+              lastBodyStatement,
+              `if (!(${conditionText})) {
+${indent}${indentInsideConsequent}return;
+${indent}}
+${expressionsAfterConditionText}`,
+            );
+          },
         });
       }
     };
