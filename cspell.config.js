@@ -29,6 +29,7 @@ export default {
     'smarttools',
     'destr',
     'unocss',
+    'attw',
 
     // Technical words/terms
     'arraify',
