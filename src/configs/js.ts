@@ -299,7 +299,8 @@ export const jsUnConfig: UnConfigFn<
       'single', // Doesn't matter since `ignoreStringLiterals` is true - BUT will be used in fixes
       {
         ignoreStringLiterals: true,
-        avoidEscape: true, // TODO Doesn't have any effect `ignoreStringLiterals` is true - should propose auto-fix?
+        avoidEscape: true,
+        allowTemplateLiterals: 'avoidEscape',
       },
     ]) // 🟠
     .addAnyRule('@stylistic', 'padding-line-between-statements', ERROR, [
