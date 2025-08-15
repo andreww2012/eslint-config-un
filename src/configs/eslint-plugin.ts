@@ -112,7 +112,7 @@ export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
     .addRule('prefer-object-rule', ERROR) // 🟢
     .addRule('prefer-placeholders', ERROR)
     .addRule('prefer-replace-text', ERROR)
-    .addRule('report-message-format', ERROR, ['^[A-Z]'])
+    .addRule('report-message-format', ERROR, [`^[A-Z'"\`{]`])
     // ESLint >=9.15.0
     .addRule('require-meta-default-options', getRuleEnforcingMetaPropertySeverity('defaultOptions')) // 🟢(since 7.0.0)
     .addRule(
