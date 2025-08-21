@@ -5,6 +5,7 @@ import {
   GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
   GLOB_MDX_SUPPORTED_CODE_BLOCKS,
   GLOB_TSX,
+  GLOB_TS_X_EXTENSION,
   OFF,
   WARNING,
 } from '../constants';
@@ -1140,7 +1141,7 @@ export const tsUnConfig: UnConfigFn<
   const configBuilderDts = createConfigBuilder(context, {}, 'ts');
   configBuilderDts
     ?.addConfig('ts/dts', {
-      files: ['**/*.d.?([cm])ts'],
+      files: [`**/*.d.${GLOB_TS_X_EXTENSION}`],
     })
     .addRule('consistent-indexed-object-style', OFF)
     .addRule('method-signature-style', OFF)
