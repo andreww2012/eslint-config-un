@@ -1091,10 +1091,12 @@ export const tsUnConfig: UnConfigFn<
     ) // 🟣
     .addOverrides();
 
+  const allTypescriptFiles = [...TS_FILES_DEFAULT, ...filesNONTypeAware, ...filesTypeAware];
+
   // TODO add rules
   configBuilderNONTypeAware
     ?.addConfig('ts/disable-handled-by-ts-compiler-rules', {
-      files: [...TS_FILES_DEFAULT, ...filesNONTypeAware, ...filesTypeAware],
+      files: allTypescriptFiles,
     })
     .disableAnyRule('', 'constructor-super')
     .disableAnyRule('', 'getter-return')
@@ -1119,6 +1121,22 @@ export const tsUnConfig: UnConfigFn<
     .disableAnyRule('', 'no-unsafe-negation')
     // Does not work correctly when type-only imports are present because you can't combine such an import with a default import.
     .disableAnyRule('', 'no-duplicate-imports');
+
+  const noImplicitCoercionBaseUnEntry = getRuleUnSeverityAndOptionsFromEntry(
+    vanillaFinalFlatConfigRules['no-implicit-coercion'] ?? ERROR,
+  );
+  noImplicitCoercionBaseUnEntry[1][0] = {
+    ...noImplicitCoercionBaseUnEntry[1][0],
+    // Might be useful for transforming values to strings: `const test = `${someCondition ? 1 : 0}``
+    // This rule would suggest replacing template literal with `String` here, which breaks types
+    disallowTemplateShorthand: false,
+  };
+
+  configBuilderNONTypeAware
+    ?.addConfig('ts/overrides', {
+      files: allTypescriptFiles,
+    })
+    .addAnyRule('', 'no-implicit-coercion', ...noImplicitCoercionBaseUnEntry);
 
   const configBuilderDts = createConfigBuilder(context, {}, 'ts');
   configBuilderDts

@@ -316,7 +316,8 @@ export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
       : severityRaw) as RuleSeverity);
   return [
     severity,
-    severityOrOptionsOverride?.[1] ?? (Array.isArray(entry) ? (entry.slice(1) as Options) : []),
+    severityOrOptionsOverride?.[1] ??
+      (Array.isArray(entry) ? structuredClone(entry.slice(1) as Options) : []),
   ];
 };
 

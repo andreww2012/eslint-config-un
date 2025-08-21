@@ -89,6 +89,7 @@
 - **import** config: added a new option `allowDevDependencies` to control if dev dependencies usage will be reported and where.
 - **nodeDependencies** config: added a new option `enforceAbsoluteVersion` to enforce to use or not to use absolute versions for dependencies.
 - **html** config: added a new option `parserOptions` to configure HTML parser options.
+- **ts** config: do not set [`disallowTemplateShorthand: true`](https://eslint.org/docs/latest/rules/no-implicit-coercion#disallowtemplateshorthand) for [`no-implicit-coercion`](https://eslint.org/docs/latest/rules/no-implicit-coercion) rule in TypeScript files.
 
 ### Dependencies
 
