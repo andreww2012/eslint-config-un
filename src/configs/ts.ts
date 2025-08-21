@@ -641,7 +641,6 @@ export const tsUnConfig: UnConfigFn<
         files: files.length > 0 ? files : TS_FILES_DEFAULT,
         ignores,
         languageOptions: {
-          // @ts-expect-error small types mismatch
           parser: typescriptEslintParser,
           parserOptions: {
             extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
