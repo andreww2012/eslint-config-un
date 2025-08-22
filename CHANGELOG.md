@@ -217,6 +217,7 @@
 - `tailwind-csstree`: [0.1.2 → 0.1.3](https://github.com/humanwhocodes/tailwind-csstree/compare/tailwind-csstree-v0.1.2...tailwind-csstree-v0.1.3)
 - `svelte-eslint-parser`: [1.3.0 → 1.3.1](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.3.0...v1.3.1)
 - `@next/eslint-plugin-next`: [15.3.2 → 15.4.6](https://github.com/vercel/next.js/compare/v15.3.2...v15.4.6)
+- `eslint-plugin-unused-imports`: 4.1.4 → 4.2.0
 
 ## 0.10.0
 
