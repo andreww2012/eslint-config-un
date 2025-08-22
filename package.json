@@ -47,7 +47,7 @@
     "typegen": "tsx scripts/typegen.ts",
     "knip": "knip --no-progress",
     "build:code": "tsdown --clean",
-    "build:code:test": "tsdown --silent --out-dir temp/dist",
+    "build:code:test": "tsdown --out-dir temp/dist",
     "build": "nr typegen && nr build:code",
     "test": "nr typegen && nr knip && nr spellcheck && nr lint && nr build:code:test",
     "lint:public-types": "npx attw --pack . --profile esm-only",
