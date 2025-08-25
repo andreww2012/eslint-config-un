@@ -123,6 +123,7 @@
   - 🟢 [`no-multiple-h1`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-multiple-h1.md)
   - 🟢 [`require-alt-text`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/require-alt-text.md)
   - 🟢 [`table-column-count`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/table-column-count.md)
+  - 🔴 (not enabled) [`no-bare-urls`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-bare-urls.md)
   - 🟢 [`no-missing-link-fragments`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-link-fragments.md)
   - 🟢 [`no-reversed-media-syntax`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-reversed-media-syntax.md)
   - 🟢 [`no-unused-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-unused-definitions.md)

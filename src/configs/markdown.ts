@@ -172,10 +172,11 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
         ],
       ) // 🟢
       .addRule('heading-increment', ERROR) // 🟢
-      .addRule('no-duplicate-definitions', ERROR) // 🟢
+      .addRule('no-bare-urls', OFF) // >=6.6.0
+      .addRule('no-duplicate-definitions', ERROR) // 🟢 >=6.5.0
       .addRule('no-duplicate-headings', OFF)
-      .addRule('no-empty-definitions', ERROR) // 🟢
-      .addRule('no-empty-images', ERROR) // 🟢
+      .addRule('no-empty-definitions', ERROR) // 🟢 >=6.5.0
+      .addRule('no-empty-images', ERROR) // 🟢 >=6.5.0
       .addRule('no-empty-links', ERROR) // 🟢
       .addRule('no-html', allowHtmlTags === true ? OFF : ERROR, [
         {
@@ -186,15 +187,15 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
         },
       ])
       .addRule('no-invalid-label-refs', ERROR) // 🟢
-      .addRule('no-missing-atx-heading-space', ERROR, [{checkClosedHeadings: true}]) // 🟢
+      .addRule('no-missing-atx-heading-space', ERROR, [{checkClosedHeadings: true}]) // 🟢 >=6.5.0
       .addRule('no-missing-label-refs', ERROR) // 🟢
-      .addRule('no-missing-link-fragments', ERROR) // 🟢
-      .addRule('no-multiple-h1', ERROR, [{frontmatterTitle: ''}]) // 🟢
-      .addRule('no-reversed-media-syntax', ERROR) // 🟢
+      .addRule('no-missing-link-fragments', ERROR) // 🟢 >=6.6.0
+      .addRule('no-multiple-h1', ERROR, [{frontmatterTitle: ''}]) // 🟢 >=6.5.0
+      .addRule('no-reversed-media-syntax', ERROR) // 🟢 >=6.6.0
       .addRule('no-space-in-emphasis', ERROR) // 🟢 >=7.2.0
-      .addRule('no-unused-definitions', ERROR) // 🟢
-      .addRule('require-alt-text', ERROR) // 🟢
-      .addRule('table-column-count', ERROR, [{checkMissingCells: true}]) // 🟢
+      .addRule('no-unused-definitions', ERROR) // 🟢 >=7.0.0
+      .addRule('require-alt-text', ERROR) // 🟢 >=6.5.0
+      .addRule('table-column-count', ERROR, [{checkMissingCells: true}]) // 🟢 >=6.5.0
       .addOverrides();
 
     if (Array.isArray(language)) {
