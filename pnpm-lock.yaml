@@ -381,8 +381,8 @@ importers:
         specifier: 8.2.5
         version: 8.2.5(eslint@9.33.0(jiti@2.5.1))
       eslint-plugin-qwik:
-        specifier: 1.15.0
-        version: 1.15.0(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2)
+        specifier: 1.16.0
+        version: 1.16.0(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2)
       eslint-plugin-react:
         specifier: 7.37.5
         version: 7.37.5(eslint@9.33.0(jiti@2.5.1))
@@ -4822,8 +4822,8 @@ packages:
     resolution: {integrity: sha512-qr7RJCYImKQjB+39q4q46i1l7p1V3joHzBE5CAYfxn5tfVFjrnjn/tw7q/kDyweU9kAIcLul0Dx/KWVUCb3BgA==}
     engines: {node: ^16.0.0 || ^18.0.0 || >=20.0.0}
 
-  eslint-plugin-qwik@1.15.0:
-    resolution: {integrity: sha512-teDkSl0N/2vDCYK1LKfagnbE0A1RCV00tMekitVX6sfrfpM/nJ199Kyco5nrgp6qvhLJgFXsRBXGEEobPgn2jA==}
+  eslint-plugin-qwik@1.16.0:
+    resolution: {integrity: sha512-rQ2tYU20fJW8m7cc3zbBpng3BEdGNKNqonvgaRfLR6KymrPEjDsmusWUuTaisE/60/UJ6LW0eggJNo2BUCjY/A==}
     engines: {node: '>=16.8.0 <18.0.0 || >=18.11'}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
@@ -13481,9 +13481,9 @@ snapshots:
     transitivePeerDependencies:
       - eslint
 
-  eslint-plugin-qwik@1.15.0(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2):
+  eslint-plugin-qwik@1.16.0(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2):
     dependencies:
-      '@typescript-eslint/utils': 8.38.0(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2)
+      '@typescript-eslint/utils': 8.40.0(eslint@9.33.0(jiti@2.5.1))(typescript@5.9.2)
       eslint: 9.33.0(jiti@2.5.1)
       jsx-ast-utils: 3.3.5
     transitivePeerDependencies:
