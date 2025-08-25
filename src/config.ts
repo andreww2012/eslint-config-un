@@ -688,6 +688,8 @@ export const eslintConfigInternal = async (
       interopDefault(import('eslint-config-prettier')).then((eslintConfigPrettier) => ({
         name: genFlatConfigEntryName('eslint-config-prettier'),
         rules: Object.fromEntries(
+          // eslint-disable-next-line ts/ban-ts-comment
+          // @ts-ignore "Expression produces a union type that is too complex to represent" only in tsgo, see https://github.com/microsoft/typescript-go/issues/1100
           Object.entries(eslintConfigPrettier.rules).filter(
             ([k]) => !RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER.has(k),
           ),

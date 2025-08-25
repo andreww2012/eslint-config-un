@@ -30,6 +30,7 @@ export default {
     'destr',
     'unocss',
     'attw',
+    'tsgo',
 
     // Technical words/terms
     'arraify',

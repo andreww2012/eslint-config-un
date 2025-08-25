@@ -27,4 +27,5 @@
 
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "cSpell.enabled": true,
+  "typescript.experimental.useTsgo": true,
 }
