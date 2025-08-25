@@ -182,7 +182,7 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
           ]
         : [],
     ) // 🟢 >=0.21.0
-    .addRule('no-redundant-files', ERROR) // >=0.20.0
+    .addRule('no-redundant-files', ERROR) // 🟢 >=0.20.0
     .addRule('order-properties', ERROR, [{order}]) // 🟢
     .addRule('repository-shorthand', ERROR, [{form: repositoryShorthand}]) // 🟢
     .addRule('require-author', OFF) // >=0.22.0
