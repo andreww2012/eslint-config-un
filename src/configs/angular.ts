@@ -602,6 +602,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
       ...getAngularEslintTemplatePluginRuleSeverity('no-distracting-elements', a11yRulesSeverity),
     ) // [all] ♿
     .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-duplicate-attributes', ERROR)) // [all]
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-empty-control-flow', ERROR)) // [>=20.2]
     .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-inline-styles', OFF)) // [>=14]
     .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-interpolation-in-attributes', ERROR)) // [>=15]
     .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-negated-async', ERROR)) // 🟢[all]
