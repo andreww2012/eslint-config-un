@@ -283,8 +283,6 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('no-nested-switch', OFF) // [S1821]
     // ⚠️ Seems too restrictive for me
     .addRule('no-nested-template-literals', OFF) // [S4624] 🟢
-    // ⚠️ `no-unreachable-loop`
-    .addRule('no-one-iteration-loop', OFF) // [S1751] 🟢
     .addRule('no-os-command-from-path', ERROR) // [S4036] 🟢 📦 `node:child_process`
     .addRule('no-parameter-reassignment', ERROR) // [S1226] 🟢
     // ⚠️ `no-new-wrappers`
