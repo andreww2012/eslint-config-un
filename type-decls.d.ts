@@ -117,3 +117,9 @@ declare module 'eslint-plugin-unnecessary-abstractions' {
   declare const value: ESLint.ESLint.Plugin;
   export = value;
 }
+
+declare module 'eslint-plugin-jsx-a11y-x' {
+  import type ESLint from 'eslint';
+  declare const value: ESLint.ESLint.Plugin;
+  export = value;
+}

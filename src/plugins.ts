@@ -313,8 +313,8 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
-  ...genModuleLoader('jsx-a11y', 'eslint-plugin-jsx-a11y', () =>
-    interopDefault(import('eslint-plugin-jsx-a11y')),
+  ...genModuleLoader('jsx-a11y', 'eslint-plugin-jsx-a11y-x', () =>
+    interopDefault(import('eslint-plugin-jsx-a11y-x')),
   ),
   ...genModuleLoader('markdown', '@eslint/markdown', () =>
     interopDefault(import('@eslint/markdown')),

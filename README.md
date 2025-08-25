@@ -246,7 +246,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | ![MDX](./assets/vscode-icons-file-type-mdx.svg) `mdx`                             | ✅ | [eslint-plugin-mdx](https://npmjs.com/eslint-plugin-mdx) (`mdx`) | Since v1.0.0<br>Configured to also lint fenced code blocks inside .mdx files |
 | ![CSS](./assets/devicon-css3.svg) `css`                                           | ✅ (unless `stylelint` is installed) | [@eslint/css](https://npmjs.com/package/@eslint/css) (`css`) | Since v0.7.0 |
 | ![CSS](./assets/devicon-css3.svg) `cssInJs`                                       | ✅ | [eslint-plugin-css](https://npmjs.com/eslint-plugin-css) (`css-in-js`) | Since v0.2.0<br>Lints inlined CSS |
-| `jsxA11y`                                                                         | ✅ | [eslint-plugin-jsx-a11y](https://npmjs.com/eslint-plugin-jsx-a11y) (`jsx-a11y`) | Since v0.8.0 |
+| `jsxA11y`                                                                         | ✅ | [eslint-plugin-jsx-a11y-x](https://npmjs.com/eslint-plugin-jsx-a11y-x) (`jsx-a11y`) | Since v1.0.0<br>Since v0.8.0 and until v1.0.0, [eslint-plugin-jsx-a11y](https://npmjs.com/eslint-plugin-jsx-a11y) was used |
 | ![YAML](./assets/devicon-yaml.svg) `yaml`                                         | ❌ | [eslint-plugin-yaml](https://npmjs.com/eslint-plugin-yaml) (`yaml`) | Since v0.1.0 |
 | ![JSON](./assets/devicon-json.svg) `jsonc`                                        | ❌ | [eslint-plugin-jsonc](https://npmjs.com/eslint-plugin-jsonc) (`jsonc`) | Since v0.1.4<br>Supports JSON, JSON5, JSONC |
 | `jsonc/json`                                                                      | ❌ | ^ | Config exclusively for `.json` files, does nothing by default |
@@ -400,12 +400,13 @@ eslint-config-un provides the ability to change any registered plugin prefix. Ad
 
 #### Default renames
 
-| Plugin                                                               | Suggested prefix     | Our prefix  | Reason                                                                                                               |
-| -------------------------------------------------------------------- | -------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------- |
-| [`typescript-eslint`](https://npmjs.com/typescript-eslint)           | `@typescript-eslint` | `ts`        | More concise and convenient to use                                                                                   |
-| [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) | `import-x`           | `import`    | This plugin is a fork and is meant to replace the original plugin with `import` prefix                               |
-| [`eslint-plugin-n`](https://npmjs.com/eslint-plugin-n)               | `n`                  | `node`      | Same ^                                                                                                               |
-| [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css)           | `css`                | `css-in-js` | Conflicts with [`@eslint/css`](https://npmjs.com/package/@eslint/css) and our name better captures the essence of the plugin |
+| Plugin                                                                   | Suggested prefix     | Our prefix  | Reason                                                                                                                       |
+| ------------------------------------------------------------------------ | -------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| [`typescript-eslint`](https://npmjs.com/typescript-eslint)               | `@typescript-eslint` | `ts`        | More concise and convenient to use                                                                                           |
+| [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x)     | `import-x`           | `import`    | This plugin is a fork and is meant to replace the original plugin with `import` prefix                                       |
+| [`eslint-plugin-n`](https://npmjs.com/eslint-plugin-n)                   | `n`                  | `node`      | Same ^                                                                                                                       |
+| [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css)               | `css`                | `css-in-js` | Conflicts with [`@eslint/css`](https://npmjs.com/package/@eslint/css) and our name better captures the essence of the plugin |
+| [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x) | `jsx-a11y-x`         | `jsx-a11y`  | This plugin is a fork and is meant to replace the original plugin with `jsx-a11y` prefix                                     |
 
 <!-- eslint-disable-next-line markdown/no-missing-label-refs -->
 > [!NOTE]

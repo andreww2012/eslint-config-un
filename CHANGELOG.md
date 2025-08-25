@@ -49,7 +49,8 @@
 - [**BREAKING**] Removed the `errorsInsteadOfWarnings` root option in favor of `forceSeverity` that can now be set globally.
 - [**BREAKING**] Changed the prefix of [`typescript-eslint` plugin](https://npmjs.com/typescript-eslint) from `@typescript-eslint` to `ts`.
 - [**BREAKING**] **unicorn, cli** configs: [`prefer-top-level-await`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-top-level-await.md) rule is now off by default and enabled in `cli` config.
-- Added a new root option, `defaultConfigsStatus`, to control what configs are enabled or disabled by default.
+- [**BREAKING**] Start using [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x) plugin instead of [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y) for `jsx-a11y` config as it has much less dependencies.
+- Added a new root option, `defaultConfigsStatus`, to control what configs are enabled or disabled by default. As a result, shared settings prefix has been changed from `jsx-a11y` to `jsx-a11y-x`.
 - Added the ability to override any of the used plugins via `pluginsOverrides` option.
 - Exported `isInCi` helper from `ci-info` package.
 - **ts, vue** configs: for extension rules, base rule options and severity are now smartly inherited from the corresponding base rules. Added an option to disable this behavior.
