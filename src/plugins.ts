@@ -132,32 +132,32 @@ export const pluginsLoaders = {
   ),
   ...genModuleLoader('@eslint-react', '@eslint-react/eslint-plugin', () =>
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react'] as unknown as EslintPlugin,
+      (m) => m.configs.all.plugins['@eslint-react'],
     ),
   ),
   ...genModuleLoader('@eslint-react/debug', '@eslint-react/eslint-plugin', () =>
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/debug'] as unknown as EslintPlugin,
+      (m) => m.configs.all.plugins['@eslint-react/debug'],
     ),
   ),
   ...genModuleLoader('@eslint-react/dom', '@eslint-react/eslint-plugin', () =>
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/dom'] as unknown as EslintPlugin,
+      (m) => m.configs.all.plugins['@eslint-react/dom'],
     ),
   ),
   ...genModuleLoader('@eslint-react/hooks-extra', '@eslint-react/eslint-plugin', () =>
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/hooks-extra'] as unknown as EslintPlugin,
+      (m) => m.configs.all.plugins['@eslint-react/hooks-extra'],
     ),
   ),
   ...genModuleLoader('@eslint-react/naming-convention', '@eslint-react/eslint-plugin', () =>
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/naming-convention'] as unknown as EslintPlugin,
+      (m) => m.configs.all.plugins['@eslint-react/naming-convention'],
     ),
   ),
   ...genModuleLoader('@eslint-react/web-api', '@eslint-react/eslint-plugin', () =>
     interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/web-api'] as unknown as EslintPlugin,
+      (m) => m.configs.all.plugins['@eslint-react/web-api'],
     ),
   ),
   ...genModuleLoader('@html-eslint', '@html-eslint/eslint-plugin', () =>
