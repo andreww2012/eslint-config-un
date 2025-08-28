@@ -1,4 +1,4 @@
-<!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror -->
+<!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex -->
 
 ## 1.0.0
 
@@ -150,7 +150,7 @@
   - ❓ [`prefer-called-once`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-once.md)
   - ❓ [`prefer-called-times`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-times.md)
 - `eslint-plugin-de-morgan`: [1.2.1 → 1.3.1](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.1...v1.3.1)
-- `eslint-plugin-es-x`: [8.6.2 → 9.0.0](https://github.com/eslint-community/eslint-plugin-es-x/compare/v8.6.2...v9.0.0)
+- `eslint-plugin-es-x`: [8.6.2 → 9.1.0](https://github.com/eslint-community/eslint-plugin-es-x/compare/v8.6.2...v9.1.0)
   - ❓(enabled conditionally) [`no-array-fromasync`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-array-fromasync.html)
   - ❓[`no-asyncdisposablestack`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-asyncdisposablestack.html)
   - ❓[`no-disposablestack`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-disposablestack.html)
@@ -165,6 +165,13 @@
   - 🔴 [`no-nonstandard-disposablestack-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-disposablestack-properties.html)
   - 🔴 [`no-nonstandard-disposablestack-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-disposablestack-prototype-properties.html)
   - 🔴 [`no-nonstandard-error-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-error-properties.html)
+  - ❓[`no-math-sumprecise`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-math-sumprecise.html)
+  - ❓[`no-uint8array-frombase64`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-uint8array-frombase64.html)
+  - ❓[`no-uint8array-fromhex`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-uint8array-fromhex.html)
+  - ❓[`no-uint8array-prototype-setfrombase64`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-uint8array-prototype-setfrombase64.html)
+  - ❓[`no-uint8array-prototype-setfromhex`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-uint8array-prototype-setfromhex.html)
+  - ❓[`no-uint8array-prototype-tobase64`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-uint8array-prototype-tobase64.html)
+  - ❓[`no-uint8array-prototype-tohex`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-uint8array-prototype-tohex.html)
 - `eslint-plugin-html`: [8.1.2 → 8.1.3](https://github.com/BenoitZugmeyer/eslint-plugin-html/compare/v8.1.2...v8.1.3)
 - `eslint-plugin-jest`: [28.11.0 → 29.0.1](https://github.com/jest-community/eslint-plugin-jest/compare/v28.11.0...v29.0.1)
   - 🟡 (enabled, warns) [`prefer-ending-with-an-expect`](https://github.com/jest-community/eslint-plugin-jest/blob/main/docs/rules/prefer-ending-with-an-expect.md)

@@ -1,4 +1,4 @@
-// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror
+// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex
 import {ERROR, OFF} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
@@ -11,9 +11,16 @@ interface EcmaFeatures {
     | 'asyncDisposableStack'
     | 'disposableStack'
     | 'errorIsError'
+    | 'mathSumPrecise'
     | 'suppressedError'
     | 'symbolAsyncDispose'
     | 'symbolDispose'
+    | 'uint8ArrayFromBase64'
+    | 'uint8ArrayFromHex'
+    | 'uint8ArrayPrototypeSetFromBase64'
+    | 'uint8ArrayPrototypeSetFromHex'
+    | 'uint8ArrayPrototypeToBase64'
+    | 'uint8ArrayPrototypeToHex'
     | 'usingDeclarations';
   2025:
     | 'dataviewPrototypeGetFloat16SetFloat16'
@@ -354,9 +361,19 @@ export const esUnConfig: UnConfigFn<
       .addRule('no-asyncdisposablestack', grs(2026, 'asyncDisposableStack')) // >=8.7.0
       .addRule('no-disposablestack', grs(2026, 'disposableStack')) // >=8.7.0
       .addRule('no-error-iserror', grs(2026, 'errorIsError')) // >=8.7.0
+      .addRule('no-math-sumprecise', grs(2026, 'mathSumPrecise')) // >=9.1.0
       .addRule('no-suppressederror', grs(2026, 'suppressedError')) // >=8.7.0
       .addRule('no-symbol-asyncdispose', grs(2026, 'symbolAsyncDispose')) // >=9.0.0
       .addRule('no-symbol-dispose', grs(2026, 'symbolDispose')) // >=9.0.0
+      .addRule('no-uint8array-frombase64', grs(2026, 'uint8ArrayFromBase64')) // >=9.1.0
+      .addRule('no-uint8array-fromhex', grs(2026, 'uint8ArrayFromHex')) // >=9.1.0
+      .addRule(
+        'no-uint8array-prototype-setfrombase64',
+        grs(2026, 'uint8ArrayPrototypeSetFromBase64'),
+      ) // >=9.1.0
+      .addRule('no-uint8array-prototype-setfromhex', grs(2026, 'uint8ArrayPrototypeSetFromHex')) // >=9.1.0
+      .addRule('no-uint8array-prototype-tobase64', grs(2026, 'uint8ArrayPrototypeToBase64')) // >=9.1.0
+      .addRule('no-uint8array-prototype-tohex', grs(2026, 'uint8ArrayPrototypeToHex')) // >=9.1.0
       .addRule('no-using-declarations', grs(2026, 'usingDeclarations')); // >=8.7.0
   }
   /* Category: ES2025 */
