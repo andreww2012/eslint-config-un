@@ -83,5 +83,6 @@ export default {
     'curlies',
     'unsanitized',
     'dont',
+    'uncapitalize', // TS utility type
   ],
 };

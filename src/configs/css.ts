@@ -33,6 +33,17 @@ export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
   allowedFontUnits?: Partial<
     Record<(GetRuleOptions<'css', 'relative-font-units'>[0]['allowUnits'] & {})[number], boolean>
   >;
+
+  /**
+   * CSS features that will be ignored by
+   * [`use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md).
+   * Must be unique.
+   */
+  allowedFeatures?: {
+    [K in keyof GetRuleOptions<'css', 'use-baseline'>[0] as K extends `allow${infer T}`
+      ? Uncapitalize<T>
+      : never]: GetRuleOptions<'css', 'use-baseline'>[0][K];
+  };
 }
 
 export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
@@ -45,7 +56,7 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
     tolerantMode: false,
   } satisfies CssEslintConfigOptions);
 
-  const {tolerantMode, customSyntax, allowedFontUnits} = optionsResolved;
+  const {tolerantMode, customSyntax, allowedFontUnits, allowedFeatures} = optionsResolved;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'css');
 
@@ -82,6 +93,8 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
         },
       },
     )
+    .addRule('font-family-fallbacks', WARNING) // 🟢 >= 0.11.0
+    .addRule('no-duplicate-keyframe-selectors', ERROR) // 🟢 >= 0.11.0
     .addRule('no-duplicate-imports', ERROR) // 🟢
     .addRule('no-empty-blocks', ERROR) // 🟢
     .addRule('no-important', WARNING) // 🟢 >=0.8.0
@@ -104,7 +117,13 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
     ]) // >=0.9.0
     .addRule('prefer-logical-properties', OFF) // >=0.5.0
     // We're keeping `warn` severity, see the discussion in this issue and specifically this comment https://github.com/eslint/css/issues/80#issuecomment-2787414430
-    .addRule('use-baseline', WARNING) // 🟡
+    .addRule('use-baseline', WARNING, [
+      {
+        ...(allowedFeatures?.atRules?.length && {allowAtRules: allowedFeatures.atRules}),
+        ...(allowedFeatures?.properties?.length && {allowProperties: allowedFeatures.properties}),
+        ...(allowedFeatures?.selectors?.length && {allowSelectors: allowedFeatures.selectors}),
+      },
+    ]) // 🟡
     .addRule('use-layers', OFF)
     .addOverrides();
 
