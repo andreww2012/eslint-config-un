@@ -1,5 +1,9 @@
 // @ts-check
 
+const semver = require('semver');
+
+const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set(['@typescript/native-preview']);
+
 const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
   '@types/node',
   'angular-eslint-plugin-template15',
@@ -12,14 +16,33 @@ const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
  */
 module.exports = {
   dep: ['prod', 'dev', 'optional'],
-  filterResults: (packageName, {currentVersionSemver, upgradedVersionSemver, upgradedVersion}) => {
-    const currentMajorVersion = currentVersionSemver.find((v) => 'major' in v)?.major;
-    const upgradedMajorVersion =
-      upgradedVersionSemver?.major || upgradedVersion.split('@').at(-1)?.split('.')[0];
-    // eslint-disable-next-line de-morgan/no-negated-conjunction
-    return !(
-      IGNORED_MAJOR_VERSION_TRANSITIONS.has(packageName) &&
-      currentMajorVersion !== upgradedMajorVersion
+  filterResults: (
+    packageName,
+    {currentVersion: currentVersionRaw, upgradedVersion: upgradedVersionRaw},
+  ) => {
+    const [currentVersion, upgradedVersion] = [currentVersionRaw, upgradedVersionRaw].map((v) =>
+      v.split('@').at(-1),
+    );
+    const [currentVersionSemver, upgradedVersionSemver] = [currentVersion, upgradedVersion].map(
+      (v) => semver.parse(v),
+    );
+    return (
+      // eslint-disable-next-line de-morgan/no-negated-conjunction
+      !(
+        IGNORED_MAJOR_VERSION_TRANSITIONS.has(packageName) &&
+        currentVersionSemver?.major !== upgradedVersionSemver?.major
+      ) &&
+      // eslint-disable-next-line de-morgan/no-negated-conjunction
+      !(
+        IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS.has(packageName) &&
+        currentVersionSemver &&
+        upgradedVersionSemver &&
+        currentVersionSemver.major === upgradedVersionSemver.major &&
+        currentVersionSemver.minor === upgradedVersionSemver.minor &&
+        currentVersionSemver.patch === upgradedVersionSemver.patch &&
+        JSON.stringify(currentVersionSemver.prerelease) !==
+          JSON.stringify(upgradedVersionSemver.prerelease)
+      )
     );
   },
 };
