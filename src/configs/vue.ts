@@ -680,7 +680,7 @@ export const vueUnConfig: UnConfigFn<
     .addRule('no-unused-emit-declarations', ERROR) // >=9.19.0
     .addRule('no-unused-properties', ERROR) // >=7.0.0
     .addRule('no-unused-refs', ERROR) // >=7.9.0
-    .addRule('no-use-v-else-with-v-for', ERROR) // >=9.16.0
+    .addRule('no-use-v-else-with-v-for', OFF) // >=9.16.0
     .addRule('no-useless-mustaches', ERROR) // >=7.0.0
     .addRule('no-useless-v-bind', ERROR) // >=7.0.0
     .addRule('no-v-text', OFF) // >=7.17.0
