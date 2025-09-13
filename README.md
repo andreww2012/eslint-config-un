@@ -198,7 +198,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | -------------- | ------------------------------------------- | ------------------------------------ | ----------------- |
 | ![VueJS](./assets/devicon-vuejs.svg) `vue`                                   | ✅ (`vue` is installed) | [eslint-plugin-vue](https://npmjs.com/eslint-plugin-vue) (`vue`) | - |
 | ![VueJS](./assets/devicon-vuejs.svg) `vue/a11y`                              | ✅ | [eslint-plugin-vuejs-accessibility](https://npmjs.com/eslint-plugin-vuejs-accessibility) (`vuejs-accessibility`) | - |
-| ![Pinia](./assets/logos-pinia.svg) `vue/pinia`                               | ✅ | [eslint-plugin-pinia](https://npmjs.com/eslint-plugin-pinia) (`pinia`) | - |
+| ![Pinia](./assets/logos-pinia.svg) `vue/pinia`                               | ✅ (`pinia` is installed) | [eslint-plugin-pinia](https://npmjs.com/eslint-plugin-pinia) (`pinia`) | - |
 | ![Angular](./assets/devicon-angular.svg) `angular`                           | ✅ (`@angular/core` is installed) | [@angular-eslint/eslint-plugin](https://npmjs.com/package/@angular-eslint/eslint-plugin) (`@angular-eslint`) | Since v0.78.0 |
 | ![Angular](./assets/devicon-angular.svg) `angular/template`                  | ✅ | [@angular-eslint/eslint-plugin/template](https://npmjs.com/package/@angular-eslint/eslint-plugin/template) (`@angular-eslint/template`) | - |
 | ![ReactJS](./assets/devicon-react.svg) `react`                               | ✅ (`react` is installed) | [eslint-plugin-react](https://npmjs.com/eslint-plugin-react) (`react`) | Since v0.8.0 |
