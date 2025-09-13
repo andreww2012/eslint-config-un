@@ -510,17 +510,17 @@ export const eslintConfigInternal = async (
 
   const unresolvedConfigs = Promise.all([
     globalIgnores.length > 0 && {
-      name: genFlatConfigEntryName('ignores-global'),
+      name: genFlatConfigEntryName('ignores/global'),
       ignores: globalIgnores,
     },
     (typeof optionsResolved.gitignore === 'object' || gitignoreFile) &&
       interopDefault(import('eslint-config-flat-gitignore')).then((eslintGitignore) => ({
-        name: genFlatConfigEntryName('ignores-gitignore'),
         ...(typeof optionsResolved.gitignore === 'object'
           ? eslintGitignore(optionsResolved.gitignore)
           : gitignoreFile
             ? eslintGitignore()
             : null),
+        name: genFlatConfigEntryName('ignores/gitignore'),
       })),
     {
       name: genFlatConfigEntryName('global-setup/language-options'),
