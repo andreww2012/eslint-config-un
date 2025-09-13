@@ -141,6 +141,10 @@ export type UnConfigOptions<
         PrettifyShallow<UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial<T>>>>
       >;
 
+      overridesAny?: OmitIndexSignature<
+        PrettifyShallow<UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial>>>
+      >;
+
       /**
        * Force non-zero severity of all the rules to be `error` or `warning`.
        * The severity forced here will take precedence over the severity forced on the root level.
@@ -549,6 +553,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
         Object.assign(
           ourRules,
           resolveOverrides(this.context, this.options.overrides || {}, ourRules),
+          resolveOverrides(this.context, this.options.overridesAny || {}, ourRules),
         );
         return result;
       },
