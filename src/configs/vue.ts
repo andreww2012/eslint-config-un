@@ -678,7 +678,7 @@ export const vueUnConfig: UnConfigFn<
       {version: `^${vuePackageInfo?.versions.full || vuePackageMajorVersion}`},
     ]) // >=6.1.0
     .addRule('no-unused-emit-declarations', ERROR) // >=9.19.0
-    .addRule('no-unused-properties', OFF) // >=7.0.0
+    .addRule('no-unused-properties', ERROR) // >=7.0.0
     .addRule('no-unused-refs', ERROR) // >=7.9.0
     .addRule('no-use-v-else-with-v-for', ERROR) // >=9.16.0
     .addRule('no-useless-mustaches', ERROR) // >=7.0.0
