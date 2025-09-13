@@ -822,7 +822,7 @@ export const tsUnConfig: UnConfigFn<
     .addRule('explicit-member-accessibility', OFF)
     .addRule('explicit-module-boundary-types', OFF)
     .addRule('member-ordering', OFF) // ❄️
-    .addRule('method-signature-style', ERROR)
+    .addRule('method-signature-style', ERROR, [], {disableAutofix: true})
     .addRule('no-import-type-side-effects', ERROR)
     .addRule('no-require-imports', OFF) // 🟣
     .addRule('no-unnecessary-parameter-property-assignment', ERROR)
