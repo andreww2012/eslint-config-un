@@ -31,6 +31,7 @@ export default {
     'unocss',
     'attw',
     'tsgo',
+    'tinyexec',
 
     // Technical words/terms
     'arraify',

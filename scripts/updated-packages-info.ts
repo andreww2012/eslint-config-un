@@ -4,6 +4,7 @@ import path from 'node:path';
 import {styleText} from 'node:util';
 import {destr} from 'destr';
 import {getPackageInfo} from 'local-pkg';
+import {exec} from 'tinyexec';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import ourPackageJson from '../package.json' with {type: 'json'};
 import type {UnionToIntersection} from '../src/types';
@@ -30,7 +31,13 @@ const getGitHubVersionTag = (dependency: string, version: string) =>
   PACKAGES_GIT_TAGS_PATTERNS[dependency as keyof typeof PACKAGES_GIT_TAGS_PATTERNS]?.(version) ??
   `v${version}`;
 
-for (const {dependency, repoUrl, oldVersion, newVersion} of updatedDependenciesInfo) {
+for (const {
+  dependency,
+  repoUrl,
+  oldVersion,
+  newVersion,
+  codeDiffResult,
+} of updatedDependenciesInfo) {
   if (repoUrl == null) {
     continue;
   }
@@ -39,10 +46,31 @@ for (const {dependency, repoUrl, oldVersion, newVersion} of updatedDependenciesI
     styleText('yellow', dependency),
     `${styleText('gray', oldVersion)} → ${styleText('green', newVersion)}`,
   );
-  console.log(`Repo: ${styleText('cyan', repoUrl)}`);
-  console.log(`Releases: ${styleText('cyan', `${repoUrl}/releases`)}`);
+  console.log(styleText('bold', 'Source code diff:'));
   console.log(
-    `\n\`${dependency}\`: [${oldVersion} → ${newVersion}](${repoUrl}/compare/${getGitHubVersionTag(dependency, oldVersion)}...${getGitHubVersionTag(dependency, newVersion)})\n`,
+    codeDiffResult.stdout
+      .trim()
+      .split('\n')
+      .map((line) => {
+        const formattedLine = line.startsWith('@')
+          ? styleText('cyan', line)
+          : line.startsWith('---') || line.startsWith('+++')
+            ? styleText('blue', line)
+            : line.startsWith('+')
+              ? styleText('green', line)
+              : line.startsWith('-')
+                ? styleText('red', line)
+                : line.startsWith(' ')
+                  ? line
+                  : styleText('blue', line);
+        return `  ${formattedLine}`;
+      })
+      .join('\n'),
+  );
+  console.log(`${styleText('bold', 'Repo:')} ${styleText('cyan', repoUrl)}`);
+  console.log(`${styleText('bold', 'Releases:')} ${styleText('cyan', `${repoUrl}/releases`)}`);
+  console.log(
+    `${styleText('bold', 'For changelog:')}\n\`${dependency}\`: [${oldVersion} → ${newVersion}](${repoUrl}/compare/${getGitHubVersionTag(dependency, oldVersion)}...${getGitHubVersionTag(dependency, newVersion)})`,
   );
 }
 
@@ -163,13 +191,24 @@ async function main() {
           dependency in dependenciesBeforeChanges &&
           version !== dependenciesBeforeChanges[dependency],
       )
-      .map(async ([dependency, newVersion]) => ({
-        dependency,
-        repoUrl: (await getDependencyRepoUrl(dependency)) || null,
+      .map(async ([dependency, newVersion]) => {
+        const repoUrl = (await getDependencyRepoUrl(dependency)) || null;
         // eslint-disable-next-line ts/no-non-null-assertion
-        oldVersion: dependenciesBeforeChanges[dependency]!,
-        newVersion,
-      })),
+        const oldVersion = dependenciesBeforeChanges[dependency]!;
+        const codeDiffResult = await exec('npm', [
+          'diff',
+          `--diff=${dependency}@${oldVersion}`,
+          `--diff=${dependency}@${newVersion}`,
+        ]);
+
+        return {
+          dependency,
+          repoUrl,
+          oldVersion,
+          newVersion,
+          codeDiffResult,
+        };
+      }),
   );
 
   return result;
