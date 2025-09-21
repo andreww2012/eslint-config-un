@@ -1,6 +1,6 @@
 import {ERROR, GLOB_HTML, GLOB_YAML, OFF, WARNING} from '../constants';
 import {
-  type BuiltinEslintRulesFixed,
+  type BuiltinEslintRules,
   type RulesRecord,
   type UnConfigOptions,
   createConfigBuilder,
@@ -8,7 +8,7 @@ import {
 import {assignDefaults, fetchPackageInfo, getKeysOfTruthyValues} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface JsEslintConfigOptions extends UnConfigOptions<BuiltinEslintRulesFixed> {
+export interface JsEslintConfigOptions extends UnConfigOptions<BuiltinEslintRules> {
   /**
    * Will be merged with the default value
    * @default {warn: true, error: true}

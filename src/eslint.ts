@@ -1,6 +1,5 @@
 import type Eslint from 'eslint';
-import type {ESLintRules as BuiltinEslintRulesMaybeAugmented} from 'eslint/rules';
-import {builtinRules} from 'eslint/use-at-your-own-risk';
+import {builtinRules as eslintBuiltinRules} from 'eslint/use-at-your-own-risk';
 // @ts-expect-error no typings
 import ruleComposer from 'eslint-rule-composer';
 import type {DisableAutofixMethod, UnConfigContext} from './configs';
@@ -58,23 +57,15 @@ export type UnFlagConfigEntry<T extends RulesRecord = RulesRecord> = PrettifySha
   }
 >;
 
-export type DisableAutofixPrefix = 'disable-autofix';
-export const DISABLE_AUTOFIX = 'disable-autofix' satisfies DisableAutofixPrefix;
+export const DISABLE_AUTOFIX = 'disable-autofix';
+export type DisableAutofixPrefix = typeof DISABLE_AUTOFIX;
 const DISABLE_AUTOFIX_WITH_SLASH = `${DISABLE_AUTOFIX}/`;
 
 export type AllEslintRules = OmitIndexSignature<FlatConfigEntry['rules'] & {}>;
-export type BuiltinEslintRulesFixed = OmitIndexSignature<
-  Pick<
-    AllEslintRules,
-    // Some plugins, like `eslint-plugin-svelte` may augment `Eslint.Linter.RulesRecord` type with custom rules, which we must exclude for this type
-    keyof PickKeysNotStartingWith<
-      OmitIndexSignature<BuiltinEslintRulesMaybeAugmented>,
-      `${string}/`
-    >
-  >
->;
+export type BuiltinEslintRules = PickKeysNotStartingWith<AllEslintRules, `${string}/`>;
 
 export type {RuleOptionsPerPlugin};
+
 export type RuleNamesForPlugin<P extends PluginPrefix | null> = P extends null
   ? keyof RuleOptionsPerPlugin[keyof RuleOptionsPerPlugin]
   : keyof OmitIndexSignature<RuleOptionsPerPlugin[P & keyof RuleOptionsPerPlugin]>;
@@ -97,7 +88,7 @@ export type RulesRecordPartial<P extends null | PluginPrefix | RulesRecord = Plu
           : never;
       }
     : P extends RulesRecord
-      ? FlatConfigEntry<P>['rules'] & {}
+      ? OmitIndexSignature<FlatConfigEntry<P>['rules'] & {}>
       : never;
 type UnConfigOptionsOverridesEntry<
   RuleName extends string,
@@ -137,12 +128,12 @@ export type UnConfigOptions<
   // eslint-disable-next-line ts/no-empty-object-type
   (ExtraOptions extends object ? ExtraOptions : {}) &
     FlatConfigEntryFilesOrIgnores & {
-      overrides?: OmitIndexSignature<
-        PrettifyShallow<UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial<T>>>>
+      overrides?: PrettifyShallow<
+        UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial<T>>>
       >;
 
-      overridesAny?: OmitIndexSignature<
-        PrettifyShallow<UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial>>>
+      overridesAny?: PrettifyShallow<
+        UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial>>
       >;
 
       /**
@@ -157,7 +148,7 @@ export const genFlatConfigEntryName = (name: string) => `eslint-config-un/${name
 
 export const eslintPluginVanillaRules: EslintPlugin = Object.freeze({
   // eslint-disable-next-line ts/no-deprecated
-  rules: Object.fromEntries(builtinRules.entries()),
+  rules: Object.fromEntries(eslintBuiltinRules.entries()),
 });
 
 export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
