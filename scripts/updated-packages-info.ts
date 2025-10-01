@@ -53,14 +53,14 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
         const formattedLine = line.startsWith('@')
           ? styleText('cyan', line)
           : line.startsWith('---') || line.startsWith('+++')
-            ? styleText('blue', line)
+            ? styleText('magentaBright', line)
             : line.startsWith('+')
               ? styleText('green', line)
               : line.startsWith('-')
                 ? styleText('red', line)
                 : line.startsWith(' ')
                   ? line
-                  : styleText('blue', line);
+                  : styleText('magentaBright', line);
         return `  ${formattedLine}`;
       })
       .join('\n'),
