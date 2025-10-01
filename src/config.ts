@@ -137,10 +137,8 @@ export const eslintConfigInternal = async (
     eslintPluginTailwind,
     eslintPluginSvelte,
   ] = await Promise.all([
-    Object.fromEntries(
-      await Promise.all(
-        PACKAGES_TO_GET_INFO_FOR.map(async (name) => [name, await fetchPackageInfo(name)] as const),
-      ),
+    Promise.all(
+      PACKAGES_TO_GET_INFO_FOR.map(async (name) => [name, await fetchPackageInfo(name)] as const),
     ),
     detectPackageManager(),
     fs.readFile('.gitignore', 'utf8').catch((error: unknown) => {
@@ -152,7 +150,7 @@ export const eslintConfigInternal = async (
     pluginsLoaders.tailwindcss(preUnConfigContext).then(({module}) => module),
     pluginsLoaders.svelte(preUnConfigContext).then(({module}) => module),
   ]);
-  const packagesInfo = packagesInfoRaw as UnConfigContext['packagesInfo'];
+  const packagesInfo = Object.fromEntries(packagesInfoRaw) as UnConfigContext['packagesInfo'];
 
   debug(`Detected package manager: ${usedPackageManager?.name ?? '<not detected>'}`);
   debug(`Found .gitignore file: ${gitignoreFile != null}`);
@@ -518,6 +516,7 @@ export const eslintConfigInternal = async (
 
   debug(`Globally ignored files: ${JSON.stringify(globalIgnores)}`);
 
+  // eslint-disable-next-line ts/await-thenable
   const unresolvedConfigs = Promise.all([
     globalIgnores.length > 0 && {
       name: genFlatConfigEntryName('ignores/global'),
@@ -765,28 +764,24 @@ export const eslintConfigInternal = async (
     isPlugin?: boolean;
   }[] = [];
   const [loadedPlugins] = await Promise.all([
-    Object.fromEntries(
-      (
-        await Promise.all(
-          usedPluginPrefixes.map(async (pluginPrefix) => {
-            const pluginResult = isIn(pluginPrefix, pluginsLoaders)
-              ? await pluginsLoaders[pluginPrefix](context)
-              : null;
-            const plugin = pluginResult?.module;
-            const packageToInstall = await checkIfModuleCorrectlyLoaded(pluginResult);
-            if (packageToInstall) {
-              packagesToManuallyInstallOrUpdate.push({...packageToInstall, isPlugin: true});
-            }
-            if (pluginPrefix) {
-              const isProvided = optionsResolved.pluginsOverrides?.[pluginPrefix] != null;
-              debug(
-                `Plugin \`${styleText('blue', pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginsOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
-              );
-            }
-            return plugin ? ([pluginPrefix, plugin] as const) : null;
-          }),
-        )
-      ).filter((v) => v != null),
+    Promise.all(
+      usedPluginPrefixes.map(async (pluginPrefix) => {
+        const pluginResult = isIn(pluginPrefix, pluginsLoaders)
+          ? await pluginsLoaders[pluginPrefix](context)
+          : null;
+        const plugin = pluginResult?.module;
+        const packageToInstall = await checkIfModuleCorrectlyLoaded(pluginResult);
+        if (packageToInstall) {
+          packagesToManuallyInstallOrUpdate.push({...packageToInstall, isPlugin: true});
+        }
+        if (pluginPrefix) {
+          const isProvided = optionsResolved.pluginsOverrides?.[pluginPrefix] != null;
+          debug(
+            `Plugin \`${styleText('blue', pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginsOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
+          );
+        }
+        return plugin ? ([pluginPrefix, plugin] as const) : null;
+      }),
     ),
 
     Promise.all(
@@ -848,7 +843,7 @@ ${packages
   }
 
   const allPlugins = {
-    ...loadedPlugins,
+    ...Object.fromEntries(loadedPlugins.filter((v) => v != null)),
     ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
     ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
   } satisfies Record<string, EslintPlugin> as Partial<Record<PluginPrefix, EslintPlugin>>;

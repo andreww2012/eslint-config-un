@@ -1,4 +1,3 @@
-import {execSync} from 'node:child_process';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
@@ -32,6 +31,7 @@ const getGitHubVersionTag = (dependency: string, version: string) =>
   `v${version}`;
 
 for (let i = 0; i < updatedDependenciesInfo.length; i++) {
+  // eslint-disable-next-line ts/no-non-null-assertion
   const {dependency, repoUrl, oldVersion, newVersion, codeDiffResult} = updatedDependenciesInfo[i]!;
   if (repoUrl == null) {
     continue;
@@ -83,10 +83,9 @@ async function readRootPackageJson() {
   return parsePackageJson(await fs.readFile(packageJsonPath, 'utf8'));
 }
 
-function readRootPackageJsonBeforeUncommittedChanges() {
+async function readRootPackageJsonBeforeUncommittedChanges() {
   try {
-    // eslint-disable-next-line sonarjs/no-os-command-from-path
-    return parsePackageJson(execSync('git --no-pager show HEAD:package.json', {encoding: 'utf8'}));
+    return parsePackageJson((await exec('git --no-pager show HEAD:package.json')).stdout);
   } catch {
     return null;
   }

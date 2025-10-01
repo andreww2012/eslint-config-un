@@ -115,7 +115,7 @@
   - Set `allowUnknownVariables: true` to [`no-invalid-properties`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-properties.md)
   - Depending on the installed Tailwind version, enabled v3 or v4 Tailwind syntax support.
   - Added `allowedFeatures` option to conveniently set what CSS features will be ignored by [`use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md) rule.
-- `typescript-eslint`: [8.32.0 → 8.41.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.32.0...v8.41.0)
+- `typescript-eslint`: [8.32.0 → 8.45.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.32.0...v8.45.0)
   - Set [`checkUnknown: true`](https://typescript-eslint.io/rules/no-base-to-string/#checkunknown) for [`no-base-to-string`](https://typescript-eslint.io/rules/no-base-to-string) rule.
 - `@eslint-react/eslint-plugin`: [1.49.0 → 1.52.7](https://github.com/Rel1cx/eslint-react/compare/v1.49.0...v1.52.7)
   - 🔴 (not enabled) [`jsx-no-iife`](https://eslint-react.xyz/docs/rules/jsx-no-iife)
