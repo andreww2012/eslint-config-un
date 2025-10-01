@@ -49,7 +49,7 @@ function genModuleLoader<T, Property extends string, N extends string>(
   property: Property,
   packageName: N,
   module: () => Promisable<T | {default: T}>,
-  ignoreErrors?: MaybeArray<string>,
+  ignoredErrors?: MaybeArray<string>,
 ): ModuleLoader<T, Property, N> {
   const loader: ModuleLoader<T, Property, N>[Property] = async (context, options) => {
     const isPluginOptionalPeerDependency = packageName in OPTIONAL_PEER_DEPENDENCIES;
@@ -61,8 +61,8 @@ function genModuleLoader<T, Property extends string, N extends string>(
           : null;
       return {module: providedPlugin || (await interopDefault(module())), packageName};
     } catch (error: unknown) {
-      const ignoredErrors: string[] = [
-        ...arraify(ignoreErrors),
+      const ignoredErrorsFinal: string[] = [
+        ...arraify(ignoredErrors),
         ...(isPluginOptionalPeerDependency ? MODULE_NOT_FOUND_ERROR_CODES : []),
       ];
       if (
@@ -70,10 +70,10 @@ function genModuleLoader<T, Property extends string, N extends string>(
         typeof error === 'object' &&
         'code' in error &&
         typeof error.code === 'string' &&
-        ignoredErrors.includes(error.code) &&
+        ignoredErrorsFinal.includes(error.code) &&
         !options?.throwIfNotFound
       ) {
-        // `eslint-plugin-vue` might be installed, but `vue-eslint-parser`, which is tried to load, might be not
+        // `eslint-plugin-vue` might be installed, but `vue-eslint-parser`, which it tried to load, might be not
         if (
           MODULE_NOT_FOUND_ERROR_CODES.includes(error.code) &&
           'message' in error &&
@@ -594,3 +594,14 @@ export const parsersLoaders = {
 
 export type ParserPrefix = keyof typeof parsersLoaders;
 const LOADABLE_PARSERS_NAMES = objectKeysUnsafe(parsersLoaders);
+
+export const packagesLoaders = {
+  ...genModuleLoader('vueBlocksProcessor', 'eslint-processor-vue-blocks', () =>
+    interopDefault(import('eslint-processor-vue-blocks')),
+  ),
+  ...genModuleLoader('vueCompilerSfc', '@vue/compiler-sfc', () =>
+    interopDefault(import('@vue/compiler-sfc')),
+  ),
+};
+
+export type LoadablePackagePrefix = keyof typeof packagesLoaders;

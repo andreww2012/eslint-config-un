@@ -31,6 +31,7 @@ import {
   OPTIONAL_PEER_DEPENDENCIES,
   PLUGIN_PREFIXES_LIST,
   type PluginPrefix,
+  packagesLoaders,
   parsersLoaders,
   pluginsLoaders,
 } from './plugins';
@@ -459,6 +460,7 @@ export const eslintConfigInternal = async (
     disabledAutofixes: {},
     usedPlugins: new Set(),
     usedParsers: new Map(),
+    usedPackages: new Set(),
     usedPackageManager,
     logger,
     debug,
@@ -754,12 +756,13 @@ export const eslintConfigInternal = async (
     ? [...context.usedPlugins]
     : LOADABLE_PLUGIN_PREFIXES_LIST;
   const usedParserPrefixes = [...context.usedParsers.keys()];
+  const usedPackagesPrefixes = [...context.usedPackages.keys()];
 
   const packagesToManuallyInstallOrUpdate: {
     name: string;
     versionRange: string;
     installedVersion?: string;
-    isParser?: boolean;
+    isPlugin?: boolean;
   }[] = [];
   const [loadedPlugins] = await Promise.all([
     Object.fromEntries(
@@ -772,7 +775,7 @@ export const eslintConfigInternal = async (
             const plugin = pluginResult?.module;
             const packageToInstall = await checkIfModuleCorrectlyLoaded(pluginResult);
             if (packageToInstall) {
-              packagesToManuallyInstallOrUpdate.push(packageToInstall);
+              packagesToManuallyInstallOrUpdate.push({...packageToInstall, isPlugin: true});
             }
             if (pluginPrefix) {
               const isProvided = optionsResolved.pluginsOverrides?.[pluginPrefix] != null;
@@ -792,7 +795,7 @@ export const eslintConfigInternal = async (
         const parser = parserResult.module;
         const packageToInstall = await checkIfModuleCorrectlyLoaded(parserResult);
         if (packageToInstall) {
-          packagesToManuallyInstallOrUpdate.push({...packageToInstall, isParser: true});
+          packagesToManuallyInstallOrUpdate.push(packageToInstall);
         }
         if (parser) {
           context.usedParsers.get(parserPrefix)?.forEach((config) => {
@@ -804,6 +807,16 @@ export const eslintConfigInternal = async (
         }
       }),
     ),
+
+    Promise.all(
+      usedPackagesPrefixes.map(async (packagePrefix) => {
+        const packageResult = await packagesLoaders[packagePrefix](context);
+        const packageToInstall = await checkIfModuleCorrectlyLoaded(packageResult);
+        if (packageToInstall) {
+          packagesToManuallyInstallOrUpdate.push(packageToInstall);
+        }
+      }),
+    ),
   ]);
   if (packagesToManuallyInstallOrUpdate.length > 0) {
     partition(packagesToManuallyInstallOrUpdate, (item) => item.installedVersion != null).forEach(
@@ -812,7 +825,7 @@ export const eslintConfigInternal = async (
           return;
         }
         const isUpdates = index === 0;
-        const packageTypes = partition(packages, (item) => !item.isParser)
+        const packageTypes = partition(packages, (item) => item.isPlugin || false)
           .map(
             (packagesOfType, i) =>
               packagesOfType.length > 0 &&

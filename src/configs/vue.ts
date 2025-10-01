@@ -10,7 +10,7 @@ import {
   createConfigBuilder,
   getRuleUnSeverityAndOptionsFromEntry,
 } from '../eslint';
-import {pluginsLoaders} from '../plugins';
+import {packagesLoaders, pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
 import {
   type MaybeArray,
@@ -281,25 +281,26 @@ export const vueUnConfig: UnConfigFn<
 > = async (context, {vanillaFinalFlatConfigRules}) => {
   const [
     {mergeProcessors: mergeEslintProcessors},
+    eslintProcessorVue,
     eslintProcessorVueBlocks,
-    eslintPluginVue,
     isPiniaPackageInstalled,
     vueI18nPackageInfo,
     nuxtPackageInfo,
     {parser: typescriptEslintParser},
   ] = await Promise.all([
     interopDefault(import('eslint-merge-processors')),
-    interopDefault(import('eslint-processor-vue-blocks')),
-    pluginsLoaders.vue(context).then(({module}) => module),
+    pluginsLoaders
+      .vue(context)
+      .then(({module}) => (module ? (module.processors['.vue'] as Eslint.Linter.Processor) : null)),
+    packagesLoaders.vueBlocksProcessor(context).then(({module}) => module),
     doesPackageExist('pinia'),
     fetchPackageInfo('vue-i18n'),
     fetchPackageInfo('nuxt'),
     interopDefault(import('typescript-eslint')),
   ]);
 
-  context.usedPlugins.add('vue');
-  if (!eslintPluginVue) {
-    return null;
+  if (!eslintProcessorVue) {
+    context.usedPlugins.add('vue');
   }
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
@@ -381,9 +382,16 @@ export const vueUnConfig: UnConfigFn<
       files: [...DEFAULT_VUE_FILES, ...optionsResolved.files],
       processor: mergeEslintProcessors(
         [
-          eslintPluginVue.processors['.vue'] as Eslint.Linter.Processor,
+          eslintProcessorVue,
           (() => {
             if (!processSfcBlocks) {
+              return null;
+            }
+            context.usedPackages
+              .add('vueBlocksProcessor')
+              // `eslint-processor-vue-blocks` expects `@vue/compiler-sfc` of v3 to be installed
+              .add('vueCompilerSfc');
+            if (!eslintProcessorVueBlocks) {
               return null;
             }
             const processorOptions = typeof processSfcBlocks === 'object' ? processSfcBlocks : {};
