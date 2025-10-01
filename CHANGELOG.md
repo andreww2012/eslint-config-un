@@ -42,7 +42,7 @@
 ### Changes
 
 - [**BREAKING**] eslint-config-un package is now distributed as ESM only.
-- [**BREAKING**] Set the minimum supported Node.js version to 20.12.
+- [**BREAKING**] Set the minimum supported Node.js version to 20.19, 22.16 and 24 respectively for these major versions.
 - [**BREAKING**] Many plugins are now not direct dependencies of this package, but its' optional peer dependencies, for example, `@graphql-eslint/eslint-plugin`, `eslint-plugin-storybook` and `eslint-plugin-tailwindcss` to name a few.
 - [**BREAKING**] You can now specify the method of disabling autofix: `prefixed` would create a plugin named `disable-autofix` and copy the rules for which the autofix is disabled. `unprefixed` would copy an entire plugin and replace the origin plugin with the copy. The default method is now `unprefixed`, which leaves full rule names unchanged. You can control the overall or per-plugin autofix disabling method via the `disableAutofixMethod` option.
 - [**BREAKING**] Removed the ability to disable rule autofix by enabling `disable-autofix/*` rules. Instead, when configuring a rule, you can now return an object and set `disableAutofix: true` in it.

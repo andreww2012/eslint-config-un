@@ -31,7 +31,7 @@ and many more;
 ## Installation
 
 Minimum supported versions:
-- NodeJS: ^20.12 or >=21.7
+- NodeJS: ^20.19 or ^22.16.0 or >=24
 - ESLint: ^9.15.0 (peer dependency)
 
 ```shell
