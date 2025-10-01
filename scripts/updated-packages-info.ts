@@ -31,20 +31,18 @@ const getGitHubVersionTag = (dependency: string, version: string) =>
   PACKAGES_GIT_TAGS_PATTERNS[dependency as keyof typeof PACKAGES_GIT_TAGS_PATTERNS]?.(version) ??
   `v${version}`;
 
-for (const {
-  dependency,
-  repoUrl,
-  oldVersion,
-  newVersion,
-  codeDiffResult,
-} of updatedDependenciesInfo) {
+for (let i = 0; i < updatedDependenciesInfo.length; i++) {
+  const {dependency, repoUrl, oldVersion, newVersion, codeDiffResult} = updatedDependenciesInfo[i]!;
   if (repoUrl == null) {
     continue;
   }
 
+  if (i > 0) {
+    console.log();
+  }
   console.log(
-    styleText('yellow', dependency),
-    `${styleText('gray', oldVersion)} → ${styleText('green', newVersion)}`,
+    styleText('black', styleText('bgCyanBright', dependency)),
+    `${styleText('gray', oldVersion)} →  ${styleText('green', newVersion)}`,
   );
   console.log(styleText('bold', 'Source code diff:'));
   console.log(
