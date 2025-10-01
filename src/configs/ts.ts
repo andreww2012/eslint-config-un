@@ -822,7 +822,7 @@ export const tsUnConfig: UnConfigFn<
     .addRule('explicit-member-accessibility', OFF)
     .addRule('explicit-module-boundary-types', OFF)
     .addRule('member-ordering', OFF) // ❄️
-    .addRule('method-signature-style', ERROR, [], {disableAutofix: true})
+    .addRule('method-signature-style', ERROR)
     .addRule('no-import-type-side-effects', ERROR)
     .addRule('no-require-imports', OFF) // 🟣
     .addRule('no-unnecessary-parameter-property-assignment', ERROR)
@@ -994,10 +994,7 @@ export const tsUnConfig: UnConfigFn<
       },
     ]) // 🟣
     .addRule('no-unnecessary-template-expression', ERROR) // 🟣
-    // Reason for disabling autofix: could remove type aliases
-    .addRule('no-unnecessary-type-arguments', ERROR, [], {
-      disableAutofix: true,
-    }) // 🟣
+    .addRule('no-unnecessary-type-arguments', ERROR) // 🟣
     .addRule('no-unnecessary-type-assertion', ERROR) // 🟣
     .addRule('no-unnecessary-type-conversion', ERROR)
     .addRule('no-unnecessary-type-parameters', ERROR) // 🟣

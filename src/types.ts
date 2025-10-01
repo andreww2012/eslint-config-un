@@ -16,6 +16,7 @@ export type Prettify<T> = {
 
 export type {
   ConditionalKeys,
+  EmptyObject,
   NonEmptyTuple,
   Tagged,
   ReadonlyDeep,

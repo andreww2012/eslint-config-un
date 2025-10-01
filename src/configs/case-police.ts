@@ -22,7 +22,7 @@ export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
         doNotIgnoreMdx: true,
       },
     ])
-    .addRule('string-check', ERROR, [], {disableAutofix: true})
+    .addRule('string-check', ERROR)
     .addOverrides();
 
   return {

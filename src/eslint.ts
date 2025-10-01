@@ -2,7 +2,7 @@ import type Eslint from 'eslint';
 import {builtinRules as eslintBuiltinRules} from 'eslint/use-at-your-own-risk';
 // @ts-expect-error no typings
 import ruleComposer from 'eslint-rule-composer';
-import type {DisableAutofixMethod, UnConfigContext} from './configs';
+import type {UnConfigContext} from './configs';
 import {
   GLOB_CSS,
   GLOB_HTML_ALL,
@@ -12,11 +12,12 @@ import {
   OFF,
   type RuleSeverity,
 } from './constants';
-import type {FixableRuleNames} from './eslint-types-fixable-only.gen';
+import type {FixableRuleNames as AllEslintFixableRuleNames} from './eslint-types-fixable-only.gen';
 import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin.gen';
 import type {RuleOptions} from './eslint-types.gen';
 import {PLUGIN_PREFIXES_LIST, type ParserPrefix, type PluginPrefix} from './plugins';
 import type {
+  EmptyObject,
   FalsyValue,
   OmitIndexSignature,
   PickKeysNotStartingWith,
@@ -46,7 +47,6 @@ export interface FlatConfigEntryFilesOrIgnores extends FlatConfigEntryFiles {
   ignores?: string[];
 }
 
-export type AllRulesRecordKeys = keyof RuleOptions;
 export type RulesRecord = Record<string, EslintRuleEntry> & RuleOptions;
 export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
   Eslint.Linter.Config<T>
@@ -61,8 +61,10 @@ export const DISABLE_AUTOFIX = 'disable-autofix';
 export type DisableAutofixPrefix = typeof DISABLE_AUTOFIX;
 const DISABLE_AUTOFIX_WITH_SLASH = `${DISABLE_AUTOFIX}/`;
 
-export type AllEslintRules = OmitIndexSignature<FlatConfigEntry['rules'] & {}>;
+type AllEslintRules = OmitIndexSignature<FlatConfigEntry['rules'] & {}>;
+export type AllEslintRuleNames = keyof AllEslintRules;
 export type BuiltinEslintRules = PickKeysNotStartingWith<AllEslintRules, `${string}/`>;
+export type {AllEslintFixableRuleNames};
 
 export type {RuleOptionsPerPlugin};
 
@@ -102,15 +104,14 @@ type UnConfigOptionsOverridesEntry<
       options?: ReadonlyDeep<Options>;
 
       /**
-       * This option has a caveat: it's not possible to disable autofix only on subset
-       * of files *without* the `disable-autofix` prefix in the rule name.
+       * Disables autofix for this rule only for this config with a caveat
+       * that the rule name will be prepended with `disable-autofix/`.
        *
-       * If you set this to `true`, the autofix method is going to be the one resulting from
-       * `disableAutofixMethod` root option, and if it is `unprefixed` (create a copy of
-       * the plugin and disable autofix for the specified rules), autofix for this rule
-       * will be disabled for **all** files.
+       * If you'd like to disable autofix without changing the rule name,
+       * it's only currently possible to do so globally (for all configs at once).
+       * For that, please use `autofixDisabledGloballyFor` root option.
        */
-      disableAutofix?: RuleName extends FixableRuleNames ? boolean | DisableAutofixMethod : false;
+      disableAutofix?: RuleName extends AllEslintFixableRuleNames ? boolean : false;
     }
 >;
 type UnConfigOptionsOverrides<T extends Partial<Record<string, EslintRuleEntry>>> = {
@@ -157,7 +158,8 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
   {
     includeRulesWithoutAutofix,
     onlyRules,
-  }: {includeRulesWithoutAutofix?: boolean; onlyRules?: string[]} = {},
+    invertOnlyRules = false,
+  }: {includeRulesWithoutAutofix?: boolean; onlyRules?: string[]; invertOnlyRules?: boolean} = {},
 ): Plugin['rules'] & {} =>
   Object.fromEntries(
     Object.entries(cloneDeep(plugin.rules || {}))
@@ -166,7 +168,7 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
         const isFixable = ruleImplementation.meta?.fixable;
         if (
           includeRulesWithoutAutofix &&
-          (!isFixable || (onlyRules && !onlyRules.includes(fullRuleName)))
+          (!isFixable || (onlyRules && invertOnlyRules === onlyRules.includes(fullRuleName)))
         ) {
           return [fullRuleName, ruleImplementation] as const;
         }
@@ -198,9 +200,7 @@ const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, EslintSeverity
   error: 2,
 };
 
-interface AddRuleInternalOptions {
-  disableAutofix?: boolean | DisableAutofixMethod;
-}
+type AddRuleInternalOptions = EmptyObject;
 
 const getPluginPrefixByFullRuleName = (ruleName: string) => {
   const ruleNameSplitted = ruleName.split('/');
@@ -213,27 +213,44 @@ const getPluginPrefixByFullRuleName = (ruleName: string) => {
   return null;
 };
 
+export const getRuleNameAndPluginPrefixByFullName = (
+  context: UnConfigContext,
+  fullRuleName: string,
+) => {
+  const pluginRenames = context.rootOptions.pluginRenames || {};
+
+  const pluginPrefixCanonical = getPluginPrefixByFullRuleName(fullRuleName);
+  const pluginPrefixResolved =
+    pluginPrefixCanonical && pluginPrefixCanonical in pluginRenames
+      ? pluginRenames[pluginPrefixCanonical] || pluginPrefixCanonical
+      : pluginPrefixCanonical;
+  const ruleNameUnprefixed = pluginPrefixCanonical
+    ? fullRuleName.slice(pluginPrefixCanonical.length + 1 /* `/` character */)
+    : fullRuleName;
+  const fullRuleNameWithResolvedPrefix =
+    pluginPrefixCanonical && pluginPrefixResolved
+      ? `${pluginPrefixResolved}/${ruleNameUnprefixed}`
+      : fullRuleName;
+
+  return {
+    pluginPrefixCanonical,
+    pluginPrefixResolved,
+    ruleNameUnprefixed,
+    fullRuleNameWithResolvedPrefix,
+  };
+};
+
 export const resolveOverrides = (
   context: UnConfigContext,
   overrides: UnConfigOptions['overrides'] & {},
   existingRules?: Partial<RulesRecord>,
 ) => {
-  const pluginRenames = context.rootOptions.pluginRenames || {};
-
   return Object.fromEntries(
     Object.entries(overrides).flatMap(([ruleNameRaw, ruleOptions]) => {
-      const pluginPrefix = getPluginPrefixByFullRuleName(ruleNameRaw);
-      const pluginPrefixFinal =
-        pluginPrefix && pluginPrefix in pluginRenames
-          ? pluginRenames[pluginPrefix] || pluginPrefix
-          : pluginPrefix;
-      const ruleNameUnprefixed = pluginPrefix
-        ? ruleNameRaw.slice(pluginPrefix.length + 1 /* "/" character */)
-        : ruleNameRaw;
-      let ruleName =
-        pluginPrefix && pluginPrefixFinal
-          ? `${pluginPrefixFinal}/${ruleNameUnprefixed}`
-          : ruleNameRaw;
+      const {pluginPrefixCanonical, ruleNameUnprefixed, fullRuleNameWithResolvedPrefix} =
+        getRuleNameAndPluginPrefixByFullName(context, ruleNameRaw);
+
+      let ruleName = fullRuleNameWithResolvedPrefix;
 
       const existingRuleRecord = existingRules?.[ruleName];
 
@@ -249,9 +266,9 @@ export const resolveOverrides = (
       // @ts-expect-error "Excessive complexity comparing types"
       const ruleEntryRaw = maybeCall(ruleOptions, severityInitial, options);
 
-      const result: [string, EslintRuleEntry][] = [];
-      let ruleEntry: EslintRuleEntry;
-      let disableAutofix: boolean | DisableAutofixMethod = false;
+      const result: [ruleName: string, EslintRuleEntry][] = [];
+      let ruleEntry = ruleEntryRaw as EslintRuleEntry;
+      let disableAutofix = false;
       if (ruleEntryRaw && typeof ruleEntryRaw === 'object' && 'severity' in ruleEntryRaw) {
         // eslint-disable-next-line ts/no-unsafe-assignment
         ruleEntry =
@@ -259,38 +276,32 @@ export const resolveOverrides = (
           ruleEntryRaw.options == null
             ? ruleEntryRaw.severity
             : [ruleEntryRaw.severity, ...ruleEntryRaw.options];
-        if (ruleEntryRaw.disableAutofix && pluginPrefix != null) {
-          const disableAutofixMethod: DisableAutofixMethod =
-            typeof ruleEntryRaw.disableAutofix === 'string'
-              ? ruleEntryRaw.disableAutofix
-              : (context.rootOptions.disableAutofixMethod[pluginPrefix] ??
-                context.rootOptions.disableAutofixMethod.default);
-          if (disableAutofixMethod === 'prefixed') {
-            result.push([ruleName, OFF]);
-            ruleName = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`;
-          }
+        if (ruleEntryRaw.disableAutofix != null && pluginPrefixCanonical != null) {
           disableAutofix = ruleEntryRaw.disableAutofix;
+          const ruleNameWithDisableAutofixPrefix = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`;
+          if (disableAutofix) {
+            result.push([ruleName, OFF]);
+            ruleName = ruleNameWithDisableAutofixPrefix;
+          } else {
+            result.push([ruleNameWithDisableAutofixPrefix, OFF]);
+          }
         }
-      } else {
-        ruleEntry = ruleEntryRaw as EslintRuleEntry;
       }
       result.push([ruleName, ruleEntry]);
 
       if (
-        pluginPrefix != null &&
+        pluginPrefixCanonical != null &&
         ruleEntry !== 0 &&
         ruleEntry !== 'off' &&
         // eslint-disable-next-line de-morgan/no-negated-conjunction
         !(Array.isArray(ruleEntry) && (ruleEntry[0] === 0 || ruleEntry[0] === 'off'))
       ) {
-        context.usedPlugins.add(pluginPrefix);
+        context.usedPlugins.add(pluginPrefixCanonical);
 
         if (disableAutofix) {
-          context.disabledAutofixes[pluginPrefix] = [
-            ...(context.disabledAutofixes[pluginPrefix] || []),
-            disableAutofix === true
-              ? ruleNameUnprefixed
-              : {ruleName: ruleNameUnprefixed, method: disableAutofix},
+          context.disabledAutofixes[pluginPrefixCanonical] = [
+            ...(context.disabledAutofixes[pluginPrefixCanonical] || []),
+            ruleNameUnprefixed,
           ];
         }
       }
@@ -444,6 +455,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
       // eslint-disable-next-line ts/ban-ts-comment
       // @ts-ignore ignores the following error during declaration file build: "error TS2859: Excessive complexity comparing types 'RuleName' and '"curly" | "unicorn/template-indent" | "@eslint-community/eslint-comments/disable-enable-pair" | "@eslint-community/eslint-comments/no-aggregating-enable" | "@eslint-community/eslint-comments/no-duplicate-disable" | ... 1725 more ... | "yoda"'"
       ruleOptions?: GetRuleOptions<P, N>,
+      // eslint-disable-next-line ts/no-unused-vars
       options?: AddRuleInternalOptions,
     ) => {
       if (severity == null) {
@@ -458,29 +470,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
 
       // eslint-disable-next-line ts/no-unnecessary-type-assertion
       const ruleNameWithResolvedPrefix = `${prefix === '' ? '' : `${(prefix === '' ? '' : this.context.rootOptions.pluginRenames?.[prefix as Exclude<PluginPrefix, ''>] || null) || prefix}/`}${ruleNameUnprefixed}`;
-      let ruleNameFinal = ruleNameWithResolvedPrefix;
-      if (options?.disableAutofix) {
-        const disableAutofixMethod: DisableAutofixMethod =
-          typeof options.disableAutofix === 'string'
-            ? options.disableAutofix
-            : (this.context.rootOptions.disableAutofixMethod[prefix] ??
-              this.context.rootOptions.disableAutofixMethod.default);
-        if (disableAutofixMethod === 'prefixed') {
-          configFinal.rules[ruleNameFinal] = OFF;
-          ruleNameFinal = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameFinal}`;
-        }
-        if (severityFinal !== OFF) {
-          this.context.disabledAutofixes[prefix] = [
-            ...(this.context.disabledAutofixes[prefix] || []),
-            typeof options.disableAutofix === 'string'
-              ? {
-                  ruleName: ruleNameUnprefixed,
-                  method: options.disableAutofix,
-                }
-              : ruleNameUnprefixed,
-          ];
-        }
-      }
+      const ruleNameFinal = ruleNameWithResolvedPrefix;
       configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
       // If the rule is disabled, disable its autofix counterpart rule as well
       if (severityFinal === OFF && !ruleNameFinal.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {

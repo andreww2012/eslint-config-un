@@ -5,12 +5,7 @@ import createDebug from 'debug';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import semver from 'semver';
-import type {
-  DisableAutofixMethod,
-  EslintConfigUnOptions,
-  UnConfigContext,
-  UnConfigs,
-} from './configs';
+import type {EslintConfigUnOptions, UnConfigContext, UnConfigs} from './configs';
 import {
   CHECKED_LODASH_METHODS,
   DEFAULT_GLOBAL_IGNORES,
@@ -19,7 +14,7 @@ import {
   PACKAGES_TO_GET_INFO_FOR,
 } from './constants';
 import {
-  type AllRulesRecordKeys,
+  type AllEslintRuleNames,
   ConfigEntryBuilder,
   type DisableAutofixPrefix,
   type EslintPlugin,
@@ -28,6 +23,7 @@ import {
   disableAutofixForAllRulesInPlugin,
   eslintPluginVanillaRules,
   genFlatConfigEntryName,
+  getRuleNameAndPluginPrefixByFullName,
   resolveOverrides,
 } from './eslint';
 import {
@@ -45,6 +41,7 @@ import {
   assignDefaults,
   capitalize,
   fetchPackageInfo,
+  groupBy,
   interopDefault,
   isIn,
   objectEntriesUnsafe,
@@ -53,14 +50,12 @@ import {
   partition,
 } from './utils';
 
-// TODO debug
-
 const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
   'curly',
   '@stylistic/quotes',
   'unicorn/template-indent',
   'vue/html-self-closing',
-] satisfies AllRulesRecordKeys[]);
+] satisfies AllEslintRuleNames[]);
 
 const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
   'security',
@@ -72,6 +67,22 @@ const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
   'nodeDependencies',
   'depend',
 ]);
+
+// NOTE: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs
+const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
+  object)['rules'] = {
+  // TODO add missing reasons for disabling autofixes
+  'case-police/string-check': true,
+
+  'ts/method-signature-style': true,
+  'ts/no-unnecessary-type-arguments': true, // Could remove type aliases
+
+  'unicorn/catch-error-name': true,
+  'unicorn/consistent-existence-index-check': true,
+  'unicorn/explicit-length-check': true, // Wrong auto-fixes
+  'unicorn/no-useless-undefined': true,
+  'unicorn/prefer-spread': true,
+};
 
 const checkIfModuleCorrectlyLoaded = async (
   moduleResult: {packageName: string; module: unknown} | null,
@@ -102,7 +113,7 @@ const CONFIGS_TO_NOT_REPORT_IF_UNNECESSARILY_ENABLED_OR_DISABLED = new Set<keyof
 
 export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
-  internalOptions: {disableAutofixOnly?: boolean} = {},
+  internalOptions: {disableAutofixForAllFixableRulesOnly?: boolean} = {},
 ): Promise<FlatConfigEntry[]> => {
   const logger = consola.withTag('eslint-config-un');
   logger.addReporter({
@@ -153,6 +164,7 @@ export const eslintConfigInternal = async (
   } satisfies EslintConfigUnOptions);
 
   const {
+    autofixDisabledGloballyFor: autofixDisabledGloballyForRaw,
     configs: configsOptions = {},
     extraConfigs,
     ignores,
@@ -364,10 +376,6 @@ export const eslintConfigInternal = async (
     packagesInfo,
     rootOptions: {
       ...optionsResolved,
-      disableAutofixMethod: {
-        default: 'unprefixed',
-        ...optionsResolved.disableAutofixMethod,
-      },
     },
     configsMeta: {
       angular: {enabled: isAngularEnabled},
@@ -713,33 +721,34 @@ export const eslintConfigInternal = async (
     // eslint-disable-next-line no-implicit-coercion
     .filter((v) => !!v);
 
-  const disabledAutofixesList = objectEntriesUnsafe(context.disabledAutofixes);
-  const defaultDisableAutofixMethod = context.rootOptions.disableAutofixMethod.default;
-  const [
-    disableAutofixPluginsWithUnprefixedMethod = [],
-    disableAutofixPluginsWithPrefixedMethod = [],
-  ] = (['unprefixed', 'prefixed'] satisfies DisableAutofixMethod[]).map((autofixDisablingMethod) =>
-    disabledAutofixesList
-      .map(([pluginPrefix, rules = []]) => {
-        const defaultMethodForPlugin =
-          context.rootOptions.disableAutofixMethod[pluginPrefix] ?? defaultDisableAutofixMethod;
-        const ruleNames: string[] = rules.map((entry) =>
-          typeof entry === 'object' ? entry.ruleName : entry,
-        );
-        const hasRules = rules.some((entry) => {
-          const method = typeof entry === 'object' ? entry.method : defaultMethodForPlugin;
-          return method === autofixDisablingMethod;
-        });
-        if (!hasRules) {
-          return null;
-        }
-        return {
-          pluginPrefix,
-          ruleNames,
-        };
-      })
-      .filter((v) => v != null),
+  const autofixDisabledGloballyFor: EslintConfigUnOptions['autofixDisabledGloballyFor'] =
+    autofixDisabledGloballyForRaw === true
+      ? true
+      : autofixDisabledGloballyForRaw === false
+        ? {}
+        : {
+            ...autofixDisabledGloballyForRaw,
+            rules: {
+              ...RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT,
+              ...autofixDisabledGloballyForRaw?.rules,
+            },
+          };
+
+  const disableAutofixPluginsWithUnprefixedMethod = groupBy(
+    Object.entries(
+      typeof autofixDisabledGloballyFor === 'object' ? autofixDisabledGloballyFor.rules || {} : {},
+    ).map(([ruleName, isAutofixDisabled]) => ({
+      ...getRuleNameAndPluginPrefixByFullName(context, ruleName),
+      isAutofixDisabled,
+    })),
+    (item) => item.pluginPrefixCanonical || '',
   );
+  const disableAutofixPluginsWithPrefixedMethod = objectEntriesUnsafe(
+    context.disabledAutofixes,
+  ).map(([pluginPrefix, ruleNames = []]) => ({
+    pluginPrefix,
+    ruleNames,
+  }));
 
   const usedPluginPrefixes: readonly PluginPrefix[] = loadPluginsOnDemand
     ? [...context.usedPlugins]
@@ -844,7 +853,7 @@ ${packages
         (disableAutofixPluginsWithPrefixedMethod.some(
           (v) => v.pluginPrefix === pluginPrefixCanonical,
         ) ||
-          (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'prefixed'))
+          internalOptions.disableAutofixForAllFixableRulesOnly)
       ) {
         const pluginPrefix =
           pluginPrefixCanonical === ''
@@ -859,50 +868,81 @@ ${packages
     }, {}),
   };
 
+  const plugins = internalOptions.disableAutofixForAllFixableRulesOnly
+    ? {}
+    : Object.fromEntries(
+        objectEntriesUnsafe(allPlugins).map(([pluginPrefixCanonical, plugin]) => {
+          const pluginPrefix =
+            pluginPrefixCanonical === ''
+              ? ''
+              : context.rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
+          const pluginRulesAutofixDisabledStatuses = Object.fromEntries(
+            // eslint-disable-next-line ts/no-unnecessary-condition -- wrong types
+            (disableAutofixPluginsWithUnprefixedMethod[pluginPrefixCanonical] || []).map(
+              ({ruleNameUnprefixed, isAutofixDisabled}) => [ruleNameUnprefixed, isAutofixDisabled],
+            ),
+          );
+
+          if (
+            !plugin ||
+            // eslint-disable-next-line de-morgan/no-negated-disjunction
+            !(
+              Object.keys(pluginRulesAutofixDisabledStatuses).length > 0 ||
+              autofixDisabledGloballyFor === true
+            )
+          ) {
+            return [pluginPrefix, plugin];
+          }
+
+          const fixablePluginRules = Object.entries(plugin.rules || {})
+            .filter(([, {meta: ruleMeta}]) => ruleMeta?.fixable)
+            .map(([ruleName]) => ruleName);
+
+          const autofixDisabledForAllPluginRulesByDefault =
+            (typeof autofixDisabledGloballyFor === 'object' &&
+              autofixDisabledGloballyFor.plugins?.[pluginPrefixCanonical]) ||
+            false;
+          const rulesToDisableAutofixFor = fixablePluginRules.filter(
+            (ruleName) =>
+              pluginRulesAutofixDisabledStatuses[ruleName] ??
+              autofixDisabledForAllPluginRulesByDefault,
+          );
+
+          if (rulesToDisableAutofixFor.length === 0) {
+            return [pluginPrefix, plugin];
+          }
+
+          const rulesCountWithAutofixNotDisabled =
+            fixablePluginRules.length - rulesToDisableAutofixFor.length;
+          if (rulesCountWithAutofixNotDisabled > 0) {
+            const areMostAutofixesDisabled =
+              rulesCountWithAutofixNotDisabled < fixablePluginRules.length / 2;
+            debug(
+              `Globally disabling autofix for ${areMostAutofixesDisabled ? `${styleText('red', 'all rules')} in ${styleText('blue', pluginPrefix)} plugin except for` : `the following ${styleText('blue', pluginPrefix)} plugin rules`}: ${(areMostAutofixesDisabled ? fixablePluginRules.filter((ruleName) => !rulesToDisableAutofixFor.includes(ruleName)) : rulesToDisableAutofixFor).map((ruleName) => styleText('green', ruleName)).join(', ')}`,
+            );
+          } else {
+            debug(
+              `Globally disabling autofix for ${styleText('red', 'all rules')} in ${styleText('blue', pluginPrefix)} plugin`,
+            );
+          }
+
+          return [
+            pluginPrefix,
+            {
+              ...plugin,
+              rules: disableAutofixForAllRulesInPlugin('', plugin, {
+                includeRulesWithoutAutofix: true,
+                onlyRules: rulesToDisableAutofixFor,
+              }),
+            } satisfies typeof plugin,
+          ];
+        }),
+      );
+
   resolvedConfigs.unshift({
     name: genFlatConfigEntryName('global-setup/plugins'),
     plugins: {
-      ...(!internalOptions.disableAutofixOnly &&
-        Object.fromEntries(
-          objectEntriesUnsafe(allPlugins).map(([pluginPrefixCanonical, plugin]) => {
-            const pluginPrefix =
-              pluginPrefixCanonical === ''
-                ? ''
-                : context.rootOptions.pluginRenames?.[pluginPrefixCanonical] ||
-                  pluginPrefixCanonical;
-            const rulesInfo = disableAutofixPluginsWithUnprefixedMethod.find(
-              (v) => v.pluginPrefix === pluginPrefixCanonical,
-            );
-            if (
-              plugin &&
-              (rulesInfo || (!loadPluginsOnDemand && defaultDisableAutofixMethod === 'unprefixed'))
-            ) {
-              if (rulesInfo?.ruleNames) {
-                rulesInfo.ruleNames.forEach((ruleNameToDisableAutofixFor) => {
-                  debug(
-                    `Globally disabling autofix for \`${styleText('blue', pluginPrefix)}/${styleText('green', ruleNameToDisableAutofixFor)}\``,
-                  );
-                });
-              } else {
-                debug(
-                  `Globally disabling autofix for all rules in plugin \`${styleText('blue', pluginPrefix)}\``,
-                );
-              }
-              return [
-                pluginPrefix,
-                {
-                  ...plugin,
-                  rules: disableAutofixForAllRulesInPlugin('', plugin, {
-                    includeRulesWithoutAutofix: true,
-                    onlyRules: rulesInfo?.ruleNames,
-                  }),
-                } as typeof plugin,
-              ];
-            }
-            return [pluginPrefix, plugin];
-          }),
-        )),
-
+      ...plugins,
       ['disable-autofix' satisfies DisableAutofixPrefix]: disableAutofixPlugin,
     },
   } satisfies FlatConfigEntry);

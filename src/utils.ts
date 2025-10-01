@@ -10,6 +10,7 @@ export {klona as cloneDeep} from 'klona';
 
 export {
   capitalize,
+  groupBy,
   memoize,
   omit,
   partition,

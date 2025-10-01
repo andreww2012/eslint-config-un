@@ -418,9 +418,43 @@ eslint-config-un provides the ability to change any registered plugin prefix. Ad
 
 ### Disabling rule autofix
 
-ESLint [doesn't (yet?) have the ability to disable autofix](https://github.com/eslint/rfcs/pull/125) for a rule by the user on per-rule basis. Our config attempts to provide this missing functionality by providing the limited ability to disable autofix for a rule as a whole or per-file and per-rule basis, but with a caveat that the rule will have `disable-autofix` prefix in its name. Additionally, we disable autofix for some rules by default, the list of which is available below.
+ESLint [doesn't (yet?) have the ability to disable autofix](https://github.com/eslint/rfcs/pull/125) for a rule by the user on per-rule basis. Our config attempts to provide this missing functionality by giving the ability to disable autofix for a rule as a whole ("globally") or per-file and per-rule basis, but with a caveat that the rule will have `disable-autofix` prefix in its name. 
 
-To disable autofix for a rule, use an object notation for the rule entry:
+#### Globally disabling rule autofix
+
+You can disable autofix for any fixable rule globally using `autofixDisabledGloballyFor` root option:
+
+```ts
+import {eslintConfig} from 'eslint-config-un';
+
+export default eslintConfig({
+  autofixDisabledGloballyFor: {
+    rules: {
+      'ts/array-type': true,
+    },
+  },
+});
+```
+
+Note that by default we already globally disable autofix for some rules, the actual list of which can be found in JSDoc of this option.
+
+It's also possible to disable autofixes for all the rules in the plugin at once, and then only enable them for the specific rules:
+
+<!-- eslint-skip -->
+```ts
+autofixDisabledGloballyFor: {
+  plugins: {
+    ts: true,
+  },
+  rules: {
+    'ts/array-type': false,
+  },
+},
+```
+
+#### Disabling rule autofix per-file
+
+To disable autofix for a rule only granularly, use an object notation for the rule entry:
 
 ```ts
 import {eslintConfig} from 'eslint-config-un';
@@ -431,7 +465,7 @@ export default eslintConfig({
       overrides: {
         'unicorn/better-regex': {
           severity: 2,
-          disableAutofix: 'prefixed', // or `unprefixed` or `true`/`false`
+          disableAutofix: true,
         },
       },
     },
@@ -439,10 +473,7 @@ export default eslintConfig({
 });
 ```
 
-* `unprefixed`: will disable autofix without changing the name of the rule, but it will be disabled for **all** files.
-* `prefixed`: will create a plugin with `disable-autofix` prefix and copy this rule into it. The final rule is going to be `disable-autofix/<rule-name>` and `<rule-name>` will be disabled in the resulting flat config.
-* `true`: use the default autofix disabling method, determined in `disableAutofixMethod.default` root option, which defaults to `unprefixed`.
-* `false`: re-enable autofix for the rule (does nothing if autofix for this rule is disabled anywhere else with `unprefixed` method).
+This will technically create a plugin with `disable-autofix` prefix and copy this rule into it. The final rule is going to be given a name `disable-autofix/<rule-name>` which would replace `<rule-name>` entry in the resulting config.
 
 ## Configs notes
 

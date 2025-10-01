@@ -5,6 +5,7 @@ import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {
+  AllEslintFixableRuleNames,
   ConfigEntryBuilder,
   EslintPlugin,
   EslintSeverity,
@@ -12,7 +13,7 @@ import type {
   UnFlagConfigEntry,
 } from '../eslint';
 import type {ParserPrefix, PluginPrefix, pluginsLoaders} from '../plugins';
-import type {PrettifyShallow, Promisable, SetRequired} from '../types';
+import type {PrettifyShallow, Promisable} from '../types';
 import type {fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
 import type {AstroEslintConfigOptions} from './astro';
@@ -156,21 +157,38 @@ export interface EslintConfigUnOptions {
   pluginRenames?: PrettifyShallow<Partial<Record<Exclude<PluginPrefix, ''>, string>>>;
 
   /**
-   * Defines a method of disabling autofix of plugins' fixable rules:
-   * - `unprefixed`: will deeply copy the plugin and disable autofixes of all or specified rules.
-   * This allows to disable autofix without changing the full rule name you won't be able
-   * to re-enable autofix on per file basis.
-   * - `prefixed`: will create a plugin with `disable-autofix` prefix and copy the rules into it.
-   * Rules with disabled autofixes will have names starting with `disable-autofix/`.
+   * Defines for which rules and/or plugins autofix will be disabled globally.
    *
-   * Empty key is a plugin with core ESLint rules.
+   * If you set `plugins.<pluginName>: false` (default), all the fixable plugin's rules will remain
+   * being autofixable, expect for the ones set to `true` in `rules`.
    *
-   * `default` specifies a default disabling method for all plugins.
-   * @default {default: 'unprefixed'}
+   * If you set `plugins.<pluginName>: true`, all the fixable plugin's rules will stop
+   * being autofixable, expect for the ones set to `false` in `rules`.
+   *
+   * `rules` object will be merged with the following default value:
+   * ```ts
+   * {
+   *   'case-police/string-check': true,
+   *   'ts/method-signature-style': true,
+   *   'ts/no-unnecessary-type-arguments': true,
+   *   'unicorn/catch-error-name': true,
+   *   'unicorn/consistent-existence-index-check': true,
+   *   'unicorn/explicit-length-check': true,
+   *   'unicorn/no-useless-undefined': true,
+   *   'unicorn/prefer-spread': true,
+   * }
+   * ```
+   *
+   * Other special values:
+   * - `true`: autofix will be disabled for all the fixable rules in all the plugins.
+   * - `false`: no autofixes will be disabled.
    */
-  disableAutofixMethod?: PrettifyShallow<
-    Partial<Record<'default' | PluginPrefix, DisableAutofixMethod>>
-  >;
+  autofixDisabledGloballyFor?:
+    | boolean
+    | {
+        plugins?: Partial<Record<PluginPrefix, boolean>>;
+        rules?: Partial<Record<AllEslintFixableRuleNames, boolean>>;
+      };
 
   /**
    * This option overrides if certain configs are enabled or disabled by default.
@@ -190,8 +208,6 @@ export interface EslintConfigUnOptions {
       : EslintPlugin;
   };
 }
-
-export type DisableAutofixMethod = 'unprefixed' | 'prefixed';
 
 /* eslint-enable perfectionist/sort-interfaces */
 export interface UnConfigs {
@@ -936,14 +952,7 @@ export interface UnConfigs {
 /* eslint-disable perfectionist/sort-interfaces */
 
 export interface UnConfigContext {
-  rootOptions: PrettifyShallow<
-    EslintConfigUnOptions & {
-      disableAutofixMethod: SetRequired<
-        EslintConfigUnOptions['disableAutofixMethod'] & {},
-        'default'
-      >;
-    }
-  >;
+  rootOptions: PrettifyShallow<EslintConfigUnOptions>;
   packagesInfo: Record<
     (typeof PACKAGES_TO_GET_INFO_FOR)[number],
     Awaited<ReturnType<typeof fetchPackageInfo>>
@@ -954,9 +963,7 @@ export interface UnConfigContext {
   /**
    * NOTE: mutable. Rule names must be UNprefixed
    */
-  disabledAutofixes: Partial<
-    Record<PluginPrefix, (string | {ruleName: string; method: DisableAutofixMethod})[]>
-  >;
+  disabledAutofixes: Partial<Record<PluginPrefix, string[]>>;
 
   /**
    * NOTE: mutable

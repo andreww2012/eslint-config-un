@@ -19,20 +19,19 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     ?.addConfig(['unicorn', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
     .addRule('better-regex', OFF) // 🔴
     .addRule('catch-error-name', OFF)
-    .addRule('catch-error-name', WARNING, [], {disableAutofix: true})
+    .addRule('catch-error-name', WARNING)
     .addRule('consistent-assert', WARNING) // >=57.0.0
     .addRule('consistent-date-clone', ERROR) // >=57.0.0
     .addRule('consistent-destructuring', OFF) // 🔴
     .addRule('consistent-empty-array-spread', ERROR)
-    .addRule('consistent-existence-index-check', ERROR, [], {disableAutofix: true})
+    .addRule('consistent-existence-index-check', ERROR)
     .addRule('consistent-function-scoping', ERROR)
     .addRule('custom-error-definition', ERROR) // 🔴
     .addRule('empty-brace-spaces', OFF) // 🟠
     .addRule('error-message', ERROR)
     .addRule('escape-case', ERROR)
     .addRule('expiring-todo-comments', ERROR)
-    // Reason for disabling autofix: wrong auto-fixes
-    .addRule('explicit-length-check', ERROR, [], {disableAutofix: true})
+    .addRule('explicit-length-check', ERROR)
     .addRule('filename-case', OFF)
     .addRule('import-style', ERROR)
     .addRule('new-for-builtins', ERROR)
@@ -89,13 +88,9 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('no-useless-promise-resolve-reject', ERROR)
     .addRule('no-useless-spread', ERROR)
     .addRule('no-useless-switch-case', ERROR)
-    // TODO reason for disabling autofix
-    .addRule(
-      'no-useless-undefined',
-      ERROR,
-      [{checkArguments: false, checkArrowFunctionBody: false}],
-      {disableAutofix: true},
-    )
+    .addRule('no-useless-undefined', ERROR, [
+      {checkArguments: false, checkArrowFunctionBody: false},
+    ])
     .addRule('no-zero-fractions', ERROR)
     .addRule('number-literal-case', OFF) // 🟠
     .addRule('numeric-separators-style', ERROR, [{onlyIfContainsSeparator: true}])
@@ -141,7 +136,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('prefer-regexp-test', ERROR) // TODO disable when regexp is enabled?
     .addRule('prefer-set-has', ERROR)
     .addRule('prefer-set-size', ERROR)
-    .addRule('prefer-spread', ERROR, [], {disableAutofix: true})
+    .addRule('prefer-spread', ERROR)
     .addRule('prefer-string-raw', ERROR)
     .addRule('prefer-string-replace-all', ERROR)
     .addRule('prefer-string-slice', ERROR)

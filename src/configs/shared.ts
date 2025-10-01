@@ -1,6 +1,6 @@
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YAML} from '../constants';
 import {
-  type AllEslintRules,
+  type AllEslintRuleNames,
   type GetRuleOptions,
   type UnConfigOptions,
   createConfigBuilder,
@@ -83,7 +83,7 @@ export const generateConfigNoOnlyTestsBuilder = (
   return configBuilderNoOnlyTests;
 };
 
-export const RULES_TO_DISABLE_IN_TEST_FILES: (keyof AllEslintRules)[] = [
+export const RULES_TO_DISABLE_IN_TEST_FILES: AllEslintRuleNames[] = [
   'no-empty-function',
   'sonarjs/no-hardcoded-ip',
   'sonarjs/no-hardcoded-passwords',
@@ -139,7 +139,7 @@ export const TOML_DEFAULT_FILES = [GLOB_TOML];
 export const YAML_DEFAULT_FILES = [GLOB_YAML];
 
 // 🟣 - in the default *markdown* processor config
-export const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS: (keyof AllEslintRules)[] = [
+export const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS: AllEslintRuleNames[] = [
   'eol-last', // 🟣
   'max-classes-per-file', // [too-strict]
   'no-alert', // [runtime-only]
