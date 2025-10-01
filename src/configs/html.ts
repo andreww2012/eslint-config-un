@@ -1,10 +1,14 @@
 import type {ParserOptions as HtmlEslintParserOptions} from '@html-eslint/parser';
 import {ERROR, GLOB_HTML_ALL, OFF, WARNING} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
+import {noRestrictedHtmlElementsDefault} from './shared';
+import type {VueEslintConfigOptions} from './vue';
 import type {UnConfigFn} from './index';
 
-export interface HtmlEslintConfigOptions extends UnConfigOptions<'@html-eslint'> {
+export interface HtmlEslintConfigOptions
+  extends UnConfigOptions<'@html-eslint'>,
+    Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
    * [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -90,6 +94,14 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
     .addRule('no-obsolete-tags', ERROR) // 🟢
     .addRule('no-restricted-attr-values', OFF)
     .addRule('no-restricted-attrs', OFF)
+    .addRule('no-restricted-tags', ERROR, [
+      {
+        tagPatterns: getKeysOfTruthyValues({
+          ...noRestrictedHtmlElementsDefault,
+          ...optionsResolved.disallowedHtmlTags,
+        }).map((tagName) => `^${tagName}$`),
+      },
+    ]) // >=0.47.0
     .addRule('no-script-style-type', ERROR)
     .addRule('no-target-blank', ERROR)
     .addRule('prefer-https', ERROR)
