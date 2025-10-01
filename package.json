@@ -31,8 +31,8 @@
   "scripts": {
     "u:after": "nr u:info && nr typegen",
     "u:info": "tsx scripts/updated-packages-info.ts",
-    "u": "ncu -i -t minor && nr u:after",
-    "u:a": "ncu -i && nr u:after",
+    "u": "ncu -t minor && nr u:after",
+    "u:a": "ncu && nr u:after",
     "print-peer-deps": "tsx scripts/print-peer-deps.ts",
     "spellcheck": "cspell --no-progress --no-summary .",
     "format:check": "prettier --check '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}' --log-level warn",
