@@ -47,6 +47,7 @@ export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
 }
 
 export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
+  // TODO only load when necessary?
   const {tailwind3: tailwind3Syntax, tailwind4: tailwind4Syntax} = await interopDefault(
     import('tailwind-csstree'),
   );

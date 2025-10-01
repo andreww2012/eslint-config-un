@@ -104,7 +104,7 @@
   - 🟢 [`prefer-at-empty`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-at-empty.md)
   - 🟡 (enabled, warns) [`no-developer-preview`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-developer-preview.md)
   - 🟡 [`no-experimental`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-experimental.md)
-- `@eslint/css`: [0.7.0 → 0.11.0](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.11.0)
+- `@eslint/css`: [0.7.0 → 0.11.1](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.11.1)
   - 🟢 [`relative-font-units`](https://github.com/eslint/css/blob/HEAD/docs/rules/relative-font-units.md)
   - 🟢 [`no-invalid-at-rule-placement`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-at-rule-placement.md)
   - 🟢 [`no-invalid-named-grid-areas`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-named-grid-areas.md)
@@ -232,7 +232,7 @@
 - `eslint-plugin-sonarjs`: [3.0.2 → 3.0.5](https://github.com/SonarSource/SonarJS/blob/master/packages/jsts/src/rules/CHANGELOG.md)
   - `no-invalid-await` rule got removed.
   - `no-one-iteration-loop` rule got removed.
-- `tailwind-csstree`: [0.1.2 → 0.1.3](https://github.com/humanwhocodes/tailwind-csstree/compare/tailwind-csstree-v0.1.2...tailwind-csstree-v0.1.3)
+- `tailwind-csstree`: [0.1.2 → 0.1.4](https://github.com/humanwhocodes/tailwind-csstree/compare/tailwind-csstree-v0.1.2...tailwind-csstree-v0.1.4)
 - `svelte-eslint-parser`: [1.3.0 → 1.3.1](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.3.0...v1.3.1)
 - `@next/eslint-plugin-next`: [15.3.2 → 15.5.0](https://github.com/vercel/next.js/compare/v15.3.2...v15.5.0)
 - `eslint-plugin-unused-imports`: 4.1.4 → 4.2.0
