@@ -109,6 +109,7 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
     ])
     .addRule('yaml-no-duplicate-catalog-item', ERROR)
     .addRule('yaml-no-unused-catalog-item', ERROR)
+    .addRule('yaml-valid-packages', ERROR) // >=1.2.0
     .addOverrides();
 
   return {
