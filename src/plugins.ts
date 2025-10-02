@@ -263,8 +263,13 @@ export const pluginsLoaders = {
         }
       >,
   ),
-  ...genModuleLoader('header', 'eslint-plugin-header', () =>
-    interopDefault(import('eslint-plugin-header')).then(fixupPluginRules),
+  ...genModuleLoader(
+    'header',
+    'eslint-plugin-header',
+    () =>
+      interopDefault(import('eslint-plugin-header')).then(
+        fixupPluginRules,
+      ) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader('headers', 'eslint-plugin-headers', () =>
     interopDefault(import('eslint-plugin-headers')),
@@ -411,8 +416,11 @@ export const pluginsLoaders = {
   ...genModuleLoader('qunit', 'eslint-plugin-qunit', () =>
     interopDefault(import('eslint-plugin-qunit')),
   ),
-  ...genModuleLoader('qwik', 'eslint-plugin-qwik', () =>
-    interopDefault(import('eslint-plugin-qwik')).then(fixupPluginRules),
+  ...genModuleLoader(
+    'qwik',
+    'eslint-plugin-qwik',
+    () =>
+      interopDefault(import('eslint-plugin-qwik')).then(fixupPluginRules) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader('react', 'eslint-plugin-react', () =>
     interopDefault(import('eslint-plugin-react')),
