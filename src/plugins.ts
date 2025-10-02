@@ -372,11 +372,7 @@ export const pluginsLoaders = {
   ...genModuleLoader(
     'package-json',
     'eslint-plugin-package-json',
-    () =>
-      interopDefault(
-        import('eslint-plugin-package-json'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+    () => interopDefault(import('eslint-plugin-package-json')) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader(
     'perfectionist',

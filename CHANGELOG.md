@@ -199,7 +199,7 @@
 - `eslint-plugin-vue`: [10.1.0 → 10.4.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.1.0...v10.4.0)
   - 🟢 (enabled) [`no-negated-v-if-condition`](https://eslint.vuejs.org/rules/no-negated-v-if-condition.html)
   - 🟢 [`no-negated-condition`](https://eslint.vuejs.org/rules/no-negated-condition.html)
-- `eslint-plugin-package-json`: [0.31.0 → 0.56.0](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.31.0...v0.56.0)
+- `eslint-plugin-package-json`: [0.31.0 → 0.56.3](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.31.0...v0.56.3)
   - 🔴 (not enabled) [`require-type`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-type.md)
   - 🟢 (enabled) [`valid-bin`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-bin.md)
   - 🟢 [`valid-author`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-author.md)
