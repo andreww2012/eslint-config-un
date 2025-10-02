@@ -59,7 +59,9 @@
   - Added a new option `enforceAbsoluteVersion` to enforce to use or not to use absolute versions for dependencies.
   - Added a new option, `propertiesAllowedToBeEmpty`, passed to [`no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md)'s [`ignoreProperties`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md#ignoreproperties), and set to `['browserslist']` by default.
   - [`require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md) and [`require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-version.md) rules are now enabled by default, while all the other `require-*` rules are disabled, because the ones that are enabled now ignore the corresponding properties in package.json files with `"private": true`.
-- **markdown** config: added a new sub-config, `formatFencedCodeBlocks`, to use a patched version of [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) to lint fenced code blocks inside Markdown files. 
+- **markdown** config:
+  - Added a new sub-config, `formatFencedCodeBlocks`, to use a patched version of [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) to lint fenced code blocks inside Markdown files. 
+  - [**BREAKING**] `language` is now set to `gfm` (GitHub Flavored Markdown) by default. Also, until [false positives on GFM Alerts are not fixed](https://github.com/eslint/markdown/issues/294), exceptions for them are added via `allowLabels` option of [`no-missing-label-refs`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-label-refs.md) rule.
 - **ts** config:
   - Added a new sub-config, `sortTsconfigKeys`, to sort top-level and `compilerOptions` keys in tsconfig files.
   - [**BREAKING**] Enforced `PascalCase` for enum, enum members, interfaces and types.

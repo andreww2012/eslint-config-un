@@ -116,7 +116,6 @@ export default eslintConfig({
 });
 ```
 
-<!-- eslint-disable-next-line markdown/no-missing-label-refs -->
 > [!NOTE]
 > We highly recommend using TypeScript config file, which is supported since ESLint v9.18.0, or [`@ts-check` directive](https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#ts-check) at the start of the file otherwise.
 
@@ -408,11 +407,9 @@ eslint-config-un provides the ability to change any registered plugin prefix. Ad
 | [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css)               | `css`                | `css-in-js` | Conflicts with [`@eslint/css`](https://npmjs.com/package/@eslint/css) and our name better captures the essence of the plugin |
 | [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x) | `jsx-a11y-x`         | `jsx-a11y`  | This plugin is a fork and is meant to replace the original plugin with `jsx-a11y` prefix                                     |
 
-<!-- eslint-disable-next-line markdown/no-missing-label-refs -->
 > [!NOTE]
 > If you rename a plugin, you still have to use the original prefix within `overrides`, `overridesAny` and `extraConfigs`. eslint-config-un will rename the rules accordingly for you.
 
-<!-- eslint-disable-next-line markdown/no-missing-label-refs -->
 > [!WARNING] Renaming plugins and `eslint-disable` directives
 > If you rename a plugin, you will have to manually rename the rules within `eslint-disable-*` directives.
 

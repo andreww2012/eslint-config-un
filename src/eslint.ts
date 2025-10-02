@@ -32,7 +32,7 @@ export type EslintSeverity = Eslint.Linter.RuleSeverity;
 type EslintRuleEntry<Options extends unknown[] = unknown[]> = Eslint.Linter.RuleEntry<Options>;
 export type EslintPlugin = Eslint.ESLint.Plugin;
 
-export interface FlatConfigEntryFiles {
+interface FlatConfigEntryFiles {
   /**
    * Pass an empty array to disable the config. Note that if the config has
    * "sub-configs", *most of the time* WON'T disabled unless otherwise stated in the config docs.

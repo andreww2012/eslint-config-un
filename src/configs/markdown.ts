@@ -2,14 +2,14 @@ import type {MarkdownLanguageOptions} from '@eslint/markdown/types';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
 import {
-  type FlatConfigEntryFiles,
   type FlatConfigEntryFilesOrIgnores,
+  type GetRuleOptions,
   type RulesRecordPartial,
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults, interopDefault, unique} from '../utils';
+import {assignDefaults, capitalize, interopDefault, unique} from '../utils';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';
 import type {UnConfigFn} from './index';
 
@@ -20,6 +20,23 @@ type CodeBlockLanguage = ShikiLanguageCodesList | (string & {});
 const DEFAULT_FILES = [GLOB_MARKDOWN];
 const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS];
 
+const GFM_ALERTS_TYPES = ['note', 'tip', 'important', 'warning', 'caution'] as const;
+
+const generateNoMissingLabelRefsOptions = (
+  dialect: MarkdownDialect,
+): GetRuleOptions<'markdown', 'no-missing-label-refs'> => [
+  {
+    // TODO remove once https://github.com/eslint/markdown/issues/294 is landed
+    ...(dialect === 'gfm' && {
+      allowLabels: GFM_ALERTS_TYPES.flatMap((alertType) => [
+        `!${alertType}`,
+        `!${alertType.toUpperCase()}`,
+        `!${capitalize(alertType)}`,
+      ]),
+    }),
+  },
+];
+
 export interface MarkdownEslintConfigOptions extends UnConfigOptions<'markdown'> {
   /**
    * Lint Markdown files themselves (***not*** fenced code blocks inside them)
@@ -29,14 +46,14 @@ export interface MarkdownEslintConfigOptions extends UnConfigOptions<'markdown'>
 
   /**
    * Choose a Markdown language dialect globally or per specific files. For each array item,
-   * a config entry will be created
+   * a separate config entry will be created. `gfm` stands for [GitHub Flavored Markdown](https://github.github.com/gfm).
    *
-   * `gfm` stands for [GitHub Flavored Markdown](https://github.github.com/gfm/)
-   * @default 'commonmark'
+   * If `gfm` syntax is used, [`no-missing-label-refs`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-label-refs.md) rule will be enabled and have `allowLabels` option set to [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts).
+   * @default 'gfm'
    */
   language?:
     | MarkdownDialect
-    | PrettifyShallow<FlatConfigEntryFiles & {language: MarkdownDialect}>[];
+    | PrettifyShallow<FlatConfigEntryFilesOrIgnores & {language: MarkdownDialect}>[];
 
   /**
    * If array, only those tags will be allowed. If `false`, no tags are allowed. If `true`, all tags are allowed (default)
@@ -105,7 +122,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
   const optionsRaw = context.rootOptions.configs?.markdown;
   const optionsResolved = assignDefaults(optionsRaw, {
     lintMarkdown: true,
-    language: 'commonmark',
+    language: 'gfm',
     allowHtmlTags: true,
     lintCodeBlocks: true,
     parseFrontmatter: 'yaml',
@@ -130,7 +147,6 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
   const configBuilder = createConfigBuilder(context, optionsResolved, 'markdown');
 
   const defaultDialect: MarkdownDialect = typeof language === 'string' ? language : 'commonmark';
-  const defaultConfigLanguage = `markdown/${defaultDialect}` as const;
 
   const allowedFencedCodeBlocksLanguages =
     Array.isArray(codeBlocksAllowedLanguages) &&
@@ -152,7 +168,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
           },
         ],
         {
-          language: defaultConfigLanguage,
+          language: `markdown/${defaultDialect}`,
           languageOptions: {
             frontmatter: parseFrontmatter,
           },
@@ -188,7 +204,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
       ])
       .addRule('no-invalid-label-refs', ERROR) // 🟢
       .addRule('no-missing-atx-heading-space', ERROR, [{checkClosedHeadings: true}]) // 🟢 >=6.5.0
-      .addRule('no-missing-label-refs', ERROR) // 🟢
+      .addRule('no-missing-label-refs', ERROR, generateNoMissingLabelRefsOptions(defaultDialect)) // 🟢
       .addRule('no-missing-link-fragments', ERROR) // 🟢 >=6.6.0
       .addRule('no-multiple-h1', ERROR, [{frontmatterTitle: ''}]) // 🟢 >=6.5.0
       .addRule('no-reversed-media-syntax', ERROR) // 🟢 >=6.6.0
@@ -200,18 +216,22 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
 
     if (Array.isArray(language)) {
       language.forEach((markdownLanguageSettings, i) => {
-        configBuilder?.addConfig(
-          [
-            `markdown/language-override/${i}`,
+        const dialect = markdownLanguageSettings.language;
+        configBuilder
+          ?.addConfig(
+            [
+              `markdown/language-override/${i}`,
+              {
+                doNotIgnoreMarkdown: true,
+                filesFallback: markdownLanguageSettings.files,
+                ignoresFallback: markdownLanguageSettings.ignores,
+              },
+            ],
             {
-              doNotIgnoreMarkdown: true,
-              filesFallback: markdownLanguageSettings.files,
+              language: `markdown/${dialect}`,
             },
-          ],
-          {
-            language: `markdown/${markdownLanguageSettings.language}`,
-          },
-        );
+          )
+          .addRule('no-missing-label-refs', ERROR, generateNoMissingLabelRefsOptions(dialect));
       });
     }
   }
