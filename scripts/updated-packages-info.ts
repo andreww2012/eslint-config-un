@@ -91,10 +91,6 @@ async function readRootPackageJsonBeforeUncommittedChanges() {
   }
 }
 
-function normalizeRepoUrl(url: string): string {
-  return url.replace(/^git\+/, '').replace(/\.git$/, '');
-}
-
 async function getDependencyRepoUrl(dependency: string) {
   const info = await getPackageInfo(dependency);
   if (!info?.packageJson) {
@@ -122,31 +118,44 @@ async function getDependencyRepoUrl(dependency: string) {
     return '';
   }
 
+  let gitHubRepoPath: string | undefined;
+
   const repoUrlParsed = URL.parse(repoUrl);
-  if (repoUrlParsed == null) {
+  if (repoUrlParsed != null) {
+    if (repoUrlParsed.hostname !== 'github.com') {
+      console.warn(`Not a GitHub repository specified as repository for ${dependency}`);
+      return '';
+    }
+
+    gitHubRepoPath = repoUrlParsed.pathname.slice(1) /* remove `/` at the beginning */;
+  }
+
+  if (!gitHubRepoPath) {
     // https://github.com/vercel/next.js/blob/v15.4.6/packages/eslint-plugin-next/package.json
     const isGitHubRepoHostname = /^[\w-]+\/[\w\-.]+$/.test(repoUrl);
     if (isGitHubRepoHostname) {
-      return `https://github.com/${repoUrl}`;
+      gitHubRepoPath = repoUrl;
     }
+  }
 
+  if (!gitHubRepoPath) {
     // https://github.com/ember-tooling/ember-eslint-parser/blob/v0.5.11-ember-eslint-parser/package.json
     const sshLikeUrlMatch = repoUrl.match(/^git@github.com:([\w-]+\/[\w\-.]+)\.git?$/);
     if (sshLikeUrlMatch) {
-      return `https://github.com/${sshLikeUrlMatch[1] || ''}`;
+      gitHubRepoPath = sshLikeUrlMatch[1];
     }
+  }
 
+  if (!gitHubRepoPath) {
     console.warn(`Failed to parse repository URL of ${dependency}: ${repoUrl}`);
     return '';
   }
 
-  if (repoUrlParsed.hostname !== 'github.com') {
-    console.warn(`Not a GitHub repository specified as repository for ${dependency}`);
-    return '';
-  }
+  // Ignore second slash onwards: https://github.com/mozilla/eslint-plugin-no-unsanitized/blob/4.1.4/package.json#L42
+  gitHubRepoPath = gitHubRepoPath.split('/').slice(0, 2).join('/');
 
   // Non-https protocol is used: https://github.com/webpack/enhanced-resolve/blob/v5.18.3/package.json
-  return normalizeRepoUrl(`https://github.com${repoUrlParsed.pathname}`);
+  return `https://github.com/${gitHubRepoPath}`.replace(/^git\+/, '').replace(/\.git$/, '');
 }
 
 async function main() {
