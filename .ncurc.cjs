@@ -17,6 +17,7 @@ const PACKAGE_GROUPS = Object.entries({
   'angular-eslint': [null],
   jest: [null],
   'html-eslint': [null],
+  cspell: [null, 'cspell'],
 }).reduce(
   (result, [groupName, packagesInGroup]) =>
     Object.assign(
