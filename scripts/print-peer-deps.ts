@@ -13,6 +13,7 @@ const dependenciesUnique: {
     ...Object.keys(packageJson.devDependencies).map((packageName) => ({packageName, isDev: true})),
   ],
   (v) => v.packageName,
+  // eslint-disable-next-line unicorn/no-array-sort
 ).sort(({packageName: a}, {packageName: b}) => a.localeCompare(b));
 
 const packageJsonsResult = await Promise.all(

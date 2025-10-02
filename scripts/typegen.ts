@@ -119,6 +119,7 @@ async function generateRuleTypes() {
           exportTypeName,
           pluginName,
           plugin,
+          // eslint-disable-next-line unicorn/no-array-sort
           ruleNamesSorted: Object.keys(plugin.rules || {}).sort(),
         };
       }),
@@ -208,6 +209,7 @@ function getDiffAsPatch(a: string, b: string) {
 }
 
 async function printDiffBetweenMostRecentAndCurrentRuleTypes(currentRuleTypes: string) {
+  // eslint-disable-next-line unicorn/no-array-sort
   const mostRecentRuleTypesFileName = (await fs.readdir(resolveInOutDir())).sort().at(-1);
   let diffString = '';
   if (mostRecentRuleTypesFileName) {

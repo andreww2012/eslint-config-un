@@ -12,44 +12,45 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
   const configBuilder = createConfigBuilder(context, optionsResolved, 'unicorn');
 
   // Legend:
-  // 🔴 - not in recommended
+  // 🔴 - NOT in recommended & unopinionated
+  // 🟣 - NOT in unopinionated
   // 🟠 - rule from `eslint-config-prettier`
 
   configBuilder
     ?.addConfig(['unicorn', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
     .addRule('better-regex', OFF) // 🔴
-    .addRule('catch-error-name', OFF)
-    .addRule('catch-error-name', WARNING)
-    .addRule('consistent-assert', WARNING) // >=57.0.0
+    .addRule('catch-error-name', WARNING) // 🟣
+    .addRule('consistent-assert', WARNING) // 🟣 >=57.0.0
     .addRule('consistent-date-clone', ERROR) // >=57.0.0
     .addRule('consistent-destructuring', OFF) // 🔴
-    .addRule('consistent-empty-array-spread', ERROR)
+    .addRule('consistent-empty-array-spread', ERROR) // 🟣
     .addRule('consistent-existence-index-check', ERROR)
-    .addRule('consistent-function-scoping', ERROR)
+    .addRule('consistent-function-scoping', ERROR) // 🟣
     .addRule('custom-error-definition', ERROR) // 🔴
-    .addRule('empty-brace-spaces', OFF) // 🟠
+    .addRule('empty-brace-spaces', OFF) // 🟣🟠
     .addRule('error-message', ERROR)
     .addRule('escape-case', ERROR)
     .addRule('expiring-todo-comments', ERROR)
-    .addRule('explicit-length-check', ERROR)
-    .addRule('filename-case', OFF)
+    .addRule('explicit-length-check', ERROR) // 🟣
+    .addRule('filename-case', OFF) // 🟣
     .addRule('import-style', ERROR)
     .addRule('new-for-builtins', ERROR)
     .addRule('no-abusive-eslint-disable', ERROR)
     .addRule('no-accessor-recursion', ERROR) // >=57.0.0
     .addRule('no-anonymous-default-export', OFF) // Note: there's the same rule in import plugin
-    .addRule('no-array-callback-reference', OFF)
+    .addRule('no-array-callback-reference', OFF) // 🟣
     .addRule('no-array-for-each', OFF)
     .addRule('no-array-method-this-argument', ERROR)
     .addRule('prefer-single-call', ERROR)
-    .addRule('no-array-reduce', OFF)
+    .addRule('no-array-reduce', OFF) // 🟣
     .addRule('no-array-reverse', ERROR)
-    .addRule('no-await-expression-member', OFF)
+    .addRule('no-array-sort', ERROR) // >=61.0.0
+    .addRule('no-await-expression-member', OFF) // 🟣
     .addRule('no-await-in-promise-methods', ERROR)
     .addRule('no-console-spaces', ERROR)
     .addRule('no-document-cookie', ERROR)
     .addRule('no-empty-file', ERROR)
-    .addRule('no-for-loop', OFF)
+    .addRule('no-for-loop', OFF) // 🟣
     .addRule('no-hex-escape', ERROR)
     .addRule('no-instanceof-builtins', ERROR) // >=57.0.0
     .addRule('no-invalid-fetch-options', ERROR)
@@ -64,10 +65,10 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('no-negated-condition', ERROR)
     .disableAnyRule('', 'no-negated-condition')
     .addRule('no-negation-in-equality-check', ERROR)
-    .addRule('no-nested-ternary', OFF) // 🟠
+    .addRule('no-nested-ternary', OFF) // 🟣🟠
     .addRule('no-new-array', ERROR)
     .addRule('no-new-buffer', ERROR)
-    .addRule('no-null', OFF)
+    .addRule('no-null', OFF) // 🟣
     .addRule('no-object-as-default-parameter', ERROR)
     .addRule('no-process-exit', OFF) // Used in `node` config
     .addRule('no-single-promise-in-promise-methods', ERROR)
@@ -101,8 +102,10 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('prefer-array-index-of', ERROR)
     .addRule('prefer-array-some', ERROR)
     .addRule('prefer-at', ERROR)
+    .addRule('prefer-bigint-literals', ERROR) // >=61.0.0
     .addRule('prefer-blob-reading-methods', ERROR)
     .addRule('prefer-class-fields', ERROR)
+    .addRule('prefer-classlist-toggle', ERROR) // >=61.0.0
     .addRule('prefer-code-point', ERROR)
     .addRule('prefer-date-now', ERROR)
     .addRule('prefer-default-parameters', ERROR)
@@ -111,7 +114,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('prefer-dom-node-remove', ERROR)
     .addRule('prefer-dom-node-text-content', OFF)
     .addRule('prefer-event-target', ERROR)
-    .addRule('prefer-export-from', ERROR, [{ignoreUsedVariables: true}])
+    .addRule('prefer-export-from', ERROR, [{ignoreUsedVariables: true}]) // 🟣
     .addRule('prefer-global-this', OFF) // >=56.0.0
     .addRule('prefer-import-meta-properties', OFF) // 🔴 used in `node` config
     .addRule('prefer-includes', ERROR)
@@ -131,12 +134,12 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('prefer-object-from-entries', ERROR)
     .addRule('prefer-optional-catch-binding', ERROR)
     .addRule('prefer-prototype-methods', ERROR)
-    .addRule('prefer-query-selector', OFF)
+    .addRule('prefer-query-selector', OFF) // 🟣
     .addRule('prefer-reflect-apply', ERROR)
     .addRule('prefer-regexp-test', ERROR) // TODO disable when regexp is enabled?
     .addRule('prefer-set-has', ERROR)
     .addRule('prefer-set-size', ERROR)
-    .addRule('prefer-spread', ERROR)
+    .addRule('prefer-spread', ERROR) // 🟣
     .addRule('prefer-string-raw', ERROR)
     .addRule('prefer-string-replace-all', ERROR)
     .addRule('prefer-string-slice', ERROR)
@@ -147,15 +150,16 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('prefer-ternary', ERROR)
     .addRule('prefer-top-level-await', OFF)
     .addRule('prefer-type-error', ERROR)
-    .addRule('prevent-abbreviations', OFF)
+    .addRule('prevent-abbreviations', OFF) // 🟣
     .addRule('relative-url-style', ERROR, ['always'])
     .addRule('require-array-join-separator', ERROR)
+    .addRule('require-module-attributes', ERROR) // >=61.0.0
     .addRule('require-module-specifiers', ERROR)
     .addRule('require-number-to-fixed-digits-argument', ERROR)
     .addRule('require-post-message-target-origin', OFF) // 🔴
     .addRule('string-content', OFF) // 🔴
-    .addRule('switch-case-braces', ERROR)
-    .addRule('template-indent', ERROR) // 🟠
+    .addRule('switch-case-braces', ERROR) // 🟣
+    .addRule('template-indent', ERROR) // 🟣🟠
     .addRule('text-encoding-identifier-case', ERROR)
     .addRule('throw-new-error', ERROR)
     .addOverrides();
