@@ -187,12 +187,20 @@ export interface JsdocEslintConfigOptions extends UnConfigOptions<'jsdoc'> {
    * - [`no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md)
    */
   extraMultilineCommentsStartingWithToIgnore?: string[];
+
+  /**
+   * Affected rules:
+   * - [`type-formatting`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/type-formatting.md)
+   * @default true
+   */
+  formatTypeValues?: boolean;
 }
 
 export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.jsdoc;
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypescript: context.configsMeta.ts.enabled,
+    formatTypeValues: true,
   } satisfies JsdocEslintConfigOptions);
 
   const {
@@ -200,6 +208,7 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     configTypescript,
     customTags,
     extraMultilineCommentsStartingWithToIgnore,
+    formatTypeValues,
   } = optionsResolved;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'jsdoc');
@@ -222,7 +231,6 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     })
     .addRule('check-access', ERROR) // 🟢2️⃣
     .addRule('check-alignment', ERROR) // 🟢4️⃣
-    .addRule('check-examples', OFF) // Doesn't work in ESLint 9
     .addRule('check-indentation', ERROR)
     .addRule('check-line-alignment', ERROR) // 4️⃣
     .addRule('check-param-names', ERROR) // 🟢2️⃣
@@ -234,6 +242,7 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     .addRule('check-values', ERROR) // 🟢2️⃣
     .addRule('convert-to-jsdoc-comments', OFF) // Experimental rule
     .addRule('empty-tags', ERROR) // 🟢2️⃣
+    .addRule('escape-inline-tags', ERROR) // 🔵2️⃣ >=60.6.0
     .addRule('implements-on-classes', ERROR) // 🟢2️⃣
     .addRule('imports-as-dependencies', OFF)
     .addRule('informative-docs', OFF) // 1️⃣
@@ -265,6 +274,9 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     .addRule('no-restricted-syntax', OFF)
     .addRule('no-types', OFF) // 2️⃣
     .addRule('no-undefined-types', ERROR) // 🟢2️⃣
+    .addRule('prefer-import-tag', OFF) // >=60.2.0
+    .addRule('reject-any-type', OFF) // 🟢 >=58.0.0
+    .addRule('reject-function-type', OFF) // 🟢 >=58.0.0
     .addRule('require-asterisk-prefix', ERROR) // 4️⃣
     .addRule('require-description-complete-sentence', OFF)
     .addRule('require-description', OFF)
@@ -272,6 +284,8 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     .addRule('require-file-overview', OFF)
     .addRule('require-hyphen-before-param-description', OFF) // 4️⃣
     .addRule('require-jsdoc', OFF) // 🟢3️⃣
+    .addRule('require-next-description', OFF) // >=59.0.0
+    .addRule('require-next-type', WARNING) // 🟢3️⃣ >=57.0.0
     .addRule('require-param-description', WARNING) // 🟢3️⃣ (error by default)
     .addRule('require-param-name', ERROR) // 🟢3️⃣
     .addRule('require-param-type', ERROR) // 🟢
@@ -284,14 +298,23 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     .addRule('require-returns-description', WARNING) // 🟢3️⃣ (error by default)
     .addRule('require-returns-type', ERROR) // 🟢
     .addRule('require-returns', OFF) // 🟢3️⃣
+    .addRule('require-tags', OFF) // >=59.1.0 (renamed to the actual name in 60.0.0)
     .addRule('require-template', OFF)
+    .addRule('require-template-description', OFF) // >=60.5.0
     .addRule('require-throws', OFF)
+    .addRule('require-throws-description', OFF) // >=59.0.0
+    .addRule('require-throws-type', WARNING) // 🟢3️⃣ >=57.0.0
     .addRule('require-yields-check', ERROR) // 🟢2️⃣
     .addRule('require-yields', ERROR) // 🟢3️⃣
+    .addRule('require-yields-description', OFF) // >=59.0.0
+    .addRule('require-yields-type', WARNING) // 🟢3️⃣ >=57.0.0
     .addRule('sort-tags', ERROR)
     .addRule('tag-lines', ERROR) // 🟢4️⃣
     .addRule('text-escaping', OFF) // 1️⃣
+    .addRule('type-formatting', formatTypeValues ? ERROR : OFF) // >=55.3.0
     .addRule('valid-types', ERROR) // 🟢2️⃣
+    // Deprecated:
+    .addRule('check-examples', OFF) // Doesn't work in ESLint 9, deprecated since 59.0.1
     .addOverrides();
 
   const configBuilderTypescript = createConfigBuilder(context, configTypescript, 'jsdoc');

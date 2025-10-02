@@ -18,7 +18,7 @@ export interface HtmlEslintConfigOptions
     // TODO
 
     /**
-     * This plugin allows you to lint not only HTML files but also HTML written in JavaScript Template Literal. You can set the @html-eslint rules in your settings to lint JavaScript code without any additional configuration.
+     * This plugin allows you to lint not only HTML files but also HTML written in JavaScript Template Literal. You can set the \@html-eslint rules in your settings to lint JavaScript code without any additional configuration.
      *
      * Not all template literals are recognized as HTML. There are two ways to make the plugin recognize them as HTML.
      *
