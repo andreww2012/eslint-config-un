@@ -20,6 +20,7 @@ const PACKAGES_GIT_TAGS_PATTERNS: Partial<
   '@sveltejs/kit': (version) => `@sveltejs/kit@${version}`,
   'ember-eslint-parser': (version) => `v${version}-ember-eslint-parser`,
   'tailwind-csstree': (version) => `tailwind-csstree-v${version}`,
+  'eslint-plugin-prefer-arrow-functions': (version) => version,
 };
 
 // =============================================================================

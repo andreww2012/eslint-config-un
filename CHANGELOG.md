@@ -269,6 +269,7 @@
 - `eslint-plugin-unused-imports`: 4.1.4 → 4.2.0
 - `eslint-plugin-yml`: [1.18.0 → 1.19.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v1.18.0...v1.19.0)
 - `eslint-plugin-jest-extended`: [3.0.0 → 3.0.1](https://github.com/jest-community/eslint-plugin-jest-extended/compare/v3.0.0...v3.0.1)
+- `eslint-plugin-prefer-arrow-functions`: [3.6.2 → 3.9.1](https://github.com/JamieMason/eslint-plugin-prefer-arrow-functions/compare/3.6.2...3.9.1)
 
 ## 0.10.0
 
