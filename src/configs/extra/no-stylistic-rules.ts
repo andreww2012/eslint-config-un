@@ -624,6 +624,7 @@ const ALL_STYLISTIC_RULES = {
     'prefer-array-index-of': true,
     'prefer-at': true,
     'prefer-bigint-literals': true,
+    'prefer-class-fields': true,
     'prefer-classlist-toggle': true,
     'prefer-code-point': true,
     'prefer-date-now': true,
