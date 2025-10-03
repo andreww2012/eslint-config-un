@@ -268,6 +268,7 @@
 - `@next/eslint-plugin-next`: [15.3.2 → 15.5.4](https://github.com/vercel/next.js/compare/v15.3.2...v15.5.4)
 - `eslint-plugin-unused-imports`: 4.1.4 → 4.2.0
 - `eslint-plugin-yml`: [1.18.0 → 1.19.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v1.18.0...v1.19.0)
+- `eslint-plugin-jest-extended`: [3.0.0 → 3.0.1](https://github.com/jest-community/eslint-plugin-jest-extended/compare/v3.0.0...v3.0.1)
 
 ## 0.10.0
 
