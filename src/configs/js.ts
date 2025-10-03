@@ -93,7 +93,7 @@ export const jsUnConfig: UnConfigFn<
     .addRule('no-sparse-arrays', ERROR) // 🟢
     .addRule('no-template-curly-in-string', ERROR)
     .addRule('no-this-before-super', ERROR) // 🟢
-    .addRule('no-unassigned-vars', eslintVersion >= 9.27 ? ERROR : OFF)
+    .addRule('no-unassigned-vars', eslintVersion >= 9.27 ? ERROR : OFF) // >=9.27
     .addRule('no-undef', ERROR) // 🟢
     .addRule('no-unexpected-multiline', OFF) // 🟢💅
     .addRule('no-unmodified-loop-condition', ERROR)
@@ -282,6 +282,7 @@ export const jsUnConfig: UnConfigFn<
     .addRule('prefer-rest-params', ERROR)
     .addRule('prefer-spread', ERROR)
     .addRule('prefer-template', ERROR)
+    .addRule('preserve-caught-error', OFF) // >=9.35.0
     .addRule('radix', ERROR)
     .addRule('require-await', ERROR)
     .addRule('require-unicode-regexp', OFF)

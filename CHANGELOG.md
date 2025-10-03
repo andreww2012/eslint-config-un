@@ -97,8 +97,9 @@
 
 ### Dependencies
 
-- `eslint` (peer dependency): [9.26.0 → 9.29.0](https://github.com/eslint/eslint/compare/v9.26.0...v9.29.0)
+- `eslint` (peer dependency): [9.26.0 → 9.36.0](https://github.com/eslint/eslint/compare/v9.26.0...v9.36.0)
   - ❓ (enabled conditionally) [`no-unassigned-vars`](https://eslint.org/docs/latest/rules/no-unassigned-vars)
+  - 🔴 (not enabled) [`preserve-caught-error`](https://eslint.org/docs/latest/rules/preserve-caught-error)
 - `angular-eslint`: [19.4.0 → 20.3.0](https://github.com/angular-eslint/angular-eslint/compare/v19.4.0...v20.3.0)
   - 🟢 (enabled) [`no-uncalled-signals`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-uncalled-signals.md)
   - 🟢 [`prefer-inject`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-inject.md)
