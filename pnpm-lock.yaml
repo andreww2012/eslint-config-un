@@ -366,8 +366,8 @@ importers:
         specifier: 5.1.1
         version: 5.1.1(eslint@9.36.0(jiti@2.6.1))
       eslint-plugin-mocha:
-        specifier: 11.1.0
-        version: 11.1.0(eslint@9.36.0(jiti@2.6.1))
+        specifier: 11.2.0
+        version: 11.2.0(eslint@9.36.0(jiti@2.6.1))
       eslint-plugin-perfectionist:
         specifier: 4.15.0
         version: 4.15.0(eslint@9.36.0(jiti@2.6.1))(typescript@5.9.3)
@@ -4932,8 +4932,8 @@ packages:
     peerDependencies:
       eslint: '>=8.0.0'
 
-  eslint-plugin-mocha@11.1.0:
-    resolution: {integrity: sha512-rKntVWRsQFPbf8OkSgVNRVRrcVAPaGTyEgWCEyXaPDJkTl0v5/lwu1vTk5sWiUJU8l2sxwvGUZzSNrEKdVMeQw==}
+  eslint-plugin-mocha@11.2.0:
+    resolution: {integrity: sha512-nMdy3tEXZac8AH5Z/9hwUkSfWu8xHf4XqwB5UEQzyTQGKcNlgFeciRAjLjliIKC3dR1Ex/a2/5sqgQzvYRkkkA==}
     peerDependencies:
       eslint: '>=9.0.0'
 
@@ -13746,9 +13746,9 @@ snapshots:
       - remark-lint-file-extension
       - supports-color
 
-  eslint-plugin-mocha@11.1.0(eslint@9.36.0(jiti@2.6.1)):
+  eslint-plugin-mocha@11.2.0(eslint@9.36.0(jiti@2.6.1)):
     dependencies:
-      '@eslint-community/eslint-utils': 4.7.0(eslint@9.36.0(jiti@2.6.1))
+      '@eslint-community/eslint-utils': 4.9.0(eslint@9.36.0(jiti@2.6.1))
       eslint: 9.36.0(jiti@2.6.1)
       globals: 15.15.0
 
