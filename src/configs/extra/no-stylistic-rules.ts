@@ -701,6 +701,8 @@ const ALL_STYLISTIC_RULES = {
     'html-self-closing': true,
     'multi-word-component-names': true,
     'no-implicit-coercion': true,
+    'no-negated-condition': true,
+    'no-negated-v-if-condition': true,
     'no-use-v-else-with-v-for': true,
     'no-use-v-if-with-v-for': true,
     'no-useless-mustaches': true,
