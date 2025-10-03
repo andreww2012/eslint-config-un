@@ -279,9 +279,11 @@ const ALL_STYLISTIC_RULES = {
     'multiline-blocks': true,
     'no-blank-block-descriptions': true,
     'no-multi-asterisks': true,
+    'prefer-import-tag': true,
     'require-asterisk-prefix': true,
     'sort-tags': true,
     'tag-lines': true,
+    'type-formatting': true,
   },
   'json-schema-validator': {
     // None
