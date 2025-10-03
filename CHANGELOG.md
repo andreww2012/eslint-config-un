@@ -256,6 +256,7 @@
 - `svelte-eslint-parser`: [1.3.0 → 1.3.1](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.3.0...v1.3.1)
 - `@next/eslint-plugin-next`: [15.3.2 → 15.5.0](https://github.com/vercel/next.js/compare/v15.3.2...v15.5.0)
 - `eslint-plugin-unused-imports`: 4.1.4 → 4.2.0
+- `eslint-plugin-yml`: [1.18.0 → 1.19.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v1.18.0...v1.19.0)
 
 ## 0.10.0
 
