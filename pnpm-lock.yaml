@@ -318,8 +318,8 @@ importers:
         specifier: 15.1.0
         version: 15.1.0(eslint@9.36.0(jiti@2.6.1))
       eslint-plugin-better-tailwindcss:
-        specifier: 3.7.6
-        version: 3.7.6(eslint@9.36.0(jiti@2.6.1))(tailwindcss@3.4.17)
+        specifier: 3.7.9
+        version: 3.7.9(eslint@9.36.0(jiti@2.6.1))(tailwindcss@3.4.17)
       eslint-plugin-case-police:
         specifier: 2.0.0
         version: 2.0.0(eslint@9.36.0(jiti@2.6.1))(typescript@5.9.3)
@@ -4751,8 +4751,8 @@ packages:
     peerDependencies:
       eslint: '>=9'
 
-  eslint-plugin-better-tailwindcss@3.7.6:
-    resolution: {integrity: sha512-sdg5vm968liqk/qJAzXSBPlOdSs0sRkajiOoRrXoYRkvAqXG/80Rd7ibgEXtw+C7QZoQ2pvjEqzR+hEuzrUJvQ==}
+  eslint-plugin-better-tailwindcss@3.7.9:
+    resolution: {integrity: sha512-xmd3YqRoc57ngplFBZLn13bLpKsq6fe+ipdObilG46llJi0MvHSx8+uQ1VNBE1/ieIcedmVY7quol4WLntM8iw==}
     engines: {node: ^20.11.0 || >=21.2.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
@@ -13471,12 +13471,12 @@ snapshots:
       pkg-dir: 5.0.0
       resolve-from: 5.0.0
 
-  eslint-plugin-better-tailwindcss@3.7.6(eslint@9.36.0(jiti@2.6.1))(tailwindcss@3.4.17):
+  eslint-plugin-better-tailwindcss@3.7.9(eslint@9.36.0(jiti@2.6.1))(tailwindcss@3.4.17):
     dependencies:
       '@eslint/css-tree': 3.6.5
       enhanced-resolve: 5.18.3
       eslint: 9.36.0(jiti@2.6.1)
-      jiti: 2.5.1
+      jiti: 2.6.1
       postcss: 8.5.6
       postcss-import: 16.1.1(postcss@8.5.6)
       synckit: 0.11.11
@@ -17744,7 +17744,7 @@ snapshots:
     dependencies:
       '@quansync/fs': 0.1.5
       defu: 6.1.4
-      jiti: 2.5.1
+      jiti: 2.6.1
       quansync: 0.2.11
 
   uncrypto@0.1.3: {}
