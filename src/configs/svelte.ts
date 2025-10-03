@@ -278,7 +278,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     .addRule('no-trailing-spaces', OFF) // 💅 >=2.7.0
     /* CATEGORY: SvelteKit */
     .addRule('no-export-load-in-svelte-module-in-kit-pages', ERROR) // 🟢 >=2.12.0
-    .addRule('no-navigation-without-base', WARNING) // >=2.36.0-next.9
+    .addRule('no-navigation-without-resolve', ERROR) // 🟢 >=3.12.0
     .addRule('valid-prop-names-in-kit-pages', ERROR) // 🟢 >=2.12.0
     /* CATEGORY: Experimental */
     .addRule('experimental-require-slot-types', OFF) // >=2.18.0
@@ -289,6 +289,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     .addRule('@typescript-eslint/no-unnecessary-condition', OFF) // >=2.9.0
     .addRule('no-dynamic-slot-name', OFF) // >=0.14.0
     .addRule('no-goto-without-base', OFF) // >=2.36.0-next.9
+    .addRule('no-navigation-without-base', OFF) // >=2.36.0-next.9
     .addOverrides();
 
   if (isPrettierPluginSvelteUsed) {
