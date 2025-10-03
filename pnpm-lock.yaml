@@ -426,8 +426,8 @@ importers:
         specifier: 2.4.1
         version: 2.4.1(eslint@9.36.0(jiti@2.6.1))
       eslint-plugin-wc:
-        specifier: 3.0.1
-        version: 3.0.1(eslint@9.36.0(jiti@2.6.1))
+        specifier: 3.0.2
+        version: 3.0.2(eslint@9.36.0(jiti@2.6.1))
       eslint-plugin-you-dont-need-lodash-underscore:
         specifier: 6.14.0
         version: 6.14.0
@@ -5136,8 +5136,8 @@ packages:
     peerDependencies:
       eslint: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
 
-  eslint-plugin-wc@3.0.1:
-    resolution: {integrity: sha512-0p1wkSlA2Ue3FA4qW+5LZ+15sy0p1nUyVl1eyBMLq4rtN1LtE9IdI49BXNWMz8N8bM/y7Ulx8SWGAni5f8XO5g==}
+  eslint-plugin-wc@3.0.2:
+    resolution: {integrity: sha512-siwTrxPTw6GU2JmP3faInw8nhi0ZCnKsiSRM3j7EAkZmBTGYdDAToeseLYsvPrc5Urp/vPz+g7Ewh7XcICLxww==}
     peerDependencies:
       eslint: '>=8.40.0'
 
@@ -14019,7 +14019,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-wc@3.0.1(eslint@9.36.0(jiti@2.6.1)):
+  eslint-plugin-wc@3.0.2(eslint@9.36.0(jiti@2.6.1)):
     dependencies:
       eslint: 9.36.0(jiti@2.6.1)
       is-valid-element-name: 1.0.0
