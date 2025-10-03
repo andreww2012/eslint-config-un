@@ -37,8 +37,8 @@
     "spellcheck": "cspell --no-progress --no-summary .",
     "format:check": "prettier --check '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}' --log-level warn",
     "format:fix": "prettier --write '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}' --log-level warn",
-    "eslint:inspect": "npx eslint-config-inspector --open false",
-    "lint:eslint": "eslint --cache",
+    "eslint:inspect": "eslint-config-inspector --open false",
+    "lint:eslint": "eslint --cache --concurrency auto",
     "lint:eslint:fix": "nr lint:eslint --fix",
     "lint:types": "tsc --noEmit",
     "lint:types:go": "tsgo --noEmit",
@@ -51,7 +51,7 @@
     "build:code:test": "tsdown --out-dir temp/dist",
     "build": "nr typegen && nr build:code",
     "test": "nr typegen && nr knip && nr spellcheck && nr lint && nr build:code:test",
-    "lint:public-types": "npx attw --pack . --profile esm-only",
+    "lint:public-types": "attw --pack . --profile esm-only",
     "prepublishOnly": "nr test && nr build && nr lint:public-types"
   },
   "overrides": {
