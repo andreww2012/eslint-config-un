@@ -163,7 +163,7 @@
   - 🟢 [`hoisted-apis-on-top`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/hoisted-apis-on-top.md)
   - 🟢 [`prefer-import-in-mock`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-import-in-mock.md)
   - ❓ [`prefer-called-exactly-once-with`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-exactly-once-with.md)
-- `eslint-plugin-de-morgan`: [1.2.1 → 1.3.1](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.1...v1.3.1)
+- `eslint-plugin-de-morgan`: [1.2.1 → 2.0.0](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.1...v2.0.0)
 - `eslint-plugin-es-x`: [8.6.2 → 9.1.0](https://github.com/eslint-community/eslint-plugin-es-x/compare/v8.6.2...v9.1.0)
   - ❓ (enabled conditionally) [`no-array-fromasync`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-array-fromasync.html)
   - ❓ [`no-asyncdisposablestack`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-asyncdisposablestack.html)
