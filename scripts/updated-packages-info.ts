@@ -58,9 +58,11 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
               ? styleText('green', line)
               : line.startsWith('-')
                 ? styleText('red', line)
-                : line.startsWith(' ')
-                  ? line
-                  : styleText('magentaBright', line);
+                : line.startsWith('\\') // Example: "\ No newline at end of file"
+                  ? styleText('gray', line)
+                  : line.startsWith(' ')
+                    ? line
+                    : styleText('magentaBright', line);
         return `  ${formattedLine}`;
       })
       .join('\n'),
@@ -70,6 +72,32 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   console.log(
     `${styleText('bold', 'For changelog:')}\n\`${dependency}\`: [${oldVersion} → ${newVersion}](${repoUrl}/compare/${getGitHubVersionTag(dependency, oldVersion)}...${getGitHubVersionTag(dependency, newVersion)})`,
   );
+}
+
+const updatedProdDependencies = updatedDependenciesInfo.filter(
+  ({dependency}) => dependency in ourPackageJson.dependencies,
+);
+const updatedOptionalPeerDependencies = updatedDependenciesInfo.filter(
+  ({dependency}) =>
+    dependency in ourPackageJson.devDependencies &&
+    dependency in ourPackageJson.peerDependenciesMeta,
+);
+if (updatedProdDependencies.length + updatedOptionalPeerDependencies.length > 0) {
+  console.log(
+    styleText('red', '\nPlease do not forget'),
+    'to review new rules additions to decide which ones should be considered stylistic',
+  );
+  if (updatedOptionalPeerDependencies.length > 0) {
+    console.log(
+      styleText('red', 'Please do not forget'),
+      'to update peer dependency ranges for the following packages:',
+    );
+    console.log(
+      updatedOptionalPeerDependencies
+        .map(({dependency, newVersion}) => `"${dependency}": "^${newVersion}",`)
+        .join('\n'),
+    );
+  }
 }
 
 // =============================================================================
