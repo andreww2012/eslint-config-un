@@ -621,6 +621,8 @@ const ALL_STYLISTIC_RULES = {
     'prefer-array-flat-map': true,
     'prefer-array-index-of': true,
     'prefer-at': true,
+    'prefer-bigint-literals': true,
+    'prefer-classlist-toggle': true,
     'prefer-code-point': true,
     'prefer-date-now': true,
     'prefer-dom-node-append': true,
