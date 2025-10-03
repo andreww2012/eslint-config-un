@@ -87,7 +87,6 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `prefer-arrow-functions`   | `eslint-plugin-prefer-arrow-functions`   |
 | `qunit`                    | `eslint-plugin-qunit`                    |
 | `qwik`                     | `eslint-plugin-qwik`                     |
-| `react-compiler`           | `eslint-plugin-react-compiler`           |
 | `react-hooks`              | `eslint-plugin-react-hooks`              |
 | `react-refresh`            | `eslint-plugin-react-refresh`            |
 | `react`                    | `eslint-plugin-react`                    |
@@ -205,7 +204,6 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | ![ReactJS](./assets/devicon-react.svg) `react/hooks`                         | ✅ | [eslint-plugin-react-hooks](https://npmjs.com/eslint-plugin-react-hooks) (`react-hooks`)<br>[@eslint-react/eslint-plugin](https://npmjs.com/package/@eslint-react/eslint-plugin) (`@eslint-react`) | Includes rules with `@eslint-react/hooks-extra` prefix from `@eslint-react/eslint-plugin` |
 | ![ReactJS](./assets/devicon-react.svg) `react/dom`                           | ✅ (`react-dom` is installed) | [@eslint-react/eslint-plugin](https://npmjs.com/package/@eslint-react/eslint-plugin) (`@eslint-react`)<br>[eslint-plugin-react](https://npmjs.com/eslint-plugin-react) | Includes rules with `@eslint-react/dom` prefix from `@eslint-react/eslint-plugin` and DOM related rules from `eslint-plugin-react` |
 | ![ReactJS](./assets/devicon-react.svg) `react/refresh`                       | ✅ | [eslint-plugin-react-refresh](https://npmjs.com/eslint-plugin-react-refresh) (`react-refresh`) | - |
-| ![ReactJS](./assets/devicon-react.svg) `react/compiler`                      | ✅ (if React version is at least 19) | [eslint-plugin-react-compiler](https://npmjs.com/eslint-plugin-react-compiler) (`react-compiler`) | - |
 | ![ReactJS](./assets/devicon-react.svg) `react/youMightNotNeedAnEffect`       | ✅ | [eslint-plugin-react-you-might-not-need-an-effect](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect) (`react-you-might-not-need-an-effect`) | Since v1.0.0 |
 | ![ReactJS](./assets/devicon-react.svg) `react/allowDefaultExportsInJsxFiles` | ✅ | - | Config that allows default exports in all JSX files |
 | ![NextJS](./assets/devicon-nextjs.svg) `nextJs`                              | ✅ (`next` is installed) | [@next/eslint-plugin-next](https://npmjs.com/package/@next/eslint-plugin-next) (`@next/next`) | Since v0.9.0 |

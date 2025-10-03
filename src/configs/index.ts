@@ -732,7 +732,6 @@ export interface UnConfigs {
    * - `reactX`: runtime agnostic ("X") and "Name Convention" rules from `@eslint-react/eslint-plugin`.
    * - `hooks`: rules from `eslint-plugin-react-hooks` as well as "Hooks Extra" rules from `@eslint-react/eslint-plugin`.
    * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and `eslint-plugin-react`.
-   * - `compiler`: rules from `eslint-plugin-react-compiler`.
    * - `refresh`: rules from `eslint-plugin-react-refresh`.
    * - `youMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
    * @default true <=> `react` package is installed

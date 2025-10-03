@@ -191,8 +191,7 @@
     "eslint-plugin-qunit": "8.2.5",
     "eslint-plugin-qwik": "1.16.1",
     "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-react-compiler": "19.1.0-rc.2",
-    "eslint-plugin-react-hooks": "5.2.0",
+    "eslint-plugin-react-hooks": "6.1.0",
     "eslint-plugin-react-refresh": "0.4.20",
     "eslint-plugin-react-you-might-not-need-an-effect": "0.4.4",
     "eslint-plugin-solid": "0.14.5",
@@ -269,8 +268,7 @@
     "eslint-plugin-qunit": "^8.2.5",
     "eslint-plugin-qwik": "^1.16.1",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-compiler": "^19.1.0-rc.2",
-    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-hooks": "^6.1.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "eslint-plugin-react-you-might-not-need-an-effect": "^0.4.4",
     "eslint-plugin-solid": "^0.14.5",
@@ -415,9 +413,6 @@
       "optional": true
     },
     "eslint-plugin-react": {
-      "optional": true
-    },
-    "eslint-plugin-react-compiler": {
       "optional": true
     },
     "eslint-plugin-react-hooks": {

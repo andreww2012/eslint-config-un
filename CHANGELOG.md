@@ -81,6 +81,7 @@
   - `configTypeAwareRules` now uses `files` and `ignores` from `ts` config by default.
   - Added a new sub-config, `youMightNotNeedAnEffect` via [`eslint-plugin-react-you-might-not-need-an-effect`](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect), enabled by default.
   - [**BREAKING**] Some `@eslint-react/eslint-plugin` rules have been renamed and removed. Please refer to [v2 migration guide](https://github.com/Rel1cx/eslint-react/releases/tag/v2.0.0) for more details.
+  - [**BREAKING**] `eslint-plugin-react-compiler` have been replaced with [new "Compiler" rules from `eslint-plugin-react-hooks`](https://react.dev/blog/2025/10/01/react-19-2#eslint-plugin-react-hooks).
 - **yaml** config:
   - Added a new config to target GitHub Actions workflow files, currently only disabling [`no-empty-mapping-value`](https://ota-meshi.github.io/eslint-plugin-yml/rules/no-empty-mapping-value.html) rule.
   - Added an option to not enforce the file extension.
@@ -212,7 +213,6 @@
 - `eslint-plugin-perfectionist`: [4.12.3 → 4.15.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.12.3...v4.15.0)
 - `eslint-plugin-prettier`: [5.4.0 → 5.4.1](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.0...v5.4.1)
 - `eslint-plugin-qwik`: [1.13.0 → 1.16.1](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik%401.13.0...eslint-plugin-qwik%401.16.1)
-- `eslint-plugin-react-compiler`: 19.1.0-rc.1 → 19.1.0-rc.2
 - `eslint-plugin-regexp`: [2.7.0 → 2.10.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v2.7.0...v2.10.0)
 - `eslint-plugin-svelte`: [3.5.1 → 3.11.0](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte%403.5.1...eslint-plugin-svelte%403.11.0)
   - 🟢 (enabled) [`no-top-level-browser-globals`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-top-level-browser-globals)
@@ -270,6 +270,34 @@
 - `eslint-plugin-yml`: [1.18.0 → 1.19.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v1.18.0...v1.19.0)
 - `eslint-plugin-jest-extended`: [3.0.0 → 3.0.1](https://github.com/jest-community/eslint-plugin-jest-extended/compare/v3.0.0...v3.0.1)
 - `eslint-plugin-prefer-arrow-functions`: [3.6.2 → 3.9.1](https://github.com/JamieMason/eslint-plugin-prefer-arrow-functions/compare/3.6.2...3.9.1)
+- `eslint-plugin-react-hooks`: [5.2.0 → 6.1.0](https://github.com/facebook/react/blob/HEAD/packages/eslint-plugin-react-hooks/CHANGELOG.md)
+  - 🟢 (enabled) `automatic-effect-dependencies`
+  - 🟢 `capitalized-calls`
+  - 🟢 `component-hook-factories`
+  - 🟢 `config`
+  - 🟢 `error-boundaries`
+  - 🟢 `fbt`
+  - 🟢 `fire`
+  - 🟢 `gating`
+  - 🟢 `globals`
+  - 🟢 `immutability`
+  - 🟢 `incompatible-library`
+  - 🟢 `invariant`
+  - 🟢 `memoized-effect-dependencies`
+  - 🟢 `no-deriving-state-in-effects`
+  - 🟢 `no-unused-directives`
+  - 🟢 `preserve-manual-memoization`
+  - 🟢 `purity`
+  - 🟢 `refs`
+  - 🟢 `rule-suppression`
+  - 🟢 `set-state-in-effect`
+  - 🟢 `set-state-in-render`
+  - 🟢 `static-components`
+  - 🟢 `syntax`
+  - 🟡 (enabled, warns) `unsupported-syntax`
+  - 🟡 `use-memo`
+  - 🔴 (not enabled) `hooks`
+  - 🔴 `todo`
 
 ## 0.10.0
 

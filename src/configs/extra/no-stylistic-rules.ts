@@ -427,9 +427,6 @@ const ALL_STYLISTIC_RULES = {
     'static-property-placement': true,
     'style-prop-object': true,
   },
-  'react-compiler': {
-    // None
-  },
   'react-hooks': {
     // None
   },

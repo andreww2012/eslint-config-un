@@ -421,9 +421,6 @@ export const pluginsLoaders = {
   ...genModuleLoader('react', 'eslint-plugin-react', () =>
     interopDefault(import('eslint-plugin-react')),
   ),
-  ...genModuleLoader('react-compiler', 'eslint-plugin-react-compiler', () =>
-    interopDefault(import('eslint-plugin-react-compiler')),
-  ),
   ...genModuleLoader('react-hooks', 'eslint-plugin-react-hooks', () =>
     interopDefault(import('eslint-plugin-react-hooks')),
   ),

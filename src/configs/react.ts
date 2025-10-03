@@ -212,7 +212,26 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
    * By default will use the same `files` and `ignores` as the parent config.
    * @default true
    */
-  configHooks?: boolean | UnConfigOptions<'react-hooks' | '@eslint-react/hooks-extra'>;
+  configHooks?:
+    | boolean
+    | (UnConfigOptions<'react-hooks' | '@eslint-react/hooks-extra'> & {
+        /**
+         * [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks) plugin
+         * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+         * that will be assigned to `react-hooks` property and applied to the specified `files` and `ignores`.
+         */
+        settings?: {
+          /**
+           * A regular expression with custom effect hooks.
+           */
+          additionalEffectHooks?: string;
+        };
+
+        /**
+         * @default true
+         */
+        enableReactCompilerRules?: boolean;
+      });
 
   /**
    * Enables or specifies the configuration for DOM specific rules from [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react).
@@ -269,14 +288,6 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
           >;
         }
       >;
-
-  /**
-   * Enables or specifies the configuration for the [`eslint-plugin-react-compiler`](https://npmjs.com/eslint-plugin-react-compiler) plugin.
-   *
-   * By default will use the same `files` and `ignores` as the parent config.
-   * @default true <=> React version is 19 or higher
-   */
-  configCompiler?: boolean | UnConfigOptions<'react-compiler'>;
 
   /**
    * By default, default exports will be allowed in all JSX files
@@ -530,8 +541,7 @@ export const reactUnConfig: UnConfigFn<
   const isMinVersion19 = reactMajorVersion >= 19;
 
   optionsResolved.newJsxTransform ??= isMinVersion17;
-  optionsResolved.configCompiler ??= isMinVersion19;
-  const {newJsxTransform, configCompiler} = optionsResolved;
+  const {newJsxTransform} = optionsResolved;
 
   const isConfigXDisabled = configReactX === false;
   const isReactEnabled = pluginX !== 'only';
@@ -829,17 +839,65 @@ export const reactUnConfig: UnConfigFn<
     .addOverrides();
 
   const configBuilderHooks = createConfigBuilder(context, configHooks, null);
+  const configHooksOptions = typeof configHooks === 'object' ? configHooks : {};
+  const {enableReactCompilerRules = true} = configHooksOptions;
+
+  const reactCompilerRulesSeverity = enableReactCompilerRules ? ERROR : OFF;
+  const reactCompilerRulesWarnSeverity = enableReactCompilerRules ? WARNING : OFF;
+
+  // Legend:
+  // 🟢 - in recommended (react compiler rules)
+  // 🟡 - in recommended (react compiler rules) (warns)
+
   configBuilderHooks
-    ?.addConfig([
-      'react/hooks',
+    ?.addConfig(
+      [
+        'react/hooks',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: parentConfigFiles || DEFAULT_FILES,
+          ignoresFallback: parentConfigIgnores,
+        },
+      ],
       {
-        includeDefaultFilesAndIgnores: true,
-        filesFallback: parentConfigFiles || DEFAULT_FILES,
-        ignoresFallback: parentConfigIgnores,
+        ...(configHooksOptions.settings && {
+          settings: {
+            'react-hooks': configHooksOptions.settings,
+          },
+        }),
       },
-    ])
+    )
+    // Severity of react compiler rules correspond to the recommended ones from https://github.com/facebook/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L715
+    .addAnyRule('react-hooks', 'automatic-effect-dependencies', reactCompilerRulesSeverity) // >=6.1.0
+    .addAnyRule('react-hooks', 'capitalized-calls', reactCompilerRulesSeverity) // >=6.1.0
+    .addAnyRule('react-hooks', 'component-hook-factories', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'config', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'error-boundaries', reactCompilerRulesSeverity) // 🟢 >=6.1.0
     .addAnyRule('react-hooks', 'exhaustive-deps', ERROR)
+    .addAnyRule('react-hooks', 'fbt', reactCompilerRulesSeverity) // >=6.1.0
+    .addAnyRule('react-hooks', 'fire', reactCompilerRulesSeverity) // >=6.1.0
+    .addAnyRule('react-hooks', 'gating', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'globals', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    // Almost the same as `rules-of-hooks`, see https://github.com/facebook/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L840
+    .addAnyRule('react-hooks', 'hooks', OFF) // >=6.1.0
+    .addAnyRule('react-hooks', 'immutability', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'incompatible-library', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'invariant', reactCompilerRulesSeverity) // >=6.1.0
+    .addAnyRule('react-hooks', 'memoized-effect-dependencies', reactCompilerRulesSeverity) // >=6.1.0
+    .addAnyRule('react-hooks', 'no-deriving-state-in-effects', reactCompilerRulesSeverity) // >=6.1.0
+    .addAnyRule('react-hooks', 'no-unused-directives', reactCompilerRulesSeverity) // >=6.1.0
+    .addAnyRule('react-hooks', 'preserve-manual-memoization', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'purity', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'refs', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'rule-suppression', reactCompilerRulesSeverity) // >=6.1.0
     .addAnyRule('react-hooks', 'rules-of-hooks', ERROR)
+    .addAnyRule('react-hooks', 'set-state-in-effect', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'set-state-in-render', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'static-components', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'syntax', reactCompilerRulesSeverity) // >=6.1.0
+    .addAnyRule('react-hooks', 'todo', OFF) // >=6.1.0
+    .addAnyRule('react-hooks', 'unsupported-syntax', reactCompilerRulesWarnSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'use-memo', reactCompilerRulesWarnSeverity) // 🟢 >=6.1.0
     .addAnyRule(
       '@eslint-react/hooks-extra',
       'no-direct-set-state-in-use-effect',
@@ -1148,19 +1206,6 @@ export const reactUnConfig: UnConfigFn<
     ])
     .addOverrides();
 
-  const configBuilderCompiler = createConfigBuilder(context, configCompiler, 'react-compiler');
-  configBuilderCompiler
-    ?.addConfig([
-      'react/compiler',
-      {
-        includeDefaultFilesAndIgnores: true,
-        filesFallback: parentConfigFiles || DEFAULT_FILES,
-        ignoresFallback: parentConfigIgnores,
-      },
-    ])
-    .addRule('react-compiler', ERROR)
-    .addOverrides();
-
   const configBuilderYouMightNotNeedAnEffect = createConfigBuilder(
     context,
     configYouMightNotNeedAnEffect,
@@ -1196,7 +1241,6 @@ export const reactUnConfig: UnConfigFn<
       configBuilderReactXTypeAware,
       configBuilderDom,
       configBuilderRefresh,
-      configBuilderCompiler,
       configBuilderYouMightNotNeedAnEffect,
     ],
     optionsResolved,
