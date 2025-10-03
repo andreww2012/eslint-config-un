@@ -8,3 +8,23 @@ packageImportMethod: clone-or-copy
 
 patchedDependencies:
   eslint-plugin-prettier: patches/eslint-plugin-prettier.patch
+
+peerDependencyRules:
+  allowedVersions:
+    # @angular-eslint/eslint-plugin-template
+    '@angular-eslint/eslint-plugin-template@15>eslint': '*'
+    '@angular-eslint/eslint-plugin-template@15>@typescript-eslint/utils': '*'
+    '@typescript-eslint/utils@5>eslint': '*'
+    '@angular-eslint/utils@15>eslint': '*'
+    # @angular-eslint/eslint-plugin-template
+    '@angular-eslint/eslint-plugin-template>eslint': '*'
+    '@typescript-eslint/utils@7>eslint': '*'
+    '@typescript-eslint/type-utils@7>eslint': '*'
+    '@angular-eslint/utils@17>eslint': '*'
+    # @smarttools/eslint-plugin-rxjs
+    '@typescript-eslint/utils@8.38>typescript': '*'
+    '@typescript-eslint/typescript-estree@8.38>typescript': '*'
+    '@typescript-eslint/tsconfig-utils@8.38>typescript': '*'
+    '@typescript-eslint/project-service@8.38>typescript': '*'
+    # eslint-plugin-no-type-assertion
+    eslint-plugin-no-type-assertion@1.3>eslint: '*'
