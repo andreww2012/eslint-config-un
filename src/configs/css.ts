@@ -104,7 +104,7 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
     .addRule('no-invalid-named-grid-areas', ERROR) // 🟢 >=0.10.0
     .addRule('no-invalid-properties', ERROR, [
       {
-        allowUnknownVariables: true, // >= 0.10.0
+        allowUnknownVariables: true, // >=0.10.0
       },
     ]) // 🟢
     .addRule('relative-font-units', ERROR, [

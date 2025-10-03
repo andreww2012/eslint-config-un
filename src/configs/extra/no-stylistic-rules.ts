@@ -97,13 +97,12 @@ const ALL_STYLISTIC_RULES = {
     // None
   },
   '@eslint-react': {
-    'avoid-shorthand-boolean': true,
-    'avoid-shorthand-fragment': true,
+    'jsx-shorthand-boolean': true,
+    'jsx-shorthand-fragment': true,
+    'no-forbidden-props': true,
     'prefer-destructuring-assignment': true,
-    'prefer-react-namespace-import': true,
+    'prefer-namespace-import': true,
     'prefer-read-only-props': true,
-    'prefer-shorthand-boolean': true,
-    'prefer-shorthand-fragment': true,
   },
   '@eslint-react/debug': {
     'class-component': true,
@@ -113,7 +112,8 @@ const ALL_STYLISTIC_RULES = {
     jsx: true,
   },
   '@eslint-react/dom': {
-    // None
+    'no-string-style-prop': true,
+    'prefer-namespace-import': true,
   },
   '@eslint-react/hooks-extra': {
     // None

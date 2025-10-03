@@ -18,39 +18,6 @@ import {assignDefaults, doesPackageExist} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import type {UnConfigFn} from './index';
 
-// Copied from https://eslint-react.xyz/docs/configuration/configure-analyzer#properties
-interface CustomReactComponent {
-  name: string;
-  as?: string;
-  attributes?: {
-    name: string;
-    as?: string;
-    defaultValue?: string;
-  }[];
-}
-
-// Copied from https://eslint-react.xyz/docs/configuration/configure-analyzer#properties
-type ReactBuiltInHookName =
-  | 'use'
-  | 'useActionState'
-  | 'useCallback'
-  | 'useContext'
-  | 'useDebugValue'
-  | 'useDeferredValue'
-  | 'useEffect'
-  | 'useFormStatus'
-  | 'useId'
-  | 'useImperativeHandle'
-  | 'useInsertionEffect'
-  | 'useLayoutEffect'
-  | 'useMemo'
-  | 'useOptimistic'
-  | 'useReducer'
-  | 'useRef'
-  | 'useState'
-  | 'useSyncExternalStore'
-  | 'useTransition';
-
 interface EslintPluginReactSettings {
   /**
    * Regex for Component Factory to use, default to `createReactClass`
@@ -139,24 +106,9 @@ interface EslintPluginReactXSettings {
   importSource?: string;
 
   /**
-   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#skipimportcheck
-   */
-  skipImportCheck?: boolean;
-
-  /**
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#polymorphicpropname
    */
   polymorphicPropName?: string;
-
-  /**
-   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#additionalcomponents-experimental
-   */
-  additionalComponents?: CustomReactComponent[];
-
-  /**
-   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#additionalhooks-experimental
-   */
-  additionalHooks?: Record<ReactBuiltInHookName, string[]>;
 }
 
 type EslintPluginReactDomRules =
@@ -397,6 +349,7 @@ export interface ReactEslintConfigOptions extends UnConfigOptions<'react'> {
    * `dom/no-unsafe-iframe-sandbox`                          | `iframe-missing-sandbox`
    * `dom/no-unsafe-target-blank`                            | `jsx-no-target-blank`
    * `dom/no-void-elements-with-children`                    | `void-dom-elements-no-children`
+   * `dom/no-string-style-prop`                              | `style-prop-object`
    * @default 'prefer'
    */
   pluginX?: 'prefer' | 'avoid' | 'only' | 'never';
@@ -606,8 +559,6 @@ export const reactUnConfig: UnConfigFn<
       : severity;
   const getXRuleSeverity = (severity: RuleSeverity) => (isReactXEnabled ? severity : OFF);
 
-  const noUnsafeClassComponentMethodsSeverity = isMinVersion17 ? WARNING : OFF;
-
   const configReactXOptions = typeof configReactX === 'object' ? configReactX : {};
 
   const configBuilderSetup = createConfigBuilder(context, {}, '', false);
@@ -638,6 +589,20 @@ export const reactUnConfig: UnConfigFn<
   });
 
   const configBuilderReactOriginal = createConfigBuilder(context, optionsResolved, 'react');
+
+  const noUnsafeClassComponentMethodsSeverity = isMinVersion17 ? WARNING : OFF;
+  const booleanShorthandSeverity =
+    shorthandBoolean === 'prefer-error' || shorthandBoolean === 'avoid-error'
+      ? ERROR
+      : shorthandBoolean === 'prefer' || shorthandBoolean === 'avoid'
+        ? WARNING
+        : OFF;
+  const fragmentShorthandSeverity =
+    shorthandBoolean === 'prefer-error' || shorthandFragment === 'avoid-error'
+      ? ERROR
+      : shorthandFragment === 'prefer' || shorthandFragment === 'avoid'
+        ? WARNING
+        : OFF;
 
   // Legend:
   // 🟢 - in recommended
@@ -691,18 +656,9 @@ export const reactUnConfig: UnConfigFn<
     .addRule('hook-use-state', getDoubleRuleSeverity(USE_STATE_SEVERITY, false), [
       {allowDestructuredState: true},
     ])
-    .addRule(
-      'jsx-boolean-value',
-      getDoubleRuleSeverity(
-        shorthandBoolean === 'prefer-error' || shorthandBoolean === 'avoid-error'
-          ? ERROR
-          : shorthandBoolean === 'prefer' || shorthandBoolean === 'avoid'
-            ? WARNING
-            : OFF,
-        false,
-      ),
-      [shorthandBoolean === 'prefer-error' || shorthandBoolean === 'prefer' ? 'never' : 'always'],
-    )
+    .addRule('jsx-boolean-value', getDoubleRuleSeverity(booleanShorthandSeverity, false), [
+      shorthandBoolean === 'prefer-error' || shorthandBoolean === 'prefer' ? 'never' : 'always',
+    ])
     .addRule('jsx-child-element-spacing', OFF) // 🟠
     .addRule('jsx-closing-bracket-location', OFF) // 🟠
     .addRule('jsx-closing-tag-location', OFF) // 🟠
@@ -719,22 +675,9 @@ export const reactUnConfig: UnConfigFn<
       },
     ])
     .addRule('jsx-first-prop-new-line', OFF) // 🟠
-    .addRule(
-      'jsx-fragments',
-      getDoubleRuleSeverity(
-        shorthandBoolean === 'prefer-error' || shorthandFragment === 'avoid-error'
-          ? ERROR
-          : shorthandFragment === 'prefer' || shorthandFragment === 'avoid'
-            ? WARNING
-            : OFF,
-        false,
-      ),
-      [
-        shorthandFragment === 'prefer-error' || shorthandFragment === 'prefer'
-          ? 'syntax'
-          : 'element',
-      ],
-    )
+    .addRule('jsx-fragments', getDoubleRuleSeverity(fragmentShorthandSeverity, false), [
+      shorthandFragment === 'prefer-error' || shorthandFragment === 'prefer' ? 'syntax' : 'element',
+    ])
     .addRule('jsx-handler-names', OFF)
     .addRule('jsx-indent-props', OFF) // 🟠
     .addRule('jsx-indent', OFF) // 🟠
@@ -904,17 +847,13 @@ export const reactUnConfig: UnConfigFn<
     ) // 🟡
     .addAnyRule(
       '@eslint-react/hooks-extra',
-      'no-direct-set-state-in-use-layout-effect',
+      'no-direct-set-state-in-use-effect',
       getXRuleSeverity(WARNING),
-    )
-    .addAnyRule('@eslint-react/hooks-extra', 'no-unnecessary-use-callback', getXRuleSeverity(ERROR))
-    .addAnyRule('@eslint-react/hooks-extra', 'no-unnecessary-use-memo', getXRuleSeverity(ERROR))
-    .addAnyRule('@eslint-react/hooks-extra', 'no-unnecessary-use-prefix', getXRuleSeverity(OFF)) // 🟡
-    .addAnyRule(
-      '@eslint-react/hooks-extra',
-      'prefer-use-state-lazy-initialization',
-      getXRuleSeverity(WARNING),
-    ) // 🟡
+    ) // >=2.0.0 (renamed from `no-direct-set-state-in-use-layout-effect`)
+    .addAnyRule('@eslint-react', 'no-unnecessary-use-callback', getXRuleSeverity(ERROR))
+    .addAnyRule('@eslint-react', 'no-unnecessary-use-memo', getXRuleSeverity(ERROR))
+    .addAnyRule('@eslint-react', 'no-unnecessary-use-prefix', getXRuleSeverity(OFF)) // 🟡
+    .addAnyRule('@eslint-react', 'prefer-use-state-lazy-initialization', getXRuleSeverity(WARNING)) // 🟡
     .addOverrides();
 
   const {
@@ -943,7 +882,7 @@ export const reactUnConfig: UnConfigFn<
     // === X rules ===
     .addRule('jsx-key-before-spread', ERROR) // 🟡
     .addRule('jsx-no-duplicate-props', getDoubleRuleSeverity(JSX_NO_DUPLICATE_PROPS_SEVERITY, true)) // 🟡 🔄️
-    .addRule('jsx-no-iife', OFF)
+    .addRule('jsx-no-iife', OFF) // >=1.51.0
     .addRule('jsx-no-undef', getDoubleRuleSeverity(JSX_NO_UNDEF_SEVERITY, true)) // 🔄️
     // "This rule does nothing when using the New JSX Transform or if the `no-unused-vars` rule is not enabled."
     .addRule('jsx-uses-react', getDoubleRuleSeverity(JSX_USES_REACT_SEVERITY, true)) // 🟡 🔄️
@@ -962,8 +901,7 @@ export const reactUnConfig: UnConfigFn<
     .addRule('no-children-to-array', getSeverity(noLegacyApis.Children)) // 🟡
     .addRule('no-class-component', getSeverity(noLegacyApis.classComponent ?? 'warn'))
     .addRule('no-clone-element', getSeverity(noLegacyApis.cloneElement)) // 🟡
-    .addRule('no-comment-textnodes', getDoubleRuleSeverity(NO_COMMENT_TEXTNODES_SEVERITY, true)) // 🟡 🔄️`jsx-no-comment-textnodes`
-    .addRule('no-complex-conditional-rendering', OFF)
+    .addRule('jsx-no-comment-textnodes', getDoubleRuleSeverity(NO_COMMENT_TEXTNODES_SEVERITY, true)) // >=2.0.0 (renamed from `no-comment-textnodes`) 🟡 🔄️`jsx-no-comment-textnodes`
     .addRule('no-component-will-mount', getSeverity(noLegacyApis.componentWillMount)) // 🟢
     .addRule('no-component-will-receive-props', getSeverity(noLegacyApis.componentWillReceiveProps)) // 🟢
     .addRule('no-component-will-update', getSeverity(noLegacyApis.componentWillUpdate)) // 🟢
@@ -976,6 +914,8 @@ export const reactUnConfig: UnConfigFn<
       getDoubleRuleSeverity(NO_DIRECT_MUTATION_STATE_SEVERITY, true),
     ) // 🟢 🔄️
     .addRule('no-duplicate-key', getDoubleRuleSeverity(NO_DUPLICATE_OR_MISSING_KEY_SEVERITY, true)) // 🟢 🔄️`jsx-key` (`warnOnDuplicates` option)
+    // By default, this rule forbids snake_case props (props containing underscores)
+    .addRule('no-forbidden-props', WARNING) // >=2.0.0 🟡
     // "In React 19, forwardRef is no longer necessary. Pass ref as a prop instead."
     .addRule('no-forward-ref', getSeverity(noLegacyApis.forwardRef)) // 🟡 🔢19.0.0
     .addRule('no-implicit-key', WARNING) // 🟡
@@ -1013,6 +953,7 @@ export const reactUnConfig: UnConfigFn<
       getDoubleRuleSeverity(NO_SET_STATE_IN_COMPONENT_WILL_UPDATE_SEVERITY, true),
     ) // 🟡 🔄️`no-will-update-set-state`
     .addRule('no-string-refs', getDoubleRuleSeverity(NO_STRING_REFS_SEVERITY, true)) // 🟢 🔄️
+    .addRule('no-unnecessary-key', ERROR) // >=20.0.0
     .addRule(
       'no-unsafe-component-will-mount',
       getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, true),
@@ -1046,39 +987,13 @@ export const reactUnConfig: UnConfigFn<
       getDoubleRuleSeverity(PREFER_DESTRUCTURING_ASSIGNMENT_SEVERITY, true),
     ) // 🔄️`destructuring-assignment`
     // TODO why?
-    .addRule('prefer-react-namespace-import', OFF)
-    .addRule(
-      'prefer-shorthand-boolean',
-      getDoubleRuleSeverity(
-        shorthandBoolean === 'prefer-error' ? ERROR : shorthandBoolean === 'prefer' ? WARNING : OFF,
-        true,
-      ),
-    ) // 🔄️`jsx-boolean-value`
-    .addRule(
-      'prefer-shorthand-fragment',
-      getDoubleRuleSeverity(
-        shorthandFragment === 'prefer-error'
-          ? ERROR
-          : shorthandFragment === 'prefer'
-            ? WARNING
-            : OFF,
-        true,
-      ),
-    ) // 🔄️`jsx-fragments`
-    .addRule(
-      'avoid-shorthand-boolean',
-      getDoubleRuleSeverity(
-        shorthandBoolean === 'avoid-error' ? ERROR : shorthandBoolean === 'avoid' ? WARNING : OFF,
-        true,
-      ),
-    ) // 🔄️`jsx-boolean-value`
-    .addRule(
-      'avoid-shorthand-fragment',
-      getDoubleRuleSeverity(
-        shorthandFragment === 'avoid-error' ? ERROR : shorthandFragment === 'avoid' ? WARNING : OFF,
-        true,
-      ),
-    ) // 🔄️`jsx-fragments`
+    .addRule('prefer-namespace-import', OFF) // >=2.0.0 (renamed from `prefer-namespace-import`)
+    .addRule('jsx-shorthand-boolean', getDoubleRuleSeverity(booleanShorthandSeverity, true), [
+      shorthandBoolean === 'prefer-error' || shorthandBoolean === 'prefer' ? 1 : -1,
+    ]) // >=2.0.0 🔄️`jsx-boolean-value`
+    .addRule('jsx-shorthand-fragment', getDoubleRuleSeverity(fragmentShorthandSeverity, true), [
+      shorthandFragment === 'prefer-error' || shorthandFragment === 'prefer' ? 1 : -1,
+    ]) // >=2.0.0 🔄️`jsx-fragments`
     // === Naming Convention rules ===
     .addAnyRule(
       '@eslint-react/naming-convention',
@@ -1124,6 +1039,7 @@ export const reactUnConfig: UnConfigFn<
       'no-leaked-conditional-rendering',
       getDoubleRuleSeverity(NO_LEAKED_CONDITIONAL_RENDERING_SEVERITY, true),
     ) // 🟡 🔄️`jsx-no-leaked-render` (worse) 💭
+    .addRule('no-unused-props', WARNING) // >=20.0.0 💭
     .addRule('prefer-read-only-props', getDoubleRuleSeverity(PREFER_READ_ONLY_PROPS_SEVERITY, true)) // 🔄️ 💭
     .addOverrides();
 
@@ -1180,9 +1096,15 @@ export const reactUnConfig: UnConfigFn<
     // React 19 docs: "In earlier React Canary versions, this API was part of React DOM and called useFormState."
     .addAnyRule('@eslint-react/dom', 'no-use-form-state', getXRuleSeverity(ERROR)) // 🟢 🔢19.0.0
     .addAnyRule(
+      ...getDoubleRuleName('no-string-style-prop', 'style-prop-object'),
+      getDoubleRuleSeverity(OFF),
+    ) // >=20.0.0 🟢 🔄️`style-prop-object`
+    .addAnyRule(
       ...getDoubleRuleName('no-void-elements-with-children', 'void-dom-elements-no-children'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟢 🔄️`void-dom-elements-no-children`
+    // TODO why?
+    .addAnyRule('@eslint-react/dom', 'prefer-namespace-import', OFF) // >=2.0.0
     // === Web API rules ===
     .addAnyRule('@eslint-react/web-api', 'no-leaked-event-listener', getXRuleSeverity(ERROR)) // 🟡
     .addAnyRule('@eslint-react/web-api', 'no-leaked-interval', getXRuleSeverity(ERROR)) // 🟡

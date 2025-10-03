@@ -80,6 +80,7 @@
 - **react** config:
   - `configTypeAwareRules` now uses `files` and `ignores` from `ts` config by default.
   - Added a new sub-config, `youMightNotNeedAnEffect` via [`eslint-plugin-react-you-might-not-need-an-effect`](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect), enabled by default.
+  - [**BREAKING**] Some `@eslint-react/eslint-plugin` rules have been renamed and removed. Please refer to [v2 migration guide](https://github.com/Rel1cx/eslint-react/releases/tag/v2.0.0) for more details.
 - **yaml** config:
   - Added a new config to target GitHub Actions workflow files, currently only disabling [`no-empty-mapping-value`](https://ota-meshi.github.io/eslint-plugin-yml/rules/no-empty-mapping-value.html) rule.
   - Added an option to not enforce the file extension.
@@ -119,8 +120,14 @@
   - Added `allowedFeatures` option to conveniently set what CSS features will be ignored by [`use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md) rule.
 - `typescript-eslint`: [8.32.0 → 8.45.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.32.0...v8.45.0)
   - Set [`checkUnknown: true`](https://typescript-eslint.io/rules/no-base-to-string/#checkunknown) for [`no-base-to-string`](https://typescript-eslint.io/rules/no-base-to-string) rule.
-- `@eslint-react/eslint-plugin`: [1.49.0 → 1.52.7](https://github.com/Rel1cx/eslint-react/compare/v1.49.0...v1.52.7)
+- `@eslint-react/eslint-plugin`: [1.49.0 → 2.0.6](https://github.com/Rel1cx/eslint-react/compare/v1.49.0...v2.0.6)
+  - Some rules have been renamed and removed. Please refer to [v2 migration guide](https://github.com/Rel1cx/eslint-react/releases/tag/v2.0.0) for more details.
   - 🔴 (not enabled) [`jsx-no-iife`](https://eslint-react.xyz/docs/rules/jsx-no-iife)
+  - 🟢 (enabled) [`no-unnecessary-key`](https://eslint-react.xyz/docs/rules/no-unnecessary-key)
+  - 🟡 (enabled, warns) [`no-forbidden-props`](https://eslint-react.xyz/docs/rules/no-forbidden-props)
+  - 🟡 [`no-unused-props`](https://eslint-react.xyz/docs/rules/no-unused-props)
+  - 🔴 [`dom/no-string-style-prop`](https://eslint-react.xyz/docs/rules/dom-no-string-style-prop)
+  - 🔴 [`dom/prefer-namespace-import`](https://eslint-react.xyz/docs/rules/dom-prefer-namespace-import)
 - `@eslint/markdown`: [6.4.0 → 7.2.0](https://github.com/eslint/markdown/compare/v6.4.0...v7.2.0)
   - 🟢 (enabled) [`no-duplicate-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-duplicate-definitions.md)
   - 🟢 [`no-empty-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-empty-definitions.md)
