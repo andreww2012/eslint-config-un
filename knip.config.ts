@@ -8,6 +8,7 @@ const config: KnipConfig = {
     .filter(([, meta]) => meta.optional)
     .map(([name]) => name),
   tags: ['-knipignore'],
+  treatConfigHintsAsErrors: true,
 };
 
 export default config;
