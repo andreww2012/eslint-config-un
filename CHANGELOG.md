@@ -211,7 +211,7 @@
 - `eslint-plugin-node-dependencies`: [1.0.1 → 1.1.2](https://github.com/ota-meshi/eslint-plugin-node-dependencies/compare/v1.0.1...v1.1.2)
 - `eslint-plugin-perfectionist`: [4.12.3 → 4.15.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.12.3...v4.15.0)
 - `eslint-plugin-prettier`: [5.4.0 → 5.4.1](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.0...v5.4.1)
-- `eslint-plugin-qwik`: [1.13.0 → 1.16.0](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik%401.13.0...eslint-plugin-qwik%401.16.0)
+- `eslint-plugin-qwik`: [1.13.0 → 1.16.1](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik%401.13.0...eslint-plugin-qwik%401.16.1)
 - `eslint-plugin-react-compiler`: 19.1.0-rc.1 → 19.1.0-rc.2
 - `eslint-plugin-regexp`: [2.7.0 → 2.10.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v2.7.0...v2.10.0)
 - `eslint-plugin-svelte`: [3.5.1 → 3.11.0](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte%403.5.1...eslint-plugin-svelte%403.11.0)
