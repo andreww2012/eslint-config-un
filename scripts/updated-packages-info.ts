@@ -152,8 +152,15 @@ async function getDependencyRepoUrl(dependency: string) {
   const repoUrlParsed = URL.parse(repoUrl);
   if (repoUrlParsed != null) {
     if (repoUrlParsed.hostname !== 'github.com') {
-      console.warn(`Not a GitHub repository specified as repository for ${dependency}`);
-      return '';
+      // https://github.com/ArnaudBarre/eslint-plugin-react-refresh/blob/1d436ffd5ebc6127528cadb30057503720d8c9b1/scripts/bundle.ts#L33
+      if (repoUrlParsed.protocol === 'github:') {
+        // TODO report
+        // eslint-disable-next-line no-useless-assignment
+        gitHubRepoPath = repoUrlParsed.pathname;
+      } else {
+        console.warn(`Not a GitHub repository specified as repository for ${dependency}`);
+        return '';
+      }
     }
 
     gitHubRepoPath = repoUrlParsed.pathname.slice(1) /* remove `/` at the beginning */;
