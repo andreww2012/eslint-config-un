@@ -1220,6 +1220,7 @@ export const reactUnConfig: UnConfigFn<
         ignoresFallback: parentConfigIgnores,
       },
     ])
+    .addRule('no-adjust-state-on-prop-change', ERROR) // 🟡 >=0.5.0 (renamed, original rules added in 0.4.5)
     .addRule('no-chain-state-updates', ERROR) // 🟡 >=0.3.0
     .addRule('no-derived-state', ERROR) // 🟡 >=0.3.0
     .addRule('no-empty-effect', ERROR) // 🟡 >=0.3.0
@@ -1228,7 +1229,7 @@ export const reactUnConfig: UnConfigFn<
     .addRule('no-manage-parent', ERROR) // 🟡 >=0.3.1
     .addRule('no-pass-data-to-parent', ERROR) // 🟡 >=0.4.0
     .addRule('no-pass-live-state-to-parent', ERROR) // 🟡 >=0.3.0
-    .addRule('no-reset-all-state-when-a-prop-changes', ERROR) // 🟡 >=0.3.0
+    .addRule('no-reset-all-state-on-prop-change', ERROR) // 🟡 >=0.5.0 (renamed, original rules added in 0.3.0)
     .addOverrides();
 
   return {
