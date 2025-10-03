@@ -86,6 +86,8 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     vitestGlobalsImporting,
   } = optionsResolved;
 
+  const vitestMajorVersion = context.packagesInfo.vitest?.versions.major;
+
   const defaultVitestEslintConfig: FlatConfigEntryForBuilder = {
     ...(pluginSettings && {
       settings: {
@@ -128,6 +130,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     )
     .addRule('consistent-vitest-vi', ERROR) // (warns in all) >=1.2.5
     .addRule('expect-expect', ERROR) // 🟢
+    .addRule('hoisted-apis-on-top', ERROR) // (warns in all) >=1.3.7
     .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [{max: maxAssertionCalls}])
     .addRule('max-nested-describe', maxNestedDescribes == null ? OFF : ERROR, [
       {max: maxNestedDescribes},
@@ -158,6 +161,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     .addRule('no-standalone-expect', ERROR) // (warns in all)
     .addRule('no-test-prefixes', ERROR) // (warns in all)
     .addRule('no-test-return-statement', ERROR) // (warns in all)
+    .addRule('prefer-called-exactly-once-with', (vitestMajorVersion || 0) >= 3 ? ERROR : OFF) // 🟢 >=1.3.14
     .addRule('prefer-called-once', enforceToBeCalledStyle === 'once' ? ERROR : OFF) // (off in all)
     .addRule('prefer-called-times', enforceToBeCalledStyle === 'times' ? ERROR : OFF) // (warns in all)
     .addRule('prefer-called-with', OFF) // (warns in all)
@@ -167,8 +171,10 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     .addRule('prefer-equality-matcher', ERROR) // (warns in all)
     .addRule('prefer-expect-assertions', OFF) // (warns in all)
     .addRule('prefer-expect-resolves', ERROR) // (warns in all)
+    .addRule('prefer-expect-type-of', ERROR) // (warns in all) >=1.3.6
     .addRule('prefer-hooks-in-order', ERROR) // (warns in all)
     .addRule('prefer-hooks-on-top', ERROR) // (warns in all)
+    .addRule('prefer-import-in-mock', ERROR) // (warns in all) >=1.3.15
     .addRule('prefer-importing-vitest-globals', vitestGlobalsImporting === 'enforce' ? ERROR : OFF) // (warns in all) >=1.2.3
     .addRule('prefer-lowercase-title', ERROR) // (warns in all)
     .addRule('prefer-mock-promise-shorthand', ERROR) // (warns in all)
