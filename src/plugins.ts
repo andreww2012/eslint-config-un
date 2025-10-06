@@ -324,8 +324,18 @@ export const pluginsLoaders = {
   ...genModuleLoader('markdown', '@eslint/markdown', () =>
     interopDefault(import('@eslint/markdown')),
   ),
-  ...genModuleLoader('markdown-preferences', 'eslint-plugin-markdown-preferences', () =>
-    interopDefault(import('eslint-plugin-markdown-preferences')),
+  ...genModuleLoader(
+    'markdown-links',
+    'eslint-plugin-markdown-links',
+    () => interopDefault(import('eslint-plugin-markdown-links')) as Promise<EslintPlugin>,
+  ),
+  ...genModuleLoader(
+    'markdown-preferences',
+    'eslint-plugin-markdown-preferences',
+    () =>
+      interopDefault(import('eslint-plugin-markdown-preferences')) as Promise<
+        EslintPlugin & Pick<typeof import('eslint-plugin-markdown-preferences'), 'resources'>
+      >,
   ),
   ...genModuleLoader('mocha', 'eslint-plugin-mocha', () =>
     interopDefault(import('eslint-plugin-mocha')),

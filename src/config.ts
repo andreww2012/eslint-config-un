@@ -319,6 +319,7 @@ export const eslintConfigInternal = async (
   const isJsxA11yEnabled = getIsConfigEnabled('jsxA11y');
   const isLitEnabled = getIsConfigEnabled('lit', 'lit');
   const isMarkdownEnabled = getIsConfigEnabled('markdown');
+  const isMarkdownLinksEnabled = getIsConfigEnabled('markdownLinks');
   const isMarkdownPreferencesEnabled = getIsConfigEnabled('markdownPreferences');
   const isMathEnabled = getIsConfigEnabled('math');
   const isMdxEnabled = getIsConfigEnabled('mdx');
@@ -413,6 +414,7 @@ export const eslintConfigInternal = async (
       jsxA11y: {enabled: isJsxA11yEnabled},
       lit: {enabled: isLitEnabled},
       markdown: {enabled: isMarkdownEnabled},
+      markdownLinks: {enabled: isMarkdownLinksEnabled},
       markdownPreferences: {enabled: isMarkdownPreferencesEnabled},
       math: {enabled: isMathEnabled},
       mdx: {enabled: isMdxEnabled},
@@ -633,6 +635,8 @@ export const eslintConfigInternal = async (
       ),
     isMarkdownPreferencesEnabled &&
       import('./configs/markdown-preferences').then((m) => m.markdownPreferencesUnConfig(context)),
+    isMarkdownLinksEnabled &&
+      import('./configs/markdown-links').then((m) => m.markdownLinksUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

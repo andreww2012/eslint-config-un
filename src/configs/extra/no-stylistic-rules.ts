@@ -316,6 +316,9 @@ const ALL_STYLISTIC_RULES = {
   markdown: {
     // None
   },
+  'markdown-links': {
+    // None
+  },
   'markdown-preferences': {
     'atx-heading-closing-sequence': true,
     'atx-heading-closing-sequence-length': true,

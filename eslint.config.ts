@@ -7,7 +7,18 @@ export default eslintConfig({
   mode: 'lib',
 
   configs: {
+    markdownLinks: {
+      check: {
+        deadUrls: {
+          ignoreUrls: [
+            // npm gets rate-limited quickly: https://github.com/ota-meshi/eslint-plugin-markdown-links/issues/42
+            String.raw`/^https:\/\/npmjs.com\/.*/`,
+          ],
+        },
+      },
+    },
     markdownPreferences: {
+      ignores: ['LICENSE.md'],
       wordsToPreserveCasingOf: ['eslint-config-un', 'Description/Notes'],
       overrides: {
         'markdown-preferences/sort-definitions': 2,

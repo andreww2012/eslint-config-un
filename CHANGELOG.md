@@ -39,6 +39,7 @@
 - `unocss` via [`@unocss/eslint-plugin`](https://npmjs.com/@unocss/eslint-plugin), enabled automatically if `unocss` package is installed.
 - `unnecessaryAbstractions` via [`eslint-plugin-unnecessary-abstractions`](https://npmjs.com/eslint-plugin-unnecessary-abstractions), enabled by default.
 - `markdownPreferences` via [`eslint-plugin-markdown-preferences`](https://npmjs.com/eslint-plugin-markdown-preferences), enabled by default.
+- `markdownLinks` via [`eslint-plugin-markdown-links`](https://npmjs.com/eslint-plugin-markdown-links), enabled by default.
 
 ### Changes
 
@@ -115,7 +116,7 @@
   - 🟢 [`no-invalid-at-rule-placement`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-at-rule-placement.md)
   - 🟢 [`no-invalid-named-grid-areas`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-named-grid-areas.md)
   - 🟡 [`no-important`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-important.md)
-  - 🟢 [`no-empty-control-flow`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-empty-control-flow.md)
+  - 🟢 [`no-empty-blocks`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-empty-blocks.md)
   - 🟡 [`font-family-fallbacks`](https://github.com/eslint/css/blob/HEAD/docs/rules/font-family-fallbacks.md)
   - 🟢 [`no-duplicate-keyframe-selectors`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-duplicate-keyframe-selectors.md)
   - Set `allowUnknownVariables: true` to [`no-invalid-properties`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-properties.md)
@@ -213,7 +214,7 @@
 - `eslint-plugin-node-dependencies`: [1.0.1 → 1.1.2](https://github.com/ota-meshi/eslint-plugin-node-dependencies/compare/v1.0.1...v1.1.2)
 - `eslint-plugin-perfectionist`: [4.12.3 → 4.15.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.12.3...v4.15.0)
 - `eslint-plugin-prettier`: [5.4.0 → 5.4.1](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.0...v5.4.1)
-- `eslint-plugin-qwik`: [1.13.0 → 1.16.1](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik%401.13.0...eslint-plugin-qwik%401.16.1)
+- `eslint-plugin-qwik`: 1.13.0 → 1.16.1
 - `eslint-plugin-regexp`: [2.7.0 → 2.10.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v2.7.0...v2.10.0)
 - `eslint-plugin-svelte`: [3.5.1 → 3.12.4](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte%403.5.1...eslint-plugin-svelte%403.12.4)
   - 🟢 (enabled) [`no-top-level-browser-globals`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-top-level-browser-globals)

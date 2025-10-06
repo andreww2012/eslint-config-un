@@ -51,6 +51,7 @@ import type {JsoncEslintConfigOptions} from './jsonc';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {LitEslintConfigOptions} from './lit';
 import type {MarkdownEslintConfigOptions} from './markdown';
+import type {MarkdownLinksEslintConfigOptions} from './markdown-links';
 import type {MarkdownPreferencesEslintConfigOptions} from './markdown-preferences';
 import type {MathEslintConfigOptions} from './math';
 import type {MdxEslintConfigOptions} from './mdx';
@@ -541,9 +542,18 @@ export interface UnConfigs {
   markdown: MarkdownEslintConfigOptions;
 
   /**
+   * An ESLint plugin that provides rules for checking the validity of links and URLs in Markdown files.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-markdown-links`](https://npmjs.com/eslint-plugin-markdown-links) ([docs](https://ota-meshi.github.io/eslint-plugin-markdown-links))
+   * @default true
+   */
+  markdownLinks: MarkdownLinksEslintConfigOptions;
+
+  /**
    * An ESLint plugin that helps enforce consistent writing style and formatting conventions in Markdown files.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-markdown-preferences`](https://npmjs.com/eslint-plugin-markdown-preferences) ([docs](https://ota-meshi.github.io/eslint-plugin-markdown-preferences))
    * @default true
    */
