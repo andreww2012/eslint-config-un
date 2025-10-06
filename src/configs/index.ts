@@ -51,6 +51,7 @@ import type {JsoncEslintConfigOptions} from './jsonc';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {LitEslintConfigOptions} from './lit';
 import type {MarkdownEslintConfigOptions} from './markdown';
+import type {MarkdownPreferencesEslintConfigOptions} from './markdown-preferences';
 import type {MathEslintConfigOptions} from './math';
 import type {MdxEslintConfigOptions} from './mdx';
 import type {MochaEslintConfigOptions} from './mocha';
@@ -538,6 +539,15 @@ export interface UnConfigs {
    * @default true
    */
   markdown: MarkdownEslintConfigOptions;
+
+  /**
+   * An ESLint plugin that helps enforce consistent writing style and formatting conventions in Markdown files.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-markdown-preferences`](https://npmjs.com/eslint-plugin-markdown-preferences) ([docs](https://ota-meshi.github.io/eslint-plugin-markdown-preferences))
+   * @default true
+   */
+  markdownPreferences: MarkdownPreferencesEslintConfigOptions;
 
   /**
    * ESLint rules related to `Math` and `Number` objects.

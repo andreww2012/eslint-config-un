@@ -324,6 +324,9 @@ export const pluginsLoaders = {
   ...genModuleLoader('markdown', '@eslint/markdown', () =>
     interopDefault(import('@eslint/markdown')),
   ),
+  ...genModuleLoader('markdown-preferences', 'eslint-plugin-markdown-preferences', () =>
+    interopDefault(import('eslint-plugin-markdown-preferences')),
+  ),
   ...genModuleLoader('mocha', 'eslint-plugin-mocha', () =>
     interopDefault(import('eslint-plugin-mocha')),
   ),

@@ -319,6 +319,7 @@ export const eslintConfigInternal = async (
   const isJsxA11yEnabled = getIsConfigEnabled('jsxA11y');
   const isLitEnabled = getIsConfigEnabled('lit', 'lit');
   const isMarkdownEnabled = getIsConfigEnabled('markdown');
+  const isMarkdownPreferencesEnabled = getIsConfigEnabled('markdownPreferences');
   const isMathEnabled = getIsConfigEnabled('math');
   const isMdxEnabled = getIsConfigEnabled('mdx');
   const isMochaEnabled = getIsConfigEnabled('mocha', 'mocha');
@@ -412,6 +413,7 @@ export const eslintConfigInternal = async (
       jsxA11y: {enabled: isJsxA11yEnabled},
       lit: {enabled: isLitEnabled},
       markdown: {enabled: isMarkdownEnabled},
+      markdownPreferences: {enabled: isMarkdownPreferencesEnabled},
       math: {enabled: isMathEnabled},
       mdx: {enabled: isMdxEnabled},
       mocha: {enabled: isMochaEnabled},
@@ -629,6 +631,8 @@ export const eslintConfigInternal = async (
       import('./configs/unnecessary-abstractions').then((m) =>
         m.unnecessaryAbstractionsUnConfig(context),
       ),
+    isMarkdownPreferencesEnabled &&
+      import('./configs/markdown-preferences').then((m) => m.markdownPreferencesUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

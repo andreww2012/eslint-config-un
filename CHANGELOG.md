@@ -38,6 +38,7 @@
 - `importZod` via [`eslint-plugin-import-zod`](https://npmjs.com/eslint-plugin-import-zod), enabled automatically if both `zod` and `next` packages are installed.
 - `unocss` via [`@unocss/eslint-plugin`](https://npmjs.com/@unocss/eslint-plugin), enabled automatically if `unocss` package is installed.
 - `unnecessaryAbstractions` via [`eslint-plugin-unnecessary-abstractions`](https://npmjs.com/eslint-plugin-unnecessary-abstractions), enabled by default.
+- `markdownPreferences` via [`eslint-plugin-markdown-preferences`](https://npmjs.com/eslint-plugin-markdown-preferences), enabled by default.
 
 ### Changes
 
@@ -60,7 +61,7 @@
   - Added a new option, `propertiesAllowedToBeEmpty`, passed to [`no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md)'s [`ignoreProperties`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md#ignoreproperties), and set to `['browserslist']` by default.
   - [`require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md) and [`require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-version.md) rules are now enabled by default, while all the other `require-*` rules are disabled, because the ones that are enabled now ignore the corresponding properties in package.json files with `"private": true`.
 - **markdown** config:
-  - Added a new sub-config, `formatFencedCodeBlocks`, to use a patched version of [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) to lint fenced code blocks inside Markdown files. 
+  - Added a new sub-config, `formatFencedCodeBlocks`, to use a patched version of [`eslint-plugin-prettier`](https://github.com/prettier/eslint-plugin-prettier) to lint fenced code blocks inside Markdown files.
   - [**BREAKING**] `language` is now set to `gfm` (GitHub Flavored Markdown) by default. Also, until [false positives on GFM Alerts are not fixed](https://github.com/eslint/markdown/issues/294), exceptions for them are added via `allowLabels` option of [`no-missing-label-refs`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-label-refs.md) rule.
 - **ts** config:
   - Added a new sub-config, `sortTsconfigKeys`, to sort top-level and `compilerOptions` keys in tsconfig files.
@@ -348,6 +349,7 @@
 - `packageJson` config: added `requireFields` option to require the specified fields to be present in the package.json file.
 
 ### Dependencies
+
 - `eslint-plugin-unicorn`: [58.0.0 → 59.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v58.0.0...v59.0.0)
   - 🟢 (enabled) [`prefer-import-meta-properties`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-import-meta-properties.md) enabled in `node` config if detected supported Node.js version is a subset of `>=20.11` version range.
   - 🟢 [`no-unnecessary-array-flat-depth`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unnecessary-array-flat-depth.md)
@@ -384,6 +386,7 @@
 - `overrides` can now accept a function that receives the severity and options possibly set by our config.
 
 ### Dependencies
+
 - `typescript-eslint`: [8.26.1 → 8.31.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.26.1...v8.31.0)
   - [**BREAKING**] Re-enabled autofix for [`no-unnecessary-type-assertion`](https://typescript-eslint.io/rules/no-unnecessary-type-assertion) since [literal const assertions are now allowed by default](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/#checkliteralconstassertions).
 - `angular-eslint`: [19.2.1 → 19.3.0](https://github.com/angular-eslint/angular-eslint/compare/v19.2.1...v19.3.0)
@@ -436,6 +439,7 @@
   - `typescript` to `configTypescript` in `jest` config
 
 ### Dependencies
+
 - `typescript-eslint`: [8.26.0 → 8.26.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.26.0...v8.26.1)
 - `@angular-eslint/*`: [19.2.0 → 19.2.1](https://github.com/angular-eslint/angular-eslint/compare/v19.2.0...v19.2.1)
 - `@vitest/eslint-plugin`: [1.1.36 → 1.1.37](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.36...v1.1.37)
@@ -451,8 +455,8 @@
 - Set newly added `ignoreOverloadsWithDifferentJSDoc: true` for [`@typescript-eslint/unified-signatures`](https://typescript-eslint.io/rules/unified-signatures) rule.
 
 ### Dependencies
-<!-- eslint-disable-next-line markdown/no-missing-label-refs -->
-- [Downgrade] `@stylistic/eslint-plugin`: [3.8.3 → 3.7.0](https://github.com/import-js/eslint-import-resolver-typescript/compare/v3.8.3..v3.7.0)
+
+- \[Downgrade] `@stylistic/eslint-plugin`: [3.8.3 → 3.7.0](https://github.com/import-js/eslint-import-resolver-typescript/compare/v3.8.3..v3.7.0)
 - `typescript-eslint`: [8.25.0 → 8.26.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.25.0...v8.26.0)
 - `@eslint/markdown`: [6.2.2 → 6.3.0](https://github.com/eslint/markdown/compare/v6.2.2...v6.3.0)
 - `eslint-config-prettier`: [10.0.2 → 10.1.1](https://github.com/prettier/eslint-config-prettier/compare/v10.0.2...v10.1.1)
@@ -468,6 +472,7 @@
 - Set `overrides['eslint-processor-vue-blocks']['@vue/compiler-sfc']` to v3 in `package.json` to potentially avoid "Preprocessing error: Cannot read properties of undefined (reading 'styles')" error during Vue files linting, caused by `@vue/compiler-sfc` resolved to a different major version.
 
 ### Dependencies
+
 - `@stylistic/eslint-plugin`: [4.1.0 → 4.2.0](https://github.com/eslint-stylistic/eslint-stylistic/compare/v4.1.0...v4.2.0)
 - `eslint-plugin-package-json`: [0.26.0 → 0.26.1](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.26.0...v0.26.1)
 - `eslint-plugin-n`: [17.15.1 → 17.16.1](https://github.com/eslint-community/eslint-plugin-n/compare/v17.15.1...v17.16.1)
@@ -484,6 +489,7 @@
 - `<config>.overrides` type now includes `disable-autofix/*` rules.
 
 ### Dependencies
+
 - `typescript-eslint`: 8.24.1 → 8.25.0
 - `@stylistic/eslint-plugin`: 4.0.1 → 4.1.0
 - `@vitest/eslint-plugin`: 1.1.31 → 1.1.36
@@ -526,6 +532,7 @@
 - `sonar`: change `prefer-single-boolean-return` default severity to `warn`.
 
 ### Dependencies
+
 - `typescript-eslint`: 8.20.0 → 8.24.0
   - [`no-unnecessary-condition`](https://typescript-eslint.io/rules/no-unnecessary-condition): change `allowConstantLoopConditions` from `true` to [`only-allowed-literals`](https://typescript-eslint.io/rules/no-unnecessary-condition/#only-allowed-literals)
 - `@eslint/markdown`: 6.2.1 → 6.2.2
@@ -553,6 +560,7 @@
 - Exposed `isInEditor` utility from `is-in-editor` package that checks if the current process is running within a well known editor.
 
 ### Dependencies
+
 - `@stylistic/eslint-plugin`: 2.12.1 → 2.13.0
 - `typescript-eslint`: 8.19.1 → 8.20.0
   - Enabled a new [`no-misused-spread`](https://typescript-eslint.io/rules/no-misused-spread) rule.
@@ -572,6 +580,7 @@
 - All dependency versions are now pinned (removed `^`).
 
 ### Dependencies
+
 - `eslint-plugin-sonarjs`: 1.0.4 → 3.0.1
   - [**BREAKING**] Significantly changed `sonar` config: added a lot of new rules, some were disabled, some were enabled.
 - `eslint-plugin-prefer-arrow-functions`: 3.4.1 → 3.6.0
@@ -649,7 +658,7 @@
 - Dependencies:
   - `eslint-plugin-vue`@9.31.0
     - Enabled a new [`vue/prefer-use-template-ref`](https://eslint.vuejs.org/rules/prefer-use-template-ref.html) rule if vue>=3.5 is installed.
-    
+
 ## 0.1.6
 
 - Fixed an issue in `vue` config where recommended rules were not picked up.
@@ -727,7 +736,7 @@
 ## 0.0.5
 
 - Update dependencies. Highlights:
-  - Update `eslint-plugin-unicorn` to v55.0.0 and enable the new `unicorn/no-length-as-slice-end` rule. 
+  - Update `eslint-plugin-unicorn` to v55.0.0 and enable the new `unicorn/no-length-as-slice-end` rule.
   - `eslint-plugin-promise` to v7.0.0 and change the minimum node version to 18.18.0.
 - Add an option to disable all the TypeScript type-aware `no-unsafe-*` rules.
 - Make `FlatConfigEntry` type work with ESLint types for v8.

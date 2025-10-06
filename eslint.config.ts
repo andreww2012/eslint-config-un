@@ -7,6 +7,12 @@ export default eslintConfig({
   mode: 'lib',
 
   configs: {
+    markdownPreferences: {
+      wordsToPreserveCasingOf: ['eslint-config-un', 'Description/Notes'],
+      overrides: {
+        'markdown-preferences/sort-definitions': 2,
+      },
+    },
     fileProgress: !isInEditor(),
     ts: {
       allowDefaultProject: ['*.config.*s', '.*.*s'],
