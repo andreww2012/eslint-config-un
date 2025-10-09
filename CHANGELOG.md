@@ -212,7 +212,7 @@
 - `eslint-plugin-n`: [17.18.0 → 17.23.1](https://github.com/eslint-community/eslint-plugin-n/compare/v17.18.0...v17.23.1)
   - 🟢 (enabled) [`no-top-level-await`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-top-level-await.md)
 - `eslint-plugin-node-dependencies`: [1.0.1 → 1.1.2](https://github.com/ota-meshi/eslint-plugin-node-dependencies/compare/v1.0.1...v1.1.2)
-- `eslint-plugin-perfectionist`: [4.12.3 → 4.15.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.12.3...v4.15.0)
+- `eslint-plugin-perfectionist`: [4.12.3 → 4.15.1](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.12.3...v4.15.1)
 - `eslint-plugin-prettier`: [5.4.0 → 5.4.1](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.0...v5.4.1)
 - `eslint-plugin-qwik`: 1.13.0 → 1.17.0
 - `eslint-plugin-regexp`: [2.7.0 → 2.10.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v2.7.0...v2.10.0)
