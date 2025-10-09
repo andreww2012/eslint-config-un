@@ -156,7 +156,7 @@
   - 🟢 [`no-ineffective-attrs`](https://html-eslint.org/docs/rules/no-ineffective-attrs)
   - 🟢 [`no-restricted-tags`](https://html-eslint.org/docs/rules/no-restricted-tags). All deprecated or non-standard HTML tags are disallowed by default.
   - Set `enforceTemplatedAttrValue: true` for [`quotes`](https://html-eslint.org/docs/rules/quotes) rule.
-- `@vitest/eslint-plugin`: [1.1.44 → 1.3.15](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.44...v1.3.15)
+- `@vitest/eslint-plugin`: [1.1.44 → 1.3.16](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.44...v1.3.16)
   - 🟢 (enabled) [`consistent-vitest-vi`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/consistent-vitest-vi.md)
   - 🟡 (enabled, warns) [`warn-todo`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/warn-todo.md)
   - ❓ (enabled conditionally) [`no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
