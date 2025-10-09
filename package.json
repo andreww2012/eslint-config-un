@@ -69,7 +69,7 @@
     "@antfu/utils": "9.2.1",
     "@eslint-community/eslint-plugin-eslint-comments": "4.5.0",
     "@eslint/compat": "1.4.0",
-    "@eslint/css": "0.11.1",
+    "@eslint/css": "0.12.0",
     "@eslint/markdown": "7.3.0",
     "@html-eslint/eslint-plugin": "0.47.0",
     "@html-eslint/parser": "0.47.0",
