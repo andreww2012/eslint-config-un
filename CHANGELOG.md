@@ -132,7 +132,7 @@
   - 🟡 [`no-unused-props`](https://eslint-react.xyz/docs/rules/no-unused-props)
   - 🔴 [`dom/no-string-style-prop`](https://eslint-react.xyz/docs/rules/dom-no-string-style-prop)
   - 🔴 [`dom/prefer-namespace-import`](https://eslint-react.xyz/docs/rules/dom-prefer-namespace-import)
-- `@eslint/markdown`: [6.4.0 → 7.2.0](https://github.com/eslint/markdown/compare/v6.4.0...v7.2.0)
+- `@eslint/markdown`: [6.4.0 → 7.4.0](https://github.com/eslint/markdown/compare/v6.4.0...v7.4.0)
   - 🟢 (enabled) [`no-duplicate-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-duplicate-definitions.md)
   - 🟢 [`no-empty-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-empty-definitions.md)
   - 🟢 [`no-empty-images`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-empty-images.md)
