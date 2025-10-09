@@ -311,7 +311,9 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     .addRule('sort-tags', ERROR)
     .addRule('tag-lines', ERROR) // 🟢4️⃣
     .addRule('text-escaping', OFF) // 1️⃣
-    .addRule('type-formatting', formatTypeValues ? ERROR : OFF) // >=55.3.0
+    .addRule('type-formatting', formatTypeValues ? ERROR : OFF, [
+      {stringQuotes: 'single', methodQuotes: 'single'},
+    ]) // >=55.3.0
     .addRule('valid-types', ERROR) // 🟢2️⃣
     // Deprecated:
     .addRule('check-examples', OFF) // Doesn't work in ESLint 9, deprecated since 59.0.1
