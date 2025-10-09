@@ -82,12 +82,10 @@ export const markdownPreferencesUnConfig: UnConfigFn<'markdownPreferences'> = as
 
   const defaultPreserveWords = getKeysOfTruthyValues({
     ...Object.fromEntries(
-      [
-        ...markdownPreferencesPlugin.resources.defaultPreserveWords,
-        // Remove once they're added: https://github.com/ota-meshi/eslint-plugin-markdown-preferences/issues/173
-        'I',
-        'MIT',
-      ].map((defaultWord) => [defaultWord, true]),
+      markdownPreferencesPlugin.resources.defaultPreserveWords.map((defaultWord) => [
+        defaultWord,
+        true,
+      ]),
     ),
     ...(!Array.isArray(wordsToPreserveCasingOf) && wordsToPreserveCasingOf),
   });

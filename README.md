@@ -559,7 +559,7 @@ Alternatively, you can use [`@eslint/config-inspector`](https://npmjs.com/packag
 
 ## Troubleshooting & caveats
 
-<!-- eslint-disable-next-line markdown-preferences/heading-casing, markdown-preferences/padding-line-between-blocks -->
+<!-- eslint-disable-next-line markdown-preferences/heading-casing -->
 ### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace.
 
 Install `globals` package as a dev dependency.
