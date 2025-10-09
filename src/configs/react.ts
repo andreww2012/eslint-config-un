@@ -846,8 +846,9 @@ export const reactUnConfig: UnConfigFn<
   const reactCompilerRulesWarnSeverity = enableReactCompilerRules ? WARNING : OFF;
 
   // Legend:
-  // 🟢 - in recommended (react compiler rules)
-  // 🟡 - in recommended (react compiler rules) (warns)
+  // 🟢 - in recommended
+  // 🟡 - in recommended (warns)
+  // 🟣 - in recommended-latest
 
   configBuilderHooks
     ?.addConfig(
@@ -873,7 +874,7 @@ export const reactUnConfig: UnConfigFn<
     .addAnyRule('react-hooks', 'component-hook-factories', reactCompilerRulesSeverity) // 🟢 >=6.1.0
     .addAnyRule('react-hooks', 'config', reactCompilerRulesSeverity) // 🟢 >=6.1.0
     .addAnyRule('react-hooks', 'error-boundaries', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'exhaustive-deps', ERROR)
+    .addAnyRule('react-hooks', 'exhaustive-deps', ERROR) // 🟡
     .addAnyRule('react-hooks', 'fbt', reactCompilerRulesSeverity) // >=6.1.0
     .addAnyRule('react-hooks', 'fire', reactCompilerRulesSeverity) // >=6.1.0
     .addAnyRule('react-hooks', 'gating', reactCompilerRulesSeverity) // 🟢 >=6.1.0
@@ -881,23 +882,23 @@ export const reactUnConfig: UnConfigFn<
     // Almost the same as `rules-of-hooks`, see https://github.com/facebook/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L840
     .addAnyRule('react-hooks', 'hooks', OFF) // >=6.1.0
     .addAnyRule('react-hooks', 'immutability', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'incompatible-library', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'incompatible-library', reactCompilerRulesSeverity) // 🟡 >=6.1.0
     .addAnyRule('react-hooks', 'invariant', reactCompilerRulesSeverity) // >=6.1.0
     .addAnyRule('react-hooks', 'memoized-effect-dependencies', reactCompilerRulesSeverity) // >=6.1.0
     .addAnyRule('react-hooks', 'no-deriving-state-in-effects', reactCompilerRulesSeverity) // >=6.1.0
-    .addAnyRule('react-hooks', 'no-unused-directives', reactCompilerRulesSeverity) // >=6.1.0
     .addAnyRule('react-hooks', 'preserve-manual-memoization', reactCompilerRulesSeverity) // 🟢 >=6.1.0
     .addAnyRule('react-hooks', 'purity', reactCompilerRulesSeverity) // 🟢 >=6.1.0
     .addAnyRule('react-hooks', 'refs', reactCompilerRulesSeverity) // 🟢 >=6.1.0
     .addAnyRule('react-hooks', 'rule-suppression', reactCompilerRulesSeverity) // >=6.1.0
-    .addAnyRule('react-hooks', 'rules-of-hooks', ERROR)
+    .addAnyRule('react-hooks', 'rules-of-hooks', ERROR) // 🟢
     .addAnyRule('react-hooks', 'set-state-in-effect', reactCompilerRulesSeverity) // 🟢 >=6.1.0
     .addAnyRule('react-hooks', 'set-state-in-render', reactCompilerRulesSeverity) // 🟢 >=6.1.0
     .addAnyRule('react-hooks', 'static-components', reactCompilerRulesSeverity) // 🟢 >=6.1.0
     .addAnyRule('react-hooks', 'syntax', reactCompilerRulesSeverity) // >=6.1.0
     .addAnyRule('react-hooks', 'todo', OFF) // >=6.1.0
-    .addAnyRule('react-hooks', 'unsupported-syntax', reactCompilerRulesWarnSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'unsupported-syntax', reactCompilerRulesWarnSeverity) // 🟡 >=6.1.0
     .addAnyRule('react-hooks', 'use-memo', reactCompilerRulesWarnSeverity) // 🟢 >=6.1.0
+    .addAnyRule('react-hooks', 'void-use-memo', reactCompilerRulesSeverity) // 🟣 >=7.0.0
     .addAnyRule(
       '@eslint-react/hooks-extra',
       'no-direct-set-state-in-use-effect',
