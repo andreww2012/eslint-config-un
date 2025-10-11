@@ -118,6 +118,7 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
     ]) // >=0.9.0
     .addRule('prefer-logical-properties', OFF) // >=0.5.0
     // We're keeping `warn` severity, see the discussion in this issue and specifically this comment https://github.com/eslint/css/issues/80#issuecomment-2787414430
+    .addRule('selector-complexity', OFF) // >=0.13.0
     .addRule('use-baseline', WARNING, [
       {
         ...(allowedFeatures?.atRules?.length && {allowAtRules: allowedFeatures.atRules}),

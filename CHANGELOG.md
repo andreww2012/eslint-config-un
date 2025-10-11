@@ -111,14 +111,15 @@
   - 🟢 [`prefer-at-empty`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-at-empty.md)
   - 🟡 (enabled, warns) [`no-developer-preview`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-developer-preview.md)
   - 🟡 [`no-experimental`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-experimental.md)
-- `@eslint/css`: [0.7.0 → 0.12.0](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.12.0)
-  - 🟢 [`relative-font-units`](https://github.com/eslint/css/blob/HEAD/docs/rules/relative-font-units.md)
+- `@eslint/css`: [0.7.0 → 0.13.0](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.13.0)
+  - 🟢 (enabled) [`relative-font-units`](https://github.com/eslint/css/blob/HEAD/docs/rules/relative-font-units.md)
   - 🟢 [`no-invalid-at-rule-placement`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-at-rule-placement.md)
   - 🟢 [`no-invalid-named-grid-areas`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-named-grid-areas.md)
-  - 🟡 [`no-important`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-important.md)
+  - 🟡 (enabled, warns) [`no-important`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-important.md)
   - 🟢 [`no-empty-blocks`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-empty-blocks.md)
   - 🟡 [`font-family-fallbacks`](https://github.com/eslint/css/blob/HEAD/docs/rules/font-family-fallbacks.md)
   - 🟢 [`no-duplicate-keyframe-selectors`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-duplicate-keyframe-selectors.md)
+  - 🔴 (not enabled) [`selector-complexity`](https://github.com/eslint/css/blob/HEAD/docs/rules/selector-complexity.md)
   - Set `allowUnknownVariables: true` to [`no-invalid-properties`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-properties.md)
   - Depending on the installed Tailwind version, enabled v3 or v4 Tailwind syntax support.
   - Added `allowedFeatures` option to conveniently set what CSS features will be ignored by [`use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md) rule.
