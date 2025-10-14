@@ -94,8 +94,8 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
         },
       },
     )
-    .addRule('font-family-fallbacks', WARNING) // 🟢 >= 0.11.0
-    .addRule('no-duplicate-keyframe-selectors', ERROR) // 🟢 >= 0.11.0
+    .addRule('font-family-fallbacks', WARNING) // 🟢 >=0.11.0
+    .addRule('no-duplicate-keyframe-selectors', ERROR) // 🟢 >=0.11.0
     .addRule('no-duplicate-imports', ERROR) // 🟢
     .addRule('no-empty-blocks', ERROR) // 🟢
     .addRule('no-important', WARNING) // 🟢 >=0.8.0

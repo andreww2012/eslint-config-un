@@ -51,190 +51,190 @@ export const jsUnConfig: UnConfigFn<
       },
     ])
     /* Category: Possible Problems */
-    .addRule('array-callback-return', ERROR, [{checkForEach: true}])
-    .addRule('constructor-super', ERROR) // 🟢
-    .addRule('for-direction', ERROR) // 🟢
-    .addRule('getter-return', ERROR) // 🟢
-    .addRule('no-async-promise-executor', ERROR) // 🟢
-    .addRule('no-await-in-loop', WARNING)
-    .addRule('no-class-assign', ERROR) // 🟢
-    .addRule('no-compare-neg-zero', ERROR) // 🟢
-    .addRule('no-cond-assign', ERROR) // 🟢
-    .addRule('no-const-assign', ERROR) // 🟢
-    .addRule('no-constant-binary-expression', ERROR) // 🟢
-    .addRule('no-constant-condition', ERROR) // 🟢
-    .addRule('no-constructor-return', WARNING)
-    .addRule('no-control-regex', ERROR) // 🟢
-    .addRule('no-debugger', ERROR) // 🟢
-    .addRule('no-dupe-args', ERROR) // 🟢
-    .addRule('no-dupe-class-members', ERROR) // 🟢
-    .addRule('no-dupe-else-if', ERROR) // 🟢
-    .addRule('no-dupe-keys', ERROR) // 🟢
-    .addRule('no-duplicate-case', ERROR) // 🟢
-    .addRule('no-duplicate-imports', ERROR)
-    .addRule('no-empty-character-class', ERROR) // 🟢
-    .addRule('no-empty-pattern', ERROR) // 🟢
-    .addRule('no-ex-assign', ERROR) // 🟢
-    .addRule('no-fallthrough', ERROR) // 🟢
-    .addRule('no-func-assign', ERROR) // 🟢
-    .addRule('no-import-assign', ERROR) // 🟢
-    .addRule('no-inner-declarations', ERROR)
-    .addRule('no-invalid-regexp', ERROR) // 🟢
-    .addRule('no-irregular-whitespace', ERROR) // 🟢
-    .addRule('no-loss-of-precision', ERROR) // 🟢
-    .addRule('no-misleading-character-class', ERROR) // 🟢
-    .addRule('no-new-native-nonconstructor', ERROR) // 🟢
-    .addRule('no-obj-calls', ERROR) // 🟢
-    .addRule('no-promise-executor-return', ERROR)
-    .addRule('no-prototype-builtins', ERROR) // 🟢
-    .addRule('no-self-assign', ERROR) // 🟢
-    .addRule('no-self-compare', ERROR)
-    .addRule('no-setter-return', ERROR) // 🟢
-    .addRule('no-sparse-arrays', ERROR) // 🟢
-    .addRule('no-template-curly-in-string', ERROR)
-    .addRule('no-this-before-super', ERROR) // 🟢
-    .addRule('no-unassigned-vars', eslintVersion >= 9.27 ? ERROR : OFF) // >=9.27
-    .addRule('no-undef', ERROR) // 🟢
-    .addRule('no-unexpected-multiline', OFF) // 🟢💅
-    .addRule('no-unmodified-loop-condition', ERROR)
-    .addRule('no-unreachable-loop', ERROR)
-    .addRule('no-unreachable', ERROR) // 🟢
-    .addRule('no-unsafe-finally', ERROR) // 🟢
-    .addRule('no-unsafe-negation', ERROR) // 🟢
-    .addRule('no-unsafe-optional-chaining', ERROR) // 🟢
-    .addRule('no-unused-private-class-members', ERROR) // 🟢
-    .addRule('no-unused-vars', ERROR, [{ignoreRestSiblings: true}]) // 🟢
-    .addRule('no-use-before-define', ERROR, [{functions: false}])
-    .addRule('no-useless-assignment', ERROR)
-    .addRule('no-useless-backreference', ERROR) // 🟢
-    .addRule('require-atomic-updates', ERROR, [{allowProperties: true}])
-    .addRule('use-isnan', ERROR) // 🟢
-    .addRule('valid-typeof', ERROR) // 🟢
+    .addRule('array-callback-return', ERROR, [{checkForEach: true}]) // >=2.0.0-alpha-1
+    .addRule('constructor-super', ERROR) // 🟢 >=0.24.0
+    .addRule('for-direction', ERROR) // 🟢 >=4.0.0-beta.0
+    .addRule('getter-return', ERROR) // 🟢 >=4.2.0
+    .addRule('no-async-promise-executor', ERROR) // 🟢 >=5.3.0
+    .addRule('no-await-in-loop', WARNING) // >=3.12.0
+    .addRule('no-class-assign', ERROR) // 🟢 >=1.0.0-rc-1
+    .addRule('no-compare-neg-zero', ERROR) // 🟢 >=3.17.0
+    .addRule('no-cond-assign', ERROR) // 🟢 >=0.0.9
+    .addRule('no-const-assign', ERROR) // 🟢 >=1.0.0-rc-1
+    .addRule('no-constant-binary-expression', ERROR) // 🟢 >=8.14.0
+    .addRule('no-constant-condition', ERROR) // 🟢 >=0.4.1
+    .addRule('no-constructor-return', WARNING) // >=6.7.0
+    .addRule('no-control-regex', ERROR) // 🟢 >=0.1.0
+    .addRule('no-debugger', ERROR) // 🟢 >=0.0.2
+    .addRule('no-dupe-args', ERROR) // 🟢 >=0.16.0
+    .addRule('no-dupe-class-members', ERROR) // 🟢 >=1.2.0
+    .addRule('no-dupe-else-if', ERROR) // 🟢 >=6.7.0
+    .addRule('no-dupe-keys', ERROR) // 🟢 >=0.0.9
+    .addRule('no-duplicate-case', ERROR) // 🟢 >=0.17.0
+    .addRule('no-duplicate-imports', ERROR) // >=2.5.0
+    .addRule('no-empty-character-class', ERROR) // 🟢 >=0.22.0
+    .addRule('no-empty-pattern', ERROR) // 🟢 >=1.7.0
+    .addRule('no-ex-assign', ERROR) // 🟢 >=0.0.9
+    .addRule('no-fallthrough', ERROR) // 🟢 >=0.0.7
+    .addRule('no-func-assign', ERROR) // 🟢 >=0.0.9
+    .addRule('no-import-assign', ERROR) // 🟢 >=6.4.0
+    .addRule('no-inner-declarations', ERROR) // >=0.6.0
+    .addRule('no-invalid-regexp', ERROR) // 🟢 >=0.1.4
+    .addRule('no-irregular-whitespace', ERROR) // 🟢 >=0.9.0
+    .addRule('no-loss-of-precision', ERROR) // 🟢 >=7.1.0
+    .addRule('no-misleading-character-class', ERROR) // 🟢 >=5.3.0
+    .addRule('no-new-native-nonconstructor', ERROR) // 🟢 >=8.27.0
+    .addRule('no-obj-calls', ERROR) // 🟢 >=0.0.9
+    .addRule('no-promise-executor-return', ERROR) // >=7.3.0
+    .addRule('no-prototype-builtins', ERROR) // 🟢 >=2.11.0
+    .addRule('no-self-assign', ERROR) // 🟢 >=2.0.0-rc.0
+    .addRule('no-self-compare', ERROR) // >=0.0.9
+    .addRule('no-setter-return', ERROR) // 🟢 >=6.7.0
+    .addRule('no-sparse-arrays', ERROR) // 🟢 >=0.4.0
+    .addRule('no-template-curly-in-string', ERROR) // >=3.3.0
+    .addRule('no-this-before-super', ERROR) // 🟢 >=0.24.0
+    .addRule('no-unassigned-vars', eslintVersion >= 9.27 ? ERROR : OFF) // >=9.27.0
+    .addRule('no-undef', ERROR) // 🟢 >=0.0.9
+    .addRule('no-unexpected-multiline', OFF) // 🟢💅 >=0.24.0
+    .addRule('no-unmodified-loop-condition', ERROR) // >=2.0.0-alpha-2
+    .addRule('no-unreachable-loop', ERROR) // >=7.3.0
+    .addRule('no-unreachable', ERROR) // 🟢 >=0.0.6
+    .addRule('no-unsafe-finally', ERROR) // 🟢 >=2.9.0
+    .addRule('no-unsafe-negation', ERROR) // 🟢 >=3.3.0
+    .addRule('no-unsafe-optional-chaining', ERROR) // 🟢 >=7.15.0
+    .addRule('no-unused-private-class-members', ERROR) // 🟢 >=8.1.0
+    .addRule('no-unused-vars', ERROR, [{ignoreRestSiblings: true}]) // 🟢 >=0.0.9
+    .addRule('no-use-before-define', ERROR, [{functions: false}]) // >=0.0.9
+    .addRule('no-useless-assignment', ERROR) // >=9.0.0-alpha.1
+    .addRule('no-useless-backreference', ERROR) // 🟢 >=7.0.0-alpha.0
+    .addRule('require-atomic-updates', ERROR, [{allowProperties: true}]) // >=5.3.0
+    .addRule('use-isnan', ERROR) // 🟢 >=0.0.6
+    .addRule('valid-typeof', ERROR) // 🟢 >=0.5.0
     /* Category: Suggestions */
-    .addRule('accessor-pairs', ERROR)
-    .addRule('arrow-body-style', OFF)
-    .addRule('block-scoped-var', ERROR)
+    .addRule('accessor-pairs', ERROR) // >=0.22.0
+    .addRule('arrow-body-style', OFF) // >=1.8.0
+    .addRule('block-scoped-var', ERROR) // >=0.1.0
     .addRule('camelcase', ERROR, [
       {
         properties: 'never' as const,
         ignoreGlobals: true,
         allow: [String.raw`\d_\d`],
       },
-    ])
-    .addRule('capitalized-comments', OFF)
+    ]) // >=0.0.2
+    .addRule('capitalized-comments', OFF) // >=3.11.0
     .addRule(
       'class-methods-use-this',
       ERROR,
       eslintVersion >= 9.24
         ? [{ignoreOverrideMethods: true, ignoreClassesWithImplements: 'all'}]
         : [],
-    )
-    .addRule('complexity', OFF)
-    .addRule('consistent-return', ERROR)
-    .addRule('consistent-this', ERROR, ['that'])
-    .addRule('curly', ERROR, ['all' /* default */]) // 🟠
-    .addRule('default-case-last', ERROR)
-    .addRule('default-case', ERROR)
-    .addRule('default-param-last', ERROR)
-    .addRule('dot-notation', ERROR)
-    .addRule('eqeqeq', ERROR, ['always', {null: 'ignore'}])
-    .addRule('func-name-matching', ERROR, [{considerPropertyDescriptor: true}])
-    .addRule('func-names', OFF)
-    .addRule('func-style', OFF)
-    .addRule('grouped-accessor-pairs', ERROR, ['getBeforeSet'])
-    .addRule('guard-for-in', ERROR)
-    .addRule('id-denylist', OFF)
-    .addRule('id-length', OFF)
-    .addRule('id-match', OFF)
-    .addRule('init-declarations', OFF)
-    .addRule('logical-assignment-operators', ERROR, ['always'])
-    .addRule('max-classes-per-file', ERROR, [{ignoreExpressions: true, max: 2}])
-    .addRule('max-depth', OFF)
-    .addRule('max-lines-per-function', OFF)
-    .addRule('max-lines', OFF)
-    .addRule('max-nested-callbacks', OFF)
-    .addRule('max-params', OFF)
-    .addRule('max-statements', OFF)
-    .addRule('new-cap', ERROR, [{properties: false, capIsNew: false}])
-    .addRule('no-alert', WARNING)
-    .addRule('no-array-constructor', ERROR)
-    .addRule('no-bitwise', OFF)
-    .addRule('no-caller', ERROR)
-    .addRule('no-case-declarations', ERROR) // 🟢
+    ) // >=3.4.0
+    .addRule('complexity', OFF) // >=0.0.9
+    .addRule('consistent-return', ERROR) // >=0.4.0
+    .addRule('consistent-this', ERROR, ['that']) // >=0.0.9
+    .addRule('curly', ERROR, ['all' /* default */]) // 🟠 >=0.0.2
+    .addRule('default-case-last', ERROR) // >=7.0.0-alpha.0
+    .addRule('default-case', ERROR) // >=0.6.0
+    .addRule('default-param-last', ERROR) // >=6.4.0
+    .addRule('dot-notation', ERROR) // >=0.0.7
+    .addRule('eqeqeq', ERROR, ['always', {null: 'ignore'}]) // >=0.0.2
+    .addRule('func-name-matching', ERROR, [{considerPropertyDescriptor: true}]) // >=3.8.0
+    .addRule('func-names', OFF) // >=0.4.0
+    .addRule('func-style', OFF) // >=0.2.0
+    .addRule('grouped-accessor-pairs', ERROR, ['getBeforeSet']) // >=6.7.0
+    .addRule('guard-for-in', ERROR) // >=0.0.6
+    .addRule('id-denylist', OFF) // >=7.4.0
+    .addRule('id-length', OFF) // >=1.0.0
+    .addRule('id-match', OFF) // >=1.0.0
+    .addRule('init-declarations', OFF) // >=1.0.0-rc-1
+    .addRule('logical-assignment-operators', ERROR, ['always']) // >=8.24.0
+    .addRule('max-classes-per-file', ERROR, [{ignoreExpressions: true, max: 2}]) // >=5.0.0-alpha.3
+    .addRule('max-depth', OFF) // >=0.0.9
+    .addRule('max-lines-per-function', OFF) // >=5.0.0
+    .addRule('max-lines', OFF) // >=2.12.0
+    .addRule('max-nested-callbacks', OFF) // >=0.2.0
+    .addRule('max-params', OFF) // >=0.0.9
+    .addRule('max-statements', OFF) // >=0.0.9
+    .addRule('new-cap', ERROR, [{properties: false, capIsNew: false}]) // >=0.0.3-0
+    .addRule('no-alert', WARNING) // >=0.0.5
+    .addRule('no-array-constructor', ERROR) // >=0.4.0
+    .addRule('no-bitwise', OFF) // >=0.0.2
+    .addRule('no-caller', ERROR) // >=0.0.6
+    .addRule('no-case-declarations', ERROR) // 🟢 >=1.9.0
     .addRule('no-console', ERROR, [
       {
         ...(allowedConsoleMethods?.length && {allow: allowedConsoleMethods}),
       },
-    ])
-    .addRule('no-continue', OFF)
-    .addRule('no-delete-var', ERROR) // 🟢
-    .addRule('no-empty-static-block', ERROR) // 🟢
-    .addRule('no-empty', ERROR) // 🟢
-    .addRule('no-extra-boolean-cast', ERROR) // 🟢
-    .addRule('no-global-assign', ERROR) // 🟢
-    .addRule('no-nonoctal-decimal-escape', ERROR) // 🟢
-    .addRule('no-octal', ERROR) // 🟢
-    .addRule('no-redeclare', ERROR) // 🟢
-    .addRule('no-regex-spaces', ERROR) // 🟢
+    ]) // >=0.0.2
+    .addRule('no-continue', OFF) // >=0.19.0
+    .addRule('no-delete-var', ERROR) // 🟢 >=0.0.9
+    .addRule('no-empty-static-block', ERROR) // 🟢 >=8.27.0
+    .addRule('no-empty', ERROR) // 🟢 >=0.0.2
+    .addRule('no-extra-boolean-cast', ERROR) // 🟢 >=0.4.0
+    .addRule('no-global-assign', ERROR) // 🟢 >=3.3.0
+    .addRule('no-nonoctal-decimal-escape', ERROR) // 🟢 >=7.14.0
+    .addRule('no-octal', ERROR) // 🟢 >=0.0.6
+    .addRule('no-redeclare', ERROR) // 🟢 >=0.0.9
+    .addRule('no-regex-spaces', ERROR) // 🟢 >=0.4.0
     .addRule(
       'no-shadow-restricted-names',
       ERROR,
       eslintVersion >= 9.26 ? [{reportGlobalThis: true}] : [],
-    ) // 🟢
-    .addRule('no-div-regex', OFF)
-    .addRule('no-else-return', ERROR, [{allowElseIf: false}])
-    .addRule('no-empty-function', ERROR)
-    .addRule('no-eq-null', OFF)
-    .addRule('no-eval', ERROR)
-    .addRule('no-extend-native', ERROR)
-    .addRule('no-extra-bind', ERROR)
-    .addRule('no-extra-label', ERROR)
-    .addRule('no-implicit-coercion', ERROR, [{boolean: true, disallowTemplateShorthand: true}])
-    .addRule('no-implicit-globals', OFF)
-    .addRule('no-implied-eval', ERROR)
-    .addRule('no-inline-comments', OFF)
-    .addRule('no-invalid-this', OFF)
-    .addRule('no-iterator', ERROR)
-    .addRule('no-label-var', ERROR)
-    .addRule('no-labels', ERROR, [{allowLoop: false}])
-    .addRule('no-lone-blocks', ERROR)
-    .addRule('no-lonely-if', ERROR)
-    .addRule('no-loop-func', ERROR)
-    .addRule('no-magic-numbers', OFF)
-    .addRule('no-multi-assign', ERROR)
-    .addRule('no-multi-str', ERROR)
-    .addRule('no-negated-condition', ERROR)
-    .addRule('no-nested-ternary', OFF)
-    .addRule('no-new-func', ERROR)
-    .addRule('no-new-wrappers', ERROR)
-    .addRule('no-new', WARNING)
-    .addRule('no-object-constructor', ERROR)
-    .addRule('no-octal-escape', ERROR)
-    .addRule('no-param-reassign', WARNING)
-    .addRule('no-plusplus', OFF)
-    .addRule('no-proto', ERROR)
-    .addRule('no-restricted-exports', OFF)
-    .addRule('no-unused-labels', ERROR) // 🟢
-    .addRule('no-useless-catch', ERROR) // 🟢
-    .addRule('no-useless-escape', ERROR) // 🟢
-    .addRule('no-with', ERROR) // 🟢
-    .addRule('require-yield', ERROR) // 🟢
+    ) // 🟢 >=0.1.4
+    .addRule('no-div-regex', OFF) // >=0.1.0
+    .addRule('no-else-return', ERROR, [{allowElseIf: false}]) // >=0.0.9
+    .addRule('no-empty-function', ERROR) // >=2.0.0
+    .addRule('no-eq-null', OFF) // >=0.0.9
+    .addRule('no-eval', ERROR) // >=0.0.2
+    .addRule('no-extend-native', ERROR) // >=0.1.4
+    .addRule('no-extra-bind', ERROR) // >=0.8.0
+    .addRule('no-extra-label', ERROR) // >=2.0.0-rc.0
+    .addRule('no-implicit-coercion', ERROR, [{boolean: true, disallowTemplateShorthand: true}]) // >=1.0.0-rc-2
+    .addRule('no-implicit-globals', OFF) // >=2.0.0-alpha-1
+    .addRule('no-implied-eval', ERROR) // >=0.0.7
+    .addRule('no-inline-comments', OFF) // >=0.10.0
+    .addRule('no-invalid-this', OFF) // >=1.0.0-rc-2
+    .addRule('no-iterator', ERROR) // >=0.0.9
+    .addRule('no-label-var', ERROR) // >=0.0.9
+    .addRule('no-labels', ERROR, [{allowLoop: false}]) // >=0.4.0
+    .addRule('no-lone-blocks', ERROR) // >=0.4.0
+    .addRule('no-lonely-if', ERROR) // >=0.6.0
+    .addRule('no-loop-func', ERROR) // >=0.0.9
+    .addRule('no-magic-numbers', OFF) // >=1.7.0
+    .addRule('no-multi-assign', ERROR) // >=3.14.0
+    .addRule('no-multi-str', ERROR) // >=0.0.9
+    .addRule('no-negated-condition', ERROR) // >=1.6.0
+    .addRule('no-nested-ternary', OFF) // >=0.2.0
+    .addRule('no-new-func', ERROR) // >=0.0.7
+    .addRule('no-new-wrappers', ERROR) // >=0.0.6
+    .addRule('no-new', WARNING) // >=0.0.7
+    .addRule('no-object-constructor', ERROR) // >=8.50.0
+    .addRule('no-octal-escape', ERROR) // >=0.0.9
+    .addRule('no-param-reassign', WARNING) // >=0.18.0
+    .addRule('no-plusplus', OFF) // >=0.0.9
+    .addRule('no-proto', ERROR) // >=0.0.9
+    .addRule('no-restricted-exports', OFF) // >=7.0.0-alpha.0
+    .addRule('no-unused-labels', ERROR) // 🟢 >=2.0.0-rc.0
+    .addRule('no-useless-catch', ERROR) // 🟢 >=5.11.0
+    .addRule('no-useless-escape', ERROR) // 🟢 >=2.5.0
+    .addRule('no-with', ERROR) // 🟢 >=0.0.2
+    .addRule('require-yield', ERROR) // 🟢 >=1.0.0-rc-1
     .addRule('no-restricted-globals', ERROR, [
       {name: 'global', message: 'Use `globalThis` instead'},
       {name: 'self', message: 'Use `globalThis` instead'},
       {name: 'event', message: 'Use local parameter instead'},
-    ])
-    .addRule('no-restricted-imports', OFF)
-    .addRule('no-restricted-properties', OFF)
-    .addRule('no-restricted-syntax', OFF)
-    .addRule('no-return-assign', ERROR, ['always'])
-    .addRule('no-script-url', ERROR)
-    .addRule('no-sequences', ERROR)
-    .addRule('no-shadow', ERROR)
-    .addRule('no-ternary', OFF)
-    .addRule('no-throw-literal', ERROR)
-    .addRule('no-undef-init', ERROR)
-    .addRule('no-undefined', OFF)
+    ]) // >=2.3.0
+    .addRule('no-restricted-imports', OFF) // >=2.0.0-alpha-1
+    .addRule('no-restricted-properties', OFF) // >=3.5.0
+    .addRule('no-restricted-syntax', OFF) // >=1.4.0
+    .addRule('no-return-assign', ERROR, ['always']) // >=0.0.9
+    .addRule('no-script-url', ERROR) // >=0.0.9
+    .addRule('no-sequences', ERROR) // >=0.5.1
+    .addRule('no-shadow', ERROR) // >=0.0.9
+    .addRule('no-ternary', OFF) // >=0.0.9
+    .addRule('no-throw-literal', ERROR) // >=0.15.0
+    .addRule('no-undef-init', ERROR) // >=0.0.6
+    .addRule('no-undefined', OFF) // >=0.7.1
     // Had a potential, but unfortunately reports accesses of object properties starting with _
     .addRule('no-underscore-dangle', OFF, [
       {
@@ -243,58 +243,59 @@ export const jsUnConfig: UnConfigFn<
         allowAfterSuper: true,
         allowAfterThisConstructor: true,
       },
-    ])
-    .addRule('no-unneeded-ternary', ERROR, [{defaultAssignment: false}])
+    ]) // >=0.0.9
+    .addRule('no-unneeded-ternary', ERROR, [{defaultAssignment: false}]) // >=0.21.0
     .addRule('no-unused-expressions', ERROR, [
       {
         allowShortCircuit: true,
         allowTernary: true,
         allowTaggedTemplates: true,
       },
-    ])
-    .addRule('no-useless-call', ERROR)
-    .addRule('no-useless-computed-key', ERROR)
-    .addRule('no-useless-concat', ERROR)
-    .addRule('no-useless-constructor', ERROR)
-    .addRule('no-useless-rename', ERROR)
-    .addRule('no-useless-return', ERROR)
-    .addRule('no-var', ERROR)
-    .addRule('no-void', ERROR, [{allowAsStatement: true}])
-    .addRule('no-warning-comments', OFF)
-    .addRule('object-shorthand', ERROR)
-    .addRule('one-var', ERROR, ['never'])
-    .addRule('operator-assignment', ERROR)
-    .addRule('prefer-arrow-callback', ERROR, [{allowNamedFunctions: false, allowUnboundThis: true}])
-    .addRule('prefer-const', ERROR, [{destructuring: 'all', ignoreReadBeforeAssign: true}])
+    ]) // >=0.1.0
+    .addRule('no-useless-call', ERROR) // >=1.0.0-rc-1
+    .addRule('no-useless-computed-key', ERROR) // >=2.9.0
+    .addRule('no-useless-concat', ERROR) // >=1.3.0
+    .addRule('no-useless-constructor', ERROR) // >=2.0.0-beta.1
+    .addRule('no-useless-rename', ERROR) // >=2.11.0
+    .addRule('no-useless-return', ERROR) // >=3.9.0
+    .addRule('no-var', ERROR) // >=0.12.0
+    .addRule('no-void', ERROR, [{allowAsStatement: true}]) // >=0.8.0
+    .addRule('no-warning-comments', OFF) // >=0.4.4
+    .addRule('object-shorthand', ERROR) // >=0.20.0
+    .addRule('one-var', ERROR, ['never']) // >=0.0.9
+    .addRule('operator-assignment', ERROR) // >=0.10.0
+    .addRule('prefer-arrow-callback', ERROR, [{allowNamedFunctions: false, allowUnboundThis: true}]) // >=1.2.0
+    .addRule('prefer-const', ERROR, [{destructuring: 'all', ignoreReadBeforeAssign: true}]) // >=0.23.0
     .addRule('prefer-destructuring', ERROR, [
       {
         VariableDeclarator: {array: false, object: true},
         AssignmentExpression: {array: false, object: false},
       },
-    ])
-    .addRule('prefer-exponentiation-operator', ERROR)
-    .addRule('prefer-named-capture-group', OFF)
-    .addRule('prefer-numeric-literals', ERROR)
-    .addRule('prefer-object-has-own', ERROR) // TODO disable if ecmaVersion<2022?
-    .addRule('prefer-object-spread', ERROR)
-    .addRule('prefer-promise-reject-errors', ERROR)
-    .addRule('prefer-regex-literals', ERROR, [{disallowRedundantWrapping: true}])
-    .addRule('prefer-rest-params', ERROR)
-    .addRule('prefer-spread', ERROR)
-    .addRule('prefer-template', ERROR)
+    ]) // >=3.13.0
+    .addRule('prefer-exponentiation-operator', ERROR) // >=6.7.0
+    .addRule('prefer-named-capture-group', OFF) // >=5.15.0
+    .addRule('prefer-numeric-literals', ERROR) // >=3.5.0
+    // TODO disable if ecmaVersion<2022?
+    .addRule('prefer-object-has-own', ERROR) // >=8.5.0
+    .addRule('prefer-object-spread', ERROR) // >=5.0.0-alpha.3
+    .addRule('prefer-promise-reject-errors', ERROR) // >=3.14.0
+    .addRule('prefer-regex-literals', ERROR, [{disallowRedundantWrapping: true}]) // >=6.4.0
+    .addRule('prefer-rest-params', ERROR) // >=2.0.0-alpha-1
+    .addRule('prefer-spread', ERROR) // >=1.0.0-rc-1
+    .addRule('prefer-template', ERROR) // >=1.2.0
     .addRule('preserve-caught-error', OFF) // >=9.35.0
-    .addRule('radix', ERROR)
-    .addRule('require-await', ERROR)
-    .addRule('require-unicode-regexp', OFF)
-    .addRule('sort-imports', ERROR, [{ignoreDeclarationSort: true}])
-    .addRule('sort-keys', OFF)
-    .addRule('sort-vars', OFF)
-    .addRule('strict', ERROR, ['never'])
-    .addRule('symbol-description', ERROR)
-    .addRule('vars-on-top', ERROR)
-    .addRule('yoda', ERROR)
+    .addRule('radix', ERROR) // >=0.0.7
+    .addRule('require-await', ERROR) // >=3.11.0
+    .addRule('require-unicode-regexp', OFF) // >=5.3.0
+    .addRule('sort-imports', ERROR, [{ignoreDeclarationSort: true}]) // >=2.0.0-beta.1
+    .addRule('sort-keys', OFF) // >=3.3.0
+    .addRule('sort-vars', OFF) // >=0.2.0
+    .addRule('strict', ERROR, ['never']) // >=0.1.0
+    .addRule('symbol-description', ERROR) // >=3.4.0
+    .addRule('vars-on-top', ERROR) // >=0.8.0
+    .addRule('yoda', ERROR) // >=0.7.1
     /* Category: Layout & Formatting */
-    .addRule('unicode-bom', ERROR)
+    .addRule('unicode-bom', ERROR) // >=2.11.0
     /* Category: Stylistic */
     .addAnyRule('@stylistic', 'quotes', ERROR, [
       'single', // Doesn't matter since `ignoreStringLiterals` is true - BUT will be used in fixes
