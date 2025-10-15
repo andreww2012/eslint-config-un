@@ -61,37 +61,37 @@ export const avaUnConfig: UnConfigFn<'ava'> = (context) => {
       enforceAssertionMessage == null
         ? []
         : [{message: enforceAssertionMessage ? 'always' : 'never'}],
-    ) // 🟢
-    .addRule('hooks-order', ERROR) // 🟢
+    ) // 🟢 >=2.3.0
+    .addRule('hooks-order', ERROR) // 🟢 >=8.0.0
     .addRule(
       'max-asserts',
       enforceMaxAssertions == null ? OFF : ERROR,
       enforceMaxAssertions == null ? [] : [enforceMaxAssertions],
-    )
-    .addRule('no-async-fn-without-await', ERROR) // 🟢
-    .addRule('no-duplicate-modifiers', ERROR) // 🟢
-    .addRule('no-identical-title', ERROR) // 🟢
-    .addRule('no-ignored-test-files', ERROR) // 🟢
-    .addRule('no-import-test-files', ERROR) // 🟢
-    .addRule('no-incorrect-deep-equal', ERROR) // 🟢
-    .addRule('no-inline-assertions', ERROR) // 🟢
-    .addRule('no-nested-tests', ERROR) // 🟢
-    .addRule('no-only-test', ERROR) // 🟢
-    .addRule('no-skip-assert', ERROR) // 🟢
-    .addRule('no-skip-test', ERROR) // 🟢
-    .addRule('no-todo-implementation', ERROR) // 🟢
-    .addRule('no-todo-test', WARNING) // 🟡
-    .addRule('no-unknown-modifiers', ERROR) // 🟢
-    .addRule('prefer-async-await', ERROR) // 🟢
-    .addRule('prefer-power-assert', OFF)
-    .addRule('prefer-t-regex', ERROR) // 🟢
-    .addRule('test-title', ERROR) // 🟢
-    .addRule('test-title-format', OFF)
-    .addRule('use-t', ERROR) // 🟢
-    .addRule('use-t-throws-async-well', ERROR) // 🟢
-    .addRule('use-t-well', ERROR) // 🟢
-    .addRule('use-test', ERROR) // 🟢
-    .addRule('use-true-false', ERROR) // 🟢
+    ) // >=1.0.0
+    .addRule('no-async-fn-without-await', ERROR) // 🟢 >=3.1.0
+    .addRule('no-duplicate-modifiers', ERROR) // 🟢 >=3.1.0
+    .addRule('no-identical-title', ERROR) // 🟢 >=1.0.0
+    .addRule('no-ignored-test-files', ERROR) // 🟢 >=2.0.0
+    .addRule('no-import-test-files', ERROR) // 🟢 >=5.0.0
+    .addRule('no-incorrect-deep-equal', ERROR) // 🟢 >=8.0.0
+    .addRule('no-inline-assertions', ERROR) // 🟢 >=8.0.0
+    .addRule('no-nested-tests', ERROR) // 🟢 >=3.0.0
+    .addRule('no-only-test', ERROR) // 🟢 >=1.0.0
+    .addRule('no-skip-assert', ERROR) // 🟢 >=1.0.0
+    .addRule('no-skip-test', ERROR) // 🟢 >=1.0.0
+    .addRule('no-todo-implementation', ERROR) // 🟢 >=3.0.0
+    .addRule('no-todo-test', WARNING) // 🟡 >=1.1.0
+    .addRule('no-unknown-modifiers', ERROR) // 🟢 >=1.4.0
+    .addRule('prefer-async-await', ERROR) // 🟢 >=3.0.0
+    .addRule('prefer-power-assert', OFF) // >=0.1.0
+    .addRule('prefer-t-regex', ERROR) // 🟢 >=7.0.0
+    .addRule('test-title', ERROR) // 🟢 >=1.0.0
+    .addRule('test-title-format', OFF) // >=7.0.0
+    .addRule('use-t', ERROR) // 🟢 >=1.2.0
+    .addRule('use-t-throws-async-well', ERROR) // 🟢 >=10.3.0
+    .addRule('use-t-well', ERROR) // 🟢 >=2.2.0
+    .addRule('use-test', ERROR) // 🟢 >=1.2.0
+    .addRule('use-true-false', ERROR) // 🟢 >=2.2.0
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
