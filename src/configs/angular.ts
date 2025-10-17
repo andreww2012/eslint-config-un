@@ -413,7 +413,6 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
         forbiddenMetadataProperties.host ? ERROR : OFF,
       ),
     ) // 🔴(18) >=0.0.1-alpha.12 <=18
-    .addRule(...getAngularEslintPluginRuleSeverity('prefer-output-emitter-ref', ERROR)) // >=19.4.0
     .addRule(...getAngularEslintPluginRuleSeverity('no-input-prefix', ERROR), [
       {prefixes: disallowedInputPrefixes},
     ]) // >=0.0.1-alpha.23
@@ -450,6 +449,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     .addRule(
       ...getAngularEslintPluginRuleSeverity('prefer-on-push-component-change-detection', OFF),
     ) // >=0.0.1-alpha.17
+    .addRule(...getAngularEslintPluginRuleSeverity('prefer-output-emitter-ref', ERROR)) // >=19.4.0
     .addRule(...getAngularEslintPluginRuleSeverity('prefer-output-readonly', ERROR)) // >=0.0.1-alpha.19
     .addRule(...getAngularEslintPluginRuleSeverity('prefer-signals', OFF)) // >=19.0.0
     .addRule(
@@ -476,7 +476,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     .addRule(...getAngularEslintPluginRuleSeverity('use-injectable-provided-in', ERROR)) // >=0.0.1-alpha.23
     .addRule(...getAngularEslintPluginRuleSeverity('use-lifecycle-interface', ERROR)) // 🟢(warns) >=0.0.1-alpha.12
     .addRule(...getAngularEslintPluginRuleSeverity('use-pipe-transform-interface', ERROR)) // 🟢 >=0.0.1-alpha.12
-    .ensureAllRulesAreListed('@angular-eslint')
+    .ensureAllRulesAreListed('@angular-eslint', {includeDeprecated: true})
     .addOverrides();
 
   // TEMPLATE CONFIG
@@ -618,11 +618,11 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     .addRule(
       ...getAngularEslintTemplatePluginRuleSeverity('prefer-ngsrc', preferNgSrc ? ERROR : OFF),
     ) // >=16.2.0
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('prefer-template-literal', ERROR)) // >=19.4.0
     .addRule(...getAngularEslintTemplatePluginRuleSeverity('prefer-self-closing-tags', OFF)) // >=16.1.0
     .addRule(
       ...getAngularEslintTemplatePluginRuleSeverity('prefer-static-string-properties', ERROR),
     ) // >=19.1.0
+    .addRule(...getAngularEslintTemplatePluginRuleSeverity('prefer-template-literal', ERROR)) // >=19.4.0
     .addRule(
       ...getAngularEslintTemplatePluginRuleSeverity('role-has-required-aria', a11yRulesSeverity),
     ) // ♿ >=16.0.0-alpha.0 (renamed from `accessibility-role-has-required-aria`)
@@ -634,6 +634,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
       ),
     ) // ♿ >=0.8.0-beta.5
     .addRule(...getAngularEslintTemplatePluginRuleSeverity('valid-aria', a11yRulesSeverity)) // ♿ >=16.0.0-alpha.0 (renamed from `accessibility-valid-aria`)
+    .ensureAllRulesAreListed('@angular-eslint/template', {includeDeprecated: true})
     .addOverrides();
 
   return {
