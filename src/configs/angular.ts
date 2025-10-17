@@ -307,9 +307,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
   });
 
   const angularEslintPluginRules = Object.keys(angularEslintPlugin?.rules || {});
-  const getAngularEslintPluginRuleSeverity = <
-    RuleName extends RuleNamesForPlugin<'@angular-eslint'>,
-  >(
+  const getPluginRuleSeverity = <RuleName extends RuleNamesForPlugin<'@angular-eslint'>>(
     ruleName: RuleName,
     severity: RuleSeverity,
   ) =>
@@ -334,7 +332,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
       },
     )
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
+      ...getPluginRuleSeverity(
         'component-class-suffix',
         componentClassSuffixes.length === 0 ? OFF : ERROR,
       ),
@@ -343,13 +341,12 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
           ...(componentClassSuffixes.length > 0 && {suffixes: componentClassSuffixes}),
         },
       ],
-    ) // >=0.0.1-alpha.12
-    .addRule(...getAngularEslintPluginRuleSeverity('component-max-inline-declarations', OFF)) // >=0.0.1-alpha.19
+    ) /** @since 0.0.1-alpha.12 */
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
-        'component-selector',
-        componentSelector === false ? OFF : ERROR,
-      ),
+      ...getPluginRuleSeverity('component-max-inline-declarations', OFF),
+    ) /** @since 0.0.1-alpha.19 */
+    .addRule(
+      ...getPluginRuleSeverity('component-selector', componentSelector === false ? OFF : ERROR),
       [
         {
           type: ['element'],
@@ -357,18 +354,18 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
           ...(typeof componentSelector === 'object' && componentSelector),
         },
       ],
-    ) // >=0.0.1-alpha.18
+    ) /** @since 0.0.1-alpha.18 */
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
+      ...getPluginRuleSeverity(
         'consistent-component-styles',
         componentStylesStyle === false ? OFF : ERROR,
       ),
       [typeof componentStylesStyle === 'string' ? componentStylesStyle : 'string'],
-    ) // >=17.3.0
-    .addRule(...getAngularEslintPluginRuleSeverity('contextual-decorator', ERROR)) // >=0.8.0-beta.7
-    .addRule(...getAngularEslintPluginRuleSeverity('contextual-lifecycle', ERROR)) // 🟢 >=0.0.1-alpha.18
+    ) /** @since 17.3.0 */
+    .addRule(...getPluginRuleSeverity('contextual-decorator', ERROR)) /** @since 0.8.0-beta.7 */
+    .addRule(...getPluginRuleSeverity('contextual-lifecycle', ERROR)) /** @since 0.0.1-alpha.18 */ // 🟢
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
+      ...getPluginRuleSeverity(
         'directive-class-suffix',
         directiveClassSuffixes.length === 0 ? OFF : ERROR,
       ),
@@ -377,12 +374,9 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
           ...(directiveClassSuffixes.length > 0 && {suffixes: directiveClassSuffixes}),
         },
       ],
-    ) // >=0.0.1-alpha.23
+    ) /** @since 0.0.1-alpha.23 */
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
-        'directive-selector',
-        directiveSelector === false ? OFF : ERROR,
-      ),
+      ...getPluginRuleSeverity('directive-selector', directiveSelector === false ? OFF : ERROR),
       [
         {
           type: ['attribute'],
@@ -390,99 +384,112 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
           ...(typeof directiveSelector === 'object' && directiveSelector),
         },
       ],
-    ) // >=0.0.1-alpha.18
-    .addRule(...getAngularEslintPluginRuleSeverity('no-async-lifecycle-method', ERROR)) // >=17.2.0
+    ) /** @since 0.0.1-alpha.18 */
+    .addRule(...getPluginRuleSeverity('no-async-lifecycle-method', ERROR)) /** @since 17.2.0 */
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
-        'no-attribute-decorator',
-        disallowAttributeDecorator ? ERROR : OFF,
-      ),
-    ) // >=0.0.1-alpha.30
-    .addRule(...getAngularEslintPluginRuleSeverity('no-conflicting-lifecycle', ERROR)) // >=0.0.1-alpha.19
-    .addRule(...getAngularEslintPluginRuleSeverity('no-developer-preview', WARNING)) // >=20.1.0
-    .addRule(...getAngularEslintPluginRuleSeverity('no-duplicates-in-metadata-arrays', ERROR)) // >=17.4.0
-    .addRule(...getAngularEslintPluginRuleSeverity('no-empty-lifecycle-method', ERROR)) // 🟢 >=0.1.0-beta.1
-    .addRule(...getAngularEslintPluginRuleSeverity('no-experimental', WARNING)) // >=20.1.0
+      ...getPluginRuleSeverity('no-attribute-decorator', disallowAttributeDecorator ? ERROR : OFF),
+    ) /** @since 0.0.1-alpha.30 */
     .addRule(
-      ...getAngularEslintPluginRuleSeverity('no-forward-ref', disallowForwardRef ? ERROR : OFF),
-    ) // >=0.0.1-alpha.23
+      ...getPluginRuleSeverity('no-conflicting-lifecycle', ERROR),
+    ) /** @since 0.0.1-alpha.19 */
+    .addRule(...getPluginRuleSeverity('no-developer-preview', WARNING)) /** @since 20.1.0 */
+    .addRule(
+      ...getPluginRuleSeverity('no-duplicates-in-metadata-arrays', ERROR),
+    ) /** @since 17.4.0 */
+    .addRule(
+      ...getPluginRuleSeverity('no-empty-lifecycle-method', ERROR),
+    ) /** @since 0.1.0-beta.1 */ // 🟢
+    .addRule(...getPluginRuleSeverity('no-experimental', WARNING)) /** @since 20.1.0 */
+    .addRule(
+      ...getPluginRuleSeverity('no-forward-ref', disallowForwardRef ? ERROR : OFF),
+    ) /** @since 0.0.1-alpha.23 */
     // See https://github.com/angular/angular/pull/54084, https://angular.dev/guide/components/host-elements
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
+      ...getPluginRuleSeverity(
         'no-host-metadata-property',
         forbiddenMetadataProperties.host ? ERROR : OFF,
       ),
-    ) // 🔴(18) >=0.0.1-alpha.12 <=18
-    .addRule(...getAngularEslintPluginRuleSeverity('no-input-prefix', ERROR), [
+    ) /** @since 0.0.1-alpha.12 */ /** @until 18 */ // 🔴(18)
+    .addRule(...getPluginRuleSeverity('no-input-prefix', ERROR), [
       {prefixes: disallowedInputPrefixes},
-    ]) // >=0.0.1-alpha.23
-    .addRule(...getAngularEslintPluginRuleSeverity('no-input-rename', ERROR)) // 🟢 >=0.0.1-alpha.23
+    ]) /** @since 0.0.1-alpha.23 */
+    .addRule(...getPluginRuleSeverity('no-input-rename', ERROR)) /** @since 0.0.1-alpha.23 */ // 🟢
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
+      ...getPluginRuleSeverity(
         'no-inputs-metadata-property',
         forbiddenMetadataProperties.inputs ? ERROR : OFF,
       ),
-    ) // 🟢 >=0.0.1-alpha.12
-    .addRule(...getAngularEslintPluginRuleSeverity('no-lifecycle-call', ERROR)) // >=0.0.1-alpha.18
-    .addRule(...getAngularEslintPluginRuleSeverity('no-output-native', ERROR)) // 🟢 >=0.0.1-alpha.18
-    .addRule(...getAngularEslintPluginRuleSeverity('no-output-on-prefix', ERROR)) // 🟢 >=0.0.1-alpha.12
-    .addRule(...getAngularEslintPluginRuleSeverity('no-output-rename', ERROR)) // 🟢 >=0.0.1-alpha.18
+    ) /** @since 0.0.1-alpha.12 */ // 🟢
+    .addRule(...getPluginRuleSeverity('no-lifecycle-call', ERROR)) /** @since 0.0.1-alpha.18 */
+    .addRule(...getPluginRuleSeverity('no-output-native', ERROR)) /** @since 0.0.1-alpha.18 */ // 🟢
+    .addRule(...getPluginRuleSeverity('no-output-on-prefix', ERROR)) /** @since 0.0.1-alpha.12 */ // 🟢
+    .addRule(...getPluginRuleSeverity('no-output-rename', ERROR)) /** @since 0.0.1-alpha.18 */ // 🟢
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
+      ...getPluginRuleSeverity(
         'no-outputs-metadata-property',
         forbiddenMetadataProperties.outputs ? ERROR : OFF,
       ),
-    ) // 🟢 >=0.0.1-alpha.12
-    .addRule(...getAngularEslintPluginRuleSeverity('no-pipe-impure', ERROR)) // >=0.0.1-alpha.17
+    ) /** @since 0.0.1-alpha.12 */ // 🟢
+    .addRule(...getPluginRuleSeverity('no-pipe-impure', ERROR)) /** @since 0.0.1-alpha.17 */
     // https://github.com/angular/angular/blob/12.1.1/packages/core/src/metadata/directives.ts#L221-L258
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
+      ...getPluginRuleSeverity(
         'no-queries-metadata-property',
         forbiddenMetadataProperties.queries ? ERROR : OFF,
       ),
-    ) // >=0.0.1-alpha.12
-    .addRule(...getAngularEslintPluginRuleSeverity('no-uncalled-signals', ERROR)) // >=19.7.0
-    .addRule(...getAngularEslintPluginRuleSeverity('pipe-prefix', ERROR), [
+    ) /** @since 0.0.1-alpha.12 */
+    .addRule(...getPluginRuleSeverity('no-uncalled-signals', ERROR)) /** @since 19.7.0 */
+    .addRule(...getPluginRuleSeverity('pipe-prefix', ERROR), [
       {prefixes: pipePrefixes},
-    ]) // >=0.0.1-alpha.33
-    .addRule(...getAngularEslintPluginRuleSeverity('prefer-inject', ERROR)) // 🟢 >=19.6.0
+    ]) /** @since 0.0.1-alpha.33 */
+    .addRule(...getPluginRuleSeverity('prefer-inject', ERROR)) /** @since 19.6.0 */ // 🟢
     .addRule(
-      ...getAngularEslintPluginRuleSeverity('prefer-on-push-component-change-detection', OFF),
-    ) // >=0.0.1-alpha.17
-    .addRule(...getAngularEslintPluginRuleSeverity('prefer-output-emitter-ref', ERROR)) // >=19.4.0
-    .addRule(...getAngularEslintPluginRuleSeverity('prefer-output-readonly', ERROR)) // >=0.0.1-alpha.19
-    .addRule(...getAngularEslintPluginRuleSeverity('prefer-signals', OFF)) // >=19.0.0
+      ...getPluginRuleSeverity('prefer-on-push-component-change-detection', OFF),
+    ) /** @since 0.0.1-alpha.17 */
+    .addRule(...getPluginRuleSeverity('prefer-output-emitter-ref', ERROR)) /** @since 19.4.0 */
+    .addRule(...getPluginRuleSeverity('prefer-output-readonly', ERROR)) /** @since 0.0.1-alpha.19 */
+    .addRule(...getPluginRuleSeverity('prefer-signals', OFF)) /** @since 19.0.0 */
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
+      ...getPluginRuleSeverity(
         'prefer-standalone',
         preferStandaloneComponents && angularVersion >= 17 ? ERROR : OFF,
       ),
-    ) // 🟢(>=19) >=17.3.0
+    ) /** @since 17.3.0 */ // 🟢(>=19)
     .addRule(
-      ...getAngularEslintPluginRuleSeverity(
+      ...getPluginRuleSeverity(
         'prefer-standalone-component',
         preferStandaloneComponents && angularVersion < 17 ? ERROR : OFF,
       ),
-    ) // 🔴(>=17) >=16.1.0 <=18
-    .addRule(...getAngularEslintPluginRuleSeverity('relative-url-prefix', ERROR)) // >=0.0.1-alpha.23
-    .addRule(...getAngularEslintPluginRuleSeverity('require-lifecycle-on-prototype', ERROR)) // >=19.2.0
-    .addRule(...getAngularEslintPluginRuleSeverity('require-localize-metadata', ERROR)) // 🌐 >=13.2.0
-    .addRule(...getAngularEslintPluginRuleSeverity('runtime-localize', ERROR)) // 🌐 >=18.3.0
-    .addRule(...getAngularEslintPluginRuleSeverity('sort-keys-in-type-decorator', ERROR)) // >=19.5.0
-    .addRule(...getAngularEslintPluginRuleSeverity('sort-lifecycle-methods', ERROR)) // >=16.2.0
-    .addRule(...getAngularEslintPluginRuleSeverity('sort-ngmodule-metadata-arrays', OFF)) // 🔴(>=17) >=2.1.0 <=18
-    .addRule(...getAngularEslintPluginRuleSeverity('use-component-selector', ERROR)) // >=0.0.1-alpha.12
-    .addRule(...getAngularEslintPluginRuleSeverity('use-component-view-encapsulation', ERROR)) // >=0.0.1-alpha.12
-    .addRule(...getAngularEslintPluginRuleSeverity('use-injectable-provided-in', ERROR)) // >=0.0.1-alpha.23
-    .addRule(...getAngularEslintPluginRuleSeverity('use-lifecycle-interface', ERROR)) // 🟢(warns) >=0.0.1-alpha.12
-    .addRule(...getAngularEslintPluginRuleSeverity('use-pipe-transform-interface', ERROR)) // 🟢 >=0.0.1-alpha.12
+    ) /** @since 16.1.0 */ /** @until 18 */ // 🔴(>=17)
+    .addRule(...getPluginRuleSeverity('relative-url-prefix', ERROR)) /** @since 0.0.1-alpha.23 */
+    .addRule(...getPluginRuleSeverity('require-lifecycle-on-prototype', ERROR)) /** @since 19.2.0 */
+    .addRule(...getPluginRuleSeverity('require-localize-metadata', ERROR)) /** @since 13.2.0 */ // 🌐
+    .addRule(...getPluginRuleSeverity('runtime-localize', ERROR)) /** @since 18.3.0 */
+    .addRule(...getPluginRuleSeverity('sort-keys-in-type-decorator', ERROR)) /** @since 19.5.0 */
+    .addRule(...getPluginRuleSeverity('sort-lifecycle-methods', ERROR)) /** @since 16.2.0 */
+    .addRule(
+      ...getPluginRuleSeverity('sort-ngmodule-metadata-arrays', OFF),
+    ) /** @since 2.1.0 */ /** @until 18 */ // 🔴(>=17)
+    .addRule(...getPluginRuleSeverity('use-component-selector', ERROR)) /** @since 0.0.1-alpha.12 */
+    .addRule(
+      ...getPluginRuleSeverity('use-component-view-encapsulation', ERROR),
+    ) /** @since 0.0.1-alpha.12 */
+    .addRule(
+      ...getPluginRuleSeverity('use-injectable-provided-in', ERROR),
+    ) /** @since 0.0.1-alpha.23 */
+    .addRule(
+      ...getPluginRuleSeverity('use-lifecycle-interface', ERROR),
+    ) /** @since 0.0.1-alpha.12 */ // 🟢(warns)
+    .addRule(
+      ...getPluginRuleSeverity('use-pipe-transform-interface', ERROR),
+    ) /** @since 0.0.1-alpha.12 */ // 🟢
     .ensureAllRulesAreListed('@angular-eslint', {includeDeprecated: true})
     .addOverrides();
 
   // TEMPLATE CONFIG
 
   const angularTemplateEslintPluginRules = Object.keys(angularTemplateEslintPlugin?.rules || {});
-  const getAngularEslintTemplatePluginRuleSeverity = <
+  const getTemplatePluginRuleSeverity = <
     RuleName extends RuleNamesForPlugin<'@angular-eslint/template'>,
   >(
     ruleName: RuleName,
@@ -522,118 +529,120 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
       },
     ])
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity('accessibility-alt-text', a11yRulesSeverity),
-    ) // ♿ >=0.8.0-beta.7 <=15
+      ...getTemplatePluginRuleSeverity('accessibility-alt-text', a11yRulesSeverity),
+    ) /** @since 0.8.0-beta.7 */ /** @until 15 */ // ♿
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity(
-        'accessibility-elements-content',
-        a11yRulesSeverity,
-      ),
-    ) // ♿ >=0.8.0-beta.6 <=15
+      ...getTemplatePluginRuleSeverity('accessibility-elements-content', a11yRulesSeverity),
+    ) /** @since 0.8.0-beta.6 */ /** @until 15 */ // ♿
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity(
+      ...getTemplatePluginRuleSeverity(
         'accessibility-interactive-supports-focus',
         a11yRulesSeverity,
       ),
-    ) // ♿ >=14.2.0 <=15
+    ) /** @since 14.2.0 */ /** @until 15 */ // ♿
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity('accessibility-label-for', a11yRulesSeverity),
-    ) // ♿ >=1.1.0 <=15
+      ...getTemplatePluginRuleSeverity('accessibility-label-for', a11yRulesSeverity),
+    ) /** @since 1.1.0 */ /** @until 15 */ // ♿
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity(
+      ...getTemplatePluginRuleSeverity(
         'accessibility-label-has-associated-control',
         a11yRulesSeverity,
       ),
-    ) // ♿ >=4.3.0 <=15
+    ) /** @since 4.3.0 */ /** @until 15 */ // ♿
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity(
-        'accessibility-role-has-required-aria',
-        a11yRulesSeverity,
-      ),
-    ) // ♿ >=14.2.0 <=15
+      ...getTemplatePluginRuleSeverity('accessibility-role-has-required-aria', a11yRulesSeverity),
+    ) /** @since 14.2.0 */ /** @until 15 */ // ♿
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity('accessibility-table-scope', a11yRulesSeverity),
-    ) // ♿ >=0.8.0-beta.6 <=15
+      ...getTemplatePluginRuleSeverity('accessibility-table-scope', a11yRulesSeverity),
+    ) /** @since 0.8.0-beta.6 */ /** @until 15 */ // ♿
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity('accessibility-valid-aria', a11yRulesSeverity),
-    ) // ♿ >=0.8.0-beta.6 <=15
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('alt-text', a11yRulesSeverity)) // ♿ >=16.0.0-alpha.0 (renamed from `accessibility-alt-text`)
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('attributes-order', ERROR)) // >=14.2.0
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('banana-in-box', ERROR)) // 🟢 >=0.0.1-alpha.12 (renamed from `banana-in-a-box`)
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('button-has-type', ERROR)) // >=13.5.0
+      ...getTemplatePluginRuleSeverity('accessibility-valid-aria', a11yRulesSeverity),
+    ) /** @since 0.8.0-beta.6 */ /** @until 15 */ // ♿
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity(
-        'click-events-have-key-events',
-        a11yRulesSeverity,
-      ),
-    ) // ♿ >=0.8.0-beta.7
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('conditional-complexity', OFF)) // >=0.8.0-beta.6
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('cyclomatic-complexity', OFF)) // >=0.0.1-alpha.28
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('elements-content', a11yRulesSeverity)) // ♿ >=16.0.0-alpha.0 (renamed from `accessibility-elements-content`)
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('eqeqeq', ERROR), [
+      ...getTemplatePluginRuleSeverity('alt-text', a11yRulesSeverity),
+    ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-alt-text */ // ♿
+    .addRule(...getTemplatePluginRuleSeverity('attributes-order', ERROR)) /** @since 14.2.0 */
+    .addRule(
+      ...getTemplatePluginRuleSeverity('banana-in-box', ERROR),
+    ) /** @since 0.0.1-alpha.12 */ /** @aka banana-in-a-box */ // 🟢
+    .addRule(...getTemplatePluginRuleSeverity('button-has-type', ERROR)) /** @since 13.5.0 */
+    .addRule(
+      ...getTemplatePluginRuleSeverity('click-events-have-key-events', a11yRulesSeverity),
+    ) /** @since 0.8.0-beta.7 */ // ♿
+    .addRule(
+      ...getTemplatePluginRuleSeverity('conditional-complexity', OFF),
+    ) /** @since 0.8.0-beta.6 */
+    .addRule(
+      ...getTemplatePluginRuleSeverity('cyclomatic-complexity', OFF),
+    ) /** @since 0.0.1-alpha.28 */
+    .addRule(
+      ...getTemplatePluginRuleSeverity('elements-content', a11yRulesSeverity),
+    ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-elements-content */ // ♿
+    .addRule(...getTemplatePluginRuleSeverity('eqeqeq', ERROR), [
       {allowNullOrUndefined: true},
-    ]) // 🟢 >=12.0.0
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('i18n', OFF)) // >=0.8.0-beta.6
+    ]) /** @since 12.0.0 */ // 🟢
+    .addRule(...getTemplatePluginRuleSeverity('i18n', OFF)) /** @since 0.8.0-beta.6 */
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity(
-        'interactive-supports-focus',
-        a11yRulesSeverity,
-      ),
-    ) // ♿ >=16.0.0-alpha.0 (renamed from `accessibility-interactive-supports-focus`)
+      ...getTemplatePluginRuleSeverity('interactive-supports-focus', a11yRulesSeverity),
+    ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-interactive-supports-focus */ // ♿
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity(
-        'label-has-associated-control',
-        a11yRulesSeverity,
-      ),
-    ) // ♿ >=16.0.0-alpha.0 (renamed from `accessibility-label-has-associated-control`)
+      ...getTemplatePluginRuleSeverity('label-has-associated-control', a11yRulesSeverity),
+    ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-label-has-associated-control */ // ♿
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity(
-        'mouse-events-have-key-events',
-        a11yRulesSeverity,
-      ),
-    ) // ♿ >=0.8.0-beta.6
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-any', WARNING)) // >=0.8.0-beta.6
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-autofocus', a11yRulesSeverity)) // ♿ >=0.5.0-beta.4
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-call-expression', OFF)) // >=0.0.1-alpha.30
+      ...getTemplatePluginRuleSeverity('mouse-events-have-key-events', a11yRulesSeverity),
+    ) /** @since 0.8.0-beta.6 */ // ♿
+    .addRule(...getTemplatePluginRuleSeverity('no-any', WARNING)) /** @since 0.8.0-beta.6 */
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity('no-distracting-elements', a11yRulesSeverity),
-    ) // ♿ >=0.8.0-beta.6
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-duplicate-attributes', ERROR)) // >=1.2.0
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-empty-control-flow', ERROR)) // >=20.2.0
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-inline-styles', OFF)) // >=14.3.0
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-interpolation-in-attributes', ERROR)) // >=15.2.0
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-negated-async', ERROR)) // 🟢 >=0.0.1-alpha.20
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-nested-tags', ERROR)) // >=19.5.0
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('no-positive-tabindex', ERROR)) // >=0.4.0-beta.1
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('prefer-at-empty', ERROR)) // >=19.5.0
+      ...getTemplatePluginRuleSeverity('no-autofocus', a11yRulesSeverity),
+    ) /** @since 0.5.0-beta.4 */ // ♿
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity('prefer-contextual-for-variables', ERROR),
-    ) // >=19.3.0
+      ...getTemplatePluginRuleSeverity('no-call-expression', OFF),
+    ) /** @since 0.0.1-alpha.30 */
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity(
-        'prefer-control-flow',
-        preferControlFlow ? ERROR : OFF,
-      ),
-    ) // >=17.1.0
+      ...getTemplatePluginRuleSeverity('no-distracting-elements', a11yRulesSeverity),
+    ) /** @since 0.8.0-beta.6 */ // ♿
+    .addRule(...getTemplatePluginRuleSeverity('no-duplicate-attributes', ERROR)) /** @since 1.2.0 */
+    .addRule(...getTemplatePluginRuleSeverity('no-empty-control-flow', ERROR)) /** @since 20.2.0 */
+    .addRule(...getTemplatePluginRuleSeverity('no-inline-styles', OFF)) /** @since 14.3.0 */
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity('prefer-ngsrc', preferNgSrc ? ERROR : OFF),
-    ) // >=16.2.0
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('prefer-self-closing-tags', OFF)) // >=16.1.0
+      ...getTemplatePluginRuleSeverity('no-interpolation-in-attributes', ERROR),
+    ) /** @since 15.2.0 */
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity('prefer-static-string-properties', ERROR),
-    ) // >=19.1.0
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('prefer-template-literal', ERROR)) // >=19.4.0
+      ...getTemplatePluginRuleSeverity('no-negated-async', ERROR),
+    ) /** @since 0.0.1-alpha.20 */ // 🟢
+    .addRule(...getTemplatePluginRuleSeverity('no-nested-tags', ERROR)) /** @since 19.5.0 */
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity('role-has-required-aria', a11yRulesSeverity),
-    ) // ♿ >=16.0.0-alpha.0 (renamed from `accessibility-role-has-required-aria`)
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('table-scope', a11yRulesSeverity)) // ♿ >=16.0.0-alpha.0 (renamed from `accessibility-table-scope`)
+      ...getTemplatePluginRuleSeverity('no-positive-tabindex', ERROR),
+    ) /** @since 0.4.0-beta.1 */
+    .addRule(...getTemplatePluginRuleSeverity('prefer-at-empty', ERROR)) /** @since 19.5.0 */
     .addRule(
-      ...getAngularEslintTemplatePluginRuleSeverity(
-        'use-track-by-function',
-        requireLoopIndexes ? ERROR : OFF,
-      ),
-    ) // ♿ >=0.8.0-beta.5
-    .addRule(...getAngularEslintTemplatePluginRuleSeverity('valid-aria', a11yRulesSeverity)) // ♿ >=16.0.0-alpha.0 (renamed from `accessibility-valid-aria`)
+      ...getTemplatePluginRuleSeverity('prefer-contextual-for-variables', ERROR),
+    ) /** @since 19.3.0 */
+    .addRule(
+      ...getTemplatePluginRuleSeverity('prefer-control-flow', preferControlFlow ? ERROR : OFF),
+    ) /** @since 17.1.0 */
+    .addRule(
+      ...getTemplatePluginRuleSeverity('prefer-ngsrc', preferNgSrc ? ERROR : OFF),
+    ) /** @since 16.2.0 */
+    .addRule(...getTemplatePluginRuleSeverity('prefer-self-closing-tags', OFF)) /** @since 16.1.0 */
+    .addRule(
+      ...getTemplatePluginRuleSeverity('prefer-static-string-properties', ERROR),
+    ) /** @since 19.1.0 */
+    .addRule(
+      ...getTemplatePluginRuleSeverity('prefer-template-literal', ERROR),
+    ) /** @since 19.4.0 */
+    .addRule(
+      ...getTemplatePluginRuleSeverity('role-has-required-aria', a11yRulesSeverity),
+    ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-role-has-required-aria */ // ♿
+    .addRule(
+      ...getTemplatePluginRuleSeverity('table-scope', a11yRulesSeverity),
+    ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-table-scope */ // ♿
+    .addRule(
+      ...getTemplatePluginRuleSeverity('use-track-by-function', requireLoopIndexes ? ERROR : OFF),
+    ) /** @since 0.8.0-beta.5 */ // ♿
+    .addRule(
+      ...getTemplatePluginRuleSeverity('valid-aria', a11yRulesSeverity),
+    ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-valid-aria */ // ♿
     .ensureAllRulesAreListed('@angular-eslint/template', {includeDeprecated: true})
     .addOverrides();
 

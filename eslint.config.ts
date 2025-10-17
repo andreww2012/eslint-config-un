@@ -63,7 +63,7 @@ export default eslintConfig({
       },
     },
     jsdoc: {
-      customTags: ['knipignore'],
+      customTags: ['knipignore', 'until', 'aka'],
     },
     eslintPlugin: {
       files: ['eslint-local-rules/**', 'src/plugin-un/rules/**'],
