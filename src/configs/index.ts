@@ -14,7 +14,7 @@ import type {
 } from '../eslint';
 import type {LoadablePackagePrefix, ParserPrefix, PluginPrefix, pluginsLoaders} from '../plugins';
 import type {PrettifyShallow, Promisable} from '../types';
-import type {fetchPackageInfo} from '../utils';
+import type {MaybeArray, fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
 import type {AstroEslintConfigOptions} from './astro';
 import type {AvaEslintConfigOptions} from './ava';
@@ -1003,6 +1003,10 @@ export interface UnConfigContext {
 
   logger: ConsolaInstance;
   debug: debug.Debugger;
+  isTestMode: boolean;
+  tests: ((data: {
+    plugins: Partial<Record<PluginPrefix, EslintPlugin>>;
+  }) => MaybeArray<string | {message: string; severity: 'error' | 'warn'}> | null)[];
 }
 
 export type UnConfigFn<

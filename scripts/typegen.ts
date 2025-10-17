@@ -1,18 +1,14 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
-import angularEslintPlugin from '@angular-eslint/eslint-plugin';
-import angularTemplateEslintPlugin from '@angular-eslint/eslint-plugin-template';
-import angularTemplateEslintPlugin15 from 'angular-eslint-plugin-template15';
-import angularTemplateEslintPlugin17 from 'angular-eslint-plugin-template17';
-import angularEslintPlugin18 from 'angular-eslint-plugin18';
 import * as diff from 'diff';
 import {capitalize} from 'es-toolkit';
 import {flatConfigsToRulesDTS, pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
 import {eslintConfigInternal} from '../src/config';
-import {DISABLE_AUTOFIX, type EslintPlugin, eslintPluginVanillaRules} from '../src/eslint';
+import {DISABLE_AUTOFIX, eslintPluginVanillaRules} from '../src/eslint';
 import {uniqueBy} from '../src/utils';
+import {generateAngularPluginsWithOldRules} from './shared';
 
 const __dirname = import.meta.dirname;
 
@@ -56,27 +52,12 @@ async function generateRuleTypes() {
       .filter(([pluginName]) => !SKIPPED_PLUGINS.has(pluginName)),
     ([pluginName]) => pluginName, // `html` is duplicated
   );
-  const angularEslintPluginWithOldRules: EslintPlugin = {
-    ...angularEslintPlugin,
-    // @ts-expect-error types mismatch
-    rules: {
-      ...angularEslintPlugin18.rules,
-      ...angularEslintPlugin.rules,
-    },
-  };
-  const angularTemplateEslintPluginWithOldRules: EslintPlugin = {
-    ...angularTemplateEslintPlugin,
-    // @ts-expect-error types mismatch
-    rules: {
-      ...angularTemplateEslintPlugin15.rules,
-      ...angularTemplateEslintPlugin17.rules,
-      ...angularTemplateEslintPlugin.rules,
-    },
-  };
+  const {plugin: pluginAngular, pluginTemplate: pluginAngularTemplate} =
+    await generateAngularPluginsWithOldRules();
   allRealPlugins.push(
     ['', eslintPluginVanillaRules],
-    ['@angular-eslint', angularEslintPluginWithOldRules],
-    ['@angular-eslint/template', angularTemplateEslintPluginWithOldRules],
+    ['@angular-eslint', pluginAngular],
+    ['@angular-eslint/template', pluginAngularTemplate],
   );
 
   const [main, fixableRulesOnlyCodeRaw, perPluginCodeRaw] = await Promise.all([

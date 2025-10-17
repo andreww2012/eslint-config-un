@@ -140,7 +140,8 @@ export default eslintConfig({
           {
             patterns: [
               {
-                regex: '^local-pkg|type-fest|klona|@antfu/utils|defu|es-toolkit$',
+                regex:
+                  '^(?:local-pkg|type-fest|klona|@antfu/utils|defu|es-toolkit|remeda|node:util)$',
                 message:
                   'Please do not use this package directly, import utility functions from `utils.ts` instead',
               },

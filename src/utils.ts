@@ -2,7 +2,10 @@ import path from 'node:path';
 import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
 import {createDefu, type defu} from 'defu';
 import {getPackageInfo, isPackageExists} from 'local-pkg';
+import * as R from 'remeda';
 import type {FalsyValue, Promisable} from './types';
+
+export {styleText} from 'node:util';
 
 export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
 
@@ -35,6 +38,55 @@ export const arraify = <T>(value?: MaybeArray<T> | null): T[] =>
 
 export const isNonEmptyArray = <T>(value?: T[] | null): value is [T, ...T[]] =>
   Array.isArray(value) && value.length > 0;
+
+export const arrayMap = R.map;
+
+export function findArrayInversions<T>(array: T[], compareFn: (a: T, b: T) => number): [T, T][];
+export function findArrayInversions<T>(
+  array: T[],
+  compareFn: (a: T, b: T) => number,
+  group: true,
+): Map<T, T[]>;
+export function findArrayInversions<T>(
+  array: T[],
+  compareFn: (a: T, b: T) => number,
+  group?: boolean,
+): [T, T][] | Map<T, T[]> {
+  const result: [T, T][] = [];
+  const addedPairsCompoundIndexes = new Set<`${number}-${number}`>();
+
+  array
+    .map((value, index) => ({value, index}))
+    .sort((a, b) => {
+      const aIndex = a.index;
+      const bIndex = b.index;
+
+      const aForComparator = aIndex < bIndex ? a.value : b.value;
+      const bForComparator = aIndex < bIndex ? b.value : a.value;
+      const comparatorResult = compareFn(aForComparator, bForComparator);
+
+      if (comparatorResult === 1) {
+        const pairIndex =
+          aIndex < bIndex ? (`${aIndex}-${bIndex}` as const) : (`${bIndex}-${aIndex}` as const);
+        if (!addedPairsCompoundIndexes.has(pairIndex)) {
+          addedPairsCompoundIndexes.add(pairIndex);
+          result.push([aForComparator, bForComparator]);
+        }
+      }
+
+      return aIndex < bIndex ? comparatorResult : -comparatorResult;
+    });
+
+  if (group) {
+    const resultMap = new Map<T, T[]>();
+    result.forEach(([a, b]) => {
+      resultMap.set(a, [...(resultMap.get(a) || []), b]);
+    });
+    return resultMap;
+  }
+
+  return result;
+}
 
 // eslint-disable-next-line ts/no-redundant-type-constituents
 export const joinPaths = (...paths: (string | FalsyValue)[]) =>

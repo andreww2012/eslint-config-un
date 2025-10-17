@@ -1,5 +1,4 @@
 import fs from 'node:fs/promises';
-import {styleText} from 'node:util';
 import consola from 'consola';
 import createDebug from 'debug';
 import globals from 'globals';
@@ -49,6 +48,7 @@ import {
   objectKeysUnsafe,
   omit,
   partition,
+  styleText,
 } from './utils';
 
 const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
@@ -114,7 +114,7 @@ const CONFIGS_TO_NOT_REPORT_IF_UNNECESSARILY_ENABLED_OR_DISABLED = new Set<keyof
 
 export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
-  internalOptions: {disableAutofixForAllFixableRulesOnly?: boolean} = {},
+  internalOptions: {disableAutofixForAllFixableRulesOnly?: boolean; testMode?: boolean} = {},
 ): Promise<FlatConfigEntry[]> => {
   const logger = consola.withTag('eslint-config-un');
   logger.addReporter({
@@ -186,6 +186,8 @@ export const eslintConfigInternal = async (
     );
   }
 
+  const isTestMode = internalOptions.testMode || Boolean(process.env.ESLINT_CONFIG_UN_TEST_MODE);
+
   const getIsConfigEnabled = (
     configName: keyof UnConfigs,
     defaultConditionOrPackageInstalled:
@@ -204,6 +206,10 @@ export const eslintConfigInternal = async (
     let reason: string | undefined;
 
     const providedConfig = configsOptions[configName];
+    if (isTestMode) {
+      enabledBySystem ??= true;
+      reason ??= 'all configs are enabled in the test mode';
+    }
     if (providedConfig != null) {
       enabledByUser ??= Boolean(providedConfig);
       reason ??= 'provided by the user';
@@ -466,6 +472,8 @@ export const eslintConfigInternal = async (
     usedPackageManager,
     logger,
     debug,
+    isTestMode,
+    tests: [],
   };
 
   const jsEslintConfigResult =
@@ -970,6 +978,38 @@ ${packages
   } satisfies FlatConfigEntry);
 
   debug(`Final config resolved: ${resolvedConfigs.length} flat config items`);
+
+  /* Testing */
+
+  if (isTestMode) {
+    const errorMessages = context.tests
+      .flatMap((testFn) => testFn({plugins: allPlugins}))
+      .filter((v) => v != null)
+      .filter(Boolean);
+
+    let errorsCount = 0;
+    let warningsCount = 0;
+    errorMessages.forEach((errorMessage) => {
+      if (typeof errorMessage === 'string') {
+        context.logger.error(errorMessage);
+        errorsCount += 1;
+      } else {
+        const {message, severity} = errorMessage;
+        context.logger[severity](message);
+        if (severity === 'error') {
+          errorsCount += 1;
+        } else {
+          warningsCount += 1;
+        }
+      }
+    });
+
+    if (errorsCount > 0 || warningsCount > 0) {
+      context.logger[errorsCount > 0 ? 'fatal' : 'warn'](
+        `Test failed with ${[errorsCount > 0 && `${errorsCount} error${errorsCount === 1 ? '' : 's'}`, warningsCount > 0 && `${warningsCount} warning${warningsCount === 1 ? '' : 's'}`].filter(Boolean).join(' and ')}`,
+      );
+    }
+  }
 
   return resolvedConfigs;
 };

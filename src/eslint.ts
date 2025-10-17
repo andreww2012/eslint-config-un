@@ -26,7 +26,15 @@ import type {
   SetRequired,
   UnionToIntersection,
 } from './types';
-import {type MaybeFn, cloneDeep, maybeCall} from './utils';
+import {
+  type MaybeFn,
+  arrayMap,
+  cloneDeep,
+  findArrayInversions,
+  maybeCall,
+  partition,
+  styleText,
+} from './utils';
 
 export type EslintSeverity = Eslint.Linter.RuleSeverity;
 type EslintRuleEntry<Options extends unknown[] = unknown[]> = Eslint.Linter.RuleEntry<Options>;
@@ -327,6 +335,9 @@ export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
   ];
 };
 
+const styleRuleName = (ruleName: string) => styleText('green', ruleName);
+const styleRuleNames = (ruleNames: string[]) => ruleNames.map(styleRuleName).join(', ');
+
 // eslint-disable-next-line ts/no-explicit-any
 export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any> {
   private readonly pluginPrefix: DefaultPrefix;
@@ -395,11 +406,11 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
         ],
     config?: FlatConfigEntryForBuilder,
   ) {
-    const [name, internalOptions = {}] =
+    const [configName, internalOptions = {}] =
       typeof nameAndMaybeOptions === 'string' ? [nameAndMaybeOptions, {}] : nameAndMaybeOptions;
     const {options: configOptions} = this;
 
-    const configName = genFlatConfigEntryName(name);
+    const configNameFinal = genFlatConfigEntryName(configName);
 
     const userFiles = configOptions.files || [];
     const fallbackFiles = internalOptions.filesFallback || [];
@@ -433,12 +444,12 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
       ...(files.length > 0 && {files}),
       ...(ignores.length > 0 && {ignores}),
       ...config,
-      name: configName,
+      name: configNameFinal,
       rules: {},
     };
 
     this.configs.push(configFinal);
-    this.configsDict.set(configName, configFinal);
+    this.configsDict.set(configNameFinal, configFinal);
 
     const {parser} = internalOptions;
     if (parser != null) {
@@ -447,6 +458,10 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
         configFinal,
       ]);
     }
+
+    const addedRules: Partial<
+      Record<PluginPrefix, Record<string, boolean /* true if added more than once */>>
+    > = {};
 
     const addRule = <P extends PluginPrefix, N extends RuleNamesForPlugin<P>>(
       prefix: P,
@@ -464,14 +479,21 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
       }
 
       const severityFinal: RuleSeverity =
-        (configOptions.forceSeverity as RuleSeverity | undefined) ??
-        (this.context.rootOptions.forceSeverity as RuleSeverity | undefined) ??
-        severity;
+        ((configOptions.forceSeverity ?? this.context.rootOptions.forceSeverity) as
+          | RuleSeverity
+          | undefined) ?? severity;
 
       // eslint-disable-next-line ts/no-unnecessary-type-assertion
       const ruleNameWithResolvedPrefix = `${prefix === '' ? '' : `${(prefix === '' ? '' : this.context.rootOptions.pluginRenames?.[prefix as Exclude<PluginPrefix, ''>] || null) || prefix}/`}${ruleNameUnprefixed}`;
       const ruleNameFinal = ruleNameWithResolvedPrefix;
       configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
+
+      addedRules[prefix] = {
+        ...addedRules[prefix],
+        [ruleNameUnprefixed]:
+          addedRules[prefix] != null && ruleNameUnprefixed in addedRules[prefix],
+      };
+
       // If the rule is disabled, disable its autofix counterpart rule as well
       if (severityFinal === OFF && !ruleNameFinal.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {
         configFinal.rules[`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameFinal}`] = OFF;
@@ -560,6 +582,108 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
             ),
           ),
         );
+        return result;
+      },
+
+      ensureAllRulesAreListed: (
+        pluginPrefixToTest: DefaultPrefix & {},
+        {
+          includeDeprecated = false,
+          allowUnsorted,
+        }: {includeDeprecated?: boolean | 'allow'; allowUnsorted?: boolean} = {},
+      ) => {
+        if (this.context.isTestMode) {
+          this.context.tests.push(({plugins}) => {
+            const commonErrorMessagePrefix = `[config:${styleText('yellow', configName)}] [plugin:${styleText('blue', pluginPrefixToTest)}]`;
+
+            const plugin = plugins[pluginPrefixToTest];
+            if (!plugin) {
+              return `${commonErrorMessagePrefix} Plugin not loaded`;
+            }
+
+            const addedRulesForPlugin = Object.entries(
+              addedRules[pluginPrefixToTest] || ({} as Record<string, boolean>),
+            );
+            const addedRulesForPluginNames = addedRulesForPlugin.map(([ruleName]) => ruleName);
+            const addedRulesForPluginNamesSet = new Set(addedRulesForPluginNames);
+
+            const [activePluginRules, deprecatedPluginRules] = arrayMap(
+              partition(Object.entries(plugin.rules || {}), ([, {meta}]) => !meta?.deprecated),
+              (rules) => new Set(rules.map(([ruleName]) => ruleName)),
+            );
+
+            const errorMessages: ReturnType<(typeof this.context.tests)[number]> & unknown[] = [];
+
+            if (includeDeprecated === false) {
+              const includedDeprecatedRules = addedRulesForPlugin.filter(([addedRuleName]) =>
+                deprecatedPluginRules.has(addedRuleName),
+              );
+              if (includedDeprecatedRules.length > 0) {
+                errorMessages.push(
+                  `⛔ Deprecated rules must not be added: ${styleRuleNames(includedDeprecatedRules.map(([ruleName]) => ruleName))}`,
+                );
+              }
+            }
+
+            if (includeDeprecated === 'allow' && deprecatedPluginRules.size === 0) {
+              errorMessages.push({
+                message: 'Deprecated rules were allowed, but there are no any in the plugin',
+                severity: 'warn',
+              });
+            }
+
+            const notIncludedRules = (
+              includeDeprecated === true
+                ? [...activePluginRules, ...deprecatedPluginRules]
+                : [...activePluginRules]
+            ).filter((ruleName) => !addedRulesForPluginNamesSet.has(ruleName));
+            if (notIncludedRules.length > 0) {
+              errorMessages.push(
+                `➕ Rules to add to the config: ${styleRuleNames(notIncludedRules)}`,
+              );
+            }
+
+            const duplicateRules = addedRulesForPlugin
+              .filter(([, isDuplicate]) => isDuplicate)
+              .map(([ruleName]) => ruleName);
+            if (duplicateRules.length > 0) {
+              errorMessages.push(`⚠️ Duplicate rules: ${styleRuleNames(duplicateRules)}`);
+            }
+
+            const extraneousRules = addedRulesForPlugin
+              .filter(([addedRuleName]) => plugin.rules && !(addedRuleName in plugin.rules))
+              .map(([ruleName]) => ruleName);
+            if (extraneousRules.length > 0) {
+              errorMessages.push(
+                `🔴 Rules not found in the plugin: ${styleRuleNames(extraneousRules)}`,
+              );
+            }
+
+            if (!allowUnsorted) {
+              const rulesToSwapPositionsOf = findArrayInversions(
+                addedRulesForPluginNames,
+                (a, b) => a.localeCompare(b),
+                true,
+              );
+              if (rulesToSwapPositionsOf.size > 0) {
+                const maxPairsToPrint = 3;
+                errorMessages.push(
+                  `↔️ Rules out of order:\n${[...rulesToSwapPositionsOf]
+                    .slice(0, maxPairsToPrint)
+                    .map(([a, b]) => `${styleRuleName(a)} <-> ${styleRuleNames(b)}`)
+                    .join(
+                      '\n',
+                    )}${rulesToSwapPositionsOf.size > maxPairsToPrint ? `\n... and ${rulesToSwapPositionsOf.size - maxPairsToPrint} more pair(s)` : ''}`,
+                );
+              }
+            }
+
+            return errorMessages.map(
+              (errorMessage) =>
+                `${commonErrorMessagePrefix} ${typeof errorMessage === 'string' ? errorMessage : errorMessage.message}`,
+            );
+          });
+        }
         return result;
       },
     };

@@ -50,7 +50,8 @@
     "build:code": "tsdown --clean",
     "build:code:test": "tsdown --out-dir temp/dist",
     "build": "nr typegen && nr build:code",
-    "test": "nr typegen && nr knip && nr spellcheck && nr lint && nr build:code:test",
+    "test:config": "tsx scripts/config-tester.ts",
+    "test": "nr typegen && nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
     "lint:public-types": "attw --pack . --profile esm-only",
     "prepublishOnly": "nr test && nr build && nr lint:public-types"
   },
@@ -125,6 +126,7 @@
     "local-pkg": "1.1.2",
     "package-manager-detector": "1.4.0",
     "read-package-up": "11.0.0",
+    "remeda": "2.32.0",
     "semver": "7.7.3",
     "tailwind-csstree": "0.1.4",
     "tinyexec": "1.0.1",
