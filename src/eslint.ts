@@ -31,6 +31,7 @@ import {
   arrayMap,
   cloneDeep,
   findArrayInversions,
+  groupBy,
   maybeCall,
   partition,
   styleText,
@@ -459,9 +460,9 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
       ]);
     }
 
-    const addedRules: Partial<
-      Record<PluginPrefix, Record<string, boolean /* true if added more than once */>>
-    > = {};
+    let currentCategory = '';
+    const addedRules: Partial<Record<PluginPrefix, Record<string, string /* Category */>>> = {};
+    const duplicateRules: Partial<Record<PluginPrefix, Set<string>>> = {};
 
     const addRule = <P extends PluginPrefix, N extends RuleNamesForPlugin<P>>(
       prefix: P,
@@ -488,10 +489,12 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
       const ruleNameFinal = ruleNameWithResolvedPrefix;
       configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
 
+      if (addedRules[prefix] && ruleNameUnprefixed in addedRules[prefix]) {
+        (duplicateRules[prefix] ||= new Set()).add(ruleNameUnprefixed);
+      }
       addedRules[prefix] = {
         ...addedRules[prefix],
-        [ruleNameUnprefixed]:
-          addedRules[prefix] != null && ruleNameUnprefixed in addedRules[prefix],
+        [ruleNameUnprefixed]: currentCategory,
       };
 
       // If the rule is disabled, disable its autofix counterpart rule as well
@@ -585,12 +588,22 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
         return result;
       },
 
+      markCategory: (name: string) => {
+        currentCategory = name;
+        return result;
+      },
+
       ensureAllRulesAreListed: (
         pluginPrefixToTest: DefaultPrefix & {},
         {
           includeDeprecated = false,
           allowUnsorted,
-        }: {includeDeprecated?: boolean | 'allow'; allowUnsorted?: boolean} = {},
+          rulesToSkipInConfig,
+        }: {
+          includeDeprecated?: boolean | 'allow';
+          allowUnsorted?: boolean;
+          rulesToSkipInConfig?: string[] | ((ruleName: string) => boolean);
+        } = {},
       ) => {
         if (this.context.isTestMode) {
           this.context.tests.push(({plugins}) => {
@@ -601,11 +614,10 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
               return `${commonErrorMessagePrefix} Plugin not loaded`;
             }
 
-            const addedRulesForPlugin = Object.entries(
-              addedRules[pluginPrefixToTest] || ({} as Record<string, boolean>),
+            const addedRulesForPlugin = Object.entries(addedRules[pluginPrefixToTest]! || {});
+            const addedRulesForPluginNamesSet = new Set(
+              addedRulesForPlugin.map(([ruleName]) => ruleName),
             );
-            const addedRulesForPluginNames = addedRulesForPlugin.map(([ruleName]) => ruleName);
-            const addedRulesForPluginNamesSet = new Set(addedRulesForPluginNames);
 
             const [activePluginRules, deprecatedPluginRules] = arrayMap(
               partition(Object.entries(plugin.rules || {}), ([, {meta}]) => !meta?.deprecated),
@@ -636,18 +648,28 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
               includeDeprecated === true
                 ? [...activePluginRules, ...deprecatedPluginRules]
                 : [...activePluginRules]
-            ).filter((ruleName) => !addedRulesForPluginNamesSet.has(ruleName));
+            ).filter(
+              (ruleName) =>
+                !addedRulesForPluginNamesSet.has(ruleName) &&
+                // eslint-disable-next-line de-morgan/no-negated-conjunction
+                !(
+                  rulesToSkipInConfig &&
+                  (typeof rulesToSkipInConfig === 'function'
+                    ? rulesToSkipInConfig(ruleName)
+                    : rulesToSkipInConfig.includes(ruleName))
+                ),
+            );
             if (notIncludedRules.length > 0) {
               errorMessages.push(
                 `➕ Rules to add to the config: ${styleRuleNames(notIncludedRules)}`,
               );
             }
 
-            const duplicateRules = addedRulesForPlugin
-              .filter(([, isDuplicate]) => isDuplicate)
-              .map(([ruleName]) => ruleName);
-            if (duplicateRules.length > 0) {
-              errorMessages.push(`⚠️ Duplicate rules: ${styleRuleNames(duplicateRules)}`);
+            const duplicateRulesForPlugin = duplicateRules[pluginPrefixToTest] || new Set();
+            if (duplicateRulesForPlugin.size > 0) {
+              errorMessages.push(
+                `⚠️ Duplicate rules: ${styleRuleNames([...duplicateRulesForPlugin])}`,
+              );
             }
 
             const extraneousRules = addedRulesForPlugin
@@ -660,19 +682,25 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
             }
 
             if (!allowUnsorted) {
-              const rulesToSwapPositionsOf = findArrayInversions(
-                addedRulesForPluginNames,
-                (a, b) => a.localeCompare(b),
-                true,
-              );
-              if (rulesToSwapPositionsOf.size > 0) {
-                errorMessages.push(
-                  `↔️ Rules out of order:\n${[...rulesToSwapPositionsOf]
-                    // Show only the last rule on the right which is the one after which the left rule must be put
-                    .map(([a, b]) => `${styleRuleName(a)} <-> ${styleRuleName(b.at(-1) || '')}`)
-                    .join('\n')}`,
+              Object.entries(
+                groupBy(addedRulesForPlugin, ([, categoryName]) => categoryName),
+              ).forEach(([groupName, rulesGroup]) => {
+                const rulesToSwapPositionsOf = findArrayInversions(
+                  rulesGroup.map(([ruleName]) => ruleName),
+                  (a, b) => a.localeCompare(b),
+                  true,
                 );
-              }
+                if (rulesToSwapPositionsOf.size > 0) {
+                  errorMessages.push(
+                    `↔️ Rules out of order${groupName ? ` in group ${styleText('cyan', groupName)}` : ''}:\n${[
+                      ...rulesToSwapPositionsOf,
+                    ]
+                      // Show only the last rule on the right which is the one after which the left rule must be put
+                      .map(([a, b]) => `${styleRuleName(a)} <-> ${styleRuleName(b.at(-1) || '')}`)
+                      .join('\n')}`,
+                  );
+                }
+              });
             }
 
             return errorMessages.map(

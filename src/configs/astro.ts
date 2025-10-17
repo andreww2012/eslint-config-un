@@ -84,28 +84,31 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
         filesFallback: DEFAULT_ASTRO_FILES,
       },
     ])
-    /* CATEGORY: Possible Errors */
-    .addRule('missing-client-only-directive-value', ERROR) // 🟢 >=0.33.0
-    .addRule('no-conflict-set-directives', ERROR) // 🟢 >=0.7.0
-    .addRule('no-deprecated-astro-canonicalurl', ERROR) // 🟢 >=0.16.0
-    .addRule('no-deprecated-astro-fetchcontent', ERROR) // 🟢 >=0.12.0
-    .addRule('no-deprecated-astro-resolve', ERROR) // 🟢 >=0.12.0
-    .addRule('no-deprecated-getentrybyslug', ERROR) // 🟢 >=0.28.0
-    .addRule('no-exports-from-components', ERROR) // >=1.1.0
-    .addRule('no-unused-define-vars-in-style', ERROR) // 🟢 >=0.6.0
-    .addRule('valid-compile', ERROR) // 🟢 >=0.21.0
-    /* CATEGORY: Security Vulnerability */
-    .addRule('no-set-html-directive', ERROR) // >=0.2.0
-    /* CATEGORY: Best Practices */
-    .addRule('no-set-text-directive', OFF) // >=0.2.0
-    .addRule('no-unused-css-selector', WARNING) // >=0.10.0
-    /* CATEGORY: Stylistic Issues */
-    .addRule('prefer-class-list-directive', ERROR) // >=0.4.0
-    .addRule('prefer-object-class-list', ERROR) // >=0.4.0
-    .addRule('prefer-split-class-list', ERROR) // >=0.4.0
-    .addRule('sort-attributes', ERROR) // >=1.3.0
-    /* CATEGORY: Extension Rules */
-    .addRule('semi', OFF) // >=0.19.0
+    .markCategory('Possible Errors')
+    .addRule('missing-client-only-directive-value', ERROR) /** @since 0.33.0 */ // 🟢
+    .addRule('no-conflict-set-directives', ERROR) /** @since 0.7.0 */ // 🟢
+    .addRule('no-deprecated-astro-canonicalurl', ERROR) /** @since 0.16.0 */ // 🟢
+    .addRule('no-deprecated-astro-fetchcontent', ERROR) /** @since 0.12.0 */ // 🟢
+    .addRule('no-deprecated-astro-resolve', ERROR) /** @since 0.12.0 */ // 🟢
+    .addRule('no-deprecated-getentrybyslug', ERROR) /** @since 0.28.0 */ // 🟢
+    .addRule('no-exports-from-components', ERROR) /** @since 1.1.0 */
+    .addRule('no-unused-define-vars-in-style', ERROR) /** @since 0.6.0 */ // 🟢
+    .addRule('valid-compile', ERROR) /** @since 0.21.0 */ // 🟢
+    .markCategory('Security Vulnerability')
+    .addRule('no-set-html-directive', ERROR) /** @since 0.2.0 */
+    .markCategory('Best Practices')
+    .addRule('no-set-text-directive', OFF) /** @since 0.2.0 */
+    .addRule('no-unused-css-selector', WARNING) /** @since 0.10.0 */
+    .markCategory('Stylistic Issues')
+    .addRule('prefer-class-list-directive', ERROR) /** @since 0.4.0 */
+    .addRule('prefer-object-class-list', ERROR) /** @since 0.4.0 */
+    .addRule('prefer-split-class-list', ERROR) /** @since 0.4.0 */
+    .addRule('sort-attributes', ERROR) /** @since 1.3.0 */
+    .markCategory('Extension Rules')
+    .addRule('semi', OFF) /** @since 0.19.0 */
+    .ensureAllRulesAreListed('astro', {
+      rulesToSkipInConfig: (ruleName) => ruleName.startsWith('jsx-a11y/'),
+    })
     .addOverrides();
 
   return {
