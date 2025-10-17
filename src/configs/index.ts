@@ -205,7 +205,7 @@ export interface EslintConfigUnOptions {
    * development version of the plugin.
    */
   pluginsOverrides?: {
-    [Plugin in Exclude<PluginPrefix, ''>]: Plugin extends keyof typeof pluginsLoaders
+    [Plugin in Exclude<PluginPrefix, ''>]?: Plugin extends keyof typeof pluginsLoaders
       ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
       : EslintPlugin;
   };
