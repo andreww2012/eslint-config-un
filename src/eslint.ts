@@ -666,14 +666,11 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
                 true,
               );
               if (rulesToSwapPositionsOf.size > 0) {
-                const maxPairsToPrint = 3;
                 errorMessages.push(
                   `↔️ Rules out of order:\n${[...rulesToSwapPositionsOf]
-                    .slice(0, maxPairsToPrint)
-                    .map(([a, b]) => `${styleRuleName(a)} <-> ${styleRuleNames(b)}`)
-                    .join(
-                      '\n',
-                    )}${rulesToSwapPositionsOf.size > maxPairsToPrint ? `\n... and ${rulesToSwapPositionsOf.size - maxPairsToPrint} more pair(s)` : ''}`,
+                    // Show only the last rule on the right which is the one after which the left rule must be put
+                    .map(([a, b]) => `${styleRuleName(a)} <-> ${styleRuleName(b.at(-1) || '')}`)
+                    .join('\n')}`,
                 );
               }
             }
