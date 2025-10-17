@@ -222,7 +222,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     disallowForwardRef: false,
   } satisfies AngularEslintConfigOptions);
 
-  const angularVersion: SupportedAngularVersion | null =
+  const angularVersion: SupportedAngularVersion =
     optionsResolved.angularVersion ??
     (() => {
       const majorVersion = context.packagesInfo['@angular/core']?.versions.major;
@@ -233,12 +233,8 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
       ) {
         return majorVersion as SupportedAngularVersion;
       }
-      return optionsRaw === true ? LATEST_SUPPORTED_ANGULAR_VERSION : null;
+      return LATEST_SUPPORTED_ANGULAR_VERSION;
     })();
-
-  if (angularVersion == null) {
-    return null;
-  }
 
   const {
     configTemplate,
@@ -480,6 +476,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     .addRule(...getAngularEslintPluginRuleSeverity('use-injectable-provided-in', ERROR)) // >=0.0.1-alpha.23
     .addRule(...getAngularEslintPluginRuleSeverity('use-lifecycle-interface', ERROR)) // 🟢(warns) >=0.0.1-alpha.12
     .addRule(...getAngularEslintPluginRuleSeverity('use-pipe-transform-interface', ERROR)) // 🟢 >=0.0.1-alpha.12
+    .ensureAllRulesAreListed('@angular-eslint')
     .addOverrides();
 
   // TEMPLATE CONFIG
