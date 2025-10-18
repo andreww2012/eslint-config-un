@@ -614,7 +614,10 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
               return `${commonErrorMessagePrefix} Plugin not loaded`;
             }
 
-            const addedRulesForPlugin = Object.entries(addedRules[pluginPrefixToTest]! || {});
+            const addedRulesForPlugin = Object.entries(
+              // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition
+              addedRules[pluginPrefixToTest]! || {},
+            );
             const addedRulesForPluginNamesSet = new Set(
               addedRulesForPlugin.map(([ruleName]) => ruleName),
             );
