@@ -94,19 +94,20 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
         },
       },
     )
-    .addRule('font-family-fallbacks', WARNING) // 🟢 >=0.11.0
-    .addRule('no-duplicate-keyframe-selectors', ERROR) // 🟢 >=0.11.0
-    .addRule('no-duplicate-imports', ERROR) // 🟢
-    .addRule('no-empty-blocks', ERROR) // 🟢
-    .addRule('no-important', WARNING) // 🟢 >=0.8.0
-    .addRule('no-invalid-at-rules', ERROR) // 🟢
-    .addRule('no-invalid-at-rule-placement', ERROR) // 🟢 >=0.10.0
-    .addRule('no-invalid-named-grid-areas', ERROR) // 🟢 >=0.10.0
+    .addRule('font-family-fallbacks', WARNING) /** @since 0.11.0 */ // 🟢
+    .addRule('no-duplicate-imports', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-duplicate-keyframe-selectors', ERROR) /** @since 0.11.0 */ // 🟢
+    .addRule('no-empty-blocks', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-important', WARNING) /** @since 0.8.0 */ // 🟢
+    .addRule('no-invalid-at-rule-placement', ERROR) /** @since 0.10.0 */ // 🟢
+    .addRule('no-invalid-at-rules', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-invalid-named-grid-areas', ERROR) /** @since 0.10.0 */ // 🟢
     .addRule('no-invalid-properties', ERROR, [
       {
-        allowUnknownVariables: true, // >=0.10.0
+        allowUnknownVariables: true /** @since 0.10.0 */,
       },
-    ]) // 🟢
+    ]) /** @since 0.1.0 */ // 🟢
+    .addRule('prefer-logical-properties', OFF) /** @since 0.5.0 */ // >=0.5.0
     .addRule('relative-font-units', ERROR, [
       {
         allowUnits: getKeysOfTruthyValues({
@@ -115,18 +116,18 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
           ...allowedFontUnits,
         }),
       },
-    ]) // >=0.9.0
-    .addRule('prefer-logical-properties', OFF) // >=0.5.0
+    ]) /** @since 0.9.0 */
     // We're keeping `warn` severity, see the discussion in this issue and specifically this comment https://github.com/eslint/css/issues/80#issuecomment-2787414430
-    .addRule('selector-complexity', OFF) // >=0.13.0
+    .addRule('selector-complexity', OFF) /** @since 0.13.0 */
     .addRule('use-baseline', WARNING, [
       {
         ...(allowedFeatures?.atRules?.length && {allowAtRules: allowedFeatures.atRules}),
         ...(allowedFeatures?.properties?.length && {allowProperties: allowedFeatures.properties}),
         ...(allowedFeatures?.selectors?.length && {allowSelectors: allowedFeatures.selectors}),
       },
-    ]) // 🟡
-    .addRule('use-layers', OFF)
+    ]) /** @since 0.3.0 */ /** @aka require-baseline */ // 🟡
+    .addRule('use-layers', OFF) /** @since 0.3.0 */
+    .ensureAllRulesAreListed('css')
     .addOverrides();
 
   return {
