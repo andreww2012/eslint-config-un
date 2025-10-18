@@ -39,7 +39,12 @@ export const dependUnConfig: UnConfigFn<'depend'> = async (context) => {
         },
       },
     )
-    .addRule('ban-dependencies', ERROR, badDependencyOptions ? [badDependencyOptions] : []) // 🟢
+    .addRule(
+      'ban-dependencies',
+      ERROR,
+      badDependencyOptions ? [badDependencyOptions] : [],
+    ) /** @since 0.2.0 */ // 🟢
+    .enableConfigTesterForPlugin('depend')
     .addOverrides();
 
   return {
