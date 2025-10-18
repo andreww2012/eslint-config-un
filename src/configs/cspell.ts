@@ -32,7 +32,12 @@ export const cspellUnConfig: UnConfigFn<'cspell'> = (context) => {
         doNotIgnoreMdx: true,
       },
     ])
-    .addRule('spellchecker', ERROR, options ? [options] : []) // 🟢
+    .addRule(
+      'spellchecker',
+      ERROR,
+      options ? [options] : [],
+    ) /** @since 5.18.5 */ /** @aka cspell */ // 🟢
+    .ensureAllRulesAreListed('@cspell')
     .addOverrides();
 
   return {
