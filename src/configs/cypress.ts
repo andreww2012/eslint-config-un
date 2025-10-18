@@ -38,19 +38,20 @@ export const cypressUnConfig: UnConfigFn<'cypress'> = (context) => {
         filesFallback: configFilesFallback,
       },
     ])
-    .addRule('assertion-before-screenshot', WARNING)
-    .addRule('no-assigning-return-values', ERROR) // 🟢
-    .addRule('no-async-before', ERROR)
-    .addRule('no-async-tests', ERROR) // 🟢
-    .addRule('no-chained-get', WARNING)
-    .addRule('no-debug', ERROR)
-    .addRule('no-force', WARNING)
-    .addRule('no-pause', ERROR)
-    .addRule('no-unnecessary-waiting', ERROR) // 🟢
-    .addRule('no-xpath', OFF)
-    .addRule('require-data-selectors', OFF)
-    .addRule('unsafe-to-chain-command', ERROR) // 🟢
+    .addRule('assertion-before-screenshot', WARNING) /** @since 2.2.0 */
+    .addRule('no-assigning-return-values', ERROR) /** @since 2.1.0 */ // 🟢
+    .addRule('no-async-before', ERROR) /** @since 2.15.2 */
+    .addRule('no-async-tests', ERROR) /** @since 2.11.0 */ // 🟢
+    .addRule('no-chained-get', WARNING) /** @since 4.3.0 */
+    .addRule('no-debug', ERROR) /** @since 3.5.0 */
+    .addRule('no-force', WARNING) /** @since 2.10.0 */
+    .addRule('no-pause', ERROR) /** @since 2.12.0 */
+    .addRule('no-unnecessary-waiting', ERROR) /** @since 2.1.0 */ // 🟢
+    .addRule('no-xpath', OFF) /** @since 4.2.0 */
+    .addRule('require-data-selectors', OFF) /** @since 2.7.0 */
+    .addRule('unsafe-to-chain-command', ERROR) /** @since 2.13.0 */ // 🟢
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
+    .enableConfigTesterForPlugin('cypress')
     .addOverrides();
 
   const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
