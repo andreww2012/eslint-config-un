@@ -22,7 +22,8 @@ export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
         doNotIgnoreMdx: true,
       },
     ])
-    .addRule('string-check', ERROR)
+    .addRule('string-check', ERROR) /** @since 0.6.0 */
+    .ensureAllRulesAreListed('case-police')
     .addOverrides();
 
   return {
