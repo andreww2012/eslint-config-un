@@ -40,7 +40,8 @@ export const compatUnConfig: UnConfigFn<'compat'> = (context) => {
         settings: pluginSettings,
       }),
     })
-    .addRule('compat', ERROR)
+    .addRule('compat', ERROR) /** @since 0.0.4 */
+    .ensureAllRulesAreListed('compat')
     .addOverrides();
 
   return {
