@@ -106,7 +106,7 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
     .addRule('sort-attributes', ERROR) /** @since 1.3.0 */
     .markCategory('Extension Rules')
     .addRule('semi', OFF) /** @since 0.19.0 */
-    .ensureAllRulesAreListed('astro', {
+    .enableConfigTesterForPlugin('astro', {
       rulesToSkipInConfig: (ruleName) => ruleName.startsWith('jsx-a11y/'),
     })
     .addOverrides();

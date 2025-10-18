@@ -41,7 +41,7 @@ export const compatUnConfig: UnConfigFn<'compat'> = (context) => {
       }),
     })
     .addRule('compat', ERROR) /** @since 0.0.4 */
-    .ensureAllRulesAreListed('compat')
+    .enableConfigTesterForPlugin('compat')
     .addOverrides();
 
   return {

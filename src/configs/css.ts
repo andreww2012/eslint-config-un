@@ -127,7 +127,7 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
       },
     ]) /** @since 0.3.0 */ /** @aka require-baseline */ // 🟡
     .addRule('use-layers', OFF) /** @since 0.3.0 */
-    .ensureAllRulesAreListed('css')
+    .enableConfigTesterForPlugin('css')
     .addOverrides();
 
   return {

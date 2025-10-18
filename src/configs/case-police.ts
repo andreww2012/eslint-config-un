@@ -23,7 +23,7 @@ export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
       },
     ])
     .addRule('string-check', ERROR) /** @since 0.6.0 */
-    .ensureAllRulesAreListed('case-police')
+    .enableConfigTesterForPlugin('case-police')
     .addOverrides();
 
   return {

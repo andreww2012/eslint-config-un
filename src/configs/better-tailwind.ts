@@ -152,7 +152,7 @@ export const betterTailwindUnConfig: UnConfigFn<'betterTailwind'> = (context) =>
       restrictedClasses?.length ? [{restrict: restrictedClasses}] : [],
     ) /** @since 3.0.0 */ // 4️⃣
     .addRule('no-unregistered-classes', OFF) /** @since 3.0.0 */ // 🟢
-    .ensureAllRulesAreListed('better-tailwindcss')
+    .enableConfigTesterForPlugin('better-tailwindcss')
     .addOverrides();
 
   return {

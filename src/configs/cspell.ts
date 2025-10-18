@@ -37,7 +37,7 @@ export const cspellUnConfig: UnConfigFn<'cspell'> = (context) => {
       ERROR,
       options ? [options] : [],
     ) /** @since 5.18.5 */ /** @aka cspell */ // 🟢
-    .ensureAllRulesAreListed('@cspell')
+    .enableConfigTesterForPlugin('@cspell')
     .addOverrides();
 
   return {

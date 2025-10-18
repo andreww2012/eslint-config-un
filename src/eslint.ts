@@ -593,7 +593,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
         return result;
       },
 
-      ensureAllRulesAreListed: (
+      enableConfigTesterForPlugin: (
         pluginPrefixToTest: DefaultPrefix & {},
         {
           includeDeprecated = false,

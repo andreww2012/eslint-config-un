@@ -107,7 +107,7 @@ export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {
     ]) /** @since 0.3.0 */ // 🟣
     .addRule('prefer-reduce-shorthand-property-box-values', ERROR) /** @since 0.3.0 */ // 🟣
     .addRule('property-casing', ERROR, [propertyCasing]) /** @since 0.1.0 */ // 🟣
-    .ensureAllRulesAreListed('css-in-js')
+    .enableConfigTesterForPlugin('css-in-js')
     .addOverrides();
 
   return {

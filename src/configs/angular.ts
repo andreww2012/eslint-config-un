@@ -483,7 +483,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     .addRule(
       ...getPluginRuleSeverity('use-pipe-transform-interface', ERROR),
     ) /** @since 0.0.1-alpha.12 */ // 🟢
-    .ensureAllRulesAreListed('@angular-eslint', {includeDeprecated: true})
+    .enableConfigTesterForPlugin('@angular-eslint', {includeDeprecated: true})
     .addOverrides();
 
   // TEMPLATE CONFIG
@@ -643,7 +643,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     .addRule(
       ...getTemplatePluginRuleSeverity('valid-aria', a11yRulesSeverity),
     ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-valid-aria */ // ♿
-    .ensureAllRulesAreListed('@angular-eslint/template', {includeDeprecated: true})
+    .enableConfigTesterForPlugin('@angular-eslint/template', {includeDeprecated: true})
     .addOverrides();
 
   return {
