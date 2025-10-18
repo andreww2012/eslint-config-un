@@ -47,11 +47,6 @@ export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
 }
 
 export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
-  // TODO only load when necessary?
-  const {tailwind3: tailwind3Syntax, tailwind4: tailwind4Syntax} = await interopDefault(
-    import('tailwind-csstree'),
-  );
-
   const optionsRaw = context.rootOptions.configs?.css;
   const optionsResolved = assignDefaults(optionsRaw, {
     tolerantMode: false,
@@ -83,12 +78,17 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
         languageOptions: {
           ...(tolerantMode && {tolerant: true}),
           customSyntax: {
-            ...(tailwindPackageInfo &&
-              (tailwindMajorVersion === 4
-                ? tailwind4Syntax
-                : tailwindMajorVersion === 3
-                  ? tailwind3Syntax
-                  : null)),
+            ...(await (async () => {
+              if (
+                tailwindPackageInfo &&
+                (tailwindMajorVersion === 4 || tailwindMajorVersion === 3)
+              ) {
+                return (await interopDefault(import('tailwind-csstree')))[
+                  `tailwind${tailwindMajorVersion}`
+                ];
+              }
+              return null;
+            })()),
             ...customSyntax,
           },
         },
