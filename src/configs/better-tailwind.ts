@@ -121,32 +121,38 @@ export const betterTailwindUnConfig: UnConfigFn<'betterTailwind'> = (context) =>
         },
       }),
     })
-    /* Category: Stylistic rules */
-    .addRule(
-      'enforce-consistent-variable-syntax',
-      // v3 doesn't support `parentheses` syntax (`bg-(--primary)`) so there's nothing to enforce
-      tailwindMajorVersion === 3 ? OFF : WARNING,
-    )
-    .addRule(
-      'enforce-consistent-line-wrapping',
-      breakUpClassesIntoMultipleLines ? WARNING : OFF,
-      breakUpClassesIntoMultipleLines ? [breakUpClassesIntoMultipleLines] : [],
-    ) // 🟢
-    .addRule('no-duplicate-classes', WARNING) // 🟢
-    .addRule('no-unnecessary-whitespace', WARNING) // 🟢
+    .markCategory('Stylistic rules')
     .addRule(
       'enforce-consistent-class-order',
       typeof classOrder === 'string' ? WARNING : OFF,
       typeof classOrder === 'string' ? [{order: classOrder}] : [],
-    ) // 🟢
-    /* Category: Correctness rules */
-    .addRule('no-conflicting-classes', ERROR)
+    ) /** @since 3.0.0 */ /** @aka sort-classes */ // 🟢
+    .addRule('enforce-consistent-important-position', ERROR, [
+      {position: tailwindMajorVersion === 3 ? 'legacy' : 'recommended'},
+    ]) /** @since 3.6.0 */
+    .addRule(
+      'enforce-consistent-line-wrapping',
+      breakUpClassesIntoMultipleLines ? WARNING : OFF,
+      breakUpClassesIntoMultipleLines ? [breakUpClassesIntoMultipleLines] : [],
+    ) /** @since 3.0.0 */ /** @aka multiline */ // 🟢
+    .addRule(
+      'enforce-consistent-variable-syntax',
+      // v3 doesn't support `parentheses` syntax (`bg-(--primary)`) so there's nothing to enforce
+      tailwindMajorVersion === 3 ? OFF : WARNING,
+    ) /** @since 3.1.0 */
+    .addRule('enforce-shorthand-classes', ERROR, []) /** @since 3.5.0 */
+    .addRule('no-deprecated-classes', WARNING) /** @since 3.6.0 */
+    .addRule('no-duplicate-classes', WARNING) /** @since 3.0.0 */ // 🟢
+    .addRule('no-unnecessary-whitespace', WARNING) /** @since 3.0.0 */ // 🟢
+    .markCategory('Correctness rules')
+    .addRule('no-conflicting-classes', ERROR) /** @since 3.0.0 */
     .addRule(
       'no-restricted-classes',
       restrictedClasses?.length ? ERROR : OFF,
       restrictedClasses?.length ? [{restrict: restrictedClasses}] : [],
-    ) // 4️⃣
-    .addRule('no-unregistered-classes', OFF) // 🟢
+    ) /** @since 3.0.0 */ // 4️⃣
+    .addRule('no-unregistered-classes', OFF) /** @since 3.0.0 */ // 🟢
+    .ensureAllRulesAreListed('better-tailwindcss')
     .addOverrides();
 
   return {
