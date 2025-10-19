@@ -47,11 +47,11 @@ export const nodeDependenciesUnConfig: UnConfigFn<'nodeDependencies'> = async (c
         },
       },
     )
-    /* Category: Possible Errors */
-    .addRule('compat-engines', WARNING) // 🟢 >=0.5.0
-    .addRule('no-dupe-deps', ERROR) // 🟢 >=0.8.0
-    .addRule('valid-semver', ERROR) // 🟢 >=0.1.0
-    /* Category: Best Practices */
+    .markCategory('Possible Errors')
+    .addRule('compat-engines', WARNING) /** @since 0.5.0 */ // 🟢
+    .addRule('no-dupe-deps', ERROR) /** @since 0.8.0 */ // 🟢
+    .addRule('valid-semver', ERROR) /** @since 0.1.0 */ // 🟢
+    .markCategory('Best Practices')
     .addRule(
       'absolute-version',
       enforceAbsoluteVersion ? ERROR : OFF,
@@ -65,15 +65,14 @@ export const nodeDependenciesUnConfig: UnConfigFn<'nodeDependencies'> = async (c
               : enforceAbsoluteVersion,
           ]
         : [],
-    ) // >=0.7.0
-    .addRule('no-deprecated', WARNING, [{devDependencies: true}]) // >=0.2.0
+    ) /** @since 0.7.0 */
+    .addRule('no-deprecated', WARNING, [{devDependencies: true}]) /** @since 0.2.0 */
     // TODO option to restrict packages with modern alternatives?
-    .addRule('no-restricted-deps', OFF) // >=0.8.0
-    /* Category: Stylistic Issues */
-    .addRule('prefer-caret-range-version', OFF) // >=0.8.0
-    .addRule('prefer-tilde-range-version', OFF) // >=0.8.0
-    /* Category: Deprecated */
-    .addRule('valid-engines', OFF) // >=0.1.0
+    .addRule('no-restricted-deps', OFF) /** @since 0.8.0 */
+    .markCategory('Stylistic Issues')
+    .addRule('prefer-caret-range-version', OFF) /** @since 0.8.0 */
+    .addRule('prefer-tilde-range-version', OFF) /** @since 0.8.0 */
+    .enableConfigTesterForPlugin('node-dependencies')
     .addOverrides();
 
   return {
