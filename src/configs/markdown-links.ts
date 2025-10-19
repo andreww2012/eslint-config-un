@@ -79,10 +79,11 @@ export const markdownLinksUnConfig: UnConfigFn<'markdownLinks'> = (context) => {
         doNotIgnoreMarkdown: true,
       },
     ])
-    .addRule('no-dead-urls', ...getCheckSeverity('deadUrls')) // >=0.1.0
-    .addRule('no-missing-fragments', ...getCheckSeverity('missingFragments')) // >=0.4.0
-    .addRule('no-missing-path', ...getCheckSeverity('missingLocalPath')) // 🟢 >=0.2.0
-    .addRule('no-self-destination', ...getCheckSeverity('selfDestinationLinks')) // 🟢 >=0.5.0
+    .addRule('no-dead-urls', ...getCheckSeverity('deadUrls')) /** @since 0.1.0 */
+    .addRule('no-missing-fragments', ...getCheckSeverity('missingFragments')) /** @since 0.4.0 */
+    .addRule('no-missing-path', ...getCheckSeverity('missingLocalPath')) /** @since 0.2.0 */ // 🟢
+    .addRule('no-self-destination', ...getCheckSeverity('selfDestinationLinks')) /** @since 0.5.0 */ // 🟢
+    .enableConfigTesterForPlugin('markdown-links')
     .addOverrides();
 
   return {
