@@ -73,6 +73,7 @@ export const nextJsUnConfig: UnConfigFn<'nextJs'> = (context) => {
     .addRule('no-title-in-document-head', ERROR) // 🟡
     .addRule('no-typos', ERROR) // 🟡
     .addRule('no-unwanted-polyfillio', ERROR) // 🟡
+    .enableConfigTesterForPlugin('@next/next')
     .addOverrides();
 
   return {
