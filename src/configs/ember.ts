@@ -1,6 +1,11 @@
 // cspell:ignore runloop tagless
 import {ERROR, GLOB_JS_TS, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
+import {
+  type GetRuleOptions,
+  type RuleNamesForPlugin,
+  type UnConfigOptions,
+  createConfigBuilder,
+} from '../eslint';
 import {assignDefaults} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
@@ -31,6 +36,24 @@ export interface EmberEslintConfigOptions extends UnConfigOptions<'ember'> {
 }
 
 const GLIMMER_TEMPLATES_FILES = ['**/*.{gjs,gts}'] as const;
+
+const EMBER_TESTING_RELATED_RULES = new Set<string>([
+  'no-current-route-name',
+  'no-ember-testing-in-module-scope',
+  'no-invalid-test-waiters',
+  'no-legacy-test-waiters',
+  'no-noop-setup-on-error-in-before',
+  'no-pause-test',
+  'no-replace-test-comments',
+  'no-restricted-resolver-tests',
+  'no-settled-after-test-helper',
+  'no-test-and-then',
+  'no-test-import-export',
+  'no-test-module-for',
+  'no-test-this-render',
+  'prefer-ember-test-helpers',
+  'require-valid-css-selector-in-test-helpers',
+] satisfies RuleNamesForPlugin<'ember'>[]);
 
 export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.ember;
@@ -65,7 +88,7 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
         filesFallback: [GLOB_JS_TS, ...GLIMMER_TEMPLATES_FILES],
       },
     ])
-    /* Category: Components */
+    .markCategory('Components')
     .addRule('no-attrs-in-components', ERROR) // 🟢
     .addRule('no-attrs-snapshot', ERROR) // 🟢
     .addRule('no-builtin-form-components', WARNING) // >=12.7.0
@@ -73,7 +96,7 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     .addRule('no-component-lifecycle-hooks', ERROR) // 🟢
     .addRule('no-on-calls-in-components', ERROR) // 🟢
     .addRule('require-tagless-components', ERROR) // 🟢
-    /* Category: Computed Properties */
+    .markCategory('Computed Properties')
     .addRule(
       'computed-property-getters',
       enforceGettersInComputedProperties == null ? OFF : ERROR,
@@ -92,12 +115,12 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     .addRule('require-computed-property-dependencies', ERROR) // 🟢
     .addRule('require-return-from-computed', ERROR) // 🟢
     .addRule('use-brace-expansion', ERROR) // 🟢
-    /* Category: Controllers */
+    .markCategory('Controllers')
     .addRule('alias-model-in-controller', OFF)
     .addRule('avoid-using-needs-in-controllers', ERROR) // 🟢
     // "This rule will not be added to the recommended configuration until controller usage has become less common / deprecated"
     .addRule('no-controllers', OFF)
-    /* Category: Deprecations */
+    .markCategory('Deprecations')
     .addRule('closure-actions', ERROR) // 🟢
     .addRule('new-module-imports', ERROR) // 🟢
     // "This rule is not in the recommended configuration because of the risk of false positives"
@@ -111,12 +134,12 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     .addRule('no-observers', ERROR) // 🟢
     .addRule('no-old-shims', ERROR) // 🟢
     .addRule('no-string-prototype-extensions', ERROR) // 🟢
-    /* Category: Ember Data */
+    .markCategory('Ember Data')
     // "This rule is not in the recommended configuration because the Ember Data team recommends not using transforms unless you actually want to transform something"
     .addRule('no-empty-attrs', OFF)
     .addRule('require-async-inverse-relationship', ERROR)
     .addRule('use-ember-data-rfc-395-imports', ERROR) // 🟢
-    /* Category: Ember Object */
+    .markCategory('Ember Object')
     .addRule('avoid-leaking-state-in-ember-objects', ERROR) // 🟢
     .addRule('no-get', ERROR) // 🟢
     .addRule('no-get-with-default', ERROR) // 🟢
@@ -125,7 +148,7 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     .addRule('no-try-invoke', ERROR) // 🟢
     .addRule('require-super-in-lifecycle-hooks', ERROR) // 🟢
     .addRule('use-ember-get-and-set', OFF)
-    /* Category: Ember Octane */
+    .markCategory('Ember Octane')
     .addRule('classic-decorator-hooks', ERROR) // 🟢
     .addRule('classic-decorator-no-classic-methods', ERROR) // 🟢
     .addRule('no-actions-hash', ERROR) // 🟢
@@ -135,11 +158,11 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     .addRule('no-tracked-properties-from-args', ERROR) // 🟢
     .addRule('template-indent', OFF)
     .addRule('template-no-let-reference', ERROR) // 🟠🔵
-    /* Category: jQuery */
+    .markCategory('jQuery')
     .addRule('jquery-ember-run', ERROR) // 🟢
     .addRule('no-global-jquery', ERROR) // 🟢
     .addRule('no-jquery', ERROR) // 🟢
-    /* Category: Miscellaneous */
+    .markCategory('Miscellaneous')
     .addRule('named-functions-in-promises', OFF)
     // "This rule is not in the recommended configuration because there are legitimate usages of `htmlSafe`"
     .addRule('no-html-safe', ERROR)
@@ -148,7 +171,7 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     .addRule('no-restricted-property-modifications', OFF)
     .addRule('no-runloop', ERROR) // 🟢
     .addRule('require-fetch-import', OFF)
-    /* Category: Routes */
+    .markCategory('Routes')
     // Not stylistic because "when you accidentally uppercase any of your routes or create upper-cased route using ember-cli the application will crash without any clear information what's wrong"
     .addRule('no-capital-letters-in-routes', ERROR) // 🟢
     .addRule('no-controller-access-in-routes', ERROR) // 🟢
@@ -159,7 +182,7 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     // "Enforces usage of kebab-case (instead of snake_case or camelCase) in route paths"
     .addRule('route-path-style', ERROR)
     .addRule('routes-segments-snake-case', ERROR) // 🟢
-    /* Category: Services */
+    .markCategory('Services')
     // "This rule is not in the recommended configuration because it is somewhat of a stylistic preference and it's not always necessary to explicitly include the service injection argument"
     .addRule('no-implicit-service-injection-argument', OFF)
     .addRule('no-restricted-service-injections', OFF)
@@ -167,13 +190,16 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     .addRule('no-unnecessary-service-injection-argument', OFF)
     // "This rule can exhibit false positives <...> Given these significant limitations, the rule is not currently recommended for production usage, but some may find it useful to experiment with. The rule will not be added to the recommended configuration unless the limitations can be addressed"
     .addRule('no-unused-services', ERROR)
-    /* Category: Stylistic Issues */
+    .markCategory('Stylistic Issues')
     .addRule('order-in-components', ERROR)
     .addRule('order-in-controllers', ERROR)
     .addRule('order-in-models', ERROR)
     .addRule('order-in-routes', ERROR)
-    /* Category: Testing */
+    .markCategory('Testing')
     .addRule('no-test-support-import', ERROR) // 🟢
+    .enableConfigTesterForPlugin('ember', {
+      rulesToSkipInConfig: (ruleName) => EMBER_TESTING_RELATED_RULES.has(ruleName),
+    })
     .addOverrides();
 
   const configBuilderTests = createConfigBuilder(context, configTestFiles, 'ember');
@@ -205,6 +231,9 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     .addRule('prefer-ember-test-helpers', ERROR) // 🟢
     .addRule('require-valid-css-selector-in-test-helpers', ERROR) // 🟢
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
+    .enableConfigTesterForPlugin('ember', {
+      rulesToSkipInConfig: (ruleName) => !EMBER_TESTING_RELATED_RULES.has(ruleName),
+    })
     .addOverrides();
 
   const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
