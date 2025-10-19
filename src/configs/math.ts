@@ -30,35 +30,36 @@ export const mathUnConfig: UnConfigFn<'math'> = (context) => {
       'abs',
       absoluteValuesConversionMethod === false ? OFF : ERROR,
       absoluteValuesConversionMethod === false ? [] : [{prefer: absoluteValuesConversionMethod}],
-    ) // >=0.3.0
-    .addRule('no-static-infinity-calculations', ERROR) // 🟢 >=0.5.0
-    .addRule('no-static-nan-calculations', ERROR) // 🟢 >=0.5.0
-    .addRule('prefer-exponentiation-operator', ERROR) // >=0.6.0
+    ) /** @since 0.3.0 */
+    .addRule('no-static-infinity-calculations', ERROR) /** @since 0.5.0 */ // 🟢
+    .addRule('no-static-nan-calculations', ERROR) /** @since 0.5.0 */ // 🟢
+    .addRule('prefer-exponentiation-operator', ERROR) /** @since 0.6.0 */
     .disableAnyRule('', 'prefer-exponentiation-operator')
-    .addRule('prefer-math-cbrt', ERROR) // 🟢 >=0.3.0
-    .addRule('prefer-math-e', ERROR) // 🟢 >=0.5.0
-    .addRule('prefer-math-hypot', ERROR) // 🟢 >=0.6.0
-    .addRule('prefer-math-ln10', ERROR) // 🟢 >=0.4.0
-    .addRule('prefer-math-ln2', ERROR) // 🟢 >=0.4.0
-    .addRule('prefer-math-log10', ERROR) // 🟢 >=0.4.0
-    .addRule('prefer-math-log10e', ERROR) // 🟢 >=0.4.0
-    .addRule('prefer-math-log2', ERROR) // 🟢 >=0.4.0
-    .addRule('prefer-math-log2e', ERROR) // 🟢 >=0.4.0
-    .addRule('prefer-math-pi', ERROR) // 🟢 >=0.5.0
-    .addRule('prefer-math-sqrt', ERROR) // 🟢 >=0.3.0
-    .addRule('prefer-math-sqrt1-2', ERROR) // 🟢 >=0.4.0
-    .addRule('prefer-math-sqrt2', ERROR) // 🟢 >=0.4.0
-    .addRule('prefer-math-sum-precise', OFF) // >=0.11.0
-    .addRule('prefer-math-trunc', ERROR) // 🟢 >=0.4.0
-    .addRule('prefer-number-epsilon', ERROR) // 🟢 >=0.5.0
-    .addRule('prefer-number-is-finite', ERROR) // 🟢 >=0.4.0
-    .addRule('prefer-number-is-integer', ERROR) // 🟢 >=0.2.0
-    .addRule('prefer-number-is-nan', ERROR) // 🟢 >=0.4.0
-    .addRule('prefer-number-is-safe-integer', ERROR) // 🟢 >=0.3.0
-    .addRule('prefer-number-max-safe-integer', ERROR) // 🟢 >=0.3.0
-    .addRule('prefer-number-max-value', ERROR) // 🟢 >=0.5.0
-    .addRule('prefer-number-min-safe-integer', ERROR) // 🟢 >=0.3.0
-    .addRule('prefer-number-min-value', ERROR) // 🟢 >=0.7.0
+    .addRule('prefer-math-cbrt', ERROR) /** @since 0.3.0 */ // 🟢
+    .addRule('prefer-math-e', ERROR) /** @since 0.5.0 */ // 🟢
+    .addRule('prefer-math-hypot', ERROR) /** @since 0.6.0 */ // 🟢
+    .addRule('prefer-math-ln10', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-math-ln2', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-math-log10', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-math-log10e', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-math-log2', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-math-log2e', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-math-pi', ERROR) /** @since 0.5.0 */ // 🟢
+    .addRule('prefer-math-sqrt', ERROR) /** @since 0.3.0 */ // 🟢
+    .addRule('prefer-math-sqrt1-2', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-math-sqrt2', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-math-sum-precise', OFF) /** @since 0.11.0 */
+    .addRule('prefer-math-trunc', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-number-epsilon', ERROR) /** @since 0.5.0 */ // 🟢
+    .addRule('prefer-number-is-finite', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-number-is-integer', ERROR) /** @since 0.2.0 */ // 🟢
+    .addRule('prefer-number-is-nan', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('prefer-number-is-safe-integer', ERROR) /** @since 0.3.0 */ // 🟢
+    .addRule('prefer-number-max-safe-integer', ERROR) /** @since 0.3.0 */ // 🟢
+    .addRule('prefer-number-max-value', ERROR) /** @since 0.5.0 */ // 🟢
+    .addRule('prefer-number-min-safe-integer', ERROR) /** @since 0.3.0 */ // 🟢
+    .addRule('prefer-number-min-value', ERROR) /** @since 0.7.0 */ // 🟢
+    .enableConfigTesterForPlugin('math')
     .addOverrides();
 
   return {
