@@ -11,6 +11,13 @@ await eslintConfigInternal(
       '@angular-eslint': pluginAngular,
       '@angular-eslint/template': pluginAngularTemplate,
     },
+    configs: {
+      // Ensure all rules are enabled
+      es: {
+        ecmaVersion: 5,
+        ecmaFeatures: {5: {default: false}},
+      },
+    },
   },
   {testMode: true},
 );
