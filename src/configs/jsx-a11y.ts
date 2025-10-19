@@ -481,7 +481,7 @@ export const jsxA11yUnConfig: UnConfigFn<
       },
     ])
     .addRule(isForLit ? 'valid-lang' : rn('lang'), ERROR) // 🔴
-    .addRule('list', isForLit ? ERROR : OFF)
+    .addRule('list', isForLit ? ERROR : null)
     .addRule(rn('media-has-caption'), isForLit ? OFF : WARNING, [
       {
         ...(customComponents.audioElements?.length && {audio: customComponents.audioElements}),
@@ -568,6 +568,10 @@ export const jsxA11yUnConfig: UnConfigFn<
     .addRule(isForLit ? 'role-supports-aria-attr' : rn('role-supports-aria-props'), ERROR)
     .addRule(rn('scope'), ERROR)
     .addRule(rn('tabindex-no-positive'), ERROR)
+    .enableConfigTesterForPlugin('jsx-a11y', {
+      // TODO stricter condition?
+      rulesToSkipInConfig: () => prefixFinal !== 'jsx-a11y',
+    })
     .addOverrides();
 
   return {
