@@ -91,7 +91,8 @@ export const mdxUnConfig: UnConfigFn<'mdx'> = async (context) => {
         }),
       },
     )
-    .addRule('remark', WARNING) // TODO
+    .addRule('remark', WARNING) /** @since 1.1.0 */ // TODO
+    .enableConfigTesterForPlugin('mdx')
     .addOverrides();
 
   configBuilder?.addConfig(
