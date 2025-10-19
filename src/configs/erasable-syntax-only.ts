@@ -38,10 +38,14 @@ export const erasableSyntaxOnlyUnConfig: UnConfigFn<'erasableSyntaxOnly'> = (con
       'erasable-syntax-only',
       {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_TSX]},
     ])
-    .addRule('enums', allowedSyntax.enums ? OFF : ERROR) // 🟢
-    .addRule('import-aliases', allowedSyntax.importAliases ? OFF : ERROR) // 🟢
-    .addRule('namespaces', allowedSyntax.namespaces ? OFF : ERROR) // 🟢
-    .addRule('parameter-properties', allowedSyntax.parameterProperties ? OFF : ERROR) // 🟢
+    .addRule('enums', allowedSyntax.enums ? OFF : ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('import-aliases', allowedSyntax.importAliases ? OFF : ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('namespaces', allowedSyntax.namespaces ? OFF : ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule(
+      'parameter-properties',
+      allowedSyntax.parameterProperties ? OFF : ERROR,
+    ) /** @since 0.1.0 */ // 🟢
+    .enableConfigTesterForPlugin('erasable-syntax-only')
     .addOverrides();
 
   return {
