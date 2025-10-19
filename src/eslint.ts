@@ -19,6 +19,7 @@ import {PLUGIN_PREFIXES_LIST, type ParserPrefix, type PluginPrefix} from './plug
 import type {
   EmptyObject,
   FalsyValue,
+  NonEmptyString,
   OmitIndexSignature,
   PickKeysNotStartingWith,
   PrettifyShallow,
@@ -588,7 +589,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
         return result;
       },
 
-      markCategory: (name: string) => {
+      markCategory: <const CategoryName extends string>(name: NonEmptyString<CategoryName>) => {
         currentCategory = name;
         return result;
       },
