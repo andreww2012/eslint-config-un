@@ -7,6 +7,8 @@ import {arraify, assignDefaults, interopDefault, isNonEmptyArray} from '../utils
 import type {UnConfigFn} from './index';
 
 export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
+  // TODO remove `import-x/` prefix for our config's users?
+
   /**
    * [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -159,15 +161,16 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
     .addRule('no-import-module-exports', OFF) // TODO enable?
     .addRule('no-internal-modules', OFF)
     .addRule('no-mutable-exports', WARNING)
-    .addRule('no-named-as-default-member', OFF) // 🟡
     // Not very useful + false positives for axios@1.6.7?
     .addRule('no-named-as-default', OFF) // 🟡
+    .addRule('no-named-as-default-member', OFF) // 🟡
     .addRule('no-named-default', OFF)
     .addRule('no-named-export', OFF)
     .addRule('no-namespace', OFF)
     .addRule('no-nodejs-modules', OFF) // TODO
     .addRule('no-relative-packages', OFF)
     .addRule('no-relative-parent-imports', OFF)
+    .addRule('no-rename-default', OFF)
     .addRule('no-restricted-paths', OFF)
     .addRule('no-self-import', ERROR)
     .addRule('no-unassigned-import', OFF)
@@ -188,7 +191,9 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
       },
     ])
     .addRule('prefer-default-export', OFF)
+    .addRule('prefer-namespace-import', OFF)
     .addRule('unambiguous', OFF)
+    .enableConfigTesterForPlugin('import')
     .addOverrides();
 
   return {
