@@ -23,7 +23,8 @@ export const noOnlyTestsUnConfig: UnConfigFn<'noOnlyTests'> = (context) => {
         filesFallback: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION),
       },
     ])
-    .addRule('no-only-tests', ERROR)
+    .addRule('no-only-tests', ERROR) /** @since 1.0.0 */
+    .enableConfigTesterForPlugin('no-only-tests')
     .addOverrides();
 
   return {
