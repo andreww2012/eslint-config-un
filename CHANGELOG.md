@@ -95,7 +95,9 @@
 - **angular** config: you are now expected to install `@angular-eslint/eslint-plugin` and `@angular-eslint/eslint-plugin-template` packages manually and only the rules from the installed packages will be used.
 - **import** config: added a new option `allowDevDependencies` to control if dev dependencies usage will be reported and where.
 - **nodeDependencies** config: added a new option `enforceAbsoluteVersion` to enforce to use or not to use absolute versions for dependencies.
-- **html** config: added a new option `parserOptions` to configure HTML parser options.
+- **html** config:
+  - Added a new option `parserOptions` to configure HTML parser options.
+  - Enabled missed [`no-invalid-entity`](https://html-eslint.org/docs/rules/no-invalid-entity) rule.
 - **ts** config: do not set [`disallowTemplateShorthand: true`](https://eslint.org/docs/latest/rules/no-implicit-coercion#disallowtemplateshorthand) for [`no-implicit-coercion`](https://eslint.org/docs/latest/rules/no-implicit-coercion) rule in TypeScript files.
 
 ### Dependencies

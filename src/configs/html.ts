@@ -81,15 +81,16 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
         }),
       },
     )
-    /* Category: Best Practice */
+    .markCategory('Best Practice')
     .addRule('max-element-depth', OFF)
     .addRule('no-duplicate-attrs', ERROR) // 🟢
     .addRule('no-duplicate-class', ERROR)
     .addRule('no-duplicate-id', ERROR) // 🟢
     .addRule('no-duplicate-in-head', ERROR) // >=0.42.0
-    .addRule('no-ineffective-attrs', ERROR) // >=0.45.0
     .addRule('no-extra-spacing-text', WARNING, [{skip: ['pre']}])
+    .addRule('no-ineffective-attrs', ERROR) // >=0.45.0
     .addRule('no-inline-styles', OFF)
+    .addRule('no-invalid-entity', ERROR)
     .addRule('no-nested-interactive', ERROR)
     .addRule('no-obsolete-tags', ERROR) // 🟢
     .addRule('no-restricted-attr-values', OFF)
@@ -113,13 +114,13 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
     .addRule('require-li-container', ERROR) // 🟢
     .addRule('require-meta-charset', ERROR)
     .addRule('use-baseline', WARNING) // 🟢
-    /* Category: SEO */
+    .markCategory('SEO')
     .addRule('no-multiple-h1', ERROR) // 🟢
     .addRule('require-lang', ERROR) // 🟢
     .addRule('require-meta-description', OFF)
     .addRule('require-open-graph-protocol', OFF)
     .addRule('require-title', ERROR) // 🟢
-    /* Category: Accessibility */
+    .markCategory('Accessibility')
     .addRule('no-abstract-roles', ERROR)
     .addRule('no-accesskey-attrs', ERROR)
     .addRule('no-aria-hidden-body', ERROR)
@@ -135,7 +136,7 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
     .addRule('require-img-alt', ERROR) // 🟢
     .addRule('require-input-label', ERROR)
     .addRule('require-meta-viewport', ERROR)
-    /* Category: Style */
+    .markCategory('Style')
     .addRule('attrs-newline', OFF) // 🟢
     .addRule('element-newline', OFF) // 🟢
     .addRule('id-naming-convention', OFF)
@@ -146,6 +147,7 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
     .addRule('no-trailing-spaces', WARNING)
     .addRule('quotes', ERROR, ['double', {enforceTemplatedAttrValue: true}]) // 🟢
     .addRule('sort-attrs', OFF) // TODO find and enforce a good sorting order?
+    .enableConfigTesterForPlugin('@html-eslint')
     .addOverrides();
 
   return {
