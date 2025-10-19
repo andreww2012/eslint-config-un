@@ -1,9 +1,26 @@
 import {ERROR, GLOB_JS_TS_EXTENSION, OFF} from '../constants';
-import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from '../eslint';
+import {
+  type RuleNamesForPlugin,
+  type RulesRecordPartial,
+  type UnConfigOptions,
+  createConfigBuilder,
+} from '../eslint';
 import type {ConditionalKeys} from '../types';
 import {assignDefaults} from '../utils';
 import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
 import type {UnConfigFn} from './index';
+
+const ESLINT_PLUGIN_TESTING_RELATED_RULES = [
+  'consistent-output',
+  'no-identical-tests',
+  'no-only-tests',
+  'prefer-output-null',
+  'test-case-property-ordering',
+  'test-case-shorthand-strings',
+] satisfies RuleNamesForPlugin<'eslint-plugin'>[];
+const ESLINT_PLUGIN_TESTING_RELATED_RULES_SET = new Set<string>(
+  ESLINT_PLUGIN_TESTING_RELATED_RULES,
+);
 
 export interface EslintPluginEslintConfigOptions extends UnConfigOptions<'eslint-plugin'> {
   /**
@@ -15,13 +32,7 @@ export interface EslintPluginEslintConfigOptions extends UnConfigOptions<'eslint
     | UnConfigOptions<
         Pick<
           RulesRecordPartial<'eslint-plugin'>,
-          `eslint-plugin/${
-            | 'consistent-output'
-            | 'no-identical-tests'
-            | 'no-only-tests'
-            | 'prefer-output-null'
-            | 'test-case-property-ordering'
-            | 'test-case-shorthand-strings'}`
+          `eslint-plugin/${(typeof ESLINT_PLUGIN_TESTING_RELATED_RULES)[number]}`
         >
       >;
 
@@ -135,6 +146,9 @@ export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
       getRuleEnforcingMetaPropertySeverity('schemaDescriptions'),
     ) // 🟢(since 7.0.0)
     .addRule('require-meta-type', getRuleEnforcingMetaPropertySeverity('type', 'enforce')) // 🟢
+    .enableConfigTesterForPlugin('eslint-plugin', {
+      rulesToSkipInConfig: (ruleName) => ESLINT_PLUGIN_TESTING_RELATED_RULES_SET.has(ruleName),
+    })
     .addOverrides();
 
   const configBuilderRuleTests = createConfigBuilder(context, configRuleTests, 'eslint-plugin');
@@ -154,6 +168,9 @@ export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
     .addRule('test-case-property-ordering', ERROR)
     .addRule('test-case-shorthand-strings', ERROR)
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
+    .enableConfigTesterForPlugin('eslint-plugin', {
+      rulesToSkipInConfig: (ruleName) => !ESLINT_PLUGIN_TESTING_RELATED_RULES_SET.has(ruleName),
+    })
     .addOverrides();
 
   return {
