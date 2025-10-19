@@ -119,6 +119,7 @@ export const litUnConfig: UnConfigFn<'lit'> = async (context) => {
     .addRule('prefer-static-styles', ERROR)
     .addRule('quoted-expressions', ERROR, ['never'])
     .addRule('value-after-constraints', ERROR)
+    .enableConfigTesterForPlugin('lit')
     .addOverrides();
 
   return {
