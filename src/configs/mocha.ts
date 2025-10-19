@@ -113,6 +113,7 @@ export const mochaUnConfig: UnConfigFn<'mocha'> = (context) => {
     .addRule('prefer-arrow-callback', OFF)
     .addRule('valid-suite-title', OFF)
     .addRule('valid-test-title', OFF)
+    .enableConfigTesterForPlugin('mocha')
     .addOverrides();
 
   const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
