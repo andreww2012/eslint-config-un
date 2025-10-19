@@ -4,6 +4,7 @@ import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '
 import {
   type FlatConfigEntryForBuilder,
   type GetRuleOptions,
+  type RuleNamesForPlugin,
   type RulesRecordPartial,
   type UnConfigOptions,
   createConfigBuilder,
@@ -174,6 +175,11 @@ export interface JestEslintConfigOptions
   minAndMaxExpectArgs?: [min: number | undefined, max: number | undefined];
 }
 
+const JEST_TYPESCRIPT_RELATED_RULES = new Set<string>([
+  'no-untyped-mock-factory',
+  'unbound-method',
+] satisfies RuleNamesForPlugin<'jest'>[]);
+
 export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
   const [eslintPluginJest, isJestExtendedInstalled] = await Promise.all([
     pluginsLoaders.jest(context).then(({module}) => module),
@@ -333,6 +339,9 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     .addRule('valid-expect-in-promise', ERROR) // 🟢
     .addRule('valid-title', ERROR) // 🟢
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
+    .enableConfigTesterForPlugin('jest', {
+      rulesToSkipInConfig: (ruleName) => JEST_TYPESCRIPT_RELATED_RULES.has(ruleName),
+    })
     .addOverrides();
 
   const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
@@ -365,6 +374,9 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
     .disableAnyRule('ts', 'unbound-method')
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
+    .enableConfigTesterForPlugin('jest', {
+      rulesToSkipInConfig: (ruleName) => !JEST_TYPESCRIPT_RELATED_RULES.has(ruleName),
+    })
     .addOverrides();
 
   const configBuilderJestExtended = createConfigBuilder(
@@ -397,6 +409,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
       getSuggestUsingJestExtendedMatcherSeverity('toHaveBeenCalledOnce'),
     )
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
+    .enableConfigTesterForPlugin('jest-extended')
     .addOverrides();
 
   // TODO https://npmjs.com/eslint-plugin-jest-dom ?
