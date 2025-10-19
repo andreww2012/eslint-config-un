@@ -80,7 +80,12 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = as
         },
       }),
     })
-    .addRule('no-invalid', ERROR, noInvalidOptions == null ? [] : [noInvalidOptions]) // 🟢 >=0.1.0
+    .addRule(
+      'no-invalid',
+      ERROR,
+      noInvalidOptions == null ? [] : [noInvalidOptions],
+    ) /** @since 0.1.0 */ // 🟢
+    .enableConfigTesterForPlugin('json-schema-validator')
     .addOverrides();
 
   return {
