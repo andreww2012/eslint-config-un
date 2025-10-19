@@ -33,17 +33,18 @@ export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) =>
         doNotIgnoreMarkdown: true,
       },
     ])
-    /* Category: Best Practices */
-    .addRule('disable-enable-pair', ERROR, [{allowWholeFile: true}]) // 🟢
-    .addRule('no-aggregating-enable', ERROR) // 🟢
-    .addRule('no-duplicate-disable', ERROR) // 🟢
-    .addRule('no-unlimited-disable', ERROR) // 🟢
-    .addRule('no-unused-disable', OFF) // Handled by ESLint natively
-    .addRule('no-unused-enable', ERROR) // 🟢
-    /* Category: Stylistic */
-    .addRule('no-restricted-disable', OFF)
-    .addRule('no-use', OFF)
-    .addRule('require-description', OFF)
+    .markCategory('Best Practices')
+    .addRule('disable-enable-pair', ERROR, [{allowWholeFile: true}]) /** @since 3.2.0 */ // 🟢
+    .addRule('no-aggregating-enable', ERROR) /** @since 3.2.0 */ // 🟢
+    .addRule('no-duplicate-disable', ERROR) /** @since 3.2.0 */ // 🟢
+    .addRule('no-unlimited-disable', ERROR) /** @since 3.2.0 */ // 🟢
+    .addRule('no-unused-disable', OFF) /** @since 3.2.0 */ // Handled by ESLint natively
+    .addRule('no-unused-enable', ERROR) /** @since 3.2.0 */ // 🟢
+    .markCategory('Stylistic')
+    .addRule('no-restricted-disable', OFF) /** @since 3.2.0 */
+    .addRule('no-use', OFF) /** @since 3.2.0 */
+    .addRule('require-description', OFF) /** @since 3.2.0 */
+    .enableConfigTesterForPlugin('@eslint-community/eslint-comments')
     .addOverrides();
 
   return {
