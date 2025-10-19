@@ -20,6 +20,7 @@ import type {
   EmptyObject,
   FalsyValue,
   NonEmptyString,
+  NonEmptyTuple,
   OmitIndexSignature,
   PickKeysNotStartingWith,
   PrettifyShallow,
@@ -694,16 +695,26 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
                   (a, b) => a.localeCompare(b),
                   true,
                 );
-                if (rulesToSwapPositionsOf.size > 0) {
-                  errorMessages.push(
-                    `↔️ Rules out of order${groupName ? ` in group ${styleText('cyan', groupName)}` : ''}:\n${[
-                      ...rulesToSwapPositionsOf,
-                    ]
-                      // Show only the last rule on the right which is the one after which the left rule must be put
-                      .map(([a, b]) => `${styleRuleName(a)} <-> ${styleRuleName(b.at(-1) || '')}`)
-                      .join('\n')}`,
-                  );
+                if (rulesToSwapPositionsOf.size === 0) {
+                  return;
                 }
+                const rulesToSwapNormalized = Object.entries(
+                  groupBy(
+                    [...rulesToSwapPositionsOf].map(([left, right]) => ({
+                      left,
+                      right: right.at(-1) || '',
+                    })),
+                    (v) => v.right,
+                  ),
+                ).map(
+                  ([right, rules]) =>
+                    [rules.at(-1)?.left || '', right] satisfies NonEmptyTuple<string>,
+                );
+                errorMessages.push(
+                  `↔️ Rules out of order${groupName ? ` in group ${styleText('cyan', groupName)}` : ''}:\n${rulesToSwapNormalized
+                    .map(([a, b]) => `${styleRuleName(a)} <-> ${styleRuleName(b)}`)
+                    .join('\n')}`,
+                );
               });
             }
 
