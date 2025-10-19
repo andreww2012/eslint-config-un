@@ -186,14 +186,14 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
             }),
           },
         ],
-      ) // 🟢
-      .addRule('heading-increment', ERROR) // 🟢
-      .addRule('no-bare-urls', OFF) // >=6.6.0
-      .addRule('no-duplicate-definitions', ERROR) // 🟢 >=6.5.0
-      .addRule('no-duplicate-headings', OFF)
-      .addRule('no-empty-definitions', ERROR) // 🟢 >=6.5.0
-      .addRule('no-empty-images', ERROR) // 🟢 >=6.5.0
-      .addRule('no-empty-links', ERROR) // 🟢
+      ) /** @since 6.0.0 */ // 🟢
+      .addRule('heading-increment', ERROR) /** @since 6.0.0 */ // 🟢
+      .addRule('no-bare-urls', OFF) /** @since 6.6.0 */
+      .addRule('no-duplicate-definitions', ERROR) /** @since 6.5.0 */ // 🟢
+      .addRule('no-duplicate-headings', OFF) /** @since 6.0.0 */
+      .addRule('no-empty-definitions', ERROR) /** @since 6.5.0 */ // 🟢
+      .addRule('no-empty-images', ERROR) /** @since 6.5.0 */ // 🟢
+      .addRule('no-empty-links', ERROR) /** @since 6.0.0 */ // 🟢
       .addRule('no-html', allowHtmlTags === true ? OFF : ERROR, [
         {
           ...(Array.isArray(allowHtmlTags) &&
@@ -201,17 +201,25 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
               allowed: unique(allowHtmlTags),
             }),
         },
-      ])
-      .addRule('no-invalid-label-refs', ERROR) // 🟢
-      .addRule('no-missing-atx-heading-space', ERROR, [{checkClosedHeadings: true}]) // 🟢 >=6.5.0
-      .addRule('no-missing-label-refs', ERROR, generateNoMissingLabelRefsOptions(defaultDialect)) // 🟢
-      .addRule('no-missing-link-fragments', ERROR) // 🟢 >=6.6.0
-      .addRule('no-multiple-h1', ERROR, [{frontmatterTitle: ''}]) // 🟢 >=6.5.0
-      .addRule('no-reversed-media-syntax', ERROR) // 🟢 >=6.6.0
-      .addRule('no-space-in-emphasis', ERROR) // 🟢 >=7.2.0
-      .addRule('no-unused-definitions', ERROR) // 🟢 >=7.0.0
-      .addRule('require-alt-text', ERROR) // 🟢 >=6.5.0
-      .addRule('table-column-count', ERROR, [{checkMissingCells: true}]) // 🟢 >=6.5.0
+      ]) /** @since 6.0.0 */
+      .addRule('no-invalid-label-refs', ERROR) /** @since 6.0.0 */ // 🟢
+      .addRule('no-missing-atx-heading-space', ERROR, [
+        {checkClosedHeadings: true} /** @since 6.5.0 */,
+      ]) // 🟢
+      .addRule(
+        'no-missing-label-refs',
+        ERROR,
+        generateNoMissingLabelRefsOptions(defaultDialect) /** @since 6.0.0 */,
+      ) // 🟢
+      .addRule('no-missing-link-fragments', ERROR) /** @since 6.6.0 */ // 🟢
+      .addRule('no-multiple-h1', ERROR, [{frontmatterTitle: ' /** @since 6.5.0 */'}]) // 🟢
+      .addRule('no-reference-like-urls', ERROR) /** @since 7.3.0 */ // 🟢
+      .addRule('no-reversed-media-syntax', ERROR) /** @since 6.6.0 */ // 🟢
+      .addRule('no-space-in-emphasis', ERROR) /** @since 7.2.0 */ // 🟢
+      .addRule('no-unused-definitions', ERROR) /** @since 7.0.0 */ // 🟢
+      .addRule('require-alt-text', ERROR) /** @since 6.5.0 */ // 🟢
+      .addRule('table-column-count', ERROR, [{checkMissingCells: true} /** @since 6.5.0 */]) // 🟢
+      .enableConfigTesterForPlugin('markdown')
       .addOverrides();
 
     if (Array.isArray(language)) {

@@ -148,6 +148,7 @@
   - 🟢 [`no-reversed-media-syntax`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-reversed-media-syntax.md)
   - 🟢 [`no-unused-definitions`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-unused-definitions.md)
   - 🟢 [`no-space-in-emphasis`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-space-in-emphasis.md)
+  - 🟢 [`no-reference-like-urls`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-reference-like-urls.md)
   - Set `checkMissingCells: true` for [`table-column-count`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/table-column-count.md) rule.
   - Set `checkClosedHeadings: true` for [`no-missing-atx-heading-space`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-atx-heading-space.md) rule.
 - `eslint-plugin-import-x`: [4.11.1 → 4.16.1](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.11.1...v4.15.2)
