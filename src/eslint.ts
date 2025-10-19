@@ -611,7 +611,9 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
           this.context.tests.push(({plugins}) => {
             const commonErrorMessagePrefix = `[config:${styleText('yellow', configName)}] [plugin:${styleText('blue', pluginPrefixToTest)}]`;
 
-            const plugin = plugins[pluginPrefixToTest];
+            const plugin =
+              plugins[pluginPrefixToTest] ||
+              (pluginPrefixToTest === '' && eslintPluginVanillaRules);
             if (!plugin) {
               return `${commonErrorMessagePrefix} Plugin not loaded`;
             }
