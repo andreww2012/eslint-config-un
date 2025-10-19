@@ -52,7 +52,8 @@ export const headerUnConfig: UnConfigFn<'headers'> = (context) => {
 
   configBuilder
     ?.addConfig(['headers', {includeDefaultFilesAndIgnores: true}])
-    .addRule('header-format', ERROR, options ? [options] : [])
+    .addRule('header-format', ERROR, options ? [options] : []) /** @since 0.1.0 */
+    .enableConfigTesterForPlugin('headers')
     .addOverrides();
 
   return {
