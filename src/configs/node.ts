@@ -281,6 +281,7 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
         ? ERROR
         : OFF,
     )
+    .enableConfigTesterForPlugin('node')
     .addOverrides();
 
   return {
