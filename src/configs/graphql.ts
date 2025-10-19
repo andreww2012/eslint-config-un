@@ -257,8 +257,8 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
     .addRule('selection-set-depth', getRuleRequiresOperationsSeverity(ERROR), [{maxDepth: 7}]) // 🔵🖥️
     .addRule('strict-id-in-types', getRuleRequiresSchemaSeverity(ERROR)) // 🟢📃
     .addRule('unique-argument-names', ERROR) // 🔵📦
-    .addRule('unique-directive-names-per-location', ERROR) // 🟢🔵📦
     .addRule('unique-directive-names', ERROR) // 🟢📦
+    .addRule('unique-directive-names-per-location', ERROR) // 🟢🔵📦
     .addRule('unique-enum-value-names', ERROR) // 🟢
     .addRule('unique-field-definition-names', ERROR) // 🟢📦
     .addRule('unique-fragment-name', getRuleRequiresOperationsSeverity(ERROR)) // 🔵🖥️
@@ -270,6 +270,7 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
     .addRule('value-literals-of-correct-type', ERROR) // 🔵📦
     .addRule('variables-are-input-types', ERROR) // 🔵📦
     .addRule('variables-in-allowed-position', ERROR) // 🔵📦
+    .enableConfigTesterForPlugin('graphql')
     .addOverrides();
 
   return {
