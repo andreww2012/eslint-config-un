@@ -56,7 +56,8 @@ export const headerUnConfig: UnConfigFn<'header'> = (context) => {
               {lineEndings: options.lineEndings},
             ]
         : [],
-    )
+    ) /** @since 0.0.1 */
+    .enableConfigTesterForPlugin('header')
     .addOverrides();
 
   return {
