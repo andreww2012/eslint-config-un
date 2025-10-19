@@ -16,8 +16,9 @@ export const noUnsanitizedUnConfig: UnConfigFn<'noUnsanitized'> = (context) => {
 
   configBuilder
     ?.addConfig(['no-unsanitized', {includeDefaultFilesAndIgnores: true}])
-    .addRule('method', ERROR)
-    .addRule('property', ERROR)
+    .addRule('method', ERROR) /** @since 1.1.0 */
+    .addRule('property', ERROR) /** @since 1.1.0 */
+    .enableConfigTesterForPlugin('no-unsanitized')
     .addOverrides();
 
   return {
