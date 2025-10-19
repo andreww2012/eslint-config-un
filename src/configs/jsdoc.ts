@@ -278,34 +278,34 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     .addRule('reject-any-type', OFF) // 🟢 >=58.0.0
     .addRule('reject-function-type', OFF) // 🟢 >=58.0.0
     .addRule('require-asterisk-prefix', ERROR) // 4️⃣
-    .addRule('require-description-complete-sentence', OFF)
     .addRule('require-description', OFF)
+    .addRule('require-description-complete-sentence', OFF)
     .addRule('require-example', OFF) // 3️⃣
     .addRule('require-file-overview', OFF)
     .addRule('require-hyphen-before-param-description', OFF) // 4️⃣
     .addRule('require-jsdoc', OFF) // 🟢3️⃣
     .addRule('require-next-description', OFF) // >=59.0.0
     .addRule('require-next-type', WARNING) // 🟢3️⃣ >=57.0.0
+    .addRule('require-param', ERROR, [{ignoreWhenAllParamsMissing: true}]) // 🟢3️⃣
     .addRule('require-param-description', WARNING) // 🟢3️⃣ (error by default)
     .addRule('require-param-name', ERROR) // 🟢3️⃣
     .addRule('require-param-type', ERROR) // 🟢
-    .addRule('require-param', ERROR, [{ignoreWhenAllParamsMissing: true}]) // 🟢3️⃣
+    .addRule('require-property', ERROR) // 🟢3️⃣
     .addRule('require-property-description', WARNING) // 🟢3️⃣ (error by default)
     .addRule('require-property-name', ERROR) // 🟢3️⃣
     .addRule('require-property-type', ERROR) // 🟢
-    .addRule('require-property', ERROR) // 🟢3️⃣
+    .addRule('require-returns', OFF) // 🟢3️⃣
     .addRule('require-returns-check', ERROR) // 🟢2️⃣
     .addRule('require-returns-description', WARNING) // 🟢3️⃣ (error by default)
     .addRule('require-returns-type', ERROR) // 🟢
-    .addRule('require-returns', OFF) // 🟢3️⃣
     .addRule('require-tags', OFF) // >=59.1.0 (renamed to the actual name in 60.0.0)
     .addRule('require-template', OFF)
     .addRule('require-template-description', OFF) // >=60.5.0
     .addRule('require-throws', OFF)
     .addRule('require-throws-description', OFF) // >=59.0.0
     .addRule('require-throws-type', WARNING) // 🟢3️⃣ >=57.0.0
-    .addRule('require-yields-check', ERROR) // 🟢2️⃣
     .addRule('require-yields', ERROR) // 🟢3️⃣
+    .addRule('require-yields-check', ERROR) // 🟢2️⃣
     .addRule('require-yields-description', OFF) // >=59.0.0
     .addRule('require-yields-type', WARNING) // 🟢3️⃣ >=57.0.0
     .addRule('sort-tags', ERROR)
@@ -315,8 +315,9 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
       {stringQuotes: 'single', methodQuotes: 'single'},
     ]) // >=55.3.0
     .addRule('valid-types', ERROR) // 🟢2️⃣
-    // Deprecated:
+    .markCategory('Deprecated')
     .addRule('check-examples', OFF) // Doesn't work in ESLint 9, deprecated since 59.0.1
+    .enableConfigTesterForPlugin('jsdoc')
     .addOverrides();
 
   const configBuilderTypescript = createConfigBuilder(context, configTypescript, 'jsdoc');
@@ -345,6 +346,9 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     .addRule('require-param-type', OFF) // 🔵(off)
     .addRule('require-property-type', OFF) // 🔵(off)
     .addRule('require-returns-type', OFF) // 🔵(off)
+    .enableConfigTesterForPlugin('jsdoc', {
+      rulesToSkipInConfig: () => true,
+    })
     .addOverrides();
 
   return {
