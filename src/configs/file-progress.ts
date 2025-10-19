@@ -47,7 +47,8 @@ export const fileProgressUnConfig: UnConfigFn<'fileProgress'> = (context) => {
         fileProgress: pluginSettings,
       },
     })
-    .addRule('activate', ERROR) // 🟢
+    .addRule('activate', ERROR) /** @since 1.0.0 */ // 🟢
+    .enableConfigTesterForPlugin('file-progress')
     .addOverrides();
 
   return {
