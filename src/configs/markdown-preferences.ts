@@ -125,9 +125,9 @@ export const markdownPreferencesUnConfig: UnConfigFn<'markdownPreferences'> = as
         }),
       },
     )
-    /* Category: Preference */
-    .addRule('canonical-code-block-language', ERROR) // >=0.9.0
-    .addRule('emoji-notation', OFF) // ⚠️ >=0.13.0
+    .markCategory('Preference')
+    .addRule('canonical-code-block-language', ERROR) /** @since 0.9.0 */
+    .addRule('emoji-notation', OFF) /** @since 0.13.0 */ // ⚠️
     .addRule('heading-casing', enforcedCasingForHeadings == null ? OFF : ERROR, [
       {
         preserveWords: defaultPreserveWords,
@@ -135,10 +135,10 @@ export const markdownPreferencesUnConfig: UnConfigFn<'markdownPreferences'> = as
           style: enforcedCasingForHeadings /* Default: 'Title Case' */,
         }),
       },
-    ]) // >=0.9.0
-    .addRule('ordered-list-marker-start', ERROR) // 💅 >=0.12.0
-    .addRule('prefer-inline-code-words', OFF) // >=0.4.0
-    .addRule('prefer-linked-words', OFF) // >=0.1.0
+    ]) /** @since 0.9.0 */
+    .addRule('ordered-list-marker-start', ERROR) /** @since 0.12.0 */ // 💅
+    .addRule('prefer-inline-code-words', OFF) /** @since 0.4.0 */
+    .addRule('prefer-linked-words', OFF) /** @since 0.1.0 */
     .addRule('table-header-casing', enforcedCasingForTableHeaders == null ? OFF : ERROR, [
       {
         preserveWords: defaultPreserveWords,
@@ -146,53 +146,59 @@ export const markdownPreferencesUnConfig: UnConfigFn<'markdownPreferences'> = as
           style: enforcedCasingForTableHeaders /* Default: 'Title Case' */,
         }),
       },
-    ]) // >=0.14.0
-    /* Category: Notation */
-    .addRule('bullet-list-marker-style', ERROR) // 💅 >=0.18.0
-    .addRule('code-fence-style', ERROR) // 💅 >=0.20.0
-    .addRule('definitions-last', ERROR) // >=0.7.0
-    .addRule('emphasis-delimiters-style', ERROR, [{emphasis: '*' /* Default: '_' */}]) // 💅 >=0.19.0
-    .addRule('hard-linebreak-style', ERROR) // 🟢 >=0.1.0
-    .addRule('level1-heading-style', ERROR) // 💅 >=0.18.0
-    .addRule('level2-heading-style', ERROR) // 💅 >=0.18.0
-    .addRule('link-destination-style', ERROR) // 💅 >=0.22.0
-    .addRule('link-title-style', ERROR, [{style: 'single' /* Default: 'double' */}]) // 💅 >=0.22.0
-    .addRule('no-implicit-block-closing', ERROR) // 🟢⚠️ >=0.28.0
-    .addRule('no-text-backslash-linebreak', ERROR) // 🟢 >=0.2.0
-    .addRule('ordered-list-marker-style', ERROR) // 💅 >=0.18.0
-    .addRule('prefer-autolinks', ERROR) // 🟢 >=0.11.0
-    .addRule('prefer-fenced-code-blocks', ERROR) // 🟢 >=0.11.0
-    .addRule('prefer-link-reference-definitions', ERROR, [{minLinks: 3 /* Default: 2 */}]) // >=0.6.0
-    .addRule('strikethrough-delimiters-style', ERROR) // 💅 >=0.19.0
-    .addRule('thematic-break-character-style', ERROR) // 💅 >=0.17.0
-    /* Category: Whitespace */
-    .addRule('blockquote-marker-alignment', ERROR) // 🟢 >=0.15.0
-    .addRule('code-fence-spacing', ERROR) // 💅 >=0.30.0
-    .addRule('custom-container-marker-spacing', ERROR) // 💅⚠️ >=0.30.0
-    .addRule('indent', ERROR) // 💅 >=0.24.0
-    .addRule('link-bracket-newline', ERROR) // 💅 >=0.22.0
-    .addRule('link-bracket-spacing', ERROR) // 💅 >=0.22.0
-    .addRule('link-paren-newline', ERROR) // 💅 >=0.23.0
-    .addRule('link-paren-spacing', ERROR) // 💅 >=0.23.0
-    .addRule('list-marker-alignment', ERROR) // 🟢 >=0.15.0
-    .addRule('no-multi-spaces', ERROR) // 💅 >=0.21.0
-    .addRule('no-multiple-empty-lines', ERROR) // 💅 >=0.10.0
-    .addRule('no-trailing-spaces', ERROR) // 💅 >=0.3.0
-    .addRule('padded-custom-containers', ERROR) // 💅⚠️ >=0.29.0
-    .addRule('padding-line-between-blocks', ERROR) // 💅⚠️ >=0.16.0
-    .addRule('table-pipe-spacing', ERROR) // 💅 >=0.25.0
-    /* Category: Decorative */
-    .addRule('atx-heading-closing-sequence', ERROR) // 💅 >=0.13.0
-    .addRule('atx-heading-closing-sequence-length', ERROR) // 💅 >=0.13.0
-    .addRule('code-fence-length', ERROR) // 💅 >=0.20.0
-    .addRule('no-laziness-blockquotes', ERROR) // 🟢 >=0.10.0
-    .addRule('ordered-list-marker-sequence', ERROR) // 💅 >=0.12.0
-    .addRule('setext-heading-underline-length', ERROR) // 💅 >=0.17.0
-    .addRule('sort-definitions', OFF) // 💅 >=0.8.0
-    .addRule('table-leading-trailing-pipes', ERROR) // 💅 >=0.25.0
-    .addRule('table-pipe-alignment', ERROR) // 💅 >=0.25.0
-    .addRule('thematic-break-length', ERROR) // 💅 >=0.17.0
-    .addRule('thematic-break-sequence-pattern', ERROR) // 💅 >=0.17.0
+    ]) /** @since 0.14.0 */
+    .markCategory('Notation')
+    .addRule('bullet-list-marker-style', ERROR) /** @since 0.18.0 */ // 💅
+    .addRule('code-fence-style', ERROR) /** @since 0.20.0 */ // 💅
+    .addRule('definitions-last', ERROR) /** @since 0.7.0 */
+    .addRule('emphasis-delimiters-style', ERROR, [
+      {emphasis: '*' /* Default: '_' */},
+    ]) /** @since 0.19.0 */ // 💅
+    .addRule('hard-linebreak-style', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('level1-heading-style', ERROR) /** @since 0.18.0 */ // 💅
+    .addRule('level2-heading-style', ERROR) /** @since 0.18.0 */ // 💅
+    .addRule('link-destination-style', ERROR) /** @since 0.22.0 */ // 💅
+    .addRule('link-title-style', ERROR, [
+      {style: 'single' /* Default: 'double' */},
+    ]) /** @since 0.22.0 */ // 💅
+    .addRule('no-implicit-block-closing', ERROR) /** @since 0.28.0 */ // 🟢⚠️
+    .addRule('no-text-backslash-linebreak', ERROR) /** @since 0.2.0 */ // 🟢
+    .addRule('ordered-list-marker-style', ERROR) /** @since 0.18.0 */ // 💅
+    .addRule('prefer-autolinks', ERROR) /** @since 0.11.0 */ // 🟢
+    .addRule('prefer-fenced-code-blocks', ERROR) /** @since 0.11.0 */ // 🟢
+    .addRule('prefer-link-reference-definitions', ERROR, [
+      {minLinks: 3 /* Default: 2 */},
+    ]) /** @since 0.6.0 */
+    .addRule('strikethrough-delimiters-style', ERROR) /** @since 0.19.0 */ // 💅
+    .addRule('thematic-break-character-style', ERROR) /** @since 0.17.0 */ // 💅
+    .markCategory('Whitespace')
+    .addRule('blockquote-marker-alignment', ERROR) /** @since 0.15.0 */ // 🟢
+    .addRule('code-fence-spacing', ERROR) /** @since 0.30.0 */ // 💅
+    .addRule('custom-container-marker-spacing', ERROR) /** @since 0.30.0 */ // 💅⚠️
+    .addRule('indent', ERROR) /** @since 0.24.0 */ // 💅
+    .addRule('link-bracket-newline', ERROR) /** @since 0.22.0 */ // 💅
+    .addRule('link-bracket-spacing', ERROR) /** @since 0.22.0 */ // 💅
+    .addRule('link-paren-newline', ERROR) /** @since 0.23.0 */ // 💅
+    .addRule('link-paren-spacing', ERROR) /** @since 0.23.0 */ // 💅
+    .addRule('list-marker-alignment', ERROR) /** @since 0.15.0 */ // 🟢
+    .addRule('no-multi-spaces', ERROR) /** @since 0.21.0 */ // 💅
+    .addRule('no-multiple-empty-lines', ERROR) /** @since 0.10.0 */ // 💅
+    .addRule('no-trailing-spaces', ERROR) /** @since 0.3.0 */ // 💅
+    .addRule('padded-custom-containers', ERROR) /** @since 0.29.0 */ // 💅⚠️
+    .addRule('padding-line-between-blocks', ERROR) /** @since 0.16.0 */ // 💅⚠️
+    .addRule('table-pipe-spacing', ERROR) /** @since 0.25.0 */ // 💅
+    .markCategory('Decorative')
+    .addRule('atx-heading-closing-sequence', ERROR) /** @since 0.13.0 */ // 💅
+    .addRule('atx-heading-closing-sequence-length', ERROR) /** @since 0.13.0 */ // 💅
+    .addRule('code-fence-length', ERROR) /** @since 0.20.0 */ // 💅
+    .addRule('no-laziness-blockquotes', ERROR) /** @since 0.10.0 */ // 🟢
+    .addRule('ordered-list-marker-sequence', ERROR) /** @since 0.12.0 */ // 💅
+    .addRule('setext-heading-underline-length', ERROR) /** @since 0.17.0 */ // 💅
+    .addRule('sort-definitions', OFF) /** @since 0.8.0 */ // 💅
+    .addRule('table-leading-trailing-pipes', ERROR) /** @since 0.25.0 */ // 💅
+    .addRule('table-pipe-alignment', ERROR) /** @since 0.25.0 */ // 💅
+    .addRule('thematic-break-length', ERROR) /** @since 0.17.0 */ // 💅
+    .addRule('thematic-break-sequence-pattern', ERROR) /** @since 0.17.0 */ // 💅
     .addOverrides();
 
   return {
