@@ -84,7 +84,6 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('aws-s3-bucket-granted-access', awsRulesSeverity) // [S6265] 🟢 📦 `aws-cdk-lib`
     .addRule('aws-s3-bucket-insecure-http', awsRulesSeverity) // [S6249] 🟢 📦 `aws-cdk-lib`
     .addRule('aws-s3-bucket-public-access', awsRulesSeverity) // [S6281] 🟢 📦 `aws-cdk-lib`
-    .addRule('aws-s3-bucket-server-encryption', OFF) // [S6245] 🔴 📦 `aws-cdk-lib`
     .addRule('aws-s3-bucket-versioning', awsRulesSeverity) // [S6252] 🟢 📦 `aws-cdk-lib`
     .addRule('aws-sagemaker-unencrypted-notebook', awsRulesSeverity) // [S6319] 🟢 📦 `aws-cdk-lib`
     .addRule('aws-sns-unencrypted-topics', awsRulesSeverity) // [S6327] 🟢 📦 `aws-cdk-lib`
@@ -96,7 +95,6 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('bool-param-default', OFF) // [S4798]
     // ⚠️ Prettier
     .addRule('call-argument-line', OFF) // [S1472] 🟢
-    .addRule('certificate-transparency', OFF) // [S5742] 🟢 📦 `helmet` Deprecated
     .addRule('chai-determinate-assertion', testsRulesSeverity) // [S6092] 🟢🧪 📦 `chai`
     // ⚠️ `camelcase`
     .addRule('class-name', OFF) // [S101] 🟢
@@ -109,14 +107,12 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('comment-regex', OFF) // [S124]
     // ⚠️ `regexp/prefer-w`, `regexp/prefer-plus-quantifier`
     .addRule('concise-regex', OFF) // [S6353] 🟢💭🔤
-    .addRule('conditional-indentation', OFF) // [S3973] 🔴
     .addRule('confidential-information-logging', ERROR) // [S5757] 🟢 📦 `signale`
     // ⚠️ `no-new`
     .addRule('constructor-for-side-effects', OFF) // [S1848] 🟢
     .addRule('content-length', ERROR) // [S5693] 🟢 📦 `formidable`, `multer`, `body-parser`
     .addRule('content-security-policy', helmetRulesSeverity) // [S5728] 🟢 📦 `helmet`
     .addRule('cookie-no-httponly', ERROR) // [S3330] 🟢 📦 `cookie-session`, `express-session`, `cookies`, `csurf`
-    .addRule('cookies', OFF) // [S2255] 🔴
     .addRule('cors', ERROR) // [S5122] 🟢 📦 `node:http`, `cors`
     .addRule('csrf', ERROR) // [S4502] 🟢 📦 `csurf`
     .addRule('cyclomatic-complexity', OFF) // [S1541]
@@ -129,15 +125,12 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('disabled-auto-escaping', ERROR) // [S5247] 🟢💭 📦 `mustache`, `handlebars`, `markdown-it`, `marked`, `kramed`
     .addRule('disabled-resource-integrity', ERROR) // [S5725] 🟢💭
     .addRule('disabled-timeout', testsRulesSeverity) // [S6080] 🟢🧪 📦 `chai`
-    .addRule('dns-prefetching', OFF) // [S5743] 🔴
     // ⚠️ `regexp/no-dupe-characters-character-class`
     .addRule('duplicates-in-character-class', OFF) // [S5869] 🟢💭🔤
     .addRule('elseif-without-else', OFF) // [S126]
     // ⚠️ `regexp/no-empty-group` (and also `sonarjs/no-empty-group`), `regexp/no-empty-alternative`, `regexp/no-trivially-nested-quantifier`
     .addRule('empty-string-repetition', OFF) // [S5842] 🟢💭🔤
-    .addRule('encryption', OFF) // [S4787] 🔴
     .addRule('encryption-secure-mode', ERROR) // [S5542] 🟢 📦 `node:crypto`
-    .addRule('enforce-trailing-comma', OFF) // [S3723] 🔴
     // Not disabling because, despite being mostly covered by `regexp/no-useless-dollar-replacements` rule, finds more problems
     .addRule('existing-groups', ERROR) // [S6328] 🟢💭🔤
     .addRule('expression-complexity', OFF) // [S1067]
@@ -291,7 +284,6 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('no-redundant-boolean', ERROR) // [S1125] 🟢
     .addRule('no-redundant-jump', ERROR) // [S3626] 🟢
     .addRule('no-redundant-optional', ERROR) // [S4782] 🟢💭
-    .addRule('no-redundant-parentheses', OFF) // [S1110] 🔴
     .addRule('no-reference-error', OFF) // [S3827]
     .addRule('no-referrer-policy', helmetRulesSeverity) // [S5736] 🟢 📦 `helmet`
     // ⚠️ `no-regex-spaces`, `regexp/prefer-quantifier`
@@ -307,7 +299,6 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('no-skipped-tests', OFF) // [S1607] 🟢🧪 `jasmine`, `jest`, `mocha`, node.js (only patterns are checked, not package imports)
     .addRule('no-small-switch', ERROR) // [S1301] 🟢
     .addRule('no-sonar-comments', OFF) // [S1291]
-    .addRule('no-tab', OFF) // [S105] 🔴
     .addRule('no-table-as-layout', ERROR) // [S5257] 🟢🔵
     // ⚠️ Reports on promise-returning functions marked with `void `
     .addRule('no-try-promise', OFF) // [S4822] 🟢💭
@@ -333,8 +324,6 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('no-useless-react-setstate', ERROR) // [S6443] 🟢 📦 `react`
     // ⚠️ `no-use-before-define`, `block-scoped-var`, `vars-on-top`
     .addRule('no-variable-usage-before-declaration', OFF) // [S1526]
-    // ⚠️ `vue/no-v-html`. Also finds problems in Vue 2 render functions
-    .addRule('no-vue-bypass-sanitization', OFF) // [S6299] 🟢
     .addRule('no-weak-cipher', ERROR) // [S5547] 🟢 📦 `node:crypto`
     .addRule('no-weak-keys', ERROR) // [S4426] 🟢 📦 `node:crypto`
     .addRule('no-wildcard-import', OFF) // [S2208]
@@ -360,7 +349,6 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('prefer-single-boolean-return', WARNING) // [S1126] 🟢
     .addRule('prefer-type-guard', ERROR) // [S4322] 🟢
     .addRule('prefer-while', ERROR) // [S1264] 🟢
-    .addRule('process-argv', OFF) // [S4823] 🔴
     .addRule('production-debug', ERROR) // [S4507] 🟢 📦 `errorhandler`
     // ⚠️ Simply reports on every usage of `Math.random`
     .addRule('pseudo-random', OFF) // [S2245] 🟢
@@ -370,7 +358,6 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     // ⚠️ Sometimes this technique is useful
     .addRule('redundant-type-aliases', OFF) // [S6564] 🟢
     .addRule('regex-complexity', WARNING, [{threshold: 40}]) // [S5843] 🟢💭🔤
-    .addRule('regular-expr', OFF) // [S4784] 🔴🔤
     .addRule('session-regeneration', ERROR) // [S5876] 🟢 📦 `passport`
     .addRule('shorthand-property-grouping', OFF) // [S3499]
     // ⚠️ `regexp/no-useless-character-class`
@@ -379,10 +366,8 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('single-character-alternation', OFF) // [S6035] 🟢💭🔤
     // ⚠️ `regexp/no-super-linear-backtracking`
     .addRule('slow-regex', OFF) // [S5852] 🟢💭🔤
-    .addRule('sockets', OFF) // [S4818] 🔴 📦 `node:net`
     .addRule('sql-queries', ERROR) // [S2077] 🟢 📦 `mysql`, `pg`
     .addRule('stable-tests', testsRulesSeverity) // [S5973] 🟢
-    .addRule('standard-input', OFF) // [S4829] 🔴
     .addRule('stateful-regex', ERROR) // [S6351] 🟢🔤
     .addRule('strict-transport-security', helmetRulesSeverity) // [S5739] 🟢 📦 `helmet`
     .addRule('strings-comparison', WARNING) // [S3003] 💭
@@ -405,18 +390,15 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     .addRule('updated-const-var', OFF) // [S3500] 🟢
     .addRule('updated-loop-counter', WARNING) // [S2310] 🟢
     .addRule('use-type-alias', WARNING) // [S4323] 🟢
-    // ⚠️ `sonarjs/no-ignored-return`
-    .addRule('useless-string-operation', OFF) // [S1154] 🔴💭
     // ⚠️ TypeScript
     .addRule('values-not-convertible-to-numbers', OFF) // [S3758] 💭
     .addRule('variable-name', OFF) // [S117]
     // ⚠️ `no-void`
     .addRule('void-use', OFF) // [S3735] 🟢💭
     .addRule('weak-ssl', ERROR) // [S4423] 🟢 📦 `node:https`, `node:tls`
-    .addRule('web-sql-database', OFF) // [S2817] 🔴💭
     .addRule('x-powered-by', ERROR) // [S5689] 🟢 📦 `express`, `helmet`
     .addRule('xml-parser-xxe', ERROR) // [S2755] 🟢 📦 `libxmljs`
-    .addRule('xpath', OFF) // [S4817] 🔴 📦 `xpath`, `xmldom`
+    .enableConfigTesterForPlugin('sonarjs')
     .addOverrides();
 
   return {
