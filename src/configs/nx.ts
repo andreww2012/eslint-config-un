@@ -54,8 +54,10 @@ export const nxUnConfig: UnConfigFn<'nx'> = async (context) => {
         },
       },
     )
-    .addRule('dependency-checks', ERROR)
-    .addRule('nx-plugin-checks', ERROR)
+    .addRule('dependency-checks', ERROR) /** @since 16.4.0 */
+    .addRule('enforce-module-boundaries', OFF) /** @since 16.0.0 */
+    .addRule('nx-plugin-checks', ERROR) /** @since 16.0.0 */
+    .enableConfigTesterForPlugin('nx')
     .addOverrides();
 
   return {
