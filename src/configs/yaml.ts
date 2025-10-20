@@ -75,49 +75,50 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = (context) => {
         ],
       },
     )
-    /* Category: Base rules */
-    .addRule('block-mapping-colon-indicator-newline', ERROR) // >=1.2.0
-    .addRule('block-mapping-question-indicator-newline', ERROR) // 🟣 >=0.5.0
-    .addRule('block-mapping', ERROR) // 🟣 >=0.1.0
-    .addRule('block-sequence-hyphen-indicator-newline', ERROR) // 🟣 >=0.5.0
-    .addRule('block-sequence', ERROR) // 🟣 >=0.1.0
+    .markCategory('Base rules')
+    .addRule('block-mapping', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('block-mapping-colon-indicator-newline', ERROR) /** @since 1.2.0 */
+    .addRule('block-mapping-question-indicator-newline', ERROR) /** @since 0.5.0 */ // 🟣
+    .addRule('block-sequence', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('block-sequence-hyphen-indicator-newline', ERROR) /** @since 0.5.0 */ // 🟣
     // TODO why reporting here?
     .addRule(
       'file-extension',
       enforceExtension ? ERROR : OFF,
       enforceExtension ? [{extension: enforceExtension}] : [],
-    ) // >=1.2.0
-    .addRule('indent', ERROR) // 🟣 >=0.1.0
+    ) /** @since 1.2.0 */
+    .addRule('indent', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('key-name-casing', optionsResolved.casing == null ? OFF : ERROR, [
       {...optionsResolved.casing, ignores: ['<<', ...(optionsResolved.casing?.ignores || [])]},
-    ]) // >=0.2.0
-    .addRule('no-empty-document', ERROR) // 🟣 >=0.6.0
-    .addRule('no-empty-key', ERROR) // 🟣 >=0.3.0
-    .addRule('no-empty-mapping-value', ERROR) // 🟣 >=0.3.0
-    .addRule('no-empty-sequence-entry', ERROR) // 🟣 >=0.3.0
-    .addRule('no-tab-indent', ERROR) // 🟣 >=0.1.0
-    .addRule('no-trailing-zeros', OFF) // >=1.6.0
+    ]) /** @since 0.2.0 */
+    .addRule('no-empty-document', ERROR) /** @since 0.6.0 */ // 🟣
+    .addRule('no-empty-key', ERROR) /** @since 0.3.0 */ // 🟣
+    .addRule('no-empty-mapping-value', ERROR) /** @since 0.3.0 */ // 🟣
+    .addRule('no-empty-sequence-entry', ERROR) /** @since 0.3.0 */ // 🟣
+    .addRule('no-tab-indent', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-trailing-zeros', OFF) /** @since 1.6.0 */
     // TODO option to ignore if a string is ISO 8601 date?
-    .addRule('plain-scalar', ERROR) // 🟣 >=0.3.0
+    .addRule('plain-scalar', ERROR) /** @since 0.3.0 */ // 🟣
     .addRule('quotes', optionsResolved.quotes === false ? OFF : ERROR, [
       {prefer: optionsResolved.quotes || 'single'},
-    ]) // 🟣 >=0.3.0
-    .addRule('require-string-key', OFF) // >=0.3.0
-    .addRule('sort-keys', OFF) // >=0.3.0
-    .addRule('sort-sequence-values', OFF) // >=0.14.0
-    .addRule('vue-custom-block/no-parsing-error', ERROR) // >=0.2.0
-    /* Category: Extension rules */
-    .addRule('flow-mapping-curly-newline', ERROR) // 🟣 >=0.1.0
-    .addRule('flow-mapping-curly-spacing', ERROR) // 🟣 >=0.1.0
-    .addRule('flow-sequence-bracket-newline', ERROR) // 🟣 >=0.1.0
-    .addRule('flow-sequence-bracket-spacing', ERROR) // 🟣 >=0.1.0
-    .addRule('key-spacing', ERROR) // 🟣 >=0.3.0
-    .addRule('no-irregular-whitespace', ERROR) // 🟣 >=0.1.0
-    .addRule('no-multiple-empty-lines', ERROR) // >=0.12.0
-    .addRule('spaced-comment', ERROR) // 🟣 >=0.1.0
+    ]) /** @since 0.3.0 */ // 🟣
+    .addRule('require-string-key', OFF) /** @since 0.3.0 */
+    .addRule('sort-keys', OFF) /** @since 0.3.0 */
+    .addRule('sort-sequence-values', OFF) /** @since 0.14.0 */
+    .addRule('vue-custom-block/no-parsing-error', ERROR) /** @since 0.2.0 */
+    .markCategory('Extension rules')
+    .addRule('flow-mapping-curly-newline', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('flow-mapping-curly-spacing', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('flow-sequence-bracket-newline', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('flow-sequence-bracket-spacing', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('key-spacing', ERROR) /** @since 0.3.0 */ // 🟣
+    .addRule('no-irregular-whitespace', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('no-multiple-empty-lines', ERROR) /** @since 0.12.0 */
+    .addRule('spaced-comment', ERROR) /** @since 0.1.0 */ // 🟣
     .disableAnyRule('', 'no-irregular-whitespace') // 🟣
     .disableAnyRule('', 'no-unused-vars') // 🟣
     .disableAnyRule('', 'spaced-comment') // 🟣
+    .enableConfigTesterForPlugin('yml')
     .addOverrides();
 
   if (context.usedPackageManager?.name === 'pnpm') {
