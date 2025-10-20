@@ -213,26 +213,27 @@ export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
         }),
       },
     )
-    .addRule('sort-array-includes', OFF) // >=0.5.0
-    .addRule('sort-classes', OFF) // >=0.11.0
-    .addRule('sort-decorators', OFF) // >=4.0.0
-    .addRule('sort-enums', OFF) // >=0.8.0
-    .addRule('sort-exports', OFF) // >=1.2.0
-    .addRule('sort-heritage-clauses', OFF) // >=4.0.0
-    .addRule('sort-imports', OFF) // >=0.9.0
-    .addRule('sort-interfaces', OFF) // >=0.1.0
-    .addRule('sort-intersection-types', OFF) // >=2.9.0
-    .addRule('sort-jsx-props', OFF) // >=0.2.0
-    .addRule('sort-maps', OFF) // >=0.5.0
-    .addRule('sort-modules', OFF) // >=4.0.0
-    .addRule('sort-named-exports', OFF) // >=0.4.0
-    .addRule('sort-named-imports', OFF) // >=0.2.0
-    .addRule('sort-object-types', OFF) // >=0.11.0
-    .addRule('sort-objects', OFF) // >=0.6.0
-    .addRule('sort-sets', OFF) // >=3.4.0
-    .addRule('sort-switch-case', OFF) // >=3.0.0
-    .addRule('sort-union-types', OFF) // >=0.4.0
-    .addRule('sort-variable-declarations', OFF) // >=3.0.0
+    .addRule('sort-array-includes', OFF) /** @since 0.5.0 */
+    .addRule('sort-classes', OFF) /** @since 0.11.0 */
+    .addRule('sort-decorators', OFF) /** @since 4.0.0 */
+    .addRule('sort-enums', OFF) /** @since 0.8.0 */
+    .addRule('sort-exports', OFF) /** @since 1.2.0 */
+    .addRule('sort-heritage-clauses', OFF) /** @since 4.0.0 */
+    .addRule('sort-imports', OFF) /** @since 0.9.0 */
+    .addRule('sort-interfaces', OFF) /** @since 0.1.0 */
+    .addRule('sort-intersection-types', OFF) /** @since 2.9.0 */
+    .addRule('sort-jsx-props', OFF) /** @since 0.2.0 */
+    .addRule('sort-maps', OFF) /** @since 0.5.0 */
+    .addRule('sort-modules', OFF) /** @since 4.0.0 */
+    .addRule('sort-named-exports', OFF) /** @since 0.4.0 */
+    .addRule('sort-named-imports', OFF) /** @since 0.2.0 */
+    .addRule('sort-object-types', OFF) /** @since 0.11.0 */
+    .addRule('sort-objects', OFF) /** @since 0.6.0 */
+    .addRule('sort-sets', OFF) /** @since 3.4.0 */
+    .addRule('sort-switch-case', OFF) /** @since 3.0.0 */
+    .addRule('sort-union-types', OFF) /** @since 0.4.0 */
+    .addRule('sort-variable-declarations', OFF) /** @since 3.0.0 */
+    .enableConfigTesterForPlugin('perfectionist')
     .addOverrides();
 
   const subConfigs = (
