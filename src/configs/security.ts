@@ -16,20 +16,21 @@ export const securityUnConfig: UnConfigFn<'security'> = (context) => {
 
   configBuilder
     ?.addConfig(['security', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
-    .addRule('detect-bidi-characters', ERROR) // 🟡
-    .addRule('detect-buffer-noassert', ERROR) // 🟡
-    .addRule('detect-child-process', WARNING) // 🟡
-    .addRule('detect-disable-mustache-escape', ERROR) // 🟡
-    .addRule('detect-eval-with-expression', ERROR) // 🟡
-    .addRule('detect-new-buffer', ERROR) // 🟡
-    .addRule('detect-no-csrf-before-method-override', WARNING) // 🟡
-    .addRule('detect-non-literal-fs-filename', OFF) // 🟡
-    .addRule('detect-non-literal-regexp', OFF) // 🟡
-    .addRule('detect-non-literal-require', OFF) // 🟡
-    .addRule('detect-object-injection', OFF) // 🟡
-    .addRule('detect-possible-timing-attacks', OFF) // 🟡
-    .addRule('detect-pseudoRandomBytes', WARNING) // 🟡
-    .addRule('detect-unsafe-regex', WARNING) // 🟡
+    .addRule('detect-bidi-characters', ERROR) /** @since 1.6.0 */ // 🟡
+    .addRule('detect-buffer-noassert', ERROR) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-child-process', WARNING) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-disable-mustache-escape', ERROR) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-eval-with-expression', ERROR) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-new-buffer', ERROR) /** @since 1.1.0 */ // 🟡
+    .addRule('detect-no-csrf-before-method-override', WARNING) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-non-literal-fs-filename', OFF) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-non-literal-regexp', OFF) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-non-literal-require', OFF) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-object-injection', OFF) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-possible-timing-attacks', OFF) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-pseudoRandomBytes', WARNING) /** @since 1.0.0 */ // 🟡
+    .addRule('detect-unsafe-regex', WARNING) /** @since 1.0.0 */ // 🟡
+    .enableConfigTesterForPlugin('security')
     .addOverrides();
 
   return {
