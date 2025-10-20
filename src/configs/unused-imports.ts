@@ -4,6 +4,7 @@ import {
   type RulesRecordPartial,
   type UnConfigOptions,
   createConfigBuilder,
+  type RuleNamesForPlugin,
 } from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
@@ -39,7 +40,11 @@ export const unusedImportsUnConfig: UnConfigFn<'unusedImports'> = (context) => {
 
   configBuilderNoUnusedImports
     ?.addConfig(['unused-imports/no-unused-imports', {includeDefaultFilesAndIgnores: true}])
-    .addRule('no-unused-imports', ERROR)
+    .addRule('no-unused-imports', ERROR) /** @since 0.0.2 */
+    .enableConfigTesterForPlugin('unused-imports', {
+      rulesToSkipInConfig: (ruleName) =>
+        ruleName === ('no-unused-vars' satisfies RuleNamesForPlugin<'unused-imports'>),
+    })
     .addOverrides();
 
   const configBuilderNoUnusedVars = createConfigBuilder(
@@ -53,10 +58,19 @@ export const unusedImportsUnConfig: UnConfigFn<'unusedImports'> = (context) => {
 
   configBuilderNoUnusedVars
     ?.addConfig(['unused-imports/no-unused-vars', {includeDefaultFilesAndIgnores: true}])
+    .addRule(
+      'no-unused-vars',
+      ERROR,
+      ruleOptions === undefined ? [] : [ruleOptions],
+    ) /** @since 0.0.2 */
     .disableAnyRule('', 'no-unused-vars')
     .disableAnyRule('sonarjs', 'no-unused-vars')
     .disableAnyRule('ts', 'no-unused-vars')
-    .addRule('no-unused-vars', ERROR, ruleOptions === undefined ? [] : [ruleOptions]);
+    .enableConfigTesterForPlugin('unused-imports', {
+      rulesToSkipInConfig: (ruleName) =>
+        ruleName === ('no-unused-imports' satisfies RuleNamesForPlugin<'unused-imports'>),
+    })
+    .addOverrides();
 
   return {
     configs: [configBuilderNoUnusedImports, configBuilderNoUnusedVars],
