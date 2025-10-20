@@ -1,5 +1,10 @@
 import {ERROR, OFF} from '../constants';
-import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from '../eslint';
+import {
+  type RulesRecordPartial,
+  type UnConfigOptions,
+  createConfigBuilder,
+  type RuleNamesForPlugin,
+} from '../eslint';
 import type {PickKeysStartingWith} from '../types';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
@@ -54,6 +59,12 @@ export interface PnpmEslintConfigOptions {
     | UnConfigOptions<PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/yaml-'>>;
 }
 
+const PNPM_YAML_RULES = new Set<string>([
+  'yaml-no-duplicate-catalog-item',
+  'yaml-no-unused-catalog-item',
+  'yaml-valid-packages',
+] satisfies RuleNamesForPlugin<'pnpm'>[]);
+
 export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
   const jsoncEslintParser = await import('jsonc-eslint-parser');
 
@@ -92,9 +103,18 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
         },
       },
     )
-    .addRule('json-enforce-catalog', enforceCatalog ? ERROR : OFF)
-    .addRule('json-prefer-workspace-settings', preferSettingsInPnpmWorkspaceYaml ? ERROR : OFF)
-    .addRule('json-valid-catalog', ERROR)
+    .addRule(
+      'json-enforce-catalog',
+      enforceCatalog ? ERROR : OFF,
+    ) /** @since 0.1.0 */ /** @aka enforce-catalog */
+    .addRule(
+      'json-prefer-workspace-settings',
+      preferSettingsInPnpmWorkspaceYaml ? ERROR : OFF,
+    ) /** @since 0.2.0 */ /** @aka prefer-workspace-settings */
+    .addRule('json-valid-catalog', ERROR) /** @since 0.1.0 */ /** @aka valid-catalog */
+    .enableConfigTesterForPlugin('pnpm', {
+      rulesToSkipInConfig: (ruleName) => PNPM_YAML_RULES.has(ruleName),
+    })
     .addOverrides();
 
   const configBuilderPnpmWorkspace = createConfigBuilder(context, configPnpmWorkspace, 'pnpm');
@@ -107,9 +127,12 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
         parser: 'yaml-eslint-parser',
       },
     ])
-    .addRule('yaml-no-duplicate-catalog-item', ERROR)
-    .addRule('yaml-no-unused-catalog-item', ERROR)
-    .addRule('yaml-valid-packages', ERROR) // >=1.2.0
+    .addRule('yaml-no-duplicate-catalog-item', ERROR) /** @since 0.3.0 */
+    .addRule('yaml-no-unused-catalog-item', ERROR) /** @since 0.3.0 */
+    .addRule('yaml-valid-packages', ERROR) /** @since 1.2.0 */
+    .enableConfigTesterForPlugin('pnpm', {
+      rulesToSkipInConfig: (ruleName) => !PNPM_YAML_RULES.has(ruleName),
+    })
     .addOverrides();
 
   return {
