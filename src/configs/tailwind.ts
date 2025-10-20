@@ -69,14 +69,15 @@ export const tailwindUnConfig: UnConfigFn<'tailwind'> = (context) => {
         },
       }),
     })
-    .addRule('classnames-order', WARNING) // 🟡
-    .addRule('enforces-negative-arbitrary-values', WARNING) // 🟡
-    .addRule('enforces-shorthand', WARNING) // 🟡
-    .addRule('migration-from-tailwind-2', WARNING) // 🟡
-    .addRule('no-arbitrary-value', OFF)
-    .addRule('no-contradicting-classname', ERROR) // 🟢
-    .addRule('no-custom-classname', OFF) // 🟡
-    .addRule('no-unnecessary-arbitrary-value', WARNING) // 🟡
+    .addRule('classnames-order', WARNING) /** @since 1.0.1 */ // 🟡
+    .addRule('enforces-negative-arbitrary-values', WARNING) /** @since 3.4.0 */ // 🟡
+    .addRule('enforces-shorthand', WARNING) /** @since 3.1.0 */ // 🟡
+    .addRule('migration-from-tailwind-2', WARNING) /** @since 3.0.0 */ // 🟡
+    .addRule('no-arbitrary-value', OFF) /** @since 3.2.0 */
+    .addRule('no-contradicting-classname', ERROR) /** @since 1.2.0 */ // 🟢
+    .addRule('no-custom-classname', OFF) /** @since 1.1.0 */ // 🟡
+    .addRule('no-unnecessary-arbitrary-value', WARNING) /** @since 3.15.0 */ // 🟡
+    .enableConfigTesterForPlugin('tailwindcss')
     .addOverrides();
 
   return {
