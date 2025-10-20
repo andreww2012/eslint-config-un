@@ -487,6 +487,37 @@ const NEXT_EXPORTS: readonly string[] = [
   'viewport', // https://nextjs.org/docs/app/api-reference/functions/generate-viewport
 ];
 
+const REACT_ORIGINAL_DOM_RULES = new Set<string>([
+  'button-has-type',
+  'checked-requires-onchange-or-readonly',
+  'forbid-dom-props',
+  'iframe-missing-sandbox',
+  'jsx-no-script-url',
+  'jsx-no-target-blank',
+  'no-invalid-html-attribute',
+  'no-danger',
+  'no-danger-with-children',
+  'no-find-dom-node',
+  'no-is-mounted',
+  'no-namespace',
+  'no-render-return-value',
+  'no-unknown-property',
+  'void-dom-elements-no-children',
+] satisfies RuleNamesForPlugin<'react'>[]);
+
+const REACT_X_TYPE_AWARE_RULES = new Set<string>([
+  'no-leaked-conditional-rendering',
+  'no-unused-props',
+  'prefer-read-only-props',
+] satisfies RuleNamesForPlugin<'@eslint-react'>[]);
+
+const REACT_X_HOOKS_RULES = new Set<string>([
+  'no-unnecessary-use-callback',
+  'no-unnecessary-use-memo',
+  'no-unnecessary-use-prefix',
+  'prefer-use-state-lazy-initialization',
+] satisfies RuleNamesForPlugin<'@eslint-react'>[]);
+
 const DEFAULT_FILES = [GLOB_JS_TS_X];
 
 export const reactUnConfig: UnConfigFn<
@@ -689,8 +720,8 @@ export const reactUnConfig: UnConfigFn<
       shorthandFragment === 'prefer-error' || shorthandFragment === 'prefer' ? 'syntax' : 'element',
     ])
     .addRule('jsx-handler-names', OFF)
-    .addRule('jsx-indent-props', OFF) // 🟠
     .addRule('jsx-indent', OFF) // 🟠
+    .addRule('jsx-indent-props', OFF) // 🟠
     .addRule('jsx-key', getDoubleRuleSeverity(NO_DUPLICATE_OR_MISSING_KEY_SEVERITY, true), [
       {
         checkFragmentShorthand: true,
@@ -820,6 +851,9 @@ export const reactUnConfig: UnConfigFn<
     .addRule('state-in-constructor', ERROR, ['never'])
     .addRule('static-property-placement', ERROR)
     .addRule('style-prop-object', OFF)
+    .enableConfigTesterForPlugin('react', {
+      rulesToSkipInConfig: (ruleName) => REACT_ORIGINAL_DOM_RULES.has(ruleName),
+    })
     .addOverrides();
 
   const configBuilderAllowDefaultExportsInJsxFiles = createConfigBuilder(
@@ -838,7 +872,7 @@ export const reactUnConfig: UnConfigFn<
     .disableAnyRule('import', 'no-default-export')
     .addOverrides();
 
-  const configBuilderHooks = createConfigBuilder(context, configHooks, null);
+  const configBuilderHooks = createConfigBuilder(context, configHooks, 'react-hooks');
   const configHooksOptions = typeof configHooks === 'object' ? configHooks : {};
   const {enableReactCompilerRules = true} = configHooksOptions;
 
@@ -869,36 +903,36 @@ export const reactUnConfig: UnConfigFn<
       },
     )
     // Severity of react compiler rules correspond to the recommended ones from https://github.com/facebook/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L715
-    .addAnyRule('react-hooks', 'automatic-effect-dependencies', reactCompilerRulesSeverity) // >=6.1.0
-    .addAnyRule('react-hooks', 'capitalized-calls', reactCompilerRulesSeverity) // >=6.1.0
-    .addAnyRule('react-hooks', 'component-hook-factories', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'config', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'error-boundaries', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'exhaustive-deps', ERROR) // 🟡
-    .addAnyRule('react-hooks', 'fbt', reactCompilerRulesSeverity) // >=6.1.0
-    .addAnyRule('react-hooks', 'fire', reactCompilerRulesSeverity) // >=6.1.0
-    .addAnyRule('react-hooks', 'gating', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'globals', reactCompilerRulesSeverity) // 🟢 >=6.1.0
+    .addRule('automatic-effect-dependencies', reactCompilerRulesSeverity) /** @since 6.1.0 */
+    .addRule('capitalized-calls', reactCompilerRulesSeverity) /** @since 6.1.0 */
+    .addRule('component-hook-factories', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('config', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('error-boundaries', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('exhaustive-deps', ERROR) // 🟡
+    .addRule('fbt', reactCompilerRulesSeverity) /** @since 6.1.0 */
+    .addRule('fire', reactCompilerRulesSeverity) /** @since 6.1.0 */
+    .addRule('gating', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('globals', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     // Almost the same as `rules-of-hooks`, see https://github.com/facebook/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L840
-    .addAnyRule('react-hooks', 'hooks', OFF) // >=6.1.0
-    .addAnyRule('react-hooks', 'immutability', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'incompatible-library', reactCompilerRulesSeverity) // 🟡 >=6.1.0
-    .addAnyRule('react-hooks', 'invariant', reactCompilerRulesSeverity) // >=6.1.0
-    .addAnyRule('react-hooks', 'memoized-effect-dependencies', reactCompilerRulesSeverity) // >=6.1.0
-    .addAnyRule('react-hooks', 'no-deriving-state-in-effects', reactCompilerRulesSeverity) // >=6.1.0
-    .addAnyRule('react-hooks', 'preserve-manual-memoization', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'purity', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'refs', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'rule-suppression', reactCompilerRulesSeverity) // >=6.1.0
-    .addAnyRule('react-hooks', 'rules-of-hooks', ERROR) // 🟢
-    .addAnyRule('react-hooks', 'set-state-in-effect', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'set-state-in-render', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'static-components', reactCompilerRulesSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'syntax', reactCompilerRulesSeverity) // >=6.1.0
-    .addAnyRule('react-hooks', 'todo', OFF) // >=6.1.0
-    .addAnyRule('react-hooks', 'unsupported-syntax', reactCompilerRulesWarnSeverity) // 🟡 >=6.1.0
-    .addAnyRule('react-hooks', 'use-memo', reactCompilerRulesWarnSeverity) // 🟢 >=6.1.0
-    .addAnyRule('react-hooks', 'void-use-memo', reactCompilerRulesSeverity) // 🟣 >=7.0.0
+    .addRule('hooks', OFF) /** @since 6.1.0 */
+    .addRule('immutability', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('incompatible-library', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟡
+    .addRule('invariant', reactCompilerRulesSeverity) /** @since 6.1.0 */
+    .addRule('memoized-effect-dependencies', reactCompilerRulesSeverity) /** @since 6.1.0 */
+    .addRule('no-deriving-state-in-effects', reactCompilerRulesSeverity) /** @since 6.1.0 */
+    .addRule('preserve-manual-memoization', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('purity', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('refs', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('rule-suppression', reactCompilerRulesSeverity) /** @since 6.1.0 */
+    .addRule('rules-of-hooks', ERROR) // 🟢
+    .addRule('set-state-in-effect', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('set-state-in-render', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('static-components', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('syntax', reactCompilerRulesSeverity) /** @since 6.1.0 */
+    .addRule('todo', OFF) /** @since 6.1.0 */
+    .addRule('unsupported-syntax', reactCompilerRulesWarnSeverity) /** @since 6.1.0 */ // 🟡
+    .addRule('use-memo', reactCompilerRulesWarnSeverity) /** @since 6.1.0 */ // 🟢
+    .addRule('void-use-memo', reactCompilerRulesSeverity) /** @since 7.0.0 */ // 🟣
     .addAnyRule(
       '@eslint-react/hooks-extra',
       'no-direct-set-state-in-use-effect',
@@ -908,11 +942,12 @@ export const reactUnConfig: UnConfigFn<
       '@eslint-react/hooks-extra',
       'no-direct-set-state-in-use-effect',
       getXRuleSeverity(WARNING),
-    ) // >=2.0.0 (renamed from `no-direct-set-state-in-use-layout-effect`)
+    ) /** @since 2.0.0 */ /** @aka no-direct-set-state-in-use-layout-effect */
     .addAnyRule('@eslint-react', 'no-unnecessary-use-callback', getXRuleSeverity(ERROR))
     .addAnyRule('@eslint-react', 'no-unnecessary-use-memo', getXRuleSeverity(ERROR))
     .addAnyRule('@eslint-react', 'no-unnecessary-use-prefix', getXRuleSeverity(OFF)) // 🟡
     .addAnyRule('@eslint-react', 'prefer-use-state-lazy-initialization', getXRuleSeverity(WARNING)) // 🟡
+    .enableConfigTesterForPlugin('react-hooks')
     .addOverrides();
 
   const {
@@ -938,11 +973,21 @@ export const reactUnConfig: UnConfigFn<
         ignoresFallback: parentConfigIgnores,
       },
     ])
-    // === X rules ===
+    .markCategory('X')
     .addRule('jsx-key-before-spread', ERROR) // 🟡
+    .addRule(
+      'jsx-no-comment-textnodes',
+      getDoubleRuleSeverity(NO_COMMENT_TEXTNODES_SEVERITY, true),
+    ) /** @since 2.0.0 */ /** @aka no-comment-textnodes */ // 🟡 🔄️`jsx-no-comment-textnodes`
     .addRule('jsx-no-duplicate-props', getDoubleRuleSeverity(JSX_NO_DUPLICATE_PROPS_SEVERITY, true)) // 🟡 🔄️
-    .addRule('jsx-no-iife', OFF) // >=1.51.0
+    .addRule('jsx-no-iife', OFF) /** @since 1.51.0 */
     .addRule('jsx-no-undef', getDoubleRuleSeverity(JSX_NO_UNDEF_SEVERITY, true)) // 🔄️
+    .addRule('jsx-shorthand-boolean', getDoubleRuleSeverity(booleanShorthandSeverity, true), [
+      shorthandBoolean === 'prefer-error' || shorthandBoolean === 'prefer' ? 1 : -1,
+    ]) /** @since 2.0.0 */ // 🔄️`jsx-boolean-value`
+    .addRule('jsx-shorthand-fragment', getDoubleRuleSeverity(fragmentShorthandSeverity, true), [
+      shorthandFragment === 'prefer-error' || shorthandFragment === 'prefer' ? 1 : -1,
+    ]) /** @since 2.0.0 */ // 🔄️`jsx-fragments`
     // "This rule does nothing when using the New JSX Transform or if the `no-unused-vars` rule is not enabled."
     .addRule('jsx-uses-react', getDoubleRuleSeverity(JSX_USES_REACT_SEVERITY, true)) // 🟡 🔄️
     // "This rule only has an effect when the `no-unused-vars` rule is enabled."
@@ -960,7 +1005,6 @@ export const reactUnConfig: UnConfigFn<
     .addRule('no-children-to-array', getSeverity(noLegacyApis.Children)) // 🟡
     .addRule('no-class-component', getSeverity(noLegacyApis.classComponent ?? 'warn'))
     .addRule('no-clone-element', getSeverity(noLegacyApis.cloneElement)) // 🟡
-    .addRule('jsx-no-comment-textnodes', getDoubleRuleSeverity(NO_COMMENT_TEXTNODES_SEVERITY, true)) // >=2.0.0 (renamed from `no-comment-textnodes`) 🟡 🔄️`jsx-no-comment-textnodes`
     .addRule('no-component-will-mount', getSeverity(noLegacyApis.componentWillMount)) // 🟢
     .addRule('no-component-will-receive-props', getSeverity(noLegacyApis.componentWillReceiveProps)) // 🟢
     .addRule('no-component-will-update', getSeverity(noLegacyApis.componentWillUpdate)) // 🟢
@@ -974,7 +1018,7 @@ export const reactUnConfig: UnConfigFn<
     ) // 🟢 🔄️
     .addRule('no-duplicate-key', getDoubleRuleSeverity(NO_DUPLICATE_OR_MISSING_KEY_SEVERITY, true)) // 🟢 🔄️`jsx-key` (`warnOnDuplicates` option)
     // By default, this rule forbids snake_case props (props containing underscores)
-    .addRule('no-forbidden-props', WARNING) // >=2.0.0 🟡
+    .addRule('no-forbidden-props', WARNING) /** @since 2.0.0 */ // 🟡
     // "In React 19, forwardRef is no longer necessary. Pass ref as a prop instead."
     .addRule('no-forward-ref', getSeverity(noLegacyApis.forwardRef)) // 🟡 🔢19.0.0
     .addRule('no-implicit-key', WARNING) // 🟡
@@ -1012,7 +1056,7 @@ export const reactUnConfig: UnConfigFn<
       getDoubleRuleSeverity(NO_SET_STATE_IN_COMPONENT_WILL_UPDATE_SEVERITY, true),
     ) // 🟡 🔄️`no-will-update-set-state`
     .addRule('no-string-refs', getDoubleRuleSeverity(NO_STRING_REFS_SEVERITY, true)) // 🟢 🔄️
-    .addRule('no-unnecessary-key', ERROR) // >=20.0.0
+    .addRule('no-unnecessary-key', ERROR) /** @since 20.0.0 */
     .addRule(
       'no-unsafe-component-will-mount',
       getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, true),
@@ -1046,14 +1090,8 @@ export const reactUnConfig: UnConfigFn<
       getDoubleRuleSeverity(PREFER_DESTRUCTURING_ASSIGNMENT_SEVERITY, true),
     ) // 🔄️`destructuring-assignment`
     // TODO why?
-    .addRule('prefer-namespace-import', OFF) // >=2.0.0 (renamed from `prefer-namespace-import`)
-    .addRule('jsx-shorthand-boolean', getDoubleRuleSeverity(booleanShorthandSeverity, true), [
-      shorthandBoolean === 'prefer-error' || shorthandBoolean === 'prefer' ? 1 : -1,
-    ]) // >=2.0.0 🔄️`jsx-boolean-value`
-    .addRule('jsx-shorthand-fragment', getDoubleRuleSeverity(fragmentShorthandSeverity, true), [
-      shorthandFragment === 'prefer-error' || shorthandFragment === 'prefer' ? 1 : -1,
-    ]) // >=2.0.0 🔄️`jsx-fragments`
-    // === Naming Convention rules ===
+    .addRule('prefer-namespace-import', OFF) /** @since 2.0.0 */ /** @aka prefer-namespace-import */
+    .markCategory('Naming Convention')
     .addAnyRule(
       '@eslint-react/naming-convention',
       'component-name',
@@ -1072,12 +1110,16 @@ export const reactUnConfig: UnConfigFn<
       'use-state',
       getDoubleRuleSeverity(USE_STATE_SEVERITY, true),
     ) // 🔄️`hook-use-state`
-    // === Debug rules ===
+    .markCategory('Debug')
     .addAnyRule('@eslint-react/debug', 'class-component', OFF)
     .addAnyRule('@eslint-react/debug', 'function-component', OFF)
     .addAnyRule('@eslint-react/debug', 'hook', OFF)
     .addAnyRule('@eslint-react/debug', 'is-from-react', OFF)
     .addAnyRule('@eslint-react/debug', 'jsx', OFF)
+    .enableConfigTesterForPlugin('@eslint-react', {
+      rulesToSkipInConfig: (ruleName) =>
+        REACT_X_TYPE_AWARE_RULES.has(ruleName) || REACT_X_HOOKS_RULES.has(ruleName),
+    })
     .addOverrides();
 
   const configBuilderReactXTypeAware = createConfigBuilder(
@@ -1098,8 +1140,11 @@ export const reactUnConfig: UnConfigFn<
       'no-leaked-conditional-rendering',
       getDoubleRuleSeverity(NO_LEAKED_CONDITIONAL_RENDERING_SEVERITY, true),
     ) // 🟡 🔄️`jsx-no-leaked-render` (worse) 💭
-    .addRule('no-unused-props', WARNING) // >=20.0.0 💭
+    .addRule('no-unused-props', WARNING) /** @since 20.0.0 */ // 💭
     .addRule('prefer-read-only-props', getDoubleRuleSeverity(PREFER_READ_ONLY_PROPS_SEVERITY, true)) // 🔄️ 💭
+    .enableConfigTesterForPlugin('@eslint-react', {
+      rulesToSkipInConfig: (ruleName) => !REACT_X_TYPE_AWARE_RULES.has(ruleName),
+    })
     .addOverrides();
 
   const configBuilderDom = createConfigBuilder(context, configDom, null);
@@ -1157,19 +1202,19 @@ export const reactUnConfig: UnConfigFn<
     .addAnyRule(
       ...getDoubleRuleName('no-string-style-prop', 'style-prop-object'),
       getDoubleRuleSeverity(OFF),
-    ) // >=20.0.0 🟢 🔄️`style-prop-object`
+    ) /** @since 20.0.0 */ // 🟢 🔄️`style-prop-object`
     .addAnyRule(
       ...getDoubleRuleName('no-void-elements-with-children', 'void-dom-elements-no-children'),
       getDoubleRuleSeverity(ERROR),
     ) // 🟢 🔄️`void-dom-elements-no-children`
     // TODO why?
-    .addAnyRule('@eslint-react/dom', 'prefer-namespace-import', OFF) // >=2.0.0
-    // === Web API rules ===
+    .addAnyRule('@eslint-react/dom', 'prefer-namespace-import', OFF) /** @since 2.0.0 */
+    .markCategory('Web API')
     .addAnyRule('@eslint-react/web-api', 'no-leaked-event-listener', getXRuleSeverity(ERROR)) // 🟡
     .addAnyRule('@eslint-react/web-api', 'no-leaked-interval', getXRuleSeverity(ERROR)) // 🟡
     .addAnyRule('@eslint-react/web-api', 'no-leaked-resize-observer', getXRuleSeverity(ERROR)) // 🟡
     .addAnyRule('@eslint-react/web-api', 'no-leaked-timeout', getXRuleSeverity(ERROR)) // 🟡
-    // === eslint-plugin-react DOM rules ===
+    .markCategory('DOM (eslint-plugin-react)')
     .addAnyRule('react', 'checked-requires-onchange-or-readonly', ERROR, [
       {ignoreMissingProperties: true},
     ])
@@ -1205,6 +1250,7 @@ export const reactUnConfig: UnConfigFn<
         ...configReactRefreshOptions.options,
       },
     ])
+    .enableConfigTesterForPlugin('react-refresh')
     .addOverrides();
 
   const configBuilderYouMightNotNeedAnEffect = createConfigBuilder(
@@ -1221,16 +1267,17 @@ export const reactUnConfig: UnConfigFn<
         ignoresFallback: parentConfigIgnores,
       },
     ])
-    .addRule('no-adjust-state-on-prop-change', ERROR) // 🟡 >=0.5.0 (renamed, original rules added in 0.4.5)
-    .addRule('no-chain-state-updates', ERROR) // 🟡 >=0.3.0
-    .addRule('no-derived-state', ERROR) // 🟡 >=0.3.0
-    .addRule('no-empty-effect', ERROR) // 🟡 >=0.3.0
-    .addRule('no-event-handler', ERROR) // 🟡 >=0.3.0
-    .addRule('no-initialize-state', ERROR) // 🟡 >=0.3.0
-    .addRule('no-manage-parent', ERROR) // 🟡 >=0.3.1
-    .addRule('no-pass-data-to-parent', ERROR) // 🟡 >=0.4.0
-    .addRule('no-pass-live-state-to-parent', ERROR) // 🟡 >=0.3.0
-    .addRule('no-reset-all-state-on-prop-change', ERROR) // 🟡 >=0.5.0 (renamed, original rules added in 0.3.0)
+    .addRule('no-adjust-state-on-prop-change', ERROR) /** @since 0.5.0 */ // 🟡 (renamed, original rules added in 0.4.5)
+    .addRule('no-chain-state-updates', ERROR) /** @since 0.3.0 */ // 🟡
+    .addRule('no-derived-state', ERROR) /** @since 0.3.0 */ // 🟡
+    .addRule('no-empty-effect', ERROR) /** @since 0.3.0 */ // 🟡
+    .addRule('no-event-handler', ERROR) /** @since 0.3.0 */ // 🟡
+    .addRule('no-initialize-state', ERROR) /** @since 0.3.0 */ // 🟡
+    .addRule('no-manage-parent', ERROR) /** @since 0.3.1 */ // 🟡
+    .addRule('no-pass-data-to-parent', ERROR) /** @since 0.4.0 */ // 🟡
+    .addRule('no-pass-live-state-to-parent', ERROR) /** @since 0.3.0 */ // 🟡
+    .addRule('no-reset-all-state-on-prop-change', ERROR) /** @since 0.5.0 */ // 🟡 (renamed, original rules added in 0.3.0)
+    .enableConfigTesterForPlugin('react-you-might-not-need-an-effect')
     .addOverrides();
 
   return {
