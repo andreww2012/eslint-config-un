@@ -20,7 +20,8 @@ export const unnecessaryAbstractionsUnConfig: UnConfigFn<'unnecessaryAbstraction
 
   configBuilder
     ?.addConfig(['unnecessary-abstractions', {includeDefaultFilesAndIgnores: true}])
-    .addRule('no-ternary-wrappers', ERROR)
+    .addRule('no-ternary-wrappers', ERROR) /** @since 0.1.0 */
+    .enableConfigTesterForPlugin('unnecessary-abstractions')
     .addOverrides();
 
   return {
