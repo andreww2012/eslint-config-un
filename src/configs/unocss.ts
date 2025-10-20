@@ -18,10 +18,11 @@ export const unocssUnConfig: UnConfigFn<'unocss'> = (context) => {
 
   configBuilder
     ?.addConfig(['unocss', {includeDefaultFilesAndIgnores: true}])
-    .addRule('blocklist', ERROR)
-    .addRule('enforce-class-compile', OFF)
-    .addRule('order', ERROR) // 🟡
-    .addRule('order-attributify', ERROR) // 🟡
+    .addRule('blocklist', ERROR) /** @since 0.55.7 */
+    .addRule('enforce-class-compile', OFF) /** @since 0.58.6 */
+    .addRule('order', ERROR) /** @since 0.49.3 */ // 🟡
+    .addRule('order-attributify', ERROR) /** @since 0.49.3 */ // 🟡
+    .enableConfigTesterForPlugin('@unocss')
     .addOverrides();
 
   return {
