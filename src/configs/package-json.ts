@@ -177,55 +177,58 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
       propertiesAllowedToBeEmpty.length > 0
         ? [
             {
-              ignoreProperties: propertiesAllowedToBeEmpty, // >=0.47.0
+              ignoreProperties: propertiesAllowedToBeEmpty /** @since 0.47.0 */,
             },
           ]
         : [],
-    ) // 🟢 >=0.21.0
-    .addRule('no-redundant-files', ERROR) // 🟢 >=0.20.0
-    .addRule('order-properties', ERROR, [{order}]) // 🟢
-    .addRule('repository-shorthand', ERROR, [{form: repositoryShorthand}]) // 🟢
-    .addRule('require-author', OFF) // >=0.22.0
-    .addRule('require-bugs', OFF) // >=0.50.0
-    .addRule('require-bundleDependencies', OFF) // >=0.50.0
-    .addRule('require-dependencies', OFF) // >=0.50.0
-    .addRule('require-description', OFF) // 🟢 >=0.31.0
-    .addRule('require-devDependencies', OFF) // >=0.50.0
-    .addRule('require-engines', OFF) // >=0.28.0
-    .addRule('require-files', OFF) // >=0.26.0
-    .addRule('require-keywords', OFF) // >=0.25.0
-    .addRule('require-name', ERROR) // 🟢 >=0.24.0
-    .addRule('require-optionalDependencies', OFF) // >=0.50.0
-    .addRule('require-peerDependencies', OFF) // >=0.50.0
-    .addRule('require-type', OFF) // 🟢 >=0.33.0
-    .addRule('require-types', OFF) // >=0.29.0
-    .addRule('require-version', ERROR) // 🟢 >=0.23.0
-    .addRule('restrict-dependency-ranges', OFF) // >=0.30.0
+    ) /** @since 0.21.0 */ // 🟢
+    .addRule('no-redundant-files', ERROR) /** @since 0.20.0 */ // 🟢
+    .addRule('order-properties', ERROR, [{order}]) /** @since 0.1.0 */ // 🟢
+    .addRule('repository-shorthand', ERROR, [
+      {form: repositoryShorthand},
+    ]) /** @since 0.5.0 */ /** @aka prefer-repository-shorthand */ // 🟢
+    .addRule('require-author', OFF) /** @since 0.22.0 */
+    .addRule('require-bugs', OFF) /** @since 0.50.0 */
+    .addRule('require-bundleDependencies', OFF) /** @since 0.50.0 */
+    .addRule('require-dependencies', OFF) /** @since 0.50.0 */
+    .addRule('require-description', OFF) /** @since 0.31.0 */ // 🟢
+    .addRule('require-devDependencies', OFF) /** @since 0.50.0 */
+    .addRule('require-engines', OFF) /** @since 0.28.0 */
+    .addRule('require-files', OFF) /** @since 0.26.0 */
+    .addRule('require-keywords', OFF) /** @since 0.25.0 */
+    .addRule('require-name', ERROR) /** @since 0.24.0 */ // 🟢
+    .addRule('require-optionalDependencies', OFF) /** @since 0.50.0 */
+    .addRule('require-peerDependencies', OFF) /** @since 0.50.0 */
+    .addRule('require-type', OFF) /** @since 0.33.0 */ // 🟢
+    .addRule('require-types', OFF) /** @since 0.29.0 */
+    .addRule('require-version', ERROR) /** @since 0.23.0 */ // 🟢
+    .addRule('restrict-dependency-ranges', OFF) /** @since 0.30.0 */
     .addRule('sort-collections', ERROR, [
       getKeysOfTruthyValues({
         ...DEFAULT_COLLECTIONS_TO_SORT,
         ...optionsResolved.collectionsToSort,
       }),
-    ]) // 🟢
-    .addRule('unique-dependencies', ERROR) // 🟢
-    .addRule('valid-author', ERROR) // 🟢 >=0.38.0
-    .addRule('valid-bin', ERROR, [{enforceCase: true}]) // 🟢 >=0.37.0
-    .addRule('valid-bundleDependencies', ERROR) // 🟢 >=0.44.0
-    .addRule('valid-config', ERROR) // 🟢 >=0.46.0
-    .addRule('valid-cpu', ERROR) // 🟢 >=0.48.0
-    .addRule('valid-dependencies', ERROR) // 🟢 >=0.49.0
-    .addRule('valid-description', ERROR) // 🟢 >=0.52.0
-    .addRule('valid-devDependencies', ERROR) // 🟢 >=0.49.0
-    .addRule('valid-directories', ERROR) // 🟢 >=0.56.0
-    .addRule('valid-exports', ERROR) // 🟢 >=0.54.0
-    .addRule('valid-license', ERROR) // 🟢 >=0.45.0
-    .addRule('valid-name', ERROR) // 🟢
-    .addRule('valid-optionalDependencies', ERROR) // 🟢 >=0.49.0
-    .addRule('valid-peerDependencies', ERROR) // 🟢 >=0.49.0
-    .addRule('valid-repository-directory', ERROR) // 🟢
-    .addRule('valid-scripts', ERROR) // 🟢 >=0.43.0
-    .addRule('valid-type', ERROR) // 🟢 >=0.41.0
-    .addRule('valid-version', ERROR) // 🟢
+    ]) /** @since 0.1.0 */ /** @aka alphabetize-collections */ // 🟢
+    .addRule('unique-dependencies', ERROR) /** @since 0.8.0 */ // 🟢
+    .addRule('valid-author', ERROR) /** @since 0.38.0 */ // 🟢
+    .addRule('valid-bin', ERROR, [{enforceCase: true}]) /** @since 0.37.0 */ // 🟢
+    .addRule('valid-bundleDependencies', ERROR) /** @since 0.44.0 */ // 🟢
+    .addRule('valid-config', ERROR) /** @since 0.46.0 */ // 🟢
+    .addRule('valid-cpu', ERROR) /** @since 0.48.0 */ // 🟢
+    .addRule('valid-dependencies', ERROR) /** @since 0.49.0 */ // 🟢
+    .addRule('valid-description', ERROR) /** @since 0.52.0 */ // 🟢
+    .addRule('valid-devDependencies', ERROR) /** @since 0.49.0 */ // 🟢
+    .addRule('valid-directories', ERROR) /** @since 0.56.0 */ // 🟢
+    .addRule('valid-exports', ERROR) /** @since 0.54.0 */ // 🟢
+    .addRule('valid-license', ERROR) /** @since 0.45.0 */ // 🟢
+    .addRule('valid-name', ERROR) /** @since 0.9.0 */ // 🟢
+    .addRule('valid-optionalDependencies', ERROR) /** @since 0.49.0 */ // 🟢
+    .addRule('valid-package-definition', ERROR) /** @since 0.1.0 */ /** @aka valid-package-def */ // 🟢
+    .addRule('valid-peerDependencies', ERROR) /** @since 0.49.0 */ // 🟢
+    .addRule('valid-repository-directory', ERROR) /** @since 0.7.0 */ // 🟢
+    .addRule('valid-scripts', ERROR) /** @since 0.43.0 */ // 🟢
+    .addRule('valid-type', ERROR) /** @since 0.41.0 */ // 🟢
+    .addRule('valid-version', ERROR) /** @since 0.10.0 */ // 🟢
     .addAnyRule(
       'node-dependencies',
       'absolute-version',
@@ -240,7 +243,8 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
               : enforceAbsoluteVersion,
           ]
         : [],
-    ) // >=0.7.0
+    )
+    .enableConfigTesterForPlugin('package-json')
     .addOverrides();
 
   return {
