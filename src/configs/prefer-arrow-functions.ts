@@ -20,7 +20,8 @@ export const preferArrowFunctionsUnConfig: UnConfigFn<'preferArrowFunctions'> = 
       'prefer-arrow-functions',
       {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true},
     ])
-    .addRule('prefer-arrow-functions', WARNING)
+    .addRule('prefer-arrow-functions', WARNING) /** @since 3.0.0 */
+    .enableConfigTesterForPlugin('prefer-arrow-functions')
     .addOverrides();
 
   return {
