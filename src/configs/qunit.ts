@@ -52,45 +52,46 @@ export const qunitUnConfig: UnConfigFn<'qunit'> = (context) => {
         }),
       },
     )
-    .addRule('assert-args', ERROR) // 🟢
-    .addRule('literal-compare-order', ERROR) // 🟢
-    .addRule('no-arrow-tests', OFF)
-    .addRule('no-assert-equal', ERROR) // 🟢
-    .addRule('no-assert-equal-boolean', ERROR) // 🟢
-    .addRule('no-assert-logical-expression', ERROR) // 🟢
-    .addRule('no-assert-ok', WARNING)
-    .addRule('no-async-in-loops', ERROR) // 🟢
-    .addRule('no-async-module-callbacks', ERROR) // 🟢
-    .addRule('no-async-test', ERROR) // 🟢
-    .addRule('no-commented-tests', WARNING) // 🟢
-    .addRule('no-compare-relation-boolean', ERROR) // 🟢
-    .addRule('no-conditional-assertions', ERROR) // 🟢
-    .addRule('no-early-return', ERROR) // 🟢
-    .addRule('no-global-assertions', ERROR) // 🟢
-    .addRule('no-global-expect', ERROR) // 🟢
-    .addRule('no-global-module-test', ERROR) // 🟢
-    .addRule('no-global-stop-start', ERROR) // 🟢
-    .addRule('no-hooks-from-ancestor-modules', ERROR) // 🟢
-    .addRule('no-identical-names', ERROR) // 🟢
-    .addRule('no-init', ERROR) // 🟢
-    .addRule('no-jsdump', ERROR) // 🟢
-    .addRule('no-loose-assertions', WARNING)
-    .addRule('no-negated-ok', ERROR) // 🟢
-    .addRule('no-nested-tests', ERROR) // 🟢
-    .addRule('no-ok-equality', ERROR) // 🟢
-    .addRule('no-only', ERROR) // 🟢
-    .addRule('no-qunit-push', ERROR) // 🟢
-    .addRule('no-qunit-start-in-tests', ERROR) // 🟢
-    .addRule('no-qunit-stop', ERROR) // 🟢
-    .addRule('no-reassign-log-callbacks', ERROR) // 🟢
-    .addRule('no-reset', ERROR) // 🟢
-    .addRule('no-setup-teardown', ERROR) // 🟢
-    .addRule('no-skip', ERROR)
-    .addRule('no-test-expect-argument', ERROR) // 🟢
-    .addRule('no-throws-string', ERROR) // 🟢
-    .addRule('require-expect', ERROR) // 🟢
-    .addRule('require-object-in-propequal', ERROR) // 🟢
-    .addRule('resolve-async', ERROR) // 🟢
+    .addRule('assert-args', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('literal-compare-order', ERROR) /** @since 0.5.0 */ // 🟢
+    .addRule('no-arrow-tests', OFF) /** @since 0.6.0 */
+    .addRule('no-assert-equal', ERROR) /** @since 0.3.0 */ // 🟢
+    .addRule('no-assert-equal-boolean', ERROR) /** @since 5.1.0 */ // 🟢
+    .addRule('no-assert-logical-expression', ERROR) /** @since 2.2.0 */ // 🟢
+    .addRule('no-assert-ok', WARNING) /** @since 4.1.0 */
+    .addRule('no-async-in-loops', ERROR) /** @since 0.1.1 */ // 🟢
+    .addRule('no-async-module-callbacks', ERROR) /** @since 5.4.0 */ // 🟢
+    .addRule('no-async-test', ERROR) /** @since 0.7.0 */ // 🟢
+    .addRule('no-commented-tests', WARNING) /** @since 0.2.0 */ // 🟢
+    .addRule('no-compare-relation-boolean', ERROR) /** @since 1.1.0 */ // 🟢
+    .addRule('no-conditional-assertions', ERROR) /** @since 2.3.0 */ // 🟢
+    .addRule('no-early-return', ERROR) /** @since 2.1.0 */ // 🟢
+    .addRule('no-global-assertions', ERROR) /** @since 0.4.0 */ // 🟢
+    .addRule('no-global-expect', ERROR) /** @since 0.8.0 */ // 🟢
+    .addRule('no-global-module-test', ERROR) /** @since 0.7.0 */ // 🟢
+    .addRule('no-global-stop-start', ERROR) /** @since 0.9.0 */ // 🟢
+    .addRule('no-hooks-from-ancestor-modules', ERROR) /** @since 5.4.0 */ // 🟢
+    .addRule('no-identical-names', ERROR) /** @since 2.4.0 */ // 🟢
+    .addRule('no-init', ERROR) /** @since 0.9.0 */ // 🟢
+    .addRule('no-jsdump', ERROR) /** @since 0.9.0 */ // 🟢
+    .addRule('no-loose-assertions', WARNING) /** @since 4.3.0 */
+    .addRule('no-negated-ok', ERROR) /** @since 0.8.0 */ // 🟢
+    .addRule('no-nested-tests', ERROR) /** @since 5.0.0 */ // 🟢
+    .addRule('no-ok-equality', ERROR) /** @since 0.2.0 */ // 🟢
+    .addRule('no-only', ERROR) /** @since 0.3.0 */ // 🟢
+    .addRule('no-qunit-push', ERROR) /** @since 0.9.0 */ // 🟢
+    .addRule('no-qunit-start-in-tests', ERROR) /** @since 2.3.0 */ // 🟢
+    .addRule('no-qunit-stop', ERROR) /** @since 0.9.0 */ // 🟢
+    .addRule('no-reassign-log-callbacks', ERROR) /** @since 0.9.0 */ // 🟢
+    .addRule('no-reset', ERROR) /** @since 0.8.0 */ // 🟢
+    .addRule('no-setup-teardown', ERROR) /** @since 0.8.0 */ // 🟢
+    .addRule('no-skip', ERROR) /** @since 4.2.0 */
+    .addRule('no-test-expect-argument', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-throws-string', ERROR) /** @since 1.1.0 */ // 🟢
+    .addRule('require-expect', ERROR) /** @since 0.6.0 */ // 🟢
+    .addRule('require-object-in-propequal', ERROR) /** @since 5.4.0 */ // 🟢
+    .addRule('resolve-async', ERROR) /** @since 0.1.1 */ // 🟢
+    .enableConfigTesterForPlugin('qunit')
     .addOverrides();
 
   const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
