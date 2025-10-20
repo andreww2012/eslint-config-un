@@ -96,62 +96,63 @@ export const playwrightUnConfig: UnConfigFn<'playwright'> = (context) => {
       customAssertFunctionNames?.length
         ? [{assertFunctionNames: customAssertFunctionNames as [string]}]
         : [],
-    ) // 🟡
-    .addRule('max-expects', OFF)
-    .addRule('max-nested-describe', WARNING) // 🟡
+    ) /** @since 0.15.0 */ // 🟡
+    .addRule('max-expects', OFF) /** @since 1.2.0 */
+    .addRule('max-nested-describe', WARNING) /** @since 0.10.0 */ // 🟡
     .addRule(
       'missing-playwright-await',
       ERROR,
       customAsyncExpectMatches?.length ? [{customMatchers: customAsyncExpectMatches}] : [],
-    ) // 🟢
-    .addRule('no-commented-out-tests', WARNING)
-    .addRule('no-conditional-expect', ERROR) // 🟡
-    .addRule('no-conditional-in-test', OFF) // 🟡
-    .addRule('no-duplicate-hooks', ERROR)
-    .addRule('no-element-handle', ERROR) // 🟡
-    .addRule('no-eval', WARNING) // 🟡
-    .addRule('no-focused-test', ERROR) // 🟢
-    .addRule('no-force-option', WARNING) // 🟡
-    .addRule('no-get-by-title', WARNING)
-    .addRule('no-hooks', OFF)
-    .addRule('no-nested-step', OFF) // 🟡
-    .addRule('no-networkidle', ERROR) // 🟢
-    .addRule('no-nth-methods', OFF)
-    .addRule('no-page-pause', WARNING) // 🟡
-    .addRule('no-raw-locators', OFF)
-    .addRule('no-restricted-matchers', OFF)
-    .addRule('no-skipped-test', ERROR) // 🟡
-    .addRule('no-slowed-test', OFF)
-    .addRule('no-standalone-expect', ERROR) // 🟢
-    .addRule('no-unsafe-references', ERROR) // 🟢
-    .addRule('no-useless-await', ERROR) // 🟡
-    .addRule('no-useless-not', ERROR) // 🟡
-    .addRule('no-wait-for-navigation', ERROR) // 🟢
-    .addRule('no-wait-for-selector', OFF) // 🟡
-    .addRule('no-wait-for-timeout', OFF) // 🟡
-    .addRule('prefer-comparison-matcher', ERROR)
-    .addRule('prefer-equality-matcher', ERROR)
-    .addRule('prefer-hooks-in-order', ERROR)
-    .addRule('prefer-hooks-on-top', ERROR)
-    .addRule('prefer-locator', WARNING)
-    .addRule('prefer-lowercase-title', ERROR)
-    .addRule('prefer-native-locators', WARNING)
-    .addRule('prefer-strict-equal', WARNING)
-    .addRule('prefer-to-be', ERROR)
-    .addRule('prefer-to-contain', ERROR)
-    .addRule('prefer-to-have-count', ERROR)
-    .addRule('prefer-to-have-length', ERROR)
-    .addRule('prefer-web-first-assertions', ERROR) // 🟢
-    .addRule('require-hook', WARNING)
-    .addRule('require-soft-assertions', OFF)
-    .addRule('require-to-throw-message', OFF)
-    .addRule('require-top-level-describe', OFF)
-    .addRule('valid-describe-callback', ERROR) // 🟢
-    .addRule('valid-expect', ERROR) // 🟢
-    .addRule('valid-expect-in-promise', ERROR) // 🟢
-    .addRule('valid-test-tags', ERROR) // 🟢
-    .addRule('valid-title', ERROR) // 🟢
+    ) /** @since 0.3.3 */ // 🟢
+    .addRule('no-commented-out-tests', WARNING) /** @since 1.2.0 */
+    .addRule('no-conditional-expect', ERROR) /** @since 1.2.0 */ // 🟡
+    .addRule('no-conditional-in-test', OFF) /** @since 0.10.0 */ // 🟡
+    .addRule('no-duplicate-hooks', ERROR) /** @since 1.2.0 */
+    .addRule('no-element-handle', ERROR) /** @since 0.9.0 */ // 🟡
+    .addRule('no-eval', WARNING) /** @since 0.9.0 */ // 🟡
+    .addRule('no-focused-test', ERROR) /** @since 0.9.0 */ // 🟢
+    .addRule('no-force-option', WARNING) /** @since 0.9.0 */ // 🟡
+    .addRule('no-get-by-title', WARNING) /** @since 1.0.0 */
+    .addRule('no-hooks', OFF) /** @since 1.3.0 */
+    .addRule('no-nested-step', OFF) /** @since 0.15.0 */ // 🟡
+    .addRule('no-networkidle', ERROR) /** @since 0.14.0 */ // 🟢
+    .addRule('no-nth-methods', OFF) /** @since 0.15.0 */
+    .addRule('no-page-pause', WARNING) /** @since 0.7.0 */ // 🟡
+    .addRule('no-raw-locators', OFF) /** @since 0.16.0 */
+    .addRule('no-restricted-matchers', OFF) /** @since 0.11.1 */
+    .addRule('no-skipped-test', ERROR) /** @since 0.9.0 */ // 🟡
+    .addRule('no-slowed-test', OFF) /** @since 2.2.0 */
+    .addRule('no-standalone-expect', ERROR) /** @since 1.2.0 */ // 🟢
+    .addRule('no-unsafe-references', ERROR) /** @since 1.1.0 */ // 🟢
+    .addRule('no-useless-await', ERROR) /** @since 0.14.0 */ // 🟡
+    .addRule('no-useless-not', ERROR) /** @since 0.11.1 */ // 🟡
+    .addRule('no-wait-for-navigation', ERROR) /** @since 2.2.1 */ // 🟢
+    .addRule('no-wait-for-selector', OFF) /** @since 0.22.0 */ // 🟡
+    .addRule('no-wait-for-timeout', OFF) /** @since 0.9.0 */ // 🟡
+    .addRule('prefer-comparison-matcher', ERROR) /** @since 1.3.0 */
+    .addRule('prefer-equality-matcher', ERROR) /** @since 1.3.0 */
+    .addRule('prefer-hooks-in-order', ERROR) /** @since 1.2.0 */
+    .addRule('prefer-hooks-on-top', ERROR) /** @since 1.2.0 */
+    .addRule('prefer-locator', WARNING) /** @since 1.7.0 */
+    .addRule('prefer-lowercase-title', ERROR) /** @since 0.11.1 */
+    .addRule('prefer-native-locators', WARNING) /** @since 1.7.0 */
+    .addRule('prefer-strict-equal', WARNING) /** @since 0.12.0 */
+    .addRule('prefer-to-be', ERROR) /** @since 0.12.0 */
+    .addRule('prefer-to-contain', ERROR) /** @since 0.15.0 */
+    .addRule('prefer-to-have-count', ERROR) /** @since 0.17.0 */
+    .addRule('prefer-to-have-length', ERROR) /** @since 0.11.1 */
+    .addRule('prefer-web-first-assertions', ERROR) /** @since 0.13.0 */ // 🟢
+    .addRule('require-hook', WARNING) /** @since 1.3.0 */
+    .addRule('require-soft-assertions', OFF) /** @since 0.12.0 */
+    .addRule('require-to-throw-message', OFF) /** @since 1.4.0 */
+    .addRule('require-top-level-describe', OFF) /** @since 0.11.1 */
+    .addRule('valid-describe-callback', ERROR) /** @since 1.4.0 */ // 🟢
+    .addRule('valid-expect', ERROR) /** @since 0.11.1 */ // 🟢
+    .addRule('valid-expect-in-promise', ERROR) /** @since 1.4.0 */ // 🟢
+    .addRule('valid-test-tags', ERROR) /** @since 2.2.1 */ // 🟢
+    .addRule('valid-title', ERROR) /** @since 0.19.0 */ // 🟢
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
+    .enableConfigTesterForPlugin('playwright')
     .addOverrides();
 
   const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
