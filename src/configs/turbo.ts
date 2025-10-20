@@ -28,7 +28,8 @@ export const turboUnConfig: UnConfigFn<'turbo'> = (context) => {
       'no-undeclared-env-vars',
       ERROR,
       undeclaredEnvVarsOptions ? [undeclaredEnvVarsOptions] : [],
-    )
+    ) /** @since 0.0.1 */
+    .enableConfigTesterForPlugin('turbo')
     .addOverrides();
 
   return {
