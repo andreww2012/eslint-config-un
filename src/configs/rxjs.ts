@@ -16,6 +16,9 @@ export interface RxjsEslintConfigOptions extends UnConfigOptions<'rxjs'> {
   /**
    * Affected rule:
    * - [`ban-operators`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-operators.md)
+   *
+   * Will be merged with the default value.
+   * @default {tap: true}
    */
   banOperators?: NamesToBanListOrObjectWithFlagOrMessage;
 
@@ -46,9 +49,12 @@ export const rxjsUnConfig: UnConfigFn<'rxjs'> = (context) => {
   const banObservablesNormalized = Array.isArray(banObservables)
     ? Object.fromEntries(banObservables.map((v) => [v, true]))
     : banObservables || {};
-  const banOperatorsNormalized = Array.isArray(banOperators)
-    ? Object.fromEntries(banOperators.map((v) => [v, true]))
-    : banOperators || {};
+  const banOperatorsNormalized: Record<string, string | boolean> = {
+    tap: true,
+    ...(Array.isArray(banOperators)
+      ? Object.fromEntries(banOperators.map((v) => [v, true]))
+      : banOperators || {}),
+  };
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'rxjs');
 
@@ -59,48 +65,48 @@ export const rxjsUnConfig: UnConfigFn<'rxjs'> = (context) => {
     ?.addConfig(['rxjs', {includeDefaultFilesAndIgnores: true}])
     .addRule('ban-observables', Object.keys(banObservablesNormalized).length > 0 ? ERROR : OFF, [
       banObservablesNormalized,
-    ])
+    ]) /** @since 1.0.0 */
     .addRule('ban-operators', Object.keys(banOperatorsNormalized).length > 0 ? ERROR : OFF, [
       banOperatorsNormalized,
-    ])
-    .addRule('finnish', enforceFinnishNotation === true ? ERROR : OFF)
-    .addRule('just', enforceJustInsteadOfOf ? ERROR : OFF)
-    .addRule('macro', OFF)
-    .addRule('no-async-subscribe', ERROR) // 🟢
-    .addRule('no-compat', ERROR)
+    ]) /** @since 1.0.0 */
+    .addRule('finnish', enforceFinnishNotation === true ? ERROR : OFF) /** @since 1.0.0 */
+    .addRule('just', enforceJustInsteadOfOf ? ERROR : OFF) /** @since 1.0.0 */
+    .addRule('macro', OFF) /** @since 1.0.0 */
+    .addRule('no-async-subscribe', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-compat', ERROR) /** @since 1.0.0 */
     .addRule('no-connectable', ERROR) // TODO configurable?
-    .addRule('no-create', ERROR) // 🟢
-    .addRule('no-cyclic-action', ERROR)
-    .addRule('no-exposed-subjects', ERROR)
-    .addRule('no-finnish', enforceFinnishNotation === 'forbid' ? ERROR : OFF)
-    .addRule('no-ignored-error', OFF)
-    .addRule('no-ignored-notifier', ERROR) // 🟢
-    .addRule('no-ignored-observable', ERROR)
-    .addRule('no-ignored-replay-buffer', ERROR) // 🟢
-    .addRule('no-ignored-subscribe', OFF)
-    .addRule('no-ignored-subscription', OFF)
-    .addRule('no-ignored-takewhile-value', ERROR) // 🟢
-    .addRule('no-implicit-any-catch', ERROR) // 🟢
-    .addRule('no-index', ERROR) // 🟢
-    .addRule('no-internal', ERROR) // 🟢
-    .addRule('no-nested-subscribe', ERROR) // 🟢
-    .addRule('no-redundant-notify', ERROR) // 🟢
-    .addRule('no-sharereplay', ERROR) // 🟢
-    .addRule('no-subclass', OFF)
+    .addRule('no-create', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-cyclic-action', ERROR) /** @since 1.0.0 */
+    .addRule('no-exposed-subjects', ERROR) /** @since 1.0.0 */
+    .addRule('no-finnish', enforceFinnishNotation === 'forbid' ? ERROR : OFF) /** @since 1.0.0 */
+    .addRule('no-ignored-error', OFF) /** @since 1.0.0 */
+    .addRule('no-ignored-notifier', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-ignored-observable', ERROR) /** @since 1.0.0 */
+    .addRule('no-ignored-replay-buffer', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-ignored-subscribe', OFF) /** @since 1.0.0 */
+    .addRule('no-ignored-subscription', OFF) /** @since 1.0.0 */
+    .addRule('no-ignored-takewhile-value', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-implicit-any-catch', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-index', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-internal', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-nested-subscribe', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-redundant-notify', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-sharereplay', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-subclass', OFF) /** @since 1.0.0 */
     .addRule('no-subject-unsubscribe', ERROR) // 🟢
-    .addRule('no-subject-value', ERROR) // TODO
-    .addRule('no-subscribe-handlers', OFF)
-    .addRule('no-tap', ERROR)
-    .addRule('no-topromise', OFF) // TODO
-    .addRule('no-unbound-methods', ERROR) // 🟢
-    .addRule('no-unsafe-catch', ERROR)
-    .addRule('no-unsafe-first', ERROR)
-    .addRule('no-unsafe-subject-next', ERROR) // 🟢
-    .addRule('no-unsafe-switchmap', ERROR)
-    .addRule('no-unsafe-takeuntil', ERROR) // 🟢
-    .addRule('prefer-observer', OFF)
-    .addRule('suffix-subjects', OFF)
-    .addRule('throw-error', ERROR)
+    .addRule('no-subject-value', ERROR) /** @since 1.0.0 */ // TODO
+    .addRule('no-subscribe-handlers', OFF) /** @since 1.0.0 */
+    .addRule('no-topromise', OFF) /** @since 1.0.2 */ // TODO
+    .addRule('no-unbound-methods', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-unsafe-catch', ERROR) /** @since 1.0.0 */
+    .addRule('no-unsafe-first', ERROR) /** @since 1.0.0 */
+    .addRule('no-unsafe-subject-next', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-unsafe-switchmap', ERROR) /** @since 1.0.0 */
+    .addRule('no-unsafe-takeuntil', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('prefer-observer', OFF) /** @since 1.0.0 */
+    .addRule('suffix-subjects', OFF) /** @since 1.0.0 */
+    .addRule('throw-error', ERROR) /** @since 1.0.0 */
+    .enableConfigTesterForPlugin('rxjs')
     .addOverrides();
 
   return {
