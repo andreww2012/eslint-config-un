@@ -173,6 +173,14 @@ export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (conte
     // 🩷 - in all the above
     // 💚 - in all the above, except `dom`
 
+    // 1.2.0 prefer-expect-query-by
+    // 2.0.0 no-get-by-for-checking-element-not-present
+    // 3.0.0 no-wait-for-empty-callback
+    // 3.0.0 prefer-wait-for
+    // 3.5.0 no-render-in-setup
+    // 4.0.0-alpha.0 no-multiple-assertions-wait-for
+    // 4.0.0-alpha.0 no-side-effects-wait-for
+
     configBuilder
       ?.addConfig([
         `testing-library/${module}`,
@@ -183,9 +191,9 @@ export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (conte
       ])
       .addRule('await-async-events', ERROR, [
         {eventModule: ['userEvent', ...(isFireEvenAsync ? ['fireEvent' as const] : [])]},
-      ]) // 🩷
-      .addRule('await-async-queries', ERROR) // 🩷
-      .addRule('await-async-utils', ERROR) // 🩷
+      ]) /** @since 1.0.0 */ /** @aka await-fire-event */ /** @aka await-async-event */ // 🩷
+      .addRule('await-async-queries', ERROR) /** @since 1.0.0 */ /** @aka await-async-query */ // 🩷
+      .addRule('await-async-utils', ERROR) /** @since 2.0.0 */ // 🩷
       // Plugin only supports `@testing-library/react`
       .addRule(
         'consistent-data-testid',
@@ -198,57 +206,68 @@ export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (conte
           moduleOptionsResolved.consistentDataTestId
           ? [moduleOptionsResolved.consistentDataTestId]
           : [],
-      )
+      ) /** @since 1.4.0 */
       .addRule(
         'no-await-sync-events',
         ERROR,
         isFireEvenAsync ? [] : [{eventModules: ['fire-event']}],
-      ) // 🟣🔴🔵
-      .addRule('no-await-sync-queries', ERROR) // 🩷
-      .addRule('no-container', isForFramework ? ERROR : OFF) // 💚
-      .addRule('no-debugging-utils', isForFramework ? ERROR : OFF) // 💚(warns)
-      .addRule('no-dom-import', isForFramework ? ERROR : OFF, isForFramework ? [module] : []) // 💚
-      .addRule('no-global-regexp-flag-in-query', ERROR) // 🩷
+      ) /** @since 3.10.0 */ // 🟣🔴🔵
+      .addRule('no-await-sync-queries', ERROR) /** @since 1.0.0 */ /** @aka no-await-sync-query */ // 🩷
+      .addRule('no-container', isForFramework ? ERROR : OFF) /** @since 4.0.0-alpha.0 */ // 💚
+      .addRule('no-debugging-utils', isForFramework ? ERROR : OFF) /** @since 5.0.0-alpha.2 */ // 💚(warns)
+      .addRule(
+        'no-dom-import',
+        isForFramework ? ERROR : OFF,
+        isForFramework ? [module] : [],
+      ) /** @since 1.0.0 */ // 💚
+      .addRule('no-global-regexp-flag-in-query', ERROR) /** @since 5.2.0 */ // 🩷
       .addRule(
         'no-manual-cleanup',
         module === 'react' || module === 'svelte' || module === 'vue' ? ERROR : OFF,
-      ) // 🔵🟠🟢
-      .addRule('no-node-access', ERROR, [{allowContainerFirstChild}]) // 🩷
-      .addRule('no-promise-in-fire-event', ERROR) // 🩷
+      ) /** @since 2.1.0 */ // 🔵🟠🟢
+      .addRule('no-node-access', ERROR, [{allowContainerFirstChild}]) /** @since 4.0.0-alpha.0 */ // 🩷
+      .addRule('no-promise-in-fire-event', ERROR) /** @since 4.0.0-alpha.0 */ // 🩷
       .addRule(
         'no-render-in-lifecycle',
         isForFramework ? ERROR : OFF,
         allowTestingFrameworkSetupHook ? [{allowTestingFrameworkSetupHook}] : [],
-      ) // 💚
-      .addRule('no-test-id-queries', WARNING)
-      .addRule('no-unnecessary-act', module === 'marko' || module === 'react' ? ERROR : OFF) // 🟡🔵
-      .addRule('no-wait-for-multiple-assertions', ERROR) // 🩷
-      .addRule('no-wait-for-side-effects', ERROR) // 🩷
-      .addRule('no-wait-for-snapshot', ERROR) // 🩷
+      ) /** @since 6.0.0-alpha.2 */ // 💚
+      .addRule('no-test-id-queries', WARNING) /** @since 7.2.0 */
+      .addRule(
+        'no-unnecessary-act',
+        module === 'marko' || module === 'react' ? ERROR : OFF,
+      ) /** @since 4.3.0 */ // 🟡🔵
+      .addRule('no-wait-for-multiple-assertions', ERROR) /** @since 4.0.0-beta.1 */ // 🩷
+      .addRule('no-wait-for-side-effects', ERROR) /** @since 4.0.0-beta.1 */ // 🩷
+      .addRule('no-wait-for-snapshot', ERROR) /** @since 3.8.0 */ // 🩷
       .addRule(
         'prefer-explicit-assert',
         moduleOptionsResolved.preferAssertStyle === 'explicit' ? ERROR : OFF,
-      )
-      .addRule('prefer-find-by', ERROR) // 🩷
+      ) /** @since 1.3.0 */
+      .addRule('prefer-find-by', ERROR) /** @since 3.2.0 */ // 🩷
       .addRule(
         'prefer-implicit-assert',
         moduleOptionsResolved.preferAssertStyle === 'implicit' ? ERROR : OFF,
-      )
-      .addRule('prefer-presence-queries', ERROR) // 🩷
-      .addRule('prefer-query-by-disappearance', ERROR) // 🩷
+      ) /** @since 6.1.0 */
+      .addRule('prefer-presence-queries', ERROR) /** @since 3.0.0 */ // 🩷
+      .addRule('prefer-query-by-disappearance', ERROR) /** @since 4.8.0 */ // 🩷
       .addRule(
         'prefer-query-matchers',
         preferQueryMatchers?.length ? ERROR : OFF,
         preferQueryMatchers?.length ? [{validEntries: preferQueryMatchers}] : [],
-      )
-      .addRule('prefer-screen-queries', ERROR) // 🩷
+      ) /** @since 5.11.0 */
+      .addRule('prefer-screen-queries', ERROR) /** @since 3.0.0 */ // 🩷
       .addRule(
         'prefer-user-event',
         preferUserEventOverFireEvent ? ERROR : OFF,
         typeof preferUserEventOverFireEvent === 'object' ? [preferUserEventOverFireEvent] : [],
-      )
-      .addRule('render-result-naming-convention', isForFramework ? ERROR : OFF) // 💚
+      ) /** @since 4.0.0-alpha.0 */
+      .addRule(
+        'render-result-naming-convention',
+        isForFramework ? ERROR : OFF,
+      ) /** @since 4.0.0-alpha.0 */ // 💚
       .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
+      .enableConfigTesterForPlugin('testing-library')
       .addOverrides();
 
     const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
