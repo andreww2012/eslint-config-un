@@ -17,13 +17,14 @@ export const tanstackQueryUnConfig: UnConfigFn<'tanstackQuery'> = (context) => {
 
   configBuilder
     ?.addConfig(['tanstack-query', {includeDefaultFilesAndIgnores: true}])
-    .addRule('exhaustive-deps', ERROR) // 🟢
-    .addRule('infinite-query-property-order', ERROR) // 🟢
-    .addRule('mutation-property-order', ERROR) // 🟢
-    .addRule('no-rest-destructuring', ERROR) // 🟡
-    .addRule('no-unstable-deps', ERROR) // 🟢
-    .addRule('no-void-query-fn', ERROR) // 🟢
-    .addRule('stable-query-client', ERROR) // 🟢
+    .addRule('exhaustive-deps', ERROR) /** @since 4.14.1 */ // 🟢
+    .addRule('infinite-query-property-order', ERROR) /** @since 5.57.0 */ // 🟢
+    .addRule('mutation-property-order', ERROR) /** @since 5.78.0 */ // 🟢
+    .addRule('no-rest-destructuring', ERROR) /** @since 5.6.0 */ // 🟡
+    .addRule('no-unstable-deps', ERROR) /** @since 5.52.0 */ // 🟢
+    .addRule('no-void-query-fn', ERROR) /** @since 5.72.0 */ // 🟢
+    .addRule('stable-query-client', ERROR) /** @since 4.36.0 */ // 🟢
+    .enableConfigTesterForPlugin('@tanstack/query')
     .addOverrides();
 
   return {
