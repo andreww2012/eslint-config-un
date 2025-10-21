@@ -26,28 +26,29 @@ export const storybookUnConfig: UnConfigFn<'storybook'> = (context) => {
         filesFallback: [`**/*.{stories,story}.${GLOB_JS_TS_X_EXTENSION}`],
       },
     ])
-    .addRule('await-interactions', ERROR) // 🟢🤝
-    .addRule('context-in-play-function', ERROR) // 🟢🤝
-    .addRule('csf-component', ERROR) // 🩷
-    .addRule('default-exports', ERROR) // 🟢🩷
-    .addRule('hierarchy-separator', ERROR) // 🟡🩷
-    .addRule('meta-inline-properties', WARNING)
+    .addRule('await-interactions', ERROR) /** @since 0.0.1-alpha.1 */ // 🟢🤝
+    .addRule('context-in-play-function', ERROR) /** @since 0.5.0 */ // 🟢🤝
+    .addRule('csf-component', ERROR) /** @since 0.0.1-alpha.0 */ // 🩷
+    .addRule('default-exports', ERROR) /** @since 0.0.1-alpha.0 */ // 🟢🩷
+    .addRule('hierarchy-separator', ERROR) /** @since 0.0.1-alpha.0 */ // 🟡🩷
+    .addRule('meta-inline-properties', WARNING) /** @since 0.0.1-alpha.0 */
     .addRule(
       'meta-satisfies-type',
       (context.packagesInfo.typescript?.versions.majorAndMinor || 0) >= 4.9 ? WARNING : OFF,
-    )
-    .addRule('no-redundant-story-name', ERROR) // 🟡🩷
-    .addRule('no-renderer-packages', ERROR) // 🟢
-    .addRule('no-stories-of', ERROR) // ❤️
-    .addRule('no-title-property-in-meta', ERROR) // ❤️
-    .addRule('no-uninstalled-addons', OFF) // 🟢 (for main.* files)
-    .addRule('prefer-pascal-case', ERROR) // 🟡
-    .addRule('story-exports', ERROR) // 🟢🩷
-    .addRule('use-storybook-expect', ERROR) // 🟢🤝
-    .addRule('use-storybook-testing-library', ERROR) // 🟢🤝
+    ) /** @since 0.12.0 */
+    .addRule('no-redundant-story-name', ERROR) /** @since 0.0.1-alpha.0 */ // 🟡🩷
+    .addRule('no-renderer-packages', ERROR) /** @since 0.13.0--canary.f263fb3.0 */ // 🟢
+    .addRule('no-stories-of', ERROR) /** @since 0.0.1-alpha.0 */ // ❤️
+    .addRule('no-title-property-in-meta', ERROR) /** @since 0.0.1-alpha.0 */ // ❤️
+    .addRule('no-uninstalled-addons', OFF) /** @since 0.6.0 */ // 🟢 (for main.* files)
+    .addRule('prefer-pascal-case', ERROR) /** @since 0.0.1-alpha.0 */ // 🟡
+    .addRule('story-exports', ERROR) /** @since 0.4.0 */ // 🟢🩷
+    .addRule('use-storybook-expect', ERROR) /** @since 0.0.1-alpha.0 */ // 🟢🤝
+    .addRule('use-storybook-testing-library', ERROR) /** @since 0.0.1-alpha.0 */ // 🟢🤝
     .disableAnyRule('import', 'no-default-export')
     .disableAnyRule('import', 'no-anonymous-default-export') // 🟢(off)
     .disableAnyRule('react-hooks', 'rules-of-hooks') // 🟢(off)
+    .enableConfigTesterForPlugin('storybook')
     .addOverrides();
 
   configBuilder
