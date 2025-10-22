@@ -38,31 +38,32 @@ export const webComponentsUnConfig: UnConfigFn<'webComponents'> = (context) => {
         },
       }),
     })
-    /* Category: Possible Errors */
-    .addRule('no-constructor-attributes', ERROR) // 🟢
-    .addRule('no-invalid-element-name', ERROR) // 🟢
-    .addRule('no-self-class', ERROR) // 🟢
-    /* Category: Best Practice */
-    .addRule('attach-shadow-constructor', ERROR)
-    .addRule('guard-super-call', ERROR)
-    .addRule('no-child-traversal-in-attributechangedcallback', ERROR)
-    .addRule('no-child-traversal-in-connectedcallback', ERROR)
-    .addRule('no-closed-shadow-root', ERROR)
-    .addRule('no-constructor-params', ERROR)
-    .addRule('no-customized-built-in-elements', ERROR)
-    .addRule('no-invalid-extends', ERROR)
-    .addRule('no-typos', ERROR)
-    .addRule('require-listener-teardown', ERROR)
-    /* Category: Preference/convention */
-    .addRule('define-tag-after-class-definition', OFF)
-    .addRule('expose-class-on-global', OFF)
-    .addRule('file-name-matches-element', OFF)
-    .addRule('guard-define-call', OFF)
-    .addRule('max-elements-per-file', OFF)
-    .addRule('no-constructor', WARNING)
-    .addRule('no-exports-with-element', OFF)
-    .addRule('no-method-prefixed-with-on', WARNING)
-    .addRule('tag-name-matches-class', WARNING)
+    .markCategory('Possible Errors')
+    .addRule('no-constructor-attributes', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-invalid-element-name', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-self-class', ERROR) /** @since 0.1.0 */ // 🟢
+    .markCategory('Best Practice')
+    .addRule('attach-shadow-constructor', ERROR) /** @since 0.1.0 */
+    .addRule('guard-super-call', ERROR) /** @since 0.1.0 */
+    .addRule('no-child-traversal-in-attributechangedcallback', ERROR) /** @since 2.0.0-ce.1 */
+    .addRule('no-child-traversal-in-connectedcallback', ERROR) /** @since 2.0.0-ce.1 */
+    .addRule('no-closed-shadow-root', ERROR) /** @since 0.1.0 */
+    .addRule('no-constructor-params', ERROR) /** @since 1.3.1 */
+    .addRule('no-customized-built-in-elements', ERROR) /** @since 2.0.0-ce.1 */
+    .addRule('no-invalid-extends', ERROR) /** @since 2.0.0-ce.1 */
+    .addRule('no-typos', ERROR) /** @since 0.1.0 */
+    .addRule('require-listener-teardown', ERROR) /** @since 1.3.1 */
+    .markCategory('Preference/convention')
+    .addRule('define-tag-after-class-definition', OFF) /** @since 2.0.0-ce.1 */
+    .addRule('expose-class-on-global', OFF) /** @since 2.0.0-ce.1 */
+    .addRule('file-name-matches-element', OFF) /** @since 2.0.0-ce.1 */
+    .addRule('guard-define-call', OFF) /** @since 2.0.0-ce.1 */
+    .addRule('max-elements-per-file', OFF) /** @since 2.0.0-ce.1 */
+    .addRule('no-constructor', WARNING) /** @since 2.0.0-ce.1 */
+    .addRule('no-exports-with-element', OFF) /** @since 2.0.0-ce.1 */
+    .addRule('no-method-prefixed-with-on', WARNING) /** @since 2.0.0-ce.1 */
+    .addRule('tag-name-matches-class', WARNING) /** @since 2.0.0-ce.1 */
+    .enableConfigTesterForPlugin('wc')
     .addOverrides();
 
   return {
