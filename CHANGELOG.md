@@ -92,7 +92,10 @@
   - Support Nuxt 4 new directory structure.
   - Added a new sub-config, `scopedCss` with the rules related to scoped CSS, via [`eslint-plugin-vue-scoped-css`](https://npmjs.com/eslint-plugin-vue-scoped-css) and enabled by default.
 - **perfectionist** config: added a bunch of new sub-configs, corresponding to each rule of the plugin. Plugin shared settings are now also configurable via `settings` option.
-- **vitest** config: rule [`prefer-describe-function-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-describe-function-title.md) is now disabled by default.
+- **vitest** config:
+  - Rule [`prefer-describe-function-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-describe-function-title.md) is now disabled by default.
+  - Added `paddingAround` option to control whether `padding-around-*` rules will be enabled.
+  - Added `typescript` sub-config for the rules designed to work exclusively with TypeScript files.
 - **angular** config: you are now expected to install `@angular-eslint/eslint-plugin` and `@angular-eslint/eslint-plugin-template` packages manually and only the rules from the installed packages will be used.
 - **import** config: added a new option `allowDevDependencies` to control if dev dependencies usage will be reported and where.
 - **nodeDependencies** config: added a new option `enforceAbsoluteVersion` to enforce to use or not to use absolute versions for dependencies.

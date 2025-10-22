@@ -88,7 +88,7 @@ export interface JestEslintConfigOptions
   configTypescript?:
     | boolean
     | UnConfigOptions<
-        Pick<RulesRecordPartial<'jest'>, `jest/${'no-untyped-mock-factory' | 'unbound-method'}`>
+        Pick<RulesRecordPartial<'jest'>, `jest/${(typeof JEST_TYPESCRIPT_RELATED_RULES)[number]}`>
       >;
 
   /**
@@ -175,10 +175,12 @@ export interface JestEslintConfigOptions
   minAndMaxExpectArgs?: [min: number | undefined, max: number | undefined];
 }
 
-const JEST_TYPESCRIPT_RELATED_RULES = new Set<string>([
+const JEST_TYPESCRIPT_RELATED_RULES = [
   'no-untyped-mock-factory',
   'unbound-method',
-] satisfies RuleNamesForPlugin<'jest'>[]);
+] satisfies RuleNamesForPlugin<'jest'>[];
+
+const JEST_TYPESCRIPT_RELATED_RULES_SET = new Set<string>(JEST_TYPESCRIPT_RELATED_RULES);
 
 export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
   const [eslintPluginJest, isJestExtendedInstalled] = await Promise.all([
@@ -191,13 +193,13 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     return null;
   }
 
-  const isTypescriptEnabled = context.configsMeta.ts.enabled;
+  const isTsConfigEnabled = context.configsMeta.ts.enabled;
 
   const optionsRaw = context.rootOptions.configs?.jest;
   const optionsResolved = assignDefaults(optionsRaw, {
     configJestExtended: isJestExtendedInstalled,
     configNoOnlyTests: false,
-    configTypescript: isTypescriptEnabled,
+    configTypescript: isTsConfigEnabled,
     paddingAround: true,
   } satisfies JestEslintConfigOptions);
 
@@ -340,7 +342,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     .addRule('valid-title', ERROR) // 🟢
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest', {
-      rulesToSkipInConfig: (ruleName) => JEST_TYPESCRIPT_RELATED_RULES.has(ruleName),
+      rulesToSkipInConfig: (ruleName) => JEST_TYPESCRIPT_RELATED_RULES_SET.has(ruleName),
     })
     .addOverrides();
 
@@ -370,12 +372,12 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     .addRule('no-untyped-mock-factory', ERROR)
     // Requires type checking
     // TODO auto-include test files in TS config?
-    .addRule('unbound-method', isTypescriptEnabled ? ERROR : OFF)
+    .addRule('unbound-method', isTsConfigEnabled ? ERROR : OFF)
     // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
     .disableAnyRule('ts', 'unbound-method')
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest', {
-      rulesToSkipInConfig: (ruleName) => !JEST_TYPESCRIPT_RELATED_RULES.has(ruleName),
+      rulesToSkipInConfig: (ruleName) => !JEST_TYPESCRIPT_RELATED_RULES_SET.has(ruleName),
     })
     .addOverrides();
 
