@@ -1,9 +1,9 @@
 import {ERROR, OFF} from '../constants';
 import {
+  type RuleNamesForPlugin,
   type RulesRecordPartial,
   type UnConfigOptions,
   createConfigBuilder,
-  type RuleNamesForPlugin,
 } from '../eslint';
 import type {PickKeysStartingWith} from '../types';
 import {assignDefaults} from '../utils';

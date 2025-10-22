@@ -1,6 +1,6 @@
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder, type RuleNamesForPlugin} from '../eslint';
+import {type RuleNamesForPlugin, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import {assignDefaults, doesPackageExist, getKeysOfTruthyValues, interopDefault} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';

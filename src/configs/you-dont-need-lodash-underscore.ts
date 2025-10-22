@@ -203,79 +203,80 @@ export const youDontNeedLodashUnderscoreUnConfig: UnConfigFn<'youDontNeedLodashU
 
   configBuilder
     ?.addConfig(['you-dont-need-lodash-underscore', {includeDefaultFilesAndIgnores: true}])
-    .addRule(...getRuleSeverity('all'))
-    .addRule(...getRuleSeverity('any'))
-    .addRule(...getRuleSeverity('assign'))
-    .addRule(...getRuleSeverity('bind'))
-    .addRule(...getRuleSeverity('capitalize'))
-    .addRule(...getRuleSeverity('castArray'))
-    .addRule(...getRuleSeverity('cloneDeep'))
-    .addRule(...getRuleSeverity('collect'))
-    .addRule(...getRuleSeverity('concat'))
-    .addRule(...getRuleSeverity('contains'))
-    .addRule(...getRuleSeverity('defaults'))
-    .addRule(...getRuleSeverity('detect'))
-    .addRule(...getRuleSeverity('drop'))
-    .addRule(...getRuleSeverity('dropRight'))
-    .addRule(...getRuleSeverity('each'))
-    .addRule(...getRuleSeverity('endsWith'))
-    .addRule(...getRuleSeverity('entries'))
-    .addRule(...getRuleSeverity('every'))
-    .addRule(...getRuleSeverity('extendOwn'))
-    .addRule(...getRuleSeverity('fill'))
-    .addRule(...getRuleSeverity('filter'))
-    .addRule(...getRuleSeverity('find'))
-    .addRule(...getRuleSeverity('findIndex'))
-    .addRule(...getRuleSeverity('first'))
-    .addRule(...getRuleSeverity('flatten'))
-    .addRule(...getRuleSeverity('foldl'))
-    .addRule(...getRuleSeverity('foldr'))
-    .addRule(...getRuleSeverity('forEach'))
-    .addRule(...getRuleSeverity('get'))
-    .addRule(...getRuleSeverity('head'))
-    .addRule(...getRuleSeverity('includes'))
-    .addRule(...getRuleSeverity('indexOf'))
-    .addRule(...getRuleSeverity('inject'))
-    .addRule(...getRuleSeverity('isArray'))
-    .addRule(...getRuleSeverity('isArrayBuffer'))
-    .addRule(...getRuleSeverity('isDate'))
-    .addRule(...getRuleSeverity('isFinite'))
-    .addRule(...getRuleSeverity('isFunction'))
-    .addRule(...getRuleSeverity('isInteger'))
-    .addRule(...getRuleSeverity('isNan'))
-    .addRule(...getRuleSeverity('isNil'))
-    .addRule(...getRuleSeverity('isNull'))
-    .addRule(...getRuleSeverity('isString'))
-    .addRule(...getRuleSeverity('isUndefined'))
-    .addRule(...getRuleSeverity('join'))
-    .addRule(...getRuleSeverity('keys'))
-    .addRule(...getRuleSeverity('last'))
-    .addRule(...getRuleSeverity('lastIndexOf'))
-    .addRule(...getRuleSeverity('map'))
-    .addRule(...getRuleSeverity('omit'))
-    .addRule(...getRuleSeverity('padEnd'))
-    .addRule(...getRuleSeverity('padStart'))
-    .addRule(...getRuleSeverity('pairs'))
-    .addRule(...getRuleSeverity('reduce'))
-    .addRule(...getRuleSeverity('reduceRight'))
-    .addRule(...getRuleSeverity('repeat'))
-    .addRule(...getRuleSeverity('replace'))
-    .addRule(...getRuleSeverity('reverse'))
-    .addRule(...getRuleSeverity('select'))
-    .addRule(...getRuleSeverity('size'))
-    .addRule(...getRuleSeverity('slice'))
-    .addRule(...getRuleSeverity('some'))
-    .addRule(...getRuleSeverity('split'))
-    .addRule(...getRuleSeverity('startsWith'))
-    .addRule(...getRuleSeverity('takeRight'))
-    .addRule(...getRuleSeverity('throttle'))
-    .addRule(...getRuleSeverity('toLower'))
-    .addRule(...getRuleSeverity('toPairs'))
-    .addRule(...getRuleSeverity('toUpper'))
-    .addRule(...getRuleSeverity('trim'))
-    .addRule(...getRuleSeverity('unionBy'))
-    .addRule(...getRuleSeverity('uniq'))
-    .addRule(...getRuleSeverity('values'))
+    .addRule(...getRuleSeverity('all')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('any')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('assign')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('bind')) /** @since 6.4.0 */
+    .addRule(...getRuleSeverity('capitalize')) /** @since 6.13.0 */
+    .addRule(...getRuleSeverity('castArray')) /** @since 6.11.0 */
+    .addRule(...getRuleSeverity('cloneDeep')) /** @since 6.14.0 */
+    .addRule(...getRuleSeverity('collect')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('concat')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('contains')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('defaults')) /** @since 6.13.0 */
+    .addRule(...getRuleSeverity('detect')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('drop')) /** @since 6.5.0 */
+    .addRule(...getRuleSeverity('dropRight')) /** @since 6.7.0 */
+    .addRule(...getRuleSeverity('each')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('endsWith')) /** @since 6.9.0 */
+    .addRule(...getRuleSeverity('entries')) /** @since 6.2.0 */
+    .addRule(...getRuleSeverity('every')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('extendOwn')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('fill')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('filter')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('find')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('findIndex')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('first')) /** @since 6.4.0 */
+    .addRule(...getRuleSeverity('flatten')) /** @since 6.8.0 */
+    .addRule(...getRuleSeverity('foldl')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('foldr')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('forEach')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('get')) /** @since 6.11.0 */
+    .addRule(...getRuleSeverity('head')) /** @since 6.13.0 */
+    .addRule(...getRuleSeverity('includes')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('indexOf')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('inject')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('isArray')) /** @since 6.4.0 */
+    .addRule(...getRuleSeverity('isArrayBuffer')) /** @since 6.13.0 */
+    .addRule(...getRuleSeverity('isDate')) /** @since 6.13.0 */
+    .addRule(...getRuleSeverity('isFinite')) /** @since 6.5.0 */
+    .addRule(...getRuleSeverity('isFunction')) /** @since 6.11.0 */
+    .addRule(...getRuleSeverity('isInteger')) /** @since 6.7.0 */
+    .addRule(...getRuleSeverity('isNan')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('isNil')) /** @since 6.6.0 */
+    .addRule(...getRuleSeverity('isNull')) /** @since 6.5.0 */
+    .addRule(...getRuleSeverity('isString')) /** @since 6.11.0 */
+    .addRule(...getRuleSeverity('isUndefined')) /** @since 6.5.0 */
+    .addRule(...getRuleSeverity('join')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('keys')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('last')) /** @since 6.4.0 */
+    .addRule(...getRuleSeverity('lastIndexOf')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('map')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('omit')) /** @since 6.5.0 */
+    .addRule(...getRuleSeverity('padEnd')) /** @since 6.6.0 */
+    .addRule(...getRuleSeverity('padStart')) /** @since 6.6.0 */
+    .addRule(...getRuleSeverity('pairs')) /** @since 6.2.0 */
+    .addRule(...getRuleSeverity('reduce')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('reduceRight')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('repeat')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('replace')) /** @since 6.4.0 */
+    .addRule(...getRuleSeverity('reverse')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('select')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('size')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('slice')) /** @since 6.4.0 */
+    .addRule(...getRuleSeverity('some')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('split')) /** @since 6.5.0 */
+    .addRule(...getRuleSeverity('startsWith')) /** @since 6.5.0 */
+    .addRule(...getRuleSeverity('takeRight')) /** @since 6.5.0 */
+    .addRule(...getRuleSeverity('throttle')) /** @since 6.9.0 */
+    .addRule(...getRuleSeverity('toLower')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('toPairs')) /** @since 6.2.0 */
+    .addRule(...getRuleSeverity('toUpper')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('trim')) /** @since 5.0.0 */
+    .addRule(...getRuleSeverity('unionBy')) /** @since 6.13.0 */
+    .addRule(...getRuleSeverity('uniq')) /** @since 6.4.0 */
+    .addRule(...getRuleSeverity('values')) /** @since 6.1.0 */
+    .enableConfigTesterForPlugin('you-dont-need-lodash-underscore')
     .addOverrides();
 
   return {

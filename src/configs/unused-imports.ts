@@ -1,10 +1,10 @@
 import {ERROR} from '../constants';
 import {
   type GetRuleOptions,
+  type RuleNamesForPlugin,
   type RulesRecordPartial,
   type UnConfigOptions,
   createConfigBuilder,
-  type RuleNamesForPlugin,
 } from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
