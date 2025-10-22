@@ -91,6 +91,7 @@
 - **vue** config:
   - Support Nuxt 4 new directory structure.
   - Added a new sub-config, `scopedCss` with the rules related to scoped CSS, via [`eslint-plugin-vue-scoped-css`](https://npmjs.com/eslint-plugin-vue-scoped-css) and enabled by default.
+  - **a11y** config: enabled [`no-aria-hidden-on-focusable`](https://vue-a11y.github.io/eslint-plugin-vuejs-accessibility/rules/no-aria-hidden-on-focusable.html) and [`no-role-presentation-on-focusable`](https://vue-a11y.github.io/eslint-plugin-vuejs-accessibility/rules/no-role-presentation-on-focusable.html) rules.
 - **perfectionist** config: added a bunch of new sub-configs, corresponding to each rule of the plugin. Plugin shared settings are now also configurable via `settings` option.
 - **vitest** config:
   - Rule [`prefer-describe-function-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-describe-function-title.md) is now disabled by default.
