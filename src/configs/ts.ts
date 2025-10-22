@@ -11,6 +11,7 @@ import {
 } from '../constants';
 import {
   type GetRuleOptions,
+  type RuleNamesForPlugin,
   type RulesRecord,
   type RulesRecordPartial,
   type UnConfigOptions,
@@ -33,68 +34,74 @@ import type {VueEslintConfigOptions} from './vue';
 import type {UnConfigFn} from './index';
 
 // TODO generate automatically?
-type TypeAwareRules =
-  | 'await-thenable'
-  | 'consistent-return'
-  | 'consistent-type-exports'
-  | 'dot-notation'
-  | 'naming-convention'
-  | 'no-array-delete'
-  | 'no-base-to-string'
-  | 'no-confusing-void-expression'
-  | 'no-deprecated'
-  | 'no-duplicate-type-constituents'
-  | 'no-floating-promises'
-  | 'no-for-in-array'
-  | 'no-implied-eval'
-  | 'no-meaningless-void-operator'
-  | 'no-misused-promises'
-  | 'no-misused-spread'
-  | 'no-mixed-enums'
-  | 'no-redundant-type-constituents'
-  | 'no-unnecessary-boolean-literal-compare'
-  | 'no-unnecessary-condition'
-  | 'no-unnecessary-qualifier'
-  | 'no-unnecessary-template-expression'
-  | 'no-unnecessary-type-arguments'
-  | 'no-unnecessary-type-assertion'
-  | 'no-unnecessary-type-conversion'
-  | 'no-unnecessary-type-parameters'
-  | 'no-unsafe-argument'
-  | 'no-unsafe-assignment'
-  | 'no-unsafe-call'
-  | 'no-unsafe-enum-comparison'
-  | 'no-unsafe-member-access'
-  | 'no-unsafe-return'
-  | 'no-unsafe-type-assertion'
-  | 'no-unsafe-unary-minus'
-  | 'non-nullable-type-assertion-style'
-  | 'only-throw-error'
-  | 'prefer-destructuring'
-  | 'prefer-find'
-  | 'prefer-includes'
-  | 'prefer-nullish-coalescing'
-  | 'prefer-optional-chain'
-  | 'prefer-promise-reject-errors'
-  | 'prefer-readonly'
-  | 'prefer-readonly-parameter-types'
-  | 'prefer-reduce-type-parameter'
-  | 'prefer-regexp-exec'
-  | 'prefer-return-this-type'
-  | 'prefer-string-starts-ends-with'
-  | 'promise-function-async'
-  | 'related-getter-setter-pairs'
-  | 'require-array-sort-compare'
-  | 'require-await'
-  | 'restrict-plus-operands'
-  | 'restrict-template-expressions'
-  | 'return-await'
-  | 'strict-boolean-expressions'
-  | 'switch-exhaustiveness-check'
-  | 'unbound-method'
-  | 'use-unknown-in-catch-callback-variable';
+const TS_PLUGIN_TYPE_AWARE_RULES = [
+  'await-thenable',
+  'consistent-return',
+  'consistent-type-exports',
+  'dot-notation',
+  'naming-convention',
+  'no-array-delete',
+  'no-base-to-string',
+  'no-confusing-void-expression',
+  'no-deprecated',
+  'no-duplicate-type-constituents',
+  'no-floating-promises',
+  'no-for-in-array',
+  'no-implied-eval',
+  'no-meaningless-void-operator',
+  'no-misused-promises',
+  'no-misused-spread',
+  'no-mixed-enums',
+  'no-redundant-type-constituents',
+  'no-unnecessary-boolean-literal-compare',
+  'no-unnecessary-condition',
+  'no-unnecessary-qualifier',
+  'no-unnecessary-template-expression',
+  'no-unnecessary-type-arguments',
+  'no-unnecessary-type-assertion',
+  'no-unnecessary-type-conversion',
+  'no-unnecessary-type-parameters',
+  'no-unsafe-argument',
+  'no-unsafe-assignment',
+  'no-unsafe-call',
+  'no-unsafe-enum-comparison',
+  'no-unsafe-member-access',
+  'no-unsafe-return',
+  'no-unsafe-type-assertion',
+  'no-unsafe-unary-minus',
+  'non-nullable-type-assertion-style',
+  'only-throw-error',
+  'prefer-destructuring',
+  'prefer-find',
+  'prefer-includes',
+  'prefer-nullish-coalescing',
+  'prefer-optional-chain',
+  'prefer-promise-reject-errors',
+  'prefer-readonly',
+  'prefer-readonly-parameter-types',
+  'prefer-reduce-type-parameter',
+  'prefer-regexp-exec',
+  'prefer-return-this-type',
+  'prefer-string-starts-ends-with',
+  'promise-function-async',
+  'related-getter-setter-pairs',
+  'require-array-sort-compare',
+  'require-await',
+  'restrict-plus-operands',
+  'restrict-template-expressions',
+  'return-await',
+  'strict-boolean-expressions',
+  'switch-exhaustiveness-check',
+  'unbound-method',
+  'use-unknown-in-catch-callback-variable',
+] satisfies RuleNamesForPlugin<'ts'>[];
 
-type TypeAwareRulesWithPrefixes = Pick<RulesRecordPartial<'ts'>, `ts/${TypeAwareRules}`>;
+const TS_PLUGIN_TYPE_AWARE_RULES_SET = new Set<string>(TS_PLUGIN_TYPE_AWARE_RULES);
+
+type TypeAwareRulesWithPrefixes = Pick<
+  RulesRecordPartial<'ts'>,
+  `ts/${(typeof TS_PLUGIN_TYPE_AWARE_RULES)[number]}`
+>;
 
 type TsconfigTopLevelKeys =
   | 'files'
@@ -770,167 +777,181 @@ export const tsUnConfig: UnConfigFn<
   // TODO add rules
   configBuilderNONTypeAware
     ?.addConfig(['ts/non-type-aware/rules', {includeDefaultFilesAndIgnores: true}])
-    /* Category: Strict */
-    .addRule('ban-ts-comment', ERROR) // 🟣
-    .addRule('no-duplicate-enum-values', ERROR) // 🟣
-    .addRule('no-dynamic-delete', WARNING) // 🟣
-    .addRule('no-empty-object-type', ERROR, [{allowInterfaces: 'with-single-extends'}]) // 🟣
-    .addRule('no-explicit-any', WARNING, [{ignoreRestArgs: true}]) // 🟣
-    .addRule('no-extra-non-null-assertion', ERROR) // 🟣
+    .markCategory('Strict')
+    .addRule('ban-ts-comment', ERROR) /** @since 2.18.0 */ // 🟣
+    .addRule('no-duplicate-enum-values', ERROR) /** @since 5.22.0 */ // 🟣
+    .addRule('no-dynamic-delete', WARNING) /** @since 2.8.0 */ // 🟣
+    .addRule('no-empty-object-type', ERROR, [
+      {allowInterfaces: 'with-single-extends'},
+    ]) /** @since 8.0.0 */ // 🟣
+    .addRule('no-explicit-any', WARNING, [{ignoreRestArgs: true}]) /** @since 0.0.1-alpha.0 */ // 🟣
+    .addRule('no-extra-non-null-assertion', ERROR) /** @since 2.9.0 */ // 🟣
     .addRule('no-extraneous-class', ERROR, [
       {
         allowWithDecorator: true, // Primarily for Angular
       },
-    ]) // 🟣
-    .addRule('no-invalid-void-type', ERROR) // 🟣
-    .addRule('no-misused-new', ERROR) // 🟣
-    .addRule('no-namespace', ERROR) // 🟣
-    .addRule('no-non-null-asserted-nullish-coalescing', ERROR) // 🟣
-    .addRule('no-non-null-asserted-optional-chain', ERROR) // 🟣
-    .addRule('no-non-null-assertion', WARNING) // 🟣
-    .addRule('no-this-alias', ERROR) // 🟣
-    .addRule('no-unnecessary-type-constraint', ERROR) // 🟣
-    .addRule('no-unsafe-declaration-merging', ERROR) // 🟣
-    .addRule('no-unsafe-function-type', ERROR) // 🟣
-    .addRule('no-wrapper-object-types', ERROR) // 🟣
-    .addRule('prefer-as-const', ERROR) // 🟣
-    .addRule('prefer-literal-enum-member', ERROR, [{allowBitwiseExpressions: true}]) // 🟣
-    .addRule('prefer-namespace-keyword', ERROR) // 🟣
-    .addRule('triple-slash-reference', ERROR) // 🟣
-    .addRule('unified-signatures', ERROR, [{ignoreOverloadsWithDifferentJSDoc: true}]) // 🟣
-    /* Category: Stylistic */
-    .addRule('adjacent-overload-signatures', ERROR) // 💅
-    .addRule('array-type', ERROR) // 💅
-    .addRule('ban-tslint-comment', ERROR) // 💅
-    .addRule('class-literal-property-style', ERROR) // 💅
-    .addRule('consistent-generic-constructors', ERROR) // 💅
-    .addRule('consistent-indexed-object-style', ERROR) // 💅
-    .addRule('consistent-type-assertions', ERROR) // 💅
-    .addRule('consistent-type-definitions', ERROR) // 💅
-    .addRule('no-confusing-non-null-assertion', ERROR) // 💅
-    .addRule('no-inferrable-types', ERROR) // 💅
-    .addRule('prefer-for-of', ERROR) // 💅
-    .addRule('prefer-function-type', OFF) // 💅
-    /* Category: Additional rules */
+    ]) /** @since 0.0.1-alpha.0 */ // 🟣
+    .addRule('no-invalid-void-type', ERROR) /** @since 2.30.0 */ // 🟣
+    .addRule('no-misused-new', ERROR) /** @since 0.0.1-alpha.0 */ // 🟣
+    .addRule('no-namespace', ERROR) /** @since 0.0.1-alpha.0 */ // 🟣
+    .addRule('no-non-null-asserted-nullish-coalescing', ERROR) /** @since 4.32.0 */ // 🟣
+    .addRule('no-non-null-asserted-optional-chain', ERROR) /** @since 2.17.0 */ // 🟣
+    .addRule('no-non-null-assertion', WARNING) /** @since 0.0.1-alpha.0 */ // 🟣
+    .addRule('no-restricted-types', OFF) /** @since 8.0.0 */
+    .addRule('no-this-alias', ERROR) /** @since 0.0.1-alpha.0 */ // 🟣
+    .addRule('no-unnecessary-type-constraint', ERROR) /** @since 4.6.0 */ // 🟣
+    .addRule('no-unsafe-declaration-merging', ERROR) /** @since 5.41.0 */ // 🟣
+    .addRule('no-unsafe-function-type', ERROR) /** @since 8.0.0 */ // 🟣
+    .addRule('no-wrapper-object-types', ERROR) /** @since 8.0.0 */ // 🟣
+    .addRule('prefer-as-const', ERROR) /** @since 2.18.0 */ // 🟣
+    .addRule('prefer-literal-enum-member', ERROR, [
+      {allowBitwiseExpressions: true},
+    ]) /** @since 3.6.0 */ // 🟣
+    .addRule('prefer-namespace-keyword', ERROR) /** @since 0.0.1-alpha.0 */ // 🟣
+    .addRule('triple-slash-reference', ERROR) /** @since 1.12.0 */ // 🟣
+    .addRule('unified-signatures', ERROR, [
+      {ignoreOverloadsWithDifferentJSDoc: true},
+    ]) /** @since 1.5.0 */ // 🟣
+    .markCategory('Stylistic')
+    .addRule('adjacent-overload-signatures', ERROR) /** @since 0.0.1-alpha.0 */ // 💅
+    .addRule('array-type', ERROR) /** @since 0.0.1-alpha.0 */ // 💅
+    .addRule('ban-tslint-comment', ERROR) /** @since 3.2.0 */ // 💅
+    .addRule('class-literal-property-style', ERROR) /** @since 2.25.0 */ // 💅
+    .addRule('consistent-generic-constructors', ERROR) /** @since 5.28.0 */ // 💅
+    .addRule('consistent-indexed-object-style', ERROR) /** @since 4.4.0 */ // 💅
+    .addRule('consistent-type-assertions', ERROR) /** @since 2.0.0 */ // 💅
+    .addRule('consistent-type-definitions', ERROR) /** @since 2.0.0 */ // 💅
+    .addRule('no-confusing-non-null-assertion', ERROR) /** @since 3.2.0 */ // 💅
+    .addRule('no-inferrable-types', ERROR) /** @since 0.0.1-alpha.0 */ // 💅
+    .addRule('prefer-for-of', ERROR) /** @since 1.7.0 */ // 💅
+    .addRule('prefer-function-type', OFF) /** @since 1.4.0 */ // 💅
+    .markCategory('Additional rules')
     .addRule('consistent-type-imports', ERROR, [
       {
         ...(typescriptVersion && typescriptVersion >= 4.5 && {fixStyle: 'inline-type-imports'}),
         disallowTypeAnnotations: false,
       },
-    ])
-    .addRule('explicit-function-return-type', OFF)
-    .addRule('explicit-member-accessibility', OFF)
-    .addRule('explicit-module-boundary-types', OFF)
-    .addRule('member-ordering', OFF) // ❄️
-    .addRule('method-signature-style', ERROR)
-    .addRule('no-import-type-side-effects', ERROR)
-    .addRule('no-require-imports', OFF) // 🟣
-    .addRule('no-unnecessary-parameter-property-assignment', ERROR)
-    .addRule('no-useless-empty-export', ERROR)
-    .addRule('parameter-properties', OFF)
-    .addRule('prefer-enum-initializers', OFF)
-    /* Category: Extension rules */
-    .addRule('class-methods-use-this', ...classMethodUseThisUnEntry)
+    ]) /** @since 4.0.0 */
+    .addRule('explicit-function-return-type', OFF) /** @since 0.0.1-alpha.0 */
+    .addRule('explicit-member-accessibility', OFF) /** @since 0.0.1-alpha.0 */
+    .addRule('explicit-module-boundary-types', OFF) /** @since 2.17.0 */
+    .addRule('member-ordering', OFF) /** @since 0.0.1-alpha.0 */ // ❄️
+    .addRule('method-signature-style', ERROR) /** @since 2.27.0 */
+    .addRule('no-import-type-side-effects', ERROR) /** @since 5.51.0 */
+    .addRule('no-require-imports', OFF) /** @since 1.3.0 */ // 🟣
+    .addRule('no-unnecessary-parameter-property-assignment', ERROR) /** @since 7.16.0 */
+    .addRule('no-useless-empty-export', ERROR) /** @since 5.13.0 */
+    .addRule('parameter-properties', OFF) /** @since 5.21.0 */
+    .addRule('prefer-enum-initializers', OFF) /** @since 3.8.0 */
+    .markCategory('Extension rules')
+    .addRule('class-methods-use-this', ...classMethodUseThisUnEntry) /** @since 6.2.0 */
     .addRule(
       'default-param-last',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['default-param-last'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    )
+    ) /** @since 2.16.0 */
     .addRule(
       'init-declarations',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['init-declarations'] ?? OFF,
         inheritFromBase ? undefined : [OFF],
       ),
-    )
-    .addRule('max-params', maxParamsBaseUnEntry[0], maxParamsOptions)
+    ) /** @since 2.29.0 */
+    .addRule('max-params', maxParamsBaseUnEntry[0], maxParamsOptions) /** @since 6.9.0 */
     .addRule(
       'no-array-constructor',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-array-constructor'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    ) // 🟣
+    ) /** @since 0.0.1-alpha.0 */ // 🟣
     .addRule(
       'no-dupe-class-members',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-dupe-class-members'] ?? OFF,
         inheritFromBase ? undefined : [OFF],
       ),
-    ) // 👍
-    .addRule('no-empty-function', noEmptyFunctionBaseUnEntry[0], noEmptyFunctionOptions) // 💅
+    ) /** @since 2.19.0 */ // 👍
+    .addRule(
+      'no-empty-function',
+      noEmptyFunctionBaseUnEntry[0],
+      noEmptyFunctionOptions,
+    ) /** @since 1.11.0 */ // 💅
     .addRule(
       'no-invalid-this',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-invalid-this'] ?? OFF,
         inheritFromBase ? undefined : [OFF],
       ),
-    ) // 👍
+    ) /** @since 2.31.0 */ // 👍
     .addRule(
       'no-loop-func',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-loop-func'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    )
+    ) /** @since 4.1.0 */
     .addRule(
       'no-magic-numbers',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-magic-numbers'] ?? OFF,
         inheritFromBase ? undefined : [OFF],
       ),
-    )
+    ) /** @since 1.11.0 */
     .addRule(
       'no-redeclare',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-redeclare'] ?? OFF,
         inheritFromBase ? undefined : [OFF],
       ),
-    ) // 👍
+    ) /** @since 4.0.0 */ // 👍
     .addRule(
       'no-restricted-imports',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-restricted-imports'] ?? OFF,
         inheritFromBase ? undefined : [OFF],
       ),
-    )
+    ) /** @since 4.32.0 */
     .addRule(
       'no-shadow',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-shadow'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    )
+    ) /** @since 4.0.0 */
     .addRule(
       'no-unused-expressions',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-unused-expressions'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    ) // 🟣
+    ) /** @since 2.7.0 */ // 🟣
     .addRule(
       'no-unused-vars',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-unused-vars'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    ) // 🟣
+    ) /** @since 0.0.1-alpha.0 */ // 🟣
     .addRule(
       'no-use-before-define',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-use-before-define'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    )
+    ) /** @since 0.0.1-alpha.0 */
     .addRule(
       'no-useless-constructor',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-useless-constructor'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    ) // 🟣
+    ) /** @since 1.2.0 */ // 🟣
+    .enableConfigTesterForPlugin('ts', {
+      rulesToSkipInConfig: (ruleName) => TS_PLUGIN_TYPE_AWARE_RULES_SET.has(ruleName),
+    })
     .addOverrides();
 
   // CONFIG TYPE AWARE
@@ -967,95 +988,106 @@ export const tsUnConfig: UnConfigFn<
       ...(filesTypeAware.length > 0 && {files: filesTypeAware}),
       ...(ignoresTypeAware.length > 0 && {ignores: ignoresTypeAware}),
     })
-    /* Category: Strict */
-    .addRule('await-thenable', ERROR) // 🟣
-    .addRule('no-array-delete', ERROR) // 🟣
-    .addRule('no-base-to-string', ERROR, [{checkUnknown: true}]) // 🟣
-    .addRule('no-confusing-void-expression', ERROR, [{ignoreArrowShorthand: true}]) // 🟣
-    .addRule('no-deprecated', WARNING) // 🟣
-    .addRule('no-duplicate-type-constituents', ERROR) // 🟣
+    .markCategory('Strict')
+    .addRule('await-thenable', ERROR) /** @since 1.7.0 */ // 🟣
+    .addRule('no-array-delete', ERROR) /** @since 6.19.0 */ // 🟣
+    .addRule('no-base-to-string', ERROR, [{checkUnknown: true}]) /** @since 2.22.0 */ // 🟣
+    .addRule('no-confusing-void-expression', ERROR, [
+      {ignoreArrowShorthand: true},
+    ]) /** @since 4.7.0 */ // 🟣
+    .addRule('no-deprecated', WARNING) /** @since 8.3.0 */ // 🟣
+    .addRule('no-duplicate-type-constituents', ERROR) /** @since 5.57.0 */ // 🟣
     .addRule('no-floating-promises', ERROR, [
       {
         checkThenables: true,
         ignoreVoid: true, // Default
       },
-    ]) // 🟣
-    .addRule('no-for-in-array', ERROR) // 🟣
-    .addRule('no-meaningless-void-operator', ERROR) // 🟣
-    .addRule('no-misused-promises', ERROR) // 🟣
-    .addRule('no-misused-spread', ERROR) // 🟣 >=8.20.0
-    .addRule('no-mixed-enums', ERROR) // 🟣
-    .addRule('no-redundant-type-constituents', ERROR) // 🟣
-    .addRule('no-unnecessary-boolean-literal-compare', ERROR) // 🟣
+    ]) /** @since 1.11.0 */ // 🟣
+    .addRule('no-for-in-array', ERROR) /** @since 1.3.0 */ // 🟣
+    .addRule('no-meaningless-void-operator', ERROR) /** @since 4.31.0 */ // 🟣
+    .addRule('no-misused-promises', ERROR) /** @since 1.13.0 */ // 🟣
+    .addRule('no-misused-spread', ERROR) /** @since 8.20.0 */ // 🟣
+    .addRule('no-mixed-enums', ERROR) /** @since 5.53.0 */ // 🟣
+    .addRule('no-redundant-type-constituents', ERROR) /** @since 5.13.0 */ // 🟣
+    .addRule('no-unnecessary-boolean-literal-compare', ERROR) /** @since 2.19.0 */ // 🟣
     .addRule('no-unnecessary-condition', ERROR, [
       {
         allowConstantLoopConditions: 'only-allowed-literals',
-        checkTypePredicates: true, // >=8.8.0
+        checkTypePredicates: true /** @since 8.8.0 */,
       },
-    ]) // 🟣
-    .addRule('no-unnecessary-template-expression', ERROR) // 🟣
-    .addRule('no-unnecessary-type-arguments', ERROR) // 🟣
-    .addRule('no-unnecessary-type-assertion', ERROR) // 🟣
-    .addRule('no-unnecessary-type-conversion', ERROR)
-    .addRule('no-unnecessary-type-parameters', ERROR) // 🟣
-    .addRule('no-unsafe-argument', noUnsafeRulesSeverity) // 🟣
-    .addRule('no-unsafe-assignment', noUnsafeRulesSeverity) // 🟣
-    .addRule('no-unsafe-call', noUnsafeRulesSeverity) // 🟣
-    .addRule('no-unsafe-enum-comparison', noUnsafeRulesSeverity) // 🟣
-    .addRule('no-unsafe-member-access', noUnsafeRulesSeverity) // 🟣
-    .addRule('no-unsafe-return', noUnsafeRulesSeverity) // 🟣
-    .addRule('no-unsafe-type-assertion', OFF)
-    .addRule('no-unsafe-unary-minus', ERROR) // 🟣
-    .addRule('prefer-reduce-type-parameter', ERROR) // 🟣
-    .addRule('prefer-return-this-type', ERROR) // 🟣
-    .addRule('restrict-plus-operands', ERROR) // 🟣
-    .addRule('restrict-template-expressions', ERROR, [{allowAny: false, allowRegExp: false}]) // 🟣
-    .addRule('unbound-method', ERROR) // 🟣
-    .addRule('use-unknown-in-catch-callback-variable', ERROR) // 🟣
-    /* Category: Stylistic */
-    .addRule('non-nullable-type-assertion-style', ERROR) // 💅
-    .addRule('prefer-find', ERROR) // 💅
-    .addRule('prefer-includes', ERROR) // 💅
+    ]) /** @since 2.3.0 */ // 🟣
+    .addRule(
+      'no-unnecessary-template-expression',
+      ERROR,
+    ) /** @since 7.12.0 */ /** @aka no-useless-template-literals */ // 🟣
+    .addRule('no-unnecessary-type-arguments', ERROR) /** @since 2.0.0 */ // 🟣
+    .addRule('no-unnecessary-type-assertion', ERROR) /** @since 1.2.0 */ // 🟣
+    .addRule('no-unnecessary-type-conversion', ERROR) /** @since 8.32.0 */
+    .addRule('no-unnecessary-type-parameters', ERROR) /** @since 7.16.0 */ // 🟣
+    .addRule('no-unsafe-argument', noUnsafeRulesSeverity) /** @since 4.21.0 */ // 🟣
+    .addRule('no-unsafe-assignment', noUnsafeRulesSeverity) /** @since 2.28.0 */ // 🟣
+    .addRule('no-unsafe-call', noUnsafeRulesSeverity) /** @since 2.23.0 */ // 🟣
+    .addRule('no-unsafe-enum-comparison', noUnsafeRulesSeverity) /** @since 5.58.0 */ // 🟣
+    .addRule('no-unsafe-member-access', noUnsafeRulesSeverity) /** @since 2.23.0 */ // 🟣
+    .addRule('no-unsafe-return', noUnsafeRulesSeverity) /** @since 2.23.0 */ // 🟣
+    .addRule('no-unsafe-type-assertion', OFF) /** @since 8.15.0 */
+    .addRule('no-unsafe-unary-minus', ERROR) /** @since 6.11.0 */ // 🟣
+    .addRule('prefer-reduce-type-parameter', ERROR) /** @since 2.28.0 */ // 🟣
+    .addRule('prefer-return-this-type', ERROR) /** @since 4.29.0 */ // 🟣
+    .addRule('restrict-plus-operands', ERROR) /** @since 1.1.0 */ // 🟣
+    .addRule('restrict-template-expressions', ERROR, [
+      {allowAny: false, allowRegExp: false},
+    ]) /** @since 2.8.0 */ // 🟣
+    .addRule('unbound-method', ERROR) /** @since 1.7.0 */ // 🟣
+    .addRule('use-unknown-in-catch-callback-variable', ERROR) /** @since 7.3.0 */ // 🟣
+    .markCategory('Stylistic')
+    .addRule('non-nullable-type-assertion-style', ERROR) /** @since 4.10.0 */ // 💅
+    .addRule('prefer-find', ERROR) /** @since 6.21.0 */ // 💅
+    .addRule('prefer-includes', ERROR) /** @since 1.7.0 */ // 💅
     .disableAnyRule('unicorn', 'prefer-includes')
-    .addRule('prefer-nullish-coalescing', OFF) // 💅
-    .addRule('prefer-optional-chain', ERROR) // 💅
-    .addRule('prefer-regexp-exec', OFF) // 💅
-    .addRule('prefer-string-starts-ends-with', ERROR, [{allowSingleElementEquality: 'always'}]) // 💅
-    /* Category: Additional rules */
-    .addRule('consistent-type-exports', ERROR, [{fixMixedExportsWithInlineTypeSpecifier: true}])
+    .addRule('prefer-nullish-coalescing', OFF) /** @since 2.9.0 */ // 💅
+    .addRule('prefer-optional-chain', ERROR) /** @since 2.9.0 */ // 💅
+    .addRule('prefer-regexp-exec', OFF) /** @since 1.9.0 */ // 💅
+    .addRule('prefer-string-starts-ends-with', ERROR, [
+      {allowSingleElementEquality: 'always'},
+    ]) /** @since 1.7.0 */ // 💅
+    .markCategory('Additional rules')
+    .addRule('consistent-type-exports', ERROR, [
+      {fixMixedExportsWithInlineTypeSpecifier: true},
+    ]) /** @since 5.2.0 */
     .addRule('naming-convention', ERROR, [
       {selector: 'enum', format: ['PascalCase']},
       {selector: 'enumMember', format: ['PascalCase']},
       {selector: 'interface', format: ['PascalCase']},
       {selector: 'typeLike', format: ['PascalCase']},
-    ])
-    .addRule('no-unnecessary-qualifier', OFF)
-    .addRule('prefer-readonly', ERROR)
-    .addRule('prefer-readonly-parameter-types', OFF)
-    .addRule('promise-function-async', OFF)
-    .addRule('related-getter-setter-pairs', ERROR) // 🟣
-    .addRule('require-array-sort-compare', OFF)
-    .addRule('return-await', ERROR, ['always']) // 🟣
+    ]) /** @since 2.16.0 */
+    .addRule('no-unnecessary-qualifier', OFF) /** @since 1.4.0 */
+    .addRule('prefer-readonly', ERROR) /** @since 1.12.0 */
+    .addRule('prefer-readonly-parameter-types', OFF) /** @since 2.22.0 */
+    .addRule('promise-function-async', OFF) /** @since 1.3.0 */
+    .addRule('related-getter-setter-pairs', ERROR) /** @since 8.15.0 */ // 🟣
+    .addRule('require-array-sort-compare', OFF) /** @since 1.4.0 */
+    .addRule('return-await', ERROR, ['always']) /** @since 2.9.0 */ // 🟣
     // Note: has different name. Also note that the original rule is deprecated and not included in this config, but we disable it anyway just for safety
     .disableAnyRule('', 'no-return-await') // 🟣
-    .addRule('strict-boolean-expressions', OFF)
-    .addRule('switch-exhaustiveness-check', ERROR)
-    /* Category: Extension rules */
+    .addRule('strict-boolean-expressions', OFF) /** @since 1.12.0 */
+    .addRule('switch-exhaustiveness-check', ERROR) /** @since 2.19.0 */
+    .markCategory('Extension rules')
     .addRule(
       'consistent-return',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['consistent-return'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    )
-    .addRule('dot-notation', dotNotationBaseUnEntry[0], dotNotationOptions) // 💅
+    ) /** @since 7.1.0 */
+    .addRule('dot-notation', dotNotationBaseUnEntry[0], dotNotationOptions) /** @since 2.30.0 */ // 💅
     .addRule(
       'no-implied-eval',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-implied-eval'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    ) // 🟣
+    ) /** @since 2.15.0 */ // 🟣
     .addRule(
       'only-throw-error',
       getRuleUnSeverityAndOptionsFromEntry(
@@ -1063,14 +1095,14 @@ export const tsUnConfig: UnConfigFn<
         inheritFromBase ? undefined : [ERROR],
       )[0],
       [{allowRethrowing: true}], // the base rule has no options
-    ) // 🟣
+    ) /** @since 7.4.0 */ // 🟣
     .addRule(
       'prefer-destructuring',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['prefer-destructuring'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    )
+    ) /** @since 6.8.0 */
     .disableAnyRule('unicorn', 'prefer-array-find') // TODO why it's here?
     .addRule(
       'prefer-promise-reject-errors',
@@ -1078,14 +1110,17 @@ export const tsUnConfig: UnConfigFn<
         vanillaFinalFlatConfigRules['prefer-promise-reject-errors'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    ) // 🟣
+    ) /** @since 6.19.0 */ // 🟣
     .addRule(
       'require-await',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['require-await'] ?? ERROR,
         inheritFromBase ? undefined : [ERROR],
       ),
-    ) // 🟣
+    ) /** @since 1.13.0 */ // 🟣
+    .enableConfigTesterForPlugin('ts', {
+      rulesToSkipInConfig: (ruleName) => !TS_PLUGIN_TYPE_AWARE_RULES_SET.has(ruleName),
+    })
     .addOverrides();
 
   const allTypescriptFiles = [...TS_FILES_DEFAULT, ...filesNONTypeAware, ...filesTypeAware];
@@ -1164,7 +1199,8 @@ export const tsUnConfig: UnConfigFn<
   );
   configBuilderNoTypeAssertions
     ?.addConfig('no-type-assertion')
-    .addRule('no-type-assertion', ERROR)
+    .addRule('no-type-assertion', ERROR) /** @since 1.0.1 */
+    .enableConfigTesterForPlugin('no-type-assertion')
     .addOverrides();
 
   const configBuilderSortTsconfigKeys = createConfigBuilder(context, configSortTsconfigKeys, null);

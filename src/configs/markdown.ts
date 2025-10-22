@@ -212,7 +212,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
         generateNoMissingLabelRefsOptions(defaultDialect) /** @since 6.0.0 */,
       ) // 🟢
       .addRule('no-missing-link-fragments', ERROR) /** @since 6.6.0 */ // 🟢
-      .addRule('no-multiple-h1', ERROR, [{frontmatterTitle: ' /** @since 6.5.0 */'}]) // 🟢
+      .addRule('no-multiple-h1', ERROR, [{frontmatterTitle: ''}]) /** @since 6.5.0 */ // 🟢
       .addRule('no-reference-like-urls', ERROR) /** @since 7.3.0 */ // 🟢
       .addRule('no-reversed-media-syntax', ERROR) /** @since 6.6.0 */ // 🟢
       .addRule('no-space-in-emphasis', ERROR) /** @since 7.2.0 */ // 🟢
