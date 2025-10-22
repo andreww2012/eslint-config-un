@@ -20,6 +20,7 @@ export const unUnConfig: UnConfigFn<'un'> = (context) => {
       },
     ])
     .addRule('prefer-early-return', ERROR)
+    .enableConfigTesterForPlugin('un') /** @since 1.0.0 */
     .addOverrides();
 
   return {
