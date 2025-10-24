@@ -102,50 +102,68 @@ export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
 
   configBuilder
     ?.addConfig(['eslint-plugin', {includeDefaultFilesAndIgnores: true}])
-    .addRule('fixer-return', ERROR) // 🟢
-    .addRule('meta-property-ordering', ERROR)
-    .addRule('no-deprecated-context-methods', ERROR) // 🟢
-    .addRule('no-deprecated-report-api', ERROR) // 🟢
+    .addRule('fixer-return', ERROR) /** @since 0.8.0 */ // 🟢
+    .addRule('meta-property-ordering', ERROR) /** @since 2.1.0 */
+    .addRule('no-deprecated-context-methods', ERROR) /** @since 1.2.0 */ // 🟢
+    .addRule('no-deprecated-report-api', ERROR) /** @since 0.1.0 */ // 🟢
     // `meta.deprecated` supported since ESLint 9.21.0
-    .addRule('no-meta-replaced-by', getRuleDisallowingMetaPropertySeverity('replacedBy')) // 🟢(since 7.0.0)
+    .addRule(
+      'no-meta-replaced-by',
+      getRuleDisallowingMetaPropertySeverity('replacedBy'),
+    ) /** @since 6.5.0 */ // 🟢(since 7.0.0)
     // `meta.defaultOptions` supported since ESLint 9.15.0
     .addRule(
       'no-meta-schema-default',
       getRuleDisallowingMetaPropertySeverity('schemaDefaultProperties'),
-    ) // 🟢(since 7.0.0)
-    .addRule('no-missing-message-ids', ERROR) // 🟢
-    .addRule('no-missing-placeholders', ERROR) // 🟢
-    .addRule('no-property-in-node', ERROR) // 💭
-    .addRule('no-unused-message-ids', ERROR) // 🟢
-    .addRule('no-unused-placeholders', ERROR) // 🟢
-    .addRule('no-useless-token-range', ERROR) // 🟢
-    .addRule('prefer-message-ids', ERROR) // 🟢
-    .addRule('prefer-object-rule', ERROR) // 🟢
-    .addRule('prefer-placeholders', ERROR)
-    .addRule('prefer-replace-text', ERROR)
-    .addRule('report-message-format', ERROR, [`^[A-Z'"\`{]`])
+    ) /** @since 6.4.0 */ // 🟢(since 7.0.0)
+    .addRule('no-missing-message-ids', ERROR) /** @since 4.4.0 */ // 🟢
+    .addRule('no-missing-placeholders', ERROR) /** @since 0.3.0 */ // 🟢
+    .addRule('no-property-in-node', ERROR) /** @since 5.3.0 */ // 💭
+    .addRule('no-unused-message-ids', ERROR) /** @since 4.4.0 */ // 🟢
+    .addRule('no-unused-placeholders', ERROR) /** @since 0.8.0 */ // 🟢
+    .addRule('no-useless-token-range', ERROR) /** @since 0.6.0 */ // 🟢
+    .addRule('prefer-message-ids', ERROR) /** @since 3.5.0 */ // 🟢
+    .addRule('prefer-object-rule', ERROR) /** @since 2.3.0 */ // 🟢
+    .addRule('prefer-placeholders', ERROR) /** @since 0.5.0 */
+    .addRule('prefer-replace-text', ERROR) /** @since 1.3.0 */
+    .addRule('report-message-format', ERROR, [`^[A-Z'"\`{]`]) /** @since 0.2.0 */
     // ESLint >=9.15.0
-    .addRule('require-meta-default-options', getRuleEnforcingMetaPropertySeverity('defaultOptions')) // 🟢(since 7.0.0)
+    .addRule(
+      'require-meta-default-options',
+      getRuleEnforcingMetaPropertySeverity('defaultOptions'),
+    ) /** @since 6.4.0 */ // 🟢(since 7.0.0)
     .addRule(
       'require-meta-docs-description',
       getRuleEnforcingMetaPropertySeverity('docsDescription'),
-    )
+    ) /** @since 2.2.0 */
     .addRule(
       'require-meta-docs-recommended',
       getRuleEnforcingMetaPropertySeverity('docsRecommended'),
-    )
-    .addRule('require-meta-docs-url', getRuleEnforcingMetaPropertySeverity('docsUrl'))
-    .addRule('require-meta-fixable', getRuleEnforcingMetaPropertySeverity('fixable', 'enforce')) // 🟢
+    ) /** @since 6.1.0 */
+    .addRule(
+      'require-meta-docs-url',
+      getRuleEnforcingMetaPropertySeverity('docsUrl'),
+    ) /** @since 1.4.0 */
+    .addRule(
+      'require-meta-fixable',
+      getRuleEnforcingMetaPropertySeverity('fixable', 'enforce'),
+    ) /** @since 0.2.0 */ // 🟢
     .addRule(
       'require-meta-has-suggestions',
       getRuleEnforcingMetaPropertySeverity('hasSuggestions', 'enforce'),
-    ) // 🟢
-    .addRule('require-meta-schema', getRuleEnforcingMetaPropertySeverity('schema', 'enforce')) // 🟢
+    ) /** @since 3.1.0 */ // 🟢
+    .addRule(
+      'require-meta-schema',
+      getRuleEnforcingMetaPropertySeverity('schema', 'enforce'),
+    ) /** @since 2.2.0 */ // 🟢
     .addRule(
       'require-meta-schema-description',
       getRuleEnforcingMetaPropertySeverity('schemaDescriptions'),
-    ) // 🟢(since 7.0.0)
-    .addRule('require-meta-type', getRuleEnforcingMetaPropertySeverity('type', 'enforce')) // 🟢
+    ) /** @since 6.3.0 */ // 🟢(since 7.0.0)
+    .addRule(
+      'require-meta-type',
+      getRuleEnforcingMetaPropertySeverity('type', 'enforce'),
+    ) /** @since 2.0.0 */ // 🟢
     .enableConfigTesterForPlugin('eslint-plugin', {
       rulesToSkipInConfig: (ruleName) => ESLINT_PLUGIN_TESTING_RELATED_RULES_SET.has(ruleName),
     })
@@ -161,12 +179,12 @@ export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
         filesFallback: generateDefaultTestFiles(GLOB_JS_TS_EXTENSION),
       },
     ])
-    .addRule('consistent-output', ERROR)
-    .addRule('no-identical-tests', ERROR) // 🟢
-    .addRule('no-only-tests', ERROR) // 🟢
-    .addRule('prefer-output-null', ERROR) // 🟢
-    .addRule('test-case-property-ordering', ERROR)
-    .addRule('test-case-shorthand-strings', ERROR)
+    .addRule('consistent-output', ERROR) /** @since 0.7.0 */
+    .addRule('no-identical-tests', ERROR) /** @since 0.7.4 */ // 🟢
+    .addRule('no-only-tests', ERROR) /** @since 3.3.0 */ // 🟢
+    .addRule('prefer-output-null', ERROR) /** @since 0.8.0 */ // 🟢
+    .addRule('test-case-property-ordering', ERROR) /** @since 0.8.0 */
+    .addRule('test-case-shorthand-strings', ERROR) /** @since 0.4.0 */
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('eslint-plugin', {
       rulesToSkipInConfig: (ruleName) => !ESLINT_PLUGIN_TESTING_RELATED_RULES_SET.has(ruleName),
