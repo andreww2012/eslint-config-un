@@ -19,7 +19,6 @@ import {
 } from './shared';
 import type {UnConfigFn} from './index';
 
-// prefer-describe-function-title 1.1.41
 export interface VitestEslintConfigOptions
   extends UnConfigOptions<'vitest'>,
     // TODO options jsdocs contain jest-related information

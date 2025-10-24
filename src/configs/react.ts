@@ -658,17 +658,17 @@ export const reactUnConfig: UnConfigFn<
         filesFallback: DEFAULT_FILES,
       },
     ])
-    .addRule('boolean-prop-naming', OFF)
-    .addRule('default-props-match-prop-types', ERROR)
+    .addRule('boolean-prop-naming', OFF) /** @since 7.2.0 */
+    .addRule('default-props-match-prop-types', ERROR) /** @since 7.1.0 */
     .addRule(
       'destructuring-assignment',
       getDoubleRuleSeverity(PREFER_DESTRUCTURING_ASSIGNMENT_SEVERITY, false),
-    )
+    ) /** @since 7.5.0 */
     .addRule(
       'display-name',
       getDoubleRuleSeverity(NO_MISSING_COMPONENT_OR_CONTEXT_DISPLAY_NAME_SEVERITY, false),
-    ) // 🟢
-    .addRule('forbid-component-props', OFF)
+    ) /** @since 1.1.0 */ // 🟢
+    .addRule('forbid-component-props', OFF) /** @since 6.1.0 */
     .addRule('forbid-elements', ERROR, [
       {
         forbid: Object.entries({
@@ -684,173 +684,196 @@ export const reactUnConfig: UnConfigFn<
           )
           .filter((v) => v != null),
       },
-    ])
-    .addRule('forbid-foreign-prop-types', isMinVersion19 ? OFF : ERROR) // propTypes only rule
-    .addRule('forbid-prop-types', OFF) // propTypes only rule
-    .addRule('forward-ref-uses-ref', getDoubleRuleSeverity(NO_USELESS_FORWARD_REF_SEVERITY, false))
+    ]) /** @since 6.10.0 */
+    .addRule('forbid-foreign-prop-types', isMinVersion19 ? OFF : ERROR) /** @since 6.10.0 */ // propTypes only rule
+    .addRule('forbid-prop-types', OFF) /** @since 3.5.0 */ // propTypes only rule
+    .addRule(
+      'forward-ref-uses-ref',
+      getDoubleRuleSeverity(NO_USELESS_FORWARD_REF_SEVERITY, false),
+    ) /** @since 7.36.0 */
     .addRule('function-component-definition', ERROR, [
       {
         namedComponents: 'arrow-function',
         unnamedComponents: 'arrow-function',
       },
-    ])
+    ]) /** @since 7.18.0 */
     .addRule('hook-use-state', getDoubleRuleSeverity(USE_STATE_SEVERITY, false), [
       {allowDestructuredState: true},
-    ])
+    ]) /** @since 7.29.0 */
     .addRule('jsx-boolean-value', getDoubleRuleSeverity(booleanShorthandSeverity, false), [
       shorthandBoolean === 'prefer-error' || shorthandBoolean === 'prefer' ? 'never' : 'always',
-    ])
-    .addRule('jsx-child-element-spacing', OFF) // 🟠
-    .addRule('jsx-closing-bracket-location', OFF) // 🟠
-    .addRule('jsx-closing-tag-location', OFF) // 🟠
+    ]) /** @since 2.1.0 */
+    .addRule('jsx-child-element-spacing', OFF) /** @since 7.6.0 */ // 🟠
+    .addRule('jsx-closing-bracket-location', OFF) /** @since 3.3.0 */ // 🟠
+    .addRule('jsx-closing-tag-location', OFF) /** @since 7.1.0 */ // 🟠
     .addRule('jsx-curly-brace-presence', WARNING, [
       {props: 'never', children: 'never', propElementValues: 'always'},
-    ])
-    .addRule('jsx-curly-newline', OFF) // 🟠
-    .addRule('jsx-curly-spacing', OFF) // 🟠
-    .addRule('jsx-equals-spacing', OFF) // 🟠
+    ]) /** @since 7.4.0-rc.0 */
+    .addRule('jsx-curly-newline', OFF) /** @since 7.14.0 */ // 🟠
+    .addRule('jsx-curly-spacing', OFF) /** @since 2.7.0 */ // 🟠
+    .addRule('jsx-equals-spacing', OFF) /** @since 3.16.0 */ // 🟠
     .addRule('jsx-filename-extension', getDoubleRuleSeverity(FILENAME_EXTENSION_SEVERITY, false), [
       {
         extensions: JSX_FILE_EXTENSIONS,
         ignoreFilesWithoutCode: true,
       },
-    ])
-    .addRule('jsx-first-prop-new-line', OFF) // 🟠
+    ]) /** @since 5.2.0 */
+    .addRule('jsx-first-prop-new-line', OFF) /** @since 5.0.0 */ // 🟠
     .addRule('jsx-fragments', getDoubleRuleSeverity(fragmentShorthandSeverity, false), [
       shorthandFragment === 'prefer-error' || shorthandFragment === 'prefer' ? 'syntax' : 'element',
-    ])
-    .addRule('jsx-handler-names', OFF)
-    .addRule('jsx-indent', OFF) // 🟠
-    .addRule('jsx-indent-props', OFF) // 🟠
+    ]) /** @since 7.12.0 */
+    .addRule('jsx-handler-names', OFF) /** @since 3.11.0 */
+    .addRule('jsx-indent', OFF) /** @since 3.14.0 */ // 🟠
+    .addRule('jsx-indent-props', OFF) /** @since 3.3.0 */ // 🟠
     .addRule('jsx-key', getDoubleRuleSeverity(NO_DUPLICATE_OR_MISSING_KEY_SEVERITY, true), [
       {
         checkFragmentShorthand: true,
         checkKeyMustBeforeSpread: true,
         warnOnDuplicates: true,
       },
-    ]) // 🟢
-    .addRule('jsx-max-depth', OFF)
-    .addRule('jsx-max-props-per-line', OFF) // 🟠
-    .addRule('jsx-newline', OFF) // 🟠
-    .addRule('jsx-no-bind', ERROR, [{allowArrowFunctions: true, ignoreRefs: true}])
+    ]) /** @since 3.9.0 */ // 🟢
+    .addRule('jsx-max-depth', OFF) /** @since 7.7.0 */
+    .addRule('jsx-max-props-per-line', OFF) /** @since 3.2.0 */ // 🟠
+    .addRule('jsx-newline', OFF) /** @since 7.22.0 */ // 🟠
+    .addRule('jsx-no-bind', ERROR, [
+      {allowArrowFunctions: true, ignoreRefs: true},
+    ]) /** @since 3.7.0 */
     .addRule(
       'jsx-no-comment-textnodes',
       getDoubleRuleSeverity(NO_COMMENT_TEXTNODES_SEVERITY, false),
-    ) // 🟢
+    ) /** @since 5.2.0 */ /** @aka no-comment-textnodes */ // 🟢
     .addRule(
       'jsx-no-constructed-context-values',
       getDoubleRuleSeverity(NO_UNSTABLE_CONTEXT_VALUE_SEVERITY, false),
-    )
+    ) /** @since 7.22.0 */
     .addRule(
       'jsx-no-duplicate-props',
       getDoubleRuleSeverity(JSX_NO_DUPLICATE_PROPS_SEVERITY, false),
-    ) // 🟢
+    ) /** @since 3.0.0 */ // 🟢
     // 🤔 Has many issues like https://github.com/jsx-eslint/eslint-plugin-react/issues/3292
     .addRule(
       'jsx-no-leaked-render',
       isReactXEnabled && !isConfigXDisabled
         ? OFF
         : getDoubleRuleSeverity(NO_LEAKED_CONDITIONAL_RENDERING_SEVERITY, false),
-    )
+    ) /** @since 7.30.0 */
     // 🤔 From my understanding a rather niche rule, mostly useful in i18n apps
-    .addRule('jsx-no-literals', OFF)
-    .addRule('jsx-no-undef', getDoubleRuleSeverity(JSX_NO_UNDEF_SEVERITY, false)) // 🟢
+    .addRule('jsx-no-literals', OFF) /** @since 3.2.0 */
+    .addRule(
+      'jsx-no-undef',
+      getDoubleRuleSeverity(JSX_NO_UNDEF_SEVERITY, false),
+    ) /** @since 1.6.0 */ // 🟢
     .addRule(
       'jsx-no-useless-fragment',
       getDoubleRuleSeverity(NO_USELESS_FRAGMENT_SEVERITY, false),
       [{allowExpressions: true}],
-    )
-    .addRule('jsx-one-expression-per-line', OFF) // 🟠
+    ) /** @since 7.15.0 */
+    .addRule('jsx-one-expression-per-line', OFF) /** @since 7.5.0 */ // 🟠
     .addRule('jsx-pascal-case', getDoubleRuleSeverity(COMPONENT_NAME_SEVERITY, false), [
       {allowNamespace: true},
-    ])
-    .addRule('jsx-props-no-multi-spaces', OFF) // 🟠
-    .addRule('jsx-props-no-spread-multi', ERROR)
+    ]) /** @since 3.10.0 */
+    .addRule('jsx-props-no-multi-spaces', OFF) /** @since 7.9.0 */ // 🟠
+    .addRule('jsx-props-no-spread-multi', ERROR) /** @since 7.35.0 */
     .addRule('jsx-props-no-spreading', ERROR, [
       {custom: 'ignore' /* Only enforced on HTML elements */},
-    ])
-    .addRule('jsx-sort-props', OFF)
-    .addRule('jsx-tag-spacing', OFF) // 🟠
+    ]) /** @since 7.13.0 */
+    .addRule('jsx-sort-props', OFF) /** @since 2.0.0 */
+    .addRule('jsx-tag-spacing', OFF) /** @since 6.7.0 */ // 🟠
     .addRule(
       'jsx-uses-react',
       newJsxTransform ? OFF : getDoubleRuleSeverity(JSX_USES_REACT_SEVERITY, false),
-    ) // 🟢
-    .addRule('jsx-uses-vars', getDoubleRuleSeverity(JSX_USES_VARS_SEVERITY, false)) // 🟢
-    .addRule('jsx-wrap-multilines', OFF) // 🟠
+    ) /** @since 1.4.0 */ // 🟢
+    .addRule(
+      'jsx-uses-vars',
+      getDoubleRuleSeverity(JSX_USES_VARS_SEVERITY, false),
+    ) /** @since 1.5.0 */ // 🟢
+    .addRule('jsx-wrap-multilines', OFF) /** @since 1.1.0 */ /** @aka wrap-multilines */ // 🟠
     .addRule(
       'no-access-state-in-setstate',
       getDoubleRuleSeverity(NO_ACCESS_STATE_IN_SETSTATE_SEVERITY, false),
-    )
-    .addRule('no-adjacent-inline-elements', OFF)
-    .addRule('no-array-index-key', getDoubleRuleSeverity(NO_ARRAY_INDEX_KEY_SEVERITY, false))
-    .addRule('no-arrow-function-lifecycle', ERROR)
-    .addRule('no-children-prop', getDoubleRuleSeverity(NO_CHILDREN_PROP_SEVERITY, false)) // 🟢
+    ) /** @since 7.5.0 */
+    .addRule('no-adjacent-inline-elements', OFF) /** @since 7.18.0 */
+    .addRule(
+      'no-array-index-key',
+      getDoubleRuleSeverity(NO_ARRAY_INDEX_KEY_SEVERITY, false),
+    ) /** @since 6.8.0 */
+    .addRule('no-arrow-function-lifecycle', ERROR) /** @since 7.27.0 */
+    .addRule(
+      'no-children-prop',
+      getDoubleRuleSeverity(NO_CHILDREN_PROP_SEVERITY, false),
+    ) /** @since 6.3.0 */ // 🟢
     // TODO
-    .addRule('no-deprecated', ERROR) // 🟢
+    .addRule('no-deprecated', ERROR) /** @since 3.12.0 */ // 🟢
     .addRule(
       'no-did-mount-set-state',
       getDoubleRuleSeverity(NO_SET_STATE_IN_COMPONENT_DID_MOUNT_SEVERITY, false),
-    )
+    ) /** @since 1.3.0 */
     .addRule(
       'no-did-update-set-state',
       getDoubleRuleSeverity(NO_SET_STATE_IN_COMPONENT_DID_UPDATE_SEVERITY, false),
-    )
+    ) /** @since 1.3.0 */
     .addRule(
       'no-direct-mutation-state',
       getDoubleRuleSeverity(NO_DIRECT_MUTATION_STATE_SEVERITY, false),
-    ) // 🟢
-    .addRule('no-multi-comp', ERROR)
+    ) /** @since 3.5.0 */ // 🟢
+    .addRule('no-multi-comp', ERROR) /** @since 1.0.0 */
     .addRule(
       'no-object-type-as-default-prop',
       getDoubleRuleSeverity(NO_UNSTABLE_DEFAULT_PROPS_SEVERITY, false),
-    )
+    ) /** @since 7.32.0 */
     .addRule(
       'no-redundant-should-component-update',
       getDoubleRuleSeverity(NO_REDUNDANT_SHOULD_COMPONENT_UPDATE_SEVERITY, false),
-    )
-    .addRule('no-set-state', OFF)
+    ) /** @since 7.1.0 */
+    .addRule('no-set-state', OFF) /** @since 3.3.0 */
     .addRule('no-string-refs', getDoubleRuleSeverity(NO_STRING_REFS_SEVERITY, false), [
       {noTemplateLiterals: true},
-    ]) // 🟢
-    .addRule('no-this-in-sfc', ERROR)
-    .addRule('no-typos', ERROR)
-    .addRule('no-unescaped-entities', OFF) // 🟢
-    .addRule('no-unsafe', getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, false)) // 🟢(off)
+    ]) /** @since 3.13.0 */ // 🟢
+    .addRule('no-this-in-sfc', ERROR) /** @since 7.6.0 */
+    .addRule('no-typos', ERROR) /** @since 7.2.0 */
+    .addRule('no-unescaped-entities', OFF) /** @since 6.7.0 */ // 🟢
+    .addRule(
+      'no-unsafe',
+      getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, false),
+    ) /** @since 7.10.0 */ // 🟢(off)
     .addRule(
       'no-unstable-nested-components',
       getDoubleRuleSeverity(NO_NESTED_COMPONENT_DEFINITIONS_SEVERITY, false),
       [{allowAsProps: true}],
-    )
+    ) /** @since 7.23.0 */
     .addRule(
       'no-unused-class-component-methods',
       getDoubleRuleSeverity(NO_UNUSED_CLASS_COMPONENT_MEMBERS_SEVERITY, false),
-    )
-    .addRule('no-unused-prop-types', WARNING)
-    .addRule('no-unused-state', getDoubleRuleSeverity(NO_UNUSED_STATE_SEVERITY, false))
+    ) /** @since 7.27.0 */
+    .addRule('no-unused-prop-types', WARNING) /** @since 6.2.0 */
+    .addRule(
+      'no-unused-state',
+      getDoubleRuleSeverity(NO_UNUSED_STATE_SEVERITY, false),
+    ) /** @since 7.2.0 */
     .addRule(
       'no-will-update-set-state',
       getDoubleRuleSeverity(NO_SET_STATE_IN_COMPONENT_WILL_UPDATE_SEVERITY, false),
-    )
-    .addRule('prefer-es6-class', ERROR)
-    .addRule('prefer-exact-props', OFF) // propTypes only rule
+    ) /** @since 7.0.0-rc.0 */
+    .addRule('prefer-es6-class', ERROR) /** @since 3.6.0 */
+    .addRule('prefer-exact-props', OFF) /** @since 7.25.0 */ // propTypes only rule
     .addRule(
       'prefer-read-only-props',
       getDoubleRuleSeverity(PREFER_READ_ONLY_PROPS_SEVERITY, false),
-    )
-    .addRule('prefer-stateless-function', ERROR)
-    .addRule('prop-types', ERROR) // 🟢
-    .addRule('react-in-jsx-scope', newJsxTransform ? OFF : ERROR) // 🟢
-    .addRule('require-default-props', OFF)
-    .addRule('require-optimization', OFF)
+    ) /** @since 7.13.0 */
+    .addRule('prefer-stateless-function', ERROR) /** @since 4.2.0 */
+    .addRule('prop-types', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('react-in-jsx-scope', newJsxTransform ? OFF : ERROR) /** @since 1.4.0 */ // 🟢
+    .addRule('require-default-props', OFF) /** @since 6.8.0 */
+    .addRule('require-optimization', OFF) /** @since 5.2.0 */
     // TODO disable in ts?
-    .addRule('require-render-return', ERROR) // 🟢
-    .addRule('self-closing-comp', OFF)
-    .addRule('sort-comp', ERROR)
-    .addRule('sort-default-props', OFF) // propTypes only rule
-    .addRule('sort-prop-types', OFF) // propTypes only rule
-    .addRule('state-in-constructor', ERROR, ['never'])
-    .addRule('static-property-placement', ERROR)
-    .addRule('style-prop-object', OFF)
+    .addRule('require-render-return', ERROR) /** @since 4.3.0 */ // 🟢
+    .addRule('self-closing-comp', OFF) /** @since 1.2.0 */
+    .addRule('sort-comp', ERROR) /** @since 2.3.0 */
+    .addRule('sort-default-props', OFF) /** @since 7.32.0 */ // propTypes only rule
+    .addRule('sort-prop-types', OFF) /** @since 4.0.0-rc.0 */ // propTypes only rule
+    .addRule('state-in-constructor', ERROR, ['never']) /** @since 7.13.0 */
+    .addRule('static-property-placement', ERROR) /** @since 7.13.0 */
+    .addRule('style-prop-object', OFF) /** @since 6.2.0 */
     .enableConfigTesterForPlugin('react', {
       rulesToSkipInConfig: (ruleName) => REACT_ORIGINAL_DOM_RULES.has(ruleName),
     })
@@ -908,7 +931,7 @@ export const reactUnConfig: UnConfigFn<
     .addRule('component-hook-factories', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('config', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('error-boundaries', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
-    .addRule('exhaustive-deps', ERROR) // 🟡
+    .addRule('exhaustive-deps', ERROR) /** @since 1.1.0-rc.0 */ // 🟡
     .addRule('fbt', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('fire', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('gating', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
@@ -924,7 +947,7 @@ export const reactUnConfig: UnConfigFn<
     .addRule('purity', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('refs', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('rule-suppression', reactCompilerRulesSeverity) /** @since 6.1.0 */
-    .addRule('rules-of-hooks', ERROR) // 🟢
+    .addRule('rules-of-hooks', ERROR) /** @since 0.0.0 */ // 🟢
     .addRule('set-state-in-effect', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('set-state-in-render', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('static-components', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
@@ -937,16 +960,27 @@ export const reactUnConfig: UnConfigFn<
       '@eslint-react/hooks-extra',
       'no-direct-set-state-in-use-effect',
       getXRuleSeverity(WARNING),
-    ) // 🟡
+    ) /** @since 1.5.26 */ /** @aka no-direct-set-state-in-use-layout-effect (until 2.0.0) */ // 🟡
     .addAnyRule(
-      '@eslint-react/hooks-extra',
-      'no-direct-set-state-in-use-effect',
+      '@eslint-react',
+      'no-unnecessary-use-callback',
+      getXRuleSeverity(ERROR),
+    ) /** @since 0.8.6-beta.6 */ /** @aka ensure-use-callback-has-non-empty-deps */
+    .addAnyRule(
+      '@eslint-react',
+      'no-unnecessary-use-memo',
+      getXRuleSeverity(ERROR),
+    ) /** @since 0.8.6-beta.6 */ /** @aka ensure-use-memo-has-non-empty-deps */
+    .addAnyRule(
+      '@eslint-react',
+      'no-unnecessary-use-prefix',
+      getXRuleSeverity(OFF),
+    ) /** @since 0.8.8-beta.0 */ /** @aka no-useless-custom-hooks */ /** @aka no-redundant-custom-hook */ /** @aka ensure-custom-hooks-using-other-hooks */ // 🟡
+    .addAnyRule(
+      '@eslint-react',
+      'prefer-use-state-lazy-initialization',
       getXRuleSeverity(WARNING),
-    ) /** @since 2.0.0 */ /** @aka no-direct-set-state-in-use-layout-effect */
-    .addAnyRule('@eslint-react', 'no-unnecessary-use-callback', getXRuleSeverity(ERROR))
-    .addAnyRule('@eslint-react', 'no-unnecessary-use-memo', getXRuleSeverity(ERROR))
-    .addAnyRule('@eslint-react', 'no-unnecessary-use-prefix', getXRuleSeverity(OFF)) // 🟡
-    .addAnyRule('@eslint-react', 'prefer-use-state-lazy-initialization', getXRuleSeverity(WARNING)) // 🟡
+    ) /** @since 0.9.6 */ // 🟡
     .enableConfigTesterForPlugin('react-hooks')
     .addOverrides();
 
@@ -974,14 +1008,20 @@ export const reactUnConfig: UnConfigFn<
       },
     ])
     .markCategory('X')
-    .addRule('jsx-key-before-spread', ERROR) // 🟡
+    .addRule('jsx-key-before-spread', ERROR) /** @since 1.49.0 */ // 🟡
     .addRule(
       'jsx-no-comment-textnodes',
       getDoubleRuleSeverity(NO_COMMENT_TEXTNODES_SEVERITY, true),
-    ) /** @since 2.0.0 */ /** @aka no-comment-textnodes */ // 🟡 🔄️`jsx-no-comment-textnodes`
-    .addRule('jsx-no-duplicate-props', getDoubleRuleSeverity(JSX_NO_DUPLICATE_PROPS_SEVERITY, true)) // 🟡 🔄️
+    ) /** @since 0.7.0 */ /** @aka no-comment-textnodes */ // 🟡 🔄️`jsx-no-comment-textnodes`
+    .addRule(
+      'jsx-no-duplicate-props',
+      getDoubleRuleSeverity(JSX_NO_DUPLICATE_PROPS_SEVERITY, true),
+    ) /** @since 1.16.1 */ /** @aka no-duplicate-props */ // 🟡 🔄️
     .addRule('jsx-no-iife', OFF) /** @since 1.51.0 */
-    .addRule('jsx-no-undef', getDoubleRuleSeverity(JSX_NO_UNDEF_SEVERITY, true)) // 🔄️
+    .addRule(
+      'jsx-no-undef',
+      getDoubleRuleSeverity(JSX_NO_UNDEF_SEVERITY, true),
+    ) /** @since 1.38.0 */ // 🔄️
     .addRule('jsx-shorthand-boolean', getDoubleRuleSeverity(booleanShorthandSeverity, true), [
       shorthandBoolean === 'prefer-error' || shorthandBoolean === 'prefer' ? 1 : -1,
     ]) /** @since 2.0.0 */ // 🔄️`jsx-boolean-value`
@@ -989,90 +1029,126 @@ export const reactUnConfig: UnConfigFn<
       shorthandFragment === 'prefer-error' || shorthandFragment === 'prefer' ? 1 : -1,
     ]) /** @since 2.0.0 */ // 🔄️`jsx-fragments`
     // "This rule does nothing when using the New JSX Transform or if the `no-unused-vars` rule is not enabled."
-    .addRule('jsx-uses-react', getDoubleRuleSeverity(JSX_USES_REACT_SEVERITY, true)) // 🟡 🔄️
+    .addRule(
+      'jsx-uses-react',
+      getDoubleRuleSeverity(JSX_USES_REACT_SEVERITY, true),
+    ) /** @since 1.40.0 */ // 🟡 🔄️
     // "This rule only has an effect when the `no-unused-vars` rule is enabled."
-    .addRule('jsx-uses-vars', getDoubleRuleSeverity(JSX_USES_VARS_SEVERITY, true)) // 🟡 🔄️
+    .addRule(
+      'jsx-uses-vars',
+      getDoubleRuleSeverity(JSX_USES_VARS_SEVERITY, true),
+    ) /** @since 1.16.1 */ /** @aka use-jsx-vars */ // 🟡 🔄️
     .addRule(
       'no-access-state-in-setstate',
       getDoubleRuleSeverity(NO_ACCESS_STATE_IN_SETSTATE_SEVERITY, true),
-    ) // 🟢 🔄️
-    .addRule('no-array-index-key', getDoubleRuleSeverity(NO_ARRAY_INDEX_KEY_SEVERITY, true)) // 🟡 🔄️
-    .addRule('no-children-count', getSeverity(noLegacyApis.Children)) // 🟡
-    .addRule('no-children-for-each', getSeverity(noLegacyApis.Children)) // 🟡
-    .addRule('no-children-map', getSeverity(noLegacyApis.Children)) // 🟡
-    .addRule('no-children-only', getSeverity(noLegacyApis.Children)) // 🟡
-    .addRule('no-children-prop', getDoubleRuleSeverity(NO_CHILDREN_PROP_SEVERITY, true)) // 🔄️
-    .addRule('no-children-to-array', getSeverity(noLegacyApis.Children)) // 🟡
-    .addRule('no-class-component', getSeverity(noLegacyApis.classComponent ?? 'warn'))
-    .addRule('no-clone-element', getSeverity(noLegacyApis.cloneElement)) // 🟡
-    .addRule('no-component-will-mount', getSeverity(noLegacyApis.componentWillMount)) // 🟢
-    .addRule('no-component-will-receive-props', getSeverity(noLegacyApis.componentWillReceiveProps)) // 🟢
-    .addRule('no-component-will-update', getSeverity(noLegacyApis.componentWillUpdate)) // 🟢
-    .addRule('no-context-provider', ERROR) // 🟡 🔢19.0.0
-    .addRule('no-create-ref', getSeverity(noLegacyApis.createRef)) // 🟢
+    ) /** @since 0.10.11-beta.2 */ // 🟢 🔄️
+    .addRule(
+      'no-array-index-key',
+      getDoubleRuleSeverity(NO_ARRAY_INDEX_KEY_SEVERITY, true),
+    ) /** @since 0.3.6 */ // 🟡 🔄️
+    .addRule('no-children-count', getSeverity(noLegacyApis.Children)) /** @since 0.8.4 */ // 🟡
+    .addRule('no-children-for-each', getSeverity(noLegacyApis.Children)) /** @since 0.8.4 */ // 🟡
+    .addRule('no-children-map', getSeverity(noLegacyApis.Children)) /** @since 0.8.4 */ // 🟡
+    .addRule('no-children-only', getSeverity(noLegacyApis.Children)) /** @since 0.8.4 */ // 🟡
+    .addRule(
+      'no-children-prop',
+      getDoubleRuleSeverity(NO_CHILDREN_PROP_SEVERITY, true),
+    ) /** @since 0.8.6 */ // 🔄️
+    .addRule('no-children-to-array', getSeverity(noLegacyApis.Children)) /** @since 0.8.4 */ // 🟡
+    .addRule(
+      'no-class-component',
+      getSeverity(noLegacyApis.classComponent ?? 'warn'),
+    ) /** @since 0.5.4 */
+    .addRule('no-clone-element', getSeverity(noLegacyApis.cloneElement)) /** @since 0.5.7 */ // 🟡
+    .addRule(
+      'no-component-will-mount',
+      getSeverity(noLegacyApis.componentWillMount),
+    ) /** @since 0.9.1 */ // 🟢
+    .addRule(
+      'no-component-will-receive-props',
+      getSeverity(noLegacyApis.componentWillReceiveProps),
+    ) /** @since 0.9.2 */ // 🟢
+    .addRule(
+      'no-component-will-update',
+      getSeverity(noLegacyApis.componentWillUpdate),
+    ) /** @since 0.9.2 */ // 🟢
+    .addRule('no-context-provider', ERROR) /** @since 1.19.0 */ // 🟡 🔢19.0.0
+    .addRule('no-create-ref', getSeverity(noLegacyApis.createRef)) /** @since 0.5.5 */ // 🟢
     // `defaultProps` removed in v19 (will be silently ignored)
-    .addRule('no-default-props', isMinVersion19 ? ERROR : WARNING) // 🟢
+    .addRule('no-default-props', isMinVersion19 ? ERROR : WARNING) /** @since 1.5.29 */ // 🟢
     .addRule(
       'no-direct-mutation-state',
       getDoubleRuleSeverity(NO_DIRECT_MUTATION_STATE_SEVERITY, true),
-    ) // 🟢 🔄️
-    .addRule('no-duplicate-key', getDoubleRuleSeverity(NO_DUPLICATE_OR_MISSING_KEY_SEVERITY, true)) // 🟢 🔄️`jsx-key` (`warnOnDuplicates` option)
+    ) /** @since 0.9.3 */ // 🟢 🔄️
+    .addRule(
+      'no-duplicate-key',
+      getDoubleRuleSeverity(NO_DUPLICATE_OR_MISSING_KEY_SEVERITY, true),
+    ) /** @since 0.3.6 */ // 🟢 🔄️`jsx-key` (`warnOnDuplicates` option)
     // By default, this rule forbids snake_case props (props containing underscores)
     .addRule('no-forbidden-props', WARNING) /** @since 2.0.0 */ // 🟡
     // "In React 19, forwardRef is no longer necessary. Pass ref as a prop instead."
-    .addRule('no-forward-ref', getSeverity(noLegacyApis.forwardRef)) // 🟡 🔢19.0.0
-    .addRule('no-implicit-key', WARNING) // 🟡
+    .addRule('no-forward-ref', getSeverity(noLegacyApis.forwardRef)) /** @since 1.18.0 */ // 🟡 🔢19.0.0
+    .addRule(
+      'no-implicit-key',
+      WARNING,
+    ) /** @since 0.6.1 */ /** @aka no-spreading-key */ /** @aka no-spreading-key */ // 🟡
     .addRule(
       'no-missing-component-display-name',
       getDoubleRuleSeverity(NO_MISSING_COMPONENT_OR_CONTEXT_DISPLAY_NAME_SEVERITY, true),
-    ) // 🔄️`display-name`
+    ) /** @since 0.8.8 */ // 🔄️`display-name`
     .addRule(
       'no-missing-context-display-name',
       getDoubleRuleSeverity(NO_MISSING_COMPONENT_OR_CONTEXT_DISPLAY_NAME_SEVERITY, true),
-    ) // 🔄️`display-name` (`checkContextObjects` option)
-    .addRule('no-missing-key', getDoubleRuleSeverity(NO_DUPLICATE_OR_MISSING_KEY_SEVERITY, true)) // 🟢 🔄️`jsx-key`
-    .addRule('no-misused-capture-owner-stack', ERROR)
+    ) /** @since 1.27.0 */ // 🔄️`display-name` (`checkContextObjects` option)
+    .addRule(
+      'no-missing-key',
+      getDoubleRuleSeverity(NO_DUPLICATE_OR_MISSING_KEY_SEVERITY, true),
+    ) /** @since 0.3.5 */ // 🟢 🔄️`jsx-key`
+    .addRule('no-misused-capture-owner-stack', ERROR) /** @since 1.45.0 */
     .addRule(
       'no-nested-component-definitions',
       getDoubleRuleSeverity(NO_NESTED_COMPONENT_DEFINITIONS_SEVERITY, true),
-    ) // 🟢 🔄️`no-unstable-nested-components`
-    .addRule('no-nested-lazy-component-declarations', ERROR) // 🟢
+    ) /** @since 0.3.3 */ /** @aka no-nested-components */ /** @aka no-unstable-nested-components */ // 🟢 🔄️`no-unstable-nested-components`
+    .addRule('no-nested-lazy-component-declarations', ERROR) /** @since 1.45.0 */ // 🟢
     // `propTypes` removed in v19 (will be silently ignored)
-    .addRule('no-prop-types', isMinVersion19 ? ERROR : WARNING) // 🟢
+    .addRule('no-prop-types', isMinVersion19 ? ERROR : WARNING) /** @since 1.5.29 */ // 🟢
     .addRule(
       'no-redundant-should-component-update',
       getDoubleRuleSeverity(NO_REDUNDANT_SHOULD_COMPONENT_UPDATE_SEVERITY, true),
-    ) // 🟢 🔄️
+    ) /** @since 0.9.0 */ // 🟢 🔄️
     .addRule(
       'no-set-state-in-component-did-mount',
       getDoubleRuleSeverity(NO_SET_STATE_IN_COMPONENT_DID_MOUNT_SEVERITY, true),
-    ) // 🟡 🔄️`no-did-mount-set-state`
+    ) /** @since 0.9.2 */ // 🟡 🔄️`no-did-mount-set-state`
     .addRule(
       'no-set-state-in-component-did-update',
       getDoubleRuleSeverity(NO_SET_STATE_IN_COMPONENT_DID_UPDATE_SEVERITY, true),
-    ) // 🟡 🔄️`no-did-update-set-state`
+    ) /** @since 0.9.2 */ // 🟡 🔄️`no-did-update-set-state`
     .addRule(
       'no-set-state-in-component-will-update',
       getDoubleRuleSeverity(NO_SET_STATE_IN_COMPONENT_WILL_UPDATE_SEVERITY, true),
-    ) // 🟡 🔄️`no-will-update-set-state`
-    .addRule('no-string-refs', getDoubleRuleSeverity(NO_STRING_REFS_SEVERITY, true)) // 🟢 🔄️
+    ) /** @since 0.9.2 */ // 🟡 🔄️`no-will-update-set-state`
+    .addRule(
+      'no-string-refs',
+      getDoubleRuleSeverity(NO_STRING_REFS_SEVERITY, true),
+    ) /** @since 0.3.9 */ // 🟢 🔄️
     .addRule('no-unnecessary-key', ERROR) /** @since 20.0.0 */
     .addRule(
       'no-unsafe-component-will-mount',
       getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, true),
-    ) // 🟡 🔄️`no-unsafe`
+    ) /** @since 0.9.1 */ // 🟡 🔄️`no-unsafe`
     .addRule(
       'no-unsafe-component-will-receive-props',
       getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, true),
-    ) // 🟡 🔄️`no-unsafe`
+    ) /** @since 0.9.2 */ // 🟡 🔄️`no-unsafe`
     .addRule(
       'no-unsafe-component-will-update',
       getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, true),
-    ) // 🟡 🔄️`no-unsafe`
+    ) /** @since 0.9.2 */ // 🟡 🔄️`no-unsafe`
     .addRule(
       'no-unstable-context-value',
       getDoubleRuleSeverity(NO_UNSTABLE_CONTEXT_VALUE_SEVERITY, true),
-    ) // 🟡 🔄️`jsx-no-constructed-context-values`
+    ) /** @since 0.3.0 */ /** @aka no-constructed-context-value */ // 🟡 🔄️`jsx-no-constructed-context-values`
     .addRule(
       'no-unstable-default-props',
       getDoubleRuleSeverity(NO_UNSTABLE_DEFAULT_PROPS_SEVERITY, true),
@@ -1080,42 +1156,54 @@ export const reactUnConfig: UnConfigFn<
     .addRule(
       'no-unused-class-component-members',
       getDoubleRuleSeverity(NO_UNUSED_CLASS_COMPONENT_MEMBERS_SEVERITY, true),
-    ) // 🟡 🔄️`no-unused-class-component-methods`
-    .addRule('no-unused-state', getDoubleRuleSeverity(NO_UNUSED_STATE_SEVERITY, true)) // 🟡 🔄️
-    .addRule('no-use-context', WARNING) // 🟡 🔢19.0.0
-    .addRule('no-useless-forward-ref', getDoubleRuleSeverity(NO_USELESS_FORWARD_REF_SEVERITY, true)) // 🟡 🔄️`forward-ref-uses-ref`
-    .addRule('no-useless-fragment', getDoubleRuleSeverity(NO_USELESS_FRAGMENT_SEVERITY, true)) // 🔄️`jsx-no-useless-fragment`
+    ) /** @since 0.10.5-beta.0 */ // 🟡 🔄️`no-unused-class-component-methods`
+    .addRule(
+      'no-unused-state',
+      getDoubleRuleSeverity(NO_UNUSED_STATE_SEVERITY, true),
+    ) /** @since 0.10.7 */ // 🟡 🔄️
+    .addRule('no-use-context', WARNING) /** @since 1.26.0 */ // 🟡 🔢19.0.0
+    .addRule(
+      'no-useless-forward-ref',
+      getDoubleRuleSeverity(NO_USELESS_FORWARD_REF_SEVERITY, true),
+    ) /** @since 1.33.0 */ /** @aka no-comment-textnodes */ // 🟡 🔄️`forward-ref-uses-ref`
+    .addRule(
+      'no-useless-fragment',
+      getDoubleRuleSeverity(NO_USELESS_FRAGMENT_SEVERITY, true),
+    ) /** @since 0.5.9 */ // 🔄️`jsx-no-useless-fragment`
     .addRule(
       'prefer-destructuring-assignment',
       getDoubleRuleSeverity(PREFER_DESTRUCTURING_ASSIGNMENT_SEVERITY, true),
-    ) // 🔄️`destructuring-assignment`
+    ) /** @since 0.5.5 */ // 🔄️`destructuring-assignment`
     // TODO why?
-    .addRule('prefer-namespace-import', OFF) /** @since 2.0.0 */ /** @aka prefer-namespace-import */
+    .addRule(
+      'prefer-namespace-import',
+      OFF,
+    ) /** @since 2.0.0 */ /** @aka prefer-react-namespace-import */
     .markCategory('Naming Convention')
     .addAnyRule(
       '@eslint-react/naming-convention',
       'component-name',
       getDoubleRuleSeverity(COMPONENT_NAME_SEVERITY, true),
-    ) // 🔄️`jsx-pascal-case`
-    .addAnyRule('@eslint-react/naming-convention', 'context-name', WARNING) // 🟡
-    .addAnyRule('@eslint-react/naming-convention', 'filename', OFF)
+    ) /** @since 0.7.0 */ // 🔄️`jsx-pascal-case`
+    .addAnyRule('@eslint-react/naming-convention', 'context-name', WARNING) /** @since 1.29.0 */ // 🟡
+    .addAnyRule('@eslint-react/naming-convention', 'filename', OFF) /** @since 0.3.0 */
     .addAnyRule(
       '@eslint-react/naming-convention',
       'filename-extension',
       getDoubleRuleSeverity(FILENAME_EXTENSION_SEVERITY, true),
       [{allow: 'always', extensions: JSX_FILE_EXTENSIONS}],
-    ) // 🔄️`jsx-filename-extension`
+    ) /** @since 0.3.0 */ // 🔄️`jsx-filename-extension`
     .addAnyRule(
       '@eslint-react/naming-convention',
       'use-state',
       getDoubleRuleSeverity(USE_STATE_SEVERITY, true),
-    ) // 🔄️`hook-use-state`
+    ) /** @since 0.9.3 */ // 🔄️`hook-use-state`
     .markCategory('Debug')
-    .addAnyRule('@eslint-react/debug', 'class-component', OFF)
-    .addAnyRule('@eslint-react/debug', 'function-component', OFF)
-    .addAnyRule('@eslint-react/debug', 'hook', OFF)
-    .addAnyRule('@eslint-react/debug', 'is-from-react', OFF)
-    .addAnyRule('@eslint-react/debug', 'jsx', OFF)
+    .addAnyRule('@eslint-react/debug', 'class-component', OFF) /** @since 0.3.3 */
+    .addAnyRule('@eslint-react/debug', 'function-component', OFF) /** @since 0.3.0 */
+    .addAnyRule('@eslint-react/debug', 'hook', OFF) /** @since 1.13.0 */
+    .addAnyRule('@eslint-react/debug', 'is-from-react', OFF) /** @since 1.10.0 */
+    .addAnyRule('@eslint-react/debug', 'jsx', OFF) /** @since 1.41.0 */
     .enableConfigTesterForPlugin('@eslint-react', {
       rulesToSkipInConfig: (ruleName) =>
         REACT_X_TYPE_AWARE_RULES.has(ruleName) || REACT_X_HOOKS_RULES.has(ruleName),
@@ -1139,9 +1227,12 @@ export const reactUnConfig: UnConfigFn<
     .addRule(
       'no-leaked-conditional-rendering',
       getDoubleRuleSeverity(NO_LEAKED_CONDITIONAL_RENDERING_SEVERITY, true),
-    ) // 🟡 🔄️`jsx-no-leaked-render` (worse) 💭
-    .addRule('no-unused-props', WARNING) /** @since 20.0.0 */ // 💭
-    .addRule('prefer-read-only-props', getDoubleRuleSeverity(PREFER_READ_ONLY_PROPS_SEVERITY, true)) // 🔄️ 💭
+    ) /** @since 0.3.0 */ // 🟡 🔄️`jsx-no-leaked-render` (worse) 💭
+    .addRule('no-unused-props', WARNING) /** @since 2.0.0 */ // 💭
+    .addRule(
+      'prefer-read-only-props',
+      getDoubleRuleSeverity(PREFER_READ_ONLY_PROPS_SEVERITY, true),
+    ) /** @since 1.5.22 */ // 🔄️ 💭
     .enableConfigTesterForPlugin('@eslint-react', {
       rulesToSkipInConfig: (ruleName) => !REACT_X_TYPE_AWARE_RULES.has(ruleName),
     })
@@ -1160,67 +1251,96 @@ export const reactUnConfig: UnConfigFn<
     .addAnyRule(
       ...getDoubleRuleName('no-dangerously-set-innerhtml', 'no-danger'),
       getDoubleRuleSeverity(ERROR),
-    ) // 🟡 🔄️`no-danger`
+    ) /** @since 0.3.0 */ /** @since 2.7.0 */ // 🟡 🔄️`no-danger`
     .addAnyRule(
       ...getDoubleRuleName('no-dangerously-set-innerhtml-with-children', 'no-danger-with-children'),
       getDoubleRuleSeverity(ERROR),
-    ) // 🟢 🔄️`no-danger-with-children`
+    ) /** @since 0.3.0 */ /** @since 6.1.0 */ // 🟢 🔄️`no-danger-with-children`
     // Deprecated API, removed in v19
-    .addAnyRule(...getDoubleRuleName('no-find-dom-node'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
-    .addAnyRule('@eslint-react/dom', 'no-flush-sync', getXRuleSeverity(ERROR)) // 🟢
+    .addAnyRule(
+      ...getDoubleRuleName('no-find-dom-node'),
+      getDoubleRuleSeverity(ERROR),
+    ) /** @since 0.8.11 */ /** @since 6.0.0-alpha.2 */ // 🟢 🔄️
+    .addAnyRule('@eslint-react/dom', 'no-flush-sync', getXRuleSeverity(ERROR)) /** @since 1.28.0 */ // 🟢
     // Deprecated API, removed in v19
-    .addAnyRule('@eslint-react/dom', 'no-hydrate', getXRuleSeverity(ERROR)) // 🟢 🔢18.0.0
+    .addAnyRule('@eslint-react/dom', 'no-hydrate', getXRuleSeverity(ERROR)) /** @since 1.35.0 */ // 🟢 🔢18.0.0
     .addAnyRule(
       ...getDoubleRuleName('no-missing-button-type', 'button-has-type'),
       getDoubleRuleSeverity(ERROR),
-    ) // 🟡 🔄️`button-has-type`
+    ) /** @since 0.6.1 */ /** @since 7.5.0 */ // 🟡 🔄️`button-has-type`
     .addAnyRule(
       ...getDoubleRuleName('no-missing-iframe-sandbox', 'iframe-missing-sandbox'),
       getDoubleRuleSeverity(ERROR),
-    ) // 🟡 🔄️`iframe-missing-sandbox`
-    .addAnyRule(...getDoubleRuleName('no-namespace'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
+    ) /** @since 0.6.1 */ /** @since 7.29.0 */ // 🟡 🔄️`iframe-missing-sandbox`
+    .addAnyRule(
+      ...getDoubleRuleName('no-namespace'),
+      getDoubleRuleSeverity(ERROR),
+    ) /** @since 0.5.5 */ /** @since 7.26.0 */ // 🟢 🔄️
     // Deprecated API, removed in v19
-    .addAnyRule('@eslint-react/dom', 'no-render', getXRuleSeverity(ERROR)) // 🟢 🔢18.0.0
-    .addAnyRule(...getDoubleRuleName('no-render-return-value'), getDoubleRuleSeverity(ERROR)) // 🟢 🔄️
+    .addAnyRule('@eslint-react/dom', 'no-render', getXRuleSeverity(ERROR)) /** @since 1.35.0 */ // 🟢 🔢18.0.0
+    .addAnyRule(
+      ...getDoubleRuleName('no-render-return-value'),
+      getDoubleRuleSeverity(ERROR),
+    ) /** @since 0.8.12 */ /** @since 5.2.0 */ // 🟢 🔄️
     .addAnyRule(
       ...getDoubleRuleName('no-script-url', 'jsx-no-script-url'),
       getDoubleRuleSeverity(ERROR),
-    ) // 🟡 🔄️`jsx-no-script-url`
+    ) /** @since 0.3.8 */ /** @since 7.18.0 */ // 🟡 🔄️`jsx-no-script-url`
     .addAnyRule(...getDoubleRuleName('no-unknown-property'), getDoubleRuleSeverity(ERROR), [
       {requireDataLowercase: true},
-    ]) // 🔄️
+    ]) /** @since 1.16.1 */ /** @since 2.0.0 */ // 🔄️
     .addAnyRule(
       ...getDoubleRuleName('no-unsafe-iframe-sandbox', 'iframe-missing-sandbox'),
       getDoubleRuleSeverity(ERROR),
-    ) // 🟡 🔄️`iframe-missing-sandbox`
+    ) /** @since 0.6.1 */ /** @since 7.29.0 */ // 🟡 🔄️`iframe-missing-sandbox`
     .addAnyRule(
       ...getDoubleRuleName('no-unsafe-target-blank', 'jsx-no-target-blank'),
       getDoubleRuleSeverity(ERROR),
-    ) // 🟡 🔄️`jsx-no-target-blank`
+    ) /** @since 0.6.2 */ /** @since 5.1.0 */ // 🟡 🔄️`jsx-no-target-blank`
     // React 19 docs: "In earlier React Canary versions, this API was part of React DOM and called useFormState."
-    .addAnyRule('@eslint-react/dom', 'no-use-form-state', getXRuleSeverity(ERROR)) // 🟢 🔢19.0.0
+    .addAnyRule(
+      '@eslint-react/dom',
+      'no-use-form-state',
+      getXRuleSeverity(ERROR),
+    ) /** @since 1.35.0 */ // 🟢 🔢19.0.0
     .addAnyRule(
       ...getDoubleRuleName('no-string-style-prop', 'style-prop-object'),
       getDoubleRuleSeverity(OFF),
-    ) /** @since 20.0.0 */ // 🟢 🔄️`style-prop-object`
+    ) /** @since 20.0.0 */ /** @since 6.2.0 */ // 🟢 🔄️`style-prop-object`
     .addAnyRule(
       ...getDoubleRuleName('no-void-elements-with-children', 'void-dom-elements-no-children'),
       getDoubleRuleSeverity(ERROR),
-    ) // 🟢 🔄️`void-dom-elements-no-children`
+    ) /** @since 1.22.0 */ /** @aka no-children-in-void-dom-elements */ /** @since 6.10.0 */ // 🟢 🔄️`void-dom-elements-no-children`
     // TODO why?
     .addAnyRule('@eslint-react/dom', 'prefer-namespace-import', OFF) /** @since 2.0.0 */
     .markCategory('Web API')
-    .addAnyRule('@eslint-react/web-api', 'no-leaked-event-listener', getXRuleSeverity(ERROR)) // 🟡
-    .addAnyRule('@eslint-react/web-api', 'no-leaked-interval', getXRuleSeverity(ERROR)) // 🟡
-    .addAnyRule('@eslint-react/web-api', 'no-leaked-resize-observer', getXRuleSeverity(ERROR)) // 🟡
-    .addAnyRule('@eslint-react/web-api', 'no-leaked-timeout', getXRuleSeverity(ERROR)) // 🟡
+    .addAnyRule(
+      '@eslint-react/web-api',
+      'no-leaked-event-listener',
+      getXRuleSeverity(ERROR),
+    ) /** @since 1.11.0 */ // 🟡
+    .addAnyRule(
+      '@eslint-react/web-api',
+      'no-leaked-interval',
+      getXRuleSeverity(ERROR),
+    ) /** @since 1.11.0 */ // 🟡
+    .addAnyRule(
+      '@eslint-react/web-api',
+      'no-leaked-resize-observer',
+      getXRuleSeverity(ERROR),
+    ) /** @since 1.13.0 */ // 🟡
+    .addAnyRule(
+      '@eslint-react/web-api',
+      'no-leaked-timeout',
+      getXRuleSeverity(ERROR),
+    ) /** @since 1.11.0 */ // 🟡
     .markCategory('DOM (eslint-plugin-react)')
     .addAnyRule('react', 'checked-requires-onchange-or-readonly', ERROR, [
       {ignoreMissingProperties: true},
-    ])
-    .addAnyRule('react', 'forbid-dom-props', OFF)
-    .addAnyRule('react', 'no-invalid-html-attribute', ERROR)
-    .addAnyRule('react', 'no-is-mounted', ERROR) // 🟢
+    ]) /** @since 7.34.0 */
+    .addAnyRule('react', 'forbid-dom-props', OFF) /** @since 7.6.0 */
+    .addAnyRule('react', 'no-invalid-html-attribute', ERROR) /** @since 7.27.0 */
+    .addAnyRule('react', 'no-is-mounted', ERROR) /** @since 3.12.0 */ // 🟢
     .addOverrides();
 
   const isRemixOrReactRouterInstalled = (
@@ -1249,7 +1369,7 @@ export const reactUnConfig: UnConfigFn<
         allowConstantExport: await doesPackageExist('vite'),
         ...configReactRefreshOptions.options,
       },
-    ])
+    ]) /** @since 0.1.0 */
     .enableConfigTesterForPlugin('react-refresh')
     .addOverrides();
 
