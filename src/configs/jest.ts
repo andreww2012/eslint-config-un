@@ -260,70 +260,90 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
       'consistent-test-it',
       optionsResolved.testDefinitionKeyword === false ? OFF : ERROR,
       generateConsistentTestItOptions(optionsResolved),
-    )
-    .addRule('expect-expect', ERROR) // 🟡
-    .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [{max: maxAssertionCalls}])
+    ) /** @since 21.9.0 */
+    .addRule('expect-expect', ERROR) /** @since 21.20.1 */ // 🟡
+    .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [
+      {max: maxAssertionCalls},
+    ]) /** @since 26.6.0 */
     .addRule('max-nested-describe', maxNestedDescribes == null ? OFF : ERROR, [
       {max: maxNestedDescribes},
-    ])
-    .addRule('no-alias-methods', ERROR) // 🟢 🎨
-    .addRule('no-commented-out-tests', WARNING) // 🟡
-    .addRule('no-conditional-expect', ERROR) // 🟢
-    .addRule('no-conditional-in-test', OFF)
-    .addRule('no-confusing-set-timeout', ERROR)
-    .addRule('no-deprecated-functions', ERROR) // 🟢
-    .addRule('no-disabled-tests', WARNING) // 🟡
-    .addRule('no-done-callback', ERROR) // 🟢
-    .addRule('no-duplicate-hooks', ERROR)
-    .addRule('no-export', ERROR) // 🟢
-    .addRule('no-focused-tests', ERROR) // 🟢
-    .addRule('no-hooks', OFF)
-    .addRule('no-identical-title', ERROR) // 🟢
-    .addRule('no-interpolation-in-snapshots', ERROR) // 🟢
-    .addRule('no-jasmine-globals', ERROR) // 🟢
-    .addRule('no-large-snapshots', OFF)
-    .addRule('no-mocks-import', ERROR) // 🟢
+    ]) /** @since 24.4.0 */
+    .addRule('no-alias-methods', ERROR) /** @since 21.24.0 */ // 🟢 🎨
+    .addRule('no-commented-out-tests', WARNING) /** @since 22.6.0 */ // 🟡
+    .addRule('no-conditional-expect', ERROR) /** @since 23.16.0 */ // 🟢
+    .addRule('no-conditional-in-test', OFF) /** @since 26.1.0-next.1 */
+    .addRule('no-confusing-set-timeout', ERROR) /** @since 27.3.0 */
+    .addRule('no-deprecated-functions', ERROR) /** @since 23.9.0 */ // 🟢
+    .addRule('no-disabled-tests', WARNING) /** @since 18.5.0-alpha.7da3df39 */ // 🟡
+    .addRule('no-done-callback', ERROR) /** @since 24.0.0 */ // 🟢
+    .addRule('no-duplicate-hooks', ERROR) /** @since 22.8.0 */
+    .addRule('no-export', ERROR) /** @since 22.11.0 */ // 🟢
+    .addRule('no-focused-tests', ERROR) /** @since 18.5.0-alpha.7da3df39 */ // 🟢
+    .addRule('no-hooks', OFF) /** @since 21.10.0 */
+    .addRule('no-identical-title', ERROR) /** @since 1.0.0 */ // 🟢
+    .addRule('no-interpolation-in-snapshots', ERROR) /** @since 23.19.0 */ // 🟢
+    .addRule('no-jasmine-globals', ERROR) /** @since 21.16.0 */ // 🟢
+    .addRule('no-large-snapshots', OFF) /** @since 21.4.0 */
+    .addRule('no-mocks-import', ERROR) /** @since 22.5.0 */ // 🟢
     .addRule('no-restricted-jest-methods', hasRestrictedMethods ? ERROR : OFF, [
       restrictedMethods || {},
-    ])
+    ]) /** @since 27.1.0 */
     .addRule('no-restricted-matchers', hasRestrictedMatchers ? ERROR : OFF, [
       restrictedMatchers || {},
-    ])
-    .addRule('no-standalone-expect', ERROR) // 🟢
-    .addRule('no-test-prefixes', ERROR) // 🟢
-    .addRule('no-test-return-statement', ERROR)
-    .addRule('padding-around-after-all-blocks', getPaddingAroundSeverity('afterAll'))
-    .addRule('padding-around-after-each-blocks', getPaddingAroundSeverity('afterEach'))
-    .addRule('padding-around-all', OFF)
-    .addRule('padding-around-before-all-blocks', getPaddingAroundSeverity('beforeAll'))
-    .addRule('padding-around-before-each-blocks', getPaddingAroundSeverity('beforeEach'))
-    .addRule('padding-around-describe-blocks', getPaddingAroundSeverity('describe'))
-    .addRule('padding-around-expect-groups', getPaddingAroundSeverity('expect'))
-    .addRule('padding-around-test-blocks', getPaddingAroundSeverity('test'))
-    .addRule('prefer-called-with', OFF)
-    .addRule('prefer-comparison-matcher', ERROR)
-    .addRule('prefer-each', WARNING)
-    .addRule('prefer-ending-with-an-expect', WARNING) // >=28.13.0
-    .addRule('prefer-equality-matcher', ERROR)
-    .addRule('prefer-expect-assertions', OFF)
-    .addRule('prefer-expect-resolves', ERROR)
-    .addRule('prefer-hooks-in-order', ERROR)
-    .addRule('prefer-hooks-on-top', ERROR)
-    .addRule('prefer-importing-jest-globals', OFF)
-    .addRule('prefer-jest-mocked', ERROR)
-    .addRule('prefer-lowercase-title', ERROR)
-    .addRule('prefer-mock-promise-shorthand', ERROR)
-    .addRule('prefer-snapshot-hint', OFF)
-    .addRule('prefer-spy-on', ERROR)
-    .addRule('prefer-strict-equal', WARNING)
-    .addRule('prefer-to-be', ERROR) // 🎨
-    .addRule('prefer-to-contain', ERROR) // 🎨
-    .addRule('prefer-to-have-length', ERROR) // 🎨
-    .addRule('prefer-todo', WARNING)
-    .addRule('require-hook', WARNING)
-    .addRule('require-to-throw-message', OFF)
-    .addRule('require-top-level-describe', OFF)
-    .addRule('valid-describe-callback', ERROR)
+    ]) /** @since 23.11.0 */
+    .addRule('no-standalone-expect', ERROR) /** @since 22.14.0 */ // 🟢
+    .addRule('no-test-prefixes', ERROR) /** @since 21.11.0 */ // 🟢
+    .addRule('no-test-return-statement', ERROR) /** @since 21.20.0 */
+    .addRule(
+      'padding-around-after-all-blocks',
+      getPaddingAroundSeverity('afterAll'),
+    ) /** @since 28.8.0 */
+    .addRule(
+      'padding-around-after-each-blocks',
+      getPaddingAroundSeverity('afterEach'),
+    ) /** @since 28.8.0 */
+    .addRule('padding-around-all', OFF) /** @since 28.8.0 */
+    .addRule(
+      'padding-around-before-all-blocks',
+      getPaddingAroundSeverity('beforeAll'),
+    ) /** @since 28.8.0 */
+    .addRule(
+      'padding-around-before-each-blocks',
+      getPaddingAroundSeverity('beforeEach'),
+    ) /** @since 28.8.0 */
+    .addRule(
+      'padding-around-describe-blocks',
+      getPaddingAroundSeverity('describe'),
+    ) /** @since 28.8.0 */
+    .addRule(
+      'padding-around-expect-groups',
+      getPaddingAroundSeverity('expect'),
+    ) /** @since 28.8.0 */
+    .addRule('padding-around-test-blocks', getPaddingAroundSeverity('test')) /** @since 28.8.0 */
+    .addRule('prefer-called-with', OFF) /** @since 22.3.0 */
+    .addRule('prefer-comparison-matcher', ERROR) /** @since 25.6.0 */
+    .addRule('prefer-each', WARNING) /** @since 26.9.0 */
+    .addRule('prefer-ending-with-an-expect', WARNING) /** @since 28.13.0 */
+    .addRule('prefer-equality-matcher', ERROR) /** @since 25.7.0 */
+    .addRule('prefer-expect-assertions', OFF) /** @since 21.6.0 */
+    .addRule('prefer-expect-resolves', ERROR) /** @since 24.5.0 */
+    .addRule('prefer-hooks-in-order', ERROR) /** @since 26.3.0 */
+    .addRule('prefer-hooks-on-top', ERROR) /** @since 22.18.0 */
+    .addRule('prefer-importing-jest-globals', OFF) /** @since 28.1.0 */
+    .addRule('prefer-jest-mocked', ERROR) /** @since 28.6.0 */
+    .addRule('prefer-lowercase-title', ERROR) /** @since 25.0.0-next.7 */
+    .addRule('prefer-mock-promise-shorthand', ERROR) /** @since 26.7.0 */
+    .addRule('prefer-snapshot-hint', OFF) /** @since 26.1.0 */
+    .addRule('prefer-spy-on', ERROR) /** @since 21.27.0 */
+    .addRule('prefer-strict-equal', WARNING) /** @since 21.21.0 */
+    .addRule('prefer-to-be', ERROR) /** @since 24.5.0 */ // 🎨
+    .addRule('prefer-to-contain', ERROR) /** @since 21.25.0 */ // 🎨
+    .addRule('prefer-to-have-length', ERROR) /** @since 21.3.0-beta.5 */ // 🎨
+    .addRule('prefer-todo', WARNING) /** @since 22.2.0 */
+    .addRule('require-hook', WARNING) /** @since 24.7.0 */
+    .addRule('require-to-throw-message', OFF) /** @since 23.0.0 */
+    .addRule('require-top-level-describe', OFF) /** @since 22.16.0 */
+    .addRule('valid-describe-callback', ERROR) /** @since 25.0.0-next.7 */
     .addRule('valid-expect', ERROR, [
       {
         alwaysAwait: true, // Default: false
@@ -337,9 +357,9 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
             maxArgs: minAndMaxExpectArgs[1],
           }),
       },
-    ])
-    .addRule('valid-expect-in-promise', ERROR) // 🟢
-    .addRule('valid-title', ERROR) // 🟢
+    ]) /** @since 19.1.0-alpha.eed8203 */
+    .addRule('valid-expect-in-promise', ERROR) /** @since 21.7.0 */ // 🟢
+    .addRule('valid-title', ERROR) /** @since 22.20.0 */ // 🟢
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest', {
       rulesToSkipInConfig: (ruleName) => JEST_TYPESCRIPT_RELATED_RULES_SET.has(ruleName),
@@ -369,10 +389,10 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
       },
     )
     // Works only on TS files
-    .addRule('no-untyped-mock-factory', ERROR)
+    .addRule('no-untyped-mock-factory', ERROR) /** @since 27.2.0 */
     // Requires type checking
     // TODO auto-include test files in TS config?
-    .addRule('unbound-method', isTsConfigEnabled ? ERROR : OFF)
+    .addRule('unbound-method', isTsConfigEnabled ? ERROR : OFF) /** @since 24.3.0 */
     // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
     .disableAnyRule('ts', 'unbound-method')
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
@@ -402,14 +422,26 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
       ],
       defaultJestEslintConfig,
     )
-    .addRule('prefer-to-be-array', getSuggestUsingJestExtendedMatcherSeverity('toBeArray'))
-    .addRule('prefer-to-be-false', getSuggestUsingJestExtendedMatcherSeverity('toBeFalse'))
-    .addRule('prefer-to-be-object', getSuggestUsingJestExtendedMatcherSeverity('toBeObject'))
-    .addRule('prefer-to-be-true', getSuggestUsingJestExtendedMatcherSeverity('toBeTrue'))
+    .addRule(
+      'prefer-to-be-array',
+      getSuggestUsingJestExtendedMatcherSeverity('toBeArray'),
+    ) /** @since 1.0.0 */
+    .addRule(
+      'prefer-to-be-false',
+      getSuggestUsingJestExtendedMatcherSeverity('toBeFalse'),
+    ) /** @since 0.0.1 */
+    .addRule(
+      'prefer-to-be-object',
+      getSuggestUsingJestExtendedMatcherSeverity('toBeObject'),
+    ) /** @since 1.0.0 */
+    .addRule(
+      'prefer-to-be-true',
+      getSuggestUsingJestExtendedMatcherSeverity('toBeTrue'),
+    ) /** @since 0.0.1 */
     .addRule(
       'prefer-to-have-been-called-once',
       getSuggestUsingJestExtendedMatcherSeverity('toHaveBeenCalledOnce'),
-    )
+    ) /** @since 1.1.0 */
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest-extended')
     .addOverrides();
