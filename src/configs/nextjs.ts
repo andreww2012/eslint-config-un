@@ -68,7 +68,7 @@ export const nextJsUnConfig: UnConfigFn<'nextJs'> = (context) => {
     .addRule('no-img-element', WARNING) /** @since 10.2.1-canary.10 */ // 🟡
     .addRule('no-page-custom-font', WARNING) /** @since 10.2.1-canary.5 */ // 🟡
     .addRule('no-script-component-in-head', ERROR) /** @since 12.0.11-canary.5 */ // 🟢
-    .addRule('no-styled-jsx-in-document', ERROR) /** @since  */ // 🟡
+    .addRule('no-styled-jsx-in-document', ERROR) /** @since 12.1.7-canary.11 */ // 🟡
     .addRule('no-sync-scripts', ERROR) /** @since 9.3.7-canary.14 */ // 🟡🔵
     .addRule('no-title-in-document-head', ERROR) /** @since 10.2.1-canary.3 */ // 🟡
     .addRule('no-typos', ERROR) /** @since 11.0.2-canary.22 */ // 🟡
