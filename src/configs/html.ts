@@ -82,19 +82,19 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
       },
     )
     .markCategory('Best Practice')
-    .addRule('max-element-depth', OFF)
-    .addRule('no-duplicate-attrs', ERROR) // 🟢
-    .addRule('no-duplicate-class', ERROR)
-    .addRule('no-duplicate-id', ERROR) // 🟢
-    .addRule('no-duplicate-in-head', ERROR) // >=0.42.0
-    .addRule('no-extra-spacing-text', WARNING, [{skip: ['pre']}])
-    .addRule('no-ineffective-attrs', ERROR) // >=0.45.0
-    .addRule('no-inline-styles', OFF)
-    .addRule('no-invalid-entity', ERROR)
-    .addRule('no-nested-interactive', ERROR)
-    .addRule('no-obsolete-tags', ERROR) // 🟢
-    .addRule('no-restricted-attr-values', OFF)
-    .addRule('no-restricted-attrs', OFF)
+    .addRule('max-element-depth', OFF) /** @since 0.33.0 */
+    .addRule('no-duplicate-attrs', ERROR) /** @since 0.9.0-0.9.0-alpha.1.0 */ // 🟢
+    .addRule('no-duplicate-class', ERROR) /** @since 0.39.0 */
+    .addRule('no-duplicate-id', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-duplicate-in-head', ERROR) /** @since 0.42.0 */
+    .addRule('no-extra-spacing-text', WARNING, [{skip: ['pre']}]) /** @since 0.27.0 */
+    .addRule('no-ineffective-attrs', ERROR) /** @since 0.45.0 */
+    .addRule('no-inline-styles', OFF) /** @since 0.1.0 */
+    .addRule('no-invalid-entity', ERROR) /** @since 0.42.0 */
+    .addRule('no-nested-interactive', ERROR) /** @since 0.32.0 */
+    .addRule('no-obsolete-tags', ERROR) /** @since 0.6.0 */ // 🟢
+    .addRule('no-restricted-attr-values', OFF) /** @since 0.20.0 */
+    .addRule('no-restricted-attrs', OFF) /** @since 0.13.0 */
     .addRule('no-restricted-tags', ERROR, [
       {
         tagPatterns: getKeysOfTruthyValues({
@@ -102,51 +102,51 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
           ...optionsResolved.disallowedHtmlTags,
         }).map((tagName) => `^${tagName}$`),
       },
-    ]) // >=0.47.0
-    .addRule('no-script-style-type', ERROR)
-    .addRule('no-target-blank', ERROR)
-    .addRule('prefer-https', ERROR)
-    .addRule('require-attrs', OFF)
-    .addRule('require-button-type', ERROR)
-    .addRule('require-closing-tags', ERROR) // 🟢
-    .addRule('require-doctype', ERROR) // 🟢
-    .addRule('require-explicit-size', ERROR)
-    .addRule('require-li-container', ERROR) // 🟢
-    .addRule('require-meta-charset', ERROR)
-    .addRule('use-baseline', WARNING) // 🟢
+    ]) /** @since 0.47.0 */
+    .addRule('no-script-style-type', ERROR) /** @since 0.21.0 */
+    .addRule('no-target-blank', ERROR) /** @since 0.9.0-0.9.0-alpha.1.0 */
+    .addRule('prefer-https', ERROR) /** @since 0.32.0 */
+    .addRule('require-attrs', OFF) /** @since 0.17.0 */
+    .addRule('require-button-type', ERROR) /** @since 0.10.0 */
+    .addRule('require-closing-tags', ERROR) /** @since 0.6.0 */ // 🟢
+    .addRule('require-doctype', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('require-explicit-size', ERROR) /** @since 0.33.0 */
+    .addRule('require-li-container', ERROR) /** @since 0.5.0 */ // 🟢
+    .addRule('require-meta-charset', ERROR) /** @since 0.8.0 */
+    .addRule('use-baseline', WARNING) /** @since 0.38.0 */ // 🟢
     .markCategory('SEO')
-    .addRule('no-multiple-h1', ERROR) // 🟢
-    .addRule('require-lang', ERROR) // 🟢
-    .addRule('require-meta-description', OFF)
-    .addRule('require-open-graph-protocol', OFF)
-    .addRule('require-title', ERROR) // 🟢
+    .addRule('no-multiple-h1', ERROR) /** @since 0.2.0 */ // 🟢
+    .addRule('require-lang', ERROR) /** @since 0.0.2 */ // 🟢
+    .addRule('require-meta-description', OFF) /** @since 0.7.0 */
+    .addRule('require-open-graph-protocol', OFF) /** @since 0.21.0 */
+    .addRule('require-title', ERROR) /** @since 0.1.0 */ // 🟢
     .markCategory('Accessibility')
-    .addRule('no-abstract-roles', ERROR)
-    .addRule('no-accesskey-attrs', ERROR)
-    .addRule('no-aria-hidden-body', ERROR)
-    .addRule('no-aria-hidden-on-focusable', ERROR) // >=0.42.0
-    .addRule('no-empty-headings', ERROR) // >=0.42.0
-    .addRule('no-heading-inside-button', ERROR)
-    .addRule('no-invalid-role', ERROR)
-    .addRule('no-non-scalable-viewport', ERROR)
-    .addRule('no-positive-tabindex', ERROR)
-    .addRule('no-skip-heading-levels', OFF)
-    .addRule('require-form-method', OFF)
-    .addRule('require-frame-title', ERROR)
-    .addRule('require-img-alt', ERROR) // 🟢
-    .addRule('require-input-label', ERROR)
-    .addRule('require-meta-viewport', ERROR)
+    .addRule('no-abstract-roles', ERROR) /** @since 0.10.0 */
+    .addRule('no-accesskey-attrs', ERROR) /** @since 0.11.0 */
+    .addRule('no-aria-hidden-body', ERROR) /** @since 0.10.0 */
+    .addRule('no-aria-hidden-on-focusable', ERROR) /** @since 0.42.0 */
+    .addRule('no-empty-headings', ERROR) /** @since 0.42.0 */
+    .addRule('no-heading-inside-button', ERROR) /** @since 0.32.0 */
+    .addRule('no-invalid-role', ERROR) /** @since 0.32.0 */
+    .addRule('no-non-scalable-viewport', ERROR) /** @since 0.7.0 */
+    .addRule('no-positive-tabindex', ERROR) /** @since 0.7.0 */
+    .addRule('no-skip-heading-levels', OFF) /** @since 0.4.0 */
+    .addRule('require-form-method', OFF) /** @since 0.32.0 */
+    .addRule('require-frame-title', ERROR) /** @since 0.7.0 */
+    .addRule('require-img-alt', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('require-input-label', ERROR) /** @since 0.32.0 */
+    .addRule('require-meta-viewport', ERROR) /** @since 0.7.0 */
     .markCategory('Style')
-    .addRule('attrs-newline', OFF) // 🟢
-    .addRule('element-newline', OFF) // 🟢
-    .addRule('id-naming-convention', OFF)
-    .addRule('indent', OFF) // 🟢
-    .addRule('lowercase', ERROR)
-    .addRule('no-extra-spacing-attrs', OFF) // 🟢💅
-    .addRule('no-multiple-empty-lines', WARNING)
-    .addRule('no-trailing-spaces', WARNING)
-    .addRule('quotes', ERROR, ['double', {enforceTemplatedAttrValue: true}]) // 🟢
-    .addRule('sort-attrs', OFF) // TODO find and enforce a good sorting order?
+    .addRule('attrs-newline', OFF) /** @since 0.25.0 */ // 🟢
+    .addRule('element-newline', OFF) /** @since 0.3.0 */ // 🟢
+    .addRule('id-naming-convention', OFF) /** @since 0.6.0 */
+    .addRule('indent', OFF) /** @since 0.4.0 */ // 🟢
+    .addRule('lowercase', ERROR) /** @since 0.21.0 */
+    .addRule('no-extra-spacing-attrs', OFF) /** @since 0.2.0 */ // 🟢💅
+    .addRule('no-multiple-empty-lines', WARNING) /** @since 0.11.0 */
+    .addRule('no-trailing-spaces', WARNING) /** @since 0.15.0 */
+    .addRule('quotes', ERROR, ['double', {enforceTemplatedAttrValue: true}]) /** @since 0.5.0 */ // 🟢
+    .addRule('sort-attrs', OFF) /** @since 0.21.0 */ // TODO find and enforce a good sorting order?
     .enableConfigTesterForPlugin('@html-eslint')
     .addOverrides();
 
