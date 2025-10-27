@@ -229,27 +229,31 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
         },
       }),
     })
-    .addRule('check-access', ERROR) // 🟢2️⃣
-    .addRule('check-alignment', ERROR) // 🟢4️⃣
-    .addRule('check-indentation', ERROR)
-    .addRule('check-line-alignment', ERROR) // 4️⃣
-    .addRule('check-param-names', ERROR) // 🟢2️⃣
-    .addRule('check-property-names', ERROR) // 🟢2️⃣
-    .addRule('check-syntax', ERROR) // 2️⃣
-    .addRule('check-tag-names', ERROR, customTags?.length ? [{definedTags: customTags}] : []) // 🟢2️⃣
-    .addRule('check-template-names', ERROR) // 2️⃣
-    .addRule('check-types', ERROR) // 🟢2️⃣
-    .addRule('check-values', ERROR) // 🟢2️⃣
-    .addRule('convert-to-jsdoc-comments', OFF) // Experimental rule
-    .addRule('empty-tags', ERROR) // 🟢2️⃣
-    .addRule('escape-inline-tags', ERROR) // 🔵2️⃣ >=60.6.0
-    .addRule('implements-on-classes', ERROR) // 🟢2️⃣
-    .addRule('imports-as-dependencies', OFF)
-    .addRule('informative-docs', OFF) // 1️⃣
-    .addRule('lines-before-block', ERROR) // 4️⃣
-    .addRule('match-description', OFF) // 1️⃣
-    .addRule('match-name', OFF)
-    .addRule('multiline-blocks', ERROR) // 🟢4️⃣
+    .addRule('check-access', ERROR) /** @since 18.0.0 */ // 🟢2️⃣
+    .addRule('check-alignment', ERROR) /** @since 4.8.0 */ // 🟢4️⃣
+    .addRule('check-indentation', ERROR) /** @since 4.8.0 */
+    .addRule('check-line-alignment', ERROR) /** @since 30.5.1 */ // 4️⃣
+    .addRule('check-param-names', ERROR) /** @since 0.0.1 */ // 🟢2️⃣
+    .addRule('check-property-names', ERROR) /** @since 30.5.1 */ // 🟢2️⃣
+    .addRule('check-syntax', ERROR) /** @since 4.8.0 */ // 2️⃣
+    .addRule(
+      'check-tag-names',
+      ERROR,
+      customTags?.length ? [{definedTags: customTags}] : [],
+    ) /** @since 2.0.1 */ // 🟢2️⃣
+    .addRule('check-template-names', ERROR) /** @since 48.8.0 */ // 2️⃣
+    .addRule('check-types', ERROR) /** @since 1.1.0 */ // 🟢2️⃣
+    .addRule('check-values', ERROR) /** @since 18.0.0 */ // 🟢2️⃣
+    .addRule('convert-to-jsdoc-comments', OFF) /** @since 48.6.0 */ // Experimental rule
+    .addRule('empty-tags', ERROR) /** @since 18.0.0 */ // 🟢2️⃣
+    .addRule('escape-inline-tags', ERROR) /** @since 60.6.0 */ // 🔵2️⃣
+    .addRule('implements-on-classes', ERROR) /** @since 7.0.0 */ // 🟢2️⃣
+    .addRule('imports-as-dependencies', OFF) /** @since 46.2.0 */
+    .addRule('informative-docs', OFF) /** @since 41.1.0 */ // 1️⃣
+    .addRule('lines-before-block', ERROR) /** @since 49.0.0 */ // 4️⃣
+    .addRule('match-description', OFF) /** @since 7.0.0 */ // 1️⃣
+    .addRule('match-name', OFF) /** @since 35.3.0 */
+    .addRule('multiline-blocks', ERROR) /** @since 34.5.0 */ // 🟢4️⃣
     .addRule('no-bad-blocks', ERROR, [
       {
         ignore: [
@@ -265,58 +269,58 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
           ...(extraMultilineCommentsStartingWithToIgnore || []),
         ],
       },
-    ]) // 2️⃣
-    .addRule('no-blank-block-descriptions', ERROR) // 1️⃣
-    .addRule('no-blank-blocks', ERROR) // 1️⃣
-    .addRule('no-defaults', ERROR) // TODO why is this recommended? 🟢2️⃣
-    .addRule('no-missing-syntax', OFF)
-    .addRule('no-multi-asterisks', ERROR, [{allowWhitespace: true}]) // 🟢4️⃣
-    .addRule('no-restricted-syntax', OFF)
-    .addRule('no-types', OFF) // 2️⃣
-    .addRule('no-undefined-types', ERROR) // 🟢2️⃣
-    .addRule('prefer-import-tag', OFF) // >=60.2.0
-    .addRule('reject-any-type', OFF) // 🟢 >=58.0.0
-    .addRule('reject-function-type', OFF) // 🟢 >=58.0.0
-    .addRule('require-asterisk-prefix', ERROR) // 4️⃣
-    .addRule('require-description', OFF)
-    .addRule('require-description-complete-sentence', OFF)
-    .addRule('require-example', OFF) // 3️⃣
-    .addRule('require-file-overview', OFF)
-    .addRule('require-hyphen-before-param-description', OFF) // 4️⃣
-    .addRule('require-jsdoc', OFF) // 🟢3️⃣
-    .addRule('require-next-description', OFF) // >=59.0.0
-    .addRule('require-next-type', WARNING) // 🟢3️⃣ >=57.0.0
-    .addRule('require-param', ERROR, [{ignoreWhenAllParamsMissing: true}]) // 🟢3️⃣
-    .addRule('require-param-description', WARNING) // 🟢3️⃣ (error by default)
-    .addRule('require-param-name', ERROR) // 🟢3️⃣
-    .addRule('require-param-type', ERROR) // 🟢
-    .addRule('require-property', ERROR) // 🟢3️⃣
-    .addRule('require-property-description', WARNING) // 🟢3️⃣ (error by default)
-    .addRule('require-property-name', ERROR) // 🟢3️⃣
-    .addRule('require-property-type', ERROR) // 🟢
-    .addRule('require-returns', OFF) // 🟢3️⃣
-    .addRule('require-returns-check', ERROR) // 🟢2️⃣
-    .addRule('require-returns-description', WARNING) // 🟢3️⃣ (error by default)
-    .addRule('require-returns-type', ERROR) // 🟢
-    .addRule('require-tags', OFF) // >=59.1.0 (renamed to the actual name in 60.0.0)
-    .addRule('require-template', OFF)
-    .addRule('require-template-description', OFF) // >=60.5.0
-    .addRule('require-throws', OFF)
-    .addRule('require-throws-description', OFF) // >=59.0.0
-    .addRule('require-throws-type', WARNING) // 🟢3️⃣ >=57.0.0
-    .addRule('require-yields', ERROR) // 🟢3️⃣
-    .addRule('require-yields-check', ERROR) // 🟢2️⃣
-    .addRule('require-yields-description', OFF) // >=59.0.0
-    .addRule('require-yields-type', WARNING) // 🟢3️⃣ >=57.0.0
-    .addRule('sort-tags', ERROR)
-    .addRule('tag-lines', ERROR) // 🟢4️⃣
-    .addRule('text-escaping', OFF) // 1️⃣
+    ]) /** @since 20.3.0 */ // 2️⃣
+    .addRule('no-blank-block-descriptions', ERROR) /** @since 40.3.0 */ // 1️⃣
+    .addRule('no-blank-blocks', ERROR) /** @since 43.1.0 */ // 1️⃣
+    .addRule('no-defaults', ERROR) /** @since 20.2.0 */ // TODO why is this recommended? 🟢2️⃣
+    .addRule('no-missing-syntax', OFF) /** @since 33.1.0 */
+    .addRule('no-multi-asterisks', ERROR, [{allowWhitespace: true}]) /** @since 34.6.0 */ // 🟢4️⃣
+    .addRule('no-restricted-syntax', OFF) /** @since 33.1.0 */
+    .addRule('no-types', OFF) /** @since 7.0.0 */ // 2️⃣
+    .addRule('no-undefined-types', ERROR) /** @since 3.6.0 */ // 🟢2️⃣
+    .addRule('prefer-import-tag', OFF) /** @since 60.2.0 */
+    .addRule('reject-any-type', OFF) /** @since 58.0.0 */ // 🟢
+    .addRule('reject-function-type', OFF) /** @since 58.0.0 */ // 🟢
+    .addRule('require-asterisk-prefix', ERROR) /** @since 33.2.0 */ // 4️⃣
+    .addRule('require-description', OFF) /** @since 3.9.0 */
+    .addRule('require-description-complete-sentence', OFF) /** @since 0.0.1 */
+    .addRule('require-example', OFF) /** @since 3.1.0 */ // 3️⃣
+    .addRule('require-file-overview', OFF) /** @since 18.7.0 */
+    .addRule('require-hyphen-before-param-description', OFF) /** @since 2.3.0 */ // 4️⃣
+    .addRule('require-jsdoc', OFF) /** @since 4.8.4 */ // 🟢3️⃣
+    .addRule('require-next-description', OFF) /** @since 59.0.0 */
+    .addRule('require-next-type', WARNING) /** @since 57.0.0 */ // 🟢3️⃣
+    .addRule('require-param', ERROR, [{ignoreWhenAllParamsMissing: true}]) /** @since 1.1.0 */ // 🟢3️⃣
+    .addRule('require-param-description', WARNING) /** @since 0.0.1 */ // 🟢3️⃣ (error by default)
+    .addRule('require-param-name', ERROR) /** @since 3.2.0 */ // 🟢3️⃣
+    .addRule('require-param-type', ERROR) /** @since 2.0.1 */ // 🟢
+    .addRule('require-property', ERROR) /** @since 19.0.0 */ // 🟢3️⃣
+    .addRule('require-property-description', WARNING) /** @since 19.0.0 */ // 🟢3️⃣ (error by default)
+    .addRule('require-property-name', ERROR) /** @since 19.0.0 */ // 🟢3️⃣
+    .addRule('require-property-type', ERROR) /** @since 19.0.0 */ // 🟢
+    .addRule('require-returns', OFF) /** @since 3.15.0 */ // 🟢3️⃣
+    .addRule('require-returns-check', ERROR) /** @since 4.0.0 */ // 🟢2️⃣
+    .addRule('require-returns-description', WARNING) /** @since 1.1.0 */ // 🟢3️⃣ (error by default)
+    .addRule('require-returns-type', ERROR) /** @since 2.0.1 */ // 🟢
+    .addRule('require-tags', OFF) /** @since 59.1.0 */ // Renamed to the actual name in 60.0.0
+    .addRule('require-template', OFF) /** @since 48.7.0 */
+    .addRule('require-template-description', OFF) /** @since 60.5.0 */
+    .addRule('require-throws', OFF) /** @since 27.1.0 */
+    .addRule('require-throws-description', OFF) /** @since 59.0.0 */
+    .addRule('require-throws-type', WARNING) /** @since 57.0.0 */ // 🟢3️⃣
+    .addRule('require-yields', ERROR) /** @since 31.1.0 */ // 🟢3️⃣
+    .addRule('require-yields-check', ERROR) /** @since 31.2.0 */ // 🟢2️⃣
+    .addRule('require-yields-description', OFF) /** @since 59.0.0 */
+    .addRule('require-yields-type', WARNING) /** @since 57.0.0 */ // 🟢3️⃣
+    .addRule('sort-tags', ERROR) /** @since 37.8.0 */
+    .addRule('tag-lines', ERROR) /** @since 34.4.0 */ // 🟢4️⃣
+    .addRule('text-escaping', OFF) /** @since 39.5.0 */ // 1️⃣
     .addRule('type-formatting', formatTypeValues ? ERROR : OFF, [
       {stringQuotes: 'single', methodQuotes: 'single'},
-    ]) // >=55.3.0
-    .addRule('valid-types', ERROR) // 🟢2️⃣
+    ]) /** @since 55.3.0 */
+    .addRule('valid-types', ERROR) /** @since 3.6.0 */ // 🟢2️⃣
     .markCategory('Deprecated')
-    .addRule('check-examples', OFF) // Doesn't work in ESLint 9, deprecated since 59.0.1
+    .addRule('check-examples', OFF) /** @since 3.13.0 */ // Doesn't work in ESLint 9, deprecated since 59.0.1
     .enableConfigTesterForPlugin('jsdoc')
     .addOverrides();
 
@@ -341,11 +345,11 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
         }),
       },
     )
-    .addRule('no-types', ERROR) // 🔵
-    .addRule('no-undefined-types', OFF) // 🔵(off)
-    .addRule('require-param-type', OFF) // 🔵(off)
-    .addRule('require-property-type', OFF) // 🔵(off)
-    .addRule('require-returns-type', OFF) // 🔵(off)
+    .addRule('no-types', ERROR) /** @since 7.0.0 */ // 🔵
+    .addRule('no-undefined-types', OFF) /** @since 3.6.0 */ // 🔵(off)
+    .addRule('require-param-type', OFF) /** @since 2.0.1 */ // 🔵(off)
+    .addRule('require-property-type', OFF) /** @since 19.0.0 */ // 🔵(off)
+    .addRule('require-returns-type', OFF) /** @since 2.0.1 */ // 🔵(off)
     .enableConfigTesterForPlugin('jsdoc', {
       rulesToSkipInConfig: () => true,
     })
