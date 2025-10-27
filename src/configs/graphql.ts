@@ -139,17 +139,17 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
         },
       },
     )
-    .addRule('alphabetize', OFF)
-    .addRule('description-style', OFF) // 🟢
-    .addRule('executable-definitions', ERROR) // 🔵📦
-    .addRule('fields-on-correct-type', ERROR) // 🔵📦
-    .addRule('fragments-on-composite-type', ERROR) // 🔵📦
-    .addRule('input-name', OFF)
-    .addRule('known-argument-names', ERROR) // 🟢🔵📦
-    .addRule('known-directives', ERROR) // 🟢🔵📦
-    .addRule('known-fragment-names', getRuleRequiresOperationsSeverity(ERROR)) // 🔵📦🖥️
-    .addRule('known-type-names', ERROR) // 🟢🔵📦
-    .addRule('lone-anonymous-operation', ERROR) // 🔵📦
+    .addRule('alphabetize', OFF) /** @since 2.3.0 */
+    .addRule('description-style', OFF) /** @since 0.2.0 */ // 🟢
+    .addRule('executable-definitions', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('fields-on-correct-type', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('fragments-on-composite-type', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('input-name', OFF) /** @since 0.2.0 */
+    .addRule('known-argument-names', ERROR) /** @since 0.6.0 */ // 🟢🔵📦
+    .addRule('known-directives', ERROR) /** @since 0.6.0 */ // 🟢🔵📦
+    .addRule('known-fragment-names', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦🖥️
+    .addRule('known-type-names', ERROR) /** @since 0.6.0 */ // 🟢🔵📦
+    .addRule('lone-anonymous-operation', ERROR) /** @since 0.6.0 */ // 🔵📦
     .addRule('lone-executable-definition', ERROR, [
       {
         // @ts-expect-error too strict type
@@ -158,9 +158,9 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
           true,
         ),
       },
-    ])
-    .addRule('lone-schema-definition', ERROR) // 🟢📦
-    .addRule('match-document-filename', OFF)
+    ]) /** @since 3.14.0 */
+    .addRule('lone-schema-definition', ERROR) /** @since 0.6.0 */ // 🟢📦
+    .addRule('match-document-filename', OFF) /** @since 2.1.0 */
     .addRule('naming-convention', ERROR, [
       // Copied from `recommended` config:
       {
@@ -211,65 +211,88 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
           forbiddenSuffixes: ['Fragment'],
         },
       },
-    ]) // 🟢🔵
-    .addRule('no-anonymous-operations', ERROR) // 🔵
-    .addRule('no-deprecated', getRuleRequiresSchemaSeverity(WARNING)) // 🔵📃
-    .addRule('no-duplicate-fields', ERROR) // 🔵
-    .addRule('no-fragment-cycles', ERROR) // 🔵📦
-    .addRule('no-hashtag-description', ERROR) // 🟢
-    .addRule('no-one-place-fragments', getRuleRequiresOperationsSeverity(ERROR)) // 🖥️
-    .addRule('no-root-type', getRuleRequiresSchemaSeverity(OFF)) // 📃
-    .addRule('no-scalar-result-type-on-mutation', getRuleRequiresSchemaSeverity(ERROR)) // 📃
-    .addRule('no-typename-prefix', ERROR) // 🟢
-    .addRule('no-undefined-variables', getRuleRequiresOperationsSeverity(ERROR)) // 🔵📦🖥️
-    .addRule('no-unreachable-types', getRuleRequiresSchemaSeverity(ERROR)) // 🟢📃
+    ]) /** @since 0.0.1 */ // 🟢🔵
+    .addRule('no-anonymous-operations', ERROR) /** @since 0.3.0 */ // 🔵
+    .addRule('no-deprecated', getRuleRequiresSchemaSeverity(WARNING)) /** @since 0.7.0 */ // 🔵📃
+    .addRule('no-duplicate-fields', ERROR) /** @since 3.0.0 */ // 🔵
+    .addRule('no-fragment-cycles', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('no-hashtag-description', ERROR) /** @since 0.7.0 */ // 🟢
+    .addRule(
+      'no-one-place-fragments',
+      getRuleRequiresOperationsSeverity(ERROR),
+    ) /** @since 3.14.0 */ // 🖥️
+    .addRule('no-root-type', getRuleRequiresSchemaSeverity(OFF)) /** @since 2.5.0 */ // 📃
+    .addRule(
+      'no-scalar-result-type-on-mutation',
+      getRuleRequiresSchemaSeverity(ERROR),
+    ) /** @since 3.0.0 */ // 📃
+    .addRule('no-typename-prefix', ERROR) /** @since 3.0.0 */ // 🟢
+    .addRule('no-undefined-variables', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦🖥️
+    .addRule('no-unreachable-types', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.7.2 */ // 🟢📃
     .addRule(
       'no-unused-fields',
       getRuleRequiresOperationsSeverity(getRuleRequiresSchemaSeverity(WARNING)),
-    ) // 🖥️📃
-    .addRule('no-unused-fragments', getRuleRequiresOperationsSeverity(ERROR)) // 🔵📦🖥️
-    .addRule('no-unused-variables', getRuleRequiresOperationsSeverity(ERROR)) // 🔵📦🖥️
-    .addRule('one-field-subscriptions', ERROR) // 🔵📦
-    .addRule('overlapping-fields-can-be-merged', ERROR) // 🔵📦
-    .addRule('possible-fragment-spread', ERROR) // 🔵📦
-    .addRule('possible-type-extension', ERROR) // 🟢📦
-    .addRule('provided-required-arguments', ERROR) // 🟢🔵📦
-    .addRule('relay-arguments', getRelaySeverity(ERROR))
-    .addRule('relay-connection-types', getRelaySeverity(ERROR))
-    .addRule('relay-edge-types', getRuleRequiresSchemaSeverity(getRelaySeverity(ERROR))) // 📃
-    .addRule('relay-page-info', getRuleRequiresSchemaSeverity(getRelaySeverity(ERROR))) // 📃
-    .addRule('require-deprecation-date', OFF)
-    .addRule('require-deprecation-reason', WARNING) // 🟢
+    ) /** @since 1.0.2 */ // 🖥️📃
+    .addRule('no-unused-fragments', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦🖥️
+    .addRule('no-unused-variables', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦🖥️
+    .addRule('one-field-subscriptions', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('overlapping-fields-can-be-merged', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('possible-fragment-spread', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('possible-type-extension', ERROR) /** @since 0.6.0 */ // 🟢📦
+    .addRule('provided-required-arguments', ERROR) /** @since 0.6.0 */ // 🟢🔵📦
+    .addRule('relay-arguments', getRelaySeverity(ERROR)) /** @since 3.10.0 */
+    .addRule('relay-connection-types', getRelaySeverity(ERROR)) /** @since 3.10.0 */
+    .addRule(
+      'relay-edge-types',
+      getRuleRequiresSchemaSeverity(getRelaySeverity(ERROR)),
+    ) /** @since 3.10.0 */ // 📃
+    .addRule(
+      'relay-page-info',
+      getRuleRequiresSchemaSeverity(getRelaySeverity(ERROR)),
+    ) /** @since 3.10.0 */ // 📃
+    .addRule('require-deprecation-date', OFF) /** @since 2.2.0 */
+    .addRule('require-deprecation-reason', WARNING) /** @since 0.0.1 */ // 🟢
     .addRule('require-description', OFF, [
       // Copied from `recommended` config
       {types: true, DirectiveDefinition: true, rootField: true},
-    ]) // 🟢
-    .addRule('require-field-of-type-query-in-mutation-result', getRuleRequiresSchemaSeverity(OFF)) // 📃
-    .addRule('require-import-fragment', getRuleRequiresOperationsSeverity(WARNING)) // 🖥️
-    .addRule('require-nullable-fields-with-oneof', ERROR)
-    .addRule('require-nullable-result-in-root', getRuleRequiresSchemaSeverity(ERROR)) // 📃
+    ]) /** @since 0.0.1 */ // 🟢
+    .addRule(
+      'require-field-of-type-query-in-mutation-result',
+      getRuleRequiresSchemaSeverity(OFF),
+    ) /** @since 2.3.0 */ // 📃
+    .addRule(
+      'require-import-fragment',
+      getRuleRequiresOperationsSeverity(WARNING),
+    ) /** @since 3.16.0 */ // 🖥️
+    .addRule('require-nullable-fields-with-oneof', ERROR) /** @since 3.14.0 */
+    .addRule(
+      'require-nullable-result-in-root',
+      getRuleRequiresSchemaSeverity(ERROR),
+    ) /** @since 3.19.0 */ // 📃
     .addRule(
       'require-selections',
       getRuleRequiresOperationsSeverity(getRuleRequiresSchemaSeverity(ERROR)),
-    ) // 🔵🖥️📃
-    .addRule('require-type-pattern-with-oneof', OFF)
-    .addRule('scalar-leafs', ERROR) // 🔵📦
-    .addRule('selection-set-depth', getRuleRequiresOperationsSeverity(ERROR), [{maxDepth: 7}]) // 🔵🖥️
-    .addRule('strict-id-in-types', getRuleRequiresSchemaSeverity(ERROR)) // 🟢📃
-    .addRule('unique-argument-names', ERROR) // 🔵📦
-    .addRule('unique-directive-names', ERROR) // 🟢📦
-    .addRule('unique-directive-names-per-location', ERROR) // 🟢🔵📦
-    .addRule('unique-enum-value-names', ERROR) // 🟢
-    .addRule('unique-field-definition-names', ERROR) // 🟢📦
-    .addRule('unique-fragment-name', getRuleRequiresOperationsSeverity(ERROR)) // 🔵🖥️
-    .addRule('unique-input-field-names', ERROR) // 🔵📦
-    .addRule('unique-operation-name', getRuleRequiresOperationsSeverity(ERROR)) // 🔵🖥️
-    .addRule('unique-operation-types', ERROR) // 🟢📦
-    .addRule('unique-type-names', ERROR) // 🟢📦
-    .addRule('unique-variable-names', ERROR) // 🔵📦
-    .addRule('value-literals-of-correct-type', ERROR) // 🔵📦
-    .addRule('variables-are-input-types', ERROR) // 🔵📦
-    .addRule('variables-in-allowed-position', ERROR) // 🔵📦
+    ) /** @since 0.3.0 */ /** @aka require-id-when-available */ // 🔵🖥️📃
+    .addRule('require-type-pattern-with-oneof', OFF) /** @since 3.14.0 */
+    .addRule('scalar-leafs', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('selection-set-depth', getRuleRequiresOperationsSeverity(ERROR), [
+      {maxDepth: 7},
+    ]) /** @since 0.7.0 */ // 🔵🖥️
+    .addRule('strict-id-in-types', getRuleRequiresSchemaSeverity(ERROR)) /** @since 0.9.0 */ // 🟢📃
+    .addRule('unique-argument-names', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('unique-directive-names', ERROR) /** @since 0.6.0 */ // 🟢📦
+    .addRule('unique-directive-names-per-location', ERROR) /** @since 0.6.0 */ // 🟢🔵📦
+    .addRule('unique-enum-value-names', ERROR) /** @since 0.6.0 */ // 🟢
+    .addRule('unique-field-definition-names', ERROR) /** @since 0.6.0 */ // 🟢📦
+    .addRule('unique-fragment-name', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵🖥️
+    .addRule('unique-input-field-names', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('unique-operation-name', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵🖥️
+    .addRule('unique-operation-types', ERROR) /** @since 0.6.0 */ // 🟢📦
+    .addRule('unique-type-names', ERROR) /** @since 0.6.0 */ // 🟢📦
+    .addRule('unique-variable-names', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('value-literals-of-correct-type', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('variables-are-input-types', ERROR) /** @since 0.6.0 */ // 🔵📦
+    .addRule('variables-in-allowed-position', ERROR) /** @since 0.6.0 */ // 🔵📦
     .enableConfigTesterForPlugin('graphql')
     .addOverrides();
 
