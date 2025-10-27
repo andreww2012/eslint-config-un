@@ -89,30 +89,30 @@ export const mochaUnConfig: UnConfigFn<'mocha'> = (context) => {
       'consistent-interface',
       enforceInterface == null ? OFF : ERROR,
       enforceInterface == null ? [] : [{interface: enforceInterface}],
-    )
-    .addRule('consistent-spacing-between-blocks', OFF) // 🟢
-    .addRule('handle-done-callback', ERROR) // 🟢
-    .addRule('max-top-level-suites', ERROR, [{limit: maxTopLevelSuites}])
-    .addRule('no-async-suite', ERROR) // 🟢
-    .addRule('no-empty-title', ERROR) // 🟢
-    .addRule('no-exclusive-tests', ERROR) // 🟡
-    .addRule('no-exports', ERROR) // 🟢
-    .addRule('no-global-tests', ERROR) // 🟢
-    .addRule('no-hooks', OFF)
-    .addRule('no-hooks-for-single-case', WARNING)
-    .addRule('no-identical-title', ERROR) // 🟢
-    .addRule('no-mocha-arrows', ERROR) // 🟢
-    .addRule('no-nested-tests', ERROR) // 🟢
-    .addRule('no-pending-tests', ERROR) // 🟡☺
-    .addRule('no-return-and-callback', ERROR) // 🟢
-    .addRule('no-return-from-async', ERROR)
-    .addRule('no-setup-in-describe', ERROR) // 🟢
-    .addRule('no-sibling-hooks', ERROR) // 🟢
-    .addRule('no-synchronous-tests', OFF)
-    .addRule('no-top-level-hooks', ERROR) // 🟡
-    .addRule('prefer-arrow-callback', OFF)
-    .addRule('valid-suite-title', OFF)
-    .addRule('valid-test-title', OFF)
+    ) /** @since 11.0.0 */
+    .addRule('consistent-spacing-between-blocks', OFF) /** @since 10.3.0 */ // 🟢
+    .addRule('handle-done-callback', ERROR) /** @since 0.3.0 */ // 🟢
+    .addRule('max-top-level-suites', ERROR, [{limit: maxTopLevelSuites}]) /** @since 4.6.0 */
+    .addRule('no-async-suite', ERROR) /** @since 11.0.0 */ // 🟢
+    .addRule('no-empty-title', ERROR) /** @since 11.0.0 */ // 🟢
+    .addRule('no-exclusive-tests', ERROR) /** @since 0.1.0 */ // 🟡
+    .addRule('no-exports', ERROR) /** @since 8.0.0 */ // 🟢
+    .addRule('no-global-tests', ERROR) /** @since 1.1.0 */ // 🟢
+    .addRule('no-hooks', OFF) /** @since 4.3.0 */
+    .addRule('no-hooks-for-single-case', WARNING) /** @since 4.4.0 */
+    .addRule('no-identical-title', ERROR) /** @since 4.5.0 */ // 🟢
+    .addRule('no-mocha-arrows', ERROR) /** @since 4.1.0 */ // 🟢
+    .addRule('no-nested-tests', ERROR) /** @since 4.7.0 */ // 🟢
+    .addRule('no-pending-tests', ERROR) /** @since 2.2.0 */ // 🟡
+    .addRule('no-return-and-callback', ERROR) /** @since 4.4.0 */ // 🟢
+    .addRule('no-return-from-async', ERROR) /** @since 6.0.0 */
+    .addRule('no-setup-in-describe', ERROR) /** @since 4.12.0 */ // 🟢
+    .addRule('no-sibling-hooks', ERROR) /** @since 4.3.0 */ // 🟢
+    .addRule('no-synchronous-tests', OFF) /** @since 0.5.1 */
+    .addRule('no-top-level-hooks', ERROR) /** @since 4.4.0 */ // 🟡
+    .addRule('prefer-arrow-callback', OFF) /** @since 5.1.0 */
+    .addRule('valid-suite-title', OFF) /** @since 11.0.0 */
+    .addRule('valid-test-title', OFF) /** @since 11.0.0 */
     .enableConfigTesterForPlugin('mocha')
     .addOverrides();
 
