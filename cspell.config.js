@@ -5,7 +5,14 @@
  */
 export default {
   useGitignore: true,
-  ignorePaths: ['**/pnpm-lock.yaml', 'test/**/*', 'pnpm-workspace.yaml', '**/*.svg', 'patches/**'],
+  ignorePaths: [
+    '**/pnpm-lock.yaml',
+    'test/**/*',
+    'pnpm-workspace.yaml',
+    '**/*.svg',
+    'patches/**',
+    'scripts/temp/**', // TODO why gitignore doesn't work?
+  ],
   words: [
     // Names
     'qwik',
@@ -32,6 +39,7 @@ export default {
     'attw',
     'tsgo',
     'tinyexec',
+    'cleye',
 
     // Technical words/terms
     'arraify',
