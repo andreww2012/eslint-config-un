@@ -91,6 +91,7 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
   // 🟢 - in recommended
   // 🟡 - in recommended (warns)
   // 🔵 - in recommended/typescript
+  // ✖️ - X only rule
 
   configBuilder
     ?.addConfig(
@@ -123,11 +124,12 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
         },
       },
     )
-    .addRule('consistent-type-specifier-style', OFF)
-    .addRule('default', ERROR) // 🟢
-    .addRule('dynamic-import-chunkname', OFF)
-    .addRule('export', ERROR) // 🟢
-    .addRule('exports-last', OFF)
+    // Versions in @since tags are from `eslint-plugin-import` plugin, unless the rule doesn't exist in it
+    .addRule('consistent-type-specifier-style', OFF) /** @since 2.27.0 */
+    .addRule('default', ERROR) /** @since 0.3.0 */ // 🟢
+    .addRule('dynamic-import-chunkname', OFF) /** @since 2.12.0 */
+    .addRule('export', ERROR) /** @since 0.7.3 */ // 🟢
+    .addRule('exports-last', OFF) /** @since 2.8.0 */
     .addRule('extensions', requireModuleExtensions ? ERROR : OFF, [
       (typeof requireModuleExtensions === 'object' && requireModuleExtensions['*']) ||
         'ignorePackages',
@@ -139,60 +141,64 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
           )),
         ...(typeof requireModuleExtensions === 'object' && requireModuleExtensions),
       },
-    ])
-    .addRule('first', ERROR)
-    .addRule('group-exports', OFF)
-    .addRule('max-dependencies', OFF)
-    .addRule('named', isTypescriptEnabled ? OFF : ERROR) // 🔵(disabled)
-    .addRule('namespace', ERROR) // 🟢
-    .addRule('newline-after-import', ERROR)
-    .addRule('no-absolute-path', ERROR)
-    .addRule('no-amd', OFF)
-    .addRule('no-anonymous-default-export', OFF)
-    .addRule('no-commonjs', OFF)
-    .addRule('no-cycle', WARNING)
-    .addRule('no-default-export', ERROR)
+    ]) /** @since 1.6.0 */
+    .addRule('first', ERROR) /** @since 2.0.0-beta.0 */
+    .addRule('group-exports', OFF) /** @since 2.9.0 */
+    .addRule('max-dependencies', OFF) /** @since 1.15.0 */
+    .addRule('named', isTypescriptEnabled ? OFF : ERROR) /** @since 0.3.0 */ // 🔵(disabled)
+    .addRule('namespace', ERROR) /** @since 0.3.4 */ // 🟢
+    .addRule('newline-after-import', ERROR) /** @since 1.7.0 */
+    .addRule('no-absolute-path', ERROR) /** @since 1.15.0 */
+    .addRule('no-amd', OFF) /** @since 0.13.0 */
+    .addRule('no-anonymous-default-export', OFF) /** @since 2.3.0 */
+    .addRule('no-commonjs', OFF) /** @since 0.13.0 */
+    .addRule('no-cycle', WARNING) /** @since 2.10.0 */
+    .addRule('no-default-export', ERROR) /** @since 2.9.0 */
     // Disabled when `typescript` config is enabled because it has a similar rule which works better (for example, is not triggered on `rxjs` operators)
-    .addRule('no-deprecated', isTypescriptEnabled ? OFF : WARNING)
-    .addRule('no-duplicates', ERROR, [{'prefer-inline': true, ...noDuplicatesOptions}]) // 🟡
-    .addRule('no-dynamic-require', OFF)
-    .addRule('no-empty-named-blocks', ERROR)
-    .addRule('no-extraneous-dependencies', ERROR, [{devDependencies: allowDevDependencies}])
-    .addRule('no-import-module-exports', OFF) // TODO enable?
-    .addRule('no-internal-modules', OFF)
-    .addRule('no-mutable-exports', WARNING)
+    .addRule('no-deprecated', isTypescriptEnabled ? OFF : WARNING) /** @since 1.0.0 */
+    .addRule('no-duplicates', ERROR, [
+      {'prefer-inline': true, ...noDuplicatesOptions},
+    ]) /** @since 0.7.9 */ // 🟡
+    .addRule('no-dynamic-require', OFF) /** @since 1.16.0 */
+    .addRule('no-empty-named-blocks', ERROR) /** @since 2.27.0 */
+    .addRule('no-extraneous-dependencies', ERROR, [
+      {devDependencies: allowDevDependencies},
+    ]) /** @since 1.6.0 */
+    .addRule('no-import-module-exports', OFF) /** @since 2.23.0 */ // TODO enable?
+    .addRule('no-internal-modules', OFF) /** @since 1.16.0 */
+    .addRule('no-mutable-exports', WARNING) /** @since 1.7.0 */
     // Not very useful + false positives for axios@1.6.7?
-    .addRule('no-named-as-default', OFF) // 🟡
-    .addRule('no-named-as-default-member', OFF) // 🟡
-    .addRule('no-named-default', OFF)
-    .addRule('no-named-export', OFF)
-    .addRule('no-namespace', OFF)
-    .addRule('no-nodejs-modules', OFF) // TODO
-    .addRule('no-relative-packages', OFF)
-    .addRule('no-relative-parent-imports', OFF)
-    .addRule('no-rename-default', OFF)
-    .addRule('no-restricted-paths', OFF)
-    .addRule('no-self-import', ERROR)
-    .addRule('no-unassigned-import', OFF)
+    .addRule('no-named-as-default', OFF) /** @since 0.4.2 */ // 🟡
+    .addRule('no-named-as-default-member', OFF) /** @since 1.5.0 */ // 🟡
+    .addRule('no-named-default', OFF) /** @since 2.1.0 */
+    .addRule('no-named-export', OFF) /** @since 2.15.0 */
+    .addRule('no-namespace', OFF) /** @since 1.5.0 */
+    .addRule('no-nodejs-modules', OFF) /** @since 1.6.0 */ // TODO
+    .addRule('no-relative-packages', OFF) /** @since 2.23.0 */
+    .addRule('no-relative-parent-imports', OFF) /** @since 2.13.0 */
+    .addRule('no-rename-default', OFF) /** @since 4.1.0 */ // ✖️
+    .addRule('no-restricted-paths', OFF) /** @since 1.10.0 */
+    .addRule('no-self-import', ERROR) /** @since 2.9.0 */
+    .addRule('no-unassigned-import', OFF) /** @since 2.0.0 */
     .addRule('no-unresolved', ERROR, [
       {
         ...(isNonEmptyArray(noUnresolvedIgnores) && {
           ignore: noUnresolvedIgnores,
         }),
       },
-    ]) // 🟢
-    .addRule('no-unused-modules', OFF)
-    .addRule('no-useless-path-segments', WARNING)
-    .addRule('no-webpack-loader-syntax', ERROR)
+    ]) /** @since 0.3.13 */ // 🟢
+    .addRule('no-unused-modules', OFF) /** @since 2.17.0 */
+    .addRule('no-useless-path-segments', WARNING) /** @since 2.9.0 */
+    .addRule('no-webpack-loader-syntax', ERROR) /** @since 2.0.0-beta.0 */
     .addRule('order', ERROR, [
       {
         groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
         alphabetize: {order: 'asc'},
       },
-    ])
-    .addRule('prefer-default-export', OFF)
-    .addRule('prefer-namespace-import', OFF)
-    .addRule('unambiguous', OFF)
+    ]) /** @since 1.6.0 */
+    .addRule('prefer-default-export', OFF) /** @since 1.8.0 */
+    .addRule('prefer-namespace-import', OFF) /** @since 4.16.0 */ // ✖️
+    .addRule('unambiguous', OFF) /** @since 2.0.0-beta.0 */
     .enableConfigTesterForPlugin('import')
     .addOverrides();
 
