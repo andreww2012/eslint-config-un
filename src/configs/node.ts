@@ -201,6 +201,7 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
 
   // Legend:
   // 🟢 - in recommended
+  // ✖️ - `n` rule only
 
   configBuilder
     ?.addConfig(['node', {includeDefaultFilesAndIgnores: true}], {
@@ -210,70 +211,82 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
         },
       }),
     })
-    .addRule('callback-return', OFF)
-    .addRule('exports-style', ERROR, ['module.exports', {allowBatchAssign: false}])
-    .addRule('file-extension-in-import', OFF)
-    .addRule('global-require', OFF)
-    .addRule('handle-callback-err', OFF)
-    .addRule('hashbang', ERROR) // 🟢
-    .addRule('no-callback-literal', OFF)
-    .addRule('no-deprecated-api', ERROR) // 🟢
-    .addRule('no-exports-assign', ERROR) // 🟢
-    .addRule('no-extraneous-import', OFF) // TODO 🟢 only disable when import plugin is enabled?
-    .addRule('no-extraneous-require', ERROR) // TODO 🟢 handled by import plugin too?
-    .addRule('no-missing-import', OFF) // TODO 🟢 only disable when import plugin is enabled?
-    .addRule('no-missing-require', ERROR) // TODO 🟢 handled by import plugin too?
-    .addRule('no-mixed-requires', OFF)
-    .addRule('no-new-require', ERROR)
-    .addRule('no-path-concat', ERROR)
-    .addRule('no-process-env', OFF)
-    .addRule('no-process-exit', OFF) // 🟢 The corresponding Unicorn rule is better: https://github.com/sindresorhus/eslint-plugin-unicorn/blob/1deb9bb5edf27fdb2f656add11c924dfa59fdac9/docs/rules/no-process-exit.md
+    // Versions in @since tags are from `eslint-plugin-node` plugin, unless the rule doesn't exist in it
+    .addRule('callback-return', OFF) /** @since 11.1.0 */
+    .addRule('exports-style', ERROR, [
+      'module.exports',
+      {allowBatchAssign: false},
+    ]) /** @since 2.1.1 */
+    .addRule('file-extension-in-import', OFF) /** @since 9.0.0 */
+    .addRule('global-require', OFF) /** @since 11.1.0 */
+    .addRule('handle-callback-err', OFF) /** @since 11.1.0 */
+    .addRule('hashbang', ERROR) /** @since 17.0.0-4 */ // 🟢✖️
+    .addRule('no-callback-literal', OFF) /** @since 9.2.0 */
+    .addRule('no-deprecated-api', ERROR) /** @since 1.4.0 */ // 🟢
+    .addRule('no-exports-assign', ERROR) /** @since 10.0.0 */ // 🟢
+    .addRule('no-extraneous-import', OFF) /** @since 5.0.0 */ // TODO 🟢 only disable when import plugin is enabled?
+    .addRule('no-extraneous-require', ERROR) /** @since 5.0.0 */ // TODO 🟢 handled by import plugin too?
+    .addRule('no-missing-import', OFF) /** @since 0.1.0 */ // TODO 🟢 only disable when import plugin is enabled?
+    .addRule('no-missing-require', ERROR) /** @since 0.1.0 */ // TODO 🟢 handled by import plugin too?
+    .addRule('no-mixed-requires', OFF) /** @since 11.1.0 */
+    .addRule('no-new-require', ERROR) /** @since 11.1.0 */
+    .addRule('no-path-concat', ERROR) /** @since 11.1.0 */
+    .addRule('no-process-env', OFF) /** @since 11.1.0 */
+    .addRule('no-process-exit', OFF) /** @since 11.1.0 */ // 🟢 The corresponding Unicorn rule is better: https://github.com/sindresorhus/eslint-plugin-unicorn/blob/1deb9bb5edf27fdb2f656add11c924dfa59fdac9/docs/rules/no-process-exit.md
     .addAnyRule('unicorn', 'no-process-exit', ERROR) // TODO 🟢
-    .addRule('no-restricted-import', OFF)
-    .addRule('no-restricted-require', OFF)
-    .addRule('no-sync', OFF)
-    .addRule('no-top-level-await', ERROR, [{ignoreBin: true}]) // >=17.19.0
-    .addRule('no-unpublished-bin', ERROR) // 🟢
-    .addRule('no-unpublished-import', OFF) // TODO 🟢 only disable when import plugin is enabled?
-    .addRule('no-unpublished-require', ERROR) // TODO 🟢 handled by import plugin too?
+    .addRule('no-restricted-import', OFF) /** @since 11.1.0 */
+    .addRule('no-restricted-require', OFF) /** @since 11.1.0 */
+    .addRule('no-sync', OFF) /** @since 11.1.0 */
+    .addRule('no-top-level-await', ERROR, [{ignoreBin: true}]) /** @since 17.19.0 */ // ✖️
+    .addRule('no-unpublished-bin', ERROR) /** @since 2.1.1 */ // 🟢
+    .addRule('no-unpublished-import', OFF) /** @since 0.4.0 */ // TODO 🟢 only disable when import plugin is enabled?
+    .addRule('no-unpublished-require', ERROR) /** @since 0.4.0 */ // TODO 🟢 handled by import plugin too?
     .addRule(
       'no-unsupported-features/es-builtins',
       ERROR,
       noUnsupportedFeaturesIgnores.esBuiltins?.length
         ? [{ignores: noUnsupportedFeaturesIgnores.esBuiltins}]
         : [],
-    ) // 🟢
+    ) /** @since 7.0.0-beta.0 */ // 🟢
     .addRule(
       'no-unsupported-features/es-syntax',
       ERROR,
       noUnsupportedFeaturesIgnores.esSyntax?.length
         ? [{ignores: noUnsupportedFeaturesIgnores.esSyntax}]
         : [],
-    )
+    ) /** @since 7.0.0-beta.0 */
     .addRule(
       'no-unsupported-features/node-builtins',
       ERROR,
       noUnsupportedFeaturesIgnores.nodeBuiltins?.length
         ? [{ignores: noUnsupportedFeaturesIgnores.nodeBuiltins}]
         : [],
-    ) //  🟢
-    .addRule('prefer-global/buffer', ERROR, [preferGlobal.buffer === false ? 'never' : 'always'])
-    .addRule('prefer-global/console', ERROR, [preferGlobal.console === false ? 'never' : 'always'])
-    .addRule('prefer-global/process', ERROR, [preferGlobal.process === false ? 'never' : 'always'])
+    ) /** @since 7.0.0-beta.0 */ //  🟢
+    .addRule('prefer-global/buffer', ERROR, [
+      preferGlobal.buffer === false ? 'never' : 'always',
+    ]) /** @since 7.0.0-beta.0 */
+    .addRule('prefer-global/console', ERROR, [
+      preferGlobal.console === false ? 'never' : 'always',
+    ]) /** @since 7.0.0-beta.0 */
+    .addRule('prefer-global/process', ERROR, [
+      preferGlobal.process === false ? 'never' : 'always',
+    ]) /** @since 7.0.0-beta.0 */
     .addRule('prefer-global/text-decoder', ERROR, [
       preferGlobal.textDecoder === false ? 'never' : 'always',
-    ])
+    ]) /** @since 8.0.0 */
     .addRule('prefer-global/text-encoder', ERROR, [
       preferGlobal.textEncoder === false ? 'never' : 'always',
-    ])
-    .addRule('prefer-global/url', ERROR, [preferGlobal.url === false ? 'never' : 'always'])
+    ]) /** @since 8.0.0 */
+    .addRule('prefer-global/url', ERROR, [
+      preferGlobal.url === false ? 'never' : 'always',
+    ]) /** @since 7.0.0-beta.0 */
     .addRule('prefer-global/url-search-params', ERROR, [
       preferGlobal.urlSearchParams === false ? 'never' : 'always',
-    ])
-    .addRule('prefer-node-protocol', ERROR)
-    .addRule('prefer-promises/dns', OFF) // TODO enable?
-    .addRule('prefer-promises/fs', OFF) // TODO enable?
-    .addRule('process-exit-as-throw', ERROR) // 🟢 Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-node/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
+    ]) /** @since 7.0.0-beta.0 */
+    .addRule('prefer-node-protocol', ERROR) /** @since 17.0.0-2 */ // ✖️
+    .addRule('prefer-promises/dns', OFF) /** @since 9.0.0 */ // TODO enable?
+    .addRule('prefer-promises/fs', OFF) /** @since 9.0.0 */ // TODO enable?
+    .addRule('process-exit-as-throw', ERROR) /** @since 1.2.0 */ // 🟢 Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-node/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
     .addAnyRule(
       'unicorn',
       'prefer-import-meta-properties',
