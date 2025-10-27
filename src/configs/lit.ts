@@ -95,30 +95,30 @@ export const litUnConfig: UnConfigFn<'lit'> = async (context) => {
         },
       }),
     })
-    .addRule('attribute-names', ERROR, [{convention: 'kebab'}])
-    .addRule('attribute-value-entities', ERROR)
-    .addRule('ban-attributes', OFF)
-    .addRule('binding-positions', ERROR)
-    .addRule('lifecycle-super', ERROR)
-    .addRule('no-classfield-shadowing', ERROR)
-    .addRule('no-duplicate-template-bindings', ERROR)
-    .addRule('no-invalid-escape-sequences', ERROR)
-    .addRule('no-invalid-html', ERROR)
-    .addRule('no-legacy-imports', ERROR)
-    .addRule('no-legacy-template-syntax', ERROR)
-    .addRule('no-native-attributes', ERROR)
-    .addRule('no-private-properties', ERROR)
-    .addRule('no-property-change-update', ERROR)
-    .addRule('no-template-arrow', ERROR)
-    .addRule('no-template-bind', ERROR)
-    .addRule('no-template-map', OFF)
-    .addRule('no-this-assign-in-render', ERROR)
-    .addRule('no-useless-template-literals', ERROR)
-    .addRule('no-value-attribute', ERROR)
-    .addRule('prefer-nothing', ERROR)
-    .addRule('prefer-static-styles', ERROR)
-    .addRule('quoted-expressions', ERROR, ['never'])
-    .addRule('value-after-constraints', ERROR)
+    .addRule('attribute-names', ERROR, [{convention: 'kebab'}]) /** @since 1.11.0 */
+    .addRule('attribute-value-entities', ERROR) /** @since 0.1.0 */
+    .addRule('ban-attributes', OFF) /** @since 1.7.0 */
+    .addRule('binding-positions', ERROR) /** @since 0.1.0 */
+    .addRule('lifecycle-super', ERROR) /** @since 1.9.0 */
+    .addRule('no-classfield-shadowing', ERROR) /** @since 1.10.0 */
+    .addRule('no-duplicate-template-bindings', ERROR) /** @since 0.1.0 */
+    .addRule('no-invalid-escape-sequences', ERROR) /** @since 1.1.0 */
+    .addRule('no-invalid-html', ERROR) /** @since 0.4.0 */
+    .addRule('no-legacy-imports', ERROR) /** @since 1.5.0 */
+    .addRule('no-legacy-template-syntax', ERROR) /** @since 0.1.0 */
+    .addRule('no-native-attributes', ERROR) /** @since 1.8.0 */
+    .addRule('no-private-properties', ERROR) /** @since 1.0.0 */
+    .addRule('no-property-change-update', ERROR) /** @since 0.2.0 */
+    .addRule('no-template-arrow', ERROR) /** @since 1.0.0 */
+    .addRule('no-template-bind', ERROR) /** @since 0.1.0 */
+    .addRule('no-template-map', OFF) /** @since 0.1.0 */
+    .addRule('no-this-assign-in-render', ERROR) /** @since 1.7.0 */
+    .addRule('no-useless-template-literals', ERROR) /** @since 0.1.0 */
+    .addRule('no-value-attribute', ERROR) /** @since 0.6.0 */
+    .addRule('prefer-nothing', ERROR) /** @since 1.7.0 */
+    .addRule('prefer-static-styles', ERROR) /** @since 1.5.0 */
+    .addRule('quoted-expressions', ERROR, ['never']) /** @since 1.4.0 */
+    .addRule('value-after-constraints', ERROR) /** @since 1.7.0 */
     .enableConfigTesterForPlugin('lit')
     .addOverrides();
 
