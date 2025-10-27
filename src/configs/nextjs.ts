@@ -51,28 +51,28 @@ export const nextJsUnConfig: UnConfigFn<'nextJs'> = (context) => {
         }),
       },
     )
-    .addRule('google-font-display', ERROR) // 🟡
+    .addRule('google-font-display', ERROR) /** @since 10.2.1-canary.4 */ // 🟡
     // "Note: Next.js automatically adds <link rel="preconnect" /> after version 12.0.1."
-    .addRule('google-font-preconnect', ERROR) // 🟡
-    .addRule('inline-script-id', ERROR) // 🟢
-    .addRule('next-script-for-ga', ERROR) // 🟡
-    .addRule('no-assign-module-variable', ERROR) // 🟢
-    .addRule('no-async-client-component', ERROR) // 🟡
-    .addRule('no-before-interactive-script-outside-document', ERROR) // 🟡
-    .addRule('no-css-tags', WARNING) // 🟡
-    .addRule('no-document-import-in-page', ERROR) // 🟢
-    .addRule('no-duplicate-head', ERROR) // 🟢
-    .addRule('no-head-element', ERROR) // 🟡
-    .addRule('no-head-import-in-document', ERROR) // 🟢
-    .addRule('no-html-link-for-pages', WARNING) // 🟡🔵
-    .addRule('no-img-element', WARNING) // 🟡
-    .addRule('no-page-custom-font', WARNING) // 🟡
-    .addRule('no-script-component-in-head', ERROR) // 🟢
-    .addRule('no-styled-jsx-in-document', ERROR) // 🟡
-    .addRule('no-sync-scripts', ERROR) // 🟡🔵
-    .addRule('no-title-in-document-head', ERROR) // 🟡
-    .addRule('no-typos', ERROR) // 🟡
-    .addRule('no-unwanted-polyfillio', ERROR) // 🟡
+    .addRule('google-font-preconnect', ERROR) /** @since 10.2.1-canary.4 */ // 🟡
+    .addRule('inline-script-id', ERROR) /** @since 11.1.1-canary.14 */ // 🟢
+    .addRule('next-script-for-ga', ERROR) /** @since 11.1.1-canary.9 */ // 🟡
+    .addRule('no-assign-module-variable', ERROR) /** @since 12.1.6-canary.2 */ // 🟢
+    .addRule('no-async-client-component', ERROR) /** @since 13.4.8-canary.6 */ // 🟡
+    .addRule('no-before-interactive-script-outside-document', ERROR) /** @since 12.1.6-canary.6 */ // 🟡
+    .addRule('no-css-tags', WARNING) /** @since 9.3.7-canary.14 */ // 🟡
+    .addRule('no-document-import-in-page', ERROR) /** @since 10.2.1-canary.5 */ // 🟢
+    .addRule('no-duplicate-head', ERROR) /** @since 11.0.2-canary.16 */ // 🟢
+    .addRule('no-head-element', ERROR) /** @since 12.0.8-canary.14 */ // 🟡
+    .addRule('no-head-import-in-document', ERROR) /** @since 10.2.1-canary.5 */ // 🟢
+    .addRule('no-html-link-for-pages', WARNING) /** @since 9.4.3-canary.0 */ // 🟡🔵
+    .addRule('no-img-element', WARNING) /** @since 10.2.1-canary.10 */ // 🟡
+    .addRule('no-page-custom-font', WARNING) /** @since 10.2.1-canary.5 */ // 🟡
+    .addRule('no-script-component-in-head', ERROR) /** @since 12.0.11-canary.5 */ // 🟢
+    .addRule('no-styled-jsx-in-document', ERROR) /** @since  */ // 🟡
+    .addRule('no-sync-scripts', ERROR) /** @since 9.3.7-canary.14 */ // 🟡🔵
+    .addRule('no-title-in-document-head', ERROR) /** @since 10.2.1-canary.3 */ // 🟡
+    .addRule('no-typos', ERROR) /** @since 11.0.2-canary.22 */ // 🟡
+    .addRule('no-unwanted-polyfillio', ERROR) /** @since 9.4.5-canary.38 */ // 🟡
     .enableConfigTesterForPlugin('@next/next')
     .addOverrides();
 
