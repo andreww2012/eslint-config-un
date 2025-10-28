@@ -98,7 +98,9 @@
   - Added `paddingAround` option to control whether `padding-around-*` rules will be enabled.
   - Added `typescript` sub-config for the rules designed to work exclusively with TypeScript files.
 - **angular** config: you are now expected to install `@angular-eslint/eslint-plugin` and `@angular-eslint/eslint-plugin-template` packages manually and only the rules from the installed packages will be used.
-- **import** config: added a new option `allowDevDependencies` to control if dev dependencies usage will be reported and where.
+- **import** config:
+  - Added a new option `allowDevDependencies` to control if dev dependencies usage will be reported and where.
+  - Plugin `settings` are now accepted in camel case and without the `import-x` prefix.
 - **nodeDependencies** config: added a new option `enforceAbsoluteVersion` to enforce to use or not to use absolute versions for dependencies.
 - **html** config:
   - Added a new option `parserOptions` to configure HTML parser options.

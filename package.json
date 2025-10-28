@@ -129,6 +129,7 @@
     "read-package-up": "11.0.0",
     "remeda": "2.32.0",
     "semver": "7.7.3",
+    "string-ts": "2.2.1",
     "tailwind-csstree": "0.1.4",
     "tinyexec": "1.0.1",
     "type-fest": "5.0.1",

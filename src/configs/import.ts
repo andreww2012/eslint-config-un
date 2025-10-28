@@ -1,18 +1,27 @@
 import type {TypeScriptResolverOptions} from 'eslint-import-resolver-typescript';
-import type {PluginSettings} from 'eslint-plugin-import-x';
+import type {
+  NewResolver as ImportPluginNewResolver,
+  ImportSettings as PluginSettings,
+  PluginSettings as PluginSettingsWithPrefixes,
+} from 'eslint-plugin-import-x';
 import {ERROR, GLOB_MARKDOWN_ALL_CODE_BLOCKS, OFF, WARNING} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
-import {arraify, assignDefaults, interopDefault, isNonEmptyArray} from '../utils';
+import {
+  arraify,
+  assignDefaults,
+  interopDefault,
+  isNonEmptyArray,
+  kebabCase,
+  objectEntriesUnsafe,
+} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
-  // TODO remove `import-x/` prefix for our config's users?
-
   /**
    * [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `settings` object as-is and applied to the specified `files` and `ignores`.
+   * that will be assigned to `settings` object with keys transformed to `import-x/<original property name in kebab case>` and applied to the specified `files` and `ignores`.
    *
    * Some settings are set by our config, and the settings you provide here will be merged with ours.
    * @see https://github.com/un-ts/eslint-plugin-import-x/tree/HEAD?tab=readme-ov-file#settings
@@ -112,7 +121,8 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
           'import-x/resolver-next': [
             // If the TS resolver goes after the node resolver, `import/no-deprecated` doesn't work
             // TODO should report?
-            isTypescriptEnabled && createTypeScriptImportResolver(tsResolverOptions),
+            isTypescriptEnabled &&
+              (createTypeScriptImportResolver(tsResolverOptions) as ImportPluginNewResolver),
             eslintPluginImportX.createNodeResolver(),
           ].filter((v) => typeof v === 'object'),
           ...(isTypescriptEnabled && {
@@ -120,8 +130,15 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
               '@typescript-eslint/parser': ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'],
             },
           }),
-          ...pluginSettings,
-        },
+          ...Object.fromEntries(
+            objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => {
+              return [
+                `import-x/${kebabCase(settingName)}` satisfies keyof PluginSettingsWithPrefixes,
+                settingValue,
+              ];
+            }),
+          ),
+        } satisfies PluginSettingsWithPrefixes,
       },
     )
     // Versions in @since tags are from `eslint-plugin-import` plugin, unless the rule doesn't exist in it

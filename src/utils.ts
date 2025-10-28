@@ -28,6 +28,10 @@ export {
   uniqBy as uniqueBy,
 } from 'es-toolkit';
 
+export {kebabCase} from 'string-ts';
+
+export {destr as jsonParse} from 'destr';
+
 export const assignDefaults = createDefu((object, key, value) => {
   if (Array.isArray(object[key]) && Array.isArray(value)) {
     // @ts-expect-error this is fine

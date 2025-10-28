@@ -9,7 +9,7 @@ patchedDependencies:
     hash: ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495
     path: patches/eslint-plugin-prettier.patch
   import-meta-resolve:
-    hash: 1572455ed64229cc1622d7557582d8f53d1aa42c06c9205886ad0779d314b46b
+    hash: f963cae4f31c09af17064520091840231df95bdf8d153e8dc6e2b3edce5fd87c
     path: patches/import-meta-resolve.patch
 
 importers:
@@ -205,6 +205,9 @@ importers:
       semver:
         specifier: 7.7.3
         version: 7.7.3
+      string-ts:
+        specifier: 2.2.1
+        version: 2.2.1
       tailwind-csstree:
         specifier: 0.1.4
         version: 0.1.4
@@ -448,7 +451,7 @@ importers:
         version: 2.3.0(eslint@9.37.0(jiti@2.6.1))
       import-meta-resolve:
         specifier: 4.2.0
-        version: 4.2.0(patch_hash=1572455ed64229cc1622d7557582d8f53d1aa42c06c9205886ad0779d314b46b)
+        version: 4.2.0(patch_hash=f963cae4f31c09af17064520091840231df95bdf8d153e8dc6e2b3edce5fd87c)
       json-schema:
         specifier: 0.4.0
         version: 0.4.0
@@ -9835,7 +9838,7 @@ snapshots:
   '@cspell/dynamic-import@9.2.1':
     dependencies:
       '@cspell/url': 9.2.1
-      import-meta-resolve: 4.2.0(patch_hash=1572455ed64229cc1622d7557582d8f53d1aa42c06c9205886ad0779d314b46b)
+      import-meta-resolve: 4.2.0(patch_hash=f963cae4f31c09af17064520091840231df95bdf8d153e8dc6e2b3edce5fd87c)
 
   '@cspell/eslint-plugin@9.2.1(eslint@9.37.0(jiti@2.6.1))':
     dependencies:
@@ -14951,7 +14954,7 @@ snapshots:
       parent-module: 1.0.1
       resolve-from: 4.0.0
 
-  import-meta-resolve@4.2.0(patch_hash=1572455ed64229cc1622d7557582d8f53d1aa42c06c9205886ad0779d314b46b): {}
+  import-meta-resolve@4.2.0(patch_hash=f963cae4f31c09af17064520091840231df95bdf8d153e8dc6e2b3edce5fd87c): {}
 
   import-modules@2.1.0: {}
 
@@ -15494,7 +15497,7 @@ snapshots:
   load-plugin@6.0.3:
     dependencies:
       '@npmcli/config': 8.3.4
-      import-meta-resolve: 4.2.0(patch_hash=1572455ed64229cc1622d7557582d8f53d1aa42c06c9205886ad0779d314b46b)
+      import-meta-resolve: 4.2.0(patch_hash=f963cae4f31c09af17064520091840231df95bdf8d153e8dc6e2b3edce5fd87c)
     transitivePeerDependencies:
       - bluebird
 

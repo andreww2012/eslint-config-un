@@ -1,4 +1,3 @@
-import {destr} from 'destr';
 import type Eslint from 'eslint';
 import type {JSONSchema4} from 'json-schema';
 import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
@@ -6,6 +5,7 @@ import type {AST as JsonAST} from 'jsonc-eslint-parser';
 import {minVersion as minSemverVersion, eq as semverVersionsEqual} from 'semver';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
+import {jsonParse} from '../src/utils';
 
 const RULE_OPTIONS_SCHEMA = {
   type: 'object',
@@ -33,7 +33,7 @@ const rule: Eslint.Rule.RuleModule = {
     },
   },
   create: (context) => {
-    const packageJsonParseResult = PackageJsonZod.safeParse(destr(context.sourceCode.text));
+    const packageJsonParseResult = PackageJsonZod.safeParse(jsonParse(context.sourceCode.text));
     const packageJson = packageJsonParseResult.data;
     if (!packageJsonParseResult.success || !packageJson) {
       return {};
