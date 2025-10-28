@@ -85,6 +85,13 @@ const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['auto
   'unicorn/prefer-spread': true,
 };
 
+const RULES_TO_DISABLE_IN_OFFLINE_MODE: AllEslintRuleNames[] = [
+  'markdown-links/no-dead-urls',
+  'json-schema-validator/no-invalid',
+];
+
+const styleRuleName = (ruleName: string) => styleText('green', ruleName);
+
 const checkIfModuleCorrectlyLoaded = async (
   moduleResult: {packageName: string; module: unknown} | null,
 ) => {
@@ -160,6 +167,7 @@ export const eslintConfigInternal = async (
     extraConfigs: [],
     disablePrettierIncompatibleRules: packagesInfo.prettier != null,
     loadPluginsOnDemand: true,
+    offlineMode: Boolean(process.env.ESLINT_CONFIG_UN_OFFLINE_MODE),
   } satisfies EslintConfigUnOptions);
 
   const {
@@ -172,6 +180,7 @@ export const eslintConfigInternal = async (
     loadPluginsOnDemand,
     disablePrettierIncompatibleRules,
     defaultConfigsStatus,
+    offlineMode,
   } = optionsResolved;
 
   const renamedPlugins = objectKeysUnsafe(pluginRenames);
@@ -950,7 +959,7 @@ ${packages
             const areMostAutofixesDisabled =
               rulesCountWithAutofixNotDisabled < fixablePluginRules.length / 2;
             debug(
-              `Globally disabling autofix for ${areMostAutofixesDisabled ? `${styleText('red', 'all rules')} in ${styleText('blue', pluginPrefix)} plugin except for` : `the following ${styleText('blue', pluginPrefix)} plugin rules`}: ${(areMostAutofixesDisabled ? fixablePluginRules.filter((ruleName) => !rulesToDisableAutofixFor.includes(ruleName)) : rulesToDisableAutofixFor).map((ruleName) => styleText('green', ruleName)).join(', ')}`,
+              `Globally disabling autofix for ${areMostAutofixesDisabled ? `${styleText('red', 'all rules')} in ${styleText('blue', pluginPrefix)} plugin except for` : `the following ${styleText('blue', pluginPrefix)} plugin rules`}: ${(areMostAutofixesDisabled ? fixablePluginRules.filter((ruleName) => !rulesToDisableAutofixFor.includes(ruleName)) : rulesToDisableAutofixFor).map((ruleName) => styleRuleName(ruleName)).join(', ')}`,
             );
           } else {
             debug(
@@ -979,7 +988,18 @@ ${packages
     },
   } satisfies FlatConfigEntry);
 
-  debug(`Final config resolved: ${resolvedConfigs.length} flat config items`);
+  /* Offline mode */
+
+  if (offlineMode) {
+    debug(
+      `Offline mode is active, the following ${RULES_TO_DISABLE_IN_OFFLINE_MODE.length} rules were disabled: ${RULES_TO_DISABLE_IN_OFFLINE_MODE.map(styleRuleName).join(', ')}`,
+    );
+
+    resolvedConfigs.push({
+      name: genFlatConfigEntryName('offline-mode'),
+      rules: Object.fromEntries(RULES_TO_DISABLE_IN_OFFLINE_MODE.map((ruleName) => [ruleName, 0])),
+    });
+  }
 
   /* Testing */
 
@@ -1012,6 +1032,8 @@ ${packages
       );
     }
   }
+
+  debug(`Final config resolved: ${resolvedConfigs.length} flat config items`);
 
   return resolvedConfigs;
 };

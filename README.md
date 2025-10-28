@@ -531,6 +531,12 @@ Disables rules that are potentially conflicting with Prettier. [`eslint-config-p
 
 Globally forces non-zero severity of all the rules configured by eslint-config-un (i.e. not within `overrides`, `overridesAny` or `extraConfigs`). This can also be configured per-config.
 
+### `offlineMode`
+
+Enables "Offline mode" which can be useful to (temporarily) disable rules performing network requests, such as [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html).
+
+It can also be enabled by setting `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable to non-empty string, but the explicitly passed value takes precedence.
+
 ## FAQ
 
 ### How do I add my own flat configs?

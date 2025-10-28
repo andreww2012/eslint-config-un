@@ -209,6 +209,12 @@ export interface EslintConfigUnOptions {
       ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
       : EslintPlugin;
   };
+
+  /**
+   * Globally disables all the rules that may perform network requests for validation.
+   * @default true <=> `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable is set to non-empty string
+   */
+  offlineMode?: boolean;
 }
 
 /* eslint-enable perfectionist/sort-interfaces */
