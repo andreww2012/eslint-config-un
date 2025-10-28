@@ -768,7 +768,8 @@ export const eslintConfigInternal = async (
   }));
 
   const usedPluginPrefixes: readonly PluginPrefix[] = loadPluginsOnDemand
-    ? [...context.usedPlugins]
+    ? // Sorting ensures that plugins will be present in the resulting config in the consistent order every time
+      [...context.usedPlugins].sort()
     : LOADABLE_PLUGIN_PREFIXES_LIST;
   const usedParserPrefixes = [...context.usedParsers.keys()];
   const usedPackagesPrefixes = [...context.usedPackages.keys()];
