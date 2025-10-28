@@ -1,0 +1,139 @@
+diff --git a/lib/resolve.d.ts b/lib/resolve.d.ts
+index f4d2f25a396f5f6a9eff59b695cde18be5a5aae9..9f2f8b35ad7eb20402944b5728e95f5051bff41f 100644
+--- a/lib/resolve.d.ts
++++ b/lib/resolve.d.ts
+@@ -26,4 +26,5 @@ export function defaultResolve(specifier: string, context?: {
+     url: string;
+     format?: string | null;
+ };
++export function getLastResolvedPackageJsonUrl(): URL | null;
+ //# sourceMappingURL=resolve.d.ts.map
+\ No newline at end of file
+diff --git a/lib/resolve.js b/lib/resolve.js
+index c4b48deb6396846ba3f13716c617354f2a2d2af2..16633f4fc789882da8c94f47c974ff13bd35c7f0 100644
+--- a/lib/resolve.js
++++ b/lib/resolve.js
+@@ -400,7 +400,7 @@ function resolvePackageTargetString(
+             )
+           : target + subpath
+
+-        return packageResolve(exportTarget, packageJsonUrl, conditions)
++        return packageResolve(exportTarget, packageJsonUrl, conditions)[0]
+       }
+     }
+
+@@ -957,11 +957,11 @@ function parsePackageName(specifier, base) {
+  * @param {string} specifier
+  * @param {URL} base
+  * @param {Set<string> | undefined} conditions
+- * @returns {URL}
++ * @returns {[packageUrl: URL, packageJsonUrl: URL | null]}
+  */
+ function packageResolve(specifier, base, conditions) {
+   if (builtinModules.includes(specifier)) {
+-    return new URL('node:' + specifier)
++    return [new URL('node:' + specifier), null]
+   }
+
+   const {packageName, packageSubpath, isScoped} = parsePackageName(
+@@ -981,13 +981,13 @@ function packageResolve(specifier, base, conditions) {
+       packageConfig.exports !== undefined &&
+       packageConfig.exports !== null
+     ) {
+-      return packageExportsResolve(
++      return [packageExportsResolve(
+         packageJsonUrl,
+         packageSubpath,
+         packageConfig,
+         base,
+         conditions
+-      )
++      ), packageJsonUrl];
+     }
+   }
+
+@@ -1015,20 +1015,20 @@ function packageResolve(specifier, base, conditions) {
+     // Package match.
+     const packageConfig = read(packageJsonPath, {base, specifier})
+     if (packageConfig.exports !== undefined && packageConfig.exports !== null) {
+-      return packageExportsResolve(
++      return [packageExportsResolve(
+         packageJsonUrl,
+         packageSubpath,
+         packageConfig,
+         base,
+         conditions
+-      )
++      ), packageJsonUrl];
+     }
+
+     if (packageSubpath === '.') {
+-      return legacyMainResolve(packageJsonUrl, packageConfig, base)
++      return [legacyMainResolve(packageJsonUrl, packageConfig, base), packageJsonUrl];
+     }
+
+-    return new URL(packageSubpath, packageJsonUrl)
++    return [new URL(packageSubpath, packageJsonUrl), packageJsonUrl];
+     // Cross-platform root check.
+   } while (packageJsonPath.length !== lastPath.length)
+
+@@ -1063,6 +1063,10 @@ function shouldBeTreatedAsRelativeOrAbsolutePath(specifier) {
+   return isRelativeSpecifier(specifier)
+ }
+
++/** @type {URL | null} */
++let lastResolvedPackageJsonUrl = null;
++export const getLastResolvedPackageJsonUrl = () => lastResolvedPackageJsonUrl;
++
+ /**
+  * The “Resolver Algorithm Specification” as detailed in the Node docs (which is
+  * sync and slightly lower-level than `resolve`).
+@@ -1079,6 +1083,7 @@ function shouldBeTreatedAsRelativeOrAbsolutePath(specifier) {
+  *   A URL object to the found thing.
+  */
+ export function moduleResolve(specifier, base, conditions, preserveSymlinks) {
++  try {
+   // Note: The Node code supports `base` as a string (in this internal API) too,
+   // we don’t.
+   if (conditions === undefined) {
+@@ -1114,7 +1119,7 @@ export function moduleResolve(specifier, base, conditions, preserveSymlinks) {
+         throw error
+       }
+
+-      resolved = packageResolve(specifier, base, conditions)
++      [resolved, lastResolvedPackageJsonUrl] = packageResolve(specifier, base, conditions)
+     }
+   }
+
+@@ -1125,6 +1130,10 @@ export function moduleResolve(specifier, base, conditions, preserveSymlinks) {
+   }
+
+   return finalizeResolution(resolved, base, preserveSymlinks)
++  } catch (error) {
++    lastResolvedPackageJsonUrl = null;
++    throw error;
++  }
+ }
+
+ /**
+diff --git a/package.json b/package.json
+index 3fed8b458d46458422702f7edd77a61165b927b9..6d3c84f94c95fea7f3f2e12ae76f7908b96405b9 100644
+--- a/package.json
++++ b/package.json
+@@ -36,6 +36,16 @@
+   ],
+   "license": "MIT",
+   "main": "index.js",
++  "exports": {
++    ".": {
++      "import": "./index.js",
++      "types": "./index.d.ts"
++    },
++    "./resolve": {
++      "import": "./lib/resolve.js",
++      "types": "./lib/resolve.d.ts"
++    }
++  },
+   "name": "import-meta-resolve",
+   "prettier": {
+     "bracketSpacing": false,

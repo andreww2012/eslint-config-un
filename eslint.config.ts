@@ -44,6 +44,15 @@ export default eslintConfig({
     casePolice: true,
     import: {
       ignores: TEST_DIR_GLOB,
+      overrides: {
+        'import/no-extraneous-dependencies': (_, options) => [
+          2,
+          {
+            ...options?.[0],
+            whitelist: ['import-meta-resolve'], // Patched + bundled
+          },
+        ],
+      },
     },
     perfectionist: {
       configSortObjects: {

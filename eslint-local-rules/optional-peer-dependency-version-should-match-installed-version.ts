@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {destr} from 'destr';
 import type Eslint from 'eslint';
 import type {JSONSchema4} from 'json-schema';

@@ -2,11 +2,11 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
 import {destr} from 'destr';
-import {getPackageInfo} from 'local-pkg';
 import {exec} from 'tinyexec';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import ourPackageJson from '../package.json' with {type: 'json'};
 import type {UnionToIntersection} from '../src/types';
+import {fetchPackageInfo} from '../src/utils';
 
 const PACKAGES_GIT_TAGS_PATTERNS: Partial<
   Record<
@@ -121,12 +121,12 @@ async function readRootPackageJsonBeforeUncommittedChanges() {
 }
 
 async function getDependencyRepoUrl(dependency: string) {
-  const info = await getPackageInfo(dependency);
-  if (!info?.packageJson) {
+  const info = await fetchPackageInfo(dependency);
+  if (!info?.info) {
     return '';
   }
 
-  const packageJson = structuredClone(info.packageJson);
+  const packageJson = structuredClone(info.info);
   const {repository} = packageJson;
   if (typeof repository === 'object') {
     // https://github.com/vercel/next.js/blob/v15.4.6/packages/eslint-plugin-next/package.json
@@ -226,31 +226,30 @@ async function main() {
     ...packageJsonBeforeChanges.devDependencies,
   };
 
-  const result = await Promise.all(
-    Object.entries(currentDependencies)
-      .filter(
-        ([dependency, version]) =>
-          dependency in dependenciesBeforeChanges &&
-          version !== dependenciesBeforeChanges[dependency],
-      )
-      .map(async ([dependency, newVersion]) => {
-        const repoUrl = (await getDependencyRepoUrl(dependency)) || null;
-        // eslint-disable-next-line ts/no-non-null-assertion
-        const oldVersion = dependenciesBeforeChanges[dependency]!;
-        const codeDiffResult = await exec('npm', [
-          'diff',
-          `--diff=${dependency}@${oldVersion}`,
-          `--diff=${dependency}@${newVersion}`,
-        ]);
+  const changedDependencies = Object.entries(currentDependencies).filter(
+    ([dependency, version]) =>
+      dependency in dependenciesBeforeChanges && version !== dependenciesBeforeChanges[dependency],
+  );
 
-        return {
-          dependency,
-          repoUrl,
-          oldVersion,
-          newVersion,
-          codeDiffResult,
-        };
-      }),
+  const result = await Promise.all(
+    changedDependencies.map(async ([dependency, newVersion]) => {
+      const repoUrl = (await getDependencyRepoUrl(dependency)) || null;
+      // eslint-disable-next-line ts/no-non-null-assertion
+      const oldVersion = dependenciesBeforeChanges[dependency]!;
+      const codeDiffResult = await exec('npm', [
+        'diff',
+        `--diff=${dependency}@${oldVersion}`,
+        `--diff=${dependency}@${newVersion}`,
+      ]);
+
+      return {
+        dependency,
+        repoUrl,
+        oldVersion,
+        newVersion,
+        codeDiffResult,
+      };
+    }),
   );
 
   return result;

@@ -1,8 +1,13 @@
+import fs from 'node:fs/promises';
 import path from 'node:path';
+import url from 'node:url';
 import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
 import {createDefu, type defu} from 'defu';
-import {getPackageInfo, isPackageExists} from 'local-pkg';
+import {destr as jsonParse} from 'destr';
+import {resolve as resolvePackage} from 'import-meta-resolve';
+import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
 import * as R from 'remeda';
+import type {PackageJson} from 'zod-package-json';
 import type {FalsyValue, Promisable} from './types';
 
 export {styleText} from 'node:util';
@@ -108,14 +113,25 @@ export const maybeCall = <Args extends readonly unknown[], ReturnType>(
 export const fetchPackageInfo = async (
   packageName: string,
 ): Promise<{
-  info: Awaited<ReturnType<typeof getPackageInfo>> & {};
+  info: PackageJson;
   versions: {
     full: string;
     major: number | null;
     majorAndMinor: number | null;
   };
 } | null> => {
-  const packageInfo = await getPackageInfo(packageName);
+  // `getPackageInfo` from `local-pkg` isn't always able to find the correct package.json: https://github.com/antfu-collective/local-pkg/issues/16
+  // This trick uses the patched version of `import-meta-resolve` that after calling `resolvePackage` updates the last resolved package's package.json path
+  try {
+    resolvePackage(packageName, import.meta.url);
+  } catch {
+    // If module is not resolved, the error is thrown
+  }
+  const packageJsonUrl = getLastResolvedPackageJsonUrl();
+
+  const packageInfo = packageJsonUrl
+    ? jsonParse<PackageJson>(await fs.readFile(url.fileURLToPath(packageJsonUrl), 'utf8'))
+    : null;
   if (!packageInfo) {
     return null;
   }
@@ -140,8 +156,15 @@ export const fetchPackageInfo = async (
   };
 };
 
-export const doesPackageExist = (packageName: string) =>
-  Promise.resolve(isPackageExists(packageName));
+export const doesPackageExist = (packageName: string): Promise<boolean> => {
+  let exists = true;
+  try {
+    resolvePackage(packageName, import.meta.url);
+  } catch {
+    exists = false;
+  }
+  return Promise.resolve(exists);
+};
 
 export const interopDefault = async <T>(module: Promisable<T | {default: T}>): Promise<T> => {
   const resolvedModule = await module;
