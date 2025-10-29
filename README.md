@@ -188,7 +188,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | 🦄 `unicorn`                                        | ✅                                          | [eslint-plugin-unicorn](https://npmjs.com/eslint-plugin-unicorn) (`unicorn`)                                                                                       | -                                                                    |
 | ⭐ `regexp`                                         | ✅                                          | [eslint-plugin-regexp](https://npmjs.com/eslint-plugin-regexp) (`regexp`)                                                                                          | -                                                                    |
 | `promise`                                           | ✅                                          | [eslint-plugin-promise](https://npmjs.com/eslint-plugin-promise) (`promise`)                                                                                       | -                                                                    |
-| `import`                                            | ✅                                          | [eslint-plugin-import-x](https://npmjs.com/eslint-plugin-import-x) (`import`)                                                                                      | -                                                                    |
+| `import`                                            | ✅                                          | [eslint-plugin-import-x] (`import`)                                                                                                                                | -                                                                    |
 | `sonarjs`                                           | ✅                                          | [eslint-plugin-sonarjs](https://npmjs.com/eslint-plugin-sonarjs) (`sonarjs`)                                                                                       | -                                                                    |
 | `eslintComments`                                    | ✅                                          | [@eslint-community/eslint-plugin-eslint-comments](https://npmjs.com/package/@eslint-community/eslint-plugin-eslint-comments) (`@eslint-community/eslint-comments`) | Since v0.1.3                                                         |
 | `jsdoc`                                             | ✅                                          | [eslint-plugin-jsdoc](https://npmjs.com/eslint-plugin-jsdoc) (`jsdoc`)                                                                                             | Since v0.3.1                                                         |
@@ -407,7 +407,7 @@ eslint-config-un provides the ability to change any registered plugin prefix. Ad
 | Plugin                                                                   | Suggested prefix     | Our prefix  | Reason                                                                                                                       |
 | ------------------------------------------------------------------------ | -------------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | [`typescript-eslint`](https://npmjs.com/typescript-eslint)               | `@typescript-eslint` | `ts`        | More concise and convenient to use                                                                                           |
-| [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x)     | `import-x`           | `import`    | This plugin is a fork and is meant to replace the original plugin with `import` prefix                                       |
+| [`eslint-plugin-import-x`]                                               | `import-x`           | `import`    | This plugin is a fork and is meant to replace the original plugin with `import` prefix                                       |
 | [`eslint-plugin-n`](https://npmjs.com/eslint-plugin-n)                   | `n`                  | `node`      | Same ^                                                                                                                       |
 | [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css)               | `css`                | `css-in-js` | Conflicts with [`@eslint/css`](https://npmjs.com/package/@eslint/css) and our name better captures the essence of the plugin |
 | [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x) | `jsx-a11y-x`         | `jsx-a11y`  | This plugin is a fork and is meant to replace the original plugin with `jsx-a11y` prefix                                     |
@@ -539,6 +539,10 @@ Enables "Offline mode" which can be useful to (temporarily) disable rules perfor
 
 It can also be enabled by setting `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable to non-empty string, but the explicitly passed value takes precedence.
 
+### `useFastImport`
+
+Allows to override certain [`eslint-plugin-import-x`] plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import).
+
 ## FAQ
 
 ### How do I add my own flat configs?
@@ -593,6 +597,8 @@ If you would like not to wait until the dependencies of `eslint-config-un` are u
 [Testing Library]: ./assets/logos-testing-library.svg
 [TypeScript]: ./assets/devicon-typescript.svg
 [VueJS]: ./assets/devicon-vuejs.svg
+[`eslint-plugin-import-x`]: https://npmjs.com/eslint-plugin-import-x
+[eslint-plugin-import-x]: https://npmjs.com/eslint-plugin-import-x
 [eslint-plugin-no-only-tests]: https://npmjs.com/eslint-plugin-no-only-tests
 [npm]: ./assets/devicon-npm.svg
 [pnpm]: ./assets/devicon-pnpm.svg

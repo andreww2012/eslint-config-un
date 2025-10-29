@@ -12,6 +12,7 @@ import type {
   FlatConfigEntry,
   UnFlagConfigEntry,
 } from '../eslint';
+import type {FastImportPluginSettings, ImportPluginReplaceableRules} from '../internal';
 import type {LoadablePackagePrefix, ParserPrefix, PluginPrefix, pluginsLoaders} from '../plugins';
 import type {PrettifyShallow, Promisable} from '../types';
 import type {MaybeArray, MaybeFn, fetchPackageInfo} from '../utils';
@@ -217,6 +218,25 @@ export interface EslintConfigUnOptions {
    * @default true <=> `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable is set to non-empty string
    */
   offlineMode?: boolean;
+
+  /**
+   * Replaces the implementation of certain [`import`](https://npmjs.com/eslint-plugin-import-x) plugin rules with implementations from [`fast-import`](https://npmjs.com/eslint-plugin-fast-import).
+   *
+   * ⚠️ The latter plugin doesn't support the rule options from the former plugin.
+   * It'll be made by us that they will be silently ignored.
+   *
+   * The replaced rules' list (their name will actually be preserved):
+   * - `no-cycle`
+   * - `no-named-as-default`
+   * - `no-unresolved` (replaced with `no-unresolved-imports`)
+   * @default false
+   */
+  useFastImport?:
+    | boolean
+    | {
+        pluginSettings?: Partial<FastImportPluginSettings>;
+        replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>;
+      };
 }
 
 /* eslint-enable perfectionist/sort-interfaces */

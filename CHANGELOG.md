@@ -57,6 +57,7 @@
 - Added the ability to override any of the used plugins via `pluginsOverrides` option.
 - Exported `isInCi` helper from `ci-info` package.
 - Introduced "Offline mode" which can be useful to (temporarily) disable rules performing network requests, such as [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html). It can be enabled via `offlineMode` root option or by setting `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable to non-empty string.
+- Added a new root option, `useFastImports`, to override certain [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import).
 - **ts, vue** configs: for extension rules, base rule options and severity are now smartly inherited from the corresponding base rules. Added an option to disable this behavior.
 - **packageJson** config:
   - Sort more package.json collections by default: added `resolutions`, `dependenciesMeta`, `pnpm.allowedDeprecatedVersions`, `pnpm.overrides`, `pnpm.packageExtensions`, `pnpm.patchedDependencies` and `pnpm.peerDependencyRules.allowedVersions`.

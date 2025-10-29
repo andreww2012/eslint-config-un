@@ -249,6 +249,15 @@ export const pluginsLoaders = {
   ...genModuleLoader('eslint-plugin', 'eslint-plugin-eslint-plugin', () =>
     interopDefault(import('eslint-plugin-eslint-plugin')),
   ),
+  ...genModuleLoader(
+    'fast-import',
+    'eslint-plugin-fast-import',
+    () =>
+      interopDefault(
+        import('eslint-plugin-fast-import'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   ...genModuleLoader('file-progress', 'eslint-plugin-file-progress', () =>
     interopDefault(import('eslint-plugin-file-progress')),
   ),

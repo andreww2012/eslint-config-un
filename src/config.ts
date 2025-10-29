@@ -25,7 +25,12 @@ import {
   getRuleNameAndPluginPrefixByFullName,
   resolveOverrides,
 } from './eslint';
-import {styleConfigName, styleRuleName} from './internal';
+import {
+  type FastImportPluginSettings,
+  replaceImportRulesImplementationWithFastPlugin,
+  styleConfigName,
+  styleRuleName,
+} from './internal';
 import {
   LOADABLE_PLUGIN_PREFIXES_LIST,
   OPTIONAL_PEER_DEPENDENCIES,
@@ -183,6 +188,7 @@ export const eslintConfigInternal = async (
     disablePrettierIncompatibleRules,
     defaultConfigsStatus,
     offlineMode,
+    useFastImport,
   } = optionsResolved;
 
   const renamedPlugins = objectKeysUnsafe(pluginRenames);
@@ -491,7 +497,7 @@ export const eslintConfigInternal = async (
       zod: {enabled: isZodEnabled},
     },
     disabledAutofixes: {},
-    usedPlugins: new Set(),
+    usedPlugins: new Set(useFastImport ? ['fast-import'] : []),
     usedParsers: new Map(),
     usedPackages: new Set(),
     usedPackageManager,
@@ -592,6 +598,15 @@ export const eslintConfigInternal = async (
         globals: {
           ...globals.commonjs,
         },
+      },
+    },
+    useFastImport && {
+      name: genFlatConfigEntryName('global-setup/fast-import'),
+      settings: {
+        'fast-import': {
+          rootDir: import.meta.dirname,
+          ...(typeof useFastImport === 'object' && useFastImport.pluginSettings),
+        } satisfies FastImportPluginSettings,
       },
     },
 
@@ -809,7 +824,7 @@ export const eslintConfigInternal = async (
       isPlugin?: boolean;
     }
   >();
-  const [loadedPlugins] = await Promise.all([
+  const [loadedPluginsRaw] = await Promise.all([
     Promise.all(
       usedPluginPrefixes.map(async (pluginPrefix) => {
         const pluginResult = isIn(pluginPrefix, pluginsLoaders)
@@ -892,8 +907,15 @@ ${packages
     });
   }
 
+  /* Plugins transformations */
+
+  const loadedPluginsMap = Object.fromEntries(loadedPluginsRaw.filter((v) => v != null)) as Partial<
+    Record<PluginPrefix, EslintPlugin>
+  >;
+  replaceImportRulesImplementationWithFastPlugin(context, loadedPluginsMap);
+
   const allPlugins = {
-    ...Object.fromEntries(loadedPlugins.filter((v) => v != null)),
+    ...loadedPluginsMap,
     ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
     ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
   } satisfies Record<string, EslintPlugin> as Partial<Record<PluginPrefix, EslintPlugin>>;
@@ -916,7 +938,7 @@ ${packages
         const pluginPrefix =
           pluginPrefixCanonical === ''
             ? ''
-            : context.rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
+            : optionsResolved.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
         debug(
           `Created a copy of \`${styleText('blue', pluginPrefix || '<builtin>')}\` plugin's rules with \`disable-autofix\` prefix`,
         );
@@ -933,7 +955,7 @@ ${packages
           const pluginPrefix =
             pluginPrefixCanonical === ''
               ? ''
-              : context.rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
+              : optionsResolved.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
           const pluginRulesAutofixDisabledStatuses = Object.fromEntries(
             // eslint-disable-next-line ts/no-unnecessary-condition -- wrong types
             (disableAutofixPluginsWithUnprefixedMethod[pluginPrefixCanonical] || []).map(
