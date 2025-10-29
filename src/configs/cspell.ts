@@ -7,7 +7,7 @@ export interface CspellEslintConfigOptions extends UnConfigOptions<'@cspell'> {
   /**
    * The single rule (`spellchecker`) options.
    */
-  options?: GetRuleOptions<'@cspell', 'spellchecker'>[0];
+  options?: GetRuleOptions<'@cspell', 'spellchecker'>;
 }
 
 export const cspellUnConfig: UnConfigFn<'cspell'> = (context) => {

@@ -85,14 +85,14 @@ export interface PackageJsonEslintConfigOptions
    * @default 'sort-package-json'
    * @see https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/order-properties.md
    */
-  order?: (GetRuleOptions<'package-json', 'order-properties'>[0] & {})['order'];
+  order?: GetRuleOptions<'package-json', 'order-properties'>['order'];
 
   /**
    * Enforces that repository entries in a package.json use either object or shorthand notation to refer to GitHub repositories when possible.
    * @default 'object'
    * @see https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/repository-shorthand.md
    */
-  repositoryShorthand?: (GetRuleOptions<'package-json', 'repository-shorthand'>[0] & {})['form'];
+  repositoryShorthand?: GetRuleOptions<'package-json', 'repository-shorthand'>['form'];
 
   /**
    * Sort lexically the properties of the specified package.json collections.
@@ -118,7 +118,7 @@ export interface PackageJsonEslintConfigOptions
   enforceAbsoluteVersion?:
     | boolean
     | 'never'
-    | (GetRuleOptions<'node-dependencies', 'absolute-version'>[0] & object);
+    | (GetRuleOptions<'node-dependencies', 'absolute-version'> & object);
 
   /**
    * The list of top-level properties that won't be reported by `no-empty-fields` rule if empty.

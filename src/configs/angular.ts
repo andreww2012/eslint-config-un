@@ -123,7 +123,7 @@ export interface AngularEslintConfigOptions
   componentSelector?:
     | boolean
     | PrettifyShallow<
-        Omit<GetRuleOptions<'@angular-eslint', 'component-selector'>[0] & {}, 'type' | 'prefix'> & {
+        Omit<GetRuleOptions<'@angular-eslint', 'component-selector'>, 'type' | 'prefix'> & {
           type?: MaybeArray<'element' | 'attribute'>;
           prefix?: MaybeArray<string>;
         }
@@ -156,7 +156,7 @@ export interface AngularEslintConfigOptions
   directiveSelector?:
     | boolean
     | PrettifyShallow<
-        Omit<GetRuleOptions<'@angular-eslint', 'directive-selector'>[0] & {}, 'type' | 'prefix'> & {
+        Omit<GetRuleOptions<'@angular-eslint', 'directive-selector'>, 'type' | 'prefix'> & {
           type?: MaybeArray<'element' | 'attribute'>;
           prefix?: MaybeArray<string>;
         }

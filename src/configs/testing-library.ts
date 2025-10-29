@@ -1,13 +1,7 @@
 // cspell:ignore marko
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import type {
-  ObjectValues,
-  OmitIndexSignature,
-  PickKeysStartingWith,
-  Prettify,
-  PrettifyShallow,
-} from '../types';
+import type {ObjectValues, PickKeysStartingWith, Prettify, PrettifyShallow} from '../types';
 import {assignDefaults, doesPackageExist} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
@@ -32,10 +26,10 @@ type SharedConfigOptions = PrettifyShallow<
      * Affected rules:
      * - [`no-render-in-lifecycle`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-render-in-lifecycle.md)
      */
-    allowTestingFrameworkSetupHook?: (GetRuleOptions<
+    allowTestingFrameworkSetupHook?: GetRuleOptions<
       'testing-library',
       'no-render-in-lifecycle'
-    >[0] & {})['allowTestingFrameworkSetupHook'];
+    >['allowTestingFrameworkSetupHook'];
 
     /**
      * - `explicit`: enables [`prefer-explicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-explicit-assert.md).
@@ -50,12 +44,7 @@ type SharedConfigOptions = PrettifyShallow<
      * - [`prefer-query-matchers`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-query-matchers.md)
      */
     preferQueryMatchers?: Prettify<
-      OmitIndexSignature<
-        ((GetRuleOptions<
-          'testing-library',
-          'prefer-query-matchers'
-        >[0] & {})['validEntries'] & {})[number]
-      >[]
+      (GetRuleOptions<'testing-library', 'prefer-query-matchers'>['validEntries'] & {})[number][]
     >;
 
     /**
@@ -65,9 +54,7 @@ type SharedConfigOptions = PrettifyShallow<
      */
     preferUserEventOverFireEvent?:
       | boolean
-      | PrettifyShallow<
-          OmitIndexSignature<GetRuleOptions<'testing-library', 'prefer-user-event'>[0] & {}>
-        >;
+      | PrettifyShallow<GetRuleOptions<'testing-library', 'prefer-user-event'>>;
   } & UnConfigOptions<'testing-library'>
 >;
 
@@ -94,7 +81,7 @@ export interface TestingLibraryEslintConfigOptions
            * Affected rules:
            * - [`consistent-data-testid`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/consistent-data-testid.md)
            */
-          consistentDataTestId?: GetRuleOptions<'testing-library', 'consistent-data-testid'>[0];
+          consistentDataTestId?: GetRuleOptions<'testing-library', 'consistent-data-testid'>;
         } & (SharedConfigOptions & NoOnlyTestsSubConfigEnabledByDefault)
       >;
 

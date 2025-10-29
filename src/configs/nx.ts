@@ -7,7 +7,7 @@ export interface NxEslintConfigOptions extends UnConfigOptions<'nx'> {
   /**
    * @default false
    */
-  enforceModuleBoundaries?: boolean | GetRuleOptions<'nx', 'enforce-module-boundaries'>[0];
+  enforceModuleBoundaries?: boolean | GetRuleOptions<'nx', 'enforce-module-boundaries'>;
 }
 
 export const nxUnConfig: UnConfigFn<'nx'> = async (context) => {

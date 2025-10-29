@@ -14,7 +14,7 @@ export interface ZodEslintConfigOptions extends UnConfigOptions<'zod'> {
    * - [`array-style`](https://github.com/marcalexiei/eslint-plugin-zod-x/blob/HEAD/docs/rules/array-style.md)
    * @default 'method'
    */
-  arrayStyle?: (GetRuleOptions<'zod', 'array-style'>[0] & {})['style'] | false;
+  arrayStyle?: GetRuleOptions<'zod', 'array-style'>['style'] | false;
 
   /**
    * Affected rule:

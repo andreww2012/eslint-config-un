@@ -98,7 +98,8 @@ export const generateConsistentTestItOptions = ({
   testDefinitionKeyword,
 }: Pick<JestEslintConfigOptions, 'testDefinitionKeyword'>): GetRuleOptions<
   'jest',
-  'consistent-test-it'
+  'consistent-test-it',
+  'all'
 > => [
   typeof testDefinitionKeyword === 'string'
     ? {

@@ -60,7 +60,7 @@ export interface BetterTailwindEslintConfigOptions extends UnConfigOptions<'bett
   /**
    * Not enforced by default
    */
-  breakUpClassesIntoMultipleLines?: GetRuleOptions<'better-tailwindcss', 'multiline'>[0];
+  breakUpClassesIntoMultipleLines?: GetRuleOptions<'better-tailwindcss', 'multiline'>;
 
   /**
    * Enforces consistent Tailwind class order. `false` disables the corresponding rule.
@@ -70,7 +70,7 @@ export interface BetterTailwindEslintConfigOptions extends UnConfigOptions<'bett
    * @default 'official'
    */
   classOrder?:
-    | (GetRuleOptions<'better-tailwindcss', 'enforce-consistent-class-order'>[0] & {})['order']
+    | GetRuleOptions<'better-tailwindcss', 'enforce-consistent-class-order'>['order']
     | false;
 
   restrictedClasses?: string[];

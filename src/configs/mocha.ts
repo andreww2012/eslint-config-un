@@ -29,7 +29,7 @@ export interface MochaEslintConfigOptions
    * Affected rules:
    * - [`consistent-interface`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/docs/rules/consistent-interface.md)
    */
-  enforceInterface?: GetRuleOptions<'mocha', 'consistent-interface'>[0]['interface'];
+  enforceInterface?: GetRuleOptions<'mocha', 'consistent-interface'>['interface'];
 
   /**
    * Enforce the max number of top-level suites in a single file.

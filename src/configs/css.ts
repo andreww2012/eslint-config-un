@@ -31,7 +31,7 @@ export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
    * @default {rem: true, em: true}
    */
   allowedFontUnits?: Partial<
-    Record<(GetRuleOptions<'css', 'relative-font-units'>[0]['allowUnits'] & {})[number], boolean>
+    Record<(GetRuleOptions<'css', 'relative-font-units'>['allowUnits'] & {})[number], boolean>
   >;
 
   /**
@@ -40,9 +40,9 @@ export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
    * Must be unique.
    */
   allowedFeatures?: {
-    [K in keyof GetRuleOptions<'css', 'use-baseline'>[0] as K extends `allow${infer T}`
+    [K in keyof GetRuleOptions<'css', 'use-baseline'> as K extends `allow${infer T}`
       ? Uncapitalize<T>
-      : never]: GetRuleOptions<'css', 'use-baseline'>[0][K];
+      : never]: GetRuleOptions<'css', 'use-baseline'>[K];
   };
 }
 

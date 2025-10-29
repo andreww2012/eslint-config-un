@@ -19,7 +19,7 @@ export interface UnusedImportsEslintConfigOptions extends UnConfigOptions<'unuse
     | UnConfigOptions<
         Pick<RulesRecordPartial<'unused-imports'>, 'unused-imports/no-unused-vars'>,
         {
-          ruleOptions?: GetRuleOptions<'unused-imports', 'no-unused-vars'>[0];
+          ruleOptions?: GetRuleOptions<'unused-imports', 'no-unused-vars'>;
         }
       >;
 }

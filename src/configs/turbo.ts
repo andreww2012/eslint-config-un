@@ -8,7 +8,7 @@ export interface TurboEslintConfigOptions extends UnConfigOptions<'turbo'> {
    * Affected rules:
    * - [`no-undeclared-env-vars`](https://github.com/vercel/turborepo/blob/HEAD/packages/eslint-plugin-turbo/docs/rules/no-undeclared-env-vars.md)
    */
-  undeclaredEnvVarsOptions?: GetRuleOptions<'turbo', 'no-undeclared-env-vars'>[0];
+  undeclaredEnvVarsOptions?: GetRuleOptions<'turbo', 'no-undeclared-env-vars'>;
 }
 
 export const turboUnConfig: UnConfigFn<'turbo'> = (context) => {

@@ -24,7 +24,7 @@ export interface YamlEslintConfigOptions extends UnConfigOptions<'yml'> {
    * Enforce a specific casing style for keys. It is not enforced by default, but passing an empty object here will enforce `camelCase` style (default value for this rule).
    * If present, `ignores` values will be merged with `<<`
    */
-  casing?: GetRuleOptions<'yml', 'key-name-casing'>[0] & {};
+  casing?: GetRuleOptions<'yml', 'key-name-casing'>;
 
   /**
    * `false` to not enforce quotes style

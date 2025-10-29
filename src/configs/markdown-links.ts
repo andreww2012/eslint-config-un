@@ -29,7 +29,7 @@ export interface MarkdownLinksEslintConfigOptions extends UnConfigOptions<'markd
               : K extends 'missingLocalPath'
                 ? 'no-missing-path'
                 : never
-        >[0];
+        >;
   };
 }
 

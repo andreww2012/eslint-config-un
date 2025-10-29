@@ -5,7 +5,7 @@ import {pluginsLoaders} from '../plugins';
 import {assignDefaults, getKeysOfTruthyValues} from '../utils';
 import type {UnConfigFn} from './index';
 
-type EnforceableCasing = GetRuleOptions<'markdown-preferences', 'heading-casing'>[0]['style'] & {};
+type EnforceableCasing = GetRuleOptions<'markdown-preferences', 'heading-casing'>['style'] & {};
 
 type CasingEnforcementPlace = 'headings' | 'tableHeaders';
 

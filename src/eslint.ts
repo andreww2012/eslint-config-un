@@ -83,10 +83,24 @@ export type {RuleOptionsPerPlugin};
 export type RuleNamesForPlugin<P extends PluginPrefix | null> = P extends null
   ? keyof RuleOptionsPerPlugin[keyof RuleOptionsPerPlugin]
   : keyof OmitIndexSignature<RuleOptionsPerPlugin[P & keyof RuleOptionsPerPlugin]>;
+
 export type GetRuleOptions<
   Prefix extends PluginPrefix,
   RuleName extends keyof RuleOptionsPerPlugin[Prefix] = keyof RuleOptionsPerPlugin[Prefix],
-> = RuleOptionsPerPlugin[Prefix][RuleName] & unknown[];
+  Index extends (keyof RuleOptionsPerPlugin[Prefix][RuleName] & number) | 0 | 'all' = 0,
+  // eslint-disable-next-line ts/naming-convention
+  _AllOptions = RuleOptionsPerPlugin[Prefix][RuleName],
+> = Exclude<
+  Index extends 'all'
+    ? _AllOptions & unknown[]
+    : _AllOptions extends readonly unknown[]
+      ? Index extends keyof _AllOptions & number
+        ? _AllOptions[Index]
+        : never
+      : _AllOptions,
+  undefined
+>;
+
 type PluginAndPrefixToFullRuleName<P extends PluginPrefix, N extends string> = P extends ''
   ? N
   : `${P}/${N}`;
@@ -473,7 +487,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
       severity: RuleSeverity | null,
       // eslint-disable-next-line ts/ban-ts-comment
       // @ts-ignore ignores the following error during declaration file build: "error TS2859: Excessive complexity comparing types 'RuleName' and '"curly" | "unicorn/template-indent" | "@eslint-community/eslint-comments/disable-enable-pair" | "@eslint-community/eslint-comments/no-aggregating-enable" | "@eslint-community/eslint-comments/no-duplicate-disable" | ... 1725 more ... | "yoda"'"
-      ruleOptions?: GetRuleOptions<P, N>,
+      ruleOptions?: GetRuleOptions<P, N, 'all'>,
       // eslint-disable-next-line ts/no-unused-vars
       options?: AddRuleInternalOptions,
     ) => {
@@ -519,7 +533,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
       addRule: <N extends RuleNamesForPlugin<DefaultPrefix>, Severity extends RuleSeverity>(
         ruleName: N,
         severity: Severity | null,
-        ruleOptions?: NoInfer<GetRuleOptions<DefaultPrefix & PluginPrefix, N>>,
+        ruleOptions?: NoInfer<GetRuleOptions<DefaultPrefix & PluginPrefix, N, 'all'>>,
         options?: AddRuleInternalOptions,
       ) => {
         if (this.pluginPrefix == null) {
@@ -536,7 +550,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
         prefix: P,
         ruleName: N,
         severity: Severity,
-        ruleOptions?: NoInfer<GetRuleOptions<P, N>>,
+        ruleOptions?: NoInfer<GetRuleOptions<P, N, 'all'>>,
         options?: AddRuleInternalOptions,
       ) => {
         return addRule(prefix, ruleName, severity, ruleOptions, options);

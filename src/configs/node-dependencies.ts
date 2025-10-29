@@ -17,7 +17,7 @@ export interface NodeDependenciesEslintConfigOptions extends UnConfigOptions<'no
   enforceAbsoluteVersion?:
     | boolean
     | 'never'
-    | (GetRuleOptions<'node-dependencies', 'absolute-version'>[0] & object);
+    | (GetRuleOptions<'node-dependencies', 'absolute-version'> & object);
 }
 
 export const nodeDependenciesUnConfig: UnConfigFn<'nodeDependencies'> = async (context) => {

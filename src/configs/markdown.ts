@@ -24,7 +24,7 @@ const GFM_ALERTS_TYPES = ['note', 'tip', 'important', 'warning', 'caution'] as c
 
 const generateNoMissingLabelRefsOptions = (
   dialect: MarkdownDialect,
-): GetRuleOptions<'markdown', 'no-missing-label-refs'> => [
+): GetRuleOptions<'markdown', 'no-missing-label-refs', 'all'> => [
   {
     // TODO remove once https://github.com/eslint/markdown/issues/294 is landed
     ...(dialect === 'gfm' && {

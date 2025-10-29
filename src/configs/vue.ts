@@ -167,10 +167,7 @@ export interface VueEslintConfigOptions extends UnConfigOptions<'vue'> {
             | true
             | Partial<
                 Record<
-                  ((GetRuleOptions<
-                    'vue-scoped-css',
-                    'enforce-style-type'
-                  >[0] & {})['allows'] & {})[number],
+                  (GetRuleOptions<'vue-scoped-css', 'enforce-style-type'>['allows'] & {})[number],
                   boolean
                 >
               >;

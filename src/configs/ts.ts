@@ -464,7 +464,7 @@ export interface TsEslintConfigOptions
            * Extra configs for [`jsonc/sort-keys`](https://ota-meshi.github.io/eslint-plugin-jsonc/rules/sort-keys.html) rule
            * that will be appended to the resulting config array.
            */
-          extraSortKeysConfigs?: (GetRuleOptions<'jsonc', 'sort-keys'>[0] & object)[];
+          extraSortKeysConfigs?: (GetRuleOptions<'jsonc', 'sort-keys'> & object)[];
         }
       >;
 
@@ -706,7 +706,7 @@ export const tsUnConfig: UnConfigFn<
 
   const noUnsafeRulesSeverity = optionsResolved.disableNoUnsafeRules ? OFF : WARNING;
 
-  const classMethodUseThisOptions: GetRuleOptions<'ts', 'class-methods-use-this'> = [
+  const classMethodUseThisOptions: GetRuleOptions<'ts', 'class-methods-use-this', 'all'> = [
     {
       ignoreOverrideMethods: true,
       ignoreClassesThatImplementAnInterface: true,
@@ -719,13 +719,13 @@ export const tsUnConfig: UnConfigFn<
   classMethodUseThisUnEntry[1][0] = {
     ...omit(classMethodUseThisUnEntry[1][0] || {}, ['ignoreClassesWithImplements']),
     ...classMethodUseThisOptions[0],
-  } satisfies GetRuleOptions<'ts', 'class-methods-use-this'>[0] & {};
+  } satisfies GetRuleOptions<'ts', 'class-methods-use-this'>;
 
   const maxParamsBaseUnEntry = getRuleUnSeverityAndOptionsFromEntry(
     vanillaFinalFlatConfigRules['max-params'] ?? OFF,
     inheritFromBase ? undefined : [OFF],
   );
-  const maxParamsOptions: GetRuleOptions<'ts', 'max-params'> =
+  const maxParamsOptions: GetRuleOptions<'ts', 'max-params', 'all'> =
     maxParamsBaseUnEntry[1][0] == null
       ? []
       : [
@@ -747,7 +747,7 @@ export const tsUnConfig: UnConfigFn<
     vanillaFinalFlatConfigRules['no-empty-function'] ?? ERROR,
     inheritFromBase ? undefined : [ERROR],
   );
-  const noEmptyFunctionOptions: GetRuleOptions<'ts', 'no-empty-function'> =
+  const noEmptyFunctionOptions: GetRuleOptions<'ts', 'no-empty-function', 'all'> =
     noEmptyFunctionBaseUnEntry[1][0]?.allow?.length
       ? [
           {
@@ -960,7 +960,7 @@ export const tsUnConfig: UnConfigFn<
     vanillaFinalFlatConfigRules['dot-notation'] ?? ERROR,
     inheritFromBase ? undefined : [ERROR],
   );
-  const dotNotationOptions: GetRuleOptions<'ts', 'dot-notation'> =
+  const dotNotationOptions: GetRuleOptions<'ts', 'dot-notation', 'all'> =
     dotNotationBaseUnEntry[1][0] == null
       ? []
       : [

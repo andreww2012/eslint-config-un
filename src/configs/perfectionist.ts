@@ -16,7 +16,7 @@ type RuleSubConfig<T extends keyof RuleOptionsPerPlugin['perfectionist']> =
       // @ts-expect-error typescript is bad
       Pick<RulesRecordPartial<'perfectionist'>, `perfectionist/${T}`>,
       {
-        options?: GetRuleOptions<'perfectionist', T>[0];
+        options?: GetRuleOptions<'perfectionist', T>;
       }
     >;
 
@@ -29,7 +29,7 @@ export interface PerfectionistEslintConfigOptions extends UnConfigOptions<'perfe
    */
   settings?: PrettifyShallow<
     Pick<
-      GetRuleOptions<'perfectionist'>[0],
+      GetRuleOptions<'perfectionist'>,
       | 'type'
       | 'order'
       | 'fallbackSort'
@@ -39,7 +39,7 @@ export interface PerfectionistEslintConfigOptions extends UnConfigOptions<'perfe
       | 'locales'
     > &
       Pick<
-        GetRuleOptions<'perfectionist', 'sort-objects'>[0],
+        GetRuleOptions<'perfectionist', 'sort-objects'>,
         'ignorePattern' | 'partitionByComment' | 'partitionByNewLine'
       >
   >;

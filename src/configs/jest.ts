@@ -99,8 +99,8 @@ export interface JestEslintConfigOptions
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/consistent-test-it.md
    */
   testDefinitionKeyword?:
-    | GetRuleOptions<'jest', 'consistent-test-it'>[0]
-    | ObjectValues<GetRuleOptions<'jest', 'consistent-test-it'>[0] & {}>
+    | GetRuleOptions<'jest', 'consistent-test-it'>
+    | ObjectValues<GetRuleOptions<'jest', 'consistent-test-it'>>
     | false;
 
   /**

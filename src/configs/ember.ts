@@ -25,7 +25,7 @@ export interface EmberEslintConfigOptions extends UnConfigOptions<'ember'> {
    * Affected rules:
    * - [`computed-property-getters`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/computed-property-getters.md)
    */
-  enforceGettersInComputedProperties?: GetRuleOptions<'ember', 'computed-property-getters'>[0];
+  enforceGettersInComputedProperties?: GetRuleOptions<'ember', 'computed-property-getters'>;
 
   /**
    * Affected rules:
