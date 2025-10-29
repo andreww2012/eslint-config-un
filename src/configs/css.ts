@@ -107,7 +107,8 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
         allowUnknownVariables: true /** @since 0.10.0 */,
       },
     ]) /** @since 0.1.0 */ // 🟢
-    .addRule('prefer-logical-properties', OFF) /** @since 0.5.0 */ // >=0.5.0
+    .addRule('no-unmatchable-selectors', ERROR) /** @since 0.14.0 */ // 🟢
+    .addRule('prefer-logical-properties', OFF) /** @since 0.5.0 */
     .addRule('relative-font-units', ERROR, [
       {
         allowUnits: getKeysOfTruthyValues({

@@ -127,7 +127,7 @@
   - ❓ [`prefer-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-host-metadata-property.md)
   - 🟢 [`prefer-at-else`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-at-else.md)
   - 🔴 [`prefer-built-in-pipes`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-built-in-pipes.md)
-- `@eslint/css`: [0.7.0 → 0.13.0](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.13.0)
+- `@eslint/css`: [0.7.0 → 0.14.0](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.14.0)
   - 🟢 (enabled) [`relative-font-units`](https://github.com/eslint/css/blob/HEAD/docs/rules/relative-font-units.md)
   - 🟢 [`no-invalid-at-rule-placement`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-at-rule-placement.md)
   - 🟢 [`no-invalid-named-grid-areas`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-named-grid-areas.md)
@@ -136,6 +136,7 @@
   - 🟡 [`font-family-fallbacks`](https://github.com/eslint/css/blob/HEAD/docs/rules/font-family-fallbacks.md)
   - 🟢 [`no-duplicate-keyframe-selectors`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-duplicate-keyframe-selectors.md)
   - 🔴 (not enabled) [`selector-complexity`](https://github.com/eslint/css/blob/HEAD/docs/rules/selector-complexity.md)
+  - 🟢 [`no-unmatchable-selectors`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-unmatchable-selectors.md)
   - Set `allowUnknownVariables: true` to [`no-invalid-properties`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-properties.md)
   - Depending on the installed Tailwind version, enabled v3 or v4 Tailwind syntax support.
   - Added `allowedFeatures` option to conveniently set what CSS features will be ignored by [`use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md) rule.
