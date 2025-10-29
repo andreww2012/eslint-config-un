@@ -85,6 +85,8 @@ const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['auto
   'unicorn/explicit-length-check': true, // Wrong auto-fixes
   'unicorn/no-useless-undefined': true,
   'unicorn/prefer-spread': true,
+
+  'zod/require-schema-suffix': true, // Does not rename variable usages
 };
 
 const RULES_TO_DISABLE_IN_OFFLINE_MODE: AllEslintRuleNames[] = [
@@ -201,7 +203,7 @@ export const eslintConfigInternal = async (
     configName: keyof UnConfigs,
     defaultConditionOrPackageInstalled:
       | boolean
-      | MaybeArray<(typeof PACKAGES_TO_GET_INFO_FOR)[number]> = true,
+      | MaybeArray<`${(typeof PACKAGES_TO_GET_INFO_FOR)[number]}${'' | `|${string}`}`> = true,
     {
       preCondition,
       requireAllListedPackagesToBeInstalled,
@@ -240,19 +242,33 @@ export const eslintConfigInternal = async (
       (Array.isArray(defaultConditionOrPackageInstalled) &&
         defaultConditionOrPackageInstalled.length > 0)
     ) {
-      const packagesList = arraify(defaultConditionOrPackageInstalled);
+      const packagesList = arraify(defaultConditionOrPackageInstalled).map(
+        (packageNameAndMaybeVersionRange) => {
+          const [packageName = '', versionRangeToSatisfy] =
+            packageNameAndMaybeVersionRange.split('|');
+          return {
+            packageName: packageName as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
+            versionRangeToSatisfy,
+          };
+        },
+      );
       if (requireAllListedPackagesToBeInstalled && packagesList.length > 1) {
-        const notInstalledPackages = packagesList.filter(
-          (packageName) => !packagesInfo[packageName],
-        );
+        const notInstalledPackages = packagesList.filter(({packageName, versionRangeToSatisfy}) => {
+          const packageInfo = packagesInfo[packageName];
+          return (
+            !packageInfo ||
+            (versionRangeToSatisfy &&
+              !semver.satisfies(packageInfo.info.version, versionRangeToSatisfy))
+          );
+        });
         enabledBySystem ??= notInstalledPackages.length === 0;
         reason ??= `${
           enabledBySystem
             ? 'all of these packages were installed'
             : `the following package${notInstalledPackages.length === 1 ? ' is' : 's are'} not installed`
-        }: ${(enabledBySystem ? packagesList : notInstalledPackages).map((packageName) => styleText('yellow', packageName)).join(', ')}`;
+        }: ${(enabledBySystem ? packagesList : notInstalledPackages).map(({packageName}) => styleText('yellow', packageName)).join(', ')}`;
       } else {
-        enabledBySystem ??= packagesList.some((packageName) => {
+        enabledBySystem ??= packagesList.some(({packageName}) => {
           const isInstalled = Boolean(packagesInfo[packageName]);
           if (isInstalled) {
             reason ??= `package ${styleText('yellow', packageName)} is installed`;
@@ -261,8 +277,8 @@ export const eslintConfigInternal = async (
         });
         reason ??=
           packagesList.length > 1
-            ? `neither of these packages are installed: ${packagesList.map((packageName) => styleText('yellow', packageName)).join(', ')}`
-            : `package ${styleText('yellow', packagesList[0] || '')} is not installed`;
+            ? `neither of these packages are installed: ${packagesList.map(({packageName}) => styleText('yellow', packageName)).join(', ')}`
+            : `package ${styleText('yellow', packagesList[0]?.packageName || '')} is not installed`;
       }
     } else if (typeof defaultConditionOrPackageInstalled === 'boolean') {
       enabledBySystem ??= defaultConditionOrPackageInstalled;
@@ -318,9 +334,7 @@ export const eslintConfigInternal = async (
   const isFileProgressEnabled = getIsConfigEnabled('fileProgress', false);
   const isGraphqlEnabled = getIsConfigEnabled('graphql', 'graphql');
   const isImportEnabled = getIsConfigEnabled('import');
-  const isImportZodEnabled = getIsConfigEnabled('importZod', ['zod', 'next'], {
-    requireAllListedPackagesToBeInstalled: true,
-  });
+  const isImportZodEnabled = getIsConfigEnabled('importZod', false);
   const isHeaderEnabled = getIsConfigEnabled('header', false);
   const isHeadersEnabled = getIsConfigEnabled('headers', false);
   // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
@@ -387,6 +401,7 @@ export const eslintConfigInternal = async (
     'lodash-es',
     ...CHECKED_LODASH_METHODS.map((method) => `lodash.${method}` as const),
   ]);
+  const isZodEnabled = getIsConfigEnabled('zod', 'zod|^4');
 
   const context: UnConfigContext = {
     packagesInfo,
@@ -473,6 +488,7 @@ export const eslintConfigInternal = async (
       webComponents: {enabled: isWebComponentsEnabled},
       yaml: {enabled: isYamlEnabled},
       youDontNeedLodashUnderscore: {enabled: isYouDontNeedLodashUnderscoreEnabled},
+      zod: {enabled: isZodEnabled},
     },
     disabledAutofixes: {},
     usedPlugins: new Set(),
@@ -654,6 +670,7 @@ export const eslintConfigInternal = async (
       import('./configs/markdown-preferences').then((m) => m.markdownPreferencesUnConfig(context)),
     isMarkdownLinksEnabled &&
       import('./configs/markdown-links').then((m) => m.markdownLinksUnConfig(context)),
+    isZodEnabled && import('./configs/zod').then((m) => m.zodUnConfig(context)),
 
     /* Disabled by default */
     isSecurityEnabled && import('./configs/security').then((m) => m.securityUnConfig(context)),

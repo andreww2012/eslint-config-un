@@ -18,7 +18,7 @@ const NPM_PACKAGE_NAME_REGEX = /^(?:@[*\-0-9a-z~][*\-.0-9_a-z~]*\/)?[*\-0-9a-z~]
 
 const TOO_MANY_VERSIONS_THRESHOLD = 300;
 
-const NPM_PACKAGE_INFO_ZOD = z.union([
+const NpmPackageInfoZod = z.union([
   z.object({
     error: z.string(),
   }),
@@ -338,7 +338,7 @@ async function run({
 async function getNpmPackageInfo(packageName: string) {
   // eslint-disable-next-line node/no-unsupported-features/node-builtins
   const response = await fetch(`https://registry.npmjs.org/${packageName}`);
-  return NPM_PACKAGE_INFO_ZOD.parse(await response.json());
+  return NpmPackageInfoZod.parse(await response.json());
 }
 
 function main() {

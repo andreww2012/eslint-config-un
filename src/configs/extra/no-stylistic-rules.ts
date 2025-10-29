@@ -806,6 +806,12 @@ const ALL_STYLISTIC_RULES = {
   'you-dont-need-lodash-underscore': {
     // None
   },
+  zod: {
+    'array-style': true,
+    'no-number-schema-with-int': true,
+    'prefer-namespace-import': true,
+    'require-schema-suffix': true,
+  },
 } as const satisfies {
   [Plugin in PluginPrefix]: Partial<Record<RuleNamesForPlugin<Plugin>, true>>;
 };

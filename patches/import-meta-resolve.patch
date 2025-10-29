@@ -16,12 +16,12 @@ index c4b48deb6396846ba3f13716c617354f2a2d2af2..16633f4fc789882da8c94f47c974ff13
 @@ -400,7 +400,7 @@ function resolvePackageTargetString(
              )
            : target + subpath
-
+ 
 -        return packageResolve(exportTarget, packageJsonUrl, conditions)
 +        return packageResolve(exportTarget, packageJsonUrl, conditions)[0]
        }
      }
-
+ 
 @@ -957,11 +957,11 @@ function parsePackageName(specifier, base) {
   * @param {string} specifier
   * @param {URL} base
@@ -34,7 +34,7 @@ index c4b48deb6396846ba3f13716c617354f2a2d2af2..16633f4fc789882da8c94f47c974ff13
 -    return new URL('node:' + specifier)
 +    return [new URL('node:' + specifier), null]
    }
-
+ 
    const {packageName, packageSubpath, isScoped} = parsePackageName(
 @@ -981,13 +981,13 @@ function packageResolve(specifier, base, conditions) {
        packageConfig.exports !== undefined &&
@@ -51,7 +51,7 @@ index c4b48deb6396846ba3f13716c617354f2a2d2af2..16633f4fc789882da8c94f47c974ff13
 +      ), packageJsonUrl];
      }
    }
-
+ 
 @@ -1015,20 +1015,20 @@ function packageResolve(specifier, base, conditions) {
      // Package match.
      const packageConfig = read(packageJsonPath, {base, specifier})
@@ -66,21 +66,21 @@ index c4b48deb6396846ba3f13716c617354f2a2d2af2..16633f4fc789882da8c94f47c974ff13
 -      )
 +      ), packageJsonUrl];
      }
-
+ 
      if (packageSubpath === '.') {
 -      return legacyMainResolve(packageJsonUrl, packageConfig, base)
 +      return [legacyMainResolve(packageJsonUrl, packageConfig, base), packageJsonUrl];
      }
-
+ 
 -    return new URL(packageSubpath, packageJsonUrl)
 +    return [new URL(packageSubpath, packageJsonUrl), packageJsonUrl];
      // Cross-platform root check.
    } while (packageJsonPath.length !== lastPath.length)
-
+ 
 @@ -1063,6 +1063,10 @@ function shouldBeTreatedAsRelativeOrAbsolutePath(specifier) {
    return isRelativeSpecifier(specifier)
  }
-
+ 
 +/** @type {URL | null} */
 +let lastResolvedPackageJsonUrl = null;
 +export const getLastResolvedPackageJsonUrl = () => lastResolvedPackageJsonUrl;
@@ -99,25 +99,25 @@ index c4b48deb6396846ba3f13716c617354f2a2d2af2..16633f4fc789882da8c94f47c974ff13
 @@ -1114,7 +1119,7 @@ export function moduleResolve(specifier, base, conditions, preserveSymlinks) {
          throw error
        }
-
+ 
 -      resolved = packageResolve(specifier, base, conditions)
 +      [resolved, lastResolvedPackageJsonUrl] = packageResolve(specifier, base, conditions)
      }
    }
-
+ 
 @@ -1125,6 +1130,10 @@ export function moduleResolve(specifier, base, conditions, preserveSymlinks) {
    }
-
+ 
    return finalizeResolution(resolved, base, preserveSymlinks)
 +  } catch (error) {
 +    lastResolvedPackageJsonUrl = null;
 +    throw error;
 +  }
  }
-
+ 
  /**
 diff --git a/package.json b/package.json
-index 3fed8b458d46458422702f7edd77a61165b927b9..6d3c84f94c95fea7f3f2e12ae76f7908b96405b9 100644
+index 3fed8b458d46458422702f7edd77a61165b927b9..9912dbd93160d3009f22124baf23b02eb4b85732 100644
 --- a/package.json
 +++ b/package.json
 @@ -36,6 +36,16 @@
@@ -126,11 +126,11 @@ index 3fed8b458d46458422702f7edd77a61165b927b9..6d3c84f94c95fea7f3f2e12ae76f7908
    "main": "index.js",
 +  "exports": {
 +    ".": {
-+      "import": "./index.js",
++      "default": "./index.js",
 +      "types": "./index.d.ts"
 +    },
 +    "./resolve": {
-+      "import": "./lib/resolve.js",
++      "default": "./lib/resolve.js",
 +      "types": "./lib/resolve.d.ts"
 +    }
 +  },

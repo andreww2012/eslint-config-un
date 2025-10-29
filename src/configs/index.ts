@@ -94,6 +94,7 @@ import type {VueEslintConfigOptions} from './vue';
 import type {WebComponentsEslintConfigOptions} from './web-components';
 import type {YamlEslintConfigOptions} from './yaml';
 import type {YouDontNeedLodashUnderscoreEslintConfigOptions} from './you-dont-need-lodash-underscore';
+import type {ZodEslintConfigOptions} from './zod';
 
 export interface EslintConfigUnOptions {
   /**
@@ -178,6 +179,7 @@ export interface EslintConfigUnOptions {
    *   'unicorn/explicit-length-check': true,
    *   'unicorn/no-useless-undefined': true,
    *   'unicorn/prefer-spread': true,
+   *   'zod/require-schema-suffix': true,
    * }
    * ```
    *
@@ -469,9 +471,12 @@ export interface UnConfigs {
    * An ESLint plugin to enforce namespace imports for zod.
    * See [this Zod issue comment](https://github.com/colinhacks/zod/issues/4433#issuecomment-2921500831) why this might be needed.
    *
+   * **Note:** you should probably use `zod` config instead, which includes the similar rule
+   * and bunch of others zod rules.
+   *
    * Used plugins:
    * - [`eslint-plugin-import-zod`](https://npmjs.com/eslint-plugin-import-zod) ([docs](https://github.com/samchungy/eslint-plugin-import-zod))
-   * @default true <=> `zod` and `next` are installed
+   * @default false
    */
   importZod: ImportZodEslintConfigOptions;
 
@@ -976,6 +981,17 @@ export interface UnConfigs {
    * @default true <=> Any of the following packages are installed: `lodash`, `lodash-es`, `lodash.{assign,bind,capitalize,concat,contains,defaults,drop,every,fill,filter,find,first,flatten,get,head,includes,join,keys,last,map,omit,pairs,reduce,repeat,replace,reverse,size,slice,some,split,throttle,trim,uniq,values}`
    */
   youDontNeedLodashUnderscore: YouDontNeedLodashUnderscoreEslintConfigOptions;
+
+  /**
+   * An ESLint plugin to enforce best practices when using Zod.
+   *
+   * **Claims to only support zod v4.**
+   *
+   * Used plugins:
+   * - [`eslint-plugin-zod-x`](https://npmjs.com/eslint-plugin-zod-x) ([docs](https://github.com/marcalexiei/eslint-plugin-zod-x#readme))
+   * @default true <=> `zod` package is installed and its version is >=4
+   */
+  zod: ZodEslintConfigOptions;
 }
 /* eslint-disable perfectionist/sort-interfaces */
 

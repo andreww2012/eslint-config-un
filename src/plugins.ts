@@ -557,6 +557,14 @@ export const pluginsLoaders = {
     'eslint-plugin-you-dont-need-lodash-underscore',
     () => interopDefault(import('eslint-plugin-you-dont-need-lodash-underscore')),
   ),
+  ...genModuleLoader(
+    'zod',
+    'eslint-plugin-zod-x',
+    () =>
+      interopDefault(
+        import('eslint-plugin-zod-x'),
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
 } satisfies Record<string, ObjectValues<ModuleLoader<EslintPlugin>>>;
 
 type LoadablePluginPrefix = keyof typeof pluginsLoaders;

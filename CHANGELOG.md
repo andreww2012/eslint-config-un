@@ -35,11 +35,12 @@
 - `headers` via [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers), **<u>disabled</u>** by default.
 - `rxjs` via [`@smarttools/eslint-plugin-rxjs`](https://npmjs.com/@smarttools/eslint-plugin-rxjs), enabled automatically if `rxjs` package is installed.
 - `nx` via [`@nx/eslint-plugin`](https://npmjs.com/@nx/eslint-plugin), enabled automatically if `nx` package is installed.
-- `importZod` via [`eslint-plugin-import-zod`](https://npmjs.com/eslint-plugin-import-zod), enabled automatically if both `zod` and `next` packages are installed.
+- `importZod` via [`eslint-plugin-import-zod`](https://npmjs.com/eslint-plugin-import-zod), **<u>disabled</u>** by default.
 - `unocss` via [`@unocss/eslint-plugin`](https://npmjs.com/@unocss/eslint-plugin), enabled automatically if `unocss` package is installed.
 - `unnecessaryAbstractions` via [`eslint-plugin-unnecessary-abstractions`](https://npmjs.com/eslint-plugin-unnecessary-abstractions), enabled by default.
 - `markdownPreferences` via [`eslint-plugin-markdown-preferences`](https://npmjs.com/eslint-plugin-markdown-preferences), enabled by default.
 - `markdownLinks` via [`eslint-plugin-markdown-links`](https://npmjs.com/eslint-plugin-markdown-links), enabled by default.
+- `zod` via [`eslint-plugin-zod-x`](https://npmjs.com/eslint-plugin-zod-x), enabled automatically if `zod@>=4` package is installed.
 
 ### Changes
 
