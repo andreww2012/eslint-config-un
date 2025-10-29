@@ -100,8 +100,9 @@
   - Added `typescript` sub-config for the rules designed to work exclusively with TypeScript files.
 - **angular** config: you are now expected to install `@angular-eslint/eslint-plugin` and `@angular-eslint/eslint-plugin-template` packages manually and only the rules from the installed packages will be used.
 - **import** config:
-  - Added a new option `allowDevDependencies` to control if dev dependencies usage will be reported and where.
-  - Plugin `settings` are now accepted in camel case and without the `import-x` prefix.
+  - [**BREAKING**] Plugin `settings` are now accepted in camel case and without the `import-x` prefix.
+  - Added a new option `allowDevDependencies` to control if [`no-extraneous-dependencies`] should report dev dependencies usage and where.
+  - Added a new option `extraneousDependenciesWhitelist` to prevent certain packages from being reported by [`no-extraneous-dependencies`] rule.
 - **nodeDependencies** config: added a new option `enforceAbsoluteVersion` to enforce to use or not to use absolute versions for dependencies.
 - **html** config:
   - Added a new option `parserOptions` to configure HTML parser options.
@@ -331,7 +332,7 @@
 - Set a new option `allowRethrowing: true` for [`@typescript-eslint/only-throw-error`](https://typescript-eslint.io/rules/only-throw-error) rule.
 - Enabled [`vue/no-custom-modifiers-on-v-model`](https://eslint.vuejs.org/rules/no-custom-modifiers-on-v-model.html) and [`vue/no-multiple-template-root`](https://eslint.vuejs.org/rules/no-multiple-template-root.html) rules for Vue 2 codebases.
 - Introduced a new root option `mode` with possible values of `app` and `lib`. It currently only controls whether you're allowed to import from `devDependencies` or not.
-- [**BREAKING**] Importing from `peerDependencies` is now allowed by default (rule: [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md)). Also disabled this rule in `cli` config.
+- [**BREAKING**] Importing from `peerDependencies` is now allowed by default (rule: [`no-extraneous-dependencies`]). Also disabled this rule in `cli` config.
 - Added the ability to change plugin prefixes.
 - `extraConfigs` now always get a name in the form of `eslint-config-un/extra-config/<provided name or "unnamed<config index>">`.
 - Set a new option `reportGlobalThis: true` for [`no-shadow-restricted-names`](https://eslint.org/docs/latest/rules/no-shadow-restricted-names) rule.
@@ -772,3 +773,5 @@
 ## 0.0.2
 
 Initial release.
+
+[`no-extraneous-dependencies`]: https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md

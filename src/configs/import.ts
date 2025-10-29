@@ -30,11 +30,18 @@ export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
 
   /**
    * Whether the use of dependencies from `devDependencies` is not going to be reported by
-   * the [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md) rule. You can specify glob patterns or allow
+   * the [`no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md) rule. You can specify glob patterns or allow
    * universally by setting this option to `true`.
    * @default false <=> `mode` root option is set to `lib`
    */
   allowDevDependencies?: string[] | boolean;
+
+  /**
+   * Package names that will be not be reported by [`no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md) rule.
+   *
+   * Use case: you're linting library code and some packages are bundled.
+   */
+  extraneousDependenciesWhitelist?: string[];
 
   /**
    * Recognized automatically and normally should not be set manually.
@@ -87,10 +94,11 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
   const {
     settings: pluginSettings,
     allowDevDependencies,
+    extraneousDependenciesWhitelist,
     isTypescriptEnabled,
-    tsResolverOptions,
     noDuplicatesOptions,
     requireModuleExtensions,
+    tsResolverOptions,
   } = optionsResolved;
   const noUnresolvedIgnores = arraify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve);
 
@@ -179,7 +187,12 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
     .addRule('no-dynamic-require', OFF) /** @since 1.16.0 */
     .addRule('no-empty-named-blocks', ERROR) /** @since 2.27.0 */
     .addRule('no-extraneous-dependencies', ERROR, [
-      {devDependencies: allowDevDependencies},
+      {
+        devDependencies: allowDevDependencies,
+        ...(extraneousDependenciesWhitelist?.length && {
+          whitelist: extraneousDependenciesWhitelist,
+        }),
+      },
     ]) /** @since 1.6.0 */
     .addRule('no-import-module-exports', OFF) /** @since 2.23.0 */ // TODO enable?
     .addRule('no-internal-modules', OFF) /** @since 1.16.0 */
