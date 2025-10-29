@@ -499,7 +499,7 @@ export interface TsEslintConfigOptions
    * `allowDefaultProject` option instead.
    * @see https://typescript-eslint.io/packages/parser#configuration
    */
-  parserOptions?: MaybeFn<[isForTypeAwareConfig: boolean], TsEslintParserOptions>;
+  parserOptions?: MaybeFn<TsEslintParserOptions, [isForTypeAwareConfig: boolean]>;
 
   /**
    * Do not put `.` (dot) before an extension

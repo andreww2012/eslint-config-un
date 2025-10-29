@@ -15,6 +15,7 @@ import {
 import type {FixableRuleNames as AllEslintFixableRuleNames} from './eslint-types-fixable-only.gen';
 import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin.gen';
 import type {RuleOptions} from './eslint-types.gen';
+import {styleConfigName} from './internal';
 import {PLUGIN_PREFIXES_LIST, type ParserPrefix, type PluginPrefix} from './plugins';
 import type {
   EmptyObject,
@@ -108,7 +109,6 @@ type UnConfigOptionsOverridesEntry<
   EslintEntry extends EslintRuleEntry,
   Options,
 > = MaybeFn<
-  [severity: EslintSeverity & number, options?: ReadonlyDeep<Options>],
   | ReadonlyDeep<EslintEntry>
   | {
       severity: EslintSeverity;
@@ -123,7 +123,8 @@ type UnConfigOptionsOverridesEntry<
        * For that, please use `autofixDisabledGloballyFor` root option.
        */
       disableAutofix?: RuleName extends AllEslintFixableRuleNames ? boolean : false;
-    }
+    },
+  [severity: EslintSeverity & number, options?: ReadonlyDeep<Options>]
 >;
 type UnConfigOptionsOverrides<T extends Partial<Record<string, EslintRuleEntry>>> = {
   [RuleName in keyof T]?: UnConfigOptionsOverridesEntry<
@@ -609,7 +610,7 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
       ) => {
         if (this.context.isTestMode) {
           this.context.tests.push(({plugins}) => {
-            const commonErrorMessagePrefix = `[config:${styleText('yellow', configName)}] [plugin:${styleText('blue', pluginPrefixToTest)}]`;
+            const commonErrorMessagePrefix = `[config:${styleConfigName(configName)}] [plugin:${styleText('blue', pluginPrefixToTest)}]`;
 
             const plugin =
               plugins[pluginPrefixToTest] ||
@@ -631,7 +632,11 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
               (rules) => new Set(rules.map(([ruleName]) => ruleName)),
             );
 
-            const errorMessages: ReturnType<(typeof this.context.tests)[number]> & unknown[] = [];
+            const errorMessages: Exclude<
+              (typeof this.context.tests)[number],
+              (...args: unknown[]) => unknown
+            > &
+              unknown[] = [];
 
             if (includeDeprecated === false) {
               const includedDeprecatedRules = addedRulesForPlugin.filter(([addedRuleName]) =>

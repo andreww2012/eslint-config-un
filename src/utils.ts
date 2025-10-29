@@ -105,17 +105,21 @@ export const joinPaths = (...paths: (string | FalsyValue)[]) =>
   // eslint-disable-next-line unicorn/prefer-native-coercion-functions
   path.posix.join(...arraify(paths).filter((v): v is string => Boolean(v)));
 
-export type MaybeFn<Args extends readonly unknown[], ReturnType> =
-  | ((...args: Args) => ReturnType)
-  | ReturnType;
+export type MaybeFn<Return, Params extends readonly unknown[] = []> =
+  | ((...args: Params) => Return)
+  | Return;
 
-export const maybeCall = <Args extends readonly unknown[], ReturnType>(
-  fnOrValue: MaybeFn<Args, ReturnType>,
-  ...args: Args
-): ReturnType =>
-  typeof fnOrValue === 'function'
-    ? (fnOrValue as (...args: Args) => ReturnType)(...args)
-    : fnOrValue;
+export const maybeCall = <
+  T extends MaybeFn<unknown>,
+  A extends readonly unknown[] = T extends (...args: infer P) => unknown ? P : never,
+>(
+  fnOrValue: T,
+  ...args: NoInfer<A>
+) =>
+  // eslint-disable-next-line ts/no-unsafe-call
+  (typeof fnOrValue === 'function' ? fnOrValue(...args) : fnOrValue) as T extends MaybeFn<infer R>
+    ? R
+    : never;
 
 export const fetchPackageInfo = async (
   packageName: string,

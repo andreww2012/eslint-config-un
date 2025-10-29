@@ -118,8 +118,8 @@ export interface JsxA11yEslintConfigOptions extends UnConfigOptions<'jsx-a11y'> 
    * Default rule severity is `warn` and the list of words is the same as listed in the rule docs.
    */
   ambiguousWordsForAnchorText?: MaybeFn<
-    [defaultWords: string[]],
-    false | WordsListAndOptionalSeverity
+    false | WordsListAndOptionalSeverity,
+    [defaultWords: string[]]
   >;
 
   /**
@@ -337,7 +337,7 @@ export const jsxA11yUnConfig: UnConfigFn<
   configBuilder
     ?.addConfig(
       [
-        prefixFinal,
+        prefixFinal.includes('a11y') ? prefixFinal : `jsx-a11y/${prefixFinal}`,
         {
           includeDefaultFilesAndIgnores: true,
           filesFallback: [GLOB_JS_TS_X_ONLY],

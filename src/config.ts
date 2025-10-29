@@ -25,6 +25,7 @@ import {
   getRuleNameAndPluginPrefixByFullName,
   resolveOverrides,
 } from './eslint';
+import {styleConfigName, styleRuleName} from './internal';
 import {
   LOADABLE_PLUGIN_PREFIXES_LIST,
   OPTIONAL_PEER_DEPENDENCIES,
@@ -44,6 +45,7 @@ import {
   groupBy,
   interopDefault,
   isIn,
+  maybeCall,
   objectEntriesUnsafe,
   objectKeysUnsafe,
   omit,
@@ -89,8 +91,6 @@ const RULES_TO_DISABLE_IN_OFFLINE_MODE: AllEslintRuleNames[] = [
   'markdown-links/no-dead-urls',
   'json-schema-validator/no-invalid',
 ];
-
-const styleRuleName = (ruleName: string) => styleText('green', ruleName);
 
 const checkIfModuleCorrectlyLoaded = async (
   moduleResult: {packageName: string; module: unknown} | null,
@@ -1004,8 +1004,27 @@ ${packages
   /* Testing */
 
   if (isTestMode) {
+    const duplicateConfigNames: string[] = [];
+    const uniqueConfigNames = new Set<string>();
+    resolvedConfigs.forEach(({name: configName}) => {
+      if (!configName) {
+        return;
+      }
+      if (uniqueConfigNames.has(configName)) {
+        duplicateConfigNames.push(configName);
+      } else {
+        uniqueConfigNames.add(configName);
+      }
+    });
+
+    if (duplicateConfigNames.length > 0) {
+      context.tests.push(
+        `Duplicate config names found: ${duplicateConfigNames.map(styleConfigName).join(', ')}`,
+      );
+    }
+
     const errorMessages = context.tests
-      .flatMap((testFn) => testFn({plugins: allPlugins}))
+      .flatMap((testFn) => maybeCall(testFn, {plugins: allPlugins}))
       .filter((v) => v != null)
       .filter(Boolean);
 
