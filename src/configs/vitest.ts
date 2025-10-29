@@ -128,7 +128,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     }),
     languageOptions: {
       // TODO why `eslint-plugin-vitest-globals` is used instead of this?
-      globals: eslintPluginVitest.environments?.env?.globals,
+      globals: eslintPluginVitest.environments?.['env']?.globals,
     },
   };
 

@@ -195,7 +195,7 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
 
   const {settings: pluginSettings, preferGlobal, noUnsupportedFeaturesIgnores} = optionsResolved;
 
-  const userNodeVersion = new Range(closestPackageJson?.packageJson.engines?.node || '');
+  const userNodeVersion = new Range(closestPackageJson?.packageJson.engines?.['node'] || '');
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'node');
 

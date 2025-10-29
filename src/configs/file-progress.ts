@@ -30,7 +30,7 @@ export const fileProgressUnConfig: UnConfigFn<'fileProgress'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.fileProgress;
   const optionsResolved = assignDefaults(optionsRaw, {
     settings: {
-      hide: Boolean(process.env.CI),
+      hide: Boolean(process.env['CI']),
     },
   } satisfies FileProgressEslintConfigOptions);
 

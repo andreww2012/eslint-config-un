@@ -167,7 +167,7 @@ export const eslintConfigInternal = async (
     extraConfigs: [],
     disablePrettierIncompatibleRules: packagesInfo.prettier != null,
     loadPluginsOnDemand: true,
-    offlineMode: Boolean(process.env.ESLINT_CONFIG_UN_OFFLINE_MODE),
+    offlineMode: Boolean(process.env['ESLINT_CONFIG_UN_OFFLINE_MODE']),
   } satisfies EslintConfigUnOptions);
 
   const {
@@ -195,7 +195,7 @@ export const eslintConfigInternal = async (
     );
   }
 
-  const isTestMode = internalOptions.testMode || Boolean(process.env.ESLINT_CONFIG_UN_TEST_MODE);
+  const isTestMode = internalOptions.testMode || Boolean(process.env['ESLINT_CONFIG_UN_TEST_MODE']);
 
   const getIsConfigEnabled = (
     configName: keyof UnConfigs,
