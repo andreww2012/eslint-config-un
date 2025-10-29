@@ -442,6 +442,12 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     .addRule(...getPluginRuleSeverity('pipe-prefix', ERROR), [
       {prefixes: pipePrefixes},
     ]) /** @since 0.0.1-alpha.33 */
+    .addRule(
+      ...getPluginRuleSeverity(
+        'prefer-host-metadata-property',
+        forbiddenMetadataProperties.host ? OFF : ERROR,
+      ),
+    ) /** @since 20.5.0 */
     .addRule(...getPluginRuleSeverity('prefer-inject', ERROR)) /** @since 19.6.0 */ // 🟢
     .addRule(
       ...getPluginRuleSeverity('prefer-on-push-component-change-detection', OFF),
@@ -614,7 +620,9 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     .addRule(
       ...getTemplatePluginRuleSeverity('no-positive-tabindex', ERROR),
     ) /** @since 0.4.0-beta.1 */
+    .addRule(...getTemplatePluginRuleSeverity('prefer-at-else', ERROR)) /** @since 20.4.0 */
     .addRule(...getTemplatePluginRuleSeverity('prefer-at-empty', ERROR)) /** @since 19.5.0 */
+    .addRule(...getTemplatePluginRuleSeverity('prefer-built-in-pipes', OFF)) /** @since 20.5.0 */
     .addRule(
       ...getTemplatePluginRuleSeverity('prefer-contextual-for-variables', ERROR),
     ) /** @since 19.3.0 */
