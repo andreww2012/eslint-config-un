@@ -1,18 +1,20 @@
 import {ERROR} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
+import {assignDefaults, isInCi, isInEditor} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface FileProgressEslintConfigOptions extends UnConfigOptions<'file-progress'> {
   /**
    * [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `fileProgress` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `progress` property and applied to the specified `files` and `ignores`.
+   *
+   * Will be merged with the default value for `hide`.
    */
   settings?: {
     /**
      * Hides the progress bar.
-     * @default Boolean(process.env.CI)
+     * @default true <=> when it's detected ESLint running in CI or in editor by `ci-info` and `is-in-editor` packages respectively
      */
     hide?: boolean;
 
@@ -28,11 +30,7 @@ export interface FileProgressEslintConfigOptions extends UnConfigOptions<'file-p
 
 export const fileProgressUnConfig: UnConfigFn<'fileProgress'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.fileProgress;
-  const optionsResolved = assignDefaults(optionsRaw, {
-    settings: {
-      hide: Boolean(process.env['CI']),
-    },
-  } satisfies FileProgressEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {} satisfies FileProgressEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;
 
@@ -44,7 +42,10 @@ export const fileProgressUnConfig: UnConfigFn<'fileProgress'> = (context) => {
   configBuilder
     ?.addConfig(['file-progress', {includeDefaultFilesAndIgnores: true}], {
       settings: {
-        fileProgress: pluginSettings,
+        progress: {
+          hide: isInCi || isInEditor(),
+          ...pluginSettings,
+        } satisfies FileProgressEslintConfigOptions['settings'] & {},
       },
     })
     .addRule('activate', ERROR) /** @since 1.0.0 */ // 🟢

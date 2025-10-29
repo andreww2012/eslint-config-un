@@ -32,6 +32,9 @@ export {kebabCase} from 'string-ts';
 
 export {destr as jsonParse} from 'destr';
 
+export {isInEditor} from 'is-in-editor';
+export {isCI as isInCi} from 'ci-info';
+
 export const assignDefaults = createDefu((object, key, value) => {
   if (Array.isArray(object[key]) && Array.isArray(value)) {
     // @ts-expect-error this is fine

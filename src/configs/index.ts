@@ -409,6 +409,9 @@ export interface UnConfigs {
   /**
    * An ESlint plugin to print file progress.
    *
+   * Even if enabled, it will be disabled by default when it's detected ESLint running
+   * in CI or in editor by `ci-info` and `is-in-editor` packages respectively.
+   *
    * Used plugin:
    * - [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress) ([docs](https://github.com/sibiraj-s/eslint-plugin-file-progress))
    * @default false

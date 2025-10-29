@@ -1,5 +1,5 @@
 import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
-import {eslintConfig, isInEditor} from './src';
+import {eslintConfig} from './src';
 
 const TEST_DIR_GLOB = ['test/**/*'];
 
@@ -24,7 +24,7 @@ export default eslintConfig({
         'markdown-preferences/sort-definitions': 2,
       },
     },
-    fileProgress: !isInEditor(),
+    fileProgress: true,
     ts: {
       allowDefaultProject: ['*.config.*s', '.*.*s'],
       configSortTsconfigKeys: {
