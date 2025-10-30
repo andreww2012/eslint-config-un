@@ -5,7 +5,7 @@ import createDebug from 'debug';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import semver from 'semver';
-import type {EslintConfigUnOptions, UnConfigContext, UnConfigs} from './configs';
+import type {EslintConfigUnOptions, UnConfigContext} from './configs';
 import {
   CHECKED_LODASH_METHODS,
   DEFAULT_GLOBAL_IGNORES,
@@ -28,6 +28,7 @@ import {
 } from './eslint';
 import {
   type FastImportPluginSettings,
+  getIsConfigEnabled as getIsConfigEnabledContextless,
   replaceImportRulesImplementationWithFastPlugin,
   styleConfigName,
   stylePackageName,
@@ -46,7 +47,6 @@ import {
 import type {FalsyValue, Promisable} from './types';
 import {
   type MaybeArray,
-  arraify,
   assignDefaults,
   capitalize,
   fetchPackageInfo,
@@ -67,17 +67,6 @@ const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
   'unicorn/template-indent',
   'vue/html-self-closing',
 ] satisfies AllEslintRuleNames[]);
-
-const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
-  'security',
-  'yaml',
-  'toml',
-  'json',
-  'packageJson',
-  'jsonSchemaValidator',
-  'nodeDependencies',
-  'depend',
-]);
 
 // NOTE: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs
 const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
@@ -128,10 +117,6 @@ const checkIfModuleCorrectlyLoaded = async (
   }
   return null;
 };
-
-const CONFIGS_TO_NOT_REPORT_IF_UNNECESSARILY_ENABLED_OR_DISABLED = new Set<keyof UnConfigs>([
-  'fileProgress',
-]);
 
 export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
@@ -186,14 +171,12 @@ export const eslintConfigInternal = async (
 
   const {
     autofixDisabledGloballyFor: autofixDisabledGloballyForRaw,
-    configs: configsOptions = {},
     extraConfigs,
     ignores,
     overrideIgnores,
     pluginRenames = {},
     loadPluginsOnDemand,
     disablePrettierIncompatibleRules,
-    defaultConfigsStatus,
     offlineMode,
     useFastImport,
   } = optionsResolved;
@@ -212,118 +195,24 @@ export const eslintConfigInternal = async (
 
   const isTestMode = internalOptions.testMode || Boolean(process.env['ESLINT_CONFIG_UN_TEST_MODE']);
 
-  const getIsConfigEnabled = (
-    configName: keyof UnConfigs,
-    defaultConditionOrPackageInstalled:
-      | boolean
-      | MaybeArray<`${(typeof PACKAGES_TO_GET_INFO_FOR)[number]}${'' | `|${string}`}`> = true,
-    {
-      preCondition,
-      requireAllListedPackagesToBeInstalled,
-    }: {
-      preCondition?: [condition: boolean, description: string];
-      requireAllListedPackagesToBeInstalled?: boolean;
-    } = {},
-  ): boolean => {
-    let enabledByUser: boolean | undefined;
-    let enabledBySystem: boolean | undefined;
-    let reason: string | undefined;
+  const context = Object.freeze({
+    packagesInfo,
+    rootOptions: {
+      ...optionsResolved,
+    },
+    configsMeta: {} as UnConfigContext['configsMeta'],
+    disabledAutofixes: {},
+    usedPlugins: new Set(useFastImport ? ['fast-import'] : []),
+    usedParsers: new Map(),
+    usedPackages: new Set(),
+    usedPackageManager,
+    logger,
+    debug,
+    isTestMode,
+    tests: [],
+  } satisfies UnConfigContext as UnConfigContext);
 
-    const providedConfig = configsOptions[configName];
-    if (isTestMode) {
-      enabledBySystem ??= true;
-      reason ??= 'all configs are enabled in the test mode';
-    }
-    if (providedConfig != null) {
-      enabledByUser ??= Boolean(providedConfig);
-      reason ??= 'provided by the user';
-    }
-    if (defaultConfigsStatus === 'all-disabled') {
-      enabledBySystem ??= false;
-      reason ??= '`defaultConfigsStatus` is set to `all-disabled`';
-    }
-    if (
-      defaultConfigsStatus === 'misc-enabled' &&
-      CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT.has(configName)
-    ) {
-      enabledBySystem ??= true;
-      reason ??=
-        '`defaultConfigsStatus` is set to `misc-enabled` and the config is in the misc group';
-    }
-    if (
-      typeof defaultConditionOrPackageInstalled === 'string' ||
-      (Array.isArray(defaultConditionOrPackageInstalled) &&
-        defaultConditionOrPackageInstalled.length > 0)
-    ) {
-      const packagesList = arraify(defaultConditionOrPackageInstalled).map(
-        (packageNameAndMaybeVersionRange) => {
-          const [packageName = '', versionRangeToSatisfy] =
-            packageNameAndMaybeVersionRange.split('|');
-          return {
-            packageName: packageName as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
-            versionRangeToSatisfy,
-          };
-        },
-      );
-      if (requireAllListedPackagesToBeInstalled && packagesList.length > 1) {
-        const notInstalledPackages = packagesList.filter(({packageName, versionRangeToSatisfy}) => {
-          const packageInfo = packagesInfo[packageName];
-          return (
-            !packageInfo ||
-            (versionRangeToSatisfy &&
-              !semver.satisfies(packageInfo.info.version, versionRangeToSatisfy))
-          );
-        });
-        enabledBySystem ??= notInstalledPackages.length === 0;
-        reason ??= `${
-          enabledBySystem
-            ? 'all of these packages were installed'
-            : `the following package${notInstalledPackages.length === 1 ? ' is' : 's are'} not installed`
-        }: ${(enabledBySystem ? packagesList : notInstalledPackages).map(({packageName}) => stylePackageName(packageName)).join(', ')}`;
-      } else {
-        enabledBySystem ??= packagesList.some(({packageName}) => {
-          const isInstalled = Boolean(packagesInfo[packageName]);
-          if (isInstalled) {
-            reason ??= `package ${stylePackageName(packageName)} is installed`;
-          }
-          return isInstalled;
-        });
-        reason ??=
-          packagesList.length > 1
-            ? `neither of these packages are installed: ${packagesList.map(({packageName}) => stylePackageName(packageName)).join(', ')}`
-            : `package ${stylePackageName(packagesList[0]?.packageName || '')} is not installed`;
-      }
-    } else if (typeof defaultConditionOrPackageInstalled === 'boolean') {
-      enabledBySystem ??= defaultConditionOrPackageInstalled;
-      reason ??= `config is ${defaultConditionOrPackageInstalled ? 'enabled' : 'disabled'} by default`;
-    }
-
-    if (preCondition) {
-      enabledBySystem &&= preCondition[0];
-      reason = `${reason} and the following condition was${enabledBySystem ? '' : styleText('redBright', ' not')} met: ${preCondition[1]}`;
-    }
-
-    enabledBySystem ??= false;
-
-    if (
-      typeof enabledByUser === 'boolean' &&
-      typeof providedConfig === 'boolean' &&
-      enabledByUser === enabledBySystem &&
-      !CONFIGS_TO_NOT_REPORT_IF_UNNECESSARILY_ENABLED_OR_DISABLED.has(configName)
-    ) {
-      logger.warn(
-        `There is no need to ${enabledByUser ? 'enable' : 'disable'} \`${styleConfigName(configName)}\` config because this is the default`,
-      );
-    }
-
-    const isEnabled = enabledByUser ?? enabledBySystem;
-
-    debug(
-      `Config \`${styleConfigName(configName)}\` is ${isEnabled ? styleText('green', 'enabled') : styleText('red', 'disabled')} because ${reason}`,
-    );
-
-    return isEnabled;
-  };
+  const getIsConfigEnabled = getIsConfigEnabledContextless.bind(context);
 
   const isAngularEnabled = getIsConfigEnabled('angular', '@angular/core');
   const isAstroEnabled = getIsConfigEnabled('astro', 'astro');
@@ -416,103 +305,88 @@ export const eslintConfigInternal = async (
   ]);
   const isZodEnabled = getIsConfigEnabled('zod', 'zod|^4');
 
-  const context: UnConfigContext = {
-    packagesInfo,
-    rootOptions: {
-      ...optionsResolved,
-    },
-    configsMeta: {
-      angular: {enabled: isAngularEnabled},
-      astro: {enabled: isAstroEnabled},
-      ava: {enabled: isAvaEnabled},
-      betterTailwind: {enabled: isBetterTailwindEnabled},
-      casePolice: {enabled: isCasePoliceEnabled},
-      cli: {enabled: isCliEnabled},
-      cloudfrontFunctions: {enabled: isCloudfrontFunctionsEnabled},
-      compat: {enabled: isCompatEnabled},
-      css: {enabled: isCssEnabled},
-      cssInJs: {enabled: isCssInJsEnabled},
-      cspell: {enabled: isCspellEnabled},
-      cypress: {enabled: isCypressEnabled},
-      deMorgan: {enabled: isDeMorganEnabled},
-      depend: {enabled: isDependEnabled},
-      ember: {enabled: isEmberEnabled},
-      erasableSyntaxOnly: {enabled: isErasableSyntaxOnlyEnabled},
-      es: {enabled: isEsEnabled},
-      eslintComments: {enabled: isEslintCommentsEnabled},
-      eslintPlugin: {enabled: isEslintPluginEnabled},
-      fileProgress: {enabled: isFileProgressEnabled},
-      graphql: {enabled: isGraphqlEnabled},
-      header: {enabled: isHeaderEnabled},
-      headers: {enabled: isHeadersEnabled},
-      html: {enabled: isHtmlEnabled},
-      import: {enabled: isImportEnabled},
-      importZod: {enabled: isImportZodEnabled},
-      jest: {enabled: isJestEnabled},
-      js: {enabled: isJsEnabled},
-      jsInline: {enabled: isJsInlineEnabled},
-      jsdoc: {enabled: isJsdocEnabled},
-      json: {enabled: isJsoncEnabled},
-      jsonSchemaValidator: {enabled: isJsonSchemaValidatorEnabled},
-      jsxA11y: {enabled: isJsxA11yEnabled},
-      lit: {enabled: isLitEnabled},
-      markdown: {enabled: isMarkdownEnabled},
-      markdownLinks: {enabled: isMarkdownLinksEnabled},
-      markdownPreferences: {enabled: isMarkdownPreferencesEnabled},
-      math: {enabled: isMathEnabled},
-      mdx: {enabled: isMdxEnabled},
-      mocha: {enabled: isMochaEnabled},
-      nextJs: {enabled: isNextJsEnabled},
-      node: {enabled: isNodeEnabled},
-      nodeDependencies: {enabled: isNodeDependenciesEnabled},
-      noOnlyTests: {enabled: isNoOnlyTestsEnabled},
-      noStylisticRules: {enabled: isNoStylisticRulesEnabled},
-      noUnsanitized: {enabled: isNoUnsanitizedEnabled},
-      nx: {enabled: isNxEnabled},
-      packageJson: {enabled: isPackageJsonEnabled},
-      perfectionist: {enabled: isPerfectionistEnabled},
-      playwright: {enabled: isPlaywrightEnabled},
-      pnpm: {enabled: isPnpmEnabled},
-      preferArrowFunctions: {enabled: isPreferArrowFunctionsEnabled},
-      promise: {enabled: isPromiseEnabled},
-      qunit: {enabled: isQunitEnabled},
-      qwik: {enabled: isQwikEnabled},
-      react: {enabled: isReactEnabled},
-      regexp: {enabled: isRegexpEnabled},
-      rxjs: {enabled: isRxjsEnabled},
-      security: {enabled: isSecurityEnabled},
-      solid: {enabled: isSolidEnabled},
-      sonar: {enabled: isSonarEnabled},
-      storybook: {enabled: isStorybookEnabled},
-      svelte: {enabled: isSvelteEnabled},
-      tailwind: {enabled: isTailwindEnabled},
-      tanstackQuery: {enabled: isTanstackQueryEnabled},
-      testingLibrary: {enabled: isTestingLibraryEnabled},
-      toml: {enabled: isTomlEnabled},
-      ts: {enabled: isTypescriptEnabled},
-      turbo: {enabled: isTurboEnabled},
-      unicorn: {enabled: isUnicornEnabled},
-      unnecessaryAbstractions: {enabled: isUnnecessaryAbstractionsEnabled},
-      unocss: {enabled: isUnocssEnabled},
-      un: {enabled: isUnEnabled},
-      unusedImports: {enabled: isUnusedImportsEnabled},
-      vitest: {enabled: isVitestEnabled},
-      vue: {enabled: isVueEnabled},
-      webComponents: {enabled: isWebComponentsEnabled},
-      yaml: {enabled: isYamlEnabled},
-      youDontNeedLodashUnderscore: {enabled: isYouDontNeedLodashUnderscoreEnabled},
-      zod: {enabled: isZodEnabled},
-    },
-    disabledAutofixes: {},
-    usedPlugins: new Set(useFastImport ? ['fast-import'] : []),
-    usedParsers: new Map(),
-    usedPackages: new Set(),
-    usedPackageManager,
-    logger,
-    debug,
-    isTestMode,
-    tests: [],
-  };
+  Object.assign(context.configsMeta, {
+    angular: {enabled: isAngularEnabled},
+    astro: {enabled: isAstroEnabled},
+    ava: {enabled: isAvaEnabled},
+    betterTailwind: {enabled: isBetterTailwindEnabled},
+    casePolice: {enabled: isCasePoliceEnabled},
+    cli: {enabled: isCliEnabled},
+    cloudfrontFunctions: {enabled: isCloudfrontFunctionsEnabled},
+    compat: {enabled: isCompatEnabled},
+    css: {enabled: isCssEnabled},
+    cssInJs: {enabled: isCssInJsEnabled},
+    cspell: {enabled: isCspellEnabled},
+    cypress: {enabled: isCypressEnabled},
+    deMorgan: {enabled: isDeMorganEnabled},
+    depend: {enabled: isDependEnabled},
+    ember: {enabled: isEmberEnabled},
+    erasableSyntaxOnly: {enabled: isErasableSyntaxOnlyEnabled},
+    es: {enabled: isEsEnabled},
+    eslintComments: {enabled: isEslintCommentsEnabled},
+    eslintPlugin: {enabled: isEslintPluginEnabled},
+    fileProgress: {enabled: isFileProgressEnabled},
+    graphql: {enabled: isGraphqlEnabled},
+    header: {enabled: isHeaderEnabled},
+    headers: {enabled: isHeadersEnabled},
+    html: {enabled: isHtmlEnabled},
+    import: {enabled: isImportEnabled},
+    importZod: {enabled: isImportZodEnabled},
+    jest: {enabled: isJestEnabled},
+    js: {enabled: isJsEnabled},
+    jsInline: {enabled: isJsInlineEnabled},
+    jsdoc: {enabled: isJsdocEnabled},
+    json: {enabled: isJsoncEnabled},
+    jsonSchemaValidator: {enabled: isJsonSchemaValidatorEnabled},
+    jsxA11y: {enabled: isJsxA11yEnabled},
+    lit: {enabled: isLitEnabled},
+    markdown: {enabled: isMarkdownEnabled},
+    markdownLinks: {enabled: isMarkdownLinksEnabled},
+    markdownPreferences: {enabled: isMarkdownPreferencesEnabled},
+    math: {enabled: isMathEnabled},
+    mdx: {enabled: isMdxEnabled},
+    mocha: {enabled: isMochaEnabled},
+    nextJs: {enabled: isNextJsEnabled},
+    node: {enabled: isNodeEnabled},
+    nodeDependencies: {enabled: isNodeDependenciesEnabled},
+    noOnlyTests: {enabled: isNoOnlyTestsEnabled},
+    noStylisticRules: {enabled: isNoStylisticRulesEnabled},
+    noUnsanitized: {enabled: isNoUnsanitizedEnabled},
+    nx: {enabled: isNxEnabled},
+    packageJson: {enabled: isPackageJsonEnabled},
+    perfectionist: {enabled: isPerfectionistEnabled},
+    playwright: {enabled: isPlaywrightEnabled},
+    pnpm: {enabled: isPnpmEnabled},
+    preferArrowFunctions: {enabled: isPreferArrowFunctionsEnabled},
+    promise: {enabled: isPromiseEnabled},
+    qunit: {enabled: isQunitEnabled},
+    qwik: {enabled: isQwikEnabled},
+    react: {enabled: isReactEnabled},
+    regexp: {enabled: isRegexpEnabled},
+    rxjs: {enabled: isRxjsEnabled},
+    security: {enabled: isSecurityEnabled},
+    solid: {enabled: isSolidEnabled},
+    sonar: {enabled: isSonarEnabled},
+    storybook: {enabled: isStorybookEnabled},
+    svelte: {enabled: isSvelteEnabled},
+    tailwind: {enabled: isTailwindEnabled},
+    tanstackQuery: {enabled: isTanstackQueryEnabled},
+    testingLibrary: {enabled: isTestingLibraryEnabled},
+    toml: {enabled: isTomlEnabled},
+    ts: {enabled: isTypescriptEnabled},
+    turbo: {enabled: isTurboEnabled},
+    unicorn: {enabled: isUnicornEnabled},
+    unnecessaryAbstractions: {enabled: isUnnecessaryAbstractionsEnabled},
+    unocss: {enabled: isUnocssEnabled},
+    un: {enabled: isUnEnabled},
+    unusedImports: {enabled: isUnusedImportsEnabled},
+    vitest: {enabled: isVitestEnabled},
+    vue: {enabled: isVueEnabled},
+    webComponents: {enabled: isWebComponentsEnabled},
+    yaml: {enabled: isYamlEnabled},
+    youDontNeedLodashUnderscore: {enabled: isYouDontNeedLodashUnderscoreEnabled},
+    zod: {enabled: isZodEnabled},
+  } satisfies UnConfigContext['configsMeta']);
 
   const jsEslintConfigResult =
     isJsEnabled && (await import('./configs/js').then((m) => m.jsUnConfig(context)));
