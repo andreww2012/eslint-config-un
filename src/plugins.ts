@@ -441,8 +441,14 @@ export const pluginsLoaders = {
   ...genModuleLoader('react', 'eslint-plugin-react', () =>
     interopDefault(import('eslint-plugin-react')),
   ),
-  ...genModuleLoader('react-hooks', 'eslint-plugin-react-hooks', () =>
-    interopDefault(import('eslint-plugin-react-hooks')),
+  ...genModuleLoader(
+    'react-hooks',
+    'eslint-plugin-react-hooks',
+    () =>
+      interopDefault(
+        import('eslint-plugin-react-hooks'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
   ...genModuleLoader('react-refresh', 'eslint-plugin-react-refresh', () =>
     interopDefault(import('eslint-plugin-react-refresh')),
