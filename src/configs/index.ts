@@ -1044,7 +1044,9 @@ export interface UnConfigContext {
    */
   usedPackages: Set<LoadablePackagePrefix>;
 
-  usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;
+  meta: {
+    usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;
+  };
 
   logger: ConsolaInstance;
   debug: debug.Debugger;
@@ -1064,7 +1066,7 @@ export type UnConfigFn<
   ExtraReturnedData = unknown,
   ExtraArguments extends readonly unknown[] = unknown[],
 > = (
-  context: UnConfigContext,
+  context: Readonly<UnConfigContext>,
   ...extraArg: ExtraArguments
 ) => Promisable<
   | null

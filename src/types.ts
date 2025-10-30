@@ -20,6 +20,7 @@ export type {
   NonEmptyString,
   NonEmptyTuple,
   Tagged,
+  PartialDeep,
   ReadonlyDeep,
   SetRequired,
   Subtract,

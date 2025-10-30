@@ -44,7 +44,7 @@ import {
   parsersLoaders,
   pluginsLoaders,
 } from './plugins';
-import type {FalsyValue, Promisable} from './types';
+import type {FalsyValue, PartialDeep, Promisable} from './types';
 import {
   type MaybeArray,
   assignDefaults,
@@ -135,7 +135,21 @@ export const eslintConfigInternal = async (
 
   debug('Initialization');
 
-  const preUnConfigContext = {logger, rootOptions: options} as UnConfigContext;
+  const context = Object.freeze({
+    packagesInfo: {},
+    rootOptions: {},
+    configsMeta: {},
+    disabledAutofixes: {},
+    usedPlugins: new Set(),
+    usedParsers: new Map(),
+    usedPackages: new Set(),
+    meta: {},
+    logger,
+    debug,
+    isTestMode: internalOptions.testMode || Boolean(process.env['ESLINT_CONFIG_UN_TEST_MODE']),
+    tests: [],
+  } satisfies PartialDeep<UnConfigContext> as unknown as UnConfigContext);
+
   const [
     packagesInfoRaw,
     usedPackageManager,
@@ -153,8 +167,8 @@ export const eslintConfigInternal = async (
       }
       throw error;
     }),
-    pluginsLoaders.tailwindcss(preUnConfigContext).then(({module}) => module),
-    pluginsLoaders.svelte(preUnConfigContext).then(({module}) => module),
+    pluginsLoaders.tailwindcss(context).then(({module}) => module),
+    pluginsLoaders.svelte(context).then(({module}) => module),
   ]);
   const packagesInfo = Object.fromEntries(packagesInfoRaw) as UnConfigContext['packagesInfo'];
 
@@ -181,6 +195,15 @@ export const eslintConfigInternal = async (
     useFastImport,
   } = optionsResolved;
 
+  Object.assign(context.packagesInfo, packagesInfo satisfies UnConfigContext['packagesInfo']);
+  Object.assign(context.rootOptions, {...optionsResolved} satisfies UnConfigContext['rootOptions']);
+  Object.assign(context.rootOptions, {...optionsResolved} satisfies UnConfigContext['rootOptions']);
+  Object.assign(context.meta, {usedPackageManager} satisfies UnConfigContext['meta']);
+
+  if (useFastImport) {
+    context.usedPlugins.add('fast-import');
+  }
+
   const renamedPlugins = objectKeysUnsafe(pluginRenames);
   const pluginRenamesList = Object.values(pluginRenames);
   const pluginPrefixesAfterRenames = [
@@ -192,25 +215,6 @@ export const eslintConfigInternal = async (
       'Invalid plugin renames: new names must not clash with the default plugin prefixes, have duplicates or be empty. If you happen to have a duplicate new prefix, please choose a different name. If you happen to rename some plugin to one of the default prefixes, you must also rename the plugin corresponding to that prefix.',
     );
   }
-
-  const isTestMode = internalOptions.testMode || Boolean(process.env['ESLINT_CONFIG_UN_TEST_MODE']);
-
-  const context = Object.freeze({
-    packagesInfo,
-    rootOptions: {
-      ...optionsResolved,
-    },
-    configsMeta: {} as UnConfigContext['configsMeta'],
-    disabledAutofixes: {},
-    usedPlugins: new Set(useFastImport ? ['fast-import'] : []),
-    usedParsers: new Map(),
-    usedPackages: new Set(),
-    usedPackageManager,
-    logger,
-    debug,
-    isTestMode,
-    tests: [],
-  } satisfies UnConfigContext as UnConfigContext);
 
   const getIsConfigEnabled = getIsConfigEnabledContextless.bind(context);
 
@@ -933,7 +937,7 @@ ${renderTable(
 
   /* Testing */
 
-  if (isTestMode) {
+  if (context.isTestMode) {
     const duplicateConfigNames: string[] = [];
     const uniqueConfigNames = new Set<string>();
     resolvedConfigs.forEach(({name: configName}) => {

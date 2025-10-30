@@ -121,7 +121,7 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = (context) => {
     .enableConfigTesterForPlugin('yml')
     .addOverrides();
 
-  if (context.usedPackageManager?.name === 'pnpm') {
+  if (context.meta.usedPackageManager?.name === 'pnpm') {
     configBuilder
       ?.addConfig('yaml/pnpm-workspace.yaml', {
         files: ['**/pnpm-workspace.yaml'],
