@@ -54,6 +54,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('no-empty-file', ERROR) /** @since 38.0.0 */
     .addRule('no-for-loop', OFF) /** @since 8.0.0 */ // 🟣
     .addRule('no-hex-escape', ERROR) /** @since 2.0.0 */
+    .addRule('no-immediate-mutation', ERROR) /** @since 62.0.0 */
     .addRule('no-instanceof-builtins', ERROR) /** @since 57.0.0 */
     .addRule('no-invalid-fetch-options', ERROR) /** @since 53.0.0 */
     .addRule('no-invalid-remove-event-listener', ERROR) /** @since 36.0.0 */
@@ -88,6 +89,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('no-unreadable-array-destructuring', OFF) /** @since 7.0.0 */
     .addRule('no-unreadable-iife', ERROR) /** @since 42.0.0 */
     .addRule('no-unused-properties', OFF) /** @since 7.0.0 */ // 🔴
+    .addRule('no-useless-collection-argument', ERROR) /** @since 62.0.0 */
     .addRule('no-useless-error-capture-stack-trace', ERROR) /** @since 60.0.0 */
     .addRule('no-useless-fallback-in-spread', ERROR) /** @since 36.0.0 */
     .addRule('no-useless-length-check', ERROR) /** @since 35.0.0 */
@@ -147,6 +149,7 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('prefer-query-selector', OFF) /** @since 7.0.0 */ // 🟣
     .addRule('prefer-reflect-apply', ERROR) /** @since 11.0.0 */
     .addRule('prefer-regexp-test', ERROR) /** @since 26.0.0 */ // TODO disable when regexp is enabled?
+    .addRule('prefer-response-static-json', ERROR) /** @since 62.0.0 */
     .addRule('prefer-set-has', ERROR) /** @since 18.0.0 */
     .addRule('prefer-set-size', ERROR) /** @since 45.0.0 */
     .addRule('prefer-single-call', ERROR) /** @since 27.0.0 */ /** @aka no-array-push-push */

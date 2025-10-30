@@ -164,8 +164,8 @@ importers:
         specifier: 0.12.0
         version: 0.12.0(eslint@9.37.0(jiti@2.6.1))
       eslint-plugin-unicorn:
-        specifier: 61.0.2
-        version: 61.0.2(eslint@9.37.0(jiti@2.6.1))
+        specifier: 62.0.0
+        version: 62.0.0(eslint@9.37.0(jiti@2.6.1))
       eslint-plugin-unnecessary-abstractions:
         specifier: 1.0.0
         version: 1.0.0
@@ -5357,11 +5357,11 @@ packages:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
 
-  eslint-plugin-unicorn@61.0.2:
-    resolution: {integrity: sha512-zLihukvneYT7f74GNbVJXfWIiNQmkc/a9vYBTE4qPkQZswolWNdu+Wsp9sIXno1JOzdn6OUwLPd19ekXVkahRA==}
+  eslint-plugin-unicorn@62.0.0:
+    resolution: {integrity: sha512-HIlIkGLkvf29YEiS/ImuDZQbP12gWyx5i3C6XrRxMvVdqMroCI9qoVYCoIl17ChN+U89pn9sVwLxhIWj5nEc7g==}
     engines: {node: ^20.10.0 || >=21.0.0}
     peerDependencies:
-      eslint: '>=9.29.0'
+      eslint: '>=9.38.0'
 
   eslint-plugin-unnecessary-abstractions@1.0.0:
     resolution: {integrity: sha512-Brd3EUWUl4CQxDLvFEWWDl5BblTHqd45Sf+xJsh7sBq/TzG25pQFX3e27OZJG5c5CnXGlNt7QlkHz/8JfsGNyA==}
@@ -7638,6 +7638,10 @@ packages:
     resolution: {integrity: sha512-cnE+y8bz4NhMjISKbgeVJtqNbtf5QpjZP+Bslo+UqkIt9QPnX9q095eiRRASJG1/tz6dlNr6Z5NsBiWYokp6EQ==}
     hasBin: true
 
+  regjsparser@0.13.0:
+    resolution: {integrity: sha512-NZQZdC5wOE/H3UT28fVGL+ikOZcEzfMGk/c3iN9UGxzWHMa1op7274oyiUVrAG4B2EuFhus8SvkaYnhvW92p9Q==}
+    hasBin: true
+
   release-it@19.0.5:
     resolution: {integrity: sha512-bYlUKC0TQroBKi8jQUeoxLHql4d9Fx/2EQLHPKUobXTNSiTS2WY8vlgdHZRhRjVEMyAWwyadJVKfFZnRJuRn4Q==}
     engines: {node: ^20.12.0 || >=22.0.0}
@@ -9789,7 +9793,7 @@ snapshots:
   '@babel/types@7.28.2':
     dependencies:
       '@babel/helper-string-parser': 7.27.1
-      '@babel/helper-validator-identifier': 7.27.1
+      '@babel/helper-validator-identifier': 7.28.5
 
   '@babel/types@7.28.4':
     dependencies:
@@ -14534,11 +14538,11 @@ snapshots:
       eslint: 9.37.0(jiti@2.6.1)
       turbo: 2.5.4
 
-  eslint-plugin-unicorn@61.0.2(eslint@9.37.0(jiti@2.6.1)):
+  eslint-plugin-unicorn@62.0.0(eslint@9.37.0(jiti@2.6.1)):
     dependencies:
       '@babel/helper-validator-identifier': 7.28.5
       '@eslint-community/eslint-utils': 4.9.0(eslint@9.37.0(jiti@2.6.1))
-      '@eslint/plugin-kit': 0.3.5
+      '@eslint/plugin-kit': 0.4.0
       change-case: 5.4.4
       ci-info: 4.3.1
       clean-regexp: 1.0.0
@@ -14552,7 +14556,7 @@ snapshots:
       jsesc: 3.1.0
       pluralize: 8.0.0
       regexp-tree: 0.1.27
-      regjsparser: 0.12.0
+      regjsparser: 0.13.0
       semver: 7.7.3
       strip-indent: 4.1.1
 
@@ -17295,6 +17299,10 @@ snapshots:
   regjsparser@0.12.0:
     dependencies:
       jsesc: 3.0.2
+
+  regjsparser@0.13.0:
+    dependencies:
+      jsesc: 3.1.0
 
   release-it@19.0.5(@types/node@20.19.1)(magicast@0.3.5):
     dependencies:

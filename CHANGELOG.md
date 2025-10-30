@@ -273,7 +273,7 @@
 - `eslint-plugin-pnpm`: [0.3.1 → 1.2.0](https://github.com/antfu/pnpm-workspace-utils/compare/v0.3.1...v1.2.0)
   - 🟢 (enabled) [`yaml-valid-packages`](https://github.com/antfu/pnpm-workspace-utils/blob/HEAD/packages/eslint-plugin-pnpm/src/rules/yaml/yaml-valid-packages.ts#L29)
 - `eslint-plugin-tailwindcss`: [3.18.0 → 3.18.2](https://github.com/francoismassart/eslint-plugin-tailwindcss/compare/v3.18.0...v3.18.2)
-- `eslint-plugin-unicorn`: [59.0.1 → 61.0.2](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v59.0.1...v61.0.2)
+- `eslint-plugin-unicorn`: [59.0.1 → 62.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v59.0.1...v62.0.0)
   - 🟢 (enabled) [`no-array-reverse`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-array-reverse.md)
   - 🟢 [`no-useless-error-capture-stack-trace`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-useless-error-capture-stack-trace.md)
   - 🟢 [`prefer-class-fields`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-class-fields.md)
@@ -282,6 +282,9 @@
   - 🟢 [`prefer-classlist-toggle`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-classlist-toggle.md)
   - 🟢 [`require-module-attributes`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/require-module-attributes.md)
   - 🟢 [`no-array-sort`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-array-sort.md)
+  - 🟢 [`no-immediate-mutation`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-immediate-mutation.md)
+  - 🟢 [`no-useless-collection-argument`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-useless-collection-argument.md)
+  - 🟢 [`prefer-response-static-json`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-response-static-json.md)
 - `eslint-plugin-sonarjs`: [3.0.2 → 3.0.5](https://github.com/SonarSource/SonarJS/blob/master/packages/jsts/src/rules/CHANGELOG.md)
   - `no-invalid-await` rule got removed.
   - `no-one-iteration-loop` rule got removed.
