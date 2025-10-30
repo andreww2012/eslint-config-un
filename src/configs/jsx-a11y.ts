@@ -453,7 +453,7 @@ export const jsxA11yUnConfig: UnConfigFn<
     .addRule(isForLit ? 'iframe-title' : rn('iframe-has-title'), ERROR) /** @since 4.0.0 */
     .addRule(
       rn('img-redundant-alt'),
-      imageWords === false || (imageWords && imageWords.words.length === 0)
+      imageWords === false || imageWords?.words.length === 0
         ? OFF
         : imageWords?.severity === 'error'
           ? ERROR
