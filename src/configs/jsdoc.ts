@@ -315,6 +315,10 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     .addRule('sort-tags', ERROR) /** @since 37.8.0 */
     .addRule('tag-lines', ERROR) /** @since 34.4.0 */ // 🟢4️⃣
     .addRule('text-escaping', OFF) /** @since 39.5.0 */ // 1️⃣
+    .addRule('ts-method-signature-style', ERROR, ['property' /* Default */]) /** @since 61.1.0 */
+    .addRule('ts-no-empty-object-type', ERROR) /** @since 61.1.0 */ // 🟢
+    .addRule('ts-no-unnecessary-template-expression', ERROR) /** @since 61.1.0 */
+    .addRule('ts-prefer-function-type', ERROR) /** @since 61.1.0 */
     .addRule('type-formatting', formatTypeValues ? ERROR : OFF, [
       {stringQuotes: 'single', methodQuotes: 'single'},
     ]) /** @since 55.3.0 */
