@@ -3,7 +3,7 @@ import {Range, subset as isFirstSemverRangeIsSubsetOfSecond} from 'semver';
 import {ERROR, OFF} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults, interopDefault, readAndParsePackageJson} from '../utils';
 import type {UnConfigFn} from './index';
 
 interface EslintPluginNSettings {
@@ -176,9 +176,9 @@ export interface NodeEslintConfigOptions extends UnConfigOptions<'node'> {
 const IMPORT_META_PROPERTIES_AVAILABLE_SINCE = '>=20.11';
 
 export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
-  const closestPackageJson = await interopDefault(import('read-package-up')).then((m) =>
-    m.readPackageUp(),
-  );
+  const closestPackageJson = await interopDefault(import('empathic/package'))
+    .then((m) => m.up())
+    .then((packageJsonPath) => readAndParsePackageJson(packageJsonPath));
 
   const optionsRaw = context.rootOptions.configs?.node;
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -189,7 +189,7 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
 
   const {settings: pluginSettings, preferGlobal, noUnsupportedFeaturesIgnores} = optionsResolved;
 
-  const userNodeVersion = new Range(closestPackageJson?.packageJson.engines?.['node'] || '');
+  const userNodeVersion = new Range(closestPackageJson?.engines?.['node'] || '');
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'node');
 

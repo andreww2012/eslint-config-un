@@ -781,7 +781,7 @@ ${renderTable(
 
   const allPlugins = {
     ...loadedPluginsMap,
-    ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind as EslintPlugin}),
+    ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind}),
     ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
   } satisfies Record<string, EslintPlugin> as Partial<Record<PluginPrefix, EslintPlugin>>;
 

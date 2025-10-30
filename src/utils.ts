@@ -7,8 +7,7 @@ import {destr as jsonParse} from 'destr';
 import {resolve as resolvePackage} from 'import-meta-resolve';
 import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
 import * as R from 'remeda';
-import type {PackageJson} from 'zod-package-json';
-import type {FalsyValue, Promisable} from './types';
+import type {FalsyValue, PackageJson, Promisable} from './types';
 
 export {styleText} from 'node:util';
 
@@ -129,6 +128,15 @@ export const readFileSafe = async (filePath: string) =>
     throw error;
   });
 
+export const readAndParsePackageJson = async (
+  filePath: string | URL | undefined,
+): Promise<PackageJson | null> =>
+  filePath
+    ? jsonParse<PackageJson | null>(
+        await readFileSafe(typeof filePath === 'string' ? filePath : url.fileURLToPath(filePath)),
+      )
+    : null;
+
 export const fetchPackageInfo = async (
   packageName: string,
 ): Promise<{
@@ -148,9 +156,7 @@ export const fetchPackageInfo = async (
   }
   const packageJsonUrl = getLastResolvedPackageJsonUrl();
 
-  const packageInfo = packageJsonUrl
-    ? jsonParse<PackageJson>(await readFileSafe(url.fileURLToPath(packageJsonUrl)))
-    : null;
+  const packageInfo = packageJsonUrl ? await readAndParsePackageJson(packageJsonUrl) : null;
   if (!packageInfo) {
     return null;
   }

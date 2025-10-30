@@ -30,3 +30,5 @@ export type {
   UnionToIntersection,
   ValueOf as ObjectValues,
 } from 'type-fest';
+
+export type {PackageJson} from 'zod-package-json';
