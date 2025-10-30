@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import consola from 'consola';
+import {renderTable} from 'console-table-printer';
 import createDebug from 'debug';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
@@ -29,6 +30,8 @@ import {
   type FastImportPluginSettings,
   replaceImportRulesImplementationWithFastPlugin,
   styleConfigName,
+  stylePackageName,
+  stylePluginPrefix,
   styleRuleName,
 } from './internal';
 import {
@@ -276,19 +279,19 @@ export const eslintConfigInternal = async (
           enabledBySystem
             ? 'all of these packages were installed'
             : `the following package${notInstalledPackages.length === 1 ? ' is' : 's are'} not installed`
-        }: ${(enabledBySystem ? packagesList : notInstalledPackages).map(({packageName}) => styleText('yellow', packageName)).join(', ')}`;
+        }: ${(enabledBySystem ? packagesList : notInstalledPackages).map(({packageName}) => stylePackageName(packageName)).join(', ')}`;
       } else {
         enabledBySystem ??= packagesList.some(({packageName}) => {
           const isInstalled = Boolean(packagesInfo[packageName]);
           if (isInstalled) {
-            reason ??= `package ${styleText('yellow', packageName)} is installed`;
+            reason ??= `package ${stylePackageName(packageName)} is installed`;
           }
           return isInstalled;
         });
         reason ??=
           packagesList.length > 1
-            ? `neither of these packages are installed: ${packagesList.map(({packageName}) => styleText('yellow', packageName)).join(', ')}`
-            : `package ${styleText('yellow', packagesList[0]?.packageName || '')} is not installed`;
+            ? `neither of these packages are installed: ${packagesList.map(({packageName}) => stylePackageName(packageName)).join(', ')}`
+            : `package ${stylePackageName(packagesList[0]?.packageName || '')} is not installed`;
       }
     } else if (typeof defaultConditionOrPackageInstalled === 'boolean') {
       enabledBySystem ??= defaultConditionOrPackageInstalled;
@@ -309,14 +312,14 @@ export const eslintConfigInternal = async (
       !CONFIGS_TO_NOT_REPORT_IF_UNNECESSARILY_ENABLED_OR_DISABLED.has(configName)
     ) {
       logger.warn(
-        `There is no need to ${enabledByUser ? 'enable' : 'disable'} \`${styleText('blue', configName)}\` config because this is the default`,
+        `There is no need to ${enabledByUser ? 'enable' : 'disable'} \`${styleConfigName(configName)}\` config because this is the default`,
       );
     }
 
     const isEnabled = enabledByUser ?? enabledBySystem;
 
     debug(
-      `Config \`${styleText('blue', configName)}\` is ${isEnabled ? styleText('green', 'enabled') : styleText('red', 'disabled')} because ${reason}`,
+      `Config \`${styleConfigName(configName)}\` is ${isEnabled ? styleText('green', 'enabled') : styleText('red', 'disabled')} because ${reason}`,
     );
 
     return isEnabled;
@@ -825,7 +828,7 @@ export const eslintConfigInternal = async (
     {
       versionRange: string;
       installedVersion?: string;
-      isPlugin?: boolean;
+      pluginPrefixes?: Set<PluginPrefix>;
     }
   >();
   const [loadedPluginsRaw] = await Promise.all([
@@ -839,13 +842,17 @@ export const eslintConfigInternal = async (
         if (packageToInstall) {
           packagesToManuallyInstallOrUpdate.set(packageToInstall.name, {
             ...packageToInstall,
-            isPlugin: true,
+            pluginPrefixes: new Set([
+              ...(packagesToManuallyInstallOrUpdate.get(packageToInstall.name)?.pluginPrefixes ||
+                []),
+              pluginPrefix,
+            ]),
           });
         }
         if (pluginPrefix) {
           const isProvided = optionsResolved.pluginsOverrides?.[pluginPrefix] != null;
           debug(
-            `Plugin \`${styleText('blue', pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginsOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
+            `Plugin \`${stylePluginPrefix(pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginsOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
           );
         }
         return plugin ? ([pluginPrefix, plugin] as const) : null;
@@ -890,7 +897,7 @@ export const eslintConfigInternal = async (
         return;
       }
       const isUpdates = index === 0;
-      const packageTypes = partition(packages, (item) => item.isPlugin || false)
+      const packageTypes = partition(packages, (item) => Boolean(item.pluginPrefixes))
         .map(
           (packagesOfType, i) =>
             packagesOfType.length > 0 &&
@@ -900,13 +907,19 @@ export const eslintConfigInternal = async (
         .join(' and ');
       context.logger[isUpdates ? 'warn' : 'fatal'](
         `${capitalize(packageTypes)} that listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${isUpdates ? 'does not satisfy the supported version range' : 'not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} by yourself or disable corresponding config${packages.length === 1 ? '' : 's'} in order for this error to disappear:
-${packages
-  .toSorted((a, b) => a.name.localeCompare(b.name))
-  .map(
-    ({name, versionRange}) =>
-      `  "${styleText('yellow', name)}": "${styleText('green', versionRange)}",`,
-  )
-  .join('\n')}`,
+${renderTable(
+  packages
+    .toSorted((a, b) => a.name.localeCompare(b.name))
+    .map(({name, versionRange, pluginPrefixes}) => ({
+      Name: stylePackageName(name),
+      'Required version range': styleText('green', versionRange),
+      ...(pluginPrefixes?.size && {
+        [`PLugin prefix${pluginPrefixes.size === 1 ? '' : 's'}`]: [...pluginPrefixes]
+          .map(stylePluginPrefix)
+          .join(', '),
+      }),
+    })),
+)}`,
       );
     });
   }
@@ -944,7 +957,7 @@ ${packages
             ? ''
             : optionsResolved.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
         debug(
-          `Created a copy of \`${styleText('blue', pluginPrefix || '<builtin>')}\` plugin's rules with \`disable-autofix\` prefix`,
+          `Created a copy of \`${stylePluginPrefix(pluginPrefix || '<builtin>')}\` plugin's rules with \`disable-autofix\` prefix`,
         );
         return Object.assign(res, disableAutofixForAllRulesInPlugin(pluginPrefix, plugin));
       }
@@ -1002,11 +1015,11 @@ ${packages
             const areMostAutofixesDisabled =
               rulesCountWithAutofixNotDisabled < fixablePluginRules.length / 2;
             debug(
-              `Globally disabling autofix for ${areMostAutofixesDisabled ? `${styleText('red', 'all rules')} in ${styleText('blue', pluginPrefix)} plugin except for` : `the following ${styleText('blue', pluginPrefix)} plugin rules`}: ${(areMostAutofixesDisabled ? fixablePluginRules.filter((ruleName) => !rulesToDisableAutofixFor.includes(ruleName)) : rulesToDisableAutofixFor).map((ruleName) => styleRuleName(ruleName)).join(', ')}`,
+              `Globally disabling autofix for ${areMostAutofixesDisabled ? `${styleText('red', 'all rules')} in ${stylePluginPrefix(pluginPrefix)} plugin except for` : `the following ${stylePluginPrefix(pluginPrefix)} plugin rules`}: ${(areMostAutofixesDisabled ? fixablePluginRules.filter((ruleName) => !rulesToDisableAutofixFor.includes(ruleName)) : rulesToDisableAutofixFor).map((ruleName) => styleRuleName(ruleName)).join(', ')}`,
             );
           } else {
             debug(
-              `Globally disabling autofix for ${styleText('red', 'all rules')} in ${styleText('blue', pluginPrefix)} plugin`,
+              `Globally disabling autofix for ${styleText('red', 'all rules')} in ${stylePluginPrefix(pluginPrefix)} plugin`,
             );
           }
 

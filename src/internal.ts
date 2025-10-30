@@ -9,6 +9,8 @@ const generateStyleFn = (color: Parameters<typeof styleText>[0]) => (string: str
   styleText(color, string);
 
 export const styleConfigName = generateStyleFn('yellow');
+export const stylePackageName = generateStyleFn('yellow');
+export const stylePluginPrefix = generateStyleFn('blue');
 export const styleRuleName = generateStyleFn('green');
 
 // TODO: move to configs/fast-import
