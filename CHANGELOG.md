@@ -334,6 +334,8 @@
   - 🔴 `todo`
 - `eslint-plugin-css`: [0.11.0 → 0.11.1](https://github.com/ota-meshi/eslint-plugin-css/compare/v0.11.0...v0.11.1)
 - `eslint-plugin-react-refresh`: [0.4.23 → 0.4.24](https://github.com/ArnaudBarre/eslint-plugin-react-refresh/compare/v0.4.23...v0.4.24)
+- `eslint-plugin-astro`: [1.3.1 → 1.4.0](https://github.com/ota-meshi/eslint-plugin-astro/compare/v1.3.1...v1.4.0)
+  - 🟢 (enabled) [`no-unsafe-inline-scripts`](https://ota-meshi.github.io/eslint-plugin-astro/rules/no-unsafe-inline-scripts)
 
 ## 0.10.0
 

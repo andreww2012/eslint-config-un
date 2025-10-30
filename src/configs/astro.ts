@@ -96,6 +96,7 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
     .addRule('valid-compile', ERROR) /** @since 0.21.0 */ // 🟢
     .markCategory('Security Vulnerability')
     .addRule('no-set-html-directive', ERROR) /** @since 0.2.0 */
+    .addRule('no-unsafe-inline-scripts', ERROR) /** @since 1.4.0 */
     .markCategory('Best Practices')
     .addRule('no-set-text-directive', OFF) /** @since 0.2.0 */
     .addRule('no-unused-css-selector', WARNING) /** @since 0.10.0 */
