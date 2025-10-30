@@ -527,14 +527,8 @@ export const pluginsLoaders = {
   ...genModuleLoader('unused-imports', 'eslint-plugin-unused-imports', () =>
     interopDefault(import('eslint-plugin-unused-imports')),
   ),
-  ...genModuleLoader(
-    'vitest',
-    '@vitest/eslint-plugin',
-    () =>
-      interopDefault(
-        import('@vitest/eslint-plugin'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ...genModuleLoader('vitest', '@vitest/eslint-plugin', () =>
+    interopDefault(import('@vitest/eslint-plugin')),
   ),
   ...genModuleLoader('vue', 'eslint-plugin-vue', () => interopDefault(import('eslint-plugin-vue'))),
   ...genModuleLoader(
