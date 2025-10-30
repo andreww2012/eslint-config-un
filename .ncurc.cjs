@@ -13,21 +13,23 @@ const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
 ]);
 
 const PACKAGE_GROUPS = Object.entries({
-  'typescript-eslint': [null, 'typescript-eslint'],
-  'angular-eslint': [null],
-  jest: [null],
-  'html-eslint': [null],
-  cspell: [null, 'cspell'],
+  '@typescript-eslint': ['typescript-eslint'],
+  '@angular-eslint': [],
+  '@jest': [],
+  '@html-eslint': [],
+  '@cspell': ['cspell'],
+  '@sveltejs': ['eslint-plugin-svelte', 'svelte-eslint-parser'],
+  'eslint-plugin-vue': ['vue-eslint-parser'],
+  'eslint-plugin-astro': ['astro-eslint-parser'],
+  'eslint-plugin-ember': ['ember-eslint-parser'],
 }).reduce(
   (result, [groupName, packagesInGroup]) =>
     Object.assign(
       result,
-      Object.fromEntries(
-        packagesInGroup.map((packageInGroup) => [
-          packageInGroup == null ? `@${groupName}/*` : packageInGroup,
-          `@${groupName}`,
-        ]),
-      ),
+      Object.fromEntries([
+        [groupName.startsWith('@') ? `${groupName}/*` : groupName, groupName],
+        ...packagesInGroup.map((packageInGroup) => [packageInGroup, groupName]),
+      ]),
     ),
   {},
 );
@@ -70,16 +72,19 @@ module.exports = {
 
   format: ['group'],
   interactive: true,
-  groupFunction: (name) => {
-    const [nameScope] = name.split('/');
+  groupFunction: (fullName) => {
+    const [nameScope] = fullName.split('/');
+    const isPlugin = fullName.includes('eslint-plugin');
+    const groupNamePluginSuffix = isPlugin ? ' (plugins)' : '';
+    const groupNumberStartsWith = 3 * (isPlugin ? 0 : 1);
     return (
-      PACKAGE_GROUPS[name] ||
+      PACKAGE_GROUPS[fullName] ||
       PACKAGE_GROUPS[`${nameScope}/*`] ||
-      (name in packageJson.devDependencies && !(name in packageJson.peerDependencies)
-        ? '_3 Dev dependencies'
-        : name in packageJson.peerDependencies
-          ? '_2 Peer dependencies'
-          : '_1 Direct dependencies')
+      (fullName in packageJson.devDependencies && !(fullName in packageJson.peerDependencies)
+        ? `${3 + groupNumberStartsWith} Dev dependencies${groupNamePluginSuffix}`
+        : fullName in packageJson.peerDependencies
+          ? `${2 + groupNumberStartsWith} Peer dependencies${groupNamePluginSuffix}`
+          : `${1 + groupNumberStartsWith} Direct dependencies${groupNamePluginSuffix}`)
     );
   },
 };
