@@ -1,4 +1,4 @@
-<!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist -->
+<!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths -->
 
 ## 1.0.0
 
@@ -250,7 +250,7 @@
 - `eslint-plugin-vue`: [10.1.0 → 10.5.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.1.0...v10.5.0)
   - 🟢 (enabled) [`no-negated-v-if-condition`](https://eslint.vuejs.org/rules/no-negated-v-if-condition.html)
   - 🟢 [`no-negated-condition`](https://eslint.vuejs.org/rules/no-negated-condition.html)
-- `eslint-plugin-package-json`: [0.31.0 → 0.56.3](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.31.0...v0.56.3)
+- `eslint-plugin-package-json`: [0.31.0 → 0.59.1](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.31.0...v0.59.1)
   - 🔴 (not enabled) [`require-type`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-type.md)
   - 🟢 (enabled) [`valid-bin`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-bin.md)
   - 🟢 [`valid-author`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-author.md)
@@ -273,6 +273,8 @@
   - 🟢 [`valid-description`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-description.md)
   - 🟢 [`valid-exports`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-exports.md)
   - 🟢 [`valid-directories`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-directories.md)
+  - 🟢 [`exports-subpaths-style`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/exports-subpaths-style.md)
+  - 🔴 [`require-license`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-license.md)
 - `eslint-plugin-jest`: [28.13.5 → 28.14.0](https://github.com/jest-community/eslint-plugin-jest/compare/v28.13.5...v28.14.0)
 - `eslint-plugin-prettier`: [5.4.1 → 5.5.0](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.1...v5.5.0)
 - `eslint-plugin-pnpm`: [0.3.1 → 1.2.0](https://github.com/antfu/pnpm-workspace-utils/compare/v0.3.1...v1.2.0)

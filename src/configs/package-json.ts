@@ -1,6 +1,11 @@
 import type {PackageJsonPluginSettings} from 'eslint-plugin-package-json';
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
+import {
+  type GetRuleOptions,
+  type UnConfigOptions,
+  createConfigBuilder,
+  type RuleNamesForPlugin,
+} from '../eslint';
 import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';
 
@@ -46,22 +51,10 @@ const DEFAULT_COLLECTIONS_TO_SORT = {
   'pnpm.peerDependencyRules.allowedVersions': true,
 } satisfies PackageJsonCollectionsToSort;
 
-type PackageJsonRequirableFields =
-  | 'author'
-  | 'bugs'
-  | 'bundleDependencies'
-  | 'dependencies'
-  | 'description'
-  | 'devDependencies'
-  | 'engines'
-  | 'files'
-  | 'keywords'
-  | 'name'
-  | 'optionalDependencies'
-  | 'peerDependencies'
-  | 'type'
-  | 'types'
-  | 'version';
+type IsRequireRule<RuleName extends string> = RuleName extends `require-${infer RequirableField}`
+  ? RequirableField
+  : never;
+type PackageJsonRequirableFields = IsRequireRule<RuleNamesForPlugin<'package-json'>>;
 
 interface RequireFieldsOption {
   /**
@@ -171,6 +164,9 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
         }),
       },
     )
+    .addRule('exports-subpaths-style', ERROR, [
+      {prefer: 'explicit' /* Default: explicit */},
+    ]) /** @since 0.59.0 */
     .addRule(
       'no-empty-fields',
       ERROR,
@@ -196,6 +192,7 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
     .addRule('require-engines', OFF) /** @since 0.28.0 */
     .addRule('require-files', OFF) /** @since 0.26.0 */
     .addRule('require-keywords', OFF) /** @since 0.25.0 */
+    .addRule('require-license', OFF) /** @since 0.57.0 */
     .addRule('require-name', ERROR) /** @since 0.24.0 */ // 🟢
     .addRule('require-optionalDependencies', OFF) /** @since 0.50.0 */
     .addRule('require-peerDependencies', OFF) /** @since 0.50.0 */
