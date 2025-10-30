@@ -334,7 +334,7 @@
   - 🔴 `todo`
 - `eslint-plugin-css`: [0.11.0 → 0.11.1](https://github.com/ota-meshi/eslint-plugin-css/compare/v0.11.0...v0.11.1)
 - `eslint-plugin-react-refresh`: [0.4.23 → 0.4.24](https://github.com/ArnaudBarre/eslint-plugin-react-refresh/compare/v0.4.23...v0.4.24)
-- 
+
 ## 0.10.0
 
 - New config: `svelte` via [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte), enabled automatically if `svelte` package is installed.
