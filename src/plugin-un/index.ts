@@ -1,7 +1,7 @@
-import type Eslint from 'eslint';
+import type {EslintPlugin} from '../eslint';
 import {preferEarlyReturn} from './rules/prefer-early-return';
 
-const eslintPluginUn: Eslint.ESLint.Plugin = {
+const eslintPluginUn: EslintPlugin = {
   meta: {
     name: 'eslint-plugin-un',
   },

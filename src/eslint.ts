@@ -1,3 +1,8 @@
+import type {
+  ConfigObject as EslintConfigObject,
+  Plugin as EslintPlugin,
+  Severity as EslintSeverity,
+} from '@eslint/core';
 import type Eslint from 'eslint';
 import {builtinRules as eslintBuiltinRules} from 'eslint/use-at-your-own-risk';
 // @ts-expect-error no typings
@@ -40,9 +45,8 @@ import {
   styleText,
 } from './utils';
 
-export type EslintSeverity = Eslint.Linter.RuleSeverity;
 type EslintRuleEntry<Options extends unknown[] = unknown[]> = Eslint.Linter.RuleEntry<Options>;
-export type EslintPlugin = Eslint.ESLint.Plugin;
+export type {EslintPlugin, EslintSeverity};
 
 interface FlatConfigEntryFiles {
   /**
@@ -61,7 +65,7 @@ export interface FlatConfigEntryFilesOrIgnores extends FlatConfigEntryFiles {
 
 export type RulesRecord = Record<string, EslintRuleEntry> & RuleOptions;
 export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
-  Eslint.Linter.Config<T>
+  EslintConfigObject<T>
 >;
 export type UnFlagConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
   Omit<FlatConfigEntry<T>, 'rules'> & {

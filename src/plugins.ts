@@ -132,8 +132,10 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
-  ...genModuleLoader('@cspell', '@cspell/eslint-plugin', () =>
-    interopDefault(import('@cspell/eslint-plugin')),
+  ...genModuleLoader(
+    '@cspell',
+    '@cspell/eslint-plugin',
+    () => interopDefault(import('@cspell/eslint-plugin')) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader(
     '@eslint-community/eslint-comments',
@@ -226,8 +228,10 @@ export const pluginsLoaders = {
     'eslint-plugin-de-morgan',
     () => interopDefault(import('eslint-plugin-de-morgan')) as Promise<EslintPlugin>,
   ),
-  ...genModuleLoader('depend', 'eslint-plugin-depend', () =>
-    interopDefault(import('eslint-plugin-depend')),
+  ...genModuleLoader(
+    'depend',
+    'eslint-plugin-depend',
+    () => interopDefault(import('eslint-plugin-depend')) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader('ember', 'eslint-plugin-ember', () =>
     interopDefault(import('eslint-plugin-ember')),
@@ -270,13 +274,8 @@ export const pluginsLoaders = {
         }
       >,
   ),
-  ...genModuleLoader(
-    'header',
-    'eslint-plugin-header',
-    () =>
-      interopDefault(import('eslint-plugin-header')).then(
-        fixupPluginRules,
-      ) as Promise<EslintPlugin>,
+  ...genModuleLoader('header', 'eslint-plugin-header', () =>
+    interopDefault(import('eslint-plugin-header')).then(fixupPluginRules),
   ),
   ...genModuleLoader('headers', 'eslint-plugin-headers', () =>
     interopDefault(import('eslint-plugin-headers')),
@@ -304,8 +303,10 @@ export const pluginsLoaders = {
   ...genModuleLoader('jest-extended', 'eslint-plugin-jest-extended', () =>
     interopDefault(import('eslint-plugin-jest-extended')),
   ),
-  ...genModuleLoader('jsdoc', 'eslint-plugin-jsdoc', () =>
-    interopDefault(import('eslint-plugin-jsdoc')),
+  ...genModuleLoader(
+    'jsdoc',
+    'eslint-plugin-jsdoc',
+    () => interopDefault(import('eslint-plugin-jsdoc')) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader(
     'json-schema-validator',
@@ -350,7 +351,11 @@ export const pluginsLoaders = {
   ...genModuleLoader('no-only-tests', 'eslint-plugin-no-only-tests', () =>
     interopDefault(import('eslint-plugin-no-only-tests')),
   ),
-  ...genModuleLoader('lit', 'eslint-plugin-lit', () => interopDefault(import('eslint-plugin-lit'))),
+  ...genModuleLoader(
+    'lit',
+    'eslint-plugin-lit',
+    () => interopDefault(import('eslint-plugin-lit')) as Promise<EslintPlugin>,
+  ),
   ...genModuleLoader('lit-a11y', 'eslint-plugin-lit-a11y', () =>
     interopDefault(import('eslint-plugin-lit-a11y')),
   ),
@@ -370,7 +375,11 @@ export const pluginsLoaders = {
   ...genModuleLoader('no-unsanitized', 'eslint-plugin-no-unsanitized', () =>
     interopDefault(import('eslint-plugin-no-unsanitized')),
   ),
-  ...genModuleLoader('node', 'eslint-plugin-n', () => interopDefault(import('eslint-plugin-n'))),
+  ...genModuleLoader(
+    'node',
+    'eslint-plugin-n',
+    () => interopDefault(import('eslint-plugin-n')) as Promise<EslintPlugin>,
+  ),
   ...genModuleLoader(
     'node-dependencies',
     'eslint-plugin-node-dependencies',
@@ -411,8 +420,10 @@ export const pluginsLoaders = {
   ...genModuleLoader('playwright', 'eslint-plugin-playwright', () =>
     interopDefault(import('eslint-plugin-playwright')),
   ),
-  ...genModuleLoader('pnpm', 'eslint-plugin-pnpm', () =>
-    interopDefault(import('eslint-plugin-pnpm')),
+  ...genModuleLoader(
+    'pnpm',
+    'eslint-plugin-pnpm',
+    () => interopDefault(import('eslint-plugin-pnpm')) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader(
     'prefer-arrow-functions',
@@ -423,20 +434,21 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  ...genModuleLoader('prettier', 'eslint-plugin-prettier', () =>
-    interopDefault(import('eslint-plugin-prettier')),
+  ...genModuleLoader(
+    'prettier',
+    'eslint-plugin-prettier',
+    () => interopDefault(import('eslint-plugin-prettier')) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader('promise', 'eslint-plugin-promise', () =>
     interopDefault(import('eslint-plugin-promise')),
   ),
-  ...genModuleLoader('qunit', 'eslint-plugin-qunit', () =>
-    interopDefault(import('eslint-plugin-qunit')),
-  ),
   ...genModuleLoader(
-    'qwik',
-    'eslint-plugin-qwik',
-    () =>
-      interopDefault(import('eslint-plugin-qwik')).then(fixupPluginRules) as Promise<EslintPlugin>,
+    'qunit',
+    'eslint-plugin-qunit',
+    () => interopDefault(import('eslint-plugin-qunit')) as Promise<EslintPlugin>,
+  ),
+  ...genModuleLoader('qwik', 'eslint-plugin-qwik', () =>
+    interopDefault(import('eslint-plugin-qwik')).then(fixupPluginRules),
   ),
   ...genModuleLoader('react', 'eslint-plugin-react', () =>
     interopDefault(import('eslint-plugin-react')),
@@ -456,7 +468,10 @@ export const pluginsLoaders = {
   ...genModuleLoader(
     'react-you-might-not-need-an-effect',
     'eslint-plugin-react-you-might-not-need-an-effect',
-    () => interopDefault(import('eslint-plugin-react-you-might-not-need-an-effect')),
+    () =>
+      interopDefault(
+        import('eslint-plugin-react-you-might-not-need-an-effect'),
+      ) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader('regexp', 'eslint-plugin-regexp', () =>
     interopDefault(import('eslint-plugin-regexp')),
@@ -498,7 +513,7 @@ export const pluginsLoaders = {
   ...genModuleLoader(
     'tailwindcss',
     'eslint-plugin-tailwindcss',
-    () => interopDefault(import('eslint-plugin-tailwindcss')),
+    () => interopDefault(import('eslint-plugin-tailwindcss')) as Promise<EslintPlugin>,
     // Tries to import `tailwindcss/resolveConfig` which doesn't exist anymore in v4
     ['ERR_PACKAGE_PATH_NOT_EXPORTED', ...MODULE_NOT_FOUND_ERROR_CODES],
   ),
@@ -524,14 +539,18 @@ export const pluginsLoaders = {
     interopDefault(import('eslint-plugin-turbo')),
   ),
   ...genModuleLoader('un', '', () => interopDefault(import('./plugin-un'))),
-  ...genModuleLoader('unicorn', 'eslint-plugin-unicorn', () =>
-    interopDefault(import('eslint-plugin-unicorn')),
+  ...genModuleLoader(
+    'unicorn',
+    'eslint-plugin-unicorn',
+    () => interopDefault(import('eslint-plugin-unicorn')) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader('unnecessary-abstractions', 'eslint-plugin-unnecessary-abstractions', () =>
     interopDefault(import('eslint-plugin-unnecessary-abstractions')),
   ),
-  ...genModuleLoader('unused-imports', 'eslint-plugin-unused-imports', () =>
-    interopDefault(import('eslint-plugin-unused-imports')),
+  ...genModuleLoader(
+    'unused-imports',
+    'eslint-plugin-unused-imports',
+    () => interopDefault(import('eslint-plugin-unused-imports')) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader('vitest', '@vitest/eslint-plugin', () =>
     interopDefault(import('@vitest/eslint-plugin')),
@@ -549,7 +568,11 @@ export const pluginsLoaders = {
   ...genModuleLoader('vuejs-accessibility', 'eslint-plugin-vuejs-accessibility', () =>
     interopDefault(import('eslint-plugin-vuejs-accessibility')),
   ),
-  ...genModuleLoader('wc', 'eslint-plugin-wc', () => interopDefault(import('eslint-plugin-wc'))),
+  ...genModuleLoader(
+    'wc',
+    'eslint-plugin-wc',
+    () => interopDefault(import('eslint-plugin-wc')) as Promise<EslintPlugin>,
+  ),
   ...genModuleLoader(
     'yml',
     'eslint-plugin-yml',
