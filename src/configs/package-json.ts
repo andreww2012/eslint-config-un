@@ -2,9 +2,9 @@ import type {PackageJsonPluginSettings} from 'eslint-plugin-package-json';
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {
   type GetRuleOptions,
+  type RuleNamesForPlugin,
   type UnConfigOptions,
   createConfigBuilder,
-  type RuleNamesForPlugin,
 } from '../eslint';
 import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
 import type {UnConfigFn} from './index';

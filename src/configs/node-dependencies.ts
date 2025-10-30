@@ -72,6 +72,7 @@ export const nodeDependenciesUnConfig: UnConfigFn<'nodeDependencies'> = async (c
     .markCategory('Stylistic Issues')
     .addRule('prefer-caret-range-version', OFF) /** @since 0.8.0 */
     .addRule('prefer-tilde-range-version', OFF) /** @since 0.8.0 */
+    .addRule('require-provenance-deps', OFF) /** @since 1.2.0 */
     .enableConfigTesterForPlugin('node-dependencies')
     .addOverrides();
 

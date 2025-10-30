@@ -92,7 +92,7 @@ async function generateRuleTypes() {
           },
         );
         code = code.replaceAll(
-          new RegExp(`'${pluginName ? `${pluginName}/` : ''}([^']*)'\\?:`, 'g'),
+          new RegExp(String.raw`'${pluginName ? `${pluginName}/` : ''}([^']*)'\?:`, 'g'),
           "'$1':",
         );
         return {

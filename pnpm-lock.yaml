@@ -137,8 +137,8 @@ importers:
         specifier: 4.1.4
         version: 4.1.4(eslint@9.37.0(jiti@2.6.1))
       eslint-plugin-node-dependencies:
-        specifier: 1.1.2
-        version: 1.1.2(eslint@9.37.0(jiti@2.6.1))
+        specifier: 1.2.0
+        version: 1.2.0(eslint@9.37.0(jiti@2.6.1))
       eslint-plugin-package-json:
         specifier: 0.59.1
         version: 0.59.1(@types/estree@1.0.8)(eslint@9.37.0(jiti@2.6.1))(jsonc-eslint-parser@2.4.1)
@@ -5160,8 +5160,8 @@ packages:
     peerDependencies:
       eslint: ^8 || ^9
 
-  eslint-plugin-node-dependencies@1.1.2:
-    resolution: {integrity: sha512-H6tN05wH2DluXFgbOFpHMgfycJnvkCNfmFqcyTZd8spZRnSv67Tpk8JpopL8HSMlwRoiYRNol1IqHD8lz9g0QA==}
+  eslint-plugin-node-dependencies@1.2.0:
+    resolution: {integrity: sha512-KOyKv53AGihp2R8fN9tCtihYCDXL7cK5cdCuumjal+1V1Zxh9zW4H5tLNN+CHyOfT8z/3QI0WovOcpskAkB8KA==}
     engines: {node: ^18.17.0 || >=20.5.0}
     peerDependencies:
       eslint: '>=6.0.0'
@@ -8432,10 +8432,6 @@ packages:
   undici@6.21.3:
     resolution: {integrity: sha512-gBLkYIlEnSp8pFbT64yFgGE6UIB9tAkhukC23PmMDCe5Nd+cRqKxSjw5y54MK2AZMgZfJWMaNE4nYUHgi1XEOw==}
     engines: {node: '>=18.17'}
-
-  undici@7.10.0:
-    resolution: {integrity: sha512-u5otvFBOBZvmdjWLVW+5DAc9Nkq8f24g0O9oY7qw2JVIF1VocIFoyz9JFkuVOS2j41AufeO0xnlweJ2RLT8nGw==}
-    engines: {node: '>=20.18.1'}
 
   undici@7.16.0:
     resolution: {integrity: sha512-QEg3HPMll0o3t2ourKwOeUAZ159Kn9mx5pnzHRQO8+Wixmh88YdZRiIwat0iNzNNXn0yoEtXJqFpyW7eM8BV7g==}
@@ -14202,7 +14198,7 @@ snapshots:
     dependencies:
       eslint: 9.37.0(jiti@2.6.1)
 
-  eslint-plugin-node-dependencies@1.1.2(eslint@9.37.0(jiti@2.6.1)):
+  eslint-plugin-node-dependencies@1.2.0(eslint@9.37.0(jiti@2.6.1)):
     dependencies:
       eslint: 9.37.0(jiti@2.6.1)
       jsonc-eslint-parser: 2.4.1
@@ -14210,7 +14206,7 @@ snapshots:
       package-json: 10.0.1
       semver: 7.7.3
       synckit: 0.11.11
-      undici: 7.10.0
+      undici: 7.16.0
 
   eslint-plugin-package-json@0.59.1(@types/estree@1.0.8)(eslint@9.37.0(jiti@2.6.1))(jsonc-eslint-parser@2.4.1):
     dependencies:
@@ -18253,8 +18249,6 @@ snapshots:
   undici-types@6.21.0: {}
 
   undici@6.21.3: {}
-
-  undici@7.10.0: {}
 
   undici@7.16.0: {}
 

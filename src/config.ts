@@ -97,6 +97,10 @@ const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['auto
 const RULES_TO_DISABLE_IN_OFFLINE_MODE: AllEslintRuleNames[] = [
   'markdown-links/no-dead-urls',
   'json-schema-validator/no-invalid',
+  'node-dependencies/compat-engines',
+  'node-dependencies/no-deprecated',
+  'node-dependencies/no-restricted-deps',
+  'node-dependencies/require-provenance-deps',
 ];
 
 const checkIfModuleCorrectlyLoaded = async (
