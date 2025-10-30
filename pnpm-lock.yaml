@@ -113,8 +113,8 @@ importers:
         specifier: 0.1.1
         version: 0.1.1(eslint@9.37.0(jiti@2.6.1))
       eslint-plugin-markdown-links:
-        specifier: 0.6.1
-        version: 0.6.1(@eslint/markdown@7.5.0)(eslint@9.37.0(jiti@2.6.1))
+        specifier: 0.6.2
+        version: 0.6.2(@eslint/markdown@7.5.0)(eslint@9.37.0(jiti@2.6.1))
       eslint-plugin-markdown-preferences:
         specifier: 0.36.2
         version: 0.36.2(@eslint/markdown@7.5.0)(eslint@9.37.0(jiti@2.6.1))
@@ -4742,6 +4742,10 @@ packages:
     resolution: {integrity: sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g==}
     engines: {node: '>=0.12'}
 
+  entities@7.0.0:
+    resolution: {integrity: sha512-FDWG5cmEYf2Z00IkYRhbFrwIwvdFKH07uV8dvNy0omp/Qb1xcyCWp2UDtcwJF4QZZvk0sLudP6/hAu42TaqVhQ==}
+    engines: {node: '>=0.12'}
+
   env-paths@3.0.0:
     resolution: {integrity: sha512-dtJUTepzMW3Lm/NPxRf3wP4642UWhjL2sQxc+ym2YMj1m/H2zDNQOlezafzkHwn6sMstjHTwG6iQQsctDW/b1A==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
@@ -5107,8 +5111,8 @@ packages:
     peerDependencies:
       eslint: '>= 8'
 
-  eslint-plugin-markdown-links@0.6.1:
-    resolution: {integrity: sha512-NFkaqPpCsv1NUhJLAo+AYS9TWv/NgRB3JvQ1WVIwyMkYQz7iFbX+BRxuFzM8z1LpgNxTOz6Y9qT9epU3j/G6Uw==}
+  eslint-plugin-markdown-links@0.6.2:
+    resolution: {integrity: sha512-M+FgHwfFdjCWjhDQaFL1c+mwhi0DrmDYmrFCuYzEFQmScsLOq8x1p+hMKz/4tLj0HBRE4r3QEuDlUjlCc3qg6Q==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
       '@eslint/markdown': ^7.1.0
@@ -13520,6 +13524,8 @@ snapshots:
 
   entities@6.0.1: {}
 
+  entities@7.0.0: {}
+
   env-paths@3.0.0: {}
 
   environment@1.1.0: {}
@@ -14109,10 +14115,11 @@ snapshots:
       parse5: 6.0.1
       parse5-htmlparser2-tree-adapter: 6.0.1
 
-  eslint-plugin-markdown-links@0.6.1(@eslint/markdown@7.5.0)(eslint@9.37.0(jiti@2.6.1)):
+  eslint-plugin-markdown-links@0.6.2(@eslint/markdown@7.5.0)(eslint@9.37.0(jiti@2.6.1)):
     dependencies:
       '@eslint/markdown': 7.5.0
       '@mdit-vue/shared': 3.0.2
+      entities: 7.0.0
       eslint: 9.37.0(jiti@2.6.1)
       fast-content-type-parse: 3.0.0
       github-slugger: 2.0.0
