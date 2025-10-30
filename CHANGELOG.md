@@ -278,7 +278,7 @@
   - 🔴 [`require-license`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-license.md)
 - `eslint-plugin-jest`: [28.13.5 → 28.14.0](https://github.com/jest-community/eslint-plugin-jest/compare/v28.13.5...v28.14.0)
 - `eslint-plugin-prettier`: [5.4.1 → 5.5.0](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.1...v5.5.0)
-- `eslint-plugin-pnpm`: [0.3.1 → 1.2.0](https://github.com/antfu/pnpm-workspace-utils/compare/v0.3.1...v1.2.0)
+- `eslint-plugin-pnpm`: [0.3.1 → 1.3.0](https://github.com/antfu/pnpm-workspace-utils/compare/v0.3.1...v1.3.0)
   - 🟢 (enabled) [`yaml-valid-packages`](https://github.com/antfu/pnpm-workspace-utils/blob/HEAD/packages/eslint-plugin-pnpm/src/rules/yaml/yaml-valid-packages.ts#L29)
 - `eslint-plugin-tailwindcss`: [3.18.0 → 3.18.2](https://github.com/francoismassart/eslint-plugin-tailwindcss/compare/v3.18.0...v3.18.2)
 - `eslint-plugin-unicorn`: [59.0.1 → 62.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v59.0.1...v62.0.0)
