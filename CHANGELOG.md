@@ -242,7 +242,7 @@
 - `eslint-plugin-prettier`: [5.4.0 → 5.4.1](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.0...v5.4.1)
 - `eslint-plugin-qwik`: 1.13.0 → 1.17.1
 - `eslint-plugin-regexp`: [2.7.0 → 2.10.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v2.7.0...v2.10.0)
-- `eslint-plugin-svelte`: [3.5.1 → 3.12.4](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte%403.5.1...eslint-plugin-svelte%403.12.4)
+- `eslint-plugin-svelte`: [3.5.1 → 3.13.0](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte%403.5.1...eslint-plugin-svelte%403.13.0)
   - 🟢 (enabled) [`no-top-level-browser-globals`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-top-level-browser-globals)
   - 🟢 [`no-add-event-listener`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-add-event-listener)
   - 🟢 [`prefer-writable-derived`](https://sveltejs.github.io/eslint-plugin-svelte/rules/prefer-writable-derived)
@@ -298,7 +298,7 @@
   - `no-invalid-await` rule got removed.
   - `no-one-iteration-loop` rule got removed.
 - `tailwind-csstree`: [0.1.2 → 0.1.4](https://github.com/humanwhocodes/tailwind-csstree/compare/tailwind-csstree-v0.1.2...tailwind-csstree-v0.1.4)
-- `svelte-eslint-parser`: [1.3.0 → 1.3.3](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.3.0...v1.3.3)
+- `svelte-eslint-parser`: [1.3.0 → 1.4.0](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.3.0...v1.4.0)
 - `@next/eslint-plugin-next`: [15.3.2 → 16.0.1](https://github.com/vercel/next.js/compare/v15.3.2...v16.0.1)
 - `eslint-plugin-unused-imports`: 4.1.4 → 4.3.0
 - `eslint-plugin-yml`: [1.18.0 → 1.19.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v1.18.0...v1.19.0)
