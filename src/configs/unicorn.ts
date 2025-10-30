@@ -3,11 +3,28 @@ import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
-export interface UnicornEslintConfigOptions extends UnConfigOptions<'unicorn'> {}
+export interface UnicornEslintConfigOptions extends UnConfigOptions<'unicorn'> {
+  /**
+   * Enforces `utf8`/`utf-8` and `ascii` for UTF-8 and ASCII encodings respectively
+   * in function arguments, such as `fs.readFile(file, 'utf8')`.
+   * - `'no-dash'`: enforce lower case and the dash-less variant for UTF-8 encoding.
+   * - `'dash'`: enforce lower case and the variant with a dash for UTF-8 encoding.
+   * - `false`: do not enforce anything.
+   *
+   * Affected rule:
+   * - [`text-encoding-identifier-case`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/text-encoding-identifier-case.md)
+   * @default 'no-dash'
+   */
+  enforceTextEncodingCaseAndNotation?: 'no-dash' | 'dash' | false;
+}
 
 export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.unicorn;
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies UnicornEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {
+    enforceTextEncodingCaseAndNotation: 'no-dash',
+  } satisfies UnicornEslintConfigOptions);
+
+  const {enforceTextEncodingCaseAndNotation} = optionsResolved;
 
   const configBuilder = createConfigBuilder(context, optionsResolved, 'unicorn');
 
@@ -182,7 +199,13 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     .addRule('string-content', OFF) /** @since 17.0.0 */ // 🔴
     .addRule('switch-case-braces', ERROR) /** @since 44.0.0 */ // 🟣
     .addRule('template-indent', ERROR) /** @since 37.0.0 */ // 🟣🟠
-    .addRule('text-encoding-identifier-case', ERROR) /** @since 41.0.0 */
+    .addRule(
+      'text-encoding-identifier-case',
+      enforceTextEncodingCaseAndNotation ? ERROR : OFF,
+      enforceTextEncodingCaseAndNotation
+        ? [{withDash: enforceTextEncodingCaseAndNotation === 'dash'}]
+        : [],
+    ) /** @since 41.0.0 */
     .addRule('throw-new-error', ERROR) /** @since 0.1.0 */
     .enableConfigTesterForPlugin('unicorn')
     .addOverrides();
