@@ -240,7 +240,7 @@
   - 🔴 (not enabled) [`require-provenance-deps`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/require-provenance-deps.html)
 - `eslint-plugin-perfectionist`: [4.12.3 → 4.15.1](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.12.3...v4.15.1)
 - `eslint-plugin-prettier`: [5.4.0 → 5.4.1](https://github.com/prettier/eslint-plugin-prettier/compare/v5.4.0...v5.4.1)
-- `eslint-plugin-qwik`: 1.13.0 → 1.17.0
+- `eslint-plugin-qwik`: 1.13.0 → 1.17.1
 - `eslint-plugin-regexp`: [2.7.0 → 2.10.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v2.7.0...v2.10.0)
 - `eslint-plugin-svelte`: [3.5.1 → 3.12.4](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte%403.5.1...eslint-plugin-svelte%403.12.4)
   - 🟢 (enabled) [`no-top-level-browser-globals`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-top-level-browser-globals)
