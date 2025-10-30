@@ -121,6 +121,14 @@ export const maybeCall = <
     ? R
     : never;
 
+export const readFileSafe = async (filePath: string) =>
+  await fs.readFile(filePath, 'utf8').catch((error: unknown) => {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
+      return null;
+    }
+    throw error;
+  });
+
 export const fetchPackageInfo = async (
   packageName: string,
 ): Promise<{
@@ -141,7 +149,7 @@ export const fetchPackageInfo = async (
   const packageJsonUrl = getLastResolvedPackageJsonUrl();
 
   const packageInfo = packageJsonUrl
-    ? jsonParse<PackageJson>(await fs.readFile(url.fileURLToPath(packageJsonUrl), 'utf8'))
+    ? jsonParse<PackageJson>(await readFileSafe(url.fileURLToPath(packageJsonUrl)))
     : null;
   if (!packageInfo) {
     return null;

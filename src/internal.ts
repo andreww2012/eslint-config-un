@@ -3,9 +3,16 @@ import semver from 'semver';
 import type {UnConfigContext, UnConfigs} from './configs';
 import type {PACKAGES_TO_GET_INFO_FOR} from './constants';
 import type {EslintPlugin, RuleNamesForPlugin} from './eslint';
-import type {PluginPrefix} from './plugins';
+import {OPTIONAL_PEER_DEPENDENCIES, type PluginPrefix} from './plugins';
 import type {NonEmptyTuple} from './types';
-import {type MaybeArray, arraify, objectEntriesUnsafe, styleText} from './utils';
+import {
+  type MaybeArray,
+  arraify,
+  fetchPackageInfo,
+  isIn,
+  objectEntriesUnsafe,
+  styleText,
+} from './utils';
 
 const generateStyleFn = (color: Parameters<typeof styleText>[0]) => (string: string) =>
   styleText(color, string);
@@ -145,6 +152,29 @@ export function getIsConfigEnabled(
 
   return isEnabled;
 }
+
+export const checkIfModuleCorrectlyLoaded = async (
+  moduleResult: {packageName: string; module: unknown} | null,
+) => {
+  const plugin = moduleResult?.module;
+  if (moduleResult && isIn(moduleResult.packageName, OPTIONAL_PEER_DEPENDENCIES)) {
+    const installedPluginVersion = plugin
+      ? (await fetchPackageInfo(moduleResult.packageName))?.versions.full
+      : null;
+    const versionRange = OPTIONAL_PEER_DEPENDENCIES[moduleResult.packageName];
+    if (
+      !plugin ||
+      (installedPluginVersion && !semver.satisfies(installedPluginVersion, versionRange))
+    ) {
+      return {
+        name: moduleResult.packageName,
+        versionRange,
+        ...(installedPluginVersion && {installedVersion: installedPluginVersion}),
+      };
+    }
+  }
+  return null;
+};
 
 // TODO: move to configs/fast-import
 export type FastImportPluginSettings = Parameters<typeof fastImportPluginConfigGenerator>[0];

@@ -1,10 +1,8 @@
-import fs from 'node:fs/promises';
 import consola from 'consola';
 import {renderTable} from 'console-table-printer';
 import createDebug from 'debug';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
-import semver from 'semver';
 import type {EslintConfigUnOptions, UnConfigContext} from './configs';
 import {
   CHECKED_LODASH_METHODS,
@@ -28,6 +26,7 @@ import {
 } from './eslint';
 import {
   type FastImportPluginSettings,
+  checkIfModuleCorrectlyLoaded,
   getIsConfigEnabled as getIsConfigEnabledContextless,
   replaceImportRulesImplementationWithFastPlugin,
   styleConfigName,
@@ -37,7 +36,6 @@ import {
 } from './internal';
 import {
   LOADABLE_PLUGIN_PREFIXES_LIST,
-  OPTIONAL_PEER_DEPENDENCIES,
   PLUGIN_PREFIXES_LIST,
   type PluginPrefix,
   packagesLoaders,
@@ -58,6 +56,7 @@ import {
   objectKeysUnsafe,
   omit,
   partition,
+  readFileSafe,
   styleText,
 } from './utils';
 
@@ -94,29 +93,6 @@ const RULES_TO_DISABLE_IN_OFFLINE_MODE: AllEslintRuleNames[] = [
   'node-dependencies/no-restricted-deps',
   'node-dependencies/require-provenance-deps',
 ];
-
-const checkIfModuleCorrectlyLoaded = async (
-  moduleResult: {packageName: string; module: unknown} | null,
-) => {
-  const plugin = moduleResult?.module;
-  if (moduleResult && isIn(moduleResult.packageName, OPTIONAL_PEER_DEPENDENCIES)) {
-    const installedPluginVersion = plugin
-      ? (await fetchPackageInfo(moduleResult.packageName))?.versions.full
-      : null;
-    const versionRange = OPTIONAL_PEER_DEPENDENCIES[moduleResult.packageName];
-    if (
-      !plugin ||
-      (installedPluginVersion && !semver.satisfies(installedPluginVersion, versionRange))
-    ) {
-      return {
-        name: moduleResult.packageName,
-        versionRange,
-        ...(installedPluginVersion && {installedVersion: installedPluginVersion}),
-      };
-    }
-  }
-  return null;
-};
 
 export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
@@ -161,12 +137,7 @@ export const eslintConfigInternal = async (
       PACKAGES_TO_GET_INFO_FOR.map(async (name) => [name, await fetchPackageInfo(name)] as const),
     ),
     detectPackageManager(),
-    fs.readFile('.gitignore', 'utf8').catch((error: unknown) => {
-      if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
-        return null;
-      }
-      throw error;
-    }),
+    readFileSafe('.gitignore'),
     pluginsLoaders.tailwindcss(context).then(({module}) => module),
     pluginsLoaders.svelte(context).then(({module}) => module),
   ]);
@@ -196,7 +167,6 @@ export const eslintConfigInternal = async (
   } = optionsResolved;
 
   Object.assign(context.packagesInfo, packagesInfo satisfies UnConfigContext['packagesInfo']);
-  Object.assign(context.rootOptions, {...optionsResolved} satisfies UnConfigContext['rootOptions']);
   Object.assign(context.rootOptions, {...optionsResolved} satisfies UnConfigContext['rootOptions']);
   Object.assign(context.meta, {usedPackageManager} satisfies UnConfigContext['meta']);
 
