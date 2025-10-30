@@ -103,6 +103,16 @@ function genModuleLoader<T, Property extends string, N extends string>(
   } as ModuleLoader<T, Property, N>;
 }
 
+const loadEslintReactPlugin = (pluginName: string) =>
+  import('@eslint-react/eslint-plugin').then(
+    (m) =>
+      (
+        m.default.configs.all as {
+          plugins: Record<string, EslintPlugin>;
+        }
+      ).plugins[pluginName] || null,
+  );
+
 export const pluginsLoaders = {
   ...genModuleLoader(
     '@angular-eslint',
@@ -131,34 +141,22 @@ export const pluginsLoaders = {
     () => interopDefault(import('@eslint-community/eslint-plugin-eslint-comments')),
   ),
   ...genModuleLoader('@eslint-react', '@eslint-react/eslint-plugin', () =>
-    interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react'],
-    ),
+    loadEslintReactPlugin('@eslint-react'),
   ),
   ...genModuleLoader('@eslint-react/debug', '@eslint-react/eslint-plugin', () =>
-    interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/debug'],
-    ),
+    interopDefault(import('eslint-plugin-react-debug')),
   ),
   ...genModuleLoader('@eslint-react/dom', '@eslint-react/eslint-plugin', () =>
-    interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/dom'],
-    ),
+    loadEslintReactPlugin('@eslint-react/dom'),
   ),
   ...genModuleLoader('@eslint-react/hooks-extra', '@eslint-react/eslint-plugin', () =>
-    interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/hooks-extra'],
-    ),
+    loadEslintReactPlugin('@eslint-react/hooks-extra'),
   ),
   ...genModuleLoader('@eslint-react/naming-convention', '@eslint-react/eslint-plugin', () =>
-    interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/naming-convention'],
-    ),
+    loadEslintReactPlugin('@eslint-react/naming-convention'),
   ),
   ...genModuleLoader('@eslint-react/web-api', '@eslint-react/eslint-plugin', () =>
-    interopDefault(import('@eslint-react/eslint-plugin')).then(
-      (m) => m.configs.all.plugins['@eslint-react/web-api'],
-    ),
+    loadEslintReactPlugin('@eslint-react/web-api'),
   ),
   ...genModuleLoader('@html-eslint', '@html-eslint/eslint-plugin', () =>
     interopDefault(import('@html-eslint/eslint-plugin')),

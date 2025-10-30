@@ -22,6 +22,7 @@ const PACKAGE_GROUPS = Object.entries({
   'eslint-plugin-vue': ['vue-eslint-parser'],
   'eslint-plugin-astro': ['astro-eslint-parser'],
   'eslint-plugin-ember': ['ember-eslint-parser'],
+  '@eslint-react': ['eslint-plugin-react-debug'],
 }).reduce(
   (result, [groupName, packagesInGroup]) =>
     Object.assign(

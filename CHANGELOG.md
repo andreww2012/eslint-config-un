@@ -143,8 +143,9 @@
   - Added `allowedFeatures` option to conveniently set what CSS features will be ignored by [`use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md) rule.
 - `typescript-eslint`: [8.32.0 → 8.46.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.32.0...v8.46.0)
   - Set [`checkUnknown: true`](https://typescript-eslint.io/rules/no-base-to-string/#checkunknown) for [`no-base-to-string`](https://typescript-eslint.io/rules/no-base-to-string) rule.
-- `@eslint-react/eslint-plugin`: [1.49.0 → 2.0.6](https://github.com/Rel1cx/eslint-react/compare/v1.49.0...v2.0.6)
-  - Some rules have been renamed and removed. Please refer to [v2 migration guide](https://github.com/Rel1cx/eslint-react/releases/tag/v2.0.0) for more details.
+- `@eslint-react/eslint-plugin`: [1.49.0 → 2.2.4](https://github.com/Rel1cx/eslint-react/compare/v1.49.0...v2.2.4)
+  - [**BREAKING**] Some rules have been renamed and removed. Please refer to [v2 migration guide](https://github.com/Rel1cx/eslint-react/releases/tag/v2.0.0) for more details.
+  - [**BREAKING**] Debug rules have been moved to a separate [`eslint-plugin-react-debug`](https://npmjs.com/eslint-plugin-react-debug) package.
   - 🔴 (not enabled) [`jsx-no-iife`](https://eslint-react.xyz/docs/rules/jsx-no-iife)
   - 🟢 (enabled) [`no-unnecessary-key`](https://eslint-react.xyz/docs/rules/no-unnecessary-key)
   - 🟡 (enabled, warns) [`no-forbidden-props`](https://eslint-react.xyz/docs/rules/no-forbidden-props)
