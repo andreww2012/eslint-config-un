@@ -25,3 +25,9 @@ peerDependencyRules:
     '@typescript-eslint/utils@7>eslint': '*'
     '@typescript-eslint/utils@8.38>typescript': '*'
     eslint-plugin-no-type-assertion@1.3>eslint: '*'
+
+overrides:
+  eslint>@eslint/core: 0.17.0
+  '@eslint/css>@eslint/core': 0.17.0
+  '@eslint/markdown>@eslint/core': 0.17.0
+  '@eslint/plugin-kit@0.3.5>@eslint/core': 0.17.0
