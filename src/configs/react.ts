@@ -1393,6 +1393,7 @@ export const reactUnConfig: UnConfigFn<
     .addRule('no-manage-parent', ERROR) /** @since 0.3.1 */ // 🟡
     .addRule('no-pass-data-to-parent', ERROR) /** @since 0.4.0 */ // 🟡
     .addRule('no-pass-live-state-to-parent', ERROR) /** @since 0.3.0 */ // 🟡
+    .addRule('no-pass-ref-to-parent', OFF) /** @since 0.7.0 */ // 🟡
     .addRule('no-reset-all-state-on-prop-change', ERROR) /** @since 0.5.0 */ // 🟡 (renamed, original rules added in 0.3.0)
     .enableConfigTesterForPlugin('react-you-might-not-need-an-effect')
     .addOverrides();
