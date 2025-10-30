@@ -331,6 +331,7 @@
   - 🟡 `incompatible-library`
   - 🔴 (not enabled) `hooks`
   - 🔴 `todo`
+- `eslint-plugin-css`: [0.11.0 → 0.11.1](https://github.com/ota-meshi/eslint-plugin-css/compare/v0.11.0...v0.11.1)
 
 ## 0.10.0
 
