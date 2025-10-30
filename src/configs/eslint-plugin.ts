@@ -164,6 +164,10 @@ export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
       'require-meta-type',
       getRuleEnforcingMetaPropertySeverity('type', 'enforce'),
     ) /** @since 2.0.0 */ // 🟢
+    .addRule('require-test-case-name', ERROR, [
+      {require: 'objects-with-config'} /** Default: objects-with-config */,
+    ]) /** @since 7.1.0 */
+    .addRule('unique-test-case-names', ERROR) /** @since 7.2.0 */
     .enableConfigTesterForPlugin('eslint-plugin', {
       rulesToSkipInConfig: (ruleName) => ESLINT_PLUGIN_TESTING_RELATED_RULES_SET.has(ruleName),
     })
