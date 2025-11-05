@@ -65,9 +65,7 @@ const PNPM_YAML_RULES = new Set<string>([
   'yaml-valid-packages',
 ] satisfies RuleNamesForPlugin<'pnpm'>[]);
 
-export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
-  const jsoncEslintParser = await import('jsonc-eslint-parser');
-
+export const pnpmUnConfig: UnConfigFn<'pnpm'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.pnpm;
   const optionsResolved = assignDefaults(optionsRaw, {
     configPackageJson: true,
@@ -90,17 +88,15 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = async (context) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesFallback: ['package.json', '**/package.json'],
-          ...(pluginSettings && {
-            settings: {
-              pnpm: pluginSettings,
-            },
-          }),
+          parser: 'jsonc-eslint-parser',
         },
       ],
       {
-        languageOptions: {
-          parser: jsoncEslintParser,
-        },
+        ...(pluginSettings && {
+          settings: {
+            pnpm: pluginSettings,
+          },
+        }),
       },
     )
     .addRule(

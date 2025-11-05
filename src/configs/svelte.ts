@@ -1,8 +1,8 @@
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
 import {type RuleNamesForPlugin, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {pluginsLoaders} from '../plugins';
-import {assignDefaults, doesPackageExist, getKeysOfTruthyValues, interopDefault} from '../utils';
+import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
+import {assignDefaults, doesPackageExist, getKeysOfTruthyValues} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import type {UnConfigFn} from './index';
@@ -99,10 +99,7 @@ const SVELTE_SYSTEM_RULES = new Set<string>([
 ] satisfies RuleNamesForPlugin<'svelte'>[]);
 
 export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
-  const [eslintPluginSvelte, {parser: typescriptEslintParser}] = await Promise.all([
-    pluginsLoaders.svelte(context).then(({module}) => module),
-    interopDefault(import('typescript-eslint')),
-  ]);
+  const eslintPluginSvelte = await pluginsLoaders.svelte(context).then(({module}) => module);
 
   context.usedPlugins.add('svelte');
   if (!eslintPluginSvelte) {
@@ -148,12 +145,13 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
       {
         languageOptions: {
           parserOptions: {
-            parser: isTypescriptEnabled ? typescriptEslintParser : undefined,
+            ...(isTypescriptEnabled &&
+              generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
             ...(svelteKitConfig && {svelteConfig: svelteKitConfig}),
           },
           sourceType: 'module',
         },
-        processor: eslintPluginSvelte.processors.svelte,
+        ...generatePackageToLoadProperty('processor', 'svelteProcessor'),
         ...(pluginSettings && {
           settings: {
             svelte: pluginSettings,

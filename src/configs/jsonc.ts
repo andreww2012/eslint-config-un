@@ -1,6 +1,6 @@
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, OFF} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults} from '../utils';
 import {JSONC_DEFAULT_FILES} from './shared';
 import type {UnConfigFn} from './index';
 
@@ -31,9 +31,7 @@ export interface JsoncEslintConfigOptions extends UnConfigOptions<'jsonc'> {
   doNotMergeFilesWithDefault?: boolean;
 }
 
-export const jsoncUnConfig: UnConfigFn<'json'> = async (context) => {
-  const jsoncEslintParser = await interopDefault(import('jsonc-eslint-parser'));
-
+export const jsoncUnConfig: UnConfigFn<'json'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.json;
   const optionsResolved = assignDefaults(optionsRaw, {
     doNotMergeFilesWithDefault: false,
@@ -49,23 +47,17 @@ export const jsoncUnConfig: UnConfigFn<'json'> = async (context) => {
   // 🟣 = in main
 
   configBuilder
-    ?.addConfig(
-      [
-        'jsonc/all',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesFallback: JSONC_DEFAULT_FILES,
-          mergeUserFilesWithFallback: !doNotMergeFilesWithDefault,
-          doNotIgnoreMarkdown: true,
-          doNotIgnoreMdx: true,
-        },
-      ],
+    ?.addConfig([
+      'jsonc/all',
       {
-        languageOptions: {
-          parser: jsoncEslintParser,
-        },
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: JSONC_DEFAULT_FILES,
+        mergeUserFilesWithFallback: !doNotMergeFilesWithDefault,
+        doNotIgnoreMarkdown: true,
+        doNotIgnoreMdx: true,
+        parser: 'jsonc-eslint-parser',
       },
-    )
+    ])
     .markCategory('Main rules')
     .addRule('auto', OFF) /** @since 0.8.0 */
     .addRule('key-name-casing', OFF) /** @since 0.8.0 */

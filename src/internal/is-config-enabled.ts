@@ -1,26 +1,8 @@
-import type {recommended as fastImportPluginConfigGenerator} from 'eslint-plugin-fast-import';
 import semver from 'semver';
-import type {UnConfigContext, UnConfigs} from './configs';
-import type {PACKAGES_TO_GET_INFO_FOR} from './constants';
-import type {EslintPlugin, RuleNamesForPlugin} from './eslint';
-import {OPTIONAL_PEER_DEPENDENCIES, type PluginPrefix} from './plugins';
-import type {NonEmptyTuple} from './types';
-import {
-  type MaybeArray,
-  arraify,
-  fetchPackageInfo,
-  isIn,
-  objectEntriesUnsafe,
-  styleText,
-} from './utils';
-
-const generateStyleFn = (color: Parameters<typeof styleText>[0]) => (string: string) =>
-  styleText(color, string);
-
-export const styleConfigName = generateStyleFn('yellow');
-export const stylePackageName = generateStyleFn('yellow');
-export const stylePluginPrefix = generateStyleFn('blue');
-export const styleRuleName = generateStyleFn('green');
+import type {UnConfigContext, UnConfigs} from '../configs';
+import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
+import {type MaybeArray, arraify, styleText} from '../utils';
+import {styleConfigName, stylePackageName} from './styling';
 
 const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
   'security',
@@ -152,86 +134,3 @@ export function getIsConfigEnabled(
 
   return isEnabled;
 }
-
-export const checkIfModuleCorrectlyLoaded = async (
-  moduleResult: {packageName: string; module: unknown} | null,
-) => {
-  const plugin = moduleResult?.module;
-  if (moduleResult && isIn(moduleResult.packageName, OPTIONAL_PEER_DEPENDENCIES)) {
-    const installedPluginVersion = plugin
-      ? (await fetchPackageInfo(moduleResult.packageName))?.versions.full
-      : null;
-    const versionRange = OPTIONAL_PEER_DEPENDENCIES[moduleResult.packageName];
-    if (
-      !plugin ||
-      (installedPluginVersion && !semver.satisfies(installedPluginVersion, versionRange))
-    ) {
-      return {
-        name: moduleResult.packageName,
-        versionRange,
-        ...(installedPluginVersion && {installedVersion: installedPluginVersion}),
-      };
-    }
-  }
-  return null;
-};
-
-// TODO: move to configs/fast-import
-export type FastImportPluginSettings = Parameters<typeof fastImportPluginConfigGenerator>[0];
-
-const IMPORT_RULES_TO_REPLACE = {
-  'no-cycle': 'no-cycle',
-  'no-named-as-default': 'no-named-as-default',
-  'no-unresolved': 'no-unresolved-imports',
-} satisfies Partial<Record<RuleNamesForPlugin<'import'>, RuleNamesForPlugin<'fast-import'>>>;
-
-export type ImportPluginReplaceableRules = keyof typeof IMPORT_RULES_TO_REPLACE;
-
-export const replaceImportRulesImplementationWithFastPlugin = (
-  context: UnConfigContext,
-  loadedPlugins: Partial<Record<PluginPrefix, EslintPlugin>>,
-): void => {
-  const {useFastImport} = context.rootOptions;
-  const {import: originalPlugin, 'fast-import': fastPlugin} = loadedPlugins;
-  if (!useFastImport || !originalPlugin || !fastPlugin) {
-    return;
-  }
-
-  const {replaceRules} = typeof useFastImport === 'object' ? useFastImport : {};
-
-  const originalPluginPatched: EslintPlugin = {
-    ...originalPlugin,
-    rules: {
-      ...originalPlugin.rules,
-      ...Object.fromEntries(
-        objectEntriesUnsafe(IMPORT_RULES_TO_REPLACE)
-          .map(([originalRuleName, fastRuleName]) => {
-            const fastRuleImplementation = fastPlugin.rules?.[fastRuleName];
-            if (!fastRuleImplementation || replaceRules?.[originalRuleName] === false) {
-              return null;
-            }
-
-            const fastRuleSchema = fastRuleImplementation.meta?.schema;
-            return [
-              originalRuleName,
-              {
-                ...fastRuleImplementation,
-                meta: {
-                  ...fastRuleImplementation.meta,
-                  schema:
-                    fastRuleSchema &&
-                    // eslint-disable-next-line de-morgan/no-negated-conjunction
-                    !(Array.isArray(fastRuleSchema) && fastRuleSchema.length === 0)
-                      ? fastRuleSchema
-                      : [{type: 'object'}], // Allows any properties
-                },
-              },
-            ] satisfies NonEmptyTuple;
-          })
-          .filter((v) => v != null),
-      ),
-    },
-  };
-
-  loadedPlugins.import = originalPluginPatched;
-};

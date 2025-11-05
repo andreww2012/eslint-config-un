@@ -1,6 +1,6 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults} from '../utils';
 import {DEFAULT_FILES_PACKAGE_JSON} from './package-json';
 import type {UnConfigFn} from './index';
 
@@ -20,9 +20,7 @@ export interface NodeDependenciesEslintConfigOptions extends UnConfigOptions<'no
     | (GetRuleOptions<'node-dependencies', 'absolute-version'> & object);
 }
 
-export const nodeDependenciesUnConfig: UnConfigFn<'nodeDependencies'> = async (context) => {
-  const jsoncEslintParser = await interopDefault(import('jsonc-eslint-parser'));
-
+export const nodeDependenciesUnConfig: UnConfigFn<'nodeDependencies'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.nodeDependencies;
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceAbsoluteVersion: false,
@@ -36,17 +34,14 @@ export const nodeDependenciesUnConfig: UnConfigFn<'nodeDependencies'> = async (c
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(
-      [
-        'node-dependencies',
-        {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_FILES_PACKAGE_JSON},
-      ],
+    ?.addConfig([
+      'node-dependencies',
       {
-        languageOptions: {
-          parser: jsoncEslintParser,
-        },
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: DEFAULT_FILES_PACKAGE_JSON,
+        parser: 'jsonc-eslint-parser',
       },
-    )
+    ])
     .markCategory('Possible Errors')
     .addRule('compat-engines', WARNING) /** @since 0.5.0 */ // 🟢
     .addRule('no-dupe-deps', ERROR) /** @since 0.8.0 */ // 🟢

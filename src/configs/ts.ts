@@ -18,16 +18,9 @@ import {
   createConfigBuilder,
   getRuleUnSeverityAndOptionsFromEntry,
 } from '../eslint';
+import {generatePackageToLoadProperty} from '../plugins';
 import type {ObjectValues} from '../types';
-import {
-  type MaybeFn,
-  assignDefaults,
-  interopDefault,
-  isIn,
-  maybeCall,
-  omit,
-  unique,
-} from '../utils';
+import {type MaybeFn, assignDefaults, isIn, maybeCall, omit, unique} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
@@ -537,7 +530,7 @@ export const tsUnConfig: UnConfigFn<
       svelteResolvedOptions: SvelteEslintConfigOptions | null;
     },
   ]
-> = async (
+> = (
   context,
   {vanillaFinalFlatConfigRules, astroResolvedOptions, vueResolvedOptions, svelteResolvedOptions},
 ) => {
@@ -565,11 +558,6 @@ export const tsUnConfig: UnConfigFn<
     typescriptVersion,
     allowDefaultProject,
   } = optionsResolved;
-
-  const [{parser: typescriptEslintParser}, jsoncEslintParser] = await Promise.all([
-    interopDefault(import('typescript-eslint')),
-    configSortTsconfigKeys ? interopDefault(import('jsonc-eslint-parser')) : null,
-  ]);
 
   const extraFilesNONTypeAware: string[] = [];
   const extraFilesTypeAware: string[] = [];
@@ -649,7 +637,7 @@ export const tsUnConfig: UnConfigFn<
         files: files.length > 0 ? files : TS_FILES_DEFAULT,
         ignores,
         languageOptions: {
-          parser: typescriptEslintParser,
+          ...generatePackageToLoadProperty('parser', 'typescriptEslintParser'),
           parserOptions: {
             extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
             sourceType: 'module',
@@ -1246,22 +1234,14 @@ export const tsUnConfig: UnConfigFn<
           : [];
 
     configBuilderSortTsconfigKeys
-      ?.addConfig(
-        [
-          'sort-tsconfig-keys',
-          {
-            includeDefaultFilesAndIgnores: true,
-            filesFallback: ['**/tsconfig.json', '**/*.tsconfig.json', '**/tsconfig.*.json'],
-          },
-        ],
+      ?.addConfig([
+        'sort-tsconfig-keys',
         {
-          ...(jsoncEslintParser && {
-            languageOptions: {
-              parser: jsoncEslintParser,
-            },
-          }),
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: ['**/tsconfig.json', '**/*.tsconfig.json', '**/tsconfig.*.json'],
+          parser: 'jsonc-eslint-parser',
         },
-      )
+      ])
       .addAnyRule('jsonc', 'sort-keys', ERROR, [
         {
           pathPattern: '^$',

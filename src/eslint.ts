@@ -20,8 +20,14 @@ import {
 import type {FixableRuleNames as AllEslintFixableRuleNames} from './eslint-types-fixable-only.gen';
 import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin.gen';
 import type {RuleOptions} from './eslint-types.gen';
-import {styleConfigName} from './internal';
-import {PLUGIN_PREFIXES_LIST, type ParserPrefix, type PluginPrefix} from './plugins';
+import {styleConfigName} from './internal/styling';
+import {
+  PLUGIN_PREFIXES_LIST,
+  type PackageToLoadInfo,
+  type ParserPrefix,
+  type PluginPrefix,
+  packageToLoadSymbol,
+} from './plugins';
 import type {
   EmptyObject,
   FalsyValue,
@@ -36,8 +42,10 @@ import type {
 } from './types';
 import {
   type MaybeFn,
+  arraify,
   arrayMap,
   cloneDeep,
+  createTraverser,
   findArrayInversions,
   groupBy,
   maybeCall,
@@ -176,6 +184,8 @@ export type UnConfigOptions<
 >;
 
 export const genFlatConfigEntryName = (name: string) => `eslint-config-un/${name}`;
+export const isUnFlatConfigEntry = (flatConfigEntry: FlatConfigEntry) =>
+  (flatConfigEntry.name || '').startsWith('eslint-config-un/');
 
 export const eslintPluginVanillaRules: EslintPlugin = Object.freeze({
   // eslint-disable-next-line ts/no-deprecated
@@ -480,6 +490,28 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
         configFinal,
       ]);
     }
+
+    const configTraverser = createTraverser(
+      config /* We only need to traverse the passed config, not the final */,
+      {includeSymbols: true},
+    );
+    configTraverser.forEach((traverseContext, value) => {
+      if (traverseContext.key !== packageToLoadSymbol) {
+        return;
+      }
+
+      const info = value as PackageToLoadInfo;
+      arraify(info.package).forEach((packageId) => {
+        this.context.usedPackages.set(packageId, [
+          ...(this.context.usedPackages.get(packageId) || []),
+          {
+            config: configFinal,
+            path: traverseContext.path.slice(0, -1).join('.'),
+            info,
+          },
+        ]);
+      });
+    });
 
     let currentCategory = '';
     const addedRules: Partial<Record<PluginPrefix, Record<string, string /* Category */>>> = {};

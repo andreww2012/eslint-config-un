@@ -543,6 +543,19 @@ It can also be enabled by setting `ESLINT_CONFIG_UN_OFFLINE_MODE` environment va
 
 Allows to override certain [`eslint-plugin-import-x`] plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import).
 
+### `cacheConfigs`
+
+Enables flat config caching. This option is enabled by default when running in editor (detected by [`is-in-editor`](https://npmjs.com/is-in-editor)). It can also be enabled by setting `ESLINT_CONFIG_UN_CACHE_CONFIGS` environment variable to non-empty string, but the explicitly passed value takes precedence.
+
+Note that caching might fail if the config contains unserializable data, such as functions.
+
+Cache will be stored in `node_modules/.cache/eslint-config-un/config.json` and considered fresh for 1 hour, unless one of the following is changed:
+
+- Current git revision (`git rev-parse HEAD`) or root `.gitignore` contents
+- `package.json`, lockfile contents or package manager
+- ESLint config file contents
+- Node.JS version
+
 ## FAQ
 
 ### How do I add my own flat configs?

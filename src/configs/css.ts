@@ -1,7 +1,8 @@
 import type {CSSLanguageOptions} from '@eslint/css';
 import {ERROR, GLOB_CSS, OFF, WARNING} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
+import {generatePackageToLoadProperty} from '../plugins';
+import {assignDefaults, getKeysOfTruthyValues} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
@@ -46,7 +47,7 @@ export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
   };
 }
 
-export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
+export const cssUnConfig: UnConfigFn<'css'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.css;
   const optionsResolved = assignDefaults(optionsRaw, {
     tolerantMode: false,
@@ -77,20 +78,25 @@ export const cssUnConfig: UnConfigFn<'css'> = async (context) => {
         language: 'css/css',
         languageOptions: {
           ...(tolerantMode && {tolerant: true}),
-          customSyntax: {
-            ...(await (async () => {
-              if (
-                tailwindPackageInfo &&
-                (tailwindMajorVersion === 4 || tailwindMajorVersion === 3)
-              ) {
-                return (await interopDefault(import('tailwind-csstree')))[
-                  `tailwind${tailwindMajorVersion}`
-                ];
-              }
-              return null;
-            })()),
-            ...customSyntax,
-          },
+          customSyntax,
+          ...(tailwindPackageInfo &&
+            (tailwindMajorVersion === 4 || tailwindMajorVersion === 3) &&
+            generatePackageToLoadProperty('customSyntax', 'tailwindCsstree', {
+              valueTransformFn: {
+                fn(
+                  this: {tailwindMajorVersion: typeof tailwindMajorVersion},
+                  {tailwindCsstree},
+                  currentValue,
+                ) {
+                  return {
+                    ...tailwindCsstree[`tailwind${this.tailwindMajorVersion}`],
+                    // eslint-disable-next-line ts/no-misused-spread
+                    ...new Object(currentValue),
+                  };
+                },
+                scope: {tailwindMajorVersion},
+              },
+            })),
         },
       },
     )

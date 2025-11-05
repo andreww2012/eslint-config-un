@@ -1,9 +1,9 @@
 // cspell:ignore canonicalurl fetchcontent getentrybyslug
 import {ERROR, GLOB_ASTRO, OFF, WARNING} from '../constants';
 import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {pluginsLoaders} from '../plugins';
+import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
 import type {PickKeysNotStartingWith, PickKeysStartingWith} from '../types';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults} from '../utils';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {UnConfigFn} from './index';
 
@@ -28,10 +28,7 @@ export interface AstroEslintConfigOptions
 const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
 
 export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
-  const [eslintPluginAstro, {parser: typescriptEslintParser}] = await Promise.all([
-    pluginsLoaders.astro(context).then(({module}) => module),
-    interopDefault(import('typescript-eslint')),
-  ]);
+  const eslintPluginAstro = await pluginsLoaders.astro(context).then(({module}) => module);
 
   context.usedPlugins.add('astro');
   if (!eslintPluginAstro) {
@@ -62,13 +59,13 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
       languageOptions: {
         globals: eslintPluginAstro.environments.astro.globals,
         parserOptions: {
-          parser: isTypescriptEnabled ? typescriptEslintParser : undefined,
+          ...(isTypescriptEnabled &&
+            generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
         },
         sourceType: 'module',
       },
-      ...(isTypescriptEnabled && {
-        processor: eslintPluginAstro.processors['client-side-ts'],
-      }),
+      ...(isTypescriptEnabled &&
+        generatePackageToLoadProperty('processor', 'astroClientSideTsProcessor')),
     },
   );
 

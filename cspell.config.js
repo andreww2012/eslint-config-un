@@ -40,6 +40,7 @@ export default {
     'tsgo',
     'tinyexec',
     'cleye',
+    'neotraverse',
 
     // Technical words/terms
     'arraify',

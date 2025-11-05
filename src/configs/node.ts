@@ -2,8 +2,8 @@ import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-res
 import {Range, subset as isFirstSemverRangeIsSubsetOfSecond} from 'semver';
 import {ERROR, OFF} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import type {PrettifyShallow} from '../types';
-import {assignDefaults, interopDefault, readAndParsePackageJson} from '../utils';
+import type {PackageJson, PrettifyShallow} from '../types';
+import {assignDefaults, interopDefault, readAndParseJson} from '../utils';
 import type {UnConfigFn} from './index';
 
 interface EslintPluginNSettings {
@@ -178,7 +178,7 @@ const IMPORT_META_PROPERTIES_AVAILABLE_SINCE = '>=20.11';
 export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
   const closestPackageJson = await interopDefault(import('empathic/package'))
     .then((m) => m.up())
-    .then((packageJsonPath) => readAndParsePackageJson(packageJsonPath));
+    .then((packageJsonPath) => readAndParseJson<PackageJson>(packageJsonPath));
 
   const optionsRaw = context.rootOptions.configs?.node;
   const optionsResolved = assignDefaults(optionsRaw, {

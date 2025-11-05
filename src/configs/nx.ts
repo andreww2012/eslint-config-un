@@ -1,6 +1,6 @@
 import {ERROR, GLOB_JSON, GLOB_TSX, OFF} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface NxEslintConfigOptions extends UnConfigOptions<'nx'> {
@@ -10,9 +10,7 @@ export interface NxEslintConfigOptions extends UnConfigOptions<'nx'> {
   enforceModuleBoundaries?: boolean | GetRuleOptions<'nx', 'enforce-module-boundaries'>;
 }
 
-export const nxUnConfig: UnConfigFn<'nx'> = async (context) => {
-  const jsoncEslintParser = await interopDefault(import('jsonc-eslint-parser'));
-
+export const nxUnConfig: UnConfigFn<'nx'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.nx;
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceModuleBoundaries: false,
@@ -40,20 +38,14 @@ export const nxUnConfig: UnConfigFn<'nx'> = async (context) => {
   const configBuilderJson = createConfigBuilder(context, optionsResolved, 'nx');
 
   configBuilderJson
-    ?.addConfig(
-      [
-        'nx/json',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_JSON],
-        },
-      ],
+    ?.addConfig([
+      'nx/json',
       {
-        languageOptions: {
-          parser: jsoncEslintParser,
-        },
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: [GLOB_JSON],
+        parser: 'jsonc-eslint-parser',
       },
-    )
+    ])
     .addRule('dependency-checks', ERROR) /** @since 16.4.0 */
     .addRule('enforce-module-boundaries', OFF) /** @since 16.0.0 */
     .addRule('nx-plugin-checks', ERROR) /** @since 16.0.0 */

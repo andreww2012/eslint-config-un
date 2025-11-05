@@ -1,11 +1,20 @@
 import {fixupPluginRules} from '@eslint/compat';
+import type {Processor as EslintProcessor} from '@eslint/core';
 import stylistic from '@stylistic/eslint-plugin';
 import type Eslint from 'eslint';
 import ourPackageJson from '../package.json' with {type: 'json'};
 import type {UnConfigContext} from './configs';
 import type {EslintPlugin} from './eslint';
-import type {ObjectValues, Promisable} from './types';
-import {type MaybeArray, arraify, interopDefault, isIn, objectKeysUnsafe, omit} from './utils';
+import type {ObjectValues, OmitStrict, Promisable} from './types';
+import {
+  type MaybeArray,
+  arraify,
+  cloneDeep,
+  interopDefault,
+  isIn,
+  objectKeysUnsafe,
+  omit,
+} from './utils';
 
 export const OPTIONAL_PEER_DEPENDENCIES = omit(ourPackageJson.peerDependencies, ['eslint']);
 
@@ -102,6 +111,8 @@ function genModuleLoader<T, Property extends string, N extends string>(
     [property]: loader,
   } as ModuleLoader<T, Property, N>;
 }
+
+type EslintParser = Eslint.Linter.Parser;
 
 const loadEslintReactPlugin = (pluginName: string) =>
   import('@eslint-react/eslint-plugin').then(
@@ -269,8 +280,8 @@ export const pluginsLoaders = {
     () =>
       interopDefault(import('@graphql-eslint/eslint-plugin')) as Promise<
         EslintPlugin & {
-          processor: Eslint.Linter.Processor;
-          parser: Eslint.Linter.Parser;
+          processor: EslintProcessor;
+          parser: EslintParser;
         }
       >,
   ),
@@ -607,14 +618,16 @@ export const PLUGIN_PREFIXES_LIST: readonly PluginPrefix[] = [
   ...objectKeysUnsafe(pluginsLoaders),
 ];
 
-// Not included because they're often used:
-// - jsonc-eslint-parser
-// - typescript-eslint
 export const parsersLoaders = {
   ...genModuleLoader(
     '@angular-eslint/template-parser',
     '@angular-eslint/template-parser',
     () => import('@angular-eslint/template-parser'),
+  ),
+  ...genModuleLoader(
+    '@html-eslint/parser',
+    '@html-eslint/parser',
+    () => import('@html-eslint/parser'),
   ),
   ...genModuleLoader(
     'astro-eslint-parser',
@@ -626,6 +639,17 @@ export const parsersLoaders = {
     'ember-eslint-parser',
     () => import('ember-eslint-parser'),
   ),
+  ...genModuleLoader('graphql-eslint-parser', '@graphql-eslint/eslint-plugin', () =>
+    // TODO cannot infer type when building declaration files for some reason unless something like `any` is used
+    // eslint-disable-next-line ts/no-unsafe-return, ts/no-explicit-any
+    import('@graphql-eslint/eslint-plugin').then((m) => m.parser as any),
+  ),
+  ...genModuleLoader(
+    'jsonc-eslint-parser',
+    'jsonc-eslint-parser',
+    () => import('jsonc-eslint-parser'),
+  ),
+  ...genModuleLoader('mdx-eslint-parser', 'eslint-mdx', () => import('eslint-mdx')),
   ...genModuleLoader(
     'svelte-eslint-parser',
     'svelte-eslint-parser',
@@ -642,18 +666,107 @@ export const parsersLoaders = {
     () => import('yaml-eslint-parser'),
   ),
   ...genModuleLoader('vue-eslint-parser', 'vue-eslint-parser', () => import('vue-eslint-parser')),
-} satisfies Record<string, ObjectValues<ModuleLoader<Eslint.Linter.Parser>>>;
+} satisfies Record<string, ObjectValues<ModuleLoader<EslintParser>>>;
 
 export type ParserPrefix = keyof typeof parsersLoaders;
 const LOADABLE_PARSERS_NAMES = objectKeysUnsafe(parsersLoaders);
 
 export const packagesLoaders = {
+  ...genModuleLoader(
+    'angularExtractInlineHtmlProcessor',
+    '@angular-eslint/eslint-plugin-template',
+    () =>
+      interopDefault(import('@angular-eslint/eslint-plugin-template')).then((module) => {
+        const fixedProcessor = cloneDeep(
+          module.processors['extract-inline-html'] as EslintProcessor,
+        );
+        fixedProcessor.meta ||= {name: 'extract-inline-html'};
+        return fixedProcessor;
+      }),
+  ),
+  ...genModuleLoader('astroClientSideTsProcessor', 'eslint-plugin-astro', () =>
+    interopDefault(import('eslint-plugin-astro')).then(
+      (module) => module.processors['client-side-ts'],
+    ),
+  ),
+  ...genModuleLoader('eslintMergeProcessors', 'eslint-merge-processors', () =>
+    interopDefault(import('eslint-merge-processors')),
+  ),
+  ...genModuleLoader('eslintPluginGraphql', '@graphql-eslint/eslint-plugin', () =>
+    interopDefault(import('@graphql-eslint/eslint-plugin')),
+  ),
+  ...genModuleLoader('eslintPluginImportX', 'eslint-plugin-import-x', () =>
+    interopDefault(import('eslint-plugin-import-x')),
+  ),
+  ...genModuleLoader('eslintPluginMarkdown', '@eslint/markdown', () =>
+    interopDefault(import('@eslint/markdown')),
+  ),
+  ...genModuleLoader('eslintPluginMdx', 'eslint-plugin-mdx', () =>
+    interopDefault(import('eslint-plugin-mdx')),
+  ),
+  ...genModuleLoader('importResolverTypescript', 'eslint-import-resolver-typescript', () =>
+    interopDefault(import('eslint-import-resolver-typescript')),
+  ),
+  ...genModuleLoader('mergeProcessors', 'eslint-merge-processors', () =>
+    interopDefault(import('eslint-merge-processors')),
+  ),
+  ...genModuleLoader('svelteProcessor', 'eslint-plugin-svelte', () =>
+    interopDefault(import('eslint-plugin-svelte')).then((m) => m.processors.svelte),
+  ),
+  ...genModuleLoader('tailwindCsstree', 'tailwind-csstree', () =>
+    interopDefault(import('tailwind-csstree')),
+  ),
+  ...genModuleLoader('typescriptEslintParser', 'typescript-eslint', () =>
+    interopDefault(import('typescript-eslint')).then(
+      (m) => m.parser as {parseForESLint: (...args: unknown[]) => unknown},
+    ),
+  ),
   ...genModuleLoader('vueBlocksProcessor', 'eslint-processor-vue-blocks', () =>
     interopDefault(import('eslint-processor-vue-blocks')),
   ),
-  ...genModuleLoader('vueCompilerSfc', '@vue/compiler-sfc', () =>
-    interopDefault(import('@vue/compiler-sfc')),
+  ...genModuleLoader('vueProcessor', 'eslint-plugin-vue', () =>
+    interopDefault(import('eslint-plugin-vue')).then(
+      (module) => module.processors['.vue'] as EslintProcessor,
+    ),
   ),
 };
 
 export type LoadablePackagePrefix = keyof typeof packagesLoaders;
+
+export const packageToLoadSymbol = Symbol('eslint-config-un packageToLoad');
+export interface PackageToLoadInfo<
+  Packages extends LoadablePackagePrefix = LoadablePackagePrefix,
+  ValueTransformFnContext = unknown,
+> {
+  package: MaybeArray<Packages>;
+  property: string;
+  valueTransformFn?: {
+    fn: (
+      this: ValueTransformFnContext,
+      modules: {
+        [Package in Packages]: Awaited<
+          ReturnType<(typeof packagesLoaders)[Package & LoadablePackagePrefix]>
+        >['module'] & {};
+      },
+      existingPropertyValue: unknown,
+    ) => unknown;
+    scope?: ValueTransformFnContext;
+  };
+}
+export const generatePackageToLoadProperty = <
+  const Packages extends LoadablePackagePrefix,
+  ValueTransformFnContext,
+>(
+  property: string,
+  packageIds: MaybeArray<Packages>,
+  options: OmitStrict<
+    PackageToLoadInfo<Packages, ValueTransformFnContext>,
+    'package' | 'property'
+  > = {},
+) => ({
+  [packageToLoadSymbol]: {
+    package: packageIds,
+    property,
+    ...options,
+  } satisfies PackageToLoadInfo<Packages, ValueTransformFnContext>,
+});

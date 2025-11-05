@@ -6,7 +6,7 @@ import {
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
-import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
+import {assignDefaults, getKeysOfTruthyValues} from '../utils';
 import type {UnConfigFn} from './index';
 
 export const DEFAULT_FILES_PACKAGE_JSON = [GLOB_PACKAGE_JSON];
@@ -123,9 +123,7 @@ export interface PackageJsonEslintConfigOptions
   propertiesAllowedToBeEmpty?: string[];
 }
 
-export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) => {
-  const jsoncEslintParser = await interopDefault(import('jsonc-eslint-parser'));
-
+export const packageJsonUnConfig: UnConfigFn<'packageJson'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.packageJson;
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceAbsoluteVersion: false,
@@ -151,12 +149,13 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = async (context) =>
     ?.addConfig(
       [
         'package-json',
-        {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_FILES_PACKAGE_JSON},
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: DEFAULT_FILES_PACKAGE_JSON,
+          parser: 'jsonc-eslint-parser',
+        },
       ],
       {
-        languageOptions: {
-          parser: jsoncEslintParser,
-        },
         ...(pluginSettings && {
           settings: {
             packageJson: pluginSettings,

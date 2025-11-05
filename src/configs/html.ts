@@ -1,7 +1,7 @@
 import type {ParserOptions as HtmlEslintParserOptions} from '@html-eslint/parser';
 import {ERROR, GLOB_HTML_ALL, OFF, WARNING} from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, getKeysOfTruthyValues, interopDefault} from '../utils';
+import {assignDefaults, getKeysOfTruthyValues} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import type {UnConfigFn} from './index';
@@ -45,9 +45,7 @@ export interface HtmlEslintConfigOptions
   parserOptions?: HtmlEslintParserOptions;
 }
 
-export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
-  const eslintParserHtml = await interopDefault(import('@html-eslint/parser'));
-
+export const htmlUnConfig: UnConfigFn<'html'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.html;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies HtmlEslintConfigOptions);
 
@@ -67,11 +65,11 @@ export const htmlUnConfig: UnConfigFn<'html'> = async (context) => {
           includeDefaultFilesAndIgnores: true,
           doNotIgnoreHtml: true,
           filesFallback: GLOB_HTML_ALL,
+          parser: '@html-eslint/parser',
         },
       ],
       {
         languageOptions: {
-          parser: eslintParserHtml,
           ...(parserOptions && {parserOptions}),
         },
         ...(pluginSettings && {

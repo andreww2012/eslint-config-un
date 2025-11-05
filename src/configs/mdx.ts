@@ -4,9 +4,9 @@ import {
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
-import {pluginsLoaders} from '../plugins';
+import {generatePackageToLoadProperty} from '../plugins';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults} from '../utils';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';
 import type {UnConfigFn} from './index';
@@ -40,12 +40,7 @@ export interface MdxEslintConfigOptions
 const DEFAULT_FILES = [GLOB_MDX];
 const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MDX_SUPPORTED_CODE_BLOCKS];
 
-export const mdxUnConfig: UnConfigFn<'mdx'> = async (context) => {
-  const [eslintPluginMdx, eslintParserMdx] = await Promise.all([
-    pluginsLoaders.mdx(context).then(({module}) => module),
-    interopDefault(import('eslint-mdx')),
-  ]);
-
+export const mdxUnConfig: UnConfigFn<'mdx'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.mdx;
   const optionsResolved = assignDefaults(optionsRaw, {
     lintCodeBlocks: true,
@@ -74,11 +69,11 @@ export const mdxUnConfig: UnConfigFn<'mdx'> = async (context) => {
           includeDefaultFilesAndIgnores: true,
           doNotIgnoreMdx: true,
           filesFallback: DEFAULT_FILES,
+          parser: 'mdx-eslint-parser',
         },
       ],
       {
         languageOptions: {
-          parser: eslintParserMdx,
           globals: {
             React: false,
           },
@@ -105,8 +100,10 @@ export const mdxUnConfig: UnConfigFn<'mdx'> = async (context) => {
     ],
     {
       ...(typeof lintCodeBlocks === 'object' && lintCodeBlocks),
-      processor: eslintPluginMdx.createRemarkProcessor({
-        lintCodeBlocks: true,
+      ...generatePackageToLoadProperty('processor', 'eslintPluginMdx', {
+        valueTransformFn: {
+          fn: ({eslintPluginMdx}) => eslintPluginMdx.createRemarkProcessor({lintCodeBlocks: true}),
+        },
       }),
     },
   );

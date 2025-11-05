@@ -5,6 +5,7 @@ const TEST_DIR_GLOB = ['test/**/*'];
 
 export default eslintConfig({
   mode: 'lib',
+  cacheConfigs: false, // TODO enable when local plugins become serializable
 
   configs: {
     markdownLinks: {

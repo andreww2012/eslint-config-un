@@ -1,9 +1,12 @@
 import consola from 'consola';
-import {renderTable} from 'console-table-printer';
 import createDebug from 'debug';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
-import type {EslintConfigUnOptions, UnConfigContext} from './configs';
+import type {
+  EslintConfigUnInternalOptions,
+  EslintConfigUnOptions,
+  UnConfigContext,
+} from './configs';
 import {
   CHECKED_LODASH_METHODS,
   DEFAULT_GLOBAL_IGNORES,
@@ -14,50 +17,38 @@ import {
 import {
   type AllEslintRuleNames,
   ConfigEntryBuilder,
-  type DisableAutofixPrefix,
-  type EslintPlugin,
   type FlatConfigEntry,
   createConfigBuilder,
-  disableAutofixForAllRulesInPlugin,
-  eslintPluginVanillaRules,
   genFlatConfigEntryName,
-  getRuleNameAndPluginPrefixByFullName,
+  isUnFlatConfigEntry,
   resolveOverrides,
 } from './eslint';
 import {
   type FastImportPluginSettings,
-  checkIfModuleCorrectlyLoaded,
   getIsConfigEnabled as getIsConfigEnabledContextless,
-  replaceImportRulesImplementationWithFastPlugin,
+  resolveConfigAsyncData,
+  restoreFromCache,
+  saveToCache,
   styleConfigName,
-  stylePackageName,
-  stylePluginPrefix,
   styleRuleName,
 } from './internal';
 import {
   LOADABLE_PLUGIN_PREFIXES_LIST,
   PLUGIN_PREFIXES_LIST,
   type PluginPrefix,
-  packagesLoaders,
-  parsersLoaders,
   pluginsLoaders,
 } from './plugins';
 import type {FalsyValue, PartialDeep, Promisable} from './types';
 import {
   type MaybeArray,
   assignDefaults,
-  capitalize,
   fetchPackageInfo,
-  groupBy,
   interopDefault,
-  isIn,
+  isInEditor,
   maybeCall,
-  objectEntriesUnsafe,
   objectKeysUnsafe,
   omit,
-  partition,
   readFileSafe,
-  styleText,
 } from './utils';
 
 const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
@@ -66,24 +57,6 @@ const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
   'unicorn/template-indent',
   'vue/html-self-closing',
 ] satisfies AllEslintRuleNames[]);
-
-// NOTE: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs
-const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
-  object)['rules'] = {
-  // TODO add missing reasons for disabling autofixes
-  'case-police/string-check': true,
-
-  'ts/method-signature-style': true,
-  'ts/no-unnecessary-type-arguments': true, // Could remove type aliases
-
-  'unicorn/catch-error-name': true,
-  'unicorn/consistent-existence-index-check': true,
-  'unicorn/explicit-length-check': true, // Wrong auto-fixes
-  'unicorn/no-useless-undefined': true,
-  'unicorn/prefer-spread': true,
-
-  'zod/require-schema-suffix': true, // Does not rename variable usages
-};
 
 const RULES_TO_DISABLE_IN_OFFLINE_MODE: AllEslintRuleNames[] = [
   'markdown-links/no-dead-urls',
@@ -94,9 +67,11 @@ const RULES_TO_DISABLE_IN_OFFLINE_MODE: AllEslintRuleNames[] = [
   'node-dependencies/require-provenance-deps',
 ];
 
+const PLUGINS_CONFIG_NAME = genFlatConfigEntryName('global-setup/plugins');
+
 export const eslintConfigInternal = async (
   options: EslintConfigUnOptions = {},
-  internalOptions: {disableAutofixForAllFixableRulesOnly?: boolean; testMode?: boolean} = {},
+  internalOptions: EslintConfigUnInternalOptions = {},
 ): Promise<FlatConfigEntry[]> => {
   const logger = consola.withTag('eslint-config-un');
   logger.addReporter({
@@ -111,51 +86,79 @@ export const eslintConfigInternal = async (
 
   debug('Initialization');
 
+  const isRunningInEditor = isInEditor();
+  debug(`Is likely running in editor: ${isRunningInEditor}`);
+
+  const optionsResolved = assignDefaults(options, {
+    mode: 'app',
+    extraConfigs: [],
+    loadPluginsOnDemand: true,
+    offlineMode: Boolean(process.env['ESLINT_CONFIG_UN_OFFLINE_MODE']),
+  } satisfies EslintConfigUnOptions);
+
+  optionsResolved.cacheConfigs =
+    options.cacheConfigs ??
+    (isRunningInEditor || Boolean(process.env['ESLINT_CONFIG_UN_CACHE_CONFIGS']));
+  const {cacheConfigs} = optionsResolved;
+  debug(`Is config caching enabled: ${cacheConfigs}`);
+
+  const usedPackageManager = await detectPackageManager();
+  debug(`Detected package manager: ${usedPackageManager?.name ?? '<not detected>'}`);
+
   const context = Object.freeze({
     packagesInfo: {},
-    rootOptions: {},
+    rootOptions: optionsResolved,
+    internalOptions,
     configsMeta: {},
     disabledAutofixes: {},
     usedPlugins: new Set(),
     usedParsers: new Map(),
-    usedPackages: new Set(),
-    meta: {},
+    usedPackages: new Map(),
+    meta: {usedPackageManager},
     logger,
     debug,
     isTestMode: internalOptions.testMode || Boolean(process.env['ESLINT_CONFIG_UN_TEST_MODE']),
     tests: [],
   } satisfies PartialDeep<UnConfigContext> as unknown as UnConfigContext);
 
-  const [
-    packagesInfoRaw,
-    usedPackageManager,
-    gitignoreFile,
-    eslintPluginTailwind,
-    eslintPluginSvelte,
-  ] = await Promise.all([
-    Promise.all(
-      PACKAGES_TO_GET_INFO_FOR.map(async (name) => [name, await fetchPackageInfo(name)] as const),
-    ),
-    detectPackageManager(),
-    readFileSafe('.gitignore'),
-    pluginsLoaders.tailwindcss(context).then(({module}) => module),
-    pluginsLoaders.svelte(context).then(({module}) => module),
-  ]);
-  const packagesInfo = Object.fromEntries(packagesInfoRaw) as UnConfigContext['packagesInfo'];
+  if (cacheConfigs) {
+    debug('Attempting to restore configs from cache');
+    const cachedData = await restoreFromCache(context);
 
-  debug(`Detected package manager: ${usedPackageManager?.name ?? '<not detected>'}`);
+    if (cachedData) {
+      debug('Successfully restored configs from cache');
+
+      const {plugins, modifyConfigs} = await resolveConfigAsyncData(context, {cachedData});
+      modifyConfigs();
+
+      const pluginConfig = cachedData.configs.find((config) => config.name === PLUGINS_CONFIG_NAME);
+      if (pluginConfig) {
+        pluginConfig.plugins = plugins;
+      }
+
+      return cachedData.configs;
+    }
+    debug("Could not restore configs from cache - it's either stale or an error occurred");
+  }
+
+  const [packagesInfoRaw, gitignoreFile, eslintPluginTailwind, eslintPluginSvelte] =
+    await Promise.all([
+      Promise.all(
+        PACKAGES_TO_GET_INFO_FOR.map(async (name) => [name, await fetchPackageInfo(name)] as const),
+      ),
+      readFileSafe('.gitignore'),
+      pluginsLoaders.tailwindcss(context).then(({module}) => module),
+      pluginsLoaders.svelte(context).then(({module}) => module),
+    ]);
+
+  const packagesInfo = Object.fromEntries(packagesInfoRaw) as UnConfigContext['packagesInfo'];
+  Object.assign(context.packagesInfo, packagesInfo satisfies UnConfigContext['packagesInfo']);
+
+  optionsResolved.disablePrettierIncompatibleRules ??= packagesInfo.prettier != null;
+
   debug(`Found .gitignore file: ${gitignoreFile != null}`);
 
-  const optionsResolved = assignDefaults(options, {
-    mode: 'app',
-    extraConfigs: [],
-    disablePrettierIncompatibleRules: packagesInfo.prettier != null,
-    loadPluginsOnDemand: true,
-    offlineMode: Boolean(process.env['ESLINT_CONFIG_UN_OFFLINE_MODE']),
-  } satisfies EslintConfigUnOptions);
-
   const {
-    autofixDisabledGloballyFor: autofixDisabledGloballyForRaw,
     extraConfigs,
     ignores,
     overrideIgnores,
@@ -165,10 +168,6 @@ export const eslintConfigInternal = async (
     offlineMode,
     useFastImport,
   } = optionsResolved;
-
-  Object.assign(context.packagesInfo, packagesInfo satisfies UnConfigContext['packagesInfo']);
-  Object.assign(context.rootOptions, {...optionsResolved} satisfies UnConfigContext['rootOptions']);
-  Object.assign(context.meta, {usedPackageManager} satisfies UnConfigContext['meta']);
 
   if (useFastImport) {
     context.usedPlugins.add('fast-import');
@@ -634,35 +633,6 @@ export const eslintConfigInternal = async (
     // eslint-disable-next-line no-implicit-coercion
     .filter((v) => !!v);
 
-  const autofixDisabledGloballyFor: EslintConfigUnOptions['autofixDisabledGloballyFor'] =
-    autofixDisabledGloballyForRaw === true
-      ? true
-      : autofixDisabledGloballyForRaw === false
-        ? {}
-        : {
-            ...autofixDisabledGloballyForRaw,
-            rules: {
-              ...RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT,
-              ...autofixDisabledGloballyForRaw?.rules,
-            },
-          };
-
-  const disableAutofixPluginsWithUnprefixedMethod = groupBy(
-    Object.entries(
-      typeof autofixDisabledGloballyFor === 'object' ? autofixDisabledGloballyFor.rules || {} : {},
-    ).map(([ruleName, isAutofixDisabled]) => ({
-      ...getRuleNameAndPluginPrefixByFullName(context, ruleName),
-      isAutofixDisabled,
-    })),
-    (item) => item.pluginPrefixCanonical || '',
-  );
-  const disableAutofixPluginsWithPrefixedMethod = objectEntriesUnsafe(
-    context.disabledAutofixes,
-  ).map(([pluginPrefix, ruleNames = []]) => ({
-    pluginPrefix,
-    ruleNames,
-  }));
-
   const usedPluginPrefixes: readonly PluginPrefix[] = loadPluginsOnDemand
     ? // Sorting ensures that plugins will be present in the resulting config in the consistent order every time
       // eslint-disable-next-line unicorn/no-array-sort
@@ -671,225 +641,15 @@ export const eslintConfigInternal = async (
   const usedParserPrefixes = [...context.usedParsers.keys()];
   const usedPackagesPrefixes = [...context.usedPackages.keys()];
 
-  const packagesToManuallyInstallOrUpdate = new Map<
-    string,
-    {
-      versionRange: string;
-      installedVersion?: string;
-      pluginPrefixes?: Set<PluginPrefix>;
-    }
-  >();
-  const [loadedPluginsRaw] = await Promise.all([
-    Promise.all(
-      usedPluginPrefixes.map(async (pluginPrefix) => {
-        const pluginResult = isIn(pluginPrefix, pluginsLoaders)
-          ? await pluginsLoaders[pluginPrefix](context)
-          : null;
-        const plugin = pluginResult?.module;
-        const packageToInstall = await checkIfModuleCorrectlyLoaded(pluginResult);
-        if (packageToInstall) {
-          packagesToManuallyInstallOrUpdate.set(packageToInstall.name, {
-            ...packageToInstall,
-            pluginPrefixes: new Set([
-              ...(packagesToManuallyInstallOrUpdate.get(packageToInstall.name)?.pluginPrefixes ||
-                []),
-              pluginPrefix,
-            ]),
-          });
-        }
-        if (pluginPrefix) {
-          const isProvided = optionsResolved.pluginsOverrides?.[pluginPrefix] != null;
-          debug(
-            `Plugin \`${stylePluginPrefix(pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginsOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
-          );
-        }
-        return plugin ? ([pluginPrefix, plugin] as const) : null;
-      }),
-    ),
-
-    Promise.all(
-      usedParserPrefixes.map(async (parserPrefix) => {
-        const parserResult = await parsersLoaders[parserPrefix](context);
-        const parser = parserResult.module;
-        const packageToInstall = await checkIfModuleCorrectlyLoaded(parserResult);
-        if (packageToInstall) {
-          packagesToManuallyInstallOrUpdate.set(packageToInstall.name, packageToInstall);
-        }
-        if (parser) {
-          context.usedParsers.get(parserPrefix)?.forEach((config) => {
-            config.languageOptions = {
-              ...config.languageOptions,
-              parser,
-            };
-          });
-        }
-      }),
-    ),
-
-    Promise.all(
-      usedPackagesPrefixes.map(async (packagePrefix) => {
-        const packageResult = await packagesLoaders[packagePrefix](context);
-        const packageToInstall = await checkIfModuleCorrectlyLoaded(packageResult);
-        if (packageToInstall) {
-          packagesToManuallyInstallOrUpdate.set(packageToInstall.name, packageToInstall);
-        }
-      }),
-    ),
-  ]);
-  if (packagesToManuallyInstallOrUpdate.size > 0) {
-    partition(
-      [...packagesToManuallyInstallOrUpdate.entries()].map(([name, item]) => ({...item, name})),
-      (item) => item.installedVersion != null,
-    ).forEach((packages, index) => {
-      if (packages.length === 0) {
-        return;
-      }
-      const isUpdates = index === 0;
-      const packageTypes = partition(packages, (item) => Boolean(item.pluginPrefixes))
-        .map(
-          (packagesOfType, i) =>
-            packagesOfType.length > 0 &&
-            `${i === 0 ? 'plugin' : 'package'}${packagesOfType.length === 1 ? '' : 's'}`,
-        )
-        .filter(Boolean)
-        .join(' and ');
-      context.logger[isUpdates ? 'warn' : 'fatal'](
-        `${capitalize(packageTypes)} that listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${isUpdates ? 'does not satisfy the supported version range' : 'not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} by yourself or disable corresponding config${packages.length === 1 ? '' : 's'} in order for this error to disappear:
-${renderTable(
-  packages
-    .toSorted((a, b) => a.name.localeCompare(b.name))
-    .map(({name, versionRange, pluginPrefixes}) => ({
-      Name: stylePackageName(name),
-      'Required version range': styleText('green', versionRange),
-      ...(pluginPrefixes?.size && {
-        [`PLugin prefix${pluginPrefixes.size === 1 ? '' : 's'}`]: [...pluginPrefixes]
-          .map(stylePluginPrefix)
-          .join(', '),
-      }),
-    })),
-)}`,
-      );
-    });
-  }
-
-  /* Plugins transformations */
-
-  const loadedPluginsMap = Object.fromEntries(loadedPluginsRaw.filter((v) => v != null)) as Partial<
-    Record<PluginPrefix, EslintPlugin>
-  >;
-  replaceImportRulesImplementationWithFastPlugin(context, loadedPluginsMap);
-
-  const allPlugins = {
-    ...loadedPluginsMap,
-    ...(eslintPluginTailwind && {tailwindcss: eslintPluginTailwind}),
-    ...(eslintPluginSvelte && {svelte: eslintPluginSvelte}),
-  } satisfies Record<string, EslintPlugin> as Partial<Record<PluginPrefix, EslintPlugin>>;
-
-  const disableAutofixPlugin: EslintPlugin = {
-    meta: {
-      name: 'eslint-plugin-disable-autofix',
-    },
-    rules: objectEntriesUnsafe({
-      ...allPlugins,
-      '': eslintPluginVanillaRules,
-    }).reduce<EslintPlugin['rules'] & {}>((res, [pluginPrefixCanonical, plugin]) => {
-      if (
-        plugin &&
-        (disableAutofixPluginsWithPrefixedMethod.some(
-          (v) => v.pluginPrefix === pluginPrefixCanonical,
-        ) ||
-          internalOptions.disableAutofixForAllFixableRulesOnly)
-      ) {
-        const pluginPrefix =
-          pluginPrefixCanonical === ''
-            ? ''
-            : optionsResolved.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
-        debug(
-          `Created a copy of \`${stylePluginPrefix(pluginPrefix || '<builtin>')}\` plugin's rules with \`disable-autofix\` prefix`,
-        );
-        return Object.assign(res, disableAutofixForAllRulesInPlugin(pluginPrefix, plugin));
-      }
-      return res;
-    }, {}),
-  };
-
-  const plugins = internalOptions.disableAutofixForAllFixableRulesOnly
-    ? {}
-    : Object.fromEntries(
-        objectEntriesUnsafe(allPlugins).map(([pluginPrefixCanonical, plugin]) => {
-          const pluginPrefix =
-            pluginPrefixCanonical === ''
-              ? ''
-              : optionsResolved.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
-          const pluginRulesAutofixDisabledStatuses = Object.fromEntries(
-            // eslint-disable-next-line ts/no-unnecessary-condition -- wrong types
-            (disableAutofixPluginsWithUnprefixedMethod[pluginPrefixCanonical] || []).map(
-              ({ruleNameUnprefixed, isAutofixDisabled}) => [ruleNameUnprefixed, isAutofixDisabled],
-            ),
-          );
-
-          if (
-            !plugin ||
-            // eslint-disable-next-line de-morgan/no-negated-disjunction
-            !(
-              Object.keys(pluginRulesAutofixDisabledStatuses).length > 0 ||
-              autofixDisabledGloballyFor === true
-            )
-          ) {
-            return [pluginPrefix, plugin];
-          }
-
-          const fixablePluginRules = Object.entries(plugin.rules || {})
-            .filter(([, {meta: ruleMeta}]) => ruleMeta?.fixable)
-            .map(([ruleName]) => ruleName);
-
-          const autofixDisabledForAllPluginRulesByDefault =
-            (typeof autofixDisabledGloballyFor === 'object' &&
-              autofixDisabledGloballyFor.plugins?.[pluginPrefixCanonical]) ||
-            false;
-          const rulesToDisableAutofixFor = fixablePluginRules.filter(
-            (ruleName) =>
-              pluginRulesAutofixDisabledStatuses[ruleName] ??
-              autofixDisabledForAllPluginRulesByDefault,
-          );
-
-          if (rulesToDisableAutofixFor.length === 0) {
-            return [pluginPrefix, plugin];
-          }
-
-          const rulesCountWithAutofixNotDisabled =
-            fixablePluginRules.length - rulesToDisableAutofixFor.length;
-          if (rulesCountWithAutofixNotDisabled > 0) {
-            const areMostAutofixesDisabled =
-              rulesCountWithAutofixNotDisabled < fixablePluginRules.length / 2;
-            debug(
-              `Globally disabling autofix for ${areMostAutofixesDisabled ? `${styleText('red', 'all rules')} in ${stylePluginPrefix(pluginPrefix)} plugin except for` : `the following ${stylePluginPrefix(pluginPrefix)} plugin rules`}: ${(areMostAutofixesDisabled ? fixablePluginRules.filter((ruleName) => !rulesToDisableAutofixFor.includes(ruleName)) : rulesToDisableAutofixFor).map((ruleName) => styleRuleName(ruleName)).join(', ')}`,
-            );
-          } else {
-            debug(
-              `Globally disabling autofix for ${styleText('red', 'all rules')} in ${stylePluginPrefix(pluginPrefix)} plugin`,
-            );
-          }
-
-          return [
-            pluginPrefix,
-            {
-              ...plugin,
-              rules: disableAutofixForAllRulesInPlugin('', plugin, {
-                includeRulesWithoutAutofix: true,
-                onlyRules: rulesToDisableAutofixFor,
-              }),
-            } satisfies typeof plugin,
-          ];
-        }),
-      );
+  const {plugins, loadedPlugins, modifyConfigs} = await resolveConfigAsyncData(context, {
+    usedPluginPrefixes,
+    usedParserPrefixes,
+    usedPackagesPrefixes,
+  });
 
   resolvedConfigs.unshift({
-    name: genFlatConfigEntryName('global-setup/plugins'),
-    plugins: {
-      ...plugins,
-      ['disable-autofix' satisfies DisableAutofixPrefix]: disableAutofixPlugin,
-    },
+    name: PLUGINS_CONFIG_NAME,
+    plugins,
   } satisfies FlatConfigEntry);
 
   /* Offline mode */
@@ -928,7 +688,7 @@ ${renderTable(
     }
 
     const errorMessages = context.tests
-      .flatMap((testFn) => maybeCall(testFn, {plugins: allPlugins}))
+      .flatMap((testFn) => maybeCall(testFn, {plugins: loadedPlugins}))
       .filter((v) => v != null)
       .filter(Boolean);
 
@@ -957,6 +717,53 @@ ${renderTable(
   }
 
   debug(`Final config resolved: ${resolvedConfigs.length} flat config items`);
+
+  if (cacheConfigs) {
+    debug('Attempting to save resolved configs to cache');
+
+    const configsToCache = [...resolvedConfigs].map((configItem) => {
+      if (!isUnFlatConfigEntry(configItem)) {
+        return configItem;
+      }
+      const result = {...configItem};
+      if (result.name === PLUGINS_CONFIG_NAME) {
+        delete result.plugins;
+      }
+      return result;
+    });
+
+    await saveToCache(context, {
+      configs: configsToCache,
+      usedPlugins: usedPluginPrefixes,
+      usedParsers: new Map(
+        [...context.usedParsers.entries()].map(([parserPrefix, configs]) => [
+          parserPrefix,
+          configs.map((c) => c.name).filter((v) => typeof v === 'string'),
+        ]),
+      ),
+      usedPackages: new Map(
+        [...context.usedPackages.entries()].map(([packagePrefix, usedPackagesInfo]) => [
+          packagePrefix,
+          usedPackagesInfo
+            .map(({config, path, info}) => {
+              const configName = config.name;
+              if (!configName) {
+                return null;
+              }
+              return {
+                configName,
+                path,
+                ...info,
+              };
+            })
+            .filter((v) => v != null),
+        ]),
+      ),
+    });
+  }
+
+  // Must be called after cache is written
+  modifyConfigs();
 
   return resolvedConfigs;
 };

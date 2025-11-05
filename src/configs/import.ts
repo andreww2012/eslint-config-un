@@ -6,15 +6,8 @@ import type {
 } from 'eslint-plugin-import-x';
 import {ERROR, GLOB_MARKDOWN_ALL_CODE_BLOCKS, OFF, WARNING} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {pluginsLoaders} from '../plugins';
-import {
-  arraify,
-  assignDefaults,
-  interopDefault,
-  isNonEmptyArray,
-  kebabCase,
-  objectEntriesUnsafe,
-} from '../utils';
+import {generatePackageToLoadProperty} from '../plugins';
+import {arraify, assignDefaults, isNonEmptyArray, kebabCase, objectEntriesUnsafe} from '../utils';
 import type {UnConfigFn} from './index';
 
 export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
@@ -78,13 +71,6 @@ export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
 }
 
 export const importUnConfig: UnConfigFn<'import'> = async (context) => {
-  const [eslintPluginImportX, {createTypeScriptImportResolver}] = await Promise.all([
-    pluginsLoaders
-      .import(context)
-      .then(({module}) => module as unknown as Promise<typeof import('eslint-plugin-import-x')>),
-    interopDefault(import('eslint-import-resolver-typescript')),
-  ]);
-
   const optionsRaw = context.rootOptions.configs?.import;
   const optionsResolved = assignDefaults(optionsRaw, {
     isTypescriptEnabled: context.configsMeta.ts.enabled,
@@ -125,14 +111,34 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
       ],
       {
         settings: {
-          ...(isTypescriptEnabled && eslintPluginImportX.configs.typescript.settings),
-          'import-x/resolver-next': [
-            // If the TS resolver goes after the node resolver, `import/no-deprecated` doesn't work
-            // TODO should report?
-            isTypescriptEnabled &&
-              (createTypeScriptImportResolver(tsResolverOptions) as ImportPluginNewResolver),
-            eslintPluginImportX.createNodeResolver(),
-          ].filter((v) => typeof v === 'object'),
+          ...(isTypescriptEnabled &&
+            (await import('eslint-plugin-import-x')).configs.typescript.settings),
+          ...generatePackageToLoadProperty(
+            'import-x/resolver-next',
+            ['importResolverTypescript', 'eslintPluginImportX'],
+            {
+              valueTransformFn: {
+                fn(
+                  this: {
+                    isTypescriptEnabled: typeof isTypescriptEnabled;
+                    tsResolverOptions: typeof tsResolverOptions;
+                  },
+                  {importResolverTypescript, eslintPluginImportX},
+                ) {
+                  return [
+                    // If the TS resolver goes after the node resolver, `import/no-deprecated` doesn't work
+                    // TODO should report?
+                    this.isTypescriptEnabled &&
+                      (importResolverTypescript.createTypeScriptImportResolver(
+                        this.tsResolverOptions,
+                      ) as ImportPluginNewResolver),
+                    eslintPluginImportX.createNodeResolver(),
+                  ].filter((v) => typeof v === 'object');
+                },
+                scope: {isTypescriptEnabled, tsResolverOptions},
+              },
+            },
+          ),
           ...(isTypescriptEnabled && {
             'import-x/parsers': {
               '@typescript-eslint/parser': ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'],

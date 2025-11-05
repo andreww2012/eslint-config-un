@@ -16,6 +16,7 @@ export type Prettify<T> = {
 
 export type {
   ConditionalKeys,
+  DistributedPick,
   EmptyObject,
   NonEmptyString,
   NonEmptyTuple,
@@ -26,7 +27,8 @@ export type {
   Subtract,
   Promisable,
   OmitIndexSignature,
-  DistributedPick,
+  Except as OmitStrict,
+  SetFieldType,
   UnionToIntersection,
   ValueOf as ObjectValues,
 } from 'type-fest';

@@ -8,8 +8,9 @@ import {
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
+import {generatePackageToLoadProperty} from '../plugins';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults, capitalize, interopDefault, unique} from '../utils';
+import {assignDefaults, capitalize, unique} from '../utils';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';
 import type {UnConfigFn} from './index';
 
@@ -113,12 +114,7 @@ export interface MarkdownEslintConfigOptions extends UnConfigOptions<'markdown'>
   parseFrontmatter?: MarkdownLanguageOptions['frontmatter'];
 }
 
-export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
-  const [eslintPluginMarkdown, {mergeProcessors, processorPassThrough}] = await Promise.all([
-    interopDefault(import('@eslint/markdown')),
-    interopDefault(import('eslint-merge-processors')),
-  ]);
-
+export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.markdown;
   const optionsResolved = assignDefaults(optionsRaw, {
     lintMarkdown: true,
@@ -245,11 +241,6 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
   }
 
   if (lintCodeBlocks) {
-    const processorAllowingLintingBothMarkdownAndCodeBlocks = mergeProcessors([
-      eslintPluginMarkdown.processors.markdown,
-      processorPassThrough,
-    ]);
-
     configBuilder?.addConfig(
       [
         'markdown/setup/code-blocks-processor',
@@ -262,7 +253,24 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = async (context) => {
         // TODO report
         // eslint-disable-next-line sonarjs/no-gratuitous-expressions
         ...(typeof lintCodeBlocks === 'object' && lintCodeBlocks),
-        processor: processorAllowingLintingBothMarkdownAndCodeBlocks,
+        ...generatePackageToLoadProperty(
+          'processor',
+          ['eslintPluginMarkdown', 'eslintMergeProcessors'],
+          {
+            valueTransformFn: {
+              fn: ({
+                eslintPluginMarkdown,
+                eslintMergeProcessors: {mergeProcessors, processorPassThrough},
+              }) => {
+                const processorAllowingLintingBothMarkdownAndCodeBlocks = mergeProcessors([
+                  eslintPluginMarkdown.processors.markdown,
+                  processorPassThrough,
+                ]);
+                return processorAllowingLintingBothMarkdownAndCodeBlocks;
+              },
+            },
+          },
+        ),
       },
     );
 

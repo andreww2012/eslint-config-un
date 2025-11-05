@@ -7,6 +7,6 @@ export default defineConfig({
   dts: true,
   external: ['eslint-plugin-no-type-assertion', 'eslint-plugin-prettier'],
   noExternal: [
-    /^import-meta-resolve(?:\/.+)?$/, // Patched
+    /^(import-meta-resolve|is-in-editor)(?:\/.+)?$/, // Patched
   ],
 });

@@ -13,7 +13,13 @@ import type {
   UnFlagConfigEntry,
 } from '../eslint';
 import type {FastImportPluginSettings, ImportPluginReplaceableRules} from '../internal';
-import type {LoadablePackagePrefix, ParserPrefix, PluginPrefix, pluginsLoaders} from '../plugins';
+import type {
+  LoadablePackagePrefix,
+  PackageToLoadInfo,
+  ParserPrefix,
+  PluginPrefix,
+  pluginsLoaders,
+} from '../plugins';
 import type {PrettifyShallow, Promisable} from '../types';
 import type {MaybeArray, MaybeFn, fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
@@ -237,6 +243,20 @@ export interface EslintConfigUnOptions {
         pluginSettings?: Partial<FastImportPluginSettings>;
         replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>;
       };
+
+  /**
+   * Attempt to cache the resolved flat config. This might fail if it contains
+   * unserializable data, such as functions. Enabled by default when running in editor.
+   *
+   * It will be stored in `node_modules/.cache/eslint-config-un/config.json` and considered
+   * fresh for 1 hour, unless one of the following is changed:
+   * - Current git revision (`git rev-parse HEAD`) or root `.gitignore` contents
+   * - `package.json`, lockfile contents or package manager
+   * - ESLint config file contents
+   * - Node.JS version
+   * @default true <=> running in editor (detected by [`is-in-editor`](https://npmjs.com/is-in-editor))
+   */
+  cacheConfigs?: boolean;
 }
 
 /* eslint-enable perfectionist/sort-interfaces */
@@ -1015,8 +1035,14 @@ export interface UnConfigs {
 }
 /* eslint-disable perfectionist/sort-interfaces */
 
+export interface EslintConfigUnInternalOptions {
+  disableAutofixForAllFixableRulesOnly?: boolean;
+  testMode?: boolean;
+}
+
 export interface UnConfigContext {
   rootOptions: PrettifyShallow<EslintConfigUnOptions>;
+  internalOptions: EslintConfigUnInternalOptions;
   packagesInfo: Record<
     (typeof PACKAGES_TO_GET_INFO_FOR)[number],
     Awaited<ReturnType<typeof fetchPackageInfo>>
@@ -1042,7 +1068,10 @@ export interface UnConfigContext {
   /**
    * NOTE: mutable
    */
-  usedPackages: Set<LoadablePackagePrefix>;
+  usedPackages: Map<
+    LoadablePackagePrefix,
+    {config: FlatConfigEntry; path: string; info: PackageToLoadInfo}[]
+  >;
 
   meta: {
     usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;

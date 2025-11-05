@@ -12,7 +12,7 @@ import {
   WARNING,
 } from '../constants';
 import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {pluginsLoaders} from '../plugins';
+import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
 import {assignDefaults, doesPackageExist, getKeysOfTruthyValues, pickBy} from '../utils';
 import type {UnConfigFn} from './index';
@@ -98,8 +98,13 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
         filesFallback: [GLOB_JS_TS_X, GLOB_FLOW, GLOB_SVELTE, GLOB_ASTRO, GLOB_EMBER_GLIMMER],
       },
     ],
+    // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
     {
-      processor: eslintPluginGraphql.processor,
+      ...generatePackageToLoadProperty('processor', 'eslintPluginGraphql', {
+        valueTransformFn: {
+          fn: (modules) => modules.eslintPluginGraphql.processor,
+        },
+      }),
     },
   );
 
@@ -126,11 +131,11 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
           includeDefaultFilesAndIgnores: true,
           filesFallback: [GLOB_GRAPHQL],
           doNotIgnoreMarkdown: true,
+          parser: 'graphql-eslint-parser',
         },
       ],
       {
         languageOptions: {
-          parser: eslintPluginGraphql.parser,
           ...(graphqlConfig && {
             parserOptions: {
               graphQLConfig: graphqlConfig,

@@ -1,4 +1,3 @@
-import type Eslint from 'eslint';
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import {
   type GetRuleOptions,
@@ -7,15 +6,9 @@ import {
   type UnConfigOptions,
   createConfigBuilder,
 } from '../eslint';
-import {pluginsLoaders} from '../plugins';
+import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
 import type {NonEmptyTuple, PrettifyShallow, Subtract} from '../types';
-import {
-  type MaybeArray,
-  assignDefaults,
-  cloneDeep,
-  fetchPackageInfo,
-  interopDefault,
-} from '../utils';
+import {type MaybeArray, assignDefaults, fetchPackageInfo} from '../utils';
 import type {UnConfigFn} from './index';
 
 // Please keep ascending order
@@ -274,22 +267,12 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     angularTemplateEslintPlugin,
     angularTemplateEslintPluginPackageInfo,
     angularTemplateParserPackageInfo,
-    extractInlineHtmlProcessor,
   ] = await Promise.all([
     pluginsLoaders['@angular-eslint'](context).then(({module}) => module),
     fetchPackageInfo('@angular-eslint/eslint-plugin'),
     pluginsLoaders['@angular-eslint/template'](context).then(({module}) => module),
     fetchPackageInfo('@angular-eslint/eslint-plugin-template'),
     fetchPackageInfo('@angular-eslint/template-parser'),
-    interopDefault(import('@angular-eslint/eslint-plugin-template'))
-      .then((m) => m.processors['extract-inline-html'] as Eslint.Linter.Processor)
-      .then((processor) => {
-        const fixedProcessor = cloneDeep(processor);
-        fixedProcessor.meta ||= {
-          name: 'extract-inline-html',
-        };
-        return fixedProcessor;
-      }),
   ]);
 
   (
@@ -325,10 +308,10 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
           filesFallback: [GLOB_JS_TS_X],
         },
       ],
+      // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
       {
-        ...(processInlineTemplates && {
-          processor: extractInlineHtmlProcessor,
-        }),
+        ...(processInlineTemplates &&
+          generatePackageToLoadProperty('processor', 'angularExtractInlineHtmlProcessor')),
       },
     )
     .addRule(

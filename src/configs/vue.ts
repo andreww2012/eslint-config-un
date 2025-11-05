@@ -1,4 +1,3 @@
-import type Eslint from 'eslint';
 import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-vue-blocks';
 import globals from 'globals';
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, type RuleSeverity, WARNING} from '../constants';
@@ -10,7 +9,7 @@ import {
   createConfigBuilder,
   getRuleUnSeverityAndOptionsFromEntry,
 } from '../eslint';
-import {packagesLoaders, pluginsLoaders} from '../plugins';
+import {generatePackageToLoadProperty} from '../plugins';
 import type {PrettifyShallow} from '../types';
 import {
   type MaybeArray,
@@ -18,7 +17,6 @@ import {
   doesPackageExist,
   fetchPackageInfo,
   getKeysOfTruthyValues,
-  interopDefault,
   joinPaths,
 } from '../utils';
 import {type ValidAndInvalidHtmlTags, noRestrictedHtmlElementsDefault} from './shared';
@@ -276,29 +274,11 @@ export const vueUnConfig: UnConfigFn<
   unknown,
   [data: {vanillaFinalFlatConfigRules: Partial<RulesRecord>}]
 > = async (context, {vanillaFinalFlatConfigRules}) => {
-  const [
-    {mergeProcessors: mergeEslintProcessors},
-    eslintProcessorVue,
-    eslintProcessorVueBlocks,
-    isPiniaPackageInstalled,
-    vueI18nPackageInfo,
-    nuxtPackageInfo,
-    {parser: typescriptEslintParser},
-  ] = await Promise.all([
-    interopDefault(import('eslint-merge-processors')),
-    pluginsLoaders
-      .vue(context)
-      .then(({module}) => (module ? (module.processors['.vue'] as Eslint.Linter.Processor) : null)),
-    packagesLoaders.vueBlocksProcessor(context).then(({module}) => module),
+  const [isPiniaPackageInstalled, vueI18nPackageInfo, nuxtPackageInfo] = await Promise.all([
     doesPackageExist('pinia'),
     fetchPackageInfo('vue-i18n'),
     fetchPackageInfo('nuxt'),
-    interopDefault(import('typescript-eslint')),
   ]);
-
-  if (!eslintProcessorVue) {
-    context.usedPlugins.add('vue');
-  }
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
@@ -377,35 +357,44 @@ export const vueUnConfig: UnConfigFn<
     ],
     {
       files: [...DEFAULT_VUE_FILES, ...optionsResolved.files],
-      processor: mergeEslintProcessors(
-        [
-          eslintProcessorVue,
-          (() => {
-            if (!processSfcBlocks) {
-              return null;
-            }
-            context.usedPackages
-              .add('vueBlocksProcessor')
-              // `eslint-processor-vue-blocks` expects `@vue/compiler-sfc` of v3 to be installed
-              .add('vueCompilerSfc');
-            if (!eslintProcessorVueBlocks) {
-              return null;
-            }
-            const processorOptions = typeof processSfcBlocks === 'object' ? processSfcBlocks : {};
-            return eslintProcessorVueBlocks({
-              ...processorOptions,
-              blocks: {
-                styles: true,
-                ...processorOptions.blocks,
-              },
-            });
-          })(),
-        ].filter((v) => v != null),
+      ...generatePackageToLoadProperty(
+        'processor',
+        ['mergeProcessors', 'vueProcessor', 'vueBlocksProcessor'],
+        {
+          valueTransformFn: {
+            fn(
+              this: {processSfcBlocks: typeof processSfcBlocks},
+              {mergeProcessors: {mergeProcessors}, vueProcessor, vueBlocksProcessor},
+            ) {
+              return mergeProcessors(
+                [
+                  vueProcessor,
+                  (() => {
+                    if (!this.processSfcBlocks) {
+                      return null;
+                    }
+                    const processorOptions =
+                      typeof this.processSfcBlocks === 'object' ? this.processSfcBlocks : {};
+                    return vueBlocksProcessor({
+                      ...processorOptions,
+                      blocks: {
+                        styles: true,
+                        ...processorOptions.blocks,
+                      },
+                    });
+                  })(),
+                ].filter((v) => v != null),
+              );
+            },
+            scope: {processSfcBlocks},
+          },
+        },
       ),
       languageOptions: {
         globals: globals.browser,
         parserOptions: {
-          parser: isTypescriptEnabled ? typescriptEslintParser : undefined,
+          ...(isTypescriptEnabled &&
+            generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
           sourceType: 'module' as const,
         },
       },

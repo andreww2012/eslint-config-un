@@ -6,6 +6,7 @@ import {createDefu, type defu} from 'defu';
 import {destr as jsonParse} from 'destr';
 import {resolve as resolvePackage} from 'import-meta-resolve';
 import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
+import {Traverse, type TraverseOptions} from 'neotraverse/modern';
 import * as R from 'remeda';
 import type {FalsyValue, PackageJson, Promisable} from './types';
 
@@ -18,6 +19,7 @@ export {klona as cloneDeep} from 'klona';
 export {
   capitalize,
   groupBy,
+  isPlainObject,
   memoize,
   omit,
   partition,
@@ -26,13 +28,18 @@ export {
   uniq as unique,
   uniqBy as uniqueBy,
 } from 'es-toolkit';
+export {get as getValueByPath, set as setValueByPath} from 'es-toolkit/compat';
 
 export {kebabCase} from 'string-ts';
 
 export {destr as jsonParse} from 'destr';
 
+// eslint-disable-next-line import/no-extraneous-dependencies -- patched
 export {isInEditor} from 'is-in-editor';
 export {isCI as isInCi} from 'ci-info';
+
+export const isObject = (value: unknown): value is object =>
+  typeof value === 'object' && value != null && !Array.isArray(value);
 
 export const assignDefaults = createDefu((object, key, value) => {
   if (Array.isArray(object[key]) && Array.isArray(value)) {
@@ -120,19 +127,23 @@ export const maybeCall = <
     ? R
     : never;
 
-export const readFileSafe = async (filePath: string) =>
-  await fs.readFile(filePath, 'utf8').catch((error: unknown) => {
+export function readFileSafe(filePath: string, asBinary?: false): Promise<string | null>;
+export function readFileSafe(filePath: string, asBinary: true): Promise<Buffer | null>;
+export async function readFileSafe(
+  filePath: string,
+  asBinary = false,
+): Promise<string | Buffer | null> {
+  return await fs.readFile(filePath, asBinary ? null : 'utf8').catch((error: unknown) => {
     if (error && typeof error === 'object' && 'code' in error && error.code === 'ENOENT') {
       return null;
     }
     throw error;
   });
+}
 
-export const readAndParsePackageJson = async (
-  filePath: string | URL | undefined,
-): Promise<PackageJson | null> =>
+export const readAndParseJson = async <T>(filePath: string | URL | undefined): Promise<T | null> =>
   filePath
-    ? jsonParse<PackageJson | null>(
+    ? jsonParse<T | null>(
         await readFileSafe(typeof filePath === 'string' ? filePath : url.fileURLToPath(filePath)),
       )
     : null;
@@ -156,7 +167,7 @@ export const fetchPackageInfo = async (
   }
   const packageJsonUrl = getLastResolvedPackageJsonUrl();
 
-  const packageInfo = packageJsonUrl ? await readAndParsePackageJson(packageJsonUrl) : null;
+  const packageInfo = packageJsonUrl ? await readAndParseJson<PackageJson>(packageJsonUrl) : null;
   if (!packageInfo) {
     return null;
   }
@@ -223,3 +234,6 @@ export function getKeysOfTruthyValues<T extends Record<string, boolean>>(
 
 export const isIn = <T extends object>(key: PropertyKey, object: T): key is keyof T =>
   key in object;
+
+export const createTraverser = (object: unknown, options?: TraverseOptions) =>
+  new Traverse(object, options);

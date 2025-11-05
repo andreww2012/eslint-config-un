@@ -1,6 +1,6 @@
 import {ERROR} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults} from '../utils';
 import {DEFAULT_FILES_PACKAGE_JSON} from './package-json';
 import type {UnConfigFn} from './index';
 
@@ -11,9 +11,7 @@ export interface DependEslintConfigOptions extends UnConfigOptions<'depend'> {
   options?: GetRuleOptions<'depend', 'ban-dependencies'>;
 }
 
-export const dependUnConfig: UnConfigFn<'depend'> = async (context) => {
-  const jsoncEslintParser = await interopDefault(import('jsonc-eslint-parser'));
-
+export const dependUnConfig: UnConfigFn<'depend'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.depend;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies DependEslintConfigOptions);
 
@@ -25,20 +23,14 @@ export const dependUnConfig: UnConfigFn<'depend'> = async (context) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(
-      [
-        'depend',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesFallback: DEFAULT_FILES_PACKAGE_JSON,
-        },
-      ],
+    ?.addConfig([
+      'depend',
       {
-        languageOptions: {
-          parser: jsoncEslintParser,
-        },
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: DEFAULT_FILES_PACKAGE_JSON,
+        parser: 'jsonc-eslint-parser',
       },
-    )
+    ])
     .addRule(
       'ban-dependencies',
       ERROR,

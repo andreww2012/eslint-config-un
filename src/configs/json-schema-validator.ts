@@ -1,7 +1,7 @@
 import type {RequestOptions} from 'node:https';
 import {ERROR} from '../constants';
 import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, interopDefault} from '../utils';
+import {assignDefaults} from '../utils';
 import {JSONC_DEFAULT_FILES, TOML_DEFAULT_FILES, YAML_DEFAULT_FILES} from './shared';
 import type {UnConfigFn} from './index';
 
@@ -26,9 +26,7 @@ export interface JsonSchemaValidatorEslintConfigOptions
   options?: GetRuleOptions<'json-schema-validator', 'no-invalid'>;
 }
 
-export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = async (context) => {
-  const jsoncEslintParser = await interopDefault(import('jsonc-eslint-parser'));
-
+export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = (context) => {
   const optionsRaw = context.rootOptions.configs?.jsonSchemaValidator;
   const optionsResolved = assignDefaults(
     optionsRaw,
@@ -42,19 +40,13 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = as
   // Legend:
   // 🟢 - in recommended
 
-  configBuilder?.addConfig(
-    [
-      'json-schema-validator/setup/jsonc',
-      {
-        filesFallback: JSONC_DEFAULT_FILES,
-      },
-    ],
+  configBuilder?.addConfig([
+    'json-schema-validator/setup/jsonc',
     {
-      languageOptions: {
-        parser: jsoncEslintParser,
-      },
+      filesFallback: JSONC_DEFAULT_FILES,
+      parser: 'jsonc-eslint-parser',
     },
-  );
+  ]);
 
   configBuilder?.addConfig([
     'json-schema-validator/setup/yaml',
