@@ -7,7 +7,7 @@ import type Eslint from 'eslint';
 import {builtinRules as eslintBuiltinRules} from 'eslint/use-at-your-own-risk';
 // @ts-expect-error no typings
 import ruleComposer from 'eslint-rule-composer';
-import type {UnConfigContext} from './configs';
+import type {ExtraPluginsType, UnConfigContext} from './configs';
 import {
   GLOB_CSS,
   GLOB_HTML_ALL,
@@ -33,6 +33,7 @@ import type {
   FalsyValue,
   NonEmptyString,
   NonEmptyTuple,
+  ObjectValues,
   OmitIndexSignature,
   PickKeysNotStartingWith,
   PrettifyShallow,
@@ -71,13 +72,25 @@ export interface FlatConfigEntryFilesOrIgnores extends FlatConfigEntryFiles {
   ignores?: string[];
 }
 
+type RulesRecordForExtraPlugins<ExtraPlugins extends ExtraPluginsType> = Partial<
+  Record<
+    ObjectValues<{
+      [PluginKey in keyof ExtraPlugins & string]: `${PluginKey}/${keyof (Awaited<
+        ReturnType<ExtraPlugins[PluginKey]>
+      >['rules'] & {}) &
+        string}`;
+    }>,
+    EslintRuleEntry
+  >
+>;
+
 export type RulesRecord = Record<string, EslintRuleEntry> & RuleOptions;
 export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
   EslintConfigObject<T>
 >;
-export type UnFlagConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
-  Omit<FlatConfigEntry<T>, 'rules'> & {
-    rules?: UnConfigOptionsOverrides<T>;
+export type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = PrettifyShallow<
+  Omit<FlatConfigEntry, 'rules'> & {
+    rules?: UnConfigOptionsOverrides<RuleOptions> & RulesRecordForExtraPlugins<ExtraPlugins>;
   }
 >;
 
@@ -152,14 +165,15 @@ type UnConfigOptionsOverridesEntry<
     },
   [severity: EslintSeverity & number, options?: ReadonlyDeep<Options>]
 >;
-type UnConfigOptionsOverrides<T extends Partial<Record<string, EslintRuleEntry>>> = {
+type UnConfigOptionsOverrides<T> = {
   [RuleName in keyof T]?: UnConfigOptionsOverridesEntry<
     RuleName & string,
-    T[RuleName] & {},
+    T[RuleName] & EslintRuleEntry,
     T[RuleName] & {} extends EslintRuleEntry<infer Options> ? ReadonlyDeep<Options> : never
   >;
 };
 export type UnConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
   T extends null | PluginPrefix | RulesRecord = RulesRecord,
   // eslint-disable-next-line ts/no-empty-object-type
   ExtraOptions = {},
@@ -173,7 +187,9 @@ export type UnConfigOptions<
 
       overridesAny?: PrettifyShallow<
         UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial>>
-      >;
+      > &
+        RulesRecordForExtraPlugins<ExtraPlugins> /*  &
+        Record<`${keyof ExtraPlugins & string}/${string}`, EslintRuleEntry> */;
 
       /**
        * Force non-zero severity of all the rules to be `error` or `warning`.
@@ -242,12 +258,19 @@ const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, EslintSeverity
 
 type AddRuleInternalOptions = EmptyObject;
 
-const getPluginPrefixByFullRuleName = (ruleName: string) => {
+const getPluginPrefixByFullRuleName = <ExtraPlugins extends ExtraPluginsType>(
+  context: UnConfigContext<ExtraPlugins>,
+  ruleName: string,
+) => {
   const ruleNameSplitted = ruleName.split('/');
   for (let i = 0; i < ruleNameSplitted.length; i++) {
     const possiblePrefix = ruleNameSplitted.slice(0, ruleNameSplitted.length - i - 1).join('/');
-    if (possiblePrefix && PLUGIN_PREFIXES_LIST.includes(possiblePrefix as PluginPrefix)) {
-      return possiblePrefix as PluginPrefix;
+    if (
+      possiblePrefix &&
+      (PLUGIN_PREFIXES_LIST.includes(possiblePrefix as PluginPrefix) ||
+        (context.rootOptions.extraPlugins && possiblePrefix in context.rootOptions.extraPlugins))
+    ) {
+      return possiblePrefix as PluginPrefix | keyof ExtraPlugins;
     }
   }
   return null;
@@ -259,10 +282,10 @@ export const getRuleNameAndPluginPrefixByFullName = (
 ) => {
   const pluginRenames = context.rootOptions.pluginRenames || {};
 
-  const pluginPrefixCanonical = getPluginPrefixByFullRuleName(fullRuleName);
+  const pluginPrefixCanonical = getPluginPrefixByFullRuleName(context, fullRuleName);
   const pluginPrefixResolved =
     pluginPrefixCanonical && pluginPrefixCanonical in pluginRenames
-      ? pluginRenames[pluginPrefixCanonical] || pluginPrefixCanonical
+      ? pluginRenames[pluginPrefixCanonical as Exclude<PluginPrefix, ''>] || pluginPrefixCanonical
       : pluginPrefixCanonical;
   const ruleNameUnprefixed = pluginPrefixCanonical
     ? fullRuleName.slice(pluginPrefixCanonical.length + 1 /* `/` character */)
@@ -339,8 +362,8 @@ export const resolveOverrides = (
         context.usedPlugins.add(pluginPrefixCanonical);
 
         if (disableAutofix) {
-          context.disabledAutofixes[pluginPrefixCanonical] = [
-            ...(context.disabledAutofixes[pluginPrefixCanonical] || []),
+          context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] = [
+            ...(context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] || []),
             ruleNameUnprefixed,
           ];
         }
@@ -370,17 +393,24 @@ export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
 const styleRuleName = (ruleName: string) => styleText('green', ruleName);
 const styleRuleNames = (ruleNames: string[]) => ruleNames.map(styleRuleName).join(', ');
 
-// eslint-disable-next-line ts/no-explicit-any
-export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any> {
+export class ConfigEntryBuilder<
+  ExtraPlugins extends ExtraPluginsType = never,
+  // eslint-disable-next-line ts/no-explicit-any
+  DefaultPrefix extends PluginPrefix | null = any,
+> {
   private readonly pluginPrefix: DefaultPrefix;
   private readonly options: UnConfigOptions<
+    ExtraPlugins,
     DefaultPrefix extends null ? RulesRecord : DefaultPrefix
   >;
   private readonly context: UnConfigContext;
 
   constructor(
     rulesPrefix: DefaultPrefix,
-    options: UnConfigOptions<DefaultPrefix extends null ? RulesRecord : DefaultPrefix>,
+    options: UnConfigOptions<
+      ExtraPlugins,
+      DefaultPrefix extends null ? RulesRecord : DefaultPrefix
+    >,
     context: UnConfigContext,
   ) {
     this.pluginPrefix = rulesPrefix;
@@ -797,9 +827,14 @@ export class ConfigEntryBuilder<DefaultPrefix extends PluginPrefix | null = any>
   }
 }
 
-export const createConfigBuilder = <P extends PluginPrefix | null>(
-  context: UnConfigContext,
-  options: UnConfigOptions<P extends null ? OmitIndexSignature<RulesRecord> : P> | boolean,
+export const createConfigBuilder = <
+  ExtraPlugins extends ExtraPluginsType,
+  P extends PluginPrefix | null,
+>(
+  context: UnConfigContext<ExtraPlugins>,
+  options: NoInfer<
+    UnConfigOptions<ExtraPlugins, P extends null ? OmitIndexSignature<RulesRecord> : P> | boolean
+  >,
   rulesPrefix: P,
   disabledIfEmptyFiles = true,
 ) => {
@@ -812,7 +847,7 @@ export const createConfigBuilder = <P extends PluginPrefix | null>(
   ) {
     return null;
   }
-  return new ConfigEntryBuilder(
+  return new ConfigEntryBuilder<ExtraPlugins, P>(
     rulesPrefix,
     // eslint-disable-next-line ts/no-unnecessary-condition
     options && typeof options === 'object' ? options : {},

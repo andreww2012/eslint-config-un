@@ -1,9 +1,8 @@
 import {ERROR} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface HeadersEslintConfigOptions extends UnConfigOptions<'headers'> {
+export interface HeadersEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'headers'> {
   // TODO types are broken
 
   /**
@@ -39,13 +38,12 @@ export interface HeadersEslintConfigOptions extends UnConfigOptions<'headers'> {
   };
 }
 
-export const headerUnConfig: UnConfigFn<'headers'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.headers;
+export default defineUnConfig('headers', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies HeadersEslintConfigOptions);
 
   const {options} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'headers');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'headers');
 
   // Legend:
   // 🟢 - in recommended
@@ -60,4 +58,4 @@ export const headerUnConfig: UnConfigFn<'headers'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

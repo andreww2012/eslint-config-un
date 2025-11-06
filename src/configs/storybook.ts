@@ -1,15 +1,13 @@
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface StorybookEslintConfigOptions extends UnConfigOptions<'storybook'> {}
+export interface StorybookEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'storybook'> {}
 
-export const storybookUnConfig: UnConfigFn<'storybook'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.storybook;
+export default defineUnConfig('storybook', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies StorybookEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'storybook');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'storybook');
 
   // Legend:
   // 🟢 - in recommended
@@ -61,4 +59,4 @@ export const storybookUnConfig: UnConfigFn<'storybook'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

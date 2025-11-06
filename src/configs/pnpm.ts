@@ -1,15 +1,16 @@
 import {ERROR, OFF} from '../constants';
+import type {PickKeysStartingWith} from '../types';
 import {
+  type ExtraPluginsType,
   type RuleNamesForPlugin,
   type RulesRecordPartial,
   type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
-import type {PickKeysStartingWith} from '../types';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface PnpmEslintConfigOptions {
+export interface PnpmEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'pnpm'> {
   /**
    * [`eslint-plugin-pnpm`](https://npmjs.com/eslint-plugin-pnpm) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -29,6 +30,7 @@ export interface PnpmEslintConfigOptions {
   configPackageJson?:
     | boolean
     | UnConfigOptions<
+        ExtraPlugins,
         PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/json-'>,
         {
           /**
@@ -56,7 +58,7 @@ export interface PnpmEslintConfigOptions {
    */
   configPnpmWorkspace?:
     | boolean
-    | UnConfigOptions<PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/yaml-'>>;
+    | UnConfigOptions<ExtraPlugins, PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/yaml-'>>;
 }
 
 const PNPM_YAML_RULES = new Set<string>([
@@ -65,8 +67,7 @@ const PNPM_YAML_RULES = new Set<string>([
   'yaml-valid-packages',
 ] satisfies RuleNamesForPlugin<'pnpm'>[]);
 
-export const pnpmUnConfig: UnConfigFn<'pnpm'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.pnpm;
+export default defineUnConfig('pnpm', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configPackageJson: true,
     configPnpmWorkspace: true,
@@ -80,7 +81,7 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = (context) => {
   } satisfies typeof configPackageJson & object);
   const {enforceCatalog, preferSettingsInPnpmWorkspaceYaml} = configPackageJsonOptions;
 
-  const configBuilderPackageJson = createConfigBuilder(context, configPackageJson, 'pnpm');
+  const configBuilderPackageJson = context.createConfigBuilder(configPackageJson, 'pnpm');
   configBuilderPackageJson
     ?.addConfig(
       [
@@ -113,7 +114,7 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = (context) => {
     })
     .addOverrides();
 
-  const configBuilderPnpmWorkspace = createConfigBuilder(context, configPnpmWorkspace, 'pnpm');
+  const configBuilderPnpmWorkspace = context.createConfigBuilder(configPnpmWorkspace, 'pnpm');
   configBuilderPnpmWorkspace
     ?.addConfig([
       'pnpm/pnpm-workspace-yaml',
@@ -135,4 +136,4 @@ export const pnpmUnConfig: UnConfigFn<'pnpm'> = (context) => {
     configs: [configBuilderPackageJson, configBuilderPnpmWorkspace],
     optionsResolved,
   };
-};
+});

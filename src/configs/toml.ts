@@ -1,12 +1,17 @@
 import {ERROR, OFF} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {TOML_DEFAULT_FILES} from './shared';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
 const DEFAULT_FILES_TO_IGNORE = ['Cargo.lock'] as const;
 
-export interface TomlEslintConfigOptions extends UnConfigOptions<'toml'> {
+export interface TomlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'toml'> {
   /** `files` specified in this config will be merged with the default of `['**\/*.toml']`. Set this to `true` to avoid that behavior */
   doNotMergeFilesWithDefault?: boolean;
 
@@ -38,8 +43,7 @@ export interface TomlEslintConfigOptions extends UnConfigOptions<'toml'> {
   maxIntegerPrecisionBits?: number;
 }
 
-export const tomlUnConfig: UnConfigFn<'toml'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.toml;
+export default defineUnConfig('toml', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     maxPrecisionOfFractionalSeconds: 3,
     maxIntegerPrecisionBits: 64,
@@ -47,7 +51,7 @@ export const tomlUnConfig: UnConfigFn<'toml'> = (context) => {
 
   const {maxPrecisionOfFractionalSeconds, maxIntegerPrecisionBits} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'toml');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'toml');
 
   // Legend:
   // 🟣 = in standard
@@ -111,4 +115,4 @@ export const tomlUnConfig: UnConfigFn<'toml'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

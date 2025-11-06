@@ -1,17 +1,21 @@
 import globals from 'globals';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface MochaEslintConfigOptions
-  extends UnConfigOptions<'mocha'>,
-    NoOnlyTestsSubConfigEnabledByDefault {
+export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'mocha'>,
+    NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -41,8 +45,7 @@ export interface MochaEslintConfigOptions
   maxTopLevelSuites?: number;
 }
 
-export const mochaUnConfig: UnConfigFn<'mocha'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.mocha;
+export default defineUnConfig('mocha', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: true,
     maxTopLevelSuites: 1,
@@ -55,7 +58,7 @@ export const mochaUnConfig: UnConfigFn<'mocha'> = (context) => {
     maxTopLevelSuites,
   } = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'mocha');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'mocha');
 
   const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
 
@@ -128,4 +131,4 @@ export const mochaUnConfig: UnConfigFn<'mocha'> = (context) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-};
+});

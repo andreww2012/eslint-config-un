@@ -1,17 +1,15 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
   RULES_TO_DISABLE_IN_TEST_FILES,
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface AvaEslintConfigOptions
-  extends UnConfigOptions<'ava'>,
-    NoOnlyTestsSubConfigDisabledByDefault {
+export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'ava'>,
+    NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * If `true`, all assertions will need to have an assertion message.
    * If set to `false`, no assertion may have an assertion message.
@@ -31,15 +29,14 @@ export interface AvaEslintConfigOptions
   enforceMaxAssertions?: number;
 }
 
-export const avaUnConfig: UnConfigFn<'ava'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.ava;
+export default defineUnConfig('ava', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false, // has `no-only-test` rule
   } satisfies AvaEslintConfigOptions);
 
   const {configNoOnlyTests, enforceAssertionMessage, enforceMaxAssertions} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'ava');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'ava');
 
   const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
 
@@ -107,4 +104,4 @@ export const avaUnConfig: UnConfigFn<'ava'> = (context) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-};
+});

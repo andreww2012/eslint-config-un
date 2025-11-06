@@ -1,24 +1,28 @@
 import {ERROR, GLOB_JSON, GLOB_TSX, OFF} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface NxEslintConfigOptions extends UnConfigOptions<'nx'> {
+export interface NxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'nx'> {
   /**
    * @default false
    */
   enforceModuleBoundaries?: boolean | GetRuleOptions<'nx', 'enforce-module-boundaries'>;
 }
 
-export const nxUnConfig: UnConfigFn<'nx'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.nx;
+export default defineUnConfig('nx', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceModuleBoundaries: false,
   } satisfies NxEslintConfigOptions);
 
   const {enforceModuleBoundaries} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'nx');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'nx');
 
   configBuilder
     ?.addConfig([
@@ -35,7 +39,7 @@ export const nxUnConfig: UnConfigFn<'nx'> = (context) => {
     )
     .addOverrides();
 
-  const configBuilderJson = createConfigBuilder(context, optionsResolved, 'nx');
+  const configBuilderJson = context.createConfigBuilder(optionsResolved, 'nx');
 
   configBuilderJson
     ?.addConfig([
@@ -56,4 +60,4 @@ export const nxUnConfig: UnConfigFn<'nx'> = (context) => {
     configs: [configBuilder, configBuilderJson],
     optionsResolved,
   };
-};
+});

@@ -1,14 +1,15 @@
 import {ERROR, GLOB_JS_TS_EXTENSION, OFF} from '../constants';
+import type {} from '../eslint';
+import type {ConditionalKeys} from '../types';
+import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
 import {
+  type ExtraPluginsType,
   type RuleNamesForPlugin,
   type RulesRecordPartial,
   type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
-import type {ConditionalKeys} from '../types';
-import {assignDefaults} from '../utils';
-import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
-import type {UnConfigFn} from './index';
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
 const ESLINT_PLUGIN_TESTING_RELATED_RULES = [
   'consistent-output',
@@ -22,7 +23,8 @@ const ESLINT_PLUGIN_TESTING_RELATED_RULES_SET = new Set<string>(
   ESLINT_PLUGIN_TESTING_RELATED_RULES,
 );
 
-export interface EslintPluginEslintConfigOptions extends UnConfigOptions<'eslint-plugin'> {
+export interface EslintPluginEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'eslint-plugin'> {
   /**
    * Includes rules for ESLint rule test files.
    * @default true
@@ -30,6 +32,7 @@ export interface EslintPluginEslintConfigOptions extends UnConfigOptions<'eslint
   configRuleTests?:
     | boolean
     | UnConfigOptions<
+        ExtraPlugins,
         Pick<
           RulesRecordPartial<'eslint-plugin'>,
           `eslint-plugin/${(typeof ESLINT_PLUGIN_TESTING_RELATED_RULES)[number]}`
@@ -71,15 +74,14 @@ export interface EslintPluginEslintConfigOptions extends UnConfigOptions<'eslint
   >;
 }
 
-export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.eslintPlugin;
+export default defineUnConfig('eslintPlugin', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configRuleTests: false,
   } satisfies EslintPluginEslintConfigOptions);
 
   const {configRuleTests, metaProperties = {}} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'eslint-plugin');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'eslint-plugin');
 
   const getRuleDisallowingMetaPropertySeverity = (
     property: ConditionalKeys<
@@ -173,7 +175,7 @@ export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
     })
     .addOverrides();
 
-  const configBuilderRuleTests = createConfigBuilder(context, configRuleTests, 'eslint-plugin');
+  const configBuilderRuleTests = context.createConfigBuilder(configRuleTests, 'eslint-plugin');
 
   configBuilderRuleTests
     ?.addConfig([
@@ -199,4 +201,4 @@ export const eslintPluginUnConfig: UnConfigFn<'eslintPlugin'> = (context) => {
     configs: [configBuilder, configBuilderRuleTests],
     optionsResolved,
   };
-};
+});

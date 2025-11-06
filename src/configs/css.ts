@@ -1,11 +1,17 @@
 import type {CSSLanguageOptions} from '@eslint/css';
 import {ERROR, GLOB_CSS, OFF, WARNING} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {generatePackageToLoadProperty} from '../plugins';
-import {assignDefaults, getKeysOfTruthyValues} from '../utils';
-import type {UnConfigFn} from './index';
+import {getKeysOfTruthyValues} from '../utils';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
+export interface CssEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'css'> {
   /**
    * From `@eslint/css` plugin docs:
    * > By default, the CSS parser runs in strict mode, which reports all parsing errors. If you'd like to allow recoverable parsing errors (those that the browser automatically fixes on its own), you can set the `tolerant` option to `true`.
@@ -47,15 +53,14 @@ export interface CssEslintConfigOptions extends UnConfigOptions<'css'> {
   };
 }
 
-export const cssUnConfig: UnConfigFn<'css'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.css;
+export default defineUnConfig('css', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     tolerantMode: false,
   } satisfies CssEslintConfigOptions);
 
   const {tolerantMode, customSyntax, allowedFontUnits, allowedFeatures} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'css');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'css');
 
   const tailwindPackageInfo = context.packagesInfo.tailwindcss;
   const tailwindMajorVersion = tailwindPackageInfo?.versions.major;
@@ -141,4 +146,4 @@ export const cssUnConfig: UnConfigFn<'css'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

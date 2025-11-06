@@ -1,9 +1,14 @@
 import {ERROR} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface CssInJsEslintConfigOptions extends UnConfigOptions<'css-in-js'> {
+export interface CssInJsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'css-in-js'> {
   /**
    * [`eslint-plugin-css` plugin settings](https://ota-meshi.github.io/eslint-plugin-css/settings/) that will be applied to the specified `files` and `ignores`.
    */
@@ -48,8 +53,7 @@ export interface CssInJsEslintConfigOptions extends UnConfigOptions<'css-in-js'>
   propertyCasing?: GetRuleOptions<'css-in-js', 'property-casing'>;
 }
 
-export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.cssInJs;
+export default defineUnConfig('cssInJs', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     hexColorsStyle: 'long',
     avoidLeadingZero: false,
@@ -69,7 +73,7 @@ export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {
       ? preferNamedColorsRaw
       : {flag: preferNamedColorsRaw ?? false};
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'css-in-js');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'css-in-js');
 
   // Legend:
   // 🟢 - in recommended and standard
@@ -114,4 +118,4 @@ export const cssInJsUnConfig: UnConfigFn<'cssInJs'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

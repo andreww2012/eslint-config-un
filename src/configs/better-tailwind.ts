@@ -5,11 +5,16 @@ import type {
   Variables as BetterTailwindcssVariables,
 } from 'eslint-plugin-better-tailwindcss/api/types';
 import {ERROR, OFF, WARNING} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface BetterTailwindEslintConfigOptions extends UnConfigOptions<'better-tailwindcss'> {
+export interface BetterTailwindEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'better-tailwindcss'> {
   /**
    * [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -76,8 +81,7 @@ export interface BetterTailwindEslintConfigOptions extends UnConfigOptions<'bett
   restrictedClasses?: string[];
 }
 
-export const betterTailwindUnConfig: UnConfigFn<'betterTailwind'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.betterTailwind;
+export default defineUnConfig('betterTailwind', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     classOrder: 'official',
   } satisfies Partial<BetterTailwindEslintConfigOptions>);
@@ -107,7 +111,7 @@ export const betterTailwindUnConfig: UnConfigFn<'betterTailwind'> = (context) =>
     );
   }
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'better-tailwindcss');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'better-tailwindcss');
 
   // Legend:
   // 🟢 - in recommended
@@ -159,4 +163,4 @@ export const betterTailwindUnConfig: UnConfigFn<'betterTailwind'> = (context) =>
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

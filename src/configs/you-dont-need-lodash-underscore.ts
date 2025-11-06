@@ -1,9 +1,13 @@
 // cspell:ignore foldl foldr
 import {ERROR, OFF} from '../constants';
-import {type RuleNamesForPlugin, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {NonEmptyTuple} from '../types';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type RuleNamesForPlugin,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
 type LodashMethods =
   | 'all'
@@ -159,8 +163,9 @@ const LODASH_METHODS_TO_RULE_NAMES: Record<
   values: 'values',
 };
 
-export interface YouDontNeedLodashUnderscoreEslintConfigOptions
-  extends UnConfigOptions<'you-dont-need-lodash-underscore'> {
+export interface YouDontNeedLodashUnderscoreEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'you-dont-need-lodash-underscore'> {
   /**
    * Lodash methods that will be exempted from the check. Will be merged with the default value.
    * @example {capitalize: true, cloneDeep: true, get: true, omit: true, throttle: true}
@@ -168,10 +173,7 @@ export interface YouDontNeedLodashUnderscoreEslintConfigOptions
   ignoredMethods?: Partial<Record<LodashMethods, boolean>>;
 }
 
-export const youDontNeedLodashUnderscoreUnConfig: UnConfigFn<'youDontNeedLodashUnderscore'> = (
-  context,
-) => {
-  const optionsRaw = context.rootOptions.configs?.youDontNeedLodashUnderscore;
+export default defineUnConfig('youDontNeedLodashUnderscore', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies YouDontNeedLodashUnderscoreEslintConfigOptions,
@@ -192,8 +194,7 @@ export const youDontNeedLodashUnderscoreUnConfig: UnConfigFn<'youDontNeedLodashU
       ignoredMethods[method] ? OFF : ERROR,
     ] satisfies NonEmptyTuple;
 
-  const configBuilder = createConfigBuilder(
-    context,
+  const configBuilder = context.createConfigBuilder(
     optionsResolved,
     'you-dont-need-lodash-underscore',
   );
@@ -283,4 +284,4 @@ export const youDontNeedLodashUnderscoreUnConfig: UnConfigFn<'youDontNeedLodashU
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

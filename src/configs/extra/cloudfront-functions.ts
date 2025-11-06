@@ -1,15 +1,20 @@
 import {ERROR, OFF} from '../../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../../eslint';
-import {assignDefaults} from '../../utils';
-import {esUnConfig} from '../es';
-import type {UnConfigFn} from '../index';
+import esUnConfig from '../es';
+import {
+  type ExtraPluginsType,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from '../index';
 
-export interface CloudfrontFunctionsEslintConfigOptions extends UnConfigOptions {
+export interface CloudfrontFunctionsEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins> {
   /**
    * By default, the runtime version is assumed to be 2.
    * This is a sub-config for functions written for the v1 runtime.
    */
-  configV1?: UnConfigOptions;
+  configV1?: UnConfigOptions<ExtraPlugins>;
 }
 
 const genSyntaxNotAllowedErrorMessage = (syntax: string, isPlural = false) =>
@@ -18,10 +23,7 @@ const genSyntaxNotAllowedErrorMessage = (syntax: string, isPlural = false) =>
 const getAllowedImports = (isV2 = true): string[] =>
   ['querystring', 'crypto', isV2 && 'cloudfront'].filter((v) => typeof v === 'string');
 
-export const cloudfrontFunctionsEslintConfig: UnConfigFn<'cloudfrontFunctions'> = async (
-  context,
-) => {
-  const optionsRaw = context.rootOptions.configs?.cloudfrontFunctions;
+export default defineUnConfig('cloudfrontFunctions', async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies CloudfrontFunctionsEslintConfigOptions,
@@ -43,7 +45,7 @@ export const cloudfrontFunctionsEslintConfig: UnConfigFn<'cloudfrontFunctions'> 
 
       const configsEs =
         (
-          await esUnConfig(context, {
+          await esUnConfig(context, undefined, {
             prefix: `cloudfront-functions/v${runtimeVersion}/es-features`,
             options: {
               files,
@@ -145,7 +147,7 @@ export const cloudfrontFunctionsEslintConfig: UnConfigFn<'cloudfrontFunctions'> 
 
       const allowedImports = getAllowedImports(isV2);
 
-      const configBuilder = createConfigBuilder(context, options, '');
+      const configBuilder = context.createConfigBuilder(options, '');
 
       configBuilder
         ?.addConfig([
@@ -234,4 +236,4 @@ export const cloudfrontFunctionsEslintConfig: UnConfigFn<'cloudfrontFunctions'> 
     configs: configs.flat(),
     optionsResolved,
   };
-};
+});

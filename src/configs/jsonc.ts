@@ -1,27 +1,26 @@
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, OFF} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {JSONC_DEFAULT_FILES} from './shared';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface JsoncEslintConfigOptions extends UnConfigOptions<'jsonc'> {
+export interface JsoncEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'jsonc'> {
   /**
    * Config exclusively for .json files (no rules are applied by default!)
    * @default false
    */
-  configJson?: boolean | UnConfigOptions<'jsonc'>;
+  configJson?: boolean | UnConfigOptions<ExtraPlugins, 'jsonc'>;
 
   /**
    * Config exclusively for .jsonc files (no rules are applied by default!)
    * @default false
    */
-  configJsonc?: boolean | UnConfigOptions<'jsonc'>;
+  configJsonc?: boolean | UnConfigOptions<ExtraPlugins, 'jsonc'>;
 
   /**
    * Config exclusively for .jsonc5 files (no rules are applied by default!)
    * @default false
    */
-  configJson5?: boolean | UnConfigOptions<'jsonc'>;
+  configJson5?: boolean | UnConfigOptions<ExtraPlugins, 'jsonc'>;
 
   /**
    * `files` specified in this config will be merged with the default of
@@ -31,8 +30,7 @@ export interface JsoncEslintConfigOptions extends UnConfigOptions<'jsonc'> {
   doNotMergeFilesWithDefault?: boolean;
 }
 
-export const jsoncUnConfig: UnConfigFn<'json'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.json;
+export default defineUnConfig('json', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     doNotMergeFilesWithDefault: false,
     configJson: false,
@@ -41,7 +39,7 @@ export const jsoncUnConfig: UnConfigFn<'json'> = (context) => {
   } satisfies JsoncEslintConfigOptions);
   const {doNotMergeFilesWithDefault, configJson, configJsonc, configJson5} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'jsonc');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'jsonc');
 
   // Legend:
   // 🟣 = in main
@@ -111,7 +109,7 @@ export const jsoncUnConfig: UnConfigFn<'json'> = (context) => {
     .enableConfigTesterForPlugin('jsonc')
     .addOverrides();
 
-  const configBuilderJson = createConfigBuilder(context, configJson, 'jsonc');
+  const configBuilderJson = context.createConfigBuilder(configJson, 'jsonc');
   configBuilderJson
     ?.addConfig([
       'jsonc/json',
@@ -124,7 +122,7 @@ export const jsoncUnConfig: UnConfigFn<'json'> = (context) => {
     ])
     .addOverrides();
 
-  const configBuilderJsonc = createConfigBuilder(context, configJsonc, 'jsonc');
+  const configBuilderJsonc = context.createConfigBuilder(configJsonc, 'jsonc');
   configBuilderJsonc
     ?.addConfig([
       'jsonc/jsonc',
@@ -137,7 +135,7 @@ export const jsoncUnConfig: UnConfigFn<'json'> = (context) => {
     ])
     .addOverrides();
 
-  const configBuilderJson5 = createConfigBuilder(context, configJson5, 'jsonc');
+  const configBuilderJson5 = context.createConfigBuilder(configJson5, 'jsonc');
   configBuilderJson5
     ?.addConfig([
       'jsonc/json5',
@@ -154,4 +152,4 @@ export const jsoncUnConfig: UnConfigFn<'json'> = (context) => {
     configs: [configBuilder, configBuilderJson, configBuilderJsonc, configBuilderJson5],
     optionsResolved,
   };
-};
+});

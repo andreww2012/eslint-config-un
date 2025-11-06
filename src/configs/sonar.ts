@@ -1,9 +1,9 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, doesPackageExist} from '../utils';
-import type {UnConfigFn} from './index';
+import {doesPackageExist} from '../utils';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface SonarEslintConfigOptions extends UnConfigOptions<'sonarjs'> {
+export interface SonarEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'sonarjs'> {
   /**
    * Enables rules that are specific to [aws-cdk-lib](https://npmjs.com/aws-cdk-lib)
    * @default true <=> `aws-cdk-lib` package is installed
@@ -23,13 +23,12 @@ export interface SonarEslintConfigOptions extends UnConfigOptions<'sonarjs'> {
   testsRules?: boolean;
 }
 
-export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
+export default defineUnConfig('sonar', async (context, optionsRaw) => {
   const [awsCdkLibInstalled, helmetInstalled] = await Promise.all([
     doesPackageExist('aws-cdk-lib'),
     doesPackageExist('helmet'),
   ]);
 
-  const optionsRaw = context.rootOptions.configs?.sonar;
   const optionsResolved = assignDefaults(optionsRaw, {
     enableAwsRules: awsCdkLibInstalled,
     enableHelmetRules: helmetInstalled,
@@ -42,7 +41,7 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
   const helmetRulesSeverity = enableHelmetRules ? ERROR : OFF;
   const testsRulesSeverity = testsRules ? ERROR : OFF;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'sonarjs');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'sonarjs');
 
   // Legend:
   // [S1234] - Sonar rule code
@@ -405,4 +404,4 @@ export const sonarUnConfig: UnConfigFn<'sonar'> = async (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

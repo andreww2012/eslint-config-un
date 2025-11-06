@@ -1,7 +1,9 @@
 import {eslintConfigInternal} from './config';
-import type {EslintConfigUnOptions} from './configs';
+import type {EslintConfigUnOptions, ExtraPluginsType} from './configs';
 
-export const eslintConfig = (options: EslintConfigUnOptions = {}) => eslintConfigInternal(options);
+export const eslintConfig = <const ExtraPlugins extends ExtraPluginsType = never>(
+  options: EslintConfigUnOptions<ExtraPlugins> = {},
+) => eslintConfigInternal(options);
 
 export type {RuleOptions} from './eslint-types.gen';
 export {DEFAULT_GLOBAL_IGNORES} from './constants';

@@ -1,14 +1,10 @@
 import {ERROR, GLOB_HTML, GLOB_YAML, OFF, WARNING} from '../constants';
-import {
-  type BuiltinEslintRules,
-  type RulesRecord,
-  type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
-import {assignDefaults, fetchPackageInfo, getKeysOfTruthyValues} from '../utils';
-import type {UnConfigFn} from './index';
+import type {BuiltinEslintRules} from '../eslint';
+import {fetchPackageInfo, getKeysOfTruthyValues} from '../utils';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface JsEslintConfigOptions extends UnConfigOptions<BuiltinEslintRules> {
+export interface JsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, BuiltinEslintRules> {
   /**
    * Will be merged with the default value
    * @default {warn: true, error: true}
@@ -16,16 +12,10 @@ export interface JsEslintConfigOptions extends UnConfigOptions<BuiltinEslintRule
   allowedConsoleMethods?: Partial<Record<keyof Console | (string & {}), boolean>>;
 }
 
-export const jsUnConfig: UnConfigFn<
-  'js',
-  {
-    finalFlatConfigRules: Partial<RulesRecord>;
-  }
-> = async (context) => {
-  const optionsRaw = context.rootOptions.configs?.js;
+export default defineUnConfig('js', async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, '');
+  const configBuilder = context.createConfigBuilder(optionsResolved, '');
 
   const eslintVersion = (await fetchPackageInfo('eslint'))?.versions.majorAndMinor || 0;
 
@@ -191,7 +181,7 @@ export const jsUnConfig: UnConfigFn<
     .addRule('no-invalid-this', OFF) /** @since 1.0.0-rc-2 */
     .addRule('no-iterator', ERROR) /** @since 0.0.9 */
     .addRule('no-label-var', ERROR) /** @since 0.0.9 */
-    .addRule('no-labels', ERROR, [{allowLoop: false}]) /** @since 0.4.0 */
+    .addRule('no-labels', ERROR, [{allowLoop: true}]) /** @since 0.4.0 */
     .addRule('no-lone-blocks', ERROR) /** @since 0.4.0 */
     .addRule('no-lonely-if', ERROR) /** @since 0.6.0 */
     .addRule('no-loop-func', ERROR) /** @since 0.0.9 */
@@ -343,4 +333,4 @@ export const jsUnConfig: UnConfigFn<
     optionsResolved,
     finalFlatConfigRules: config?.config.rules || {},
   };
-};
+});

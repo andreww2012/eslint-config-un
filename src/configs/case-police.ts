@@ -1,15 +1,13 @@
 import {ERROR} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface CasePoliceEslintConfigOptions extends UnConfigOptions<'case-police'> {}
+export interface CasePoliceEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'case-police'> {}
 
-export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.casePolice;
+export default defineUnConfig('casePolice', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies CasePoliceEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'case-police');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'case-police');
 
   configBuilder
     ?.addConfig([
@@ -30,4 +28,4 @@ export const casePoliceUnConfig: UnConfigFn<'casePolice'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

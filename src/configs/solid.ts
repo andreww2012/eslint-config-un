@@ -1,15 +1,13 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface SolidEslintConfigOptions extends UnConfigOptions<'solid'> {}
+export interface SolidEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'solid'> {}
 
-export const solidUnConfig: UnConfigFn<'solid'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.solid;
+export default defineUnConfig('solid', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies SolidEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'solid');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'solid');
 
   const solidPackageInfo = context.packagesInfo['solid-js'];
   const solidParsedVersion = solidPackageInfo?.versions.majorAndMinor;
@@ -66,4 +64,4 @@ export const solidUnConfig: UnConfigFn<'solid'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

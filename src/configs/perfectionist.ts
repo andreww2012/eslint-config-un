@@ -1,18 +1,22 @@
 import {ERROR, OFF} from '../constants';
+import type {RuleOptionsPerPlugin} from '../eslint';
+import type {PrettifyShallow} from '../types';
 import {
+  type ExtraPluginsType,
   type GetRuleOptions,
-  type RuleOptionsPerPlugin,
   type RulesRecordPartial,
   type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
-import type {PrettifyShallow} from '../types';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-type RuleSubConfig<T extends keyof RuleOptionsPerPlugin['perfectionist']> =
+type RuleSubConfig<
+  ExtraPlugins extends ExtraPluginsType,
+  T extends keyof RuleOptionsPerPlugin['perfectionist'],
+> =
   | boolean
   | UnConfigOptions<
+      ExtraPlugins,
       // @ts-expect-error typescript is bad
       Pick<RulesRecordPartial<'perfectionist'>, `perfectionist/${T}`>,
       {
@@ -20,7 +24,8 @@ type RuleSubConfig<T extends keyof RuleOptionsPerPlugin['perfectionist']> =
       }
     >;
 
-export interface PerfectionistEslintConfigOptions extends UnConfigOptions<'perfectionist'> {
+export interface PerfectionistEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'perfectionist'> {
   /**
    * [`eslint-plugin-perfectionist`](https://npmjs.com/eslint-plugin-perfectionist) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -47,106 +52,105 @@ export interface PerfectionistEslintConfigOptions extends UnConfigOptions<'perfe
   /**
    * @default false
    */
-  configSortArrayIncludes?: RuleSubConfig<'sort-array-includes'>;
+  configSortArrayIncludes?: RuleSubConfig<ExtraPlugins, 'sort-array-includes'>;
 
   /**
    * @default false
    */
-  configSortClasses?: RuleSubConfig<'sort-classes'>;
+  configSortClasses?: RuleSubConfig<ExtraPlugins, 'sort-classes'>;
 
   /**
    * @default false
    */
-  configSortDecorators?: RuleSubConfig<'sort-decorators'>;
+  configSortDecorators?: RuleSubConfig<ExtraPlugins, 'sort-decorators'>;
 
   /**
    * @default false
    */
-  configSortEnums?: RuleSubConfig<'sort-enums'>;
+  configSortEnums?: RuleSubConfig<ExtraPlugins, 'sort-enums'>;
 
   /**
    * @default false
    */
-  configSortExports?: RuleSubConfig<'sort-exports'>;
+  configSortExports?: RuleSubConfig<ExtraPlugins, 'sort-exports'>;
 
   /**
    * @default false
    */
-  configSortHeritageClauses?: RuleSubConfig<'sort-heritage-clauses'>;
+  configSortHeritageClauses?: RuleSubConfig<ExtraPlugins, 'sort-heritage-clauses'>;
 
   /**
    * @default false
    */
-  configSortImports?: RuleSubConfig<'sort-imports'>;
+  configSortImports?: RuleSubConfig<ExtraPlugins, 'sort-imports'>;
 
   /**
    * @default false
    */
-  configSortInterfaces?: RuleSubConfig<'sort-interfaces'>;
+  configSortInterfaces?: RuleSubConfig<ExtraPlugins, 'sort-interfaces'>;
 
   /**
    * @default false
    */
-  configSortIntersectionTypes?: RuleSubConfig<'sort-intersection-types'>;
+  configSortIntersectionTypes?: RuleSubConfig<ExtraPlugins, 'sort-intersection-types'>;
 
   /**
    * @default false
    */
-  configSortJsxProps?: RuleSubConfig<'sort-jsx-props'>;
+  configSortJsxProps?: RuleSubConfig<ExtraPlugins, 'sort-jsx-props'>;
 
   /**
    * @default false
    */
-  configSortMaps?: RuleSubConfig<'sort-maps'>;
+  configSortMaps?: RuleSubConfig<ExtraPlugins, 'sort-maps'>;
 
   /**
    * @default false
    */
-  configSortModules?: RuleSubConfig<'sort-modules'>;
+  configSortModules?: RuleSubConfig<ExtraPlugins, 'sort-modules'>;
 
   /**
    * @default false
    */
-  configSortNamedExports?: RuleSubConfig<'sort-named-exports'>;
+  configSortNamedExports?: RuleSubConfig<ExtraPlugins, 'sort-named-exports'>;
 
   /**
    * @default false
    */
-  configSortNamedImports?: RuleSubConfig<'sort-named-imports'>;
+  configSortNamedImports?: RuleSubConfig<ExtraPlugins, 'sort-named-imports'>;
 
   /**
    * @default false
    */
-  configSortObjectTypes?: RuleSubConfig<'sort-object-types'>;
+  configSortObjectTypes?: RuleSubConfig<ExtraPlugins, 'sort-object-types'>;
 
   /**
    * @default false
    */
-  configSortObjects?: RuleSubConfig<'sort-objects'>;
+  configSortObjects?: RuleSubConfig<ExtraPlugins, 'sort-objects'>;
 
   /**
    * @default false
    */
-  configSortSets?: RuleSubConfig<'sort-sets'>;
+  configSortSets?: RuleSubConfig<ExtraPlugins, 'sort-sets'>;
 
   /**
    * @default false
    */
-  configSortSwitchCase?: RuleSubConfig<'sort-switch-case'>;
+  configSortSwitchCase?: RuleSubConfig<ExtraPlugins, 'sort-switch-case'>;
 
   /**
    * @default false
    */
-  configSortUnionTypes?: RuleSubConfig<'sort-union-types'>;
+  configSortUnionTypes?: RuleSubConfig<ExtraPlugins, 'sort-union-types'>;
 
   /**
    * @default false
    */
-  configSortVariableDeclarations?: RuleSubConfig<'sort-variable-declarations'>;
+  configSortVariableDeclarations?: RuleSubConfig<ExtraPlugins, 'sort-variable-declarations'>;
 }
 
-export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.perfectionist;
+export default defineUnConfig('perfectionist', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configSortArrayIncludes: false,
     configSortClasses: false,
@@ -194,7 +198,7 @@ export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
     configSortVariableDeclarations,
   } = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'perfectionist');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'perfectionist');
 
   configBuilder
     ?.addConfig(
@@ -260,7 +264,7 @@ export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
       ['sort-variable-declarations', configSortVariableDeclarations],
     ] as const
   ).map(([ruleName, ruleSubConfig]) => {
-    const configBuilderForRule = createConfigBuilder(context, ruleSubConfig, 'perfectionist');
+    const configBuilderForRule = context.createConfigBuilder(ruleSubConfig, 'perfectionist');
     configBuilderForRule
       ?.addConfig([
         `perfectionist/${ruleName}`,
@@ -281,4 +285,4 @@ export const perfectionistUnConfig: UnConfigFn<'perfectionist'> = (context) => {
     configs: [configBuilder, ...subConfigs],
     optionsResolved,
   };
-};
+});

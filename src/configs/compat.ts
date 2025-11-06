@@ -1,9 +1,8 @@
 import {ERROR} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface CompatEslintConfigOptions extends UnConfigOptions<'compat'> {
+export interface CompatEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'compat'> {
   /**
    * [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -23,13 +22,12 @@ export interface CompatEslintConfigOptions extends UnConfigOptions<'compat'> {
   };
 }
 
-export const compatUnConfig: UnConfigFn<'compat'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.compat;
+export default defineUnConfig('compat', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies CompatEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'compat');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'compat');
 
   // Legend:
   // 🟢 - in recommended
@@ -48,4 +46,4 @@ export const compatUnConfig: UnConfigFn<'compat'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

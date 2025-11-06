@@ -1,9 +1,13 @@
 import {ERROR, GLOB_JS_TS_EXTENSION} from '../../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../../eslint';
-import {assignDefaults} from '../../utils';
-import type {UnConfigFn} from '../index';
+import {
+  type ExtraPluginsType,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from '../index';
 
-export interface CliEslintConfigOptions extends UnConfigOptions {
+export interface CliEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins> {
   /**
    * By default, files in directories on all levels are accounted for by this config. Set this to true to only account for files in the top-level directories.
    * @default false
@@ -14,13 +18,12 @@ export interface CliEslintConfigOptions extends UnConfigOptions {
 const DEFAULT_CLI_DIRS = ['bin', 'scripts', 'cli'] as const;
 const DEFAULT_CLI_FILES = ['cli'] as const;
 
-export const cliUnConfig: UnConfigFn<'cli'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.cli;
+export default defineUnConfig('cli', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies CliEslintConfigOptions);
 
   const {onlyTopLevelDirs} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, null);
+  const configBuilder = context.createConfigBuilder(optionsResolved, null);
 
   configBuilder
     ?.addConfig([
@@ -51,4 +54,4 @@ export const cliUnConfig: UnConfigFn<'cli'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

@@ -1,15 +1,16 @@
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
+import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
+import type {NonEmptyTuple, PrettifyShallow, Subtract} from '../types';
+import {type MaybeArray, fetchPackageInfo} from '../utils';
 import {
   type GetRuleOptions,
+  type ExtraPluginsType,
   type RuleNamesForPlugin,
   type RulesRecordPartial,
   type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
-import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
-import type {NonEmptyTuple, PrettifyShallow, Subtract} from '../types';
-import {type MaybeArray, assignDefaults, fetchPackageInfo} from '../utils';
-import type {UnConfigFn} from './index';
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
 // Please keep ascending order
 const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20] as const;
@@ -22,8 +23,8 @@ const LATEST_SUPPORTED_ANGULAR_VERSION = SUPPORTED_ANGULAR_VERSIONS.at(
   -1,
 ) as LatestSupportedAngularVersion;
 
-export interface AngularEslintConfigOptions
-  extends UnConfigOptions<RulesRecordPartial<'@angular-eslint'>> {
+export interface AngularEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, RulesRecordPartial<'@angular-eslint'>> {
   /**
    * Enables or specifies the configuration for the [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template) plugin,
    * which includes template-specific rules.
@@ -32,6 +33,7 @@ export interface AngularEslintConfigOptions
   configTemplate?:
     | boolean
     | UnConfigOptions<
+        ExtraPlugins,
         '@angular-eslint/template',
         {
           /**
@@ -200,8 +202,7 @@ export interface AngularEslintConfigOptions
   preferStandaloneComponents?: boolean;
 }
 
-export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
-  const optionsRaw = context.rootOptions.configs?.angular;
+export default defineUnConfig('angular', async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTemplate: true,
     processInlineTemplates: true,
@@ -252,7 +253,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     ...optionsResolved.forbiddenMetadataProperties,
   };
 
-  const configBuilderGeneral = createConfigBuilder(context, optionsResolved, '@angular-eslint');
+  const configBuilderGeneral = context.createConfigBuilder(optionsResolved, '@angular-eslint');
 
   // Legend:
   // 🟢 - in recommended (latest version)
@@ -501,8 +502,7 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
 
   const a11yRulesSeverity = a11yRules === true ? ERROR : a11yRules === 'warn' ? WARNING : OFF;
 
-  const configBuilderTemplate = createConfigBuilder(
-    context,
+  const configBuilderTemplate = context.createConfigBuilder(
     configTemplate,
     '@angular-eslint/template',
   );
@@ -641,4 +641,4 @@ export const angularUnConfig: UnConfigFn<'angular'> = async (context) => {
     configs: [configBuilderGeneral, configBuilderTemplate],
     optionsResolved,
   };
-};
+});

@@ -1,11 +1,16 @@
 // cspell:ignore classfield
 import {ERROR, OFF} from '../constants';
-import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type RulesRecordPartial,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface LitEslintConfigOptions extends UnConfigOptions<'lit'> {
+export interface LitEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'lit'> {
   /**
    * [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -30,6 +35,7 @@ export interface LitEslintConfigOptions extends UnConfigOptions<'lit'> {
   configA11y?:
     | boolean
     | UnConfigOptions<
+        ExtraPlugins,
         RulesRecordPartial<'lit-a11y'>,
         {
           /**
@@ -71,11 +77,10 @@ export interface LitEslintConfigOptions extends UnConfigOptions<'lit'> {
       >;
 }
 
-export const litUnConfig: UnConfigFn<'lit'> = async (context) => {
-  const optionsRaw = context.rootOptions.configs?.lit;
+export default defineUnConfig('lit', async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies LitEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'lit');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'lit');
 
   const {
     settings: pluginSettings,
@@ -128,9 +133,9 @@ export const litUnConfig: UnConfigFn<'lit'> = async (context) => {
       ...(configA11y === false
         ? []
         : await (async () => {
-            const {jsxA11yUnConfig} = await import('./jsx-a11y');
+            const {default: jsxA11yUnConfig} = await import('./jsx-a11y');
             const options = typeof configA11y === 'object' ? configA11y : {};
-            const result = await jsxA11yUnConfig(context, {
+            const result = await jsxA11yUnConfig(context, undefined, {
               prefix: 'lit',
               options: {
                 files: parentConfigFiles,
@@ -145,4 +150,4 @@ export const litUnConfig: UnConfigFn<'lit'> = async (context) => {
     ],
     optionsResolved,
   };
-};
+});

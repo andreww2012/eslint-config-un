@@ -1,18 +1,13 @@
 import {ERROR, GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../constants';
-import {
-  type FlatConfigEntryFilesOrIgnores,
-  type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
+import type {FlatConfigEntryFilesOrIgnores} from '../eslint';
 import {generatePackageToLoadProperty} from '../plugins';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults} from '../utils';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface MdxEslintConfigOptions
-  extends UnConfigOptions<'mdx'>,
+export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'mdx'>,
     Pick<
       MarkdownEslintConfigOptions,
       | 'codeBlocksImpliedStrictMode'
@@ -40,8 +35,7 @@ export interface MdxEslintConfigOptions
 const DEFAULT_FILES = [GLOB_MDX];
 const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MDX_SUPPORTED_CODE_BLOCKS];
 
-export const mdxUnConfig: UnConfigFn<'mdx'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.mdx;
+export default defineUnConfig('mdx', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     lintCodeBlocks: true,
     codeBlocksImpliedStrictMode: true,
@@ -56,7 +50,7 @@ export const mdxUnConfig: UnConfigFn<'mdx'> = (context) => {
     configFormatFencedCodeBlocks,
   } = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'mdx');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'mdx');
 
   // Legend:
   // 🟢 - in recommended
@@ -141,8 +135,7 @@ export const mdxUnConfig: UnConfigFn<'mdx'> = (context) => {
     }
   }
 
-  const configFormatFencedCodeBlocksBuilder = createConfigBuilder(
-    context,
+  const configFormatFencedCodeBlocksBuilder = context.createConfigBuilder(
     configFormatFencedCodeBlocks,
     'prettier',
   );
@@ -165,4 +158,4 @@ export const mdxUnConfig: UnConfigFn<'mdx'> = (context) => {
     configs: [configBuilder, configFormatFencedCodeBlocksBuilder],
     optionsResolved,
   };
-};
+});

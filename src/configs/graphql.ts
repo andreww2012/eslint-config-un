@@ -11,13 +11,13 @@ import {
   type RuleSeverity,
   WARNING,
 } from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults, doesPackageExist, getKeysOfTruthyValues, pickBy} from '../utils';
-import type {UnConfigFn} from './index';
+import {doesPackageExist, getKeysOfTruthyValues, pickBy} from '../utils';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface GraphqlEslintConfigOptions extends UnConfigOptions<'graphql'> {
+export interface GraphqlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'graphql'> {
   /**
    * Files for which GraphQL processor will be used.
    * "Under the hood, the processor extracts schema and operation files from these files
@@ -61,8 +61,7 @@ export interface GraphqlEslintConfigOptions extends UnConfigOptions<'graphql'> {
   >;
 }
 
-export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
-  const optionsRaw = context.rootOptions.configs?.graphql;
+export default defineUnConfig('graphql', async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configJsProcessor: true,
     disableRulesRequiringOperations: false,
@@ -87,7 +86,7 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
     disableRulesRequiringSchema,
   } = optionsResolved;
 
-  const configBuilderProcessor = createConfigBuilder(context, configJsProcessor, null);
+  const configBuilderProcessor = context.createConfigBuilder(configJsProcessor, null);
   configBuilderProcessor?.addConfig(
     [
       'graphql/processor',
@@ -108,7 +107,7 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
     },
   );
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'graphql');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'graphql');
 
   const getRelaySeverity = (severity: RuleSeverity) => (isRelayInstalled ? severity : OFF);
   const getRuleRequiresOperationsSeverity = (severity: RuleSeverity) =>
@@ -305,4 +304,4 @@ export const graphqlUnConfig: UnConfigFn<'graphql'> = async (context) => {
     configs: [configBuilderProcessor, configBuilder],
     optionsResolved,
   };
-};
+});

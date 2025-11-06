@@ -1,18 +1,19 @@
 import type {MarkdownLanguageOptions} from '@eslint/markdown/types';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
+import type {FlatConfigEntryFilesOrIgnores} from '../eslint';
+import {generatePackageToLoadProperty} from '../plugins';
+import type {PrettifyShallow} from '../types';
+import {capitalize, unique} from '../utils';
+import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';
 import {
-  type FlatConfigEntryFilesOrIgnores,
+  type ExtraPluginsType,
   type GetRuleOptions,
   type RulesRecordPartial,
   type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
-import {generatePackageToLoadProperty} from '../plugins';
-import type {PrettifyShallow} from '../types';
-import {assignDefaults, capitalize, unique} from '../utils';
-import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';
-import type {UnConfigFn} from './index';
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
 type MarkdownDialect = 'commonmark' | 'gfm';
 
@@ -38,7 +39,8 @@ const generateNoMissingLabelRefsOptions = (
   },
 ];
 
-export interface MarkdownEslintConfigOptions extends UnConfigOptions<'markdown'> {
+export interface MarkdownEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'markdown'> {
   /**
    * Lint Markdown files themselves (***not*** fenced code blocks inside them)
    * @default true
@@ -103,7 +105,7 @@ export interface MarkdownEslintConfigOptions extends UnConfigOptions<'markdown'>
    * Format fenced code blocks with Prettier.
    * @default true <=> `prettier` package is installed
    */
-  configFormatFencedCodeBlocks?: boolean | UnConfigOptions<'prettier'>;
+  configFormatFencedCodeBlocks?: boolean | UnConfigOptions<ExtraPlugins, 'prettier'>;
 
   overridesCodeBlocks?: RulesRecordPartial;
 
@@ -114,8 +116,7 @@ export interface MarkdownEslintConfigOptions extends UnConfigOptions<'markdown'>
   parseFrontmatter?: MarkdownLanguageOptions['frontmatter'];
 }
 
-export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.markdown;
+export default defineUnConfig('markdown', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     lintMarkdown: true,
     language: 'gfm',
@@ -140,7 +141,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
     configFormatFencedCodeBlocks,
   } = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'markdown');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'markdown');
 
   const defaultDialect: MarkdownDialect = typeof language === 'string' ? language : 'commonmark';
 
@@ -307,8 +308,7 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
     }
   }
 
-  const configFormatFencedCodeBlocksBuilder = createConfigBuilder(
-    context,
+  const configFormatFencedCodeBlocksBuilder = context.createConfigBuilder(
     configFormatFencedCodeBlocks,
     'prettier',
   );
@@ -331,4 +331,4 @@ export const markdownUnConfig: UnConfigFn<'markdown'> = (context) => {
     configs: [configBuilder, configFormatFencedCodeBlocksBuilder],
     optionsResolved,
   };
-};
+});

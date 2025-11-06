@@ -5,7 +5,14 @@ const TEST_DIR_GLOB = ['test/**/*'];
 
 export default eslintConfig({
   mode: 'lib',
-  cacheConfigs: false, // TODO enable when local plugins become serializable
+  extraPlugins: {
+    'local-rules': () => ({
+      rules: {
+        'optional-peer-dependency-version-should-match-installed-version':
+          optionalPeerDependencyVersionShouldMatchInstalledVersion,
+      },
+    }),
+  },
 
   configs: {
     markdownLinks: {
@@ -81,14 +88,6 @@ export default eslintConfig({
   extraConfigs: [
     {
       files: ['package.json'],
-      plugins: {
-        'local-rules': {
-          rules: {
-            'optional-peer-dependency-version-should-match-installed-version':
-              optionalPeerDependencyVersionShouldMatchInstalledVersion,
-          },
-        },
-      },
       rules: {
         'local-rules/optional-peer-dependency-version-should-match-installed-version': [
           2,
@@ -100,6 +99,12 @@ export default eslintConfig({
             ],
           },
         ],
+      },
+    },
+    {
+      files: ['src/configs/**/*.ts'],
+      rules: {
+        'import/no-default-export': 0,
       },
     },
     {

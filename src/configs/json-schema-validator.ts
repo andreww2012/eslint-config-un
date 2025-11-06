@@ -1,12 +1,17 @@
 import type {RequestOptions} from 'node:https';
 import {ERROR} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {JSONC_DEFAULT_FILES, TOML_DEFAULT_FILES, YAML_DEFAULT_FILES} from './shared';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface JsonSchemaValidatorEslintConfigOptions
-  extends UnConfigOptions<'json-schema-validator'> {
+export interface JsonSchemaValidatorEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'json-schema-validator'> {
   /**
    * [`eslint-plugin-json-schema-validator`](https://npmjs.com/eslint-plugin-json-schema-validator) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -26,8 +31,7 @@ export interface JsonSchemaValidatorEslintConfigOptions
   options?: GetRuleOptions<'json-schema-validator', 'no-invalid'>;
 }
 
-export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.jsonSchemaValidator;
+export default defineUnConfig('jsonSchemaValidator', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies JsonSchemaValidatorEslintConfigOptions,
@@ -35,7 +39,7 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = (c
 
   const {settings: pluginSettings, options: noInvalidOptions} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'json-schema-validator');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'json-schema-validator');
 
   // Legend:
   // 🟢 - in recommended
@@ -84,4 +88,4 @@ export const jsonSchemaValidatorUnConfig: UnConfigFn<'jsonSchemaValidator'> = (c
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

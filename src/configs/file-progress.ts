@@ -1,9 +1,9 @@
 import {ERROR} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, isInCi, isInEditor} from '../utils';
-import type {UnConfigFn} from './index';
+import {isInCi, isInEditor} from '../utils';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface FileProgressEslintConfigOptions extends UnConfigOptions<'file-progress'> {
+export interface FileProgressEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'file-progress'> {
   /**
    * [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -28,13 +28,12 @@ export interface FileProgressEslintConfigOptions extends UnConfigOptions<'file-p
   };
 }
 
-export const fileProgressUnConfig: UnConfigFn<'fileProgress'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.fileProgress;
+export default defineUnConfig('fileProgress', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies FileProgressEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'file-progress');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'file-progress');
 
   // Legend:
   // 🟢 - in recommended
@@ -56,4 +55,4 @@ export const fileProgressUnConfig: UnConfigFn<'fileProgress'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

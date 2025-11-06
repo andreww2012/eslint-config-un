@@ -1,11 +1,16 @@
 // cspell:ignore attributify blockquotes autolinks setext
 /* eslint perfectionist/sort-objects: "error" */
-import {type RuleNamesForPlugin, type UnConfigOptions, createConfigBuilder} from '../../eslint';
 import {ALL_RULES_PER_PLUGIN} from '../../eslint-rules.gen';
 import type {PluginPrefix} from '../../plugins';
 import type {ObjectValues} from '../../types';
-import {assignDefaults, objectEntriesUnsafe} from '../../utils';
-import type {UnConfigFn} from '../index';
+import {objectEntriesUnsafe} from '../../utils';
+import {
+  type ExtraPluginsType,
+  type RuleNamesForPlugin,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from '../index';
 
 const markAllPluginRulesAsStylistic = <PluginName extends keyof typeof ALL_RULES_PER_PLUGIN>(
   pluginName: PluginName,
@@ -823,7 +828,8 @@ type AllStylisticRules = ObjectValues<{
   [Plugin in keyof typeof ALL_STYLISTIC_RULES]: `${Plugin extends '' ? '' : `${Plugin}/`}${keyof (typeof ALL_STYLISTIC_RULES)[Plugin] & string}`;
 }>;
 
-export interface NoStylisticRulesEslintConfigOptions extends UnConfigOptions {
+export interface NoStylisticRulesEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins> {
   enableRules?: {
     /**
      * Specify which of the disabled by default stylistic rules will be enabled.
@@ -841,8 +847,7 @@ export interface NoStylisticRulesEslintConfigOptions extends UnConfigOptions {
   };
 }
 
-export const noStylisticRulesUnConfig: UnConfigFn<'noStylisticRules'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.noStylisticRules;
+export default defineUnConfig('noStylisticRules', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies NoStylisticRulesEslintConfigOptions,
@@ -851,7 +856,7 @@ export const noStylisticRulesUnConfig: UnConfigFn<'noStylisticRules'> = (context
   const {enableRules: {disableAllOtherRules = false, rules: enabledRules} = {rules: false}} =
     optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, null);
+  const configBuilder = context.createConfigBuilder(optionsResolved, null);
 
   configBuilder
     ?.addConfig([
@@ -909,4 +914,4 @@ export const noStylisticRulesUnConfig: UnConfigFn<'noStylisticRules'> = (context
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

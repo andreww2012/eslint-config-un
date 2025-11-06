@@ -1,10 +1,9 @@
 import type Eslint from 'eslint';
 import globals from 'globals';
 import {GLOB_HTML_ALL} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
-import {assignDefaults, getKeysOfTruthyValues} from '../utils';
-import type {UnConfigFn} from './index';
+import {getKeysOfTruthyValues} from '../utils';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
 // These are copied from eslint-plugin-html's source code
 const DEFAULT_HTML_EXTENSIONS = [
@@ -23,7 +22,8 @@ const DEFAULT_HTML_EXTENSIONS = [
 ];
 const DEFAULT_XML_EXTENSIONS = ['.xhtml', '.xml'];
 
-export interface JsInlineEslintConfigOptions extends UnConfigOptions<'html'> {
+export interface JsInlineEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'html'> {
   /**
    * [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -104,15 +104,14 @@ export interface JsInlineEslintConfigOptions extends UnConfigOptions<'html'> {
   languageOptions?: Eslint.Linter.LanguageOptions;
 }
 
-export const jsInlineUnConfig: UnConfigFn<'jsInline'> = async (context) => {
+export default defineUnConfig('jsInline', async (context, optionsRaw) => {
   const eslintPluginHtml = await pluginsLoaders.html(context).then(({module}) => module);
 
-  const optionsRaw = context.rootOptions.configs?.jsInline;
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsInlineEslintConfigOptions);
 
   const {settings: pluginSettings, languageOptions} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'html');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'html');
 
   configBuilder
     ?.addConfig(
@@ -176,4 +175,4 @@ export const jsInlineUnConfig: UnConfigFn<'jsInline'> = async (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

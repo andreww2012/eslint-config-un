@@ -5,12 +5,18 @@ import type {
   PluginSettings as PluginSettingsWithPrefixes,
 } from 'eslint-plugin-import-x';
 import {ERROR, GLOB_MARKDOWN_ALL_CODE_BLOCKS, OFF, WARNING} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {generatePackageToLoadProperty} from '../plugins';
-import {arraify, assignDefaults, isNonEmptyArray, kebabCase, objectEntriesUnsafe} from '../utils';
-import type {UnConfigFn} from './index';
+import {arraify, isNonEmptyArray, kebabCase, objectEntriesUnsafe} from '../utils';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
+export interface ImportEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'import'> {
   /**
    * [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -70,8 +76,7 @@ export interface ImportEslintConfigOptions extends UnConfigOptions<'import'> {
   noDuplicatesOptions?: GetRuleOptions<'import', 'no-duplicates'>;
 }
 
-export const importUnConfig: UnConfigFn<'import'> = async (context) => {
-  const optionsRaw = context.rootOptions.configs?.import;
+export default defineUnConfig('import', async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     isTypescriptEnabled: context.configsMeta.ts.enabled,
     allowDevDependencies: context.rootOptions.mode !== 'lib',
@@ -88,7 +93,7 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
   } = optionsResolved;
   const noUnresolvedIgnores = arraify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'import');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'import');
 
   // Legend:
   // 🟢 - in recommended
@@ -242,4 +247,4 @@ export const importUnConfig: UnConfigFn<'import'> = async (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

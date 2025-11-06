@@ -1,13 +1,12 @@
 import type {ParserOptions as HtmlEslintParserOptions} from '@html-eslint/parser';
 import {ERROR, GLOB_HTML_ALL, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults, getKeysOfTruthyValues} from '../utils';
+import {getKeysOfTruthyValues} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface HtmlEslintConfigOptions
-  extends UnConfigOptions<'@html-eslint'>,
+export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, '@html-eslint'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
    * [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin) plugin
@@ -45,13 +44,12 @@ export interface HtmlEslintConfigOptions
   parserOptions?: HtmlEslintParserOptions;
 }
 
-export const htmlUnConfig: UnConfigFn<'html'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.html;
+export default defineUnConfig('html', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies HtmlEslintConfigOptions);
 
   const {settings: pluginSettings, parserOptions} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, '@html-eslint');
+  const configBuilder = context.createConfigBuilder(optionsResolved, '@html-eslint');
 
   // Legend:
   // 🟢 - in recommended
@@ -152,4 +150,4 @@ export const htmlUnConfig: UnConfigFn<'html'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

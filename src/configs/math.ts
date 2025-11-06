@@ -1,9 +1,14 @@
 import {ERROR, OFF} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface MathEslintConfigOptions extends UnConfigOptions<'math'> {
+export interface MathEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'math'> {
   /**
    * Enforces the method of conversion to absolute values. Set to `false` not not enforce it.
    * @default 'Math.abs'
@@ -11,15 +16,14 @@ export interface MathEslintConfigOptions extends UnConfigOptions<'math'> {
   absoluteValuesConversionMethod?: false | GetRuleOptions<'math', 'abs'>['prefer'];
 }
 
-export const mathUnConfig: UnConfigFn<'math'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.math;
+export default defineUnConfig('math', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     absoluteValuesConversionMethod: 'Math.abs',
   } satisfies MathEslintConfigOptions);
 
   const {absoluteValuesConversionMethod} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'math');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'math');
 
   // Legend:
   // 🟢 - in recommended
@@ -66,4 +70,4 @@ export const mathUnConfig: UnConfigFn<'math'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

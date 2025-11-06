@@ -556,6 +556,12 @@ Cache will be stored in `node_modules/.cache/eslint-config-un/config.json` and c
 - ESLint config file contents
 - Node.JS version
 
+### `extraPlugins`
+
+Allows to provide additional ESLint plugins. Their prefixes and possibly rule names will appear in configs' `rules` property type. They will be lazy-loaded only if used.
+
+Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`) or even prefixes you've renamed via `pluginRenames`.
+
 ## FAQ
 
 ### How do I add my own flat configs?

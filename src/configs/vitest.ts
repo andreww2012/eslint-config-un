@@ -1,14 +1,7 @@
 // cspell:ignore idential
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import {
-  type FlatConfigEntryForBuilder,
-  type RuleNamesForPlugin,
-  type RulesRecordPartial,
-  type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
+import type {FlatConfigEntryForBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
-import {assignDefaults} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
@@ -17,13 +10,20 @@ import {
   generateConsistentTestItOptions,
   generateDefaultTestFiles,
 } from './shared';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type RuleNamesForPlugin,
+  type RulesRecordPartial,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface VitestEslintConfigOptions
-  extends UnConfigOptions<'vitest'>,
+export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'vitest'>,
     // TODO options jsdocs contain jest-related information
     Pick<
-      JestEslintConfigOptions,
+      JestEslintConfigOptions<ExtraPlugins>,
       | 'testDefinitionKeyword'
       | 'maxAssertionCalls'
       | 'maxNestedDescribes'
@@ -33,7 +33,7 @@ export interface VitestEslintConfigOptions
       | 'minAndMaxExpectArgs'
       | 'paddingAround'
     >,
-    NoOnlyTestsSubConfigDisabledByDefault {
+    NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * `@vitest/eslint-plugin` plugin settings that will be applied to the specified `files` and `ignores`.
    */
@@ -52,6 +52,7 @@ export interface VitestEslintConfigOptions
   configTypescript?:
     | boolean
     | UnConfigOptions<
+        ExtraPlugins,
         Pick<
           RulesRecordPartial<'vitest'>,
           `vitest/${(typeof VITEST_TYPESCRIPT_RELATED_RULES)[number]}`
@@ -84,7 +85,7 @@ const VITEST_TYPESCRIPT_RELATED_RULES = [
 
 const VITEST_TYPESCRIPT_RELATED_RULES_SET = new Set<string>(VITEST_TYPESCRIPT_RELATED_RULES);
 
-export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
+export default defineUnConfig('vitest', async (context, optionsRaw) => {
   const eslintPluginVitest = await pluginsLoaders.vitest(context).then(({module}) => module);
 
   context.usedPlugins.add('vitest');
@@ -94,7 +95,6 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
 
   const isTsConfigEnabled = context.configsMeta.ts.enabled;
 
-  const optionsRaw = context.rootOptions.configs?.vitest;
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false,
     configTypescript: isTsConfigEnabled,
@@ -141,7 +141,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
   const getPaddingAroundSeverity = (key: keyof (typeof paddingAround & object)) =>
     paddingAround === true || (paddingAround && paddingAround[key] !== false) ? ERROR : OFF;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'vitest');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'vitest');
 
   // Legend:
   // 🟢 - in recommended
@@ -295,7 +295,7 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     })
     .addOverrides();
 
-  const configBuilderTypescript = createConfigBuilder(context, configTypescript, 'vitest');
+  const configBuilderTypescript = context.createConfigBuilder(configTypescript, 'vitest');
   configBuilderTypescript
     ?.addConfig(
       [
@@ -327,4 +327,4 @@ export const vitestUnConfig: UnConfigFn<'vitest'> = async (context) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-};
+});

@@ -1,16 +1,22 @@
 // cspell:ignore blockquotes autolinks setext
 import {ERROR, GLOB_MARKDOWN, OFF} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
-import {assignDefaults, getKeysOfTruthyValues} from '../utils';
-import type {UnConfigFn} from './index';
+import {getKeysOfTruthyValues} from '../utils';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
 type EnforceableCasing = GetRuleOptions<'markdown-preferences', 'heading-casing'>['style'] & {};
 
 type CasingEnforcementPlace = 'headings' | 'tableHeaders';
 
-export interface MarkdownPreferencesEslintConfigOptions
-  extends UnConfigOptions<'markdown-preferences'> {
+export interface MarkdownPreferencesEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'markdown-preferences'> {
   /**
    * Enforces casing of heading and table headers.
    * - If casing is specified, it will be enforced.
@@ -62,12 +68,11 @@ export interface MarkdownPreferencesEslintConfigOptions
   wordsToPreserveCasingOf?: string[] | Record<string, boolean>;
 }
 
-export const markdownPreferencesUnConfig: UnConfigFn<'markdownPreferences'> = async (context) => {
+export default defineUnConfig('markdownPreferences', async (context, optionsRaw) => {
   const markdownPreferencesPlugin = await pluginsLoaders['markdown-preferences'](context).then(
     ({module}) => module,
   );
 
-  const optionsRaw = context.rootOptions.configs?.markdownPreferences;
   const optionsResolved = assignDefaults(optionsRaw, {
     extendedMarkdownSyntax: true,
   } satisfies MarkdownPreferencesEslintConfigOptions);
@@ -78,7 +83,7 @@ export const markdownPreferencesUnConfig: UnConfigFn<'markdownPreferences'> = as
     wordsToPreserveCasingOf,
   } = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'markdown-preferences');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'markdown-preferences');
 
   const defaultPreserveWords = getKeysOfTruthyValues({
     ...Object.fromEntries(
@@ -205,4 +210,4 @@ export const markdownPreferencesUnConfig: UnConfigFn<'markdownPreferences'> = as
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

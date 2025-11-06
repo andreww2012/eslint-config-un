@@ -1,27 +1,24 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   RULES_TO_DISABLE_IN_TEST_FILES,
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface CypressEslintConfigOptions
-  extends UnConfigOptions<'cypress'>,
-    NoOnlyTestsSubConfigEnabledByDefault {}
+export interface CypressEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'cypress'>,
+    NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {}
 
-export const cypressUnConfig: UnConfigFn<'cypress'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.cypress;
+export default defineUnConfig('cypress', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: true,
   } satisfies CypressEslintConfigOptions);
 
   const {configNoOnlyTests} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'cypress');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'cypress');
 
   const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
     includeCypressTests: true,
@@ -66,4 +63,4 @@ export const cypressUnConfig: UnConfigFn<'cypress'> = (context) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-};
+});

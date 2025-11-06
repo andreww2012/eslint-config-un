@@ -1,7 +1,5 @@
 import {ERROR, GLOB_TSX, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
 interface EslintPluginJsdocSettings {
   /**
@@ -158,7 +156,8 @@ interface EslintPluginJsdocSettings {
   exemptDestructuredRootsFromChecks?: boolean;
 }
 
-export interface JsdocEslintConfigOptions extends UnConfigOptions<'jsdoc'> {
+export interface JsdocEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'jsdoc'> {
   /**
    * [`eslint-plugin-jsdoc` plugin settings](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md) that will be applied to the specified `files` and `ignores`.
    */
@@ -170,7 +169,9 @@ export interface JsdocEslintConfigOptions extends UnConfigOptions<'jsdoc'> {
    * Will create a separate ESLint config which by default will use `settings` from the root `jsdoc` config, if specified, and will only be applied to TypeScript files.
    * @default true <=> `ts` config is enabled
    */
-  configTypescript?: boolean | UnConfigOptions<'jsdoc', Pick<JsdocEslintConfigOptions, 'settings'>>;
+  configTypescript?:
+    | boolean
+    | UnConfigOptions<ExtraPlugins, 'jsdoc', Pick<JsdocEslintConfigOptions, 'settings'>>;
 
   /**
    * Recognize the following tags as valid JSDoc tags.
@@ -196,8 +197,7 @@ export interface JsdocEslintConfigOptions extends UnConfigOptions<'jsdoc'> {
   formatTypeValues?: boolean;
 }
 
-export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.jsdoc;
+export default defineUnConfig('jsdoc', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypescript: context.configsMeta.ts.enabled,
     formatTypeValues: true,
@@ -211,7 +211,7 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     formatTypeValues,
   } = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'jsdoc');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'jsdoc');
 
   // Legend:
   // 🟢 - in recommended
@@ -328,7 +328,7 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     .enableConfigTesterForPlugin('jsdoc')
     .addOverrides();
 
-  const configBuilderTypescript = createConfigBuilder(context, configTypescript, 'jsdoc');
+  const configBuilderTypescript = context.createConfigBuilder(configTypescript, 'jsdoc');
   const configTypescriptOptions = typeof configTypescript === 'object' ? configTypescript : {};
   const pluginSettingsForTs = configTypescriptOptions.settings || pluginSettings;
 
@@ -363,4 +363,4 @@ export const jsdocUnConfig: UnConfigFn<'jsdoc'> = (context) => {
     configs: [configBuilder, configBuilderTypescript],
     optionsResolved,
   };
-};
+});

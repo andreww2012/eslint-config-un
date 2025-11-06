@@ -1,10 +1,9 @@
 // cspell:ignore polyfillio
 import {ERROR, GLOB_JS_TS_X, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface NextJsEslintConfigOptions extends UnConfigOptions<'@next/next'> {
+export interface NextJsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, '@next/next'> {
   /**
    * [`@next/eslint-plugin-next`](https://npmjs.com/@next/eslint-plugin-next) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -21,13 +20,12 @@ export interface NextJsEslintConfigOptions extends UnConfigOptions<'@next/next'>
 }
 
 // eslint-disable-next-line case-police/string-check
-export const nextJsUnConfig: UnConfigFn<'nextJs'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.nextJs;
+export default defineUnConfig('nextJs', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies NextJsEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, '@next/next');
+  const configBuilder = context.createConfigBuilder(optionsResolved, '@next/next');
 
   // Legend:
   // 🟢 - in recommended
@@ -80,4 +78,4 @@ export const nextJsUnConfig: UnConfigFn<'nextJs'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

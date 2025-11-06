@@ -53,7 +53,7 @@ const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['auto
 };
 
 interface ResolveConfigAsyncDataOptions {
-  usedPluginPrefixes: readonly PluginPrefix[];
+  usedPluginPrefixes: readonly string[];
   usedParserPrefixes: readonly ParserPrefix[];
   usedPackagesPrefixes: readonly LoadablePackagePrefix[];
 }
@@ -63,8 +63,11 @@ export const resolveConfigAsyncData = async (
   options: ResolveConfigAsyncDataOptions | {cachedData: CacheData},
 ) => {
   const {debug, internalOptions, rootOptions} = context;
-  const {autofixDisabledGloballyFor: autofixDisabledGloballyForRaw, loadPluginsOnDemand} =
-    rootOptions;
+  const {
+    autofixDisabledGloballyFor: autofixDisabledGloballyForRaw,
+    extraPlugins = {},
+    loadPluginsOnDemand,
+  } = rootOptions;
 
   const {usedPluginPrefixes, usedParserPrefixes, usedPackagesPrefixes} =
     'cachedData' in options
@@ -107,21 +110,26 @@ export const resolveConfigAsyncData = async (
       usedPluginPrefixes.map(async (pluginPrefix) => {
         const pluginResult = isIn(pluginPrefix, pluginsLoaders)
           ? await pluginsLoaders[pluginPrefix](context)
-          : null;
+          : extraPlugins[pluginPrefix]
+            ? await Promise.resolve(extraPlugins[pluginPrefix]()).then((module) => ({module}))
+            : null;
         const plugin = pluginResult?.module;
-        const packageToInstall = await checkIfModuleCorrectlyLoaded(pluginResult);
-        if (packageToInstall) {
-          packagesToManuallyInstallOrUpdate.set(packageToInstall.name, {
-            ...packageToInstall,
-            pluginPrefixes: new Set([
-              ...(packagesToManuallyInstallOrUpdate.get(packageToInstall.name)?.pluginPrefixes ||
-                []),
-              pluginPrefix,
-            ]),
-          });
+        if (pluginResult && 'packageName' in pluginResult) {
+          const packageToInstall = await checkIfModuleCorrectlyLoaded(pluginResult);
+          if (packageToInstall) {
+            packagesToManuallyInstallOrUpdate.set(packageToInstall.name, {
+              ...packageToInstall,
+              pluginPrefixes: new Set([
+                ...(packagesToManuallyInstallOrUpdate.get(packageToInstall.name)?.pluginPrefixes ||
+                  []),
+                pluginPrefix as PluginPrefix,
+              ]),
+            });
+          }
         }
         if (pluginPrefix) {
-          const isProvided = rootOptions.pluginsOverrides?.[pluginPrefix] != null;
+          const isProvided =
+            rootOptions.pluginsOverrides?.[pluginPrefix as Exclude<PluginPrefix, ''>] != null;
           debug(
             `Plugin \`${stylePluginPrefix(pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginsOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
           );
@@ -291,7 +299,6 @@ ${renderTable(
               ? ''
               : rootOptions.pluginRenames?.[pluginPrefixCanonical] || pluginPrefixCanonical;
           const pluginRulesAutofixDisabledStatuses = Object.fromEntries(
-            // eslint-disable-next-line ts/no-unnecessary-condition -- wrong types
             (disableAutofixPluginsWithUnprefixedMethod[pluginPrefixCanonical] || []).map(
               ({ruleNameUnprefixed, isAutofixDisabled}) => [ruleNameUnprefixed, isAutofixDisabled],
             ),

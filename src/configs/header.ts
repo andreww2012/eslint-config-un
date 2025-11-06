@@ -1,9 +1,9 @@
 import {ERROR} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {type MaybeArray, assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import type {MaybeArray} from '../utils';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface HeaderEslintConfigOptions extends UnConfigOptions<'header'> {
+export interface HeaderEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'header'> {
   /**
    * The single rule (`header`) options.
    */
@@ -29,13 +29,12 @@ export interface HeaderEslintConfigOptions extends UnConfigOptions<'header'> {
       };
 }
 
-export const headerUnConfig: UnConfigFn<'header'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.header;
+export default defineUnConfig('header', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies HeaderEslintConfigOptions);
 
   const {options} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'header');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'header');
 
   // Legend:
   // 🟢 - in recommended
@@ -64,4 +63,4 @@ export const headerUnConfig: UnConfigFn<'header'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

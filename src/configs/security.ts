@@ -1,15 +1,13 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface SecurityEslintConfigOptions extends UnConfigOptions<'security'> {}
+export interface SecurityEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'security'> {}
 
-export const securityUnConfig: UnConfigFn<'security'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.security;
+export default defineUnConfig('security', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies SecurityEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'security');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'security');
 
   // Legend:
   // 🟡 - in recommended (warns)
@@ -37,4 +35,4 @@ export const securityUnConfig: UnConfigFn<'security'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

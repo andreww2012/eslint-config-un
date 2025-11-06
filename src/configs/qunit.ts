@@ -1,17 +1,15 @@
 // cspell:ignore jsdump propequal
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface QunitEslintConfigOptions
-  extends UnConfigOptions<'qunit'>,
-    NoOnlyTestsSubConfigDisabledByDefault {
+export interface QunitEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'qunit'>,
+    NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-qunit`](https://npmjs.com/eslint-plugin-qunit) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -20,15 +18,14 @@ export interface QunitEslintConfigOptions
   settings?: Record<string, unknown>;
 }
 
-export const qunitUnConfig: UnConfigFn<'qunit'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.qunit;
+export default defineUnConfig('qunit', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false, // has `no-only` rule
   } satisfies QunitEslintConfigOptions);
 
   const {settings: pluginSettings, configNoOnlyTests} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'qunit');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'qunit');
 
   const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
 
@@ -106,4 +103,4 @@ export const qunitUnConfig: UnConfigFn<'qunit'> = (context) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-};
+});

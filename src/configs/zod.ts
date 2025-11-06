@@ -1,9 +1,14 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface ZodEslintConfigOptions extends UnConfigOptions<'zod'> {
+export interface ZodEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'zod'> {
   /**
    * Enforce zod array style:
    * - `'function'`: `z.array(z.string())`
@@ -31,8 +36,7 @@ export interface ZodEslintConfigOptions extends UnConfigOptions<'zod'> {
   schemaSuffix?: string | false;
 }
 
-export const zodUnConfig: UnConfigFn<'zod'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.zod;
+export default defineUnConfig('zod', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     arrayStyle: 'method',
     enforceNamespaceImport: true,
@@ -41,7 +45,7 @@ export const zodUnConfig: UnConfigFn<'zod'> = (context) => {
 
   const {arrayStyle, enforceNamespaceImport, schemaSuffix} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'zod');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'zod');
 
   const zodMajorVersion = context.packagesInfo.zod?.versions.major ?? 4;
   const severityForRulesOnlyForV4 = zodMajorVersion >= 4 ? ERROR : OFF;
@@ -81,4 +85,4 @@ export const zodUnConfig: UnConfigFn<'zod'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

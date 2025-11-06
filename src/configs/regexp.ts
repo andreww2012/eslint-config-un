@@ -1,15 +1,13 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface RegexpEslintConfigOptions extends UnConfigOptions<'regexp'> {}
+export interface RegexpEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'regexp'> {}
 
-export const regexpUnConfig: UnConfigFn<'regexp'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.regexp;
+export default defineUnConfig('regexp', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies RegexpEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'regexp');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'regexp');
 
   // Legend:
   // 🟢 - in recommended
@@ -124,4 +122,4 @@ export const regexpUnConfig: UnConfigFn<'regexp'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

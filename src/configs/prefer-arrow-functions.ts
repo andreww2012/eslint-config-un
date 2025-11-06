@@ -1,19 +1,17 @@
 import {WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface PreferArrowFunctionsEslintConfigOptions
-  extends UnConfigOptions<'prefer-arrow-functions'> {}
+export interface PreferArrowFunctionsEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'prefer-arrow-functions'> {}
 
-export const preferArrowFunctionsUnConfig: UnConfigFn<'preferArrowFunctions'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.preferArrowFunctions;
+export default defineUnConfig('preferArrowFunctions', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies PreferArrowFunctionsEslintConfigOptions,
   );
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'prefer-arrow-functions');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'prefer-arrow-functions');
 
   configBuilder
     ?.addConfig([
@@ -28,4 +26,4 @@ export const preferArrowFunctionsUnConfig: UnConfigFn<'preferArrowFunctions'> = 
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

@@ -1,18 +1,16 @@
 // cspell:ignore networkidle
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
   RULES_TO_DISABLE_IN_TEST_FILES,
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface PlaywrightEslintConfigOptions
-  extends UnConfigOptions<'playwright'>,
-    NoOnlyTestsSubConfigDisabledByDefault {
+export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'playwright'>,
+    NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -52,8 +50,7 @@ export interface PlaywrightEslintConfigOptions
   customAsyncExpectMatches?: string[];
 }
 
-export const playwrightUnConfig: UnConfigFn<'playwright'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.playwright;
+export default defineUnConfig('playwright', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false,
   } satisfies PlaywrightEslintConfigOptions);
@@ -65,7 +62,7 @@ export const playwrightUnConfig: UnConfigFn<'playwright'> = (context) => {
     customAsyncExpectMatches,
   } = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'playwright');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'playwright');
 
   const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
 
@@ -167,4 +164,4 @@ export const playwrightUnConfig: UnConfigFn<'playwright'> = (context) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-};
+});

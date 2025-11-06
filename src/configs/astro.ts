@@ -1,14 +1,21 @@
 // cspell:ignore canonicalurl fetchcontent getentrybyslug
 import {ERROR, GLOB_ASTRO, OFF, WARNING} from '../constants';
-import {type RulesRecordPartial, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
 import type {PickKeysNotStartingWith, PickKeysStartingWith} from '../types';
-import {assignDefaults} from '../utils';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type RulesRecordPartial,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface AstroEslintConfigOptions
-  extends UnConfigOptions<PickKeysNotStartingWith<RulesRecordPartial<'astro'>, 'astro/jsx-a11y'>> {
+export interface AstroEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<
+    ExtraPlugins,
+    PickKeysNotStartingWith<RulesRecordPartial<'astro'>, 'astro/jsx-a11y'>
+  > {
   /**
    * A11Y (accessibility) specific rules for Astro components.
    * By default, uses `files` and `ignores` from the parent config.
@@ -20,6 +27,7 @@ export interface AstroEslintConfigOptions
   configJsxA11y?:
     | boolean
     | UnConfigOptions<
+        ExtraPlugins,
         PickKeysStartingWith<RulesRecordPartial<'astro'>, 'astro/jsx-a11y'>,
         Omit<JsxA11yEslintConfigOptions, 'settings' | keyof UnConfigOptions>
       >;
@@ -27,7 +35,7 @@ export interface AstroEslintConfigOptions
 
 const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
 
-export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
+export default defineUnConfig('astro', async (context, optionsRaw) => {
   const eslintPluginAstro = await pluginsLoaders.astro(context).then(({module}) => module);
 
   context.usedPlugins.add('astro');
@@ -35,7 +43,6 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
     return null;
   }
 
-  const optionsRaw = context.rootOptions.configs?.astro;
   const optionsResolved = assignDefaults(optionsRaw, {
     files: DEFAULT_ASTRO_FILES,
     configJsxA11y: true,
@@ -43,7 +50,7 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
 
   const {files: parentConfigFiles, ignores: parentConfigIgnores, configJsxA11y} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'astro');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'astro');
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
   configBuilder?.addConfig(
@@ -115,8 +122,8 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
       ...(configJsxA11y === false
         ? []
         : await (async () => {
-            const {jsxA11yUnConfig} = await import('./jsx-a11y');
-            const result = await jsxA11yUnConfig(context, {
+            const {default: jsxA11yUnConfig} = await import('./jsx-a11y');
+            const result = await jsxA11yUnConfig(context, undefined, {
               prefix: 'astro',
               options: {
                 files: parentConfigFiles,
@@ -129,4 +136,4 @@ export const astroUnConfig: UnConfigFn<'astro'> = async (context) => {
     ],
     optionsResolved,
   };
-};
+});

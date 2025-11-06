@@ -1,10 +1,15 @@
 import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
 import {Range, subset as isFirstSemverRangeIsSubsetOfSecond} from 'semver';
 import {ERROR, OFF} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {PackageJson, PrettifyShallow} from '../types';
-import {assignDefaults, interopDefault, readAndParseJson} from '../utils';
-import type {UnConfigFn} from './index';
+import {interopDefault, readAndParseJson} from '../utils';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
 interface EslintPluginNSettings {
   /**
@@ -92,7 +97,8 @@ interface EslintPluginNSettings {
   version?: string;
 }
 
-export interface NodeEslintConfigOptions extends UnConfigOptions<'node'> {
+export interface NodeEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'node'> {
   /**
    * [`eslint-plugin-n`](https://github.com/eslint-community/eslint-plugin-n) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -175,12 +181,11 @@ export interface NodeEslintConfigOptions extends UnConfigOptions<'node'> {
 
 const IMPORT_META_PROPERTIES_AVAILABLE_SINCE = '>=20.11';
 
-export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
+export default defineUnConfig('node', async (context, optionsRaw) => {
   const closestPackageJson = await interopDefault(import('empathic/package'))
     .then((m) => m.up())
     .then((packageJsonPath) => readAndParseJson<PackageJson>(packageJsonPath));
 
-  const optionsRaw = context.rootOptions.configs?.node;
   const optionsResolved = assignDefaults(optionsRaw, {
     preferGlobal: {} as NodeEslintConfigOptions['preferGlobal'] & {},
     noUnsupportedFeaturesIgnores:
@@ -191,7 +196,7 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
 
   const userNodeVersion = new Range(closestPackageJson?.engines?.['node'] || '');
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'node');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'node');
 
   // Legend:
   // 🟢 - in recommended
@@ -295,4 +300,4 @@ export const nodeUnConfig: UnConfigFn<'node'> = async (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

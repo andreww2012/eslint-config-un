@@ -1,16 +1,14 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {generateDefaultTestFiles} from './shared';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface NoOnlyTestsEslintConfigOptions extends UnConfigOptions<'no-only-tests'> {}
+export interface NoOnlyTestsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'no-only-tests'> {}
 
-export const noOnlyTestsUnConfig: UnConfigFn<'noOnlyTests'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.noOnlyTests;
+export default defineUnConfig('noOnlyTests', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies NoOnlyTestsEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'no-only-tests');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'no-only-tests');
 
   // Legend:
   // 🟢 - in recommended
@@ -31,4 +29,4 @@ export const noOnlyTestsUnConfig: UnConfigFn<'noOnlyTests'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

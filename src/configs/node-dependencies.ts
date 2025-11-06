@@ -1,10 +1,15 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {DEFAULT_FILES_PACKAGE_JSON} from './package-json';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface NodeDependenciesEslintConfigOptions extends UnConfigOptions<'node-dependencies'> {
+export interface NodeDependenciesEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'node-dependencies'> {
   /**
    * - `true`: enforces to use the absolute version only on `dependencies` and `devDependencies`.
    * - `'never'`: enforces not to use the absolute version.
@@ -20,15 +25,14 @@ export interface NodeDependenciesEslintConfigOptions extends UnConfigOptions<'no
     | (GetRuleOptions<'node-dependencies', 'absolute-version'> & object);
 }
 
-export const nodeDependenciesUnConfig: UnConfigFn<'nodeDependencies'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.nodeDependencies;
+export default defineUnConfig('nodeDependencies', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceAbsoluteVersion: false,
   } satisfies NodeDependenciesEslintConfigOptions);
 
   const {enforceAbsoluteVersion} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'node-dependencies');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'node-dependencies');
 
   // Legend:
   // 🟢 - in recommended
@@ -75,4 +79,4 @@ export const nodeDependenciesUnConfig: UnConfigFn<'nodeDependencies'> = (context
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

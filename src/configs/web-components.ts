@@ -1,10 +1,9 @@
 // cspell:ignore attributechangedcallback connectedcallback
 import {ERROR, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface WebComponentsEslintConfigOptions extends UnConfigOptions<'wc'> {
+export interface WebComponentsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'wc'> {
   /**
    * [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -19,13 +18,12 @@ export interface WebComponentsEslintConfigOptions extends UnConfigOptions<'wc'> 
   };
 }
 
-export const webComponentsUnConfig: UnConfigFn<'webComponents'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.webComponents;
+export default defineUnConfig('webComponents', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies WebComponentsEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'wc');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'wc');
 
   // Legend:
   // 🟢 - in recommended
@@ -70,4 +68,4 @@ export const webComponentsUnConfig: UnConfigFn<'webComponents'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

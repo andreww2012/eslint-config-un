@@ -1,9 +1,8 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface UnicornEslintConfigOptions extends UnConfigOptions<'unicorn'> {
+export interface UnicornEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'unicorn'> {
   /**
    * Enforces `utf8`/`utf-8` and `ascii` for UTF-8 and ASCII encodings respectively
    * in function arguments, such as `fs.readFile(file, 'utf8')`.
@@ -18,15 +17,14 @@ export interface UnicornEslintConfigOptions extends UnConfigOptions<'unicorn'> {
   enforceTextEncodingCaseAndNotation?: 'no-dash' | 'dash' | false;
 }
 
-export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.unicorn;
+export default defineUnConfig('unicorn', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceTextEncodingCaseAndNotation: 'no-dash',
   } satisfies UnicornEslintConfigOptions);
 
   const {enforceTextEncodingCaseAndNotation} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'unicorn');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'unicorn');
 
   // Legend:
   // 🔴 - NOT in recommended & unopinionated
@@ -214,4 +212,4 @@ export const unicornUnConfig: UnConfigFn<'unicorn'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

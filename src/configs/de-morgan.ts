@@ -1,15 +1,13 @@
 import {ERROR} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface DeMorganEslintConfigOptions extends UnConfigOptions<'de-morgan'> {}
+export interface DeMorganEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'de-morgan'> {}
 
-export const deMorganUnConfig: UnConfigFn<'deMorgan'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.deMorgan;
+export default defineUnConfig('deMorgan', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies DeMorganEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'de-morgan');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'de-morgan');
 
   configBuilder
     ?.addConfig(['de-morgan', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
@@ -22,4 +20,4 @@ export const deMorganUnConfig: UnConfigFn<'deMorgan'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

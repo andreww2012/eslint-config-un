@@ -1,17 +1,10 @@
 import type {Jest as JestMethods} from '@jest/environment';
 import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import {
-  type FlatConfigEntryForBuilder,
-  type GetRuleOptions,
-  type RuleNamesForPlugin,
-  type RulesRecordPartial,
-  type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
+import type {FlatConfigEntryForBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
 import type {ObjectValues, PrettifyShallow} from '../types';
-import {assignDefaults, doesPackageExist} from '../utils';
+import {doesPackageExist} from '../utils';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
   RULES_TO_DISABLE_IN_TEST_FILES,
@@ -19,13 +12,21 @@ import {
   generateConsistentTestItOptions,
   generateDefaultTestFiles,
 } from './shared';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type RuleNamesForPlugin,
+  type RulesRecordPartial,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
 type AllJestMatchers = PrettifyShallow<keyof ReturnType<JestExpect> | keyof AsymmetricMatchers>;
 
-export interface JestEslintConfigOptions
-  extends UnConfigOptions<'jest'>,
-    NoOnlyTestsSubConfigDisabledByDefault {
+export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'jest'>,
+    NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-jest` plugin settings](https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jest-globals) that will be applied to the specified `files` and `ignores`.
    */
@@ -57,6 +58,7 @@ export interface JestEslintConfigOptions
   configJestExtended?:
     | boolean
     | UnConfigOptions<
+        ExtraPlugins,
         'jest-extended',
         {
           /**
@@ -88,6 +90,7 @@ export interface JestEslintConfigOptions
   configTypescript?:
     | boolean
     | UnConfigOptions<
+        ExtraPlugins,
         Pick<RulesRecordPartial<'jest'>, `jest/${(typeof JEST_TYPESCRIPT_RELATED_RULES)[number]}`>
       >;
 
@@ -182,7 +185,7 @@ const JEST_TYPESCRIPT_RELATED_RULES = [
 
 const JEST_TYPESCRIPT_RELATED_RULES_SET = new Set<string>(JEST_TYPESCRIPT_RELATED_RULES);
 
-export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
+export default defineUnConfig('jest', async (context, optionsRaw) => {
   const [eslintPluginJest, isJestExtendedInstalled] = await Promise.all([
     pluginsLoaders.jest(context).then(({module}) => module),
     doesPackageExist('jest-extended'),
@@ -195,7 +198,6 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
 
   const isTsConfigEnabled = context.configsMeta.ts.enabled;
 
-  const optionsRaw = context.rootOptions.configs?.jest;
   const optionsResolved = assignDefaults(optionsRaw, {
     configJestExtended: isJestExtendedInstalled,
     configNoOnlyTests: false,
@@ -238,7 +240,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
   const getPaddingAroundSeverity = (key: keyof (typeof paddingAround & object)) =>
     paddingAround === true || (paddingAround && paddingAround[key] !== false) ? ERROR : OFF;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'jest');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'jest');
 
   // Legend:
   // 🟢 - in recommended
@@ -374,7 +376,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     {filesFallback: defaultJestFiles},
   );
 
-  const configBuilderTypescript = createConfigBuilder(context, configTypescript, 'jest');
+  const configBuilderTypescript = context.createConfigBuilder(configTypescript, 'jest');
   configBuilderTypescript
     ?.addConfig(
       [
@@ -401,8 +403,7 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     })
     .addOverrides();
 
-  const configBuilderJestExtended = createConfigBuilder(
-    context,
+  const configBuilderJestExtended = context.createConfigBuilder(
     configJestExtended,
     'jest-extended',
   );
@@ -458,4 +459,4 @@ export const jestUnConfig: UnConfigFn<'jest'> = async (context) => {
     ],
     optionsResolved,
   };
-};
+});

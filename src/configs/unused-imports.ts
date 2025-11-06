@@ -1,15 +1,16 @@
 import {ERROR} from '../constants';
 import {
+  type ExtraPluginsType,
   type GetRuleOptions,
   type RuleNamesForPlugin,
   type RulesRecordPartial,
   type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface UnusedImportsEslintConfigOptions extends UnConfigOptions<'unused-imports'> {
+export interface UnusedImportsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'unused-imports'> {
   /**
    * Disable [`no-unused-vars`](https://eslint.org/docs/latest/rules/no-unused-vars), [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) and [`sonarjs/no-unused-vars`](https://sonarsource.github.io/rspec/#/rspec/S1481/javascript) rules in favor of `unused-imports/no-unused-vars` rule.
    * @default false
@@ -17,6 +18,7 @@ export interface UnusedImportsEslintConfigOptions extends UnConfigOptions<'unuse
   configNoUnusedVars?:
     | boolean
     | UnConfigOptions<
+        ExtraPlugins,
         Pick<RulesRecordPartial<'unused-imports'>, 'unused-imports/no-unused-vars'>,
         {
           ruleOptions?: GetRuleOptions<'unused-imports', 'no-unused-vars'>;
@@ -24,16 +26,14 @@ export interface UnusedImportsEslintConfigOptions extends UnConfigOptions<'unuse
       >;
 }
 
-export const unusedImportsUnConfig: UnConfigFn<'unusedImports'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.unusedImports;
+export default defineUnConfig('unusedImports', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoUnusedVars: false,
   } satisfies UnusedImportsEslintConfigOptions);
 
   const {configNoUnusedVars} = optionsResolved;
 
-  const configBuilderNoUnusedImports = createConfigBuilder(
-    context,
+  const configBuilderNoUnusedImports = context.createConfigBuilder(
     optionsResolved,
     'unused-imports',
   );
@@ -47,8 +47,7 @@ export const unusedImportsUnConfig: UnConfigFn<'unusedImports'> = (context) => {
     })
     .addOverrides();
 
-  const configBuilderNoUnusedVars = createConfigBuilder(
-    context,
+  const configBuilderNoUnusedVars = context.createConfigBuilder(
     configNoUnusedVars,
     'unused-imports',
   );
@@ -76,4 +75,4 @@ export const unusedImportsUnConfig: UnConfigFn<'unusedImports'> = (context) => {
     configs: [configBuilderNoUnusedImports, configBuilderNoUnusedVars],
     optionsResolved,
   };
-};
+});

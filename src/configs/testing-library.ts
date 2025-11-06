@@ -1,17 +1,22 @@
 // cspell:ignore marko
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {ObjectValues, PickKeysStartingWith, Prettify, PrettifyShallow} from '../types';
-import {assignDefaults, doesPackageExist} from '../utils';
+import {doesPackageExist} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   RULES_TO_DISABLE_IN_TEST_FILES,
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-type SharedConfigOptions = PrettifyShallow<
+type SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> = PrettifyShallow<
   {
     /**
      * By default, [`no-node-access` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-node-access.md) is enabled,
@@ -55,20 +60,24 @@ type SharedConfigOptions = PrettifyShallow<
     preferUserEventOverFireEvent?:
       | boolean
       | PrettifyShallow<GetRuleOptions<'testing-library', 'prefer-user-event'>>;
-  } & UnConfigOptions<'testing-library'>
+  } & UnConfigOptions<ExtraPlugins, 'testing-library'>
 >;
 
-export interface TestingLibraryEslintConfigOptions
-  extends Omit<SharedConfigOptions, 'allowTestingFrameworkSetupHook'> {
+export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends Omit<SharedConfigOptions<ExtraPlugins>, 'allowTestingFrameworkSetupHook'> {
   /**
    * @default <=> `angular` config is enabled
    */
-  configAngular?: boolean | (SharedConfigOptions & NoOnlyTestsSubConfigEnabledByDefault);
+  configAngular?:
+    | boolean
+    | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
    * @default <=> `marko` package is installed
    */
-  configMarko?: boolean | (SharedConfigOptions & NoOnlyTestsSubConfigEnabledByDefault);
+  configMarko?:
+    | boolean
+    | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
    * @default <=> `react` config is enabled
@@ -82,18 +91,22 @@ export interface TestingLibraryEslintConfigOptions
            * - [`consistent-data-testid`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/consistent-data-testid.md)
            */
           consistentDataTestId?: GetRuleOptions<'testing-library', 'consistent-data-testid'>;
-        } & (SharedConfigOptions & NoOnlyTestsSubConfigEnabledByDefault)
+        } & (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>)
       >;
 
   /**
    * @default <=> `svelte` config is enabled
    */
-  configSvelte?: boolean | (SharedConfigOptions & NoOnlyTestsSubConfigEnabledByDefault);
+  configSvelte?:
+    | boolean
+    | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
    * @default <=> `vue` config is enabled
    */
-  configVue?: boolean | (SharedConfigOptions & NoOnlyTestsSubConfigEnabledByDefault);
+  configVue?:
+    | boolean
+    | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
    * Disable root (DOM) config if any framework config is enabled.
@@ -102,8 +115,7 @@ export interface TestingLibraryEslintConfigOptions
   disableRootConfigIfFrameworkConfigIsEnabled?: boolean;
 }
 
-export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (context) => {
-  const optionsRaw = context.rootOptions.configs?.testingLibrary;
+export default defineUnConfig('testingLibrary', async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configAngular: context.configsMeta.angular.enabled,
     configMarko: await doesPackageExist('marko'),
@@ -146,7 +158,7 @@ export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (conte
       preferUserEventOverFireEvent,
     } = moduleOptionsResolved;
 
-    const configBuilder = createConfigBuilder(context, moduleOptionsResolved, 'testing-library');
+    const configBuilder = context.createConfigBuilder(moduleOptionsResolved, 'testing-library');
 
     const configFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
 
@@ -288,4 +300,4 @@ export const testingLibraryUnConfig: UnConfigFn<'testingLibrary'> = async (conte
     ],
     optionsResolved,
   };
-};
+});

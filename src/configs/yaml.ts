@@ -1,12 +1,17 @@
 import {ERROR, OFF} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {YAML_DEFAULT_FILES} from './shared';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
 const DEFAULT_FILES_TO_IGNORE = ['yarn.lock', 'pnpm-lock.yaml'] as const;
 
-export interface YamlEslintConfigOptions extends UnConfigOptions<'yml'> {
+export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'yml'> {
   /**
    * `files` specified in this config will be merged with the default of `['**\/*.y?(a)ml']`. Set this to `true` to avoid that behavior
    */
@@ -40,15 +45,14 @@ export interface YamlEslintConfigOptions extends UnConfigOptions<'yml'> {
   };
 }
 
-export const yamlUnConfig: UnConfigFn<'yaml'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.yaml;
+export default defineUnConfig('yaml', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceExtension: 'yml',
   } satisfies YamlEslintConfigOptions);
 
   const {enforceExtension} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'yml');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'yml');
 
   // Legend:
   // 🟣 = in standard
@@ -140,4 +144,4 @@ export const yamlUnConfig: UnConfigFn<'yaml'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

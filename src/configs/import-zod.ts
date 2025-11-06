@@ -1,15 +1,13 @@
 import {ERROR} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface ImportZodEslintConfigOptions extends UnConfigOptions<'import-zod'> {}
+export interface ImportZodEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'import-zod'> {}
 
-export const importZodUnConfig: UnConfigFn<'importZod'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.importZod;
+export default defineUnConfig('importZod', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies ImportZodEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'import-zod');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'import-zod');
 
   // Legend:
   // 🟢 - in recommended
@@ -23,4 +21,4 @@ export const importZodUnConfig: UnConfigFn<'importZod'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

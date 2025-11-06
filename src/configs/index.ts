@@ -4,13 +4,15 @@ import type {ConsolaInstance} from 'consola';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
-import type {
-  AllEslintFixableRuleNames,
+import {
+  type AllEslintFixableRuleNames,
   ConfigEntryBuilder,
-  EslintPlugin,
-  EslintSeverity,
-  FlatConfigEntry,
-  UnFlagConfigEntry,
+  type EslintPlugin,
+  type EslintSeverity,
+  type FlatConfigEntry,
+  type RulesRecord,
+  type UnConfigOptions,
+  type UnFlagConfigEntry,
 } from '../eslint';
 import type {FastImportPluginSettings, ImportPluginReplaceableRules} from '../internal';
 import type {
@@ -20,7 +22,7 @@ import type {
   PluginPrefix,
   pluginsLoaders,
 } from '../plugins';
-import type {PrettifyShallow, Promisable} from '../types';
+import type {OmitIndexSignature, PrettifyShallow, Promisable} from '../types';
 import type {MaybeArray, MaybeFn, fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
 import type {AstroEslintConfigOptions} from './astro';
@@ -103,7 +105,17 @@ import type {YamlEslintConfigOptions} from './yaml';
 import type {YouDontNeedLodashUnderscoreEslintConfigOptions} from './you-dont-need-lodash-underscore';
 import type {ZodEslintConfigOptions} from './zod';
 
-export interface EslintConfigUnOptions {
+export type {
+  GetRuleOptions,
+  RuleNamesForPlugin,
+  RulesRecordPartial,
+  UnConfigOptions,
+} from '../eslint';
+export {assignDefaults} from '../utils';
+
+export type ExtraPluginsType = Record<string, () => Promisable<EslintPlugin>>;
+
+export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * **Global** ignore patterns. By default will be merged with our ignore patterns, unless `overrideIgnores` is set to `true`
    */
@@ -142,10 +154,12 @@ export interface EslintConfigUnOptions {
   forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
 
   configs?: {
-    [Key in keyof UnConfigs]?: boolean | PrettifyShallow<UnConfigs[Key]>;
+    [Key in keyof UnConfigs<ExtraPlugins>]?:
+      | boolean
+      | PrettifyShallow<UnConfigs<ExtraPlugins>[Key]>;
   };
 
-  extraConfigs?: UnFlagConfigEntry[];
+  extraConfigs?: UnFlagConfigEntry<ExtraPlugins>[];
 
   /**
    * Only load ESLint plugins if they are actually used.
@@ -257,10 +271,19 @@ export interface EslintConfigUnOptions {
    * @default true <=> running in editor (detected by [`is-in-editor`](https://npmjs.com/is-in-editor))
    */
   cacheConfigs?: boolean;
+
+  /**
+   * Allows to provide additional ESLint plugins. Their prefixes and possibly rule names
+   * will appear in configs' `rules` property type. They will be lazy-loaded only if used.
+   *
+   * Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`)
+   * or even prefixes you've renamed via `pluginRenames`.
+   */
+  extraPlugins?: ExtraPlugins;
 }
 
 /* eslint-enable perfectionist/sort-interfaces */
-export interface UnConfigs {
+export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * [Angular](https://angular.dev) specific rules. Supported versions: 13 to 20 (inclusive).
    *
@@ -271,7 +294,7 @@ export interface UnConfigs {
    * The list of available rules will depend on the installed version of the packages.
    * @default true <=> `@angular/core` package is installed
    */
-  angular: AngularEslintConfigOptions;
+  angular: AngularEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Astro](https://astro.build) specific rules.
@@ -280,7 +303,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-astro`](https://npmjs.com/eslint-plugin-astro) ([docs](https://ota-meshi.github.io/eslint-plugin-astro))
    * @default true <=> `astro` package is installed
    */
-  astro: AstroEslintConfigOptions;
+  astro: AstroEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Ava test runner](https://avajs.dev) specific rules.
@@ -289,7 +312,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-ava`](https://npmjs.com/eslint-plugin-ava) ([docs](https://github.com/avajs/eslint-plugin-ava))
    * @default true <=> `ava` package is installed
    */
-  ava: AvaEslintConfigOptions;
+  ava: AvaEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [TailwindCSS](https://tailwindcss.com) specific rules.
@@ -298,7 +321,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss) ([docs](https://github.com/schoero/eslint-plugin-better-tailwindcss))
    * @default true <=> `tailwindcss` package is installed
    */
-  betterTailwind: BetterTailwindEslintConfigOptions;
+  betterTailwind: BetterTailwindEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
@@ -307,7 +330,7 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  casePolice: CasePoliceEslintConfigOptions;
+  casePolice: CasePoliceEslintConfigOptions<ExtraPlugins>;
 
   /**
    * A config specific to files meant to be executed. By default, allows `process.exit()`
@@ -315,7 +338,7 @@ export interface UnConfigs {
    * (on any level).
    * @default true
    */
-  cli: CliEslintConfigOptions;
+  cli: CliEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) specific rules.
@@ -330,7 +353,7 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  cloudfrontFunctions: CloudfrontFunctionsEslintConfigOptions;
+  cloudfrontFunctions: CloudfrontFunctionsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin to lint the browser compatibility of the code.
@@ -341,7 +364,7 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  compat: CompatEslintConfigOptions;
+  compat: CompatEslintConfigOptions<ExtraPlugins>;
 
   /**
    * CSpell spell checker.
@@ -352,7 +375,7 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  cspell: CspellEslintConfigOptions;
+  cspell: CspellEslintConfigOptions<ExtraPlugins>;
 
   /**
    * CSS specific rules.
@@ -361,14 +384,14 @@ export interface UnConfigs {
    * - [`@eslint/css`](https://npmjs.com/@eslint/css) ([docs](https://github.com/eslint/css))
    * @default true <=> `stylelint` package is NOT installed
    */
-  css: CssEslintConfigOptions;
+  css: CssEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css) ([docs](https://ota-meshi.github.io/eslint-plugin-css))
    * @default true
    */
-  cssInJs: CssInJsEslintConfigOptions;
+  cssInJs: CssInJsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Cypress](https://www.cypress.io) specific rules.
@@ -377,7 +400,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-cypress`](https://npmjs.com/eslint-plugin-cypress) ([docs](https://github.com/cypress-io/eslint-plugin-cypress))
    * @default true <=> `cypress` package is installed
    */
-  cypress: CypressEslintConfigOptions;
+  cypress: CypressEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Enforce logical consistency by transforming negated boolean expressions according to De Morgan’s laws.
@@ -388,7 +411,7 @@ export interface UnConfigs {
    * NOTE: disabled by default.
    * @default false
    */
-  deMorgan: DeMorganEslintConfigOptions;
+  deMorgan: DeMorganEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Enables rules from a plugin to help suggest alternatives to various dependencies.
@@ -399,7 +422,7 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
-  depend: DependEslintConfigOptions;
+  depend: DependEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Ember](https://emberjs.com) specific rules.
@@ -408,7 +431,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-ember`](https://npmjs.com/eslint-plugin-ember) ([docs](https://github.com/ember-cli/eslint-plugin-ember))
    * @default true <=> `ember-source` package is installed
    */
-  ember: EmberEslintConfigOptions;
+  ember: EmberEslintConfigOptions<ExtraPlugins>;
 
   /**
    * ESLint plugin to granularly enforce TypeScript's [`erasableSyntaxOnly`](https://devblogs.microsoft.com/typescript/announcing-typescript-5-8-rc/#the---erasablesyntaxonly-option) flag.
@@ -421,7 +444,7 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  erasableSyntaxOnly: ErasableSyntaxOnlyEslintConfigOptions;
+  erasableSyntaxOnly: ErasableSyntaxOnlyEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
@@ -430,14 +453,14 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  es: EsEslintConfigOptions;
+  es: EsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`@eslint-community/eslint-plugin-eslint-comments`](https://npmjs.com/@eslint-community/eslint-plugin-eslint-comments) ([docs](https://eslint-community.github.io/eslint-plugin-eslint-comments))
    * @default true
    */
-  eslintComments: EslintCommentsEslintConfigOptions;
+  eslintComments: EslintCommentsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin for linting ESLint plugins.
@@ -446,7 +469,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-eslint-plugin`](https://npmjs.com/eslint-plugin-eslint-plugin) ([docs](https://github.com/eslint-community/eslint-plugin-eslint-plugin))
    * @default false
    */
-  eslintPlugin: EslintPluginEslintConfigOptions;
+  eslintPlugin: EslintPluginEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESlint plugin to print file progress.
@@ -458,7 +481,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress) ([docs](https://github.com/sibiraj-s/eslint-plugin-file-progress))
    * @default false
    */
-  fileProgress: FileProgressEslintConfigOptions;
+  fileProgress: FileProgressEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [GraphQL](https://graphql.org) specific rules.
@@ -467,7 +490,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-graphql`](https://npmjs.com/@graphql-eslint/eslint-plugin) ([docs](https://the-guild.dev/graphql/eslint))
    * @default true <=> `graphql` package is installed
    */
-  graphql: GraphqlEslintConfigOptions;
+  graphql: GraphqlEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin to ensure that files begin with the given comment.
@@ -478,7 +501,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header) ([docs](https://github.com/Stuk/eslint-plugin-header))
    * @default false
    */
-  header: HeaderEslintConfigOptions;
+  header: HeaderEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin to ensure that files begin with the given comment.
@@ -489,7 +512,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers) ([docs](https://github.com/robmisasi/eslint-plugin-headers))
    * @default false
    */
-  headers: HeadersEslintConfigOptions;
+  headers: HeadersEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Rules for linting plain HTML files.
@@ -498,14 +521,14 @@ export interface UnConfigs {
    * - [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin) ([docs](https://html-eslint.org/docs/getting-started))
    * @default true <=> `angular` config is **disabled**
    */
-  html: HtmlEslintConfigOptions;
+  html: HtmlEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) ([docs](https://github.com/un-ts/eslint-plugin-import-x))
    * @default true
    */
-  import: ImportEslintConfigOptions;
+  import: ImportEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin to enforce namespace imports for zod.
@@ -518,27 +541,27 @@ export interface UnConfigs {
    * - [`eslint-plugin-import-zod`](https://npmjs.com/eslint-plugin-import-zod) ([docs](https://github.com/samchungy/eslint-plugin-import-zod))
    * @default false
    */
-  importZod: ImportZodEslintConfigOptions;
+  importZod: ImportZodEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`eslint-plugin-jest`](https://npmjs.com/eslint-plugin-jest) ([docs](https://github.com/jest-community/eslint-plugin-jest))
    * @default true <=> `jest` package is installed
    */
-  jest: JestEslintConfigOptions;
+  jest: JestEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Built-in rules for linting JavaScript & TypeScript.
    * @default true
    */
-  js: JsEslintConfigOptions;
+  js: JsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`eslint-plugin-jsdoc`](https://npmjs.com/eslint-plugin-jsdoc) ([docs](https://github.com/gajus/eslint-plugin-jsdoc))
    * @default true
    */
-  jsdoc: JsdocEslintConfigOptions;
+  jsdoc: JsdocEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Plugin for linting `<script>` blocks inside HTML files. It does not have any
@@ -548,7 +571,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html) ([docs](https://github.com/BenoitZugmeyer/eslint-plugin-html))
    * @default true
    */
-  jsInline: JsInlineEslintConfigOptions;
+  jsInline: JsInlineEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
@@ -557,7 +580,7 @@ export interface UnConfigs {
    * NOTE: disabled by default.
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
-  json: JsoncEslintConfigOptions;
+  json: JsoncEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
@@ -566,7 +589,7 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
-  jsonSchemaValidator: JsonSchemaValidatorEslintConfigOptions;
+  jsonSchemaValidator: JsonSchemaValidatorEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Provides accessibility rules for JSX. Applied to all JSX files by default.
@@ -577,7 +600,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y)
    * @default true
    */
-  jsxA11y: JsxA11yEslintConfigOptions;
+  jsxA11y: JsxA11yEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Lit](https://lit.dev) specific rules.
@@ -586,14 +609,14 @@ export interface UnConfigs {
    * - [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit) ([docs](https://github.com/43081j/eslint-plugin-lit))
    * @default true <=> `lit` package is installed
    */
-  lit: LitEslintConfigOptions;
+  lit: LitEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`@eslint/markdown`](https://npmjs.com/@eslint/markdown) ([docs](https://github.com/eslint/markdown))
    * @default true
    */
-  markdown: MarkdownEslintConfigOptions;
+  markdown: MarkdownEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin that provides rules for checking the validity of links and URLs in Markdown files.
@@ -602,7 +625,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-markdown-links`](https://npmjs.com/eslint-plugin-markdown-links) ([docs](https://ota-meshi.github.io/eslint-plugin-markdown-links))
    * @default true
    */
-  markdownLinks: MarkdownLinksEslintConfigOptions;
+  markdownLinks: MarkdownLinksEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin that helps enforce consistent writing style and formatting conventions in Markdown files.
@@ -611,7 +634,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-markdown-preferences`](https://npmjs.com/eslint-plugin-markdown-preferences) ([docs](https://ota-meshi.github.io/eslint-plugin-markdown-preferences))
    * @default true
    */
-  markdownPreferences: MarkdownPreferencesEslintConfigOptions;
+  markdownPreferences: MarkdownPreferencesEslintConfigOptions<ExtraPlugins>;
 
   /**
    * ESLint rules related to `Math` and `Number` objects.
@@ -620,7 +643,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-math`](https://npmjs.com/eslint-plugin-math) ([docs](https://ota-meshi.github.io/eslint-plugin-math))
    * @default true
    */
-  math: MathEslintConfigOptions;
+  math: MathEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [MDX](https://mdxjs.com) specific rules.
@@ -629,7 +652,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-mdx`](https://npmjs.com/eslint-plugin-mdx) ([docs](https://github.com/mdx-js/eslint-mdx))
    * @default true
    */
-  mdx: MdxEslintConfigOptions;
+  mdx: MdxEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Mocha](https://mochajs.org) specific rules.
@@ -638,7 +661,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha) ([docs](https://github.com/lo1tuma/eslint-plugin-mocha))
    * @default true
    */
-  mocha: MochaEslintConfigOptions;
+  mocha: MochaEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Next.js](https://nextjs.org) specific rules.
@@ -647,7 +670,7 @@ export interface UnConfigs {
    * - [`@next/eslint-plugin-next`](https://npmjs.com/@next/eslint-plugin-next) ([docs](https://nextjs.org/docs/app/api-reference/config/eslint))
    * @default true <=> `next` package is installed
    */
-  nextJs: NextJsEslintConfigOptions;
+  nextJs: NextJsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Node.js code specific rules.
@@ -656,7 +679,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-n`](https://npmjs.com/eslint-plugin-n) ([docs](https://github.com/eslint-community/eslint-plugin-n))
    * @default true
    */
-  node: NodeEslintConfigOptions;
+  node: NodeEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
@@ -670,7 +693,7 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
-  nodeDependencies: NodeDependenciesEslintConfigOptions;
+  nodeDependencies: NodeDependenciesEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin to prevent focused (`.only`) tests. Also included in
@@ -684,7 +707,7 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  noOnlyTests: NoOnlyTestsEslintConfigOptions;
+  noOnlyTests: NoOnlyTestsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * If you integrate eslint-config-un into an existing project, you might encounter a lot of
@@ -696,14 +719,14 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  noStylisticRules: NoStylisticRulesEslintConfigOptions;
+  noStylisticRules: NoStylisticRulesEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`eslint-plugin-no-unsanitized`](https://npmjs.com/eslint-plugin-no-unsanitized) ([docs](https://github.com/mozilla/eslint-plugin-no-unsanitized))
    * @default true
    */
-  noUnsanitized: NoUnsanitizedEslintConfigOptions;
+  noUnsanitized: NoUnsanitizedEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Nx](https://nx.dev) specific rules.
@@ -712,7 +735,7 @@ export interface UnConfigs {
    * - [`@nx/eslint-plugin`](https://npmjs.com/@nx/eslint-plugin) ([docs](https://nx.dev/technologies/eslint/eslint-plugin))
    * @default true <=> `nx` package is installed
    */
-  nx: NxEslintConfigOptions;
+  nx: NxEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugins:
@@ -722,7 +745,7 @@ export interface UnConfigs {
    * NOTE: disabled by default.
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
-  packageJson: PackageJsonEslintConfigOptions;
+  packageJson: PackageJsonEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
@@ -733,7 +756,7 @@ export interface UnConfigs {
    * NOTE: disabled by default.
    * @default false
    */
-  perfectionist: PerfectionistEslintConfigOptions;
+  perfectionist: PerfectionistEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Playwright](https://playwright.dev) specific rules.
@@ -742,7 +765,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright) ([docs](https://github.com/playwright-community/eslint-plugin-playwright))
    * @default true <=> `playwright` package is installed
    */
-  playwright: PlaywrightEslintConfigOptions;
+  playwright: PlaywrightEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Rules specific to pnpm package manager.
@@ -751,7 +774,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-pnpm`](https://npmjs.com/eslint-plugin-pnpm)
    * @default true <=> pnpm is detected as a used package manager by [`package-manager-detector`](https://npmjs.com/package-manager-detector)
    */
-  pnpm: PnpmEslintConfigOptions;
+  pnpm: PnpmEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
@@ -760,14 +783,14 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default false
    */
-  preferArrowFunctions: PreferArrowFunctionsEslintConfigOptions;
+  preferArrowFunctions: PreferArrowFunctionsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`eslint-plugin-promise`](https://npmjs.com/eslint-plugin-promise) ([docs](https://github.com/eslint-community/eslint-plugin-promise))
    * @default true
    */
-  promise: PromiseEslintConfigOptions;
+  promise: PromiseEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [QUnit](https://qunitjs.com) specific rules.
@@ -776,7 +799,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-qunit`](https://npmjs.com/eslint-plugin-qunit) ([docs](https://github.com/platinumazure/eslint-plugin-qunit))
    * @default true <=> `qunit` package is installed
    */
-  qunit: QunitEslintConfigOptions;
+  qunit: QunitEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [qwik](https://qwik.dev) specific rules.
@@ -785,7 +808,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-qwik`](https://npmjs.com/eslint-plugin-qwik) ([docs](https://qwik.dev/docs/advanced/eslint))
    * @default true <=> `@builder.io/qwik` or `@qwik.dev/core` package is installed
    */
-  qwik: QwikEslintConfigOptions;
+  qwik: QwikEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [React](https://react.dev) specific rules.
@@ -810,14 +833,14 @@ export interface UnConfigs {
    * - `youMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
    * @default true <=> `react` package is installed
    */
-  react: ReactEslintConfigOptions;
+  react: ReactEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`eslint-plugin-regexp`](https://npmjs.com/eslint-plugin-regexp) ([docs](https://ota-meshi.github.io/eslint-plugin-regexp))
    * @default true
    */
-  regexp: RegexpEslintConfigOptions;
+  regexp: RegexpEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [RxJS](https://rxjs.dev) specific rules.
@@ -826,7 +849,7 @@ export interface UnConfigs {
    * - [`@smarttools/eslint-plugin-rxjs`](https://npmjs.com/@smarttools/eslint-plugin-rxjs) ([docs](https://github.com/DaveMBush/eslint-plugin-rxjs))
    * @default true <=> `rxjs` package is installed
    */
-  rxjs: RxjsEslintConfigOptions;
+  rxjs: RxjsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
@@ -835,7 +858,7 @@ export interface UnConfigs {
    * NOTE: disabled by default
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
-  security: SecurityEslintConfigOptions;
+  security: SecurityEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [SolidJS](https://svelte.dev) specific rules.
@@ -844,14 +867,14 @@ export interface UnConfigs {
    * - [`eslint-plugin-solid`](https://npmjs.com/eslint-plugin-solid) ([docs](https://github.com/solidjs-community/eslint-plugin-solid))
    * @default true <=> `solid-js` package is installed
    */
-  solid: SolidEslintConfigOptions;
+  solid: SolidEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`eslint-plugin-sonarjs`](https://npmjs.com/eslint-plugin-sonarjs) ([docs](https://github.com/SonarSource/SonarJS/tree/master/packages/jsts/src/rules#eslint-plugin-sonarjs-))
    * @default true
    */
-  sonar: SonarEslintConfigOptions;
+  sonar: SonarEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Storybook](https://storybook.js.org) specific rules.
@@ -860,7 +883,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-storybook`](https://npmjs.com/eslint-plugin-storybook) ([docs](https://storybook.js.org/docs/configure/integration/eslint-plugin))
    * @default true <=> `storybook` package is installed
    */
-  storybook: StorybookEslintConfigOptions;
+  storybook: StorybookEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Svelte](https://svelte.dev) specific rules.
@@ -869,7 +892,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte) ([docs](https://sveltejs.github.io/eslint-plugin-svelte))
    * @default true <=> `svelte` package is installed
    */
-  svelte: SvelteEslintConfigOptions;
+  svelte: SvelteEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Tailwind CSS](https://tailwindcss.com) specific rules, "original" plugin.
@@ -880,7 +903,7 @@ export interface UnConfigs {
    * NOTE: disabled by default, superseded by `betterTailwind` config
    * @default false
    */
-  tailwind: TailwindEslintConfigOptions;
+  tailwind: TailwindEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [TanStack Query](https://tanstack.com/query) specific rules.
@@ -889,7 +912,7 @@ export interface UnConfigs {
    * - [`@tanstack/eslint-plugin-query`](https://npmjs.com/@tanstack/eslint-plugin-query) ([docs](https://tanstack.com/query/v5/docs/eslint/eslint-plugin-query))
    * @default true <=> `@tanstack/query-core` package is installed (dependency of all `@tanstack/*-query` packages)
    */
-  tanstackQuery: TanstackQueryEslintConfigOptions;
+  tanstackQuery: TanstackQueryEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Testing Library](https://testing-library.com) specific rules.
@@ -898,7 +921,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-testing-library`](https://npmjs.com/eslint-plugin-testing-library) ([docs](https://github.com/testing-library/eslint-plugin-testing-library))
    * @default true <=> `@testing-library/dom` package is installed
    */
-  testingLibrary: TestingLibraryEslintConfigOptions;
+  testingLibrary: TestingLibraryEslintConfigOptions<ExtraPlugins>;
 
   /**
    * TOML specific rules.
@@ -911,7 +934,7 @@ export interface UnConfigs {
    * NOTE: disabled by default.
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
-  toml: TomlEslintConfigOptions;
+  toml: TomlEslintConfigOptions<ExtraPlugins>;
 
   /**
    * TypeScript specific rules.
@@ -923,7 +946,7 @@ export interface UnConfigs {
    * unless its `files` are explicitly specified.
    * @default true
    */
-  ts: TsEslintConfigOptions;
+  ts: TsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Turborepo](https://turborepo.com) specific rules.
@@ -932,7 +955,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-turbo`](https://npmjs.com/eslint-plugin-turbo) ([docs](https://turborepo.com/docs/reference/eslint-plugin-turbo))
    * @default true <=> `turbo` package is installed
    */
-  turbo: TurboEslintConfigOptions;
+  turbo: TurboEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Rules not included in any other plugins, provided by us and collected under `un` prefix.
@@ -941,14 +964,14 @@ export interface UnConfigs {
    * - Built-in eslint-plugin-un
    * @default true
    */
-  un: UnEslintConfigOptions;
+  un: UnEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`eslint-plugin-unicorn`](https://npmjs.com/eslint-plugin-unicorn) ([docs](https://github.com/sindresorhus/eslint-plugin-unicorn))
    * @default true
    */
-  unicorn: UnicornEslintConfigOptions;
+  unicorn: UnicornEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin with rules to detect and prevent some unnecessary code abstractions.
@@ -957,7 +980,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-unnecessary-abstractions`](https://npmjs.com/eslint-plugin-unnecessary-abstractions) ([docs](https://github.com/personalyisus/eslint-plugin-unnecessary-abstractions#readme))
    * @default true
    */
-  unnecessaryAbstractions: UnnecessaryAbstractionsEslintConfigOptions;
+  unnecessaryAbstractions: UnnecessaryAbstractionsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [UnoCSS](https://unocss.dev) specific rules.
@@ -966,7 +989,7 @@ export interface UnConfigs {
    * - [`@unocss/eslint-plugin`](https://npmjs.com/@unocss/eslint-plugin) ([docs](https://unocss.dev/integrations/eslint))
    * @default true <=> `unocss` package is installed
    */
-  unocss: UnocssEslintConfigOptions;
+  unocss: UnocssEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Provides an autofix to remove unused imports.
@@ -975,21 +998,21 @@ export interface UnConfigs {
    * - [`eslint-plugin-unused-imports`](https://npmjs.com/eslint-plugin-unused-imports)
    * @default true
    */
-  unusedImports: UnusedImportsEslintConfigOptions;
+  unusedImports: UnusedImportsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`eslint-plugin-vitest`](https://npmjs.com/eslint-plugin-vitest) ([docs](https://github.com/veritem/eslint-plugin-vitest))
    * @default true <=> `vitest` package is installed
    */
-  vitest: VitestEslintConfigOptions;
+  vitest: VitestEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
    * - [`eslint-plugin-vue`](https://npmjs.com/eslint-plugin-vue) ([docs](https://eslint.vuejs.org))
    * @default true <=> `vue` package is installed
    */
-  vue: VueEslintConfigOptions;
+  vue: VueEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Web components specific rules.
@@ -998,7 +1021,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc) ([docs](https://github.com/43081j/eslint-plugin-wc))
    * @default false
    */
-  webComponents: WebComponentsEslintConfigOptions;
+  webComponents: WebComponentsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * YAML specific rules.
@@ -1011,7 +1034,7 @@ export interface UnConfigs {
    * NOTE: disabled by default.
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
-  yaml: YamlEslintConfigOptions;
+  yaml: YamlEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Helps in identifying places in your codebase where you don't (may not) need Lodash/Underscore.
@@ -1020,7 +1043,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-you-dont-need-lodash-underscore`](https://npmjs.com/eslint-plugin-you-dont-need-lodash-underscore) ([docs](https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore))
    * @default true <=> Any of the following packages are installed: `lodash`, `lodash-es`, `lodash.{assign,bind,capitalize,concat,contains,defaults,drop,every,fill,filter,find,first,flatten,get,head,includes,join,keys,last,map,omit,pairs,reduce,repeat,replace,reverse,size,slice,some,split,throttle,trim,uniq,values}`
    */
-  youDontNeedLodashUnderscore: YouDontNeedLodashUnderscoreEslintConfigOptions;
+  youDontNeedLodashUnderscore: YouDontNeedLodashUnderscoreEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin to enforce best practices when using Zod.
@@ -1031,7 +1054,7 @@ export interface UnConfigs {
    * - [`eslint-plugin-zod-x`](https://npmjs.com/eslint-plugin-zod-x) ([docs](https://github.com/marcalexiei/eslint-plugin-zod-x#readme))
    * @default true <=> `zod` package is installed and its version is >=4
    */
-  zod: ZodEslintConfigOptions;
+  zod: ZodEslintConfigOptions<ExtraPlugins>;
 }
 /* eslint-disable perfectionist/sort-interfaces */
 
@@ -1040,15 +1063,43 @@ export interface EslintConfigUnInternalOptions {
   testMode?: boolean;
 }
 
-export interface UnConfigContext {
-  rootOptions: PrettifyShallow<EslintConfigUnOptions>;
+export function createConfigBuilder<
+  ExtraPlugins extends ExtraPluginsType,
+  P extends PluginPrefix | null,
+>(
+  this: UnConfigContext<ExtraPlugins>,
+  options: NoInfer<
+    UnConfigOptions<ExtraPlugins, P extends null ? OmitIndexSignature<RulesRecord> : P> | boolean
+  >,
+  rulesPrefix: P,
+  disabledIfEmptyFiles = true,
+) {
+  const optionsResolved = typeof options === 'object' ? options : {};
+  if (
+    !options ||
+    (Array.isArray(optionsResolved.files) &&
+      optionsResolved.files.length === 0 &&
+      disabledIfEmptyFiles)
+  ) {
+    return null;
+  }
+  return new ConfigEntryBuilder<ExtraPlugins, P>(
+    rulesPrefix,
+    // eslint-disable-next-line ts/no-unnecessary-condition
+    options && typeof options === 'object' ? options : {},
+    this,
+  );
+}
+
+export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPluginsType> {
+  rootOptions: PrettifyShallow<EslintConfigUnOptions<ExtraPlugins>>;
   internalOptions: EslintConfigUnInternalOptions;
   packagesInfo: Record<
     (typeof PACKAGES_TO_GET_INFO_FOR)[number],
     Awaited<ReturnType<typeof fetchPackageInfo>>
   >;
-  configsMeta: Record<keyof UnConfigs, {enabled: boolean}>;
-  resolvedConfigs?: Partial<UnConfigs>;
+  configsMeta: Record<keyof UnConfigs<ExtraPlugins>, {enabled: boolean}>;
+  resolvedConfigs?: Partial<UnConfigs<ExtraPlugins>>;
 
   /**
    * NOTE: mutable. Rule names must be UNprefixed
@@ -1058,7 +1109,7 @@ export interface UnConfigContext {
   /**
    * NOTE: mutable
    */
-  usedPlugins: Set<PluginPrefix>;
+  usedPlugins: Set<PluginPrefix | (string & {})>;
 
   /**
    * NOTE: mutable
@@ -1088,21 +1139,26 @@ export interface UnConfigContext {
       },
     ]
   >[];
+  createConfigBuilder: typeof createConfigBuilder;
 }
 
-export type UnConfigFn<
-  T extends keyof UnConfigs,
+export const defineUnConfig = <
+  const ConfigKey extends keyof UnConfigs,
+  ExtraArgument = unknown,
   ExtraReturnedData = unknown,
-  ExtraArguments extends readonly unknown[] = unknown[],
-> = (
-  context: Readonly<UnConfigContext>,
-  ...extraArg: ExtraArguments
-) => Promisable<
-  | null
-  | ({
-      configs: (ConfigEntryBuilder | null)[];
-      optionsResolved: UnConfigs[T] & {};
-    } & ExtraReturnedData)
->;
+>(
+  configKey: ConfigKey,
+  fn: <ExtraPlugins extends ExtraPluginsType>(
+    context: Readonly<UnConfigContext<ExtraPlugins>>,
+    configOptions: (EslintConfigUnOptions<ExtraPlugins>['configs'] & {})[ConfigKey],
+    extraArgument: ExtraArgument,
+  ) => Promisable<
+    | null
+    | ({
+        configs: (ConfigEntryBuilder<ExtraPlugins> | null)[];
+        optionsResolved: UnConfigs<ExtraPlugins>[ConfigKey] & {};
+      } & ExtraReturnedData)
+  >,
+) => fn;
 
 /* eslint-enable perfectionist/sort-interfaces */

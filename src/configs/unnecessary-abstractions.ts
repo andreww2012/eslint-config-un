@@ -1,19 +1,17 @@
 import {ERROR} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface UnnecessaryAbstractionsEslintConfigOptions
-  extends UnConfigOptions<'unnecessary-abstractions'> {}
+export interface UnnecessaryAbstractionsEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'unnecessary-abstractions'> {}
 
-export const unnecessaryAbstractionsUnConfig: UnConfigFn<'unnecessaryAbstractions'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.unnecessaryAbstractions;
+export default defineUnConfig('unnecessaryAbstractions', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies UnnecessaryAbstractionsEslintConfigOptions,
   );
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'unnecessary-abstractions');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'unnecessary-abstractions');
 
   // Legend:
   // 🟢 - in recommended
@@ -28,4 +26,4 @@ export const unnecessaryAbstractionsUnConfig: UnConfigFn<'unnecessaryAbstraction
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

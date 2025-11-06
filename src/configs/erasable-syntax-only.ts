@@ -1,13 +1,12 @@
 import {ERROR, GLOB_TSX, OFF} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
 type CheckedSyntax = 'enums' | 'importAliases' | 'namespaces' | 'parameterProperties';
 
-export interface ErasableSyntaxOnlyEslintConfigOptions
-  extends UnConfigOptions<'erasable-syntax-only'> {
+export interface ErasableSyntaxOnlyEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'erasable-syntax-only'> {
   /**
    * By default, all syntaxes are disallowed. You can enable specific syntaxes by setting
    * their keys to `true` in this object.
@@ -19,8 +18,7 @@ export interface ErasableSyntaxOnlyEslintConfigOptions
   allowedSyntax?: PrettifyShallow<Partial<Record<CheckedSyntax, boolean>>>;
 }
 
-export const erasableSyntaxOnlyUnConfig: UnConfigFn<'erasableSyntaxOnly'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.erasableSyntaxOnly;
+export default defineUnConfig('erasableSyntaxOnly', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies ErasableSyntaxOnlyEslintConfigOptions,
@@ -28,7 +26,7 @@ export const erasableSyntaxOnlyUnConfig: UnConfigFn<'erasableSyntaxOnly'> = (con
 
   const {allowedSyntax = {}} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'erasable-syntax-only');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'erasable-syntax-only');
 
   // Legend:
   // 🟢 - in recommended
@@ -52,4 +50,4 @@ export const erasableSyntaxOnlyUnConfig: UnConfigFn<'erasableSyntaxOnly'> = (con
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

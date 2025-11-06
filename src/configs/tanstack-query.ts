@@ -1,15 +1,13 @@
 import {ERROR} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface TanstackQueryEslintConfigOptions extends UnConfigOptions<'@tanstack/query'> {}
+export interface TanstackQueryEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, '@tanstack/query'> {}
 
-export const tanstackQueryUnConfig: UnConfigFn<'tanstackQuery'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.tanstackQuery;
+export default defineUnConfig('tanstackQuery', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies TanstackQueryEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, '@tanstack/query');
+  const configBuilder = context.createConfigBuilder(optionsResolved, '@tanstack/query');
 
   // Legend:
   // 🟢 - in recommended
@@ -31,4 +29,4 @@ export const tanstackQueryUnConfig: UnConfigFn<'tanstackQuery'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

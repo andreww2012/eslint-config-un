@@ -1,20 +1,16 @@
 import {ERROR, OFF} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface EslintCommentsEslintConfigOptions
-  extends UnConfigOptions<'@eslint-community/eslint-comments'> {}
+export interface EslintCommentsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, '@eslint-community/eslint-comments'> {}
 
-export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.eslintComments;
+export default defineUnConfig('eslintComments', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies EslintCommentsEslintConfigOptions,
   );
 
-  const configBuilder = createConfigBuilder(
-    context,
+  const configBuilder = context.createConfigBuilder(
     optionsResolved,
     '@eslint-community/eslint-comments',
   );
@@ -51,4 +47,4 @@ export const eslintCommentsUnConfig: UnConfigFn<'eslintComments'> = (context) =>
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

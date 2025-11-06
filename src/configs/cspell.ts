@@ -1,22 +1,26 @@
 import {ERROR} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface CspellEslintConfigOptions extends UnConfigOptions<'@cspell'> {
+export interface CspellEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, '@cspell'> {
   /**
    * The single rule (`spellchecker`) options.
    */
   options?: GetRuleOptions<'@cspell', 'spellchecker'>;
 }
 
-export const cspellUnConfig: UnConfigFn<'cspell'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.cspell;
+export default defineUnConfig('cspell', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies CspellEslintConfigOptions);
 
   const {options} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, '@cspell');
+  const configBuilder = context.createConfigBuilder(optionsResolved, '@cspell');
 
   // Legend:
   // 🟢 - in recommended
@@ -44,4 +48,4 @@ export const cspellUnConfig: UnConfigFn<'cspell'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

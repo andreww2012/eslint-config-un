@@ -1,13 +1,8 @@
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YAML} from '../constants';
-import {
-  type AllEslintRuleNames,
-  type GetRuleOptions,
-  type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
+import type {AllEslintRuleNames} from '../eslint';
 import {pick} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
-import type {UnConfigContext} from '.';
+import type {ExtraPluginsType, GetRuleOptions, UnConfigContext, UnConfigOptions} from '.';
 
 export const generateDefaultTestFiles = <T extends string>(
   extensions: T,
@@ -25,9 +20,11 @@ export const generateDefaultTestFiles = <T extends string>(
   ...(includeCypressTests ? [`**/*.cy.${extensions}` as const] : []),
 ];
 
-type ConfigNoOnlyTests = boolean | UnConfigOptions<'no-only-tests'>;
+type ConfigNoOnlyTests<ExtraPlugins extends ExtraPluginsType = never> =
+  | boolean
+  | UnConfigOptions<ExtraPlugins, 'no-only-tests'>;
 
-export interface NoOnlyTestsSubConfigEnabledByDefault {
+export interface NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins extends ExtraPluginsType> {
   /**
    * Enables [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/no-only-tests) rule
    * on the test files.
@@ -35,10 +32,10 @@ export interface NoOnlyTestsSubConfigEnabledByDefault {
    * By default will be applied to the same `files` and `ignores` as the parent config.
    * @default true
    */
-  configNoOnlyTests?: ConfigNoOnlyTests;
+  configNoOnlyTests?: ConfigNoOnlyTests<ExtraPlugins>;
 }
 
-export interface NoOnlyTestsSubConfigDisabledByDefault {
+export interface NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins extends ExtraPluginsType> {
   /**
    * Enables [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/no-only-tests) rule
    * on the test files.
@@ -46,22 +43,21 @@ export interface NoOnlyTestsSubConfigDisabledByDefault {
    * By default will be applied to the same `files` and `ignores` as the parent config.
    * @default false
    */
-  configNoOnlyTests?: ConfigNoOnlyTests;
+  configNoOnlyTests?: ConfigNoOnlyTests<ExtraPlugins>;
 }
 
-export const generateConfigNoOnlyTestsBuilder = (
-  context: UnConfigContext,
+export const generateConfigNoOnlyTestsBuilder = <ExtraPlugins extends ExtraPluginsType>(
+  context: UnConfigContext<ExtraPlugins>,
   prefix: string,
-  configNoOnlyTests: NoOnlyTestsSubConfigEnabledByDefault['configNoOnlyTests'] & {},
-  parentConfig: boolean | UnConfigOptions,
+  configNoOnlyTests: NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>['configNoOnlyTests'] & {},
+  parentConfig: boolean | UnConfigOptions<ExtraPlugins>,
   {
     filesFallback,
   }: {
     filesFallback?: string[];
   } = {},
 ) => {
-  const configBuilderNoOnlyTests = createConfigBuilder(
-    context,
+  const configBuilderNoOnlyTests = context.createConfigBuilder(
     configNoOnlyTests
       ? {
           ...(typeof parentConfig === 'object' && pick(parentConfig, ['files', 'ignores'])),

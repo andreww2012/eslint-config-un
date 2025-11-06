@@ -1,25 +1,28 @@
 // cspell:ignore runloop tagless
 import {ERROR, GLOB_JS_TS, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
 import {
-  type GetRuleOptions,
-  type RuleNamesForPlugin,
-  type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
-import {assignDefaults} from '../utils';
-import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   RULES_TO_DISABLE_IN_TEST_FILES,
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type RuleNamesForPlugin,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface EmberEslintConfigOptions extends UnConfigOptions<'ember'> {
+export interface EmberEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'ember'> {
   /**
    * Rules specific to files with tests.
    */
-  configTestFiles?: boolean | UnConfigOptions<'ember', NoOnlyTestsSubConfigEnabledByDefault>;
+  configTestFiles?:
+    | boolean
+    | UnConfigOptions<ExtraPlugins, 'ember', NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>>;
 
   /**
    * Affected rules:
@@ -55,8 +58,7 @@ const EMBER_TESTING_RELATED_RULES = new Set<string>([
   'require-valid-css-selector-in-test-helpers',
 ] satisfies RuleNamesForPlugin<'ember'>[]);
 
-export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.ember;
+export default defineUnConfig('ember', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTestFiles: true,
     enforceGlimmerComponents: true,
@@ -65,7 +67,7 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
   const {configTestFiles, enforceGettersInComputedProperties, enforceGlimmerComponents} =
     optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'ember');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'ember');
 
   configBuilder?.addConfig([
     'ember/glimmer-templates',
@@ -205,7 +207,7 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     })
     .addOverrides();
 
-  const configBuilderTests = createConfigBuilder(context, configTestFiles, 'ember');
+  const configBuilderTests = context.createConfigBuilder(configTestFiles, 'ember');
 
   const configTestsFilesFallback = generateDefaultTestFiles(GLOB_JS_TS_EXTENSION);
 
@@ -251,4 +253,4 @@ export const emberUnConfig: UnConfigFn<'ember'> = (context) => {
     configs: [configBuilder, configBuilderTests, configBuilderNoOnlyTests],
     optionsResolved,
   };
-};
+});

@@ -1,19 +1,17 @@
 import {ERROR, GLOB_JS_TS_X, OFF} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface QwikEslintConfigOptions extends UnConfigOptions<'qwik'> {
+export interface QwikEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'qwik'> {
   routesDir?: string;
 }
 
-export const qwikUnConfig: UnConfigFn<'qwik'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.qwik;
+export default defineUnConfig('qwik', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies QwikEslintConfigOptions);
 
   const {routesDir} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'qwik');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'qwik');
 
   // Legend:
   // 🟢 - in recommended
@@ -52,4 +50,4 @@ export const qwikUnConfig: UnConfigFn<'qwik'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

@@ -1,15 +1,13 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
-export interface PromiseEslintConfigOptions extends UnConfigOptions<'promise'> {}
+export interface PromiseEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'promise'> {}
 
-export const promiseUnConfig: UnConfigFn<'promise'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.promise;
+export default defineUnConfig('promise', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies PromiseEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'promise');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'promise');
 
   // Legend:
   // 🟢 - in recommended
@@ -43,4 +41,4 @@ export const promiseUnConfig: UnConfigFn<'promise'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

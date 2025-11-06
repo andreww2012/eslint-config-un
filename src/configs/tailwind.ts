@@ -1,8 +1,7 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {PrettifyShallow} from '../types';
-import {assignDefaults, maybeCall, objectKeysUnsafe} from '../utils';
-import type {UnConfigFn} from './index';
+import {maybeCall, objectKeysUnsafe} from '../utils';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
 type OverwriteOrDeriveFromDefault<T> = T | ((defaultValue: T) => T);
 
@@ -26,7 +25,8 @@ const DEFAULT_PLUGIN_SETTINGS = {
   cssFiles: ['**/*.css', '!**/node_modules', '!**/.*', '!**/dist', '!**/build'],
 };
 
-export interface TailwindEslintConfigOptions extends UnConfigOptions<'tailwindcss'> {
+export interface TailwindEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'tailwindcss'> {
   /**
    * Will be merged with the default [`eslint-plugin-tailwindcss` settings](https://github.com/francoismassart/eslint-plugin-tailwindcss?tab=readme-ov-file#more-settings).
    *
@@ -35,13 +35,12 @@ export interface TailwindEslintConfigOptions extends UnConfigOptions<'tailwindcs
   settings?: PrettifyShallow<TailwindPluginSettings>;
 }
 
-export const tailwindUnConfig: UnConfigFn<'tailwind'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.tailwind;
+export default defineUnConfig('tailwind', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies TailwindEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'tailwindcss');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'tailwindcss');
 
   // Legend:
   // 🟢 - in recommended
@@ -84,4 +83,4 @@ export const tailwindUnConfig: UnConfigFn<'tailwind'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

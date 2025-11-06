@@ -1,12 +1,17 @@
 import {ERROR, GLOB_MARKDOWN, OFF} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import type {NonEmptyTuple} from '../types';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
 type IssueType = 'deadUrls' | 'missingFragments' | 'missingLocalPath' | 'selfDestinationLinks';
 
-export interface MarkdownLinksEslintConfigOptions extends UnConfigOptions<'markdown-links'> {
+export interface MarkdownLinksEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'markdown-links'> {
   /**
    * What types of issues the links are checked for. By default, all issues are enabled.
    * The value you provide here will be **deeply merged** with the default value.
@@ -33,11 +38,10 @@ export interface MarkdownLinksEslintConfigOptions extends UnConfigOptions<'markd
   };
 }
 
-export const markdownLinksUnConfig: UnConfigFn<'markdownLinks'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.markdownLinks;
+export default defineUnConfig('markdownLinks', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies MarkdownLinksEslintConfigOptions);
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'markdown-links');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'markdown-links');
 
   const deadUrls = optionsResolved.check?.deadUrls;
   const check: MarkdownLinksEslintConfigOptions['check'] & {} = {
@@ -90,4 +94,4 @@ export const markdownLinksUnConfig: UnConfigFn<'markdownLinks'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

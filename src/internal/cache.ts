@@ -8,12 +8,7 @@ import {LOCKS as packageManagerLockfilesReversed} from 'package-manager-detector
 import {exec} from 'tinyexec';
 import type {UnConfigContext} from '../configs';
 import type {FlatConfigEntry} from '../eslint';
-import type {
-  LoadablePackagePrefix,
-  PackageToLoadInfo,
-  ParserPrefix,
-  PluginPrefix,
-} from '../plugins';
+import type {LoadablePackagePrefix, PackageToLoadInfo, ParserPrefix} from '../plugins';
 import type {SetFieldType} from '../types';
 import {
   createTraverser,
@@ -27,7 +22,7 @@ import {
 
 export interface CacheData<Serialized extends boolean = true> {
   configs: FlatConfigEntry[];
-  usedPlugins: readonly PluginPrefix[];
+  usedPlugins: readonly string[];
   usedParsers: Serialized extends true
     ? Record<string, string[] /* Config names */>
     : Map<ParserPrefix, string[] /* Config names */>;

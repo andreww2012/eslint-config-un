@@ -1,12 +1,11 @@
 // cspell:ignore sharereplay switchmap takeuntil takewhile topromise
 import {ERROR, OFF} from '../constants';
-import {type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
-import type {UnConfigFn} from './index';
+import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
 
 type NamesToBanListOrObjectWithFlagOrMessage = Record<string, boolean | string> | string[];
 
-export interface RxjsEslintConfigOptions extends UnConfigOptions<'rxjs'> {
+export interface RxjsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'rxjs'> {
   /**
    * Affected rule:
    * - [`ban-observables`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-observables.md)
@@ -36,8 +35,7 @@ export interface RxjsEslintConfigOptions extends UnConfigOptions<'rxjs'> {
   enforceJustInsteadOfOf?: boolean;
 }
 
-export const rxjsUnConfig: UnConfigFn<'rxjs'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.rxjs;
+export default defineUnConfig('rxjs', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceFinnishNotation: context.packagesInfo['@angular/core'] != null,
     enforceJustInsteadOfOf: false,
@@ -56,7 +54,7 @@ export const rxjsUnConfig: UnConfigFn<'rxjs'> = (context) => {
       : banOperators || {}),
   };
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'rxjs');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'rxjs');
 
   // Legend:
   // 🟢 - in recommended
@@ -113,4 +111,4 @@ export const rxjsUnConfig: UnConfigFn<'rxjs'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

@@ -1,14 +1,19 @@
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
-import {type RuleNamesForPlugin, type UnConfigOptions, createConfigBuilder} from '../eslint';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
-import {assignDefaults, doesPackageExist, getKeysOfTruthyValues} from '../utils';
+import {doesPackageExist, getKeysOfTruthyValues} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type RuleNamesForPlugin,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface SvelteEslintConfigOptions
-  extends UnConfigOptions<'svelte'>,
+export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'svelte'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
    * [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte) plugin
@@ -98,7 +103,7 @@ const SVELTE_SYSTEM_RULES = new Set<string>([
   'system',
 ] satisfies RuleNamesForPlugin<'svelte'>[]);
 
-export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
+export default defineUnConfig('svelte', async (context, optionsRaw) => {
   const eslintPluginSvelte = await pluginsLoaders.svelte(context).then(({module}) => module);
 
   context.usedPlugins.add('svelte');
@@ -108,7 +113,6 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
-  const optionsRaw = context.rootOptions.configs?.svelte;
   const optionsResolved = assignDefaults(optionsRaw, {
     files: DEFAULT_SVELTE_FILES,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
@@ -126,7 +130,7 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     isPrettierPluginSvelteUsed,
   } = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'svelte');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'svelte');
 
   configBuilder
     ?.addConfig(
@@ -322,4 +326,4 @@ export const svelteUnConfig: UnConfigFn<'svelte'> = async (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

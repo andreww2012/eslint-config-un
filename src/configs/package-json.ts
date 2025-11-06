@@ -1,13 +1,14 @@
 import type {PackageJsonPluginSettings} from 'eslint-plugin-package-json';
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
+import {getKeysOfTruthyValues} from '../utils';
 import {
+  type ExtraPluginsType,
   type GetRuleOptions,
   type RuleNamesForPlugin,
   type UnConfigOptions,
-  createConfigBuilder,
-} from '../eslint';
-import {assignDefaults, getKeysOfTruthyValues} from '../utils';
-import type {UnConfigFn} from './index';
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
 export const DEFAULT_FILES_PACKAGE_JSON = [GLOB_PACKAGE_JSON];
 
@@ -63,8 +64,8 @@ interface RequireFieldsOption {
   requireFields?: Partial<Record<PackageJsonRequirableFields, boolean>>;
 }
 
-export interface PackageJsonEslintConfigOptions
-  extends UnConfigOptions<'package-json'>,
+export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'package-json'>,
     RequireFieldsOption {
   /**
    * [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json) plugin
@@ -123,8 +124,7 @@ export interface PackageJsonEslintConfigOptions
   propertiesAllowedToBeEmpty?: string[];
 }
 
-export const packageJsonUnConfig: UnConfigFn<'packageJson'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.packageJson;
+export default defineUnConfig('packageJson', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceAbsoluteVersion: false,
     order: 'sort-package-json',
@@ -140,7 +140,7 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = (context) => {
     propertiesAllowedToBeEmpty,
   } = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'package-json');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'package-json');
 
   // Legend:
   // 🟢 - in recommended
@@ -247,4 +247,4 @@ export const packageJsonUnConfig: UnConfigFn<'packageJson'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});

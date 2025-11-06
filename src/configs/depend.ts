@@ -1,23 +1,27 @@
 import {ERROR} from '../constants';
-import {type GetRuleOptions, type UnConfigOptions, createConfigBuilder} from '../eslint';
-import {assignDefaults} from '../utils';
 import {DEFAULT_FILES_PACKAGE_JSON} from './package-json';
-import type {UnConfigFn} from './index';
+import {
+  type ExtraPluginsType,
+  type GetRuleOptions,
+  type UnConfigOptions,
+  assignDefaults,
+  defineUnConfig,
+} from './index';
 
-export interface DependEslintConfigOptions extends UnConfigOptions<'depend'> {
+export interface DependEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'depend'> {
   /**
    * [Options of the only rule (`ban-dependencies`)](https://github.com/es-tooling/eslint-plugin-depend/blob/HEAD/docs/rules/ban-dependencies.md).
    */
   options?: GetRuleOptions<'depend', 'ban-dependencies'>;
 }
 
-export const dependUnConfig: UnConfigFn<'depend'> = (context) => {
-  const optionsRaw = context.rootOptions.configs?.depend;
+export default defineUnConfig('depend', (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies DependEslintConfigOptions);
 
   const {options: badDependencyOptions} = optionsResolved;
 
-  const configBuilder = createConfigBuilder(context, optionsResolved, 'depend');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'depend');
 
   // Legend:
   // 🟢 - in recommended
@@ -43,4 +47,4 @@ export const dependUnConfig: UnConfigFn<'depend'> = (context) => {
     configs: [configBuilder],
     optionsResolved,
   };
-};
+});
