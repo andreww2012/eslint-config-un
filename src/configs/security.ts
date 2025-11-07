@@ -1,10 +1,15 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface SecurityEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'security'> {}
 
-export default defineUnConfig('security', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies SecurityEslintConfigOptions);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'security');
@@ -35,4 +40,4 @@ export default defineUnConfig('security', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'security'>;

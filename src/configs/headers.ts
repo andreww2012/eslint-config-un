@@ -1,5 +1,10 @@
 import {ERROR} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface HeadersEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'headers'> {
@@ -38,7 +43,7 @@ export interface HeadersEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
   };
 }
 
-export default defineUnConfig('headers', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies HeadersEslintConfigOptions);
 
   const {options} = optionsResolved;
@@ -58,4 +63,4 @@ export default defineUnConfig('headers', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'headers'>;

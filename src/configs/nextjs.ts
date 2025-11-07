@@ -1,6 +1,11 @@
 // cspell:ignore polyfillio
 import {ERROR, GLOB_JS_TS_X, WARNING} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface NextJsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, '@next/next'> {
@@ -19,8 +24,7 @@ export interface NextJsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   };
 }
 
-// eslint-disable-next-line case-police/string-check
-export default defineUnConfig('nextJs', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies NextJsEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;
@@ -78,4 +82,5 @@ export default defineUnConfig('nextJs', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+  // eslint-disable-next-line case-police/string-check
+}) satisfies UnConfigFn<'nextJs'>;

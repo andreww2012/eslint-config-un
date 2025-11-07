@@ -1,6 +1,11 @@
 import {ERROR} from '../constants';
 import type {MaybeArray} from '../utils';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface HeaderEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'header'> {
@@ -29,7 +34,7 @@ export interface HeaderEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
       };
 }
 
-export default defineUnConfig('header', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies HeaderEslintConfigOptions);
 
   const {options} = optionsResolved;
@@ -63,4 +68,4 @@ export default defineUnConfig('header', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'header'>;

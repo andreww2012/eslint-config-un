@@ -5,9 +5,9 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type RuleNamesForPlugin,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export const DEFAULT_FILES_PACKAGE_JSON = [GLOB_PACKAGE_JSON];
@@ -124,7 +124,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   propertiesAllowedToBeEmpty?: string[];
 }
 
-export default defineUnConfig('packageJson', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceAbsoluteVersion: false,
     order: 'sort-package-json',
@@ -247,4 +247,4 @@ export default defineUnConfig('packageJson', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'packageJson'>;

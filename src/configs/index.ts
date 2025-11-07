@@ -22,7 +22,7 @@ import type {
   PluginPrefix,
   pluginsLoaders,
 } from '../plugins';
-import type {OmitIndexSignature, PrettifyShallow, Promisable} from '../types';
+import type {OmitIndexSignature, Promisable} from '../types';
 import type {MaybeArray, MaybeFn, fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
 import type {AstroEslintConfigOptions} from './astro';
@@ -154,9 +154,7 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
   forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
 
   configs?: {
-    [Key in keyof UnConfigs<ExtraPlugins>]?:
-      | boolean
-      | PrettifyShallow<UnConfigs<ExtraPlugins>[Key]>;
+    [Key in keyof UnConfigs<ExtraPlugins>]?: boolean | UnConfigs<ExtraPlugins>[Key];
   };
 
   extraConfigs?: UnFlagConfigEntry<ExtraPlugins>[];
@@ -178,7 +176,7 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    * {'@eslint-react': 'react-x'}
    * ```
    */
-  pluginRenames?: PrettifyShallow<Partial<Record<Exclude<PluginPrefix, ''>, string>>>;
+  pluginRenames?: Partial<Record<Exclude<PluginPrefix, ''>, string>>;
 
   /**
    * Defines for which rules and/or plugins autofix will be disabled globally.
@@ -1092,7 +1090,7 @@ export function createConfigBuilder<
 }
 
 export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPluginsType> {
-  rootOptions: PrettifyShallow<EslintConfigUnOptions<ExtraPlugins>>;
+  rootOptions: EslintConfigUnOptions<ExtraPlugins>;
   internalOptions: EslintConfigUnInternalOptions;
   packagesInfo: Record<
     (typeof PACKAGES_TO_GET_INFO_FOR)[number],
@@ -1142,23 +1140,23 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   createConfigBuilder: typeof createConfigBuilder;
 }
 
-export const defineUnConfig = <
-  const ConfigKey extends keyof UnConfigs,
+export type UnConfigFn<
+  ConfigKey extends keyof UnConfigs,
   ExtraArgument = unknown,
   ExtraReturnedData = unknown,
->(
-  configKey: ConfigKey,
-  fn: <ExtraPlugins extends ExtraPluginsType>(
-    context: Readonly<UnConfigContext<ExtraPlugins>>,
-    configOptions: (EslintConfigUnOptions<ExtraPlugins>['configs'] & {})[ConfigKey],
-    extraArgument: ExtraArgument,
-  ) => Promisable<
-    | null
-    | ({
-        configs: (ConfigEntryBuilder<ExtraPlugins> | null)[];
-        optionsResolved: UnConfigs<ExtraPlugins>[ConfigKey] & {};
-      } & ExtraReturnedData)
-  >,
-) => fn;
+> = <ExtraPlugins extends ExtraPluginsType>(
+  context: Readonly<UnConfigContext<ExtraPlugins>>,
+  configOptions:
+    | boolean
+    | Omit<UnConfigs<ExtraPlugins>[ConfigKey], 'overrides' | 'overridesAny'>
+    | undefined,
+  extraArgument: ExtraArgument,
+) => Promisable<
+  | null
+  | ({
+      configs: (ConfigEntryBuilder<ExtraPlugins> | null)[];
+      optionsResolved: Record<string, unknown>;
+    } & ExtraReturnedData)
+>;
 
 /* eslint-enable perfectionist/sort-interfaces */

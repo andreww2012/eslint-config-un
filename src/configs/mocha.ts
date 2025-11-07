@@ -8,9 +8,9 @@ import {
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -45,7 +45,7 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
   maxTopLevelSuites?: number;
 }
 
-export default defineUnConfig('mocha', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: true,
     maxTopLevelSuites: 1,
@@ -131,4 +131,4 @@ export default defineUnConfig('mocha', (context, optionsRaw) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'mocha'>;

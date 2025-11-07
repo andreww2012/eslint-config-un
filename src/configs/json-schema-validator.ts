@@ -4,9 +4,9 @@ import {JSONC_DEFAULT_FILES, TOML_DEFAULT_FILES, YAML_DEFAULT_FILES} from './sha
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface JsonSchemaValidatorEslintConfigOptions<
@@ -31,7 +31,7 @@ export interface JsonSchemaValidatorEslintConfigOptions<
   options?: GetRuleOptions<'json-schema-validator', 'no-invalid'>;
 }
 
-export default defineUnConfig('jsonSchemaValidator', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies JsonSchemaValidatorEslintConfigOptions,
@@ -88,4 +88,4 @@ export default defineUnConfig('jsonSchemaValidator', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'jsonSchemaValidator'>;

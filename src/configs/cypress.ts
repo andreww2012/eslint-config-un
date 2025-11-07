@@ -5,13 +5,18 @@ import {
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface CypressEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'cypress'>,
     NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {}
 
-export default defineUnConfig('cypress', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: true,
   } satisfies CypressEslintConfigOptions);
@@ -63,4 +68,4 @@ export default defineUnConfig('cypress', (context, optionsRaw) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'cypress'>;

@@ -2,9 +2,9 @@ import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface TurboEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -16,7 +16,7 @@ export interface TurboEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
   undeclaredEnvVarsOptions?: GetRuleOptions<'turbo', 'no-undeclared-env-vars'>;
 }
 
-export default defineUnConfig('turbo', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies TurboEslintConfigOptions);
 
   const {undeclaredEnvVarsOptions} = optionsResolved;
@@ -40,4 +40,4 @@ export default defineUnConfig('turbo', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'turbo'>;

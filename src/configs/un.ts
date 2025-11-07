@@ -1,10 +1,15 @@
 import {ERROR, GLOB_TSX} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface UnEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'un'> {}
 
-export default defineUnConfig('un', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies UnEslintConfigOptions);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'un');
@@ -25,4 +30,4 @@ export default defineUnConfig('un', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'un'>;

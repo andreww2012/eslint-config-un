@@ -7,9 +7,9 @@ import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
   type RuleNamesForPlugin,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -103,7 +103,7 @@ const SVELTE_SYSTEM_RULES = new Set<string>([
   'system',
 ] satisfies RuleNamesForPlugin<'svelte'>[]);
 
-export default defineUnConfig('svelte', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const eslintPluginSvelte = await pluginsLoaders.svelte(context).then(({module}) => module);
 
   context.usedPlugins.add('svelte');
@@ -326,4 +326,4 @@ export default defineUnConfig('svelte', async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'svelte'>;

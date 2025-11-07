@@ -1,5 +1,10 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface UnicornEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'unicorn'> {
@@ -17,7 +22,7 @@ export interface UnicornEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
   enforceTextEncodingCaseAndNotation?: 'no-dash' | 'dash' | false;
 }
 
-export default defineUnConfig('unicorn', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceTextEncodingCaseAndNotation: 'no-dash',
   } satisfies UnicornEslintConfigOptions);
@@ -212,4 +217,4 @@ export default defineUnConfig('unicorn', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'unicorn'>;

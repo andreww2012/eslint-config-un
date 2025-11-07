@@ -5,9 +5,9 @@ import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 type EnforceableCasing = GetRuleOptions<'markdown-preferences', 'heading-casing'>['style'] & {};
@@ -68,7 +68,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
   wordsToPreserveCasingOf?: string[] | Record<string, boolean>;
 }
 
-export default defineUnConfig('markdownPreferences', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const markdownPreferencesPlugin = await pluginsLoaders['markdown-preferences'](context).then(
     ({module}) => module,
   );
@@ -210,4 +210,4 @@ export default defineUnConfig('markdownPreferences', async (context, optionsRaw)
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'markdownPreferences'>;

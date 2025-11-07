@@ -1,6 +1,11 @@
 // cspell:ignore sharereplay switchmap takeuntil takewhile topromise
 import {ERROR, OFF} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 type NamesToBanListOrObjectWithFlagOrMessage = Record<string, boolean | string> | string[];
 
@@ -35,7 +40,7 @@ export interface RxjsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   enforceJustInsteadOfOf?: boolean;
 }
 
-export default defineUnConfig('rxjs', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceFinnishNotation: context.packagesInfo['@angular/core'] != null,
     enforceJustInsteadOfOf: false,
@@ -111,4 +116,4 @@ export default defineUnConfig('rxjs', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'rxjs'>;

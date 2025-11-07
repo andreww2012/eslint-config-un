@@ -4,9 +4,9 @@ import type {NonEmptyTuple} from '../types';
 import {
   type ExtraPluginsType,
   type RuleNamesForPlugin,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 type LodashMethods =
@@ -173,7 +173,7 @@ export interface YouDontNeedLodashUnderscoreEslintConfigOptions<
   ignoredMethods?: Partial<Record<LodashMethods, boolean>>;
 }
 
-export default defineUnConfig('youDontNeedLodashUnderscore', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies YouDontNeedLodashUnderscoreEslintConfigOptions,
@@ -284,4 +284,4 @@ export default defineUnConfig('youDontNeedLodashUnderscore', (context, optionsRa
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'youDontNeedLodashUnderscore'>;

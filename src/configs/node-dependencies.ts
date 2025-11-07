@@ -3,9 +3,9 @@ import {DEFAULT_FILES_PACKAGE_JSON} from './package-json';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface NodeDependenciesEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -25,7 +25,7 @@ export interface NodeDependenciesEslintConfigOptions<ExtraPlugins extends ExtraP
     | (GetRuleOptions<'node-dependencies', 'absolute-version'> & object);
 }
 
-export default defineUnConfig('nodeDependencies', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceAbsoluteVersion: false,
   } satisfies NodeDependenciesEslintConfigOptions);
@@ -79,4 +79,4 @@ export default defineUnConfig('nodeDependencies', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'nodeDependencies'>;

@@ -5,7 +5,12 @@ import {
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'ava'>,
@@ -29,7 +34,7 @@ export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
   enforceMaxAssertions?: number;
 }
 
-export default defineUnConfig('ava', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false, // has `no-only-test` rule
   } satisfies AvaEslintConfigOptions);
@@ -104,4 +109,4 @@ export default defineUnConfig('ava', (context, optionsRaw) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'ava'>;

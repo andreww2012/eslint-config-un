@@ -1,10 +1,15 @@
 import {ERROR, OFF} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface EslintCommentsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, '@eslint-community/eslint-comments'> {}
 
-export default defineUnConfig('eslintComments', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies EslintCommentsEslintConfigOptions,
@@ -47,4 +52,4 @@ export default defineUnConfig('eslintComments', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'eslintComments'>;

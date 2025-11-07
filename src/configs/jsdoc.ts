@@ -1,5 +1,10 @@
 import {ERROR, GLOB_TSX, OFF, WARNING} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 interface EslintPluginJsdocSettings {
   /**
@@ -171,7 +176,7 @@ export interface JsdocEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
    */
   configTypescript?:
     | boolean
-    | UnConfigOptions<ExtraPlugins, 'jsdoc', Pick<JsdocEslintConfigOptions, 'settings'>>;
+    | (UnConfigOptions<ExtraPlugins, 'jsdoc'> & Pick<JsdocEslintConfigOptions, 'settings'>);
 
   /**
    * Recognize the following tags as valid JSDoc tags.
@@ -197,7 +202,7 @@ export interface JsdocEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
   formatTypeValues?: boolean;
 }
 
-export default defineUnConfig('jsdoc', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypescript: context.configsMeta.ts.enabled,
     formatTypeValues: true,
@@ -363,4 +368,4 @@ export default defineUnConfig('jsdoc', (context, optionsRaw) => {
     configs: [configBuilder, configBuilderTypescript],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'jsdoc'>;

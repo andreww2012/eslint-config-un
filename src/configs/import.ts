@@ -10,9 +10,9 @@ import {arraify, isNonEmptyArray, kebabCase, objectEntriesUnsafe} from '../utils
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface ImportEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -76,7 +76,7 @@ export interface ImportEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   noDuplicatesOptions?: GetRuleOptions<'import', 'no-duplicates'>;
 }
 
-export default defineUnConfig('import', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     isTypescriptEnabled: context.configsMeta.ts.enabled,
     allowDevDependencies: context.rootOptions.mode !== 'lib',
@@ -247,4 +247,4 @@ export default defineUnConfig('import', async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'import'>;

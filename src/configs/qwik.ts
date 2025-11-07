@@ -1,12 +1,17 @@
 import {ERROR, GLOB_JS_TS_X, OFF} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface QwikEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'qwik'> {
   routesDir?: string;
 }
 
-export default defineUnConfig('qwik', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies QwikEslintConfigOptions);
 
   const {routesDir} = optionsResolved;
@@ -50,4 +55,4 @@ export default defineUnConfig('qwik', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'qwik'>;

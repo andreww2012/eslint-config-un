@@ -2,9 +2,9 @@ import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface CspellEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -15,7 +15,7 @@ export interface CspellEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   options?: GetRuleOptions<'@cspell', 'spellchecker'>;
 }
 
-export default defineUnConfig('cspell', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies CspellEslintConfigOptions);
 
   const {options} = optionsResolved;
@@ -48,4 +48,4 @@ export default defineUnConfig('cspell', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'cspell'>;

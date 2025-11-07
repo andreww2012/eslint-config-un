@@ -12,9 +12,14 @@ import {
   WARNING,
 } from '../constants';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
-import type {PrettifyShallow} from '../types';
+import type {Prettify} from '../types';
 import {doesPackageExist, getKeysOfTruthyValues, pickBy} from '../utils';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface GraphqlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'graphql'> {
@@ -27,7 +32,7 @@ export interface GraphqlEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
    * By default, the processor will be used on **all** files.
    * @default true
    */
-  configJsProcessor?: boolean | PrettifyShallow<Pick<UnConfigOptions, 'files' | 'ignores'>>;
+  configJsProcessor?: boolean | Prettify<Pick<UnConfigOptions, 'files' | 'ignores'>>;
 
   /**
    * Disable all the rules requiring GraphQL Operations specified in GraphQL config
@@ -61,7 +66,7 @@ export interface GraphqlEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
   >;
 }
 
-export default defineUnConfig('graphql', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configJsProcessor: true,
     disableRulesRequiringOperations: false,
@@ -304,4 +309,4 @@ export default defineUnConfig('graphql', async (context, optionsRaw) => {
     configs: [configBuilderProcessor, configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'graphql'>;

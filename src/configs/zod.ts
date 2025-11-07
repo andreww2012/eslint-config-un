@@ -2,9 +2,9 @@ import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface ZodEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -36,7 +36,7 @@ export interface ZodEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
   schemaSuffix?: string | false;
 }
 
-export default defineUnConfig('zod', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     arrayStyle: 'method',
     enforceNamespaceImport: true,
@@ -85,4 +85,4 @@ export default defineUnConfig('zod', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'zod'>;

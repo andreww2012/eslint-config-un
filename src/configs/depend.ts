@@ -3,9 +3,9 @@ import {DEFAULT_FILES_PACKAGE_JSON} from './package-json';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface DependEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -16,7 +16,7 @@ export interface DependEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   options?: GetRuleOptions<'depend', 'ban-dependencies'>;
 }
 
-export default defineUnConfig('depend', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies DependEslintConfigOptions);
 
   const {options: badDependencyOptions} = optionsResolved;
@@ -47,4 +47,4 @@ export default defineUnConfig('depend', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'depend'>;

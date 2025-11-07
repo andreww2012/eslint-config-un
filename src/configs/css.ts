@@ -5,9 +5,9 @@ import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface CssEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -53,7 +53,7 @@ export interface CssEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
   };
 }
 
-export default defineUnConfig('css', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     tolerantMode: false,
   } satisfies CssEslintConfigOptions);
@@ -146,4 +146,4 @@ export default defineUnConfig('css', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'css'>;

@@ -1,13 +1,13 @@
 import {ERROR, OFF} from '../constants';
 import type {RuleOptionsPerPlugin} from '../eslint';
-import type {PrettifyShallow} from '../types';
+import type {Prettify} from '../types';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type RulesRecordPartial,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 type RuleSubConfig<
@@ -15,14 +15,13 @@ type RuleSubConfig<
   T extends keyof RuleOptionsPerPlugin['perfectionist'],
 > =
   | boolean
-  | UnConfigOptions<
+  | (UnConfigOptions<
       ExtraPlugins,
       // @ts-expect-error typescript is bad
-      Pick<RulesRecordPartial<'perfectionist'>, `perfectionist/${T}`>,
-      {
-        options?: GetRuleOptions<'perfectionist', T>;
-      }
-    >;
+      Pick<RulesRecordPartial<'perfectionist'>, `perfectionist/${T}`>
+    > & {
+      options?: GetRuleOptions<'perfectionist', T>;
+    });
 
 export interface PerfectionistEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'perfectionist'> {
@@ -32,7 +31,7 @@ export interface PerfectionistEslintConfigOptions<ExtraPlugins extends ExtraPlug
    * that will be assigned to `perfectionist` property and applied to the specified `files` and `ignores`.
    * @see https://perfectionist.dev/guide/getting-started#settings
    */
-  settings?: PrettifyShallow<
+  settings?: Prettify<
     Pick<
       GetRuleOptions<'perfectionist'>,
       | 'type'
@@ -150,7 +149,7 @@ export interface PerfectionistEslintConfigOptions<ExtraPlugins extends ExtraPlug
   configSortVariableDeclarations?: RuleSubConfig<ExtraPlugins, 'sort-variable-declarations'>;
 }
 
-export default defineUnConfig('perfectionist', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configSortArrayIncludes: false,
     configSortClasses: false,
@@ -285,4 +284,4 @@ export default defineUnConfig('perfectionist', (context, optionsRaw) => {
     configs: [configBuilder, ...subConfigs],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'perfectionist'> as UnConfigFn<'perfectionist'>;

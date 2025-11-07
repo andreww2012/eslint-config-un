@@ -4,10 +4,18 @@ import {
   type GetRuleOptions,
   type RuleNamesForPlugin,
   type RulesRecordPartial,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
+
+interface NoUnusedVarsSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<
+    ExtraPlugins,
+    Pick<RulesRecordPartial<'unused-imports'>, 'unused-imports/no-unused-vars'>
+  > {
+  ruleOptions?: GetRuleOptions<'unused-imports', 'no-unused-vars'>;
+}
 
 export interface UnusedImportsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'unused-imports'> {
@@ -15,18 +23,10 @@ export interface UnusedImportsEslintConfigOptions<ExtraPlugins extends ExtraPlug
    * Disable [`no-unused-vars`](https://eslint.org/docs/latest/rules/no-unused-vars), [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) and [`sonarjs/no-unused-vars`](https://sonarsource.github.io/rspec/#/rspec/S1481/javascript) rules in favor of `unused-imports/no-unused-vars` rule.
    * @default false
    */
-  configNoUnusedVars?:
-    | boolean
-    | UnConfigOptions<
-        ExtraPlugins,
-        Pick<RulesRecordPartial<'unused-imports'>, 'unused-imports/no-unused-vars'>,
-        {
-          ruleOptions?: GetRuleOptions<'unused-imports', 'no-unused-vars'>;
-        }
-      >;
+  configNoUnusedVars?: boolean | NoUnusedVarsSubConfigOptions<ExtraPlugins>;
 }
 
-export default defineUnConfig('unusedImports', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoUnusedVars: false,
   } satisfies UnusedImportsEslintConfigOptions);
@@ -75,4 +75,4 @@ export default defineUnConfig('unusedImports', (context, optionsRaw) => {
     configs: [configBuilderNoUnusedImports, configBuilderNoUnusedVars],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'unusedImports'>;

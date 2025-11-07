@@ -1,14 +1,13 @@
 import {ERROR, GLOB_JS_TS_EXTENSION, OFF} from '../constants';
-import type {} from '../eslint';
 import type {ConditionalKeys} from '../types';
 import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
 import {
   type ExtraPluginsType,
   type RuleNamesForPlugin,
   type RulesRecordPartial,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 const ESLINT_PLUGIN_TESTING_RELATED_RULES = [
@@ -74,7 +73,7 @@ export interface EslintPluginEslintConfigOptions<ExtraPlugins extends ExtraPlugi
   >;
 }
 
-export default defineUnConfig('eslintPlugin', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configRuleTests: false,
   } satisfies EslintPluginEslintConfigOptions);
@@ -201,4 +200,4 @@ export default defineUnConfig('eslintPlugin', (context, optionsRaw) => {
     configs: [configBuilder, configBuilderRuleTests],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'eslintPlugin'> as UnConfigFn<'eslintPlugin'>;

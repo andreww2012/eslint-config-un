@@ -5,7 +5,12 @@ import {
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface QunitEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'qunit'>,
@@ -18,7 +23,7 @@ export interface QunitEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
   settings?: Record<string, unknown>;
 }
 
-export default defineUnConfig('qunit', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false, // has `no-only` rule
   } satisfies QunitEslintConfigOptions);
@@ -103,4 +108,4 @@ export default defineUnConfig('qunit', (context, optionsRaw) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'qunit'>;

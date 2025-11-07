@@ -2,9 +2,9 @@ import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface MathEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -16,7 +16,7 @@ export interface MathEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   absoluteValuesConversionMethod?: false | GetRuleOptions<'math', 'abs'>['prefer'];
 }
 
-export default defineUnConfig('math', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     absoluteValuesConversionMethod: 'Math.abs',
   } satisfies MathEslintConfigOptions);
@@ -70,4 +70,4 @@ export default defineUnConfig('math', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'math'>;

@@ -1,15 +1,14 @@
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
-import type {NonEmptyTuple, PrettifyShallow, Subtract} from '../types';
+import type {NonEmptyTuple, Prettify, Subtract} from '../types';
 import {type MaybeArray, fetchPackageInfo} from '../utils';
 import {
-  type GetRuleOptions,
   type ExtraPluginsType,
+  type GetRuleOptions,
   type RuleNamesForPlugin,
-  type RulesRecordPartial,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 // Please keep ascending order
@@ -23,65 +22,62 @@ const LATEST_SUPPORTED_ANGULAR_VERSION = SUPPORTED_ANGULAR_VERSIONS.at(
   -1,
 ) as LatestSupportedAngularVersion;
 
+interface ConfigTemplateSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, '@angular-eslint/template'> {
+  /**
+   * Enable all a11y (accessibility) rules (all are prefixed with `@angular-eslint/template`):
+   * - [`alt-text`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/alt-text.md) ([`accessibility-alt-text`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-alt-text.md) before Angular 16)
+   * - [`click-events-have-key-events`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/click-events-have-key-events.md)
+   * - [`elements-content`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/elements-content.md) ([`accessibility-elements-content`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-elements-content.md) before Angular 16)
+   * - [`interactive-supports-focus`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/interactive-supports-focus.md) ([`accessibility-interactive-supports-focus`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-interactive-supports-focus.md) before Angular 16)
+   * - [`label-has-associated-control`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/label-has-associated-control.md) ([`accessibility-label-has-associated-control`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-label-has-associated-control.md) before Angular 16)
+   * - [`mouse-events-have-key-events`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/mouse-events-have-key-events.md)
+   * - [`no-autofocus`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/no-autofocus.md)
+   * - [`no-distracting-elements`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/no-distracting-elements.md)
+   * - [`role-has-required-aria`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/role-has-required-aria.md) ([`accessibility-role-has-required-aria`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-role-has-required-aria.md) before Angular 16)
+   * - [`table-scope`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/table-scope.md) ([`accessibility-table-scope`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-table-scope.md) before Angular 16)
+   * - [`valid-aria`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/valid-aria.md) ([`accessibility-valid-aria`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-valid-aria.md) before Angular 16)
+   * @default true
+   */
+  a11yRules?: boolean | 'warn';
+
+  /**
+   * Uses [`@angular-eslint/template/prefer-control-flow`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-control-flow.md) rule.
+   *
+   * Note that this rule is enabled in our config if Angular version is at least 19.
+   * @default true <=> Angular version >=19
+   * @see https://angular.dev/guide/templates/control-flow
+   */
+  preferControlFlow?: boolean;
+
+  /**
+   * Prefer rendering images (`<img>`) with the help of [`NgOptimizedImage`](https://angular.dev/api/common/NgOptimizedImage) directive,
+   * i.e. using `ngSrc` attribute instead of `src`.
+   *
+   * Also see ["Optimizing images"](https://angular.dev/tutorials/learn-angular/11-optimizing-images) lesson.
+   *
+   * Uses [`@angular-eslint/template/prefer-ngsrc`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-ngsrc.md) rule.
+   * @default false
+   */
+  preferNgSrc?: boolean;
+
+  /**
+   * Requires [`trackBy` function](https://angular.dev/api/core/TrackByFunction) to be used with [`*ngFor` loops](https://angular.dev/api/common/NgFor).
+   *
+   * Uses [`@angular-eslint/template/use-track-by-function`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/use-track-by-function.md) rule.
+   * @default false
+   */
+  requireLoopIndexes?: boolean;
+}
+
 export interface AngularEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, RulesRecordPartial<'@angular-eslint'>> {
+  extends UnConfigOptions<ExtraPlugins, '@angular-eslint'> {
   /**
    * Enables or specifies the configuration for the [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template) plugin,
    * which includes template-specific rules.
    * @default true
    */
-  configTemplate?:
-    | boolean
-    | UnConfigOptions<
-        ExtraPlugins,
-        '@angular-eslint/template',
-        {
-          /**
-           * Enable all a11y (accessibility) rules (all are prefixed with `@angular-eslint/template`):
-           * - [`alt-text`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/alt-text.md) ([`accessibility-alt-text`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-alt-text.md) before Angular 16)
-           * - [`click-events-have-key-events`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/click-events-have-key-events.md)
-           * - [`elements-content`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/elements-content.md) ([`accessibility-elements-content`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-elements-content.md) before Angular 16)
-           * - [`interactive-supports-focus`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/interactive-supports-focus.md) ([`accessibility-interactive-supports-focus`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-interactive-supports-focus.md) before Angular 16)
-           * - [`label-has-associated-control`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/label-has-associated-control.md) ([`accessibility-label-has-associated-control`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-label-has-associated-control.md) before Angular 16)
-           * - [`mouse-events-have-key-events`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/mouse-events-have-key-events.md)
-           * - [`no-autofocus`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/no-autofocus.md)
-           * - [`no-distracting-elements`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/no-distracting-elements.md)
-           * - [`role-has-required-aria`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/role-has-required-aria.md) ([`accessibility-role-has-required-aria`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-role-has-required-aria.md) before Angular 16)
-           * - [`table-scope`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/table-scope.md) ([`accessibility-table-scope`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-table-scope.md) before Angular 16)
-           * - [`valid-aria`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/valid-aria.md) ([`accessibility-valid-aria`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-valid-aria.md) before Angular 16)
-           * @default true
-           */
-          a11yRules?: boolean | 'warn';
-
-          /**
-           * Uses [`@angular-eslint/template/prefer-control-flow`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-control-flow.md) rule.
-           *
-           * Note that this rule is enabled in our config if Angular version is at least 19.
-           * @default true <=> Angular version >=19
-           * @see https://angular.dev/guide/templates/control-flow
-           */
-          preferControlFlow?: boolean;
-
-          /**
-           * Prefer rendering images (`<img>`) with the help of [`NgOptimizedImage`](https://angular.dev/api/common/NgOptimizedImage) directive,
-           * i.e. using `ngSrc` attribute instead of `src`.
-           *
-           * Also see ["Optimizing images"](https://angular.dev/tutorials/learn-angular/11-optimizing-images) lesson.
-           *
-           * Uses [`@angular-eslint/template/prefer-ngsrc`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-ngsrc.md) rule.
-           * @default false
-           */
-          preferNgSrc?: boolean;
-
-          /**
-           * Requires [`trackBy` function](https://angular.dev/api/core/TrackByFunction) to be used with [`*ngFor` loops](https://angular.dev/api/common/NgFor).
-           *
-           * Uses [`@angular-eslint/template/use-track-by-function`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/use-track-by-function.md) rule.
-           * @default false
-           */
-          requireLoopIndexes?: boolean;
-        }
-      >;
+  configTemplate?: boolean | ConfigTemplateSubConfigOptions<ExtraPlugins>;
 
   /**
    * Detected automatically from a major version of the installed version of
@@ -117,7 +113,7 @@ export interface AngularEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
    */
   componentSelector?:
     | boolean
-    | PrettifyShallow<
+    | Prettify<
         Omit<GetRuleOptions<'@angular-eslint', 'component-selector'>, 'type' | 'prefix'> & {
           type?: MaybeArray<'element' | 'attribute'>;
           prefix?: MaybeArray<string>;
@@ -150,7 +146,7 @@ export interface AngularEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
    */
   directiveSelector?:
     | boolean
-    | PrettifyShallow<
+    | Prettify<
         Omit<GetRuleOptions<'@angular-eslint', 'directive-selector'>, 'type' | 'prefix'> & {
           type?: MaybeArray<'element' | 'attribute'>;
           prefix?: MaybeArray<string>;
@@ -202,7 +198,7 @@ export interface AngularEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
   preferStandaloneComponents?: boolean;
 }
 
-export default defineUnConfig('angular', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTemplate: true,
     processInlineTemplates: true,
@@ -641,4 +637,4 @@ export default defineUnConfig('angular', async (context, optionsRaw) => {
     configs: [configBuilderGeneral, configBuilderTemplate],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'angular'>;

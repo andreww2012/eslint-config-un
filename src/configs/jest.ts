@@ -3,7 +3,7 @@ import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import type {FlatConfigEntryForBuilder} from '../eslint';
 import {pluginsLoaders} from '../plugins';
-import type {ObjectValues, PrettifyShallow} from '../types';
+import type {ObjectValues, Prettify} from '../types';
 import {doesPackageExist} from '../utils';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
@@ -17,12 +17,35 @@ import {
   type GetRuleOptions,
   type RuleNamesForPlugin,
   type RulesRecordPartial,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
-type AllJestMatchers = PrettifyShallow<keyof ReturnType<JestExpect> | keyof AsymmetricMatchers>;
+type AllJestMatchers = Prettify<keyof ReturnType<JestExpect> | keyof AsymmetricMatchers>;
+
+interface JestExtendedSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'jest-extended'> {
+  /**
+   * Suggests using various `jest-extended` methods instead of some assertion forms.
+   *
+   * ⚠️ If specified as object, unspecified options will be treated as if they were enabled (set to `true`).
+   * @default true
+   * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-array.md - `toBeArray`
+   * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-false.md - `toBeFalse`
+   * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-object.md - `toBeObject`
+   * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-true.md - `toBeTrue`
+   * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-have-been-called-once.md - `toHaveBeenCalledOnce`
+   */
+  suggestUsing?:
+    | boolean
+    | Partial<
+        Record<
+          'toBeArray' | 'toBeFalse' | 'toBeObject' | 'toBeTrue' | 'toHaveBeenCalledOnce',
+          boolean
+        >
+      >;
+}
 
 export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'jest'>,
@@ -55,33 +78,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * Enables or specifies the configuration for the [`eslint-plugin-jest-extended`](https://npmjs.com/eslint-plugin-jest-extended) plugin.
    * @default true <=> `jest-extended` package is installed
    */
-  configJestExtended?:
-    | boolean
-    | UnConfigOptions<
-        ExtraPlugins,
-        'jest-extended',
-        {
-          /**
-           * Suggests using various `jest-extended` methods instead of some assertion forms.
-           *
-           * ⚠️ If specified as object, unspecified options will be treated as if they were enabled (set to `true`).
-           * @default true
-           * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-array.md - `toBeArray`
-           * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-false.md - `toBeFalse`
-           * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-object.md - `toBeObject`
-           * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-true.md - `toBeTrue`
-           * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-have-been-called-once.md - `toHaveBeenCalledOnce`
-           */
-          suggestUsing?:
-            | boolean
-            | Partial<
-                Record<
-                  'toBeArray' | 'toBeFalse' | 'toBeObject' | 'toBeTrue' | 'toHaveBeenCalledOnce',
-                  boolean
-                >
-              >;
-        }
-      >;
+  configJestExtended?: boolean | JestExtendedSubConfigOptions<ExtraPlugins>;
 
   /**
    * Explicitly specify or ignore files written in TypeScript. Will be used to enable TypeScript-specific rules like [`no-untyped-mock-factory`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-untyped-mock-factory.md) or [`unbound-method`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md).
@@ -185,7 +182,7 @@ const JEST_TYPESCRIPT_RELATED_RULES = [
 
 const JEST_TYPESCRIPT_RELATED_RULES_SET = new Set<string>(JEST_TYPESCRIPT_RELATED_RULES);
 
-export default defineUnConfig('jest', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const [eslintPluginJest, isJestExtendedInstalled] = await Promise.all([
     pluginsLoaders.jest(context).then(({module}) => module),
     doesPackageExist('jest-extended'),
@@ -459,4 +456,4 @@ export default defineUnConfig('jest', async (context, optionsRaw) => {
     ],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'jest'> as UnConfigFn<'jest'>;

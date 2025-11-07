@@ -1,5 +1,10 @@
 import {ERROR} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface CompatEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'compat'> {
@@ -22,7 +27,7 @@ export interface CompatEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   };
 }
 
-export default defineUnConfig('compat', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies CompatEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;
@@ -46,4 +51,4 @@ export default defineUnConfig('compat', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'compat'>;

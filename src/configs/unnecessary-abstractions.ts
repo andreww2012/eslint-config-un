@@ -1,11 +1,16 @@
 import {ERROR} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface UnnecessaryAbstractionsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'unnecessary-abstractions'> {}
 
-export default defineUnConfig('unnecessaryAbstractions', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies UnnecessaryAbstractionsEslintConfigOptions,
@@ -26,4 +31,4 @@ export default defineUnConfig('unnecessaryAbstractions', (context, optionsRaw) =
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'unnecessaryAbstractions'>;

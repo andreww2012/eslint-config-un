@@ -2,9 +2,9 @@ import {ERROR, GLOB_JSON, GLOB_TSX, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface NxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -15,7 +15,7 @@ export interface NxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = n
   enforceModuleBoundaries?: boolean | GetRuleOptions<'nx', 'enforce-module-boundaries'>;
 }
 
-export default defineUnConfig('nx', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceModuleBoundaries: false,
   } satisfies NxEslintConfigOptions);
@@ -60,4 +60,4 @@ export default defineUnConfig('nx', (context, optionsRaw) => {
     configs: [configBuilder, configBuilderJson],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'nx'>;

@@ -3,7 +3,12 @@ import globals from 'globals';
 import {GLOB_HTML_ALL} from '../constants';
 import {pluginsLoaders} from '../plugins';
 import {getKeysOfTruthyValues} from '../utils';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 // These are copied from eslint-plugin-html's source code
 const DEFAULT_HTML_EXTENSIONS = [
@@ -104,7 +109,7 @@ export interface JsInlineEslintConfigOptions<ExtraPlugins extends ExtraPluginsTy
   languageOptions?: Eslint.Linter.LanguageOptions;
 }
 
-export default defineUnConfig('jsInline', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const eslintPluginHtml = await pluginsLoaders.html(context).then(({module}) => module);
 
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsInlineEslintConfigOptions);
@@ -175,4 +180,4 @@ export default defineUnConfig('jsInline', async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'jsInline'>;

@@ -10,9 +10,9 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type RuleNamesForPlugin,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface EmberEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -22,7 +22,7 @@ export interface EmberEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
    */
   configTestFiles?:
     | boolean
-    | UnConfigOptions<ExtraPlugins, 'ember', NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>>;
+    | (UnConfigOptions<ExtraPlugins, 'ember'> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
    * Affected rules:
@@ -58,7 +58,7 @@ const EMBER_TESTING_RELATED_RULES = new Set<string>([
   'require-valid-css-selector-in-test-helpers',
 ] satisfies RuleNamesForPlugin<'ember'>[]);
 
-export default defineUnConfig('ember', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTestFiles: true,
     enforceGlimmerComponents: true,
@@ -253,4 +253,4 @@ export default defineUnConfig('ember', (context, optionsRaw) => {
     configs: [configBuilder, configBuilderTests, configBuilderNoOnlyTests],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'ember'>;

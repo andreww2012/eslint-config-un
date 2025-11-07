@@ -1,11 +1,16 @@
 import {WARNING} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface PreferArrowFunctionsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'prefer-arrow-functions'> {}
 
-export default defineUnConfig('preferArrowFunctions', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies PreferArrowFunctionsEslintConfigOptions,
@@ -26,4 +31,4 @@ export default defineUnConfig('preferArrowFunctions', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'preferArrowFunctions'>;

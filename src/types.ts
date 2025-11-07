@@ -7,13 +7,6 @@ export type PickKeysNotStartingWith<O, T extends string> = {
 
 export type FalsyValue = false | 0 | 0n | '' | null | undefined;
 
-export type PrettifyShallow<T> = {
-  [K in keyof T]: T[K];
-} & {};
-export type Prettify<T> = {
-  [K in keyof T]: Prettify<T[K]>;
-} & {};
-
 export type {
   ConditionalKeys,
   DistributedPick,
@@ -23,10 +16,12 @@ export type {
   NonEmptyString,
   NonEmptyTuple,
   PartialDeep,
+  Promisable,
+  Simplify as Prettify,
+  SimplifyDeep as PrettifyDeep,
   ReadonlyDeep,
   SetRequired,
   Subtract,
-  Promisable,
   ValueOf as ObjectValues,
   OmitIndexSignature,
   Except as OmitStrict,

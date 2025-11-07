@@ -7,9 +7,9 @@ import {
   type EslintConfigUnOptions,
   type ExtraPluginsType,
   type UnConfigContext,
+  type UnConfigFn,
   type UnConfigs,
   createConfigBuilder as createConfigBuilderWithContext,
-  type defineUnConfig,
 } from './configs';
 import {
   CHECKED_LODASH_METHODS,
@@ -320,7 +320,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
   const loadUnConfig = async <
     ConfigKey extends keyof UnConfigs,
     ExtraArgument,
-    T extends ReturnType<typeof defineUnConfig<ConfigKey, ExtraArgument>>,
+    T extends UnConfigFn<ConfigKey, ExtraArgument>,
   >(
     configKey: ConfigKey,
     importer: () => Promise<{default: T}>,
@@ -331,28 +331,26 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
         : [extraArgument: ExtraArgument]
   ): Promise<Awaited<ReturnType<T>> | null> =>
     context.configsMeta[configKey].enabled
-      ? ((await importer().then((m) =>
+      ? // @ts-expect-error weird error
+        await Promise.resolve(importer()).then((m) =>
           m.default(
             context,
             context.rootOptions.configs?.[configKey],
             // @ts-expect-error "A spread argument must either have a tuple type or be passed to a rest parameter."
             ...args,
           ),
-        )) as Awaited<ReturnType<T>>)
+        )
       : null;
 
   const jsEslintConfigResult = await loadUnConfig('js', () => import('./configs/js'));
-  // eslint-disable-next-line ts/no-unsafe-assignment
   const vanillaFinalFlatConfigRules = jsEslintConfigResult?.finalFlatConfigRules || {};
   const [astroEslintConfigResult, vueEslintConfigResult, svelteEslintConfigResult] =
     await Promise.all([
       loadUnConfig('astro', () => import('./configs/astro')),
-      // eslint-disable-next-line ts/no-unsafe-assignment
       loadUnConfig('vue', () => import('./configs/vue'), {vanillaFinalFlatConfigRules}),
       loadUnConfig('svelte', () => import('./configs/svelte')),
     ]);
   const tsEslintConfigResult = await loadUnConfig('ts', () => import('./configs/ts'), {
-    // eslint-disable-next-line ts/no-unsafe-assignment
     vanillaFinalFlatConfigRules,
     astroResolvedOptions: astroEslintConfigResult ? astroEslintConfigResult.optionsResolved : null,
     vueResolvedOptions: vueEslintConfigResult ? vueEslintConfigResult.optionsResolved : null,
@@ -561,7 +559,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
           ),
         ),
       })),
-  ]) satisfies Promise<UnresolvedConfigType[]> as Promise<UnresolvedConfigType[]>;
+  ]) as Promise<UnresolvedConfigType[]>;
   /* eslint-enable ts/await-thenable */
 
   const resolvedConfigs: FlatConfigEntry[] = (await unresolvedConfigs)

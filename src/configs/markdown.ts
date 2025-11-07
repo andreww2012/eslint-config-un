@@ -3,16 +3,16 @@ import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
 import type {FlatConfigEntryFilesOrIgnores} from '../eslint';
 import {generatePackageToLoadProperty} from '../plugins';
-import type {PrettifyShallow} from '../types';
+import type {Prettify} from '../types';
 import {capitalize, unique} from '../utils';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type RulesRecordPartial,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 type MarkdownDialect = 'commonmark' | 'gfm';
@@ -56,7 +56,7 @@ export interface MarkdownEslintConfigOptions<ExtraPlugins extends ExtraPluginsTy
    */
   language?:
     | MarkdownDialect
-    | PrettifyShallow<FlatConfigEntryFilesOrIgnores & {language: MarkdownDialect}>[];
+    | Prettify<FlatConfigEntryFilesOrIgnores & {language: MarkdownDialect}>[];
 
   /**
    * If array, only those tags will be allowed. If `false`, no tags are allowed. If `true`, all tags are allowed (default)
@@ -71,7 +71,7 @@ export interface MarkdownEslintConfigOptions<ExtraPlugins extends ExtraPluginsTy
    * @default true
    * @example {files: ['**\/*.md'], ignores: ['CHANGELOG.md'], ignoreLanguages: ['yml']}
    */
-  lintCodeBlocks?: boolean | PrettifyShallow<FlatConfigEntryFilesOrIgnores>;
+  lintCodeBlocks?: boolean | Prettify<FlatConfigEntryFilesOrIgnores>;
 
   /**
    * Note that these languages will be ignored disregarding of specified in `.lintCodeBlocks{files,ignores}`, i.e. this option will create a rule ignoring by `**\/*.md/**\/*.{extensions}` pattern.
@@ -116,7 +116,7 @@ export interface MarkdownEslintConfigOptions<ExtraPlugins extends ExtraPluginsTy
   parseFrontmatter?: MarkdownLanguageOptions['frontmatter'];
 }
 
-export default defineUnConfig('markdown', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     lintMarkdown: true,
     language: 'gfm',
@@ -331,4 +331,4 @@ export default defineUnConfig('markdown', (context, optionsRaw) => {
     configs: [configBuilder, configFormatFencedCodeBlocksBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'markdown'>;

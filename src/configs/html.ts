@@ -3,7 +3,12 @@ import {ERROR, GLOB_HTML_ALL, OFF, WARNING} from '../constants';
 import {getKeysOfTruthyValues} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, '@html-eslint'>,
@@ -44,7 +49,7 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   parserOptions?: HtmlEslintParserOptions;
 }
 
-export default defineUnConfig('html', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies HtmlEslintConfigOptions);
 
   const {settings: pluginSettings, parserOptions} = optionsResolved;
@@ -150,4 +155,4 @@ export default defineUnConfig('html', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'html'>;

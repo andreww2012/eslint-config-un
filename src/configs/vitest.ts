@@ -14,9 +14,9 @@ import {
   type ExtraPluginsType,
   type RuleNamesForPlugin,
   type RulesRecordPartial,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -85,7 +85,7 @@ const VITEST_TYPESCRIPT_RELATED_RULES = [
 
 const VITEST_TYPESCRIPT_RELATED_RULES_SET = new Set<string>(VITEST_TYPESCRIPT_RELATED_RULES);
 
-export default defineUnConfig('vitest', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const eslintPluginVitest = await pluginsLoaders.vitest(context).then(({module}) => module);
 
   context.usedPlugins.add('vitest');
@@ -327,4 +327,4 @@ export default defineUnConfig('vitest', async (context, optionsRaw) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'vitest'> as UnConfigFn<'vitest'>;

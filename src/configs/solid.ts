@@ -1,10 +1,15 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface SolidEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'solid'> {}
 
-export default defineUnConfig('solid', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies SolidEslintConfigOptions);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'solid');
@@ -64,4 +69,4 @@ export default defineUnConfig('solid', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'solid'>;

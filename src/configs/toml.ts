@@ -3,9 +3,9 @@ import {TOML_DEFAULT_FILES} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 const DEFAULT_FILES_TO_IGNORE = ['Cargo.lock'] as const;
@@ -43,7 +43,7 @@ export interface TomlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   maxIntegerPrecisionBits?: number;
 }
 
-export default defineUnConfig('toml', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     maxPrecisionOfFractionalSeconds: 3,
     maxIntegerPrecisionBits: 64,
@@ -115,4 +115,4 @@ export default defineUnConfig('toml', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'toml'>;

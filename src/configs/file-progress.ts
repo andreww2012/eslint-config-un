@@ -1,6 +1,11 @@
 import {ERROR} from '../constants';
 import {isInCi, isInEditor} from '../utils';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface FileProgressEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'file-progress'> {
@@ -28,7 +33,7 @@ export interface FileProgressEslintConfigOptions<ExtraPlugins extends ExtraPlugi
   };
 }
 
-export default defineUnConfig('fileProgress', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies FileProgressEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;
@@ -55,4 +60,4 @@ export default defineUnConfig('fileProgress', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'fileProgress'>;

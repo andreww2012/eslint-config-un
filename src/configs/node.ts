@@ -1,14 +1,14 @@
 import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
 import {Range, subset as isFirstSemverRangeIsSubsetOfSecond} from 'semver';
 import {ERROR, OFF} from '../constants';
-import type {PackageJson, PrettifyShallow} from '../types';
+import type {PackageJson, Prettify} from '../types';
 import {interopDefault, readAndParseJson} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 interface EslintPluginNSettings {
@@ -118,7 +118,7 @@ export interface NodeEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * Specifies which features will not be reported if detected as supported
    * by `no-unsupported-features/*` rules.
    */
-  noUnsupportedFeaturesIgnores?: PrettifyShallow<{
+  noUnsupportedFeaturesIgnores?: Prettify<{
     esBuiltins?: GetRuleOptions<'node', 'no-unsupported-features/es-builtins'>['ignores'];
     esSyntax?: GetRuleOptions<'node', 'no-unsupported-features/es-syntax'>['ignores'];
     nodeBuiltins?: GetRuleOptions<'node', 'no-unsupported-features/node-builtins'>['ignores'];
@@ -181,7 +181,7 @@ export interface NodeEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
 
 const IMPORT_META_PROPERTIES_AVAILABLE_SINCE = '>=20.11';
 
-export default defineUnConfig('node', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const closestPackageJson = await interopDefault(import('empathic/package'))
     .then((m) => m.up())
     .then((packageJsonPath) => readAndParseJson<PackageJson>(packageJsonPath));
@@ -300,4 +300,4 @@ export default defineUnConfig('node', async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'node'>;

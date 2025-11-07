@@ -8,9 +8,9 @@ import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 export interface BetterTailwindEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -81,7 +81,7 @@ export interface BetterTailwindEslintConfigOptions<ExtraPlugins extends ExtraPlu
   restrictedClasses?: string[];
 }
 
-export default defineUnConfig('betterTailwind', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     classOrder: 'official',
   } satisfies Partial<BetterTailwindEslintConfigOptions>);
@@ -163,4 +163,4 @@ export default defineUnConfig('betterTailwind', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'betterTailwind'>;

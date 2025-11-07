@@ -1,6 +1,11 @@
 // cspell:ignore attributechangedcallback connectedcallback
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface WebComponentsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'wc'> {
@@ -18,7 +23,7 @@ export interface WebComponentsEslintConfigOptions<ExtraPlugins extends ExtraPlug
   };
 }
 
-export default defineUnConfig('webComponents', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies WebComponentsEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;
@@ -68,4 +73,4 @@ export default defineUnConfig('webComponents', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'webComponents'>;

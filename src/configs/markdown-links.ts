@@ -3,9 +3,9 @@ import type {NonEmptyTuple} from '../types';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
 type IssueType = 'deadUrls' | 'missingFragments' | 'missingLocalPath' | 'selfDestinationLinks';
@@ -38,7 +38,7 @@ export interface MarkdownLinksEslintConfigOptions<ExtraPlugins extends ExtraPlug
   };
 }
 
-export default defineUnConfig('markdownLinks', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies MarkdownLinksEslintConfigOptions);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'markdown-links');
@@ -94,4 +94,4 @@ export default defineUnConfig('markdownLinks', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'markdownLinks'>;

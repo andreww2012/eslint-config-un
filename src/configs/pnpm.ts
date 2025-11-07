@@ -4,10 +4,34 @@ import {
   type ExtraPluginsType,
   type RuleNamesForPlugin,
   type RulesRecordPartial,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
+
+interface PnpmJsonSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<
+    ExtraPlugins,
+    PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/json-'>
+  > {
+  /**
+   * Enforces that all dependencies are coming from [pnpm catalogs](https://pnpm.io/catalogs).
+   *
+   * Used by the following rules:
+   * - `json-enforce-catalog`
+   * @default false
+   */
+  enforceCatalog?: boolean;
+
+  /**
+   * "Prefer having pnpm settings in `pnpm-workspace.yaml` instead of `package.json`. This would requires pnpm v10.6+, see https://github.com/orgs/pnpm/discussions/9037." - plugin docs
+   *
+   * Used by the following rules:
+   * - `json-prefer-workspace-settings`
+   * @default false
+   */
+  preferSettingsInPnpmWorkspaceYaml?: boolean;
+}
 
 export interface PnpmEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'pnpm'> {
@@ -27,31 +51,7 @@ export interface PnpmEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   /**
    * Rules for `package.json` files.
    */
-  configPackageJson?:
-    | boolean
-    | UnConfigOptions<
-        ExtraPlugins,
-        PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/json-'>,
-        {
-          /**
-           * Enforces that all dependencies are coming from [pnpm catalogs](https://pnpm.io/catalogs).
-           *
-           * Used by the following rules:
-           * - `json-enforce-catalog`
-           * @default false
-           */
-          enforceCatalog?: boolean;
-
-          /**
-           * "Prefer having pnpm settings in `pnpm-workspace.yaml` instead of `package.json`. This would requires pnpm v10.6+, see https://github.com/orgs/pnpm/discussions/9037." - plugin docs
-           *
-           * Used by the following rules:
-           * - `json-prefer-workspace-settings`
-           * @default false
-           */
-          preferSettingsInPnpmWorkspaceYaml?: boolean;
-        }
-      >;
+  configPackageJson?: boolean | PnpmJsonSubConfigOptions<ExtraPlugins>;
 
   /**
    * Rules for `pnpm-workspace.yaml` file.
@@ -67,7 +67,7 @@ const PNPM_YAML_RULES = new Set<string>([
   'yaml-valid-packages',
 ] satisfies RuleNamesForPlugin<'pnpm'>[]);
 
-export default defineUnConfig('pnpm', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configPackageJson: true,
     configPnpmWorkspace: true,
@@ -136,4 +136,4 @@ export default defineUnConfig('pnpm', (context, optionsRaw) => {
     configs: [configBuilderPackageJson, configBuilderPnpmWorkspace],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'pnpm'> as UnConfigFn<'pnpm'>;

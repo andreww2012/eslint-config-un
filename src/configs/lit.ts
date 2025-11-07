@@ -3,11 +3,50 @@ import {ERROR, OFF} from '../constants';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import {
   type ExtraPluginsType,
-  type RulesRecordPartial,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
+
+interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends UnConfigOptions<ExtraPlugins, 'lit-a11y'>,
+    Omit<
+      JsxA11yEslintConfigOptions,
+      | 'settings'
+      | keyof UnConfigOptions
+      | 'ambiguousWordsForAnchorText'
+      | 'customComponents'
+      | 'labelAttributes'
+      | 'tabbableRoles'
+    > {
+  /**
+   * [`eslint-plugin-lit-a11y`](https://npmjs.com/eslint-plugin-lit-a11y) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `settings` object as-is and applied to the specified `files` and `ignores`.
+   */
+  settings?: {
+    /**
+     * Set to `true` to make sure only [`lit-html`](https://npmjs.com/lit-html)
+     * tagged template literals are linted.
+     *
+     * If you're importing `lit-html` from a package that re-exports `lit-html`,
+     * like for example `@apollo-elements/lit-apollo`, you can specify
+     * `@apollo-elements/lit-apollo` here.
+     */
+    litHtmlSources?: boolean | string[];
+  };
+
+  customComponents?: Pick<
+    JsxA11yEslintConfigOptions['customComponents'] & {},
+    | 'areaElements'
+    | 'headings'
+    | 'imgElements'
+    | 'inputTypeImageElements'
+    | 'inputs'
+    | 'links'
+    | 'objectElements'
+  >;
+}
 
 export interface LitEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'lit'> {
@@ -32,52 +71,10 @@ export interface LitEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
    * this config also accepts the same options as `jsxA11y` config.
    * @default true
    */
-  configA11y?:
-    | boolean
-    | UnConfigOptions<
-        ExtraPlugins,
-        RulesRecordPartial<'lit-a11y'>,
-        {
-          /**
-           * [`eslint-plugin-lit-a11y`](https://npmjs.com/eslint-plugin-lit-a11y) plugin
-           * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-           * that will be assigned to `settings` object as-is and applied to the specified `files` and `ignores`.
-           */
-          settings?: {
-            /**
-             * Set to `true` to make sure only [`lit-html`](https://npmjs.com/lit-html)
-             * tagged template literals are linted.
-             *
-             * If you're importing `lit-html` from a package that re-exports `lit-html`,
-             * like for example `@apollo-elements/lit-apollo`, you can specify
-             * `@apollo-elements/lit-apollo` here.
-             */
-            litHtmlSources?: boolean | string[];
-          };
-        } & Omit<
-          JsxA11yEslintConfigOptions,
-          | 'settings'
-          | keyof UnConfigOptions
-          | 'ambiguousWordsForAnchorText'
-          | 'customComponents'
-          | 'labelAttributes'
-          | 'tabbableRoles'
-        > & {
-            customComponents?: Pick<
-              JsxA11yEslintConfigOptions['customComponents'] & {},
-              | 'areaElements'
-              | 'headings'
-              | 'imgElements'
-              | 'inputTypeImageElements'
-              | 'inputs'
-              | 'links'
-              | 'objectElements'
-            >;
-          }
-      >;
+  configA11y?: boolean | A11YSubConfigOptions<ExtraPlugins>;
 }
 
-export default defineUnConfig('lit', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies LitEslintConfigOptions);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'lit');
@@ -135,7 +132,7 @@ export default defineUnConfig('lit', async (context, optionsRaw) => {
         : await (async () => {
             const {default: jsxA11yUnConfig} = await import('./jsx-a11y');
             const options = typeof configA11y === 'object' ? configA11y : {};
-            const result = await jsxA11yUnConfig(context, undefined, {
+            const result = jsxA11yUnConfig(context, undefined, {
               prefix: 'lit',
               options: {
                 files: parentConfigFiles,
@@ -145,9 +142,9 @@ export default defineUnConfig('lit', async (context, optionsRaw) => {
                 settings: options.settings as JsxA11yEslintConfigOptions['settings'],
               },
             });
-            return result?.configs || [];
+            return result.configs;
           })()),
     ],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'lit'>;

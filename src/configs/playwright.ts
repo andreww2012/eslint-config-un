@@ -6,7 +6,12 @@ import {
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'playwright'>,
@@ -50,7 +55,7 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
   customAsyncExpectMatches?: string[];
 }
 
-export default defineUnConfig('playwright', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false,
   } satisfies PlaywrightEslintConfigOptions);
@@ -164,4 +169,4 @@ export default defineUnConfig('playwright', (context, optionsRaw) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'playwright'>;

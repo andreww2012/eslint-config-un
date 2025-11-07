@@ -1,6 +1,11 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import {doesPackageExist} from '../utils';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface SonarEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'sonarjs'> {
@@ -23,7 +28,7 @@ export interface SonarEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
   testsRules?: boolean;
 }
 
-export default defineUnConfig('sonar', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const [awsCdkLibInstalled, helmetInstalled] = await Promise.all([
     doesPackageExist('aws-cdk-lib'),
     doesPackageExist('helmet'),
@@ -404,4 +409,4 @@ export default defineUnConfig('sonar', async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'sonar'>;

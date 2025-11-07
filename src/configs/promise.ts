@@ -1,10 +1,15 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface PromiseEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'promise'> {}
 
-export default defineUnConfig('promise', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies PromiseEslintConfigOptions);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'promise');
@@ -41,4 +46,4 @@ export default defineUnConfig('promise', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'promise'>;

@@ -7,9 +7,9 @@ import {objectEntriesUnsafe} from '../../utils';
 import {
   type ExtraPluginsType,
   type RuleNamesForPlugin,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from '../index';
 
 const markAllPluginRulesAsStylistic = <PluginName extends keyof typeof ALL_RULES_PER_PLUGIN>(
@@ -847,7 +847,7 @@ export interface NoStylisticRulesEslintConfigOptions<ExtraPlugins extends ExtraP
   };
 }
 
-export default defineUnConfig('noStylisticRules', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies NoStylisticRulesEslintConfigOptions,
@@ -914,4 +914,4 @@ export default defineUnConfig('noStylisticRules', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'noStylisticRules'>;

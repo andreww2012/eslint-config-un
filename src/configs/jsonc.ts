@@ -1,6 +1,11 @@
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, OFF} from '../constants';
 import {JSONC_DEFAULT_FILES} from './shared';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface JsoncEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'jsonc'> {
@@ -30,7 +35,7 @@ export interface JsoncEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
   doNotMergeFilesWithDefault?: boolean;
 }
 
-export default defineUnConfig('json', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     doNotMergeFilesWithDefault: false,
     configJson: false,
@@ -152,4 +157,4 @@ export default defineUnConfig('json', (context, optionsRaw) => {
     configs: [configBuilder, configBuilderJson, configBuilderJsonc, configBuilderJson5],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'json'>;

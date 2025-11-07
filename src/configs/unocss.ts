@@ -1,11 +1,16 @@
 // cspell:ignore attributify
 import {ERROR, OFF} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface UnocssEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, '@unocss'> {}
 
-export default defineUnConfig('unocss', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies UnocssEslintConfigOptions);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '@unocss');
@@ -27,4 +32,4 @@ export default defineUnConfig('unocss', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'unocss'>;

@@ -1,10 +1,15 @@
 import {ERROR, GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../constants';
 import type {FlatConfigEntryFilesOrIgnores} from '../eslint';
 import {generatePackageToLoadProperty} from '../plugins';
-import type {PrettifyShallow} from '../types';
+import type {Prettify} from '../types';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'mdx'>,
@@ -29,13 +34,13 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
    * @default true
    * @example {files: ['**\/*.mdx'], ignores: ['ignored-file.mdx']}
    */
-  lintCodeBlocks?: boolean | PrettifyShallow<FlatConfigEntryFilesOrIgnores>;
+  lintCodeBlocks?: boolean | Prettify<FlatConfigEntryFilesOrIgnores>;
 }
 
 const DEFAULT_FILES = [GLOB_MDX];
 const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MDX_SUPPORTED_CODE_BLOCKS];
 
-export default defineUnConfig('mdx', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     lintCodeBlocks: true,
     codeBlocksImpliedStrictMode: true,
@@ -158,4 +163,4 @@ export default defineUnConfig('mdx', (context, optionsRaw) => {
     configs: [configBuilder, configFormatFencedCodeBlocksBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'mdx'>;

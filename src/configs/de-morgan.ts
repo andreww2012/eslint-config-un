@@ -1,10 +1,15 @@
 import {ERROR} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface DeMorganEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'de-morgan'> {}
 
-export default defineUnConfig('deMorgan', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies DeMorganEslintConfigOptions);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'de-morgan');
@@ -20,4 +25,4 @@ export default defineUnConfig('deMorgan', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'deMorgan'>;

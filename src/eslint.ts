@@ -36,7 +36,6 @@ import type {
   ObjectValues,
   OmitIndexSignature,
   PickKeysNotStartingWith,
-  PrettifyShallow,
   ReadonlyDeep,
   SetRequired,
   UnionToIntersection,
@@ -54,7 +53,9 @@ import {
   styleText,
 } from './utils';
 
-type EslintRuleEntry<Options extends unknown[] = unknown[]> = Eslint.Linter.RuleEntry<Options>;
+type EslintRuleEntry<Options extends readonly unknown[] = readonly unknown[]> =
+  Eslint.Linter.RuleEntry<// @ts-expect-error "The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type 'any[]'" - this is fine, options are not mutated by ESLint
+  Options>;
 export type {EslintPlugin, EslintSeverity};
 
 interface FlatConfigEntryFiles {
@@ -85,14 +86,13 @@ type RulesRecordForExtraPlugins<ExtraPlugins extends ExtraPluginsType> = Partial
 >;
 
 export type RulesRecord = Record<string, EslintRuleEntry> & RuleOptions;
-export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = PrettifyShallow<
-  EslintConfigObject<T>
->;
-export type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = PrettifyShallow<
-  Omit<FlatConfigEntry, 'rules'> & {
-    rules?: UnConfigOptionsOverrides<RuleOptions> & RulesRecordForExtraPlugins<ExtraPlugins>;
-  }
->;
+export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = EslintConfigObject<T>;
+export type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = Omit<
+  FlatConfigEntry,
+  'rules'
+> & {
+  rules?: UnConfigOptionsOverrides<RuleOptions> & RulesRecordForExtraPlugins<ExtraPlugins>;
+};
 
 export const DISABLE_AUTOFIX = 'disable-autofix';
 export type DisableAutofixPrefix = typeof DISABLE_AUTOFIX;
@@ -143,15 +143,15 @@ export type RulesRecordPartial<P extends null | PluginPrefix | RulesRecord = Plu
     : P extends RulesRecord
       ? OmitIndexSignature<FlatConfigEntry<P>['rules'] & {}>
       : never;
+
 type UnConfigOptionsOverridesEntry<
-  RuleName extends string,
-  EslintEntry extends EslintRuleEntry,
-  Options,
+  RuleName extends string = string,
+  Options extends readonly unknown[] = readonly unknown[],
 > = MaybeFn<
-  | ReadonlyDeep<EslintEntry>
+  | ReadonlyDeep<EslintRuleEntry<Options>>
   | {
       severity: EslintSeverity;
-      options?: ReadonlyDeep<Options>;
+      options?: Options;
 
       /**
        * Disables autofix for this rule only for this config with a caveat
@@ -161,43 +161,35 @@ type UnConfigOptionsOverridesEntry<
        * it's only currently possible to do so globally (for all configs at once).
        * For that, please use `autofixDisabledGloballyFor` root option.
        */
-      disableAutofix?: RuleName extends AllEslintFixableRuleNames ? boolean : false;
+      disableAutofix?: RuleName extends AllEslintFixableRuleNames
+        ? boolean
+        : string extends RuleName
+          ? boolean
+          : false;
     },
-  [severity: EslintSeverity & number, options?: ReadonlyDeep<Options>]
+  [severity: EslintSeverity & number, options?: Options]
 >;
 type UnConfigOptionsOverrides<T> = {
-  [RuleName in keyof T]?: UnConfigOptionsOverridesEntry<
-    RuleName & string,
-    T[RuleName] & EslintRuleEntry,
-    T[RuleName] & {} extends EslintRuleEntry<infer Options> ? ReadonlyDeep<Options> : never
-  >;
+  [RuleName in keyof T]?: T[RuleName] & {} extends EslintRuleEntry<infer Options>
+    ? UnConfigOptionsOverridesEntry<RuleName & string, ReadonlyDeep<Options>>
+    : never;
 };
-export type UnConfigOptions<
+
+export interface UnConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
   T extends null | PluginPrefix | RulesRecord = RulesRecord,
-  // eslint-disable-next-line ts/no-empty-object-type
-  ExtraOptions = {},
-> = PrettifyShallow<
-  // eslint-disable-next-line ts/no-empty-object-type
-  (ExtraOptions extends object ? ExtraOptions : {}) &
-    FlatConfigEntryFilesOrIgnores & {
-      overrides?: PrettifyShallow<
-        UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial<T>>>
-      >;
+> extends FlatConfigEntryFilesOrIgnores {
+  overrides?: UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial<T>>>;
 
-      overridesAny?: PrettifyShallow<
-        UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial>>
-      > &
-        RulesRecordForExtraPlugins<ExtraPlugins> /*  &
-        Record<`${keyof ExtraPlugins & string}/${string}`, EslintRuleEntry> */;
+  overridesAny?: UnConfigOptionsOverrides<UnionToIntersection<RulesRecordPartial>> &
+    RulesRecordForExtraPlugins<ExtraPlugins>;
 
-      /**
-       * Force non-zero severity of all the rules to be `error` or `warning`.
-       * The severity forced here will take precedence over the severity forced on the root level.
-       */
-      forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
-    }
->;
+  /**
+   * Force non-zero severity of all the rules to be `error` or `warning`.
+   * The severity forced here will take precedence over the severity forced on the root level.
+   */
+  forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
+}
 
 export const genFlatConfigEntryName = (name: string) => `eslint-config-un/${name}`;
 export const isUnFlatConfigEntry = (flatConfigEntry: FlatConfigEntry) =>
@@ -305,11 +297,11 @@ export const getRuleNameAndPluginPrefixByFullName = (
 
 export const resolveOverrides = (
   context: UnConfigContext,
-  overrides: UnConfigOptions['overrides'] & {},
+  overrides: Record<string, UnConfigOptionsOverridesEntry | undefined> | undefined,
   existingRules?: Partial<RulesRecord>,
 ) => {
   return Object.fromEntries(
-    Object.entries(overrides).flatMap(([ruleNameRaw, ruleOptions]) => {
+    Object.entries(overrides || {}).flatMap(([ruleNameRaw, ruleOptions]) => {
       const {pluginPrefixCanonical, ruleNameUnprefixed, fullRuleNameWithResolvedPrefix} =
         getRuleNameAndPluginPrefixByFullName(context, ruleNameRaw);
 
@@ -326,16 +318,13 @@ export const resolveOverrides = (
           : (rawSeverityInitial ?? 0);
 
       const options = Array.isArray(existingRuleRecord) ? existingRuleRecord.slice(1) : undefined;
-      // @ts-expect-error "Excessive complexity comparing types"
       const ruleEntryRaw = maybeCall(ruleOptions, severityInitial, options);
 
       const result: [ruleName: string, EslintRuleEntry][] = [];
       let ruleEntry = ruleEntryRaw as EslintRuleEntry;
       let disableAutofix = false;
       if (ruleEntryRaw && typeof ruleEntryRaw === 'object' && 'severity' in ruleEntryRaw) {
-        // eslint-disable-next-line ts/no-unsafe-assignment
         ruleEntry =
-          // @ts-expect-error "Expression produces a union type that is too complex to represent"
           ruleEntryRaw.options == null
             ? ruleEntryRaw.severity
             : [ruleEntryRaw.severity, ...ruleEntryRaw.options];
@@ -641,8 +630,8 @@ export class ConfigEntryBuilder<
         const ourRules = configFinal.rules;
         Object.assign(
           ourRules,
-          resolveOverrides(this.context, this.options.overrides || {}, ourRules),
-          resolveOverrides(this.context, this.options.overridesAny || {}, ourRules),
+          resolveOverrides(this.context, this.options.overrides, ourRules),
+          resolveOverrides(this.context, this.options.overridesAny, ourRules),
         );
         return result;
       },

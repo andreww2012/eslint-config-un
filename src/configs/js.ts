@@ -1,7 +1,12 @@
 import {ERROR, GLOB_HTML, GLOB_YAML, OFF, WARNING} from '../constants';
 import type {BuiltinEslintRules} from '../eslint';
 import {fetchPackageInfo, getKeysOfTruthyValues} from '../utils';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface JsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, BuiltinEslintRules> {
@@ -12,7 +17,7 @@ export interface JsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = n
   allowedConsoleMethods?: Partial<Record<keyof Console | (string & {}), boolean>>;
 }
 
-export default defineUnConfig('js', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsEslintConfigOptions);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '');
@@ -333,4 +338,4 @@ export default defineUnConfig('js', async (context, optionsRaw) => {
     optionsResolved,
     finalFlatConfigRules: config?.config.rules || {},
   };
-});
+}) satisfies UnConfigFn<'js'>;

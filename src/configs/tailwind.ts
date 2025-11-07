@@ -1,7 +1,12 @@
 import {ERROR, OFF, WARNING} from '../constants';
-import type {PrettifyShallow} from '../types';
+import type {Prettify} from '../types';
 import {maybeCall, objectKeysUnsafe} from '../utils';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 type OverwriteOrDeriveFromDefault<T> = T | ((defaultValue: T) => T);
 
@@ -32,10 +37,10 @@ export interface TailwindEslintConfigOptions<ExtraPlugins extends ExtraPluginsTy
    *
    * Actual default values can be found [here](https://github.com/francoismassart/eslint-plugin-tailwindcss/blob/HEAD/lib/util/settings.js).
    */
-  settings?: PrettifyShallow<TailwindPluginSettings>;
+  settings?: Prettify<TailwindPluginSettings>;
 }
 
-export default defineUnConfig('tailwind', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies TailwindEslintConfigOptions);
 
   const {settings: pluginSettings} = optionsResolved;
@@ -83,4 +88,4 @@ export default defineUnConfig('tailwind', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'tailwind'>;

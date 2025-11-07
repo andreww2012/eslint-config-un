@@ -1,6 +1,10 @@
 import {ERROR, GLOB_TSX, OFF} from '../constants';
-import type {PrettifyShallow} from '../types';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 type CheckedSyntax = 'enums' | 'importAliases' | 'namespaces' | 'parameterProperties';
 
@@ -15,10 +19,10 @@ export interface ErasableSyntaxOnlyEslintConfigOptions<
    * - `namespaces`: allow using TypeScript's namespaces.
    * - `parameterProperties`: allow using TypeScript's class parameter properties.
    */
-  allowedSyntax?: PrettifyShallow<Partial<Record<CheckedSyntax, boolean>>>;
+  allowedSyntax?: Partial<Record<CheckedSyntax, boolean>>;
 }
 
-export default defineUnConfig('erasableSyntaxOnly', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(
     optionsRaw,
     {} satisfies ErasableSyntaxOnlyEslintConfigOptions,
@@ -50,4 +54,4 @@ export default defineUnConfig('erasableSyntaxOnly', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'erasableSyntaxOnly'>;

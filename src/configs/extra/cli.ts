@@ -1,9 +1,9 @@
 import {ERROR, GLOB_JS_TS_EXTENSION} from '../../constants';
 import {
   type ExtraPluginsType,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from '../index';
 
 export interface CliEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -18,7 +18,7 @@ export interface CliEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
 const DEFAULT_CLI_DIRS = ['bin', 'scripts', 'cli'] as const;
 const DEFAULT_CLI_FILES = ['cli'] as const;
 
-export default defineUnConfig('cli', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies CliEslintConfigOptions);
 
   const {onlyTopLevelDirs} = optionsResolved;
@@ -54,4 +54,4 @@ export default defineUnConfig('cli', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'cli'>;

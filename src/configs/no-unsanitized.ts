@@ -1,10 +1,15 @@
 import {ERROR} from '../constants';
-import {type ExtraPluginsType, type UnConfigOptions, assignDefaults, defineUnConfig} from './index';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnConfigOptions,
+  assignDefaults,
+} from './index';
 
 export interface NoUnsanitizedEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'no-unsanitized'> {}
 
-export default defineUnConfig('noUnsanitized', (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies NoUnsanitizedEslintConfigOptions);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'no-unsanitized');
@@ -23,4 +28,4 @@ export default defineUnConfig('noUnsanitized', (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'noUnsanitized'>;

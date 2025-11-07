@@ -1,6 +1,6 @@
 // cspell:ignore marko
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import type {ObjectValues, PickKeysStartingWith, Prettify, PrettifyShallow} from '../types';
+import type {ObjectValues, PickKeysStartingWith, PrettifyDeep} from '../types';
 import {doesPackageExist} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
@@ -11,57 +11,64 @@ import {
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
-  defineUnConfig,
 } from './index';
 
-type SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> = PrettifyShallow<
-  {
-    /**
-     * By default, [`no-node-access` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-node-access.md) is enabled,
-     * which disallows DOM traversal using native HTML methods and properties.
-     * This option allows the use of `firstChild` property
-     * [to get the root element of the rendered element](https://testing-library.com/docs/react-testing-library/api/#container-1).
-     * @default true
-     */
-    allowContainerFirstChild?: boolean;
+interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType>
+  extends UnConfigOptions<ExtraPlugins, 'testing-library'> {
+  /**
+   * By default, [`no-node-access` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-node-access.md) is enabled,
+   * which disallows DOM traversal using native HTML methods and properties.
+   * This option allows the use of `firstChild` property
+   * [to get the root element of the rendered element](https://testing-library.com/docs/react-testing-library/api/#container-1).
+   * @default true
+   */
+  allowContainerFirstChild?: boolean;
 
-    /**
-     * Affected rules:
-     * - [`no-render-in-lifecycle`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-render-in-lifecycle.md)
-     */
-    allowTestingFrameworkSetupHook?: GetRuleOptions<
-      'testing-library',
-      'no-render-in-lifecycle'
-    >['allowTestingFrameworkSetupHook'];
+  /**
+   * Affected rules:
+   * - [`no-render-in-lifecycle`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-render-in-lifecycle.md)
+   */
+  allowTestingFrameworkSetupHook?: GetRuleOptions<
+    'testing-library',
+    'no-render-in-lifecycle'
+  >['allowTestingFrameworkSetupHook'];
 
-    /**
-     * - `explicit`: enables [`prefer-explicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-explicit-assert.md).
-     * - `implicit`: enables [`prefer-implicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-implicit-assert.md).
-     *
-     * By default, assert style is not enforced.
-     */
-    preferAssertStyle?: 'explicit' | 'implicit';
+  /**
+   * - `explicit`: enables [`prefer-explicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-explicit-assert.md).
+   * - `implicit`: enables [`prefer-implicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-implicit-assert.md).
+   *
+   * By default, assert style is not enforced.
+   */
+  preferAssertStyle?: 'explicit' | 'implicit';
 
-    /**
-     * Affected rules:
-     * - [`prefer-query-matchers`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-query-matchers.md)
-     */
-    preferQueryMatchers?: Prettify<
-      (GetRuleOptions<'testing-library', 'prefer-query-matchers'>['validEntries'] & {})[number][]
-    >;
+  /**
+   * Affected rules:
+   * - [`prefer-query-matchers`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-query-matchers.md)
+   */
+  preferQueryMatchers?: PrettifyDeep<
+    (GetRuleOptions<'testing-library', 'prefer-query-matchers'>['validEntries'] & {})[number][]
+  >;
 
-    /**
-     * Affected rules:
-     * - [`prefer-user-event`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-user-event.md)
-     * @default true
-     */
-    preferUserEventOverFireEvent?:
-      | boolean
-      | PrettifyShallow<GetRuleOptions<'testing-library', 'prefer-user-event'>>;
-  } & UnConfigOptions<ExtraPlugins, 'testing-library'>
->;
+  /**
+   * Affected rules:
+   * - [`prefer-user-event`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-user-event.md)
+   * @default true
+   */
+  preferUserEventOverFireEvent?: boolean | GetRuleOptions<'testing-library', 'prefer-user-event'>;
+}
+
+interface ReactSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends SharedConfigOptions<ExtraPlugins>,
+    NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
+  /**
+   * Affected rules:
+   * - [`consistent-data-testid`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/consistent-data-testid.md)
+   */
+  consistentDataTestId?: GetRuleOptions<'testing-library', 'consistent-data-testid'>;
+}
 
 export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends Omit<SharedConfigOptions<ExtraPlugins>, 'allowTestingFrameworkSetupHook'> {
@@ -82,17 +89,7 @@ export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPlu
   /**
    * @default <=> `react` config is enabled
    */
-  configReact?:
-    | boolean
-    | PrettifyShallow<
-        {
-          /**
-           * Affected rules:
-           * - [`consistent-data-testid`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/consistent-data-testid.md)
-           */
-          consistentDataTestId?: GetRuleOptions<'testing-library', 'consistent-data-testid'>;
-        } & (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>)
-      >;
+  configReact?: boolean | ReactSubConfigOptions<ExtraPlugins>;
 
   /**
    * @default <=> `svelte` config is enabled
@@ -115,7 +112,7 @@ export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPlu
   disableRootConfigIfFrameworkConfigIsEnabled?: boolean;
 }
 
-export default defineUnConfig('testingLibrary', async (context, optionsRaw) => {
+export default (async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configAngular: context.configsMeta.angular.enabled,
     configMarko: await doesPackageExist('marko'),
@@ -300,4 +297,4 @@ export default defineUnConfig('testingLibrary', async (context, optionsRaw) => {
     ],
     optionsResolved,
   };
-});
+}) satisfies UnConfigFn<'testingLibrary'>;
