@@ -209,7 +209,6 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
   const getIsConfigEnabled = getIsConfigEnabledContextless.bind(context);
 
   const isAngularEnabled = getIsConfigEnabled('angular', '@angular/core');
-  const isNodeEnabled = getIsConfigEnabled('node');
 
   Object.assign(context.configsMeta, {
     angular: {enabled: isAngularEnabled},
@@ -259,7 +258,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       // eslint-disable-next-line case-police/string-check
       enabled: getIsConfigEnabled('nextJs', 'next'),
     },
-    node: {enabled: isNodeEnabled},
+    node: {enabled: getIsConfigEnabled('node')},
     nodeDependencies: {enabled: getIsConfigEnabled('nodeDependencies', false)},
     noOnlyTests: {enabled: getIsConfigEnabled('noOnlyTests', false)},
     noStylisticRules: {enabled: getIsConfigEnabled('noStylisticRules', false)},
@@ -412,9 +411,6 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
             jsx: true,
           },
           sourceType: 'module',
-        },
-        globals: {
-          ...(isNodeEnabled && globals.node),
         },
       } as const,
     },

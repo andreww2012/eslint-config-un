@@ -1,4 +1,5 @@
 import type {ResolveOptions as EnhancedResolveResolveOptions} from 'enhanced-resolve';
+import globals from 'globals';
 import {Range, subset as isFirstSemverRangeIsSubsetOfSecond} from 'semver';
 import {ERROR, OFF} from '../constants';
 import type {PackageJson, Prettify} from '../types';
@@ -209,6 +210,9 @@ export default (async (context, optionsRaw) => {
           node: pluginSettings,
         },
       }),
+      languageOptions: {
+        globals: globals.node,
+      },
     })
     // Versions in @since tags are from `eslint-plugin-node` plugin, unless the rule doesn't exist in it
     .addRule('callback-return', OFF) /** @since 11.1.0 */
