@@ -2,7 +2,7 @@ import type {Jest as JestMethods} from '@jest/environment';
 import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import type {FlatConfigEntryForBuilder} from '../eslint';
-import {pluginsLoaders} from '../plugins';
+import {pluginsLoaders} from '../loaders';
 import type {ObjectValues, Prettify} from '../types';
 import {doesPackageExist} from '../utils';
 import {

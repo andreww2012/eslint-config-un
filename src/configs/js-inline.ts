@@ -1,7 +1,7 @@
 import type Eslint from 'eslint';
 import globals from 'globals';
 import {GLOB_HTML_ALL} from '../constants';
-import {pluginsLoaders} from '../plugins';
+import {pluginsLoaders} from '../loaders';
 import type {OmitStrict} from '../types';
 import {getKeysOfTruthyValues} from '../utils';
 import {

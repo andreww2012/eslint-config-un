@@ -1,6 +1,6 @@
 // cspell:ignore canonicalurl fetchcontent getentrybyslug
 import {ERROR, GLOB_ASTRO, OFF, WARNING} from '../constants';
-import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
+import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {OmitStrict, PickKeysNotStartingWith, PickKeysStartingWith} from '../types';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import {

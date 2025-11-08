@@ -1,6 +1,6 @@
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
-import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
+import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import {doesPackageExist, getKeysOfTruthyValues} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';

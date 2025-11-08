@@ -24,7 +24,7 @@ import type {
   ParserPrefix,
   PluginPrefix,
   pluginsLoaders,
-} from '../plugins';
+} from '../loaders';
 import type {OmitIndexSignature, OmitStrict, Promisable} from '../types';
 import type {MaybeArray, MaybeFn, fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
@@ -1124,6 +1124,11 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
     LoadablePackagePrefix,
     {config: FlatConfigEntry; path: string; info: PackageToLoadInfo}[]
   >;
+
+  /**
+   * NOTE: mutable
+   */
+  missingPackages: Set<string>;
 
   meta: {
     usedPackageManager: Awaited<ReturnType<typeof detectPackageManager>>;

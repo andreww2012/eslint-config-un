@@ -16,7 +16,7 @@ import {
   packagesLoaders,
   parsersLoaders,
   pluginsLoaders,
-} from '../plugins';
+} from '../loaders';
 import type {NonEmptyTuple} from '../types';
 import {
   arraify,
@@ -58,6 +58,7 @@ interface ResolveConfigAsyncDataOptions {
   usedPluginPrefixes: readonly string[];
   usedParserPrefixes: readonly ParserPrefix[];
   usedPackagesPrefixes: readonly LoadablePackagePrefix[];
+  missingPackages: readonly string[];
 }
 
 export const resolveConfigAsyncData = async (
@@ -71,7 +72,7 @@ export const resolveConfigAsyncData = async (
     loadPluginsOnDemand,
   } = rootOptions;
 
-  const {usedPluginPrefixes, usedParserPrefixes, usedPackagesPrefixes} =
+  const {usedPluginPrefixes, usedParserPrefixes, usedPackagesPrefixes, missingPackages} =
     'cachedData' in options
       ? ({
           usedPluginPrefixes: options.cachedData.usedPlugins,
@@ -81,6 +82,7 @@ export const resolveConfigAsyncData = async (
           usedPackagesPrefixes: Object.keys(
             options.cachedData.usedPackages,
           ) as ResolveConfigAsyncDataOptions['usedPackagesPrefixes'],
+          missingPackages: [], // We don't cache if missing packages are found
         } satisfies ResolveConfigAsyncDataOptions)
       : options;
 
@@ -94,6 +96,7 @@ export const resolveConfigAsyncData = async (
   const packagesToManuallyInstallOrUpdate = new Map<
     string,
     {
+      /** Note: may be empty */
       versionRange: string;
       installedVersion?: string;
       pluginPrefixes?: Set<PluginPrefix>;
@@ -193,6 +196,14 @@ export const resolveConfigAsyncData = async (
     ),
   ]);
 
+  missingPackages.forEach((missingPackage) => {
+    if (!packagesToManuallyInstallOrUpdate.has(missingPackage)) {
+      packagesToManuallyInstallOrUpdate.set(missingPackage, {
+        versionRange: '',
+      });
+    }
+  });
+
   if (packagesToManuallyInstallOrUpdate.size > 0) {
     partition(
       [...packagesToManuallyInstallOrUpdate.entries()].map(([name, item]) => ({...item, name})),
@@ -217,7 +228,9 @@ ${renderTable(
     .toSorted((a, b) => a.name.localeCompare(b.name))
     .map(({name, versionRange, pluginPrefixes}) => ({
       Name: stylePackageName(name),
-      'Required version range': styleText('green', versionRange),
+      'Required version range': versionRange
+        ? styleText('green', versionRange)
+        : styleText('gray', 'Unknown'),
       ...(pluginPrefixes?.size && {
         [`PLugin prefix${pluginPrefixes.size === 1 ? '' : 's'}`]: [...pluginPrefixes]
           .map(stylePluginPrefix)

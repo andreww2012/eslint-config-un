@@ -1,7 +1,7 @@
 // cspell:ignore idential
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import type {FlatConfigEntryForBuilder} from '../eslint';
-import {pluginsLoaders} from '../plugins';
+import {pluginsLoaders} from '../loaders';
 import type {JestEslintConfigOptions} from './jest';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,

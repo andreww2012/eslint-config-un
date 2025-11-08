@@ -2,7 +2,7 @@ import type {MarkdownLanguageOptions} from '@eslint/markdown/types';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
 import type {FlatConfigEntryFilesOrIgnores} from '../eslint';
-import {generatePackageToLoadProperty} from '../plugins';
+import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
 import {capitalize, unique} from '../utils';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';

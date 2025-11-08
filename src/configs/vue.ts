@@ -6,7 +6,7 @@ import {
   type RulesRecord,
   getRuleUnSeverityAndOptionsFromEntry,
 } from '../eslint';
-import {generatePackageToLoadProperty} from '../plugins';
+import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
 import {
   type MaybeArray,

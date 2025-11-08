@@ -1,6 +1,6 @@
 // cspell:ignore blockquotes autolinks setext
 import {ERROR, GLOB_MARKDOWN, OFF} from '../constants';
-import {pluginsLoaders} from '../plugins';
+import {pluginsLoaders} from '../loaders';
 import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,

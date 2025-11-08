@@ -1,5 +1,5 @@
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
-import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
+import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {NonEmptyTuple, OmitStrict, Prettify, Subtract} from '../types';
 import {type MaybeArray, fetchPackageInfo} from '../utils';
 import {

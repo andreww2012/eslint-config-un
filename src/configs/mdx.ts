@@ -1,6 +1,6 @@
 import {ERROR, GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../constants';
 import type {FlatConfigEntryFilesOrIgnores} from '../eslint';
-import {generatePackageToLoadProperty} from '../plugins';
+import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';

@@ -5,7 +5,7 @@ import type {
   PluginSettings as PluginSettingsWithPrefixes,
 } from 'eslint-plugin-import-x';
 import {ERROR, GLOB_MARKDOWN_ALL_CODE_BLOCKS, OFF, WARNING} from '../constants';
-import {generatePackageToLoadProperty} from '../plugins';
+import {generatePackageToLoadProperty} from '../loaders';
 import {arraify, isNonEmptyArray, kebabCase, objectEntriesUnsafe} from '../utils';
 import {
   type ExtraPluginsType,

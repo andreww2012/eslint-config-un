@@ -8,7 +8,7 @@ import {LOCKS as packageManagerLockfilesReversed} from 'package-manager-detector
 import {exec} from 'tinyexec';
 import type {UnConfigContext} from '../configs';
 import type {FlatConfigEntry} from '../eslint';
-import type {LoadablePackagePrefix, PackageToLoadInfo, ParserPrefix} from '../plugins';
+import type {LoadablePackagePrefix, PackageToLoadInfo, ParserPrefix} from '../loaders';
 import type {SetFieldType} from '../types';
 import {
   createTraverser,

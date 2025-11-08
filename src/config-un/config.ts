@@ -32,7 +32,7 @@ import {
   PLUGIN_PREFIXES_LIST,
   type PluginPrefix,
   pluginsLoaders,
-} from '../plugins';
+} from '../loaders';
 import type {FalsyValue, IsOptional, IsUnknown, OmitStrict, PartialDeep} from '../types';
 import {
   type MaybeArray,
@@ -116,6 +116,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     usedPlugins: new Set(),
     usedParsers: new Map(),
     usedPackages: new Map(),
+    missingPackages: new Set(),
     meta: {usedPackageManager},
     logger,
     debug,
@@ -585,6 +586,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     usedPluginPrefixes,
     usedParserPrefixes,
     usedPackagesPrefixes,
+    missingPackages: [...context.missingPackages.keys()],
   });
 
   resolvedConfigs.unshift({

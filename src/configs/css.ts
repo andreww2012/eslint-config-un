@@ -1,6 +1,6 @@
 import type {CSSLanguageOptions} from '@eslint/css';
 import {ERROR, GLOB_CSS, OFF, WARNING} from '../constants';
-import {generatePackageToLoadProperty} from '../plugins';
+import {generatePackageToLoadProperty} from '../loaders';
 import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,

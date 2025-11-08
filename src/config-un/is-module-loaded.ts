@@ -1,5 +1,5 @@
 import semver from 'semver';
-import {OPTIONAL_PEER_DEPENDENCIES} from '../plugins';
+import {OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import {fetchPackageInfo, isIn} from '../utils';
 
 export const checkIfModuleCorrectlyLoaded = async (

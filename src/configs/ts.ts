@@ -10,7 +10,7 @@ import {
   WARNING,
 } from '../constants';
 import {type RulesRecord, getRuleUnSeverityAndOptionsFromEntry} from '../eslint';
-import {generatePackageToLoadProperty} from '../plugins';
+import {generatePackageToLoadProperty} from '../loaders';
 import type {ObjectValues, OmitStrict} from '../types';
 import {type MaybeFn, isIn, maybeCall, omit, unique} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';

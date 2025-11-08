@@ -1,7 +1,7 @@
 // cspell:ignore attributify blockquotes autolinks setext
 /* eslint perfectionist/sort-objects: "error" */
 import {ALL_RULES_PER_PLUGIN} from '../../eslint-rules.gen';
-import type {PluginPrefix} from '../../plugins';
+import type {PluginPrefix} from '../../loaders';
 import type {ObjectValues} from '../../types';
 import {objectEntriesUnsafe} from '../../utils';
 import {

@@ -11,7 +11,7 @@ import {
   type RuleSeverity,
   WARNING,
 } from '../constants';
-import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
+import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {Prettify} from '../types';
 import {doesPackageExist, getKeysOfTruthyValues, pickBy} from '../utils';
 import {

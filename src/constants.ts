@@ -1,5 +1,9 @@
+import ourPackageJson from '../package.json' with {type: 'json'};
 // See https://github.com/typescript-eslint/typescript-eslint/issues/8721
 import type {Tagged} from './types';
+import {omit} from './utils';
+
+export const OPTIONAL_PEER_DEPENDENCIES = omit(ourPackageJson.peerDependencies, ['eslint']);
 
 /* Error levels */
 

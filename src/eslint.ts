@@ -26,7 +26,7 @@ import {
   type ParserPrefix,
   type PluginPrefix,
   packageToLoadSymbol,
-} from './plugins';
+} from './loaders';
 import type {
   EmptyObject,
   FalsyValue,
