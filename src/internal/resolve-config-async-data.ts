@@ -380,16 +380,23 @@ ${renderTable(
               info: {
                 package: packagePrefix as LoadablePackagePrefix,
                 property,
-                ...(valueTransformFn && {
-                  valueTransformFn: {
-                    // eslint-disable-next-line ts/no-implied-eval, no-new-func
-                    fn: new Function(
-                      '...args',
-                      `(${valueTransformFn[0].startsWith(`${'fn' satisfies keyof ValueTransformFn}(`) ? 'function ' : ''}${valueTransformFn[0]})(...args)`,
-                    ) as ValueTransformFn['fn'],
-                    ...('1' in valueTransformFn && {scope: valueTransformFn[1]}),
-                  },
-                }),
+                ...(valueTransformFn &&
+                  (() => {
+                    const functionBodyRaw = valueTransformFn[0];
+                    const isStartsWithPropertyName = functionBodyRaw.startsWith(
+                      `${'fn' satisfies keyof ValueTransformFn}(`,
+                    );
+                    const isRegularFunction =
+                      isStartsWithPropertyName || functionBodyRaw.startsWith('function ');
+                    const functionBody = `return (${isStartsWithPropertyName ? 'function ' : ''}${functionBodyRaw})${isRegularFunction ? '.call(this, ' : '('}...args)`;
+                    return {
+                      valueTransformFn: {
+                        // eslint-disable-next-line ts/no-implied-eval, no-new-func
+                        fn: new Function('...args', functionBody) as ValueTransformFn['fn'],
+                        ...('1' in valueTransformFn && {scope: valueTransformFn[1]}),
+                      },
+                    };
+                  })()),
               } satisfies PackageToLoadInfo as PackageToLoadInfo,
             };
           })
