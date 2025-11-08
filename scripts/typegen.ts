@@ -5,7 +5,7 @@ import * as diff from 'diff';
 import {capitalize} from 'es-toolkit';
 import {flatConfigsToRulesDTS, pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
-import {eslintConfigInternal} from '../src/config';
+import {eslintConfigInternal} from '../src/config-un/config';
 import {DISABLE_AUTOFIX, eslintPluginVanillaRules} from '../src/eslint';
 import {uniqueBy} from '../src/utils';
 import {generateAngularPluginsWithOldRules} from './shared';

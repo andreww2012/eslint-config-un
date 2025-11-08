@@ -3,6 +3,10 @@
 import type {ConsolaInstance} from 'consola';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
+import type {
+  FastImportPluginSettings,
+  ImportPluginReplaceableRules,
+} from '../config-un/fast-import';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import {
   type AllEslintFixableRuleNames,
@@ -14,7 +18,6 @@ import {
   type UnConfigOptions,
   type UnFlagConfigEntry,
 } from '../eslint';
-import type {FastImportPluginSettings, ImportPluginReplaceableRules} from '../internal';
 import type {
   LoadablePackagePrefix,
   PackageToLoadInfo,

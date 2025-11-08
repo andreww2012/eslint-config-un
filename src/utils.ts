@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import url from 'node:url';
+import {styleText} from 'node:util';
 import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
 import {createDefu, type defu} from 'defu';
 import {destr as jsonParse} from 'destr';
@@ -9,8 +10,6 @@ import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
 import {Traverse, type TraverseOptions} from 'neotraverse/modern';
 import * as R from 'remeda';
 import type {FalsyValue, PackageJson, Promisable} from './types';
-
-export {styleText} from 'node:util';
 
 export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
 
@@ -37,6 +36,15 @@ export {destr as jsonParse} from 'destr';
 // eslint-disable-next-line import/no-extraneous-dependencies -- patched
 export {isInEditor} from 'is-in-editor';
 export {isCI as isInCi} from 'ci-info';
+
+const generateStyleFn = (color: Parameters<typeof styleText>[0]) => (string: string) =>
+  styleText(color, string);
+
+export {styleText};
+export const styleConfigName = generateStyleFn('yellow');
+export const stylePackageName = generateStyleFn('yellow');
+export const stylePluginPrefix = generateStyleFn('blue');
+export const styleRuleName = generateStyleFn('green');
 
 export const isObject = (value: unknown): value is object =>
   typeof value === 'object' && value != null && !Array.isArray(value);

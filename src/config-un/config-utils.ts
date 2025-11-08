@@ -1,8 +1,7 @@
 import semver from 'semver';
 import type {UnConfigContext, UnConfigs} from '../configs';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
-import {type MaybeArray, arraify, styleText} from '../utils';
-import {styleConfigName, stylePackageName} from './styling';
+import {type MaybeArray, arraify, styleConfigName, stylePackageName, styleText} from '../utils';
 
 const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
   'security',

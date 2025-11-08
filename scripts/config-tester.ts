@@ -1,4 +1,4 @@
-import {eslintConfigInternal} from '../src/config';
+import {eslintConfigInternal} from '../src/config-un/config';
 import {generateAngularPluginsWithOldRules} from './shared';
 
 const {plugin: pluginAngular, pluginTemplate: pluginAngularTemplate} =

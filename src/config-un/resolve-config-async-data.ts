@@ -27,12 +27,14 @@ import {
   objectEntriesUnsafe,
   partition,
   setValueByPath,
+  stylePackageName,
+  stylePluginPrefix,
+  styleRuleName,
   styleText,
 } from '../utils';
 import type {CacheData} from './cache';
 import {replaceImportRulesImplementationWithFastPlugin} from './fast-import';
 import {checkIfModuleCorrectlyLoaded} from './is-module-loaded';
-import {stylePackageName, stylePluginPrefix, styleRuleName} from './styling';
 
 // NOTE: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs
 const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &

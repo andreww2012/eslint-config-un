@@ -20,7 +20,6 @@ import {
 import type {FixableRuleNames as AllEslintFixableRuleNames} from './eslint-types-fixable-only.gen';
 import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin.gen';
 import type {RuleOptions} from './eslint-types.gen';
-import {styleConfigName} from './internal/styling';
 import {
   PLUGIN_PREFIXES_LIST,
   type PackageToLoadInfo,
@@ -51,6 +50,7 @@ import {
   groupBy,
   maybeCall,
   partition,
+  styleConfigName,
   styleText,
 } from './utils';
 

@@ -10,14 +10,14 @@ import {
   type UnConfigFn,
   type UnConfigs,
   createConfigBuilder as createConfigBuilderWithContext,
-} from './configs';
+} from '../configs';
 import {
   CHECKED_LODASH_METHODS,
   DEFAULT_GLOBAL_IGNORES,
   GLOB_CONFIG_FILES,
   GLOB_JS_TS_X_EXTENSION,
   PACKAGES_TO_GET_INFO_FOR,
-} from './constants';
+} from '../constants';
 import {
   type AllEslintRuleNames,
   ConfigEntryBuilder,
@@ -26,23 +26,14 @@ import {
   genFlatConfigEntryName,
   isUnFlatConfigEntry,
   resolveOverrides,
-} from './eslint';
-import {
-  type FastImportPluginSettings,
-  getIsConfigEnabled as getIsConfigEnabledContextless,
-  resolveConfigAsyncData,
-  restoreFromCache,
-  saveToCache,
-  styleConfigName,
-  styleRuleName,
-} from './internal';
+} from '../eslint';
 import {
   LOADABLE_PLUGIN_PREFIXES_LIST,
   PLUGIN_PREFIXES_LIST,
   type PluginPrefix,
   pluginsLoaders,
-} from './plugins';
-import type {FalsyValue, IsOptional, IsUnknown, OmitStrict, PartialDeep} from './types';
+} from '../plugins';
+import type {FalsyValue, IsOptional, IsUnknown, OmitStrict, PartialDeep} from '../types';
 import {
   type MaybeArray,
   arraify,
@@ -54,7 +45,13 @@ import {
   objectKeysUnsafe,
   omit,
   readFileSafe,
-} from './utils';
+  styleConfigName,
+  styleRuleName,
+} from '../utils';
+import {restoreFromCache, saveToCache} from './cache';
+import {getIsConfigEnabled as getIsConfigEnabledContextless} from './config-utils';
+import type {FastImportPluginSettings} from './fast-import';
+import {resolveConfigAsyncData} from './resolve-config-async-data';
 
 const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
   'curly',
@@ -342,15 +339,15 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
         )
       : null;
 
-  const jsEslintConfigResult = await loadUnConfig('js', () => import('./configs/js'));
+  const jsEslintConfigResult = await loadUnConfig('js', () => import('../configs/js'));
   const vanillaFinalFlatConfigRules = jsEslintConfigResult?.finalFlatConfigRules || {};
   const [astroEslintConfigResult, vueEslintConfigResult, svelteEslintConfigResult] =
     await Promise.all([
-      loadUnConfig('astro', () => import('./configs/astro')),
-      loadUnConfig('vue', () => import('./configs/vue'), {vanillaFinalFlatConfigRules}),
-      loadUnConfig('svelte', () => import('./configs/svelte')),
+      loadUnConfig('astro', () => import('../configs/astro')),
+      loadUnConfig('vue', () => import('../configs/vue'), {vanillaFinalFlatConfigRules}),
+      loadUnConfig('svelte', () => import('../configs/svelte')),
     ]);
-  const tsEslintConfigResult = await loadUnConfig('ts', () => import('./configs/ts'), {
+  const tsEslintConfigResult = await loadUnConfig('ts', () => import('../configs/ts'), {
     vanillaFinalFlatConfigRules,
     astroResolvedOptions: astroEslintConfigResult ? astroEslintConfigResult.optionsResolved : null,
     vueResolvedOptions: vueEslintConfigResult ? vueEslintConfigResult.optionsResolved : null,
@@ -441,22 +438,22 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
 
     /* Enabled by default or conditionally */
     jsEslintConfigResult,
-    loadUnConfig('unicorn', () => import('./configs/unicorn')),
-    loadUnConfig('import', () => import('./configs/import')),
-    loadUnConfig('node', () => import('./configs/node')),
-    loadUnConfig('promise', () => import('./configs/promise')),
-    loadUnConfig('sonar', () => import('./configs/sonar')),
-    loadUnConfig('tailwind', () => import('./configs/tailwind')),
-    loadUnConfig('regexp', () => import('./configs/regexp')),
-    loadUnConfig('eslintComments', () => import('./configs/eslint-comments')),
-    loadUnConfig('cssInJs', () => import('./configs/css-in-js')),
-    loadUnConfig('jest', () => import('./configs/jest')),
-    loadUnConfig('vitest', () => import('./configs/vitest')),
-    loadUnConfig('jsdoc', () => import('./configs/jsdoc')),
-    loadUnConfig('qwik', () => import('./configs/qwik')),
-    loadUnConfig('css', () => import('./configs/css')),
-    loadUnConfig('unusedImports', () => import('./configs/unused-imports')),
-    loadUnConfig('react', () => import('./configs/react'), {
+    loadUnConfig('unicorn', () => import('../configs/unicorn')),
+    loadUnConfig('import', () => import('../configs/import')),
+    loadUnConfig('node', () => import('../configs/node')),
+    loadUnConfig('promise', () => import('../configs/promise')),
+    loadUnConfig('sonar', () => import('../configs/sonar')),
+    loadUnConfig('tailwind', () => import('../configs/tailwind')),
+    loadUnConfig('regexp', () => import('../configs/regexp')),
+    loadUnConfig('eslintComments', () => import('../configs/eslint-comments')),
+    loadUnConfig('cssInJs', () => import('../configs/css-in-js')),
+    loadUnConfig('jest', () => import('../configs/jest')),
+    loadUnConfig('vitest', () => import('../configs/vitest')),
+    loadUnConfig('jsdoc', () => import('../configs/jsdoc')),
+    loadUnConfig('qwik', () => import('../configs/qwik')),
+    loadUnConfig('css', () => import('../configs/css')),
+    loadUnConfig('unusedImports', () => import('../configs/unused-imports')),
+    loadUnConfig('react', () => import('../configs/react'), {
       tsFilesTypeAware:
         typeof tsEslintConfigResult === 'object' && tsEslintConfigResult
           ? tsEslintConfigResult.filesTypeAware
@@ -466,79 +463,79 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
           ? tsEslintConfigResult.ignoresTypeAware
           : [],
     }),
-    loadUnConfig('jsxA11y', () => import('./configs/jsx-a11y'), undefined),
-    loadUnConfig('pnpm', () => import('./configs/pnpm')),
+    loadUnConfig('jsxA11y', () => import('../configs/jsx-a11y'), undefined),
+    loadUnConfig('pnpm', () => import('../configs/pnpm')),
     // eslint-disable-next-line case-police/string-check
-    loadUnConfig('nextJs', () => import('./configs/nextjs')),
-    loadUnConfig('solid', () => import('./configs/solid')),
-    loadUnConfig('jsInline', () => import('./configs/js-inline')),
-    loadUnConfig('html', () => import('./configs/html')),
-    loadUnConfig('math', () => import('./configs/math')),
-    loadUnConfig('tanstackQuery', () => import('./configs/tanstack-query')),
-    loadUnConfig('ava', () => import('./configs/ava')),
-    loadUnConfig('testingLibrary', () => import('./configs/testing-library')),
-    loadUnConfig('storybook', () => import('./configs/storybook')),
-    loadUnConfig('ember', () => import('./configs/ember')),
-    loadUnConfig('cypress', () => import('./configs/cypress')),
-    loadUnConfig('turbo', () => import('./configs/turbo')),
-    loadUnConfig('noUnsanitized', () => import('./configs/no-unsanitized')),
-    loadUnConfig('betterTailwind', () => import('./configs/better-tailwind')),
-    loadUnConfig('mdx', () => import('./configs/mdx')),
-    loadUnConfig('playwright', () => import('./configs/playwright')),
+    loadUnConfig('nextJs', () => import('../configs/nextjs')),
+    loadUnConfig('solid', () => import('../configs/solid')),
+    loadUnConfig('jsInline', () => import('../configs/js-inline')),
+    loadUnConfig('html', () => import('../configs/html')),
+    loadUnConfig('math', () => import('../configs/math')),
+    loadUnConfig('tanstackQuery', () => import('../configs/tanstack-query')),
+    loadUnConfig('ava', () => import('../configs/ava')),
+    loadUnConfig('testingLibrary', () => import('../configs/testing-library')),
+    loadUnConfig('storybook', () => import('../configs/storybook')),
+    loadUnConfig('ember', () => import('../configs/ember')),
+    loadUnConfig('cypress', () => import('../configs/cypress')),
+    loadUnConfig('turbo', () => import('../configs/turbo')),
+    loadUnConfig('noUnsanitized', () => import('../configs/no-unsanitized')),
+    loadUnConfig('betterTailwind', () => import('../configs/better-tailwind')),
+    loadUnConfig('mdx', () => import('../configs/mdx')),
+    loadUnConfig('playwright', () => import('../configs/playwright')),
     loadUnConfig(
       'youDontNeedLodashUnderscore',
-      () => import('./configs/you-dont-need-lodash-underscore'),
+      () => import('../configs/you-dont-need-lodash-underscore'),
     ),
-    loadUnConfig('lit', () => import('./configs/lit')),
-    loadUnConfig('mocha', () => import('./configs/mocha')),
-    loadUnConfig('qunit', () => import('./configs/qunit')),
-    loadUnConfig('rxjs', () => import('./configs/rxjs')),
-    loadUnConfig('nx', () => import('./configs/nx')),
-    loadUnConfig('un', () => import('./configs/un')),
-    loadUnConfig('importZod', () => import('./configs/import-zod')),
-    loadUnConfig('unocss', () => import('./configs/unocss')),
-    loadUnConfig('unnecessaryAbstractions', () => import('./configs/unnecessary-abstractions')),
-    loadUnConfig('markdownPreferences', () => import('./configs/markdown-preferences')),
-    loadUnConfig('markdownLinks', () => import('./configs/markdown-links')),
-    loadUnConfig('zod', () => import('./configs/zod')),
+    loadUnConfig('lit', () => import('../configs/lit')),
+    loadUnConfig('mocha', () => import('../configs/mocha')),
+    loadUnConfig('qunit', () => import('../configs/qunit')),
+    loadUnConfig('rxjs', () => import('../configs/rxjs')),
+    loadUnConfig('nx', () => import('../configs/nx')),
+    loadUnConfig('un', () => import('../configs/un')),
+    loadUnConfig('importZod', () => import('../configs/import-zod')),
+    loadUnConfig('unocss', () => import('../configs/unocss')),
+    loadUnConfig('unnecessaryAbstractions', () => import('../configs/unnecessary-abstractions')),
+    loadUnConfig('markdownPreferences', () => import('../configs/markdown-preferences')),
+    loadUnConfig('markdownLinks', () => import('../configs/markdown-links')),
+    loadUnConfig('zod', () => import('../configs/zod')),
 
     /* Disabled by default */
-    loadUnConfig('security', () => import('./configs/security')),
-    loadUnConfig('preferArrowFunctions', () => import('./configs/prefer-arrow-functions')),
-    loadUnConfig('yaml', () => import('./configs/yaml')),
-    loadUnConfig('toml', () => import('./configs/toml')),
-    loadUnConfig('json', () => import('./configs/jsonc')),
-    loadUnConfig('packageJson', () => import('./configs/package-json')),
-    loadUnConfig('perfectionist', () => import('./configs/perfectionist')),
-    loadUnConfig('deMorgan', () => import('./configs/de-morgan')),
-    loadUnConfig('jsonSchemaValidator', () => import('./configs/json-schema-validator')),
-    loadUnConfig('casePolice', () => import('./configs/case-police')),
-    loadUnConfig('nodeDependencies', () => import('./configs/node-dependencies')),
-    loadUnConfig('depend', () => import('./configs/depend')),
-    loadUnConfig('erasableSyntaxOnly', () => import('./configs/erasable-syntax-only')),
-    loadUnConfig('cspell', () => import('./configs/cspell')),
-    loadUnConfig('eslintPlugin', () => import('./configs/eslint-plugin')),
-    loadUnConfig('fileProgress', () => import('./configs/file-progress')),
-    loadUnConfig('noOnlyTests', () => import('./configs/no-only-tests')),
-    loadUnConfig('compat', () => import('./configs/compat')),
-    loadUnConfig('webComponents', () => import('./configs/web-components')),
-    loadUnConfig('header', () => import('./configs/header')),
-    loadUnConfig('headers', () => import('./configs/headers')),
+    loadUnConfig('security', () => import('../configs/security')),
+    loadUnConfig('preferArrowFunctions', () => import('../configs/prefer-arrow-functions')),
+    loadUnConfig('yaml', () => import('../configs/yaml')),
+    loadUnConfig('toml', () => import('../configs/toml')),
+    loadUnConfig('json', () => import('../configs/jsonc')),
+    loadUnConfig('packageJson', () => import('../configs/package-json')),
+    loadUnConfig('perfectionist', () => import('../configs/perfectionist')),
+    loadUnConfig('deMorgan', () => import('../configs/de-morgan')),
+    loadUnConfig('jsonSchemaValidator', () => import('../configs/json-schema-validator')),
+    loadUnConfig('casePolice', () => import('../configs/case-police')),
+    loadUnConfig('nodeDependencies', () => import('../configs/node-dependencies')),
+    loadUnConfig('depend', () => import('../configs/depend')),
+    loadUnConfig('erasableSyntaxOnly', () => import('../configs/erasable-syntax-only')),
+    loadUnConfig('cspell', () => import('../configs/cspell')),
+    loadUnConfig('eslintPlugin', () => import('../configs/eslint-plugin')),
+    loadUnConfig('fileProgress', () => import('../configs/file-progress')),
+    loadUnConfig('noOnlyTests', () => import('../configs/no-only-tests')),
+    loadUnConfig('compat', () => import('../configs/compat')),
+    loadUnConfig('webComponents', () => import('../configs/web-components')),
+    loadUnConfig('header', () => import('../configs/header')),
+    loadUnConfig('headers', () => import('../configs/headers')),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS
-    loadUnConfig('es', () => import('./configs/es'), undefined), // Must come after ts
+    loadUnConfig('es', () => import('../configs/es'), undefined), // Must come after ts
     vueEslintConfigResult, // Must come after ts
     astroEslintConfigResult, // Must come after ts
-    loadUnConfig('angular', () => import('./configs/angular')), // Must come after ts
+    loadUnConfig('angular', () => import('../configs/angular')), // Must come after ts
     svelteEslintConfigResult, // Must be after ts
-    loadUnConfig('graphql', () => import('./configs/graphql')),
-    loadUnConfig('markdown', () => import('./configs/markdown')), // Must be last
+    loadUnConfig('graphql', () => import('../configs/graphql')),
+    loadUnConfig('markdown', () => import('../configs/markdown')), // Must be last
 
     rootConfigBuilder,
 
-    loadUnConfig('cli', () => import('./configs/extra/cli')),
-    loadUnConfig('cloudfrontFunctions', () => import('./configs/extra/cloudfront-functions')),
+    loadUnConfig('cli', () => import('../configs/extra/cli')),
+    loadUnConfig('cloudfrontFunctions', () => import('../configs/extra/cloudfront-functions')),
 
     ...extraConfigs.map((config, configIndex) => ({
       ...omit(config, ['rules']),
@@ -547,7 +544,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     })),
 
     // MUST be last
-    loadUnConfig('noStylisticRules', () => import('./configs/extra/no-stylistic-rules')),
+    loadUnConfig('noStylisticRules', () => import('../configs/extra/no-stylistic-rules')),
     disablePrettierIncompatibleRules &&
       interopDefault(import('eslint-config-prettier')).then((eslintConfigPrettier) => ({
         name: genFlatConfigEntryName('eslint-config-prettier'),
