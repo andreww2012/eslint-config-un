@@ -33,7 +33,6 @@ export {kebabCase} from 'string-ts';
 
 export {destr as jsonParse} from 'destr';
 
-// eslint-disable-next-line import/no-extraneous-dependencies -- patched
 export {isInEditor} from 'is-in-editor';
 export {isCI as isInCi} from 'ci-info';
 

@@ -346,7 +346,6 @@ export const resolveOverrides = (
         pluginPrefixCanonical != null &&
         ruleEntry !== 0 &&
         ruleEntry !== 'off' &&
-        // eslint-disable-next-line de-morgan/no-negated-conjunction
         !(Array.isArray(ruleEntry) && (ruleEntry[0] === 0 || ruleEntry[0] === 'off'))
       ) {
         context.usedPlugins.add(pluginPrefixCanonical);
@@ -733,7 +732,6 @@ export class ConfigEntryBuilder<
             ).filter(
               (ruleName) =>
                 !addedRulesForPluginNamesSet.has(ruleName) &&
-                // eslint-disable-next-line de-morgan/no-negated-conjunction
                 !(
                   rulesToSkipInConfig &&
                   (typeof rulesToSkipInConfig === 'function'

@@ -1,5 +1,5 @@
 import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
-import {eslintConfig} from './src';
+import {eslintConfig, isInCi} from './src';
 
 const TEST_DIR_GLOB = ['test/**/*'];
 
@@ -16,6 +16,7 @@ export default eslintConfig({
 
   configs: {
     markdownLinks: {
+      ...(!isInCi && {files: []}),
       check: {
         deadUrls: {
           ignoreUrls: [
@@ -42,7 +43,6 @@ export default eslintConfig({
       },
     },
     erasableSyntaxOnly: true,
-    deMorgan: true,
     yaml: true,
     toml: true,
     json: true,
@@ -52,12 +52,12 @@ export default eslintConfig({
         'package-json/scripts-name-casing': 0, // enable again once https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/issues/1368 is fixed
       },
     },
-    vue: true,
     casePolice: true,
     import: {
       ignores: TEST_DIR_GLOB,
       extraneousDependenciesWhitelist: [
         'import-meta-resolve', // Bundled (patched)
+        'is-in-editor', // Bundled (patched)
       ],
     },
     perfectionist: {
@@ -89,7 +89,6 @@ export default eslintConfig({
     nx: false,
     rxjs: false,
     turbo: false,
-    importZod: true,
   },
 
   extraConfigs: [

@@ -142,7 +142,6 @@ ${perPluginCodeRaw
           ],
           [language],
           [dialects?.join(',')],
-          // eslint-disable-next-line de-morgan/no-negated-conjunction
           [schema && !(Array.isArray(schema) && schema.length === 0) && '📄'],
           [deprecated && '⛔', fixable && '🔧', hasSuggestions && '💡'],
         ]

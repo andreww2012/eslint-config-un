@@ -321,7 +321,6 @@ ${renderTable(
 
           if (
             !plugin ||
-            // eslint-disable-next-line de-morgan/no-negated-disjunction
             !(
               Object.keys(pluginRulesAutofixDisabledStatuses).length > 0 ||
               autofixDisabledGloballyFor === true

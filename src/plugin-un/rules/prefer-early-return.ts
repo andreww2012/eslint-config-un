@@ -62,7 +62,6 @@ const rule: Eslint.Rule.RuleModule = {
       const lastBodyStatement = bodyStatements.at(-1);
       if (
         lastBodyStatement &&
-        // eslint-disable-next-line de-morgan/no-negated-conjunction
         !(onlyReportIfSingleStatement && bodyStatements.length > 1) &&
         lastBodyStatement.type === 'IfStatement' &&
         lastBodyStatement.alternate == null &&

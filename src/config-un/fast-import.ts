@@ -49,7 +49,6 @@ export const replaceImportRulesImplementationWithFastPlugin = (
                   ...fastRuleImplementation.meta,
                   schema:
                     fastRuleSchema &&
-                    // eslint-disable-next-line de-morgan/no-negated-conjunction
                     !(Array.isArray(fastRuleSchema) && fastRuleSchema.length === 0)
                       ? fastRuleSchema
                       : [{type: 'object'}], // Allows any properties

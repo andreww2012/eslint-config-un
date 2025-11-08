@@ -52,12 +52,10 @@ module.exports = {
       (v) => semver.parse(v),
     );
     return (
-      // eslint-disable-next-line de-morgan/no-negated-conjunction
       !(
         IGNORED_MAJOR_VERSION_TRANSITIONS.has(packageName) &&
         currentVersionSemver?.major !== upgradedVersionSemver?.major
       ) &&
-      // eslint-disable-next-line de-morgan/no-negated-conjunction
       !(
         IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS.has(packageName) &&
         currentVersionSemver &&
