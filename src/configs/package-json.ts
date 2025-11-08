@@ -120,6 +120,20 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * @default `['browserslist']`
    */
   propertiesAllowedToBeEmpty?: string[];
+
+  /**
+   * Disallows unnecessary properties in private packages (marked as `"private": true`).
+   *
+   * Possible values:
+   * - `true`: disallow some properties included by default (see the rule docs).
+   * - `false`: do not disallow any properties.
+   * - `string[]`: custom list of disallowed properties.
+   *
+   * Affected rule:
+   * - [`restrict-private-properties`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-private-properties.md)
+   * @default false
+   */
+  disallowUnnecessaryPropertiesInPrivatePackages?: boolean | string[];
 }
 
 export default ((context, optionsRaw) => {
@@ -136,12 +150,14 @@ export default ((context, optionsRaw) => {
     order,
     repositoryShorthand,
     propertiesAllowedToBeEmpty,
+    disallowUnnecessaryPropertiesInPrivatePackages,
   } = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'package-json');
 
   // Legend:
   // 🟢 - in recommended
+  // 🎨 - in stylistic
 
   configBuilder
     ?.addConfig(
@@ -161,9 +177,8 @@ export default ((context, optionsRaw) => {
         }),
       },
     )
-    .addRule('exports-subpaths-style', ERROR, [
-      {prefer: 'explicit' /* Default: explicit */},
-    ]) /** @since 0.59.0 */
+    .addRule('bin-name-casing', ERROR) /** @since 0.64.0 */ // 🎨
+    .addRule('exports-subpaths-style', ERROR) /** @since 0.59.0 */ // 🎨
     .addRule(
       'no-empty-fields',
       ERROR,
@@ -176,6 +191,7 @@ export default ((context, optionsRaw) => {
         : [],
     ) /** @since 0.21.0 */ // 🟢
     .addRule('no-redundant-files', ERROR) /** @since 0.20.0 */ // 🟢
+    .addRule('no-redundant-publishConfig', ERROR) /** @since 0.65.0 */ // 🟢
     .addRule('order-properties', ERROR, [{order}]) /** @since 0.1.0 */ // 🟢
     .addRule('repository-shorthand', ERROR, [
       {form: repositoryShorthand},
@@ -197,6 +213,14 @@ export default ((context, optionsRaw) => {
     .addRule('require-types', OFF) /** @since 0.29.0 */
     .addRule('require-version', ERROR) /** @since 0.23.0 */ // 🟢
     .addRule('restrict-dependency-ranges', OFF) /** @since 0.30.0 */
+    .addRule(
+      'restrict-private-properties',
+      disallowUnnecessaryPropertiesInPrivatePackages ? ERROR : OFF,
+      Array.isArray(disallowUnnecessaryPropertiesInPrivatePackages)
+        ? [{blockedProperties: disallowUnnecessaryPropertiesInPrivatePackages}]
+        : [],
+    ) /** @since 0.63.0 */
+    .addRule('scripts-name-casing', ERROR) /** @since 0.62.0 */ // 🎨
     .addRule('sort-collections', ERROR, [
       getKeysOfTruthyValues({
         ...DEFAULT_COLLECTIONS_TO_SORT,
@@ -205,7 +229,7 @@ export default ((context, optionsRaw) => {
     ]) /** @since 0.1.0 */ /** @aka alphabetize-collections */ // 🟢
     .addRule('unique-dependencies', ERROR) /** @since 0.8.0 */ // 🟢
     .addRule('valid-author', ERROR) /** @since 0.38.0 */ // 🟢
-    .addRule('valid-bin', ERROR, [{enforceCase: true}]) /** @since 0.37.0 */ // 🟢
+    .addRule('valid-bin', ERROR) /** @since 0.37.0 */ // 🟢
     .addRule('valid-bundleDependencies', ERROR) /** @since 0.44.0 */ // 🟢
     .addRule('valid-config', ERROR) /** @since 0.46.0 */ // 🟢
     .addRule('valid-cpu', ERROR) /** @since 0.48.0 */ // 🟢

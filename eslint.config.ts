@@ -47,7 +47,11 @@ export default eslintConfig({
     toml: true,
     json: true,
     jsxA11y: false,
-    packageJson: true,
+    packageJson: {
+      overrides: {
+        'package-json/scripts-name-casing': 0, // enable again once https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/issues/1368 is fixed
+      },
+    },
     vue: true,
     casePolice: true,
     import: {

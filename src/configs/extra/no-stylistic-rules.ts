@@ -409,8 +409,10 @@ const ALL_STYLISTIC_RULES = {
     // None
   },
   'package-json': {
+    'bin-name-casing': true,
     'no-empty-fields': true,
     'order-properties': true,
+    'scripts-name-casing': true,
     'sort-collections': true,
   },
   perfectionist: markAllPluginRulesAsStylistic('perfectionist'),
