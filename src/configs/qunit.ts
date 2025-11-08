@@ -14,21 +14,14 @@ import {
 
 export interface QunitEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'qunit'>,
-    NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
-  /**
-   * [`eslint-plugin-qunit`](https://npmjs.com/eslint-plugin-qunit) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `qunit` property and applied to the specified `files` and `ignores`.
-   */
-  settings?: Record<string, unknown>;
-}
+    NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false, // has `no-only` rule
   } satisfies QunitEslintConfigOptions);
 
-  const {settings: pluginSettings, configNoOnlyTests} = optionsResolved;
+  const {configNoOnlyTests} = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'qunit');
 
@@ -38,22 +31,13 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(
-      [
-        'qunit',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesFallback: configFilesFallback,
-        },
-      ],
+    ?.addConfig([
+      'qunit',
       {
-        ...(pluginSettings && {
-          settings: {
-            qunit: pluginSettings,
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: configFilesFallback,
       },
-    )
+    ])
     .addRule('assert-args', ERROR) /** @since 0.4.0 */ // 🟢
     .addRule('literal-compare-order', ERROR) /** @since 0.5.0 */ // 🟢
     .addRule('no-arrow-tests', OFF) /** @since 0.6.0 */
