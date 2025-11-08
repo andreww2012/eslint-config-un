@@ -35,6 +35,7 @@ import type {
   NonEmptyTuple,
   ObjectValues,
   OmitIndexSignature,
+  OmitStrict,
   PickKeysNotStartingWith,
   ReadonlyDeep,
   SetRequired,
@@ -87,7 +88,7 @@ type RulesRecordForExtraPlugins<ExtraPlugins extends ExtraPluginsType> = Partial
 
 export type RulesRecord = Record<string, EslintRuleEntry> & RuleOptions;
 export type FlatConfigEntry<T extends RulesRecord = RulesRecord> = EslintConfigObject<T>;
-export type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = Omit<
+export type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = OmitStrict<
   FlatConfigEntry,
   'rules'
 > & {
@@ -240,7 +241,7 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
       .filter((v) => v != null),
   );
 
-export type FlatConfigEntryForBuilder = Omit<FlatConfigEntry, 'name' | 'rules'>;
+export type FlatConfigEntryForBuilder = OmitStrict<FlatConfigEntry, 'name' | 'rules'>;
 
 const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, EslintSeverity & number> = {
   off: 0,

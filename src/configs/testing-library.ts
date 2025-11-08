@@ -1,6 +1,6 @@
 // cspell:ignore marko
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import type {ObjectValues, PickKeysStartingWith, PrettifyDeep} from '../types';
+import type {ObjectValues, OmitStrict, PickKeysStartingWith, PrettifyDeep} from '../types';
 import {doesPackageExist} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
@@ -71,7 +71,7 @@ interface ReactSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
 }
 
 export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends Omit<SharedConfigOptions<ExtraPlugins>, 'allowTestingFrameworkSetupHook'> {
+  extends OmitStrict<SharedConfigOptions<ExtraPlugins>, 'allowTestingFrameworkSetupHook'> {
   /**
    * @default <=> `angular` config is enabled
    */

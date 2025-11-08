@@ -11,7 +11,7 @@ import {
 } from '../constants';
 import {type RulesRecord, getRuleUnSeverityAndOptionsFromEntry} from '../eslint';
 import {generatePackageToLoadProperty} from '../plugins';
-import type {ObjectValues} from '../types';
+import type {ObjectValues, OmitStrict} from '../types';
 import {type MaybeFn, isIn, maybeCall, omit, unique} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import type {SvelteEslintConfigOptions} from './svelte';
@@ -438,7 +438,7 @@ interface SortTsconfigKeysSubConfigOptions<ExtraPlugins extends ExtraPluginsType
 export interface TsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<
     ExtraPlugins,
-    Omit<RulesRecordPartial<'ts'>, keyof TypeAwareRulesWithPrefixes>
+    OmitStrict<RulesRecordPartial<'ts'>, keyof TypeAwareRulesWithPrefixes>
   > {
   /**
    * Applies rules requiring type information on the specified `files`.

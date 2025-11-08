@@ -1,6 +1,6 @@
 // cspell:ignore spinbutton treegrid menuitemradio menuitemcheckbox
 import {ERROR, GLOB_JS_TS_X_ONLY, OFF, WARNING} from '../constants';
-import type {OmitIndexSignature} from '../types';
+import type {OmitIndexSignature, OmitStrict} from '../types';
 import {type MaybeFn, getKeysOfTruthyValues, maybeCall} from '../utils';
 import {
   type ExtraPluginsType,
@@ -17,7 +17,7 @@ interface WordsListAndOptionalSeverity {
   severity?: 'error' | 'warn';
 }
 
-type AltTextCheckDefaultElements = keyof Omit<
+type AltTextCheckDefaultElements = keyof OmitStrict<
   OmitIndexSignature<GetRuleOptions<'jsx-a11y', 'alt-text'>>,
   'elements'
 >;

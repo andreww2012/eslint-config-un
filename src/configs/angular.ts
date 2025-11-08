@@ -1,6 +1,6 @@
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../plugins';
-import type {NonEmptyTuple, Prettify, Subtract} from '../types';
+import type {NonEmptyTuple, OmitStrict, Prettify, Subtract} from '../types';
 import {type MaybeArray, fetchPackageInfo} from '../utils';
 import {
   type ExtraPluginsType,
@@ -114,7 +114,7 @@ export interface AngularEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
   componentSelector?:
     | boolean
     | Prettify<
-        Omit<GetRuleOptions<'@angular-eslint', 'component-selector'>, 'type' | 'prefix'> & {
+        OmitStrict<GetRuleOptions<'@angular-eslint', 'component-selector'>, 'type' | 'prefix'> & {
           type?: MaybeArray<'element' | 'attribute'>;
           prefix?: MaybeArray<string>;
         }
@@ -147,7 +147,7 @@ export interface AngularEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
   directiveSelector?:
     | boolean
     | Prettify<
-        Omit<GetRuleOptions<'@angular-eslint', 'directive-selector'>, 'type' | 'prefix'> & {
+        OmitStrict<GetRuleOptions<'@angular-eslint', 'directive-selector'>, 'type' | 'prefix'> & {
           type?: MaybeArray<'element' | 'attribute'>;
           prefix?: MaybeArray<string>;
         }

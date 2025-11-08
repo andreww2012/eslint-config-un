@@ -22,7 +22,7 @@ import type {
   PluginPrefix,
   pluginsLoaders,
 } from '../plugins';
-import type {OmitIndexSignature, Promisable} from '../types';
+import type {OmitIndexSignature, OmitStrict, Promisable} from '../types';
 import type {MaybeArray, MaybeFn, fetchPackageInfo} from '../utils';
 import type {AngularEslintConfigOptions} from './angular';
 import type {AstroEslintConfigOptions} from './astro';
@@ -1148,7 +1148,7 @@ export type UnConfigFn<
   context: Readonly<UnConfigContext<ExtraPlugins>>,
   configOptions:
     | boolean
-    | Omit<UnConfigs<ExtraPlugins>[ConfigKey], 'overrides' | 'overridesAny'>
+    | OmitStrict<UnConfigs<ExtraPlugins>[ConfigKey], 'overrides' | 'overridesAny'>
     | undefined,
   extraArgument: ExtraArgument,
 ) => Promisable<

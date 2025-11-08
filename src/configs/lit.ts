@@ -1,5 +1,6 @@
 // cspell:ignore classfield
 import {ERROR, OFF} from '../constants';
+import type {OmitStrict} from '../types';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import {
   type ExtraPluginsType,
@@ -10,7 +11,7 @@ import {
 
 interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnConfigOptions<ExtraPlugins, 'lit-a11y'>,
-    Omit<
+    OmitStrict<
       JsxA11yEslintConfigOptions,
       | 'settings'
       | keyof UnConfigOptions

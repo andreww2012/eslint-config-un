@@ -87,6 +87,19 @@ export default eslintConfig({
 
   extraConfigs: [
     {
+      files: ['**/*.?([cm])ts?(x)'],
+      rules: {
+        'ts/no-restricted-types': [
+          2,
+          {
+            types: {
+              Omit: 'Please use `OmitStrict` utility instead',
+            },
+          },
+        ],
+      },
+    },
+    {
       files: ['package.json'],
       rules: {
         'local-rules/optional-peer-dependency-version-should-match-installed-version': [

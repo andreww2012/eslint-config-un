@@ -2,6 +2,7 @@ import type Eslint from 'eslint';
 import globals from 'globals';
 import {GLOB_HTML_ALL} from '../constants';
 import {pluginsLoaders} from '../plugins';
+import type {OmitStrict} from '../types';
 import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
@@ -150,7 +151,7 @@ export default (async (context, optionsRaw) => {
                 ...Object.fromEntries(DEFAULT_XML_EXTENSIONS.map((tag) => [tag, true])),
                 ...pluginSettings['xml-extensions'],
               }),
-            } satisfies Omit<
+            } satisfies OmitStrict<
               JsInlineEslintConfigOptions['settings'] & {},
               'html-extensions' | 'xml-extensions'
             > &
