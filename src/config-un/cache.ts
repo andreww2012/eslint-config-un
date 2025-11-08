@@ -22,7 +22,7 @@ import {
 
 export interface CacheData<Serialized extends boolean = true> {
   configs: FlatConfigEntry[];
-  usedPlugins: readonly string[];
+  usedPlugins: string[];
   usedParsers: Serialized extends true
     ? Record<string, string[] /* Config names */>
     : Map<ParserPrefix, string[] /* Config names */>;

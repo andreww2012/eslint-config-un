@@ -55,10 +55,10 @@ const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['auto
 };
 
 interface ResolveConfigAsyncDataOptions {
-  usedPluginPrefixes: readonly string[];
-  usedParserPrefixes: readonly ParserPrefix[];
-  usedPackagesPrefixes: readonly LoadablePackagePrefix[];
-  missingPackages: readonly string[];
+  usedPluginPrefixes: string[];
+  usedParserPrefixes: ParserPrefix[];
+  usedPackagesPrefixes: LoadablePackagePrefix[];
+  missingPackages: string[];
 }
 
 export const resolveConfigAsyncData = async (

@@ -1,4 +1,3 @@
-/* eslint perfectionist/sort-interfaces: 2 */
 /* eslint-disable perfectionist/sort-interfaces */
 import type {ConsolaInstance} from 'consola';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
@@ -20,6 +19,7 @@ import {
 } from '../eslint';
 import type {
   LoadablePackagePrefix,
+  LoadablePluginPrefix,
   PackageToLoadInfo,
   ParserPrefix,
   PluginPrefix,
@@ -164,9 +164,20 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
 
   /**
    * Only load ESLint plugins if they are actually used.
+   *
+   * If an object is used, all plugins except the ones specified in `alwaysLoad`
+   * will be lazy-loaded.
    * @default true
    */
-  loadPluginsOnDemand?: boolean;
+  loadPluginsOnDemand?:
+    | boolean
+    | {
+        /**
+         * These plugins will always be loaded. This can be useful if you only enable certain
+         * plugin rules using [configuration comments](https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments).
+         */
+        alwaysLoad: LoadablePluginPrefix[];
+      };
 
   /**
    * Allows to change a plugin prefix. Keys are the default prefixes, value cannot be empty

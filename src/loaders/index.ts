@@ -1,6 +1,7 @@
 export {
   LOADABLE_PLUGIN_PREFIXES_LIST,
   PLUGIN_PREFIXES_LIST,
+  type LoadablePluginPrefix,
   type PluginPrefix,
   pluginsLoaders,
 } from './plugins';

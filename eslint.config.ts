@@ -61,8 +61,11 @@ export default eslintConfig({
       ],
     },
     perfectionist: {
+      configSortInterfaces: {
+        files: ['src/configs/index.ts'],
+      },
       configSortObjects: {
-        files: ['src/plugins.ts'],
+        files: ['src/configs/extra/no-stylistic-rules.ts'],
       },
     },
     nodeDependencies: {
