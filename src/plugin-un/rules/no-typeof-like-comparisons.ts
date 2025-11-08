@@ -1,4 +1,3 @@
-// Based on: https://github.com/Shopify/web-configs/blob/6c51fc60ef04a6229c5498acae988b49bedb4a18/packages/eslint-plugin/lib/rules/prefer-early-return.js
 import type Eslint from 'eslint';
 import type * as ESTree from 'estree';
 import type {JSONSchema4} from 'json-schema';
