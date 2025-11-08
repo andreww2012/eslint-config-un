@@ -10,8 +10,6 @@ import {
   assignDefaults,
 } from './index';
 
-export const DEFAULT_FILES_PACKAGE_JSON = [GLOB_PACKAGE_JSON];
-
 type PackageJsonCollection =
   | 'scripts'
   | 'devDependencies'
@@ -151,7 +149,7 @@ export default ((context, optionsRaw) => {
         'package-json',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: DEFAULT_FILES_PACKAGE_JSON,
+          filesFallback: [GLOB_PACKAGE_JSON],
           parser: 'jsonc-eslint-parser',
         },
       ],

@@ -1,5 +1,4 @@
-import {ERROR, OFF, WARNING} from '../constants';
-import {DEFAULT_FILES_PACKAGE_JSON} from './package-json';
+import {ERROR, GLOB_PACKAGE_JSON, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -42,7 +41,7 @@ export default ((context, optionsRaw) => {
       'node-dependencies',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: DEFAULT_FILES_PACKAGE_JSON,
+        filesFallback: [GLOB_PACKAGE_JSON],
         parser: 'jsonc-eslint-parser',
       },
     ])
