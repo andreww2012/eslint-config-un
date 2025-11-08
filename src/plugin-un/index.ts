@@ -1,4 +1,5 @@
 import type {EslintPlugin} from '../eslint';
+import {noTypeofLikeComparison} from './rules/no-typeof-like-comparisons';
 import {preferEarlyReturn} from './rules/prefer-early-return';
 
 const eslintPluginUn: EslintPlugin = {
@@ -6,6 +7,7 @@ const eslintPluginUn: EslintPlugin = {
     name: 'eslint-plugin-un',
   },
   rules: {
+    'no-typeof-like-comparisons': noTypeofLikeComparison,
     'prefer-early-return': preferEarlyReturn,
   },
 };

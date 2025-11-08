@@ -1,4 +1,4 @@
-import {ERROR, GLOB_TSX} from '../constants';
+import {ERROR, GLOB_JS_TS_X, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -19,11 +19,12 @@ export default ((context, optionsRaw) => {
       'un',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_TSX],
+        filesFallback: [GLOB_JS_TS_X],
       },
     ])
-    .addRule('prefer-early-return', ERROR)
-    .enableConfigTesterForPlugin('un') /** @since 1.0.0 */
+    .addRule('no-typeof-like-comparisons', WARNING) /** @since 1.0.0 */
+    .addRule('prefer-early-return', ERROR) /** @since 1.0.0 */
+    .enableConfigTesterForPlugin('un')
     .addOverrides();
 
   return {
