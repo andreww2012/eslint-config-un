@@ -360,8 +360,8 @@ importers:
         specifier: 12.7.4
         version: 12.7.4(@babel/core@7.28.5)(@typescript-eslint/parser@8.46.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-erasable-syntax-only:
-        specifier: 0.3.1
-        version: 0.3.1(@typescript-eslint/parser@8.46.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
+        specifier: 0.4.0
+        version: 0.4.0(@typescript-eslint/parser@8.46.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-es-x:
         specifier: 9.1.2
         version: 9.1.2(eslint@9.39.1(jiti@2.6.1))
@@ -4650,8 +4650,8 @@ packages:
       '@typescript-eslint/parser':
         optional: true
 
-  eslint-plugin-erasable-syntax-only@0.3.1:
-    resolution: {integrity: sha512-f4Eo1LEZJfUP7/2PwNdFUcIUJlYAoCoie9BSoThQ4y4eO8bW+Sq38qC4IskYTu4+FW887mPW0wYuI9HU0nQnlg==}
+  eslint-plugin-erasable-syntax-only@0.4.0:
+    resolution: {integrity: sha512-7dx2gpfVn0FFEGukLqsF/izW4hGvSaySNOkcuSCO4q6Khh0ecOGYlRhW9hhDUtNryuKc+cXd1WFiQdpae3xzaQ==}
     engines: {node: '>=20.18.0'}
     peerDependencies:
       '@typescript-eslint/parser': '>=8'
@@ -13170,7 +13170,7 @@ snapshots:
       - '@babel/core'
       - typescript
 
-  eslint-plugin-erasable-syntax-only@0.3.1(@typescript-eslint/parser@8.46.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3):
+  eslint-plugin-erasable-syntax-only@0.4.0(@typescript-eslint/parser@8.46.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3):
     dependencies:
       '@typescript-eslint/parser': 8.46.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
       '@typescript-eslint/utils': 8.46.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
