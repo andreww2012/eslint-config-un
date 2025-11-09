@@ -126,6 +126,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-slowed-test', OFF) /** @since 2.2.0 */
     .addRule('no-standalone-expect', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('no-unsafe-references', ERROR) /** @since 1.1.0 */ // 🟢
+    .addRule('no-unused-locators', ERROR) /** @since 2.3.0 */ // 🟢
     .addRule('no-useless-await', ERROR) /** @since 0.14.0 */ // 🟡
     .addRule('no-useless-not', ERROR) /** @since 0.11.1 */ // 🟡
     .addRule('no-wait-for-navigation', ERROR) /** @since 2.2.1 */ // 🟢
