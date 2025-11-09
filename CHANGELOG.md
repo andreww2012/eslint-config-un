@@ -179,7 +179,7 @@
   - 🟢 [`no-ineffective-attrs`](https://html-eslint.org/docs/rules/no-ineffective-attrs)
   - 🟢 [`no-restricted-tags`](https://html-eslint.org/docs/rules/no-restricted-tags). All deprecated or non-standard HTML tags are disallowed by default.
   - Set `enforceTemplatedAttrValue: true` for [`quotes`](https://html-eslint.org/docs/rules/quotes) rule.
-- `@vitest/eslint-plugin`: [1.1.44 → 1.4.0](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.44...v1.4.0)
+- `@vitest/eslint-plugin`: [1.1.44 → 1.4.2](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.44...v1.4.2)
   - 🟢 (enabled) [`consistent-vitest-vi`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/consistent-vitest-vi.md)
   - 🟡 (enabled, warns) [`warn-todo`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/warn-todo.md)
   - ❓ (enabled conditionally) [`no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
@@ -189,6 +189,7 @@
   - 🟢 [`hoisted-apis-on-top`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/hoisted-apis-on-top.md)
   - 🟢 [`prefer-import-in-mock`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-import-in-mock.md)
   - ❓ [`prefer-called-exactly-once-with`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-exactly-once-with.md)
+  - 🟢 [`require-awaited-expect-poll`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/require-awaited-expect-poll.md)
 - `eslint-plugin-de-morgan`: [1.2.1 → 2.0.0](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.1...v2.0.0)
 - `eslint-plugin-es-x`: [8.6.2 → 9.1.2](https://github.com/eslint-community/eslint-plugin-es-x/compare/v8.6.2...v9.1.2)
   - ❓ (enabled conditionally) [`no-array-fromasync`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-array-fromasync.html)

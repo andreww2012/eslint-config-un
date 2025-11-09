@@ -266,6 +266,7 @@ export default (async (context, optionsRaw) => {
     .addRule('prefer-to-contain', ERROR) /** @since 0.1.0 */ // (warns in all)
     .addRule('prefer-to-have-length', ERROR) /** @since 0.0.57 */ // (warns in all)
     .addRule('prefer-todo', WARNING) /** @since 0.1.0 */ // (warns in all)
+    .addRule('require-awaited-expect-poll', WARNING) /** @since 1.4.2 */ // (warns in all)
     .addRule('require-hook', WARNING) /** @since 0.1.0 */ // (warns in all)
     .addRule('require-local-test-context-for-concurrent-snapshots', ERROR) /** @since 0.3.13 */ // 🟢
     .addRule('require-mock-type-parameters', WARNING) /** @since 1.1.27 */
