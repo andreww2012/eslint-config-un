@@ -32,7 +32,7 @@ import {
   styleRuleName,
   styleText,
 } from '../utils';
-import type {CacheData} from './cache';
+import type {CacheDataInFs} from './cache';
 import {replaceImportRulesImplementationWithFastPlugin} from './fast-import';
 import {checkIfModuleCorrectlyLoaded} from './is-module-loaded';
 
@@ -63,7 +63,7 @@ interface ResolveConfigAsyncDataOptions {
 
 export const resolveConfigAsyncData = async (
   context: UnConfigContext,
-  options: ResolveConfigAsyncDataOptions | {cachedData: CacheData},
+  options: ResolveConfigAsyncDataOptions | {cachedData: CacheDataInFs},
 ) => {
   const {debug, internalOptions, rootOptions} = context;
   const {

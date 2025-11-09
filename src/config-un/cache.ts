@@ -20,29 +20,6 @@ import {
   readFileSafe,
 } from '../utils';
 
-export interface CacheData<Serialized extends boolean = true> {
-  configs: FlatConfigEntry[];
-  usedPlugins: string[];
-  usedParsers: Serialized extends true
-    ? Record<string, string[] /* Config names */>
-    : Map<ParserPrefix, string[] /* Config names */>;
-  usedPackages: Serialized extends true
-    ? Record<
-        string,
-        ({configName: string} & SetFieldType<
-          PackageToLoadInfo,
-          'valueTransformFn',
-          [functionSource: string, scope?: unknown] | undefined
-        >)[]
-      >
-    : Map<LoadablePackagePrefix, ({configName: string; path: string} & PackageToLoadInfo)[]>;
-}
-
-interface CacheDataStored extends CacheData {
-  key: string;
-  date: string;
-}
-
 const sha256 = (input: string | Buffer) => {
   const hashInstance = crypto.createHash('sha256');
   if (typeof input === 'string') {
@@ -115,6 +92,16 @@ const computeCacheKey = async (context: UnConfigContext) => {
   };
 };
 
+interface CacheMetadata {
+  key: string;
+  date: string;
+}
+
+const MAX_CACHE_VALID_MS = 3_600_000 satisfies Ms<'1h'>;
+
+const isCacheFresh = (cacheMetadata: CacheMetadata): boolean =>
+  Date.now() < new Date(cacheMetadata.date).getTime() + MAX_CACHE_VALID_MS;
+
 const resolveCacheFilePath = (context: UnConfigContext): string | undefined => {
   const cachePath = packageUtils.cache('eslint-config-un', {create: true});
   if (!cachePath) {
@@ -124,9 +111,29 @@ const resolveCacheFilePath = (context: UnConfigContext): string | undefined => {
   return path.join(cachePath, 'config.json');
 };
 
-export const saveToCache = async (
+export interface CacheDataInFs<Serialized extends boolean = true> {
+  configs: FlatConfigEntry[];
+  usedPlugins: string[];
+  usedParsers: Serialized extends true
+    ? Record<string, string[] /* Config names */>
+    : Map<ParserPrefix, string[] /* Config names */>;
+  usedPackages: Serialized extends true
+    ? Record<
+        string,
+        ({configName: string} & SetFieldType<
+          PackageToLoadInfo,
+          'valueTransformFn',
+          [functionSource: string, scope?: unknown] | undefined
+        >)[]
+      >
+    : Map<LoadablePackagePrefix, ({configName: string; path: string} & PackageToLoadInfo)[]>;
+}
+
+interface CacheDataStoredInFs extends CacheDataInFs, CacheMetadata {}
+
+export const saveCacheToFs = async (
   context: UnConfigContext,
-  cacheData: CacheData<false>,
+  cacheData: CacheDataInFs<false>,
 ): Promise<boolean> => {
   const cachePath = resolveCacheFilePath(context);
   if (!cachePath) {
@@ -136,7 +143,7 @@ export const saveToCache = async (
 
   const {hash: cacheKey, source: cacheKeyRaw} = await computeCacheKey(context);
 
-  const dataToStore: CacheDataStored = {
+  const dataToStore: CacheDataStoredInFs = {
     date: new Date().toISOString(),
     key: cacheKey,
     ...cacheData,
@@ -206,9 +213,9 @@ export const saveToCache = async (
   }
 };
 
-const MAX_CACHE_VALID_MS = 3_600_000 satisfies Ms<'1h'>;
-
-export const restoreFromCache = async (context: UnConfigContext): Promise<CacheData | null> => {
+export const restoreCacheFromFs = async (
+  context: UnConfigContext,
+): Promise<CacheDataInFs | null> => {
   const cachePath = resolveCacheFilePath(context);
   if (!cachePath) {
     context.logger.warn('Could not determine cache path');
@@ -217,7 +224,7 @@ export const restoreFromCache = async (context: UnConfigContext): Promise<CacheD
 
   const [{hash: cacheKey}, cachedData] = await Promise.all([
     computeCacheKey(context),
-    readAndParseJson<CacheDataStored>(cachePath),
+    readAndParseJson<CacheDataStoredInFs>(cachePath),
   ]);
 
   if (
@@ -225,6 +232,39 @@ export const restoreFromCache = async (context: UnConfigContext): Promise<CacheD
     Date.now() < new Date(cachedData.date).getTime() + MAX_CACHE_VALID_MS
   ) {
     return cachedData;
+  }
+
+  return null;
+};
+
+interface CacheDataInMemory {
+  config: FlatConfigEntry[];
+}
+
+interface CacheDataStoredInMemory extends CacheDataInMemory, CacheMetadata {}
+
+// eslint-disable-next-line no-shadow-restricted-names
+declare const globalThis: typeof global & {
+  eslintConfigUnResolvedConfig?: CacheDataStoredInMemory;
+};
+
+export const saveCacheToMemory = async (context: UnConfigContext, data: CacheDataInMemory) => {
+  const cacheKey = await computeCacheKey(context);
+
+  globalThis.eslintConfigUnResolvedConfig = {
+    ...data,
+    key: cacheKey.hash,
+    date: new Date().toISOString(),
+  };
+};
+
+export const restoreCacheFromMemory = async (context: UnConfigContext) => {
+  const cacheKey = await computeCacheKey(context);
+
+  const configInMemory = globalThis.eslintConfigUnResolvedConfig;
+
+  if (configInMemory?.key === cacheKey.hash && isCacheFresh(configInMemory)) {
+    return configInMemory;
   }
 
   return null;

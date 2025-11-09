@@ -48,7 +48,12 @@ import {
   styleConfigName,
   styleRuleName,
 } from '../utils';
-import {restoreFromCache, saveToCache} from './cache';
+import {
+  restoreCacheFromFs,
+  restoreCacheFromMemory,
+  saveCacheToFs,
+  saveCacheToMemory,
+} from './cache';
 import {getIsConfigEnabled as getIsConfigEnabledContextless} from './config-utils';
 import type {FastImportPluginSettings} from './fast-import';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
@@ -130,22 +135,35 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     > as unknown as UnConfigContext<ExtraPlugins>);
 
   if (cacheConfigs) {
-    debug('Attempting to restore configs from cache');
-    const cachedData = await restoreFromCache(context);
+    debug('Attempting to restore configs from memory cache');
 
-    if (cachedData) {
-      debug('Successfully restored configs from cache');
+    const configFromMemoryCache = await restoreCacheFromMemory(context);
+    if (configFromMemoryCache) {
+      debug('Successfully restored configs from memory cache');
+      return configFromMemoryCache.config;
+    }
 
-      const {plugins, modifyConfigs} = await resolveConfigAsyncData(context, {cachedData});
+    debug('Attempting to restore configs from file system cache');
+
+    const configFromFsCache = await restoreCacheFromFs(context);
+    if (configFromFsCache) {
+      debug('Successfully restored configs from file system cache');
+
+      const {plugins, modifyConfigs} = await resolveConfigAsyncData(context, {
+        cachedData: configFromFsCache,
+      });
       modifyConfigs();
 
-      const pluginConfig = cachedData.configs.find((config) => config.name === PLUGINS_CONFIG_NAME);
+      const pluginConfig = configFromFsCache.configs.find(
+        (config) => config.name === PLUGINS_CONFIG_NAME,
+      );
       if (pluginConfig) {
         pluginConfig.plugins = plugins;
       }
 
-      return cachedData.configs;
+      return configFromFsCache.configs;
     }
+
     debug("Could not restore configs from cache - it's either stale or an error occurred");
   }
 
@@ -664,7 +682,11 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
   debug(`Final config resolved: ${resolvedConfigs.length} flat config items`);
 
   if (cacheConfigs) {
-    debug('Attempting to save resolved configs to cache');
+    debug('Attempting to save resolved configs to memory and file system cache');
+
+    await saveCacheToMemory(context, {
+      config: resolvedConfigs,
+    });
 
     const configsToCache = [...resolvedConfigs].map((configItem) => {
       if (!isUnFlatConfigEntry(configItem)) {
@@ -677,7 +699,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       return result;
     });
 
-    await saveToCache(context, {
+    await saveCacheToFs(context, {
       configs: configsToCache,
       usedPlugins: usedPluginPrefixes,
       usedParsers: new Map(
