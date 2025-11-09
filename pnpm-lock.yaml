@@ -444,8 +444,8 @@ importers:
         specifier: 7.13.3
         version: 7.13.3(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-turbo:
-        specifier: 2.5.8
-        version: 2.5.8(eslint@9.39.1(jiti@2.6.1))(turbo@2.5.4)
+        specifier: 2.6.0
+        version: 2.6.0(eslint@9.39.1(jiti@2.6.1))(turbo@2.5.4)
       eslint-plugin-vue:
         specifier: 10.5.1
         version: 10.5.1(@stylistic/eslint-plugin@5.5.0(eslint@9.39.1(jiti@2.6.1)))(@typescript-eslint/parser@8.46.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.39.1(jiti@2.6.1)))
@@ -5064,8 +5064,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-plugin-turbo@2.5.8:
-    resolution: {integrity: sha512-bVjx4vTH0oTKIyQ7EGFAXnuhZMrKIfu17qlex/dps7eScPnGQLJ3r1/nFq80l8xA+8oYjsSirSQ2tXOKbz3kEw==}
+  eslint-plugin-turbo@2.6.0:
+    resolution: {integrity: sha512-04TohZhq6YQVXBZVRvrn8ZTj1sUQYZmjUWsfwgFAlaM5Kbk5Fdh5mLBKfhGGzekB55E+Ut9qNzAGh+JW4rjiuA==}
     peerDependencies:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
@@ -13873,7 +13873,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-turbo@2.5.8(eslint@9.39.1(jiti@2.6.1))(turbo@2.5.4):
+  eslint-plugin-turbo@2.6.0(eslint@9.39.1(jiti@2.6.1))(turbo@2.5.4):
     dependencies:
       dotenv: 16.0.3
       eslint: 9.39.1(jiti@2.6.1)
