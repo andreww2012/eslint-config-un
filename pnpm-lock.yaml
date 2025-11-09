@@ -5,7 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@eslint/markdown>@eslint/core': 0.17.0
   '@eslint/plugin-kit@0.3.5>@eslint/core': 0.17.0
   eslint>@eslint/core: 0.17.0
 
@@ -37,8 +36,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       '@eslint/markdown':
-        specifier: 7.5.0
-        version: 7.5.0
+        specifier: 7.5.1
+        version: 7.5.1
       '@html-eslint/eslint-plugin':
         specifier: 0.47.0
         version: 0.47.0(eslint@9.38.0(jiti@2.6.1))(jiti@2.6.1)
@@ -125,10 +124,10 @@ importers:
         version: 0.1.1(eslint@9.38.0(jiti@2.6.1))
       eslint-plugin-markdown-links:
         specifier: 0.6.2
-        version: 0.6.2(@eslint/markdown@7.5.0)(eslint@9.38.0(jiti@2.6.1))
+        version: 0.6.2(@eslint/markdown@7.5.1)(eslint@9.38.0(jiti@2.6.1))
       eslint-plugin-markdown-preferences:
         specifier: 0.36.2
-        version: 0.36.2(@eslint/markdown@7.5.0)(eslint@9.38.0(jiti@2.6.1))
+        version: 0.36.2(@eslint/markdown@7.5.1)(eslint@9.38.0(jiti@2.6.1))
       eslint-plugin-math:
         specifier: 0.13.0
         version: 0.13.0(eslint@9.38.0(jiti@2.6.1))
@@ -1778,8 +1777,8 @@ packages:
     resolution: {integrity: sha512-UZ1VpFvXf9J06YG9xQBdnzU+kthors6KjhMAl6f4gH4usHyh31rUf2DLGInT8RFYIReYXNSydgPY0V2LuWgl7A==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@eslint/markdown@7.5.0':
-    resolution: {integrity: sha512-reKloVSpytg4ene3yviPJcUO7zglpNn9kWNRiSQ/8gBbBFMKW5Q042LaCi3wv2vVtbPNnLrl6WvhRAHeBd43QA==}
+  '@eslint/markdown@7.5.1':
+    resolution: {integrity: sha512-R8uZemG9dKTbru/DQRPblbJyXpObwKzo8rv1KYGGuPUPtjM4LXBYM9q5CIZAComzZupws3tWbDwam5AFpPLyJQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/object-schema@2.1.7':
@@ -9898,7 +9897,7 @@ snapshots:
 
   '@eslint/js@9.38.0': {}
 
-  '@eslint/markdown@7.5.0':
+  '@eslint/markdown@7.5.1':
     dependencies:
       '@eslint/core': 0.17.0
       '@eslint/plugin-kit': 0.4.1
@@ -13362,9 +13361,9 @@ snapshots:
       parse5: 6.0.1
       parse5-htmlparser2-tree-adapter: 6.0.1
 
-  eslint-plugin-markdown-links@0.6.2(@eslint/markdown@7.5.0)(eslint@9.38.0(jiti@2.6.1)):
+  eslint-plugin-markdown-links@0.6.2(@eslint/markdown@7.5.1)(eslint@9.38.0(jiti@2.6.1)):
     dependencies:
-      '@eslint/markdown': 7.5.0
+      '@eslint/markdown': 7.5.1
       '@mdit-vue/shared': 3.0.2
       entities: 7.0.0
       eslint: 9.38.0(jiti@2.6.1)
@@ -13374,9 +13373,9 @@ snapshots:
       synckit: 0.11.11
       undici: 7.16.0
 
-  eslint-plugin-markdown-preferences@0.36.2(@eslint/markdown@7.5.0)(eslint@9.38.0(jiti@2.6.1)):
+  eslint-plugin-markdown-preferences@0.36.2(@eslint/markdown@7.5.1)(eslint@9.38.0(jiti@2.6.1)):
     dependencies:
-      '@eslint/markdown': 7.5.0
+      '@eslint/markdown': 7.5.1
       diff-sequences: 29.6.3
       emoji-regex-xs: 2.0.1
       eslint: 9.38.0(jiti@2.6.1)

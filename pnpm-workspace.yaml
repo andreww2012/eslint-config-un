@@ -5,7 +5,6 @@ onlyBuiltDependencies:
   - unrs-resolver
 
 overrides:
-  '@eslint/markdown>@eslint/core': 0.17.0
   '@eslint/plugin-kit@0.3.5>@eslint/core': 0.17.0
   eslint>@eslint/core: 0.17.0
 
