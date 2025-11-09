@@ -1003,6 +1003,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       },
     ])
     .markCategory('X')
+    .addRule('jsx-dollar', WARNING) /** @since 2.3.0 */
     .addRule('jsx-key-before-spread', ERROR) /** @since 1.49.0 */ // 🟡
     .addRule(
       'jsx-no-comment-textnodes',
