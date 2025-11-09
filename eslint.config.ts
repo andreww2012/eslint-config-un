@@ -47,11 +47,7 @@ export default eslintConfig({
     toml: true,
     json: true,
     jsxA11y: false,
-    packageJson: {
-      overrides: {
-        'package-json/scripts-name-casing': 0, // enable again once https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/issues/1368 is fixed
-      },
-    },
+    packageJson: true,
     casePolice: true,
     import: {
       ignores: TEST_DIR_GLOB,
