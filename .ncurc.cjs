@@ -73,7 +73,7 @@ module.exports = {
   interactive: true,
   groupFunction: (fullName) => {
     const [nameScope] = fullName.split('/');
-    const isPlugin = fullName.includes('eslint-plugin');
+    const isPlugin = fullName.startsWith('eslint-plugin') || fullName.startsWith('@eslint/');
     const groupNamePluginSuffix = isPlugin ? ' (plugins)' : '';
     const groupNumberStartsWith = 3 * (isPlugin ? 0 : 1);
     return (

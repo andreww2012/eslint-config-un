@@ -130,7 +130,7 @@
   - ❓ [`prefer-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-host-metadata-property.md)
   - 🟢 [`prefer-at-else`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-at-else.md)
   - 🔴 [`prefer-built-in-pipes`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-built-in-pipes.md)
-- `@eslint/css`: [0.7.0 → 0.14.0](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.14.0)
+- `@eslint/css`: [0.7.0 → 0.14.1](https://github.com/eslint/css/compare/css-v0.7.0...css-v0.14.1)
   - 🟢 (enabled) [`relative-font-units`](https://github.com/eslint/css/blob/HEAD/docs/rules/relative-font-units.md)
   - 🟢 [`no-invalid-at-rule-placement`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-at-rule-placement.md)
   - 🟢 [`no-invalid-named-grid-areas`](https://github.com/eslint/css/blob/HEAD/docs/rules/no-invalid-named-grid-areas.md)
