@@ -17,7 +17,7 @@ export const packagesLoaders = {
   ),
   ...genModuleLoader('astroClientSideTsProcessor', 'eslint-plugin-astro', () =>
     interopDefault(import('eslint-plugin-astro')).then(
-      (module) => module.processors['client-side-ts'],
+      (module) => module.processors['client-side-ts'] as EslintProcessor,
     ),
   ),
   ...genModuleLoader('eslintMergeProcessors', 'eslint-merge-processors', () =>
