@@ -116,7 +116,7 @@
 
 ### Dependencies
 
-- `eslint` (peer dependency): [9.26.0 → 9.38.0](https://github.com/eslint/eslint/compare/v9.26.0...v9.38.0)
+- `eslint` (peer dependency): [9.26.0 → 9.39.1](https://github.com/eslint/eslint/compare/v9.26.0...v9.39.1)
   - ❓ (enabled conditionally) [`no-unassigned-vars`](https://eslint.org/docs/latest/rules/no-unassigned-vars)
   - 🔴 (not enabled) [`preserve-caught-error`](https://eslint.org/docs/latest/rules/preserve-caught-error)
 - `angular-eslint`: [19.4.0 → 20.5.0](https://github.com/angular-eslint/angular-eslint/compare/v19.4.0...v20.5.0)

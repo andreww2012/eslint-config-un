@@ -169,7 +169,7 @@
     "cspell": "9.2.2",
     "diff": "8.0.2",
     "ember-eslint-parser": "0.5.11",
-    "eslint": "9.38.0",
+    "eslint": "9.39.1",
     "eslint-plugin-astro": "1.4.0",
     "eslint-plugin-ava": "15.1.0",
     "eslint-plugin-better-tailwindcss": "3.7.10",
