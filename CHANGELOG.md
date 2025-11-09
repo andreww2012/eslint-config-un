@@ -173,7 +173,7 @@
   - Set `checkClosedHeadings: true` for [`no-missing-atx-heading-space`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-atx-heading-space.md) rule.
 - `eslint-plugin-import-x`: [4.11.1 → 4.16.1](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.11.1...v4.15.2)
 - `eslint-import-resolver-typescript`: [4.3.4 → 4.4.4](https://github.com/import-js/eslint-import-resolver-typescript/compare/v4.3.4...v4.4.4)
-- `@html-eslint/eslint-plugin`: [0.40.2 → 0.47.0](https://github.com/yeonjuan/html-eslint/compare/v0.40.2...v0.47.0)
+- `@html-eslint/eslint-plugin`: [0.40.2 → 0.48.0](https://github.com/yeonjuan/html-eslint/compare/v0.40.2...v0.48.0)
   - 🟢 (enabled) [`no-aria-hidden-on-focusable`](https://html-eslint.org/docs/rules/no-aria-hidden-on-focusable)
   - 🟢 [`no-duplicate-in-head`](https://html-eslint.org/docs/rules/no-duplicate-in-head)
   - 🟢 [`no-empty-headings`](https://html-eslint.org/docs/rules/no-empty-headings)
