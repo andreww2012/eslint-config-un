@@ -820,6 +820,7 @@ const ALL_STYLISTIC_RULES = {
     'no-number-schema-with-int': true,
     'prefer-namespace-import': true,
     'require-schema-suffix': true,
+    'schema-error-property-style': true,
   },
 } as const satisfies {
   [Plugin in PluginPrefix]: Partial<Record<RuleNamesForPlugin<Plugin>, true>>;

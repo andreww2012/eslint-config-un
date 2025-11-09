@@ -103,6 +103,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `vue`                      | `eslint-plugin-vue`                      |
 | `vue-scoped-css`           | `eslint-plugin-vue-scoped-css`           |
 | `vuejs-accessibility`      | `eslint-plugin-vuejs-accessibility`      |
+| `zod`                      | `eslint-plugin-zod-x`                    |
 
 </details>
 
