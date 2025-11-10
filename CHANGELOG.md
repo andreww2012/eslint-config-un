@@ -236,7 +236,7 @@
   - 🟢 [`ts-no-unnecessary-template-expression`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/ts-no-unnecessary-template-expression.md)
   - 🟢 [`ts-prefer-function-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/ts-prefer-function-type.md)
 - `@stylistic/eslint-plugin`: [4.2.0 → 5.5.0](https://github.com/eslint-stylistic/eslint-stylistic/compare/v4.2.0...v5.5.0)
-- `eslint-plugin-json-schema-validator`: [5.4.0 → 5.4.1](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v5.4.0...v5.4.1)
+- `eslint-plugin-json-schema-validator`: [5.4.0 → 5.5.0](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v5.4.0...v5.5.0)
 - `eslint-plugin-jsonc`: [2.20.0 → 2.21.0](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v2.20.0...v2.21.0)
 - `eslint-plugin-n`: [17.18.0 → 17.23.1](https://github.com/eslint-community/eslint-plugin-n/compare/v17.18.0...v17.23.1)
   - 🟢 (enabled) [`no-top-level-await`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-top-level-await.md)
