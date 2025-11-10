@@ -20,6 +20,11 @@ export const packagesLoaders = {
       (module) => module.processors['client-side-ts'] as EslintProcessor,
     ),
   ),
+  ...genModuleLoader('checkFileProcessor', 'eslint-plugin-check-file', () =>
+    interopDefault(import('eslint-plugin-check-file')).then(
+      (m) => m.processors['eslint-processor-check-file'],
+    ),
+  ),
   ...genModuleLoader('eslintMergeProcessors', 'eslint-merge-processors', () =>
     interopDefault(import('eslint-merge-processors')),
   ),

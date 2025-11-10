@@ -175,6 +175,7 @@
     "eslint-plugin-ava": "15.1.0",
     "eslint-plugin-better-tailwindcss": "3.7.10",
     "eslint-plugin-case-police": "2.0.0",
+    "eslint-plugin-check-file": "3.3.1",
     "eslint-plugin-compat": "6.0.2",
     "eslint-plugin-cypress": "5.2.0",
     "eslint-plugin-de-morgan": "2.0.0",
@@ -256,6 +257,7 @@
     "eslint-plugin-ava": "^15.1.0",
     "eslint-plugin-better-tailwindcss": "^3.7.10",
     "eslint-plugin-case-police": "^2.0.0",
+    "eslint-plugin-check-file": "^3.3.1",
     "eslint-plugin-compat": "^6.0.2",
     "eslint-plugin-cypress": "^5.2.0",
     "eslint-plugin-de-morgan": "^2.0.0",
@@ -357,6 +359,9 @@
       "optional": true
     },
     "eslint-plugin-case-police": {
+      "optional": true
+    },
+    "eslint-plugin-check-file": {
       "optional": true
     },
     "eslint-plugin-compat": {

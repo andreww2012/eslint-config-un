@@ -347,6 +347,9 @@ importers:
       eslint-plugin-case-police:
         specifier: 2.0.0
         version: 2.0.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
+      eslint-plugin-check-file:
+        specifier: 3.3.1
+        version: 3.3.1(eslint@9.39.1(jiti@2.6.1))
       eslint-plugin-compat:
         specifier: 6.0.2
         version: 6.0.2(eslint@9.39.1(jiti@2.6.1))
@@ -4661,6 +4664,12 @@ packages:
     resolution: {integrity: sha512-8QTPWpCOqBn9nScjsHWje9PPiIjO7Vi8ZPdEoPB8HGaVyTFTYB4kzY1JXXok+FXY/YjQbFfPIByzc0LYuhvmzg==}
     peerDependencies:
       eslint: ^9.9.0
+
+  eslint-plugin-check-file@3.3.1:
+    resolution: {integrity: sha512-b7fDkp8Y0T9vloTYSrkMnb5Cqpk1bc6+jDQdgKIhzdwb47NmLAvMFYo3SzHOPF8u4SEsOVhmrNSbo6Sp633syg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      eslint: '>=9.0.0'
 
   eslint-plugin-compat@6.0.2:
     resolution: {integrity: sha512-1ME+YfJjmOz1blH0nPZpHgjMGK4kjgEeoYqGCqoBPQ/mGu/dJzdoP0f1C8H2jcWZjzhZjAMccbM/VdXhPORIfA==}
@@ -13234,6 +13243,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - typescript
+
+  eslint-plugin-check-file@3.3.1(eslint@9.39.1(jiti@2.6.1)):
+    dependencies:
+      eslint: 9.39.1(jiti@2.6.1)
+      is-glob: 4.0.3
+      micromatch: 4.0.8
 
   eslint-plugin-compat@6.0.2(eslint@9.39.1(jiti@2.6.1)):
     dependencies:

@@ -234,6 +234,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     ava: {enabled: getIsConfigEnabled('ava', 'ava')},
     betterTailwind: {enabled: getIsConfigEnabled('betterTailwind', 'tailwindcss')},
     casePolice: {enabled: getIsConfigEnabled('casePolice', false)},
+    checkFile: {enabled: getIsConfigEnabled('checkFile', false)},
     cli: {enabled: getIsConfigEnabled('cli')},
     cloudfrontFunctions: {enabled: getIsConfigEnabled('cloudfrontFunctions', false)},
     compat: {enabled: getIsConfigEnabled('compat', false)},
@@ -547,6 +548,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('angular', () => import('../configs/angular')), // Must come after ts
     svelteEslintConfigResult, // Must be after ts
     loadUnConfig('graphql', () => import('../configs/graphql')),
+    loadUnConfig('checkFile', () => import('../configs/check-file')), // Likely should be last
     loadUnConfig('markdown', () => import('../configs/markdown')), // Must be last
 
     rootConfigBuilder,

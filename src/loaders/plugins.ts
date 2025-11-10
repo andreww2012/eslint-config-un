@@ -115,6 +115,9 @@ export const pluginsLoaders = {
     'eslint-plugin-case-police',
     () => interopDefault(import('eslint-plugin-case-police')) as Promise<EslintPlugin>,
   ),
+  ...genModuleLoader('check-file', 'eslint-plugin-check-file', () =>
+    interopDefault(import('eslint-plugin-check-file')),
+  ),
   ...genModuleLoader('compat', 'eslint-plugin-compat', () =>
     interopDefault(import('eslint-plugin-compat')),
   ),

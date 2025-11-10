@@ -72,6 +72,7 @@ yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERS
 | `ava`                      | `eslint-plugin-ava`                      |
 | `better-tailwindcss`       | `eslint-plugin-better-tailwindcss`       |
 | `case-police`              | `eslint-plugin-case-police`              |
+| `check-file`               | `eslint-plugin-check-file`               |
 | `de-morgan`                | `eslint-plugin-de-morgan`                |
 | `ember`                    | `eslint-plugin-ember`                    |
 | `erasable-syntax-only`     | `eslint-plugin-erasable-syntax-only`     |
@@ -332,6 +333,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `webComponents`                                                | ❌                                          | [eslint-plugin-wc](https://npmjs.com/eslint-plugin-wc) (`wc`)                                     | Since v1.0.0                                                                                                                             |
 | `header`                                                       | ❌                                          | [eslint-plugin-header](https://npmjs.com/eslint-plugin-header) (`header`)                         | Since v1.0.0                                                                                                                             |
 | `headers`                                                      | ❌                                          | [eslint-plugin-headers](https://npmjs.com/eslint-plugin-headers) (`headers`)                      | Since v1.0.0                                                                                                                             |
+| `checkFile`                                                    | ❌                                          | [eslint-plugin-check-file](https://npmjs.com/eslint-plugin-check-file) (`check-file`)             | Since v1.0.0                                                                                                                             |
 
 ## How to use
 

@@ -169,6 +169,9 @@ const ALL_STYLISTIC_RULES = {
   'case-police': {
     'string-check': true,
   },
+  'check-file': {
+    // TODO
+  },
   compat: {
     // None
   },

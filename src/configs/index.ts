@@ -29,6 +29,7 @@ import type {AstroEslintConfigOptions} from './astro';
 import type {AvaEslintConfigOptions} from './ava';
 import type {BetterTailwindEslintConfigOptions} from './better-tailwind';
 import type {CasePoliceEslintConfigOptions} from './case-police';
+import type {CheckFileEslintConfigOptions} from './check-file';
 import type {CompatEslintConfigOptions} from './compat';
 import type {CspellEslintConfigOptions} from './cspell';
 import type {CssEslintConfigOptions} from './css';
@@ -337,10 +338,23 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Used plugin:
    * - [`eslint-plugin-case-police`](https://npmjs.com/eslint-plugin-case-police) ([docs](https://github.com/antfu/case-police))
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default false
    */
   casePolice: CasePoliceEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin that enforces consistent naming conventions for files and directories.
+   *
+   * By default, all rules are disabled.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-check-file`](https://npmjs.com/eslint-plugin-check-file) ([docs](https://github.com/dukeluo/eslint-plugin-check-file#readme))
+   *
+   * NOTE: disabled by default.
+   * @default false
+   */
+  checkFile: CheckFileEslintConfigOptions<ExtraPlugins>;
 
   /**
    * A config specific to files meant to be executed. By default, allows `process.exit()`
@@ -360,7 +374,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Note that if neither `files` or `ignores` are specified or is an empty array in the main
    * or a sub-config, the config won't be generated.
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default false
    */
   cloudfrontFunctions: CloudfrontFunctionsEslintConfigOptions<ExtraPlugins>;
@@ -371,7 +385,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Used plugins:
    * - [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat) ([docs](https://github.com/amilajack/eslint-plugin-compat))
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default false
    */
   compat: CompatEslintConfigOptions<ExtraPlugins>;
@@ -382,7 +396,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Used plugin:
    * - [`@cspell/eslint-plugin`](https://npmjs.com/package/@cspell/eslint-plugin) ([docs](https://github.com/streetsidesoftware/cspell/tree/HEAD/packages/cspell-eslint-plugin#readme))
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default false
    */
   cspell: CspellEslintConfigOptions<ExtraPlugins>;
@@ -429,7 +443,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Used plugin:
    * - [`eslint-plugin-depend`](https://npmjs.com/eslint-plugin-depend) ([docs](https://github.com/es-tooling/eslint-plugin-depend))
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   depend: DependEslintConfigOptions<ExtraPlugins>;
@@ -451,7 +465,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Used plugin:
    * - [`eslint-plugin-erasable-syntax-only`](https://npmjs.com/eslint-plugin-erasable-syntax-only) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only))
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default false
    */
   erasableSyntaxOnly: ErasableSyntaxOnlyEslintConfigOptions<ExtraPlugins>;
@@ -460,7 +474,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Used plugin:
    * - [`eslint-plugin-es-x`](https://npmjs.com/eslint-plugin-es-x) ([docs](https://eslint-community.github.io/eslint-plugin-es-x))
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default false
    */
   es: EsEslintConfigOptions<ExtraPlugins>;
@@ -482,10 +496,16 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   eslintPlugin: EslintPluginEslintConfigOptions<ExtraPlugins>;
 
   /**
+   * A faster alternative to `eslint-plugin-import(-x)` plugins. From the docs, it
+   * "uses a novel algorithm combined with the OXC Rust based parser that is significantly more performant than other import plugins".
    *
+   * Does not implement all the rules from the original plugins
+   * and might require some additional setup.
    *
    * Used plugins:
    * - [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import) ([docs](https://github.com/nebrius/eslint-plugin-fast-import#readme))
+   *
+   * NOTE: disabled by default.
    * @default false
    */
   fastImport: FastImportEslintConfigOptions<ExtraPlugins>;
@@ -498,6 +518,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * Used plugin:
    * - [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress) ([docs](https://github.com/sibiraj-s/eslint-plugin-file-progress))
+   *
+   * NOTE: disabled by default.
    * @default false
    */
   fileProgress: FileProgressEslintConfigOptions<ExtraPlugins>;
@@ -518,6 +540,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * Used plugins:
    * - [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header) ([docs](https://github.com/Stuk/eslint-plugin-header))
+   *
+   * NOTE: disabled by default.
    * @default false
    */
   header: HeaderEslintConfigOptions<ExtraPlugins>;
@@ -529,6 +553,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * Used plugins:
    * - [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers) ([docs](https://github.com/robmisasi/eslint-plugin-headers))
+   *
+   * NOTE: disabled by default.
    * @default false
    */
   headers: HeadersEslintConfigOptions<ExtraPlugins>;
@@ -558,6 +584,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * Used plugins:
    * - [`eslint-plugin-import-zod`](https://npmjs.com/eslint-plugin-import-zod) ([docs](https://github.com/samchungy/eslint-plugin-import-zod))
+   *
+   * NOTE: disabled by default.
    * @default false
    */
   importZod: ImportZodEslintConfigOptions<ExtraPlugins>;
@@ -605,7 +633,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Used plugin:
    * - [`eslint-plugin-json-schema-validator`](https://npmjs.com/eslint-plugin-json-schema-validator) ([the single rule docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/HEAD/docs/rules/no-invalid.md))
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   jsonSchemaValidator: JsonSchemaValidatorEslintConfigOptions<ExtraPlugins>;
@@ -709,7 +737,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * By default will be applied to all `package.json` files.
    * You may only specify JSON files for this config.
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   nodeDependencies: NodeDependenciesEslintConfigOptions<ExtraPlugins>;
@@ -723,7 +751,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Used plugins:
    * - [`eslint-plugin-no-only-tests`](https://npmjs.com/eslint-plugin-no-only-tests) ([docs](https://github.com/levibuzolic/no-only-tests))
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default false
    */
   noOnlyTests: NoOnlyTestsEslintConfigOptions<ExtraPlugins>;
@@ -735,7 +763,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Use this config to globally disable all such rules, or conversely enable only them,
    * or some of them.
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default false
    */
   noStylisticRules: NoStylisticRulesEslintConfigOptions<ExtraPlugins>;
@@ -799,7 +827,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Used plugin:
    * - [`eslint-plugin-prefer-arrow-functions`](https://npmjs.com/eslint-plugin-prefer-arrow-functions) ([docs](https://github.com/JamieMason/eslint-plugin-prefer-arrow-functions))
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default false
    */
   preferArrowFunctions: PreferArrowFunctionsEslintConfigOptions<ExtraPlugins>;
@@ -874,7 +902,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Used plugin:
    * - [`eslint-plugin-security`](https://npmjs.com/eslint-plugin-security) ([docs](https://github.com/eslint-community/eslint-plugin-security))
    *
-   * NOTE: disabled by default
+   * NOTE: disabled by default.
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   security: SecurityEslintConfigOptions<ExtraPlugins>;
@@ -1038,6 +1066,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * Used plugins:
    * - [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc) ([docs](https://github.com/43081j/eslint-plugin-wc))
+   *
+   * NOTE: disabled by default.
    * @default false
    */
   webComponents: WebComponentsEslintConfigOptions<ExtraPlugins>;
