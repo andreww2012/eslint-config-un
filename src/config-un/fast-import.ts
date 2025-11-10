@@ -1,12 +1,12 @@
-import type {recommended as fastImportPluginConfigGenerator} from 'eslint-plugin-fast-import';
 import type {UnConfigContext} from '../configs';
 import type {EslintPlugin, RuleNamesForPlugin} from '../eslint';
 import type {PluginPrefix} from '../loaders';
 import type {NonEmptyTuple} from '../types';
 import {objectEntriesUnsafe} from '../utils';
 
+export type {FastImportPluginSettings} from '../configs/fast-import';
+
 // TODO: move to configs/fast-import
-export type FastImportPluginSettings = Parameters<typeof fastImportPluginConfigGenerator>[0];
 
 const IMPORT_RULES_TO_REPLACE = {
   'no-cycle': 'no-cycle',

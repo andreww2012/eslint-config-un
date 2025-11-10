@@ -215,7 +215,8 @@ const ALL_STYLISTIC_RULES = {
     'test-case-property-ordering': true,
   },
   'fast-import': {
-    // None
+    'consistent-file-extensions': true,
+    'require-node-prefix': true,
   },
   'file-progress': {
     // None

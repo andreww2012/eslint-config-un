@@ -243,6 +243,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     cypress: {enabled: getIsConfigEnabled('cypress', 'cypress')},
     deMorgan: {enabled: getIsConfigEnabled('deMorgan', false)},
     depend: {enabled: getIsConfigEnabled('depend', false)},
+    fastImport: {enabled: getIsConfigEnabled('fastImport', false)},
     ember: {enabled: getIsConfigEnabled('ember', 'ember-source')},
     erasableSyntaxOnly: {enabled: getIsConfigEnabled('erasableSyntaxOnly', false)},
     es: {enabled: getIsConfigEnabled('es', false)},
@@ -536,6 +537,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('webComponents', () => import('../configs/web-components')),
     loadUnConfig('header', () => import('../configs/header')),
     loadUnConfig('headers', () => import('../configs/headers')),
+    loadUnConfig('fastImport', () => import('../configs/fast-import')),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

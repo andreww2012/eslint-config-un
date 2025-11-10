@@ -2,10 +2,7 @@
 import type {ConsolaInstance} from 'consola';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
-import type {
-  FastImportPluginSettings,
-  ImportPluginReplaceableRules,
-} from '../config-un/fast-import';
+import type {ImportPluginReplaceableRules} from '../config-un/fast-import';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import {
   type AllEslintFixableRuleNames,
@@ -47,6 +44,7 @@ import type {EslintPluginEslintConfigOptions} from './eslint-plugin';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-functions';
 import type {NoStylisticRulesEslintConfigOptions} from './extra/no-stylistic-rules';
+import type {FastImportEslintConfigOptions, FastImportPluginSettings} from './fast-import';
 import type {FileProgressEslintConfigOptions} from './file-progress';
 import type {GraphqlEslintConfigOptions} from './graphql';
 import type {HeaderEslintConfigOptions} from './header';
@@ -482,6 +480,15 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default false
    */
   eslintPlugin: EslintPluginEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   *
+   *
+   * Used plugins:
+   * - [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import) ([docs](https://github.com/nebrius/eslint-plugin-fast-import#readme))
+   * @default false
+   */
+  fastImport: FastImportEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESlint plugin to print file progress.
