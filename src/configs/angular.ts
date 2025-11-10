@@ -1,7 +1,7 @@
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
-import type {NonEmptyTuple, OmitStrict, Prettify, Subtract} from '../types';
-import {type MaybeArray, fetchPackageInfo} from '../utils';
+import type {NonEmptyTuple, Subtract} from '../types';
+import {fetchPackageInfo} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -111,14 +111,7 @@ export interface AngularEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
    * @default true
    * @see [`@angular-eslint/component-selector`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-selector.md)
    */
-  componentSelector?:
-    | boolean
-    | Prettify<
-        OmitStrict<GetRuleOptions<'@angular-eslint', 'component-selector'>, 'type' | 'prefix'> & {
-          type?: MaybeArray<'element' | 'attribute'>;
-          prefix?: MaybeArray<string>;
-        }
-      >;
+  componentSelector?: boolean | GetRuleOptions<'@angular-eslint', 'component-selector'>;
 
   /**
    * Ensures consistent usage of `styles`/`styleUrls`/`styleUrl` within `Component` metadata.
@@ -144,14 +137,7 @@ export interface AngularEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
    * @default true
    * @see [`@angular-eslint/directive-selector`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/directive-selector.md)
    */
-  directiveSelector?:
-    | boolean
-    | Prettify<
-        OmitStrict<GetRuleOptions<'@angular-eslint', 'directive-selector'>, 'type' | 'prefix'> & {
-          type?: MaybeArray<'element' | 'attribute'>;
-          prefix?: MaybeArray<string>;
-        }
-      >;
+  directiveSelector?: boolean | GetRuleOptions<'@angular-eslint', 'directive-selector'>;
 
   /**
    * Forbids the use of certain metadata properties. Will be merged with the default value.
@@ -328,11 +314,13 @@ export default (async (context, optionsRaw) => {
     .addRule(
       ...getPluginRuleSeverity('component-selector', componentSelector === false ? OFF : ERROR),
       [
-        {
-          type: ['element'],
-          style: 'kebab-case',
-          ...(typeof componentSelector === 'object' && componentSelector),
-        },
+        Array.isArray(componentSelector)
+          ? componentSelector
+          : {
+              type: ['element'],
+              style: 'kebab-case',
+              ...(typeof componentSelector === 'object' && componentSelector),
+            },
       ],
     ) /** @since 0.0.1-alpha.18 */
     .addRule(
@@ -358,11 +346,13 @@ export default (async (context, optionsRaw) => {
     .addRule(
       ...getPluginRuleSeverity('directive-selector', directiveSelector === false ? OFF : ERROR),
       [
-        {
-          type: ['attribute'],
-          style: 'camelCase',
-          ...(typeof directiveSelector === 'object' && directiveSelector),
-        },
+        Array.isArray(directiveSelector)
+          ? directiveSelector
+          : {
+              type: ['attribute'],
+              style: 'camelCase',
+              ...(typeof directiveSelector === 'object' && directiveSelector),
+            },
       ],
     ) /** @since 0.0.1-alpha.18 */
     .addRule(...getPluginRuleSeverity('no-async-lifecycle-method', ERROR)) /** @since 17.2.0 */
