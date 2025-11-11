@@ -65,8 +65,15 @@ const computeCacheKey = async (context: UnConfigContext) => {
     findUp.file(eslintConfigFileName),
   );
 
-  const [{stdout: gitHeadStdout, exitCode: gitHeadErrorCode}, ...filesToHash] = await Promise.all([
-    exec('git rev-parse HEAD'),
+  const [gitHeadHashResult, ...filesToHash] = await Promise.all([
+    // eslint-disable-next-line promise/prefer-catch -- does not implement `catch`
+    exec('git', ['rev-parse', 'HEAD']).then(
+      (v) => v,
+      (error: unknown) => {
+        context.logger.warn('Error getting git HEAD hash:', error);
+        return null;
+      },
+    ),
     gitignorePath && readFileSafe(gitignorePath, true),
     packageJsonPath && readFileSafe(packageJsonPath, true),
     Promise.all(
@@ -82,7 +89,11 @@ const computeCacheKey = async (context: UnConfigContext) => {
   ]);
 
   result.push(
-    gitHeadErrorCode ? String(gitHeadErrorCode) : gitHeadStdout,
+    gitHeadHashResult
+      ? gitHeadHashResult.exitCode
+        ? String(gitHeadHashResult.exitCode)
+        : gitHeadHashResult.stdout
+      : '',
     ...filesToHash.map((file) => (file ? sha256(file) : '')),
   );
 
