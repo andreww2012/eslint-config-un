@@ -238,6 +238,9 @@ export default ((context, optionsRaw) => {
     .addRule('valid-devDependencies', ERROR) /** @since 0.49.0 */ // 🟢
     .addRule('valid-directories', ERROR) /** @since 0.56.0 */ // 🟢
     .addRule('valid-exports', ERROR) /** @since 0.54.0 */ // 🟢
+    .addRule('valid-files', ERROR) /** @since 0.67.0 */ // 🟢
+    .addRule('valid-homepage', ERROR) /** @since 0.66.0 */ // 🟢
+    .addRule('valid-keywords', ERROR) /** @since 0.68.0 */ // 🟢
     .addRule('valid-license', ERROR) /** @since 0.45.0 */ // 🟢
     .addRule('valid-name', ERROR) /** @since 0.9.0 */ // 🟢
     .addRule('valid-optionalDependencies', ERROR) /** @since 0.49.0 */ // 🟢
