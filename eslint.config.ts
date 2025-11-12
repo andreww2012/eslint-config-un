@@ -19,10 +19,12 @@ export default eslintConfig({
       ...(!isInCi && {files: []}),
       check: {
         deadUrls: {
-          ignoreUrls: [
-            // npm gets rate-limited quickly: https://github.com/ota-meshi/eslint-plugin-markdown-links/issues/42
-            String.raw`/^https:\/\/npmjs.com\/.*/`,
-          ],
+          options: {
+            ignoreUrls: [
+              // npm gets rate-limited quickly: https://github.com/ota-meshi/eslint-plugin-markdown-links/issues/42
+              String.raw`/^https:\/\/npmjs.com\/.*/`,
+            ],
+          },
         },
       },
     },

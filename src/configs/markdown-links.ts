@@ -1,4 +1,4 @@
-import {ERROR, GLOB_MARKDOWN, OFF} from '../constants';
+import {ERROR, GLOB_MARKDOWN, OFF, WARNING} from '../constants';
 import type {NonEmptyTuple} from '../types';
 import {
   type ExtraPluginsType,
@@ -19,22 +19,25 @@ export interface MarkdownLinksEslintConfigOptions<ExtraPlugins extends ExtraPlug
    * You can also use this option to more conveniently control the options of the corresponding rules.
    * @default
    * ```ts
-   * {deadUrls: {checkAnchor: false}, missingFragments: true, missingLocalPath: true, selfDestinationLinks: true}
+   * {deadUrls: {options: {checkAnchor: false}, severityWarn: true}, missingFragments: true, missingLocalPath: true, selfDestinationLinks: true}
    * ```
    */
   check?: {
     [K in IssueType]?:
       | boolean
-      | GetRuleOptions<
-          'markdown-links',
-          K extends 'deadUrls'
-            ? 'no-dead-urls'
-            : K extends 'missingFragments'
-              ? 'no-missing-fragments'
-              : K extends 'missingLocalPath'
-                ? 'no-missing-path'
-                : never
-        >;
+      | {
+          options?: GetRuleOptions<
+            'markdown-links',
+            K extends 'deadUrls'
+              ? 'no-dead-urls'
+              : K extends 'missingFragments'
+                ? 'no-missing-fragments'
+                : K extends 'missingLocalPath'
+                  ? 'no-missing-path'
+                  : never
+          >;
+          severityWarn?: boolean;
+        };
   };
 }
 
@@ -50,26 +53,36 @@ export default ((context, optionsRaw) => {
       deadUrls === false
         ? false
         : {
-            // High number of false positives
-            checkAnchor: false,
+            severityWarn: true, // Sites these days are sensitive to making tons of requests quickly
             ...(typeof deadUrls === 'object' && deadUrls),
+            options: {
+              // High number of false positives
+              checkAnchor: false,
+              ...(typeof deadUrls === 'object' && deadUrls.options),
+            },
           },
   };
 
   const getCheckSeverity = <
     T extends IssueType,
-    RuleOptions = (MarkdownLinksEslintConfigOptions['check'] & {})[T] & object,
+    RuleOptions = Extract<
+      (MarkdownLinksEslintConfigOptions['check'] & {})[T],
+      Record<string, unknown>
+    >['options'] & {},
   >(
     issueType: T,
-  ) =>
-    [
-      check[issueType] === false ? OFF : ERROR,
-      (typeof check[issueType] === 'object' ? [check[issueType]] : []) as [RuleOptions] extends [
-        never,
-      ]
+  ) => {
+    const checkInfo = check[issueType];
+    const isCheckInfoObject = typeof checkInfo === 'object';
+    return [
+      checkInfo === false ? OFF : isCheckInfoObject && checkInfo.severityWarn ? WARNING : ERROR,
+      (isCheckInfoObject && checkInfo.options != null ? [checkInfo.options] : []) as [
+        RuleOptions,
+      ] extends [never]
         ? []
         : [RuleOptions],
     ] satisfies NonEmptyTuple;
+  };
 
   // Legend:
   // 🟢 - in recommended
