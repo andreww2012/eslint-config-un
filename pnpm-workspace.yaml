@@ -2,6 +2,7 @@ nodeLinker: hoisted
 
 onlyBuiltDependencies:
   - esbuild
+  - lefthook
   - unrs-resolver
 
 overrides:

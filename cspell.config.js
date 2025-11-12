@@ -47,6 +47,7 @@ export default {
     'neotraverse',
     'knip',
     'tsdown',
+    'commitlint',
 
     // Technical words/terms
     'arraify',

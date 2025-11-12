@@ -1,4 +1,3 @@
-# cspell:ignore knip
 pre-push:
   parallel: true
   commands:
@@ -13,4 +12,8 @@ pre-push:
     knip:
       run: nr knip
     types:
-      run: nr lint:types
+      run: nr lint:types:go
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit {0}
