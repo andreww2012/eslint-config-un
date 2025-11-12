@@ -66,6 +66,7 @@ export default {
     'nums',
     'textnodes',
     'multilines',
+    'greppability',
 
     // Misc
     'multicol',

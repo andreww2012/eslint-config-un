@@ -77,6 +77,7 @@
   - [**BREAKING**] Enforced `PascalCase` for enum, enum members, interfaces and types.
 - **unicorn** config:
   - Disabled [`prefer-json-parse-buffer`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-json-parse-buffer.md) rule as it [suggests bad fixes in TypeScript code](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2565).
+  - Disabled [`prefer-dom-node-dataset`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-dom-node-dataset.md) because [it might hurt greppability of codebase](https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2451).
   - Set [`checkArrowFunctionBody: false`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-undefined.md#checkarrowfunctionbody) for [`no-useless-undefined`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-undefined.md) rule.
   - Added `enforceTextEncodingCaseAndNotation` option to control [`text-encoding-identifier-case`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/text-encoding-identifier-case.md) rule.
 - **cli** config: included `**/cli.*` files by default and disabled [`no-await-in-loop`](https://eslint.org/docs/latest/rules/no-await-in-loop) rule. Disabled [`node/hashbang`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/hashbang.md) rule.

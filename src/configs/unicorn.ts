@@ -139,7 +139,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-date-now', ERROR) /** @since 24.0.0 */
     .addRule('prefer-default-parameters', ERROR) /** @since 25.0.0 */
     .addRule('prefer-dom-node-append', ERROR) /** @since 7.0.0 */ /** @aka prefer-node-append */
-    .addRule('prefer-dom-node-dataset', ERROR) /** @since 11.0.0 */ /** @aka prefer-dataset */
+    .addRule('prefer-dom-node-dataset', OFF) /** @since 11.0.0 */ /** @aka prefer-dataset */
     .addRule('prefer-dom-node-remove', ERROR) /** @since 8.0.0 */ /** @aka prefer-node-remove */
     .addRule(
       'prefer-dom-node-text-content',
