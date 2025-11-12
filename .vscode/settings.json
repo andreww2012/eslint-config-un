@@ -1,3 +1,4 @@
+// cspell:ignore esbenp
 {
   "eslint.validate": [
     "javascript",

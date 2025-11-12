@@ -5,8 +5,12 @@
  */
 export default {
   useGitignore: true,
+  enableGlobDot: true,
   ignorePaths: [
+    '.git/**',
+    '**/.gitignore',
     '**/pnpm-lock.yaml',
+    '.vscode/extensions.json',
     'test/**/*',
     'pnpm-workspace.yaml',
     '**/*.svg',
@@ -41,6 +45,8 @@ export default {
     'tinyexec',
     'cleye',
     'neotraverse',
+    'knip',
+    'tsdown',
 
     // Technical words/terms
     'arraify',
@@ -81,6 +87,7 @@ export default {
     'knipignore',
     'asyncdispose',
     'matchall',
+    'typegen',
 
     // Actual-ish English words
     'uncategorized',

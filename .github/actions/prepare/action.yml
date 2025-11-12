@@ -1,0 +1,34 @@
+name: Prepare
+description: Prepares CI environment
+
+inputs:
+  node-version:
+    description: Node.js version to use
+    required: false
+    default: '20'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4.2.0
+    - name: Setup Node.js
+      uses: actions/setup-node@v6.0.0
+      with:
+        cache: pnpm
+        node-version: ${{ inputs.node-version }}
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
+    - name: Cache typegen output
+      id: cache-typegen
+      uses: actions/cache@v4.3.0
+      with:
+        key: ${{ runner.os }}-${{ inputs.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        path: |
+          src/*.gen.ts
+          src/*.gen.d.ts
+    - name: Run typegen
+      shell: bash
+      if: steps.cache-typegen.outputs.cache-hit != 'true'
+      run: pnpm typegen

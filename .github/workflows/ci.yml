@@ -1,0 +1,72 @@
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - dev-v1 # TODO: remove after v1 is released
+
+jobs:
+  install:
+    name: Install dependencies
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/prepare
+
+  knip:
+    name: Knip
+    needs: install
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/prepare
+      - run: pnpm knip
+  spellcheck:
+    name: Spellcheck (cspell)
+    needs: install
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/prepare
+      - run: pnpm spellcheck
+  formatting:
+    name: Formatting check (prettier)
+    needs: install
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/prepare
+      - run: pnpm format:check
+  typecheck:
+    name: Typecheck (tsgo)
+    needs: install
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/prepare
+      - run: pnpm lint:types:go
+  eslint:
+    name: ESLint
+    needs: install
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/prepare
+      - run: pnpm lint:eslint
+  test-config:
+    name: Test config
+    needs: install
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/prepare
+      - run: pnpm test:config
+  build:
+    name: Build (tsdown) & lint public types (attw)
+    needs: install
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/prepare
+      - run: pnpm build && pnpm lint:public-types
