@@ -57,7 +57,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
   /**
    * Preserve the casing of the following words in headings and table headers which capitalization is enforced.
    *
-   * Will be merged with the plugin's [default words list](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/main/src/resources/preserve-words.ts).
+   * Will be merged with the plugin's [default words list](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/HEAD/src/resources/preserve-words.ts).
    *
    * You can use the array or the object syntax. The difference is that the object syntax allows to exclude some words from the default list by setting the value to `false`.
    *

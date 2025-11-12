@@ -218,25 +218,25 @@
   - ❓ [`no-uint8array-prototype-tohex`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-uint8array-prototype-tohex.html)
 - `eslint-plugin-html`: [8.1.2 → 8.1.3](https://github.com/BenoitZugmeyer/eslint-plugin-html/compare/v8.1.2...v8.1.3)
 - `eslint-plugin-jest`: [28.11.0 → 29.0.1](https://github.com/jest-community/eslint-plugin-jest/compare/v28.11.0...v29.0.1)
-  - 🟡 (enabled, warns) [`prefer-ending-with-an-expect`](https://github.com/jest-community/eslint-plugin-jest/blob/main/docs/rules/prefer-ending-with-an-expect.md)
+  - 🟡 (enabled, warns) [`prefer-ending-with-an-expect`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-ending-with-an-expect.md)
 - `eslint-plugin-jsdoc`: [50.6.14 → 61.1.12](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.14...v61.1.12)
-  - 🟢 (enabled) [`escape-inline-tags`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/escape-inline-tags.md)
-  - 🔴 (not enabled) [`prefer-import-tag`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/prefer-import-tag.md)
-  - 🔴 [`reject-any-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/reject-any-type.md)
-  - 🔴 [`reject-function-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/reject-function-type.md)
-  - 🔴 [`require-next-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-next-description.md)
-  - 🔴 [`require-tags`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-tags.md)
-  - 🔴 [`require-template-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-template-description.md)
-  - 🔴 [`require-throws-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-throws-description.md)
-  - 🔴 [`require-yields-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-yields-description.md)
-  - 🟡 (enabled, warns) [`require-next-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-next-type.md)
-  - 🟡 [`require-throws-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-throws-type.md)
-  - 🟡 [`require-yields-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/require-yields-type.md)
-  - 🟢 [`type-formatting`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/type-formatting.md)
-  - 🟢 [`ts-method-signature-style`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/ts-method-signature-style.md)
-  - 🟢 [`ts-no-empty-object-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/ts-no-empty-object-type.md)
-  - 🟢 [`ts-no-unnecessary-template-expression`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/ts-no-unnecessary-template-expression.md)
-  - 🟢 [`ts-prefer-function-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/main/docs/rules/ts-prefer-function-type.md)
+  - 🟢 (enabled) [`escape-inline-tags`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/escape-inline-tags.md)
+  - 🔴 (not enabled) [`prefer-import-tag`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/prefer-import-tag.md)
+  - 🔴 [`reject-any-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/reject-any-type.md)
+  - 🔴 [`reject-function-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/reject-function-type.md)
+  - 🔴 [`require-next-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-next-description.md)
+  - 🔴 [`require-tags`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-tags.md)
+  - 🔴 [`require-template-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-template-description.md)
+  - 🔴 [`require-throws-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-throws-description.md)
+  - 🔴 [`require-yields-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-yields-description.md)
+  - 🟡 (enabled, warns) [`require-next-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-next-type.md)
+  - 🟡 [`require-throws-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-throws-type.md)
+  - 🟡 [`require-yields-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-yields-type.md)
+  - 🟢 [`type-formatting`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/type-formatting.md)
+  - 🟢 [`ts-method-signature-style`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/ts-method-signature-style.md)
+  - 🟢 [`ts-no-empty-object-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/ts-no-empty-object-type.md)
+  - 🟢 [`ts-no-unnecessary-template-expression`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/ts-no-unnecessary-template-expression.md)
+  - 🟢 [`ts-prefer-function-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/ts-prefer-function-type.md)
 - `@stylistic/eslint-plugin`: [4.2.0 → 5.5.0](https://github.com/eslint-stylistic/eslint-stylistic/compare/v4.2.0...v5.5.0)
 - `eslint-plugin-json-schema-validator`: [5.4.0 → 5.5.0](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v5.4.0...v5.5.0)
 - `eslint-plugin-jsonc`: [2.20.0 → 2.21.0](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v2.20.0...v2.21.0)
@@ -296,18 +296,18 @@
   - 🟢 (enabled) [`yaml-valid-packages`](https://github.com/antfu/pnpm-workspace-utils/blob/HEAD/packages/eslint-plugin-pnpm/src/rules/yaml/yaml-valid-packages.ts#L29)
 - `eslint-plugin-tailwindcss`: [3.18.0 → 3.18.2](https://github.com/francoismassart/eslint-plugin-tailwindcss/compare/v3.18.0...v3.18.2)
 - `eslint-plugin-unicorn`: [59.0.1 → 62.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v59.0.1...v62.0.0)
-  - 🟢 (enabled) [`no-array-reverse`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-array-reverse.md)
-  - 🟢 [`no-useless-error-capture-stack-trace`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-useless-error-capture-stack-trace.md)
-  - 🟢 [`prefer-class-fields`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-class-fields.md)
-  - 🟢 [`require-module-specifiers`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/require-module-specifiers.md)
-  - 🟢 [`prefer-bigint-literals`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-bigint-literals.md)
-  - 🟢 [`prefer-classlist-toggle`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-classlist-toggle.md)
-  - 🟢 [`require-module-attributes`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/require-module-attributes.md)
-  - 🟢 [`no-array-sort`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-array-sort.md)
-  - 🟢 [`no-immediate-mutation`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-immediate-mutation.md)
-  - 🟢 [`no-useless-collection-argument`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-useless-collection-argument.md)
-  - 🟢 [`prefer-response-static-json`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-response-static-json.md)
-- `eslint-plugin-sonarjs`: [3.0.2 → 3.0.5](https://github.com/SonarSource/SonarJS/blob/master/packages/jsts/src/rules/CHANGELOG.md)
+  - 🟢 (enabled) [`no-array-reverse`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-array-reverse.md)
+  - 🟢 [`no-useless-error-capture-stack-trace`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-error-capture-stack-trace.md)
+  - 🟢 [`prefer-class-fields`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-class-fields.md)
+  - 🟢 [`require-module-specifiers`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-module-specifiers.md)
+  - 🟢 [`prefer-bigint-literals`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-bigint-literals.md)
+  - 🟢 [`prefer-classlist-toggle`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-classlist-toggle.md)
+  - 🟢 [`require-module-attributes`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-module-attributes.md)
+  - 🟢 [`no-array-sort`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-array-sort.md)
+  - 🟢 [`no-immediate-mutation`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-immediate-mutation.md)
+  - 🟢 [`no-useless-collection-argument`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-collection-argument.md)
+  - 🟢 [`prefer-response-static-json`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-response-static-json.md)
+- `eslint-plugin-sonarjs`: [3.0.2 → 3.0.5](https://github.com/SonarSource/SonarJS/blob/HEAD/packages/jsts/src/rules/CHANGELOG.md)
   - `no-invalid-await` rule got removed.
   - `no-one-iteration-loop` rule got removed.
 - `tailwind-csstree`: [0.1.2 → 0.1.4](https://github.com/humanwhocodes/tailwind-csstree/compare/tailwind-csstree-v0.1.2...tailwind-csstree-v0.1.4)
@@ -400,19 +400,19 @@
 ### Dependencies
 
 - `eslint-plugin-unicorn`: [58.0.0 → 59.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v58.0.0...v59.0.0)
-  - 🟢 (enabled) [`prefer-import-meta-properties`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-import-meta-properties.md) enabled in `node` config if detected supported Node.js version is a subset of `>=20.11` version range.
-  - 🟢 [`no-unnecessary-array-flat-depth`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unnecessary-array-flat-depth.md)
-  - 🟢 [`no-unnecessary-array-splice-count`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unnecessary-array-splice-count.md)
-  - [**BREAKING**] `no-array-push-push` renamed to [`prefer-single-call`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-single-call.md)
-  - [**BREAKING**] `no-length-as-slice-end` renamed to [`no-unnecessary-slice-end`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-unnecessary-slice-end.md)
+  - 🟢 (enabled) [`prefer-import-meta-properties`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-import-meta-properties.md) enabled in `node` config if detected supported Node.js version is a subset of `>=20.11` version range.
+  - 🟢 [`no-unnecessary-array-flat-depth`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-array-flat-depth.md)
+  - 🟢 [`no-unnecessary-array-splice-count`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-array-splice-count.md)
+  - [**BREAKING**] `no-array-push-push` renamed to [`prefer-single-call`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-single-call.md)
+  - [**BREAKING**] `no-length-as-slice-end` renamed to [`no-unnecessary-slice-end`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-slice-end.md)
 - `@eslint-react/eslint-plugin`: [1.48.4 → 1.48.5](https://github.com/Rel1cx/eslint-react/compare/v1.48.4...v1.48.5)
 - `typescript-eslint`: [8.31.0 → 8.31.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.31.0...v8.31.1)
   - [**BREAKING**] [`no-unnecessary-condition`](https://typescript-eslint.io/rules/no-unnecessary-condition) autofix was previously disabled, but it's now downgraded to a suggestion, as a result it have lost the `disable-autofix` prefix.
 - `eslint-plugin-import-x`: [4.10.6 → 4.11.0](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.10.6...v4.11.0)
 - `eslint-plugin-jsdoc`: [50.6.9 → 50.6.11](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.9...v50.6.11)
 - `eslint-plugin-package-json`: [0.29.1 → 0.31.0](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.29.1...v0.31.0)
-  - 🔴 (off) [`restrict-dependency-ranges`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/restrict-dependency-ranges.md)
-  - 🔴 [`require-description`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-description.md)
+  - 🔴 (off) [`restrict-dependency-ranges`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-dependency-ranges.md)
+  - 🔴 [`require-description`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-description.md)
 - `eslint-plugin-perfectionist`: [4.10.1 → 4.12.3](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.10.1...v4.12.3)
 - `eslint-plugin-vue`: [10.0.0 → 10.0.1](https://github.com/vuejs/eslint-plugin-vue/compare/v10.0.0...v10.0.1)
 - `eslint-plugin-yml`: [1.17.0 → 1.18.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v1.17.0...v1.18.0)
@@ -446,7 +446,7 @@
 - `@eslint/markdown`: [6.3.0 → 6.4.0](https://github.com/eslint/markdown/compare/v6.3.0...v6.4.0)
   - Enabled parsing of Front Matter in YAML format by default.
 - `@vitest/eslint-plugin`: [1.1.37 → 1.1.43](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.1.37...v1.1.43)
-  - 🟢 (enabled) [`prefer-describe-function-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-describe-function-title.md)
+  - 🟢 (enabled) [`prefer-describe-function-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-describe-function-title.md)
 - `eslint-config-prettier`: [10.1.1 → 10.1.2](https://github.com/prettier/eslint-config-prettier/compare/v10.1.1...v10.1.2)
 - `eslint-import-resolver-typescript`: [3.9.1 → 4.3.4](https://github.com/import-js/eslint-import-resolver-typescript/compare/v3.9.1...v4.3.4)
 - `eslint-plugin-import-x`: [4.8.0 → 4.10.6](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.8.0...v4.10.6)
@@ -455,8 +455,8 @@
 - `eslint-plugin-jsonc`: [2.19.1 → 2.20.0](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v2.19.1...v2.20.0)
 - `eslint-plugin-n:` [17.16.2 → 17.17.0](https://github.com/eslint-community/eslint-plugin-n/compare/v17.16.2...v17.17.0)
 - `eslint-plugin-package-json`: [0.26.3 → 0.29.1](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.26.3...v0.29.1)
-  - 🔴 (off) [`require-engines`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-engines.md)
-  - 🔴 [`require-types`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-types.md)
+  - 🔴 (off) [`require-engines`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-engines.md)
+  - 🔴 [`require-types`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-types.md)
 - `eslint-plugin-unicorn`: [57.0.0 → 58.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v57.0.0...v58.0.0)
 - `eslint-plugin-qwik`: [1.12.1 → 1.13.0](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik%401.12.1...eslint-plugin-qwik%401.13.0)
 - `eslint-plugin-react-compiler`: 19.0.0-beta-ebf51a3-20250411 → 19.1.0-rc.1
@@ -559,11 +559,11 @@
   - [**BREAKING**] Claims to support only `eslint`>=9.20.0, but we haven't enforced this version range in `peerDependencies` in case it works fine with the older versions.
   - ESM only now.
   - ❌ (deprecated) `no-instanceof-builtins`
-  - 🟡 (warns) [`consistent-assert`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/consistent-assert.md)
-  - 🟢 (enabled) [`consistent-date-clone`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/consistent-date-clone.md)
-  - 🟢 [`no-accessor-recursion`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-accessor-recursion.md)
-  - 🟢 [`no-instanceof-builtins`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-instanceof-builtins.md)
-  - 🟢 [`no-named-default`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/no-named-default.md)
+  - 🟡 (warns) [`consistent-assert`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-assert.md)
+  - 🟢 (enabled) [`consistent-date-clone`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-date-clone.md)
+  - 🟢 [`no-accessor-recursion`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-accessor-recursion.md)
+  - 🟢 [`no-instanceof-builtins`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-instanceof-builtins.md)
+  - 🟢 [`no-named-default`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-named-default.md)
 - `@vitest/eslint-plugin`: 1.1.28 → 1.1.31
 - `eslint-import-resolver-typescript`: [3.7.0 → 3.8.3](https://github.com/import-js/eslint-import-resolver-typescript/compare/v3.7.0...v3.8.3)
 - `eslint-plugin-perfectionist`: 4.8.0 → 4.9.0
@@ -587,19 +587,19 @@
 - `@eslint/markdown`: 6.2.1 → 6.2.2
 - `@stylistic/eslint-plugin`: 2.13.0 → 3.1.0
 - `@vitest/eslint-plugin`: 1.1.25 → 1.1.28
-  - 🟡 (warns) [`require-mock-type-parameters`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/require-mock-type-parameters.md)
-  - 🔴 (off) [`prefer-strict-boolean-matchers`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-strict-boolean-matchers.md)
+  - 🟡 (warns) [`require-mock-type-parameters`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/require-mock-type-parameters.md)
+  - 🔴 (off) [`prefer-strict-boolean-matchers`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-strict-boolean-matchers.md)
 - `eslint-config-flat-gitignore`: 1.0.0 → 2.0.0
 - `eslint-merge-processors`: 1.0.0 → 2.0.0
 - `eslint-plugin-jsdoc`: 50.6.2 → 50.6.3
 - `eslint-plugin-jsonc`: 2.18.2 → 2.19.1
 - `eslint-plugin-package-json`: 0.20.0 → 0.26.0
-  - 🟢 (enabled) [`no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/no-empty-fields.md)
-  - 🟢 [`require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-version.md)
-  - 🟢 [`require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-name.md)
-  - 🔴 (off) [`require-author`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-author.md)
-  - 🔴 (off) [`require-keywords`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-keywords.md)
-  - 🔴 (off) [`require-files`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/require-files.md)
+  - 🟢 (enabled) [`no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md)
+  - 🟢 [`require-version`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-version.md)
+  - 🟢 [`require-name`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-name.md)
+  - 🔴 (off) [`require-author`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-author.md)
+  - 🔴 (off) [`require-keywords`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-keywords.md)
+  - 🔴 (off) [`require-files`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-files.md)
 - `eslint-plugin-perfectionist`: 4.6.0 → 4.8.0
 
 ## 0.4.1
@@ -619,7 +619,7 @@
 - `eslint-plugin-jest-extended`: 2.4.0 → 3.0.0
 - `eslint-plugin-jsdoc`: 50.6.1 → 50.6.2
 - `eslint-plugin-package-json`: 0.19.0 → 0.20.0
-  - Enabled a new [`no-redundant-files`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/main/docs/rules/no-redundant-files.md) rule.
+  - Enabled a new [`no-redundant-files`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-redundant-files.md) rule.
 - `eslint-plugin-prefer-arrow-functions`: 3.6.0 → 3.6.2
 - `eslint-plugin-tailwindcss`: 3.17.5 → 3.18.0
 
@@ -649,7 +649,7 @@
 
 ## 0.3.0
 
-- [**BREAKING**] [`prefer-inline` option of `import/no-duplicates` rule](https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/no-duplicates.md#inline-type-imports) is now set to `true`. Added an new option `noDuplicatesOptions` in `import` config to override this behavior.
+- [**BREAKING**] [`prefer-inline` option of `import/no-duplicates` rule](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-duplicates.md#inline-type-imports) is now set to `true`. Added an new option `noDuplicatesOptions` in `import` config to override this behavior.
 - [**BREAKING**] Removed `overridesPinia` option from `vue` config in favor of adding the ability to pass more usual config options in `pinia` option.
 - New config: `jest` via [`eslint-plugin-jest`](https://npmjs.com/eslint-plugin-jest), enabled automatically if `jest` package is installed.
 - New config: `jest-extended` via [`eslint-plugin-jest-extended`](https://npmjs.com/eslint-plugin-jest-extended), enabled automatically if **both** `jest` and `jest-extended` packages are installed.
@@ -673,8 +673,8 @@
 - `eslint-plugin-package-json`: 0.15.6 → 0.18.0
   - `overrides` collection is now sorted by default.
 - `eslint-plugin-promise`: 7.1.0 → 7.2.1
-  - [**BREAKING**] Replace `allowThen: true` with the new [`allowThenStrict: true`](https://github.com/eslint-community/eslint-plugin-promise/blob/main/docs/rules/catch-or-return.md#allowthenstrict) in `catch-or-return` rule.
-  - [**BREAKING**] Enabled a new [`prefer-catch`](https://github.com/eslint-community/eslint-plugin-promise/blob/main/docs/rules/prefer-catch.md) rule.
+  - [**BREAKING**] Replace `allowThen: true` with the new [`allowThenStrict: true`](https://github.com/eslint-community/eslint-plugin-promise/blob/HEAD/docs/rules/catch-or-return.md#allowthenstrict) in `catch-or-return` rule.
+  - [**BREAKING**] Enabled a new [`prefer-catch`](https://github.com/eslint-community/eslint-plugin-promise/blob/HEAD/docs/rules/prefer-catch.md) rule.
 - `eslint-plugin-toml`: 0.11.1 → 0.12.0
 - `eslint-plugin-vue`: 9.31.0 → 9.32.0
   - [**BREAKING**] Enabled a new [`slot-name-casing`](https://eslint.vuejs.org/rules/slot-name-casing.html) rule, which enforces `camelCase` for slot names.
@@ -718,7 +718,7 @@
 - New config: `packageJson` via [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json).
 - Dependencies:
   - `eslint-plugin-import-x`@4.4.0
-    - Enable `checkTypeImports` option for [`import/extensions`](https://github.com/un-ts/eslint-plugin-import-x/blob/master/docs/rules/extensions.md) rule.
+    - Enable `checkTypeImports` option for [`import/extensions`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/extensions.md) rule.
 
 ## 0.1.4
 
@@ -734,7 +734,7 @@
 - New config: `toml` via [`eslint-plugin-toml`](https://npmjs.com/eslint-plugin-toml).
 - Dependencies:
   - `eslint-plugin-unicorn`@56.0.0
-    - Enable [`unicorn/consistent-existence-index-check`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/consistent-existence-index-check.md) and [`unicorn/prefer-math-min-max`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/prefer-math-min-max.md) rules.
+    - Enable [`unicorn/consistent-existence-index-check`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-existence-index-check.md) and [`unicorn/prefer-math-min-max`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-math-min-max.md) rules.
   - `eslint-plugin-vue`@9.29.0
     - Enable [`vue/no-deprecated-delete-set`](https://eslint.vuejs.org/rules/no-deprecated-delete-set.html) rule for Vue 3.
 
@@ -772,7 +772,7 @@
 ## 0.0.7
 
 - Update dependencies. Highlights:
-  - Enable new rule: [`promise/spec-only`](https://github.com/eslint-community/eslint-plugin-promise/blob/main/docs/rules/spec-only.md).
+  - Enable new rule: [`promise/spec-only`](https://github.com/eslint-community/eslint-plugin-promise/blob/HEAD/docs/rules/spec-only.md).
 - Ensure type safety of `overrides` option.
 - Set `allowChildren: true` for `vuejs-accessibility/label-has-for`.
 

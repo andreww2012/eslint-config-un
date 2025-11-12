@@ -44,7 +44,7 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    *
    * Will be assigned to `languageOptions.parserOptions` in the resulting flat config
    * and applied to the specified `files` and `ignores`.
-   * @see https://github.com/yeonjuan/html-eslint/blob/main/docs/integrating-template-engine.md
+   * @see https://github.com/yeonjuan/html-eslint/blob/HEAD/docs/integrating-template-engine.md
    */
   parserOptions?: HtmlEslintParserOptions;
 }
