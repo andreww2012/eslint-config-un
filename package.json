@@ -505,7 +505,7 @@
     "eslint-plugin-prettier",
     "eslint-plugin-no-type-assertion"
   ],
-  "packageManager": "pnpm@10.18.0",
+  "packageManager": "pnpm@10.22.0",
   "engines": {
     "node": "^20.19 || ^22.16.0 || >=24"
   }
