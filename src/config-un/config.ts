@@ -1,3 +1,4 @@
+import {isMainThread} from 'node:worker_threads';
 import consola from 'consola';
 import createDebug from 'debug';
 import globals from 'globals';
@@ -84,11 +85,16 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
   logger.addReporter({
     log(logObj) {
       if (logObj.type === 'fatal') {
-        // eslint-disable-next-line unicorn/no-process-exit
         process.exit(1);
       }
     },
   });
+  // TODO come up with better solution
+  // Prevents logging the same messages when eslint is ran in the concurrent mode
+  if (!isMainThread) {
+    logger.pauseLogs();
+  }
+
   const debug = createDebug('eslint-config-un');
 
   debug('Initialization');
