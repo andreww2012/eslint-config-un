@@ -5,6 +5,7 @@ import type {
   Variables as BetterTailwindcssVariables,
 } from 'eslint-plugin-better-tailwindcss/api/types';
 import {ERROR, OFF, WARNING} from '../constants';
+import type {RequireExactlyOne} from '../types';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -19,8 +20,10 @@ export interface BetterTailwindEslintConfigOptions<ExtraPlugins extends ExtraPlu
    * [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `better-tailwindcss` property and applied to the specified `files` and `ignores`.
+   *
+   * Note: you MUST specify either `entryPoint` (for Tailwind 4) or `tailwindConfig` (for Tailwind 3).
    */
-  settings?: {
+  settings: RequireExactlyOne<{
     /**
      * [Tailwind 4 only] The path to the entry file of the css based Tailwind config
      */
@@ -30,7 +33,7 @@ export interface BetterTailwindEslintConfigOptions<ExtraPlugins extends ExtraPlu
      * [Tailwind 3 only] The path to the Tailwind config file (e.g.: `tailwind.config.js`)
      */
     tailwindConfig?: string;
-
+  }> & {
     /**
      * From plugin docs:
      * The path to the `tsconfig.json` file. If not specified, the plugin will try to find it automatically.
@@ -97,7 +100,7 @@ export default ((context, optionsRaw) => {
   const tailwindRealMajorVersion = tailwindPackageInfo?.versions.major;
   const tailwindMajorVersion = tailwindRealMajorVersion === 3 ? 3 : 4;
 
-  if (tailwindRealMajorVersion === 4 && !pluginSettings?.entryPoint) {
+  if (tailwindRealMajorVersion === 4 && !pluginSettings.entryPoint) {
     context.logger.warn(
       "[betterTailwind] You haven't specified `settings.entryPoint` option which is required for `eslint-plugin-better-tailwindcss` to work properly with Tailwind 4",
     );
@@ -119,11 +122,9 @@ export default ((context, optionsRaw) => {
 
   configBuilder
     ?.addConfig(['better-tailwindcss', {includeDefaultFilesAndIgnores: true}], {
-      ...(pluginSettings && {
-        settings: {
-          'better-tailwindcss': pluginSettings,
-        },
-      }),
+      settings: {
+        'better-tailwindcss': pluginSettings,
+      },
     })
     .markCategory('Stylistic rules')
     .addRule(
