@@ -20,6 +20,7 @@ export type {
   Simplify as Prettify,
   SimplifyDeep as PrettifyDeep,
   ReadonlyDeep,
+  RequireExactlyOne,
   SetRequired,
   Subtract,
   ValueOf as ObjectValues,

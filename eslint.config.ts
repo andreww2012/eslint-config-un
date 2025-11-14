@@ -1,5 +1,6 @@
 import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
 import {eslintConfig, isInCi} from './src';
+import {forbidImportingFromUtilityLibraries} from './src/snippets';
 
 const TEST_DIR_GLOB = ['test/**/*'];
 
@@ -165,12 +166,11 @@ export default eslintConfig({
           2,
           {
             patterns: [
-              {
-                regex:
-                  '^(?:local-pkg|type-fest|klona|@antfu/utils|defu|es-toolkit|remeda|node:util|destr|string-ts)$',
+              forbidImportingFromUtilityLibraries({
+                packageNames: {'local-pkg': true, klona: true, defu: true, destr: true},
                 message:
-                  'Please do not use this package directly, import utility functions from `utils.ts` instead',
-              },
+                  'Please do not use this package directly, import utilities from `utils.ts` or `types.ts` instead',
+              }),
             ],
           },
         ],
