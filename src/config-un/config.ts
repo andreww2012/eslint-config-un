@@ -3,15 +3,7 @@ import consola from 'consola';
 import createDebug from 'debug';
 import globals from 'globals';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
-import {
-  type EslintConfigUnInternalOptions,
-  type EslintConfigUnOptions,
-  type ExtraPluginsType,
-  type UnConfigContext,
-  type UnConfigFn,
-  type UnConfigs,
-  createConfigBuilder as createConfigBuilderWithContext,
-} from '../configs';
+import type {UnConfigs} from '../configs';
 import {
   CHECKED_LODASH_METHODS,
   DEFAULT_GLOBAL_IGNORES,
@@ -58,6 +50,14 @@ import {
 import {getIsConfigEnabled as getIsConfigEnabledContextless} from './config-utils';
 import type {FastImportPluginSettings} from './fast-import';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
+import {
+  type EslintConfigUnInternalOptions,
+  type EslintConfigUnOptions,
+  type ExtraPluginsType,
+  type UnConfigContext,
+  type UnConfigFn,
+  createConfigBuilder as createConfigBuilderWithContext,
+} from './shared';
 
 const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
   'curly',

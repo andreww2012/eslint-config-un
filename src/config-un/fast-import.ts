@@ -1,8 +1,8 @@
-import type {UnConfigContext} from '../configs';
 import type {EslintPlugin, RuleNamesForPlugin} from '../eslint';
 import type {PluginPrefix} from '../loaders';
 import type {NonEmptyTuple} from '../types';
 import {objectEntriesUnsafe} from '../utils';
+import type {UnConfigContext} from './shared';
 
 export type {FastImportPluginSettings} from '../configs/fast-import';
 

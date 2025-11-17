@@ -1,8 +1,9 @@
+import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YAML} from '../constants';
 import type {AllEslintRuleNames} from '../eslint';
 import {pick} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
-import type {ExtraPluginsType, GetRuleOptions, UnConfigContext, UnConfigOptions} from '.';
+import type {ExtraPluginsType, GetRuleOptions, UnConfigOptions} from '.';
 
 export const generateDefaultTestFiles = <T extends string>(
   extensions: T,

@@ -1,5 +1,5 @@
 import {eslintConfigInternal} from './config-un/config';
-import type {EslintConfigUnOptions, ExtraPluginsType} from './configs';
+import type {EslintConfigUnOptions, ExtraPluginsType} from './config-un/shared';
 
 export const eslintConfig = <const ExtraPlugins extends ExtraPluginsType = never>(
   options: EslintConfigUnOptions<ExtraPlugins> = {},

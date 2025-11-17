@@ -1,5 +1,5 @@
 import type Eslint from 'eslint';
-import type {UnConfigContext} from '../configs';
+import type {UnConfigContext} from '../config-un/shared';
 import {OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import type {Promisable} from '../types';
 import {type MaybeArray, arraify, interopDefault, isIn} from '../utils';

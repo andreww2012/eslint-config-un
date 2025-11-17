@@ -7,7 +7,7 @@ import type Eslint from 'eslint';
 import {builtinRules as eslintBuiltinRules} from 'eslint/use-at-your-own-risk';
 // @ts-expect-error no typings
 import ruleComposer from 'eslint-rule-composer';
-import type {ExtraPluginsType, UnConfigContext} from './configs';
+import type {ExtraPluginsType, UnConfigContext} from './config-un/shared';
 import {
   GLOB_CSS,
   GLOB_HTML_ALL,

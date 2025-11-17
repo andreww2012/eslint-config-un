@@ -6,7 +6,6 @@ import * as packageUtils from 'empathic/package';
 import type {Ms} from 'ms-ts';
 import {LOCKS as packageManagerLockfilesReversed} from 'package-manager-detector/constants';
 import {exec} from 'tinyexec';
-import type {UnConfigContext} from '../configs';
 import type {FlatConfigEntry} from '../eslint';
 import type {LoadablePackagePrefix, PackageToLoadInfo, ParserPrefix} from '../loaders';
 import type {SetFieldType} from '../types';
@@ -19,6 +18,7 @@ import {
   readAndParseJson,
   readFileSafe,
 } from '../utils';
+import type {UnConfigContext} from './shared';
 
 const sha256 = (input: string | Buffer) => {
   const hashInstance = crypto.createHash('sha256');

@@ -1,5 +1,4 @@
 import {renderTable} from 'console-table-printer';
-import type {EslintConfigUnOptions, UnConfigContext} from '../configs';
 import {
   type DisableAutofixPrefix,
   type EslintPlugin,
@@ -35,6 +34,7 @@ import {
 import type {CacheDataInFs} from './cache';
 import {replaceImportRulesImplementationWithFastPlugin} from './fast-import';
 import {checkIfModuleCorrectlyLoaded} from './is-module-loaded';
+import type {EslintConfigUnOptions, UnConfigContext} from './shared';
 
 // NOTE: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs
 const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
