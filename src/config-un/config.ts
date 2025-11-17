@@ -167,7 +167,12 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
         pluginConfig.plugins = plugins;
       }
 
-      return configFromFsCache.configs;
+      const finalConfig = configFromFsCache.configs;
+
+      debug('Saving config restored from the file system cache to memory');
+      await saveCacheToMemory(context, {config: finalConfig});
+
+      return finalConfig;
     }
 
     debug("Could not restore configs from cache - it's either stale or an error occurred");
