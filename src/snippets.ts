@@ -60,7 +60,7 @@ export const forbidImportingFromUtilityLibraries = ({
 } = {}): NoRestrictedImportsEntry => {
   const forbiddenPackages = getKeysOfTruthyValues({...UTILITY_PACKAGES, ...packageNames});
   return {
-    regex: `^(?:${forbiddenPackages.join('|')})(?:/.*)?$`,
+    regex: `^(?:${forbiddenPackages.join('|').replaceAll('.', String.raw`\.`)})(?:/.*)?$`,
     ...(message && {message}),
   };
 };
