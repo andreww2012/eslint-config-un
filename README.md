@@ -513,15 +513,11 @@ If `markdown` config is enabled (which is the default), the same rules provided 
 
 But applying certain rules for code blocks might not be desirable because some of them are too strict for the code that won't be executed anyway or even unfixable (like missing imports). You can find the full list of disabled rules in `src/configs/markdown.ts` file.
 
-## Other root options
+## Root options
 
 ### `ignores`
 
-Specifies a list of globally ignored files. By default will be merged with our ignore patterns, unless `overrideIgnores` is set to `true`.
-
-### `overrideIgnores`
-
-Set to `true` if you don't want `ignores` to be merged with our ignore patterns, which are `['**/dist']`.
+Specifies a list of globally ignored files. By default will be merged with our ignore patterns, unless the object notation is used and the `override` property is set to `true`.
 
 ### `gitignore`
 

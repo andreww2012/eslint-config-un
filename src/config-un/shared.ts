@@ -29,19 +29,18 @@ export type ExtraPluginsType = Record<string, () => Promisable<EslintPlugin>>;
 
 export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = never> {
   /**
-   * **Global** ignore patterns. By default will be merged with our ignore patterns, unless `overrideIgnores` is set to `true`
+   * **Global** ignore patterns. By default will be merged with our ignore patterns, unless the object notation is used and `override` option is set to `true`
    */
-  ignores?: FlatConfigEntry['ignores'];
+  ignores?:
+    | FlatConfigEntry['ignores']
+    | {
+        files: string[];
+        override?: boolean;
+      };
 
   /**
-   * `ignores` patterns override, not merge with the ignore patterns suggested by our config
-   * @default false
-   */
-  overrideIgnores?: boolean;
-
-  /**
-   * Automatically add gitignore'd files to `ignores` array.
-   * @default true <=> `.gitignore` exists
+   * Automatically add gitignore'd files to the global `ignores` array.
+   * @default true <=> `.gitignore` exists on the same level on which ESLint config file is placed
    */
   gitignore?: boolean | FlatGitignoreOptions;
 
