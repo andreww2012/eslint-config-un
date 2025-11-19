@@ -501,7 +501,7 @@ We detect the version of the used frontend framework (Angular, Vue, Svelte, etc.
 
 #### Vue
 
-By default, TypeScript rules will be enabled in `.vue` files if `enforceTypescriptInScriptSection` is set to true in vue's config options which in turn is *automatically* set to true if `ts` config is enabled. If you have `.vue` files authored in both TypeScript and JavaScript, use `enforceTypescriptInScriptSection.{files,ignores}` to manually specify TS & JS Vue components respectively. It is not currently possible to apply different ESLint rules depending on the value of `lang` attribute of `<script>` SFC section.
+By default, TypeScript rules will be enabled in `.vue` files if `enforceTypescriptInScriptSection` is set to `true` in vue's config options which in turn is *automatically* set to `true` if `ts` config is enabled. If you have `.vue` files authored in both TypeScript and JavaScript, use `enforceTypescriptInScriptSection.{files,ignores}` to manually specify TS & JS Vue components respectively. It is not currently possible to apply different ESLint rules depending on the value of `lang` attribute of `<script>` SFC section.
 
 #### Angular
 
@@ -509,7 +509,7 @@ We support Angular versions from 13 to 20, all at once. You are expected to inst
 
 #### React
 
-We use rules from several plugins to lint your React code. You will be able to choose whether you would like to use only `eslint-plugin-react` or `@eslint-react/eslint-plugin`, or both, which is the default.
+We use rules from several plugins to lint your React code. You will be able to choose whether you would like to use only `@eslint-react/eslint-plugin` or `eslint-plugin-react`, or both, which is the default.
 
 ### Markdown
 
@@ -539,13 +539,13 @@ See [Rules configuration](#rules-configuration-configs-and-extraconfigs-option).
 
 ### `ignores`
 
-Specifies a list of globally ignored files. By default will be merged with our ignore patterns, unless the object notation is used and the `override` property is set to `true`.
+Specifies a list of globally ignored files. By default will be merged with our ignore patterns (also exported as [`DEFAULT_GLOBAL_IGNORES`](#default_global_ignores)), unless the object notation is used and the `override` property is set to `true`.
 
 ### `extraPlugins`
 
 Allows to provide additional ESLint plugins. Their prefixes and possibly rule names will appear in configs' `rules` property type. They, like all the built-in plugins, by default will be loaded only if used.
 
-Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`) or even prefixes you've set via `pluginRenames`.
+Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`) or even prefixes you've set via [`pluginRenames`](#pluginrenames).
 
 ### `defaultConfigsStatus`
 
@@ -560,7 +560,7 @@ Type of your project, either application (`app`, default) or library (`lib`). Wi
 
 ### `forceSeverity`
 
-Globally forces non-zero severity of all the rules configured by eslint-config-un (i.e. not within `overrides`, `overridesAny` or `extraConfigs`). This can also be configured per-config.
+Globally forces non-zero severity of all the rules configured by eslint-config-un (i.e. not within `overrides`, `overridesAny` or [`extraConfigs`](#extraconfigs)). This can also be configured per-config.
 
 ### `pluginRenames`
 
@@ -582,11 +582,13 @@ See [Globally disabling rule autofix](#globally-disabling-rule-autofix).
 
 ### `gitignore`
 
-By default files from `.gitignore` (read from [the current working directory](https://nodejs.org/api/process.html#processcwd)) in the will be automatically added to the global `ignores` list. Set this option to `false` to disable this behavior. You may also provide an object which configures [eslint-config-flat-gitignore](https://npmjs.com/eslint-config-flat-gitignore), which actually provides this functionality.
+By default files from `.gitignore` (read from [the current working directory](https://nodejs.org/api/process.html#processcwd)) in the will be automatically added to the global [`ignores`](#ignores) list. Set this option to `false` to disable this behavior. You may also provide an object which configures [eslint-config-flat-gitignore](https://npmjs.com/eslint-config-flat-gitignore), which actually provides this functionality.
 
 ### `offlineMode`
 
 Enables "Offline mode" which can be useful to (temporarily) disable rules performing network requests, such as [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html).
+
+It can also be enabled by setting `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable to non-empty string, but the explicitly passed value takes precedence.
 
 ### `cacheConfigs`
 
@@ -604,8 +606,6 @@ Cache will be stored in `node_modules/.cache/eslint-config-un/config.json` and c
 ### `disablePrettierIncompatibleRules`
 
 Disables rules that are potentially conflicting with Prettier. [`eslint-config-prettier`](https://npmjs.com/eslint-config-prettier) is used under the hood, with a few exceptions. Defaults to `true` if `prettier` package is installed.
-
-It can also be enabled by setting `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable to non-empty string, but the explicitly passed value takes precedence.
 
 ### `useFastImport`
 
@@ -661,7 +661,7 @@ Alternatively, you can `await` the `eslintConfig()` function and then add your o
 
 ### Do I have to install any of the used plugins?
 
-Most used packages are direct dependencies on this package, but the rest are optional peer dependencies which means you're responsible for making sure they're installed. eslint-config-un will refuse to work if a plugin is used but not installed.
+Many plugins are direct dependencies on this package, but the rest (the majority) are optional peer dependencies which means you're responsible for making sure they're installed. eslint-config-un will refuse to work if a plugin is used but not installed. Please run ESLint with our config once to get the list of dependencies to be installed manually.
 
 ### How do I know how eslint-config-un configures rules?
 
@@ -669,11 +669,11 @@ It's too much to document, so please have a look at the source code of our confi
 
 ### How does exactly eslint-config-un knows if some package is installed?
 
-We use [`import-meta-resolve`](https://npmjs.com/import-meta-resolve) package to detect if the package is installed and resolve the path to its' package.json.
+We use [`import-meta-resolve`](https://npmjs.com/import-meta-resolve) package to detect if the package is installed and resolve the path to its' `package.json`.
 
 ### How can I know which configs will be enabled, for which rules autofix will be disabled, etc.?
 
-You can enable the debug mode by setting `DEBUG=eslint-config-un` environment variable when running ESLint command. We use [`debug` package](http://npmjs.com/debug) to print debug messages, so please refer to its documentation for more info.
+You can enable the debug mode by setting `DEBUG=eslint-config-un` environment variable when running ESLint command. We use [`debug` package](https://npmjs.com/debug) to print debug messages, so please refer to its documentation for more info.
 
 Alternatively, you can use [`@eslint/config-inspector`](https://npmjs.com/@eslint/config-inspector) to inspect the final config.
 
@@ -692,12 +692,10 @@ Install `globals` package as a dev dependency.
 
 If you would like not to wait until the dependencies of `eslint-config-un` are updated or by whatever other reason you need to install a different version of a dependency, you can do that using your package manager's settings for all but the following packages:
 
-| Package name                                                                                                         | Reason                                                                           |
-| -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [`eslint-plugin-prettier`](https://npmjs.com/eslint-plugin-prettier)                                                 | Patched by us to enable formatting of "fenced code blocks" inside Markdown files |
-| [`eslint-plugin-no-type-assertion`](https://npmjs.com/eslint-plugin-no-type-assertion)                               | Has outdated requirements of peer dependencies                                   |
-| [`@angular-eslint/eslint-plugin-template@17.5.3`](https://npmjs.com/@angular-eslint/eslint-plugin-template/v/17.5.3) | Old version with outdated requirements of peer dependencies                      |
-| [`@angular-eslint/eslint-plugin@18.4.3`](https://npmjs.com/@angular-eslint/eslint-plugin-template/v/18.4.3)          | ^                                                                                |
+| Package name                                                                           | Reason                                                                           |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| [`eslint-plugin-no-type-assertion`](https://npmjs.com/eslint-plugin-no-type-assertion) | Has outdated requirements of peer dependencies                                   |
+| [`eslint-plugin-prettier`](https://npmjs.com/eslint-plugin-prettier)                   | Patched by us to enable formatting of "fenced code blocks" inside Markdown files |
 
 [@eslint-react/eslint-plugin]: https://npmjs.com/@eslint-react/eslint-plugin
 [Angular]: ./assets/devicon-angular.svg
