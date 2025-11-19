@@ -517,6 +517,18 @@ If `markdown` config is enabled (which is the default), the same rules provided 
 
 But applying certain rules for code blocks might not be desirable because some of them are too strict for the code that won't be executed anyway or even unfixable (like missing imports). You can find the full list of disabled rules in `src/configs/markdown.ts` file.
 
+### Tailwind CSS
+
+There exists two plugins working with Tailwind:
+
+| Package name                                                                             | Default plugin prefix | Supported Tailwind versions (declared in `peerDependencies`) |
+| ---------------------------------------------------------------------------------------- | --------------------- | ------------------------------------------------------------ |
+| [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss) | `better-tailwindcss`  | `^3.3.0 \|\| ^4.1.6`                                         |
+| [`eslint-plugin-tailwindcss`](https://npmjs.com/eslint-plugin-tailwindcss)               | `tailwindcss`         | `^3.4.0`                                                     |
+
+We highly recommend using the former because it supports Tailwind v4 and as of time of writing it is better maintained and more actively updated.
+In addition, if you don't like the verbosity of the default prefix, you can use [`pluginRenames` option](#pluginrenames) to rename it to simply `tailwindcss` or `tailwind`.
+
 ## Root options
 
 ### `configs`

@@ -31,7 +31,7 @@ export default eslintConfig({
     },
     markdownPreferences: {
       ignores: ['LICENSE.md'],
-      wordsToPreserveCasingOf: ['eslint-config-un', 'Description/Notes'],
+      wordsToPreserveCasingOf: ['eslint-config-un', 'Description/Notes', 'Tailwind'],
       overrides: {
         'markdown-preferences/sort-definitions': 2,
       },
