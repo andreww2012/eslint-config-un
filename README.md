@@ -677,6 +677,38 @@ You can enable the debug mode by setting `DEBUG=eslint-config-un` environment va
 
 Alternatively, you can use [`@eslint/config-inspector`](https://npmjs.com/@eslint/config-inspector) to inspect the final config.
 
+## Migrating existing codebase to eslint-config-un
+
+### Prerequisites
+
+Node.JS and ESLint satisfy [minimum required versions](#installation). Please don't attempt to migrate to ESLint 9 and eslint-config-un at the same time.
+
+### Migration guide
+
+<!-- eslint-disable-next-line markdown-preferences/ordered-list-marker-start -->
+0. Remove **ALL** ESLint related dependencies - be it plugins, parsers, whatever else or `eslint` itself. This ensures correct versions of plugins will be resolved by eslint-config-un and saves you from other weird and hard to debug problems. We recommend that every and sub-step below is done in a separate commit and in a separate git branch.
+1. If you're using `.js` config file, we highly recommend that you migrate to `.ts` one, or at least add `@ts-check` TypeScript directive. Please don't forget install [`jiti`](https://npmjs.com/jiti) for ESLint to able be to read your TypeScript config file.
+2. Set up eslint-config-un minimally and run ESLint for the first time (you may comment out the old config for now). The list of dependencies to be installed will *likely* be shown. Please review whether those plugins are actually used/needed and act accordingly: install necessary plugins and disable configs which require packages you do not wish to install.
+3. Following your intuition or/and configs' options JSDoc documentation, migrate the existing config to the closest eslint-config-un equivalent. Likely plenty of other rules will be enabled.
+4. Set `configs.noStylisticRules` to `true` to disable purely stylistic rules and run ESLint for the first time with the new config. Please don't use `--fix` option - this may complicate things as you will have less idea of what's changed (plus some autofixes may be unsafe to automatically apply). Thoroughly go through the report and:
+   - Decide which rules need to be disabled, enabled or changed the options of;
+   - Decide which `eslint-ignore` comments are no longer relevant and should be removed;
+   - Possibly set `ts.allowDefaultProject` to include files which are not part of any TypeScript project (tsconfig file), but for which TypeScript type-aware rules (rules requiring type information) should still work. Conversely, if for some files type-aware linting should be disabled, specify them in `ts.configTypeAware.ignores` option (or set `ts.configTypeAware` to `false` to disable type-aware linting altogether);
+   - Add `<!-- eslint-skip -->` comments before fenced code blocks in Markdown files for which code parsing is failing;
+   - Fix/resolve any other issues and difficulties.
+5. Now, enable stylistic rules only and fix them by running ESLint with `--fix --fix-type problem,suggestion,layout` (the latter flag ensures auto removal of "unused" `eslint-disable` comments is off):
+
+```ts
+noStylisticRules: {
+  enableRules: {
+    rules: true,
+    disableAllOtherRules: true,
+  },
+}
+```
+
+6. Remove `noStylisticRules` config and probably re-run ESLint as you would do normally to make sure everything is working as intended.
+
 ## Troubleshooting & caveats
 
 ### Why are there reports from `node` plugin in my frontend code?
