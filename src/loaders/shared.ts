@@ -50,10 +50,10 @@ export function genModuleLoader<T, Property extends string, N extends string>(
   const loader: ModuleLoader<T, Property, N>[Property] = async (context, options) => {
     const isPluginOptionalPeerDependency = packageName in OPTIONAL_PEER_DEPENDENCIES;
     try {
-      const {pluginsOverrides} = context.rootOptions;
+      const {pluginOverrides} = context.rootOptions;
       const providedPlugin =
-        pluginsOverrides && isIn(property, pluginsOverrides)
-          ? (pluginsOverrides[property] as T)
+        pluginOverrides && isIn(property, pluginOverrides)
+          ? (pluginOverrides[property] as T)
           : null;
       return {module: providedPlugin || (await interopDefault(module())), packageName};
     } catch (error: unknown) {

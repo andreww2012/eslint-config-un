@@ -42,7 +42,7 @@ pnpm i -D eslint-config-un eslint@latest
 yarn add -D eslint-config-un eslint@latest # Yarn Berry only (v2+)
 ```
 
-Commonly used plugins are direct dependencies of this package, you don't need to install them separately. We aim to update the dependencies within 1 month after their release. You can always override plugins' implementation with [`pluginsOverrides` option](#pluginoverrides) or using your package manager's overrides functionality.
+Commonly used plugins are direct dependencies of this package, you don't need to install them separately. We aim to update the dependencies within 1 month after their release. You can always override plugins' implementation with [`pluginOverrides` option](#pluginoverrides) or using your package manager's overrides functionality.
 
 Certain plugins (usually framework/library specific ones) are optional peer dependencies, which means that you need to install them manually if they are end up being used. You need to run ESLint with our config once to find out which plugins should be installed manually.
 
@@ -554,7 +554,7 @@ Globally forces non-zero severity of all the rules configured by eslint-config-u
 
 See [Plugin prefixes](#plugin-prefixes-pluginrenames-option).
 
-### `pluginsOverrides`
+### `pluginOverrides`
 
 Override implementation of some of the plugins. This can be useful when this config is used to lint a repository of one of the built-in plugins to provide development version of that plugin.
 

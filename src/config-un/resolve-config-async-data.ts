@@ -134,9 +134,9 @@ export const resolveConfigAsyncData = async (
         }
         if (pluginPrefix) {
           const isProvided =
-            rootOptions.pluginsOverrides?.[pluginPrefix as Exclude<PluginPrefix, ''>] != null;
+            rootOptions.pluginOverrides?.[pluginPrefix as Exclude<PluginPrefix, ''>] != null;
           debug(
-            `Plugin \`${stylePluginPrefix(pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginsOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
+            `Plugin \`${stylePluginPrefix(pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
           );
         }
         return plugin ? ([pluginPrefix, plugin] as const) : null;

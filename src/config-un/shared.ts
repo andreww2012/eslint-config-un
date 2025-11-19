@@ -113,7 +113,7 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    * when this config is used to lint a repository of one of the built-in plugins
    * to provide development version of that plugin.
    */
-  pluginsOverrides?: {
+  pluginOverrides?: {
     [Plugin in Exclude<PluginPrefix, ''>]?: Plugin extends keyof typeof pluginsLoaders
       ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
       : EslintPlugin;

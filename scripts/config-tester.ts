@@ -7,7 +7,7 @@ const {plugin: pluginAngular, pluginTemplate: pluginAngularTemplate} =
 await eslintConfigInternal(
   {
     loadPluginsOnDemand: false,
-    pluginsOverrides: {
+    pluginOverrides: {
       '@angular-eslint': pluginAngular,
       '@angular-eslint/template': pluginAngularTemplate,
     },

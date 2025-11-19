@@ -57,7 +57,7 @@
 - [**BREAKING**] Start using [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x) plugin instead of [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y) for `jsx-a11y` config as it has much less dependencies.
 - [**BREAKING**] `overrideIgnores` root option removed in favor of `ignores.override`.
 - Added a new root option, `defaultConfigsStatus`, to control what configs are enabled or disabled by default. As a result, shared settings prefix has been changed from `jsx-a11y` to `jsx-a11y-x`.
-- Added the ability to override any of the used plugins via `pluginsOverrides` option.
+- Added the ability to override any of the used plugins via `pluginOverrides` option.
 - Exported `isInCi` helper from `ci-info` package.
 - Introduced "Offline mode" which can be useful to (temporarily) disable rules performing network requests, such as [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html). It can be enabled via `offlineMode` root option or by setting `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable to non-empty string.
 - Added a new root option, `useFastImports`, to override certain [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import).
