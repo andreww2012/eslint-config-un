@@ -667,6 +667,10 @@ Alternatively, you can use [`@eslint/config-inspector`](https://npmjs.com/@eslin
 
 ## Troubleshooting & caveats
 
+### Why are there reports from `node` plugin in my frontend code?
+
+All code is assumed to be Node.JS code by default (`eslint-plugin-n` plugin is run on such code). Please specify `files`, `ignores` or disable `node` config altogether to avoid false positives.
+
 <!-- eslint-disable-next-line markdown-preferences/heading-casing -->
 ### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace.
 
