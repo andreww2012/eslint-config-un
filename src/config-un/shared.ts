@@ -28,6 +28,12 @@ import type {ImportPluginReplaceableRules} from './fast-import';
 export type ExtraPluginsType = Record<string, () => Promisable<EslintPlugin>>;
 
 export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = never> {
+  // 🟠 FREQUENTLY USED OPTIONS
+
+  configs?: {
+    [Key in keyof UnConfigs<ExtraPlugins>]?: boolean | UnConfigs<ExtraPlugins>[Key];
+  };
+
   /**
    * **Global** ignore patterns. By default will be merged with our ignore patterns, unless the object notation is used and `override` option is set to `true`
    */
@@ -39,10 +45,40 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
       };
 
   /**
-   * Automatically add gitignore'd files to the global `ignores` array.
-   * @default true <=> `.gitignore` exists on the same level on which ESLint config file is placed
+   * Allows to provide additional ESLint plugins. Their prefixes and possibly rule names
+   * will appear in configs' `rules` property type. They will be lazy-loaded only if used.
+   *
+   * Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`)
+   * or even prefixes you've renamed via `pluginRenames`.
    */
-  gitignore?: boolean | FlatGitignoreOptions;
+  extraPlugins?: ExtraPlugins;
+
+  // 🟠 OTHER CONFIGS RELATED OPTIONS
+
+  /**
+   * User provided flat configs. They still support plugin renaming, but besides that,
+   * will be put as-is after all the eslint-config-un's configs,
+   * and before the config which disables Prettier incompatible rules for all files.
+   */
+  extraConfigs?: UnFlagConfigEntry<ExtraPlugins>[];
+
+  /* eslint-disable jsdoc/check-indentation */
+
+  /**
+   * This option overrides if certain configs are enabled or disabled by default.
+   * - `all-disabled`: consider all top level configs disabled unless explicitly enabled.
+   * - `misc-enabled`: consider some configs disabled by default, conversely enabled:
+   *   * `depend`
+   *   * `json`
+   *   * `jsonSchemaValidator`
+   *   * `nodeDependencies`
+   *   * `packageJson`
+   *   * `security`
+   *   * `toml`
+   *   * `yaml`
+   */
+  defaultConfigsStatus?: 'all-disabled' | 'misc-enabled';
+  /* eslint-enable jsdoc/check-indentation */
 
   /**
    * Type of your project. Depending on the value, will affect the following rules:
@@ -52,40 +88,12 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
   mode?: 'app' | 'lib';
 
   /**
-   * Enables `eslint-config-prettier` at the end of the ruleset.
-   * @default true
-   * @see https://github.com/prettier/eslint-config-prettier
-   */
-  disablePrettierIncompatibleRules?: boolean;
-
-  /**
    * Force non-zero severity of all the rules to be `error` or `warning`.
    * This can also be configured per-config.
    */
   forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
 
-  configs?: {
-    [Key in keyof UnConfigs<ExtraPlugins>]?: boolean | UnConfigs<ExtraPlugins>[Key];
-  };
-
-  extraConfigs?: UnFlagConfigEntry<ExtraPlugins>[];
-
-  /**
-   * Only load ESLint plugins if they are actually used.
-   *
-   * If an object is used, all plugins except the ones specified in `alwaysLoad`
-   * will be lazy-loaded.
-   * @default true
-   */
-  loadPluginsOnDemand?:
-    | boolean
-    | {
-        /**
-         * These plugins will always be loaded. This can be useful if you only enable certain
-         * plugin rules using [configuration comments](https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments).
-         */
-        alwaysLoad: LoadablePluginPrefix[];
-      };
+  // 🟠 OTHER PLUGINS OPTIONS
 
   /**
    * Allows to change a plugin prefix. Keys are the default prefixes, value cannot be empty
@@ -99,6 +107,37 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    * ```
    */
   pluginRenames?: Partial<Record<Exclude<PluginPrefix, ''>, string>>;
+
+  /**
+   * This option allows you to override any of the used plugins. This can be useful
+   * when this config is used to lint a repository of one of the built-in plugins
+   * to provide development version of that plugin.
+   */
+  pluginsOverrides?: {
+    [Plugin in Exclude<PluginPrefix, ''>]?: Plugin extends keyof typeof pluginsLoaders
+      ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
+      : EslintPlugin;
+  };
+
+  /**
+   * Whether ESLint plugins will be loaded if they are actually used.
+   *
+   * If an object is used, all plugins except the ones specified in `alwaysLoad`
+   * will be lazy-loaded.
+   * @default true
+   */
+  loadPluginsOnDemand?:
+    | boolean
+    | {
+        /**
+         * These plugins will always be loaded. This can be useful if you enable certain
+         * plugin rules only be using
+         * [configuration comments](https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments).
+         */
+        alwaysLoad: LoadablePluginPrefix[];
+      };
+
+  // 🟠 OTHER OPTIONS
 
   /**
    * Defines for which rules and/or plugins autofix will be disabled globally.
@@ -136,28 +175,37 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
       };
 
   /**
-   * This option overrides if certain configs are enabled or disabled by default.
-   * - `all-disabled`: consider all top level configs disabled unless explicitly enabled.
-   * - `misc-enabled`: consider some configs disabled by default, conversely enabled: `security`, `yaml`,  `toml`, `json`, `packageJson`, `jsonSchemaValidator`, `nodeDependencies`, `depend`.
+   * Automatically add gitignore'd files to the global `ignores` array.
+   * @default true <=> `.gitignore` exists in [the current working directory](https://nodejs.org/api/process.html#processcwd)
    */
-  defaultConfigsStatus?: 'all-disabled' | 'misc-enabled';
-
-  /**
-   * This option allows you to override any of the used plugins. This can be useful in case
-   * this config is used to lint a repository itself of one of the plugins to provide
-   * development version of the plugin.
-   */
-  pluginsOverrides?: {
-    [Plugin in Exclude<PluginPrefix, ''>]?: Plugin extends keyof typeof pluginsLoaders
-      ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
-      : EslintPlugin;
-  };
+  gitignore?: boolean | FlatGitignoreOptions;
 
   /**
    * Globally disables all the rules that may perform network requests for validation.
    * @default true <=> `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable is set to non-empty string
    */
   offlineMode?: boolean;
+
+  /**
+   * Attempt to cache the resolved flat config. This might fail if it contains
+   * unserializable data, such as functions. Enabled by default when running in editor.
+   *
+   * It will be stored in `node_modules/.cache/eslint-config-un/config.json` and considered
+   * fresh for 1 hour, unless one of the following is changed:
+   * - Current git revision (`git rev-parse HEAD`) or root `.gitignore` contents
+   * - `package.json`, lockfile contents or package manager
+   * - ESLint config file contents
+   * - Node.JS version
+   * @default true <=> running in editor (detected by [`is-in-editor`](https://npmjs.com/is-in-editor))
+   */
+  cacheConfigs?: boolean;
+
+  /**
+   * Enables `eslint-config-prettier` at the end of the ruleset.
+   * @default true <=> `prettier` package is installed
+   * @see https://github.com/prettier/eslint-config-prettier
+   */
+  disablePrettierIncompatibleRules?: boolean;
 
   /**
    * Replaces the implementation of certain [`import`](https://npmjs.com/eslint-plugin-import-x) plugin rules with implementations from [`fast-import`](https://npmjs.com/eslint-plugin-fast-import).
@@ -177,29 +225,6 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
         pluginSettings?: Partial<FastImportPluginSettings>;
         replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>;
       };
-
-  /**
-   * Attempt to cache the resolved flat config. This might fail if it contains
-   * unserializable data, such as functions. Enabled by default when running in editor.
-   *
-   * It will be stored in `node_modules/.cache/eslint-config-un/config.json` and considered
-   * fresh for 1 hour, unless one of the following is changed:
-   * - Current git revision (`git rev-parse HEAD`) or root `.gitignore` contents
-   * - `package.json`, lockfile contents or package manager
-   * - ESLint config file contents
-   * - Node.JS version
-   * @default true <=> running in editor (detected by [`is-in-editor`](https://npmjs.com/is-in-editor))
-   */
-  cacheConfigs?: boolean;
-
-  /**
-   * Allows to provide additional ESLint plugins. Their prefixes and possibly rule names
-   * will appear in configs' `rules` property type. They will be lazy-loaded only if used.
-   *
-   * Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`)
-   * or even prefixes you've renamed via `pluginRenames`.
-   */
-  extraPlugins?: ExtraPlugins;
 }
 
 export interface EslintConfigUnInternalOptions {
