@@ -3,6 +3,7 @@ import {defineConfig} from 'tsdown';
 export default defineConfig({
   entry: ['src/index.ts', 'src/snippets.ts'],
   format: 'esm',
+  hash: false,
   shims: true,
   dts: true,
   external: ['eslint-plugin-no-type-assertion', 'eslint-plugin-prettier'],
