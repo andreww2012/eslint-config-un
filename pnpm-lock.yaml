@@ -129,8 +129,8 @@ importers:
         specifier: 0.36.3
         version: 0.36.3(@eslint/markdown@7.5.1)(eslint@9.39.1(jiti@2.6.1))
       eslint-plugin-math:
-        specifier: 0.13.0
-        version: 0.13.0(eslint@9.39.1(jiti@2.6.1))
+        specifier: 0.13.1
+        version: 0.13.1(eslint@9.39.1(jiti@2.6.1))
       eslint-plugin-mdx:
         specifier: 3.6.2
         version: 3.6.2(eslint@9.39.1(jiti@2.6.1))
@@ -5021,8 +5021,8 @@ packages:
       '@eslint/markdown': ^7.4.0
       eslint: '>=9.0.0'
 
-  eslint-plugin-math@0.13.0:
-    resolution: {integrity: sha512-6k6Bd7qMzLLQvG9D03fAePH5I5oOLWc7m4JkQBrkuPYa5PbGhTvvmEgWl9+m6Iw/oMfo1Z2UU3ik42ian5P0/A==}
+  eslint-plugin-math@0.13.1:
+    resolution: {integrity: sha512-vQSl7LpmgKggEKnkgzre+5zbFyuIDcqzlL/lXnTBRuA6T2/K0zzJ17gsie6+eip6X68r+PTlC2KpJYvHnWyp5g==}
     engines: {node: ^18 || >=20}
     peerDependencies:
       eslint: '>=8.57.0'
@@ -14030,7 +14030,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-math@0.13.0(eslint@9.39.1(jiti@2.6.1)):
+  eslint-plugin-math@0.13.1(eslint@9.39.1(jiti@2.6.1)):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.1(jiti@2.6.1))
       eslint: 9.39.1(jiti@2.6.1)
