@@ -38,6 +38,7 @@
     "u:info": "tsx scripts/updated-packages-info.ts",
     "u": "ncu -t minor && nr u:after",
     "u:a": "ncu && nr u:after",
+    "deps:audit": "pnpm audit --audit-level high",
     "print-peer-deps": "tsx scripts/print-peer-deps.ts",
     "rules-finder": "tsx scripts/rules-finder.ts",
     "spellcheck": "cspell --no-progress --no-summary .",

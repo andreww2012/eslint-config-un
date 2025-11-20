@@ -103,5 +103,6 @@ export default {
     'unsanitized',
     'dont',
     'uncapitalize', // TS utility type
+    'dups',
   ],
 };
