@@ -9,7 +9,6 @@ const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
   'yaml',
   'toml',
   'json',
-  'packageJson',
   'jsonSchemaValidator',
   'nodeDependencies',
   'depend',

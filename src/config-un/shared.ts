@@ -70,7 +70,6 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    *   * `json`
    *   * `jsonSchemaValidator`
    *   * `nodeDependencies`
-   *   * `packageJson`
    *   * `security`
    *   * `toml`
    *   * `yaml`
