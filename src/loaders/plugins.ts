@@ -70,8 +70,10 @@ export const pluginsLoaders = {
   ...genModuleLoader('@eslint-react/web-api', '@eslint-react/eslint-plugin', () =>
     loadEslintReactPlugin('@eslint-react/web-api'),
   ),
-  ...genModuleLoader('@html-eslint', '@html-eslint/eslint-plugin', () =>
-    interopDefault(import('@html-eslint/eslint-plugin')),
+  ...genModuleLoader(
+    '@html-eslint',
+    '@html-eslint/eslint-plugin',
+    () => interopDefault(import('@html-eslint/eslint-plugin')) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader(
     '@intlify/vue-i18n',
