@@ -273,7 +273,9 @@ export default (async (context, optionsRaw) => {
   });
 
   const angularEslintPluginRules = Object.keys(angularEslintPlugin?.rules || {});
-  const getPluginRuleSeverity = <RuleName extends RuleNamesForPlugin<'@angular-eslint'>>(
+  const getPluginRuleSeverity = <
+    RuleName extends RuleNamesForPlugin<'@angular-eslint'>, // prettier-ignore
+  >(
     ruleName: RuleName,
     severity: RuleSeverity,
   ) =>
