@@ -64,6 +64,7 @@ import type {SecurityEslintConfigOptions} from './security';
 import type {SolidEslintConfigOptions} from './solid';
 import type {SonarEslintConfigOptions} from './sonar';
 import type {StorybookEslintConfigOptions} from './storybook';
+import type {StylisticEslintConfigOptions} from './stylistic';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {TailwindEslintConfigOptions} from './tailwind';
 import type {TanstackQueryEslintConfigOptions} from './tanstack-query';
@@ -738,6 +739,16 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> `storybook` package is installed
    */
   storybook: StorybookEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * Stylistic/formatting only rules for JS/TS(X). Only small number of rules
+   * are enabled by default.
+   *
+   * Used plugins:
+   * - [`@stylistic/eslint-plugin`](https://npmjs.com/@stylistic/eslint-plugin) ([docs](https://eslint.style))
+   * @default true
+   */
+  stylistic: StylisticEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Svelte](https://svelte.dev) specific rules.

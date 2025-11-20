@@ -312,6 +312,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     solid: {enabled: getIsConfigEnabled('solid', 'solid-js')},
     sonar: {enabled: getIsConfigEnabled('sonar')},
     storybook: {enabled: getIsConfigEnabled('storybook', 'storybook')},
+    stylistic: {enabled: getIsConfigEnabled('stylistic')},
     svelte: {
       enabled: getIsConfigEnabled('svelte', 'svelte', {
         preCondition: [eslintPluginSvelte != null, '`eslint-plugin-svelte` can be loaded'],
@@ -470,6 +471,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
 
     /* Enabled by default or conditionally */
     jsEslintConfigResult,
+    loadUnConfig('stylistic', () => import('../configs/stylistic')),
     loadUnConfig('unicorn', () => import('../configs/unicorn')),
     loadUnConfig('import', () => import('../configs/import')),
     loadUnConfig('node', () => import('../configs/node')),

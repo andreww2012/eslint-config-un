@@ -19,6 +19,7 @@ export {
   capitalize,
   groupBy,
   isPlainObject,
+  mapKeys,
   memoize,
   omit,
   partition,

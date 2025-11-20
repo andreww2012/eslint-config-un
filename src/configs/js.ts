@@ -301,18 +301,6 @@ export default (async (context, optionsRaw) => {
     .addRule('yoda', ERROR) /** @since 0.7.1 */
     .markCategory('Layout & Formatting')
     .addRule('unicode-bom', ERROR) /** @since 2.11.0 */
-    .markCategory('Stylistic')
-    .addAnyRule('@stylistic', 'quotes', ERROR, [
-      'single', // Doesn't matter since `ignoreStringLiterals` is true - BUT will be used in fixes
-      {
-        ignoreStringLiterals: true,
-        avoidEscape: true,
-        allowTemplateLiterals: 'avoidEscape',
-      },
-    ]) // 🟠
-    .addAnyRule('@stylistic', 'padding-line-between-statements', ERROR, [
-      {blankLine: 'never', prev: 'import', next: 'import'},
-    ])
     .enableConfigTesterForPlugin('')
     .addOverrides();
 
