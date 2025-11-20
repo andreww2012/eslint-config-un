@@ -1,7 +1,11 @@
 // @ts-check
-
+const fs = require('node:fs');
+const path = require('node:path');
 const semver = require('semver');
 const packageJson = require('./package.json');
+
+const CACHE_DIRECTORY = path.join(__dirname, 'node_modules/.cache/npm-check-updates');
+fs.mkdirSync(CACHE_DIRECTORY, {recursive: true});
 
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set(['@typescript/native-preview']);
 
@@ -40,6 +44,10 @@ const PACKAGE_GROUPS = Object.entries({
  */
 module.exports = {
   dep: ['prod', 'dev', 'optional'],
+
+  cache: true,
+  cacheExpiration: 30,
+  cacheFile: path.join(CACHE_DIRECTORY, 'cache.json'),
 
   filterResults: (
     packageName,
