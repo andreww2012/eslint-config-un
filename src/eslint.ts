@@ -114,7 +114,6 @@ export type GetRuleOptions<
   Prefix extends PluginPrefix,
   RuleName extends keyof RuleOptionsPerPlugin[Prefix] = keyof RuleOptionsPerPlugin[Prefix],
   Index extends (keyof RuleOptionsPerPlugin[Prefix][RuleName] & number) | 0 | 'all' = 0,
-  // eslint-disable-next-line ts/naming-convention
   _AllOptions = RuleOptionsPerPlugin[Prefix][RuleName],
 > = Exclude<
   Index extends 'all'

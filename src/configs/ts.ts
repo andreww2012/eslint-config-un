@@ -1033,6 +1033,7 @@ export default ((
       {selector: 'enumMember', format: ['PascalCase']},
       {selector: 'interface', format: ['PascalCase']},
       {selector: 'typeLike', format: ['PascalCase']},
+      {selector: 'typeParameter', format: ['PascalCase'], leadingUnderscore: 'allow'},
     ]) /** @since 2.16.0 */
     .addRule('no-unnecessary-qualifier', OFF) /** @since 1.4.0 */
     .addRule('prefer-readonly', ERROR) /** @since 1.12.0 */

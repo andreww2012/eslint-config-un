@@ -118,7 +118,9 @@
 - **html** config:
   - Added a new option `parserOptions` to configure HTML parser options.
   - Enabled missed [`no-invalid-entity`](https://html-eslint.org/docs/rules/no-invalid-entity) rule.
-- **ts** config: do not set [`disallowTemplateShorthand: true`](https://eslint.org/docs/latest/rules/no-implicit-coercion#disallowtemplateshorthand) for [`no-implicit-coercion`](https://eslint.org/docs/latest/rules/no-implicit-coercion) rule in TypeScript files.
+- **ts** config:
+  - Do not set [`disallowTemplateShorthand: true`](https://eslint.org/docs/latest/rules/no-implicit-coercion#disallowtemplateshorthand) for [`no-implicit-coercion`](https://eslint.org/docs/latest/rules/no-implicit-coercion) rule in TypeScript files.
+  - Allow a single leading underscore for type parameters names.
 
 ### Dependencies
 

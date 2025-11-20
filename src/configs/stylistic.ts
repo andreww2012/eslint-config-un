@@ -44,7 +44,6 @@ export default (async (context, optionsRaw) => {
 
   const setupRule = <
     RuleName extends RuleNamesForPlugin<'@stylistic'>,
-    // eslint-disable-next-line ts/naming-convention
     _RuleOptions = GetRuleOptions<'@stylistic', RuleName, 'all'>,
   >(
     ruleName: RuleName,
