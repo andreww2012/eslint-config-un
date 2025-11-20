@@ -303,6 +303,7 @@ export default ((context, optionsRaw) => {
     .addRule('require-property-description', WARNING) /** @since 19.0.0 */ // 🟢3️⃣ (error by default)
     .addRule('require-property-name', ERROR) /** @since 19.0.0 */ // 🟢3️⃣
     .addRule('require-property-type', ERROR) /** @since 19.0.0 */ // 🟢
+    .addRule('require-rejects', OFF) /** @since 61.4.0 */
     .addRule('require-returns', OFF) /** @since 3.15.0 */ // 🟢3️⃣
     .addRule('require-returns-check', ERROR) /** @since 4.0.0 */ // 🟢2️⃣
     .addRule('require-returns-description', WARNING) /** @since 1.1.0 */ // 🟢3️⃣ (error by default)
