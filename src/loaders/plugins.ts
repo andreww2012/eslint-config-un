@@ -53,8 +53,10 @@ export const pluginsLoaders = {
   ...genModuleLoader('@eslint-react', '@eslint-react/eslint-plugin', () =>
     loadEslintReactPlugin('@eslint-react'),
   ),
-  ...genModuleLoader('@eslint-react/debug', '@eslint-react/eslint-plugin', () =>
-    interopDefault(import('eslint-plugin-react-debug')),
+  ...genModuleLoader(
+    '@eslint-react/debug',
+    '@eslint-react/eslint-plugin',
+    () => interopDefault(import('eslint-plugin-react-debug')) as Promise<EslintPlugin>,
   ),
   ...genModuleLoader('@eslint-react/dom', '@eslint-react/eslint-plugin', () =>
     loadEslintReactPlugin('@eslint-react/dom'),
@@ -173,6 +175,9 @@ export const pluginsLoaders = {
   ),
   ...genModuleLoader('file-progress', 'eslint-plugin-file-progress', () =>
     interopDefault(import('eslint-plugin-file-progress')),
+  ),
+  ...genModuleLoader('formatjs', 'eslint-plugin-formatjs', () =>
+    interopDefault(import('eslint-plugin-formatjs')),
   ),
   ...genModuleLoader(
     'graphql',
@@ -396,8 +401,15 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
-  ...genModuleLoader('security', 'eslint-plugin-security', () =>
-    interopDefault(import('eslint-plugin-security')),
+  ...genModuleLoader(
+    'security',
+    'eslint-plugin-security',
+    () =>
+      // @ts-expect-error types mismatch
+      interopDefault(
+        import('eslint-plugin-security'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   ...genModuleLoader(
     'solid',

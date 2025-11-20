@@ -48,6 +48,8 @@ export default {
     'knip',
     'tsdown',
     'commitlint',
+    'formatjs',
+    'messageformat',
 
     // Technical words/terms
     'arraify',

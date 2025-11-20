@@ -255,6 +255,9 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     deMorgan: {enabled: getIsConfigEnabled('deMorgan', false)},
     depend: {enabled: getIsConfigEnabled('depend', false)},
     fastImport: {enabled: getIsConfigEnabled('fastImport', false)},
+    formatJs: {
+      enabled: getIsConfigEnabled('formatJs', '@formatjs/icu-messageformat-parser'),
+    },
     ember: {enabled: getIsConfigEnabled('ember', 'ember-source')},
     erasableSyntaxOnly: {enabled: getIsConfigEnabled('erasableSyntaxOnly', false)},
     es: {enabled: getIsConfigEnabled('es', false)},
@@ -561,6 +564,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     svelteEslintConfigResult, // Must be after ts
     loadUnConfig('graphql', () => import('../configs/graphql')),
     loadUnConfig('checkFile', () => import('../configs/check-file')), // Likely should be last
+    loadUnConfig('formatJs', () => import('../configs/formatjs')), // Likely should be last
     loadUnConfig('markdown', () => import('../configs/markdown')), // Must be last
 
     rootConfigBuilder,

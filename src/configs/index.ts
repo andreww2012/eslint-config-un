@@ -22,6 +22,7 @@ import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-fu
 import type {NoStylisticRulesEslintConfigOptions} from './extra/no-stylistic-rules';
 import type {FastImportEslintConfigOptions} from './fast-import';
 import type {FileProgressEslintConfigOptions} from './file-progress';
+import type {FormatjsEslintConfigOptions} from './formatjs';
 import type {GraphqlEslintConfigOptions} from './graphql';
 import type {HeaderEslintConfigOptions} from './header';
 import type {HeadersEslintConfigOptions} from './headers';
@@ -145,7 +146,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * By default, all rules are disabled.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-check-file`](https://npmjs.com/eslint-plugin-check-file) ([docs](https://github.com/dukeluo/eslint-plugin-check-file#readme))
    *
    * NOTE: disabled by default.
@@ -179,7 +180,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * An ESLint plugin to lint the browser compatibility of the code.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat) ([docs](https://github.com/amilajack/eslint-plugin-compat))
    *
    * NOTE: disabled by default.
@@ -299,7 +300,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Does not implement all the rules from the original plugins
    * and might require some additional setup.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import) ([docs](https://github.com/nebrius/eslint-plugin-fast-import#readme))
    *
    * NOTE: disabled by default.
@@ -322,6 +323,15 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   fileProgress: FileProgressEslintConfigOptions<ExtraPlugins>;
 
   /**
+   * [FormatJS](https://formatjs.github.io) specific rules.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-formatjs`](https://npmjs.com/eslint-plugin-formatjs) ([docs](https://formatjs.github.io/docs/tooling/linter))
+   * @default true <=> `@formatjs/icu-messageformat-parser` package is installed
+   */
+  formatJs: FormatjsEslintConfigOptions<ExtraPlugins>;
+
+  /**
    * [GraphQL](https://graphql.org) specific rules.
    *
    * Used plugin:
@@ -335,7 +345,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * There is also an alternative config, `headers`, which is powered by [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers).
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header) ([docs](https://github.com/Stuk/eslint-plugin-header))
    *
    * NOTE: disabled by default.
@@ -348,7 +358,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * There is also an alternative config, `header`, which is powered by [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header).
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers) ([docs](https://github.com/robmisasi/eslint-plugin-headers))
    *
    * NOTE: disabled by default.
@@ -379,7 +389,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * **Note:** you should probably use `zod` config instead, which includes the similar rule
    * and bunch of others zod rules.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-import-zod`](https://npmjs.com/eslint-plugin-import-zod) ([docs](https://github.com/samchungy/eslint-plugin-import-zod))
    *
    * NOTE: disabled by default.
@@ -449,7 +459,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * [Lit](https://lit.dev) specific rules.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit) ([docs](https://github.com/43081j/eslint-plugin-lit))
    * @default true <=> `lit` package is installed
    */
@@ -501,7 +511,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * [Mocha](https://mochajs.org) specific rules.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha) ([docs](https://github.com/lo1tuma/eslint-plugin-mocha))
    * @default true
    */
@@ -545,7 +555,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * If enabled, by default will be applied to all test files.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-no-only-tests`](https://npmjs.com/eslint-plugin-no-only-tests) ([docs](https://github.com/levibuzolic/no-only-tests))
    *
    * NOTE: disabled by default.
@@ -575,14 +585,14 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * [Nx](https://nx.dev) specific rules.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`@nx/eslint-plugin`](https://npmjs.com/@nx/eslint-plugin) ([docs](https://nx.dev/technologies/eslint/eslint-plugin))
    * @default true <=> `nx` package is installed
    */
   nx: NxEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json))
    * - (if `enforceAbsoluteVersion` option is used) [`eslint-plugin-node-dependencies`](https://npmjs.com/eslint-plugin-node-dependencies) ([docs](https://ota-meshi.github.io/eslint-plugin-node-dependencies))
    *
@@ -639,7 +649,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * [QUnit](https://qunitjs.com) specific rules.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-qunit`](https://npmjs.com/eslint-plugin-qunit) ([docs](https://github.com/platinumazure/eslint-plugin-qunit))
    * @default true <=> `qunit` package is installed
    */
@@ -689,7 +699,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * [RxJS](https://rxjs.dev) specific rules.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`@smarttools/eslint-plugin-rxjs`](https://npmjs.com/@smarttools/eslint-plugin-rxjs) ([docs](https://github.com/DaveMBush/eslint-plugin-rxjs))
    * @default true <=> `rxjs` package is installed
    */
@@ -804,7 +814,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * Rules not included in any other plugins, provided by us and collected under `un` prefix.
    *
-   * Used plugins:
+   * Used plugin:
    * - Built-in eslint-plugin-un
    * @default true
    */
@@ -820,7 +830,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * An ESLint plugin with rules to detect and prevent some unnecessary code abstractions.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-unnecessary-abstractions`](https://npmjs.com/eslint-plugin-unnecessary-abstractions) ([docs](https://github.com/personalyisus/eslint-plugin-unnecessary-abstractions#readme))
    * @default true
    */
@@ -829,7 +839,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * [UnoCSS](https://unocss.dev) specific rules.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`@unocss/eslint-plugin`](https://npmjs.com/@unocss/eslint-plugin) ([docs](https://unocss.dev/integrations/eslint))
    * @default true <=> `unocss` package is installed
    */
@@ -861,7 +871,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * Web components specific rules.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc) ([docs](https://github.com/43081j/eslint-plugin-wc))
    *
    * NOTE: disabled by default.
@@ -885,7 +895,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * Helps in identifying places in your codebase where you don't (may not) need Lodash/Underscore.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-you-dont-need-lodash-underscore`](https://npmjs.com/eslint-plugin-you-dont-need-lodash-underscore) ([docs](https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore))
    * @default true <=> Any of the following packages are installed: `lodash`, `lodash-es`, `lodash.{assign,bind,capitalize,concat,contains,defaults,drop,every,fill,filter,find,first,flatten,get,head,includes,join,keys,last,map,omit,pairs,reduce,repeat,replace,reverse,size,slice,some,split,throttle,trim,uniq,values}`
    */
@@ -896,7 +906,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * **Claims to only support zod v4.**
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-zod-x`](https://npmjs.com/eslint-plugin-zod-x) ([docs](https://github.com/marcalexiei/eslint-plugin-zod-x#readme))
    * @default true <=> `zod` package is installed and its version is >=4
    */

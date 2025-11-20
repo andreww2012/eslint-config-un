@@ -1,6 +1,7 @@
+import type {EslintPlugin} from '../eslint';
 import type {OmitStrict} from '../types';
 import {type MaybeArray, cloneDeep, interopDefault} from '../utils';
-import {type EslintProcessor, genModuleLoader} from './shared';
+import {type EslintParser, type EslintProcessor, genModuleLoader} from './shared';
 
 export const packagesLoaders = {
   ...genModuleLoader(
@@ -28,8 +29,16 @@ export const packagesLoaders = {
   ...genModuleLoader('eslintMergeProcessors', 'eslint-merge-processors', () =>
     interopDefault(import('eslint-merge-processors')),
   ),
-  ...genModuleLoader('eslintPluginGraphql', '@graphql-eslint/eslint-plugin', () =>
-    interopDefault(import('@graphql-eslint/eslint-plugin')),
+  ...genModuleLoader(
+    'eslintPluginGraphql',
+    '@graphql-eslint/eslint-plugin',
+    () =>
+      interopDefault(import('@graphql-eslint/eslint-plugin')) as Promise<
+        EslintPlugin & {
+          processor: EslintProcessor;
+          parser: EslintParser;
+        }
+      >,
   ),
   ...genModuleLoader('eslintPluginImportX', 'eslint-plugin-import-x', () =>
     interopDefault(import('eslint-plugin-import-x')),

@@ -224,6 +224,10 @@ const ALL_STYLISTIC_RULES = {
   'file-progress': {
     // None
   },
+  formatjs: {
+    'prefer-formatted-message': true,
+    'prefer-pound-in-plural': true,
+  },
   graphql: {
     alphabetize: true,
     'description-style': true,

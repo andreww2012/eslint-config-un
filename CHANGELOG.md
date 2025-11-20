@@ -43,6 +43,7 @@
 - `zod` via [`eslint-plugin-zod-x`](https://npmjs.com/eslint-plugin-zod-x), enabled automatically if `zod@>=4` package is installed.
 - `fast-import` via [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import), **<u>disabled</u>** by default.
 - `checkFile` via [`eslint-plugin-check-file`](https://npmjs.com/eslint-plugin-check-file), **<u>disabled</u>** by default.
+- `formatJs` via [`eslint-plugin-formatjs`](https://npmjs.com/eslint-plugin-formatjs), enabled automatically if `@formatjs/icu-messageformat-parser` package is installed.
 
 ### Changes
 

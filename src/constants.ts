@@ -153,6 +153,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'nx',
   'zod',
   'unocss',
+  '@formatjs/icu-messageformat-parser',
 
   'astro',
   'vue',
