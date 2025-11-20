@@ -62,8 +62,6 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    */
   extraConfigs?: UnFlagConfigEntry<ExtraPlugins>[];
 
-  /* eslint-disable jsdoc/check-indentation */
-
   /**
    * This option overrides if certain configs are enabled or disabled by default.
    * - `all-disabled`: consider all top level configs disabled unless explicitly enabled.
@@ -78,7 +76,6 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    *   * `yaml`
    */
   defaultConfigsStatus?: 'all-disabled' | 'misc-enabled';
-  /* eslint-enable jsdoc/check-indentation */
 
   /**
    * Type of your project. Depending on the value, will affect the following rules:

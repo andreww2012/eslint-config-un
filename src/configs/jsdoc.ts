@@ -236,7 +236,9 @@ export default ((context, optionsRaw) => {
     })
     .addRule('check-access', ERROR) /** @since 18.0.0 */ // 🟢2️⃣
     .addRule('check-alignment', ERROR) /** @since 4.8.0 */ // 🟢4️⃣
-    .addRule('check-indentation', ERROR) /** @since 4.8.0 */
+    .addRule('check-indentation', ERROR, [
+      {allowIndentedSections: true /** @since 61.3.0 */},
+    ]) /** @since 4.8.0 */
     .addRule('check-line-alignment', ERROR) /** @since 30.5.1 */ // 4️⃣
     .addRule('check-param-names', ERROR) /** @since 0.0.1 */ // 🟢2️⃣
     .addRule('check-property-names', ERROR) /** @since 30.5.1 */ // 🟢2️⃣
