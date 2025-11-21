@@ -156,7 +156,8 @@ export default ((context, optionsRaw) => {
   const configBuilder = context.createConfigBuilder(optionsResolved, 'package-json');
 
   // Legend:
-  // 🟢 - in recommended
+  // 🟢 - in recommended and recommended-publishable
+  // 📦 - in recommended-publishable, but not in recommended
   // 🎨 - in stylistic
 
   configBuilder
@@ -196,6 +197,7 @@ export default ((context, optionsRaw) => {
     .addRule('repository-shorthand', ERROR, [
       {form: repositoryShorthand},
     ]) /** @since 0.5.0 */ /** @aka prefer-repository-shorthand */ // 🟢
+    .addRule('require-attribution', OFF) /** @since 0.81.0 */ // 📦
     .addRule('require-author', OFF) /** @since 0.22.0 */
     .addRule('require-bugs', OFF) /** @since 0.50.0 */
     .addRule('require-bundleDependencies', OFF) /** @since 0.50.0 */
@@ -203,12 +205,14 @@ export default ((context, optionsRaw) => {
     .addRule('require-description', OFF) /** @since 0.31.0 */ // 🟢
     .addRule('require-devDependencies', OFF) /** @since 0.50.0 */
     .addRule('require-engines', OFF) /** @since 0.28.0 */
-    .addRule('require-files', OFF) /** @since 0.26.0 */
+    .addRule('require-exports', OFF) /** @since 0.80.0 */ // 📦
+    .addRule('require-files', OFF) /** @since 0.26.0 */ // 📦
     .addRule('require-keywords', OFF) /** @since 0.25.0 */
     .addRule('require-license', OFF) /** @since 0.57.0 */
     .addRule('require-name', ERROR) /** @since 0.24.0 */ // 🟢
     .addRule('require-optionalDependencies', OFF) /** @since 0.50.0 */
     .addRule('require-peerDependencies', OFF) /** @since 0.50.0 */
+    .addRule('require-sideEffects', OFF) /** @since 0.82.0 */ // 📦
     .addRule('require-type', OFF) /** @since 0.33.0 */ // 🟢
     .addRule('require-types', OFF) /** @since 0.29.0 */
     .addRule('require-version', ERROR) /** @since 0.23.0 */ // 🟢
@@ -227,29 +231,39 @@ export default ((context, optionsRaw) => {
         ...optionsResolved.collectionsToSort,
       }),
     ]) /** @since 0.1.0 */ /** @aka alphabetize-collections */ // 🟢
+    .addRule('specify-peers-locally', ERROR) /** @since 0.83.0 */ // 🟢
     .addRule('unique-dependencies', ERROR) /** @since 0.8.0 */ // 🟢
     .addRule('valid-author', ERROR) /** @since 0.38.0 */ // 🟢
     .addRule('valid-bin', ERROR) /** @since 0.37.0 */ // 🟢
     .addRule('valid-bundleDependencies', ERROR) /** @since 0.44.0 */ // 🟢
     .addRule('valid-config', ERROR) /** @since 0.46.0 */ // 🟢
+    .addRule('valid-contributors', ERROR) /** @since 0.72.0 */ // 🟢
     .addRule('valid-cpu', ERROR) /** @since 0.48.0 */ // 🟢
     .addRule('valid-dependencies', ERROR) /** @since 0.49.0 */ // 🟢
     .addRule('valid-description', ERROR) /** @since 0.52.0 */ // 🟢
     .addRule('valid-devDependencies', ERROR) /** @since 0.49.0 */ // 🟢
     .addRule('valid-directories', ERROR) /** @since 0.56.0 */ // 🟢
+    .addRule('valid-engines', ERROR) /** @since 0.76.0 */ // 🟢
     .addRule('valid-exports', ERROR) /** @since 0.54.0 */ // 🟢
     .addRule('valid-files', ERROR) /** @since 0.67.0 */ // 🟢
     .addRule('valid-homepage', ERROR) /** @since 0.66.0 */ // 🟢
     .addRule('valid-keywords', ERROR) /** @since 0.68.0 */ // 🟢
     .addRule('valid-license', ERROR) /** @since 0.45.0 */ // 🟢
+    .addRule('valid-main', ERROR) /** @since 0.69.0 */ // 🟢
+    .addRule('valid-man', ERROR) /** @since 0.74.0 */ // 🟢
     .addRule('valid-name', ERROR) /** @since 0.9.0 */ // 🟢
     .addRule('valid-optionalDependencies', ERROR) /** @since 0.49.0 */ // 🟢
-    .addRule('valid-package-definition', ERROR) /** @since 0.1.0 */ /** @aka valid-package-def */ // 🟢
+    .addRule('valid-os', ERROR) /** @since 0.71.0 */ // 🟢
     .addRule('valid-peerDependencies', ERROR) /** @since 0.49.0 */ // 🟢
+    .addRule('valid-private', ERROR) /** @since 0.70.0 */ // 🟢
+    .addRule('valid-publishConfig', ERROR) /** @since 0.74.0 */ // 🟢
+    .addRule('valid-repository', ERROR) /** @since 0.78.0 */ // 🟢
     .addRule('valid-repository-directory', ERROR) /** @since 0.7.0 */ // 🟢
     .addRule('valid-scripts', ERROR) /** @since 0.43.0 */ // 🟢
+    .addRule('valid-sideEffects', ERROR) /** @since 0.85.0 */ // 🟢
     .addRule('valid-type', ERROR) /** @since 0.41.0 */ // 🟢
     .addRule('valid-version', ERROR) /** @since 0.10.0 */ // 🟢
+    .addRule('valid-workspaces', ERROR) /** @since 0.75.0 */ // 🟢
     .addAnyRule(
       'node-dependencies',
       'absolute-version',
