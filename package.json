@@ -167,7 +167,7 @@
     "@types/estree": "1.0.8",
     "@types/node": "20.19.1",
     "@types/semver": "7.7.1",
-    "@typescript/native-preview": "7.0.0-dev.20251027.1",
+    "@typescript/native-preview": "7.0.0-dev.20251121.1",
     "@unocss/eslint-plugin": "66.5.5",
     "@vitest/eslint-plugin": "1.4.3",
     "angular-eslint-plugin-template15": "npm:@angular-eslint/eslint-plugin-template@15.2.1",
