@@ -9,6 +9,14 @@ fs.mkdirSync(CACHE_DIRECTORY, {recursive: true});
 
 const SCOPED_ESLINT_PACKAGES_NOT_PLUGINS = new Set(['config-inspector', 'compat']);
 
+const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Set([
+  '@next/eslint-plugin-next',
+  '@nx/eslint-plugin',
+  '@unocss/eslint-plugin',
+  'eslint-plugin-storybook',
+  'eslint-plugin-turbo',
+]);
+
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set(['@typescript/native-preview']);
 
 const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
@@ -83,20 +91,32 @@ module.exports = {
   interactive: true,
   groupFunction: (fullName) => {
     const [nameScope, nameWithoutScope = ''] = fullName.split('/');
+    const knownGroupName = PACKAGE_GROUPS[fullName] || PACKAGE_GROUPS[`${nameScope}/*`];
+
+    if (knownGroupName) {
+      return `3. ${knownGroupName} (🟢🟡 plugins and/or non-plugins)`;
+    }
+
     const isPlugin =
       fullName.startsWith('eslint-plugin-') ||
       nameWithoutScope.startsWith('eslint-plugin') ||
       (nameScope === '@eslint' && !SCOPED_ESLINT_PACKAGES_NOT_PLUGINS.has(nameWithoutScope));
-    const groupNamePluginSuffix = isPlugin ? ' (plugins)' : '';
-    const groupNumberStartsWith = 3 * (isPlugin ? 0 : 1);
-    return (
-      PACKAGE_GROUPS[fullName] ||
-      PACKAGE_GROUPS[`${nameScope}/*`] ||
-      (fullName in packageJson.devDependencies && !(fullName in packageJson.peerDependencies)
-        ? `${3 + groupNumberStartsWith} Dev dependencies${groupNamePluginSuffix}`
-        : fullName in packageJson.peerDependencies
-          ? `${2 + groupNumberStartsWith} Peer dependencies${groupNamePluginSuffix}`
-          : `${1 + groupNumberStartsWith} Direct dependencies${groupNamePluginSuffix}`)
-    );
+    const isPublishedFromMonorepoWithPackagesUnrelatedToEslint =
+      PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT.has(fullName);
+
+    const groupNamePluginSuffix = `${isPlugin ? '(🟢 plugins)' : '(🟡 non-plugins)'}${isPublishedFromMonorepoWithPackagesUnrelatedToEslint ? ' (🔴 updates might be fake)' : ''}`;
+
+    /**
+     * @param {number} base Base group number
+     * @param {string} name Group name
+     */
+    const generateGroupName = (base, name) =>
+      `${base + 3 * (isPlugin ? 0 : 1) + (isPlugin ? -1 : 0)}${isPublishedFromMonorepoWithPackagesUnrelatedToEslint ? '.1' : ''} ${name} ${groupNamePluginSuffix}`;
+
+    return fullName in packageJson.devDependencies && !(fullName in packageJson.peerDependencies)
+      ? generateGroupName(3, 'Dev dependencies')
+      : fullName in packageJson.peerDependencies
+        ? generateGroupName(2, 'Peer dependencies')
+        : generateGroupName(1, 'Direct dependencies');
   },
 };
