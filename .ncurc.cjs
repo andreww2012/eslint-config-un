@@ -7,6 +7,8 @@ const packageJson = require('./package.json');
 const CACHE_DIRECTORY = path.join(__dirname, 'node_modules/.cache/npm-check-updates');
 fs.mkdirSync(CACHE_DIRECTORY, {recursive: true});
 
+const SCOPED_ESLINT_PACKAGES_NOT_PLUGINS = new Set(['config-inspector', 'compat']);
+
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set(['@typescript/native-preview']);
 
 const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
@@ -80,11 +82,11 @@ module.exports = {
   format: ['group'],
   interactive: true,
   groupFunction: (fullName) => {
-    const [nameScope] = fullName.split('/');
+    const [nameScope, nameWithoutScope = ''] = fullName.split('/');
     const isPlugin =
-      fullName.startsWith('eslint-plugin') ||
-      fullName.startsWith('@eslint/') ||
-      fullName.endsWith('/eslint-plugin');
+      fullName.startsWith('eslint-plugin-') ||
+      nameWithoutScope.startsWith('eslint-plugin') ||
+      (nameScope === '@eslint' && !SCOPED_ESLINT_PACKAGES_NOT_PLUGINS.has(nameWithoutScope));
     const groupNamePluginSuffix = isPlugin ? ' (plugins)' : '';
     const groupNumberStartsWith = 3 * (isPlugin ? 0 : 1);
     return (
