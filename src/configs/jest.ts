@@ -358,6 +358,7 @@ export default (async (context, optionsRaw) => {
       },
     ]) /** @since 19.1.0-alpha.eed8203 */
     .addRule('valid-expect-in-promise', ERROR) /** @since 21.7.0 */ // 🟢
+    .addRule('valid-mock-module-path', ERROR) /** @since 29.2.0 */
     .addRule('valid-title', ERROR) /** @since 22.20.0 */ // 🟢
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest', {
