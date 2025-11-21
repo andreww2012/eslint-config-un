@@ -409,10 +409,8 @@ export const pluginsLoaders = {
     'security',
     'eslint-plugin-security',
     () =>
-      // @ts-expect-error types mismatch
       interopDefault(
         import('eslint-plugin-security'),
-        // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   ...genModuleLoader(
