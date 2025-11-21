@@ -903,6 +903,13 @@ export default ((
       ),
     ) /** @since 2.7.0 */ // 🟣
     .addRule(
+      'no-unused-private-class-members',
+      ...getRuleUnSeverityAndOptionsFromEntry(
+        vanillaFinalFlatConfigRules['no-unused-private-class-members'] ?? ERROR,
+        inheritFromBase ? undefined : [ERROR],
+      ),
+    ) /** @since 8.47.0 */ // 🟣
+    .addRule(
       'no-unused-vars',
       ...getRuleUnSeverityAndOptionsFromEntry(
         vanillaFinalFlatConfigRules['no-unused-vars'] ?? ERROR,
