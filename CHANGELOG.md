@@ -373,6 +373,7 @@
 - `eslint-plugin-react-refresh`: [0.4.23 → 0.4.24](https://github.com/ArnaudBarre/eslint-plugin-react-refresh/compare/v0.4.23...v0.4.24)
 - `eslint-plugin-astro`: [1.3.1 → 1.5.0](https://github.com/ota-meshi/eslint-plugin-astro/compare/v1.3.1...v1.5.0)
   - 🟢 (enabled) [`no-unsafe-inline-scripts`](https://ota-meshi.github.io/eslint-plugin-astro/rules/no-unsafe-inline-scripts)
+- `eslint-plugin-case-police`: [2.0.0 → 2.1.1](https://github.com/antfu/case-police/compare/v2.1.0...v2.1.1)
 
 ## 0.10.0
 
