@@ -159,7 +159,7 @@
     "@next/eslint-plugin-next": "16.0.3",
     "@nx/eslint-plugin": "22.1.0",
     "@smarttools/eslint-plugin-rxjs": "1.0.22",
-    "@sveltejs/kit": "2.48.4",
+    "@sveltejs/kit": "2.49.0",
     "@tanstack/eslint-plugin-query": "5.91.2",
     "@types/debug": "4.1.12",
     "@types/eslint-plugin-security": "3.0.0",

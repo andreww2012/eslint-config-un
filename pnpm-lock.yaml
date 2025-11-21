@@ -283,8 +283,8 @@ importers:
         specifier: 1.0.22
         version: 1.0.22(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
       '@sveltejs/kit':
-        specifier: 2.48.4
-        version: 2.48.4(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.3)(vite@6.3.5(@types/node@20.19.1)(jiti@2.6.1)(stylus@0.57.0)(tsx@4.20.6)(yaml@2.8.1)))(svelte@5.34.3)(vite@6.3.5(@types/node@20.19.1)(jiti@2.6.1)(stylus@0.57.0)(tsx@4.20.6)(yaml@2.8.1))
+        specifier: 2.49.0
+        version: 2.49.0(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.3)(vite@6.3.5(@types/node@20.19.1)(jiti@2.6.1)(stylus@0.57.0)(tsx@4.20.6)(yaml@2.8.1)))(svelte@5.34.3)(vite@6.3.5(@types/node@20.19.1)(jiti@2.6.1)(stylus@0.57.0)(tsx@4.20.6)(yaml@2.8.1))
       '@tanstack/eslint-plugin-query':
         specifier: 5.91.2
         version: 5.91.2(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
@@ -3078,8 +3078,8 @@ packages:
     peerDependencies:
       acorn: ^8.9.0
 
-  '@sveltejs/kit@2.48.4':
-    resolution: {integrity: sha512-TGFX1pZUt9qqY20Cv5NyYvy0iLWHf2jXi8s+eCGsig7jQMdwZWKUFMR6TbvFNhfDSUpc1sH/Y5EHv20g3HHA3g==}
+  '@sveltejs/kit@2.49.0':
+    resolution: {integrity: sha512-oH8tXw7EZnie8FdOWYrF7Yn4IKrqTFHhXvl8YxXxbKwTMcD/5NNCryUSEXRk2ZR4ojnub0P8rNrsVGHXWqIDtA==}
     engines: {node: '>=18.13'}
     hasBin: true
     peerDependencies:
@@ -11680,7 +11680,7 @@ snapshots:
     dependencies:
       acorn: 8.15.0
 
-  '@sveltejs/kit@2.48.4(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.3)(vite@6.3.5(@types/node@20.19.1)(jiti@2.6.1)(stylus@0.57.0)(tsx@4.20.6)(yaml@2.8.1)))(svelte@5.34.3)(vite@6.3.5(@types/node@20.19.1)(jiti@2.6.1)(stylus@0.57.0)(tsx@4.20.6)(yaml@2.8.1))':
+  '@sveltejs/kit@2.49.0(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.3)(vite@6.3.5(@types/node@20.19.1)(jiti@2.6.1)(stylus@0.57.0)(tsx@4.20.6)(yaml@2.8.1)))(svelte@5.34.3)(vite@6.3.5(@types/node@20.19.1)(jiti@2.6.1)(stylus@0.57.0)(tsx@4.20.6)(yaml@2.8.1))':
     dependencies:
       '@standard-schema/spec': 1.0.0
       '@sveltejs/acorn-typescript': 1.0.6(acorn@8.15.0)
