@@ -45,29 +45,37 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     styleText('black', styleText('bgCyanBright', dependency)),
     `${styleText('gray', oldVersion)} →  ${styleText('green', newVersion)}`,
   );
+
   console.log(styleText('bold', 'Source code diff:'));
-  console.log(
-    codeDiffResult.stdout
-      .trim()
-      .split('\n')
-      .map((line) => {
-        const formattedLine = line.startsWith('@')
-          ? styleText('cyan', line)
-          : line.startsWith('---') || line.startsWith('+++')
-            ? styleText('magentaBright', line)
-            : line.startsWith('+')
-              ? styleText('green', line)
-              : line.startsWith('-')
-                ? styleText('red', line)
-                : line.startsWith('\\') // Example: "\ No newline at end of file"
-                  ? styleText('gray', line)
-                  : line.startsWith(' ')
-                    ? line
-                    : styleText('magentaBright', line);
-        return `  ${formattedLine}`;
-      })
-      .join('\n'),
-  );
+  let diffForLastFileSkipped = false;
+  for (const line of codeDiffResult.stdout.trim().split('\n')) {
+    let isDiffHeader = line.startsWith('--- ') || line.startsWith('+++ ');
+    const formattedLine = line.startsWith('@')
+      ? styleText('cyan', line)
+      : isDiffHeader
+        ? styleText('magentaBright', line)
+        : line.startsWith('+')
+          ? styleText('green', line)
+          : line.startsWith('-')
+            ? styleText('red', line)
+            : line.startsWith('\\') // Example: "\ No newline at end of file"
+              ? styleText('gray', line)
+              : line.startsWith(' ')
+                ? line
+                : ((isDiffHeader = true), styleText('magentaBright', line));
+    if (line.startsWith('diff --git ')) {
+      diffForLastFileSkipped = line.endsWith('.map');
+      // eslint-disable-next-line sonarjs/no-redundant-assignments
+      isDiffHeader = true;
+    }
+    if (isDiffHeader || !diffForLastFileSkipped) {
+      console.log(`  ${formattedLine}`);
+    }
+    if (line.startsWith('+++ ') && diffForLastFileSkipped) {
+      console.log(`  ${styleText('yellow', 'Diff for this file is not shown')}`);
+    }
+  }
+
   console.log(`${styleText('bold', 'Repo:')} ${styleText('cyan', repoUrl)}`);
   console.log(`${styleText('bold', 'Releases:')} ${styleText('cyan', `${repoUrl}/releases`)}`);
   console.log(
