@@ -239,7 +239,7 @@
 - `eslint-plugin-jest`: [28.11.0 → 29.2.0](https://github.com/jest-community/eslint-plugin-jest/compare/v28.11.0...v29.2.0)
   - 🟡 (enabled, warns) [`prefer-ending-with-an-expect`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-ending-with-an-expect.md)
   - 🟢 (enabled) [`valid-mock-module-path`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-mock-module-path.md)
-- `eslint-plugin-jsdoc`: [50.6.14 → 61.4.0](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.14...v61.4.0)
+- `eslint-plugin-jsdoc`: [50.6.14 → 61.4.1](https://github.com/gajus/eslint-plugin-jsdoc/compare/v50.6.14...v61.4.1)
   - 🟢 (enabled) [`escape-inline-tags`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/escape-inline-tags.md)
   - 🔴 (not enabled) [`prefer-import-tag`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/prefer-import-tag.md)
   - 🔴 [`reject-any-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/reject-any-type.md)
