@@ -277,9 +277,10 @@
   - 🟢 [`prefer-svelte-reactivity`](https://sveltejs.github.io/eslint-plugin-svelte/rules/prefer-svelte-reactivity)
   - ❓ (enabled conditionally) [`require-event-prefix`](https://sveltejs.github.io/eslint-plugin-svelte/rules/require-event-prefix)
   - 🟢 [`no-navigation-without-resolve`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-navigation-without-resolve)
-- `eslint-plugin-vue`: [10.1.0 → 10.5.1](https://github.com/vuejs/eslint-plugin-vue/compare/v10.1.0...v10.5.1)
+- `eslint-plugin-vue`: [10.1.0 → 10.6.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.1.0...v10.6.0)
   - 🟢 (enabled) [`no-negated-v-if-condition`](https://eslint.vuejs.org/rules/no-negated-v-if-condition.html)
   - 🟢 [`no-negated-condition`](https://eslint.vuejs.org/rules/no-negated-condition.html)
+  - 🟢 [`no-duplicate-class-names`](https://eslint.vuejs.org/rules/no-duplicate-class-names.html)
 - `eslint-plugin-package-json`: [0.31.0 → 0.85.0](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.31.0...v0.85.0)
   - Removed [`valid-package-definition`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-package-definition.md) as it has been marked as deprecated.
   - 🔴 (not enabled) [`require-type`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-type.md)

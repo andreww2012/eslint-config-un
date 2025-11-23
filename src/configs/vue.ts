@@ -482,6 +482,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('no-dupe-keys', ERROR) /** @since 3.9.0 */ // 3️⃣2️⃣
     .addRule('no-dupe-v-else-if', ERROR) /** @since 7.0.0 */ // 3️⃣2️⃣
     .addRule('no-duplicate-attributes', ERROR) /** @since 3.0.0 */ // 3️⃣2️⃣
+    .addRule('no-duplicate-class-names', ERROR) /** @since 10.6.0 */
     .addRule('no-export-in-script-setup', ERROR) /** @since 7.13.0 */ // 3️⃣2️⃣
     .addRule('no-expose-after-await', vue3Severity(ERROR)) /** @since 8.1.0 */ // 3️⃣
     .addRule('no-lifecycle-after-await', vue3Severity(ERROR)) /** @since 7.0.0 */ // 3️⃣
