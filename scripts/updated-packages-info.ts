@@ -31,6 +31,8 @@ const getGitHubVersionTag = (dependency: string, version: string) =>
   PACKAGES_GIT_TAGS_PATTERNS[dependency as keyof typeof PACKAGES_GIT_TAGS_PATTERNS]?.(version) ??
   `v${version}`;
 
+const FILE_EXTENSIONS_TO_SKIP_IN_DIFF = ['map', 'cjs', 'cts'];
+
 for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   // eslint-disable-next-line ts/no-non-null-assertion
   const {dependency, repoUrl, oldVersion, newVersion, codeDiffResult} = updatedDependenciesInfo[i]!;
@@ -64,7 +66,9 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
                 ? line
                 : ((isDiffHeader = true), styleText('magentaBright', line));
     if (line.startsWith('diff --git ')) {
-      diffForLastFileSkipped = line.endsWith('.map');
+      diffForLastFileSkipped = FILE_EXTENSIONS_TO_SKIP_IN_DIFF.some((extension) =>
+        line.endsWith(`.${extension}`),
+      );
       // eslint-disable-next-line sonarjs/no-redundant-assignments
       isDiffHeader = true;
     }
