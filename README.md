@@ -597,9 +597,12 @@ It can also be enabled by setting `ESLINT_CONFIG_UN_OFFLINE_MODE` environment va
 
 Enables flat config caching. This option is enabled by default when running in editor (detected by [`is-in-editor`](https://npmjs.com/is-in-editor)). It can also be enabled by setting `ESLINT_CONFIG_UN_CACHE_CONFIGS` environment variable to non-empty string, but the explicitly passed value takes precedence.
 
-Note that caching might fail if the config contains unserializable data, such as functions.
+There are 2 layers of caching:
 
-Cache will be stored in `node_modules/.cache/eslint-config-un/config.json` and considered fresh for 1 hour, unless one of the following is changed:
+- In memory: the cache will be stored in a global variable, and if it's preserved between ESLint extension process re-runs (it does at least in VSCode), it will be preferred over FS cache. This is an **extremely fast** caching option.
+- In file system: the cache will be stored in `node_modules/.cache/eslint-config-un/config.json`. Note that in this case caching might fail if the config contains unserializable data, such as functions.
+
+The cache, regardless of the storage, is considered fresh for 1 hour, unless one of the following is changed:
 
 - Current git revision (`git rev-parse HEAD`) or root `.gitignore` contents
 - `package.json`, lockfile contents or package manager
@@ -682,7 +685,7 @@ We use [`import-meta-resolve`](https://npmjs.com/import-meta-resolve) package to
 
 ### How can I know which configs will be enabled, for which rules autofix will be disabled, etc.?
 
-You can enable the debug mode by setting `DEBUG=eslint-config-un` environment variable when running ESLint command. We use [`debug` package](https://npmjs.com/debug) to print debug messages, so please refer to its documentation for more info.
+You can enable the debug mode by setting `DEBUG=eslint-config-un` environment variable when running ESLint command. We use [`obug` package](https://npmjs.com/obug) ([`debug`](https://npmjs.com/debug) alternative with compatible API) to print debug messages, so please refer to its documentation for more info.
 
 Alternatively, you can use [`@eslint/config-inspector`](https://npmjs.com/@eslint/config-inspector) to inspect the final config.
 
