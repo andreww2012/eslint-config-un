@@ -1,4 +1,4 @@
-// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex
+// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo
 import {ERROR, OFF} from '../constants';
 import type {Prettify} from '../types';
 import {memoize} from '../utils';
@@ -25,7 +25,16 @@ interface EcmaFeatures {
     | 'uint8ArrayPrototypeSetFromHex'
     | 'uint8ArrayPrototypeToBase64'
     | 'uint8ArrayPrototypeToHex'
-    | 'usingDeclarations';
+    | 'usingDeclarations'
+    | 'intlLocalePrototypeFirstDayOfWeek'
+    | 'intlLocalePrototypeGetCalendars'
+    | 'intlLocalePrototypeGetCollations'
+    | 'intlLocalePrototypeGetHourCycles'
+    | 'intlLocalePrototypeGetNumberingSystems'
+    | 'intlLocalePrototypeGetTextInfo'
+    | 'intlLocalePrototypeGetTimeZones'
+    | 'intlLocalePrototypeGetWeekInfo'
+    | 'iteratorConcat';
   2025:
     | 'dataviewPrototypeGetFloat16SetFloat16'
     | 'dynamicImportOptions'
@@ -381,7 +390,41 @@ export default ((context, optionsRawFromParameters, customConfig) => {
         'no-uint8array-prototype-tohex',
         grs(2026, 'uint8ArrayPrototypeToHex'),
       ) /** @since 9.1.0 */
-      .addRule('no-using-declarations', grs(2026, 'usingDeclarations')); /** @since 8.7.0 */
+      .addRule('no-using-declarations', grs(2026, 'usingDeclarations')) /** @since 8.7.0 */
+      .markCategory('2026-intl')
+      .addRule(
+        'no-intl-locale-prototype-firstdayofweek',
+        grs(2026, 'intlLocalePrototypeFirstDayOfWeek'),
+      ) /** @since 9.2.0 */
+      .addRule(
+        'no-intl-locale-prototype-getcalendars',
+        grs(2026, 'intlLocalePrototypeGetCalendars'),
+      ) /** @since 9.2.0 */
+      .addRule(
+        'no-intl-locale-prototype-getcollations',
+        grs(2026, 'intlLocalePrototypeGetCollations'),
+      ) /** @since 9.2.0 */
+      .addRule(
+        'no-intl-locale-prototype-gethourcycles',
+        grs(2026, 'intlLocalePrototypeGetHourCycles'),
+      ) /** @since 9.2.0 */
+      .addRule(
+        'no-intl-locale-prototype-getnumberingsystems',
+        grs(2026, 'intlLocalePrototypeGetNumberingSystems'),
+      ) /** @since 9.2.0 */
+      .addRule(
+        'no-intl-locale-prototype-gettextinfo',
+        grs(2026, 'intlLocalePrototypeGetTextInfo'),
+      ) /** @since 9.2.0 */
+      .addRule(
+        'no-intl-locale-prototype-gettimezones',
+        grs(2026, 'intlLocalePrototypeGetTimeZones'),
+      ) /** @since 9.2.0 */
+      .addRule(
+        'no-intl-locale-prototype-getweekinfo',
+        grs(2026, 'intlLocalePrototypeGetWeekInfo'),
+      ) /** @since 9.2.0 */
+      .addRule('no-iterator-concat', grs(2026, 'iteratorConcat')); /** @since 9.2.0 */
   }
   if (!isEsVersionFullySupported(2025)) {
     mainConfig

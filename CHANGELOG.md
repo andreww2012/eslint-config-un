@@ -1,4 +1,4 @@
-<!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths -->
+<!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
 ## 1.0.0
 
@@ -204,7 +204,7 @@
   - ❓ [`prefer-called-exactly-once-with`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-exactly-once-with.md)
   - 🟢 [`require-awaited-expect-poll`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/require-awaited-expect-poll.md)
 - `eslint-plugin-de-morgan`: [1.2.1 → 2.0.0](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v1.2.1...v2.0.0)
-- `eslint-plugin-es-x`: [8.6.2 → 9.1.2](https://github.com/eslint-community/eslint-plugin-es-x/compare/v8.6.2...v9.1.2)
+- `eslint-plugin-es-x`: [8.6.2 → 9.2.0](https://github.com/eslint-community/eslint-plugin-es-x/compare/v8.6.2...v9.2.0)
   - ❓ (enabled conditionally) [`no-array-fromasync`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-array-fromasync.html)
   - ❓ [`no-asyncdisposablestack`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-asyncdisposablestack.html)
   - ❓ [`no-disposablestack`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-disposablestack.html)
@@ -226,6 +226,15 @@
   - ❓ [`no-uint8array-prototype-setfromhex`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-uint8array-prototype-setfromhex.html)
   - ❓ [`no-uint8array-prototype-tobase64`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-uint8array-prototype-tobase64.html)
   - ❓ [`no-uint8array-prototype-tohex`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-uint8array-prototype-tohex.html)
+  - ❓ [`no-intl-locale-prototype-firstdayofweek`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-intl-locale-prototype-firstdayofweek.html)
+  - ❓ [`no-intl-locale-prototype-getcalendars`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-intl-locale-prototype-getcalendars.html)
+  - ❓ [`no-intl-locale-prototype-getcollations`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-intl-locale-prototype-getcollations.html)
+  - ❓ [`no-intl-locale-prototype-gethourcycles`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-intl-locale-prototype-gethourcycles.html)
+  - ❓ [`no-intl-locale-prototype-getnumberingsystems`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-intl-locale-prototype-getnumberingsystems.html)
+  - ❓ [`no-intl-locale-prototype-gettextinfo`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-intl-locale-prototype-gettextinfo.html)
+  - ❓ [`no-intl-locale-prototype-gettimezones`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-intl-locale-prototype-gettimezones.html)
+  - ❓ [`no-intl-locale-prototype-getweekinfo`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-intl-locale-prototype-getweekinfo.html)
+  - ❓ [`no-iterator-concat`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-iterator-concat.html)
 - `eslint-plugin-html`: [8.1.2 → 8.1.3](https://github.com/BenoitZugmeyer/eslint-plugin-html/compare/v8.1.2...v8.1.3)
 - `eslint-plugin-jest`: [28.11.0 → 29.2.0](https://github.com/jest-community/eslint-plugin-jest/compare/v28.11.0...v29.2.0)
   - 🟡 (enabled, warns) [`prefer-ending-with-an-expect`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-ending-with-an-expect.md)
