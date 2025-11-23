@@ -50,6 +50,7 @@ export default {
     'commitlint',
     'formatjs',
     'messageformat',
+    'obug',
 
     // Technical words/terms
     'arraify',

@@ -1,7 +1,7 @@
 import {isMainThread} from 'node:worker_threads';
 import consola from 'consola';
-import createDebug from 'debug';
 import globals from 'globals';
+import {createDebug} from 'obug';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
 import {

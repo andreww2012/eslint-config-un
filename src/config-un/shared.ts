@@ -1,5 +1,6 @@
 import type {ConsolaInstance} from 'consola';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
+import type {Debugger} from 'obug';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigOptions, UnConfigs} from '../configs';
 import type {FastImportPluginSettings} from '../configs/fast-import';
@@ -299,7 +300,7 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   };
 
   logger: ConsolaInstance;
-  debug: debug.Debugger;
+  debug: Debugger;
   isTestMode: boolean;
   tests: MaybeFn<
     MaybeArray<string | {message: string; severity: 'error' | 'warn'}> | null,
