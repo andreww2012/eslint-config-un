@@ -12,7 +12,7 @@ import {
 } from './index';
 
 // Please keep ascending order
-const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20] as const;
+const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20, 21] as const;
 type SupportedAngularVersion = (typeof SUPPORTED_ANGULAR_VERSIONS)[number];
 type LatestSupportedAngularVersion = (typeof SUPPORTED_ANGULAR_VERSIONS)[Subtract<
   (typeof SUPPORTED_ANGULAR_VERSIONS)['length'],
@@ -361,9 +361,7 @@ export default (async (context, optionsRaw) => {
     .addRule(
       ...getPluginRuleSeverity('no-attribute-decorator', disallowAttributeDecorator ? ERROR : OFF),
     ) /** @since 0.0.1-alpha.30 */
-    .addRule(
-      ...getPluginRuleSeverity('no-conflicting-lifecycle', ERROR),
-    ) /** @since 0.0.1-alpha.19 */
+    .addRule(...getPluginRuleSeverity('no-conflicting-lifecycle', OFF)) /** @since 0.0.1-alpha.19 */ // 🔴(21)
     .addRule(...getPluginRuleSeverity('no-developer-preview', WARNING)) /** @since 20.1.0 */
     .addRule(
       ...getPluginRuleSeverity('no-duplicates-in-metadata-arrays', ERROR),
@@ -599,7 +597,7 @@ export default (async (context, optionsRaw) => {
     ) /** @since 19.3.0 */
     .addRule(
       ...getTemplatePluginRuleSeverity('prefer-control-flow', preferControlFlow ? ERROR : OFF),
-    ) /** @since 17.1.0 */
+    ) /** @since 17.1.0 */ // 🟢
     .addRule(
       ...getTemplatePluginRuleSeverity('prefer-ngsrc', preferNgSrc ? ERROR : OFF),
     ) /** @since 16.2.0 */

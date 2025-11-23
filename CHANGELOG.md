@@ -130,7 +130,8 @@
 - `eslint` (peer dependency): [9.26.0 → 9.39.1](https://github.com/eslint/eslint/compare/v9.26.0...v9.39.1)
   - ❓ (enabled conditionally) [`no-unassigned-vars`](https://eslint.org/docs/latest/rules/no-unassigned-vars)
   - 🔴 (not enabled) [`preserve-caught-error`](https://eslint.org/docs/latest/rules/preserve-caught-error)
-- `angular-eslint`: [19.4.0 → 20.6.0](https://github.com/angular-eslint/angular-eslint/compare/v19.4.0...v20.6.0)
+- `angular-eslint`: [19.4.0 → 21.0.1](https://github.com/angular-eslint/angular-eslint/compare/v19.4.0...v21.0.1)
+  - Disabled [`no-conflicting-lifecycle`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-conflicting-lifecycle.md) by default since it was marked as deprecated since v21.
   - 🟢 (enabled) [`no-uncalled-signals`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-uncalled-signals.md)
   - 🟢 [`prefer-inject`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-inject.md)
   - 🟢 [`sort-keys-in-type-decorator`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/sort-keys-in-type-decorator.md)
