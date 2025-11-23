@@ -279,6 +279,9 @@ importers:
       '@next/eslint-plugin-next':
         specifier: 16.0.3
         version: 16.0.3
+      '@nuxt/eslint-plugin':
+        specifier: 1.10.0
+        version: 1.10.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
       '@nx/eslint-plugin':
         specifier: 22.1.0
         version: 22.1.0(@babel/traverse@7.28.5)(@typescript-eslint/parser@8.47.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint-config-prettier@10.1.8(eslint@9.39.1(jiti@2.6.1)))(eslint@9.39.1(jiti@2.6.1))(nx@22.1.0)(typescript@5.9.3)
@@ -2563,6 +2566,11 @@ packages:
   '@npmcli/promise-spawn@7.0.2':
     resolution: {integrity: sha512-xhfYPXoV5Dy4UkY0D+v2KkwvnDfiA/8Mt3sWCGI/hM03NsYIH8ZaG6QzS9x7pje5vHZBZJ2v6VRFVTWACnqcmQ==}
     engines: {node: ^16.14.0 || >=18.0.0}
+
+  '@nuxt/eslint-plugin@1.10.0':
+    resolution: {integrity: sha512-KL8eCdYGuEIVlts/B+MLgL7FCpaPt2HU6m3XBsUdl+LXPI7/eCMSLlFDmDmfz+PuMx0PCGo7ayyDN6cid12Rlw==}
+    peerDependencies:
+      eslint: ^9.0.0
 
   '@nx/devkit@22.1.0':
     resolution: {integrity: sha512-8vWDUDMn2yZnsVDmNKvy0H6XCnXnB6taK25XxS1RGrnkCxrLE7NWDbTfi3SlydYy5LdQgnji8Gy4BjqHVJRlLQ==}
@@ -11361,6 +11369,15 @@ snapshots:
   '@npmcli/promise-spawn@7.0.2':
     dependencies:
       which: 4.0.0
+
+  '@nuxt/eslint-plugin@1.10.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)':
+    dependencies:
+      '@typescript-eslint/types': 8.47.0
+      '@typescript-eslint/utils': 8.47.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
+      eslint: 9.39.1(jiti@2.6.1)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   '@nx/devkit@22.1.0(nx@22.1.0)':
     dependencies:

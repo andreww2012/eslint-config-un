@@ -412,6 +412,9 @@ const ALL_STYLISTIC_RULES = {
   'node-dependencies': {
     // None
   },
+  nuxt: {
+    'nuxt-config-keys-order': true,
+  },
   nx: {
     // None
   },

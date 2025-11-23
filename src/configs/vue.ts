@@ -1,13 +1,22 @@
 import type {Options as EslintProcessorVueBlocksOptions} from 'eslint-processor-vue-blocks';
 import globals from 'globals';
-import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_VUE, OFF, type RuleSeverity, WARNING} from '../constants';
+import {
+  ERROR,
+  GLOB_JS_TS_EXTENSION,
+  GLOB_JS_TS_X_EXTENSION,
+  GLOB_VUE,
+  OFF,
+  type RuleSeverity,
+  WARNING,
+} from '../constants';
 import {
   type FlatConfigEntryFilesOrIgnores,
+  type RuleNamesForPlugin,
   type RulesRecord,
   getRuleUnSeverityAndOptionsFromEntry,
 } from '../eslint';
 import {generatePackageToLoadProperty} from '../loaders';
-import type {Prettify} from '../types';
+import type {OmitStrict, Prettify} from '../types';
 import {
   type MaybeArray,
   doesPackageExist,
@@ -19,6 +28,7 @@ import {type ValidAndInvalidHtmlTags, noRestrictedHtmlElementsDefault} from './s
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
+  type RulesRecordPartial,
   type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
@@ -35,7 +45,7 @@ type WellKnownSfcBlocks =
 
 const DEFAULT_PINIA_STORE_NAME_SUFFIX = 'Store';
 
-interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType>
   extends UnConfigOptions<ExtraPlugins, '@intlify/vue-i18n'> {
   /**
    * [`@intlify/eslint-plugin-vue-i18n`](https://npmjs.com/@intlify/eslint-plugin-vue-i18n) plugin
@@ -95,8 +105,27 @@ interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   };
 }
 
-// TODO extend `UnConfigOptions`?
-interface NuxtSubConfigOptions {
+type NuxtPluginNuxtConfigRelatedRules = 'nuxt-config-keys-order';
+
+interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType>
+  extends UnConfigOptions<
+    ExtraPlugins,
+    OmitStrict<RulesRecordPartial<'nuxt'>, `nuxt/${NuxtPluginNuxtConfigRelatedRules}`>
+  > {
+  /**
+   * Configures rules specific to Nuxt config file.
+   *
+   * Currently includes the single rule, [`nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/index.ts), and applies it
+   * to all `nuxt.config.?([cm])[jt]s?(x)` files.
+   * @default true
+   */
+  configNuxtConfig?:
+    | boolean
+    | UnConfigOptions<
+        ExtraPlugins,
+        Pick<RulesRecordPartial<'nuxt'>, `nuxt/${NuxtPluginNuxtConfigRelatedRules}`>
+      >;
+
   /**
    * @default auto-detected
    */
@@ -110,7 +139,7 @@ interface NuxtSubConfigOptions {
   v4DirectoryStructure?: boolean;
 }
 
-interface PiniaSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+interface PiniaSubConfigOptions<ExtraPlugins extends ExtraPluginsType>
   extends UnConfigOptions<ExtraPlugins, 'pinia'> {
   /**
    * @default `Store`
@@ -119,7 +148,7 @@ interface PiniaSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   storesNameSuffix?: string;
 }
 
-interface ScopedCssEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+interface ScopedCssEslintConfigOptions<ExtraPlugins extends ExtraPluginsType>
   extends UnConfigOptions<ExtraPlugins, 'vue-scoped-css'> {
   /**
    * Will be merged with the default value. `true` does not restrict the style type.
@@ -154,10 +183,28 @@ export interface VueEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
   configI18n?: boolean | I18nSubConfigOptions<ExtraPlugins>;
 
   /**
-   * Nuxt-specific rules and tweaks.
+   * Nuxt-specific rules and tweaks:
+   * - Built-in Nuxt components ([`client-only`](https://nuxt.com/docs/4.x/api/components/client-only), [`dev-only`](https://nuxt.com/docs/4.x/api/components/dev-only) or any component starting with `nuxt`)
+   * will be ignored by [`vue/no-undef-components`](https://eslint.vuejs.org/rules/no-undef-components.html);
+   * - Nuxt's [`app.vue`](https://nuxt.com/docs/4.x/directory-structure/app/app),
+   * [`error.vue`](https://nuxt.com/docs/4.x/directory-structure/app/error) and
+   * [layout files](https://nuxt.com/docs/4.x/directory-structure/app/layouts)
+   * will be exempted from being checked by
+   * [`vue/allow-single-word-component-names`](https://eslint.vuejs.org/rules/allow-single-word-component-names.html);
+   * - Layout files will also not be subject of
+   * [`allow-implicit-slots`](https://eslint.vuejs.org/rules/allow-implicit-slots.html) check;
+   * - [Plugins](https://nuxt.com/docs/4.x/directory-structure/app/plugins) and
+   * [server](https://nuxt.com/docs/4.x/directory-structure/server) files will be allowed
+   * to do `export default` ([`import/no-default-export`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-default-export.md) will be turned off);
+   * - [`nuxt/prefer-import-meta`](https://eslint.nuxt.com/packages/plugin#nuxtprefer-import-meta)
+   * will be applied to the specified `files` and `ignores`, defaulting to all files inside
+   * `vueOrNuxtProjectDir` directory;
+   * - Another sub-config, `configNuxtConfig`, will control whether
+   * [`nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/index.ts)
+   * rule will be applied to Nuxt config file (`true` by default).
    * @default true <=> `nuxt` package is installed
    */
-  configNuxt?: boolean | NuxtSubConfigOptions;
+  configNuxt?: boolean | NuxtSubConfigOptions<ExtraPlugins>;
 
   /**
    * Enabled automatically by checking if `pinia` package is installed (at any level). Pass a false value to disable pinia-specific rules.
@@ -281,7 +328,6 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   const vuePackageMajorVersion = vuePackageInfo?.versions.major;
 
   const optionsResolved = assignDefaults(optionsRaw, {
-    files: DEFAULT_VUE_FILES,
     majorVersion:
       vuePackageMajorVersion === 2 || vuePackageMajorVersion === 3 ? vuePackageMajorVersion : 3,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
@@ -328,15 +374,12 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
 
   const nuxtPackageMajorVersion = nuxtPackageInfo?.versions.major;
   const optionsNuxtResolved = assignDefaults(configNuxt, {
+    configNuxtConfig: true,
     nuxtMajorVersion: nuxtPackageMajorVersion === 4 ? 4 : 3,
   } satisfies VueEslintConfigOptions['configNuxt'] & object);
   optionsNuxtResolved.v4DirectoryStructure ??= optionsNuxtResolved.nuxtMajorVersion === 4;
   const {v4DirectoryStructure: nuxtV4DirectoryStructure} = optionsNuxtResolved;
-
   optionsResolved.vueOrNuxtProjectDir ??= nuxtV4DirectoryStructure ? 'app' : '';
-  const {vueOrNuxtProjectDir} = optionsResolved;
-
-  const resolvePathInVueOrNuxtProjectDir = joinPaths.bind(null, vueOrNuxtProjectDir);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'vue');
 
@@ -349,7 +392,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       },
     ],
     {
-      files: [...DEFAULT_VUE_FILES, ...optionsResolved.files],
+      files: [...DEFAULT_VUE_FILES, ...(optionsResolved.files || [])],
       ...generatePackageToLoadProperty(
         'processor',
         ['mergeProcessors', 'vueProcessor', 'vueBlocksProcessor'],
@@ -660,7 +703,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         ignorePatterns: [
           'router-link',
           'router-view',
-          configNuxt && /^(lazy-)?(nuxt-|client-only$)/,
+          configNuxt && /^(?:lazy-)?(?:nuxt-|(?:client|dev)-only$)/,
           ...(optionsResolved.knownComponentNames || []),
         ]
           .flat()
@@ -851,6 +894,45 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .disableAnyRule('', 'no-useless-assignment') // False positives in script setup
     .enableConfigTesterForPlugin('vue')
     .addOverrides();
+
+  const resolvePathInVueOrNuxtProjectDir = joinPaths.bind(
+    null,
+    optionsResolved.vueOrNuxtProjectDir,
+  );
+
+  const configBuilderNuxt = context.createConfigBuilder(optionsNuxtResolved, 'nuxt');
+  configBuilderNuxt
+    ?.addConfig([
+      'vue/nuxt',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesFallback: [resolvePathInVueOrNuxtProjectDir('**/*.vue')],
+      },
+    ])
+    .addAnyRule('nuxt', 'prefer-import-meta', ERROR)
+    .addOverrides()
+    .enableConfigTesterForPlugin('nuxt', {
+      rulesToSkipInConfig: ['nuxt-config-keys-order'] satisfies RuleNamesForPlugin<'nuxt'>[],
+    });
+  const configBuilderNuxtConfig = context.createConfigBuilder(
+    optionsNuxtResolved.configNuxtConfig,
+    'nuxt',
+  );
+  if (optionsNuxtResolved.configNuxtConfig) {
+    configBuilderNuxtConfig
+      ?.addConfig([
+        'vue/nuxt/nuxt-config',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: [`**/nuxt.config.${GLOB_JS_TS_X_EXTENSION}`],
+        },
+      ])
+      .addAnyRule('nuxt', 'nuxt-config-keys-order', ERROR)
+      .addOverrides()
+      .enableConfigTesterForPlugin('nuxt', {
+        rulesToSkipInConfig: ['prefer-import-meta'] satisfies RuleNamesForPlugin<'nuxt'>[],
+      });
+  }
 
   const nuxtLayoutsFilesGlob = resolvePathInVueOrNuxtProjectDir('layouts/**/*.vue');
 
@@ -1091,6 +1173,8 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   return {
     configs: [
       configBuilder,
+      configBuilderNuxt,
+      configBuilderNuxtConfig,
       configBuilderA11y,
       configBuilderPinia,
       configBuilderI18n,

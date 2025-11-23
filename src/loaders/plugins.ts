@@ -317,6 +317,9 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
+  nuxt: genModuleLoader('nuxt', '@nuxt/eslint-plugin', () =>
+    interopDefault(import('@nuxt/eslint-plugin')),
+  ),
   nx: genModuleLoader(
     'nx',
     '@nx/eslint-plugin',
