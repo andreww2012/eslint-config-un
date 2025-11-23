@@ -65,6 +65,7 @@
 - Added a new root option, `useFastImports`, to override certain [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import).
 - Added a new root option, `cacheConfigs`, to enable flat config caching, which might improve performance when ESLint is running in editor (for example, from an ESLint extension).
 - Added a new root option, `extraPlugins`, which allows to provide additional ESLint plugins.
+- Added a new export, `/snippets`, which currently provides utilities to work with `no-restricted-*` rules.
 - **ts, vue** configs: for extension rules, base rule options and severity are now smartly inherited from the corresponding base rules. Added an option to disable this behavior.
 - **packageJson** config:
   - [**BREAKING**] It is not enabled by default.

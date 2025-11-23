@@ -652,6 +652,10 @@ Provides some useful rule options snippet generators which can be aggravating to
 
 Please refer to JSDoc of exported symbols for proper documentation.
 
+### `createNoRestricted*Rule`
+
+Utility functions re-exported from [`eslint-no-restricted` package](https://npmjs.com/eslint-no-restricted) which generate `no-restricted-*` rules. Please refer to [the package documentation](https://github.com/bradzacher/eslint-no-restricted#readme) for more info.
+
 ## FAQ
 
 ### How do I add my own flat configs?

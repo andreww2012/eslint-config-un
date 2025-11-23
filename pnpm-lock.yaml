@@ -95,6 +95,9 @@ importers:
       eslint-merge-processors:
         specifier: 2.0.0
         version: 2.0.0(eslint@9.39.1(jiti@2.6.1))
+      eslint-no-restricted:
+        specifier: 0.0.8
+        version: 0.0.8(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-css:
         specifier: 0.11.1
         version: 0.11.1(eslint@9.39.1(jiti@2.6.1))
@@ -4964,6 +4967,12 @@ packages:
     resolution: {integrity: sha512-sUuhSf3IrJdGooquEUB5TNpGNpBoQccbnaLHsb1XkBLUPPqCNivCpY05ZcpCOiV9uHwO2yxXEWVczVclzMxYlA==}
     peerDependencies:
       eslint: '*'
+
+  eslint-no-restricted@0.0.8:
+    resolution: {integrity: sha512-5nir9XpG8141+9+DWBfn7CdgJmhxWiePDpNdqAVfheLA/nymi4Th90whcZdbmwOc1VWafqKVaDzY+pLCvtevTw==}
+    engines: {node: ^20.9.0 || >=22.0.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9
 
   eslint-plugin-astro@1.5.0:
     resolution: {integrity: sha512-IWy4kY3DKTJxd7g652zIWpBGFuxw7NIIt16kyqc8BlhnIKvI8yGJj+Maua0DiNYED3F/D8AmzoTTTA6A95WX9g==}
@@ -13868,6 +13877,14 @@ snapshots:
   eslint-merge-processors@2.0.0(eslint@9.39.1(jiti@2.6.1)):
     dependencies:
       eslint: 9.39.1(jiti@2.6.1)
+
+  eslint-no-restricted@0.0.8(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3):
+    dependencies:
+      '@typescript-eslint/utils': 8.47.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
+      eslint: 9.39.1(jiti@2.6.1)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   eslint-plugin-astro@1.5.0(eslint@9.39.1(jiti@2.6.1)):
     dependencies:

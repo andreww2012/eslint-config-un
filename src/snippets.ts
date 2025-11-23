@@ -3,6 +3,12 @@ import type {GetRuleOptions} from './eslint';
 import type {Prettify, RequireExactlyOne} from './types';
 import {getKeysOfTruthyValues} from './utils';
 
+export {
+  createGlobals as createNoRestrictedGlobalsRule,
+  createProperties as createNoRestrictedPropertiesRule,
+  createSyntax as createNoRestrictedSyntaxRule,
+} from 'eslint-no-restricted';
+
 type NoRestrictedImportsEntry = Prettify<
   RequireExactlyOne<{
     regex: string;
