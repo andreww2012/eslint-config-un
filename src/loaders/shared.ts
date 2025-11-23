@@ -9,45 +9,37 @@ export type EslintParser = Eslint.Linter.Parser;
 
 export const MODULE_NOT_FOUND_ERROR_CODES = ['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'];
 
-export type ModuleLoader<
-  T,
-  Property extends string = string,
-  N extends string = string,
-  PackageNullable extends boolean = true,
-> = Record<
-  Property,
-  (
-    context: UnConfigContext,
-    options?: {
-      throwIfNotFound?: boolean;
-    },
-  ) => Promise<{
-    packageName: N;
-    module: T | (PackageNullable extends true ? null : never);
-  }>
->;
+export type ModuleLoader<T, N extends string = string, PackageNullable extends boolean = true> = (
+  context: UnConfigContext,
+  options?: {
+    throwIfNotFound?: boolean;
+  },
+) => Promise<{
+  packageName: N;
+  module: T | (PackageNullable extends true ? null : never);
+}>;
 
 const MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP = /^Cannot find module '([^']+)'/;
 
-export function genModuleLoader<T, Property extends string, N extends string>(
-  property: Property,
+export function genModuleLoader<T, N extends string>(
+  property: string,
   packageName: N,
   module: () => Promisable<T | {default: T}>,
   ignoreErrors?: undefined,
-): ModuleLoader<T, Property, N, N extends keyof typeof OPTIONAL_PEER_DEPENDENCIES ? true : false>;
-export function genModuleLoader<T, Property extends string, N extends string>(
-  property: Property,
+): ModuleLoader<T, N, N extends keyof typeof OPTIONAL_PEER_DEPENDENCIES ? true : false>;
+export function genModuleLoader<T, N extends string>(
+  property: string,
   packageName: N,
   module: () => Promisable<T | {default: T}>,
   ignoreErrors: MaybeArray<string>,
-): ModuleLoader<T, Property, N>;
-export function genModuleLoader<T, Property extends string, N extends string>(
-  property: Property,
+): ModuleLoader<T, N>;
+export function genModuleLoader<T, N extends string>(
+  property: string,
   packageName: N,
   module: () => Promisable<T | {default: T}>,
   ignoredErrors?: MaybeArray<string>,
-): ModuleLoader<T, Property, N> {
-  const loader: ModuleLoader<T, Property, N>[Property] = async (context, options) => {
+): ModuleLoader<T, N> {
+  return async (context, options) => {
     const isPluginOptionalPeerDependency = packageName in OPTIONAL_PEER_DEPENDENCIES;
     try {
       const {pluginOverrides} = context.rootOptions;
@@ -89,7 +81,4 @@ export function genModuleLoader<T, Property extends string, N extends string>(
       throw error;
     }
   };
-  return {
-    [property]: loader,
-  } as ModuleLoader<T, Property, N>;
 }
