@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "eslint-config-un": "1.0.0-alpha.42"
+  },
+  "changesets": [
+    "cold-foxes-lie"
+  ]
+}

@@ -1,18 +1,18 @@
 {
   "name": "eslint-config-un",
-  "version": "1.0.0-alpha.42",
+  "version": "1.0.0-alpha.43",
   "description": "A universal-ish ESLint config aiming to be reasonably strict and easily configurable.",
   "keywords": [
     "eslint",
     "eslint-config"
   ],
-  "homepage": "https://github.com/andreww2012/eslint-plugin-un",
+  "homepage": "https://github.com/andreww2012/eslint-config-un",
   "bugs": {
-    "url": "https://github.com/andreww2012/eslint-plugin-un/issues/new"
+    "url": "https://github.com/andreww2012/eslint-config-un/issues/new"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andreww2012/eslint-plugin-un.git"
+    "url": "git+https://github.com/andreww2012/eslint-config-un.git"
   },
   "license": "MIT",
   "author": "andreww2012",
