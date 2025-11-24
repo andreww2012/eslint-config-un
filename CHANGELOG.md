@@ -1,5 +1,11 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-alpha.43
+
+### Patch Changes
+
+- 12a4466: Setup changesets & GH action to publish new versions
+
 ## 1.0.0
 
 ### New configs
