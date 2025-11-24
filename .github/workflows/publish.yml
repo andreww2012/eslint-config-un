@@ -1,0 +1,47 @@
+on:
+  push:
+    branches:
+      - main
+      - dev-v1
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write # Required for Trusted Publishing
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release-main:
+    name: Create release PR and publish on merge
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5.0.0
+        # Check out full history; required for `changeset status` command to work.
+        # See https://github.com/changesets/changesets/issues/1055#issuecomment-1602572294
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/prepare
+      - name: Enter pre-release mode
+        if: github.ref == 'refs/heads/dev-v1'
+        run: npx changeset pre enter alpha
+      - name: Test & build
+        run: pnpm prepublishOnly
+      # Based on https://github.com/changesets/action/issues/303#issuecomment-1888167265
+      - name: Capture new release version
+        run: |
+          pnpm changeset status --since origin/main --output=_release.json
+          echo "NEW_VERSION=$(jq -r '.releases[0].newVersion' _release.json)" >> "$GITHUB_ENV"
+          rm _release.json
+      - name: Create release PR
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
+          commitMode: github-api
+          title: 'chore: release v${{ env.NEW_VERSION }}'
+          commit: 'chore: release v${{ env.NEW_VERSION }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

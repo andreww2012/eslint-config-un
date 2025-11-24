@@ -60,7 +60,8 @@
     "test:config": "tsx scripts/config-tester.ts",
     "test": "nr typegen && nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
     "lint:public-types": "attw --pack . --profile esm-only",
-    "prepublishOnly": "nr test && nr build && nr lint:public-types"
+    "prepublishOnly": "nr test && nr build && nr lint:public-types",
+    "release": "changeset publish"
   },
   "overrides": {
     "eslint-plugin-jest": {
@@ -147,6 +148,7 @@
     "@angular-eslint/template-parser": "21.0.1",
     "@antfu/ni": "27.0.1",
     "@arethetypeswrong/cli": "0.18.2",
+    "@changesets/cli": "2.29.7",
     "@commitlint/cli": "20.1.0",
     "@commitlint/config-conventional": "20.0.0",
     "@commitlint/types": "20.0.0",
