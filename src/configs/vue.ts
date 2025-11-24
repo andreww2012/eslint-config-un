@@ -721,7 +721,9 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('no-unused-refs', ERROR) /** @since 7.9.0 */
     .addRule('no-use-v-else-with-v-for', OFF) /** @since 9.16.0 */
     .addRule('no-useless-mustaches', ERROR) /** @since 7.0.0 */
-    .addRule('no-useless-v-bind', ERROR) /** @since 7.0.0 */
+    .addRule('no-useless-v-bind', ERROR, [
+      {ignoreIncludesComment: true, ignoreStringEscape: true},
+    ]) /** @since 7.0.0 */
     .addRule('no-v-text', OFF) /** @since 7.17.0 */
     .addRule('padding-line-between-blocks', ERROR) /** @since 6.2.0 */
     .addRule('padding-line-between-tags', OFF) /** @since 9.5.0 */
