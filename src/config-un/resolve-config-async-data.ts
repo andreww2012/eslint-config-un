@@ -99,9 +99,9 @@ export const resolveConfigAsyncData = async (
       /** Note: may be empty */
       versionRange: string;
       installedVersion?: string;
-      pluginPrefixes?: Set<PluginPrefix>;
     }
   >();
+  const packagesToManuallyInstallPluginPrefixes = new Map<string, Set<PluginPrefix>>();
 
   const configModifyFns: (() => void)[] = [];
   const modifyConfigs = () => {
@@ -122,14 +122,14 @@ export const resolveConfigAsyncData = async (
         if (pluginResult && 'packageName' in pluginResult) {
           const packageToInstall = await checkIfModuleCorrectlyLoaded(pluginResult);
           if (packageToInstall) {
-            packagesToManuallyInstallOrUpdate.set(packageToInstall.name, {
-              ...packageToInstall,
-              pluginPrefixes: new Set([
-                ...(packagesToManuallyInstallOrUpdate.get(packageToInstall.name)?.pluginPrefixes ||
-                  []),
+            packagesToManuallyInstallOrUpdate.set(packageToInstall.name, packageToInstall);
+            packagesToManuallyInstallPluginPrefixes.set(
+              packageToInstall.name,
+              new Set([
+                ...(packagesToManuallyInstallPluginPrefixes.get(packageToInstall.name) || []),
                 pluginPrefix as PluginPrefix,
               ]),
-            });
+            );
           }
         }
         if (pluginPrefix) {
@@ -213,7 +213,9 @@ export const resolveConfigAsyncData = async (
         return;
       }
       const isUpdates = index === 0;
-      const packageTypes = partition(packages, (item) => Boolean(item.pluginPrefixes))
+      const packageTypes = partition(packages, (item) =>
+        packagesToManuallyInstallPluginPrefixes.has(item.name),
+      )
         .map(
           (packagesOfType, i) =>
             packagesOfType.length > 0 &&
@@ -226,17 +228,20 @@ export const resolveConfigAsyncData = async (
 ${renderTable(
   packages
     .toSorted((a, b) => a.name.localeCompare(b.name))
-    .map(({name, versionRange, pluginPrefixes}) => ({
-      Name: stylePackageName(name),
-      'Required version range': versionRange
-        ? styleText('green', versionRange)
-        : styleText('gray', 'Unknown'),
-      ...(pluginPrefixes?.size && {
-        [`PLugin prefix${pluginPrefixes.size === 1 ? '' : 's'}`]: [...pluginPrefixes]
-          .map(stylePluginPrefix)
-          .join(', '),
-      }),
-    })),
+    .map(({name, versionRange}) => {
+      const pluginPrefixes = packagesToManuallyInstallPluginPrefixes.get(name);
+      return {
+        Name: stylePackageName(name),
+        'Required version range': versionRange
+          ? styleText('green', versionRange)
+          : styleText('gray', 'Unknown'),
+        ...(pluginPrefixes?.size && {
+          [`PLugin prefix${pluginPrefixes.size === 1 ? '' : 's'}`]: [...pluginPrefixes]
+            .map(stylePluginPrefix)
+            .join(', '),
+        }),
+      };
+    }),
 )}`,
       );
     });
