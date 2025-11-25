@@ -1,5 +1,12 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-alpha.44
+
+### Patch Changes
+
+- 84429c2: Ensure plugins with missing or bad version always have prefix
+- 18807e7: vue: add nuxt rules only if nuxt config is enabled
+
 ## 1.0.0-alpha.43
 
 ### Patch Changes

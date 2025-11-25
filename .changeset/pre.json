@@ -5,6 +5,8 @@
     "eslint-config-un": "1.0.0-alpha.42"
   },
   "changesets": [
+    "bright-deer-lick",
+    "chilly-baboons-remain",
     "cold-foxes-lie"
   ]
 }
