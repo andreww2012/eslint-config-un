@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
       - uses: ./.github/actions/prepare
       - name: Install npm version supporting Trusted Publishing
         run: npm install --global npm@^11
@@ -28,9 +30,9 @@ jobs:
       # Based on https://github.com/changesets/action/issues/303#issuecomment-1888167265
       - name: Capture new release version
         run: |
-          pnpm changeset status --since=origin/${{ github.ref_name }} --output=.changeset/_release.json
-          echo "NEW_VERSION=$(jq -r '.releases[0].newVersion' .changeset/_release.json)" >> "$GITHUB_ENV"
-          rm .changeset/_release.json
+          pnpm changeset version
+          echo "NEW_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+          git restore .
       - name: Create release PR OR Publish
         id: changesets
         uses: changesets/action@v1
