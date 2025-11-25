@@ -923,7 +923,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     optionsNuxtResolved.configNuxtConfig,
     'nuxt',
   );
-  if (optionsNuxtResolved.configNuxtConfig) {
+  if (configNuxt && optionsNuxtResolved.configNuxtConfig) {
     configBuilderNuxtConfig
       ?.addConfig([
         'vue/nuxt/nuxt-config',
