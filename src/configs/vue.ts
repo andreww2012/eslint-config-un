@@ -904,19 +904,21 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   );
 
   const configBuilderNuxt = context.createConfigBuilder(optionsNuxtResolved, 'nuxt');
-  configBuilderNuxt
-    ?.addConfig([
-      'vue/nuxt',
-      {
-        includeDefaultFilesAndIgnores: true,
-        filesFallback: [resolvePathInVueOrNuxtProjectDir('**/*.vue')],
-      },
-    ])
-    .addAnyRule('nuxt', 'prefer-import-meta', ERROR)
-    .addOverrides()
-    .enableConfigTesterForPlugin('nuxt', {
-      rulesToSkipInConfig: ['nuxt-config-keys-order'] satisfies RuleNamesForPlugin<'nuxt'>[],
-    });
+  if (configNuxt) {
+    configBuilderNuxt
+      ?.addConfig([
+        'vue/nuxt',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesFallback: [resolvePathInVueOrNuxtProjectDir('**/*.vue')],
+        },
+      ])
+      .addAnyRule('nuxt', 'prefer-import-meta', ERROR)
+      .addOverrides()
+      .enableConfigTesterForPlugin('nuxt', {
+        rulesToSkipInConfig: ['nuxt-config-keys-order'] satisfies RuleNamesForPlugin<'nuxt'>[],
+      });
+  }
   const configBuilderNuxtConfig = context.createConfigBuilder(
     optionsNuxtResolved.configNuxtConfig,
     'nuxt',
