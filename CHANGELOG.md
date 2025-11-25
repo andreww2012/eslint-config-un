@@ -1,5 +1,11 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-alpha.45
+
+### Patch Changes
+
+- 0ed26cf: fix(vue): add nuxt rules only if nuxt config is enabled
+
 ## 1.0.0-alpha.44
 
 ### Patch Changes
