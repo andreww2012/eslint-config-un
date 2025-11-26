@@ -1,5 +1,11 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-alpha.46
+
+### Patch Changes
+
+- 1225a7b: vue: Fixed an issue resulting in irrelevant rules not disabled on vue files
+
 ## 1.0.0-alpha.45
 
 ### Patch Changes
