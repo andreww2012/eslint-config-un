@@ -114,7 +114,7 @@ export default (async (context, optionsRaw) => {
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
   const optionsResolved = assignDefaults(optionsRaw, {
-    files: DEFAULT_SVELTE_FILES,
+    files: DEFAULT_SVELTE_FILES, // Must be assigned to options for `ts` config
     enforceTypescriptInScriptSection: isTypescriptEnabled,
     svelteVersion:
       context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,

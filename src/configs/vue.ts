@@ -328,6 +328,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   const vuePackageMajorVersion = vuePackageInfo?.versions.major;
 
   const optionsResolved = assignDefaults(optionsRaw, {
+    files: DEFAULT_VUE_FILES, // Must be assigned to options for `ts` config
     majorVersion:
       vuePackageMajorVersion === 2 || vuePackageMajorVersion === 3 ? vuePackageMajorVersion : 3,
     enforceTypescriptInScriptSection: isTypescriptEnabled,
@@ -392,7 +393,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       },
     ],
     {
-      files: [...DEFAULT_VUE_FILES, ...(optionsResolved.files || [])],
+      files: [...DEFAULT_VUE_FILES, ...optionsResolved.files],
       ...generatePackageToLoadProperty(
         'processor',
         ['mergeProcessors', 'vueProcessor', 'vueBlocksProcessor'],
