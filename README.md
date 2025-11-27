@@ -550,6 +550,10 @@ Allows to provide additional ESLint plugins. Their prefixes and possibly rule na
 
 Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`) or even prefixes you've set via [`pluginRenames`](#pluginrenames).
 
+### `linterOptions{NoInlineConfig,ReportUnusedDisableDirectives,ReportUnusedInlineConfigs}`
+
+Sets [`linterOptions.{noInlineConfig,reportUnusedDisableDirectives,reportUnusedInlineConfigs}`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=linterOptions) globally or more granularly.
+
 ### `defaultConfigsStatus`
 
 Quickly enable multiple configs at once. Possible options:

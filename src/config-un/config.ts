@@ -204,6 +204,9 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     disablePrettierIncompatibleRules,
     offlineMode,
     useFastImport,
+    linterOptionsNoInlineConfig = false,
+    linterOptionsReportUnusedDisableDirectives = 'warn',
+    linterOptionsReportUnusedInlineConfigs = 'off',
   } = optionsResolved;
 
   if (useFastImport) {
@@ -436,6 +439,27 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
             : null),
         name: genFlatConfigEntryName('ignores/gitignore'),
       })),
+    ...(
+      [
+        [linterOptionsNoInlineConfig, 'noInlineConfig'],
+        [linterOptionsReportUnusedDisableDirectives, 'reportUnusedDisableDirectives'],
+        [linterOptionsReportUnusedInlineConfigs, 'reportUnusedInlineConfigs'],
+      ] as const
+    ).flatMap(([linterOptionConfigs, linterOptionName]) =>
+      (typeof linterOptionConfigs === 'object'
+        ? arraify(linterOptionConfigs)
+        : [{value: linterOptionConfigs}]
+      ).map((linterOptionConfig, linterOptionConfigIndex, resolvedLinterOptionConfigs) => ({
+        name: genFlatConfigEntryName(
+          `global-setup/linter-options/${linterOptionName}${resolvedLinterOptionConfigs.length > 1 ? `/${linterOptionConfigIndex}` : ''}`,
+        ),
+        ...(linterOptionConfig.files?.length && {files: linterOptionConfig.files}),
+        ...(linterOptionConfig.ignores?.length && {ignores: linterOptionConfig.ignores}),
+        ...(linterOptionConfig.value != null && {
+          linterOptions: {[linterOptionName]: linterOptionConfig.value},
+        }),
+      })),
+    ),
     {
       name: genFlatConfigEntryName('global-setup/language-options'),
       languageOptions: {

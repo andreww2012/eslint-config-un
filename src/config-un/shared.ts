@@ -11,6 +11,7 @@ import {
   type EslintPlugin,
   type EslintSeverity,
   type FlatConfigEntry,
+  type FlatConfigEntryFilesOrIgnores,
   type RulesRecord,
   type UnFlagConfigEntry,
 } from '../eslint';
@@ -22,14 +23,18 @@ import type {
   PluginPrefix,
   pluginsLoaders,
 } from '../loaders';
-import type {OmitIndexSignature, OmitStrict, Promisable} from '../types';
+import type {OmitIndexSignature, OmitStrict, Prettify, Promisable} from '../types';
 import type {MaybeArray, MaybeFn, fetchPackageInfo} from '../utils';
 import type {ImportPluginReplaceableRules} from './fast-import';
 
 export type ExtraPluginsType = Record<string, () => Promisable<EslintPlugin>>;
 
+type ValueOrEslintConfigWithValue<T> =
+  | T
+  | MaybeArray<Prettify<FlatConfigEntryFilesOrIgnores & {value?: T}>>;
+
 export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = never> {
-  // 🟠 FREQUENTLY USED OPTIONS
+  // #region 🟠 FREQUENTLY USED OPTIONS
 
   configs?: {
     [Key in keyof UnConfigs<ExtraPlugins>]?: boolean | UnConfigs<ExtraPlugins>[Key];
@@ -54,7 +59,31 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    */
   extraPlugins?: ExtraPlugins;
 
-  // 🟠 OTHER CONFIGS RELATED OPTIONS
+  // #endregion
+
+  // #region 🟠 ESLINT FLAT CONFIG OPTIONS
+
+  /**
+   * Sets [`linterOptions.noInlineConfig`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=noInlineConfig) globally or more granularly.
+   * @default false
+   */
+  linterOptionsNoInlineConfig?: ValueOrEslintConfigWithValue<boolean>;
+
+  /**
+   * Sets [`linterOptions.reportUnusedDisableDirectives`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=reportUnusedDisableDirectives) globally or more granularly.
+   * @default 'warn'
+   */
+  linterOptionsReportUnusedDisableDirectives?: ValueOrEslintConfigWithValue<EslintSeverity>;
+
+  /**
+   * Sets [`linterOptions.reportUnusedInlineConfigs`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=reportUnusedInlineConfigs) globally or more granularly.
+   * @default 'off'
+   */
+  linterOptionsReportUnusedInlineConfigs?: ValueOrEslintConfigWithValue<EslintSeverity>;
+
+  // #endregion
+
+  // #region 🟠 CONFIGS RELATED OPTIONS
 
   /**
    * User provided flat configs. They still support plugin renaming, but besides that,
@@ -90,7 +119,9 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    */
   forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
 
-  // 🟠 OTHER PLUGINS OPTIONS
+  // #endregion
+
+  // #region 🟠 PLUGINS RELATED OPTIONS
 
   /**
    * Allows to change a plugin prefix. Keys are the default prefixes, value cannot be empty
@@ -134,7 +165,9 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
         alwaysLoad: LoadablePluginPrefix[];
       };
 
-  // 🟠 OTHER OPTIONS
+  // #endregion
+
+  // #region 🟠 OTHER OPTIONS
 
   /**
    * Defines for which rules and/or plugins autofix will be disabled globally.
@@ -222,6 +255,8 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
         pluginSettings?: Partial<FastImportPluginSettings>;
         replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>;
       };
+
+  // #endregion
 }
 
 export interface EslintConfigUnInternalOptions {
