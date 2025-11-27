@@ -107,5 +107,6 @@ export default {
     'dont',
     'uncapitalize', // TS utility type
     'dups',
+    'strikethrough',
   ],
 };
