@@ -17,6 +17,39 @@ type CasingEnforcementPlace = 'headings' | 'tableHeaders';
 export interface MarkdownPreferencesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'markdown-preferences'> {
+  delimitersStyle?: {
+    /**
+     * Choose the style of emphasized, strong, or emphasized strong text. Possible values:
+     * - `'*'`: use `*text*` for emphasized text and `**text**` for strong text (default);
+     * - `'_'`: same as above, but use `_` instead of `*`;
+     * - `object`: directly configure the rule's options;
+     * - `false`: style not enforced.
+     *
+     * Note: style for emphasized strong text is automatically determined
+     * from the emphasis and strong styles. See rules documentation for more info.
+     *
+     * Affected rule:
+     * - [`emphasis-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emphasis-delimiters-style.html)
+     * @default '*'
+     */
+    emphasis?:
+      | false
+      | '*'
+      | '_'
+      | GetRuleOptions<'markdown-preferences', 'emphasis-delimiters-style'>;
+
+    /**
+     * Choose the style of emphasized for strikethrough. Set `false` to not enforce.
+     *
+     * Affected rule:
+     * - [`strikethrough-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/strikethrough-delimiters-style.html)
+     * @default '~~'
+     */
+    strikethrough?:
+      | false
+      | GetRuleOptions<'markdown-preferences', 'strikethrough-delimiters-style'>['delimiter'];
+  };
+
   /**
    * Enforces casing of heading and table headers.
    * - If casing is specified, it will be enforced.
@@ -78,6 +111,7 @@ export default (async (context, optionsRaw) => {
   } satisfies MarkdownPreferencesEslintConfigOptions);
 
   const {
+    delimitersStyle,
     enforceCasing = 'Sentence case',
     extendedMarkdownSyntax,
     wordsToPreserveCasingOf,
@@ -108,6 +142,9 @@ export default (async (context, optionsRaw) => {
         : enforceCasing[place];
   const enforcedCasingForHeadings = getEnforcedCasing('headings');
   const enforcedCasingForTableHeaders = getEnforcedCasing('tableHeaders');
+
+  const emphasisStyle = delimitersStyle?.emphasis ?? '*';
+  const strikethroughStyle = delimitersStyle?.strikethrough ?? '~~';
 
   // Legend:
   // 🟢 - in recommended AND standard
@@ -156,9 +193,15 @@ export default (async (context, optionsRaw) => {
     .addRule('bullet-list-marker-style', ERROR) /** @since 0.18.0 */ // 💅
     .addRule('code-fence-style', ERROR) /** @since 0.20.0 */ // 💅
     .addRule('definitions-last', ERROR) /** @since 0.7.0 */
-    .addRule('emphasis-delimiters-style', ERROR, [
-      {emphasis: '*' /* Default: '_' */},
-    ]) /** @since 0.19.0 */ // 💅
+    .addRule(
+      'emphasis-delimiters-style',
+      emphasisStyle === false ? OFF : ERROR,
+      emphasisStyle === false
+        ? []
+        : typeof emphasisStyle === 'string'
+          ? [{emphasis: emphasisStyle, strong: emphasisStyle === '*' ? '**' : '__'}]
+          : [emphasisStyle],
+    ) /** @since 0.19.0 */ // 💅
     .addRule('hard-linebreak-style', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('level1-heading-style', ERROR) /** @since 0.18.0 */ // 💅
     .addRule('level2-heading-style', ERROR) /** @since 0.18.0 */ // 💅
@@ -174,7 +217,11 @@ export default (async (context, optionsRaw) => {
     .addRule('prefer-link-reference-definitions', ERROR, [
       {minLinks: 3 /* Default: 2 */},
     ]) /** @since 0.6.0 */
-    .addRule('strikethrough-delimiters-style', ERROR) /** @since 0.19.0 */ // 💅
+    .addRule(
+      'strikethrough-delimiters-style',
+      strikethroughStyle === false ? OFF : ERROR,
+      strikethroughStyle === false ? [] : [{delimiter: strikethroughStyle}],
+    ) /** @since 0.19.0 */ // 💅
     .addRule('thematic-break-character-style', ERROR) /** @since 0.17.0 */ // 💅
     .markCategory('Whitespace')
     .addRule('blockquote-marker-alignment', ERROR) /** @since 0.15.0 */ // 🟢
