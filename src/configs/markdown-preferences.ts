@@ -14,6 +14,24 @@ type EnforceableCasing = GetRuleOptions<'markdown-preferences', 'heading-casing'
 
 type CasingEnforcementPlace = 'headings' | 'tableHeaders';
 
+type ArrayOrBooleanRecord<T extends PropertyKey = string> = T[] | Record<T, boolean>;
+
+// Copied from https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/82e0c36a269a77719906b6a1cac454e9f4ec193d/src/rules/heading-casing.ts#L88-L99
+const DEFAULT_IGNORE_PATTERNS = [
+  // Version numbers (e.g., v1.2.3, 2.0.1)
+  String.raw`/^v\d+/u`,
+
+  // File extensions and names
+  String.raw`/\w+\.[a-z\d]+$/u`,
+
+  // Common technical patterns
+  /* eslint-disable case-police/string-check */
+  String.raw`/\w+(?:API|Api)$/u`, // webAPI, restAPI, etc.
+  String.raw`/\w+(?:SDK|Sdk)$/u`, // nodeSDK, etc.
+  String.raw`/\w+(?:CLI|Cli)$/u`, // nodeCLI, etc.
+  /* eslint-enable case-police/string-check */
+];
+
 export interface MarkdownPreferencesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'markdown-preferences'> {
@@ -88,7 +106,22 @@ export interface MarkdownPreferencesEslintConfigOptions<
   extendedMarkdownSyntax?: boolean;
 
   /**
-   * Preserve the casing of the following words in headings and table headers which capitalization is enforced.
+   * Word regular expression patterns that should be ignored during casing checks
+   * in headings and table headers when capitalization is enforced.
+   *
+   * Will be merged with the plugin's [default patterns list](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/82e0c36a269a77719906b6a1cac454e9f4ec193d/src/rules/heading-casing.ts#L88-L99).
+   *
+   * You can use the array or the object syntax. The difference is that the object syntax allows to exclude some words from the default list by setting the value to `false`.
+   *
+   * Affected rules:
+   * - [`heading-casing`](https://``ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
+   * - [`table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
+   */
+  casingEnforcementIgnorePatterns?: ArrayOrBooleanRecord<`/${string}/${string}`>;
+
+  /**
+   * Preserve the casing of the following words in headings and table headers
+   * when capitalization is enforced.
    *
    * Will be merged with the plugin's [default words list](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/HEAD/src/resources/preserve-words.ts).
    *
@@ -98,7 +131,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * - [`heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
    * - [`table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
    */
-  wordsToPreserveCasingOf?: string[] | Record<string, boolean>;
+  wordsToPreserveCasingOf?: ArrayOrBooleanRecord;
 }
 
 export default (async (context, optionsRaw) => {
@@ -114,6 +147,7 @@ export default (async (context, optionsRaw) => {
     delimitersStyle,
     enforceCasing = 'Sentence case',
     extendedMarkdownSyntax,
+    casingEnforcementIgnorePatterns,
     wordsToPreserveCasingOf,
   } = optionsResolved;
 
@@ -130,6 +164,14 @@ export default (async (context, optionsRaw) => {
   });
   if (Array.isArray(wordsToPreserveCasingOf)) {
     defaultPreserveWords.push(...wordsToPreserveCasingOf);
+  }
+
+  const defaultIgnorePatterns = getKeysOfTruthyValues<Record<string, boolean>>({
+    ...Object.fromEntries(DEFAULT_IGNORE_PATTERNS.map((defaultWord) => [defaultWord, true])),
+    ...(!Array.isArray(casingEnforcementIgnorePatterns) && casingEnforcementIgnorePatterns),
+  });
+  if (Array.isArray(casingEnforcementIgnorePatterns)) {
+    defaultIgnorePatterns.push(...casingEnforcementIgnorePatterns);
   }
 
   const getEnforcedCasing = (
@@ -173,6 +215,7 @@ export default (async (context, optionsRaw) => {
     .addRule('heading-casing', enforcedCasingForHeadings == null ? OFF : ERROR, [
       {
         preserveWords: defaultPreserveWords,
+        ignorePatterns: defaultIgnorePatterns,
         ...(enforcedCasingForHeadings != null && {
           style: enforcedCasingForHeadings /* Default: 'Title Case' */,
         }),
@@ -184,6 +227,7 @@ export default (async (context, optionsRaw) => {
     .addRule('table-header-casing', enforcedCasingForTableHeaders == null ? OFF : ERROR, [
       {
         preserveWords: defaultPreserveWords,
+        ignorePatterns: defaultIgnorePatterns,
         ...(enforcedCasingForTableHeaders != null && {
           style: enforcedCasingForTableHeaders /* Default: 'Title Case' */,
         }),
