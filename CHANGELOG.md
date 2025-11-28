@@ -1,5 +1,18 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.0
+
+### Major Changes
+
+- 84981c5: Release first beta version
+
+### Patch Changes
+
+- 754ad26: Added 3 new root options, `linterOptions{NoInlineConfig,ReportUnusedDisableDirectives,ReportUnusedInlineConfigs}`, to more conveniently set `linterOptions`
+- d694af0: Added the section about renaming rules in eslint configuration comments and made other improvements to the migration guide
+- 2c2a388: markdownPreferences: added a new option `casingEnforcementIgnorePatterns` to control `ignorePatterns` option of `{heading,table-header}-casing` rules
+- 2f53098: markdownPreferences: added `delimitersStyle` config option to more conveniently configure `emphasis-delimiters-style` and `strikethrough-delimiters-style` rules
+
 ## 1.0.0-alpha.46
 
 ### Patch Changes
