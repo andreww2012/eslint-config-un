@@ -1,8 +1,8 @@
 {
   "mode": "pre",
-  "tag": "alpha",
+  "tag": "beta",
   "initialVersions": {
-    "eslint-config-un": "1.0.0-alpha.42"
+    "eslint-config-un": "0.0.0"
   },
   "changesets": [
     "bright-deer-lick",
