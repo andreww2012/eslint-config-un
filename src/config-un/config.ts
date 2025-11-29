@@ -257,6 +257,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     cypress: {enabled: getIsConfigEnabled('cypress', 'cypress')},
     deMorgan: {enabled: getIsConfigEnabled('deMorgan', false)},
     depend: {enabled: getIsConfigEnabled('depend', false)},
+    docusaurus: {enabled: getIsConfigEnabled('docusaurus', '@docusaurus/core')},
     fastImport: {enabled: getIsConfigEnabled('fastImport', false)},
     formatJs: {
       enabled: getIsConfigEnabled('formatJs', '@formatjs/icu-messageformat-parser'),
@@ -556,6 +557,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('markdownPreferences', () => import('../configs/markdown-preferences')),
     loadUnConfig('markdownLinks', () => import('../configs/markdown-links')),
     loadUnConfig('zod', () => import('../configs/zod')),
+    loadUnConfig('docusaurus', () => import('../configs/docusaurus')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),

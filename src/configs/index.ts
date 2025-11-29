@@ -12,6 +12,7 @@ import type {CssInJsEslintConfigOptions} from './css-in-js';
 import type {CypressEslintConfigOptions} from './cypress';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
 import type {DependEslintConfigOptions} from './depend';
+import type {DocusaurusEslintConfigOptions} from './docusaurus';
 import type {EmberEslintConfigOptions} from './ember';
 import type {ErasableSyntaxOnlyEslintConfigOptions} from './erasable-syntax-only';
 import type {EsEslintConfigOptions} from './es';
@@ -246,6 +247,18 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   depend: DependEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [Docusaurus](https://docusaurus.io) specific rules.
+   *
+   * By default will be applied to:
+   * - `** /*.?([cm])[jt]sx`
+   *
+   * Used plugin:
+   * - [`@docusaurus/eslint-plugin`](https://npmjs.com/@docusaurus/eslint-plugin) ([docs](https://docusaurus.io/docs/api/misc/@docusaurus/eslint-plugin))
+   * @default true <=> `@docusaurus/core` package is installed
+   */
+  docusaurus: DocusaurusEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Ember](https://emberjs.com) specific rules.

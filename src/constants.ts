@@ -24,6 +24,8 @@ export const GLOB_JS_TS_X = `**/*.${GLOB_JS_TS_X_EXTENSION}` as const;
 const GLOB_JS_TS_X_ONLY_EXTENSION = `${GLOB_JS_TS_EXTENSION}x` as const;
 export const GLOB_JS_TS_X_ONLY = `**/*.${GLOB_JS_TS_X_ONLY_EXTENSION}` as const;
 
+export const GLOB_JSX_TSX = '**/*.?([cm])[jt]sx' as const;
+
 export const GLOB_CONFIG_FILES = [
   `**/*.config.${GLOB_JS_TS_X_EXTENSION}` as const,
   `**/.*rc.${GLOB_JS_TS_X_EXTENSION}` as const,
@@ -154,6 +156,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'zod',
   'unocss',
   '@formatjs/icu-messageformat-parser',
+  '@docusaurus/core',
 
   'astro',
   'vue',

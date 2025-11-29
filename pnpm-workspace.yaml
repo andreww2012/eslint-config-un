@@ -53,12 +53,12 @@ trustPolicyExclude:
   - '@graphql-tools/executor-http@1.3.3'
   - '@graphql-tools/executor-graphql-ws@2.0.7'
   - '@graphql-tools/wrap@10.1.4'
-  - '@typescript-eslint/typescript-estree@7.11.0'
-  - '@typescript-eslint/scope-manager@7.11.0'
+  - '@typescript-eslint/typescript-estree@5.62.0||7.11.0'
+  - '@typescript-eslint/scope-manager@5.62.0||7.11.0'
   - '@typescript-eslint/type-utils@7.11.0'
-  - '@typescript-eslint/types@7.11.0'
-  - '@typescript-eslint/utils@7.11.0'
-  - '@typescript-eslint/visitor-keys@7.11.0'
+  - '@typescript-eslint/types@5.62.0||7.11.0'
+  - '@typescript-eslint/utils@5.62.0||7.11.0'
+  - '@typescript-eslint/visitor-keys@5.62.0||7.11.0'
   - cached-factory@0.1.0
   - chokidar@4.0.3
   - detect-port@1.6.1

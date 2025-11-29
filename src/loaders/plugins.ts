@@ -157,6 +157,16 @@ export const pluginsLoaders = {
     'eslint-plugin-depend',
     () => interopDefault(import('eslint-plugin-depend')) as Promise<EslintPlugin>,
   ),
+  docusaurus: genModuleLoader(
+    'docusaurus',
+    '@docusaurus/eslint-plugin',
+    () =>
+      // @ts-expect-error types mismatch
+      interopDefault(
+        import('@docusaurus/eslint-plugin'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
   ember: genModuleLoader('ember', 'eslint-plugin-ember', () =>
     interopDefault(import('eslint-plugin-ember')),
   ),

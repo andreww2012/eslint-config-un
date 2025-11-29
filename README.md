@@ -67,6 +67,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `@angular-eslint/eslint-plugin-template` | `@angular-eslint/template` |
 | `@angular-eslint/eslint-plugin`          | `@angular-eslint`          |
 | `@cspell/eslint-plugin`                  | `@cspell`                  |
+| `@docusaurus/eslint-plugin`              | `docusaurus`               |
 | `@eslint-react/eslint-plugin`            | `@eslint-react`            |
 | `@intlify/eslint-plugin-vue-i18n`        | `@intlify/vue-i18n`        |
 | `@next/eslint-plugin-next`               | `@next/next`               |
@@ -325,6 +326,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | ![UnoCSS](./assets/logos-unocss.svg) `unocss`                                       | ✅ (`unocss` is installed)                             | [@unocss/eslint-plugin](https://npmjs.com/@unocss/eslint-plugin) (`unocss`)                                                                          | Since v1.0.0                                                                                        |
 | ![Zod](./assets/logos-zod.svg) `zod`                                                | ✅ (`zod@>=4` is installed)                            | [eslint-plugin-zod-x](https://npmjs.com/eslint-plugin-zod-x) (`zod`)                                                                                 | Since v1.0.0                                                                                        |
 | ![FormatJS](./assets/logos-formatjs.svg) `formatJs`                                 | ✅ (`@formatjs/icu-messageformat-parser` is installed) | [eslint-plugin-formatjs](https://npmjs.com/eslint-plugin-formatjs) (`formatjs`)                                                                      | Since v1.0.0                                                                                        |
+| ![Docusaurus](./assets/vscode-icons-file-type-docusaurus.svg) `docusaurus`          | ✅ (`@docusaurus/core` is installed)                   | [@docusaurus/eslint-plugin](https://npmjs.com/@docusaurus/eslint-plugin) (`docusaurus`)                                                              | Since v1.0.0                                                                                        |
 
 ### Miscellaneous
 
@@ -417,14 +419,15 @@ eslint-config-un provides the ability to change any registered plugin prefix. Ad
 
 #### Default renames
 
-| Plugin                                                                   | Suggested prefix     | Our prefix  | Reason                                                                                                               |
-| ------------------------------------------------------------------------ | -------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------- |
-| [`typescript-eslint`](https://npmjs.com/typescript-eslint)               | `@typescript-eslint` | `ts`        | More concise and convenient to use                                                                                   |
-| [`eslint-plugin-import-x`]                                               | `import-x`           | `import`    | This plugin is a fork and is meant to replace the original plugin with `import` prefix                               |
-| [`eslint-plugin-n`](https://npmjs.com/eslint-plugin-n)                   | `n`                  | `node`      | Same ^                                                                                                               |
-| [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css)               | `css`                | `css-in-js` | Conflicts with [`@eslint/css`](https://npmjs.com/@eslint/css) and our name better captures the essence of the plugin |
-| [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x) | `jsx-a11y-x`         | `jsx-a11y`  | This plugin is a fork and is meant to replace the original plugin with `jsx-a11y` prefix                             |
-| [`eslint-plugin-zod-x`](https://npmjs.com/eslint-plugin-zod-x)           | `zod-x`              | `zod`       | Better replacement for an existing `eslint-plugin-zod` plugin                                                        |
+| Plugin                                                                     | Suggested prefix     | Our prefix   | Reason                                                                                                               |
+| -------------------------------------------------------------------------- | -------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------- |
+| [`typescript-eslint`](https://npmjs.com/typescript-eslint)                 | `@typescript-eslint` | `ts`         | More concise and convenient to use                                                                                   |
+| [`eslint-plugin-import-x`]                                                 | `import-x`           | `import`     | This plugin is a fork and is meant to replace the original plugin with `import` prefix                               |
+| [`eslint-plugin-n`](https://npmjs.com/eslint-plugin-n)                     | `n`                  | `node`       | Same ^                                                                                                               |
+| [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css)                 | `css`                | `css-in-js`  | Conflicts with [`@eslint/css`](https://npmjs.com/@eslint/css) and our name better captures the essence of the plugin |
+| [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x)   | `jsx-a11y-x`         | `jsx-a11y`   | This plugin is a fork and is meant to replace the original plugin with `jsx-a11y` prefix                             |
+| [`eslint-plugin-zod-x`](https://npmjs.com/eslint-plugin-zod-x)             | `zod-x`              | `zod`        | Better replacement for an existing `eslint-plugin-zod` plugin                                                        |
+| [`@docusaurus/eslint-plugin`](https://npmjs.com/@docusaurus/eslint-plugin) | `@docusaurus`        | `docusaurus` | `@` feels unnecessary                                                                                                |
 
 > [!NOTE]
 > If you rename a plugin, you still have to use the original prefix within `overrides`, `overridesAny` and `extraConfigs`. eslint-config-un will rename the rules accordingly for you.

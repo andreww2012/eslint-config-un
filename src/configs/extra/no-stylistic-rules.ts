@@ -193,6 +193,9 @@ const ALL_STYLISTIC_RULES = {
   depend: {
     // None
   },
+  docusaurus: {
+    // None
+  },
   ember: {
     'no-implicit-service-injection-argument': true,
     'no-unnecessary-index-route': true,
