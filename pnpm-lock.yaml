@@ -134,6 +134,9 @@ importers:
       eslint-plugin-mdx:
         specifier: 3.6.2
         version: 3.6.2(eslint@9.39.1(jiti@2.6.1))
+      eslint-plugin-module-interop:
+        specifier: 0.3.1
+        version: 0.3.1(eslint@9.39.1(jiti@2.6.1))
       eslint-plugin-n:
         specifier: 17.23.1
         version: 17.23.1(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
@@ -5323,6 +5326,12 @@ packages:
 
   eslint-plugin-mocha@11.2.0:
     resolution: {integrity: sha512-nMdy3tEXZac8AH5Z/9hwUkSfWu8xHf4XqwB5UEQzyTQGKcNlgFeciRAjLjliIKC3dR1Ex/a2/5sqgQzvYRkkkA==}
+    peerDependencies:
+      eslint: '>=9.0.0'
+
+  eslint-plugin-module-interop@0.3.1:
+    resolution: {integrity: sha512-2d2nmqaBKnnZ6pOovSPltXNw9gZFcOdhSy/xULJ83r97clyww5JMiauhBcnBFXqY0AoN0RGAs8w2oyQkq/EL2A==}
+    engines: {node: ^18.18.0||^20.9.0||>=21.1.0}
     peerDependencies:
       eslint: '>=9.0.0'
 
@@ -14690,6 +14699,13 @@ snapshots:
       '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.1(jiti@2.6.1))
       eslint: 9.39.1(jiti@2.6.1)
       globals: 15.15.0
+
+  eslint-plugin-module-interop@0.3.1(eslint@9.39.1(jiti@2.6.1)):
+    dependencies:
+      '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.1(jiti@2.6.1))
+      enhanced-resolve: 5.18.3
+      eslint: 9.39.1(jiti@2.6.1)
+      get-tsconfig: 4.13.0
 
   eslint-plugin-n@17.23.1(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3):
     dependencies:

@@ -44,6 +44,7 @@ import type {MarkdownPreferencesEslintConfigOptions} from './markdown-preference
 import type {MathEslintConfigOptions} from './math';
 import type {MdxEslintConfigOptions} from './mdx';
 import type {MochaEslintConfigOptions} from './mocha';
+import type {ModuleInteropEslintConfigOptions} from './module-interop';
 import type {NextJsEslintConfigOptions} from './nextjs';
 import type {NoOnlyTestsEslintConfigOptions} from './no-only-tests';
 import type {NoUnsanitizedEslintConfigOptions} from './no-unsanitized';
@@ -530,6 +531,15 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true
    */
   mocha: MochaEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin with rules for module interoperability.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-module-interop`](https://npmjs.com/eslint-plugin-module-interop) ([docs](https://ota-meshi.github.io/eslint-plugin-module-interop))
+   * @default true
+   */
+  moduleInterop: ModuleInteropEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Next.js](https://nextjs.org) specific rules.

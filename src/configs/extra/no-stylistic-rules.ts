@@ -393,6 +393,9 @@ const ALL_STYLISTIC_RULES = {
   mocha: {
     'consistent-spacing-between-blocks': true,
   },
+  'module-interop': {
+    // None
+  },
   'no-only-tests': {
     // None
   },

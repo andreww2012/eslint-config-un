@@ -291,6 +291,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     math: {enabled: getIsConfigEnabled('math')},
     mdx: {enabled: getIsConfigEnabled('mdx')},
     mocha: {enabled: getIsConfigEnabled('mocha', 'mocha')},
+    moduleInterop: {enabled: getIsConfigEnabled('moduleInterop')},
     nextJs: {
       // eslint-disable-next-line case-police/string-check
       enabled: getIsConfigEnabled('nextJs', 'next'),
@@ -558,6 +559,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('markdownLinks', () => import('../configs/markdown-links')),
     loadUnConfig('zod', () => import('../configs/zod')),
     loadUnConfig('docusaurus', () => import('../configs/docusaurus')),
+    loadUnConfig('moduleInterop', () => import('../configs/module-interop')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),

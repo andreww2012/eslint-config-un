@@ -304,6 +304,11 @@ export const pluginsLoaders = {
   mocha: genModuleLoader('mocha', 'eslint-plugin-mocha', () =>
     interopDefault(import('eslint-plugin-mocha')),
   ),
+  'module-interop': genModuleLoader(
+    'moduleInterop',
+    'eslint-plugin-module-interop',
+    () => interopDefault(import('eslint-plugin-module-interop')) as Promise<EslintPlugin>,
+  ),
   'no-only-tests': genModuleLoader('no-only-tests', 'eslint-plugin-no-only-tests', () =>
     interopDefault(import('eslint-plugin-no-only-tests')),
   ),
