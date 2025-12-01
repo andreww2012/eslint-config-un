@@ -279,6 +279,12 @@ export default (async (context, optionsRaw) => {
     .addRule('list-marker-alignment', ERROR) /** @since 0.15.0 */ // 🟢
     .addRule('no-multi-spaces', ERROR) /** @since 0.21.0 */ // 💅
     .addRule('no-multiple-empty-lines', ERROR) /** @since 0.10.0 */ // 💅
+    .addRule('no-tabs', ERROR, [
+      {
+        ignoreCodeBlocks: ['*'], // Default: `[]`
+        codeBlockTabWidth: 2, // Default: 4
+      },
+    ]) /** @since 0.37.0 */ // 💅
     .addRule('no-trailing-spaces', ERROR) /** @since 0.3.0 */ // 💅
     .addRule('padded-custom-containers', ERROR) /** @since 0.29.0 */ // 💅⚠️
     .addRule('padding-line-between-blocks', ERROR) /** @since 0.16.0 */ // 💅⚠️
