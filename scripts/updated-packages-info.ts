@@ -82,8 +82,15 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 
   console.log(`${styleText('bold', 'Repo:')} ${styleText('cyan', repoUrl)}`);
   console.log(`${styleText('bold', 'Releases:')} ${styleText('cyan', `${repoUrl}/releases`)}`);
+
+  console.log(styleText('bold', 'For changelog:'));
   console.log(
-    `${styleText('bold', 'For changelog:')}\n\`${dependency}\`: [${oldVersion} → ${newVersion}](${repoUrl}/compare/${getGitHubVersionTag(dependency, oldVersion)}...${getGitHubVersionTag(dependency, newVersion)})`,
+    `: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${repoUrl}/compare/${getGitHubVersionTag(dependency, oldVersion)}...${getGitHubVersionTag(dependency, newVersion)}):
+
+- 🟢 enabled [\`\`]() rule with the following default options:
+- 🟡 enabled [\`\`]() rule (warning) with the following default options:
+- ❓ enabled conditionally [\`\`]() rule with the following default options:
+- 🔴 not enabled [\`\`]() rule `,
   );
 }
 
