@@ -43,8 +43,13 @@ export const packagesLoaders = {
         }
       >,
   ),
-  eslintPluginImportX: genModuleLoader('eslintPluginImportX', 'eslint-plugin-import-x', () =>
-    interopDefault(import('eslint-plugin-import-x')),
+  eslintPluginImportX: genModuleLoader(
+    'eslintPluginImportX',
+    'eslint-plugin-import-x',
+    () =>
+      interopDefault(import('eslint-plugin-import-x')) as Promise<
+        Pick<typeof import('eslint-plugin-import-x'), 'createNodeResolver'>
+      >,
   ),
   eslintPluginMarkdown: genModuleLoader('eslintPluginMarkdown', '@eslint/markdown', () =>
     interopDefault(import('@eslint/markdown')),
