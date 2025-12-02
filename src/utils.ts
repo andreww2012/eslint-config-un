@@ -9,7 +9,7 @@ import {resolve as resolvePackage} from 'import-meta-resolve';
 import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
 import {Traverse, type TraverseOptions} from 'neotraverse/modern';
 import * as R from 'remeda';
-import type {FalsyValue, PackageJson, Promisable} from './types';
+import type {FalsyValue, PackageJson, Promisable, StripReadonly} from './types';
 
 export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
 
@@ -245,3 +245,28 @@ export const isIn = <T extends object>(key: PropertyKey, object: T): key is keyo
 
 export const createTraverser = (object: unknown, options?: TraverseOptions) =>
   new Traverse(object, options);
+
+type FindDuplicate<T extends readonly unknown[]> = T extends readonly [infer First, ...infer Rest]
+  ? First extends Rest[number]
+    ? First
+    : FindDuplicate<Rest extends readonly unknown[] ? Rest : never>
+  : never;
+
+type MissingMembers<U, A extends readonly unknown[]> = Exclude<U, A[number]>;
+
+type ExtraMembers<U, A extends readonly unknown[]> = Exclude<A[number], U>;
+
+export const allUnionMembers =
+  // eslint-disable-next-line ts/no-unnecessary-type-parameters
+  <ArrayType, Options extends {readonly?: boolean} = {readonly: false}>() =>
+    <const A extends readonly ArrayType[]>(
+      array: A &
+        ([ExtraMembers<ArrayType, A>] extends [never]
+          ? [MissingMembers<ArrayType, A>] extends [never]
+            ? [FindDuplicate<A>] extends [never]
+              ? unknown
+              : never
+            : never
+          : never),
+    ) =>
+      array as Options['readonly'] extends true ? A : StripReadonly<A>;

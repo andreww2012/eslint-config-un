@@ -22,6 +22,7 @@ export type {
   ReadonlyDeep,
   RequireExactlyOne,
   SetRequired,
+  Writable as StripReadonly,
   Subtract,
   ValueOf as ObjectValues,
   OmitIndexSignature,
