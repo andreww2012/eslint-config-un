@@ -95,6 +95,10 @@ export type {
 export {assignDefaults} from '../utils';
 export type {ExtraPluginsType, UnConfigFn} from '../config-un/shared';
 
+export type ArrayOrBooleanRecord<T extends PropertyKey = string> =
+  | T[]
+  | Partial<Record<T, boolean>>;
+
 export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * [Angular](https://angular.dev) specific rules. Supported versions: 13 to 20 (inclusive).

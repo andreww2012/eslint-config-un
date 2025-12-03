@@ -219,14 +219,14 @@ export const interopDefault = async <T>(module: Promisable<T | {default: T}>): P
     : resolvedModule;
 };
 
-export function getKeysOfTruthyValues<T extends Record<string, boolean>>(
+export function getKeysOfTruthyValues<T extends Partial<Record<string, boolean>>>(
   object: T,
 ): (keyof T & string)[];
-export function getKeysOfTruthyValues<T extends Record<string, boolean>>(
+export function getKeysOfTruthyValues<T extends Partial<Record<string, boolean>>>(
   object: T,
   requireAtLeastOneTruthyValue: true,
 ): [keyof T & string, ...(keyof T & string)[]] | undefined;
-export function getKeysOfTruthyValues<T extends Record<string, boolean>>(
+export function getKeysOfTruthyValues<T extends Partial<Record<string, boolean>>>(
   object: T,
   requireAtLeastOneTruthyValue?: boolean,
 ) {

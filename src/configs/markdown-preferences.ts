@@ -3,6 +3,7 @@ import {ERROR, GLOB_MARKDOWN, OFF} from '../constants';
 import {pluginsLoaders} from '../loaders';
 import {getKeysOfTruthyValues} from '../utils';
 import {
+  type ArrayOrBooleanRecord,
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
@@ -13,8 +14,6 @@ import {
 type EnforceableCasing = GetRuleOptions<'markdown-preferences', 'heading-casing'>['style'] & {};
 
 type CasingEnforcementPlace = 'headings' | 'tableHeaders';
-
-type ArrayOrBooleanRecord<T extends PropertyKey = string> = T[] | Record<T, boolean>;
 
 // Copied from https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/82e0c36a269a77719906b6a1cac454e9f4ec193d/src/rules/heading-casing.ts#L88-L99
 const DEFAULT_IGNORE_PATTERNS = [

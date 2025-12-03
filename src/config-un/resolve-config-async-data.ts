@@ -50,8 +50,6 @@ const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['auto
   'unicorn/explicit-length-check': true, // Wrong auto-fixes
   'unicorn/no-useless-undefined': true,
   'unicorn/prefer-spread': true,
-
-  'zod/require-schema-suffix': true, // Does not rename variable usages
 };
 
 interface ResolveConfigAsyncDataOptions {
