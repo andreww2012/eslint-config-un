@@ -166,6 +166,9 @@ const ALL_STYLISTIC_RULES = {
     'no-unnecessary-whitespace': true,
     'sort-classes': true,
   },
+  boundaries: {
+    // None
+  },
   'case-police': {
     'string-check': true,
   },

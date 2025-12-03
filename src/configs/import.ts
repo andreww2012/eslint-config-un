@@ -21,7 +21,8 @@ export interface ImportEslintConfigOptions<
   /**
    * [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `settings` object with keys transformed to `import-x/<original property name in kebab case>` and applied to the specified `files` and `ignores`.
+   * that will be assigned to `settings` object with keys transformed to
+   * `import-x/<original property name in kebab case>` and applied to the specified `files` and `ignores`.
    *
    * Some settings are set by our config, and the settings you provide here will be merged with ours.
    * @see https://github.com/un-ts/eslint-plugin-import-x/tree/HEAD?tab=readme-ov-file#settings
@@ -151,12 +152,10 @@ export default (async (context, optionsRaw) => {
             },
           }),
           ...Object.fromEntries(
-            objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => {
-              return [
-                `import-x/${kebabCase(settingName)}` satisfies keyof PluginSettingsWithPrefixes,
-                settingValue,
-              ];
-            }),
+            objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
+              `import-x/${kebabCase(settingName)}` satisfies keyof PluginSettingsWithPrefixes,
+              settingValue,
+            ]),
           ),
         } satisfies PluginSettingsWithPrefixes,
       },

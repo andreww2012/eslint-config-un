@@ -123,6 +123,9 @@ export const pluginsLoaders = {
     'eslint-plugin-better-tailwindcss',
     () => interopDefault(import('eslint-plugin-better-tailwindcss')),
   ),
+  boundaries: genModuleLoader('boundaries', 'eslint-plugin-boundaries', () =>
+    interopDefault(import('eslint-plugin-boundaries')),
+  ),
   'case-police': genModuleLoader(
     'case-police',
     'eslint-plugin-case-police',

@@ -246,6 +246,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     astro: {enabled: getIsConfigEnabled('astro', 'astro')},
     ava: {enabled: getIsConfigEnabled('ava', 'ava')},
     betterTailwind: {enabled: getIsConfigEnabled('betterTailwind', 'tailwindcss')},
+    boundaries: {enabled: getIsConfigEnabled('boundaries', false)},
     casePolice: {enabled: getIsConfigEnabled('casePolice', false)},
     checkFile: {enabled: getIsConfigEnabled('checkFile', false)},
     cli: {enabled: getIsConfigEnabled('cli')},
@@ -584,6 +585,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('header', () => import('../configs/header')),
     loadUnConfig('headers', () => import('../configs/headers')),
     loadUnConfig('fastImport', () => import('../configs/fast-import')),
+    loadUnConfig('boundaries', () => import('../configs/boundaries')),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

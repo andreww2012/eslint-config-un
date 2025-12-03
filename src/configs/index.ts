@@ -3,6 +3,7 @@ import type {AngularEslintConfigOptions} from './angular';
 import type {AstroEslintConfigOptions} from './astro';
 import type {AvaEslintConfigOptions} from './ava';
 import type {BetterTailwindEslintConfigOptions} from './better-tailwind';
+import type {BoundariesEslintConfigOptions} from './boundaries';
 import type {CasePoliceEslintConfigOptions} from './case-police';
 import type {CheckFileEslintConfigOptions} from './check-file';
 import type {CompatEslintConfigOptions} from './compat';
@@ -138,6 +139,15 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> `tailwindcss` package is installed
    */
   betterTailwind: BetterTailwindEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin to enforce architectural boundaries in JS/TS projects.
+   *
+   * Used plugins:
+   * - [`eslint-plugin-boundaries`](https://npmjs.com/eslint-plugin-boundaries) ([docs](https://www.jsboundaries.dev))
+   * @default false
+   */
+  boundaries: BoundariesEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Used plugin:
