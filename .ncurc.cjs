@@ -10,6 +10,7 @@ fs.mkdirSync(CACHE_DIRECTORY, {recursive: true});
 const SCOPED_ESLINT_PACKAGES_NOT_PLUGINS = new Set(['config-inspector', 'compat']);
 
 const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Set([
+  '@cspell/eslint-plugin',
   '@next/eslint-plugin-next',
   '@nx/eslint-plugin',
   '@unocss/eslint-plugin',
@@ -31,7 +32,6 @@ const PACKAGE_GROUPS = Object.entries({
   '@angular-eslint': [],
   '@jest': [],
   '@html-eslint': [],
-  '@cspell': ['cspell'],
   '@sveltejs': ['eslint-plugin-svelte', 'svelte-eslint-parser'],
   'eslint-plugin-vue': ['vue-eslint-parser'],
   'eslint-plugin-astro': ['astro-eslint-parser'],
