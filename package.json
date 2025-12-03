@@ -166,7 +166,7 @@
     "@nuxt/eslint-plugin": "1.11.0",
     "@nx/eslint-plugin": "22.1.0",
     "@smarttools/eslint-plugin-rxjs": "1.0.22",
-    "@sveltejs/kit": "2.49.0",
+    "@sveltejs/kit": "2.49.1",
     "@tanstack/eslint-plugin-query": "5.91.2",
     "@types/eslint-plugin-security": "3.0.0",
     "@types/eslint-plugin-tailwindcss": "3.17.0",
