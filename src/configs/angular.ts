@@ -22,8 +22,9 @@ const LATEST_SUPPORTED_ANGULAR_VERSION = SUPPORTED_ANGULAR_VERSIONS.at(
   -1,
 ) as LatestSupportedAngularVersion;
 
-interface ConfigTemplateSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, '@angular-eslint/template'> {
+interface ConfigTemplateSubConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, '@angular-eslint/template'> {
   /**
    * Enable all a11y (accessibility) rules (all are prefixed with `@angular-eslint/template`):
    * - [`alt-text`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/alt-text.md) ([`accessibility-alt-text`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-alt-text.md) before Angular 16)
@@ -70,8 +71,9 @@ interface ConfigTemplateSubConfigOptions<ExtraPlugins extends ExtraPluginsType =
   requireLoopIndexes?: boolean;
 }
 
-export interface AngularEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, '@angular-eslint'> {
+export interface AngularEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, '@angular-eslint'> {
   /**
    * Enables or specifies the configuration for the [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template) plugin,
    * which includes template-specific rules.

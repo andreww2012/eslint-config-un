@@ -7,8 +7,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface NoOnlyTestsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'no-only-tests'> {}
+export interface NoOnlyTestsEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'no-only-tests'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies NoOnlyTestsEslintConfigOptions);

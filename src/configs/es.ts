@@ -274,8 +274,9 @@ interface EcmaFeatures {
 
 type EcmaVersion = keyof EcmaFeatures;
 
-export interface EsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'es'> {
+export interface EsEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'es'> {
   /**
    * [`eslint-plugin-es-x`](https://npmjs.com/eslint-plugin-es-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

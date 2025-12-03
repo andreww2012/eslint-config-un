@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface CompatEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'compat'> {
+export interface CompatEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'compat'> {
   /**
    * [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

@@ -9,11 +9,12 @@ import {
   assignDefaults,
 } from './index';
 
-interface PnpmJsonSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<
-    ExtraPlugins,
-    PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/json-'>
-  > {
+interface PnpmJsonSubConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<
+  ExtraPlugins,
+  PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/json-'>
+> {
   /**
    * Enforces that all dependencies are coming from [pnpm catalogs](https://pnpm.io/catalogs).
    *
@@ -33,8 +34,9 @@ interface PnpmJsonSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never
   preferSettingsInPnpmWorkspaceYaml?: boolean;
 }
 
-export interface PnpmEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'pnpm'> {
+export interface PnpmEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'pnpm'> {
   /**
    * [`eslint-plugin-pnpm`](https://npmjs.com/eslint-plugin-pnpm) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

@@ -7,8 +7,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface CspellEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, '@cspell'> {
+export interface CspellEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, '@cspell'> {
   /**
    * The single rule (`spellchecker`) options.
    */

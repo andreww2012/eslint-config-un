@@ -7,8 +7,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface SonarEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'sonarjs'> {
+export interface SonarEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'sonarjs'> {
   /**
    * Enables rules that are specific to [aws-cdk-lib](https://npmjs.com/aws-cdk-lib)
    * @default true <=> `aws-cdk-lib` package is installed

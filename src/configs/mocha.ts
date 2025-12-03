@@ -14,7 +14,8 @@ import {
 } from './index';
 
 export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'mocha'>,
+  extends
+    UnConfigOptions<ExtraPlugins, 'mocha'>,
     NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha) plugin

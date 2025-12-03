@@ -63,8 +63,7 @@ interface RequireFieldsOption {
 }
 
 export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'package-json'>,
-    RequireFieldsOption {
+  extends UnConfigOptions<ExtraPlugins, 'package-json'>, RequireFieldsOption {
   /**
    * [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

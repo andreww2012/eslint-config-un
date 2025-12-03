@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface UnicornEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'unicorn'> {
+export interface UnicornEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'unicorn'> {
   /**
    * Enforces `utf8`/`utf-8` and `ascii` for UTF-8 and ASCII encodings respectively
    * in function arguments, such as `fs.readFile(file, 'utf8')`.

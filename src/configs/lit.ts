@@ -10,7 +10,8 @@ import {
 } from './index';
 
 interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'lit-a11y'>,
+  extends
+    UnConfigOptions<ExtraPlugins, 'lit-a11y'>,
     OmitStrict<
       JsxA11yEslintConfigOptions,
       | 'settings'
@@ -49,8 +50,9 @@ interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   >;
 }
 
-export interface LitEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'lit'> {
+export interface LitEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'lit'> {
   /**
    * [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

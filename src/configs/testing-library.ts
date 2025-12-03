@@ -16,8 +16,10 @@ import {
   assignDefaults,
 } from './index';
 
-interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType>
-  extends UnConfigOptions<ExtraPlugins, 'testing-library'> {
+interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnConfigOptions<
+  ExtraPlugins,
+  'testing-library'
+> {
   /**
    * By default, [`no-node-access` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-node-access.md) is enabled,
    * which disallows DOM traversal using native HTML methods and properties.
@@ -61,8 +63,7 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType>
 }
 
 interface ReactSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends SharedConfigOptions<ExtraPlugins>,
-    NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
+  extends SharedConfigOptions<ExtraPlugins>, NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
   /**
    * Affected rules:
    * - [`consistent-data-testid`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/consistent-data-testid.md)
@@ -70,8 +71,9 @@ interface ReactSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   consistentDataTestId?: GetRuleOptions<'testing-library', 'consistent-data-testid'>;
 }
 
-export interface TestingLibraryEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends OmitStrict<SharedConfigOptions<ExtraPlugins>, 'allowTestingFrameworkSetupHook'> {
+export interface TestingLibraryEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends OmitStrict<SharedConfigOptions<ExtraPlugins>, 'allowTestingFrameworkSetupHook'> {
   /**
    * @default <=> `angular` config is enabled
    */

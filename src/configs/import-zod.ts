@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface ImportZodEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'import-zod'> {}
+export interface ImportZodEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'import-zod'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies ImportZodEslintConfigOptions);

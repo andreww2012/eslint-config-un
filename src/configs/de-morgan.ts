@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface DeMorganEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'de-morgan'> {}
+export interface DeMorganEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'de-morgan'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies DeMorganEslintConfigOptions);

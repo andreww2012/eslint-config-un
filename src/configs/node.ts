@@ -98,8 +98,9 @@ interface EslintPluginNSettings {
   version?: string;
 }
 
-export interface NodeEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'node'> {
+export interface NodeEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'node'> {
   /**
    * [`eslint-plugin-n`](https://github.com/eslint-community/eslint-plugin-n) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

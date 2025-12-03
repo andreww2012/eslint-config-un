@@ -19,8 +19,9 @@ const ALL_ZOD_OBJECT_SCHEMA_TYPES = allUnionMembers<ZodObjectSchemaType>()([
   'strictObject',
 ]);
 
-export interface ZodEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'zod'> {
+export interface ZodEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'zod'> {
   /**
    * Specify which object schema types will be allowed.
    * - If object is used, it will be merged with the default value.

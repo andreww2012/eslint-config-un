@@ -15,8 +15,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface EmberEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'ember'> {
+export interface EmberEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'ember'> {
   /**
    * Rules specific to files with tests.
    */

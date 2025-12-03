@@ -28,8 +28,9 @@ const DEFAULT_HTML_EXTENSIONS = [
 ];
 const DEFAULT_XML_EXTENSIONS = ['.xhtml', '.xml'];
 
-export interface JsInlineEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'html'> {
+export interface JsInlineEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'html'> {
   /**
    * [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from '../index';
 
-export interface CliEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins> {
+export interface CliEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins> {
   /**
    * By default, files in directories on all levels are accounted for by this config. Set this to true to only account for files in the top-level directories.
    * @default false

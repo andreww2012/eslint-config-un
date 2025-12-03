@@ -7,8 +7,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface CssInJsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'css-in-js'> {
+export interface CssInJsEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'css-in-js'> {
   /**
    * [`eslint-plugin-css` plugin settings](https://ota-meshi.github.io/eslint-plugin-css/settings/) that will be applied to the specified `files` and `ignores`.
    */

@@ -161,8 +161,9 @@ interface EslintPluginJsdocSettings {
   exemptDestructuredRootsFromChecks?: boolean;
 }
 
-export interface JsdocEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'jsdoc'> {
+export interface JsdocEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'jsdoc'> {
   /**
    * [`eslint-plugin-jsdoc` plugin settings](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md) that will be applied to the specified `files` and `ignores`.
    */

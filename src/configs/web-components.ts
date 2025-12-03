@@ -7,8 +7,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface WebComponentsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'wc'> {
+export interface WebComponentsEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'wc'> {
   /**
    * [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

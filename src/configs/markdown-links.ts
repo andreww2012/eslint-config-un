@@ -10,8 +10,9 @@ import {
 
 type IssueType = 'deadUrls' | 'missingFragments' | 'missingLocalPath' | 'selfDestinationLinks';
 
-export interface MarkdownLinksEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'markdown-links'> {
+export interface MarkdownLinksEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'markdown-links'> {
   /**
    * What types of issues the links are checked for. By default, all issues are enabled.
    * The value you provide here will be **deeply merged** with the default value.

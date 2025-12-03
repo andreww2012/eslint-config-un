@@ -23,8 +23,9 @@ type RuleSubConfig<
       options?: GetRuleOptions<'perfectionist', T>;
     });
 
-export interface PerfectionistEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'perfectionist'> {
+export interface PerfectionistEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'perfectionist'> {
   /**
    * [`eslint-plugin-perfectionist`](https://npmjs.com/eslint-plugin-perfectionist) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

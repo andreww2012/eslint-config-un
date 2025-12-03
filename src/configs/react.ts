@@ -120,11 +120,12 @@ type EslintPluginReactDomRules =
 
 type ReactXTypeAwareRules = 'no-leaked-conditional-rendering' | 'prefer-read-only-props';
 
-interface ReactXSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<
-    ExtraPlugins,
-    OmitStrict<RulesRecordPartial<'@eslint-react'>, `@eslint-react/${ReactXTypeAwareRules}`>
-  > {
+interface ReactXSubConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<
+  ExtraPlugins,
+  OmitStrict<RulesRecordPartial<'@eslint-react'>, `@eslint-react/${ReactXTypeAwareRules}`>
+> {
   /**
    * [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -182,8 +183,9 @@ interface ReactXSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
       >;
 }
 
-interface HooksSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'react-hooks' | '@eslint-react/hooks-extra'> {
+interface HooksSubConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'react-hooks' | '@eslint-react/hooks-extra'> {
   /**
    * [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -202,8 +204,9 @@ interface HooksSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   enableReactCompilerRules?: boolean;
 }
 
-interface RefreshSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'react-refresh'> {
+interface RefreshSubConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'react-refresh'> {
   /**
    * "If you use a framework that handles HMR of some specific exports, you can use this option to avoid warning for them." - plugin docs
    *
@@ -227,8 +230,9 @@ interface RefreshSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   >;
 }
 
-export interface ReactEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'react'> {
+export interface ReactEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'react'> {
   /**
    * [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

@@ -13,7 +13,8 @@ import {
 } from './index';
 
 export interface CypressEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'cypress'>,
+  extends
+    UnConfigOptions<ExtraPlugins, 'cypress'>,
     NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {}
 
 export default ((context, optionsRaw) => {

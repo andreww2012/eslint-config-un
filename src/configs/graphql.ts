@@ -21,8 +21,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface GraphqlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'graphql'> {
+export interface GraphqlEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'graphql'> {
   /**
    * Files for which GraphQL processor will be used.
    * "Under the hood, the processor extracts schema and operation files from these files

@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface CasePoliceEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'case-police'> {}
+export interface CasePoliceEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'case-police'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies CasePoliceEslintConfigOptions);

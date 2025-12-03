@@ -39,8 +39,9 @@ const generateNoMissingLabelRefsOptions = (
   },
 ];
 
-export interface MarkdownEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'markdown'> {
+export interface MarkdownEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'markdown'> {
   /**
    * Lint Markdown files themselves (***not*** fenced code blocks inside them)
    * @default true

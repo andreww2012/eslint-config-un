@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface StorybookEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'storybook'> {}
+export interface StorybookEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'storybook'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies StorybookEslintConfigOptions);

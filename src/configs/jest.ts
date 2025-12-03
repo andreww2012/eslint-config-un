@@ -24,8 +24,9 @@ import {
 
 type AllJestMatchers = Prettify<keyof ReturnType<JestExpect> | keyof AsymmetricMatchers>;
 
-interface JestExtendedSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'jest-extended'> {
+interface JestExtendedSubConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'jest-extended'> {
   /**
    * Suggests using various `jest-extended` methods instead of some assertion forms.
    *
@@ -48,7 +49,8 @@ interface JestExtendedSubConfigOptions<ExtraPlugins extends ExtraPluginsType = n
 }
 
 export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'jest'>,
+  extends
+    UnConfigOptions<ExtraPlugins, 'jest'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-jest` plugin settings](https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jest-globals) that will be applied to the specified `files` and `ignores`.

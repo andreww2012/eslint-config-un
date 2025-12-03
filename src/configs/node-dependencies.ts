@@ -7,8 +7,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface NodeDependenciesEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'node-dependencies'> {
+export interface NodeDependenciesEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'node-dependencies'> {
   /**
    * - `true`: enforces to use the absolute version only on `dependencies` and `devDependencies`.
    * - `'never'`: enforces not to use the absolute version.

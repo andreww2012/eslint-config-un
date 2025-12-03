@@ -8,8 +8,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface JsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, BuiltinEslintRules> {
+export interface JsEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, BuiltinEslintRules> {
   /**
    * Will be merged with the default value
    * @default {warn: true, error: true}

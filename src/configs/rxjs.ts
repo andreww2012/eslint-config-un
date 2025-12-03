@@ -9,8 +9,9 @@ import {
 
 type NamesToBanListOrObjectWithFlagOrMessage = Record<string, boolean | string> | string[];
 
-export interface RxjsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'rxjs'> {
+export interface RxjsEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'rxjs'> {
   /**
    * Affected rule:
    * - [`ban-observables`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-observables.md)

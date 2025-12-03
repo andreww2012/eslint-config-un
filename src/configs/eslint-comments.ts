@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface EslintCommentsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, '@eslint-community/eslint-comments'> {}
+export interface EslintCommentsEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, '@eslint-community/eslint-comments'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(

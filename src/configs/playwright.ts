@@ -14,7 +14,8 @@ import {
 } from './index';
 
 export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'playwright'>,
+  extends
+    UnConfigOptions<ExtraPlugins, 'playwright'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright) plugin

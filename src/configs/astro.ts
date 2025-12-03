@@ -11,11 +11,12 @@ import {
   assignDefaults,
 } from './index';
 
-export interface AstroEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<
-    ExtraPlugins,
-    PickKeysNotStartingWith<RulesRecordPartial<'astro'>, 'astro/jsx-a11y'>
-  > {
+export interface AstroEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<
+  ExtraPlugins,
+  PickKeysNotStartingWith<RulesRecordPartial<'astro'>, 'astro/jsx-a11y'>
+> {
   /**
    * A11Y (accessibility) specific rules for Astro components.
    * By default, uses `files` and `ignores` from the parent config.

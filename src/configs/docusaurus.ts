@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface DocusaurusEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'docusaurus'> {}
+export interface DocusaurusEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'docusaurus'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies DocusaurusEslintConfigOptions);

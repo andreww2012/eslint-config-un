@@ -857,8 +857,9 @@ type AllStylisticRules = ObjectValues<{
   [Plugin in keyof typeof ALL_STYLISTIC_RULES]: `${Plugin extends '' ? '' : `${Plugin}/`}${keyof (typeof ALL_STYLISTIC_RULES)[Plugin] & string}`;
 }>;
 
-export interface NoStylisticRulesEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins> {
+export interface NoStylisticRulesEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins> {
   enableRules?: {
     /**
      * Specify which of the disabled by default stylistic rules will be enabled.

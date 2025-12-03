@@ -13,7 +13,8 @@ import {
 } from './index';
 
 export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'svelte'>,
+  extends
+    UnConfigOptions<ExtraPlugins, 'svelte'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
    * [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte) plugin

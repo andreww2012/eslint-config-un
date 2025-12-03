@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface SolidEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'solid'> {}
+export interface SolidEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'solid'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies SolidEslintConfigOptions);

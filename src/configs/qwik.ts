@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface QwikEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'qwik'> {
+export interface QwikEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'qwik'> {
   routesDir?: string;
 }
 

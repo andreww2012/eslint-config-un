@@ -7,8 +7,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface JsoncEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'jsonc'> {
+export interface JsoncEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'jsonc'> {
   /**
    * Config exclusively for .json files (no rules are applied by default!)
    * @default false

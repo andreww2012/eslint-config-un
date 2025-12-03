@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface HeadersEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'headers'> {
+export interface HeadersEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'headers'> {
   // TODO types are broken
 
   /**

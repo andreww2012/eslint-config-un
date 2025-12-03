@@ -66,8 +66,9 @@ const defaultHoverOutHandlersRequiringOnBlur: Record<`on${string}`, true> = {
   onPointerLeave: true,
 };
 
-export interface JsxA11yEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'jsx-a11y'> {
+export interface JsxA11yEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'jsx-a11y'> {
   /**
    * [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

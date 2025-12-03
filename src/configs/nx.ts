@@ -7,8 +7,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface NxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'nx'> {
+export interface NxEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'nx'> {
   /**
    * @default false
    */

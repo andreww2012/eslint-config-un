@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface NoUnsanitizedEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'no-unsanitized'> {}
+export interface NoUnsanitizedEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'no-unsanitized'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies NoUnsanitizedEslintConfigOptions);

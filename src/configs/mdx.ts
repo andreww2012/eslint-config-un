@@ -12,7 +12,8 @@ import {
 } from './index';
 
 export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'mdx'>,
+  extends
+    UnConfigOptions<ExtraPlugins, 'mdx'>,
     Pick<
       MarkdownEslintConfigOptions,
       | 'codeBlocksImpliedStrictMode'

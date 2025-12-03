@@ -10,8 +10,9 @@ import {
 
 const DEFAULT_FILES_TO_IGNORE = ['Cargo.lock'] as const;
 
-export interface TomlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'toml'> {
+export interface TomlEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'toml'> {
   /** `files` specified in this config will be merged with the default of `['**\/*.toml']`. Set this to `true` to avoid that behavior */
   doNotMergeFilesWithDefault?: boolean;
 

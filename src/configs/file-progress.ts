@@ -7,8 +7,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface FileProgressEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'file-progress'> {
+export interface FileProgressEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'file-progress'> {
   /**
    * [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

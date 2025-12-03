@@ -12,8 +12,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface StylisticEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, '@stylistic'> {
+export interface StylisticEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, '@stylistic'> {
   /**
    * Customization function directly coming from [the plugin](https://eslint.style/guide/config-presets#configuration-factory).
    *

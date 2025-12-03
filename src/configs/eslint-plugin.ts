@@ -22,8 +22,9 @@ const ESLINT_PLUGIN_TESTING_RELATED_RULES_SET = new Set<string>(
   ESLINT_PLUGIN_TESTING_RELATED_RULES,
 );
 
-export interface EslintPluginEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'eslint-plugin'> {
+export interface EslintPluginEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'eslint-plugin'> {
   /**
    * Includes rules for ESLint rule test files.
    * @default true

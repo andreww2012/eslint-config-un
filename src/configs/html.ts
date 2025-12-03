@@ -11,7 +11,8 @@ import {
 } from './index';
 
 export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, '@html-eslint'>,
+  extends
+    UnConfigOptions<ExtraPlugins, '@html-eslint'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
    * [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin) plugin

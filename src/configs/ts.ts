@@ -387,8 +387,9 @@ const TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS = {
   ],
 } satisfies Record<string, TsconfigCompilerOptionsKeys[]>;
 
-interface SortTsconfigKeysSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins> {
+interface SortTsconfigKeysSubConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins> {
   /**
    * @default ['extends', 'references', 'files', 'include', 'exclude', 'compilerOptions', 'vueCompilerOptions', 'angularCompilerOptions', 'ts-node']
    */
@@ -435,11 +436,12 @@ interface SortTsconfigKeysSubConfigOptions<ExtraPlugins extends ExtraPluginsType
   extraSortKeysConfigs?: (GetRuleOptions<'jsonc', 'sort-keys'> & object)[];
 }
 
-export interface TsEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<
-    ExtraPlugins,
-    OmitStrict<RulesRecordPartial<'ts'>, keyof TypeAwareRulesWithPrefixes>
-  > {
+export interface TsEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<
+  ExtraPlugins,
+  OmitStrict<RulesRecordPartial<'ts'>, keyof TypeAwareRulesWithPrefixes>
+> {
   /**
    * Applies rules requiring type information on the specified `files`.
    *

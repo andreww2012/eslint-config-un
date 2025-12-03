@@ -8,8 +8,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface CheckFileEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'check-file'> {
+export interface CheckFileEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'check-file'> {
   /**
    * Allows to which files should `eslint-processor-check-file` processor be applied.
    * This might be necessary if some files are not processed by other processors

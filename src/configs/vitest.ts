@@ -32,7 +32,8 @@ const FUNCTIONS_WITH_EACH_OR_FOR = allUnionMembers<keyof ConsistentEachForRuleOp
 ]);
 
 export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'vitest'>,
+  extends
+    UnConfigOptions<ExtraPlugins, 'vitest'>,
     // TODO options jsdocs contain jest-related information
     Pick<
       JestEslintConfigOptions<ExtraPlugins>,

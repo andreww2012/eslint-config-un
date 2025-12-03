@@ -6,8 +6,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface ModuleInteropEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'module-interop'> {}
+export interface ModuleInteropEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'module-interop'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies ModuleInteropEslintConfigOptions);

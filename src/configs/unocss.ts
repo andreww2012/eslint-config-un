@@ -7,8 +7,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface UnocssEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, '@unocss'> {}
+export interface UnocssEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, '@unocss'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies UnocssEslintConfigOptions);

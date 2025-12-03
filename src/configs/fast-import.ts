@@ -10,8 +10,9 @@ import {
 
 export type FastImportPluginSettings = Parameters<typeof fastImportPluginConfigGenerator>[0];
 
-export interface FastImportEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'fast-import'> {
+export interface FastImportEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'fast-import'> {
   /**
    * [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

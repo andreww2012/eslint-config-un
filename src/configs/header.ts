@@ -7,8 +7,9 @@ import {
   assignDefaults,
 } from './index';
 
-export interface HeaderEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'header'> {
+export interface HeaderEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'header'> {
   /**
    * The single rule (`header`) options.
    */

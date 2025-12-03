@@ -45,8 +45,10 @@ type WellKnownSfcBlocks =
 
 const DEFAULT_PINIA_STORE_NAME_SUFFIX = 'Store';
 
-interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType>
-  extends UnConfigOptions<ExtraPlugins, '@intlify/vue-i18n'> {
+interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnConfigOptions<
+  ExtraPlugins,
+  '@intlify/vue-i18n'
+> {
   /**
    * [`@intlify/eslint-plugin-vue-i18n`](https://npmjs.com/@intlify/eslint-plugin-vue-i18n) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -107,11 +109,10 @@ interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType>
 
 type NuxtPluginNuxtConfigRelatedRules = 'nuxt-config-keys-order';
 
-interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType>
-  extends UnConfigOptions<
-    ExtraPlugins,
-    OmitStrict<RulesRecordPartial<'nuxt'>, `nuxt/${NuxtPluginNuxtConfigRelatedRules}`>
-  > {
+interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnConfigOptions<
+  ExtraPlugins,
+  OmitStrict<RulesRecordPartial<'nuxt'>, `nuxt/${NuxtPluginNuxtConfigRelatedRules}`>
+> {
   /**
    * Configures rules specific to Nuxt config file.
    *
@@ -139,8 +140,10 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType>
   v4DirectoryStructure?: boolean;
 }
 
-interface PiniaSubConfigOptions<ExtraPlugins extends ExtraPluginsType>
-  extends UnConfigOptions<ExtraPlugins, 'pinia'> {
+interface PiniaSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnConfigOptions<
+  ExtraPlugins,
+  'pinia'
+> {
   /**
    * @default `Store`
    * @see https://github.com/lisilinhart/eslint-plugin-pinia/blob/HEAD/docs/rules/prefer-use-store-naming-convention.md
@@ -148,8 +151,9 @@ interface PiniaSubConfigOptions<ExtraPlugins extends ExtraPluginsType>
   storesNameSuffix?: string;
 }
 
-interface ScopedCssEslintConfigOptions<ExtraPlugins extends ExtraPluginsType>
-  extends UnConfigOptions<ExtraPlugins, 'vue-scoped-css'> {
+interface ScopedCssEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType,
+> extends UnConfigOptions<ExtraPlugins, 'vue-scoped-css'> {
   /**
    * Will be merged with the default value. `true` does not restrict the style type.
    * @default {plain: true, scoped: true}
@@ -164,8 +168,9 @@ interface ScopedCssEslintConfigOptions<ExtraPlugins extends ExtraPluginsType>
       >;
 }
 
-export interface VueEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'vue'> {
+export interface VueEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnConfigOptions<ExtraPlugins, 'vue'> {
   /**
    * Enables A11Y (accessibility) rules for Vue SFC templates
    *
