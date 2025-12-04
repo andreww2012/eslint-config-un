@@ -300,6 +300,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     node: {enabled: getIsConfigEnabled('node')},
     nodeDependencies: {enabled: getIsConfigEnabled('nodeDependencies', false)},
     noOnlyTests: {enabled: getIsConfigEnabled('noOnlyTests', false)},
+    noSecrets: {enabled: getIsConfigEnabled('noSecrets')},
     noStylisticRules: {enabled: getIsConfigEnabled('noStylisticRules', false)},
     noUnsanitized: {enabled: getIsConfigEnabled('noUnsanitized')},
     nx: {enabled: getIsConfigEnabled('nx', 'nx')},
@@ -561,6 +562,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('zod', () => import('../configs/zod')),
     loadUnConfig('docusaurus', () => import('../configs/docusaurus')),
     loadUnConfig('moduleInterop', () => import('../configs/module-interop')),
+    loadUnConfig('noSecrets', () => import('../configs/no-secrets')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),

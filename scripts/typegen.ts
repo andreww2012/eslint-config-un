@@ -7,24 +7,20 @@ import {flatConfigsToRulesDTS, pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
 import {eslintConfigInternal} from '../src/config-un/config';
 import {DISABLE_AUTOFIX, eslintPluginVanillaRules} from '../src/eslint';
-import {uniqueBy} from '../src/utils';
 import {generateAngularPluginsWithOldRules} from './shared';
+import {addMissingRuleOptionsSchemas} from './src/set-missing-rule-options-schemas';
 
 const __dirname = import.meta.dirname;
 
 await fs.mkdir(resolveInOutDir(), {recursive: true});
 
-const {
-  main: ruleTypes,
-  perPluginCode,
-  fixableRulesOnlyCode,
-  allRulesCode,
-} = await generateRuleTypes();
+const {allRuleTypesCode, perPluginCode, fixableRulesOnlyCode, allRulesCode} =
+  await generateRuleTypes();
 
-await printDiffBetweenMostRecentAndCurrentRuleTypes(ruleTypes);
+await printDiffBetweenMostRecentAndCurrentRuleTypes(allRuleTypesCode);
 
 await Promise.all([
-  fs.writeFile(path.join(__dirname, '../src/eslint-types.gen.d.ts'), ruleTypes),
+  fs.writeFile(path.join(__dirname, '../src/eslint-types.gen.d.ts'), allRuleTypesCode),
   fs.writeFile(path.join(__dirname, '../src/eslint-types-per-plugin.gen.d.ts'), perPluginCode),
   fs.writeFile(
     path.join(__dirname, '../src/eslint-types-fixable-only.gen.d.ts'),
@@ -33,37 +29,41 @@ await Promise.all([
   fs.writeFile(path.join(__dirname, '../src/eslint-rules.gen.ts'), allRulesCode),
   fs.writeFile(
     resolveInOutDir(`eslint-types.${new Date().toISOString().replaceAll(':', '')}.d.ts`),
-    ruleTypes,
+    allRuleTypesCode,
   ),
 ]);
 
 async function generateRuleTypes() {
-  const unFlatConfigs = await eslintConfigInternal({
-    loadPluginsOnDemand: false,
-  });
-  const SKIPPED_PLUGINS = new Set<string>([
-    DISABLE_AUTOFIX,
-    '@angular-eslint',
-    '@angular-eslint/template',
+  const [
+    unFlatConfigs,
+    {plugin: pluginAngular, pluginTemplate: pluginAngularTemplate},
+    pluginsWithAddedRuleOptionSchemas,
+  ] = await Promise.all([
+    eslintConfigInternal({loadPluginsOnDemand: false}),
+    generateAngularPluginsWithOldRules(),
+    addMissingRuleOptionsSchemas(),
   ]);
-  const allRealPlugins = uniqueBy(
-    unFlatConfigs
-      .flatMap((v) => Object.entries(v.plugins || {}))
-      .filter(([pluginName]) => !SKIPPED_PLUGINS.has(pluginName)),
-    ([pluginName]) => pluginName, // `html` is duplicated
+
+  const allPlugins = Object.fromEntries(
+    unFlatConfigs.flatMap((v) => Object.entries(v.plugins || {})),
   );
-  const {plugin: pluginAngular, pluginTemplate: pluginAngularTemplate} =
-    await generateAngularPluginsWithOldRules();
-  allRealPlugins.push(
-    ['', eslintPluginVanillaRules],
-    ['@angular-eslint', pluginAngular],
-    ['@angular-eslint/template', pluginAngularTemplate],
+  // eslint-disable-next-line ts/no-dynamic-delete
+  delete allPlugins[DISABLE_AUTOFIX];
+  Object.assign(
+    allPlugins,
+    {
+      '': eslintPluginVanillaRules,
+      '@angular-eslint': pluginAngular,
+      '@angular-eslint/template': pluginAngularTemplate,
+    },
+    pluginsWithAddedRuleOptionSchemas,
   );
 
-  const [main, fixableRulesOnlyCodeRaw, perPluginCodeRaw] = await Promise.all([
-    pluginsToRulesDTS(Object.fromEntries(allRealPlugins), {
+  const [allRuleTypesCodeRaw, fixableRulesOnlyCodeRaw, perPluginCodeRaw] = await Promise.all([
+    pluginsToRulesDTS(allPlugins, {
       includeAugmentation: false,
     }),
+
     flatConfigsToRulesDTS(
       [
         ...(await eslintConfigInternal(
@@ -79,8 +79,9 @@ async function generateRuleTypes() {
       ],
       {includeAugmentation: false},
     ),
+
     Promise.all(
-      allRealPlugins.map(async ([pluginName, plugin]) => {
+      Object.entries(allPlugins).map(async ([pluginName, plugin]) => {
         const exportTypeName = normalizeIdentifier(`Plugin${capitalize(pluginName || 'js')}`);
         let code = await pluginsToRulesDTS(
           {[pluginName]: plugin},
@@ -157,7 +158,7 @@ ${perPluginCodeRaw
 `;
 
   return {
-    main,
+    allRuleTypesCode: allRuleTypesCodeRaw,
     perPluginCode,
     fixableRulesOnlyCode,
     allRulesCode,

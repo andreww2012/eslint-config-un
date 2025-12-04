@@ -244,6 +244,7 @@ export default (async (context, optionsRaw) => {
   // ♿ - in accessibility (latest version)
   // 🌐 - i18n related rules
   // 🔴 - deprecated
+  // eslint-disable-next-line no-secrets/no-secrets
   // Check rule usage: https://github.com/search?q=%22%40angular-eslint%2Fno-input-prefix%22+path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F&type=code&p=1
 
   const [

@@ -48,6 +48,7 @@ import type {MochaEslintConfigOptions} from './mocha';
 import type {ModuleInteropEslintConfigOptions} from './module-interop';
 import type {NextJsEslintConfigOptions} from './nextjs';
 import type {NoOnlyTestsEslintConfigOptions} from './no-only-tests';
+import type {NoSecretsEslintConfigOptions} from './no-secrets';
 import type {NoUnsanitizedEslintConfigOptions} from './no-unsanitized';
 import type {NodeEslintConfigOptions} from './node';
 import type {NodeDependenciesEslintConfigOptions} from './node-dependencies';
@@ -267,7 +268,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * [Docusaurus](https://docusaurus.io) specific rules.
    *
    * By default will be applied to:
-   * - `** /*.?([cm])[jt]sx`
+   * - <code>**&#47;*.?([cm])[jt]sx</code>
    *
    * Used plugin:
    * - [`@docusaurus/eslint-plugin`](https://npmjs.com/@docusaurus/eslint-plugin) ([docs](https://docusaurus.io/docs/api/misc/@docusaurus/eslint-plugin))
@@ -600,6 +601,22 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default false
    */
   noOnlyTests: NoOnlyTestsEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin that offers a rule that searches for potential secrets/keys in code
+   * and JSON files.
+   *
+   * By default will be applied to:
+   * - <code>**&#47;*.?([cm])[jt]s?(x)</code>
+   *
+   * Sub-configs:
+   * - `json`
+   *
+   * Used plugins:
+   * - [`eslint-plugin-no-secrets`](https://npmjs.com/eslint-plugin-no-secrets) ([docs](https://github.com/nickdeis/eslint-plugin-no-secrets#readme))
+   * @default true
+   */
+  noSecrets: NoSecretsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * If you integrate eslint-config-un into an existing project, you might encounter a lot of

@@ -402,6 +402,9 @@ const ALL_STYLISTIC_RULES = {
   'no-only-tests': {
     // None
   },
+  'no-secrets': {
+    // None
+  },
   'no-type-assertion': {
     'no-type-assertion': true,
   },

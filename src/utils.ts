@@ -26,7 +26,6 @@ export {
   pick,
   pickBy,
   uniq as unique,
-  uniqBy as uniqueBy,
 } from 'es-toolkit';
 export {get as getValueByPath, set as setValueByPath} from 'es-toolkit/compat';
 

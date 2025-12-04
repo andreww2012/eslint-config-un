@@ -315,6 +315,11 @@ export const pluginsLoaders = {
   'no-only-tests': genModuleLoader('no-only-tests', 'eslint-plugin-no-only-tests', () =>
     interopDefault(import('eslint-plugin-no-only-tests')),
   ),
+  'no-secrets': genModuleLoader(
+    'no-secrets',
+    'eslint-plugin-no-secrets',
+    () => interopDefault(import('eslint-plugin-no-secrets')) as Promise<EslintPlugin>,
+  ),
   'no-type-assertion': genModuleLoader('no-type-assertion', 'eslint-plugin-no-type-assertion', () =>
     interopDefault(import('eslint-plugin-no-type-assertion')),
   ),

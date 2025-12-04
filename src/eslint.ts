@@ -9,6 +9,7 @@ import {builtinRules as eslintBuiltinRules} from 'eslint/use-at-your-own-risk';
 import ruleComposer from 'eslint-rule-composer';
 import type {ExtraPluginsType, UnConfigContext} from './config-un/shared';
 import {
+  ERROR,
   GLOB_CSS,
   GLOB_HTML_ALL,
   GLOB_MARKDOWN,
@@ -16,6 +17,7 @@ import {
   GLOB_MDX,
   OFF,
   type RuleSeverity,
+  WARNING,
 } from './constants';
 import type {FixableRuleNames as AllEslintFixableRuleNames} from './eslint-types-fixable-only.gen';
 import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin.gen';
@@ -242,11 +244,21 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
 
 export type FlatConfigEntryForBuilder = OmitStrict<FlatConfigEntry, 'name' | 'rules'>;
 
-const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, EslintSeverity & number> = {
-  off: 0,
-  warn: 1,
-  error: 2,
+const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, RuleSeverity> = {
+  off: OFF,
+  warn: WARNING,
+  error: ERROR,
 };
+
+export const eslintToUnRuleSeverity = (
+  maybeEslintSeverity: EslintSeverity | undefined,
+  defaultSeverity: RuleSeverity = OFF,
+): RuleSeverity =>
+  typeof maybeEslintSeverity === 'string'
+    ? STRING_SEVERITY_TO_NUMERIC[maybeEslintSeverity]
+    : maybeEslintSeverity == null
+      ? defaultSeverity
+      : (maybeEslintSeverity as RuleSeverity);
 
 type AddRuleInternalOptions = EmptyObject;
 
@@ -312,10 +324,7 @@ export const resolveOverrides = (
       const rawSeverityInitial = Array.isArray(existingRuleRecord)
         ? existingRuleRecord[0]
         : existingRuleRecord;
-      const severityInitial: EslintSeverity =
-        typeof rawSeverityInitial === 'string'
-          ? STRING_SEVERITY_TO_NUMERIC[rawSeverityInitial as EslintSeverity & string]
-          : (rawSeverityInitial ?? 0);
+      const severityInitial = eslintToUnRuleSeverity(rawSeverityInitial);
 
       const options = Array.isArray(existingRuleRecord) ? existingRuleRecord.slice(1) : undefined;
       const ruleEntryRaw = maybeCall(ruleOptions, severityInitial, options);
