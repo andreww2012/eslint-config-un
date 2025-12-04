@@ -16,6 +16,14 @@ export default eslintConfig({
   },
 
   configs: {
+    checkFile: {
+      overrides: {
+        'check-file/filename-naming-convention': [
+          2,
+          {'{eslint-local-rules,src,scripts}/**': 'KEBAB_CASE'},
+        ],
+      },
+    },
     markdownLinks: {
       ...(!isInCi && {files: []}),
       check: {
