@@ -16,6 +16,7 @@ export default eslintConfig({
   },
 
   configs: {
+    command: true,
     checkFile: {
       overrides: {
         'check-file/filename-naming-convention': [

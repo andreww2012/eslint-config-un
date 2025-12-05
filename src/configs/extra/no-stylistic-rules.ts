@@ -175,6 +175,9 @@ const ALL_STYLISTIC_RULES = {
   'check-file': {
     // TODO
   },
+  command: {
+    // None
+  },
   compat: {
     // None
   },

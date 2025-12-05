@@ -70,6 +70,7 @@ export default {
     'textnodes',
     'multilines',
     'greppability',
+    'codemod',
 
     // Misc
     'multicol',

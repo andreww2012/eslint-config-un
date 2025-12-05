@@ -134,6 +134,11 @@ export const pluginsLoaders = {
   'check-file': genModuleLoader('check-file', 'eslint-plugin-check-file', () =>
     interopDefault(import('eslint-plugin-check-file')),
   ),
+  command: genModuleLoader(
+    'command',
+    'eslint-plugin-command',
+    () => interopDefault(import('eslint-plugin-command')) as Promise<EslintPlugin>,
+  ),
   compat: genModuleLoader('compat', 'eslint-plugin-compat', () =>
     interopDefault(import('eslint-plugin-compat')),
   ),

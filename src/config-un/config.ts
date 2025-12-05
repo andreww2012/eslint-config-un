@@ -251,6 +251,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     checkFile: {enabled: getIsConfigEnabled('checkFile', false)},
     cli: {enabled: getIsConfigEnabled('cli')},
     cloudfrontFunctions: {enabled: getIsConfigEnabled('cloudfrontFunctions', false)},
+    command: {enabled: getIsConfigEnabled('command', false)},
     compat: {enabled: getIsConfigEnabled('compat', false)},
     css: {enabled: getIsConfigEnabled('css', !packagesInfo.stylelint)},
     cssInJs: {enabled: getIsConfigEnabled('cssInJs')},
@@ -590,6 +591,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('fastImport', () => import('../configs/fast-import')),
     loadUnConfig('boundaries', () => import('../configs/boundaries')),
     loadUnConfig('expectType', () => import('../configs/expect-type')),
+    loadUnConfig('command', () => import('../configs/command')),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

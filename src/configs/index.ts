@@ -6,6 +6,7 @@ import type {BetterTailwindEslintConfigOptions} from './better-tailwind';
 import type {BoundariesEslintConfigOptions} from './boundaries';
 import type {CasePoliceEslintConfigOptions} from './case-police';
 import type {CheckFileEslintConfigOptions} from './check-file';
+import type {CommandEslintConfigOptions} from './command';
 import type {CompatEslintConfigOptions} from './compat';
 import type {CspellEslintConfigOptions} from './cspell';
 import type {CssEslintConfigOptions} from './css';
@@ -197,6 +198,17 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default false
    */
   cloudfrontFunctions: CloudfrontFunctionsEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin serving as a codemod triggered by special comments.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-command`](https://npmjs.com/eslint-plugin-command) ([docs](https://eslint-plugin-command.antfu.me))
+   *
+   * NOTE: disabled by default.
+   * @default false
+   */
+  command: CommandEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin to lint the browser compatibility of the code.

@@ -78,6 +78,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-boundaries`               | `boundaries`               |
 | `eslint-plugin-case-police`              | `case-police`              |
 | `eslint-plugin-check-file`               | `check-file`               |
+| `eslint-plugin-command`                  | `command`                  |
 | `eslint-plugin-de-morgan`                | `de-morgan`                |
 | `eslint-plugin-ember`                    | `ember`                    |
 | `eslint-plugin-erasable-syntax-only`     | `erasable-syntax-only`     |
@@ -350,6 +351,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `noSecrets`                                                    | ✅                                          | [eslint-plugin-no-secrets](https://npmjs.com/eslint-plugin-no-secrets) (`no-secrets`)             | Since v1.0.0                                                                                                                             |
 | `noSecrets/json`                                               | ✅                                          | ^                                                                                                 | Applied only to `.json` files by default                                                                                                 |
 | `expectType`                                                   | ❌                                          | [eslint-plugin-expect-type](https://npmjs.com/eslint-plugin-expect-type) (`expect-type`)          | Since v1.0.0                                                                                                                             |
+| `command`                                                      | ❌                                          | [eslint-plugin-command](https://npmjs.com/eslint-plugin-command) (`command`)                      | Since v1.0.0                                                                                                                             |
 
 ## How to use
 
