@@ -479,6 +479,11 @@ export const pluginsLoaders = {
         import('eslint-plugin-security'),
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
+  'sentences-per-line': genModuleLoader(
+    'sentences-per-line',
+    'eslint-plugin-sentences-per-line',
+    () => interopDefault(import('eslint-plugin-sentences-per-line')),
+  ),
   solid: genModuleLoader(
     'solid',
     'eslint-plugin-solid',

@@ -43,6 +43,24 @@ export interface MarkdownEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'markdown'> {
   /**
+   * Format fenced code blocks with Prettier.
+   * @default true <=> `prettier` package is installed
+   */
+  configFormatFencedCodeBlocks?: boolean | UnConfigOptions<ExtraPlugins, 'prettier'>;
+
+  /**
+   * Config with the plugin that allows you to enforce that no line in your Markdown files
+   * contains more than one sentence.
+   *
+   * By default, uses `files` and `ignores` from the parent config.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-sentences-per-line`](https://npmjs.com/eslint-plugin-sentences-per-line) ([docs](https://github.com/JoshuaKGoldberg/sentences-per-line/tree/main/packages/eslint-plugin-sentences-per-line#readme))
+   * @default false
+   */
+  configSentencesPerLine?: boolean | UnConfigOptions<ExtraPlugins, 'sentences-per-line'>;
+
+  /**
    * Lint Markdown files themselves (***not*** fenced code blocks inside them)
    * @default true
    */
@@ -102,12 +120,6 @@ export interface MarkdownEslintConfigOptions<
    */
   codeBlocksImpliedStrictMode?: boolean;
 
-  /**
-   * Format fenced code blocks with Prettier.
-   * @default true <=> `prettier` package is installed
-   */
-  configFormatFencedCodeBlocks?: boolean | UnConfigOptions<ExtraPlugins, 'prettier'>;
-
   overridesCodeBlocks?: RulesRecordPartial;
 
   /**
@@ -119,16 +131,24 @@ export interface MarkdownEslintConfigOptions<
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
+    configFormatFencedCodeBlocks: context.packagesInfo.prettier != null,
+    configSentencesPerLine: false,
+    files: DEFAULT_FILES,
     lintMarkdown: true,
     language: 'gfm',
     allowHtmlTags: true,
     lintCodeBlocks: true,
     parseFrontmatter: 'yaml',
     codeBlocksImpliedStrictMode: true,
-    configFormatFencedCodeBlocks: context.packagesInfo.prettier != null,
   } satisfies MarkdownEslintConfigOptions);
 
   const {
+    files: parentConfigFiles,
+    ignores: parentConfigIgnores,
+
+    configFormatFencedCodeBlocks,
+    configSentencesPerLine,
+
     lintMarkdown,
     language,
     allowHtmlTags,
@@ -139,7 +159,6 @@ export default ((context, optionsRaw) => {
     codeBlocksImpliedStrictMode,
 
     parseFrontmatter,
-    configFormatFencedCodeBlocks,
   } = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'markdown');
@@ -161,7 +180,6 @@ export default ((context, optionsRaw) => {
           'markdown/markdown',
           {
             includeDefaultFilesAndIgnores: true,
-            filesFallback: DEFAULT_FILES,
             doNotIgnoreMarkdown: true,
           },
         ],
@@ -328,8 +346,28 @@ export default ((context, optionsRaw) => {
     ])
     .addRule('prettier', ERROR, [{}, {eslintTakeoverMode: true}]);
 
+  const configBuilderSentencesPerLine = context.createConfigBuilder(
+    configSentencesPerLine,
+    'sentences-per-line',
+  );
+  if (configSentencesPerLine) {
+    configBuilderSentencesPerLine
+      ?.addConfig([
+        'markdown/sentences-per-line',
+        {
+          includeDefaultFilesAndIgnores: true,
+          doNotIgnoreMarkdown: true,
+          filesFallback: parentConfigFiles,
+          ignoresFallback: parentConfigIgnores,
+        },
+      ])
+      .addRule('one', ERROR) /** @since 0.0.0 */ // 🟢
+      .enableConfigTesterForPlugin('sentences-per-line')
+      .addOverrides();
+  }
+
   return {
-    configs: [configBuilder, configFormatFencedCodeBlocksBuilder],
+    configs: [configBuilder, configFormatFencedCodeBlocksBuilder, configBuilderSentencesPerLine],
     optionsResolved,
   };
 }) satisfies UnConfigFn<'markdown'>;

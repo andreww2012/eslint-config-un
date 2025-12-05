@@ -558,6 +558,9 @@ const ALL_STYLISTIC_RULES = {
   security: {
     // None
   },
+  'sentences-per-line': {
+    one: true,
+  },
   solid: {
     imports: true,
     'prefer-show': true,
