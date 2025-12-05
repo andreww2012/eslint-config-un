@@ -1,4 +1,4 @@
-import {ERROR, GLOB_JS_TS_X} from '../constants';
+import {ERROR, GLOB_TSX} from '../constants';
 import type {GetRuleOptions} from '../eslint';
 import {
   type ExtraPluginsType,
@@ -35,7 +35,7 @@ export default ((context, optionsRaw) => {
       'expect-type',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JS_TS_X],
+        filesFallback: [GLOB_TSX],
       },
     ])
     .addRule('expect', ERROR, expectRuleOptions ? [expectRuleOptions] : []) /** @since 0.0.1 */ // 🟢💭

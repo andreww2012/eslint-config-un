@@ -16,6 +16,7 @@ export default eslintConfig({
   },
 
   configs: {
+    expectType: true,
     command: true,
     checkFile: {
       overrides: {

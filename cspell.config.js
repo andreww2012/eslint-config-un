@@ -51,6 +51,7 @@ export default {
     'formatjs',
     'messageformat',
     'obug',
+    'darraghor',
 
     // Technical words/terms
     'arraify',

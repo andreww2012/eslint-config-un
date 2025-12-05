@@ -48,6 +48,7 @@ import type {MathEslintConfigOptions} from './math';
 import type {MdxEslintConfigOptions} from './mdx';
 import type {MochaEslintConfigOptions} from './mocha';
 import type {ModuleInteropEslintConfigOptions} from './module-interop';
+import type {NestJsEslintConfigOptions} from './nest-js';
 import type {NextJsEslintConfigOptions} from './nextjs';
 import type {NoOnlyTestsEslintConfigOptions} from './no-only-tests';
 import type {NoSecretsEslintConfigOptions} from './no-secrets';
@@ -344,7 +345,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * match the types of code values.
    *
    * By default will be applied to:
-   * - <code>**&#47;*.?([cm])[jt]s?(x)</code>
+   * - <code>**&#47*.?([cm])ts?(x)</code>
    *
    * ⚠️WARNING: make sure that the linted files are provided with type information.
    * For that, they must be included in `files` array of `ts/configTypeAware` config
@@ -590,6 +591,22 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true
    */
   moduleInterop: ModuleInteropEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [NestJS](https://nestjs.com) specific rules.
+   *
+   * By default will be applied to:
+   * - <code>**&#47*.?([cm])ts</code>
+   *
+   * ⚠️WARNING: make sure that the linted files are provided with type information.
+   * For that, they must be included in `files` array of `ts/configTypeAware` config
+   * (they are by default).
+   *
+   * Used plugin:
+   * - [`@darraghor/eslint-plugin-nestjs-typed`](https://npmjs.com/@darraghor/eslint-plugin-nestjs-typed) ([docs](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed#readme))
+   * @default true <=> `@nestjs/core` package is installed
+   */
+  nestJs: NestJsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Next.js](https://nextjs.org) specific rules.

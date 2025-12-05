@@ -33,7 +33,7 @@ export const GLOB_CONFIG_FILES = [
 
 const GLOB_TS_EXTENSION = '?([cm])ts' as const;
 export const GLOB_TS_X_EXTENSION = `${GLOB_TS_EXTENSION}?(x)` as const;
-const GLOB_TS = `**/*.${GLOB_TS_EXTENSION}` as const;
+export const GLOB_TS = `**/*.${GLOB_TS_EXTENSION}` as const;
 export const GLOB_TSX = `${GLOB_TS}?(x)` as const;
 
 export const GLOB_VUE = '**/*.vue' as const;
@@ -171,4 +171,5 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   '@qwik.dev/core',
   'ember-source',
   'lit',
+  '@nestjs/core',
 ] as const;

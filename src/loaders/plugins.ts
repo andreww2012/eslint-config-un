@@ -326,6 +326,15 @@ export const pluginsLoaders = {
     'eslint-plugin-module-interop',
     () => interopDefault(import('eslint-plugin-module-interop')) as Promise<EslintPlugin>,
   ),
+  nestjs: genModuleLoader(
+    'nestjs',
+    '@darraghor/eslint-plugin-nestjs-typed',
+    () =>
+      interopDefault(import('@darraghor/eslint-plugin-nestjs-typed')).then(
+        (m) => m.plugin,
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
   'no-only-tests': genModuleLoader('no-only-tests', 'eslint-plugin-no-only-tests', () =>
     interopDefault(import('eslint-plugin-no-only-tests')),
   ),

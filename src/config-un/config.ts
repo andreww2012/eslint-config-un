@@ -295,6 +295,8 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     mdx: {enabled: getIsConfigEnabled('mdx')},
     mocha: {enabled: getIsConfigEnabled('mocha', 'mocha')},
     moduleInterop: {enabled: getIsConfigEnabled('moduleInterop')},
+    // eslint-disable-next-line case-police/string-check
+    nestJs: {enabled: getIsConfigEnabled('nestJs', '@nestjs/core')},
     nextJs: {
       // eslint-disable-next-line case-police/string-check
       enabled: getIsConfigEnabled('nextJs', 'next'),
@@ -565,6 +567,8 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('docusaurus', () => import('../configs/docusaurus')),
     loadUnConfig('moduleInterop', () => import('../configs/module-interop')),
     loadUnConfig('noSecrets', () => import('../configs/no-secrets')),
+    // eslint-disable-next-line case-police/string-check
+    loadUnConfig('nestJs', () => import('../configs/nest-js')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),

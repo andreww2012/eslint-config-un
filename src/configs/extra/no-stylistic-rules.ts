@@ -405,6 +405,9 @@ const ALL_STYLISTIC_RULES = {
   'module-interop': {
     // None
   },
+  nestjs: {
+    'sort-module-metadata-arrays': true,
+  },
   'no-only-tests': {
     // None
   },

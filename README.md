@@ -67,6 +67,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `@angular-eslint/eslint-plugin-template` | `@angular-eslint/template` |
 | `@angular-eslint/eslint-plugin`          | `@angular-eslint`          |
 | `@cspell/eslint-plugin`                  | `@cspell`                  |
+| `@darraghor/eslint-plugin-nestjs-typed`  | `nestjs`                   |
 | `@docusaurus/eslint-plugin`              | `docusaurus`               |
 | `@eslint-react/eslint-plugin`            | `@eslint-react`            |
 | `@intlify/eslint-plugin-vue-i18n`        | `@intlify/vue-i18n`        |
@@ -237,6 +238,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | ![Lit](./assets/logos-lit-icon.svg) `lit/a11y`       | ✅                                                       | [eslint-plugin-lit-a11y](https://npmjs.com/eslint-plugin-lit-a11y) (`lit-a11y`)                                                                               | Since v1.0.0                                                                                                                       |
 | ![TailwindCSS] `betterTailwind`                      | ✅ (`tailwindcss` is installed)                          | [eslint-plugin-better-tailwindcss](https://npmjs.com/eslint-plugin-better-tailwindcss) (`better-tailwindcss`)                                                 | Since v1.0.0<br>Supports v4 and v3                                                                                                 |
 | ![TailwindCSS] `tailwind`                            | ❌                                                       | [eslint-plugin-tailwindcss](https://npmjs.com/eslint-plugin-tailwindcss) (`tailwindcss`)                                                                      | Only supports v3                                                                                                                   |
+| ![NestJS](./assets/devicon-nestjs.svg) `nestJs`      | ✅ (`@nestjs/core` is installed)                         | [@darraghor/eslint-plugin-nestjs-typed](https://npmjs.com/@darraghor/eslint-plugin-nestjs-typed) (`nestjs`)                                                   | Since v1.0.0                                                                                                                       |
 
 ### Runtimes & related
 
@@ -428,15 +430,16 @@ eslint-config-un provides the ability to change any registered plugin prefix. Ad
 
 #### Default renames
 
-| Plugin                                                                     | Suggested prefix     | Our prefix   | Reason                                                                                                               |
-| -------------------------------------------------------------------------- | -------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------- |
-| [`typescript-eslint`](https://npmjs.com/typescript-eslint)                 | `@typescript-eslint` | `ts`         | More concise and convenient to use                                                                                   |
-| [`eslint-plugin-import-x`]                                                 | `import-x`           | `import`     | This plugin is a fork and is meant to replace the original plugin with `import` prefix                               |
-| [`eslint-plugin-n`](https://npmjs.com/eslint-plugin-n)                     | `n`                  | `node`       | Same ^                                                                                                               |
-| [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css)                 | `css`                | `css-in-js`  | Conflicts with [`@eslint/css`](https://npmjs.com/@eslint/css) and our name better captures the essence of the plugin |
-| [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x)   | `jsx-a11y-x`         | `jsx-a11y`   | This plugin is a fork and is meant to replace the original plugin with `jsx-a11y` prefix                             |
-| [`eslint-plugin-zod-x`](https://npmjs.com/eslint-plugin-zod-x)             | `zod-x`              | `zod`        | Better replacement for an existing `eslint-plugin-zod` plugin                                                        |
-| [`@docusaurus/eslint-plugin`](https://npmjs.com/@docusaurus/eslint-plugin) | `@docusaurus`        | `docusaurus` | `@` feels unnecessary                                                                                                |
+| Plugin                                                                                             | Suggested prefix          | Our prefix   | Reason                                                                                                               |
+| -------------------------------------------------------------------------------------------------- | ------------------------- | ------------ | -------------------------------------------------------------------------------------------------------------------- |
+| [`typescript-eslint`](https://npmjs.com/typescript-eslint)                                         | `@typescript-eslint`      | `ts`         | More concise and convenient to use                                                                                   |
+| [`eslint-plugin-import-x`]                                                                         | `import-x`                | `import`     | This plugin is a fork and is meant to replace the original plugin with `import` prefix                               |
+| [`eslint-plugin-n`](https://npmjs.com/eslint-plugin-n)                                             | `n`                       | `node`       | Same ^                                                                                                               |
+| [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css)                                         | `css`                     | `css-in-js`  | Conflicts with [`@eslint/css`](https://npmjs.com/@eslint/css) and our name better captures the essence of the plugin |
+| [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x)                           | `jsx-a11y-x`              | `jsx-a11y`   | This plugin is a fork and is meant to replace the original plugin with `jsx-a11y` prefix                             |
+| [`eslint-plugin-zod-x`](https://npmjs.com/eslint-plugin-zod-x)                                     | `zod-x`                   | `zod`        | Better replacement for an existing `eslint-plugin-zod` plugin                                                        |
+| [`@docusaurus/eslint-plugin`](https://npmjs.com/@docusaurus/eslint-plugin)                         | `@docusaurus`             | `docusaurus` | `@` feels unnecessary                                                                                                |
+| [`@darraghor/eslint-plugin-nestjs-typed`](https://npmjs.com/@darraghor/eslint-plugin-nestjs-typed) | `@darraghor/nestjs-typed` | `nestjs`     | More concise and convenient to use                                                                                   |
 
 > [!NOTE]
 > If you rename a plugin, you still have to use the original prefix within `overrides`, `overridesAny` and `extraConfigs`. eslint-config-un will rename the rules accordingly for you.
