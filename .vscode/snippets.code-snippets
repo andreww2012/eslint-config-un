@@ -52,7 +52,7 @@
       "/**",
       " *",
       " *",
-      " * Used plugins:",
+      " * Used plugin:",
       " * - [`eslint-plugin-$TM_FILENAME_BASE`](https://npmjs.com/eslint-plugin-$TM_FILENAME_BASE) ([docs]())",
       " * @default true",
       " * /",

@@ -11,7 +11,7 @@ export interface DependEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'depend'> {
   /**
-   * [Options of the only rule (`ban-dependencies`)](https://github.com/es-tooling/eslint-plugin-depend/blob/HEAD/docs/rules/ban-dependencies.md).
+   * Options of [the only rule, `ban-dependencies`](https://github.com/es-tooling/eslint-plugin-depend/blob/HEAD/docs/rules/ban-dependencies.md).
    */
   options?: GetRuleOptions<'depend', 'ban-dependencies'>;
 }

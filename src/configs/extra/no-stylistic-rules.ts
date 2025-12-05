@@ -223,6 +223,9 @@ const ALL_STYLISTIC_RULES = {
     'meta-property-ordering': true,
     'test-case-property-ordering': true,
   },
+  'expect-type': {
+    // None
+  },
   'fast-import': {
     'consistent-file-extensions': true,
     'require-node-prefix': true,

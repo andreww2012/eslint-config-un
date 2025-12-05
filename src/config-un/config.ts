@@ -268,6 +268,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     es: {enabled: getIsConfigEnabled('es', false)},
     eslintComments: {enabled: getIsConfigEnabled('eslintComments')},
     eslintPlugin: {enabled: getIsConfigEnabled('eslintPlugin', false)},
+    expectType: {enabled: getIsConfigEnabled('expectType', false)},
     fileProgress: {enabled: getIsConfigEnabled('fileProgress', false)},
     graphql: {enabled: getIsConfigEnabled('graphql', 'graphql')},
     header: {enabled: getIsConfigEnabled('header', false)},
@@ -588,6 +589,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('headers', () => import('../configs/headers')),
     loadUnConfig('fastImport', () => import('../configs/fast-import')),
     loadUnConfig('boundaries', () => import('../configs/boundaries')),
+    loadUnConfig('expectType', () => import('../configs/expect-type')),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

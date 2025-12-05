@@ -19,6 +19,7 @@ import type {ErasableSyntaxOnlyEslintConfigOptions} from './erasable-syntax-only
 import type {EsEslintConfigOptions} from './es';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
 import type {EslintPluginEslintConfigOptions} from './eslint-plugin';
+import type {ExpectTypeEslintConfigOptions} from './expect-type';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-functions';
 import type {NoStylisticRulesEslintConfigOptions} from './extra/no-stylistic-rules';
@@ -144,8 +145,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * An ESLint plugin to enforce architectural boundaries in JS/TS projects.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-boundaries`](https://npmjs.com/eslint-plugin-boundaries) ([docs](https://www.jsboundaries.dev))
+   *
+   * NOTE: disabled by default.
    * @default false
    */
   boundaries: BoundariesEslintConfigOptions<ExtraPlugins>;
@@ -322,6 +325,26 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default false
    */
   eslintPlugin: EslintPluginEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin that provides a rule that enforces that types indicated
+   * in special comments (`^?`, `$ExpectError`, `$ExpectType`, and `$ExpectTypeSnapshot`)
+   * match the types of code values.
+   *
+   * By default will be applied to:
+   * - <code>**&#47;*.?([cm])[jt]s?(x)</code>
+   *
+   * ⚠️WARNING: make sure that the linted files are provided with type information.
+   * For that, they must be included in `files` array of `ts/configTypeAware` config
+   * (they are by default).
+   *
+   * Used plugin:
+   * - [`eslint-plugin-expect-type`](https://npmjs.com/eslint-plugin-expect-type) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-expect-type#readme))
+   *
+   * NOTE: disabled by default.
+   * @default false
+   */
+  expectType: ExpectTypeEslintConfigOptions<ExtraPlugins>;
 
   /**
    * A faster alternative to `eslint-plugin-import(-x)` plugins. From the docs, it
@@ -550,7 +573,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * An ESLint plugin with rules for module interoperability.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-module-interop`](https://npmjs.com/eslint-plugin-module-interop) ([docs](https://ota-meshi.github.io/eslint-plugin-module-interop))
    * @default true
    */
@@ -612,7 +635,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Sub-configs:
    * - `json`
    *
-   * Used plugins:
+   * Used plugin:
    * - [`eslint-plugin-no-secrets`](https://npmjs.com/eslint-plugin-no-secrets) ([docs](https://github.com/nickdeis/eslint-plugin-no-secrets#readme))
    * @default true
    */
@@ -796,7 +819,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Stylistic/formatting only rules for JS/TS(X). Only small number of rules
    * are enabled by default.
    *
-   * Used plugins:
+   * Used plugin:
    * - [`@stylistic/eslint-plugin`](https://npmjs.com/@stylistic/eslint-plugin) ([docs](https://eslint.style))
    * @default true
    */

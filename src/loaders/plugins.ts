@@ -188,6 +188,15 @@ export const pluginsLoaders = {
   'eslint-plugin': genModuleLoader('eslint-plugin', 'eslint-plugin-eslint-plugin', () =>
     interopDefault(import('eslint-plugin-eslint-plugin')),
   ),
+  'expect-type': genModuleLoader(
+    'expect-type',
+    'eslint-plugin-expect-type',
+    () =>
+      interopDefault(
+        import('eslint-plugin-expect-type'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   'fast-import': genModuleLoader(
     'fast-import',
     'eslint-plugin-fast-import',
