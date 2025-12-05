@@ -79,6 +79,7 @@ import type {TailwindEslintConfigOptions} from './tailwind';
 import type {TanstackQueryEslintConfigOptions} from './tanstack-query';
 import type {TestingLibraryEslintConfigOptions} from './testing-library';
 import type {TomlEslintConfigOptions} from './toml';
+import type {TreeShakingEslintConfigOptions} from './tree-shaking';
 import type {TsEslintConfigOptions} from './ts';
 import type {TurboEslintConfigOptions} from './turbo';
 import type {UnEslintConfigOptions} from './un';
@@ -933,6 +934,21 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   toml: TomlEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin providing a rule to identify patterns that will interfere with
+   * the tree-shaking algorithm of their module bundler.
+   *
+   * By default will be applied to:
+   * - <code>**&#47;*.?([cm])[jt]s?(x)</code>
+   *
+   * Used plugin:
+   * - [`eslint-plugin-tree-shaking`](https://npmjs.com/eslint-plugin-tree-shaking) ([docs](https://github.com/lukastaegert/eslint-plugin-tree-shaking#readme))
+   *
+   * NOTE: disabled by default.
+   * @default false
+   */
+  treeShaking: TreeShakingEslintConfigOptions<ExtraPlugins>;
 
   /**
    * TypeScript specific rules.

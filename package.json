@@ -231,6 +231,7 @@
     "eslint-plugin-svelte": "3.13.0",
     "eslint-plugin-tailwindcss": "3.18.2",
     "eslint-plugin-testing-library": "7.13.5",
+    "eslint-plugin-tree-shaking": "1.12.2",
     "eslint-plugin-turbo": "2.6.1",
     "eslint-plugin-vue": "10.6.2",
     "eslint-plugin-vue-scoped-css": "2.12.0",
@@ -325,6 +326,7 @@
     "eslint-plugin-svelte": "^3.13.0",
     "eslint-plugin-tailwindcss": "^3.18.2",
     "eslint-plugin-testing-library": "^7.13.5",
+    "eslint-plugin-tree-shaking": "^1.12.2",
     "eslint-plugin-turbo": "^2.6.1",
     "eslint-plugin-vue": "^10.6.2",
     "eslint-plugin-vue-scoped-css": "^2.12.0",
@@ -523,6 +525,9 @@
       "optional": true
     },
     "eslint-plugin-testing-library": {
+      "optional": true
+    },
+    "eslint-plugin-tree-shaking": {
       "optional": true
     },
     "eslint-plugin-turbo": {

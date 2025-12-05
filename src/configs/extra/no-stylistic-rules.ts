@@ -644,6 +644,9 @@ const ALL_STYLISTIC_RULES = {
     'table-bracket-spacing': true,
     'tables-order': true,
   },
+  'tree-shaking': {
+    // None
+  },
   // Won't include: prefer-find, no-unnecessary-type-assertion
   ts: {
     'adjacent-overload-signatures': true,

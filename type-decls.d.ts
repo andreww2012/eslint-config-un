@@ -117,3 +117,9 @@ declare module 'eslint-plugin-jsx-a11y-x' {
   declare const value: EslintPlugin;
   export = value;
 }
+
+declare module 'eslint-plugin-tree-shaking' {
+  import type {Plugin as EslintPlugin} from '@eslint/core';
+  declare const value: EslintPlugin;
+  export = value;
+}

@@ -525,6 +525,14 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
+  'tree-shaking': genModuleLoader(
+    'tree-shaking',
+    'eslint-plugin-tree-shaking',
+    () =>
+      interopDefault(import('eslint-plugin-tree-shaking')).then(
+        fixupPluginRules,
+      ) as Promise<EslintPlugin>,
+  ),
   ts: genModuleLoader(
     'ts',
     'typescript-eslint',

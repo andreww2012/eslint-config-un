@@ -339,6 +339,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     tanstackQuery: {enabled: getIsConfigEnabled('tanstackQuery', '@tanstack/query-core')},
     testingLibrary: {enabled: getIsConfigEnabled('testingLibrary', '@testing-library/dom')},
     toml: {enabled: getIsConfigEnabled('toml', false)},
+    treeShaking: {enabled: getIsConfigEnabled('treeShaking', false)},
     ts: {enabled: getIsConfigEnabled('ts', 'typescript')},
     turbo: {enabled: getIsConfigEnabled('turbo', 'turbo')},
     unicorn: {enabled: getIsConfigEnabled('unicorn')},
@@ -600,6 +601,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('expectType', () => import('../configs/expect-type')),
     loadUnConfig('command', () => import('../configs/command')),
     loadUnConfig('antfu', () => import('../configs/antfu')),
+    loadUnConfig('treeShaking', () => import('../configs/tree-shaking')),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS
