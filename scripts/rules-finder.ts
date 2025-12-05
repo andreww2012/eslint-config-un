@@ -338,6 +338,9 @@ async function run({
 async function getNpmPackageInfo(packageName: string) {
   // eslint-disable-next-line node/no-unsupported-features/node-builtins
   const response = await fetch(`https://registry.npmjs.org/${packageName}`);
+  if (!response.ok) {
+    return {error: `${response.status} ${response.statusText}`};
+  }
   return NpmPackageInfoZod.parse(await response.json());
 }
 
