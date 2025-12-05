@@ -822,7 +822,7 @@ All code is assumed to be Node.JS code by default (`eslint-plugin-n` plugin is r
 Please specify `files`, `ignores` or disable `node` config altogether to avoid false positives.
 
 <!-- eslint-disable-next-line markdown-preferences/heading-casing -->
-### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace.
+### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace
 
 Install `globals` package as a dev dependency.
 

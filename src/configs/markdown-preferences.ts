@@ -220,6 +220,7 @@ export default (async (context, optionsRaw) => {
         }),
       },
     ]) /** @since 0.9.0 */
+    .addRule('no-heading-trailing-punctuation', ERROR) /** @since 0.38.0 */
     .addRule('ordered-list-marker-start', ERROR) /** @since 0.12.0 */ // 💅
     .addRule('prefer-inline-code-words', OFF) /** @since 0.4.0 */
     .addRule('prefer-linked-words', OFF) /** @since 0.1.0 */
