@@ -157,6 +157,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'unocss',
   '@formatjs/icu-messageformat-parser',
   '@docusaurus/core',
+  '@testing-library/jest-dom',
 
   'astro',
   'vue',

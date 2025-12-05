@@ -281,6 +281,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     import: {enabled: getIsConfigEnabled('import')},
     importZod: {enabled: getIsConfigEnabled('importZod', false)},
     jest: {enabled: getIsConfigEnabled('jest', 'jest')},
+    jestDom: {enabled: getIsConfigEnabled('jestDom', '@testing-library/jest-dom')},
     js: {enabled: getIsConfigEnabled('js')},
     jsInline: {enabled: getIsConfigEnabled('jsInline')},
     jsdoc: {enabled: getIsConfigEnabled('jsdoc')},
@@ -569,6 +570,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('noSecrets', () => import('../configs/no-secrets')),
     // eslint-disable-next-line case-police/string-check
     loadUnConfig('nestJs', () => import('../configs/nest-js')),
+    loadUnConfig('jestDom', () => import('../configs/jest-dom')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),

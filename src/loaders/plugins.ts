@@ -253,6 +253,9 @@ export const pluginsLoaders = {
   jest: genModuleLoader('jest', 'eslint-plugin-jest', () =>
     interopDefault(import('eslint-plugin-jest')),
   ),
+  'jest-dom': genModuleLoader('jest-dom', 'eslint-plugin-jest-dom', () =>
+    interopDefault(import('eslint-plugin-jest-dom')),
+  ),
   'jest-extended': genModuleLoader('jest-extended', 'eslint-plugin-jest-extended', () =>
     interopDefault(import('eslint-plugin-jest-extended')),
   ),

@@ -34,6 +34,7 @@ import type {HtmlEslintConfigOptions} from './html';
 import type {ImportEslintConfigOptions} from './import';
 import type {ImportZodEslintConfigOptions} from './import-zod';
 import type {JestEslintConfigOptions} from './jest';
+import type {JestDomEslintConfigOptions} from './jest-dom';
 import type {JsEslintConfigOptions} from './js';
 import type {JsInlineEslintConfigOptions} from './js-inline';
 import type {JsdocEslintConfigOptions} from './jsdoc';
@@ -469,6 +470,17 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> `jest` package is installed
    */
   jest: JestEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [`@testing-library/jest-dom`]((https://github.com/testing-library/jest-dom#readme))
+   * specific rules. Note that, contrary to its name, this package can be used with
+   * other testing libraries, for example `vitest`, so it doesn't belong to any top-level config.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-jest-dom`](https://npmjs.com/eslint-plugin-jest-dom) ([docs](https://github.com/testing-library/eslint-plugin-jest-dom#readme))
+   * @default true <=> `@testing-library/jest-dom` package is installed
+   */
+  jestDom: JestDomEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Built-in rules for linting JavaScript & TypeScript.

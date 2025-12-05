@@ -297,6 +297,9 @@ const ALL_STYLISTIC_RULES = {
     'prefer-to-contain': true,
     'prefer-to-have-length': true,
   },
+  'jest-dom': {
+    // TODO
+  },
   'jest-extended': markAllPluginRulesAsStylistic('jest-extended'),
   jsdoc: {
     'check-alignment': true,
