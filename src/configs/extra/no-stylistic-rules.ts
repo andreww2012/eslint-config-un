@@ -149,6 +149,12 @@ const ALL_STYLISTIC_RULES = {
     order: true,
     'order-attributify': true,
   },
+  antfu: {
+    'consistent-chaining': true,
+    'consistent-list-newline': true,
+    curly: true,
+    'if-newline': true,
+  },
   astro: {
     'prefer-class-list-directive': true,
     'prefer-object-class-list': true,

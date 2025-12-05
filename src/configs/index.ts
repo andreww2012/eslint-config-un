@@ -1,5 +1,6 @@
 import type {ExtraPluginsType} from '../config-un/shared';
 import type {AngularEslintConfigOptions} from './angular';
+import type {AntfuEslintConfigOptions} from './antfu';
 import type {AstroEslintConfigOptions} from './astro';
 import type {AvaEslintConfigOptions} from './ava';
 import type {BetterTailwindEslintConfigOptions} from './better-tailwind';
@@ -117,6 +118,22 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> `@angular/core` package is installed
    */
   angular: AngularEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [Anthony Fu](https://antfu.me/)'s personal collection of rules.
+   *
+   * By default will be applied to:
+   * - <code>**&#47;*.?([cm])[jt]s?(x)</code>
+   *
+   * ⚠️WARNING: all rules are disabled by default.
+   *
+   * Used plugin:
+   * - [`eslint-plugin-antfu`](https://npmjs.com/eslint-plugin-antfu) ([docs](https://github.com/antfu/eslint-plugin-antfu#readme))
+   *
+   * NOTE: disabled by default.
+   * @default false
+   */
+  antfu: AntfuEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Astro](https://astro.build) specific rules.

@@ -243,6 +243,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
 
   Object.assign(context.configsMeta, {
     angular: {enabled: isAngularEnabled},
+    antfu: {enabled: getIsConfigEnabled('antfu', false)},
     astro: {enabled: getIsConfigEnabled('astro', 'astro')},
     ava: {enabled: getIsConfigEnabled('ava', 'ava')},
     betterTailwind: {enabled: getIsConfigEnabled('betterTailwind', 'tailwindcss')},
@@ -598,6 +599,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('boundaries', () => import('../configs/boundaries')),
     loadUnConfig('expectType', () => import('../configs/expect-type')),
     loadUnConfig('command', () => import('../configs/command')),
+    loadUnConfig('antfu', () => import('../configs/antfu')),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

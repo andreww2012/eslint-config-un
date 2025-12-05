@@ -112,6 +112,9 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
+  antfu: genModuleLoader('antfu', 'eslint-plugin-antfu', () =>
+    interopDefault(import('eslint-plugin-antfu')),
+  ),
   astro: genModuleLoader('astro', 'eslint-plugin-astro', () =>
     interopDefault(import('eslint-plugin-astro')),
   ),

@@ -355,6 +355,7 @@ Sub-config is a Config located within Config's options. If the parent config is 
 | `noSecrets/json`                                               | ✅                                          | ^                                                                                                 | Applied only to `.json` files by default                                                                                                 |
 | `expectType`                                                   | ❌                                          | [eslint-plugin-expect-type](https://npmjs.com/eslint-plugin-expect-type) (`expect-type`)          | Since v1.0.0                                                                                                                             |
 | `command`                                                      | ❌                                          | [eslint-plugin-command](https://npmjs.com/eslint-plugin-command) (`command`)                      | Since v1.0.0                                                                                                                             |
+| `antfu`                                                        | ❌                                          | [eslint-plugin-antfu](https://npmjs.com/eslint-plugin-antfu) (`antfu`)                            | Since v1.0.0<br>[Anthony Fu](https://antfu.me/)'s personal collection of rules.                                                          |
 
 ## How to use
 
