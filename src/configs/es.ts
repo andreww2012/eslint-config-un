@@ -1,4 +1,4 @@
-// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo
+// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo israwjson rawjson
 import {ERROR, OFF} from '../constants';
 import type {Prettify} from '../types';
 import {memoize} from '../utils';
@@ -34,7 +34,10 @@ interface EcmaFeatures {
     | 'intlLocalePrototypeGetTextInfo'
     | 'intlLocalePrototypeGetTimeZones'
     | 'intlLocalePrototypeGetWeekInfo'
-    | 'iteratorConcat';
+    | 'iteratorConcat'
+    | 'jsonIsRawJson'
+    | 'jsonParseReviverContextParameter'
+    | 'jsonRawJson';
   2025:
     | 'dataviewPrototypeGetFloat16SetFloat16'
     | 'dynamicImportOptions'
@@ -369,6 +372,12 @@ export default ((context, optionsRawFromParameters, customConfig) => {
       .addRule('no-asyncdisposablestack', grs(2026, 'asyncDisposableStack')) /** @since 8.7.0 */
       .addRule('no-disposablestack', grs(2026, 'disposableStack')) /** @since 8.7.0 */
       .addRule('no-error-iserror', grs(2026, 'errorIsError')) /** @since 8.7.0 */
+      .addRule('no-json-israwjson', grs(2026, 'jsonIsRawJson')) /** @since 9.3.0 */
+      .addRule(
+        'no-json-parse-reviver-context-parameter',
+        grs(2026, 'jsonParseReviverContextParameter'),
+      ) /** @since 9.3.0 */
+      .addRule('no-json-rawjson', grs(2026, 'jsonRawJson')) /** @since 9.3.0 */
       .addRule('no-math-sumprecise', grs(2026, 'mathSumPrecise')) /** @since 9.1.0 */
       .addRule('no-suppressederror', grs(2026, 'suppressedError')) /** @since 8.7.0 */
       .addRule('no-symbol-asyncdispose', grs(2026, 'symbolAsyncDispose')) /** @since 9.0.0 */
