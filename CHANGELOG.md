@@ -1,5 +1,65 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.1
+
+### Minor Changes
+
+- 9c235e1: Added a new config `command` which uses [`eslint-plugin-command`](https://npmjs.com/eslint-plugin-command), ❌ disabled by default
+- 72532ee: Added a new config `expectType` which uses [`eslint-plugin-expect-type`](https://npmjs.com/eslint-plugin-expect-type), ❌ disabled by default
+- 0982fe0: Added a new config `treeShaking` which uses [`eslint-plugin-tree-shaking`](https://npmjs.com/eslint-plugin-tree-shaking), ❌ disabled by default
+- 6cd4569: Added a new config `antfu` which uses [`eslint-plugin-antfu`](https://npmjs.com/eslint-plugin-antfu), ❌ disabled by default
+- fb934f4: Added a new config `moduleInterop` which uses [`eslint-plugin-module-interop`](https://npmjs.com/eslint-plugin-module-interop), ✅ enabled by default
+- 92a1901: Added a new config `noSecrets` which uses [`eslint-plugin-no-secrets`](https://npmjs.com/eslint-plugin-no-secrets), ✅ enabled by default
+- 177c056: Added a new config `docusaurus` which uses [`@docusaurus/eslint-plugin`](https://npmjs.com/@docusaurus/eslint-plugin), ❓ enabled automatically if `@docusaurus/core` package is installed
+- 9d46740: Added a new config `boundaries` which uses [`eslint-plugin-boundaries`](https://npmjs.com/eslint-plugin-boundaries), ❌ disabled by default
+- 91b7041: Added a new config `nestJs` which uses [`@darraghor/eslint-plugin-nestjs-typed`](https://npmjs.com/@darraghor/eslint-plugin-nestjs-typed), ❓ enabled automatically if `@nestjs/core` package is installed
+- a1e1589: Added a new config `jestDom` which uses [`eslint-plugin-jest-dom`](https://npmjs.com/eslint-plugin-jest-dom), ❓ enabled automatically if `@testing-library/jest-dom` package is installed
+
+### Patch Changes
+
+- 1454e2c: vue: updated [`eslint-plugin-vue` from v10.6.0 to v10.6.2](https://github.com/vuejs/eslint-plugin-vue/compare/v10.6.0...v10.6.2)
+- 6b8459a: markdownPreferences: updated [`eslint-plugin-markdown-preferences` from v0.36.3 to v0.38.0](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/compare/v0.36.3...v0.38.0):
+  - 🟢 enabled [`no-tabs`](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/HEAD/docs/rules/no-tabs.md) rule with the following default options: `{ignoreCodeBlocks: ['*'], codeBlockTabWidth: 2}`
+  - 🟢 enabled [`no-heading-trailing-punctuation`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/no-heading-trailing-punctuation.html) rule
+
+- be0a185: playwright: updated [`eslint-plugin-playwright` from v2.3.0 to v2.4.0](https://github.com/playwright-community/eslint-plugin-playwright/compare/v2.3.0...v2.4.0)
+- 13077c9: yaml: updated [`yaml-eslint-parser` from v1.3.0 to v1.3.2](https://github.com/ota-meshi/yaml-eslint-parser/compare/v1.3.0...v1.3.2)
+- 5960178: zod: updated [`eslint-plugin-zod-x` from v1.11.2 to v1.12.0](https://github.com/marcalexiei/eslint-plugin-zod-x/compare/v1.11.2...v1.12.0):
+  - 🔴 not enabled [`no-unknown-schema`](https://github.com/marcalexiei/eslint-plugin-zod-x/blob/HEAD/docs/rules/no-unknown-schema.md) rule
+
+- 70c3f45: cspell: updated [`@cspell/eslint-plugin` from v9.3.2 to v9.4.0](https://github.com/streetsidesoftware/cspell/compare/v9.3.2...v9.4.0)
+- 5fdd9f6: es: updated [`eslint-plugin-es-x` from v9.2.0 to v9.3.0](https://github.com/eslint-community/eslint-plugin-es-x/compare/v9.2.0...v9.3.0):
+  - ❓ enabled conditionally [`no-json-israwjson`](https://eslint-community.github.io/eslint-plugin-rules/no-json-israwjson.html) rule
+  - ❓ enabled conditionally [`no-json-parse-reviver-context-parameter`](https://eslint-communithub.io/eslint-plugin-es-x/rules/no-json-parse-reviver-context-parameter.html) rule
+  - ❓ enabled conditionally [`no-json-rawjson`](https://eslint-communithub.io/eslint-plugin-es-x/rules/no-json-rawjson.html) rule
+
+  <!-- cspell:ignore no-json-israwjson rawjson -->
+
+- 4fcf74d: unocss: updated [`@unocss/eslint-plugin` from v66.5.9 to v66.5.10](https://github.com/unocss/unocss/compare/v66.5.9...v66.5.10)
+- 27d1eeb: html: updated [`@html-eslint/*` from v0.49.0 to v0.50.0](https://github.com/yeonjuan/html-eslint/compare/v0.49.0...v0.50.0)
+- b92d103: react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v2.3.7 to v2.3.12](https://github.com/Rel1cx/eslint-react/compare/v2.3.7...v2.3.12)
+- 87b9e8b: nx: updated [`@nx/eslint-plugin` from v22.1.0 to v22.1.3](https://github.com/nrwl/nx/compare/22.1.0...22.1.3)
+- 0f176da: jest: updated [`eslint-plugin-jest` from v29.2.0 to v29.2.1](https://github.com/jest-community/eslint-plugin-jest/compare/v29.2.0...v29.2.1)
+- 2be42ba: pnpm: updated [`eslint-plugin-pnpm` from v1.3.0 to v1.4.1](https://github.com/antfu/pnpm-workspace-utils/compare/v1.3.0...v1.4.1):
+  - Added a new option `enforcePnpmWorkspaceSettings` of `pnpmWorkspace` sub-config, which controls if `yaml-enforce-settings` rule should be enabled
+
+- 8edc578: markdownLinks: updated [`eslint-plugin-markdown-links` from v0.6.2 to v0.7.0](https://github.com/ota-meshi/eslint-plugin-markdown-links/compare/v0.6.2...v0.7.0)
+- 4b22cc1: turbo: updated [`eslint-plugin-turbo` from v2.6.1 to v2.6.3](https://github.com/vercel/turborepo/compare/v2.6.1...v2.6.3)
+- 7be4cb9: noStylisticRules: added `regexp/no-useless-character-class`, `sonarjs/single-character-alternation` and `vitest/padding-around-*` rules
+- 5b25d88: nextJs: updated [`@next/eslint-plugin-next` from v16.0.3 to v16.0.7](https://github.com/vercel/next.js/compare/v16.0.3...v16.0.7)
+- 32c070e: ts: updated [`typescript-eslint` from v8.47.0 to v8.48.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.47.0...v8.48.1)
+- 36aded8: vue: updated [`@nuxt/eslint-plugin` from v1.10.0 to v1.11.0](https://github.com/nuxt/eslint/compare/v1.10.0...v1.11.0)
+- ce76947: zod: updated [`eslint-plugin-zod-x` from v1.10.0 to v1.11.2](https://github.com/marcalexiei/eslint-plugin-zod-x/compare/v1.10.0...v1.11.2)
+  - 🟢 enabled [`consistent-object-schema-type`](https://github.com/marcalexiei/eslint-plugin-zod-x/blob/HEAD/docs/rules/consistent-object-schema-type.md) rule and added config-level `allowedObjectSchemaTypes` option related to it
+
+- 89a3eda: svelte: updated [`svelte-eslint-parser` from v1.4.0 to v1.4.1](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.4.0...v1.4.1)
+- ab1d12d: vitest: updated [`@vitest/eslint-plugin` from v1.4.3 to v1.5.1](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.4.3...v1.5.1):
+  - 🟢 enabled [`require-import-vi-mock`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/require-import-vi-mock.md) rule
+  - 🟢 enabled [`consistent-each-for`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/consistent-each-for.md) rule and added config-level `enforceEachOrFor` option related to it
+
+- 2d0fc2e: svelte: updated [`eslint-plugin-svelte` from v3.13.0 to v3.13.1](https://github.com/sveltejs/eslint-plugin-svelte/compare/v3.13.0...v3.13.1)
+- 9e7e28a: storybook: updated [`eslint-plugin-storybook` from v10.0.8 to v10.1.4](https://github.com/storybookjs/storybook/compare/v10.0.8...v10.1.4)
+
 ## 1.0.0-beta.0
 
 ### Major Changes
