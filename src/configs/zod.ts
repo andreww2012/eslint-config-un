@@ -122,6 +122,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-number-schema-with-int', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
     .addRule('no-optional-and-default-together', ERROR) /** @since 1.6.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 0.0.1 */ // 🟢
+    .addRule('no-unknown-schema', OFF) /** @since 1.12.0 */
     // `.meta()` added in v4
     .addRule('prefer-meta', severityForRulesOnlyForV4) /** @since 0.0.1 */ // 🟢
     .addRule('prefer-meta-last', ERROR) /** @since 0.0.1 */ // 🟢
