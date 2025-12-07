@@ -17,7 +17,7 @@ export type {
   NonEmptyString,
   NonEmptyTuple,
   PartialDeep,
-  Promisable,
+  Promisable as MaybePromise,
   Simplify as Prettify,
   SimplifyDeep as PrettifyDeep,
   ReadonlyDeep,

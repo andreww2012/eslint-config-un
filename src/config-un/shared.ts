@@ -23,11 +23,11 @@ import type {
   PluginPrefix,
   pluginsLoaders,
 } from '../loaders';
-import type {OmitIndexSignature, OmitStrict, Prettify, Promisable} from '../types';
+import type {MaybePromise, OmitIndexSignature, OmitStrict, Prettify} from '../types';
 import type {MaybeArray, MaybeFn, fetchPackageInfo} from '../utils';
 import type {ImportPluginReplaceableRules} from './fast-import';
 
-export type ExtraPluginsType = Record<string, () => Promisable<EslintPlugin>>;
+export type ExtraPluginsType = Record<string, () => MaybePromise<EslintPlugin>>;
 
 type ValueOrEslintConfigWithValue<T> =
   | T
@@ -142,9 +142,13 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    * to provide development version of that plugin.
    */
   pluginOverrides?: {
-    [Plugin in Exclude<PluginPrefix, ''>]?: Plugin extends keyof typeof pluginsLoaders
-      ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
-      : EslintPlugin;
+    [Plugin in Exclude<PluginPrefix, ''>]?: MaybeFn<
+      MaybePromise<
+        Plugin extends keyof typeof pluginsLoaders
+          ? Awaited<ReturnType<(typeof pluginsLoaders)[Plugin]>>['module'] & {}
+          : EslintPlugin
+      >
+    >;
   };
 
   /**
@@ -359,7 +363,7 @@ export type UnConfigFn<
     | OmitStrict<UnConfigs<ExtraPlugins>[ConfigKey], 'overrides' | 'overridesAny'>
     | undefined,
   extraArgument: ExtraArgument,
-) => Promisable<
+) => MaybePromise<
   | null
   | ({
       configs: (ConfigEntryBuilder<ExtraPlugins> | null)[];

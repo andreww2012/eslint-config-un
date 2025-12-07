@@ -1,7 +1,7 @@
 import type Eslint from 'eslint';
 import type {UnConfigContext} from '../config-un/shared';
 import {OPTIONAL_PEER_DEPENDENCIES} from '../constants';
-import type {Promisable} from '../types';
+import type {MaybePromise} from '../types';
 import {type MaybeArray, arraify, interopDefault, isIn} from '../utils';
 
 export type {Processor as EslintProcessor} from '@eslint/core';
@@ -24,19 +24,19 @@ const MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP = /^Cannot find module '([^']+)'/;
 export function genModuleLoader<T, N extends string>(
   property: string,
   packageName: N,
-  module: () => Promisable<T | {default: T}>,
+  module: () => MaybePromise<T | {default: T}>,
   ignoreErrors?: undefined,
 ): ModuleLoader<T, N, N extends keyof typeof OPTIONAL_PEER_DEPENDENCIES ? true : false>;
 export function genModuleLoader<T, N extends string>(
   property: string,
   packageName: N,
-  module: () => Promisable<T | {default: T}>,
+  module: () => MaybePromise<T | {default: T}>,
   ignoreErrors: MaybeArray<string>,
 ): ModuleLoader<T, N>;
 export function genModuleLoader<T, N extends string>(
   property: string,
   packageName: N,
-  module: () => Promisable<T | {default: T}>,
+  module: () => MaybePromise<T | {default: T}>,
   ignoredErrors?: MaybeArray<string>,
 ): ModuleLoader<T, N> {
   return async (context, options) => {
@@ -45,7 +45,7 @@ export function genModuleLoader<T, N extends string>(
       const {pluginOverrides} = context.rootOptions;
       const providedPlugin =
         pluginOverrides && isIn(property, pluginOverrides)
-          ? (pluginOverrides[property] as T)
+          ? await interopDefault(pluginOverrides[property] as T)
           : null;
       return {module: providedPlugin || (await interopDefault(module())), packageName};
     } catch (error: unknown) {

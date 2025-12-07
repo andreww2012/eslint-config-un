@@ -9,7 +9,7 @@ import {resolve as resolvePackage} from 'import-meta-resolve';
 import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
 import {Traverse, type TraverseOptions} from 'neotraverse/modern';
 import * as R from 'remeda';
-import type {FalsyValue, PackageJson, Promisable, StripReadonly} from './types';
+import type {FalsyValue, MaybePromise, PackageJson, StripReadonly} from './types';
 
 export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
 
@@ -209,7 +209,7 @@ export const doesPackageExist = (packageName: string): Promise<boolean> => {
   return Promise.resolve(exists);
 };
 
-export const interopDefault = async <T>(module: Promisable<T | {default: T}>): Promise<T> => {
+export const interopDefault = async <T>(module: MaybePromise<T | {default: T}>): Promise<T> => {
   const resolvedModule = await module;
   // TODO report?
   // eslint-disable-next-line ts/no-unnecessary-condition
