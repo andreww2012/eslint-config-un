@@ -16,6 +16,11 @@ export default eslintConfig({
   },
 
   configs: {
+    js: {
+      overrides: {
+        'arrow-body-style': 2,
+      },
+    },
     expectType: true,
     command: true,
     checkFile: {

@@ -959,11 +959,11 @@ export default ((context, optionsRaw) => {
       .disableBulkRules(
         objectEntriesUnsafe(ALL_RULES_PER_PLUGIN)
           .flatMap(([pluginName, rules]) =>
-            rules.map((ruleName) => {
-              return ruleName in ALL_STYLISTIC_RULES[pluginName]
+            rules.map((ruleName) =>
+              ruleName in ALL_STYLISTIC_RULES[pluginName]
                 ? null
-                : `${pluginName ? `${pluginName}/` : ''}${ruleName}`;
-            }),
+                : `${pluginName ? `${pluginName}/` : ''}${ruleName}`,
+            ),
           )
           .filter((v) => v != null),
       );

@@ -653,9 +653,7 @@ export class ConfigEntryBuilder<
         severity: Severity,
         ruleOptions?: NoInfer<GetRuleOptions<P, N, 'all'>>,
         options?: AddRuleInternalOptions,
-      ) => {
-        return addRule(prefix, ruleName, severity, ruleOptions, options);
-      },
+      ) => addRule(prefix, ruleName, severity, ruleOptions, options),
 
       disableAnyRule: <P extends PluginPrefix>(prefix: P, ruleName: RuleNamesForPlugin<P>) => {
         const prefixFinal =
