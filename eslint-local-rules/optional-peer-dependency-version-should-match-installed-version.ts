@@ -26,9 +26,10 @@ type RuleOptions = InferJsonSchemaType<typeof RULE_OPTIONS_SCHEMA>;
 const rule: Eslint.Rule.RuleModule = {
   meta: {
     type: 'problem',
+    fixable: 'code',
     schema: [RULE_OPTIONS_SCHEMA],
     messages: {
-      peerDependencyRangeTooLow:
+      peerDependencyRangeDoNotMatchDevDependencyVersion:
         'Optional peer dependency {{name}} version must exactly match the installed version of the same dependency ({{installedVersion}}) and also be prepended with a caret (^)',
     },
   },
@@ -88,17 +89,24 @@ const rule: Eslint.Rule.RuleModule = {
             }
 
             if (
-              !semverVersionsEqual(minVersionSatisfyingRange.version, installedDevDependencyVersion)
+              semverVersionsEqual(minVersionSatisfyingRange.version, installedDevDependencyVersion)
             ) {
-              context.report({
-                node: peerDependencyNode,
-                messageId: 'peerDependencyRangeTooLow',
-                data: {
-                  name: peerDependencyName,
-                  installedVersion: installedDevDependencyVersion,
-                },
-              });
+              return;
             }
+
+            context.report({
+              node: peerDependencyNode.value,
+              messageId: 'peerDependencyRangeDoNotMatchDevDependencyVersion',
+              data: {
+                name: peerDependencyName,
+                installedVersion: installedDevDependencyVersion,
+              },
+              fix: (fixer) =>
+                fixer.replaceText(
+                  peerDependencyNode.value,
+                  JSON.stringify(`^${installedDevDependencyVersion}`),
+                ),
+            });
           });
         },
     };
