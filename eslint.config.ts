@@ -203,5 +203,22 @@ export default eslintConfig({
         ],
       },
     },
+    {
+      name: 'enforce-kebab-case-for-plugin-and-parser-prefixes',
+      files: ['src/loaders/{plugins,parsers}.ts'],
+      rules: {
+        'ts/naming-convention': [
+          2,
+          {
+            selector: 'objectLiteralProperty',
+            format: null,
+            custom: {
+              match: true,
+              regex: String.raw`^@?[a-z\d]+(-[a-z\d]+)*(?:/[a-z\d]+(-[a-z\d]+)*)?$`,
+            },
+          },
+        ],
+      },
+    },
   ],
 });
