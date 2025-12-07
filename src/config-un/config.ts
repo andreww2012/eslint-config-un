@@ -620,11 +620,22 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('cli', () => import('../configs/extra/cli')),
     loadUnConfig('cloudfrontFunctions', () => import('../configs/extra/cloudfront-functions')),
 
-    ...extraConfigs.map((config, configIndex) => ({
-      ...omit(config, ['rules']),
-      ...(config.rules && {rules: resolveOverrides(context, config.rules)}),
-      name: genFlatConfigEntryName(`extra-config/${config.name || `unnamed${configIndex}`}`),
-    })),
+    ...extraConfigs.flatMap((extraConfig, configIndex) => {
+      const configName = genFlatConfigEntryName(
+        `extra-config/${extraConfig.name || `unnamed${configIndex}`}`,
+      );
+      const overridesResolved = resolveOverrides(
+        context,
+        {...extraConfig, name: configName},
+        extraConfig.rules,
+      );
+      const extraConfigFinal: FlatConfigEntry = {
+        ...omit(extraConfig, ['rules']),
+        ...(extraConfig.rules && {rules: overridesResolved.rules}),
+        name: configName,
+      };
+      return [extraConfigFinal, ...overridesResolved.extraConfigs];
+    }),
 
     // MUST be last
     loadUnConfig('noStylisticRules', () => import('../configs/extra/no-stylistic-rules')),

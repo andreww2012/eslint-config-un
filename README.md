@@ -138,7 +138,8 @@ export default eslintConfig({
 > [!NOTE]
 > We highly recommend using TypeScript config file, which is supported since ESLint v9.18.0, or [`@ts-check` directive](https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#ts-check) at the start of the file otherwise.
 
-## List of configs
+<!-- eslint-disable-next-line markdown-preferences/heading-casing -->
+## Configs and Sub-configs
 
 eslint-config-un has a concept of Configs and Sub-configs, further referred to as Configs. 
 They are similar to ESLint flat config objects, but with some useful extensions.
@@ -148,12 +149,28 @@ You can enable any Config by setting it to `true` or an object with the Config's
 Passing `false` disables the Config. 
 Passing an empty array to `files` disables the Config, but not its' Sub-configs.
 
-<details>
-<summary>Config interface & docs</summary>
+Sub-config is a Config located within Config's options. 
+If the parent config is disabled by passing `false`, all its' Sub-configs are disabled too.
+
+After evaluating all the flat configs, eslint-config-un will **load only those plugins that were actually used**, unless `loadPluginsOnDemand` option is set to `false`.
+
+### Config (`UnConfig`) interface
 
 The Config has the following interface (exact types are simplified for docs):
 
 ```ts
+type Severity = 0 | 1 | 2 | 'off' | 'warn' | 'error';
+
+type RuleOptions = { /* ... pre-generated all rules' options */ };
+
+type UnRuleEntry<RuleName extends string> = Severity | [Severity, RuleOptions[RuleName]] | {
+  severity: Severity;
+  options?: RuleOptions[RuleName];
+  disableAutofix?: boolean;
+  files?: string[];
+  ignores?: string[];
+}
+
 type UnConfig =
   | boolean
   | {
@@ -162,43 +179,73 @@ type UnConfig =
 
       [RuleName in ('overrides' | 'overridesAny')]?: {
         [RuleName in string]:
-          | Severity
-          | [Severity, RuleOptions[RuleName]]
+          | UnRuleEntry<RuleName>
           | ((
               // These are severity and options *maybe* set by eslint-config-un
-              ourSeverity: Severity,
-              ourOptions?: RuleOptions[RuleName],
-            ) => Severity | [Severity, RuleOptions[RuleName]]);
+              unRuleSeverity: Severity,
+              unRuleOptions?: RuleOptions[RuleName],
+            ) => UnRuleEntry<RuleName>);
       };
 
       forceSeverity?: '2' | 'error' | '1' | 'warn';
-
       [`config${string}`]: UnConfig; // These are Sub-configs
-
       [customOptions: string]: unknown; // Custom options, individual for each Config
     };
-
-type Severity = 0 | 1 | 2 | 'off' | 'warn' | 'error';
 ```
 
-</details>
+#### `files` and `ignores`
 
-<br>
+They have exactly the same meaning as the corresponding ESLint flat config item properties, with the only difference being an empty array `[]` handling:
 
-- Sub-configs are the same as Configs, but configured within Config options. 
-  All Sub-configs use `configXXX` naming convention.
-- After evaluating all the flat configs, eslint-config-un will **load only those plugins that were actually used**, unless `loadPluginsOnDemand` option is set to `false`.
-- `files` and `ignores` have exactly the same meaning as the corresponding ESLint flat config item properties, with the only difference being an empty array `[]` handling:
-  - If you specify an empty array for `files`, the Config **will be disabled**, but of its' Sub-configs remain unaffected.
-  - If you specify an empty array for `ignores`, the default ignore list won't be used.
-- `overrides`/`overridesAny` is similar to ESLint's `rules`, but with a very important advantage: you can provide a function that will be called with the rule severity and options set by eslint-config-un, which allows you to **granularly override the options** or change the severity of each rule.
-  - The difference between `overrides` and `overridesAny` is that `overridesAny` will allow *any* rule to be overridden (from TypeScript's stand point; technically you can pass any rule to `overrides` too), while `overrides` will only allow those rules which are tied to the config.
-  - `overridesAny` will be applied **after** `overrides`.
-- `forceSeverity` allows to bulk override the severity of all the rules not overridden via `overrides` or `overridesAny`.
-- Custom options are individual for each Config and are documented in JSDoc format.
+- If you specify an empty array for `files`, the Config **will be disabled**, but of its' Sub-configs remain unaffected.
+- If you specify an empty array for `ignores`, the default ignore list won't be used.
 
-Sub-config is a Config located within Config's options. 
-If the parent config is disabled by passing `false`, all its' Sub-configs are disabled too. 
+#### `overrides` and `overridesAny`
+
+These are similar to ESLint's `rules`, but with a very important advantage: you can provide a function that will be called with the rule severity and options set by eslint-config-un, which allows you to **granularly override the options** or change the severity of each rule.
+
+- The difference between `overrides` and `overridesAny` is that `overridesAny` will allow *any* rule to be overridden (from TypeScript's stand point; technically you can pass any rule to `overrides` too), while `overrides` will only allow those rules which are tied to the config.
+- `overridesAny` will be applied **after** `overrides`.
+
+#### Sub-configs
+
+Sub-configs are the same as Configs, but configured within Config options. 
+All Sub-configs use `configXXX` naming convention.
+
+#### `forceSeverity`
+
+Allows to bulk override the severity of all the rules not overridden via `overrides` or `overridesAny`.
+
+#### Custom options
+
+Custom options are individual for each Config and are documented in JSDoc format.
+
+### Rule entry (`UnRuleEntry`) interface
+
+#### `severity` and `options`
+
+Normal ESLint severity and rule options.
+
+#### `disableAutofix`
+
+Apply a copy of the rule with `disable-autofix/` prefix and all autofixes disabled.
+
+#### `files` and `ignores`
+
+Allows to limit to which files only the current rule will be applied.
+Only works if:
+
+- At least one of `files` or `ignores` is provided and non-empty;
+- `files` or the current Config is not an empty array.
+
+If these conditions are met, a separate Config will be created with:
+
+- `name` being the current Config's name with `/@rule/<rule name with prefix>` postfix;
+- `files` [intersected with the parent's `files`](https://eslint.org/docs/latest/use/configure/configuration-files#specifying-files-with-an-and-operation);
+- `ignores` merged with the parent's `ignores`.
+
+## List of configs
+
 In the following table, Sub-configs have `/` in their names.
 
 ### Most popular and well known

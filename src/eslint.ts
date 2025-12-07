@@ -43,6 +43,7 @@ import type {
   UnionToIntersection,
 } from './types';
 import {
+  type MaybeArray,
   type MaybeFn,
   arraify,
   arrayMap,
@@ -168,6 +169,9 @@ type UnConfigOptionsOverridesEntry<
         : string extends RuleName
           ? boolean
           : false;
+
+      files?: string[];
+      ignores?: string[];
     },
   [severity: EslintSeverity & number, options?: Options]
 >;
@@ -309,10 +313,13 @@ export const getRuleNameAndPluginPrefixByFullName = (
 
 export const resolveOverrides = (
   context: UnConfigContext,
+  config: FlatConfigEntry | UnFlagConfigEntry,
   overrides: Record<string, UnConfigOptionsOverridesEntry | undefined> | undefined,
   existingRules?: Partial<RulesRecord>,
 ) => {
-  return Object.fromEntries(
+  const extraConfigs: SetRequired<FlatConfigEntry, 'name'>[] = [];
+
+  const rules: Record<string, EslintRuleEntry> = Object.fromEntries(
     Object.entries(overrides || {}).flatMap(([ruleNameRaw, ruleOptions]) => {
       const {pluginPrefixCanonical, ruleNameUnprefixed, fullRuleNameWithResolvedPrefix} =
         getRuleNameAndPluginPrefixByFullName(context, ruleNameRaw);
@@ -332,11 +339,17 @@ export const resolveOverrides = (
       const result: [ruleName: string, EslintRuleEntry][] = [];
       let ruleEntry = ruleEntryRaw as EslintRuleEntry;
       let disableAutofix = false;
-      if (ruleEntryRaw && typeof ruleEntryRaw === 'object' && 'severity' in ruleEntryRaw) {
+
+      if (
+        ruleEntryRaw &&
+        typeof ruleEntryRaw === 'object' &&
+        'severity' in ruleEntryRaw /* `!Array.isArray(...)` doesn't work */
+      ) {
         ruleEntry =
           ruleEntryRaw.options == null
             ? ruleEntryRaw.severity
             : [ruleEntryRaw.severity, ...ruleEntryRaw.options];
+
         if (ruleEntryRaw.disableAutofix != null && pluginPrefixCanonical != null) {
           disableAutofix = ruleEntryRaw.disableAutofix;
           const ruleNameWithDisableAutofixPrefix = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`;
@@ -347,7 +360,24 @@ export const resolveOverrides = (
             result.push([ruleNameWithDisableAutofixPrefix, OFF]);
           }
         }
+
+        if (
+          (ruleEntryRaw.files?.length || ruleEntryRaw.ignores?.length) &&
+          config.files?.length !== 0
+        ) {
+          extraConfigs.push({
+            name: `${config.name || ''}/@rule/${ruleName}`,
+            ...(ruleEntryRaw.files && {
+              files: config.files ? [config.files.flat(), ruleEntryRaw.files] : ruleEntryRaw.files,
+            }),
+            ...(ruleEntryRaw.ignores?.length && {
+              ignores: [...(config.ignores || []), ...ruleEntryRaw.ignores],
+            }),
+          });
+          return result;
+        }
       }
+
       result.push([ruleName, ruleEntry]);
 
       if (
@@ -368,6 +398,11 @@ export const resolveOverrides = (
       return result;
     }),
   );
+
+  return {
+    rules,
+    extraConfigs,
+  };
 };
 
 export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
@@ -417,6 +452,13 @@ export class ConfigEntryBuilder<
 
   private readonly configs: FlatConfigEntry[] = [];
   private readonly configsDict = new Map<string, FlatConfigEntry>();
+
+  private addFlatConfig(configs: MaybeArray<SetRequired<FlatConfigEntry, 'name'>>) {
+    arraify(configs).forEach((config) => {
+      this.configs.push(config);
+      this.configsDict.set(config.name, config);
+    });
+  }
 
   /**
    * Note: `rules` will **always** be added to the resulting config, meaning that this method
@@ -469,8 +511,6 @@ export class ConfigEntryBuilder<
       typeof nameAndMaybeOptions === 'string' ? [nameAndMaybeOptions, {}] : nameAndMaybeOptions;
     const {options: configOptions} = this;
 
-    const configNameFinal = genFlatConfigEntryName(configName);
-
     const userFiles = configOptions.files || [];
     const fallbackFiles = internalOptions.filesFallback || [];
     const files =
@@ -499,16 +539,14 @@ export class ConfigEntryBuilder<
     // We require the presence of `rules`:
     // - to avoid likely adding it anyway later on
     // - to avoid (mostly likely accidental) "global ignores" configs (https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores)
-    const configFinal: SetRequired<FlatConfigEntry, 'rules'> = {
+    const configFinal: SetRequired<FlatConfigEntry, 'rules' | 'name'> = {
       ...(files.length > 0 && {files}),
       ...(ignores.length > 0 && {ignores}),
       ...config,
-      name: configNameFinal,
+      name: genFlatConfigEntryName(configName),
       rules: {},
     };
-
-    this.configs.push(configFinal);
-    this.configsDict.set(configNameFinal, configFinal);
+    this.addFlatConfig(configFinal);
 
     const {parser} = internalOptions;
     if (parser != null) {
@@ -636,35 +674,56 @@ export class ConfigEntryBuilder<
 
       addOverrides: () => {
         const ourRules = configFinal.rules;
-        Object.assign(
+
+        const overridesResolved = resolveOverrides(
+          this.context,
+          configFinal,
+          this.options.overrides,
           ourRules,
-          resolveOverrides(this.context, this.options.overrides, ourRules),
-          resolveOverrides(this.context, this.options.overridesAny, ourRules),
         );
+        const overridesAnyResolved = resolveOverrides(
+          this.context,
+          configFinal,
+          this.options.overridesAny,
+          ourRules,
+        );
+
+        Object.assign(ourRules, overridesResolved.rules, overridesAnyResolved.rules);
+        this.addFlatConfig([
+          ...overridesResolved.extraConfigs,
+          ...overridesAnyResolved.extraConfigs,
+        ]);
+
         return result;
       },
 
       addBulkRules: (rules: AllEslintRules | FalsyValue) => {
-        Object.assign(configFinal.rules, resolveOverrides(this.context, rules || {}));
+        const overridesResolved = resolveOverrides(this.context, configFinal, rules || {});
+
+        Object.assign(configFinal.rules, overridesResolved.rules);
+        this.addFlatConfig(overridesResolved.extraConfigs);
+
         return result;
       },
 
       disableBulkRules: (rules: (keyof AllEslintRules | (string & {}))[] | FalsyValue) => {
-        Object.assign(
-          configFinal.rules,
-          resolveOverrides(
-            this.context,
-            Object.fromEntries(
-              (rules || []).flatMap(
-                (ruleName) =>
-                  [
-                    [ruleName, OFF],
-                    [`${DISABLE_AUTOFIX}/${ruleName}`, OFF],
-                  ] as const,
-              ),
+        const overridesResolved = resolveOverrides(
+          this.context,
+          configFinal,
+          Object.fromEntries(
+            (rules || []).flatMap(
+              (ruleName) =>
+                [
+                  [ruleName, OFF],
+                  [`${DISABLE_AUTOFIX}/${ruleName}`, OFF],
+                ] as const,
             ),
           ),
         );
+
+        Object.assign(configFinal.rules, overridesResolved.rules);
+        this.addFlatConfig(overridesResolved.extraConfigs);
+
         return result;
       },
 
