@@ -778,7 +778,6 @@ const ALL_STYLISTIC_RULES = {
     'consistent-test-it': true,
     'consistent-vitest-vi': true,
     'no-alias-methods': true,
-    'no-importing-vitest-globals': true,
     'no-interpolation-in-snapshots': true,
     'padding-around-after-all-blocks': true,
     'padding-around-after-each-blocks': true,
