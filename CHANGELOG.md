@@ -690,7 +690,7 @@
 
 - [**BREAKING**] All used ESLint plugins are now loaded unconditionally, allowing the use of any of their rules without requiring that the corresponding config is enabled.
 - Abandon [`eslint-plugin-disable-autofix`](https://npmjs.com/eslint-plugin-disable-autofix) in favor of manually adding the same functionality.
-- [**BREAKING**] Disabled autofix for [`no-unnecessary-type-assertion`](https://typescript-eslint.io/rules/no-unnecessary-type-assertion/) due to [this bug](https://github.com/typescript-eslint/typescript-eslint/issues/8721).
+- [**BREAKING**] Disabled autofix for [`no-unnecessary-type-assertion`](https://typescript-eslint.io/rules/no-unnecessary-type-assertion) due to [this bug](https://github.com/typescript-eslint/typescript-eslint/issues/8721).
 - New config: `deMorgan` via [`eslint-plugin-de-morgan`](https://npmjs.com/eslint-plugin-de-morgan), **<u>disabled</u>** by default.
 
 ### Dependencies
@@ -906,7 +906,7 @@
     - Enabled a new [`vue/require-default-export`](https://eslint.vuejs.org/rules/require-default-export.html) rule.
     - Added unplugin-vue-router's [`definePage`](https://uvr.esm.is/guide/extending-routes.html#definepage) and nuxt's [`definePageMeta`](https://nuxt.com/docs/api/utils/define-page-meta) and [`defineRouteRules`](https://nuxt.com/docs/api/utils/define-route-rules) macros to `vue/define-macros-order`.
   - `typescript-eslint`@8.7.0
-    - Enabled a new [`@typescript-eslint/no-deprecated`](https://typescript-eslint.io/rules/no-deprecated/) rule.
+    - Enabled a new [`@typescript-eslint/no-deprecated`](https://typescript-eslint.io/rules/no-deprecated) rule.
 - Internal code refactoring.
 
 ## 0.0.7
