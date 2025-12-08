@@ -33,6 +33,25 @@ type ValueOrEslintConfigWithValue<T> =
   | T
   | MaybeArray<Prettify<FlatConfigEntryFilesOrIgnores & {value?: T}>>;
 
+// NOTE: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs
+export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
+  object)['rules'] = {
+  // TODO add missing reasons for disabling autofixes
+  'case-police/string-check': true,
+
+  'ts/method-signature-style': true,
+  'ts/no-unnecessary-type-arguments': true, // Could remove type aliases
+
+  'unicorn/catch-error-name': true,
+  'unicorn/consistent-existence-index-check': true,
+  'unicorn/explicit-length-check': true, // Wrong auto-fixes
+  'unicorn/no-useless-undefined': true,
+  'unicorn/prefer-spread': true,
+
+  'vitest/prefer-lowercase-title': true, // Strings/symbols shouldn't be changed by autofix
+  'vitest/require-import-vi-mock': true, // Might cause runtime/TS errors if imports are removed
+};
+
 export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = never> {
   // #region 🟠 FREQUENTLY USED OPTIONS
 
@@ -193,6 +212,8 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    *   'unicorn/explicit-length-check': true,
    *   'unicorn/no-useless-undefined': true,
    *   'unicorn/prefer-spread': true,
+   *   'vitest/require-import-vi-mock': true,
+   *   'vitest/prefer-lowercase-title': true,
    *   'zod/require-schema-suffix': true,
    * }
    * ```

@@ -34,23 +34,11 @@ import {
 import type {CacheDataInFs} from './cache';
 import {replaceImportRulesImplementationWithFastPlugin} from './fast-import';
 import {checkIfModuleCorrectlyLoaded} from './is-module-loaded';
-import type {EslintConfigUnOptions, UnConfigContext} from './shared';
-
-// NOTE: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs
-const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
-  object)['rules'] = {
-  // TODO add missing reasons for disabling autofixes
-  'case-police/string-check': true,
-
-  'ts/method-signature-style': true,
-  'ts/no-unnecessary-type-arguments': true, // Could remove type aliases
-
-  'unicorn/catch-error-name': true,
-  'unicorn/consistent-existence-index-check': true,
-  'unicorn/explicit-length-check': true, // Wrong auto-fixes
-  'unicorn/no-useless-undefined': true,
-  'unicorn/prefer-spread': true,
-};
+import {
+  type EslintConfigUnOptions,
+  RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT,
+  type UnConfigContext,
+} from './shared';
 
 interface ResolveConfigAsyncDataOptions {
   usedPluginPrefixes: string[];
