@@ -70,7 +70,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
   /**
    * Enforces casing of heading and table headers.
    * - If casing is specified, it will be enforced.
-   * - If `null` is specified, casing will not be enforced.
+   * - If `false` is specified, casing will not be enforced.
    * - If a literal value is used, it will apply to both headings and table headers.
    * - When an object syntax is used and some preferences are not specified, they will be set to the default value.
    *
@@ -81,7 +81,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
    */
   enforceCasing?:
     | EnforceableCasing
-    | null
+    | false
     | Partial<Record<CasingEnforcementPlace, EnforceableCasing>>;
 
   /**
@@ -176,11 +176,7 @@ export default (async (context, optionsRaw) => {
   const getEnforcedCasing = (
     place: CasingEnforcementPlace,
   ): EnforceableCasing | null | undefined =>
-    typeof enforceCasing === 'string'
-      ? enforceCasing
-      : enforceCasing === null
-        ? null
-        : enforceCasing[place];
+    typeof enforceCasing === 'string' ? enforceCasing : enforceCasing ? enforceCasing[place] : null;
   const enforcedCasingForHeadings = getEnforcedCasing('headings');
   const enforcedCasingForTableHeaders = getEnforcedCasing('tableHeaders');
 
