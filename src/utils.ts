@@ -255,17 +255,20 @@ type MissingMembers<U, A extends readonly unknown[]> = Exclude<U, A[number]>;
 
 type ExtraMembers<U, A extends readonly unknown[]> = Exclude<A[number], U>;
 
+export type AllUnionMembers<T, A extends readonly T[]> = A &
+  ([ExtraMembers<T, A>] extends [never]
+    ? [MissingMembers<T, A>] extends [never]
+      ? [FindDuplicate<A>] extends [never]
+        ? unknown
+        : never
+      : never
+    : never);
+
 export const allUnionMembers =
-  // eslint-disable-next-line ts/no-unnecessary-type-parameters
-  <ArrayType, Options extends {readonly?: boolean} = {readonly: false}>() =>
-    <const A extends readonly ArrayType[]>(
-      array: A &
-        ([ExtraMembers<ArrayType, A>] extends [never]
-          ? [MissingMembers<ArrayType, A>] extends [never]
-            ? [FindDuplicate<A>] extends [never]
-              ? unknown
-              : never
-            : never
-          : never),
-    ) =>
-      array as Options['readonly'] extends true ? A : StripReadonly<A>;
+  <
+    ArrayType,
+    // eslint-disable-next-line ts/no-unnecessary-type-parameters
+    Options extends {readonly?: boolean} = {readonly: false},
+  >() =>
+  <const A extends readonly ArrayType[]>(array: AllUnionMembers<ArrayType, A>) =>
+    array as Options['readonly'] extends true ? A : StripReadonly<A>;

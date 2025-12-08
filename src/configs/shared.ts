@@ -1,9 +1,53 @@
 import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YAML} from '../constants';
 import type {AllEslintRuleNames} from '../eslint';
-import {pick} from '../utils';
+import {type AllUnionMembers, pick} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import type {ExtraPluginsType, GetRuleOptions, UnConfigOptions} from '.';
+
+export interface IgnoresAdditionalOptions<Patterns extends string | readonly string[]> {
+  /**
+   * All the keys of this object are merged with the resolved `ignores` by default.
+   * Set any of them to `false` to avoid that. Set `false` to avoid merging with any of them
+   * @default true
+   */
+  ignoresAdditional?:
+    | false
+    | Partial<Record<Patterns extends readonly unknown[] ? Patterns[number] : Patterns, boolean>>;
+}
+
+export const generateIgnoresWithAdditional =
+  <Patterns extends string | readonly string[]>(
+    config: boolean | (UnConfigOptions & IgnoresAdditionalOptions<Patterns>),
+    extraIgnoresFallback?: string[],
+  ) =>
+  <
+    const ProvidedPatterns extends readonly (Patterns extends readonly unknown[]
+      ? Patterns[number]
+      : Patterns)[],
+  >(
+    allAdditionalIgnores: AllUnionMembers<
+      Patterns extends readonly unknown[] ? Patterns[number] : Patterns,
+      ProvidedPatterns
+    >,
+  ) => {
+    const {ignoresAdditional = true} = typeof config === 'object' ? config : {};
+    const ignoresFinal = [
+      ...allAdditionalIgnores
+        .map(
+          (fileToIgnore) =>
+            !(
+              ignoresAdditional === false ||
+              (typeof ignoresAdditional === 'object' && ignoresAdditional[fileToIgnore] === false)
+            ) && fileToIgnore,
+        )
+        .filter((v) => typeof v === 'string'),
+      ...((typeof config === 'object' ? config.ignores : null) || extraIgnoresFallback || []),
+    ];
+    return {
+      ...(ignoresFinal.length > 0 && {ignores: ignoresFinal}),
+    };
+  };
 
 export const generateDefaultTestFiles = <T extends string>(
   extensions: T,

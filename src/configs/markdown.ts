@@ -5,7 +5,11 @@ import type {FlatConfigEntryFilesOrIgnores} from '../eslint';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
 import {capitalize, unique} from '../utils';
-import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';
+import {
+  type IgnoresAdditionalOptions,
+  RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS,
+  generateIgnoresWithAdditional,
+} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -39,6 +43,8 @@ const generateNoMissingLabelRefsOptions = (
   },
 ];
 
+const CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES = ['LICENSE.md'] as const;
+
 export interface MarkdownEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'markdown'> {
@@ -52,13 +58,21 @@ export interface MarkdownEslintConfigOptions<
    * Config with the plugin that allows you to enforce that no line in your Markdown files
    * contains more than one sentence.
    *
-   * By default, uses `files` and `ignores` from the parent config.
+   * 📁 Default `files`: parent config's `files`
    *
-   * Used plugin:
-   * - [`eslint-plugin-sentences-per-line`](https://npmjs.com/eslint-plugin-sentences-per-line) ([docs](https://github.com/JoshuaKGoldberg/sentences-per-line/tree/main/packages/eslint-plugin-sentences-per-line#readme))
+   * ❌ Default `ignores`: parent config's `ignores` merged with the default ignore list.
+   * If `ignores` is explicitly specified, it will still be merged with the default ignore list,
+   * excluding items specified in `ignoresAdditional`.
+   *
+   * The default ignore list: `LICENSE.md`.
+   *
+   * 🧩 Main plugin: [`eslint-plugin-sentences-per-line`](https://npmjs.com/eslint-plugin-sentences-per-line) ([docs](https://github.com/JoshuaKGoldberg/sentences-per-line/tree/main/packages/eslint-plugin-sentences-per-line#readme))
    * @default false
    */
-  configSentencesPerLine?: boolean | UnConfigOptions<ExtraPlugins, 'sentences-per-line'>;
+  configSentencesPerLine?:
+    | boolean
+    | (UnConfigOptions<ExtraPlugins, 'sentences-per-line'> &
+        IgnoresAdditionalOptions<typeof CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES>);
 
   /**
    * Lint Markdown files themselves (***not*** fenced code blocks inside them)
@@ -352,15 +366,22 @@ export default ((context, optionsRaw) => {
   );
   if (configSentencesPerLine) {
     configBuilderSentencesPerLine
-      ?.addConfig([
-        'markdown/sentences-per-line',
+      ?.addConfig(
+        [
+          'markdown/sentences-per-line',
+          {
+            includeDefaultFilesAndIgnores: true,
+            doNotIgnoreMarkdown: true,
+            filesFallback: parentConfigFiles,
+          },
+        ],
         {
-          includeDefaultFilesAndIgnores: true,
-          doNotIgnoreMarkdown: true,
-          filesFallback: parentConfigFiles,
-          ignoresFallback: parentConfigIgnores,
+          ...generateIgnoresWithAdditional(
+            configSentencesPerLine,
+            parentConfigIgnores,
+          )(CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES),
         },
-      ])
+      )
       .addRule('one', ERROR) /** @since 0.0.0 */ // 🟢
       .enableConfigTesterForPlugin('sentences-per-line')
       .addOverrides();

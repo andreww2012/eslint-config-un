@@ -33,7 +33,7 @@ export default eslintConfig({
     },
     markdown: {
       configSentencesPerLine: {
-        ignores: ['CHANGELOG.md', '.changeset/README.md', 'LICENSE.md'],
+        ignores: ['CHANGELOG.md', '.changeset/README.md'],
       },
     },
     markdownLinks: {
