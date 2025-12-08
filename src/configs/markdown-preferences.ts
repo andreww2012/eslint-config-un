@@ -34,38 +34,47 @@ const DEFAULT_IGNORE_PATTERNS = [
 export interface MarkdownPreferencesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'markdown-preferences'> {
-  delimitersStyle?: {
-    /**
-     * Choose the style of emphasized, strong, or emphasized strong text. Possible values:
-     * - `'*'`: use `*text*` for emphasized text and `**text**` for strong text (default);
-     * - `'_'`: same as above, but use `_` instead of `*`;
-     * - `object`: directly configure the rule's options;
-     * - `false`: style not enforced.
-     *
-     * Note: style for emphasized strong text is automatically determined
-     * from the emphasis and strong styles. See rules documentation for more info.
-     *
-     * Affected rule:
-     * - [`emphasis-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emphasis-delimiters-style.html)
-     * @default '*'
-     */
-    emphasis?:
-      | false
-      | '*'
-      | '_'
-      | GetRuleOptions<'markdown-preferences', 'emphasis-delimiters-style'>;
+  /**
+   * Sets the style for emphasized, strong, emphasized strong and strikethrough text.
+   *
+   * Affected rules:
+   * - [`emphasis-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emphasis-delimiters-style.html)
+   * - [`strikethrough-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/strikethrough-delimiters-style.html)
+   */
+  delimitersStyle?:
+    | false
+    | {
+        /**
+         * Choose the style of emphasized, strong, or emphasized strong text. Possible values:
+         * - `'*'`: use `*text*` for emphasized text and `**text**` for strong text (default);
+         * - `'_'`: same as above, but use `_` instead of `*`;
+         * - `object`: directly configure the rule's options;
+         * - `false`: style not enforced.
+         *
+         * Note: style for emphasized strong text is automatically determined
+         * from the emphasis and strong styles. See rules documentation for more info.
+         *
+         * Affected rule:
+         * - [`emphasis-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emphasis-delimiters-style.html)
+         * @default '*'
+         */
+        emphasis?:
+          | false
+          | '*'
+          | '_'
+          | GetRuleOptions<'markdown-preferences', 'emphasis-delimiters-style'>;
 
-    /**
-     * Choose the style of emphasized for strikethrough. Set `false` to not enforce.
-     *
-     * Affected rule:
-     * - [`strikethrough-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/strikethrough-delimiters-style.html)
-     * @default '~~'
-     */
-    strikethrough?:
-      | false
-      | GetRuleOptions<'markdown-preferences', 'strikethrough-delimiters-style'>['delimiter'];
-  };
+        /**
+         * Choose the style of emphasized for strikethrough. Set `false` to not enforce.
+         *
+         * Affected rule:
+         * - [`strikethrough-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/strikethrough-delimiters-style.html)
+         * @default '~~'
+         */
+        strikethrough?:
+          | false
+          | GetRuleOptions<'markdown-preferences', 'strikethrough-delimiters-style'>['delimiter'];
+      };
 
   /**
    * Enforces casing of heading and table headers.
@@ -180,8 +189,10 @@ export default (async (context, optionsRaw) => {
   const enforcedCasingForHeadings = getEnforcedCasing('headings');
   const enforcedCasingForTableHeaders = getEnforcedCasing('tableHeaders');
 
-  const emphasisStyle = delimitersStyle?.emphasis ?? '*';
-  const strikethroughStyle = delimitersStyle?.strikethrough ?? '~~';
+  const emphasisStyle =
+    delimitersStyle === false ? delimitersStyle : (delimitersStyle?.emphasis ?? '*');
+  const strikethroughStyle =
+    delimitersStyle === false ? delimitersStyle : (delimitersStyle?.strikethrough ?? '~~');
 
   // Legend:
   // 🟢 - in recommended AND standard
