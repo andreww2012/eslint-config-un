@@ -1,4 +1,4 @@
-import {ERROR, GLOB_JS_TS_X, WARNING} from '../constants';
+import {ERROR, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -16,13 +16,7 @@ export default ((context, optionsRaw) => {
   const configBuilder = context.createConfigBuilder(optionsResolved, 'un');
 
   configBuilder
-    ?.addConfig([
-      'un',
-      {
-        includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JS_TS_X],
-      },
-    ])
+    ?.addConfig(['un', {includeDefaultFilesAndIgnores: true}])
     .addRule('no-multiple-consecutive-spaces', ERROR) /** @since 1.0.0 */
     .addRule('no-typeof-like-comparisons', WARNING) /** @since 1.0.0 */
     .addRule('prefer-early-return', ERROR) /** @since 1.0.0 */

@@ -1092,7 +1092,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * Rules not included in any other plugins, provided by us and collected under `un` prefix.
    *
-   * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+   * 📁 Default `files`: all files
    *
    * 🧩 Plugin(s): Built-in eslint-plugin-un
    * @default true
