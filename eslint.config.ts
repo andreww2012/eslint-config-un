@@ -24,11 +24,8 @@ export default eslintConfig({
     expectType: true,
     command: true,
     checkFile: {
-      overrides: {
-        'check-file/filename-naming-convention': [
-          2,
-          {'{eslint-local-rules,src,scripts}/**': 'KEBAB_CASE'},
-        ],
+      fileNamingConventions: {
+        '{eslint-local-rules,src,scripts}/**': 'KEBAB_CASE',
       },
     },
     markdown: {
@@ -52,20 +49,7 @@ export default eslintConfig({
     markdownPreferences: {
       ignores: ['LICENSE.md'],
       wordsToPreserveCasingOf: ['eslint-config-un', 'Description/Notes', 'Tailwind'],
-      overrides: {
-        'markdown-preferences/sort-definitions': 2,
-        // TODO add the ability to add ignore patterns via option
-        'markdown-preferences/heading-casing': (severity, options) => [
-          severity,
-          {
-            ...options?.[0],
-            ignorePatterns: [
-              ...(options?.[0]?.ignorePatterns || []),
-              '/changes/i' /* Added by changeset CLI to CHANGELOG.md */,
-            ],
-          },
-        ],
-      },
+      casingEnforcementIgnorePatterns: ['/changes/i'] /* Added by changeset CLI to CHANGELOG.md */,
     },
     fileProgress: true,
     ts: {
