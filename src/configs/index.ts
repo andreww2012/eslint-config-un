@@ -1043,10 +1043,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.toml</code>
    *
-   * ❌ Default `ignores`: <code>**&#47;Cargo.lock</code>
+   * If `ignores` is explicitly specified, it still be merged with the default ignore list,
+   * excluding items specified in `ignoresAdditional`.
    *
-   * Will be merged with user-provided `ignores`. To control that behavior,
-   * use `doNotIgnoreFilesByDefault` option.
+   * The default ignore list: <code>**&#47;Cargo.lock</code>
    *
    * 🧩 Main plugin: [`eslint-plugin-toml`](https://npmjs.com/eslint-plugin-toml) ([docs](https://ota-meshi.github.io/eslint-plugin-toml))
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
@@ -1180,10 +1180,12 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * YAML specific rules.
    *
-   * If enabled, lockfiles (`yarn.lock`, `pnpm-lock.yaml`) will be ignored by default
-   *
    * 📁 Default `files`: <code>**&#47;*.y?(a)ml</code>
-   * ❌ Default `ignores`: <code>**&#47;{pnpm-lock.yaml,yarn.lock}</code>
+   *
+   * If `ignores` is explicitly specified, it still be merged with the default ignore list,
+   * excluding items specified in `ignoresAdditional`.
+   *
+   * The default ignore list: <code>**&#47;{pnpm-lock.yaml,yarn.lock}</code>
    *
    * 🧩 Main plugin: [`eslint-plugin-yml`](https://npmjs.com/eslint-plugin-yml) ([docs](https://ota-meshi.github.io/eslint-plugin-yml))
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`

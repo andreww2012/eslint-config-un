@@ -1,5 +1,9 @@
 import {ERROR, OFF} from '../constants';
-import {TOML_DEFAULT_FILES} from './shared';
+import {
+  type IgnoresAdditionalOptions,
+  TOML_DEFAULT_FILES,
+  generateIgnoresWithAdditional,
+} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -8,15 +12,14 @@ import {
   assignDefaults,
 } from './index';
 
-const DEFAULT_FILES_TO_IGNORE = ['Cargo.lock'] as const;
+const CONFIG_DEFAULT_IGNORES = ['**/Cargo.lock'] as const;
 
-export interface TomlEslintConfigOptions<
-  ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'toml'> {
+export interface TomlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
+  extends
+    UnConfigOptions<ExtraPlugins, 'toml'>,
+    IgnoresAdditionalOptions<typeof CONFIG_DEFAULT_IGNORES> {
   /** `files` specified in this config will be merged with the default of `['**\/*.toml']`. Set this to `true` to avoid that behavior */
   doNotMergeFilesWithDefault?: boolean;
-
-  doNotIgnoreFilesByDefault?: Partial<Record<(typeof DEFAULT_FILES_TO_IGNORE)[number], boolean>>;
 
   /**
    * Mixed types in array were prohibited in TOML v0.5.0: https://toml.io/en/v0.5.0#array
@@ -69,14 +72,7 @@ export default ((context, optionsRaw) => {
         },
       ],
       {
-        ignores: [
-          ...DEFAULT_FILES_TO_IGNORE.map((fileToIgnore) =>
-            optionsResolved.doNotIgnoreFilesByDefault?.[fileToIgnore]
-              ? undefined
-              : (`**/${fileToIgnore}` as const),
-          ).filter((v) => typeof v === 'string'),
-          ...(optionsResolved.ignores || []),
-        ],
+        ...generateIgnoresWithAdditional(optionsResolved)(CONFIG_DEFAULT_IGNORES),
       },
     )
     .markCategory('Base rules')
