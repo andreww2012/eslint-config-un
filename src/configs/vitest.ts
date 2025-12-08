@@ -319,7 +319,7 @@ export default (async (context, optionsRaw) => {
     .addRule('prefer-todo', WARNING) /** @since 0.1.0 */ // (warns in all)
     .addRule('require-awaited-expect-poll', WARNING) /** @since 1.4.2 */ // (warns in all)
     .addRule('require-hook', WARNING) /** @since 0.1.0 */ // (warns in all)
-    .addRule('require-import-vi-mock', ERROR) /** @since 1.4.4 */ // (warns in all)
+    .addRule('require-import-vi-mock', OFF) /** @since 1.4.4 */ // (warns in all) Disabled because does exactly the same as `prefer-import-in-mock`: https://github.com/vitest-dev/eslint-plugin-vitest/issues/829
     .addRule('require-local-test-context-for-concurrent-snapshots', ERROR) /** @since 0.3.13 */ // 🟢
     .addRule('require-mock-type-parameters', WARNING) /** @since 1.1.27 */
     .addRule('require-to-throw-message', OFF) /** @since 0.1.0 */ // (warns in all)
