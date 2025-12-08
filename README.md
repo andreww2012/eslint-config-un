@@ -416,7 +416,7 @@ In the following table, Sub-configs have `/` in their names.
 | `noSecrets/json`                                               | ✅                                          | ^                                                                                                 | Applied only to `.json` files by default                                                                                                 |
 | `expectType`                                                   | ❌                                          | [eslint-plugin-expect-type](https://npmjs.com/eslint-plugin-expect-type) (`expect-type`)          | Since v1.0.0                                                                                                                             |
 | `command`                                                      | ❌                                          | [eslint-plugin-command](https://npmjs.com/eslint-plugin-command) (`command`)                      | Since v1.0.0                                                                                                                             |
-| `antfu`                                                        | ❌                                          | [eslint-plugin-antfu](https://npmjs.com/eslint-plugin-antfu) (`antfu`)                            | Since v1.0.0<br>[Anthony Fu](https://antfu.me/)'s personal collection of rules.                                                          |
+| `antfu`                                                        | ❌                                          | [eslint-plugin-antfu](https://npmjs.com/eslint-plugin-antfu) (`antfu`)                            | Since v1.0.0<br>[Anthony Fu](https://antfu.me)'s personal collection of rules.                                                           |
 
 ## How to use
 
@@ -823,34 +823,45 @@ Please don't attempt to migrate to ESLint 9 and eslint-config-un at the same tim
 
 ### Migration guide
 
-We recommend that every step and sub-step below is done in a separate commit and on a separate git branch. 
+We recommend that every step and sub-step below is done in a separate commit and on a separate git branch.
+If necessary, any step should be additionally split into multiple commits.
 Before committing, please do also run tests, formatter, other linters and tools to ensure that nothing became broken, if you have any.
 
-1. Remove **ALL** ESLint related *dev* dependencies - be it plugins, parsers, whatever else or `eslint` itself. 
-   This ensures correct versions of plugins will be resolved by eslint-config-un and saves you from other weird and hard to debug problems.
-2. If you're using `.js` config file, we highly recommend that you migrate to `.ts` one, or at least add `@ts-check` TypeScript directive to the former. 
+1. Dependencies:
+   1. Remove **ALL** ESLint related *dev* dependencies - be it plugins, parsers, whatever else or `eslint` itself. 
+      This ensures correct versions of plugins will be resolved by eslint-config-un and saves you from other weird and hard to debug problems.
+   2. Install `eslint-config-un` following [the installation instructions](#installation).
+2. If you're using `.js` config file, we highly recommend that you migrate to `.ts` one, or at least add `@ts-check` TypeScript directive to the former.
    Please don't forget install [`jiti`](https://npmjs.com/jiti) for ESLint to able be to read your TypeScript config file.
 3. Following your intuition or/and configs' options JSDoc documentation, migrate the existing config to the closest eslint-config-un equivalent.
    1. Run ESLint for the first time (without `--fix`!). 
       The list of dependencies to be installed might be shown to you.
       Please review whether those plugins are actually used/needed and act accordingly: install necessary plugins and disable configs which require packages you do not wish to install.
    2. Rename rules on existing [`eslint` configuration comments](https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments) if they have different plugin prefixes (the most common case is that `typescript-eslint` plugin has `ts` prefix in eslint-config-un instead of `@typescript-eslint`) **OR** change prefixes using [`pluginRenames` option](#plugin-prefixes-pluginrenames-option).
+      Look for `Definition for rule '<rule name>' was not found` comments
 4. Perform the following two steps in any order:
    1. Enable stylistic rules only and fix them automatically (if you wish to do so) by running ESLint with `--fix --fix-type problem,suggestion,layout` (the latter flag ensures auto removal of "unused" `eslint-disable` comments will not happen):
 
       ```ts
-      noStylisticRules: {
-        enableRules: {
-          rules: true,
-          disableAllOtherRules: true,
+      // ...
+      configs: {
+        // ...
+        noStylisticRules: {
+          enableRules: {
+            rules: true,
+            disableAllOtherRules: true,
+          },
         },
-      }
+        // ...
+      },
+      // ...
       ```
 
       **Note:** not every stylistic rule is auto-fixable and not all auto-fixes are safe to apply automatically (although we already maintain a list of rules for which we've disabled autofixes by default for these reasons).
 
       Please carefully review automatically applied fixes and do not forget about problems requiring manual intervention.
-   2. Set `configs.noStylisticRules` to `true` to disable purely stylistic rules and run ESLint for the first time with the new config. 
+      It might be worth to fix stylistic issues in two stages: auto and manually fixable problems.
+   2. Now set `configs.noStylisticRules` to `true` to disable purely stylistic rules and run ESLint for the first time with the new config. 
       Please don't use `--fix` option - this may complicate things as you will have less idea of what's changed (plus some autofixes may be unsafe to automatically apply). 
       Thoroughly go through the report and:
       - Decide which rules need to be disabled, enabled or changed the options of;
