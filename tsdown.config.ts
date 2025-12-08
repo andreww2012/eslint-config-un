@@ -10,4 +10,5 @@ export default defineConfig({
   noExternal: [
     /^(import-meta-resolve|is-in-editor)(?:\/.+)?$/, // Patched
   ],
+  unbundle: true,
 });
