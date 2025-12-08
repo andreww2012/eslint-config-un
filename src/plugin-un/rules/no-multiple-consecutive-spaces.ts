@@ -1,6 +1,21 @@
 import type Eslint from 'eslint';
+import type {JSONSchema4} from 'json-schema';
+import type {FromSchema as InferJsonSchemaType} from 'json-schema-to-ts';
+
+const RULE_OPTIONS_SCHEMA = {
+  type: 'object',
+  properties: {
+    allowSpacesOnly: {
+      type: 'boolean',
+    },
+  },
+  additionalProperties: false,
+} as const satisfies JSONSchema4;
+
+type RuleOptions = InferJsonSchemaType<typeof RULE_OPTIONS_SCHEMA>;
 
 const MULTIPLE_CONSECUTIVE_SPACES_REGEXP = / {2,}/g;
+const SPACES_ONLY_REGEXP = /^ +$/;
 
 const rule: Eslint.Rule.RuleModule = {
   meta: {
@@ -10,7 +25,8 @@ const rule: Eslint.Rule.RuleModule = {
     },
     fixable: 'code',
     hasSuggestions: true,
-    schema: [],
+    schema: [RULE_OPTIONS_SCHEMA],
+    defaultOptions: [{allowSpacesOnly: true}] satisfies [RuleOptions],
     messages: {
       noMultipleConsecutiveSpaces: 'Multiple consecutive spaces in string literal are not allowed.',
       replaceMultipleSpacesWithSingle: 'Replace multiple spaces with a single space',
@@ -21,6 +37,8 @@ const rule: Eslint.Rule.RuleModule = {
     const {sourceCode} = context;
     return {
       Literal: (node) => {
+        const options = context.options[0] as RuleOptions | undefined;
+
         const {value} = node;
         if (typeof value !== 'string') {
           return;
@@ -30,6 +48,10 @@ const rule: Eslint.Rule.RuleModule = {
         [...matches].forEach(({index: startIndex, 0: matchString}) => {
           const reportStart = (node.range?.[0] || 0) + 1 /* Quote */ + startIndex;
           const reportEnd = reportStart + matchString.length;
+
+          if (options?.allowSpacesOnly && SPACES_ONLY_REGEXP.test(value)) {
+            return;
+          }
 
           context.report({
             node,
