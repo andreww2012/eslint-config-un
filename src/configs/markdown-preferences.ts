@@ -122,10 +122,57 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * You can use the array or the object syntax. The difference is that the object syntax allows to exclude some words from the default list by setting the value to `false`.
    *
    * Affected rules:
-   * - [`heading-casing`](https://``ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
+   * - [`heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
    * - [`table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
    */
   casingEnforcementIgnorePatterns?: ArrayOrBooleanRecord<`/${string}/${string}`>;
+
+  /**
+   * Enforces ordered lists numbering style and start number.
+   *
+   * Affected rules:
+   * - [`ordered-list-marker-sequence`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-sequence.html)
+   * - [`ordered-list-marker-start`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-start.html)
+   * - [`ordered-list-marker-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-style.html)
+   */
+  orderedLists?:
+    | false
+    | {
+        /**
+         * Enforces ordered lists numbering style:
+         * - `'sequential'` (default): enforces sequential numbering style (1, 2, 3, ...);
+         * - `'fixed'`: fixed numbering style (1, 1, 1, ...).
+         * - `false`: does not enforce the numbering style.
+         *
+         * Affected rule:
+         * - [`ordered-list-marker-sequence`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-sequence.html)
+         * @default 'sequential'
+         */
+        numbering?: false | 'sequential' | 'fixed';
+
+        /**
+         * Enforces that ordered lists in start with a specific number (1 or 0).
+         *
+         * Affected rule:
+         * - [`ordered-list-marker-start`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-start.html)
+         * @default 1
+         */
+        start?:
+          | false
+          | (GetRuleOptions<'markdown-preferences', 'ordered-list-marker-start'>['start'] & {});
+
+        /**
+         * Enforces ordered lists style.
+         *
+         * Affected rule:
+         * - [`ordered-list-marker-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-style.html)
+         * @default 'n.''
+         */
+        style?:
+          | false
+          | (GetRuleOptions<'markdown-preferences', 'ordered-list-marker-style'>['prefer'] & {})
+          | GetRuleOptions<'markdown-preferences', 'ordered-list-marker-style'>;
+      };
 
   /**
    * Preserve the casing of the following words in headings and table headers
@@ -156,10 +203,9 @@ export default (async (context, optionsRaw) => {
     enforceCasing = 'Sentence case',
     extendedMarkdownSyntax,
     casingEnforcementIgnorePatterns,
+    orderedLists: orderedListsRaw,
     wordsToPreserveCasingOf,
   } = optionsResolved;
-
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'markdown-preferences');
 
   const defaultPreserveWords = getKeysOfTruthyValues({
     ...Object.fromEntries(
@@ -193,6 +239,14 @@ export default (async (context, optionsRaw) => {
     delimitersStyle === false ? delimitersStyle : (delimitersStyle?.emphasis ?? '*');
   const strikethroughStyle =
     delimitersStyle === false ? delimitersStyle : (delimitersStyle?.strikethrough ?? '~~');
+
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'markdown-preferences');
+
+  const orderedLists: Required<MarkdownPreferencesEslintConfigOptions['orderedLists'] & object> = {
+    numbering: orderedListsRaw === false ? false : (orderedListsRaw?.numbering ?? 'sequential'),
+    start: orderedListsRaw === false ? false : (orderedListsRaw?.start ?? 1),
+    style: orderedListsRaw === false ? false : (orderedListsRaw?.style ?? 'n.'),
+  };
 
   // Legend:
   // 🟢 - in recommended AND standard
@@ -228,7 +282,11 @@ export default (async (context, optionsRaw) => {
       },
     ]) /** @since 0.9.0 */
     .addRule('no-heading-trailing-punctuation', ERROR) /** @since 0.38.0 */
-    .addRule('ordered-list-marker-start', ERROR) /** @since 0.12.0 */ // 💅
+    .addRule(
+      'ordered-list-marker-start',
+      orderedLists.start === false ? OFF : ERROR,
+      orderedLists.start === false ? [] : [{start: orderedLists.start}],
+    ) /** @since 0.12.0 */ // 💅
     .addRule('prefer-inline-code-words', OFF) /** @since 0.4.0 */
     .addRule('prefer-linked-words', OFF) /** @since 0.1.0 */
     .addRule('table-header-casing', enforcedCasingForTableHeaders == null ? OFF : ERROR, [
@@ -262,7 +320,15 @@ export default (async (context, optionsRaw) => {
     ]) /** @since 0.22.0 */ // 💅
     .addRule('no-implicit-block-closing', ERROR) /** @since 0.28.0 */ // 🟢⚠️
     .addRule('no-text-backslash-linebreak', ERROR) /** @since 0.2.0 */ // 🟢
-    .addRule('ordered-list-marker-style', ERROR) /** @since 0.18.0 */ // 💅
+    .addRule(
+      'ordered-list-marker-style',
+      orderedLists.style === false ? OFF : ERROR,
+      orderedLists.style === false
+        ? []
+        : typeof orderedLists.style === 'string'
+          ? [{prefer: orderedLists.style}]
+          : [orderedLists.style],
+    ) /** @since 0.18.0 */ // 💅
     .addRule('prefer-autolinks', ERROR) /** @since 0.11.0 */ // 🟢
     .addRule('prefer-fenced-code-blocks', ERROR) /** @since 0.11.0 */ // 🟢
     .addRule('prefer-link-reference-definitions', ERROR, [
@@ -300,8 +366,15 @@ export default (async (context, optionsRaw) => {
     .addRule('atx-heading-closing-sequence', ERROR) /** @since 0.13.0 */ // 💅
     .addRule('atx-heading-closing-sequence-length', ERROR) /** @since 0.13.0 */ // 💅
     .addRule('code-fence-length', ERROR) /** @since 0.20.0 */ // 💅
+    .addRule('max-len', OFF) /** @since 0.40.0 */
     .addRule('no-laziness-blockquotes', ERROR) /** @since 0.10.0 */ // 🟢
-    .addRule('ordered-list-marker-sequence', ERROR) /** @since 0.12.0 */ // 💅
+    .addRule(
+      'ordered-list-marker-sequence',
+      orderedLists.numbering === false ? OFF : ERROR,
+      orderedLists.numbering === false
+        ? []
+        : [{increment: orderedLists.numbering === 'sequential' ? 'always' : 'never'}],
+    ) /** @since 0.12.0 */ // 💅
     .addRule('setext-heading-underline-length', ERROR) /** @since 0.17.0 */ // 💅
     .addRule('sort-definitions', OFF) /** @since 0.8.0 */ // 💅
     .addRule('table-leading-trailing-pipes', ERROR) /** @since 0.25.0 */ // 💅

@@ -108,7 +108,7 @@
     "eslint-plugin-jsonc": "2.21.0",
     "eslint-plugin-jsx-a11y-x": "0.1.1",
     "eslint-plugin-markdown-links": "0.7.1",
-    "eslint-plugin-markdown-preferences": "0.38.0",
+    "eslint-plugin-markdown-preferences": "0.40.1",
     "eslint-plugin-math": "0.13.1",
     "eslint-plugin-mdx": "3.6.2",
     "eslint-plugin-module-interop": "0.3.1",
