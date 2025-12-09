@@ -4,7 +4,7 @@ Grown out of the personal collection of rules, an ESLint config aspiring to cove
 
 ## Features
 
-- **Every major plugin** is included (50+ in total): 
+- **Every major plugin** is included (100+ in total): 
   [![JavaScript](./assets/devicon-javascript.svg) Vanilla JS rules](https://eslint.org/docs/latest/rules),
   [![TypeScript] typescript-eslint](https://typescript-eslint.io/rules),
   [🦄unicorn](https://npmjs.com/eslint-plugin-unicorn),
