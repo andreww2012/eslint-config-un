@@ -1,5 +1,40 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.2
+
+### Minor Changes
+
+- e10b808: markdownPreferences: `delimitersStyle` option now accepts `false` value, allowing to disable enforcement of delimiters/strikethrough text style.
+- aa2496c: markdown/sentencesPerLine: ignore `LICENSE.md` file in addition to the `ignores` provided by the parent config or explicitly.
+  Added `ignoresAdditional` option to control if this `ignores` entry should be added.
+- 05bdae2: un: config is now applied to all files by default.
+- c063c3c: [**BREAKING**] un: `no-multiple-consecutive-spaces` rule: added a new option `allowSpacesOnly` and set it to `true` by default.
+- 3f868c8: Added the ability to specify `files` and `ignores` on a rule level to override the parent's `files` and `ignores` for a specific rule
+- 76fc52d: markdownPreferences: updated [`eslint-plugin-markdown-preferences` from v0.38.0 to v0.40.1](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/compare/v0.38.0...v0.40.1):
+  - 🔴 not enabled [`max-len`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/max-len.html) rule
+  - Added a new option `orderedLists` to conveniently control [`ordered-list-marker-sequence`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-sequence.html), [`ordered-list-marker-start`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-start.html) and [`ordered-list-marker-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-style.html) rules
+
+- 7978d95: checkFile: added 2 new options, `fileNamingConventions` and `folderNamingConventions`, to enforce file and folder naming conventions.
+- 94af255: angular: updated [`@angular-eslint/template-parser` from v21.0.1 to v21.1.0](https://github.com/angular-eslint/angular-eslint/compare/v21.0.1...v21.1.0):
+  - 🟢 enabled [`prefer-signal-model`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-signal-model.md) rule if Angular version is at least 19
+
+- a51ba97: [**BREAKING**] toml, yaml: renamed `doNotIgnoreFilesByDefault` to `ignoresAdditional` and enhanced its type (added the ability to set `false` and require the full pattern string to be specified instead of just the file name).
+
+### Patch Changes
+
+- f51bb3c: noStylisticRules: removed [`vitest/no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md) since removing/adding imports may cause TypeScript errors
+- cffc3b2: Improved `pluginOverrides` root option type to support accepting functions and promises
+- 8cac922: markdownPreferences: fixed a bug where `enforceCasing` option was not working as expected if `null` is passed.
+  Instead you should now use `false`.
+- 4fe593e: Document to which files each root config is applied.
+  Made config documentation format consistent & more readable.
+- 011b3df: vitest: Disabled autofixes for [`prefer-lowercase-title`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-lowercase-title.md) and [`require-import-vi-mock`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/require-import-vi-mock.md) rules because they are not safe:
+  - In the first case, automatic test case rename might be undesirable.
+  - In the second case, the rule may remove the import statements and cause runtime/TypeScript errors.
+
+- f4f1562: markdownPreferences: updated [`eslint-plugin-markdown-links` from v0.7.0 to v0.7.1](https://github.com/ota-meshi/eslint-plugin-markdown-links/compare/v0.7.0...v0.7.1)
+- 7325ae3: vitest: disabled [`require-import-vi-mock`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/require-import-vi-mock.md) due to doing [absolutely the same](https://github.com/vitest-dev/eslint-plugin-vitest/issues/829) as [`prefer-import-in-mock`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-import-in-mock.md)
+
 ## 1.0.0-beta.1
 
 ### Minor Changes
