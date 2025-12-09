@@ -427,6 +427,9 @@ export default (async (context, optionsRaw) => {
     ) /** @since 0.0.1-alpha.17 */
     .addRule(...getPluginRuleSeverity('prefer-output-emitter-ref', ERROR)) /** @since 19.4.0 */
     .addRule(...getPluginRuleSeverity('prefer-output-readonly', ERROR)) /** @since 0.0.1-alpha.19 */
+    .addRule(
+      ...getPluginRuleSeverity('prefer-signal-model', angularVersion >= 19 ? ERROR : OFF),
+    ) /** @since 21.1.0 */
     .addRule(...getPluginRuleSeverity('prefer-signals', OFF)) /** @since 19.0.0 */
     .addRule(
       ...getPluginRuleSeverity(
