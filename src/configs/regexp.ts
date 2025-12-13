@@ -98,7 +98,13 @@ export default ((context, optionsRaw) => {
     .markCategory('Stylistic Issues')
     .addRule('grapheme-string-literal', OFF) /** @since 2.0.0-next.13 */ // TODO
     .addRule('hexadecimal-escape', ERROR, ['never']) /** @since 0.9.0 */
-    .addRule('letter-case', ERROR) /** @since 0.3.0 */
+    .addRule('letter-case', ERROR, [
+      {
+        // `lowercase` conflicts with `unicorn/escape-case`: https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/escape-case.md
+        unicodeEscape: 'uppercase',
+        hexadecimalEscape: 'uppercase',
+      },
+    ]) /** @since 0.3.0 */
     .addRule('match-any', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('no-useless-escape', ERROR) /** @since 0.4.0 */ // 🟢
     .addRule('no-useless-non-capturing-group', ERROR) /** @since 0.4.0 */ // 🟢
