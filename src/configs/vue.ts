@@ -274,9 +274,11 @@ export interface VueEslintConfigOptions<
   reportUnusedDisableDirectives?: boolean;
 
   /**
-   * Will be merged with `['router-link', 'router-view']` and Nuxt-specific ones if Nuxt is enabled
+   * Will be merged with `['^router-link$', '^router-view$']` and Nuxt-specific ones
+   * if Nuxt is enabled
    */
-  knownComponentNames?: (string | RegExp)[];
+  knownComponentNames?: string[];
+
   enforceApiStyle?: 'setup' | 'options';
 
   /**
@@ -713,9 +715,9 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('no-undef-components', ERROR, [
       {
         ignorePatterns: [
-          'router-link',
-          'router-view',
-          configNuxt && /^(?:lazy-)?(?:nuxt-|(?:client|dev)-only$)/,
+          '^router-link$',
+          '^router-view$',
+          configNuxt && '^(?:lazy-)?(?:nuxt-|(?:client|dev)-only$)',
           ...(optionsResolved.knownComponentNames || []),
         ]
           .flat()
