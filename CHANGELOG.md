@@ -1,5 +1,30 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.3
+
+### Minor Changes
+
+- d9fec87: User provided `ignores` are now merged with the internal `ignores`, which primarily exist to ignore the files that the current config is not supposed to work with and might crash on
+- df38077: [**BREAKING**] un: `allow` option now accepts an object instead of an array, and `undefined` is now allowed by default, and the provided value will be merged with the default
+- e468454: regexp: [`letter-case`](https://ota-meshi.github.io/eslint-plugin-regexp/rules/letter-case.html): set `unicodeEscape` and `hexadecimalEscape` to `uppercase` to avoid conflicts with [`unicorn/escape-case`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/escape-case.md) and make such escapes more distinguishable
+
+### Patch Changes
+
+- 9a07d98: packageJson: enabled the config by default (was previously disabled by mistake)
+- 6f5e1ea: jsdoc: updated [`eslint-plugin-jsdoc` from v61.4.1 to v61.5.0](https://github.com/gajus/eslint-plugin-jsdoc/compare/v61.4.1...v61.5.0)
+- 2933f32: zod: updated [`eslint-plugin-zod-x` from v1.12.0 to v1.13.0](https://github.com/marcalexiei/eslint-plugin-zod-x/compare/v1.12.0...v1.13.0)
+- d00a68c: Fixed an issue resulting in the config generated from the rule entry with `files` or `ignores` not having the `rules` property
+- a5e4d6e: ts: updated [`typescript-eslint` from v8.48.1 to v8.49.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.48.1...v8.49.0)
+- 7c2ce77: pnpm: updated [`eslint-plugin-pnpm` from v1.4.1 to v1.4.2](https://github.com/antfu/pnpm-workspace-utils/compare/v1.4.1...v1.4.2)
+- 37a4be5: html: updated [`@html-eslint/*` from v0.50.0 to v0.51.0](https://github.com/yeonjuan/html-eslint/compare/v0.50.0...v0.51.0):
+  - 🟢 enabled [`no-whitespace-only-children`](https://html-eslint.org/docs/rules/no-whitespace-only-children) rule
+
+- e3cd46f: vue: regexes are no longer used in `no-undef-components` rule options to make the config serializable for caching purposes
+- a3f3c4b: betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v3.7.11 to v3.8.0](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v3.7.11...v3.8.0)
+- 1ac19ce: vue: `enforceTypescriptInScriptSection`: `files` and `ignores` from the parent config are now used if they're not explicitly set
+- 9b2cdb5: vue: updated [`@nuxt/eslint-plugin` from v1.11.0 to v1.12.1](https://github.com/nuxt/eslint/compare/v1.11.0...v1.12.1):
+  - 🟢 enabled [`no-nuxt-config-test-key`](https://github.com/nuxt/eslint/blob/HEAD/packages/eslint-plugin/src/rules/no-nuxt-config-test-key/index.ts) rule
+
 ## 1.0.0-beta.2
 
 ### Minor Changes
