@@ -107,6 +107,7 @@ export default ((context, optionsRaw) => {
     ]) /** @since 0.47.0 */
     .addRule('no-script-style-type', ERROR) /** @since 0.21.0 */
     .addRule('no-target-blank', ERROR) /** @since 0.9.0-0.9.0-alpha.1.0 */
+    .addRule('no-whitespace-only-children', ERROR) /** @since 0.51.0  */
     .addRule('prefer-https', ERROR) /** @since 0.32.0 */
     .addRule('require-attrs', OFF) /** @since 0.17.0 */
     .addRule('require-button-type', ERROR) /** @since 0.10.0 */
