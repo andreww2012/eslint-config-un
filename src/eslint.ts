@@ -271,8 +271,11 @@ type AddRuleInternalOptions = EmptyObject;
 const getPluginPrefixByFullRuleName = <ExtraPlugins extends ExtraPluginsType>(
   context: UnConfigContext<ExtraPlugins>,
   ruleName: string,
-) => {
+): PluginPrefix | keyof ExtraPlugins => {
   const ruleNameSplitted = ruleName.split('/');
+  if (ruleNameSplitted.length === 1) {
+    return '';
+  }
   for (let i = 0; i < ruleNameSplitted.length; i++) {
     const possiblePrefix = ruleNameSplitted.slice(0, ruleNameSplitted.length - i - 1).join('/');
     if (
@@ -283,7 +286,7 @@ const getPluginPrefixByFullRuleName = <ExtraPlugins extends ExtraPluginsType>(
       return possiblePrefix as PluginPrefix | keyof ExtraPlugins;
     }
   }
-  return null;
+  return '';
 };
 
 export const getRuleNameAndPluginPrefixByFullName = (
@@ -357,11 +360,7 @@ export const resolveOverrides = (
         : (ruleEntryRaw as EslintRuleEntry);
       let disableAutofix = false;
 
-      if (
-        isRuleEntryRawObject &&
-        ruleEntryRaw.disableAutofix != null &&
-        pluginPrefixCanonical != null
-      ) {
+      if (isRuleEntryRawObject && ruleEntryRaw.disableAutofix != null) {
         disableAutofix = ruleEntryRaw.disableAutofix;
         const ruleNameWithDisableAutofixPrefix = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`;
         if (disableAutofix) {
@@ -375,7 +374,6 @@ export const resolveOverrides = (
       result.push([ruleName, ruleEntry]);
 
       if (
-        pluginPrefixCanonical != null &&
         ruleEntry !== 0 &&
         ruleEntry !== 'off' &&
         !(Array.isArray(ruleEntry) && (ruleEntry[0] === 0 || ruleEntry[0] === 'off'))
