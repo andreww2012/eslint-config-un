@@ -634,6 +634,9 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
         ...(extraConfig.rules && {rules: overridesResolved.rules}),
         name: configName,
       };
+      overridesResolved.removedRules.forEach((ruleName) => {
+        extraConfigFinal.rules && Reflect.deleteProperty(extraConfigFinal.rules, ruleName);
+      });
       return [extraConfigFinal, ...overridesResolved.extraConfigs];
     }),
 

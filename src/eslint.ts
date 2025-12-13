@@ -323,6 +323,7 @@ export const resolveOverrides = (
   existingRules?: Partial<RulesRecord>,
 ) => {
   const extraConfigs: SetRequired<FlatConfigEntry, 'name'>[] = [];
+  const removedRules: string[] = [];
 
   const rules: Record<string, EslintRuleEntry> = Object.fromEntries(
     Object.entries(overrides || {}).flatMap(([ruleNameRaw, ruleOptions]) => {
@@ -403,6 +404,7 @@ export const resolveOverrides = (
           }),
           rules: Object.fromEntries(result),
         });
+        removedRules.push(...result.map(([ruleNameToRemove]) => ruleNameToRemove));
         return [];
       }
 
@@ -413,6 +415,7 @@ export const resolveOverrides = (
   return {
     rules,
     extraConfigs,
+    removedRules,
   };
 };
 
@@ -711,6 +714,11 @@ export class ConfigEntryBuilder<
           ...overridesResolved.extraConfigs,
           ...overridesAnyResolved.extraConfigs,
         ]);
+        [...overridesResolved.removedRules, ...overridesAnyResolved.removedRules].forEach(
+          (ruleName) => {
+            Reflect.deleteProperty(ourRules, ruleName);
+          },
+        );
 
         return result;
       },
@@ -720,6 +728,9 @@ export class ConfigEntryBuilder<
 
         Object.assign(configFinal.rules, overridesResolved.rules);
         this.addFlatConfig(overridesResolved.extraConfigs);
+        [...overridesResolved.removedRules].forEach((ruleName) => {
+          Reflect.deleteProperty(configFinal.rules, ruleName);
+        });
 
         return result;
       },
@@ -741,6 +752,9 @@ export class ConfigEntryBuilder<
 
         Object.assign(configFinal.rules, overridesResolved.rules);
         this.addFlatConfig(overridesResolved.extraConfigs);
+        [...overridesResolved.removedRules].forEach((ruleName) => {
+          Reflect.deleteProperty(configFinal.rules, ruleName);
+        });
 
         return result;
       },
