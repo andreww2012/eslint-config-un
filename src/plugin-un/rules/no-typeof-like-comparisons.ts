@@ -25,10 +25,11 @@ const RULE_OPTIONS_SCHEMA = {
   type: 'object',
   properties: {
     allow: {
-      type: 'array',
-      items: {
-        enum: [...TYPEOF_POSSIBLE_RETURN_VALUES_SET],
-      },
+      type: 'object',
+      additionalProperties: false,
+      properties: Object.fromEntries(
+        [...TYPEOF_POSSIBLE_RETURN_VALUES_SET].map((value) => [value, {type: 'boolean'}]),
+      ),
     },
     disallow: {
       type: 'array',
@@ -60,6 +61,10 @@ const rule: Eslint.Rule.RuleModule = {
 
   create(context) {
     const options = context.options[0] as RuleOptions | undefined;
+    const allow: Record<string, boolean> = {
+      undefined: true,
+      ...options?.allow,
+    };
 
     return {
       BinaryExpression: (node) => {
@@ -87,7 +92,7 @@ const rule: Eslint.Rule.RuleModule = {
         }
 
         const literalValue = literalNode.value;
-        if (typeof literalValue !== 'string' || options?.allow?.includes(literalValue)) {
+        if (typeof literalValue !== 'string' || allow[literalValue]) {
           return;
         }
 
