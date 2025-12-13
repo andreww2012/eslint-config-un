@@ -127,7 +127,6 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-meta', severityForRulesOnlyForV4) /** @since 0.0.1 */ // 🟢
     .addRule('prefer-meta-last', ERROR) /** @since 0.0.1 */ // 🟢
     .addRule('prefer-namespace-import', enforceNamespaceImport ? ERROR : OFF) /** @since 0.0.1 */ // 🟢
-    .addRule('prefer-strict-object', OFF) /** @since 0.0.1 */
     .addRule('require-brand-type-parameter', ERROR) /** @since 1.8.0 */ // 🟢
     .addRule('require-error-message', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule(
