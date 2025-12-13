@@ -229,9 +229,14 @@ export interface VueEslintConfigOptions<
   majorVersion?: 2 | 3;
 
   /**
-   * Enforces the presence of `lang="ts"` in `<script>` sections, see [vue/block-lang](https://eslint.vuejs.org/rules/block-lang.html) rule for more details.
+   * Enforces the presence of `lang="ts"` in `<script>` sections, see
+   * [vue/block-lang](https://eslint.vuejs.org/rules/block-lang.html) rule for more details.
    *
-   * Setting this option no anything but `false` also makes all `.vue` (or explicitly specified files if object syntax is used) checked by `ts` config, and by default **BOTH non-type-aware and type-aware** rules will be applied. You can opt out of this behavior or only enable NON-type-aware rules with `typescriptRules` option. Disabling type-aware rules might be beneficial for bigger projects as these rules are known to be quite slow on Vue files.
+   * By default, will inherit `files` and `ignores` from the parent config, and specifying
+   * them explicitly here will *override* the respective property of the parent config.
+   *
+   * These files will be checked by all the `ts` config rules. You can control this behavior
+   * by using `typescriptRules` option.
    * @default true <=> `ts` config is enabled
    */
   enforceTypescriptInScriptSection?:

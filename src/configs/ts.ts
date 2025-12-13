@@ -560,10 +560,10 @@ export default ((
 
   if (vueResolvedOptions) {
     const {enforceTypescriptInScriptSection} = vueResolvedOptions;
-    const tsInVueOptions =
-      typeof enforceTypescriptInScriptSection === 'object'
-        ? enforceTypescriptInScriptSection
-        : {files: vueResolvedOptions.files};
+    const tsInVueOptions = {
+      ...vueResolvedOptions,
+      ...(typeof enforceTypescriptInScriptSection === 'object' && enforceTypescriptInScriptSection),
+    };
 
     if (enforceTypescriptInScriptSection && tsInVueOptions.typescriptRules !== false) {
       const vueFilesWithTs = tsInVueOptions.files || [];
