@@ -321,10 +321,17 @@ export const resolveOverrides = (
 
   const rules: Record<string, EslintRuleEntry> = Object.fromEntries(
     Object.entries(overrides || {}).flatMap(([ruleNameRaw, ruleOptions]) => {
-      const {pluginPrefixCanonical, ruleNameUnprefixed, fullRuleNameWithResolvedPrefix} =
-        getRuleNameAndPluginPrefixByFullName(context, ruleNameRaw);
+      if (ruleOptions == null) {
+        return [];
+      }
 
-      let ruleName = fullRuleNameWithResolvedPrefix;
+      const {
+        pluginPrefixCanonical,
+        ruleNameUnprefixed,
+        fullRuleNameWithResolvedPrefix: ruleNameInitial,
+      } = getRuleNameAndPluginPrefixByFullName(context, ruleNameRaw);
+
+      let ruleName = ruleNameInitial;
 
       const existingRuleRecord = existingRules?.[ruleName];
 
@@ -335,46 +342,31 @@ export const resolveOverrides = (
 
       const options = Array.isArray(existingRuleRecord) ? existingRuleRecord.slice(1) : undefined;
       const ruleEntryRaw = maybeCall(ruleOptions, severityInitial, options);
+      const isRuleEntryRawObject =
+        ruleEntryRaw &&
+        typeof ruleEntryRaw === 'object' &&
+        'severity' in ruleEntryRaw; /* `!Array.isArray(...)` doesn't work */
 
       const result: [ruleName: string, EslintRuleEntry][] = [];
-      let ruleEntry = ruleEntryRaw as EslintRuleEntry;
+      const ruleEntry: EslintRuleEntry = isRuleEntryRawObject
+        ? ruleEntryRaw.options == null
+          ? ruleEntryRaw.severity
+          : [ruleEntryRaw.severity, ...ruleEntryRaw.options]
+        : (ruleEntryRaw as EslintRuleEntry);
       let disableAutofix = false;
 
       if (
-        ruleEntryRaw &&
-        typeof ruleEntryRaw === 'object' &&
-        'severity' in ruleEntryRaw /* `!Array.isArray(...)` doesn't work */
+        isRuleEntryRawObject &&
+        ruleEntryRaw.disableAutofix != null &&
+        pluginPrefixCanonical != null
       ) {
-        ruleEntry =
-          ruleEntryRaw.options == null
-            ? ruleEntryRaw.severity
-            : [ruleEntryRaw.severity, ...ruleEntryRaw.options];
-
-        if (ruleEntryRaw.disableAutofix != null && pluginPrefixCanonical != null) {
-          disableAutofix = ruleEntryRaw.disableAutofix;
-          const ruleNameWithDisableAutofixPrefix = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`;
-          if (disableAutofix) {
-            result.push([ruleName, OFF]);
-            ruleName = ruleNameWithDisableAutofixPrefix;
-          } else {
-            result.push([ruleNameWithDisableAutofixPrefix, OFF]);
-          }
-        }
-
-        if (
-          (ruleEntryRaw.files?.length || ruleEntryRaw.ignores?.length) &&
-          config.files?.length !== 0
-        ) {
-          extraConfigs.push({
-            name: `${config.name || ''}/@rule/${ruleName}`,
-            ...(ruleEntryRaw.files && {
-              files: config.files ? [config.files.flat(), ruleEntryRaw.files] : ruleEntryRaw.files,
-            }),
-            ...(ruleEntryRaw.ignores?.length && {
-              ignores: [...(config.ignores || []), ...ruleEntryRaw.ignores],
-            }),
-          });
-          return result;
+        disableAutofix = ruleEntryRaw.disableAutofix;
+        const ruleNameWithDisableAutofixPrefix = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`;
+        if (disableAutofix) {
+          result.push([ruleName, OFF]);
+          ruleName = ruleNameWithDisableAutofixPrefix;
+        } else {
+          result.push([ruleNameWithDisableAutofixPrefix, OFF]);
         }
       }
 
@@ -395,6 +387,25 @@ export const resolveOverrides = (
           ];
         }
       }
+
+      if (
+        isRuleEntryRawObject &&
+        (ruleEntryRaw.files?.length || ruleEntryRaw.ignores?.length) &&
+        config.files?.length !== 0
+      ) {
+        extraConfigs.push({
+          name: `${config.name || ''}/@rule/${ruleNameInitial}`,
+          ...(ruleEntryRaw.files && {
+            files: config.files ? [config.files.flat(), ruleEntryRaw.files] : ruleEntryRaw.files,
+          }),
+          ...(ruleEntryRaw.ignores?.length && {
+            ignores: [...(config.ignores || []), ...ruleEntryRaw.ignores],
+          }),
+          rules: Object.fromEntries(result),
+        });
+        return [];
+      }
+
       return result;
     }),
   );
