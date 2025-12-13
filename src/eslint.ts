@@ -147,32 +147,34 @@ export type RulesRecordPartial<P extends null | PluginPrefix | RulesRecord = Plu
       ? OmitIndexSignature<FlatConfigEntry<P>['rules'] & {}>
       : never;
 
+interface DisabledAutofixOption {
+  /**
+   * Disables autofix for this rule only for this config with a caveat
+   * that the rule name will be prepended with `disable-autofix/`.
+   *
+   * If you'd like to disable autofix without changing the rule name,
+   * it's only currently possible to do so globally (for all configs at once).
+   * For that, please use `autofixDisabledGloballyFor` root option.
+   */
+  disableAutofix?: boolean;
+}
+
 type UnConfigOptionsOverridesEntry<
   RuleName extends string = string,
   Options extends readonly unknown[] = readonly unknown[],
 > = MaybeFn<
   | ReadonlyDeep<EslintRuleEntry<Options>>
-  | {
+  | ({
       severity: EslintSeverity;
       options?: Options;
 
-      /**
-       * Disables autofix for this rule only for this config with a caveat
-       * that the rule name will be prepended with `disable-autofix/`.
-       *
-       * If you'd like to disable autofix without changing the rule name,
-       * it's only currently possible to do so globally (for all configs at once).
-       * For that, please use `autofixDisabledGloballyFor` root option.
-       */
-      disableAutofix?: RuleName extends AllEslintFixableRuleNames
-        ? boolean
-        : string extends RuleName
-          ? boolean
-          : false;
-
       files?: string[];
       ignores?: string[];
-    },
+    } & (RuleName extends AllEslintFixableRuleNames
+      ? DisabledAutofixOption
+      : string extends RuleName
+        ? DisabledAutofixOption
+        : unknown)),
   [severity: EslintSeverity & number, options?: Options]
 >;
 type UnConfigOptionsOverrides<T> = {
