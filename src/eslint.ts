@@ -484,10 +484,16 @@ export class ConfigEntryBuilder<
           name: string,
           options: {
             includeDefaultFilesAndIgnores?: boolean;
+
             filesFallback?: string[];
-            ignoresFallback?: string[];
             mergeUserFilesWithFallback?: boolean;
-            mergeUserIgnoresWithFallback?: boolean;
+
+            /**
+             * Will be merged with internal `ignores`, and,
+             * if `ignoresFallbackMergedWithUserIgnores` set to `true`, with the user provided ones.
+             */
+            ignoresFallback?: string[];
+            ignoresFallbackMergedWithUserIgnores?: boolean;
 
             parser?: ParserPrefix;
 
@@ -531,21 +537,24 @@ export class ConfigEntryBuilder<
           : userFiles
         : fallbackFiles;
 
-    const userIgnores = configOptions.ignores;
-    const fallbackIgnores = internalOptions.ignoresFallback || [];
-    const ignores = (internalOptions.includeDefaultFilesAndIgnores
-      ? internalOptions.mergeUserIgnoresWithFallback &&
-        fallbackIgnores.length + (userIgnores?.length || 0) > 0
-        ? [...fallbackIgnores, ...(userIgnores || [])]
-        : userIgnores
-      : null) || [
+    const ignoresUser = configOptions.ignores;
+    const ignoresInternal = [
       ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
       ...(internalOptions.doNotIgnoreMdx ? [] : [GLOB_MDX]),
       ...(internalOptions.doNotIgnoreHtml ? [] : GLOB_HTML_ALL),
       ...(internalOptions.doNotIgnoreCss ? [] : [GLOB_CSS]),
       ...(internalOptions.ignoreMarkdownCodeBlocks ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS] : []),
-      ...(internalOptions.ignoresFallback || []),
     ];
+    const ignoresFallback = internalOptions.ignoresFallback || [];
+    const ignores = internalOptions.includeDefaultFilesAndIgnores
+      ? [
+          ...ignoresInternal,
+          ...(internalOptions.ignoresFallbackMergedWithUserIgnores || !ignoresUser
+            ? ignoresFallback
+            : []),
+          ...(ignoresUser || []),
+        ]
+      : [...ignoresInternal, ...ignoresFallback];
 
     // We require the presence of `rules`:
     // - to avoid likely adding it anyway later on

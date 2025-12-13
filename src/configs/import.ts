@@ -113,7 +113,7 @@ export default (async (context, optionsRaw) => {
           // (+300-500 MB when running on our codebase w/o cache as of time of writing this)
           // TODO investigate that?
           ignoresFallback: [GLOB_MARKDOWN_ALL_CODE_BLOCKS],
-          mergeUserIgnoresWithFallback: true,
+          ignoresFallbackMergedWithUserIgnores: true,
         },
       ],
       {
