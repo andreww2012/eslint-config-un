@@ -55,7 +55,6 @@ export default eslintConfig({
     toml: true,
     json: true,
     jsxA11y: false,
-    packageJson: true,
     casePolice: true,
     import: {
       ignores: TEST_DIR_GLOB,

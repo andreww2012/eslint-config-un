@@ -310,7 +310,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     noStylisticRules: {enabled: getIsConfigEnabled('noStylisticRules', false)},
     noUnsanitized: {enabled: getIsConfigEnabled('noUnsanitized')},
     nx: {enabled: getIsConfigEnabled('nx', 'nx')},
-    packageJson: {enabled: getIsConfigEnabled('packageJson', false)},
+    packageJson: {enabled: getIsConfigEnabled('packageJson')},
     perfectionist: {enabled: getIsConfigEnabled('perfectionist', false)},
     playwright: {enabled: getIsConfigEnabled('playwright', 'playwright')},
     pnpm: {enabled: getIsConfigEnabled('pnpm', usedPackageManager?.name === 'pnpm')},
