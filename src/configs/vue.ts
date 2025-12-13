@@ -11,7 +11,7 @@ import {
 } from '../constants';
 import {
   type FlatConfigEntryFilesOrIgnores,
-  type RuleNamesForPlugin,
+  type RuleOptionsPerPlugin,
   type RulesRecord,
   getRuleUnSeverityAndOptionsFromEntry,
 } from '../eslint';
@@ -19,6 +19,7 @@ import {generatePackageToLoadProperty} from '../loaders';
 import type {OmitStrict, Prettify} from '../types';
 import {
   type MaybeArray,
+  allUnionMembers,
   doesPackageExist,
   fetchPackageInfo,
   getKeysOfTruthyValues,
@@ -326,6 +327,12 @@ export interface VueEslintConfigOptions<
 }
 
 const DEFAULT_VUE_FILES: string[] = [GLOB_VUE];
+
+const NUXT_CONFIG_FILES = new Set<string>(
+  allUnionMembers<
+    keyof Pick<RuleOptionsPerPlugin['nuxt'], 'no-nuxt-config-test-key' | 'nuxt-config-keys-order'>
+  >()(['no-nuxt-config-test-key', 'nuxt-config-keys-order']),
+);
 
 export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   const [isPiniaPackageInstalled, vueI18nPackageInfo, nuxtPackageInfo] = await Promise.all([
@@ -926,10 +933,10 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
           filesFallback: [resolvePathInVueOrNuxtProjectDir('**/*.vue')],
         },
       ])
-      .addAnyRule('nuxt', 'prefer-import-meta', ERROR)
+      .addAnyRule('nuxt', 'prefer-import-meta', ERROR) /** @since 0.3.0-alpha.0 */
       .addOverrides()
       .enableConfigTesterForPlugin('nuxt', {
-        rulesToSkipInConfig: ['nuxt-config-keys-order'] satisfies RuleNamesForPlugin<'nuxt'>[],
+        rulesToSkipInConfig: (ruleName) => NUXT_CONFIG_FILES.has(ruleName),
       });
   }
   const configBuilderNuxtConfig = context.createConfigBuilder(
@@ -945,10 +952,11 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
           filesFallback: [`**/nuxt.config.${GLOB_JS_TS_X_EXTENSION}`],
         },
       ])
-      .addAnyRule('nuxt', 'nuxt-config-keys-order', ERROR)
+      .addAnyRule('nuxt', 'nuxt-config-keys-order', ERROR) /** @since 0.6.0 */
+      .addAnyRule('nuxt', 'no-nuxt-config-test-key', ERROR) /** @since 1.12.0 */
       .addOverrides()
       .enableConfigTesterForPlugin('nuxt', {
-        rulesToSkipInConfig: ['prefer-import-meta'] satisfies RuleNamesForPlugin<'nuxt'>[],
+        rulesToSkipInConfig: (ruleName) => !NUXT_CONFIG_FILES.has(ruleName),
       });
   }
 
