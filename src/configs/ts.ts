@@ -62,6 +62,7 @@ const TS_PLUGIN_TYPE_AWARE_RULES = [
   'no-unsafe-return',
   'no-unsafe-type-assertion',
   'no-unsafe-unary-minus',
+  'no-useless-default-assignment',
   'non-nullable-type-assertion-style',
   'only-throw-error',
   'prefer-destructuring',
@@ -1014,6 +1015,7 @@ export default ((
     .addRule('no-unsafe-return', noUnsafeRulesSeverity) /** @since 2.23.0 */ // 🟣
     .addRule('no-unsafe-type-assertion', OFF) /** @since 8.15.0 */
     .addRule('no-unsafe-unary-minus', ERROR) /** @since 6.11.0 */ // 🟣
+    .addRule('no-useless-default-assignment', ERROR) /** @since 8.50.0 */ // 🟣
     .addRule('prefer-reduce-type-parameter', ERROR) /** @since 2.28.0 */ // 🟣
     .addRule('prefer-return-this-type', ERROR) /** @since 4.29.0 */ // 🟣
     .addRule('restrict-plus-operands', ERROR) /** @since 1.1.0 */ // 🟣

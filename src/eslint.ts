@@ -527,7 +527,7 @@ export class ConfigEntryBuilder<
         ],
     config?: FlatConfigEntryForBuilder,
   ) {
-    const [configName, internalOptions = {}] =
+    const [configName, internalOptions] =
       typeof nameAndMaybeOptions === 'string' ? [nameAndMaybeOptions, {}] : nameAndMaybeOptions;
     const {options: configOptions} = this;
 
