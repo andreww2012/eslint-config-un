@@ -12,8 +12,11 @@ export interface NoSecretsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'no-secrets'> {
   /**
-   * By default will be applied to:
-   * - <code>**&#47;*.json</code>
+   * 📁 Default `files`: <code>**&#47;*.json</code>
+   *
+   * ❌ Default `ignores`: <code>**&#47;package-lock.json</code>
+   *
+   * ⚠️ Will be merged with the user provided `ignores`
    * @default true
    */
   configJson?: boolean | UnConfigOptions<ExtraPlugins, 'no-secrets'>;
@@ -66,6 +69,8 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesFallback: [GLOB_JSON],
+        ignoresFallback: ['**/package-lock.json'],
+        ignoresFallbackMergedWithUserIgnores: true,
         parser: 'jsonc-eslint-parser',
       },
     ])
