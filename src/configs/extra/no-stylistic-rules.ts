@@ -262,7 +262,15 @@ const ALL_STYLISTIC_RULES = {
     // None
   },
   html: {
-    // None
+    'attrs-newline': true,
+    'element-newline': true,
+    indent: true,
+    lowercase: true,
+    'no-extra-spacing-attrs': true,
+    'no-multiple-empty-lines': true,
+    'no-trailing-spaces': true,
+    quotes: true,
+    'sort-attrs': true,
   },
   import: {
     'consistent-type-specifier-style': true,

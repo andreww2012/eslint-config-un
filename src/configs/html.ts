@@ -89,7 +89,6 @@ export default ((context, optionsRaw) => {
     .addRule('no-duplicate-class', ERROR) /** @since 0.39.0 */
     .addRule('no-duplicate-id', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('no-duplicate-in-head', ERROR) /** @since 0.42.0 */
-    .addRule('no-extra-spacing-text', WARNING, [{skip: ['pre']}]) /** @since 0.27.0 */
     .addRule('no-ineffective-attrs', ERROR) /** @since 0.45.0 */
     .addRule('no-inline-styles', OFF) /** @since 0.1.0 */
     .addRule('no-invalid-entity', ERROR) /** @since 0.42.0 */
@@ -146,6 +145,7 @@ export default ((context, optionsRaw) => {
     .addRule('indent', OFF) /** @since 0.4.0 */ // 🟢
     .addRule('lowercase', ERROR) /** @since 0.21.0 */
     .addRule('no-extra-spacing-attrs', OFF) /** @since 0.2.0 */ // 🟢💅
+    .addRule('no-extra-spacing-text', WARNING, [{skip: ['pre']}]) /** @since 0.27.0 */
     .addRule('no-multiple-empty-lines', WARNING) /** @since 0.11.0 */
     .addRule('no-trailing-spaces', WARNING) /** @since 0.15.0 */
     .addRule('quotes', ERROR, ['double', {enforceTemplatedAttrValue: true}]) /** @since 0.5.0 */ // 🟢
