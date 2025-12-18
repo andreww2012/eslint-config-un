@@ -295,6 +295,7 @@ export default (async (context, optionsRaw) => {
     .addRule('no-standalone-expect', ERROR) /** @since 22.14.0 */ // 🟢
     .addRule('no-test-prefixes', ERROR) /** @since 21.11.0 */ // 🟢
     .addRule('no-test-return-statement', ERROR) /** @since 21.20.0 */
+    .addRule('no-unneeded-async-expect-function', ERROR) /** @since 29.5.0 */
     .addRule(
       'padding-around-after-all-blocks',
       getPaddingAroundSeverity('afterAll'),
@@ -339,6 +340,8 @@ export default (async (context, optionsRaw) => {
     .addRule('prefer-strict-equal', WARNING) /** @since 21.21.0 */
     .addRule('prefer-to-be', ERROR) /** @since 24.5.0 */ // 🎨
     .addRule('prefer-to-contain', ERROR) /** @since 21.25.0 */ // 🎨
+    .addRule('prefer-to-have-been-called', OFF) /** @since 29.4.0 */
+    .addRule('prefer-to-have-been-called-times', OFF) /** @since 29.4.0 */
     .addRule('prefer-to-have-length', ERROR) /** @since 21.3.0-beta.5 */ // 🎨
     .addRule('prefer-todo', WARNING) /** @since 22.2.0 */
     .addRule('require-hook', WARNING) /** @since 24.7.0 */

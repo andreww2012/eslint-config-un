@@ -291,6 +291,7 @@ const ALL_STYLISTIC_RULES = {
     'no-alias-methods': true,
     'no-interpolation-in-snapshots': true,
     'no-test-prefixes': true,
+    'no-unneeded-async-expect-function': true,
     'padding-around-after-all-blocks': true,
     'padding-around-after-each-blocks': true,
     'padding-around-all': true,
