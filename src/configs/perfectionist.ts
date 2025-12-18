@@ -45,7 +45,7 @@ export interface PerfectionistEslintConfigOptions<
     > &
       Pick<
         GetRuleOptions<'perfectionist', 'sort-objects'>,
-        'ignorePattern' | 'partitionByComment' | 'partitionByNewLine'
+        'partitionByComment' | 'partitionByNewLine'
       >
   >;
 
@@ -72,6 +72,11 @@ export interface PerfectionistEslintConfigOptions<
   /**
    * @default false
    */
+  configSortExportAttributes?: RuleSubConfig<ExtraPlugins, 'sort-export-attributes'>;
+
+  /**
+   * @default false
+   */
   configSortExports?: RuleSubConfig<ExtraPlugins, 'sort-exports'>;
 
   /**
@@ -83,6 +88,11 @@ export interface PerfectionistEslintConfigOptions<
    * @default false
    */
   configSortImports?: RuleSubConfig<ExtraPlugins, 'sort-imports'>;
+
+  /**
+   * @default false
+   */
+  configSortImportAttributes?: RuleSubConfig<ExtraPlugins, 'sort-import-attributes'>;
 
   /**
    * @default false
@@ -157,8 +167,10 @@ export default ((context, optionsRaw) => {
     configSortDecorators: false,
     configSortEnums: false,
     configSortExports: false,
+    configSortExportAttributes: false,
     configSortHeritageClauses: false,
     configSortImports: false,
+    configSortImportAttributes: false,
     configSortInterfaces: false,
     configSortIntersectionTypes: false,
     configSortJsxProps: false,
@@ -180,9 +192,11 @@ export default ((context, optionsRaw) => {
     configSortClasses,
     configSortDecorators,
     configSortEnums,
+    configSortExportAttributes,
     configSortExports,
     configSortHeritageClauses,
     configSortImports,
+    configSortImportAttributes,
     configSortInterfaces,
     configSortIntersectionTypes,
     configSortJsxProps,
@@ -221,8 +235,10 @@ export default ((context, optionsRaw) => {
     .addRule('sort-classes', OFF) /** @since 0.11.0 */
     .addRule('sort-decorators', OFF) /** @since 4.0.0 */
     .addRule('sort-enums', OFF) /** @since 0.8.0 */
+    .addRule('sort-export-attributes', OFF) /** @since 5.0.0 */
     .addRule('sort-exports', OFF) /** @since 1.2.0 */
     .addRule('sort-heritage-clauses', OFF) /** @since 4.0.0 */
+    .addRule('sort-import-attributes', OFF) /** @since 5.0.0 */
     .addRule('sort-imports', OFF) /** @since 0.9.0 */
     .addRule('sort-interfaces', OFF) /** @since 0.1.0 */
     .addRule('sort-intersection-types', OFF) /** @since 2.9.0 */
@@ -246,9 +262,11 @@ export default ((context, optionsRaw) => {
       ['sort-classes', configSortClasses],
       ['sort-decorators', configSortDecorators],
       ['sort-enums', configSortEnums],
+      ['sort-export-attributes', configSortExportAttributes],
       ['sort-exports', configSortExports],
       ['sort-heritage-clauses', configSortHeritageClauses],
       ['sort-imports', configSortImports],
+      ['sort-import-attributes', configSortImportAttributes],
       ['sort-interfaces', configSortInterfaces],
       ['sort-intersection-types', configSortIntersectionTypes],
       ['sort-jsx-props', configSortJsxProps],
@@ -275,6 +293,7 @@ export default ((context, optionsRaw) => {
       .addRule(
         ruleName,
         ERROR,
+        // @ts-expect-error `selector` type for different rules differs
         typeof ruleSubConfig === 'object' && ruleSubConfig.options ? [ruleSubConfig.options] : [],
       )
       .addOverrides();
