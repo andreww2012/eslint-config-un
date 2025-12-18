@@ -101,10 +101,11 @@ module.exports = {
       fullName.startsWith('eslint-plugin-') ||
       nameWithoutScope.startsWith('eslint-plugin') ||
       (nameScope === '@eslint' && !SCOPED_ESLINT_PACKAGES_NOT_PLUGINS.has(nameWithoutScope));
+    const isParser = fullName.endsWith('-eslint-parser') || fullName.endsWith('-eslint/parser');
     const isPublishedFromMonorepoWithPackagesUnrelatedToEslint =
       PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT.has(fullName);
 
-    const groupNamePluginSuffix = `${isPlugin ? '(🟢 plugins)' : '(🟡 non-plugins)'}${isPublishedFromMonorepoWithPackagesUnrelatedToEslint ? ' (🔴 updates might be fake)' : ''}`;
+    const groupNamePluginSuffix = `${isPlugin ? '(🟢 plugin(s))' : isParser ? '(🟢 parser(s))' : '(🟡 non-plugin/parser(s))'}${isPublishedFromMonorepoWithPackagesUnrelatedToEslint ? ' (🔴 updates might be fake)' : ''}`;
 
     /**
      * @param {number} base Base group number
