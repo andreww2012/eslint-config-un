@@ -1,5 +1,52 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.4
+
+### Minor Changes
+
+- e97c231: [**BREAKING**] perfectionist: updated [`eslint-plugin-perfectionist` from v4.15.1 to v5.0.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v4.15.1...v5.0.0):
+  - 🔴 not enabled [`sort-export-attributes`](https://perfectionist.dev/rules/sort-export-attributes) rule, but added a new sub config `sortExportAttributes` controlling it
+  - 🔴 not enabled [`sort-import-attributes`](https://perfectionist.dev/rules/sort-import-attributes) rule, but added a new sub config `sortImportAttributes` controlling it
+
+- 63379e7: ts: updated [`typescript-eslint` from v8.49.0 to v8.50.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.49.0...v8.50.0):
+  - 🟢 enabled [`no-useless-default-assignment`](https://typescript-eslint.io/rules/no-useless-default-assignment) rule
+
+### Patch Changes
+
+- c628635: boundaries: updated [`eslint-plugin-boundaries` from v5.3.0 to v5.3.1](https://github.com/javierbrea/eslint-plugin-boundaries/compare/v5.3.0...v5.3.1)
+- f86a47f: noStylisticRules: added missing stylistic rules from [`eslint-plugin-regexp`](https://npmjs.com/eslint-plugin-regexp)
+- 0314235: react: updated [`eslint-plugin-react-refresh` from v0.4.24 to v0.4.26](https://github.com/rnaudBarre/eslint-plugin-react-refresh/compare/v0.4.24...v0.4.26)
+- 01b5db3: testingLibrary: updated [`eslint-plugin-testing-library` from v7.13.5 to v7.15.1](https://github.com/testing-library/eslint-plugin-testing-library/compare/v7.13.5...v7.15.1):
+  - 🟢 enabled [`prefer-user-event-setup`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-user-event-setup.md) rule
+
+- b1902ef: qwik: updated [`eslint-plugin-qwik` from v1.17.2 to v1.18.0](https://github.com/QwikDev/qwik/compare/v1.17.2...v1.18.0)
+- 2caf282: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v6.9.17 to v7.1.1](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v6.9.17...v7.1.1):
+  - 🟢 enabled [`use-injectable-provided-token`](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/HEAD/src/docs/rules/use-injectable-provided-token.md) rule
+  - 🟢 enabled [`api-operation-summary-description-capitalized`](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/HEAD/src/docs/rules/api-operation-summary-description-capitalized.md) rule
+  - 🟢 enabled [`api-property-should-have-api-extra-models`](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/HEAD/src/docs/rules/api-property-should-have-api-extra-models.md) rule
+  - 🟢 enabled [`validation-pipe-should-use-forbid-unknown`](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/HEAD/src/docs/rules/validation-pipe-should-use-forbid-unknown.md) rule
+  - 🔴 not enabled [`use-dependency-injection`](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/HEAD/src/docs/rules/use-dependency-injection.md) rule
+  - 🔴 not enabled [`use-correct-endpoint-naming-convention`](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/HEAD/src/docs/rules/use-correct-endpoint-naming-convention.md) rule
+
+- 8b5cbd3: nextJs: updated [`@next/eslint-plugin-next` from v16.0.7 to v16.1.0](https://github.com/vercel/next.js/compare/v16.0.7...v16.1.0)
+- 68651e3: nx: updated [`@nx/eslint-plugin` from v22.1.3 to v22.3.1](https://github.com/nrwl/nx/compare/22.1.3...22.3.1)
+- 35767d4: formatJs: updated [`eslint-plugin-formatjs` from v5.4.2 to v6.0.2](https://github.com/formatjs/formatjs/compare/v5.4.2...v6.0.2)
+- 69658da: noSecrets: `json` sub config: ensure `**/package-lock.json` files are always ignored
+- 4aa858b: storybook: updated [`eslint-plugin-storybook` from v10.1.4 to v10.1.10](https://github.com/storybookjs/storybook/compare/v10.1.4...v10.1.10)
+- 483aeb0: css: do not assign `customSyntax` property if it is undefined, otherwise it will lead to config validation error
+- 222e8ff: noStylisticRules: added missing stylistic rules from [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin)
+- 87c9992: toml: updated [`toml-eslint-parser` from v0.10.0 to v0.10.1](https://github.com/ota-meshi/toml-eslint-parser/compare/v0.10.0...v0.10.1)
+- 1f20326: vitest: updated [`@vitest/eslint-plugin` from v1.5.1 to v1.5.2](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.5.1...v1.5.2):
+- 62f2d6d: markdownPreferences: updated [`eslint-plugin-markdown-preferences` from v0.40.1 to v0.40.2](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/compare/v0.40.1...v0.40.2)
+- 5614ad9: react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v2.3.12 to v2.3.13](https://github.com/Rel1cx/eslint-react/compare/v2.3.12...v2.3.13)
+- cdcc8de: pnpm: updated [`eslint-plugin-pnpm` from v1.4.2 to v1.4.3](https://github.com/antfu/pnpm-workspace-utils/compare/v1.4.2...v1.4.3)
+- a31c2d7: jest: updated [`eslint-plugin-jest` from v29.2.1 to v29.5.0](https://github.com/jest-community/eslint-plugin-jest/compare/v29.2.1...v29.5.0):
+  - 🟢 enabled [`no-unneeded-async-expect-function`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-unneeded-async-expect-function.md) rule and added it to the `noStylisticRules` config
+  - 🔴 not enabled [`prefer-to-have-been-called`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-to-have-been-called.md) rule
+  - 🔴 not enabled [`prefer-to-have-been-called-times`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-to-have-been-called-times.md) rule
+
+- 8226e4d: zod: updated [`eslint-plugin-zod-x` from v1.13.0 to v1.13.2](https://github.com/marcalexiei/eslint-plugin-zod-x/compare/v1.13.0...v1.13.2)
+
 ## 1.0.0-beta.3
 
 ### Minor Changes
