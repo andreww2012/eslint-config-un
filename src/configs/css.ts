@@ -84,7 +84,7 @@ export default ((context, optionsRaw) => {
         language: 'css/css',
         languageOptions: {
           ...(tolerantMode && {tolerant: true}),
-          customSyntax,
+          ...(customSyntax != null && {customSyntax}),
           ...(tailwindPackageInfo &&
             (tailwindMajorVersion === 4 || tailwindMajorVersion === 3) &&
             generatePackageToLoadProperty('customSyntax', 'tailwindCsstree', {
