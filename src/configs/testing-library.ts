@@ -260,6 +260,7 @@ export default (async (context, optionsRaw) => {
         preferUserEventOverFireEvent ? ERROR : OFF,
         typeof preferUserEventOverFireEvent === 'object' ? [preferUserEventOverFireEvent] : [],
       ) /** @since 4.0.0-alpha.0 */
+      .addRule('prefer-user-event-setup', ERROR) /** @since 7.14.0 */
       .addRule(
         'render-result-naming-convention',
         isForFramework ? ERROR : OFF,
