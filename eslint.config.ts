@@ -90,7 +90,8 @@ export default eslintConfig({
     eslintPlugin: {
       files: ['eslint-local-rules/**', 'src/plugin-un/rules/**'],
     },
-    nx: false,
+
+    // False positives:
     rxjs: false,
     turbo: false,
   },
