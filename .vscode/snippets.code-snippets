@@ -79,7 +79,7 @@
       "\t\t\t\t},",
       "\t\t\t}),",
       "\t\t})",
-      "\t\t// .addRule('', ERROR)",
+      "\t\t// .addRule('', ERROR) /** @since  */ // 🟢",
       "\t\t.enableConfigTesterForPlugin('$TM_FILENAME_BASE')",
       "\t\t.addOverrides();",
       "",

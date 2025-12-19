@@ -384,6 +384,9 @@ importers:
       eslint-plugin-check-file:
         specifier: 3.3.1
         version: 3.3.1(eslint@9.39.2(jiti@2.6.1))
+      eslint-plugin-clsx:
+        specifier: 0.0.11
+        version: 0.0.11(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-command:
         specifier: 3.4.0
         version: 3.4.0(eslint@9.39.2(jiti@2.6.1))
@@ -5230,6 +5233,11 @@ packages:
     engines: {node: '>=18'}
     peerDependencies:
       eslint: '>=9.0.0'
+
+  eslint-plugin-clsx@0.0.11:
+    resolution: {integrity: sha512-7PAohQQqy0UG78UXujkA3JYX7qxGQDY/Z4eiFVKDNQ+tE+oWOloZswG5D97dOEyvn60C60oFqYNLZphNt4tVFg==}
+    peerDependencies:
+      eslint: ^8 || ^9
 
   eslint-plugin-command@3.4.0:
     resolution: {integrity: sha512-EW4eg/a7TKEhG0s5IEti72kh3YOTlnhfFNuctq5WnB1fst37/IHTd5OkD+vnlRf3opTvUcSRihAateP6bT5ZcA==}
@@ -14718,6 +14726,17 @@ snapshots:
       eslint: 9.39.2(jiti@2.6.1)
       is-glob: 4.0.3
       micromatch: 4.0.8
+
+  eslint-plugin-clsx@0.0.11(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3):
+    dependencies:
+      '@typescript-eslint/types': 8.50.0
+      '@typescript-eslint/utils': 8.50.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      eslint: 9.39.2(jiti@2.6.1)
+      esquery: 1.6.0
+      remeda: 2.32.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   eslint-plugin-command@3.4.0(eslint@9.39.2(jiti@2.6.1)):
     dependencies:

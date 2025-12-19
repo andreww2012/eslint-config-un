@@ -179,7 +179,13 @@ const ALL_STYLISTIC_RULES = {
     'string-check': true,
   },
   'check-file': {
-    // TODO
+    // None
+  },
+  clsx: {
+    'forbid-array-expressions': true,
+    'prefer-logical-over-objects': true,
+    'prefer-merged-neighboring-elements': true,
+    'prefer-objects-over-logical': true,
   },
   command: {
     // None

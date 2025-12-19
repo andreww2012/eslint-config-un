@@ -137,6 +137,15 @@ export const pluginsLoaders = {
   'check-file': genModuleLoader('check-file', 'eslint-plugin-check-file', () =>
     interopDefault(import('eslint-plugin-check-file')),
   ),
+  clsx: genModuleLoader(
+    'clsx',
+    'eslint-plugin-clsx',
+    () =>
+      interopDefault(
+        import('eslint-plugin-clsx'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   command: genModuleLoader(
     'command',
     'eslint-plugin-command',

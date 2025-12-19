@@ -7,6 +7,7 @@ import type {BetterTailwindEslintConfigOptions} from './better-tailwind';
 import type {BoundariesEslintConfigOptions} from './boundaries';
 import type {CasePoliceEslintConfigOptions} from './case-police';
 import type {CheckFileEslintConfigOptions} from './check-file';
+import type {ClsxEslintConfigOptions} from './clsx';
 import type {CommandEslintConfigOptions} from './command';
 import type {CompatEslintConfigOptions} from './compat';
 import type {CspellEslintConfigOptions} from './cspell';
@@ -231,6 +232,17 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default false
    */
   cloudfrontFunctions: CloudfrontFunctionsEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [clsx](https://github.com/lukeed/clsx) specific rules.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-clsx`](https://npmjs.com/eslint-plugin-clsx)
+   * ([docs](https://github.com/temoncher/eslint-plugin-clsx#readme))
+   * @default true <=> [`clsx`](https://npmjs.com/clsx) package is installed
+   */
+  clsx: ClsxEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin serving as a codemod triggered by special comments.

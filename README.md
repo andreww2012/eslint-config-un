@@ -84,6 +84,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-boundaries`               | `boundaries`               |
 | `eslint-plugin-case-police`              | `case-police`              |
 | `eslint-plugin-check-file`               | `check-file`               |
+| `eslint-plugin-clsx`                     | `clsx`                     |
 | `eslint-plugin-command`                  | `command`                  |
 | `eslint-plugin-de-morgan`                | `de-morgan`                |
 | `eslint-plugin-ember`                    | `ember`                    |
@@ -395,6 +396,7 @@ In the following table, Sub-configs have `/` in their names.
 | ![Zod](./assets/logos-zod.svg) `zod`                                                | ✅ (`zod@>=4` is installed)                            | [eslint-plugin-zod-x](https://npmjs.com/eslint-plugin-zod-x) (`zod`)                                                                                 | Since v1.0.0                                                                                        |
 | ![FormatJS](./assets/logos-formatjs.svg) `formatJs`                                 | ✅ (`@formatjs/icu-messageformat-parser` is installed) | [eslint-plugin-formatjs](https://npmjs.com/eslint-plugin-formatjs) (`formatjs`)                                                                      | Since v1.0.0                                                                                        |
 | ![Docusaurus](./assets/vscode-icons-file-type-docusaurus.svg) `docusaurus`          | ✅ (`@docusaurus/core` is installed)                   | [@docusaurus/eslint-plugin](https://npmjs.com/@docusaurus/eslint-plugin) (`docusaurus`)                                                              | Since v1.0.0                                                                                        |
+| `clsx`                                                                              | ✅ (`clsx` is installed)                               | [eslint-plugin-clsx](https://npmjs.com/eslint-plugin-clsx) (`clsx`)                                                                                  | Since v1.0.0                                                                                        |
 
 ### Miscellaneous
 

@@ -252,6 +252,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     checkFile: {enabled: getIsConfigEnabled('checkFile', false)},
     cli: {enabled: getIsConfigEnabled('cli')},
     cloudfrontFunctions: {enabled: getIsConfigEnabled('cloudfrontFunctions', false)},
+    clsx: {enabled: getIsConfigEnabled('clsx', 'clsx')},
     command: {enabled: getIsConfigEnabled('command', false)},
     compat: {enabled: getIsConfigEnabled('compat', false)},
     css: {enabled: getIsConfigEnabled('css', !packagesInfo.stylelint)},
@@ -573,6 +574,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     // eslint-disable-next-line case-police/string-check
     loadUnConfig('nestJs', () => import('../configs/nest-js')),
     loadUnConfig('jestDom', () => import('../configs/jest-dom')),
+    loadUnConfig('clsx', () => import('../configs/clsx')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),
