@@ -38,6 +38,7 @@
     "u:info": "tsx scripts/updated-packages-info.ts",
     "u": "ncu && nr u:after",
     "u:m": "ncu -t minor && nr u:after",
+    "u:pm": "ncu --dep packageManager",
     "deps:audit": "pnpm audit --audit-level high",
     "print-peer-deps": "tsx scripts/print-peer-deps.ts",
     "rules-finder": "tsx scripts/rules-finder.ts",
@@ -582,7 +583,7 @@
     "eslint-plugin-prettier",
     "eslint-plugin-no-type-assertion"
   ],
-  "packageManager": "pnpm@10.23.0",
+  "packageManager": "pnpm@10.26.1",
   "engines": {
     "node": "^20.19 || ^22.16.0 || >=24"
   }

@@ -4,10 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@eslint/plugin-kit@0.3.5>@eslint/core': 0.17.0
-  glob@>=10.2.0 <10.5.0: 10.5.0
-
 patchedDependencies:
   eslint-plugin-prettier:
     hash: ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495
