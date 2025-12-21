@@ -874,7 +874,7 @@ export class ConfigEntryBuilder<
                 }
                 const rulesToSwapNormalized = Object.entries(
                   groupBy(
-                    [...rulesToSwapPositionsOf].map(([left, right]) => ({
+                    Array.from(rulesToSwapPositionsOf, ([left, right]) => ({
                       left,
                       right: right.at(-1) || '',
                     })),

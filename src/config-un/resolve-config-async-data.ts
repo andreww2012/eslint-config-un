@@ -192,7 +192,7 @@ export const resolveConfigAsyncData = async (
 
   if (packagesToManuallyInstallOrUpdate.size > 0) {
     partition(
-      [...packagesToManuallyInstallOrUpdate.entries()].map(([name, item]) => ({...item, name})),
+      Array.from(packagesToManuallyInstallOrUpdate.entries(), ([name, item]) => ({...item, name})),
       (item) => item.installedVersion != null,
     ).forEach((packages, index) => {
       if (packages.length === 0) {
@@ -222,9 +222,10 @@ ${renderTable(
           ? styleText('green', versionRange)
           : styleText('gray', 'Unknown'),
         ...(pluginPrefixes?.size && {
-          [`PLugin prefix${pluginPrefixes.size === 1 ? '' : 's'}`]: [...pluginPrefixes]
-            .map(stylePluginPrefix)
-            .join(', '),
+          [`PLugin prefix${pluginPrefixes.size === 1 ? '' : 's'}`]: Array.from(
+            pluginPrefixes,
+            stylePluginPrefix,
+          ).join(', '),
         }),
       };
     }),

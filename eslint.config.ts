@@ -52,8 +52,6 @@ export default eslintConfig({
       },
     },
     erasableSyntaxOnly: true,
-    yaml: true, // TODO
-    toml: true, // TODO
     jsxA11y: false,
     casePolice: true,
     import: {
@@ -91,6 +89,11 @@ export default eslintConfig({
     },
     eslintPlugin: {
       files: ['eslint-local-rules/**', 'src/plugin-un/rules/**'],
+    },
+    security: {
+      overrides: {
+        'security/detect-unsafe-regex': 0, // Many false positives
+      },
     },
 
     // False positives:

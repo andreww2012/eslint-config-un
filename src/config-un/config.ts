@@ -678,7 +678,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadPluginsOnDemand === false
       ? LOADABLE_PLUGIN_PREFIXES_LIST
       : // Sorting ensures that plugins will be present in the resulting config in the consistent order every time
-        // eslint-disable-next-line unicorn/no-array-sort
+        // eslint-disable-next-line unicorn/no-array-sort, e18e/prefer-array-to-sorted
         [...context.usedPlugins].sort();
   if (typeof loadPluginsOnDemand === 'object') {
     usedPluginPrefixes.push(...loadPluginsOnDemand.alwaysLoad);
@@ -774,7 +774,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       config: resolvedConfigs,
     });
 
-    const configsToCache = [...resolvedConfigs].map((configItem) => {
+    const configsToCache = Array.from(resolvedConfigs, (configItem) => {
       if (!isUnFlatConfigEntry(configItem)) {
         return configItem;
       }
@@ -789,13 +789,13 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       configs: configsToCache,
       usedPlugins: usedPluginPrefixes,
       usedParsers: new Map(
-        [...context.usedParsers.entries()].map(([parserPrefix, configs]) => [
+        Array.from(context.usedParsers.entries(), ([parserPrefix, configs]) => [
           parserPrefix,
           configs.map((c) => c.name).filter((v) => typeof v === 'string'),
         ]),
       ),
       usedPackages: new Map(
-        [...context.usedPackages.entries()].map(([packagePrefix, usedPackagesInfo]) => [
+        Array.from(context.usedPackages.entries(), ([packagePrefix, usedPackagesInfo]) => [
           packagePrefix,
           usedPackagesInfo
             .map(({config, path, info}) => {

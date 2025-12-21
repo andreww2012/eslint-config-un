@@ -28,7 +28,7 @@ const RULE_OPTIONS_SCHEMA = {
       type: 'object',
       additionalProperties: false,
       properties: Object.fromEntries(
-        [...TYPEOF_POSSIBLE_RETURN_VALUES_SET].map((value) => [value, {type: 'boolean'}]),
+        Array.from(TYPEOF_POSSIBLE_RETURN_VALUES_SET, (value) => [value, {type: 'boolean'}]),
       ),
     },
     disallow: {

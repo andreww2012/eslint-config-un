@@ -297,33 +297,34 @@ async function fetchPackageInfo(packageName: string) {
   }
 
   await Promise.all(
-    [
-      ...new Set([
+    Array.from(
+      new Set([
         ...Object.keys(packageMetadata.dependencies || {}),
         ...Object.keys(packageMetadata.devDependencies || {}),
         ...Object.keys(packageMetadata.peerDependencies || {}),
         ...Object.keys(packageMetadata.optionalDependencies || {}),
       ]),
-    ].map(async (dependencyPackageName) => {
-      const isEslintPlugin = isLikelyEslintPlugin(dependencyPackageName);
-      if (
-        newPackagesToCheck.has(dependencyPackageName) ||
-        KNOWN_ESLINT_PLUGINS.includes(dependencyPackageName) ||
-        (!cliFlags.deep && !isEslintPlugin) ||
-        (await knownMissingFromNpmPackages.has(dependencyPackageName))
-      ) {
-        return;
-      }
+      async (dependencyPackageName) => {
+        const isEslintPlugin = isLikelyEslintPlugin(dependencyPackageName);
+        if (
+          newPackagesToCheck.has(dependencyPackageName) ||
+          KNOWN_ESLINT_PLUGINS.includes(dependencyPackageName) ||
+          (!cliFlags.deep && !isEslintPlugin) ||
+          (await knownMissingFromNpmPackages.has(dependencyPackageName))
+        ) {
+          return;
+        }
 
-      newPackagesToCheck.add(dependencyPackageName);
-      queueFetchPackageInfo(dependencyPackageName);
+        newPackagesToCheck.add(dependencyPackageName);
+        queueFetchPackageInfo(dependencyPackageName);
 
-      if (isEslintPlugin) {
-        logger.info(
-          `👀 Potentially new ESLint plugin found: https://npmjs.com/${styleText('green', dependencyPackageName)} (dependency of ${styleText('gray', packageName)}) (new in total: ${(newEslintPluginsCount += 1)})`,
-        );
-      }
-    }),
+        if (isEslintPlugin) {
+          logger.info(
+            `👀 Potentially new ESLint plugin found: https://npmjs.com/${styleText('green', dependencyPackageName)} (dependency of ${styleText('gray', packageName)}) (new in total: ${(newEslintPluginsCount += 1)})`,
+          );
+        }
+      },
+    ),
   );
 
   const packageInfo: PackageInfo = {

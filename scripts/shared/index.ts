@@ -79,7 +79,7 @@ export const generateEslintPluginsRulesPresence = (
   });
 
   return {
-    rules: [...ruleVersions].map(([ruleName, versions]) => {
+    rules: Array.from(ruleVersions, ([ruleName, versions]) => {
       const versionsSorted = versions.toSorted((a, b) => compare(a.version, b.version));
       return {
         ruleName,

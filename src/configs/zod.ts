@@ -85,7 +85,7 @@ export default ((context, optionsRaw) => {
   const allowedObjectSchemaTypes = getKeysOfTruthyValues(
     Array.isArray(allowedObjectSchemaTypesRaw)
       ? Object.fromEntries(
-          [...new Set(allowedObjectSchemaTypesRaw)].map((method) => [method, true]),
+          Array.from(new Set(allowedObjectSchemaTypesRaw), (method) => [method, true]),
         )
       : {
           ...Object.fromEntries(ALL_ZOD_OBJECT_SCHEMA_TYPES.map((method) => [method, true])),

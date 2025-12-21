@@ -116,7 +116,7 @@ ${perPluginCodeRaw.map((v) => `  '${v.pluginName}': ${v.exportTypeName};`).join(
 }\n`.replaceAll(/: Linter.RuleEntry<([^>]*)>/g, ': $1;');
 
   // eslint-disable-next-line ts/no-shadow
-  const fixableRulesOnlyCode = `export type FixableRuleNames = ${[...fixableRulesOnlyCodeRaw.matchAll(/'disable-autofix\/([^']*)'/g)].map((match) => `'${match[1]}'`).join(' | ')};\n`;
+  const fixableRulesOnlyCode = `export type FixableRuleNames = ${Array.from(fixableRulesOnlyCodeRaw.matchAll(/'disable-autofix\/([^']*)'/g), (match) => `'${match[1]}'`).join(' | ')};\n`;
 
   // eslint-disable-next-line ts/no-shadow
   const allRulesCode = `export const ALL_RULES_PER_PLUGIN = /* ${perPluginCodeRaw.length} plugin${perPluginCodeRaw.length === 1 ? '' : 's'} */ {
