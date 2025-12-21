@@ -17,6 +17,7 @@ import type {CypressEslintConfigOptions} from './cypress';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
 import type {DependEslintConfigOptions} from './depend';
 import type {DocusaurusEslintConfigOptions} from './docusaurus';
+import type {E18eEslintConfigOptions} from './e18e';
 import type {EmberEslintConfigOptions} from './ember';
 import type {ErasableSyntaxOnlyEslintConfigOptions} from './erasable-syntax-only';
 import type {EsEslintConfigOptions} from './es';
@@ -320,12 +321,12 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
 
   /**
    * Enables rules from a plugin to help suggest alternatives to various dependencies.
-   * [The list of replacements](https://e18e.dev/docs/replacements) maintained by e18e community.
+   * [The list of replacements](https://e18e.dev/docs/replacements) is maintained by e18e community.
    *
    * 📁 Default `files`: <code>**&#47;package.json</code>
    *
    * 🧩 Main plugin: [`eslint-plugin-depend`](https://npmjs.com/eslint-plugin-depend) ([docs](https://github.com/es-tooling/eslint-plugin-depend))
-   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
+   * @default false
    */
   depend: DependEslintConfigOptions<ExtraPlugins>;
 
@@ -338,6 +339,20 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> [`@docusaurus/core`](https://npmjs.com/@docusaurus/core) package is installed
    */
   docusaurus: DocusaurusEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin from the [e18e community](https://e18e.dev) focusing on applying
+   * the e18e community's best practices and advise to JavaScript/TypeScript codebases.
+   *
+   * 📁 Default `files`: ❌ none, sub configs are used instead
+   *
+   * 🧩 Main plugin: [`@e18e/eslint-plugin`](https://npmjs.com/@e18e/eslint-plugin)
+   * ([docs](https://github.com/e18e/eslint-plugin#readme))
+   *
+   * ⚙️ Sub config(s): `modernization`, `moduleReplacements`, `performanceImprovements`
+   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
+   */
+  e18e: E18eEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Ember](https://emberjs.com) specific rules.

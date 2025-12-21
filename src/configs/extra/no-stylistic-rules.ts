@@ -214,6 +214,16 @@ const ALL_STYLISTIC_RULES = {
   docusaurus: {
     // None
   },
+  e18e: {
+    'no-indexof-equality': true,
+    'prefer-array-at': true,
+    'prefer-array-fill': true,
+    'prefer-date-now': true,
+    'prefer-exponentiation-operator': true,
+    'prefer-includes': true,
+    'prefer-nullish-coalescing': true,
+    'prefer-spread-syntax': true,
+  },
   ember: {
     'no-implicit-service-injection-argument': true,
     'no-unnecessary-index-route': true,

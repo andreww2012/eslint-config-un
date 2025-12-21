@@ -266,6 +266,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     formatJs: {
       enabled: getIsConfigEnabled('formatJs', '@formatjs/icu-messageformat-parser'),
     },
+    e18e: {enabled: getIsConfigEnabled('e18e', false)},
     ember: {enabled: getIsConfigEnabled('ember', 'ember-source')},
     erasableSyntaxOnly: {enabled: getIsConfigEnabled('erasableSyntaxOnly', false)},
     es: {enabled: getIsConfigEnabled('es', false)},
@@ -575,6 +576,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('nestJs', () => import('../configs/nest-js')),
     loadUnConfig('jestDom', () => import('../configs/jest-dom')),
     loadUnConfig('clsx', () => import('../configs/clsx')),
+    loadUnConfig('e18e', () => import('../configs/e18e')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),

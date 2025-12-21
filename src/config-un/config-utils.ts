@@ -5,13 +5,13 @@ import {type MaybeArray, arraify, styleConfigName, stylePackageName, styleText} 
 import type {UnConfigContext} from './shared';
 
 const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
-  'security',
-  'yaml',
-  'toml',
+  'e18e',
   'json',
   'jsonSchemaValidator',
   'nodeDependencies',
-  'depend',
+  'security',
+  'toml',
+  'yaml',
 ]);
 
 const CONFIGS_TO_NOT_REPORT_IF_UNNECESSARILY_ENABLED_OR_DISABLED = new Set<keyof UnConfigs>([

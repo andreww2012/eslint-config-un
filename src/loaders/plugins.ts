@@ -187,6 +187,11 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
+  e18e: genModuleLoader(
+    'e18e',
+    '@e18e/eslint-plugin',
+    () => interopDefault(import('@e18e/eslint-plugin')) as Promise<EslintPlugin>,
+  ),
   ember: genModuleLoader('ember', 'eslint-plugin-ember', () =>
     interopDefault(import('eslint-plugin-ember')),
   ),

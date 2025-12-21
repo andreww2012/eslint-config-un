@@ -14,6 +14,7 @@ export default eslintConfig({
       },
     }),
   },
+  defaultConfigsStatus: 'misc-enabled',
 
   configs: {
     js: {
@@ -51,9 +52,8 @@ export default eslintConfig({
       },
     },
     erasableSyntaxOnly: true,
-    yaml: true,
-    toml: true,
-    json: true,
+    yaml: true, // TODO
+    toml: true, // TODO
     jsxA11y: false,
     casePolice: true,
     import: {
@@ -79,9 +79,11 @@ export default eslintConfig({
         peerDependencies: 'never',
       },
     },
-    depend: {
-      options: {
-        allowed: ['eslint-plugin-react'],
+    e18e: {
+      configModuleReplacements: {
+        options: {
+          allowed: ['eslint-plugin-react'],
+        },
       },
     },
     jsdoc: {
