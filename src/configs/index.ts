@@ -3,6 +3,7 @@ import type {AngularEslintConfigOptions} from './angular';
 import type {AntfuEslintConfigOptions} from './antfu';
 import type {AstroEslintConfigOptions} from './astro';
 import type {AvaEslintConfigOptions} from './ava';
+import type {BarrelFilesEslintConfigOptions} from './barrel-files';
 import type {BetterTailwindEslintConfigOptions} from './better-tailwind';
 import type {BoundariesEslintConfigOptions} from './boundaries';
 import type {CasePoliceEslintConfigOptions} from './case-police';
@@ -165,6 +166,17 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> [`ava`](https://npmjs.com/ava) package is installed
    */
   ava: AvaEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin related to "barrel files" usage.
+   *
+   * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+   *
+   * 🧩 Main plugin: [`eslint-plugin-barrel-files`](https://npmjs.com/eslint-plugin-barrel-files)
+   * ([docs](https://github.com/thepassle/eslint-plugin-barrel-files#readme))
+   * @default false
+   */
+  barrelFiles: BarrelFilesEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [TailwindCSS](https://tailwindcss.com) specific rules.

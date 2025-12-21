@@ -246,6 +246,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     antfu: {enabled: getIsConfigEnabled('antfu', false)},
     astro: {enabled: getIsConfigEnabled('astro', 'astro')},
     ava: {enabled: getIsConfigEnabled('ava', 'ava')},
+    barrelFiles: {enabled: getIsConfigEnabled('barrelFiles', false)},
     betterTailwind: {enabled: getIsConfigEnabled('betterTailwind', 'tailwindcss')},
     boundaries: {enabled: getIsConfigEnabled('boundaries', false)},
     casePolice: {enabled: getIsConfigEnabled('casePolice', false)},
@@ -606,6 +607,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('command', () => import('../configs/command')),
     loadUnConfig('antfu', () => import('../configs/antfu')),
     loadUnConfig('treeShaking', () => import('../configs/tree-shaking')),
+    loadUnConfig('barrelFiles', () => import('../configs/barrel-files')),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

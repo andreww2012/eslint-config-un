@@ -121,6 +121,9 @@ export const pluginsLoaders = {
   ava: genModuleLoader('ava', 'eslint-plugin-ava', () =>
     interopDefault(import('eslint-plugin-ava')),
   ),
+  'barrel-files': genModuleLoader('barrel-files', 'eslint-plugin-barrel-files', () =>
+    interopDefault(import('eslint-plugin-barrel-files')),
+  ),
   'better-tailwindcss': genModuleLoader(
     'better-tailwindcss',
     'eslint-plugin-better-tailwindcss',

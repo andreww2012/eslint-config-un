@@ -165,6 +165,9 @@ const ALL_STYLISTIC_RULES = {
   ava: {
     'hooks-order': true,
   },
+  'barrel-files': {
+    // None
+  },
   'better-tailwindcss': {
     'enforce-consistent-variable-syntax': true,
     multiline: true,

@@ -22,6 +22,7 @@ export default eslintConfig({
         'arrow-body-style': 2,
       },
     },
+    barrelFiles: true,
     expectType: true,
     command: true,
     checkFile: {

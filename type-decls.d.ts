@@ -123,3 +123,9 @@ declare module 'eslint-plugin-tree-shaking' {
   declare const value: EslintPlugin;
   export = value;
 }
+
+declare module 'eslint-plugin-barrel-files' {
+  import type {Plugin as EslintPlugin} from '@eslint/core';
+  declare const value: EslintPlugin;
+  export = value;
+}
