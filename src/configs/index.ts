@@ -75,6 +75,7 @@ import type {RxjsEslintConfigOptions} from './rxjs';
 import type {SecurityEslintConfigOptions} from './security';
 import type {SolidEslintConfigOptions} from './solid';
 import type {SonarEslintConfigOptions} from './sonar';
+import type {SqlEslintConfigOptions} from './sql';
 import type {StorybookEslintConfigOptions} from './storybook';
 import type {StylisticEslintConfigOptions} from './stylistic';
 import type {SvelteEslintConfigOptions} from './svelte';
@@ -1009,6 +1010,17 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true
    */
   sonar: SonarEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin related to SQL queries written in `sql` template literal tag.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-sql`](https://npmjs.com/eslint-plugin-sql)
+   * ([docs](https://github.com/gajus/eslint-plugin-sql#readme))
+   * @default false
+   */
+  sql: SqlEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Storybook](https://storybook.js.org) specific rules.

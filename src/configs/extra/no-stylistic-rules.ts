@@ -635,6 +635,9 @@ const ALL_STYLISTIC_RULES = {
     'use-type-alias': true,
     'variable-name': true,
   },
+  sql: {
+    format: true,
+  },
   storybook: {
     // None
   },

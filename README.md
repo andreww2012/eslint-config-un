@@ -74,13 +74,14 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `@cspell/eslint-plugin`                  | `@cspell`                  |
 | `@darraghor/eslint-plugin-nestjs-typed`  | `nestjs`                   |
 | `@docusaurus/eslint-plugin`              | `docusaurus`               |
-| `@e18e/eslint-plugin`                    | `@e18e`                    |
+| `@e18e/eslint-plugin`                    | `e18e`                     |
 | `@eslint-react/eslint-plugin`            | `@eslint-react`            |
 | `@intlify/eslint-plugin-vue-i18n`        | `@intlify/vue-i18n`        |
 | `@next/eslint-plugin-next`               | `@next/next`               |
 | `@tanstack/eslint-plugin-query`          | `@tanstack/query`          |
 | `eslint-plugin-astro`                    | `astro`                    |
 | `eslint-plugin-ava`                      | `ava`                      |
+| `eslint-plugin-barrel-files`             | `barrel-files`             |
 | `eslint-plugin-better-tailwindcss`       | `better-tailwindcss`       |
 | `eslint-plugin-boundaries`               | `boundaries`               |
 | `eslint-plugin-case-police`              | `case-police`              |
@@ -112,6 +113,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-react`                    | `react`                    |
 | `@smarttools/eslint-plugin-rxjs`         | `rxjs`                     |
 | `eslint-plugin-solid`                    | `solid`                    |
+| `eslint-plugin-sql`                      | `sql`                      |
 | `eslint-plugin-storybook`                | `storybook`                |
 | `eslint-plugin-svelte`                   | `svelte`                   |
 | `eslint-plugin-tailwindcss`              | `tailwindcss`              |
@@ -426,6 +428,7 @@ In the following table, Sub-configs have `/` in their names.
 | `expectType`                                                   | ❌                                          | [eslint-plugin-expect-type](https://npmjs.com/eslint-plugin-expect-type) (`expect-type`)          | Since v1.0.0                                                                                                                             |
 | `command`                                                      | ❌                                          | [eslint-plugin-command](https://npmjs.com/eslint-plugin-command) (`command`)                      | Since v1.0.0                                                                                                                             |
 | `antfu`                                                        | ❌                                          | [eslint-plugin-antfu](https://npmjs.com/eslint-plugin-antfu) (`antfu`)                            | Since v1.0.0<br>[Anthony Fu](https://antfu.me)'s personal collection of rules.                                                           |
+| `sql`                                                          | ❌                                          | [eslint-plugin-sql](https://npmjs.com/eslint-plugin-sql) (`sql`)                                  | Since v1.0.0                                                                                                                             |
 
 ## How to use
 

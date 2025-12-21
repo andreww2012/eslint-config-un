@@ -233,6 +233,7 @@
     "eslint-plugin-react-you-might-not-need-an-effect": "0.7.0",
     "eslint-plugin-sentences-per-line": "0.1.0",
     "eslint-plugin-solid": "0.14.5",
+    "eslint-plugin-sql": "3.2.2",
     "eslint-plugin-storybook": "10.1.10",
     "eslint-plugin-svelte": "3.13.1",
     "eslint-plugin-tailwindcss": "3.18.2",
@@ -335,6 +336,7 @@
     "eslint-plugin-react-you-might-not-need-an-effect": "^0.7.0",
     "eslint-plugin-sentences-per-line": "^0.1.0",
     "eslint-plugin-solid": "^0.14.5",
+    "eslint-plugin-sql": "^3.2.2",
     "eslint-plugin-storybook": "^10.1.10",
     "eslint-plugin-svelte": "^3.13.1",
     "eslint-plugin-tailwindcss": "^3.18.2",
@@ -535,6 +537,9 @@
       "optional": true
     },
     "eslint-plugin-solid": {
+      "optional": true
+    },
+    "eslint-plugin-sql": {
       "optional": true
     },
     "eslint-plugin-storybook": {

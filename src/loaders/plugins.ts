@@ -510,6 +510,16 @@ export const pluginsLoaders = {
   sonarjs: genModuleLoader('sonarjs', 'eslint-plugin-sonarjs', () =>
     interopDefault(import('eslint-plugin-sonarjs')),
   ),
+  sql: genModuleLoader(
+    'sql',
+    'eslint-plugin-sql',
+    () =>
+      // @ts-expect-error types mismatch
+      interopDefault(
+        import('eslint-plugin-sql'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
   storybook: genModuleLoader(
     'storybook',
     'eslint-plugin-storybook',

@@ -327,6 +327,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     security: {enabled: getIsConfigEnabled('security', false)},
     solid: {enabled: getIsConfigEnabled('solid', 'solid-js')},
     sonar: {enabled: getIsConfigEnabled('sonar')},
+    sql: {enabled: getIsConfigEnabled('sql', false)},
     storybook: {enabled: getIsConfigEnabled('storybook', 'storybook')},
     stylistic: {enabled: getIsConfigEnabled('stylistic')},
     svelte: {
@@ -608,6 +609,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('antfu', () => import('../configs/antfu')),
     loadUnConfig('treeShaking', () => import('../configs/tree-shaking')),
     loadUnConfig('barrelFiles', () => import('../configs/barrel-files')),
+    loadUnConfig('sql', () => import('../configs/sql')),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS
