@@ -234,6 +234,9 @@ export const pluginsLoaders = {
   'file-progress': genModuleLoader('file-progress', 'eslint-plugin-file-progress', () =>
     interopDefault(import('eslint-plugin-file-progress')),
   ),
+  format: genModuleLoader('format', 'eslint-plugin-format', () =>
+    interopDefault(import('eslint-plugin-format')),
+  ),
   formatjs: genModuleLoader('formatjs', 'eslint-plugin-formatjs', () =>
     interopDefault(import('eslint-plugin-formatjs')),
   ),

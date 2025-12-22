@@ -261,6 +261,10 @@ const ALL_STYLISTIC_RULES = {
   'file-progress': {
     // None
   },
+  format: {
+    dprint: true,
+    prettier: true,
+  },
   formatjs: {
     'prefer-formatted-message': true,
     'prefer-pound-in-plural': true,

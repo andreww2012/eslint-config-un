@@ -15,6 +15,7 @@ import {
   type AllEslintRuleNames,
   ConfigEntryBuilder,
   type FlatConfigEntry,
+  configIndexProperty,
   createConfigBuilder,
   genFlatConfigEntryName,
   isUnFlatConfigEntry,
@@ -26,7 +27,14 @@ import {
   type PluginPrefix,
   pluginsLoaders,
 } from '../loaders';
-import type {FalsyValue, IsOptional, IsUnknown, OmitStrict, PartialDeep} from '../types';
+import type {
+  FalsyValue,
+  IsAnyUnionMemberAssignableTo,
+  IsOptional,
+  IsUnknown,
+  OmitStrict,
+  PartialDeep,
+} from '../types';
 import {
   type MaybeArray,
   arraify,
@@ -264,6 +272,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     depend: {enabled: getIsConfigEnabled('depend', false)},
     docusaurus: {enabled: getIsConfigEnabled('docusaurus', '@docusaurus/core')},
     fastImport: {enabled: getIsConfigEnabled('fastImport', false)},
+    format: {enabled: getIsConfigEnabled('format', false)},
     formatJs: {
       enabled: getIsConfigEnabled('formatJs', '@formatjs/icu-messageformat-parser'),
     },
@@ -378,17 +387,40 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       : IsOptional<ExtraArgument> extends true
         ? [extraArgument?: ExtraArgument]
         : [extraArgument: ExtraArgument]
-  ): Promise<Awaited<ReturnType<T>> | null> =>
+  ): Promise<
+    | (IsAnyUnionMemberAssignableTo<
+        (EslintConfigUnOptions['configs'] & {})[ConfigKey],
+        readonly unknown[]
+      > extends true
+        ? Awaited<ReturnType<T>>[]
+        : Awaited<ReturnType<T>>)
+    | null
+  > =>
     context.configsMeta[configKey].enabled
       ? // @ts-expect-error weird error
-        await Promise.resolve(importer()).then((m) =>
-          m.default(
+        await Promise.resolve(importer()).then((m) => {
+          const configOptions = context.rootOptions.configs?.[configKey];
+          if (Array.isArray(configOptions)) {
+            return Promise.all(
+              // eslint-disable-next-line ts/await-thenable
+              configOptions.map((configOptionsItem, configIndex) =>
+                m.default(
+                  context,
+                  {...configOptionsItem, [configIndexProperty]: configIndex},
+                  // @ts-expect-error "A spread argument must either have a tuple type or be passed to a rest parameter."
+                  ...args,
+                ),
+              ),
+            );
+          }
+          return m.default(
             context,
-            context.rootOptions.configs?.[configKey],
+            // @ts-expect-error "Expression produces a union type that is too complex to represent."
+            configOptions,
             // @ts-expect-error "A spread argument must either have a tuple type or be passed to a rest parameter."
             ...args,
-          ),
-        )
+          );
+        })
       : null;
 
   const jsEslintConfigResult = await loadUnConfig('js', () => import('../configs/js'));
@@ -610,6 +642,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('treeShaking', () => import('../configs/tree-shaking')),
     loadUnConfig('barrelFiles', () => import('../configs/barrel-files')),
     loadUnConfig('sql', () => import('../configs/sql')),
+    loadUnConfig('format', () => import('../configs/format')),
 
     /* Other configs */
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS

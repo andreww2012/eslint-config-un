@@ -21,6 +21,11 @@ export const parsersLoaders = {
     'ember-eslint-parser',
     () => import('ember-eslint-parser'),
   ),
+  'eslint-parser-plain': genModuleLoader(
+    'eslint-parser-plain',
+    'eslint-parser-plain',
+    () => import('eslint-parser-plain'),
+  ),
   'graphql-eslint-parser': genModuleLoader(
     'graphql-eslint-parser',
     '@graphql-eslint/eslint-plugin',

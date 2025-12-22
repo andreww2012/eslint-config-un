@@ -95,6 +95,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-eslint-plugin`            | `eslint-plugin`            |
 | `eslint-plugin-expect-type`              | `expect-type`              |
 | `eslint-plugin-fast-import`              | `fast-import`              |
+| `eslint-plugin-format`                   | `format`                   |
 | `@graphql-eslint/eslint-plugin`          | `graphql`                  |
 | `eslint-plugin-header`                   | `header`                   |
 | `eslint-plugin-headers`                  | `headers`                  |
@@ -429,6 +430,7 @@ In the following table, Sub-configs have `/` in their names.
 | `command`                                                      | ❌                                          | [eslint-plugin-command](https://npmjs.com/eslint-plugin-command) (`command`)                      | Since v1.0.0                                                                                                                             |
 | `antfu`                                                        | ❌                                          | [eslint-plugin-antfu](https://npmjs.com/eslint-plugin-antfu) (`antfu`)                            | Since v1.0.0<br>[Anthony Fu](https://antfu.me)'s personal collection of rules.                                                           |
 | `sql`                                                          | ❌                                          | [eslint-plugin-sql](https://npmjs.com/eslint-plugin-sql) (`sql`)                                  | Since v1.0.0                                                                                                                             |
+| `format`                                                       | ❌                                          | [eslint-plugin-format](https://npmjs.com/eslint-plugin-format) (`format`)                         | Since v1.0.0<br>📚 Supports multiple configs                                                                                             |
 
 ## How to use
 

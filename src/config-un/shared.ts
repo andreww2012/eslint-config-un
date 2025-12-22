@@ -52,11 +52,18 @@ export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOption
   'vitest/require-import-vi-mock': true, // Might cause runtime/TS errors if imports are removed
 };
 
+type UnConfigsSupportingArrays = 'format';
+
 export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = never> {
   // #region 🟠 FREQUENTLY USED OPTIONS
 
   configs?: {
-    [Key in keyof UnConfigs<ExtraPlugins>]?: boolean | UnConfigs<ExtraPlugins>[Key];
+    [Key in keyof UnConfigs<ExtraPlugins>]?:
+      | boolean
+      | UnConfigs<ExtraPlugins>[Key]
+      | (Key extends UnConfigsSupportingArrays
+          ? [UnConfigs<ExtraPlugins>[Key], ...UnConfigs<ExtraPlugins>[Key][]]
+          : never);
   };
 
   /**

@@ -439,6 +439,8 @@ export const getRuleUnSeverityAndOptionsFromEntry = <Options extends unknown[]>(
 const styleRuleName = (ruleName: string) => styleText('green', ruleName);
 const styleRuleNames = (ruleNames: string[]) => ruleNames.map(styleRuleName).join(', ');
 
+export const configIndexProperty = Symbol('ConfigIndex');
+
 export class ConfigEntryBuilder<
   ExtraPlugins extends ExtraPluginsType = never,
   // eslint-disable-next-line ts/no-explicit-any
@@ -448,7 +450,7 @@ export class ConfigEntryBuilder<
   private readonly options: UnConfigOptions<
     ExtraPlugins,
     DefaultPrefix extends null ? RulesRecord : DefaultPrefix
-  >;
+  > & {[configIndexProperty]?: number};
   private readonly context: UnConfigContext;
 
   constructor(
@@ -566,7 +568,9 @@ export class ConfigEntryBuilder<
       ...(files.length > 0 && {files}),
       ...(ignores.length > 0 && {ignores}),
       ...config,
-      name: genFlatConfigEntryName(configName),
+      name: genFlatConfigEntryName(
+        `${configName}${configIndexProperty in this.options ? `#${this.options[configIndexProperty]}` : ''}`,
+      ),
       rules: {},
     };
     this.addFlatConfig(configFinal);

@@ -30,6 +30,7 @@ import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-fu
 import type {NoStylisticRulesEslintConfigOptions} from './extra/no-stylistic-rules';
 import type {FastImportEslintConfigOptions} from './fast-import';
 import type {FileProgressEslintConfigOptions} from './file-progress';
+import type {FormatEslintConfigOptions} from './format';
 import type {FormatjsEslintConfigOptions} from './formatjs';
 import type {GraphqlEslintConfigOptions} from './graphql';
 import type {HeaderEslintConfigOptions} from './header';
@@ -466,6 +467,20 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default false
    */
   fileProgress: FileProgressEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin for formatting various languages by
+   * [Prettier](https://prettier.io) or [dprint](https://dprint.dev).
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-format`](https://npmjs.com/eslint-plugin-format)
+   * ([docs](https://github.com/antfu/eslint-plugin-format#readme))
+   *
+   * 📚 Supports multiple configs (array notation)
+   * @default false
+   */
+  format: FormatEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [FormatJS](https://formatjs.github.io) specific rules.
