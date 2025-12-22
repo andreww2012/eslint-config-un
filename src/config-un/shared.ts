@@ -122,13 +122,14 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    * This option overrides if certain configs are enabled or disabled by default.
    * - `all-disabled`: consider all top level configs disabled unless explicitly enabled.
    * - `misc-enabled`: consider some configs disabled by default, conversely enabled:
-   *   * `depend`
-   *   * `json`
-   *   * `jsonSchemaValidator`
-   *   * `nodeDependencies`
-   *   * `security`
-   *   * `toml`
-   *   * `yaml`
+   *   - `e18e`
+   *   - `json`
+   *   - `jsonSchemaValidator`
+   *   - `lockfile`
+   *   - `nodeDependencies`
+   *   - `security`
+   *   - `toml`
+   *   - `yaml`
    */
   defaultConfigsStatus?: 'all-disabled' | 'misc-enabled';
 

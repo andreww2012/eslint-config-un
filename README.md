@@ -102,6 +102,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-import-zod`               | `import-zod`               |
 | `eslint-plugin-jest-extended`            | `jest-extended`            |
 | `eslint-plugin-jest`                     | `jest`                     |
+| `eslint-plugin-lockfile`                 | `lockfile`                 |
 | `@nx/eslint-plugin`                      | `nx`                       |
 | `eslint-plugin-perfectionist`            | `perfectionist`            |
 | `eslint-plugin-pinia`                    | `pinia`                    |
@@ -431,6 +432,7 @@ In the following table, Sub-configs have `/` in their names.
 | `antfu`                                                        | ❌                                          | [eslint-plugin-antfu](https://npmjs.com/eslint-plugin-antfu) (`antfu`)                            | Since v1.0.0<br>[Anthony Fu](https://antfu.me)'s personal collection of rules.                                                           |
 | `sql`                                                          | ❌                                          | [eslint-plugin-sql](https://npmjs.com/eslint-plugin-sql) (`sql`)                                  | Since v1.0.0                                                                                                                             |
 | `format`                                                       | ❌                                          | [eslint-plugin-format](https://npmjs.com/eslint-plugin-format) (`format`)                         | Since v1.0.0<br>📚 Supports multiple configs                                                                                             |
+| `lockfile`                                                     | ❌                                          | [eslint-plugin-lockfile](https://npmjs.com/eslint-plugin-lockfile) (`lockfile`)                   | Since v1.0.0                                                                                                                             |
 
 ## How to use
 

@@ -302,6 +302,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     jsonSchemaValidator: {enabled: getIsConfigEnabled('jsonSchemaValidator', false)},
     jsxA11y: {enabled: getIsConfigEnabled('jsxA11y')},
     lit: {enabled: getIsConfigEnabled('lit', 'lit')},
+    lockfile: {enabled: getIsConfigEnabled('lockfile', false)},
     markdown: {enabled: getIsConfigEnabled('markdown')},
     markdownLinks: {enabled: getIsConfigEnabled('markdownLinks')},
     markdownPreferences: {enabled: getIsConfigEnabled('markdownPreferences')},
@@ -611,6 +612,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('jestDom', () => import('../configs/jest-dom')),
     loadUnConfig('clsx', () => import('../configs/clsx')),
     loadUnConfig('e18e', () => import('../configs/e18e')),
+    loadUnConfig('lockfile', () => import('../configs/lockfile')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),

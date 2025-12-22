@@ -381,6 +381,9 @@ const ALL_STYLISTIC_RULES = {
   'lit-a11y': {
     // None
   },
+  lockfile: {
+    // None
+  },
   markdown: {
     // None
   },

@@ -47,6 +47,7 @@ import type {JsonSchemaValidatorEslintConfigOptions} from './json-schema-validat
 import type {JsoncEslintConfigOptions} from './jsonc';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import type {LitEslintConfigOptions} from './lit';
+import type {LockfileEslintConfigOptions} from './lockfile';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import type {MarkdownLinksEslintConfigOptions} from './markdown-links';
 import type {MarkdownPreferencesEslintConfigOptions} from './markdown-preferences';
@@ -664,6 +665,19 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> [`lit`](https://npmjs.com/lit) package is installed
    */
   lit: LitEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin to lint npm ecosystem lockfiles for security and consistency issues.
+   *
+   * 📁 Default `files`: <code>**&#47;package-lock.json</code>, <code>**&#47;yarn.lock</code>,
+   * <code>**&#47;pnpm-lock.yaml</code>, <code>**&#47;bun.lock</code>,
+   * <code>**&#47;vlt-lock.json</code>
+   *
+   * 🧩 Main plugin: [`eslint-plugin-lockfile`](https://npmjs.com/eslint-plugin-lockfile)
+   * ([docs](https://github.com/ljharb/lockfile-tools/tree/main/packages/eslint-plugin#readme))
+   * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
+   */
+  lockfile: LockfileEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Markdown related rules.

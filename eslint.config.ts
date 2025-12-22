@@ -22,6 +22,16 @@ export default eslintConfig({
         'arrow-body-style': 2,
       },
     },
+    lockfile: {
+      noNonRegistryDependencySpecifiers: {
+        ignore: [
+          {
+            specifier: 'file',
+            explanation: 'Local dependencies are safe',
+          },
+        ],
+      },
+    },
     barrelFiles: true,
     expectType: true,
     command: true,

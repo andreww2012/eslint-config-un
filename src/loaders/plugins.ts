@@ -316,6 +316,9 @@ export const pluginsLoaders = {
   'lit-a11y': genModuleLoader('lit-a11y', 'eslint-plugin-lit-a11y', () =>
     interopDefault(import('eslint-plugin-lit-a11y')),
   ),
+  lockfile: genModuleLoader('lockfile', 'eslint-plugin-lockfile', () =>
+    interopDefault(import('eslint-plugin-lockfile')),
+  ),
   markdown: genModuleLoader('markdown', '@eslint/markdown', () =>
     interopDefault(import('@eslint/markdown')),
   ),
