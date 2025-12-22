@@ -516,8 +516,8 @@ importers:
         specifier: 1.12.2
         version: 1.12.2
       eslint-plugin-turbo:
-        specifier: 2.6.3
-        version: 2.6.3(eslint@9.39.2(jiti@2.6.1))(turbo@2.5.4)
+        specifier: 2.7.1
+        version: 2.7.1(eslint@9.39.2(jiti@2.6.1))(turbo@2.5.4)
       eslint-plugin-vue:
         specifier: 10.6.2
         version: 10.6.2(@stylistic/eslint-plugin@5.6.1(eslint@9.39.2(jiti@2.6.1)))(@typescript-eslint/parser@8.50.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.39.2(jiti@2.6.1)))
@@ -6036,8 +6036,8 @@ packages:
     resolution: {integrity: sha512-D3MBKjH9EaGZg1gxqezGmjCeWzHs/O0jRFajpuXLYKeOCh3ycgoXeZ1ceKaD2QnK+v18ly+XjNDUCgss4vKbWg==}
     engines: {node: '>=6.0.0'}
 
-  eslint-plugin-turbo@2.6.3:
-    resolution: {integrity: sha512-91WZ+suhT/pk+qNS0/rqT43xLUlUblsa3a8jKmAStGhkJCmR2uX0oWo/e0Edb+It8MdnteXuYpCkvsK4Vw8FtA==}
+  eslint-plugin-turbo@2.7.1:
+    resolution: {integrity: sha512-ZC7dTOdw6tGuvx1CeC1WQ0pMkgT/Jmj69QW93d63nysiLbbKRLiDKKA9s/TvwJHq8Uvbou2+hnU8if1L0jHsVQ==}
     peerDependencies:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
@@ -16394,7 +16394,7 @@ snapshots:
 
   eslint-plugin-tree-shaking@1.12.2: {}
 
-  eslint-plugin-turbo@2.6.3(eslint@9.39.2(jiti@2.6.1))(turbo@2.5.4):
+  eslint-plugin-turbo@2.7.1(eslint@9.39.2(jiti@2.6.1))(turbo@2.5.4):
     dependencies:
       dotenv: 16.0.3
       eslint: 9.39.2(jiti@2.6.1)
