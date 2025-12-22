@@ -1389,7 +1389,6 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     .addRule('no-empty-effect', ERROR) /** @since 0.3.0 */ // 🟡
     .addRule('no-event-handler', ERROR) /** @since 0.3.0 */ // 🟡
     .addRule('no-initialize-state', ERROR) /** @since 0.3.0 */ // 🟡
-    .addRule('no-manage-parent', ERROR) /** @since 0.3.1 */ // 🟡
     .addRule('no-pass-data-to-parent', ERROR) /** @since 0.4.0 */ // 🟡
     .addRule('no-pass-live-state-to-parent', ERROR) /** @since 0.3.0 */ // 🟡
     .addRule('no-pass-ref-to-parent', OFF) /** @since 0.7.0 */ // 🟡
