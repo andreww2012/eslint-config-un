@@ -44,11 +44,6 @@ export const pluginsLoaders = {
     '@cspell/eslint-plugin',
     () => interopDefault(import('@cspell/eslint-plugin')) as Promise<EslintPlugin>,
   ),
-  '@eslint-community/eslint-comments': genModuleLoader(
-    '@eslint-community/eslint-comments',
-    '@eslint-community/eslint-plugin-eslint-comments',
-    () => interopDefault(import('@eslint-community/eslint-plugin-eslint-comments')),
-  ),
   '@eslint-react': genModuleLoader('@eslint-react', '@eslint-react/eslint-plugin', () =>
     loadEslintReactPlugin('@eslint-react'),
   ),
@@ -209,6 +204,11 @@ export const pluginsLoaders = {
   ),
   es: genModuleLoader('es', 'eslint-plugin-es-x', () =>
     interopDefault(import('eslint-plugin-es-x')),
+  ),
+  'eslint-comments': genModuleLoader(
+    'eslint-comments',
+    '@eslint-community/eslint-plugin-eslint-comments',
+    () => interopDefault(import('@eslint-community/eslint-plugin-eslint-comments')),
   ),
   'eslint-plugin': genModuleLoader('eslint-plugin', 'eslint-plugin-eslint-plugin', () =>
     interopDefault(import('eslint-plugin-eslint-plugin')),

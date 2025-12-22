@@ -97,9 +97,6 @@ const ALL_STYLISTIC_RULES = {
   '@cspell': {
     // None
   },
-  '@eslint-community/eslint-comments': {
-    // None
-  },
   '@eslint-react': {
     'jsx-shorthand-boolean': true,
     'jsx-shorthand-fragment': true,
@@ -245,6 +242,9 @@ const ALL_STYLISTIC_RULES = {
     // None
   },
   es: {
+    // None
+  },
+  'eslint-comments': {
     // None
   },
   'eslint-plugin': {

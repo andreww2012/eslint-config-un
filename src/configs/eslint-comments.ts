@@ -8,7 +8,7 @@ import {
 
 export interface EslintCommentsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, '@eslint-community/eslint-comments'> {}
+> extends UnConfigOptions<ExtraPlugins, 'eslint-comments'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(
@@ -16,10 +16,7 @@ export default ((context, optionsRaw) => {
     {} satisfies EslintCommentsEslintConfigOptions,
   );
 
-  const configBuilder = context.createConfigBuilder(
-    optionsResolved,
-    '@eslint-community/eslint-comments',
-  );
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'eslint-comments');
 
   // Legend:
   // 🟢 - in recommended
@@ -46,7 +43,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-restricted-disable', OFF) /** @since 3.2.0 */
     .addRule('no-use', OFF) /** @since 3.2.0 */
     .addRule('require-description', OFF) /** @since 3.2.0 */
-    .enableConfigTesterForPlugin('@eslint-community/eslint-comments')
+    .enableConfigTesterForPlugin('eslint-comments')
     .addOverrides();
 
   return {
