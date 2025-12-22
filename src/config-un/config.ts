@@ -747,7 +747,8 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     resolvedConfigs.push({
       name: genFlatConfigEntryName('offline-mode'),
       rules: Object.fromEntries(
-        // @ts-expect-error "TS2590: Expression produces a union type that is too complex to represent" for whatever reason
+        // eslint-disable-next-line ts/ban-ts-comment -- error only in `tsc`, not in `tsgo`
+        // @ts-ignore "TS2590: Expression produces a union type that is too complex to represent" for whatever reason
         RULES_TO_DISABLE_IN_OFFLINE_MODE.map((ruleName) => [ruleName, 0]),
       ),
     });
