@@ -90,7 +90,8 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 - 🟢 enabled [\`\`]() rule with the following default options:
 - 🟡 enabled [\`\`]() rule (warning) with the following default options:
 - ❓ enabled conditionally [\`\`]() rule with the following default options:
-- 🔴 not enabled [\`\`]() rule `,
+- 🔴 not enabled [\`\`]() rule
+- ❌ \`\` rule was removed`,
   );
 }
 
