@@ -116,7 +116,7 @@ export default ((context, optionsRaw) => {
         ? []
         : [{allow: allowedObjectSchemaTypes}],
     ) /** @since 1.11.0 */
-    .addRule('no-any', WARNING) /** @since 0.0.1 */ // 🟢
+    .addRule('no-any-schema', WARNING) /** @since 0.0.1 */ /** @aka no-any (before 2.0.0) */ // 🟢
     .addRule('no-empty-custom-schema', ERROR) /** @since 1.1.0 */ // 🟢
     // `.int()` added in v4
     .addRule('no-number-schema-with-int', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
