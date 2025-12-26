@@ -96,6 +96,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-expect-type`              | `expect-type`              |
 | `eslint-plugin-fast-import`              | `fast-import`              |
 | `eslint-plugin-format`                   | `format`                   |
+| `eslint-plugin-github-action`            | `github-actions`           |
 | `@graphql-eslint/eslint-plugin`          | `graphql`                  |
 | `eslint-plugin-header`                   | `header`                   |
 | `eslint-plugin-headers`                  | `headers`                  |
@@ -433,6 +434,7 @@ In the following table, Sub-configs have `/` in their names.
 | `sql`                                                          | ❌                                          | [eslint-plugin-sql](https://npmjs.com/eslint-plugin-sql) (`sql`)                                  | Since v1.0.0                                                                                                                             |
 | `format`                                                       | ❌                                          | [eslint-plugin-format](https://npmjs.com/eslint-plugin-format) (`format`)                         | Since v1.0.0<br>📚 Supports multiple configs                                                                                             |
 | `lockfile`                                                     | ❌                                          | [eslint-plugin-lockfile](https://npmjs.com/eslint-plugin-lockfile) (`lockfile`)                   | Since v1.0.0                                                                                                                             |
+| ![GitHub](./assets/devicon-github.svg) `githubActions`         | ✅ (`.github/workflows` directory exists)   | [eslint-plugin-github-action](https://npmjs.com/eslint-plugin-github-action) (`github-actions`)   | Since v1.0.0                                                                                                                             |
 
 ## How to use
 
@@ -524,6 +526,7 @@ If you would like to rename them back or rename some other plugins, you can use 
 | [`@docusaurus/eslint-plugin`](https://npmjs.com/@docusaurus/eslint-plugin)                                             | `@docusaurus`                       | `docusaurus`      | `@` feels unnecessary                                                                                                |
 | [`@darraghor/eslint-plugin-nestjs-typed`](https://npmjs.com/@darraghor/eslint-plugin-nestjs-typed)                     | `@darraghor/nestjs-typed`           | `nestjs`          | More concise and convenient to use                                                                                   |
 | [`@eslint-community/eslint-plugin-eslint-comments`](https://npmjs.com/@eslint-community/eslint-plugin-eslint-comments) | `@eslint-community/eslint-comments` | `eslint-comments` | More concise and convenient to use                                                                                   |
+| [`eslint-plugin-github-action`](https://npmjs.com/eslint-plugin-github-action)                                         | `github-action`                     | `github-actions`  | Consistent with the platform name (also `-github-actions` plugin seems to not be maintained)                         |
 
 > [!NOTE]
 > If you rename a plugin, you still have to use the original prefix within `overrides`, `overridesAny` and `extraConfigs`. eslint-config-un will rename the rules accordingly for you.

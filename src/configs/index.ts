@@ -32,6 +32,7 @@ import type {FastImportEslintConfigOptions} from './fast-import';
 import type {FileProgressEslintConfigOptions} from './file-progress';
 import type {FormatEslintConfigOptions} from './format';
 import type {FormatjsEslintConfigOptions} from './formatjs';
+import type {GithubActionsEslintConfigOptions} from './github-actions';
 import type {GraphqlEslintConfigOptions} from './graphql';
 import type {HeaderEslintConfigOptions} from './header';
 import type {HeadersEslintConfigOptions} from './headers';
@@ -492,6 +493,17 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> [`@formatjs/icu-messageformat-parser`](https://npmjs.com/@formatjs/icu-messageformat-parser) package is installed
    */
   formatJs: FormatjsEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin with rules for consistent, readable and valid GitHub Actions files.
+   *
+   * 📁 Default `files`: <code>.github/workflows/*.y?(a)ml</code>
+   *
+   * 🧩 Main plugin: [`eslint-plugin-github-actions`](https://npmjs.com/eslint-plugin-github-actions)
+   * ([docs](https://eslint-plugin-github-action.ntnyq.com))
+   * @default true <=> `.github/workflows` directory exists
+   */
+  githubActions: GithubActionsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [GraphQL](https://graphql.org) specific rules.

@@ -240,6 +240,16 @@ export const pluginsLoaders = {
   formatjs: genModuleLoader('formatjs', 'eslint-plugin-formatjs', () =>
     interopDefault(import('eslint-plugin-formatjs')),
   ),
+  'github-actions': genModuleLoader(
+    'github-actions',
+    'eslint-plugin-github-action',
+    () =>
+      // @ts-expect-error types mismatch
+      interopDefault(
+        import('eslint-plugin-github-action'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
   graphql: genModuleLoader(
     'graphql',
     '@graphql-eslint/eslint-plugin',

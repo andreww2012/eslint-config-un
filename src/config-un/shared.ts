@@ -37,7 +37,7 @@ type ValueOrEslintConfigWithValue<T> =
 export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
   object)['rules'] = {
   // TODO add missing reasons for disabling autofixes
-  'case-police/string-check': true,
+  'case-police/string-check': true, // May alter JS strings, object properties, etc
 
   'ts/method-signature-style': true,
   'ts/no-unnecessary-type-arguments': true, // Could remove type aliases
@@ -50,6 +50,8 @@ export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOption
 
   'vitest/prefer-import-in-mock': true, // Might cause runtime/TS errors if imports are removed
   'vitest/prefer-lowercase-title': true, // Strings/symbols shouldn't be changed by autofix
+
+  'github-actions/action-name-casing': true, // May break the name
 };
 
 type UnConfigsSupportingArrays = 'format';

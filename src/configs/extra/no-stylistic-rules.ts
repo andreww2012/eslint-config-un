@@ -269,6 +269,9 @@ const ALL_STYLISTIC_RULES = {
     'prefer-formatted-message': true,
     'prefer-pound-in-plural': true,
   },
+  'github-actions': {
+    'prefer-file-extension': true,
+  },
   graphql: {
     alphabetize: true,
     'description-style': true,

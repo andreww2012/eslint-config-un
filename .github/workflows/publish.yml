@@ -1,3 +1,4 @@
+name: Create release PR/Publish
 on:
   push:
     branches:

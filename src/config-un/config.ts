@@ -1,5 +1,6 @@
 import {isMainThread} from 'node:worker_threads';
 import consola from 'consola';
+import * as findUp from 'empathic/find';
 import globals from 'globals';
 import {createDebug} from 'obug';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
@@ -248,7 +249,6 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
   const getIsConfigEnabled = getIsConfigEnabledContextless.bind(context);
 
   const isAngularEnabled = getIsConfigEnabled('angular', '@angular/core');
-
   Object.assign(context.configsMeta, {
     angular: {enabled: isAngularEnabled},
     antfu: {enabled: getIsConfigEnabled('antfu', false)},
@@ -284,6 +284,9 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     eslintPlugin: {enabled: getIsConfigEnabled('eslintPlugin', false)},
     expectType: {enabled: getIsConfigEnabled('expectType', false)},
     fileProgress: {enabled: getIsConfigEnabled('fileProgress', false)},
+    githubActions: {
+      enabled: getIsConfigEnabled('githubActions', findUp.dir('.github/workflows') != null),
+    },
     graphql: {enabled: getIsConfigEnabled('graphql', 'graphql')},
     header: {enabled: getIsConfigEnabled('header', false)},
     headers: {enabled: getIsConfigEnabled('headers', false)},
@@ -613,6 +616,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('clsx', () => import('../configs/clsx')),
     loadUnConfig('e18e', () => import('../configs/e18e')),
     loadUnConfig('lockfile', () => import('../configs/lockfile')),
+    loadUnConfig('githubActions', () => import('../configs/github-actions')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),

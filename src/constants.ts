@@ -42,7 +42,7 @@ export const GLOB_JSON = '**/*.json' as const;
 export const GLOB_JSONC = '**/*.jsonc' as const;
 export const GLOB_JSON5 = '**/*.json5' as const;
 
-const GLOB_YAML_EXTENSION = 'y?(a)ml' as const;
+export const GLOB_YAML_EXTENSION = 'y?(a)ml' as const;
 export const GLOB_YAML = `**/*.${GLOB_YAML_EXTENSION}` as const;
 
 export const GLOB_TOML = '**/*.toml' as const;
