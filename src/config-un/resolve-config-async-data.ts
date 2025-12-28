@@ -23,6 +23,7 @@ import {
   getValueByPath,
   groupBy,
   isIn,
+  maybeCall,
   objectEntriesUnsafe,
   partition,
   setValueByPath,
@@ -102,7 +103,9 @@ export const resolveConfigAsyncData = async (
         const pluginResult = isIn(pluginPrefix, pluginsLoaders)
           ? await pluginsLoaders[pluginPrefix](context)
           : extraPlugins[pluginPrefix]
-            ? await Promise.resolve(extraPlugins[pluginPrefix]()).then((module) => ({module}))
+            ? await Promise.resolve(maybeCall(extraPlugins[pluginPrefix])).then((module) => ({
+                module,
+              }))
             : null;
         const plugin = pluginResult?.module;
         if (pluginResult && 'packageName' in pluginResult) {

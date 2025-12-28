@@ -81,7 +81,9 @@ type RulesRecordForExtraPlugins<ExtraPlugins extends ExtraPluginsType> = Partial
   Record<
     ObjectValues<{
       [PluginKey in keyof ExtraPlugins & string]: `${PluginKey}/${keyof (Awaited<
-        ReturnType<ExtraPlugins[PluginKey]>
+        ExtraPlugins[PluginKey] extends (...args: unknown[]) => EslintPlugin
+          ? ReturnType<ExtraPlugins[PluginKey]>
+          : ExtraPlugins[PluginKey] & EslintPlugin
       >['rules'] & {}) &
         string}`;
     }>,

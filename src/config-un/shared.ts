@@ -27,7 +27,7 @@ import type {MaybePromise, OmitIndexSignature, OmitStrict, Prettify} from '../ty
 import type {MaybeArray, MaybeFn, fetchPackageInfo} from '../utils';
 import type {ImportPluginReplaceableRules} from './fast-import';
 
-export type ExtraPluginsType = Record<string, () => MaybePromise<EslintPlugin>>;
+export type ExtraPluginsType = Record<string, MaybeFn<MaybePromise<EslintPlugin>>>;
 
 type ValueOrEslintConfigWithValue<T> =
   | T
