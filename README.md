@@ -255,6 +255,11 @@ If these conditions are met, a separate Config will be created with:
 
 In the following table, Sub-configs have `/` in their names.
 
+> [!WARNING]
+> You will notice that oftentimes the configs are automatically enabled if certain dependency(-ies) are installed.
+> This check is done by [`import-meta-resolve` package](https://npmjs.com/import-meta-resolve) and might produce false positives.
+> Please [read more about this here](#how-does-exactly-eslint-config-un-knows-if-some-package-is-installed).
+
 ### Most popular and well known
 
 | Un config name                                      | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`)                                                                                                     | Description/Notes                                                    |
@@ -826,6 +831,19 @@ All the configs are placed inside `src/configs` directory.
 ### How does exactly eslint-config-un knows if some package is installed?
 
 We use [`import-meta-resolve`](https://npmjs.com/import-meta-resolve) package to detect if the package is installed and resolve the path to its' `package.json`.
+
+> [!WARNING]
+> This tool replicates the Node.JS resolution algorithm, so there might be false positives
+> on package detection if your dependencies are installed in such a way that non-direct dependencies
+> can be resolved.
+>
+> If this is the case, at least 3 additional packages will be considered detected as installed
+> regardless of whether they are actually installed in the root of your project, because they are
+> sub-dependencies of eslint-config-un's direct dependencies:
+>
+> - `typescript` (enables `ts` config and friends);
+> - `prettier` (causes Prettier-incompatible rules to be disabled);
+> - `lodash` (enables `youDontNeedLodashUnderscore` config).
 
 ### How can I know which configs will be enabled, for which rules autofix will be disabled, etc.?
 
