@@ -82,6 +82,8 @@ const RULES_TO_DISABLE_IN_OFFLINE_MODE = [
   'node-dependencies/no-deprecated',
   'node-dependencies/no-restricted-deps',
   'node-dependencies/require-provenance-deps',
+  'lockfile/binary-conflicts',
+  'lockfile/integrity',
 ] satisfies AllEslintRuleNames[];
 
 const PLUGINS_CONFIG_NAME = genFlatConfigEntryName('global-setup/plugins');
