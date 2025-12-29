@@ -1,4 +1,4 @@
-import {ERROR, GLOB_JS_TS_X, OFF} from '../constants';
+import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -22,13 +22,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig([
-      'barrel-files',
-      {
-        includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JS_TS_X],
-      },
-    ])
+    ?.addConfig(['barrel-files', {includeDefaultFilesAndIgnores: true}])
     .addRule('avoid-barrel-files', OFF) /** @since 1.0.0 */
     .addRule('avoid-importing-barrel-files', OFF) /** @since 2.0.0 */
     .addRule('avoid-namespace-import', OFF) /** @since 1.0.0 */
