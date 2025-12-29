@@ -917,30 +917,3 @@ export class ConfigEntryBuilder<
     return this.configs;
   }
 }
-
-export const createConfigBuilder = <
-  ExtraPlugins extends ExtraPluginsType,
-  P extends PluginPrefix | null,
->(
-  context: UnConfigContext<ExtraPlugins>,
-  options: NoInfer<
-    UnConfigOptions<ExtraPlugins, P extends null ? OmitIndexSignature<RulesRecord> : P> | boolean
-  >,
-  rulesPrefix: P,
-  disabledIfEmptyFiles = true,
-) => {
-  const optionsResolved = typeof options === 'object' ? options : {};
-  if (
-    !options ||
-    (Array.isArray(optionsResolved.files) &&
-      optionsResolved.files.length === 0 &&
-      disabledIfEmptyFiles)
-  ) {
-    return null;
-  }
-  return new ConfigEntryBuilder<ExtraPlugins, P>(
-    rulesPrefix,
-    typeof options === 'object' ? options : {},
-    context,
-  );
-};

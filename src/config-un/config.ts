@@ -17,7 +17,6 @@ import {
   ConfigEntryBuilder,
   type FlatConfigEntry,
   configIndexProperty,
-  createConfigBuilder,
   genFlatConfigEntryName,
   isUnFlatConfigEntry,
   resolveOverrides,
@@ -446,7 +445,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       : null,
   });
 
-  const rootConfigBuilder = createConfigBuilder(context, {}, '');
+  const rootConfigBuilder = context.createConfigBuilder({}, '');
   rootConfigBuilder
     ?.addConfig('config-files', {
       files: GLOB_CONFIG_FILES,
