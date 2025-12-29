@@ -16,7 +16,7 @@ const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml'] as const;
 
 export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'yml'>,
+    UnConfigOptions<ExtraPlugins, 'yaml'>,
     IgnoresAdditionalOptions<typeof CONFIG_DEFAULT_IGNORES> {
   /**
    * `files` specified in this config will be merged with the default of `['**\/*.y?(a)ml']`. Set this to `true` to avoid that behavior
@@ -33,7 +33,7 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * Enforce a specific casing style for keys. It is not enforced by default, but passing an empty object here will enforce `camelCase` style (default value for this rule).
    * If present, `ignores` values will be merged with `<<`
    */
-  casing?: GetRuleOptions<'yml', 'key-name-casing'>;
+  casing?: GetRuleOptions<'yaml', 'key-name-casing'>;
 
   /**
    * `false` to not enforce quotes style
@@ -56,7 +56,7 @@ export default ((context, optionsRaw) => {
 
   const {enforceExtension} = optionsResolved;
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'yml');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'yaml');
 
   // Legend:
   // 🟣 = in standard
@@ -119,7 +119,7 @@ export default ((context, optionsRaw) => {
     .disableAnyRule('', 'no-irregular-whitespace') // 🟣
     .disableAnyRule('', 'no-unused-vars') // 🟣
     .disableAnyRule('', 'spaced-comment') // 🟣
-    .enableConfigTesterForPlugin('yml')
+    .enableConfigTesterForPlugin('yaml')
     .addOverrides();
 
   if (context.meta.usedPackageManager?.name === 'pnpm') {

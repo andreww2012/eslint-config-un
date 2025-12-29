@@ -532,6 +532,7 @@ If you would like to rename them back or rename some other plugins, you can use 
 | [`@darraghor/eslint-plugin-nestjs-typed`](https://npmjs.com/@darraghor/eslint-plugin-nestjs-typed)                     | `@darraghor/nestjs-typed`           | `nestjs`          | More concise and convenient to use                                                                                   |
 | [`@eslint-community/eslint-plugin-eslint-comments`](https://npmjs.com/@eslint-community/eslint-plugin-eslint-comments) | `@eslint-community/eslint-comments` | `eslint-comments` | More concise and convenient to use                                                                                   |
 | [`eslint-plugin-github-action`](https://npmjs.com/eslint-plugin-github-action)                                         | `github-action`                     | `github-actions`  | Consistent with the platform name (also `-github-actions` plugin seems to not be maintained)                         |
+| [`eslint-plugin-yml`](https://npmjs.com/eslint-plugin-yml)                                                             | `yml`                               | `yaml`            | Consistent with the official language name (also `-yaml` plugin is much less popular)                                |
 
 > [!NOTE]
 > If you rename a plugin, you still have to use the original prefix within `overrides`, `overridesAny` and `extraConfigs`. eslint-config-un will rename the rules accordingly for you.

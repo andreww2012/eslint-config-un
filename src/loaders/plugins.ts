@@ -626,8 +626,8 @@ export const pluginsLoaders = {
     'eslint-plugin-wc',
     () => interopDefault(import('eslint-plugin-wc')) as Promise<EslintPlugin>,
   ),
-  yml: genModuleLoader(
-    'yml',
+  yaml: genModuleLoader(
+    'yaml',
     'eslint-plugin-yml',
     () =>
       interopDefault(

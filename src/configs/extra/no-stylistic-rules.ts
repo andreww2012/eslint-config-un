@@ -903,7 +903,7 @@ const ALL_STYLISTIC_RULES = {
     'file-name-matches-element': true,
     'max-elements-per-file': true,
   },
-  yml: {
+  yaml: {
     'block-mapping': true,
     'block-mapping-colon-indicator-newline': true,
     'block-mapping-question-indicator-newline': true,

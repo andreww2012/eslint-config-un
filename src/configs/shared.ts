@@ -275,7 +275,7 @@ export const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS: AllEslintRuleNames[] = [
   'regexp/optimal-quantifier-concatenation', // [runtime-only]
 
   // misc
-  // won't disable: yml/file-extension, sonarjs/no-identical-functions, eslint-comments/no-unlimited-disable
+  // won't disable: yaml/file-extension, sonarjs/no-identical-functions, eslint-comments/no-unlimited-disable
   'unused-imports/no-unused-imports', // [too-strict]
   'turbo/no-undeclared-env-vars', // [runtime-only]
   'eslint-plugin/no-property-in-node', // [type-aware]
