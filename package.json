@@ -43,6 +43,7 @@
     "print-peer-deps": "tsx scripts/print-peer-deps.ts",
     "rules-finder": "tsx scripts/rules-finder.ts",
     "plugins-finder": "tsx scripts/plugins-finder.ts",
+    "checked-deps-finder": "tsx scripts/check-detected-packages-in-prod-dependencies.ts",
     "spellcheck": "cspell --no-progress --no-summary .",
     "format:check": "prettier --check '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}' --log-level warn",
     "format:fix": "prettier --write '**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,vue}' --log-level warn",
