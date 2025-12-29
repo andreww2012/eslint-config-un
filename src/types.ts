@@ -7,6 +7,8 @@ export type PickKeysNotStartingWith<O, T extends string> = {
 
 export type FalsyValue = false | 0 | 0n | '' | null | undefined;
 
+export type {Nullable} from '@antfu/utils';
+
 export type {
   CamelCase,
   ConditionalKeys,

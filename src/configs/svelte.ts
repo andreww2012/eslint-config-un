@@ -7,6 +7,7 @@ import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
   type RuleNamesForPlugin,
+  type RulesRecordPartial,
   type UnConfigFn,
   type UnConfigOptions,
   assignDefaults,
@@ -63,6 +64,20 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   };
 
   /**
+   * Enforces the presence of `lang="ts"` in `<script>` blocks.
+   *
+   * By default, will inherit `files` and `ignores` from the parent config, and specifying
+   * them explicitly here will *override* the respective property of the parent config.
+   *
+   * Used rules:
+   * - [`block-lang`](https://sveltejs.github.io/eslint-plugin-svelte/rules/block-lang)
+   * @default true <=> `ts` config is enabled
+   */
+  configEnforceTypescriptInScriptSection?:
+    | boolean
+    | UnConfigOptions<ExtraPlugins, Pick<RulesRecordPartial<'svelte'>, 'svelte/block-lang'>>;
+
+  /**
    * Used by some rules like [`valid-compile`](https://sveltejs.github.io/eslint-plugin-svelte/rules/valid-compile).
    * Will be assigned to `languageOptions.parserOptions.svelteConfig` is specified
    * (but only if TypeScript config, `ts`, is enabled).
@@ -79,15 +94,6 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   svelteVersion?: number;
 
   /**
-   * Enforces the presence of `lang="ts"` in `<script>` blocks.
-   *
-   * Used rules:
-   * - [`block-lang`](https://sveltejs.github.io/eslint-plugin-svelte/rules/block-lang)
-   * @default true <=> `ts` config is enabled
-   */
-  enforceTypescriptInScriptSection?: boolean;
-
-  /**
    * Whether [`prettier-plugin-svelte`](https://npmjs.com/prettier-plugin-svelte)
    * is used. If `true`, will disable [a number of stylistic rules](https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts).
    * @default detected automatically
@@ -96,8 +102,8 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
 }
 
 const LATEST_SVELTE_MAJOR_VERSION = 5;
-const DEFAULT_SVELTE_FILES: string[] = [GLOB_SVELTE];
-const DEFAULT_SVELTE_SCRIPT_FILES: string[] = ['**/*.svelte.{js,ts}'];
+const DEFAULT_SVELTE_FILES = [GLOB_SVELTE];
+const DEFAULT_SVELTE_SCRIPT_FILES = ['**/*.svelte.{js,ts}' as const];
 
 const SVELTE_SYSTEM_RULES = new Set<string>([
   'comment-directive',
@@ -116,17 +122,23 @@ export default (async (context, optionsRaw) => {
 
   const optionsResolved = assignDefaults(optionsRaw, {
     files: DEFAULT_SVELTE_FILES, // Must be assigned to options for `ts` config
-    enforceTypescriptInScriptSection: isTypescriptEnabled,
+    configEnforceTypescriptInScriptSection: isTypescriptEnabled,
     svelteVersion:
       context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,
     isPrettierPluginSvelteUsed: await doesPackageExist('prettier-plugin-svelte'),
   } satisfies SvelteEslintConfigOptions);
+  if (optionsResolved.configEnforceTypescriptInScriptSection === true) {
+    optionsResolved.configEnforceTypescriptInScriptSection = {
+      files: optionsResolved.files,
+      ignores: optionsResolved.ignores,
+    };
+  }
 
   const {
     settings: pluginSettings,
     files: parentConfigFiles,
     svelteKitConfig,
-    enforceTypescriptInScriptSection,
+    configEnforceTypescriptInScriptSection,
     svelteVersion,
     isPrettierPluginSvelteUsed,
   } = optionsResolved;
@@ -181,10 +193,7 @@ export default (async (context, optionsRaw) => {
   // 💅 - included in Prettier config: https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts
 
   configBuilder
-    ?.addConfig([
-      'svelte',
-      {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_SVELTE_FILES},
-    ])
+    ?.addConfig(['svelte', {includeDefaultFilesAndIgnores: true}])
     .markCategory('Possible Errors')
     .addRule('infinite-reactive-loop', ERROR) /** @since 2.16.0 */ // 🟢4️⃣
     .addRule('no-dom-manipulating', ERROR) /** @since 2.13.0 */ // 🟢
@@ -210,12 +219,7 @@ export default (async (context, optionsRaw) => {
     // TODO should also set to `off` in `react` config, like in `vue`?
     .addRule('no-target-blank', OFF) /** @since 0.0.4 */
     .markCategory('Best Practices')
-    .addRule('block-lang', ERROR, [
-      {
-        script: ['ts', ...(enforceTypescriptInScriptSection ? [] : [null])],
-        style: ['scss', null],
-      },
-    ]) /** @since 2.18.0 */
+    .addRule('block-lang', OFF) /** @since 2.18.0 */
     .addRule('button-has-type', ERROR) /** @since 0.0.4 */
     .addRule('no-add-event-listener', ERROR) /** @since 3.6.0 */
     .addRule('no-at-debug-tags', ERROR) /** @since 0.0.1 */ // 🟢
@@ -305,6 +309,19 @@ export default (async (context, optionsRaw) => {
     })
     .addOverrides();
 
+  const configBuilderEnforceTypescriptInScriptSection = context.createConfigBuilder(
+    configEnforceTypescriptInScriptSection,
+    'svelte',
+  );
+  configBuilderEnforceTypescriptInScriptSection
+    ?.addConfig('svelte/enforce-typescript-in-script-section')
+    .addRule('block-lang', ERROR, [
+      {
+        script: ['ts', ...(configEnforceTypescriptInScriptSection ? [] : [null])],
+      },
+    ])
+    .addOverrides();
+
   if (isPrettierPluginSvelteUsed) {
     // From `prettier` config
     configBuilder
@@ -327,4 +344,4 @@ export default (async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'svelte'>;
+}) satisfies UnConfigFn<'svelte'> as UnConfigFn<'svelte'>;

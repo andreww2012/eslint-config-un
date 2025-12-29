@@ -11,7 +11,7 @@ import {
 } from '../constants';
 import {type RulesRecord, getRuleUnSeverityAndOptionsFromEntry} from '../eslint';
 import {generatePackageToLoadProperty} from '../loaders';
-import type {ObjectValues, OmitStrict} from '../types';
+import type {Nullable, ObjectValues, OmitStrict} from '../types';
 import {type MaybeFn, isIn, maybeCall, omit, unique} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import type {SvelteEslintConfigOptions} from './svelte';
@@ -532,9 +532,9 @@ export default ((
     configNoTypeAssertion: false,
     configSortTsconfigKeys: false,
     extraFileExtensions: [
-      context.configsMeta.vue.enabled && 'vue',
       context.configsMeta.astro.enabled && 'astro',
       context.configsMeta.svelte.enabled && 'svelte',
+      context.configsMeta.vue.enabled && 'vue',
     ].filter((v) => v !== false),
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
   } satisfies TsEslintConfigOptions);
@@ -557,48 +557,39 @@ export default ((
     GLOB_MDX_SUPPORTED_CODE_BLOCKS,
   ];
 
-  // TODO the following 3 sections are copy-pasty
-
-  if (vueResolvedOptions) {
-    const {enforceTypescriptInScriptSection} = vueResolvedOptions;
-    const tsInVueOptions = {
-      ...vueResolvedOptions,
-      ...(typeof enforceTypescriptInScriptSection === 'object' && enforceTypescriptInScriptSection),
-    };
-
-    if (enforceTypescriptInScriptSection && tsInVueOptions.typescriptRules !== false) {
-      const vueFilesWithTs = tsInVueOptions.files || [];
-      const vueIgnoredFilesWithTs = tsInVueOptions.ignores || [];
-
-      extraFilesNONTypeAware.push(...vueFilesWithTs);
-      if (tsInVueOptions.typescriptRules !== 'only-non-type-aware') {
-        extraFilesTypeAware.push(...vueFilesWithTs);
-      }
-
-      extraFilesToIgnoreNONTypeAware.push(...vueIgnoredFilesWithTs);
-      extraFilesToIgnoreTypeAware.push(...vueIgnoredFilesWithTs);
+  const svelteTsConfig = svelteResolvedOptions?.configEnforceTypescriptInScriptSection;
+  const vueTsConfig = vueResolvedOptions?.configEnforceTypescriptInScriptSection;
+  const vueTypescriptRules = typeof vueTsConfig === 'object' ? vueTsConfig.typescriptRules : null;
+  (
+    [
+      [astroResolvedOptions],
+      [svelteTsConfig],
+      [
+        vueTsConfig,
+        {
+          additionalCondition: vueTypescriptRules !== false,
+          doNotTreatFilesAsTypeAware: vueTypescriptRules === 'only-non-type-aware',
+        },
+      ],
+    ] satisfies [
+      config: Nullable<UnConfigOptions> | boolean,
+      options?: {additionalCondition?: boolean; doNotTreatFilesAsTypeAware?: boolean},
+    ][]
+  ).forEach(([config, {additionalCondition, doNotTreatFilesAsTypeAware} = {}]) => {
+    if (typeof config !== 'object' || !config || additionalCondition === false) {
+      return;
     }
-  }
 
-  if (astroResolvedOptions) {
-    const astroFilesWithTs = astroResolvedOptions.files || [];
-    const astroIgnoredFilesWithTs = astroResolvedOptions.ignores || [];
+    const {files: extraTsFiles = [], ignores: extraTsIgnores = []} = config;
 
-    extraFilesNONTypeAware.push(...astroFilesWithTs);
-    extraFilesTypeAware.push(...astroFilesWithTs);
-    extraFilesToIgnoreNONTypeAware.push(...astroIgnoredFilesWithTs);
-    extraFilesToIgnoreTypeAware.push(...astroIgnoredFilesWithTs);
-  }
+    extraFilesNONTypeAware.push(...extraTsFiles);
+    if (!doNotTreatFilesAsTypeAware) {
+      extraFilesTypeAware.push(...extraTsFiles);
+    }
 
-  if (svelteResolvedOptions) {
-    const svelteFilesWithTs = svelteResolvedOptions.files || [];
-    const svelteIgnoredFilesWithTs = svelteResolvedOptions.ignores || [];
-
-    extraFilesNONTypeAware.push(...svelteFilesWithTs);
-    extraFilesTypeAware.push(...svelteFilesWithTs);
-    extraFilesToIgnoreNONTypeAware.push(...svelteIgnoredFilesWithTs);
-    extraFilesToIgnoreTypeAware.push(...svelteIgnoredFilesWithTs);
-  }
+    extraFilesToIgnoreNONTypeAware.push(...extraTsIgnores);
+    extraFilesToIgnoreTypeAware.push(...extraTsIgnores);
+  });
 
   const filesNONTypeAwareDefault =
     optionsResolved.files?.length === 0 ? [] : [...(optionsResolved.files || TS_FILES_DEFAULT)];

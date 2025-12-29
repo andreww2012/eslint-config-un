@@ -10,13 +10,12 @@ import {
   WARNING,
 } from '../constants';
 import {
-  type FlatConfigEntryFilesOrIgnores,
   type RuleOptionsPerPlugin,
   type RulesRecord,
   getRuleUnSeverityAndOptionsFromEntry,
 } from '../eslint';
 import {generatePackageToLoadProperty} from '../loaders';
-import type {OmitStrict, Prettify} from '../types';
+import type {OmitStrict} from '../types';
 import {
   type MaybeArray,
   allUnionMembers,
@@ -45,6 +44,16 @@ type WellKnownSfcBlocks =
   | 'style[scoped]';
 
 const DEFAULT_PINIA_STORE_NAME_SUFFIX = 'Store';
+
+interface EnforceTypescriptInScriptionSectionConfigOptions<
+  ExtraPlugins extends ExtraPluginsType,
+> extends UnConfigOptions<ExtraPlugins, Pick<RulesRecordPartial<'vue'>, 'vue/block-lang'>> {
+  /**
+   * What `ts` rules will be applied to the specified `files`. If you want more control over which TypeScript rules are applied to which Vue files, use `ts` config options for that.
+   * @default true
+   */
+  typescriptRules?: boolean | 'only-non-type-aware';
+}
 
 interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnConfigOptions<
   ExtraPlugins,
@@ -181,6 +190,21 @@ export interface VueEslintConfigOptions<
   configA11y?: boolean | UnConfigOptions<ExtraPlugins, 'vuejs-accessibility'>;
 
   /**
+   * Enforces the presence of `lang="ts"` in `<script>` sections, see
+   * [vue/block-lang](https://eslint.vuejs.org/rules/block-lang.html) rule for more details.
+   *
+   * By default, will inherit `files` and `ignores` from the parent config, and specifying
+   * them explicitly here will *override* the respective property of the parent config.
+   *
+   * These files will be checked by all the `ts` config rules. You can control this behavior
+   * by using `typescriptRules` option.
+   * @default true <=> `ts` config is enabled
+   */
+  configEnforceTypescriptInScriptSection?:
+    | boolean
+    | EnforceTypescriptInScriptionSectionConfigOptions<ExtraPlugins>;
+
+  /**
    * [`vue-i18n`](https://npmjs.com/vue-i18n) specific rules.
    *
    * By default, uses `files` and `ignores` from the parent config.
@@ -228,29 +252,6 @@ export interface VueEslintConfigOptions<
    * @default auto-detected
    */
   majorVersion?: 2 | 3;
-
-  /**
-   * Enforces the presence of `lang="ts"` in `<script>` sections, see
-   * [vue/block-lang](https://eslint.vuejs.org/rules/block-lang.html) rule for more details.
-   *
-   * By default, will inherit `files` and `ignores` from the parent config, and specifying
-   * them explicitly here will *override* the respective property of the parent config.
-   *
-   * These files will be checked by all the `ts` config rules. You can control this behavior
-   * by using `typescriptRules` option.
-   * @default true <=> `ts` config is enabled
-   */
-  enforceTypescriptInScriptSection?:
-    | boolean
-    | Prettify<
-        FlatConfigEntryFilesOrIgnores & {
-          /**
-           * What `ts` rules will be applied to the specified `files`. If you want more control over which TypeScript rules are applied to which Vue files, use `ts` config options for that.
-           * @default true
-           */
-          typescriptRules?: boolean | 'only-non-type-aware';
-        }
-      >;
 
   /**
    * Almost all [extension rules](https://eslint.vuejs.org/rules/#extension-rules)
@@ -347,10 +348,10 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   const vuePackageMajorVersion = vuePackageInfo?.versions.major;
 
   const optionsResolved = assignDefaults(optionsRaw, {
+    configEnforceTypescriptInScriptSection: isTypescriptEnabled,
     files: DEFAULT_VUE_FILES, // Must be assigned to options for `ts` config
     majorVersion:
       vuePackageMajorVersion === 2 || vuePackageMajorVersion === 3 ? vuePackageMajorVersion : 3,
-    enforceTypescriptInScriptSection: isTypescriptEnabled,
     configA11y: true,
     configI18n: vueI18nPackageInfo != null,
     configNuxt: nuxtPackageInfo != null,
@@ -361,10 +362,16 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     enforcePropsDeclarationStyle: 'runtime',
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
   } satisfies VueEslintConfigOptions);
+  if (optionsResolved.configEnforceTypescriptInScriptSection === true) {
+    optionsResolved.configEnforceTypescriptInScriptSection = {
+      files: optionsResolved.files,
+      ignores: optionsResolved.ignores,
+    };
+  }
 
   const {
     majorVersion: vueMajorVersion,
-    enforceTypescriptInScriptSection,
+    configEnforceTypescriptInScriptSection,
     configA11y,
     configI18n,
     configNuxt,
@@ -466,7 +473,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   // 🟠 - rule from `eslint-config-prettier`
 
   configBuilder
-    ?.addConfig(['vue', {includeDefaultFilesAndIgnores: true, filesFallback: DEFAULT_VUE_FILES}])
+    ?.addConfig(['vue', {includeDefaultFilesAndIgnores: true}])
     .markCategory('Base')
     .addRule('comment-directive', ERROR, [
       // false by default
@@ -609,14 +616,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('order-in-components', ERROR) /** @since 3.2.0 */ // 3️⃣2️⃣
     .addRule('this-in-template', ERROR) /** @since 3.13.0 */ // 3️⃣2️⃣
     .markCategory('Uncategorized')
-    .addRule('block-lang', ERROR, [
-      {
-        script: {
-          lang: 'ts',
-          ...(enforceTypescriptInScriptSection === false && {allowNoLang: true}),
-        },
-      },
-    ]) /** @since 7.15.0 */
+    .addRule('block-lang', OFF) /** @since 7.15.0 */
     .addRule('block-order', ERROR, [
       {
         order: [
@@ -916,6 +916,22 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .disableAnyRule('import', 'no-default-export')
     .disableAnyRule('', 'no-useless-assignment') // False positives in script setup
     .enableConfigTesterForPlugin('vue')
+    .addOverrides();
+
+  const configBuilderEnforceTypescriptInScriptSection = context.createConfigBuilder(
+    configEnforceTypescriptInScriptSection,
+    'vue',
+  );
+  configBuilderEnforceTypescriptInScriptSection
+    ?.addConfig('vue/enforce-typescript-in-script-section')
+    .addRule('block-lang', ERROR, [
+      {
+        script: {
+          lang: 'ts',
+          ...(configEnforceTypescriptInScriptSection === false && {allowNoLang: true}),
+        },
+      },
+    ])
     .addOverrides();
 
   const resolvePathInVueOrNuxtProjectDir = joinPaths.bind(

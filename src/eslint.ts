@@ -940,8 +940,7 @@ export const createConfigBuilder = <
   }
   return new ConfigEntryBuilder<ExtraPlugins, P>(
     rulesPrefix,
-    // eslint-disable-next-line ts/no-unnecessary-condition
-    options && typeof options === 'object' ? options : {},
+    typeof options === 'object' ? options : {},
     context,
   );
 };
