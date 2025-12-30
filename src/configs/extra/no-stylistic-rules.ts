@@ -289,6 +289,7 @@ const ALL_STYLISTIC_RULES = {
   },
   html: {
     'attrs-newline': true,
+    'class-spacing': true,
     'element-newline': true,
     indent: true,
     lowercase: true,

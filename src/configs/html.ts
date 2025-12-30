@@ -93,6 +93,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-inline-styles', OFF) /** @since 0.1.0 */
     .addRule('no-invalid-entity', ERROR) /** @since 0.42.0 */
     .addRule('no-nested-interactive', ERROR) /** @since 0.32.0 */
+    .addRule('no-obsolete-attrs', ERROR) /** @since 0.52.0 */ // 🟢
     .addRule('no-obsolete-tags', ERROR) /** @since 0.6.0 */ // 🟢
     .addRule('no-restricted-attr-values', OFF) /** @since 0.20.0 */
     .addRule('no-restricted-attrs', OFF) /** @since 0.13.0 */
@@ -140,6 +141,7 @@ export default ((context, optionsRaw) => {
     .addRule('require-meta-viewport', ERROR) /** @since 0.7.0 */
     .markCategory('Style')
     .addRule('attrs-newline', OFF) /** @since 0.25.0 */ // 🟢
+    .addRule('class-spacing', ERROR) /** @since 0.52.0 */ // 🟢
     .addRule('element-newline', OFF) /** @since 0.3.0 */ // 🟢
     .addRule('id-naming-convention', OFF) /** @since 0.6.0 */
     .addRule('indent', OFF) /** @since 0.4.0 */ // 🟢
