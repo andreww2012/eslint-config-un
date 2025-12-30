@@ -1,6 +1,6 @@
 // cspell:ignore nonblock
 import type eslintPluginStylistic from '@stylistic/eslint-plugin';
-import {ERROR, GLOB_HTML, GLOB_YAML, OFF, type RuleSeverity} from '../constants';
+import {ERROR, GLOB_HTML, GLOB_YML_YAML, OFF, type RuleSeverity} from '../constants';
 import type {FlatConfigEntry, GetRuleOptions, RuleNamesForPlugin} from '../eslint';
 import {pluginsLoaders} from '../loaders';
 import type {OmitStrict} from '../types';
@@ -185,7 +185,7 @@ export default (async (context, optionsRaw) => {
       // TODO possible to do anything with this?
       // Triggered on all YAML comments because they all are considered Block for whatever reason: https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581
       // Might crash on HTML files (if receives a comment node with `CommentContent` type)
-      ignores: [GLOB_YAML, GLOB_HTML, ...(optionsResolved.ignores || [])],
+      ignores: [GLOB_YML_YAML, GLOB_HTML, ...(optionsResolved.ignores || [])],
     })
     .addRule(...setupRule('spaced-comment', ERROR, ['always', {block: {balanced: true}}]));
 

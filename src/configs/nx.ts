@@ -1,4 +1,4 @@
-import {ERROR, GLOB_JSON, GLOB_TSX, OFF} from '../constants';
+import {ERROR, GLOB_JSON, GLOB_TS_X, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -30,7 +30,7 @@ export default ((context, optionsRaw) => {
       'nx',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_TSX],
+        filesFallback: [GLOB_TS_X],
       },
     ])
     .addRule(

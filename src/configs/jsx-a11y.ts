@@ -1,5 +1,5 @@
 // cspell:ignore spinbutton treegrid menuitemradio menuitemcheckbox
-import {ERROR, GLOB_JS_TS_X_ONLY, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_JSX_TSX, OFF, WARNING} from '../constants';
 import type {OmitIndexSignature, OmitStrict} from '../types';
 import {type MaybeFn, getKeysOfTruthyValues, maybeCall} from '../utils';
 import {
@@ -346,7 +346,7 @@ export default ((
         prefixFinal.includes('a11y') ? prefixFinal : `jsx-a11y/${prefixFinal}`,
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_JS_TS_X_ONLY],
+          filesFallback: [GLOB_JSX_TSX],
         },
       ],
       {

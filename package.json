@@ -25,6 +25,10 @@
     "./snippets": {
       "types": "./dist/snippets.d.mts",
       "default": "./dist/snippets.mjs"
+    },
+    "./globs": {
+      "types": "./dist/globs.d.mts",
+      "default": "./dist/globs.mjs"
     }
   },
   "main": "./dist/index.mjs",

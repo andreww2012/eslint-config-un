@@ -825,6 +825,10 @@ Please refer to JSDoc of exported symbols for proper documentation.
 Utility functions re-exported from [`eslint-no-restricted` package](https://npmjs.com/eslint-no-restricted) which generate `no-restricted-*` rules.
 Please refer to [the package documentation](https://github.com/bradzacher/eslint-no-restricted#readme) for more info.
 
+### `globs` entrypoint
+
+Exports various globs that can be useful for specifying `files` or `ignores` ESLint config options.
+
 ## FAQ
 
 ### How do I add my own flat configs?

@@ -1,6 +1,6 @@
 import type Eslint from 'eslint';
 import globals from 'globals';
-import {GLOB_HTML_ALL} from '../constants';
+import {GLOB_HTM_HTML} from '../constants';
 import {pluginsLoaders} from '../loaders';
 import type {OmitStrict} from '../types';
 import {getKeysOfTruthyValues} from '../utils';
@@ -126,7 +126,7 @@ export default (async (context, optionsRaw) => {
         'js-inline',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: GLOB_HTML_ALL,
+          filesFallback: [GLOB_HTM_HTML],
           doNotIgnoreHtml: true,
         },
       ],
@@ -168,7 +168,7 @@ export default (async (context, optionsRaw) => {
       'js-inline/js-inside-html-inside-markdown',
       {
         doNotIgnoreHtml: true,
-        filesFallback: GLOB_HTML_ALL.map((htmlGlob) => `**/*.md/${htmlGlob}`),
+        filesFallback: [`**/*.md/${GLOB_HTM_HTML}`],
       },
     ],
     {

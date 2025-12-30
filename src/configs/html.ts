@@ -1,5 +1,5 @@
 import type {ParserOptions as HtmlEslintParserOptions} from '@html-eslint/parser';
-import {ERROR, GLOB_HTML_ALL, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_HTM_HTML, OFF, WARNING} from '../constants';
 import {getKeysOfTruthyValues} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
@@ -68,7 +68,7 @@ export default ((context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           doNotIgnoreHtml: true,
-          filesFallback: GLOB_HTML_ALL,
+          filesFallback: [GLOB_HTM_HTML],
           parser: '@html-eslint/parser',
         },
       ],

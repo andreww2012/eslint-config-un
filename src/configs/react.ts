@@ -1,11 +1,4 @@
-import {
-  ERROR,
-  GLOB_JS_TS_X,
-  GLOB_JS_TS_X_ONLY,
-  OFF,
-  type RuleSeverity,
-  WARNING,
-} from '../constants';
+import {ERROR, GLOB_JSX_TSX, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import type {DistributedPick, OmitStrict, Prettify} from '../types';
 import {doesPackageExist} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
@@ -888,7 +881,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'react/allow-default-export-in-jsx-files',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JS_TS_X_ONLY],
+        filesFallback: [GLOB_JSX_TSX],
       },
     ])
     .disableAnyRule('import', 'no-default-export')
@@ -1353,7 +1346,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'react/refresh',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JS_TS_X_ONLY],
+        filesFallback: [GLOB_JSX_TSX],
       },
     ])
     .addRule('only-export-components', ERROR, [

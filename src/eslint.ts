@@ -11,7 +11,7 @@ import type {ExtraPluginsType, UnConfigContext} from './config-un/shared';
 import {
   ERROR,
   GLOB_CSS,
-  GLOB_HTML_ALL,
+  GLOB_HTM_HTML,
   GLOB_MARKDOWN,
   GLOB_MARKDOWN_ALL_CODE_BLOCKS,
   GLOB_MDX,
@@ -548,7 +548,7 @@ export class ConfigEntryBuilder<
     const ignoresInternal = [
       ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
       ...(internalOptions.doNotIgnoreMdx ? [] : [GLOB_MDX]),
-      ...(internalOptions.doNotIgnoreHtml ? [] : GLOB_HTML_ALL),
+      ...(internalOptions.doNotIgnoreHtml ? [] : [GLOB_HTM_HTML]),
       ...(internalOptions.doNotIgnoreCss ? [] : [GLOB_CSS]),
       ...(internalOptions.ignoreMarkdownCodeBlocks ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS] : []),
     ];

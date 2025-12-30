@@ -1,4 +1,4 @@
-import {ERROR, GLOB_TSX, OFF} from '../constants';
+import {ERROR, GLOB_TS_X, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -38,7 +38,7 @@ export default ((context, optionsRaw) => {
   configBuilder
     ?.addConfig([
       'erasable-syntax-only',
-      {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_TSX]},
+      {includeDefaultFilesAndIgnores: true, filesFallback: [GLOB_TS_X]},
     ])
     .addRule('enums', allowedSyntax.enums ? OFF : ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('import-aliases', allowedSyntax.importAliases ? OFF : ERROR) /** @since 0.1.0 */ // 🟢

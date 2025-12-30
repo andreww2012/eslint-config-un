@@ -1,4 +1,4 @@
-import {ERROR, GLOB_YAML_EXTENSION, OFF} from '../constants';
+import {ERROR, GLOB_YML_YAML_EXTENSION, OFF} from '../constants';
 import type {GetRuleOptions} from '../eslint';
 import {
   type ExtraPluginsType,
@@ -55,7 +55,7 @@ export default ((context, optionsRaw) => {
       'github-actions',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [`.github/workflows/*.${GLOB_YAML_EXTENSION}`],
+        filesFallback: [`.github/workflows/*.${GLOB_YML_YAML_EXTENSION}`],
         parser: 'yaml-eslint-parser',
       },
     ])

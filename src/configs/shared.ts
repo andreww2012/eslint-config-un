@@ -1,5 +1,5 @@
 import type {UnConfigContext} from '../config-un/shared';
-import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YAML} from '../constants';
+import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YML_YAML} from '../constants';
 import type {AllEslintRuleNames} from '../eslint';
 import {type AllUnionMembers, pick} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
@@ -178,7 +178,7 @@ export const JSONC_DEFAULT_FILES = [GLOB_JSON, GLOB_JSONC, GLOB_JSON5];
 
 export const TOML_DEFAULT_FILES = [GLOB_TOML];
 
-export const YAML_DEFAULT_FILES = [GLOB_YAML];
+export const YAML_DEFAULT_FILES = [GLOB_YML_YAML];
 
 // 🟣 - in the default *markdown* processor config
 export const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS: AllEslintRuleNames[] = [

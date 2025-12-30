@@ -1,5 +1,5 @@
 // cspell:ignore canparse
-import {ERROR, GLOB_PACKAGE_JSON, GLOB_TSX} from '../constants';
+import {ERROR, GLOB_PACKAGE_JSON, GLOB_TS_X} from '../constants';
 import type {GetRuleOptions, RuleNamesForPlugin, RulesRecordPartial} from '../eslint';
 import {
   type ExtraPluginsType,
@@ -234,7 +234,7 @@ export default ((context, optionsRaw) => {
         'e18e/performance-improvements/type-aware',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_TSX],
+          filesFallback: [GLOB_TS_X],
         },
       ])
       .addRule('no-indexof-equality', ERROR) /** @since 0.0.1 */ // 🔴💭

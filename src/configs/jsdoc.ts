@@ -1,4 +1,4 @@
-import {ERROR, GLOB_TSX, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_TS_X, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -347,7 +347,7 @@ export default ((context, optionsRaw) => {
         'jsdoc/ts',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_TSX],
+          filesFallback: [GLOB_TS_X],
         },
       ],
       {

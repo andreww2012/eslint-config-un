@@ -4,7 +4,7 @@ import {
   ERROR,
   GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
   GLOB_MDX_SUPPORTED_CODE_BLOCKS,
-  GLOB_TSX,
+  GLOB_TS_X,
   GLOB_TS_X_EXTENSION,
   OFF,
   WARNING,
@@ -518,7 +518,7 @@ export interface TsEslintConfigOptions<
   disableNoUnsafeRules?: boolean;
 }
 
-const TS_FILES_DEFAULT = [GLOB_TSX];
+const TS_FILES_DEFAULT = [GLOB_TS_X];
 
 export default ((
   context,
