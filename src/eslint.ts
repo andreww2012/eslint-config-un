@@ -226,7 +226,7 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
         const isFixable = ruleImplementation.meta?.fixable;
         if (
           includeRulesWithoutAutofix &&
-          (!isFixable || (onlyRules && invertOnlyRules === onlyRules.includes(fullRuleName)))
+          (!isFixable || invertOnlyRules === onlyRules?.includes(fullRuleName))
         ) {
           return [fullRuleName, ruleImplementation] as const;
         }
