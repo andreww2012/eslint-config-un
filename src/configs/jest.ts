@@ -1,10 +1,10 @@
 import type {Jest as JestMethods} from '@jest/environment';
 import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import type {FlatConfigEntryForBuilder} from '../eslint';
+import type {FlatConfigEntryForBuilder, RuleOptionsPerPlugin} from '../eslint';
 import {pluginsLoaders} from '../loaders';
 import type {ObjectValues, Prettify} from '../types';
-import {doesPackageExist} from '../utils';
+import {allUnionMembers, doesPackageExist} from '../utils';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
   RULES_TO_DISABLE_IN_TEST_FILES,
@@ -15,7 +15,6 @@ import {
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type RuleNamesForPlugin,
   type RulesRecordPartial,
   type UnConfigFn,
   type UnConfigOptions,
@@ -90,7 +89,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     | boolean
     | UnConfigOptions<
         ExtraPlugins,
-        Pick<RulesRecordPartial<'jest'>, `jest/${(typeof JEST_TYPESCRIPT_RELATED_RULES)[number]}`>
+        Pick<RulesRecordPartial<'jest'>, `jest/${JestRulesForTypescriptFiles}`>
       >;
 
   /**
@@ -177,12 +176,24 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   minAndMaxExpectArgs?: [min: number | undefined, max: number | undefined];
 }
 
-const JEST_TYPESCRIPT_RELATED_RULES = [
-  'no-untyped-mock-factory',
-  'unbound-method',
-] satisfies RuleNamesForPlugin<'jest'>[];
+type JestRulesForTypescriptFiles = keyof Pick<
+  RuleOptionsPerPlugin['jest'],
+  | 'no-error-equal'
+  | 'no-unnecessary-assertion'
+  | 'no-untyped-mock-factory'
+  | 'unbound-method'
+  | 'valid-expect-with-promise'
+>;
 
-const JEST_TYPESCRIPT_RELATED_RULES_SET = new Set<string>(JEST_TYPESCRIPT_RELATED_RULES);
+const JEST_RULES_FOR_TYPESCRIPT_FILES_SET = new Set<string>(
+  allUnionMembers<JestRulesForTypescriptFiles>()([
+    'no-error-equal',
+    'no-unnecessary-assertion',
+    'no-untyped-mock-factory',
+    'unbound-method',
+    'valid-expect-with-promise',
+  ]),
+);
 
 export default (async (context, optionsRaw) => {
   const [eslintPluginJest, isJestExtendedInstalled] = await Promise.all([
@@ -245,6 +256,7 @@ export default (async (context, optionsRaw) => {
   // 🟢 - in recommended
   // 🟡 - in recommended (warns)
   // 🎨 - in style
+  // 💭 - requires type information
 
   configBuilder
     ?.addConfig(
@@ -335,6 +347,7 @@ export default (async (context, optionsRaw) => {
     .addRule('prefer-jest-mocked', ERROR) /** @since 28.6.0 */
     .addRule('prefer-lowercase-title', ERROR) /** @since 25.0.0-next.7 */
     .addRule('prefer-mock-promise-shorthand', ERROR) /** @since 26.7.0 */
+    .addRule('prefer-mock-return-shorthand', ERROR) /** @since 29.11.0 */
     .addRule('prefer-snapshot-hint', OFF) /** @since 26.1.0 */
     .addRule('prefer-spy-on', ERROR) /** @since 21.27.0 */
     .addRule('prefer-strict-equal', WARNING) /** @since 21.21.0 */
@@ -367,7 +380,7 @@ export default (async (context, optionsRaw) => {
     .addRule('valid-title', ERROR) /** @since 22.20.0 */ // 🟢
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest', {
-      rulesToSkipInConfig: (ruleName) => JEST_TYPESCRIPT_RELATED_RULES_SET.has(ruleName),
+      rulesToSkipInConfig: (ruleName) => JEST_RULES_FOR_TYPESCRIPT_FILES_SET.has(ruleName),
     })
     .addOverrides();
 
@@ -393,16 +406,19 @@ export default (async (context, optionsRaw) => {
         ...defaultJestEslintConfig,
       },
     )
+    .addRule('no-error-equal', ERROR) /** @since 29.7.0 */ // 💭
+    .addRule('no-unnecessary-assertion', ERROR) /** @since 29.6.0 */ // 💭
     // Works only on TS files
     .addRule('no-untyped-mock-factory', ERROR) /** @since 27.2.0 */
     // Requires type checking
     // TODO auto-include test files in TS config?
-    .addRule('unbound-method', isTsConfigEnabled ? ERROR : OFF) /** @since 24.3.0 */
+    .addRule('unbound-method', isTsConfigEnabled ? ERROR : OFF) /** @since 24.3.0 */ // 💭
+    .addRule('valid-expect-with-promise', ERROR) /** @since 29.8.0 */ // 💭
     // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
     .disableAnyRule('ts', 'unbound-method')
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest', {
-      rulesToSkipInConfig: (ruleName) => !JEST_TYPESCRIPT_RELATED_RULES_SET.has(ruleName),
+      rulesToSkipInConfig: (ruleName) => !JEST_RULES_FOR_TYPESCRIPT_FILES_SET.has(ruleName),
     })
     .addOverrides();
 

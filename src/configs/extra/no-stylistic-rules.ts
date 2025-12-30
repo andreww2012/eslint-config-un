@@ -335,6 +335,7 @@ const ALL_STYLISTIC_RULES = {
     'prefer-hooks-on-top': true,
     'prefer-lowercase-title': true,
     'prefer-mock-promise-shorthand': true,
+    'prefer-mock-return-shorthand': true,
     'prefer-to-be': true,
     'prefer-to-contain': true,
     'prefer-to-have-length': true,
