@@ -54,7 +54,7 @@ export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOption
   'github-actions/action-name-casing': true, // May break the name
 };
 
-type UnConfigsSupportingArrays = 'format';
+type UnConfigsSupportingArrays = keyof Pick<UnConfigs, 'format' | 'packageJson'>;
 
 export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = never> {
   // #region 🟠 FREQUENTLY USED OPTIONS

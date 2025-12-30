@@ -882,6 +882,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * 🧩 Main plugins:
    * - [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json))
    * - (if `enforceAbsoluteVersion` option is used) [`eslint-plugin-node-dependencies`](https://npmjs.com/eslint-plugin-node-dependencies) ([docs](https://ota-meshi.github.io/eslint-plugin-node-dependencies))
+   *
+   * 📚 Supports multiple configs (array notation)
    * @default true
    */
   packageJson: PackageJsonEslintConfigOptions<ExtraPlugins>;

@@ -121,6 +121,17 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   propertiesAllowedToBeEmpty?: string[];
 
   /**
+   * Indicate that the linted files are for publishable packages.
+   * This enables *at least* all rules enabled in the official
+   * [`recommended-publishable` config](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json#supported-rules).
+   *
+   * If you want to have different configs for publishable and non-publishable `package.json`s,
+   * create multiple `packageJson` configs using array notation.
+   * @default false
+   */
+  publishable?: boolean;
+
+  /**
    * Disallows unnecessary properties in private packages (marked as `"private": true`).
    *
    * Possible values:
@@ -141,6 +152,7 @@ export default ((context, optionsRaw) => {
     order: 'sort-package-json',
     repositoryShorthand: 'object',
     propertiesAllowedToBeEmpty: ['browserslist'],
+    publishable: false,
   } satisfies PackageJsonEslintConfigOptions);
 
   const {
@@ -150,6 +162,7 @@ export default ((context, optionsRaw) => {
     repositoryShorthand,
     propertiesAllowedToBeEmpty,
     disallowUnnecessaryPropertiesInPrivatePackages,
+    publishable,
   } = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'package-json');
@@ -196,23 +209,23 @@ export default ((context, optionsRaw) => {
     .addRule('repository-shorthand', ERROR, [
       {form: repositoryShorthand},
     ]) /** @since 0.5.0 */ /** @aka prefer-repository-shorthand */ // 🟢
-    .addRule('require-attribution', OFF) /** @since 0.81.0 */ // 📦
+    .addRule('require-attribution', publishable ? ERROR : OFF) /** @since 0.81.0 */ // 📦
     .addRule('require-author', OFF) /** @since 0.22.0 */
     .addRule('require-bugs', OFF) /** @since 0.50.0 */
     .addRule('require-bundleDependencies', OFF) /** @since 0.50.0 */
     .addRule('require-dependencies', OFF) /** @since 0.50.0 */
-    .addRule('require-description', OFF) /** @since 0.31.0 */ // 🟢
+    .addRule('require-description', publishable ? ERROR : OFF) /** @since 0.31.0 */ // 🟢
     .addRule('require-devDependencies', OFF) /** @since 0.50.0 */
     .addRule('require-engines', OFF) /** @since 0.28.0 */
-    .addRule('require-exports', OFF) /** @since 0.80.0 */ // 📦
-    .addRule('require-files', OFF) /** @since 0.26.0 */ // 📦
+    .addRule('require-exports', publishable ? ERROR : OFF) /** @since 0.80.0 */ // 📦
+    .addRule('require-files', publishable ? ERROR : OFF) /** @since 0.26.0 */ // 📦
     .addRule('require-keywords', OFF) /** @since 0.25.0 */
-    .addRule('require-license', OFF) /** @since 0.57.0 */
+    .addRule('require-license', publishable ? ERROR : OFF) /** @since 0.57.0 */
     .addRule('require-name', ERROR) /** @since 0.24.0 */ // 🟢
     .addRule('require-optionalDependencies', OFF) /** @since 0.50.0 */
     .addRule('require-peerDependencies', OFF) /** @since 0.50.0 */
-    .addRule('require-sideEffects', OFF) /** @since 0.82.0 */ // 📦
-    .addRule('require-type', OFF) /** @since 0.33.0 */ // 🟢
+    .addRule('require-sideEffects', publishable ? ERROR : OFF) /** @since 0.82.0 */ // 📦
+    .addRule('require-type', publishable ? ERROR : OFF) /** @since 0.33.0 */ // 🟢
     .addRule('require-types', OFF) /** @since 0.29.0 */
     .addRule('require-version', ERROR) /** @since 0.23.0 */ // 🟢
     .addRule('restrict-dependency-ranges', OFF) /** @since 0.30.0 */
