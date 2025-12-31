@@ -1,9 +1,12 @@
-nodeLinker: hoisted
-
 allowBuilds:
   esbuild: true
   lefthook: true
+  puppeteer: true
   unrs-resolver: true
+
+blockExoticSubdeps: true
+
+nodeLinker: hoisted
 
 packageImportMethod: clone-or-copy
 
@@ -28,9 +31,8 @@ peerDependencyRules:
     '@typescript-eslint/utils@8.38>typescript': '*'
     eslint-plugin-no-type-assertion@1.3>eslint: '*'
 
-blockExoticSubdeps: true
-
 trustPolicy: no-downgrade
+
 trustPolicyExclude:
   - '@oxc-parser/binding-darwin-arm64@0.73.2'
   - '@oxc-parser/binding-darwin-x64@0.73.2'
