@@ -355,6 +355,12 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       }),
     },
     tanstackQuery: {enabled: getIsConfigEnabled('tanstackQuery', '@tanstack/query-core')},
+    tanstackRouter: {
+      enabled: getIsConfigEnabled('tanstackRouter', [
+        '@tanstack/react-router',
+        '@tanstack/solid-router',
+      ]),
+    },
     testingLibrary: {enabled: getIsConfigEnabled('testingLibrary', '@testing-library/dom')},
     toml: {enabled: getIsConfigEnabled('toml', false)},
     treeShaking: {enabled: getIsConfigEnabled('treeShaking', false)},
@@ -618,6 +624,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('e18e', () => import('../configs/e18e')),
     loadUnConfig('lockfile', () => import('../configs/lockfile')),
     loadUnConfig('githubActions', () => import('../configs/github-actions')),
+    loadUnConfig('tanstackRouter', () => import('../configs/tanstack-router')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),

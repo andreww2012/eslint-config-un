@@ -184,6 +184,7 @@
     "@smarttools/eslint-plugin-rxjs": "1.0.22",
     "@sveltejs/kit": "2.49.2",
     "@tanstack/eslint-plugin-query": "5.91.2",
+    "@tanstack/eslint-plugin-router": "1.141.0",
     "@types/eslint-plugin-security": "3.0.0",
     "@types/eslint-plugin-tailwindcss": "3.17.0",
     "@types/estree": "1.0.8",
@@ -310,6 +311,7 @@
     "@nx/eslint-plugin": "^22.3.1",
     "@smarttools/eslint-plugin-rxjs": "^1.0.22",
     "@tanstack/eslint-plugin-query": "^5.91.2",
+    "@tanstack/eslint-plugin-router": "^1.141.0",
     "@unocss/eslint-plugin": "^66.5.10",
     "@vitest/eslint-plugin": "^1.6.1",
     "astro-eslint-parser": "^1.2.2",
@@ -424,6 +426,9 @@
       "optional": true
     },
     "@tanstack/eslint-plugin-query": {
+      "optional": true
+    },
+    "@tanstack/eslint-plugin-router": {
       "optional": true
     },
     "@unocss/eslint-plugin": {

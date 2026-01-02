@@ -193,6 +193,8 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'typescript',
   'graphql',
   '@tanstack/query-core',
+  '@tanstack/react-router',
+  '@tanstack/solid-router',
   'storybook',
   'tailwindcss',
   'stylelint',

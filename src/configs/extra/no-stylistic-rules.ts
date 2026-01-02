@@ -142,6 +142,9 @@ const ALL_STYLISTIC_RULES = {
   '@tanstack/query': {
     // None
   },
+  '@tanstack/router': {
+    // None
+  },
   '@unocss': {
     order: true,
     'order-attributify': true,

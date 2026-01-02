@@ -84,6 +84,7 @@ import type {StylisticEslintConfigOptions} from './stylistic';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {TailwindEslintConfigOptions} from './tailwind';
 import type {TanstackQueryEslintConfigOptions} from './tanstack-query';
+import type {TanstackRouterEslintConfigOptions} from './tanstack-router';
 import type {TestingLibraryEslintConfigOptions} from './testing-library';
 import type {TomlEslintConfigOptions} from './toml';
 import type {TreeShakingEslintConfigOptions} from './tree-shaking';
@@ -1117,6 +1118,17 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> [`@tanstack/query-core`](https://npmjs.com/@tanstack/query-core) package is installed (dependency of all `@tanstack/*-query` packages)
    */
   tanstackQuery: TanstackQueryEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [TanStack Router](https://tanstack.com/router) specific rules.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-tanstack-router`](https://npmjs.com/eslint-plugin-tanstack-router)
+   * ([docs](https://tanstack.com/router/latest/docs/eslint/eslint-plugin-router))
+   * @default true <=> [`foo`](https://npmjs.com/foo) package is installed
+   */
+  tanstackRouter: TanstackRouterEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Testing Library](https://testing-library.com) specific rules.
