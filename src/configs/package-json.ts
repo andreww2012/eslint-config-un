@@ -219,6 +219,7 @@ export default ((context, optionsRaw) => {
     .addRule('require-engines', OFF) /** @since 0.28.0 */
     .addRule('require-exports', publishable ? ERROR : OFF) /** @since 0.80.0 */ // 📦
     .addRule('require-files', publishable ? ERROR : OFF) /** @since 0.26.0 */ // 📦
+    .addRule('require-homepage', OFF) /** @since 0.87.1 */
     .addRule('require-keywords', OFF) /** @since 0.25.0 */
     .addRule('require-license', publishable ? ERROR : OFF) /** @since 0.57.0 */
     .addRule('require-name', ERROR) /** @since 0.24.0 */ // 🟢
@@ -263,6 +264,7 @@ export default ((context, optionsRaw) => {
     .addRule('valid-license', ERROR) /** @since 0.45.0 */ // 🟢
     .addRule('valid-main', ERROR) /** @since 0.69.0 */ // 🟢
     .addRule('valid-man', ERROR) /** @since 0.74.0 */ // 🟢
+    .addRule('valid-module', ERROR) /** @since 0.86.0 */ // 🟢
     .addRule('valid-name', ERROR) /** @since 0.9.0 */ // 🟢
     .addRule('valid-optionalDependencies', ERROR) /** @since 0.49.0 */ // 🟢
     .addRule('valid-os', ERROR) /** @since 0.71.0 */ // 🟢
