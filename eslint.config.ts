@@ -20,6 +20,11 @@ export default eslintConfig({
     js: {
       overrides: {
         'arrow-body-style': 2,
+        'max-classes-per-file': (severity, options) => ({
+          severity,
+          options,
+          ignores: ['scripts/**'],
+        }),
       },
     },
     lockfile: {

@@ -16,7 +16,7 @@ export default {
     '**/*.svg',
     'patches/**',
     'scripts/temp/**', // TODO why gitignore doesn't work?
-    'data/known-eslint-plugins.json',
+    'data/eslint-plugins-db.json',
   ],
   words: [
     // Names

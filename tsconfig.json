@@ -5,6 +5,10 @@
 
   // Based on https://www.totaltypescript.com/tsconfig-cheat-sheet
   "compilerOptions": {
+    "plugins": [
+      {"name": "@effect/language-service"},
+    ],
+
     /* Base Options: */
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -45,5 +49,5 @@
     // "composite": true,
     // "sourceMap": true,
     // "declarationMap": true
-  }
+  },
 }
