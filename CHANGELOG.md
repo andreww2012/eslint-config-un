@@ -1,5 +1,61 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.5
+
+### Minor Changes
+
+- 1ece5ed: html: updated [`@html-eslint/*` from v0.51.0 to v0.52.1](https://github.com/yeonjuan/html-eslint/compare/v0.51.0...v0.52.1):
+  - 🟢 enabled [`class-spacing`](https://github.com/yeonjuan/html-eslint/blob/HEAD/docs/rules/class-spacing.md) rule
+  - 🟢 enabled [`no-obsolete-attrs`](https://github.com/yeonjuan/html-eslint/blob/HEAD/docs/rules/no-obsolete-attrs.md) rule
+
+- 227d727: Added a new config `e18e` which uses [`@e18e/eslint-plugin`](https://npmjs.com/@e18e/eslint-plugin), ❓ enabled if `defaultConfigsStatus` is set to `misc-enabled`
+- 54e7eed: packageJson: added a new option, `publishable`, to control whether additional rules meant for publishable `package.json`s should be turned on.
+  You can also now specify multiple `packageJson` configs
+- 7fcd33f: packageJson: updated [`eslint-plugin-package-json` from v0.85.0 to v0.87.1](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.85.0...v0.87.1):
+  - 🟢 enabled [`valid-module`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-module.md) rule
+  - 🔴 not enabled [`require-homepage`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-homepage.md) rule
+
+- 7048892: Added a new config `tanstackRouter` which uses [`@tanstack/eslint-plugin-router`](https://npmjs.com/@tanstack/eslint-plugin-router), ❓ enabled automatically if `@tanstack/react-router` or `@tanstack/solid-router` package is installed
+- 375da69: Added a new config `githubActions` which uses [`eslint-plugin-github-action`](https://npmjs.com/eslint-plugin-github-action), ❓ enabled if `.github/workflows` directory exists
+- 4afcfdf: jest: updated [`eslint-plugin-jest` from v29.5.0 to v29.11.2](https://github.com/jest-community/eslint-plugin-jest/compare/v29.5.0...v29.11.2):
+  - 🟢 enabled [`no-error-equal`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-error-equal.md) rule in ⚙️ `typescript` sub-config
+  - 🟢 enabled [`no-unnecessary-assertion`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-unnecessary-assertion.md) rule in ⚙️ `typescript` sub-config
+  - 🟢 enabled [`prefer-mock-return-shorthand`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-mock-return-shorthand.md)
+  - 🟢 enabled [`valid-expect-with-promise`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect-with-promise.md) rule in ⚙️ `typescript` sub-config
+
+- 2b6d4ed: Added a new config `sql` which uses [`eslint-plugin-sql`](https://npmjs.com/eslint-plugin-sql), ❌ disabled by default
+- 0a1390d: [**BREAKING**] yaml: changed the default prefix of `eslint-plugin-yml` to `yaml` instead of `yml`
+- 251afbb: Added a new package entrypoint, `globs`, which exports various globs that can be useful for specifying `files` or `ignores` ESLint config options
+- 3411e57: [**BREAKING**] svelte, vue: renamed `enforceTypescriptInScriptSection` option to `configEnforceTypescriptInScriptSection` and made it a proper sub-config
+- 4080234: Added a new config `lockfile` which uses [`eslint-plugin-lockfile`](https://npmjs.com/eslint-plugin-lockfile), ❓ enabled if `defaultConfigsStatus` is set to `misc-enabled`
+- d8c0709: Added a new config `barrelFiles` which uses [`eslint-plugin-barrel-files`](https://npmjs.com/eslint-plugin-barrel-files), ❌ disabled by default
+- 2b2beb4: Added a new config `format` which uses [`eslint-plugin-format`](https://npmjs.com/eslint-plugin-format), ❌ disabled by default, and supporting multiple configs
+- 9ec9343: [**BREAKING**] zod: updated [`eslint-plugin-zod-x` from v1.13.2 to v2.0.0](https://github.com/marcalexiei/eslint-plugin-zod-x/compare/v1.13.2...v2.0.0):
+  - 🔄 `no-any` rule was renamed to [`no-any-schema`](https://github.com/marcalexiei/eslint-plugin-zod-x/blob/HEAD/docs/rules/no-any-schema.md)
+
+- c7da75e: Added a new config `clsx` which uses [`eslint-plugin-clsx`](https://npmjs.com/eslint-plugin-clsx), ❌ disabled by default
+
+### Patch Changes
+
+- ddfde86: `extraPlugins` can now be passed as objects
+- 54ade9b: react: updated [`eslint-plugin-react-you-might-not-need-an-effect` from v0.7.0 to v0.8.1](https://github.com/NickvanDyke/eslint-plugin-react-you-might-not-need-an-effect/compare/8ed4285ccd5dfbed4ac4b61afc778e2e5ee90d4d...983312bec60a996f2d8ffb2e7a1bcd4292925880):
+  - ❌ `no-manage-parent` rule was removed
+
+- ce3cd08: ts: updated [`typescript-eslint` from v8.50.1 to v8.51.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.50.1...v8.51.0)
+- 227d727: depend: removed from `misc-enabled` configs in favor of `e18e` config
+- 7782adf: lockfile: added [`binary-conflicts`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/binary-conflicts.md) and [`integrity`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/integrity.md) rules to the list of rules that will be disabled in offline mode
+- 6e5d55c: [**BREAKING**] eslintComments: change default plugin prefix from `@eslint-community/eslint-comments` to `eslint-comments`
+- 6b43d1c: clsx: updated [`eslint-plugin-clsx` from v0.0.11 to v0.0.12](https://github.com/temoncher/eslint-plugin-clsx/compare/v0.0.11...v0.0.12)
+- 68838bf: ts: updated [`typescript-eslint` from v8.50.0 to v8.50.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.50.0...v8.50.1)
+- 457b79c: barrelFiles: the config is now applied to all files by default
+- a270080: turbo: updated [`eslint-plugin-turbo` from v2.6.3 to v2.7.1](https://github.com/vercel/turborepo/compare/v2.6.3...v2.7.1)
+- 650c82c: vitest: updated [`@vitest/eslint-plugin` from v1.5.2 to v1.6.1](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.5.2...v1.6.1):
+  - 🟢 enabled [`no-unneeded-async-expect-function`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-unneeded-async-expect-function.md) rule
+  - 🟢 enabled [`prefer-to-have-been-called-times`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-to-have-been-called-times.md) rule
+  - ❌ `require-import-vi-mock` rule was removed
+
+- b461206: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.1.1 to v7.1.2](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.1.1...v7.1.2)
+
 ## 1.0.0-beta.4
 
 ### Minor Changes
