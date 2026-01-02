@@ -13,12 +13,19 @@ const EslintPluginsDbZod = z.record(
           'deprecated',
           'missing' /* Missing from npm */,
           'fetched' /* Info fetched */,
-          'tba' /* To be added to eslint-config-un */,
           'added' /* Already added to eslint-config-un */,
         ]),
       }),
       z.strictObject({
-        status: z.literal('declined'),
+        status: z.literal('accepted') /* To be added to eslint-config-un */,
+
+        /**
+         * Min: 1 (highest), max: 3
+         */
+        priority: z.int().min(1).max(3),
+      }),
+      z.strictObject({
+        status: z.enum(['declined', 'uncertain' /* Maybe should be added to eslint-config-un? */]),
         reason: z.string().min(1),
       }),
     ])

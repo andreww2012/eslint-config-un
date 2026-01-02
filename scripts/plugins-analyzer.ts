@@ -29,7 +29,8 @@ const ESLINT_PLUGIN_STATUS_EMOJIS: Record<(ObjectValues<EslintPluginsDb> & {})['
     declined: '❌',
     deprecated: '⚠️',
     missing: '🚫',
-    tba: '➕',
+    uncertain: '❓',
+    accepted: '➕',
     fetched: '⏭️',
   };
 
@@ -122,7 +123,7 @@ export const analyze = Effect.gen(function* () {
       );
 
       const hasFinalStatus = Boolean(
-        status && status.status !== 'tba' && status.status !== 'fetched',
+        status && status.status !== 'accepted' && status.status !== 'fetched',
       );
 
       const score = hasFinalStatus
@@ -154,7 +155,7 @@ export const analyze = Effect.gen(function* () {
         const depsCount = plugin.allDirectDependencies.length;
         const pluginsDepsCount = plugin.directDependenciesOtherEslintPlugins.length;
         return {
-          'Plugin name': `${status == null ? '' : `${ESLINT_PLUGIN_STATUS_EMOJIS[status]}${status === 'declined' ? ` (${plugin.status?.reason})` : ''}`}https://npmjs.com/${styleText('blueBright', plugin.name)}`,
+          'Plugin name': `${status == null ? '' : `${ESLINT_PLUGIN_STATUS_EMOJIS[status]}${status === 'declined' ? `(${plugin.status?.reason})` : ''}`}${status === 'accepted' ? `(${plugin.status?.priority})` : ''} https://npmjs.com/${styleText('blueBright', plugin.name)}`,
 
           'Deps (plugins)': `${styleText(depsCount === 0 ? 'green' : depsCount < 5 ? 'yellow' : 'red', depsCount.toString())}${pluginsDepsCount > 0 ? styleText(pluginsDepsCount < 2 ? 'yellow' : 'red', ` (${pluginsDepsCount})`) : ''}`,
 
