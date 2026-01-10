@@ -860,13 +860,12 @@ We use [`import-meta-resolve`](https://npmjs.com/import-meta-resolve) package to
 > on package detection if your dependencies are installed in such a way that non-direct dependencies
 > can be resolved.
 >
-> If this is the case, at least 3 additional packages will be considered detected as installed
+> If this is the case, at least 2 additional packages will be considered detected as installed
 > regardless of whether they are actually installed in the root of your project, because they are
 > sub-dependencies of eslint-config-un's direct dependencies:
 >
 > - `typescript` (enables `ts` config and friends);
-> - `prettier` (causes Prettier-incompatible rules to be disabled);
-> - `lodash` (enables `youDontNeedLodashUnderscore` config).
+> - `prettier` (causes Prettier-incompatible rules to be disabled).
 
 ### How can I know which configs will be enabled, for which rules autofix will be disabled, etc.?
 
