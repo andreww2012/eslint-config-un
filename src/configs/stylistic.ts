@@ -107,7 +107,6 @@ export default (async (context, optionsRaw) => {
     .addRule(...setupRule('jsx-pascal-case', OFF)) /** @since 1.6.0 */
     .addRule(...setupRule('jsx-quotes', OFF)) /** @since 0.0.6 */ // 🟢
     .addRule(...setupRule('jsx-self-closing-comp', OFF)) /** @since 0.1.0 */
-    .addRule(...setupRule('jsx-sort-props', OFF)) /** @since 0.0.7 */
     .addRule(...setupRule('jsx-tag-spacing', OFF)) /** @since 0.0.7 */ // 🟢
     .addRule(...setupRule('jsx-wrap-multilines', OFF)) /** @since 0.0.7 */ // 🟢
     .addRule(...setupRule('key-spacing', OFF)) /** @since 0.0.4 */ // 🟢
