@@ -8,7 +8,8 @@ import {
 
 interface EslintPluginJsdocSettings {
   /**
-   * Disables all rules for the comment block on which a `@private` tag (or `@access private`) occurs.
+   * Disables all rules for the comment block on which a `@private` tag
+   * (or `@access private`) occurs.
    * @default false
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#allow-tags-private-or-internal-to-disable-rules-for-that-comment-block
    */
@@ -22,14 +23,16 @@ interface EslintPluginJsdocSettings {
   ignoreInternal?: boolean;
 
   /**
-   * Indicates how many line breaks (if any) will be checked to find a jsdoc comment block before the given code block
+   * Indicates how many line breaks (if any) will be checked to find a jsdoc comment block
+   * before the given code block.
    * @default 0
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#maxlines-and-minlines
    */
   minLines?: number;
 
   /**
-   * Indicates how many line breaks (if any) will be checked to find a jsdoc comment block before the given code block
+   * Indicates how many line breaks (if any) will be checked to find a jsdoc comment block
+   * before the given code block.
    * @default 1
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#maxlines-and-minlines
    */
@@ -43,7 +46,8 @@ interface EslintPluginJsdocSettings {
   mode?: 'typescript' | 'clojure' | 'jsdoc';
 
   /**
-   * Preferred alias name for a JSDoc tag. The format of the configuration is: `<primary tag name>`: `<preferred alias name>`
+   * Preferred alias name for a JSDoc tag. The format of the configuration is:
+   * `<primary tag name>`: `<preferred alias name>`
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#alias-preference
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#default-preferred-aliases for the default list of aliases
    */
@@ -64,7 +68,8 @@ interface EslintPluginJsdocSettings {
   overrideReplacesDocs?: boolean;
 
   /**
-   * Allows the omission of the tags corresponding to `require-*` rules if `@augments` or its alias `@extends` is present.
+   * Allows the omission of the tags corresponding to `require-*` rules if `@augments`
+   * or its alias `@extends` is present.
    * @default false
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#overrideaugmentsextendsimplementsignore-without-accompanying-paramdescriptionexamplereturnsthrowsyields
    */
@@ -78,7 +83,8 @@ interface EslintPluginJsdocSettings {
   implementsReplacesDocs?: boolean;
 
   /**
-   * Configures [`check-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/check-types.md) and [`no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md) rules.
+   * Configures [`check-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/check-types.md)
+   * and [`no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md) rules.
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#settings-to-configure-check-types-and-no-undefined-types
    */
   preferredTypes?: Partial<
@@ -93,7 +99,8 @@ interface EslintPluginJsdocSettings {
           message: string;
 
           /**
-           * Use string to specify the type to be preferred in its place (and which fix mode can replace). Use `false` for forbidding the type
+           * Use string to specify the type to be preferred in its place (and which fix mode
+           * can replace). Use `false` for forbidding the type
            */
           replacement?: string | false;
 
@@ -106,7 +113,16 @@ interface EslintPluginJsdocSettings {
   >;
 
   /**
-   * An object indicating tags whose types and names/namepaths (whether defining or referencing namepaths) will be checked, subject to configuration.
+   * Set to `true` to allow JSDoc blocks to be found across invocations such
+   * as call expressions and `new` expressions. Used by
+   * [`require-jsdoc`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-jsdoc.md).
+   * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/main/.README/settings.md#skipinvokedexpressionsforcommentfinding
+   */
+  skipInvokedExpressionsForCommentFinding?: boolean;
+
+  /**
+   * An object indicating tags whose types and names/namepaths (whether defining or referencing
+   * namepaths) will be checked, subject to configuration.
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#structuredtags
    */
   structuredTags?: Record<
@@ -154,7 +170,8 @@ interface EslintPluginJsdocSettings {
   )[];
 
   /**
-   * Configures [`require-param-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-type.md) and [`require-param-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-description.md) rules.
+   * Configures [`require-param-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-type.md)
+   * and [`require-param-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-description.md) rules.
    */
   // Note: undocumented on the settings readme, only on rule-specific docs:
   // https://github.com/gajus/eslint-plugin-jsdoc/blob/d2c60403bb55a14eadbf49fc9937caad14a29cde/docs/rules/require-param-type.md?plain=1#L17
