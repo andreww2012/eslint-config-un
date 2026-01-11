@@ -1076,13 +1076,13 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     .addRule(
       'no-duplicate-key',
       getDoubleRuleSeverity(NO_DUPLICATE_OR_MISSING_KEY_SEVERITY, true),
-    ) /** @since 0.3.6 */ // 🟢 🔄️`jsx-key` (`warnOnDuplicates` option)
+    ) /** @since 0.3.6 */ // 🔄️`jsx-key` (`warnOnDuplicates` option)
     // "In React 19, forwardRef is no longer necessary. Pass ref as a prop instead."
     .addRule('no-forward-ref', getSeverity(noLegacyApis.forwardRef)) /** @since 1.18.0 */ // 🟡 🔢19.0.0
     .addRule(
       'no-implicit-key',
       WARNING,
-    ) /** @since 0.6.1 */ /** @aka no-spreading-key */ /** @aka no-spreading-key */ // 🟡
+    ) /** @since 0.6.1 */ /** @aka no-spreading-key */ /** @aka no-spreading-key */
     .addRule(
       'no-missing-component-display-name',
       getDoubleRuleSeverity(NO_MISSING_COMPONENT_OR_CONTEXT_DISPLAY_NAME_SEVERITY, true),
@@ -1188,7 +1188,9 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       '@eslint-react/naming-convention',
       'use-state',
       getDoubleRuleSeverity(USE_STATE_SEVERITY, true),
+      [{enforceAssignment: true}],
     ) /** @since 0.9.3 */ // 🔄️`hook-use-state`
+    .addAnyRule('@eslint-react/naming-convention', 'ref-name', ERROR) /** @since 2.5.0 */ // 🟡
     .markCategory('Debug')
     .addAnyRule('@eslint-react/debug', 'class-component', OFF) /** @since 0.3.3 */
     .addAnyRule('@eslint-react/debug', 'function-component', OFF) /** @since 0.3.0 */
