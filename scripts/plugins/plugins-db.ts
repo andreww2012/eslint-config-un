@@ -65,7 +65,7 @@ const writeEslintPluginsDb = (data: EslintPluginsDb) =>
 
     yield* fs.writeFileString(
       temporaryFilePath,
-      jsonStringifyCompact(dataWritten, {maxLength: 100}),
+      jsonStringifyCompact(dataWritten, {maxLength: 1000}),
     );
 
     yield* fs.rename(temporaryFilePath, knownEslintPluginsPath);
