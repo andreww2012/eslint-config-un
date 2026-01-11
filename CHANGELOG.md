@@ -1,5 +1,59 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.6
+
+### Minor Changes
+
+- fc2bee9: packageJson: updated [`eslint-plugin-package-json` from v0.87.1 to v0.88.1](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.87.1...v0.88.1):
+  - ❓ enabled [`require-repository`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-repository.md) rule if `publishable` option is set to `true`
+  - 🔴 not enabled [`require-scripts`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-scripts.md) rule
+
+- 045ce49: vitest: updated [`@vitest/eslint-plugin` from v1.6.1 to v1.6.6](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.6.1...v1.6.6):
+  - Set [`expectAssertions: true`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-conditional-expect.md#expectassertions) for [`no-conditional-expect`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-conditional-expect.md) rule
+  - Set [`fixable: false`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/main/docs/rules/prefer-import-in-mock.md#options) for [`prefer-import-in-mock`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-import-in-mock.md) rule and do not disable autofix globally
+  - 🟢 enabled [`prefer-mock-return-shorthand`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-mock-return-shorthand.md) rule and added it to `noStylistic` config
+  - 🔴 not enabled [`require-test-timeout`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/require-test-timeout.md) rule
+
+- 4570d43: eslintPlugin: updated [`eslint-plugin-eslint-plugin` from v7.2.0 to v7.3.0](https://github.com/eslint-community/eslint-plugin-eslint-plugin/compare/v7.2.0...v7.3.0):
+  - 🟢 enabled [`no-matching-violation-suggest-message-ids`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-matching-violation-suggest-message-ids.md) rule
+
+- 51901c8: react: updated [`eslint-plugin-react-debug` from v2.3.13 to v2.5.5](https://github.com/Rel1cx/eslint-react/compare/v2.3.13...v2.5.5)
+  - Set [`enforceAssignment: true`](https://www.eslint-react.xyz/docs/rules/naming-convention-use-state#enforceassignment) for [`use-state`](https://www.eslint-react.xyz/docs/rules/naming-convention-use-state)
+  - 🟢 enabled [`ref-name`](https://www.eslint-react.xyz/docs/rules/naming-convention-ref-name) rule
+
+### Patch Changes
+
+- cc071af: e18e: disabled `performance-improvements/type-aware` config with type-aware rules on Markdown code blocks, otherwise rules might crash
+- 643dd82: nx: updated [`@nx/eslint-plugin` from v22.3.1 to v22.3.3](https://github.com/nrwl/nx/compare/22.3.1...22.3.3)
+- 57e015e: jest: updated [`eslint-plugin-jest` from v29.11.2 to v29.12.1](https://github.com/jest-community/eslint-plugin-jest/compare/v29.11.2...v29.12.1)
+- 1daa60a: ts: updated [`typescript-eslint` from v8.51.0 to v8.52.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.51.0...v8.52.0)
+- ee920d6: [**BREAKING**] toml: updated [`toml-eslint-parser` from v0.10.1 to v1.0.0](https://github.com/ota-meshi/toml-eslint-parser/compare/v0.10.1...v1.0.0):
+  - Sets the default TOML version to `1.1.0`
+
+- e72ecc6: format: updated [`eslint-plugin-format` from v1.1.0 to v1.2.0](https://github.com/antfu/eslint-plugin-format/compare/v1.1.0...v1.2.0)
+- 0ad790d: react: updated [`eslint-plugin-react-you-might-not-need-an-effect` from v0.8.1 to v0.8.5](https://github.com/NickvanDyke/eslint-plugin-react-you-might-not-need-an-effect/compare/v0.8.1...v0.8.5)
+- c094fa1: perfectionist: updated [`eslint-plugin-perfectionist` from v5.0.0 to v5.3.1](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v5.0.0...v5.3.1):
+  - Added [new shared settings](https://perfectionist.dev/guide/getting-started#settings): `newlinesBetween` and `newlinesInside`
+
+- fa7da81: stylistic: updated [`@stylistic/eslint-plugin` from v5.6.1 to v5.7.0](https://github.com/eslint-stylistic/eslint-stylistic/compare/v5.6.1...v5.7.0):
+  - ❌ [`jsx-sort-props`](https://github.com/eslint-stylistic/eslint-stylistic/tree/94ba6b3f25d8f92d300fe0eda87181d7115bb708/packages/eslint-plugin/rules/jsx-sort-props) rule was deprecated
+
+- a634627: toml: updated [`eslint-plugin-toml` from v0.12.0 to v0.13.1](https://github.com/ota-meshi/eslint-plugin-toml/compare/v0.12.0...v0.13.1)
+- 308528f: fastImport, import: updated [`eslint-plugin-fast-import` from v1.5.3 to v1.7.1](https://github.com/nebrius/eslint-plugin-fast-import/compare/v1.5.3...v1.7.1)
+- c7af706: testingLibrary: updated [`eslint-plugin-testing-library` from v7.15.1 to v7.15.4](https://github.com/testing-library/eslint-plugin-testing-library/compare/v7.15.1...v7.15.4)
+- 434cd0b: antfu: updated [`eslint-plugin-antfu` from v3.1.1 to v3.1.3](https://github.com/antfu/eslint-plugin-antfu/compare/v3.1.1...v3.1.3)
+- 7a26d4e: svelte: updated [`eslint-plugin-svelte` from v3.13.1 to v3.14.0](https://github.com/sveltejs/eslint-plugin-svelte/compare/v3.13.1...v3.14.0)
+- 644a916: unocss: updated [`@unocss/eslint-plugin` from v66.5.10 to v66.5.12](https://github.com/unocss/unocss/compare/v66.5.10...v66.5.12)
+- 5cb7a29: cypress: updated [`eslint-plugin-cypress` from v5.2.0 to v5.2.1](https://github.com/cypress-io/eslint-plugin-cypress/compare/v5.2.0...v5.2.1)
+- c0a8665: jsonSchemaValidator: updated [`eslint-plugin-json-schema-validator` from v5.5.0 to v5.5.1](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v5.5.0...v5.5.1)
+- 5d2f1dd: astro: fixed an issue resulting in `jsx-a11y` rules receiving `jsx-a11y` plugin options, despite them not supported in `astro` plugin
+- fb87d6b: dependencies: updated [`globals` from v16.5.0 to v17.0.0](https://github.com/sindresorhus/globals/compare/v16.5.0...v17.0.0)
+- 9ae5e40: playwright: updated [`eslint-plugin-playwright` from v2.4.0 to v2.4.1](https://github.com/mskelton/eslint-plugin-playwright/compare/v2.4.0...v2.4.1)
+- 6cfd92e: jsdoc: updated [`eslint-plugin-jsdoc` from v61.5.0 to v62.0.0](https://github.com/gajus/eslint-plugin-jsdoc/compare/v61.5.0...v62.0.0):
+- af28aca: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.1.2 to v7.1.13](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.1.2...v7.1.13)
+- 98300d6: formatJs: updated [`eslint-plugin-formatjs` from v6.0.2 to v6.0.10](https://github.com/formatjs/formatjs/compare/v6.0.2...v6.0.10)
+- 63d52ac: turbo: updated [`eslint-plugin-turbo` from v2.7.1 to v2.7.3](https://github.com/vercel/turborepo/compare/v2.7.1...v2.7.3)
+
 ## 1.0.0-beta.5
 
 ### Minor Changes
