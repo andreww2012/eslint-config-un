@@ -113,9 +113,18 @@ export default eslintConfig({
     },
 
     // False positives:
+    betterTailwind: false,
+    clsx: false,
     graphql: false,
+    formatJs: false,
+    jestDom: false,
+    nx: false,
+    react: false,
     rxjs: false,
+    svelte: false,
+    testingLibrary: false,
     turbo: false,
+    youDontNeedLodashUnderscore: false,
   },
 
   extraConfigs: [
