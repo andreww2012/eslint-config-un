@@ -225,6 +225,8 @@ export default ((context, optionsRaw) => {
     .addRule('require-name', ERROR) /** @since 0.24.0 */ // 🟢
     .addRule('require-optionalDependencies', OFF) /** @since 0.50.0 */
     .addRule('require-peerDependencies', OFF) /** @since 0.50.0 */
+    .addRule('require-repository', publishable ? ERROR : OFF) /** @since 0.88.0 */ // 📦
+    .addRule('require-scripts', OFF) /** @since 0.88.1 */
     .addRule('require-sideEffects', publishable ? ERROR : OFF) /** @since 0.82.0 */ // 📦
     .addRule('require-type', publishable ? ERROR : OFF) /** @since 0.33.0 */ // 🟢
     .addRule('require-types', OFF) /** @since 0.29.0 */
