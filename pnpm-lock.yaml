@@ -447,8 +447,8 @@ importers:
         specifier: 1.5.3
         version: 1.5.3(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-format:
-        specifier: 1.1.0
-        version: 1.1.0(eslint@9.39.2(jiti@2.6.1))
+        specifier: 1.2.0
+        version: 1.2.0(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-formatjs:
         specifier: 6.0.10
         version: 6.0.10(@types/eslint@9.6.1)(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
@@ -1772,14 +1772,14 @@ packages:
     peerDependencies:
       eslint: '>=6'
 
-  '@dprint/formatter@0.3.0':
-    resolution: {integrity: sha512-N9fxCxbaBOrDkteSOzaCqwWjso5iAe+WJPsHC021JfHNj2ThInPNEF13ORDKta3llq5D1TlclODCvOvipH7bWQ==}
+  '@dprint/formatter@0.4.1':
+    resolution: {integrity: sha512-IB/GXdlMOvi0UhQQ9mcY15Fxcrc2JPadmo6tqefCNV0bptFq7YBpggzpqYXldBXDa04CbKJ+rDwO2eNRPE2+/g==}
 
-  '@dprint/markdown@0.17.8':
-    resolution: {integrity: sha512-ukHFOg+RpG284aPdIg7iPrCYmMs3Dqy43S1ejybnwlJoFiW02b+6Bbr5cfZKFRYNP3dKGM86BqHEnMzBOyLvvA==}
+  '@dprint/markdown@0.20.0':
+    resolution: {integrity: sha512-qvynFdQZwul4Y+hoMP02QerEhM5VItb4cO8/qpQrSuQuYvDU+bIseiheVAetSpWlNPBU1JK8bQKloiCSp9lXnA==}
 
-  '@dprint/toml@0.6.4':
-    resolution: {integrity: sha512-bZXIUjxr0LIuHWshZr/5mtUkOrnh0NKVZEF6ACojW5z7zkJu7s9sV2mMXm8XQDqN4cJzdHYUYzUyEGdfciaLJA==}
+  '@dprint/toml@0.7.0':
+    resolution: {integrity: sha512-eFaQTcfxKHB+YyTh83x7GEv+gDPuj9q5NFOTaoj5rZmQTbj6OgjjMxUicmS1R8zYcx8YAq5oA9J3YFa5U6x2gA==}
 
   '@e18e/eslint-plugin@0.1.3':
     resolution: {integrity: sha512-gkldotfVlQqyiA2YkmpeWkMva7kbz+wf7nh7tswzDaFjlGxkIgrx45hIgj5oUb1vKS6SVKBa/8/f0ZmBxUXyxg==}
@@ -6088,8 +6088,8 @@ packages:
     peerDependencies:
       eslint: ^9.0.0
 
-  eslint-plugin-format@1.1.0:
-    resolution: {integrity: sha512-zjGPZcftddkO9GydBwvTKBV4ICN6a++XK0zIPi3HZHlU8W9EaftTA3XAanJvGAXQUYEqAADtgQi08SX+afbPrg==}
+  eslint-plugin-format@1.2.0:
+    resolution: {integrity: sha512-46iOK4ROUPCEScJ29bWh5LFEkkbnap1LIFJG0sDjsCiNvM8zgY101Kk/OteZ1rpFf0nGxaRGkN6GAkGRE5BFZA==}
     peerDependencies:
       eslint: ^8.40.0 || ^9.0.0
 
@@ -12070,11 +12070,11 @@ snapshots:
       - supports-color
       - typescript
 
-  '@dprint/formatter@0.3.0': {}
+  '@dprint/formatter@0.4.1': {}
 
-  '@dprint/markdown@0.17.8': {}
+  '@dprint/markdown@0.20.0': {}
 
-  '@dprint/toml@0.6.4': {}
+  '@dprint/toml@0.7.0': {}
 
   '@e18e/eslint-plugin@0.1.3(eslint@9.39.2(jiti@2.6.1))':
     dependencies:
@@ -16756,11 +16756,11 @@ snapshots:
       nanospinner: 1.2.2
       picocolors: 1.1.1
 
-  eslint-plugin-format@1.1.0(eslint@9.39.2(jiti@2.6.1)):
+  eslint-plugin-format@1.2.0(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
-      '@dprint/formatter': 0.3.0
-      '@dprint/markdown': 0.17.8
-      '@dprint/toml': 0.6.4
+      '@dprint/formatter': 0.4.1
+      '@dprint/markdown': 0.20.0
+      '@dprint/toml': 0.7.0
       eslint: 9.39.2(jiti@2.6.1)
       eslint-formatting-reporter: 0.0.0(eslint@9.39.2(jiti@2.6.1))
       eslint-parser-plain: 0.1.1
