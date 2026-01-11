@@ -185,15 +185,20 @@ The Config has the following interface (exact types are simplified for docs):
 ```ts
 type Severity = 0 | 1 | 2 | 'off' | 'warn' | 'error';
 
-type RuleOptions = { /* ... pre-generated all rules' options */ };
+type RuleOptions = {
+  /* ... pre-generated all rules' options */
+};
 
-type UnRuleEntry<RuleName extends string> = Severity | [Severity, RuleOptions[RuleName]] | {
-  severity: Severity;
-  options?: RuleOptions[RuleName];
-  disableAutofix?: boolean;
-  files?: string[];
-  ignores?: string[];
-}
+type UnRuleEntry<RuleName extends string> =
+  | Severity
+  | [Severity, RuleOptions[RuleName]]
+  | {
+      severity: Severity;
+      options?: RuleOptions[RuleName];
+      disableAutofix?: boolean;
+      files?: string[];
+      ignores?: string[];
+    };
 
 type UnConfig =
   | boolean
@@ -901,6 +906,8 @@ Before committing, please do also run tests, formatter, other linters and tools 
       Look for `Definition for rule '<rule name>' was not found` comments
 4. Perform the following two steps in any order:
    1. Enable stylistic rules only and fix them automatically (if you wish to do so) by running ESLint with `--fix --fix-type problem,suggestion,layout` (the latter flag ensures auto removal of "unused" `eslint-disable` comments will not happen):
+
+      <!-- eslint-skip -->
 
       ```ts
       // ...
