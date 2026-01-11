@@ -1,16 +1,13 @@
-// Named exports may not always possible: https://arethetypeswrong.github.io/?p=eslint-no-restricted%400.0.8
-import noRestricted from 'eslint-no-restricted';
 // cspell:ignore toolbelt radashi rambda mobily luxon
 import type {GetRuleOptions} from './eslint';
 import type {Prettify, RequireExactlyOne} from './types';
 import {getKeysOfTruthyValues} from './utils';
 
-const {createGlobals, createProperties, createSyntax} = noRestricted;
 export {
   createGlobals as createNoRestrictedGlobalsRule,
   createProperties as createNoRestrictedPropertiesRule,
   createSyntax as createNoRestrictedSyntaxRule,
-};
+} from 'eslint-no-restricted';
 
 type NoRestrictedImportsEntry = Prettify<
   RequireExactlyOne<{

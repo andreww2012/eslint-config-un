@@ -106,7 +106,7 @@
     "eslint-import-resolver-typescript": "4.4.4",
     "eslint-mdx": "3.6.2",
     "eslint-merge-processors": "2.0.0",
-    "eslint-no-restricted": "0.0.8",
+    "eslint-no-restricted": "0.0.10",
     "eslint-plugin-css": "0.11.1",
     "eslint-plugin-depend": "1.4.0",
     "eslint-plugin-file-progress": "3.0.2",
