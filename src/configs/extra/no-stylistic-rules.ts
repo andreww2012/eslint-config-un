@@ -855,6 +855,7 @@ const ALL_STYLISTIC_RULES = {
     'prefer-hooks-in-order': true,
     'prefer-importing-vitest-globals': true,
     'prefer-lowercase-title': true,
+    'prefer-mock-return-shorthand': true,
     'prefer-to-be': true,
     'prefer-to-contain': true,
     'prefer-to-have-been-called-times': true,

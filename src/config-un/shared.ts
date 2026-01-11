@@ -48,7 +48,6 @@ export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOption
   'unicorn/no-useless-undefined': true,
   'unicorn/prefer-spread': true,
 
-  'vitest/prefer-import-in-mock': true, // Might cause runtime/TS errors if imports are removed
   'vitest/prefer-lowercase-title': true, // Strings/symbols shouldn't be changed by autofix
 
   'github-actions/action-name-casing': true, // May break the name

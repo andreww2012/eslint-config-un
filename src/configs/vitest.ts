@@ -180,6 +180,7 @@ export default (async (context, optionsRaw) => {
 
   // Legend:
   // 🟢 - in recommended
+  // 🟡 - in recommended (warns)
 
   // TODO sync settings with `jest` config?
   configBuilder
@@ -226,10 +227,12 @@ export default (async (context, optionsRaw) => {
     ]) /** @since 0.0.8 */
     .addRule('no-alias-methods', ERROR) /** @since 0.0.49 */ // (warns in all)
     .addRule('no-commented-out-tests', WARNING) /** @since 0.0.49 */ // 🟢
-    .addRule('no-conditional-expect', ERROR) /** @since 0.0.49 */ // 🟢(since 1.5.0)
+    .addRule('no-conditional-expect', ERROR, [
+      {expectAssertions: true /** @since 1.6.5 */},
+    ]) /** @since 0.0.49 */ // 🟢(since 1.5.0)
     .addRule('no-conditional-in-test', OFF) /** @since 0.0.8 */ // (warns in all) Maybe got removed and re-added in 0.0.49
     .addRule('no-conditional-tests', ERROR) /** @since 0.0.16 */ // (warns in all)
-    .addRule('no-disabled-tests', WARNING) /** @since 0.0.49 */ // 🟢(since 1.5.0)
+    .addRule('no-disabled-tests', WARNING) /** @since 0.0.49 */ // 🟡(since 1.5.0)
     .addRule('no-duplicate-hooks', ERROR) /** @since 0.0.49 */ // (warns in all)
     .addRule('no-focused-tests', ERROR) /** @since 0.0.13 */ // 🟢(since 1.5.0)
     .addRule('no-hooks', OFF) /** @since 0.0.35 */ // (warns in all)
@@ -297,7 +300,9 @@ export default (async (context, optionsRaw) => {
     .addRule('prefer-expect-type-of', ERROR) /** @since 1.3.6 */ // (warns in all)
     .addRule('prefer-hooks-in-order', ERROR) /** @since 0.1.0 */ // (warns in all)
     .addRule('prefer-hooks-on-top', ERROR) /** @since 0.1.0 */ // (warns in all)
-    .addRule('prefer-import-in-mock', ERROR) /** @since 1.3.15 */ // (warns in all)
+    .addRule('prefer-import-in-mock', ERROR, [
+      {fixable: false /** @since 1.6.3 */},
+    ]) /** @since 1.3.15 */ // (warns in all)
     .addRule(
       'prefer-importing-vitest-globals',
       vitestGlobalsImporting === 'enforce' ? ERROR : OFF,
@@ -307,6 +312,7 @@ export default (async (context, optionsRaw) => {
       'prefer-mock-promise-shorthand',
       ERROR,
     ) /** @since 0.1.0 */ /** @aka preferMockPromiseShorthand */ // (warns in all)
+    .addRule('prefer-mock-return-shorthand', ERROR) /** @since 1.6.4 */
     .addRule('prefer-snapshot-hint', OFF) /** @since 0.1.0 */ // (warns in all)
     .addRule('prefer-spy-on', ERROR) /** @since 0.1.0 */ // (warns in all)
     .addRule('prefer-strict-boolean-matchers', OFF) /** @since 1.1.26 */
@@ -323,6 +329,7 @@ export default (async (context, optionsRaw) => {
     .addRule('require-hook', WARNING) /** @since 0.1.0 */ // (warns in all)
     .addRule('require-local-test-context-for-concurrent-snapshots', ERROR) /** @since 0.3.13 */ // 🟢
     .addRule('require-mock-type-parameters', WARNING) /** @since 1.1.27 */
+    .addRule('require-test-timeout', OFF) /** @since 1.6.6 */
     .addRule('require-to-throw-message', OFF) /** @since 0.1.0 */ // (warns in all)
     .addRule('require-top-level-describe', OFF) /** @since 0.1.0 */ // (warns in all)
     .addRule('valid-describe-callback', ERROR) /** @since 0.1.0 */ // 🟢
