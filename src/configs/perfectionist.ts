@@ -45,7 +45,7 @@ export interface PerfectionistEslintConfigOptions<
     > &
       Pick<
         GetRuleOptions<'perfectionist', 'sort-objects'>,
-        'partitionByComment' | 'partitionByNewLine'
+        'partitionByComment' | 'partitionByNewLine' | 'newlinesBetween' | 'newlinesInside'
       >
   >;
 
