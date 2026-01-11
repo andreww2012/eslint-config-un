@@ -108,6 +108,7 @@ export default ((context, optionsRaw) => {
     .addRule('meta-property-ordering', ERROR) /** @since 2.1.0 */
     .addRule('no-deprecated-context-methods', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('no-deprecated-report-api', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-matching-violation-suggest-message-ids', ERROR) /** @since 7.3.0 */
     // `meta.deprecated` supported since ESLint 9.21.0
     .addRule(
       'no-meta-replaced-by',
