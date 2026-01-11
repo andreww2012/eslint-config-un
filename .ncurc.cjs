@@ -16,6 +16,7 @@ const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Se
   '@unocss/eslint-plugin',
   'eslint-plugin-storybook',
   'eslint-plugin-turbo',
+  'eslint-plugin-formatjs',
 ]);
 
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set(['@typescript/native-preview']);
