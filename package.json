@@ -69,9 +69,10 @@
     "test:config": "tsx scripts/config-tester.ts",
     "test": "nr typegen && nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
     "lint:public-types": "attw --pack . --profile esm-only",
-    "prepublishOnly": "nr test && nr build && nr lint:public-types",
     "change": "npx changeset add && nr spellcheck",
-    "release": "changeset publish"
+    "release": "changeset publish",
+    "prepublishOnly": "nr test && nr build && nr lint:public-types",
+    "prepack": "nr build"
   },
   "overrides": {
     "eslint-plugin-jest": {
