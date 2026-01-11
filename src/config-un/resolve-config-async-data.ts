@@ -374,7 +374,7 @@ ${renderTable(
   );
 
   const allPackageUses = cacheData
-    ? Object.entries(cacheData.usedPackages).flatMap(([packagePrefix, packageUses]) =>
+    ? objectEntriesUnsafe(cacheData.usedPackages).flatMap(([packagePrefix, packageUses = []]) =>
         packageUses
           .map(({configName, property, valueTransformFn}) => {
             const config = cachedConfigsByName[configName];
@@ -387,7 +387,7 @@ ${renderTable(
               config,
               path: property, // serialized `property` contains the full path
               info: {
-                package: packagePrefix as LoadablePackagePrefix,
+                package: packagePrefix,
                 property,
                 ...(valueTransformFn &&
                   (() => {
@@ -417,38 +417,30 @@ ${renderTable(
           path: [packageUse.path, packageUse.info.property].filter(Boolean).join('.'),
         })),
       );
-  const packagesUsesGrouped = Object.entries(groupBy(allPackageUses, (v) => v.path)).map(
-    ([fullPath, items]) => ({fullPath, items}),
-  );
 
   configModifyFns.push(() => {
-    packagesUsesGrouped.forEach(({fullPath, items}) => {
-      const {
-        config,
-        info: {valueTransformFn},
-        // eslint-disable-next-line ts/no-non-null-assertion
-      } = items[0]!;
-      const packageModules = Object.fromEntries(
-        items.flatMap((item) =>
-          arraify(item.info.package).map((packageId) => [packageId, loadedPackagesMap[packageId]]),
-        ),
-      );
+    allPackageUses.forEach(
+      ({config, path: fullPath, info: {valueTransformFn, package: packagesToLoad}}) => {
+        const loadedPackagesForConfig = Object.fromEntries(
+          arraify(packagesToLoad).map((packageId) => [packageId, loadedPackagesMap[packageId]]),
+        );
 
-      setValueByPath(
-        config,
-        fullPath,
-        valueTransformFn
-          ? valueTransformFn.fn.call(
-              valueTransformFn.scope,
-              // @ts-expect-error keys type is lost
-              packageModules,
-              getValueByPath(config, fullPath),
-            )
-          : Object.keys(packageModules).length === 1
-            ? Object.values(packageModules)[0]
-            : packageModules,
-      );
-    });
+        setValueByPath(
+          config,
+          fullPath,
+          valueTransformFn
+            ? valueTransformFn.fn.call(
+                valueTransformFn.scope,
+                // @ts-expect-error keys type is lost
+                loadedPackagesForConfig,
+                getValueByPath(config, fullPath),
+              )
+            : Object.keys(loadedPackagesForConfig).length === 1
+              ? Object.values(loadedPackagesForConfig)[0]
+              : loadedPackagesForConfig,
+        );
+      },
+    );
   });
 
   return {

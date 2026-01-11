@@ -129,13 +129,15 @@ export interface CacheDataInFs<Serialized extends boolean = true> {
     ? Record<string, string[] /* Config names */>
     : Map<ParserPrefix, string[] /* Config names */>;
   usedPackages: Serialized extends true
-    ? Record<
-        string,
-        ({configName: string} & SetFieldType<
-          PackageToLoadInfo,
-          'valueTransformFn',
-          [functionSource: string, scope?: unknown] | undefined
-        >)[]
+    ? Partial<
+        Record<
+          LoadablePackagePrefix,
+          ({configName: string} & SetFieldType<
+            PackageToLoadInfo,
+            'valueTransformFn',
+            [functionSource: string, scope?: unknown] | undefined
+          >)[]
+        >
       >
     : Map<LoadablePackagePrefix, ({configName: string; path: string} & PackageToLoadInfo)[]>;
 }
