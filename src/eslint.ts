@@ -15,6 +15,7 @@ import {
   GLOB_MARKDOWN,
   GLOB_MARKDOWN_ALL_CODE_BLOCKS,
   GLOB_MDX,
+  GLOB_MDX_ALL_CODE_BLOCKS,
   OFF,
   type RuleSeverity,
   WARNING,
@@ -525,7 +526,7 @@ export class ConfigEntryBuilder<
              */
             doNotIgnoreHtml?: boolean;
 
-            /** Do not apply this config to "fenced code blocks" inside *.md files */
+            /** Do not apply this config to "fenced code blocks" inside `*.md?(x)` files */
             ignoreMarkdownCodeBlocks?: boolean;
           },
         ],
@@ -550,7 +551,9 @@ export class ConfigEntryBuilder<
       ...(internalOptions.doNotIgnoreMdx ? [] : [GLOB_MDX]),
       ...(internalOptions.doNotIgnoreHtml ? [] : [GLOB_HTM_HTML]),
       ...(internalOptions.doNotIgnoreCss ? [] : [GLOB_CSS]),
-      ...(internalOptions.ignoreMarkdownCodeBlocks ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS] : []),
+      ...(internalOptions.ignoreMarkdownCodeBlocks
+        ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS, GLOB_MDX_ALL_CODE_BLOCKS]
+        : []),
     ];
     const ignoresFallback = internalOptions.ignoresFallback || [];
     const ignores = internalOptions.includeDefaultFilesAndIgnores
