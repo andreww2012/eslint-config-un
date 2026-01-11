@@ -69,7 +69,7 @@ trustPolicyExclude:
   - tailwindcss@3.4.17
   - ts-api-utils@2.3.0
   - undici-types@6.21.0
-  - undici@6.21.3
+  - undici@6.22.0
   - '@oxc-resolver/binding-darwin-x64@1.12.0'
   - '@oxc-resolver/binding-darwin-arm64@1.12.0'
   - '@oxc-resolver/binding-win32-x64-msvc@1.12.0'
