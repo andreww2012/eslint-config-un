@@ -1,8 +1,7 @@
 // cspell:ignore canonicalurl fetchcontent getentrybyslug
 import {ERROR, GLOB_ASTRO, OFF, WARNING} from '../constants';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
-import type {OmitStrict, PickKeysNotStartingWith, PickKeysStartingWith} from '../types';
-import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
+import type {PickKeysNotStartingWith, PickKeysStartingWith} from '../types';
 import {
   type ExtraPluginsType,
   type RulesRecordPartial,
@@ -27,11 +26,10 @@ export interface AstroEslintConfigOptions<
    */
   configJsxA11y?:
     | boolean
-    | (UnConfigOptions<
+    | UnConfigOptions<
         ExtraPlugins,
         PickKeysStartingWith<RulesRecordPartial<'astro'>, 'astro/jsx-a11y'>
-      > &
-        OmitStrict<JsxA11yEslintConfigOptions, 'settings' | keyof UnConfigOptions>);
+      >;
 }
 
 const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];

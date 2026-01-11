@@ -335,6 +335,9 @@ export default ((
   const rn = <T extends string>(ruleName: T) =>
     `${isForAstro ? 'jsx-a11y/' : ''}${ruleName}` as const;
 
+  const setRuleOptions = <Options extends readonly unknown[]>(options: Options): Options | [] =>
+    isForAstro ? [] : options;
+
   const configBuilder = context.createConfigBuilder(optionsResolved, prefixFinal);
 
   // Legend:
@@ -361,20 +364,24 @@ export default ((
         }),
       },
     )
-    .addRule(rn('alt-text'), altTextCheckForElements === false ? OFF : ERROR, [
-      {
-        elements: getKeysOfTruthyValues({
-          ...altTextCheckDefaultElements,
-          ...altTextCheckForElements,
-        }),
-        ...(customComponents.imgElements?.length && {img: customComponents.imgElements}),
-        ...(customComponents.objectElements?.length && {object: customComponents.objectElements}),
-        ...(customComponents.areaElements?.length && {area: customComponents.areaElements}),
-        ...(customComponents.inputTypeImageElements?.length && {
-          'input[type="image"]': customComponents.inputTypeImageElements,
-        }),
-      },
-    ]) /** @since 5.0.0 */
+    .addRule(
+      rn('alt-text'),
+      altTextCheckForElements === false ? OFF : ERROR,
+      setRuleOptions([
+        {
+          elements: getKeysOfTruthyValues({
+            ...altTextCheckDefaultElements,
+            ...altTextCheckForElements,
+          }),
+          ...(customComponents.imgElements?.length && {img: customComponents.imgElements}),
+          ...(customComponents.objectElements?.length && {object: customComponents.objectElements}),
+          ...(customComponents.areaElements?.length && {area: customComponents.areaElements}),
+          ...(customComponents.inputTypeImageElements?.length && {
+            'input[type="image"]': customComponents.inputTypeImageElements,
+          }),
+        },
+      ]),
+    ) /** @since 5.0.0 */
     .addRule(
       rn('anchor-ambiguous-text'),
       ambiguousWords === false || isForLit
@@ -382,77 +389,93 @@ export default ((
         : ambiguousWords.severity === 'error'
           ? ERROR
           : WARNING,
-      [
+      setRuleOptions([
         {
           ...(ambiguousWords && ambiguousWords.words.length > 0 && {words: ambiguousWords.words}),
         },
-      ],
+      ]),
     ) /** @since 6.7.0 */ // 🔴
-    .addRule(rn('anchor-has-content'), ERROR, [
-      {
-        ...(customComponents.links?.length && {components: customComponents.links}),
-      },
-    ]) /** @since 2.1.0 */
+    .addRule(
+      rn('anchor-has-content'),
+      ERROR,
+      setRuleOptions([
+        {
+          ...(customComponents.links?.length && {components: customComponents.links}),
+        },
+      ]),
+    ) /** @since 2.1.0 */
     .addRule(
       rn('anchor-is-valid'),
       anchorIsValidCheckedAspects === false || anchorIsValidFinalCheckedAspects == null
         ? OFF
         : ERROR,
-      [
+      setRuleOptions([
         {
           ...(customComponents.links?.length && {components: customComponents.links}),
           aspects: anchorIsValidFinalCheckedAspects,
         },
-      ],
+      ]),
     ) /** @since 5.1.1 */
     .addRule(rn('aria-activedescendant-has-tabindex'), ERROR) /** @since 4.0.0 */
     .addRule(isForLit ? 'aria-attrs' : rn('aria-props'), ERROR) /** @since 1.0.0 */
     .addRule(isForLit ? 'aria-attr-valid-value' : rn('aria-proptypes'), ERROR) /** @since 1.0.0 */
     .addRule(rn('aria-role'), ERROR) /** @since 1.0.0 */
     .addRule(rn('aria-unsupported-elements'), ERROR) /** @since 1.0.0 */
-    .addRule(rn('autocomplete-valid'), ERROR, [
-      {
-        ...(customComponents.inputs?.length && {inputComponents: customComponents.inputs}),
-      },
-    ]) /** @since 6.3.0 */
+    .addRule(
+      rn('autocomplete-valid'),
+      ERROR,
+      setRuleOptions([
+        {
+          ...(customComponents.inputs?.length && {inputComponents: customComponents.inputs}),
+        },
+      ]),
+    ) /** @since 6.3.0 */
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/click-events-have-key-events/
     .addRule(rn('click-events-have-key-events'), isForAstro ? OFF : ERROR) /** @since 2.2.0 */
-    .addRule(rn('control-has-associated-label'), isForLit ? OFF : ERROR, [
-      {
-        ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
-        ...(labelAttributes?.length && {labelAttributes}),
-        // Copied from `recommended` config (but removed `includeRoles` because it's not supported)
-        ignoreElements: [
-          'audio',
-          'canvas',
-          'embed',
-          'input',
-          'textarea',
-          'tr',
-          'video',
-          // Included these two to avoid https://github.com/airbnb/javascript/issues/3069
-          'th',
-          'td',
-        ],
-        ignoreRoles: [
-          'grid',
-          'listbox',
-          'menu',
-          'menubar',
-          'radiogroup',
-          'row',
-          'tablist',
-          'toolbar',
-          'tree',
-          'treegrid',
-        ],
-      },
-    ]) /** @since 6.2.0 */ // 🔴
-    .addRule(rn('heading-has-content'), ERROR, [
-      {
-        ...(customComponents.headings?.length && {inputComponents: customComponents.headings}),
-      },
-    ]) /** @since 1.5.0 */
+    .addRule(
+      rn('control-has-associated-label'),
+      isForLit ? OFF : ERROR,
+      setRuleOptions([
+        {
+          ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
+          ...(labelAttributes?.length && {labelAttributes}),
+          // Copied from `recommended` config (but removed `includeRoles` because it's not supported)
+          ignoreElements: [
+            'audio',
+            'canvas',
+            'embed',
+            'input',
+            'textarea',
+            'tr',
+            'video',
+            // Included these two to avoid https://github.com/airbnb/javascript/issues/3069
+            'th',
+            'td',
+          ],
+          ignoreRoles: [
+            'grid',
+            'listbox',
+            'menu',
+            'menubar',
+            'radiogroup',
+            'row',
+            'tablist',
+            'toolbar',
+            'tree',
+            'treegrid',
+          ],
+        },
+      ]),
+    ) /** @since 6.2.0 */ // 🔴
+    .addRule(
+      rn('heading-has-content'),
+      ERROR,
+      setRuleOptions([
+        {
+          ...(customComponents.headings?.length && {inputComponents: customComponents.headings}),
+        },
+      ]),
+    ) /** @since 1.5.0 */
     // Disabled because "This rule is largely superseded by the `lang` rule"
     // eslint-disable-next-line sonarjs/no-all-duplicated-branches
     .addRule(rn('html-has-lang'), isForLit ? OFF : OFF) /** @since 1.5.0 */
@@ -464,110 +487,150 @@ export default ((
         : imageWords?.severity === 'error'
           ? ERROR
           : WARNING,
-      [
+      setRuleOptions([
         {
           ...(imageWords && imageWords.words.length > 0 && {words: imageWords.words}),
           ...(customComponents.imgElements?.length && {components: customComponents.imgElements}),
         },
-      ],
+      ]),
     ) /** @since 1.0.0 */
-    .addRule(rn('interactive-supports-focus'), isForLit ? OFF : ERROR, [
-      {
-        tabbable: getKeysOfTruthyValues({
-          ...defaultTabbableRoles,
-          ...tabbableRoles,
-        }),
-      },
-    ]) /** @since 5.0.0 */
-    .addRule(rn('label-has-associated-control'), isForLit ? OFF : ERROR, [
-      {
-        ...(labelAttributes?.length && {labelAttributes}),
-        ...(customComponents.labels?.length && {labelComponents: customComponents.labels}),
-        ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
-      },
-    ]) /** @since 6.1.0 */
+    .addRule(
+      rn('interactive-supports-focus'),
+      isForLit ? OFF : ERROR,
+      setRuleOptions([
+        {
+          tabbable: getKeysOfTruthyValues({
+            ...defaultTabbableRoles,
+            ...tabbableRoles,
+          }),
+        },
+      ]),
+    ) /** @since 5.0.0 */
+    .addRule(
+      rn('label-has-associated-control'),
+      isForLit ? OFF : ERROR,
+      setRuleOptions([
+        {
+          ...(labelAttributes?.length && {labelAttributes}),
+          ...(customComponents.labels?.length && {labelComponents: customComponents.labels}),
+          ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
+        },
+      ]),
+    ) /** @since 6.1.0 */
     .addRule(isForLit ? 'valid-lang' : rn('lang'), ERROR) /** @since 1.5.0 */ // 🔴
     .addRule('list', isForLit ? ERROR : null)
-    .addRule(rn('media-has-caption'), isForLit ? OFF : WARNING, [
-      {
-        ...(customComponents.audioElements?.length && {audio: customComponents.audioElements}),
-        ...(customComponents.videoElements?.length && {video: customComponents.videoElements}),
-        ...(customComponents.trackElements?.length && {track: customComponents.trackElements}),
-      },
-    ]) /** @since 5.0.0 */
+    .addRule(
+      rn('media-has-caption'),
+      isForLit ? OFF : WARNING,
+      setRuleOptions([
+        {
+          ...(customComponents.audioElements?.length && {audio: customComponents.audioElements}),
+          ...(customComponents.videoElements?.length && {video: customComponents.videoElements}),
+          ...(customComponents.trackElements?.length && {track: customComponents.trackElements}),
+        },
+      ]),
+    ) /** @since 5.0.0 */
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/mouse-events-have-key-events/
-    .addRule(rn('mouse-events-have-key-events'), isForAstro ? OFF : ERROR, [
-      {
-        hoverInHandlers: getKeysOfTruthyValues({
-          ...defaultHoverInHandlersRequiringOnFocus,
-          ...hoverInHandlersRequiringOnFocus,
-        }),
-        hoverOutHandlers: getKeysOfTruthyValues({
-          ...defaultHoverOutHandlersRequiringOnBlur,
-          ...hoverOutHandlersRequiringOnBlur,
-        }),
-      },
-    ]) /** @since 1.0.0 */
+    .addRule(
+      rn('mouse-events-have-key-events'),
+      isForAstro ? OFF : ERROR,
+      setRuleOptions([
+        {
+          hoverInHandlers: getKeysOfTruthyValues({
+            ...defaultHoverInHandlersRequiringOnFocus,
+            ...hoverInHandlersRequiringOnFocus,
+          }),
+          hoverOutHandlers: getKeysOfTruthyValues({
+            ...defaultHoverOutHandlersRequiringOnBlur,
+            ...hoverOutHandlersRequiringOnBlur,
+          }),
+        },
+      ]),
+    ) /** @since 1.0.0 */
     .addRule(rn('no-access-key'), ERROR) /** @since 0.0.1 */
     .addRule(rn('no-aria-hidden-on-focusable'), isForLit ? OFF : WARNING) /** @since 6.7.1 */ // 🔴
-    .addRule(rn('no-autofocus'), WARNING, [{ignoreNonDOM: true}]) /** @since 4.0.0 */
+    .addRule(
+      rn('no-autofocus'),
+      WARNING,
+      setRuleOptions([{ignoreNonDOM: true}]),
+    ) /** @since 4.0.0 */
     .addRule(rn('no-distracting-elements'), ERROR) /** @since 4.0.0 */
-    .addRule(rn('no-interactive-element-to-noninteractive-role'), isForLit ? OFF : ERROR, [
-      {
-        // Copied from `recommended` config
-        // "The recommended options for this rule allow the `tr` element to be given a role of `presentation` (or its semantic equivalent none). Under normal circumstances, an element with an interactive role should not be semantically neutralized with `presentation` (or `none`)." - rule docs
-        tr: ['none', 'presentation'],
-        canvas: ['img'],
-      },
-    ]) /** @since 5.0.0 */
-    .addRule(rn('no-noninteractive-element-interactions'), isForLit ? OFF : ERROR, [
-      {
+    .addRule(
+      rn('no-interactive-element-to-noninteractive-role'),
+      isForLit ? OFF : ERROR,
+      setRuleOptions([
+        {
+          // Copied from `recommended` config
+          // "The recommended options for this rule allow the `tr` element to be given a role of `presentation` (or its semantic equivalent none). Under normal circumstances, an element with an interactive role should not be semantically neutralized with `presentation` (or `none`)." - rule docs
+          tr: ['none', 'presentation'],
+          canvas: ['img'],
+        },
+      ]),
+    ) /** @since 5.0.0 */
+    .addRule(
+      rn('no-noninteractive-element-interactions'),
+      isForLit ? OFF : ERROR,
+      setRuleOptions([
+        {
+          // TODO copied from `recommended` config
+          handlers: [
+            'onClick',
+            'onError',
+            'onLoad',
+            'onMouseDown',
+            'onMouseUp',
+            'onKeyPress',
+            'onKeyDown',
+            'onKeyUp',
+          ],
+          alert: ['onKeyUp', 'onKeyDown', 'onKeyPress'],
+          body: ['onError', 'onLoad'],
+          dialog: ['onKeyUp', 'onKeyDown', 'onKeyPress'],
+          iframe: ['onError', 'onLoad'],
+          img: ['onError', 'onLoad'],
+        },
+      ]),
+    ) /** @since 5.0.0 */
+    .addRule(
+      rn('no-noninteractive-element-to-interactive-role'),
+      isForLit ? OFF : ERROR,
+      setRuleOptions([
+        {
+          // TODO copied from `recommended` config
+          ul: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
+          ol: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
+          li: ['menuitem', 'menuitemradio', 'menuitemcheckbox', 'option', 'row', 'tab', 'treeitem'],
+          table: ['grid'],
+          td: ['gridcell'],
+          fieldset: ['radiogroup', 'presentation'],
+        },
+      ]),
+    ) /** @since 5.0.0 */
+    .addRule(
+      rn('no-noninteractive-tabindex'),
+      isForLit ? OFF : ERROR,
+      setRuleOptions([
         // TODO copied from `recommended` config
-        handlers: [
-          'onClick',
-          'onError',
-          'onLoad',
-          'onMouseDown',
-          'onMouseUp',
-          'onKeyPress',
-          'onKeyDown',
-          'onKeyUp',
-        ],
-        alert: ['onKeyUp', 'onKeyDown', 'onKeyPress'],
-        body: ['onError', 'onLoad'],
-        dialog: ['onKeyUp', 'onKeyDown', 'onKeyPress'],
-        iframe: ['onError', 'onLoad'],
-        img: ['onError', 'onLoad'],
-      },
-    ]) /** @since 5.0.0 */
-    .addRule(rn('no-noninteractive-element-to-interactive-role'), isForLit ? OFF : ERROR, [
-      {
-        // TODO copied from `recommended` config
-        ul: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
-        ol: ['listbox', 'menu', 'menubar', 'radiogroup', 'tablist', 'tree', 'treegrid'],
-        li: ['menuitem', 'menuitemradio', 'menuitemcheckbox', 'option', 'row', 'tab', 'treeitem'],
-        table: ['grid'],
-        td: ['gridcell'],
-        fieldset: ['radiogroup', 'presentation'],
-      },
-    ]) /** @since 5.0.0 */
-    .addRule(rn('no-noninteractive-tabindex'), isForLit ? OFF : ERROR, [
-      // TODO copied from `recommended` config
-      {
-        tags: [],
-        roles: ['tabpanel'],
-        allowExpressionValues: true,
-      },
-    ]) /** @since 5.0.0 */
+        {
+          tags: [],
+          roles: ['tabpanel'],
+          allowExpressionValues: true,
+        },
+      ]),
+    ) /** @since 5.0.0 */
     .addRule(isForLit ? 'no-redundant-role' : rn('no-redundant-roles'), ERROR) /** @since 4.0.0 */
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/no-static-element-interactions/
-    .addRule(rn('no-static-element-interactions'), isForAstro || isForLit ? OFF : ERROR, [
-      // TODO copied from `recommended` config
-      {
-        allowExpressionValues: true,
-        handlers: ['onClick', 'onMouseDown', 'onMouseUp', 'onKeyPress', 'onKeyDown', 'onKeyUp'],
-      },
-    ]) /** @since 2.2.0 */
+    .addRule(
+      rn('no-static-element-interactions'),
+      isForAstro || isForLit ? OFF : ERROR,
+      setRuleOptions([
+        // TODO copied from `recommended` config
+        {
+          allowExpressionValues: true,
+          handlers: ['onClick', 'onMouseDown', 'onMouseUp', 'onKeyPress', 'onKeyDown', 'onKeyUp'],
+        },
+      ]),
+    ) /** @since 2.2.0 */
     // eslint-disable-next-line sonarjs/no-all-duplicated-branches
     .addRule(rn('prefer-tag-over-role'), isForLit ? OFF : OFF) /** @since 6.7.0 */ // 🔴
     .addRule(
