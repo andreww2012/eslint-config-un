@@ -235,6 +235,7 @@ export default ((context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesFallback: [GLOB_TS_X],
+          ignoreMarkdownCodeBlocks: true, // `no-indexof-equality` crashes otherwise
         },
       ])
       .addRule('no-indexof-equality', ERROR) /** @since 0.0.1 */ // 🔴💭
