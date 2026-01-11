@@ -294,7 +294,7 @@ const queueFetchPackageInfo = (packageName: string, priority: number) =>
   Effect.gen(function* () {
     const taskQueue = yield* TaskQueueTag;
     const runtimeLayer = yield* RuntimeLayerTag;
-    const adjustedPriority = isInOurDependencies(packageName) ? Number.POSITIVE_INFINITY : priority;
+    const adjustedPriority = isInOurDependencies(packageName) ? priority * 2 : priority;
 
     const runtimeLayerWithSelf = Layer.merge(
       runtimeLayer,
@@ -381,8 +381,10 @@ const mainProgram = Effect.gen(function* () {
     Layer.succeed(RuntimeLayerTag, Layer.merge(BaseLayer, refsLayer)),
   );
 
-  for (const packageName of Object.keys(db)) {
-    yield* queueFetchPackageInfo(packageName, 1).pipe(Effect.provide(FullLayer));
+  for (const [packageName, packageInfo] of Object.entries(db)) {
+    yield* queueFetchPackageInfo(packageName, packageInfo == null ? 3 : 1).pipe(
+      Effect.provide(FullLayer),
+    );
   }
 
   yield* Effect.fork(saveEslintPluginsDbPeriodically.pipe(Effect.provide(FullLayer)));
