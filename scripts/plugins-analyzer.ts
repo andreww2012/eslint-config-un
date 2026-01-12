@@ -19,20 +19,25 @@ import {
 const ANALYSIS_CRITERION_WEIGHTS = {
   recency: 0.2,
   downloads: 0.45,
-  dependencies: 0.15,
-  eslintPluginsDependencies: 0.2,
+  dependencies: 0.05,
+  eslintPluginsDependencies: 0.3,
 } as const;
 
-const ESLINT_PLUGIN_STATUS_EMOJIS: Record<(ObjectValues<EslintPluginsDb> & {})['status'], string> =
+const ESLINT_PLUGIN_STATUSES_META: Record<
+  (ObjectValues<EslintPluginsDb> & {})['status'],
   {
-    added: '✅',
-    declined: '❌',
-    deprecated: '⚠️',
-    missing: '🚫',
-    uncertain: '❓',
-    accepted: '➕',
-    fetched: '⏭️',
-  };
+    emoji: string;
+    priority: number;
+  }
+> = {
+  added: {emoji: '✅', priority: 1},
+  declined: {emoji: '❌', priority: 2},
+  deprecated: {emoji: '⚠️', priority: 3},
+  missing: {emoji: '🚫', priority: 4},
+  uncertain: {emoji: '❓', priority: 5},
+  accepted: {emoji: '➕', priority: 6},
+  fetched: {emoji: '⏭️', priority: 7},
+};
 
 const scoreMetric = (
   value: number,
@@ -93,10 +98,12 @@ export const analyze = Effect.gen(function* () {
       if (
         // eslint-disable-next-line ts/no-unnecessary-condition -- types are lying, `value` can be `null`
         info == null ||
-        status === undefined
+        status == null
       ) {
         return null;
       }
+
+      const statusMeta = ESLINT_PLUGIN_STATUSES_META[status.status];
 
       const downloadsPerDay = Object.values(info.stats || {});
       const totalDownloads = sum(downloadsPerDay);
@@ -106,8 +113,9 @@ export const analyze = Effect.gen(function* () {
       const yearsSinceLastUpdated = differenceInMonths(new Date(), lastUpdated);
       const scoreRecency = scoreMetric(yearsSinceLastUpdated, 3, 12 * 10 /* 10 years */);
 
-      const scoreDownloads = scoreMetric(downloadsPerDayAverage, 50_000, 500, {
+      const scoreDownloads = scoreMetric(downloadsPerDayAverage, 100_000, 300, {
         inverse: true,
+        logarithmic: true,
       });
 
       const allDirectDependencies = getActualDependencyNames(info.metadata.dependencies);
@@ -122,23 +130,21 @@ export const analyze = Effect.gen(function* () {
         -0.5 * directDependenciesOtherEslintPlugins.length,
       );
 
-      const hasFinalStatus = Boolean(
-        status && status.status !== 'accepted' && status.status !== 'fetched',
-      );
-
-      const score = hasFinalStatus
-        ? 0
-        : scoreRecency * ANALYSIS_CRITERION_WEIGHTS.recency +
-          scoreDownloads * ANALYSIS_CRITERION_WEIGHTS.downloads +
-          scoreDependencies * ANALYSIS_CRITERION_WEIGHTS.dependencies +
-          scoreEslintPluginsDependencies * ANALYSIS_CRITERION_WEIGHTS.eslintPluginsDependencies;
+      let score =
+        scoreRecency * ANALYSIS_CRITERION_WEIGHTS.recency +
+        scoreDownloads * ANALYSIS_CRITERION_WEIGHTS.downloads +
+        scoreDependencies * ANALYSIS_CRITERION_WEIGHTS.dependencies +
+        scoreEslintPluginsDependencies * ANALYSIS_CRITERION_WEIGHTS.eslintPluginsDependencies;
+      if (downloadsPerDayAverage <= 10) {
+        score *= 0.75;
+      }
 
       return {
         name,
         status,
+        statusMeta,
         downloadsPerDayAverage,
         lastUpdated,
-        hasFinalStatus,
         allDirectDependencies,
         directDependenciesOtherEslintPlugins,
         score,
@@ -146,18 +152,27 @@ export const analyze = Effect.gen(function* () {
     })
     .filter((v) => v != null)
     // eslint-disable-next-line unicorn/no-array-sort
-    .sort((a, b) => a.score - b.score || a.downloadsPerDayAverage - b.downloadsPerDayAverage);
+    .sort(
+      (a, b) =>
+        a.statusMeta.priority - b.statusMeta.priority ||
+        a.score - b.score ||
+        a.downloadsPerDayAverage - b.downloadsPerDayAverage ||
+        b.allDirectDependencies.length - a.allDirectDependencies.length,
+    );
 
   if (pluginsAnalyzed.length > 0) {
     const shownTable = renderTable(
       pluginsAnalyzed.map((plugin) => {
-        const status = plugin.status?.status;
+        const {status: statusId} = plugin.status;
+        const statusMeta = ESLINT_PLUGIN_STATUSES_META[statusId];
+
         const depsCount = plugin.allDirectDependencies.length;
         const pluginsDepsCount = plugin.directDependenciesOtherEslintPlugins.length;
-        return {
-          'Plugin name': `${status == null ? '' : `${ESLINT_PLUGIN_STATUS_EMOJIS[status]}${status === 'declined' ? `(${plugin.status?.reason})` : ''}`}${status === 'accepted' ? `(${plugin.status?.priority})` : ''} https://npmjs.com/${styleText('blueBright', plugin.name)}`,
 
-          'Deps (plugins)': `${styleText(depsCount === 0 ? 'green' : depsCount < 5 ? 'yellow' : 'red', depsCount.toString())}${pluginsDepsCount > 0 ? styleText(pluginsDepsCount < 2 ? 'yellow' : 'red', ` (${pluginsDepsCount})`) : ''}`,
+        return {
+          'Plugin name': `${statusMeta.emoji}${statusId === 'declined' ? `(${plugin.status.reason})` : ''}${statusId === 'accepted' ? `(${plugin.status.priority})` : ''} https://npmjs.com/${styleText('blueBright', plugin.name)}`,
+
+          'Deps (plugins)': `${styleText(depsCount === 0 ? 'green' : depsCount < 10 ? 'yellow' : 'red', depsCount.toString())}${pluginsDepsCount > 0 ? styleText(pluginsDepsCount < 2 ? 'yellow' : 'red', ` (${pluginsDepsCount})`) : ''}`,
 
           'Downloads per day (last month)': Math.round(
             plugin.downloadsPerDayAverage,
@@ -172,7 +187,7 @@ export const analyze = Effect.gen(function* () {
   }
 
   const pluginsWithFinalStatusCount = pluginsAnalyzed.filter(
-    (plugin) => plugin.hasFinalStatus,
+    (plugin) => plugin.status.status !== 'accepted' && plugin.status.status !== 'fetched',
   ).length;
 
   logger.info(
