@@ -897,7 +897,7 @@ Before committing, please do also run tests, formatter, other linters and tools 
       This ensures correct versions of plugins will be resolved by eslint-config-un and saves you from other weird and hard to debug problems.
    2. Install `eslint-config-un` following [the installation instructions](#installation).
 2. If you're using `.js` config file, we highly recommend that you migrate to `.ts` one, or at least add `@ts-check` TypeScript directive to the former.
-   Please don't forget install [`jiti`](https://npmjs.com/jiti) for ESLint to able be to read your TypeScript config file.
+   Please don't forget to install [`jiti`](https://npmjs.com/jiti) for ESLint to able be to read your TypeScript config file.
 3. Following your intuition or/and configs' options JSDoc documentation, migrate the existing config to the closest eslint-config-un equivalent.
    1. Run ESLint for the first time (without `--fix`!).
       The list of dependencies to be installed might be shown to you.
