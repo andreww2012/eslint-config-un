@@ -927,6 +927,8 @@ const ALL_STYLISTIC_RULES = {
     'plain-scalar': true,
     quotes: true,
     'require-string-key': true,
+    'sort-keys': true,
+    'sort-sequence-values': true,
     'spaced-comment': true,
   },
   'you-dont-need-lodash-underscore': {
