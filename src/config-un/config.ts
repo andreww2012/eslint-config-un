@@ -596,7 +596,6 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('turbo', () => import('../configs/turbo')),
     loadUnConfig('noUnsanitized', () => import('../configs/no-unsanitized')),
     loadUnConfig('betterTailwind', () => import('../configs/better-tailwind')),
-    loadUnConfig('mdx', () => import('../configs/mdx')),
     loadUnConfig('playwright', () => import('../configs/playwright')),
     loadUnConfig(
       'youDontNeedLodashUnderscore',
@@ -669,6 +668,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('checkFile', () => import('../configs/check-file')), // Likely should be last
     loadUnConfig('formatJs', () => import('../configs/formatjs')), // Likely should be last
     loadUnConfig('markdown', () => import('../configs/markdown')), // Must be last
+    loadUnConfig('mdx', () => import('../configs/mdx')), // Must be last
 
     rootConfigBuilder,
 
