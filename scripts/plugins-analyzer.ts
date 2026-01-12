@@ -1,10 +1,13 @@
+// cspell:ignore inversed
 import {styleText} from 'node:util';
 import {NodeFileSystem} from '@effect/platform-node';
+import {cli} from 'cleye';
 import {renderTable} from 'console-table-printer';
 import {differenceInMonths, formatDistanceToNow} from 'date-fns';
 import {Effect, Layer, Ref} from 'effect';
 import {sum} from 'es-toolkit';
 import type {ValueOf as ObjectValues} from 'type-fest';
+import * as z from 'zod';
 import {type EslintPluginsDb, readEslintPluginsDb} from './plugins/plugins-db';
 import {
   EslintPluginsDbRefTag,
@@ -15,6 +18,25 @@ import {
   getActualDependencyNames,
   isLikelyEslintPlugin,
 } from './plugins/shared';
+
+const SortingZod = z.enum(['score', 'downloads', 'recency', 'deps', 'plugins-deps']);
+type Sorting = z.output<typeof SortingZod>;
+
+const argv = cli({
+  strictFlags: true,
+  flags: {
+    sort: {
+      type: (value) => SortingZod.parse(value),
+      default: 'score' satisfies Sorting as Sorting,
+    },
+    sortInverse: {
+      type: Boolean,
+      default: false,
+    },
+  },
+});
+
+const cliFlags = argv.flags;
 
 const ANALYSIS_CRITERION_WEIGHTS = {
   recency: 0.2,
@@ -150,15 +172,48 @@ export const analyze = Effect.gen(function* () {
         score,
       };
     })
-    .filter((v) => v != null)
-    // eslint-disable-next-line unicorn/no-array-sort
-    .sort(
-      (a, b) =>
-        a.statusMeta.priority - b.statusMeta.priority ||
-        a.score - b.score ||
-        a.downloadsPerDayAverage - b.downloadsPerDayAverage ||
-        b.allDirectDependencies.length - a.allDirectDependencies.length,
-    );
+    .filter((v) => v != null);
+
+  let pluginsSortingCriterion!: (value: (typeof pluginsAnalyzed)[number]) => number;
+  let sortInversedByDefault = false;
+  switch (cliFlags.sort) {
+    case 'score': {
+      pluginsSortingCriterion = (value) => value.statusMeta.priority;
+      break;
+    }
+    case 'deps': {
+      pluginsSortingCriterion = (value) => value.allDirectDependencies.length;
+      sortInversedByDefault = true;
+      break;
+    }
+    case 'plugins-deps': {
+      pluginsSortingCriterion = (value) => value.directDependenciesOtherEslintPlugins.length;
+      sortInversedByDefault = true;
+      break;
+    }
+    case 'downloads': {
+      pluginsSortingCriterion = (value) => value.downloadsPerDayAverage;
+      break;
+    }
+    case 'recency': {
+      pluginsSortingCriterion = (value) => value.lastUpdated.getTime();
+      break;
+    }
+    default: {
+      cliFlags.sort satisfies never;
+    }
+  }
+
+  pluginsAnalyzed.sort(
+    (a, b) =>
+      a.statusMeta.priority - b.statusMeta.priority ||
+      (pluginsSortingCriterion(a) - pluginsSortingCriterion(b)) *
+        (cliFlags.sortInverse ? -1 : 1) *
+        (sortInversedByDefault ? -1 : 1) ||
+      a.score - b.score ||
+      a.downloadsPerDayAverage - b.downloadsPerDayAverage ||
+      b.allDirectDependencies.length - a.allDirectDependencies.length,
+  );
 
   if (pluginsAnalyzed.length > 0) {
     const shownTable = renderTable(
@@ -170,7 +225,8 @@ export const analyze = Effect.gen(function* () {
         const pluginsDepsCount = plugin.directDependenciesOtherEslintPlugins.length;
 
         return {
-          'Plugin name': `${statusMeta.emoji}${statusId === 'declined' ? `(${plugin.status.reason})` : ''}${statusId === 'accepted' ? `(${plugin.status.priority})` : ''} https://npmjs.com/${styleText('blueBright', plugin.name)}`,
+          // TODO rendering of `\n` is broken
+          'Plugin name': `${statusMeta.emoji}${statusId === 'declined' ? `\n(${plugin.status.reason})` : ''}${statusId === 'accepted' ? `(${plugin.status.priority})` : ''} https://npmjs.com/${styleText('blueBright', plugin.name)}`,
 
           'Deps (plugins)': `${styleText(depsCount === 0 ? 'green' : depsCount < 10 ? 'yellow' : 'red', depsCount.toString())}${pluginsDepsCount > 0 ? styleText(pluginsDepsCount < 2 ? 'yellow' : 'red', ` (${pluginsDepsCount})`) : ''}`,
 
