@@ -93,6 +93,7 @@ export default ((context, optionsRaw) => {
         }),
       },
     )
+    .addRule('consistent-spacing-between-blocks', ERROR) /** @since 2.5.0 */ // 🟡
     .addRule(
       'expect-expect',
       ERROR,
@@ -122,6 +123,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-nth-methods', OFF) /** @since 0.15.0 */
     .addRule('no-page-pause', WARNING) /** @since 0.7.0 */ // 🟡
     .addRule('no-raw-locators', OFF) /** @since 0.16.0 */
+    .addRule('no-restricted-locators', OFF) /** @since 2.5.0 */
     .addRule('no-restricted-matchers', OFF) /** @since 0.11.1 */
     .addRule('no-skipped-test', ERROR) /** @since 0.9.0 */ // 🟡
     .addRule('no-slowed-test', OFF) /** @since 2.2.0 */

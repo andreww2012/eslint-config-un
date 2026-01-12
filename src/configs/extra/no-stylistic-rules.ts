@@ -503,6 +503,7 @@ const ALL_STYLISTIC_RULES = {
     'prefer-use-store-naming-convention': true,
   },
   playwright: {
+    'consistent-spacing-between-blocks': true,
     'no-useless-not': true,
     'prefer-comparison-matcher': true,
     'prefer-equality-matcher': true,
