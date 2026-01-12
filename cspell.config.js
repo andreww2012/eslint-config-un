@@ -53,6 +53,7 @@ export default {
     'messageformat',
     'obug',
     'darraghor',
+    'arkregex',
 
     // Technical words/terms
     'arraify',

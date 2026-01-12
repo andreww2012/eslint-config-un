@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
+import {regex} from 'arkregex';
 import {destr} from 'destr';
 import {exec} from 'tinyexec';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
@@ -31,7 +32,16 @@ const getGitHubVersionTag = (dependency: string, version: string) =>
   PACKAGES_GIT_TAGS_PATTERNS[dependency as keyof typeof PACKAGES_GIT_TAGS_PATTERNS]?.(version) ??
   `v${version}`;
 
-const FILE_EXTENSIONS_TO_SKIP_IN_DIFF = ['map', 'cjs', 'cts'];
+const EXTENSIONS_TO_SKIP_IN_DIFF = new Set(['map', 'ts', 'cts', 'mts']);
+const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Record<string, string[]> = {
+  // For packages distributed as ESM+CJS (for example: eslint-plugin-zod-x@2.0.0)
+  cjs: ['js', 'mjs'],
+  cts: ['ts', 'mts'],
+};
+
+const FILE_HEADER_IN_DIFF_REGEXP = regex('^diff --git a/(.+) b/(.+)$');
+// eslint-disable-next-line unicorn/prefer-string-raw
+const FILE_OR_PATH_WITH_EXTENSION_REGEXP = regex('^(?<path>.*)\\.(?<extension>[a-z\\d]+)$');
 
 for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   // eslint-disable-next-line ts/no-non-null-assertion
@@ -49,8 +59,34 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   );
 
   console.log(styleText('bold', 'Source code diff:'));
+
+  const lines = codeDiffResult.stdout.trim().split('\n');
+  const filesInDiff = lines
+    .map((line) => {
+      const match = FILE_HEADER_IN_DIFF_REGEXP.exec(line);
+      if (!match) {
+        return null;
+      }
+      const [, oldPath, newPath] = match;
+      const oldPathExtensionMatch = FILE_OR_PATH_WITH_EXTENSION_REGEXP.exec(oldPath);
+      const newPathExtensionMatch = FILE_OR_PATH_WITH_EXTENSION_REGEXP.exec(newPath);
+      return {
+        oldPath: {
+          full: oldPath,
+          extensionLess: oldPathExtensionMatch?.groups.path || oldPath,
+          extension: oldPathExtensionMatch?.groups.extension,
+        },
+        newPath: {
+          full: newPath,
+          extensionLess: newPathExtensionMatch?.groups.path || newPath,
+          extension: newPathExtensionMatch?.groups.extension,
+        },
+      };
+    })
+    .filter((v) => v != null);
+
   let diffForLastFileSkipped = false;
-  for (const line of codeDiffResult.stdout.trim().split('\n')) {
+  for (const line of lines) {
     let isDiffHeader = line.startsWith('--- ') || line.startsWith('+++ ');
     const formattedLine = line.startsWith('@')
       ? styleText('cyan', line)
@@ -65,12 +101,31 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
               : line.startsWith(' ')
                 ? line
                 : ((isDiffHeader = true), styleText('magentaBright', line));
-    if (line.startsWith('diff --git ')) {
-      diffForLastFileSkipped = FILE_EXTENSIONS_TO_SKIP_IN_DIFF.some((extension) =>
-        line.endsWith(`.${extension}`),
-      );
+    const fileHeaderMatch = FILE_HEADER_IN_DIFF_REGEXP.exec(line);
+    if (fileHeaderMatch) {
       // eslint-disable-next-line sonarjs/no-redundant-assignments
       isDiffHeader = true;
+      const extensionMatch = FILE_OR_PATH_WITH_EXTENSION_REGEXP.exec(fileHeaderMatch[1]);
+      if (extensionMatch) {
+        const {extension, path: filePathExtensionLess} = extensionMatch.groups;
+        const counterpartExtensions =
+          EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS[extension];
+        if (
+          EXTENSIONS_TO_SKIP_IN_DIFF.has(extension) &&
+          !fileHeaderMatch[2].endsWith(`.d.${extension}`)
+        ) {
+          diffForLastFileSkipped = true;
+        } else if (counterpartExtensions) {
+          diffForLastFileSkipped = filesInDiff.some(
+            (fileInDiff) =>
+              fileInDiff.newPath.extensionLess === filePathExtensionLess &&
+              fileInDiff.newPath.extension &&
+              counterpartExtensions.includes(fileInDiff.newPath.extension),
+          );
+        } else {
+          diffForLastFileSkipped = false;
+        }
+      }
     }
     if (isDiffHeader || !diffForLastFileSkipped) {
       console.log(`  ${formattedLine}`);

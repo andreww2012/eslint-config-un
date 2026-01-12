@@ -199,6 +199,7 @@
     "angular-eslint-plugin-template15": "npm:@angular-eslint/eslint-plugin-template@15.2.1",
     "angular-eslint-plugin-template17": "npm:@angular-eslint/eslint-plugin-template@17.5.3",
     "angular-eslint-plugin18": "npm:@angular-eslint/eslint-plugin@18.4.3",
+    "arkregex": "0.0.5",
     "astro-eslint-parser": "1.2.2",
     "cleye": "2.2.1",
     "cspell": "9.4.0",
