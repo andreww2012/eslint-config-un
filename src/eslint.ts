@@ -16,6 +16,7 @@ import {
   GLOB_MARKDOWN_ALL_CODE_BLOCKS,
   GLOB_MDX,
   GLOB_MDX_ALL_CODE_BLOCKS,
+  GLOB_TOML,
   OFF,
   type RuleSeverity,
   WARNING,
@@ -526,6 +527,15 @@ export class ConfigEntryBuilder<
              */
             doNotIgnoreHtml?: boolean;
 
+            /**
+             * Some rules (for example, `sonarjs/assertions-in-tests` or
+             * `node/no-unsupported-features/node-builtins`)
+             * crash when linting `*.toml` files, so they are ignored by default.
+             *
+             * Set this to `true` if you're actually writing a config for `*.toml` files.
+             */
+            doNotIgnoreToml?: boolean;
+
             /** Do not apply this config to "fenced code blocks" inside `*.md?(x)` files */
             ignoreMarkdownCodeBlocks?: boolean;
           },
@@ -551,6 +561,7 @@ export class ConfigEntryBuilder<
       ...(internalOptions.doNotIgnoreMdx ? [] : [GLOB_MDX]),
       ...(internalOptions.doNotIgnoreHtml ? [] : [GLOB_HTM_HTML]),
       ...(internalOptions.doNotIgnoreCss ? [] : [GLOB_CSS]),
+      ...(internalOptions.doNotIgnoreToml ? [] : [GLOB_TOML]),
       ...(internalOptions.ignoreMarkdownCodeBlocks
         ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS, GLOB_MDX_ALL_CODE_BLOCKS]
         : []),

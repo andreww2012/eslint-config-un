@@ -68,11 +68,12 @@ export default ((context, optionsRaw) => {
           includeDefaultFilesAndIgnores: true,
           filesFallback: TOML_DEFAULT_FILES,
           mergeUserFilesWithFallback: !optionsResolved.doNotMergeFilesWithDefault,
-          parser: 'toml-eslint-parser',
+          doNotIgnoreToml: true,
         },
       ],
       {
         ...generateIgnoresWithAdditional(optionsResolved)(CONFIG_DEFAULT_IGNORES),
+        language: 'toml/toml',
       },
     )
     .markCategory('Base rules')

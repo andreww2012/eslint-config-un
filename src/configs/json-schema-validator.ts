@@ -60,13 +60,18 @@ export default ((context, optionsRaw) => {
     },
   ]);
 
-  configBuilder?.addConfig([
-    'json-schema-validator/setup/toml',
+  configBuilder?.addConfig(
+    [
+      'json-schema-validator/setup/toml',
+      {
+        filesFallback: TOML_DEFAULT_FILES,
+        doNotIgnoreToml: true,
+      },
+    ],
     {
-      filesFallback: TOML_DEFAULT_FILES,
-      parser: 'toml-eslint-parser',
+      language: 'toml/toml',
     },
-  ]);
+  );
 
   configBuilder
     ?.addConfig(['json-schema-validator', {includeDefaultFilesAndIgnores: true}], {

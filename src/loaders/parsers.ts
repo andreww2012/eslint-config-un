@@ -49,11 +49,6 @@ export const parsersLoaders = {
     'svelte-eslint-parser',
     () => import('svelte-eslint-parser'),
   ),
-  'toml-eslint-parser': genModuleLoader(
-    'toml-eslint-parser',
-    'toml-eslint-parser',
-    () => import('toml-eslint-parser'),
-  ),
   'vue-eslint-parser': genModuleLoader(
     'vue-eslint-parser',
     'vue-eslint-parser',

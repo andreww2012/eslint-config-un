@@ -571,11 +571,7 @@ export const pluginsLoaders = {
   toml: genModuleLoader(
     'toml',
     'eslint-plugin-toml',
-    () =>
-      interopDefault(
-        import('eslint-plugin-toml'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+    () => interopDefault(import('eslint-plugin-toml')) as Promise<EslintPlugin>,
   ),
   'tree-shaking': genModuleLoader(
     'tree-shaking',
