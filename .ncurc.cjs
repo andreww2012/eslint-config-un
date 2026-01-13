@@ -4,6 +4,8 @@ const path = require('node:path');
 const semver = require('semver');
 const packageJson = require('./package.json');
 
+// TODO mark `eslint-plugin-storybook` as requiring full reinstallation to avoid missing peer dependency warning
+
 const CACHE_DIRECTORY = path.join(__dirname, 'node_modules/.cache/npm-check-updates');
 fs.mkdirSync(CACHE_DIRECTORY, {recursive: true});
 
@@ -19,7 +21,7 @@ const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Se
   'eslint-plugin-formatjs',
 ]);
 
-const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set(['@typescript/native-preview']);
+const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set();
 
 const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
   '@types/node',
@@ -29,33 +31,36 @@ const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
 ]);
 
 const PACKAGE_GROUPS = Object.entries({
-  '@typescript-eslint': ['typescript-eslint'],
-  '@angular-eslint': [],
-  '@jest': [],
-  '@html-eslint': [],
-  '@sveltejs': ['eslint-plugin-svelte', 'svelte-eslint-parser'],
-  'eslint-plugin-vue': ['vue-eslint-parser'],
-  'eslint-plugin-astro': ['astro-eslint-parser'],
-  'eslint-plugin-ember': ['ember-eslint-parser'],
-  '@eslint-react': ['eslint-plugin-react-debug'],
-}).reduce(
-  (result, [groupName, packagesInGroup]) =>
-    Object.assign(
-      result,
-      Object.fromEntries([
-        [groupName.startsWith('@') ? `${groupName}/*` : groupName, groupName],
-        ...packagesInGroup.map((packageInGroup) => [packageInGroup, groupName]),
-      ]),
-    ),
-  {},
-);
+  'Package manager': {packages: ['pnpm'], special: true},
+  tsgo: {packages: ['@typescript/native-preview'], special: true},
+
+  '@typescript-eslint': {packages: ['typescript-eslint']},
+  '@angular-eslint': {packages: []},
+  '@jest': {packages: []},
+  '@html-eslint': {packages: []},
+  '@sveltejs': {packages: ['eslint-plugin-svelte', 'svelte-eslint-parser']},
+  'eslint-plugin-vue': {packages: ['vue-eslint-parser']},
+  'eslint-plugin-astro': {packages: ['astro-eslint-parser']},
+  'eslint-plugin-ember': {packages: ['ember-eslint-parser']},
+  '@eslint-react': {packages: ['eslint-plugin-react-debug']},
+}).reduce((result, [groupName, {packages: packagesInGroup, ...groupMeta}]) => {
+  const groupInfo = {
+    groupName,
+    ...groupMeta,
+  };
+
+  const packagesInCurrentGroup = Object.fromEntries([
+    [groupName.startsWith('@') ? `${groupName}/*` : groupName, groupInfo],
+    ...packagesInGroup.map((packageInGroup) => [packageInGroup, groupInfo]),
+  ]);
+
+  return Object.assign(result, packagesInCurrentGroup);
+}, {});
 
 /**
  * @type {import('npm-check-updates').RunOptions}
  */
 module.exports = {
-  dep: ['prod', 'dev', 'optional'],
-
   cache: true,
   cacheExpiration: 30,
   cacheFile: path.join(CACHE_DIRECTORY, 'cache.json'),
@@ -76,7 +81,9 @@ module.exports = {
         currentVersionSemver?.major !== upgradedVersionSemver?.major
       ) &&
       !(
-        IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS.has(packageName) &&
+        IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS /* eslint-disable-line sonarjs/no-empty-collection */.has(
+          packageName,
+        ) &&
         currentVersionSemver &&
         upgradedVersionSemver &&
         currentVersionSemver.major === upgradedVersionSemver.major &&
@@ -92,10 +99,13 @@ module.exports = {
   interactive: true,
   groupFunction: (fullName) => {
     const [nameScope, nameWithoutScope = ''] = fullName.split('/');
-    const knownGroupName = PACKAGE_GROUPS[fullName] || PACKAGE_GROUPS[`${nameScope}/*`];
+    const knownGroup = PACKAGE_GROUPS[fullName] || PACKAGE_GROUPS[`${nameScope}/*`];
 
-    if (knownGroupName) {
-      return `3. ${knownGroupName} (🟢🟡 plugins and/or non-plugins)`;
+    if (knownGroup) {
+      if (knownGroup.special) {
+        return `✨ ${knownGroup.groupName}`;
+      }
+      return `3. ${knownGroup.groupName} (🟢🟡 plugins and/or non-plugins)`;
     }
 
     const isPlugin =
