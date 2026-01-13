@@ -152,6 +152,8 @@ export const analyze = Effect.gen(function* () {
         -0.5 * directDependenciesOtherEslintPlugins.length,
       );
 
+      const pluginInfo = info.eslintPluginInfo;
+
       let score =
         scoreRecency * ANALYSIS_CRITERION_WEIGHTS.recency +
         scoreDownloads * ANALYSIS_CRITERION_WEIGHTS.downloads +
@@ -159,6 +161,9 @@ export const analyze = Effect.gen(function* () {
         scoreEslintPluginsDependencies * ANALYSIS_CRITERION_WEIGHTS.eslintPluginsDependencies;
       if (downloadsPerDayAverage <= 10) {
         score *= 0.75;
+      }
+      if (pluginInfo && 'customRules' in pluginInfo && pluginInfo.customRules.length === 0) {
+        score = 0;
       }
 
       return {
@@ -169,6 +174,7 @@ export const analyze = Effect.gen(function* () {
         lastUpdated,
         allDirectDependencies,
         directDependenciesOtherEslintPlugins,
+        pluginInfo,
         score,
       };
     })
@@ -224,9 +230,20 @@ export const analyze = Effect.gen(function* () {
         const depsCount = plugin.allDirectDependencies.length;
         const pluginsDepsCount = plugin.directDependenciesOtherEslintPlugins.length;
 
+        const {pluginInfo} = plugin;
+
         return {
           // TODO rendering of `\n` is broken
           'Plugin name': `${statusMeta.emoji}${statusId === 'declined' ? `\n(${plugin.status.reason})` : ''}${statusId === 'accepted' ? `(${plugin.status.priority})` : ''} https://npmjs.com/${styleText('blueBright', plugin.name)}`,
+
+          'Rules count':
+            pluginInfo == null
+              ? styleText('gray', '❓ rules')
+              : 'error' in pluginInfo
+                ? styleText('yellow', 'Error')
+                : pluginInfo.customRules.length === 0
+                  ? styleText('red', 'No rules')
+                  : `${pluginInfo.customRules.length} rule${pluginInfo.customRules.length === 1 ? '' : 's'}`,
 
           'Deps (plugins)': `${styleText(depsCount === 0 ? 'green' : depsCount < 10 ? 'yellow' : 'red', depsCount.toString())}${pluginsDepsCount > 0 ? styleText(pluginsDepsCount < 2 ? 'yellow' : 'red', ` (${pluginsDepsCount})`) : ''}`,
 
@@ -264,6 +281,6 @@ const mainProgram = Effect.gen(function* () {
   yield* analyze.pipe(Effect.provide(refsLayer));
 });
 
-const program = mainProgram.pipe(Effect.provide(BaseLayer), Effect.provide(NodeFileSystem.layer));
+const program = mainProgram.pipe(Effect.provide(Layer.mergeAll(BaseLayer, NodeFileSystem.layer)));
 
 await Effect.runPromise(program);

@@ -5,7 +5,9 @@ import parseNpmPackageArgument from 'npm-package-arg';
 import type {FullMetadata, FullVersion} from 'package-json';
 import {type Storage as UnStorage, createStorage} from 'unstorage';
 import unstorageFsDriver from 'unstorage/drivers/fs';
+import type {Prettify} from '../../src/types';
 import type {EslintPluginsDb} from './plugins-db';
+import type {getEslintPluginInfo} from './plugins-info';
 
 export const CACHE_BASE_PATH = '../../node_modules/.cache/eslint-config-un/packages-info';
 
@@ -13,8 +15,9 @@ export class LoggerTag extends Context.Tag('Logger')<LoggerTag, ConsolaInstance>
 
 export interface PackageInfo {
   updatedAt: string;
-  metadata: FullVersion & Pick<FullMetadata, 'time'>;
+  metadata: Prettify<FullVersion & Pick<FullMetadata, 'time'>>;
   stats: Record<string /* ISO date only */, number> | null;
+  eslintPluginInfo: ReturnType<typeof getEslintPluginInfo> | {error: unknown};
 }
 
 export class PackagesInfoStorageTag extends Context.Tag('PackagesInfoStorage')<

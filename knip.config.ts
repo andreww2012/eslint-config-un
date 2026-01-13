@@ -4,7 +4,7 @@ import packageJson from './package.json' with {type: 'json'};
 
 const config: KnipConfig = {
   ignore: ['test/**'],
-  entry: ['.ncurc.cjs'],
+  entry: ['.ncurc.cjs', 'https-module-resolver.js'],
   ignoreDependencies: [
     '@eslint/core',
     ...Object.entries(packageJson.peerDependenciesMeta)

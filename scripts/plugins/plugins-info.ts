@@ -4,6 +4,7 @@ import {HttpClient, HttpClientError, HttpClientRequest} from '@effect/platform';
 import {Data, DateTime, Duration, Effect} from 'effect';
 import * as packageFetcher from 'package-json';
 import * as z from 'zod';
+import {interopDefault} from '../../src/utils';
 import {LoggerTag} from './shared';
 
 const STATS_THROTTLE_INTERVAL_MS = 3000;
@@ -139,3 +140,58 @@ export const fetchPackageStats = (packageName: string) =>
       return result;
     }),
   );
+
+export const getEslintPluginInfo = (
+  module: unknown,
+): {
+  keys: string[];
+  customRules: string[];
+} | null => {
+  const isModuleObject = typeof module === 'object' && module != null;
+  const hasRulesObject =
+    isModuleObject && 'rules' in module && typeof module.rules === 'object' && module.rules != null;
+  const hasConfigsObject =
+    isModuleObject &&
+    'configs' in module &&
+    typeof module.configs === 'object' &&
+    module.configs != null;
+
+  const isLikelyPlugin = hasRulesObject || hasConfigsObject;
+  if (!isLikelyPlugin) {
+    return null;
+  }
+
+  return {
+    customRules: hasRulesObject ? Object.keys(module.rules as Record<string, unknown>) : [],
+    keys: Object.keys(module),
+  };
+};
+
+class PackageModuleLoadError extends Data.TaggedError('PackageModuleLoadError')<{
+  packageName: string;
+  cause: unknown;
+}> {}
+
+export const executePackageAsEslintPlugin = (packageName: string) =>
+  Effect.gen(function* () {
+    const logger = yield* LoggerTag;
+    const styledName = styleText('blueBright', packageName);
+
+    logger.verbose(`Loading package module via esm.sh: ${styledName}`);
+
+    const packageModule = yield* Effect.tryPromise({
+      try: () =>
+        interopDefault(
+          // eslint-disable-next-line no-unsanitized/method
+          import(`https://esm.sh/${packageName}`) as Promise<unknown>,
+        ),
+      catch: (error) => {
+        logger.warn(`Failed to load package module: ${styledName}`, error);
+        return new PackageModuleLoadError({packageName, cause: error});
+      },
+    });
+
+    logger.verbose(`✅ Package module executed: ${styledName}`);
+
+    return getEslintPluginInfo(packageModule);
+  });

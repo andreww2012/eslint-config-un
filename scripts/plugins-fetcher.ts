@@ -14,7 +14,12 @@ import {
   readEslintPluginsDb,
   updateEslintPluginsDb,
 } from './plugins/plugins-db';
-import {PackageMissingError, fetchPackageMetadata, fetchPackageStats} from './plugins/plugins-info';
+import {
+  PackageMissingError,
+  executePackageAsEslintPlugin,
+  fetchPackageMetadata,
+  fetchPackageStats,
+} from './plugins/plugins-info';
 import {
   CACHE_BASE_PATH,
   EslintPluginsDbRefTag,
@@ -26,8 +31,6 @@ import {
   getActualDependencyNames,
   isLikelyEslintPlugin,
 } from './plugins/shared';
-
-Effect.log('Hello world!');
 
 // #region Effect Context Tags
 
@@ -196,27 +199,34 @@ const fetchPackageInfo = (packageName: string) =>
 
     const shouldFetchStats = (!cachedInfo || shouldRefetchStats) && isPackageLikelyEslintPlugin;
 
-    const packageMetadata = yield* cachedInfo?.metadata
-      ? Effect.succeed(cachedInfo.metadata)
-      : fetchPackageMetadata(packageName).pipe(
-          Effect.catchAll((error) => {
-            if (error instanceof PackageMissingError) {
-              return Effect.promise(async () => {
-                await knownMissingFromNpmPackages.setItem(packageName, true);
-                return null;
-              });
-            }
-            return Effect.succeed(null);
-          }),
-        );
+    const packageMetadata =
+      cachedInfo?.metadata ||
+      (yield* fetchPackageMetadata(packageName).pipe(
+        Effect.catchAll((error) => {
+          if (error instanceof PackageMissingError) {
+            return Effect.promise(async () => {
+              await knownMissingFromNpmPackages.setItem(packageName, true);
+              return null;
+            });
+          }
+          return Effect.succeed(null);
+        }),
+      ));
     if (packageMetadata == null) {
       yield* updateEslintPluginsDbSafe(packageName, {status: 'missing'});
       return null;
     }
 
-    const packageStats = yield* shouldFetchStats
-      ? fetchPackageStats(packageName).pipe(Effect.catchAll(() => Effect.succeed(null)))
-      : Effect.succeed(cachedInfo?.stats ?? null);
+    const eslintPluginInfo = isPackageLikelyEslintPlugin
+      ? cachedInfo?.eslintPluginInfo ||
+        (yield* executePackageAsEslintPlugin(packageName).pipe(
+          Effect.catchAll((error) => Effect.succeed({error: error.cause})),
+        ))
+      : null;
+
+    const packageStats = shouldFetchStats
+      ? yield* fetchPackageStats(packageName).pipe(Effect.catchAll(() => Effect.succeed(null)))
+      : (cachedInfo?.stats ?? null);
     if (shouldFetchStats && !packageStats) {
       return null;
     }
@@ -281,6 +291,7 @@ const fetchPackageInfo = (packageName: string) =>
       updatedAt: new Date().toISOString(),
       metadata: packageMetadata,
       stats: packageStats || null,
+      eslintPluginInfo,
     };
 
     if (!cachedInfo || shouldRefetchStats) {
@@ -305,8 +316,7 @@ const queueFetchPackageInfo = (packageName: string, priority: number) =>
       async () => {
         await Effect.runPromise(
           fetchPackageInfo(packageName).pipe(
-            Effect.provide(runtimeLayerWithSelf),
-            Effect.provide(NodeHttpClient.layer),
+            Effect.provide(Layer.mergeAll(runtimeLayerWithSelf, NodeHttpClient.layer)),
             Effect.catchAll(() => Effect.void),
           ),
         );
@@ -319,7 +329,7 @@ const saveEslintPluginsDbPeriodically = Effect.gen(function* () {
   const logger = yield* LoggerTag;
   const dbRef = yield* EslintPluginsDbRefTag;
 
-  yield* Effect.forever(
+  return yield* Effect.forever(
     Effect.gen(function* () {
       yield* Effect.sleep('10 seconds');
 
@@ -342,7 +352,7 @@ const logQueueSizePeriodically = Effect.gen(function* () {
   const logger = yield* LoggerTag;
   const taskQueue = yield* TaskQueueTag;
 
-  yield* Effect.forever(
+  return yield* Effect.forever(
     Effect.gen(function* () {
       yield* Effect.sleep('10 seconds');
       logger.info(`Task queue size: ${styleText('blueBright', taskQueue.size.toString())}`);
@@ -403,6 +413,6 @@ const mainProgram = Effect.gen(function* () {
   yield* updateEslintPluginsDb(finalDb);
 });
 
-const program = mainProgram.pipe(Effect.provide(BaseLayer), Effect.provide(NodeFileSystem.layer));
+const program = mainProgram.pipe(Effect.provide(Layer.mergeAll(BaseLayer, NodeFileSystem.layer)));
 
 await Effect.runPromise(program);
