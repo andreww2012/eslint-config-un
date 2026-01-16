@@ -370,7 +370,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     unnecessaryAbstractions: {enabled: getIsConfigEnabled('unnecessaryAbstractions')},
     unocss: {enabled: getIsConfigEnabled('unocss', 'unocss')},
     un: {enabled: getIsConfigEnabled('un')},
-    unusedImports: {enabled: getIsConfigEnabled('unusedImports')},
+    unusedImports: {enabled: getIsConfigEnabled('unusedImports', false)},
     vitest: {enabled: getIsConfigEnabled('vitest', 'vitest')},
     vue: {enabled: getIsConfigEnabled('vue', 'vue')},
     webComponents: {enabled: getIsConfigEnabled('webComponents', false)},

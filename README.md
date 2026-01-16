@@ -138,6 +138,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-testing-library`                    | `testing-library`                    |
 | `eslint-plugin-tree-shaking`                       | `tree-shaking`                       |
 | `eslint-plugin-turbo`                              | `turbo`                              |
+| `eslint-plugin-unused-imports`                     | `unused-imports`                     |
 | `eslint-plugin-vue`                                | `vue`                                |
 | `eslint-plugin-vue-scoped-css`                     | `vue-scoped-css`                     |
 | `eslint-plugin-vuejs-accessibility`                | `vuejs-accessibility`                |

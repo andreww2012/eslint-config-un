@@ -1247,7 +1247,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * 🧩 Main plugin: [`eslint-plugin-unused-imports`](https://npmjs.com/eslint-plugin-unused-imports)
    *
    * ⚙️ Sub config(s): `noUnusedVars`
-   * @default true
+   * @default false
    */
   unusedImports: UnusedImportsEslintConfigOptions<ExtraPlugins>;
 
