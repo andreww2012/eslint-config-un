@@ -523,13 +523,6 @@ const REACT_X_TYPE_AWARE_RULES = new Set<string>([
   'prefer-read-only-props',
 ] satisfies RuleNamesForPlugin<'@eslint-react'>[]);
 
-const REACT_X_HOOKS_RULES = new Set<string>([
-  'no-unnecessary-use-callback',
-  'no-unnecessary-use-memo',
-  'no-unnecessary-use-prefix',
-  'prefer-use-state-lazy-initialization',
-] satisfies RuleNamesForPlugin<'@eslint-react'>[]);
-
 const DEFAULT_FILES = [GLOB_JS_TS_X];
 
 export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) => {
@@ -962,26 +955,6 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'no-direct-set-state-in-use-effect',
       getXRuleSeverity(WARNING),
     ) /** @since 1.5.26 */ /** @aka no-direct-set-state-in-use-layout-effect (until 2.0.0) */ // 🟡
-    .addAnyRule(
-      '@eslint-react',
-      'no-unnecessary-use-callback',
-      getXRuleSeverity(ERROR),
-    ) /** @since 0.8.6-beta.6 */ /** @aka ensure-use-callback-has-non-empty-deps */
-    .addAnyRule(
-      '@eslint-react',
-      'no-unnecessary-use-memo',
-      getXRuleSeverity(ERROR),
-    ) /** @since 0.8.6-beta.6 */ /** @aka ensure-use-memo-has-non-empty-deps */
-    .addAnyRule(
-      '@eslint-react',
-      'no-unnecessary-use-prefix',
-      getXRuleSeverity(OFF),
-    ) /** @since 0.8.8-beta.0 */ /** @aka no-useless-custom-hooks */ /** @aka no-redundant-custom-hook */ /** @aka ensure-custom-hooks-using-other-hooks */ // 🟡
-    .addAnyRule(
-      '@eslint-react',
-      'prefer-use-state-lazy-initialization',
-      getXRuleSeverity(WARNING),
-    ) /** @since 0.9.6 */ // 🟡
     .enableConfigTesterForPlugin('react-hooks')
     .addOverrides();
 
@@ -1133,6 +1106,18 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       getDoubleRuleSeverity(NO_STRING_REFS_SEVERITY, true),
     ) /** @since 0.3.9 */ // 🟢 🔄️
     .addRule('no-unnecessary-key', ERROR) /** @since 20.0.0 */
+    .addRule(
+      'no-unnecessary-use-callback',
+      getXRuleSeverity(ERROR),
+    ) /** @since 0.8.6-beta.6 */ /** @aka ensure-use-callback-has-non-empty-deps */
+    .addRule(
+      'no-unnecessary-use-memo',
+      getXRuleSeverity(ERROR),
+    ) /** @since 0.8.6-beta.6 */ /** @aka ensure-use-memo-has-non-empty-deps */
+    .addRule(
+      'no-unnecessary-use-prefix',
+      getXRuleSeverity(OFF),
+    ) /** @since 0.8.8-beta.0 */ /** @aka no-useless-custom-hooks */ /** @aka no-redundant-custom-hook */ /** @aka ensure-custom-hooks-using-other-hooks */ // 🟡
     .addRule('no-unnecessary-use-ref', ERROR) /** @since 2.6.0 */
     .addRule(
       'no-unsafe-component-will-mount',
@@ -1180,6 +1165,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'prefer-namespace-import',
       OFF,
     ) /** @since 2.0.0 */ /** @aka prefer-react-namespace-import */
+    .addRule('prefer-use-state-lazy-initialization', getXRuleSeverity(WARNING)) /** @since 0.9.6 */ // 🟡
     .markCategory('Naming Convention')
     .addAnyRule(
       '@eslint-react/naming-convention',
@@ -1208,8 +1194,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     .addAnyRule('@eslint-react/debug', 'is-from-react', OFF) /** @since 1.10.0 */
     .addAnyRule('@eslint-react/debug', 'jsx', OFF) /** @since 1.41.0 */
     .enableConfigTesterForPlugin('@eslint-react', {
-      rulesToSkipInConfig: (ruleName) =>
-        REACT_X_TYPE_AWARE_RULES.has(ruleName) || REACT_X_HOOKS_RULES.has(ruleName),
+      rulesToSkipInConfig: (ruleName) => REACT_X_TYPE_AWARE_RULES.has(ruleName),
     })
     .addOverrides();
 
