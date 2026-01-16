@@ -19,7 +19,7 @@ import {
   isLikelyEslintPlugin,
 } from './plugins/shared';
 
-const SortingZod = z.enum(['score', 'downloads', 'recency', 'deps', 'plugins-deps']);
+const SortingZod = z.enum(['score', 'downloads', 'recency', 'deps', 'deps-plugins', 'rules']);
 type Sorting = z.output<typeof SortingZod>;
 
 const argv = cli({
@@ -192,7 +192,7 @@ export const analyze = Effect.gen(function* () {
       sortInversedByDefault = true;
       break;
     }
-    case 'plugins-deps': {
+    case 'deps-plugins': {
       pluginsSortingCriterion = (value) => value.directDependenciesOtherEslintPlugins.length;
       sortInversedByDefault = true;
       break;
@@ -203,6 +203,11 @@ export const analyze = Effect.gen(function* () {
     }
     case 'recency': {
       pluginsSortingCriterion = (value) => value.lastUpdated.getTime();
+      break;
+    }
+    case 'rules': {
+      pluginsSortingCriterion = ({pluginInfo}) =>
+        pluginInfo && 'customRules' in pluginInfo ? pluginInfo.customRules.length : 0;
       break;
     }
     default: {
@@ -240,7 +245,7 @@ export const analyze = Effect.gen(function* () {
             pluginInfo == null
               ? styleText('gray', '❓ rules')
               : 'error' in pluginInfo
-                ? styleText('yellow', 'Error')
+                ? styleText('yellow', `Error (${styleText('gray', pluginInfo.error.code)})`)
                 : pluginInfo.customRules.length === 0
                   ? styleText('red', 'No rules')
                   : `${pluginInfo.customRules.length} rule${pluginInfo.customRules.length === 1 ? '' : 's'}`,

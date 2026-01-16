@@ -4,6 +4,7 @@ src/**/*.gen.ts
 test/*
 TODO.md
 temp/
+.nx/
 
 ####################
 # Nodejs gitignore #

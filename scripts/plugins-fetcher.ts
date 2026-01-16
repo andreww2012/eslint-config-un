@@ -217,15 +217,27 @@ const fetchPackageInfo = (packageName: string) =>
       return null;
     }
 
-    const eslintPluginInfo = isPackageLikelyEslintPlugin
-      ? cachedInfo?.eslintPluginInfo ||
-        (yield* executePackageAsEslintPlugin(packageName).pipe(
-          Effect.catchAll((error) => Effect.succeed({error: error.cause})),
-        ))
-      : null;
+    const eslintPluginInfo =
+      isPackageLikelyEslintPlugin && cachedInfo?.eslintPluginInfo === undefined
+        ? yield* executePackageAsEslintPlugin(packageName).pipe(
+            // @effect-diagnostics-next-line globalErrorInEffectFailure:off
+            Effect.catchAll(() =>
+              Effect.fail(
+                new Error(
+                  `An expected error occurred while executing ${packageName} package as an ESLint plugin`,
+                ),
+              ),
+            ),
+          )
+        : null;
 
     const packageStats = shouldFetchStats
-      ? yield* fetchPackageStats(packageName).pipe(Effect.catchAll(() => Effect.succeed(null)))
+      ? yield* fetchPackageStats(packageName).pipe(
+          Effect.catchAll((error) => {
+            logger.warn(`Error fetching stats for ${styledPackageName}:`, error);
+            return Effect.succeed(null);
+          }),
+        )
       : (cachedInfo?.stats ?? null);
     if (shouldFetchStats && !packageStats) {
       return null;

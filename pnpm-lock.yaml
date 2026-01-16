@@ -386,9 +386,6 @@ importers:
       ember-eslint-parser:
         specifier: 0.5.13
         version: 0.5.13(@babel/core@7.28.5)(@typescript-eslint/parser@8.52.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
-      esbuild:
-        specifier: 0.27.2
-        version: 0.27.2
       eslint:
         specifier: 9.39.2
         version: 9.39.2(jiti@2.6.1)
@@ -626,9 +623,6 @@ importers:
       svelte-eslint-parser:
         specifier: 1.4.1
         version: 1.4.1(svelte@5.34.3)
-      toml-eslint-parser:
-        specifier: 1.0.0
-        version: 1.0.0
       tsdown:
         specifier: 0.19.0
         version: 0.19.0(@arethetypeswrong/core@0.18.2)(@typescript/native-preview@7.0.0-dev.20251203.1)(oxc-resolver@11.16.0)(synckit@0.11.11)(typescript@5.9.3)
@@ -9955,10 +9949,6 @@ packages:
   toml-eslint-parser@0.12.0:
     resolution: {integrity: sha512-4qHgkGXl0LyFp/3aNoi6dKWuPuxFsCiDtBl5IbJljeYR57+5l3pJHJEW9xPSOu2U1drGlG82tpGqkJz/uJZ2Fw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-
-  toml-eslint-parser@1.0.0:
-    resolution: {integrity: sha512-syGkwm4fa+uOzswyJQy6aFmmpcSBm/M0+F/iOAWfDkFuz33OnPMJkVQzaCk10WpqwzKcbaeAJWxfSGkkH8GiBw==}
-    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
   toml-eslint-parser@1.0.1:
     resolution: {integrity: sha512-hwY3wKy2dUcvQq0arS5v4zVxoIieq06cwSTwatLvzK8PclsDqFZMhcjI9nV/IncmOL40jsTDV7WehoQYRJXqrw==}
@@ -21753,10 +21743,6 @@ snapshots:
   toml-eslint-parser@0.12.0:
     dependencies:
       eslint-visitor-keys: 3.4.3
-
-  toml-eslint-parser@1.0.0:
-    dependencies:
-      eslint-visitor-keys: 5.0.0
 
   toml-eslint-parser@1.0.1:
     dependencies:

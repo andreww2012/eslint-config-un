@@ -1,11 +1,16 @@
-// cspell:ignore millis
+// cspell:ignore millis scandir
 import {styleText} from 'node:util';
+import {Worker} from 'node:worker_threads';
 import {HttpClient, HttpClientError, HttpClientRequest} from '@effect/platform';
 import {Data, DateTime, Duration, Effect} from 'effect';
+import type {Ms} from 'ms-ts';
 import * as packageFetcher from 'package-json';
 import * as z from 'zod';
-import {interopDefault} from '../../src/utils';
-import {LoggerTag} from './shared';
+import {
+  type ExecuteAnyEslintPluginWorkerInitialData,
+  type ExecuteAnyEslintPluginWorkerOutput,
+  LoggerTag,
+} from './shared';
 
 const STATS_THROTTLE_INTERVAL_MS = 3000;
 
@@ -141,57 +146,70 @@ export const fetchPackageStats = (packageName: string) =>
     }),
   );
 
-export const getEslintPluginInfo = (
-  module: unknown,
-): {
-  keys: string[];
-  customRules: string[];
-} | null => {
-  const isModuleObject = typeof module === 'object' && module != null;
-  const hasRulesObject =
-    isModuleObject && 'rules' in module && typeof module.rules === 'object' && module.rules != null;
-  const hasConfigsObject =
-    isModuleObject &&
-    'configs' in module &&
-    typeof module.configs === 'object' &&
-    module.configs != null;
-
-  const isLikelyPlugin = hasRulesObject || hasConfigsObject;
-  if (!isLikelyPlugin) {
-    return null;
-  }
-
-  return {
-    customRules: hasRulesObject ? Object.keys(module.rules as Record<string, unknown>) : [],
-    keys: Object.keys(module),
-  };
-};
-
-class PackageModuleLoadError extends Data.TaggedError('PackageModuleLoadError')<{
-  packageName: string;
-  cause: unknown;
-}> {}
+const ESLINT_PLUGIN_EXECUTION_TIMEOUT_MS = 300_000 satisfies Ms<'5m'>;
 
 export const executePackageAsEslintPlugin = (packageName: string) =>
   Effect.gen(function* () {
     const logger = yield* LoggerTag;
     const styledName = styleText('blueBright', packageName);
 
-    logger.verbose(`Loading package module via esm.sh: ${styledName}`);
+    logger.verbose(`Attempting to install & execute module: ${styledName}`);
 
-    const packageModule = yield* Effect.tryPromise({
-      try: () =>
-        interopDefault(
-          // eslint-disable-next-line no-unsanitized/method
-          import(`https://esm.sh/${packageName}`) as Promise<unknown>,
-        ),
-      catch: (error) => {
-        logger.warn(`Failed to load package module: ${styledName}`, error);
-        return new PackageModuleLoadError({packageName, cause: error});
-      },
-    });
+    return yield* Effect.tryPromise(
+      () =>
+        new Promise<ExecuteAnyEslintPluginWorkerOutput>((resolve, reject) => {
+          const workerPath = new URL('./execute-any-eslint-plugin.worker.ts', import.meta.url);
+          const worker = new Worker(
+            `import('tsx/esm/api').then((tsx) => {tsx.register(); return import('${workerPath.toString()}')});`,
+            {
+              eval: true,
+              workerData: {packageName} satisfies ExecuteAnyEslintPluginWorkerInitialData,
+              stdout: false,
+              stderr: false,
+            },
+          );
 
-    logger.verbose(`✅ Package module executed: ${styledName}`);
+          const workerTimeoutTimer = setTimeout(() => {
+            logger.verbose(
+              `Executing module ${styledName} timed out after ${ESLINT_PLUGIN_EXECUTION_TIMEOUT_MS} ms`,
+            );
+            void worker.terminate().then(() => {
+              reject(new Error(`Worker timed out after ${ESLINT_PLUGIN_EXECUTION_TIMEOUT_MS} ms`));
+            });
+          }, ESLINT_PLUGIN_EXECUTION_TIMEOUT_MS);
 
-    return getEslintPluginInfo(packageModule);
+          worker.on('error', (error) => {
+            clearTimeout(workerTimeoutTimer);
+            reject(error);
+            logger.warn(`Worker error while trying to execute module ${styledName}`, error);
+          });
+
+          worker.on('message', (message: ExecuteAnyEslintPluginWorkerOutput) => {
+            clearTimeout(workerTimeoutTimer);
+
+            if (message && 'error' in message) {
+              logger.warn(
+                `Error during executing package ${styledName}:`,
+                styleText('gray', JSON.stringify(message.error)),
+              );
+              if (message.error.code === 'INSTALLATION') {
+                reject(new Error(`Installation failed: ${message.error.cause}`));
+                return;
+              }
+            } else {
+              if (message === null) {
+                logger.warn(
+                  `Package ${styledName} is probably not an ESLint plugin or module evaluation resulted in no exports`,
+                );
+              }
+              logger.verbose(
+                `✅ Package ${styledName} executed successfully:`,
+                styleText('gray', JSON.stringify(message)),
+              );
+            }
+
+            resolve(message);
+          });
+        }),
+    );
   });
