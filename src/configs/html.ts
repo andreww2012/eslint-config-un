@@ -60,6 +60,7 @@ export default ((context, optionsRaw) => {
   // Legend:
   // 🟢 - in recommended
   // 💅 - conflicts with Prettier
+  // 🎨 - CSS related
 
   configBuilder
     ?.addConfig(
@@ -84,6 +85,7 @@ export default ((context, optionsRaw) => {
       },
     )
     .markCategory('Best Practice')
+    .addRule('css-no-empty-blocks', ERROR) /** @since 0.53.0 */ // 🎨
     .addRule('max-element-depth', OFF) /** @since 0.33.0 */
     .addRule('no-duplicate-attrs', ERROR) /** @since 0.9.0-0.9.0-alpha.1.0 */ // 🟢
     .addRule('no-duplicate-class', ERROR) /** @since 0.39.0 */
