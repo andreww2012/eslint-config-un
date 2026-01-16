@@ -119,19 +119,11 @@ const solveCaptchaAsync = (browserPage: Page) =>
   Effect.tryPromise({
     try: () =>
       new Promise<true>((resolve, reject) => {
-        // eslint-disable-next-line ts/no-misused-promises
-        browserPage.on('console', async (message) => {
-          const messageText = message.text();
-          if (!messageText.includes('intercepted-params:')) {
-            return;
-          }
-
-          // eslint-disable-next-line ts/no-unsafe-assignment
-          const params = JSON.parse(messageText.replace('intercepted-params:', ''));
-
+        const solveCaptcha = async (
+          params: Parameters<typeof captchaSolver.cloudflareTurnstile>[0],
+        ) => {
           try {
             logger.info('Solving the captcha...');
-            // eslint-disable-next-line ts/no-unsafe-argument
             const res = await captchaSolver.cloudflareTurnstile(params);
             logger.info(`Solved the captcha ${res.id}`);
             await browserPage.evaluate((token) => {
@@ -144,6 +136,18 @@ const solveCaptchaAsync = (browserPage: Page) =>
             // eslint-disable-next-line ts/prefer-promise-reject-errors
             reject(error);
           }
+        };
+
+        browserPage.on('console', (message) => {
+          const messageText = message.text();
+          if (!messageText.includes('intercepted-params:')) {
+            return;
+          }
+
+          const params: unknown = JSON.parse(messageText.replace('intercepted-params:', ''));
+
+          // @ts-expect-error assuming params are of right type
+          void solveCaptcha(params);
         });
       }),
     catch: (error) => new CaptchaSolveError({cause: error}),

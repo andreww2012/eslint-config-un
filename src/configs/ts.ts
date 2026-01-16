@@ -85,6 +85,7 @@ const TS_PLUGIN_TYPE_AWARE_RULES = [
   'restrict-template-expressions',
   'return-await',
   'strict-boolean-expressions',
+  'strict-void-return',
   'switch-exhaustiveness-check',
   'unbound-method',
   'use-unknown-in-catch-callback-variable',
@@ -516,6 +517,20 @@ export interface TsEslintConfigOptions<
    * Note: this option does not affect [`no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule, which is disabled by default.
    */
   disableNoUnsafeRules?: boolean;
+
+  /**
+   * Which special variable types should be subject to removal by
+   * [`no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) (if unused).
+   *
+   * Will be merged with the default value.
+   * @default {imports: true}
+   */
+  extraVariableTypesToRemove?: Partial<
+    Record<
+      keyof (Extract<GetRuleOptions<'ts', 'no-unused-vars'>, object>['enableAutofixRemoval'] & {}),
+      boolean
+    >
+  >;
 }
 
 const TS_FILES_DEFAULT = [GLOB_TS_X];
@@ -547,6 +562,7 @@ export default ((
     inheritBaseRuleSeverityAndOptionsForExtensionRules: inheritFromBase,
     typescriptVersion,
     allowDefaultProject,
+    extraVariableTypesToRemove,
   } = optionsResolved;
 
   const extraFilesNONTypeAware: string[] = [];
@@ -735,6 +751,22 @@ export default ((
         ]
       : [];
 
+  const noUnusedVarsBaseUnEntry = getRuleUnSeverityAndOptionsFromEntry(
+    vanillaFinalFlatConfigRules['no-unused-vars'] ?? ERROR,
+    inheritFromBase ? undefined : [ERROR],
+  );
+  const noUnusedVarsOptions: GetRuleOptions<'ts', 'no-unused-vars', 'all'> =
+    noUnusedVarsBaseUnEntry[1][0] == null
+      ? []
+      : [
+          {
+            enableAutofixRemoval: {imports: true, ...extraVariableTypesToRemove},
+            ...(typeof noUnusedVarsBaseUnEntry[1][0] === 'string'
+              ? {vars: noUnusedVarsBaseUnEntry[1][0]}
+              : noUnusedVarsBaseUnEntry[1][0]),
+          },
+        ];
+
   // Legend:
   // 🟣 - in strict
   // 💅 - in stylistic
@@ -905,10 +937,8 @@ export default ((
     ) /** @since 8.47.0 */ // 🟣
     .addRule(
       'no-unused-vars',
-      ...getRuleUnSeverityAndOptionsFromEntry(
-        vanillaFinalFlatConfigRules['no-unused-vars'] ?? ERROR,
-        inheritFromBase ? undefined : [ERROR],
-      ),
+      noUnusedVarsBaseUnEntry[0],
+      noUnusedVarsOptions,
     ) /** @since 0.0.1-alpha.0 */ // 🟣
     .addRule(
       'no-use-before-define',
@@ -1047,6 +1077,7 @@ export default ((
     // Note: has different name. Also note that the original rule is deprecated and not included in this config, but we disable it anyway just for safety
     .disableAnyRule('', 'no-return-await') // 🟣
     .addRule('strict-boolean-expressions', OFF) /** @since 1.12.0 */
+    .addRule('strict-void-return', ERROR) /** @since 8.53.0 */
     .addRule('switch-exhaustiveness-check', ERROR) /** @since 2.19.0 */
     .markCategory('Extension rules')
     .addRule(
