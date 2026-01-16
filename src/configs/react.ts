@@ -90,16 +90,25 @@ interface EslintPluginReactSettings {
 
 interface EslintPluginReactXSettings {
   /**
+   * Regex pattern matching custom hooks treated as state hooks
+   * @see https://www.eslint-react.xyz/docs/configuration/configure-analyzer#additionalstatehooks
+   */
+  additionalStateHooks?: string;
+
+  /**
+   * React version. Automatically set by eslint-config-un if detected
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#version
    */
   version?: string;
 
   /**
+   * Customizes the React module import source. Useful for non-standard distributions
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#importsource
    */
   importSource?: string;
 
   /**
+   * Defines the prop used for polymorphic components
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#polymorphicpropname
    */
   polymorphicPropName?: string;
@@ -1082,7 +1091,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     .addRule(
       'no-implicit-key',
       WARNING,
-    ) /** @since 0.6.1 */ /** @aka no-spreading-key */ /** @aka no-spreading-key */
+    ) /** @since 0.6.1 */ /** @aka no-spreading-key */ /** @aka no-spreading-key */ // 🟡
     .addRule(
       'no-missing-component-display-name',
       getDoubleRuleSeverity(NO_MISSING_COMPONENT_OR_CONTEXT_DISPLAY_NAME_SEVERITY, true),
@@ -1124,6 +1133,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       getDoubleRuleSeverity(NO_STRING_REFS_SEVERITY, true),
     ) /** @since 0.3.9 */ // 🟢 🔄️
     .addRule('no-unnecessary-key', ERROR) /** @since 20.0.0 */
+    .addRule('no-unnecessary-use-ref', ERROR) /** @since 2.6.0 */
     .addRule(
       'no-unsafe-component-will-mount',
       getDoubleRuleSeverity(noUnsafeClassComponentMethodsSeverity, true),
