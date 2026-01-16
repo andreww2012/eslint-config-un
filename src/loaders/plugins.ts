@@ -647,10 +647,10 @@ export const pluginsLoaders = {
   ),
   zod: genModuleLoader(
     'zod',
-    'eslint-plugin-zod-x',
+    'eslint-plugin-zod',
     () =>
       interopDefault(
-        import('eslint-plugin-zod-x'),
+        import('eslint-plugin-zod'),
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
 } satisfies Record<string, ModuleLoader<EslintPlugin | null, string, boolean>>;

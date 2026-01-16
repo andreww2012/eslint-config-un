@@ -28,7 +28,7 @@ export interface ZodEslintConfigOptions<
    * - Disallowing all methods will not ignored.
    *
    * Affected rule:
-   * - [`consistent-object-schema-type`](https://github.com/marcalexiei/eslint-plugin-zod-x/blob/HEAD/docs/rules/consistent-object-schema-type.md)
+   * - [`consistent-object-schema-type`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-object-schema-type.md)
    * @default {object: true, looseObject: true, strictObject: true}
    */
   allowedObjectSchemaTypes?: ArrayOrBooleanRecord<ZodObjectSchemaType>;
@@ -40,14 +40,14 @@ export interface ZodEslintConfigOptions<
    * - `false`: not enforced
    *
    * Affected rule:
-   * - [`array-style`](https://github.com/marcalexiei/eslint-plugin-zod-x/blob/HEAD/docs/rules/array-style.md)
+   * - [`array-style`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/array-style.md)
    * @default 'method'
    */
   arrayStyle?: GetRuleOptions<'zod', 'array-style'>['style'] | false;
 
   /**
    * Affected rule:
-   * - [`prefer-namespace-import`](https://github.com/marcalexiei/eslint-plugin-zod-x/blob/HEAD/docs/rules/prefer-namespace-import.md)
+   * - [`prefer-namespace-import`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/prefer-namespace-import.md)
    * @default true
    */
   enforceNamespaceImport?: boolean;
@@ -57,7 +57,7 @@ export interface ZodEslintConfigOptions<
    * to end with a specified suffix. Pass `false` or an empty string to not enforce.
    *
    * Affected rule:
-   * - [`require-schema-suffix`](https://github.com/marcalexiei/eslint-plugin-zod-x/blob/HEAD/docs/rules/require-schema-suffix.md)
+   * - [`require-schema-suffix`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/require-schema-suffix.md)
    * @default 'Zod'
    */
   schemaSuffix?: string | false;
@@ -123,6 +123,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-optional-and-default-together', ERROR) /** @since 1.6.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 0.0.1 */ // 🟢
     .addRule('no-unknown-schema', OFF) /** @since 1.12.0 */
+    .addRule('prefer-enum-over-literal-union', ERROR) /** @since 3.0.0 */ // 🟢
     // `.meta()` added in v4
     .addRule('prefer-meta', severityForRulesOnlyForV4) /** @since 0.0.1 */ // 🟢
     .addRule('prefer-meta-last', ERROR) /** @since 0.0.1 */ // 🟢
