@@ -1,9 +1,3 @@
-import type {
-  Attributes as BetterTailwindcssAttributes,
-  Callees as BetterTailwindcssCallees,
-  Tags as BetterTailwindcssTags,
-  Variables as BetterTailwindcssVariables,
-} from 'eslint-plugin-better-tailwindcss/api/types';
 import {ERROR, OFF, WARNING} from '../constants';
 import type {RequireExactlyOne} from '../types';
 import {
@@ -13,6 +7,8 @@ import {
   type UnConfigOptions,
   assignDefaults,
 } from './index';
+
+type AnyRuleOptions = GetRuleOptions<'better-tailwindcss', 'enforce-shorthand-classes'>;
 
 export interface BetterTailwindEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -45,31 +41,53 @@ export interface BetterTailwindEslintConfigOptions<
      * The name of the attribute that contains the tailwind classes.
      * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#attributes
      */
-    attributes?: BetterTailwindcssAttributes;
+    attributes?: AnyRuleOptions['attributes'];
 
     /**
      * List of function names which arguments should also get linted.
      * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#callees
      */
-    callees?: BetterTailwindcssCallees;
+    callees?: AnyRuleOptions['callees'];
 
     /**
      * List of variable names whose initializer should also get linted.
      * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#variables
      */
-    variables?: BetterTailwindcssVariables;
+    variables?: AnyRuleOptions['variables'];
 
     /**
      * List of template literal tag names whose content should get linted.
      * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#tags
      */
-    tags?: BetterTailwindcssTags;
+    tags?: AnyRuleOptions['tags'];
+
+    /**
+     * The font size of the `<html>` element in pixels.
+     * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#rootfontsize
+     */
+    rootFontSize?: AnyRuleOptions['rootFontSize'];
+
+    /**
+     * Customize how linting messages are displayed.
+     * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#messagestyle
+     */
+    messageStyle?: AnyRuleOptions['messageStyle'];
+
+    /**
+     * [Custom component classes](https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes)
+     * that should not be reported as unknown.
+     * @see https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#detectcomponentclasses
+     */
+    detectComponentClasses?: AnyRuleOptions['detectComponentClasses'];
   };
 
   /**
    * Not enforced by default
    */
-  breakUpClassesIntoMultipleLines?: GetRuleOptions<'better-tailwindcss', 'multiline'>;
+  breakUpClassesIntoMultipleLines?: GetRuleOptions<
+    'better-tailwindcss',
+    'enforce-consistent-line-wrapping'
+  >;
 
   /**
    * Enforces consistent Tailwind class order. `false` disables the corresponding rule.
@@ -129,12 +147,16 @@ export default ((context, optionsRaw) => {
     })
     .markCategory('Stylistic rules')
     .addRule(
+      'enforce-canonical-classes',
+      tailwindMajorVersion === 3 ? OFF : ERROR,
+    ) /** @since 4.0.0 */ // 🟢
+    .addRule(
       'enforce-consistent-class-order',
       typeof classOrder === 'string' ? WARNING : OFF,
       typeof classOrder === 'string' ? [{order: classOrder}] : [],
     ) /** @since 3.0.0 */ /** @aka sort-classes */ // 🟢
-    .addRule('enforce-consistent-important-position', ERROR, [
-      {position: tailwindMajorVersion === 3 ? 'legacy' : 'recommended'},
+    .addRule('enforce-consistent-important-position', tailwindMajorVersion === 3 ? ERROR : OFF, [
+      {position: 'legacy'},
     ]) /** @since 3.6.0 */
     .addRule(
       'enforce-consistent-line-wrapping',
@@ -143,10 +165,13 @@ export default ((context, optionsRaw) => {
     ) /** @since 3.0.0 */ /** @aka multiline */ // 🟢
     .addRule(
       'enforce-consistent-variable-syntax',
-      // v3 doesn't support `parentheses` syntax (`bg-(--primary)`) so there's nothing to enforce
-      tailwindMajorVersion === 3 ? OFF : WARNING,
+      // Do not enable in v3 because it doesn't support `parentheses` syntax (`bg-(--primary)`)
+      OFF,
     ) /** @since 3.1.0 */
-    .addRule('enforce-shorthand-classes', ERROR, []) /** @since 3.5.0 */
+    .addRule(
+      'enforce-shorthand-classes',
+      tailwindMajorVersion === 3 ? ERROR : OFF,
+    ) /** @since 3.5.0 */
     .addRule('no-deprecated-classes', WARNING) /** @since 3.6.0 */
     .addRule('no-duplicate-classes', WARNING) /** @since 3.0.0 */ // 🟢
     .addRule('no-unnecessary-whitespace', WARNING) /** @since 3.0.0 */ // 🟢
@@ -157,7 +182,7 @@ export default ((context, optionsRaw) => {
       restrictedClasses?.length ? ERROR : OFF,
       restrictedClasses?.length ? [{restrict: restrictedClasses}] : [],
     ) /** @since 3.0.0 */ // 4️⃣
-    .addRule('no-unregistered-classes', OFF) /** @since 3.0.0 */ // 🟢
+    .addRule('no-unknown-classes', OFF) /** @since 3.0.0 */ /** @aka no-unregistered-classes */ // 🟢
     .enableConfigTesterForPlugin('better-tailwindcss')
     .addOverrides();
 

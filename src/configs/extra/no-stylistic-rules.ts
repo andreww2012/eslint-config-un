@@ -169,11 +169,14 @@ const ALL_STYLISTIC_RULES = {
     // None
   },
   'better-tailwindcss': {
+    'enforce-canonical-classes': true,
+    'enforce-consistent-class-order': true,
+    'enforce-consistent-important-position': true,
+    'enforce-consistent-line-wrapping': true,
     'enforce-consistent-variable-syntax': true,
-    multiline: true,
+    'enforce-shorthand-classes': true,
     'no-duplicate-classes': true,
     'no-unnecessary-whitespace': true,
-    'sort-classes': true,
   },
   boundaries: {
     // None
