@@ -67,7 +67,7 @@
     "build:code:test": "tsdown --out-dir temp/dist",
     "build": "nr typegen && nr build:code",
     "test:config": "tsx scripts/config-tester.ts",
-    "test": "nr typegen && nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
+    "test": "nr deps:audit && nr typegen && nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
     "lint:public-types": "attw --pack . --profile esm-only",
     "change": "npx changeset add && nr spellcheck",
     "release": "changeset publish",
