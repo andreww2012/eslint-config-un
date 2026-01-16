@@ -1,9 +1,3 @@
-declare module '@eslint-community/eslint-plugin-eslint-comments' {
-  import type {Plugin as EslintPlugin} from '@eslint/core';
-  declare const value: EslintPlugin;
-  export = value;
-}
-
 declare module 'eslint-plugin-jest-extended' {
   import type {Plugin as EslintPlugin} from '@eslint/core';
   declare const value: EslintPlugin;
