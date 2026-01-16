@@ -15,7 +15,7 @@ export default {
     'pnpm-workspace.yaml',
     '**/*.svg',
     'patches/**',
-    'scripts/temp/**', // TODO why gitignore doesn't work?
+    '**/temp/**', // TODO why gitignore doesn't work?
     'data/eslint-plugins-db.json',
   ],
   words: [
