@@ -851,6 +851,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 6.1.0 */
+    .addRule('no-literals-in-template', OFF) /** @since 10.7.0 */
     .addRule(
       'no-loss-of-precision',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -879,6 +880,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 7.0.0 */
+    .addRule('no-undef-directives', ERROR) /** @since 10.7.0 */
     .addRule(
       'no-useless-concat',
       ...getRuleUnSeverityAndOptionsFromEntry(
