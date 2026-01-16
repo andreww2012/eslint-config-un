@@ -44,6 +44,7 @@
     "u:m": "ncu -t minor && nr u:after",
     "u:pm": "ncu --dep packageManager",
     "deps:audit": "pnpm audit --audit-level high",
+    "deps:dedupe-check": "pnpm dedupe --check",
     "print-peer-deps": "tsx scripts/print-peer-deps.ts",
     "rules-finder": "tsx scripts/rules-finder.ts",
     "plugins:analyze": "tsx scripts/plugins-analyzer.ts",
@@ -71,7 +72,7 @@
     "lint:public-types": "attw --pack . --profile esm-only",
     "change": "npx changeset add && nr spellcheck",
     "release": "changeset publish",
-    "prepublishOnly": "nr test && nr build && nr lint:public-types",
+    "prepublishOnly": "nr deps:dedupe-check && nr test && nr build && nr lint:public-types",
     "prepack": "nr build"
   },
   "overrides": {
