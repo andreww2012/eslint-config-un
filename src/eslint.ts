@@ -79,18 +79,17 @@ export interface FlatConfigEntryFilesOrIgnores extends FlatConfigEntryFiles {
   ignores?: string[];
 }
 
+export type ExtraPluginsRules<ExtraPlugins extends ExtraPluginsType> = ObjectValues<{
+  [PluginKey in keyof ExtraPlugins & string]: `${PluginKey}/${keyof (Awaited<
+    ExtraPlugins[PluginKey] extends (...args: unknown[]) => EslintPlugin
+      ? ReturnType<ExtraPlugins[PluginKey]>
+      : ExtraPlugins[PluginKey] & EslintPlugin
+  >['rules'] & {}) &
+    string}`;
+}>;
+
 type RulesRecordForExtraPlugins<ExtraPlugins extends ExtraPluginsType> = Partial<
-  Record<
-    ObjectValues<{
-      [PluginKey in keyof ExtraPlugins & string]: `${PluginKey}/${keyof (Awaited<
-        ExtraPlugins[PluginKey] extends (...args: unknown[]) => EslintPlugin
-          ? ReturnType<ExtraPlugins[PluginKey]>
-          : ExtraPlugins[PluginKey] & EslintPlugin
-      >['rules'] & {}) &
-        string}`;
-    }>,
-    EslintRuleEntry
-  >
+  Record<ExtraPluginsRules<ExtraPlugins>, EslintRuleEntry>
 >;
 
 export type RulesRecord = Record<string, EslintRuleEntry> & RuleOptions;

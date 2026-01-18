@@ -1,8 +1,9 @@
 // cspell:ignore attributify blockquotes autolinks setext
+import type {AllEslintRuleNames, ExtraPluginsRules} from '../../eslint';
 import {ALL_RULES_PER_PLUGIN} from '../../eslint-rules.gen';
 import type {PluginPrefix} from '../../loaders';
 import type {ObjectValues} from '../../types';
-import {objectEntriesUnsafe} from '../../utils';
+import {isIn, objectEntriesUnsafe} from '../../utils';
 import {
   type ExtraPluginsType,
   type RuleNamesForPlugin,
@@ -949,6 +950,8 @@ const ALL_STYLISTIC_RULES = {
   [Plugin in PluginPrefix]: Partial<Record<RuleNamesForPlugin<Plugin>, true>>;
 };
 
+/* eslint-disable perfectionist/sort-objects */
+
 type AllStylisticRules = ObjectValues<{
   [Plugin in keyof typeof ALL_STYLISTIC_RULES]: `${Plugin extends '' ? '' : `${Plugin}/`}${keyof (typeof ALL_STYLISTIC_RULES)[Plugin] & string}`;
 }>;
@@ -959,8 +962,9 @@ export interface NoStylisticRulesEslintConfigOptions<
   enableRules?: {
     /**
      * Specify which of the disabled by default stylistic rules will be enabled.
-     * `true` enables all rules. In combination with `enableRules.disableAllOtherRules` set to `true`,
-     * all the other rules will be disabled. This allows to enable stylistic rules exclusively.
+     * `true` enables all rules. In combination with `enableRules.disableAllOtherRules`
+     * set to `true`, all the other rules will be disabled.
+     * This allows to enable stylistic rules exclusively.
      * @default false
      */
     rules: boolean | Partial<Record<AllStylisticRules, boolean>>;
@@ -971,6 +975,16 @@ export interface NoStylisticRulesEslintConfigOptions<
      */
     disableAllOtherRules?: boolean;
   };
+
+  /**
+   * Specify additional rules which should be considered stylistic.
+   */
+  additionalRules?: Partial<
+    Record<
+      Exclude<ExtraPluginsRules<ExtraPlugins> | AllEslintRuleNames, AllStylisticRules>,
+      boolean
+    >
+  >;
 }
 
 export default ((context, optionsRaw) => {
@@ -979,8 +993,10 @@ export default ((context, optionsRaw) => {
     {} satisfies NoStylisticRulesEslintConfigOptions,
   );
 
-  const {enableRules: {disableAllOtherRules = false, rules: enabledRules} = {rules: false}} =
-    optionsResolved;
+  const {
+    enableRules: {disableAllOtherRules = false, rules: enabledRules} = {rules: false},
+    additionalRules,
+  } = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, null);
 
@@ -998,16 +1014,20 @@ export default ((context, optionsRaw) => {
     .disableBulkRules(
       enabledRules === true
         ? false
-        : Object.entries(ALL_STYLISTIC_RULES).flatMap(([pluginName, rules]) =>
-            Object.keys(rules)
-              .map((ruleName) => {
+        : [
+            ...Object.entries(ALL_STYLISTIC_RULES).flatMap(([pluginName, rules]) =>
+              Object.keys(rules).map((ruleName) => {
                 const ruleNameWithPrefix = `${pluginName ? `${pluginName}/` : ''}${ruleName}`;
                 return enabledRules && enabledRules[ruleNameWithPrefix as keyof typeof enabledRules]
                   ? null
                   : ruleNameWithPrefix;
-              })
-              .filter((v) => v != null),
-          ),
+              }),
+            ),
+            ...objectEntriesUnsafe(
+              // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- added to preserve the type
+              additionalRules! || {},
+            ).map(([ruleName, isStylistic]) => (isStylistic ? ruleName : null)),
+          ].filter((v) => v != null),
     )
     .addOverrides();
 
@@ -1026,11 +1046,17 @@ export default ((context, optionsRaw) => {
       .disableBulkRules(
         objectEntriesUnsafe(ALL_RULES_PER_PLUGIN)
           .flatMap(([pluginName, rules]) =>
-            rules.map((ruleName) =>
-              ruleName in ALL_STYLISTIC_RULES[pluginName]
+            rules.map((ruleName) => {
+              const ruleNameWithPluginPrefix = `${pluginName ? `${pluginName}/` : ''}${ruleName}`;
+              return ruleName in ALL_STYLISTIC_RULES[pluginName] &&
+                !(
+                  additionalRules &&
+                  isIn(ruleNameWithPluginPrefix, additionalRules) &&
+                  additionalRules[ruleNameWithPluginPrefix] === true
+                )
                 ? null
-                : `${pluginName ? `${pluginName}/` : ''}${ruleName}`,
-            ),
+                : ruleNameWithPluginPrefix;
+            }),
           )
           .filter((v) => v != null),
       );
@@ -1041,3 +1067,5 @@ export default ((context, optionsRaw) => {
     optionsResolved,
   };
 }) satisfies UnConfigFn<'noStylisticRules'>;
+
+/* eslint-enable perfectionist/sort-objects */
