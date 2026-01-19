@@ -73,4 +73,10 @@ try {
             String(error),
     },
   });
+} finally {
+  try {
+    await fs.rm(tempDirectoryPath, {recursive: true, force: true});
+  } catch (error: unknown) {
+    console.warn(`Failed to clean up temporary directory ${tempDirectoryPath}:`, error);
+  }
 }

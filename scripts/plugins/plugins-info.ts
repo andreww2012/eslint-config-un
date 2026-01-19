@@ -148,12 +148,20 @@ export const fetchPackageStats = (packageName: string) =>
 
 const ESLINT_PLUGIN_EXECUTION_TIMEOUT_MS = 300_000 satisfies Ms<'5m'>;
 
+// TODO start executing packages in a separate process so that it won't crash the main process
+const CRASHING_PACKAGES = new Set(['@servicenow/eslint-plugin']);
+
 export const executePackageAsEslintPlugin = (packageName: string) =>
   Effect.gen(function* () {
     const logger = yield* LoggerTag;
     const styledName = styleText('blueBright', packageName);
 
     logger.verbose(`Attempting to install & execute module: ${styledName}`);
+
+    if (CRASHING_PACKAGES.has(packageName)) {
+      logger.warn(`Skipping execution of ${styledName} package, it's known to be crashing`);
+      return null;
+    }
 
     return yield* Effect.tryPromise(
       () =>
@@ -192,16 +200,13 @@ export const executePackageAsEslintPlugin = (packageName: string) =>
                 `Error during executing package ${styledName}:`,
                 styleText('gray', JSON.stringify(message.error)),
               );
-              if (message.error.code === 'INSTALLATION') {
-                reject(new Error(`Installation failed: ${message.error.cause}`));
-                return;
-              }
             } else {
               if (message === null) {
                 logger.warn(
                   `Package ${styledName} is probably not an ESLint plugin or module evaluation resulted in no exports`,
                 );
               }
+
               logger.verbose(
                 `✅ Package ${styledName} executed successfully:`,
                 styleText('gray', JSON.stringify(message)),

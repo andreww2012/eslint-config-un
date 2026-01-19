@@ -14,19 +14,26 @@ export const CACHE_BASE_PATH = '../../node_modules/.cache/eslint-config-un/packa
 
 export class LoggerTag extends Context.Tag('Logger')<LoggerTag, ConsolaInstance>() {}
 
-export interface PackageInfo {
+export type PackageInfo = {
   updatedAt: string;
-  metadata: Prettify<FullVersion & Pick<FullMetadata, 'time'>>;
-  stats: Record<string /* ISO date only */, number> | null;
-  eslintPluginInfo:
-    | ReturnType<typeof getEslintPluginInfo>
-    | {
-        error: {
-          code: 'UNEXPECTED' | `UNEXPECTED:${string}` | 'INSTALLATION' | 'UNKNOWN';
-          cause: string;
-        };
-      };
-}
+} & (
+  | {
+      metadata: Prettify<FullVersion & Pick<FullMetadata, 'time'>>;
+      stats: Record<string /* ISO date only */, number> | null;
+      eslintPluginInfo:
+        | ReturnType<typeof getEslintPluginInfo>
+        | {
+            error: {
+              code: 'UNEXPECTED' | `UNEXPECTED:${string}` | 'INSTALLATION' | 'UNKNOWN';
+              cause: string;
+            };
+          };
+    }
+  | {
+      error: 'PLUGIN_INSTALLATION';
+      consecutiveErrorsCount: number;
+    }
+);
 
 export class PackagesInfoStorageTag extends Context.Tag('PackagesInfoStorage')<
   PackagesInfoStorageTag,
@@ -93,7 +100,10 @@ export type ExecuteAnyEslintPluginWorkerInitialData = z.infer<
   typeof ExecuteAnyEslintPluginWorkerInitialDataZod
 >;
 
-export type ExecuteAnyEslintPluginWorkerOutput = PackageInfo['eslintPluginInfo'];
+export type ExecuteAnyEslintPluginWorkerOutput = Extract<
+  PackageInfo,
+  {eslintPluginInfo: unknown}
+>['eslintPluginInfo'];
 
 export const getEslintPluginInfo = (
   module: unknown,

@@ -75,6 +75,8 @@ class RuntimeLayerTag extends Context.Tag('RuntimeLayer')<
 const TASK_QUEUE_CONCURRENCY = 10;
 const CACHED_DATA_FRESH_FOR_MS = 604800000 satisfies Ms<'1w'>;
 
+const SHOULD_REFETCH_ERRORED_PLUGIN_INFO_AFTER_MINIMUM_MS = 86400000 satisfies Ms<'1d'>;
+
 const argv = cli({
   flags: {
     verbose: {
@@ -174,30 +176,44 @@ const fetchPackageInfo = (packageName: string) =>
       return null;
     }
 
+    let cachedInfoInitial: PackageInfo | undefined;
     const cachedInfo = yield* Effect.promise(async () => {
       const result = await packagesInfoStorage.getItem(packageName);
-      if (result != null) {
-        if (Date.now() - new Date(result.updatedAt).getTime() > CACHED_DATA_FRESH_FOR_MS) {
-          logger.warn(`Package ${styledPackageName} info fetched, but its info is stale`);
-          return null;
-        }
-
-        logger.verbose(`Fetching package info skipped, already exists: ${styledPackageName}`);
+      if (result == null) {
+        return result;
       }
+      cachedInfoInitial = result;
+
+      if (Date.now() - new Date(result.updatedAt).getTime() > CACHED_DATA_FRESH_FOR_MS) {
+        logger.warn(`Package ${styledPackageName} info fetched, but its info is stale`);
+        return null;
+      }
+      if ('error' in result) {
+        const dateShouldRefetchPackageAfter = new Date(
+          new Date(result.updatedAt).getTime() +
+            SHOULD_REFETCH_ERRORED_PLUGIN_INFO_AFTER_MINIMUM_MS +
+            (43200000 satisfies Ms<'12h'>) * (result.consecutiveErrorsCount - 1),
+        );
+        const shouldRefetch = new Date() > dateShouldRefetchPackageAfter;
+        if (shouldRefetch) {
+          logger.info(
+            `Package ${styledPackageName} will be re-fetched after an error happened during the previous attempt (${styleText('red', result.error)}) on ${styleText('blue', result.updatedAt)}`,
+          );
+        } else {
+          logger.verbose(
+            `Package ${styledPackageName} last time errored with error code ${styleText('red', result.error)}, but we won't attempt to re-fetch it until ${styleText('blue', dateShouldRefetchPackageAfter.toISOString())}`,
+          );
+        }
+        return shouldRefetch ? null : result;
+      }
+
+      logger.verbose(`Fetching package info skipped, already exists: ${styledPackageName}`);
       return result;
     });
 
-    const isPackageLikelyEslintPlugin = isLikelyEslintPlugin(packageName, db);
-
-    const shouldRefetchStats =
-      cachedInfo != null &&
-      Object.keys(cachedInfo.stats || {}).length === 0 &&
-      isPackageLikelyEslintPlugin;
-    if (shouldRefetchStats) {
-      logger.info(`Attempting to refetch stats of ${styledPackageName}`);
+    if (cachedInfo && 'error' in cachedInfo) {
+      return null;
     }
-
-    const shouldFetchStats = (!cachedInfo || shouldRefetchStats) && isPackageLikelyEslintPlugin;
 
     const packageMetadata =
       cachedInfo?.metadata ||
@@ -215,48 +231,6 @@ const fetchPackageInfo = (packageName: string) =>
     if (packageMetadata == null) {
       yield* updateEslintPluginsDbSafe(packageName, {status: 'missing'});
       return null;
-    }
-
-    const eslintPluginInfo =
-      isPackageLikelyEslintPlugin && cachedInfo?.eslintPluginInfo === undefined
-        ? yield* executePackageAsEslintPlugin(packageName).pipe(
-            // @effect-diagnostics-next-line globalErrorInEffectFailure:off
-            Effect.catchAll(() =>
-              Effect.fail(
-                new Error(
-                  `An expected error occurred while executing ${packageName} package as an ESLint plugin`,
-                ),
-              ),
-            ),
-          )
-        : null;
-
-    const packageStats = shouldFetchStats
-      ? yield* fetchPackageStats(packageName).pipe(
-          Effect.catchAll((error) => {
-            logger.warn(`Error fetching stats for ${styledPackageName}:`, error);
-            return Effect.succeed(null);
-          }),
-        )
-      : (cachedInfo?.stats ?? null);
-    if (shouldFetchStats && !packageStats) {
-      return null;
-    }
-
-    const newPackagesToCheck = yield* Ref.get(newPackagesToCheckRef);
-
-    if (
-      (newPackagesToCheck.has(packageName) && isPackageLikelyEslintPlugin) ||
-      db[packageName] === null
-    ) {
-      yield* updateEslintPluginsDbSafe(
-        packageName,
-        packageMetadata.deprecated
-          ? {status: 'deprecated'}
-          : isInOurDependencies(packageName)
-            ? {status: 'added'}
-            : {status: 'fetched'},
-      );
     }
 
     const allDependencies = new Set([
@@ -299,10 +273,85 @@ const fetchPackageInfo = (packageName: string) =>
       }
     }
 
+    const isPackageLikelyEslintPlugin = isLikelyEslintPlugin(packageName, db);
+
+    const isCachedInfoHasNoPluginInfo = cachedInfo?.eslintPluginInfo === undefined;
+    const eslintPluginInfo =
+      isPackageLikelyEslintPlugin && isCachedInfoHasNoPluginInfo
+        ? yield* executePackageAsEslintPlugin(packageName).pipe(
+            // @effect-diagnostics-next-line globalErrorInEffectFailure:off
+            Effect.catchAll(() =>
+              Effect.fail(
+                new Error(
+                  `An expected error occurred while executing ${packageName} package as an ESLint plugin`,
+                ),
+              ),
+            ),
+          )
+        : null;
+
+    if (
+      isCachedInfoHasNoPluginInfo &&
+      eslintPluginInfo &&
+      'error' in eslintPluginInfo &&
+      eslintPluginInfo.error.code === 'INSTALLATION'
+    ) {
+      yield* Effect.promise(() =>
+        packagesInfoStorage.setItem(packageName, {
+          updatedAt: new Date().toISOString(),
+          error: 'PLUGIN_INSTALLATION',
+          consecutiveErrorsCount:
+            1 +
+            (cachedInfoInitial && 'error' in cachedInfoInitial
+              ? cachedInfoInitial.consecutiveErrorsCount
+              : 0),
+        }),
+      );
+      return null;
+    }
+
+    const shouldRefetchStats =
+      cachedInfo != null &&
+      Object.keys(cachedInfo.stats || {}).length === 0 &&
+      isPackageLikelyEslintPlugin;
+    if (shouldRefetchStats) {
+      logger.info(`Attempting to refetch stats of ${styledPackageName}`);
+    }
+
+    const shouldFetchStats = (!cachedInfo || shouldRefetchStats) && isPackageLikelyEslintPlugin;
+
+    const packageStats = shouldFetchStats
+      ? yield* fetchPackageStats(packageName).pipe(
+          Effect.catchAll((error) => {
+            logger.warn(`Error fetching stats for ${styledPackageName}:`, error);
+            return Effect.succeed(null);
+          }),
+        )
+      : (cachedInfo?.stats ?? null);
+    if (shouldFetchStats && !packageStats) {
+      return null;
+    }
+
+    const newPackagesToCheck = yield* Ref.get(newPackagesToCheckRef);
+
+    if (
+      (newPackagesToCheck.has(packageName) && isPackageLikelyEslintPlugin) ||
+      db[packageName] === null
+    ) {
+      yield* updateEslintPluginsDbSafe(
+        packageName,
+        packageMetadata.deprecated
+          ? {status: 'deprecated'}
+          : isInOurDependencies(packageName)
+            ? {status: 'added'}
+            : {status: 'fetched'},
+      );
+    }
+
     const packageInfo: PackageInfo = {
       updatedAt: new Date().toISOString(),
       metadata: packageMetadata,
-      stats: packageStats || null,
+      stats: packageStats,
       eslintPluginInfo,
     };
 

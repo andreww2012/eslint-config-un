@@ -39,10 +39,11 @@ const argv = cli({
 const cliFlags = argv.flags;
 
 const ANALYSIS_CRITERION_WEIGHTS = {
-  recency: 0.2,
-  downloads: 0.45,
+  recency: 0.25,
+  downloads: 0.35,
   dependencies: 0.05,
-  eslintPluginsDependencies: 0.3,
+  eslintPluginsDependencies: 0.25,
+  rulesCount: 0.1,
 } as const;
 
 const ESLINT_PLUGIN_STATUSES_META: Record<
@@ -120,6 +121,7 @@ export const analyze = Effect.gen(function* () {
       if (
         // eslint-disable-next-line ts/no-unnecessary-condition -- types are lying, `value` can be `null`
         info == null ||
+        'error' in info ||
         status == null
       ) {
         return null;
@@ -154,15 +156,19 @@ export const analyze = Effect.gen(function* () {
 
       const pluginInfo = info.eslintPluginInfo;
 
+      const rulesCount = pluginInfo && !('error' in pluginInfo) ? pluginInfo.customRules.length : 0;
+      const scoreRulesCount = scoreMetric(rulesCount, 5, 1, {inverse: true});
+
       let score =
         scoreRecency * ANALYSIS_CRITERION_WEIGHTS.recency +
         scoreDownloads * ANALYSIS_CRITERION_WEIGHTS.downloads +
         scoreDependencies * ANALYSIS_CRITERION_WEIGHTS.dependencies +
-        scoreEslintPluginsDependencies * ANALYSIS_CRITERION_WEIGHTS.eslintPluginsDependencies;
+        scoreEslintPluginsDependencies * ANALYSIS_CRITERION_WEIGHTS.eslintPluginsDependencies +
+        scoreRulesCount * ANALYSIS_CRITERION_WEIGHTS.rulesCount;
       if (downloadsPerDayAverage <= 10) {
         score *= 0.75;
       }
-      if (pluginInfo && 'customRules' in pluginInfo && pluginInfo.customRules.length === 0) {
+      if (pluginInfo && !('error' in pluginInfo) && rulesCount === 0) {
         score = 0;
       }
 
