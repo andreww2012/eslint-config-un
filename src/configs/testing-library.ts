@@ -184,7 +184,7 @@ export default (async (context, optionsRaw) => {
         `testing-library/${module}`,
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: configFilesFallback,
+          filesDefault: configFilesFallback,
         },
       ])
       .addRule('await-async-events', ERROR, [
@@ -274,7 +274,7 @@ export default (async (context, optionsRaw) => {
       `testing-library/${module}`,
       configNoOnlyTests,
       moduleOptionsResolved,
-      {filesFallback: configFilesFallback},
+      {filesDefault: configFilesFallback},
     );
 
     return [configBuilder, configBuilderNoOnlyTests];

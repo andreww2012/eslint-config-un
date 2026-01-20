@@ -364,7 +364,7 @@ export default ((context, optionsRaw) => {
         'jsdoc/ts',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_TS_X],
+          filesDefault: [GLOB_TS_X],
         },
       ],
       {

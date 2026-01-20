@@ -67,8 +67,8 @@ export default ((context, optionsRaw) => {
         'yaml',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: YAML_DEFAULT_FILES,
-          mergeUserFilesWithFallback: !optionsResolved.doNotMergeFilesWithDefault,
+          filesDefault: YAML_DEFAULT_FILES,
+          filesDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeFilesWithDefault,
           parser: 'yaml-eslint-parser',
         },
       ],

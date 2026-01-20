@@ -103,7 +103,7 @@ export default ((context, optionsRaw) => {
         'pnpm/package.json',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: ['package.json', '**/package.json'],
+          filesDefault: ['package.json', '**/package.json'],
           parser: 'jsonc-eslint-parser',
         },
       ],
@@ -144,7 +144,7 @@ export default ((context, optionsRaw) => {
       'pnpm/pnpm-workspace-yaml',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: ['pnpm-workspace.yaml'],
+        filesDefault: ['pnpm-workspace.yaml'],
         parser: 'yaml-eslint-parser',
       },
     ])

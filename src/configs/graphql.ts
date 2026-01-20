@@ -100,7 +100,7 @@ export default (async (context, optionsRaw) => {
         includeDefaultFilesAndIgnores: true,
         // "Provided file type must be one of .js, .mjs, .cjs, .jsx, .ts, .mts, .cts, .tsx, .flow, .flow.js, .flow.jsx, .vue, .svelte, .astro, .gts, .gjs"
         // "Preprocessing error: Processing of `.vue` files is no longer supported, follow the new official vue example for ESLint's flat config https://github.com/dimaMachina/graphql-eslint/tree/master/examples/vue-code-file"
-        filesFallback: [GLOB_JS_TS_X, GLOB_FLOW, GLOB_SVELTE, GLOB_ASTRO, GLOB_EMBER_GLIMMER],
+        filesDefault: [GLOB_JS_TS_X, GLOB_FLOW, GLOB_SVELTE, GLOB_ASTRO, GLOB_EMBER_GLIMMER],
       },
     ],
     // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
@@ -134,7 +134,7 @@ export default (async (context, optionsRaw) => {
         'graphql',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_GRAPHQL],
+          filesDefault: [GLOB_GRAPHQL],
           doNotIgnoreMarkdown: true,
           parser: 'graphql-eslint-parser',
         },

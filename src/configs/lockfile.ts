@@ -75,7 +75,7 @@ export default ((context, optionsRaw) => {
       'lockfile',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [
+        filesDefault: [
           '**/package-lock.json',
           '**/yarn.lock',
           '**/pnpm-lock.yaml',

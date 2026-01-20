@@ -493,15 +493,15 @@ export class ConfigEntryBuilder<
           options: {
             includeDefaultFilesAndIgnores?: boolean;
 
-            filesFallback?: string[];
-            mergeUserFilesWithFallback?: boolean;
+            filesDefault?: string[];
+            filesDefaultMergedWithUserIgnores?: boolean;
 
             /**
              * Will be merged with internal `ignores`, and,
-             * if `ignoresFallbackMergedWithUserIgnores` set to `true`, with the user provided ones.
+             * if `ignoresDefaultMergedWithUserIgnores` set to `true`, with the user provided ones.
              */
-            ignoresFallback?: string[];
-            ignoresFallbackMergedWithUserIgnores?: boolean;
+            ignoresDefault?: string[];
+            ignoresDefaultMergedWithUserIgnores?: boolean;
 
             parser?: ParserPrefix;
 
@@ -545,16 +545,16 @@ export class ConfigEntryBuilder<
       typeof nameAndMaybeOptions === 'string' ? [nameAndMaybeOptions, {}] : nameAndMaybeOptions;
     const {options: configOptions} = this;
 
-    const userFiles = configOptions.files || [];
-    const fallbackFiles = internalOptions.filesFallback || [];
+    const filesFromUser = configOptions.files || [];
+    const filesDefault = internalOptions.filesDefault || [];
     const files =
-      userFiles.length > 0 && internalOptions.includeDefaultFilesAndIgnores
-        ? internalOptions.mergeUserFilesWithFallback
-          ? [...fallbackFiles, ...userFiles]
-          : userFiles
-        : fallbackFiles;
+      filesFromUser.length > 0 && internalOptions.includeDefaultFilesAndIgnores
+        ? internalOptions.filesDefaultMergedWithUserIgnores
+          ? [...filesDefault, ...filesFromUser]
+          : filesFromUser
+        : filesDefault;
 
-    const ignoresUser = configOptions.ignores;
+    const ignoresFromUser = configOptions.ignores;
     const ignoresInternal = [
       ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
       ...(internalOptions.doNotIgnoreMdx ? [] : [GLOB_MDX]),
@@ -565,16 +565,18 @@ export class ConfigEntryBuilder<
         ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS, GLOB_MDX_ALL_CODE_BLOCKS]
         : []),
     ];
-    const ignoresFallback = internalOptions.ignoresFallback || [];
-    const ignores = internalOptions.includeDefaultFilesAndIgnores
-      ? [
-          ...ignoresInternal,
-          ...(internalOptions.ignoresFallbackMergedWithUserIgnores || !ignoresUser
-            ? ignoresFallback
-            : []),
-          ...(ignoresUser || []),
-        ]
-      : [...ignoresInternal, ...ignoresFallback];
+    const ignoresDefault = internalOptions.ignoresDefault || [];
+    const ignores = [
+      ...ignoresInternal,
+      ...(internalOptions.includeDefaultFilesAndIgnores
+        ? [
+            ...(internalOptions.ignoresDefaultMergedWithUserIgnores || !ignoresFromUser
+              ? ignoresDefault
+              : []),
+            ...(ignoresFromUser || []),
+          ]
+        : ignoresDefault),
+    ];
 
     // We require the presence of `rules`:
     // - to avoid likely adding it anyway later on

@@ -34,7 +34,7 @@ export default ((context, optionsRaw) => {
       'tree-shaking',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JS_TS_X],
+        filesDefault: [GLOB_JS_TS_X],
       },
     ])
     .addRule(

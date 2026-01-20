@@ -55,7 +55,7 @@ export default ((context, optionsRaw) => {
       'github-actions',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [`.github/workflows/*.${GLOB_YML_YAML_EXTENSION}`],
+        filesDefault: [`.github/workflows/*.${GLOB_YML_YAML_EXTENSION}`],
         parser: 'yaml-eslint-parser',
       },
     ])

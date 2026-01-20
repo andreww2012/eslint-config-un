@@ -55,7 +55,7 @@ export default ((context, optionsRaw) => {
       'ava',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: configFilesFallback,
+        filesDefault: configFilesFallback,
       },
     ])
     .addRule(
@@ -103,7 +103,7 @@ export default ((context, optionsRaw) => {
     'ava',
     configNoOnlyTests,
     optionsResolved,
-    {filesFallback: configFilesFallback},
+    {filesDefault: configFilesFallback},
   );
 
   return {

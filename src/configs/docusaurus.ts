@@ -24,7 +24,7 @@ export default ((context, optionsRaw) => {
       'docusaurus',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JSX_TSX],
+        filesDefault: [GLOB_JSX_TSX],
       },
     ])
     .addRule('no-html-links', ERROR) /** @since 0.0.0-5416 */ // 🟡

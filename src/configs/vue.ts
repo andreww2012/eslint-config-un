@@ -948,7 +948,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         'vue/nuxt',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [resolvePathInVueOrNuxtProjectDir('**/*.vue')],
+          filesDefault: [resolvePathInVueOrNuxtProjectDir('**/*.vue')],
         },
       ])
       .addAnyRule('nuxt', 'prefer-import-meta', ERROR) /** @since 0.3.0-alpha.0 */
@@ -967,7 +967,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         'vue/nuxt/nuxt-config',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [`**/nuxt.config.${GLOB_JS_TS_X_EXTENSION}`],
+          filesDefault: [`**/nuxt.config.${GLOB_JS_TS_X_EXTENSION}`],
         },
       ])
       .addAnyRule('nuxt', 'nuxt-config-keys-order', ERROR) /** @since 0.6.0 */
@@ -1032,8 +1032,8 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       {
         includeDefaultFilesAndIgnores: true,
         ignoreMarkdownCodeBlocks: true,
-        filesFallback: optionsResolved.files,
-        ignoresFallback: optionsResolved.ignores,
+        filesDefault: optionsResolved.files,
+        ignoresDefault: optionsResolved.ignores,
       },
     ])
     .addRule('alt-text', ERROR) /** @since 0.1.0 */ // 🟢
@@ -1115,8 +1115,8 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         'vue/i18n',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: optionsResolved.files,
-          ignoresFallback: optionsResolved.ignores,
+          filesDefault: optionsResolved.files,
+          ignoresDefault: optionsResolved.ignores,
         },
       ],
       {

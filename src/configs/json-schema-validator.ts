@@ -47,7 +47,7 @@ export default ((context, optionsRaw) => {
   configBuilder?.addConfig([
     'json-schema-validator/setup/jsonc',
     {
-      filesFallback: JSONC_DEFAULT_FILES,
+      filesDefault: JSONC_DEFAULT_FILES,
       parser: 'jsonc-eslint-parser',
     },
   ]);
@@ -55,7 +55,7 @@ export default ((context, optionsRaw) => {
   configBuilder?.addConfig([
     'json-schema-validator/setup/yaml',
     {
-      filesFallback: YAML_DEFAULT_FILES,
+      filesDefault: YAML_DEFAULT_FILES,
       parser: 'yaml-eslint-parser',
     },
   ]);
@@ -64,7 +64,7 @@ export default ((context, optionsRaw) => {
     [
       'json-schema-validator/setup/toml',
       {
-        filesFallback: TOML_DEFAULT_FILES,
+        filesDefault: TOML_DEFAULT_FILES,
         doNotIgnoreToml: true,
       },
     ],

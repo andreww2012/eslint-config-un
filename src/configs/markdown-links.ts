@@ -93,7 +93,7 @@ export default ((context, optionsRaw) => {
       'markdown-links',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_MARKDOWN],
+        filesDefault: [GLOB_MARKDOWN],
         doNotIgnoreMarkdown: true,
       },
     ])

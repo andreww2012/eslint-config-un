@@ -150,7 +150,7 @@ export default (async (context, optionsRaw) => {
       [
         'svelte/setup',
         {
-          filesFallback: [
+          filesDefault: [
             ...DEFAULT_SVELTE_FILES,
             ...DEFAULT_SVELTE_SCRIPT_FILES,
             ...parentConfigFiles,

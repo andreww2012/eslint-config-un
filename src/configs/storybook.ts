@@ -27,7 +27,7 @@ export default ((context, optionsRaw) => {
       'storybook',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [`**/*.{stories,story}.${GLOB_JS_TS_X_EXTENSION}`],
+        filesDefault: [`**/*.{stories,story}.${GLOB_JS_TS_X_EXTENSION}`],
       },
     ])
     .addRule('await-interactions', ERROR) /** @since 0.0.1-alpha.1 */ // 🟢🤝

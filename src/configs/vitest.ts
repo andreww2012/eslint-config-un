@@ -189,7 +189,7 @@ export default (async (context, optionsRaw) => {
         'vitest',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: defaultVitestFiles,
+          filesDefault: defaultVitestFiles,
         },
       ],
       defaultVitestEslintConfig,
@@ -363,7 +363,7 @@ export default (async (context, optionsRaw) => {
         'vitest/ts',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: defaultVitestTypescriptFiles,
+          filesDefault: defaultVitestTypescriptFiles,
         },
       ],
       defaultVitestEslintConfig,
@@ -381,7 +381,7 @@ export default (async (context, optionsRaw) => {
     'vitest',
     configNoOnlyTests,
     optionsResolved,
-    {filesFallback: defaultVitestFiles},
+    {filesDefault: defaultVitestFiles},
   );
 
   return {

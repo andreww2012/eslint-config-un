@@ -26,7 +26,7 @@ export default ((context, optionsRaw) => {
       'antfu',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JS_TS_X],
+        filesDefault: [GLOB_JS_TS_X],
       },
     ])
     .addRule('consistent-chaining', OFF) /** @since 2.4.0 */

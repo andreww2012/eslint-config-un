@@ -38,7 +38,7 @@ export default ((context, optionsRaw) => {
       'cypress',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: configFilesFallback,
+        filesDefault: configFilesFallback,
       },
     ])
     .addRule('assertion-before-screenshot', WARNING) /** @since 2.2.0 */
@@ -62,7 +62,7 @@ export default ((context, optionsRaw) => {
     'cypress',
     configNoOnlyTests,
     optionsResolved,
-    {filesFallback: configFilesFallback},
+    {filesDefault: configFilesFallback},
   );
 
   return {

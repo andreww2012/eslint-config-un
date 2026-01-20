@@ -264,7 +264,7 @@ export default (async (context, optionsRaw) => {
         'jest',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: defaultJestFiles,
+          filesDefault: defaultJestFiles,
         },
       ],
       defaultJestEslintConfig,
@@ -389,7 +389,7 @@ export default (async (context, optionsRaw) => {
     'jest',
     configNoOnlyTests,
     optionsResolved,
-    {filesFallback: defaultJestFiles},
+    {filesDefault: defaultJestFiles},
   );
 
   const configBuilderTypescript = context.createConfigBuilder(configTypescript, 'jest');
@@ -399,7 +399,7 @@ export default (async (context, optionsRaw) => {
         'jest/ts',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: defaultJestTypescriptFiles,
+          filesDefault: defaultJestTypescriptFiles,
         },
       ],
       {
@@ -437,7 +437,7 @@ export default (async (context, optionsRaw) => {
         'jest/extended',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: defaultJestFiles,
+          filesDefault: defaultJestFiles,
         },
       ],
       defaultJestEslintConfig,

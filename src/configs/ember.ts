@@ -73,7 +73,7 @@ export default ((context, optionsRaw) => {
   configBuilder?.addConfig([
     'ember/glimmer-templates',
     {
-      filesFallback: [...GLIMMER_TEMPLATES_FILES],
+      filesDefault: [...GLIMMER_TEMPLATES_FILES],
       parser: 'ember-eslint-parser',
     },
   ]);
@@ -88,7 +88,7 @@ export default ((context, optionsRaw) => {
       'ember',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JS_TS, ...GLIMMER_TEMPLATES_FILES],
+        filesDefault: [GLOB_JS_TS, ...GLIMMER_TEMPLATES_FILES],
       },
     ])
     .markCategory('Components')
@@ -217,7 +217,7 @@ export default ((context, optionsRaw) => {
       'ember/tests',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: configTestsFilesFallback,
+        filesDefault: configTestsFilesFallback,
       },
     ])
     .addRule('no-current-route-name', ERROR) /** @since 10.1.0 */
@@ -247,7 +247,7 @@ export default ((context, optionsRaw) => {
     'ember',
     (typeof configTestFiles === 'object' ? configTestFiles.configNoOnlyTests : null) ?? true,
     configTestFiles,
-    {filesFallback: configTestsFilesFallback},
+    {filesDefault: configTestsFilesFallback},
   );
 
   return {

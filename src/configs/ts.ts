@@ -1256,7 +1256,7 @@ export default ((
         'sort-tsconfig-keys',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: ['**/tsconfig.json', '**/*.tsconfig.json', '**/tsconfig.*.json'],
+          filesDefault: ['**/tsconfig.json', '**/*.tsconfig.json', '**/tsconfig.*.json'],
           parser: 'jsonc-eslint-parser',
         },
       ])

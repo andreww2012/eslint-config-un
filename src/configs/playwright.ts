@@ -82,7 +82,7 @@ export default ((context, optionsRaw) => {
         'playwright',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: configFilesFallback,
+          filesDefault: configFilesFallback,
         },
       ],
       {
@@ -166,7 +166,7 @@ export default ((context, optionsRaw) => {
     'playwright',
     configNoOnlyTests,
     optionsResolved,
-    {filesFallback: configFilesFallback},
+    {filesDefault: configFilesFallback},
   );
 
   return {

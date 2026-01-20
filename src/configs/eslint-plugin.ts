@@ -183,7 +183,7 @@ export default ((context, optionsRaw) => {
       'eslint-plugin',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: generateDefaultTestFiles(GLOB_JS_TS_EXTENSION),
+        filesDefault: generateDefaultTestFiles(GLOB_JS_TS_EXTENSION),
       },
     ])
     .addRule('consistent-output', ERROR) /** @since 0.7.0 */

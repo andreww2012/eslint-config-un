@@ -53,7 +53,7 @@ export default ((context, optionsRaw) => {
       'no-secrets',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JS_TS_X],
+        filesDefault: [GLOB_JS_TS_X],
       },
     ])
     .addRule('no-pattern-match', OFF) /** @since 2.1.1-rc.0 */
@@ -68,9 +68,9 @@ export default ((context, optionsRaw) => {
       'no-secrets/json',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JSON],
-        ignoresFallback: ['**/package-lock.json'],
-        ignoresFallbackMergedWithUserIgnores: true,
+        filesDefault: [GLOB_JSON],
+        ignoresDefault: ['**/package-lock.json'],
+        ignoresDefaultMergedWithUserIgnores: true,
         parser: 'jsonc-eslint-parser',
       },
     ])

@@ -178,7 +178,7 @@ export default ((context, optionsRaw) => {
         'package-json',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_PACKAGE_JSON],
+          filesDefault: [GLOB_PACKAGE_JSON],
           parser: 'jsonc-eslint-parser',
         },
       ],

@@ -27,7 +27,7 @@ export default ((context, optionsRaw) => {
       'nest-js',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_TS],
+        filesDefault: [GLOB_TS],
       },
     ])
     .markCategory('Nest Modules and Dependency Injection')

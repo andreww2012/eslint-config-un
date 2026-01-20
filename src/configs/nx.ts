@@ -30,7 +30,7 @@ export default ((context, optionsRaw) => {
       'nx',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_TS_X],
+        filesDefault: [GLOB_TS_X],
       },
     ])
     .addRule(
@@ -47,7 +47,7 @@ export default ((context, optionsRaw) => {
       'nx/json',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JSON],
+        filesDefault: [GLOB_JSON],
         parser: 'jsonc-eslint-parser',
       },
     ])

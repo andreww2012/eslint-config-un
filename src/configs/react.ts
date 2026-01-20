@@ -650,7 +650,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'react/plugin-original',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: DEFAULT_FILES,
+        filesDefault: DEFAULT_FILES,
       },
     ])
     .addRule('boolean-prop-naming', OFF) /** @since 7.2.0 */
@@ -883,7 +883,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'react/allow-default-export-in-jsx-files',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JSX_TSX],
+        filesDefault: [GLOB_JSX_TSX],
       },
     ])
     .disableAnyRule('import', 'no-default-export')
@@ -907,8 +907,8 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
         'react/hooks',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: parentConfigFiles || DEFAULT_FILES,
-          ignoresFallback: parentConfigIgnores,
+          filesDefault: parentConfigFiles || DEFAULT_FILES,
+          ignoresDefault: parentConfigIgnores,
         },
       ],
       {
@@ -977,8 +977,8 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'react/x',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: parentConfigFiles || DEFAULT_FILES,
-        ignoresFallback: parentConfigIgnores,
+        filesDefault: parentConfigFiles || DEFAULT_FILES,
+        ignoresDefault: parentConfigIgnores,
       },
     ])
     .markCategory('X')
@@ -1207,8 +1207,8 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'react/x/rules-type-aware',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: tsFilesTypeAware,
-        ignoresFallback: tsIgnoresTypeAware,
+        filesDefault: tsFilesTypeAware,
+        ignoresDefault: tsIgnoresTypeAware,
       },
     ])
     .addRule(
@@ -1231,8 +1231,8 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'react/dom',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: parentConfigFiles || DEFAULT_FILES,
-        ignoresFallback: parentConfigIgnores,
+        filesDefault: parentConfigFiles || DEFAULT_FILES,
+        ignoresDefault: parentConfigIgnores,
       },
     ])
     .addAnyRule(
@@ -1343,7 +1343,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'react/refresh',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JSX_TSX],
+        filesDefault: [GLOB_JSX_TSX],
       },
     ])
     .addRule('only-export-components', ERROR, [
@@ -1369,8 +1369,8 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'react/you-might-not-need-an-effect',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: parentConfigFiles || DEFAULT_FILES,
-        ignoresFallback: parentConfigIgnores,
+        filesDefault: parentConfigFiles || DEFAULT_FILES,
+        ignoresDefault: parentConfigIgnores,
       },
     ])
     .addRule('no-adjust-state-on-prop-change', ERROR) /** @since 0.5.0 */ // 🟡 (renamed, original rules added in 0.4.5)

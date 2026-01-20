@@ -68,7 +68,7 @@ export default ((context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           doNotIgnoreMdx: true,
-          filesFallback: DEFAULT_FILES,
+          filesDefault: DEFAULT_FILES,
           parser: 'mdx-eslint-parser',
         },
       ],
@@ -95,7 +95,7 @@ export default ((context, optionsRaw) => {
       'mdx/setup/code-blocks-processor',
       {
         doNotIgnoreMdx: true,
-        filesFallback: DEFAULT_FILES,
+        filesDefault: DEFAULT_FILES,
       },
     ],
     {
@@ -118,7 +118,7 @@ export default ((context, optionsRaw) => {
             doNotIgnoreHtml: true,
             doNotIgnoreMarkdown: true,
             doNotIgnoreMdx: true,
-            filesFallback: DEFAULT_FILES_FOR_CODE_BLOCKS,
+            filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
           },
         ],
         {
@@ -155,7 +155,7 @@ export default ((context, optionsRaw) => {
         doNotIgnoreMarkdown: true,
         doNotIgnoreMdx: true,
         includeDefaultFilesAndIgnores: true,
-        filesFallback: DEFAULT_FILES_FOR_CODE_BLOCKS,
+        filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
       },
     ])
     .addRule('prettier', ERROR, [{}, {eslintTakeoverMode: true}]);

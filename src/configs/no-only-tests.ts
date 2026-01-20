@@ -24,7 +24,7 @@ export default ((context, optionsRaw) => {
       'no-only-tests',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION),
+        filesDefault: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION),
       },
     ])
     .addRule('no-only-tests', ERROR) /** @since 1.0.0 */

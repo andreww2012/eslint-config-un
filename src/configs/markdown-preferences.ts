@@ -259,7 +259,7 @@ export default (async (context, optionsRaw) => {
         'markdown-preferences',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_MARKDOWN],
+          filesDefault: [GLOB_MARKDOWN],
           doNotIgnoreMarkdown: true,
         },
       ],

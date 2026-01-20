@@ -112,8 +112,8 @@ export default (async (context, optionsRaw) => {
           // For some reason running this plugin on fenced code blocks takes a lot of memory
           // (+300-500 MB when running on our codebase w/o cache as of time of writing this)
           // TODO investigate that?
-          ignoresFallback: [GLOB_MARKDOWN_ALL_CODE_BLOCKS],
-          ignoresFallbackMergedWithUserIgnores: true,
+          ignoresDefault: [GLOB_MARKDOWN_ALL_CODE_BLOCKS],
+          ignoresDefaultMergedWithUserIgnores: true,
         },
       ],
       {

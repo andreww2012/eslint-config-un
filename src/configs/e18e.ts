@@ -177,7 +177,7 @@ export default ((context, optionsRaw) => {
         'e18e/module-replacements',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_PACKAGE_JSON],
+          filesDefault: [GLOB_PACKAGE_JSON],
           parser: 'jsonc-eslint-parser',
         },
       ])
@@ -234,7 +234,7 @@ export default ((context, optionsRaw) => {
         'e18e/performance-improvements/type-aware',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_TS_X],
+          filesDefault: [GLOB_TS_X],
           ignoreMarkdownCodeBlocks: true, // `no-indexof-equality` crashes otherwise
         },
       ])

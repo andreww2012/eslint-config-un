@@ -43,7 +43,7 @@ export default ((context, optionsRaw) => {
         'nextjs',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_JS_TS_X],
+          filesDefault: [GLOB_JS_TS_X],
         },
       ],
       {

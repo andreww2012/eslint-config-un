@@ -29,7 +29,7 @@ export default ((context, optionsRaw) => {
       'jest-dom',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: defaultJestDomFiles,
+        filesDefault: defaultJestDomFiles,
       },
     ])
     .addRule('prefer-checked', ERROR) /** @since 1.0.0 */ // 🟢

@@ -36,7 +36,7 @@ export default ((context, optionsRaw) => {
       'qunit',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: configFilesFallback,
+        filesDefault: configFilesFallback,
       },
     ])
     .addRule('assert-args', ERROR) /** @since 0.4.0 */ // 🟢
@@ -86,7 +86,7 @@ export default ((context, optionsRaw) => {
     'qunit',
     configNoOnlyTests,
     optionsResolved,
-    {filesFallback: configFilesFallback},
+    {filesDefault: configFilesFallback},
   );
 
   return {

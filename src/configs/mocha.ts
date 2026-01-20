@@ -73,7 +73,7 @@ export default ((context, optionsRaw) => {
         'mocha',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: configFilesFallback,
+          filesDefault: configFilesFallback,
         },
       ],
       {
@@ -125,7 +125,7 @@ export default ((context, optionsRaw) => {
     'mocha',
     configNoOnlyTests,
     optionsResolved,
-    {filesFallback: configFilesFallback},
+    {filesDefault: configFilesFallback},
   );
 
   return {

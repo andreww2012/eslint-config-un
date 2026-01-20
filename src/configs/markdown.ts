@@ -261,8 +261,8 @@ export default ((context, optionsRaw) => {
               `markdown/language-override/${i}`,
               {
                 doNotIgnoreMarkdown: true,
-                filesFallback: markdownLanguageSettings.files,
-                ignoresFallback: markdownLanguageSettings.ignores,
+                filesDefault: markdownLanguageSettings.files,
+                ignoresDefault: markdownLanguageSettings.ignores,
               },
             ],
             {
@@ -280,7 +280,7 @@ export default ((context, optionsRaw) => {
         'markdown/setup/code-blocks-processor',
         {
           doNotIgnoreMarkdown: true,
-          filesFallback: DEFAULT_FILES,
+          filesDefault: DEFAULT_FILES,
         },
       ],
       {
@@ -317,7 +317,7 @@ export default ((context, optionsRaw) => {
             doNotIgnoreHtml: true,
             doNotIgnoreMarkdown: true,
             doNotIgnoreMdx: true,
-            filesFallback: DEFAULT_FILES_FOR_CODE_BLOCKS,
+            filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
           },
         ],
         // TODO way to ignore ````js some-property`? way to allow using `with`, which is not allowed in the strict mode?
@@ -355,7 +355,7 @@ export default ((context, optionsRaw) => {
         doNotIgnoreMarkdown: true,
         doNotIgnoreMdx: true,
         includeDefaultFilesAndIgnores: true,
-        filesFallback: DEFAULT_FILES_FOR_CODE_BLOCKS,
+        filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
       },
     ])
     .addRule('prettier', ERROR, [{}, {eslintTakeoverMode: true}]);
@@ -372,7 +372,7 @@ export default ((context, optionsRaw) => {
           {
             includeDefaultFilesAndIgnores: true,
             doNotIgnoreMarkdown: true,
-            filesFallback: parentConfigFiles,
+            filesDefault: parentConfigFiles,
           },
         ],
         {

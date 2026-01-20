@@ -293,7 +293,7 @@ export default (async (context, optionsRaw) => {
         'angular/general',
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_JS_TS_X],
+          filesDefault: [GLOB_JS_TS_X],
         },
       ],
       // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
@@ -504,7 +504,7 @@ export default (async (context, optionsRaw) => {
       'angular/template',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_HTML],
+        filesDefault: [GLOB_HTML],
         parser: '@angular-eslint/template-parser',
         doNotIgnoreHtml: true,
       },

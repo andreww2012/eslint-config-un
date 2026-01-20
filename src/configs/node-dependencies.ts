@@ -42,7 +42,7 @@ export default ((context, optionsRaw) => {
       'node-dependencies',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_PACKAGE_JSON],
+        filesDefault: [GLOB_PACKAGE_JSON],
         parser: 'jsonc-eslint-parser',
       },
     ])

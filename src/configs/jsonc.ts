@@ -55,8 +55,8 @@ export default ((context, optionsRaw) => {
       'jsonc/all',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: JSONC_DEFAULT_FILES,
-        mergeUserFilesWithFallback: !doNotMergeFilesWithDefault,
+        filesDefault: JSONC_DEFAULT_FILES,
+        filesDefaultMergedWithUserIgnores: !doNotMergeFilesWithDefault,
         doNotIgnoreMarkdown: true,
         doNotIgnoreMdx: true,
         parser: 'jsonc-eslint-parser',
@@ -121,7 +121,7 @@ export default ((context, optionsRaw) => {
       'jsonc/json',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JSON],
+        filesDefault: [GLOB_JSON],
         doNotIgnoreMarkdown: true,
         doNotIgnoreMdx: true,
       },
@@ -134,7 +134,7 @@ export default ((context, optionsRaw) => {
       'jsonc/jsonc',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JSONC],
+        filesDefault: [GLOB_JSONC],
         doNotIgnoreMarkdown: true,
         doNotIgnoreMdx: true,
       },
@@ -147,7 +147,7 @@ export default ((context, optionsRaw) => {
       'jsonc/json5',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JSON5],
+        filesDefault: [GLOB_JSON5],
         doNotIgnoreMarkdown: true,
         doNotIgnoreMdx: true,
       },

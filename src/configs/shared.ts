@@ -97,9 +97,9 @@ export const generateConfigNoOnlyTestsBuilder = <ExtraPlugins extends ExtraPlugi
   configNoOnlyTests: NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>['configNoOnlyTests'] & {},
   parentConfig: boolean | UnConfigOptions<ExtraPlugins>,
   {
-    filesFallback,
+    filesDefault,
   }: {
-    filesFallback?: string[];
+    filesDefault?: string[];
   } = {},
 ) => {
   const configBuilderNoOnlyTests = context.createConfigBuilder(
@@ -116,7 +116,7 @@ export const generateConfigNoOnlyTestsBuilder = <ExtraPlugins extends ExtraPlugi
       `${prefix}/no-only-tests`,
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback,
+        filesDefault,
       },
     ])
     .addRule('no-only-tests', ERROR)

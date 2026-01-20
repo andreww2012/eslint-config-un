@@ -28,7 +28,7 @@ export default ((context, optionsRaw) => {
       'qwik',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_JS_TS_X],
+        filesDefault: [GLOB_JS_TS_X],
       },
     ])
     .addRule('jsx-a', ERROR) /** @since 1.2.11 */ // 🟣

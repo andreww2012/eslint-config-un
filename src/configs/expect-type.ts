@@ -35,7 +35,7 @@ export default ((context, optionsRaw) => {
       'expect-type',
       {
         includeDefaultFilesAndIgnores: true,
-        filesFallback: [GLOB_TS_X],
+        filesDefault: [GLOB_TS_X],
       },
     ])
     .addRule('expect', ERROR, expectRuleOptions ? [expectRuleOptions] : []) /** @since 0.0.1 */ // 🟢💭

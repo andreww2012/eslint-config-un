@@ -349,7 +349,7 @@ export default ((
         prefixFinal.includes('a11y') ? prefixFinal : `jsx-a11y/${prefixFinal}`,
         {
           includeDefaultFilesAndIgnores: true,
-          filesFallback: [GLOB_JSX_TSX],
+          filesDefault: [GLOB_JSX_TSX],
         },
       ],
       {
