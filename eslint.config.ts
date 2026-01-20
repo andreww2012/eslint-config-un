@@ -47,7 +47,11 @@ export default eslintConfig({
     },
     markdown: {
       configSentencesPerLine: {
-        ignores: ['CHANGELOG.md', '.changeset/README.md'],
+        ignores: [
+          'CHANGELOG.md',
+          // Putting every sentence on its own line causes line wraps in the changelog
+          '.changeset/*.md',
+        ],
       },
     },
     markdownLinks: {

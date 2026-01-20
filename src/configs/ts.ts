@@ -1078,7 +1078,7 @@ export default ((
     .disableAnyRule('', 'no-return-await') // 🟣
     .addRule('strict-boolean-expressions', OFF) /** @since 1.12.0 */
     .addRule('strict-void-return', ERROR) /** @since 8.53.0 */
-    .addRule('switch-exhaustiveness-check', ERROR) /** @since 2.19.0 */
+    .addRule('switch-exhaustiveness-check', OFF) /** @since 2.19.0 */
     .markCategory('Extension rules')
     .addRule(
       'consistent-return',
