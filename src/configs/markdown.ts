@@ -7,7 +7,7 @@ import type {Prettify} from '../types';
 import {capitalize, unique} from '../utils';
 import {
   type IgnoresAdditionalOptions,
-  RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS,
+  determineRulesDisabledInEmbeddedCodeBlocks,
   generateIgnoresWithAdditional,
 } from './shared';
 import {
@@ -331,7 +331,7 @@ export default ((context, optionsRaw) => {
           },
         },
       )
-      .disableBulkRules(RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS)
+      .disableBulkRules(determineRulesDisabledInEmbeddedCodeBlocks(context))
       .addBulkRules(optionsResolved.overridesCodeBlocks); // TODO
 
     if (codeBlocksIgnoredLanguages?.length) {

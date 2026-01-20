@@ -656,13 +656,15 @@ With the latter, you can use the rules added in newer versions of `@angular-esli
 We use rules from several plugins to lint your React code.
 You will be able to choose whether you would like to use only `@eslint-react/eslint-plugin` or `eslint-plugin-react`, or both, which is the default.
 
-### Markdown
+<!-- eslint-disable-next-line markdown-preferences/heading-casing -->
+### Markdown/MDX
 
-If `markdown` config is enabled (which is the default), the same rules provided by other configs will be applied to code blocks (\```lang ... \```) inside Markdown files.
-This works because under the hood the plugin [`@eslint/markdown`](https://npmjs.com/@eslint/markdown) that provides that functionality will create virtual files for each code block with the same extension as specified after ```.
+If `markdown`/`mdx` config is enabled (which is the default), the same rules provided by other configs will be applied to code blocks (\```lang ... \```) inside Markdown files.
+This works because under the hood [`@eslint/markdown`](https://npmjs.com/@eslint/markdown)/[`eslint-mdx`](https://npmjs.com/eslint-mdx) will create virtual files for each code block with the same extension as specified after ```.
 
 But applying certain rules for code blocks might not be desirable because some of them are too strict for the code that won't be executed anyway or even unfixable (like missing imports).
 You can find the full list of disabled rules in `src/configs/markdown.ts` file.
+You have the full control over which rules are disabled/enabled via [`markdownCodeBlocksRules`](#markdowncodeblocksrules) option.
 
 ### Tailwind CSS
 
@@ -739,6 +741,28 @@ This can be useful if you enable certain plugin rules only be using [configurati
 
 See [Globally disabling rule autofix](#globally-disabling-rule-autofix).
 
+### `disablePrettierIncompatibleRules`
+
+Disables rules that are potentially conflicting with Prettier. [`eslint-config-prettier`](https://npmjs.com/eslint-config-prettier) is used under the hood, with a few exceptions.
+Defaults to `true` if `prettier` package is installed.
+
+### `markdownCodeBlocksRules`
+
+eslint-config-un disables a number of rules in all embedded code blocks (AKA "fenced code blocks") inside Markdown and MDX files.
+This option gives you more control over which rules are disabled/enabled.
+
+#### `markdownCodeBlocksRules.additionalDisabledRules`
+
+Allows to specify more rules to disable in embedded code blocks.
+
+#### `markdownCodeBlocksRules.doNotDisable`
+
+Allows to specify which rules should not be disabled by default in embedded code blocks.
+
+### `useFastImport`
+
+Allows to override certain [`eslint-plugin-import-x`] plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import).
+
 ### `gitignore`
 
 By default files from `.gitignore` (read from [the current working directory](https://nodejs.org/api/process.html#processcwd)) in the will be automatically added to the global [`ignores`](#ignores) list.
@@ -770,15 +794,6 @@ The cache, regardless of the storage, is considered fresh for 1 hour, unless one
 - `package.json`, lockfile contents or package manager
 - ESLint config file contents
 - Node.JS version
-
-### `disablePrettierIncompatibleRules`
-
-Disables rules that are potentially conflicting with Prettier. [`eslint-config-prettier`](https://npmjs.com/eslint-config-prettier) is used under the hood, with a few exceptions.
-Defaults to `true` if `prettier` package is installed.
-
-### `useFastImport`
-
-Allows to override certain [`eslint-plugin-import-x`] plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import).
 
 ## Other exports
 

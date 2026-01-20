@@ -1,7 +1,7 @@
 import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YML_YAML} from '../constants';
 import type {AllEslintRuleNames} from '../eslint';
-import {type AllUnionMembers, pick} from '../utils';
+import {type AllUnionMembers, objectEntriesUnsafe, pick} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import type {ExtraPluginsType, GetRuleOptions, UnConfigOptions} from '.';
 
@@ -181,7 +181,7 @@ export const TOML_DEFAULT_FILES = [GLOB_TOML];
 export const YAML_DEFAULT_FILES = [GLOB_YML_YAML];
 
 // 🟣 - in the default *markdown* processor config
-export const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS: AllEslintRuleNames[] = [
+const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'eol-last', // 🟣
   'max-classes-per-file', // [too-strict]
   'no-alert', // [runtime-only]
@@ -279,4 +279,18 @@ export const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS: AllEslintRuleNames[] = [
   'unused-imports/no-unused-imports', // [too-strict]
   'turbo/no-undeclared-env-vars', // [runtime-only]
   'eslint-plugin/no-property-in-node', // [type-aware]
-];
+] satisfies AllEslintRuleNames[];
+
+export type RulesDisabledInEmbeddedCodeBlocksByDefault =
+  (typeof RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS)[number];
+
+export const determineRulesDisabledInEmbeddedCodeBlocks = (context: UnConfigContext) =>
+  [
+    ...RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS.filter(
+      (ruleName) => context.rootOptions.markdownCodeBlocksRules?.doNotDisable?.[ruleName] !== true,
+    ),
+    ...objectEntriesUnsafe(
+      // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition, ts/no-non-null-asserted-optional-chain -- added to preserve the type
+      context.rootOptions.markdownCodeBlocksRules?.additionalDisabledRules! || {},
+    ).map(([ruleName, shouldDisable]) => (shouldDisable ? ruleName : null)),
+  ].filter((v) => v != null);

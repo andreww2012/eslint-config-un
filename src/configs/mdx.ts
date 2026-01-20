@@ -3,7 +3,7 @@ import type {FlatConfigEntryFilesOrIgnores} from '../eslint';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
 import type {MarkdownEslintConfigOptions} from './markdown';
-import {RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS} from './shared';
+import {determineRulesDisabledInEmbeddedCodeBlocks} from './shared';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -131,7 +131,7 @@ export default ((context, optionsRaw) => {
           },
         },
       )
-      .disableBulkRules(RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS)
+      .disableBulkRules(determineRulesDisabledInEmbeddedCodeBlocks(context))
       .addBulkRules(optionsResolved.overridesCodeBlocks); // TODO
 
     if (codeBlocksIgnoredLanguages?.length) {

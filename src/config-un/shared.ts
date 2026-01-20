@@ -4,12 +4,15 @@ import type {Debugger} from 'obug';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigOptions, UnConfigs} from '../configs';
 import type {FastImportPluginSettings} from '../configs/fast-import';
+import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../configs/shared';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import {
   type AllEslintFixableRuleNames,
+  type AllEslintRuleNames,
   ConfigEntryBuilder,
   type EslintPlugin,
   type EslintSeverity,
+  type ExtraPluginsRules,
   type FlatConfigEntry,
   type FlatConfigEntryFilesOrIgnores,
   type RulesRecord,
@@ -199,7 +202,7 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
 
   // #endregion
 
-  // #region 🟠 OTHER OPTIONS
+  // #region 🟠 RULES RELATED OPTIONS
 
   /**
    * Defines for which rules and/or plugins autofix will be disabled globally.
@@ -239,6 +242,63 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
       };
 
   /**
+   * Enables `eslint-config-prettier` at the end of the ruleset.
+   * @default true <=> `prettier` package is installed
+   * @see https://github.com/prettier/eslint-config-prettier
+   */
+  disablePrettierIncompatibleRules?: boolean;
+
+  /**
+   * Decide which rules should be disabled/enabled in Markdown and MDX "fenced code blocks"
+   * (like \```lang ... ```).
+   */
+  markdownCodeBlocksRules?: {
+    /**
+     * Setting rule names to `true` in this object will disable them in all embedded code blocks.
+     */
+    additionalDisabledRules?: Partial<
+      Record<
+        Exclude<
+          ExtraPluginsRules<ExtraPlugins> | AllEslintRuleNames,
+          RulesDisabledInEmbeddedCodeBlocksByDefault
+        >,
+        boolean
+      >
+    >;
+
+    /**
+     * All rules available for this option are disabled by default by eslint-config-un
+     * in embedded code blocks. Set necessary rules to `true` to avoid disabling them.
+     *
+     * ⚠️ Some rules are disabled in certain configs.
+     */
+    doNotDisable?: Partial<Record<RulesDisabledInEmbeddedCodeBlocksByDefault, boolean>>;
+  };
+
+  /**
+   * Replaces the implementation of certain [`import`](https://npmjs.com/eslint-plugin-import-x) plugin rules with implementations from [`fast-import`](https://npmjs.com/eslint-plugin-fast-import).
+   *
+   * ⚠️ The latter plugin doesn't support the rule options from the former plugin.
+   * It'll be made by us that they will be silently ignored.
+   *
+   * The replaced rules' list (their name will actually be preserved):
+   * - `no-cycle`
+   * - `no-named-as-default`
+   * - `no-unresolved` (replaced with `no-unresolved-imports`)
+   * @default false
+   */
+  useFastImport?:
+    | boolean
+    | {
+        pluginSettings?: Partial<FastImportPluginSettings>;
+        replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>;
+      };
+
+  // #endregion
+
+  // #region 🟠 OTHER OPTIONS
+
+  /**
    * Automatically add gitignore'd files to the global `ignores` array.
    * @default true <=> `.gitignore` exists in [the current working directory](https://nodejs.org/api/process.html#processcwd)
    */
@@ -263,32 +323,6 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    * @default true <=> running in editor (detected by [`is-in-editor`](https://npmjs.com/is-in-editor))
    */
   cacheConfigs?: boolean;
-
-  /**
-   * Enables `eslint-config-prettier` at the end of the ruleset.
-   * @default true <=> `prettier` package is installed
-   * @see https://github.com/prettier/eslint-config-prettier
-   */
-  disablePrettierIncompatibleRules?: boolean;
-
-  /**
-   * Replaces the implementation of certain [`import`](https://npmjs.com/eslint-plugin-import-x) plugin rules with implementations from [`fast-import`](https://npmjs.com/eslint-plugin-fast-import).
-   *
-   * ⚠️ The latter plugin doesn't support the rule options from the former plugin.
-   * It'll be made by us that they will be silently ignored.
-   *
-   * The replaced rules' list (their name will actually be preserved):
-   * - `no-cycle`
-   * - `no-named-as-default`
-   * - `no-unresolved` (replaced with `no-unresolved-imports`)
-   * @default false
-   */
-  useFastImport?:
-    | boolean
-    | {
-        pluginSettings?: Partial<FastImportPluginSettings>;
-        replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>;
-      };
 
   // #endregion
 }
