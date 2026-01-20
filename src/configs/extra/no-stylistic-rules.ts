@@ -1004,11 +1004,8 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'no-stylistic-rules',
       {
-        doNotIgnoreCss: true,
-        doNotIgnoreHtml: true,
-        doNotIgnoreMarkdown: true,
-        doNotIgnoreMdx: true,
         includeDefaultFilesAndIgnores: true,
+        ignoresInternal: false,
       },
     ])
     .disableBulkRules(
@@ -1036,11 +1033,8 @@ export default ((context, optionsRaw) => {
       ?.addConfig([
         'no-stylistic-rules/disable-all-non-stylistic-rules',
         {
-          doNotIgnoreCss: true,
-          doNotIgnoreHtml: true,
-          doNotIgnoreMarkdown: true,
-          doNotIgnoreMdx: true,
           includeDefaultFilesAndIgnores: true,
+          ignoresInternal: false,
         },
       ])
       .disableBulkRules(

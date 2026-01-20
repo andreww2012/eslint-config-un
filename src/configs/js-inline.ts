@@ -127,7 +127,9 @@ export default (async (context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: [GLOB_HTM_HTML],
-          doNotIgnoreHtml: true,
+          ignoresInternal: {
+            html: false,
+          },
         },
       ],
       {
@@ -167,8 +169,10 @@ export default (async (context, optionsRaw) => {
     [
       'js-inline/js-inside-html-inside-markdown',
       {
-        doNotIgnoreHtml: true,
         filesDefault: [`**/*.md/${GLOB_HTM_HTML}`],
+        ignoresInternal: {
+          html: false,
+        },
       },
     ],
     {

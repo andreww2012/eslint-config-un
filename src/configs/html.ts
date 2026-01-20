@@ -68,9 +68,11 @@ export default ((context, optionsRaw) => {
         'html',
         {
           includeDefaultFilesAndIgnores: true,
-          doNotIgnoreHtml: true,
           filesDefault: [GLOB_HTM_HTML],
           parser: '@html-eslint/parser',
+          ignoresInternal: {
+            html: false,
+          },
         },
       ],
       {

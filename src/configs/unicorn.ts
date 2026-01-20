@@ -38,7 +38,16 @@ export default ((context, optionsRaw) => {
   // 🟠 - rule from `eslint-config-prettier`
 
   configBuilder
-    ?.addConfig(['unicorn', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
+    ?.addConfig([
+      'unicorn',
+      {
+        includeDefaultFilesAndIgnores: true,
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
+      },
+    ])
     .addRule('better-regex', OFF) /** @since 3.0.0 */ /** @aka regex-shorthand */ // 🔴
     .addRule('catch-error-name', WARNING) /** @since 0.4.0 */ // 🟣
     .addRule('consistent-assert', WARNING) /** @since 57.0.0 */ // 🟣

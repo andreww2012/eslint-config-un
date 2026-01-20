@@ -245,13 +245,25 @@ export default ((context, optionsRaw) => {
   // 4️⃣ - in Stylistic
 
   configBuilder
-    ?.addConfig(['jsdoc', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}], {
-      ...(pluginSettings && {
-        settings: {
-          jsdoc: pluginSettings,
+    ?.addConfig(
+      [
+        'jsdoc',
+        {
+          includeDefaultFilesAndIgnores: true,
+          // TODO why?
+          ignoresInternal: {
+            html: false,
+          },
         },
-      }),
-    })
+      ],
+      {
+        ...(pluginSettings && {
+          settings: {
+            jsdoc: pluginSettings,
+          },
+        }),
+      },
+    )
     .addRule('check-access', ERROR) /** @since 18.0.0 */ // 🟢2️⃣
     .addRule('check-alignment', ERROR) /** @since 4.8.0 */ // 🟢4️⃣
     .addRule('check-indentation', ERROR, [

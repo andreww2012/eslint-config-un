@@ -220,7 +220,10 @@ export default ((context, optionsRaw) => {
         'perfectionist',
         {
           includeDefaultFilesAndIgnores: true,
-          doNotIgnoreHtml: true,
+          // TODO why?
+          ignoresInternal: {
+            html: false,
+          },
         },
       ],
       {

@@ -414,8 +414,11 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     [
       'vue/setup',
       {
-        doNotIgnoreMarkdown: true,
         parser: 'vue-eslint-parser',
+        // TODO why?
+        ignoresInternal: {
+          md: false,
+        },
       },
     ],
     {

@@ -27,16 +27,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig([
-      'cspell',
-      {
-        includeDefaultFilesAndIgnores: true,
-        doNotIgnoreCss: true,
-        doNotIgnoreHtml: true,
-        doNotIgnoreMarkdown: true,
-        doNotIgnoreMdx: true,
-      },
-    ])
+    ?.addConfig(['cspell', {includeDefaultFilesAndIgnores: true, ignoresInternal: false}])
     .addRule(
       'spellchecker',
       ERROR,

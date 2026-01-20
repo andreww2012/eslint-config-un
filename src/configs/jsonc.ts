@@ -57,9 +57,12 @@ export default ((context, optionsRaw) => {
         includeDefaultFilesAndIgnores: true,
         filesDefault: JSONC_DEFAULT_FILES,
         filesDefaultMergedWithUserIgnores: !doNotMergeFilesWithDefault,
-        doNotIgnoreMarkdown: true,
-        doNotIgnoreMdx: true,
         parser: 'jsonc-eslint-parser',
+        // TODO why?
+        ignoresInternal: {
+          md: false,
+          mdx: false,
+        },
       },
     ])
     .markCategory('Main rules')
@@ -122,8 +125,11 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSON],
-        doNotIgnoreMarkdown: true,
-        doNotIgnoreMdx: true,
+        // TODO why?
+        ignoresInternal: {
+          md: false,
+          mdx: false,
+        },
       },
     ])
     .addOverrides();
@@ -135,8 +141,11 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSONC],
-        doNotIgnoreMarkdown: true,
-        doNotIgnoreMdx: true,
+        // TODO why?
+        ignoresInternal: {
+          md: false,
+          mdx: false,
+        },
       },
     ])
     .addOverrides();
@@ -148,8 +157,11 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSON5],
-        doNotIgnoreMarkdown: true,
-        doNotIgnoreMdx: true,
+        // TODO why?
+        ignoresInternal: {
+          md: false,
+          mdx: false,
+        },
       },
     ])
     .addOverrides();

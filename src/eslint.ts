@@ -54,6 +54,7 @@ import {
   findArrayInversions,
   groupBy,
   maybeCall,
+  objectEntriesUnsafe,
   partition,
   styleConfigName,
   styleText,
@@ -444,6 +445,14 @@ const styleRuleNames = (ruleNames: string[]) => ruleNames.map(styleRuleName).joi
 
 export const configIndexProperty = Symbol('ConfigIndex');
 
+const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
+  css: [GLOB_CSS],
+  md: [GLOB_MARKDOWN],
+  mdx: [GLOB_MDX],
+  html: [GLOB_HTM_HTML],
+  toml: [GLOB_TOML],
+} as const satisfies Record<string, [string, ...string[]]>;
+
 export class ConfigEntryBuilder<
   ExtraPlugins extends ExtraPluginsType = never,
   // eslint-disable-next-line ts/no-explicit-any
@@ -506,36 +515,40 @@ export class ConfigEntryBuilder<
             parser?: ParserPrefix;
 
             /**
-             * Some rules (for example, [`no-irregular-whitespace`](https://eslint.org/docs/latest/rules/no-irregular-whitespace))
-             * crash when linting `*.css` files, so they are ignored by default.
+             * Some rules crash when linting certain file types.
+             * This usually happens on unexpected for the rule file types when
+             * `files` are not restricted. For example:
+             * - [`no-irregular-whitespace`](https://eslint.org/docs/latest/rules/no-irregular-whitespace)
+             * crashes on `.css` files
+             * - [`regexp/no-legacy-features`](https://ota-meshi.github.io/eslint-plugin-regexp/rules/no-legacy-features.html)
+             * crashes on `.md` files (only if `language` option is specified
+             * in the markdown config)
+             * - [`strict`](https://eslint.org/docs/latest/rules/strict)
+             * crashes on `.html` files
+             * - [`sonarjs/assertions-in-tests`](https://sonarsource.github.io/rspec/#/rspec/S2699/javascript)
+             * or [`node/no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/node-builtins.md)
+             * crash on `.toml` files
              *
-             * Set this to `true` if you're actually writing a config for `*.css` files.
+             * That's why globs corresponding to such files are implicitly/internally added
+             * to the final `ignores` array.
+             *
+             * Use this option if you don't want implicitly ignore certain file types
+             * (set the file type you wish not to be ignored to `false`).
+             * You can also set the whole option to `false` to not add anything to `ignores`.
+             * @default true
              */
-            doNotIgnoreCss?: boolean;
-
-            /** Some rules (for example, `regexp/no-legacy-features`) crash when linting `*.md` files (only if `language` option is specified for the markdown config). We cannot ignore such files globally as that is irreversible, so we ignore them in every single config with the option to not ignore. */
-            doNotIgnoreMarkdown?: boolean;
-
-            doNotIgnoreMdx?: boolean;
+            ignoresInternal?:
+              | boolean
+              | Partial<
+                  Record<
+                    keyof typeof FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS,
+                    boolean
+                  >
+                >;
 
             /**
-             * Some rules (for example, [`strict`](https://eslint.org/docs/latest/rules/strict))
-             * crash when linting `*.html` files, so they are ignored by default.
-             *
-             * Set this to `true` if you're actually writing a config for `*.html` files.
+             * Do not apply this config to "fenced code blocks" inside `*.md?(x)` files
              */
-            doNotIgnoreHtml?: boolean;
-
-            /**
-             * Some rules (for example, `sonarjs/assertions-in-tests` or
-             * `node/no-unsupported-features/node-builtins`)
-             * crash when linting `*.toml` files, so they are ignored by default.
-             *
-             * Set this to `true` if you're actually writing a config for `*.toml` files.
-             */
-            doNotIgnoreToml?: boolean;
-
-            /** Do not apply this config to "fenced code blocks" inside `*.md?(x)` files */
             ignoreMarkdownCodeBlocks?: boolean;
           },
         ],
@@ -556,11 +569,15 @@ export class ConfigEntryBuilder<
 
     const ignoresFromUser = configOptions.ignores;
     const ignoresInternal = [
-      ...(internalOptions.doNotIgnoreMarkdown ? [] : [GLOB_MARKDOWN]),
-      ...(internalOptions.doNotIgnoreMdx ? [] : [GLOB_MDX]),
-      ...(internalOptions.doNotIgnoreHtml ? [] : [GLOB_HTM_HTML]),
-      ...(internalOptions.doNotIgnoreCss ? [] : [GLOB_CSS]),
-      ...(internalOptions.doNotIgnoreToml ? [] : [GLOB_TOML]),
+      ...objectEntriesUnsafe(
+        FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS,
+      ).flatMap(([fileType, globs]) =>
+        internalOptions.ignoresInternal === false ||
+        (internalOptions.ignoresInternal !== true &&
+          internalOptions.ignoresInternal?.[fileType] === false)
+          ? []
+          : globs,
+      ),
       ...(internalOptions.ignoreMarkdownCodeBlocks
         ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS, GLOB_MDX_ALL_CODE_BLOCKS]
         : []),

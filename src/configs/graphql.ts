@@ -135,8 +135,11 @@ export default (async (context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: [GLOB_GRAPHQL],
-          doNotIgnoreMarkdown: true,
           parser: 'graphql-eslint-parser',
+          // TODO why?
+          ignoresInternal: {
+            md: false,
+          },
         },
       ],
       {

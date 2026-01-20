@@ -61,7 +61,16 @@ export default (async (context, optionsRaw) => {
   // 🔵 - JSX/HTML rule
 
   configBuilder
-    ?.addConfig(['sonar', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
+    ?.addConfig([
+      'sonar',
+      {
+        includeDefaultFilesAndIgnores: true,
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
+      },
+    ])
     .addRule('anchor-precedence', ERROR) /** @since 1.0.4-alpha.0 */ // [S5850] 🟢💭🔤
     // ⚠️ Handled by TypeScript
     .addRule('argument-type', OFF) /** @since 1.0.4-alpha.0 */ // [S3782] 🟢💭

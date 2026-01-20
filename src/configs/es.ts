@@ -355,7 +355,16 @@ export default ((context, optionsRawFromParameters, customConfig) => {
   const configBuilder = context.createConfigBuilder(optionsResolved, 'es');
 
   const mainConfig = configBuilder?.addConfig(
-    [customConfig?.prefix || 'es', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}],
+    [
+      customConfig?.prefix || 'es',
+      {
+        includeDefaultFilesAndIgnores: true,
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
+      },
+    ],
     {
       ...(pluginSettings && {
         settings: {

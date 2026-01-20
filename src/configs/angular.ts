@@ -506,7 +506,9 @@ export default (async (context, optionsRaw) => {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_HTML],
         parser: '@angular-eslint/template-parser',
-        doNotIgnoreHtml: true,
+        ignoresInternal: {
+          html: false,
+        },
       },
     ])
     .addRule(

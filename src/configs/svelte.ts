@@ -156,7 +156,10 @@ export default (async (context, optionsRaw) => {
             ...parentConfigFiles,
           ],
           parser: 'svelte-eslint-parser',
-          doNotIgnoreMarkdown: true,
+          // TODO why?
+          ignoresInternal: {
+            md: false,
+          },
         },
       ],
       {

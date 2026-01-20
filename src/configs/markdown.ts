@@ -190,13 +190,7 @@ export default ((context, optionsRaw) => {
   if (lintMarkdown) {
     configBuilder
       ?.addConfig(
-        [
-          'markdown/markdown',
-          {
-            includeDefaultFilesAndIgnores: true,
-            doNotIgnoreMarkdown: true,
-          },
-        ],
+        ['markdown/markdown', {includeDefaultFilesAndIgnores: true, ignoresInternal: {md: false}}],
         {
           language: `markdown/${defaultDialect}`,
           languageOptions: {
@@ -260,9 +254,11 @@ export default ((context, optionsRaw) => {
             [
               `markdown/language-override/${i}`,
               {
-                doNotIgnoreMarkdown: true,
                 filesDefault: markdownLanguageSettings.files,
                 ignoresDefault: markdownLanguageSettings.ignores,
+                ignoresInternal: {
+                  md: false,
+                },
               },
             ],
             {
@@ -278,10 +274,7 @@ export default ((context, optionsRaw) => {
     configBuilder?.addConfig(
       [
         'markdown/setup/code-blocks-processor',
-        {
-          doNotIgnoreMarkdown: true,
-          filesDefault: DEFAULT_FILES,
-        },
+        {filesDefault: DEFAULT_FILES, ignoresInternal: {md: false}},
       ],
       {
         // TODO report
@@ -312,13 +305,7 @@ export default ((context, optionsRaw) => {
       ?.addConfig(
         [
           'markdown/code-blocks',
-          {
-            doNotIgnoreCss: true,
-            doNotIgnoreHtml: true,
-            doNotIgnoreMarkdown: true,
-            doNotIgnoreMdx: true,
-            filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
-          },
+          {filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS, ignoresInternal: false},
         ],
         // TODO way to ignore ````js some-property`? way to allow using `with`, which is not allowed in the strict mode?
         {
@@ -350,12 +337,9 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'markdown/format-fenced-code-blocks',
       {
-        doNotIgnoreCss: true,
-        doNotIgnoreHtml: true,
-        doNotIgnoreMarkdown: true,
-        doNotIgnoreMdx: true,
         includeDefaultFilesAndIgnores: true,
         filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
+        ignoresInternal: false,
       },
     ])
     .addRule('prettier', ERROR, [{}, {eslintTakeoverMode: true}]);
@@ -371,8 +355,10 @@ export default ((context, optionsRaw) => {
           'markdown/sentences-per-line',
           {
             includeDefaultFilesAndIgnores: true,
-            doNotIgnoreMarkdown: true,
             filesDefault: parentConfigFiles,
+            ignoresInternal: {
+              md: false,
+            },
           },
         ],
         {

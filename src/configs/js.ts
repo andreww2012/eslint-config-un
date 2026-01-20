@@ -43,7 +43,10 @@ export default (async (context, optionsRaw) => {
       'js',
       {
         includeDefaultFilesAndIgnores: true,
-        doNotIgnoreHtml: true, // TODO required?
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
       },
     ])
     .markCategory('Possible Problems')

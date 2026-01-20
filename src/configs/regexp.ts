@@ -20,7 +20,16 @@ export default ((context, optionsRaw) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(['regexp', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
+    ?.addConfig([
+      'regexp',
+      {
+        includeDefaultFilesAndIgnores: true,
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
+      },
+    ])
     .markCategory('Possible Errors')
     .addRule('no-contradiction-with-assertion', ERROR) /** @since 1.2.0 */ // 🟢
     // "This rule is inspired by the `no-control-regex` rule. The positions of reports are improved over the core rule and suggestions are provided in some cases"

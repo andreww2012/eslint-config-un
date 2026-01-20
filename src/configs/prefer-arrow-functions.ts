@@ -21,7 +21,13 @@ export default ((context, optionsRaw) => {
   configBuilder
     ?.addConfig([
       'prefer-arrow-functions',
-      {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true},
+      {
+        includeDefaultFilesAndIgnores: true,
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
+      },
     ])
     .addRule('prefer-arrow-functions', WARNING) /** @since 3.0.0 */
     .enableConfigTesterForPlugin('prefer-arrow-functions')

@@ -16,7 +16,16 @@ export default ((context, optionsRaw) => {
   const configBuilder = context.createConfigBuilder(optionsResolved, 'de-morgan');
 
   configBuilder
-    ?.addConfig(['de-morgan', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
+    ?.addConfig([
+      'de-morgan',
+      {
+        includeDefaultFilesAndIgnores: true,
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
+      },
+    ])
     .addRule('no-negated-conjunction', ERROR) /** @since 1.0.0 */
     .addRule('no-negated-disjunction', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('de-morgan')

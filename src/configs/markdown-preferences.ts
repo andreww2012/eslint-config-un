@@ -260,7 +260,9 @@ export default (async (context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: [GLOB_MARKDOWN],
-          doNotIgnoreMarkdown: true,
+          ignoresInternal: {
+            md: false,
+          },
         },
       ],
       {

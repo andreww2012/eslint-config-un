@@ -65,7 +65,9 @@ export default ((context, optionsRaw) => {
       'json-schema-validator/setup/toml',
       {
         filesDefault: TOML_DEFAULT_FILES,
-        doNotIgnoreToml: true,
+        ignoresInternal: {
+          toml: false,
+        },
       },
     ],
     {

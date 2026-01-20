@@ -68,10 +68,7 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         ...(usePlainParser && {parser: 'eslint-parser-plain'}),
-        doNotIgnoreCss: true,
-        doNotIgnoreMarkdown: true,
-        doNotIgnoreMdx: true,
-        doNotIgnoreHtml: true,
+        ignoresInternal: false,
       },
     ])
     .addRule(

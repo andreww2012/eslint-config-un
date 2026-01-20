@@ -20,7 +20,16 @@ export default ((context, optionsRaw) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(['promise', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
+    ?.addConfig([
+      'promise',
+      {
+        includeDefaultFilesAndIgnores: true,
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
+      },
+    ])
     .addRule('always-return', ERROR, [{ignoreLastCallback: true}]) /** @since 1.0.0 */ // 🟢
     .addRule('avoid-new', OFF) /** @since 3.4.0 */
     .addRule('catch-or-return', ERROR, [

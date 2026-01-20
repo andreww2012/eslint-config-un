@@ -57,8 +57,11 @@ export default (async (context, optionsRaw) => {
       'astro/setup',
       {
         filesDefault: [...DEFAULT_ASTRO_FILES, ...parentConfigFiles],
-        doNotIgnoreMarkdown: true,
         parser: 'astro-eslint-parser',
+        // TODO why?
+        ignoresInternal: {
+          md: false,
+        },
       },
     ],
     {
@@ -82,9 +85,12 @@ export default (async (context, optionsRaw) => {
     ?.addConfig([
       'astro',
       {
-        doNotIgnoreMarkdown: true,
         includeDefaultFilesAndIgnores: true,
         filesDefault: DEFAULT_ASTRO_FILES,
+        // TODO why?
+        ignoresInternal: {
+          md: false,
+        },
       },
     ])
     .markCategory('Possible Errors')

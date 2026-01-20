@@ -94,7 +94,9 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_MARKDOWN],
-        doNotIgnoreMarkdown: true,
+        ignoresInternal: {
+          md: false,
+        },
       },
     ])
     .addRule('no-dead-urls', ...getCheckSeverity('deadUrls')) /** @since 0.1.0 */

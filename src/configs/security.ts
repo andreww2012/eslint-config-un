@@ -19,7 +19,16 @@ export default ((context, optionsRaw) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(['security', {includeDefaultFilesAndIgnores: true, doNotIgnoreHtml: true}])
+    ?.addConfig([
+      'security',
+      {
+        includeDefaultFilesAndIgnores: true,
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
+      },
+    ])
     .addRule('detect-bidi-characters', ERROR) /** @since 1.6.0 */ // 🟡
     .addRule('detect-buffer-noassert', ERROR) /** @since 1.0.0 */ // 🟡
     .addRule('detect-child-process', WARNING) /** @since 1.0.0 */ // 🟡
