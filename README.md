@@ -961,6 +961,34 @@ Before committing, please do also run tests, formatter, other linters and tools 
 All code is assumed to be Node.JS code by default (`eslint-plugin-n` plugin is run on such code).
 Please specify `files`, `ignores` or disable `node` config altogether to avoid false positives.
 
+### I'm getting `The inferred type of 'default' cannot be named without a reference to './node_modules/eslint-config-un/dist/eslint.mjs'. This is likely not portable. A type annotation is necessary` kind of error when exporting the value returned by `eslintConfig()` in ESLint config file
+
+This error means this file is compiled by TypeScript with [`declaration: true` flag](https://www.typescriptlang.org/tsconfig/#declaration), but some file required to infer type type of the returned value cannot be accessed by the compiler.
+
+Possible fixes are:
+
+#### Do not set `declaration: true` for ESLint config file
+
+ESLint config file might be included in the TypeScript project by mistake.
+But it could also be included in a [`composite`](https://www.typescriptlang.org/tsconfig/#composite) config file, which implies `declaration: true`.
+In that case, you need a different fix, unless it's possible to exclude the config file from the composite config.
+
+#### Wrap the returned value in `defineConfig` from `eslint/config`
+
+Example:
+
+```ts
+import {defineConfig} from 'eslint/config';
+import {eslintConfig} from 'eslint-config-un';
+
+export default defineConfig(await eslintConfig(/* ... */));
+```
+
+#### Mark the export with `@internal` JSDoc annotation and set `stripInternal: true` in tsconfig
+
+This is mostly self-explanatory.
+For more info, [refer to the TypeScript docs](https://www.typescriptlang.org/tsconfig/#stripInternal).
+
 <!-- eslint-disable-next-line markdown-preferences/heading-casing -->
 ### TypeError: Key `languageOptions`: Key `globals`: Global `AudioWorkletGlobalScope ` has leading or trailing whitespace
 
