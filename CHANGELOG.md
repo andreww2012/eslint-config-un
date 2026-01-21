@@ -1,5 +1,85 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.7
+
+### Minor Changes
+
+- b97c2cc: cli: added `disabledRules` option to re-enable disabled rules
+- be48e27: ts: updated [`typescript-eslint` from v8.52.0 to v8.53.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.52.0...v8.53.0):
+  - 🟢 enabled [`strict-void-return`](https://typescript-eslint.io/rules/strict-void-return) rule
+  - Added a new option, `extraVariableTypesToRemove`, to control which special variable types should be subject to removal by [`no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars).
+    The default value is `{imports: true}`.
+    The passed value gets merged with the default value.
+
+- 7a3c4d5: html: updated [`@html-eslint/parser` from v0.52.0 to v0.53.0](https://github.com/yeonjuan/html-eslint/compare/v0.52.0...v0.53.0):
+  - 🟢 enabled [`css-no-empty-blocks`](https://html-eslint.org/docs/rules/css-no-empty-blocks) rule
+
+- 78354ad: vue: updated [`eslint-plugin-vue` from v10.6.2 to v10.7.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.6.2...v10.7.0):
+  - 🟢 enabled [`no-undef-directives`](https://eslint.vuejs.org/rules/no-undef-directives.html) rule
+  - 🔴 not enabled [`no-literals-in-template`](https://eslint.vuejs.org/rules/no-literals-in-template.html) rule
+
+- c6ed572: lit: enabled the following previously missing entirely from the config rules:
+  - [`accessible-name`](https://github.com/open-wc/open-wc/blob/HEAD/packages/eslint-plugin-lit-a11y/docs/rules/accessible-name.md)
+  - [`definition-list`](https://github.com/open-wc/open-wc/blob/HEAD/packages/eslint-plugin-lit-a11y/docs/rules/definition-list.md)
+  - [`heading-hidden`](https://github.com/open-wc/open-wc/blob/HEAD/packages/eslint-plugin-lit-a11y/docs/rules/heading-hidden.md)
+  - [`no-aria-slot`](https://github.com/open-wc/open-wc/blob/HEAD/packages/eslint-plugin-lit-a11y/docs/rules/no-aria-slot.md)
+  - [`obj-alt`](https://github.com/open-wc/open-wc/blob/HEAD/packages/eslint-plugin-lit-a11y/docs/rules/obj-alt.md)
+
+- e0b0148: zod: `eslint-plugin-zod-x` was renamed to `eslint-plugin-zod` and updated [from v2.0.1 to v3.0.2](https://github.com/marcalexiei/eslint-plugin-zod/compare/v2.0.1...v3.0.2)
+  - 🟢 enabled [`prefer-enum-over-literal-union`](https://github.com/marcalexiei/eslint-plugin-zod-x/blob/HEAD/docs/rules/prefer-enum-over-literal-union.md) rule
+
+- ce2d79c: [**BREAKING**] betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v3.8.0 to v4.0.1](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v3.8.0...v4.0.1):
+  - ❓ enabled [`enforce-canonical-classes`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-canonical-classes.md) if resolved Tailwind version is >=4 and added it to the `noStylisticRules` config
+    - disabled [`enforce-consistent-important-position`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-consistent-important-position.md), [`enforce-consistent-variable-syntax`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-consistent-variable-syntax.md) and [`enforce-shorthand-classes`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-shorthand-classes.md) for Tailwind >=4
+  - 🔄 `no-unregistered-classes` was renamed to [`no-unknown-classes`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/no-unknown-classes.md)
+
+- 1fb5533: Added `markdownCodeBlocksRules.{additionalDisabledRules,doNotDisable}` root options to control which rules are disabled/enabled in Markdown/MDX embedded ("fenced") code blocks
+- 646c21f: noStylisticRules: added `additionalRules` option allowing to specify additional rules that should be considered stylistic
+- 9ef4e48: playwright: updated [`eslint-plugin-playwright` from v2.4.1 to v2.5.0](https://github.com/mskelton/eslint-plugin-playwright/compare/v2.4.1...v2.5.0):
+  - 🟢 enabled [`consistent-spacing-between-blocks`](https://github.com/mskelton/eslint-plugin-playwright/blob/HEAD/docs/rules/consistent-spacing-between-blocks.md) rule and added it to `noStylisticRules` config
+  - 🔴 not enabled [`no-restricted-locators`](https://github.com/mskelton/eslint-plugin-playwright/blob/HEAD/docs/rules/no-restricted-locators.md) rule
+
+### Patch Changes
+
+- 8a187a6: [**BREAKING**] yaml: updated [`eslint-plugin-yml` from v1.19.1 to v3.0.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v1.19.1...v3.0.0):
+  - The plugin now provides `yaml` ESLint language are therefore does not require specifying `parser` (but instead you should now specify `language: '<plugin prefix (defaults to yaml)>/yaml'`). Thus, `yaml-eslint-parser` dependency has been removed.
+
+- 075f173: react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v2.5.5 to v2.7.1](https://github.com/Rel1cx/eslint-react/compare/v2.5.5...v2.7.1):
+  - 🟢 enabled _experimental_ [`no-unnecessary-use-ref`](https://www.eslint-react.xyz/docs/rules/no-unnecessary-use-ref) rule
+
+- 9583f59: cspell: updated [`@cspell/eslint-plugin` from v9.4.0 to v9.6.0](https://github.com/streetsidesoftware/cspell/compare/v9.4.0...v9.6.0)
+- 1ea84b0: vue: updated [`@intlify/eslint-plugin-vue-i18n` from v4.1.0 to v4.1.1](https://github.com/intlify/eslint-plugin-vue-i18n/compare/v4.1.0...v4.1.1)
+- 57ea13c: sql: updated [`eslint-plugin-sql` from v3.2.2 to v3.4.1](https://github.com/gajus/eslint-plugin-sql/compare/v3.2.2...v3.4.1)
+- 10bca28: pnpm: updated [`eslint-plugin-pnpm` from v1.4.3 to v1.5.0](https://github.com/antfu/pnpm-workspace-utils/compare/v1.4.3...v1.5.0):
+- 405370a: ts: disabled [`switch-exhaustiveness-check` rule](https://typescript-eslint.io/rules/switch-exhaustiveness-check) because oftentimes it's not possible to declare all union members, so the rule gets suppressed. To substitute the rule, put `<expression in switch statement> satisfies never` in the `default` clause.
+- 18d9e49: noStylisticRules, yaml: added `sort-*` rules to `noStylisticRules` config
+- 90c27dd: formatJs: updated [`eslint-plugin-formatjs` from v6.0.10 to v6.1.0](https://github.com/formatjs/formatjs/compare/v6.0.10...v6.1.0)
+- 03f4f85: zod: updated [`eslint-plugin-zod-x` from v2.0.0 to v2.0.1](https://github.com/marcalexiei/eslint-plugin-zod-x/compare/v2.0.0...v2.0.1)
+- 3b04d1b: mdx: fixed an issue resulting in some rules were not disabled in MDX code blocks
+- c63a978: format: updated [`eslint-plugin-format` from v1.2.0 to v1.3.1](https://github.com/antfu/eslint-plugin-format/compare/v1.2.0...v1.3.1)
+- 1fd1f65: toml: updated [`eslint-plugin-toml` from v1.0.0 to v1.0.3](https://github.com/ota-meshi/eslint-plugin-toml/compare/v1.0.0...v1.0.3)
+- 9cc0267: Fixed an issue resulting in `pluginRenames` root option not respected in `language` flat config option
+- ac5233a: eslintComments: updated [`@eslint-community/eslint-plugin-eslint-comments` from v4.5.0 to v4.6.0](https://github.com/eslint-community/eslint-plugin-eslint-comments/compare/v4.5.0...v4.6.0)
+- b7813fa: turbo: updated [`eslint-plugin-turbo` from v2.7.3 to v2.7.4](https://github.com/vercel/turborepo/compare/v2.7.3...v2.7.4)
+- 6b7c89d: [**BREAKING**] unusedParams: make this config disabled by default and move `eslint-plugin-unused-imports` to optional peer dependencies
+- 8cf7e6c: [**BREAKING**] toml: updated [`eslint-plugin-toml` from v0.13.1 to v1.0.0](https://github.com/ota-meshi/eslint-plugin-toml/compare/v0.13.1...v1.0.0):
+  - The plugin now provides `toml` ESLint language are therefore does not require specifying `parser` (but instead you should now specify `language: '<plugin prefix (defaults to toml)>/toml'`).
+    Thus, `toml-eslint-parser` dependency has been removed.
+
+- 756369f: unocss: updated [`@unocss/eslint-plugin` from v66.5.12 to v66.6.0](https://github.com/unocss/unocss/compare/v66.5.12...v66.6.0)
+- 5e5692b: node: updated [`eslint-plugin-n` from v17.23.1 to v17.23.2](https://github.com/eslint-community/eslint-plugin-n/compare/v17.23.1...v17.23.2)
+- f7f90a4: fastImport, import: updated [`eslint-plugin-fast-import` from v1.7.1 to v1.8.0](https://github.com/nebrius/eslint-plugin-fast-import/compare/v1.7.1...v1.8.0)
+- 32f568c: jsonSchemaValidator: updated [`eslint-plugin-json-schema-validator` from v5.5.1 to v6.0.0](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v5.5.1...v6.0.0)
+- d40c22b: [**BREAKING**] react: the following rules moved from `hooks` sub-config to `reactX` sub-config:
+  - [`no-unnecessary-use-callback`](https://eslint-react.xyz/docs/rules/no-unnecessary-use-callback)
+  - [`no-unnecessary-use-memo`](https://eslint-react.xyz/docs/rules/no-unnecessary-use-memo)
+  - [`no-unnecessary-use-prefix`](https://eslint-react.xyz/docs/rules/no-unnecessary-use-prefix)
+  - [`prefer-use-state-lazy-initialization`](https://eslint-react.xyz/docs/rules/prefer-use-state-lazy-initialization)
+
+- 17f5f01: unicorn: disabled autofix for [`prefer-string-raw`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-raw.md) because changing a string literal to `String.raw` expression may lead to type errors
+- 6006988: jsdoc: updated [`eslint-plugin-jsdoc` from v62.0.0 to v62.3.0](https://github.com/gajus/eslint-plugin-jsdoc/compare/v62.0.0...v62.3.0)
+- 01030b9: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.1.13 to v7.1.14](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.1.13...v7.1.14)
+
 ## 1.0.0-beta.6
 
 ### Minor Changes
