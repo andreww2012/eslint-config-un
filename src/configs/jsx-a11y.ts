@@ -356,7 +356,7 @@ export default ((
         ...(pluginSettings && {
           settings: {
             ...(isForLit
-              ? pluginSettings
+              ? pluginSettings // Direct spreading settings object for `lit-a11y` is not a mistake: https://github.com/open-wc/open-wc/blob/5aeaf35e01a2f15b6663d71102eeea3333e4c57d/packages/eslint-plugin-lit-a11y/lib/utils/HasLitHtmlImportRuleExtension.js#L122
               : {
                   'jsx-a11y-x': pluginSettings,
                 }),
@@ -364,6 +364,7 @@ export default ((
         }),
       },
     )
+    .addRule('accessible-name', isForLit ? ERROR : null)
     .addRule(
       rn('alt-text'),
       altTextCheckForElements === false ? OFF : ERROR,
@@ -384,11 +385,13 @@ export default ((
     ) /** @since 5.0.0 */
     .addRule(
       rn('anchor-ambiguous-text'),
-      ambiguousWords === false || isForLit
-        ? OFF
-        : ambiguousWords.severity === 'error'
-          ? ERROR
-          : WARNING,
+      isForLit
+        ? null
+        : ambiguousWords === false
+          ? OFF
+          : ambiguousWords.severity === 'error'
+            ? ERROR
+            : WARNING,
       setRuleOptions([
         {
           ...(ambiguousWords && ambiguousWords.words.length > 0 && {words: ambiguousWords.words}),
@@ -397,7 +400,7 @@ export default ((
     ) /** @since 6.7.0 */ // 🔴
     .addRule(
       rn('anchor-has-content'),
-      ERROR,
+      isForLit ? null : ERROR,
       setRuleOptions([
         {
           ...(customComponents.links?.length && {components: customComponents.links}),
@@ -417,8 +420,10 @@ export default ((
       ]),
     ) /** @since 5.1.1 */
     .addRule(rn('aria-activedescendant-has-tabindex'), ERROR) /** @since 4.0.0 */
-    .addRule(isForLit ? 'aria-attrs' : rn('aria-props'), ERROR) /** @since 1.0.0 */
-    .addRule(isForLit ? 'aria-attr-valid-value' : rn('aria-proptypes'), ERROR) /** @since 1.0.0 */
+    .addRule('aria-attr-valid-value', isForLit ? ERROR : null)
+    .addRule('aria-attrs', isForLit ? ERROR : null)
+    .addRule(rn('aria-props'), isForLit ? null : ERROR) /** @since 1.0.0 */
+    .addRule(rn('aria-proptypes'), isForLit ? null : ERROR) /** @since 1.0.0 */
     .addRule(rn('aria-role'), ERROR) /** @since 1.0.0 */
     .addRule(rn('aria-unsupported-elements'), ERROR) /** @since 1.0.0 */
     .addRule(
@@ -431,10 +436,10 @@ export default ((
       ]),
     ) /** @since 6.3.0 */
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/click-events-have-key-events/
-    .addRule(rn('click-events-have-key-events'), isForAstro ? OFF : ERROR) /** @since 2.2.0 */
+    .addRule(rn('click-events-have-key-events'), isForAstro ? null : ERROR) /** @since 2.2.0 */
     .addRule(
       rn('control-has-associated-label'),
-      isForLit ? OFF : ERROR,
+      isForLit ? null : ERROR,
       setRuleOptions([
         {
           ...(customComponents.controls?.length && {controlComponents: customComponents.controls}),
@@ -467,18 +472,19 @@ export default ((
         },
       ]),
     ) /** @since 6.2.0 */ // 🔴
+    .addRule('definition-list', isForLit ? ERROR : null)
     .addRule(
       rn('heading-has-content'),
-      ERROR,
+      isForLit ? null : ERROR,
       setRuleOptions([
         {
           ...(customComponents.headings?.length && {inputComponents: customComponents.headings}),
         },
       ]),
     ) /** @since 1.5.0 */
+    .addRule('heading-hidden', isForLit ? ERROR : null)
     // Disabled because "This rule is largely superseded by the `lang` rule"
-    // eslint-disable-next-line sonarjs/no-all-duplicated-branches
-    .addRule(rn('html-has-lang'), isForLit ? OFF : OFF) /** @since 1.5.0 */
+    .addRule(rn('html-has-lang'), isForLit ? null : OFF) /** @since 1.5.0 */
     .addRule(isForLit ? 'iframe-title' : rn('iframe-has-title'), ERROR) /** @since 4.0.0 */
     .addRule(
       rn('img-redundant-alt'),
@@ -496,7 +502,7 @@ export default ((
     ) /** @since 1.0.0 */
     .addRule(
       rn('interactive-supports-focus'),
-      isForLit ? OFF : ERROR,
+      isForLit ? null : ERROR,
       setRuleOptions([
         {
           tabbable: getKeysOfTruthyValues({
@@ -508,7 +514,7 @@ export default ((
     ) /** @since 5.0.0 */
     .addRule(
       rn('label-has-associated-control'),
-      isForLit ? OFF : ERROR,
+      isForLit ? null : ERROR,
       setRuleOptions([
         {
           ...(labelAttributes?.length && {labelAttributes}),
@@ -517,11 +523,11 @@ export default ((
         },
       ]),
     ) /** @since 6.1.0 */
-    .addRule(isForLit ? 'valid-lang' : rn('lang'), ERROR) /** @since 1.5.0 */ // 🔴
+    .addRule(rn('lang'), isForLit ? null : ERROR) /** @since 1.5.0 */ // 🔴
     .addRule('list', isForLit ? ERROR : null)
     .addRule(
       rn('media-has-caption'),
-      isForLit ? OFF : WARNING,
+      isForLit ? null : WARNING,
       setRuleOptions([
         {
           ...(customComponents.audioElements?.length && {audio: customComponents.audioElements}),
@@ -548,7 +554,8 @@ export default ((
       ]),
     ) /** @since 1.0.0 */
     .addRule(rn('no-access-key'), ERROR) /** @since 0.0.1 */
-    .addRule(rn('no-aria-hidden-on-focusable'), isForLit ? OFF : WARNING) /** @since 6.7.1 */ // 🔴
+    .addRule(rn('no-aria-hidden-on-focusable'), isForLit ? null : WARNING) /** @since 6.7.1 */ // 🔴
+    .addRule('no-aria-slot', isForLit ? ERROR : null)
     .addRule(
       rn('no-autofocus'),
       WARNING,
@@ -557,7 +564,7 @@ export default ((
     .addRule(rn('no-distracting-elements'), ERROR) /** @since 4.0.0 */
     .addRule(
       rn('no-interactive-element-to-noninteractive-role'),
-      isForLit ? OFF : ERROR,
+      isForLit ? null : ERROR,
       setRuleOptions([
         {
           // Copied from `recommended` config
@@ -569,7 +576,7 @@ export default ((
     ) /** @since 5.0.0 */
     .addRule(
       rn('no-noninteractive-element-interactions'),
-      isForLit ? OFF : ERROR,
+      isForLit ? null : ERROR,
       setRuleOptions([
         {
           // TODO copied from `recommended` config
@@ -593,7 +600,7 @@ export default ((
     ) /** @since 5.0.0 */
     .addRule(
       rn('no-noninteractive-element-to-interactive-role'),
-      isForLit ? OFF : ERROR,
+      isForLit ? null : ERROR,
       setRuleOptions([
         {
           // TODO copied from `recommended` config
@@ -608,7 +615,7 @@ export default ((
     ) /** @since 5.0.0 */
     .addRule(
       rn('no-noninteractive-tabindex'),
-      isForLit ? OFF : ERROR,
+      isForLit ? null : ERROR,
       setRuleOptions([
         // TODO copied from `recommended` config
         {
@@ -622,7 +629,7 @@ export default ((
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/no-static-element-interactions/
     .addRule(
       rn('no-static-element-interactions'),
-      isForAstro || isForLit ? OFF : ERROR,
+      isForAstro || isForLit ? null : ERROR,
       setRuleOptions([
         // TODO copied from `recommended` config
         {
@@ -631,8 +638,8 @@ export default ((
         },
       ]),
     ) /** @since 2.2.0 */
-    // eslint-disable-next-line sonarjs/no-all-duplicated-branches
-    .addRule(rn('prefer-tag-over-role'), isForLit ? OFF : OFF) /** @since 6.7.0 */ // 🔴
+    .addRule('obj-alt', isForLit ? ERROR : null)
+    .addRule(rn('prefer-tag-over-role'), isForLit ? null : OFF) /** @since 6.7.0 */ // 🔴
     .addRule(
       isForLit ? 'role-has-required-aria-attrs' : rn('role-has-required-aria-props'),
       ERROR,
@@ -643,9 +650,10 @@ export default ((
     ) /** @since 1.0.0 */
     .addRule(rn('scope'), ERROR) /** @since 1.5.0 */
     .addRule(rn('tabindex-no-positive'), ERROR) /** @since 1.0.0 */
-    .enableConfigTesterForPlugin('jsx-a11y', {
-      // TODO stricter condition?
-      rulesToSkipInConfig: () => prefixFinal !== 'jsx-a11y',
+    .addRule('valid-lang', isForLit ? ERROR : null)
+    .enableConfigTesterForPlugin(prefixFinal, {
+      rulesToSkipInConfig: (ruleName) =>
+        prefixFinal === 'astro' && !ruleName.startsWith('astro/jsx-a11y/'),
     })
     .addOverrides();
 
