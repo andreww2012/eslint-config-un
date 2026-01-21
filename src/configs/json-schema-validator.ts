@@ -52,32 +52,24 @@ export default ((context, optionsRaw) => {
     },
   ]);
 
-  configBuilder?.addConfig(
-    [
-      'json-schema-validator/setup/yaml',
-      {
-        filesDefault: YAML_DEFAULT_FILES,
-      },
-    ],
+  configBuilder?.addConfig([
+    'json-schema-validator/setup/yaml',
     {
-      language: 'yaml/yaml',
+      filesDefault: YAML_DEFAULT_FILES,
+      language: ['yaml', 'yaml'],
     },
-  );
+  ]);
 
-  configBuilder?.addConfig(
-    [
-      'json-schema-validator/setup/toml',
-      {
-        filesDefault: TOML_DEFAULT_FILES,
-        ignoresInternal: {
-          toml: false,
-        },
-      },
-    ],
+  configBuilder?.addConfig([
+    'json-schema-validator/setup/toml',
     {
-      language: 'toml/toml',
+      filesDefault: TOML_DEFAULT_FILES,
+      ignoresInternal: {
+        toml: false,
+      },
+      language: ['toml', 'toml'],
     },
-  );
+  ]);
 
   configBuilder
     ?.addConfig(['json-schema-validator', {includeDefaultFilesAndIgnores: true}], {

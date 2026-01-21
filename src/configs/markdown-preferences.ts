@@ -254,23 +254,19 @@ export default (async (context, optionsRaw) => {
   // ⚠️ - supports (or only works with) non-standard syntax
 
   configBuilder
-    ?.addConfig(
-      [
-        'markdown-preferences',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesDefault: [GLOB_MARKDOWN],
-          ignoresInternal: {
-            md: false,
-          },
-        },
-      ],
+    ?.addConfig([
+      'markdown-preferences',
       {
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: [GLOB_MARKDOWN],
+        ignoresInternal: {
+          md: false,
+        },
         ...(extendedMarkdownSyntax && {
-          language: 'markdown-preferences/extended-syntax',
+          language: ['markdown-preferences', 'extended-syntax'],
         }),
       },
-    )
+    ])
     .markCategory('Preference')
     .addRule('canonical-code-block-language', ERROR) /** @since 0.9.0 */
     .addRule('emoji-notation', OFF) /** @since 0.13.0 */ // ⚠️

@@ -71,11 +71,11 @@ export default ((context, optionsRaw) => {
           ignoresInternal: {
             toml: false,
           },
+          language: ['toml', 'toml'],
         },
       ],
       {
         ...generateIgnoresWithAdditional(optionsResolved)(CONFIG_DEFAULT_IGNORES),
-        language: 'toml/toml',
       },
     )
     .markCategory('Base rules')

@@ -190,9 +190,17 @@ export default ((context, optionsRaw) => {
   if (lintMarkdown) {
     configBuilder
       ?.addConfig(
-        ['markdown/markdown', {includeDefaultFilesAndIgnores: true, ignoresInternal: {md: false}}],
+        [
+          'markdown/markdown',
+          {
+            includeDefaultFilesAndIgnores: true,
+            ignoresInternal: {
+              md: false,
+            },
+            language: ['markdown', defaultDialect],
+          },
+        ],
         {
-          language: `markdown/${defaultDialect}`,
           languageOptions: {
             frontmatter: parseFrontmatter,
           },
@@ -250,21 +258,17 @@ export default ((context, optionsRaw) => {
       language.forEach((markdownLanguageSettings, i) => {
         const dialect = markdownLanguageSettings.language;
         configBuilder
-          ?.addConfig(
-            [
-              `markdown/language-override/${i}`,
-              {
-                filesDefault: markdownLanguageSettings.files,
-                ignoresDefault: markdownLanguageSettings.ignores,
-                ignoresInternal: {
-                  md: false,
-                },
-              },
-            ],
+          ?.addConfig([
+            `markdown/language-override/${i}`,
             {
-              language: `markdown/${dialect}`,
+              filesDefault: markdownLanguageSettings.files,
+              ignoresDefault: markdownLanguageSettings.ignores,
+              ignoresInternal: {
+                md: false,
+              },
+              language: ['markdown', dialect],
             },
-          )
+          ])
           .addRule('no-missing-label-refs', ERROR, generateNoMissingLabelRefsOptions(dialect));
       });
     }

@@ -80,10 +80,10 @@ export default ((context, optionsRaw) => {
           ignoresInternal: {
             css: false,
           },
+          language: ['css', 'css'],
         },
       ],
       {
-        language: 'css/css',
         languageOptions: {
           ...(tolerantMode && {tolerant: true}),
           ...(customSyntax != null && {customSyntax}),

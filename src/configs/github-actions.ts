@@ -51,18 +51,14 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(
-      [
-        'github-actions',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesDefault: [`.github/workflows/*.${GLOB_YML_YAML_EXTENSION}`],
-        },
-      ],
+    ?.addConfig([
+      'github-actions',
       {
-        language: 'yaml/yaml',
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: [`.github/workflows/*.${GLOB_YML_YAML_EXTENSION}`],
+        language: ['yaml', 'yaml'],
       },
-    )
+    ])
     .addRule('action-name-casing', OFF) /** @since 0.0.2 */
     .addRule('job-id-casing', ERROR) /** @since 0.0.3 */
     .addRule(

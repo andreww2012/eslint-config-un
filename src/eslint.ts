@@ -250,7 +250,7 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
       .filter((v) => v != null),
   );
 
-export type FlatConfigEntryForBuilder = OmitStrict<FlatConfigEntry, 'name' | 'rules'>;
+export type FlatConfigEntryForBuilder = OmitStrict<FlatConfigEntry, 'name' | 'rules' | 'language'>;
 
 const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, RuleSeverity> = {
   off: OFF,
@@ -451,6 +451,15 @@ const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
   toml: [GLOB_TOML],
 } as const satisfies Record<string, [string, ...string[]]>;
 
+// eslint-disable-next-line ts/no-unused-vars -- come up with sth better
+const PLUGINS_PROVIDING_LANGUAGES = {
+  css: ['css'],
+  'markdown-preferences': ['extended-syntax'],
+  markdown: ['gfm', 'commonmark'],
+  toml: ['toml'],
+  yaml: ['yaml'],
+} as const satisfies Partial<Record<PluginPrefix, [string, ...string[]]>>;
+
 export class ConfigEntryBuilder<
   ExtraPlugins extends ExtraPluginsType = never,
   // eslint-disable-next-line ts/no-explicit-any
@@ -492,7 +501,7 @@ export class ConfigEntryBuilder<
    *
    * `rules` and `name` keys cannot be overridden.
    */
-  addConfig(
+  addConfig<PluginPrefixWithLanguage extends keyof typeof PLUGINS_PROVIDING_LANGUAGES>(
     nameAndMaybeOptions:
       | string
       | [
@@ -543,6 +552,14 @@ export class ConfigEntryBuilder<
                     boolean
                   >
                 >;
+
+            /**
+             * Type-safe version of `language` config property, also handling plugin prefix renames.
+             */
+            language?: [
+              PluginPrefixWithLanguage,
+              (typeof PLUGINS_PROVIDING_LANGUAGES)[PluginPrefixWithLanguage][number],
+            ];
           },
         ],
     config?: FlatConfigEntryForBuilder,
@@ -594,6 +611,9 @@ export class ConfigEntryBuilder<
         `${configName}${configIndexProperty in this.options ? `#${this.options[configIndexProperty]}` : ''}`,
       ),
       rules: {},
+      ...(internalOptions.language && {
+        language: `${this.context.rootOptions.pluginRenames?.[internalOptions.language[0]] ?? internalOptions.language[0]}/${internalOptions.language[1]}`,
+      }),
     };
     this.addFlatConfig(configFinal);
 

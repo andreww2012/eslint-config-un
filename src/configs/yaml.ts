@@ -69,11 +69,11 @@ export default ((context, optionsRaw) => {
           includeDefaultFilesAndIgnores: true,
           filesDefault: YAML_DEFAULT_FILES,
           filesDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeFilesWithDefault,
+          language: ['yaml', 'yaml'],
         },
       ],
       {
         ...generateIgnoresWithAdditional(optionsResolved)(CONFIG_DEFAULT_IGNORES),
-        language: 'yaml/yaml',
         ...(parserOptions && {languageOptions: {parserOptions}}),
       },
     )
