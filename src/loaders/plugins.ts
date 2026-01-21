@@ -634,11 +634,7 @@ export const pluginsLoaders = {
   yaml: genModuleLoader(
     'yaml',
     'eslint-plugin-yml',
-    () =>
-      interopDefault(
-        import('eslint-plugin-yml'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+    () => interopDefault(import('eslint-plugin-yml')) as Promise<EslintPlugin>,
   ),
   'you-dont-need-lodash-underscore': genModuleLoader(
     'you-dont-need-lodash-underscore',

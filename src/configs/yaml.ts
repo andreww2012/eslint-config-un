@@ -41,11 +41,11 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    */
   quotes?: 'single' | 'double' | false;
 
-  parseOptions?: {
+  parserOptions?: {
     /**
-     * @see https://github.com/ota-meshi/yaml-eslint-parser?tab=readme-ov-file#advanced-configuration
+     * @see https://github.com/ota-meshi/yaml-eslint-parser#advanced-configuration
      */
-    defaultYAMLVersion?: string;
+    defaultYAMLVersion?: '1.2' | '1.1';
   };
 }
 
@@ -54,7 +54,7 @@ export default ((context, optionsRaw) => {
     enforceExtension: 'yml',
   } satisfies YamlEslintConfigOptions);
 
-  const {enforceExtension} = optionsResolved;
+  const {enforceExtension, parserOptions} = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'yaml');
 
@@ -69,11 +69,12 @@ export default ((context, optionsRaw) => {
           includeDefaultFilesAndIgnores: true,
           filesDefault: YAML_DEFAULT_FILES,
           filesDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeFilesWithDefault,
-          parser: 'yaml-eslint-parser',
         },
       ],
       {
         ...generateIgnoresWithAdditional(optionsResolved)(CONFIG_DEFAULT_IGNORES),
+        language: 'yaml/yaml',
+        ...(parserOptions && {languageOptions: {parserOptions}}),
       },
     )
     .markCategory('Base rules')

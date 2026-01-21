@@ -140,14 +140,18 @@ export default ((context, optionsRaw) => {
     'pnpm',
   );
   configBuilderPnpmWorkspace
-    ?.addConfig([
-      'pnpm/pnpm-workspace-yaml',
+    ?.addConfig(
+      [
+        'pnpm/pnpm-workspace-yaml',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesDefault: ['pnpm-workspace.yaml'],
+        },
+      ],
       {
-        includeDefaultFilesAndIgnores: true,
-        filesDefault: ['pnpm-workspace.yaml'],
-        parser: 'yaml-eslint-parser',
+        language: 'yaml/yaml',
       },
-    ])
+    )
     .addRule(
       'yaml-enforce-settings',
       enforcePnpmWorkspaceSettings ? ERROR : OFF,

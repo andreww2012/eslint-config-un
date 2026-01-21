@@ -52,13 +52,17 @@ export default ((context, optionsRaw) => {
     },
   ]);
 
-  configBuilder?.addConfig([
-    'json-schema-validator/setup/yaml',
+  configBuilder?.addConfig(
+    [
+      'json-schema-validator/setup/yaml',
+      {
+        filesDefault: YAML_DEFAULT_FILES,
+      },
+    ],
     {
-      filesDefault: YAML_DEFAULT_FILES,
-      parser: 'yaml-eslint-parser',
+      language: 'yaml/yaml',
     },
-  ]);
+  );
 
   configBuilder?.addConfig(
     [

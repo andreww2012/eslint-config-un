@@ -54,11 +54,6 @@ export const parsersLoaders = {
     'vue-eslint-parser',
     () => import('vue-eslint-parser'),
   ),
-  'yaml-eslint-parser': genModuleLoader(
-    'yaml-eslint-parser',
-    'yaml-eslint-parser',
-    () => import('yaml-eslint-parser'),
-  ),
 } satisfies Record<string, ModuleLoader<EslintParser, string, boolean>>;
 
 export type ParserPrefix = keyof typeof parsersLoaders;
