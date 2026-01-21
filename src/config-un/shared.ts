@@ -50,6 +50,7 @@ export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOption
   'unicorn/explicit-length-check': true, // Wrong auto-fixes
   'unicorn/no-useless-undefined': true,
   'unicorn/prefer-spread': true,
+  'unicorn/prefer-string-raw': true, // Transforms strings to `String.raw` expressions, which may cause type errors
 
   'vitest/prefer-lowercase-title': true, // Strings/symbols shouldn't be changed by autofix
 
@@ -224,6 +225,7 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    *   'unicorn/explicit-length-check': true,
    *   'unicorn/no-useless-undefined': true,
    *   'unicorn/prefer-spread': true,
+   *   'unicorn/prefer-string-raw': true,
    *   'vitest/require-import-vi-mock': true,
    *   'vitest/prefer-lowercase-title': true,
    *   'zod/require-schema-suffix': true,
