@@ -309,11 +309,7 @@ export const pluginsLoaders = {
   'json-schema-validator': genModuleLoader(
     'json-schema-validator',
     'eslint-plugin-json-schema-validator',
-    () =>
-      interopDefault(
-        import('eslint-plugin-json-schema-validator'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+    () => interopDefault(import('eslint-plugin-json-schema-validator')),
   ),
   jsonc: genModuleLoader(
     'jsonc',

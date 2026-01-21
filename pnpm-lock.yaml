@@ -114,8 +114,8 @@ importers:
         specifier: 62.0.0
         version: 62.0.0(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-json-schema-validator:
-        specifier: 5.5.1
-        version: 5.5.1(eslint@9.39.2(jiti@2.6.1))
+        specifier: 6.0.0
+        version: 6.0.0(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-jsonc:
         specifier: 2.21.0
         version: 2.21.0(eslint@9.39.2(jiti@2.6.1))
@@ -6215,11 +6215,11 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
 
-  eslint-plugin-json-schema-validator@5.5.1:
-    resolution: {integrity: sha512-KhMcNtXCVid7Crkzbf2mfX5mNIMU6T1F1eCMxbeNfoJMZADNHVCFHb+xVdg/DWSPF/7BFYGxLQqfZ5OxMOLhhA==}
-    engines: {node: ^14.18.0 || >=16.0.0}
+  eslint-plugin-json-schema-validator@6.0.0:
+    resolution: {integrity: sha512-55/aPUP8mfTMVirSC15jix0hvnCeboCpkwccVfawJUmCEs+gpAlNih0Q2LJQHTAU6bmJW3Lu7QZYGB4tjhN0CQ==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
     peerDependencies:
-      eslint: '>=6.0.0'
+      eslint: '>=9.38.0'
 
   eslint-plugin-jsonc@2.21.0:
     resolution: {integrity: sha512-HttlxdNG5ly3YjP1cFMP62R4qKLxJURfBZo2gnMY+yQojZxkLyOpY1H1KRTKBmvQeSG9pIpSGEhDjE17vvYosg==}
@@ -9857,10 +9857,6 @@ packages:
   to-valid-identifier@1.0.0:
     resolution: {integrity: sha512-41wJyvKep3yT2tyPqX/4blcfybknGB4D+oETKLs7Q76UiPqRpUJK3hr1nxelyYO0PHKVzJwlu0aCeEAsGI6rpw==}
     engines: {node: '>=20'}
-
-  toml-eslint-parser@0.12.0:
-    resolution: {integrity: sha512-4qHgkGXl0LyFp/3aNoi6dKWuPuxFsCiDtBl5IbJljeYR57+5l3pJHJEW9xPSOu2U1drGlG82tpGqkJz/uJZ2Fw==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
   toml-eslint-parser@1.0.2:
     resolution: {integrity: sha512-ZI3t5mJiCt+1jQei8iNvKacpoPg9Qc9LumWZBJpWpHKbezA2df0nIXl16HjgwCr44qxpVm7azTYpJ5rylcbsNg==}
@@ -16831,21 +16827,20 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-json-schema-validator@5.5.1(eslint@9.39.2(jiti@2.6.1)):
+  eslint-plugin-json-schema-validator@6.0.0(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2(jiti@2.6.1))
       ajv: 8.17.1
       debug: 4.4.3
       eslint: 9.39.2(jiti@2.6.1)
-      eslint-compat-utils: 0.6.5(eslint@9.39.2(jiti@2.6.1))
       eslint-json-compat-utils: 0.2.1(eslint@9.39.2(jiti@2.6.1))(jsonc-eslint-parser@2.4.2)
       json-schema-migrate-x: 2.1.0
       jsonc-eslint-parser: 2.4.2
       minimatch: 10.1.1
       synckit: 0.11.12
-      toml-eslint-parser: 0.12.0
+      toml-eslint-parser: 1.0.2
       tunnel-agent: 0.6.0
-      yaml-eslint-parser: 1.3.2
+      yaml-eslint-parser: 2.0.0
     transitivePeerDependencies:
       - '@eslint/json'
       - supports-color
@@ -21433,10 +21428,6 @@ snapshots:
     dependencies:
       '@sindresorhus/base62': 1.0.0
       reserved-identifiers: 1.2.0
-
-  toml-eslint-parser@0.12.0:
-    dependencies:
-      eslint-visitor-keys: 3.4.3
 
   toml-eslint-parser@1.0.2:
     dependencies:
