@@ -4,6 +4,7 @@ import {
   ERROR,
   GLOB_JS_TS_EXTENSION,
   GLOB_JS_TS_X_EXTENSION,
+  GLOB_MD_X_CODE_BLOCKS,
   GLOB_VUE,
   OFF,
   type RuleSeverity,
@@ -1034,9 +1035,8 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       'vue/a11y',
       {
         includeDefaultFilesAndIgnores: true,
-        ignoreMarkdownCodeBlocks: true,
         filesDefault: optionsResolved.files,
-        ignoresDefault: optionsResolved.ignores,
+        ignoresDefault: [...GLOB_MD_X_CODE_BLOCKS, ...(optionsResolved.ignores || [])],
       },
     ])
     .addRule('alt-text', ERROR) /** @since 0.1.0 */ // 🟢
@@ -1074,7 +1074,8 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       'pinia',
       {
         includeDefaultFilesAndIgnores: true,
-        ignoreMarkdownCodeBlocks: true,
+        ignoresDefault: [...GLOB_MD_X_CODE_BLOCKS],
+        ignoresDefaultMergedWithUserIgnores: true,
       },
     ])
     .addRule('never-export-initialized-store', ERROR) /** @since 0.2.0 */ // 🟢

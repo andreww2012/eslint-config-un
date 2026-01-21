@@ -147,6 +147,11 @@ export const GLOB_MDX_SUPPORTED_CODE_BLOCKS =
   `${GLOB_MDX}/**/*.{${GLOB_SUPPORTED_EXTENSIONS}}` as const;
 export const GLOB_MDX_ALL_CODE_BLOCKS = `${GLOB_MDX}/**/*.*` as const;
 
+export const GLOB_MD_X_CODE_BLOCKS = [
+  GLOB_MARKDOWN_ALL_CODE_BLOCKS,
+  GLOB_MDX_ALL_CODE_BLOCKS,
+] as const;
+
 /* Misc */
 
 export const DEFAULT_GLOBAL_IGNORES = ['**/dist'] as const;

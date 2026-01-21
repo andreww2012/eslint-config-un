@@ -13,9 +13,7 @@ import {
   GLOB_CSS,
   GLOB_HTM_HTML,
   GLOB_MARKDOWN,
-  GLOB_MARKDOWN_ALL_CODE_BLOCKS,
   GLOB_MDX,
-  GLOB_MDX_ALL_CODE_BLOCKS,
   GLOB_TOML,
   OFF,
   type RuleSeverity,
@@ -545,11 +543,6 @@ export class ConfigEntryBuilder<
                     boolean
                   >
                 >;
-
-            /**
-             * Do not apply this config to "fenced code blocks" inside `*.md?(x)` files
-             */
-            ignoreMarkdownCodeBlocks?: boolean;
           },
         ],
     config?: FlatConfigEntryForBuilder,
@@ -568,20 +561,15 @@ export class ConfigEntryBuilder<
         : filesDefault;
 
     const ignoresFromUser = configOptions.ignores;
-    const ignoresInternal = [
-      ...objectEntriesUnsafe(
-        FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS,
-      ).flatMap(([fileType, globs]) =>
-        internalOptions.ignoresInternal === false ||
-        (internalOptions.ignoresInternal !== true &&
-          internalOptions.ignoresInternal?.[fileType] === false)
-          ? []
-          : globs,
-      ),
-      ...(internalOptions.ignoreMarkdownCodeBlocks
-        ? [GLOB_MARKDOWN_ALL_CODE_BLOCKS, GLOB_MDX_ALL_CODE_BLOCKS]
-        : []),
-    ];
+    const ignoresInternal = objectEntriesUnsafe(
+      FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS,
+    ).flatMap(([fileType, globs]) =>
+      internalOptions.ignoresInternal === false ||
+      (internalOptions.ignoresInternal !== true &&
+        internalOptions.ignoresInternal?.[fileType] === false)
+        ? []
+        : globs,
+    );
     const ignoresDefault = internalOptions.ignoresDefault || [];
     const ignores = [
       ...ignoresInternal,

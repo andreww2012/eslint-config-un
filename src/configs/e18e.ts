@@ -1,5 +1,5 @@
 // cspell:ignore canparse
-import {ERROR, GLOB_PACKAGE_JSON, GLOB_TS_X} from '../constants';
+import {ERROR, GLOB_MD_X_CODE_BLOCKS, GLOB_PACKAGE_JSON, GLOB_TS_X} from '../constants';
 import type {GetRuleOptions, RuleNamesForPlugin, RulesRecordPartial} from '../eslint';
 import {
   type ExtraPluginsType,
@@ -235,7 +235,8 @@ export default ((context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: [GLOB_TS_X],
-          ignoreMarkdownCodeBlocks: true, // `no-indexof-equality` crashes otherwise
+          ignoresDefault: [...GLOB_MD_X_CODE_BLOCKS], // otherwise `no-indexof-equality` crashes
+          ignoresDefaultMergedWithUserIgnores: true,
         },
       ])
       .addRule('no-indexof-equality', ERROR) /** @since 0.0.1 */ // 🔴💭
