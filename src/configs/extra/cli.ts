@@ -1,4 +1,5 @@
 import {ERROR, GLOB_JS_TS_EXTENSION} from '../../constants';
+import type {AllEslintRuleNames} from '../../eslint';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -10,6 +11,12 @@ export interface CliEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins> {
   /**
+   * By default, all rules available in this list are *disabled*.
+   * To not disable certain rule, set `false` to the corresponding key.
+   */
+  disabledRules?: Partial<Record<(typeof RULES_DISABLED_BY_DEFAULT)[number], boolean>>;
+
+  /**
    * By default, files in directories on all levels are accounted for by this config. Set this to true to only account for files in the top-level directories.
    * @default false
    */
@@ -19,10 +26,23 @@ export interface CliEslintConfigOptions<
 const DEFAULT_CLI_DIRS = ['bin', 'scripts', 'cli'] as const;
 const DEFAULT_CLI_FILES = ['cli'] as const;
 
+const RULES_DISABLED_BY_DEFAULT = [
+  'no-await-in-loop',
+  'no-console',
+
+  'node/hashbang',
+  'node/no-process-exit',
+  'node/no-top-level-await',
+
+  'import/no-extraneous-dependencies',
+
+  'unicorn/no-process-exit',
+] as const satisfies AllEslintRuleNames[];
+
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies CliEslintConfigOptions);
 
-  const {onlyTopLevelDirs} = optionsResolved;
+  const {disabledRules, onlyTopLevelDirs} = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, null);
 
@@ -41,14 +61,10 @@ export default ((context, optionsRaw) => {
         ],
       },
     ])
-    .disableAnyRule('node', 'hashbang')
-    .disableAnyRule('node', 'no-process-exit')
-    .disableAnyRule('unicorn', 'no-process-exit')
-    .disableAnyRule('', 'no-await-in-loop')
-    .disableAnyRule('', 'no-console')
-    .disableAnyRule('import', 'no-extraneous-dependencies')
     .addAnyRule('unicorn', 'prefer-top-level-await', ERROR)
-    .disableAnyRule('node', 'no-top-level-await')
+    .disableBulkRules(
+      RULES_DISABLED_BY_DEFAULT.filter((ruleName) => disabledRules?.[ruleName] !== false),
+    )
     .addOverrides();
 
   return {

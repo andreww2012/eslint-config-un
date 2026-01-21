@@ -759,7 +759,7 @@ export class ConfigEntryBuilder<
         return result;
       },
 
-      disableBulkRules: (rules: (keyof AllEslintRules | (string & {}))[] | FalsyValue) => {
+      disableBulkRules: (rules: (AllEslintRuleNames | (string & {}))[] | FalsyValue) => {
         const overridesResolved = resolveOverrides(
           this.context,
           configFinal,
