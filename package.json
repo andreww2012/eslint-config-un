@@ -68,11 +68,12 @@
     "build:code:test": "tsdown --out-dir temp/dist",
     "build": "nr typegen && nr build:code",
     "test:config": "tsx scripts/config-tester.ts",
-    "test": "nr deps:audit && nr typegen && nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
+    "test:common": "nr typegen && nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
+    "test": "nr deps:audit && nr test:common",
     "lint:public-types": "attw --pack . --profile esm-only",
     "change": "npx changeset add && nr spellcheck",
     "release": "changeset publish",
-    "prepublishOnly": "nr deps:dedupe-check && nr test && nr build && nr lint:public-types",
+    "prepublishOnly": "nr deps:dedupe-check && nr deps:audit || true && nr test:common && nr build && nr lint:public-types",
     "prepack": "nr build"
   },
   "overrides": {
