@@ -497,8 +497,10 @@ export const pluginsLoaders = {
         import('eslint-plugin-react-you-might-not-need-an-effect'),
       ) as Promise<EslintPlugin>,
   ),
-  regexp: genModuleLoader('regexp', 'eslint-plugin-regexp', () =>
-    interopDefault(import('eslint-plugin-regexp')),
+  regexp: genModuleLoader(
+    'regexp',
+    'eslint-plugin-regexp',
+    () => interopDefault(import('eslint-plugin-regexp')) as Promise<EslintPlugin>,
   ),
   rxjs: genModuleLoader(
     'rxjs',
