@@ -1,4 +1,5 @@
 import {ERROR, OFF, WARNING} from '../constants';
+import type {MaybeArray} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -8,10 +9,27 @@ import {
 
 export interface RegexpEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'regexp'> {}
+> extends UnConfigOptions<ExtraPlugins, 'regexp'> {
+  /**
+   * [`eslint-plugin-regexp`](https://npmjs.com/eslint-plugin-regexp) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `regexp` object as-is and applied to the specified `files` and `ignores`.
+   */
+  settings?: {
+    /**
+     * Defines a set of allowed character ranges. Rules will only allow, create, and fix
+     * character ranges defined here.
+     * @default 'alphanumeric'
+     * @see https://ota-meshi.github.io/eslint-plugin-regexp/settings/#allowedcharacterranges
+     */
+    allowedCharacterRanges?: MaybeArray<'alphanumeric' | 'all' | `${string}-${string}`>;
+  };
+}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies RegexpEslintConfigOptions);
+
+  const {settings: pluginSettings} = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'regexp');
 
@@ -20,16 +38,25 @@ export default ((context, optionsRaw) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig([
-      'regexp',
-      {
-        includeDefaultFilesAndIgnores: true,
-        // TODO why?
-        ignoresInternal: {
-          html: false,
+    ?.addConfig(
+      [
+        'regexp',
+        {
+          includeDefaultFilesAndIgnores: true,
+          // TODO why?
+          ignoresInternal: {
+            html: false,
+          },
         },
+      ],
+      {
+        ...(pluginSettings && {
+          settings: {
+            regexp: pluginSettings,
+          },
+        }),
       },
-    ])
+    )
     .markCategory('Possible Errors')
     .addRule('no-contradiction-with-assertion', ERROR) /** @since 1.2.0 */ // 🟢
     // "This rule is inspired by the `no-control-regex` rule. The positions of reports are improved over the core rule and suggestions are provided in some cases"
