@@ -283,7 +283,8 @@ export interface EsEslintConfigOptions<
   /**
    * [`eslint-plugin-es-x`](https://npmjs.com/eslint-plugin-es-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `es-x` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `es-x` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     /**
@@ -354,25 +355,19 @@ export default ((context, optionsRawFromParameters, customConfig) => {
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'es');
 
-  const mainConfig = configBuilder?.addConfig(
-    [
-      customConfig?.prefix || 'es',
-      {
-        includeDefaultFilesAndIgnores: true,
-        // TODO why?
-        ignoresInternal: {
-          html: false,
-        },
-      },
-    ],
+  const mainConfig = configBuilder?.addConfig([
+    customConfig?.prefix || 'es',
     {
-      ...(pluginSettings && {
-        settings: {
-          'es-x': pluginSettings,
-        },
-      }),
+      includeDefaultFilesAndIgnores: true,
+      // TODO why?
+      ignoresInternal: {
+        html: false,
+      },
+      settings: {
+        'es-x': pluginSettings,
+      },
     },
-  );
+  ]);
 
   if (!isEsVersionFullySupported(2026)) {
     mainConfig

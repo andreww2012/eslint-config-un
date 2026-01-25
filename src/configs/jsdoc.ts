@@ -182,7 +182,10 @@ export interface JsdocEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'jsdoc'> {
   /**
-   * [`eslint-plugin-jsdoc` plugin settings](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md) that will be applied to the specified `files` and `ignores`.
+   * [`eslint-plugin-jsdoc`](https://npmjs.com/eslint-plugin-jsdoc) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `jsdoc` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: EslintPluginJsdocSettings;
 
@@ -245,25 +248,20 @@ export default ((context, optionsRaw) => {
   // 4️⃣ - in Stylistic
 
   configBuilder
-    ?.addConfig(
-      [
-        'jsdoc',
-        {
-          includeDefaultFilesAndIgnores: true,
-          // TODO why?
-          ignoresInternal: {
-            html: false,
-          },
-        },
-      ],
+    ?.addConfig([
+      'jsdoc',
       {
-        ...(pluginSettings && {
-          settings: {
-            jsdoc: pluginSettings,
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
+        settings: {
+          // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
+          jsdoc: pluginSettings,
+        },
       },
-    )
+    ])
     .addRule('check-access', ERROR) /** @since 18.0.0 */ // 🟢2️⃣
     .addRule('check-alignment', ERROR) /** @since 4.8.0 */ // 🟢4️⃣
     .addRule('check-indentation', ERROR, [
@@ -371,22 +369,17 @@ export default ((context, optionsRaw) => {
   const pluginSettingsForTs = configTypescriptOptions.settings || pluginSettings;
 
   configBuilderTypescript
-    ?.addConfig(
-      [
-        'jsdoc/ts',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesDefault: [GLOB_TS_X],
-        },
-      ],
+    ?.addConfig([
+      'jsdoc/ts',
       {
-        ...(pluginSettingsForTs && {
-          settings: {
-            jsdoc: pluginSettingsForTs,
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: [GLOB_TS_X],
+        settings: {
+          // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
+          jsdoc: pluginSettingsForTs,
+        },
       },
-    )
+    ])
     .addRule('no-types', ERROR) /** @since 7.0.0 */ // 🔵
     .addRule('no-undefined-types', OFF) /** @since 3.6.0 */ // 🔵(off)
     .addRule('require-param-type', OFF) /** @since 2.0.1 */ // 🔵(off)

@@ -34,7 +34,8 @@ export interface JsInlineEslintConfigOptions<
   /**
    * [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `html` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `html` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     /**
@@ -130,6 +131,27 @@ export default (async (context, optionsRaw) => {
           ignoresInternal: {
             html: false,
           },
+          settings: {
+            html:
+              // TODO should `*-extensions` properties be assigned regardless of whether `settings` option is provided?
+              pluginSettings
+                ? ({
+                    ...pluginSettings,
+                    'html-extensions': getKeysOfTruthyValues({
+                      ...Object.fromEntries(DEFAULT_HTML_EXTENSIONS.map((tag) => [tag, true])),
+                      ...pluginSettings['html-extensions'],
+                    }),
+                    'xml-extensions': getKeysOfTruthyValues({
+                      ...Object.fromEntries(DEFAULT_XML_EXTENSIONS.map((tag) => [tag, true])),
+                      ...pluginSettings['xml-extensions'],
+                    }),
+                  } satisfies OmitStrict<
+                    JsInlineEslintConfigOptions['settings'] & {},
+                    'html-extensions' | 'xml-extensions'
+                  > &
+                    Record<Partial<'html-extensions' | 'xml-extensions'>, string[]>)
+                : null,
+          },
         },
       ],
       {
@@ -142,25 +164,6 @@ export default (async (context, optionsRaw) => {
           },
           ...languageOptions,
         },
-        ...(pluginSettings && {
-          settings: {
-            html: {
-              ...pluginSettings,
-              'html-extensions': getKeysOfTruthyValues({
-                ...Object.fromEntries(DEFAULT_HTML_EXTENSIONS.map((tag) => [tag, true])),
-                ...pluginSettings['html-extensions'],
-              }),
-              'xml-extensions': getKeysOfTruthyValues({
-                ...Object.fromEntries(DEFAULT_XML_EXTENSIONS.map((tag) => [tag, true])),
-                ...pluginSettings['xml-extensions'],
-              }),
-            } satisfies OmitStrict<
-              JsInlineEslintConfigOptions['settings'] & {},
-              'html-extensions' | 'xml-extensions'
-            > &
-              Record<Partial<'html-extensions' | 'xml-extensions'>, string[]>,
-          },
-        }),
       },
     )
     .addOverrides();

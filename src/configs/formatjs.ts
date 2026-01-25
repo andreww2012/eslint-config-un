@@ -15,7 +15,8 @@ export interface FormatjsEslintConfigOptions<
   /**
    * [`eslint-plugin-formatjs`](https://npmjs.com/eslint-plugin-formatjs) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `formatjs` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `formatjs` property
+   * and applied to the resolved `files` and `ignores` of this config.
    * @see https://formatjs.github.io/docs/tooling/linter#shared-settings
    */
   settings?: {
@@ -104,13 +105,15 @@ export default ((context, optionsRaw) => {
   // 🟣 - in strict
 
   configBuilder
-    ?.addConfig(['formatjs', {includeDefaultFilesAndIgnores: true}], {
-      ...(pluginSettings && {
+    ?.addConfig([
+      'formatjs',
+      {
+        includeDefaultFilesAndIgnores: true,
         settings: {
           formatjs: pluginSettings,
         },
-      }),
-    })
+      },
+    ])
     // Default options in `recommended`: ['selectordinal']
     .addRule(
       'blocklist-elements',

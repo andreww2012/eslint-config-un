@@ -16,7 +16,8 @@ export interface BoundariesEslintConfigOptions<
    * [`eslint-plugin-boundaries`](https://npmjs.com/eslint-plugin-boundaries) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `settings` object with keys transformed to
-   * `boundaries/<original property name in kebab case>` and applied to the specified `files` and `ignores`.
+   * `boundaries/<original property name in kebab case>`
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings: SetRequired<
     {
@@ -42,17 +43,21 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['boundaries', {includeDefaultFilesAndIgnores: true}], {
-      settings: {
-        ...Object.fromEntries(
-          // eslint-disable-next-line ts/no-unnecessary-condition -- settings not provided in config tester
-          objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
-            `boundaries/${kebabCase(settingName)}`,
-            settingValue,
-          ]),
-        ),
+    ?.addConfig([
+      'boundaries',
+      {
+        includeDefaultFilesAndIgnores: true,
+        settings: {
+          '': Object.fromEntries(
+            // eslint-disable-next-line ts/no-unnecessary-condition -- settings not provided in config tester
+            objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
+              `boundaries/${kebabCase(settingName)}`,
+              settingValue,
+            ]),
+          ),
+        },
       },
-    })
+    ])
     .addRule('element-types', ERROR) /** @since 2.0.0-beta.1 */ // 🟢
     .addRule('entry-point', ERROR) /** @since 1.0.0-beta.1 */ // 🟢
     .addRule('external', ERROR) /** @since 2.0.0-beta.1 */ // 🟢

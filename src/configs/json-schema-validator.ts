@@ -15,7 +15,8 @@ export interface JsonSchemaValidatorEslintConfigOptions<
   /**
    * [`eslint-plugin-json-schema-validator`](https://npmjs.com/eslint-plugin-json-schema-validator) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `json-schema-validator` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `json-schema-validator` property
+   * and applied to the resolved `files` and `ignores` of this config.
    * @see [Docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/tree/main#settings)
    */
   settings?: {
@@ -72,13 +73,15 @@ export default ((context, optionsRaw) => {
   ]);
 
   configBuilder
-    ?.addConfig(['json-schema-validator', {includeDefaultFilesAndIgnores: true}], {
-      ...(pluginSettings && {
+    ?.addConfig([
+      'json-schema-validator',
+      {
+        includeDefaultFilesAndIgnores: true,
         settings: {
           'json-schema-validator': pluginSettings,
         },
-      }),
-    })
+      },
+    ])
     .addRule(
       'no-invalid',
       ERROR,

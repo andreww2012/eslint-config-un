@@ -67,7 +67,8 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   /**
    * [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `packageJson` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `packageJson` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: PackageJsonPluginSettings;
 
@@ -173,23 +174,18 @@ export default ((context, optionsRaw) => {
   // 🎨 - in stylistic
 
   configBuilder
-    ?.addConfig(
-      [
-        'package-json',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesDefault: [GLOB_PACKAGE_JSON],
-          parser: 'jsonc-eslint-parser',
-        },
-      ],
+    ?.addConfig([
+      'package-json',
       {
-        ...(pluginSettings && {
-          settings: {
-            packageJson: pluginSettings,
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: [GLOB_PACKAGE_JSON],
+        parser: 'jsonc-eslint-parser',
+        settings: {
+          // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
+          packageJson: pluginSettings,
+        },
       },
-    )
+    ])
     .addRule('bin-name-casing', ERROR) /** @since 0.64.0 */ // 🎨
     .addRule('exports-subpaths-style', ERROR) /** @since 0.59.0 */ // 🎨
     .addRule(

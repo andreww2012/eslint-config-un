@@ -21,8 +21,9 @@ export interface ImportEslintConfigOptions<
   /**
    * [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `settings` object with keys transformed to
-   * `import-x/<original property name in kebab case>` and applied to the specified `files` and `ignores`.
+   * that will be assigned directly to `settings` flat config option with keys transformed to
+   * `import-x/<original property name in kebab case>`
+   * and applied to the resolved `files` and `ignores` of this config.
    *
    * Some settings are set by our config, and the settings you provide here will be merged with ours.
    * @see https://github.com/un-ts/eslint-plugin-import-x/tree/HEAD?tab=readme-ov-file#settings
@@ -104,62 +105,60 @@ export default (async (context, optionsRaw) => {
   // ✖️ - X only rule
 
   configBuilder
-    ?.addConfig(
-      [
-        'import',
-        {
-          includeDefaultFilesAndIgnores: true,
-          // For some reason running this plugin on fenced code blocks takes a lot of memory
-          // (+300-500 MB when running on our codebase w/o cache as of time of writing this)
-          // TODO investigate that?
-          ignoresDefault: [GLOB_MARKDOWN_ALL_CODE_BLOCKS],
-          ignoresDefaultMergedWithUserIgnores: true,
-        },
-      ],
+    ?.addConfig([
+      'import',
       {
+        includeDefaultFilesAndIgnores: true,
+        // For some reason running this plugin on fenced code blocks takes a lot of memory
+        // (+300-500 MB when running on our codebase w/o cache as of time of writing this)
+        // TODO investigate that?
+        ignoresDefault: [GLOB_MARKDOWN_ALL_CODE_BLOCKS],
+        ignoresDefaultMergedWithUserIgnores: true,
         settings: {
-          ...(isTypescriptEnabled &&
-            (await import('eslint-plugin-import-x')).configs.typescript.settings),
-          ...generatePackageToLoadProperty(
-            'import-x/resolver-next',
-            ['importResolverTypescript', 'eslintPluginImportX'],
-            {
-              valueTransformFn: {
-                fn(
-                  this: {
-                    isTypescriptEnabled: typeof isTypescriptEnabled;
-                    tsResolverOptions: typeof tsResolverOptions;
+          '': {
+            ...(isTypescriptEnabled &&
+              (await import('eslint-plugin-import-x')).configs.typescript.settings),
+            ...generatePackageToLoadProperty(
+              'import-x/resolver-next',
+              ['importResolverTypescript', 'eslintPluginImportX'],
+              {
+                valueTransformFn: {
+                  fn(
+                    this: {
+                      isTypescriptEnabled: typeof isTypescriptEnabled;
+                      tsResolverOptions: typeof tsResolverOptions;
+                    },
+                    {importResolverTypescript, eslintPluginImportX},
+                  ) {
+                    return [
+                      // If the TS resolver goes after the node resolver, `import/no-deprecated` doesn't work
+                      // TODO should report?
+                      this.isTypescriptEnabled &&
+                        (importResolverTypescript.createTypeScriptImportResolver(
+                          this.tsResolverOptions,
+                        ) as ImportPluginNewResolver),
+                      eslintPluginImportX.createNodeResolver(),
+                    ].filter((v) => typeof v === 'object');
                   },
-                  {importResolverTypescript, eslintPluginImportX},
-                ) {
-                  return [
-                    // If the TS resolver goes after the node resolver, `import/no-deprecated` doesn't work
-                    // TODO should report?
-                    this.isTypescriptEnabled &&
-                      (importResolverTypescript.createTypeScriptImportResolver(
-                        this.tsResolverOptions,
-                      ) as ImportPluginNewResolver),
-                    eslintPluginImportX.createNodeResolver(),
-                  ].filter((v) => typeof v === 'object');
+                  scope: {isTypescriptEnabled, tsResolverOptions},
                 },
-                scope: {isTypescriptEnabled, tsResolverOptions},
               },
-            },
-          ),
-          ...(isTypescriptEnabled && {
-            'import-x/parsers': {
-              '@typescript-eslint/parser': ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'],
-            },
-          }),
-          ...Object.fromEntries(
-            objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
-              `import-x/${kebabCase(settingName)}` satisfies keyof PluginSettingsWithPrefixes,
-              settingValue,
-            ]),
-          ),
-        } satisfies PluginSettingsWithPrefixes,
+            ),
+            ...(isTypescriptEnabled && {
+              'import-x/parsers': {
+                '@typescript-eslint/parser': ['.ts', '.cts', '.mts', '.tsx', '.ctsx', '.mtsx'],
+              },
+            }),
+            ...Object.fromEntries(
+              objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
+                `import-x/${kebabCase(settingName)}` satisfies keyof PluginSettingsWithPrefixes,
+                settingValue,
+              ]),
+            ),
+          } satisfies PluginSettingsWithPrefixes,
+        },
       },
-    )
+    ])
     // Versions in @since tags are from `eslint-plugin-import` plugin, unless the rule doesn't exist in it
     .addRule('consistent-type-specifier-style', OFF) /** @since 2.27.0 */
     .addRule('default', ERROR) /** @since 0.3.0 */ // 🟢

@@ -131,7 +131,8 @@ interface ReactXSubConfigOptions<
   /**
    * [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `react-x` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `react-x` property
+   * and applied to the resolved `files` and `ignores` of this config.
    *
    * Note that they will be merged with `{version: <detected by us React version>}`.
    */
@@ -191,7 +192,8 @@ interface HooksSubConfigOptions<
   /**
    * [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `react-hooks` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `react-hooks` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     /**
@@ -238,7 +240,8 @@ export interface ReactEslintConfigOptions<
   /**
    * [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `react` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `react` property
+   * and applied to the resolved `files` and `ignores` of this config.
    *
    * Note that they will be merged with `{version: <detected by us React version>}` to avoid
    * `Warning: React version not specified in eslint-plugin-react settings.` log message

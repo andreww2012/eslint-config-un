@@ -72,7 +72,8 @@ export interface JsxA11yEslintConfigOptions<
   /**
    * [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `jsx-a11y-x` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `jsx-a11y-x` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     attributes?: {
@@ -344,26 +345,17 @@ export default ((
   // 🔴 - NOT in recommended
 
   configBuilder
-    ?.addConfig(
-      [
-        prefixFinal.includes('a11y') ? prefixFinal : `jsx-a11y/${prefixFinal}`,
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesDefault: [GLOB_JSX_TSX],
-        },
-      ],
+    ?.addConfig([
+      prefixFinal.includes('a11y') ? prefixFinal : `jsx-a11y/${prefixFinal}`,
       {
-        ...(pluginSettings && {
-          settings: {
-            ...(isForLit
-              ? pluginSettings // Direct spreading settings object for `lit-a11y` is not a mistake: https://github.com/open-wc/open-wc/blob/5aeaf35e01a2f15b6663d71102eeea3333e4c57d/packages/eslint-plugin-lit-a11y/lib/utils/HasLitHtmlImportRuleExtension.js#L122
-              : {
-                  'jsx-a11y-x': pluginSettings,
-                }),
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: [GLOB_JSX_TSX],
+        // Direct spreading settings object for `lit-a11y` is not a mistake: https://github.com/open-wc/open-wc/blob/5aeaf35e01a2f15b6663d71102eeea3333e4c57d/packages/eslint-plugin-lit-a11y/lib/utils/HasLitHtmlImportRuleExtension.js#L122
+        settings: {
+          [isForLit ? '' : 'jsx-a11y-x']: pluginSettings,
+        },
       },
-    )
+    ])
     .addRule('accessible-name', isForLit ? ERROR : null)
     .addRule(
       rn('alt-text'),

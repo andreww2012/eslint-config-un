@@ -12,7 +12,8 @@ export interface SqlEslintConfigOptions<
   /**
    * [`eslint-plugin-sql`](https://npmjs.com/eslint-plugin-sql) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `sql` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `sql` property
+   * and applied to the resolved `files` and `ignores` of this config.
    * @see https://github.com/gajus/eslint-plugin-sql#settings
    */
   settings?: {
@@ -36,13 +37,15 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['sql', {includeDefaultFilesAndIgnores: true}], {
-      ...(pluginSettings && {
+    ?.addConfig([
+      'sql',
+      {
+        includeDefaultFilesAndIgnores: true,
         settings: {
           sql: pluginSettings,
         },
-      }),
-    })
+      },
+    ])
     .addRule('format', ERROR) /** @since 1.0.0 */
     .addRule('no-unsafe-query', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('sql')

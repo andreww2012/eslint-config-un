@@ -20,7 +20,8 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   /**
    * [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `svelte` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `svelte` property
+   * and applied to the resolved `files` and `ignores` of this config.
    * @see [settings docs](https://sveltejs.github.io/eslint-plugin-svelte/user-guide/#settings-svelte)
    */
   settings?: {
@@ -160,6 +161,9 @@ export default (async (context, optionsRaw) => {
           ignoresInternal: {
             md: false,
           },
+          settings: {
+            svelte: pluginSettings,
+          },
         },
       ],
       {
@@ -172,11 +176,6 @@ export default (async (context, optionsRaw) => {
           sourceType: 'module',
         },
         ...generatePackageToLoadProperty('processor', 'svelteProcessor'),
-        ...(pluginSettings && {
-          settings: {
-            svelte: pluginSettings,
-          },
-        }),
       },
     )
     .addRule('comment-directive', ERROR, [

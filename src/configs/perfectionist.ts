@@ -29,7 +29,8 @@ export interface PerfectionistEslintConfigOptions<
   /**
    * [`eslint-plugin-perfectionist`](https://npmjs.com/eslint-plugin-perfectionist) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `perfectionist` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `perfectionist` property
+   * and applied to the resolved `files` and `ignores` of this config.
    * @see https://perfectionist.dev/guide/getting-started#settings
    */
   settings?: Prettify<
@@ -215,25 +216,19 @@ export default ((context, optionsRaw) => {
   const configBuilder = context.createConfigBuilder(optionsResolved, 'perfectionist');
 
   configBuilder
-    ?.addConfig(
-      [
-        'perfectionist',
-        {
-          includeDefaultFilesAndIgnores: true,
-          // TODO why?
-          ignoresInternal: {
-            html: false,
-          },
-        },
-      ],
+    ?.addConfig([
+      'perfectionist',
       {
-        ...(pluginSettings && {
-          settings: {
-            perfectionist: pluginSettings,
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
+        settings: {
+          perfectionist: pluginSettings,
+        },
       },
-    )
+    ])
     .addRule('sort-array-includes', OFF) /** @since 0.5.0 */
     .addRule('sort-classes', OFF) /** @since 0.11.0 */
     .addRule('sort-decorators', OFF) /** @since 4.0.0 */

@@ -52,7 +52,11 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     UnConfigOptions<ExtraPlugins, 'jest'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
-   * [`eslint-plugin-jest` plugin settings](https://github.com/jest-community/eslint-plugin-jest?tab=readme-ov-file#aliased-jest-globals) that will be applied to the specified `files` and `ignores`.
+   * [`eslint-plugin-jest`](https://npmjs.com/eslint-plugin-jest) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `jest` property
+   * and applied to the resolved `files` and `ignores` of this config,
+   * as well as for `ts` and `jestExtended` sub-configs.
    */
   settings?: {
     /**
@@ -230,11 +234,6 @@ export default (async (context, optionsRaw) => {
   } = optionsResolved;
 
   const defaultJestEslintConfig: FlatConfigEntryForBuilder = {
-    ...(pluginSettings && {
-      settings: {
-        jest: pluginSettings,
-      },
-    }),
     languageOptions: {
       // Yes, `globals.globals` is required
       globals: eslintPluginJest.environments.globals.globals,
@@ -265,6 +264,9 @@ export default (async (context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: defaultJestFiles,
+          settings: {
+            jest: pluginSettings,
+          },
         },
       ],
       defaultJestEslintConfig,
@@ -400,11 +402,12 @@ export default (async (context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: defaultJestTypescriptFiles,
+          settings: {
+            jest: pluginSettings,
+          },
         },
       ],
-      {
-        ...defaultJestEslintConfig,
-      },
+      defaultJestEslintConfig,
     )
     .addRule('no-error-equal', ERROR) /** @since 29.7.0 */ // 💭
     .addRule('no-unnecessary-assertion', ERROR) /** @since 29.6.0 */ // 💭
@@ -438,6 +441,9 @@ export default (async (context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: defaultJestFiles,
+          settings: {
+            jest: pluginSettings,
+          },
         },
       ],
       defaultJestEslintConfig,

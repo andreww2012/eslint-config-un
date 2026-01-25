@@ -13,7 +13,8 @@ export interface WebComponentsEslintConfigOptions<
   /**
    * [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `wc` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `wc` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     /**
@@ -35,13 +36,15 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['web-components', {includeDefaultFilesAndIgnores: true}], {
-      ...(pluginSettings && {
+    ?.addConfig([
+      'web-components',
+      {
+        includeDefaultFilesAndIgnores: true,
         settings: {
-          webComponents: pluginSettings,
+          wc: pluginSettings,
         },
-      }),
-    })
+      },
+    ])
     .markCategory('Possible Errors')
     .addRule('no-constructor-attributes', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('no-invalid-element-name', ERROR) /** @since 0.1.0 */ // 🟢

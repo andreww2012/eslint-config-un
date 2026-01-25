@@ -12,8 +12,8 @@ export interface ClsxEslintConfigOptions<
   /**
    * [`eslint-plugin-clsx`](https://npmjs.com/eslint-plugin-clsx) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `clsxOptions` property and applied
-   * to the specified `files` and `ignores`.
+   * that will be assigned to `clsxOptions` property
+   * and applied to the resolved `files` and `ignores` of this config.
    * @default {clsx: ['default', 'clsx']; classnames: 'default'}
    */
   settings?: {
@@ -37,13 +37,15 @@ export default ((context, optionsRaw) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(['clsx', {includeDefaultFilesAndIgnores: true}], {
-      ...(pluginSettings && {
+    ?.addConfig([
+      'clsx',
+      {
+        includeDefaultFilesAndIgnores: true,
         settings: {
           clsxOptions: pluginSettings,
         },
-      }),
-    })
+      },
+    ])
     .addRule('forbid-array-expressions', ERROR) /** @since 0.0.1 */ // 🟡
     .addRule('forbid-false-inside-object-expressions', ERROR) /** @since 0.0.1 */ // 🟡
     .addRule('forbid-true-inside-object-expressions', ERROR) /** @since 0.0.1 */ // 🟡

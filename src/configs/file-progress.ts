@@ -13,7 +13,8 @@ export interface FileProgressEslintConfigOptions<
   /**
    * [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `progress` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `progress` property
+   * and applied to the resolved `files` and `ignores` of this config.
    *
    * Will be merged with the default value for `hide`.
    */
@@ -45,14 +46,18 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['file-progress', {includeDefaultFilesAndIgnores: true}], {
-      settings: {
-        progress: {
-          hide: isInCi || isInEditor(),
-          ...pluginSettings,
-        } satisfies FileProgressEslintConfigOptions['settings'] & {},
+    ?.addConfig([
+      'file-progress',
+      {
+        includeDefaultFilesAndIgnores: true,
+        settings: {
+          progress: {
+            hide: isInCi || isInEditor(),
+            ...pluginSettings,
+          } satisfies FileProgressEslintConfigOptions['settings'] & {},
+        },
       },
-    })
+    ])
     .addRule('activate', ERROR) /** @since 1.0.0 */ // 🟢
     .enableConfigTesterForPlugin('file-progress')
     .addOverrides();

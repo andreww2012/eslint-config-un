@@ -12,7 +12,8 @@ export interface CompatEslintConfigOptions<
   /**
    * [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `settings` object as-is and applied to the specified `files` and `ignores`.
+   * that will be assigned directly to `settings` flat config option
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     polyfills?: string[];
@@ -39,11 +40,15 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['compat', {includeDefaultFilesAndIgnores: true}], {
-      ...(pluginSettings && {
-        settings: pluginSettings,
-      }),
-    })
+    ?.addConfig([
+      'compat',
+      {
+        includeDefaultFilesAndIgnores: true,
+        settings: {
+          '': pluginSettings,
+        },
+      },
+    ])
     .addRule('compat', ERROR) /** @since 0.0.4 */
     .enableConfigTesterForPlugin('compat')
     .addOverrides();

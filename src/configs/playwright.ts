@@ -20,7 +20,8 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
   /**
    * [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `playwright` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `playwright` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     /**
@@ -77,22 +78,16 @@ export default ((context, optionsRaw) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(
-      [
-        'playwright',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesDefault: configFilesFallback,
-        },
-      ],
+    ?.addConfig([
+      'playwright',
       {
-        ...(pluginSettings && {
-          settings: {
-            playwright: pluginSettings,
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: configFilesFallback,
+        settings: {
+          playwright: pluginSettings,
+        },
       },
-    )
+    ])
     .addRule('consistent-spacing-between-blocks', ERROR) /** @since 2.5.0 */ // 🟡
     .addRule(
       'expect-expect',

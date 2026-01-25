@@ -34,6 +34,11 @@ export interface TailwindEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'tailwindcss'> {
   /**
+   * [`eslint-plugin-tailwindcss`](https://npmjs.com/eslint-plugin-tailwindcss) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `tailwindcss` property
+   * and applied to the resolved `files` and `ignores` of this config.
+   *
    * Will be merged with the default [`eslint-plugin-tailwindcss` settings](https://github.com/francoismassart/eslint-plugin-tailwindcss?tab=readme-ov-file#more-settings).
    *
    * Actual default values can be found [here](https://github.com/francoismassart/eslint-plugin-tailwindcss/blob/HEAD/lib/util/settings.js).
@@ -53,14 +58,16 @@ export default ((context, optionsRaw) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(['tailwind', {includeDefaultFilesAndIgnores: true}], {
-      ...(pluginSettings && {
+    ?.addConfig([
+      'tailwind',
+      {
+        includeDefaultFilesAndIgnores: true,
         settings: {
           tailwindcss: {
             ...pluginSettings,
             ...objectKeysUnsafe(DEFAULT_PLUGIN_SETTINGS).reduce<TailwindPluginSettings>(
               (acc, settingKey) => {
-                if (pluginSettings[settingKey]) {
+                if (pluginSettings?.[settingKey]) {
                   acc[settingKey] = maybeCall(
                     pluginSettings[settingKey],
                     DEFAULT_PLUGIN_SETTINGS[settingKey],
@@ -72,8 +79,8 @@ export default ((context, optionsRaw) => {
             ),
           } satisfies TailwindPluginSettings,
         },
-      }),
-    })
+      },
+    ])
     .addRule('classnames-order', WARNING) /** @since 1.0.1 */ // 🟡
     .addRule('enforces-negative-arbitrary-values', WARNING) /** @since 3.4.0 */ // 🟡
     .addRule('enforces-shorthand', WARNING) /** @since 3.1.0 */ // 🟡

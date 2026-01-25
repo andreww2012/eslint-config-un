@@ -52,7 +52,8 @@ export interface PnpmEslintConfigOptions<
   /**
    * [`eslint-plugin-pnpm`](https://npmjs.com/eslint-plugin-pnpm) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `pnpm` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `pnpm` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     /**
@@ -98,23 +99,17 @@ export default ((context, optionsRaw) => {
 
   const configBuilderPackageJson = context.createConfigBuilder(configPackageJson, 'pnpm');
   configBuilderPackageJson
-    ?.addConfig(
-      [
-        'pnpm/package.json',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesDefault: ['package.json', '**/package.json'],
-          parser: 'jsonc-eslint-parser',
-        },
-      ],
+    ?.addConfig([
+      'pnpm/package.json',
       {
-        ...(pluginSettings && {
-          settings: {
-            pnpm: pluginSettings,
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: ['package.json', '**/package.json'],
+        parser: 'jsonc-eslint-parser',
+        settings: {
+          pnpm: pluginSettings,
+        },
       },
-    )
+    ])
     .addRule(
       'json-enforce-catalog',
       enforceCatalog ? ERROR : OFF,

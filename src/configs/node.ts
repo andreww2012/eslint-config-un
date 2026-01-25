@@ -104,7 +104,8 @@ export interface NodeEslintConfigOptions<
   /**
    * [`eslint-plugin-n`](https://github.com/eslint-community/eslint-plugin-n) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `node` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `node` property
+   * and applied to the resolved `files` and `ignores` of this config.
    *
    * Most of the settings are used to override options simultaneously for multiple rules.
    * The plugin reads `option` value from multiple sources in the following order, and stops when it finds a valid value:
@@ -205,16 +206,23 @@ export default (async (context, optionsRaw) => {
   // ✖️ - `n` rule only
 
   configBuilder
-    ?.addConfig(['node', {includeDefaultFilesAndIgnores: true}], {
-      ...(pluginSettings && {
-        settings: {
-          node: pluginSettings,
+    ?.addConfig(
+      [
+        'node',
+        {
+          includeDefaultFilesAndIgnores: true,
+          settings: {
+            // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
+            node: pluginSettings,
+          },
         },
-      }),
-      languageOptions: {
-        globals: globals.node,
+      ],
+      {
+        languageOptions: {
+          globals: globals.node,
+        },
       },
-    })
+    )
     // Versions in @since tags are from `eslint-plugin-node` plugin, unless the rule doesn't exist in it
     .addRule('callback-return', OFF) /** @since 11.1.0 */
     .addRule('exports-style', ERROR, [

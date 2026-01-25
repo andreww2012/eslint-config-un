@@ -56,7 +56,8 @@ export interface LitEslintConfigOptions<
   /**
    * [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `lit` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `lit` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     /**
@@ -93,13 +94,15 @@ export default (async (context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['lit', {includeDefaultFilesAndIgnores: true}], {
-      ...(pluginSettings && {
+    ?.addConfig([
+      'lit',
+      {
+        includeDefaultFilesAndIgnores: true,
         settings: {
           lit: pluginSettings,
         },
-      }),
-    })
+      },
+    ])
     .addRule('attribute-names', ERROR, [{convention: 'kebab'}]) /** @since 1.11.0 */
     .addRule('attribute-value-entities', ERROR) /** @since 0.1.0 */
     .addRule('ban-attributes', OFF) /** @since 1.7.0 */

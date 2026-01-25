@@ -34,6 +34,7 @@ import type {
   FalsyValue,
   NonEmptyString,
   NonEmptyTuple,
+  Nullable,
   ObjectValues,
   OmitIndexSignature,
   OmitStrict,
@@ -560,6 +561,14 @@ export class ConfigEntryBuilder<
               PluginPrefixWithLanguage,
               (typeof PLUGINS_PROVIDING_LANGUAGES)[PluginPrefixWithLanguage][number],
             ];
+
+            /**
+             * Specifies plugin shared settings on the specified property.
+             *
+             * To assign settings directly to the `settings` object,
+             * use an empty string as a property name.
+             */
+            settings?: Record<string, Nullable<Record<string, unknown>>>;
           },
         ],
     config?: FlatConfigEntryForBuilder,
@@ -614,7 +623,35 @@ export class ConfigEntryBuilder<
       ...(internalOptions.language && {
         language: `${this.context.rootOptions.pluginRenames?.[internalOptions.language[0]] ?? internalOptions.language[0]}/${internalOptions.language[1]}`,
       }),
+      ...(() => {
+        const {settings: settingsRaw} = internalOptions;
+        if (!settingsRaw) {
+          return null;
+        }
+
+        const settings = Object.fromEntries(
+          Object.entries(settingsRaw)
+            .flatMap(([property, value]) => {
+              if (!value || Object.keys(value).length === 0) {
+                return null;
+              }
+              if (!property) {
+                return Object.entries(value);
+              }
+              return [[property, value]] satisfies NonEmptyTuple[];
+            })
+            .filter((v) => v != null),
+        );
+        if (Object.keys(settings).length === 0) {
+          return null;
+        }
+
+        return {
+          settings,
+        };
+      })(),
     };
+
     this.addFlatConfig(configFinal);
 
     const {parser} = internalOptions;

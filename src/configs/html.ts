@@ -17,7 +17,8 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   /**
    * [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `html` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `html` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     // TODO
@@ -73,17 +74,15 @@ export default ((context, optionsRaw) => {
           ignoresInternal: {
             html: false,
           },
+          settings: {
+            html: pluginSettings,
+          },
         },
       ],
       {
         languageOptions: {
           ...(parserOptions && {parserOptions}),
         },
-        ...(pluginSettings && {
-          settings: {
-            html: pluginSettings,
-          },
-        }),
       },
     )
     .markCategory('Best Practice')

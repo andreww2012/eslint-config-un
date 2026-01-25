@@ -13,7 +13,8 @@ export interface NextJsEslintConfigOptions<
   /**
    * [`@next/eslint-plugin-next`](https://npmjs.com/@next/eslint-plugin-next) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `next` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `next` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     /**
@@ -38,22 +39,16 @@ export default ((context, optionsRaw) => {
   // 🔵 - in Core Web Vitals (error)
 
   configBuilder
-    ?.addConfig(
-      [
-        'nextjs',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesDefault: [GLOB_JS_TS_X],
-        },
-      ],
+    ?.addConfig([
+      'nextjs',
       {
-        ...(pluginSettings && {
-          settings: {
-            next: pluginSettings,
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: [GLOB_JS_TS_X],
+        settings: {
+          next: pluginSettings,
+        },
       },
-    )
+    ])
     .addRule('google-font-display', ERROR) /** @since 10.2.1-canary.4 */ // 🟡
     // "Note: Next.js automatically adds <link rel="preconnect" /> after version 12.0.1."
     .addRule('google-font-preconnect', ERROR) /** @since 10.2.1-canary.4 */ // 🟡

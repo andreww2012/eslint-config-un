@@ -48,7 +48,11 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
     >,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
-   * `@vitest/eslint-plugin` plugin settings that will be applied to the specified `files` and `ignores`.
+   * [`@vitest/eslint-plugin`](https://npmjs.com/@vitest/eslint-plugin) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `vitest` property
+   * and applied to the resolved `files` and `ignores` of this config,
+   * as well as for `ts` sub-config.
    */
   settings?: {
     /**
@@ -156,11 +160,6 @@ export default (async (context, optionsRaw) => {
   const vitestMajorVersion = context.packagesInfo.vitest?.versions.major;
 
   const defaultVitestEslintConfig: FlatConfigEntryForBuilder = {
-    ...(pluginSettings && {
-      settings: {
-        vitest: pluginSettings,
-      },
-    }),
     languageOptions: {
       // TODO why `eslint-plugin-vitest-globals` is used instead of this?
       globals: eslintPluginVitest.environments.env.globals,
@@ -190,6 +189,9 @@ export default (async (context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: defaultVitestFiles,
+          settings: {
+            vitest: pluginSettings,
+          },
         },
       ],
       defaultVitestEslintConfig,
@@ -364,6 +366,9 @@ export default (async (context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: defaultVitestTypescriptFiles,
+          settings: {
+            vitest: pluginSettings,
+          },
         },
       ],
       defaultVitestEslintConfig,

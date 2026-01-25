@@ -20,7 +20,8 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
   /**
    * [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `mocha/*` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `settings` object with keys transformed to
+   * `mocha/<property>` and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     additionalCustomNames?: {
@@ -74,19 +75,22 @@ export default ((context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: configFilesFallback,
+          settings: {
+            '': {
+              ...Object.fromEntries(
+                Object.entries(pluginSettings || {}).map(([name, value]) => [
+                  `mocha/${name}`,
+                  value,
+                ]),
+              ),
+            },
+          },
         },
       ],
       {
         languageOptions: {
           globals: globals.mocha,
         },
-        ...(pluginSettings && {
-          settings: {
-            ...Object.fromEntries(
-              Object.entries(pluginSettings).map(([name, value]) => [`mocha/${name}`, value]),
-            ),
-          },
-        }),
       },
     )
     .addRule(

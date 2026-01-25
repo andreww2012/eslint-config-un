@@ -63,7 +63,8 @@ interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
   /**
    * [`@intlify/eslint-plugin-vue-i18n`](https://npmjs.com/@intlify/eslint-plugin-vue-i18n) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `vue-i18n` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `vue-i18n` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     /**
@@ -1114,23 +1115,17 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   );
 
   configBuilderI18n
-    ?.addConfig(
-      [
-        'vue/i18n',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesDefault: optionsResolved.files,
-          ignoresDefault: optionsResolved.ignores,
-        },
-      ],
+    ?.addConfig([
+      'vue/i18n',
       {
-        ...(pluginI18nSettings && {
-          settings: {
-            'vue-i18n': pluginI18nSettings,
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: optionsResolved.files,
+        ignoresDefault: optionsResolved.ignores,
+        settings: {
+          'vue-i18n': pluginI18nSettings,
+        },
       },
-    )
+    ])
     .markCategory('Recommended')
     .addRule(
       'no-deprecated-i18n-component',

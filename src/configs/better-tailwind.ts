@@ -16,7 +16,8 @@ export interface BetterTailwindEslintConfigOptions<
   /**
    * [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `better-tailwindcss` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `better-tailwindcss` property
+   * and applied to the resolved `files` and `ignores` of this config.
    *
    * Note: you MUST specify either `entryPoint` (for Tailwind 4) or `tailwindConfig` (for Tailwind 3).
    */
@@ -140,11 +141,15 @@ export default ((context, optionsRaw) => {
   // 4️⃣ - only Tailwind 4
 
   configBuilder
-    ?.addConfig(['better-tailwindcss', {includeDefaultFilesAndIgnores: true}], {
-      settings: {
-        'better-tailwindcss': pluginSettings,
+    ?.addConfig([
+      'better-tailwindcss',
+      {
+        includeDefaultFilesAndIgnores: true,
+        settings: {
+          'better-tailwindcss': pluginSettings,
+        },
       },
-    })
+    ])
     .markCategory('Stylistic rules')
     .addRule(
       'enforce-canonical-classes',

@@ -11,7 +11,10 @@ export interface CssInJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnConfigOptions<ExtraPlugins, 'css-in-js'> {
   /**
-   * [`eslint-plugin-css` plugin settings](https://ota-meshi.github.io/eslint-plugin-css/settings) that will be applied to the specified `files` and `ignores`.
+   * [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css) plugin
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * that will be assigned to `css` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     /**
@@ -81,13 +84,15 @@ export default ((context, optionsRaw) => {
   // 🟣 - in standard
 
   configBuilder
-    ?.addConfig(['css-in-js', {includeDefaultFilesAndIgnores: true}], {
-      ...(pluginSettings && {
+    ?.addConfig([
+      'css-in-js',
+      {
+        includeDefaultFilesAndIgnores: true,
         settings: {
           css: pluginSettings,
         },
-      }),
-    })
+      },
+    ])
     .addRule('color-hex-style', ERROR, [
       hexColorsStyle === 'long' ? 'RRGGBB' : 'RGB',
     ]) /** @since 0.4.0 */ // 🟣

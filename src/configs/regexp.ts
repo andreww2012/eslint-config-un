@@ -13,7 +13,8 @@ export interface RegexpEslintConfigOptions<
   /**
    * [`eslint-plugin-regexp`](https://npmjs.com/eslint-plugin-regexp) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `regexp` object as-is and applied to the specified `files` and `ignores`.
+   * that will be assigned to `regexp` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
     /**
@@ -38,25 +39,19 @@ export default ((context, optionsRaw) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(
-      [
-        'regexp',
-        {
-          includeDefaultFilesAndIgnores: true,
-          // TODO why?
-          ignoresInternal: {
-            html: false,
-          },
-        },
-      ],
+    ?.addConfig([
+      'regexp',
       {
-        ...(pluginSettings && {
-          settings: {
-            regexp: pluginSettings,
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        // TODO why?
+        ignoresInternal: {
+          html: false,
+        },
+        settings: {
+          regexp: pluginSettings,
+        },
       },
-    )
+    ])
     .markCategory('Possible Errors')
     .addRule('no-contradiction-with-assertion', ERROR) /** @since 1.2.0 */ // 🟢
     // "This rule is inspired by the `no-control-regex` rule. The positions of reports are improved over the core rule and suggestions are provided in some cases"

@@ -24,7 +24,8 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
   /**
    * [`eslint-plugin-mdx`](https://npmjs.com/eslint-plugin-mdx) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `mdx` property and applied to the specified `files` and `ignores`.
+   * that will be assigned to `mdx` property
+   * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: Record<string, unknown>;
 
@@ -72,6 +73,10 @@ export default ((context, optionsRaw) => {
           ignoresInternal: {
             mdx: false,
           },
+          // TODO
+          settings: {
+            mdx: pluginSettings,
+          },
         },
       ],
       {
@@ -80,12 +85,6 @@ export default ((context, optionsRaw) => {
             React: false,
           },
         },
-        // TODO
-        ...(pluginSettings && {
-          settings: {
-            mdx: pluginSettings,
-          },
-        }),
       },
     )
     .addRule('remark', WARNING) /** @since 1.1.0 */ // TODO
