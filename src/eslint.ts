@@ -251,7 +251,10 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
       .filter((v) => v != null),
   );
 
-export type FlatConfigEntryForBuilder = OmitStrict<FlatConfigEntry, 'name' | 'rules' | 'language'>;
+export type FlatConfigEntryForBuilder = OmitStrict<
+  FlatConfigEntry,
+  'name' | 'rules' | 'language' | 'settings'
+>;
 
 const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, RuleSeverity> = {
   off: OFF,

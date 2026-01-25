@@ -1,4 +1,5 @@
 import {ERROR, GLOB_JSX_TSX, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
+import type {FlatConfigEntry} from '../eslint';
 import type {DistributedPick, OmitStrict, Prettify} from '../types';
 import {doesPackageExist} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
@@ -600,22 +601,20 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
 
   const configReactXOptions = typeof configReactX === 'object' ? configReactX : {};
 
-  const configBuilderSetup = context.createConfigBuilder({}, '', false);
-  configBuilderSetup?.addConfig('react/setup', {
-    settings: {
-      ...(isReactEnabled && {
-        react: {
-          version: reactFullVersion,
-          ...pluginSettings,
-        } satisfies EslintPluginReactSettings,
-      }),
-      ...(isReactXEnabled && {
-        'react-x': {
-          version: reactFullVersion,
-          ...configReactXOptions.settings,
-        } satisfies EslintPluginReactXSettings,
-      }),
-    },
+  const reactOriginalSettings = isReactEnabled
+    ? ({
+        version: reactFullVersion,
+        ...pluginSettings,
+      } satisfies EslintPluginReactSettings)
+    : null;
+  const reactXSettings = isReactXEnabled
+    ? ({
+        version: reactFullVersion,
+        ...configReactXOptions.settings,
+      } satisfies EslintPluginReactXSettings)
+    : null;
+
+  const extraFlatConfigForReactOriginal: FlatConfigEntry = {
     // Copied from https://github.com/jsx-eslint/eslint-plugin-react/blob/e6b5b41191690ee166d0cca1e9db27092b910f03/index.js#L86
     ...(isReactEnabled &&
       newJsxTransform && {
@@ -625,7 +624,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
           },
         },
       }),
-  });
+  };
 
   const configBuilderReactOriginal = context.createConfigBuilder(optionsResolved, 'react');
 
@@ -649,13 +648,19 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
   // Check rule usage: https://github.com/search?q=path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F+%22react%2Fboolean-prop-naming%22&type=code
 
   configBuilderReactOriginal
-    ?.addConfig([
-      'react/plugin-original',
-      {
-        includeDefaultFilesAndIgnores: true,
-        filesDefault: DEFAULT_FILES,
-      },
-    ])
+    ?.addConfig(
+      [
+        'react/plugin-original',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesDefault: DEFAULT_FILES,
+          settings: {
+            react: reactOriginalSettings,
+          },
+        },
+      ],
+      extraFlatConfigForReactOriginal,
+    )
     .addRule('boolean-prop-naming', OFF) /** @since 7.2.0 */
     .addRule('default-props-match-prop-types', ERROR) /** @since 7.1.0 */
     .addRule(
@@ -905,23 +910,17 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
   // 🟣 - in recommended-latest
 
   configBuilderHooks
-    ?.addConfig(
-      [
-        'react/hooks',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesDefault: parentConfigFiles || DEFAULT_FILES,
-          ignoresDefault: parentConfigIgnores,
-        },
-      ],
+    ?.addConfig([
+      'react/hooks',
       {
-        ...(configHooksOptions.settings && {
-          settings: {
-            'react-hooks': configHooksOptions.settings,
-          },
-        }),
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: parentConfigFiles || DEFAULT_FILES,
+        ignoresDefault: parentConfigIgnores,
+        settings: {
+          'react-hooks': configHooksOptions.settings,
+        },
       },
-    )
+    ])
     // Severity of react compiler rules correspond to the recommended ones from https://github.com/facebook/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L715
     .addRule('automatic-effect-dependencies', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('capitalized-calls', reactCompilerRulesSeverity) /** @since 6.1.0 */
@@ -982,6 +981,9 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
         includeDefaultFilesAndIgnores: true,
         filesDefault: parentConfigFiles || DEFAULT_FILES,
         ignoresDefault: parentConfigIgnores,
+        settings: {
+          'react-x': reactXSettings,
+        },
       },
     ])
     .markCategory('X')
@@ -1230,14 +1232,21 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
 
   const configBuilderDom = context.createConfigBuilder(configDom, null);
   configBuilderDom
-    ?.addConfig([
-      'react/dom',
-      {
-        includeDefaultFilesAndIgnores: true,
-        filesDefault: parentConfigFiles || DEFAULT_FILES,
-        ignoresDefault: parentConfigIgnores,
-      },
-    ])
+    ?.addConfig(
+      [
+        'react/dom',
+        {
+          includeDefaultFilesAndIgnores: true,
+          filesDefault: parentConfigFiles || DEFAULT_FILES,
+          ignoresDefault: parentConfigIgnores,
+          settings: {
+            react: reactOriginalSettings,
+            'react-x': reactXSettings,
+          },
+        },
+      ],
+      extraFlatConfigForReactOriginal,
+    )
     .addAnyRule(
       ...getDoubleRuleName('no-dangerously-set-innerhtml', 'no-danger'),
       getDoubleRuleSeverity(ERROR),
@@ -1391,7 +1400,6 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
 
   return {
     configs: [
-      configBuilderSetup,
       configBuilderReactOriginal,
       configBuilderAllowDefaultExportsInJsxFiles,
       configBuilderHooks,
