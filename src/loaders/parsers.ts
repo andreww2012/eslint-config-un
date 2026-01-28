@@ -6,11 +6,6 @@ export const parsersLoaders = {
     '@angular-eslint/template-parser',
     () => import('@angular-eslint/template-parser'),
   ),
-  '@html-eslint/parser': genModuleLoader(
-    '@html-eslint/parser',
-    '@html-eslint/parser',
-    () => import('@html-eslint/parser'),
-  ),
   'astro-eslint-parser': genModuleLoader(
     'astro-eslint-parser',
     'astro-eslint-parser',

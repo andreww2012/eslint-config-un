@@ -457,6 +457,7 @@ const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
 
 // eslint-disable-next-line ts/no-unused-vars -- come up with sth better
 const PLUGINS_PROVIDING_LANGUAGES = {
+  '@html-eslint': ['html'],
   css: ['css'],
   'markdown-preferences': ['extended-syntax'],
   markdown: ['gfm', 'commonmark'],

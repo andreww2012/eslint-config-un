@@ -1,0 +1,24 @@
+diff --git a/src/verifyWithFlatConfigPatch.js b/src/verifyWithFlatConfigPatch.js
+index 8757a7a26fba9f1fe073d171a8ab397f67b673c6..ee7f9e3ade257efa155ef1ddce6ce70d4e0dfedf 100644
+--- a/src/verifyWithFlatConfigPatch.js
++++ b/src/verifyWithFlatConfigPatch.js
+@@ -146,9 +146,6 @@ function findExternalHtmlPluginName(config) {
+ 
+ function verifyExternalHtmlPlugin(eslintModule, config, callOriginalVerify) {
+   const htmlPluginName = findExternalHtmlPluginName(config)
+-  if (!htmlPluginName) {
+-    return [[], config]
+-  }
+ 
+   const rules = {}
+   for (const name in config.rules) {
+@@ -164,7 +161,8 @@ function verifyExternalHtmlPlugin(eslintModule, config, callOriginalVerify) {
+         ...config.languageOptions,
+         parser: eslintModule.require("espree"),
+       },
+-      rules,
++      ...(htmlPluginName && {rules}),
++      language: eslintModule.require('../languages/js'),
+     }),
+   ]
+ }

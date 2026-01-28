@@ -70,13 +70,13 @@ export default ((context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: [GLOB_HTM_HTML],
-          parser: '@html-eslint/parser',
           ignoresInternal: {
             html: false,
           },
           settings: {
             html: pluginSettings,
           },
+          language: ['@html-eslint', 'html'],
         },
       ],
       {
