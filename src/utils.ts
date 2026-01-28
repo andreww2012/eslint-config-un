@@ -9,7 +9,7 @@ import {resolve as resolvePackage} from 'import-meta-resolve';
 import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
 import {Traverse, type TraverseOptions} from 'neotraverse/modern';
 import * as R from 'remeda';
-import type {FalsyValue, MaybePromise, PackageJson, StripReadonly} from './types';
+import type {FalsyValue, MaybePromise, Nullable, PackageJson, StripReadonly} from './types';
 
 export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
 
@@ -219,17 +219,20 @@ export const interopDefault = async <T>(module: MaybePromise<T | {default: T}>):
 };
 
 export function getKeysOfTruthyValues<T extends Partial<Record<string, boolean>>>(
-  object: T,
+  object: Nullable<T>,
 ): (keyof T & string)[];
 export function getKeysOfTruthyValues<T extends Partial<Record<string, boolean>>>(
-  object: T,
+  object: Nullable<T>,
   requireAtLeastOneTruthyValue: true,
 ): [keyof T & string, ...(keyof T & string)[]] | undefined;
 export function getKeysOfTruthyValues<T extends Partial<Record<string, boolean>>>(
-  object: T,
+  object: Nullable<T>,
   requireAtLeastOneTruthyValue?: boolean,
 ) {
-  const result = objectEntriesUnsafe(object)
+  const result = objectEntriesUnsafe(
+    // eslint-disable-next-line  ts/no-non-null-assertion, ts/no-unnecessary-condition -- for correct types
+    object! || {},
+  )
     .filter(([, value]) => value)
     .map(([key]) => key);
   if (requireAtLeastOneTruthyValue && result.length === 0) {

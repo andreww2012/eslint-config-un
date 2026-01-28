@@ -1,5 +1,6 @@
 import {ERROR, OFF} from '../constants';
 import type {GetRuleOptions} from '../eslint';
+import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -51,6 +52,16 @@ export interface LockfileEslintConfigOptions<
   noNonRegistryDependencySpecifiers?:
     | boolean
     | GetRuleOptions<'lockfile', 'non-registry-specifiers'>;
+
+  /**
+   * Valid [`npm-package-arg` registry specifiers](https://www.npmjs.com/package/npm-package-arg)
+   * to ignore packages that will be allowed to be installed with their own lockfiles
+   * (aka shrinkwrap files).
+   *
+   * Affected rule:
+   * - [`shrinkwrap`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/shrinkwrap.md)
+   */
+  packageSpecifiersToAllowLockfilesFor?: Record<string, boolean>;
 }
 
 export default ((context, optionsRaw) => {
@@ -63,6 +74,7 @@ export default ((context, optionsRaw) => {
     enforceLockfileVersion,
     enforcePackageManager,
     noNonRegistryDependencySpecifiers,
+    packageSpecifiersToAllowLockfilesFor,
   } = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'lockfile');
@@ -104,6 +116,9 @@ export default ((context, optionsRaw) => {
       enforceAllowedRegistries ? ERROR : OFF,
       typeof enforceAllowedRegistries === 'object' ? [enforceAllowedRegistries] : [],
     ) /** @since 1.0.0 */ // 🟢
+    .addRule('shrinkwrap', ERROR, [
+      getKeysOfTruthyValues(packageSpecifiersToAllowLockfilesFor),
+    ]) /** @since 1.1.0 */ // 🟢
     .addRule(
       'version',
       enforceLockfileVersion ? ERROR : OFF,

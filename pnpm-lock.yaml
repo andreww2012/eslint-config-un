@@ -6,7 +6,7 @@ settings:
 
 overrides:
   '@eslint/config-inspector>h3@<=1.15.4': ^1.15.5
-  tar@<=7.5.3: ^7.5.4
+  tar@<7.5.7: ^7.5.7
 
 patchedDependencies:
   eslint-plugin-prettier:
@@ -484,8 +484,8 @@ importers:
         specifier: 5.1.1
         version: 5.1.1(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-lockfile:
-        specifier: 1.0.0
-        version: 1.0.0(eslint@9.39.2(jiti@2.6.1))
+        specifier: 1.1.0
+        version: 1.1.0(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-mocha:
         specifier: 11.2.0
         version: 11.2.0(eslint@9.39.2(jiti@2.6.1))
@@ -6252,8 +6252,8 @@ packages:
     peerDependencies:
       eslint: '>= 8'
 
-  eslint-plugin-lockfile@1.0.0:
-    resolution: {integrity: sha512-3KPSVNI9IemSM5Yh8ewiI+mMK0vEqACZc9FviTYkoSE/zGJnO4ojbfqMqjqWoPjm2oMuz/ksyKbmk6R9Cq0z/Q==}
+  eslint-plugin-lockfile@1.1.0:
+    resolution: {integrity: sha512-sentK/8/2XLD2yLD4NVH93g89wXgLyk8OzsOrJAGi9zTeyJhN3O2j66R0m0WLsVrMRAWOSN5Bg5PA+/9HuxRzA==}
     engines: {node: ^22.21 || ^24.11 || >= 25.2}
     peerDependencies:
       eslint: ^9.39.2
@@ -9796,8 +9796,8 @@ packages:
   tar-stream@3.1.7:
     resolution: {integrity: sha512-qJj60CXt7IU1Ffyc3NJMjh6EkuCFej46zUqJ4J7pqYlThyd9bO0XBTmcOIhSzZJVWfsLks0+nle/j538YAW9RQ==}
 
-  tar@7.5.6:
-    resolution: {integrity: sha512-xqUeu2JAIJpXyvskvU3uvQW8PAmHrtXp2KDuMJwQqW8Sqq0CaZBAQ+dKS3RBXVhU4wC5NjAdKrmh84241gO9cA==}
+  tar@7.5.7:
+    resolution: {integrity: sha512-fov56fJiRuThVFXD6o6/Q354S7pnWMJIVlDBYijsTNx6jKSE4pvrDTs6lUnmGvNyfJwFQQwWy3owKz1ucIhveQ==}
     engines: {node: '>=18'}
 
   term-size@2.2.1:
@@ -16905,12 +16905,14 @@ snapshots:
       parse5: 6.0.1
       parse5-htmlparser2-tree-adapter: 6.0.1
 
-  eslint-plugin-lockfile@1.0.0(eslint@9.39.2(jiti@2.6.1)):
+  eslint-plugin-lockfile@1.1.0(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
       lockfile-tools: 1.0.1
       minimatch: 10.1.1
+      npm-package-arg: 13.0.2
       pacote: 21.0.4
+      semver: 7.7.3
     transitivePeerDependencies:
       - supports-color
 
@@ -19678,7 +19680,7 @@ snapshots:
       nopt: 9.0.0
       proc-log: 6.1.0
       semver: 7.7.3
-      tar: 7.5.6
+      tar: 7.5.7
       tinyglobby: 0.2.15
       which: 6.0.0
     transitivePeerDependencies:
@@ -20152,7 +20154,7 @@ snapshots:
       promise-retry: 2.0.1
       sigstore: 4.1.0
       ssri: 13.0.0
-      tar: 7.5.6
+      tar: 7.5.7
     transitivePeerDependencies:
       - supports-color
 
@@ -21377,7 +21379,7 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
 
-  tar@7.5.6:
+  tar@7.5.7:
     dependencies:
       '@isaacs/fs-minipass': 4.0.1
       chownr: 3.0.0
