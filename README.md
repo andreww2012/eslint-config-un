@@ -118,7 +118,6 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-lit-a11y`                           | `lit-a11y`                           |
 | `eslint-plugin-lockfile`                           | `lockfile`                           |
 | `eslint-plugin-mocha`                              | `mocha`                              |
-| `eslint-plugin-perfectionist`                      | `perfectionist`                      |
 | `eslint-plugin-pinia`                              | `pinia`                              |
 | `eslint-plugin-playwright`                         | `playwright`                         |
 | `eslint-plugin-prefer-arrow-functions`             | `prefer-arrow-functions`             |
@@ -677,6 +676,20 @@ There exists two plugins working with Tailwind:
 
 We highly recommend using the former because it supports Tailwind v4 and as of time of writing it is better maintained and more actively updated.
 In addition, if you don't like the verbosity of the default prefix, you can use [`pluginRenames` option](#pluginrenames) to rename it to simply `tailwindcss` or `tailwind`.
+
+### Perfectionist
+
+In the `perfectionist` config, even if it's enabled, all rules and Sub-Configs (there is a Sub-Config corresponding to each rule) are turned *off* by default.
+If you want all rules to be on by default, you can manually set every single Sub-Config to `true` or use the simpler method.
+Just set this in the `perfectionist` config:
+
+<!-- eslint-skip -->
+
+```ts
+perfectionist: {
+  forceSeverity: 'error',
+},
+```
 
 ## Root options
 

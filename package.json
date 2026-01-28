@@ -130,6 +130,7 @@
     "eslint-plugin-no-unsanitized": "4.1.4",
     "eslint-plugin-node-dependencies": "1.3.0",
     "eslint-plugin-package-json": "0.88.1",
+    "eslint-plugin-perfectionist": "5.4.0",
     "eslint-plugin-pnpm": "1.5.0",
     "eslint-plugin-prettier": "file:./deps/eslint-plugin-prettier-5.5.0.tgz",
     "eslint-plugin-promise": "7.2.1",
@@ -242,7 +243,6 @@
     "eslint-plugin-lit-a11y": "5.1.1",
     "eslint-plugin-lockfile": "1.1.0",
     "eslint-plugin-mocha": "11.2.0",
-    "eslint-plugin-perfectionist": "5.3.1",
     "eslint-plugin-pinia": "0.4.2",
     "eslint-plugin-playwright": "2.5.0",
     "eslint-plugin-prefer-arrow-functions": "3.9.1",
@@ -352,7 +352,6 @@
     "eslint-plugin-lit-a11y": "^5.1.1",
     "eslint-plugin-lockfile": "^1.1.0",
     "eslint-plugin-mocha": "^11.2.0",
-    "eslint-plugin-perfectionist": "^5.3.1",
     "eslint-plugin-pinia": "^0.4.2",
     "eslint-plugin-playwright": "^2.5.0",
     "eslint-plugin-prefer-arrow-functions": "^3.9.1",
@@ -541,9 +540,6 @@
       "optional": true
     },
     "eslint-plugin-mocha": {
-      "optional": true
-    },
-    "eslint-plugin-perfectionist": {
       "optional": true
     },
     "eslint-plugin-pinia": {
