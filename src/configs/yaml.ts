@@ -69,6 +69,9 @@ export default ((context, optionsRaw) => {
           includeDefaultFilesAndIgnores: true,
           filesDefault: YAML_DEFAULT_FILES,
           filesDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeFilesWithDefault,
+          ignoresInternal: {
+            yaml: false,
+          },
           language: ['yaml', 'yaml'],
         },
       ],
@@ -125,16 +128,38 @@ export default ((context, optionsRaw) => {
 
   if (context.meta.usedPackageManager?.name === 'pnpm') {
     configBuilder
-      ?.addConfig('yaml/pnpm-workspace.yaml', {
-        files: ['**/pnpm-workspace.yaml'],
-      })
+      ?.addConfig(
+        [
+          'yaml/pnpm-workspace.yaml',
+          {
+            ignoresInternal: {
+              yaml: false,
+            },
+            language: ['yaml', 'yaml'],
+          },
+        ],
+        {
+          files: ['**/pnpm-workspace.yaml'],
+        },
+      )
       .addRule('file-extension', OFF);
   }
 
   configBuilder
-    ?.addConfig('yaml/github-actions', {
-      files: ['**/.github/workflows/**/*.{yml,yaml}'],
-    })
+    ?.addConfig(
+      [
+        'yaml/github-actions',
+        {
+          ignoresInternal: {
+            yaml: false,
+          },
+          language: ['yaml', 'yaml'],
+        },
+      ],
+      {
+        files: ['**/.github/workflows/**/*.{yml,yaml}'],
+      },
+    )
     // Example: `pull_request:` may be empty
     .addRule('no-empty-mapping-value', OFF);
 

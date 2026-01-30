@@ -15,6 +15,7 @@ import {
   GLOB_MARKDOWN,
   GLOB_MDX,
   GLOB_TOML,
+  GLOB_YAML,
   OFF,
   type RuleSeverity,
   WARNING,
@@ -459,6 +460,7 @@ const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
   mdx: [GLOB_MDX],
   html: [GLOB_HTM_HTML],
   toml: [GLOB_TOML],
+  yaml: [GLOB_YAML],
 } as const satisfies Record<string, [string, ...string[]]>;
 
 // eslint-disable-next-line ts/no-unused-vars -- come up with sth better
@@ -532,7 +534,7 @@ export class ConfigEntryBuilder<
             parser?: ParserPrefix;
 
             /**
-             * Some rules crash when linting certain file types.
+             * Some rules crash or behave unexpectedly when linting foreign file types.
              * This usually happens on unexpected for the rule file types when
              * `files` are not restricted. For example:
              * - [`no-irregular-whitespace`](https://eslint.org/docs/latest/rules/no-irregular-whitespace)
@@ -545,6 +547,11 @@ export class ConfigEntryBuilder<
              * - [`sonarjs/assertions-in-tests`](https://sonarsource.github.io/rspec/#/rspec/S2699/javascript)
              * or [`node/no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/node-builtins.md)
              * crash on `.toml` files
+             * - `.yaml` files are excluded because when no config specifies the language
+             * or a parser for YAML files, embedded code blocks might get linted by
+             * other rules and produce weird errors. For example,
+             * [`no-labels`](https://eslint.org/docs/latest/rules/no-labels)
+             * gets triggered on YAML maps (`a: b`).
              *
              * That's why globs corresponding to such files are implicitly/internally added
              * to the final `ignores` array.
