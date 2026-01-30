@@ -322,7 +322,7 @@ export const getRuleNameAndPluginPrefixByFullName = (
   };
 };
 
-export const resolveOverrides = (
+export const processUnOrFlatConfig = (
   context: UnConfigContext,
   config: FlatConfigEntry | UnFlagConfigEntry,
   overrides: Record<string, UnConfigOptionsOverridesEntry | undefined> | undefined,
@@ -330,6 +330,12 @@ export const resolveOverrides = (
 ) => {
   const extraConfigs: SetRequired<FlatConfigEntry, 'name'>[] = [];
   const removedRules: string[] = [];
+
+  if (config.language) {
+    context.usedPlugins.add(
+      getRuleNameAndPluginPrefixByFullName(context, config.language).pluginPrefixCanonical,
+    );
+  }
 
   const rules: Record<string, EslintRuleEntry> = Object.fromEntries(
     Object.entries(overrides || {}).flatMap(([ruleNameRaw, ruleOptions]) => {
@@ -780,25 +786,25 @@ export class ConfigEntryBuilder<
       addOverrides: () => {
         const ourRules = configFinal.rules;
 
-        const overridesResolved = resolveOverrides(
+        const overridesResolveResult = processUnOrFlatConfig(
           this.context,
           configFinal,
           this.options.overrides,
           ourRules,
         );
-        const overridesAnyResolved = resolveOverrides(
+        const overridesAnyResolveResult = processUnOrFlatConfig(
           this.context,
           configFinal,
           this.options.overridesAny,
           ourRules,
         );
 
-        Object.assign(ourRules, overridesResolved.rules, overridesAnyResolved.rules);
+        Object.assign(ourRules, overridesResolveResult.rules, overridesAnyResolveResult.rules);
         this.addFlatConfig([
-          ...overridesResolved.extraConfigs,
-          ...overridesAnyResolved.extraConfigs,
+          ...overridesResolveResult.extraConfigs,
+          ...overridesAnyResolveResult.extraConfigs,
         ]);
-        [...overridesResolved.removedRules, ...overridesAnyResolved.removedRules].forEach(
+        [...overridesResolveResult.removedRules, ...overridesAnyResolveResult.removedRules].forEach(
           (ruleName) => {
             Reflect.deleteProperty(ourRules, ruleName);
           },
@@ -808,11 +814,11 @@ export class ConfigEntryBuilder<
       },
 
       addBulkRules: (rules: AllEslintRules | FalsyValue) => {
-        const overridesResolved = resolveOverrides(this.context, configFinal, rules || {});
+        const configResolveResult = processUnOrFlatConfig(this.context, configFinal, rules || {});
 
-        Object.assign(configFinal.rules, overridesResolved.rules);
-        this.addFlatConfig(overridesResolved.extraConfigs);
-        [...overridesResolved.removedRules].forEach((ruleName) => {
+        Object.assign(configFinal.rules, configResolveResult.rules);
+        this.addFlatConfig(configResolveResult.extraConfigs);
+        [...configResolveResult.removedRules].forEach((ruleName) => {
           Reflect.deleteProperty(configFinal.rules, ruleName);
         });
 
@@ -820,7 +826,7 @@ export class ConfigEntryBuilder<
       },
 
       disableBulkRules: (rules: (AllEslintRuleNames | (string & {}))[] | FalsyValue) => {
-        const overridesResolved = resolveOverrides(
+        const configResolveResult = processUnOrFlatConfig(
           this.context,
           configFinal,
           Object.fromEntries(
@@ -834,9 +840,9 @@ export class ConfigEntryBuilder<
           ),
         );
 
-        Object.assign(configFinal.rules, overridesResolved.rules);
-        this.addFlatConfig(overridesResolved.extraConfigs);
-        [...overridesResolved.removedRules].forEach((ruleName) => {
+        Object.assign(configFinal.rules, configResolveResult.rules);
+        this.addFlatConfig(configResolveResult.extraConfigs);
+        [...configResolveResult.removedRules].forEach((ruleName) => {
           Reflect.deleteProperty(configFinal.rules, ruleName);
         });
 

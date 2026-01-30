@@ -19,7 +19,7 @@ import {
   configIndexProperty,
   genFlatConfigEntryName,
   isUnFlatConfigEntry,
-  resolveOverrides,
+  processUnOrFlatConfig,
 } from '../eslint';
 import {
   LOADABLE_PLUGIN_PREFIXES_LIST,
@@ -679,20 +679,20 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       const configName = genFlatConfigEntryName(
         `extra-config/${extraConfig.name || `unnamed${configIndex}`}`,
       );
-      const overridesResolved = resolveOverrides(
+      const configResolveResult = processUnOrFlatConfig(
         context,
         {...extraConfig, name: configName},
         extraConfig.rules,
       );
       const extraConfigFinal: FlatConfigEntry = {
         ...omit(extraConfig, ['rules']),
-        ...(extraConfig.rules && {rules: overridesResolved.rules}),
+        ...(extraConfig.rules && {rules: configResolveResult.rules}),
         name: configName,
       };
-      overridesResolved.removedRules.forEach((ruleName) => {
+      configResolveResult.removedRules.forEach((ruleName) => {
         extraConfigFinal.rules && Reflect.deleteProperty(extraConfigFinal.rules, ruleName);
       });
-      return [extraConfigFinal, ...overridesResolved.extraConfigs];
+      return [extraConfigFinal, ...configResolveResult.extraConfigs];
     }),
 
     // MUST be last
