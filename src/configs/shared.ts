@@ -279,6 +279,8 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'unused-imports/no-unused-imports', // [too-strict]
   'turbo/no-undeclared-env-vars', // [runtime-only]
   'eslint-plugin/no-property-in-node', // [type-aware]
+  // Conflicts with `markdown-preferences/canonical-code-block-language` by default, can also be handled by that rule and it's confusing for users to see the word "extension" in the lint message
+  'yaml/file-extension',
 ] satisfies AllEslintRuleNames[];
 
 export type RulesDisabledInEmbeddedCodeBlocksByDefault =
