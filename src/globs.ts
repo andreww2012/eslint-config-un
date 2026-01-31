@@ -56,6 +56,7 @@ export {
   // --
   GLOB_HTML,
   GLOB_HTM,
+  GLOB_HTM_HTML_EXTENSION,
   GLOB_HTM_HTML,
   // --
   GLOB_TOML,
