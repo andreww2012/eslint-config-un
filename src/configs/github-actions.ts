@@ -86,6 +86,8 @@ export default ((context, optionsRaw) => {
     .addRule('require-job-step-name', require.jobStepName ? ERROR : OFF) /** @since 0.0.6 */
     .addRule('valid-timeout-minutes', ERROR) /** @since 0.0.16 */ // 🟢
     .addRule('valid-trigger-events', ERROR) /** @since 0.0.16 */ // 🟢
+    // Example: `pull_request:` may be empty
+    .disableAnyRule('yaml', 'no-empty-mapping-value')
     .enableConfigTesterForPlugin('github-actions')
     .addOverrides();
 

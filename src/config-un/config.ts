@@ -622,7 +622,6 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('clsx', () => import('../configs/clsx')),
     loadUnConfig('e18e', () => import('../configs/e18e')),
     loadUnConfig('lockfile', () => import('../configs/lockfile')),
-    loadUnConfig('githubActions', () => import('../configs/github-actions')),
     loadUnConfig('tanstackRouter', () => import('../configs/tanstack-router')),
 
     /* Disabled by default */
@@ -658,6 +657,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('format', () => import('../configs/format')),
 
     /* Other configs */
+    loadUnConfig('githubActions', () => import('../configs/github-actions')), // Must come after `yaml`
     tsEslintConfigResult, // Must come after all rulesets for vanilla JS
     loadUnConfig('es', () => import('../configs/es'), undefined), // Must come after ts
     vueEslintConfigResult, // Must come after ts

@@ -145,24 +145,6 @@ export default ((context, optionsRaw) => {
       .addRule('file-extension', OFF);
   }
 
-  configBuilder
-    ?.addConfig(
-      [
-        'yaml/github-actions',
-        {
-          ignoresInternal: {
-            yaml: false,
-          },
-          language: ['yaml', 'yaml'],
-        },
-      ],
-      {
-        files: ['**/.github/workflows/**/*.{yml,yaml}'],
-      },
-    )
-    // Example: `pull_request:` may be empty
-    .addRule('no-empty-mapping-value', OFF);
-
   return {
     configs: [configBuilder],
     optionsResolved,
