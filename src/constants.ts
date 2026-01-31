@@ -88,7 +88,8 @@ export const GLOB_YAML = '**/*.yaml' as const;
 
 export const GLOB_HTML = '**/*.html' as const;
 export const GLOB_HTM = '**/*.htm' as const;
-export const GLOB_HTM_HTML = '**/*.htm?(l)' as const;
+export const GLOB_HTM_HTML_EXTENSION = 'htm?(l)' as const;
+export const GLOB_HTM_HTML = `**/*.${GLOB_HTM_HTML_EXTENSION}` as const;
 
 /* Globs - other extensions */
 
@@ -125,7 +126,7 @@ const GLOB_SUPPORTED_EXTENSIONS = [
   'json5',
   GLOB_YML_YAML_EXTENSION,
   'toml',
-  'html',
+  GLOB_HTM_HTML_EXTENSION,
   'css',
   'astro',
   'svelte',
