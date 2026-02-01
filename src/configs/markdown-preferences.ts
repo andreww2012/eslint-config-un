@@ -7,7 +7,7 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -33,7 +33,7 @@ const DEFAULT_IGNORE_PATTERNS = [
 
 export interface MarkdownPreferencesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'markdown-preferences'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'markdown-preferences'> {
   /**
    * Sets the style for emphasized, strong, emphasized strong and strikethrough text.
    *

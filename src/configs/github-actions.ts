@@ -1,15 +1,15 @@
 import {ERROR, GLOB_YML_YAML_EXTENSION, OFF} from '../constants';
-import type {GetRuleOptions} from '../eslint';
 import {
   type ExtraPluginsType,
+  type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface GithubActionsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'github-actions'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'github-actions'> {
   /**
    * Maximum number of jobs that should be present in an action file.
    *

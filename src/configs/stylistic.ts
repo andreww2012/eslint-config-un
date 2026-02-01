@@ -1,20 +1,22 @@
 // cspell:ignore nonblock
 import type eslintPluginStylistic from '@stylistic/eslint-plugin';
 import {ERROR, GLOB_HTML, GLOB_YML_YAML, OFF, type RuleSeverity} from '../constants';
-import type {FlatConfigEntry, GetRuleOptions, RuleNamesForPlugin} from '../eslint';
+import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import {pluginsLoaders} from '../loaders';
 import type {OmitStrict} from '../types';
 import {mapKeys} from '../utils';
 import {
   type ExtraPluginsType,
+  type GetRuleNamesInPlugin,
+  type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface StylisticEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, '@stylistic'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, '@stylistic'> {
   /**
    * Customization function directly coming from [the plugin](https://eslint.style/guide/config-presets#configuration-factory).
    *
@@ -33,7 +35,7 @@ export default (async (context, optionsRaw) => {
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '@stylistic');
 
-  let configProducedByCustomize: FlatConfigEntry['rules'] | undefined;
+  let configProducedByCustomize: EslintFlatConfigEntry['rules'] | undefined;
   if (customizeOptions) {
     const {customize} = await pluginsLoaders['@stylistic'](context).then(
       ({module}) => module.configs,
@@ -44,7 +46,7 @@ export default (async (context, optionsRaw) => {
   }
 
   const setupRule = <
-    RuleName extends RuleNamesForPlugin<'@stylistic'>,
+    RuleName extends GetRuleNamesInPlugin<'@stylistic'>,
     _RuleOptions = GetRuleOptions<'@stylistic', RuleName, 'all'>,
   >(
     ruleName: RuleName,

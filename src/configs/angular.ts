@@ -4,10 +4,10 @@ import type {NonEmptyTuple, Subtract} from '../types';
 import {fetchPackageInfo} from '../utils';
 import {
   type ExtraPluginsType,
+  type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type RuleNamesForPlugin,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -24,7 +24,7 @@ const LATEST_SUPPORTED_ANGULAR_VERSION = SUPPORTED_ANGULAR_VERSIONS.at(
 
 interface ConfigTemplateSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, '@angular-eslint/template'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, '@angular-eslint/template'> {
   /**
    * Enable all a11y (accessibility) rules (all are prefixed with `@angular-eslint/template`):
    * - [`alt-text`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/alt-text.md) ([`accessibility-alt-text`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-alt-text.md) before Angular 16)
@@ -73,7 +73,7 @@ interface ConfigTemplateSubConfigOptions<
 
 export interface AngularEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, '@angular-eslint'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, '@angular-eslint'> {
   /**
    * Enables or specifies the configuration for the [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template) plugin,
    * which includes template-specific rules.
@@ -277,7 +277,7 @@ export default (async (context, optionsRaw) => {
 
   const angularEslintPluginRules = Object.keys(angularEslintPlugin?.rules || {});
   const getPluginRuleSeverity = <
-    RuleName extends RuleNamesForPlugin<'@angular-eslint'>, // prettier-ignore
+    RuleName extends GetRuleNamesInPlugin<'@angular-eslint'>, // prettier-ignore
   >(
     ruleName: RuleName,
     severity: RuleSeverity,
@@ -472,7 +472,7 @@ export default (async (context, optionsRaw) => {
 
   const angularTemplateEslintPluginRules = Object.keys(angularTemplateEslintPlugin?.rules || {});
   const getTemplatePluginRuleSeverity = <
-    RuleName extends RuleNamesForPlugin<'@angular-eslint/template'>,
+    RuleName extends GetRuleNamesInPlugin<'@angular-eslint/template'>,
   >(
     ruleName: RuleName,
     severity: RuleSeverity,

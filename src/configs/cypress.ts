@@ -8,13 +8,13 @@ import {
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface CypressEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'cypress'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'cypress'>,
     NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {}
 
 export default ((context, optionsRaw) => {

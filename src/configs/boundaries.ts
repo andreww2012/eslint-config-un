@@ -5,13 +5,13 @@ import {kebabCase, objectEntriesUnsafe} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface BoundariesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'boundaries'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'boundaries'> {
   /**
    * [`eslint-plugin-boundaries`](https://npmjs.com/eslint-plugin-boundaries) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

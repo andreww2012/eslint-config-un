@@ -2,13 +2,13 @@ import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface PromiseEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'promise'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'promise'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies PromiseEslintConfigOptions);

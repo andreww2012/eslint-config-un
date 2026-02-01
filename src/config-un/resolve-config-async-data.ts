@@ -1,12 +1,11 @@
 import {renderTable} from 'console-table-printer';
+import type {DisableAutofixPrefix} from '../constants';
+import {eslintPluginVanillaRules} from '../eslint/eslint-shared';
+import type {EslintFlatConfigEntry, EslintPlugin} from '../eslint/eslint-types';
 import {
-  type DisableAutofixPrefix,
-  type EslintPlugin,
-  type FlatConfigEntry,
   disableAutofixForAllRulesInPlugin,
-  eslintPluginVanillaRules,
   getRuleNameAndPluginPrefixByFullName,
-} from '../eslint';
+} from '../eslint/eslint-utils';
 import {
   type LoadablePackagePrefix,
   type PackageToLoadInfo,
@@ -448,7 +447,7 @@ ${renderTable(
     plugins: {
       ...plugins,
       ['disable-autofix' satisfies DisableAutofixPrefix]: disableAutofixPlugin,
-    } satisfies FlatConfigEntry['plugins'] & {} as FlatConfigEntry['plugins'] & {},
+    } satisfies EslintFlatConfigEntry['plugins'] & {} as EslintFlatConfigEntry['plugins'] & {},
     disableAutofixPlugin,
     modifyConfigs,
   };

@@ -1,5 +1,5 @@
 import {ERROR, GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../constants';
-import type {FlatConfigEntryFilesOrIgnores} from '../eslint';
+import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
 import type {MarkdownEslintConfigOptions} from './markdown';
@@ -7,13 +7,13 @@ import {determineRulesDisabledInEmbeddedCodeBlocks} from './shared';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'mdx'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'mdx'>,
     Pick<
       MarkdownEslintConfigOptions,
       | 'codeBlocksImpliedStrictMode'
@@ -36,7 +36,7 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
    * @default true
    * @example {files: ['**\/*.mdx'], ignores: ['ignored-file.mdx']}
    */
-  lintCodeBlocks?: boolean | Prettify<FlatConfigEntryFilesOrIgnores>;
+  lintCodeBlocks?: boolean | Prettify<UnFlatConfigEntryFilesAndIgnores>;
 }
 
 const DEFAULT_FILES = [GLOB_MDX];

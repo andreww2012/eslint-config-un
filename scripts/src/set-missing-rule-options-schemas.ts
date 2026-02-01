@@ -1,5 +1,5 @@
 import type {JSONSchema} from 'json-schema-to-ts';
-import type {EslintPlugin} from '../../src/eslint';
+import type {EslintPlugin} from '../../src/eslint/eslint-types';
 import type {PluginPrefix} from '../../src/loaders';
 import {cloneDeep, interopDefault, objectEntriesUnsafe} from '../../src/utils';
 

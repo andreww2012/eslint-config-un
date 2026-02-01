@@ -3,13 +3,13 @@ import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface JestDomEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'jest-dom'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'jest-dom'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(

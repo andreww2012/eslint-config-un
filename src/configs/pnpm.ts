@@ -1,19 +1,21 @@
 import {ERROR, OFF} from '../constants';
-import type {RuleOptionsPerPlugin} from '../eslint';
 import type {PickKeysStartingWith} from '../types';
 import {allUnionMembers} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type RulesRecordPartial,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRuleOptionsByPlugin,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
-interface PnpmJsonSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnConfigOptions<
+interface PnpmJsonSubConfigOptions<
+  ExtraPlugins extends ExtraPluginsType,
+> extends UnFlatConfigEntryBase<
   ExtraPlugins,
-  PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/json-'>
+  PickKeysStartingWith<UnRulesConfigPartial<'pnpm'>, 'pnpm/json-'>
 > {
   /**
    * Enforces that all dependencies are coming from [pnpm catalogs](https://pnpm.io/catalogs).
@@ -34,9 +36,11 @@ interface PnpmJsonSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extend
   preferSettingsInPnpmWorkspaceYaml?: boolean;
 }
 
-interface PnpmYamlSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnConfigOptions<
+interface PnpmYamlSubConfigOptions<
+  ExtraPlugins extends ExtraPluginsType,
+> extends UnFlatConfigEntryBase<
   ExtraPlugins,
-  PickKeysStartingWith<RulesRecordPartial<'pnpm'>, 'pnpm/yaml-'>
+  PickKeysStartingWith<UnRulesConfigPartial<'pnpm'>, 'pnpm/yaml-'>
 > {
   /**
    * Configure [`yaml-enforce-settings` rule options](https://github.com/antfu/pnpm-workspace-utils/blob/7d608b8aa8f1c9a2b76ca4a2cc75d96e914268ae/packages/eslint-plugin-pnpm/src/rules/yaml/yaml-enforce-settings.ts#L30).
@@ -48,7 +52,7 @@ interface PnpmYamlSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extend
 
 export interface PnpmEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'pnpm'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'pnpm'> {
   /**
    * [`eslint-plugin-pnpm`](https://npmjs.com/eslint-plugin-pnpm) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -75,7 +79,7 @@ export interface PnpmEslintConfigOptions<
 }
 
 const PNPM_YAML_RULES = new Set<string>(
-  allUnionMembers<keyof PickKeysStartingWith<RuleOptionsPerPlugin['pnpm'], 'yaml-'>>()([
+  allUnionMembers<keyof PickKeysStartingWith<UnRuleOptionsByPlugin['pnpm'], 'yaml-'>>()([
     'yaml-enforce-settings',
     'yaml-no-duplicate-catalog-item',
     'yaml-no-unused-catalog-item',

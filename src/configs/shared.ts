@@ -1,9 +1,9 @@
 import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, GLOB_TOML, GLOB_YML_YAML} from '../constants';
-import type {AllEslintRuleNames} from '../eslint';
+import type {UnAllRuleNames} from '../eslint/eslint-types';
 import {type AllUnionMembers, objectEntriesUnsafe, pick} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
-import type {ExtraPluginsType, GetRuleOptions, UnConfigOptions} from '.';
+import type {ExtraPluginsType, GetRuleOptions, UnFlatConfigEntryBase} from '.';
 
 export interface IgnoresAdditionalOptions<Patterns extends string | readonly string[]> {
   /**
@@ -18,7 +18,7 @@ export interface IgnoresAdditionalOptions<Patterns extends string | readonly str
 
 export const generateIgnoresWithAdditional =
   <Patterns extends string | readonly string[]>(
-    config: boolean | (UnConfigOptions & IgnoresAdditionalOptions<Patterns>),
+    config: boolean | (UnFlatConfigEntryBase & IgnoresAdditionalOptions<Patterns>),
     extraIgnoresFallback?: string[],
   ) =>
   <
@@ -67,7 +67,7 @@ export const generateDefaultTestFiles = <T extends string>(
 
 type ConfigNoOnlyTests<ExtraPlugins extends ExtraPluginsType = never> =
   | boolean
-  | UnConfigOptions<ExtraPlugins, 'no-only-tests'>;
+  | UnFlatConfigEntryBase<ExtraPlugins, 'no-only-tests'>;
 
 export interface NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins extends ExtraPluginsType> {
   /**
@@ -95,7 +95,7 @@ export const generateConfigNoOnlyTestsBuilder = <ExtraPlugins extends ExtraPlugi
   context: UnConfigContext<ExtraPlugins>,
   prefix: string,
   configNoOnlyTests: NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>['configNoOnlyTests'] & {},
-  parentConfig: boolean | UnConfigOptions<ExtraPlugins>,
+  parentConfig: boolean | UnFlatConfigEntryBase<ExtraPlugins>,
   {
     filesDefault,
   }: {
@@ -124,7 +124,7 @@ export const generateConfigNoOnlyTestsBuilder = <ExtraPlugins extends ExtraPlugi
   return configBuilderNoOnlyTests;
 };
 
-export const RULES_TO_DISABLE_IN_TEST_FILES: AllEslintRuleNames[] = [
+export const RULES_TO_DISABLE_IN_TEST_FILES: UnAllRuleNames[] = [
   'no-empty-function',
   'sonarjs/no-hardcoded-ip',
   'sonarjs/no-hardcoded-passwords',
@@ -281,7 +281,7 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'eslint-plugin/no-property-in-node', // [type-aware]
   // Conflicts with `markdown-preferences/canonical-code-block-language` by default, can also be handled by that rule and it's confusing for users to see the word "extension" in the lint message
   'yaml/file-extension',
-] satisfies AllEslintRuleNames[];
+] satisfies UnAllRuleNames[];
 
 export type RulesDisabledInEmbeddedCodeBlocksByDefault =
   (typeof RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS)[number];

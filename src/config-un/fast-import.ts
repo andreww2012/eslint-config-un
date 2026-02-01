@@ -1,4 +1,4 @@
-import type {EslintPlugin, RuleNamesForPlugin} from '../eslint';
+import type {EslintPlugin, GetRuleNamesInPlugin} from '../eslint/eslint-types';
 import type {PluginPrefix} from '../loaders';
 import type {NonEmptyTuple} from '../types';
 import {objectEntriesUnsafe} from '../utils';
@@ -12,7 +12,7 @@ const IMPORT_RULES_TO_REPLACE = {
   'no-cycle': 'no-cycle',
   'no-named-as-default': 'no-named-as-default',
   'no-unresolved': 'no-unresolved-imports',
-} satisfies Partial<Record<RuleNamesForPlugin<'import'>, RuleNamesForPlugin<'fast-import'>>>;
+} satisfies Partial<Record<GetRuleNamesInPlugin<'import'>, GetRuleNamesInPlugin<'fast-import'>>>;
 
 export type ImportPluginReplaceableRules = keyof typeof IMPORT_RULES_TO_REPLACE;
 

@@ -1,6 +1,6 @@
 import {fixupPluginRules} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
-import type {EslintPlugin} from '../eslint';
+import type {EslintPlugin} from '../eslint/eslint-types';
 import {interopDefault, objectKeysUnsafe} from '../utils';
 import {
   type EslintParser,

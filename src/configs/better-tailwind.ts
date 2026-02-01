@@ -4,7 +4,7 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -12,7 +12,7 @@ type AnyRuleOptions = GetRuleOptions<'better-tailwindcss', 'enforce-shorthand-cl
 
 export interface BetterTailwindEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'better-tailwindcss'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'better-tailwindcss'> {
   /**
    * [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

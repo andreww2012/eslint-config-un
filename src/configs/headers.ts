@@ -2,13 +2,13 @@ import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface HeadersEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'headers'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'headers'> {
   // TODO types are broken
 
   /**

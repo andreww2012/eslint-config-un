@@ -1,15 +1,15 @@
 import {ERROR, GLOB_TS_X} from '../constants';
-import type {GetRuleOptions} from '../eslint';
 import {
   type ExtraPluginsType,
+  type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface ExpectTypeEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'expect-type'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'expect-type'> {
   /**
    * Options of [the only rule, `expect`](https://github.com/JoshuaKGoldberg/eslint-plugin-expect-type/blob/HEAD/docs/rules/expect.md).
    */

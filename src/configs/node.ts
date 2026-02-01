@@ -8,7 +8,7 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -100,7 +100,7 @@ interface EslintPluginNSettings {
 
 export interface NodeEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'node'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'node'> {
   /**
    * [`eslint-plugin-n`](https://github.com/eslint-community/eslint-plugin-n) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

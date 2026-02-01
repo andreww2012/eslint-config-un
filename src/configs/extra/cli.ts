@@ -1,15 +1,15 @@
 import {ERROR, GLOB_JS_TS_EXTENSION} from '../../constants';
-import type {AllEslintRuleNames} from '../../eslint';
 import {
   type ExtraPluginsType,
+  type UnAllRuleNames,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from '../index';
 
 export interface CliEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins> {
+> extends UnFlatConfigEntryBase<ExtraPlugins> {
   /**
    * By default, all rules available in this list are *disabled*.
    * To not disable certain rule, set `false` to the corresponding key.
@@ -37,7 +37,7 @@ const RULES_DISABLED_BY_DEFAULT = [
   'import/no-extraneous-dependencies',
 
   'unicorn/no-process-exit',
-] as const satisfies AllEslintRuleNames[];
+] as const satisfies UnAllRuleNames[];
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies CliEslintConfigOptions);

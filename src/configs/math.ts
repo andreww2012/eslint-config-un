@@ -3,13 +3,13 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface MathEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'math'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'math'> {
   /**
    * Enforces the method of conversion to absolute values. Set to `false` not not enforce it.
    * @default 'Math.abs'

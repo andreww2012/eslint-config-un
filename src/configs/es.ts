@@ -5,7 +5,7 @@ import {memoize} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -279,7 +279,7 @@ type EcmaVersion = keyof EcmaFeatures;
 
 export interface EsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'es'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'es'> {
   /**
    * [`eslint-plugin-es-x`](https://npmjs.com/eslint-plugin-es-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

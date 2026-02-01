@@ -3,13 +3,13 @@ import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface UnocssEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, '@unocss'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, '@unocss'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies UnocssEslintConfigOptions);

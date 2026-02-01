@@ -3,10 +3,10 @@ import type {ConditionalKeys} from '../types';
 import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
 import {
   type ExtraPluginsType,
-  type RuleNamesForPlugin,
-  type RulesRecordPartial,
+  type GetRuleNamesInPlugin,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
@@ -17,24 +17,24 @@ const ESLINT_PLUGIN_TESTING_RELATED_RULES = [
   'prefer-output-null',
   'test-case-property-ordering',
   'test-case-shorthand-strings',
-] satisfies RuleNamesForPlugin<'eslint-plugin'>[];
+] satisfies GetRuleNamesInPlugin<'eslint-plugin'>[];
 const ESLINT_PLUGIN_TESTING_RELATED_RULES_SET = new Set<string>(
   ESLINT_PLUGIN_TESTING_RELATED_RULES,
 );
 
 export interface EslintPluginEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'eslint-plugin'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'eslint-plugin'> {
   /**
    * Includes rules for ESLint rule test files.
    * @default true
    */
   configRuleTests?:
     | boolean
-    | UnConfigOptions<
+    | UnFlatConfigEntryBase<
         ExtraPlugins,
         Pick<
-          RulesRecordPartial<'eslint-plugin'>,
+          UnRulesConfigPartial<'eslint-plugin'>,
           `eslint-plugin/${(typeof ESLINT_PLUGIN_TESTING_RELATED_RULES)[number]}`
         >
       >;

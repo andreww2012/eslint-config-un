@@ -3,13 +3,13 @@ import type {MaybeArray} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface RegexpEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'regexp'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'regexp'> {
   /**
    * [`eslint-plugin-regexp`](https://npmjs.com/eslint-plugin-regexp) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

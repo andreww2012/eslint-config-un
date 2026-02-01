@@ -8,13 +8,13 @@ import {
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface QunitEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'qunit'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'qunit'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {}
 
 export default ((context, optionsRaw) => {

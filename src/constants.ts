@@ -13,6 +13,12 @@ export const OFF = 0 as Tagged<0, 'off'>;
 
 export type RuleSeverity = typeof ERROR | typeof WARNING | typeof OFF;
 
+/* Other */
+
+export const DISABLE_AUTOFIX = 'disable-autofix';
+export const DISABLE_AUTOFIX_WITH_SLASH = `${DISABLE_AUTOFIX}/`;
+export type DisableAutofixPrefix = typeof DISABLE_AUTOFIX;
+
 /* Globs - Helpers */
 
 export const GLOB_MAYBE_COMMONJS_OR_ESM = '?([cm])' as const;

@@ -2,7 +2,7 @@ import {ERROR, GLOB_TS_X, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -180,7 +180,7 @@ interface EslintPluginJsdocSettings {
 
 export interface JsdocEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'jsdoc'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'jsdoc'> {
   /**
    * [`eslint-plugin-jsdoc`](https://npmjs.com/eslint-plugin-jsdoc) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -197,7 +197,7 @@ export interface JsdocEslintConfigOptions<
    */
   configTypescript?:
     | boolean
-    | (UnConfigOptions<ExtraPlugins, 'jsdoc'> & Pick<JsdocEslintConfigOptions, 'settings'>);
+    | (UnFlatConfigEntryBase<ExtraPlugins, 'jsdoc'> & Pick<JsdocEslintConfigOptions, 'settings'>);
 
   /**
    * Recognize the following tags as valid JSDoc tags.

@@ -1,15 +1,15 @@
 import {ERROR, GLOB_JSX_TSX, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
-import type {FlatConfigEntry} from '../eslint';
+import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import type {DistributedPick, OmitStrict, Prettify} from '../types';
 import {doesPackageExist} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import {
   type ExtraPluginsType,
+  type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type RuleNamesForPlugin,
-  type RulesRecordPartial,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
@@ -125,9 +125,9 @@ type ReactXTypeAwareRules = 'no-leaked-conditional-rendering' | 'prefer-read-onl
 
 interface ReactXSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<
+> extends UnFlatConfigEntryBase<
   ExtraPlugins,
-  OmitStrict<RulesRecordPartial<'@eslint-react'>, `@eslint-react/${ReactXTypeAwareRules}`>
+  OmitStrict<UnRulesConfigPartial<'@eslint-react'>, `@eslint-react/${ReactXTypeAwareRules}`>
 > {
   /**
    * [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) plugin
@@ -181,15 +181,15 @@ interface ReactXSubConfigOptions<
    */
   configTypeAwareRules?:
     | boolean
-    | UnConfigOptions<
+    | UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<RulesRecordPartial<'@eslint-react'>, `@eslint-react/${ReactXTypeAwareRules}`>
+        Pick<UnRulesConfigPartial<'@eslint-react'>, `@eslint-react/${ReactXTypeAwareRules}`>
       >;
 }
 
 interface HooksSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'react-hooks' | '@eslint-react/hooks-extra'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'react-hooks' | '@eslint-react/hooks-extra'> {
   /**
    * [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -211,7 +211,7 @@ interface HooksSubConfigOptions<
 
 interface RefreshSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'react-refresh'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'react-refresh'> {
   /**
    * "If you use a framework that handles HMR of some specific exports, you can use this option to avoid warning for them." - plugin docs
    *
@@ -237,7 +237,7 @@ interface RefreshSubConfigOptions<
 
 export interface ReactEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'react'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'react'> {
   /**
    * [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -285,10 +285,10 @@ export interface ReactEslintConfigOptions<
    */
   configDom?:
     | boolean
-    | UnConfigOptions<
+    | UnFlatConfigEntryBase<
         ExtraPlugins,
         | '@eslint-react/dom'
-        | Pick<RulesRecordPartial<'react'>, `react/${EslintPluginReactDomRules}`>
+        | Pick<UnRulesConfigPartial<'react'>, `react/${EslintPluginReactDomRules}`>
       >;
 
   /**
@@ -306,9 +306,9 @@ export interface ReactEslintConfigOptions<
    */
   configAllowDefaultExportsInJsxFiles?:
     | boolean
-    | UnConfigOptions<
+    | UnFlatConfigEntryBase<
         ExtraPlugins,
-        DistributedPick<RulesRecordPartial, 'import/no-default-export'>
+        DistributedPick<UnRulesConfigPartial, 'import/no-default-export'>
       >;
 
   /**
@@ -319,7 +319,7 @@ export interface ReactEslintConfigOptions<
    */
   configYouMightNotNeedAnEffect?:
     | boolean
-    | UnConfigOptions<ExtraPlugins, 'react-you-might-not-need-an-effect'>;
+    | UnFlatConfigEntryBase<ExtraPlugins, 'react-you-might-not-need-an-effect'>;
 
   /**
    * Controls how rules from [@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react) are used.
@@ -519,13 +519,13 @@ const REACT_ORIGINAL_DOM_RULES = new Set<string>([
   'no-render-return-value',
   'no-unknown-property',
   'void-dom-elements-no-children',
-] satisfies RuleNamesForPlugin<'react'>[]);
+] satisfies GetRuleNamesInPlugin<'react'>[]);
 
 const REACT_X_TYPE_AWARE_RULES = new Set<string>([
   'no-leaked-conditional-rendering',
   'no-unused-props',
   'prefer-read-only-props',
-] satisfies RuleNamesForPlugin<'@eslint-react'>[]);
+] satisfies GetRuleNamesInPlugin<'@eslint-react'>[]);
 
 const DEFAULT_FILES = [GLOB_JS_TS_X];
 
@@ -580,8 +580,8 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
   const isReactXPreferred = pluginX === 'prefer' || pluginX === 'only';
 
   const getDoubleRuleName = <
-    A extends RuleNamesForPlugin<'@eslint-react/dom'>,
-    B extends RuleNamesForPlugin<'react'> = A & RuleNamesForPlugin<'react'>,
+    A extends GetRuleNamesInPlugin<'@eslint-react/dom'>,
+    B extends GetRuleNamesInPlugin<'react'> = A & GetRuleNamesInPlugin<'react'>,
   >(
     nameXUnprefixed: A,
     nameOriginal?: B,
@@ -614,7 +614,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       } satisfies EslintPluginReactXSettings)
     : null;
 
-  const extraFlatConfigForReactOriginal: FlatConfigEntry = {
+  const extraFlatConfigForReactOriginal: EslintFlatConfigEntry = {
     // Copied from https://github.com/jsx-eslint/eslint-plugin-react/blob/e6b5b41191690ee166d0cca1e9db27092b910f03/index.js#L86
     ...(isReactEnabled &&
       newJsxTransform && {

@@ -8,7 +8,7 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -16,7 +16,7 @@ const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml'] as const;
 
 export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'yaml'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'yaml'>,
     IgnoresAdditionalOptions<typeof CONFIG_DEFAULT_IGNORES> {
   /**
    * `files` specified in this config will be merged with the default of `['**\/*.y?(a)ml']`. Set this to `true` to avoid that behavior

@@ -3,30 +3,30 @@ import {JSONC_DEFAULT_FILES} from './shared';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface JsoncEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'jsonc'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'jsonc'> {
   /**
    * Config exclusively for .json files (no rules are applied by default!)
    * @default false
    */
-  configJson?: boolean | UnConfigOptions<ExtraPlugins, 'jsonc'>;
+  configJson?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'jsonc'>;
 
   /**
    * Config exclusively for .jsonc files (no rules are applied by default!)
    * @default false
    */
-  configJsonc?: boolean | UnConfigOptions<ExtraPlugins, 'jsonc'>;
+  configJsonc?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'jsonc'>;
 
   /**
    * Config exclusively for .jsonc5 files (no rules are applied by default!)
    * @default false
    */
-  configJson5?: boolean | UnConfigOptions<ExtraPlugins, 'jsonc'>;
+  configJson5?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'jsonc'>;
 
   /**
    * `files` specified in this config will be merged with the default of

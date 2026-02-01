@@ -3,18 +3,18 @@ import esUnConfig from '../es';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from '../index';
 
 export interface CloudfrontFunctionsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins> {
+> extends UnFlatConfigEntryBase<ExtraPlugins> {
   /**
    * By default, the runtime version is assumed to be 2.
    * This is a sub-config for functions written for the v1 runtime.
    */
-  configV1?: UnConfigOptions<ExtraPlugins>;
+  configV1?: UnFlatConfigEntryBase<ExtraPlugins>;
 }
 
 const genSyntaxNotAllowedErrorMessage = (syntax: string, isPlural = false) =>
@@ -33,7 +33,7 @@ export default ((context, optionsRaw) => {
     [
       [1, optionsResolved.configV1 || {}],
       [2, optionsResolved],
-    ] satisfies [1 | 2, UnConfigOptions][]
+    ] satisfies [1 | 2, UnFlatConfigEntryBase][]
   ).flatMap(([runtimeVersion, options]) => {
     const isV2 = runtimeVersion === 2;
 

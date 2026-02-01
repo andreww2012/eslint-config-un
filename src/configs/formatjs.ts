@@ -5,13 +5,13 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface FormatjsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'formatjs'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'formatjs'> {
   /**
    * [`eslint-plugin-formatjs`](https://npmjs.com/eslint-plugin-formatjs) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

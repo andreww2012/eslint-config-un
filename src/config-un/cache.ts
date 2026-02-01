@@ -6,7 +6,7 @@ import * as packageUtils from 'empathic/package';
 import type {Ms} from 'ms-ts';
 import {LOCKS as packageManagerLockfilesReversed} from 'package-manager-detector/constants';
 import {exec} from 'tinyexec';
-import type {FlatConfigEntry} from '../eslint';
+import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import type {LoadablePackagePrefix, PackageToLoadInfo, ParserPrefix} from '../loaders';
 import type {SetFieldType} from '../types';
 import {
@@ -123,7 +123,7 @@ const resolveCacheFilePath = (context: UnConfigContext): string | undefined => {
 };
 
 export interface CacheDataInFs<Serialized extends boolean = true> {
-  configs: FlatConfigEntry[];
+  configs: EslintFlatConfigEntry[];
   usedPlugins: string[];
   usedParsers: Serialized extends true
     ? Record<string, string[] /* Config names */>
@@ -251,7 +251,7 @@ export const restoreCacheFromFs = async (
 };
 
 interface CacheDataInMemory {
-  config: FlatConfigEntry[];
+  config: EslintFlatConfigEntry[];
 }
 
 interface CacheDataStoredInMemory extends CacheDataInMemory, CacheMetadata {}

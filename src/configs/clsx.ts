@@ -2,13 +2,13 @@ import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface ClsxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'clsx'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'clsx'> {
   /**
    * [`eslint-plugin-clsx`](https://npmjs.com/eslint-plugin-clsx) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

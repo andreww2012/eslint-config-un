@@ -3,9 +3,9 @@ import {ERROR, OFF} from '../constants';
 import type {NonEmptyTuple} from '../types';
 import {
   type ExtraPluginsType,
-  type RuleNamesForPlugin,
+  type GetRuleNamesInPlugin,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -86,7 +86,7 @@ type LodashMethods =
 
 const LODASH_METHODS_TO_RULE_NAMES: Record<
   LodashMethods,
-  RuleNamesForPlugin<'you-dont-need-lodash-underscore'>
+  GetRuleNamesInPlugin<'you-dont-need-lodash-underscore'>
 > = {
   all: 'all',
   any: 'any',
@@ -165,7 +165,7 @@ const LODASH_METHODS_TO_RULE_NAMES: Record<
 
 export interface YouDontNeedLodashUnderscoreEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'you-dont-need-lodash-underscore'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'you-dont-need-lodash-underscore'> {
   /**
    * Lodash methods that will be exempted from the check. Will be merged with the default value.
    * @example {capitalize: true, cloneDeep: true, get: true, omit: true, throttle: true}

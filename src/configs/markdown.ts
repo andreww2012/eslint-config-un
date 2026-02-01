@@ -1,7 +1,7 @@
 import type {MarkdownLanguageOptions} from '@eslint/markdown/types';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
-import type {FlatConfigEntryFilesOrIgnores} from '../eslint';
+import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
 import {capitalize, unique} from '../utils';
@@ -13,9 +13,9 @@ import {
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type RulesRecordPartial,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
@@ -47,12 +47,12 @@ const CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES = ['LICENSE.md'] as const;
 
 export interface MarkdownEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'markdown'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'markdown'> {
   /**
    * Format fenced code blocks with Prettier.
    * @default true <=> `prettier` package is installed
    */
-  configFormatFencedCodeBlocks?: boolean | UnConfigOptions<ExtraPlugins, 'prettier'>;
+  configFormatFencedCodeBlocks?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'prettier'>;
 
   /**
    * Config with the plugin that allows you to enforce that no line in your Markdown files
@@ -71,7 +71,7 @@ export interface MarkdownEslintConfigOptions<
    */
   configSentencesPerLine?:
     | boolean
-    | (UnConfigOptions<ExtraPlugins, 'sentences-per-line'> &
+    | (UnFlatConfigEntryBase<ExtraPlugins, 'sentences-per-line'> &
         IgnoresAdditionalOptions<typeof CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES>);
 
   /**
@@ -89,7 +89,7 @@ export interface MarkdownEslintConfigOptions<
    */
   language?:
     | MarkdownDialect
-    | Prettify<FlatConfigEntryFilesOrIgnores & {language: MarkdownDialect}>[];
+    | Prettify<UnFlatConfigEntryFilesAndIgnores & {language: MarkdownDialect}>[];
 
   /**
    * If array, only those tags will be allowed. If `false`, no tags are allowed. If `true`, all tags are allowed (default)
@@ -104,7 +104,7 @@ export interface MarkdownEslintConfigOptions<
    * @default true
    * @example {files: ['**\/*.md'], ignores: ['CHANGELOG.md'], ignoreLanguages: ['yml']}
    */
-  lintCodeBlocks?: boolean | Prettify<FlatConfigEntryFilesOrIgnores>;
+  lintCodeBlocks?: boolean | Prettify<UnFlatConfigEntryFilesAndIgnores>;
 
   /**
    * Note that these languages will be ignored disregarding of specified in `.lintCodeBlocks{files,ignores}`, i.e. this option will create a rule ignoring by `**\/*.md/**\/*.{extensions}` pattern.
@@ -134,7 +134,7 @@ export interface MarkdownEslintConfigOptions<
    */
   codeBlocksImpliedStrictMode?: boolean;
 
-  overridesCodeBlocks?: RulesRecordPartial;
+  overridesCodeBlocks?: UnRulesConfigPartial;
 
   /**
    * Enables Front Matter parsing in both `commonmark` and `gfm` dialects.

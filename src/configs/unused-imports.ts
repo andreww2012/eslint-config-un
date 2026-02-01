@@ -1,26 +1,26 @@
 import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
+  type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type RuleNamesForPlugin,
-  type RulesRecordPartial,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
 interface NoUnusedVarsSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<
+> extends UnFlatConfigEntryBase<
   ExtraPlugins,
-  Pick<RulesRecordPartial<'unused-imports'>, 'unused-imports/no-unused-vars'>
+  Pick<UnRulesConfigPartial<'unused-imports'>, 'unused-imports/no-unused-vars'>
 > {
   ruleOptions?: GetRuleOptions<'unused-imports', 'no-unused-vars'>;
 }
 
 export interface UnusedImportsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'unused-imports'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'unused-imports'> {
   /**
    * Disable [`no-unused-vars`](https://eslint.org/docs/latest/rules/no-unused-vars), [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) and [`sonarjs/no-unused-vars`](https://sonarsource.github.io/rspec/#/rspec/S1481/javascript) rules in favor of `unused-imports/no-unused-vars` rule.
    * @default false
@@ -45,7 +45,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-unused-imports', ERROR) /** @since 0.0.2 */
     .enableConfigTesterForPlugin('unused-imports', {
       rulesToSkipInConfig: (ruleName) =>
-        ruleName === ('no-unused-vars' satisfies RuleNamesForPlugin<'unused-imports'>),
+        ruleName === ('no-unused-vars' satisfies GetRuleNamesInPlugin<'unused-imports'>),
     })
     .addOverrides();
 
@@ -69,7 +69,7 @@ export default ((context, optionsRaw) => {
     .disableAnyRule('ts', 'no-unused-vars')
     .enableConfigTesterForPlugin('unused-imports', {
       rulesToSkipInConfig: (ruleName) =>
-        ruleName === ('no-unused-imports' satisfies RuleNamesForPlugin<'unused-imports'>),
+        ruleName === ('no-unused-imports' satisfies GetRuleNamesInPlugin<'unused-imports'>),
     })
     .addOverrides();
 

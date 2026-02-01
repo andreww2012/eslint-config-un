@@ -2,13 +2,13 @@ import {ERROR, GLOB_JS_TS_X, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface QwikEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'qwik'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'qwik'> {
   routesDir?: string;
 }
 

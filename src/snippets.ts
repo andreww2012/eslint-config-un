@@ -1,5 +1,5 @@
 // cspell:ignore toolbelt radashi rambda mobily luxon
-import type {GetRuleOptions} from './eslint';
+import type {GetRuleOptions} from './eslint/eslint-types';
 import type {Prettify, RequireExactlyOne} from './types';
 import {getKeysOfTruthyValues} from './utils';
 

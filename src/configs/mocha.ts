@@ -9,13 +9,13 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'mocha'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'mocha'>,
     NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha) plugin

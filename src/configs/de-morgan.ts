@@ -2,13 +2,13 @@ import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface DeMorganEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'de-morgan'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'de-morgan'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies DeMorganEslintConfigOptions);

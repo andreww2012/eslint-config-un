@@ -3,13 +3,13 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface NxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'nx'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'nx'> {
   /**
    * @default false
    */

@@ -2,13 +2,13 @@ import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface BarrelFilesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'barrel-files'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'barrel-files'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(

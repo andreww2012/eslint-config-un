@@ -4,17 +4,17 @@ import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {PickKeysNotStartingWith, PickKeysStartingWith} from '../types';
 import {
   type ExtraPluginsType,
-  type RulesRecordPartial,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
 export interface AstroEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<
+> extends UnFlatConfigEntryBase<
   ExtraPlugins,
-  PickKeysNotStartingWith<RulesRecordPartial<'astro'>, 'astro/jsx-a11y'>
+  PickKeysNotStartingWith<UnRulesConfigPartial<'astro'>, 'astro/jsx-a11y'>
 > {
   /**
    * A11Y (accessibility) specific rules for Astro components.
@@ -26,9 +26,9 @@ export interface AstroEslintConfigOptions<
    */
   configJsxA11y?:
     | boolean
-    | UnConfigOptions<
+    | UnFlatConfigEntryBase<
         ExtraPlugins,
-        PickKeysStartingWith<RulesRecordPartial<'astro'>, 'astro/jsx-a11y'>
+        PickKeysStartingWith<UnRulesConfigPartial<'astro'>, 'astro/jsx-a11y'>
       >;
 }
 

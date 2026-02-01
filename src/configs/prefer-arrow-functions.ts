@@ -2,13 +2,13 @@ import {WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface PreferArrowFunctionsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'prefer-arrow-functions'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'prefer-arrow-functions'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(

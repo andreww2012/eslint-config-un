@@ -1,10 +1,11 @@
 import {ERROR, OFF} from '../constants';
-import type {FlatConfigEntryFilesOrIgnores, GetRuleOptions} from '../eslint';
+import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import {
   type ExtraPluginsType,
+  type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -21,13 +22,13 @@ type FolderNamingConventionOptions = GetRuleOptions<
 
 export interface CheckFileEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'check-file'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'check-file'> {
   /**
    * Allows to which files should `eslint-processor-check-file` processor be applied.
    * This might be necessary if some files are not processed by other processors
    * but still require linting by this config's plugin.
    */
-  configEnableCheckFileProcessor?: FlatConfigEntryFilesOrIgnores;
+  configEnableCheckFileProcessor?: UnFlatConfigEntryFilesAndIgnores;
 
   /**
    * Enforce file naming conventions.

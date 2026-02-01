@@ -9,7 +9,7 @@ import {
   OFF,
   WARNING,
 } from '../constants';
-import {type RulesRecord, getRuleUnSeverityAndOptionsFromEntry} from '../eslint';
+import type {EslintTypedRulesConfig} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Nullable, ObjectValues, OmitStrict} from '../types';
 import {type MaybeFn, isIn, maybeCall, omit, unique} from '../utils';
@@ -18,12 +18,13 @@ import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
+  type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type RuleNamesForPlugin,
-  type RulesRecordPartial,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
+  getRuleUnSeverityAndOptionsFromEntry,
 } from './index';
 
 // TODO generate automatically?
@@ -89,12 +90,12 @@ const TS_PLUGIN_TYPE_AWARE_RULES = [
   'switch-exhaustiveness-check',
   'unbound-method',
   'use-unknown-in-catch-callback-variable',
-] satisfies RuleNamesForPlugin<'ts'>[];
+] satisfies GetRuleNamesInPlugin<'ts'>[];
 
 const TS_PLUGIN_TYPE_AWARE_RULES_SET = new Set<string>(TS_PLUGIN_TYPE_AWARE_RULES);
 
 type TypeAwareRulesWithPrefixes = Pick<
-  RulesRecordPartial<'ts'>,
+  UnRulesConfigPartial<'ts'>,
   `ts/${(typeof TS_PLUGIN_TYPE_AWARE_RULES)[number]}`
 >;
 
@@ -391,7 +392,7 @@ const TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS = {
 
 interface SortTsconfigKeysSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins> {
+> extends UnFlatConfigEntryBase<ExtraPlugins> {
   /**
    * @default ['extends', 'references', 'files', 'include', 'exclude', 'compilerOptions', 'vueCompilerOptions', 'angularCompilerOptions', 'ts-node']
    */
@@ -440,9 +441,9 @@ interface SortTsconfigKeysSubConfigOptions<
 
 export interface TsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<
+> extends UnFlatConfigEntryBase<
   ExtraPlugins,
-  OmitStrict<RulesRecordPartial<'ts'>, keyof TypeAwareRulesWithPrefixes>
+  OmitStrict<UnRulesConfigPartial<'ts'>, keyof TypeAwareRulesWithPrefixes>
 > {
   /**
    * Applies rules requiring type information on the specified `files`.
@@ -450,7 +451,7 @@ export interface TsEslintConfigOptions<
    * By default uses `ignores` from the parent config.
    * @default true
    */
-  configTypeAware?: boolean | UnConfigOptions<ExtraPlugins, TypeAwareRulesWithPrefixes>;
+  configTypeAware?: boolean | UnFlatConfigEntryBase<ExtraPlugins, TypeAwareRulesWithPrefixes>;
 
   /**
    * Disallows any type assertions via [`eslint-plugin-no-type-assertion`](https://npmjs.com/eslint-plugin-no-type-assertion) plugin.
@@ -458,7 +459,7 @@ export interface TsEslintConfigOptions<
    * If you'd like to disallow only unsafe type assertions, enable [`no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule instead.
    * @default false
    */
-  configNoTypeAssertion?: boolean | UnConfigOptions<ExtraPlugins, 'no-type-assertion'>;
+  configNoTypeAssertion?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'no-type-assertion'>;
 
   /**
    * Sorts the keys of `tsconfig.json` files.
@@ -588,7 +589,7 @@ export default ((
         },
       ],
     ] satisfies [
-      config: Nullable<UnConfigOptions> | boolean,
+      config: Nullable<UnFlatConfigEntryBase> | boolean,
       options?: {additionalCondition?: boolean; doNotTreatFilesAsTypeAware?: boolean},
     ][]
   ).forEach(([config, {additionalCondition, doNotTreatFilesAsTypeAware} = {}]) => {
@@ -1293,7 +1294,7 @@ export default ((
 }) satisfies UnConfigFn<
   'ts',
   {
-    vanillaFinalFlatConfigRules: Partial<RulesRecord>;
+    vanillaFinalFlatConfigRules: Partial<EslintTypedRulesConfig>;
     astroResolvedOptions: AstroEslintConfigOptions | null;
     vueResolvedOptions: VueEslintConfigOptions | null;
     svelteResolvedOptions: SvelteEslintConfigOptions | null;

@@ -1,10 +1,12 @@
 // cspell:ignore canparse
 import {ERROR, GLOB_MD_X_CODE_BLOCKS, GLOB_PACKAGE_JSON, GLOB_TS_X} from '../constants';
-import type {GetRuleOptions, RuleNamesForPlugin, RulesRecordPartial} from '../eslint';
 import {
   type ExtraPluginsType,
+  type GetRuleNamesInPlugin,
+  type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
@@ -20,12 +22,12 @@ const E18E_RULES_MODERNIZATION = [
   'prefer-object-has-own',
   'prefer-spread-syntax',
   'prefer-url-canparse',
-] as const satisfies RuleNamesForPlugin<'e18e'>[];
+] as const satisfies GetRuleNamesInPlugin<'e18e'>[];
 const E18E_RULES_MODERNIZATION_SET = new Set<string>(E18E_RULES_MODERNIZATION);
 
 const E18E_RULES_MODULE_REPLACEMENTS = [
   'ban-dependencies',
-] as const satisfies RuleNamesForPlugin<'e18e'>[];
+] as const satisfies GetRuleNamesInPlugin<'e18e'>[];
 const E18E_RULES_MODULE_REPLACEMENTS_SET = new Set<string>(E18E_RULES_MODULE_REPLACEMENTS);
 
 const E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS = [
@@ -33,21 +35,21 @@ const E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS = [
   'prefer-date-now',
   'prefer-regex-test',
   'prefer-timer-args',
-] as const satisfies RuleNamesForPlugin<'e18e'>[];
+] as const satisfies GetRuleNamesInPlugin<'e18e'>[];
 const E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS_SET = new Set<string>(
   E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS,
 );
 const E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS = [
   'no-indexof-equality',
   'prefer-regex-test',
-] as const satisfies RuleNamesForPlugin<'e18e'>[];
+] as const satisfies GetRuleNamesInPlugin<'e18e'>[];
 const E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS_SET = new Set<string>(
   E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS,
 );
 
 export interface E18eEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'e18e'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'e18e'> {
   /**
    * "New syntax and APIs which improve code readability and performance"
    * \- [plugin docs](https://github.com/e18e/eslint-plugin#overview)
@@ -57,9 +59,9 @@ export interface E18eEslintConfigOptions<
    */
   configModernization?:
     | boolean
-    | UnConfigOptions<
+    | UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<RulesRecordPartial<'e18e'>, `e18e/${(typeof E18E_RULES_MODERNIZATION)[number]}`>
+        Pick<UnRulesConfigPartial<'e18e'>, `e18e/${(typeof E18E_RULES_MODERNIZATION)[number]}`>
       >;
 
   /**
@@ -71,9 +73,12 @@ export interface E18eEslintConfigOptions<
    */
   configModuleReplacements?:
     | boolean
-    | (UnConfigOptions<
+    | (UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<RulesRecordPartial<'e18e'>, `e18e/${(typeof E18E_RULES_MODULE_REPLACEMENTS)[number]}`>
+        Pick<
+          UnRulesConfigPartial<'e18e'>,
+          `e18e/${(typeof E18E_RULES_MODULE_REPLACEMENTS)[number]}`
+        >
       > & {
         /**
          * Options of [the only rule, `ban-dependencies`](https://github.com/es-tooling/eslint-plugin-depend/blob/HEAD/docs/rules/ban-dependencies.md).
@@ -92,10 +97,10 @@ export interface E18eEslintConfigOptions<
    */
   configPerformanceImprovements?:
     | boolean
-    | (UnConfigOptions<
+    | (UnFlatConfigEntryBase<
         ExtraPlugins,
         Pick<
-          RulesRecordPartial<'e18e'>,
+          UnRulesConfigPartial<'e18e'>,
           `e18e/${(typeof E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS)[number]}`
         >
       > & {
@@ -108,10 +113,10 @@ export interface E18eEslintConfigOptions<
          */
         configTypescript?:
           | boolean
-          | UnConfigOptions<
+          | UnFlatConfigEntryBase<
               ExtraPlugins,
               Pick<
-                RulesRecordPartial<'e18e'>,
+                UnRulesConfigPartial<'e18e'>,
                 `e18e/${(typeof E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS)[number]}`
               >
             >;

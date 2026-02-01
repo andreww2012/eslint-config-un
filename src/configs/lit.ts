@@ -5,17 +5,17 @@ import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'lit-a11y'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'lit-a11y'>,
     OmitStrict<
       JsxA11yEslintConfigOptions,
       | 'settings'
-      | keyof UnConfigOptions
+      | keyof UnFlatConfigEntryBase
       | 'ambiguousWordsForAnchorText'
       | 'customComponents'
       | 'labelAttributes'
@@ -52,7 +52,7 @@ interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
 
 export interface LitEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'lit'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'lit'> {
   /**
    * [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

@@ -6,7 +6,7 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -68,7 +68,7 @@ const defaultHoverOutHandlersRequiringOnBlur: Record<`on${string}`, true> = {
 
 export interface JsxA11yEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'jsx-a11y'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'jsx-a11y'> {
   /**
    * [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -293,7 +293,7 @@ export default ((
   optionsRawFromParameters,
   customConfig?: {
     prefix: 'astro' | 'lit';
-    options: JsxA11yEslintConfigOptions & UnConfigOptions;
+    options: JsxA11yEslintConfigOptions & UnFlatConfigEntryBase;
   },
 ) => {
   const optionsRaw =
@@ -657,7 +657,7 @@ export default ((
   'jsxA11y',
   | {
       prefix: 'astro' | 'lit';
-      options: JsxA11yEslintConfigOptions & UnConfigOptions;
+      options: JsxA11yEslintConfigOptions & UnFlatConfigEntryBase;
     }
   | undefined
 >;

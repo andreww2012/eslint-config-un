@@ -2,13 +2,13 @@ import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface SqlEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'sql'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'sql'> {
   /**
    * [`eslint-plugin-sql`](https://npmjs.com/eslint-plugin-sql) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

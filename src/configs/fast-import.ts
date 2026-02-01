@@ -4,7 +4,7 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -12,7 +12,7 @@ export type FastImportPluginSettings = Parameters<typeof fastImportPluginConfigG
 
 export interface FastImportEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'fast-import'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'fast-import'> {
   /**
    * [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

@@ -3,13 +3,13 @@ import {ERROR, GLOB_JS_TS_X, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface NextJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, '@next/next'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, '@next/next'> {
   /**
    * [`@next/eslint-plugin-next`](https://npmjs.com/@next/eslint-plugin-next) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

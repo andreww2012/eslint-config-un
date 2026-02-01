@@ -4,7 +4,7 @@ import type {OmitStrict} from '../types';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -15,7 +15,7 @@ interface SupportedFormatters {
 
 export interface FormatEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'format'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'format'> {
   /**
    * Choose a formatter from `prettier` and `dprint`. Use an array notation
    * to pass formatter options.

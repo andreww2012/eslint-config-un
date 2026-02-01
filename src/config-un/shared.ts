@@ -2,22 +2,26 @@ import type {ConsolaInstance} from 'consola';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {Debugger} from 'obug';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
-import type {UnConfigOptions, UnConfigs} from '../configs';
+import type {UnConfigs} from '../configs';
 import type {FastImportPluginSettings} from '../configs/fast-import';
 import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../configs/shared';
-import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
-import {
-  type AllEslintFixableRuleNames,
-  type AllEslintRuleNames,
-  ConfigEntryBuilder,
-  type EslintPlugin,
-  type EslintSeverity,
-  type ExtraPluginsRules,
-  type FlatConfigEntry,
-  type FlatConfigEntryFilesOrIgnores,
-  type RulesRecord,
-  type UnFlagConfigEntry,
-} from '../eslint';
+import {DISABLE_AUTOFIX_WITH_SLASH, OFF, type PACKAGES_TO_GET_INFO_FOR} from '../constants';
+import type {
+  EslintFlatConfigEntry,
+  EslintPlugin,
+  EslintRuleEntry,
+  EslintSeverity,
+  EslintTypedRulesConfig,
+  UnAllRuleNames,
+  UnExtraPluginsRules,
+  UnExtraPluginsRulesConfig,
+  UnFixableRuleNames,
+  UnFlatConfigEntryFilesAndIgnores,
+  UnFlatConfigEntryOverridesEntry,
+  UnFlatConfigEntryOverridesType,
+  UnRulesConfig,
+} from '../eslint/eslint-types';
+import {eslintToUnRuleSeverity, getRuleNameAndPluginPrefixByFullName} from '../eslint/eslint-utils';
 import type {
   LoadablePackagePrefix,
   LoadablePluginPrefix,
@@ -26,15 +30,24 @@ import type {
   PluginPrefix,
   pluginsLoaders,
 } from '../loaders';
-import type {MaybePromise, OmitIndexSignature, OmitStrict, Prettify} from '../types';
-import type {MaybeArray, MaybeFn, fetchPackageInfo} from '../utils';
+import type {MaybePromise, OmitStrict, Prettify, SetRequired} from '../types';
+import {type MaybeArray, type MaybeFn, type fetchPackageInfo, maybeCall} from '../utils';
+import type {createConfigBuilder} from './config';
+import type {ConfigEntryBuilder} from './config-entry-builder';
 import type {ImportPluginReplaceableRules} from './fast-import';
 
 export type ExtraPluginsType = Record<string, MaybeFn<MaybePromise<EslintPlugin>>>;
 
+type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = OmitStrict<
+  EslintFlatConfigEntry,
+  'rules'
+> & {
+  rules?: UnFlatConfigEntryOverridesType<UnRulesConfig> & UnExtraPluginsRulesConfig<ExtraPlugins>;
+};
+
 type ValueOrEslintConfigWithValue<T> =
   | T
-  | MaybeArray<Prettify<FlatConfigEntryFilesOrIgnores & {value?: T}>>;
+  | MaybeArray<Prettify<UnFlatConfigEntryFilesAndIgnores & {value?: T}>>;
 
 // NOTE: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs
 export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
@@ -75,7 +88,7 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    * **Global** ignore patterns. By default will be merged with our ignore patterns, unless the object notation is used and `override` option is set to `true`
    */
   ignores?:
-    | FlatConfigEntry['ignores']
+    | EslintFlatConfigEntry['ignores']
     | {
         files: string[];
         override?: boolean;
@@ -240,7 +253,7 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
     | boolean
     | {
         plugins?: Partial<Record<PluginPrefix, boolean>>;
-        rules?: Partial<Record<AllEslintFixableRuleNames, boolean>>;
+        rules?: Partial<Record<UnFixableRuleNames, boolean>>;
       };
 
   /**
@@ -261,7 +274,7 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
     additionalDisabledRules?: Partial<
       Record<
         Exclude<
-          ExtraPluginsRules<ExtraPlugins> | AllEslintRuleNames,
+          UnExtraPluginsRules<ExtraPlugins> | UnAllRuleNames,
           RulesDisabledInEmbeddedCodeBlocksByDefault
         >,
         boolean
@@ -334,34 +347,6 @@ export interface EslintConfigUnInternalOptions {
   testMode?: boolean;
 }
 
-export function createConfigBuilder<
-  ExtraPlugins extends ExtraPluginsType,
-  P extends PluginPrefix | null,
->(
-  this: UnConfigContext<ExtraPlugins>,
-  options: NoInfer<
-    UnConfigOptions<ExtraPlugins, P extends null ? OmitIndexSignature<RulesRecord> : P> | boolean
-  >,
-  rulesPrefix: P,
-  disabledIfEmptyFiles = true,
-) {
-  const optionsResolved = typeof options === 'object' ? options : {};
-  if (
-    !options ||
-    (Array.isArray(optionsResolved.files) &&
-      optionsResolved.files.length === 0 &&
-      disabledIfEmptyFiles)
-  ) {
-    return null;
-  }
-  return new ConfigEntryBuilder<ExtraPlugins, P>(
-    rulesPrefix,
-    // eslint-disable-next-line ts/no-unnecessary-condition
-    options && typeof options === 'object' ? options : {},
-    this,
-  );
-}
-
 export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPluginsType> {
   rootOptions: EslintConfigUnOptions<ExtraPlugins>;
   internalOptions: EslintConfigUnInternalOptions;
@@ -385,14 +370,14 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   /**
    * NOTE: mutable
    */
-  usedParsers: Map<ParserPrefix, FlatConfigEntry[]>;
+  usedParsers: Map<ParserPrefix, EslintFlatConfigEntry[]>;
 
   /**
    * NOTE: mutable
    */
   usedPackages: Map<
     LoadablePackagePrefix,
-    {config: FlatConfigEntry; path: string; info: PackageToLoadInfo}[]
+    {config: EslintFlatConfigEntry; path: string; info: PackageToLoadInfo}[]
   >;
 
   /**
@@ -436,3 +421,112 @@ export type UnConfigFn<
       optionsResolved: Record<string, unknown>;
     } & ExtraReturnedData)
 >;
+
+export const processUnOrFlatConfig = (
+  context: UnConfigContext,
+  config: EslintFlatConfigEntry | UnFlagConfigEntry,
+  overrides: Record<string, UnFlatConfigEntryOverridesEntry | undefined> | undefined,
+  existingRules?: Partial<EslintTypedRulesConfig>,
+) => {
+  const extraConfigs: SetRequired<EslintFlatConfigEntry, 'name'>[] = [];
+  const removedRules: string[] = [];
+
+  if (config.language) {
+    context.usedPlugins.add(
+      getRuleNameAndPluginPrefixByFullName(context, config.language).pluginPrefixCanonical,
+    );
+  }
+
+  const rules: Record<string, EslintRuleEntry> = Object.fromEntries(
+    Object.entries(overrides || {}).flatMap(([ruleNameRaw, ruleOptions]) => {
+      if (ruleOptions == null) {
+        return [];
+      }
+
+      const {
+        pluginPrefixCanonical,
+        ruleNameUnprefixed,
+        fullRuleNameWithResolvedPrefix: ruleNameInitial,
+      } = getRuleNameAndPluginPrefixByFullName(context, ruleNameRaw);
+
+      let ruleName = ruleNameInitial;
+
+      const existingRuleRecord = existingRules?.[ruleName];
+
+      const rawSeverityInitial = Array.isArray(existingRuleRecord)
+        ? existingRuleRecord[0]
+        : existingRuleRecord;
+      const severityInitial = eslintToUnRuleSeverity(rawSeverityInitial);
+
+      const options = Array.isArray(existingRuleRecord) ? existingRuleRecord.slice(1) : undefined;
+      const ruleEntryRaw = maybeCall(ruleOptions, severityInitial, options);
+      const isRuleEntryRawObject =
+        ruleEntryRaw &&
+        typeof ruleEntryRaw === 'object' &&
+        'severity' in ruleEntryRaw; /* `!Array.isArray(...)` doesn't work */
+
+      const result: [ruleName: string, EslintRuleEntry][] = [];
+      const ruleEntry: EslintRuleEntry = isRuleEntryRawObject
+        ? ruleEntryRaw.options == null
+          ? ruleEntryRaw.severity
+          : [ruleEntryRaw.severity, ...ruleEntryRaw.options]
+        : (ruleEntryRaw as EslintRuleEntry);
+      let disableAutofix = false;
+
+      if (isRuleEntryRawObject && ruleEntryRaw.disableAutofix != null) {
+        disableAutofix = ruleEntryRaw.disableAutofix;
+        const ruleNameWithDisableAutofixPrefix = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`;
+        if (disableAutofix) {
+          result.push([ruleName, OFF]);
+          ruleName = ruleNameWithDisableAutofixPrefix;
+        } else {
+          result.push([ruleNameWithDisableAutofixPrefix, OFF]);
+        }
+      }
+
+      result.push([ruleName, ruleEntry]);
+
+      if (
+        ruleEntry !== 0 &&
+        ruleEntry !== 'off' &&
+        !(Array.isArray(ruleEntry) && (ruleEntry[0] === 0 || ruleEntry[0] === 'off'))
+      ) {
+        context.usedPlugins.add(pluginPrefixCanonical);
+
+        if (disableAutofix) {
+          context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] = [
+            ...(context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] || []),
+            ruleNameUnprefixed,
+          ];
+        }
+      }
+
+      if (
+        isRuleEntryRawObject &&
+        (ruleEntryRaw.files?.length || ruleEntryRaw.ignores?.length) &&
+        config.files?.length !== 0
+      ) {
+        extraConfigs.push({
+          name: `${config.name || ''}/@rule/${ruleNameInitial}`,
+          ...(ruleEntryRaw.files && {
+            files: config.files ? [config.files.flat(), ruleEntryRaw.files] : ruleEntryRaw.files,
+          }),
+          ...(ruleEntryRaw.ignores?.length && {
+            ignores: [...(config.ignores || []), ...ruleEntryRaw.ignores],
+          }),
+          rules: Object.fromEntries(result),
+        });
+        removedRules.push(...result.map(([ruleNameToRemove]) => ruleNameToRemove));
+        return [];
+      }
+
+      return result;
+    }),
+  );
+
+  return {
+    rules,
+    extraConfigs,
+    removedRules,
+  };
+};

@@ -6,7 +6,8 @@ import {capitalize} from 'es-toolkit';
 import {flatConfigsToRulesDTS, pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
 import {eslintConfigInternal} from '../src/config-un/config';
-import {DISABLE_AUTOFIX, eslintPluginVanillaRules} from '../src/eslint';
+import {DISABLE_AUTOFIX} from '../src/constants';
+import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {addMissingRuleOptionsSchemas} from './src/set-missing-rule-options-schemas';
 

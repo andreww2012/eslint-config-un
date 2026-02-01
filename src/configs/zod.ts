@@ -5,7 +5,7 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -21,7 +21,7 @@ const ALL_ZOD_OBJECT_SCHEMA_TYPES = allUnionMembers<ZodObjectSchemaType>()([
 
 export interface ZodEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'zod'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'zod'> {
   /**
    * Specify which object schema types will be allowed.
    * - If object is used, it will be merged with the default value.

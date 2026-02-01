@@ -3,13 +3,13 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface CspellEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, '@cspell'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, '@cspell'> {
   /**
    * The single rule (`spellchecker`) options.
    */

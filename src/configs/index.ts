@@ -102,12 +102,16 @@ import type {YamlEslintConfigOptions} from './yaml';
 import type {YouDontNeedLodashUnderscoreEslintConfigOptions} from './you-dont-need-lodash-underscore';
 import type {ZodEslintConfigOptions} from './zod';
 
+export {eslintToUnRuleSeverity, getRuleUnSeverityAndOptionsFromEntry} from '../eslint/eslint-utils';
 export type {
+  UnAllRuleNames,
   GetRuleOptions,
-  RuleNamesForPlugin,
-  RulesRecordPartial,
-  UnConfigOptions,
-} from '../eslint';
+  GetRuleNamesInPlugin,
+  UnRuleOptionsByPlugin,
+  UnRulesConfigPartial,
+  UnFlatConfigEntryBase,
+} from '../eslint/eslint-types';
+export type {FlatConfigEntryForBuilder} from '../config-un/config-entry-builder';
 export {assignDefaults} from '../utils';
 export type {ExtraPluginsType, UnConfigFn} from '../config-un/shared';
 

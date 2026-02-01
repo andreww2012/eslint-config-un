@@ -1,16 +1,16 @@
 import {ERROR, GLOB_HTML, GLOB_YML_YAML, OFF, WARNING} from '../constants';
-import type {BuiltinEslintRules} from '../eslint';
+import type {BuiltinEslintRules} from '../eslint/eslint-types';
 import {fetchPackageInfo, getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface JsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, BuiltinEslintRules> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, BuiltinEslintRules> {
   /**
    * Will be merged with the default value
    * @default {warn: true, error: true}

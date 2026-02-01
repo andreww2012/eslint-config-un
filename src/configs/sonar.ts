@@ -3,13 +3,13 @@ import {doesPackageExist} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface SonarEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'sonarjs'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'sonarjs'> {
   /**
    * Enables rules that are specific to [aws-cdk-lib](https://npmjs.com/aws-cdk-lib)
    * @default true <=> `aws-cdk-lib` package is installed

@@ -17,13 +17,13 @@ import {doesPackageExist, getKeysOfTruthyValues, pickBy} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface GraphqlEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'graphql'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'graphql'> {
   /**
    * Files for which GraphQL processor will be used.
    * "Under the hood, the processor extracts schema and operation files from these files
@@ -33,7 +33,7 @@ export interface GraphqlEslintConfigOptions<
    * By default, the processor will be used on **all** files.
    * @default true
    */
-  configJsProcessor?: boolean | Prettify<Pick<UnConfigOptions, 'files' | 'ignores'>>;
+  configJsProcessor?: boolean | Prettify<Pick<UnFlatConfigEntryBase, 'files' | 'ignores'>>;
 
   /**
    * Disable all the rules requiring GraphQL Operations specified in GraphQL config

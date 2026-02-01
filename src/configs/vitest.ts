@@ -1,6 +1,5 @@
 // cspell:ignore idential
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import type {FlatConfigEntryForBuilder} from '../eslint';
 import {pluginsLoaders} from '../loaders';
 import type {Prettify} from '../types';
 import {allUnionMembers} from '../utils';
@@ -14,11 +13,12 @@ import {
 } from './shared';
 import {
   type ExtraPluginsType,
+  type FlatConfigEntryForBuilder,
+  type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type RuleNamesForPlugin,
-  type RulesRecordPartial,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
@@ -33,7 +33,7 @@ const FUNCTIONS_WITH_EACH_OR_FOR = allUnionMembers<keyof ConsistentEachForRuleOp
 
 export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'vitest'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'vitest'>,
     // TODO options jsdocs contain jest-related information
     Pick<
       JestEslintConfigOptions<ExtraPlugins>,
@@ -68,10 +68,10 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    */
   configTypescript?:
     | boolean
-    | UnConfigOptions<
+    | UnFlatConfigEntryBase<
         ExtraPlugins,
         Pick<
-          RulesRecordPartial<'vitest'>,
+          UnRulesConfigPartial<'vitest'>,
           `vitest/${(typeof VITEST_TYPESCRIPT_RELATED_RULES)[number]}`
         >
       >;
@@ -118,7 +118,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
 
 const VITEST_TYPESCRIPT_RELATED_RULES = [
   'prefer-vi-mocked',
-] satisfies RuleNamesForPlugin<'vitest'>[];
+] satisfies GetRuleNamesInPlugin<'vitest'>[];
 
 const VITEST_TYPESCRIPT_RELATED_RULES_SET = new Set<string>(VITEST_TYPESCRIPT_RELATED_RULES);
 

@@ -1,16 +1,16 @@
 import {ERROR, OFF} from '../constants';
-import type {GetRuleOptions} from '../eslint';
 import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
+  type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface LockfileEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'lockfile'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'lockfile'> {
   /**
    * Ensure that all packages in lockfiles are downloaded from trusted registries.
    *

@@ -3,13 +3,13 @@ import {generateDefaultTestFiles} from './shared';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface NoOnlyTestsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'no-only-tests'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'no-only-tests'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies NoOnlyTestsEslintConfigOptions);

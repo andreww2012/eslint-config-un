@@ -6,16 +6,16 @@ import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
-  type RuleNamesForPlugin,
-  type RulesRecordPartial,
+  type GetRuleNamesInPlugin,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
 export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'svelte'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'svelte'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
    * [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte) plugin
@@ -76,7 +76,10 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    */
   configEnforceTypescriptInScriptSection?:
     | boolean
-    | UnConfigOptions<ExtraPlugins, Pick<RulesRecordPartial<'svelte'>, 'svelte/block-lang'>>;
+    | UnFlatConfigEntryBase<
+        ExtraPlugins,
+        Pick<UnRulesConfigPartial<'svelte'>, 'svelte/block-lang'>
+      >;
 
   /**
    * Used by some rules like [`valid-compile`](https://sveltejs.github.io/eslint-plugin-svelte/rules/valid-compile).
@@ -109,7 +112,7 @@ const DEFAULT_SVELTE_SCRIPT_FILES = ['**/*.svelte.{js,ts}' as const];
 const SVELTE_SYSTEM_RULES = new Set<string>([
   'comment-directive',
   'system',
-] satisfies RuleNamesForPlugin<'svelte'>[]);
+] satisfies GetRuleNamesInPlugin<'svelte'>[]);
 
 export default (async (context, optionsRaw) => {
   const eslintPluginSvelte = await pluginsLoaders.svelte(context).then(({module}) => module);

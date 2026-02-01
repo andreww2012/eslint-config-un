@@ -8,22 +8,23 @@ import {
 } from './shared';
 import {
   type ExtraPluginsType,
+  type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type RuleNamesForPlugin,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface EmberEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'ember'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'ember'> {
   /**
    * Rules specific to files with tests.
    */
   configTestFiles?:
     | boolean
-    | (UnConfigOptions<ExtraPlugins, 'ember'> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
+    | (UnFlatConfigEntryBase<ExtraPlugins, 'ember'> &
+        NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
    * Affected rules:
@@ -57,7 +58,7 @@ const EMBER_TESTING_RELATED_RULES = new Set<string>([
   'no-test-this-render',
   'prefer-ember-test-helpers',
   'require-valid-css-selector-in-test-helpers',
-] satisfies RuleNamesForPlugin<'ember'>[]);
+] satisfies GetRuleNamesInPlugin<'ember'>[]);
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {

@@ -1,5 +1,5 @@
 import {compare} from 'semver';
-import type {EslintPlugin} from '../../src/eslint';
+import type {EslintPlugin} from '../../src/eslint/eslint-types';
 import {interopDefault} from '../../src/utils';
 
 export const generateAngularPluginsWithOldRules = async () => {

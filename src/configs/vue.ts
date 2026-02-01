@@ -10,11 +10,7 @@ import {
   type RuleSeverity,
   WARNING,
 } from '../constants';
-import {
-  type RuleOptionsPerPlugin,
-  type RulesRecord,
-  getRuleUnSeverityAndOptionsFromEntry,
-} from '../eslint';
+import type {EslintTypedRulesConfig} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {OmitStrict} from '../types';
 import {
@@ -29,10 +25,12 @@ import {type ValidAndInvalidHtmlTags, noRestrictedHtmlElementsDefault} from './s
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type RulesRecordPartial,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRuleOptionsByPlugin,
+  type UnRulesConfigPartial,
   assignDefaults,
+  getRuleUnSeverityAndOptionsFromEntry,
 } from './index';
 
 type WellKnownSfcBlocks =
@@ -48,7 +46,7 @@ const DEFAULT_PINIA_STORE_NAME_SUFFIX = 'Store';
 
 interface EnforceTypescriptInScriptionSectionConfigOptions<
   ExtraPlugins extends ExtraPluginsType,
-> extends UnConfigOptions<ExtraPlugins, Pick<RulesRecordPartial<'vue'>, 'vue/block-lang'>> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, Pick<UnRulesConfigPartial<'vue'>, 'vue/block-lang'>> {
   /**
    * What `ts` rules will be applied to the specified `files`. If you want more control over which TypeScript rules are applied to which Vue files, use `ts` config options for that.
    * @default true
@@ -56,7 +54,7 @@ interface EnforceTypescriptInScriptionSectionConfigOptions<
   typescriptRules?: boolean | 'only-non-type-aware';
 }
 
-interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnConfigOptions<
+interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<
   ExtraPlugins,
   '@intlify/vue-i18n'
 > {
@@ -121,9 +119,9 @@ interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
 
 type NuxtPluginNuxtConfigRelatedRules = 'nuxt-config-keys-order';
 
-interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnConfigOptions<
+interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<
   ExtraPlugins,
-  OmitStrict<RulesRecordPartial<'nuxt'>, `nuxt/${NuxtPluginNuxtConfigRelatedRules}`>
+  OmitStrict<UnRulesConfigPartial<'nuxt'>, `nuxt/${NuxtPluginNuxtConfigRelatedRules}`>
 > {
   /**
    * Configures rules specific to Nuxt config file.
@@ -134,9 +132,9 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
    */
   configNuxtConfig?:
     | boolean
-    | UnConfigOptions<
+    | UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<RulesRecordPartial<'nuxt'>, `nuxt/${NuxtPluginNuxtConfigRelatedRules}`>
+        Pick<UnRulesConfigPartial<'nuxt'>, `nuxt/${NuxtPluginNuxtConfigRelatedRules}`>
       >;
 
   /**
@@ -152,10 +150,9 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
   v4DirectoryStructure?: boolean;
 }
 
-interface PiniaSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnConfigOptions<
-  ExtraPlugins,
-  'pinia'
-> {
+interface PiniaSubConfigOptions<
+  ExtraPlugins extends ExtraPluginsType,
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'pinia'> {
   /**
    * @default `Store`
    * @see https://github.com/lisilinhart/eslint-plugin-pinia/blob/HEAD/docs/rules/prefer-use-store-naming-convention.md
@@ -165,7 +162,7 @@ interface PiniaSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends U
 
 interface ScopedCssEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType,
-> extends UnConfigOptions<ExtraPlugins, 'vue-scoped-css'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'vue-scoped-css'> {
   /**
    * Will be merged with the default value. `true` does not restrict the style type.
    * @default {plain: true, scoped: true}
@@ -182,14 +179,14 @@ interface ScopedCssEslintConfigOptions<
 
 export interface VueEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'vue'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'vue'> {
   /**
    * Enables A11Y (accessibility) rules for Vue SFC templates
    *
    * By default, uses `files` and `ignores` from the parent config.
    * @default true
    */
-  configA11y?: boolean | UnConfigOptions<ExtraPlugins, 'vuejs-accessibility'>;
+  configA11y?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'vuejs-accessibility'>;
 
   /**
    * Enforces the presence of `lang="ts"` in `<script>` sections, see
@@ -333,7 +330,7 @@ const DEFAULT_VUE_FILES: string[] = [GLOB_VUE];
 
 const NUXT_CONFIG_FILES = new Set<string>(
   allUnionMembers<
-    keyof Pick<RuleOptionsPerPlugin['nuxt'], 'no-nuxt-config-test-key' | 'nuxt-config-keys-order'>
+    keyof Pick<UnRuleOptionsByPlugin['nuxt'], 'no-nuxt-config-test-key' | 'nuxt-config-keys-order'>
   >()(['no-nuxt-config-test-key', 'nuxt-config-keys-order']),
 );
 
@@ -1225,4 +1222,4 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     ],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'vue', {vanillaFinalFlatConfigRules: Partial<RulesRecord>}>;
+}) satisfies UnConfigFn<'vue', {vanillaFinalFlatConfigRules: Partial<EslintTypedRulesConfig>}>;

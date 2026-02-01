@@ -2,13 +2,13 @@ import {ERROR, GLOB_JSX_TSX, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface DocusaurusEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'docusaurus'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'docusaurus'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies DocusaurusEslintConfigOptions);

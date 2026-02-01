@@ -1,4 +1,4 @@
-import type {EslintPlugin} from '../eslint';
+import type {EslintPlugin} from '../eslint/eslint-types';
 import type {OmitStrict} from '../types';
 import {type MaybeArray, cloneDeep, interopDefault} from '../utils';
 import {type EslintParser, type EslintProcessor, genModuleLoader} from './shared';

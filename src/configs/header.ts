@@ -3,13 +3,13 @@ import type {MaybeArray} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface HeaderEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'header'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'header'> {
   /**
    * The single rule (`header`) options.
    */

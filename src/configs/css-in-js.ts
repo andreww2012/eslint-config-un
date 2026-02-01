@@ -3,13 +3,13 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface CssInJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'css-in-js'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'css-in-js'> {
   /**
    * [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

@@ -1,16 +1,17 @@
 import {ERROR, GLOB_JSON, GLOB_JS_TS_X, OFF} from '../constants';
-import {type EslintSeverity, eslintToUnRuleSeverity} from '../eslint';
+import type {EslintSeverity} from '../eslint/eslint-types';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
+  eslintToUnRuleSeverity,
 } from './index';
 
 export interface NoSecretsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'no-secrets'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'no-secrets'> {
   /**
    * 📁 Default `files`: <code>**&#47;*.json</code>
    *
@@ -19,7 +20,7 @@ export interface NoSecretsEslintConfigOptions<
    * ⚠️ Will be merged with the user provided `ignores`
    * @default true
    */
-  configJson?: boolean | UnConfigOptions<ExtraPlugins, 'no-secrets'>;
+  configJson?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'no-secrets'>;
 
   /**
    * Convenient way of configuring `no-secrets` rule for both JS/TS and JSON files.

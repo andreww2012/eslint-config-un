@@ -1,31 +1,31 @@
 import {ERROR, OFF} from '../constants';
-import type {RuleOptionsPerPlugin} from '../eslint';
 import type {Prettify} from '../types';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type RulesRecordPartial,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRuleOptionsByPlugin,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
 type RuleSubConfig<
   ExtraPlugins extends ExtraPluginsType,
-  T extends keyof RuleOptionsPerPlugin['perfectionist'],
+  T extends keyof UnRuleOptionsByPlugin['perfectionist'],
 > =
   | boolean
-  | (UnConfigOptions<
+  | (UnFlatConfigEntryBase<
       ExtraPlugins,
       // @ts-expect-error typescript is bad
-      Pick<RulesRecordPartial<'perfectionist'>, `perfectionist/${T}`>
+      Pick<UnRulesConfigPartial<'perfectionist'>, `perfectionist/${T}`>
     > & {
       options?: GetRuleOptions<'perfectionist', T>;
     });
 
 export interface PerfectionistEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'perfectionist'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'perfectionist'> {
   /**
    * [`eslint-plugin-perfectionist`](https://npmjs.com/eslint-plugin-perfectionist) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

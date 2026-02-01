@@ -1,14 +1,15 @@
 // cspell:ignore attributify blockquotes autolinks setext
-import type {AllEslintRuleNames, ExtraPluginsRules} from '../../eslint';
+import type {UnExtraPluginsRules} from '../../eslint/eslint-types';
 import {ALL_RULES_PER_PLUGIN} from '../../eslint-rules.gen';
 import type {PluginPrefix} from '../../loaders';
 import type {ObjectValues} from '../../types';
 import {isIn, objectEntriesUnsafe} from '../../utils';
 import {
   type ExtraPluginsType,
-  type RuleNamesForPlugin,
+  type GetRuleNamesInPlugin,
+  type UnAllRuleNames,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from '../index';
 
@@ -947,7 +948,7 @@ const ALL_STYLISTIC_RULES = {
     'schema-error-property-style': true,
   },
 } as const satisfies {
-  [Plugin in PluginPrefix]: Partial<Record<RuleNamesForPlugin<Plugin>, true>>;
+  [Plugin in PluginPrefix]: Partial<Record<GetRuleNamesInPlugin<Plugin>, true>>;
 };
 
 /* eslint-disable perfectionist/sort-objects */
@@ -958,7 +959,7 @@ type AllStylisticRules = ObjectValues<{
 
 export interface NoStylisticRulesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins> {
+> extends UnFlatConfigEntryBase<ExtraPlugins> {
   enableRules?: {
     /**
      * Specify which of the disabled by default stylistic rules will be enabled.
@@ -980,10 +981,7 @@ export interface NoStylisticRulesEslintConfigOptions<
    * Specify additional rules which should be considered stylistic.
    */
   additionalRules?: Partial<
-    Record<
-      Exclude<ExtraPluginsRules<ExtraPlugins> | AllEslintRuleNames, AllStylisticRules>,
-      boolean
-    >
+    Record<Exclude<UnExtraPluginsRules<ExtraPlugins> | UnAllRuleNames, AllStylisticRules>, boolean>
   >;
 }
 

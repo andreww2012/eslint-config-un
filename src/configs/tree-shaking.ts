@@ -1,15 +1,15 @@
 import {ERROR, GLOB_JS_TS_X} from '../constants';
-import type {GetRuleOptions} from '../eslint';
 import {
   type ExtraPluginsType,
+  type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface TreeShakingEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'tree-shaking'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'tree-shaking'> {
   /**
    * Options of [the only rule, `no-side-effects-in-initialization`](https://github.com/lukastaegert/eslint-plugin-tree-shaking#installation-and-setup).
    */

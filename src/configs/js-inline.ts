@@ -7,7 +7,7 @@ import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -30,7 +30,7 @@ const DEFAULT_XML_EXTENSIONS = ['.xhtml', '.xml'];
 
 export interface JsInlineEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'html'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'html'> {
   /**
    * [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

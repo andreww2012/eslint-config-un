@@ -3,10 +3,10 @@ import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
+  type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type RuleNamesForPlugin,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -53,7 +53,7 @@ const DEFAULT_COLLECTIONS_TO_SORT = {
 type IsRequireRule<RuleName extends string> = RuleName extends `require-${infer RequirableField}`
   ? RequirableField
   : never;
-type PackageJsonRequirableFields = IsRequireRule<RuleNamesForPlugin<'package-json'>>;
+type PackageJsonRequirableFields = IsRequireRule<GetRuleNamesInPlugin<'package-json'>>;
 
 interface RequireFieldsOption {
   /**
@@ -63,7 +63,7 @@ interface RequireFieldsOption {
 }
 
 export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
-  extends UnConfigOptions<ExtraPlugins, 'package-json'>, RequireFieldsOption {
+  extends UnFlatConfigEntryBase<ExtraPlugins, 'package-json'>, RequireFieldsOption {
   /**
    * [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

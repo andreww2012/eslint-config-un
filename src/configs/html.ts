@@ -6,13 +6,13 @@ import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, '@html-eslint'>,
+    UnFlatConfigEntryBase<ExtraPlugins, '@html-eslint'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
    * [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin) plugin

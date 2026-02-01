@@ -12,11 +12,11 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
-interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnConfigOptions<
+interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<
   ExtraPlugins,
   'testing-library'
 > {

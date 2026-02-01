@@ -3,7 +3,7 @@ import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -11,7 +11,7 @@ type NamesToBanListOrObjectWithFlagOrMessage = Record<string, boolean | string> 
 
 export interface RxjsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'rxjs'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'rxjs'> {
   /**
    * Affected rule:
    * - [`ban-observables`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-observables.md)

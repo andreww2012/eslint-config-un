@@ -2,13 +2,13 @@ import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface EslintCommentsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'eslint-comments'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'eslint-comments'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(

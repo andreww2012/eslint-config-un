@@ -8,13 +8,13 @@ import {
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'ava'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'ava'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * If `true`, all assertions will need to have an assertion message.

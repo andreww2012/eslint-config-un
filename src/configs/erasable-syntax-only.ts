@@ -2,7 +2,7 @@ import {ERROR, GLOB_TS_X, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -10,7 +10,7 @@ type CheckedSyntax = 'enums' | 'importAliases' | 'namespaces' | 'parameterProper
 
 export interface ErasableSyntaxOnlyEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'erasable-syntax-only'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'erasable-syntax-only'> {
   /**
    * By default, all syntaxes are disallowed. You can enable specific syntaxes by setting
    * their keys to `true` in this object.

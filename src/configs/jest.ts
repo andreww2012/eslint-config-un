@@ -1,7 +1,6 @@
 import type {Jest as JestMethods} from '@jest/environment';
 import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
-import type {FlatConfigEntryForBuilder, RuleOptionsPerPlugin} from '../eslint';
 import {pluginsLoaders} from '../loaders';
 import type {ObjectValues, Prettify} from '../types';
 import {allUnionMembers, doesPackageExist} from '../utils';
@@ -14,10 +13,12 @@ import {
 } from './shared';
 import {
   type ExtraPluginsType,
+  type FlatConfigEntryForBuilder,
   type GetRuleOptions,
-  type RulesRecordPartial,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
+  type UnRuleOptionsByPlugin,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
@@ -25,7 +26,7 @@ type AllJestMatchers = Prettify<keyof ReturnType<JestExpect> | keyof AsymmetricM
 
 interface JestExtendedSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'jest-extended'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'jest-extended'> {
   /**
    * Suggests using various `jest-extended` methods instead of some assertion forms.
    *
@@ -49,7 +50,7 @@ interface JestExtendedSubConfigOptions<
 
 export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'jest'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'jest'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-jest`](https://npmjs.com/eslint-plugin-jest) plugin
@@ -91,9 +92,9 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    */
   configTypescript?:
     | boolean
-    | UnConfigOptions<
+    | UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<RulesRecordPartial<'jest'>, `jest/${JestRulesForTypescriptFiles}`>
+        Pick<UnRulesConfigPartial<'jest'>, `jest/${JestRulesForTypescriptFiles}`>
       >;
 
   /**
@@ -181,7 +182,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
 }
 
 type JestRulesForTypescriptFiles = keyof Pick<
-  RuleOptionsPerPlugin['jest'],
+  UnRuleOptionsByPlugin['jest'],
   | 'no-error-equal'
   | 'no-unnecessary-assertion'
   | 'no-untyped-mock-factory'

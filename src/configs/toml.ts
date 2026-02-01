@@ -8,7 +8,7 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -16,7 +16,7 @@ const CONFIG_DEFAULT_IGNORES = ['**/Cargo.lock'] as const;
 
 export interface TomlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnConfigOptions<ExtraPlugins, 'toml'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'toml'>,
     IgnoresAdditionalOptions<typeof CONFIG_DEFAULT_IGNORES> {
   /** `files` specified in this config will be merged with the default of `['**\/*.toml']`. Set this to `true` to avoid that behavior */
   doNotMergeFilesWithDefault?: boolean;

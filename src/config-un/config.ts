@@ -12,15 +12,13 @@ import {
   GLOB_JS_TS_X_EXTENSION,
   PACKAGES_TO_GET_INFO_FOR,
 } from '../constants';
-import {
-  type AllEslintRuleNames,
-  ConfigEntryBuilder,
-  type FlatConfigEntry,
-  configIndexProperty,
-  genFlatConfigEntryName,
-  isUnFlatConfigEntry,
-  processUnOrFlatConfig,
-} from '../eslint';
+import type {
+  EslintFlatConfigEntry,
+  EslintTypedRulesConfig,
+  UnAllRuleNames,
+  UnFlatConfigEntryBase,
+} from '../eslint/eslint-types';
+import {genFlatConfigEntryName, isUnFlatConfigEntry} from '../eslint/eslint-utils';
 import {
   LOADABLE_PLUGIN_PREFIXES_LIST,
   PLUGIN_PREFIXES_LIST,
@@ -32,6 +30,7 @@ import type {
   IsAnyUnionMemberAssignableTo,
   IsOptional,
   IsUnknown,
+  OmitIndexSignature,
   OmitStrict,
   PartialDeep,
 } from '../types';
@@ -55,6 +54,7 @@ import {
   saveCacheToFs,
   saveCacheToMemory,
 } from './cache';
+import {ConfigEntryBuilder, configIndexProperty} from './config-entry-builder';
 import {getIsConfigEnabled as getIsConfigEnabledContextless} from './config-utils';
 import type {FastImportPluginSettings} from './fast-import';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
@@ -64,15 +64,47 @@ import {
   type ExtraPluginsType,
   type UnConfigContext,
   type UnConfigFn,
-  createConfigBuilder as createConfigBuilderWithContext,
+  processUnOrFlatConfig,
 } from './shared';
+
+export function createConfigBuilder<
+  ExtraPlugins extends ExtraPluginsType,
+  P extends PluginPrefix | null,
+>(
+  this: UnConfigContext<ExtraPlugins>,
+  options: NoInfer<
+    | UnFlatConfigEntryBase<
+        ExtraPlugins,
+        P extends null ? OmitIndexSignature<EslintTypedRulesConfig> : P
+      >
+    | boolean
+  >,
+  rulesPrefix: P,
+  disabledIfEmptyFiles = true,
+) {
+  const optionsResolved = typeof options === 'object' ? options : {};
+  if (
+    !options ||
+    (Array.isArray(optionsResolved.files) &&
+      optionsResolved.files.length === 0 &&
+      disabledIfEmptyFiles)
+  ) {
+    return null;
+  }
+  return new ConfigEntryBuilder<ExtraPlugins, P>(
+    rulesPrefix,
+    // eslint-disable-next-line ts/no-unnecessary-condition
+    options && typeof options === 'object' ? options : {},
+    this,
+  );
+}
 
 const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
   'curly',
   '@stylistic/quotes',
   'unicorn/template-indent',
   'vue/html-self-closing',
-] satisfies AllEslintRuleNames[]);
+] satisfies UnAllRuleNames[]);
 
 const RULES_TO_DISABLE_IN_OFFLINE_MODE = [
   'markdown-links/no-dead-urls',
@@ -83,14 +115,14 @@ const RULES_TO_DISABLE_IN_OFFLINE_MODE = [
   'node-dependencies/require-provenance-deps',
   'lockfile/binary-conflicts',
   'lockfile/integrity',
-] satisfies AllEslintRuleNames[];
+] satisfies UnAllRuleNames[];
 
 const PLUGINS_CONFIG_NAME = genFlatConfigEntryName('global-setup/plugins');
 
 export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPluginsType>(
   options: EslintConfigUnOptions<ExtraPlugins> = {},
   internalOptions: EslintConfigUnInternalOptions = {},
-): Promise<FlatConfigEntry[]> => {
+): Promise<EslintFlatConfigEntry[]> => {
   const logger = consola.withTag('eslint-config-un');
   logger.addReporter({
     log(logObj) {
@@ -143,7 +175,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     debug,
     isTestMode: internalOptions.testMode || Boolean(process.env['ESLINT_CONFIG_UN_TEST_MODE']),
     tests: [],
-    createConfigBuilder: createConfigBuilderWithContext,
+    createConfigBuilder,
   } satisfies PartialDeep<Pick<UnConfigContext, 'packagesInfo' | 'configsMeta'>> &
     OmitStrict<
       UnConfigContext,
@@ -479,7 +511,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
   debug(`Globally ignored files: ${JSON.stringify(globalIgnores)}`);
 
   type UnresolvedConfigType =
-    | MaybeArray<FlatConfigEntry | ConfigEntryBuilder<ExtraPlugins> | FalsyValue>
+    | MaybeArray<EslintFlatConfigEntry | ConfigEntryBuilder<ExtraPlugins> | FalsyValue>
     | {configs: (ConfigEntryBuilder<ExtraPlugins> | null)[]};
 
   /* eslint-disable ts/await-thenable */
@@ -684,7 +716,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
         {...extraConfig, name: configName},
         extraConfig.rules,
       );
-      const extraConfigFinal: FlatConfigEntry = {
+      const extraConfigFinal: EslintFlatConfigEntry = {
         ...omit(extraConfig, ['rules']),
         ...(extraConfig.rules && {rules: configResolveResult.rules}),
         name: configName,
@@ -711,7 +743,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
   ]) as Promise<UnresolvedConfigType[]>;
   /* eslint-enable ts/await-thenable */
 
-  const resolvedConfigs: FlatConfigEntry[] = (await unresolvedConfigs)
+  const resolvedConfigs: EslintFlatConfigEntry[] = (await unresolvedConfigs)
     .map((unConfigOrEntryBuilders) =>
       arraify(unConfigOrEntryBuilders).map((configOrBuilder) =>
         configOrBuilder instanceof ConfigEntryBuilder

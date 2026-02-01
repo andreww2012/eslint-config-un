@@ -4,7 +4,7 @@ import {maybeCall, objectKeysUnsafe} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -32,7 +32,7 @@ const DEFAULT_PLUGIN_SETTINGS = {
 
 export interface TailwindEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'tailwindcss'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'tailwindcss'> {
   /**
    * [`eslint-plugin-tailwindcss`](https://npmjs.com/eslint-plugin-tailwindcss) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

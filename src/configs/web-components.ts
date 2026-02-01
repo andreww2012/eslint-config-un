@@ -3,13 +3,13 @@ import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface WebComponentsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'wc'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'wc'> {
   /**
    * [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)

@@ -3,13 +3,13 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface TurboEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'turbo'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'turbo'> {
   /**
    * Affected rules:
    * - [`no-undeclared-env-vars`](https://github.com/vercel/turborepo/blob/HEAD/packages/eslint-plugin-turbo/docs/rules/no-undeclared-env-vars.md)

@@ -2,13 +2,13 @@ import {ERROR, GLOB_TS, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface NestJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'nestjs'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'nestjs'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(

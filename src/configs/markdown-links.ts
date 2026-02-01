@@ -4,7 +4,7 @@ import {
   type ExtraPluginsType,
   type GetRuleOptions,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
@@ -12,7 +12,7 @@ type IssueType = 'deadUrls' | 'missingFragments' | 'missingLocalPath' | 'selfDes
 
 export interface MarkdownLinksEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'markdown-links'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'markdown-links'> {
   /**
    * What types of issues the links are checked for. By default, all issues are enabled.
    * The value you provide here will be **deeply merged** with the default value.

@@ -3,13 +3,13 @@ import {isInCi, isInEditor} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
-  type UnConfigOptions,
+  type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
 
 export interface FileProgressEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnConfigOptions<ExtraPlugins, 'file-progress'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'file-progress'> {
   /**
    * [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
