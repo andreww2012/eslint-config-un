@@ -77,9 +77,6 @@ export default ((context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: [GLOB_CSS],
-          ignoresInternal: {
-            css: false,
-          },
           language: ['css', 'css'],
         },
       ],

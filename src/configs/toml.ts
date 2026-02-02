@@ -68,9 +68,6 @@ export default ((context, optionsRaw) => {
           includeDefaultFilesAndIgnores: true,
           filesDefault: TOML_DEFAULT_FILES,
           filesDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeFilesWithDefault,
-          ignoresInternal: {
-            toml: false,
-          },
           language: ['toml', 'toml'],
         },
       ],

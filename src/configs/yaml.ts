@@ -1,9 +1,5 @@
 import {ERROR, OFF} from '../constants';
-import {
-  type IgnoresAdditionalOptions,
-  YAML_DEFAULT_FILES,
-  generateIgnoresWithAdditional,
-} from './shared';
+import {type IgnoresAdditionalOptions, YAML_DEFAULT_FILES} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -12,16 +8,23 @@ import {
   assignDefaults,
 } from './index';
 
-const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml'] as const;
+const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml'];
 
 export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'yaml'>,
     IgnoresAdditionalOptions<typeof CONFIG_DEFAULT_IGNORES> {
   /**
-   * `files` specified in this config will be merged with the default of `['**\/*.y?(a)ml']`. Set this to `true` to avoid that behavior
+   * `files` specified in this config will be merged with the default of
+   * `['**\/*.y?(a)ml']`. Set this to `true` to avoid that behavior
    */
   doNotMergeFilesWithDefault?: boolean;
+
+  /**
+   * `ignores` specified in this config will be merged with the default of
+   * `['**\/yarn.lock', '**\/pnpm-lock.yaml']`. Set this to `true` to avoid that behavior
+   */
+  doNotMergeIgnoresWithDefault?: boolean;
 
   /**
    * Set to `false` to not enforce the extension.
@@ -69,14 +72,12 @@ export default ((context, optionsRaw) => {
           includeDefaultFilesAndIgnores: true,
           filesDefault: YAML_DEFAULT_FILES,
           filesDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeFilesWithDefault,
-          ignoresInternal: {
-            yaml: false,
-          },
+          ignoresDefault: CONFIG_DEFAULT_IGNORES,
+          ignoresDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeIgnoresWithDefault,
           language: ['yaml', 'yaml'],
         },
       ],
       {
-        ...generateIgnoresWithAdditional(optionsResolved)(CONFIG_DEFAULT_IGNORES),
         ...(parserOptions && {languageOptions: {parserOptions}}),
       },
     )
@@ -132,9 +133,6 @@ export default ((context, optionsRaw) => {
         [
           'yaml/pnpm-workspace.yaml',
           {
-            ignoresInternal: {
-              yaml: false,
-            },
             language: ['yaml', 'yaml'],
           },
         ],

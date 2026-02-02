@@ -74,6 +74,21 @@ const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
   yaml: [GLOB_YAML],
 } as const satisfies Record<string, [string, ...string[]]>;
 
+const PLUGIN_LANGUAGES_TO_NOT_IGNORED_FILES: {
+  [PluginKey in keyof typeof PLUGINS_PROVIDING_LANGUAGES]?: Partial<
+    Record<
+      (typeof PLUGINS_PROVIDING_LANGUAGES)[PluginKey][number],
+      keyof typeof FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS
+    >
+  >;
+} = {
+  css: {css: 'css'},
+  'markdown-preferences': {'extended-syntax': 'md'},
+  markdown: {gfm: 'md', commonmark: 'md'},
+  toml: {toml: 'toml'},
+  yaml: {yaml: 'yaml'},
+};
+
 type AddRuleInternalOptions = EmptyObject;
 
 const styleRuleNames = (ruleNames: string[]) => ruleNames.map(styleRuleName).join(', ');
@@ -216,7 +231,11 @@ export class ConfigEntryBuilder<
     ).flatMap(([fileType, globs]) =>
       internalOptions.ignoresInternal === false ||
       (internalOptions.ignoresInternal !== true &&
-        internalOptions.ignoresInternal?.[fileType] === false)
+        (internalOptions.ignoresInternal?.[fileType] === false ||
+          (internalOptions.language &&
+            PLUGIN_LANGUAGES_TO_NOT_IGNORED_FILES[internalOptions.language[0]]?.[
+              internalOptions.language[1]
+            ] === fileType)))
         ? []
         : globs,
     );

@@ -57,9 +57,6 @@ export default ((context, optionsRaw) => {
     'json-schema-validator/setup/yaml',
     {
       filesDefault: YAML_DEFAULT_FILES,
-      ignoresInternal: {
-        yaml: false,
-      },
       language: ['yaml', 'yaml'],
     },
   ]);
@@ -68,9 +65,6 @@ export default ((context, optionsRaw) => {
     'json-schema-validator/setup/toml',
     {
       filesDefault: TOML_DEFAULT_FILES,
-      ignoresInternal: {
-        toml: false,
-      },
       language: ['toml', 'toml'],
     },
   ]);

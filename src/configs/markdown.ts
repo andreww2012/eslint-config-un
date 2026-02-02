@@ -194,9 +194,6 @@ export default ((context, optionsRaw) => {
           'markdown/markdown',
           {
             includeDefaultFilesAndIgnores: true,
-            ignoresInternal: {
-              md: false,
-            },
             language: ['markdown', defaultDialect],
           },
         ],
@@ -263,9 +260,6 @@ export default ((context, optionsRaw) => {
             {
               filesDefault: markdownLanguageSettings.files,
               ignoresDefault: markdownLanguageSettings.ignores,
-              ignoresInternal: {
-                md: false,
-              },
               language: ['markdown', dialect],
             },
           ])
@@ -278,7 +272,12 @@ export default ((context, optionsRaw) => {
     configBuilder?.addConfig(
       [
         'markdown/setup/code-blocks-processor',
-        {filesDefault: DEFAULT_FILES, ignoresInternal: {md: false}},
+        {
+          filesDefault: DEFAULT_FILES,
+          ignoresInternal: {
+            md: false,
+          },
+        },
       ],
       {
         // TODO report
@@ -309,7 +308,10 @@ export default ((context, optionsRaw) => {
       ?.addConfig(
         [
           'markdown/code-blocks',
-          {filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS, ignoresInternal: false},
+          {
+            filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
+            ignoresInternal: false,
+          },
         ],
         // TODO way to ignore ````js some-property`? way to allow using `with`, which is not allowed in the strict mode?
         {

@@ -144,9 +144,6 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: ['pnpm-workspace.yaml'],
-        ignoresInternal: {
-          yaml: false,
-        },
         language: ['yaml', 'yaml'],
       },
     ])

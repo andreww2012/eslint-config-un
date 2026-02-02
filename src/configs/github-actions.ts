@@ -56,9 +56,6 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [`.github/workflows/*.${GLOB_YML_YAML_EXTENSION}`],
-        ignoresInternal: {
-          yaml: false,
-        },
         language: ['yaml', 'yaml'],
       },
     ])
