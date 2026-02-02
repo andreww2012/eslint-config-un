@@ -5,6 +5,7 @@ import {forbidImportingFromUtilityLibraries} from './src/snippets';
 const TEST_DIR_GLOB = ['test/**/*'];
 
 export default eslintConfig({
+  ignores: ['test/fixtures/**'],
   mode: 'lib',
   extraPlugins: {
     'local-rules': () => ({

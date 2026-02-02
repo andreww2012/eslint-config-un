@@ -49,6 +49,7 @@ export default {
     'knip',
     'tsdown',
     'commitlint',
+    'vitest',
     'formatjs',
     'messageformat',
     'obug',

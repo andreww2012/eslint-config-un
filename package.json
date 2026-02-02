@@ -68,7 +68,9 @@
     "build:code:test": "tsdown --out-dir temp/dist",
     "build": "nr typegen && nr build:code",
     "test:config": "tsx scripts/config-tester.ts",
-    "test:common": "nr typegen && nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
+    "t": "vitest",
+    "test:vitest": "nr t",
+    "test:common": "nr typegen && nr knip && nr spellcheck && nr test:config && nr test:vitest run && nr lint && nr build:code:test",
     "test": "nr deps:audit && nr test:common",
     "lint:public-types": "attw --pack . --profile esm-only",
     "change": "npx changeset add && nr spellcheck",
@@ -293,6 +295,7 @@
     "typescript": "5.9.3",
     "unstorage": "1.17.4",
     "validate-npm-package-name": "7.0.2",
+    "vitest": "4.0.18",
     "vue-eslint-parser": "10.2.0",
     "zod": "4.3.5",
     "zod-package-json": "2.1.0"
