@@ -236,7 +236,7 @@ export default (async (context, optionsRaw) => {
     .addRule('no-conditional-tests', ERROR) /** @since 0.0.16 */ // (warns in all)
     .addRule('no-disabled-tests', WARNING) /** @since 0.0.49 */ // 🟡(since 1.5.0)
     .addRule('no-duplicate-hooks', ERROR) /** @since 0.0.49 */ // (warns in all)
-    .addRule('no-focused-tests', ERROR) /** @since 0.0.13 */ // 🟢(since 1.5.0)
+    .addRule('no-focused-tests', ERROR, [{fixable: false}]) /** @since 0.0.13 */ // 🟢(since 1.5.0)
     .addRule('no-hooks', OFF) /** @since 0.0.35 */ // (warns in all)
     .addRule('no-identical-title', ERROR) /** @since 0.0.8 */ /** @aka no-idential-title */ // 🟢
     .addRule('no-import-node-test', ERROR) /** @since 0.3.14 */ // 🟢
