@@ -1,3 +1,4 @@
+// cspell:disable viem tronweb
 import {ERROR, OFF, WARNING} from '../constants';
 import {doesPackageExist} from '../utils';
 import {
@@ -141,6 +142,7 @@ export default (async (context, optionsRaw) => {
     .addRule('disabled-timeout', testsRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S6080] 🟢🧪 📦 `chai`
     // ⚠️ `regexp/no-dupe-characters-character-class`
     .addRule('duplicates-in-character-class', OFF) /** @since 1.0.4-alpha.0 */ // [S5869] 🟢💭🔤
+    .addRule('dynamically-constructed-templates', ERROR) /** @since 3.0.6 */ // [S7790] 🟢📦 `pug`, `ejs`
     .addRule('elseif-without-else', OFF) /** @since 0.9.1 */ // [S126]
     // ⚠️ `regexp/no-empty-group` (and also `sonarjs/no-empty-group`), `regexp/no-empty-alternative`, `regexp/no-trivially-nested-quantifier`
     .addRule('empty-string-repetition', OFF) /** @since 1.0.4-alpha.0 */ // [S5842] 🟢💭🔤
@@ -166,6 +168,7 @@ export default (async (context, optionsRaw) => {
     .addRule('future-reserved-words', ERROR) /** @since 1.0.4-alpha.0 */ // [S1527] 🟢
     // ⚠️ `require-yield`. Does not seem to report on empty yields like `yield;`
     .addRule('generator-without-yield', OFF) /** @since 1.0.4-alpha.0 */ // [S3531] 🟢
+    .addRule('hardcoded-secret-signatures', ERROR) /** @since 3.0.6 */ // [S6437] 🟢📦 `cookie-parser`, `node:crypto`, `jose`, `jsonwebtoken`, `node-jose`, `superagent`, `express-session`
     .addRule('hashing', ERROR) /** @since 1.0.4-alpha.0 */ // [S4790] 🟢 📦 `node:crypto`
     .addRule('hidden-files', ERROR) /** @since 1.0.4-alpha.0 */ // [S5691] 🟢 📦 `serve-static`
     // ⚠️ Handled by TypeScript
@@ -372,6 +375,7 @@ export default (async (context, optionsRaw) => {
     // ⚠️ Sometimes this technique is useful
     .addRule('redundant-type-aliases', OFF) /** @since 1.0.4-alpha.0 */ // [S6564] 🟢
     .addRule('regex-complexity', WARNING, [{threshold: 40}]) /** @since 1.0.4-alpha.0 */ // [S5843] 🟢💭🔤
+    .addRule('review-blockchain-mnemonic', ERROR) /** @since 3.0.6 */ // [S7639] 🟢📦 `ethers`, `viem`, `tronweb`
     .addRule('session-regeneration', ERROR) /** @since 1.0.4-alpha.0 */ // [S5876] 🟢 📦 `passport`
     .addRule('shorthand-property-grouping', OFF) /** @since 1.0.4-alpha.0 */ // [S3499]
     // ⚠️ `regexp/no-useless-character-class`

@@ -256,7 +256,7 @@ interface CacheDataInMemory {
 
 interface CacheDataStoredInMemory extends CacheDataInMemory, CacheMetadata {}
 
-// eslint-disable-next-line no-shadow-restricted-names
+// eslint-disable-next-line no-shadow-restricted-names, sonarjs/no-globals-shadowing
 declare const globalThis: typeof global & {
   eslintConfigUnResolvedConfig?: CacheDataStoredInMemory;
 };
