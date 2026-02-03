@@ -233,8 +233,6 @@ async function getDependencyRepoUrl(dependency: string) {
     if (repoUrlParsed.hostname !== 'github.com') {
       // https://github.com/ArnaudBarre/eslint-plugin-react-refresh/blob/1d436ffd5ebc6127528cadb30057503720d8c9b1/scripts/bundle.ts#L33
       if (repoUrlParsed.protocol === 'github:') {
-        // TODO report
-        // eslint-disable-next-line no-useless-assignment
         gitHubRepoPath = repoUrlParsed.pathname;
       } else {
         console.warn(`Not a GitHub repository specified as repository for ${dependency}`);
@@ -242,7 +240,10 @@ async function getDependencyRepoUrl(dependency: string) {
       }
     }
 
-    gitHubRepoPath = repoUrlParsed.pathname.slice(1) /* remove `/` at the beginning */;
+    // Might not always starts with `/`: https://npmx.dev/package-code/eslint-plugin-react-refresh/v/0.5.0/package.json#L8
+    if (repoUrlParsed.pathname.startsWith('/')) {
+      gitHubRepoPath = repoUrlParsed.pathname.slice(1);
+    }
   }
 
   if (!gitHubRepoPath) {
