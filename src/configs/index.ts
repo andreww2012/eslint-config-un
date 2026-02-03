@@ -363,7 +363,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
 
   /**
    * An ESLint plugin from the [e18e community](https://e18e.dev) focusing on applying
-   * the e18e community's best practices and advise to JavaScript/TypeScript codebases.
+   * the e18e community's best practices and advice to JavaScript/TypeScript codebases.
    *
    * 📁 Default `files`: ❌ none, sub configs are used instead
    *
@@ -595,7 +595,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   jest: JestEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * [`@testing-library/jest-dom`]((https://github.com/testing-library/jest-dom#readme))
+   * [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom#readme)
    * specific rules. Note that, contrary to its name, this package can be used with
    * other testing libraries, for example `vitest`, so it doesn't belong to any top-level config.
    *
@@ -860,7 +860,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
 
   /**
    * An ESLint plugin with rules to disallow unsafe coding practices that may result
-   * into security vulnerabilities.
+   * in security vulnerabilities.
    *
    * 📁 Default `files`: all files
    *
@@ -1039,7 +1039,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   security: SecurityEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * [SolidJS](https://svelte.dev) specific rules.
+   * [SolidJS](https://www.solidjs.com) specific rules.
    *
    * 📁 Default `files`: all files
    *

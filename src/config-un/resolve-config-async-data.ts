@@ -224,7 +224,7 @@ ${renderTable(
           ? styleText('green', versionRange)
           : styleText('gray', 'Unknown'),
         ...(pluginPrefixes?.size && {
-          [`PLugin prefix${pluginPrefixes.size === 1 ? '' : 's'}`]: Array.from(
+          [`Plugin prefix${pluginPrefixes.size === 1 ? '' : 's'}`]: Array.from(
             pluginPrefixes,
             stylePluginPrefix,
           ).join(', '),

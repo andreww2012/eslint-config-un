@@ -46,7 +46,7 @@ Commonly used plugins are direct dependencies of this package, you don't need to
 We aim to update the dependencies within 1 month after their release.
 You can always override plugins' implementation with [`pluginOverrides` option](#pluginoverrides) or using your package manager's overrides functionality.
 
-Certain plugins (usually framework/library specific ones) are optional peer dependencies, which means that you need to install them manually if they are end up being used.
+Certain plugins (usually framework/library specific ones) are optional peer dependencies, which means that you need to install them manually if they end up being used.
 You need to run ESLint with our config once to find out which plugins should be installed manually.
 
 <details>
