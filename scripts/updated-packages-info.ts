@@ -9,6 +9,8 @@ import ourPackageJson from '../package.json' with {type: 'json'};
 import type {UnionToIntersection} from '../src/types';
 import {fetchPackageInfo} from '../src/utils';
 
+const versionAsIs = (version: string) => version;
+
 const PACKAGES_GIT_TAGS_PATTERNS: Partial<
   Record<
     keyof UnionToIntersection<(typeof ourPackageJson)['dependencies' | 'devDependencies']>,
@@ -17,11 +19,12 @@ const PACKAGES_GIT_TAGS_PATTERNS: Partial<
 > = {
   '@eslint/compat': (version) => `compat-v${version}`,
   '@eslint/css': (version) => `css-v${version}`,
-  '@nx/eslint-plugin': (version) => version,
+  '@nx/eslint-plugin': versionAsIs,
   '@sveltejs/kit': (version) => `@sveltejs/kit@${version}`,
   'ember-eslint-parser': (version) => `v${version}-ember-eslint-parser`,
   'tailwind-csstree': (version) => `tailwind-csstree-v${version}`,
-  'eslint-plugin-prefer-arrow-functions': (version) => version,
+  'eslint-plugin-prefer-arrow-functions': versionAsIs,
+  '@e18e/eslint-plugin': versionAsIs,
 };
 
 // =============================================================================

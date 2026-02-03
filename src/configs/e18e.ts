@@ -32,6 +32,7 @@ const E18E_RULES_MODULE_REPLACEMENTS_SET = new Set<string>(E18E_RULES_MODULE_REP
 
 const E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS = [
   'prefer-array-from-map',
+  'prefer-array-some',
   'prefer-date-now',
   'prefer-regex-test',
   'prefer-timer-args',
@@ -211,6 +212,7 @@ export default ((context, optionsRaw) => {
         },
       ])
       .addRule('prefer-array-from-map', ERROR) /** @since 0.0.1 */
+      .addRule('prefer-array-some', ERROR) /** @since 0.1.4 */
       .addRule('prefer-date-now', ERROR) /** @since 0.1.3 */
       .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */ // 💭(optional)
       .addRule('prefer-timer-args', ERROR) /** @since 0.0.1 */
