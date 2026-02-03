@@ -383,6 +383,9 @@ export default (async (context, optionsRaw) => {
         forbiddenMetadataProperties.host ? ERROR : OFF,
       ),
     ) /** @since 0.0.1-alpha.12 */ /** @until 18 */ // 🔴(18)
+    .addRule(
+      ...getPluginRuleSeverity('no-implicit-take-until-destroyed', ERROR),
+    ) /** @since 21.2.0 */
     .addRule(...getPluginRuleSeverity('no-input-prefix', ERROR), [
       {prefixes: disallowedInputPrefixes},
     ]) /** @since 0.0.1-alpha.23 */
@@ -600,6 +603,7 @@ export default (async (context, optionsRaw) => {
     .addRule(...getTemplatePluginRuleSeverity('prefer-at-else', ERROR)) /** @since 20.4.0 */
     .addRule(...getTemplatePluginRuleSeverity('prefer-at-empty', ERROR)) /** @since 19.5.0 */
     .addRule(...getTemplatePluginRuleSeverity('prefer-built-in-pipes', OFF)) /** @since 20.5.0 */
+    .addRule(...getTemplatePluginRuleSeverity('prefer-class-binding', ERROR)) /** @since 21.2.0 */
     .addRule(
       ...getTemplatePluginRuleSeverity('prefer-contextual-for-variables', ERROR),
     ) /** @since 19.3.0 */
