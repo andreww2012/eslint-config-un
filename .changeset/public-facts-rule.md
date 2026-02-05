@@ -1,5 +1,5 @@
 ---
-'eslint-config-un': patch
+'eslint-config-un': minor
 ---
 
 betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v4.0.1 to v4.1.1](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v4.0.1...v4.1.1):
