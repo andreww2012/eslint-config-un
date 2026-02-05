@@ -468,12 +468,17 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
 
   const jsEslintConfigResult = await loadUnConfig('js', () => import('../configs/js'));
   const vanillaFinalFlatConfigRules = jsEslintConfigResult?.finalFlatConfigRules || {};
-  const [astroEslintConfigResult, vueEslintConfigResult, svelteEslintConfigResult] =
-    await Promise.all([
-      loadUnConfig('astro', () => import('../configs/astro')),
-      loadUnConfig('vue', () => import('../configs/vue'), {vanillaFinalFlatConfigRules}),
-      loadUnConfig('svelte', () => import('../configs/svelte')),
-    ]);
+  const [
+    astroEslintConfigResult,
+    vueEslintConfigResult,
+    svelteEslintConfigResult,
+    cssEslintConfigResult,
+  ] = await Promise.all([
+    loadUnConfig('astro', () => import('../configs/astro')),
+    loadUnConfig('vue', () => import('../configs/vue'), {vanillaFinalFlatConfigRules}),
+    loadUnConfig('svelte', () => import('../configs/svelte')),
+    loadUnConfig('css', () => import('../configs/css')),
+  ]);
   const tsEslintConfigResult = await loadUnConfig('ts', () => import('../configs/ts'), {
     vanillaFinalFlatConfigRules,
     astroResolvedOptions: astroEslintConfigResult ? astroEslintConfigResult.optionsResolved : null,
@@ -599,7 +604,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('vitest', () => import('../configs/vitest')),
     loadUnConfig('jsdoc', () => import('../configs/jsdoc')),
     loadUnConfig('qwik', () => import('../configs/qwik')),
-    loadUnConfig('css', () => import('../configs/css')),
+    cssEslintConfigResult,
     loadUnConfig('unusedImports', () => import('../configs/unused-imports')),
     loadUnConfig('react', () => import('../configs/react'), {
       tsFilesTypeAware:
@@ -627,7 +632,9 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('cypress', () => import('../configs/cypress')),
     loadUnConfig('turbo', () => import('../configs/turbo')),
     loadUnConfig('noUnsanitized', () => import('../configs/no-unsanitized')),
-    loadUnConfig('betterTailwind', () => import('../configs/better-tailwind')),
+    loadUnConfig('betterTailwind', () => import('../configs/better-tailwind'), {
+      cssResolvedOptions: cssEslintConfigResult?.optionsResolved,
+    }),
     loadUnConfig('playwright', () => import('../configs/playwright')),
     loadUnConfig(
       'youDontNeedLodashUnderscore',

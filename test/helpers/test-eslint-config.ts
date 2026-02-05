@@ -5,12 +5,21 @@ import type {Linter} from 'eslint';
 import {eslintConfig} from '../../src';
 import type {EslintConfigUnOptions} from '../../src/config-un/shared';
 import type {OmitStrict} from '../../src/types';
+import {arraify, type MaybeArray} from '../../src/utils';
 
-export const testEslintConfig = async (
+export const testEslintConfig = async <
+  const FixturePaths extends string | readonly [string, ...string[]],
+>(
   configs: EslintConfigUnOptions['configs'],
-  fixturePath: string,
+  fixturePaths: FixturePaths,
   options?: OmitStrict<EslintConfigUnOptions, 'configs'>,
-) => {
+): Promise<
+  FixturePaths extends string
+    ? ESLint.LintResult[]
+    : {
+        [K in keyof FixturePaths]: ESLint.LintResult[];
+      }
+> => {
   const config = await eslintConfig({
     defaultConfigsStatus: 'all-disabled',
     ...options,
@@ -22,12 +31,24 @@ export const testEslintConfig = async (
     overrideConfig: config as Linter.Config[],
   });
 
-  const content = await fs.readFile(
-    path.join(import.meta.dirname, '..', 'fixtures', fixturePath),
-    'utf8',
+  const fixtures = await Promise.all(
+    arraify(fixturePaths).map(async (fixturePath) => ({
+      contents: await fs.readFile(
+        path.join(import.meta.dirname, '..', 'fixtures', fixturePath),
+        'utf8',
+      ),
+      filePath: path.basename(fixturePath),
+    })),
   );
 
-  return await eslint.lintText(content, {
-    filePath: path.basename(fixturePath),
-  });
+  const lintResults = await Promise.all(
+    fixtures.map(({contents, filePath}) =>
+      eslint.lintText(contents, {
+        filePath,
+      }),
+    ),
+  );
+
+  // @ts-expect-error -- TS doesn't support conditional return types
+  return typeof fixturePaths === 'string' ? lintResults[0]! : lintResults;
 };

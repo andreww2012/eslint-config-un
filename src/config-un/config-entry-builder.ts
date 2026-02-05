@@ -145,10 +145,16 @@ export class ConfigEntryBuilder<
             includeDefaultFilesAndIgnores?: boolean;
 
             filesDefault?: string[];
-            filesDefaultMergedWithUserIgnores?: boolean;
+            filesDefaultMergedWithUserFiles?: boolean;
 
             /**
-             * Will be merged with internal `ignores`, and,
+             * Files to add to the resolved files list (user files + default files)
+             * IF that list is not empty
+             */
+            filesMerged?: string[];
+
+            /**
+             * Will be merged with the internal `ignores`, and,
              * if `ignoresDefaultMergedWithUserIgnores` set to `true`, with the user provided ones.
              */
             ignoresDefault?: string[];
@@ -220,10 +226,13 @@ export class ConfigEntryBuilder<
     const filesDefault = internalOptions.filesDefault || [];
     const files =
       filesFromUser.length > 0 && internalOptions.includeDefaultFilesAndIgnores
-        ? internalOptions.filesDefaultMergedWithUserIgnores
+        ? internalOptions.filesDefaultMergedWithUserFiles
           ? [...filesDefault, ...filesFromUser]
           : filesFromUser
         : filesDefault;
+    if (internalOptions.filesMerged?.length && files.length > 0) {
+      files.push(...internalOptions.filesMerged);
+    }
 
     const ignoresFromUser = configOptions.ignores;
     const ignoresInternal = objectEntriesUnsafe(

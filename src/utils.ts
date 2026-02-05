@@ -58,8 +58,8 @@ export const assignDefaults = createDefu((object, key, value) => {
 }) as typeof defu;
 
 export type MaybeArray<T> = T | T[];
-export const arraify = <T>(value?: MaybeArray<T> | null): T[] =>
-  Array.isArray(value) ? value : value == null ? [] : [value];
+export const arraify = <T>(value?: T | readonly T[] | null): T[] =>
+  Array.isArray(value) ? value : value == null ? [] : [value as T];
 
 export const isNonEmptyArray = <T>(value?: T[] | null): value is [T, ...T[]] =>
   Array.isArray(value) && value.length > 0;

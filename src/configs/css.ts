@@ -56,6 +56,7 @@ export interface CssEslintConfigOptions<
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
+    files: [GLOB_CSS], // Need to resolve `files` early
     tolerantMode: false,
   } satisfies CssEslintConfigOptions);
 
@@ -76,7 +77,6 @@ export default ((context, optionsRaw) => {
         'css',
         {
           includeDefaultFilesAndIgnores: true,
-          filesDefault: [GLOB_CSS],
           language: ['css', 'css'],
         },
       ],

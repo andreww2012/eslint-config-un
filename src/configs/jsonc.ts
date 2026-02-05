@@ -56,7 +56,7 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: JSONC_DEFAULT_FILES,
-        filesDefaultMergedWithUserIgnores: !doNotMergeFilesWithDefault,
+        filesDefaultMergedWithUserFiles: !doNotMergeFilesWithDefault,
         parser: 'jsonc-eslint-parser',
         // TODO why?
         ignoresInternal: {

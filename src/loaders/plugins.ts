@@ -131,7 +131,7 @@ export const pluginsLoaders = {
   'better-tailwindcss': genModuleLoader(
     'better-tailwindcss',
     'eslint-plugin-better-tailwindcss',
-    () => interopDefault(import('eslint-plugin-better-tailwindcss')),
+    () => interopDefault(import('eslint-plugin-better-tailwindcss')) as Promise<EslintPlugin>,
   ),
   boundaries: genModuleLoader('boundaries', 'eslint-plugin-boundaries', () =>
     interopDefault(import('eslint-plugin-boundaries')),

@@ -71,7 +71,7 @@ export default ((context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: YAML_DEFAULT_FILES,
-          filesDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeFilesWithDefault,
+          filesDefaultMergedWithUserFiles: !optionsResolved.doNotMergeFilesWithDefault,
           ignoresDefault: CONFIG_DEFAULT_IGNORES,
           ignoresDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeIgnoresWithDefault,
           language: ['yaml', 'yaml'],

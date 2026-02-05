@@ -1,5 +1,6 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import type {RequireExactlyOne} from '../types';
+import type {CssEslintConfigOptions} from './css';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -91,6 +92,18 @@ export interface BetterTailwindEslintConfigOptions<
   >;
 
   /**
+   * If `css` config is enabled, its `files` and `ignores` will be merged with the same fields
+   * of this config to enable `.css` files linting. This is because CSS parsing in required
+   * in order for `eslint-plugin-better-tailwindcss` to work on CSS files.
+   * [Read more about CSS linting in the docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/parsers/css.md).
+   *
+   * If you would like to avoid this behavior or would like to specify different
+   * `files` and `ignores`, set this option to `false` and configure the corresponding fields
+   * of this config manually.
+   */
+  cssLinting?: false;
+
+  /**
    * Enforces consistent Tailwind class order. `false` disables the corresponding rule.
    *
    * Affected rules:
@@ -104,7 +117,7 @@ export interface BetterTailwindEslintConfigOptions<
   restrictedClasses?: string[];
 }
 
-export default ((context, optionsRaw) => {
+export default ((context, optionsRaw, {cssResolvedOptions}) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     classOrder: 'official',
   } satisfies Partial<BetterTailwindEslintConfigOptions>);
@@ -134,6 +147,11 @@ export default ((context, optionsRaw) => {
     );
   }
 
+  const cssLinting =
+    optionsResolved.cssLinting !== false &&
+    cssResolvedOptions != null &&
+    cssResolvedOptions.files?.length !== 0;
+
   const configBuilder = context.createConfigBuilder(optionsResolved, 'better-tailwindcss');
 
   // Legend:
@@ -145,6 +163,14 @@ export default ((context, optionsRaw) => {
       'better-tailwindcss',
       {
         includeDefaultFilesAndIgnores: true,
+        ...(cssLinting && {
+          filesMerged: cssResolvedOptions.files,
+          ignoresDefault: cssResolvedOptions.ignores,
+          ignoresDefaultMergedWithUserIgnores: true,
+        }),
+        ignoresInternal: {
+          css: !cssLinting,
+        },
         settings: {
           'better-tailwindcss': pluginSettings,
         },
@@ -195,4 +221,9 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'betterTailwind'>;
+}) satisfies UnConfigFn<
+  'betterTailwind',
+  {
+    cssResolvedOptions: CssEslintConfigOptions | undefined;
+  }
+>;
