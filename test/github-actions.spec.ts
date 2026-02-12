@@ -7,8 +7,10 @@ describe('githubActions config', () => {
       'github-workflow-empty-mapping.yml',
     );
 
-    const yamlNoEmptyMappingError = results[0]?.messages.find(
-      (msg) => msg.ruleId === 'yaml/no-empty-mapping-value',
+    const yamlNoEmptyMappingError = findLintMessageFromLintResults(
+      results,
+      'github-workflow-empty-mapping.yml',
+      'yaml/no-empty-mapping-value',
     );
 
     expect(yamlNoEmptyMappingError).toBeUndefined();

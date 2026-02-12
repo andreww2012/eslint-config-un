@@ -7,8 +7,10 @@ describe('css config', () => {
       'css-empty-block.css',
     );
 
-    const cssNoEmptyBlocksError = results[0]?.messages.find(
-      (msg) => msg.ruleId === 'css/no-empty-blocks',
+    const cssNoEmptyBlocksError = findLintMessageFromLintResults(
+      results,
+      'css-empty-block.css',
+      'css/no-empty-blocks',
     );
 
     expect(cssNoEmptyBlocksError).toBeDefined();

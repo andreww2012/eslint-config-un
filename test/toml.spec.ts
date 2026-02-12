@@ -7,7 +7,11 @@ describe('toml config', () => {
       'toml-wrong-indent.toml',
     );
 
-    const tomlIndentError = results[0]?.messages.find((msg) => msg.ruleId === 'toml/indent');
+    const tomlIndentError = findLintMessageFromLintResults(
+      results,
+      'toml-wrong-indent.toml',
+      'toml/indent',
+    );
 
     expect(tomlIndentError).toBeDefined();
   });
@@ -20,7 +24,11 @@ describe('toml config', () => {
       'toml-correct-indent.toml',
     );
 
-    const tomlIndentError = results[0]?.messages.find((msg) => msg.ruleId === 'toml/indent');
+    const tomlIndentError = findLintMessageFromLintResults(
+      results,
+      'toml-correct-indent.toml',
+      'toml/indent',
+    );
 
     expect(tomlIndentError).toBeUndefined();
   });

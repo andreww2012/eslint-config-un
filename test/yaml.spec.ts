@@ -7,8 +7,10 @@ describe('yaml config', () => {
       'yaml-empty-mapping.yaml',
     );
 
-    const yamlNoEmptyMappingError = results[0]?.messages.find(
-      (msg) => msg.ruleId === 'yaml/no-empty-mapping-value',
+    const yamlNoEmptyMappingError = findLintMessageFromLintResults(
+      results,
+      'yaml-empty-mapping.yaml',
+      'yaml/no-empty-mapping-value',
     );
 
     expect(yamlNoEmptyMappingError).toBeDefined();
@@ -22,8 +24,10 @@ describe('yaml config', () => {
       'yaml-empty-mapping.yml',
     );
 
-    const yamlNoEmptyMappingError = results[0]?.messages.find(
-      (msg) => msg.ruleId === 'yaml/no-empty-mapping-value',
+    const yamlNoEmptyMappingError = findLintMessageFromLintResults(
+      results,
+      'yaml-empty-mapping.yml',
+      'yaml/no-empty-mapping-value',
     );
 
     expect(yamlNoEmptyMappingError).toBeDefined();

@@ -7,8 +7,10 @@ describe('sonar config', () => {
       'sonar-empty-collection.js',
     );
 
-    const sonarNoEmptyCollectionError = results[0]?.messages.find(
-      (msg) => msg.ruleId === 'sonarjs/no-empty-collection',
+    const sonarNoEmptyCollectionError = findLintMessageFromLintResults(
+      results,
+      'sonar-empty-collection.js',
+      'sonarjs/no-empty-collection',
     );
 
     expect(sonarNoEmptyCollectionError).toBeDefined();
@@ -22,8 +24,10 @@ describe('sonar config', () => {
       'sonar-filled-collection.js',
     );
 
-    const sonarNoEmptyCollectionError = results[0]?.messages.find(
-      (msg) => msg.ruleId === 'sonarjs/no-empty-collection',
+    const sonarNoEmptyCollectionError = findLintMessageFromLintResults(
+      results,
+      'sonar-filled-collection.js',
+      'sonarjs/no-empty-collection',
     );
 
     expect(sonarNoEmptyCollectionError).toBeUndefined();

@@ -1,15 +1,3 @@
-import {ESLint} from 'eslint';
-
-// TODO use this helper in other tests
-const findLintMessageFromLintResults = (
-  lintResult: ESLint.LintResult[],
-  filePath: string,
-  ruleId: string,
-) => {
-  const fileResult = lintResult.find((r) => r.filePath.endsWith(filePath));
-  return fileResult?.messages.find((m) => m.ruleId === ruleId);
-};
-
 describe('betterTailwind config', () => {
   it('should trigger better-tailwindcss/no-duplicate-classes on duplicate classes', async () => {
     const result = await testEslintConfig(
