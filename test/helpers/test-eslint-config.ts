@@ -10,7 +10,9 @@ import {arraify, type MaybeArray} from '../../src/utils';
 export const testEslintConfig = async <
   const FixturePaths extends string | readonly [string, ...string[]],
 >(
-  configs: EslintConfigUnOptions['configs'],
+  configsOrSingleConfigName:
+    | EslintConfigUnOptions['configs']
+    | keyof (EslintConfigUnOptions['configs'] & {}),
   fixturePaths: FixturePaths,
   options?: OmitStrict<EslintConfigUnOptions, 'configs'>,
 ): Promise<
@@ -23,7 +25,12 @@ export const testEslintConfig = async <
   const config = await eslintConfig({
     defaultConfigsStatus: 'all-disabled',
     ...options,
-    configs,
+    configs:
+      typeof configsOrSingleConfigName === 'string'
+        ? {
+            [configsOrSingleConfigName]: true,
+          }
+        : configsOrSingleConfigName,
   });
 
   const eslint = new ESLint({
