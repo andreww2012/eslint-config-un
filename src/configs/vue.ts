@@ -177,6 +177,12 @@ interface ScopedCssEslintConfigOptions<
       >;
 }
 
+type SupportedVueMajorVersion = 2 | 3;
+const SUPPORTED_VUE_MAJOR_VERSIONS = new Set<number>(
+  allUnionMembers<SupportedVueMajorVersion>()([2, 3]),
+);
+const DEFAULT_VUE_MAJOR_VERSION = 3 satisfies SupportedVueMajorVersion;
+
 export interface VueEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'vue'> {
@@ -250,7 +256,7 @@ export interface VueEslintConfigOptions<
   /**
    * @default auto-detected
    */
-  majorVersion?: 2 | 3;
+  majorVersion?: SupportedVueMajorVersion;
 
   /**
    * Almost all [extension rules](https://eslint.vuejs.org/rules/#extension-rules)
@@ -345,12 +351,15 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
 
   const vuePackageInfo = context.packagesInfo.vue;
   const vuePackageMajorVersion = vuePackageInfo?.versions.major;
+  const isVuePackageMajorVersionSupported =
+    vuePackageMajorVersion != null && SUPPORTED_VUE_MAJOR_VERSIONS.has(vuePackageMajorVersion);
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configEnforceTypescriptInScriptSection: isTypescriptEnabled,
     files: DEFAULT_VUE_FILES, // Must be assigned to options for `ts` config
-    majorVersion:
-      vuePackageMajorVersion === 2 || vuePackageMajorVersion === 3 ? vuePackageMajorVersion : 3,
+    majorVersion: isVuePackageMajorVersionSupported
+      ? (vuePackageMajorVersion as SupportedVueMajorVersion)
+      : DEFAULT_VUE_MAJOR_VERSION,
     configA11y: true,
     configI18n: vueI18nPackageInfo != null,
     configNuxt: nuxtPackageInfo != null,
@@ -384,7 +393,17 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     inheritBaseRuleSeverityAndOptionsForExtensionRules: inheritFromBase,
   } = optionsResolved;
 
-  const vuePackageFullVersion = vuePackageInfo?.versions.majorAndMinor ?? vueMajorVersion;
+  const isVueMajorVersionSetImplicitlyOrWrong =
+    !isVuePackageMajorVersionSupported &&
+    (typeof optionsRaw !== 'object' ||
+      (typeof optionsRaw === 'object' && optionsRaw.majorVersion == null));
+  if (isVueMajorVersionSetImplicitlyOrWrong) {
+    context.logger.warn(
+      `[vue config] Vue major version could not be detected or not supported and was also not explicitly passed. Defaulting to ${DEFAULT_VUE_MAJOR_VERSION}. If this is not correct, please install the supported version of \`vue\` package (${[...SUPPORTED_VUE_MAJOR_VERSIONS].join(', ')}) or specify the major version explicitly in the \`majorVersion\` config option.`,
+    );
+  }
+
+  const vuePackageFullVersion: number = vuePackageInfo?.versions.majorAndMinor ?? vueMajorVersion;
 
   const isVue2 = vueMajorVersion === 2;
   const isVue3 = vueMajorVersion === 3;
@@ -736,7 +755,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     // TODO enable if script setup is enforced and only in JS?
     .addRule('no-undef-properties', OFF) /** @since 7.20.0 */
     .addRule('no-unsupported-features', ERROR, [
-      {version: `^${vuePackageInfo?.versions.full || vuePackageMajorVersion}`},
+      {version: `^${vuePackageFullVersion}`},
     ]) /** @since 6.1.0 */
     .addRule('no-unused-emit-declarations', ERROR) /** @since 9.19.0 */
     .addRule('no-unused-properties', ERROR) /** @since 7.0.0 */
