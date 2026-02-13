@@ -1,5 +1,7 @@
 describe('compat config', () => {
   it('should trigger compat rule on fetch API with old browser target', async () => {
+    const fixtureFileName = 'fetch-api.js';
+
     const result = await testEslintConfig(
       {
         compat: {
@@ -8,15 +10,18 @@ describe('compat config', () => {
           },
         },
       },
-      'compat-fetch-api.js',
+      fixtureFileName,
+      import.meta.dirname,
     );
 
-    const message = findLintMessageFromLintResults(result, 'compat-fetch-api.js', 'compat/compat');
+    const message = findLintMessageFromLintResults(result, fixtureFileName, 'compat/compat');
 
     expect(message).toBeDefined();
   });
 
   it('should not trigger compat rule on widely supported console API', async () => {
+    const fixtureFileName = 'console-api.js';
+
     const result = await testEslintConfig(
       {
         compat: {
@@ -25,14 +30,11 @@ describe('compat config', () => {
           },
         },
       },
-      'compat-console-api.js',
+      fixtureFileName,
+      import.meta.dirname,
     );
 
-    const message = findLintMessageFromLintResults(
-      result,
-      'compat-console-api.js',
-      'compat/compat',
-    );
+    const message = findLintMessageFromLintResults(result, fixtureFileName, 'compat/compat');
 
     expect(message).toBeUndefined();
   });

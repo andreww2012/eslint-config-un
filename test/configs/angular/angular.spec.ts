@@ -1,10 +1,12 @@
 describe('angular config', () => {
   it('should trigger @angular-eslint/template/banana-in-box on wrong syntax', async () => {
-    const result = await testEslintConfig({angular: true}, 'angular-banana-in-box-wrong.html');
+    const fixtureFileName = 'angular-2way-binding-wrong.html';
+
+    const result = await testEslintConfig({angular: true}, fixtureFileName, import.meta.dirname);
 
     const message = findLintMessageFromLintResults(
       result,
-      'angular-banana-in-box-wrong.html',
+      fixtureFileName,
       '@angular-eslint/template/banana-in-box',
     );
 
@@ -12,11 +14,13 @@ describe('angular config', () => {
   });
 
   it('should not trigger @angular-eslint/template/banana-in-box on correct syntax', async () => {
-    const result = await testEslintConfig({angular: true}, 'angular-banana-in-box-correct.html');
+    const fixtureFileName = 'angular-2way-binding-correct.html';
+
+    const result = await testEslintConfig({angular: true}, fixtureFileName, import.meta.dirname);
 
     const message = findLintMessageFromLintResults(
       result,
-      'angular-banana-in-box-correct.html',
+      fixtureFileName,
       '@angular-eslint/template/banana-in-box',
     );
 

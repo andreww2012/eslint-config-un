@@ -1,15 +1,18 @@
 describe('css config', () => {
   it('lints .css files and triggers css rules', async () => {
+    const fixtureFileName = 'css-empty-block.css';
+
     const results = await testEslintConfig(
       {
         css: true,
       },
-      'css-empty-block.css',
+      fixtureFileName,
+      import.meta.dirname,
     );
 
     const cssNoEmptyBlocksError = findLintMessageFromLintResults(
       results,
-      'css-empty-block.css',
+      fixtureFileName,
       'css/no-empty-blocks',
     );
 

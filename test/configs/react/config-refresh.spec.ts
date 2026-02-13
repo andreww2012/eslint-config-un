@@ -1,10 +1,12 @@
-describe('react/refresh config', () => {
+describe('react: sub config `refresh`', () => {
   it('should trigger react-refresh/only-export-components on mixed exports', async () => {
-    const result = await testEslintConfig({react: true}, 'react-refresh-mixed-exports.jsx');
+    const fixtureFileName = 'react-component-file-mixed-exports.jsx';
+
+    const result = await testEslintConfig({react: true}, fixtureFileName, import.meta.dirname);
 
     const message = findLintMessageFromLintResults(
       result,
-      'react-refresh-mixed-exports.jsx',
+      fixtureFileName,
       'react-refresh/only-export-components',
     );
 
@@ -12,14 +14,17 @@ describe('react/refresh config', () => {
   });
 
   it('should not trigger react-refresh/only-export-components on component-only exports', async () => {
+    const fixtureName = 'react-component-file-single-export.jsx';
+
     const result = await testEslintConfig(
       {react: {configRefresh: true}},
-      'react-refresh-component-only.jsx',
+      fixtureName,
+      import.meta.dirname,
     );
 
     const message = findLintMessageFromLintResults(
       result,
-      'react-refresh-component-only.jsx',
+      fixtureName,
       'react-refresh/only-export-components',
     );
 

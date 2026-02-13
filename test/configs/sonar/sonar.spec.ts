@@ -1,15 +1,18 @@
 describe('sonar config', () => {
   it('triggers sonarjs/no-empty-collection for empty collections', async () => {
+    const fixtureFileName = 'using-includes-on-empty-array.js';
+
     const results = await testEslintConfig(
       {
         sonar: true,
       },
-      'sonar-empty-collection.js',
+      fixtureFileName,
+      import.meta.dirname,
     );
 
     const sonarNoEmptyCollectionError = findLintMessageFromLintResults(
       results,
-      'sonar-empty-collection.js',
+      fixtureFileName,
       'sonarjs/no-empty-collection',
     );
 
@@ -17,16 +20,19 @@ describe('sonar config', () => {
   });
 
   it('does not trigger sonarjs/no-empty-collection for filled collections', async () => {
+    const fixtureFileName = 'using-includes-on-non-empty-array.js';
+
     const results = await testEslintConfig(
       {
         sonar: true,
       },
-      'sonar-filled-collection.js',
+      fixtureFileName,
+      import.meta.dirname,
     );
 
     const sonarNoEmptyCollectionError = findLintMessageFromLintResults(
       results,
-      'sonar-filled-collection.js',
+      fixtureFileName,
       'sonarjs/no-empty-collection',
     );
 

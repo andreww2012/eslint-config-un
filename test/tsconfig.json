@@ -1,7 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig.json",
   "extends": "../tsconfig.json",
-  "include": ["*.ts"],
+  "include": ["**/*.ts"],
+  "exclude": ["temp"],
   "compilerOptions": {
     "types": ["vitest/globals"]
   }

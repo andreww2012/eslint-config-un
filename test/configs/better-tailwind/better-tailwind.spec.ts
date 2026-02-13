@@ -1,20 +1,27 @@
+import path from 'node:path';
+
 describe('betterTailwind config', () => {
+  const entryPoint = path.posix.resolve(import.meta.dirname, 'fixtures', 'tailwind-entry.css');
+
   it('should trigger better-tailwindcss/no-duplicate-classes on duplicate classes', async () => {
+    const fixtureFileName = 'tailwind-in-jsx-duplicate-classes.jsx';
+
     const result = await testEslintConfig(
       {
         betterTailwind: {
           files: ['**'], // TODO not linted otherwise
           settings: {
-            entryPoint: 'fixtures/tailwind-entry.css',
+            entryPoint,
           },
         },
       },
-      'better-tailwind-duplicate-classes.jsx',
+      fixtureFileName,
+      import.meta.dirname,
     );
 
     const message = findLintMessageFromLintResults(
       result,
-      'better-tailwind-duplicate-classes.jsx',
+      fixtureFileName,
       'better-tailwindcss/no-duplicate-classes',
     );
 
@@ -22,20 +29,23 @@ describe('betterTailwind config', () => {
   });
 
   it('should not trigger better-tailwindcss/no-duplicate-classes on unique classes', async () => {
+    const fixtureFileName = 'tailwind-in-jsx-no-duplicate-classes.jsx';
+
     const result = await testEslintConfig(
       {
         betterTailwind: {
           settings: {
-            entryPoint: 'fixtures/tailwind-entry.css',
+            entryPoint,
           },
         },
       },
-      'better-tailwind-no-duplicate.jsx',
+      fixtureFileName,
+      import.meta.dirname,
     );
 
     const message = findLintMessageFromLintResults(
       result,
-      'better-tailwind-no-duplicate.jsx',
+      fixtureFileName,
       'better-tailwindcss/no-duplicate-classes',
     );
 
@@ -43,21 +53,24 @@ describe('betterTailwind config', () => {
   });
 
   it('should lint CSS files when css config is enabled', async () => {
+    const fixtureFileName = 'tailwind-in-css-duplicate-classes.css';
+
     const result = await testEslintConfig(
       {
         css: true,
         betterTailwind: {
           settings: {
-            entryPoint: 'fixtures/tailwind-entry.css',
+            entryPoint,
           },
         },
       },
-      'better-tailwind-css-duplicate.css',
+      fixtureFileName,
+      import.meta.dirname,
     );
 
     const message = findLintMessageFromLintResults(
       result,
-      'better-tailwind-css-duplicate.css',
+      fixtureFileName,
       'better-tailwindcss/no-duplicate-classes',
     );
 
@@ -65,19 +78,22 @@ describe('betterTailwind config', () => {
   });
 
   it('does not lint CSS files when css config is not enabled', async () => {
+    const fixtureFileName = 'tailwind-in-css-duplicate-classes.css';
+
     const result = await testEslintConfig(
       {
         betterTailwind: {
           settings: {
-            entryPoint: 'fixtures/tailwind-entry.css',
+            entryPoint,
           },
         },
       },
-      'better-tailwind-css-duplicate.css',
+      fixtureFileName,
+      import.meta.dirname,
     );
 
     const message = result
-      .find((r) => r.filePath.endsWith('better-tailwind-css-duplicate.css'))
+      .find((r) => r.filePath.endsWith(fixtureFileName))
       ?.messages.find((m) =>
         m.message.includes('File ignored because no matching configuration was supplied'),
       );
@@ -86,35 +102,41 @@ describe('betterTailwind config', () => {
   });
 
   it('can lint CSS and non-CSS files at the same time (given the non-CSS file matches at least one config)', async () => {
+    const cssFixtureFileName = 'tailwind-in-css-duplicate-classes.css';
+    const jsxFixtureFileName = 'tailwind-in-jsx-duplicate-classes.jsx';
+
     const result = await testEslintConfig(
       {
         css: true,
         betterTailwind: {
           settings: {
-            entryPoint: 'fixtures/tailwind-entry.css',
+            entryPoint,
           },
         },
       },
-      ['better-tailwind-css-duplicate.css', 'better-tailwind-duplicate-classes.jsx'],
+      [cssFixtureFileName, jsxFixtureFileName],
       {
-        extraConfigs: [
-          // If `.jsx` file is not matched by any other config, it'll be ignored and there is no way to avoid this behavior
-          {
-            files: ['**/*.jsx'],
-          },
-        ],
+        un: {
+          extraConfigs: [
+            // If `.jsx` file is not matched by any other config, it'll be ignored and there is no way to avoid this behavior
+            {
+              files: ['**/*.jsx'],
+            },
+          ],
+        },
+        searchFixturesRelativeToPath: import.meta.dirname,
       },
     );
 
     const messageForCssFile = findLintMessageFromLintResults(
       result[0],
-      'better-tailwind-css-duplicate.css',
+      cssFixtureFileName,
       'better-tailwindcss/no-duplicate-classes',
     );
 
     const messageForJsxFile = findLintMessageFromLintResults(
       result[1],
-      'better-tailwind-duplicate-classes.jsx',
+      jsxFixtureFileName,
       'better-tailwindcss/no-duplicate-classes',
     );
 

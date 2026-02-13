@@ -1,9 +1,6 @@
 dist/
 src/**/*.gen.d.ts
 src/**/*.gen.ts
-test/*/
-!test/fixtures/
-!test/helpers/
 TODO.md
 temp/
 .nx/

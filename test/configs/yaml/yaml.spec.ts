@@ -1,15 +1,18 @@
 describe('yaml config', () => {
   it('lints .yaml files and triggers yaml rules', async () => {
+    const fixtureFileName = 'empty-mapping.yaml';
+
     const results = await testEslintConfig(
       {
         yaml: true,
       },
-      'yaml-empty-mapping.yaml',
+      fixtureFileName,
+      import.meta.dirname,
     );
 
     const yamlNoEmptyMappingError = findLintMessageFromLintResults(
       results,
-      'yaml-empty-mapping.yaml',
+      fixtureFileName,
       'yaml/no-empty-mapping-value',
     );
 
@@ -17,16 +20,19 @@ describe('yaml config', () => {
   });
 
   it('lints .yml files and triggers yaml rules', async () => {
+    const fixtureFileName = 'empty-mapping.yml';
+
     const results = await testEslintConfig(
       {
         yaml: true,
       },
-      'yaml-empty-mapping.yml',
+      fixtureFileName,
+      import.meta.dirname,
     );
 
     const yamlNoEmptyMappingError = findLintMessageFromLintResults(
       results,
-      'yaml-empty-mapping.yml',
+      fixtureFileName,
       'yaml/no-empty-mapping-value',
     );
 
