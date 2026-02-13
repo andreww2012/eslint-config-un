@@ -231,7 +231,8 @@ export interface VueEslintConfigOptions<
    * - [Plugins](https://nuxt.com/docs/4.x/directory-structure/app/plugins) and
    * [server](https://nuxt.com/docs/4.x/directory-structure/server) files will be allowed
    * to do `export default` ([`import/no-default-export`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-default-export.md) will be turned off);
-   * - [`nuxt/prefer-import-meta`](https://eslint.nuxt.com/packages/plugin#nuxtprefer-import-meta)
+   * - [`nuxt/no-page-meta-runtime-values`](https://github.com/nuxt/eslint/blob/89618070025b4373e90b227eb478b33a13b34c8f/packages/eslint-plugin/src/rules/no-page-meta-runtime-values/no-page-meta-runtime-values.ts#L66)
+   * and [`nuxt/prefer-import-meta`](https://eslint.nuxt.com/packages/plugin#nuxtprefer-import-meta)
    * will be applied to the specified `files` and `ignores`, defaulting to all files inside
    * `vueOrNuxtProjectDir` directory;
    * - Another sub-config, `configNuxtConfig`, will control whether
@@ -334,7 +335,7 @@ export interface VueEslintConfigOptions<
 
 const DEFAULT_VUE_FILES: string[] = [GLOB_VUE];
 
-const NUXT_CONFIG_FILES = new Set<string>(
+const NUXT_CONFIG_RULES = new Set<string>(
   allUnionMembers<
     keyof Pick<UnRuleOptionsByPlugin['nuxt'], 'no-nuxt-config-test-key' | 'nuxt-config-keys-order'>
   >()(['no-nuxt-config-test-key', 'nuxt-config-keys-order']),
@@ -973,9 +974,10 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         },
       ])
       .addAnyRule('nuxt', 'prefer-import-meta', ERROR) /** @since 0.3.0-alpha.0 */
+      .addAnyRule('nuxt', 'no-page-meta-runtime-values', ERROR) /** @since 1.14.0 */
       .addOverrides()
       .enableConfigTesterForPlugin('nuxt', {
-        rulesToSkipInConfig: (ruleName) => NUXT_CONFIG_FILES.has(ruleName),
+        rulesToSkipInConfig: (ruleName) => NUXT_CONFIG_RULES.has(ruleName),
       });
   }
   const configBuilderNuxtConfig = context.createConfigBuilder(
@@ -995,7 +997,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       .addAnyRule('nuxt', 'no-nuxt-config-test-key', ERROR) /** @since 1.12.0 */
       .addOverrides()
       .enableConfigTesterForPlugin('nuxt', {
-        rulesToSkipInConfig: (ruleName) => !NUXT_CONFIG_FILES.has(ruleName),
+        rulesToSkipInConfig: (ruleName) => !NUXT_CONFIG_RULES.has(ruleName),
       });
   }
 

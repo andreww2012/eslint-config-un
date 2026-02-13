@@ -145,9 +145,9 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   console.log(
     `: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${repoUrl}/compare/${getGitHubVersionTag(dependency, oldVersion)}...${getGitHubVersionTag(dependency, newVersion)}):
 
-- 🟢 enabled [\`\`]() rule with the following default options:
-- 🟡 enabled [\`\`]() rule (warning) and added it to the \`noStylisticRules\` config
-- ❓ enabled conditionally [\`\`]() rule with the following default options:
+- 🟢 enabled [\`\`]() rule and added it to the \`noStylisticRules\` config
+- 🟡 enabled [\`\`]() rule (warning) with the following default options:
+- ❓ enabled conditionally [\`\`]() rule in ⚙️ \`\` sub-config
 - 🔴 not enabled [\`\`]() rule
 - ❌ \`\` rule was removed
 - 🔄 \`\` was renamed to [\`\`]()`,
