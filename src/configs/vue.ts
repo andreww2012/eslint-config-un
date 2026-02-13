@@ -1213,6 +1213,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   return {
     configs: [
       configBuilder,
+      configBuilderEnforceTypescriptInScriptSection,
       configBuilderNuxt,
       configBuilderNuxtConfig,
       configBuilderA11y,
