@@ -38,7 +38,7 @@
     "deps"
   ],
   "scripts": {
-    "u:after": "nr u:info && nr lint:eslint:fix package.json && nr typegen",
+    "u:after": "nr u:info && nr lint:eslint:fix package.json && nr typegen && nr lint:types:go && nr build:code:test",
     "u:info": "tsx scripts/updated-packages-info.ts",
     "u": "ncu && nr u:after",
     "u:m": "ncu -t minor && nr u:after",
