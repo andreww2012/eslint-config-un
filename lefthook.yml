@@ -13,6 +13,8 @@ pre-push:
       run: nr knip
     types:
       run: nr lint:types:go
+    build:
+      run: nr build:code:test
 commit-msg:
   commands:
     commitlint:
