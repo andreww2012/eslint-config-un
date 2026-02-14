@@ -85,6 +85,7 @@ export default (async (context, optionsRaw) => {
     .addRule(...setupRule('curly-newline', OFF)) /** @since 2.9.0 */
     .addRule(...setupRule('dot-location', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('eol-last', OFF)) /** @since 0.0.6 */ // 🟢
+    .addRule(...setupRule('exp-jsx-props-style', OFF)) /** @since 5.8.0 */
     .addRule(...setupRule('exp-list-style', OFF)) /** @since 5.5.0 */
     .addRule(...setupRule('function-call-argument-newline', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('function-call-spacing', OFF)) /** @since 0.0.4 */
