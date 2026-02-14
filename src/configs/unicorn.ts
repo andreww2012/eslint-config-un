@@ -64,6 +64,7 @@ export default ((context, optionsRaw) => {
     .addRule('explicit-length-check', ERROR) /** @since 1.0.0 */ // 🟣
     .addRule('filename-case', OFF) /** @since 0.3.0 */ // 🟣
     .addRule('import-style', ERROR) /** @since 22.0.0 */
+    .addRule('isolated-functions', OFF) /** @since 63.0.0 */
     .addRule('new-for-builtins', ERROR) /** @since 3.0.0 */
     .addRule('no-abusive-eslint-disable', ERROR) /** @since 0.5.0 */
     .addRule('no-accessor-recursion', ERROR) /** @since 57.0.0 */
