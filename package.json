@@ -111,7 +111,7 @@
     "eslint-mdx": "3.6.2",
     "eslint-merge-processors": "2.0.0",
     "eslint-no-restricted": "0.0.10",
-    "eslint-plugin-css": "0.11.1",
+    "eslint-plugin-css": "0.12.0",
     "eslint-plugin-depend": "1.4.0",
     "eslint-plugin-file-progress": "3.0.2",
     "eslint-plugin-html": "8.1.3",

@@ -97,8 +97,8 @@ importers:
         specifier: 0.0.10
         version: 0.0.10(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-css:
-        specifier: 0.11.1
-        version: 0.11.1(eslint@9.39.2(jiti@2.6.1))
+        specifier: 0.12.0
+        version: 0.12.0(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-depend:
         specifier: 1.4.0
         version: 1.4.0
@@ -6221,8 +6221,8 @@ packages:
     peerDependencies:
       eslint: ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0
 
-  eslint-plugin-css@0.11.1:
-    resolution: {integrity: sha512-yoQayfGOPcLqcToQbij5hq6VA7y/07fCpFJTCOPboDxJpDVD8Tr2OL6whaQmKVzuymllocMy63EnIISn+Z75FA==}
+  eslint-plugin-css@0.12.0:
+    resolution: {integrity: sha512-pztNsypvSgHbGmoEOIWHkYzr8W8O4zlg0J9p2mE0eFCMsZRN/kSTxD4tupBV/jgYcKu0jXPKFJWU238soopXyw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: '>=7.0.0'
@@ -17044,7 +17044,7 @@ snapshots:
       lodash.memoize: 4.1.2
       semver: 7.7.3
 
-  eslint-plugin-css@0.11.1(eslint@9.39.2(jiti@2.6.1)):
+  eslint-plugin-css@0.12.0(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2(jiti@2.6.1))
       colord: 2.9.3
