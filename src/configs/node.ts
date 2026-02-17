@@ -146,6 +146,13 @@ export interface NodeEslintConfigOptions<
     console?: boolean;
 
     /**
+     * Enforce either `crypto` or `require("node:crypto").webcrypto`
+     * @default true
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/crypto.md
+     */
+    crypto?: boolean;
+
+    /**
      * Enforce either `process` or `require("process")`
      * @default true
      * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/process.md
@@ -158,6 +165,14 @@ export interface NodeEslintConfigOptions<
      * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/text-decoder.md
      */
     textDecoder?: boolean;
+
+    /**
+     * Enforce either `clearImmediate`, `clearInterval`, `clearTimeout`, `setImmediate`,
+     * `setInterval`, and `setTimeout` or `require("timers").{setTimeout,...}`
+     * @default true
+     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/timers.md
+     */
+    timers?: boolean;
 
     /**
      * Enforce either `TextEncoder` or `require("util").TextEncoder`
@@ -280,6 +295,9 @@ export default (async (context, optionsRaw) => {
     .addRule('prefer-global/console', ERROR, [
       preferGlobal.console === false ? 'never' : 'always',
     ]) /** @since 7.0.0-beta.0 */
+    .addRule('prefer-global/crypto', ERROR, [
+      preferGlobal.crypto === false ? 'never' : 'always',
+    ]) /** @since 17.24.0 */
     .addRule('prefer-global/process', ERROR, [
       preferGlobal.process === false ? 'never' : 'always',
     ]) /** @since 7.0.0-beta.0 */
@@ -289,6 +307,9 @@ export default (async (context, optionsRaw) => {
     .addRule('prefer-global/text-encoder', ERROR, [
       preferGlobal.textEncoder === false ? 'never' : 'always',
     ]) /** @since 8.0.0 */
+    .addRule('prefer-global/timers', ERROR, [
+      preferGlobal.timers === false ? 'never' : 'always',
+    ]) /** @since 17.24.0 */
     .addRule('prefer-global/url', ERROR, [
       preferGlobal.url === false ? 'never' : 'always',
     ]) /** @since 7.0.0-beta.0 */
