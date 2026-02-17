@@ -1,45 +1,38 @@
-describe('vue: sub config `nuxt`', () => {
-  const fixtureFileName = 'nuxt-using-process-server-instead-of-import-meta-server.vue';
+const FIXTURES = {
+  nuxtUsingProcessServer: 'nuxt-using-process-server-instead-of-import-meta-server.vue',
+  nuxtUsingImportMetaServer: 'nuxt-using-import-meta-server-instead-of-process-server.vue',
+} as const;
 
+describe('vue: sub config `nuxt`', () => {
   it('triggers nuxt/prefer-import-meta when using process.server', async () => {
     const results = await testEslintConfig(
-      {
-        vue: {
-          configNuxt: true,
-        },
-      },
-      fixtureFileName,
+      {vue: {configNuxt: true}},
+      FIXTURES.nuxtUsingProcessServer,
       import.meta.dirname,
     );
 
-    const preferImportMetaError = findLintMessageFromLintResults(
+    const error = findLintMessageFromLintResults(
       results,
-      fixtureFileName,
+      FIXTURES.nuxtUsingProcessServer,
       'nuxt/prefer-import-meta',
     );
 
-    expect(preferImportMetaError).toBeDefined();
+    expect(error?.message).toMatchInlineSnapshot(`"Replace \`process.server\` with \`import.meta.server\`."`);
   });
 
   it('does not trigger nuxt/prefer-import-meta when using import.meta.server', async () => {
-    const fixtureFileName = 'nuxt-using-import-meta-server-instead-of-process-server.vue';
-
     const results = await testEslintConfig(
-      {
-        vue: {
-          configNuxt: true,
-        },
-      },
-      fixtureFileName,
+      {vue: {configNuxt: true}},
+      FIXTURES.nuxtUsingImportMetaServer,
       import.meta.dirname,
     );
 
-    const preferImportMetaError = findLintMessageFromLintResults(
+    const error = findLintMessageFromLintResults(
       results,
-      fixtureFileName,
+      FIXTURES.nuxtUsingImportMetaServer,
       'nuxt/prefer-import-meta',
     );
 
-    expect(preferImportMetaError).toBeUndefined();
+    expect(error).toBeUndefined();
   });
 });

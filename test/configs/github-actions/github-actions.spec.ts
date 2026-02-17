@@ -1,21 +1,21 @@
+const FIXTURES = {
+  githubWorkflowEmptyMapping: 'github-workflow-empty-mapping.yml',
+} as const;
+
 describe('githubActions config', () => {
   it('does not trigger yaml/no-empty-mapping-value for empty trigger events', async () => {
-    const fixtureFileName = 'github-workflow-empty-mapping.yml';
-
     const results = await testEslintConfig(
-      {
-        githubActions: true,
-      },
-      fixtureFileName,
+      'githubActions',
+      FIXTURES.githubWorkflowEmptyMapping,
       import.meta.dirname,
     );
 
-    const yamlNoEmptyMappingError = findLintMessageFromLintResults(
+    const error = findLintMessageFromLintResults(
       results,
-      fixtureFileName,
+      FIXTURES.githubWorkflowEmptyMapping,
       'yaml/no-empty-mapping-value',
     );
 
-    expect(yamlNoEmptyMappingError).toBeUndefined();
+    expect(error).toBeUndefined();
   });
 });

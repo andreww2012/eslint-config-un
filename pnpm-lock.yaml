@@ -616,6 +616,9 @@ importers:
       package-json:
         specifier: 10.0.1
         version: 10.0.1
+      pathe:
+        specifier: 2.0.3
+        version: 2.0.3
       prettier:
         specifier: 3.8.0
         version: 3.8.0

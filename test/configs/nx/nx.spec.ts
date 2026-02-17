@@ -6,6 +6,13 @@ declare global {
 }
 /* eslint-enable vars-on-top */
 
+const FIXTURES = {
+  withUnusedDep: 'with-unused-dep/package.json',
+  withoutDeps: 'without-deps/package.json',
+  crossBoundaryImport: 'cross-boundary-import.ts',
+  localImport: 'local-import.ts',
+} as const;
+
 describe('nx config', () => {
   // @nx/eslint-plugin rules read the Nx project graph from globalThis (set by
   // `ensureGlobalProjectGraph`). Without it, some rules silently bail out while
@@ -64,21 +71,25 @@ describe('nx config', () => {
   });
 
   it('triggers nx/dependency-checks for a package.json with an unused dependency', async () => {
-    const fixtureFileName = 'with-unused-dep/package.json';
+    const results = await testEslintConfig('nx', FIXTURES.withUnusedDep, import.meta.dirname);
 
-    const results = await testEslintConfig('nx', fixtureFileName, import.meta.dirname);
-
-    const error = findLintMessageFromLintResults(results, 'package.json', 'nx/dependency-checks');
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.withUnusedDep,
+      'nx/dependency-checks',
+    );
 
     expect(error).toBeDefined();
   });
 
   it('does not trigger nx/dependency-checks for a package.json without dependencies', async () => {
-    const fixtureFileName = 'without-deps/package.json';
+    const results = await testEslintConfig('nx', FIXTURES.withoutDeps, import.meta.dirname);
 
-    const results = await testEslintConfig('nx', fixtureFileName, import.meta.dirname);
-
-    const error = findLintMessageFromLintResults(results, 'package.json', 'nx/dependency-checks');
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.withoutDeps,
+      'nx/dependency-checks',
+    );
 
     expect(error).toBeUndefined();
   });
@@ -87,77 +98,73 @@ describe('nx config', () => {
     const RULE_ID = 'nx/enforce-module-boundaries';
 
     it('does not trigger for a cross-boundary import by default', async () => {
-      const fixtureFileName = 'cross-boundary-import.ts';
+      const results = await testEslintConfig(
+        'nx',
+        FIXTURES.crossBoundaryImport,
+        import.meta.dirname,
+      );
 
-      const results = await testEslintConfig('nx', fixtureFileName, import.meta.dirname);
-
-      const error = findLintMessageFromLintResults(results, fixtureFileName, RULE_ID);
+      const error = findLintMessageFromLintResults(results, FIXTURES.crossBoundaryImport, RULE_ID);
 
       expect(error).toBeUndefined();
     });
 
     it('does not trigger for a local import by default', async () => {
-      const fixtureFileName = 'local-import.ts';
+      const results = await testEslintConfig('nx', FIXTURES.localImport, import.meta.dirname);
 
-      const results = await testEslintConfig('nx', fixtureFileName, import.meta.dirname);
-
-      const error = findLintMessageFromLintResults(results, fixtureFileName, RULE_ID);
+      const error = findLintMessageFromLintResults(results, FIXTURES.localImport, RULE_ID);
 
       expect(error).toBeUndefined();
     });
 
     it('triggers for a cross-boundary import when set to `true`', async () => {
-      const fixtureFileName = 'cross-boundary-import.ts';
-
       const results = await testEslintConfig(
         {nx: {enforceModuleBoundaries: true}},
-        fixtureFileName,
+        FIXTURES.crossBoundaryImport,
         import.meta.dirname,
       );
 
-      const error = findLintMessageFromLintResults(results, fixtureFileName, RULE_ID);
+      const error = findLintMessageFromLintResults(results, FIXTURES.crossBoundaryImport, RULE_ID);
 
-      expect(error).toBeDefined();
+      expect(error?.message).toMatchInlineSnapshot(
+        `"Projects cannot be imported by a relative or absolute path, and must begin with a npm scope"`,
+      );
     });
 
     it('does not trigger for a local import when set to `true`', async () => {
-      const fixtureFileName = 'local-import.ts';
-
       const results = await testEslintConfig(
         {nx: {enforceModuleBoundaries: true}},
-        fixtureFileName,
+        FIXTURES.localImport,
         import.meta.dirname,
       );
 
-      const error = findLintMessageFromLintResults(results, fixtureFileName, RULE_ID);
+      const error = findLintMessageFromLintResults(results, FIXTURES.localImport, RULE_ID);
 
       expect(error).toBeUndefined();
     });
 
     it('triggers for a cross-boundary import when set to an object', async () => {
-      const fixtureFileName = 'cross-boundary-import.ts';
-
       const results = await testEslintConfig(
         {nx: {enforceModuleBoundaries: {depConstraints: []}}},
-        fixtureFileName,
+        FIXTURES.crossBoundaryImport,
         import.meta.dirname,
       );
 
-      const error = findLintMessageFromLintResults(results, fixtureFileName, RULE_ID);
+      const error = findLintMessageFromLintResults(results, FIXTURES.crossBoundaryImport, RULE_ID);
 
-      expect(error).toBeDefined();
+      expect(error?.message).toMatchInlineSnapshot(
+        `"Projects cannot be imported by a relative or absolute path, and must begin with a npm scope"`,
+      );
     });
 
     it('does not trigger for a local import when set to an object', async () => {
-      const fixtureFileName = 'local-import.ts';
-
       const results = await testEslintConfig(
         {nx: {enforceModuleBoundaries: {depConstraints: []}}},
-        fixtureFileName,
+        FIXTURES.localImport,
         import.meta.dirname,
       );
 
-      const error = findLintMessageFromLintResults(results, fixtureFileName, RULE_ID);
+      const error = findLintMessageFromLintResults(results, FIXTURES.localImport, RULE_ID);
 
       expect(error).toBeUndefined();
     });

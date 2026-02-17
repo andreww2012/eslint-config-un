@@ -1,21 +1,17 @@
+const FIXTURES = {
+  cssEmptyBlock: 'css-empty-block.css',
+} as const;
+
 describe('css config', () => {
   it('lints .css files and triggers css rules', async () => {
-    const fixtureFileName = 'css-empty-block.css';
+    const results = await testEslintConfig('css', FIXTURES.cssEmptyBlock, import.meta.dirname);
 
-    const results = await testEslintConfig(
-      {
-        css: true,
-      },
-      fixtureFileName,
-      import.meta.dirname,
-    );
-
-    const cssNoEmptyBlocksError = findLintMessageFromLintResults(
+    const error = findLintMessageFromLintResults(
       results,
-      fixtureFileName,
+      FIXTURES.cssEmptyBlock,
       'css/no-empty-blocks',
     );
 
-    expect(cssNoEmptyBlocksError).toBeDefined();
+    expect(error?.message).toMatchInlineSnapshot(`"Unexpected empty block found."`);
   });
 });

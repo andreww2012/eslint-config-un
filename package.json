@@ -286,6 +286,7 @@
     "npm-package-arg": "13.0.2",
     "p-queue": "9.1.0",
     "package-json": "10.0.1",
+    "pathe": "2.0.3",
     "prettier": "3.8.0",
     "puppeteer": "24.35.0",
     "release-it": "19.2.3",

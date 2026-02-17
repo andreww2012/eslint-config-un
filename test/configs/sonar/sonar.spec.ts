@@ -1,41 +1,40 @@
+const FIXTURES = {
+  usingIncludesOnEmptyArray: 'using-includes-on-empty-array.js',
+  usingIncludesOnNonEmptyArray: 'using-includes-on-non-empty-array.js',
+} as const;
+
 describe('sonar config', () => {
   it('triggers sonarjs/no-empty-collection for empty collections', async () => {
-    const fixtureFileName = 'using-includes-on-empty-array.js';
-
     const results = await testEslintConfig(
-      {
-        sonar: true,
-      },
-      fixtureFileName,
+      'sonar',
+      FIXTURES.usingIncludesOnEmptyArray,
       import.meta.dirname,
     );
 
-    const sonarNoEmptyCollectionError = findLintMessageFromLintResults(
+    const error = findLintMessageFromLintResults(
       results,
-      fixtureFileName,
+      FIXTURES.usingIncludesOnEmptyArray,
       'sonarjs/no-empty-collection',
     );
 
-    expect(sonarNoEmptyCollectionError).toBeDefined();
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Review this usage of "strings" as it can only be empty here."`,
+    );
   });
 
   it('does not trigger sonarjs/no-empty-collection for filled collections', async () => {
-    const fixtureFileName = 'using-includes-on-non-empty-array.js';
-
     const results = await testEslintConfig(
-      {
-        sonar: true,
-      },
-      fixtureFileName,
+      'sonar',
+      FIXTURES.usingIncludesOnNonEmptyArray,
       import.meta.dirname,
     );
 
-    const sonarNoEmptyCollectionError = findLintMessageFromLintResults(
+    const error = findLintMessageFromLintResults(
       results,
-      fixtureFileName,
+      FIXTURES.usingIncludesOnNonEmptyArray,
       'sonarjs/no-empty-collection',
     );
 
-    expect(sonarNoEmptyCollectionError).toBeUndefined();
+    expect(error).toBeUndefined();
   });
 });

@@ -1,4 +1,5 @@
 import {ESLint, Linter} from 'eslint';
+import pathe from 'pathe';
 
 export function findLintMessageFromLintResults(
   lintResult: ESLint.LintResult[],
@@ -18,7 +19,10 @@ export function findLintMessageFromLintResults(
   ruleId: string,
   options?: {all?: boolean},
 ): Linter.LintMessage | Linter.LintMessage[] | undefined {
-  const fileResult = lintResult.find((r) => r.filePath.endsWith(filePath));
+  const fileName = filePath.split('/')?.at(-1) || '';
+  const fileResult = lintResult.find(
+    (r) => fileName && pathe.normalize(r.filePath).split('/').at(-1) === fileName,
+  );
   if (options?.all) {
     return fileResult?.messages.filter((m) => m.ruleId === ruleId) || [];
   }

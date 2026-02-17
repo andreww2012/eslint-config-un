@@ -1,3 +1,8 @@
+const FIXTURES = {
+  templateWithUselessMustache: 'template-with-useless-mustache.vue',
+  templateWithoutUselessMustache: 'template-without-useless-mustache.vue',
+} as const;
+
 describe('vue config', () => {
   describe('vue version detection', () => {
     it('does not throw if Vue version cannot be determined', async () => {
@@ -22,11 +27,7 @@ describe('vue config', () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write');
 
       await testEslintConfig(
-        {
-          vue: {
-            majorVersion: 3,
-          },
-        },
+        {vue: {majorVersion: 3}},
         'template-with-useless-mustache.vue',
         import.meta.dirname,
       );
@@ -36,27 +37,31 @@ describe('vue config', () => {
   });
 
   it('triggers vue/no-useless-mustaches for string literals in mustaches', async () => {
-    const fixtureFileName = 'template-with-useless-mustache.vue';
-
-    const results = await testEslintConfig('vue', fixtureFileName, import.meta.dirname);
+    const results = await testEslintConfig(
+      'vue',
+      FIXTURES.templateWithUselessMustache,
+      import.meta.dirname,
+    );
 
     const error = findLintMessageFromLintResults(
       results,
-      fixtureFileName,
+      FIXTURES.templateWithUselessMustache,
       'vue/no-useless-mustaches',
     );
 
-    expect(error).toBeDefined();
+    expect(error?.message).toMatchInlineSnapshot(`"Unexpected mustache interpolation with a string literal value."`);
   });
 
   it('does not trigger vue/no-useless-mustaches for plain text', async () => {
-    const fixtureFileName = 'template-without-useless-mustache.vue';
-
-    const results = await testEslintConfig('vue', fixtureFileName, import.meta.dirname);
+    const results = await testEslintConfig(
+      'vue',
+      FIXTURES.templateWithoutUselessMustache,
+      import.meta.dirname,
+    );
 
     const error = findLintMessageFromLintResults(
       results,
-      fixtureFileName,
+      FIXTURES.templateWithoutUselessMustache,
       'vue/no-useless-mustaches',
     );
 

@@ -1,41 +1,30 @@
+const FIXTURES = {
+  fetchApi: 'fetch-api.js',
+  consoleApi: 'console-api.js',
+} as const;
+
 describe('compat config', () => {
   it('should trigger compat rule on fetch API with old browser target', async () => {
-    const fixtureFileName = 'fetch-api.js';
-
     const result = await testEslintConfig(
-      {
-        compat: {
-          settings: {
-            targets: ['ie 11'],
-          },
-        },
-      },
-      fixtureFileName,
+      {compat: {settings: {targets: ['ie 11']}}},
+      FIXTURES.fetchApi,
       import.meta.dirname,
     );
 
-    const message = findLintMessageFromLintResults(result, fixtureFileName, 'compat/compat');
+    const error = findLintMessageFromLintResults(result, FIXTURES.fetchApi, 'compat/compat');
 
-    expect(message).toBeDefined();
+    expect(error?.message).toMatchInlineSnapshot(`"fetch is not supported in IE 11"`);
   });
 
   it('should not trigger compat rule on widely supported console API', async () => {
-    const fixtureFileName = 'console-api.js';
-
     const result = await testEslintConfig(
-      {
-        compat: {
-          settings: {
-            targets: ['ie 11'],
-          },
-        },
-      },
-      fixtureFileName,
+      {compat: {settings: {targets: ['ie 11']}}},
+      FIXTURES.consoleApi,
       import.meta.dirname,
     );
 
-    const message = findLintMessageFromLintResults(result, fixtureFileName, 'compat/compat');
+    const error = findLintMessageFromLintResults(result, FIXTURES.consoleApi, 'compat/compat');
 
-    expect(message).toBeUndefined();
+    expect(error).toBeUndefined();
   });
 });

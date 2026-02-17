@@ -1,11 +1,15 @@
 import path from 'node:path';
 
+const FIXTURES = {
+  tailwindInJsxDuplicateClasses: 'tailwind-in-jsx-duplicate-classes.jsx',
+  tailwindInJsxNoDuplicateClasses: 'tailwind-in-jsx-no-duplicate-classes.jsx',
+  tailwindInCssDuplicateClasses: 'tailwind-in-css-duplicate-classes.css',
+} as const;
+
 describe('betterTailwind config', () => {
   const entryPoint = path.posix.resolve(import.meta.dirname, 'fixtures', 'tailwind-entry.css');
 
   it('should trigger better-tailwindcss/no-duplicate-classes on duplicate classes', async () => {
-    const fixtureFileName = 'tailwind-in-jsx-duplicate-classes.jsx';
-
     const result = await testEslintConfig(
       {
         betterTailwind: {
@@ -15,22 +19,20 @@ describe('betterTailwind config', () => {
           },
         },
       },
-      fixtureFileName,
+      FIXTURES.tailwindInJsxDuplicateClasses,
       import.meta.dirname,
     );
 
-    const message = findLintMessageFromLintResults(
+    const error = findLintMessageFromLintResults(
       result,
-      fixtureFileName,
+      FIXTURES.tailwindInJsxDuplicateClasses,
       'better-tailwindcss/no-duplicate-classes',
     );
 
-    expect(message).toBeDefined();
+    expect(error?.message).toMatchInlineSnapshot(`"Duplicate classname: "flex"."`);
   });
 
   it('should not trigger better-tailwindcss/no-duplicate-classes on unique classes', async () => {
-    const fixtureFileName = 'tailwind-in-jsx-no-duplicate-classes.jsx';
-
     const result = await testEslintConfig(
       {
         betterTailwind: {
@@ -39,22 +41,20 @@ describe('betterTailwind config', () => {
           },
         },
       },
-      fixtureFileName,
+      FIXTURES.tailwindInJsxNoDuplicateClasses,
       import.meta.dirname,
     );
 
-    const message = findLintMessageFromLintResults(
+    const error = findLintMessageFromLintResults(
       result,
-      fixtureFileName,
+      FIXTURES.tailwindInJsxNoDuplicateClasses,
       'better-tailwindcss/no-duplicate-classes',
     );
 
-    expect(message).toBeUndefined();
+    expect(error).toBeUndefined();
   });
 
   it('should lint CSS files when css config is enabled', async () => {
-    const fixtureFileName = 'tailwind-in-css-duplicate-classes.css';
-
     const result = await testEslintConfig(
       {
         css: true,
@@ -64,22 +64,20 @@ describe('betterTailwind config', () => {
           },
         },
       },
-      fixtureFileName,
+      FIXTURES.tailwindInCssDuplicateClasses,
       import.meta.dirname,
     );
 
-    const message = findLintMessageFromLintResults(
+    const error = findLintMessageFromLintResults(
       result,
-      fixtureFileName,
+      FIXTURES.tailwindInCssDuplicateClasses,
       'better-tailwindcss/no-duplicate-classes',
     );
 
-    expect(message).toBeDefined();
+    expect(error?.message).toMatchInlineSnapshot(`"Duplicate classname: "flex"."`);
   });
 
   it('does not lint CSS files when css config is not enabled', async () => {
-    const fixtureFileName = 'tailwind-in-css-duplicate-classes.css';
-
     const result = await testEslintConfig(
       {
         betterTailwind: {
@@ -88,23 +86,18 @@ describe('betterTailwind config', () => {
           },
         },
       },
-      fixtureFileName,
+      FIXTURES.tailwindInCssDuplicateClasses,
       import.meta.dirname,
     );
 
-    const message = result
-      .find((r) => r.filePath.endsWith(fixtureFileName))
-      ?.messages.find((m) =>
-        m.message.includes('File ignored because no matching configuration was supplied'),
-      );
+    const error = result.find((r) => r.filePath.endsWith(FIXTURES.tailwindInCssDuplicateClasses));
 
-    expect(message).toBeDefined();
+    expect(error?.messages?.[0]?.message).toMatchInlineSnapshot(
+      `"File ignored because no matching configuration was supplied."`,
+    );
   });
 
   it('can lint CSS and non-CSS files at the same time (given the non-CSS file matches at least one config)', async () => {
-    const cssFixtureFileName = 'tailwind-in-css-duplicate-classes.css';
-    const jsxFixtureFileName = 'tailwind-in-jsx-duplicate-classes.jsx';
-
     const result = await testEslintConfig(
       {
         css: true,
@@ -114,7 +107,7 @@ describe('betterTailwind config', () => {
           },
         },
       },
-      [cssFixtureFileName, jsxFixtureFileName],
+      [FIXTURES.tailwindInCssDuplicateClasses, FIXTURES.tailwindInJsxDuplicateClasses],
       {
         un: {
           extraConfigs: [
@@ -128,19 +121,19 @@ describe('betterTailwind config', () => {
       },
     );
 
-    const messageForCssFile = findLintMessageFromLintResults(
+    const errorForCssFile = findLintMessageFromLintResults(
       result[0],
-      cssFixtureFileName,
+      FIXTURES.tailwindInCssDuplicateClasses,
       'better-tailwindcss/no-duplicate-classes',
     );
 
-    const messageForJsxFile = findLintMessageFromLintResults(
+    const errorForJsxFile = findLintMessageFromLintResults(
       result[1],
-      jsxFixtureFileName,
+      FIXTURES.tailwindInJsxDuplicateClasses,
       'better-tailwindcss/no-duplicate-classes',
     );
 
-    expect(messageForCssFile).toBeDefined();
-    expect(messageForJsxFile).toBeDefined();
+    expect(errorForCssFile?.message).toMatchInlineSnapshot(`"Duplicate classname: "flex"."`);
+    expect(errorForJsxFile?.message).toMatchInlineSnapshot(`"Duplicate classname: "flex"."`);
   });
 });

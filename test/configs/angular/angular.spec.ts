@@ -1,29 +1,38 @@
+const FIXTURES = {
+  twoWayBindingWrong: 'angular-2way-binding-wrong.html',
+  twoWayBindingCorrect: 'angular-2way-binding-correct.html',
+} as const;
+
 describe('angular config', () => {
   it('should trigger @angular-eslint/template/banana-in-box on wrong syntax', async () => {
-    const fixtureFileName = 'angular-2way-binding-wrong.html';
+    const result = await testEslintConfig(
+      'angular',
+      FIXTURES.twoWayBindingWrong,
+      import.meta.dirname,
+    );
 
-    const result = await testEslintConfig({angular: true}, fixtureFileName, import.meta.dirname);
-
-    const message = findLintMessageFromLintResults(
+    const error = findLintMessageFromLintResults(
       result,
-      fixtureFileName,
+      FIXTURES.twoWayBindingWrong,
       '@angular-eslint/template/banana-in-box',
     );
 
-    expect(message).toBeDefined();
+    expect(error?.message).toMatchInlineSnapshot(`"Invalid binding syntax. Use [(expr)] instead"`);
   });
 
   it('should not trigger @angular-eslint/template/banana-in-box on correct syntax', async () => {
-    const fixtureFileName = 'angular-2way-binding-correct.html';
+    const result = await testEslintConfig(
+      'angular',
+      FIXTURES.twoWayBindingCorrect,
+      import.meta.dirname,
+    );
 
-    const result = await testEslintConfig({angular: true}, fixtureFileName, import.meta.dirname);
-
-    const message = findLintMessageFromLintResults(
+    const error = findLintMessageFromLintResults(
       result,
-      fixtureFileName,
+      FIXTURES.twoWayBindingCorrect,
       '@angular-eslint/template/banana-in-box',
     );
 
-    expect(message).toBeUndefined();
+    expect(error).toBeUndefined();
   });
 });
