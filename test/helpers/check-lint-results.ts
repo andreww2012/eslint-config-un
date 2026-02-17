@@ -1,13 +1,26 @@
-import {ESLint} from 'eslint';
+import {ESLint, Linter} from 'eslint';
 
-/**
- * Returns `null` if the specified `filePath` was not found
- */
-export const findLintMessageFromLintResults = (
+export function findLintMessageFromLintResults(
   lintResult: ESLint.LintResult[],
   filePath: string,
   ruleId: string,
-) => {
+  options?: {all?: false},
+): Linter.LintMessage | undefined;
+export function findLintMessageFromLintResults(
+  lintResult: ESLint.LintResult[],
+  filePath: string,
+  ruleId: string,
+  options: {all: true},
+): Linter.LintMessage[];
+export function findLintMessageFromLintResults(
+  lintResult: ESLint.LintResult[],
+  filePath: string,
+  ruleId: string,
+  options?: {all?: boolean},
+): Linter.LintMessage | Linter.LintMessage[] | undefined {
   const fileResult = lintResult.find((r) => r.filePath.endsWith(filePath));
-  return fileResult ? fileResult.messages.find((m) => m.ruleId === ruleId) : null;
-};
+  if (options?.all) {
+    return fileResult?.messages.filter((m) => m.ruleId === ruleId) || [];
+  }
+  return fileResult?.messages.find((m) => m.ruleId === ruleId);
+}
