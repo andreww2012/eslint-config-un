@@ -13,7 +13,7 @@ export interface CssInJsEslintConfigOptions<
   /**
    * [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `css` property
+   * that will be assigned to `css.target` property
    * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: {
@@ -89,7 +89,7 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         settings: {
-          css: pluginSettings,
+          css: pluginSettings ? {target: pluginSettings} : undefined,
         },
       },
     ])
