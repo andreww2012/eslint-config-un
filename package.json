@@ -38,8 +38,9 @@
     "deps"
   ],
   "scripts": {
-    "u:after": "nr u:info && nr lint:eslint:fix package.json && nr typegen && nr lint:types:go && nr build:code:test",
+    "u:after": "nr u:info && nr lint:eslint:fix package.json && nr typegen && nr u:t",
     "u:info": "tsx scripts/updated-packages-info.ts",
+    "u:t": "nr lint:types:go && nr build:code:test",
     "u": "ncu && nr u:after",
     "u:m": "ncu -t minor && nr u:after",
     "u:pm": "ncu --dep packageManager",
@@ -138,7 +139,7 @@
     "eslint-plugin-promise": "7.2.1",
     "eslint-plugin-regexp": "3.0.0",
     "eslint-plugin-security": "3.0.1",
-    "eslint-plugin-sonarjs": "3.0.6",
+    "eslint-plugin-sonarjs": "4.0.0",
     "eslint-plugin-toml": "1.0.3",
     "eslint-plugin-unicorn": "63.0.0",
     "eslint-plugin-unnecessary-abstractions": "1.0.0",

@@ -114,8 +114,6 @@ export default (async (context, optionsRaw) => {
     // ⚠️ `camelcase`
     .addRule('class-name', OFF) /** @since 1.0.4-alpha.0 */ // [S101] 🟢
     .addRule('class-prototype', OFF) /** @since 1.0.4-alpha.0 */ // [S3525] 💭
-    // ⚠️ `no-eval`, `no-script-url`, `no-new-func`
-    .addRule('code-eval', OFF) /** @since 1.0.4-alpha.0 */ // [S1523] 🟢
     // ⚠️ Unreliable metric and cannot be universally applied to all projects
     .addRule('cognitive-complexity', OFF) /** @since 0.1.0-0 */ // [S3776] 🟢
     .addRule('comma-or-logical-or-case', ERROR) /** @since 1.0.4-alpha.0 */ // [S3616] 🟢
@@ -312,6 +310,7 @@ export default (async (context, optionsRaw) => {
     .addRule('no-same-line-conditional', OFF) /** @since 0.5.0 */ // [S3972] 🟢
     // ⚠️ Unsure about this one, it seems to me that it might disallow "normal" code which could be hard to "fix"
     .addRule('no-selector-parameter', OFF) /** @since 2.0.3 */ // [S2301] 🟢💭
+    .addRule('no-session-cookies-on-static-assets', ERROR) /** @since 4.0.0 */ // [S8441] 🟢 📦 `express-session`, `cookie-session`
     // ⚠️ `jest/no-disabled-tests`, `vitest/no-disabled-tests`
     .addRule('no-skipped-tests', OFF) /** @since 3.0.0 */ // [S1607] 🟢🧪 `jasmine`, `jest`, `mocha`, node.js (only patterns are checked, not package imports)
     .addRule('no-small-switch', ERROR) /** @since 0.1.0-0 */ // [S1301] 🟢
@@ -389,8 +388,6 @@ export default (async (context, optionsRaw) => {
     .addRule('stateful-regex', ERROR) /** @since 1.0.4-alpha.0 */ // [S6351] 🟢🔤
     .addRule('strict-transport-security', helmetRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S5739] 🟢 📦 `helmet`
     .addRule('strings-comparison', WARNING) /** @since 1.0.4-alpha.0 */ // [S3003] 💭
-    // ⚠️ `constructor-super`
-    .addRule('super-invocation', OFF) /** @since 1.0.4-alpha.0 */ // [S3854] 🟢
     .addRule('table-header', WARNING) /** @since 1.0.4-alpha.0 */ // [S5256] 🟢🔵
     .addRule('table-header-reference', WARNING) /** @since 1.0.4-alpha.0 */ // [S5260] 🟢🔵
     .addRule('test-check-exception', ERROR) /** @since 1.0.4-alpha.0 */ // [S5958] 🟢🧪 (only patterns are checked, not package imports)

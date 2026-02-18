@@ -634,7 +634,6 @@ const ALL_STYLISTIC_RULES = {
     'class-name': true,
     'conditional-indentation': true,
     'destructuring-assignment-syntax': true,
-    'enforce-trailing-comma': true,
     'function-name': true,
     'max-lines': true,
     'max-lines-per-function': true,
