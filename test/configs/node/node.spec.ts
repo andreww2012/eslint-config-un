@@ -16,7 +16,7 @@ const mockUserPackageJsonPath = (fixtureDirectory: string) => {
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('node');
 
-  it('loads the node plugin if used', () => {
+  it('loads `node` plugin if used', () => {
     expect(configResult.getLoadedPlugin('node')).toBeDefined();
   });
 

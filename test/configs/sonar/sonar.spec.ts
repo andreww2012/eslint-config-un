@@ -1,40 +1,81 @@
 const FIXTURES = {
   usingIncludesOnEmptyArray: 'using-includes-on-empty-array.js',
-  usingIncludesOnNonEmptyArray: 'using-includes-on-non-empty-array.js',
 } as const;
 
-describe('sonar config', () => {
-  it('triggers sonarjs/no-empty-collection for empty collections', async () => {
-    const results = await testEslintConfig(
-      'sonar',
-      FIXTURES.usingIncludesOnEmptyArray,
-      import.meta.dirname,
+describe('basic tests', async () => {
+  const configResult = await computeEslintConfig('sonar');
+
+  it('loads `sonarjs` plugin if used', () => {
+    expect(configResult.getLoadedPlugin('sonarjs')).toBeDefined();
+  });
+
+  it('creates `sonar` eslint config', () => {
+    expect(configResult.getConfigByUnPostfix('sonar')).toBeDefined();
+  });
+
+  describe('rules', () => {
+    it('enables `sonarjs/arguments-order` rule by default', () => {
+      const ruleEntry = configResult.getRuleEntry('sonar', 'sonarjs/arguments-order');
+
+      expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[2]"`);
+    });
+
+    it('does not enable `sonarjs/file-header` rule by default', () => {
+      const ruleEntry = configResult.getRuleEntry('sonar', 'sonarjs/file-header');
+
+      expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[0]"`);
+    });
+
+    it('`sonarjs/no-empty-collection` rule works', async () => {
+      const results = await testEslintConfig(
+        'sonar',
+        FIXTURES.usingIncludesOnEmptyArray,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.usingIncludesOnEmptyArray,
+        'sonarjs/no-empty-collection',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        `"Review this usage of "strings" as it can only be empty here."`,
+      );
+    });
+  });
+});
+
+describe('options', () => {
+  describe('`enableAwsRules`', () => {
+    it.todo('enables rules specific to `aws-cdk-lib` if set to `true`');
+
+    it.todo('does not enable rules specific to `aws-cdk-lib` if set to `false`');
+
+    it.todo(
+      'enables rules specific to `aws-cdk-lib` if `aws-cdk-lib` package is detected as installed',
     );
 
-    const error = findLintMessageFromLintResults(
-      results,
-      FIXTURES.usingIncludesOnEmptyArray,
-      'sonarjs/no-empty-collection',
-    );
-
-    expect(error?.message).toMatchInlineSnapshot(
-      `"Review this usage of "strings" as it can only be empty here."`,
+    it.todo(
+      'does not enable rules specific to `aws-cdk-lib` if `aws-cdk-lib` package is not detected as installed',
     );
   });
 
-  it('does not trigger sonarjs/no-empty-collection for filled collections', async () => {
-    const results = await testEslintConfig(
-      'sonar',
-      FIXTURES.usingIncludesOnNonEmptyArray,
-      import.meta.dirname,
-    );
+  describe('`enableHelmetRules`', () => {
+    it.todo('enables rules specific to `helmet` if set to `true`');
 
-    const error = findLintMessageFromLintResults(
-      results,
-      FIXTURES.usingIncludesOnNonEmptyArray,
-      'sonarjs/no-empty-collection',
-    );
+    it.todo('does not enable rules specific to `helmet` if set to `false`');
 
-    expect(error).toBeUndefined();
+    it.todo('enables rules specific to `helmet` if `helmet` package is detected as installed');
+
+    it.todo(
+      'does not enable rules specific to `helmet` if `helmet` package is not detected as installed',
+    );
+  });
+
+  describe('`testsRules`', () => {
+    it.todo('enables rules specific to test or assertion libraries if set to `true`');
+
+    it.todo('does not enable rules specific to test or assertion libraries if set to `false`');
   });
 });
