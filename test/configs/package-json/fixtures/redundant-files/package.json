@@ -1,0 +1,4 @@
+{
+  "files": ["README.md", "CHANGELOG.md", "lib/index.js"],
+  "main": "lib/index.js"
+}
