@@ -6,6 +6,45 @@ import {eslintConfig} from '../../src';
 import type {EslintConfigUnOptions} from '../../src/config-un/shared';
 import type {OmitStrict} from '../../src/types';
 import {arraify} from '../../src/utils';
+import type {PluginPrefix} from '../../src/loaders';
+
+export const computeEslintConfig = async (
+  configsOrSingleConfigName:
+    | EslintConfigUnOptions['configs']
+    | keyof (EslintConfigUnOptions['configs'] & {}),
+  options?: {
+    un?: OmitStrict<EslintConfigUnOptions, 'configs'>;
+  },
+) => {
+  const unOptions = options?.un;
+
+  const config = await eslintConfig({
+    defaultConfigsStatus: 'all-disabled',
+    ...unOptions,
+    configs:
+      typeof configsOrSingleConfigName === 'string'
+        ? {
+            [configsOrSingleConfigName]: true,
+          }
+        : configsOrSingleConfigName,
+  });
+
+  const getConfigByUnPostfix = (eslintConfigNamePostfix: string) =>
+    config.find((c) => c.name === `eslint-config-un/${eslintConfigNamePostfix}`);
+
+  const getRuleEntry = (configName: string, ruleName: string) =>
+    getConfigByUnPostfix(configName)?.rules?.[ruleName];
+
+  return {
+    config,
+    getConfigByUnPostfix,
+    getRuleEntry,
+    getLoadedPlugin: (pluginPrefix: Exclude<PluginPrefix, ''>) =>
+      getConfigByUnPostfix('global-setup/plugins')?.plugins?.[
+        unOptions?.pluginRenames?.[pluginPrefix] ?? pluginPrefix
+      ],
+  };
+};
 
 export const testEslintConfig = async <
   const FixturePaths extends string | readonly [string, ...string[]],
