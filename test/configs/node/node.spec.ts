@@ -30,64 +30,116 @@ describe('basic tests', async () => {
 
     expect(nodeConfig?.languageOptions?.['globals']).toStrictEqual(globals.node);
   });
+});
 
-  describe('rules', () => {
-    it('enables `node/hashbang` rule by default', () => {
-      const ruleEntry = configResult.getRuleEntry('node', 'node/hashbang');
+describe('un options', () => {
+  describe('`overrides`', async () => {
+    const configResult = await computeEslintConfig({
+      node: {overrides: {'node/no-sync': 1}},
+    });
+
+    it('respect `overrides`', () => {
+      expect(
+        JSON.stringify(configResult.getRuleEntry('node', 'node/no-sync')),
+      ).toMatchInlineSnapshot(`"1"`);
+    });
+  });
+
+  describe('`overridesAny`', () => {
+    it('respect `overridesAny`', async () => {
+      const configResult = await computeEslintConfig({
+        node: {overridesAny: {'no-console': 0}},
+      });
+
+      expect(JSON.stringify(configResult.getRuleEntry('node', 'no-console'))).toMatchInlineSnapshot(
+        `"0"`,
+      );
+    });
+
+    it('respects both `overrides` and `overridesAny`', async () => {
+      const configResult = await computeEslintConfig({
+        node: {
+          overrides: {'node/no-sync': 1},
+          overridesAny: {'no-console': 0},
+        },
+      });
+
+      expect(
+        JSON.stringify(configResult.getRuleEntry('node', 'node/no-sync')),
+      ).toMatchInlineSnapshot(`"1"`);
+
+      expect(JSON.stringify(configResult.getRuleEntry('node', 'no-console'))).toMatchInlineSnapshot(
+        `"0"`,
+      );
+    });
+
+    it('puts `overridesAny` after `overrides`', async () => {
+      const configResult = await computeEslintConfig({
+        node: {
+          overrides: {'node/no-sync': 1},
+          overridesAny: {'node/no-sync': 2},
+        },
+      });
+
+      expect(
+        JSON.stringify(configResult.getRuleEntry('node', 'node/no-sync')),
+      ).toMatchInlineSnapshot(`"2"`);
+    });
+  });
+});
+
+describe('rules', async () => {
+  const configResult = await computeEslintConfig('node');
+
+  it('enables `node/hashbang` rule by default', () => {
+    const ruleEntry = configResult.getRuleEntry('node', 'node/hashbang');
+
+    expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[2]"`);
+  });
+
+  it('does not enable `node/global-require` rule by default', () => {
+    const ruleEntry = configResult.getRuleEntry('node', 'node/global-require');
+
+    expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[0]"`);
+  });
+
+  it('`node/prefer-node-protocol` rule works', async () => {
+    const results = await testEslintConfig(
+      'node',
+      FIXTURES.importBuiltinNodeModuleWithoutNodeProtocol,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.importBuiltinNodeModuleWithoutNodeProtocol,
+      'node/prefer-node-protocol',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(`"Prefer \`node:fs\` over \`fs\`."`);
+  });
+
+  describe("`unicorn/prefer-import-meta-properties` rule based on `engines.node` in user's package.json", () => {
+    afterEach(() => {
+      vi.doUnmock(import('empathic/package'));
+    });
+
+    it('enables the rule if supports `import.meta`', async () => {
+      mockUserPackageJsonPath(FIXTURES.packageJsonWithEnginesNodeFrom20_11);
+
+      const configResult = await computeEslintConfig('node');
+      const ruleEntry = configResult.getRuleEntry('node', 'unicorn/prefer-import-meta-properties');
 
       expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[2]"`);
     });
 
-    it('does not enable `node/global-require` rule by default', () => {
-      const ruleEntry = configResult.getRuleEntry('node', 'node/global-require');
+    it('disables the rule if does not support `import.meta`', async () => {
+      mockUserPackageJsonPath(FIXTURES.packageJsonWithEnginesNodeFrom14);
+
+      const configResult = await computeEslintConfig('node');
+      const ruleEntry = configResult.getRuleEntry('node', 'unicorn/prefer-import-meta-properties');
 
       expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[0]"`);
-    });
-
-    it('`node/prefer-node-protocol` rule works', async () => {
-      const results = await testEslintConfig(
-        'node',
-        FIXTURES.importBuiltinNodeModuleWithoutNodeProtocol,
-        import.meta.dirname,
-      );
-
-      const error = findLintMessageFromLintResults(
-        results,
-        FIXTURES.importBuiltinNodeModuleWithoutNodeProtocol,
-        'node/prefer-node-protocol',
-      );
-
-      expect(error?.message).toMatchInlineSnapshot(`"Prefer \`node:fs\` over \`fs\`."`);
-    });
-
-    describe("`unicorn/prefer-import-meta-properties` rule based on `engines.node` in user's package.json", () => {
-      afterEach(() => {
-        vi.doUnmock(import('empathic/package'));
-      });
-
-      it('enables the rule if supports `import.meta`', async () => {
-        mockUserPackageJsonPath(FIXTURES.packageJsonWithEnginesNodeFrom20_11);
-
-        const configResult = await computeEslintConfig('node');
-        const ruleEntry = configResult.getRuleEntry(
-          'node',
-          'unicorn/prefer-import-meta-properties',
-        );
-
-        expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[2]"`);
-      });
-
-      it('disables the rule if does not support `import.meta`', async () => {
-        mockUserPackageJsonPath(FIXTURES.packageJsonWithEnginesNodeFrom14);
-
-        const configResult = await computeEslintConfig('node');
-        const ruleEntry = configResult.getRuleEntry(
-          'node',
-          'unicorn/prefer-import-meta-properties',
-        );
-
-        expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[0]"`);
-      });
     });
   });
 });

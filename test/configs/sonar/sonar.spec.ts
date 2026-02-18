@@ -12,37 +12,95 @@ describe('basic tests', async () => {
   it('creates `sonar` eslint config', () => {
     expect(configResult.getConfigByUnPostfix('sonar')).toBeDefined();
   });
+});
 
-  describe('rules', () => {
-    it('enables `sonarjs/arguments-order` rule by default', () => {
-      const ruleEntry = configResult.getRuleEntry('sonar', 'sonarjs/arguments-order');
-
-      expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[2]"`);
+describe('un options', () => {
+  describe('`overrides`', async () => {
+    const configResult = await computeEslintConfig({
+      sonar: {overrides: {'sonarjs/no-nested-incdec': 1}},
     });
 
-    it('does not enable `sonarjs/file-header` rule by default', () => {
-      const ruleEntry = configResult.getRuleEntry('sonar', 'sonarjs/file-header');
+    it('respect `overrides`', () => {
+      expect(
+        JSON.stringify(configResult.getRuleEntry('sonar', 'sonarjs/no-nested-incdec')),
+      ).toMatchInlineSnapshot(`"1"`);
+    });
+  });
 
-      expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[0]"`);
+  describe('`overridesAny`', () => {
+    it('respect `overridesAny`', async () => {
+      const configResult = await computeEslintConfig({
+        sonar: {overridesAny: {'no-console': 0}},
+      });
+
+      expect(
+        JSON.stringify(configResult.getRuleEntry('sonar', 'no-console')),
+      ).toMatchInlineSnapshot(`"0"`);
     });
 
-    it('`sonarjs/no-empty-collection` rule works', async () => {
-      const results = await testEslintConfig(
-        'sonar',
-        FIXTURES.usingIncludesOnEmptyArray,
-        import.meta.dirname,
-      );
+    it('respects both `overrides` and `overridesAny`', async () => {
+      const configResult = await computeEslintConfig({
+        sonar: {
+          overrides: {'sonarjs/no-nested-incdec': 1},
+          overridesAny: {'no-console': 0},
+        },
+      });
 
-      const error = findLintMessageFromLintResults(
-        results,
-        FIXTURES.usingIncludesOnEmptyArray,
-        'sonarjs/no-empty-collection',
-      );
+      expect(
+        JSON.stringify(configResult.getRuleEntry('sonar', 'sonarjs/no-nested-incdec')),
+      ).toMatchInlineSnapshot(`"1"`);
 
-      expect(error?.message).toMatchInlineSnapshot(
-        `"Review this usage of "strings" as it can only be empty here."`,
-      );
+      expect(
+        JSON.stringify(configResult.getRuleEntry('sonar', 'no-console')),
+      ).toMatchInlineSnapshot(`"0"`);
     });
+
+    it('puts `overridesAny` after `overrides`', async () => {
+      const configResult = await computeEslintConfig({
+        sonar: {
+          overrides: {'sonarjs/no-nested-incdec': 1},
+          overridesAny: {'sonarjs/no-nested-incdec': 2},
+        },
+      });
+
+      expect(
+        JSON.stringify(configResult.getRuleEntry('sonar', 'sonarjs/no-nested-incdec')),
+      ).toMatchInlineSnapshot(`"2"`);
+    });
+  });
+});
+
+describe('rules', async () => {
+  const configResult = await computeEslintConfig('sonar');
+
+  it('enables `sonarjs/arguments-order` rule by default', () => {
+    const ruleEntry = configResult.getRuleEntry('sonar', 'sonarjs/arguments-order');
+
+    expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[2]"`);
+  });
+
+  it('does not enable `sonarjs/file-header` rule by default', () => {
+    const ruleEntry = configResult.getRuleEntry('sonar', 'sonarjs/file-header');
+
+    expect(JSON.stringify(ruleEntry)).toMatchInlineSnapshot(`"[0]"`);
+  });
+
+  it('`sonarjs/no-empty-collection` rule works', async () => {
+    const results = await testEslintConfig(
+      'sonar',
+      FIXTURES.usingIncludesOnEmptyArray,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.usingIncludesOnEmptyArray,
+      'sonarjs/no-empty-collection',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Review this usage of "strings" as it can only be empty here."`,
+    );
   });
 });
 
