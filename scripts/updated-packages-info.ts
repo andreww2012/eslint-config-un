@@ -35,7 +35,7 @@ const getGitHubVersionTag = (dependency: string, version: string) =>
   PACKAGES_GIT_TAGS_PATTERNS[dependency as keyof typeof PACKAGES_GIT_TAGS_PATTERNS]?.(version) ??
   `v${version}`;
 
-const EXTENSIONS_TO_SKIP_IN_DIFF = new Set(['map', 'ts', 'cts', 'mts']);
+const EXTENSIONS_TO_SKIP_IN_DIFF = new Set(['map', 'ts', 'cts', 'mts', 'tsbuildinfo']);
 const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Record<string, string[]> = {
   // For packages distributed as ESM+CJS (for example: eslint-plugin-zod-x@2.0.0)
   cjs: ['js', 'mjs'],
