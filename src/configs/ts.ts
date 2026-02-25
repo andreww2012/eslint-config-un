@@ -639,10 +639,14 @@ export default ((
           languageOptions: {
             ...generatePackageToLoadProperty('parser', 'typescriptEslintParser'),
             parserOptions: {
-              extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
               sourceType: 'module',
+              ...(extraFileExtensions.length > 0 && {
+                extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
+              }),
               ...(isTypeAware && {
-                projectService: {allowDefaultProject},
+                projectService: {
+                  ...(allowDefaultProject?.length && {allowDefaultProject}),
+                },
               }),
               ...maybeCall(optionsResolved.parserOptions, isTypeAware),
             } satisfies TsEslintParserOptions,
