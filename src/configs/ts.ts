@@ -2,8 +2,7 @@
 import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import {
   ERROR,
-  GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
-  GLOB_MDX_SUPPORTED_CODE_BLOCKS,
+  GLOB_MD_X_CODE_BLOCKS,
   GLOB_TS_X,
   GLOB_TS_X_EXTENSION,
   OFF,
@@ -569,10 +568,7 @@ export default ((
   const extraFilesNONTypeAware: string[] = [];
   const extraFilesTypeAware: string[] = [];
   const extraFilesToIgnoreNONTypeAware: string[] = [];
-  const extraFilesToIgnoreTypeAware: string[] = [
-    GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS,
-    GLOB_MDX_SUPPORTED_CODE_BLOCKS,
-  ];
+  const extraFilesToIgnoreTypeAware: string[] = [GLOB_MD_X_CODE_BLOCKS];
 
   const svelteTsConfig = svelteResolvedOptions?.configEnforceTypescriptInScriptSection;
   const vueTsConfig = vueResolvedOptions?.configEnforceTypescriptInScriptSection;

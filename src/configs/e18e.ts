@@ -242,7 +242,7 @@ export default ((context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: [GLOB_TS_X],
-          ignoresDefault: [...GLOB_MD_X_CODE_BLOCKS], // otherwise `no-indexof-equality` crashes
+          ignoresDefault: [GLOB_MD_X_CODE_BLOCKS], // otherwise `no-indexof-equality` crashes
           ignoresDefaultMergedWithUserIgnores: true,
         },
       ])

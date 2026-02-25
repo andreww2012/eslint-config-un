@@ -1055,7 +1055,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: optionsResolved.files,
-        ignoresDefault: [...GLOB_MD_X_CODE_BLOCKS, ...(optionsResolved.ignores || [])],
+        ignoresDefault: [GLOB_MD_X_CODE_BLOCKS, ...(optionsResolved.ignores || [])],
       },
     ])
     .addRule('alt-text', ERROR) /** @since 0.1.0 */ // 🟢
@@ -1093,7 +1093,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       'pinia',
       {
         includeDefaultFilesAndIgnores: true,
-        ignoresDefault: [...GLOB_MD_X_CODE_BLOCKS],
+        ignoresDefault: [GLOB_MD_X_CODE_BLOCKS],
         ignoresDefaultMergedWithUserIgnores: true,
       },
     ])
