@@ -626,22 +626,29 @@ export default ((
   const generateSetupConfigBuilder = (files: string[], ignores: string[], isTypeAware: boolean) => {
     const configBuilderSetup = context.createConfigBuilder({}, 'ts');
     configBuilderSetup
-      ?.addConfig(`ts/${isTypeAware ? '' : 'non-'}type-aware/setup`, {
-        // Applying this generally to all files is unacceptable
-        files: files.length > 0 ? files : TS_FILES_DEFAULT,
-        ignores,
-        languageOptions: {
-          ...generatePackageToLoadProperty('parser', 'typescriptEslintParser'),
-          parserOptions: {
-            extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
-            sourceType: 'module',
-            ...(isTypeAware && {
-              projectService: {allowDefaultProject},
-            }),
-            ...maybeCall(optionsResolved.parserOptions, isTypeAware),
-          } satisfies TsEslintParserOptions,
+      ?.addConfig(
+        [
+          `ts/${isTypeAware ? '' : 'non-'}type-aware/setup`,
+          {
+            // Applying this generally to all files is unacceptable
+            filesDefault: files.length > 0 ? files : TS_FILES_DEFAULT,
+            ignoresDefault: ignores,
+          },
+        ],
+        {
+          languageOptions: {
+            ...generatePackageToLoadProperty('parser', 'typescriptEslintParser'),
+            parserOptions: {
+              extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
+              sourceType: 'module',
+              ...(isTypeAware && {
+                projectService: {allowDefaultProject},
+              }),
+              ...maybeCall(optionsResolved.parserOptions, isTypeAware),
+            } satisfies TsEslintParserOptions,
+          },
         },
-      })
+      )
       .disableAnyRule('', 'class-methods-use-this')
       .disableAnyRule('', 'default-param-last')
       .disableAnyRule('', 'init-declarations')
