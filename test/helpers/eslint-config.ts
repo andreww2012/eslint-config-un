@@ -1,0 +1,37 @@
+import {ERROR, OFF, WARNING, type RuleSeverity} from '../../src/constants';
+import type {EslintFlatConfigEntry, EslintRuleEntry} from '../../src/eslint/eslint-types';
+import type {Nullable} from '../../src/types';
+
+export const getRuleSeverityFromEslintRuleEntry = (
+  entry: Nullable<EslintRuleEntry>,
+): RuleSeverity => {
+  const severityRaw = Array.isArray(entry) ? entry[0] : (entry ?? OFF);
+
+  if (typeof severityRaw === 'number') {
+    return severityRaw as RuleSeverity;
+  }
+
+  switch (severityRaw) {
+    case 'off': {
+      return OFF;
+    }
+    case 'warn': {
+      return WARNING;
+    }
+    case 'error': {
+      return ERROR;
+    }
+    default: {
+      severityRaw satisfies never;
+    }
+  }
+
+  return OFF;
+};
+
+export const getAllRulesSeverities = (config: Nullable<EslintFlatConfigEntry>) =>
+  // TODO `e18e/prefer-array-to-sorted` shouldn't trigger here - report
+  // eslint-disable-next-line e18e/prefer-array-to-sorted, unicorn/no-array-sort
+  [...new Set(Object.values(config?.rules || {}).map(getRuleSeverityFromEslintRuleEntry))].sort(
+    (a, b) => a - b,
+  );
