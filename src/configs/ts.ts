@@ -996,10 +996,13 @@ export default ((
   );
 
   configBuilderTypeAware
-    ?.addConfig('ts/type-aware/rules', {
-      ...(filesTypeAware.length > 0 && {files: filesTypeAware}),
-      ...(ignoresTypeAware.length > 0 && {ignores: ignoresTypeAware}),
-    })
+    ?.addConfig([
+      'ts/type-aware/rules',
+      {
+        filesDefault: filesTypeAware,
+        ignoresDefault: ignoresTypeAware,
+      },
+    ])
     .markCategory('Strict')
     .addRule('await-thenable', ERROR) /** @since 1.7.0 */ // 🟣
     .addRule('no-array-delete', ERROR) /** @since 6.19.0 */ // 🟣
