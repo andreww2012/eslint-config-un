@@ -19,7 +19,9 @@ describe('unicorn config', () => {
       'unicorn/no-lonely-if',
     );
 
-    expect(error?.message).toMatchInlineSnapshot(`"Unexpected \`if\` as the only statement in a \`if\` block without \`else\`."`);
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Unexpected \`if\` as the only statement in a \`if\` block without \`else\`."`,
+    );
   });
 
   it('does not trigger unicorn/no-lonely-if for a combined condition', async () => {

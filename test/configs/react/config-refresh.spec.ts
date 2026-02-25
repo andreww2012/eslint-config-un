@@ -17,7 +17,9 @@ describe('react: sub config `refresh`', () => {
       'react-refresh/only-export-components',
     );
 
-    expect(error?.message).toMatchInlineSnapshot(`"Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components."`);
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components."`,
+    );
   });
 
   it('should not trigger react-refresh/only-export-components on component-only exports', async () => {

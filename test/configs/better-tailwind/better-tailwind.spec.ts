@@ -92,7 +92,7 @@ describe('betterTailwind config', () => {
 
     const error = result.find((r) => r.filePath.endsWith(FIXTURES.tailwindInCssDuplicateClasses));
 
-    expect(error?.messages?.[0]?.message).toMatchInlineSnapshot(
+    expect(error?.messages[0]?.message).toMatchInlineSnapshot(
       `"File ignored because no matching configuration was supplied."`,
     );
   });

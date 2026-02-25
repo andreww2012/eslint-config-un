@@ -17,7 +17,9 @@ describe('vue: sub config `nuxt`', () => {
       'nuxt/prefer-import-meta',
     );
 
-    expect(error?.message).toMatchInlineSnapshot(`"Replace \`process.server\` with \`import.meta.server\`."`);
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Replace \`process.server\` with \`import.meta.server\`."`,
+    );
   });
 
   it('does not trigger nuxt/prefer-import-meta when using import.meta.server', async () => {

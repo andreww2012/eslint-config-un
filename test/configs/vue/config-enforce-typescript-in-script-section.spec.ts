@@ -17,7 +17,9 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
       'vue/block-lang',
     );
 
-    expect(error?.message).toMatchInlineSnapshot(`"The 'lang' attribute of '<script>' is missing."`);
+    expect(error?.message).toMatchInlineSnapshot(
+      `"The 'lang' attribute of '<script>' is missing."`,
+    );
   });
 
   it('does not trigger vue/block-lang when <script lang="ts"> is present', async () => {

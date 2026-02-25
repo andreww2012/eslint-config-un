@@ -29,5 +29,7 @@ it('`perfectionist/sort-imports` rule works', async () => {
     'perfectionist/sort-imports',
   );
 
-  expect(error?.message).toMatchInlineSnapshot(`"Expected "express-session" to come before "node:fs/promises"."`);
+  expect(error?.message).toMatchInlineSnapshot(
+    `"Expected "express-session" to come before "node:fs/promises"."`,
+  );
 });

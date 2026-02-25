@@ -49,7 +49,9 @@ describe('vue config', () => {
       'vue/no-useless-mustaches',
     );
 
-    expect(error?.message).toMatchInlineSnapshot(`"Unexpected mustache interpolation with a string literal value."`);
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Unexpected mustache interpolation with a string literal value."`,
+    );
   });
 
   it('does not trigger vue/no-useless-mustaches for plain text', async () => {

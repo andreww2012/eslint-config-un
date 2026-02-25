@@ -9,7 +9,9 @@ describe('toml config', () => {
 
     const error = findLintMessageFromLintResults(results, FIXTURES.wrongIndent, 'toml/indent');
 
-    expect(error?.message).toMatchInlineSnapshot(`"Expected indentation of 0 spaces but found 1 spaces."`);
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Expected indentation of 0 spaces but found 1 spaces."`,
+    );
   });
 
   it('does not trigger toml/indent for valid .toml files', async () => {

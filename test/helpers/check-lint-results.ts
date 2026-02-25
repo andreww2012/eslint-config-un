@@ -19,7 +19,7 @@ export function findLintMessageFromLintResults(
   ruleId: string,
   options?: {all?: boolean},
 ): Linter.LintMessage | Linter.LintMessage[] | undefined {
-  const fileName = filePath.split('/')?.at(-1) || '';
+  const fileName = filePath.split('/').at(-1) || '';
   const fileResult = lintResult.find(
     (r) => fileName && pathe.normalize(r.filePath).split('/').at(-1) === fileName,
   );
