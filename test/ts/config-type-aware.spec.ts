@@ -3,12 +3,14 @@ describe('ts: sub config `configTypeAware`', () => {
     it.todo(
       'creates `ts/type-aware/setup` and `ts/type-aware/rules` configs when enabled (default)',
     );
+
     it.todo('does not create `ts/type-aware/setup` or `ts/type-aware/rules` configs when disabled');
   });
 
   describe.todo('un options', () => {
     describe.todo('option: `files`', () => {
       it.todo('uses user-provided `files` in type-aware configs');
+
       it.todo('disables type-aware rules config when `files` is empty array');
     });
 
