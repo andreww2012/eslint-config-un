@@ -29,9 +29,20 @@ export const getRuleSeverityFromEslintRuleEntry = (
   return OFF;
 };
 
-export const getAllRulesSeverities = (config: Nullable<EslintFlatConfigEntry>) =>
+export const getAllRulesSeverities = (
+  config: Nullable<EslintFlatConfigEntry>,
+  ruleFilter?: (ruleName: string) => boolean,
+) =>
   // TODO `e18e/prefer-array-to-sorted` shouldn't trigger here - report
-  // eslint-disable-next-line e18e/prefer-array-to-sorted, unicorn/no-array-sort
-  [...new Set(Object.values(config?.rules || {}).map(getRuleSeverityFromEslintRuleEntry))].sort(
-    (a, b) => a - b,
-  );
+  // eslint-disable-next-line e18e/prefer-array-to-sorted
+  [
+    ...new Set(
+      Object.entries(config?.rules || {})
+        .filter(
+          ([ruleName]) =>
+            !ruleName.startsWith('disable-autofix/') && (!ruleFilter || ruleFilter(ruleName)),
+        )
+        .map(([, ruleEntry]) => getRuleSeverityFromEslintRuleEntry(ruleEntry)),
+    ),
+    // eslint-disable-next-line unicorn/no-array-sort
+  ].sort((a, b) => a - b);
