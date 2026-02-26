@@ -56,14 +56,17 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    */
   settings?: {
     /**
-     * You must set this to `true` if you're using [type testing vitest feature](https://vitest.dev/guide/testing-types).
+     * You must set this to `true` if you're using
+     * [type testing vitest feature](https://vitest.dev/guide/testing-types).
      * @see https://github.com/vitest-dev/eslint-plugin-vitest?tab=readme-ov-file#enabling-with-type-testing
      */
     typecheck?: boolean;
   };
 
   /**
-   * Explicitly specify or ignore files written in TypeScript. Will be used to enable TypeScript-specific rules like [`prefer-vi-mocked`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-vi-mocked.md).
+   * Explicitly specify or ignore files written in TypeScript.
+   * Will be used to enable TypeScript-specific rules like
+   * [`prefer-vi-mocked`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-vi-mocked.md).
    * @default true <=> `ts` config is enabled
    */
   configTypescript?:
@@ -79,7 +82,10 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   /**
    * Prefer [`.each`](https://vitest.dev/api/#test-each) or [`.for`](https://vitest.dev/api/#test-for). Note these are not the same. Possible options:
    * - `each` or `for`: prefer the specified method in all cases.
-   * - object: configure which method to prefer for different test function types (`test`, `it`, `describe`, `suite`). You may also set the `default` property to specify the preferred by default method, otherwise if not explicitly specified, both will be allowed.
+   * - object: configure which method to prefer for different test function types
+   * (`test`, `it`, `describe`, `suite`). You may also set the `default` property
+   * to specify the preferred by default method, otherwise if not explicitly specified,
+   * both will be allowed.
    * - `false`: no enforcement.
    *
    * Affected rule:
