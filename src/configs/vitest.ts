@@ -390,7 +390,7 @@ export default (async (context, optionsRaw) => {
   );
 
   return {
-    configs: [configBuilder, configBuilderNoOnlyTests],
+    configs: [configBuilder, configBuilderTypescript, configBuilderNoOnlyTests],
     optionsResolved,
   };
 }) satisfies UnConfigFn<'vitest'> as UnConfigFn<'vitest'>;
