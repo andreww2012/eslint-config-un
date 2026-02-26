@@ -216,7 +216,9 @@ export default (async (context, optionsRaw) => {
     .addRule(
       'consistent-test-it',
       optionsResolved.testDefinitionKeyword === false ? OFF : ERROR,
-      generateConsistentTestItOptions(optionsResolved),
+      optionsResolved.testDefinitionKeyword === false
+        ? []
+        : generateConsistentTestItOptions(optionsResolved),
     ) /** @since 0.0.29 */
     .addRule('consistent-vitest-vi', ERROR) /** @since 1.2.5 */ // (warns in all)
     .addRule('expect-expect', ERROR) /** @since 0.0.17 */ // 🟢
@@ -224,9 +226,11 @@ export default (async (context, optionsRaw) => {
     .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [
       {max: maxAssertionCalls},
     ]) /** @since 0.0.49 */
-    .addRule('max-nested-describe', maxNestedDescribes == null ? OFF : ERROR, [
-      {max: maxNestedDescribes},
-    ]) /** @since 0.0.8 */
+    .addRule(
+      'max-nested-describe',
+      maxNestedDescribes == null ? OFF : ERROR,
+      maxNestedDescribes == null ? [] : [{max: maxNestedDescribes}],
+    ) /** @since 0.0.8 */
     .addRule('no-alias-methods', ERROR) /** @since 0.0.49 */ // (warns in all)
     .addRule('no-commented-out-tests', WARNING) /** @since 0.0.49 */ // 🟢
     .addRule('no-conditional-expect', ERROR, [
@@ -247,12 +251,16 @@ export default (async (context, optionsRaw) => {
     .addRule('no-interpolation-in-snapshots', ERROR) /** @since 0.0.54 */ // 🟢(since 1.5.0)
     .addRule('no-large-snapshots', OFF) /** @since 0.0.54 */ // (warns in all)
     .addRule('no-mocks-import', ERROR) /** @since 0.0.54 */ // 🟢(since 1.5.0)
-    .addRule('no-restricted-matchers', hasRestrictedMatchers ? ERROR : OFF, [
-      restrictedMatchers || {},
-    ]) /** @since 0.0.54 */
-    .addRule('no-restricted-vi-methods', hasRestrictedMethods ? ERROR : OFF, [
-      restrictedMethods || {},
-    ]) /** @since 0.0.43 */
+    .addRule(
+      'no-restricted-matchers',
+      hasRestrictedMatchers ? ERROR : OFF,
+      hasRestrictedMatchers ? [restrictedMatchers || {}] : [],
+    ) /** @since 0.0.54 */
+    .addRule(
+      'no-restricted-vi-methods',
+      hasRestrictedMethods ? ERROR : OFF,
+      hasRestrictedMethods ? [restrictedMethods || {}] : [],
+    ) /** @since 0.0.43 */
     .addRule('no-standalone-expect', ERROR) /** @since 0.0.54 */ // 🟢(since 1.5.0)
     .addRule('no-test-prefixes', ERROR) /** @since 0.0.54 */ // (warns in all)
     .addRule('no-test-return-statement', ERROR) /** @since 0.0.54 */ // (warns in all)
