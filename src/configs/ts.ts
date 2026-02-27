@@ -8,9 +8,12 @@ import {
   OFF,
   WARNING,
 } from '../constants';
-import type {EslintTypedRulesConfig} from '../eslint/eslint-types';
+import type {
+  EslintTypedRulesConfig,
+  UnFlatConfigEntryFilesAndIgnores,
+} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
-import type {Nullable, ObjectValues, OmitStrict} from '../types';
+import type {Nullable, ObjectValues, OmitStrict, Prettify} from '../types';
 import {type MaybeFn, isIn, maybeCall, omit, unique} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import type {SvelteEslintConfigOptions} from './svelte';
@@ -445,12 +448,42 @@ export interface TsEslintConfigOptions<
   OmitStrict<UnRulesConfigPartial<'ts'>, keyof TypeAwareRulesWithPrefixes>
 > {
   /**
+   * Set ups `typescript-eslint` plugin: sets `language.{parser,parserOptions}`
+   * for NON-type-aware rules.
+   *
+   * By default, it will be applied to all TypeScript files (<code>**&#47;*.?([cm])ts?(x)</code>)
+   * plus extra files coming from `astro`, `svelte` and `vue` configs.
+   * If different files are specified, those extra files will still be appended.
+   *
+   * To configure the setup config for type-aware rules, use `configTypeAware.configSetup` option.
+   */
+  configSetup?: UnFlatConfigEntryFilesAndIgnores;
+
+  /**
    * Applies rules requiring type information on the specified `files`.
    *
    * By default uses `ignores` from the parent config.
    * @default true
    */
-  configTypeAware?: boolean | UnFlatConfigEntryBase<ExtraPlugins, TypeAwareRulesWithPrefixes>;
+  configTypeAware?:
+    | boolean
+    | Prettify<
+        {
+          /**
+           * Set ups `typescript-eslint` plugin: sets `language.{parser,parserOptions}`
+           * for type-aware rules.
+           *
+           * By default, it will be applied to all TypeScript files
+           * (<code>**&#47;*.?([cm])ts?(x)</code>)
+           * plus extra files coming from `astro`, `svelte` and `vue` configs.
+           * If different files are specified, those extra files will still be appended.
+           *
+           * To configure the setup config for type-aware rules, use `configSetup` option
+           * on the root config.
+           */
+          configSetup?: UnFlatConfigEntryFilesAndIgnores;
+        } & UnFlatConfigEntryBase<ExtraPlugins, TypeAwareRulesWithPrefixes>
+      >;
 
   /**
    * Disallows any type assertions via [`eslint-plugin-no-type-assertion`](https://npmjs.com/eslint-plugin-no-type-assertion) plugin.
@@ -534,6 +567,7 @@ export interface TsEslintConfigOptions<
 }
 
 const TS_FILES_DEFAULT = [GLOB_TS_X];
+const DEFAULT_IGNORES_TYPE_AWARE = [GLOB_MD_X_CODE_BLOCKS];
 
 export default ((
   context,
@@ -555,6 +589,7 @@ export default ((
   } satisfies TsEslintConfigOptions);
   optionsResolved.typescriptVersion ??= typescriptPackageInfo?.versions.majorAndMinor ?? undefined;
   const {
+    configSetup,
     configTypeAware,
     configNoTypeAssertion,
     configSortTsconfigKeys,
@@ -567,8 +602,8 @@ export default ((
 
   const extraFilesNONTypeAware: string[] = [];
   const extraFilesTypeAware: string[] = [];
-  const extraFilesToIgnoreNONTypeAware: string[] = [];
-  const extraFilesToIgnoreTypeAware: string[] = [GLOB_MD_X_CODE_BLOCKS];
+  const extraIgnoresNONTypeAware: string[] = [];
+  const extraIgnoresTypeAware: string[] = [...DEFAULT_IGNORES_TYPE_AWARE];
 
   const svelteTsConfig = svelteResolvedOptions?.configEnforceTypescriptInScriptSection;
   const vueTsConfig = vueResolvedOptions?.configEnforceTypescriptInScriptSection;
@@ -600,17 +635,14 @@ export default ((
       extraFilesTypeAware.push(...extraTsFiles);
     }
 
-    extraFilesToIgnoreNONTypeAware.push(...extraTsIgnores);
-    extraFilesToIgnoreTypeAware.push(...extraTsIgnores);
+    extraIgnoresNONTypeAware.push(...extraTsIgnores);
+    extraIgnoresTypeAware.push(...extraTsIgnores);
   });
 
   const filesNONTypeAwareDefault =
     optionsResolved.files?.length === 0 ? [] : [...(optionsResolved.files || TS_FILES_DEFAULT)];
-  const filesNONTypeAware = [...filesNONTypeAwareDefault, ...extraFilesNONTypeAware].flat();
-  const ignoresNONTypeAware = [
-    ...(optionsResolved.ignores || []),
-    ...extraFilesToIgnoreNONTypeAware,
-  ];
+  const filesNONTypeAware = [...filesNONTypeAwareDefault, ...extraFilesNONTypeAware];
+  const ignoresNONTypeAware = [...(optionsResolved.ignores || []), ...extraIgnoresNONTypeAware];
 
   const configTypeAwareOptions = typeof configTypeAware === 'object' ? configTypeAware : {};
   const {files: userFilesTypeAware, ignores: userIgnoresTypeAware} = configTypeAwareOptions;
@@ -620,19 +652,32 @@ export default ((
   ].flat();
   const ignoresTypeAware = [
     ...(userIgnoresTypeAware || optionsResolved.ignores || []),
-    ...extraFilesToIgnoreTypeAware,
+    ...extraIgnoresTypeAware,
   ];
 
-  const generateSetupConfigBuilder = (files: string[], ignores: string[], isTypeAware: boolean) => {
-    const configBuilderSetup = context.createConfigBuilder({}, 'ts');
+  const generateSetupConfigBuilder = (isTypeAware: boolean) => {
+    const optionsNonTypeAwareForSetup = configSetup || {};
+    const optionsTypeAwareForSetup = configTypeAwareOptions.configSetup || {};
+
+    const options = isTypeAware ? optionsTypeAwareForSetup : optionsNonTypeAwareForSetup;
+    if (isTypeAware) {
+      options.files ||= optionsNonTypeAwareForSetup.files;
+      options.ignores ||= optionsNonTypeAwareForSetup.ignores;
+    }
+
+    const configBuilderSetup = context.createConfigBuilder(options, 'ts');
     configBuilderSetup
       ?.addConfig(
         [
           `ts/${isTypeAware ? '' : 'non-'}type-aware/setup`,
           {
-            // Applying this generally to all files is unacceptable
-            filesDefault: files.length > 0 ? files : TS_FILES_DEFAULT,
-            ignoresDefault: ignores,
+            includeDefaultFilesAndIgnores: true,
+            filesDefault: [
+              ...(options.files?.length ? [] : TS_FILES_DEFAULT),
+              ...(isTypeAware ? extraFilesTypeAware : extraFilesNONTypeAware),
+            ],
+            filesDefaultMergedWithUserFiles: true,
+            ...(isTypeAware && {ignoresDefault: DEFAULT_IGNORES_TYPE_AWARE}),
           },
         ],
         {
@@ -681,11 +726,7 @@ export default ((
     return configBuilderSetup;
   };
 
-  const configBuilderNONTypeAwareSetup = generateSetupConfigBuilder(
-    filesNONTypeAware,
-    ignoresNONTypeAware,
-    false,
-  );
+  const configBuilderNONTypeAwareSetup = generateSetupConfigBuilder(false);
 
   const configBuilderNONTypeAware = context.createConfigBuilder(
     {
@@ -983,11 +1024,7 @@ export default ((
           },
         ];
 
-  const configBuilderTypeAwareSetup = generateSetupConfigBuilder(
-    filesTypeAware,
-    ignoresTypeAware,
-    true,
-  );
+  const configBuilderTypeAwareSetup = generateSetupConfigBuilder(true);
 
   const configBuilderTypeAware = context.createConfigBuilder(
     // This is an exception for "files is empty array disables only one config" rule. If parent config gets an empty array, we must disable type-aware rules too
@@ -1301,12 +1338,18 @@ export default ((
     filesTypeAware,
     ignoresTypeAware,
   };
-}) satisfies UnConfigFn<
+}) satisfies TsConfig as TsConfig;
+
+type TsConfig = UnConfigFn<
   'ts',
   {
     vanillaFinalFlatConfigRules: Partial<EslintTypedRulesConfig>;
     astroResolvedOptions: AstroEslintConfigOptions | null;
     vueResolvedOptions: VueEslintConfigOptions | null;
     svelteResolvedOptions: SvelteEslintConfigOptions | null;
+  },
+  {
+    filesTypeAware: string[];
+    ignoresTypeAware: string[];
   }
 >;

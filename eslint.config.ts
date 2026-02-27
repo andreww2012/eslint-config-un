@@ -118,6 +118,11 @@ export default eslintConfig({
         'security/detect-unsafe-regex': 0, // Many false positives
       },
     },
+    vitest: {
+      overrides: {
+        'vitest/valid-expect': 0, // Triggers on `(not.)to.include.members`
+      },
+    },
 
     // False positives:
     betterTailwind: false,

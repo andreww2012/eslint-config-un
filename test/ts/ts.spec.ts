@@ -50,67 +50,65 @@ describe('basic tests', async () => {
 
 describe('un options', () => {
   describe('option: `files`', async () => {
+    const FILES = ['src/**/*.ts'];
     const configResult = await computeEslintConfig({
-      ts: {files: ['src/**/*.ts']},
+      ts: {files: FILES},
     });
 
-    it('uses user-provided `files` in `{non-type-aware,type-aware}/{setup,rules}` eslint configs', () => {
+    it('uses user-provided `files` in `{non-type-aware,type-aware}/rules` eslint configs, but not in `*/setup`', () => {
+      expect(configResult.getConfigByUnPostfix('ts/non-type-aware/rules')?.files).toStrictEqual(
+        FILES,
+      );
+      expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')?.files).toStrictEqual(FILES);
+
       expect(
         configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files,
-      ).toMatchInlineSnapshot(`["src/**/*.ts"]`);
-      expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).toMatchInlineSnapshot(
-        `["src/**/*.ts"]`,
-      );
+      ).not.to.include.members(FILES);
       expect(
-        configResult.getConfigByUnPostfix('ts/non-type-aware/rules')?.files,
-      ).toMatchInlineSnapshot(`["src/**/*.ts"]`);
-      expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')?.files).toMatchInlineSnapshot(
-        `["src/**/*.ts"]`,
-      );
+        configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files,
+      ).not.to.include.members(FILES);
     });
 
-    it('disables `{non-type-aware,type-aware}/rules` eslint configs when `files` is empty array, but does not disable `{non-type-aware,type-aware}/setup` eslint configs', async () => {
+    it('disables `{non-type-aware,type-aware}/rules` eslint configs when `files` is empty array, but does not disable `{non-type-aware,type-aware}/setup`', async () => {
+      const FILES: string[] = [];
       const configResult = await computeEslintConfig({
-        ts: {files: []},
+        ts: {files: FILES},
       });
 
       expect(configResult.getConfigByUnPostfix('ts/non-type-aware/rules')).toBeUndefined();
       expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')).toBeUndefined();
-      expect(
-        configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files,
-      ).toMatchInlineSnapshot(`["**/*.?([cm])ts?(x)"]`);
-      expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).toMatchInlineSnapshot(
-        `["**/*.?([cm])ts?(x)"]`,
-      );
+
+      const nonTypeAwareSetup = configResult.getConfigByUnPostfix('ts/non-type-aware/setup');
+      expect(nonTypeAwareSetup).toBeDefined();
+      expect(nonTypeAwareSetup?.files).not.toStrictEqual(FILES);
+
+      const typeAwareSetup = configResult.getConfigByUnPostfix('ts/type-aware/setup');
+      expect(typeAwareSetup).toBeDefined();
+      expect(typeAwareSetup?.files).not.toStrictEqual(FILES);
     });
   });
 
   describe('option: `ignores`', async () => {
+    const IGNORES = ['**/fixtures/*.ts'];
     const configResult = await computeEslintConfig({
-      ts: {ignores: ['**/fixtures/*.ts']},
+      ts: {ignores: IGNORES},
     });
 
-    it('uses user-provided `ignores` in `{non-type-aware,type-aware}/{setup,rules}` eslint configs and merges them with the implicit default `ignores`', () => {
+    it('uses user-provided `ignores` in `{non-type-aware,type-aware}/rules` eslint configs and merges them with the implicit default `ignores`, but not in `*/setup`', () => {
+      const nonTypeAwareRules = configResult.getConfigByUnPostfix('ts/non-type-aware/rules');
+      expect(nonTypeAwareRules?.ignores).to.include.members(IGNORES);
+      expect(nonTypeAwareRules?.ignores?.length).toBeGreaterThan(IGNORES.length);
+
+      const typeAwareRules = configResult.getConfigByUnPostfix('ts/type-aware/rules');
+      expect(typeAwareRules?.ignores).to.include.members(IGNORES);
+      expect(typeAwareRules?.ignores?.length).toBeGreaterThan(IGNORES.length);
+
       expect(
         configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.ignores,
-      ).toMatchInlineSnapshot(
-        `["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.yaml", "**/fixtures/*.ts"]`,
-      );
+      ).not.to.include.members(IGNORES);
       expect(
         configResult.getConfigByUnPostfix('ts/type-aware/setup')?.ignores,
-      ).toMatchInlineSnapshot(
-        `["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.yaml", "**/fixtures/*.ts", "**/*.md?(x)/**/*.*"]`,
-      );
-      expect(
-        configResult.getConfigByUnPostfix('ts/non-type-aware/rules')?.ignores,
-      ).toMatchInlineSnapshot(
-        `["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.yaml", "**/fixtures/*.ts"]`,
-      );
-      expect(
-        configResult.getConfigByUnPostfix('ts/type-aware/rules')?.ignores,
-      ).toMatchInlineSnapshot(
-        `["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.yaml", "**/fixtures/*.ts", "**/*.md?(x)/**/*.*"]`,
-      );
+      ).not.to.include.members(IGNORES);
     });
   });
 
@@ -121,8 +119,10 @@ describe('un options', () => {
 
     it('respect `overrides`', () => {
       expect(
-        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
-      ).toMatchInlineSnapshot(`0`);
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
+        ),
+      ).toEqual(0);
     });
   });
 
@@ -133,8 +133,10 @@ describe('un options', () => {
       });
 
       expect(
-        configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
-      ).toMatchInlineSnapshot(`0`);
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
+        ),
+      ).toEqual(0);
     });
 
     it('respects both `overrides` and `overridesAny`', async () => {
@@ -146,12 +148,16 @@ describe('un options', () => {
       });
 
       expect(
-        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
-      ).toMatchInlineSnapshot(`0`);
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
+        ),
+      ).toEqual(0);
 
       expect(
-        configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
-      ).toMatchInlineSnapshot(`0`);
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
+        ),
+      ).toEqual(0);
     });
 
     it('puts `overridesAny` after `overrides`', async () => {
@@ -163,8 +169,10 @@ describe('un options', () => {
       });
 
       expect(
-        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
-      ).toMatchInlineSnapshot(`2`);
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
+        ),
+      ).toEqual(2);
     });
   });
 

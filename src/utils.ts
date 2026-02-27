@@ -17,6 +17,7 @@ export {klona as cloneDeep} from 'klona';
 
 export {
   capitalize,
+  difference,
   groupBy,
   isPlainObject,
   mapKeys,
