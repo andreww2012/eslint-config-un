@@ -306,6 +306,14 @@ export class ConfigEntryBuilder<
 
     this.addFlatConfig(configFinal);
 
+    // TODO copy-pasted from `processUnOrFlatConfig`
+    if (configFinal.language) {
+      this.context.usedPlugins.add(
+        getRuleNameAndPluginPrefixByFullName(this.context, configFinal.language)
+          .pluginPrefixCanonical,
+      );
+    }
+
     const {parser} = internalOptions;
     if (parser != null) {
       this.context.usedParsers.set(parser, [
