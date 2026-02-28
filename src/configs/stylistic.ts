@@ -28,6 +28,11 @@ export interface StylisticEslintConfigOptions<
   >;
 }
 
+/**
+ * Note: matches both `import 'foo'` and `import {} from 'foo'` - but not `import {bar} from 'foo'`
+ */
+const SIDE_EFFECTS_ONLY_IMPORT_ESLINT_SELECTOR = 'ImportDeclaration[specifiers.length=0]';
+
 export default (async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {} satisfies StylisticEslintConfigOptions);
 
@@ -146,6 +151,16 @@ export default (async (context, optionsRaw) => {
     .addRule(
       ...setupRule('padding-line-between-statements', ERROR, [
         {blankLine: 'never', prev: 'import', next: 'import'},
+        {
+          blankLine: 'any',
+          prev: 'import',
+          next: {selector: SIDE_EFFECTS_ONLY_IMPORT_ESLINT_SELECTOR},
+        },
+        {
+          blankLine: 'any',
+          prev: {selector: SIDE_EFFECTS_ONLY_IMPORT_ESLINT_SELECTOR},
+          next: 'import',
+        },
       ]),
     ) /** @since 0.0.4 */
     .addRule(...setupRule('quote-props', OFF)) /** @since 0.0.6 */ // 🟢

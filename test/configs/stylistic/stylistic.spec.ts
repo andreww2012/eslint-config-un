@@ -1,3 +1,9 @@
+const FIXTURES = {
+  normalImportBlankLineNormalImport: 'normal-import-blank-line-normal-import.js',
+  sideEffectImportBlankLineNormalImport: 'side-effect-import-blank-line-normal-import.js',
+  normalImportBlankLineSideEffectImport: 'normal-import-blank-line-side-effect-import.js',
+} as const;
+
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('stylistic');
 
@@ -45,7 +51,9 @@ describe('rules', async () => {
   it('enables `@stylistic/padding-line-between-statements` rule by default', () => {
     expect(
       configResult.getRuleEntry('stylistic', '@stylistic/padding-line-between-statements'),
-    ).toMatchInlineSnapshot(`[2, {"blankLine": "never", "next": "import", "prev": "import"}]`);
+    ).toMatchInlineSnapshot(
+      `[2, {"blankLine": "never", "next": "import", "prev": "import"}, {"blankLine": "any", "next": {"selector": "ImportDeclaration[specifiers.length=0]"}, "prev": "import"}, {"blankLine": "any", "next": "import", "prev": {"selector": "ImportDeclaration[specifiers.length=0]"}}]`,
+    );
   });
 
   it('disables `@stylistic/indent` rule by default', () => {
@@ -70,6 +78,60 @@ describe('rules', async () => {
         configResult.getRuleEntry('stylistic', '@stylistic/spaced-comment'),
       ),
     ).toBe(0);
+  });
+
+  describe('`@stylistic/padding-line-between-statements` rule behavior', () => {
+    const RULE_ID = '@stylistic/padding-line-between-statements';
+
+    it('reports an error for a blank line between two normal imports', async () => {
+      const results = await testEslintConfig(
+        'stylistic',
+        FIXTURES.normalImportBlankLineNormalImport,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.normalImportBlankLineNormalImport,
+        RULE_ID,
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        `"Unexpected blank line before this statement."`,
+      );
+    });
+
+    it('does not report an error for a blank line between a side-effect import and a normal import', async () => {
+      const results = await testEslintConfig(
+        'stylistic',
+        FIXTURES.sideEffectImportBlankLineNormalImport,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.sideEffectImportBlankLineNormalImport,
+        RULE_ID,
+      );
+
+      expect(error).toBeUndefined();
+    });
+
+    it('does not report an error for a blank line between a normal import and a side-effect import', async () => {
+      const results = await testEslintConfig(
+        'stylistic',
+        FIXTURES.normalImportBlankLineSideEffectImport,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.normalImportBlankLineSideEffectImport,
+        RULE_ID,
+      );
+
+      expect(error).toBeUndefined();
+    });
   });
 });
 
