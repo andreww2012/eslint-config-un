@@ -11,5 +11,8 @@ export default defineConfig({
       // `indent` is implicitly set to 2 by default, but `min` cannot be used together with non-falsy `indent` value
       indent: 0,
     },
+    coverage: {
+      include: ['src/**/*.ts'],
+    },
   },
 });
