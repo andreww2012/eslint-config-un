@@ -48,9 +48,7 @@ const E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS_SET = new Set<string>(
   E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS,
 );
 
-export interface E18eEslintConfigOptions<
-  ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'e18e'> {
+export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * "New syntax and APIs which improve code readability and performance"
    * \- [plugin docs](https://github.com/e18e/eslint-plugin#overview)

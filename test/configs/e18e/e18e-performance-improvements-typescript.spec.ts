@@ -1,5 +1,5 @@
 describe('e18e: sub config `configPerformanceImprovements.configTypescript`', () => {
-  describe('basic tests', async () => {
+  describe('basic tests', () => {
     it('does not create `e18e/performance-improvements/type-aware` eslint config by default (requires `ts` config to be enabled)', async () => {
       const configResult = await computeEslintConfig('e18e');
 

@@ -411,7 +411,8 @@ export type UnConfigFn<
   context: Readonly<UnConfigContext<ExtraPlugins>>,
   configOptions:
     | boolean
-    | OmitStrict<UnConfigs<ExtraPlugins>[ConfigKey], 'overrides' | 'overridesAny'>
+    // eslint-disable-next-line ts/no-restricted-types -- some configs don't have the omitted properties
+    | Omit<UnConfigs<ExtraPlugins>[ConfigKey], 'overrides' | 'overridesAny'>
     | undefined,
   extraArgument: ExtraArgument,
 ) => MaybePromise<
