@@ -19,7 +19,7 @@ import type {
   UnFlatConfigEntryBase,
   UnRulesConfig,
 } from '../eslint/eslint-types';
-import {genFlatConfigEntryName} from '../eslint/eslint-utils';
+import {genFlatConfigEntryName, getRuleNameAndPluginPrefixByFullName} from '../eslint/eslint-utils';
 import {
   type PackageToLoadInfo,
   type ParserPrefix,
@@ -32,6 +32,7 @@ import type {
   NonEmptyString,
   NonEmptyTuple,
   Nullable,
+  ObjectValues,
   OmitStrict,
   Prettify,
   SetRequired,
@@ -64,6 +65,13 @@ const PLUGINS_PROVIDING_LANGUAGES = {
   toml: ['toml'],
   yaml: ['yaml'],
 } as const satisfies Partial<Record<PluginPrefix, [string, ...string[]]>>;
+
+export type SupportedEslintPluginLanguages = ObjectValues<{
+  [PluginKey in keyof typeof PLUGINS_PROVIDING_LANGUAGES]: [
+    PluginKey,
+    (typeof PLUGINS_PROVIDING_LANGUAGES)[PluginKey][number],
+  ];
+}>;
 
 const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
   css: [GLOB_CSS],

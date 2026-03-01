@@ -1,5 +1,7 @@
+import type {SupportedEslintPluginLanguages} from '../config-un/config-entry-builder';
 import {ERROR, OFF} from '../constants';
-import {getKeysOfTruthyValues} from '../utils';
+import type {ParserPrefix} from '../loaders';
+import {getKeysOfTruthyValues, groupBy, objectEntriesUnsafe} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -7,6 +9,8 @@ import {
   type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
+
+type SupportedPackageManagers = Extract<GetRuleOptions<'lockfile', 'flavor'>, string>;
 
 export interface LockfileEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -65,6 +69,30 @@ export interface LockfileEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
+  const LOCKFILES_INFO = objectEntriesUnsafe({
+    npm: [
+      ['package-lock.json', 'npm-shrinkwrap.json'],
+      ['json', {parser: 'jsonc-eslint-parser'}],
+    ],
+    yarn: [['yarn.lock'], ['yaml', {language: ['yaml', 'yaml']}]],
+    pnpm: [['pnpm-lock.yaml'], ['yaml', {language: ['yaml', 'yaml']}]],
+    // TODO what to do with `bun.lockb`?
+    bun: [
+      ['bun.lock', 'bun.lockb'],
+      ['json', {parser: 'jsonc-eslint-parser'}],
+    ],
+    vlt: [['vlt-lock.json'], ['json', {parser: 'jsonc-eslint-parser'}]],
+  } satisfies Record<
+    SupportedPackageManagers,
+    [
+      lockfiles: string[],
+      languageOrParser: [
+        configName: string,
+        {language: SupportedEslintPluginLanguages} | {parser: ParserPrefix},
+      ],
+    ]
+  >);
+
   const optionsResolved = assignDefaults(optionsRaw, {
     noNonRegistryDependencySpecifiers: true,
   } satisfies Partial<LockfileEslintConfigOptions>);
@@ -82,19 +110,17 @@ export default ((context, optionsRaw) => {
   // Legend:
   // 🟢 - in recommended
 
-  configBuilder
+  const lockfileEslintConfig = configBuilder
     ?.addConfig([
       'lockfile',
       {
         includeDefaultFilesAndIgnores: true,
-        filesDefault: [
-          '**/package-lock.json',
-          '**/yarn.lock',
-          '**/pnpm-lock.yaml',
-          '**/bun.lock',
-          '**/bun.lockb',
-          '**/vlt-lock.json',
-        ],
+        filesDefault: LOCKFILES_INFO.flatMap(([, [lockfiles]]) =>
+          lockfiles.map((lockfile) => `**/${lockfile}`),
+        ) satisfies string[],
+        ignoresInternal: {
+          yaml: false,
+        },
       },
     ])
     .addRule('binary-conflicts', ERROR) /** @since 1.0.0 */ // 🟢
@@ -125,7 +151,47 @@ export default ((context, optionsRaw) => {
       enforceLockfileVersion ? [enforceLockfileVersion] : [],
     ) /** @since 1.0.0 */ // 🟢
     .enableConfigTesterForPlugin('lockfile')
-    .addOverrides();
+    .addOverrides().config;
+
+  if (lockfileEslintConfig) {
+    const files = lockfileEslintConfig.files?.flat() || [];
+    objectEntriesUnsafe(
+      groupBy(files, (fileGlob) => {
+        for (const [, [lockfiles, [parserConfigName]]] of LOCKFILES_INFO) {
+          if (lockfiles.some((lockfile) => fileGlob.includes(lockfile))) {
+            return parserConfigName;
+          }
+        }
+        return '';
+      }),
+    ).forEach(([parserConfigName, globs]) => {
+      if (!parserConfigName) {
+        context.logger.warn(
+          `The following file globs in the \`lockfile\` config could not be associated with a known package manager and may not be parsed correctly: ${globs.join(
+            ', ',
+          )}`,
+        );
+        return;
+      }
+
+      // eslint-disable-next-line ts/no-non-null-assertion
+      const [, parserOrLanguage] = LOCKFILES_INFO.find(
+        ([, [, [pm]]]) => pm === parserConfigName,
+      )![1][1];
+
+      configBuilder.addConfig([
+        `lockfile/parser/${parserConfigName}`,
+        {
+          filesDefault: globs,
+          ignoresInternal: {
+            yaml: false,
+          },
+          ...('parser' in parserOrLanguage && {parser: parserOrLanguage.parser}),
+          ...('language' in parserOrLanguage && {language: parserOrLanguage.language}),
+        },
+      ]);
+    });
+  }
 
   return {
     configs: [configBuilder],

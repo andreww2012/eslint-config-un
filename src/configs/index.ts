@@ -690,6 +690,9 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * <code>**&#47;pnpm-lock.yaml</code>, <code>**&#47;bun.lock</code>,
    * <code>**&#47;vlt-lock.json</code>
    *
+   * ⚠️ Note: specified `files` will be naively analyzed for lockfile types and corresponding
+   * parser configs (named `lockfile/parser/{json,yaml}`) will be created for matched entries.
+   *
    * 🧩 Main plugin: [`eslint-plugin-lockfile`](https://npmjs.com/eslint-plugin-lockfile)
    * ([docs](https://github.com/ljharb/lockfile-tools/tree/main/packages/eslint-plugin#readme))
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
