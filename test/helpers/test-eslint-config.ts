@@ -8,6 +8,8 @@ import type {OmitStrict} from '../../src/types';
 import {arraify} from '../../src/utils';
 import type {PluginPrefix} from '../../src/loaders';
 
+const UN_ESLINT_CONFIGS_PREFIX = 'eslint-config-un/';
+
 export const computeEslintConfig = async (
   configsOrSingleConfigName:
     | EslintConfigUnOptions['configs']
@@ -30,7 +32,24 @@ export const computeEslintConfig = async (
   });
 
   const getConfigByUnPostfix = (eslintConfigNamePostfix: string) =>
-    config.find((c) => c.name === `eslint-config-un/${eslintConfigNamePostfix}`);
+    config.find((c) => c.name === `${UN_ESLINT_CONFIGS_PREFIX}${eslintConfigNamePostfix}`);
+
+  const getConfigsByUnPostfix = (predicate: (postfix: string) => boolean) =>
+    config
+      .map((config) => {
+        if (!config.name?.startsWith(UN_ESLINT_CONFIGS_PREFIX)) {
+          return null;
+        }
+        const namePrefixless = config.name.slice(UN_ESLINT_CONFIGS_PREFIX.length);
+        if (!predicate(namePrefixless)) {
+          return null;
+        }
+        return {
+          config,
+          name: namePrefixless,
+        };
+      })
+      .filter((v) => v != null);
 
   const getRuleEntry = (configName: string, ruleName: string) =>
     getConfigByUnPostfix(configName)?.rules?.[ruleName];
@@ -38,6 +57,7 @@ export const computeEslintConfig = async (
   return {
     config,
     getConfigByUnPostfix,
+    getConfigsByUnPostfix,
     getRuleEntry,
     getLoadedPlugin: (pluginPrefix: Exclude<PluginPrefix, ''>) =>
       getConfigByUnPostfix('global-setup/plugins')?.plugins?.[
@@ -92,7 +112,7 @@ export const testEslintConfig = async <
   const fixtures = await Promise.all(
     arraify(fixturePaths).map(async (fixturePath) => ({
       contents: await fs.readFile(path.resolve(fixturesRootPath, 'fixtures', fixturePath), 'utf8'),
-      filePath: path.basename(fixturePath),
+      filePath: path.join(fixturesRootPath, 'fixtures', fixturePath),
     })),
   );
 
