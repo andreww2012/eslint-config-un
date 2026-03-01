@@ -15,13 +15,18 @@ export const computeEslintConfig = async (
     | EslintConfigUnOptions['configs']
     | keyof (EslintConfigUnOptions['configs'] & {}),
   options?: {
+    /**
+     * Do not set implicit default options
+     * @default false
+     */
+    reset?: boolean;
     un?: OmitStrict<EslintConfigUnOptions, 'configs'>;
   },
 ) => {
   const unOptions = options?.un;
 
   const config = await eslintConfig({
-    defaultConfigsStatus: 'all-disabled',
+    ...(!options?.reset && {defaultConfigsStatus: 'all-disabled'}),
     ...unOptions,
     configs:
       typeof configsOrSingleConfigName === 'string'

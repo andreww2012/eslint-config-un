@@ -20,10 +20,10 @@ describe('basic tests', async () => {
   });
 
   it('does not create `stylistic` eslint configs when disabled', async () => {
-    const disabledResult = await computeEslintConfig({stylistic: false});
+    const configResult = await computeEslintConfig({stylistic: false});
 
-    expect(disabledResult.getConfigByUnPostfix('stylistic')).toBeUndefined();
-    expect(disabledResult.getConfigByUnPostfix('stylistic/spaced-comment')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('stylistic')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('stylistic/spaced-comment')).toBeUndefined();
   });
 
   it('has no explicit `files` restriction in `stylistic` eslint config by default', () => {

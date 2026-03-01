@@ -1,0 +1,212 @@
+describe('jsdoc: sub config `configTypescript`', () => {
+  describe('basic tests', async () => {
+    const configResult = await computeEslintConfig({jsdoc: true, ts: true});
+
+    it('creates `jsdoc/ts` eslint config when enabled (default when `ts` config is enabled)', () => {
+      expect(configResult.getConfigByUnPostfix('jsdoc/ts')).toBeDefined();
+    });
+
+    it('does not create `jsdoc/ts` eslint config when disabled', async () => {
+      const configResult = await computeEslintConfig({
+        jsdoc: {configTypescript: false},
+        ts: true,
+      });
+
+      expect(configResult.getConfigByUnPostfix('jsdoc/ts')).toBeUndefined();
+    });
+
+    it('creates `jsdoc/ts` eslint config with default TypeScript files', () => {
+      expect(configResult.getConfigByUnPostfix('jsdoc/ts')?.files).toMatchInlineSnapshot(
+        `["**/*.?([cm])ts?(x)"]`,
+      );
+    });
+
+    it('has default `ignores` in `jsdoc/ts` eslint config', () => {
+      const ignores = configResult.getConfigByUnPostfix('jsdoc/ts')?.ignores;
+
+      expect(ignores?.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('rules', async () => {
+    const configResult = await computeEslintConfig({jsdoc: true, ts: true});
+
+    it('enables `jsdoc/no-types` rule by default', () => {
+      expect(
+        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-types')),
+      ).toBe(2);
+    });
+
+    it('disables `jsdoc/no-undefined-types` rule by default', () => {
+      expect(
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-undefined-types'),
+        ),
+      ).toBe(0);
+    });
+  });
+
+  describe('un options', () => {
+    describe('option: `files`', () => {
+      it('uses user-provided `files` in `jsdoc/ts` eslint config', async () => {
+        const FILES = ['src/**/*.ts'];
+        const configResult = await computeEslintConfig({
+          jsdoc: {configTypescript: {files: FILES}},
+          ts: true,
+        });
+
+        expect(configResult.getConfigByUnPostfix('jsdoc/ts')?.files).toStrictEqual(FILES);
+      });
+
+      it('disables `jsdoc/ts` eslint config when `files` is empty array', async () => {
+        const configResult = await computeEslintConfig({
+          jsdoc: {configTypescript: {files: []}},
+          ts: true,
+        });
+
+        expect(configResult.getConfigByUnPostfix('jsdoc/ts')).toBeUndefined();
+      });
+    });
+
+    describe('option: `ignores`', () => {
+      it('uses user-provided `ignores` in `jsdoc/ts` eslint config and merges them with defaults', async () => {
+        const IGNORES = ['**/fixtures/**'];
+        const configResult = await computeEslintConfig({
+          jsdoc: {configTypescript: {ignores: IGNORES}},
+          ts: true,
+        });
+
+        const ignores = configResult.getConfigByUnPostfix('jsdoc/ts')?.ignores;
+
+        expect(ignores).to.include.members(IGNORES);
+        expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+      });
+    });
+
+    describe('option: `overrides`', () => {
+      it('respects `overrides` in `jsdoc/ts` eslint config', async () => {
+        const configResult = await computeEslintConfig({
+          jsdoc: {configTypescript: {overrides: {'jsdoc/no-types': 0}}},
+          ts: true,
+        });
+
+        expect(
+          getRuleSeverityFromEslintRuleEntry(
+            configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-types'),
+          ),
+        ).toBe(0);
+      });
+    });
+
+    describe('option: `overridesAny`', () => {
+      it('respects `overridesAny` in `jsdoc/ts` eslint config', async () => {
+        const configResult = await computeEslintConfig({
+          jsdoc: {configTypescript: {overridesAny: {'no-console': 0}}},
+          ts: true,
+        });
+
+        expect(
+          getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc/ts', 'no-console')),
+        ).toBe(0);
+      });
+
+      it('respects both `overrides` and `overridesAny`', async () => {
+        const configResult = await computeEslintConfig({
+          jsdoc: {
+            configTypescript: {
+              overrides: {'jsdoc/no-types': 0},
+              overridesAny: {'no-console': 0},
+            },
+          },
+          ts: true,
+        });
+
+        expect(
+          getRuleSeverityFromEslintRuleEntry(
+            configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-types'),
+          ),
+        ).toBe(0);
+
+        expect(
+          getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc/ts', 'no-console')),
+        ).toBe(0);
+      });
+
+      it('puts `overridesAny` after `overrides`', async () => {
+        const configResult = await computeEslintConfig({
+          jsdoc: {
+            configTypescript: {
+              overrides: {'jsdoc/no-types': 1},
+              overridesAny: {'jsdoc/no-types': 2},
+            },
+          },
+          ts: true,
+        });
+
+        expect(
+          getRuleSeverityFromEslintRuleEntry(
+            configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-types'),
+          ),
+        ).toBe(2);
+      });
+    });
+
+    describe('option: `forceSeverity`', () => {
+      it('respects `forceSeverity` set to `error` in `jsdoc/ts` eslint config', async () => {
+        const configResult = await computeEslintConfig({
+          jsdoc: {configTypescript: {forceSeverity: 'error'}},
+          ts: true,
+        });
+
+        expect(
+          getAllRulesSeverities(configResult.getConfigByUnPostfix('jsdoc/ts'), (ruleName) =>
+            ruleName.startsWith('jsdoc/'),
+          ),
+        ).toStrictEqual([2]);
+      });
+
+      it('respects `forceSeverity` set to `warn` in `jsdoc/ts` eslint config', async () => {
+        const configResult = await computeEslintConfig({
+          jsdoc: {configTypescript: {forceSeverity: 'warn'}},
+          ts: true,
+        });
+
+        expect(
+          getAllRulesSeverities(configResult.getConfigByUnPostfix('jsdoc/ts'), (ruleName) =>
+            ruleName.startsWith('jsdoc/'),
+          ),
+        ).toStrictEqual([1]);
+      });
+    });
+  });
+
+  describe('options', () => {
+    describe('option: `settings`', () => {
+      const SETTINGS = {ignorePrivate: true, mode: 'jsdoc'} as const;
+
+      it('inherits jsdoc settings from root config when not provided', async () => {
+        const configResult = await computeEslintConfig({
+          jsdoc: {settings: SETTINGS},
+          ts: true,
+        });
+        const config = configResult.getConfigByUnPostfix('jsdoc/ts');
+
+        expect(config?.settings?.['jsdoc']).toStrictEqual(SETTINGS);
+      });
+
+      it('uses sub-config-specific jsdoc settings when provided', async () => {
+        const SUB_SETTINGS = {mode: 'typescript'} as const;
+        const configResult = await computeEslintConfig({
+          jsdoc: {
+            settings: SETTINGS,
+            configTypescript: {settings: SUB_SETTINGS},
+          },
+          ts: true,
+        });
+        const config = configResult.getConfigByUnPostfix('jsdoc/ts');
+
+        expect(config?.settings?.['jsdoc']).toStrictEqual(SUB_SETTINGS);
+      });
+    });
+  });
+});

@@ -10,9 +10,9 @@ describe('basic tests', async () => {
   });
 
   it('does not create `security` eslint config when disabled', async () => {
-    const disabledResult = await computeEslintConfig({security: false});
+    const configResult = await computeEslintConfig({security: false});
 
-    expect(disabledResult.getConfigByUnPostfix('security')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('security')).toBeUndefined();
   });
 
   it('has no explicit `files` restriction in `security` eslint config by default (applies to all files)', () => {

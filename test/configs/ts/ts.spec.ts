@@ -79,10 +79,12 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')).toBeUndefined();
 
       const nonTypeAwareSetup = configResult.getConfigByUnPostfix('ts/non-type-aware/setup');
+
       expect(nonTypeAwareSetup).toBeDefined();
       expect(nonTypeAwareSetup?.files).not.toStrictEqual(FILES);
 
       const typeAwareSetup = configResult.getConfigByUnPostfix('ts/type-aware/setup');
+
       expect(typeAwareSetup).toBeDefined();
       expect(typeAwareSetup?.files).not.toStrictEqual(FILES);
     });
@@ -96,10 +98,12 @@ describe('un options', () => {
 
     it('uses user-provided `ignores` in `{non-type-aware,type-aware}/rules` eslint configs and merges them with the implicit default `ignores`, but not in `*/setup`', () => {
       const nonTypeAwareRules = configResult.getConfigByUnPostfix('ts/non-type-aware/rules');
+
       expect(nonTypeAwareRules?.ignores).to.include.members(IGNORES);
       expect(nonTypeAwareRules?.ignores?.length).toBeGreaterThan(IGNORES.length);
 
       const typeAwareRules = configResult.getConfigByUnPostfix('ts/type-aware/rules');
+
       expect(typeAwareRules?.ignores).to.include.members(IGNORES);
       expect(typeAwareRules?.ignores?.length).toBeGreaterThan(IGNORES.length);
 
@@ -122,7 +126,7 @@ describe('un options', () => {
         getRuleSeverityFromEslintRuleEntry(
           configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
         ),
-      ).toEqual(0);
+      ).toBe(0);
     });
   });
 
@@ -136,7 +140,7 @@ describe('un options', () => {
         getRuleSeverityFromEslintRuleEntry(
           configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
         ),
-      ).toEqual(0);
+      ).toBe(0);
     });
 
     it('respects both `overrides` and `overridesAny`', async () => {
@@ -151,13 +155,13 @@ describe('un options', () => {
         getRuleSeverityFromEslintRuleEntry(
           configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
         ),
-      ).toEqual(0);
+      ).toBe(0);
 
       expect(
         getRuleSeverityFromEslintRuleEntry(
           configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
         ),
-      ).toEqual(0);
+      ).toBe(0);
     });
 
     it('puts `overridesAny` after `overrides`', async () => {
@@ -172,7 +176,7 @@ describe('un options', () => {
         getRuleSeverityFromEslintRuleEntry(
           configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
         ),
-      ).toEqual(2);
+      ).toBe(2);
     });
   });
 

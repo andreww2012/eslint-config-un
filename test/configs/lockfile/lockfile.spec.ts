@@ -25,17 +25,23 @@ describe('basic tests', async () => {
   });
 
   it('does not create `lockfile` by default', async () => {
-    const disabledResult = await computeEslintConfig({});
+    const configResult = await computeEslintConfig({}, {reset: true});
 
-    expect(disabledResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
   });
 
-  it('does not create `lockfile` eslint config when explicitly disabled and prints a warning that there is no need to do that', async () => {
+  it('creates `lockfile` eslint config if explicitly enabled', async () => {
+    const configResult = await computeEslintConfig({lockfile: true}, {reset: true});
+
+    expect(configResult.getConfigByUnPostfix('lockfile')).toBeDefined();
+  });
+
+  it('does not create `lockfile` eslint config and prints a warning that there is no need to do that if explicitly disabled', async () => {
     using stderrSpy = vi.spyOn(process.stderr, 'write');
 
-    const disabledResult = await computeEslintConfig({lockfile: false});
+    const configResult = await computeEslintConfig({lockfile: false}, {reset: true});
 
-    expect(disabledResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
 
     expect(
       String(stderrSpy.mock.calls[0]?.[0]).startsWith(
