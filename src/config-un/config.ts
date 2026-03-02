@@ -182,6 +182,10 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       'packagesInfo' | 'configsMeta'
     > as unknown as UnConfigContext<ExtraPlugins>);
 
+  if (context.isTestMode) {
+    logger.level = 0; // Fatal and Error only
+  }
+
   if (cacheConfigs) {
     debug('Attempting to restore configs from memory cache');
 
@@ -840,7 +844,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
         errorsCount += 1;
       } else {
         const {message, severity} = errorMessage;
-        context.logger[severity](message);
+        context.logger.error(`${severity === 'warn' ? '[warn] ' : ''}${message}`);
         if (severity === 'error') {
           errorsCount += 1;
         } else {
@@ -850,7 +854,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     });
 
     if (errorsCount > 0 || warningsCount > 0) {
-      context.logger[errorsCount > 0 ? 'fatal' : 'warn'](
+      context.logger[errorsCount > 0 ? 'fatal' : 'error'](
         `Test failed with ${[errorsCount > 0 && `${errorsCount} error${errorsCount === 1 ? '' : 's'}`, warningsCount > 0 && `${warningsCount} warning${warningsCount === 1 ? '' : 's'}`].filter(Boolean).join(' and ')}`,
       );
     }

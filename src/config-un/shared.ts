@@ -344,6 +344,11 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
 
 export interface EslintConfigUnInternalOptions {
   disableAutofixForAllFixableRulesOnly?: boolean;
+
+  /**
+   * - Enables configs testing
+   * - Disables console warnings
+   */
   testMode?: boolean;
 }
 
