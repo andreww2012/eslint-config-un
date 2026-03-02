@@ -810,6 +810,23 @@ The cache, regardless of the storage, is considered fresh for 1 hour, unless one
 - ESLint config file contents
 - Node.JS version
 
+## Environment variables
+
+All environment variables affecting eslint-config-un behavior start with `ESLINT_CONFIG_UN_`.
+Boolean values are transformed via `Boolean` constructor, meaning that if the value is `'0'`, is will be treated as `true`.
+
+### `ESLINT_CONFIG_UN_CACHE_CONFIGS`
+
+See [`cacheConfigs` option](#cacheconfigs).
+
+### `ESLINT_CONFIG_UN_DISABLE_WARNINGS`
+
+Do not print any warnings to the console.
+
+### `ESLINT_CONFIG_UN_OFFLINE_MODE`
+
+See [`offlineMode` option](#offlinemode).
+
 ## Other exports
 
 ### Main entrypoint
