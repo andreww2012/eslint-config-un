@@ -299,6 +299,7 @@ const ALL_STYLISTIC_RULES = {
     'attrs-newline': true,
     'class-spacing': true,
     'element-newline': true,
+    'head-order': true,
     indent: true,
     lowercase: true,
     'no-extra-spacing-attrs': true,

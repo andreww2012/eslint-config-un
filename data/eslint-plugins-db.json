@@ -1898,7 +1898,7 @@
   "eslint-plugin-canonical-vocabulary": {"status": "fetched"},
   "eslint-plugin-capital-case": {"status": "fetched"},
   "eslint-plugin-capital-i-interface": {"status": "fetched"},
-  "eslint-plugin-capo": {"status": "fetched"},
+  "eslint-plugin-capo": {"status": "declined", "reason": "`head-order` from @html-eslint/eslint-plugin can be used instead"},
   "eslint-plugin-carav-plugin": {"status": "fetched"},
   "eslint-plugin-care": {"status": "fetched"},
   "eslint-plugin-careaxiom": {"status": "fetched"},

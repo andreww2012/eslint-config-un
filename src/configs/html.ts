@@ -87,6 +87,7 @@ export default ((context, optionsRaw) => {
     )
     .markCategory('Best Practice')
     .addRule('css-no-empty-blocks', ERROR) /** @since 0.53.0 */ // 🎨
+    .addRule('head-order', ERROR) /** @since 0.57.0 */
     .addRule('max-element-depth', OFF) /** @since 0.33.0 */
     .addRule('no-duplicate-attrs', ERROR) /** @since 0.9.0-0.9.0-alpha.1.0 */ // 🟢
     .addRule('no-duplicate-class', ERROR) /** @since 0.39.0 */
@@ -94,6 +95,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-duplicate-in-head', ERROR) /** @since 0.42.0 */
     .addRule('no-ineffective-attrs', ERROR) /** @since 0.45.0 */
     .addRule('no-inline-styles', OFF) /** @since 0.1.0 */
+    .addRule('no-invalid-attr-value', ERROR) /** @since 0.55.0 */
     .addRule('no-invalid-entity', ERROR) /** @since 0.42.0 */
     .addRule('no-nested-interactive', ERROR) /** @since 0.32.0 */
     .addRule('no-obsolete-attrs', ERROR) /** @since 0.52.0 */ // 🟢
@@ -136,6 +138,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-invalid-role', ERROR) /** @since 0.32.0 */
     .addRule('no-non-scalable-viewport', ERROR) /** @since 0.7.0 */
     .addRule('no-positive-tabindex', ERROR) /** @since 0.7.0 */
+    .addRule('no-redundant-role', ERROR) /** @since 0.55.0 */
     .addRule('no-skip-heading-levels', OFF) /** @since 0.4.0 */
     .addRule('require-form-method', OFF) /** @since 0.32.0 */
     .addRule('require-frame-title', ERROR) /** @since 0.7.0 */
