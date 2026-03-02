@@ -24,29 +24,45 @@ const E18E_RULES_MODERNIZATION = [
   'prefer-url-canparse',
 ] as const satisfies GetRuleNamesInPlugin<'e18e'>[];
 const E18E_RULES_MODERNIZATION_SET = new Set<string>(E18E_RULES_MODERNIZATION);
+type E18eModernizationRules = (typeof E18E_RULES_MODERNIZATION)[number];
 
 const E18E_RULES_MODULE_REPLACEMENTS = [
   'ban-dependencies',
 ] as const satisfies GetRuleNamesInPlugin<'e18e'>[];
 const E18E_RULES_MODULE_REPLACEMENTS_SET = new Set<string>(E18E_RULES_MODULE_REPLACEMENTS);
+type E18eModuleReplacementsRules = (typeof E18E_RULES_MODULE_REPLACEMENTS)[number];
 
 const E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS = [
   'prefer-array-from-map',
   'prefer-array-some',
   'prefer-date-now',
+  'prefer-inline-equality',
   'prefer-regex-test',
+  'prefer-static-regex',
   'prefer-timer-args',
 ] as const satisfies GetRuleNamesInPlugin<'e18e'>[];
 const E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS_SET = new Set<string>(
   E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS,
 );
+type E18ePerformanceImprovementsNonTsRules =
+  (typeof E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS)[number];
+
 const E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS = [
   'no-indexof-equality',
+  'prefer-inline-equality',
   'prefer-regex-test',
 ] as const satisfies GetRuleNamesInPlugin<'e18e'>[];
 const E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS_SET = new Set<string>(
   E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS,
 );
+type E18ePerformanceImprovementsTsRules = (typeof E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS)[number];
+
+type AllE18eRules = keyof UnRulesConfigPartial<'e18e'>;
+
+'' as Exclude<
+  AllE18eRules,
+  `e18e/${E18eModernizationRules | E18eModuleReplacementsRules | E18ePerformanceImprovementsNonTsRules | E18ePerformanceImprovementsTsRules}`
+> satisfies never;
 
 export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never> {
   /**
@@ -60,7 +76,7 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     | boolean
     | UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<UnRulesConfigPartial<'e18e'>, `e18e/${(typeof E18E_RULES_MODERNIZATION)[number]}`>
+        Pick<UnRulesConfigPartial<'e18e'>, `e18e/${E18eModernizationRules}`>
       >;
 
   /**
@@ -74,10 +90,7 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     | boolean
     | (UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<
-          UnRulesConfigPartial<'e18e'>,
-          `e18e/${(typeof E18E_RULES_MODULE_REPLACEMENTS)[number]}`
-        >
+        Pick<UnRulesConfigPartial<'e18e'>, `e18e/${E18eModuleReplacementsRules}`>
       > & {
         /**
          * Options of [the only rule, `ban-dependencies`](https://github.com/es-tooling/eslint-plugin-depend/blob/HEAD/docs/rules/ban-dependencies.md).
@@ -98,10 +111,7 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     | boolean
     | (UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<
-          UnRulesConfigPartial<'e18e'>,
-          `e18e/${(typeof E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS)[number]}`
-        >
+        Pick<UnRulesConfigPartial<'e18e'>, `e18e/${E18ePerformanceImprovementsNonTsRules}`>
       > & {
         /**
          * Same as parent config, but only rules (potentially optionally)
@@ -114,10 +124,7 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
           | boolean
           | UnFlatConfigEntryBase<
               ExtraPlugins,
-              Pick<
-                UnRulesConfigPartial<'e18e'>,
-                `e18e/${(typeof E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS)[number]}`
-              >
+              Pick<UnRulesConfigPartial<'e18e'>, `e18e/${E18ePerformanceImprovementsTsRules}`>
             >;
       });
 }
@@ -212,7 +219,9 @@ export default ((context, optionsRaw) => {
       .addRule('prefer-array-from-map', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-some', ERROR) /** @since 0.1.4 */
       .addRule('prefer-date-now', ERROR) /** @since 0.1.3 */
+      .addRule('prefer-inline-equality', ERROR) /** @since 0.2.0 */ // 💭(optional)
       .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */ // 💭(optional)
+      .addRule('prefer-static-regex', ERROR) /** @since 0.2.0 */
       .addRule('prefer-timer-args', ERROR) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
         rulesToSkipInConfig: (ruleName) =>
@@ -245,6 +254,7 @@ export default ((context, optionsRaw) => {
         },
       ])
       .addRule('no-indexof-equality', ERROR) /** @since 0.0.1 */ // 🔴💭
+      .addRule('prefer-inline-equality', ERROR) /** @since 0.2.0 */ // 💭(optional)
       .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */ // 💭(optional)
       .enableConfigTesterForPlugin('e18e', {
         rulesToSkipInConfig: (ruleName) =>

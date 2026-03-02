@@ -21,6 +21,8 @@ const RULE_OPTIONS_SCHEMA = {
 
 type RuleOptions = InferJsonSchemaType<typeof RULE_OPTIONS_SCHEMA>;
 
+const CONSEQUENT_INDENT_REGEX = /^\s+/m;
+
 const rule: Eslint.Rule.RuleModule = {
   meta: {
     type: 'layout',
@@ -76,7 +78,8 @@ const rule: Eslint.Rule.RuleModule = {
 
             const indent = ' '.repeat(lastBodyStatement.loc?.start.column || 0);
 
-            const consequentIndentLength = consequentText.match(/^\s+/m)?.[0]?.length || 0;
+            const consequentIndentLength =
+              consequentText.match(CONSEQUENT_INDENT_REGEX)?.[0]?.length || 0;
             const indentInsideConsequent = ' '.repeat(
               Math.max(0, consequentIndentLength - indent.length),
             );

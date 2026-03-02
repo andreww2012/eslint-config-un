@@ -40,6 +40,8 @@ import {
   type UnConfigContext,
 } from './shared';
 
+const VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX = /^(?:\^|~)/;
+
 interface ResolveConfigAsyncDataOptions {
   usedPluginPrefixes: string[];
   usedParserPrefixes: ParserPrefix[];
@@ -251,7 +253,7 @@ ${styleText(
   generateInstallationCommand(
     packages.map(({name, versionRange}) =>
       versionRange
-        ? `${name}@${versionRange ? versionRange.replace(/^(\^|~)/, '') : 'latest'}`
+        ? `${name}@${versionRange ? versionRange.replace(VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX, '') : 'latest'}`
         : name,
     ),
   ),

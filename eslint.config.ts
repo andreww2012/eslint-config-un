@@ -21,11 +21,6 @@ export default eslintConfig({
     js: {
       overrides: {
         'arrow-body-style': 2,
-        'max-classes-per-file': (severity, options) => ({
-          severity,
-          options,
-          ignores: ['scripts/**'],
-        }),
       },
     },
     lockfile: {
@@ -140,6 +135,13 @@ export default eslintConfig({
   },
 
   extraConfigs: [
+    {
+      files: ['scripts/**'],
+      rules: {
+        'max-classes-per-file': 0,
+        'e18e/prefer-static-regex': 0,
+      },
+    },
     {
       files: ['**/*.?([cm])ts?(x)'],
       rules: {
