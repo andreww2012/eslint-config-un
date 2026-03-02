@@ -35,7 +35,6 @@ export default ((context, optionsRaw) => {
     .addRule('no-aggregating-enable', ERROR) /** @since 3.2.0 */ // 🟢
     .addRule('no-duplicate-disable', ERROR) /** @since 3.2.0 */ // 🟢
     .addRule('no-unlimited-disable', ERROR) /** @since 3.2.0 */ // 🟢
-    .addRule('no-unused-disable', OFF) /** @since 3.2.0 */ // Handled by ESLint natively
     .addRule('no-unused-enable', ERROR) /** @since 3.2.0 */ // 🟢
     .markCategory('Stylistic')
     .addRule('no-restricted-disable', OFF) /** @since 3.2.0 */
