@@ -223,30 +223,20 @@ describe('un options', () => {
     });
   });
 
-  describe('option: `overrides`', () => {
-    it('respects `overrides` in `lockfile` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        lockfile: {overrides: {'lockfile/binary-conflicts': 0}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('lockfile', 'lockfile/binary-conflicts'),
-        ),
-      ).toBe(0);
+  it('respects `overrides` and `overridesAny` in `lockfile` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      lockfile: {overrides: {'lockfile/binary-conflicts': 0}, overridesAny: {'no-console': 0}},
     });
-  });
 
-  describe('option: `overridesAny`', () => {
-    it('respects `overridesAny` in `lockfile` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        lockfile: {overridesAny: {'no-console': 0}},
-      });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(
+        configResult.getRuleEntry('lockfile', 'lockfile/binary-conflicts'),
+      ),
+    ).toBe(0);
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('lockfile', 'no-console')),
-      ).toBe(0);
-    });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('lockfile', 'no-console')),
+    ).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {

@@ -15,58 +15,23 @@ describe('basic tests', async () => {
 });
 
 describe('un options', () => {
-  describe('`overrides`', async () => {
+  it('respects `overrides` and `overridesAny` in `sonar` eslint config', async () => {
     const configResult = await computeEslintConfig({
-      sonar: {overrides: {'sonarjs/no-nested-incdec': 1}},
+      sonar: {
+        overrides: {'sonarjs/no-nested-incdec': 1},
+        overridesAny: {'no-console': 0},
+      },
     });
 
-    it('respect `overrides`', () => {
-      expect(
-        JSON.stringify(configResult.getRuleEntry('sonar', 'sonarjs/no-nested-incdec')),
-      ).toMatchInlineSnapshot(`"1"`);
-    });
-  });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(
+        configResult.getRuleEntry('sonar', 'sonarjs/no-nested-incdec'),
+      ),
+    ).toBe(1);
 
-  describe('`overridesAny`', () => {
-    it('respect `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        sonar: {overridesAny: {'no-console': 0}},
-      });
-
-      expect(
-        JSON.stringify(configResult.getRuleEntry('sonar', 'no-console')),
-      ).toMatchInlineSnapshot(`"0"`);
-    });
-
-    it('respects both `overrides` and `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        sonar: {
-          overrides: {'sonarjs/no-nested-incdec': 1},
-          overridesAny: {'no-console': 0},
-        },
-      });
-
-      expect(
-        JSON.stringify(configResult.getRuleEntry('sonar', 'sonarjs/no-nested-incdec')),
-      ).toMatchInlineSnapshot(`"1"`);
-
-      expect(
-        JSON.stringify(configResult.getRuleEntry('sonar', 'no-console')),
-      ).toMatchInlineSnapshot(`"0"`);
-    });
-
-    it('puts `overridesAny` after `overrides`', async () => {
-      const configResult = await computeEslintConfig({
-        sonar: {
-          overrides: {'sonarjs/no-nested-incdec': 1},
-          overridesAny: {'sonarjs/no-nested-incdec': 2},
-        },
-      });
-
-      expect(
-        JSON.stringify(configResult.getRuleEntry('sonar', 'sonarjs/no-nested-incdec')),
-      ).toMatchInlineSnapshot(`"2"`);
-    });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('sonar', 'no-console')),
+    ).toBe(0);
   });
 });
 

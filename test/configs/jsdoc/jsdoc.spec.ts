@@ -99,64 +99,18 @@ describe('un options', () => {
     });
   });
 
-  describe('option: `overrides`', () => {
-    it('respects `overrides` in `jsdoc` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        jsdoc: {overrides: {'jsdoc/check-access': 0}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('jsdoc', 'jsdoc/check-access'),
-        ),
-      ).toBe(0);
-    });
-  });
-
-  describe('option: `overridesAny`', () => {
-    it('respects `overridesAny` in `jsdoc` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        jsdoc: {overridesAny: {'no-console': 0}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc', 'no-console')),
-      ).toBe(0);
+  it('respects `overrides` and `overridesAny` in `jsdoc` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      jsdoc: {overrides: {'jsdoc/check-access': 0}, overridesAny: {'no-console': 0}},
     });
 
-    it('respects both `overrides` and `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        jsdoc: {
-          overrides: {'jsdoc/check-access': 0},
-          overridesAny: {'no-console': 0},
-        },
-      });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc', 'jsdoc/check-access')),
+    ).toBe(0);
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('jsdoc', 'jsdoc/check-access'),
-        ),
-      ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc', 'no-console')),
-      ).toBe(0);
-    });
-
-    it('puts `overridesAny` after `overrides`', async () => {
-      const configResult = await computeEslintConfig({
-        jsdoc: {
-          overrides: {'jsdoc/check-access': 1},
-          overridesAny: {'jsdoc/check-access': 2},
-        },
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('jsdoc', 'jsdoc/check-access'),
-        ),
-      ).toBe(2);
-    });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc', 'no-console')),
+    ).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {

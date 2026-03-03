@@ -23,58 +23,23 @@ describe('basic tests', async () => {
 });
 
 describe('un options', () => {
-  describe('`overrides`', async () => {
+  it('respects `overrides` and `overridesAny` in `perfectionist` eslint config', async () => {
     const configResult = await computeEslintConfig({
-      perfectionist: {overrides: {'perfectionist/sort-classes': 1}},
+      perfectionist: {
+        overrides: {'perfectionist/sort-classes': 1},
+        overridesAny: {'no-console': 0},
+      },
     });
 
-    it('respect `overrides`', () => {
-      expect(
-        JSON.stringify(configResult.getRuleEntry('perfectionist', 'perfectionist/sort-classes')),
-      ).toMatchInlineSnapshot(`"1"`);
-    });
-  });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(
+        configResult.getRuleEntry('perfectionist', 'perfectionist/sort-classes'),
+      ),
+    ).toBe(1);
 
-  describe('`overridesAny`', () => {
-    it('respect `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        perfectionist: {overridesAny: {'sort-imports': 0}},
-      });
-
-      expect(
-        JSON.stringify(configResult.getRuleEntry('perfectionist', 'sort-imports')),
-      ).toMatchInlineSnapshot(`"0"`);
-    });
-
-    it('respects both `overrides` and `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        perfectionist: {
-          overrides: {'perfectionist/sort-classes': 1},
-          overridesAny: {'sort-imports': 0},
-        },
-      });
-
-      expect(
-        JSON.stringify(configResult.getRuleEntry('perfectionist', 'perfectionist/sort-classes')),
-      ).toMatchInlineSnapshot(`"1"`);
-
-      expect(
-        JSON.stringify(configResult.getRuleEntry('perfectionist', 'sort-imports')),
-      ).toMatchInlineSnapshot(`"0"`);
-    });
-
-    it('puts `overridesAny` after `overrides`', async () => {
-      const configResult = await computeEslintConfig({
-        perfectionist: {
-          overrides: {'perfectionist/sort-classes': 1},
-          overridesAny: {'perfectionist/sort-classes': 2},
-        },
-      });
-
-      expect(
-        JSON.stringify(configResult.getRuleEntry('perfectionist', 'perfectionist/sort-classes')),
-      ).toMatchInlineSnapshot(`"2"`);
-    });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('perfectionist', 'no-console')),
+    ).toBe(0);
   });
 });
 

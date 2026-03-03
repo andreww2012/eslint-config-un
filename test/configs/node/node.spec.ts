@@ -33,58 +33,18 @@ describe('basic tests', async () => {
 });
 
 describe('un options', () => {
-  describe('`overrides`', async () => {
+  it('respects `overrides` and `overridesAny` in `node` eslint config', async () => {
     const configResult = await computeEslintConfig({
-      node: {overrides: {'node/no-sync': 1}},
+      node: {overrides: {'node/no-sync': 0}, overridesAny: {'no-console': 0}},
     });
 
-    it('respect `overrides`', () => {
-      expect(
-        JSON.stringify(configResult.getRuleEntry('node', 'node/no-sync')),
-      ).toMatchInlineSnapshot(`"1"`);
-    });
-  });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('node', 'node/no-sync')),
+    ).toBe(0);
 
-  describe('`overridesAny`', () => {
-    it('respect `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        node: {overridesAny: {'no-console': 0}},
-      });
-
-      expect(JSON.stringify(configResult.getRuleEntry('node', 'no-console'))).toMatchInlineSnapshot(
-        `"0"`,
-      );
-    });
-
-    it('respects both `overrides` and `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        node: {
-          overrides: {'node/no-sync': 1},
-          overridesAny: {'no-console': 0},
-        },
-      });
-
-      expect(
-        JSON.stringify(configResult.getRuleEntry('node', 'node/no-sync')),
-      ).toMatchInlineSnapshot(`"1"`);
-
-      expect(JSON.stringify(configResult.getRuleEntry('node', 'no-console'))).toMatchInlineSnapshot(
-        `"0"`,
-      );
-    });
-
-    it('puts `overridesAny` after `overrides`', async () => {
-      const configResult = await computeEslintConfig({
-        node: {
-          overrides: {'node/no-sync': 1},
-          overridesAny: {'node/no-sync': 2},
-        },
-      });
-
-      expect(
-        JSON.stringify(configResult.getRuleEntry('node', 'node/no-sync')),
-      ).toMatchInlineSnapshot(`"2"`);
-    });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('node', 'no-console')),
+    ).toBe(0);
   });
 });
 

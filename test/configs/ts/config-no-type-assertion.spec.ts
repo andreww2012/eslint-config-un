@@ -20,13 +20,7 @@ describe('ts: sub config `configNoTypeAssertion`', () => {
       );
     });
 
-    describe.todo('option: `overrides`', () => {
-      it.todo('respects `overrides` in `no-type-assertion` config');
-    });
-
-    describe.todo('option: `overridesAny`', () => {
-      it.todo('respects `overridesAny` in `no-type-assertion` config');
-    });
+    it.todo('respects `overrides` and `overridesAny` in `no-type-assertion` eslint config');
 
     describe.todo('option: `forceSeverity`', () => {
       it.todo('respects `forceSeverity` in `no-type-assertion` config');

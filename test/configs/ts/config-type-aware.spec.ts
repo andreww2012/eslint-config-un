@@ -18,13 +18,7 @@ describe('ts: sub config `configTypeAware`', () => {
       it.todo('uses user-provided `ignores` in type-aware configs and merges them with defaults');
     });
 
-    describe.todo('option: `overrides`', () => {
-      it.todo('respects `overrides` in type-aware rules');
-    });
-
-    describe.todo('option: `overridesAny`', () => {
-      it.todo('respects `overridesAny` in type-aware rules');
-    });
+    it.todo('respects `overrides` and `overridesAny` in type-aware eslint configs');
 
     describe.todo('option: `forceSeverity`', () => {
       it.todo('respects `forceSeverity` in type-aware rules');

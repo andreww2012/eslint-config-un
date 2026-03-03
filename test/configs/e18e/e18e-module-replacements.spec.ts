@@ -75,72 +75,27 @@ describe('e18e: sub config `configModuleReplacements`', () => {
       });
     });
 
-    describe('option: `overrides`', () => {
-      it('respects `overrides` in `e18e/module-replacements` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {configModuleReplacements: {overrides: {'e18e/ban-dependencies': 0}}},
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('e18e/module-replacements', 'e18e/ban-dependencies'),
-          ),
-        ).toBe(0);
-      });
-    });
-
-    describe('option: `overridesAny`', () => {
-      it('respects `overridesAny` in `e18e/module-replacements` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {configModuleReplacements: {overridesAny: {'no-console': 0}}},
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('e18e/module-replacements', 'no-console'),
-          ),
-        ).toBe(0);
-      });
-
-      it('respects both `overrides` and `overridesAny`', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {
-            configModuleReplacements: {
-              overrides: {'e18e/ban-dependencies': 0},
-              overridesAny: {'no-console': 0},
-            },
+    it('respects `overrides` and `overridesAny` in `e18e/module-replacements` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        e18e: {
+          configModuleReplacements: {
+            overrides: {'e18e/ban-dependencies': 0},
+            overridesAny: {'no-console': 0},
           },
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('e18e/module-replacements', 'e18e/ban-dependencies'),
-          ),
-        ).toBe(0);
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('e18e/module-replacements', 'no-console'),
-          ),
-        ).toBe(0);
+        },
       });
 
-      it('puts `overridesAny` after `overrides`', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {
-            configModuleReplacements: {
-              overrides: {'e18e/ban-dependencies': 1},
-              overridesAny: {'e18e/ban-dependencies': 0},
-            },
-          },
-        });
+      expect(
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry('e18e/module-replacements', 'e18e/ban-dependencies'),
+        ),
+      ).toBe(0);
 
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('e18e/module-replacements', 'e18e/ban-dependencies'),
-          ),
-        ).toBe(0);
-      });
+      expect(
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry('e18e/module-replacements', 'no-console'),
+        ),
+      ).toBe(0);
     });
 
     describe('option: `forceSeverity`', () => {

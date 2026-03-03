@@ -20,13 +20,7 @@ describe('ts: sub config `configSortTsconfigKeys`', () => {
       );
     });
 
-    describe.todo('option: `overrides`', () => {
-      it.todo('respects `overrides` in `sort-tsconfig-keys` config');
-    });
-
-    describe.todo('option: `overridesAny`', () => {
-      it.todo('respects `overridesAny` in `sort-tsconfig-keys` config');
-    });
+    it.todo('respects `overrides` and `overridesAny` in `sort-tsconfig-keys` eslint config');
 
     describe.todo('option: `forceSeverity`', () => {
       it.todo('respects `forceSeverity` in `sort-tsconfig-keys` config');

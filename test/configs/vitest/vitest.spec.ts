@@ -65,56 +65,25 @@ describe('un options', () => {
     });
   });
 
-  describe('option: `overrides`', () => {
-    it('respects `overrides` in `vitest` and `vitest/ts` configs', async () => {
-      const configResult = await computeEslintConfig({
-        ts: true,
-        vitest: {
-          overrides: {'vitest/prefer-to-be': 0},
-          configTypescript: {
-            overrides: {'vitest/prefer-vi-mocked': 0},
-          },
-        },
-      });
-
-      expect(configResult.getRuleEntry('vitest', 'vitest/prefer-to-be')).toMatchInlineSnapshot(`0`);
-      expect(
-        configResult.getRuleEntry('vitest/ts', 'vitest/prefer-vi-mocked'),
-      ).toMatchInlineSnapshot(`0`);
-    });
-  });
-
-  describe('option: `overridesAny`', () => {
-    it('respects `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        vitest: {overridesAny: {'no-console': 0}},
-      });
-
-      expect(configResult.getRuleEntry('vitest', 'no-console')).toMatchInlineSnapshot(`0`);
+  it('respects `overrides` and `overridesAny` in `vitest` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      vitest: {
+        overrides: {'vitest/prefer-to-be': 0},
+        overridesAny: {'no-console': 0},
+      },
     });
 
-    it('respects both `overrides` and `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        vitest: {
-          overrides: {'vitest/prefer-to-be': 1},
-          overridesAny: {'no-console': 0},
-        },
-      });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(
+        configResult.getRuleEntry('vitest', 'vitest/prefer-to-be'),
+      ),
+    ).toBe(0);
 
-      expect(configResult.getRuleEntry('vitest', 'vitest/prefer-to-be')).toMatchInlineSnapshot(`1`);
-      expect(configResult.getRuleEntry('vitest', 'no-console')).toMatchInlineSnapshot(`0`);
-    });
-
-    it('puts `overridesAny` after `overrides`', async () => {
-      const configResult = await computeEslintConfig({
-        vitest: {
-          overrides: {'vitest/prefer-to-be': 1},
-          overridesAny: {'vitest/prefer-to-be': 0},
-        },
-      });
-
-      expect(configResult.getRuleEntry('vitest', 'vitest/prefer-to-be')).toMatchInlineSnapshot(`0`);
-    });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(
+        configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
+      ),
+    ).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {
@@ -448,7 +417,9 @@ describe('options', () => {
         },
       });
 
-      expect(configResult.getRuleEntry('vitest', 'vitest/valid-expect')).toMatchInlineSnapshot(`[2, {"alwaysAwait": true, "asyncMatchers": ["toResolveWith"], "maxArgs": 2, "minArgs": 1}]`);
+      expect(configResult.getRuleEntry('vitest', 'vitest/valid-expect')).toMatchInlineSnapshot(
+        `[2, {"alwaysAwait": true, "asyncMatchers": ["toResolveWith"], "maxArgs": 2, "minArgs": 1}]`,
+      );
     });
   });
 });

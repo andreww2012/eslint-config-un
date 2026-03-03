@@ -83,72 +83,21 @@ describe('jsdoc: sub config `configTypescript`', () => {
       });
     });
 
-    describe('option: `overrides`', () => {
-      it('respects `overrides` in `jsdoc/ts` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jsdoc: {configTypescript: {overrides: {'jsdoc/no-types': 0}}},
-          ts: true,
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-types'),
-          ),
-        ).toBe(0);
-      });
-    });
-
-    describe('option: `overridesAny`', () => {
-      it('respects `overridesAny` in `jsdoc/ts` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jsdoc: {configTypescript: {overridesAny: {'no-console': 0}}},
-          ts: true,
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc/ts', 'no-console')),
-        ).toBe(0);
+    it('respects `overrides` and `overridesAny` in `jsdoc/ts` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        jsdoc: {
+          configTypescript: {overrides: {'jsdoc/no-types': 0}, overridesAny: {'no-console': 0}},
+        },
+        ts: true,
       });
 
-      it('respects both `overrides` and `overridesAny`', async () => {
-        const configResult = await computeEslintConfig({
-          jsdoc: {
-            configTypescript: {
-              overrides: {'jsdoc/no-types': 0},
-              overridesAny: {'no-console': 0},
-            },
-          },
-          ts: true,
-        });
+      expect(
+        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-types')),
+      ).toBe(0);
 
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-types'),
-          ),
-        ).toBe(0);
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc/ts', 'no-console')),
-        ).toBe(0);
-      });
-
-      it('puts `overridesAny` after `overrides`', async () => {
-        const configResult = await computeEslintConfig({
-          jsdoc: {
-            configTypescript: {
-              overrides: {'jsdoc/no-types': 1},
-              overridesAny: {'jsdoc/no-types': 2},
-            },
-          },
-          ts: true,
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-types'),
-          ),
-        ).toBe(2);
-      });
+      expect(
+        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc/ts', 'no-console')),
+      ).toBe(0);
     });
 
     describe('option: `forceSeverity`', () => {

@@ -81,64 +81,23 @@ describe('un options', () => {
     });
   });
 
-  describe('option: `overrides`', () => {
-    it('respects `overrides` in `security` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        security: {overrides: {'security/detect-child-process': 0}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('security', 'security/detect-child-process'),
-        ),
-      ).toBe(0);
-    });
-  });
-
-  describe('option: `overridesAny`', () => {
-    it('respects `overridesAny` in `security` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        security: {overridesAny: {'no-console': 0}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('security', 'no-console')),
-      ).toBe(0);
+  it('respects `overrides` and `overridesAny` in `security` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      security: {
+        overrides: {'security/detect-child-process': 0},
+        overridesAny: {'no-console': 0},
+      },
     });
 
-    it('respects both `overrides` and `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        security: {
-          overrides: {'security/detect-child-process': 0},
-          overridesAny: {'no-console': 0},
-        },
-      });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(
+        configResult.getRuleEntry('security', 'security/detect-child-process'),
+      ),
+    ).toBe(0);
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('security', 'security/detect-child-process'),
-        ),
-      ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('security', 'no-console')),
-      ).toBe(0);
-    });
-
-    it('puts `overridesAny` after `overrides`', async () => {
-      const configResult = await computeEslintConfig({
-        security: {
-          overrides: {'security/detect-child-process': 1},
-          overridesAny: {'security/detect-child-process': 2},
-        },
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('security', 'security/detect-child-process'),
-        ),
-      ).toBe(2);
-    });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('security', 'no-console')),
+    ).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {

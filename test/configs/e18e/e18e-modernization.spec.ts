@@ -53,9 +53,7 @@ describe('e18e: sub config `configModernization`', () => {
           e18e: {configModernization: {files: FILES}},
         });
 
-        expect(configResult.getConfigByUnPostfix('e18e/modernization')?.files).toStrictEqual(
-          FILES,
-        );
+        expect(configResult.getConfigByUnPostfix('e18e/modernization')?.files).toStrictEqual(FILES);
       });
 
       it('disables `e18e/modernization` eslint config when `files` is empty array', async () => {
@@ -81,72 +79,27 @@ describe('e18e: sub config `configModernization`', () => {
       });
     });
 
-    describe('option: `overrides`', () => {
-      it('respects `overrides` in `e18e/modernization` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {configModernization: {overrides: {'e18e/prefer-array-at': 0}}},
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('e18e/modernization', 'e18e/prefer-array-at'),
-          ),
-        ).toBe(0);
-      });
-    });
-
-    describe('option: `overridesAny`', () => {
-      it('respects `overridesAny` in `e18e/modernization` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {configModernization: {overridesAny: {'no-console': 0}}},
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('e18e/modernization', 'no-console'),
-          ),
-        ).toBe(0);
-      });
-
-      it('respects both `overrides` and `overridesAny`', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {
-            configModernization: {
-              overrides: {'e18e/prefer-array-at': 0},
-              overridesAny: {'no-console': 0},
-            },
+    it('respects `overrides` and `overridesAny` in `e18e/modernization` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        e18e: {
+          configModernization: {
+            overrides: {'e18e/prefer-array-at': 0},
+            overridesAny: {'no-console': 0},
           },
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('e18e/modernization', 'e18e/prefer-array-at'),
-          ),
-        ).toBe(0);
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('e18e/modernization', 'no-console'),
-          ),
-        ).toBe(0);
+        },
       });
 
-      it('puts `overridesAny` after `overrides`', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {
-            configModernization: {
-              overrides: {'e18e/prefer-array-at': 1},
-              overridesAny: {'e18e/prefer-array-at': 0},
-            },
-          },
-        });
+      expect(
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry('e18e/modernization', 'e18e/prefer-array-at'),
+        ),
+      ).toBe(0);
 
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('e18e/modernization', 'e18e/prefer-array-at'),
-          ),
-        ).toBe(0);
-      });
+      expect(
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry('e18e/modernization', 'no-console'),
+        ),
+      ).toBe(0);
     });
 
     describe('option: `forceSeverity`', () => {

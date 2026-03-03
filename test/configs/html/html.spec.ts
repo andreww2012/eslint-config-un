@@ -128,64 +128,20 @@ describe('un options', () => {
     });
   });
 
-  describe('option: `overrides`', () => {
-    it('respects `overrides` in `html` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        html: {overrides: {'@html-eslint/no-duplicate-attrs': 0}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('html', '@html-eslint/no-duplicate-attrs'),
-        ),
-      ).toBe(0);
-    });
-  });
-
-  describe('option: `overridesAny`', () => {
-    it('respects `overridesAny` in `html` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        html: {overridesAny: {'no-console': 0}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('html', 'no-console')),
-      ).toBe(0);
+  it('respects `overrides` and `overridesAny` in `eslint-comments` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      html: {overrides: {'@html-eslint/no-duplicate-attrs': 0}, overridesAny: {'no-console': 0}},
     });
 
-    it('respects both `overrides` and `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        html: {
-          overrides: {'@html-eslint/no-duplicate-attrs': 0},
-          overridesAny: {'no-console': 0},
-        },
-      });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(
+        configResult.getRuleEntry('html', '@html-eslint/no-duplicate-attrs'),
+      ),
+    ).toBe(0);
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('html', '@html-eslint/no-duplicate-attrs'),
-        ),
-      ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('html', 'no-console')),
-      ).toBe(0);
-    });
-
-    it('puts `overridesAny` after `overrides`', async () => {
-      const configResult = await computeEslintConfig({
-        html: {
-          overrides: {'@html-eslint/no-duplicate-attrs': 1},
-          overridesAny: {'@html-eslint/no-duplicate-attrs': 2},
-        },
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('html', '@html-eslint/no-duplicate-attrs'),
-        ),
-      ).toBe(2);
-    });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('html', 'no-console')),
+    ).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {

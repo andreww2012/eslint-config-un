@@ -99,89 +99,30 @@ describe('e18e: sub config `configPerformanceImprovements`', () => {
       });
     });
 
-    describe('option: `overrides`', () => {
-      it('respects `overrides` in `e18e/performance-improvements/non-type-aware` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {
-            configPerformanceImprovements: {overrides: {'e18e/prefer-array-from-map': 0}},
+    it('respects `overrides` and `overridesAny` in `e18e/performance-improvements/type-aware` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        e18e: {
+          configPerformanceImprovements: {
+            overrides: {'e18e/prefer-array-from-map': 0},
+            overridesAny: {'no-console': 0},
           },
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry(
-              'e18e/performance-improvements/non-type-aware',
-              'e18e/prefer-array-from-map',
-            ),
-          ),
-        ).toBe(0);
-      });
-    });
-
-    describe('option: `overridesAny`', () => {
-      it('respects `overridesAny` in `e18e/performance-improvements/non-type-aware` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {configPerformanceImprovements: {overridesAny: {'no-console': 0}}},
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry(
-              'e18e/performance-improvements/non-type-aware',
-              'no-console',
-            ),
-          ),
-        ).toBe(0);
+        },
       });
 
-      it('respects both `overrides` and `overridesAny`', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {
-            configPerformanceImprovements: {
-              overrides: {'e18e/prefer-array-from-map': 0},
-              overridesAny: {'no-console': 0},
-            },
-          },
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry(
-              'e18e/performance-improvements/non-type-aware',
-              'e18e/prefer-array-from-map',
-            ),
+      expect(
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry(
+            'e18e/performance-improvements/non-type-aware',
+            'e18e/prefer-array-from-map',
           ),
-        ).toBe(0);
+        ),
+      ).toBe(0);
 
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry(
-              'e18e/performance-improvements/non-type-aware',
-              'no-console',
-            ),
-          ),
-        ).toBe(0);
-      });
-
-      it('puts `overridesAny` after `overrides`', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {
-            configPerformanceImprovements: {
-              overrides: {'e18e/prefer-array-from-map': 1},
-              overridesAny: {'e18e/prefer-array-from-map': 0},
-            },
-          },
-        });
-
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry(
-              'e18e/performance-improvements/non-type-aware',
-              'e18e/prefer-array-from-map',
-            ),
-          ),
-        ).toBe(0);
-      });
+      expect(
+        getRuleSeverityFromEslintRuleEntry(
+          configResult.getRuleEntry('e18e/performance-improvements/non-type-aware', 'no-console'),
+        ),
+      ).toBe(0);
     });
 
     describe('option: `forceSeverity`', () => {

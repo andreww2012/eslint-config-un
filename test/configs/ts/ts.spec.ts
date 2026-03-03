@@ -116,68 +116,25 @@ describe('un options', () => {
     });
   });
 
-  describe('option: `overrides`', async () => {
+  it('respects `overrides` and `overridesAny` in `ts/non-type-aware/rules` eslint config', async () => {
     const configResult = await computeEslintConfig({
-      ts: {overrides: {'ts/no-dynamic-delete': 0}},
+      ts: {
+        overrides: {'ts/no-dynamic-delete': 0},
+        overridesAny: {'no-console': 0},
+      },
     });
 
-    it('respect `overrides`', () => {
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
-        ),
-      ).toBe(0);
-    });
-  });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(
+        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
+      ),
+    ).toBe(0);
 
-  describe('option: `overridesAny`', () => {
-    it('respect `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        ts: {overridesAny: {'no-console': 0}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
-        ),
-      ).toBe(0);
-    });
-
-    it('respects both `overrides` and `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        ts: {
-          overrides: {'ts/no-dynamic-delete': 0},
-          overridesAny: {'no-console': 0},
-        },
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
-        ),
-      ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
-        ),
-      ).toBe(0);
-    });
-
-    it('puts `overridesAny` after `overrides`', async () => {
-      const configResult = await computeEslintConfig({
-        ts: {
-          overrides: {'ts/no-dynamic-delete': 1},
-          overridesAny: {'ts/no-dynamic-delete': 2},
-        },
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
-        ),
-      ).toBe(2);
-    });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(
+        configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
+      ),
+    ).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {

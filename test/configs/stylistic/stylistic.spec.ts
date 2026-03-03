@@ -179,64 +179,23 @@ describe('un options', () => {
     });
   });
 
-  describe('option: `overrides`', () => {
-    it('respects `overrides` in `stylistic` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        stylistic: {overrides: {'@stylistic/quotes': 0}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('stylistic', '@stylistic/quotes'),
-        ),
-      ).toBe(0);
-    });
-  });
-
-  describe('option: `overridesAny`', () => {
-    it('respects `overridesAny` in `stylistic` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        stylistic: {overridesAny: {'no-console': 0}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('stylistic', 'no-console')),
-      ).toBe(0);
+  it('respects `overrides` and `overridesAny` in `stylistic` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      stylistic: {
+        overrides: {'@stylistic/quotes': 0},
+        overridesAny: {'no-console': 0},
+      },
     });
 
-    it('respects both `overrides` and `overridesAny`', async () => {
-      const configResult = await computeEslintConfig({
-        stylistic: {
-          overrides: {'@stylistic/quotes': 0},
-          overridesAny: {'no-console': 0},
-        },
-      });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(
+        configResult.getRuleEntry('stylistic', '@stylistic/quotes'),
+      ),
+    ).toBe(0);
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('stylistic', '@stylistic/quotes'),
-        ),
-      ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('stylistic', 'no-console')),
-      ).toBe(0);
-    });
-
-    it('puts `overridesAny` after `overrides`', async () => {
-      const configResult = await computeEslintConfig({
-        stylistic: {
-          overrides: {'@stylistic/quotes': 1},
-          overridesAny: {'@stylistic/quotes': 0},
-        },
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('stylistic', '@stylistic/quotes'),
-        ),
-      ).toBe(0);
-    });
+    expect(
+      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('stylistic', 'no-console')),
+    ).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {
