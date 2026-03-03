@@ -3,7 +3,7 @@ import type {KnipConfig} from 'knip';
 import packageJson from './package.json' with {type: 'json'};
 
 const config: KnipConfig = {
-  ignore: ['test/**'],
+  ignore: ['test/**/fixtures/**'],
   entry: ['.ncurc.cjs'],
   ignoreDependencies: [
     '@eslint/core',
