@@ -1,4 +1,4 @@
-import {difference} from '../../src/utils';
+import {difference} from '../../../src/utils';
 
 describe('ts: sub config `configTypeAware.configSetup`', () => {
   describe('un options', () => {
