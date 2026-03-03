@@ -514,11 +514,14 @@ export const processUnOrFlatConfig = (
       ) {
         extraConfigs.push({
           name: `${config.name || ''}/@rule/${ruleNameInitial}`,
-          ...(ruleEntryRaw.files && {
-            files: config.files ? [config.files.flat(), ruleEntryRaw.files] : ruleEntryRaw.files,
+          ...((ruleEntryRaw.files?.length || config.files?.length) && {
+            files:
+              ruleEntryRaw.files?.length && config.files?.length
+                ? [ruleEntryRaw.files, config.files.flat()]
+                : ruleEntryRaw.files || config.files,
           }),
-          ...(ruleEntryRaw.ignores?.length && {
-            ignores: [...(config.ignores || []), ...ruleEntryRaw.ignores],
+          ...((ruleEntryRaw.ignores?.length || config.ignores?.length) && {
+            ignores: ruleEntryRaw.ignores?.length ? ruleEntryRaw.ignores : config.ignores,
           }),
           rules: Object.fromEntries(result),
         });
