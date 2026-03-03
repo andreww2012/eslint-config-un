@@ -4,6 +4,15 @@ import type {NonEmptyTuple} from '../../../src/types';
 const ENABLED_PARSERS = ['json', 'yaml'].sort();
 const PARSER_CONFIG_PREFIX = 'lockfile/parser/';
 
+const FIXTURES = {
+  packageLockJson: 'npm/package-lock.json',
+  packageLockNonRegistrySpecifier: 'npm-non-registry/package-lock.json',
+  yarnLock: 'yarn/yarn.lock',
+  pnpmLockYaml: 'pnpm/pnpm-lock.yaml',
+  bunLock: 'bun/bun.lock',
+  vltLockJson: 'vlt/vlt-lock.json',
+} as const;
+
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('lockfile');
 
@@ -24,30 +33,57 @@ describe('basic tests', async () => {
     ).toStrictEqual(ENABLED_PARSERS);
   });
 
-  it('does not create `lockfile` by default', async () => {
-    const configResult = await computeEslintConfig({}, {reset: true});
+  describe('mode: all configs are disabled', () => {
+    it('does not create `lockfile` eslint config', async () => {
+      const configResult = await computeEslintConfig({});
 
-    expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
+    });
+
+    it('creates `lockfile` eslint config if explicitly enabled', async () => {
+      const configResult = await computeEslintConfig({lockfile: true});
+
+      expect(configResult.getConfigByUnPostfix('lockfile')).toBeDefined();
+    });
   });
 
-  it('creates `lockfile` eslint config if explicitly enabled', async () => {
-    const configResult = await computeEslintConfig({lockfile: true}, {reset: true});
+  describe('mode: all configs are not explicitly enabled or disabled', () => {
+    it('does not create `lockfile` eslint config', async () => {
+      const configResult = await computeEslintConfig({}, {reset: true});
 
-    expect(configResult.getConfigByUnPostfix('lockfile')).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
+    });
+
+    it('creates `lockfile` eslint config if explicitly enabled', async () => {
+      const configResult = await computeEslintConfig({lockfile: true}, {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('lockfile')).toBeDefined();
+    });
+
+    it('does not create `lockfile` eslint config and prints a warning if explicitly disabled', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write');
+
+      const configResult = await computeEslintConfig({lockfile: false}, {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
+
+      expect(
+        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
+          `[warn] [eslint-config-un] There is no need to disable \`lockfile\` config because this is the default`,
+        ),
+      ).toBe(true);
+    });
   });
 
-  it('does not create `lockfile` eslint config and prints a warning that there is no need to do that if explicitly disabled', async () => {
-    using stderrSpy = vi.spyOn(process.stderr, 'write');
+  describe('mode: misc configs are enabled', () => {
+    it('creates `lockfile` eslint config', async () => {
+      const configResult = await computeEslintConfig(
+        {},
+        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
+      );
 
-    const configResult = await computeEslintConfig({lockfile: false}, {reset: true});
-
-    expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
-
-    expect(
-      String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-        `[warn] [eslint-config-un] There is no need to disable \`lockfile\` config because this is the default`,
-      ),
-    ).toBe(true);
+      expect(configResult.getConfigByUnPostfix('lockfile')).toBeDefined();
+    });
   });
 
   it('has default `files` in `lockfile` eslint config', () => {
@@ -81,6 +117,24 @@ describe('rules', async () => {
         configResult.getRuleEntry('lockfile', 'lockfile/registry'),
       ),
     ).toBe(0);
+  });
+
+  it('`lockfile/non-registry-specifiers` rule fires on a lockfile with a github: specifier', async () => {
+    const results = await testEslintConfig(
+      'lockfile',
+      FIXTURES.packageLockNonRegistrySpecifier,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.packageLockNonRegistrySpecifier,
+      'lockfile/non-registry-specifiers',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Package "node_modules/some-pkg" in lockfile "package-lock.json" uses GitHub shorthand: github:some-org/some-pkg#abcdef1234567890"`,
+    );
   });
 });
 
@@ -181,6 +235,21 @@ describe('un options', () => {
     it('only enables `json` parser config when `files` only match vlt-lock.json', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {files: ['**/vlt-lock.json']},
+      });
+
+      const allParserConfigs = configResult.getConfigsByUnPostfix((name) =>
+        name.startsWith(PARSER_CONFIG_PREFIX),
+      );
+
+      expect(
+        // eslint-disable-next-line unicorn/no-array-sort
+        allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
+      ).toStrictEqual(['json']);
+    });
+
+    it('only enables `json` parser config when `files` only match bun.lockb', async () => {
+      const configResult = await computeEslintConfig({
+        lockfile: {files: ['**/bun.lockb']},
       });
 
       const allParserConfigs = configResult.getConfigsByUnPostfix((name) =>
@@ -408,14 +477,6 @@ describe('options', () => {
 });
 
 describe('linting lockfiles', () => {
-  const FIXTURES = {
-    packageLockJson: 'npm/package-lock.json',
-    yarnLock: 'yarn/yarn.lock',
-    pnpmLockYaml: 'pnpm/pnpm-lock.yaml',
-    bunLock: 'bun/bun.lock',
-    vltLockJson: 'vlt/vlt-lock.json',
-  } as const;
-
   it('does not crash when linting `package-lock.json`', async () => {
     const results = await testEslintConfig(
       'lockfile',
