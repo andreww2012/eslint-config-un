@@ -415,9 +415,10 @@ export default (async (context, optionsRaw) => {
       ),
     ) /** @since 0.0.1-alpha.12 */
     .addRule(...getPluginRuleSeverity('no-uncalled-signals', ERROR)) /** @since 19.7.0 */
-    .addRule(...getPluginRuleSeverity('pipe-prefix', ERROR), [
-      {prefixes: pipePrefixes},
-    ]) /** @since 0.0.1-alpha.33 */
+    .addRule(
+      ...getPluginRuleSeverity('pipe-prefix', ERROR),
+      pipePrefixes?.length ? [{prefixes: pipePrefixes}] : [],
+    ) /** @since 0.0.1-alpha.33 */
     .addRule(
       ...getPluginRuleSeverity(
         'prefer-host-metadata-property',
