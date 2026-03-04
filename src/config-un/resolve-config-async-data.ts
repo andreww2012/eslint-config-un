@@ -399,9 +399,9 @@ ${styleText(
   );
 
   const allPackageUses = cacheData
-    ? objectEntriesUnsafe(cacheData.usedPackages).flatMap(([packagePrefix, packageUses = []]) =>
+    ? objectEntriesUnsafe(cacheData.usedPackages).flatMap(([, packageUses = []]) =>
         packageUses
-          .map(({configName, property, valueTransformFn}) => {
+          .map(({configName, package: packagesToLoad, property, valueTransformFn}) => {
             const config = cachedConfigsByName[configName];
             if (!config) {
               return null;
@@ -412,7 +412,7 @@ ${styleText(
               config,
               path: property, // serialized `property` contains the full path
               info: {
-                package: packagePrefix,
+                package: packagesToLoad,
                 property,
                 ...(valueTransformFn &&
                   (() => {
