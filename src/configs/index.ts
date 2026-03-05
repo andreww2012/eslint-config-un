@@ -643,7 +643,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   jsInline: JsInlineEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * JSON/JSONC/JSON5 related rules.
+   * JSON, JSONC and JSON5 related rules.
    *
    * 📁 Default `files`: <code>**&#47;*.{json,jsonc,json5}</code>
    *
