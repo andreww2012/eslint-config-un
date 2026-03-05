@@ -48,7 +48,7 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSON],
-        parser: 'jsonc-eslint-parser',
+        language: ['jsonc', 'x'],
       },
     ])
     .addRule('dependency-checks', ERROR) /** @since 16.4.0 */

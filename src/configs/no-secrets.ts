@@ -72,7 +72,7 @@ export default ((context, optionsRaw) => {
         filesDefault: [GLOB_JSON],
         ignoresDefault: ['**/package-lock.json'],
         ignoresDefaultMergedWithUserIgnores: true,
-        parser: 'jsonc-eslint-parser',
+        language: ['jsonc', 'x'],
       },
     ])
     .addRule('no-secrets', noSecretsSeverity, [noSecretsOptions])

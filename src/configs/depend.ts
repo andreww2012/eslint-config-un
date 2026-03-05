@@ -32,7 +32,7 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_PACKAGE_JSON],
-        parser: 'jsonc-eslint-parser',
+        language: ['jsonc', 'json'],
       },
     ])
     .addRule(

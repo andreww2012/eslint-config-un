@@ -69,28 +69,21 @@ export interface LockfileEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
+  const LOCKFILE_PARSERS = {
+    json: {language: ['jsonc', 'json']},
+    jsonc: {language: ['jsonc', 'jsonc']},
+    yaml: {language: ['yaml', 'yaml']},
+  } satisfies Record<string, {language: SupportedEslintPluginLanguages} | {parser: ParserPrefix}>;
+
   const LOCKFILES_INFO = objectEntriesUnsafe({
-    npm: [
-      ['package-lock.json', 'npm-shrinkwrap.json'],
-      ['json', {parser: 'jsonc-eslint-parser'}],
-    ],
-    yarn: [['yarn.lock'], ['yaml', {language: ['yaml', 'yaml']}]],
-    pnpm: [['pnpm-lock.yaml'], ['yaml', {language: ['yaml', 'yaml']}]],
-    // TODO what to do with `bun.lockb`?
-    bun: [
-      ['bun.lock', 'bun.lockb'],
-      ['json', {parser: 'jsonc-eslint-parser'}],
-    ],
-    vlt: [['vlt-lock.json'], ['json', {parser: 'jsonc-eslint-parser'}]],
+    npm: ['json', ['package-lock.json', 'npm-shrinkwrap.json']],
+    yarn: ['yaml', ['yarn.lock']],
+    pnpm: ['yaml', ['pnpm-lock.yaml']],
+    bun: ['jsonc', ['bun.lock', 'bun.lockb']],
+    vlt: ['json', ['vlt-lock.json']],
   } satisfies Record<
     SupportedPackageManagers,
-    [
-      lockfiles: string[],
-      languageOrParser: [
-        configName: string,
-        {language: SupportedEslintPluginLanguages} | {parser: ParserPrefix},
-      ],
-    ]
+    [languageOrParser: keyof typeof LOCKFILE_PARSERS, lockfileNames: string[]]
   >);
 
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -115,7 +108,7 @@ export default ((context, optionsRaw) => {
       'lockfile',
       {
         includeDefaultFilesAndIgnores: true,
-        filesDefault: LOCKFILES_INFO.flatMap(([, [lockfiles]]) =>
+        filesDefault: LOCKFILES_INFO.flatMap(([, [, lockfiles]]) =>
           lockfiles.map((lockfile) => `**/${lockfile}`),
         ) satisfies string[],
         ignoresInternal: {
@@ -157,8 +150,8 @@ export default ((context, optionsRaw) => {
     const files = lockfileEslintConfig.files?.flat() || [];
     objectEntriesUnsafe(
       groupBy(files, (fileGlob) => {
-        for (const [, [lockfiles, [parserConfigName]]] of LOCKFILES_INFO) {
-          if (lockfiles.some((lockfile) => fileGlob.includes(lockfile))) {
+        for (const [, [parserConfigName, lockfileNames]] of LOCKFILES_INFO) {
+          if (lockfileNames.some((lockfile) => fileGlob.includes(lockfile))) {
             return parserConfigName;
           }
         }
@@ -175,9 +168,8 @@ export default ((context, optionsRaw) => {
       }
 
       // eslint-disable-next-line ts/no-non-null-assertion
-      const [, parserOrLanguage] = LOCKFILES_INFO.find(
-        ([, [, [pm]]]) => pm === parserConfigName,
-      )![1][1];
+      const [languageOrParserName] = LOCKFILES_INFO.find(([, [pm]]) => pm === parserConfigName)![1];
+      const languageOrParser = LOCKFILE_PARSERS[languageOrParserName];
 
       configBuilder.addConfig([
         `lockfile/parser/${parserConfigName}`,
@@ -186,8 +178,8 @@ export default ((context, optionsRaw) => {
           ignoresInternal: {
             yaml: false,
           },
-          ...('parser' in parserOrLanguage && {parser: parserOrLanguage.parser}),
-          ...('language' in parserOrLanguage && {language: parserOrLanguage.language}),
+          // ...('parser' in languageOrParser && {parser: languageOrParser.parser}),
+          ...('language' in languageOrParser && {language: languageOrParser.language}),
         },
       ]);
     });

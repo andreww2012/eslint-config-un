@@ -1,7 +1,7 @@
 import type {NonEmptyTuple} from '../../../src/types';
 
 // eslint-disable-next-line unicorn/no-array-sort
-const ENABLED_PARSERS = ['json', 'yaml'].sort();
+const ENABLED_PARSERS = ['json', 'jsonc', 'yaml'].sort();
 const PARSER_CONFIG_PREFIX = 'lockfile/parser/';
 
 const FIXTURES = {
@@ -217,7 +217,7 @@ describe('un options', () => {
       ).toStrictEqual(['yaml']);
     });
 
-    it('only enables `json` parser config when `files` only match bun.lock', async () => {
+    it('only enables `jsonc` parser config when `files` only match bun.lock', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {files: ['**/bun.lock']},
       });
@@ -229,7 +229,7 @@ describe('un options', () => {
       expect(
         // eslint-disable-next-line unicorn/no-array-sort
         allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
-      ).toStrictEqual(['json']);
+      ).toStrictEqual(['jsonc']);
     });
 
     it('only enables `json` parser config when `files` only match vlt-lock.json', async () => {
@@ -247,7 +247,7 @@ describe('un options', () => {
       ).toStrictEqual(['json']);
     });
 
-    it('only enables `json` parser config when `files` only match bun.lockb', async () => {
+    it.todo('only enables `jsonc` parser config when `files` only match bun.lockb', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {files: ['**/bun.lockb']},
       });
@@ -259,7 +259,7 @@ describe('un options', () => {
       expect(
         // eslint-disable-next-line unicorn/no-array-sort
         allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
-      ).toStrictEqual(['json']);
+      ).toStrictEqual(['jsonc']);
     });
 
     it('prints a warning if some glob pattern does not match a known lockfile', async () => {

@@ -34,11 +34,6 @@ export const parsersLoaders = {
       // eslint-disable-next-line ts/no-unsafe-return, ts/no-explicit-any
       import('@graphql-eslint/eslint-plugin').then((m) => m.parser as any),
   ),
-  'jsonc-eslint-parser': genModuleLoader(
-    'jsonc-eslint-parser',
-    'jsonc-eslint-parser',
-    () => import('jsonc-eslint-parser'),
-  ),
   'mdx-eslint-parser': genModuleLoader(
     'mdx-eslint-parser',
     'eslint-mdx',

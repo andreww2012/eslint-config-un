@@ -179,7 +179,7 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_PACKAGE_JSON],
-        parser: 'jsonc-eslint-parser',
+        language: ['jsonc', 'json'],
         settings: {
           // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
           packageJson: pluginSettings,

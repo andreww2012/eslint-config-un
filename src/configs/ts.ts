@@ -1305,7 +1305,7 @@ export default ((
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: ['**/tsconfig.json', '**/*.tsconfig.json', '**/tsconfig.*.json'],
-          parser: 'jsonc-eslint-parser',
+          language: ['jsonc', 'x'],
         },
       ])
       .addAnyRule('jsonc', 'sort-keys', ERROR, [

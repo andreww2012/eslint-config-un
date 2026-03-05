@@ -60,6 +60,7 @@ export type FlatConfigEntryForBuilder = OmitStrict<
 // eslint-disable-next-line ts/no-unused-vars -- come up with sth better
 const PLUGINS_PROVIDING_LANGUAGES = {
   css: ['css'],
+  jsonc: ['x', 'json', 'jsonc', 'json5'],
   'markdown-preferences': ['extended-syntax'],
   markdown: ['gfm', 'commonmark'],
   toml: ['toml'],

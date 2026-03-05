@@ -57,12 +57,8 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: JSONC_DEFAULT_FILES,
-        parser: 'jsonc-eslint-parser',
-        // TODO why?
-        ignoresInternal: {
-          md: false,
-          mdx: false,
-        },
+        ignoresInternal: {md: false, mdx: false}, // TODO why?
+        language: ['jsonc', 'x'],
       },
     ])
     .markCategory('Main rules')
@@ -125,11 +121,8 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSON],
-        // TODO why?
-        ignoresInternal: {
-          md: false,
-          mdx: false,
-        },
+        ignoresInternal: {md: false, mdx: false}, // TODO why?
+        language: ['jsonc', 'json'],
       },
     ])
     .addOverrides();
@@ -141,11 +134,8 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSONC],
-        // TODO why?
-        ignoresInternal: {
-          md: false,
-          mdx: false,
-        },
+        ignoresInternal: {md: false, mdx: false}, // TODO why?
+        language: ['jsonc', 'jsonc'],
       },
     ])
     .addOverrides();
@@ -157,11 +147,8 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSON5],
-        // TODO why?
-        ignoresInternal: {
-          md: false,
-          mdx: false,
-        },
+        ignoresInternal: {md: false, mdx: false}, // TODO why?
+        language: ['jsonc', 'json5'],
       },
     ])
     .addOverrides();

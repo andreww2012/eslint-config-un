@@ -108,7 +108,7 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: ['package.json', '**/package.json'],
-        parser: 'jsonc-eslint-parser',
+        language: ['jsonc', 'json'],
         settings: {
           pnpm: pluginSettings,
         },

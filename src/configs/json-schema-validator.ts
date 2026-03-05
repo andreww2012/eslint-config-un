@@ -49,7 +49,7 @@ export default ((context, optionsRaw) => {
     'json-schema-validator/setup/jsonc',
     {
       filesDefault: JSONC_DEFAULT_FILES,
-      parser: 'jsonc-eslint-parser',
+      language: ['jsonc', 'x'],
     },
   ]);
 
