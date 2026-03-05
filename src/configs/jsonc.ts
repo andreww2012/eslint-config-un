@@ -27,23 +27,15 @@ export interface JsoncEslintConfigOptions<
    * @default false
    */
   configJson5?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'jsonc'>;
-
-  /**
-   * `files` specified in this config will be merged with the default of
-   * `['**\/*.json', '**\/*.jsonc', '**\/*.json5']`. Set this to `true` to avoid that behavior
-   * @default false
-   */
-  doNotMergeFilesWithDefault?: boolean;
 }
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    doNotMergeFilesWithDefault: false,
     configJson: false,
     configJsonc: false,
     configJson5: false,
   } satisfies JsoncEslintConfigOptions);
-  const {doNotMergeFilesWithDefault, configJson, configJsonc, configJson5} = optionsResolved;
+  const {configJson, configJsonc, configJson5} = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'jsonc');
 
@@ -56,7 +48,6 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: JSONC_DEFAULT_FILES,
-        filesDefaultMergedWithUserFiles: !doNotMergeFilesWithDefault,
         parser: 'jsonc-eslint-parser',
         // TODO why?
         ignoresInternal: {
