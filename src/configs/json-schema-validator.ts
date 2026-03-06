@@ -1,9 +1,8 @@
 import type {RequestOptions} from 'node:https';
-import {ERROR} from '../constants';
+import {ERROR, GLOB_JS_TS_X} from '../constants';
 import {JSONC_DEFAULT_FILES, TOML_DEFAULT_FILES, YAML_DEFAULT_FILES} from './shared';
 import {
   type ExtraPluginsType,
-  type GetRuleOptions,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
@@ -27,9 +26,22 @@ export interface JsonSchemaValidatorEslintConfigOptions<
   };
 
   /**
-   * The single [rule (`no-invalid`)](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/HEAD/docs/rules/no-invalid.md) options.
+   * 📁 Default `files`: <code>**&#47;*.{json,jsonc,json5}</code>
+   * @default true
    */
-  options?: GetRuleOptions<'json-schema-validator', 'no-invalid'>;
+  configJson?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'json-schema-validator'>;
+
+  /**
+   * 📁 Default `files`: <code>**&#47;*.y?(a)ml</code>
+   * @default true
+   */
+  configYaml?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'json-schema-validator'>;
+
+  /**
+   * 📁 Default `files`: <code>**&#47;*.toml</code>
+   * @default true
+   */
+  configToml?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'json-schema-validator'>;
 }
 
 export default ((context, optionsRaw) => {
@@ -38,57 +50,86 @@ export default ((context, optionsRaw) => {
     {} satisfies JsonSchemaValidatorEslintConfigOptions,
   );
 
-  const {settings: pluginSettings, options: noInvalidOptions} = optionsResolved;
-
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'json-schema-validator');
+  const {
+    settings: pluginSettings,
+    configJson = true,
+    configYaml = true,
+    configToml = true,
+  } = optionsResolved;
 
   // Legend:
   // 🟢 - in recommended
 
-  configBuilder?.addConfig([
-    'json-schema-validator/setup/jsonc',
-    {
-      filesDefault: JSONC_DEFAULT_FILES,
-      language: ['jsonc', 'x'],
-    },
-  ]);
-
-  configBuilder?.addConfig([
-    'json-schema-validator/setup/yaml',
-    {
-      filesDefault: YAML_DEFAULT_FILES,
-      language: ['yaml', 'yaml'],
-    },
-  ]);
-
-  configBuilder?.addConfig([
-    'json-schema-validator/setup/toml',
-    {
-      filesDefault: TOML_DEFAULT_FILES,
-      language: ['toml', 'toml'],
-    },
-  ]);
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'json-schema-validator');
 
   configBuilder
     ?.addConfig([
-      'json-schema-validator',
+      'json-schema-validator/js-ts',
       {
+        filesDefault: [GLOB_JS_TS_X],
         includeDefaultFilesAndIgnores: true,
         settings: {
           'json-schema-validator': pluginSettings,
         },
       },
     ])
-    .addRule(
-      'no-invalid',
-      ERROR,
-      noInvalidOptions == null ? [] : [noInvalidOptions],
-    ) /** @since 0.1.0 */ // 🟢
+    .addRule('no-invalid', ERROR) /** @since 0.1.0 */ // 🟢
     .enableConfigTesterForPlugin('json-schema-validator')
     .addOverrides();
 
+  const configBuilderJson = context.createConfigBuilder(configJson, 'json-schema-validator');
+
+  configBuilderJson
+    ?.addConfig([
+      'json-schema-validator/json',
+      {
+        filesDefault: JSONC_DEFAULT_FILES,
+        includeDefaultFilesAndIgnores: true,
+        language: ['jsonc', 'x'],
+        settings: {
+          'json-schema-validator': pluginSettings,
+        },
+      },
+    ])
+    .addRule('no-invalid', ERROR)
+    .addOverrides();
+
+  const configBuilderYaml = context.createConfigBuilder(configYaml, 'json-schema-validator');
+
+  configBuilderYaml
+    ?.addConfig([
+      'json-schema-validator/yaml',
+      {
+        filesDefault: YAML_DEFAULT_FILES,
+        includeDefaultFilesAndIgnores: true,
+        language: ['yaml', 'yaml'],
+        settings: {
+          'json-schema-validator': pluginSettings,
+        },
+      },
+    ])
+    .addRule('no-invalid', ERROR)
+    .addOverrides();
+
+  const configBuilderToml = context.createConfigBuilder(configToml, 'json-schema-validator');
+
+  configBuilderToml
+    ?.addConfig([
+      'json-schema-validator/toml',
+      {
+        filesDefault: TOML_DEFAULT_FILES,
+        includeDefaultFilesAndIgnores: true,
+        language: ['toml', 'toml'],
+        settings: {
+          'json-schema-validator': pluginSettings,
+        },
+      },
+    ])
+    .addRule('no-invalid', ERROR)
+    .addOverrides();
+
   return {
-    configs: [configBuilder],
+    configs: [configBuilder, configBuilderJson, configBuilderYaml, configBuilderToml],
     optionsResolved,
   };
 }) satisfies UnConfigFn<'jsonSchemaValidator'>;

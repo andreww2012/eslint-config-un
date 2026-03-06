@@ -657,9 +657,12 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * An ESLint plugin that validates data using JSON Schema Validator.
    *
-   * 📁 Default `files`: all files
+   * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-json-schema-validator`](https://npmjs.com/eslint-plugin-json-schema-validator) ([the single rule docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/HEAD/docs/rules/no-invalid.md))
+   * 🧩 Main plugin: [`eslint-plugin-json-schema-validator`](https://npmjs.com/eslint-plugin-json-schema-validator)
+   * ([the single rule docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/HEAD/docs/rules/no-invalid.md))
+   *
+   * ⚙️ Sub config(s): `json`, `yaml`, `toml`
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   jsonSchemaValidator: JsonSchemaValidatorEslintConfigOptions<ExtraPlugins>;
@@ -1173,7 +1176,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * An ESLint plugin providing a rule to identify patterns that will interfere with
    * the tree-shaking algorithm of their module bundler.
    *
-   * 📁 Default `files`:<code>**&#47;*.?([cm])[jt]s?(x)</code>
+   * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
    *
    * 🧩 Main plugin: [`eslint-plugin-tree-shaking`](https://npmjs.com/eslint-plugin-tree-shaking) ([docs](https://github.com/lukastaegert/eslint-plugin-tree-shaking#readme))
    * @default false
