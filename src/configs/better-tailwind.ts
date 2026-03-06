@@ -1,5 +1,6 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import type {RequireExactlyOne} from '../types';
+import {allUnionMembers} from '../utils';
 import type {CssEslintConfigOptions} from './css';
 import {
   type ExtraPluginsType,
@@ -8,6 +9,11 @@ import {
   type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
+
+type SupportedTailwindVersion = 3 | 4;
+const SUPPORTED_TAILWIND_VERSIONS = new Set<number>(
+  allUnionMembers<SupportedTailwindVersion>()([3, 4]),
+);
 
 type AnyRuleOptions = GetRuleOptions<'better-tailwindcss', 'enforce-shorthand-classes'>;
 
@@ -84,6 +90,12 @@ export interface BetterTailwindEslintConfigOptions<
   };
 
   /**
+   * Detected automatically from a major version of the installed version of
+   * `tailwindcss` package, but can also be specified manually here.
+   */
+  tailwindVersion?: SupportedTailwindVersion;
+
+  /**
    * Not enforced by default
    */
   breakUpClassesIntoMultipleLines?: GetRuleOptions<
@@ -130,18 +142,15 @@ export default ((context, optionsRaw, {cssResolvedOptions}) => {
   } = optionsResolved;
 
   const tailwindPackageInfo = context.packagesInfo.tailwindcss;
-  const tailwindRealMajorVersion = tailwindPackageInfo?.versions.major;
-  const tailwindMajorVersion = tailwindRealMajorVersion === 3 ? 3 : 4;
+  const tailwindMajorVersion =
+    optionsResolved.tailwindVersion ?? tailwindPackageInfo?.versions.major;
 
-  if (tailwindRealMajorVersion === 4 && !pluginSettings.entryPoint) {
+  if (tailwindMajorVersion === 4 && !pluginSettings.entryPoint) {
     context.logger.warn(
       "[betterTailwind] You haven't specified `settings.entryPoint` option which is required for `eslint-plugin-better-tailwindcss` to work properly with Tailwind 4",
     );
   }
-  if (
-    tailwindRealMajorVersion != null &&
-    (tailwindRealMajorVersion < 3 || tailwindRealMajorVersion > 4)
-  ) {
+  if (tailwindMajorVersion != null && !SUPPORTED_TAILWIND_VERSIONS.has(tailwindMajorVersion)) {
     context.logger.warn(
       '[betterTailwind] The detected Tailwind version is not supported by `eslint-plugin-better-tailwindcss`',
     );
