@@ -100,8 +100,8 @@ importers:
         specifier: 0.12.0
         version: 0.12.0(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-depend:
-        specifier: 1.4.0
-        version: 1.4.0
+        specifier: 1.5.0
+        version: 1.5.0(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-file-progress:
         specifier: 3.0.2
         version: 3.0.2(eslint@9.39.2(jiti@2.6.1))
@@ -6077,8 +6077,10 @@ packages:
     peerDependencies:
       eslint: '>=8.0.0'
 
-  eslint-plugin-depend@1.4.0:
-    resolution: {integrity: sha512-MQs+m4nHSfgAO9bJDsBzqw0ofK/AOA0vfeY/6ahofqcUMLeM6/D1sTYs21fOhc17kNU/gn58YCtj20XaAssh2A==}
+  eslint-plugin-depend@1.5.0:
+    resolution: {integrity: sha512-i3UeLYmclf1Icp35+6W7CR4Bp2PIpDgBuf/mpmXK5UeLkZlvYJ21VuQKKHHAIBKRTPivPGX/gZl5JGno1o9Y0A==}
+    peerDependencies:
+      eslint: '>=8.40.0'
 
   eslint-plugin-ember@12.7.5:
     resolution: {integrity: sha512-2zLEpu3xcKjykgsKkj8sU2GwdxADFTH5XPBvuIrNBP253JxHSz2P21isUuRB50kGoR2KL+eUHNgV0j7IPCav1w==}
@@ -12197,7 +12199,7 @@ snapshots:
 
   '@e18e/eslint-plugin@0.2.0(eslint@9.39.2(jiti@2.6.1))':
     dependencies:
-      eslint-plugin-depend: 1.4.0
+      eslint-plugin-depend: 1.5.0(eslint@9.39.2(jiti@2.6.1))
     optionalDependencies:
       eslint: 9.39.2(jiti@2.6.1)
 
@@ -16791,9 +16793,10 @@ snapshots:
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
 
-  eslint-plugin-depend@1.4.0:
+  eslint-plugin-depend@1.5.0(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       empathic: 2.0.0
+      eslint: 9.39.2(jiti@2.6.1)
       module-replacements: 2.11.0
       semver: 7.7.3
 

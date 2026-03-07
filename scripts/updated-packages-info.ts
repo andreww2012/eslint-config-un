@@ -25,6 +25,7 @@ const PACKAGES_GIT_TAGS_PATTERNS: Partial<
   'tailwind-csstree': (version) => `tailwind-csstree-v${version}`,
   'eslint-plugin-prefer-arrow-functions': versionAsIs,
   '@e18e/eslint-plugin': versionAsIs,
+  'eslint-plugin-depend': versionAsIs,
 };
 
 // =============================================================================
