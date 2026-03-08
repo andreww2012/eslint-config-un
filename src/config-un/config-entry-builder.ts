@@ -443,13 +443,13 @@ export class ConfigEntryBuilder<
         return result;
       },
 
-      addOverrides: () => {
+      addOverrides: ({onlyAny = false}: {onlyAny?: boolean} = {}) => {
         const ourRules = configFinal.rules;
 
         const overridesResolveResult = processUnOrFlatConfig(
           this.context,
           configFinal,
-          this.options.overrides,
+          onlyAny ? {} : this.options.overrides,
           ourRules,
         );
         const overridesAnyResolveResult = processUnOrFlatConfig(

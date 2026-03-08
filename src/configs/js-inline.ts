@@ -30,7 +30,7 @@ const DEFAULT_XML_EXTENSIONS = ['.xhtml', '.xml'];
 
 export interface JsInlineEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'html'> {
+> extends OmitStrict<UnFlatConfigEntryBase<ExtraPlugins, 'html'>, 'overrides' | 'forceSeverity'> {
   /**
    * [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -166,7 +166,7 @@ export default (async (context, optionsRaw) => {
         },
       },
     )
-    .addOverrides();
+    .addOverrides({onlyAny: true});
 
   configBuilder?.addConfig(
     [
