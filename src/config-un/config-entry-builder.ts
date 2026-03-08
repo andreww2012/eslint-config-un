@@ -5,7 +5,7 @@ import {
   GLOB_MARKDOWN,
   GLOB_MDX,
   GLOB_TOML,
-  GLOB_YAML,
+  GLOB_YML_YAML,
   OFF,
   type RuleSeverity,
 } from '../constants';
@@ -80,7 +80,7 @@ const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
   mdx: [GLOB_MDX],
   html: [GLOB_HTM_HTML],
   toml: [GLOB_TOML],
-  yaml: [GLOB_YAML],
+  yaml: [GLOB_YML_YAML],
 } as const satisfies Record<string, [string, ...string[]]>;
 
 const PLUGIN_LANGUAGES_TO_NOT_IGNORED_FILES: {
