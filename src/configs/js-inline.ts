@@ -49,7 +49,7 @@ export interface JsInlineEslintConfigOptions<
      * `*.htm` files will be linted.
      * @default {'.erb': true, '.handlebars': true, '.hbs': true, '.htm': true, '.html': true, '.mustache': true, '.nunjucks': true, '.php': true, '.tag': true, '.riot': true, '.twig': true, '.we': true}
      */
-    'html-extensions': Record<`.${string}`, boolean>;
+    'html-extensions'?: Record<`.${string}`, boolean>;
 
     /**
      * See JSDoc for `html-extensions` to understand how this option works.
@@ -88,14 +88,14 @@ export interface JsInlineEslintConfigOptions<
      * or multiple MIME types. If a MIME type starts with a `/`, it will be considered
      * as a regular expression." - plugin docs
      */
-    'javascript-mime-types': string | string[];
+    'javascript-mime-types'?: string | string[];
 
     /**
      * "By default, the code between `<script>` tags is considered JavaScript if there is no `type`
      * attribute. You can set this setting to `true` to ignore script tags without
      * a `type` attribute." - plugin docs
      */
-    'ignore-tags-without-type': boolean;
+    'ignore-tags-without-type'?: boolean;
   };
 
   /**
