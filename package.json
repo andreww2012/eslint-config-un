@@ -192,7 +192,7 @@
     "@sveltejs/kit": "2.49.5",
     "@tanstack/eslint-plugin-query": "5.91.2",
     "@tanstack/eslint-plugin-router": "1.141.0",
-    "@types/eslint-plugin-security": "3.0.0",
+    "@types/eslint-plugin-security": "3.0.1",
     "@types/eslint-plugin-tailwindcss": "3.17.0",
     "@types/estree": "1.0.8",
     "@types/node": "20.19.1",
