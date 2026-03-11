@@ -18,9 +18,6 @@ export interface TomlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'toml'>,
     IgnoresAdditionalOptions<typeof CONFIG_DEFAULT_IGNORES> {
-  /** `files` specified in this config will be merged with the default of `['**\/*.toml']`. Set this to `true` to avoid that behavior */
-  doNotMergeFilesWithDefault?: boolean;
-
   /**
    * Mixed types in array were prohibited in TOML v0.5.0: https://toml.io/en/v0.5.0#array
    * @default false
@@ -67,7 +64,6 @@ export default ((context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: TOML_DEFAULT_FILES,
-          filesDefaultMergedWithUserFiles: !optionsResolved.doNotMergeFilesWithDefault,
           language: ['toml', 'toml'],
         },
       ],
