@@ -1,10 +1,100 @@
+import {GLOB_TOML} from '../../../src/constants';
+
 const FIXTURES = {
   wrongIndent: 'wrong-indent.toml',
-  correctIndent: 'correct-indent.toml',
+  mixedTypeArray: 'mixed-type-array.toml',
+  tooManyFractionalSeconds: 'too-many-fractional-seconds.toml',
 } as const;
 
-describe('toml config', () => {
-  it('lints .toml files and triggers toml rules', async () => {
+describe('basic tests', async () => {
+  const configResult = await computeEslintConfig('toml');
+
+  it('loads `toml` plugin if used', () => {
+    expect(configResult.getLoadedPlugin('toml')).toBeDefined();
+  });
+
+  it('creates `toml` eslint config', () => {
+    expect(configResult.getConfigByUnPostfix('toml')).toBeDefined();
+  });
+
+  describe('mode: all configs are disabled', () => {
+    it('does not create `toml` eslint config', async () => {
+      const configResult = await computeEslintConfig({});
+
+      expect(configResult.getConfigByUnPostfix('toml')).toBeUndefined();
+    });
+
+    it('creates `toml` eslint config if explicitly enabled', async () => {
+      const configResult = await computeEslintConfig('toml');
+
+      expect(configResult.getConfigByUnPostfix('toml')).toBeDefined();
+    });
+  });
+
+  describe('mode: all configs are not explicitly enabled or disabled', () => {
+    it('does not create `toml` eslint config', async () => {
+      const configResult = await computeEslintConfig({}, {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('toml')).toBeUndefined();
+    });
+
+    it('creates `toml` eslint config if explicitly enabled', async () => {
+      const configResult = await computeEslintConfig('toml', {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('toml')).toBeDefined();
+    });
+
+    it('does not create `toml` eslint config and prints a warning if explicitly disabled', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write');
+
+      const configResult = await computeEslintConfig({toml: false}, {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('toml')).toBeUndefined();
+
+      expect(
+        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
+          `[warn] [eslint-config-un] There is no need to disable \`toml\` config because this is the default`,
+        ),
+      ).toBe(true);
+    });
+  });
+
+  describe('mode: misc configs are enabled', () => {
+    it('creates `toml` eslint config', async () => {
+      const configResult = await computeEslintConfig(
+        {},
+        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
+      );
+
+      expect(configResult.getConfigByUnPostfix('toml')).toBeDefined();
+    });
+  });
+
+  it('has default `files` in `toml` eslint config', () => {
+    expect(configResult.getConfigByUnPostfix('toml')?.files).toMatchInlineSnapshot(`["**/*.toml"]`);
+  });
+
+  it('has default `ignores` in `toml` eslint config (ignores `**/Cargo.lock`)', () => {
+    const ignores = configResult.getConfigByUnPostfix('toml')?.ignores;
+
+    expect(ignores).to.include.members(['**/Cargo.lock']);
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.to.include.members([GLOB_TOML]);
+  });
+});
+
+describe('rules', async () => {
+  const configResult = await computeEslintConfig('toml');
+
+  it('enables `toml/indent` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('toml', 'toml/indent')).toBe(2);
+  });
+
+  it('disables `toml/no-mixed-type-in-array` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('toml', 'toml/no-mixed-type-in-array')).toBe(0);
+  });
+
+  it('`toml/indent` rule fires on a .toml file with wrong indentation', async () => {
     const results = await testEslintConfig('toml', FIXTURES.wrongIndent, import.meta.dirname);
 
     const error = findLintMessageFromLintResults(results, FIXTURES.wrongIndent, 'toml/indent');
@@ -13,12 +103,209 @@ describe('toml config', () => {
       `"Expected indentation of 0 spaces but found 1 spaces."`,
     );
   });
+});
 
-  it('does not trigger toml/indent for valid .toml files', async () => {
-    const results = await testEslintConfig('toml', FIXTURES.correctIndent, import.meta.dirname);
+describe('un options', () => {
+  describe('option: `files`', () => {
+    it('uses user-provided `files` in `toml` eslint config', async () => {
+      const FILES = ['app/**/*.toml'];
+      const configResult = await computeEslintConfig({
+        toml: {files: FILES},
+      });
 
-    const error = findLintMessageFromLintResults(results, FIXTURES.correctIndent, 'toml/indent');
+      expect(configResult.getConfigByUnPostfix('toml')?.files).toStrictEqual(FILES);
+    });
 
-    expect(error).toBeUndefined();
+    it('disables `toml` eslint config when `files` is empty array', async () => {
+      const configResult = await computeEslintConfig({
+        toml: {files: []},
+      });
+
+      expect(configResult.getConfigByUnPostfix('toml')).toBeUndefined();
+    });
+  });
+
+  describe('option: `ignores`', () => {
+    it('includes user-provided `ignores` in `toml` eslint config and merges them with defaults', async () => {
+      const IGNORES = ['**/fixtures/**'];
+      const configResult = await computeEslintConfig({
+        toml: {ignores: IGNORES},
+      });
+
+      const ignores = configResult.getConfigByUnPostfix('toml')?.ignores;
+
+      expect(ignores).to.include.members(IGNORES);
+      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+    });
+  });
+
+  it('respects `overrides` and `overridesAny` in `toml` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      toml: {overrides: {'toml/indent': 0}, overridesAny: {'no-console': 0}},
+    });
+
+    expect(configResult.getRuleEntrySeverity('toml', 'toml/indent')).toBe(0);
+
+    expect(configResult.getRuleEntrySeverity('toml', 'no-console')).toBe(0);
+  });
+
+  describe('option: `forceSeverity`', () => {
+    it('respects `forceSeverity` set to `error` in `toml` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        toml: {forceSeverity: 'error'},
+      });
+
+      expect(
+        getAllRulesSeverities(configResult.getConfigByUnPostfix('toml'), (ruleName) =>
+          ruleName.startsWith('toml/'),
+        ),
+      ).toStrictEqual([2]);
+    });
+
+    it('respects `forceSeverity` set to `warn` in `toml` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        toml: {forceSeverity: 'warn'},
+      });
+
+      expect(
+        getAllRulesSeverities(configResult.getConfigByUnPostfix('toml'), (ruleName) =>
+          ruleName.startsWith('toml/'),
+        ),
+      ).toStrictEqual([1]);
+    });
+  });
+});
+
+describe('options', () => {
+  describe('option: `noMixedTypeInArray`', () => {
+    it('disables `toml/no-mixed-type-in-array` rule when `false` (default)', async () => {
+      const configResult = await computeEslintConfig({
+        toml: {noMixedTypeInArray: false},
+      });
+
+      expect(configResult.getRuleEntrySeverity('toml', 'toml/no-mixed-type-in-array')).toBe(0);
+    });
+
+    it('enables `toml/no-mixed-type-in-array` rule when `true`', async () => {
+      const configResult = await computeEslintConfig({
+        toml: {noMixedTypeInArray: true},
+      });
+
+      expect(configResult.getRuleEntrySeverity('toml', 'toml/no-mixed-type-in-array')).toBe(2);
+    });
+
+    it('`toml/no-mixed-type-in-array` rule fires on a file with mixed types in array', async () => {
+      const results = await testEslintConfig(
+        {toml: {noMixedTypeInArray: true}},
+        FIXTURES.mixedTypeArray,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.mixedTypeArray,
+        'toml/no-mixed-type-in-array',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(`"Data types may not be mixed in an array."`);
+    });
+  });
+
+  describe('option: `noNonDecimalIntegerExceptions`', () => {
+    it('allows hexadecimal integers by default (`allowHexadecimal: true`)', async () => {
+      const configResult = await computeEslintConfig('toml');
+
+      expect(
+        configResult.getRuleEntry('toml', 'toml/no-non-decimal-integer'),
+      ).toMatchInlineSnapshot(`[2, {"allowHexadecimal": true}]`);
+    });
+
+    it('disallows hexadecimal integers when set to `{allowHexadecimal: false}`', async () => {
+      const configResult = await computeEslintConfig({
+        toml: {noNonDecimalIntegerExceptions: {allowHexadecimal: false}},
+      });
+
+      expect(
+        configResult.getRuleEntry('toml', 'toml/no-non-decimal-integer'),
+      ).toMatchInlineSnapshot(`[2, {"allowHexadecimal": false}]`);
+    });
+  });
+
+  describe('option: `maxPrecisionOfFractionalSeconds`', () => {
+    it('uses default of 3 for `toml/precision-of-fractional-seconds` rule', async () => {
+      const configResult = await computeEslintConfig('toml');
+
+      expect(
+        configResult.getRuleEntry('toml', 'toml/precision-of-fractional-seconds'),
+      ).toMatchInlineSnapshot(`[2, {"max": 3}]`);
+    });
+
+    it('uses custom value for `toml/precision-of-fractional-seconds` rule', async () => {
+      const configResult = await computeEslintConfig({
+        toml: {maxPrecisionOfFractionalSeconds: 6},
+      });
+
+      expect(
+        configResult.getRuleEntry('toml', 'toml/precision-of-fractional-seconds'),
+      ).toMatchInlineSnapshot(`[2, {"max": 6}]`);
+    });
+
+    it('`toml/precision-of-fractional-seconds` rule fires on a file with too many fractional digits', async () => {
+      const results = await testEslintConfig(
+        'toml',
+        FIXTURES.tooManyFractionalSeconds,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.tooManyFractionalSeconds,
+        'toml/precision-of-fractional-seconds',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        `"Precision of fractional seconds greater than 3 are forbidden."`,
+      );
+    });
+  });
+
+  describe('option: `maxIntegerPrecisionBits`', () => {
+    it('uses default of 64 bits for `toml/precision-of-integer` rule', async () => {
+      const configResult = await computeEslintConfig('toml');
+
+      expect(configResult.getRuleEntry('toml', 'toml/precision-of-integer')).toMatchInlineSnapshot(
+        `[2, {"maxBit": 64}]`,
+      );
+    });
+
+    it('uses custom value for `toml/precision-of-integer` rule', async () => {
+      const configResult = await computeEslintConfig({
+        toml: {maxIntegerPrecisionBits: 32},
+      });
+
+      expect(configResult.getRuleEntry('toml', 'toml/precision-of-integer')).toMatchInlineSnapshot(
+        `[2, {"maxBit": 32}]`,
+      );
+    });
+  });
+
+  describe('option: `ignoresAdditional`', () => {
+    it('ignores `**/Cargo.lock` by default', async () => {
+      const configResult = await computeEslintConfig('toml');
+
+      expect(configResult.getConfigByUnPostfix('toml')?.ignores).to.include.members([
+        '**/Cargo.lock',
+      ]);
+    });
+
+    it('does not ignore `**/Cargo.lock` when set to `false`', async () => {
+      const configResult = await computeEslintConfig({
+        toml: {ignoresAdditional: false},
+      });
+
+      expect(configResult.getConfigByUnPostfix('toml')?.ignores).not.to.include.members([
+        '**/Cargo.lock',
+      ]);
+    });
   });
 });
