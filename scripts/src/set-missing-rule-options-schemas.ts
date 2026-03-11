@@ -3,71 +3,7 @@ import type {EslintPlugin} from '../../src/eslint/eslint-types';
 import type {PluginPrefix} from '../../src/loaders';
 import {cloneDeep, interopDefault, objectEntriesUnsafe} from '../../src/utils';
 
-const PLUGIN_OPTIONS_SCHEMAS: Partial<Record<PluginPrefix, Record<string, JSONSchema[]>>> = {
-  'no-secrets': {
-    'no-secrets': [
-      {
-        type: 'object',
-        additionalProperties: false,
-        properties: {
-          tolerance: {
-            type: 'number',
-            minimum: 0,
-            exclusiveMinimum: true as unknown as number,
-          },
-          additionalRegexes: {
-            type: 'object',
-            additionalProperties: {type: 'string'},
-          },
-          ignoreContent: {
-            anyOf: [
-              {
-                type: 'string',
-              },
-              {
-                type: 'array',
-                items: {
-                  type: 'string',
-                },
-              },
-            ],
-          },
-          ignoreModules: {type: 'boolean'},
-          ignoreIdentifiers: {
-            anyOf: [
-              {
-                type: 'string',
-              },
-              {
-                type: 'array',
-                items: {
-                  type: 'string',
-                },
-              },
-            ],
-          },
-          ignoreCase: {type: 'boolean'},
-          additionalDelimiters: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-          },
-        },
-      },
-    ],
-
-    'no-pattern-match': [
-      {
-        type: 'object',
-        additionalProperties: false,
-        properties: {
-          patterns: {type: 'object', additionalProperties: {type: 'string'}},
-        },
-      },
-    ],
-  },
-};
+const PLUGIN_OPTIONS_SCHEMAS: Partial<Record<PluginPrefix, Record<string, JSONSchema[]>>> = {};
 
 export const addMissingRuleOptionsSchemas = async () => {
   const [

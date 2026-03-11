@@ -9,6 +9,9 @@ import {
   eslintToUnRuleSeverity,
 } from './index';
 
+// TODO all options should be optional, remove `Partial<>` wrapper and type casts when fixed
+type NoSecretsOptions = GetRuleOptions<'no-secrets', 'no-secrets'>;
+
 export interface NoSecretsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'no-secrets'> {
@@ -26,9 +29,9 @@ export interface NoSecretsEslintConfigOptions<
    * Convenient way of configuring `no-secrets` rule for both JS/TS and JSON files.
    *
    * Will be merged with the default options.
-   * @default {tolerance: 5}
+   * @default {tolerance: 4.5}
    */
-  noSecretsOptions?: GetRuleOptions<'no-secrets', 'no-secrets'> & {severity?: EslintSeverity};
+  noSecretsOptions?: Partial<NoSecretsOptions & {severity?: EslintSeverity}>;
 }
 
 export default ((context, optionsRaw) => {
@@ -58,7 +61,9 @@ export default ((context, optionsRaw) => {
       },
     ])
     .addRule('no-pattern-match', OFF) /** @since 2.1.1-rc.0 */
-    .addRule('no-secrets', noSecretsSeverity, [noSecretsOptions]) /** @since 0.1.0 */
+    .addRule('no-secrets', noSecretsSeverity, [
+      noSecretsOptions as NoSecretsOptions,
+    ]) /** @since 0.1.0 */
     .enableConfigTesterForPlugin('no-secrets')
     .addOverrides();
 
@@ -75,7 +80,7 @@ export default ((context, optionsRaw) => {
         language: ['jsonc', 'x'],
       },
     ])
-    .addRule('no-secrets', noSecretsSeverity, [noSecretsOptions])
+    .addRule('no-secrets', noSecretsSeverity, [noSecretsOptions as NoSecretsOptions])
     .addOverrides();
 
   return {
