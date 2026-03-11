@@ -97,7 +97,9 @@ export default ((context, optionsRaw) => {
     .addRule('array-bracket-spacing', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('array-element-newline', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('comma-style', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('inline-table-curly-newline', ERROR) /** @since 1.3.0 */ // 🟣
     .addRule('inline-table-curly-spacing', ERROR) /** @since 0.1.0 */ // 🟣
+    .addRule('inline-table-key-value-newline', ERROR) /** @since 1.3.0 */ // 🟣
     .addRule('key-spacing', ERROR) /** @since 0.2.0 */ // 🟣
     .addRule('spaced-comment', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('table-bracket-spacing', ERROR) /** @since 0.1.0 */ // 🟣
