@@ -81,19 +81,11 @@ describe('rules', async () => {
   const configResult = await computeEslintConfig('noUnsanitized');
 
   it('enables `no-unsanitized/method` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('no-unsanitized', 'no-unsanitized/method'),
-      ),
-    ).toBe(2);
+    expect(configResult.getRuleEntrySeverity('no-unsanitized', 'no-unsanitized/method')).toBe(2);
   });
 
   it('enables `no-unsanitized/property` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('no-unsanitized', 'no-unsanitized/property'),
-      ),
-    ).toBe(2);
+    expect(configResult.getRuleEntrySeverity('no-unsanitized', 'no-unsanitized/property')).toBe(2);
   });
 
   it('`no-unsanitized/property` rule fires on unsafe `innerHTML` assignment', async () => {
@@ -155,14 +147,8 @@ describe('un options', () => {
       },
     });
 
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('no-unsanitized', 'no-unsanitized/method'),
-      ),
-    ).toBe(0);
-    expect(
-      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('no-unsanitized', 'no-console')),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('no-unsanitized', 'no-unsanitized/method')).toBe(0);
+    expect(configResult.getRuleEntry('no-unsanitized', 'no-console')).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {
