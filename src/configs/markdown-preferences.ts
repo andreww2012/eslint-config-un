@@ -99,9 +99,21 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * - [Mathematical Expressions](https://docs.github.com/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)
    * - [Import Code Snippets](https://vitepress.dev/guide/markdown#import-code-snippets)
    *
-   * Technically, when enabled, sets `language: 'markdown-preferences/extended-syntax'` in the resulting flat config.
+   * ⚠️ If enabled, will set `language: 'markdown-preferences/extended-syntax'`
+   * in the resulting flat config for the resolved `files` list and put it AFTER
+   * the flat config produced by `markdown` config (if the latter is enabled),
+   * to potentially override the language for Markdown files. If not enabled,
+   * it will be put BEFORE the `markdown` config, and the resolved `files`
+   * will be associated with `markdown/commonmark` language (provided by
+   * [`@eslint/markdown` plugin](https://npmjs.com/@eslint/markdown)), meaning that
+   * if some file matches both of the flat configs, its final language may be overridden
+   * by `markdown` config.
    *
-   * This option is required for some rules, such as [`custom-container-marker-spacing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/custom-container-marker-spacing.html), to work, and for some rules, such as [`no-implicit-block-closing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/no-implicit-block-closing.html), to handle this custom syntax.
+   * This option is required for some rules, such as
+   * [`custom-container-marker-spacing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/custom-container-marker-spacing.html),
+   * to work, and for some rules, such as
+   * [`no-implicit-block-closing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/no-implicit-block-closing.html),
+   * to handle this custom syntax.
    *
    * Affected rules:
    * - [`emoji-notation`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emoji-notation.html)
@@ -109,7 +121,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * - [`custom-container-marker-spacing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/custom-container-marker-spacing.html)
    * - [`padded-custom-containers`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/padded-custom-containers.html)
    * - [`padding-line-between-blocks`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/padding-line-between-blocks.html)
-   * @default true
+   * @default false
    */
   extendedMarkdownSyntax?: boolean;
 
@@ -195,7 +207,7 @@ export default (async (context, optionsRaw) => {
   );
 
   const optionsResolved = assignDefaults(optionsRaw, {
-    extendedMarkdownSyntax: true,
+    extendedMarkdownSyntax: false,
   } satisfies MarkdownPreferencesEslintConfigOptions);
 
   const {
@@ -259,12 +271,9 @@ export default (async (context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_MARKDOWN],
-        ignoresInternal: {
-          md: false,
-        },
-        ...(extendedMarkdownSyntax && {
-          language: ['markdown-preferences', 'extended-syntax'],
-        }),
+        language: extendedMarkdownSyntax
+          ? ['markdown-preferences', 'extended-syntax']
+          : ['markdown', 'commonmark'],
       },
     ])
     .markCategory('Preference')

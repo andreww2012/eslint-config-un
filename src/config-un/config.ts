@@ -478,11 +478,13 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     vueEslintConfigResult,
     svelteEslintConfigResult,
     cssEslintConfigResult,
+    markdownPreferencesConfigResult,
   ] = await Promise.all([
     loadUnConfig('astro', () => import('../configs/astro')),
     loadUnConfig('vue', () => import('../configs/vue'), {vanillaFinalFlatConfigRules}),
     loadUnConfig('svelte', () => import('../configs/svelte')),
     loadUnConfig('css', () => import('../configs/css')),
+    loadUnConfig('markdownPreferences', () => import('../configs/markdown-preferences')),
   ]);
   const tsEslintConfigResult = await loadUnConfig('ts', () => import('../configs/ts'), {
     vanillaFinalFlatConfigRules,
@@ -492,6 +494,9 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       ? svelteEslintConfigResult.optionsResolved
       : null,
   });
+
+  const shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs =
+    markdownPreferencesConfigResult?.optionsResolved.extendedMarkdownSyntax === true;
 
   const rootConfigBuilder = context.createConfigBuilder({}, '');
   rootConfigBuilder
@@ -654,7 +659,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('importZod', () => import('../configs/import-zod')),
     loadUnConfig('unocss', () => import('../configs/unocss')),
     loadUnConfig('unnecessaryAbstractions', () => import('../configs/unnecessary-abstractions')),
-    loadUnConfig('markdownPreferences', () => import('../configs/markdown-preferences')),
+    !shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs && markdownPreferencesConfigResult,
     loadUnConfig('markdownLinks', () => import('../configs/markdown-links')),
     loadUnConfig('zod', () => import('../configs/zod')),
     loadUnConfig('docusaurus', () => import('../configs/docusaurus')),
@@ -712,6 +717,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('checkFile', () => import('../configs/check-file')), // Likely should be last
     loadUnConfig('formatJs', () => import('../configs/formatjs')), // Likely should be last
     loadUnConfig('markdown', () => import('../configs/markdown')), // Must be last
+    shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs && markdownPreferencesConfigResult,
     loadUnConfig('mdx', () => import('../configs/mdx')), // Must be last
 
     rootConfigBuilder,
