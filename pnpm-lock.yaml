@@ -151,8 +151,8 @@ importers:
         specifier: file:./deps/eslint-plugin-no-type-assertion-1.3.0.tgz
         version: file:deps/eslint-plugin-no-type-assertion-1.3.0.tgz(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-no-unsanitized:
-        specifier: 4.1.4
-        version: 4.1.4(eslint@9.39.2(jiti@2.6.1))
+        specifier: 4.1.5
+        version: 4.1.5(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-node-dependencies:
         specifier: 1.3.0
         version: 1.3.0(eslint@9.39.2(jiti@2.6.1))
@@ -6318,10 +6318,10 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0
 
-  eslint-plugin-no-unsanitized@4.1.4:
-    resolution: {integrity: sha512-cjAoZoq3J+5KJuycYYOWrc0/OpZ7pl2Z3ypfFq4GtaAgheg+L7YGxUo2YS3avIvo/dYU5/zR2hXu3v81M9NxhQ==}
+  eslint-plugin-no-unsanitized@4.1.5:
+    resolution: {integrity: sha512-MSB4hXPVFQrI8weqzs6gzl7reP2k/qSjtCoL2vUMSDejIIq9YL1ZKvq5/ORBXab/PvfBBrWO2jWviYpL+4Ghfg==}
     peerDependencies:
-      eslint: ^8 || ^9
+      eslint: ^9 || ^10
 
   eslint-plugin-node-dependencies@1.3.0:
     resolution: {integrity: sha512-DeB67/C1Cz8OIJPWj4O4Np1c/Xy/Igv9Cqd9UKwWcSZ+azseiNNBJb8lQtVLm7C6fuic/ePWm/ttb0iADtEKww==}
@@ -17160,7 +17160,7 @@ snapshots:
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
 
-  eslint-plugin-no-unsanitized@4.1.4(eslint@9.39.2(jiti@2.6.1)):
+  eslint-plugin-no-unsanitized@4.1.5(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
 
