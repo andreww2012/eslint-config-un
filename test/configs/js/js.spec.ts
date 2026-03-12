@@ -1,0 +1,222 @@
+import {GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML} from '../../../src/constants';
+
+const FIXTURES = {
+  usedConsoleLog: 'used-console-log.js',
+} as const;
+
+describe('basic tests', async () => {
+  const configResult = await computeEslintConfig('js');
+
+  it('creates `js` and `js/@stylistic_spaced-comment` eslint configs', () => {
+    expect(configResult.getConfigByUnPostfix('js')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('js/@stylistic_spaced-comment')).toBeDefined();
+  });
+
+  describe('mode: all configs are disabled', () => {
+    it('does not create `js` eslint config', async () => {
+      const configResult = await computeEslintConfig({});
+
+      expect(configResult.getConfigByUnPostfix('js')).toBeUndefined();
+    });
+
+    it('creates `js` eslint config if explicitly enabled', async () => {
+      const configResult = await computeEslintConfig('js');
+
+      expect(configResult.getConfigByUnPostfix('js')).toBeDefined();
+    });
+  });
+
+  describe('mode: all configs are not explicitly enabled or disabled', () => {
+    it('creates `js` eslint config', async () => {
+      const configResult = await computeEslintConfig({}, {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('js')).toBeDefined();
+    });
+
+    it('creates `js` eslint config and prints a warning if explicitly enabled', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write');
+
+      const configResult = await computeEslintConfig('js', {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('js')).toBeDefined();
+
+      expect(
+        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
+          `[warn] [eslint-config-un] There is no need to enable \`js\` config because this is the default`,
+        ),
+      ).toBe(true);
+    });
+
+    it('does not create `js` eslint config if explicitly disabled', async () => {
+      const configResult = await computeEslintConfig({js: false}, {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('js')).toBeUndefined();
+    });
+  });
+
+  describe('mode: misc configs are enabled', () => {
+    it('creates `js` eslint config', async () => {
+      const configResult = await computeEslintConfig(
+        {},
+        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
+      );
+
+      expect(configResult.getConfigByUnPostfix('js')).toBeDefined();
+    });
+  });
+
+  it('has no explicit `files` in `js` eslint config by default', () => {
+    expect(configResult.getConfigByUnPostfix('js')?.files).toBeUndefined();
+  });
+
+  it('has default `ignores` in `js` eslint config (does not ignore HTML files)', () => {
+    const ignores = configResult.getConfigByUnPostfix('js')?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.to.include.members([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+  });
+
+  it('has default `ignores` in `js/@stylistic_spaced-comment` eslint config including YAML and HTML', () => {
+    const ignores = configResult.getConfigByUnPostfix('js/@stylistic_spaced-comment')?.ignores;
+
+    expect(ignores).to.include.members(['**/*.y?(a)ml', '**/*.html']);
+  });
+});
+
+describe('rules', async () => {
+  const configResult = await computeEslintConfig('js');
+
+  it('enables `no-console` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('js', 'no-console')).toBe(2);
+  });
+
+  it('disables `arrow-body-style` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('js', 'arrow-body-style')).toBe(0);
+  });
+
+  it('`no-console` rule fires on a file with console.log', async () => {
+    const results = await testEslintConfig('js', FIXTURES.usedConsoleLog, import.meta.dirname);
+
+    const error = findLintMessageFromLintResults(results, FIXTURES.usedConsoleLog, 'no-console');
+
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Unexpected console statement. Only these console methods are allowed: warn, error."`,
+    );
+  });
+});
+
+describe('un options', () => {
+  describe('option: `files`', () => {
+    it('uses user-provided `files` in `js` and `js/@stylistic_spaced-comment` eslint configs', async () => {
+      const FILES = ['src/**/*.js'];
+      const configResult = await computeEslintConfig({js: {files: FILES}});
+
+      expect(configResult.getConfigByUnPostfix('js')?.files).toStrictEqual(FILES);
+      expect(
+        configResult.getConfigByUnPostfix('js/@stylistic_spaced-comment')?.files,
+      ).toStrictEqual(FILES);
+    });
+
+    it('disables `js` eslint config when `files` is empty array', async () => {
+      const configResult = await computeEslintConfig({js: {files: []}});
+
+      expect(configResult.getConfigByUnPostfix('js')).toBeUndefined();
+    });
+  });
+
+  describe('option: `ignores`', () => {
+    it('uses user-provided `ignores` in `js` and `js/@stylistic_spaced-comment` eslint configs and merges them with defaults', async () => {
+      const IGNORES = ['**/fixtures/**'];
+      const configResult = await computeEslintConfig({js: {ignores: IGNORES}});
+
+      const ignoresFromJs = configResult.getConfigByUnPostfix('js')?.ignores;
+
+      expect(ignoresFromJs).to.include.members(IGNORES);
+      expect(ignoresFromJs?.length).toBeGreaterThan(IGNORES.length);
+
+      const ignoresFromStylisticNoSpacedComment = configResult.getConfigByUnPostfix(
+        'js/@stylistic_spaced-comment',
+      )?.ignores;
+
+      expect(ignoresFromStylisticNoSpacedComment).to.include.members(IGNORES);
+      expect(ignoresFromStylisticNoSpacedComment?.length).toBeGreaterThan(IGNORES.length);
+    });
+  });
+
+  it('respects `overrides` and `overridesAny` in `js` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      js: {
+        overrides: {'no-console': 0},
+        overridesAny: {'no-eval': 0},
+      },
+    });
+
+    expect(configResult.getRuleEntrySeverity('js', 'no-console')).toBe(0);
+
+    expect(configResult.getRuleEntrySeverity('js', 'no-eval')).toBe(0);
+  });
+
+  describe('option: `forceSeverity`', () => {
+    it('respects `forceSeverity` set to `error` in `js` eslint config', async () => {
+      const configResult = await computeEslintConfig({js: {forceSeverity: 'error'}});
+
+      expect(
+        getAllRulesSeverities(
+          configResult.getConfigByUnPostfix('js'),
+          (ruleName) => !ruleName.includes('/'),
+        ),
+      ).toStrictEqual([2]);
+    });
+
+    it('respects `forceSeverity` set to `warn` in `js` eslint config', async () => {
+      const configResult = await computeEslintConfig({js: {forceSeverity: 'warn'}});
+
+      expect(
+        getAllRulesSeverities(
+          configResult.getConfigByUnPostfix('js'),
+          (ruleName) => !ruleName.includes('/'),
+        ),
+      ).toStrictEqual([1]);
+    });
+  });
+});
+
+describe('options', () => {
+  describe('option: `allowedConsoleMethods`', () => {
+    it('allows `warn` and `error` console methods by default', async () => {
+      const configResult = await computeEslintConfig('js');
+
+      expect(configResult.getRuleEntry('js', 'no-console')).toMatchInlineSnapshot(
+        `[2, {"allow": ["warn", "error"]}]`,
+      );
+    });
+
+    it('adds extra console methods when specified', async () => {
+      const configResult = await computeEslintConfig({
+        js: {allowedConsoleMethods: {log: true}},
+      });
+
+      expect(configResult.getRuleEntry('js', 'no-console')).toMatchInlineSnapshot(
+        `[2, {"allow": ["warn", "error", "log"]}]`,
+      );
+    });
+
+    it('removes a method when set to false', async () => {
+      const configResult = await computeEslintConfig({
+        js: {allowedConsoleMethods: {warn: false}},
+      });
+
+      expect(configResult.getRuleEntry('js', 'no-console')).toMatchInlineSnapshot(
+        `[2, {"allow": ["error"]}]`,
+      );
+    });
+
+    it('disallows all console methods when all defaults are set to false', async () => {
+      const configResult = await computeEslintConfig({
+        js: {allowedConsoleMethods: {warn: false, error: false}},
+      });
+
+      expect(configResult.getRuleEntry('js', 'no-console')).toMatchInlineSnapshot(`[2, {}]`);
+    });
+  });
+});
