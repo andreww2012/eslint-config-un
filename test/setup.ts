@@ -7,6 +7,7 @@ import {
   getRuleSeverityFromEslintRuleEntry as getRuleSeverityFromEslintRuleEntryImpl,
   getAllRulesSeverities as getAllRulesSeveritiesImpl,
 } from './helpers/eslint-config';
+import {createFetchPackageInfoMock as createFetchPackageInfoMockImpl} from './helpers/module-mocks';
 
 /* eslint-disable vars-on-top */
 declare global {
@@ -15,6 +16,7 @@ declare global {
   var findLintMessageFromLintResults: typeof findLintMessageFromLintResultsImpl;
   var getRuleSeverityFromEslintRuleEntry: typeof getRuleSeverityFromEslintRuleEntryImpl;
   var getAllRulesSeverities: typeof getAllRulesSeveritiesImpl;
+  var createFetchPackageInfoMock: typeof createFetchPackageInfoMockImpl;
 }
 /* eslint-enable vars-on-top */
 
@@ -23,3 +25,4 @@ globalThis.testEslintConfig = testEslintConfigImpl;
 globalThis.findLintMessageFromLintResults = findLintMessageFromLintResultsImpl;
 globalThis.getRuleSeverityFromEslintRuleEntry = getRuleSeverityFromEslintRuleEntryImpl;
 globalThis.getAllRulesSeverities = getAllRulesSeveritiesImpl;
+globalThis.createFetchPackageInfoMock = createFetchPackageInfoMockImpl;
