@@ -22,22 +22,37 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
 
   /**
    * Set to `false` to not enforce the extension.
+   *
+   * Affected rule:
+   * - [`file-extension`](https://ota-meshi.github.io/eslint-plugin-yml/rules/file-extension.html)
    * @default 'yml'
    */
   enforceExtension?: 'yml' | 'yaml' | false;
 
   /**
-   * Enforce a specific casing style for keys. It is not enforced by default, but passing an empty object here will enforce `camelCase` style (default value for this rule).
-   * If present, `ignores` values will be merged with `<<`
+   * Enforce a specific casing style for keys. It is not enforced by default,
+   * but passing an empty object here will enforce `camelCase` style
+   * (default value for this rule).
+   * If present, `ignores` values will be merged with `<<`.
+   *
+   * Affected rule:
+   * - [`key-name-casing`](https://ota-meshi.github.io/eslint-plugin-yml/rules/key-name-casing.html)
    */
   casing?: GetRuleOptions<'yaml', 'key-name-casing'>;
 
   /**
    * `false` to not enforce quotes style
+   *
+   * Affected rule:
+   * - [`quotes`](https://ota-meshi.github.io/eslint-plugin-yml/rules/quotes.html)
    * @default 'single'
    */
   quotes?: 'single' | 'double' | false;
 
+  /**
+   * `yaml-eslint-parser` parser options (used by `eslint-plugin-yml` under the hood)
+   * @see https://ota-meshi.github.io/eslint-plugin-yml/user-guide/#parser-options
+   */
   parserOptions?: {
     /**
      * @see https://github.com/ota-meshi/yaml-eslint-parser#advanced-configuration
