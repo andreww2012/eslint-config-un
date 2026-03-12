@@ -15,12 +15,6 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     UnFlatConfigEntryBase<ExtraPlugins, 'yaml'>,
     IgnoresAdditionalOptions<typeof CONFIG_DEFAULT_IGNORES> {
   /**
-   * `files` specified in this config will be merged with the default of
-   * `['**\/*.y?(a)ml']`. Set this to `true` to avoid that behavior
-   */
-  doNotMergeFilesWithDefault?: boolean;
-
-  /**
    * `ignores` specified in this config will be merged with the default of
    * `['**\/yarn.lock', '**\/pnpm-lock.yaml']`. Set this to `true` to avoid that behavior
    */
@@ -71,7 +65,6 @@ export default ((context, optionsRaw) => {
         {
           includeDefaultFilesAndIgnores: true,
           filesDefault: YAML_DEFAULT_FILES,
-          filesDefaultMergedWithUserFiles: !optionsResolved.doNotMergeFilesWithDefault,
           ignoresDefault: CONFIG_DEFAULT_IGNORES,
           ignoresDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeIgnoresWithDefault,
           language: ['yaml', 'yaml'],
