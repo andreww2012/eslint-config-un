@@ -35,6 +35,13 @@ export interface AstroEslintConfigOptions<
         > &
           OmitStrict<JsxA11yEslintConfigOptions, keyof UnFlatConfigEntryBase>
       >;
+
+  /**
+   * Set ups .astro files parser.
+   *
+   * By default, it will be applied to all Astro files (<code>**&#47;*.astro</code>)
+   */
+  configSetup?: UnFlatConfigEntryFilesAndIgnores;
 }
 
 const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
@@ -42,26 +49,27 @@ const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
 export default (async (context, optionsRaw) => {
   const eslintPluginAstro = await pluginsLoaders.astro(context).then(({module}) => module);
 
-  context.usedPlugins.add('astro');
-  if (!eslintPluginAstro) {
-    return null;
-  }
-
   const optionsResolved = assignDefaults(optionsRaw, {
     files: DEFAULT_ASTRO_FILES, // Must be assigned to options for `ts` config
     configJsxA11y: true,
   } satisfies AstroEslintConfigOptions);
 
-  const {files: parentConfigFiles, ignores: parentConfigIgnores, configJsxA11y} = optionsResolved;
+  const {
+    files: parentConfigFiles,
+    ignores: parentConfigIgnores,
+    configSetup: configSetupOptions = {},
+    configJsxA11y,
+  } = optionsResolved;
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'astro');
+  const configBuilderSetup = context.createConfigBuilder(configSetupOptions, null);
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
-  configBuilder?.addConfig(
+  configBuilderSetup?.addConfig(
     [
       'astro/setup',
       {
-        filesDefault: [...DEFAULT_ASTRO_FILES, ...parentConfigFiles],
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: DEFAULT_ASTRO_FILES,
         parser: 'astro-eslint-parser',
         // TODO why?
         ignoresInternal: {
@@ -71,7 +79,7 @@ export default (async (context, optionsRaw) => {
     ],
     {
       languageOptions: {
-        globals: eslintPluginAstro.environments.astro.globals,
+        globals: eslintPluginAstro?.environments.astro.globals,
         parserOptions: {
           ...(isTypescriptEnabled &&
             generatePackageToLoadProperty('parser', 'typescriptEslintParser')),
@@ -82,6 +90,8 @@ export default (async (context, optionsRaw) => {
         generatePackageToLoadProperty('processor', 'astroClientSideTsProcessor')),
     },
   );
+
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'astro');
 
   // Legend:
   // 🟢 - in recommended
@@ -129,6 +139,8 @@ export default (async (context, optionsRaw) => {
   return {
     configs: [
       configBuilder,
+      configBuilderSetup,
+
       ...(configJsxA11y === false
         ? []
         : await (async () => {
