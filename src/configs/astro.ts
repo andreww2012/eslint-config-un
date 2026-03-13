@@ -1,7 +1,9 @@
 // cspell:ignore canonicalurl fetchcontent getentrybyslug
 import {ERROR, GLOB_ASTRO, OFF, WARNING} from '../constants';
+import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
-import type {PickKeysNotStartingWith, PickKeysStartingWith} from '../types';
+import type {OmitStrict, PickKeysNotStartingWith, PickKeysStartingWith, Prettify} from '../types';
+import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -26,9 +28,12 @@ export interface AstroEslintConfigOptions<
    */
   configJsxA11y?:
     | boolean
-    | UnFlatConfigEntryBase<
-        ExtraPlugins,
-        PickKeysStartingWith<UnRulesConfigPartial<'astro'>, 'astro/jsx-a11y'>
+    | Prettify<
+        UnFlatConfigEntryBase<
+          ExtraPlugins,
+          PickKeysStartingWith<UnRulesConfigPartial<'astro'>, 'astro/jsx-a11y'>
+        > &
+          OmitStrict<JsxA11yEslintConfigOptions, keyof UnFlatConfigEntryBase>
       >;
 }
 
