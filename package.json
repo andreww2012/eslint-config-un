@@ -76,7 +76,7 @@
     "test:common": "nr typegen && nr knip && nr spellcheck && nr test:config && nr test:vitest run && nr lint && nr build:code:test",
     "test": "nr deps:audit && nr test:common",
     "lint:public-types": "attw --pack . --profile esm-only",
-    "change": "npx changeset add && nr spellcheck",
+    "ch": "npx changeset add",
     "release": "changeset publish",
     "prepublishOnly": "nr deps:dedupe-check && nr deps:audit || true && nr test:common && nr build && nr lint:public-types",
     "prepack": "nr build"
