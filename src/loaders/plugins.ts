@@ -252,12 +252,7 @@ export const pluginsLoaders = {
   'github-actions': genModuleLoader(
     'github-actions',
     'eslint-plugin-github-action',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('eslint-plugin-github-action'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+    () => interopDefault(import('eslint-plugin-github-action')) as Promise<EslintPlugin>,
   ),
   graphql: genModuleLoader(
     'graphql',
