@@ -413,7 +413,10 @@ export default (async (context, optionsRaw) => {
     .addRule('weak-ssl', ERROR) /** @since 1.0.4-alpha.0 */ // [S4423] 🟢 📦 `node:https`, `node:tls`
     .addRule('x-powered-by', ERROR) /** @since 1.0.4-alpha.0 */ // [S5689] 🟢 📦 `express`, `helmet`
     .addRule('xml-parser-xxe', ERROR) /** @since 1.0.4-alpha.0 */ // [S2755] 🟢 📦 `libxmljs`
-    .enableConfigTesterForPlugin('sonarjs')
+    .enableConfigTesterForPlugin('sonarjs', {
+      // It looks like `code-eval` was accidentally re-introduced in v4.0.1 after removing in v4.0.0
+      rulesToSkipInConfig: (ruleName) => ruleName === 'code-eval',
+    })
     .addOverrides();
 
   return {
