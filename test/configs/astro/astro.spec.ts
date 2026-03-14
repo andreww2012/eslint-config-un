@@ -1,20 +1,7 @@
 import {GLOB_ASTRO, GLOB_MARKDOWN} from '../../../src/constants';
 
-const INITIAL_INSTALLED_PACKAGES: Record<string, string> = {astro: '5.0.0'};
-// eslint-disable-next-line vitest/require-hook
-let mockInstalledPackages: Record<string, string> = {...INITIAL_INSTALLED_PACKAGES};
-
-vi.mock(import('../../../src/utils'), async (importOriginal) => {
-  const mod = await importOriginal();
-  return {
-    ...mod,
-    fetchPackageInfo: (packageName: string) =>
-      createFetchPackageInfoMock(mockInstalledPackages, mod).fetchPackageInfo(packageName),
-  };
-});
-
-afterEach(() => {
-  mockInstalledPackages = {...INITIAL_INSTALLED_PACKAGES};
+beforeEach(() => {
+  addInstalledPackages({astro: '5.0.0'});
 });
 
 const FIXTURES = {
@@ -58,7 +45,7 @@ describe('basic tests', async () => {
     });
 
     it('does not create `astro/setup` and `astro` eslint configs when `astro` package is not installed', async () => {
-      mockInstalledPackages = {};
+      setInstalledPackages({});
 
       const modeConfigResult = await computeEslintConfig({}, {reset: true});
 
@@ -76,7 +63,7 @@ describe('basic tests', async () => {
     });
 
     it('does not create `astro/setup` and `astro` eslint configs and prints a warning if explicitly disabled when `astro` package is not installed', async () => {
-      mockInstalledPackages = {};
+      setInstalledPackages({});
 
       using stderrSpy = vi.spyOn(process.stderr, 'write');
 
@@ -96,7 +83,7 @@ describe('basic tests', async () => {
 
   describe('mode: misc configs are enabled', () => {
     it('does not create `astro/setup` and `astro` eslint configs when `astro` package is not installed', async () => {
-      mockInstalledPackages = {};
+      setInstalledPackages({});
 
       const modeConfigResult = await computeEslintConfig(
         {},

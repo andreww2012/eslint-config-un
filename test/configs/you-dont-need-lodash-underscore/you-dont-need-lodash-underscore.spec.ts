@@ -1,16 +1,7 @@
 import {CHECKED_LODASH_METHODS} from '../../../src/constants';
 
-const INITIAL_INSTALLED_PACKAGES: Record<string, string> = {lodash: '4.17.21'};
-// eslint-disable-next-line vitest/require-hook
-let mockInstalledPackages: Record<string, string> = {...INITIAL_INSTALLED_PACKAGES};
-
-vi.mock(import('../../../src/utils'), async (importOriginal) => {
-  const mod = await importOriginal();
-  return {
-    ...mod,
-    fetchPackageInfo: (packageName: string) =>
-      createFetchPackageInfoMock(mockInstalledPackages, mod).fetchPackageInfo(packageName),
-  };
+beforeEach(() => {
+  addInstalledPackages({lodash: '4.17.21'});
 });
 
 const FIXTURES = {
@@ -94,12 +85,8 @@ describe('basic tests', async () => {
       ...CHECKED_LODASH_METHODS.map((method) => `lodash.${method}`),
     ];
 
-    afterEach(() => {
-      mockInstalledPackages = {...INITIAL_INSTALLED_PACKAGES};
-    });
-
     it('does not create `you-dont-need-lodash-underscore` eslint config when no lodash package is installed', async () => {
-      mockInstalledPackages = {};
+      setInstalledPackages({});
 
       const configResult = await computeEslintConfig({}, {reset: true});
 
@@ -109,7 +96,7 @@ describe('basic tests', async () => {
     it.each(LODASH_PACKAGES)(
       'creates `you-dont-need-lodash-underscore` eslint config when `%s` is installed',
       async (pkg) => {
-        mockInstalledPackages = {[pkg]: '4.17.21'};
+        setInstalledPackages({[pkg]: '4.17.21'});
 
         const configResult = await computeEslintConfig({}, {reset: true});
 
