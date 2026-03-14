@@ -1,0 +1,9 @@
+on:
+  push:
+jobs:
+  test-job:
+    name: Test Job
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Run test
+        run: echo "test"
