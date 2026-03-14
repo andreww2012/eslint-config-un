@@ -84,7 +84,11 @@ export default eslintConfig({
         files: ['src/configs/index.ts'],
       },
       configSortObjects: {
-        files: ['src/configs/extra/no-stylistic-rules.ts', 'src/loaders/*.ts'],
+        files: [
+          'src/configs/extra/no-stylistic-rules.ts',
+          'src/loaders/*.ts',
+          'scripts/updated-packages-info.ts',
+        ],
         ignores: ['src/loaders/{index,shared}.ts'],
       },
     },

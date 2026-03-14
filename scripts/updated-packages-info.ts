@@ -6,35 +6,187 @@ import {destr} from 'destr';
 import {exec} from 'tinyexec';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import ourPackageJson from '../package.json' with {type: 'json'};
-import type {UnionToIntersection} from '../src/types';
-import {fetchPackageInfo} from '../src/utils';
+import type {UnConfigs} from '../src/configs';
+import {type LoadablePluginPrefix, pluginsLoaders} from '../src/loaders';
+import {fetchPackageInfo, objectEntriesUnsafe} from '../src/utils';
 
 const versionAsIs = (version: string) => version;
 
-const PACKAGES_GIT_TAGS_PATTERNS: Partial<
-  Record<
-    keyof UnionToIntersection<(typeof ourPackageJson)['dependencies' | 'devDependencies']>,
-    (version: string) => string
-  >
-> = {
-  '@eslint/compat': (version) => `compat-v${version}`,
-  '@eslint/css': (version) => `css-v${version}`,
-  '@nx/eslint-plugin': versionAsIs,
-  '@sveltejs/kit': (version) => `@sveltejs/kit@${version}`,
-  'ember-eslint-parser': (version) => `v${version}-ember-eslint-parser`,
-  'tailwind-csstree': (version) => `tailwind-csstree-v${version}`,
-  'eslint-plugin-prefer-arrow-functions': versionAsIs,
-  '@e18e/eslint-plugin': versionAsIs,
-  'eslint-plugin-depend': versionAsIs,
+type GitTagResult = string | {url: string};
+
+interface PackageMeta {
+  configs: (keyof UnConfigs)[];
+  gitTag?: (version: string) => GitTagResult;
+}
+
+const PACKAGES_META: Record<string, PackageMeta> = {
+  ...Object.fromEntries(
+    objectEntriesUnsafe({
+      '@angular-eslint': {configs: ['angular']},
+      '@angular-eslint/template': {configs: ['angular']},
+      '@cspell': {configs: ['cspell']},
+      '@eslint-react': {configs: ['react']},
+      '@eslint-react/debug': {configs: ['react']},
+      '@eslint-react/dom': {configs: ['react']},
+      '@eslint-react/hooks-extra': {configs: ['react']},
+      '@eslint-react/naming-convention': {configs: ['react']},
+      '@eslint-react/web-api': {configs: ['react']},
+      '@html-eslint': {configs: ['html']},
+      '@intlify/vue-i18n': {configs: ['vue']},
+      '@next/next': {configs: ['nextJs']}, // eslint-disable-line case-police/string-check
+      '@stylistic': {configs: ['stylistic']},
+      '@tanstack/query': {configs: ['tanstackQuery']},
+      '@tanstack/router': {configs: ['tanstackRouter']},
+      '@unocss': {configs: ['unocss']},
+      antfu: {configs: ['antfu']},
+      astro: {configs: ['astro']},
+      ava: {configs: ['ava']},
+      'barrel-files': {configs: ['barrelFiles']},
+      'better-tailwindcss': {configs: ['betterTailwind']},
+      boundaries: {configs: ['boundaries']},
+      'case-police': {configs: ['casePolice']},
+      'check-file': {configs: ['checkFile']},
+      clsx: {configs: ['clsx']},
+      command: {configs: ['command']},
+      compat: {configs: ['compat'], gitTag: (version) => `compat-v${version}`},
+      css: {configs: ['css'], gitTag: (version) => `css-v${version}`},
+      'css-in-js': {configs: ['cssInJs']},
+      cypress: {configs: ['cypress']},
+      'de-morgan': {configs: ['deMorgan']},
+      depend: {configs: ['depend'], gitTag: versionAsIs},
+      docusaurus: {configs: ['docusaurus']},
+      e18e: {configs: ['e18e'], gitTag: versionAsIs},
+      ember: {configs: ['ember']},
+      'erasable-syntax-only': {configs: ['erasableSyntaxOnly']},
+      es: {configs: ['es']},
+      'eslint-comments': {configs: ['eslintComments']},
+      'eslint-plugin': {configs: ['eslintPlugin']},
+      'expect-type': {configs: ['expectType']},
+      'fast-import': {configs: ['fastImport']},
+      'file-progress': {configs: ['fileProgress']},
+      format: {configs: ['format']},
+      formatjs: {configs: ['formatJs']},
+      'github-actions': {configs: ['githubActions']},
+      graphql: {configs: ['graphql']},
+      header: {configs: ['header']},
+      headers: {configs: ['headers']},
+      html: {configs: ['jsInline']},
+      import: {configs: ['import']},
+      'import-zod': {configs: ['importZod']},
+      jest: {configs: ['jest']},
+      'jest-dom': {configs: ['jestDom']},
+      'jest-extended': {configs: ['jest']},
+      jsdoc: {configs: ['jsdoc']},
+      'json-schema-validator': {configs: ['jsonSchemaValidator']},
+      jsonc: {configs: ['json']},
+      'jsx-a11y': {configs: ['jsxA11y']},
+      lit: {configs: ['lit']},
+      'lit-a11y': {configs: ['lit']},
+      lockfile: {configs: ['lockfile']},
+      markdown: {configs: ['markdown']},
+      'markdown-links': {configs: ['markdownLinks']},
+      'markdown-preferences': {configs: ['markdownPreferences']},
+      math: {configs: ['math']},
+      mdx: {configs: ['mdx']},
+      mocha: {configs: ['mocha']},
+      'module-interop': {configs: ['moduleInterop']},
+      nestjs: {configs: ['nestJs']}, // eslint-disable-line case-police/string-check
+      'no-only-tests': {configs: ['noOnlyTests']},
+      'no-secrets': {configs: ['noSecrets']},
+      'no-type-assertion': {configs: ['ts']},
+      'no-unsanitized': {configs: ['noUnsanitized']},
+      node: {configs: ['node']},
+      'node-dependencies': {configs: ['nodeDependencies']},
+      nuxt: {configs: ['vue']},
+      nx: {configs: ['nx'], gitTag: versionAsIs},
+      'package-json': {configs: ['packageJson']},
+      perfectionist: {configs: ['perfectionist']},
+      pinia: {configs: ['vue']},
+      playwright: {configs: ['playwright']},
+      pnpm: {configs: ['pnpm']},
+      'prefer-arrow-functions': {configs: ['preferArrowFunctions'], gitTag: versionAsIs},
+      prettier: {configs: []},
+      promise: {configs: ['promise']},
+      qunit: {configs: ['qunit']},
+      qwik: {configs: ['qwik']},
+      react: {configs: ['react']},
+      'react-hooks': {configs: ['react']},
+      'react-refresh': {configs: ['react']},
+      'react-you-might-not-need-an-effect': {configs: ['react']},
+      regexp: {configs: ['regexp']},
+      rxjs: {configs: ['rxjs']},
+      security: {configs: ['security']},
+      'sentences-per-line': {configs: ['markdown']},
+      solid: {configs: ['solid']},
+      sonarjs: {
+        configs: ['sonar'],
+        gitTag: (version) => ({
+          url: `https://github.com/SonarSource/SonarJS/blob/___INSERT-REF-HERE___/packages/jsts/src/rules/CHANGELOG.md#___INSERT-DATE-HERE___-version-${version.replaceAll(/\D/g, '')}`,
+        }),
+      },
+      sql: {configs: ['sql']},
+      storybook: {configs: ['storybook']},
+      svelte: {configs: ['svelte']},
+      tailwindcss: {configs: ['tailwind']},
+      'testing-library': {configs: ['testingLibrary']},
+      toml: {configs: ['toml']},
+      'tree-shaking': {configs: ['treeShaking']},
+      ts: {configs: ['ts']},
+      turbo: {configs: ['turbo']},
+      un: {configs: ['un']},
+      unicorn: {configs: ['unicorn']},
+      'unnecessary-abstractions': {configs: ['unnecessaryAbstractions']},
+      'unused-imports': {configs: ['unusedImports']},
+      vitest: {configs: ['vitest']},
+      vue: {configs: ['vue']},
+      'vue-scoped-css': {configs: ['vue']},
+      'vuejs-accessibility': {configs: ['vue']},
+      wc: {configs: ['webComponents']},
+      yaml: {configs: ['yaml']},
+      'you-dont-need-lodash-underscore': {configs: ['youDontNeedLodashUnderscore']},
+      zod: {configs: ['zod']},
+    } satisfies Record<LoadablePluginPrefix, PackageMeta>).map(([pluginPrefix, meta]) => {
+      const {packageName} = pluginsLoaders[pluginPrefix];
+      return [packageName, meta];
+    }),
+  ),
+  // Additional packages that are not eslint plugins but are tracked as dependencies
+  '@sveltejs/kit': {configs: ['svelte'], gitTag: (version) => `@sveltejs/kit@${version}`},
+  'ember-eslint-parser': {
+    configs: ['ember'],
+    gitTag: (version) => `v${version}-ember-eslint-parser`,
+  },
+  'tailwind-csstree': {configs: ['tailwind'], gitTag: (version) => `tailwind-csstree-v${version}`},
 };
+
+/* eslint-disable perfectionist/sort-objects */
 
 // =============================================================================
 
 const updatedDependenciesInfo = await main();
 
-const getGitHubVersionTag = (dependency: string, version: string) =>
-  PACKAGES_GIT_TAGS_PATTERNS[dependency as keyof typeof PACKAGES_GIT_TAGS_PATTERNS]?.(version) ??
-  `v${version}`;
+const getCompareDiffUrl = (
+  dependency: string,
+  repoUrl: string,
+  oldVersion: string,
+  newVersion: string,
+): string => {
+  const gitTag = PACKAGES_META[dependency]?.gitTag;
+  if (!gitTag) {
+    return `${repoUrl}/compare/v${oldVersion}...v${newVersion}`;
+  }
+  const newTagResult = gitTag(newVersion);
+  const oldTagResult = gitTag(oldVersion);
+  if (typeof newTagResult === 'object') {
+    return newTagResult.url;
+  }
+  if (typeof oldTagResult === 'object') {
+    throw new TypeError(
+      'gitTag function for new version returned a string, but for old version returned an object',
+    );
+  }
+  return `${repoUrl}/compare/${oldTagResult}...${newTagResult}`;
+};
 
 const EXTENSIONS_TO_SKIP_IN_DIFF = new Set(['map', 'ts', 'cts', 'mts', 'tsbuildinfo']);
 const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Record<string, string[]> = {
@@ -62,7 +214,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     `${styleText('gray', oldVersion)} →  ${styleText('green', newVersion)}`,
   );
 
-  console.log(styleText('bold', 'Source code diff:'));
+  console.log(styleText('underline', 'Source code diff:'));
 
   const lines = codeDiffResult.stdout.trim().split('\n');
   const filesInDiff = lines
@@ -139,13 +291,23 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     }
   }
 
-  console.log(`${styleText('bold', 'Repo:')} ${styleText('cyan', repoUrl)}`);
-  console.log(`${styleText('bold', 'Releases:')} ${styleText('cyan', `${repoUrl}/releases`)}`);
+  const mainUnConfigs = PACKAGES_META[dependency]?.configs;
+  const mainUnConfigNames = mainUnConfigs?.join(', ') || '';
 
-  console.log(styleText('bold', 'For changelog:'));
+  console.log(`${styleText('underline', 'Repo:')} ${styleText('cyan', repoUrl)}`);
+  console.log(`${styleText('underline', 'Releases:')} ${styleText('cyan', `${repoUrl}/releases`)}`);
+
+  if (mainUnConfigNames) {
+    console.log(styleText('underline', 'For commit message:'));
+    console.log(`chore(${mainUnConfigNames}): update ${dependency} to v${newVersion}`);
+    console.log(
+      `feat(${mainUnConfigNames}): update ${dependency} to v${newVersion} and enable ___INSERT-CHANGES___`,
+    );
+  }
+
+  console.log(styleText('underline', 'For changelog:'));
   console.log(
-    `: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${repoUrl}/compare/${getGitHubVersionTag(dependency, oldVersion)}...${getGitHubVersionTag(dependency, newVersion)}):
-
+    `${mainUnConfigNames}: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${getCompareDiffUrl(dependency, repoUrl, oldVersion, newVersion)}):
 - 🟢 enabled [\`\`]() rule and added it to the \`noStylisticRules\` config
 - 🟡 enabled [\`\`]() rule (warning) with the following default options:
 - ❓ enabled conditionally [\`\`]() rule in ⚙️ \`\` sub-config
@@ -165,12 +327,12 @@ const updatedOptionalPeerDependencies = updatedDependenciesInfo.filter(
 );
 if (updatedProdDependencies.length + updatedOptionalPeerDependencies.length > 0) {
   console.log(
-    styleText('red', '\nPlease do not forget'),
+    styleText('underline', styleText('red', '\nPlease do not forget')),
     'to review new rules additions to decide which ones should be considered stylistic',
   );
   if (updatedOptionalPeerDependencies.length > 0) {
     console.log(
-      styleText('red', 'Please do not forget'),
+      styleText('underline', styleText('red', 'Please do not forget')),
       'to update peer dependency ranges for the following packages:',
     );
     console.log(
@@ -335,3 +497,5 @@ async function main() {
 
   return result;
 }
+
+/* eslint-enable perfectionist/sort-objects */

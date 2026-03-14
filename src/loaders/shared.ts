@@ -9,7 +9,7 @@ export type EslintParser = Eslint.Linter.Parser;
 
 export const MODULE_NOT_FOUND_ERROR_CODES = ['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'];
 
-export type ModuleLoader<T, N extends string = string, PackageNullable extends boolean = true> = (
+export type ModuleLoader<T, N extends string = string, PackageNullable extends boolean = true> = ((
   context: UnConfigContext,
   options?: {
     throwIfNotFound?: boolean;
@@ -17,7 +17,9 @@ export type ModuleLoader<T, N extends string = string, PackageNullable extends b
 ) => Promise<{
   packageName: N;
   module: T | (PackageNullable extends true ? null : never);
-}>;
+}>) & {
+  packageName: N;
+};
 
 const MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP = /^Cannot find module '([^']+)'/;
 
@@ -39,7 +41,7 @@ export function genModuleLoader<T, N extends string>(
   module: () => MaybePromise<T | {default: T}>,
   ignoredErrors?: MaybeArray<string>,
 ): ModuleLoader<T, N> {
-  return async (context, options) => {
+  const result: ModuleLoader<T, N> = async (context, options) => {
     const isPluginOptionalPeerDependency = packageName in OPTIONAL_PEER_DEPENDENCIES;
     try {
       const {pluginOverrides} = context.rootOptions;
@@ -81,4 +83,6 @@ export function genModuleLoader<T, N extends string>(
       throw error;
     }
   };
+  result.packageName = packageName;
+  return result;
 }
