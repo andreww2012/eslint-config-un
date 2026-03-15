@@ -287,7 +287,7 @@ export const pluginsLoaders = {
   import: genModuleLoader(
     'import',
     'eslint-plugin-import-x',
-    () => interopDefault(import('eslint-plugin-import-x')) as unknown as Promise<EslintPlugin>,
+    () => interopDefault(import('eslint-plugin-import-x')) as Promise<EslintPlugin>,
   ),
   'import-zod': genModuleLoader('import-zod', 'eslint-plugin-import-zod', () =>
     interopDefault(import('eslint-plugin-import-zod')),
