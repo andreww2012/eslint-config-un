@@ -105,7 +105,7 @@ export default ((context, optionsRaw) => {
       'pnpm/package.json',
       {
         includeDefaultFilesAndIgnores: true,
-        filesDefault: ['package.json', '**/package.json'],
+        filesDefault: ['**/package.json'],
         language: ['jsonc', 'json'],
         settings: {
           pnpm: pluginSettings,
