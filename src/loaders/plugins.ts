@@ -122,8 +122,10 @@ export const pluginsLoaders = {
   astro: genModuleLoader('astro', 'eslint-plugin-astro', () =>
     interopDefault(import('eslint-plugin-astro')),
   ),
-  ava: genModuleLoader('ava', 'eslint-plugin-ava', () =>
-    interopDefault(import('eslint-plugin-ava')),
+  ava: genModuleLoader(
+    'ava',
+    'eslint-plugin-ava',
+    () => interopDefault(import('eslint-plugin-ava')) as Promise<EslintPlugin>,
   ),
   'barrel-files': genModuleLoader('barrel-files', 'eslint-plugin-barrel-files', () =>
     interopDefault(import('eslint-plugin-barrel-files')),

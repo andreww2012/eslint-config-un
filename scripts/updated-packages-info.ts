@@ -314,6 +314,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 - ❓ enabled conditionally [\`\`]() rule in ⚙️ \`\` sub-config
 - 🔴 not enabled [\`\`]() rule
 - ❌ \`\` rule was removed
+- ⚠️ [\`\`]() rule was disabled because got deprecated
 - 🔄 \`\` was renamed to [\`\`]()`,
   );
 }

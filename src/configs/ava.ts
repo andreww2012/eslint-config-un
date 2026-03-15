@@ -65,29 +65,39 @@ export default ((context, optionsRaw) => {
         ? []
         : [{message: enforceAssertionMessage ? 'always' : 'never'}],
     ) /** @since 2.3.0 */ // 🟢
+    .addRule('failing-test-url', OFF) /** @since 16.0.0 */
     .addRule('hooks-order', ERROR) /** @since 8.0.0 */ // 🟢
     .addRule(
       'max-asserts',
       enforceMaxAssertions == null ? OFF : ERROR,
-      enforceMaxAssertions == null ? [] : [enforceMaxAssertions],
+      enforceMaxAssertions == null ? [] : [{max: enforceMaxAssertions}],
     ) // /** @since 1.0.0 */
     .addRule('no-async-fn-without-await', ERROR) /** @since 3.1.0 */ // 🟢
-    .addRule('no-duplicate-modifiers', ERROR) /** @since 3.1.0 */ // 🟢
+    // TODO should create a sub config targeting `package.json`s only with this rule?
+    .addRule('no-ava-in-dependencies', OFF) /** @since 16.0.0 */ // 🟢
+    .addRule('no-commented-tests', WARNING) /** @since 16.0.0 */ // 🟡
+    .addRule('no-conditional-assertion', ERROR) /** @since 16.0.0 */ // 🟢
+    .addRule('no-duplicate-hooks', ERROR) /** @since 16.0.0 */ // 🟢
     .addRule('no-identical-title', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-ignored-test-files', ERROR) /** @since 2.0.0 */ // 🟢
     .addRule('no-import-test-files', ERROR) /** @since 5.0.0 */ // 🟢
     .addRule('no-incorrect-deep-equal', ERROR) /** @since 8.0.0 */ // 🟢
     .addRule('no-inline-assertions', ERROR) /** @since 8.0.0 */ // 🟢
+    .addRule('no-invalid-modifier-chain', ERROR) /** @since 16.0.0 */ // 🟢
+    .addRule('no-negated-assertion', ERROR) /** @since 16.0.0 */ // 🟢
+    .addRule('no-nested-assertions', ERROR) /** @since 16.0.0 */ // 🟢
     .addRule('no-nested-tests', ERROR) /** @since 3.0.0 */ // 🟢
     .addRule('no-only-test', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-skip-assert', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-skip-test', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-todo-implementation', ERROR) /** @since 3.0.0 */ // 🟢
     .addRule('no-todo-test', WARNING) /** @since 1.1.0 */ // 🟡
-    .addRule('no-unknown-modifiers', ERROR) /** @since 1.4.0 */ // 🟢
+    .addRule('no-useless-t-pass', ERROR) /** @since 16.0.0 */ // 🟢
     .addRule('prefer-async-await', ERROR) /** @since 3.0.0 */ // 🟢
     .addRule('prefer-power-assert', OFF) // /** @since 0.1.0 */
     .addRule('prefer-t-regex', ERROR) /** @since 7.0.0 */ // 🟢
+    .addRule('prefer-t-throws', ERROR) /** @since 16.0.0 */ // 🟢
+    .addRule('require-assertion', ERROR) /** @since 16.0.0 */ // 🟢
     .addRule('test-title', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('test-title-format', OFF) // /** @since 7.0.0 */
     .addRule('use-t', ERROR) /** @since 1.2.0 */ // 🟢

@@ -246,7 +246,7 @@ describe('options', () => {
       });
 
       expect(configResult.getRuleEntryOptions('ava', 'ava/max-asserts')).toStrictEqual([
-        MAX_ASSERTIONS,
+        {max: MAX_ASSERTIONS},
       ]);
     });
   });

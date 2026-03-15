@@ -166,6 +166,8 @@ const ALL_STYLISTIC_RULES = {
   },
   ava: {
     'hooks-order': true,
+    'no-negated-assertion': true,
+    'prefer-t-throws': true,
   },
   'barrel-files': {
     // None
