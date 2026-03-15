@@ -10,7 +10,7 @@ import {
   assignDefaults,
 } from './index';
 
-type CssCustomSyntax = Partial<CSSLanguageOptions['customSyntax']>;
+type CssCustomSyntax = Extract<CSSLanguageOptions['customSyntax'], Record<string, unknown>>;
 
 export interface CssEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -33,6 +33,11 @@ export interface CssEslintConfigOptions<
    * If `tailwindcss` is installed, `extraSyntax` will contain the built-in Tailwind syntax
    * that can be used in a function to compose the final syntax. From the docs:
    * > Note: The Tailwind syntax doesn't currently provide for the `theme()` function. This is a limitation of `CSSTree` that we hope will be resolved soon.
+   *
+   * NOTE: function passed to `customSyntax` is not the same as
+   * [function supported by `@eslint/css`](https://github.com/eslint/css#configuring-custom-syntax).
+   * We don't support the latter because it is not cacheable, but that `defaultSyntax` parameter
+   * is coming from `@eslint/css-tree/definition-syntax-data`, which you can use manually.
    */
   customSyntax?: MaybeFn<
     CssCustomSyntax,

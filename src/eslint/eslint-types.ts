@@ -1,8 +1,9 @@
+// @eslint/core gets resolved to v1, which is incompatible with eslint@9
 import type {
   ConfigObject as EslintConfigObject,
   Plugin as EslintPlugin,
   Severity as EslintSeverity,
-} from '@eslint/core';
+} from '@eslint/core0';
 import type Eslint from 'eslint';
 import type {ExtraPluginsType} from '../config-un/shared';
 import type {FixableRuleNames as UnFixableRuleNames} from '../eslint-types-fixable-only.gen';

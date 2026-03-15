@@ -161,7 +161,12 @@ export const pluginsLoaders = {
   compat: genModuleLoader('compat', 'eslint-plugin-compat', () =>
     interopDefault(import('eslint-plugin-compat')),
   ),
-  css: genModuleLoader('css', '@eslint/css', () => interopDefault(import('@eslint/css'))),
+  css: genModuleLoader(
+    'css',
+    '@eslint/css',
+    // @ts-expect-error types mismatch
+    () => interopDefault(import('@eslint/css')) as Promise<EslintPlugin>,
+  ),
   'css-in-js': genModuleLoader(
     'css-in-js',
     'eslint-plugin-css',

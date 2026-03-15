@@ -33,9 +33,12 @@ importers:
       '@eslint/compat':
         specifier: 2.0.1
         version: 2.0.1(eslint@9.39.2(jiti@2.6.1))
+      '@eslint/core0':
+        specifier: npm:@eslint/core@^0.17.0
+        version: '@eslint/core@0.17.0'
       '@eslint/css':
-        specifier: 0.14.1
-        version: 0.14.1
+        specifier: 1.0.0
+        version: 1.0.0
       '@eslint/markdown':
         specifier: 7.5.1
         version: 7.5.1
@@ -2177,13 +2180,17 @@ packages:
     resolution: {integrity: sha512-/nr9K9wkr3P1EzFTdFdMoLuo1PmIxjmwvPozwoSodjNBdefGujXQUF93u1DDZpEaTuDvMsIQddsd35BwtrW9Xw==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
+  '@eslint/core@1.1.1':
+    resolution: {integrity: sha512-QUPblTtE51/7/Zhfv8BDwO0qkkzQL7P/aWWbqcf4xWLEYn1oKjdO0gglQBB4GAsu7u6wjijbCmzsUTy6mnk6oQ==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
   '@eslint/css-tree@3.6.9':
     resolution: {integrity: sha512-3D5/OHibNEGk+wKwNwMbz63NMf367EoR4mVNNpxddCHKEb2Nez7z62J2U6YjtErSsZDoY0CsccmoUpdEbkogNA==}
     engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0}
 
-  '@eslint/css@0.14.1':
-    resolution: {integrity: sha512-NXiteSacmpaXqgyIW3+GcNzexXyfC0kd+gig6WTjD4A74kBGJeNx1tV0Hxa0v7x0+mnIyKfGPhGNs1uhRFdh+w==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+  '@eslint/css@1.0.0':
+    resolution: {integrity: sha512-2MjyL517F1wrLrmmfaFntKKiImudiXW6Dd80oE7VRIRu64bT5YieRs+WPgdZy9m8izs/tSUqi3j2mBnjUrqJfA==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
   '@eslint/eslintrc@3.3.3':
     resolution: {integrity: sha512-Kr+LPIUVKz2qkx1HAMH8q1q6azbqBAsXJUxBl/ODDuVPX45Z9DfwB8tPjTi6nNZ8BuM3nbJxC5zCAg5elnBUTQ==}
@@ -2207,6 +2214,10 @@ packages:
 
   '@eslint/plugin-kit@0.6.0':
     resolution: {integrity: sha512-bIZEUzOI1jkhviX2cp5vNyXQc6olzb2ohewQubuYlMXZ2Q/XjBO0x0XhGPvc9fjSIiUN0vw+0hq53BJ4eQSJKQ==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@eslint/plugin-kit@0.6.1':
+    resolution: {integrity: sha512-iH1B076HoAshH1mLpHMgwdGeTs0CYwL0SPMkGuSebZrwBp16v415e9NZXg2jtrqPVQjf6IANe2Vtlr5KswtcZQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
   '@fastify/busboy@3.2.0':
@@ -12529,16 +12540,20 @@ snapshots:
     dependencies:
       '@types/json-schema': 7.0.15
 
+  '@eslint/core@1.1.1':
+    dependencies:
+      '@types/json-schema': 7.0.15
+
   '@eslint/css-tree@3.6.9':
     dependencies:
       mdn-data: 2.23.0
       source-map-js: 1.2.1
 
-  '@eslint/css@0.14.1':
+  '@eslint/css@1.0.0':
     dependencies:
-      '@eslint/core': 0.17.0
+      '@eslint/core': 1.1.1
       '@eslint/css-tree': 3.6.9
-      '@eslint/plugin-kit': 0.4.1
+      '@eslint/plugin-kit': 0.6.1
 
   '@eslint/eslintrc@3.3.3':
     dependencies:
@@ -12580,6 +12595,11 @@ snapshots:
   '@eslint/plugin-kit@0.6.0':
     dependencies:
       '@eslint/core': 1.1.0
+      levn: 0.4.1
+
+  '@eslint/plugin-kit@0.6.1':
+    dependencies:
+      '@eslint/core': 1.1.1
       levn: 0.4.1
 
   '@fastify/busboy@3.2.0': {}

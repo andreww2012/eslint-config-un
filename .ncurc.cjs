@@ -24,6 +24,7 @@ const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Se
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set();
 
 const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
+  '@eslint/core0',
   '@types/node',
   'angular-eslint-plugin-template15',
   'angular-eslint-plugin-template17',
