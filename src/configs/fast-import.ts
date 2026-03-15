@@ -16,7 +16,7 @@ export interface FastImportEslintConfigOptions<
   /**
    * [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `fastImport` property
+   * that will be assigned to `fast-import` property
    * and applied to the resolved `files` and `ignores` of this config.
    */
   settings?: Partial<FastImportPluginSettings>;
@@ -50,7 +50,7 @@ export default ((context, optionsRaw) => {
       {
         includeDefaultFilesAndIgnores: true,
         settings: {
-          fastImport: {
+          'fast-import': {
             rootDir: import.meta.dirname,
             ...pluginSettings,
           } satisfies FastImportPluginSettings,
