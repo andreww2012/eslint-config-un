@@ -62,7 +62,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       'eslint-comments': {configs: ['eslintComments']},
       'eslint-plugin': {configs: ['eslintPlugin']},
       'expect-type': {configs: ['expectType']},
-      'fast-import': {configs: ['fastImport']},
+      'fast-import': {configs: ['fastImport'], gitTag: versionAsIs},
       'file-progress': {configs: ['fileProgress']},
       format: {configs: ['format']},
       formatjs: {configs: ['formatJs']},

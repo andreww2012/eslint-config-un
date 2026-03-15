@@ -264,6 +264,7 @@ const ALL_STYLISTIC_RULES = {
   },
   'fast-import': {
     'consistent-file-extensions': true,
+    'prefer-alias-imports': true,
     'require-node-prefix': true,
   },
   'file-progress': {

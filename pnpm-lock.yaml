@@ -458,8 +458,8 @@ importers:
         specifier: 0.6.2
         version: 0.6.2(@typescript-eslint/parser@8.56.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-fast-import:
-        specifier: 1.8.0
-        version: 1.8.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+        specifier: 2.0.0
+        version: 2.0.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-format:
         specifier: 1.3.1
         version: 1.3.1(eslint@9.39.2(jiti@2.6.1))
@@ -6122,8 +6122,8 @@ packages:
       eslint: '>=7'
       typescript: '>=4'
 
-  eslint-plugin-fast-import@1.8.0:
-    resolution: {integrity: sha512-MDmBoAjYR7EDhvgx64jib3rsDTg+VulzQKXxiQ6+qJzajHN4WFSZHsiau98H9vO14bFBun36xdig5XPSoSgCUQ==}
+  eslint-plugin-fast-import@2.0.0:
+    resolution: {integrity: sha512-LnvHcCEPVUq3sR+ZLBOtKVUxlWK9QplS4cL2xprDHS1rERu7HilZPIMQj1wkWFo6XqBGKokD7ga/stQ+WTRQrA==}
     peerDependencies:
       eslint: '>=9.0.0'
 
@@ -16841,10 +16841,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-fast-import@1.8.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3):
+  eslint-plugin-fast-import@2.0.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3):
     dependencies:
-      '@typescript-eslint/typescript-estree': 8.56.0(typescript@5.9.3)
-      '@typescript-eslint/utils': 8.56.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      '@typescript-eslint/typescript-estree': 8.56.1(typescript@5.9.3)
+      '@typescript-eslint/utils': 8.56.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       cross-dirname: 0.1.0
       eslint: 9.39.2(jiti@2.6.1)
       ignore: 7.0.5

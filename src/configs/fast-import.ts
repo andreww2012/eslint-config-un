@@ -8,7 +8,10 @@ import {
   assignDefaults,
 } from './index';
 
-export type FastImportPluginSettings = Parameters<typeof fastImportPluginConfigGenerator>[0];
+export type FastImportPluginSettings = Extract<
+  Parameters<typeof fastImportPluginConfigGenerator>[0],
+  object
+>;
 
 export interface FastImportEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -66,6 +69,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-entry-point-imports', ERROR) /** @since 1.0.0-beta2 */ // 🟢
     .addRule('no-external-barrel-reexports', ERROR) /** @since 1.0.0-beta2 */ // 🟢
     .addRule('no-named-as-default', ERROR) /** @since 1.1.2 */ // 🟢
+    .addRule('no-node-builtins', OFF) /** @since 1.10.0 */
     .addRule(
       'no-restricted-imports',
       restrictImports ? ERROR : OFF,
@@ -74,6 +78,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-test-imports-in-prod', ERROR) /** @since 1.0.0-beta2 */ // 🟢
     .addRule('no-unresolved-imports', ERROR) /** @since 1.0.1 */ // 🟢
     .addRule('no-unused-exports', ERROR) /** @since 1.0.0-beta2 */ // 🟢
+    .addRule('prefer-alias-imports', OFF) /** @since 2.0.0 */ // 🟢
     .addRule('require-node-prefix', ERROR) /** @since 1.0.0-rc1 */
     .enableConfigTesterForPlugin('fast-import')
     .addOverrides();
