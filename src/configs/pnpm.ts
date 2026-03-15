@@ -50,9 +50,7 @@ interface PnpmYamlSubConfigOptions<
   enforcePnpmWorkspaceSettings?: GetRuleOptions<'pnpm', 'yaml-enforce-settings'>;
 }
 
-export interface PnpmEslintConfigOptions<
-  ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'pnpm'> {
+export interface PnpmEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * [`eslint-plugin-pnpm`](https://npmjs.com/eslint-plugin-pnpm) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
