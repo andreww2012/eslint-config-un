@@ -425,8 +425,8 @@ importers:
         specifier: 5.3.1
         version: 5.3.1(@typescript-eslint/parser@8.56.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@4.4.4(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.56.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-case-police:
-        specifier: 2.1.1
-        version: 2.1.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+        specifier: 2.2.0
+        version: 2.2.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-check-file:
         specifier: 3.3.1
         version: 3.3.1(eslint@9.39.2(jiti@2.6.1))
@@ -4993,8 +4993,8 @@ packages:
   caniuse-lite@1.0.30001770:
     resolution: {integrity: sha512-x/2CLQ1jHENRbHg5PSId2sXq1CIO1CISvwWAj027ltMVG2UNgW+w9oH2+HzgEIRFembL8bUlXtfbBHR1fCg2xw==}
 
-  case-police@2.1.1:
-    resolution: {integrity: sha512-b7ntnoig2aVgKDi/OiziUPmbUQO4lVS0qxspY4Fu+U/N8q2iOU2TpsJjHu94S3GDWEjYnmOOQH7PAgt2ColTPQ==}
+  case-police@2.2.0:
+    resolution: {integrity: sha512-bFGvJl/w6+X2DoFB0HTFGxbIk/dClWxM7S0fiIQ63Xg00fL4dw7G+MOAGgVgHlfIda4YmHeRh9mp13xFqxz3hg==}
     hasBin: true
 
   ccount@2.0.1:
@@ -6043,10 +6043,10 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-plugin-case-police@2.1.1:
-    resolution: {integrity: sha512-DAQJUJOSUZ5Z8BXLb4E6ZUcyWJq6jWcpKNuGQ4cgLa6MlXVJs6smajkKZyyQwG9pXomOwnn6JKfUfy8JrM6+BA==}
+  eslint-plugin-case-police@2.2.0:
+    resolution: {integrity: sha512-pM0tfbwZ/Rg2H7UXeYvrRUQgOhldkKgJJyeNegekOo0/G5rP+wEfBzNg/2PRc3ZM06Nl1rl5A5QOlEs9Z+g98g==}
     peerDependencies:
-      eslint: ^9.9.0
+      eslint: ^9.9.0 || ^10.0.0
 
   eslint-plugin-check-file@3.3.1:
     resolution: {integrity: sha512-b7fDkp8Y0T9vloTYSrkMnb5Cqpk1bc6+jDQdgKIhzdwb47NmLAvMFYo3SzHOPF8u4SEsOVhmrNSbo6Sp633syg==}
@@ -15596,7 +15596,7 @@ snapshots:
 
   caniuse-lite@1.0.30001770: {}
 
-  case-police@2.1.1: {}
+  case-police@2.2.0: {}
 
   ccount@2.0.1: {}
 
@@ -16716,10 +16716,10 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-plugin-case-police@2.1.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3):
+  eslint-plugin-case-police@2.2.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3):
     dependencies:
-      '@typescript-eslint/utils': 8.56.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
-      case-police: 2.1.1
+      '@typescript-eslint/utils': 8.56.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      case-police: 2.2.0
       eslint: 9.39.2(jiti@2.6.1)
       synckit: 0.11.12
     transitivePeerDependencies:
