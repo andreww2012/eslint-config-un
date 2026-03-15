@@ -1,3 +1,9 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
+const FIXTURES = {
+  wrongParamNames: 'wrong-param-names.js',
+} as const;
+
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('jsdoc');
 
@@ -9,30 +15,71 @@ describe('basic tests', async () => {
     expect(configResult.getConfigByUnPostfix('jsdoc')).toBeDefined();
   });
 
-  it('creates `jsdoc` eslint config by default', async () => {
-    const configResult = await computeEslintConfig({}, {reset: true});
+  describe('mode: all configs are disabled', () => {
+    it('does not create `jsdoc` eslint config', async () => {
+      const configResult = await computeEslintConfig({});
 
-    expect(configResult.getConfigByUnPostfix('jsdoc')).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('jsdoc')).toBeUndefined();
+    });
+
+    it('creates `jsdoc` eslint config if explicitly enabled', async () => {
+      const configResult = await computeEslintConfig('jsdoc');
+
+      expect(configResult.getConfigByUnPostfix('jsdoc')).toBeDefined();
+    });
+
+    it('does not create `jsdoc` eslint config and prints a warning if explicitly disabled', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write');
+
+      const configResult = await computeEslintConfig({jsdoc: false});
+
+      expect(configResult.getConfigByUnPostfix('jsdoc')).toBeUndefined();
+
+      expect(
+        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
+          '[warn] [eslint-config-un] There is no need to disable `jsdoc` config because this is the default',
+        ),
+      ).toBe(true);
+    });
   });
 
-  it('creates `jsdoc` eslint config and prints a warning if explicitly enabled', async () => {
-    using stderrSpy = vi.spyOn(process.stderr, 'write');
+  describe('mode: all configs are not explicitly enabled or disabled', () => {
+    it('creates `jsdoc` eslint config', async () => {
+      const configResult = await computeEslintConfig({}, {reset: true});
 
-    await computeEslintConfig({jsdoc: true}, {reset: true});
+      expect(configResult.getConfigByUnPostfix('jsdoc')).toBeDefined();
+    });
 
-    expect(configResult.getConfigByUnPostfix('jsdoc')).toBeDefined();
+    it('creates `jsdoc` eslint config and prints a warning if explicitly enabled', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write');
 
-    expect(
-      String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-        `[warn] [eslint-config-un] There is no need to enable \`jsdoc\` config because this is the default`,
-      ),
-    ).toBe(true);
+      const configResult = await computeEslintConfig('jsdoc', {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('jsdoc')).toBeDefined();
+
+      expect(
+        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
+          '[warn] [eslint-config-un] There is no need to enable `jsdoc` config because this is the default',
+        ),
+      ).toBe(true);
+    });
+
+    it('does not create `jsdoc` eslint config if explicitly disabled', async () => {
+      const configResult = await computeEslintConfig({jsdoc: false}, {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('jsdoc')).toBeUndefined();
+    });
   });
 
-  it('does not create `jsdoc` eslint config if explicitly disabled', async () => {
-    const configResult = await computeEslintConfig({jsdoc: false}, {reset: true});
+  describe('mode: misc configs are enabled', () => {
+    it('creates `jsdoc` eslint config', async () => {
+      const configResult = await computeEslintConfig(
+        {},
+        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
+      );
 
-    expect(configResult.getConfigByUnPostfix('jsdoc')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('jsdoc')).toBeDefined();
+    });
   });
 
   it('has no explicit `files` restriction in `jsdoc` eslint config by default', () => {
@@ -43,7 +90,7 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('jsdoc')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.to.include.members(['**/*.htm?(l)']);
+    expect(ignores).not.to.include.members([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 
@@ -51,17 +98,25 @@ describe('rules', async () => {
   const configResult = await computeEslintConfig('jsdoc');
 
   it('enables `jsdoc/check-access` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc', 'jsdoc/check-access')),
-    ).toBe(2);
+    expect(configResult.getRuleEntrySeverity('jsdoc', 'jsdoc/check-access')).toBe(2);
   });
 
   it('disables `jsdoc/convert-to-jsdoc-comments` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('jsdoc', 'jsdoc/convert-to-jsdoc-comments'),
-      ),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('jsdoc', 'jsdoc/convert-to-jsdoc-comments')).toBe(0);
+  });
+
+  it('`jsdoc/check-param-names` rule fires on mismatched param names', async () => {
+    const results = await testEslintConfig('jsdoc', FIXTURES.wrongParamNames, import.meta.dirname);
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.wrongParamNames,
+      'jsdoc/check-param-names',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Expected @param names to be "a, b". Got "wrongName, anotherWrong"."',
+    );
   });
 });
 
@@ -104,13 +159,8 @@ describe('un options', () => {
       jsdoc: {overrides: {'jsdoc/check-access': 0}, overridesAny: {'no-console': 0}},
     });
 
-    expect(
-      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc', 'jsdoc/check-access')),
-    ).toBe(0);
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc', 'no-console')),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('jsdoc', 'jsdoc/check-access')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('jsdoc', 'no-console')).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {
@@ -155,27 +205,30 @@ describe('options', () => {
       const configResult = await computeEslintConfig({
         jsdoc: {settings: SETTINGS},
       });
-      const config = configResult.getConfigByUnPostfix('jsdoc');
 
-      expect(config?.settings?.['jsdoc']).toStrictEqual(SETTINGS);
+      expect(configResult.getConfigByUnPostfix('jsdoc')?.settings?.['jsdoc']).toStrictEqual(
+        SETTINGS,
+      );
     });
   });
 
   describe('option: `customTags`', () => {
     it('does not set `definedTags` in `check-tag-names` rule options when `customTags` is not provided', async () => {
       const configResult = await computeEslintConfig('jsdoc');
-      const rule = configResult.getRuleEntry('jsdoc', 'jsdoc/check-tag-names');
 
-      expect(rule).toMatchInlineSnapshot(`[2]`);
+      expect(configResult.getRuleEntryOptions('jsdoc', 'jsdoc/check-tag-names')).toStrictEqual([]);
     });
 
     it('sets `definedTags` in `check-tag-names` rule options when `customTags` is provided', async () => {
-      const configResult = await computeEslintConfig({
-        jsdoc: {customTags: ['slot', 'component']},
-      });
-      const rule = configResult.getRuleEntry('jsdoc', 'jsdoc/check-tag-names');
+      const CUSTOM_TAGS = ['slot', 'component'];
 
-      expect(rule).toMatchInlineSnapshot(`[2, {"definedTags": ["slot", "component"]}]`);
+      const configResult = await computeEslintConfig({
+        jsdoc: {customTags: CUSTOM_TAGS},
+      });
+
+      expect(configResult.getRuleEntryOptions('jsdoc', 'jsdoc/check-tag-names')).toStrictEqual([
+        {definedTags: CUSTOM_TAGS},
+      ]);
     });
   });
 
@@ -185,7 +238,7 @@ describe('options', () => {
       const rule = configResult.getRuleEntry('jsdoc', 'jsdoc/no-bad-blocks');
 
       expect(rule).toMatchInlineSnapshot(
-        `[2, {"ignore": ["ts-check", "ts-expect-error", "ts-ignore", "ts-nocheck", "__PURE__", "__NO_SIDE_EFFECTS__", "vite-ignore"]}]`,
+        '[2, {"ignore": ["ts-check", "ts-expect-error", "ts-ignore", "ts-nocheck", "__PURE__", "__NO_SIDE_EFFECTS__", "vite-ignore"]}]',
       );
     });
 
@@ -196,7 +249,7 @@ describe('options', () => {
       const rule = configResult.getRuleEntry('jsdoc', 'jsdoc/no-bad-blocks');
 
       expect(rule).toMatchInlineSnapshot(
-        `[2, {"ignore": ["ts-check", "ts-expect-error", "ts-ignore", "ts-nocheck", "__PURE__", "__NO_SIDE_EFFECTS__", "vite-ignore", "eslint-disable", "webpack-magic"]}]`,
+        '[2, {"ignore": ["ts-check", "ts-expect-error", "ts-ignore", "ts-nocheck", "__PURE__", "__NO_SIDE_EFFECTS__", "vite-ignore", "eslint-disable", "webpack-magic"]}]',
       );
     });
   });
@@ -205,11 +258,7 @@ describe('options', () => {
     it('enables `type-formatting` rule when `formatTypeValues` is `true` (default)', async () => {
       const configResult = await computeEslintConfig('jsdoc');
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('jsdoc', 'jsdoc/type-formatting'),
-        ),
-      ).toBe(2);
+      expect(configResult.getRuleEntrySeverity('jsdoc', 'jsdoc/type-formatting')).toBe(2);
     });
 
     it('disables `type-formatting` rule when `formatTypeValues` is `false`', async () => {
@@ -217,11 +266,7 @@ describe('options', () => {
         jsdoc: {formatTypeValues: false},
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('jsdoc', 'jsdoc/type-formatting'),
-        ),
-      ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('jsdoc', 'jsdoc/type-formatting')).toBe(0);
     });
   });
 });

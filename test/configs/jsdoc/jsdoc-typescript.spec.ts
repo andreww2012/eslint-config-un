@@ -1,3 +1,7 @@
+const FIXTURES = {
+  typeAnnotatedJsdoc: 'type-annotated-jsdoc.ts',
+} as const;
+
 describe('jsdoc: sub config `configTypescript`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig({jsdoc: true, ts: true});
@@ -15,9 +19,15 @@ describe('jsdoc: sub config `configTypescript`', () => {
       expect(configResult.getConfigByUnPostfix('jsdoc/ts')).toBeUndefined();
     });
 
+    it('does not create `jsdoc/ts` eslint config when `jsdoc` is enabled, but `ts` is not', async () => {
+      const configResult = await computeEslintConfig({jsdoc: true});
+
+      expect(configResult.getConfigByUnPostfix('jsdoc/ts')).toBeUndefined();
+    });
+
     it('creates `jsdoc/ts` eslint config with default TypeScript files', () => {
       expect(configResult.getConfigByUnPostfix('jsdoc/ts')?.files).toMatchInlineSnapshot(
-        `["**/*.?([cm])ts?(x)"]`,
+        '["**/*.?([cm])ts?(x)"]',
       );
     });
 
@@ -32,17 +42,23 @@ describe('jsdoc: sub config `configTypescript`', () => {
     const configResult = await computeEslintConfig({jsdoc: true, ts: true});
 
     it('enables `jsdoc/no-types` rule by default', () => {
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-types')),
-      ).toBe(2);
+      expect(configResult.getRuleEntrySeverity('jsdoc/ts', 'jsdoc/no-types')).toBe(2);
     });
 
     it('disables `jsdoc/no-undefined-types` rule by default', () => {
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-undefined-types'),
-        ),
-      ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('jsdoc/ts', 'jsdoc/no-undefined-types')).toBe(0);
+    });
+
+    it('`jsdoc/no-types` rule fires on type annotations in TypeScript JSDoc comments', async () => {
+      const results = await testEslintConfig(
+        {jsdoc: true, ts: true},
+        FIXTURES.typeAnnotatedJsdoc,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(results, FIXTURES.typeAnnotatedJsdoc, 'jsdoc/no-types');
+
+      expect(error?.message).toMatchInlineSnapshot('"Types are not permitted on @param."');
     });
   });
 
@@ -91,13 +107,8 @@ describe('jsdoc: sub config `configTypescript`', () => {
         ts: true,
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc/ts', 'jsdoc/no-types')),
-      ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsdoc/ts', 'no-console')),
-      ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('jsdoc/ts', 'jsdoc/no-types')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('jsdoc/ts', 'no-console')).toBe(0);
     });
 
     describe('option: `forceSeverity`', () => {
@@ -138,6 +149,7 @@ describe('jsdoc: sub config `configTypescript`', () => {
           jsdoc: {settings: SETTINGS},
           ts: true,
         });
+
         const config = configResult.getConfigByUnPostfix('jsdoc/ts');
 
         expect(config?.settings?.['jsdoc']).toStrictEqual(SETTINGS);
@@ -145,6 +157,7 @@ describe('jsdoc: sub config `configTypescript`', () => {
 
       it('uses sub-config-specific jsdoc settings when provided', async () => {
         const SUB_SETTINGS = {mode: 'typescript'} as const;
+
         const configResult = await computeEslintConfig({
           jsdoc: {
             settings: SETTINGS,
@@ -152,6 +165,7 @@ describe('jsdoc: sub config `configTypescript`', () => {
           },
           ts: true,
         });
+
         const config = configResult.getConfigByUnPostfix('jsdoc/ts');
 
         expect(config?.settings?.['jsdoc']).toStrictEqual(SUB_SETTINGS);
