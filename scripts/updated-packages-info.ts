@@ -141,7 +141,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       vue: {configs: ['vue']},
       'vue-scoped-css': {configs: ['vue']},
       'vuejs-accessibility': {configs: ['vue']},
-      wc: {configs: ['webComponents']},
+      wc: {configs: ['webComponents'], gitTag: versionAsIs},
       yaml: {configs: ['yaml']},
       'you-dont-need-lodash-underscore': {configs: ['youDontNeedLodashUnderscore']},
       zod: {configs: ['zod']},
