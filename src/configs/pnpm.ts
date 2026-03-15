@@ -132,10 +132,7 @@ export default ((context, optionsRaw) => {
   );
   const {enforcePnpmWorkspaceSettings} = configPnpmWorkspaceOptions;
 
-  const configBuilderPnpmWorkspace = context.createConfigBuilder(
-    configPnpmWorkspaceOptions,
-    'pnpm',
-  );
+  const configBuilderPnpmWorkspace = context.createConfigBuilder(configPnpmWorkspace, 'pnpm');
   configBuilderPnpmWorkspace
     ?.addConfig([
       'pnpm/pnpm-workspace-yaml',
