@@ -1,3 +1,5 @@
+import {GLOB_MARKDOWN, GLOB_MDX} from '../../../src/constants';
+
 const FIXTURES = {
   dupKeysJson: 'dup-keys.json',
 } as const;
@@ -21,7 +23,7 @@ describe('basic tests', async () => {
     });
 
     it('creates `jsonc/all` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig({json: true});
+      const configResult = await computeEslintConfig('json');
 
       expect(configResult.getConfigByUnPostfix('jsonc/all')).toBeDefined();
     });
@@ -35,7 +37,7 @@ describe('basic tests', async () => {
     });
 
     it('creates `jsonc/all` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig({json: true}, {reset: true});
+      const configResult = await computeEslintConfig('json', {reset: true});
 
       expect(configResult.getConfigByUnPostfix('jsonc/all')).toBeDefined();
     });
@@ -49,7 +51,7 @@ describe('basic tests', async () => {
 
       expect(
         String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to disable \`json\` config because this is the default`,
+          '[warn] [eslint-config-un] There is no need to disable `json` config because this is the default',
         ),
       ).toBe(true);
     });
@@ -68,7 +70,7 @@ describe('basic tests', async () => {
 
   it('has default `files` in `jsonc/all` eslint config', () => {
     expect(configResult.getConfigByUnPostfix('jsonc/all')?.files).toMatchInlineSnapshot(
-      `["**/*.json", "**/*.jsonc", "**/*.json5"]`,
+      '["**/*.json", "**/*.jsonc", "**/*.json5"]',
     );
   });
 
@@ -76,7 +78,7 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('jsonc/all')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.to.include.members(['**/*.md', '**/*.mdx']);
+    expect(ignores).not.to.include.members([GLOB_MARKDOWN, GLOB_MDX]);
   });
 });
 
@@ -84,17 +86,11 @@ describe('rules', async () => {
   const configResult = await computeEslintConfig('json');
 
   it('enables `jsonc/no-dupe-keys` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('jsonc/all', 'jsonc/no-dupe-keys'),
-      ),
-    ).toBe(2);
+    expect(configResult.getRuleEntrySeverity('jsonc/all', 'jsonc/no-dupe-keys')).toBe(2);
   });
 
   it('disables `jsonc/sort-keys` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsonc/all', 'jsonc/sort-keys')),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('jsonc/all', 'jsonc/sort-keys')).toBe(0);
   });
 
   it('`jsonc/no-dupe-keys` rule fires on a .json file with duplicate keys', async () => {
@@ -149,15 +145,8 @@ describe('un options', () => {
       json: {overrides: {'jsonc/no-dupe-keys': 0}, overridesAny: {'no-console': 0}},
     });
 
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('jsonc/all', 'jsonc/no-dupe-keys'),
-      ),
-    ).toBe(0);
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsonc/all', 'no-console')),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('jsonc/all', 'jsonc/no-dupe-keys')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('jsonc/all', 'no-console')).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {

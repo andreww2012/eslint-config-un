@@ -20,7 +20,7 @@ describe('jsonc: sub config `configJson5`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('jsonc/json5')?.files).toMatchInlineSnapshot(
-        `["**/*.json5"]`,
+        '["**/*.json5"]',
       );
     });
 
@@ -84,15 +84,8 @@ describe('jsonc: sub config `configJson5`', () => {
         },
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('jsonc/json5', 'jsonc/no-dupe-keys'),
-        ),
-      ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsonc/json5', 'no-console')),
-      ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('jsonc/json5', 'jsonc/no-dupe-keys')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('jsonc/json5', 'no-console')).toBe(0);
     });
   });
 });

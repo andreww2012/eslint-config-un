@@ -20,7 +20,7 @@ describe('jsonc: sub config `configJson`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('jsonc/json')?.files).toMatchInlineSnapshot(
-        `["**/*.json"]`,
+        '["**/*.json"]',
       );
     });
 
@@ -82,15 +82,8 @@ describe('jsonc: sub config `configJson`', () => {
         json: {configJson: {overrides: {'jsonc/no-dupe-keys': 0}, overridesAny: {'no-console': 0}}},
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('jsonc/json', 'jsonc/no-dupe-keys'),
-        ),
-      ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('jsonc/json', 'no-console')),
-      ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('jsonc/json', 'jsonc/no-dupe-keys')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('jsonc/json', 'no-console')).toBe(0);
     });
   });
 });
