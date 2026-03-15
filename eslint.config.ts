@@ -2,8 +2,6 @@ import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint
 import {eslintConfig, isInCi} from './src';
 import {forbidImportingFromUtilityLibraries} from './src/snippets';
 
-const TEST_DIR_GLOB = ['test/**/*'];
-
 export default eslintConfig({
   ignores: ['test/**/fixtures/**'],
   mode: 'lib',
@@ -73,7 +71,6 @@ export default eslintConfig({
     jsxA11y: false,
     casePolice: true,
     import: {
-      ignores: TEST_DIR_GLOB,
       extraneousDependenciesWhitelist: [
         'import-meta-resolve', // Bundled (patched)
         'is-in-editor', // Bundled (patched)
@@ -181,36 +178,10 @@ export default eslintConfig({
       },
     },
     {
-      files: TEST_DIR_GLOB,
+      files: ['test/**/*'],
       rules: {
-        curly: 0,
-        'import/order': 0,
-        'no-unused-vars': 0,
-        'prefer-template': 0,
-        'sort-imports': 0,
-
-        'unused-imports/no-unused-imports': 0,
-
-        'import/newline-after-import': 0,
-        'import/no-duplicates': 0,
-
-        'ts/consistent-type-imports': 0,
-        'ts/no-explicit-any': 0,
-        'ts/no-non-null-assertion': 0,
+        'e18e/prefer-static-regex': 0,
         'ts/no-shadow': 0,
-        'ts/no-unused-vars': 0,
-
-        '@stylistic/padding-line-between-statements': 0,
-        '@stylistic/quotes': 0,
-
-        'jsdoc/lines-before-block': 0,
-
-        'astro/prefer-class-list-directive': 0,
-        'astro/sort-attributes': 0,
-
-        'svelte/button-has-type': 0,
-        'svelte/prefer-style-directive': 0,
-        'svelte/sort-attributes': 0,
       },
     },
     {
