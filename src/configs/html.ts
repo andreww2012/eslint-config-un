@@ -117,6 +117,7 @@ export default ((context, optionsRaw) => {
     .addRule('require-attrs', OFF) /** @since 0.17.0 */
     .addRule('require-button-type', ERROR) /** @since 0.10.0 */
     .addRule('require-closing-tags', ERROR) /** @since 0.6.0 */ // 🟢
+    .addRule('require-details-summary', ERROR) /** @since 0.58.0 */
     .addRule('require-doctype', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('require-explicit-size', ERROR) /** @since 0.33.0 */
     .addRule('require-li-container', ERROR) /** @since 0.5.0 */ // 🟢

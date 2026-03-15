@@ -151,6 +151,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
     }),
   ),
   // Additional packages that are not eslint plugins but are tracked as dependencies
+  '@html-eslint/parser': {configs: ['html']},
   '@sveltejs/kit': {configs: ['svelte'], gitTag: (version) => `@sveltejs/kit@${version}`},
   'ember-eslint-parser': {
     configs: ['ember'],

@@ -1,3 +1,5 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('html');
 
@@ -17,7 +19,7 @@ describe('basic tests', async () => {
     });
 
     it('creates `html` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig({html: true});
+      const configResult = await computeEslintConfig('html');
 
       expect(configResult.getConfigByUnPostfix('html')).toBeDefined();
     });
@@ -33,11 +35,13 @@ describe('basic tests', async () => {
     it('creates `html` eslint config and prints a warning if explicitly enabled', async () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write');
 
-      await computeEslintConfig({html: true}, {reset: true});
+      const configResult = await computeEslintConfig('html', {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('html')).toBeDefined();
 
       expect(
         String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to enable \`html\` config because this is the default`,
+          '[warn] [eslint-config-un] There is no need to enable `html` config because this is the default',
         ),
       ).toBe(true);
     });
@@ -62,7 +66,7 @@ describe('basic tests', async () => {
 
   it('has default `files` in `html` eslint config', () => {
     expect(configResult.getConfigByUnPostfix('html')?.files).toMatchInlineSnapshot(
-      `["**/*.htm?(l)"]`,
+      '["**/*.htm?(l)"]',
     );
   });
 
@@ -70,7 +74,7 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('html')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).to.not.include.members(['**/*.htm?(l)']);
+    expect(ignores).to.not.include.members([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 
@@ -78,19 +82,11 @@ describe('rules', async () => {
   const configResult = await computeEslintConfig('html');
 
   it('enables `@html-eslint/no-duplicate-attrs` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('html', '@html-eslint/no-duplicate-attrs'),
-      ),
-    ).toBe(2);
+    expect(configResult.getRuleEntrySeverity('html', '@html-eslint/no-duplicate-attrs')).toBe(2);
   });
 
   it('disables `@html-eslint/no-inline-styles` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('html', '@html-eslint/no-inline-styles'),
-      ),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('html', '@html-eslint/no-inline-styles')).toBe(0);
   });
 });
 
@@ -133,15 +129,8 @@ describe('un options', () => {
       html: {overrides: {'@html-eslint/no-duplicate-attrs': 0}, overridesAny: {'no-console': 0}},
     });
 
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('html', '@html-eslint/no-duplicate-attrs'),
-      ),
-    ).toBe(0);
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('html', 'no-console')),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('html', '@html-eslint/no-duplicate-attrs')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('html', 'no-console')).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {
@@ -218,7 +207,7 @@ describe('options', () => {
       const ruleEntry = configResult.getRuleEntry('html', '@html-eslint/no-restricted-tags');
 
       expect(ruleEntry).toMatchInlineSnapshot(
-        `[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^font$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$"]}]`,
+        '[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^font$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$"]}]',
       );
     });
 
@@ -229,7 +218,7 @@ describe('options', () => {
       const ruleEntry = configResult.getRuleEntry('html', '@html-eslint/no-restricted-tags');
 
       expect(ruleEntry).toMatchInlineSnapshot(
-        `[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^font$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$", "^iframe$"]}]`,
+        '[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^font$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$", "^iframe$"]}]',
       );
     });
 
@@ -240,7 +229,7 @@ describe('options', () => {
       const ruleEntry = configResult.getRuleEntry('html', '@html-eslint/no-restricted-tags');
 
       expect(ruleEntry).toMatchInlineSnapshot(
-        `[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$"]}]`,
+        '[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$"]}]',
       );
     });
   });
