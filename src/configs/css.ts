@@ -1,7 +1,7 @@
 import type {CSSLanguageOptions} from '@eslint/css';
 import {ERROR, GLOB_CSS, OFF, WARNING} from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
-import {getKeysOfTruthyValues} from '../utils';
+import {type MaybeFn, getKeysOfTruthyValues, maybeCall} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -9,6 +9,8 @@ import {
   type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
+
+type CssCustomSyntax = Partial<CSSLanguageOptions['customSyntax']>;
 
 export interface CssEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -28,11 +30,23 @@ export interface CssEslintConfigOptions<
    *
    * > The `customSyntax` option is an object that uses the `CSSTree` format for defining custom syntax, which allows you to specify at-rules, properties, and some types.
    *
-   * If `tailwindcss` is installed, user provided `customSyntax` will be merged
-   * with the built-in Tailwind syntax. From the docs:
+   * If `tailwindcss` is installed, `extraSyntax` will contain the built-in Tailwind syntax
+   * that can be used in a function to compose the final syntax. From the docs:
    * > Note: The Tailwind syntax doesn't currently provide for the `theme()` function. This is a limitation of `CSSTree` that we hope will be resolved soon.
    */
-  customSyntax?: CSSLanguageOptions['customSyntax'];
+  customSyntax?: MaybeFn<
+    CssCustomSyntax,
+    [
+      {
+        /**
+         * Extra syntax provided by us.
+         * Currently may only be TailwindCSS syntax coming from `tailwind-csstree` based on the
+         * installed version of `tailwindcss` package.
+         */
+        extraSyntax?: CssCustomSyntax;
+      },
+    ]
+  >;
 
   /**
    * Will be merged with the default value.
@@ -83,25 +97,25 @@ export default ((context, optionsRaw) => {
       {
         languageOptions: {
           ...(tolerantMode && {tolerant: true}),
-          ...(customSyntax != null && {customSyntax}),
-          ...(tailwindPackageInfo &&
-            (tailwindMajorVersion === 4 || tailwindMajorVersion === 3) &&
-            generatePackageToLoadProperty('customSyntax', 'tailwindCsstree', {
-              valueTransformFn: {
-                fn(
-                  this: {tailwindMajorVersion: typeof tailwindMajorVersion},
-                  {tailwindCsstree},
-                  currentValue,
-                ) {
-                  return {
-                    ...tailwindCsstree[`tailwind${this.tailwindMajorVersion}`],
-                    // eslint-disable-next-line ts/no-misused-spread
-                    ...new Object(currentValue),
-                  };
+          ...(tailwindPackageInfo && (tailwindMajorVersion === 3 || tailwindMajorVersion === 4)
+            ? generatePackageToLoadProperty('customSyntax', 'tailwindCsstree', {
+                valueTransformFn: {
+                  fn(
+                    this: {
+                      tailwindMajorVersion: typeof tailwindMajorVersion;
+                      customSyntax: typeof customSyntax;
+                    },
+                    {tailwindCsstree},
+                  ) {
+                    const tailwindSyntax = tailwindCsstree[`tailwind${this.tailwindMajorVersion}`];
+                    return this.customSyntax == null
+                      ? tailwindSyntax
+                      : maybeCall(this.customSyntax, {extraSyntax: tailwindSyntax});
+                  },
+                  scope: {tailwindMajorVersion, customSyntax},
                 },
-                scope: {tailwindMajorVersion},
-              },
-            })),
+              })
+            : customSyntax != null && {customSyntax: maybeCall(customSyntax, {})}),
         },
       },
     )
