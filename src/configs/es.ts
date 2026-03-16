@@ -37,7 +37,11 @@ interface EcmaFeatures {
     | 'iteratorConcat'
     | 'jsonIsRawJson'
     | 'jsonParseReviverContextParameter'
-    | 'jsonRawJson';
+    | 'jsonRawJson'
+    | 'mapPrototypeGetOrInsert'
+    | 'mapPrototypeGetOrInsertComputed'
+    | 'weakMapPrototypeGetOrInsert'
+    | 'weakMapPrototypeGetOrInsertComputed';
   2025:
     | 'dataviewPrototypeGetFloat16SetFloat16'
     | 'dynamicImportOptions'
@@ -438,7 +442,23 @@ export default ((context, optionsRawFromParameters, customConfig) => {
         'no-intl-locale-prototype-getweekinfo',
         grs(2026, 'intlLocalePrototypeGetWeekInfo'),
       ) /** @since 9.2.0 */
-      .addRule('no-iterator-concat', grs(2026, 'iteratorConcat')); /** @since 9.2.0 */
+      .addRule('no-iterator-concat', grs(2026, 'iteratorConcat')) /** @since 9.2.0 */
+      .addRule(
+        'no-map-prototype-getorinsert', // cspell:disable-line
+        grs(2026, 'mapPrototypeGetOrInsert'),
+      ) /** @since 9.4.0 */
+      .addRule(
+        'no-map-prototype-getorinsertcomputed', // cspell:disable-line
+        grs(2026, 'mapPrototypeGetOrInsertComputed'),
+      ) /** @since 9.4.0 */
+      .addRule(
+        'no-weakmap-prototype-getorinsert', // cspell:disable-line
+        grs(2026, 'weakMapPrototypeGetOrInsert'),
+      ) /** @since 9.4.0 */
+      .addRule(
+        'no-weakmap-prototype-getorinsertcomputed', // cspell:disable-line
+        grs(2026, 'weakMapPrototypeGetOrInsertComputed'),
+      ) /** @since 9.4.0 */;
   }
   if (!isEsVersionFullySupported(2025)) {
     mainConfig
