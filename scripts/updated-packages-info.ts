@@ -48,7 +48,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       'check-file': {configs: ['checkFile']},
       clsx: {configs: ['clsx']},
       command: {configs: ['command']},
-      compat: {configs: ['compat'], gitTag: (version) => `compat-v${version}`},
+      compat: {configs: ['compat']},
       css: {configs: ['css'], gitTag: (version) => `css-v${version}`},
       'css-in-js': {configs: ['cssInJs']},
       cypress: {configs: ['cypress']},
