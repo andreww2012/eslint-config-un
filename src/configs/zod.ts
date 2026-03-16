@@ -47,7 +47,7 @@ export interface ZodEslintConfigOptions<
 
   /**
    * Affected rule:
-   * - [`prefer-namespace-import`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/prefer-namespace-import.md)
+   * - [`consistent-import`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-import.md)
    * @default true
    */
   enforceNamespaceImport?: boolean;
@@ -104,6 +104,7 @@ export default ((context, optionsRaw) => {
       arrayStyle === false ? OFF : ERROR,
       arrayStyle === false ? [] : [{style: arrayStyle}],
     ) /** @since 0.0.1 */ // 🟢
+    .addRule('consistent-import', enforceNamespaceImport ? ERROR : OFF) /** @since 3.1.0 */ // 🟢
     .addRule('consistent-import-source', OFF) /** @since 1.2.0 */
     .addRule(
       'consistent-object-schema-type',
@@ -121,13 +122,14 @@ export default ((context, optionsRaw) => {
     // `.int()` added in v4
     .addRule('no-number-schema-with-int', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
     .addRule('no-optional-and-default-together', ERROR) /** @since 1.6.0 */ // 🟢
+    .addRule('no-string-schema-with-uuid', ERROR) /** @since 3.2.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 0.0.1 */ // 🟢
     .addRule('no-unknown-schema', OFF) /** @since 1.12.0 */
     .addRule('prefer-enum-over-literal-union', ERROR) /** @since 3.0.0 */ // 🟢
     // `.meta()` added in v4
     .addRule('prefer-meta', severityForRulesOnlyForV4) /** @since 0.0.1 */ // 🟢
     .addRule('prefer-meta-last', ERROR) /** @since 0.0.1 */ // 🟢
-    .addRule('prefer-namespace-import', enforceNamespaceImport ? ERROR : OFF) /** @since 0.0.1 */ // 🟢
+    .addRule('prefer-string-schema-with-trim', OFF) /** @since 3.3.0 */ // 🟢
     .addRule('require-brand-type-parameter', ERROR) /** @since 1.8.0 */ // 🟢
     .addRule('require-error-message', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule(

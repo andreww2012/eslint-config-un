@@ -228,26 +228,26 @@ describe('options', () => {
   });
 
   describe('option: `enforceNamespaceImport`', () => {
-    it('enables `prefer-namespace-import` rule by default', async () => {
+    it('enables `consistent-import` rule by default', async () => {
       const configResult = await computeEslintConfig('zod');
 
-      expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-namespace-import')).toBe(2);
+      expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-import')).toBe(2);
     });
 
-    it('enables `prefer-namespace-import` when set to `true`', async () => {
+    it('enables `consistent-import` when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         zod: {enforceNamespaceImport: true},
       });
 
-      expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-namespace-import')).toBe(2);
+      expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-import')).toBe(2);
     });
 
-    it('disables `prefer-namespace-import` when set to `false`', async () => {
+    it('disables `consistent-import` when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         zod: {enforceNamespaceImport: false},
       });
 
-      expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-namespace-import')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-import')).toBe(0);
     });
   });
 

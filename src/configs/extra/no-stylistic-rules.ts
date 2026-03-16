@@ -947,6 +947,7 @@ const ALL_STYLISTIC_RULES = {
   },
   zod: {
     'array-style': true,
+    'consistent-import': true,
     'no-number-schema-with-int': true,
     'prefer-namespace-import': true,
     'require-schema-suffix': true,
