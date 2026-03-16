@@ -298,13 +298,11 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   console.log(`${styleText('underline', 'Repo:')} ${styleText('cyan', repoUrl)}`);
   console.log(`${styleText('underline', 'Releases:')} ${styleText('cyan', `${repoUrl}/releases`)}`);
 
-  if (mainUnConfigNames) {
-    console.log(styleText('underline', 'For commit message:'));
-    console.log(`chore(${mainUnConfigNames}): update ${dependency} to v${newVersion}`);
-    console.log(
-      `feat(${mainUnConfigNames}): update ${dependency} to v${newVersion} and enable ___INSERT-CHANGES___`,
-    );
-  }
+  console.log(styleText('underline', 'For commit message:'));
+  console.log(`chore(${mainUnConfigNames}): update ${dependency} to v${newVersion}`);
+  console.log(
+    `feat(${mainUnConfigNames}): update ${dependency} to v${newVersion} and enable ___INSERT-CHANGES___`,
+  );
 
   console.log(styleText('underline', 'For changelog:'));
   console.log(

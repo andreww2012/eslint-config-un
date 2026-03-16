@@ -1,6 +1,5 @@
-// cspell:ignore nonblock
 import type eslintPluginStylistic from '@stylistic/eslint-plugin';
-import {ERROR, GLOB_HTML, GLOB_YML_YAML, OFF, type RuleSeverity} from '../constants';
+import {ERROR, OFF, type RuleSeverity} from '../constants';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import {pluginsLoaders} from '../loaders';
 import type {OmitStrict} from '../types';
@@ -140,8 +139,9 @@ export default (async (context, optionsRaw) => {
     .addRule(...setupRule('no-multiple-empty-lines', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('no-tabs', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('no-trailing-spaces', OFF)) /** @since 0.0.4 */ // 🟢
-    .addRule(...setupRule('no-whitespace-before-property', OFF)) /** @since 0.0.4 */ // 🟢
+    // cspell:disable-next-line
     .addRule(...setupRule('nonblock-statement-body-position', OFF)) /** @since 0.0.4 */
+    .addRule(...setupRule('no-whitespace-before-property', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('object-curly-newline', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('object-curly-spacing', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('object-property-newline', OFF)) /** @since 0.0.4 */
@@ -196,14 +196,19 @@ export default (async (context, optionsRaw) => {
     .enableConfigTesterForPlugin('@stylistic')
     .addOverrides();
 
+  // TODO possible to do anything with this?
+  // Note: do not exclude YAML or HTML files from ignore-list. This rule is triggered
+  // on all YAML comments because they all are considered Block for whatever reason:
+  // https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581
+  // Might crash on HTML files (if receives a comment node with `CommentContent` type)
   configBuilder
-    ?.addConfig('stylistic/spaced-comment', {
-      ...(optionsResolved.files?.length && {files: optionsResolved.files}),
-      // TODO possible to do anything with this?
-      // Triggered on all YAML comments because they all are considered Block for whatever reason: https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581
-      // Might crash on HTML files (if receives a comment node with `CommentContent` type)
-      ignores: [GLOB_YML_YAML, GLOB_HTML, ...(optionsResolved.ignores || [])],
-    })
+    ?.addConfig([
+      'stylistic/spaced-comment',
+      {
+        filesDefault: optionsResolved.files,
+        ignoresDefault: optionsResolved.ignores,
+      },
+    ])
     .addRule(...setupRule('spaced-comment', ERROR, ['always', {block: {balanced: true}}]));
 
   return {

@@ -1,3 +1,5 @@
+import {GLOB_YML_YAML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   normalImportBlankLineNormalImport: 'normal-import-blank-line-normal-import.js',
   sideEffectImportBlankLineNormalImport: 'side-effect-import-blank-line-normal-import.js',
@@ -11,19 +13,57 @@ describe('basic tests', async () => {
     expect(configResult.getLoadedPlugin('@stylistic')).toBeDefined();
   });
 
-  it('creates `stylistic` eslint config', () => {
+  it('creates `stylistic` and `stylistic/spaced-comment` eslint configs', () => {
     expect(configResult.getConfigByUnPostfix('stylistic')).toBeDefined();
-  });
-
-  it('creates `stylistic/spaced-comment` eslint config', () => {
     expect(configResult.getConfigByUnPostfix('stylistic/spaced-comment')).toBeDefined();
   });
 
-  it('does not create `stylistic` eslint configs when disabled', async () => {
-    const configResult = await computeEslintConfig({stylistic: false});
+  describe('mode: all configs are disabled', () => {
+    it('does not create `stylistic` eslint configs', async () => {
+      await expectConfigState({}, ['stylistic', 'stylistic'], false);
+    });
 
-    expect(configResult.getConfigByUnPostfix('stylistic')).toBeUndefined();
-    expect(configResult.getConfigByUnPostfix('stylistic/spaced-comment')).toBeUndefined();
+    it('creates `stylistic` eslint configs if explicitly enabled', async () => {
+      await expectConfigState('stylistic', ['stylistic', 'stylistic'], true);
+    });
+
+    it('does not create `stylistic` eslint configs and prints a warning if explicitly disabled', async () => {
+      await expectConfigState({stylistic: false}, ['stylistic', 'stylistic'], ['stylistic', false]);
+    });
+  });
+
+  describe('mode: all configs are not explicitly enabled or disabled', () => {
+    it('creates `stylistic` eslint configs', async () => {
+      await expectConfigState({}, ['stylistic', 'stylistic'], true, 'default');
+    });
+
+    it('creates `stylistic` eslint configs and prints a warning if explicitly enabled', async () => {
+      await expectConfigState(
+        'stylistic',
+        ['stylistic', 'stylistic'],
+        ['stylistic', true],
+        'default',
+      );
+    });
+
+    it('does not create `stylistic` eslint configs if explicitly disabled', async () => {
+      await expectConfigState({stylistic: false}, ['stylistic', 'stylistic'], false, 'default');
+    });
+  });
+
+  describe('mode: misc configs are enabled', () => {
+    it('creates `stylistic` eslint configs', async () => {
+      await expectConfigState({}, ['stylistic', 'stylistic'], true, 'misc-enabled');
+    });
+
+    it('creates `stylistic` eslint configs and prints a warning if explicitly enabled', async () => {
+      await expectConfigState(
+        {stylistic: true},
+        ['stylistic', 'stylistic'],
+        ['stylistic', true],
+        'misc-enabled',
+      );
+    });
   });
 
   it('has no explicit `files` restriction in `stylistic` eslint config by default', () => {
@@ -39,9 +79,12 @@ describe('basic tests', async () => {
   });
 
   it('`stylistic/spaced-comment` eslint config ignores YAML and HTML files', () => {
+    const expectedIgnores = [GLOB_YML_YAML, GLOB_HTM_HTML];
+
     const ignores = configResult.getConfigByUnPostfix('stylistic/spaced-comment')?.ignores;
 
-    expect(ignores).to.include.members(['**/*.y?(a)ml', '**/*.html']);
+    expect(ignores).to.include.members(expectedIgnores);
+    expect(ignores?.length).toBeGreaterThan(expectedIgnores.length);
   });
 });
 
@@ -52,32 +95,22 @@ describe('rules', async () => {
     expect(
       configResult.getRuleEntry('stylistic', '@stylistic/padding-line-between-statements'),
     ).toMatchInlineSnapshot(
-      `[2, {"blankLine": "never", "next": "import", "prev": "import"}, {"blankLine": "any", "next": {"selector": "ImportDeclaration[specifiers.length=0]"}, "prev": "import"}, {"blankLine": "any", "next": "import", "prev": {"selector": "ImportDeclaration[specifiers.length=0]"}}]`,
+      '[2, {"blankLine": "never", "next": "import", "prev": "import"}, {"blankLine": "any", "next": {"selector": "ImportDeclaration[specifiers.length=0]"}, "prev": "import"}, {"blankLine": "any", "next": "import", "prev": {"selector": "ImportDeclaration[specifiers.length=0]"}}]',
     );
   });
 
   it('disables `@stylistic/indent` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('stylistic', '@stylistic/indent'),
-      ),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('stylistic', '@stylistic/indent')).toBe(0);
   });
 
   it('enables `@stylistic/spaced-comment` in `stylistic/spaced-comment` eslint config', () => {
     expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('stylistic/spaced-comment', '@stylistic/spaced-comment'),
-      ),
+      configResult.getRuleEntrySeverity('stylistic/spaced-comment', '@stylistic/spaced-comment'),
     ).toBe(2);
   });
 
   it('disables `@stylistic/spaced-comment` in main `stylistic` eslint config', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('stylistic', '@stylistic/spaced-comment'),
-      ),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('stylistic', '@stylistic/spaced-comment')).toBe(0);
   });
 
   describe('`@stylistic/padding-line-between-statements` rule behavior', () => {
@@ -97,7 +130,7 @@ describe('rules', async () => {
       );
 
       expect(error?.message).toMatchInlineSnapshot(
-        `"Unexpected blank line before this statement."`,
+        '"Unexpected blank line before this statement."',
       );
     });
 
@@ -149,12 +182,13 @@ describe('un options', () => {
       );
     });
 
-    it('disables `stylistic` eslint config when `files` is empty array', async () => {
+    it('disables `stylistic` and `stylistic/spaced-comment` eslint configs when `files` is empty array', async () => {
       const configResult = await computeEslintConfig({
         stylistic: {files: []},
       });
 
       expect(configResult.getConfigByUnPostfix('stylistic')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('stylistic/spaced-comment')).toBeUndefined();
     });
   });
 
@@ -187,15 +221,8 @@ describe('un options', () => {
       },
     });
 
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('stylistic', '@stylistic/quotes'),
-      ),
-    ).toBe(0);
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('stylistic', 'no-console')),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('stylistic', '@stylistic/quotes')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('stylistic', 'no-console')).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {
@@ -233,7 +260,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('stylistic');
 
       expect(configResult.getRuleEntry('stylistic', RULE_ID)).toMatchInlineSnapshot(
-        `[2, "single", {"allowTemplateLiterals": "avoidEscape", "avoidEscape": true, "ignoreStringLiterals": true}]`,
+        '[2, "single", {"allowTemplateLiterals": "avoidEscape", "avoidEscape": true, "ignoreStringLiterals": true}]',
       );
     });
 
@@ -241,7 +268,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig({stylistic: {customizeOptions: {}}});
 
       expect(configResult.getRuleEntry('stylistic', RULE_ID)).toMatchInlineSnapshot(
-        `["error", "single", {"allowTemplateLiterals": "always", "avoidEscape": false}]`,
+        '["error", "single", {"allowTemplateLiterals": "always", "avoidEscape": false}]',
       );
     });
   });
