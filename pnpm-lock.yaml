@@ -91,8 +91,8 @@ importers:
         specifier: 4.4.4
         version: 4.4.4(eslint-plugin-import-x@4.16.2(@typescript-eslint/utils@8.56.1(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1))
       eslint-mdx:
-        specifier: 3.6.2
-        version: 3.6.2(eslint@9.39.2(jiti@2.6.1))
+        specifier: 3.7.0
+        version: 3.7.0(eslint@9.39.2(jiti@2.6.1))
       eslint-merge-processors:
         specifier: 2.0.0
         version: 2.0.0(eslint@9.39.2(jiti@2.6.1))
@@ -136,8 +136,8 @@ importers:
         specifier: 0.13.1
         version: 0.13.1(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-mdx:
-        specifier: 3.6.2
-        version: 3.6.2(eslint@9.39.2(jiti@2.6.1))
+        specifier: 3.7.0
+        version: 3.7.0(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-module-interop:
         specifier: 0.3.1
         version: 0.3.1(eslint@9.39.2(jiti@2.6.1))
@@ -5539,10 +5539,6 @@ packages:
     resolution: {integrity: sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
-  diff@5.2.2:
-    resolution: {integrity: sha512-vtcDfH3TOjP8UekytvnHH1o1P4FcUdt4eQ1Y+Abap1tk/OB2MWQvcwS2ClCd1zuIhc3JKOx6p3kod8Vfys3E+A==}
-    engines: {node: '>=0.3.1'}
-
   diff@8.0.3:
     resolution: {integrity: sha512-qejHi7bcSD4hQAZE0tNAawRK1ZtafHDmMTMkrrIGgSLl7hTnQHmKCeB45xAcbfTqK2zowkM3j3bHt/4b/ARbYQ==}
     engines: {node: '>=0.3.1'}
@@ -5971,8 +5967,8 @@ packages:
       '@eslint/json':
         optional: true
 
-  eslint-mdx@3.6.2:
-    resolution: {integrity: sha512-5hczn5iSSEcwtNtVXFwCKIk6iLEDaZpwc3vjYDl/B779OzaAAK/ou16J2xVdO6ecOLEO1WZqp7MRCQ/WsKDUig==}
+  eslint-mdx@3.7.0:
+    resolution: {integrity: sha512-QpPdJ6EeFthHuIrfgnWneZgwwFNOLFj/nf2jg/tOTBoiUnqNTxUUpTGAn0ZFHYEh5htVVoe5kjvD02oKtxZGeA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: '>=8.0.0'
@@ -6303,8 +6299,8 @@ packages:
     peerDependencies:
       eslint: '>=8.57.0'
 
-  eslint-plugin-mdx@3.6.2:
-    resolution: {integrity: sha512-RfMd5HYD/9+cqANhVWJbuBRg3huWUsAoGJNGmPsyiRD2X6BaG6bvt1omyk1ORlg81GK8ST7Ojt5fNAuwWhWU8A==}
+  eslint-plugin-mdx@3.7.0:
+    resolution: {integrity: sha512-JXaaQPnKqyti/QSOSQDThLV1EemHm/Fe2l/nMKH0vmhvmABtN/yV/9+GtKgh8UTZwrwuTfQq1HW5eR8HXneNLA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: '>=8.0.0'
@@ -10329,11 +10325,6 @@ packages:
 
   uuid@11.1.0:
     resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
-    hasBin: true
-
-  uvu@0.5.6:
-    resolution: {integrity: sha512-+g8ENReyr8YsOc6fv/NVJs2vFdHBnBNdfE49rshrTzDWOlUx4Gq7KOS2GD8eqhy2j+Ejq29+SbKH8yjkAqXqoA==}
-    engines: {node: '>=8'}
     hasBin: true
 
   valibot@1.2.0:
@@ -14363,7 +14354,7 @@ snapshots:
 
   '@types/concat-stream@2.0.3':
     dependencies:
-      '@types/node': 22.19.11
+      '@types/node': 20.19.1
 
   '@types/conventional-commits-parser@5.0.2':
     dependencies:
@@ -16126,8 +16117,6 @@ snapshots:
 
   diff-sequences@29.6.3: {}
 
-  diff@5.2.2: {}
-
   diff@8.0.3: {}
 
   dir-glob@3.0.1:
@@ -16588,7 +16577,7 @@ snapshots:
       esquery: 1.7.0
       jsonc-eslint-parser: 3.1.0
 
-  eslint-mdx@3.6.2(eslint@9.39.2(jiti@2.6.1)):
+  eslint-mdx@3.7.0(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       acorn: 8.15.0
       acorn-jsx: 5.3.2(acorn@8.15.0)
@@ -16602,7 +16591,6 @@ snapshots:
       unified: 11.0.5
       unified-engine: 11.2.2
       unist-util-visit: 5.1.0
-      uvu: 0.5.6
       vfile: 6.0.3
     transitivePeerDependencies:
       - bluebird
@@ -17079,10 +17067,10 @@ snapshots:
       eslint: 9.39.2(jiti@2.6.1)
       eslint-type-tracer: 0.4.1(eslint@9.39.2(jiti@2.6.1))
 
-  eslint-plugin-mdx@3.6.2(eslint@9.39.2(jiti@2.6.1)):
+  eslint-plugin-mdx@3.7.0(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
-      eslint-mdx: 3.6.2(eslint@9.39.2(jiti@2.6.1))
+      eslint-mdx: 3.7.0(eslint@9.39.2(jiti@2.6.1))
       mdast-util-from-markdown: 2.0.2
       mdast-util-mdx: 3.0.0
       micromark-extension-mdxjs: 3.0.0
@@ -22005,13 +21993,6 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   uuid@11.1.0: {}
-
-  uvu@0.5.6:
-    dependencies:
-      dequal: 2.0.3
-      diff: 5.2.2
-      kleur: 4.1.5
-      sade: 1.8.1
 
   valibot@1.2.0(typescript@5.9.3):
     optionalDependencies:

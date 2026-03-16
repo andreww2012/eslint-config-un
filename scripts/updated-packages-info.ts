@@ -87,7 +87,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       'markdown-links': {configs: ['markdownLinks']},
       'markdown-preferences': {configs: ['markdownPreferences']},
       math: {configs: ['math']},
-      mdx: {configs: ['mdx']},
+      mdx: {configs: ['mdx'], gitTag: (tag) => `eslint-plugin-mdx@${tag}`},
       mocha: {configs: ['mocha']},
       'module-interop': {configs: ['moduleInterop']},
       nestjs: {configs: ['nestJs']}, // eslint-disable-line case-police/string-check
