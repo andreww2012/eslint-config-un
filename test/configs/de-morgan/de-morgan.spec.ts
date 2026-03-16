@@ -1,0 +1,160 @@
+const FIXTURES = {
+  negatedConjunction: 'negated-conjunction.js',
+} as const;
+
+describe('basic tests', async () => {
+  const configResult = await computeEslintConfig('deMorgan');
+
+  it('loads `de-morgan` plugin if used', () => {
+    expect(configResult.getLoadedPlugin('de-morgan')).toBeDefined();
+  });
+
+  it('creates `de-morgan` eslint config', () => {
+    expect(configResult.getConfigByUnPostfix('de-morgan')).toBeDefined();
+  });
+
+  describe('mode: all configs are disabled', () => {
+    it('does not create `de-morgan` eslint config', async () => {
+      await expectConfigState({}, 'de-morgan', false);
+    });
+
+    it('creates `de-morgan` eslint config if explicitly enabled', async () => {
+      await expectConfigState('deMorgan', 'de-morgan', true);
+    });
+  });
+
+  describe('mode: all configs are not explicitly enabled or disabled', () => {
+    it('does not create `de-morgan` eslint config', async () => {
+      await expectConfigState({}, 'de-morgan', false, 'default');
+    });
+
+    it('creates `de-morgan` eslint config if explicitly enabled', async () => {
+      await expectConfigState('deMorgan', 'de-morgan', true, 'default');
+    });
+
+    it('does not create `de-morgan` eslint config and prints a warning if explicitly disabled', async () => {
+      await expectConfigState({deMorgan: false}, 'de-morgan', ['deMorgan', false], 'default');
+    });
+  });
+
+  describe('mode: misc configs are enabled', () => {
+    it('does not create `de-morgan` eslint config', async () => {
+      await expectConfigState({}, 'de-morgan', false, 'misc-enabled');
+    });
+
+    it('does not create `de-morgan` eslint config and prints a warning if explicitly disabled', async () => {
+      await expectConfigState({deMorgan: false}, 'de-morgan', ['deMorgan', false], 'misc-enabled');
+    });
+  });
+
+  it('has no explicit `files` restriction in `de-morgan` eslint config by default', () => {
+    expect(configResult.getConfigByUnPostfix('de-morgan')?.files).toBeUndefined();
+  });
+
+  it('has default `ignores` in `de-morgan` eslint config', () => {
+    expect(configResult.getConfigByUnPostfix('de-morgan')?.ignores?.length).toBeGreaterThan(0);
+  });
+});
+
+describe('rules', async () => {
+  const configResult = await computeEslintConfig('deMorgan');
+
+  it('enables `de-morgan/no-negated-conjunction` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('de-morgan', 'de-morgan/no-negated-conjunction')).toBe(
+      2,
+    );
+  });
+
+  it('`de-morgan/no-negated-conjunction` rule fires on a file with a negated conjunction', async () => {
+    const results = await testEslintConfig(
+      'deMorgan',
+      FIXTURES.negatedConjunction,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.negatedConjunction,
+      'de-morgan/no-negated-conjunction',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Replace negated conjunction `!(a && b)` with `!a || !b`"',
+    );
+  });
+});
+
+describe('un options', () => {
+  describe('option: `files`', () => {
+    it('uses user-provided `files` in `de-morgan` eslint config', async () => {
+      const FILES = ['**/*.ts'];
+      const configResult = await computeEslintConfig({
+        deMorgan: {files: FILES},
+      });
+
+      expect(configResult.getConfigByUnPostfix('de-morgan')?.files).toStrictEqual(FILES);
+    });
+
+    it('disables `de-morgan` eslint config when `files` is empty array', async () => {
+      const configResult = await computeEslintConfig({
+        deMorgan: {files: []},
+      });
+
+      expect(configResult.getConfigByUnPostfix('de-morgan')).toBeUndefined();
+    });
+  });
+
+  describe('option: `ignores`', () => {
+    it('uses user-provided `ignores` in `de-morgan` eslint config and merges them with defaults', async () => {
+      const IGNORES = ['**/fixtures/**'];
+      const configResult = await computeEslintConfig({
+        deMorgan: {ignores: IGNORES},
+      });
+
+      const ignores = configResult.getConfigByUnPostfix('de-morgan')?.ignores;
+
+      expect(ignores).to.include.members(IGNORES);
+      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+    });
+  });
+
+  it('respects `overrides` and `overridesAny` in `de-morgan` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      deMorgan: {
+        overrides: {'de-morgan/no-negated-conjunction': 0},
+        overridesAny: {'no-console': 0},
+      },
+    });
+
+    expect(configResult.getRuleEntrySeverity('de-morgan', 'de-morgan/no-negated-conjunction')).toBe(
+      0,
+    );
+    expect(configResult.getRuleEntrySeverity('de-morgan', 'no-console')).toBe(0);
+  });
+
+  describe('option: `forceSeverity`', () => {
+    it('respects `forceSeverity` set to `error` in `de-morgan` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        deMorgan: {forceSeverity: 'error'},
+      });
+
+      expect(
+        getAllRulesSeverities(configResult.getConfigByUnPostfix('de-morgan'), (ruleName) =>
+          ruleName.startsWith('de-morgan/'),
+        ),
+      ).toStrictEqual([2]);
+    });
+
+    it('respects `forceSeverity` set to `warn` in `de-morgan` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        deMorgan: {forceSeverity: 'warn'},
+      });
+
+      expect(
+        getAllRulesSeverities(configResult.getConfigByUnPostfix('de-morgan'), (ruleName) =>
+          ruleName.startsWith('de-morgan/'),
+        ),
+      ).toStrictEqual([1]);
+    });
+  });
+});
