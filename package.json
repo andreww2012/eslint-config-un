@@ -40,7 +40,7 @@
   "scripts": {
     "u:after": "nr u:info && nr lint:eslint:fix package.json && nr typegen && nr u:test",
     "u:info": "tsx scripts/updated-packages-info.ts",
-    "u:test": "nr lint:types:go && nr build:code:test",
+    "u:test": "nr lint:types:go && nr build:code:test --logLevel warn",
     "u": "ncu && nr u:after",
     "u:m": "ncu -t minor && nr u:after",
     "u:pm": "ncu --dep packageManager",
