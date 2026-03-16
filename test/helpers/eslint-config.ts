@@ -1,4 +1,4 @@
-import {ERROR, OFF, WARNING, type RuleSeverity} from '../../src/constants';
+import {ERROR, OFF, type RuleSeverity, WARNING} from '../../src/constants';
 import type {EslintFlatConfigEntry, EslintRuleEntry} from '../../src/eslint/eslint-types';
 import type {Nullable} from '../../src/types';
 
@@ -34,7 +34,6 @@ export const getAllRulesSeverities = (
   ruleFilter?: (ruleName: string) => boolean,
 ) =>
   // TODO `e18e/prefer-array-to-sorted` shouldn't trigger here - report
-  // eslint-disable-next-line e18e/prefer-array-to-sorted
   [
     ...new Set(
       Object.entries(config?.rules || {})

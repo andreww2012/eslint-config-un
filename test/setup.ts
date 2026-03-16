@@ -1,12 +1,13 @@
+import {expectConfigState as expectConfigStateImpl} from './helpers/basic-config';
+import {findLintMessageFromLintResults as findLintMessageFromLintResultsImpl} from './helpers/check-lint-results';
+import {
+  getAllRulesSeverities as getAllRulesSeveritiesImpl,
+  getRuleSeverityFromEslintRuleEntry as getRuleSeverityFromEslintRuleEntryImpl,
+} from './helpers/eslint-config';
 import {
   computeEslintConfig as computeEslintConfigImpl,
   testEslintConfig as testEslintConfigImpl,
 } from './helpers/test-eslint-config';
-import {findLintMessageFromLintResults as findLintMessageFromLintResultsImpl} from './helpers/check-lint-results';
-import {
-  getRuleSeverityFromEslintRuleEntry as getRuleSeverityFromEslintRuleEntryImpl,
-  getAllRulesSeverities as getAllRulesSeveritiesImpl,
-} from './helpers/eslint-config';
 
 type UtilsModule = typeof import('../src/utils');
 
@@ -82,6 +83,7 @@ beforeEach(() => {
 declare global {
   var computeEslintConfig: typeof computeEslintConfigImpl;
   var testEslintConfig: typeof testEslintConfigImpl;
+  var expectConfigState: typeof expectConfigStateImpl;
   var findLintMessageFromLintResults: typeof findLintMessageFromLintResultsImpl;
   var getRuleSeverityFromEslintRuleEntry: typeof getRuleSeverityFromEslintRuleEntryImpl;
   var getAllRulesSeverities: typeof getAllRulesSeveritiesImpl;
@@ -92,6 +94,7 @@ declare global {
 
 globalThis.computeEslintConfig = computeEslintConfigImpl;
 globalThis.testEslintConfig = testEslintConfigImpl;
+globalThis.expectConfigState = expectConfigStateImpl;
 globalThis.findLintMessageFromLintResults = findLintMessageFromLintResultsImpl;
 globalThis.getRuleSeverityFromEslintRuleEntry = getRuleSeverityFromEslintRuleEntryImpl;
 globalThis.getAllRulesSeverities = getAllRulesSeveritiesImpl;
