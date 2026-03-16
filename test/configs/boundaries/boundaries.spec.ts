@@ -64,20 +64,20 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('boundaries');
 
-  it('enables `boundaries/element-types` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('boundaries', 'boundaries/element-types')).toBe(2);
+  it('enables `boundaries/dependencies` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('boundaries', 'boundaries/dependencies')).toBe(2);
   });
 
   it('disables `boundaries/no-ignored` rule by default', () => {
     expect(configResult.getRuleEntrySeverity('boundaries', 'boundaries/no-ignored')).toBe(0);
   });
 
-  it('`boundaries/element-types` rule fires on a disallowed cross-element import', async () => {
+  it('`boundaries/dependencies` rule fires on a disallowed cross-element import', async () => {
     const results = await testEslintConfig(
       {
         boundaries: {
           overrides: {
-            'boundaries/element-types': [2, {default: 'disallow', rules: []}],
+            'boundaries/dependencies': [2, {default: 'disallow', rules: []}],
           },
           settings: {
             elements: [
@@ -95,11 +95,11 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.elementTypesViolation,
-      'boundaries/element-types',
+      'boundaries/dependencies',
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      `"No rule allowing this dependency was found. File is of type 'page'. Dependency is of type 'component'"`,
+      '"There is no rule allowing dependencies from elements of type "page" to elements of type "component""',
     );
   });
 });

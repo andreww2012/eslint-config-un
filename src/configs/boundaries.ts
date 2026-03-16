@@ -58,14 +58,17 @@ export default ((context, optionsRaw) => {
         },
       },
     ])
-    .addRule('element-types', ERROR) /** @since 2.0.0-beta.1 */ // 🟢
+    .addRule('dependencies', ERROR) /** @since 2.0.0-beta.1 */ /** @aka element-types */ // 🟢
     .addRule('entry-point', ERROR) /** @since 1.0.0-beta.1 */ // 🟢
     .addRule('external', ERROR) /** @since 2.0.0-beta.1 */ // 🟢
     .addRule('no-ignored', OFF) /** @since 2.0.0-beta.1 */
     .addRule('no-private', ERROR) /** @since 1.0.0-beta.1 */ // 🟢
     .addRule('no-unknown', OFF) /** @since 2.0.0-beta.1 */
     .addRule('no-unknown-files', OFF) /** @since 2.0.0-beta.1 */
-    .enableConfigTesterForPlugin('boundaries')
+    .enableConfigTesterForPlugin('boundaries', {
+      // `element-types` was not properly marked as deprecated: https://www.jsboundaries.dev/docs/releases/migration-guides/v5-to-v6/#rule-element-types-renamed-to-dependencies
+      rulesToSkipInConfig: (ruleName) => ruleName === 'element-types',
+    })
     .addOverrides();
 
   return {
