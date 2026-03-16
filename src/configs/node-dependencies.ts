@@ -47,7 +47,7 @@ export default ((context, optionsRaw) => {
       },
     ])
     .markCategory('Possible Errors')
-    .addRule('compat-engines', WARNING) /** @since 0.5.0 */ // 🟢
+    .addRule('compat-engines', WARNING, [{devDependencies: true}]) /** @since 0.5.0 */ // 🟢
     .addRule('no-dupe-deps', ERROR) /** @since 0.8.0 */ // 🟢
     .addRule('valid-semver', ERROR) /** @since 0.1.0 */ // 🟢
     .markCategory('Best Practices')

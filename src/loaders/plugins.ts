@@ -400,14 +400,8 @@ export const pluginsLoaders = {
     'eslint-plugin-n',
     () => interopDefault(import('eslint-plugin-n')) as Promise<EslintPlugin>,
   ),
-  'node-dependencies': genModuleLoader(
-    'node-dependencies',
-    'eslint-plugin-node-dependencies',
-    () =>
-      interopDefault(
-        import('eslint-plugin-node-dependencies'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  'node-dependencies': genModuleLoader('node-dependencies', 'eslint-plugin-node-dependencies', () =>
+    interopDefault(import('eslint-plugin-node-dependencies')),
   ),
   nuxt: genModuleLoader('nuxt', '@nuxt/eslint-plugin', () =>
     interopDefault(import('@nuxt/eslint-plugin')),
