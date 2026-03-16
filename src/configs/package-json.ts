@@ -207,20 +207,33 @@ export default ((context, optionsRaw) => {
     ]) /** @since 0.5.0 */ /** @aka prefer-repository-shorthand */ // 🟢
     .addRule('require-attribution', publishable ? ERROR : OFF) /** @since 0.81.0 */ // 📦
     .addRule('require-author', OFF) /** @since 0.22.0 */
+    .addRule('require-bin', OFF) /** @since 0.90.1 */
     .addRule('require-bugs', OFF) /** @since 0.50.0 */
     .addRule('require-bundleDependencies', OFF) /** @since 0.50.0 */
+    .addRule('require-contributors', OFF) /** @since 0.90.1 */
+    .addRule('require-cpu', OFF) /** @since 0.90.0 */
     .addRule('require-dependencies', OFF) /** @since 0.50.0 */
     .addRule('require-description', publishable ? ERROR : OFF) /** @since 0.31.0 */ // 🟢
     .addRule('require-devDependencies', OFF) /** @since 0.50.0 */
+    .addRule('require-devEngines', OFF) /** @since 0.90.1 */
+    .addRule('require-directories', OFF) /** @since 0.90.1 */
     .addRule('require-engines', OFF) /** @since 0.28.0 */
     .addRule('require-exports', publishable ? ERROR : OFF) /** @since 0.80.0 */ // 📦
     .addRule('require-files', publishable ? ERROR : OFF) /** @since 0.26.0 */ // 📦
+    .addRule('require-funding', OFF) /** @since 0.90.1 */
     .addRule('require-homepage', OFF) /** @since 0.87.1 */
     .addRule('require-keywords', OFF) /** @since 0.25.0 */
     .addRule('require-license', publishable ? ERROR : OFF) /** @since 0.57.0 */
+    .addRule('require-main', OFF) /** @since 0.89.4 */
+    .addRule('require-man', OFF) /** @since 0.90.1 */
+    .addRule('require-module', OFF) /** @since 0.91.0 */
     .addRule('require-name', ERROR) /** @since 0.24.0 */ // 🟢
     .addRule('require-optionalDependencies', OFF) /** @since 0.50.0 */
+    .addRule('require-os', OFF) /** @since 0.89.4 */
+    .addRule('require-packageManager', OFF) /** @since 0.89.3 */
     .addRule('require-peerDependencies', OFF) /** @since 0.50.0 */
+    .addRule('require-private', OFF) /** @since 0.89.4 */
+    .addRule('require-publishConfig', OFF) /** @since 0.89.4 */
     .addRule('require-repository', publishable ? ERROR : OFF) /** @since 0.88.0 */ // 📦
     .addRule('require-scripts', OFF) /** @since 0.88.1 */
     .addRule('require-sideEffects', publishable ? ERROR : OFF) /** @since 0.82.0 */ // 📦
@@ -246,6 +259,7 @@ export default ((context, optionsRaw) => {
     .addRule('unique-dependencies', ERROR) /** @since 0.8.0 */ // 🟢
     .addRule('valid-author', ERROR) /** @since 0.38.0 */ // 🟢
     .addRule('valid-bin', ERROR) /** @since 0.37.0 */ // 🟢
+    .addRule('valid-bugs', ERROR) /** @since 0.90.0 */ // 🟢
     .addRule('valid-bundleDependencies', ERROR) /** @since 0.44.0 */ // 🟢
     .addRule('valid-config', ERROR) /** @since 0.46.0 */ // 🟢
     .addRule('valid-contributors', ERROR) /** @since 0.72.0 */ // 🟢
@@ -253,10 +267,12 @@ export default ((context, optionsRaw) => {
     .addRule('valid-dependencies', ERROR) /** @since 0.49.0 */ // 🟢
     .addRule('valid-description', ERROR) /** @since 0.52.0 */ // 🟢
     .addRule('valid-devDependencies', ERROR) /** @since 0.49.0 */ // 🟢
+    .addRule('valid-devEngines', ERROR) /** @since 0.91.0 */ // 🟢
     .addRule('valid-directories', ERROR) /** @since 0.56.0 */ // 🟢
     .addRule('valid-engines', ERROR) /** @since 0.76.0 */ // 🟢
     .addRule('valid-exports', ERROR) /** @since 0.54.0 */ // 🟢
     .addRule('valid-files', ERROR) /** @since 0.67.0 */ // 🟢
+    .addRule('valid-funding', ERROR) /** @since 0.90.0 */ // 🟢
     .addRule('valid-homepage', ERROR) /** @since 0.66.0 */ // 🟢
     .addRule('valid-keywords', ERROR) /** @since 0.68.0 */ // 🟢
     .addRule('valid-license', ERROR) /** @since 0.45.0 */ // 🟢
@@ -266,6 +282,7 @@ export default ((context, optionsRaw) => {
     .addRule('valid-name', ERROR) /** @since 0.9.0 */ // 🟢
     .addRule('valid-optionalDependencies', ERROR) /** @since 0.49.0 */ // 🟢
     .addRule('valid-os', ERROR) /** @since 0.71.0 */ // 🟢
+    .addRule('valid-packageManager', ERROR) /** @since 0.90.0 */ // 🟢
     .addRule('valid-peerDependencies', ERROR) /** @since 0.49.0 */ // 🟢
     .addRule('valid-private', ERROR) /** @since 0.70.0 */ // 🟢
     .addRule('valid-publishConfig', ERROR) /** @since 0.74.0 */ // 🟢
