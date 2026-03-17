@@ -1,5 +1,6 @@
 const FIXTURES = {
   doubleQuotes: 'double-quotes.js',
+  markdownListWithAsterisk: 'markdown-list-with-asterisk.md',
 } as const;
 
 describe('basic tests', async () => {
@@ -9,8 +10,13 @@ describe('basic tests', async () => {
     expect(configResult.getLoadedPlugin('format')).toBeDefined();
   });
 
-  it('creates `format/prettier` eslint config', () => {
+  it('creates `format/prettier` eslint config and does not create other `format/*` eslint configs', () => {
     expect(configResult.getConfigByUnPostfix('format/prettier')).toBeDefined();
+    expect(
+      configResult.getConfigsByUnPostfix(
+        (configName) => configName.startsWith('format/') && configName !== 'format/prettier',
+      ),
+    ).toHaveLength(0);
   });
 
   it('supports array notation to create multiple format eslint configs', async () => {
@@ -77,17 +83,15 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('format');
 
-  it('enables `format/prettier` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('format/prettier', 'format/prettier')).toBe(2);
-  });
-
-  it('disables `format/dprint` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('format/prettier', 'format/dprint')).toBe(0);
+  it('enables only `format/prettier` rule by default', () => {
+    expect(configResult.getConfigByUnPostfix('format/prettier')?.rules).toMatchInlineSnapshot(
+      '{"format/prettier": [2]}',
+    );
   });
 
   it('`format/prettier` rule fires on a file with double quotes', async () => {
     const results = await testEslintConfig(
-      {format: {formatter: ['prettier', {singleQuote: true}]}},
+      {format: {formatter: ['prettier', {singleQuote: true, parser: 'babel'}]}},
       FIXTURES.doubleQuotes,
       import.meta.dirname,
     );
@@ -95,6 +99,40 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(results, FIXTURES.doubleQuotes, 'format/prettier');
 
     expect(error?.message).toMatchInlineSnapshot(`"Replace \`"hello"\` with \`'hello'\`"`);
+  });
+
+  it('`format/oxfmt` rule fires on a file with double quotes', async () => {
+    const results = await testEslintConfig(
+      {format: {formatter: ['oxfmt', {singleQuote: true, parser: 'babel'}]}},
+      FIXTURES.doubleQuotes,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(results, FIXTURES.doubleQuotes, 'format/oxfmt');
+
+    expect(error?.message).toMatchInlineSnapshot(`"Replace \`"hello"\` with \`'hello'\`"`);
+  });
+
+  it('`format/dprint` rule fires on a file with unformatted markdown', async () => {
+    const results = await testEslintConfig(
+      {
+        format: {
+          files: ['**/*.md'],
+          formatter: ['dprint', {language: 'markdown'}],
+          usePlainParser: true,
+        },
+      },
+      FIXTURES.markdownListWithAsterisk,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.markdownListWithAsterisk,
+      'format/dprint',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot('"Replace `*` with `-`"');
   });
 });
 
@@ -181,28 +219,36 @@ describe('options', () => {
       expect(configResult.getConfigByUnPostfix('format/prettier')).toBeDefined();
     });
 
-    it('enables only `format/prettier` rule when `formatter` is `prettier`', async () => {
-      const configResult = await computeEslintConfig({format: {formatter: 'prettier'}});
-
-      expect(configResult.getRuleEntrySeverity('format/prettier', 'format/prettier')).toBe(2);
-      expect(configResult.getRuleEntrySeverity('format/prettier', 'format/dprint')).toBe(0);
-    });
-
     it('creates `format/dprint` eslint config when `formatter` is set to `dprint`', async () => {
       const configResult = await computeEslintConfig({
         format: {formatter: ['dprint', {language: 'typescript'}]},
       });
 
       expect(configResult.getConfigByUnPostfix('format/dprint')).toBeDefined();
-    });
-
-    it('enables only `format/dprint` rule when `formatter` is `dprint`', async () => {
-      const configResult = await computeEslintConfig({
-        format: {formatter: ['dprint', {language: 'typescript'}]},
-      });
-
       expect(configResult.getRuleEntrySeverity('format/dprint', 'format/dprint')).toBe(2);
       expect(configResult.getRuleEntrySeverity('format/dprint', 'format/prettier')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('format/dprint', 'format/oxfmt')).toBe(0);
+    });
+
+    it('creates `format/oxfmt` eslint config when `formatter` is set to `oxfmt`', async () => {
+      const configResult = await computeEslintConfig({format: {formatter: 'oxfmt'}});
+
+      expect(configResult.getConfigByUnPostfix('format/oxfmt')).toBeDefined();
+      expect(configResult.getRuleEntrySeverity('format/oxfmt', 'format/oxfmt')).toBe(2);
+      expect(configResult.getRuleEntrySeverity('format/oxfmt', 'format/prettier')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('format/oxfmt', 'format/dprint')).toBe(0);
+    });
+
+    it("passes options to `format/oxfmt` rule when `formatter` is `['oxfmt', options]`", async () => {
+      const OPTIONS = {printWidth: 100};
+
+      const configResult = await computeEslintConfig({
+        format: {formatter: ['oxfmt', OPTIONS]},
+      });
+
+      expect(configResult.getRuleEntryOptions('format/oxfmt', 'format/oxfmt')).toStrictEqual([
+        OPTIONS,
+      ]);
     });
 
     it("passes options to `format/prettier` rule when `formatter` is `['prettier', options]`", async () => {
@@ -222,6 +268,7 @@ describe('options', () => {
         plugins: [],
         typescript: 'https://plugins.dprint.dev/typescript-0.93.0.wasm',
       };
+
       const configResult = await computeEslintConfig({
         format: {formatter: ['dprint', OPTIONS]},
       });

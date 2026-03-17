@@ -55,6 +55,7 @@ export default {
     'obug',
     'darraghor',
     'arkregex',
+    'oxfmt',
 
     // Technical words/terms
     'arraify',

@@ -1,6 +1,6 @@
-import type {DprintOptions, PrettierOptions} from 'eslint-plugin-format/rule-options';
-import {ERROR, OFF} from '../constants';
-import type {OmitStrict} from '../types';
+import type {DprintOptions, OxfmtOptions, PrettierOptions} from 'eslint-plugin-format/rule-options';
+import {ERROR} from '../constants';
+import type {OmitStrict, Prettify} from '../types';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -10,14 +10,15 @@ import {
 
 interface SupportedFormatters {
   dprint: DprintOptions;
-  prettier: PrettierOptions;
+  oxfmt: Prettify<OxfmtOptions>;
+  prettier: Prettify<PrettierOptions>;
 }
 
 export interface FormatEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'format'> {
   /**
-   * Choose a formatter from `prettier` and `dprint`. Use an array notation
+   * Choose a formatter from `prettier`, `oxfmt` and `dprint`. Use an array notation
    * to pass formatter options.
    *
    * ⚠️ `dprint` formatter requires specifying `language` which is a file path or URL
@@ -53,7 +54,7 @@ export default ((context, optionsRaw) => {
 
   const {formatter: formatterAndMaybeOptions, usePlainParser} = optionsResolved;
 
-  const [formatter, formatterOptions] = Array.isArray(formatterAndMaybeOptions)
+  const [usedFormatter, formatterOptions] = Array.isArray(formatterAndMaybeOptions)
     ? formatterAndMaybeOptions
     : [formatterAndMaybeOptions];
 
@@ -64,29 +65,34 @@ export default ((context, optionsRaw) => {
 
   configBuilder
     ?.addConfig([
-      `format/${formatter}`,
+      `format/${usedFormatter}`,
       {
         includeDefaultFilesAndIgnores: true,
-        ...(usePlainParser && {parser: 'eslint-parser-plain'}),
         ignoresInternal: false,
+        ...(usePlainParser && {parser: 'eslint-parser-plain'}),
       },
     ])
-    .addRule(
-      'dprint',
-      formatter === 'dprint' ? ERROR : OFF,
-      formatterOptions && formatter === 'dprint' ? [formatterOptions] : [],
-    ) /** @since 0.0.1 */
-    .addRule(
-      'prettier',
-      formatter === 'prettier' ? ERROR : OFF,
-      // @ts-expect-error this is fine
-      formatterOptions && formatter === 'prettier' ? [formatterOptions] : [],
-    ) /** @since 0.0.0 */
-    .enableConfigTesterForPlugin('format')
+
+    /**
+     * prettier
+     * @since 0.0.1
+     */
+
+    /**
+     * dprint
+     * @since 0.0.1
+     */
+
+    /**
+     * oxfmt
+     * @since 1.5.0
+     */
+    .addRule(usedFormatter, ERROR, formatterOptions ? [formatterOptions] : [])
+    // Config tester is not enabled: only single rule is used
     .addOverrides();
 
   return {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'format'>;
+}) satisfies UnConfigFn<'format'> as UnConfigFn<'format'>;
