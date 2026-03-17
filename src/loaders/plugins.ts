@@ -2,6 +2,7 @@ import {fixupPluginRules} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
 import type {EslintPlugin} from '../eslint/eslint-types';
 import {interopDefault, objectKeysUnsafe} from '../utils';
+import {HEADER_RULE_SCHEMA, withMissingRuleSchemas} from './missing-rule-schemas';
 import {
   type EslintParser,
   type EslintProcessor,
@@ -274,13 +275,11 @@ export const pluginsLoaders = {
         }
       >,
   ),
-  header: genModuleLoader(
-    'header',
-    'eslint-plugin-header',
-    () =>
-      interopDefault(import('eslint-plugin-header')).then(
-        fixupPluginRules,
-      ) as Promise<EslintPlugin>,
+  header: genModuleLoader('header', 'eslint-plugin-header', async () =>
+    withMissingRuleSchemas(
+      fixupPluginRules(await interopDefault(import('eslint-plugin-header'))) as EslintPlugin,
+      {header: HEADER_RULE_SCHEMA},
+    ),
   ),
   headers: genModuleLoader('headers', 'eslint-plugin-headers', () =>
     interopDefault(import('eslint-plugin-headers')),
@@ -585,8 +584,10 @@ export const pluginsLoaders = {
     () =>
       interopDefault(import('typescript-eslint')).then((m) => m.plugin) as Promise<EslintPlugin>,
   ),
-  turbo: genModuleLoader('turbo', 'eslint-plugin-turbo', () =>
-    interopDefault(import('eslint-plugin-turbo')),
+  turbo: genModuleLoader(
+    'turbo',
+    'eslint-plugin-turbo',
+    () => interopDefault(import('eslint-plugin-turbo')) as Promise<EslintPlugin>,
   ),
   un: genModuleLoader('un', '', () => interopDefault(import('../plugin-un'))),
   unicorn: genModuleLoader(
