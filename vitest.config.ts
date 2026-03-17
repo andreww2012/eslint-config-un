@@ -6,6 +6,16 @@ export default defineConfig({
     globals: true,
     testTimeout: 30_000, // Generating ESLint config might not be very fast
     setupFiles: ['./test/setup.ts'],
+    // Vitest passes `--conditions development` to workers, causing `@glimmer/syntax`,
+    // which is a dependency of `ember-eslint-parser`, to resolve to its dev build,
+    // which in turn tries to load `@glimmer/env` not listed in its dependencies.
+    // So we need to mock it.
+    // Node 22's require(esm) then triggers the full ESM import chain before Vite's pipeline
+    // can intercept it, so a Node loader hook is the only way to provide the mock.
+    execArgv: [
+      '--import',
+      import.meta.resolve('./test/__mocks__/loader/index.js', import.meta.url),
+    ],
     snapshotFormat: {
       min: true,
       // `indent` is implicitly set to 2 by default, but `min` cannot be used together with non-falsy `indent` value
