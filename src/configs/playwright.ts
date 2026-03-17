@@ -107,6 +107,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-conditional-expect', ERROR) /** @since 1.2.0 */ // 🟡
     .addRule('no-conditional-in-test', OFF) /** @since 0.10.0 */ // 🟡
     .addRule('no-duplicate-hooks', ERROR) /** @since 1.2.0 */
+    .addRule('no-duplicate-slow', ERROR) /** @since 2.6.0 */ // 🟢
     .addRule('no-element-handle', ERROR) /** @since 0.9.0 */ // 🟡
     .addRule('no-eval', WARNING) /** @since 0.9.0 */ // 🟡
     .addRule('no-focused-test', ERROR) /** @since 0.9.0 */ // 🟢
@@ -120,6 +121,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-raw-locators', OFF) /** @since 0.16.0 */
     .addRule('no-restricted-locators', OFF) /** @since 2.5.0 */
     .addRule('no-restricted-matchers', OFF) /** @since 0.11.1 */
+    .addRule('no-restricted-roles', OFF) /** @since 2.6.0 */
     .addRule('no-skipped-test', ERROR) /** @since 0.9.0 */ // 🟡
     .addRule('no-slowed-test', OFF) /** @since 2.2.0 */
     .addRule('no-standalone-expect', ERROR) /** @since 1.2.0 */ // 🟢
@@ -145,6 +147,8 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-web-first-assertions', ERROR) /** @since 0.13.0 */ // 🟢
     .addRule('require-hook', WARNING) /** @since 1.3.0 */
     .addRule('require-soft-assertions', OFF) /** @since 0.12.0 */
+    .addRule('require-tags', OFF) /** @since 2.6.0 */
+    .addRule('require-to-pass-timeout', OFF) /** @since 2.6.0 */
     .addRule('require-to-throw-message', OFF) /** @since 1.4.0 */
     .addRule('require-top-level-describe', OFF) /** @since 0.11.1 */
     .addRule('valid-describe-callback', ERROR) /** @since 1.4.0 */ // 🟢
