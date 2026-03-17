@@ -45,13 +45,13 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
   /**
    * Names of functions that should be considered to be asserting functions.
    *
-   * Affected rules:
+   * Affected rule:
    * - [`expect-expect`](https://github.com/playwright-community/eslint-plugin-playwright/blob/HEAD/docs/rules/expect-expect.md)
    */
   customAssertFunctionNames?: string[];
 
   /**
-   * Affected rules:
+   * Affected rule:
    * - [`missing-playwright-await`](https://github.com/playwright-community/eslint-plugin-playwright/blob/HEAD/docs/rules/missing-playwright-await.md)
    */
   customAsyncExpectMatches?: string[];
