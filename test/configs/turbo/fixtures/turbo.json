@@ -1,0 +1,7 @@
+{
+  "tasks": {
+    "build": {
+      "env": ["DECLARED_VAR"]
+    }
+  }
+}
