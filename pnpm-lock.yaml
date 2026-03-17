@@ -440,8 +440,8 @@ importers:
         specifier: 7.0.1
         version: 7.0.1(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-cypress:
-        specifier: 5.2.1
-        version: 5.2.1(eslint@9.39.2(jiti@2.6.1))
+        specifier: 6.2.0
+        version: 6.2.0(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-de-morgan:
         specifier: 2.1.1
         version: 2.1.1(eslint@9.39.2(jiti@2.6.1))
@@ -6336,8 +6336,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-plugin-cypress@5.2.1:
-    resolution: {integrity: sha512-HTJLbcd7fwJ4agbHinZ4FUIl38bUTJT3BmH8zdgS2V32LETmPqCtWHi3xlgZ2vpX0aW6kQoHCVVqHm8NxZJ9sA==}
+  eslint-plugin-cypress@6.2.0:
+    resolution: {integrity: sha512-G/8XT9Si0GaqGRVM0sgnRACCI9mbzsC4CisvaaiuJlQoCseKz6C51kq5fcC/yKmwO4dTsWCdhbgaiQtZFGSONg==}
     peerDependencies:
       eslint: '>=9'
 
@@ -17287,10 +17287,10 @@ snapshots:
       known-css-properties: 0.37.0
       postcss-value-parser: 4.2.0
 
-  eslint-plugin-cypress@5.2.1(eslint@9.39.2(jiti@2.6.1)):
+  eslint-plugin-cypress@6.2.0(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
-      globals: 16.5.0
+      globals: 17.4.0
 
   eslint-plugin-de-morgan@2.1.1(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
