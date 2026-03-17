@@ -2,7 +2,6 @@ import {fixupPluginRules} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
 import type {EslintPlugin} from '../eslint/eslint-types';
 import {interopDefault, objectKeysUnsafe} from '../utils';
-import {HEADER_RULE_SCHEMA, withMissingRuleSchemas} from './missing-rule-schemas';
 import {
   type EslintParser,
   type EslintProcessor,
@@ -10,6 +9,23 @@ import {
   type ModuleLoader,
   genModuleLoader,
 } from './shared';
+
+const setPluginRuleSchemas = <Plugin extends EslintPlugin>(m: Plugin): Plugin => ({
+  ...m,
+  rules: Object.fromEntries(
+    Object.entries(m.rules || {}).map(([name, rule]) => [
+      name,
+      {
+        ...rule,
+        meta: {
+          ...rule.meta,
+          // `false` means "you can pass whatever you want", `undefined` means "you cannot pass anything"
+          schema: rule.meta?.schema ?? false,
+        },
+      },
+    ]),
+  ),
+});
 
 const loadEslintReactPlugin = (pluginName: string) =>
   import('@eslint-react/eslint-plugin').then(
@@ -128,6 +144,7 @@ export const pluginsLoaders = {
   ava: genModuleLoader(
     'ava',
     'eslint-plugin-ava',
+    // eslint-disable-next-line ts/no-unnecessary-type-assertion
     () => interopDefault(import('eslint-plugin-ava')) as Promise<EslintPlugin>,
   ),
   'barrel-files': genModuleLoader('barrel-files', 'eslint-plugin-barrel-files', () =>
@@ -275,11 +292,8 @@ export const pluginsLoaders = {
         }
       >,
   ),
-  header: genModuleLoader('header', 'eslint-plugin-header', async () =>
-    withMissingRuleSchemas(
-      fixupPluginRules(await interopDefault(import('eslint-plugin-header'))) as EslintPlugin,
-      {header: HEADER_RULE_SCHEMA},
-    ),
+  header: genModuleLoader('header', 'eslint-plugin-header', () =>
+    interopDefault(import('eslint-plugin-header')).then(setPluginRuleSchemas),
   ),
   headers: genModuleLoader('headers', 'eslint-plugin-headers', () =>
     interopDefault(import('eslint-plugin-headers')),
