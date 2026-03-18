@@ -1,300 +1,356 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+
 const FIXTURES = {
   twoWayBindingWrong: 'angular-2way-binding-wrong.html',
   twoWayBindingCorrect: 'angular-2way-binding-correct.html',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('angular');
-
-  it('creates `angular/template` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('angular/template')).toBeDefined();
-  });
-
-  it('does not create `angular/template` eslint config when `configTemplate` is `false`', async () => {
-    const noTemplateConfigResult = await computeEslintConfig({
-      angular: {configTemplate: false},
-    });
-
-    expect(noTemplateConfigResult.getConfigByUnPostfix('angular/template')).toBeUndefined();
-  });
-
-  it('creates `angular/template` eslint config when `configTemplate` is `true` explicitly', async () => {
-    const explicitConfigResult = await computeEslintConfig({
-      angular: {configTemplate: true},
-    });
-
-    expect(explicitConfigResult.getConfigByUnPostfix('angular/template')).toBeDefined();
-  });
+beforeEach(() => {
+  addInstalledPackages({'@angular/core': '19.0.0'});
 });
 
-describe('rules', async () => {
-  const configResult = await computeEslintConfig('angular');
+describe('angular: sub config `configTemplate`', () => {
+  describe('basic tests', async () => {
+    const configResult = await computeEslintConfig('angular');
 
-  it('enables `@angular-eslint/template/banana-in-box` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('angular/template', '@angular-eslint/template/banana-in-box'),
-      ),
-    ).toBe(2);
-  });
+    it('creates `angular/template` eslint config by default', () => {
+      expect(configResult.getConfigByUnPostfix('angular/template')).toBeDefined();
+    });
 
-  it('disables `@angular-eslint/template/no-call-expression` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry(
-          'angular/template',
-          '@angular-eslint/template/no-call-expression',
-        ),
-      ),
-    ).toBe(0);
-  });
+    it('does not create `angular/template` eslint config when `configTemplate` is `false`', async () => {
+      const noTemplateConfigResult = await computeEslintConfig({
+        angular: {configTemplate: false},
+      });
 
-  it('triggers `@angular-eslint/template/banana-in-box` on wrong two-way binding syntax', async () => {
-    const result = await testEslintConfig(
-      'angular',
-      FIXTURES.twoWayBindingWrong,
-      import.meta.dirname,
-    );
+      expect(noTemplateConfigResult.getConfigByUnPostfix('angular/template')).toBeUndefined();
+    });
 
-    const error = findLintMessageFromLintResults(
-      result,
-      FIXTURES.twoWayBindingWrong,
-      '@angular-eslint/template/banana-in-box',
-    );
+    it('creates `angular/template` eslint config when `configTemplate` is `true` explicitly', async () => {
+      const explicitConfigResult = await computeEslintConfig({
+        angular: {configTemplate: true},
+      });
 
-    expect(error?.message).toMatchInlineSnapshot(`"Invalid binding syntax. Use [(expr)] instead"`);
-  });
+      expect(explicitConfigResult.getConfigByUnPostfix('angular/template')).toBeDefined();
+    });
 
-  it('does not trigger `@angular-eslint/template/banana-in-box` on correct two-way binding syntax', async () => {
-    const result = await testEslintConfig(
-      'angular',
-      FIXTURES.twoWayBindingCorrect,
-      import.meta.dirname,
-    );
-
-    const error = findLintMessageFromLintResults(
-      result,
-      FIXTURES.twoWayBindingCorrect,
-      '@angular-eslint/template/banana-in-box',
-    );
-
-    expect(error).toBeUndefined();
-  });
-});
-
-describe('un options', () => {
-  describe('option: `files`', () => {
-    it('has default `files` in `angular/template` eslint config', async () => {
-      const configResult = await computeEslintConfig('angular');
-
+    it('has default `files` in `angular/template` eslint config', () => {
       expect(configResult.getConfigByUnPostfix('angular/template')?.files).toMatchInlineSnapshot(
-        `["**/*.html"]`,
+        '["**/*.html"]',
       );
     });
 
-    it('uses user-provided `files` in `angular/template` eslint config', async () => {
-      const FILES = ['src/**/*.html'];
-      const configResult = await computeEslintConfig({
-        angular: {configTemplate: {files: FILES}},
-      });
-
-      expect(configResult.getConfigByUnPostfix('angular/template')?.files).toStrictEqual(FILES);
-    });
-
-    it('disables `angular/template` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        angular: {configTemplate: {files: []}},
-      });
-
-      expect(configResult.getConfigByUnPostfix('angular/template')).toBeUndefined();
-    });
-  });
-
-  describe('option: `ignores`', () => {
-    it('uses user-provided `ignores` in `angular/template` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        angular: {configTemplate: {ignores: IGNORES}},
-      });
-
+    it('has default `ignores` in `angular/template` eslint config', () => {
       const ignores = configResult.getConfigByUnPostfix('angular/template')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
-
-      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+      expect(ignores?.length).toBeGreaterThan(0);
+      expect(ignores).not.to.include.members([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
   });
 
-  it('respects `overrides` and `overridesAny` in `angular/template` eslint config', async () => {
-    const configResult = await computeEslintConfig({
-      angular: {
-        configTemplate: {
-          overrides: {'@angular-eslint/template/banana-in-box': 0},
-          overridesAny: {'no-console': 0},
+  describe('rules', async () => {
+    const configResult = await computeEslintConfig('angular');
+
+    it('enables `@angular-eslint/template/banana-in-box` rule by default', () => {
+      expect(
+        configResult.getRuleEntrySeverity(
+          'angular/template',
+          '@angular-eslint/template/banana-in-box',
+        ),
+      ).toBe(2);
+    });
+
+    it('disables `@angular-eslint/template/no-call-expression` rule by default', () => {
+      expect(
+        configResult.getRuleEntrySeverity(
+          'angular/template',
+          '@angular-eslint/template/no-call-expression',
+        ),
+      ).toBe(0);
+    });
+
+    it('triggers `@angular-eslint/template/banana-in-box` on wrong two-way binding syntax', async () => {
+      const result = await testEslintConfig(
+        'angular',
+        FIXTURES.twoWayBindingWrong,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        result,
+        FIXTURES.twoWayBindingWrong,
+        '@angular-eslint/template/banana-in-box',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Invalid binding syntax. Use [(expr)] instead"',
+      );
+    });
+
+    it('does not trigger `@angular-eslint/template/banana-in-box` on correct two-way binding syntax', async () => {
+      const result = await testEslintConfig(
+        'angular',
+        FIXTURES.twoWayBindingCorrect,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        result,
+        FIXTURES.twoWayBindingCorrect,
+        '@angular-eslint/template/banana-in-box',
+      );
+
+      expect(error).toBeUndefined();
+    });
+  });
+
+  describe('un options', () => {
+    describe('option: `files`', () => {
+      it('uses user-provided `files` in `angular/template` eslint config', async () => {
+        const FILES = ['src/**/*.html'];
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {files: FILES}},
+        });
+
+        expect(configResult.getConfigByUnPostfix('angular/template')?.files).toStrictEqual(FILES);
+      });
+
+      it('disables `angular/template` eslint config when `files` is empty array', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {files: []}},
+        });
+
+        expect(configResult.getConfigByUnPostfix('angular/template')).toBeUndefined();
+      });
+    });
+
+    describe('option: `ignores`', () => {
+      it('uses user-provided `ignores` in `angular/template` eslint config and merges them with defaults', async () => {
+        const IGNORES = ['**/fixtures/**'];
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {ignores: IGNORES}},
+        });
+
+        const ignores = configResult.getConfigByUnPostfix('angular/template')?.ignores;
+
+        expect(ignores).to.include.members(IGNORES);
+        expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+      });
+    });
+
+    it('respects `overrides` and `overridesAny` in `angular/template` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        angular: {
+          configTemplate: {
+            overrides: {'@angular-eslint/template/banana-in-box': 0},
+            overridesAny: {'no-console': 0},
+          },
         },
-      },
-    });
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('angular/template', '@angular-eslint/template/banana-in-box'),
-      ),
-    ).toBe(0);
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('angular/template', 'no-console'),
-      ),
-    ).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `angular/template` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        angular: {configTemplate: {forceSeverity: 'error'}},
       });
 
       expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('angular/template'), (ruleName) =>
-          ruleName.startsWith('@angular-eslint/template/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `angular/template` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        angular: {configTemplate: {forceSeverity: 'warn'}},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('angular/template'), (ruleName) =>
-          ruleName.startsWith('@angular-eslint/template/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
-});
-
-describe('options', () => {
-  describe('option: `a11yRules`', () => {
-    it('enables a11y rules at error severity when `a11yRules` is `true` (default)', async () => {
-      const configResult = await computeEslintConfig('angular');
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/template', '@angular-eslint/template/alt-text'),
-        ),
-      ).toBe(2);
-    });
-
-    it('enables a11y rules at warning severity when `a11yRules` is `"warn"`', async () => {
-      const configResult = await computeEslintConfig({
-        angular: {configTemplate: {a11yRules: 'warn'}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/template', '@angular-eslint/template/alt-text'),
-        ),
-      ).toBe(1);
-    });
-
-    it('disables a11y rules when `a11yRules` is `false`', async () => {
-      const configResult = await computeEslintConfig({
-        angular: {configTemplate: {a11yRules: false}},
-      });
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/template', '@angular-eslint/template/alt-text'),
+        configResult.getRuleEntrySeverity(
+          'angular/template',
+          '@angular-eslint/template/banana-in-box',
         ),
       ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('angular/template', 'no-console')).toBe(0);
+    });
+
+    describe('option: `forceSeverity`', () => {
+      it('respects `forceSeverity` set to `error` in `angular/template` eslint config', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {forceSeverity: 'error'}},
+        });
+
+        expect(
+          getAllRulesSeverities(configResult.getConfigByUnPostfix('angular/template'), (ruleName) =>
+            ruleName.startsWith('@angular-eslint/template/'),
+          ),
+        ).toStrictEqual([2]);
+      });
+
+      it('respects `forceSeverity` set to `warn` in `angular/template` eslint config', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {forceSeverity: 'warn'}},
+        });
+
+        expect(
+          getAllRulesSeverities(configResult.getConfigByUnPostfix('angular/template'), (ruleName) =>
+            ruleName.startsWith('@angular-eslint/template/'),
+          ),
+        ).toStrictEqual([1]);
+      });
     });
   });
 
-  describe('option: `preferControlFlow`', () => {
-    it('enables `prefer-control-flow` rule when `preferControlFlow` is `true`', async () => {
-      const configResult = await computeEslintConfig({
-        angular: {configTemplate: {preferControlFlow: true}},
+  describe('options', () => {
+    describe('option: `a11yRules`', () => {
+      it('enables a11y rules at error severity when option is not set', async () => {
+        const configResult = await computeEslintConfig('angular');
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/template',
+            '@angular-eslint/template/alt-text',
+          ),
+        ).toBe(2);
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
+      it('enables a11y rules at error severity when option is set to `true`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {a11yRules: true}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/template',
+            '@angular-eslint/template/alt-text',
+          ),
+        ).toBe(2);
+      });
+
+      it('enables a11y rules at warning severity when option is set to `"warn"`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {a11yRules: 'warn'}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/template',
+            '@angular-eslint/template/alt-text',
+          ),
+        ).toBe(1);
+      });
+
+      it('disables a11y rules when option is set to `false`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {a11yRules: false}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/template',
+            '@angular-eslint/template/alt-text',
+          ),
+        ).toBe(0);
+      });
+    });
+
+    describe('option: `preferControlFlow`', () => {
+      it('enables `@angular-eslint/template/prefer-control-flow` rule when option is not set (Angular 19, default `true`)', async () => {
+        const configResult = await computeEslintConfig('angular');
+
+        expect(
+          configResult.getRuleEntrySeverity(
             'angular/template',
             '@angular-eslint/template/prefer-control-flow',
           ),
-        ),
-      ).toBe(2);
-    });
-
-    it('disables `prefer-control-flow` rule when `preferControlFlow` is `false`', async () => {
-      const configResult = await computeEslintConfig({
-        angular: {configTemplate: {preferControlFlow: false}},
+        ).toBe(2);
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
+      it('enables `@angular-eslint/template/prefer-control-flow` rule when option is `true`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {preferControlFlow: true}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
             'angular/template',
             '@angular-eslint/template/prefer-control-flow',
           ),
-        ),
-      ).toBe(0);
-    });
-  });
-
-  describe('option: `preferNgSrc`', () => {
-    it('disables `prefer-ngsrc` rule by default', async () => {
-      const configResult = await computeEslintConfig('angular');
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/template', '@angular-eslint/template/prefer-ngsrc'),
-        ),
-      ).toBe(0);
-    });
-
-    it('enables `prefer-ngsrc` rule when `preferNgSrc` is `true`', async () => {
-      const configResult = await computeEslintConfig({
-        angular: {configTemplate: {preferNgSrc: true}},
+        ).toBe(2);
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/template', '@angular-eslint/template/prefer-ngsrc'),
-        ),
-      ).toBe(2);
+      it('disables `@angular-eslint/template/prefer-control-flow` rule when option is `false`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {preferControlFlow: false}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/template',
+            '@angular-eslint/template/prefer-control-flow',
+          ),
+        ).toBe(0);
+      });
     });
-  });
 
-  describe('option: `requireLoopIndexes`', () => {
-    it('disables `use-track-by-function` rule by default', async () => {
-      const configResult = await computeEslintConfig('angular');
+    describe('option: `preferNgSrc`', () => {
+      it('disables `@angular-eslint/template/prefer-ngsrc` rule when option is not set', async () => {
+        const configResult = await computeEslintConfig('angular');
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/template',
+            '@angular-eslint/template/prefer-ngsrc',
+          ),
+        ).toBe(0);
+      });
+
+      it('enables `@angular-eslint/template/prefer-ngsrc` rule when option is `true`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {preferNgSrc: true}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/template',
+            '@angular-eslint/template/prefer-ngsrc',
+          ),
+        ).toBe(2);
+      });
+
+      it('disables `@angular-eslint/template/prefer-ngsrc` rule when option is `false`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {preferNgSrc: false}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/template',
+            '@angular-eslint/template/prefer-ngsrc',
+          ),
+        ).toBe(0);
+      });
+    });
+
+    describe('option: `requireLoopIndexes`', () => {
+      it('disables `@angular-eslint/template/use-track-by-function` rule when option is not set', async () => {
+        const configResult = await computeEslintConfig('angular');
+
+        expect(
+          configResult.getRuleEntrySeverity(
             'angular/template',
             '@angular-eslint/template/use-track-by-function',
           ),
-        ),
-      ).toBe(0);
-    });
-
-    it('enables `use-track-by-function` rule when `requireLoopIndexes` is `true`', async () => {
-      const configResult = await computeEslintConfig({
-        angular: {configTemplate: {requireLoopIndexes: true}},
+        ).toBe(0);
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
+      it('enables `@angular-eslint/template/use-track-by-function` rule when option is `true`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {requireLoopIndexes: true}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
             'angular/template',
             '@angular-eslint/template/use-track-by-function',
           ),
-        ),
-      ).toBe(2);
+        ).toBe(2);
+      });
+
+      it('disables `@angular-eslint/template/use-track-by-function` rule when option is `false`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {configTemplate: {requireLoopIndexes: false}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/template',
+            '@angular-eslint/template/use-track-by-function',
+          ),
+        ).toBe(0);
+      });
     });
   });
 });

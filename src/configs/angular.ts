@@ -1,6 +1,6 @@
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
-import type {NonEmptyTuple, Subtract} from '../types';
+import type {NonEmptyTuple, Prettify, Subtract} from '../types';
 import {fetchPackageInfo} from '../utils';
 import {
   type ExtraPluginsType,
@@ -10,6 +10,8 @@ import {
   type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
+
+type PartialObjectsOnly<T> = T extends readonly unknown[] ? T : Partial<T>;
 
 // Please keep ascending order
 const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20, 21] as const;
@@ -26,38 +28,47 @@ interface ConfigTemplateSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, '@angular-eslint/template'> {
   /**
-   * Enable all a11y (accessibility) rules (all are prefixed with `@angular-eslint/template`):
-   * - [`alt-text`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/alt-text.md) ([`accessibility-alt-text`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-alt-text.md) before Angular 16)
+   * Enables all a11y (accessibility) rules (all are prefixed with `@angular-eslint/template`):
+   * - [`alt-text`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/alt-text.md)
+   * ([`accessibility-alt-text`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-alt-text.md) before Angular 16)
    * - [`click-events-have-key-events`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/click-events-have-key-events.md)
-   * - [`elements-content`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/elements-content.md) ([`accessibility-elements-content`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-elements-content.md) before Angular 16)
-   * - [`interactive-supports-focus`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/interactive-supports-focus.md) ([`accessibility-interactive-supports-focus`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-interactive-supports-focus.md) before Angular 16)
-   * - [`label-has-associated-control`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/label-has-associated-control.md) ([`accessibility-label-has-associated-control`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-label-has-associated-control.md) before Angular 16)
+   * - [`elements-content`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/elements-content.md)
+   * ([`accessibility-elements-content`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-elements-content.md) before Angular 16)
+   * - [`interactive-supports-focus`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/interactive-supports-focus.md)
+   * ([`accessibility-interactive-supports-focus`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-interactive-supports-focus.md) before Angular 16)
+   * - [`label-has-associated-control`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/label-has-associated-control.md)
+   * ([`accessibility-label-has-associated-control`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-label-has-associated-control.md) before Angular 16)
    * - [`mouse-events-have-key-events`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/mouse-events-have-key-events.md)
    * - [`no-autofocus`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/no-autofocus.md)
    * - [`no-distracting-elements`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/no-distracting-elements.md)
-   * - [`role-has-required-aria`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/role-has-required-aria.md) ([`accessibility-role-has-required-aria`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-role-has-required-aria.md) before Angular 16)
-   * - [`table-scope`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/table-scope.md) ([`accessibility-table-scope`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-table-scope.md) before Angular 16)
-   * - [`valid-aria`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/valid-aria.md) ([`accessibility-valid-aria`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-valid-aria.md) before Angular 16)
+   * - [`role-has-required-aria`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/role-has-required-aria.md)
+   * ([`accessibility-role-has-required-aria`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-role-has-required-aria.md) before Angular 16)
+   * - [`table-scope`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/table-scope.md)
+   * ([`accessibility-table-scope`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-table-scope.md) before Angular 16)
+   * - [`valid-aria`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/valid-aria.md)
+   * ([`accessibility-valid-aria`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-valid-aria.md) before Angular 16)
    * @default true
    */
   a11yRules?: boolean | 'warn';
 
   /**
-   * Uses [`@angular-eslint/template/prefer-control-flow`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-control-flow.md) rule.
-   *
-   * Note that this rule is enabled in our config if Angular version is at least 19.
+   * Affected rule:
+   * - [`@angular-eslint/template/prefer-control-flow`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-control-flow.md) rule.
    * @default true <=> Angular version >=19
    * @see https://angular.dev/guide/templates/control-flow
    */
   preferControlFlow?: boolean;
 
   /**
-   * Prefer rendering images (`<img>`) with the help of [`NgOptimizedImage`](https://angular.dev/api/common/NgOptimizedImage) directive,
+   * Prefer rendering images (`<img>`) with the help of
+   * [`NgOptimizedImage`](https://angular.dev/api/common/NgOptimizedImage) directive,
    * i.e. using `ngSrc` attribute instead of `src`.
    *
-   * Also see ["Optimizing images"](https://angular.dev/tutorials/learn-angular/11-optimizing-images) lesson.
+   * Also see
+   * ["Optimizing images"](https://angular.dev/tutorials/learn-angular/11-optimizing-images) lesson.
    *
-   * Uses [`@angular-eslint/template/prefer-ngsrc`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-ngsrc.md) rule.
+   * Affected rule:
+   * - [`@angular-eslint/template/prefer-ngsrc`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-ngsrc.md) rule.
    * @default false
    */
   preferNgSrc?: boolean;
@@ -65,7 +76,8 @@ interface ConfigTemplateSubConfigOptions<
   /**
    * Requires [`trackBy` function](https://angular.dev/api/core/TrackByFunction) to be used with [`*ngFor` loops](https://angular.dev/api/common/NgFor).
    *
-   * Uses [`@angular-eslint/template/use-track-by-function`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/use-track-by-function.md) rule.
+   * Affected rule:
+   * - [`@angular-eslint/template/use-track-by-function`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/use-track-by-function.md) rule.
    * @default false
    */
   requireLoopIndexes?: boolean;
@@ -75,8 +87,12 @@ export interface AngularEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, '@angular-eslint'> {
   /**
-   * Enables or specifies the configuration for the [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template) plugin,
-   * which includes template-specific rules.
+   * Config with template-specific rules.
+   *
+   * 📁 Default `files`: <code>**&#47;*.html</code>
+   *
+   * 🧩 Main plugin: [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template)
+   * ([docs](https://github.com/angular-eslint/angular-eslint/tree/main/packages/eslint-plugin-template#readme))
    * @default true
    */
   configTemplate?: boolean | ConfigTemplateSubConfigOptions<ExtraPlugins>;
@@ -86,7 +102,10 @@ export interface AngularEslintConfigOptions<
    * `@angular/core` package, but can also be specified manually here.
    *
    * Used to determine which rules will be available based on its availability
-   * in the same major version of the [`@angular-eslint/eslint-plugin`](https://npmjs.com/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template) packages.
+   * in the same major version of
+   * [`@angular-eslint/eslint-plugin`](https://npmjs.com/@angular-eslint/eslint-plugin) and
+   * [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template)
+   * packages.
    *
    * Unavailable rules can be ported by specifying them in `portRules` option.
    */
@@ -101,8 +120,10 @@ export interface AngularEslintConfigOptions<
   /**
    * Valid class name suffixes for classes decorated with `@Component`.
    * Passing empty array disables the check.
+   *
+   * Affected rule:
+   * - [`@angular-eslint/component-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-class-suffix.md)
    * @default ['Component']
-   * @see [`@angular-eslint/component-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-class-suffix.md)
    */
   componentClassSuffixes?: string[];
 
@@ -110,25 +131,33 @@ export interface AngularEslintConfigOptions<
    * Enforces component selector style.
    * Options will be merged with the default value `{type: ['element'], style: 'kebab-case'}`.
    * Pass `false` to disable the check.
+   *
+   * Affected rule:
+   * - [`@angular-eslint/component-selector`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-selector.md)
    * @default true
-   * @see [`@angular-eslint/component-selector`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-selector.md)
    */
-  componentSelector?: boolean | GetRuleOptions<'@angular-eslint', 'component-selector'>;
+  componentSelector?:
+    | boolean
+    | Prettify<PartialObjectsOnly<GetRuleOptions<'@angular-eslint', 'component-selector'>>>;
 
   /**
    * Ensures consistent usage of `styles`/`styleUrls`/`styleUrl` within `Component` metadata.
    * By default, `string` style is enforced.
    * Pass `false` to disable the check.
+   *
+   * Affected rule:
+   * - [`@angular-eslint/consistent-component-styles`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/consistent-component-styles.md)
    * @default true
-   * @see [`@angular-eslint/consistent-component-styles`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/consistent-component-styles.md)
    */
   componentStylesStyle?: boolean | GetRuleOptions<'@angular-eslint', 'consistent-component-styles'>;
 
   /**
    * Valid class name suffixes for classes decorated with `@Directive`.
    * Passing empty array disables the check.
+   *
+   * Affected rule:
+   * - [`@angular-eslint/directive-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/directive-class-suffix.md)
    * @default ['Component']
-   * @see [`@angular-eslint/directive-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/directive-class-suffix.md)
    */
   directiveClassSuffixes?: string[];
 
@@ -136,51 +165,63 @@ export interface AngularEslintConfigOptions<
    * Enforces directive selector style.
    * Options will be merged with the default value `{type: ['attribute'], style: 'camelCase'}`.
    * Pass `false` to disable the check.
+   *
+   * Affected rule:
+   * - [`@angular-eslint/directive-selector`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/directive-selector.md)
    * @default true
-   * @see [`@angular-eslint/directive-selector`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/directive-selector.md)
    */
-  directiveSelector?: boolean | GetRuleOptions<'@angular-eslint', 'directive-selector'>;
+  directiveSelector?:
+    | boolean
+    | Prettify<PartialObjectsOnly<GetRuleOptions<'@angular-eslint', 'directive-selector'>>>;
 
   /**
    * Forbids the use of certain metadata properties. Will be merged with the default value.
    *
-   * Uses the following rules:
+   * Affected rules:
+   * - [`@angular-eslint/no-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/v18.4.3/packages/eslint-plugin/docs/rules/no-host-metadata-property.md)
    * - [`@angular-eslint/no-inputs-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-inputs-metadata-property.md)
    * - [`@angular-eslint/no-outputs-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-outputs-metadata-property.md)
-   * - [`@angular-eslint/no-queries-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-queries-metadata-property.md)
-   * - [`@angular-eslint/no-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/v18.4.3/packages/eslint-plugin/docs/rules/no-host-metadata-property.md) (available until Angular 18, deprecated in Angular 18)
+   * - [`@angular-eslint/no-queries-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-queries-metadata-property.md)(available until Angular 18, deprecated in Angular 18)
    * @default {inputs: true, outputs: true, queries: true}
    */
   forbiddenMetadataProperties?: Partial<Record<'host' | 'inputs' | 'outputs' | 'queries', boolean>>;
 
   /**
    * Disallow the following prefixes for input bindings, including aliases.
+   *
+   * Affected rule:
+   * - [`@angular-eslint/no-input-prefix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-input-prefix.md)
    * @default ['on']
-   * @see [`@angular-eslint/no-input-prefix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-input-prefix.md)
    */
   disallowedInputPrefixes?: string[];
 
   /**
+   * Affected rule:
+   * - [`@angular-eslint/no-attribute-decorator`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-attribute-decorator.md)
    * @default false
-   * @see [`@angular-eslint/no-attribute-decorator`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-attribute-decorator.md)
    */
   disallowAttributeDecorator?: boolean;
 
   /**
+   * Affected rule:
+   * - [`@angular-eslint/no-forward-ref`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-forward-ref.md)
    * @default false
-   * @see [`@angular-eslint/no-forward-ref`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-forward-ref.md)
    */
   disallowForwardRef?: boolean;
 
   /**
    * Enforce specified prefixes for pipes.
+   *
+   * Affected rule:
+   * - [`@angular-eslint/pipe-prefix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/pipe-prefix.md)
    * @default []
-   * @see [`@angular-eslint/pipe-prefix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/pipe-prefix.md)
    */
   pipePrefixes?: string[];
 
   /**
-   * Uses [`@angular-eslint/prefer-standalone`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-standalone.md) rule since Angular 17 and uses [`@angular-eslint/prefer-standalone-component`](https://github.com/angular-eslint/angular-eslint/blob/v16.3.1/packages/eslint-plugin/docs/rules/prefer-standalone-component.md) rule for Angular 16.
+   * Affected rule:
+   * - Since Angular 17: [`@angular-eslint/prefer-standalone`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-standalone.md)
+   * - For Angular 16: [`@angular-eslint/prefer-standalone-component`](https://github.com/angular-eslint/angular-eslint/blob/v16.3.1/packages/eslint-plugin/docs/rules/prefer-standalone-component.md)
    * @default true <=> Angular version >=19
    */
   preferStandaloneComponents?: boolean;
@@ -275,7 +316,11 @@ export default (async (context, optionsRaw) => {
     }
   });
 
-  const angularEslintPluginRules = Object.keys(angularEslintPlugin?.rules || {});
+  // `|| {}` is unreachable (plugin always loads); start/stop needed to suppress inline branches
+  const angularEslintPluginRules = Object.keys(
+    /* v8 ignore start */ angularEslintPlugin?.rules || {} /* v8 ignore stop */,
+  );
+
   const getPluginRuleSeverity = <
     RuleName extends GetRuleNamesInPlugin<'@angular-eslint'>, // prettier-ignore
   >(
@@ -474,7 +519,11 @@ export default (async (context, optionsRaw) => {
 
   // TEMPLATE CONFIG
 
-  const angularTemplateEslintPluginRules = Object.keys(angularTemplateEslintPlugin?.rules || {});
+  // same rationale for ignore comments as above
+  const angularTemplateEslintPluginRules = Object.keys(
+    /* v8 ignore start */ angularTemplateEslintPlugin?.rules || {} /* v8 ignore stop */,
+  );
+
   const getTemplatePluginRuleSeverity = <
     RuleName extends GetRuleNamesInPlugin<'@angular-eslint/template'>,
   >(

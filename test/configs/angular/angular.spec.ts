@@ -1,73 +1,127 @@
+import type {NonEmptyTuple} from '../../../src/types';
+
+const FIXTURES = {
+  emptyLifecycleMethod: 'empty-lifecycle-method.ts',
+} as const;
+
+beforeEach(() => {
+  addInstalledPackages({'@angular/core': '19.0.0'});
+});
+
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('angular');
 
-  it('loads `@angular-eslint` plugin', () => {
-    expect(configResult.getLoadedPlugin('@angular-eslint')).toBeDefined();
-  });
+  const MAIN_ESLINT_CONFIGS = ['angular/general', 'angular/template'];
 
-  it('loads `@angular-eslint/template` plugin', () => {
+  it('loads `@angular-eslint` and `@angular-eslint/template` plugins', () => {
+    expect(configResult.getLoadedPlugin('@angular-eslint')).toBeDefined();
     expect(configResult.getLoadedPlugin('@angular-eslint/template')).toBeDefined();
   });
 
-  it('creates `angular/general` and `angular/template` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('angular/general')).toBeDefined();
-
-    expect(configResult.getConfigByUnPostfix('angular/template')).toBeDefined();
+  it('creates `angular/{general,template}` eslint configs', () => {
+    expect(configResult.getConfigsByUnPostfix(MAIN_ESLINT_CONFIGS)).toHaveLength(
+      MAIN_ESLINT_CONFIGS.length,
+    );
   });
 
   describe('mode: all configs are disabled', () => {
-    it('does not create `angular/general` eslint config', async () => {
-      const modeConfigResult = await computeEslintConfig({});
-
-      expect(modeConfigResult.getConfigByUnPostfix('angular/general')).toBeUndefined();
+    it('does not create `angular/{general,template}` eslint configs', async () => {
+      await expectConfigState({}, MAIN_ESLINT_CONFIGS, false);
     });
 
-    it('does not create `angular/template` eslint config', async () => {
-      const modeConfigResult = await computeEslintConfig({});
+    it('creates `angular/{general,template}` eslint configs if explicitly enabled', async () => {
+      await expectConfigState('angular', MAIN_ESLINT_CONFIGS, true);
+    });
 
-      expect(modeConfigResult.getConfigByUnPostfix('angular/template')).toBeUndefined();
+    it('does not create `angular/{general,template}` eslint configs and prints a warning if explicitly disabled', async () => {
+      await expectConfigState({angular: false}, MAIN_ESLINT_CONFIGS, ['angular', false]);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    it('does not create `angular/general` eslint config (no `@angular/core` installed)', async () => {
-      const modeConfigResult = await computeEslintConfig({}, {reset: true});
+    describe('@angular/core is installed', () => {
+      it('creates `angular/{general,template}` eslint configs by default', async () => {
+        await expectConfigState({}, MAIN_ESLINT_CONFIGS, true, 'default');
+      });
 
-      expect(modeConfigResult.getConfigByUnPostfix('angular/general')).toBeUndefined();
+      it('creates `angular/{general,template}` eslint configs and prints a warning if explicitly enabled', async () => {
+        await expectConfigState('angular', MAIN_ESLINT_CONFIGS, ['angular', true], 'default');
+      });
+
+      it('does not create `angular` eslint configs if explicitly disabled', async () => {
+        await expectConfigState({angular: false}, MAIN_ESLINT_CONFIGS, false, 'default');
+      });
     });
 
-    it('creates `angular/general` eslint config if explicitly enabled', async () => {
-      const modeConfigResult = await computeEslintConfig({angular: true}, {reset: true});
+    describe('@angular/core is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
 
-      expect(modeConfigResult.getConfigByUnPostfix('angular/general')).toBeDefined();
-    });
+      it('does not create `angular/{general,template}` eslint configs', async () => {
+        await expectConfigState({}, MAIN_ESLINT_CONFIGS, false, 'default');
+      });
 
-    it('does not create `angular` eslint configs but prints a warning if explicitly disabled (already disabled by default)', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
+      it('creates `angular/{general,template}` eslint configs if explicitly enabled', async () => {
+        await expectConfigState('angular', MAIN_ESLINT_CONFIGS, true, 'default');
+      });
 
-      const modeConfigResult = await computeEslintConfig({angular: false}, {reset: true});
-
-      expect(modeConfigResult.getConfigByUnPostfix('angular/general')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to disable \`angular\` config because this is the default`,
-        ),
-      ).toBe(true);
+      it('does not create `angular/{general,template}` eslint configs and prints a warning if explicitly disabled', async () => {
+        await expectConfigState(
+          {angular: false},
+          MAIN_ESLINT_CONFIGS,
+          ['angular', false],
+          'default',
+        );
+      });
     });
   });
 
   describe('mode: misc configs are enabled', () => {
-    it('does not create `angular` eslint configs (not a misc config)', async () => {
-      const modeConfigResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+    describe('@angular/core is installed', () => {
+      it('creates `angular/{general,template}` eslint configs', async () => {
+        await expectConfigState({}, MAIN_ESLINT_CONFIGS, true, 'misc-enabled');
+      });
 
-      expect(modeConfigResult.getConfigByUnPostfix('angular/general')).toBeUndefined();
+      it('creates `angular/{general,template}` eslint configs and prints a warning if explicitly enabled', async () => {
+        await expectConfigState('angular', MAIN_ESLINT_CONFIGS, ['angular', true], 'misc-enabled');
+      });
 
-      expect(modeConfigResult.getConfigByUnPostfix('angular/template')).toBeUndefined();
+      it('does not create `angular/{general,template}` eslint configs if explicitly disabled', async () => {
+        await expectConfigState({angular: false}, MAIN_ESLINT_CONFIGS, false, 'misc-enabled');
+      });
     });
+
+    describe('@angular/core is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
+
+      it('does not create `angular` eslint configs', async () => {
+        await expectConfigState({}, MAIN_ESLINT_CONFIGS, false, 'misc-enabled');
+      });
+
+      it('does not create `angular` eslint configs and prints a warning if explicitly disabled', async () => {
+        await expectConfigState(
+          {angular: false},
+          MAIN_ESLINT_CONFIGS,
+          ['angular', false],
+          'misc-enabled',
+        );
+      });
+    });
+  });
+
+  it('has default `files` in `angular/general` eslint config', () => {
+    expect(configResult.getConfigByUnPostfix('angular/general')?.files).toMatchInlineSnapshot(
+      '["**/*.?([cm])[jt]s?(x)"]',
+    );
+  });
+
+  it('has default `ignores` in `angular/general` eslint config', () => {
+    expect(configResult.getConfigByUnPostfix('angular/general')?.ignores?.length).toBeGreaterThan(
+      0,
+    );
   });
 });
 
@@ -76,21 +130,33 @@ describe('rules', async () => {
 
   it('enables `@angular-eslint/contextual-lifecycle` rule by default', () => {
     expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('angular/general', '@angular-eslint/contextual-lifecycle'),
-      ),
+      configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/contextual-lifecycle'),
     ).toBe(2);
   });
 
   it('disables `@angular-eslint/sort-ngmodule-metadata-arrays` rule by default', () => {
     expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry(
-          'angular/general',
-          '@angular-eslint/sort-ngmodule-metadata-arrays',
-        ),
+      configResult.getRuleEntrySeverity(
+        'angular/general',
+        '@angular-eslint/sort-ngmodule-metadata-arrays',
       ),
     ).toBe(0);
+  });
+
+  it('`@angular-eslint/no-empty-lifecycle-method` rule fires on empty lifecycle method', async () => {
+    const results = await testEslintConfig(
+      {angular: true, ts: {configTypeAware: false}},
+      FIXTURES.emptyLifecycleMethod,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.emptyLifecycleMethod,
+      '@angular-eslint/no-empty-lifecycle-method',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot('"Lifecycle methods should not be empty"');
   });
 });
 
@@ -113,12 +179,12 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('angular/general')).toBeUndefined();
     });
 
-    it('has default `files` in `angular/general` eslint config', async () => {
-      const configResult = await computeEslintConfig('angular');
+    it('does not disable `angular/template` sub-config when `files` is empty array', async () => {
+      const configResult = await computeEslintConfig({
+        angular: {files: []},
+      });
 
-      expect(configResult.getConfigByUnPostfix('angular/general')?.files).toMatchInlineSnapshot(
-        `["**/*.?([cm])[jt]s?(x)"]`,
-      );
+      expect(configResult.getConfigByUnPostfix('angular/template')).toBeDefined();
     });
   });
 
@@ -131,8 +197,8 @@ describe('un options', () => {
 
       const ignores = configResult.getConfigByUnPostfix('angular/general')?.ignores;
 
-      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       expect(ignores).to.include.members(IGNORES);
+      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
 
@@ -145,16 +211,9 @@ describe('un options', () => {
     });
 
     expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('angular/general', '@angular-eslint/contextual-lifecycle'),
-      ),
+      configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/contextual-lifecycle'),
     ).toBe(0);
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('angular/general', 'no-console'),
-      ),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('angular/general', 'no-console')).toBe(0);
   });
 
   describe('option: `forceSeverity`', () => {
@@ -186,291 +245,604 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `processInlineTemplates`', () => {
-    it('sets inline template processor when `processInlineTemplates` is `true` (default)', async () => {
+    it('sets inline template processor when option is not set', async () => {
       const configResult = await computeEslintConfig('angular');
-      const config = configResult.getConfigByUnPostfix('angular/general');
 
-      expect(config?.processor).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('angular/general')?.processor).toBeDefined();
     });
 
-    it('does not set inline template processor when `processInlineTemplates` is `false`', async () => {
+    it('sets inline template processor when option is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        angular: {processInlineTemplates: true},
+      });
+
+      expect(configResult.getConfigByUnPostfix('angular/general')?.processor).toBeDefined();
+    });
+
+    it('does not set inline template processor when option is `false`', async () => {
       const configResult = await computeEslintConfig({
         angular: {processInlineTemplates: false},
       });
-      const config = configResult.getConfigByUnPostfix('angular/general');
 
-      expect(config?.processor).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('angular/general')?.processor).toBeUndefined();
     });
   });
 
   describe('option: `componentClassSuffixes`', () => {
-    it('enables `component-class-suffix` rule with default suffix when option is not provided', async () => {
+    it('enables `@angular-eslint/component-class-suffix` rule with default suffix when option is not set', async () => {
       const configResult = await computeEslintConfig('angular');
 
       expect(
         configResult.getRuleEntry('angular/general', '@angular-eslint/component-class-suffix'),
-      ).toMatchInlineSnapshot(`[2, {"suffixes": ["Component"]}]`);
+      ).toMatchInlineSnapshot('[2, {"suffixes": ["Component"]}]');
     });
 
-    it('disables `component-class-suffix` rule when `componentClassSuffixes` is empty array', async () => {
+    it('disables `@angular-eslint/component-class-suffix` rule when option is set to empty array', async () => {
       const configResult = await computeEslintConfig({
         angular: {componentClassSuffixes: []},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/component-class-suffix'),
+        configResult.getRuleEntrySeverity(
+          'angular/general',
+          '@angular-eslint/component-class-suffix',
         ),
       ).toBe(0);
     });
 
-    it('uses custom `componentClassSuffixes`', async () => {
+    it('uses custom `componentClassSuffixes` on `@angular-eslint/component-class-suffix` rule', async () => {
+      const SUFFIXES = ['Component', 'Page'];
       const configResult = await computeEslintConfig({
-        angular: {componentClassSuffixes: ['Component', 'Page']},
+        angular: {componentClassSuffixes: SUFFIXES},
       });
 
       expect(
-        configResult.getRuleEntry('angular/general', '@angular-eslint/component-class-suffix'),
-      ).toMatchInlineSnapshot(`[2, {"suffixes": ["Component", "Page"]}]`);
+        configResult.getRuleEntryOptions(
+          'angular/general',
+          '@angular-eslint/component-class-suffix',
+        ),
+      ).toStrictEqual([{suffixes: SUFFIXES}]);
     });
   });
 
   describe('option: `componentSelector`', () => {
-    it('enables `component-selector` rule by default', async () => {
+    it('enables `@angular-eslint/component-selector` rule when option is not set', async () => {
       const configResult = await computeEslintConfig('angular');
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/component-selector'),
-        ),
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/component-selector'),
       ).toBe(2);
     });
 
-    it('disables `component-selector` rule when `componentSelector` is `false`', async () => {
+    it('enables `@angular-eslint/component-selector` rule when option is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        angular: {componentSelector: true},
+      });
+
+      expect(
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/component-selector'),
+      ).toBe(2);
+    });
+
+    it('disables `@angular-eslint/component-selector` rule when option is `false`', async () => {
       const configResult = await computeEslintConfig({
         angular: {componentSelector: false},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/component-selector'),
-        ),
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/component-selector'),
       ).toBe(0);
+    });
+
+    it('merges object options passed to `componentSelector` with defaults on `@angular-eslint/component-selector` rule', async () => {
+      const OPTIONS = {prefix: ['app']};
+      const configResult = await computeEslintConfig({
+        angular: {componentSelector: OPTIONS},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('angular/general', '@angular-eslint/component-selector'),
+      ).toStrictEqual([{type: ['element'], style: 'kebab-case', ...OPTIONS}]);
+    });
+
+    it('uses raw array options on `@angular-eslint/component-selector` rule when `componentSelector` is an array', async () => {
+      const SELECTOR = [
+        {type: 'element' as const, prefix: ['app'], style: 'kebab-case' as const},
+      ] satisfies NonEmptyTuple;
+      const configResult = await computeEslintConfig({
+        angular: {componentSelector: SELECTOR},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('angular/general', '@angular-eslint/component-selector'),
+      ).toStrictEqual([SELECTOR]);
     });
   });
 
   describe('option: `componentStylesStyle`', () => {
-    it('enables `consistent-component-styles` rule with `string` style by default', async () => {
+    it('enables `@angular-eslint/consistent-component-styles` rule with `string` when `componentStylesStyle` is not set', async () => {
       const configResult = await computeEslintConfig('angular');
 
       expect(
         configResult.getRuleEntry('angular/general', '@angular-eslint/consistent-component-styles'),
-      ).toMatchInlineSnapshot(`[2, "string"]`);
+      ).toMatchInlineSnapshot('[2, "string"]');
     });
 
-    it('disables `consistent-component-styles` rule when `componentStylesStyle` is `false`', async () => {
+    it('uses custom option passed to `componentStylesStyle` on `@angular-eslint/consistent-component-styles` rule', async () => {
+      const OPTIONS = 'array';
+      const configResult = await computeEslintConfig({
+        angular: {componentStylesStyle: OPTIONS},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions(
+          'angular/general',
+          '@angular-eslint/consistent-component-styles',
+        ),
+      ).toStrictEqual([OPTIONS]);
+    });
+
+    it('enables `@angular-eslint/consistent-component-styles` rule with default options when option is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        angular: {componentStylesStyle: true},
+      });
+
+      expect(
+        configResult.getRuleEntry('angular/general', '@angular-eslint/consistent-component-styles'),
+      ).toMatchInlineSnapshot('[2, "string"]');
+    });
+
+    it('disables `@angular-eslint/consistent-component-styles` rule when option is `false`', async () => {
       const configResult = await computeEslintConfig({
         angular: {componentStylesStyle: false},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'angular/general',
-            '@angular-eslint/consistent-component-styles',
-          ),
+        configResult.getRuleEntrySeverity(
+          'angular/general',
+          '@angular-eslint/consistent-component-styles',
         ),
       ).toBe(0);
     });
   });
 
   describe('option: `directiveClassSuffixes`', () => {
-    it('enables `directive-class-suffix` rule with default suffix when option is not provided', async () => {
+    it('enables `@angular-eslint/directive-class-suffix` rule with default suffix when option is not set', async () => {
       const configResult = await computeEslintConfig('angular');
 
       expect(
         configResult.getRuleEntry('angular/general', '@angular-eslint/directive-class-suffix'),
-      ).toMatchInlineSnapshot(`[2, {"suffixes": ["Directive"]}]`);
+      ).toMatchInlineSnapshot('[2, {"suffixes": ["Directive"]}]');
     });
 
-    it('disables `directive-class-suffix` rule when `directiveClassSuffixes` is empty array', async () => {
+    it('disables `@angular-eslint/directive-class-suffix` rule when option is set to empty array', async () => {
       const configResult = await computeEslintConfig({
         angular: {directiveClassSuffixes: []},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/directive-class-suffix'),
+        configResult.getRuleEntrySeverity(
+          'angular/general',
+          '@angular-eslint/directive-class-suffix',
         ),
       ).toBe(0);
+    });
+
+    it('uses the suffixes list passed to `directiveClassSuffixes` on `@angular-eslint/directive-class-suffix` rule', async () => {
+      const SUFFIXES = ['Directive', 'Component'];
+      const configResult = await computeEslintConfig({
+        angular: {directiveClassSuffixes: SUFFIXES},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions(
+          'angular/general',
+          '@angular-eslint/directive-class-suffix',
+        ),
+      ).toStrictEqual([{suffixes: SUFFIXES}]);
     });
   });
 
   describe('option: `directiveSelector`', () => {
-    it('enables `directive-selector` rule by default', async () => {
+    it('enables `@angular-eslint/directive-selector` rule when option is not set', async () => {
       const configResult = await computeEslintConfig('angular');
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/directive-selector'),
-        ),
-      ).toBe(2);
+        configResult.getRuleEntryOptions('angular/general', '@angular-eslint/directive-selector'),
+      ).toMatchInlineSnapshot('[{"style": "camelCase", "type": ["attribute"]}]');
     });
 
-    it('disables `directive-selector` rule when `directiveSelector` is `false`', async () => {
+    it('uses default options for `@angular-eslint/directive-selector` rule when option is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        angular: {directiveSelector: true},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('angular/general', '@angular-eslint/directive-selector'),
+      ).toMatchInlineSnapshot('[{"style": "camelCase", "type": ["attribute"]}]');
+    });
+
+    it('merges options passed to `directiveSelector` with default ones and sets them on `@angular-eslint/directive-selector` rule', async () => {
+      const OPTIONS = {type: ['element' as const], prefix: 'foo'};
+      const configResult = await computeEslintConfig({
+        angular: {directiveSelector: OPTIONS},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('angular/general', '@angular-eslint/directive-selector'),
+      ).toStrictEqual([{style: 'camelCase', ...OPTIONS}]);
+    });
+
+    it('disables `@angular-eslint/directive-selector` rule when option is `false`', async () => {
       const configResult = await computeEslintConfig({
         angular: {directiveSelector: false},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/directive-selector'),
-        ),
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/directive-selector'),
       ).toBe(0);
+    });
+
+    it('uses raw array options on `@angular-eslint/directive-selector` rule when `directiveSelector` is an array', async () => {
+      const SELECTOR = [
+        {type: 'attribute' as const, prefix: ['app'], style: 'camelCase' as const},
+      ] satisfies NonEmptyTuple;
+      const configResult = await computeEslintConfig({
+        angular: {directiveSelector: SELECTOR},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('angular/general', '@angular-eslint/directive-selector'),
+      ).toStrictEqual([SELECTOR]);
     });
   });
 
   describe('option: `forbiddenMetadataProperties`', () => {
-    it('enables `no-inputs-metadata-property` rule by default', async () => {
-      const configResult = await computeEslintConfig('angular');
+    describe('host', () => {
+      it('disables `@angular-eslint/no-host-metadata-property` rule when option is not set', async () => {
+        const configResult = await computeEslintConfig('angular');
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
+        expect(
+          configResult.getRuleEntrySeverity(
             'angular/general',
-            '@angular-eslint/no-inputs-metadata-property',
+            '@angular-eslint/no-host-metadata-property',
           ),
-        ),
-      ).toBe(2);
-    });
-
-    it('disables `no-inputs-metadata-property` rule when `forbiddenMetadataProperties.inputs` is `false`', async () => {
-      const configResult = await computeEslintConfig({
-        angular: {forbiddenMetadataProperties: {inputs: false}},
+        ).toBe(0);
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
+      // TODO test when the loaded plugin includes the rule
+      it('does not enable `@angular-eslint/no-host-metadata-property` rule even when `forbiddenMetadataProperties.host` is `true`, but plugin does not include this rule (default)', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {forbiddenMetadataProperties: {host: true}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/general',
+            '@angular-eslint/no-host-metadata-property',
+          ),
+        ).toBe(0);
+      });
+
+      it('disables `@angular-eslint/no-host-metadata-property` rule when `forbiddenMetadataProperties.host` is `false`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {forbiddenMetadataProperties: {host: false}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/general',
+            '@angular-eslint/no-host-metadata-property',
+          ),
+        ).toBe(0);
+      });
+    });
+
+    describe('inputs', () => {
+      it('enables `@angular-eslint/no-inputs-metadata-property` rule when option is not set', async () => {
+        const configResult = await computeEslintConfig('angular');
+
+        expect(
+          configResult.getRuleEntrySeverity(
             'angular/general',
             '@angular-eslint/no-inputs-metadata-property',
           ),
-        ),
-      ).toBe(0);
+        ).toBe(2);
+      });
+
+      it('enables `@angular-eslint/no-inputs-metadata-property` rule when `forbiddenMetadataProperties.inputs` is `true`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {forbiddenMetadataProperties: {inputs: true}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/general',
+            '@angular-eslint/no-inputs-metadata-property',
+          ),
+        ).toBe(2);
+      });
+
+      it('disables `@angular-eslint/no-inputs-metadata-property` rule when `forbiddenMetadataProperties.inputs` is `false`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {forbiddenMetadataProperties: {inputs: false}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/general',
+            '@angular-eslint/no-inputs-metadata-property',
+          ),
+        ).toBe(0);
+      });
+    });
+
+    describe('outputs', () => {
+      it('enables `@angular-eslint/no-outputs-metadata-property` rule when option is not set', async () => {
+        const configResult = await computeEslintConfig('angular');
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/general',
+            '@angular-eslint/no-outputs-metadata-property',
+          ),
+        ).toBe(2);
+      });
+
+      it('enables `@angular-eslint/no-outputs-metadata-property` rule when `forbiddenMetadataProperties.outputs` is `true`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {forbiddenMetadataProperties: {outputs: true}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/general',
+            '@angular-eslint/no-outputs-metadata-property',
+          ),
+        ).toBe(2);
+      });
+
+      it('disables `@angular-eslint/no-outputs-metadata-property` rule when `forbiddenMetadataProperties.outputs` is `false`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {forbiddenMetadataProperties: {outputs: false}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/general',
+            '@angular-eslint/no-outputs-metadata-property',
+          ),
+        ).toBe(0);
+      });
+    });
+
+    describe('queries', () => {
+      it('enables `@angular-eslint/no-queries-metadata-property` rule when option is not set', async () => {
+        const configResult = await computeEslintConfig('angular');
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/general',
+            '@angular-eslint/no-queries-metadata-property',
+          ),
+        ).toBe(2);
+      });
+
+      it('enables `@angular-eslint/no-queries-metadata-property` rule when `forbiddenMetadataProperties.queries` is `true`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {forbiddenMetadataProperties: {queries: true}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/general',
+            '@angular-eslint/no-queries-metadata-property',
+          ),
+        ).toBe(2);
+      });
+
+      it('disables `@angular-eslint/no-queries-metadata-property` rule when `forbiddenMetadataProperties.queries` is `false`', async () => {
+        const configResult = await computeEslintConfig({
+          angular: {forbiddenMetadataProperties: {queries: false}},
+        });
+
+        expect(
+          configResult.getRuleEntrySeverity(
+            'angular/general',
+            '@angular-eslint/no-queries-metadata-property',
+          ),
+        ).toBe(0);
+      });
     });
   });
 
   describe('option: `disallowedInputPrefixes`', () => {
-    it('enables `no-input-prefix` rule with `on` prefix by default', async () => {
+    it('enables `@angular-eslint/no-input-prefix` rule with `on` prefix when option is not set', async () => {
       const configResult = await computeEslintConfig('angular');
 
       expect(
         configResult.getRuleEntry('angular/general', '@angular-eslint/no-input-prefix'),
-      ).toMatchInlineSnapshot(`[2, {"prefixes": ["on"]}]`);
+      ).toMatchInlineSnapshot('[2, {"prefixes": ["on"]}]');
     });
 
     it('uses custom `disallowedInputPrefixes`', async () => {
+      const PREFIXES = ['handle', 'on'];
       const configResult = await computeEslintConfig({
-        angular: {disallowedInputPrefixes: ['handle', 'on']},
+        angular: {disallowedInputPrefixes: PREFIXES},
       });
 
       expect(
-        configResult.getRuleEntry('angular/general', '@angular-eslint/no-input-prefix'),
-      ).toMatchInlineSnapshot(`[2, {"prefixes": ["handle", "on"]}]`);
+        configResult.getRuleEntryOptions('angular/general', '@angular-eslint/no-input-prefix'),
+      ).toStrictEqual([{prefixes: PREFIXES}]);
     });
   });
 
   describe('option: `disallowAttributeDecorator`', () => {
-    it('disables `no-attribute-decorator` rule by default', async () => {
+    it('disables `@angular-eslint/no-attribute-decorator` rule when option is not set', async () => {
       const configResult = await computeEslintConfig('angular');
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/no-attribute-decorator'),
+        configResult.getRuleEntrySeverity(
+          'angular/general',
+          '@angular-eslint/no-attribute-decorator',
         ),
       ).toBe(0);
     });
 
-    it('enables `no-attribute-decorator` rule when `disallowAttributeDecorator` is `true`', async () => {
+    it('enables `@angular-eslint/no-attribute-decorator` rule when `disallowAttributeDecorator` is `true`', async () => {
       const configResult = await computeEslintConfig({
         angular: {disallowAttributeDecorator: true},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/no-attribute-decorator'),
+        configResult.getRuleEntrySeverity(
+          'angular/general',
+          '@angular-eslint/no-attribute-decorator',
         ),
       ).toBe(2);
+    });
+
+    it('disables `@angular-eslint/no-attribute-decorator` rule when `disallowAttributeDecorator` is `false`', async () => {
+      const configResult = await computeEslintConfig({
+        angular: {disallowAttributeDecorator: false},
+      });
+
+      expect(
+        configResult.getRuleEntrySeverity(
+          'angular/general',
+          '@angular-eslint/no-attribute-decorator',
+        ),
+      ).toBe(0);
     });
   });
 
   describe('option: `disallowForwardRef`', () => {
-    it('disables `no-forward-ref` rule by default', async () => {
+    it('disables `@angular-eslint/no-forward-ref` rule when option is not set', async () => {
       const configResult = await computeEslintConfig('angular');
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/no-forward-ref'),
-        ),
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/no-forward-ref'),
       ).toBe(0);
     });
 
-    it('enables `no-forward-ref` rule when `disallowForwardRef` is `true`', async () => {
+    it('enables `@angular-eslint/no-forward-ref` rule when `disallowForwardRef` is `true`', async () => {
       const configResult = await computeEslintConfig({
         angular: {disallowForwardRef: true},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/no-forward-ref'),
-        ),
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/no-forward-ref'),
       ).toBe(2);
+    });
+
+    it('disables `@angular-eslint/no-forward-ref` rule when `disallowForwardRef` is `false`', async () => {
+      const configResult = await computeEslintConfig({
+        angular: {disallowForwardRef: false},
+      });
+
+      expect(
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/no-forward-ref'),
+      ).toBe(0);
     });
   });
 
   describe('option: `pipePrefixes`', () => {
-    it('enables `pipe-prefix` rule with empty prefixes by default', async () => {
+    it('enables `@angular-eslint/pipe-prefix` rule with empty prefixes when option is not set', async () => {
       const configResult = await computeEslintConfig('angular');
 
       expect(
         configResult.getRuleEntry('angular/general', '@angular-eslint/pipe-prefix'),
-      ).toMatchInlineSnapshot(`[2]`);
+      ).toMatchInlineSnapshot('[2]');
     });
 
     it('uses custom `pipePrefixes`', async () => {
+      const PREFIXES = ['app'];
       const configResult = await computeEslintConfig({
-        angular: {pipePrefixes: ['app']},
+        angular: {pipePrefixes: PREFIXES},
       });
 
       expect(
-        configResult.getRuleEntry('angular/general', '@angular-eslint/pipe-prefix'),
-      ).toMatchInlineSnapshot(`[2, {"prefixes": ["app"]}]`);
+        configResult.getRuleEntryOptions('angular/general', '@angular-eslint/pipe-prefix'),
+      ).toStrictEqual([{prefixes: PREFIXES}]);
     });
   });
 
   describe('option: `preferStandaloneComponents`', () => {
-    it('enables `prefer-standalone` rule when `preferStandaloneComponents` is `true`', async () => {
-      const configResult = await computeEslintConfig({
-        angular: {preferStandaloneComponents: true, angularVersion: 19},
-      });
+    it('enables `@angular-eslint/prefer-standalone` rule when option is not set (Angular 19, default `true`)', async () => {
+      const configResult = await computeEslintConfig('angular');
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/prefer-standalone'),
-        ),
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/prefer-standalone'),
       ).toBe(2);
     });
 
-    it('disables `prefer-standalone` rule when `preferStandaloneComponents` is `false`', async () => {
+    it('enables `@angular-eslint/prefer-standalone` rule when `preferStandaloneComponents` is `true`', async () => {
       const configResult = await computeEslintConfig({
-        angular: {preferStandaloneComponents: false, angularVersion: 19},
+        angular: {preferStandaloneComponents: true},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('angular/general', '@angular-eslint/prefer-standalone'),
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/prefer-standalone'),
+      ).toBe(2);
+    });
+
+    it('disables `@angular-eslint/prefer-standalone` rule when `preferStandaloneComponents` is `false`', async () => {
+      const configResult = await computeEslintConfig({
+        angular: {preferStandaloneComponents: false},
+      });
+
+      expect(
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/prefer-standalone'),
+      ).toBe(0);
+    });
+
+    it('enables deprecated `@angular-eslint/prefer-standalone-component` rule for Angular <17 when `preferStandaloneComponents` is `true` (unless rule is not in the installed plugin)', async () => {
+      const configResult = await computeEslintConfig({
+        angular: {angularVersion: 16, preferStandaloneComponents: true},
+      });
+
+      // Rule was removed from plugin >=18, so severity falls back to 0 if rule is not found
+      expect(
+        configResult.getRuleEntrySeverity(
+          'angular/general',
+          '@angular-eslint/prefer-standalone-component',
         ),
       ).toBe(0);
+    });
+  });
+
+  describe('option: `angularVersion`', () => {
+    it('auto-detects angular version from `@angular/core` when option is not set', async () => {
+      const configResult = await computeEslintConfig('angular');
+
+      expect(
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/prefer-signal-model'),
+      ).toBe(2);
+    });
+
+    it('uses specified `angularVersion` when option is set to `18`', async () => {
+      const configResult = await computeEslintConfig({
+        angular: {angularVersion: 18},
+      });
+
+      expect(
+        configResult.getRuleEntrySeverity('angular/general', '@angular-eslint/prefer-signal-model'),
+      ).toBe(0);
+    });
+  });
+
+  describe('angular-eslint plugin version compatibility', () => {
+    it('warns and still builds config when installed `@angular-eslint` plugin major version does not match the detected Angular version', async () => {
+      addInstalledPackages({'@angular-eslint/eslint-plugin': '18.0.0'});
+      // @angular/core is '19.0.0' (from beforeEach) → angularVersion = 19, plugin major = 18 → mismatch
+      const configResult = await computeEslintConfig('angular');
+
+      expect(
+        configResult.getRuleEntrySeverity(
+          'angular/general',
+          '@angular-eslint/contextual-lifecycle',
+        ),
+      ).toBe(2);
     });
   });
 });
