@@ -11,7 +11,7 @@ import {
   type RuleSeverity,
   WARNING,
 } from '../constants';
-import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
+import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
 import {doesPackageExist, getKeysOfTruthyValues, pickBy} from '../utils';
 import {
@@ -68,21 +68,13 @@ export interface GraphqlEslintConfigOptions<
 }
 
 export default (async (context, optionsRaw) => {
+  const isRelayInstalled = await doesPackageExist('relay-runtime');
+
   const optionsResolved = assignDefaults(optionsRaw, {
     configJsProcessor: true,
     disableRulesRequiringOperations: false,
     disableRulesRequiringSchema: false,
   } satisfies GraphqlEslintConfigOptions);
-
-  const [eslintPluginGraphql, isRelayInstalled] = await Promise.all([
-    pluginsLoaders.graphql(context, {throwIfNotFound: true}).then(({module}) => module),
-    doesPackageExist('relay-runtime'),
-  ]);
-
-  context.usedPlugins.add('graphql');
-  if (!eslintPluginGraphql) {
-    return null;
-  }
 
   const {
     configJsProcessor,
