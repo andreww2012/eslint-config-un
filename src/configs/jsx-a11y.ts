@@ -360,20 +360,24 @@ export default ((
     .addRule(
       rn('alt-text'),
       altTextCheckForElements === false ? OFF : ERROR,
-      setRuleOptions([
-        {
-          elements: getKeysOfTruthyValues({
-            ...altTextCheckDefaultElements,
-            ...altTextCheckForElements,
-          }),
-          ...(customComponents.imgElements?.length && {img: customComponents.imgElements}),
-          ...(customComponents.objectElements?.length && {object: customComponents.objectElements}),
-          ...(customComponents.areaElements?.length && {area: customComponents.areaElements}),
-          ...(customComponents.inputTypeImageElements?.length && {
-            'input[type="image"]': customComponents.inputTypeImageElements,
-          }),
-        },
-      ]),
+      isForLit
+        ? []
+        : setRuleOptions([
+            {
+              elements: getKeysOfTruthyValues({
+                ...altTextCheckDefaultElements,
+                ...altTextCheckForElements,
+              }),
+              ...(customComponents.imgElements?.length && {img: customComponents.imgElements}),
+              ...(customComponents.objectElements?.length && {
+                object: customComponents.objectElements,
+              }),
+              ...(customComponents.areaElements?.length && {area: customComponents.areaElements}),
+              ...(customComponents.inputTypeImageElements?.length && {
+                'input[type="image"]': customComponents.inputTypeImageElements,
+              }),
+            },
+          ]),
     ) /** @since 5.0.0 */
     .addRule(
       rn('anchor-ambiguous-text'),
@@ -421,11 +425,13 @@ export default ((
     .addRule(
       rn('autocomplete-valid'),
       ERROR,
-      setRuleOptions([
-        {
-          ...(customComponents.inputs?.length && {inputComponents: customComponents.inputs}),
-        },
-      ]),
+      isForLit
+        ? []
+        : setRuleOptions([
+            {
+              ...(customComponents.inputs?.length && {inputComponents: customComponents.inputs}),
+            },
+          ]),
     ) /** @since 6.3.0 */
     // "this rule probably doesn’t work for Astro components because Astro components don’t provide an event listener as syntax" - https://ota-meshi.github.io/eslint-plugin-astro/rules/jsx-a11y/click-events-have-key-events/
     .addRule(rn('click-events-have-key-events'), isForAstro ? null : ERROR) /** @since 2.2.0 */
@@ -551,7 +557,7 @@ export default ((
     .addRule(
       rn('no-autofocus'),
       WARNING,
-      setRuleOptions([{ignoreNonDOM: true}]),
+      isForLit ? [] : setRuleOptions([{ignoreNonDOM: true}]),
     ) /** @since 4.0.0 */
     .addRule(rn('no-distracting-elements'), ERROR) /** @since 4.0.0 */
     .addRule(
