@@ -373,6 +373,7 @@ export default (async (context, optionsRaw) => {
             },
       ],
     ) /** @since 0.0.1-alpha.18 */
+    .addRule(...getPluginRuleSeverity('computed-must-return', ERROR)) /** @since 21.3.0 */
     .addRule(
       ...getPluginRuleSeverity(
         'consistent-component-styles',
@@ -647,6 +648,7 @@ export default (async (context, optionsRaw) => {
       ...getTemplatePluginRuleSeverity('no-negated-async', ERROR),
     ) /** @since 0.0.1-alpha.20 */ // 🟢
     .addRule(...getTemplatePluginRuleSeverity('no-nested-tags', ERROR)) /** @since 19.5.0 */
+    .addRule(...getTemplatePluginRuleSeverity('no-non-null-assertion', OFF)) /** @since 21.3.0 */
     .addRule(
       ...getTemplatePluginRuleSeverity('no-positive-tabindex', ERROR),
     ) /** @since 0.4.0-beta.1 */
