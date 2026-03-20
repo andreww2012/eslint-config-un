@@ -116,7 +116,6 @@ export default eslintConfig({
     },
     vitest: {
       overrides: {
-        'vitest/valid-expect': 0, // Triggers on `(not.)to.include.members`
         'vitest/expect-expect': [
           2,
           {

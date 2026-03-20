@@ -206,17 +206,10 @@ export default (async (context, optionsRaw) => {
     doesPackageExist('jest-extended'),
   ]);
 
-  context.usedPlugins.add('jest');
-  if (!eslintPluginJest) {
-    return null;
-  }
-
-  const isTsConfigEnabled = context.configsMeta.ts.enabled;
-
   const optionsResolved = assignDefaults(optionsRaw, {
     configJestExtended: isJestExtendedInstalled,
     configNoOnlyTests: false,
-    configTypescript: isTsConfigEnabled,
+    configTypescript: context.configsMeta.ts.enabled,
     paddingAround: true,
   } satisfies JestEslintConfigOptions);
 
@@ -237,7 +230,7 @@ export default (async (context, optionsRaw) => {
   const defaultJestEslintConfig: FlatConfigEntryForBuilder = {
     languageOptions: {
       // Yes, `globals.globals` is required
-      globals: eslintPluginJest.environments.globals.globals,
+      globals: eslintPluginJest?.environments.globals.globals,
     },
   };
 
@@ -281,9 +274,11 @@ export default (async (context, optionsRaw) => {
     .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [
       {max: maxAssertionCalls},
     ]) /** @since 26.6.0 */
-    .addRule('max-nested-describe', maxNestedDescribes == null ? OFF : ERROR, [
-      {max: maxNestedDescribes},
-    ]) /** @since 24.4.0 */
+    .addRule(
+      'max-nested-describe',
+      maxNestedDescribes == null ? OFF : ERROR,
+      maxNestedDescribes == null ? [] : [{max: maxNestedDescribes}],
+    ) /** @since 24.4.0 */
     .addRule('no-alias-methods', ERROR) /** @since 21.24.0 */ // 🟢 🎨
     .addRule('no-commented-out-tests', WARNING) /** @since 22.6.0 */ // 🟡
     .addRule('no-conditional-expect', ERROR) /** @since 23.16.0 */ // 🟢
@@ -383,6 +378,7 @@ export default (async (context, optionsRaw) => {
     .addRule('valid-title', ERROR) /** @since 22.20.0 */ // 🟢
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => JEST_RULES_FOR_TYPESCRIPT_FILES_SET.has(ruleName),
     })
     .addOverrides();
@@ -416,12 +412,13 @@ export default (async (context, optionsRaw) => {
     .addRule('no-untyped-mock-factory', ERROR) /** @since 27.2.0 */
     // Requires type checking
     // TODO auto-include test files in TS config?
-    .addRule('unbound-method', isTsConfigEnabled ? ERROR : OFF) /** @since 24.3.0 */ // 💭
+    .addRule('unbound-method', configTypescript ? ERROR : OFF) /** @since 24.3.0 */ // 💭
     .addRule('valid-expect-with-promise', ERROR) /** @since 29.8.0 */ // 💭
     // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
     .disableAnyRule('ts', 'unbound-method')
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !JEST_RULES_FOR_TYPESCRIPT_FILES_SET.has(ruleName),
     })
     .addOverrides();
@@ -430,7 +427,7 @@ export default (async (context, optionsRaw) => {
     configJestExtended,
     'jest-extended',
   );
-  const {suggestUsing} = typeof configJestExtended === 'object' ? configJestExtended : {};
+  const {suggestUsing = true} = typeof configJestExtended === 'object' ? configJestExtended : {};
 
   const getSuggestUsingJestExtendedMatcherSeverity = (key: keyof (typeof suggestUsing & object)) =>
     suggestUsing === true || (suggestUsing && suggestUsing[key] !== false) ? ERROR : OFF;

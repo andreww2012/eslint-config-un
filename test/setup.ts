@@ -1,3 +1,5 @@
+import {expect} from 'vitest';
+import * as jestExtendedMatchers from 'jest-extended';
 import {expectConfigState as expectConfigStateImpl} from './helpers/basic-config';
 import {findLintMessageFromLintResults as findLintMessageFromLintResultsImpl} from './helpers/check-lint-results';
 import {
@@ -8,6 +10,8 @@ import {
   computeEslintConfig as computeEslintConfigImpl,
   testEslintConfig as testEslintConfigImpl,
 } from './helpers/test-eslint-config';
+
+expect.extend(jestExtendedMatchers);
 
 type UtilsModule = typeof import('../src/utils');
 
