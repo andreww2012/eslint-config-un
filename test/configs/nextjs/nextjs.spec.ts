@@ -1,0 +1,210 @@
+/* eslint-disable case-police/string-check */
+// eslint-disable-next-line import/no-extraneous-dependencies
+import pathe from 'pathe';
+
+const FIXTURES = {
+  imgElement: 'img-element/img-element.tsx',
+} as const;
+
+describe('basic tests', async () => {
+  const configResult = await computeEslintConfig('nextJs');
+
+  it('loads `@next/next` plugin if used', () => {
+    expect(configResult.getLoadedPlugin('@next/next')).toBeDefined();
+  });
+
+  it('creates `nextjs` eslint config', () => {
+    expect(configResult.getConfigByUnPostfix('nextjs')).toBeDefined();
+  });
+
+  describe('mode: all configs are disabled', () => {
+    it('does not create `nextjs` eslint config', async () => {
+      await expectConfigState({}, 'nextjs', false);
+    });
+
+    it('creates `nextjs` eslint config if explicitly enabled', async () => {
+      await expectConfigState('nextJs', 'nextjs', true);
+    });
+  });
+
+  describe('mode: all configs are not explicitly enabled or disabled', () => {
+    it('does not create `nextjs` eslint config (no `next` installed)', async () => {
+      await expectConfigState({}, 'nextjs', false, 'default');
+    });
+
+    it('creates `nextjs` eslint config if explicitly enabled', async () => {
+      await expectConfigState('nextJs', 'nextjs', true, 'default');
+    });
+
+    it('does not create `nextjs` eslint config but prints a warning if explicitly disabled (already disabled by default)', async () => {
+      await expectConfigState({nextJs: false}, 'nextjs', ['nextJs', false], 'default');
+    });
+
+    describe('`next` is installed', () => {
+      beforeEach(() => {
+        addInstalledPackages({next: '15.0.0'});
+      });
+
+      it('creates `nextjs` eslint config', async () => {
+        await expectConfigState({}, 'nextjs', true, 'default');
+      });
+
+      it('creates `nextjs` eslint config and prints a warning if explicitly enabled', async () => {
+        await expectConfigState('nextJs', 'nextjs', ['nextJs', true], 'default');
+      });
+
+      it('does not create `nextjs` eslint config if explicitly disabled', async () => {
+        await expectConfigState({nextJs: false}, 'nextjs', false, 'default');
+      });
+    });
+  });
+
+  describe('mode: misc configs are enabled', () => {
+    it('does not create `nextjs` eslint config (not a misc config)', async () => {
+      await expectConfigState({}, 'nextjs', false, 'misc-enabled');
+    });
+
+    it('creates `nextjs` eslint config if explicitly enabled', async () => {
+      await expectConfigState({nextJs: true}, 'nextjs', true, 'misc-enabled');
+    });
+
+    it('does not create `nextjs` eslint config and prints a warning if explicitly disabled', async () => {
+      await expectConfigState({nextJs: false}, 'nextjs', ['nextJs', false], 'misc-enabled');
+    });
+  });
+
+  it('has default `files` in `nextjs` eslint config', () => {
+    expect(configResult.getConfigByUnPostfix('nextjs')?.files).toMatchInlineSnapshot(
+      '["**/*.?([cm])[jt]s?(x)"]',
+    );
+  });
+
+  it('has default `ignores` in `nextjs` eslint config', () => {
+    const ignores = configResult.getConfigByUnPostfix('nextjs')?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers(['**/*.jsx']);
+  });
+});
+
+describe('rules', async () => {
+  const configResult = await computeEslintConfig('nextJs');
+
+  it('enables `@next/next/inline-script-id` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('nextjs', '@next/next/inline-script-id')).toBe(2);
+  });
+
+  it('enables `@next/next/no-css-tags` rule as a warning by default', () => {
+    expect(configResult.getRuleEntrySeverity('nextjs', '@next/next/no-css-tags')).toBe(1);
+  });
+
+  it('`@next/next/no-img-element` rule fires on a tsx file with an <img> element', async () => {
+    const results = await testEslintConfig(
+      {
+        nextJs: {
+          settings: {
+            // To prevent warning printed in the console about `pages` directory not found
+            rootDir: pathe.join(import.meta.dirname, 'fixtures/img-element'),
+          },
+        },
+      },
+      FIXTURES.imgElement,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.imgElement,
+      '@next/next/no-img-element',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element"',
+    );
+  });
+});
+
+describe('un options', () => {
+  describe('option: `files`', () => {
+    it('uses user-provided `files` in `nextjs` eslint config', async () => {
+      const FILES = ['src/**/*.tsx'];
+
+      const configResult = await computeEslintConfig({nextJs: {files: FILES}});
+
+      expect(configResult.getConfigByUnPostfix('nextjs')?.files).toStrictEqual(FILES);
+    });
+
+    it('disables `nextjs` eslint config when `files` is empty array', async () => {
+      const configResult = await computeEslintConfig({nextJs: {files: []}});
+
+      expect(configResult.getConfigByUnPostfix('nextjs')).toBeUndefined();
+    });
+  });
+
+  describe('option: `ignores`', () => {
+    it('uses user-provided `ignores` in `nextjs` eslint config and merges them with defaults', async () => {
+      const IGNORES = ['**/fixtures/**'];
+
+      const configResult = await computeEslintConfig({nextJs: {ignores: IGNORES}});
+
+      const ignores = configResult.getConfigByUnPostfix('nextjs')?.ignores;
+
+      expect(ignores).toIncludeAllMembers(IGNORES);
+      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+    });
+  });
+
+  it('respects `overrides` and `overridesAny` in `nextjs` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      nextJs: {
+        overrides: {'@next/next/inline-script-id': 0},
+        overridesAny: {'no-console': 0},
+      },
+    });
+
+    expect(configResult.getRuleEntrySeverity('nextjs', '@next/next/inline-script-id')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('nextjs', 'no-console')).toBe(0);
+  });
+
+  describe('option: `forceSeverity`', () => {
+    it('respects `forceSeverity` set to `error` in `nextjs` eslint config', async () => {
+      const configResult = await computeEslintConfig({nextJs: {forceSeverity: 'error'}});
+
+      expect(
+        getAllRulesSeverities(configResult.getConfigByUnPostfix('nextjs'), (ruleName) =>
+          ruleName.startsWith('@next/next/'),
+        ),
+      ).toStrictEqual([2]);
+    });
+
+    it('respects `forceSeverity` set to `warn` in `nextjs` eslint config', async () => {
+      const configResult = await computeEslintConfig({nextJs: {forceSeverity: 'warn'}});
+
+      expect(
+        getAllRulesSeverities(configResult.getConfigByUnPostfix('nextjs'), (ruleName) =>
+          ruleName.startsWith('@next/next/'),
+        ),
+      ).toStrictEqual([1]);
+    });
+  });
+});
+
+describe('options', () => {
+  describe('option: `settings`', () => {
+    it('does not set `next` settings when option is not set', async () => {
+      const configResult = await computeEslintConfig('nextJs');
+
+      expect(configResult.getConfigByUnPostfix('nextjs')?.settings?.['next']).toBeUndefined();
+    });
+
+    it('sets `next` settings with `rootDir` as a string when provided', async () => {
+      const SETTINGS = {rootDir: '/path/to/app'};
+
+      const configResult = await computeEslintConfig({nextJs: {settings: SETTINGS}});
+
+      expect(configResult.getConfigByUnPostfix('nextjs')?.settings?.['next']).toStrictEqual(
+        SETTINGS,
+      );
+    });
+  });
+});
