@@ -251,9 +251,13 @@ export interface ReactEslintConfigOptions<
   settings?: EslintPluginReactSettings;
 
   /**
-   * Enables or specifies the configuration for the [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) plugin.
+   * Enables or specifies the configuration for
+   * [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) plugin.
    *
-   * Only includes [runtime agnostic ("X")](https://eslint-react.xyz/docs/rules/overview#x-rules) and ["Naming Convention"](https://eslint-react.xyz/docs/rules/overview#naming-convention-rules) rules.
+   * Only includes
+   * [runtime agnostic ("X")](https://eslint-react.xyz/docs/rules/overview#x-rules) and
+   * ["Naming Convention"](https://eslint-react.xyz/docs/rules/overview#naming-convention-rules)
+   * rules.
    *
    * Disabling this sub-config does not stop all the rules from `@eslint-react/eslint-plugin`
    * from being used in other sub-configs. If you for some reason do not want to use this plugin's
@@ -265,7 +269,9 @@ export interface ReactEslintConfigOptions<
   configReactX?: boolean | ReactXSubConfigOptions<ExtraPlugins>;
 
   /**
-   * Enables or specifies the configuration for the [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks) plugin, as well as ["Hooks Extra" rules from `@eslint-react/eslint-plugin`](https://eslint-react.xyz/docs/rules/overview#hooks-extra-rules)
+   * Enables or specifies the configuration for
+   * [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks) plugin,
+   * as well as `no-direct-set-state-in-use-effect` rule from `@eslint-react/eslint-plugin`
    * (unless `pluginX` option is set to `never` on `react` config).
    *
    * By default will use the same `files` and `ignores` as the parent config.
@@ -274,7 +280,9 @@ export interface ReactEslintConfigOptions<
   configHooks?: boolean | HooksSubConfigOptions<ExtraPlugins>;
 
   /**
-   * Enables or specifies the configuration for DOM specific rules from [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react).
+   * Enables or specifies the configuration for DOM specific rules from
+   * [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) and
+   * [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react) plugins.
    *
    * To avoid including the rules from any of these plugins, set `pluginX` option to
    * `never` or `avoid` to completely ignore `@eslint-react/eslint-plugin` or
@@ -292,7 +300,8 @@ export interface ReactEslintConfigOptions<
       >;
 
   /**
-   * Enables or specifies the configuration for the [`eslint-plugin-react-refresh`](https://npmjs.com/eslint-plugin-react-refresh) plugin.
+   * Enables or specifies the configuration for
+   * [`eslint-plugin-react-refresh`](https://npmjs.com/eslint-plugin-react-refresh) plugin.
    *
    * - By default will be applied to JSX files only, as per the plugin recommendation.
    * - Will set `allowConstantExport: true` if `vite` package is installed.
@@ -312,7 +321,9 @@ export interface ReactEslintConfigOptions<
       >;
 
   /**
-   * Enables or specifies the configuration for the [`eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme`](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme) plugin.
+   * Enables or specifies the configuration for
+   * [`eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme`](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme)
+   * plugin.
    *
    * By default will use the same `files` and `ignores` as the parent config.
    * @default true
@@ -388,7 +399,9 @@ export interface ReactEslintConfigOptions<
   reactVersion?: number;
 
   /**
-   * A flag indicating [the new JSX Transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html) is used. Affects some rules only from `eslint-plugin-react` plugin.
+   * A flag indicating
+   * [the new JSX Transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html)
+   * is used. Affects some rules only from `eslint-plugin-react` plugin.
    * @default true <=> React version is 17 or higher
    */
   newJsxTransform?: boolean;
@@ -399,7 +412,7 @@ export interface ReactEslintConfigOptions<
    *
    * By default, all deprecated or non-standard HTML tags are disallowed. Pass `false` to re-allow any of them.
    *
-   * Affects the options of the following rules:
+   * Affected rule:
    * - [`react/forbid-elements`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/forbid-elements.md)
    * @example {center: false, pre: true, button: 'use <Button> instead'}
    */
@@ -411,7 +424,7 @@ export interface ReactEslintConfigOptions<
    * - `prefer-error`/`avoid-error`: prefer/avoid boolean shorthand syntax, use `error` severity.
    * - `off`: allow both syntaxes.
    *
-   * Affects the following rules:
+   * Affected rules:
    * - [`@eslint-react/prefer-shorthand-boolean`](https://eslint-react.xyz/docs/rules/prefer-shorthand-boolean)
    * - [`@eslint-react/avoid-shorthand-boolean`](https://eslint-react.xyz/docs/rules/avoid-shorthand-boolean)
    * - [`jsx-boolean-value`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-boolean-value.md)
@@ -425,7 +438,7 @@ export interface ReactEslintConfigOptions<
    * - `prefer-error`/`avoid-error`: prefer/avoid Fragment shorthand syntax, use `error` severity.
    * - `off`: allow both syntaxes.
    *
-   * Affects the following rules:
+   * Affected rules:
    * - [`@eslint-react/prefer-shorthand-fragment`](https://eslint-react.xyz/docs/rules/prefer-shorthand-fragment)
    * - [`@eslint-react/avoid-shorthand-fragment`](https://eslint-react.xyz/docs/rules/avoid-shorthand-fragment)
    * - [`jsx-fragments`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-fragments.md)
@@ -530,13 +543,21 @@ const REACT_X_TYPE_AWARE_RULES = new Set<string>([
 const DEFAULT_FILES = [GLOB_JS_TS_X];
 
 export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) => {
+  const [isReactDomInstalled, isRemixOrReactRouterInstalled, isViteInstalled] = await Promise.all([
+    doesPackageExist('react-dom'),
+    Promise.all(
+      [...REMIX_PACKAGES, ...REACT_ROUTER_PACKAGES].map((module) => doesPackageExist(module)),
+    ).then((results) => results.some(Boolean)),
+    doesPackageExist('vite'),
+  ]);
+
   const reactPackageInfo = context.packagesInfo.react;
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configAllowDefaultExportsInJsxFiles: true,
     configHooks: true,
     configReactX: true,
-    configDom: await doesPackageExist('react-dom'),
+    configDom: isReactDomInstalled,
     configRefresh: true,
     configYouMightNotNeedAnEffect: true,
     pluginX: 'prefer',
@@ -878,6 +899,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     .addRule('static-property-placement', ERROR) /** @since 7.13.0 */
     .addRule('style-prop-object', OFF) /** @since 6.2.0 */
     .enableConfigTesterForPlugin('react', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => REACT_ORIGINAL_DOM_RULES.has(ruleName),
     })
     .addOverrides();
@@ -1199,6 +1221,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     .addAnyRule('@eslint-react/debug', 'is-from-react', OFF) /** @since 1.10.0 */
     .addAnyRule('@eslint-react/debug', 'jsx', OFF) /** @since 1.41.0 */
     .enableConfigTesterForPlugin('@eslint-react', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => REACT_X_TYPE_AWARE_RULES.has(ruleName),
     })
     .addOverrides();
@@ -1226,6 +1249,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       getDoubleRuleSeverity(PREFER_READ_ONLY_PROPS_SEVERITY, true),
     ) /** @since 1.5.22 */ // 🔄️ 💭
     .enableConfigTesterForPlugin('@eslint-react', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !REACT_X_TYPE_AWARE_RULES.has(ruleName),
     })
     .addOverrides();
@@ -1342,12 +1366,6 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     .addAnyRule('react', 'no-is-mounted', ERROR) /** @since 3.12.0 */ // 🟢
     .addOverrides();
 
-  const isRemixOrReactRouterInstalled = (
-    await Promise.all(
-      [...REMIX_PACKAGES, ...REACT_ROUTER_PACKAGES].map((module) => doesPackageExist(module)),
-    )
-  ).some(Boolean);
-
   const configBuilderRefresh = context.createConfigBuilder(configRefresh, 'react-refresh');
   const configReactRefreshOptions = typeof configRefresh === 'object' ? configRefresh : {};
   configBuilderRefresh
@@ -1365,7 +1383,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
           ...(context.packagesInfo.next ? NEXT_EXPORTS : []),
           ...(configReactRefreshOptions.allowExportNames || []),
         ],
-        allowConstantExport: await doesPackageExist('vite'),
+        allowConstantExport: isViteInstalled,
         ...configReactRefreshOptions.options,
       },
     ]) /** @since 0.1.0 */
