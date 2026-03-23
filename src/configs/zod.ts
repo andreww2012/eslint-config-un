@@ -91,7 +91,7 @@ export default ((context, optionsRaw) => {
           ...Object.fromEntries(ALL_ZOD_OBJECT_SCHEMA_TYPES.map((method) => [method, true])),
           ...(!Array.isArray(allowedObjectSchemaTypesRaw) && allowedObjectSchemaTypesRaw),
         },
-    true,
+    'nonEmptyArray',
   );
 
   // Legend:

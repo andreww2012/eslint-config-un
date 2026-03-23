@@ -1210,7 +1210,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
               plain: true,
               scoped: true,
             },
-            true,
+            'nonEmptyArray',
           ),
         },
       ],

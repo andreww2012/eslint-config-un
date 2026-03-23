@@ -31,7 +31,7 @@ export default (async (context, optionsRaw) => {
       error: true,
       ...optionsResolved.allowedConsoleMethods,
     },
-    true,
+    'nonEmptyArray',
   );
 
   // Legend:

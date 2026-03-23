@@ -284,7 +284,7 @@ export default (async (context, optionsRaw) => {
           ...noRestrictedHtmlElementsDefault,
           ...optionsResolved.disallowedHtmlTags,
         },
-        true,
+        'nonEmptyArray',
       ),
     ) /** @since 2.31.0 */
     .addRule('no-spaces-around-equal-signs-in-attribute', ERROR) /** @since 2.3.0 */ // 💅

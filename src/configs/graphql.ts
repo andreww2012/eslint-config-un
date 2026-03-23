@@ -160,7 +160,7 @@ export default (async (context, optionsRaw) => {
         // @ts-expect-error too strict type
         ignore: getKeysOfTruthyValues(
           pickBy(requireSeparateFilesFor, (v) => !v),
-          true,
+          'nonEmptyArray',
         ),
       },
     ]) /** @since 3.14.0 */

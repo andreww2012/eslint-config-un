@@ -1,13 +1,12 @@
-// cspell:ignore sharereplay switchmap takeuntil takewhile topromise
 import {ERROR, OFF} from '../constants';
+import {getKeysOfTruthyValues} from '../utils';
 import {
+  type ArrayOrBooleanRecord,
   type ExtraPluginsType,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
-
-type NamesToBanListOrObjectWithFlagOrMessage = Record<string, boolean | string> | string[];
 
 export interface RxjsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -16,16 +15,17 @@ export interface RxjsEslintConfigOptions<
    * Affected rule:
    * - [`ban-observables`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-observables.md)
    */
-  banObservables?: NamesToBanListOrObjectWithFlagOrMessage;
+  banObservables?: ArrayOrBooleanRecord<string, 'booleanOrMessage'>;
 
   /**
+   * Will be merged with the default value ONLY IF object notation is used;
+   * otherwise all array elements will be mapped to `value: true` object properties.
+   *
    * Affected rule:
    * - [`ban-operators`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-operators.md)
-   *
-   * Will be merged with the default value.
    * @default {tap: true}
    */
-  banOperators?: NamesToBanListOrObjectWithFlagOrMessage;
+  banOperators?: ArrayOrBooleanRecord<string, 'booleanOrMessage'>;
 
   /**
    * - `true` enforces the use of Finnish notation - i.e. the `$` suffix.
@@ -36,29 +36,35 @@ export interface RxjsEslintConfigOptions<
   enforceFinnishNotation?: boolean | 'forbid';
 
   /**
+   * Affected rule:
+   * - [`just`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/just.md)
    * @default false
    */
   enforceJustInsteadOfOf?: boolean;
 }
 
 export default ((context, optionsRaw) => {
+  const isAngularCoreInstalled = context.packagesInfo['@angular/core'] != null;
+
   const optionsResolved = assignDefaults(optionsRaw, {
-    enforceFinnishNotation: context.packagesInfo['@angular/core'] != null,
+    enforceFinnishNotation: isAngularCoreInstalled,
     enforceJustInsteadOfOf: false,
   } satisfies RxjsEslintConfigOptions);
 
-  const {banObservables, banOperators, enforceFinnishNotation, enforceJustInsteadOfOf} =
-    optionsResolved;
+  const {
+    banObservables: banObservablesRaw,
+    banOperators: banOperatorsRaw,
+    enforceFinnishNotation,
+    enforceJustInsteadOfOf,
+  } = optionsResolved;
 
-  const banObservablesNormalized = Array.isArray(banObservables)
-    ? Object.fromEntries(banObservables.map((v) => [v, true]))
-    : banObservables || {};
-  const banOperatorsNormalized: Record<string, string | boolean> = {
-    tap: true,
-    ...(Array.isArray(banOperators)
-      ? Object.fromEntries(banOperators.map((v) => [v, true]))
-      : banOperators || {}),
-  };
+  const banObservables = getKeysOfTruthyValues(banObservablesRaw, 'object');
+  const hasBannedObservables = Object.keys(banObservables).length > 0;
+
+  const banOperators = Array.isArray(banOperatorsRaw)
+    ? Object.fromEntries(banOperatorsRaw.map((operator) => [operator, true]))
+    : getKeysOfTruthyValues({tap: true, ...banOperatorsRaw}, 'object');
+  const hasBannedOperators = Object.keys(banOperators).length > 0;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'rxjs');
 
@@ -67,12 +73,16 @@ export default ((context, optionsRaw) => {
 
   configBuilder
     ?.addConfig(['rxjs', {includeDefaultFilesAndIgnores: true}])
-    .addRule('ban-observables', Object.keys(banObservablesNormalized).length > 0 ? ERROR : OFF, [
-      banObservablesNormalized,
-    ]) /** @since 1.0.0 */
-    .addRule('ban-operators', Object.keys(banOperatorsNormalized).length > 0 ? ERROR : OFF, [
-      banOperatorsNormalized,
-    ]) /** @since 1.0.0 */
+    .addRule(
+      'ban-observables',
+      hasBannedObservables ? ERROR : OFF,
+      hasBannedObservables ? [banObservables] : [],
+    ) /** @since 1.0.0 */
+    .addRule(
+      'ban-operators',
+      hasBannedOperators ? ERROR : OFF,
+      hasBannedOperators ? [banOperators] : [],
+    ) /** @since 1.0.0 */
     .addRule('finnish', enforceFinnishNotation === true ? ERROR : OFF) /** @since 1.0.0 */
     .addRule('just', enforceJustInsteadOfOf ? ERROR : OFF) /** @since 1.0.0 */
     .addRule('macro', OFF) /** @since 1.0.0 */
@@ -89,23 +99,28 @@ export default ((context, optionsRaw) => {
     .addRule('no-ignored-replay-buffer', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-ignored-subscribe', OFF) /** @since 1.0.0 */
     .addRule('no-ignored-subscription', OFF) /** @since 1.0.0 */
+    // cspell:disable-next-line
     .addRule('no-ignored-takewhile-value', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-implicit-any-catch', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-index', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-internal', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-nested-subscribe', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-redundant-notify', ERROR) /** @since 1.0.0 */ // 🟢
+    // cspell:disable-next-line
     .addRule('no-sharereplay', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-subclass', OFF) /** @since 1.0.0 */
     .addRule('no-subject-unsubscribe', ERROR) // 🟢
     .addRule('no-subject-value', ERROR) /** @since 1.0.0 */ // TODO
     .addRule('no-subscribe-handlers', OFF) /** @since 1.0.0 */
+    // cspell:disable-next-line
     .addRule('no-topromise', OFF) /** @since 1.0.2 */ // TODO
     .addRule('no-unbound-methods', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('no-unsafe-catch', ERROR) /** @since 1.0.0 */
     .addRule('no-unsafe-first', ERROR) /** @since 1.0.0 */
     .addRule('no-unsafe-subject-next', ERROR) /** @since 1.0.0 */ // 🟢
+    // cspell:disable-next-line
     .addRule('no-unsafe-switchmap', ERROR) /** @since 1.0.0 */
+    // cspell:disable-next-line
     .addRule('no-unsafe-takeuntil', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('prefer-observer', OFF) /** @since 1.0.0 */
     .addRule('suffix-subjects', OFF) /** @since 1.0.0 */

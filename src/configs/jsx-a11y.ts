@@ -324,7 +324,7 @@ export default ((
       ...anchorIsValidDefaultAspectsToCheck,
       ...anchorIsValidCheckedAspects,
     },
-    true,
+    'nonEmptyArray',
   );
 
   const prefix = customConfig?.prefix;

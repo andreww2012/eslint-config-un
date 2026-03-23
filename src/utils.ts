@@ -219,28 +219,43 @@ export const interopDefault = async <T>(module: MaybePromise<T | {default: T}>):
     : resolvedModule;
 };
 
-export function getKeysOfTruthyValues<T extends Partial<Record<string, boolean>>>(
-  object: Nullable<T>,
-): (keyof T & string)[];
-export function getKeysOfTruthyValues<T extends Partial<Record<string, boolean>>>(
-  object: Nullable<T>,
-  requireAtLeastOneTruthyValue: true,
+export function getKeysOfTruthyValues<
+  T extends string[] | Partial<Record<string, boolean | string>>,
+>(objectOrArray: Nullable<T>): (keyof T & string)[];
+export function getKeysOfTruthyValues<
+  T extends string[] | Partial<Record<string, boolean | string>>,
+>(
+  objectOrArray: Nullable<T>,
+  mode: 'nonEmptyArray',
 ): [keyof T & string, ...(keyof T & string)[]] | undefined;
-export function getKeysOfTruthyValues<T extends Partial<Record<string, boolean>>>(
-  object: Nullable<T>,
-  requireAtLeastOneTruthyValue?: boolean,
-) {
+export function getKeysOfTruthyValues<
+  T extends string[] | Partial<Record<string, boolean | string>>,
+>(objectOrArray: Nullable<T>, mode: 'object'): Exclude<T, string[]>;
+export function getKeysOfTruthyValues<
+  T extends string[] | Partial<Record<string, boolean | string>>,
+>(objectOrArray: Nullable<T>, mode?: 'array' | 'nonEmptyArray' | 'object') {
+  if (Array.isArray(objectOrArray)) {
+    return mode === 'nonEmptyArray' && objectOrArray.length === 0
+      ? undefined
+      : // eslint-disable-next-line un/no-typeof-like-comparisons
+        mode === 'object'
+        ? Object.fromEntries(objectOrArray.map((key) => [key, true]))
+        : objectOrArray;
+  }
+
   const result = objectEntriesUnsafe(
-    // eslint-disable-next-line  ts/no-non-null-assertion, ts/no-unnecessary-condition -- for correct types
-    object! || {},
-  )
-    .filter(([, value]) => value)
-    .map(([key]) => key);
-  if (requireAtLeastOneTruthyValue && result.length === 0) {
+    // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition -- for correct types
+    objectOrArray! || {},
+  ).filter(([, value]) => value);
+  if (mode === 'nonEmptyArray' && result.length === 0) {
     // eslint-disable-next-line unicorn/no-useless-undefined
     return undefined;
   }
-  return result;
+  // eslint-disable-next-line un/no-typeof-like-comparisons
+  if (mode === 'object') {
+    return Object.fromEntries(result);
+  }
+  return result.map(([key]) => key);
 }
 
 export const isIn = <T extends object>(key: PropertyKey, object: T): key is keyof T =>
