@@ -323,7 +323,8 @@ export default (async (context, optionsRaw) => {
     .addOverrides();
 
   const configBuilderEnforceTypescriptInScriptSection = context.createConfigBuilder(
-    configEnforceTypescriptInScriptSection,
+    // Special case: this config is always created to enable `svelte/block-lang` rule
+    configEnforceTypescriptInScriptSection || optionsResolved,
     'svelte',
   );
   configBuilderEnforceTypescriptInScriptSection
