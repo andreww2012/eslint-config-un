@@ -1,6 +1,7 @@
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
-import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
+import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
+import {generatePackageToLoadProperty} from '../loaders';
 import {doesPackageExist, getKeysOfTruthyValues} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
@@ -61,7 +62,7 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
      * The schema is a subset of SvelteKit’s configuration, so refer to the SvelteKit documentation
      * for more details: https://svelte.dev/docs/kit/configuration" - plugin docs
      */
-    kit?: Pick<SvelteKitConfig, 'kit'>;
+    kit?: SvelteKitConfig['kit'];
   };
 
   /**
@@ -70,7 +71,7 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * By default, will inherit `files` and `ignores` from the parent config, and specifying
    * them explicitly here will *override* the respective property of the parent config.
    *
-   * Used rules:
+   * Affected rule:
    * - [`block-lang`](https://sveltejs.github.io/eslint-plugin-svelte/rules/block-lang)
    * @default true <=> `ts` config is enabled
    */
@@ -82,7 +83,17 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
       >;
 
   /**
-   * Used by some rules like [`valid-compile`](https://sveltejs.github.io/eslint-plugin-svelte/rules/valid-compile).
+   * Set ups `.svelte` and `.svelte.{js,ts}` files parser.
+   *
+   * 📁 Default `files`:
+   * - <code>**&#47;*.svelte</code>
+   * - <code>**&#47;*.svelte.{js,ts}</code>
+   */
+  configSetup?: UnFlatConfigEntryFilesAndIgnores;
+
+  /**
+   * Used by some rules like
+   * [`valid-compile`](https://sveltejs.github.io/eslint-plugin-svelte/rules/valid-compile).
    * Will be assigned to `languageOptions.parserOptions.svelteConfig` is specified
    * (but only if TypeScript config, `ts`, is enabled).
    *
@@ -99,7 +110,8 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
 
   /**
    * Whether [`prettier-plugin-svelte`](https://npmjs.com/prettier-plugin-svelte)
-   * is used. If `true`, will disable [a number of stylistic rules](https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts).
+   * is used. If `true`, will disable
+   * [a number of stylistic rules](https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts).
    * @default detected automatically
    */
   isPrettierPluginSvelteUsed?: boolean;
@@ -115,21 +127,16 @@ const SVELTE_SYSTEM_RULES = new Set<string>([
 ] satisfies GetRuleNamesInPlugin<'svelte'>[]);
 
 export default (async (context, optionsRaw) => {
-  const eslintPluginSvelte = await pluginsLoaders.svelte(context).then(({module}) => module);
-
-  context.usedPlugins.add('svelte');
-  if (!eslintPluginSvelte) {
-    return null;
-  }
+  const isPrettierPluginSvelteInstalled = await doesPackageExist('prettier-plugin-svelte');
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
 
   const optionsResolved = assignDefaults(optionsRaw, {
-    files: DEFAULT_SVELTE_FILES, // Must be assigned to options for `ts` config
     configEnforceTypescriptInScriptSection: isTypescriptEnabled,
+    files: DEFAULT_SVELTE_FILES, // Must be assigned to options for `ts` config
     svelteVersion:
       context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,
-    isPrettierPluginSvelteUsed: await doesPackageExist('prettier-plugin-svelte'),
+    isPrettierPluginSvelteUsed: isPrettierPluginSvelteInstalled,
   } satisfies SvelteEslintConfigOptions);
   if (optionsResolved.configEnforceTypescriptInScriptSection === true) {
     optionsResolved.configEnforceTypescriptInScriptSection = {
@@ -140,25 +147,22 @@ export default (async (context, optionsRaw) => {
 
   const {
     settings: pluginSettings,
-    files: parentConfigFiles,
-    svelteKitConfig,
     configEnforceTypescriptInScriptSection,
+    configSetup: configSetupOptions = {},
+    svelteKitConfig,
     svelteVersion,
     isPrettierPluginSvelteUsed,
   } = optionsResolved;
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'svelte');
+  const configBuilderSetup = context.createConfigBuilder(configSetupOptions, 'svelte');
 
-  configBuilder
+  configBuilderSetup
     ?.addConfig(
       [
         'svelte/setup',
         {
-          filesDefault: [
-            ...DEFAULT_SVELTE_FILES,
-            ...DEFAULT_SVELTE_SCRIPT_FILES,
-            ...parentConfigFiles,
-          ],
+          includeDefaultFilesAndIgnores: true,
+          filesDefault: [...DEFAULT_SVELTE_FILES, ...DEFAULT_SVELTE_SCRIPT_FILES],
           parser: 'svelte-eslint-parser',
           // TODO why?
           ignoresInternal: {
@@ -189,8 +193,11 @@ export default (async (context, optionsRaw) => {
     // Crashes on `statement.expression.type` (`expression` is null)
     .disableAnyRule('sonarjs', 'no-unused-collection')
     .enableConfigTesterForPlugin('svelte', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !SVELTE_SYSTEM_RULES.has(ruleName),
     });
+
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'svelte');
 
   // Legend:
   // 🟢 - in recommended
@@ -310,6 +317,7 @@ export default (async (context, optionsRaw) => {
     .markCategory('System')
     // Added in the setup config
     .enableConfigTesterForPlugin('svelte', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => SVELTE_SYSTEM_RULES.has(ruleName),
     })
     .addOverrides();
@@ -346,7 +354,7 @@ export default (async (context, optionsRaw) => {
   }
 
   return {
-    configs: [configBuilder],
+    configs: [configBuilderSetup, configBuilder, configBuilderEnforceTypescriptInScriptSection],
     optionsResolved,
   };
 }) satisfies UnConfigFn<'svelte'> as UnConfigFn<'svelte'>;
