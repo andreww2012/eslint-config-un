@@ -1,7 +1,6 @@
-// cspell:ignore marko
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import type {ObjectValues, OmitStrict, PickKeysStartingWith, PrettifyDeep} from '../types';
-import {doesPackageExist} from '../utils';
+import {doesPackageExist, objectEntriesUnsafe} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   RULES_TO_DISABLE_IN_TEST_FILES,
@@ -114,6 +113,12 @@ export interface TestingLibraryEslintConfigOptions<
   disableRootConfigIfFrameworkConfigIsEnabled?: boolean;
 }
 
+type SupportedModules = keyof {
+  [K in keyof TestingLibraryEslintConfigOptions as K extends `config${infer ModuleName}`
+    ? Lowercase<ModuleName>
+    : never]: unknown;
+};
+
 export default (async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configAngular: context.configsMeta.angular.enabled,
@@ -137,11 +142,15 @@ export default (async (context, optionsRaw) => {
     PickKeysStartingWith<TestingLibraryEslintConfigOptions, 'config'>
   > & {};
   const generateConfigsForModule = (
-    module: 'dom' | 'angular' | 'marko' | 'react' | 'svelte' | 'vue',
+    module: 'dom' | SupportedModules,
     options: AllPossibleOptions,
   ) => {
+    if (!options) {
+      return [];
+    }
+
     const isForFramework = module !== 'dom';
-    const isFireEvenAsync = module === 'marko' || module === 'svelte' || module === 'vue';
+    const isFireEventAsync = module === 'marko' || module === 'svelte' || module === 'vue';
 
     const moduleOptionsResolved = assignDefaults(options, {
       configNoOnlyTests: true,
@@ -188,7 +197,7 @@ export default (async (context, optionsRaw) => {
         },
       ])
       .addRule('await-async-events', ERROR, [
-        {eventModule: ['userEvent', ...(isFireEvenAsync ? ['fireEvent' as const] : [])]},
+        {eventModule: ['userEvent', ...(isFireEventAsync ? ['fireEvent' as const] : [])]},
       ]) /** @since 1.0.0 */ /** @aka await-fire-event */ /** @aka await-async-event */ // 🩷
       .addRule('await-async-queries', ERROR) /** @since 1.0.0 */ /** @aka await-async-query */ // 🩷
       .addRule('await-async-utils', ERROR) /** @since 2.0.0 */ // 🩷
@@ -208,7 +217,7 @@ export default (async (context, optionsRaw) => {
       .addRule(
         'no-await-sync-events',
         ERROR,
-        isFireEvenAsync ? [] : [{eventModules: ['fire-event']}],
+        isFireEventAsync ? [] : [{eventModules: ['fire-event']}],
       ) /** @since 3.10.0 */ // 🟣🔴🔵
       .addRule('no-await-sync-queries', ERROR) /** @since 1.0.0 */ /** @aka no-await-sync-query */ // 🩷
       .addRule('no-container', isForFramework ? ERROR : OFF) /** @since 4.0.0-alpha.0 */ // 💚
@@ -292,11 +301,15 @@ export default (async (context, optionsRaw) => {
           ? false
           : optionsResolved,
       ),
-      ...generateConfigsForModule('angular', configAngular),
-      ...generateConfigsForModule('marko', configMarko),
-      ...generateConfigsForModule('react', configReact),
-      ...generateConfigsForModule('svelte', configSvelte),
-      ...generateConfigsForModule('vue', configVue),
+      ...objectEntriesUnsafe({
+        angular: configAngular,
+        marko: configMarko,
+        react: configReact,
+        svelte: configSvelte,
+        vue: configVue,
+      } satisfies Record<SupportedModules, AllPossibleOptions>).flatMap(([module, options]) =>
+        generateConfigsForModule(module, options),
+      ),
     ],
     optionsResolved,
   };
