@@ -29,7 +29,7 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
   allowContainerFirstChild?: boolean;
 
   /**
-   * Affected rules:
+   * Affected rule:
    * - [`no-render-in-lifecycle`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-render-in-lifecycle.md)
    */
   allowTestingFrameworkSetupHook?: GetRuleOptions<
@@ -46,7 +46,7 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
   preferAssertStyle?: 'explicit' | 'implicit';
 
   /**
-   * Affected rules:
+   * Affected rule:
    * - [`prefer-query-matchers`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-query-matchers.md)
    */
   preferQueryMatchers?: PrettifyDeep<
@@ -54,7 +54,7 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
   >;
 
   /**
-   * Affected rules:
+   * Affected rule:
    * - [`prefer-user-event`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-user-event.md)
    * @default true
    */
@@ -64,7 +64,7 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
 interface ReactSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends SharedConfigOptions<ExtraPlugins>, NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
   /**
-   * Affected rules:
+   * Affected rule:
    * - [`consistent-data-testid`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/consistent-data-testid.md)
    */
   consistentDataTestId?: GetRuleOptions<'testing-library', 'consistent-data-testid'>;
