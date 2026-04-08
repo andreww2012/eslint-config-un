@@ -127,7 +127,7 @@ const DEFAULT_TSCONFIG_TOP_LEVEL_ORDER: TsconfigTopLevelKeys[] = [
   'ts-node',
 ];
 // ⚠️ Must be sorted
-const TSCONFIG_COMPILER_OPTIONS_KEYS = {
+export const TSCONFIG_COMPILER_OPTIONS_KEYS = {
   typeChecking: [
     'allowUnreachableCode',
     'allowUnusedLabels',
@@ -257,7 +257,7 @@ const TSCONFIG_COMPILER_OPTIONS_KEYS = {
 type TsconfigCompilerOptionsGroups = keyof typeof TSCONFIG_COMPILER_OPTIONS_KEYS;
 type TsconfigCompilerOptionsKeys = ObjectValues<typeof TSCONFIG_COMPILER_OPTIONS_KEYS>[number];
 
-const TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS = {
+export const TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS = {
   // Source: https://github.com/antfu/eslint-config/blob/56262ef7962ce310d29348060d8941d420f410fc/src/configs/sort.ts#L138
   antfu: [
     /* Projects */
@@ -1002,6 +1002,7 @@ export default ((
       ),
     ) /** @since 1.2.0 */ // 🟣
     .enableConfigTesterForPlugin('ts', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => TS_PLUGIN_TYPE_AWARE_RULES_SET.has(ruleName),
     })
     .addOverrides();
@@ -1172,6 +1173,7 @@ export default ((
       ),
     ) /** @since 1.13.0 */ // 🟣
     .enableConfigTesterForPlugin('ts', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !TS_PLUGIN_TYPE_AWARE_RULES_SET.has(ruleName),
     })
     .addOverrides();
@@ -1308,7 +1310,7 @@ export default ((
         'sort-tsconfig-keys',
         {
           includeDefaultFilesAndIgnores: true,
-          filesDefault: ['**/tsconfig.json', '**/*.tsconfig.json', '**/tsconfig.*.json'],
+          filesDefault: ['{tsconfig,*.tsconfig,tsconfig.*}.json'],
           language: ['jsonc', 'x'],
         },
       ])

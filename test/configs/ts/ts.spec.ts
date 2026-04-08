@@ -1,59 +1,115 @@
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('ts');
+const FIXTURES = {
+  explicitAny: 'explicit-any.ts',
+} as const;
 
-  it('loads `ts` plugin if used', () => {
+const MAIN_TS_ESLINT_CONFIGS = ['ts/non-type-aware/rules', 'ts/type-aware/rules'];
+
+beforeEach(() => {
+  addInstalledPackages({typescript: '5.0.0'});
+});
+
+describe('basic tests', () => {
+  it('creates `ts/non-type-aware/{setup,rules}` eslint configs, loads `ts` plugin and has expected defaults when set to `true`', async () => {
+    const configResult = await computeEslintConfig('ts');
+
     expect(configResult.getLoadedPlugin('ts')).toBeDefined();
+
+    const configSetup = configResult.getConfigByUnPostfix('ts/non-type-aware/setup');
+
+    expect(configSetup).toBeDefined();
+    expect(configSetup?.files).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
+
+    const configRules = configResult.getConfigByUnPostfix('ts/non-type-aware/rules');
+
+    expect(configRules).toBeDefined();
+    expect(configRules?.files).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
   });
 
-  it('creates `ts/non-type-aware/setup` eslint config', () => {
-    const config = configResult.getConfigByUnPostfix('ts/non-type-aware/setup');
+  describe('mode: all configs are disabled', () => {
+    it('does not create `ts` eslint configs', async () => {
+      await expectConfigState({}, MAIN_TS_ESLINT_CONFIGS, false);
+    });
 
-    expect(config?.files).toMatchInlineSnapshot(`["**/*.?([cm])ts?(x)"]`);
-    expect(config?.ignores).toMatchInlineSnapshot(
-      `["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.yaml"]`,
-    );
-    expect(config?.languageOptions?.['parserOptions']).toMatchInlineSnapshot(
-      `{"sourceType": "module"}`,
-    );
+    it('creates `ts` eslint configs if explicitly enabled', async () => {
+      await expectConfigState('ts', MAIN_TS_ESLINT_CONFIGS, true);
+    });
   });
 
-  it('creates `ts/non-type-aware/rules` eslint config', () => {
-    const config = configResult.getConfigByUnPostfix('ts/non-type-aware/rules');
+  describe('mode: all configs are not explicitly enabled or disabled', () => {
+    it('creates `ts` eslint configs', async () => {
+      await expectConfigState({}, MAIN_TS_ESLINT_CONFIGS, true, 'default');
+    });
 
-    expect(config?.files).toMatchInlineSnapshot(`["**/*.?([cm])ts?(x)"]`);
-    expect(config?.ignores).toMatchInlineSnapshot(
-      `["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.yaml"]`,
-    );
+    it('creates `ts` eslint configs and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('ts', MAIN_TS_ESLINT_CONFIGS, ['ts', true], 'default');
+    });
+
+    it('does not create `ts` eslint configs if explicitly disabled', async () => {
+      await expectConfigState({ts: false}, MAIN_TS_ESLINT_CONFIGS, false, 'default');
+    });
+
+    describe('`typescript` is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
+
+      it('does not create `ts` eslint configs', async () => {
+        await expectConfigState({}, MAIN_TS_ESLINT_CONFIGS, false, 'default');
+      });
+
+      it('creates `ts` eslint configs if explicitly enabled', async () => {
+        await expectConfigState('ts', MAIN_TS_ESLINT_CONFIGS, true, 'default');
+      });
+
+      it('does not create `ts` eslint configs and prints a warning if explicitly disabled', async () => {
+        await expectConfigState({ts: false}, MAIN_TS_ESLINT_CONFIGS, ['ts', false], 'default');
+      });
+    });
   });
 
-  it('creates `ts/type-aware/setup` eslint config', () => {
-    const config = configResult.getConfigByUnPostfix('ts/type-aware/setup');
+  describe('mode: misc configs are enabled', () => {
+    it('creates `ts` eslint configs', async () => {
+      await expectConfigState({}, MAIN_TS_ESLINT_CONFIGS, true, 'misc-enabled');
+    });
 
-    expect(config?.files).toMatchInlineSnapshot(`["**/*.?([cm])ts?(x)"]`);
-    expect(config?.ignores).toMatchInlineSnapshot(
-      `["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.yaml", "**/*.md?(x)/**/*.*"]`,
-    );
-    expect(config?.languageOptions?.['parserOptions']).toMatchInlineSnapshot(
-      `{"projectService": {}, "sourceType": "module"}`,
-    );
+    it('creates `ts` eslint configs and prints a warning if explicitly enabled', async () => {
+      await expectConfigState({ts: true}, MAIN_TS_ESLINT_CONFIGS, ['ts', true], 'misc-enabled');
+    });
+
+    it('does not create `ts` eslint configs if explicitly disabled', async () => {
+      await expectConfigState({ts: false}, MAIN_TS_ESLINT_CONFIGS, false, 'misc-enabled');
+    });
+  });
+});
+
+describe('rules', () => {
+  it('correctly sets severities by default', async () => {
+    const configResult = await computeEslintConfig({ts: {configSortTsconfigKeys: true}});
+
+    expect(configResult.getRuleSeverities('ts/non-type-aware/rules')).toMatchObject({
+      'ts/ban-ts-comment': 2,
+      'ts/explicit-function-return-type': 0,
+    });
   });
 
-  it('creates `ts/type-aware/rules` eslint config', () => {
-    const config = configResult.getConfigByUnPostfix('ts/type-aware/rules');
+  it('`ts/no-explicit-any` rule fires on a file with `any`', async () => {
+    const results = await testEslintConfig('ts', FIXTURES.explicitAny, import.meta.dirname);
 
-    expect(config?.files).toMatchInlineSnapshot(`["**/*.?([cm])ts?(x)"]`);
-    expect(config?.ignores).toMatchInlineSnapshot(
-      `["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.yaml", "**/*.md?(x)/**/*.*"]`,
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.explicitAny,
+      'ts/no-explicit-any',
     );
+
+    expect(error?.message).toMatchInlineSnapshot('"Unexpected any. Specify a different type."');
   });
 });
 
 describe('un options', () => {
   describe('option: `files`', async () => {
     const FILES = ['src/**/*.ts'];
-    const configResult = await computeEslintConfig({
-      ts: {files: FILES},
-    });
+
+    const configResult = await computeEslintConfig({ts: {files: FILES}});
 
     it('uses user-provided `files` in `{non-type-aware,type-aware}/rules` eslint configs, but not in `*/setup`', () => {
       expect(configResult.getConfigByUnPostfix('ts/non-type-aware/rules')?.files).toStrictEqual(
@@ -63,17 +119,14 @@ describe('un options', () => {
 
       expect(
         configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files,
-      ).not.to.include.members(FILES);
+      ).not.toIncludeAnyMembers(FILES);
       expect(
         configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files,
-      ).not.to.include.members(FILES);
+      ).not.toIncludeAnyMembers(FILES);
     });
 
-    it('disables `{non-type-aware,type-aware}/rules` eslint configs when `files` is empty array, but does not disable `{non-type-aware,type-aware}/setup`', async () => {
-      const FILES: string[] = [];
-      const configResult = await computeEslintConfig({
-        ts: {files: FILES},
-      });
+    it('disables `{non-type-aware,type-aware}/rules` eslint configs when set to empty array, but not `{non-type-aware,type-aware}/setup`', async () => {
+      const configResult = await computeEslintConfig({ts: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('ts/non-type-aware/rules')).toBeUndefined();
       expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')).toBeUndefined();
@@ -81,38 +134,36 @@ describe('un options', () => {
       const nonTypeAwareSetup = configResult.getConfigByUnPostfix('ts/non-type-aware/setup');
 
       expect(nonTypeAwareSetup).toBeDefined();
-      expect(nonTypeAwareSetup?.files).not.toStrictEqual(FILES);
+      expect(nonTypeAwareSetup?.files).not.toStrictEqual([]);
 
       const typeAwareSetup = configResult.getConfigByUnPostfix('ts/type-aware/setup');
 
       expect(typeAwareSetup).toBeDefined();
-      expect(typeAwareSetup?.files).not.toStrictEqual(FILES);
+      expect(typeAwareSetup?.files).not.toStrictEqual([]);
     });
   });
 
   describe('option: `ignores`', async () => {
     const IGNORES = ['**/fixtures/*.ts'];
-    const configResult = await computeEslintConfig({
-      ts: {ignores: IGNORES},
-    });
 
-    it('uses user-provided `ignores` in `{non-type-aware,type-aware}/rules` eslint configs and merges them with the implicit default `ignores`, but not in `*/setup`', () => {
+    const configResult = await computeEslintConfig({ts: {ignores: IGNORES}});
+
+    it('uses user-provided `ignores` in `{non-type-aware,type-aware}/rules` eslint configs (but not in `*/setup`) and merges them with the implicit defaults', () => {
       const nonTypeAwareRules = configResult.getConfigByUnPostfix('ts/non-type-aware/rules');
 
-      expect(nonTypeAwareRules?.ignores).to.include.members(IGNORES);
+      expect(nonTypeAwareRules?.ignores).toIncludeAllMembers(IGNORES);
       expect(nonTypeAwareRules?.ignores?.length).toBeGreaterThan(IGNORES.length);
 
       const typeAwareRules = configResult.getConfigByUnPostfix('ts/type-aware/rules');
 
-      expect(typeAwareRules?.ignores).to.include.members(IGNORES);
+      expect(typeAwareRules?.ignores).toIncludeAllMembers(IGNORES);
       expect(typeAwareRules?.ignores?.length).toBeGreaterThan(IGNORES.length);
-
       expect(
         configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.ignores,
-      ).not.to.include.members(IGNORES);
+      ).not.toIncludeAnyMembers(IGNORES);
       expect(
         configResult.getConfigByUnPostfix('ts/type-aware/setup')?.ignores,
-      ).not.to.include.members(IGNORES);
+      ).not.toIncludeAnyMembers(IGNORES);
     });
   });
 
@@ -124,46 +175,9 @@ describe('un options', () => {
       },
     });
 
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-dynamic-delete'),
-      ),
-    ).toBe(0);
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
-      ),
-    ).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `non-type-aware/rules` eslint config, but does not in `type-aware/rules` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        ts: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('ts/non-type-aware/rules')),
-      ).toStrictEqual([2]);
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('ts/type-aware/rules')),
-      ).toStrictEqual([0, 1, 2]);
-    });
-
-    it('respects `forceSeverity` set to `warn`', async () => {
-      const configResult = await computeEslintConfig({
-        ts: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('ts/non-type-aware/rules')),
-      ).toStrictEqual([1]);
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('ts/type-aware/rules')),
-      ).toStrictEqual([0, 1, 2]);
+    expect(configResult.getRuleSeverities('ts/non-type-aware/rules')).toMatchObject({
+      'ts/no-dynamic-delete': 0,
+      'no-console': 0,
     });
   });
 });
@@ -179,119 +193,210 @@ describe('options', () => {
       'ts/no-unsafe-return',
     ] as const;
 
-    it('does not disable `no-unsafe-*` rules when `disableNoUnsafeRules` is `false` (default)', async () => {
+    it('does not disable `ts/no-unsafe-*` rules by default', async () => {
       const configResult = await computeEslintConfig('ts');
-      const config = configResult.getConfigByUnPostfix('ts/type-aware/rules');
 
-      for (const rule of NO_UNSAFE_RULES) {
-        expect(getRuleSeverityFromEslintRuleEntry(config?.rules?.[rule])).toBe(1);
-      }
+      expect(configResult.getRuleSeverities('ts/type-aware/rules')).toMatchObject(
+        Object.fromEntries(NO_UNSAFE_RULES.map((rule) => [rule, 1])),
+      );
     });
 
-    it('disables `no-unsafe-*` rules when `disableNoUnsafeRules` is `true`', async () => {
-      const configResult = await computeEslintConfig({
-        ts: {disableNoUnsafeRules: true},
-      });
-      const config = configResult.getConfigByUnPostfix('ts/type-aware/rules');
+    it('disables `ts/no-unsafe-*` rules when set to `true`', async () => {
+      const configResult = await computeEslintConfig({ts: {disableNoUnsafeRules: true}});
 
-      for (const rule of NO_UNSAFE_RULES) {
-        expect(getRuleSeverityFromEslintRuleEntry(config?.rules?.[rule])).toBe(0);
-      }
+      expect(configResult.getRuleSeverities('ts/type-aware/rules')).toMatchObject(
+        Object.fromEntries(NO_UNSAFE_RULES.map((rule) => [rule, 0])),
+      );
+    });
+
+    it('does not disable `ts/no-unsafe-*` rules when set to `false`', async () => {
+      const configResult = await computeEslintConfig({ts: {disableNoUnsafeRules: false}});
+
+      expect(configResult.getRuleSeverities('ts/type-aware/rules')).toMatchObject(
+        Object.fromEntries(NO_UNSAFE_RULES.map((rule) => [rule, 1])),
+      );
     });
   });
 
   describe('option: `inheritBaseRuleSeverityAndOptionsForExtensionRules`', () => {
-    it('inherits base rule severity and options for extension rules when `true` (default)', async () => {
+    it('inherits base rule severity and options for extension rules by default', async () => {
+      const configResult = await computeEslintConfig({js: {overrides: {'no-shadow': 1}}, ts: true});
+
+      expect(configResult.getRuleEntrySeverity('ts/non-type-aware/rules', 'ts/no-shadow')).toBe(1);
+    });
+
+    it('inherits base rule severity and options for extension rules when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         js: {overrides: {'no-shadow': 1}},
         ts: {inheritBaseRuleSeverityAndOptionsForExtensionRules: true},
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-shadow'),
-        ),
-      ).toBe(1);
+      expect(configResult.getRuleEntrySeverity('ts/non-type-aware/rules', 'ts/no-shadow')).toBe(1);
     });
 
-    it('does not inherit base rule severity and options for extension rules when `false`', async () => {
+    it('does not inherit base rule severity and options for extension rules when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         js: {overrides: {'no-shadow': 1}},
         ts: {inheritBaseRuleSeverityAndOptionsForExtensionRules: false},
       });
 
+      expect(configResult.getRuleEntrySeverity('ts/non-type-aware/rules', 'ts/no-shadow')).toBe(2);
+    });
+
+    it('inherits base `ts/max-params` rule options when base rule has object options with `maximum` key', async () => {
+      const configResult = await computeEslintConfig({
+        js: {overrides: {'max-params': [2, {maximum: 4}]}},
+        ts: true,
+      });
+
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-shadow'),
-        ),
-      ).toBe(2);
+        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/max-params'),
+      ).toMatchInlineSnapshot('[2, {"max": 4}]');
+    });
+
+    it('inherits base `ts/max-params` rule options when base rule has object options with `max` key', async () => {
+      const configResult = await computeEslintConfig({
+        js: {overrides: {'max-params': [2, {max: 5}]}},
+        ts: true,
+      });
+
+      expect(
+        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/max-params'),
+      ).toMatchInlineSnapshot('[2, {"max": 5}]');
+    });
+
+    it('inherits base `ts/max-params` rule options when base rule has number options', async () => {
+      const configResult = await computeEslintConfig({
+        js: {overrides: {'max-params': [2, 3]}},
+        ts: true,
+      });
+
+      expect(
+        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/max-params'),
+      ).toMatchInlineSnapshot('[2, {"max": 3}]');
+    });
+
+    it('inherits base `ts/no-empty-function` rule options, transforming `privateConstructors` and `protectedConstructors` in `allow`', async () => {
+      const configResult = await computeEslintConfig({
+        js: {
+          overrides: {
+            'no-empty-function': [2, {allow: ['privateConstructors', 'protectedConstructors']}],
+          },
+        },
+        ts: true,
+      });
+
+      expect(
+        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-empty-function'),
+      ).toMatchInlineSnapshot('[2, {"allow": ["private-constructors", "protected-constructors"]}]');
+    });
+
+    it('inherits base `ts/no-empty-function` rule options when `allow` has no constructor values', async () => {
+      const configResult = await computeEslintConfig({
+        js: {overrides: {'no-empty-function': [2, {allow: ['arrowFunctions']}]}},
+        ts: true,
+      });
+
+      expect(
+        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-empty-function'),
+      ).toMatchInlineSnapshot('[2, {"allow": ["arrowFunctions"]}]');
+    });
+
+    it('inherits base `ts/no-unused-vars` rule options when base rule has string options', async () => {
+      const configResult = await computeEslintConfig({
+        js: {overrides: {'no-unused-vars': [2, 'all']}},
+        ts: true,
+      });
+
+      expect(
+        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-unused-vars'),
+      ).toMatchInlineSnapshot('[2, {"enableAutofixRemoval": {"imports": true}, "vars": "all"}]');
+    });
+
+    it('inherits base `ts/dot-notation` options when base `dot-notation` rule has object options', async () => {
+      const configResult = await computeEslintConfig({
+        js: {overrides: {'dot-notation': [2, {allowKeywords: false}]}},
+        ts: true,
+      });
+
+      expect(
+        configResult.getRuleEntry('ts/type-aware/rules', 'ts/dot-notation'),
+      ).toMatchInlineSnapshot(
+        '[2, {"allowIndexSignaturePropertyAccess": true, "allowKeywords": false}]',
+      );
     });
   });
 
   describe('option: `typescriptVersion`', () => {
-    it('uses `inline-type-imports` fix style for `consistent-type-imports` when typescript version >= 4.5', async () => {
-      const configResult = await computeEslintConfig({
-        ts: {typescriptVersion: 4.5},
-      });
-      const rule = configResult.getRuleEntry(
-        'ts/non-type-aware/rules',
-        'ts/consistent-type-imports',
-      );
+    it('resolves typescript version from the installed package and thus uses `inline-type-imports` fix style for `ts/consistent-type-imports` by default', async () => {
+      const configResult = await computeEslintConfig('ts');
 
-      expect(rule).toMatchInlineSnapshot(
-        `[2, {"disallowTypeAnnotations": false, "fixStyle": "inline-type-imports"}]`,
-      );
+      expect(
+        configResult.getRuleEntryOptions('ts/non-type-aware/rules', 'ts/consistent-type-imports'),
+      ).toMatchObject([{fixStyle: 'inline-type-imports'}]);
     });
 
-    it('does not use `inline-type-imports` fix style for `consistent-type-imports` when typescript version < 4.5', async () => {
-      const configResult = await computeEslintConfig({
-        ts: {typescriptVersion: 4.4},
-      });
-      const rule = configResult.getRuleEntry(
-        'ts/non-type-aware/rules',
-        'ts/consistent-type-imports',
-      );
+    it('uses `inline-type-imports` fix style for `ts/consistent-type-imports` when set to >=4.5', async () => {
+      const configResult = await computeEslintConfig({ts: {typescriptVersion: 4.5}});
 
-      expect(rule).toMatchInlineSnapshot(`[2, {"disallowTypeAnnotations": false}]`);
+      expect(
+        configResult.getRuleEntryOptions('ts/non-type-aware/rules', 'ts/consistent-type-imports'),
+      ).toMatchObject([{fixStyle: 'inline-type-imports'}]);
+    });
+
+    it('does not use `inline-type-imports` fix style for `ts/consistent-type-imports` when set to <4.5', async () => {
+      const configResult = await computeEslintConfig({ts: {typescriptVersion: 4.4}});
+
+      expect(
+        configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/consistent-type-imports'),
+      ).toMatchInlineSnapshot('[2, {"disallowTypeAnnotations": false}]');
     });
   });
 
   describe('option: `allowDefaultProject`', () => {
-    it('does not set `allowDefaultProject` in parser options when not provided (default)', async () => {
+    it('does not set `allowDefaultProject` in parser options by default', async () => {
       const configResult = await computeEslintConfig('ts');
-      const config = configResult.getConfigByUnPostfix('ts/type-aware/setup');
 
-      expect(config?.languageOptions?.['parserOptions']).toMatchInlineSnapshot(
-        `{"projectService": {}, "sourceType": "module"}`,
-      );
+      expect(
+        configResult.getConfigByUnPostfix('ts/type-aware/setup')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toMatchObject({
+        projectService: expect.not.objectContaining({
+          allowDefaultProject: expect.anything() as unknown,
+        }) as unknown,
+      });
     });
 
     it('sets `allowDefaultProject` in parser options when provided', async () => {
-      const configResult = await computeEslintConfig({
-        ts: {allowDefaultProject: ['*.js']},
-      });
-      const config = configResult.getConfigByUnPostfix('ts/type-aware/setup');
+      const ALLOW_DEFAULT_PROJECT = ['*.js'];
 
-      expect(config?.languageOptions?.['parserOptions']).toMatchInlineSnapshot(
-        `{"projectService": {"allowDefaultProject": ["*.js"]}, "sourceType": "module"}`,
-      );
+      const configResult = await computeEslintConfig({
+        ts: {allowDefaultProject: ALLOW_DEFAULT_PROJECT},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('ts/type-aware/setup')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toMatchObject({projectService: {allowDefaultProject: ALLOW_DEFAULT_PROJECT}});
     });
   });
 
   describe('option: `parserOptions`', () => {
-    it('uses default parser options when `parserOptions` is not provided', async () => {
+    it('uses default parser options by default', async () => {
       const configResult = await computeEslintConfig('ts');
 
       expect(
         configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.languageOptions?.[
           'parserOptions'
         ],
-      ).toMatchInlineSnapshot(`{"sourceType": "module"}`);
+      ).toMatchInlineSnapshot('{"sourceType": "module"}');
       expect(
         configResult.getConfigByUnPostfix('ts/type-aware/setup')?.languageOptions?.[
           'parserOptions'
         ],
-      ).toMatchInlineSnapshot(`{"projectService": {}, "sourceType": "module"}`);
+      ).toMatchInlineSnapshot('{"projectService": {}, "sourceType": "module"}');
     });
 
     it('merges user-provided parser options (object) with default parser options', async () => {
@@ -303,13 +408,13 @@ describe('options', () => {
         configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.languageOptions?.[
           'parserOptions'
         ],
-      ).toMatchInlineSnapshot(`{"sourceType": "module", "tsconfigRootDir": "/custom/root"}`);
+      ).toMatchInlineSnapshot('{"sourceType": "module", "tsconfigRootDir": "/custom/root"}');
       expect(
         configResult.getConfigByUnPostfix('ts/type-aware/setup')?.languageOptions?.[
           'parserOptions'
         ],
       ).toMatchInlineSnapshot(
-        `{"projectService": {}, "sourceType": "module", "tsconfigRootDir": "/custom/root"}`,
+        '{"projectService": {}, "sourceType": "module", "tsconfigRootDir": "/custom/root"}',
       );
     });
 
@@ -327,113 +432,115 @@ describe('options', () => {
           'parserOptions'
         ],
       ).toMatchInlineSnapshot(
-        `{"sourceType": "module", "tsconfigRootDir": "/non-type-aware-root"}`,
+        '{"sourceType": "module", "tsconfigRootDir": "/non-type-aware-root"}',
       );
       expect(
         configResult.getConfigByUnPostfix('ts/type-aware/setup')?.languageOptions?.[
           'parserOptions'
         ],
       ).toMatchInlineSnapshot(
-        `{"projectService": {}, "sourceType": "module", "tsconfigRootDir": "/type-aware-root"}`,
+        '{"projectService": {}, "sourceType": "module", "tsconfigRootDir": "/type-aware-root"}',
       );
     });
   });
 
   describe('option: `extraFileExtensions`', () => {
-    it('does not set `extraFileExtensions` in parser options when array is empty', async () => {
-      const configResult = await computeEslintConfig({
-        ts: {extraFileExtensions: []},
-      });
-      const nonTypeAwareParserOptions =
+    it('does not set `extraFileExtensions` in parser options when set to empty array', async () => {
+      const configResult = await computeEslintConfig({ts: {extraFileExtensions: []}});
+
+      expect(
         configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.languageOptions?.[
           'parserOptions'
-        ];
-      const typeAwareParserOptions =
+        ],
+      ).toMatchInlineSnapshot('{"sourceType": "module"}');
+      expect(
         configResult.getConfigByUnPostfix('ts/type-aware/setup')?.languageOptions?.[
           'parserOptions'
-        ];
-
-      expect(nonTypeAwareParserOptions).toMatchInlineSnapshot(`{"sourceType": "module"}`);
-      expect(typeAwareParserOptions).toMatchInlineSnapshot(
-        `{"projectService": {}, "sourceType": "module"}`,
-      );
+        ],
+      ).toMatchInlineSnapshot('{"projectService": {}, "sourceType": "module"}');
     });
 
     it('sets `extraFileExtensions` in parser options when provided', async () => {
       const configResult = await computeEslintConfig({
         ts: {extraFileExtensions: ['vue', 'svelte']},
       });
-      const nonTypeAwareParserOptions =
+
+      expect(
         configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.languageOptions?.[
           'parserOptions'
-        ];
-      const typeAwareParserOptions =
+        ],
+      ).toMatchInlineSnapshot(
+        '{"extraFileExtensions": [".vue", ".svelte"], "sourceType": "module"}',
+      );
+      expect(
         configResult.getConfigByUnPostfix('ts/type-aware/setup')?.languageOptions?.[
           'parserOptions'
-        ];
-
-      expect(nonTypeAwareParserOptions).toMatchInlineSnapshot(
-        `{"extraFileExtensions": [".vue", ".svelte"], "sourceType": "module"}`,
-      );
-      expect(typeAwareParserOptions).toMatchInlineSnapshot(
-        `{"extraFileExtensions": [".vue", ".svelte"], "projectService": {}, "sourceType": "module"}`,
+        ],
+      ).toMatchInlineSnapshot(
+        '{"extraFileExtensions": [".vue", ".svelte"], "projectService": {}, "sourceType": "module"}',
       );
     });
 
     it('auto-detects `extraFileExtensions` when `astro` config is enabled', async () => {
-      const configResult = await computeEslintConfig({
-        ts: true,
-        astro: true,
-      });
-      const parserOptions = configResult.getConfigByUnPostfix('ts/non-type-aware/setup')
-        ?.languageOptions?.['parserOptions'] as Record<string, unknown> | undefined;
+      const configResult = await computeEslintConfig({ts: true, astro: true});
 
-      expect(parserOptions?.['extraFileExtensions']).toMatchInlineSnapshot(`[".astro"]`);
+      expect(
+        (
+          configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.languageOptions?.[
+            'parserOptions'
+          ] as Record<string, unknown> | undefined
+        )?.['extraFileExtensions'],
+      ).toMatchInlineSnapshot('[".astro"]');
     });
 
     it('auto-detects `extraFileExtensions` when `vue` config is enabled', async () => {
-      const configResult = await computeEslintConfig({
-        ts: true,
-        vue: true,
-      });
-      const parserOptions = configResult.getConfigByUnPostfix('ts/non-type-aware/setup')
-        ?.languageOptions?.['parserOptions'] as Record<string, unknown> | undefined;
+      const configResult = await computeEslintConfig({ts: true, vue: true});
 
-      expect(parserOptions?.['extraFileExtensions']).toMatchInlineSnapshot(`[".vue"]`);
+      expect(
+        (
+          configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.languageOptions?.[
+            'parserOptions'
+          ] as Record<string, unknown> | undefined
+        )?.['extraFileExtensions'],
+      ).toMatchInlineSnapshot('[".vue"]');
     });
 
     it('auto-detects `extraFileExtensions` when `svelte` config is enabled', async () => {
-      const configResult = await computeEslintConfig({
-        ts: true,
-        svelte: true,
-      });
-      const parserOptions = configResult.getConfigByUnPostfix('ts/non-type-aware/setup')
-        ?.languageOptions?.['parserOptions'] as Record<string, unknown> | undefined;
+      const configResult = await computeEslintConfig({ts: true, svelte: true});
 
-      expect(parserOptions?.['extraFileExtensions']).toMatchInlineSnapshot(`[".svelte"]`);
+      expect(
+        (
+          configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.languageOptions?.[
+            'parserOptions'
+          ] as Record<string, unknown> | undefined
+        )?.['extraFileExtensions'],
+      ).toMatchInlineSnapshot('[".svelte"]');
     });
 
+    // TODO should merge?
     it('explicit `extraFileExtensions` overrides auto-detected extensions from enabled configs', async () => {
       const configResult = await computeEslintConfig({
         ts: {extraFileExtensions: ['mdx']},
         vue: true,
       });
-      const parserOptions = configResult.getConfigByUnPostfix('ts/non-type-aware/setup')
-        ?.languageOptions?.['parserOptions'] as Record<string, unknown> | undefined;
 
-      expect(parserOptions?.['extraFileExtensions']).toMatchInlineSnapshot(`[".mdx"]`);
+      expect(
+        (
+          configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.languageOptions?.[
+            'parserOptions'
+          ] as Record<string, unknown> | undefined
+        )?.['extraFileExtensions'],
+      ).toMatchInlineSnapshot('[".mdx"]');
     });
   });
 
   describe('option: `extraVariableTypesToRemove`', () => {
-    it('uses default `extraVariableTypesToRemove` (`{imports: true}`) when not provided', async () => {
+    it('uses default `extraVariableTypesToRemove` for `ts/no-unused-vars` by default', async () => {
       const configResult = await computeEslintConfig({ts: true, js: true});
-      const rule = configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-unused-vars');
-      const options = (Array.isArray(rule) ? rule[1] : undefined) as
-        | Record<string, unknown>
-        | undefined;
 
-      expect(options?.['enableAutofixRemoval']).toMatchInlineSnapshot(`{"imports": true}`);
+      expect(
+        configResult.getRuleEntryOptions('ts/non-type-aware/rules', 'ts/no-unused-vars'),
+      ).toMatchObject([{enableAutofixRemoval: {imports: true}}]);
     });
 
     it('overrides default `enableAutofixRemoval` when `extraVariableTypesToRemove` is provided', async () => {
@@ -441,12 +548,10 @@ describe('options', () => {
         ts: {extraVariableTypesToRemove: {imports: false}},
         js: true,
       });
-      const rule = configResult.getRuleEntry('ts/non-type-aware/rules', 'ts/no-unused-vars');
-      const options = (Array.isArray(rule) ? rule[1] : undefined) as
-        | Record<string, unknown>
-        | undefined;
 
-      expect(options?.['enableAutofixRemoval']).toMatchInlineSnapshot(`{"imports": false}`);
+      expect(
+        configResult.getRuleEntryOptions('ts/non-type-aware/rules', 'ts/no-unused-vars'),
+      ).toMatchObject([{enableAutofixRemoval: {imports: false}}]);
     });
   });
 });

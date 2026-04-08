@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "strict": true,
+    "target": "es2022"
+  },
+  "extends": "./tsconfig.base.json"
+}

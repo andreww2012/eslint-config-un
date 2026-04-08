@@ -1,36 +1,48 @@
 import {difference} from '../../../src/utils';
 
-describe('ts: sub config `configSetup`', () => {
+describe('ts: sub config `setup`', () => {
+  describe('basic tests', () => {
+    it('creates `ts/non-type-aware/setup` eslint config and has expected defaults by default', async () => {
+      const configResult = await computeEslintConfig('ts');
+
+      const config = configResult.getConfigByUnPostfix('ts/non-type-aware/setup');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
+      expect(config?.languageOptions?.['parserOptions']).toMatchObject({sourceType: 'module'});
+    });
+  });
+
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `ts/non-type-aware/setup` eslint config, but not in `ts/non-type-aware/rules`', async () => {
         const FILES = ['src/**/*.ts'];
-        const configResult = await computeEslintConfig({
-          ts: {configSetup: {files: FILES}},
-        });
+
+        const configResult = await computeEslintConfig({ts: {configSetup: {files: FILES}}});
 
         expect(configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files).toStrictEqual(
           FILES,
         );
         expect(
           configResult.getConfigByUnPostfix('ts/non-type-aware/rules')?.files,
-        ).not.to.include.members(FILES);
+        ).not.toIncludeAnyMembers(FILES);
       });
 
-      it('uses `files` in `ts/type-aware/setup` eslint config if not specified there', async () => {
+      it('uses user-provided `files` in `ts/type-aware/setup` eslint config if not specified there', async () => {
         const FILES = ['src/**/*.ts'];
-        const configResult = await computeEslintConfig({
-          ts: {configSetup: {files: FILES}},
-        });
+
+        const configResult = await computeEslintConfig({ts: {configSetup: {files: FILES}}});
 
         expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files).toStrictEqual(
           FILES,
         );
       });
 
-      it('does not use `files` in `ts/type-aware/setup` eslint config if specified there', async () => {
+      it('does not use user-provided `files` in `ts/type-aware/setup` eslint config if specified there', async () => {
         const FILES_NON_TYPE_AWARE = ['src/**/*.ts'];
         const FILES_TYPE_AWARE = ['lib/**/*.ts'];
+
         const configResult = await computeEslintConfig({
           ts: {
             configSetup: {files: FILES_NON_TYPE_AWARE},
@@ -43,8 +55,16 @@ describe('ts: sub config `configSetup`', () => {
         );
       });
 
+      it('does not create `ts/non-type-aware/setup` and `ts/type-aware/setup` eslint configs when set to empty array', async () => {
+        const configResult = await computeEslintConfig({ts: {configSetup: {files: []}}});
+
+        expect(configResult.getConfigByUnPostfix('ts/non-type-aware/setup')).toBeUndefined();
+        expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')).toBeUndefined();
+      });
+
       it('merges `files` with `files` from `astro` config if the latter is enabled', async () => {
         const FILES_TS = ['src/**/*.ts'];
+
         const configResult = await computeEslintConfig({
           ts: {configSetup: {files: FILES_TS}},
           astro: true,
@@ -53,14 +73,15 @@ describe('ts: sub config `configSetup`', () => {
         const nonTypeAwareSetupFiles =
           configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files;
 
-        expect(nonTypeAwareSetupFiles).to.include.members(FILES_TS);
+        expect(nonTypeAwareSetupFiles).toIncludeAllMembers(FILES_TS);
         expect(difference(nonTypeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
-          `["**/*.astro"]`,
+          '["**/*.astro"]',
         );
       });
 
       it('merges `files` with `files` from `svelte` config if the latter is enabled', async () => {
         const FILES_TS = ['src/**/*.ts'];
+
         const configResult = await computeEslintConfig({
           ts: {configSetup: {files: FILES_TS}},
           svelte: true,
@@ -69,14 +90,15 @@ describe('ts: sub config `configSetup`', () => {
         const nonTypeAwareSetupFiles =
           configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files;
 
-        expect(nonTypeAwareSetupFiles).to.include.members(FILES_TS);
+        expect(nonTypeAwareSetupFiles).toIncludeAllMembers(FILES_TS);
         expect(difference(nonTypeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
-          `["**/*.svelte"]`,
+          '["**/*.svelte"]',
         );
       });
 
       it('merges `files` with `files` from `vue` config if the latter is enabled', async () => {
         const FILES_TS = ['src/**/*.ts'];
+
         const configResult = await computeEslintConfig({
           ts: {configSetup: {files: FILES_TS}},
           vue: true,
@@ -85,46 +107,45 @@ describe('ts: sub config `configSetup`', () => {
         const nonTypeAwareSetupFiles =
           configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files;
 
-        expect(nonTypeAwareSetupFiles).to.include.members(FILES_TS);
+        expect(nonTypeAwareSetupFiles).toIncludeAllMembers(FILES_TS);
         expect(difference(nonTypeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
-          `["**/*.vue"]`,
+          '["**/*.vue"]',
         );
       });
     });
 
     describe('option: `ignores`', () => {
-      it('uses user-provided `ignores` in `ts/non-type-aware/setup` when `configSetup.ignores` is provided, but does not affect `ts/non-type-aware/rules`', async () => {
+      it('uses user-provided `ignores` in `ts/non-type-aware/setup` eslint config and merges them with the implicit defaults, but not in `ts/non-type-aware/rules`', async () => {
         const IGNORES = ['**/fixtures/**'];
-        const configResult = await computeEslintConfig({
-          ts: {configSetup: {ignores: IGNORES}},
-        });
+
+        const configResult = await computeEslintConfig({ts: {configSetup: {ignores: IGNORES}}});
 
         const nonTypeAwareSetupIgnores =
           configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.ignores;
 
-        expect(nonTypeAwareSetupIgnores).to.include.members(IGNORES);
+        expect(nonTypeAwareSetupIgnores).toIncludeAllMembers(IGNORES);
         expect(nonTypeAwareSetupIgnores?.length).toBeGreaterThan(IGNORES.length);
 
         expect(
           configResult.getConfigByUnPostfix('ts/non-type-aware/rules')?.ignores,
-        ).not.to.include.members(IGNORES);
+        ).not.toIncludeAnyMembers(IGNORES);
       });
 
-      it('uses `ignores` in `ts/type-aware/setup` eslint config if not specified there', async () => {
+      it('uses user-provided `ignores` in `ts/type-aware/setup` eslint config if not specified there', async () => {
         const IGNORES = ['**/fixtures/**'];
-        const configResult = await computeEslintConfig({
-          ts: {configSetup: {ignores: IGNORES}},
-        });
+
+        const configResult = await computeEslintConfig({ts: {configSetup: {ignores: IGNORES}}});
 
         const typeAwareSetup = configResult.getConfigByUnPostfix('ts/type-aware/setup');
 
-        expect(typeAwareSetup?.ignores).to.include.members(IGNORES);
+        expect(typeAwareSetup?.ignores).toIncludeAllMembers(IGNORES);
         expect(typeAwareSetup?.ignores?.length).toBeGreaterThan(IGNORES.length);
       });
 
       it('does not use `ignores` in `ts/type-aware/setup` eslint config if specified there', async () => {
         const IGNORES_NON_TYPE_AWARE = ['**/fixtures/**'];
         const IGNORES_TYPE_AWARE = ['test/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           ts: {
             configSetup: {ignores: IGNORES_NON_TYPE_AWARE},
@@ -134,7 +155,7 @@ describe('ts: sub config `configSetup`', () => {
 
         const typeAwareSetup = configResult.getConfigByUnPostfix('ts/type-aware/setup');
 
-        expect(typeAwareSetup?.ignores).to.include.members(IGNORES_TYPE_AWARE);
+        expect(typeAwareSetup?.ignores).toIncludeAllMembers(IGNORES_TYPE_AWARE);
         expect(typeAwareSetup?.ignores?.length).toBeGreaterThan(IGNORES_TYPE_AWARE.length);
       });
     });
