@@ -126,8 +126,9 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
   /**
    * Configures rules specific to Nuxt config file.
    *
-   * Currently includes the single rule, [`nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/index.ts), and applies it
-   * to all `nuxt.config.?([cm])[jt]s?(x)` files.
+   * Currently includes the single rule,
+   * [`nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/index.ts),
+   * and applies it to all `nuxt.config.?([cm])[jt]s?(x)` files.
    * @default true
    */
   configNuxtConfig?:
@@ -138,13 +139,14 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
       >;
 
   /**
-   * @default auto-detected
+   * By default auto-detected from the installed `nuxt` package version.
    */
   nuxtMajorVersion?: 3 | 4;
 
   /**
    * You may need to set this manually to `true` if you're using
-   * [Nuxt 4 directory structure](https://nuxt.com/docs/4.x/getting-started/upgrade#new-directory-structure) in Nuxt 3.
+   * [Nuxt 4 directory structure](https://nuxt.com/docs/4.x/getting-started/upgrade#new-directory-structure)
+   * in Nuxt 3.
    * @default true <=> Nuxt version is 4
    */
   v4DirectoryStructure?: boolean;
@@ -154,7 +156,9 @@ interface PiniaSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'pinia'> {
   /**
-   * @default `Store`
+   * Enforses pinia stores to be defined with the specified suffix.
+   * Set to an empty string to not require any suffix.
+   * @default 'Store'
    * @see https://github.com/lisilinhart/eslint-plugin-pinia/blob/HEAD/docs/rules/prefer-use-store-naming-convention.md
    */
   storesNameSuffix?: string;
@@ -187,7 +191,7 @@ export interface VueEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'vue'> {
   /**
-   * Enables A11Y (accessibility) rules for Vue SFC templates
+   * Enables a11y (accessibility) rules for Vue SFC templates
    *
    * By default, uses `files` and `ignores` from the parent config.
    * @default true
@@ -255,6 +259,7 @@ export interface VueEslintConfigOptions<
   configScopedCss?: boolean | ScopedCssEslintConfigOptions<ExtraPlugins>;
 
   /**
+   * By default auto-detected from the installed `vue` package version.
    * @default auto-detected
    */
   majorVersion?: SupportedVueMajorVersion;
@@ -271,7 +276,32 @@ export interface VueEslintConfigOptions<
    * - [`dot-notation`](https://eslint.vuejs.org/rules/dot-notation.html) will inherit
    * severity and options unless `noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles`
    * is set to `true`, in which case the rule will be turned off.
-   * - All "stylistic" rules are always turned off: [array-bracket-newline](https://eslint.vuejs.org/rules/array-bracket-newline.html), [array-bracket-spacing](https://eslint.vuejs.org/rules/array-bracket-spacing.html), [array-element-newline](https://eslint.vuejs.org/rules/array-element-newline.html), [arrow-spacing](https://eslint.vuejs.org/rules/arrow-spacing.html), [block-spacing](https://eslint.vuejs.org/rules/block-spacing.html), [brace-style](https://eslint.vuejs.org/rules/brace-style.html), [comma-dangle](https://eslint.vuejs.org/rules/comma-dangle.html), [comma-spacing](https://eslint.vuejs.org/rules/comma-spacing.html), [comma-style](https://eslint.vuejs.org/rules/comma-style.html), [dot-location](https://eslint.vuejs.org/rules/dot-location.html), [func-call-spacing](https://eslint.vuejs.org/rules/func-call-spacing.html), [key-spacing](https://eslint.vuejs.org/rules/key-spacing.html), [keyword-spacing](https://eslint.vuejs.org/rules/keyword-spacing.html), [max-len](https://eslint.vuejs.org/rules/max-len.html), [multiline-ternary](https://eslint.vuejs.org/rules/multiline-ternary.html), [no-extra-parens](https://eslint.vuejs.org/rules/no-extra-parens.html), [object-curly-newline](https://eslint.vuejs.org/rules/object-curly-newline.html), [object-curly-spacing](https://eslint.vuejs.org/rules/object-curly-spacing.html), [object-property-newline](https://eslint.vuejs.org/rules/object-property-newline.html), [operator-linebreak](https://eslint.vuejs.org/rules/operator-linebreak.html), [quote-props](https://eslint.vuejs.org/rules/quote-props.html), [space-in-parens](https://eslint.vuejs.org/rules/space-in-parens.html), [space-infix-ops](https://eslint.vuejs.org/rules/space-infix-ops.html), [space-unary-ops](https://eslint.vuejs.org/rules/space-unary-ops.html), [template-curly-spacing](https://eslint.vuejs.org/rules/template-curly-spacing.html)
+   * - All "stylistic" rules are always turned off:
+   * [array-bracket-newline](https://eslint.vuejs.org/rules/array-bracket-newline.html),
+   * [array-bracket-spacing](https://eslint.vuejs.org/rules/array-bracket-spacing.html),
+   * [array-element-newline](https://eslint.vuejs.org/rules/array-element-newline.html),
+   * [arrow-spacing](https://eslint.vuejs.org/rules/arrow-spacing.html),
+   * [block-spacing](https://eslint.vuejs.org/rules/block-spacing.html),
+   * [brace-style](https://eslint.vuejs.org/rules/brace-style.html),
+   * [comma-dangle](https://eslint.vuejs.org/rules/comma-dangle.html),
+   * [comma-spacing](https://eslint.vuejs.org/rules/comma-spacing.html),
+   * [comma-style](https://eslint.vuejs.org/rules/comma-style.html),
+   * [dot-location](https://eslint.vuejs.org/rules/dot-location.html),
+   * [func-call-spacing](https://eslint.vuejs.org/rules/func-call-spacing.html),
+   * [key-spacing](https://eslint.vuejs.org/rules/key-spacing.html),
+   * [keyword-spacing](https://eslint.vuejs.org/rules/keyword-spacing.html),
+   * [max-len](https://eslint.vuejs.org/rules/max-len.html),
+   * [multiline-ternary](https://eslint.vuejs.org/rules/multiline-ternary.html),
+   * [no-extra-parens](https://eslint.vuejs.org/rules/no-extra-parens.html),
+   * [object-curly-newline](https://eslint.vuejs.org/rules/object-curly-newline.html),
+   * [object-curly-spacing](https://eslint.vuejs.org/rules/object-curly-spacing.html),
+   * [object-property-newline](https://eslint.vuejs.org/rules/object-property-newline.html),
+   * [operator-linebreak](https://eslint.vuejs.org/rules/operator-linebreak.html),
+   * [quote-props](https://eslint.vuejs.org/rules/quote-props.html),
+   * [space-in-parens](https://eslint.vuejs.org/rules/space-in-parens.html),
+   * [space-infix-ops](https://eslint.vuejs.org/rules/space-infix-ops.html),
+   * [space-unary-ops](https://eslint.vuejs.org/rules/space-unary-ops.html),
+   * [template-curly-spacing](https://eslint.vuejs.org/rules/template-curly-spacing.html)
    * @default true
    */
   inheritBaseRuleSeverityAndOptionsForExtensionRules?: boolean;
@@ -283,10 +313,14 @@ export interface VueEslintConfigOptions<
 
   /**
    * Will be merged with `['^router-link$', '^router-view$']` and Nuxt-specific ones
-   * if Nuxt is enabled
+   * if `nuxt` sub-config is enabled
    */
   knownComponentNames?: string[];
 
+  /**
+   * Enforce either Composition (`setup`) or Options (`options`) API.
+   * Not enforced by default.
+   */
   enforceApiStyle?: 'setup' | 'options';
 
   /**
@@ -300,7 +334,9 @@ export interface VueEslintConfigOptions<
    * @see https://eslint.vuejs.org/rules/block-order.html
    */
   sfcBlockOrder?: 'template-first' | 'script-first' | (WellKnownSfcBlocks | (string & {}))[];
+
   noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles?: boolean;
+
   doNotRequireComponentNamesToBeMultiWordForPatterns?: string | string[];
 
   /**
@@ -977,6 +1013,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       .addAnyRule('nuxt', 'no-page-meta-runtime-values', ERROR) /** @since 1.14.0 */
       .addOverrides()
       .enableConfigTesterForPlugin('nuxt', {
+        /* v8 ignore next */
         rulesToSkipInConfig: (ruleName) => NUXT_CONFIG_RULES.has(ruleName),
       });
   }
@@ -997,6 +1034,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       .addAnyRule('nuxt', 'no-nuxt-config-test-key', ERROR) /** @since 1.12.0 */
       .addOverrides()
       .enableConfigTesterForPlugin('nuxt', {
+        /* v8 ignore next */
         rulesToSkipInConfig: (ruleName) => !NUXT_CONFIG_RULES.has(ruleName),
       });
   }
