@@ -14,7 +14,7 @@ import type {
 } from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Nullable, ObjectValues, OmitStrict, Prettify} from '../types';
-import {type MaybeFn, isIn, maybeCall, omit, unique} from '../utils';
+import {type MaybeFn, isIn, maybeCall, omit} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
@@ -377,6 +377,7 @@ const TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS = {
     'noImplicitOverride',
     /* If transpiling with TypeScript: */
     'module',
+    'noEmit', // If NOT transpiling with TypeScript
     'outDir',
     'sourceMap',
     /* AND if you're building for a library: */
@@ -384,9 +385,6 @@ const TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS = {
     /* AND if you're building for a library in a monorepo: */
     'composite',
     'declarationMap',
-    /* If NOT transpiling with TypeScript: */
-    'module',
-    'noEmit',
     /* If your code runs/doesn't run in the DOM: */
     'lib',
   ],
@@ -1311,11 +1309,11 @@ export default ((
       .addAnyRule('jsonc', 'sort-keys', ERROR, [
         {
           pathPattern: '^$',
-          order: unique(topLevelOptionsOrder),
+          order: topLevelOptionsOrder,
         },
         {
           pathPattern: '^compilerOptions$',
-          order: unique(compilerOptionsOrder),
+          order: compilerOptionsOrder,
         },
         ...(extraSortKeysConfigs || []),
       ])
