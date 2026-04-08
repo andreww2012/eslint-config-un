@@ -1264,6 +1264,7 @@ export default ((
   if (configSortTsconfigKeys) {
     const configSortTsconfigKeysOptions = assignDefaults(configSortTsconfigKeys, {
       orderTopLevel: true,
+      orderCompilerOptions: true,
     } satisfies TsEslintConfigOptions['configSortTsconfigKeys'] & {});
 
     const {orderTopLevel, orderCompilerOptions, extraSortKeysConfigs} =
