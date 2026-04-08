@@ -1250,7 +1250,12 @@ export default ((
     'no-type-assertion',
   );
   configBuilderNoTypeAssertions
-    ?.addConfig('no-type-assertion')
+    ?.addConfig([
+      'no-type-assertion',
+      {
+        includeDefaultFilesAndIgnores: true,
+      },
+    ])
     .addRule('no-type-assertion', ERROR) /** @since 1.0.1 */
     .enableConfigTesterForPlugin('no-type-assertion')
     .addOverrides();
