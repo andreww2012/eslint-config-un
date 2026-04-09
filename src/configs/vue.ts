@@ -156,7 +156,7 @@ interface PiniaSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'pinia'> {
   /**
-   * Enforses pinia stores to be defined with the specified suffix.
+   * Enforces pinia stores to be defined with the specified suffix.
    * Set to an empty string to not require any suffix.
    * @default 'Store'
    * @see https://github.com/lisilinhart/eslint-plugin-pinia/blob/HEAD/docs/rules/prefer-use-store-naming-convention.md
@@ -979,11 +979,12 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addOverrides();
 
   const configBuilderEnforceTypescriptInScriptSection = context.createConfigBuilder(
-    configEnforceTypescriptInScriptSection,
+    // Special case: this config is always created to enable `vue/block-lang` rule
+    configEnforceTypescriptInScriptSection || optionsResolved,
     'vue',
   );
   configBuilderEnforceTypescriptInScriptSection
-    ?.addConfig('vue/enforce-typescript-in-script-section')
+    ?.addConfig(['vue/enforce-typescript-in-script-section', {includeDefaultFilesAndIgnores: true}])
     .addRule('block-lang', ERROR, [
       {
         script: {

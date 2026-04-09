@@ -9,41 +9,61 @@ beforeEach(() => {
 
 describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
   describe('basic tests', () => {
-    it('does not create `vue/enforce-typescript-in-script-section` eslint config by default (when `ts` config is disabled)', async () => {
+    it('creates `vue/enforce-typescript-in-script-section` eslint config, uses parent config `files` and `ignores` and enforces `ts` lang for <script> sections when `ts` config is enabled', async () => {
+      const IGNORES = ['**/fixtures/**'];
+
+      const configResult = await computeEslintConfig({vue: {ignores: IGNORES}, ts: true});
+
+      const config = configResult.getConfigByUnPostfix('vue/enforce-typescript-in-script-section');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.vue"]');
+      expect(config?.ignores).toIncludeAllMembers(IGNORES);
+
+      expect(
+        configResult.getRuleEntryOptions(
+          'vue/enforce-typescript-in-script-section',
+          'vue/block-lang',
+        ),
+      ).toStrictEqual([{script: {lang: 'ts'}}]);
+    });
+
+    it('creates `vue/enforce-typescript-in-script-section` eslint config even when `ts` config is disabled, but does not enforce `ts` lang for <script> sections', async () => {
       const configResult = await computeEslintConfig('vue');
 
       expect(
-        configResult.getConfigByUnPostfix('vue/enforce-typescript-in-script-section'),
-      ).toBeUndefined();
+        configResult.getRuleEntryOptions(
+          'vue/enforce-typescript-in-script-section',
+          'vue/block-lang',
+        ),
+      ).toMatchObject([{script: {allowNoLang: true}}]);
     });
 
-    it('creates `vue/enforce-typescript-in-script-section` eslint config when `ts` config is enabled', async () => {
-      const configResult = await computeEslintConfig({vue: true, ts: true});
-
-      expect(
-        configResult.getConfigByUnPostfix('vue/enforce-typescript-in-script-section'),
-      ).toBeDefined();
-    });
-
-    it('creates `vue/enforce-typescript-in-script-section` eslint config when set to `true`', async () => {
+    it('creates `vue/enforce-typescript-in-script-section` eslint config and enforces `ts` lang when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         vue: {configEnforceTypescriptInScriptSection: true},
       });
 
       expect(
-        configResult.getConfigByUnPostfix('vue/enforce-typescript-in-script-section'),
-      ).toBeDefined();
+        configResult.getRuleEntryOptions(
+          'vue/enforce-typescript-in-script-section',
+          'vue/block-lang',
+        ),
+      ).toStrictEqual([{script: {lang: 'ts'}}]);
     });
 
-    it('does not create `vue/enforce-typescript-in-script-section` eslint config when set to `false`', async () => {
+    it('creates `vue/enforce-typescript-in-script-section` eslint config, but does not enforce `ts` lang when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         vue: {configEnforceTypescriptInScriptSection: false},
         ts: true,
       });
 
       expect(
-        configResult.getConfigByUnPostfix('vue/enforce-typescript-in-script-section'),
-      ).toBeUndefined();
+        configResult.getRuleEntryOptions(
+          'vue/enforce-typescript-in-script-section',
+          'vue/block-lang',
+        ),
+      ).toMatchObject([{script: {allowNoLang: true}}]);
     });
   });
 
@@ -97,6 +117,18 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
 
   describe('un options', () => {
     describe('option: `files`', () => {
+      it('uses user-provided `files` in `vue/enforce-typescript-in-script-section` eslint config', async () => {
+        const FILES = ['src/**/*.vue'];
+
+        const configResult = await computeEslintConfig({
+          vue: {configEnforceTypescriptInScriptSection: {files: FILES}},
+        });
+
+        expect(
+          configResult.getConfigByUnPostfix('vue/enforce-typescript-in-script-section')?.files,
+        ).toStrictEqual(FILES);
+      });
+
       it('disables `vue/enforce-typescript-in-script-section` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           vue: {configEnforceTypescriptInScriptSection: {files: []}},
@@ -105,6 +137,23 @@ describe('vue: sub config `enforceTypescriptInScriptSection`', () => {
         expect(
           configResult.getConfigByUnPostfix('vue/enforce-typescript-in-script-section'),
         ).toBeUndefined();
+      });
+    });
+
+    describe('option: `ignores`', () => {
+      it('uses user-provided `ignores` in `vue/enforce-typescript-in-script-section` eslint config and merges them with the implicit defaults', async () => {
+        const IGNORES = ['**/fixtures/**'];
+
+        const configResult = await computeEslintConfig({
+          vue: {configEnforceTypescriptInScriptSection: {ignores: IGNORES}},
+        });
+
+        const ignores = configResult.getConfigByUnPostfix(
+          'vue/enforce-typescript-in-script-section',
+        )?.ignores;
+
+        expect(ignores).toIncludeAllMembers(IGNORES);
+        expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
 

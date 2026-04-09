@@ -14,7 +14,7 @@ describe('vue: sub config `i18n`', () => {
       const config = configResult.getConfigByUnPostfix('vue/i18n');
 
       expect(config).toBeDefined();
-      expect(config?.files).toMatchInlineSnapshot(`["**/*.vue"]`);
+      expect(config?.files).toMatchInlineSnapshot('["**/*.vue"]');
     });
 
     it('does not create `vue/i18n` eslint config when `vue-i18n` is not installed', async () => {
