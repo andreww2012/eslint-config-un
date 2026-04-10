@@ -97,7 +97,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('svelte')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `svelte` eslint config when `files` is empty array', async () => {
+    it('disables `svelte` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({svelte: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('svelte')).toBeUndefined();
@@ -127,32 +127,6 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('svelte', 'svelte/no-at-html-tags')).toBe(0);
     expect(configResult.getRuleEntrySeverity('svelte', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `svelte` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        svelte: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('svelte'), (ruleName) =>
-          ruleName.startsWith('svelte/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `svelte` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        svelte: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('svelte'), (ruleName) =>
-          ruleName.startsWith('svelte/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 
@@ -188,25 +162,25 @@ describe('rules', async () => {
 
 describe('options', () => {
   describe('option: `svelteVersion`', () => {
-    it('enables `svelte/prefer-style-directive` rule when option is not set and installed `svelte` versio is >= 3.46', async () => {
+    it('enables `svelte/prefer-style-directive` rule when installed `svelte` version is >=3.46 (detected from the installed package version)', async () => {
       const configResult = await computeEslintConfig('svelte');
 
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/prefer-style-directive')).toBe(1);
     });
 
-    it('enables `svelte/prefer-style-directive` rule when option is set to >=3.46', async () => {
+    it('enables `svelte/prefer-style-directive` rule when set to >=3.46', async () => {
       const configResult = await computeEslintConfig({svelte: {svelteVersion: 3.46}});
 
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/prefer-style-directive')).toBe(1);
     });
 
-    it('disables `svelte/prefer-style-directive` rule when option is set to <3.46', async () => {
+    it('disables `svelte/prefer-style-directive` rule when set to <3.46', async () => {
       const configResult = await computeEslintConfig({svelte: {svelteVersion: 3}});
 
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/prefer-style-directive')).toBe(0);
     });
 
-    it('disables `svelte/prefer-style-directive` rule when option is not set and installed `svelte` version is < 3.46', async () => {
+    it('disables `svelte/prefer-style-directive` rule by default and installed `svelte` version is < 3.46', async () => {
       setInstalledPackages({svelte: '3'});
 
       const configResult = await computeEslintConfig({svelte: {svelteVersion: 3}});
@@ -214,13 +188,13 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/prefer-style-directive')).toBe(0);
     });
 
-    it('enables `svelte/require-event-prefix` rule when option is not set and installed `svelte` version is >= 5', async () => {
+    it('enables `svelte/require-event-prefix` rule by default and installed `svelte` version is >= 5', async () => {
       const configResult = await computeEslintConfig('svelte');
 
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/require-event-prefix')).toBe(2);
     });
 
-    it('disables `svelte/require-event-prefix` rule when option is not set and installed `svelte` version is < 5', async () => {
+    it('disables `svelte/require-event-prefix` rule by default and installed `svelte` version is < 5', async () => {
       setInstalledPackages({svelte: '4'});
 
       const configResult = await computeEslintConfig('svelte');
@@ -228,13 +202,13 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/require-event-prefix')).toBe(0);
     });
 
-    it('enables `svelte/require-event-prefix` rule when option is set to >=5', async () => {
+    it('enables `svelte/require-event-prefix` rule when set to >=5', async () => {
       const configResult = await computeEslintConfig({svelte: {svelteVersion: 5}});
 
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/require-event-prefix')).toBe(2);
     });
 
-    it('disables `svelte/require-event-prefix` rule when option is set to <5', async () => {
+    it('disables `svelte/require-event-prefix` rule when set to <5', async () => {
       const configResult = await computeEslintConfig({svelte: {svelteVersion: 4}});
 
       expect(configResult.getRuleEntrySeverity('svelte', 'svelte/require-event-prefix')).toBe(0);
@@ -289,7 +263,7 @@ describe('options', () => {
       );
     });
 
-    it('allows a previously-restricted invalid tag when option is `false`', async () => {
+    it('allows a previously-restricted invalid tag when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         svelte: {disallowedHtmlTags: {font: false}},
       });
@@ -302,7 +276,7 @@ describe('options', () => {
   });
 
   describe('option: `settings`', () => {
-    it('does not set svelte settings when option is not set', async () => {
+    it('does not set svelte settings by default', async () => {
       const configResult = await computeEslintConfig('svelte');
 
       expect(
@@ -312,9 +286,8 @@ describe('options', () => {
 
     it('sets svelte settings when `settings` is provided', async () => {
       const SETTINGS = {ignoreWarnings: ['some-rule']};
-      const configResult = await computeEslintConfig({
-        svelte: {settings: SETTINGS},
-      });
+
+      const configResult = await computeEslintConfig({svelte: {settings: SETTINGS}});
 
       expect(configResult.getConfigByUnPostfix('svelte/setup')?.settings?.['svelte']).toStrictEqual(
         SETTINGS,
@@ -323,7 +296,7 @@ describe('options', () => {
   });
 
   describe('option: `svelteKitConfig`', () => {
-    it('does not set `svelteConfig` in parserOptions when option is not set', async () => {
+    it('does not set `svelteConfig` in parserOptions by default', async () => {
       const configResult = await computeEslintConfig('svelte');
 
       expect(

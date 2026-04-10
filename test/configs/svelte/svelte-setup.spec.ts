@@ -28,7 +28,7 @@ describe('svelte: sub config `setup`', () => {
         expect(configResult.getConfigByUnPostfix('svelte')?.files).not.toIncludeAnyMembers(FILES);
       });
 
-      it('disables `svelte/setup` eslint config when `files` is empty array, but not `svelte`', async () => {
+      it('disables `svelte/setup` eslint config when set to empty array, but not `svelte`', async () => {
         const configResult = await computeEslintConfig({svelte: {configSetup: {files: []}}});
 
         expect(configResult.getConfigByUnPostfix('svelte/setup')).toBeUndefined();
