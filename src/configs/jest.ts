@@ -410,12 +410,10 @@ export default (async (context, optionsRaw) => {
     .addRule('no-unnecessary-assertion', ERROR) /** @since 29.6.0 */ // 💭
     // Works only on TS files
     .addRule('no-untyped-mock-factory', ERROR) /** @since 27.2.0 */
-    // Requires type checking
-    // TODO auto-include test files in TS config?
-    .addRule('unbound-method', configTypescript ? ERROR : OFF) /** @since 24.3.0 */ // 💭
-    .addRule('valid-expect-with-promise', ERROR) /** @since 29.8.0 */ // 💭
     // https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md#how-to-use
+    .addRule('unbound-method', ERROR) /** @since 24.3.0 */ // 💭
     .disableAnyRule('ts', 'unbound-method')
+    .addRule('valid-expect-with-promise', ERROR) /** @since 29.8.0 */ // 💭
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest', {
       /* v8 ignore next */
