@@ -146,44 +146,41 @@ export default ((context, optionsRaw) => {
     .enableConfigTesterForPlugin('lockfile')
     .addOverrides().config;
 
-  if (lockfileEslintConfig) {
-    const files = lockfileEslintConfig.files?.flat() || [];
-    objectEntriesUnsafe(
-      groupBy(files, (fileGlob) => {
-        for (const [, [parserConfigName, lockfileNames]] of LOCKFILES_INFO) {
-          if (lockfileNames.some((lockfile) => fileGlob.includes(lockfile))) {
-            return parserConfigName;
-          }
+  objectEntriesUnsafe(
+    groupBy(lockfileEslintConfig?.files?.flat() || [], (fileGlob) => {
+      for (const [, [parserConfigName, lockfileNames]] of LOCKFILES_INFO) {
+        if (lockfileNames.some((lockfile) => fileGlob.includes(lockfile))) {
+          return parserConfigName;
         }
-        return '';
-      }),
-    ).forEach(([parserConfigName, globs]) => {
-      if (!parserConfigName) {
-        context.logger.warn(
-          `The following file globs in the \`lockfile\` config could not be associated with a known package manager and may not be parsed correctly: ${globs.join(
-            ', ',
-          )}`,
-        );
-        return;
       }
+      return '';
+    }),
+  ).forEach(([parserConfigName, globs]) => {
+    if (!parserConfigName) {
+      context.logger.warn(
+        `The following file globs in the \`lockfile\` config could not be associated with a known package manager and may not be parsed correctly: ${globs.join(
+          ', ',
+        )}`,
+      );
+      return;
+    }
 
-      // eslint-disable-next-line ts/no-non-null-assertion
-      const [languageOrParserName] = LOCKFILES_INFO.find(([, [pm]]) => pm === parserConfigName)![1];
-      const languageOrParser = LOCKFILE_PARSERS[languageOrParserName];
+    // eslint-disable-next-line ts/no-non-null-assertion
+    const [languageOrParserName] = LOCKFILES_INFO.find(([, [pm]]) => pm === parserConfigName)![1];
+    const languageOrParser = LOCKFILE_PARSERS[languageOrParserName];
 
-      configBuilder.addConfig([
-        `lockfile/parser/${parserConfigName}`,
-        {
-          filesDefault: globs,
-          ignoresInternal: {
-            yaml: false,
-          },
-          // ...('parser' in languageOrParser && {parser: languageOrParser.parser}),
-          ...('language' in languageOrParser && {language: languageOrParser.language}),
+    configBuilder?.addConfig([
+      `lockfile/parser/${parserConfigName}`,
+      {
+        filesDefault: globs,
+        ignoresInternal: {
+          yaml: false,
         },
-      ]);
-    });
-  }
+        // ...('parser' in languageOrParser && {parser: languageOrParser.parser}),
+        ...('language' in languageOrParser && {language: languageOrParser.language}),
+      },
+    ]);
+  });
 
   return {
     configs: [configBuilder],

@@ -35,60 +35,45 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `lockfile` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
+      await expectConfigState({}, 'lockfile', false);
     });
 
     it('creates `lockfile` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig({lockfile: true});
-
-      expect(configResult.getConfigByUnPostfix('lockfile')).toBeDefined();
+      await expectConfigState('lockfile', 'lockfile', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('does not create `lockfile` eslint config', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
+      await expectConfigState({}, 'lockfile', false, 'default');
     });
 
     it('creates `lockfile` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig({lockfile: true}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('lockfile')).toBeDefined();
+      await expectConfigState('lockfile', 'lockfile', true, 'default');
     });
 
     it('does not create `lockfile` eslint config and prints a warning if explicitly disabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig({lockfile: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to disable \`lockfile\` config because this is the default`,
-        ),
-      ).toBe(true);
+      await expectConfigState({lockfile: false}, 'lockfile', ['lockfile', false], 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `lockfile` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'lockfile', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('lockfile')).toBeDefined();
+    it('creates `lockfile` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState({lockfile: true}, 'lockfile', ['lockfile', true], 'misc-enabled');
+    });
+
+    it('does not create `lockfile` eslint config if explicitly disabled', async () => {
+      await expectConfigState({lockfile: false}, 'lockfile', false, 'misc-enabled');
     });
   });
 
   it('has default `files` in `lockfile` eslint config', () => {
     expect(configResult.getConfigByUnPostfix('lockfile')?.files).toMatchInlineSnapshot(
-      `["**/package-lock.json", "**/npm-shrinkwrap.json", "**/yarn.lock", "**/pnpm-lock.yaml", "**/bun.lock", "**/bun.lockb", "**/vlt-lock.json"]`,
+      '["**/package-lock.json", "**/npm-shrinkwrap.json", "**/yarn.lock", "**/pnpm-lock.yaml", "**/bun.lock", "**/bun.lockb", "**/vlt-lock.json"]',
     );
   });
 
@@ -96,7 +81,7 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('lockfile')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.to.include.members(['**/*.yaml']);
+    expect(ignores).not.toIncludeAnyMembers(['**/*.yaml']);
   });
 });
 
@@ -104,19 +89,11 @@ describe('rules', async () => {
   const configResult = await computeEslintConfig('lockfile');
 
   it('enables `lockfile/integrity` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('lockfile', 'lockfile/integrity'),
-      ),
-    ).toBe(2);
+    expect(configResult.getRuleEntrySeverity('lockfile', 'lockfile/integrity')).toBe(2);
   });
 
   it('disables `lockfile/registry` rule by default', () => {
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('lockfile', 'lockfile/registry'),
-      ),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('lockfile', 'lockfile/registry')).toBe(0);
   });
 
   it('`lockfile/non-registry-specifiers` rule fires on a lockfile with a github: specifier', async () => {
@@ -133,7 +110,7 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      `"Package "node_modules/some-pkg" in lockfile "package-lock.json" uses GitHub shorthand: github:some-org/some-pkg#abcdef1234567890"`,
+      '"Package "node_modules/some-pkg" in lockfile "package-lock.json" uses GitHub shorthand: github:some-org/some-pkg#abcdef1234567890"',
     );
   });
 });
@@ -142,17 +119,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `lockfile` eslint config', async () => {
       const FILES = ['package-lock.json'];
-      const configResult = await computeEslintConfig({
-        lockfile: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({lockfile: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('lockfile')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `lockfile` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        lockfile: {files: []},
-      });
+    it('disables `lockfile` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({lockfile: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
     });
@@ -188,9 +162,7 @@ describe('un options', () => {
     });
 
     it('only enables `yaml` parser config when `files` only match yarn.lock', async () => {
-      const configResult = await computeEslintConfig({
-        lockfile: {files: ['**/yarn.lock']},
-      });
+      const configResult = await computeEslintConfig({lockfile: {files: ['**/yarn.lock']}});
 
       const allParserConfigs = configResult.getConfigsByUnPostfix((name) =>
         name.startsWith(PARSER_CONFIG_PREFIX),
@@ -203,9 +175,7 @@ describe('un options', () => {
     });
 
     it('only enables `yaml` parser config when `files` only match pnpm-lock.yaml', async () => {
-      const configResult = await computeEslintConfig({
-        lockfile: {files: ['**/pnpm-lock.yaml']},
-      });
+      const configResult = await computeEslintConfig({lockfile: {files: ['**/pnpm-lock.yaml']}});
 
       const allParserConfigs = configResult.getConfigsByUnPostfix((name) =>
         name.startsWith(PARSER_CONFIG_PREFIX),
@@ -218,9 +188,7 @@ describe('un options', () => {
     });
 
     it('only enables `jsonc` parser config when `files` only match bun.lock', async () => {
-      const configResult = await computeEslintConfig({
-        lockfile: {files: ['**/bun.lock']},
-      });
+      const configResult = await computeEslintConfig({lockfile: {files: ['**/bun.lock']}});
 
       const allParserConfigs = configResult.getConfigsByUnPostfix((name) =>
         name.startsWith(PARSER_CONFIG_PREFIX),
@@ -233,9 +201,7 @@ describe('un options', () => {
     });
 
     it('only enables `json` parser config when `files` only match vlt-lock.json', async () => {
-      const configResult = await computeEslintConfig({
-        lockfile: {files: ['**/vlt-lock.json']},
-      });
+      const configResult = await computeEslintConfig({lockfile: {files: ['**/vlt-lock.json']}});
 
       const allParserConfigs = configResult.getConfigsByUnPostfix((name) =>
         name.startsWith(PARSER_CONFIG_PREFIX),
@@ -247,10 +213,8 @@ describe('un options', () => {
       ).toStrictEqual(['json']);
     });
 
-    it.todo('only enables `jsonc` parser config when `files` only match bun.lockb', async () => {
-      const configResult = await computeEslintConfig({
-        lockfile: {files: ['**/bun.lockb']},
-      });
+    it('only enables `jsonc` parser config when `files` only match bun.lockb', async () => {
+      const configResult = await computeEslintConfig({lockfile: {files: ['**/bun.lockb']}});
 
       const allParserConfigs = configResult.getConfigsByUnPostfix((name) =>
         name.startsWith(PARSER_CONFIG_PREFIX),
@@ -266,9 +230,8 @@ describe('un options', () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write');
 
       const FILES = ['pkg-lock.json', 'yarn.lock', 'bun.json'] satisfies NonEmptyTuple;
-      await computeEslintConfig({
-        lockfile: {files: FILES},
-      });
+
+      await computeEslintConfig({lockfile: {files: FILES}});
 
       expect(
         String(stderrSpy.mock.calls[0]?.[0]).startsWith(
@@ -281,13 +244,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `lockfile` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        lockfile: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({lockfile: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('lockfile')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -297,149 +259,102 @@ describe('un options', () => {
       lockfile: {overrides: {'lockfile/binary-conflicts': 0}, overridesAny: {'no-console': 0}},
     });
 
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('lockfile', 'lockfile/binary-conflicts'),
-      ),
-    ).toBe(0);
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('lockfile', 'no-console')),
-    ).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `lockfile` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        lockfile: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('lockfile'), (ruleName) =>
-          ruleName.startsWith('lockfile/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `lockfile` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        lockfile: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('lockfile'), (ruleName) =>
-          ruleName.startsWith('lockfile/'),
-        ),
-      ).toStrictEqual([1]);
-    });
+    expect(configResult.getRuleEntrySeverity('lockfile', 'lockfile/binary-conflicts')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('lockfile', 'no-console')).toBe(0);
   });
 });
 
 describe('options', () => {
   describe('option: `enforceAllowedRegistries`', () => {
-    it('disables `lockfile/registry` rule when `enforceAllowedRegistries` is `false` (default)', async () => {
+    it('disables `lockfile/registry` rule by default', async () => {
+      const configResult = await computeEslintConfig('lockfile');
+
+      expect(configResult.getRuleEntrySeverity('lockfile', 'lockfile/registry')).toBe(0);
+    });
+
+    it('disables `lockfile/registry` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {enforceAllowedRegistries: false},
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('lockfile', 'lockfile/registry'),
-        ),
-      ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('lockfile', 'lockfile/registry')).toBe(0);
     });
 
-    it('enables `lockfile/registry` rule when `enforceAllowedRegistries` is `true`', async () => {
+    it('enables `lockfile/registry` rule when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {enforceAllowedRegistries: true},
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('lockfile', 'lockfile/registry'),
-        ),
-      ).toBe(2);
+      expect(configResult.getRuleEntrySeverity('lockfile', 'lockfile/registry')).toBe(2);
     });
 
-    it('enables `lockfile/registry` rule with options when `enforceAllowedRegistries` is an object', async () => {
+    it('enables `lockfile/registry` rule with options when set to object', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {enforceAllowedRegistries: {'https://registry.npmjs.org': true}},
       });
 
       expect(configResult.getRuleEntry('lockfile', 'lockfile/registry')).toMatchInlineSnapshot(
-        `[2, {"https://registry.npmjs.org": true}]`,
+        '[2, {"https://registry.npmjs.org": true}]',
       );
     });
   });
 
   describe('option: `enforceLockfileVersion`', () => {
-    it('disables `lockfile/version` rule when `enforceLockfileVersion` is not set (default)', async () => {
+    it('disables `lockfile/version` rule by default', async () => {
       const configResult = await computeEslintConfig('lockfile');
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('lockfile', 'lockfile/version'),
-        ),
-      ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('lockfile', 'lockfile/version')).toBe(0);
     });
 
-    it('enables `lockfile/version` rule when `enforceLockfileVersion` is set to an object', async () => {
+    it('enables `lockfile/version` rule when set to object', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {enforceLockfileVersion: {npm: 3}},
       });
 
       expect(configResult.getRuleEntry('lockfile', 'lockfile/version')).toMatchInlineSnapshot(
-        `[2, {"npm": 3}]`,
+        '[2, {"npm": 3}]',
       );
     });
   });
 
   describe('option: `enforcePackageManager`', () => {
-    it('disables `lockfile/flavor` rule when `enforcePackageManager` is not set (default)', async () => {
+    it('disables `lockfile/flavor` rule by default', async () => {
       const configResult = await computeEslintConfig('lockfile');
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('lockfile', 'lockfile/flavor'),
-        ),
-      ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('lockfile', 'lockfile/flavor')).toBe(0);
     });
 
-    it('enables `lockfile/flavor` rule when `enforcePackageManager` is set', async () => {
+    it('enables `lockfile/flavor` rule when set to string', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {enforcePackageManager: 'pnpm'},
       });
 
       expect(configResult.getRuleEntry('lockfile', 'lockfile/flavor')).toMatchInlineSnapshot(
-        `[2, "pnpm"]`,
+        '[2, "pnpm"]',
       );
     });
   });
 
   describe('option: `noNonRegistryDependencySpecifiers`', () => {
-    it('enables `lockfile/non-registry-specifiers` rule when `noNonRegistryDependencySpecifiers` is `true` (default)', async () => {
+    it('enables `lockfile/non-registry-specifiers` rule by default', async () => {
       const configResult = await computeEslintConfig('lockfile');
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('lockfile', 'lockfile/non-registry-specifiers'),
-        ),
+        configResult.getRuleEntrySeverity('lockfile', 'lockfile/non-registry-specifiers'),
       ).toBe(2);
     });
 
-    it('disables `lockfile/non-registry-specifiers` rule when `noNonRegistryDependencySpecifiers` is `false`', async () => {
+    it('disables `lockfile/non-registry-specifiers` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {noNonRegistryDependencySpecifiers: false},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('lockfile', 'lockfile/non-registry-specifiers'),
-        ),
+        configResult.getRuleEntrySeverity('lockfile', 'lockfile/non-registry-specifiers'),
       ).toBe(0);
     });
 
-    it('enables `lockfile/non-registry-specifiers` rule with options when `noNonRegistryDependencySpecifiers` is an object', async () => {
+    it('enables `lockfile/non-registry-specifiers` rule with options when set to object', async () => {
       const IGNORE_ENTRY = {specifier: 'github:my-org/some-private-pkg', explanation: 'internal'};
       const configResult = await computeEslintConfig({
         lockfile: {noNonRegistryDependencySpecifiers: {ignore: [IGNORE_ENTRY]}},
@@ -448,21 +363,21 @@ describe('options', () => {
       expect(
         configResult.getRuleEntry('lockfile', 'lockfile/non-registry-specifiers'),
       ).toMatchInlineSnapshot(
-        `[2, {"ignore": [{"explanation": "internal", "specifier": "github:my-org/some-private-pkg"}]}]`,
+        '[2, {"ignore": [{"explanation": "internal", "specifier": "github:my-org/some-private-pkg"}]}]',
       );
     });
   });
 
   describe('option: `packageSpecifiersToAllowLockfilesFor`', () => {
-    it('enables `lockfile/shrinkwrap` with empty allowed list when `packageSpecifiersToAllowLockfilesFor` is not set (default)', async () => {
+    it('enables `lockfile/shrinkwrap` with empty allowed list by default', async () => {
       const configResult = await computeEslintConfig('lockfile');
 
       expect(configResult.getRuleEntry('lockfile', 'lockfile/shrinkwrap')).toMatchInlineSnapshot(
-        `[2, []]`,
+        '[2, []]',
       );
     });
 
-    it('enables `lockfile/shrinkwrap` with specified packages when `packageSpecifiersToAllowLockfilesFor` is set', async () => {
+    it('enables `lockfile/shrinkwrap` with specified packages when set', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {
           packageSpecifiersToAllowLockfilesFor: {'some-package': true, 'other-pkg': false},
@@ -470,7 +385,7 @@ describe('options', () => {
       });
 
       expect(configResult.getRuleEntry('lockfile', 'lockfile/shrinkwrap')).toMatchInlineSnapshot(
-        `[2, ["some-package"]]`,
+        '[2, ["some-package"]]',
       );
     });
   });
@@ -539,7 +454,7 @@ describe('linting lockfiles', () => {
       expect(
         findLintMessageFromLintResults(results, FIXTURES.pnpmLockYaml, 'lockfile/flavor')?.message,
       ).toMatchInlineSnapshot(
-        `"Lockfile \`pnpm-lock.yaml\` is not allowed. Allowed lockfiles: \`package-lock.json\`"`,
+        '"Lockfile `pnpm-lock.yaml` is not allowed. Allowed lockfiles: `package-lock.json`"',
       );
     });
   });
