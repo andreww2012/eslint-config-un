@@ -2,6 +2,7 @@ import {GLOB_MARKDOWN_ALL_CODE_BLOCKS} from '../../../src/constants';
 
 const FIXTURES = {
   defaultExport: 'default-export.js',
+  tsImportValid: 'ts-import-valid.ts',
 } as const;
 
 describe('basic tests', async () => {
@@ -101,6 +102,50 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot('"Prefer named exports."');
+  });
+
+  describe('typescript resolver', () => {
+    it('does not report `import/no-unresolved` for a valid `.ts` import when typescript is enabled', async () => {
+      const results = await testEslintConfig(
+        {import: true, ts: true},
+        FIXTURES.tsImportValid,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.tsImportValid,
+        'import/no-unresolved',
+      );
+
+      expect(error).toBeUndefined();
+    });
+
+    it('includes `eslint-import-resolver-typescript` in `resolver-next` settings when typescript is enabled', async () => {
+      const configResult = await computeEslintConfig({import: true, ts: true});
+
+      const resolvers = configResult.getConfigByUnPostfix('import')?.settings?.[
+        'import-x/resolver-next'
+      ] as {name: string}[] | undefined;
+
+      expect(resolvers).toIncludeAllMembers([
+        expect.objectContaining({name: 'eslint-import-resolver-typescript'}),
+      ]);
+      expect(resolvers?.length).toBeGreaterThan(1); // Should still include node resolver
+    });
+
+    it('does not include typescript resolver in `resolver-next` settings when typescript is disabled', async () => {
+      const configResult = await computeEslintConfig('import');
+
+      const resolvers = configResult.getConfigByUnPostfix('import')?.settings?.[
+        'import-x/resolver-next'
+      ] as {name: string}[] | undefined;
+
+      expect(resolvers).not.toIncludeAnyMembers([
+        expect.objectContaining({name: 'eslint-import-resolver-typescript'}),
+      ]);
+      expect(resolvers?.length).toBeGreaterThan(0); // Should still include node resolver
+    });
   });
 });
 

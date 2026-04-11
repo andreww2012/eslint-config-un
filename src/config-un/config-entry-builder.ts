@@ -290,20 +290,22 @@ export class ConfigEntryBuilder<
           return null;
         }
 
-        const settings = Object.fromEntries(
-          Object.entries(settingsRaw)
-            .flatMap(([property, value]) => {
-              if (!value || Object.keys(value).length === 0) {
-                return null;
-              }
-              if (!property) {
-                return Object.entries(value);
-              }
-              return [[property, value]] satisfies NonEmptyTuple[];
-            })
-            .filter((v) => v != null),
-        );
-        if (Object.keys(settings).length === 0) {
+        const settings = {...settingsRaw};
+        const directlyMappedSettings = settings[''];
+        if (directlyMappedSettings) {
+          delete settings[''];
+          Object.assign(
+            settings,
+            Object.fromEntries(
+              Reflect.ownKeys(directlyMappedSettings).map((settingKey) => [
+                settingKey,
+                directlyMappedSettings[settingKey as string],
+              ]),
+            ),
+          );
+        }
+
+        if (Reflect.ownKeys(settings).length === 0) {
           return null;
         }
 
@@ -331,10 +333,7 @@ export class ConfigEntryBuilder<
       ]);
     }
 
-    const configTraverser = createTraverser(
-      config /* We only need to traverse the passed config, not the final */,
-      {includeSymbols: true},
-    );
+    const configTraverser = createTraverser(configFinal, {includeSymbols: true});
     configTraverser.forEach((traverseContext, value) => {
       if (traverseContext.key !== packageToLoadSymbol) {
         return;
