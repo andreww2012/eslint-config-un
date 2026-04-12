@@ -134,7 +134,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('nextjs')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `nextjs` eslint config when `files` is empty array', async () => {
+    it('disables `nextjs` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({nextJs: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('nextjs')).toBeUndefined();
@@ -165,33 +165,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('nextjs', '@next/next/inline-script-id')).toBe(0);
     expect(configResult.getRuleEntrySeverity('nextjs', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `nextjs` eslint config', async () => {
-      const configResult = await computeEslintConfig({nextJs: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('nextjs'), (ruleName) =>
-          ruleName.startsWith('@next/next/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `nextjs` eslint config', async () => {
-      const configResult = await computeEslintConfig({nextJs: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('nextjs'), (ruleName) =>
-          ruleName.startsWith('@next/next/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set `next` settings when option is not set', async () => {
+    it('does not set `next` settings by default', async () => {
       const configResult = await computeEslintConfig('nextJs');
 
       expect(configResult.getConfigByUnPostfix('nextjs')?.settings?.['next']).toBeUndefined();

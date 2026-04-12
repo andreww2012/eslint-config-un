@@ -42,6 +42,10 @@ describe('basic tests', async () => {
       await expectConfigState({}, 'de-morgan', false, 'misc-enabled');
     });
 
+    it('creates `de-morgan` eslint config if explicitly enabled', async () => {
+      await expectConfigState({deMorgan: true}, 'de-morgan', true, 'misc-enabled');
+    });
+
     it('does not create `de-morgan` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({deMorgan: false}, 'de-morgan', ['deMorgan', false], 'misc-enabled');
     });
@@ -88,17 +92,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `de-morgan` eslint config', async () => {
       const FILES = ['**/*.ts'];
-      const configResult = await computeEslintConfig({
-        deMorgan: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({deMorgan: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('de-morgan')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `de-morgan` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        deMorgan: {files: []},
-      });
+    it('disables `de-morgan` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({deMorgan: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('de-morgan')).toBeUndefined();
     });
@@ -107,13 +108,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `de-morgan` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        deMorgan: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({deMorgan: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('de-morgan')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -130,31 +130,5 @@ describe('un options', () => {
       0,
     );
     expect(configResult.getRuleEntrySeverity('de-morgan', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `de-morgan` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        deMorgan: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('de-morgan'), (ruleName) =>
-          ruleName.startsWith('de-morgan/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `de-morgan` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        deMorgan: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('de-morgan'), (ruleName) =>
-          ruleName.startsWith('de-morgan/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

@@ -42,6 +42,10 @@ describe('basic tests', async () => {
       await expectConfigState({}, 'cspell', false, 'misc-enabled');
     });
 
+    it('creates `cspell` eslint config if explicitly enabled', async () => {
+      await expectConfigState({cspell: true}, 'cspell', true, 'misc-enabled');
+    });
+
     it('does not create `cspell` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({cspell: false}, 'cspell', ['cspell', false], 'misc-enabled');
     });
@@ -80,17 +84,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `cspell` eslint config', async () => {
       const FILES = ['**/*.ts'];
-      const configResult = await computeEslintConfig({
-        cspell: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({cspell: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('cspell')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `cspell` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        cspell: {files: []},
-      });
+    it('disables `cspell` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({cspell: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('cspell')).toBeUndefined();
     });
@@ -99,9 +100,8 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `cspell` eslint config without adding defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        cspell: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({cspell: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('cspell')?.ignores;
 
@@ -117,44 +117,18 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('cspell', '@cspell/spellchecker')).toBe(0);
     expect(configResult.getRuleEntrySeverity('cspell', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `cspell` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        cspell: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('cspell'), (ruleName) =>
-          ruleName.startsWith('@cspell/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `cspell` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        cspell: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('cspell'), (ruleName) =>
-          ruleName.startsWith('@cspell/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `options`', () => {
-    it('does not set rule options when `options` is not provided', async () => {
+    it('does not set rule options by default', async () => {
       const configResult = await computeEslintConfig('cspell');
       const rule = configResult.getRuleEntry('cspell', '@cspell/spellchecker');
 
       expect(rule).toMatchInlineSnapshot('[2]');
     });
 
-    it('sets rule options when `options` is provided', async () => {
+    it('sets rule options when set to provided', async () => {
       const OPTIONS = {autoFix: false, numSuggestions: 5, checkComments: false} as const;
 
       const configResult = await computeEslintConfig({

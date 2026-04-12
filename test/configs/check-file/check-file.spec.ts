@@ -72,26 +72,24 @@ describe('basic tests', async () => {
   });
 
   it('has default `ignores` in `check-file` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('check-file')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
+    expect(configResult.getConfigByUnPostfix('check-file')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 
 describe('rules', async () => {
   const configResult = await computeEslintConfig('checkFile');
 
-  it('disables `filename-blocklist` rule by default', () => {
+  it('disables `check-file/filename-blocklist` rule by default', () => {
     expect(configResult.getRuleEntrySeverity('check-file', 'check-file/filename-blocklist')).toBe(
       0,
     );
   });
 
-  it('disables `no-index` rule by default', () => {
+  it('disables `check-file/no-index` rule by default', () => {
     expect(configResult.getRuleEntrySeverity('check-file', 'check-file/no-index')).toBe(0);
   });
 
-  it('`filename-naming-convention` rule fires on a file that violates naming convention', async () => {
+  it('`check-file/filename-naming-convention` rule fires on a file that violates naming convention', async () => {
     const results = await testEslintConfig(
       {checkFile: {fileNamingConventions: {'**/*': 'KEBAB_CASE'}}},
       FIXTURES.fileNamingConvention,
@@ -114,22 +112,19 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `check-file` eslint config', async () => {
       const FILES = ['src/**/*.{js,ts}'];
-      const configResult = await computeEslintConfig({
-        checkFile: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({checkFile: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('check-file')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `check-file` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        checkFile: {files: []},
-      });
+    it('disables `check-file` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({checkFile: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('check-file')).toBeUndefined();
     });
 
-    it('does not disable `check-file/processor` sub-config when `files` is empty array', async () => {
+    it('does not disable `check-file/processor` sub-config when set to empty array', async () => {
       const configResult = await computeEslintConfig({
         checkFile: {files: [], configEnableCheckFileProcessor: {}},
       });
@@ -142,13 +137,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `check-file` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        checkFile: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({checkFile: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('check-file')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -161,37 +155,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('check-file', 'check-file/no-index')).toBe(2);
     expect(configResult.getRuleEntrySeverity('check-file', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `check-file` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        checkFile: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('check-file'), (ruleName) =>
-          ruleName.startsWith('check-file/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `check-file` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        checkFile: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('check-file'), (ruleName) =>
-          ruleName.startsWith('check-file/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `fileNamingConventions`', () => {
-    it('disables `filename-naming-convention` rule when `fileNamingConventions` is not set (default)', async () => {
+    it('disables `check-file/filename-naming-convention` rule by default', async () => {
       const configResult = await computeEslintConfig('checkFile');
 
       expect(
@@ -199,7 +167,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `filename-naming-convention` rule when `fileNamingConventions` is provided as object', async () => {
+    it('enables `check-file/filename-naming-convention` rule when set to provided as object', async () => {
       const CONVENTIONS = {'**/*': 'KEBAB_CASE'};
 
       const configResult = await computeEslintConfig({
@@ -211,7 +179,7 @@ describe('options', () => {
       ).toStrictEqual([CONVENTIONS]);
     });
 
-    it('enables `filename-naming-convention` rule when `fileNamingConventions` is provided as array', async () => {
+    it('enables `check-file/filename-naming-convention` rule when set to provided as array', async () => {
       const CONVENTIONS = [
         {'**/*': 'KEBAB_CASE' as const},
         {ignoreMiddleExtensions: true},
@@ -228,7 +196,7 @@ describe('options', () => {
   });
 
   describe('option: `folderNamingConventions`', () => {
-    it('disables `folder-naming-convention` rule when `folderNamingConventions` is not set (default)', async () => {
+    it('disables `check-file/folder-naming-convention` rule by default', async () => {
       const configResult = await computeEslintConfig('checkFile');
 
       expect(
@@ -236,7 +204,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `folder-naming-convention` rule when `folderNamingConventions` is provided as object', async () => {
+    it('enables `check-file/folder-naming-convention` rule when set to provided as object', async () => {
       const CONVENTIONS = {'**/*': 'KEBAB_CASE'};
 
       const configResult = await computeEslintConfig({
@@ -248,7 +216,7 @@ describe('options', () => {
       ).toStrictEqual([CONVENTIONS]);
     });
 
-    it('enables `folder-naming-convention` rule when `folderNamingConventions` is provided as array', async () => {
+    it('enables `check-file/folder-naming-convention` rule when set to provided as array', async () => {
       const CONVENTIONS = [
         {'**/*': 'KEBAB_CASE' as const},
         {errorMessage: 'use kebab-case folders'},

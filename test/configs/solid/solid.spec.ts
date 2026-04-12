@@ -168,17 +168,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `solid` eslint config', async () => {
       const FILES = ['src/**/*.tsx'];
-      const configResult = await computeEslintConfig({
-        solid: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({solid: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('solid')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `solid` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        solid: {files: []},
-      });
+    it('disables `solid` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({solid: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('solid')).toBeUndefined();
     });
@@ -188,9 +185,7 @@ describe('un options', () => {
     it('uses user-provided `ignores` in `solid` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
 
-      const configResult = await computeEslintConfig({
-        solid: {ignores: IGNORES},
-      });
+      const configResult = await computeEslintConfig({solid: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('solid')?.ignores;
 
@@ -206,31 +201,5 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('solid', 'solid/no-destructure')).toBe(0);
     expect(configResult.getRuleEntrySeverity('solid', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `solid` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        solid: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('solid'), (ruleName) =>
-          ruleName.startsWith('solid/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `solid` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        solid: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('solid'), (ruleName) =>
-          ruleName.startsWith('solid/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

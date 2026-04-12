@@ -120,7 +120,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('rxjs')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `rxjs` eslint config when `files` is empty array', async () => {
+    it('disables `rxjs` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({rxjs: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('rxjs')).toBeUndefined();
@@ -148,39 +148,17 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/no-async-subscribe')).toBe(0);
     expect(configResult.getRuleEntrySeverity('rxjs', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `rxjs` eslint config', async () => {
-      const configResult = await computeEslintConfig({rxjs: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('rxjs'), (ruleName) =>
-          ruleName.startsWith('rxjs/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `rxjs` eslint config', async () => {
-      const configResult = await computeEslintConfig({rxjs: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('rxjs'), (ruleName) =>
-          ruleName.startsWith('rxjs/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `banObservables`', () => {
-    it('disables `rxjs/ban-observables` rule when option is not set', async () => {
+    it('disables `rxjs/ban-observables` rule by default', async () => {
       const configResult = await computeEslintConfig('rxjs');
 
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/ban-observables')).toBe(0);
     });
 
-    it('enables `rxjs/ban-observables` rule when option is non-empty array', async () => {
+    it('enables `rxjs/ban-observables` rule when set to non-empty array', async () => {
       const BANNED_OBSERVABLES = ['Observable'];
 
       const configResult = await computeEslintConfig({rxjs: {banObservables: BANNED_OBSERVABLES}});
@@ -190,7 +168,7 @@ describe('options', () => {
       ]);
     });
 
-    it('enables `rxjs/ban-observables` rule when option is non-empty object', async () => {
+    it('enables `rxjs/ban-observables` rule when set to non-empty object', async () => {
       const BANNED_OBSERVABLES = {Observable: 'Use Subject instead'};
 
       const configResult = await computeEslintConfig({rxjs: {banObservables: BANNED_OBSERVABLES}});
@@ -200,13 +178,13 @@ describe('options', () => {
       ]);
     });
 
-    it('disables `rxjs/ban-observables` rule when option is empty array', async () => {
+    it('disables `rxjs/ban-observables` rule when set to empty array', async () => {
       const configResult = await computeEslintConfig({rxjs: {banObservables: []}});
 
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/ban-observables')).toBe(0);
     });
 
-    it('disables `rxjs/ban-observables` rule when option is empty object', async () => {
+    it('disables `rxjs/ban-observables` rule when set to empty object', async () => {
       const configResult = await computeEslintConfig({rxjs: {banObservables: {}}});
 
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/ban-observables')).toBe(0);
@@ -214,7 +192,7 @@ describe('options', () => {
   });
 
   describe('option: `banOperators`', () => {
-    it('enables `rxjs/ban-operators` rule with `tap: true` when option is not set', async () => {
+    it('enables `rxjs/ban-operators` rule with `tap: true` by default', async () => {
       const configResult = await computeEslintConfig('rxjs');
 
       expect(configResult.getRuleEntryOptions('rxjs', 'rxjs/ban-operators')).toStrictEqual([
@@ -222,7 +200,7 @@ describe('options', () => {
       ]);
     });
 
-    it('merges user-provided operators with default `tap: true` when option is object', async () => {
+    it('merges user-provided operators with default `tap: true` when set to object', async () => {
       const BANNED_OPERATORS = {switchMap: true};
 
       const configResult = await computeEslintConfig({
@@ -234,7 +212,7 @@ describe('options', () => {
       ]);
     });
 
-    it('user-provided operators override default ignored ones when option is array', async () => {
+    it('user-provided operators override default ignored ones when set to array', async () => {
       const BANNED_OPERATORS = ['switchMap'];
 
       const configResult = await computeEslintConfig({
@@ -246,7 +224,7 @@ describe('options', () => {
       ]);
     });
 
-    it('allows overriding `tap` when option is object with `tap: false`', async () => {
+    it('allows overriding `tap` when set to object with `tap: false`', async () => {
       const BANNED_OPERATORS = {tap: false};
 
       const configResult = await computeEslintConfig({
@@ -257,7 +235,7 @@ describe('options', () => {
       expect(configResult.getRuleEntryOptions('rxjs', 'rxjs/ban-operators')).toStrictEqual([]);
     });
 
-    it('disables `rxjs/ban-operators` rule when option is empty array', async () => {
+    it('disables `rxjs/ban-operators` rule when set to empty array', async () => {
       const configResult = await computeEslintConfig({rxjs: {banOperators: []}});
 
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/ban-operators')).toBe(0);
@@ -271,14 +249,14 @@ describe('options', () => {
   });
 
   describe('option: `enforceFinnishNotation`', () => {
-    it('disables `rxjs/finnish` and `rxjs/no-finnish` rules when option is not set and `@angular/core` is not installed', async () => {
+    it('disables `rxjs/finnish` and `rxjs/no-finnish` rules by default and `@angular/core` is not installed', async () => {
       const configResult = await computeEslintConfig('rxjs');
 
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/finnish')).toBe(0);
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/no-finnish')).toBe(0);
     });
 
-    it('enables `rxjs/finnish` rule and disables `rxjs/no-finnish` when option is not set and `@angular/core` is installed', async () => {
+    it('enables `rxjs/finnish` rule and disables `rxjs/no-finnish` by default and `@angular/core` is installed', async () => {
       addInstalledPackages({'@angular/core': '15.2.0'});
 
       const configResult = await computeEslintConfig('rxjs');
@@ -287,14 +265,14 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/no-finnish')).toBe(0);
     });
 
-    it('enables `rxjs/finnish` rule and disables `rxjs/no-finnish` when option is `true`', async () => {
+    it('enables `rxjs/finnish` rule and disables `rxjs/no-finnish` when set to `true`', async () => {
       const configResult = await computeEslintConfig({rxjs: {enforceFinnishNotation: true}});
 
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/finnish')).toBe(2);
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/no-finnish')).toBe(0);
     });
 
-    it("enables `rxjs/no-finnish` rule and disables `rxjs/finnish` when option is `'forbid'`", async () => {
+    it("enables `rxjs/no-finnish` rule and disables `rxjs/finnish` when set to `'forbid'`", async () => {
       const configResult = await computeEslintConfig({rxjs: {enforceFinnishNotation: 'forbid'}});
 
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/finnish')).toBe(0);
@@ -303,19 +281,19 @@ describe('options', () => {
   });
 
   describe('option: `enforceJustInsteadOfOf`', () => {
-    it('disables `rxjs/just` rule when option is not set', async () => {
+    it('disables `rxjs/just` rule by default', async () => {
       const configResult = await computeEslintConfig('rxjs');
 
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/just')).toBe(0);
     });
 
-    it('enables `rxjs/just` rule when option is `true`', async () => {
+    it('enables `rxjs/just` rule when set to `true`', async () => {
       const configResult = await computeEslintConfig({rxjs: {enforceJustInsteadOfOf: true}});
 
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/just')).toBe(2);
     });
 
-    it('disables `rxjs/just` rule when option is `false`', async () => {
+    it('disables `rxjs/just` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({rxjs: {enforceJustInsteadOfOf: false}});
 
       expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/just')).toBe(0);

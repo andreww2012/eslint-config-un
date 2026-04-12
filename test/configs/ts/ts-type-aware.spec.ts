@@ -4,7 +4,7 @@ const FIXTURES = {
 
 describe('ts: sub config `typeAware`', () => {
   describe('basic tests', () => {
-    it('creates `ts/type-aware/{setup,rules}` eslint configs and has expected defaults by default', async () => {
+    it('creates `ts/type-aware/{setup,rules}` eslint configs by default', async () => {
       const configResult = await computeEslintConfig('ts');
 
       const configSetup = configResult.getConfigByUnPostfix('ts/type-aware/setup');
@@ -63,7 +63,7 @@ describe('ts: sub config `typeAware`', () => {
         );
       });
 
-      it('disables `ts/type-aware/rules` config when set to empty array, but does not disable `ts/type-aware/setup` eslint config', async () => {
+      it('disables `ts/type-aware/rules` eslint config when set to empty array, but not `ts/type-aware/setup`', async () => {
         const configResult = await computeEslintConfig({ts: {configTypeAware: {files: []}}});
 
         expect(configResult.getConfigByUnPostfix('ts/type-aware/rules')).toBeUndefined();

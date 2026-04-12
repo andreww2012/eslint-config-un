@@ -1,4 +1,4 @@
-describe('cypress: sub config `configNoOnlyTests`', () => {
+describe('cypress: sub config `noOnlyTests`', () => {
   describe('basic tests', () => {
     it('creates `cypress/no-only-tests` eslint config by default (`configNoOnlyTests` is enabled by default)', async () => {
       const configResult = await computeEslintConfig('cypress');
@@ -24,6 +24,7 @@ describe('cypress: sub config `configNoOnlyTests`', () => {
 
     it('inherits `files` from parent `cypress` config when `configNoOnlyTests` is enabled', async () => {
       const FILES = ['e2e/**/*.cy.ts'];
+
       const configResult = await computeEslintConfig({
         cypress: {files: FILES, configNoOnlyTests: true},
       });
@@ -48,6 +49,7 @@ describe('cypress: sub config `configNoOnlyTests`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `cypress/no-only-tests` eslint config', async () => {
         const FILES = ['e2e/**/*.cy.ts'];
+
         const configResult = await computeEslintConfig({
           cypress: {configNoOnlyTests: {files: FILES}},
         });
@@ -57,7 +59,7 @@ describe('cypress: sub config `configNoOnlyTests`', () => {
         );
       });
 
-      it('disables `cypress/no-only-tests` eslint config when `files` is empty array', async () => {
+      it('disables `cypress/no-only-tests` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           cypress: {configNoOnlyTests: {files: []}},
         });
@@ -69,13 +71,14 @@ describe('cypress: sub config `configNoOnlyTests`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `cypress/no-only-tests` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           cypress: {configNoOnlyTests: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('cypress/no-only-tests')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });

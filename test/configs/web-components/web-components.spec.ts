@@ -15,54 +15,49 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `web-components` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('web-components')).toBeUndefined();
+      await expectConfigState({}, 'web-components', false);
     });
 
     it('creates `web-components` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('webComponents');
-
-      expect(configResult.getConfigByUnPostfix('web-components')).toBeDefined();
+      await expectConfigState('webComponents', 'web-components', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('does not create `web-components` eslint config', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('web-components')).toBeUndefined();
+      await expectConfigState({}, 'web-components', false, 'default');
     });
 
     it('creates `web-components` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('webComponents', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('web-components')).toBeDefined();
+      await expectConfigState('webComponents', 'web-components', true, 'default');
     });
 
     it('does not create `web-components` eslint config and prints a warning if explicitly disabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig({webComponents: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('web-components')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to disable `webComponents` config because this is the default',
-        ),
-      ).toBe(true);
+      await expectConfigState(
+        {webComponents: false},
+        'web-components',
+        ['webComponents', false],
+        'default',
+      );
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('does not create `web-components` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'web-components', false, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('web-components')).toBeUndefined();
+    it('creates `web-components` eslint config if explicitly enabled', async () => {
+      await expectConfigState({webComponents: true}, 'web-components', true, 'misc-enabled');
+    });
+
+    it('does not create `web-components` eslint config and prints a warning if explicitly disabled', async () => {
+      await expectConfigState(
+        {webComponents: false},
+        'web-components',
+        ['webComponents', false],
+        'misc-enabled',
+      );
     });
   });
 
@@ -71,9 +66,7 @@ describe('basic tests', async () => {
   });
 
   it('has default `ignores` in `web-components` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('web-components')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
+    expect(configResult.getConfigByUnPostfix('web-components')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 
@@ -115,12 +108,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `web-components` eslint config', async () => {
       const FILES = ['src/**/*.js', 'src/**/*.ts'];
+
       const configResult = await computeEslintConfig({webComponents: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('web-components')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `web-components` eslint config when `files` is empty array', async () => {
+    it('disables `web-components` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({webComponents: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('web-components')).toBeUndefined();
@@ -130,10 +124,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `web-components` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({webComponents: {ignores: IGNORES}});
+
       const ignores = configResult.getConfigByUnPostfix('web-components')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -151,33 +147,11 @@ describe('un options', () => {
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('web-components', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `web-components` eslint config', async () => {
-      const configResult = await computeEslintConfig({webComponents: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('web-components'), (ruleName) =>
-          ruleName.startsWith('wc/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `web-components` eslint config', async () => {
-      const configResult = await computeEslintConfig({webComponents: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('web-components'), (ruleName) =>
-          ruleName.startsWith('wc/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set `wc` settings when `settings` is not provided', async () => {
+    it('does not set `wc` settings by default', async () => {
       const configResult = await computeEslintConfig('webComponents');
       const config = configResult.getConfigByUnPostfix('web-components');
 

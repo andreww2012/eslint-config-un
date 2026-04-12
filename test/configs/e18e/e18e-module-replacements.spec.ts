@@ -1,48 +1,38 @@
-describe('e18e: sub config `configModuleReplacements`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('e18e');
+describe('e18e: sub config `moduleReplacements`', () => {
+  describe('basic tests', () => {
+    it('creates `e18e/module-replacements` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('e18e');
 
-    it('creates `e18e/module-replacements` eslint config when enabled (default)', () => {
-      expect(configResult.getConfigByUnPostfix('e18e/module-replacements')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('e18e/module-replacements');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/package.json"]');
     });
 
-    it('does not create `e18e/module-replacements` eslint config when disabled', async () => {
-      const configResult = await computeEslintConfig({
-        e18e: {configModuleReplacements: false},
-      });
+    it('does not create `e18e/module-replacements` eslint config when set to `false`', async () => {
+      const configResult = await computeEslintConfig({e18e: {configModuleReplacements: false}});
 
       expect(configResult.getConfigByUnPostfix('e18e/module-replacements')).toBeUndefined();
     });
-
-    it('has default `files` in `e18e/module-replacements` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('e18e/module-replacements')?.files,
-      ).toMatchInlineSnapshot(`["**/package.json"]`);
-    });
-
-    it('has default `ignores` in `e18e/module-replacements` eslint config', () => {
-      const ignores = configResult.getConfigByUnPostfix('e18e/module-replacements')?.ignores;
-
-      expect(ignores?.length).toBeGreaterThan(0);
-    });
   });
 
-  describe('rules', async () => {
-    const configResult = await computeEslintConfig('e18e');
+  describe('rules', () => {
+    it('correctly sets severities by default', async () => {
+      const configResult = await computeEslintConfig('e18e');
 
-    it('enables `e18e/ban-dependencies` rule by default', () => {
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('e18e/module-replacements', 'e18e/ban-dependencies'),
-        ),
-      ).toBe(2);
+      expect(configResult.getRuleSeverities('e18e/module-replacements')).toMatchObject({
+        'e18e/ban-dependencies': 2,
+      });
     });
+
+    // TODO rule in action test
   });
 
   describe('un options', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `e18e/module-replacements` eslint config', async () => {
         const FILES = ['**/package.json', '**/packages/*/package.json'];
+
         const configResult = await computeEslintConfig({
           e18e: {configModuleReplacements: {files: FILES}},
         });
@@ -52,7 +42,7 @@ describe('e18e: sub config `configModuleReplacements`', () => {
         );
       });
 
-      it('disables `e18e/module-replacements` eslint config when `files` is empty array', async () => {
+      it('disables `e18e/module-replacements` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           e18e: {configModuleReplacements: {files: []}},
         });
@@ -64,13 +54,14 @@ describe('e18e: sub config `configModuleReplacements`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `e18e/module-replacements` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/package.json'];
+
         const configResult = await computeEslintConfig({
           e18e: {configModuleReplacements: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('e18e/module-replacements')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -85,44 +76,9 @@ describe('e18e: sub config `configModuleReplacements`', () => {
         },
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('e18e/module-replacements', 'e18e/ban-dependencies'),
-        ),
-      ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('e18e/module-replacements', 'no-console'),
-        ),
-      ).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `warn` in `e18e/module-replacements` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {configModuleReplacements: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('e18e/module-replacements'),
-            (ruleName) => ruleName.startsWith('e18e/'),
-          ),
-        ).toStrictEqual([1]);
-      });
-
-      it('respects `forceSeverity` set to `error` in `e18e/module-replacements` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          e18e: {configModuleReplacements: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('e18e/module-replacements'),
-            (ruleName) => ruleName.startsWith('e18e/'),
-          ),
-        ).toStrictEqual([2]);
+      expect(configResult.getRuleSeverities('e18e/module-replacements')).toMatchObject({
+        'e18e/ban-dependencies': 0,
+        'no-console': 0,
       });
     });
   });
@@ -134,17 +90,19 @@ describe('e18e: sub config `configModuleReplacements`', () => {
 
         expect(
           configResult.getRuleEntry('e18e/module-replacements', 'e18e/ban-dependencies'),
-        ).toMatchInlineSnapshot(`[2]`);
+        ).toMatchInlineSnapshot('[2]');
       });
 
       it('passes custom `options` to `e18e/ban-dependencies` rule when provided', async () => {
+        const OPTIONS = {modules: ['lodash']};
+
         const configResult = await computeEslintConfig({
-          e18e: {configModuleReplacements: {options: {modules: ['lodash']}}},
+          e18e: {configModuleReplacements: {options: OPTIONS}},
         });
 
         expect(
-          configResult.getRuleEntry('e18e/module-replacements', 'e18e/ban-dependencies'),
-        ).toMatchInlineSnapshot(`[2, {"modules": ["lodash"]}]`);
+          configResult.getRuleEntryOptions('e18e/module-replacements', 'e18e/ban-dependencies'),
+        ).toStrictEqual([OPTIONS]);
       });
     });
   });

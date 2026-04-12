@@ -7,14 +7,8 @@ describe('option: `overrides` and `overridesAny`', () => {
       },
     });
 
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-to-be'),
-      ),
-    ).toBe(1);
-    expect(
-      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('vitest', 'no-console')),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-to-be')).toBe(1);
+    expect(configResult.getRuleEntrySeverity('vitest', 'no-console')).toBe(0);
   });
 
   it('puts `overridesAny` after `overrides`', async () => {
@@ -25,11 +19,7 @@ describe('option: `overrides` and `overridesAny`', () => {
       },
     });
 
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-to-be'),
-      ),
-    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-to-be')).toBe(0);
   });
 
   it('object override works', async () => {
@@ -45,7 +35,7 @@ describe('option: `overrides` and `overridesAny`', () => {
     });
 
     expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toMatchInlineSnapshot(
-      `[1, {"fixable": true}]`,
+      '[1, {"fixable": true}]',
     );
   });
 
@@ -63,7 +53,7 @@ describe('option: `overrides` and `overridesAny`', () => {
       });
 
       expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toMatchInlineSnapshot(
-        `[1, {"fixable": true}]`,
+        '[1, {"fixable": true}]',
       );
     });
 
@@ -86,8 +76,8 @@ describe('option: `overrides` and `overridesAny`', () => {
         },
       });
 
-      expect(expectedSeverity).toMatchInlineSnapshot(`2`);
-      expect(expectedOptions).toMatchInlineSnapshot(`[{"fixable": false}]`);
+      expect(expectedSeverity).toMatchInlineSnapshot('2');
+      expect(expectedOptions).toMatchInlineSnapshot('[{"fixable": false}]');
     });
   });
 
@@ -105,11 +95,11 @@ describe('option: `overrides` and `overridesAny`', () => {
     });
 
     expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toMatchInlineSnapshot(
-      `0`,
+      '0',
     );
     expect(
       configResult.getRuleEntry('vitest', 'disable-autofix/vitest/no-focused-tests'),
-    ).toMatchInlineSnapshot(`[1, {"fixable": true}]`);
+    ).toMatchInlineSnapshot('[1, {"fixable": true}]');
   });
 
   describe('`files` and `ignores` options', () => {
@@ -127,11 +117,10 @@ describe('option: `overrides` and `overridesAny`', () => {
       });
 
       expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toBeUndefined();
-
       expect(
         configResult.getConfigByUnPostfix('vitest/@rule/vitest/no-focused-tests'),
       ).toMatchInlineSnapshot(
-        `{"files": [["**/*.test.ts"], ["**/*.spec.?([cm])[jt]s?(x)", "**/*-spec.?([cm])[jt]s?(x)", "**/*_spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__tests__/**/*.?([cm])[jt]s?(x)", "**/__test__/**/*.?([cm])[jt]s?(x)"]], "ignores": ["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.yaml"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}`,
+        '{"files": [["**/*.test.ts"], ["**/*.spec.?([cm])[jt]s?(x)", "**/*-spec.?([cm])[jt]s?(x)", "**/*_spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__tests__/**/*.?([cm])[jt]s?(x)", "**/__test__/**/*.?([cm])[jt]s?(x)"]], "ignores": ["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.y?(a)ml"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}',
       );
     });
 
@@ -149,11 +138,10 @@ describe('option: `overrides` and `overridesAny`', () => {
       });
 
       expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toBeUndefined();
-
       expect(
         configResult.getConfigByUnPostfix('vitest/@rule/vitest/no-focused-tests'),
       ).toMatchInlineSnapshot(
-        `{"files": ["**/*.spec.?([cm])[jt]s?(x)", "**/*-spec.?([cm])[jt]s?(x)", "**/*_spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__tests__/**/*.?([cm])[jt]s?(x)", "**/__test__/**/*.?([cm])[jt]s?(x)"], "ignores": ["**/*.todo.test.ts"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}`,
+        '{"files": ["**/*.spec.?([cm])[jt]s?(x)", "**/*-spec.?([cm])[jt]s?(x)", "**/*_spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__tests__/**/*.?([cm])[jt]s?(x)", "**/__test__/**/*.?([cm])[jt]s?(x)"], "ignores": ["**/*.todo.test.ts"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}',
       );
     });
 
@@ -172,11 +160,10 @@ describe('option: `overrides` and `overridesAny`', () => {
       });
 
       expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toBeUndefined();
-
       expect(
         configResult.getConfigByUnPostfix('vitest/@rule/vitest/no-focused-tests'),
       ).toMatchInlineSnapshot(
-        `{"files": [["**/*.test.ts"], ["**/*.spec.?([cm])[jt]s?(x)", "**/*-spec.?([cm])[jt]s?(x)", "**/*_spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__tests__/**/*.?([cm])[jt]s?(x)", "**/__test__/**/*.?([cm])[jt]s?(x)"]], "ignores": ["**/*.todo.test.ts"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}`,
+        '{"files": [["**/*.test.ts"], ["**/*.spec.?([cm])[jt]s?(x)", "**/*-spec.?([cm])[jt]s?(x)", "**/*_spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__tests__/**/*.?([cm])[jt]s?(x)", "**/__test__/**/*.?([cm])[jt]s?(x)"]], "ignores": ["**/*.todo.test.ts"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}',
       );
     });
 
@@ -194,7 +181,7 @@ describe('option: `overrides` and `overridesAny`', () => {
       });
 
       expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toMatchInlineSnapshot(
-        `[2, {"fixable": true}]`,
+        '[2, {"fixable": true}]',
       );
       expect(
         configResult.getConfigByUnPostfix('vitest/@rule/vitest/no-focused-tests'),
@@ -215,7 +202,7 @@ describe('option: `overrides` and `overridesAny`', () => {
       });
 
       expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toMatchInlineSnapshot(
-        `[2, {"fixable": true}]`,
+        '[2, {"fixable": true}]',
       );
       expect(
         configResult.getConfigByUnPostfix('vitest/@rule/vitest/no-focused-tests'),
@@ -237,11 +224,33 @@ describe('option: `overrides` and `overridesAny`', () => {
       });
 
       expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toMatchInlineSnapshot(
-        `[2, {"fixable": true}]`,
+        '[2, {"fixable": true}]',
       );
       expect(
         configResult.getConfigByUnPostfix('vitest/@rule/vitest/no-focused-tests'),
       ).toBeUndefined();
     });
+  });
+});
+
+describe('option: `forceSeverity`', () => {
+  it('respects `forceSeverity` set to `error`', async () => {
+    const configResult = await computeEslintConfig({sonar: {forceSeverity: 'error'}});
+
+    expect(
+      getAllRulesSeverities(configResult.getConfigByUnPostfix('sonar'), (ruleName) =>
+        ruleName.startsWith('sonarjs/'),
+      ),
+    ).toStrictEqual([2]);
+  });
+
+  it('respects `forceSeverity` set to `warn`', async () => {
+    const configResult = await computeEslintConfig({sonar: {forceSeverity: 'warn'}});
+
+    expect(
+      getAllRulesSeverities(configResult.getConfigByUnPostfix('sonar'), (ruleName) =>
+        ruleName.startsWith('sonarjs/'),
+      ),
+    ).toStrictEqual([1]);
   });
 });

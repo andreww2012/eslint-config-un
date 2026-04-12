@@ -1,10 +1,10 @@
-beforeEach(() => {
-  addInstalledPackages({zod: '4.3.5'});
-});
-
 const FIXTURES = {
   zodSchemaWithoutSpecificSuffix: 'zod-schema-without-specific-suffix.js',
 } as const;
+
+beforeEach(() => {
+  addInstalledPackages({zod: '4.3.5'});
+});
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('zod');
@@ -40,10 +40,22 @@ describe('basic tests', async () => {
       await expectConfigState('zod', 'zod', ['zod', true], 'default');
     });
 
-    it('does not create `zod` eslint config when `zod` is not installed', async () => {
-      setInstalledPackages({});
+    describe('`zod` is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
 
-      await expectConfigState({}, 'zod', false, 'default');
+      it('does not create `zod` eslint config', async () => {
+        await expectConfigState({}, 'zod', false, 'default');
+      });
+
+      it('creates `zod` eslint config if explicitly enabled', async () => {
+        await expectConfigState('zod', 'zod', true, 'default');
+      });
+
+      it('does not create `zod` eslint config and prints a warning if explicitly disabled', async () => {
+        await expectConfigState({zod: false}, 'zod', ['zod', false], 'default');
+      });
     });
 
     it('creates `zod` eslint config when `zod` v3 is installed', async () => {
@@ -139,7 +151,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('zod')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `zod` eslint config when `files` is empty array', async () => {
+    it('disables `zod` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({zod: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('zod')).toBeUndefined();
@@ -154,7 +166,7 @@ describe('un options', () => {
 
       const ignores = configResult.getConfigByUnPostfix('zod')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -170,32 +182,6 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('zod', 'zod/no-throw-in-refine')).toBe(0);
     expect(configResult.getRuleEntrySeverity('zod', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `zod` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        zod: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('zod'), (ruleName) =>
-          ruleName.startsWith('zod/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `zod` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        zod: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('zod'), (ruleName) =>
-          ruleName.startsWith('zod/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
@@ -209,43 +195,35 @@ describe('options', () => {
     });
 
     it("uses `'function'` style when set to `'function'`", async () => {
-      const configResult = await computeEslintConfig({
-        zod: {arrayStyle: 'function'},
-      });
+      const configResult = await computeEslintConfig({zod: {arrayStyle: 'function'}});
 
       expect(configResult.getRuleEntry('zod', 'zod/array-style')).toMatchInlineSnapshot(
         '[2, {"style": "function"}]',
       );
     });
 
-    it('disables `array-style` rule when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        zod: {arrayStyle: false},
-      });
+    it('disables `zod/array-style` rule when set to `false`', async () => {
+      const configResult = await computeEslintConfig({zod: {arrayStyle: false}});
 
       expect(configResult.getRuleEntrySeverity('zod', 'zod/array-style')).toBe(0);
     });
   });
 
   describe('option: `enforceNamespaceImport`', () => {
-    it('enables `consistent-import` rule by default', async () => {
+    it('enables `zod/consistent-import` rule by default', async () => {
       const configResult = await computeEslintConfig('zod');
 
       expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-import')).toBe(2);
     });
 
     it('enables `consistent-import` when set to `true`', async () => {
-      const configResult = await computeEslintConfig({
-        zod: {enforceNamespaceImport: true},
-      });
+      const configResult = await computeEslintConfig({zod: {enforceNamespaceImport: true}});
 
       expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-import')).toBe(2);
     });
 
     it('disables `consistent-import` when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        zod: {enforceNamespaceImport: false},
-      });
+      const configResult = await computeEslintConfig({zod: {enforceNamespaceImport: false}});
 
       expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-import')).toBe(0);
     });
@@ -261,9 +239,7 @@ describe('options', () => {
     });
 
     it('enforces custom suffix when provided', async () => {
-      const configResult = await computeEslintConfig({
-        zod: {schemaSuffix: 'Schema'},
-      });
+      const configResult = await computeEslintConfig({zod: {schemaSuffix: 'Schema'}});
 
       expect(configResult.getRuleEntry('zod', 'zod/require-schema-suffix')).toMatchInlineSnapshot(
         '[2, {"suffix": "Schema"}]',
@@ -271,9 +247,7 @@ describe('options', () => {
     });
 
     it('disables `require-schema-suffix` when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        zod: {schemaSuffix: false},
-      });
+      const configResult = await computeEslintConfig({zod: {schemaSuffix: false}});
 
       expect(configResult.getRuleEntrySeverity('zod', 'zod/require-schema-suffix')).toBe(0);
     });

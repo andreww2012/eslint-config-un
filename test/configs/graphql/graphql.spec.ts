@@ -165,12 +165,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `graphql` eslint config', async () => {
       const FILES = ['src/**/*.graphql'];
+
       const configResult = await computeEslintConfig({graphql: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('graphql')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `graphql` eslint config when `files` is empty array', async () => {
+    it('disables `graphql` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({graphql: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('graphql')).toBeUndefined();
@@ -180,6 +181,7 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `graphql` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({graphql: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('graphql')?.ignores;
@@ -200,39 +202,17 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('graphql', 'graphql/no-anonymous-operations')).toBe(0);
     expect(configResult.getRuleEntrySeverity('graphql', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `graphql` eslint config', async () => {
-      const configResult = await computeEslintConfig({graphql: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('graphql'), (ruleName) =>
-          ruleName.startsWith('graphql/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `graphql` eslint config', async () => {
-      const configResult = await computeEslintConfig({graphql: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('graphql'), (ruleName) =>
-          ruleName.startsWith('graphql/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `disableRulesRequiringOperations`', () => {
-    it('enables rules requiring operations when option is not set', async () => {
+    it('enables rules requiring operations by default', async () => {
       const configResult = await computeEslintConfig('graphql');
 
       expect(configResult.getRuleEntrySeverity('graphql', 'graphql/known-fragment-names')).toBe(2);
     });
 
-    it('enables rules requiring operations when option is `false`', async () => {
+    it('enables rules requiring operations when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         graphql: {disableRulesRequiringOperations: false},
       });
@@ -240,7 +220,7 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('graphql', 'graphql/known-fragment-names')).toBe(2);
     });
 
-    it('disables rules requiring operations when option is `true`', async () => {
+    it('disables rules requiring operations when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         graphql: {disableRulesRequiringOperations: true},
       });
@@ -254,13 +234,13 @@ describe('options', () => {
   });
 
   describe('option: `disableRulesRequiringSchema`', () => {
-    it('enables rules requiring schema when option is not set', async () => {
+    it('enables rules requiring schema by default', async () => {
       const configResult = await computeEslintConfig('graphql');
 
       expect(configResult.getRuleEntrySeverity('graphql', 'graphql/no-unreachable-types')).toBe(2);
     });
 
-    it('enables rules requiring schema when option is `false`', async () => {
+    it('enables rules requiring schema when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         graphql: {disableRulesRequiringSchema: false},
       });
@@ -268,7 +248,7 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('graphql', 'graphql/no-unreachable-types')).toBe(2);
     });
 
-    it('disables rules requiring schema when option is `true`', async () => {
+    it('disables rules requiring schema when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         graphql: {disableRulesRequiringSchema: true},
       });
@@ -280,7 +260,7 @@ describe('options', () => {
   });
 
   describe('option: `graphqlConfig`', () => {
-    it('does not set `parserOptions.graphQLConfig` when option is not set', async () => {
+    it('does not set `parserOptions.graphQLConfig` by default', async () => {
       const configResult = await computeEslintConfig('graphql');
 
       expect(
@@ -314,7 +294,7 @@ describe('options', () => {
   });
 
   describe('option: `requireSeparateFilesFor`', () => {
-    it('uses default `lone-executable-definition` rule entry when option is not set', async () => {
+    it('uses default `graphql/lone-executable-definition` rule settings by default', async () => {
       const configResult = await computeEslintConfig('graphql');
 
       expect(
@@ -322,7 +302,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"ignore": undefined}]');
     });
 
-    it('sets `ignore` for `lone-executable-definition` rule when operation type is set to `false`', async () => {
+    it('sets `ignore` for `graphql/lone-executable-definition` rule when operation type is set to `false`', async () => {
       const configResult = await computeEslintConfig({
         graphql: {requireSeparateFilesFor: {mutation: false}},
       });

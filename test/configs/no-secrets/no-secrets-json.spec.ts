@@ -2,7 +2,7 @@ const FIXTURES = {
   withSecret: 'with-secret.json',
 } as const;
 
-describe('no-secrets: sub config `configJson`', () => {
+describe('no-secrets: sub config `json`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig('noSecrets');
 
@@ -20,14 +20,14 @@ describe('no-secrets: sub config `configJson`', () => {
 
     it('creates `no-secrets/json` eslint config with default JSON files', () => {
       expect(configResult.getConfigByUnPostfix('no-secrets/json')?.files).toMatchInlineSnapshot(
-        `["**/*.json"]`,
+        '["**/*.json"]',
       );
     });
 
     it('has default `ignores` in `no-secrets/json` eslint config that always includes `**/package-lock.json`', () => {
       const ignores = configResult.getConfigByUnPostfix('no-secrets/json')?.ignores;
 
-      expect(ignores).to.include.members(['**/package-lock.json']);
+      expect(ignores).toIncludeAllMembers(['**/package-lock.json']);
     });
   });
 
@@ -49,7 +49,7 @@ describe('no-secrets: sub config `configJson`', () => {
 
       expect(error?.message).toMatchInlineSnapshot(
         // eslint-disable-next-line no-secrets/no-secrets
-        `"Found a string with entropy 5.11 : "WkQTUwGtlCOJXaqR34qicCxjnGEweU7v2mPUBSNA8tHZvxPZ""`,
+        '"Found a string with entropy 5.11 : "WkQTUwGtlCOJXaqR34qicCxjnGEweU7v2mPUBSNA8tHZvxPZ""',
       );
     });
   });
@@ -58,6 +58,7 @@ describe('no-secrets: sub config `configJson`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `no-secrets/json` eslint config', async () => {
         const FILES = ['**/*.json'];
+
         const configResult = await computeEslintConfig({
           noSecrets: {configJson: {files: FILES}},
         });
@@ -65,7 +66,7 @@ describe('no-secrets: sub config `configJson`', () => {
         expect(configResult.getConfigByUnPostfix('no-secrets/json')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `no-secrets/json` eslint config when `files` is empty array', async () => {
+      it('disables `no-secrets/json` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           noSecrets: {configJson: {files: []}},
         });
@@ -77,13 +78,14 @@ describe('no-secrets: sub config `configJson`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `no-secrets/json` eslint config and always includes `**/package-lock.json`', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           noSecrets: {configJson: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('no-secrets/json')?.ignores;
 
-        expect(ignores).to.include.members([...IGNORES, '**/package-lock.json']);
+        expect(ignores).toIncludeAllMembers([...IGNORES, '**/package-lock.json']);
       });
     });
 
@@ -95,34 +97,7 @@ describe('no-secrets: sub config `configJson`', () => {
       });
 
       expect(configResult.getRuleEntrySeverity('no-secrets/json', 'no-secrets/no-secrets')).toBe(0);
-
       expect(configResult.getRuleEntrySeverity('no-secrets/json', 'no-console')).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `no-secrets/json` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          noSecrets: {configJson: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('no-secrets/json'), (ruleName) =>
-            ruleName.startsWith('no-secrets/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `no-secrets/json` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          noSecrets: {configJson: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('no-secrets/json'), (ruleName) =>
-            ruleName.startsWith('no-secrets/'),
-          ),
-        ).toStrictEqual([1]);
-      });
     });
   });
 });

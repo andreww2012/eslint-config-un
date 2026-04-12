@@ -1,5 +1,7 @@
-import {expect} from 'vitest';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as jestExtendedMatchers from 'jest-extended';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {expect} from 'vitest';
 import {expectConfigState as expectConfigStateImpl} from './helpers/basic-config';
 import {findLintMessageFromLintResults as findLintMessageFromLintResultsImpl} from './helpers/check-lint-results';
 import {

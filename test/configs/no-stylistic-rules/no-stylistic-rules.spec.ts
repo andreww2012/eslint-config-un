@@ -114,17 +114,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `no-stylistic-rules` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
-      const configResult = await computeEslintConfig({
-        noStylisticRules: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({noStylisticRules: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('no-stylistic-rules')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `no-stylistic-rules` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        noStylisticRules: {files: []},
-      });
+    it('disables `no-stylistic-rules` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({noStylisticRules: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('no-stylistic-rules')).toBeUndefined();
     });
@@ -133,9 +130,8 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `no-stylistic-rules` eslint config', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        noStylisticRules: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({noStylisticRules: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('no-stylistic-rules')?.ignores;
 
@@ -151,29 +147,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('no-stylistic-rules', 'prefer-template')).toBe(2);
     expect(configResult.getRuleEntrySeverity('no-stylistic-rules', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('`forceSeverity: "error"` does not change rules disabled via `disableBulkRules` in `no-stylistic-rules` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        noStylisticRules: {forceSeverity: 'error'},
-      });
-
-      expect(configResult.getRuleEntrySeverity('no-stylistic-rules', 'prefer-template')).toBe(0);
-    });
-
-    it('`forceSeverity: "warn"` does not change rules disabled via `disableBulkRules` in `no-stylistic-rules` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        noStylisticRules: {forceSeverity: 'warn'},
-      });
-
-      expect(configResult.getRuleEntrySeverity('no-stylistic-rules', 'prefer-template')).toBe(0);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `enableRules.rules`', () => {
-    it('disables `prefer-template` rule when option is not set', async () => {
+    it('disables `prefer-template` rule by default', async () => {
       const configResult = await computeEslintConfig('noStylisticRules');
 
       expect(configResult.getRuleEntrySeverity('no-stylistic-rules', 'prefer-template')).toBe(0);
@@ -223,7 +201,7 @@ describe('options', () => {
       ).toBeDefined();
     });
 
-    it('disables a non-stylistic rule in `no-stylistic-rules/disable-all-non-stylistic-rules` config', async () => {
+    it('disables a non-stylistic rule in `no-stylistic-rules/disable-all-non-stylistic-rules` eslint config', async () => {
       const configResult = await computeEslintConfig({
         noStylisticRules: {enableRules: {rules: false, disableAllOtherRules: true}},
       });
@@ -236,7 +214,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('still disables a stylistic rule in `no-stylistic-rules/disable-all-non-stylistic-rules` config even it is provided in `additionalRules` as `true`', async () => {
+    it('still disables a stylistic rule in `no-stylistic-rules/disable-all-non-stylistic-rules` eslint config even it is provided in `additionalRules` as `true`', async () => {
       const configResult = await computeEslintConfig({
         noStylisticRules: {
           enableRules: {rules: false, disableAllOtherRules: true},

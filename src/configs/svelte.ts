@@ -328,7 +328,10 @@ export default (async (context, optionsRaw) => {
     'svelte',
   );
   configBuilderEnforceTypescriptInScriptSection
-    ?.addConfig(['svelte/enforce-typescript-in-script-section', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig([
+      'svelte/enforce-typescript-in-script-section',
+      {includeDefaultFilesAndIgnores: true},
+    ])
     .addRule('block-lang', ERROR, [
       {
         script: ['ts', ...(configEnforceTypescriptInScriptSection ? [] : [null])],

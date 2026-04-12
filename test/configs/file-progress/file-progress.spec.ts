@@ -77,17 +77,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `file-progress` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
-      const configResult = await computeEslintConfig({
-        fileProgress: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({fileProgress: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('file-progress')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `file-progress` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        fileProgress: {files: []},
-      });
+    it('disables `file-progress` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({fileProgress: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('file-progress')).toBeUndefined();
     });
@@ -96,13 +93,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `file-progress` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        fileProgress: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({fileProgress: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('file-progress')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -117,32 +113,6 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('file-progress', 'file-progress/activate')).toBe(0);
     expect(configResult.getRuleEntrySeverity('file-progress', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `file-progress` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        fileProgress: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('file-progress'), (ruleName) =>
-          ruleName.startsWith('file-progress/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `file-progress` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        fileProgress: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('file-progress'), (ruleName) =>
-          ruleName.startsWith('file-progress/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 

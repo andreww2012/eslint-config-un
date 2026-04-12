@@ -1,6 +1,6 @@
 import {GLOB_ASTRO, GLOB_MARKDOWN} from '../../../src/constants';
 
-describe('astro: sub config `configSetup`', () => {
+describe('astro: sub config `setup`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig('astro');
 
@@ -10,7 +10,7 @@ describe('astro: sub config `configSetup`', () => {
 
     it('has default `files` in `astro/setup` eslint config', () => {
       expect(configResult.getConfigByUnPostfix('astro/setup')?.files).toMatchInlineSnapshot(
-        `["**/*.astro"]`,
+        '["**/*.astro"]',
       );
     });
 
@@ -18,7 +18,7 @@ describe('astro: sub config `configSetup`', () => {
       const ignores = configResult.getConfigByUnPostfix('astro/setup')?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.to.include.members([GLOB_MARKDOWN, GLOB_ASTRO]);
+      expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN, GLOB_ASTRO]);
     });
   });
 
@@ -26,13 +26,14 @@ describe('astro: sub config `configSetup`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `astro/setup` eslint config, but not in `astro`', async () => {
         const FILES = ['src/**/*.astro'];
+
         const configResult = await computeEslintConfig({astro: {configSetup: {files: FILES}}});
 
         expect(configResult.getConfigByUnPostfix('astro/setup')?.files).toStrictEqual(FILES);
-        expect(configResult.getConfigByUnPostfix('astro')?.files).not.to.include.members(FILES);
+        expect(configResult.getConfigByUnPostfix('astro')?.files).not.toIncludeAnyMembers(FILES);
       });
 
-      it('disables `astro/setup` eslint config when `files` is empty array, but not `astro`', async () => {
+      it('disables `astro/setup` eslint config when set to empty array, but not `astro`', async () => {
         const configResult = await computeEslintConfig({astro: {configSetup: {files: []}}});
 
         expect(configResult.getConfigByUnPostfix('astro/setup')).toBeUndefined();
@@ -43,23 +44,27 @@ describe('astro: sub config `configSetup`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `astro/setup` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           astro: {configSetup: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('astro/setup')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
 
       it('does not use `ignores` from `configSetup` in the main `astro` eslint config', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           astro: {configSetup: {ignores: IGNORES}},
         });
 
-        expect(configResult.getConfigByUnPostfix('astro')?.ignores).not.to.include.members(IGNORES);
+        expect(configResult.getConfigByUnPostfix('astro')?.ignores).not.toIncludeAnyMembers(
+          IGNORES,
+        );
       });
     });
   });

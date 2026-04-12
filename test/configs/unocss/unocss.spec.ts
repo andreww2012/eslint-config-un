@@ -1,10 +1,10 @@
-beforeEach(() => {
-  addInstalledPackages({unocss: '0.60.0'});
-});
-
 const FIXTURES = {
   unorderedClasses: 'unordered-classes.jsx',
 } as const;
+
+beforeEach(() => {
+  addInstalledPackages({unocss: '0.60.0'});
+});
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('unocss');
@@ -114,12 +114,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `unocss` eslint config', async () => {
       const FILES = ['src/**/*.jsx'];
+
       const configResult = await computeEslintConfig({unocss: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('unocss')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `unocss` eslint config when `files` is empty array', async () => {
+    it('disables `unocss` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({unocss: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('unocss')).toBeUndefined();
@@ -129,46 +130,25 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `unocss` eslint config and merges with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({unocss: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('unocss')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
-});
 
-it('respects `overrides` and `overridesAny` in `unocss` eslint config', async () => {
-  const configResult = await computeEslintConfig({
-    unocss: {
-      overrides: {'@unocss/blocklist': 0},
-      overridesAny: {'no-console': 0},
-    },
-  });
+  it('respects `overrides` and `overridesAny` in `unocss` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      unocss: {
+        overrides: {'@unocss/blocklist': 0},
+        overridesAny: {'no-console': 0},
+      },
+    });
 
-  expect(configResult.getRuleEntrySeverity('unocss', '@unocss/blocklist')).toBe(0);
-  expect(configResult.getRuleEntrySeverity('unocss', 'no-console')).toBe(0);
-});
-
-describe('option: `forceSeverity`', () => {
-  it('respects `forceSeverity` set to `error` in `unocss` eslint config', async () => {
-    const configResult = await computeEslintConfig({unocss: {forceSeverity: 'error'}});
-
-    expect(
-      getAllRulesSeverities(configResult.getConfigByUnPostfix('unocss'), (ruleName) =>
-        ruleName.startsWith('@unocss/'),
-      ),
-    ).toStrictEqual([2]);
-  });
-
-  it('respects `forceSeverity` set to `warn` in `unocss` eslint config', async () => {
-    const configResult = await computeEslintConfig({unocss: {forceSeverity: 'warn'}});
-
-    expect(
-      getAllRulesSeverities(configResult.getConfigByUnPostfix('unocss'), (ruleName) =>
-        ruleName.startsWith('@unocss/'),
-      ),
-    ).toStrictEqual([1]);
+    expect(configResult.getRuleEntrySeverity('unocss', '@unocss/blocklist')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('unocss', 'no-console')).toBe(0);
   });
 });

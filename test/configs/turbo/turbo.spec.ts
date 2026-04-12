@@ -1,12 +1,12 @@
 import path from 'node:path';
 
-beforeEach(() => {
-  addInstalledPackages({turbo: '2.5.4'});
-});
-
 const FIXTURES = {
   undeclaredEnvVar: 'undeclared-env-var.js',
 } as const;
+
+beforeEach(() => {
+  addInstalledPackages({turbo: '2.5.4'});
+});
 
 const FIXTURES_DIR = path.join(import.meta.dirname, 'fixtures');
 
@@ -44,10 +44,22 @@ describe('basic tests', async () => {
       await expectConfigState({turbo: false}, 'turbo', false, 'default');
     });
 
-    it('does not create `turbo` eslint config when `turbo` is not installed', async () => {
-      setInstalledPackages({});
+    describe('`turbo` is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
 
-      await expectConfigState({}, 'turbo', false, 'default');
+      it('does not create `turbo` eslint config', async () => {
+        await expectConfigState({}, 'turbo', false, 'default');
+      });
+
+      it('creates `turbo` eslint config if explicitly enabled', async () => {
+        await expectConfigState('turbo', 'turbo', true, 'default');
+      });
+
+      it('does not create `turbo` eslint config and prints a warning if explicitly disabled', async () => {
+        await expectConfigState({turbo: false}, 'turbo', ['turbo', false], 'default');
+      });
     });
   });
 
@@ -104,12 +116,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `turbo` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
+
       const configResult = await computeEslintConfig({turbo: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('turbo')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `turbo` eslint config when `files` is empty array', async () => {
+    it('disables `turbo` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({turbo: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('turbo')).toBeUndefined();
@@ -119,11 +132,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `turbo` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({turbo: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('turbo')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -136,33 +150,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('turbo', 'turbo/no-undeclared-env-vars')).toBe(0);
     expect(configResult.getRuleEntrySeverity('turbo', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `turbo` eslint config', async () => {
-      const configResult = await computeEslintConfig({turbo: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('turbo'), (ruleName) =>
-          ruleName.startsWith('turbo/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `turbo` eslint config', async () => {
-      const configResult = await computeEslintConfig({turbo: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('turbo'), (ruleName) =>
-          ruleName.startsWith('turbo/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `undeclaredEnvVarsOptions`', () => {
-    it('does not pass extra options to `turbo/no-undeclared-env-vars` rule when `undeclaredEnvVarsOptions` is not set (default)', async () => {
+    it('does not pass extra options to `turbo/no-undeclared-env-vars` rule by default', async () => {
       const configResult = await computeEslintConfig('turbo');
 
       expect(

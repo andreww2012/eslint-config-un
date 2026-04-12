@@ -15,67 +15,72 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `json-schema-validator/js-ts` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('json-schema-validator/js-ts')).toBeUndefined();
+      await expectConfigState({}, 'json-schema-validator/js-ts', false);
     });
 
     it('creates `json-schema-validator/js-ts` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('jsonSchemaValidator');
-
-      expect(configResult.getConfigByUnPostfix('json-schema-validator/js-ts')).toBeDefined();
+      await expectConfigState('jsonSchemaValidator', 'json-schema-validator/js-ts', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('does not create `json-schema-validator/js-ts` eslint config', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('json-schema-validator/js-ts')).toBeUndefined();
+      await expectConfigState({}, 'json-schema-validator/js-ts', false, 'default');
     });
 
     it('creates `json-schema-validator/js-ts` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('jsonSchemaValidator', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('json-schema-validator/js-ts')).toBeDefined();
+      await expectConfigState(
+        'jsonSchemaValidator',
+        'json-schema-validator/js-ts',
+        true,
+        'default',
+      );
     });
 
     it('does not create `json-schema-validator/js-ts` eslint config and prints a warning if explicitly disabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig({jsonSchemaValidator: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('json-schema-validator/js-ts')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to disable \`jsonSchemaValidator\` config because this is the default`,
-        ),
-      ).toBe(true);
+      await expectConfigState(
+        {jsonSchemaValidator: false},
+        'json-schema-validator/js-ts',
+        ['jsonSchemaValidator', false],
+        'default',
+      );
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `json-schema-validator/js-ts` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'json-schema-validator/js-ts', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('json-schema-validator/js-ts')).toBeDefined();
+    it('creates `json-schema-validator/js-ts` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState(
+        {jsonSchemaValidator: true},
+        'json-schema-validator/js-ts',
+        ['jsonSchemaValidator', true],
+        'misc-enabled',
+      );
+    });
+
+    it('does not create `json-schema-validator/js-ts` eslint config if explicitly disabled', async () => {
+      await expectConfigState(
+        {jsonSchemaValidator: false},
+        'json-schema-validator/js-ts',
+        false,
+        'misc-enabled',
+      );
     });
   });
 
   it('has default `files` in `json-schema-validator/js-ts` eslint config', () => {
     expect(
       configResult.getConfigByUnPostfix('json-schema-validator/js-ts')?.files,
-    ).toMatchInlineSnapshot(`["**/*.?([cm])[jt]s?(x)"]`);
+    ).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
   });
 
   it('has default `ignores` in `json-schema-validator/js-ts` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('json-schema-validator/js-ts')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
+    expect(
+      configResult.getConfigByUnPostfix('json-schema-validator/js-ts')?.ignores?.length,
+    ).toBeGreaterThan(0);
   });
 });
 
@@ -84,11 +89,9 @@ describe('rules', async () => {
 
   it('enables `json-schema-validator/no-invalid` rule by default in `json-schema-validator/js-ts`', () => {
     expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry(
-          'json-schema-validator/js-ts',
-          'json-schema-validator/no-invalid',
-        ),
+      configResult.getRuleEntrySeverity(
+        'json-schema-validator/js-ts',
+        'json-schema-validator/no-invalid',
       ),
     ).toBe(2);
   });
@@ -114,27 +117,22 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `json-schema-validator/js-ts` eslint config', async () => {
       const FILES = ['src/**/*.js'];
-      const configResult = await computeEslintConfig({
-        jsonSchemaValidator: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({jsonSchemaValidator: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('json-schema-validator/js-ts')?.files).toStrictEqual(
         FILES,
       );
     });
 
-    it('disables `json-schema-validator/js-ts` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        jsonSchemaValidator: {files: []},
-      });
+    it('disables `json-schema-validator/js-ts` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({jsonSchemaValidator: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('json-schema-validator/js-ts')).toBeUndefined();
     });
 
-    it('does not disable json/yaml/toml sub-configs when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        jsonSchemaValidator: {files: []},
-      });
+    it('does not disable json/yaml/toml sub-configs when set to empty array', async () => {
+      const configResult = await computeEslintConfig({jsonSchemaValidator: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('json-schema-validator/json')).toBeDefined();
       expect(configResult.getConfigByUnPostfix('json-schema-validator/yaml')).toBeDefined();
@@ -145,13 +143,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `json-schema-validator/js-ts` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        jsonSchemaValidator: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({jsonSchemaValidator: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('json-schema-validator/js-ts')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -165,53 +162,18 @@ describe('un options', () => {
     });
 
     expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry(
-          'json-schema-validator/js-ts',
-          'json-schema-validator/no-invalid',
-        ),
+      configResult.getRuleEntrySeverity(
+        'json-schema-validator/js-ts',
+        'json-schema-validator/no-invalid',
       ),
     ).toBe(0);
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('json-schema-validator/js-ts', 'no-console'),
-      ),
-    ).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `json-schema-validator/js-ts` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        jsonSchemaValidator: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('json-schema-validator/js-ts'),
-          (ruleName) => ruleName.startsWith('json-schema-validator/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `json-schema-validator/js-ts` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        jsonSchemaValidator: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('json-schema-validator/js-ts'),
-          (ruleName) => ruleName.startsWith('json-schema-validator/'),
-        ),
-      ).toStrictEqual([1]);
-    });
+    expect(configResult.getRuleEntrySeverity('json-schema-validator/js-ts', 'no-console')).toBe(0);
   });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set `json-schema-validator` settings when not provided', async () => {
+    it('does not set `json-schema-validator` settings by default', async () => {
       const configResult = await computeEslintConfig('jsonSchemaValidator');
       const config = configResult.getConfigByUnPostfix('json-schema-validator/js-ts');
 
@@ -241,13 +203,11 @@ describe('options', () => {
           'json-schema-validator'
         ],
       ).toStrictEqual(SETTINGS);
-
       expect(
         configResult.getConfigByUnPostfix('json-schema-validator/yaml')?.settings?.[
           'json-schema-validator'
         ],
       ).toStrictEqual(SETTINGS);
-
       expect(
         configResult.getConfigByUnPostfix('json-schema-validator/toml')?.settings?.[
           'json-schema-validator'

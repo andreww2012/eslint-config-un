@@ -110,7 +110,7 @@ describe('markdown: sub config `formatFencedCodeBlocks`', () => {
         ).toStrictEqual(FILES);
       });
 
-      it('disables `markdown/format-fenced-code-blocks` eslint config when `files` is empty array', async () => {
+      it('disables `markdown/format-fenced-code-blocks` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           markdown: {configFormatFencedCodeBlocks: {files: []}},
         });

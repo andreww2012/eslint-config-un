@@ -63,7 +63,7 @@ describe('react: sub config `allowDefaultExportsInJsxFiles`', () => {
         ).toStrictEqual(FILES);
       });
 
-      it('disables `react/allow-default-export-in-jsx-files` when `files` is empty array', async () => {
+      it('disables `react/allow-default-export-in-jsx-files` when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           react: {configAllowDefaultExportsInJsxFiles: {files: []}},
         });

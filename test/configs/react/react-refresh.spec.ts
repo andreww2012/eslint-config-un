@@ -88,7 +88,7 @@ describe('react: sub config `refresh`', () => {
         ]);
       });
 
-      it('includes user-provided names in `allowExportNames` when option is set', async () => {
+      it('includes user-provided names in `allowExportNames` when set', async () => {
         const ALLOW_EXPORT_NAMES = ['myCustomExport'];
 
         const configResult = await computeEslintConfig({

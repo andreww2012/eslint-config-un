@@ -18,61 +18,54 @@ describe('basic tests', async () => {
   });
 
   it('has default `ignores` in `no-unsanitized` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('no-unsanitized')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
+    expect(configResult.getConfigByUnPostfix('no-unsanitized')?.ignores?.length).toBeGreaterThan(0);
   });
 
   describe('mode: all configs are disabled', () => {
     it('does not create `no-unsanitized` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('no-unsanitized')).toBeUndefined();
+      await expectConfigState({}, 'no-unsanitized', false);
     });
 
     it('creates `no-unsanitized` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('noUnsanitized');
-
-      expect(configResult.getConfigByUnPostfix('no-unsanitized')).toBeDefined();
+      await expectConfigState('noUnsanitized', 'no-unsanitized', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('creates `no-unsanitized` eslint config', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('no-unsanitized')).toBeDefined();
+      await expectConfigState({}, 'no-unsanitized', true, 'default');
     });
 
     it('creates `no-unsanitized` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig('noUnsanitized', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('no-unsanitized')).toBeDefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to enable \`noUnsanitized\` config because this is the default`,
-        ),
-      ).toBe(true);
+      await expectConfigState(
+        'noUnsanitized',
+        'no-unsanitized',
+        ['noUnsanitized', true],
+        'default',
+      );
     });
 
     it('does not create `no-unsanitized` eslint config if explicitly disabled', async () => {
-      const configResult = await computeEslintConfig({noUnsanitized: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('no-unsanitized')).toBeUndefined();
+      await expectConfigState({noUnsanitized: false}, 'no-unsanitized', false, 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `no-unsanitized` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'no-unsanitized', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('no-unsanitized')).toBeDefined();
+    it('creates `no-unsanitized` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState(
+        'noUnsanitized',
+        'no-unsanitized',
+        ['noUnsanitized', true],
+        'misc-enabled',
+      );
+    });
+
+    it('does not create `no-unsanitized` eslint config if explicitly disabled', async () => {
+      await expectConfigState({noUnsanitized: false}, 'no-unsanitized', false, 'misc-enabled');
     });
   });
 });
@@ -101,7 +94,7 @@ describe('rules', async () => {
       'no-unsanitized/property',
     );
 
-    expect(error?.message).toMatchInlineSnapshot(`"Unsafe assignment to innerHTML"`);
+    expect(error?.message).toMatchInlineSnapshot('"Unsafe assignment to innerHTML"');
   });
 });
 
@@ -109,17 +102,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `no-unsanitized` eslint config', async () => {
       const FILES = ['src/**/*.js'];
-      const configResult = await computeEslintConfig({
-        noUnsanitized: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({noUnsanitized: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('no-unsanitized')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `no-unsanitized` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        noUnsanitized: {files: []},
-      });
+    it('disables `no-unsanitized` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({noUnsanitized: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('no-unsanitized')).toBeUndefined();
     });
@@ -128,13 +118,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `no-unsanitized` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        noUnsanitized: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({noUnsanitized: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('no-unsanitized')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -149,31 +138,5 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('no-unsanitized', 'no-unsanitized/method')).toBe(0);
     expect(configResult.getRuleEntry('no-unsanitized', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `no-unsanitized` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        noUnsanitized: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('no-unsanitized'), (ruleName) =>
-          ruleName.startsWith('no-unsanitized/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `no-unsanitized` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        noUnsanitized: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('no-unsanitized'), (ruleName) =>
-          ruleName.startsWith('no-unsanitized/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

@@ -984,7 +984,7 @@ export interface NoStylisticRulesEslintConfigOptions<
   };
 
   /**
-   * Specify additional rules which should be considered stylistic.
+   * Specify arbitrary rules which should be considered stylistic.
    */
   additionalRules?: Partial<
     Record<Exclude<UnExtraPluginsRules<ExtraPlugins> | UnAllRuleNames, AllStylisticRules>, boolean>

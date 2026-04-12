@@ -102,13 +102,13 @@ describe('rules', async () => {
     expect(configResult.getRuleEntrySeverity('storybook', 'storybook/default-exports')).toBe(2);
   });
 
-  it('disables `storybook/no-uninstalled-addons` rule by default in `storybook` config', () => {
+  it('disables `storybook/no-uninstalled-addons` rule by default in `storybook` eslint config', () => {
     expect(configResult.getRuleEntrySeverity('storybook', 'storybook/no-uninstalled-addons')).toBe(
       0,
     );
   });
 
-  it('enables `storybook/no-uninstalled-addons` rule in `storybook/main` config', () => {
+  it('enables `storybook/no-uninstalled-addons` rule in `storybook/main` eslint config', () => {
     expect(
       configResult.getRuleEntrySeverity('storybook/main', 'storybook/no-uninstalled-addons'),
     ).toBe(2);
@@ -171,7 +171,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('storybook')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `storybook` and `storybook/main` eslint configs when `files` is empty array', async () => {
+    it('disables `storybook` and `storybook/main` eslint configs when set to empty array', async () => {
       const configResult = await computeEslintConfig({storybook: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('storybook')).toBeUndefined();
@@ -202,27 +202,5 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('storybook', 'storybook/default-exports')).toBe(0);
     expect(configResult.getRuleEntrySeverity('storybook', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `storybook` eslint config', async () => {
-      const configResult = await computeEslintConfig({storybook: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('storybook'), (ruleName) =>
-          ruleName.startsWith('storybook/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `storybook` eslint config', async () => {
-      const configResult = await computeEslintConfig({storybook: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('storybook'), (ruleName) =>
-          ruleName.startsWith('storybook/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

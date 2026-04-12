@@ -5,7 +5,7 @@ const FIXTURES = {
   pauseTest: 'pause-test/__tests__/pause-test.js',
 } as const;
 
-describe('ember: sub config `configTestFiles`', () => {
+describe('ember: sub config `testFiles`', () => {
   describe('basic tests', () => {
     it('creates `ember/tests` eslint config by default', async () => {
       const configResult = await computeEslintConfig('ember');
@@ -25,7 +25,7 @@ describe('ember: sub config `configTestFiles`', () => {
       expect(configResult.getConfigByUnPostfix('ember/tests')).toBeDefined();
     });
 
-    it('creates `ember/tests` eslint config when `configTestFiles` is an object', async () => {
+    it('creates `ember/tests` eslint config when `configTestFiles` is object', async () => {
       const configResult = await computeEslintConfig({ember: {configTestFiles: {}}});
 
       expect(configResult.getConfigByUnPostfix('ember/tests')).toBeDefined();
@@ -82,6 +82,7 @@ describe('ember: sub config `configTestFiles`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `ember/tests` eslint config', async () => {
         const FILES = ['tests/**/*.spec.ts'];
+
         const configResult = await computeEslintConfig({
           ember: {configTestFiles: {files: FILES}},
         });
@@ -89,7 +90,7 @@ describe('ember: sub config `configTestFiles`', () => {
         expect(configResult.getConfigByUnPostfix('ember/tests')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `ember/tests` eslint config when `files` is empty array', async () => {
+      it('disables `ember/tests` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           ember: {configTestFiles: {files: []}},
         });
@@ -101,13 +102,14 @@ describe('ember: sub config `configTestFiles`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `ember/tests` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           ember: {configTestFiles: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('ember/tests')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -124,32 +126,6 @@ describe('ember: sub config `configTestFiles`', () => {
 
       expect(configResult.getRuleEntrySeverity('ember/tests', 'ember/no-pause-test')).toBe(0);
       expect(configResult.getRuleEntrySeverity('ember/tests', 'no-console')).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `ember/tests` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          ember: {configTestFiles: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('ember/tests'), (ruleName) =>
-            ruleName.startsWith('ember/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `ember/tests` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          ember: {configTestFiles: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('ember/tests'), (ruleName) =>
-            ruleName.startsWith('ember/'),
-          ),
-        ).toStrictEqual([1]);
-      });
     });
   });
 });

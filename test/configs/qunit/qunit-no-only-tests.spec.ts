@@ -1,4 +1,4 @@
-describe('qunit: sub config `configNoOnlyTests`', () => {
+describe('qunit: sub config `noOnlyTests`', () => {
   describe('basic tests', () => {
     it('does not create `qunit/no-only-tests` eslint config by default (`configNoOnlyTests` is disabled by default)', async () => {
       const configResult = await computeEslintConfig('qunit');
@@ -22,6 +22,7 @@ describe('qunit: sub config `configNoOnlyTests`', () => {
 
     it('inherits `files` from parent `qunit` config when `configNoOnlyTests` is enabled', async () => {
       const FILES = ['tests/**/*.spec.ts'];
+
       const configResult = await computeEslintConfig({
         qunit: {files: FILES, configNoOnlyTests: true},
       });
@@ -44,6 +45,7 @@ describe('qunit: sub config `configNoOnlyTests`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `qunit/no-only-tests` eslint config', async () => {
         const FILES = ['tests/**/*.spec.ts'];
+
         const configResult = await computeEslintConfig({
           qunit: {configNoOnlyTests: {files: FILES}},
         });
@@ -53,7 +55,7 @@ describe('qunit: sub config `configNoOnlyTests`', () => {
         );
       });
 
-      it('disables `qunit/no-only-tests` eslint config when `files` is empty array', async () => {
+      it('disables `qunit/no-only-tests` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           qunit: {configNoOnlyTests: {files: []}},
         });
@@ -65,13 +67,14 @@ describe('qunit: sub config `configNoOnlyTests`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `qunit/no-only-tests` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           qunit: {configNoOnlyTests: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('qunit/no-only-tests')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -89,7 +92,6 @@ describe('qunit: sub config `configNoOnlyTests`', () => {
       expect(
         configResult.getRuleEntrySeverity('qunit/no-only-tests', 'no-only-tests/no-only-tests'),
       ).toBe(0);
-
       expect(configResult.getRuleEntrySeverity('qunit/no-only-tests', 'no-console')).toBe(0);
     });
   });

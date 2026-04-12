@@ -325,10 +325,8 @@ export interface EsEslintConfigOptions<
   }>;
 }
 
-export default ((context, optionsRawFromParameters, customConfig) => {
-  const optionsRaw =
-    customConfig?.options ?? optionsRawFromParameters ?? context.rootOptions.configs?.es;
-  const optionsResolved = assignDefaults(optionsRaw, {
+export default ((context, optionsRaw, customConfig) => {
+  const optionsResolved = assignDefaults(customConfig?.options ?? optionsRaw, {
     ecmaVersion: 'latest',
   } satisfies EsEslintConfigOptions);
 

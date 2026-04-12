@@ -1,4 +1,4 @@
-describe('playwright: sub config `configNoOnlyTests`', () => {
+describe('playwright: sub config `noOnlyTests`', () => {
   describe('basic tests', () => {
     it('does not create `playwright/no-only-tests` eslint config by default (`configNoOnlyTests` is disabled by default)', async () => {
       const configResult = await computeEslintConfig('playwright');
@@ -28,6 +28,7 @@ describe('playwright: sub config `configNoOnlyTests`', () => {
 
     it('inherits `files` from parent `playwright` config when `configNoOnlyTests` is enabled', async () => {
       const FILES = ['e2e/**/*.spec.ts'];
+
       const configResult = await computeEslintConfig({
         playwright: {files: FILES, configNoOnlyTests: true},
       });
@@ -57,6 +58,7 @@ describe('playwright: sub config `configNoOnlyTests`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `playwright/no-only-tests` eslint config', async () => {
         const FILES = ['e2e/**/*.spec.ts'];
+
         const configResult = await computeEslintConfig({
           playwright: {configNoOnlyTests: {files: FILES}},
         });
@@ -66,7 +68,7 @@ describe('playwright: sub config `configNoOnlyTests`', () => {
         );
       });
 
-      it('disables `playwright/no-only-tests` eslint config when `files` is empty array', async () => {
+      it('disables `playwright/no-only-tests` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           playwright: {configNoOnlyTests: {files: []}},
         });
@@ -78,13 +80,14 @@ describe('playwright: sub config `configNoOnlyTests`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `playwright/no-only-tests` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           playwright: {configNoOnlyTests: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('playwright/no-only-tests')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });

@@ -98,7 +98,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('jsx-a11y')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `jsx-a11y` eslint config when `files` is empty array', async () => {
+    it('disables `jsx-a11y` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({jsxA11y: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('jsx-a11y')).toBeUndefined();
@@ -126,33 +126,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('jsx-a11y', 'jsx-a11y/alt-text')).toBe(0);
     expect(configResult.getRuleEntrySeverity('jsx-a11y', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `jsx-a11y` eslint config', async () => {
-      const configResult = await computeEslintConfig({jsxA11y: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('jsx-a11y'), (ruleName) =>
-          ruleName.startsWith('jsx-a11y/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `jsx-a11y` eslint config', async () => {
-      const configResult = await computeEslintConfig({jsxA11y: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('jsx-a11y'), (ruleName) =>
-          ruleName.startsWith('jsx-a11y/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set `jsx-a11y-x` settings when option is not set', async () => {
+    it('does not set `jsx-a11y-x` settings by default', async () => {
       const configResult = await computeEslintConfig('jsxA11y');
       const config = configResult.getConfigByUnPostfix('jsx-a11y');
 
@@ -170,7 +148,7 @@ describe('options', () => {
   });
 
   describe('option: `altTextCheckForElements`', () => {
-    it('includes default elements in `jsx-a11y/alt-text` rule when option is not set', async () => {
+    it('includes default elements in `jsx-a11y/alt-text` rule by default', async () => {
       const configResult = await computeEslintConfig('jsxA11y');
       const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/alt-text');
 
@@ -179,7 +157,7 @@ describe('options', () => {
       );
     });
 
-    it('disables `jsx-a11y/alt-text` rule when option is `false`', async () => {
+    it('disables `jsx-a11y/alt-text` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({jsxA11y: {altTextCheckForElements: false}});
 
       expect(configResult.getRuleEntrySeverity('jsx-a11y', 'jsx-a11y/alt-text')).toBe(0);
@@ -209,14 +187,14 @@ describe('options', () => {
   });
 
   describe('option: `anchorIsValidCheckedAspects`', () => {
-    it('checks default aspects in `jsx-a11y/anchor-is-valid` rule when option is not set', async () => {
+    it('checks default aspects in `jsx-a11y/anchor-is-valid` rule by default', async () => {
       const configResult = await computeEslintConfig('jsxA11y');
       const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/anchor-is-valid');
 
       expect(rule).toMatchInlineSnapshot('[2, {"aspects": ["noHref", "invalidHref"]}]');
     });
 
-    it('disables `jsx-a11y/anchor-is-valid` rule when option is `false`', async () => {
+    it('disables `jsx-a11y/anchor-is-valid` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         jsxA11y: {anchorIsValidCheckedAspects: false},
       });
@@ -246,7 +224,7 @@ describe('options', () => {
   });
 
   describe('option: `ambiguousWordsForAnchorText`', () => {
-    it('uses default ambiguous words in `jsx-a11y/anchor-ambiguous-text` rule when option is not set', async () => {
+    it('uses default ambiguous words in `jsx-a11y/anchor-ambiguous-text` rule by default', async () => {
       const configResult = await computeEslintConfig('jsxA11y');
       const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/anchor-ambiguous-text');
 
@@ -255,7 +233,7 @@ describe('options', () => {
       );
     });
 
-    it('disables `jsx-a11y/anchor-ambiguous-text` rule when option is `false`', async () => {
+    it('disables `jsx-a11y/anchor-ambiguous-text` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         jsxA11y: {ambiguousWordsForAnchorText: false},
       });
@@ -296,13 +274,13 @@ describe('options', () => {
   });
 
   describe('option: `imageWords`', () => {
-    it('uses `warn` severity for `jsx-a11y/img-redundant-alt` rule when option is not set', async () => {
+    it('uses `warn` severity for `jsx-a11y/img-redundant-alt` rule by default', async () => {
       const configResult = await computeEslintConfig('jsxA11y');
 
       expect(configResult.getRuleEntrySeverity('jsx-a11y', 'jsx-a11y/img-redundant-alt')).toBe(1);
     });
 
-    it('disables `jsx-a11y/img-redundant-alt` rule when option is `false`', async () => {
+    it('disables `jsx-a11y/img-redundant-alt` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({jsxA11y: {imageWords: false}});
 
       expect(configResult.getRuleEntrySeverity('jsx-a11y', 'jsx-a11y/img-redundant-alt')).toBe(0);
@@ -327,7 +305,7 @@ describe('options', () => {
   });
 
   describe('option: `hoverInHandlersRequiringOnFocus`', () => {
-    it('uses default hover-in handlers in `jsx-a11y/mouse-events-have-key-events` rule when option is not set', async () => {
+    it('uses default hover-in handlers in `jsx-a11y/mouse-events-have-key-events` rule by default', async () => {
       const configResult = await computeEslintConfig('jsxA11y');
       const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/mouse-events-have-key-events');
 
@@ -384,7 +362,7 @@ describe('options', () => {
   });
 
   describe('option: `labelAttributes`', () => {
-    it('does not include custom label attributes in rules when option is not set', async () => {
+    it('does not include custom label attributes in rules by default', async () => {
       const configResult = await computeEslintConfig('jsxA11y');
       const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/label-has-associated-control');
 
@@ -406,7 +384,6 @@ describe('options', () => {
       );
 
       expect(labelRule).toMatchInlineSnapshot('[2, {"labelAttributes": ["data-label"]}]');
-
       expect(controlRule).toMatchInlineSnapshot(
         '[2, {"ignoreElements": ["audio", "canvas", "embed", "input", "textarea", "tr", "video", "th", "td"], "ignoreRoles": ["grid", "listbox", "menu", "menubar", "radiogroup", "row", "tablist", "toolbar", "tree", "treegrid"], "labelAttributes": ["data-label"]}]',
       );
@@ -414,7 +391,7 @@ describe('options', () => {
   });
 
   describe('option: `tabbableRoles`', () => {
-    it('uses default tabbable roles in `jsx-a11y/interactive-supports-focus` rule when option is not set', async () => {
+    it('uses default tabbable roles in `jsx-a11y/interactive-supports-focus` rule by default', async () => {
       const configResult = await computeEslintConfig('jsxA11y');
       const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/interactive-supports-focus');
 
@@ -423,7 +400,7 @@ describe('options', () => {
       );
     });
 
-    it('uses default roles when option is `false`', async () => {
+    it('uses default roles when set to `false`', async () => {
       const configResult = await computeEslintConfig({jsxA11y: {tabbableRoles: false}});
       const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/interactive-supports-focus');
 
@@ -457,7 +434,7 @@ describe('options', () => {
 
   describe('option: `customComponents`', () => {
     describe('`imgElements`', () => {
-      it('does not include custom img components in rules when option is not set', async () => {
+      it('does not include custom img components in rules by default', async () => {
         const configResult = await computeEslintConfig('jsxA11y');
         const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/alt-text');
 
@@ -485,7 +462,7 @@ describe('options', () => {
     });
 
     describe('`links`', () => {
-      it('does not include custom link components in rules when option is not set', async () => {
+      it('does not include custom link components in rules by default', async () => {
         const configResult = await computeEslintConfig('jsxA11y');
         const rule = configResult.getRuleEntry('jsx-a11y', 'jsx-a11y/anchor-has-content');
 

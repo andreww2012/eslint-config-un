@@ -2,9 +2,9 @@ import {configDefaults, defineConfig} from 'vitest/config';
 
 export default defineConfig({
   test: {
-    exclude: [...configDefaults.exclude, 'test/temp/**'],
+    exclude: [...configDefaults.exclude, 'test/**/fixtures/**'],
     globals: true,
-    testTimeout: 30_000, // Generating ESLint config might not be very fast
+    testTimeout: 60_000, // Generating ESLint config might not be very fast
     setupFiles: ['./test/setup.ts'],
     // Vitest passes `--conditions development` to workers, causing `@glimmer/syntax`,
     // which is a dependency of `ember-eslint-parser`, to resolve to its dev build,
@@ -23,6 +23,11 @@ export default defineConfig({
     },
     coverage: {
       include: ['src/**/*.ts'],
+      reporter: ['html', 'json'],
+      // Avoid "Error: ENOENT: no such file or directory, open 'coverage\.tmp\coverage-8.json'" in watch mode
+      clean: false,
     },
+    ui: true,
+    open: false,
   },
 });

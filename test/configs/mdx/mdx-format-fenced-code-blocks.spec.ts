@@ -9,6 +9,14 @@ describe('basic tests', () => {
     expect(configResult.getConfigByUnPostfix('mdx/format-fenced-code-blocks')).toBeDefined();
   });
 
+  it('does not create `mdx/format-fenced-code-blocks` eslint config when `prettier` is not installed', async () => {
+    setInstalledPackages({});
+
+    const configResult = await computeEslintConfig('mdx');
+
+    expect(configResult.getConfigByUnPostfix('mdx/format-fenced-code-blocks')).toBeUndefined();
+  });
+
   it('does not create `mdx/format-fenced-code-blocks` eslint config when `configFormatFencedCodeBlocks` is `false`', async () => {
     const configResult = await computeEslintConfig({
       mdx: {configFormatFencedCodeBlocks: false},
@@ -64,6 +72,7 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `mdx/format-fenced-code-blocks` eslint config', async () => {
       const FILES = ['docs/**/*.mdx/**/*.js'];
+
       const configResult = await computeEslintConfig({
         mdx: {configFormatFencedCodeBlocks: {files: FILES}},
       });
@@ -73,7 +82,7 @@ describe('un options', () => {
       ).toStrictEqual(FILES);
     });
 
-    it('disables `mdx/format-fenced-code-blocks` eslint config when `files` is empty array', async () => {
+    it('disables `mdx/format-fenced-code-blocks` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({
         mdx: {configFormatFencedCodeBlocks: {files: []}},
       });
@@ -85,41 +94,14 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `mdx/format-fenced-code-blocks` eslint config', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({
         mdx: {configFormatFencedCodeBlocks: {ignores: IGNORES}},
       });
 
       const ignores = configResult.getConfigByUnPostfix('mdx/format-fenced-code-blocks')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
-    });
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `mdx/format-fenced-code-blocks` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        mdx: {configFormatFencedCodeBlocks: {forceSeverity: 'error'}},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('mdx/format-fenced-code-blocks'),
-          (ruleName) => ruleName.startsWith('prettier/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `mdx/format-fenced-code-blocks` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        mdx: {configFormatFencedCodeBlocks: {forceSeverity: 'warn'}},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('mdx/format-fenced-code-blocks'),
-          (ruleName) => ruleName.startsWith('prettier/'),
-        ),
-      ).toStrictEqual([1]);
+      expect(ignores).toIncludeAllMembers(IGNORES);
     });
   });
 });

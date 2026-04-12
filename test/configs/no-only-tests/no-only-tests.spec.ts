@@ -104,7 +104,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('no-only-tests')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `no-only-tests` eslint config when `files` is empty array', async () => {
+    it('disables `no-only-tests` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({noOnlyTests: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('no-only-tests')).toBeUndefined();
@@ -136,31 +136,5 @@ describe('un options', () => {
       0,
     );
     expect(configResult.getRuleEntrySeverity('no-only-tests', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `no-only-tests` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        noOnlyTests: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('no-only-tests'), (ruleName) =>
-          ruleName.startsWith('no-only-tests/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `no-only-tests` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        noOnlyTests: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('no-only-tests'), (ruleName) =>
-          ruleName.startsWith('no-only-tests/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

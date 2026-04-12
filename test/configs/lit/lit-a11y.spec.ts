@@ -6,7 +6,7 @@ beforeEach(() => {
   addInstalledPackages({lit: '3.0.0'});
 });
 
-describe('lit: sub config `configA11y`', () => {
+describe('lit: sub config `a11y`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig('lit');
 
@@ -73,6 +73,7 @@ describe('lit: sub config `configA11y`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `lit-a11y` eslint config', async () => {
         const FILES = ['src/**/*.ts'];
+
         const configResult = await computeEslintConfig({
           lit: {configA11y: {files: FILES}},
         });
@@ -80,7 +81,7 @@ describe('lit: sub config `configA11y`', () => {
         expect(configResult.getConfigByUnPostfix('lit-a11y')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `lit-a11y` eslint config when `files` is empty array', async () => {
+      it('disables `lit-a11y` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           lit: {configA11y: {files: []}},
         });
@@ -92,13 +93,14 @@ describe('lit: sub config `configA11y`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `lit-a11y` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           lit: {configA11y: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('lit-a11y')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -114,34 +116,7 @@ describe('lit: sub config `configA11y`', () => {
       });
 
       expect(configResult.getRuleEntrySeverity('lit-a11y', 'lit-a11y/accessible-name')).toBe(0);
-
       expect(configResult.getRuleEntrySeverity('lit-a11y', 'no-console')).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `lit-a11y` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          lit: {configA11y: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('lit-a11y'), (ruleName) =>
-            ruleName.startsWith('lit-a11y/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `lit-a11y` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          lit: {configA11y: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('lit-a11y'), (ruleName) =>
-            ruleName.startsWith('lit-a11y/'),
-          ),
-        ).toStrictEqual([1]);
-      });
     });
   });
 

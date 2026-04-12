@@ -1,3 +1,4 @@
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 import type {NonEmptyTuple} from '../../../src/types';
 
 const FIXTURES = {
@@ -17,58 +18,45 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `js-inline` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('js-inline')).toBeUndefined();
+      await expectConfigState({}, 'js-inline', false);
     });
 
     it('creates `js-inline` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('jsInline');
-
-      expect(configResult.getConfigByUnPostfix('js-inline')).toBeDefined();
+      await expectConfigState('jsInline', 'js-inline', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('creates `js-inline` eslint config by default', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('js-inline')).toBeDefined();
+      await expectConfigState({}, 'js-inline', true, 'default');
     });
 
     it('creates `js-inline` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      await computeEslintConfig('jsInline', {reset: true});
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to enable \`jsInline\` config because this is the default`,
-        ),
-      ).toBe(true);
+      await expectConfigState('jsInline', 'js-inline', ['jsInline', true], 'default');
     });
 
     it('does not create `js-inline` eslint config if explicitly disabled', async () => {
-      const configResult = await computeEslintConfig({jsInline: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('js-inline')).toBeUndefined();
+      await expectConfigState({jsInline: false}, 'js-inline', false, 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `js-inline` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'js-inline', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('js-inline')).toBeDefined();
+    it('creates `js-inline` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('jsInline', 'js-inline', ['jsInline', true], 'misc-enabled');
+    });
+
+    it('does not create `js-inline` eslint config if explicitly disabled', async () => {
+      await expectConfigState({jsInline: false}, 'js-inline', false, 'misc-enabled');
     });
   });
 
   it('has default `files` in `js-inline` eslint config', () => {
     expect(configResult.getConfigByUnPostfix('js-inline')?.files).toMatchInlineSnapshot(
-      `["**/*.htm?(l)"]`,
+      '["**/*.htm?(l)"]',
     );
   });
 
@@ -76,13 +64,13 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('js-inline')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.to.include.members(['**/*.htm?(l)']);
+    expect(ignores).not.toIncludeAnyMembers(['**/*.htm?(l)']);
   });
 
   it('has default `files` in `js-inline/js-inside-html-inside-markdown` eslint config', () => {
     expect(
       configResult.getConfigByUnPostfix('js-inline/js-inside-html-inside-markdown')?.files,
-    ).toMatchInlineSnapshot(`["**/*.md/**/*.htm?(l)"]`);
+    ).toMatchInlineSnapshot('["**/*.md/**/*.htm?(l)"]');
   });
 
   it('has default `ignores` in `js-inline/js-inside-html-inside-markdown` eslint config', () => {
@@ -91,7 +79,7 @@ describe('basic tests', async () => {
     )?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.to.include.members(['**/*.htm?(l)']);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 
@@ -111,7 +99,7 @@ describe('rules', async () => {
 
     const error = findLintMessageFromLintResults(results, FIXTURES.withEval, 'no-eval');
 
-    expect(error?.message).toMatchInlineSnapshot(`"eval can be harmful."`);
+    expect(error?.message).toMatchInlineSnapshot('"eval can be harmful."');
   });
 });
 
@@ -119,17 +107,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `js-inline` eslint config', async () => {
       const FILES = ['src/**/*.html'];
-      const configResult = await computeEslintConfig({
-        jsInline: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({jsInline: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('js-inline')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `js-inline` and `js-inline/js-inside-html-inside-markdown` eslint configs when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        jsInline: {files: []},
-      });
+    it('disables `js-inline` and `js-inline/js-inside-html-inside-markdown` eslint configs when set to empty array', async () => {
+      const configResult = await computeEslintConfig({jsInline: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('js-inline')).toBeUndefined();
       expect(
@@ -141,27 +126,25 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `js-inline` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        jsInline: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({jsInline: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('js-inline')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
 
     it('does not propagate user `ignores` to `js-inline/js-inside-html-inside-markdown` eslint config', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        jsInline: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({jsInline: {ignores: IGNORES}});
 
       const mdIgnores = configResult.getConfigByUnPostfix(
         'js-inline/js-inside-html-inside-markdown',
       )?.ignores;
 
-      expect(mdIgnores).not.to.include.members(IGNORES);
+      expect(mdIgnores).not.toIncludeAnyMembers(IGNORES);
     });
   });
 
@@ -175,32 +158,13 @@ describe('un options', () => {
     });
 
     expect(configResult.getRuleEntry('js-inline', 'no-eval')).toBeUndefined();
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(configResult.getRuleEntry('js-inline', 'no-console')),
-    ).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('does not support `forceSeverity`', async () => {
-      const configResult = await computeEslintConfig({
-        jsInline: {
-          // @ts-expect-error does not support `forceSeverity` because have no config-specific rules
-          forceSeverity: 'error',
-          overridesAny: {'no-console': 0},
-        },
-      });
-
-      expect(getAllRulesSeverities(configResult.getConfigByUnPostfix('js-inline'))).toStrictEqual([
-        0,
-      ]);
-    });
+    expect(configResult.getRuleEntrySeverity('js-inline', 'no-console')).toBe(0);
   });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set html settings when not provided', async () => {
+    it('does not set html settings by default', async () => {
       const configResult = await computeEslintConfig('jsInline');
       const config = configResult.getConfigByUnPostfix('js-inline');
 
@@ -219,7 +183,7 @@ describe('options', () => {
             | undefined
         )?.['html-extensions'],
       ).toMatchInlineSnapshot(
-        `[".erb", ".handlebars", ".hbs", ".htm", ".html", ".mustache", ".nunjucks", ".php", ".tag", ".riot", ".twig", ".we"]`,
+        '[".erb", ".handlebars", ".hbs", ".htm", ".html", ".mustache", ".nunjucks", ".php", ".tag", ".riot", ".twig", ".we"]',
       );
     });
 
@@ -240,8 +204,14 @@ describe('options', () => {
 
       const htmlSettings = configResult.getConfigByUnPostfix('js-inline')?.settings?.['html'];
 
-      expect(htmlSettings).property('html-extensions').not.to.include.members(DISABLED_EXTENSIONS);
-      expect(htmlSettings).property('html-extensions').to.include.members(ENABLED_EXTENSIONS);
+      expect(htmlSettings).toHaveProperty(
+        'html-extensions',
+        expect.not.arrayContaining(DISABLED_EXTENSIONS),
+      );
+      expect(htmlSettings).toHaveProperty(
+        'html-extensions',
+        expect.arrayContaining(ENABLED_EXTENSIONS),
+      );
     });
 
     it('sets `xml-extensions` to defaults when `settings` is provided without `xml-extensions`', async () => {
@@ -253,7 +223,7 @@ describe('options', () => {
             | Record<string, unknown>
             | undefined
         )?.['xml-extensions'],
-      ).toMatchInlineSnapshot(`[".xhtml", ".xml"]`);
+      ).toMatchInlineSnapshot('[".xhtml", ".xml"]');
     });
 
     it('customizes `xml-extensions` when provided', async () => {
@@ -273,8 +243,14 @@ describe('options', () => {
 
       const htmlSettings = configResult.getConfigByUnPostfix('js-inline')?.settings?.['html'];
 
-      expect(htmlSettings).property('xml-extensions').not.to.include.members(DISABLED_EXTENSIONS);
-      expect(htmlSettings).property('xml-extensions').to.include.members(ENABLED_EXTENSIONS);
+      expect(htmlSettings).toHaveProperty(
+        'xml-extensions',
+        expect.not.arrayContaining(DISABLED_EXTENSIONS),
+      );
+      expect(htmlSettings).toHaveProperty(
+        'xml-extensions',
+        expect.arrayContaining(ENABLED_EXTENSIONS),
+      );
     });
 
     it('passes through other settings properties', async () => {

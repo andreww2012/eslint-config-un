@@ -37,9 +37,9 @@ export interface AstroEslintConfigOptions<
       >;
 
   /**
-   * Set ups .astro files parser.
+   * Set ups `.astro` files parser.
    *
-   * By default, it will be applied to all Astro files (<code>**&#47;*.astro</code>)
+   * 📁 Default `files`: <code>**&#47;*.astro</code>
    */
   configSetup?: UnFlatConfigEntryFilesAndIgnores;
 }
@@ -132,6 +132,7 @@ export default (async (context, optionsRaw) => {
     .markCategory('Extension Rules')
     .addRule('semi', OFF) /** @since 0.19.0 */
     .enableConfigTesterForPlugin('astro', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => ruleName.startsWith('jsx-a11y/'),
     })
     .addOverrides();

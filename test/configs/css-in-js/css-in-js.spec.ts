@@ -25,7 +25,104 @@ const FIXTURES = {
   defineFunctionNoDupe: 'define-function-no-dupe.js',
 } as const;
 
-describe('cssInJs config', () => {
+describe('basic tests', async () => {
+  const configResult = await computeEslintConfig('cssInJs');
+
+  it('creates `css-in-js` eslint config', () => {
+    expect(configResult.getConfigByUnPostfix('css-in-js')).toBeDefined();
+  });
+
+  describe('mode: all configs are disabled', () => {
+    it('does not create `css-in-js` eslint config', async () => {
+      await expectConfigState({}, 'css-in-js', false);
+    });
+
+    it('creates `css-in-js` eslint config if explicitly enabled', async () => {
+      await expectConfigState('cssInJs', 'css-in-js', true);
+    });
+  });
+
+  describe('mode: all configs are not explicitly enabled or disabled', () => {
+    it('creates `css-in-js` eslint config', async () => {
+      await expectConfigState({}, 'css-in-js', true, 'default');
+    });
+
+    it('creates `css-in-js` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('cssInJs', 'css-in-js', ['cssInJs', true], 'default');
+    });
+
+    it('does not create `css-in-js` eslint config if explicitly disabled', async () => {
+      await expectConfigState({cssInJs: false}, 'css-in-js', false, 'default');
+    });
+  });
+
+  describe('mode: misc configs are enabled', () => {
+    it('creates `css-in-js` eslint config', async () => {
+      await expectConfigState({}, 'css-in-js', true, 'misc-enabled');
+    });
+
+    it('creates `css-in-js` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('cssInJs', 'css-in-js', ['cssInJs', true], 'misc-enabled');
+    });
+
+    it('does not create `css-in-js` eslint config if explicitly disabled', async () => {
+      await expectConfigState({cssInJs: false}, 'css-in-js', false, 'misc-enabled');
+    });
+  });
+});
+
+describe('un options', () => {
+  describe('option: `files`', () => {
+    it('uses user-provided `files` in `css-in-js` eslint config', async () => {
+      const FILES = ['src/**/*.tsx'];
+
+      const configResult = await computeEslintConfig({cssInJs: {files: FILES}});
+
+      expect(configResult.getConfigByUnPostfix('css-in-js')?.files).toStrictEqual(FILES);
+    });
+
+    it('disables `css-in-js` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({cssInJs: {files: []}});
+
+      expect(configResult.getConfigByUnPostfix('css-in-js')).toBeUndefined();
+    });
+  });
+
+  describe('option: `ignores`', () => {
+    it('uses user-provided `ignores` in `css-in-js` eslint config and merges them with defaults', async () => {
+      const IGNORES = ['**/fixtures/**'];
+
+      const configResult = await computeEslintConfig({cssInJs: {ignores: IGNORES}});
+
+      const ignores = configResult.getConfigByUnPostfix('css-in-js')?.ignores;
+
+      expect(ignores).toIncludeAllMembers(IGNORES);
+      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+    });
+  });
+
+  it('respects `overrides` and `overridesAny` in `css-in-js` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      cssInJs: {
+        overrides: {'css-in-js/no-dupe-properties': 0},
+        overridesAny: {'no-console': 0},
+      },
+    });
+
+    expect(configResult.getRuleEntrySeverity('css-in-js', 'css-in-js/no-dupe-properties')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('css-in-js', 'no-console')).toBe(0);
+  });
+});
+
+describe('rules', () => {
+  it('correctly sets severities by default', async () => {
+    const configResult = await computeEslintConfig('cssInJs');
+
+    expect(configResult.getRuleSeverities('css-in-js')).toMatchObject({
+      'css-in-js/no-dupe-properties': 2,
+    });
+  });
+
   it('triggers css-in-js/no-dupe-properties for duplicate style properties', async () => {
     const results = await testEslintConfig(
       'cssInJs',
@@ -59,10 +156,10 @@ describe('cssInJs config', () => {
 
     expect(error).toBeUndefined();
   });
+});
 
+describe('options', () => {
   describe('option: `settings`', () => {
-    const RULE_ID = 'css-in-js/no-dupe-properties';
-
     describe('`attributes`', () => {
       it('does not trigger for duplicate properties in custom attribute by default', async () => {
         const results = await testEslintConfig(
@@ -71,7 +168,11 @@ describe('cssInJs config', () => {
           JSX_EXTRA_CONFIGS,
         );
 
-        const error = findLintMessageFromLintResults(results, FIXTURES.cssAttributeDupe, RULE_ID);
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.cssAttributeDupe,
+          'css-in-js/no-dupe-properties',
+        );
 
         expect(error).toBeUndefined();
       });
@@ -83,7 +184,11 @@ describe('cssInJs config', () => {
           JSX_EXTRA_CONFIGS,
         );
 
-        const error = findLintMessageFromLintResults(results, FIXTURES.cssAttributeDupe, RULE_ID);
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.cssAttributeDupe,
+          'css-in-js/no-dupe-properties',
+        );
 
         expect(error?.message).toMatchInlineSnapshot(
           `"Duplicate property 'background-color' and 'backgroundColor'."`,
@@ -97,7 +202,11 @@ describe('cssInJs config', () => {
           JSX_EXTRA_CONFIGS,
         );
 
-        const error = findLintMessageFromLintResults(results, FIXTURES.cssAttributeNoDupe, RULE_ID);
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.cssAttributeNoDupe,
+          'css-in-js/no-dupe-properties',
+        );
 
         expect(error).toBeUndefined();
       });
@@ -111,7 +220,11 @@ describe('cssInJs config', () => {
           import.meta.dirname,
         );
 
-        const error = findLintMessageFromLintResults(results, FIXTURES.defineFunctionDupe, RULE_ID);
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.defineFunctionDupe,
+          'css-in-js/no-dupe-properties',
+        );
 
         expect(error).toBeUndefined();
       });
@@ -123,7 +236,11 @@ describe('cssInJs config', () => {
           import.meta.dirname,
         );
 
-        const error = findLintMessageFromLintResults(results, FIXTURES.defineFunctionDupe, RULE_ID);
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.defineFunctionDupe,
+          'css-in-js/no-dupe-properties',
+        );
 
         expect(error?.message).toMatchInlineSnapshot(
           `"Duplicate property 'background-color' and 'backgroundColor'."`,
@@ -140,7 +257,7 @@ describe('cssInJs config', () => {
         const error = findLintMessageFromLintResults(
           results,
           FIXTURES.defineFunctionNoDupe,
-          RULE_ID,
+          'css-in-js/no-dupe-properties',
         );
 
         expect(error).toBeUndefined();
@@ -149,12 +266,14 @@ describe('cssInJs config', () => {
   });
 
   describe('option: `hexColorsStyle`', () => {
-    const RULE_ID = 'css-in-js/color-hex-style';
-
     it('triggers for short hex color by default', async () => {
       const results = await testEslintConfig('cssInJs', FIXTURES.hexColorShort, JSX_EXTRA_CONFIGS);
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.hexColorShort, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.hexColorShort,
+        'css-in-js/color-hex-style',
+      );
 
       expect(error?.message).toMatchInlineSnapshot(`"Expected '#abc' to be '#aabbcc'."`);
     });
@@ -162,7 +281,11 @@ describe('cssInJs config', () => {
     it('does not trigger for long hex color by default', async () => {
       const results = await testEslintConfig('cssInJs', FIXTURES.hexColorLong, JSX_EXTRA_CONFIGS);
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.hexColorLong, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.hexColorLong,
+        'css-in-js/color-hex-style',
+      );
 
       expect(error).toBeUndefined();
     });
@@ -174,7 +297,11 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.hexColorLong, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.hexColorLong,
+        'css-in-js/color-hex-style',
+      );
 
       expect(error?.message).toMatchInlineSnapshot(`"Expected '#aabbcc' to be '#abc'."`);
     });
@@ -186,7 +313,11 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.hexColorShort, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.hexColorShort,
+        'css-in-js/color-hex-style',
+      );
 
       expect(error).toBeUndefined();
     });
@@ -198,7 +329,11 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.hexColorShort, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.hexColorShort,
+        'css-in-js/color-hex-style',
+      );
 
       expect(error?.message).toMatchInlineSnapshot(`"Expected '#abc' to be '#aabbcc'."`);
     });
@@ -210,19 +345,25 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.hexColorLong, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.hexColorLong,
+        'css-in-js/color-hex-style',
+      );
 
       expect(error).toBeUndefined();
     });
   });
 
   describe('option: `preferNamedColors`', () => {
-    const RULE_ID = 'css-in-js/named-color';
-
     it('triggers for named color by default', async () => {
       const results = await testEslintConfig('cssInJs', FIXTURES.namedColor, JSX_EXTRA_CONFIGS);
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.namedColor, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.namedColor,
+        'css-in-js/named-color',
+      );
 
       expect(error?.message).toMatchInlineSnapshot(`"Expected 'red' to be '#f00'."`);
     });
@@ -237,7 +378,7 @@ describe('cssInJs config', () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.hexColorWithNamedEquivalent,
-        RULE_ID,
+        'css-in-js/named-color',
       );
 
       expect(error).toBeUndefined();
@@ -253,7 +394,7 @@ describe('cssInJs config', () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.hexColorWithNamedEquivalent,
-        RULE_ID,
+        'css-in-js/named-color',
       );
 
       expect(error?.message).toMatchInlineSnapshot(`"Expected '#ff0000' to be 'red'."`);
@@ -266,7 +407,11 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.namedColor, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.namedColor,
+        'css-in-js/named-color',
+      );
 
       expect(error).toBeUndefined();
     });
@@ -278,7 +423,11 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.namedColor, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.namedColor,
+        'css-in-js/named-color',
+      );
 
       expect(error?.message).toMatchInlineSnapshot(`"Expected 'red' to be '#f00'."`);
     });
@@ -293,7 +442,7 @@ describe('cssInJs config', () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.hexColorWithNamedEquivalent,
-        RULE_ID,
+        'css-in-js/named-color',
       );
 
       expect(error).toBeUndefined();
@@ -309,7 +458,7 @@ describe('cssInJs config', () => {
       const errors = findLintMessageFromLintResults(
         results,
         FIXTURES.namedColorsMultipleProperties,
-        RULE_ID,
+        'css-in-js/named-color',
         {all: true},
       );
 
@@ -327,7 +476,7 @@ describe('cssInJs config', () => {
       const errors = findLintMessageFromLintResults(
         results,
         FIXTURES.hexColorsMultipleProperties,
-        RULE_ID,
+        'css-in-js/named-color',
         {all: true},
       );
 
@@ -337,20 +486,26 @@ describe('cssInJs config', () => {
   });
 
   describe('option: `avoidLeadingZero`', () => {
-    const RULE_ID = 'css-in-js/number-leading-zero';
-
     it('triggers for missing leading zero by default', async () => {
       const results = await testEslintConfig('cssInJs', FIXTURES.noLeadingZero, JSX_EXTRA_CONFIGS);
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.noLeadingZero, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.noLeadingZero,
+        'css-in-js/number-leading-zero',
+      );
 
-      expect(error?.message).toMatchInlineSnapshot(`"Expected a leading zero."`);
+      expect(error?.message).toMatchInlineSnapshot('"Expected a leading zero."');
     });
 
     it('does not trigger for leading zero by default', async () => {
       const results = await testEslintConfig('cssInJs', FIXTURES.leadingZero, JSX_EXTRA_CONFIGS);
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.leadingZero, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.leadingZero,
+        'css-in-js/number-leading-zero',
+      );
 
       expect(error).toBeUndefined();
     });
@@ -362,9 +517,13 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.noLeadingZero, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.noLeadingZero,
+        'css-in-js/number-leading-zero',
+      );
 
-      expect(error?.message).toMatchInlineSnapshot(`"Expected a leading zero."`);
+      expect(error?.message).toMatchInlineSnapshot('"Expected a leading zero."');
     });
 
     it('does not trigger for leading zero when set to `false`', async () => {
@@ -374,7 +533,11 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.leadingZero, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.leadingZero,
+        'css-in-js/number-leading-zero',
+      );
 
       expect(error).toBeUndefined();
     });
@@ -386,9 +549,13 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.leadingZero, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.leadingZero,
+        'css-in-js/number-leading-zero',
+      );
 
-      expect(error?.message).toMatchInlineSnapshot(`"Unexpected leading zero."`);
+      expect(error?.message).toMatchInlineSnapshot('"Unexpected leading zero."');
     });
 
     it('does not trigger for no leading zero when set to `true`', async () => {
@@ -398,23 +565,29 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.noLeadingZero, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.noLeadingZero,
+        'css-in-js/number-leading-zero',
+      );
 
       expect(error).toBeUndefined();
     });
   });
 
   describe('option: `propertyCasing`', () => {
-    const RULE_ID = 'css-in-js/property-casing';
-
-    it('triggers for kebab-case by default (camelCase is default)', async () => {
+    it('triggers for kebab-case by default', async () => {
       const results = await testEslintConfig(
         'cssInJs',
         FIXTURES.propertyKebabCase,
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.propertyKebabCase, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.propertyKebabCase,
+        'css-in-js/property-casing',
+      );
 
       expect(error?.message).toMatchInlineSnapshot(`"'background-color' is not in camelCase."`);
     });
@@ -426,7 +599,11 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.propertyCamelCase, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.propertyCamelCase,
+        'css-in-js/property-casing',
+      );
 
       expect(error).toBeUndefined();
     });
@@ -438,7 +615,11 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.propertyCamelCase, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.propertyCamelCase,
+        'css-in-js/property-casing',
+      );
 
       expect(error?.message).toMatchInlineSnapshot(`"'backgroundColor' is not in kebab-case."`);
     });
@@ -450,31 +631,43 @@ describe('cssInJs config', () => {
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.propertyKebabCase, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.propertyKebabCase,
+        'css-in-js/property-casing',
+      );
 
       expect(error).toBeUndefined();
     });
 
-    it('triggers for kebab-case when explicitly set to `camelCase`', async () => {
+    it('triggers for kebab-case when set to `camelCase`', async () => {
       const results = await testEslintConfig(
         {cssInJs: {propertyCasing: 'camelCase'}},
         FIXTURES.propertyKebabCase,
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.propertyKebabCase, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.propertyKebabCase,
+        'css-in-js/property-casing',
+      );
 
       expect(error?.message).toMatchInlineSnapshot(`"'background-color' is not in camelCase."`);
     });
 
-    it('does not trigger for camelCase when explicitly set to `camelCase`', async () => {
+    it('does not trigger for camelCase when set to `camelCase`', async () => {
       const results = await testEslintConfig(
         {cssInJs: {propertyCasing: 'camelCase'}},
         FIXTURES.propertyCamelCase,
         JSX_EXTRA_CONFIGS,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.propertyCamelCase, RULE_ID);
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.propertyCamelCase,
+        'css-in-js/property-casing',
+      );
 
       expect(error).toBeUndefined();
     });

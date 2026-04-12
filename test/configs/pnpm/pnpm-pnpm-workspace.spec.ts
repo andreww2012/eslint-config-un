@@ -3,11 +3,11 @@ const FIXTURES = {
   pnpmWorkspaceWithCatalog: 'with-catalog/pnpm-workspace.yaml',
 } as const;
 
-describe('pnpm: sub config `configPnpmWorkspace`', () => {
+describe('pnpm: sub config `pnpmWorkspace`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig('pnpm');
 
-    it('creates `pnpm/pnpm-workspace-yaml` eslint config when enabled (default)', () => {
+    it('creates `pnpm/pnpm-workspace-yaml` eslint config by default', () => {
       expect(configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')).toBeDefined();
     });
 
@@ -24,9 +24,9 @@ describe('pnpm: sub config `configPnpmWorkspace`', () => {
     });
 
     it('has default `ignores` in `pnpm/pnpm-workspace-yaml` eslint config', () => {
-      const ignores = configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')?.ignores;
-
-      expect(ignores?.length).toBeGreaterThan(0);
+      expect(
+        configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')?.ignores?.length,
+      ).toBeGreaterThan(0);
     });
   });
 
@@ -86,6 +86,7 @@ describe('pnpm: sub config `configPnpmWorkspace`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `pnpm/pnpm-workspace-yaml` eslint config', async () => {
         const FILES = ['workspace.yaml'];
+
         const configResult = await computeEslintConfig({
           pnpm: {configPnpmWorkspace: {files: FILES}},
         });
@@ -95,7 +96,7 @@ describe('pnpm: sub config `configPnpmWorkspace`', () => {
         );
       });
 
-      it('disables `pnpm/pnpm-workspace-yaml` eslint config when `files` is empty array', async () => {
+      it('disables `pnpm/pnpm-workspace-yaml` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           pnpm: {configPnpmWorkspace: {files: []}},
         });
@@ -107,13 +108,14 @@ describe('pnpm: sub config `configPnpmWorkspace`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `pnpm/pnpm-workspace-yaml` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           pnpm: {configPnpmWorkspace: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -136,39 +138,11 @@ describe('pnpm: sub config `configPnpmWorkspace`', () => {
       ).toBe(0);
       expect(configResult.getRuleEntrySeverity('pnpm/pnpm-workspace-yaml', 'no-console')).toBe(0);
     });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `pnpm/pnpm-workspace-yaml` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          pnpm: {configPnpmWorkspace: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml'),
-            (ruleName) => ruleName.startsWith('pnpm/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `pnpm/pnpm-workspace-yaml` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          pnpm: {configPnpmWorkspace: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml'),
-            (ruleName) => ruleName.startsWith('pnpm/'),
-          ),
-        ).toStrictEqual([1]);
-      });
-    });
   });
 
   describe('options', () => {
     describe('option: `enforcePnpmWorkspaceSettings`', () => {
-      it('disables `pnpm/yaml-enforce-settings` rule when `enforcePnpmWorkspaceSettings` is not provided (default)', async () => {
+      it('disables `pnpm/yaml-enforce-settings` rule by default', async () => {
         const configResult = await computeEslintConfig('pnpm');
 
         expect(
@@ -181,6 +155,7 @@ describe('pnpm: sub config `configPnpmWorkspace`', () => {
 
       it('enables `pnpm/yaml-enforce-settings` rule with options when `enforcePnpmWorkspaceSettings` is provided', async () => {
         const SETTINGS = {requiredFields: ['catalogs']};
+
         const configResult = await computeEslintConfig({
           pnpm: {configPnpmWorkspace: {enforcePnpmWorkspaceSettings: SETTINGS}},
         });

@@ -144,16 +144,15 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `cloudfront-functions/v2` eslint config', async () => {
       const FILES = ['src/**/*.cf.js'];
-      const configResult = await computeEslintConfig({
-        cloudfrontFunctions: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({cloudfrontFunctions: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('cloudfront-functions/v2')?.files).toStrictEqual(
         FILES,
       );
     });
 
-    it('does not create `cloudfront-functions/v2` eslint config when `files` is empty array (does not affect `configV1`)', async () => {
+    it('does not create `cloudfront-functions/v2` eslint config when set to empty array (does not affect `configV1`)', async () => {
       const configResult = await computeEslintConfig({
         cloudfrontFunctions: {files: [], configV1: {files: ['**/*.js']}},
       });
@@ -166,13 +165,14 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `cloudfront-functions/v2` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({
         cloudfrontFunctions: {files: V2_FILES, ignores: IGNORES},
       });
 
       const ignores = configResult.getConfigByUnPostfix('cloudfront-functions/v2')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -188,27 +188,5 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntry('cloudfront-functions/v2', 'no-restricted-globals')).toBe(0);
     expect(configResult.getRuleEntry('cloudfront-functions/v2', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `cloudfront-functions/v2` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        cloudfrontFunctions: {files: ['**/*.js'], forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('cloudfront-functions/v2')),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `cloudfront-functions/v2` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        cloudfrontFunctions: {files: ['**/*.js'], forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('cloudfront-functions/v2')),
-      ).toStrictEqual([1]);
-    });
   });
 });

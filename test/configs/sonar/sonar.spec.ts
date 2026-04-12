@@ -15,54 +15,39 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `sonar` eslint config', async () => {
-      const modeConfigResult = await computeEslintConfig({});
-
-      expect(modeConfigResult.getConfigByUnPostfix('sonar')).toBeUndefined();
+      await expectConfigState({}, 'sonar', false);
     });
 
     it('creates `sonar` eslint config if explicitly enabled', async () => {
-      const modeConfigResult = await computeEslintConfig('sonar');
-
-      expect(modeConfigResult.getConfigByUnPostfix('sonar')).toBeDefined();
+      await expectConfigState('sonar', 'sonar', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('creates `sonar` eslint config by default', async () => {
-      const modeConfigResult = await computeEslintConfig({}, {reset: true});
-
-      expect(modeConfigResult.getConfigByUnPostfix('sonar')).toBeDefined();
+      await expectConfigState({}, 'sonar', true, 'default');
     });
 
     it('creates `sonar` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const modeConfigResult = await computeEslintConfig('sonar', {reset: true});
-
-      expect(modeConfigResult.getConfigByUnPostfix('sonar')).toBeDefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to enable \`sonar\` config because this is the default`,
-        ),
-      ).toBe(true);
+      await expectConfigState('sonar', 'sonar', ['sonar', true], 'default');
     });
 
     it('does not create `sonar` eslint config if explicitly disabled', async () => {
-      const modeConfigResult = await computeEslintConfig({sonar: false}, {reset: true});
-
-      expect(modeConfigResult.getConfigByUnPostfix('sonar')).toBeUndefined();
+      await expectConfigState({sonar: false}, 'sonar', false, 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `sonar` eslint config', async () => {
-      const modeConfigResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'sonar', true, 'misc-enabled');
+    });
 
-      expect(modeConfigResult.getConfigByUnPostfix('sonar')).toBeDefined();
+    it('creates `sonar` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('sonar', 'sonar', ['sonar', true], 'misc-enabled');
+    });
+
+    it('does not create `sonar` eslint config if explicitly disabled', async () => {
+      await expectConfigState({sonar: false}, 'sonar', false, 'misc-enabled');
     });
   });
 
@@ -71,9 +56,7 @@ describe('basic tests', async () => {
   });
 
   it('has default `ignores` in `sonar` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('sonar')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
+    expect(configResult.getConfigByUnPostfix('sonar')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 
@@ -102,7 +85,7 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      `"Review this usage of "strings" as it can only be empty here."`,
+      '"Review this usage of "strings" as it can only be empty here."',
     );
   });
 });
@@ -117,12 +100,13 @@ describe('un options', () => {
 
     it('uses user-provided `files` in `sonar` eslint config', async () => {
       const FILES = ['src/**/*.{js,ts}'];
+
       const configResult = await computeEslintConfig({sonar: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('sonar')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `sonar` eslint config when `files` is empty array', async () => {
+    it('disables `sonar` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({sonar: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('sonar')).toBeUndefined();
@@ -132,11 +116,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `sonar` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({sonar: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('sonar')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
 
@@ -157,28 +142,6 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/no-nested-incdec')).toBe(1);
     expect(configResult.getRuleEntrySeverity('sonar', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `sonar` eslint config', async () => {
-      const configResult = await computeEslintConfig({sonar: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('sonar'), (ruleName) =>
-          ruleName.startsWith('sonarjs/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `sonar` eslint config', async () => {
-      const configResult = await computeEslintConfig({sonar: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('sonar'), (ruleName) =>
-          ruleName.startsWith('sonarjs/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 

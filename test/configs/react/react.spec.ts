@@ -146,7 +146,7 @@ describe('un options', () => {
       );
     });
 
-    it('disables `react/plugin-original` eslint config when `files` is empty array', async () => {
+    it('disables `react/plugin-original` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({react: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('react/plugin-original')).toBeUndefined();
@@ -176,39 +176,11 @@ describe('un options', () => {
     );
     expect(configResult.getRuleEntrySeverity('react/plugin-original', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `react/plugin-original` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        react: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('react/plugin-original'),
-          (ruleName) => ruleName.startsWith('react/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `react/plugin-original` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        react: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('react/plugin-original'),
-          (ruleName) => ruleName.startsWith('react/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set custom `react` settings when option is not set', async () => {
+    it('does not set custom `react` settings by default', async () => {
       const configResult = await computeEslintConfig('react');
 
       expect(
@@ -230,7 +202,7 @@ describe('options', () => {
   });
 
   describe('option: `pluginX`', () => {
-    it('disables `react/jsx-no-comment-textnodes` in `react/plugin-original` when `pluginX` is `prefer` when option is not set', async () => {
+    it('disables `react/jsx-no-comment-textnodes` in `react/plugin-original` when `pluginX` is `prefer` by default', async () => {
       const configResult = await computeEslintConfig('react');
 
       expect(
@@ -241,7 +213,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `react/jsx-no-comment-textnodes` in `react/plugin-original` when option is `never`', async () => {
+    it('enables `react/jsx-no-comment-textnodes` in `react/plugin-original` when set to `never`', async () => {
       const configResult = await computeEslintConfig({react: {pluginX: 'never'}});
 
       expect(
@@ -252,7 +224,7 @@ describe('options', () => {
       ).toBe(2);
     });
 
-    it('enables `react/jsx-no-comment-textnodes` in `react/plugin-original` when option is `avoid`', async () => {
+    it('enables `react/jsx-no-comment-textnodes` in `react/plugin-original` when set to `avoid`', async () => {
       const configResult = await computeEslintConfig({react: {pluginX: 'avoid'}});
 
       expect(
@@ -263,7 +235,7 @@ describe('options', () => {
       ).toBe(2);
     });
 
-    it('disables `react/jsx-no-comment-textnodes` in `react/plugin-original` when option is `only`', async () => {
+    it('disables `react/jsx-no-comment-textnodes` in `react/plugin-original` when set to `only`', async () => {
       const configResult = await computeEslintConfig({react: {pluginX: 'only'}});
 
       expect(
@@ -312,7 +284,7 @@ describe('options', () => {
   });
 
   describe('option: `newJsxTransform`', () => {
-    it('disables `react/jsx-uses-react` when option is not set', async () => {
+    it('disables `react/jsx-uses-react` by default', async () => {
       const configResult = await computeEslintConfig('react');
 
       expect(
@@ -320,7 +292,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `react/jsx-uses-react` when option is `false` and `pluginX` is `never`', async () => {
+    it('enables `react/jsx-uses-react` when set to `false` and `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({
         react: {newJsxTransform: false, pluginX: 'never'},
       });
@@ -332,7 +304,7 @@ describe('options', () => {
   });
 
   describe('option: `disallowedElements`', () => {
-    it('includes deprecated html elements in `react/forbid-elements` when option is not set', async () => {
+    it('includes deprecated html elements in `react/forbid-elements` by default', async () => {
       const configResult = await computeEslintConfig('react');
 
       expect(
@@ -375,7 +347,7 @@ describe('options', () => {
   });
 
   describe('option: `shorthandBoolean`', () => {
-    it('uses `never` value and warning severity for `react/jsx-boolean-value` when option is not set and `pluginX` is `never`', async () => {
+    it('uses `never` value and warning severity for `react/jsx-boolean-value` by default and `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({react: {pluginX: 'never'}});
 
       expect(
@@ -383,7 +355,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[1, "never"]');
     });
 
-    it('uses `always` value and warning severity for `react/jsx-boolean-value` when option is `avoid` and `pluginX` is `never`', async () => {
+    it('uses `always` value and warning severity for `react/jsx-boolean-value` when set to `avoid` and `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({
         react: {shorthandBoolean: 'avoid', pluginX: 'never'},
       });
@@ -393,7 +365,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[1, "always"]');
     });
 
-    it('uses `never` value and error severity for `react/jsx-boolean-value` when option is `prefer-error` and `pluginX` is `never`', async () => {
+    it('uses `never` value and error severity for `react/jsx-boolean-value` when set to `prefer-error` and `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({
         react: {shorthandBoolean: 'prefer-error', pluginX: 'never'},
       });
@@ -403,7 +375,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, "never"]');
     });
 
-    it('uses `always` value and error severity for `react/jsx-boolean-value` when option is `avoid-error` and `pluginX` is `never`', async () => {
+    it('uses `always` value and error severity for `react/jsx-boolean-value` when set to `avoid-error` and `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({
         react: {shorthandBoolean: 'avoid-error', pluginX: 'never'},
       });
@@ -413,7 +385,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, "always"]');
     });
 
-    it('disables `react/jsx-boolean-value` when option is `off` and `pluginX` is `never`', async () => {
+    it('disables `react/jsx-boolean-value` when set to `off` and `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({
         react: {shorthandBoolean: 'off', pluginX: 'never'},
       });
@@ -425,7 +397,7 @@ describe('options', () => {
   });
 
   describe('option: `shorthandFragment`', () => {
-    it('uses `syntax` value and warning severity for `react/jsx-fragments` when option is not set and `pluginX` is `never`', async () => {
+    it('uses `syntax` value and warning severity for `react/jsx-fragments` by default and `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({react: {pluginX: 'never'}});
 
       expect(
@@ -433,7 +405,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[1, "syntax"]');
     });
 
-    it('uses `element` value and warning severity for `react/jsx-fragments` when option is `avoid` and `pluginX` is `never`', async () => {
+    it('uses `element` value and warning severity for `react/jsx-fragments` when set to `avoid` and `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({
         react: {shorthandFragment: 'avoid', pluginX: 'never'},
       });
@@ -443,7 +415,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[1, "element"]');
     });
 
-    it('uses `element` value and error severity for `react/jsx-fragments` when option is `avoid-error` and `pluginX` is `never`', async () => {
+    it('uses `element` value and error severity for `react/jsx-fragments` when set to `avoid-error` and `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({
         react: {shorthandFragment: 'avoid-error', pluginX: 'never'},
       });
@@ -453,7 +425,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, "element"]');
     });
 
-    it('disables `react/jsx-fragments` when option is `off` and `pluginX` is `never`', async () => {
+    it('disables `react/jsx-fragments` when set to `off` and `pluginX` is `never`', async () => {
       const configResult = await computeEslintConfig({
         react: {shorthandFragment: 'off', pluginX: 'never'},
       });

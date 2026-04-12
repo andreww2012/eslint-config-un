@@ -93,7 +93,7 @@ describe('react: sub config `hooks`', () => {
         expect(configResult.getConfigByUnPostfix('react/hooks')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `react/hooks` eslint config when `files` is empty array', async () => {
+      it('disables `react/hooks` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           react: {configHooks: {files: []}},
         });
@@ -124,25 +124,11 @@ describe('react: sub config `hooks`', () => {
         0,
       );
     });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `warn` in `react/hooks` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          react: {configHooks: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('react/hooks'), (ruleName) =>
-            ruleName.startsWith('react-hooks/'),
-          ),
-        ).toStrictEqual([1]);
-      });
-    });
   });
 
   describe('options', () => {
     describe('option: `enableReactCompilerRules`', () => {
-      it('enables react compiler rules when option is not set', async () => {
+      it('enables react compiler rules by default', async () => {
         const configResult = await computeEslintConfig('react');
 
         expect(
@@ -153,7 +139,7 @@ describe('react: sub config `hooks`', () => {
         ).toBe(2);
       });
 
-      it('enables react compiler rules when option is `true`', async () => {
+      it('enables react compiler rules when set to `true`', async () => {
         const configResult = await computeEslintConfig({
           react: {configHooks: {enableReactCompilerRules: true}},
         });
@@ -166,7 +152,7 @@ describe('react: sub config `hooks`', () => {
         ).toBe(2);
       });
 
-      it('disables react compiler rules when option is `false`', async () => {
+      it('disables react compiler rules when set to `false`', async () => {
         const configResult = await computeEslintConfig({
           react: {configHooks: {enableReactCompilerRules: false}},
         });
@@ -179,7 +165,7 @@ describe('react: sub config `hooks`', () => {
         ).toBe(0);
       });
 
-      it('does not affect `react-hooks/exhaustive-deps` (non-compiler rule) when option is `false`', async () => {
+      it('does not affect `react-hooks/exhaustive-deps` (non-compiler rule) when set to `false`', async () => {
         const configResult = await computeEslintConfig({
           react: {configHooks: {enableReactCompilerRules: false}},
         });

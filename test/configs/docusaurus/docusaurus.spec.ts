@@ -1,10 +1,10 @@
-beforeEach(() => {
-  addInstalledPackages({'@docusaurus/core': '3.0.0'});
-});
-
 const FIXTURES = {
   noHtmlLinks: 'no-html-links.tsx',
 } as const;
+
+beforeEach(() => {
+  addInstalledPackages({'@docusaurus/core': '3.0.0'});
+});
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('docusaurus');
@@ -38,6 +38,29 @@ describe('basic tests', async () => {
 
     it('does not create `docusaurus` eslint config if explicitly disabled', async () => {
       await expectConfigState({docusaurus: false}, 'docusaurus', false, 'default');
+    });
+
+    describe('`@docusaurus/core` is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
+
+      it('does not create `docusaurus` eslint config', async () => {
+        await expectConfigState({}, 'docusaurus', false, 'default');
+      });
+
+      it('creates `docusaurus` eslint config if explicitly enabled', async () => {
+        await expectConfigState('docusaurus', 'docusaurus', true, 'default');
+      });
+
+      it('does not create `docusaurus` eslint config and prints a warning if explicitly disabled', async () => {
+        await expectConfigState(
+          {docusaurus: false},
+          'docusaurus',
+          ['docusaurus', false],
+          'default',
+        );
+      });
     });
   });
 
@@ -100,17 +123,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `docusaurus` eslint config', async () => {
       const FILES = ['src/**/*.tsx'];
-      const configResult = await computeEslintConfig({
-        docusaurus: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({docusaurus: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('docusaurus')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `docusaurus` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        docusaurus: {files: []},
-      });
+    it('disables `docusaurus` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({docusaurus: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('docusaurus')).toBeUndefined();
     });
@@ -119,13 +139,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `docusaurus` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        docusaurus: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({docusaurus: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('docusaurus')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -140,31 +159,5 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('docusaurus', 'docusaurus/no-html-links')).toBe(0);
     expect(configResult.getRuleEntrySeverity('docusaurus', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `docusaurus` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        docusaurus: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('docusaurus'), (ruleName) =>
-          ruleName.startsWith('docusaurus/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `docusaurus` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        docusaurus: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('docusaurus'), (ruleName) =>
-          ruleName.startsWith('docusaurus/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

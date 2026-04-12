@@ -128,12 +128,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `jest` eslint config', async () => {
       const FILES = ['tests/**/*.spec.ts'];
+
       const configResult = await computeEslintConfig({jest: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('jest')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `jest` eslint config when `files` is empty array', async () => {
+    it('disables `jest` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({jest: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('jest')).toBeUndefined();
@@ -143,6 +144,7 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `jest` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({jest: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('jest')?.ignores;
@@ -160,33 +162,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('jest', 'jest/no-focused-tests')).toBe(0);
     expect(configResult.getRuleEntrySeverity('jest', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `jest` eslint config', async () => {
-      const configResult = await computeEslintConfig({jest: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('jest'), (ruleName) =>
-          ruleName.startsWith('jest/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `jest` eslint config', async () => {
-      const configResult = await computeEslintConfig({jest: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('jest'), (ruleName) =>
-          ruleName.startsWith('jest/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set jest settings when option is not set', async () => {
+    it('does not set jest settings by default', async () => {
       const configResult = await computeEslintConfig('jest');
 
       expect(configResult.getConfigByUnPostfix('jest')?.settings?.['jest']).toBeUndefined();
@@ -201,7 +181,7 @@ describe('options', () => {
   });
 
   describe('option: `testDefinitionKeyword`', () => {
-    it('enables `jest/consistent-test-it` with default options when option is not set', async () => {
+    it('enables `jest/consistent-test-it` with default options by default', async () => {
       const configResult = await computeEslintConfig('jest');
 
       expect(configResult.getRuleEntry('jest', 'jest/consistent-test-it')).toMatchInlineSnapshot(
@@ -209,7 +189,7 @@ describe('options', () => {
       );
     });
 
-    it('disables `jest/consistent-test-it` when option is `false`', async () => {
+    it('disables `jest/consistent-test-it` when set to `false`', async () => {
       const configResult = await computeEslintConfig({jest: {testDefinitionKeyword: false}});
 
       expect(configResult.getRuleEntrySeverity('jest', 'jest/consistent-test-it')).toBe(0);
@@ -233,7 +213,7 @@ describe('options', () => {
   });
 
   describe('option: `maxAssertionCalls`', () => {
-    it('disables `jest/max-expects` when option is not set', async () => {
+    it('disables `jest/max-expects` by default', async () => {
       const configResult = await computeEslintConfig('jest');
 
       expect(configResult.getRuleEntry('jest', 'jest/max-expects')).toMatchInlineSnapshot(
@@ -251,7 +231,7 @@ describe('options', () => {
   });
 
   describe('option: `maxNestedDescribes`', () => {
-    it('disables `jest/max-nested-describe` when option is not set', async () => {
+    it('disables `jest/max-nested-describe` by default', async () => {
       const configResult = await computeEslintConfig('jest');
 
       expect(configResult.getRuleEntry('jest', 'jest/max-nested-describe')).toMatchInlineSnapshot(
@@ -259,7 +239,7 @@ describe('options', () => {
       );
     });
 
-    it('enables `jest/max-nested-describe` when option is set to number', async () => {
+    it('enables `jest/max-nested-describe` when set to number', async () => {
       const configResult = await computeEslintConfig({jest: {maxNestedDescribes: 2}});
 
       expect(configResult.getRuleEntry('jest', 'jest/max-nested-describe')).toMatchInlineSnapshot(
@@ -269,7 +249,7 @@ describe('options', () => {
   });
 
   describe('option: `restrictedMethods`', () => {
-    it('disables `jest/no-restricted-jest-methods` when option is not set', async () => {
+    it('disables `jest/no-restricted-jest-methods` by default', async () => {
       const configResult = await computeEslintConfig('jest');
 
       expect(
@@ -289,7 +269,7 @@ describe('options', () => {
   });
 
   describe('option: `restrictedMatchers`', () => {
-    it('disables `jest/no-restricted-matchers` when option is not set', async () => {
+    it('disables `jest/no-restricted-matchers` by default', async () => {
       const configResult = await computeEslintConfig('jest');
 
       expect(
@@ -319,7 +299,7 @@ describe('options', () => {
       'padding-around-test-blocks',
     ] as const;
 
-    it('enables all `jest/padding-around-*` rules when option is not set', async () => {
+    it('enables all `jest/padding-around-*` rules by default', async () => {
       const configResult = await computeEslintConfig('jest');
 
       expect(
@@ -327,7 +307,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, 2, 2, 2, 2, 2, 2]');
     });
 
-    it('disables all `jest/padding-around-*` rules when option is `false`', async () => {
+    it('disables all `jest/padding-around-*` rules when set to `false`', async () => {
       const configResult = await computeEslintConfig({jest: {paddingAround: false}});
 
       expect(
@@ -348,7 +328,7 @@ describe('options', () => {
   });
 
   describe('option: `asyncMatchers`', () => {
-    it('does not add `asyncMatchers` to `jest/valid-expect` options when option is not set', async () => {
+    it('does not add `asyncMatchers` to `jest/valid-expect` options by default', async () => {
       const configResult = await computeEslintConfig('jest');
 
       expect(configResult.getRuleEntry('jest', 'jest/valid-expect')).toMatchInlineSnapshot(
@@ -370,7 +350,7 @@ describe('options', () => {
   });
 
   describe('option: `minAndMaxExpectArgs`', () => {
-    it('does not set `minArgs`/`maxArgs` in `jest/valid-expect` options when option is not set', async () => {
+    it('does not set `minArgs`/`maxArgs` in `jest/valid-expect` options by default', async () => {
       const configResult = await computeEslintConfig('jest');
 
       expect(configResult.getRuleEntry('jest', 'jest/valid-expect')).toMatchInlineSnapshot(

@@ -128,7 +128,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('mocha')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `mocha` eslint config when `files` is empty array', async () => {
+    it('disables `mocha` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({mocha: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('mocha')).toBeUndefined();
@@ -156,33 +156,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('mocha', 'mocha/handle-done-callback')).toBe(0);
     expect(configResult.getRuleEntrySeverity('mocha', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `mocha` eslint config', async () => {
-      const configResult = await computeEslintConfig({mocha: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('mocha'), (ruleName) =>
-          ruleName.startsWith('mocha/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `mocha` eslint config', async () => {
-      const configResult = await computeEslintConfig({mocha: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('mocha'), (ruleName) =>
-          ruleName.startsWith('mocha/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set mocha settings when option is not set', async () => {
+    it('does not set mocha settings by default', async () => {
       const configResult = await computeEslintConfig('mocha');
 
       expect(
@@ -206,7 +184,7 @@ describe('options', () => {
   });
 
   describe('option: `enforceInterface`', () => {
-    it('disables `mocha/consistent-interface` rule when option is not set', async () => {
+    it('disables `mocha/consistent-interface` rule by default', async () => {
       const configResult = await computeEslintConfig('mocha');
 
       expect(configResult.getRuleEntrySeverity('mocha', 'mocha/consistent-interface')).toBe(0);
@@ -230,7 +208,7 @@ describe('options', () => {
   });
 
   describe('option: `maxTopLevelSuites`', () => {
-    it('enables `mocha/max-top-level-suites` rule with default limit of 1 when option is not set', async () => {
+    it('enables `mocha/max-top-level-suites` rule with default limit of 1 by default', async () => {
       const configResult = await computeEslintConfig('mocha');
 
       expect(

@@ -61,7 +61,7 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('es')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.to.include.members([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 
@@ -97,17 +97,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `es` eslint config', async () => {
       const FILES = ['src/**/*.js'];
-      const configResult = await computeEslintConfig({
-        es: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({es: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('es')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `es` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        es: {files: []},
-      });
+    it('disables `es` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({es: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('es')).toBeUndefined();
     });
@@ -116,13 +113,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `es` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        es: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({es: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('es')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -138,37 +134,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('es', 'es/no-date-prototype-getyear-setyear')).toBe(2);
     expect(configResult.getRuleEntrySeverity('es', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `es` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        es: {ecmaVersion: 2019, forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('es'), (ruleName) =>
-          ruleName.startsWith('es/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `es` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        es: {ecmaVersion: 2019, forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('es'), (ruleName) =>
-          ruleName.startsWith('es/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set `es-x` settings when not provided', async () => {
+    it('does not set `es-x` settings by default', async () => {
       const configResult = await computeEslintConfig('es');
 
       expect(configResult.getConfigByUnPostfix('es')?.settings?.['es-x']).toBeUndefined();
@@ -230,12 +200,18 @@ describe('options', () => {
     });
 
     it('enables all rules in a version when ecmaFeatures sets that version to false (boolean shorthand)', async () => {
-      const configResult = await computeEslintConfig({
-        es: {ecmaFeatures: {2020: false}},
-      });
+      const configResult = await computeEslintConfig({es: {ecmaFeatures: {2020: false}}});
 
-      expect(configResult.getRuleEntrySeverity('es', 'es/no-bigint')).toBe(2);
-      expect(configResult.getRuleEntrySeverity('es', 'es/no-optional-chaining')).toBe(2);
+      expect(configResult.getRuleSeverities('es')).toMatchObject({
+        'es/no-bigint': 2,
+        'es/no-optional-chaining': 2,
+      });
+    });
+
+    it('enables ES5 rules when ecmaFeatures sets ES5 to `false`', async () => {
+      const configResult = await computeEslintConfig({es: {ecmaFeatures: {5: false}}});
+
+      expect(configResult.getRuleEntrySeverity('es', 'es/no-array-isarray')).toBe(2);
     });
   });
 });

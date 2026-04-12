@@ -132,9 +132,11 @@ export default (async (context, optionsRaw) => {
   const eslintPluginVitest = await pluginsLoaders.vitest(context).then(({module}) => module);
 
   context.usedPlugins.add('vitest');
+  /* v8 ignore start */
   if (!eslintPluginVitest) {
     return null;
   }
+  /* v8 ignore stop */
 
   const isTsConfigEnabled = context.configsMeta.ts.enabled;
 
@@ -260,11 +262,13 @@ export default (async (context, optionsRaw) => {
     .addRule(
       'no-restricted-matchers',
       hasRestrictedMatchers ? ERROR : OFF,
+      /* v8 ignore next */
       hasRestrictedMatchers ? [restrictedMatchers || {}] : [],
     ) /** @since 0.0.54 */
     .addRule(
       'no-restricted-vi-methods',
       hasRestrictedMethods ? ERROR : OFF,
+      /* v8 ignore next */
       hasRestrictedMethods ? [restrictedMethods || {}] : [],
     ) /** @since 0.0.43 */
     .addRule('no-standalone-expect', ERROR) /** @since 0.0.54 */ // 🟢(since 1.5.0)
@@ -368,6 +372,7 @@ export default (async (context, optionsRaw) => {
     .addRule('warn-todo', WARNING) /** @since 1.3.3 */
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('vitest', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => VITEST_TYPESCRIPT_RELATED_RULES_SET.has(ruleName),
     })
     .addOverrides();
@@ -391,6 +396,7 @@ export default (async (context, optionsRaw) => {
     .addRule('prefer-vi-mocked', OFF) /** @since 1.1.6 */ // (warns in all)
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('vitest', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !VITEST_TYPESCRIPT_RELATED_RULES_SET.has(ruleName),
     })
     .addOverrides();

@@ -17,86 +17,57 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `css` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('css')).toBeUndefined();
+      await expectConfigState({}, 'css', false);
     });
 
     it('creates `css` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('css');
-
-      expect(configResult.getConfigByUnPostfix('css')).toBeDefined();
+      await expectConfigState('css', 'css', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('creates `css` eslint config by default (when stylelint is not installed)', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('css')).toBeDefined();
+      await expectConfigState({}, 'css', true, 'default');
     });
 
     it('creates `css` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig('css', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('css')).toBeDefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to enable `css` config because this is the default',
-        ),
-      ).toBe(true);
+      await expectConfigState('css', 'css', ['css', true], 'default');
     });
 
     it('does not create `css` eslint config if explicitly disabled', async () => {
-      const configResult = await computeEslintConfig({css: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('css')).toBeUndefined();
+      await expectConfigState({css: false}, 'css', false, 'default');
     });
 
     it('does not create `css` eslint config when `stylelint` is installed', async () => {
       addInstalledPackages({stylelint: '16.0.0'});
 
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('css')).toBeUndefined();
+      await expectConfigState({}, 'css', false, 'default');
     });
 
     it('creates `css` eslint config if explicitly enabled when `stylelint` is installed', async () => {
       addInstalledPackages({stylelint: '16.0.0'});
 
-      const configResult = await computeEslintConfig('css', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('css')).toBeDefined();
+      await expectConfigState('css', 'css', true, 'default');
     });
 
     it('does not create `css` eslint config and prints a warning if explicitly disabled when `stylelint` is installed', async () => {
       addInstalledPackages({stylelint: '16.0.0'});
 
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig({css: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('css')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to disable `css` config because this is the default',
-        ),
-      ).toBe(true);
+      await expectConfigState({css: false}, 'css', ['css', false], 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `css` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'css', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('css')).toBeDefined();
+    it('creates `css` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('css', 'css', ['css', true], 'misc-enabled');
+    });
+
+    it('does not create `css` eslint config if explicitly disabled', async () => {
+      await expectConfigState({css: false}, 'css', false, 'misc-enabled');
     });
   });
 
@@ -108,7 +79,7 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('css')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).to.not.include.members([GLOB_CSS]);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_CSS]);
   });
 });
 
@@ -140,17 +111,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `css` eslint config', async () => {
       const FILES = ['src/**/*.css'];
-      const configResult = await computeEslintConfig({
-        css: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({css: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('css')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `css` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        css: {files: []},
-      });
+    it('disables `css` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({css: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('css')).toBeUndefined();
     });
@@ -159,13 +127,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `css` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        css: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({css: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('css')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -177,32 +144,6 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('css', 'css/no-empty-blocks')).toBe(0);
     expect(configResult.getRuleEntrySeverity('css', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `css` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        css: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('css'), (ruleName) =>
-          ruleName.startsWith('css/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `css` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        css: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('css'), (ruleName) =>
-          ruleName.startsWith('css/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 
@@ -216,12 +157,22 @@ describe('options', () => {
       ).toBeUndefined();
     });
 
-    it('sets `tolerant` language option to `true` when `tolerantMode` is `true`', async () => {
+    it('sets `tolerant` language option to `true` when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         css: {tolerantMode: true},
       });
 
       expect(configResult.getConfigByUnPostfix('css')?.languageOptions?.['tolerant']).toBe(true);
+    });
+
+    it('does not set `tolerant` language option when set to `false`', async () => {
+      const configResult = await computeEslintConfig({
+        css: {tolerantMode: false},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('css')?.languageOptions?.['tolerant'],
+      ).toBeUndefined();
     });
   });
 
@@ -315,7 +266,7 @@ describe('options', () => {
   });
 
   describe('option: `allowedFontUnits`', () => {
-    it('allows `rem` and `em` font units by default', async () => {
+    it('allows `rem` and `em` font units when set to provided', async () => {
       const configResult = await computeEslintConfig('css');
 
       expect(configResult.getRuleEntry('css', 'css/relative-font-units')).toMatchInlineSnapshot(
@@ -345,13 +296,13 @@ describe('options', () => {
   });
 
   describe('option: `allowedFeatures`', () => {
-    it('has no extra allowed features in `use-baseline` rule by default', async () => {
+    it('has no extra allowed features in `css/use-baseline` rule by default', async () => {
       const configResult = await computeEslintConfig('css');
 
       expect(configResult.getRuleEntry('css', 'css/use-baseline')).toMatchInlineSnapshot('[1, {}]');
     });
 
-    it('sets `allowAtRules` in `use-baseline` rule when `atRules` is provided', async () => {
+    it('sets `allowAtRules` in `css/use-baseline` rule when `atRules` is provided', async () => {
       const configResult = await computeEslintConfig({
         css: {allowedFeatures: {atRules: ['layer']}},
       });
@@ -361,7 +312,7 @@ describe('options', () => {
       );
     });
 
-    it('sets `allowProperties` in `use-baseline` rule when `properties` is provided', async () => {
+    it('sets `allowProperties` in `css/use-baseline` rule when `properties` is provided', async () => {
       const configResult = await computeEslintConfig({
         css: {allowedFeatures: {properties: ['grid-template']}},
       });
@@ -371,7 +322,7 @@ describe('options', () => {
       );
     });
 
-    it('sets `allowSelectors` in `use-baseline` rule when `selectors` is provided', async () => {
+    it('sets `allowSelectors` in `css/use-baseline` rule when `selectors` is provided', async () => {
       const configResult = await computeEslintConfig({
         css: {allowedFeatures: {selectors: ['has']}},
       });

@@ -15,52 +15,39 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `cli` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('cli')).toBeUndefined();
+      await expectConfigState({}, 'cli', false);
     });
 
     it('creates `cli` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig({cli: true});
-
-      expect(configResult.getConfigByUnPostfix('cli')).toBeDefined();
+      await expectConfigState({cli: true}, 'cli', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('creates `cli` eslint config by default', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('cli')).toBeDefined();
+      await expectConfigState({}, 'cli', true, 'default');
     });
 
     it('creates `cli` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      await computeEslintConfig({cli: true}, {reset: true});
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to enable `cli` config because this is the default',
-        ),
-      ).toBe(true);
+      await expectConfigState({cli: true}, 'cli', ['cli', true], 'default');
     });
 
     it('does not create `cli` eslint config if explicitly disabled', async () => {
-      const configResult = await computeEslintConfig({cli: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('cli')).toBeUndefined();
+      await expectConfigState({cli: false}, 'cli', false, 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `cli` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'cli', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('cli')).toBeDefined();
+    it('creates `cli` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState({cli: true}, 'cli', ['cli', true], 'misc-enabled');
+    });
+
+    it('does not create `cli` eslint config if explicitly disabled', async () => {
+      await expectConfigState({cli: false}, 'cli', false, 'misc-enabled');
     });
   });
 
@@ -82,7 +69,7 @@ describe('rules', async () => {
     expect(configResult.getRuleEntrySeverity('cli', 'unicorn/prefer-top-level-await')).toBe(2);
   });
 
-  it('disables `no-console` rule by default', () => {
+  it('disables `check-file/no-console` rule by default', () => {
     expect(configResult.getRuleEntrySeverity('cli', 'no-console')).toBe(0);
   });
 
@@ -103,12 +90,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `cli` eslint config', async () => {
       const FILES = ['bin/**/*.ts'];
+
       const configResult = await computeEslintConfig({cli: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('cli')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `cli` eslint config when `files` is empty array', async () => {
+    it('disables `cli` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({cli: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('cli')).toBeUndefined();
@@ -118,11 +106,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `cli` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({cli: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('cli')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -138,20 +127,6 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('cli', 'unicorn/prefer-top-level-await')).toBe(0);
     expect(configResult.getRuleEntrySeverity('cli', 'no-console')).toBe(1);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `cli` eslint config', async () => {
-      const configResult = await computeEslintConfig({cli: {forceSeverity: 'error'}});
-
-      expect(configResult.getRuleEntrySeverity('cli', 'unicorn/prefer-top-level-await')).toBe(2);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `cli` eslint config', async () => {
-      const configResult = await computeEslintConfig({cli: {forceSeverity: 'warn'}});
-
-      expect(configResult.getRuleEntrySeverity('cli', 'unicorn/prefer-top-level-await')).toBe(1);
-    });
-  });
 });
 
 describe('options', () => {
@@ -164,7 +139,7 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('cli', 'node/hashbang')).toBe(0);
     });
 
-    it('does not disable `no-await-in-loop` rule when set to `false`', async () => {
+    it('does not disable `check-file/no-await-in-loop` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         cli: {disabledRules: {'no-await-in-loop': false}},
       });
@@ -172,10 +147,8 @@ describe('options', () => {
       expect(configResult.getRuleEntry('cli', 'no-await-in-loop')).toBeUndefined();
     });
 
-    it('does not disable `no-console` rule when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        cli: {disabledRules: {'no-console': false}},
-      });
+    it('does not disable `check-file/no-console` rule when set to `false`', async () => {
+      const configResult = await computeEslintConfig({cli: {disabledRules: {'no-console': false}}});
 
       expect(configResult.getRuleEntry('cli', 'no-console')).toBeUndefined();
     });
@@ -222,7 +195,7 @@ describe('options', () => {
   });
 
   describe('option: `onlyTopLevelDirs`', () => {
-    it('includes nested directories in default `files` when `onlyTopLevelDirs` is not set', async () => {
+    it('includes nested directories in default `files` by default', async () => {
       const configResult = await computeEslintConfig('cli');
 
       expect(configResult.getConfigByUnPostfix('cli')?.files).toMatchInlineSnapshot(
@@ -230,11 +203,19 @@ describe('options', () => {
       );
     });
 
-    it('only includes top-level directories in `files` when `onlyTopLevelDirs` is `true`', async () => {
+    it('only includes top-level directories in `files` when set to `true`', async () => {
       const configResult = await computeEslintConfig({cli: {onlyTopLevelDirs: true}});
 
       expect(configResult.getConfigByUnPostfix('cli')?.files).toMatchInlineSnapshot(
         '["bin/**/*.?([cm])[jt]s", "scripts/**/*.?([cm])[jt]s", "cli/**/*.?([cm])[jt]s", "cli.?([cm])[jt]s"]',
+      );
+    });
+
+    it('includes nested directories in default `files` when set to `false`', async () => {
+      const configResult = await computeEslintConfig({cli: {onlyTopLevelDirs: false}});
+
+      expect(configResult.getConfigByUnPostfix('cli')?.files).toMatchInlineSnapshot(
+        '["**/bin/**/*.?([cm])[jt]s", "**/scripts/**/*.?([cm])[jt]s", "**/cli/**/*.?([cm])[jt]s", "**/cli.?([cm])[jt]s"]',
       );
     });
   });

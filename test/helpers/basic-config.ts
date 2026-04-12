@@ -39,7 +39,7 @@ export const expectConfigState = async (
   state: boolean | [configName: keyof UnConfigs, action: boolean],
   modeOrComputeOptions?: ConfigMode | ComputeOptions,
 ): Promise<ConfigResultType> => {
-  using stderrSpy = vi.spyOn(process.stderr, 'write');
+  using stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
 
   const computeOptions =
     typeof modeOrComputeOptions === 'string'

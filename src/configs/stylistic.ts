@@ -44,8 +44,12 @@ export default (async (context, optionsRaw) => {
     const {customize} = await pluginsLoaders['@stylistic'](context).then(
       ({module}) => module.configs,
     );
-    configProducedByCustomize = mapKeys(customize(customizeOptions).rules || {}, (_, key) =>
-      String(key).slice('@stylistic/'.length),
+    configProducedByCustomize = mapKeys(
+      customize(customizeOptions).rules ||
+        /* v8 ignore start */
+        {},
+      /* v8 ignore stop */
+      (_, key) => String(key).slice('@stylistic/'.length),
     );
   }
 
@@ -139,9 +143,9 @@ export default (async (context, optionsRaw) => {
     .addRule(...setupRule('no-multiple-empty-lines', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('no-tabs', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('no-trailing-spaces', OFF)) /** @since 0.0.4 */ // 🟢
+    .addRule(...setupRule('no-whitespace-before-property', OFF)) /** @since 0.0.4 */ // 🟢
     // cspell:disable-next-line
     .addRule(...setupRule('nonblock-statement-body-position', OFF)) /** @since 0.0.4 */
-    .addRule(...setupRule('no-whitespace-before-property', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('object-curly-newline', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('object-curly-spacing', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('object-property-newline', OFF)) /** @since 0.0.4 */

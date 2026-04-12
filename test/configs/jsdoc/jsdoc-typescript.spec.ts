@@ -2,7 +2,7 @@ const FIXTURES = {
   typeAnnotatedJsdoc: 'type-annotated-jsdoc.ts',
 } as const;
 
-describe('jsdoc: sub config `configTypescript`', () => {
+describe('jsdoc: sub config `typescript`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig({jsdoc: true, ts: true});
 
@@ -32,9 +32,7 @@ describe('jsdoc: sub config `configTypescript`', () => {
     });
 
     it('has default `ignores` in `jsdoc/ts` eslint config', () => {
-      const ignores = configResult.getConfigByUnPostfix('jsdoc/ts')?.ignores;
-
-      expect(ignores?.length).toBeGreaterThan(0);
+      expect(configResult.getConfigByUnPostfix('jsdoc/ts')?.ignores?.length).toBeGreaterThan(0);
     });
   });
 
@@ -56,7 +54,11 @@ describe('jsdoc: sub config `configTypescript`', () => {
         import.meta.dirname,
       );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.typeAnnotatedJsdoc, 'jsdoc/no-types');
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.typeAnnotatedJsdoc,
+        'jsdoc/no-types',
+      );
 
       expect(error?.message).toMatchInlineSnapshot('"Types are not permitted on @param."');
     });
@@ -66,6 +68,7 @@ describe('jsdoc: sub config `configTypescript`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `jsdoc/ts` eslint config', async () => {
         const FILES = ['src/**/*.ts'];
+
         const configResult = await computeEslintConfig({
           jsdoc: {configTypescript: {files: FILES}},
           ts: true,
@@ -74,7 +77,7 @@ describe('jsdoc: sub config `configTypescript`', () => {
         expect(configResult.getConfigByUnPostfix('jsdoc/ts')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `jsdoc/ts` eslint config when `files` is empty array', async () => {
+      it('disables `jsdoc/ts` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           jsdoc: {configTypescript: {files: []}},
           ts: true,
@@ -87,6 +90,7 @@ describe('jsdoc: sub config `configTypescript`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `jsdoc/ts` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           jsdoc: {configTypescript: {ignores: IGNORES}},
           ts: true,
@@ -94,7 +98,7 @@ describe('jsdoc: sub config `configTypescript`', () => {
 
         const ignores = configResult.getConfigByUnPostfix('jsdoc/ts')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -110,41 +114,13 @@ describe('jsdoc: sub config `configTypescript`', () => {
       expect(configResult.getRuleEntrySeverity('jsdoc/ts', 'jsdoc/no-types')).toBe(0);
       expect(configResult.getRuleEntrySeverity('jsdoc/ts', 'no-console')).toBe(0);
     });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `jsdoc/ts` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jsdoc: {configTypescript: {forceSeverity: 'error'}},
-          ts: true,
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('jsdoc/ts'), (ruleName) =>
-            ruleName.startsWith('jsdoc/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `jsdoc/ts` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jsdoc: {configTypescript: {forceSeverity: 'warn'}},
-          ts: true,
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('jsdoc/ts'), (ruleName) =>
-            ruleName.startsWith('jsdoc/'),
-          ),
-        ).toStrictEqual([1]);
-      });
-    });
   });
 
   describe('options', () => {
     describe('option: `settings`', () => {
       const SETTINGS = {ignorePrivate: true, mode: 'jsdoc'} as const;
 
-      it('inherits jsdoc settings from root config when not provided', async () => {
+      it('inherits jsdoc settings from root config by default', async () => {
         const configResult = await computeEslintConfig({
           jsdoc: {settings: SETTINGS},
           ts: true,

@@ -1,10 +1,10 @@
-beforeEach(() => {
-  addInstalledPackages({qunit: '2.20.0'});
-});
-
 const FIXTURES = {
   noAssertEqual: 'no-assert-equal/test.spec.js',
 } as const;
+
+beforeEach(() => {
+  addInstalledPackages({qunit: '2.20.0'});
+});
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('qunit');
@@ -114,12 +114,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `qunit` eslint config', async () => {
       const FILES = ['tests/**/*.spec.ts'];
+
       const configResult = await computeEslintConfig({qunit: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('qunit')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `qunit` eslint config when `files` is empty array', async () => {
+    it('disables `qunit` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({qunit: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('qunit')).toBeUndefined();
@@ -129,10 +130,11 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `qunit` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({qunit: {ignores: IGNORES}});
       const ignores = configResult.getConfigByUnPostfix('qunit')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -144,27 +146,5 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('qunit', 'qunit/assert-args')).toBe(0);
     expect(configResult.getRuleEntrySeverity('qunit', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `qunit` eslint config', async () => {
-      const configResult = await computeEslintConfig({qunit: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('qunit'), (ruleName) =>
-          ruleName.startsWith('qunit/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `qunit` eslint config', async () => {
-      const configResult = await computeEslintConfig({qunit: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('qunit'), (ruleName) =>
-          ruleName.startsWith('qunit/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

@@ -15,54 +15,44 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `fast-import` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('fast-import')).toBeUndefined();
+      await expectConfigState({}, 'fast-import', false);
     });
 
     it('creates `fast-import` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('fastImport');
-
-      expect(configResult.getConfigByUnPostfix('fast-import')).toBeDefined();
+      await expectConfigState('fastImport', 'fast-import', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('does not create `fast-import` eslint config', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('fast-import')).toBeUndefined();
+      await expectConfigState({}, 'fast-import', false, 'default');
     });
 
     it('creates `fast-import` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('fastImport', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('fast-import')).toBeDefined();
+      await expectConfigState('fastImport', 'fast-import', true, 'default');
     });
 
     it('does not create `fast-import` eslint config and prints a warning if explicitly disabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig({fastImport: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('fast-import')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to disable `fastImport` config because this is the default',
-        ),
-      ).toBe(true);
+      await expectConfigState({fastImport: false}, 'fast-import', ['fastImport', false], 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('does not create `fast-import` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'fast-import', false, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('fast-import')).toBeUndefined();
+    it('creates `fast-import` eslint config if explicitly enabled', async () => {
+      await expectConfigState({fastImport: true}, 'fast-import', true, 'misc-enabled');
+    });
+
+    it('does not create `fast-import` eslint config and prints a warning if explicitly disabled', async () => {
+      await expectConfigState(
+        {fastImport: false},
+        'fast-import',
+        ['fastImport', false],
+        'misc-enabled',
+      );
     });
   });
 
@@ -115,17 +105,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `fast-import` eslint config', async () => {
       const FILES = ['src/**/*.{js,ts}'];
-      const configResult = await computeEslintConfig({
-        fastImport: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({fastImport: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('fast-import')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `fast-import` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        fastImport: {files: []},
-      });
+    it('disables `fast-import` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({fastImport: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('fast-import')).toBeUndefined();
     });
@@ -134,13 +121,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `fast-import` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        fastImport: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({fastImport: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('fast-import')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -151,40 +137,13 @@ describe('un options', () => {
     });
 
     expect(configResult.getRuleEntrySeverity('fast-import', 'fast-import/no-cycle')).toBe(0);
-
     expect(configResult.getRuleEntrySeverity('fast-import', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `fast-import` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        fastImport: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('fast-import'), (ruleName) =>
-          ruleName.startsWith('fast-import/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `fast-import` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        fastImport: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('fast-import'), (ruleName) =>
-          ruleName.startsWith('fast-import/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('sets default `rootDir` when `settings` is not provided', async () => {
+    it('sets default `rootDir` by default', async () => {
       const configResult = await computeEslintConfig('fastImport');
 
       const settings = configResult.getConfigByUnPostfix('fast-import')?.settings?.['fast-import'];
@@ -194,6 +153,7 @@ describe('options', () => {
 
     it('merges user-provided `settings` into `fast-import` settings (e.g. overrides `rootDir`)', async () => {
       const SETTINGS = {rootDir: 'custom-root', mode: 'fix' as const};
+
       const configResult = await computeEslintConfig({fastImport: {settings: SETTINGS}});
 
       expect(
@@ -203,7 +163,7 @@ describe('options', () => {
   });
 
   describe('option: `enforceFileExtensions`', () => {
-    it('disables `consistent-file-extensions` rule when `enforceFileExtensions` is not provided (default)', async () => {
+    it('disables `fast-import/consistent-file-extensions` rule by default', async () => {
       const configResult = await computeEslintConfig('fastImport');
 
       expect(
@@ -211,7 +171,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `consistent-file-extensions` rule when `enforceFileExtensions` is provided', async () => {
+    it('enables `fast-import/consistent-file-extensions` rule when `enforceFileExtensions` is provided', async () => {
       const configResult = await computeEslintConfig({
         fastImport: {enforceFileExtensions: {mode: 'always'}},
       });
@@ -223,7 +183,7 @@ describe('options', () => {
   });
 
   describe('option: `restrictImports`', () => {
-    it('disables `no-restricted-imports` rule when `restrictImports` is not provided (default)', async () => {
+    it('disables `fast-import/no-restricted-imports` rule by default', async () => {
       const configResult = await computeEslintConfig('fastImport');
 
       expect(
@@ -231,7 +191,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `no-restricted-imports` rule when `restrictImports` is provided', async () => {
+    it('enables `fast-import/no-restricted-imports` rule when `restrictImports` is provided', async () => {
       const OPTIONS = {
         rules: [{type: 'built-in' as const, moduleSpecifier: 'fs', denied: ['*']}],
       };

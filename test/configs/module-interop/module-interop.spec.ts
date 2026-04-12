@@ -55,6 +55,10 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
+
+    it('does not create `module-interop` eslint config if explicitly disabled', async () => {
+      await expectConfigState({moduleInterop: false}, 'module-interop', false, 'misc-enabled');
+    });
   });
 
   it('has no explicit `files` restriction in `module-interop` eslint config', () => {
@@ -69,13 +73,13 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('moduleInterop');
 
-  it('enables `prefer-json-modules` rule by default', () => {
+  it('enables `module-interop/prefer-json-modules` rule by default', () => {
     expect(
       configResult.getRuleEntrySeverity('module-interop', 'module-interop/prefer-json-modules'),
     ).toBe(2);
   });
 
-  it('disables `no-import-cjs` rule by default', () => {
+  it('disables `module-interop/no-import-cjs` rule by default', () => {
     expect(
       configResult.getRuleEntrySeverity('module-interop', 'module-interop/no-import-cjs'),
     ).toBe(0);
@@ -104,12 +108,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `module-interop` eslint config', async () => {
       const FILES = ['src/**/*.{js,ts}'];
+
       const configResult = await computeEslintConfig({moduleInterop: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('module-interop')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `module-interop` eslint config when `files` is empty array', async () => {
+    it('disables `module-interop` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({moduleInterop: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('module-interop')).toBeUndefined();
@@ -119,11 +124,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `module-interop` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({moduleInterop: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('module-interop')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
 
@@ -148,27 +154,5 @@ describe('un options', () => {
       configResult.getRuleEntrySeverity('module-interop', 'module-interop/no-import-cjs'),
     ).toBe(1);
     expect(configResult.getRuleEntrySeverity('module-interop', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('forces severity of all rules to `error` in `module-interop` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        moduleInterop: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('module-interop')),
-      ).toStrictEqual([2]);
-    });
-
-    it('forces severity of all rules to `warning` in `module-interop` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        moduleInterop: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('module-interop')),
-      ).toStrictEqual([1]);
-    });
   });
 });

@@ -1,4 +1,4 @@
-describe('graphql: sub config `configJsProcessor`', () => {
+describe('graphql: sub config `jsProcessor`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig('graphql');
 
@@ -40,6 +40,7 @@ describe('graphql: sub config `configJsProcessor`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `graphql/processor` eslint config', async () => {
         const FILES = ['src/**/*.{js,ts}'];
+
         const configResult = await computeEslintConfig({
           graphql: {configJsProcessor: {files: FILES}},
         });
@@ -47,7 +48,7 @@ describe('graphql: sub config `configJsProcessor`', () => {
         expect(configResult.getConfigByUnPostfix('graphql/processor')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `graphql/processor` eslint config when `files` is empty array', async () => {
+      it('disables `graphql/processor` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           graphql: {configJsProcessor: {files: []}},
         });
@@ -59,6 +60,7 @@ describe('graphql: sub config `configJsProcessor`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `graphql/processor` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           graphql: {configJsProcessor: {ignores: IGNORES}},
         });

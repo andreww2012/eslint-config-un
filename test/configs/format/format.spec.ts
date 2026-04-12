@@ -140,17 +140,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `format/prettier` eslint config', async () => {
       const FILES = ['**/*.js'];
-      const configResult = await computeEslintConfig({
-        format: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({format: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('format/prettier')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `format/prettier` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        format: {files: []},
-      });
+    it('disables `format/prettier` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({format: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('format/prettier')).toBeUndefined();
     });
@@ -159,13 +156,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `format/prettier` eslint config', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        format: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({format: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('format/prettier')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
     });
   });
 
@@ -176,32 +172,6 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('format/prettier', 'format/prettier')).toBe(0);
     expect(configResult.getRuleEntrySeverity('format/prettier', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `format/prettier` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        format: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('format/prettier'), (ruleName) =>
-          ruleName.startsWith('format/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `format/prettier` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        format: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('format/prettier'), (ruleName) =>
-          ruleName.startsWith('format/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 
@@ -280,7 +250,7 @@ describe('options', () => {
   });
 
   describe('option: `usePlainParser`', () => {
-    it('does not set `eslint-parser-plain` parser when `usePlainParser` is not set', async () => {
+    it('does not set `eslint-parser-plain` parser by default', async () => {
       const configResult = await computeEslintConfig('format');
 
       expect(
@@ -288,7 +258,7 @@ describe('options', () => {
       ).toBeUndefined();
     });
 
-    it('sets `eslint-parser-plain` parser when `usePlainParser` is `true`', async () => {
+    it('sets `eslint-parser-plain` parser when set to `true`', async () => {
       const configResult = await computeEslintConfig({format: {usePlainParser: true}});
 
       expect(

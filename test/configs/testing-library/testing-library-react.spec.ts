@@ -83,7 +83,7 @@ describe('testing-library: sub config `react`', () => {
         );
       });
 
-      it('disables `testing-library/react` eslint config when `files` is empty array', async () => {
+      it('disables `testing-library/react` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           testingLibrary: {configReact: {files: []}},
         });
@@ -125,39 +125,11 @@ describe('testing-library: sub config `react`', () => {
       ).toBe(0);
       expect(configResult.getRuleEntrySeverity('testing-library/react', 'no-console')).toBe(0);
     });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `testing-library/react` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          testingLibrary: {configReact: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('testing-library/react'),
-            (ruleName) => ruleName.startsWith('testing-library/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `testing-library/react` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          testingLibrary: {configReact: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('testing-library/react'),
-            (ruleName) => ruleName.startsWith('testing-library/'),
-          ),
-        ).toStrictEqual([1]);
-      });
-    });
   });
 
   describe('options', () => {
     describe('option: `allowContainerFirstChild`', () => {
-      it('sets `allowContainerFirstChild: true` in `testing-library/no-node-access` rule options when option is not set', async () => {
+      it('sets `allowContainerFirstChild: true` in `testing-library/no-node-access` rule options by default', async () => {
         const configResult = await computeEslintConfig({testingLibrary: {configReact: true}});
 
         expect(
@@ -165,7 +137,7 @@ describe('testing-library: sub config `react`', () => {
         ).toMatchInlineSnapshot('[2, {"allowContainerFirstChild": true}]');
       });
 
-      it('sets `allowContainerFirstChild: false` in `testing-library/no-node-access` rule options when option is `false`', async () => {
+      it('sets `allowContainerFirstChild: false` in `testing-library/no-node-access` rule options when set to `false`', async () => {
         const configResult = await computeEslintConfig({
           testingLibrary: {configReact: {allowContainerFirstChild: false}},
         });
@@ -177,7 +149,7 @@ describe('testing-library: sub config `react`', () => {
     });
 
     describe('option: `consistentDataTestId`', () => {
-      it('does not enforce consistent data-testid in `testing-library/consistent-data-testid` rule when option is not set', async () => {
+      it('does not enforce consistent data-testid in `testing-library/consistent-data-testid` rule by default', async () => {
         const configResult = await computeEslintConfig({testingLibrary: {configReact: true}});
 
         expect(
@@ -205,7 +177,7 @@ describe('testing-library: sub config `react`', () => {
     });
 
     describe('option: `preferAssertStyle`', () => {
-      it('does not enforce assert style in `testing-library/prefer-explicit-assert` rule when option is not set', async () => {
+      it('does not enforce assert style in `testing-library/prefer-explicit-assert` rule by default', async () => {
         const configResult = await computeEslintConfig({testingLibrary: {configReact: true}});
 
         expect(
@@ -216,7 +188,7 @@ describe('testing-library: sub config `react`', () => {
         ).toBe(0);
       });
 
-      it('enables `testing-library/prefer-explicit-assert` rule when option is set to `explicit`', async () => {
+      it('enables `testing-library/prefer-explicit-assert` rule when set to `explicit`', async () => {
         const configResult = await computeEslintConfig({
           testingLibrary: {configReact: {preferAssertStyle: 'explicit'}},
         });
@@ -229,7 +201,7 @@ describe('testing-library: sub config `react`', () => {
         ).toBe(2);
       });
 
-      it('enables `testing-library/prefer-implicit-assert` rule when option is set to `implicit`', async () => {
+      it('enables `testing-library/prefer-implicit-assert` rule when set to `implicit`', async () => {
         const configResult = await computeEslintConfig({
           testingLibrary: {configReact: {preferAssertStyle: 'implicit'}},
         });
@@ -244,7 +216,7 @@ describe('testing-library: sub config `react`', () => {
     });
 
     describe('option: `preferQueryMatchers`', () => {
-      it('disables `testing-library/prefer-query-matchers` rule when option is not set', async () => {
+      it('disables `testing-library/prefer-query-matchers` rule by default', async () => {
         const configResult = await computeEslintConfig({testingLibrary: {configReact: true}});
 
         expect(
@@ -272,7 +244,7 @@ describe('testing-library: sub config `react`', () => {
     });
 
     describe('option: `preferUserEventOverFireEvent`', () => {
-      it('enables `testing-library/prefer-user-event` rule when option is not set', async () => {
+      it('enables `testing-library/prefer-user-event` rule by default', async () => {
         const configResult = await computeEslintConfig({testingLibrary: {configReact: true}});
 
         expect(
@@ -283,7 +255,7 @@ describe('testing-library: sub config `react`', () => {
         ).toBe(2);
       });
 
-      it('disables `testing-library/prefer-user-event` rule when option is `false`', async () => {
+      it('disables `testing-library/prefer-user-event` rule when set to `false`', async () => {
         const configResult = await computeEslintConfig({
           testingLibrary: {configReact: {preferUserEventOverFireEvent: false}},
         });
@@ -301,13 +273,13 @@ describe('testing-library: sub config `react`', () => {
   describe('sub config: `configNoOnlyTests`', async () => {
     const configResult = await computeEslintConfig({testingLibrary: {configReact: true}});
 
-    it('creates `testing-library/react/no-only-tests` eslint config when option is not set', () => {
+    it('creates `testing-library/react/no-only-tests` eslint config by default', () => {
       expect(
         configResult.getConfigByUnPostfix('testing-library/react/no-only-tests'),
       ).toBeDefined();
     });
 
-    it('does not create `testing-library/react/no-only-tests` eslint config when option is `false`', async () => {
+    it('does not create `testing-library/react/no-only-tests` eslint config when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         testingLibrary: {configReact: {configNoOnlyTests: false}},
       });

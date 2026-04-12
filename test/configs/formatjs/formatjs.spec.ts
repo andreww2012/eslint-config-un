@@ -1,10 +1,10 @@
-beforeEach(() => {
-  addInstalledPackages({'@formatjs/icu-messageformat-parser': '6.0.0'});
-});
-
 const FIXTURES = {
   withEmoji: 'with-emoji.js',
 } as const;
+
+beforeEach(() => {
+  addInstalledPackages({'@formatjs/icu-messageformat-parser': '6.0.0'});
+});
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('formatJs');
@@ -40,10 +40,22 @@ describe('basic tests', async () => {
       await expectConfigState('formatJs', 'formatjs', ['formatJs', true], 'default');
     });
 
-    it('does not create `formatjs` eslint config when `@formatjs/icu-messageformat-parser` package is not installed', async () => {
-      setInstalledPackages({});
+    describe('`@formatjs/icu-messageformat-parser` is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
 
-      await expectConfigState({}, 'formatjs', false, 'default');
+      it('does not create `formatjs` eslint config', async () => {
+        await expectConfigState({}, 'formatjs', false, 'default');
+      });
+
+      it('creates `formatjs` eslint config if explicitly enabled', async () => {
+        await expectConfigState('formatJs', 'formatjs', true, 'default');
+      });
+
+      it('does not create `formatjs` eslint config and prints a warning if explicitly disabled', async () => {
+        await expectConfigState({formatJs: false}, 'formatjs', ['formatJs', false], 'default');
+      });
     });
   });
 
@@ -102,7 +114,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('formatjs')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `formatjs` eslint config when `files` is empty array', async () => {
+    it('disables `formatjs` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({formatJs: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('formatjs')).toBeUndefined();
@@ -117,7 +129,7 @@ describe('un options', () => {
 
       const ignores = configResult.getConfigByUnPostfix('formatjs')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -133,33 +145,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('formatjs', 'formatjs/no-emoji')).toBe(0);
     expect(configResult.getRuleEntrySeverity('formatjs', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `formatjs` eslint config', async () => {
-      const configResult = await computeEslintConfig({formatJs: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('formatjs'), (ruleName) =>
-          ruleName.startsWith('formatjs/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `formatjs` eslint config', async () => {
-      const configResult = await computeEslintConfig({formatJs: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('formatjs'), (ruleName) =>
-          ruleName.startsWith('formatjs/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set `formatjs` settings when not provided', async () => {
+    it('does not set `formatjs` settings by default', async () => {
       const configResult = await computeEslintConfig('formatJs');
 
       expect(configResult.getConfigByUnPostfix('formatjs')?.settings?.['formatjs']).toBeUndefined();
@@ -200,7 +190,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, "literal"]');
     });
 
-    it('disables `enforce-default-message` rule when set to `false`', async () => {
+    it('disables `formatjs/enforce-default-message` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         formatJs: {enforceDefaultMessage: false},
       });
@@ -230,7 +220,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, "literal"]');
     });
 
-    it('disables `enforce-description` rule when set to `false`', async () => {
+    it('disables `formatjs/enforce-description` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         formatJs: {enforceDescription: false},
       });
@@ -247,14 +237,14 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('formatjs', 'formatjs/no-id')).toBe(2);
     });
 
-    it('enables `enforce-id` rule and keeps `no-id` rule enabled when set to `always`', async () => {
+    it('enables `formatjs/enforce-id` rule and keeps `formatjs/no-id` rule enabled when set to `always`', async () => {
       const configResult = await computeEslintConfig({formatJs: {enforceId: 'always'}});
 
       expect(configResult.getRuleEntrySeverity('formatjs', 'formatjs/enforce-id')).toBe(2);
       expect(configResult.getRuleEntrySeverity('formatjs', 'formatjs/no-id')).toBe(2);
     });
 
-    it('disables both `enforce-id` and `no-id` rules when set to `never`', async () => {
+    it('disables both `formatjs/enforce-id` and `formatjs/no-id` rules when set to `never`', async () => {
       const configResult = await computeEslintConfig({formatJs: {enforceId: 'never'}});
 
       expect(configResult.getRuleEntrySeverity('formatjs', 'formatjs/enforce-id')).toBe(0);
@@ -283,13 +273,13 @@ describe('options', () => {
   });
 
   describe('option: `icuElementsBlocklist`', () => {
-    it('disables `blocklist-elements` rule when `icuElementsBlocklist` is not provided', async () => {
+    it('disables `formatjs/blocklist-elements` rule by default', async () => {
       const configResult = await computeEslintConfig('formatJs');
 
       expect(configResult.getRuleEntrySeverity('formatjs', 'formatjs/blocklist-elements')).toBe(0);
     });
 
-    it('enables `blocklist-elements` rule when truthy values are specified', async () => {
+    it('enables `formatjs/blocklist-elements` rule when truthy values are specified', async () => {
       const configResult = await computeEslintConfig({
         formatJs: {icuElementsBlocklist: {select: true}},
       });
@@ -299,7 +289,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, ["select"]]');
     });
 
-    it('does not enable `blocklist-elements` rule when only falsy values are specified', async () => {
+    it('does not enable `formatjs/blocklist-elements` rule when only falsy values are specified', async () => {
       const configResult = await computeEslintConfig({
         formatJs: {icuElementsBlocklist: {select: false}},
       });

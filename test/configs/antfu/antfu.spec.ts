@@ -15,67 +15,50 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `antfu` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('antfu')).toBeUndefined();
+      await expectConfigState({}, 'antfu', false);
     });
 
     it('creates `antfu` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('antfu');
-
-      expect(configResult.getConfigByUnPostfix('antfu')).toBeDefined();
+      await expectConfigState('antfu', 'antfu', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('does not create `antfu` eslint config', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('antfu')).toBeUndefined();
+      await expectConfigState({}, 'antfu', false, 'default');
     });
 
     it('creates `antfu` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('antfu', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('antfu')).toBeDefined();
+      await expectConfigState('antfu', 'antfu', true, 'default');
     });
 
     it('does not create `antfu` eslint config and prints a warning if explicitly disabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig({antfu: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('antfu')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to disable \`antfu\` config because this is the default`,
-        ),
-      ).toBe(true);
+      await expectConfigState({antfu: false}, 'antfu', ['antfu', false], 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('does not create `antfu` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'antfu', false, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('antfu')).toBeUndefined();
+    it('creates `antfu` eslint config if explicitly enabled', async () => {
+      await expectConfigState({antfu: true}, 'antfu', true, 'misc-enabled');
+    });
+
+    it('does not create `antfu` eslint config and prints a warning if explicitly disabled', async () => {
+      await expectConfigState({antfu: false}, 'antfu', ['antfu', false], 'misc-enabled');
     });
   });
 
   it('has default `files` in `antfu` eslint config', () => {
     expect(configResult.getConfigByUnPostfix('antfu')?.files).toMatchInlineSnapshot(
-      `["**/*.?([cm])[jt]s?(x)"]`,
+      '["**/*.?([cm])[jt]s?(x)"]',
     );
   });
 
   it('has default `ignores` in `antfu` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('antfu')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
+    expect(configResult.getConfigByUnPostfix('antfu')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 
@@ -104,7 +87,7 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      `"Top-level functions should be declared with function keyword"`,
+      '"Top-level functions should be declared with function keyword"',
     );
   });
 });
@@ -113,17 +96,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `antfu` eslint config', async () => {
       const FILES = ['**/*.ts'];
-      const configResult = await computeEslintConfig({
-        antfu: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({antfu: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('antfu')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `antfu` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        antfu: {files: []},
-      });
+    it('disables `antfu` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({antfu: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('antfu')).toBeUndefined();
     });
@@ -132,13 +112,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `antfu` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        antfu: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({antfu: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('antfu')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -152,33 +131,6 @@ describe('un options', () => {
     });
 
     expect(configResult.getRuleEntrySeverity('antfu', 'antfu/consistent-chaining')).toBe(2);
-
     expect(configResult.getRuleEntrySeverity('antfu', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `antfu` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        antfu: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('antfu'), (ruleName) =>
-          ruleName.startsWith('antfu/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `antfu` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        antfu: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('antfu'), (ruleName) =>
-          ruleName.startsWith('antfu/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

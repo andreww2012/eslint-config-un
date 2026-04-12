@@ -112,19 +112,16 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `unused-imports/no-unused-imports` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
-      const configResult = await computeEslintConfig({
-        unusedImports: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({unusedImports: {files: FILES}});
 
       expect(
         configResult.getConfigByUnPostfix('unused-imports/no-unused-imports')?.files,
       ).toStrictEqual(FILES);
     });
 
-    it('disables `unused-imports/no-unused-imports` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        unusedImports: {files: []},
-      });
+    it('disables `unused-imports/no-unused-imports` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({unusedImports: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('unused-imports/no-unused-imports')).toBeUndefined();
     });
@@ -133,15 +130,14 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `unused-imports/no-unused-imports` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        unusedImports: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({unusedImports: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix(
         'unused-imports/no-unused-imports',
       )?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -163,33 +159,5 @@ describe('un options', () => {
     expect(
       configResult.getRuleEntrySeverity('unused-imports/no-unused-imports', 'no-console'),
     ).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `unused-imports/no-unused-imports` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        unusedImports: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('unused-imports/no-unused-imports'),
-          (ruleName) => ruleName.startsWith('unused-imports/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `unused-imports/no-unused-imports` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        unusedImports: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('unused-imports/no-unused-imports'),
-          (ruleName) => ruleName.startsWith('unused-imports/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

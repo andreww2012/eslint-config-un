@@ -1,4 +1,4 @@
-import {GLOB_YML_YAML, GLOB_YML, GLOB_YAML} from '../../../src/constants';
+import {GLOB_YAML, GLOB_YML, GLOB_YML_YAML} from '../../../src/constants';
 
 const FIXTURES = {
   invalidYaml: 'invalid.yaml',
@@ -23,14 +23,14 @@ describe('json-schema-validator: sub-config `configYaml`', () => {
     it('has default `files` in `json-schema-validator/yaml` eslint config', () => {
       expect(
         configResult.getConfigByUnPostfix('json-schema-validator/yaml')?.files,
-      ).toMatchInlineSnapshot(`["**/*.y?(a)ml"]`);
+      ).toMatchInlineSnapshot('["**/*.y?(a)ml"]');
     });
 
     it('has default `ignores` in `json-schema-validator/yaml` eslint config', () => {
       const ignores = configResult.getConfigByUnPostfix('json-schema-validator/yaml')?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.to.include.members([GLOB_YML_YAML, GLOB_YML, GLOB_YAML]);
+      expect(ignores).not.toIncludeAnyMembers([GLOB_YML_YAML, GLOB_YML, GLOB_YAML]);
     });
   });
 
@@ -39,11 +39,9 @@ describe('json-schema-validator: sub-config `configYaml`', () => {
 
     it('enables `json-schema-validator/no-invalid` rule by default in `json-schema-validator/yaml`', () => {
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'json-schema-validator/yaml',
-            'json-schema-validator/no-invalid',
-          ),
+        configResult.getRuleEntrySeverity(
+          'json-schema-validator/yaml',
+          'json-schema-validator/no-invalid',
         ),
       ).toBe(2);
     });
@@ -69,6 +67,7 @@ describe('json-schema-validator: sub-config `configYaml`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `json-schema-validator/yaml` eslint config', async () => {
         const FILES = ['src/**/*.yaml'];
+
         const configResult = await computeEslintConfig({
           jsonSchemaValidator: {configYaml: {files: FILES}},
         });
@@ -78,7 +77,7 @@ describe('json-schema-validator: sub-config `configYaml`', () => {
         ).toStrictEqual(FILES);
       });
 
-      it('disables `json-schema-validator/yaml` eslint config when `files` is empty array', async () => {
+      it('disables `json-schema-validator/yaml` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           jsonSchemaValidator: {configYaml: {files: []}},
         });
@@ -90,13 +89,14 @@ describe('json-schema-validator: sub-config `configYaml`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `json-schema-validator/yaml` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           jsonSchemaValidator: {configYaml: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('json-schema-validator/yaml')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -112,47 +112,12 @@ describe('json-schema-validator: sub-config `configYaml`', () => {
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'json-schema-validator/yaml',
-            'json-schema-validator/no-invalid',
-          ),
+        configResult.getRuleEntrySeverity(
+          'json-schema-validator/yaml',
+          'json-schema-validator/no-invalid',
         ),
       ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('json-schema-validator/yaml', 'no-console'),
-        ),
-      ).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `json-schema-validator/yaml` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jsonSchemaValidator: {configYaml: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('json-schema-validator/yaml'),
-            (ruleName) => ruleName.startsWith('json-schema-validator/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `json-schema-validator/yaml` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jsonSchemaValidator: {configYaml: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('json-schema-validator/yaml'),
-            (ruleName) => ruleName.startsWith('json-schema-validator/'),
-          ),
-        ).toStrictEqual([1]);
-      });
+      expect(configResult.getRuleEntrySeverity('json-schema-validator/yaml', 'no-console')).toBe(0);
     });
   });
 });

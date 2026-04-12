@@ -15,7 +15,7 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
       expect(configResult.getConfigByUnPostfix('sort-tsconfig-keys')).toBeUndefined();
     });
 
-    it('creates `sort-tsconfig-keys` eslint config and has expected defaults when set to `true`', async () => {
+    it('creates `sort-tsconfig-keys` eslint config when set to `true`', async () => {
       const configResult = await computeEslintConfig({ts: {configSortTsconfigKeys: true}});
 
       const config = configResult.getConfigByUnPostfix('sort-tsconfig-keys');
@@ -313,6 +313,23 @@ describe('ts: sub config `sortTsconfigKeys`', () => {
                 type: 'order-groups',
                 order: ['tyPeChecking' as 'typeChecking'],
                 orderWithinGroup: {['tyPeChecking' as 'typeChecking']: 'alphabetical'},
+              },
+            },
+          },
+        });
+
+        expect(
+          configResult.getRuleEntryOptions('sort-tsconfig-keys', 'jsonc/sort-keys')[1],
+        ).toMatchObject({order: []});
+      });
+
+      it('returns empty order for unknown groups when `orderWithinGroup` is not provided for that group', async () => {
+        const configResult = await computeEslintConfig({
+          ts: {
+            configSortTsconfigKeys: {
+              orderCompilerOptions: {
+                type: 'order-groups',
+                order: ['tyPeChecking' as 'typeChecking'],
               },
             },
           },

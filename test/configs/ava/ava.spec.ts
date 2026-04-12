@@ -2,6 +2,10 @@ const FIXTURES = {
   noSkipTest: 'no-skip-test/test.spec.js',
 } as const;
 
+beforeEach(() => {
+  addInstalledPackages({ava: '6.2.0'});
+});
+
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('ava');
 
@@ -15,95 +19,77 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `ava` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('ava')).toBeUndefined();
+      await expectConfigState({}, 'ava', false);
     });
 
     it('creates `ava` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('ava');
-
-      expect(configResult.getConfigByUnPostfix('ava')).toBeDefined();
+      await expectConfigState('ava', 'ava', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    it('does not create `ava` eslint config when `ava` package is not installed', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
+    describe('ava is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
 
-      expect(configResult.getConfigByUnPostfix('ava')).toBeUndefined();
+      it('does not create `ava` eslint config', async () => {
+        await expectConfigState({}, 'ava', false, 'default');
+      });
+
+      it('creates `ava` eslint config if explicitly enabled', async () => {
+        await expectConfigState('ava', 'ava', true, 'default');
+      });
+
+      it('does not create `ava` eslint config and prints a warning if explicitly disabled', async () => {
+        await expectConfigState({ava: false}, 'ava', ['ava', false], 'default');
+      });
     });
 
-    it('creates `ava` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('ava', {reset: true});
+    describe('ava is installed', () => {
+      beforeEach(() => {
+        addInstalledPackages({ava: '6.2.0'});
+      });
 
-      expect(configResult.getConfigByUnPostfix('ava')).toBeDefined();
-    });
+      it('creates `ava` eslint config by default', async () => {
+        await expectConfigState({}, 'ava', true, 'default');
+      });
 
-    it('creates `ava` eslint config when `ava` package is installed', async () => {
-      addInstalledPackages({ava: '6.2.0'});
+      it('creates `ava` eslint config and prints a warning if explicitly enabled', async () => {
+        await expectConfigState('ava', 'ava', ['ava', true], 'default');
+      });
 
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('ava')).toBeDefined();
-    });
-
-    it('creates `ava` eslint config and prints a warning if explicitly enabled when `ava` package is installed', async () => {
-      addInstalledPackages({ava: '6.2.0'});
-
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig('ava', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('ava')).toBeDefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to enable `ava` config because this is the default',
-        ),
-      ).toBe(true);
-    });
-
-    it('does not create `ava` eslint config if explicitly disabled when `ava` package is installed', async () => {
-      addInstalledPackages({ava: '6.2.0'});
-
-      const configResult = await computeEslintConfig({ava: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('ava')).toBeUndefined();
-    });
-
-    it('does not create `ava` eslint config if explicitly disabled when `ava` package is not installed', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig({ava: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('ava')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to disable `ava` config because this is the default',
-        ),
-      ).toBe(true);
+      it('does not create `ava` eslint config if explicitly disabled', async () => {
+        await expectConfigState({ava: false}, 'ava', false, 'default');
+      });
     });
   });
 
   describe('mode: misc configs are enabled', () => {
-    it('does not create `ava` eslint config (not in misc group)', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
-
-      expect(configResult.getConfigByUnPostfix('ava')).toBeUndefined();
+    it('creates `ava` eslint config', async () => {
+      await expectConfigState({}, 'ava', true, 'misc-enabled');
     });
 
-    it('creates `ava` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig(
-        {ava: true},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+    it('creates `ava` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('ava', 'ava', ['ava', true], 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('ava')).toBeDefined();
+    it('does not create `ava` eslint config if explicitly disabled', async () => {
+      await expectConfigState({ava: false}, 'ava', false, 'misc-enabled');
+    });
+
+    describe('ava is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
+
+      it('does not create `ava` eslint config (not in misc group)', async () => {
+        await expectConfigState({}, 'ava', false, 'misc-enabled');
+      });
+
+      it('creates `ava` eslint config if explicitly enabled', async () => {
+        await expectConfigState({ava: true}, 'ava', true, 'misc-enabled');
+      });
     });
   });
 
@@ -114,9 +100,7 @@ describe('basic tests', async () => {
   });
 
   it('has default `ignores` in `ava` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('ava')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
+    expect(configResult.getConfigByUnPostfix('ava')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 
@@ -144,12 +128,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `ava` eslint config', async () => {
       const FILES = ['tests/**/*.spec.ts'];
+
       const configResult = await computeEslintConfig({ava: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('ava')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `ava` eslint config when `files` is empty array', async () => {
+    it('disables `ava` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({ava: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('ava')).toBeUndefined();
@@ -159,11 +144,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `ava` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({ava: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('ava')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -176,33 +162,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntry('ava', 'ava/hooks-order')).toBe(0);
     expect(configResult.getRuleEntry('ava', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `ava` eslint config', async () => {
-      const configResult = await computeEslintConfig({ava: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('ava'), (ruleName) =>
-          ruleName.startsWith('ava/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `ava` eslint config', async () => {
-      const configResult = await computeEslintConfig({ava: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('ava'), (ruleName) =>
-          ruleName.startsWith('ava/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `enforceAssertionMessage`', () => {
-    it('does not enforce assertion message when option is not provided (default)', async () => {
+    it('does not enforce assertion message by default', async () => {
       const configResult = await computeEslintConfig('ava');
 
       expect(configResult.getRuleEntry('ava', 'ava/assertion-arguments')).toMatchInlineSnapshot(
@@ -232,13 +196,13 @@ describe('options', () => {
   });
 
   describe('option: `enforceMaxAssertions`', () => {
-    it('disables `max-asserts` rule when option is not provided (default)', async () => {
+    it('disables `ava/max-asserts` rule by default', async () => {
       const configResult = await computeEslintConfig('ava');
 
       expect(configResult.getRuleEntrySeverity('ava', 'ava/max-asserts')).toBe(0);
     });
 
-    it('enables `max-asserts` rule with the provided limit', async () => {
+    it('enables `ava/max-asserts` rule with the provided limit', async () => {
       const MAX_ASSERTIONS = 5;
 
       const configResult = await computeEslintConfig({

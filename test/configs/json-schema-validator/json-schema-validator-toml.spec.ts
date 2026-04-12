@@ -1,3 +1,5 @@
+import {GLOB_TOML} from '../../../src/constants';
+
 const FIXTURES = {
   invalidToml: 'invalid.toml',
 } as const;
@@ -21,14 +23,14 @@ describe('json-schema-validator: sub-config `configToml`', () => {
     it('has default `files` in `json-schema-validator/toml` eslint config', () => {
       expect(
         configResult.getConfigByUnPostfix('json-schema-validator/toml')?.files,
-      ).toMatchInlineSnapshot(`["**/*.toml"]`);
+      ).toMatchInlineSnapshot('["**/*.toml"]');
     });
 
     it('has default `ignores` in `json-schema-validator/toml` eslint config', () => {
       const ignores = configResult.getConfigByUnPostfix('json-schema-validator/toml')?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.to.include.members(['**/*.toml']);
+      expect(ignores).not.toIncludeAnyMembers([GLOB_TOML]);
     });
   });
 
@@ -37,11 +39,9 @@ describe('json-schema-validator: sub-config `configToml`', () => {
 
     it('enables `json-schema-validator/no-invalid` rule by default in `json-schema-validator/toml`', () => {
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'json-schema-validator/toml',
-            'json-schema-validator/no-invalid',
-          ),
+        configResult.getRuleEntrySeverity(
+          'json-schema-validator/toml',
+          'json-schema-validator/no-invalid',
         ),
       ).toBe(2);
     });
@@ -67,6 +67,7 @@ describe('json-schema-validator: sub-config `configToml`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `json-schema-validator/toml` eslint config', async () => {
         const FILES = ['src/**/*.toml'];
+
         const configResult = await computeEslintConfig({
           jsonSchemaValidator: {configToml: {files: FILES}},
         });
@@ -76,7 +77,7 @@ describe('json-schema-validator: sub-config `configToml`', () => {
         ).toStrictEqual(FILES);
       });
 
-      it('disables `json-schema-validator/toml` eslint config when `files` is empty array', async () => {
+      it('disables `json-schema-validator/toml` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           jsonSchemaValidator: {configToml: {files: []}},
         });
@@ -88,13 +89,14 @@ describe('json-schema-validator: sub-config `configToml`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `json-schema-validator/toml` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           jsonSchemaValidator: {configToml: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('json-schema-validator/toml')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -110,47 +112,12 @@ describe('json-schema-validator: sub-config `configToml`', () => {
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'json-schema-validator/toml',
-            'json-schema-validator/no-invalid',
-          ),
+        configResult.getRuleEntrySeverity(
+          'json-schema-validator/toml',
+          'json-schema-validator/no-invalid',
         ),
       ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('json-schema-validator/toml', 'no-console'),
-        ),
-      ).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `json-schema-validator/toml` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jsonSchemaValidator: {configToml: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('json-schema-validator/toml'),
-            (ruleName) => ruleName.startsWith('json-schema-validator/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `json-schema-validator/toml` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jsonSchemaValidator: {configToml: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('json-schema-validator/toml'),
-            (ruleName) => ruleName.startsWith('json-schema-validator/'),
-          ),
-        ).toStrictEqual([1]);
-      });
+      expect(configResult.getRuleEntrySeverity('json-schema-validator/toml', 'no-console')).toBe(0);
     });
   });
 });

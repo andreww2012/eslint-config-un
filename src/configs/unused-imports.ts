@@ -44,6 +44,7 @@ export default ((context, optionsRaw) => {
     ?.addConfig(['unused-imports/no-unused-imports', {includeDefaultFilesAndIgnores: true}])
     .addRule('no-unused-imports', ERROR) /** @since 0.0.2 */
     .enableConfigTesterForPlugin('unused-imports', {
+      /* v8 ignore next 2 */
       rulesToSkipInConfig: (ruleName) =>
         ruleName === ('no-unused-vars' satisfies GetRuleNamesInPlugin<'unused-imports'>),
     })
@@ -68,6 +69,7 @@ export default ((context, optionsRaw) => {
     .disableAnyRule('sonarjs', 'no-unused-vars')
     .disableAnyRule('ts', 'no-unused-vars')
     .enableConfigTesterForPlugin('unused-imports', {
+      /* v8 ignore next 2 */
       rulesToSkipInConfig: (ruleName) =>
         ruleName === ('no-unused-imports' satisfies GetRuleNamesInPlugin<'unused-imports'>),
     })

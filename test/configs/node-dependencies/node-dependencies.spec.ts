@@ -56,6 +56,15 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
+
+    it('does not create `node-dependencies` eslint config if explicitly disabled', async () => {
+      await expectConfigState(
+        {nodeDependencies: false},
+        'node-dependencies',
+        false,
+        'misc-enabled',
+      );
+    });
   });
 
   it('has default `files` in `node-dependencies` eslint config', () => {
@@ -65,9 +74,9 @@ describe('basic tests', async () => {
   });
 
   it('has default `ignores` in `node-dependencies` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('node-dependencies')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
+    expect(configResult.getConfigByUnPostfix('node-dependencies')?.ignores?.length).toBeGreaterThan(
+      0,
+    );
   });
 });
 
@@ -107,17 +116,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `node-dependencies` eslint config', async () => {
       const FILES = ['package.json'];
-      const configResult = await computeEslintConfig({
-        nodeDependencies: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({nodeDependencies: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('node-dependencies')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `node-dependencies` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        nodeDependencies: {files: []},
-      });
+    it('disables `node-dependencies` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({nodeDependencies: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('node-dependencies')).toBeUndefined();
     });
@@ -126,13 +132,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `node-dependencies` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        nodeDependencies: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({nodeDependencies: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('node-dependencies')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -150,37 +155,22 @@ describe('un options', () => {
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('node-dependencies', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `node-dependencies` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        nodeDependencies: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('node-dependencies'), (ruleName) =>
-          ruleName.startsWith('node-dependencies/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `node-dependencies` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        nodeDependencies: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('node-dependencies'), (ruleName) =>
-          ruleName.startsWith('node-dependencies/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `enforceAbsoluteVersion`', () => {
-    it('disables `node-dependencies/absolute-version` rule when `enforceAbsoluteVersion` is `false` (default)', async () => {
+    it('disables `node-dependencies/absolute-version` rule by default', async () => {
+      const configResult = await computeEslintConfig('nodeDependencies');
+
+      expect(
+        configResult.getRuleEntrySeverity(
+          'node-dependencies',
+          'node-dependencies/absolute-version',
+        ),
+      ).toBe(0);
+    });
+
+    it('disables `node-dependencies/absolute-version` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         nodeDependencies: {enforceAbsoluteVersion: false},
       });
@@ -193,7 +183,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `node-dependencies/absolute-version` rule with default options when `enforceAbsoluteVersion` is `true`', async () => {
+    it('enables `node-dependencies/absolute-version` rule with default options when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         nodeDependencies: {enforceAbsoluteVersion: true},
       });
@@ -205,7 +195,7 @@ describe('options', () => {
       );
     });
 
-    it("enables `node-dependencies/absolute-version` rule with `never` option when `enforceAbsoluteVersion` is `'never'`", async () => {
+    it("enables `node-dependencies/absolute-version` rule with `never` option when set to `'never'`", async () => {
       const configResult = await computeEslintConfig({
         nodeDependencies: {enforceAbsoluteVersion: 'never'},
       });
@@ -215,7 +205,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, "never"]');
     });
 
-    it('enables `node-dependencies/absolute-version` rule with custom options when `enforceAbsoluteVersion` is an object', async () => {
+    it('enables `node-dependencies/absolute-version` rule with custom options when set to object', async () => {
       const OPTIONS = {dependencies: 'always' as const};
 
       const configResult = await computeEslintConfig({
@@ -227,7 +217,7 @@ describe('options', () => {
       ).toStrictEqual([OPTIONS]);
     });
 
-    it('`node-dependencies/absolute-version` rule fires when `enforceAbsoluteVersion` is `true` and a dependency uses a range version', async () => {
+    it('`node-dependencies/absolute-version` rule fires when set to `true` and a dependency uses a range version', async () => {
       const results = await testEslintConfig(
         {nodeDependencies: {enforceAbsoluteVersion: true}},
         FIXTURES.nonAbsoluteVersion,

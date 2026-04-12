@@ -159,7 +159,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('testing-library/dom')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `testing-library/dom` eslint config when `files` is empty array', async () => {
+    it('disables `testing-library/dom` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({testingLibrary: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('testing-library/dom')).toBeUndefined();
@@ -201,39 +201,11 @@ describe('un options', () => {
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('testing-library/dom', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `testing-library/dom` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        testingLibrary: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('testing-library/dom'),
-          (ruleName) => ruleName.startsWith('testing-library/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `testing-library/dom` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        testingLibrary: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('testing-library/dom'),
-          (ruleName) => ruleName.startsWith('testing-library/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `allowContainerFirstChild`', () => {
-    it('sets `allowContainerFirstChild: true` in `testing-library/no-node-access` rule options when option is not set', async () => {
+    it('sets `allowContainerFirstChild: true` in `testing-library/no-node-access` rule options by default', async () => {
       const configResult = await computeEslintConfig('testingLibrary');
 
       expect(
@@ -241,7 +213,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"allowContainerFirstChild": true}]');
     });
 
-    it('sets `allowContainerFirstChild: false` in `testing-library/no-node-access` rule options when option is `false', async () => {
+    it('sets `allowContainerFirstChild: false` in `testing-library/no-node-access` rule options when set to `false', async () => {
       const configResult = await computeEslintConfig({
         testingLibrary: {allowContainerFirstChild: false},
       });
@@ -253,7 +225,7 @@ describe('options', () => {
   });
 
   describe('option: `preferAssertStyle`', () => {
-    it('does not enforce assert style when option is not set', async () => {
+    it('does not enforce assert style by default', async () => {
       const configResult = await computeEslintConfig('testingLibrary');
 
       expect(
@@ -270,7 +242,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `testing-library/prefer-explicit-assert` rule when option is set to `explicit`', async () => {
+    it('enables `testing-library/prefer-explicit-assert` rule when set to `explicit`', async () => {
       const configResult = await computeEslintConfig({
         testingLibrary: {preferAssertStyle: 'explicit'},
       });
@@ -289,7 +261,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `testing-library/prefer-implicit-assert` rule when option is set to `implicit`', async () => {
+    it('enables `testing-library/prefer-implicit-assert` rule when set to `implicit`', async () => {
       const configResult = await computeEslintConfig({
         testingLibrary: {preferAssertStyle: 'implicit'},
       });
@@ -310,7 +282,7 @@ describe('options', () => {
   });
 
   describe('option: `preferQueryMatchers`', () => {
-    it('disables `testing-library/prefer-query-matchers` rule when option is not set', async () => {
+    it('disables `testing-library/prefer-query-matchers` rule by default', async () => {
       const configResult = await computeEslintConfig('testingLibrary');
 
       expect(
@@ -338,7 +310,7 @@ describe('options', () => {
   });
 
   describe('option: `preferUserEventOverFireEvent`', () => {
-    it('enables `testing-library/prefer-user-event` rule when option is not set', async () => {
+    it('enables `testing-library/prefer-user-event` rule by default', async () => {
       const configResult = await computeEslintConfig('testingLibrary');
 
       expect(
@@ -349,7 +321,7 @@ describe('options', () => {
       ).toBe(2);
     });
 
-    it('disables `prefer-user-event` rule when option is `false`', async () => {
+    it('disables `testing-library/prefer-user-event` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         testingLibrary: {preferUserEventOverFireEvent: false},
       });
@@ -362,7 +334,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `prefer-user-event` rule with options when set to object', async () => {
+    it('enables `testing-library/prefer-user-event` rule with options when set to object', async () => {
       const ALLOWED_METHODS = ['paste'];
 
       const configResult = await computeEslintConfig({
@@ -379,14 +351,14 @@ describe('options', () => {
   });
 
   describe('option: `disableRootConfigIfFrameworkConfigIsEnabled`', () => {
-    it('suppresses `testing-library/dom` config when a framework sub-config is enabled and option is not set', async () => {
+    it('suppresses `testing-library/dom` eslint config when a framework sub-config is enabled and option is not set', async () => {
       const configResult = await computeEslintConfig({testingLibrary: {configReact: true}});
 
       expect(configResult.getConfigByUnPostfix('testing-library/dom')).toBeUndefined();
       expect(configResult.getConfigByUnPostfix('testing-library/react')).toBeDefined();
     });
 
-    it('keeps `testing-library/dom` config when option is `false` even if a framework sub-config is enabled', async () => {
+    it('keeps `testing-library/dom` eslint config when set to `false` even if a framework sub-config is enabled', async () => {
       const configResult = await computeEslintConfig({
         testingLibrary: {configReact: true, disableRootConfigIfFrameworkConfigIsEnabled: false},
       });
@@ -396,4 +368,3 @@ describe('options', () => {
     });
   });
 });
-

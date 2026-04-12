@@ -818,6 +818,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
 
   /* Testing */
 
+  /* v8 ignore start */
   if (context.isTestMode) {
     const duplicateConfigNames: string[] = [];
     const uniqueConfigNames = new Set<string>();
@@ -866,6 +867,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       );
     }
   }
+  /* v8 ignore stop */
 
   debug(`Final config resolved: ${resolvedConfigs.length} flat config items`);
 

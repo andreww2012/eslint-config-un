@@ -2,7 +2,7 @@ const FIXTURES = {
   noOnlyTest: 'no-only-test/test.spec.js',
 } as const;
 
-describe('ava: sub config `configNoOnlyTests`', () => {
+describe('ava: sub config `noOnlyTests`', () => {
   describe('basic tests', () => {
     it('does not create `ava/no-only-tests` eslint config by default', async () => {
       const configResult = await computeEslintConfig('ava');
@@ -26,6 +26,7 @@ describe('ava: sub config `configNoOnlyTests`', () => {
 
     it('inherits `files` from parent `ava` config when `configNoOnlyTests` is enabled', async () => {
       const FILES = ['tests/**/*.spec.ts'];
+
       const configResult = await computeEslintConfig({
         ava: {files: FILES, configNoOnlyTests: true},
       });
@@ -64,6 +65,7 @@ describe('ava: sub config `configNoOnlyTests`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `ava/no-only-tests` eslint config', async () => {
         const FILES = ['tests/**/*.spec.ts'];
+
         const configResult = await computeEslintConfig({
           ava: {configNoOnlyTests: {files: FILES}},
         });
@@ -71,7 +73,7 @@ describe('ava: sub config `configNoOnlyTests`', () => {
         expect(configResult.getConfigByUnPostfix('ava/no-only-tests')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `ava/no-only-tests` eslint config when `files` is empty array', async () => {
+      it('disables `ava/no-only-tests` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           ava: {configNoOnlyTests: {files: []}},
         });
@@ -83,13 +85,14 @@ describe('ava: sub config `configNoOnlyTests`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `ava/no-only-tests` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           ava: {configNoOnlyTests: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('ava/no-only-tests')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });

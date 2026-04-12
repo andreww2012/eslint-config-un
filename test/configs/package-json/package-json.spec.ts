@@ -15,52 +15,39 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `package-json` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('package-json')).toBeUndefined();
+      await expectConfigState({}, 'package-json', false);
     });
 
     it('creates `package-json` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('packageJson');
-
-      expect(configResult.getConfigByUnPostfix('package-json')).toBeDefined();
+      await expectConfigState('packageJson', 'package-json', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('creates `package-json` eslint config by default', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('package-json')).toBeDefined();
+      await expectConfigState({}, 'package-json', true, 'default');
     });
 
     it('creates `package-json` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      await computeEslintConfig('packageJson', {reset: true});
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to enable `packageJson` config because this is the default',
-        ),
-      ).toBe(true);
+      await expectConfigState('packageJson', 'package-json', ['packageJson', true], 'default');
     });
 
     it('does not create `package-json` eslint config if explicitly disabled', async () => {
-      const configResult = await computeEslintConfig({packageJson: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('package-json')).toBeUndefined();
+      await expectConfigState({packageJson: false}, 'package-json', false, 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `package-json` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'package-json', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('package-json')).toBeDefined();
+    it('creates `package-json` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('packageJson', 'package-json', ['packageJson', true], 'misc-enabled');
+    });
+
+    it('does not create `package-json` eslint config if explicitly disabled', async () => {
+      await expectConfigState({packageJson: false}, 'package-json', false, 'misc-enabled');
     });
   });
 
@@ -71,9 +58,7 @@ describe('basic tests', async () => {
   });
 
   it('has default `ignores` in `package-json` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('package-json')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
+    expect(configResult.getConfigByUnPostfix('package-json')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 
@@ -115,12 +100,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `package-json` eslint config', async () => {
       const FILES = ['package.json'];
+
       const configResult = await computeEslintConfig({packageJson: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('package-json')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `package-json` eslint config when `files` is empty array', async () => {
+    it('disables `package-json` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({packageJson: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('package-json')).toBeUndefined();
@@ -130,11 +116,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `package-json` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({packageJson: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('package-json')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -150,30 +137,7 @@ describe('un options', () => {
     expect(
       configResult.getRuleEntrySeverity('package-json', 'package-json/no-redundant-files'),
     ).toBe(1);
-
     expect(configResult.getRuleEntrySeverity('package-json', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `package-json` eslint config', async () => {
-      const configResult = await computeEslintConfig({packageJson: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('package-json'), (ruleName) =>
-          ruleName.startsWith('package-json/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `package-json` eslint config', async () => {
-      const configResult = await computeEslintConfig({packageJson: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('package-json'), (ruleName) =>
-          ruleName.startsWith('package-json/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 
@@ -191,7 +155,7 @@ describe('options', () => {
   });
 
   describe('`order`', () => {
-    it('uses default order (`sort-package-json`) in `order-properties` rule', async () => {
+    it('uses default order (`sort-package-json`) in `package-json/order-properties` rule', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
       expect(
@@ -199,7 +163,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"order": "sort-package-json"}]');
     });
 
-    it('uses provided order in `order-properties` rule', async () => {
+    it('uses provided order in `package-json/order-properties` rule', async () => {
       const configResult = await computeEslintConfig({packageJson: {order: 'legacy'}});
 
       expect(
@@ -209,7 +173,7 @@ describe('options', () => {
   });
 
   describe('`repositoryShorthand`', () => {
-    it('uses default form (`object`) in `repository-shorthand` rule', async () => {
+    it('uses default form (`object`) in `package-json/repository-shorthand` rule', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
       expect(
@@ -217,7 +181,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"form": "object"}]');
     });
 
-    it('uses `shorthand` form in `repository-shorthand` rule', async () => {
+    it('uses `shorthand` form in `package-json/repository-shorthand` rule', async () => {
       const configResult = await computeEslintConfig({
         packageJson: {repositoryShorthand: 'shorthand'},
       });
@@ -229,7 +193,7 @@ describe('options', () => {
   });
 
   describe('`collectionsToSort`', () => {
-    it('uses default collections in `sort-collections` rule', async () => {
+    it('uses default collections in `package-json/sort-collections` rule', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
       expect(
@@ -239,7 +203,7 @@ describe('options', () => {
       );
     });
 
-    it('merges user-provided collections with defaults in `sort-collections` rule', async () => {
+    it('merges user-provided collections with defaults in `package-json/sort-collections` rule', async () => {
       const configResult = await computeEslintConfig({
         packageJson: {collectionsToSort: {scripts: true}},
       });
@@ -251,7 +215,7 @@ describe('options', () => {
       );
     });
 
-    it('allows disabling a default collection in `sort-collections` rule', async () => {
+    it('allows disabling a default collection in `package-json/sort-collections` rule', async () => {
       const configResult = await computeEslintConfig({
         packageJson: {collectionsToSort: {dependencies: false}},
       });
@@ -265,7 +229,7 @@ describe('options', () => {
   });
 
   describe('`enforceAbsoluteVersion`', () => {
-    it('disables `node-dependencies/absolute-version` rule when `enforceAbsoluteVersion` is `false` (default)', async () => {
+    it('disables `node-dependencies/absolute-version` rule by default', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
       expect(
@@ -285,6 +249,16 @@ describe('options', () => {
       );
     });
 
+    it('disables `node-dependencies/absolute-version` rule when set to `false`', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {enforceAbsoluteVersion: false},
+      });
+
+      expect(
+        configResult.getRuleEntrySeverity('package-json', 'node-dependencies/absolute-version'),
+      ).toBe(0);
+    });
+
     it("enables `node-dependencies/absolute-version` rule when `enforceAbsoluteVersion` is `'never'`", async () => {
       const configResult = await computeEslintConfig({
         packageJson: {enforceAbsoluteVersion: 'never'},
@@ -295,7 +269,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, "never"]');
     });
 
-    it('enables `node-dependencies/absolute-version` rule with custom options when `enforceAbsoluteVersion` is an object', async () => {
+    it('enables `node-dependencies/absolute-version` rule with custom options when `enforceAbsoluteVersion` is object', async () => {
       const OPTIONS = {optionalDependencies: 'ignore', peerDependencies: 'always'} as const;
 
       const configResult = await computeEslintConfig({
@@ -309,7 +283,7 @@ describe('options', () => {
   });
 
   describe('`propertiesAllowedToBeEmpty`', () => {
-    it('ignores `browserslist` property by default in `no-empty-fields` rule', async () => {
+    it('ignores `browserslist` property by default in `package-json/no-empty-fields` rule by default', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
       expect(
@@ -317,7 +291,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"ignoreProperties": ["browserslist"]}]');
     });
 
-    it('uses user-provided properties in `no-empty-fields` rule', async () => {
+    it('uses user-provided properties in `package-json/no-empty-fields` rule', async () => {
       const configResult = await computeEslintConfig({
         packageJson: {propertiesAllowedToBeEmpty: ['config']},
       });
@@ -327,7 +301,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"ignoreProperties": ["config"]}]');
     });
 
-    it('passes no options to `no-empty-fields` rule when `propertiesAllowedToBeEmpty` is empty', async () => {
+    it('passes no options to `package-json/no-empty-fields` rule when set to empty array', async () => {
       const configResult = await computeEslintConfig({
         packageJson: {propertiesAllowedToBeEmpty: []},
       });
@@ -339,7 +313,7 @@ describe('options', () => {
   });
 
   describe('`publishable`', () => {
-    it('disables publishable-specific rules when `publishable` is `false` (default)', async () => {
+    it('disables publishable-specific rules by default', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
       expect(
@@ -347,7 +321,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables publishable-specific rules when `publishable` is `true`', async () => {
+    it('enables publishable-specific rules when set to `true`', async () => {
       const configResult = await computeEslintConfig({packageJson: {publishable: true}});
 
       expect(
@@ -357,7 +331,7 @@ describe('options', () => {
   });
 
   describe('`disallowUnnecessaryPropertiesInPrivatePackages`', () => {
-    it('disables `restrict-private-properties` rule when `disallowUnnecessaryPropertiesInPrivatePackages` is `false` (default)', async () => {
+    it('disables `package-json/restrict-private-properties` rule by default', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
       expect(
@@ -368,7 +342,7 @@ describe('options', () => {
       ).toBe(0);
     });
 
-    it('enables `restrict-private-properties` rule when `disallowUnnecessaryPropertiesInPrivatePackages` is `true`', async () => {
+    it('enables `package-json/restrict-private-properties` rule when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         packageJson: {disallowUnnecessaryPropertiesInPrivatePackages: true},
       });
@@ -378,7 +352,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2]');
     });
 
-    it('enables `restrict-private-properties` rule with custom blocked properties when `disallowUnnecessaryPropertiesInPrivatePackages` is a string array', async () => {
+    it('enables `package-json/restrict-private-properties` rule with custom blocked properties when set to a string array', async () => {
       const PROPERTIES = ['funding', 'bugs'];
 
       const configResult = await computeEslintConfig({

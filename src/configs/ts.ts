@@ -1293,15 +1293,19 @@ export default ((
                       ? isIn(group, TSCONFIG_COMPILER_OPTIONS_KEYS)
                         ? TSCONFIG_COMPILER_OPTIONS_KEYS[group]
                         : []
-                      : orderCompilerOptions.orderWithinGroup[group] || []
+                      : orderCompilerOptions.orderWithinGroup[
+                          group
+                        ] /* v8 ignore start - guaranteed to exist in runtime, but not during type checking */ ||
+                        [] /* v8 ignore stop */
                     : isIn(group, TSCONFIG_COMPILER_OPTIONS_KEYS)
                       ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS.antfu.filter((v) =>
                           TSCONFIG_COMPILER_OPTIONS_KEYS[group].includes(v as never),
                         )
                       : [],
                 )
-              : []
-        : orderCompilerOptions
+              : /* v8 ignore start - not reachable */ []
+        : /* v8 ignore stop */
+          orderCompilerOptions
           ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS.antfu
           : [];
 

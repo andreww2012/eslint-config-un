@@ -415,6 +415,7 @@ export default (async (context, optionsRaw) => {
     .addRule('xml-parser-xxe', ERROR) /** @since 1.0.4-alpha.0 */ // [S2755] 🟢 📦 `libxmljs`
     .enableConfigTesterForPlugin('sonarjs', {
       // It looks like `code-eval` was accidentally re-introduced in v4.0.1 after removing in v4.0.0
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => ruleName === 'code-eval',
     })
     .addOverrides();

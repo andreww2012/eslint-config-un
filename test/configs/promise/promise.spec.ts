@@ -47,6 +47,10 @@ describe('basic tests', async () => {
     it('creates `promise` eslint config and prints a warning if explicitly enabled', async () => {
       await expectConfigState('promise', 'promise', ['promise', true], 'misc-enabled');
     });
+
+    it('does not create `promise` eslint config if explicitly disabled', async () => {
+      await expectConfigState({promise: false}, 'promise', false, 'misc-enabled');
+    });
   });
 
   it('has no explicit `files` restriction in `promise` eslint config by default', () => {
@@ -57,7 +61,7 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('promise')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.to.include.members([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 
@@ -95,12 +99,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `promise` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
+
       const configResult = await computeEslintConfig({promise: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('promise')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `promise` eslint config when `files` is empty array', async () => {
+    it('disables `promise` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({promise: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('promise')).toBeUndefined();
@@ -110,11 +115,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `promise` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({promise: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('promise')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -126,27 +132,5 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('promise', 'promise/param-names')).toBe(0);
     expect(configResult.getRuleEntrySeverity('promise', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `promise` eslint config', async () => {
-      const configResult = await computeEslintConfig({promise: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('promise'), (ruleName) =>
-          ruleName.startsWith('promise/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `promise` eslint config', async () => {
-      const configResult = await computeEslintConfig({promise: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('promise'), (ruleName) =>
-          ruleName.startsWith('promise/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

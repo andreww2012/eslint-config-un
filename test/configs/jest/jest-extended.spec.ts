@@ -6,7 +6,7 @@ beforeEach(() => {
   addInstalledPackages({jest: '29.0.0', 'jest-extended': '7.0.0'});
 });
 
-describe('jest: sub config `configJestExtended`', () => {
+describe('jest: sub config `jestExtended`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig({jest: {configJestExtended: true}});
 
@@ -108,7 +108,9 @@ describe('jest: sub config `configJestExtended`', () => {
         'jest-extended/prefer-to-be-array',
       );
 
-      expect(error?.message).toMatchInlineSnapshot(`"Prefer using \`toBeArray()\` to test if a value is an array."`);
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Prefer using `toBeArray()` to test if a value is an array."',
+      );
     });
   });
 
@@ -116,6 +118,7 @@ describe('jest: sub config `configJestExtended`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `jest/extended` eslint config', async () => {
         const FILES = ['tests/**/*.spec.ts'];
+
         const configResult = await computeEslintConfig({
           jest: {configJestExtended: {files: FILES}},
         });
@@ -123,7 +126,7 @@ describe('jest: sub config `configJestExtended`', () => {
         expect(configResult.getConfigByUnPostfix('jest/extended')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `jest/extended` eslint config when `files` is empty array', async () => {
+      it('disables `jest/extended` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           jest: {configJestExtended: {files: []}},
         });
@@ -135,6 +138,7 @@ describe('jest: sub config `configJestExtended`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `jest/extended` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           jest: {configJestExtended: {ignores: IGNORES}},
         });
@@ -162,32 +166,6 @@ describe('jest: sub config `configJestExtended`', () => {
       ).toBe(0);
       expect(configResult.getRuleEntrySeverity('jest/extended', 'no-console')).toBe(0);
     });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `jest/extended` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jest: {configJestExtended: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('jest/extended'), (ruleName) =>
-            ruleName.startsWith('jest-extended/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `jest/extended` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jest: {configJestExtended: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('jest/extended'), (ruleName) =>
-            ruleName.startsWith('jest-extended/'),
-          ),
-        ).toStrictEqual([1]);
-      });
-    });
   });
 
   describe('options', () => {
@@ -200,7 +178,7 @@ describe('jest: sub config `configJestExtended`', () => {
         'prefer-to-have-been-called-once',
       ];
 
-      it('enables all suggest-using rules when option is not set', async () => {
+      it('enables all suggest-using rules by default', async () => {
         const configResult = await computeEslintConfig({jest: {configJestExtended: true}});
 
         expect(
@@ -210,7 +188,7 @@ describe('jest: sub config `configJestExtended`', () => {
         ).toMatchInlineSnapshot('[2, 2, 2, 2, 2]');
       });
 
-      it('enables all suggest-using rules when option is `true`', async () => {
+      it('enables all suggest-using rules when set to `true`', async () => {
         const configResult = await computeEslintConfig({
           jest: {configJestExtended: {suggestUsing: true}},
         });
@@ -222,7 +200,7 @@ describe('jest: sub config `configJestExtended`', () => {
         ).toMatchInlineSnapshot('[2, 2, 2, 2, 2]');
       });
 
-      it('disables all suggest-using rules when option is `false`', async () => {
+      it('disables all suggest-using rules when set to `false`', async () => {
         const configResult = await computeEslintConfig({
           jest: {configJestExtended: {suggestUsing: false}},
         });

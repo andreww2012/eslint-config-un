@@ -1,3 +1,7 @@
+beforeEach(() => {
+  addInstalledPackages({vitest: '2.0.0'});
+});
+
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('vitest');
 
@@ -20,6 +24,62 @@ describe('basic tests', async () => {
       eslintPluginVitest.default.environments.env.globals,
     );
   });
+
+  describe('mode: all configs are disabled', () => {
+    it('does not create `vitest` eslint config', async () => {
+      await expectConfigState({}, 'vitest', false);
+    });
+
+    it('creates `vitest` eslint config if explicitly enabled', async () => {
+      await expectConfigState('vitest', 'vitest', true);
+    });
+  });
+
+  describe('mode: all configs are not explicitly enabled or disabled', () => {
+    it('creates `vitest` eslint config when `vitest` package is installed', async () => {
+      await expectConfigState({}, 'vitest', true, 'default');
+    });
+
+    it('creates `vitest` eslint config if explicitly enabled and prints a warning', async () => {
+      await expectConfigState('vitest', 'vitest', ['vitest', true], 'default');
+    });
+
+    it('does not create `vitest` eslint config if explicitly disabled', async () => {
+      await expectConfigState({vitest: false}, 'vitest', false, 'default');
+    });
+
+    describe('`vitest` is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
+
+      it('does not create `vitest` eslint config', async () => {
+        await expectConfigState({}, 'vitest', false, 'default');
+      });
+
+      it('creates `vitest` eslint config if explicitly enabled', async () => {
+        await expectConfigState('vitest', 'vitest', true, 'default');
+      });
+
+      it('does not create `vitest` eslint config and prints a warning if explicitly disabled', async () => {
+        await expectConfigState({vitest: false}, 'vitest', ['vitest', false], 'default');
+      });
+    });
+  });
+
+  describe('mode: misc configs are enabled', () => {
+    it('creates `vitest` eslint config when `vitest` package is installed', async () => {
+      await expectConfigState({}, 'vitest', true, 'misc-enabled');
+    });
+
+    it('creates `vitest` eslint config if explicitly enabled and prints a warning', async () => {
+      await expectConfigState({vitest: true}, 'vitest', ['vitest', true], 'misc-enabled');
+    });
+
+    it('does not create `vitest` eslint config if explicitly disabled', async () => {
+      await expectConfigState({vitest: false}, 'vitest', false, 'misc-enabled');
+    });
+  });
 });
 
 describe('un options', () => {
@@ -33,14 +93,14 @@ describe('un options', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('vitest')?.files).toMatchInlineSnapshot(
-        `["tests/**/*.vitest.ts"]`,
+        '["tests/**/*.vitest.ts"]',
       );
       expect(configResult.getConfigByUnPostfix('vitest/ts')?.files).toMatchInlineSnapshot(
-        `["**/*.spec.?([cm])ts?(x)", "**/*-spec.?([cm])ts?(x)", "**/*_spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__tests__/**/*.?([cm])ts?(x)", "**/__test__/**/*.?([cm])ts?(x)"]`,
+        '["**/*.spec.?([cm])ts?(x)", "**/*-spec.?([cm])ts?(x)", "**/*_spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__tests__/**/*.?([cm])ts?(x)", "**/__test__/**/*.?([cm])ts?(x)"]',
       );
     });
 
-    it('disables `vitest` eslint config when `files` is an empty array', async () => {
+    it('disables `vitest` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({
         vitest: {
           files: [],
@@ -60,7 +120,7 @@ describe('un options', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('vitest')?.ignores).toMatchInlineSnapshot(
-        `["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.yaml", "**/fixtures/**"]`,
+        '["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.y?(a)ml", "**/fixtures/**"]',
       );
     });
   });
@@ -73,47 +133,8 @@ describe('un options', () => {
       },
     });
 
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-to-be'),
-      ),
-    ).toBe(0);
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('ts/non-type-aware/rules', 'no-console'),
-      ),
-    ).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `vitest` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        vitest: {
-          forceSeverity: 'error',
-        },
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('vitest'), (ruleName) =>
-          ruleName.startsWith('vitest/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `vitest` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        vitest: {
-          forceSeverity: 'warn',
-        },
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('vitest'), (ruleName) =>
-          ruleName.startsWith('vitest/'),
-        ),
-      ).toStrictEqual([1]);
-    });
+    expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-to-be')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('ts/non-type-aware/rules', 'no-console')).toBe(0);
   });
 });
 
@@ -143,10 +164,8 @@ describe('options', () => {
       const configResult = await computeEslintConfig('vitest');
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('vitest', 'vitest/consistent-each-for'),
-        ),
-      ).toMatchInlineSnapshot(`2`);
+        configResult.getRuleEntrySeverity('vitest', 'vitest/consistent-each-for'),
+      ).toMatchInlineSnapshot('2');
     });
 
     it('disables `consistent-each-for` when set to `false`', async () => {
@@ -155,10 +174,8 @@ describe('options', () => {
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('vitest', 'vitest/consistent-each-for'),
-        ),
-      ).toMatchInlineSnapshot(`0`);
+        configResult.getRuleEntrySeverity('vitest', 'vitest/consistent-each-for'),
+      ).toMatchInlineSnapshot('0');
     });
 
     it('uses per-function mapping when object value is provided', async () => {
@@ -171,7 +188,7 @@ describe('options', () => {
       expect(
         configResult.getRuleEntry('vitest', 'vitest/consistent-each-for'),
       ).toMatchInlineSnapshot(
-        `[2, {"describe": "for", "it": "for", "suite": "for", "test": "each"}]`,
+        '[2, {"describe": "for", "it": "for", "suite": "for", "test": "each"}]',
       );
     });
   });
@@ -182,10 +199,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-once'),
-      ).toMatchInlineSnapshot(`[2]`);
+      ).toMatchInlineSnapshot('[2]');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-times'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
     });
 
     it('enforces `times` style when set to `times`', async () => {
@@ -195,10 +212,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-once'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-times'),
-      ).toMatchInlineSnapshot(`[2]`);
+      ).toMatchInlineSnapshot('[2]');
     });
 
     it('disables both called-style rules when set to `false`', async () => {
@@ -208,10 +225,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-once'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-times'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
     });
   });
 
@@ -221,10 +238,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-importing-vitest-globals'),
-      ).toMatchInlineSnapshot(`[2]`);
+      ).toMatchInlineSnapshot('[2]');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-importing-vitest-globals'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
     });
 
     it('enforces importing vitest globals when set to `enforce`', async () => {
@@ -234,10 +251,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-importing-vitest-globals'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-importing-vitest-globals'),
-      ).toMatchInlineSnapshot(`[2]`);
+      ).toMatchInlineSnapshot('[2]');
     });
 
     it('allows both styles when set to `any`', async () => {
@@ -247,10 +264,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-importing-vitest-globals'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-importing-vitest-globals'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
     });
   });
 
@@ -259,7 +276,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('vitest');
 
       expect(configResult.getRuleEntry('vitest', 'vitest/max-expects')).toMatchInlineSnapshot(
-        `[0, {"max": undefined}]`,
+        '[0, {"max": undefined}]',
       );
     });
 
@@ -269,7 +286,7 @@ describe('options', () => {
       });
 
       expect(configResult.getRuleEntry('vitest', 'vitest/max-expects')).toMatchInlineSnapshot(
-        `[2, {"max": 3}]`,
+        '[2, {"max": 3}]',
       );
     });
   });
@@ -280,7 +297,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/max-nested-describe'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
     });
 
     it('enables `max-nested-describe` with provided max value', async () => {
@@ -290,7 +307,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/max-nested-describe'),
-      ).toMatchInlineSnapshot(`[2, {"max": 2}]`);
+      ).toMatchInlineSnapshot('[2, {"max": 2}]');
     });
   });
 
@@ -300,7 +317,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-restricted-vi-methods'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
     });
 
     it('enables `no-restricted-vi-methods` with provided restrictions', async () => {
@@ -312,7 +329,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-restricted-vi-methods'),
-      ).toMatchInlineSnapshot(`[2, {"spyOn": "Use explicit mocks"}]`);
+      ).toMatchInlineSnapshot('[2, {"spyOn": "Use explicit mocks"}]');
     });
   });
 
@@ -322,7 +339,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-restricted-matchers'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
     });
 
     it('enables `no-restricted-matchers` with provided restrictions', async () => {
@@ -334,7 +351,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-restricted-matchers'),
-      ).toMatchInlineSnapshot(`[2, {"toBeTruthy": "Use strict equality matcher"}]`);
+      ).toMatchInlineSnapshot('[2, {"toBeTruthy": "Use strict equality matcher"}]');
     });
   });
 
@@ -344,7 +361,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/consistent-test-it'),
-      ).toMatchInlineSnapshot(`[2, {"fn": "it", "withinDescribe": "it"}]`);
+      ).toMatchInlineSnapshot('[2, {"fn": "it", "withinDescribe": "it"}]');
     });
 
     it('disables `consistent-test-it` when set to `false`', async () => {
@@ -354,7 +371,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/consistent-test-it'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
     });
   });
 
@@ -364,7 +381,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/padding-around-test-blocks'),
-      ).toMatchInlineSnapshot(`[2]`);
+      ).toMatchInlineSnapshot('[2]');
     });
 
     it('disables all padding-around rules when set to `false`', async () => {
@@ -374,10 +391,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/padding-around-test-blocks'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/padding-around-describe-blocks'),
-      ).toMatchInlineSnapshot(`[0]`);
+      ).toMatchInlineSnapshot('[0]');
     });
 
     it('supports object form to disable only selected groups', async () => {
@@ -386,27 +403,41 @@ describe('options', () => {
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('vitest', 'vitest/padding-around-test-blocks'),
-        ),
-      ).toMatchInlineSnapshot(`0`);
+        configResult.getRuleEntrySeverity('vitest', 'vitest/padding-around-test-blocks'),
+      ).toMatchInlineSnapshot('0');
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('vitest', 'vitest/padding-around-describe-blocks'),
-        ),
-      ).toMatchInlineSnapshot(`2`);
+        configResult.getRuleEntrySeverity('vitest', 'vitest/padding-around-describe-blocks'),
+      ).toMatchInlineSnapshot('2');
+    });
+  });
+
+  describe('vitest version', () => {
+    it('disables `vitest/prefer-called-exactly-once-with` rule for vitest 2', async () => {
+      const configResult = await computeEslintConfig('vitest');
+
+      expect(
+        configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-exactly-once-with'),
+      ).toBe(0);
+    });
+
+    it('enables `vitest/prefer-called-exactly-once-with` rule for vitest v3+', async () => {
+      setInstalledPackages({vitest: '3.0.0'});
+
+      const configResult = await computeEslintConfig('vitest');
+
+      expect(
+        configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-exactly-once-with'),
+      ).toBe(2);
     });
   });
 
   describe('option: `asyncMatchers` and `minAndMaxExpectArgs`', () => {
-    it('uses default `valid-expect` options when not provided', async () => {
+    it('uses default `valid-expect` options by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('vitest', 'vitest/valid-expect'),
-        ),
-      ).toMatchInlineSnapshot(`2`);
+        configResult.getRuleEntrySeverity('vitest', 'vitest/valid-expect'),
+      ).toMatchInlineSnapshot('2');
     });
 
     it('passes `asyncMatchers` and min/max args to `valid-expect`', async () => {
@@ -418,7 +449,7 @@ describe('options', () => {
       });
 
       expect(configResult.getRuleEntry('vitest', 'vitest/valid-expect')).toMatchInlineSnapshot(
-        `[2, {"alwaysAwait": true, "asyncMatchers": ["toResolveWith"], "maxArgs": 2, "minArgs": 1}]`,
+        '[2, {"alwaysAwait": true, "asyncMatchers": ["toResolveWith"], "maxArgs": 2, "minArgs": 1}]',
       );
     });
   });

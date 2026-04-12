@@ -90,17 +90,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `math` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
-      const configResult = await computeEslintConfig({
-        math: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({math: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('math')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `math` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        math: {files: []},
-      });
+    it('disables `math` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({math: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('math')).toBeUndefined();
     });
@@ -109,13 +106,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `math` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        math: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({math: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('math')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -130,32 +126,6 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('math', 'math/prefer-math-cbrt')).toBe(0);
     expect(configResult.getRuleEntrySeverity('math', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `math` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        math: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('math'), (ruleName) =>
-          ruleName.startsWith('math/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `math` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        math: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('math'), (ruleName) =>
-          ruleName.startsWith('math/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 

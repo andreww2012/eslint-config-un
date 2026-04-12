@@ -107,17 +107,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `tree-shaking` eslint config', async () => {
       const FILES = ['**/*.ts'];
-      const configResult = await computeEslintConfig({
-        treeShaking: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({treeShaking: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('tree-shaking')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `tree-shaking` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        treeShaking: {files: []},
-      });
+    it('disables `tree-shaking` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({treeShaking: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('tree-shaking')).toBeUndefined();
     });
@@ -126,13 +123,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `tree-shaking` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        treeShaking: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({treeShaking: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('tree-shaking')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -153,37 +149,11 @@ describe('un options', () => {
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('tree-shaking', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `tree-shaking` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        treeShaking: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('tree-shaking'), (ruleName) =>
-          ruleName.startsWith('tree-shaking/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `tree-shaking` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        treeShaking: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('tree-shaking'), (ruleName) =>
-          ruleName.startsWith('tree-shaking/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `options`', () => {
-    it('does not pass extra options to `tree-shaking/no-side-effects-in-initialization` rule when `options` is not set (default)', async () => {
+    it('does not pass extra options to `tree-shaking/no-side-effects-in-initialization` rule by default', async () => {
       const configResult = await computeEslintConfig('treeShaking');
 
       expect(

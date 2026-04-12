@@ -136,17 +136,13 @@ describe('un options', () => {
     it('uses user-provided `files` in `markdown-preferences` eslint config', async () => {
       const FILES = ['docs/**/*.md'];
 
-      const configResult = await computeEslintConfig({
-        markdownPreferences: {files: FILES},
-      });
+      const configResult = await computeEslintConfig({markdownPreferences: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('markdown-preferences')?.files).toStrictEqual(FILES);
     });
 
     it('disables `markdown-preferences` eslint config when set to empty array', async () => {
-      const configResult = await computeEslintConfig({
-        markdownPreferences: {files: []},
-      });
+      const configResult = await computeEslintConfig({markdownPreferences: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('markdown-preferences')).toBeUndefined();
     });
@@ -156,9 +152,7 @@ describe('un options', () => {
     it('uses user-provided `ignores` in `markdown-preferences` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
 
-      const configResult = await computeEslintConfig({
-        markdownPreferences: {ignores: IGNORES},
-      });
+      const configResult = await computeEslintConfig({markdownPreferences: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('markdown-preferences')?.ignores;
 
@@ -279,7 +273,7 @@ describe('options', () => {
         ).toMatchInlineSnapshot('[2, {"emphasis": "_", "strong": "__"}]');
       });
 
-      it('disables `emphasis-delimiters-style` rule when `emphasis` is `false`', async () => {
+      it('disables `markdown-preferences/emphasis-delimiters-style` rule when `emphasis` is `false`', async () => {
         const configResult = await computeEslintConfig({
           markdownPreferences: {delimitersStyle: {emphasis: false}},
         });
@@ -292,7 +286,7 @@ describe('options', () => {
         ).toBe(0);
       });
 
-      it('uses options directly provided to `emphasis` on `emphasis-delimiters-style` rule', async () => {
+      it('uses options directly provided to `emphasis` on `markdown-preferences/emphasis-delimiters-style` rule', async () => {
         const configResult = await computeEslintConfig({
           markdownPreferences: {
             delimitersStyle: {emphasis: {emphasis: '_', strong: '**', strongEmphasis: '***'}},
@@ -333,7 +327,7 @@ describe('options', () => {
         ).toMatchInlineSnapshot('[2, {"delimiter": "~"}]');
       });
 
-      it('disables `strikethrough-delimiters-style` rule when `strikethrough` is `false`', async () => {
+      it('disables `markdown-preferences/strikethrough-delimiters-style` rule when `strikethrough` is `false`', async () => {
         const configResult = await computeEslintConfig({
           markdownPreferences: {delimitersStyle: {strikethrough: false}},
         });
@@ -347,7 +341,7 @@ describe('options', () => {
       });
     });
 
-    it('disables both `emphasis-delimiters-style` and `strikethrough-delimiters-style` rules when `delimitersStyle` is `false`', async () => {
+    it('disables both `markdown-preferences/emphasis-delimiters-style` and `markdown-preferences/strikethrough-delimiters-style` rules when `delimitersStyle` is `false`', async () => {
       const configResult = await computeEslintConfig({
         markdownPreferences: {delimitersStyle: false},
       });
@@ -571,7 +565,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"increment": "never"}]');
     });
 
-    it('disables `ordered-list-marker-sequence` rule when `numbering` is `false`', async () => {
+    it('disables `markdown-preferences/ordered-list-marker-sequence` rule when `numbering` is `false`', async () => {
       const configResult = await computeEslintConfig({
         markdownPreferences: {orderedLists: {numbering: false}},
       });
@@ -597,7 +591,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"start": 0}]');
     });
 
-    it('disables `ordered-list-marker-start` rule when `start` is `false`', async () => {
+    it('disables `markdown-preferences/ordered-list-marker-start` rule when `start` is `false`', async () => {
       const configResult = await computeEslintConfig({
         markdownPreferences: {orderedLists: {start: false}},
       });

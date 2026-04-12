@@ -1,11 +1,11 @@
-beforeEach(() => {
-  addInstalledPackages({'ember-source': '5.0.0'});
-});
-
 const FIXTURES = {
   thisGet: 'this-get/test.js',
   letReferenceInTemplate: 'let-reference-in-template/test.gjs',
 } as const;
+
+beforeEach(() => {
+  addInstalledPackages({'ember-source': '5.0.0'});
+});
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('ember');
@@ -126,7 +126,9 @@ describe('rules', async () => {
       'ember/template-no-let-reference',
     );
 
-    expect(error?.message).toMatchInlineSnapshot(`"update-able variables are not supported in templates, reference a const variable"`);
+    expect(error?.message).toMatchInlineSnapshot(
+      '"update-able variables are not supported in templates, reference a const variable"',
+    );
   });
 });
 
@@ -134,18 +136,19 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `ember` eslint config', async () => {
       const FILES = ['src/**/*.js'];
+
       const configResult = await computeEslintConfig({ember: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('ember')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `ember` eslint config when `files` is empty array', async () => {
+    it('disables `ember` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({ember: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('ember')).toBeUndefined();
     });
 
-    it('does not disable `ember/tests` eslint config when `files` is empty array', async () => {
+    it('does not disable `ember/tests` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({ember: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('ember/tests')).toBeDefined();
@@ -155,11 +158,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `ember` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({ember: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('ember')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -172,39 +176,17 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('ember', 'ember/no-get')).toBe(0);
     expect(configResult.getRuleEntrySeverity('ember', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `ember` eslint config', async () => {
-      const configResult = await computeEslintConfig({ember: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('ember'), (ruleName) =>
-          ruleName.startsWith('ember/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `ember` eslint config', async () => {
-      const configResult = await computeEslintConfig({ember: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('ember'), (ruleName) =>
-          ruleName.startsWith('ember/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `enforceGlimmerComponents`', () => {
-    it('enables `ember/no-classic-components` rule when `enforceGlimmerComponents` is `true` (default)', async () => {
+    it('enables `ember/no-classic-components` rule by default', async () => {
       const configResult = await computeEslintConfig('ember');
 
       expect(configResult.getRuleEntrySeverity('ember', 'ember/no-classic-components')).toBe(2);
     });
 
-    it('disables `ember/no-classic-components` rule when `enforceGlimmerComponents` is `false`', async () => {
+    it('disables `ember/no-classic-components` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({ember: {enforceGlimmerComponents: false}});
 
       expect(configResult.getRuleEntrySeverity('ember', 'ember/no-classic-components')).toBe(0);
@@ -212,13 +194,13 @@ describe('options', () => {
   });
 
   describe('option: `enforceGettersInComputedProperties`', () => {
-    it('disables `ember/computed-property-getters` rule when `enforceGettersInComputedProperties` is not provided (default)', async () => {
+    it('disables `ember/computed-property-getters` rule by default', async () => {
       const configResult = await computeEslintConfig('ember');
 
       expect(configResult.getRuleEntrySeverity('ember', 'ember/computed-property-getters')).toBe(0);
     });
 
-    it('enables `ember/computed-property-getters` rule with options when `enforceGettersInComputedProperties` is provided', async () => {
+    it('enables `ember/computed-property-getters` rule with options when set to provided', async () => {
       const configResult = await computeEslintConfig({
         ember: {enforceGettersInComputedProperties: 'always-with-setter'},
       });

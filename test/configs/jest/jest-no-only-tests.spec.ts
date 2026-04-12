@@ -1,4 +1,4 @@
-describe('jest: sub config `configNoOnlyTests`', () => {
+describe('jest: sub config `noOnlyTests`', () => {
   describe('basic tests', () => {
     it('does not create `jest/no-only-tests` eslint config by default (`configNoOnlyTests` is disabled by default)', async () => {
       const configResult = await computeEslintConfig('jest');
@@ -22,6 +22,7 @@ describe('jest: sub config `configNoOnlyTests`', () => {
 
     it('inherits `files` from parent `jest` config when `configNoOnlyTests` is enabled', async () => {
       const FILES = ['tests/**/*.spec.ts'];
+
       const configResult = await computeEslintConfig({
         jest: {files: FILES, configNoOnlyTests: true},
       });
@@ -44,6 +45,7 @@ describe('jest: sub config `configNoOnlyTests`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `jest/no-only-tests` eslint config', async () => {
         const FILES = ['tests/**/*.spec.ts'];
+
         const configResult = await computeEslintConfig({
           jest: {configNoOnlyTests: {files: FILES}},
         });
@@ -51,7 +53,7 @@ describe('jest: sub config `configNoOnlyTests`', () => {
         expect(configResult.getConfigByUnPostfix('jest/no-only-tests')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `jest/no-only-tests` eslint config when `files` is empty array', async () => {
+      it('disables `jest/no-only-tests` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           jest: {configNoOnlyTests: {files: []}},
         });
@@ -63,6 +65,7 @@ describe('jest: sub config `configNoOnlyTests`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `jest/no-only-tests` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           jest: {configNoOnlyTests: {ignores: IGNORES}},
         });

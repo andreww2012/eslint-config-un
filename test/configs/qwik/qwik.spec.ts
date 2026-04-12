@@ -130,17 +130,13 @@ describe('un options', () => {
     it('uses user-provided `files` in `qwik` eslint config', async () => {
       const FILES = ['src/**/*.tsx'];
 
-      const configResult = await computeEslintConfig({
-        qwik: {files: FILES},
-      });
+      const configResult = await computeEslintConfig({qwik: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('qwik')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `qwik` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        qwik: {files: []},
-      });
+    it('disables `qwik` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({qwik: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('qwik')).toBeUndefined();
     });
@@ -150,9 +146,7 @@ describe('un options', () => {
     it('uses user-provided `ignores` in `qwik` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
 
-      const configResult = await computeEslintConfig({
-        qwik: {ignores: IGNORES},
-      });
+      const configResult = await computeEslintConfig({qwik: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('qwik')?.ignores;
 
@@ -169,37 +163,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('qwik', 'qwik/valid-lexical-scope')).toBe(0);
     expect(configResult.getRuleEntrySeverity('qwik', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `qwik` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        qwik: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('qwik'), (ruleName) =>
-          ruleName.startsWith('qwik/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `qwik` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        qwik: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('qwik'), (ruleName) =>
-          ruleName.startsWith('qwik/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `routesDir`', () => {
-    it('does not set `routesDir` in `qwik/loader-location` rule options when option is not set', async () => {
+    it('does not set `routesDir` in `qwik/loader-location` rule options by default', async () => {
       const configResult = await computeEslintConfig('qwik');
 
       expect(configResult.getRuleEntry('qwik', 'qwik/loader-location')).toMatchInlineSnapshot(

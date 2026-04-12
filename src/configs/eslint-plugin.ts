@@ -27,7 +27,7 @@ export interface EslintPluginEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'eslint-plugin'> {
   /**
    * Includes rules for ESLint rule test files.
-   * @default true
+   * @default false
    */
   configRuleTests?:
     | boolean
@@ -172,6 +172,7 @@ export default ((context, optionsRaw) => {
     ]) /** @since 7.1.0 */
     .addRule('unique-test-case-names', ERROR) /** @since 7.2.0 */
     .enableConfigTesterForPlugin('eslint-plugin', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => ESLINT_PLUGIN_TESTING_RELATED_RULES_SET.has(ruleName),
     })
     .addOverrides();
@@ -180,7 +181,7 @@ export default ((context, optionsRaw) => {
 
   configBuilderRuleTests
     ?.addConfig([
-      'eslint-plugin',
+      'eslint-plugin/rule-tests',
       {
         includeDefaultFilesAndIgnores: true,
         filesDefault: generateDefaultTestFiles(GLOB_JS_TS_EXTENSION),
@@ -194,6 +195,7 @@ export default ((context, optionsRaw) => {
     .addRule('test-case-shorthand-strings', ERROR) /** @since 0.4.0 */
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('eslint-plugin', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !ESLINT_PLUGIN_TESTING_RELATED_RULES_SET.has(ruleName),
     })
     .addOverrides();

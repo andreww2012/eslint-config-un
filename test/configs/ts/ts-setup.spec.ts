@@ -2,7 +2,7 @@ import {difference} from '../../../src/utils';
 
 describe('ts: sub config `setup`', () => {
   describe('basic tests', () => {
-    it('creates `ts/non-type-aware/setup` eslint config and has expected defaults by default', async () => {
+    it('creates `ts/non-type-aware/setup` eslint config by default', async () => {
       const configResult = await computeEslintConfig('ts');
 
       const config = configResult.getConfigByUnPostfix('ts/non-type-aware/setup');

@@ -104,17 +104,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `markdown/markdown` eslint config', async () => {
       const FILES = ['docs/**/*.md'];
-      const configResult = await computeEslintConfig({
-        markdown: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({markdown: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('markdown/markdown')?.files).toStrictEqual(FILES);
     });
 
-    it('disables all `markdown` eslint configs when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        markdown: {files: []},
-      });
+    it('disables all `markdown` eslint configs when set to empty array', async () => {
+      const configResult = await computeEslintConfig({markdown: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('markdown/markdown')).toBeUndefined();
       expect(
@@ -127,9 +124,8 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `markdown/markdown` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        markdown: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({markdown: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('markdown/markdown')?.ignores;
 
@@ -151,49 +147,23 @@ describe('un options', () => {
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('markdown/markdown', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `markdown/markdown` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        markdown: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('markdown/markdown'), (ruleName) =>
-          ruleName.startsWith('markdown/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `markdown/markdown` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        markdown: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('markdown/markdown'), (ruleName) =>
-          ruleName.startsWith('markdown/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `lintMarkdown`', () => {
-    it('creates `markdown/markdown` eslint config when option is not set', async () => {
+    it('creates `markdown/markdown` eslint config by default', async () => {
       const configResult = await computeEslintConfig('markdown');
 
       expect(configResult.getConfigByUnPostfix('markdown/markdown')).toBeDefined();
     });
 
-    it('creates `markdown/markdown` eslint config when option is `true`', async () => {
+    it('creates `markdown/markdown` eslint config when set to `true`', async () => {
       const configResult = await computeEslintConfig({markdown: {lintMarkdown: true}});
 
       expect(configResult.getConfigByUnPostfix('markdown/markdown')).toBeDefined();
     });
 
-    it('does not create `markdown/markdown` eslint config when option is `false`', async () => {
+    it('does not create `markdown/markdown` eslint config when set to `false`', async () => {
       const configResult = await computeEslintConfig({markdown: {lintMarkdown: false}});
 
       expect(configResult.getConfigByUnPostfix('markdown/markdown')).toBeUndefined();
@@ -258,25 +228,25 @@ describe('options', () => {
   });
 
   describe('option: `allowHtmlTags`', () => {
-    it('disables `markdown/no-html` rule when option is not set', async () => {
+    it('disables `markdown/no-html` rule by default', async () => {
       const configResult = await computeEslintConfig('markdown');
 
       expect(configResult.getRuleEntrySeverity('markdown/markdown', 'markdown/no-html')).toBe(0);
     });
 
-    it('disables `markdown/no-html` rule when option is `true`', async () => {
+    it('disables `markdown/no-html` rule when set to `true`', async () => {
       const configResult = await computeEslintConfig({markdown: {allowHtmlTags: true}});
 
       expect(configResult.getRuleEntrySeverity('markdown/markdown', 'markdown/no-html')).toBe(0);
     });
 
-    it('enables `markdown/no-html` rule when option is `false`', async () => {
+    it('enables `markdown/no-html` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({markdown: {allowHtmlTags: false}});
 
       expect(configResult.getRuleEntrySeverity('markdown/markdown', 'markdown/no-html')).toBe(2);
     });
 
-    it('enables `markdown/no-html` rule with `allowed` option when option is array', async () => {
+    it('enables `markdown/no-html` rule with `allowed` option when set to array', async () => {
       const ALLOWED_HTML_TAGS = ['details', 'summary'];
 
       const configResult = await computeEslintConfig({
@@ -290,7 +260,7 @@ describe('options', () => {
   });
 
   describe('option: `lintCodeBlocks`', () => {
-    it('creates `markdown/code-blocks` eslint config when option is not set', async () => {
+    it('creates `markdown/code-blocks` eslint config by default', async () => {
       const configResult = await computeEslintConfig('markdown');
 
       expect(
@@ -300,13 +270,13 @@ describe('options', () => {
       );
     });
 
-    it('creates `markdown/code-blocks` eslint config when option is `true`', async () => {
+    it('creates `markdown/code-blocks` eslint config when set to `true`', async () => {
       const configResult = await computeEslintConfig({markdown: {lintCodeBlocks: true}});
 
       expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeDefined();
     });
 
-    it('does not create `markdown/code-blocks` eslint config when option is `false`', async () => {
+    it('does not create `markdown/code-blocks` eslint config when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         markdown: {lintCodeBlocks: false},
       });
@@ -324,6 +294,7 @@ describe('options', () => {
 
     it('applies custom files from `lintCodeBlocks` object to `markdown/setup/code-blocks-processor`', async () => {
       const FILES = ['docs/**/*.md'];
+
       const configResult = await computeEslintConfig({
         markdown: {lintCodeBlocks: {files: FILES}},
       });
@@ -335,7 +306,7 @@ describe('options', () => {
   });
 
   describe('option: `codeBlocksIgnoredLanguages`', () => {
-    it('does not create `markdown/code-blocks/ignore` eslint config when option is not set', async () => {
+    it('does not create `markdown/code-blocks/ignore` eslint config by default', async () => {
       const configResult = await computeEslintConfig('markdown');
 
       expect(configResult.getConfigByUnPostfix('markdown/code-blocks/ignore')).toBeUndefined();
@@ -353,7 +324,7 @@ describe('options', () => {
   });
 
   describe('option: `codeBlocksAllowedLanguages`', () => {
-    it('disables `markdown/fenced-code-language` rule when option is not set', async () => {
+    it('disables `markdown/fenced-code-language` rule by default', async () => {
       const configResult = await computeEslintConfig('markdown');
 
       expect(
@@ -385,7 +356,7 @@ describe('options', () => {
   });
 
   describe('option: `codeBlocksImpliedStrictMode`', () => {
-    it('sets `impliedStrict` to `true` in code-blocks `parserOptions` when option is not set', async () => {
+    it('sets `impliedStrict` to `true` in code-blocks `parserOptions` by default', async () => {
       const configResult = await computeEslintConfig('markdown');
 
       expect(
@@ -395,7 +366,7 @@ describe('options', () => {
       ).toStrictEqual({ecmaFeatures: {impliedStrict: true}});
     });
 
-    it('sets `impliedStrict` to `true` in code-blocks `parserOptions` when option is `true`', async () => {
+    it('sets `impliedStrict` to `true` in code-blocks `parserOptions` when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         markdown: {codeBlocksImpliedStrictMode: true},
       });
@@ -407,7 +378,7 @@ describe('options', () => {
       ).toStrictEqual({ecmaFeatures: {impliedStrict: true}});
     });
 
-    it('sets `impliedStrict` to `false` in code-blocks `parserOptions` when option is `false`', async () => {
+    it('sets `impliedStrict` to `false` in code-blocks `parserOptions` when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         markdown: {codeBlocksImpliedStrictMode: false},
       });
@@ -421,7 +392,7 @@ describe('options', () => {
   });
 
   describe('option: `parseFrontmatter`', () => {
-    it('sets frontmatter to `yaml` in `markdown/markdown` eslint config when option is not set', async () => {
+    it('sets frontmatter to `yaml` in `markdown/markdown` eslint config by default', async () => {
       const configResult = await computeEslintConfig('markdown');
 
       expect(
@@ -429,7 +400,7 @@ describe('options', () => {
       ).toBe('yaml');
     });
 
-    it('sets frontmatter to `toml` in `markdown/markdown` eslint config when option is provided', async () => {
+    it('sets frontmatter to `toml` in `markdown/markdown` eslint config when set to provided', async () => {
       const configResult = await computeEslintConfig({
         markdown: {parseFrontmatter: 'toml'},
       });

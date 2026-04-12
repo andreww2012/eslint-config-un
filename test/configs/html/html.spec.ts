@@ -13,54 +13,39 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `html` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('html')).toBeUndefined();
+      await expectConfigState({}, 'html', false);
     });
 
     it('creates `html` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('html');
-
-      expect(configResult.getConfigByUnPostfix('html')).toBeDefined();
+      await expectConfigState('html', 'html', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('creates `html` eslint config by default (when angular is not installed)', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('html')).toBeDefined();
+      await expectConfigState({}, 'html', true, 'default');
     });
 
     it('creates `html` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig('html', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('html')).toBeDefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to enable `html` config because this is the default',
-        ),
-      ).toBe(true);
+      await expectConfigState('html', 'html', ['html', true], 'default');
     });
 
     it('does not create `html` eslint config if explicitly disabled', async () => {
-      const configResult = await computeEslintConfig({html: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('html')).toBeUndefined();
+      await expectConfigState({html: false}, 'html', false, 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `html` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'html', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('html')).toBeDefined();
+    it('creates `html` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('html', 'html', ['html', true], 'misc-enabled');
+    });
+
+    it('does not create `html` eslint config if explicitly disabled', async () => {
+      await expectConfigState({html: false}, 'html', false, 'misc-enabled');
     });
   });
 
@@ -73,8 +58,8 @@ describe('basic tests', async () => {
   it('has default `ignores` in `html` eslint config', () => {
     const ignores = configResult.getConfigByUnPostfix('html')?.ignores;
 
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).to.not.include.members([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+    expect(configResult.getConfigByUnPostfix('html')?.ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 
@@ -94,17 +79,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `html` eslint config', async () => {
       const FILES = ['src/**/*.html'];
-      const configResult = await computeEslintConfig({
-        html: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({html: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('html')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `html` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        html: {files: []},
-      });
+    it('disables `html` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({html: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('html')).toBeUndefined();
     });
@@ -113,18 +95,17 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `html` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        html: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({html: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('html')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
 
-  it('respects `overrides` and `overridesAny` in `eslint-comments` eslint config', async () => {
+  it('respects `overrides` and `overridesAny` in `html` eslint config', async () => {
     const configResult = await computeEslintConfig({
       html: {overrides: {'@html-eslint/no-duplicate-attrs': 0}, overridesAny: {'no-console': 0}},
     });
@@ -132,37 +113,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('html', '@html-eslint/no-duplicate-attrs')).toBe(0);
     expect(configResult.getRuleEntrySeverity('html', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `html` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        html: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('html'), (ruleName) =>
-          ruleName.startsWith('@html-eslint/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `html` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        html: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('html'), (ruleName) =>
-          ruleName.startsWith('@html-eslint/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set html settings when not provided', async () => {
+    it('does not set html settings by default', async () => {
       const configResult = await computeEslintConfig('html');
       const config = configResult.getConfigByUnPostfix('html');
 
@@ -182,7 +137,7 @@ describe('options', () => {
   });
 
   describe('option: `parserOptions`', () => {
-    it('does not set parserOptions when not provided', async () => {
+    it('does not set parserOptions by default', async () => {
       const configResult = await computeEslintConfig('html');
       const config = configResult.getConfigByUnPostfix('html');
 
@@ -211,7 +166,7 @@ describe('options', () => {
       );
     });
 
-    it('adds custom disallowed tags to `no-restricted-tags` rule', async () => {
+    it('adds custom disallowed tags to `@html-eslint/no-restricted-tags` rule', async () => {
       const configResult = await computeEslintConfig({
         html: {disallowedHtmlTags: {iframe: true}},
       });

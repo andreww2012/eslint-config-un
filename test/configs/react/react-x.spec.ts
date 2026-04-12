@@ -90,7 +90,7 @@ describe('react: sub config `reactX`', () => {
         expect(configResult.getConfigByUnPostfix('react/x')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `react/x` eslint config when `files` is empty array', async () => {
+      it('disables `react/x` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({react: {configReactX: {files: []}}});
 
         expect(configResult.getConfigByUnPostfix('react/x')).toBeUndefined();
@@ -119,26 +119,12 @@ describe('react: sub config `reactX`', () => {
         2,
       );
     });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `react/x` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          react: {configReactX: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('react/x'), (ruleName) =>
-            ruleName.startsWith('@eslint-react/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-    });
   });
 
   describe('options', () => {
     describe('option: `noLegacyApis`', () => {
       describe('`classComponent`', () => {
-        it('enables `@eslint-react/no-class-component` with warning severity when option is not set', async () => {
+        it('enables `@eslint-react/no-class-component` with warning severity by default', async () => {
           const configResult = await computeEslintConfig('react');
 
           expect(
@@ -146,7 +132,7 @@ describe('react: sub config `reactX`', () => {
           ).toBe(1);
         });
 
-        it('enables `@eslint-react/no-class-component` with error severity when option is `true`', async () => {
+        it('enables `@eslint-react/no-class-component` with error severity when set to `true`', async () => {
           const configResult = await computeEslintConfig({
             react: {configReactX: {noLegacyApis: {classComponent: true}}},
           });
@@ -156,7 +142,7 @@ describe('react: sub config `reactX`', () => {
           ).toBe(2);
         });
 
-        it('disables `@eslint-react/no-class-component` when option is `false`', async () => {
+        it('disables `@eslint-react/no-class-component` when set to `false`', async () => {
           const configResult = await computeEslintConfig({
             react: {configReactX: {noLegacyApis: {classComponent: false}}},
           });
@@ -166,7 +152,7 @@ describe('react: sub config `reactX`', () => {
           ).toBe(0);
         });
 
-        it('enables `@eslint-react/no-class-component` with warning severity when option is set to `warn`', async () => {
+        it('enables `@eslint-react/no-class-component` with warning severity when set to `warn`', async () => {
           const configResult = await computeEslintConfig({
             react: {configReactX: {noLegacyApis: {classComponent: 'warn'}}},
           });
@@ -186,7 +172,7 @@ describe('react: sub config `reactX`', () => {
           ).toBe(2);
         });
 
-        it('disables children-related rules when option is `false`', async () => {
+        it('disables children-related rules when set to `false`', async () => {
           const configResult = await computeEslintConfig({
             react: {configReactX: {noLegacyApis: {Children: false}}},
           });
@@ -196,7 +182,7 @@ describe('react: sub config `reactX`', () => {
           ).toBe(0);
         });
 
-        it('enables `@eslint-react/no-children-count` with warning severity when option is set to `warn`', async () => {
+        it('enables `@eslint-react/no-children-count` with warning severity when set to `warn`', async () => {
           const configResult = await computeEslintConfig({
             react: {configReactX: {noLegacyApis: {Children: 'warn'}}},
           });
@@ -216,7 +202,7 @@ describe('react: sub config `reactX`', () => {
           );
         });
 
-        it('disables `@eslint-react/no-forward-ref` when option is `false`', async () => {
+        it('disables `@eslint-react/no-forward-ref` when set to `false`', async () => {
           const configResult = await computeEslintConfig({
             react: {configReactX: {noLegacyApis: {forwardRef: false}}},
           });

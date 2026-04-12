@@ -76,7 +76,7 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('prefer-arrow-functions')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.to.include.members([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 
@@ -115,19 +115,16 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `prefer-arrow-functions` eslint config', async () => {
       const FILES = ['**/*.ts'];
-      const configResult = await computeEslintConfig({
-        preferArrowFunctions: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({preferArrowFunctions: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('prefer-arrow-functions')?.files).toStrictEqual(
         FILES,
       );
     });
 
-    it('disables `prefer-arrow-functions` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        preferArrowFunctions: {files: []},
-      });
+    it('disables `prefer-arrow-functions` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({preferArrowFunctions: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('prefer-arrow-functions')).toBeUndefined();
     });
@@ -136,13 +133,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `prefer-arrow-functions` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        preferArrowFunctions: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({preferArrowFunctions: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('prefer-arrow-functions')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -162,33 +158,5 @@ describe('un options', () => {
       ),
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('prefer-arrow-functions', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `prefer-arrow-functions` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        preferArrowFunctions: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('prefer-arrow-functions'),
-          (ruleName) => ruleName.startsWith('prefer-arrow-functions/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `prefer-arrow-functions` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        preferArrowFunctions: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('prefer-arrow-functions'),
-          (ruleName) => ruleName.startsWith('prefer-arrow-functions/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

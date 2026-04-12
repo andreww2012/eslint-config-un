@@ -2,7 +2,7 @@ const FIXTURES = {
   itOnly: 'it-only/test.spec.js',
 } as const;
 
-describe('ember: sub config `configNoOnlyTests`', () => {
+describe('ember: sub config `noOnlyTests`', () => {
   describe('basic tests', () => {
     it('creates `ember/no-only-tests` eslint config by default', async () => {
       const configResult = await computeEslintConfig('ember');
@@ -42,6 +42,7 @@ describe('ember: sub config `configNoOnlyTests`', () => {
 
     it('inherits `files` from `configTestFiles` when provided', async () => {
       const FILES = ['tests/**/*.spec.ts'];
+
       const configResult = await computeEslintConfig({
         ember: {configTestFiles: {files: FILES}},
       });
@@ -78,6 +79,7 @@ describe('ember: sub config `configNoOnlyTests`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `ember/no-only-tests` eslint config', async () => {
         const FILES = ['tests/**/*.spec.ts'];
+
         const configResult = await computeEslintConfig({
           ember: {configTestFiles: {configNoOnlyTests: {files: FILES}}},
         });
@@ -87,7 +89,7 @@ describe('ember: sub config `configNoOnlyTests`', () => {
         );
       });
 
-      it('disables `ember/no-only-tests` eslint config when `files` is empty array', async () => {
+      it('disables `ember/no-only-tests` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           ember: {configTestFiles: {configNoOnlyTests: {files: []}}},
         });
@@ -99,13 +101,14 @@ describe('ember: sub config `configNoOnlyTests`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `ember/no-only-tests` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           ember: {configTestFiles: {configNoOnlyTests: {ignores: IGNORES}}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('ember/no-only-tests')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -125,7 +128,6 @@ describe('ember: sub config `configNoOnlyTests`', () => {
       expect(
         configResult.getRuleEntrySeverity('ember/no-only-tests', 'no-only-tests/no-only-tests'),
       ).toBe(0);
-
       expect(configResult.getRuleEntrySeverity('ember/no-only-tests', 'no-console')).toBe(0);
     });
   });

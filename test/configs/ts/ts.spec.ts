@@ -9,7 +9,7 @@ beforeEach(() => {
 });
 
 describe('basic tests', () => {
-  it('creates `ts/non-type-aware/{setup,rules}` eslint configs, loads `ts` plugin and has expected defaults when set to `true`', async () => {
+  it('creates `ts/non-type-aware/{setup,rules}` eslint configs, loads `ts` plugin when set to `true`', async () => {
     const configResult = await computeEslintConfig('ts');
 
     expect(configResult.getLoadedPlugin('ts')).toBeDefined();

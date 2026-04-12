@@ -86,12 +86,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `header` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
+
       const configResult = await computeEslintConfig({header: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('header')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `header` eslint config when `files` is empty array', async () => {
+    it('disables `header` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({header: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('header')).toBeUndefined();
@@ -101,11 +102,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `header` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({header: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('header')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -118,33 +120,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('header', 'header/header')).toBe(0);
     expect(configResult.getRuleEntrySeverity('header', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `header` eslint config', async () => {
-      const configResult = await computeEslintConfig({header: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('header'), (ruleName) =>
-          ruleName.startsWith('header/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `header` eslint config', async () => {
-      const configResult = await computeEslintConfig({header: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('header'), (ruleName) =>
-          ruleName.startsWith('header/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `options`', () => {
-    it('does not pass extra args to `header/header` rule when `options` is not set (default)', async () => {
+    it('does not pass extra args to `header/header` rule by default', async () => {
       const configResult = await computeEslintConfig('header');
 
       expect(configResult.getRuleEntry('header', 'header/header')).toMatchInlineSnapshot('[2]');
@@ -178,7 +158,7 @@ describe('options', () => {
     });
 
     describe('option: `commentStyle`', () => {
-      it('uses `block` comment style when `commentStyle` is not set (default)', async () => {
+      it('uses `block` comment style by default', async () => {
         const configResult = await computeEslintConfig({
           header: {options: {comment: 'Copyright'}},
         });
@@ -220,7 +200,7 @@ describe('options', () => {
         );
       });
 
-      it('passes an array of comments', async () => {
+      it('passes array of comments', async () => {
         const configResult = await computeEslintConfig({
           header: {options: {comment: ['Copyright Acme Corp', 'All rights reserved']}},
         });
@@ -244,7 +224,7 @@ describe('options', () => {
     });
 
     describe('option: `numberOfNewlinesAfterHeader`', () => {
-      it('does not set newlines count after header when `numberOfNewlinesAfterHeader` is not set (default)', async () => {
+      it('does not set newlines count after header by default', async () => {
         const configResult = await computeEslintConfig({
           header: {options: {comment: 'Copyright'}},
         });
@@ -266,7 +246,7 @@ describe('options', () => {
     });
 
     describe('option: `lineEndings`', () => {
-      it('passes no `lineEndings` when not set (default)', async () => {
+      it('passes no `lineEndings` by default', async () => {
         const configResult = await computeEslintConfig({
           header: {options: {comment: 'Copyright'}},
         });

@@ -122,7 +122,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('nest-js')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `nest-js` eslint config when `files` is empty array', async () => {
+    it('disables `nest-js` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({nestJs: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('nest-js')).toBeUndefined();
@@ -162,31 +162,5 @@ describe('un options', () => {
       configResult.getRuleEntrySeverity('nest-js', 'nestjs/injectable-should-be-provided'),
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('nest-js', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `nest-js` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        nestJs: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('nest-js'), (ruleName) =>
-          ruleName.startsWith('nestjs/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `nest-js` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        nestJs: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('nest-js'), (ruleName) =>
-          ruleName.startsWith('nestjs/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

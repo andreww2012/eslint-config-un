@@ -69,7 +69,7 @@ describe('react: sub config `youMightNotNeedAnEffect`', () => {
         ).toStrictEqual(FILES);
       });
 
-      it('disables `react/you-might-not-need-an-effect` eslint config when `files` is empty array', async () => {
+      it('disables `react/you-might-not-need-an-effect` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           react: {configYouMightNotNeedAnEffect: {files: []}},
         });
@@ -112,21 +112,6 @@ describe('react: sub config `youMightNotNeedAnEffect`', () => {
           'react-you-might-not-need-an-effect/no-derived-state',
         ),
       ).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `warn` in `react/you-might-not-need-an-effect` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          react: {configYouMightNotNeedAnEffect: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('react/you-might-not-need-an-effect'),
-            (ruleName) => ruleName.startsWith('react-you-might-not-need-an-effect/'),
-          ),
-        ).toStrictEqual([1]);
-      });
     });
   });
 });

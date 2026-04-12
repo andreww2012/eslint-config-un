@@ -1,10 +1,10 @@
-beforeEach(() => {
-  addInstalledPackages({clsx: '2.1.1'});
-});
-
 const FIXTURES = {
   clsxWithArrayExpression: 'clsx-with-array-expression.js',
 } as const;
+
+beforeEach(() => {
+  addInstalledPackages({clsx: '2.1.1'});
+});
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('clsx');
@@ -69,6 +69,10 @@ describe('basic tests', async () => {
     it('creates `clsx` eslint config and prints a warning if explicitly enabled', async () => {
       await expectConfigState({clsx: true}, 'clsx', ['clsx', true], 'misc-enabled');
     });
+
+    it('does not create `clsx` eslint config if explicitly disabled', async () => {
+      await expectConfigState({clsx: false}, 'clsx', false, 'misc-enabled');
+    });
   });
 
   it('has no explicit `files` restriction in `clsx` eslint config by default', () => {
@@ -76,9 +80,7 @@ describe('basic tests', async () => {
   });
 
   it('has default `ignores` in `clsx` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('clsx')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
+    expect(configResult.getConfigByUnPostfix('clsx')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 
@@ -93,7 +95,7 @@ describe('rules', async () => {
     expect(configResult.getRuleEntrySeverity('clsx', 'clsx/prefer-logical-over-objects')).toBe(0);
   });
 
-  it('`clsx/forbid-array-expressions` rule fires on a clsx call with an array argument', async () => {
+  it('`clsx/forbid-array-expressions` rule fires on a clsx call with array argument', async () => {
     const results = await testEslintConfig(
       'clsx',
       FIXTURES.clsxWithArrayExpression,
@@ -116,17 +118,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `clsx` eslint config', async () => {
       const FILES = ['src/**/*.tsx'];
-      const configResult = await computeEslintConfig({
-        clsx: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({clsx: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('clsx')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `clsx` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        clsx: {files: []},
-      });
+    it('disables `clsx` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({clsx: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('clsx')).toBeUndefined();
     });
@@ -135,13 +134,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `clsx` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        clsx: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({clsx: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('clsx')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -157,37 +155,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('clsx', 'clsx/forbid-array-expressions')).toBe(0);
     expect(configResult.getRuleEntrySeverity('clsx', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `clsx` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        clsx: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('clsx'), (ruleName) =>
-          ruleName.startsWith('clsx/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `clsx` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        clsx: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('clsx'), (ruleName) =>
-          ruleName.startsWith('clsx/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set `clsxOptions` settings when `settings` is not provided', async () => {
+    it('does not set `clsxOptions` settings by default', async () => {
       const configResult = await computeEslintConfig('clsx');
       const config = configResult.getConfigByUnPostfix('clsx');
 

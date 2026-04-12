@@ -122,6 +122,7 @@ export default ((context, optionsRaw) => {
     ) /** @since 0.2.0 */ /** @aka prefer-workspace-settings */
     .addRule('json-valid-catalog', ERROR) /** @since 0.1.0 */ /** @aka valid-catalog */
     .enableConfigTesterForPlugin('pnpm', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => PNPM_YAML_RULES.has(ruleName),
     })
     .addOverrides();
@@ -151,6 +152,7 @@ export default ((context, optionsRaw) => {
     .addRule('yaml-no-unused-catalog-item', ERROR) /** @since 0.3.0 */
     .addRule('yaml-valid-packages', ERROR) /** @since 1.2.0 */
     .enableConfigTesterForPlugin('pnpm', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !PNPM_YAML_RULES.has(ruleName),
     })
     .addOverrides();

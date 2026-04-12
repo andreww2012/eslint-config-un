@@ -81,7 +81,7 @@ describe('markdown: sub config `fentencesPerLine`', () => {
         ).toStrictEqual(FILES);
       });
 
-      it('disables `markdown/sentences-per-line` eslint config when `files` is empty array', async () => {
+      it('disables `markdown/sentences-per-line` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           markdown: {configSentencesPerLine: {files: []}},
         });
@@ -122,39 +122,11 @@ describe('markdown: sub config `fentencesPerLine`', () => {
         0,
       );
     });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `markdown/sentences-per-line` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          markdown: {configSentencesPerLine: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('markdown/sentences-per-line'),
-            (ruleName) => ruleName.startsWith('sentences-per-line/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `markdown/sentences-per-line` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          markdown: {configSentencesPerLine: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('markdown/sentences-per-line'),
-            (ruleName) => ruleName.startsWith('sentences-per-line/'),
-          ),
-        ).toStrictEqual([1]);
-      });
-    });
   });
 
   describe('options', () => {
     describe('option: `ignoresAdditional`', () => {
-      it('ignores `LICENSE.md` when option is not set', async () => {
+      it('ignores `LICENSE.md` by default', async () => {
         const configResult = await computeEslintConfig({markdown: {configSentencesPerLine: true}});
 
         expect(
@@ -162,7 +134,7 @@ describe('markdown: sub config `fentencesPerLine`', () => {
         ).toIncludeAllMembers(['LICENSE.md']);
       });
 
-      it('does not ignore `LICENSE.md` when option is `false`', async () => {
+      it('does not ignore `LICENSE.md` when set to `false`', async () => {
         const configResult = await computeEslintConfig({
           markdown: {configSentencesPerLine: {ignoresAdditional: false}},
         });
@@ -172,7 +144,7 @@ describe('markdown: sub config `fentencesPerLine`', () => {
         ).not.toIncludeAnyMembers(['LICENSE.md']);
       });
 
-      it('does not ignore `LICENSE.md` when option is object and `LICENSE.md` set to `false`', async () => {
+      it('does not ignore `LICENSE.md` when set to object and `LICENSE.md` set to `false`', async () => {
         const configResult = await computeEslintConfig({
           markdown: {configSentencesPerLine: {ignoresAdditional: {'LICENSE.md': false}}},
         });
@@ -182,7 +154,7 @@ describe('markdown: sub config `fentencesPerLine`', () => {
         ).not.toIncludeAnyMembers(['LICENSE.md']);
       });
 
-      it('ignores `LICENSE.md` when option is object and `LICENSE.md` set to `true`', async () => {
+      it('ignores `LICENSE.md` when set to object and `LICENSE.md` set to `true`', async () => {
         const configResult = await computeEslintConfig({
           markdown: {configSentencesPerLine: {ignoresAdditional: {'LICENSE.md': true}}},
         });

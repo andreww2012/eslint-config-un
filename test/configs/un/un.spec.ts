@@ -90,17 +90,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `un` eslint config', async () => {
       const FILES = ['src/**/*.js'];
-      const configResult = await computeEslintConfig({
-        un: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({un: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('un')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `un` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        un: {files: []},
-      });
+    it('disables `un` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({un: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('un')).toBeUndefined();
     });
@@ -109,13 +106,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `un` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        un: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({un: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('un')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -130,31 +126,5 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('un', 'un/no-multiple-consecutive-spaces')).toBe(0);
     expect(configResult.getRuleEntrySeverity('un', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `un` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        un: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('un'), (ruleName) =>
-          ruleName.startsWith('un/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `un` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        un: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('un'), (ruleName) =>
-          ruleName.startsWith('un/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

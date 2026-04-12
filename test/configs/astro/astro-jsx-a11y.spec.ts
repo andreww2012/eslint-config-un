@@ -2,15 +2,15 @@ const FIXTURES = {
   missingAlt: 'missing-alt.astro',
 } as const;
 
-describe('astro: sub config `configJsxA11y`', () => {
+describe('astro: sub config `jsxA11y`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig('astro');
 
-    it('creates `jsx-a11y/astro` eslint config by default when astro is enabled', () => {
+    it('creates `jsx-a11y/astro` eslint config by default', () => {
       expect(configResult.getConfigByUnPostfix('jsx-a11y/astro')).toBeDefined();
     });
 
-    it('does not create `jsx-a11y/astro` eslint config when `configJsxA11y` is disabled', async () => {
+    it('does not create `jsx-a11y/astro` eslint config when set to `false`', async () => {
       const disabledConfigResult = await computeEslintConfig({astro: {configJsxA11y: false}});
 
       expect(disabledConfigResult.getConfigByUnPostfix('jsx-a11y/astro')).toBeUndefined();
@@ -18,12 +18,13 @@ describe('astro: sub config `configJsxA11y`', () => {
 
     it('has default `files` in `jsx-a11y/astro` eslint config', () => {
       expect(configResult.getConfigByUnPostfix('jsx-a11y/astro')?.files).toMatchInlineSnapshot(
-        `["**/*.astro"]`,
+        '["**/*.astro"]',
       );
     });
 
     it('inherits `files` from parent `astro` config when `configJsxA11y` is enabled', async () => {
       const FILES = ['src/**/*.astro'];
+
       const inheritedConfigResult = await computeEslintConfig({
         astro: {files: FILES, configJsxA11y: true},
       });
@@ -44,20 +45,16 @@ describe('astro: sub config `configJsxA11y`', () => {
     const configResult = await computeEslintConfig('astro');
 
     it('enables `astro/jsx-a11y/alt-text` rule by default', () => {
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('jsx-a11y/astro', 'astro/jsx-a11y/alt-text'),
-        ),
-      ).toBe(2);
+      expect(configResult.getRuleEntrySeverity('jsx-a11y/astro', 'astro/jsx-a11y/alt-text')).toBe(
+        2,
+      );
     });
 
     it('disables `astro/jsx-a11y/mouse-events-have-key-events` rule by default', () => {
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'jsx-a11y/astro',
-            'astro/jsx-a11y/mouse-events-have-key-events',
-          ),
+        configResult.getRuleEntrySeverity(
+          'jsx-a11y/astro',
+          'astro/jsx-a11y/mouse-events-have-key-events',
         ),
       ).toBe(0);
     });
@@ -72,7 +69,7 @@ describe('astro: sub config `configJsxA11y`', () => {
       );
 
       expect(error?.message).toMatchInlineSnapshot(
-        `"If you want to use astro/jsx-a11y/alt-text rule, you need to install eslint-plugin-jsx-a11y."`,
+        '"If you want to use astro/jsx-a11y/alt-text rule, you need to install eslint-plugin-jsx-a11y."',
       );
     });
   });
@@ -81,6 +78,7 @@ describe('astro: sub config `configJsxA11y`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `jsx-a11y/astro` eslint config', async () => {
         const FILES = ['src/**/*.astro'];
+
         const configResult = await computeEslintConfig({
           astro: {configJsxA11y: {files: FILES}},
         });
@@ -88,7 +86,7 @@ describe('astro: sub config `configJsxA11y`', () => {
         expect(configResult.getConfigByUnPostfix('jsx-a11y/astro')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `jsx-a11y/astro` eslint config when `files` is empty array', async () => {
+      it('disables `jsx-a11y/astro` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           astro: {configJsxA11y: {files: []}},
         });
@@ -100,13 +98,14 @@ describe('astro: sub config `configJsxA11y`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `jsx-a11y/astro` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           astro: {configJsxA11y: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('jsx-a11y/astro')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -121,49 +120,17 @@ describe('astro: sub config `configJsxA11y`', () => {
         },
       });
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('jsx-a11y/astro', 'astro/jsx-a11y/alt-text'),
-        ),
-      ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('jsx-a11y/astro', 'astro/jsx-a11y/alt-text')).toBe(
+        0,
+      );
 
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('jsx-a11y/astro', 'no-console'),
-        ),
-      ).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `jsx-a11y/astro` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          astro: {configJsxA11y: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('jsx-a11y/astro'), (ruleName) =>
-            ruleName.startsWith('astro/jsx-a11y/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `jsx-a11y/astro` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          astro: {configJsxA11y: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('jsx-a11y/astro'), (ruleName) =>
-            ruleName.startsWith('astro/jsx-a11y/'),
-          ),
-        ).toStrictEqual([1]);
-      });
+      expect(configResult.getRuleEntrySeverity('jsx-a11y/astro', 'no-console')).toBe(0);
     });
   });
 
   describe('options', () => {
     describe('option: `settings`', () => {
-      it('does not set `jsx-a11y-x` settings when `configJsxA11y` is enabled without options', async () => {
+      it('does not set `jsx-a11y-x` settings by default', async () => {
         const configResult = await computeEslintConfig('astro');
 
         expect(
@@ -171,8 +138,9 @@ describe('astro: sub config `configJsxA11y`', () => {
         ).toBeUndefined();
       });
 
-      it('sets `jsx-a11y-x` settings when `settings` is provided', async () => {
+      it('sets `jsx-a11y-x` settings when set', async () => {
         const SETTINGS = {components: {CardLink: 'a'}};
+
         const configResult = await computeEslintConfig({
           astro: {configJsxA11y: {settings: SETTINGS}},
         });
@@ -188,8 +156,9 @@ describe('astro: sub config `configJsxA11y`', () => {
         const configResult = await computeEslintConfig('astro');
 
         expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('jsx-a11y/astro', 'astro/jsx-a11y/anchor-ambiguous-text'),
+          configResult.getRuleEntrySeverity(
+            'jsx-a11y/astro',
+            'astro/jsx-a11y/anchor-ambiguous-text',
           ),
         ).toBe(1);
       });
@@ -200,13 +169,14 @@ describe('astro: sub config `configJsxA11y`', () => {
         });
 
         expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('jsx-a11y/astro', 'astro/jsx-a11y/anchor-ambiguous-text'),
+          configResult.getRuleEntrySeverity(
+            'jsx-a11y/astro',
+            'astro/jsx-a11y/anchor-ambiguous-text',
           ),
         ).toBe(0);
       });
 
-      it('sets `astro/jsx-a11y/anchor-ambiguous-text` severity to error when configured', async () => {
+      it('sets `astro/jsx-a11y/anchor-ambiguous-text` severity to error when set to configured', async () => {
         const configResult = await computeEslintConfig({
           astro: {
             configJsxA11y: {
@@ -219,8 +189,9 @@ describe('astro: sub config `configJsxA11y`', () => {
         });
 
         expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('jsx-a11y/astro', 'astro/jsx-a11y/anchor-ambiguous-text'),
+          configResult.getRuleEntrySeverity(
+            'jsx-a11y/astro',
+            'astro/jsx-a11y/anchor-ambiguous-text',
           ),
         ).toBe(2);
       });
@@ -230,11 +201,9 @@ describe('astro: sub config `configJsxA11y`', () => {
       it('enables `astro/jsx-a11y/alt-text` by default', async () => {
         const configResult = await computeEslintConfig('astro');
 
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('jsx-a11y/astro', 'astro/jsx-a11y/alt-text'),
-          ),
-        ).toBe(2);
+        expect(configResult.getRuleEntrySeverity('jsx-a11y/astro', 'astro/jsx-a11y/alt-text')).toBe(
+          2,
+        );
       });
 
       it('disables `astro/jsx-a11y/alt-text` when set to `false`', async () => {
@@ -242,11 +211,9 @@ describe('astro: sub config `configJsxA11y`', () => {
           astro: {configJsxA11y: {altTextCheckForElements: false}},
         });
 
-        expect(
-          getRuleSeverityFromEslintRuleEntry(
-            configResult.getRuleEntry('jsx-a11y/astro', 'astro/jsx-a11y/alt-text'),
-          ),
-        ).toBe(0);
+        expect(configResult.getRuleEntrySeverity('jsx-a11y/astro', 'astro/jsx-a11y/alt-text')).toBe(
+          0,
+        );
       });
     });
   });

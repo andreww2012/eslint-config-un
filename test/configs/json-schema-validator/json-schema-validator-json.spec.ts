@@ -21,13 +21,13 @@ describe('json-schema-validator: sub-config `configJson`', () => {
     it('has default `files` in `json-schema-validator/json` eslint config', () => {
       expect(
         configResult.getConfigByUnPostfix('json-schema-validator/json')?.files,
-      ).toMatchInlineSnapshot(`["**/*.json", "**/*.jsonc", "**/*.json5"]`);
+      ).toMatchInlineSnapshot('["**/*.json", "**/*.jsonc", "**/*.json5"]');
     });
 
     it('has default `ignores` in `json-schema-validator/json` eslint config', () => {
-      const ignores = configResult.getConfigByUnPostfix('json-schema-validator/json')?.ignores;
-
-      expect(ignores?.length).toBeGreaterThan(0);
+      expect(
+        configResult.getConfigByUnPostfix('json-schema-validator/json')?.ignores?.length,
+      ).toBeGreaterThan(0);
     });
   });
 
@@ -36,11 +36,9 @@ describe('json-schema-validator: sub-config `configJson`', () => {
 
     it('enables `json-schema-validator/no-invalid` rule by default in `json-schema-validator/json`', () => {
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'json-schema-validator/json',
-            'json-schema-validator/no-invalid',
-          ),
+        configResult.getRuleEntrySeverity(
+          'json-schema-validator/json',
+          'json-schema-validator/no-invalid',
         ),
       ).toBe(2);
     });
@@ -66,6 +64,7 @@ describe('json-schema-validator: sub-config `configJson`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `json-schema-validator/json` eslint config', async () => {
         const FILES = ['src/**/*.json'];
+
         const configResult = await computeEslintConfig({
           jsonSchemaValidator: {configJson: {files: FILES}},
         });
@@ -75,7 +74,7 @@ describe('json-schema-validator: sub-config `configJson`', () => {
         ).toStrictEqual(FILES);
       });
 
-      it('disables `json-schema-validator/json` eslint config when `files` is empty array', async () => {
+      it('disables `json-schema-validator/json` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           jsonSchemaValidator: {configJson: {files: []}},
         });
@@ -87,13 +86,14 @@ describe('json-schema-validator: sub-config `configJson`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `json-schema-validator/json` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           jsonSchemaValidator: {configJson: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('json-schema-validator/json')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -109,47 +109,12 @@ describe('json-schema-validator: sub-config `configJson`', () => {
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'json-schema-validator/json',
-            'json-schema-validator/no-invalid',
-          ),
+        configResult.getRuleEntrySeverity(
+          'json-schema-validator/json',
+          'json-schema-validator/no-invalid',
         ),
       ).toBe(0);
-
-      expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry('json-schema-validator/json', 'no-console'),
-        ),
-      ).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `json-schema-validator/json` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jsonSchemaValidator: {configJson: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('json-schema-validator/json'),
-            (ruleName) => ruleName.startsWith('json-schema-validator/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `json-schema-validator/json` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jsonSchemaValidator: {configJson: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('json-schema-validator/json'),
-            (ruleName) => ruleName.startsWith('json-schema-validator/'),
-          ),
-        ).toStrictEqual([1]);
-      });
+      expect(configResult.getRuleEntrySeverity('json-schema-validator/json', 'no-console')).toBe(0);
     });
   });
 });

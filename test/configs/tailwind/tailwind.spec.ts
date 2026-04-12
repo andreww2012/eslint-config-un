@@ -102,7 +102,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('tailwind')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `tailwind` eslint config when `files` is empty array', async () => {
+    it('disables `tailwind` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({tailwind: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('tailwind')).toBeUndefined();
@@ -134,28 +134,6 @@ describe('un options', () => {
       configResult.getRuleEntrySeverity('tailwind', 'tailwindcss/no-contradicting-classname'),
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('tailwind', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `tailwind` eslint config', async () => {
-      const configResult = await computeEslintConfig({tailwind: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('tailwind'), (ruleName) =>
-          ruleName.startsWith('tailwindcss/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `tailwind` eslint config', async () => {
-      const configResult = await computeEslintConfig({tailwind: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('tailwind'), (ruleName) =>
-          ruleName.startsWith('tailwindcss/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 

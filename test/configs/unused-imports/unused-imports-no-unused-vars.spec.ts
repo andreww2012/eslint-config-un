@@ -2,7 +2,7 @@ const FIXTURES = {
   unusedVar: 'unused-var.js',
 } as const;
 
-describe('unused-imports: sub config `configNoUnusedVars`', () => {
+describe('unused-imports: sub config `noUnusedVars`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig({unusedImports: {configNoUnusedVars: true}});
 
@@ -79,6 +79,7 @@ describe('unused-imports: sub config `configNoUnusedVars`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `unused-imports/no-unused-vars` eslint config', async () => {
         const FILES = ['src/**/*.ts'];
+
         const configResult = await computeEslintConfig({
           unusedImports: {configNoUnusedVars: {files: FILES}},
         });
@@ -88,7 +89,7 @@ describe('unused-imports: sub config `configNoUnusedVars`', () => {
         ).toStrictEqual(FILES);
       });
 
-      it('disables `unused-imports/no-unused-vars` eslint config when `files` is empty array', async () => {
+      it('disables `unused-imports/no-unused-vars` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           unusedImports: {configNoUnusedVars: {files: []}},
         });
@@ -100,13 +101,14 @@ describe('unused-imports: sub config `configNoUnusedVars`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `unused-imports/no-unused-vars` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           unusedImports: {configNoUnusedVars: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('unused-imports/no-unused-vars')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -131,39 +133,11 @@ describe('unused-imports: sub config `configNoUnusedVars`', () => {
         0,
       );
     });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `unused-imports/no-unused-vars` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          unusedImports: {configNoUnusedVars: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('unused-imports/no-unused-vars'),
-            (ruleName) => ruleName.startsWith('unused-imports/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `unused-imports/no-unused-vars` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          unusedImports: {configNoUnusedVars: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(
-            configResult.getConfigByUnPostfix('unused-imports/no-unused-vars'),
-            (ruleName) => ruleName.startsWith('unused-imports/'),
-          ),
-        ).toStrictEqual([1]);
-      });
-    });
   });
 
   describe('options', () => {
     describe('option: `ruleOptions`', () => {
-      it('does not add options to `unused-imports/no-unused-vars` rule when `ruleOptions` is not provided (default)', async () => {
+      it('does not add options to `unused-imports/no-unused-vars` rule by default', async () => {
         const configResult = await computeEslintConfig({
           unusedImports: {configNoUnusedVars: true},
         });

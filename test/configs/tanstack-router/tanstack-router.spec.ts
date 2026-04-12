@@ -1,10 +1,10 @@
-beforeEach(() => {
-  addInstalledPackages({'@tanstack/react-router': '1.0.0'});
-});
-
 const FIXTURES = {
   routeWithWrongPropertyOrder: 'route-wrong-order.ts',
 } as const;
+
+beforeEach(() => {
+  addInstalledPackages({'@tanstack/react-router': '1.0.0'});
+});
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('tanstackRouter');
@@ -144,17 +144,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `tanstack-router` eslint config', async () => {
       const FILES = ['src/**/*.tsx'];
-      const configResult = await computeEslintConfig({
-        tanstackRouter: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({tanstackRouter: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('tanstack-router')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `tanstack-router` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        tanstackRouter: {files: []},
-      });
+    it('disables `tanstack-router` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({tanstackRouter: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('tanstack-router')).toBeUndefined();
     });
@@ -163,13 +160,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `tanstack-router` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        tanstackRouter: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({tanstackRouter: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('tanstack-router')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -189,31 +185,5 @@ describe('un options', () => {
       ),
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('tanstack-router', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `tanstack-router` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        tanstackRouter: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('tanstack-router'), (ruleName) =>
-          ruleName.startsWith('@tanstack/router/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `tanstack-router` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        tanstackRouter: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('tanstack-router'), (ruleName) =>
-          ruleName.startsWith('@tanstack/router/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

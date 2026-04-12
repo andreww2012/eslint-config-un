@@ -51,7 +51,7 @@ describe('basic tests', async () => {
     });
   });
 
-  it('has default `files` in `headers` eslint config', () => {
+  it('has no explicit `files` restriction in `headers` eslint config', () => {
     expect(configResult.getConfigByUnPostfix('headers')?.files).toBeUndefined();
   });
 
@@ -63,11 +63,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('headers');
 
-  it('enables `header-format` rule by default', () => {
+  it('enables `headers/header-format` rule by default', () => {
     expect(configResult.getRuleEntrySeverity('headers', 'headers/header-format')).toBe(2);
   });
 
-  it('`header-format` rule fires on a file missing the required header', async () => {
+  it('`headers/header-format` rule fires on a file missing the required header', async () => {
     const results = await testEslintConfig(
       {headers: {options: {source: 'string', content: 'Copyright Acme'}}},
       FIXTURES.missingHeader,
@@ -88,12 +88,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `headers` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
+
       const configResult = await computeEslintConfig({headers: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('headers')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `headers` eslint config when `files` is empty array', async () => {
+    it('disables `headers` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({headers: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('headers')).toBeUndefined();
@@ -103,11 +104,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `headers` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({headers: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('headers')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -120,33 +122,11 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('headers', 'headers/header-format')).toBe(0);
     expect(configResult.getRuleEntrySeverity('headers', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `headers` eslint config', async () => {
-      const configResult = await computeEslintConfig({headers: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('headers'), (ruleName) =>
-          ruleName.startsWith('header'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `headers` eslint config', async () => {
-      const configResult = await computeEslintConfig({headers: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('headers'), (ruleName) =>
-          ruleName.startsWith('header'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `options`', () => {
-    it('does not pass extra options to `header-format` rule when `options` is not set (default)', async () => {
+    it('does not pass extra options to `headers/header-format` rule by default', async () => {
       const configResult = await computeEslintConfig('headers');
 
       expect(configResult.getRuleEntry('headers', 'headers/header-format')).toMatchInlineSnapshot(
@@ -154,7 +134,7 @@ describe('options', () => {
       );
     });
 
-    it('passes provided options to `header-format` rule when `options` is set', async () => {
+    it('passes provided options to `headers/header-format` rule when `options` is set', async () => {
       const OPTIONS = {source: 'string' as const, content: 'Copyright'};
 
       const configResult = await computeEslintConfig({

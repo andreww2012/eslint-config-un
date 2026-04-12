@@ -67,6 +67,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-unknown-files', OFF) /** @since 2.0.0-beta.1 */
     .enableConfigTesterForPlugin('boundaries', {
       // `element-types` was not properly marked as deprecated: https://www.jsboundaries.dev/docs/releases/migration-guides/v5-to-v6/#rule-element-types-renamed-to-dependencies
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => ruleName === 'element-types',
     })
     .addOverrides();

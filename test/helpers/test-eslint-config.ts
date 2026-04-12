@@ -5,7 +5,7 @@ import {ESLint} from 'eslint';
 import pathe from 'pathe';
 import type {EslintConfigUnOptions} from '../../src/config-un/shared';
 import type {PluginPrefix} from '../../src/loaders';
-import type {OmitStrict} from '../../src/types';
+import type {NonEmptyTuple, OmitStrict} from '../../src/types';
 import {arraify} from '../../src/utils';
 
 const UN_ESLINT_CONFIGS_PREFIX = 'eslint-config-un/';
@@ -43,8 +43,18 @@ export const computeEslintConfig = async (
         : configsOrSingleConfigName,
   });
 
+  const eslintConfigsByName = Object.fromEntries(
+    config
+      .map((c) =>
+        c.name
+          ? ([c.name.slice(UN_ESLINT_CONFIGS_PREFIX.length), c] satisfies NonEmptyTuple)
+          : null,
+      )
+      .filter((v) => v != null),
+  );
+
   const getConfigByUnPostfix = (eslintConfigNamePostfix: string) =>
-    config.find((c) => c.name === `${UN_ESLINT_CONFIGS_PREFIX}${eslintConfigNamePostfix}`);
+    eslintConfigsByName[eslintConfigNamePostfix];
 
   const getConfigsByUnPostfix = (predicateOrList: ((postfix: string) => boolean) | string[]) =>
     config
@@ -76,6 +86,14 @@ export const computeEslintConfig = async (
     return getRuleSeverityFromEslintRuleEntry(ruleEntry);
   };
 
+  const getRuleSeverities = (configName: string) =>
+    Object.fromEntries(
+      Object.entries(getConfigByUnPostfix(configName)?.rules || {}).map(([ruleName, ruleEntry]) => [
+        ruleName,
+        getRuleSeverityFromEslintRuleEntry(ruleEntry),
+      ]),
+    );
+
   const getRuleEntryOptions = (configName: string, ruleName: string) => {
     const ruleEntry = getRuleEntry(configName, ruleName);
     return Array.isArray(ruleEntry) ? ruleEntry.slice(1) : [];
@@ -92,6 +110,7 @@ export const computeEslintConfig = async (
     getConfigsByUnPostfix,
     getRuleEntry,
     getRuleEntrySeverity,
+    getRuleSeverities,
     getRuleEntryOptions,
     getRuleEntryParsed,
     getLoadedPlugin: (pluginPrefix: Exclude<PluginPrefix, ''>) =>

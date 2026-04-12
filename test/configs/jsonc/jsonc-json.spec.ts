@@ -1,4 +1,4 @@
-describe('jsonc: sub config `configJson`', () => {
+describe('jsonc: sub config `json`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig('json');
 
@@ -47,6 +47,7 @@ describe('jsonc: sub config `configJson`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `jsonc/json` eslint config', async () => {
         const FILES = ['packages/**/*.json'];
+
         const configResult = await computeEslintConfig({
           json: {configJson: {files: FILES}},
         });
@@ -54,7 +55,7 @@ describe('jsonc: sub config `configJson`', () => {
         expect(configResult.getConfigByUnPostfix('jsonc/json')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `jsonc/json` eslint config when `files` is empty array', async () => {
+      it('disables `jsonc/json` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           json: {configJson: {files: []}},
         });
@@ -66,13 +67,14 @@ describe('jsonc: sub config `configJson`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `jsonc/json` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           json: {configJson: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('jsonc/json')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });

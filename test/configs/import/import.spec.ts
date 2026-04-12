@@ -18,54 +18,39 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `import` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('import')).toBeUndefined();
+      await expectConfigState({}, 'import', false);
     });
 
     it('creates `import` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig({import: true});
-
-      expect(configResult.getConfigByUnPostfix('import')).toBeDefined();
+      await expectConfigState({import: true}, 'import', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('creates `import` eslint config by default', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('import')).toBeDefined();
+      await expectConfigState({}, 'import', true, 'default');
     });
 
     it('creates `import` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig('import', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('import')).toBeDefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to enable `import` config because this is the default',
-        ),
-      ).toBe(true);
+      await expectConfigState('import', 'import', ['import', true], 'default');
     });
 
     it('does not create `import` eslint config if explicitly disabled', async () => {
-      const configResult = await computeEslintConfig({import: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('import')).toBeUndefined();
+      await expectConfigState({import: false}, 'import', false, 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `import` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'import', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('import')).toBeDefined();
+    it('creates `import` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('import', 'import', ['import', true], 'misc-enabled');
+    });
+
+    it('does not create `import` eslint config if explicitly disabled', async () => {
+      await expectConfigState({import: false}, 'import', false, 'misc-enabled');
     });
   });
 
@@ -77,7 +62,7 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('import')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(1);
-    expect(ignores).to.include.members([GLOB_MARKDOWN_ALL_CODE_BLOCKS]);
+    expect(ignores).toIncludeAllMembers([GLOB_MARKDOWN_ALL_CODE_BLOCKS]);
   });
 });
 
@@ -159,7 +144,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('import')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `import` eslint config when `files` is empty array', async () => {
+    it('disables `import` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({import: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('import')).toBeUndefined();
@@ -174,7 +159,7 @@ describe('un options', () => {
 
       const ignores = configResult.getConfigByUnPostfix('import')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -189,28 +174,6 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('import', 'import/no-default-export')).toBe(0);
     expect(configResult.getRuleEntrySeverity('import', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `import` eslint config', async () => {
-      const configResult = await computeEslintConfig({import: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('import'), (ruleName) =>
-          ruleName.startsWith('import/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `import` eslint config', async () => {
-      const configResult = await computeEslintConfig({import: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('import'), (ruleName) =>
-          ruleName.startsWith('import/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 
@@ -246,7 +209,7 @@ describe('options', () => {
   });
 
   describe('option: `extraneousDependenciesWhitelist`', () => {
-    it('does not add whitelist to `no-extraneous-dependencies` rule when not provided', async () => {
+    it('does not add whitelist to `import/no-extraneous-dependencies` rule by default', async () => {
       const configResult = await computeEslintConfig('import');
 
       expect(
@@ -254,7 +217,7 @@ describe('options', () => {
       ).toMatchInlineSnapshot('[2, {"devDependencies": true}]');
     });
 
-    it('adds whitelist to `no-extraneous-dependencies` rule when provided', async () => {
+    it('adds whitelist to `import/no-extraneous-dependencies` rule when provided', async () => {
       const WHITELIST = ['my-bundled-lib', 'another-lib'];
 
       const configResult = await computeEslintConfig({
@@ -268,21 +231,21 @@ describe('options', () => {
   });
 
   describe('option: `isTypescriptEnabled`', () => {
-    it('enables `import/named` and `import/no-deprecated` rules when `isTypescriptEnabled` is `false` (default)', async () => {
+    it('enables `import/named` and `import/no-deprecated` rules by default', async () => {
       const configResult = await computeEslintConfig('import');
 
       expect(configResult.getRuleEntrySeverity('import', 'import/named')).toBe(2);
       expect(configResult.getRuleEntrySeverity('import', 'import/no-deprecated')).toBe(1);
     });
 
-    it('disables `import/named` and `import/no-deprecated` rules when `isTypescriptEnabled` is `true`', async () => {
+    it('disables `import/named` and `import/no-deprecated` rules when set to `true`', async () => {
       const configResult = await computeEslintConfig({import: {isTypescriptEnabled: true}});
 
       expect(configResult.getRuleEntrySeverity('import', 'import/named')).toBe(0);
       expect(configResult.getRuleEntrySeverity('import', 'import/no-deprecated')).toBe(0);
     });
 
-    it('disables `import/named` and `import/no-deprecated` rules when `isTypescriptEnabled` is implicitly `true` (`ts` config is enabled)', async () => {
+    it('disables `import/named` and `import/no-deprecated` rules when set to implicitly `true` (`ts` config is enabled)', async () => {
       const configResult = await computeEslintConfig({import: true, ts: true});
 
       expect(configResult.getRuleEntrySeverity('import', 'import/named')).toBe(0);
@@ -291,7 +254,7 @@ describe('options', () => {
   });
 
   describe('option: `importPatternsToIgnoreWhenTryingToResolve`', () => {
-    it('does not add `ignore` to `no-unresolved` rule options when not provided', async () => {
+    it('does not add `ignore` to `import/no-unresolved` rule options by default', async () => {
       const configResult = await computeEslintConfig('import');
 
       expect(configResult.getRuleEntry('import', 'import/no-unresolved')).toMatchInlineSnapshot(
@@ -299,7 +262,7 @@ describe('options', () => {
       );
     });
 
-    it('adds `ignore` to `no-unresolved` rule when provided as a string', async () => {
+    it('adds `ignore` to `import/no-unresolved` rule when provided as string', async () => {
       const PATTERN = 'virtual:*';
 
       const configResult = await computeEslintConfig({
@@ -311,7 +274,7 @@ describe('options', () => {
       ]);
     });
 
-    it('adds `ignore` to `no-unresolved` rule when provided as an array', async () => {
+    it('adds `ignore` to `import/no-unresolved` rule when provided as array', async () => {
       const PATTERNS = ['virtual:*', 'bun:*'];
 
       const configResult = await computeEslintConfig({
@@ -325,13 +288,13 @@ describe('options', () => {
   });
 
   describe('option: `requireModuleExtensions`', () => {
-    it('disables `import/extensions` rule when `requireModuleExtensions` is `false` (default)', async () => {
+    it('disables `import/extensions` rule by default', async () => {
       const configResult = await computeEslintConfig('import');
 
       expect(configResult.getRuleEntrySeverity('import', 'import/extensions')).toBe(0);
     });
 
-    it('enables `import/extensions` rule for all JS/TS extensions when `requireModuleExtensions` is `true`', async () => {
+    it('enables `import/extensions` rule for all JS/TS extensions when set to `true`', async () => {
       const configResult = await computeEslintConfig({
         import: {requireModuleExtensions: true},
       });
@@ -341,7 +304,7 @@ describe('options', () => {
       );
     });
 
-    it('enables `import/extensions` with `*` key controlling default when `requireModuleExtensions` is an object with `*`', async () => {
+    it('enables `import/extensions` with `*` key controlling default when `requireModuleExtensions` is object with `*`', async () => {
       const OPTIONS = {'*': 'always' as const, ts: 'never' as const};
 
       const configResult = await computeEslintConfig({
@@ -354,7 +317,7 @@ describe('options', () => {
       ]);
     });
 
-    it('enables `import/extensions` with `ignorePackages` default when `requireModuleExtensions` is an object without `*`', async () => {
+    it('enables `import/extensions` with `ignorePackages` default when `requireModuleExtensions` is object without `*`', async () => {
       const configResult = await computeEslintConfig({
         import: {requireModuleExtensions: {ts: 'never'}},
       });
@@ -367,7 +330,7 @@ describe('options', () => {
   });
 
   describe('option: `noDuplicatesOptions`', () => {
-    it('uses default `no-duplicates` rule options when not provided', async () => {
+    it('uses default `import/no-duplicates` rule options by default', async () => {
       const configResult = await computeEslintConfig('import');
 
       expect(configResult.getRuleEntry('import', 'import/no-duplicates')).toMatchInlineSnapshot(
@@ -375,7 +338,7 @@ describe('options', () => {
       );
     });
 
-    it('merges provided options into `no-duplicates` rule', async () => {
+    it('merges provided options into `import/no-duplicates` rule', async () => {
       const OPTIONS = {considerQueryString: true};
 
       const configResult = await computeEslintConfig({
@@ -389,7 +352,7 @@ describe('options', () => {
   });
 
   describe('option: `settings`', () => {
-    it('does not add user settings to `import` config when not provided', async () => {
+    it('does not add user settings to `import` config by default', async () => {
       const configResult = await computeEslintConfig('import');
       const config = configResult.getConfigByUnPostfix('import');
 

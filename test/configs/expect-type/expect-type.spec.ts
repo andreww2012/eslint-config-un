@@ -18,7 +18,7 @@ describe('basic tests', () => {
     const configResult = await computeEslintConfig({expectType: false});
 
     expect(configResult.getConfigByUnPostfix('expect-type')).toBeUndefined();
-    expect(configResult.getLoadedPlugin('expect-type')).toBeDefined();
+    expect(configResult.getLoadedPlugin('expect-type')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {

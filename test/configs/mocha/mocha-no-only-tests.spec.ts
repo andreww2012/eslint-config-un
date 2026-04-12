@@ -57,7 +57,7 @@ describe('mocha: sub config `noOnlyTests`', () => {
         'no-only-tests/no-only-tests',
       );
 
-      expect(error?.message).toMatchInlineSnapshot(`"it.only not permitted"`);
+      expect(error?.message).toMatchInlineSnapshot('"it.only not permitted"');
     });
   });
 
@@ -65,6 +65,7 @@ describe('mocha: sub config `noOnlyTests`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `mocha/no-only-tests` eslint config', async () => {
         const FILES = ['tests/**/*.spec.ts'];
+
         const configResult = await computeEslintConfig({
           mocha: {configNoOnlyTests: {files: FILES}},
         });
@@ -74,7 +75,7 @@ describe('mocha: sub config `noOnlyTests`', () => {
         );
       });
 
-      it('disables `mocha/no-only-tests` eslint config when `files` is empty array', async () => {
+      it('disables `mocha/no-only-tests` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           mocha: {configNoOnlyTests: {files: []}},
         });

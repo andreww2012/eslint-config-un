@@ -89,7 +89,7 @@ describe('rules', () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      `"Import zod as a namespace (import * as z from "zod") instead of destructuring its exports or using default imports"`,
+      '"Import zod as a namespace (import * as z from "zod") instead of destructuring its exports or using default imports"',
     );
   });
 });

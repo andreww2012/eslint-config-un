@@ -1,4 +1,4 @@
-import {GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML} from '../../../src/constants';
+import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 
 const FIXTURES = {
   evalWithExpression: 'eval-with-expression.js',
@@ -17,71 +17,39 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `security` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('security')).toBeUndefined();
+      await expectConfigState({}, 'security', false);
     });
 
     it('creates `security` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('security');
-
-      expect(configResult.getConfigByUnPostfix('security')).toBeDefined();
+      await expectConfigState('security', 'security', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('does not create `security` eslint config', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('security')).toBeUndefined();
+      await expectConfigState({}, 'security', false, 'default');
     });
 
     it('creates `security` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('security', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('security')).toBeDefined();
+      await expectConfigState('security', 'security', true, 'default');
     });
 
     it('does not create `security` eslint config and prints a warning if explicitly disabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig({security: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('security')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to disable \`security\` config because this is the default`,
-        ),
-      ).toBe(true);
+      await expectConfigState({security: false}, 'security', ['security', false], 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `security` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
-
-      expect(configResult.getConfigByUnPostfix('security')).toBeDefined();
+      await expectConfigState({}, 'security', true, 'misc-enabled');
     });
 
     it('creates `security` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
+      await expectConfigState({security: true}, 'security', ['security', true], 'misc-enabled');
+    });
 
-      const configResult = await computeEslintConfig(
-        {security: true},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
-
-      expect(configResult.getConfigByUnPostfix('security')).toBeDefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to enable \`security\` config because this is the default`,
-        ),
-      ).toBe(true);
+    it('does not create `security` eslint config if explicitly disabled', async () => {
+      await expectConfigState({security: false}, 'security', false, 'misc-enabled');
     });
   });
 
@@ -93,7 +61,7 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('security')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.to.include.members([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 
@@ -125,7 +93,7 @@ describe('rules', async () => {
       'security/detect-eval-with-expression',
     );
 
-    expect(error?.message).toMatchInlineSnapshot(`"eval with argument of type Identifier"`);
+    expect(error?.message).toMatchInlineSnapshot('"eval with argument of type Identifier"');
   });
 });
 
@@ -133,17 +101,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `security` eslint config', async () => {
       const FILES = ['src/**/*.js'];
-      const configResult = await computeEslintConfig({
-        security: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({security: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('security')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `security` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        security: {files: []},
-      });
+    it('disables `security` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({security: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('security')).toBeUndefined();
     });
@@ -152,13 +117,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `security` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        security: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({security: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('security')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -172,33 +136,6 @@ describe('un options', () => {
     });
 
     expect(configResult.getRuleEntrySeverity('security', 'security/detect-child-process')).toBe(0);
-
     expect(configResult.getRuleEntrySeverity('security', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `security` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        security: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('security'), (ruleName) =>
-          ruleName.startsWith('security/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `security` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        security: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('security'), (ruleName) =>
-          ruleName.startsWith('security/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

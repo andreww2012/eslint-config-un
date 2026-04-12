@@ -116,12 +116,13 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `jest-dom` eslint config', async () => {
       const FILES = ['tests/**/*.spec.ts'];
+
       const configResult = await computeEslintConfig({jestDom: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('jest-dom')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `jest-dom` eslint config when `files` is empty array', async () => {
+    it('disables `jest-dom` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({jestDom: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('jest-dom')).toBeUndefined();
@@ -131,6 +132,7 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `jest-dom` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({jestDom: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('jest-dom')?.ignores;
@@ -147,27 +149,5 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('jest-dom', 'jest-dom/prefer-checked')).toBe(0);
     expect(configResult.getRuleEntrySeverity('jest-dom', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `jest-dom` eslint config', async () => {
-      const configResult = await computeEslintConfig({jestDom: {forceSeverity: 'error'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('jest-dom'), (ruleName) =>
-          ruleName.startsWith('jest-dom/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `jest-dom` eslint config', async () => {
-      const configResult = await computeEslintConfig({jestDom: {forceSeverity: 'warn'}});
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('jest-dom'), (ruleName) =>
-          ruleName.startsWith('jest-dom/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

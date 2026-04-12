@@ -292,18 +292,24 @@ export class ConfigEntryBuilder<
 
         const settings = {...settingsRaw};
         const directlyMappedSettings = settings[''];
+        delete settings[''];
         if (directlyMappedSettings) {
-          delete settings[''];
           Object.assign(
             settings,
             Object.fromEntries(
               Reflect.ownKeys(directlyMappedSettings).map((settingKey) => [
                 settingKey,
-                directlyMappedSettings[settingKey as string],
+                directlyMappedSettings[settingKey as keyof typeof directlyMappedSettings],
               ]),
             ),
           );
         }
+        Reflect.ownKeys(settings).forEach((settingKey) => {
+          const value = settings[settingKey as keyof typeof settings];
+          if (value == null || (typeof value === 'object' && Reflect.ownKeys(value).length === 0)) {
+            Reflect.deleteProperty(settings, settingKey);
+          }
+        });
 
         if (Reflect.ownKeys(settings).length === 0) {
           return null;
@@ -525,6 +531,7 @@ export class ConfigEntryBuilder<
           rulesToSkipInConfig?: string[] | ((ruleName: string) => boolean);
         } = {},
       ) => {
+        /* v8 ignore start */
         if (this.context.isTestMode) {
           this.context.tests.push(({plugins}) => {
             const commonErrorMessagePrefix = `[config:${styleConfigName(configName)}] [plugin:${styleText('blue', pluginPrefixToTest)}]`;
@@ -647,6 +654,7 @@ export class ConfigEntryBuilder<
             );
           });
         }
+        /* v8 ignore stop */
         return result;
       },
     };

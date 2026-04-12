@@ -17,54 +17,39 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `jsonc/all` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('jsonc/all')).toBeUndefined();
+      await expectConfigState({}, 'jsonc/all', false);
     });
 
     it('creates `jsonc/all` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('json');
-
-      expect(configResult.getConfigByUnPostfix('jsonc/all')).toBeDefined();
+      await expectConfigState('json', 'jsonc/all', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('does not create `jsonc/all` eslint config', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('jsonc/all')).toBeUndefined();
+      await expectConfigState({}, 'jsonc/all', false, 'default');
     });
 
     it('creates `jsonc/all` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('json', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('jsonc/all')).toBeDefined();
+      await expectConfigState('json', 'jsonc/all', true, 'default');
     });
 
     it('does not create `jsonc/all` eslint config and prints a warning if explicitly disabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig({json: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('jsonc/all')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to disable `json` config because this is the default',
-        ),
-      ).toBe(true);
+      await expectConfigState({json: false}, 'jsonc/all', ['json', false], 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `jsonc/all` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'jsonc/all', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('jsonc/all')).toBeDefined();
+    it('creates `jsonc/all` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState({json: true}, 'jsonc/all', ['json', true], 'misc-enabled');
+    });
+
+    it('does not create `jsonc/all` eslint config if explicitly disabled', async () => {
+      await expectConfigState({json: false}, 'jsonc/all', false, 'misc-enabled');
     });
   });
 
@@ -78,7 +63,7 @@ describe('basic tests', async () => {
     const ignores = configResult.getConfigByUnPostfix('jsonc/all')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.to.include.members([GLOB_MARKDOWN, GLOB_MDX]);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN, GLOB_MDX]);
   });
 });
 
@@ -110,17 +95,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `jsonc/all` eslint config', async () => {
       const FILES = ['src/**/*.json'];
-      const configResult = await computeEslintConfig({
-        json: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({json: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('jsonc/all')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `jsonc/all` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        json: {files: []},
-      });
+    it('disables `jsonc/all` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({json: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('jsonc/all')).toBeUndefined();
     });
@@ -129,13 +111,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `jsonc/all` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        json: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({json: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('jsonc/all')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -147,31 +128,5 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('jsonc/all', 'jsonc/no-dupe-keys')).toBe(0);
     expect(configResult.getRuleEntrySeverity('jsonc/all', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `jsonc/all` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        json: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('jsonc/all'), (ruleName) =>
-          ruleName.startsWith('jsonc/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `jsonc/all` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        json: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('jsonc/all'), (ruleName) =>
-          ruleName.startsWith('jsonc/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

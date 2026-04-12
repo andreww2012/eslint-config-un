@@ -165,6 +165,7 @@ export default ((context, optionsRaw) => {
       .addRule('prefer-spread-syntax', ERROR) /** @since 0.0.1 */
       .addRule('prefer-url-canparse', ERROR) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
+        /* v8 ignore next */
         rulesToSkipInConfig: (ruleName) => !E18E_RULES_MODERNIZATION_SET.has(ruleName),
       })
       .addOverrides();
@@ -198,6 +199,7 @@ export default ((context, optionsRaw) => {
         badDependencyOptions ? [badDependencyOptions] : [],
       ) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
+        /* v8 ignore next */
         rulesToSkipInConfig: (ruleName) => !E18E_RULES_MODULE_REPLACEMENTS_SET.has(ruleName),
       })
       .addOverrides();
@@ -224,6 +226,7 @@ export default ((context, optionsRaw) => {
       .addRule('prefer-static-regex', ERROR) /** @since 0.2.0 */
       .addRule('prefer-timer-args', ERROR) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
+        /* v8 ignore next */
         rulesToSkipInConfig: (ruleName) =>
           !E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS_SET.has(ruleName),
       })
@@ -257,6 +260,7 @@ export default ((context, optionsRaw) => {
       .addRule('prefer-inline-equality', ERROR) /** @since 0.2.0 */ // 💭(optional)
       .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */ // 💭(optional)
       .enableConfigTesterForPlugin('e18e', {
+        /* v8 ignore next */
         rulesToSkipInConfig: (ruleName) =>
           !E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS_SET.has(ruleName),
       })

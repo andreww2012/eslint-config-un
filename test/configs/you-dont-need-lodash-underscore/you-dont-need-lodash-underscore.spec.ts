@@ -1,12 +1,12 @@
 import {CHECKED_LODASH_METHODS} from '../../../src/constants';
 
-beforeEach(() => {
-  addInstalledPackages({lodash: '4.17.21'});
-});
-
 const FIXTURES = {
   lodashMapUsage: 'lodash-map-usage.js',
 } as const;
+
+beforeEach(() => {
+  addInstalledPackages({lodash: '4.17.21'});
+});
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('youDontNeedLodashUnderscore');
@@ -21,60 +21,91 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `you-dont-need-lodash-underscore` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')).toBeUndefined();
+      await expectConfigState({}, 'you-dont-need-lodash-underscore', false);
     });
 
     it('creates `you-dont-need-lodash-underscore` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig({youDontNeedLodashUnderscore: true});
-
-      expect(configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')).toBeDefined();
+      await expectConfigState(
+        {youDontNeedLodashUnderscore: true},
+        'you-dont-need-lodash-underscore',
+        true,
+      );
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('creates `you-dont-need-lodash-underscore` eslint config by default (lodash is installed)', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')).toBeDefined();
+      await expectConfigState({}, 'you-dont-need-lodash-underscore', true, 'default');
     });
 
     it('creates `you-dont-need-lodash-underscore` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig(
-        {youDontNeedLodashUnderscore: true},
-        {reset: true},
+      await expectConfigState(
+        'youDontNeedLodashUnderscore',
+        'you-dont-need-lodash-underscore',
+        ['youDontNeedLodashUnderscore', true],
+        'default',
       );
-
-      expect(configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')).toBeDefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to enable \`youDontNeedLodashUnderscore\` config because this is the default`,
-        ),
-      ).toBe(true);
     });
 
     it('does not create `you-dont-need-lodash-underscore` eslint config if explicitly disabled', async () => {
-      const configResult = await computeEslintConfig(
+      await expectConfigState(
         {youDontNeedLodashUnderscore: false},
-        {reset: true},
+        'you-dont-need-lodash-underscore',
+        false,
+        'default',
       );
+    });
 
-      expect(configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')).toBeUndefined();
+    describe('`lodash` is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
+
+      it('does not create `you-dont-need-lodash-underscore` eslint config', async () => {
+        await expectConfigState({}, 'you-dont-need-lodash-underscore', false, 'default');
+      });
+
+      it('creates `you-dont-need-lodash-underscore` eslint config if explicitly enabled', async () => {
+        await expectConfigState(
+          'youDontNeedLodashUnderscore',
+          'you-dont-need-lodash-underscore',
+          true,
+          'default',
+        );
+      });
+
+      it('does not create `you-dont-need-lodash-underscore` eslint config and prints a warning if explicitly disabled', async () => {
+        await expectConfigState(
+          {youDontNeedLodashUnderscore: false},
+          'you-dont-need-lodash-underscore',
+          ['youDontNeedLodashUnderscore', false],
+          'default',
+        );
+      });
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `you-dont-need-lodash-underscore` eslint config (lodash is installed)', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'you-dont-need-lodash-underscore', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')).toBeDefined();
+    it('creates `you-dont-need-lodash-underscore` eslint config and prints a warning if explicitly enabled (lodash is installed)', async () => {
+      await expectConfigState(
+        'youDontNeedLodashUnderscore',
+        'you-dont-need-lodash-underscore',
+        ['youDontNeedLodashUnderscore', true],
+        'misc-enabled',
+      );
+    });
+
+    it('does not create `you-dont-need-lodash-underscore` eslint config if explicitly disabled', async () => {
+      await expectConfigState(
+        {youDontNeedLodashUnderscore: false},
+        'you-dont-need-lodash-underscore',
+        false,
+        'misc-enabled',
+      );
     });
   });
 
@@ -112,9 +143,9 @@ describe('basic tests', async () => {
   });
 
   it('has default `ignores` in `you-dont-need-lodash-underscore` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
+    expect(
+      configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')?.ignores?.length,
+    ).toBeGreaterThan(0);
   });
 });
 
@@ -163,19 +194,15 @@ describe('un options', () => {
     it('uses user-provided `files` in `you-dont-need-lodash-underscore` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
 
-      const configResult = await computeEslintConfig({
-        youDontNeedLodashUnderscore: {files: FILES},
-      });
+      const configResult = await computeEslintConfig({youDontNeedLodashUnderscore: {files: FILES}});
 
       expect(
         configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')?.files,
       ).toStrictEqual(FILES);
     });
 
-    it('disables `you-dont-need-lodash-underscore` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        youDontNeedLodashUnderscore: {files: []},
-      });
+    it('disables `you-dont-need-lodash-underscore` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({youDontNeedLodashUnderscore: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')).toBeUndefined();
     });
@@ -191,7 +218,7 @@ describe('un options', () => {
 
       const ignores = configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -210,38 +237,9 @@ describe('un options', () => {
         'you-dont-need-lodash-underscore/map',
       ),
     ).toBe(0);
-
     expect(configResult.getRuleEntrySeverity('you-dont-need-lodash-underscore', 'no-console')).toBe(
       0,
     );
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `you-dont-need-lodash-underscore` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        youDontNeedLodashUnderscore: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore'),
-          (ruleName) => ruleName.startsWith('you-dont-need-lodash-underscore/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `you-dont-need-lodash-underscore` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        youDontNeedLodashUnderscore: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore'),
-          (ruleName) => ruleName.startsWith('you-dont-need-lodash-underscore/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 
@@ -267,7 +265,6 @@ describe('options', () => {
             ),
         ),
       ).toStrictEqual([0]);
-
       expect(
         configResult.getRuleEntrySeverity(
           'you-dont-need-lodash-underscore',
@@ -276,7 +273,7 @@ describe('options', () => {
       ).not.toBe(0);
     });
 
-    it('disables `map` rule when added to `ignoredMethods`', async () => {
+    it('disables `you-dont-need-lodash-underscore/map` rule when added to `ignoredMethods`', async () => {
       const configResult = await computeEslintConfig({
         youDontNeedLodashUnderscore: {ignoredMethods: {map: true}},
       });

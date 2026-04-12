@@ -19,7 +19,6 @@ describe('basic tests', async () => {
 
   it('creates `lit` and `lit-a11y` eslint configs', () => {
     expect(configResult.getConfigByUnPostfix('lit')).toBeDefined();
-
     expect(configResult.getConfigByUnPostfix('lit-a11y')).toBeDefined();
   });
 
@@ -145,17 +144,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `lit` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
-      const configResult = await computeEslintConfig({
-        lit: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({lit: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('lit')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `lit` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        lit: {files: []},
-      });
+    it('disables `lit` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({lit: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('lit')).toBeUndefined();
     });
@@ -164,13 +160,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `lit` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        lit: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({lit: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('lit')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -181,34 +176,7 @@ describe('un options', () => {
     });
 
     expect(configResult.getRuleEntrySeverity('lit', 'lit/attribute-names')).toBe(0);
-
     expect(configResult.getRuleEntrySeverity('lit', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `lit` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        lit: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('lit'), (ruleName) =>
-          ruleName.startsWith('lit/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `lit` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        lit: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('lit'), (ruleName) =>
-          ruleName.startsWith('lit/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 

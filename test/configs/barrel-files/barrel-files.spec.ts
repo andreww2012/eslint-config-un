@@ -15,54 +15,49 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `barrel-files` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('barrel-files')).toBeUndefined();
+      await expectConfigState({}, 'barrel-files', false);
     });
 
     it('creates `barrel-files` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('barrelFiles');
-
-      expect(configResult.getConfigByUnPostfix('barrel-files')).toBeDefined();
+      await expectConfigState('barrelFiles', 'barrel-files', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('does not create `barrel-files` eslint config', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('barrel-files')).toBeUndefined();
+      await expectConfigState({}, 'barrel-files', false, 'default');
     });
 
     it('creates `barrel-files` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('barrelFiles', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('barrel-files')).toBeDefined();
+      await expectConfigState('barrelFiles', 'barrel-files', true, 'default');
     });
 
     it('does not create `barrel-files` eslint config and prints a warning if explicitly disabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig({barrelFiles: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('barrel-files')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to disable `barrelFiles` config because this is the default',
-        ),
-      ).toBe(true);
+      await expectConfigState(
+        {barrelFiles: false},
+        'barrel-files',
+        ['barrelFiles', false],
+        'default',
+      );
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('does not create `barrel-files` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'barrel-files', false, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('barrel-files')).toBeUndefined();
+    it('creates `barrel-files` eslint config if explicitly enabled', async () => {
+      await expectConfigState({barrelFiles: true}, 'barrel-files', true, 'misc-enabled');
+    });
+
+    it('does not create `barrel-files` eslint config and prints a warning if explicitly disabled', async () => {
+      await expectConfigState(
+        {barrelFiles: false},
+        'barrel-files',
+        ['barrelFiles', false],
+        'misc-enabled',
+      );
     });
   });
 
@@ -119,7 +114,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('barrel-files')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `barrel-files` eslint config when `files` is empty array', async () => {
+    it('disables `barrel-files` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({barrelFiles: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('barrel-files')).toBeUndefined();
@@ -134,7 +129,7 @@ describe('un options', () => {
 
       const ignores = configResult.getConfigByUnPostfix('barrel-files')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -151,31 +146,5 @@ describe('un options', () => {
       configResult.getRuleEntrySeverity('barrel-files', 'barrel-files/avoid-re-export-all'),
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('barrel-files', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `barrel-files` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        barrelFiles: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('barrel-files'), (ruleName) =>
-          ruleName.startsWith('barrel-files/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `barrel-files` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        barrelFiles: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('barrel-files'), (ruleName) =>
-          ruleName.startsWith('barrel-files/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

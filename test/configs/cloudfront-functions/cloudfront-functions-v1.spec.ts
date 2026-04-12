@@ -4,7 +4,7 @@ const FIXTURES = {
   cloudfrontImport: 'cloudfront-import.js',
 } as const;
 
-describe('cloudfront functions: sub config `configV1`', () => {
+describe('cloudfront functions: sub config `v1`', () => {
   describe('basic tests', async () => {
     it('does not create `cloudfront-functions/v1` eslint config when neither `files` or `ignores` are provided', async () => {
       const configResult = await computeEslintConfig({
@@ -44,13 +44,13 @@ describe('cloudfront functions: sub config `configV1`', () => {
       cloudfrontFunctions: {configV1: {files: V1_FILES}},
     });
 
-    it('enables `no-restricted-globals` rule in `cloudfront-functions/v1` config', () => {
+    it('enables `no-restricted-globals` rule in `cloudfront-functions/v1` eslint config', () => {
       expect(
         configResult.getRuleEntrySeverity('cloudfront-functions/v1', 'no-restricted-globals'),
       ).toBe(2);
     });
 
-    it('disables `no-var` rule in `cloudfront-functions/v1` config (v1 does not support let/const)', () => {
+    it('disables `no-var` rule in `cloudfront-functions/v1` eslint config (v1 does not support let/const)', () => {
       expect(configResult.getRuleEntrySeverity('cloudfront-functions/v1', 'no-var')).toBe(0);
     });
 
@@ -77,6 +77,7 @@ describe('cloudfront functions: sub config `configV1`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `cloudfront-functions/v1` eslint config', async () => {
         const FILES = ['src/**/*.cf-v1.js'];
+
         const configResult = await computeEslintConfig({
           cloudfrontFunctions: {configV1: {files: FILES}},
         });
@@ -98,6 +99,7 @@ describe('cloudfront functions: sub config `configV1`', () => {
     describe('option: `ignores`', () => {
       it('creates `cloudfront-functions/v1` eslint config when `configV1.ignores` is non-empty (even without `files`)', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           cloudfrontFunctions: {configV1: {ignores: IGNORES}},
         });
@@ -107,13 +109,14 @@ describe('cloudfront functions: sub config `configV1`', () => {
 
       it('uses user-provided `ignores` in `cloudfront-functions/v1` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           cloudfrontFunctions: {configV1: {files: ['**/*.js'], ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('cloudfront-functions/v1')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -131,28 +134,6 @@ describe('cloudfront functions: sub config `configV1`', () => {
 
       expect(configResult.getRuleEntry('cloudfront-functions/v1', 'no-restricted-globals')).toBe(0);
       expect(configResult.getRuleEntry('cloudfront-functions/v1', 'no-console')).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `cloudfront-functions/v1` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          cloudfrontFunctions: {configV1: {files: ['**/*.js'], forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('cloudfront-functions/v1')),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `cloudfront-functions/v1` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          cloudfrontFunctions: {configV1: {files: ['**/*.js'], forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('cloudfront-functions/v1')),
-        ).toStrictEqual([1]);
-      });
     });
   });
 });

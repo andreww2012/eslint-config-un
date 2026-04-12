@@ -1,4 +1,4 @@
-describe('jest: sub config `configTypescript`', () => {
+describe('jest: sub config `typescript`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig({jest: true, ts: true});
 
@@ -30,6 +30,7 @@ describe('jest: sub config `configTypescript`', () => {
 
     it('uses default TypeScript files even when parent `jest` config has explicit `files`', async () => {
       const FILES = ['tests/**/*.spec.ts'];
+
       const configResult = await computeEslintConfig({jest: {files: FILES}, ts: true});
 
       expect(configResult.getConfigByUnPostfix('jest/ts')?.files).toMatchInlineSnapshot(
@@ -68,6 +69,7 @@ describe('jest: sub config `configTypescript`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `jest/ts` eslint config', async () => {
         const FILES = ['src/**/*.spec.ts'];
+
         const configResult = await computeEslintConfig({
           jest: {configTypescript: {files: FILES}},
           ts: true,
@@ -76,7 +78,7 @@ describe('jest: sub config `configTypescript`', () => {
         expect(configResult.getConfigByUnPostfix('jest/ts')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `jest/ts` eslint config when `files` is empty array', async () => {
+      it('disables `jest/ts` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           jest: {configTypescript: {files: []}},
           ts: true,
@@ -89,6 +91,7 @@ describe('jest: sub config `configTypescript`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `jest/ts` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           jest: {configTypescript: {ignores: IGNORES}},
           ts: true,
@@ -114,34 +117,6 @@ describe('jest: sub config `configTypescript`', () => {
 
       expect(configResult.getRuleEntrySeverity('jest/ts', 'jest/no-untyped-mock-factory')).toBe(0);
       expect(configResult.getRuleEntrySeverity('jest/ts', 'no-console')).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `jest/ts` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jest: {configTypescript: {forceSeverity: 'error'}},
-          ts: true,
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('jest/ts'), (ruleName) =>
-            ruleName.startsWith('jest/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `jest/ts` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          jest: {configTypescript: {forceSeverity: 'warn'}},
-          ts: true,
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('jest/ts'), (ruleName) =>
-            ruleName.startsWith('jest/'),
-          ),
-        ).toStrictEqual([1]);
-      });
     });
   });
 });

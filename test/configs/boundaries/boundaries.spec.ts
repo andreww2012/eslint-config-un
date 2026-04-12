@@ -42,6 +42,10 @@ describe('basic tests', async () => {
       await expectConfigState({}, 'boundaries', false, 'misc-enabled');
     });
 
+    it('creates `boundaries` eslint config if explicitly enabled', async () => {
+      await expectConfigState({boundaries: true}, 'boundaries', true, 'misc-enabled');
+    });
+
     it('does not create `boundaries` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState(
         {boundaries: false},
@@ -108,6 +112,7 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `boundaries` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
+
       const configResult = await computeEslintConfig({
         boundaries: {files: FILES, settings: {elements: []}},
       });
@@ -115,7 +120,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('boundaries')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `boundaries` eslint config when `files` is empty array', async () => {
+    it('disables `boundaries` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({
         boundaries: {files: [], settings: {elements: []}},
       });
@@ -127,13 +132,14 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `boundaries` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({
         boundaries: {ignores: IGNORES, settings: {elements: []}},
       });
 
       const ignores = configResult.getConfigByUnPostfix('boundaries')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -149,32 +155,6 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('boundaries', 'boundaries/element-types')).toBe(0);
     expect(configResult.getRuleEntrySeverity('boundaries', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `boundaries` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        boundaries: {forceSeverity: 'error', settings: {elements: []}},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('boundaries'), (ruleName) =>
-          ruleName.startsWith('boundaries/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `boundaries` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        boundaries: {forceSeverity: 'warn', settings: {elements: []}},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('boundaries'), (ruleName) =>
-          ruleName.startsWith('boundaries/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 

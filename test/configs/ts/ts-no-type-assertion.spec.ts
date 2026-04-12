@@ -11,7 +11,7 @@ describe('ts: sub config `noTypeAssertion`', () => {
       expect(configResult.getLoadedPlugin('no-type-assertion')).toBeUndefined();
     });
 
-    it('creates `no-type-assertion` eslint config, loads `no-type-assertion` plugin and has expected defaults when set to `true`', async () => {
+    it('creates `no-type-assertion` eslint config, loads `no-type-assertion` plugin when set to `true`', async () => {
       const configResult = await computeEslintConfig({ts: {configNoTypeAssertion: true}});
 
       expect(configResult.getLoadedPlugin('no-type-assertion')).toBeDefined();

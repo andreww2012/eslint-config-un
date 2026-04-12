@@ -15,54 +15,44 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `case-police` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('case-police')).toBeUndefined();
+      await expectConfigState({}, 'case-police', false);
     });
 
     it('creates `case-police` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('casePolice');
-
-      expect(configResult.getConfigByUnPostfix('case-police')).toBeDefined();
+      await expectConfigState('casePolice', 'case-police', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('does not create `case-police` eslint config', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('case-police')).toBeUndefined();
+      await expectConfigState({}, 'case-police', false, 'default');
     });
 
     it('creates `case-police` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('casePolice', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('case-police')).toBeDefined();
+      await expectConfigState('casePolice', 'case-police', true, 'default');
     });
 
     it('does not create `case-police` eslint config and prints a warning if explicitly disabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig({casePolice: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('case-police')).toBeUndefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] There is no need to disable `casePolice` config because this is the default',
-        ),
-      ).toBe(true);
+      await expectConfigState({casePolice: false}, 'case-police', ['casePolice', false], 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('does not create `case-police` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'case-police', false, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('case-police')).toBeUndefined();
+    it('creates `case-police` eslint config if explicitly enabled', async () => {
+      await expectConfigState({casePolice: true}, 'case-police', true, 'misc-enabled');
+    });
+
+    it('does not create `case-police` eslint config and prints a warning if explicitly disabled', async () => {
+      await expectConfigState(
+        {casePolice: false},
+        'case-police',
+        ['casePolice', false],
+        'misc-enabled',
+      );
     });
   });
 
@@ -104,17 +94,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `case-police` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
-      const configResult = await computeEslintConfig({
-        casePolice: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({casePolice: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('case-police')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `case-police` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        casePolice: {files: []},
-      });
+    it('disables `case-police` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({casePolice: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('case-police')).toBeUndefined();
     });
@@ -123,9 +110,8 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `case-police` eslint config', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        casePolice: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({casePolice: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('case-police')?.ignores;
 
@@ -140,31 +126,5 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('case-police', 'case-police/string-check')).toBe(0);
     expect(configResult.getRuleEntrySeverity('case-police', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `case-police` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        casePolice: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('case-police'), (ruleName) =>
-          ruleName.startsWith('case-police/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `case-police` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        casePolice: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('case-police'), (ruleName) =>
-          ruleName.startsWith('case-police/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });

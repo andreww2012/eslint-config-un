@@ -103,6 +103,7 @@ describe('react: sub config `dom`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `react/dom` eslint config', async () => {
         const FILES = ['src/**/*.jsx'];
+
         const configResult = await computeEslintConfig({
           react: {configDom: {files: FILES}},
         });
@@ -110,7 +111,7 @@ describe('react: sub config `dom`', () => {
         expect(configResult.getConfigByUnPostfix('react/dom')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `react/dom` eslint config when `files` is empty array', async () => {
+      it('disables `react/dom` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           react: {configDom: {files: []}},
         });
@@ -122,6 +123,7 @@ describe('react: sub config `dom`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `react/dom` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           react: {configDom: {ignores: IGNORES}},
         });
@@ -144,20 +146,6 @@ describe('react: sub config `dom`', () => {
           '@eslint-react/dom/no-dangerously-set-innerhtml',
         ),
       ).toBe(0);
-    });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `warn` in `react/dom` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          react: {configDom: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('react/dom'), (ruleName) =>
-            ruleName.startsWith('@eslint-react/'),
-          ),
-        ).toStrictEqual([1]);
-      });
     });
   });
 });

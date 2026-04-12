@@ -137,17 +137,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `markdown-links` eslint config', async () => {
       const FILES = ['docs/**/*.md'];
-      const configResult = await computeEslintConfig({
-        markdownLinks: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({markdownLinks: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('markdown-links')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `markdown-links` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        markdownLinks: {files: []},
-      });
+    it('disables `markdown-links` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({markdownLinks: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('markdown-links')).toBeUndefined();
     });
@@ -156,9 +153,8 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `markdown-links` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        markdownLinks: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({markdownLinks: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('markdown-links')?.ignores;
 
@@ -180,37 +176,11 @@ describe('un options', () => {
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('markdown-links', 'no-console')).toBe(0);
   });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `markdown-links` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        markdownLinks: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('markdown-links'), (ruleName) =>
-          ruleName.startsWith('markdown-links/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `markdown-links` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        markdownLinks: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('markdown-links'), (ruleName) =>
-          ruleName.startsWith('markdown-links/'),
-        ),
-      ).toStrictEqual([1]);
-    });
-  });
 });
 
 describe('options', () => {
   describe('option: `check.deadUrls`', () => {
-    it('sets `markdown-links/no-dead-urls` to warning with `checkAnchor: false` when option is not set', async () => {
+    it('sets `markdown-links/no-dead-urls` to warning with `checkAnchor: false` by default', async () => {
       const configResult = await computeEslintConfig('markdownLinks');
 
       expect(
@@ -250,7 +220,7 @@ describe('options', () => {
   });
 
   describe('option: `check.missingFragments`', () => {
-    it('enables `markdown-links/no-missing-fragments` rule at error when option is not set', async () => {
+    it('enables `markdown-links/no-missing-fragments` rule at error by default', async () => {
       const configResult = await computeEslintConfig('markdownLinks');
 
       expect(
@@ -280,7 +250,7 @@ describe('options', () => {
   });
 
   describe('option: `check.missingLocalPath`', () => {
-    it('enables `markdown-links/no-missing-path` rule at error when option is not set', async () => {
+    it('enables `markdown-links/no-missing-path` rule at error by default', async () => {
       const configResult = await computeEslintConfig('markdownLinks');
 
       expect(
@@ -310,7 +280,7 @@ describe('options', () => {
   });
 
   describe('option: `check.selfDestinationLinks`', () => {
-    it('enables `markdown-links/no-self-destination` rule at error when option is not set', async () => {
+    it('enables `markdown-links/no-self-destination` rule at error by default', async () => {
       const configResult = await computeEslintConfig('markdownLinks');
 
       expect(

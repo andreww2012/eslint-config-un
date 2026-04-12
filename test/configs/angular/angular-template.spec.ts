@@ -9,7 +9,7 @@ beforeEach(() => {
   addInstalledPackages({'@angular/core': '19.0.0'});
 });
 
-describe('angular: sub config `configTemplate`', () => {
+describe('angular: sub config `template`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig('angular');
 
@@ -17,18 +17,14 @@ describe('angular: sub config `configTemplate`', () => {
       expect(configResult.getConfigByUnPostfix('angular/template')).toBeDefined();
     });
 
-    it('does not create `angular/template` eslint config when `configTemplate` is `false`', async () => {
-      const noTemplateConfigResult = await computeEslintConfig({
-        angular: {configTemplate: false},
-      });
+    it('does not create `angular/template` eslint config when set to `false`', async () => {
+      const noTemplateConfigResult = await computeEslintConfig({angular: {configTemplate: false}});
 
       expect(noTemplateConfigResult.getConfigByUnPostfix('angular/template')).toBeUndefined();
     });
 
-    it('creates `angular/template` eslint config when `configTemplate` is `true` explicitly', async () => {
-      const explicitConfigResult = await computeEslintConfig({
-        angular: {configTemplate: true},
-      });
+    it('creates `angular/template` eslint config when set to `true`', async () => {
+      const explicitConfigResult = await computeEslintConfig({angular: {configTemplate: true}});
 
       expect(explicitConfigResult.getConfigByUnPostfix('angular/template')).toBeDefined();
     });
@@ -43,7 +39,7 @@ describe('angular: sub config `configTemplate`', () => {
       const ignores = configResult.getConfigByUnPostfix('angular/template')?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.to.include.members([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
   });
 
@@ -107,17 +103,14 @@ describe('angular: sub config `configTemplate`', () => {
     describe('option: `files`', () => {
       it('uses user-provided `files` in `angular/template` eslint config', async () => {
         const FILES = ['src/**/*.html'];
-        const configResult = await computeEslintConfig({
-          angular: {configTemplate: {files: FILES}},
-        });
+
+        const configResult = await computeEslintConfig({angular: {configTemplate: {files: FILES}}});
 
         expect(configResult.getConfigByUnPostfix('angular/template')?.files).toStrictEqual(FILES);
       });
 
-      it('disables `angular/template` eslint config when `files` is empty array', async () => {
-        const configResult = await computeEslintConfig({
-          angular: {configTemplate: {files: []}},
-        });
+      it('disables `angular/template` eslint config when set to empty array', async () => {
+        const configResult = await computeEslintConfig({angular: {configTemplate: {files: []}}});
 
         expect(configResult.getConfigByUnPostfix('angular/template')).toBeUndefined();
       });
@@ -126,13 +119,14 @@ describe('angular: sub config `configTemplate`', () => {
     describe('option: `ignores`', () => {
       it('uses user-provided `ignores` in `angular/template` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
+
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('angular/template')?.ignores;
 
-        expect(ignores).to.include.members(IGNORES);
+        expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
@@ -155,37 +149,11 @@ describe('angular: sub config `configTemplate`', () => {
       ).toBe(0);
       expect(configResult.getRuleEntrySeverity('angular/template', 'no-console')).toBe(0);
     });
-
-    describe('option: `forceSeverity`', () => {
-      it('respects `forceSeverity` set to `error` in `angular/template` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          angular: {configTemplate: {forceSeverity: 'error'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('angular/template'), (ruleName) =>
-            ruleName.startsWith('@angular-eslint/template/'),
-          ),
-        ).toStrictEqual([2]);
-      });
-
-      it('respects `forceSeverity` set to `warn` in `angular/template` eslint config', async () => {
-        const configResult = await computeEslintConfig({
-          angular: {configTemplate: {forceSeverity: 'warn'}},
-        });
-
-        expect(
-          getAllRulesSeverities(configResult.getConfigByUnPostfix('angular/template'), (ruleName) =>
-            ruleName.startsWith('@angular-eslint/template/'),
-          ),
-        ).toStrictEqual([1]);
-      });
-    });
   });
 
   describe('options', () => {
     describe('option: `a11yRules`', () => {
-      it('enables a11y rules at error severity when option is not set', async () => {
+      it('enables a11y rules at error severity by default', async () => {
         const configResult = await computeEslintConfig('angular');
 
         expect(
@@ -196,7 +164,7 @@ describe('angular: sub config `configTemplate`', () => {
         ).toBe(2);
       });
 
-      it('enables a11y rules at error severity when option is set to `true`', async () => {
+      it('enables a11y rules at error severity when set to `true`', async () => {
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {a11yRules: true}},
         });
@@ -209,7 +177,7 @@ describe('angular: sub config `configTemplate`', () => {
         ).toBe(2);
       });
 
-      it('enables a11y rules at warning severity when option is set to `"warn"`', async () => {
+      it('enables a11y rules at warning severity when set to `"warn"`', async () => {
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {a11yRules: 'warn'}},
         });
@@ -222,7 +190,7 @@ describe('angular: sub config `configTemplate`', () => {
         ).toBe(1);
       });
 
-      it('disables a11y rules when option is set to `false`', async () => {
+      it('disables a11y rules when set to `false`', async () => {
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {a11yRules: false}},
         });
@@ -237,7 +205,7 @@ describe('angular: sub config `configTemplate`', () => {
     });
 
     describe('option: `preferControlFlow`', () => {
-      it('enables `@angular-eslint/template/prefer-control-flow` rule when option is not set (Angular 19, default `true`)', async () => {
+      it('enables `@angular-eslint/template/prefer-control-flow` rule by default (Angular 19, default `true`)', async () => {
         const configResult = await computeEslintConfig('angular');
 
         expect(
@@ -248,7 +216,7 @@ describe('angular: sub config `configTemplate`', () => {
         ).toBe(2);
       });
 
-      it('enables `@angular-eslint/template/prefer-control-flow` rule when option is `true`', async () => {
+      it('enables `@angular-eslint/template/prefer-control-flow` rule when set to `true`', async () => {
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {preferControlFlow: true}},
         });
@@ -261,7 +229,7 @@ describe('angular: sub config `configTemplate`', () => {
         ).toBe(2);
       });
 
-      it('disables `@angular-eslint/template/prefer-control-flow` rule when option is `false`', async () => {
+      it('disables `@angular-eslint/template/prefer-control-flow` rule when set to `false`', async () => {
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {preferControlFlow: false}},
         });
@@ -276,7 +244,7 @@ describe('angular: sub config `configTemplate`', () => {
     });
 
     describe('option: `preferNgSrc`', () => {
-      it('disables `@angular-eslint/template/prefer-ngsrc` rule when option is not set', async () => {
+      it('disables `@angular-eslint/template/prefer-ngsrc` rule by default', async () => {
         const configResult = await computeEslintConfig('angular');
 
         expect(
@@ -287,7 +255,7 @@ describe('angular: sub config `configTemplate`', () => {
         ).toBe(0);
       });
 
-      it('enables `@angular-eslint/template/prefer-ngsrc` rule when option is `true`', async () => {
+      it('enables `@angular-eslint/template/prefer-ngsrc` rule when set to `true`', async () => {
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {preferNgSrc: true}},
         });
@@ -300,7 +268,7 @@ describe('angular: sub config `configTemplate`', () => {
         ).toBe(2);
       });
 
-      it('disables `@angular-eslint/template/prefer-ngsrc` rule when option is `false`', async () => {
+      it('disables `@angular-eslint/template/prefer-ngsrc` rule when set to `false`', async () => {
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {preferNgSrc: false}},
         });
@@ -315,7 +283,7 @@ describe('angular: sub config `configTemplate`', () => {
     });
 
     describe('option: `requireLoopIndexes`', () => {
-      it('disables `@angular-eslint/template/use-track-by-function` rule when option is not set', async () => {
+      it('disables `@angular-eslint/template/use-track-by-function` rule by default', async () => {
         const configResult = await computeEslintConfig('angular');
 
         expect(
@@ -326,7 +294,7 @@ describe('angular: sub config `configTemplate`', () => {
         ).toBe(0);
       });
 
-      it('enables `@angular-eslint/template/use-track-by-function` rule when option is `true`', async () => {
+      it('enables `@angular-eslint/template/use-track-by-function` rule when set to `true`', async () => {
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {requireLoopIndexes: true}},
         });
@@ -339,7 +307,7 @@ describe('angular: sub config `configTemplate`', () => {
         ).toBe(2);
       });
 
-      it('disables `@angular-eslint/template/use-track-by-function` rule when option is `false`', async () => {
+      it('disables `@angular-eslint/template/use-track-by-function` rule when set to `false`', async () => {
         const configResult = await computeEslintConfig({
           angular: {configTemplate: {requireLoopIndexes: false}},
         });

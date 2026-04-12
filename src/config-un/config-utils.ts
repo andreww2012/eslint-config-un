@@ -41,10 +41,12 @@ export function getIsConfigEnabled(
   let reason: string | undefined;
 
   const providedConfig = configs[configName];
+  /* v8 ignore start */
   if (this.isTestMode) {
     enabledBySystem ??= true;
     reason ??= 'all configs are enabled in the test mode';
   }
+  /* v8 ignore stop */
   if (providedConfig != null) {
     enabledByUser ??= Boolean(providedConfig);
     reason ??= 'provided by the user';

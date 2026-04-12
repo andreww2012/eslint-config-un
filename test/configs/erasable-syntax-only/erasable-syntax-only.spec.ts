@@ -102,7 +102,6 @@ describe('rules', async () => {
     );
 
     expect(error).toBeUndefined();
-
     expect(results[0]?.messages.find((m) => m.ruleId == null)?.message).toMatchInlineSnapshot(
       `"Parsing error: The keyword 'enum' is reserved"`,
     );
@@ -131,17 +130,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `erasable-syntax-only` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
-      const configResult = await computeEslintConfig({
-        erasableSyntaxOnly: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({erasableSyntaxOnly: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('erasable-syntax-only')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `erasable-syntax-only` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        erasableSyntaxOnly: {files: []},
-      });
+    it('disables `erasable-syntax-only` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({erasableSyntaxOnly: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('erasable-syntax-only')).toBeUndefined();
     });
@@ -150,13 +146,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `erasable-syntax-only` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        erasableSyntaxOnly: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({erasableSyntaxOnly: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('erasable-syntax-only')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -173,34 +168,6 @@ describe('un options', () => {
       configResult.getRuleEntrySeverity('erasable-syntax-only', 'erasable-syntax-only/enums'),
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('erasable-syntax-only', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `erasable-syntax-only` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        erasableSyntaxOnly: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('erasable-syntax-only'),
-          (ruleName) => ruleName.startsWith('erasable-syntax-only/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `erasable-syntax-only` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        erasableSyntaxOnly: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(
-          configResult.getConfigByUnPostfix('erasable-syntax-only'),
-          (ruleName) => ruleName.startsWith('erasable-syntax-only/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 

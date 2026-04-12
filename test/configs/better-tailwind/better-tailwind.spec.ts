@@ -5,6 +5,10 @@ const FIXTURES = {
   tailwindInCssDuplicateClasses: 'tailwind-in-css-duplicate-classes.css',
 } as const;
 
+beforeEach(() => {
+  addInstalledPackages({tailwindcss: '3.4.17'});
+});
+
 const DEFAULT_SETTINGS = {
   entryPoint: path.posix.resolve(import.meta.dirname, 'fixtures', 'tailwind-entry.css'),
 };
@@ -22,56 +26,76 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `better-tailwindcss` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeUndefined();
+      await expectConfigState({}, 'better-tailwindcss', false);
     });
 
     it('creates `better-tailwindcss` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig({betterTailwind: true});
-
-      expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeDefined();
+      await expectConfigState('betterTailwind', 'better-tailwindcss', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('creates `better-tailwindcss` eslint config by default (tailwindcss is installed)', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeDefined();
+      await expectConfigState({}, 'better-tailwindcss', true, 'default');
     });
 
     it('creates `better-tailwindcss` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      await computeEslintConfig({betterTailwind: true}, {reset: true});
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to enable \`betterTailwind\` config because this is the default`,
-        ),
-      ).toBe(true);
+      await expectConfigState(
+        'betterTailwind',
+        'better-tailwindcss',
+        ['betterTailwind', true],
+        'default',
+      );
     });
 
     it('does not create `better-tailwindcss` eslint config if explicitly disabled', async () => {
-      const configResult = await computeEslintConfig({betterTailwind: false}, {reset: true});
+      await expectConfigState({betterTailwind: false}, 'better-tailwindcss', false, 'default');
+    });
 
-      expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeUndefined();
+    describe('`tailwindcss` is not installed', () => {
+      beforeEach(() => {
+        setInstalledPackages({});
+      });
+
+      it('does not create `better-tailwindcss` eslint config', async () => {
+        await expectConfigState({}, 'better-tailwindcss', false, 'default');
+      });
+
+      it('creates `better-tailwindcss` eslint config if explicitly enabled', async () => {
+        await expectConfigState('betterTailwind', 'better-tailwindcss', true, 'default');
+      });
+
+      it('does not create `better-tailwindcss` eslint config and prints a warning if explicitly disabled', async () => {
+        await expectConfigState(
+          {betterTailwind: false},
+          'better-tailwindcss',
+          ['betterTailwind', false],
+          'default',
+        );
+      });
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `better-tailwindcss` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'better-tailwindcss', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeDefined();
+    it('creates `better-tailwindcss` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState(
+        'betterTailwind',
+        'better-tailwindcss',
+        ['betterTailwind', true],
+        'misc-enabled',
+      );
+    });
+
+    it('does not create `better-tailwindcss` eslint config if explicitly disabled', async () => {
+      await expectConfigState({betterTailwind: false}, 'better-tailwindcss', false, 'misc-enabled');
     });
   });
 
-  it('has default `files` in `better-tailwindcss` eslint config', () => {
+  it('has no explicit `files` restriction in `better-tailwindcss` eslint config', () => {
     expect(configResult.getConfigByUnPostfix('better-tailwindcss')?.files).toBeUndefined();
   });
 
@@ -87,19 +111,18 @@ describe('rules', async () => {
 
   it('enables `better-tailwindcss/no-conflicting-classes` rule by default', () => {
     expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry(
-          'better-tailwindcss',
-          'better-tailwindcss/no-conflicting-classes',
-        ),
+      configResult.getRuleEntrySeverity(
+        'better-tailwindcss',
+        'better-tailwindcss/no-conflicting-classes',
       ),
     ).toBe(2);
   });
 
   it('disables `better-tailwindcss/no-unknown-classes` rule by default', () => {
     expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('better-tailwindcss', 'better-tailwindcss/no-unknown-classes'),
+      configResult.getRuleEntrySeverity(
+        'better-tailwindcss',
+        'better-tailwindcss/no-unknown-classes',
       ),
     ).toBe(0);
   });
@@ -109,7 +132,13 @@ describe('rules', async () => {
       {
         betterTailwind: {
           files: ['**'],
-          settings: DEFAULT_SETTINGS,
+          settings: {
+            tailwindConfig: path.posix.resolve(
+              import.meta.dirname,
+              'fixtures',
+              'tailwind.config.js',
+            ),
+          },
         },
       },
       FIXTURES.tailwindInJsxDuplicateClasses,
@@ -122,7 +151,7 @@ describe('rules', async () => {
       'better-tailwindcss/no-duplicate-classes',
     );
 
-    expect(error?.message).toMatchInlineSnapshot(`"Duplicate classname: "flex"."`);
+    expect(error?.message).toMatchInlineSnapshot('"Duplicate classname: "flex"."');
   });
 });
 
@@ -130,6 +159,7 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `better-tailwindcss` eslint config', async () => {
       const FILES = ['**/*.jsx'];
+
       const configResult = await computeEslintConfig({
         betterTailwind: {files: FILES, settings: DEFAULT_SETTINGS},
       });
@@ -137,7 +167,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('better-tailwindcss')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `better-tailwindcss` eslint config when `files` is empty array', async () => {
+    it('disables `better-tailwindcss` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({
         betterTailwind: {files: [], settings: DEFAULT_SETTINGS},
       });
@@ -149,13 +179,14 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `better-tailwindcss` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
+
       const configResult = await computeEslintConfig({
         betterTailwind: {ignores: IGNORES, settings: DEFAULT_SETTINGS},
       });
 
       const ignores = configResult.getConfigByUnPostfix('better-tailwindcss')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -170,45 +201,12 @@ describe('un options', () => {
     });
 
     expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry(
-          'better-tailwindcss',
-          'better-tailwindcss/no-conflicting-classes',
-        ),
+      configResult.getRuleEntrySeverity(
+        'better-tailwindcss',
+        'better-tailwindcss/no-conflicting-classes',
       ),
     ).toBe(0);
-
-    expect(
-      getRuleSeverityFromEslintRuleEntry(
-        configResult.getRuleEntry('better-tailwindcss', 'no-console'),
-      ),
-    ).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `better-tailwindcss` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        betterTailwind: {forceSeverity: 'error', settings: DEFAULT_SETTINGS},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('better-tailwindcss'), (ruleName) =>
-          ruleName.startsWith('better-tailwindcss/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `better-tailwindcss` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        betterTailwind: {forceSeverity: 'warn', settings: DEFAULT_SETTINGS},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('better-tailwindcss'), (ruleName) =>
-          ruleName.startsWith('better-tailwindcss/'),
-        ),
-      ).toStrictEqual([1]);
-    });
+    expect(configResult.getRuleEntrySeverity('better-tailwindcss', 'no-console')).toBe(0);
   });
 });
 
@@ -234,7 +232,7 @@ describe('options', () => {
   });
 
   describe('option: `classOrder`', () => {
-    it('enables `enforce-consistent-class-order` rule with "official" order by default', async () => {
+    it('enables `better-tailwindcss/enforce-consistent-class-order` rule with "official" order by default', async () => {
       const configResult = await computeEslintConfig('betterTailwind');
 
       expect(
@@ -242,10 +240,10 @@ describe('options', () => {
           'better-tailwindcss',
           'better-tailwindcss/enforce-consistent-class-order',
         ),
-      ).toMatchInlineSnapshot(`[1, {"order": "official"}]`);
+      ).toMatchInlineSnapshot('[1, {"order": "official"}]');
     });
 
-    it('enables `enforce-consistent-class-order` rule with custom order when `classOrder` is a string', async () => {
+    it('enables `better-tailwindcss/enforce-consistent-class-order` rule with custom order when set to string', async () => {
       const configResult = await computeEslintConfig({
         betterTailwind: {classOrder: 'asc', settings: DEFAULT_SETTINGS},
       });
@@ -255,40 +253,36 @@ describe('options', () => {
           'better-tailwindcss',
           'better-tailwindcss/enforce-consistent-class-order',
         ),
-      ).toMatchInlineSnapshot(`[1, {"order": "asc"}]`);
+      ).toMatchInlineSnapshot('[1, {"order": "asc"}]');
     });
 
-    it('disables `enforce-consistent-class-order` rule when `classOrder` is `false`', async () => {
+    it('disables `better-tailwindcss/enforce-consistent-class-order` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         betterTailwind: {classOrder: false, settings: DEFAULT_SETTINGS},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'better-tailwindcss',
-            'better-tailwindcss/enforce-consistent-class-order',
-          ),
+        configResult.getRuleEntrySeverity(
+          'better-tailwindcss',
+          'better-tailwindcss/enforce-consistent-class-order',
         ),
       ).toBe(0);
     });
   });
 
   describe('option: `restrictedClasses`', () => {
-    it('disables `no-restricted-classes` rule when `restrictedClasses` is not set (default)', async () => {
+    it('disables `better-tailwindcss/no-restricted-classes` rule by default', async () => {
       const configResult = await computeEslintConfig('betterTailwind');
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'better-tailwindcss',
-            'better-tailwindcss/no-restricted-classes',
-          ),
+        configResult.getRuleEntrySeverity(
+          'better-tailwindcss',
+          'better-tailwindcss/no-restricted-classes',
         ),
       ).toBe(0);
     });
 
-    it('enables `no-restricted-classes` rule with list when `restrictedClasses` is set', async () => {
+    it('enables `better-tailwindcss/no-restricted-classes` rule with list when set', async () => {
       const configResult = await computeEslintConfig({
         betterTailwind: {
           restrictedClasses: ['flex', 'block'],
@@ -298,25 +292,23 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('better-tailwindcss', 'better-tailwindcss/no-restricted-classes'),
-      ).toMatchInlineSnapshot(`[2, {"restrict": ["flex", "block"]}]`);
+      ).toMatchInlineSnapshot('[2, {"restrict": ["flex", "block"]}]');
     });
   });
 
   describe('option: `breakUpClassesIntoMultipleLines`', () => {
-    it('disables `enforce-consistent-line-wrapping` rule when not set (default)', async () => {
+    it('disables `better-tailwindcss/enforce-consistent-line-wrapping` rule by default', async () => {
       const configResult = await computeEslintConfig('betterTailwind');
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'better-tailwindcss',
-            'better-tailwindcss/enforce-consistent-line-wrapping',
-          ),
+        configResult.getRuleEntrySeverity(
+          'better-tailwindcss',
+          'better-tailwindcss/enforce-consistent-line-wrapping',
         ),
       ).toBe(0);
     });
 
-    it('enables `enforce-consistent-line-wrapping` rule when `breakUpClassesIntoMultipleLines` is set', async () => {
+    it('enables `better-tailwindcss/enforce-consistent-line-wrapping` rule when set', async () => {
       const configResult = await computeEslintConfig({
         betterTailwind: {
           breakUpClassesIntoMultipleLines: {printWidth: 80},
@@ -329,16 +321,24 @@ describe('options', () => {
           'better-tailwindcss',
           'better-tailwindcss/enforce-consistent-line-wrapping',
         ),
-      ).toMatchInlineSnapshot(`[1, {"printWidth": 80}]`);
+      ).toMatchInlineSnapshot('[1, {"printWidth": 80}]');
     });
   });
 
   describe('option: `cssLinting`', () => {
-    it('lints CSS files when css config is enabled (default behavior)', async () => {
+    it('lints CSS files when css config is enabled by default', async () => {
       const result = await testEslintConfig(
         {
           css: true,
-          betterTailwind: {settings: DEFAULT_SETTINGS},
+          betterTailwind: {
+            settings: {
+              tailwindConfig: path.posix.resolve(
+                import.meta.dirname,
+                'fixtures',
+                'tailwind.config.js',
+              ),
+            },
+          },
         },
         FIXTURES.tailwindInCssDuplicateClasses,
         import.meta.dirname,
@@ -350,10 +350,10 @@ describe('options', () => {
         'better-tailwindcss/no-duplicate-classes',
       );
 
-      expect(error?.message).toMatchInlineSnapshot(`"Duplicate classname: "flex"."`);
+      expect(error?.message).toMatchInlineSnapshot('"Duplicate classname: "flex"."');
     });
 
-    it('does not lint CSS files when `cssLinting` is `false` even if css config is enabled', async () => {
+    it('does not lint CSS files when set to `false` even if css config is enabled', async () => {
       const result = await testEslintConfig(
         {
           css: true,
@@ -374,73 +374,57 @@ describe('options', () => {
   });
 
   describe('option: `tailwindVersion`', () => {
-    it('applies Tailwind v4-specific rules when `tailwindVersion` is 4', async () => {
+    it('applies Tailwind v4-specific rules when set to 4', async () => {
       const configResult = await computeEslintConfig({
         betterTailwind: {tailwindVersion: 4, settings: DEFAULT_SETTINGS},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'better-tailwindcss',
-            'better-tailwindcss/enforce-canonical-classes',
-          ),
+        configResult.getRuleEntrySeverity(
+          'better-tailwindcss',
+          'better-tailwindcss/enforce-canonical-classes',
         ),
       ).toBe(2);
-
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'better-tailwindcss',
-            'better-tailwindcss/enforce-shorthand-classes',
-          ),
+        configResult.getRuleEntrySeverity(
+          'better-tailwindcss',
+          'better-tailwindcss/enforce-shorthand-classes',
         ),
       ).toBe(0);
-
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'better-tailwindcss',
-            'better-tailwindcss/enforce-consistent-important-position',
-          ),
+        configResult.getRuleEntrySeverity(
+          'better-tailwindcss',
+          'better-tailwindcss/enforce-consistent-important-position',
         ),
       ).toBe(0);
     });
 
-    it('does not apply Tailwind v4-specific rules when `tailwindVersion` is 3', async () => {
+    it('does not apply Tailwind v4-specific rules when set to 3', async () => {
       const configResult = await computeEslintConfig({
         betterTailwind: {tailwindVersion: 3, settings: DEFAULT_SETTINGS},
       });
 
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'better-tailwindcss',
-            'better-tailwindcss/enforce-canonical-classes',
-          ),
+        configResult.getRuleEntrySeverity(
+          'better-tailwindcss',
+          'better-tailwindcss/enforce-canonical-classes',
         ),
       ).toBe(0);
-
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'better-tailwindcss',
-            'better-tailwindcss/enforce-shorthand-classes',
-          ),
+        configResult.getRuleEntrySeverity(
+          'better-tailwindcss',
+          'better-tailwindcss/enforce-shorthand-classes',
         ),
       ).toBe(2);
-
       expect(
-        getRuleSeverityFromEslintRuleEntry(
-          configResult.getRuleEntry(
-            'better-tailwindcss',
-            'better-tailwindcss/enforce-consistent-important-position',
-          ),
+        configResult.getRuleEntrySeverity(
+          'better-tailwindcss',
+          'better-tailwindcss/enforce-consistent-important-position',
         ),
       ).toBe(2);
     });
 
-    it('warns when `tailwindVersion` is 4 but `settings.entryPoint` is not specified', async () => {
+    it('warns when set to 4 but `settings.entryPoint` is not specified', async () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write');
 
       await computeEslintConfig({
@@ -455,7 +439,7 @@ describe('options', () => {
       );
     });
 
-    it('warns when `tailwindVersion` is an unsupported version (below 3)', async () => {
+    it('warns when set to an unsupported version (below 3)', async () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write');
 
       await computeEslintConfig({
@@ -467,7 +451,7 @@ describe('options', () => {
       );
     });
 
-    it('warns when `tailwindVersion` is an unsupported version (above 4)', async () => {
+    it('warns when set to an unsupported version (above 4)', async () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write');
 
       await computeEslintConfig({

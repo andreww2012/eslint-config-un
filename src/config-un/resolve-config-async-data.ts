@@ -142,7 +142,6 @@ export const resolveConfigAsyncData = async (
           packagesToManuallyInstallOrUpdate.set(packageToInstall.name, packageToInstall);
         }
 
-        // eslint-disable-next-line ts/no-unsafe-assignment
         const parser = parserResult.module;
         if (!parser) {
           return;
@@ -425,7 +424,7 @@ ${styleText(
                     const functionBody = `return (${isStartsWithPropertyName ? 'function ' : ''}${functionBodyRaw})${isRegularFunction ? '.call(this, ' : '('}...args)`;
                     return {
                       valueTransformFn: {
-                        // eslint-disable-next-line ts/no-implied-eval, no-new-func
+                        // eslint-disable-next-line no-new-func
                         fn: new Function('...args', functionBody) as ValueTransformFn['fn'],
                         ...('1' in valueTransformFn && {scope: valueTransformFn[1]}),
                       },

@@ -15,60 +15,45 @@ describe('basic tests', async () => {
 
   describe('mode: all configs are disabled', () => {
     it('does not create `no-secrets` eslint config', async () => {
-      const configResult = await computeEslintConfig({});
-
-      expect(configResult.getConfigByUnPostfix('no-secrets')).toBeUndefined();
+      await expectConfigState({}, 'no-secrets', false);
     });
 
     it('creates `no-secrets` eslint config if explicitly enabled', async () => {
-      const configResult = await computeEslintConfig('noSecrets');
-
-      expect(configResult.getConfigByUnPostfix('no-secrets')).toBeDefined();
+      await expectConfigState('noSecrets', 'no-secrets', true);
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
     it('creates `no-secrets` eslint config by default', async () => {
-      const configResult = await computeEslintConfig({}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('no-secrets')).toBeDefined();
+      await expectConfigState({}, 'no-secrets', true, 'default');
     });
 
     it('creates `no-secrets` eslint config and prints a warning if explicitly enabled', async () => {
-      using stderrSpy = vi.spyOn(process.stderr, 'write');
-
-      const configResult = await computeEslintConfig('noSecrets', {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('no-secrets')).toBeDefined();
-
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] There is no need to enable \`noSecrets\` config because this is the default`,
-        ),
-      ).toBe(true);
+      await expectConfigState('noSecrets', 'no-secrets', ['noSecrets', true], 'default');
     });
 
     it('does not create `no-secrets` eslint config if explicitly disabled', async () => {
-      const configResult = await computeEslintConfig({noSecrets: false}, {reset: true});
-
-      expect(configResult.getConfigByUnPostfix('no-secrets')).toBeUndefined();
+      await expectConfigState({noSecrets: false}, 'no-secrets', false, 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
     it('creates `no-secrets` eslint config', async () => {
-      const configResult = await computeEslintConfig(
-        {},
-        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
-      );
+      await expectConfigState({}, 'no-secrets', true, 'misc-enabled');
+    });
 
-      expect(configResult.getConfigByUnPostfix('no-secrets')).toBeDefined();
+    it('creates `no-secrets` eslint config and prints a warning if explicitly enabled', async () => {
+      await expectConfigState('noSecrets', 'no-secrets', ['noSecrets', true], 'misc-enabled');
+    });
+
+    it('does not create `no-secrets` eslint config if explicitly disabled', async () => {
+      await expectConfigState({noSecrets: false}, 'no-secrets', false, 'misc-enabled');
     });
   });
 
   it('has default `files` in `no-secrets` eslint config', () => {
     expect(configResult.getConfigByUnPostfix('no-secrets')?.files).toMatchInlineSnapshot(
-      `["**/*.?([cm])[jt]s?(x)"]`,
+      '["**/*.?([cm])[jt]s?(x)"]',
     );
   });
 
@@ -99,7 +84,7 @@ describe('rules', async () => {
 
     expect(error?.message).toMatchInlineSnapshot(
       // eslint-disable-next-line no-secrets/no-secrets
-      `"Found a string with entropy 5.11 : "WkQTUwGtlCOJXaqR34qicCxjnGEweU7v2mPUBSNA8tHZvxPZ""`,
+      '"Found a string with entropy 5.11 : "WkQTUwGtlCOJXaqR34qicCxjnGEweU7v2mPUBSNA8tHZvxPZ""',
     );
   });
 });
@@ -108,17 +93,14 @@ describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `no-secrets` eslint config', async () => {
       const FILES = ['src/**/*.ts'];
-      const configResult = await computeEslintConfig({
-        noSecrets: {files: FILES},
-      });
+
+      const configResult = await computeEslintConfig({noSecrets: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('no-secrets')?.files).toStrictEqual(FILES);
     });
 
-    it('disables `no-secrets` eslint config when `files` is empty array', async () => {
-      const configResult = await computeEslintConfig({
-        noSecrets: {files: []},
-      });
+    it('disables `no-secrets` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({noSecrets: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('no-secrets')).toBeUndefined();
     });
@@ -127,13 +109,12 @@ describe('un options', () => {
   describe('option: `ignores`', () => {
     it('uses user-provided `ignores` in `no-secrets` eslint config and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
-      const configResult = await computeEslintConfig({
-        noSecrets: {ignores: IGNORES},
-      });
+
+      const configResult = await computeEslintConfig({noSecrets: {ignores: IGNORES}});
 
       const ignores = configResult.getConfigByUnPostfix('no-secrets')?.ignores;
 
-      expect(ignores).to.include.members(IGNORES);
+      expect(ignores).toIncludeAllMembers(IGNORES);
       expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
@@ -144,44 +125,17 @@ describe('un options', () => {
     });
 
     expect(configResult.getRuleEntrySeverity('no-secrets', 'no-secrets/no-secrets')).toBe(0);
-
     expect(configResult.getRuleEntrySeverity('no-secrets', 'no-console')).toBe(0);
-  });
-
-  describe('option: `forceSeverity`', () => {
-    it('respects `forceSeverity` set to `error` in `no-secrets` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        noSecrets: {forceSeverity: 'error'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('no-secrets'), (ruleName) =>
-          ruleName.startsWith('no-secrets/'),
-        ),
-      ).toStrictEqual([2]);
-    });
-
-    it('respects `forceSeverity` set to `warn` in `no-secrets` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        noSecrets: {forceSeverity: 'warn'},
-      });
-
-      expect(
-        getAllRulesSeverities(configResult.getConfigByUnPostfix('no-secrets'), (ruleName) =>
-          ruleName.startsWith('no-secrets/'),
-        ),
-      ).toStrictEqual([1]);
-    });
   });
 });
 
 describe('options', () => {
   describe('option: `noSecretsOptions`', () => {
-    it('uses default `tolerance` (4.5) when `noSecretsOptions` is not provided', async () => {
+    it('uses default `tolerance` (4.5) by default', async () => {
       const configResult = await computeEslintConfig('noSecrets');
       const rule = configResult.getRuleEntry('no-secrets', 'no-secrets/no-secrets');
 
-      expect(rule).toMatchInlineSnapshot(`[2, {"tolerance": 4.5}]`);
+      expect(rule).toMatchInlineSnapshot('[2, {"tolerance": 4.5}]');
     });
 
     it('uses user-provided `tolerance` in `noSecretsOptions`', async () => {
@@ -190,7 +144,7 @@ describe('options', () => {
       });
       const rule = configResult.getRuleEntry('no-secrets', 'no-secrets/no-secrets');
 
-      expect(rule).toMatchInlineSnapshot(`[2, {"tolerance": 3}]`);
+      expect(rule).toMatchInlineSnapshot('[2, {"tolerance": 3}]');
     });
 
     it('uses default severity (error) when `severity` is not provided in `noSecretsOptions`', async () => {

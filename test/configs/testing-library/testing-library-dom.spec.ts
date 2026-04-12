@@ -6,7 +6,7 @@ describe('testing-library: sub config `dom`', () => {
       expect(configResult.getConfigByUnPostfix('testing-library/dom/no-only-tests')).toBeDefined();
     });
 
-    it('`testing-library/dom/no-only-tests` config inherits files from `testing-library/dom`', () => {
+    it('`testing-library/dom/no-only-tests` eslint config inherits files from `testing-library/dom`', () => {
       expect(
         configResult.getConfigByUnPostfix('testing-library/dom/no-only-tests')?.files,
       ).toStrictEqual(configResult.getConfigByUnPostfix('testing-library/dom')?.files);
