@@ -356,7 +356,9 @@ async function readRootPackageJson() {
 
 async function readRootPackageJsonBeforeUncommittedChanges() {
   try {
-    return parsePackageJson((await exec('git --no-pager show HEAD:package.json')).stdout);
+    return parsePackageJson(
+      (await exec('git', ['--no-pager', 'show', 'HEAD:package.json'])).stdout,
+    );
   } catch {
     return null;
   }
