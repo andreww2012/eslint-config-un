@@ -27,11 +27,13 @@ export type UnAllRuleNames = keyof UnRulesConfig;
 
 interface UnFlatConfigEntryFilesOnly {
   /**
-   * Pass an empty array to disable the config. Note that if the config has
-   * "sub-configs", *most of the time* WON'T disabled unless otherwise stated in the config docs.
-   * The good example of the config which doesn't follow this rule is `ts` config,
+   * If the config has "sub-configs", most of the time they WON'T disabled
+   * unless otherwise stated in the config docs.
+   * The good example of the config which doesn't follow this rule is `ts`,
    * which disables type-aware sub-config too if `files` is empty array and no files
    * are passed explicitly to the sub-config.
+   *
+   * Pass an empty array to disable the config, but keep sub-configs intact (if any).
    */
   files?: string[];
 }
