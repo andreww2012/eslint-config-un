@@ -18,7 +18,7 @@ describe('svelte: sub config `enforceTypescriptInScriptSection`', () => {
       );
 
       expect(config).toBeDefined();
-      expect(config?.files).toMatchInlineSnapshot(`["**/*.svelte"]`);
+      expect(config?.files).toMatchInlineSnapshot('["**/*.svelte"]');
       expect(config?.ignores).toIncludeAllMembers(IGNORES);
 
       expect(
