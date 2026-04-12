@@ -29,4 +29,8 @@
   "typescript.tsdk": "node_modules\\typescript\\lib",
   "cSpell.enabled": true,
   "typescript.experimental.useTsgo": true,
+  "chat.tools.terminal.autoApprove": {
+    "nr t": true,
+    "nr t:cov": true,
+  },
 }
