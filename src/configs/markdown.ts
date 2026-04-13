@@ -1,4 +1,4 @@
-import type {MarkdownLanguageOptions} from '@eslint/markdown/types';
+import type {MarkdownLanguageOptions} from '@eslint/markdown';
 import type {BundledLanguage as ShikiLanguageCodesList} from 'shiki';
 import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '../constants';
 import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
@@ -216,6 +216,7 @@ export default ((context, optionsRaw) => {
           },
         ],
       ) /** @since 6.0.0 */ // 🟢
+      .addRule('fenced-code-meta', OFF) /** @since 8.0.0 */
       .addRule('heading-increment', ERROR) /** @since 6.0.0 */ // 🟢
       .addRule('no-bare-urls', OFF) /** @since 6.6.0 */
       .addRule('no-duplicate-definitions', ERROR) /** @since 6.5.0 */ // 🟢

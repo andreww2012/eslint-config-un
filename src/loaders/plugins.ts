@@ -351,13 +351,25 @@ export const pluginsLoaders = {
   lockfile: genModuleLoader('lockfile', 'eslint-plugin-lockfile', () =>
     interopDefault(import('eslint-plugin-lockfile')),
   ),
-  markdown: genModuleLoader('markdown', '@eslint/markdown', () =>
-    interopDefault(import('@eslint/markdown')),
+  markdown: genModuleLoader(
+    'markdown',
+    '@eslint/markdown',
+    () =>
+      // @ts-expect-error types mismatch
+      interopDefault(
+        import('@eslint/markdown'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'markdown-links': genModuleLoader(
     'markdown-links',
     'eslint-plugin-markdown-links',
-    () => interopDefault(import('eslint-plugin-markdown-links')) as Promise<EslintPlugin>,
+    () =>
+      // @ts-expect-error types mismatch
+      interopDefault(
+        import('eslint-plugin-markdown-links'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'markdown-preferences': genModuleLoader(
     'markdown-preferences',
@@ -533,7 +545,7 @@ export const pluginsLoaders = {
   'sentences-per-line': genModuleLoader(
     'sentences-per-line',
     'eslint-plugin-sentences-per-line',
-    () => interopDefault(import('eslint-plugin-sentences-per-line')),
+    () => interopDefault(import('eslint-plugin-sentences-per-line')) as Promise<EslintPlugin>,
   ),
   solid: genModuleLoader(
     'solid',
