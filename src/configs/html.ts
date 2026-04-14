@@ -122,6 +122,7 @@ export default ((context, optionsRaw) => {
     .addRule('require-explicit-size', ERROR) /** @since 0.33.0 */
     .addRule('require-li-container', ERROR) /** @since 0.5.0 */ // 🟢
     .addRule('require-meta-charset', ERROR) /** @since 0.8.0 */
+    .addRule('svg-require-viewbox', ERROR) /** @since 0.59.0 */
     .addRule('use-baseline', WARNING) /** @since 0.38.0 */ // 🟢
     .markCategory('SEO')
     .addRule('no-multiple-h1', ERROR) /** @since 0.2.0 */ // 🟢
@@ -141,6 +142,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-positive-tabindex', ERROR) /** @since 0.7.0 */
     .addRule('no-redundant-role', ERROR) /** @since 0.55.0 */
     .addRule('no-skip-heading-levels', OFF) /** @since 0.4.0 */
+    .addRule('require-content', ERROR) /** @since 0.59.0 */
     .addRule('require-form-method', OFF) /** @since 0.32.0 */
     .addRule('require-frame-title', ERROR) /** @since 0.7.0 */
     .addRule('require-img-alt', ERROR) /** @since 0.1.0 */ // 🟢
