@@ -187,6 +187,7 @@ export const saveCacheToFs = async (
   const traverser = createTraverser(dataToStore.configs);
   traverser.forEach(({path: valuePath}, value: unknown) => {
     const isUnserializable =
+      // eslint-disable-next-line ts/no-unnecessary-condition
       typeof value === 'function' || (isObject(value) && !isPlainObject(value));
     if (isUnserializable) {
       unserializablePaths.push([valuePath, value]);
