@@ -365,10 +365,8 @@ export const pluginsLoaders = {
     'markdown-links',
     'eslint-plugin-markdown-links',
     () =>
-      // @ts-expect-error types mismatch
       interopDefault(
         import('eslint-plugin-markdown-links'),
-        // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   'markdown-preferences': genModuleLoader(

@@ -127,8 +127,8 @@ importers:
         specifier: 0.1.1
         version: 0.1.1(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-markdown-links:
-        specifier: 0.7.1
-        version: 0.7.1(@eslint/markdown@8.0.1)(eslint@9.39.2(jiti@2.6.1))
+        specifier: 0.8.1
+        version: 0.8.1(@eslint/markdown@8.0.1)(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-markdown-preferences:
         specifier: 0.41.1
         version: 0.41.1(@eslint/markdown@8.0.1)(eslint@9.39.2(jiti@2.6.1))
@@ -6003,6 +6003,10 @@ packages:
     resolution: {integrity: sha512-TWrgLOFUQTH994YUyl1yT4uyavY5nNB5muff+RtWaqNVCAK408b5ZnnbNAUEWLTCpum9w6arT70i1XdQ4UeOPA==}
     engines: {node: '>=0.12'}
 
+  entities@8.0.0:
+    resolution: {integrity: sha512-zwfzJecQ/Uej6tusMqwAqU/6KL2XaB2VZ2Jg54Je6ahNBGNH6Ek6g3jjNCF0fG9EWQKGZNddNjU5F1ZQn/sBnA==}
+    engines: {node: '>=20.19.0'}
+
   env-paths@2.2.1:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
@@ -6585,11 +6589,11 @@ packages:
     peerDependencies:
       eslint: ^9.39.2
 
-  eslint-plugin-markdown-links@0.7.1:
-    resolution: {integrity: sha512-c6HAhdS3GmNLOzEuauGZ1+kkr20ruAHuF5rzwT48PdfZLTvPLeXa1Mb6HLdG8koLvwiLaIsXd8CntO/dt6UZug==}
+  eslint-plugin-markdown-links@0.8.1:
+    resolution: {integrity: sha512-6+yYVCoC+0yC9a0f7OR9HIbNZHq6eVTJAQdJJFDbn1muEVAUXYXAoARuPtVQpI1US5oGd9D+Q034/o94iy1nog==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
-      '@eslint/markdown': ^7.1.0
+      '@eslint/markdown': ^7.1.0 || ^8.0.0
       eslint: '>=9.0.0'
 
   eslint-plugin-markdown-preferences@0.41.1:
@@ -14744,6 +14748,10 @@ snapshots:
     dependencies:
       acorn: 8.15.0
 
+  '@sveltejs/acorn-typescript@1.0.9(acorn@8.16.0)':
+    dependencies:
+      acorn: 8.16.0
+
   '@sveltejs/kit@2.49.5(@sveltejs/vite-plugin-svelte@5.1.0(svelte@5.34.3)(vite@7.3.1(@types/node@20.19.1)(jiti@2.6.1)(stylus@0.57.0)(tsx@4.21.0)(yaml@2.8.2)))(svelte@5.34.3)(typescript@5.9.3)(vite@7.3.1(@types/node@20.19.1)(jiti@2.6.1)(stylus@0.57.0)(tsx@4.21.0)(yaml@2.8.2))':
     dependencies:
       '@standard-schema/spec': 1.1.0
@@ -16981,6 +16989,8 @@ snapshots:
 
   entities@7.0.1: {}
 
+  entities@8.0.0: {}
+
   env-paths@2.2.1: {}
 
   env-paths@3.0.0: {}
@@ -17746,11 +17756,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-markdown-links@0.7.1(@eslint/markdown@8.0.1)(eslint@9.39.2(jiti@2.6.1)):
+  eslint-plugin-markdown-links@0.8.1(@eslint/markdown@8.0.1)(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       '@eslint/markdown': 8.0.1
       '@mdit-vue/shared': 3.0.2
-      entities: 7.0.1
+      entities: 8.0.0
       eslint: 9.39.2(jiti@2.6.1)
       fast-content-type-parse: 3.0.0
       github-slugger: 2.0.0
@@ -22179,9 +22189,9 @@ snapshots:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@jridgewell/sourcemap-codec': 1.5.5
-      '@sveltejs/acorn-typescript': 1.0.9(acorn@8.15.0)
+      '@sveltejs/acorn-typescript': 1.0.9(acorn@8.16.0)
       '@types/estree': 1.0.8
-      acorn: 8.15.0
+      acorn: 8.16.0
       aria-query: 5.3.2
       axobject-query: 4.1.0
       clsx: 2.1.1
