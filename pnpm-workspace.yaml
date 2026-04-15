@@ -10,6 +10,7 @@ allowBuilds:
 blockExoticSubdeps: true
 
 nodeLinker: hoisted
+dedupePeers: true
 
 overrides:
   '@eslint/config-inspector>h3@<=1.15.4': ^1.15.5
