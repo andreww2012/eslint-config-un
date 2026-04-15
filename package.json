@@ -75,6 +75,7 @@
     "test:vitest": "nr t",
     "test:common": "nr typegen && nr knip && nr spellcheck && nr test:config && nr test:vitest run && nr lint && nr build:code:test",
     "test": "nr deps:audit && nr test:common",
+    "test:quick": "nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
     "lint:public-types": "attw --pack . --profile esm-only",
     "ch": "npx changeset add",
     "release": "changeset publish",
