@@ -1,5 +1,5 @@
 import {ERROR, OFF} from '../constants';
-import type {Prettify} from '../types';
+import type {Prettify, SetRequired} from '../types';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -52,111 +52,139 @@ export interface PerfectionistEslintConfigOptions<
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-array-includes
    */
   configSortArrayIncludes?: RuleSubConfig<ExtraPlugins, 'sort-array-includes'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-arrays
+   */
+  configSortArrays?: RuleSubConfig<ExtraPlugins, 'sort-arrays'>;
+
+  /**
+   * @default false
+   * @see https://perfectionist.dev/rules/sort-classes
    */
   configSortClasses?: RuleSubConfig<ExtraPlugins, 'sort-classes'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-decorators
    */
   configSortDecorators?: RuleSubConfig<ExtraPlugins, 'sort-decorators'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-enums
    */
   configSortEnums?: RuleSubConfig<ExtraPlugins, 'sort-enums'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-export-attributes
    */
   configSortExportAttributes?: RuleSubConfig<ExtraPlugins, 'sort-export-attributes'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-exports
    */
   configSortExports?: RuleSubConfig<ExtraPlugins, 'sort-exports'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-heritage-clauses
    */
   configSortHeritageClauses?: RuleSubConfig<ExtraPlugins, 'sort-heritage-clauses'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-imports
    */
   configSortImports?: RuleSubConfig<ExtraPlugins, 'sort-imports'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-import-attributes
    */
   configSortImportAttributes?: RuleSubConfig<ExtraPlugins, 'sort-import-attributes'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-interfaces
    */
   configSortInterfaces?: RuleSubConfig<ExtraPlugins, 'sort-interfaces'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-intersection-types
    */
   configSortIntersectionTypes?: RuleSubConfig<ExtraPlugins, 'sort-intersection-types'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-jsx-props
    */
   configSortJsxProps?: RuleSubConfig<ExtraPlugins, 'sort-jsx-props'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-maps
    */
   configSortMaps?: RuleSubConfig<ExtraPlugins, 'sort-maps'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-modules
    */
   configSortModules?: RuleSubConfig<ExtraPlugins, 'sort-modules'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-named-exports
    */
   configSortNamedExports?: RuleSubConfig<ExtraPlugins, 'sort-named-exports'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-named-imports
    */
   configSortNamedImports?: RuleSubConfig<ExtraPlugins, 'sort-named-imports'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-object-types
    */
   configSortObjectTypes?: RuleSubConfig<ExtraPlugins, 'sort-object-types'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-objects
    */
   configSortObjects?: RuleSubConfig<ExtraPlugins, 'sort-objects'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-sets
    */
   configSortSets?: RuleSubConfig<ExtraPlugins, 'sort-sets'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-switch-case
    */
   configSortSwitchCase?: RuleSubConfig<ExtraPlugins, 'sort-switch-case'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-union-types
    */
   configSortUnionTypes?: RuleSubConfig<ExtraPlugins, 'sort-union-types'>;
 
   /**
    * @default false
+   * @see https://perfectionist.dev/rules/sort-variable-declarations
    */
   configSortVariableDeclarations?: RuleSubConfig<ExtraPlugins, 'sort-variable-declarations'>;
 }
@@ -164,6 +192,7 @@ export interface PerfectionistEslintConfigOptions<
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configSortArrayIncludes: false,
+    configSortArrays: false,
     configSortClasses: false,
     configSortDecorators: false,
     configSortEnums: false,
@@ -185,11 +214,15 @@ export default ((context, optionsRaw) => {
     configSortSwitchCase: false,
     configSortUnionTypes: false,
     configSortVariableDeclarations: false,
-  } satisfies PerfectionistEslintConfigOptions);
+  } satisfies SetRequired<
+    PerfectionistEslintConfigOptions,
+    Extract<keyof PerfectionistEslintConfigOptions, `configSort${string}`>
+  >);
 
   const {
     settings: pluginSettings,
     configSortArrayIncludes,
+    configSortArrays,
     configSortClasses,
     configSortDecorators,
     configSortEnums,
@@ -230,6 +263,7 @@ export default ((context, optionsRaw) => {
       },
     ])
     .addRule('sort-array-includes', OFF) /** @since 0.5.0 */
+    .addRule('sort-arrays', OFF) /** @since 5.8.0 */
     .addRule('sort-classes', OFF) /** @since 0.11.0 */
     .addRule('sort-decorators', OFF) /** @since 4.0.0 */
     .addRule('sort-enums', OFF) /** @since 0.8.0 */
@@ -257,6 +291,7 @@ export default ((context, optionsRaw) => {
   const subConfigs = (
     [
       ['sort-array-includes', configSortArrayIncludes],
+      ['sort-arrays', configSortArrays],
       ['sort-classes', configSortClasses],
       ['sort-decorators', configSortDecorators],
       ['sort-enums', configSortEnums],

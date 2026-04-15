@@ -1,12 +1,9 @@
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('perfectionist');
 
-  it('does not load `perfectionist` plugin in the default configuration', () => {
-    expect(configResult.getLoadedPlugin('perfectionist')).toBeUndefined();
-  });
-
-  it('creates `perfectionist` eslint config', () => {
+  it('creates `perfectionist` eslint config and does not load `perfectionist` plugin when set to `true`', () => {
     expect(configResult.getConfigByUnPostfix('perfectionist')).toBeDefined();
+    expect(configResult.getLoadedPlugin('perfectionist')).toBeUndefined();
   });
 
   it('does not enable any rules by default', () => {
@@ -102,11 +99,10 @@ describe('un options', () => {
       },
     });
 
-    expect(configResult.getRuleEntrySeverity('perfectionist', 'perfectionist/sort-classes')).toBe(
-      1,
-    );
-
-    expect(configResult.getRuleEntrySeverity('perfectionist', 'no-console')).toBe(0);
+    expect(configResult.getRuleSeverities('perfectionist')).toMatchObject({
+      'perfectionist/sort-classes': 1,
+      'no-console': 0,
+    });
   });
 });
 
