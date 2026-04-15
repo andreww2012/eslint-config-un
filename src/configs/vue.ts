@@ -667,7 +667,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('v-on-style', ERROR) /** @since 3.0.0 */ // 3️⃣2️⃣
     .addRule('v-slot-style', ERROR) /** @since 6.0.0 */ // 3️⃣2️⃣
     .markCategory('Priority C: Recommended')
-    .addRule('attributes-order', ERROR) /** @since 4.3.0 */ // 3️⃣2️⃣
+    .addRule('attributes-order', ERROR, [{ignoreVBindObject: true}]) /** @since 4.3.0 */ // 3️⃣2️⃣
     .addRule('no-lone-template', ERROR) /** @since 7.0.0 */ // 3️⃣2️⃣
     .addRule('no-multiple-slot-args', ERROR) /** @since 7.0.0 */ // 3️⃣2️⃣
     .addRule('no-v-html', ERROR) /** @since 4.7.0 */ // 3️⃣2️⃣
