@@ -99,6 +99,7 @@ export default {
     'asyncdispose',
     'matchall',
     'typegen',
+    'viewbox',
 
     // Actual-ish English words
     'uncategorized',
