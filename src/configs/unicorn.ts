@@ -56,6 +56,7 @@ export default ((context, optionsRaw) => {
     .addRule('consistent-empty-array-spread', ERROR) /** @since 53.0.0 */ // 🟣
     .addRule('consistent-existence-index-check', ERROR) /** @since 56.0.0 */
     .addRule('consistent-function-scoping', ERROR) /** @since 11.0.0 */ // 🟣
+    .addRule('consistent-template-literal-escape', ERROR) /** @since 64.0.0 */ // 🟣
     .addRule('custom-error-definition', ERROR) /** @since 2.0.0 */ // 🔴
     .addRule('empty-brace-spaces', OFF) /** @since 24.0.0 */ // 🟣🟠
     .addRule('error-message', ERROR) /** @since 4.0.0 */
@@ -123,6 +124,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-useless-collection-argument', ERROR) /** @since 62.0.0 */
     .addRule('no-useless-error-capture-stack-trace', ERROR) /** @since 60.0.0 */
     .addRule('no-useless-fallback-in-spread', ERROR) /** @since 36.0.0 */
+    .addRule('no-useless-iterator-to-array', ERROR) /** @since 64.0.0 */
     .addRule('no-useless-length-check', ERROR) /** @since 35.0.0 */
     .addRule('no-useless-promise-resolve-reject', ERROR) /** @since 40.0.0 */
     .addRule('no-useless-spread', ERROR) /** @since 35.0.0 */
@@ -183,6 +185,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-response-static-json', ERROR) /** @since 62.0.0 */
     .addRule('prefer-set-has', ERROR) /** @since 18.0.0 */
     .addRule('prefer-set-size', ERROR) /** @since 45.0.0 */
+    .addRule('prefer-simple-condition-first', ERROR) /** @since 64.0.0 */
     .addRule('prefer-single-call', ERROR) /** @since 27.0.0 */ /** @aka no-array-push-push */
     .addRule('prefer-spread', ERROR) /** @since 4.0.0 */ // 🟣
     .addRule('prefer-string-raw', ERROR) /** @since 53.0.0 */
@@ -212,6 +215,7 @@ export default ((context, optionsRaw) => {
     .addRule('require-post-message-target-origin', OFF) /** @since 34.0.0 */ // 🔴
     .addRule('string-content', OFF) /** @since 17.0.0 */ // 🔴
     .addRule('switch-case-braces', ERROR) /** @since 44.0.0 */ // 🟣
+    .addRule('switch-case-break-position', ERROR) /** @since 64.0.0 */ // 🟣
     .addRule('template-indent', ERROR) /** @since 37.0.0 */ // 🟣🟠
     .addRule(
       'text-encoding-identifier-case',
