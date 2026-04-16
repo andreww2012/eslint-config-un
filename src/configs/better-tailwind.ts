@@ -161,6 +161,8 @@ export default ((context, optionsRaw, {cssResolvedOptions}) => {
     cssResolvedOptions != null &&
     cssResolvedOptions.files?.length !== 0;
 
+  const isV3 = tailwindMajorVersion === 3;
+
   const configBuilder = context.createConfigBuilder(optionsResolved, 'better-tailwindcss');
 
   // Legend:
@@ -186,16 +188,13 @@ export default ((context, optionsRaw, {cssResolvedOptions}) => {
       },
     ])
     .markCategory('Stylistic rules')
-    .addRule(
-      'enforce-canonical-classes',
-      tailwindMajorVersion === 3 ? OFF : ERROR,
-    ) /** @since 4.0.0 */ // 🟢
+    .addRule('enforce-canonical-classes', isV3 ? OFF : ERROR) /** @since 4.0.0 */ // 🟢
     .addRule(
       'enforce-consistent-class-order',
       typeof classOrder === 'string' ? WARNING : OFF,
       typeof classOrder === 'string' ? [{order: classOrder}] : [],
     ) /** @since 3.0.0 */ /** @aka sort-classes */ // 🟢
-    .addRule('enforce-consistent-important-position', tailwindMajorVersion === 3 ? ERROR : OFF, [
+    .addRule('enforce-consistent-important-position', isV3 ? ERROR : OFF, [
       {position: 'legacy'},
     ]) /** @since 3.6.0 */
     .addRule(
@@ -208,10 +207,9 @@ export default ((context, optionsRaw, {cssResolvedOptions}) => {
       // Do not enable in v3 because it doesn't support `parentheses` syntax (`bg-(--primary)`)
       OFF,
     ) /** @since 3.1.0 */
-    .addRule(
-      'enforce-shorthand-classes',
-      tailwindMajorVersion === 3 ? ERROR : OFF,
-    ) /** @since 3.5.0 */
+    .addRule('enforce-consistent-variant-order', isV3 ? OFF : ERROR) /** @since 4.4.0 */
+    .addRule('enforce-logical-properties', OFF) /** @since 4.4.0 */
+    .addRule('enforce-shorthand-classes', isV3 ? ERROR : OFF) /** @since 3.5.0 */
     .addRule('no-deprecated-classes', WARNING) /** @since 3.6.0 */
     .addRule('no-duplicate-classes', WARNING) /** @since 3.0.0 */ // 🟢
     .addRule('no-unnecessary-whitespace', WARNING) /** @since 3.0.0 */ // 🟢

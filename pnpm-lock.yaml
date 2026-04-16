@@ -420,8 +420,8 @@ importers:
         specifier: 3.0.1
         version: 3.0.1(eslint@9.39.2)
       eslint-plugin-better-tailwindcss:
-        specifier: 4.3.2
-        version: 4.3.2(eslint@9.39.2)(tailwindcss@3.4.17)(typescript@5.9.3)
+        specifier: 4.4.1
+        version: 4.4.1(@eslint/css@1.1.0)(eslint@9.39.2)(tailwindcss@3.4.17)(typescript@5.9.3)
       eslint-plugin-boundaries:
         specifier: 6.0.0
         version: 6.0.0(@typescript-eslint/parser@8.58.2)(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2)
@@ -2288,6 +2288,10 @@ packages:
   '@eslint/css-tree@3.6.9':
     resolution: {integrity: sha512-3D5/OHibNEGk+wKwNwMbz63NMf367EoR4mVNNpxddCHKEb2Nez7z62J2U6YjtErSsZDoY0CsccmoUpdEbkogNA==}
     engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0}
+
+  '@eslint/css-tree@4.0.2':
+    resolution: {integrity: sha512-eqSkC3mka2tiqOuPZKqvxNJoRzpxMss3Np3Yqi4sW7nTTRCpTKB2hzrY4JRsi0ZP3QbVfp23sgEm7VCoOjesmw==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
   '@eslint/css@1.1.0':
     resolution: {integrity: sha512-sNwfLcU3nKXv/v2YglqujwMU4Iv3BDhxldNUd/2FckVab0zdvc9pPlKWxjR6Ap/EU+Y8Pdu853iwvcUpemRhRw==}
@@ -4747,10 +4751,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@valibot/to-json-schema@1.5.0':
-    resolution: {integrity: sha512-GE7DmSr1C2UCWPiV0upRH6mv0cCPsqYGs819fb6srCS1tWhyXrkGGe+zxUiwzn/L1BOfADH4sNjY/YHCuP8phQ==}
+  '@valibot/to-json-schema@1.6.0':
+    resolution: {integrity: sha512-d6rYyK5KVa2XdqamWgZ4/Nr+cXhxjy7lmpe6Iajw15J/jmU+gyxl2IEd1Otg1d7Rl3gOQL5reulnSypzBtYy1A==}
     peerDependencies:
-      valibot: ^1.2.0
+      valibot: ^1.3.0
 
   '@vitest/coverage-v8@4.0.18':
     resolution: {integrity: sha512-7i+N2i0+ME+2JFZhfuz7Tg/FqKtilHjGyGvoHYQ6iLV0zahbsJ9sljC9OcFcPDbhYKCet+sG8SsVqlyGvPflZg==}
@@ -6045,8 +6049,8 @@ packages:
     resolution: {integrity: sha512-LgQMM4WXU3QI+SYgEc2liRgznaD5ojbmY3sb8LxyguVkIg5FxdpTkvk72te2R38/TGKxH634oLxXRGY6d7AP+Q==}
     engines: {node: '>=10.13.0'}
 
-  enhanced-resolve@5.20.0:
-    resolution: {integrity: sha512-/ce7+jQ1PQ6rVXwe+jKEg5hW5ciicHwIQUagZkp6IufBoY3YDgdTTY1azVs0qoRgVmvsNB+rbjLJxDAeHHtwsQ==}
+  enhanced-resolve@5.20.1:
+    resolution: {integrity: sha512-Qohcme7V1inbAfvjItgw0EaxVX5q2rdVEZHRBrEQdRZTssLDGsL8Lwrznl8oQ/6kuTJONLaDcGjkNP247XEhcA==}
     engines: {node: '>=10.13.0'}
 
   enquirer@2.3.6:
@@ -6408,8 +6412,8 @@ packages:
       eslint: '>= 5'
     bundledDependencies: []
 
-  eslint-plugin-better-tailwindcss@4.3.2:
-    resolution: {integrity: sha512-1DLX2QmHmOj3u667f8vEI0zKoRc0Y1qJt33tfIeIkpTyzWaz9b2GzWBLD4bR+WJ/kxzC0Skcbx7cMerRWQ6OYg==}
+  eslint-plugin-better-tailwindcss@4.4.1:
+    resolution: {integrity: sha512-ueFciTgj2M+4YklYdtvpbMA3Nn22z60sQoSA4bnctOP4h0daUhJKAsDaGi888N00qWtIUqeK5Ikt6xnNnHPg2g==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=23.0.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
@@ -8571,6 +8575,9 @@ packages:
   mdn-data@2.23.0:
     resolution: {integrity: sha512-786vq1+4079JSeu2XdcDjrhi/Ry7BWtjDl9WtGPWLiIHb2T66GvIVflZTBoSNZ5JqTtJGYEVMuFA/lbQlMOyDQ==}
 
+  mdn-data@2.27.1:
+    resolution: {integrity: sha512-9Yubnt3e8A0OKwxYSXyhLymGW4sCufcLG6VdiDdUGVkPhpqLxlvP5vl1983gQjJl3tqbrM731mjaZaP68AgosQ==}
+
   mdurl@2.0.0:
     resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==}
 
@@ -10235,6 +10242,15 @@ packages:
     resolution: {integrity: sha512-FzD187HuFIZEyeR7Xy6sJbJll2d4SybS90satC8SKIuaNRC05CxMvdzN7BUsfDQffcnabckRM5OIcfArjsZ0mg==}
     engines: {node: '>=18.18'}
 
+  tailwind-csstree@0.3.1:
+    resolution: {integrity: sha512-v147gLOR+E+9H4dNaP9rBeS/S/CTQJMRItlX9jLOXjdBGfSRauLwiz7LBCViaQmn6URXIlOdN6iMzSzOaeoUUw==}
+    engines: {node: '>=18.18'}
+    peerDependencies:
+      '@eslint/css': '>=1.0.0'
+    peerDependenciesMeta:
+      '@eslint/css':
+        optional: true
+
   tailwindcss@3.4.17:
     resolution: {integrity: sha512-w33E2aCvSDP0tW9RZuNXadXlkHXqFzSkQew/aIa2i/Sj8fThxwovwlXHSPXTbAHwEIhBFXAedUhP2tueAKP8Og==}
     engines: {node: '>=14.0.0'}
@@ -10765,8 +10781,8 @@ packages:
     resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
     hasBin: true
 
-  valibot@1.2.0:
-    resolution: {integrity: sha512-mm1rxUsmOxzrwnX5arGS+U4T25RdvpPjPN4yR0u9pUBov9+zGVtO84tif1eY4r6zWxVxu3KzIyknJy3rxfRZZg==}
+  valibot@1.3.1:
+    resolution: {integrity: sha512-sfdRir/QFM0JaF22hqTroPc5xy4DimuGQVKFrzF1YfGwaS1nJot3Y8VqMdLO2Lg27fMzat2yD3pY5PbAYO39Gg==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
@@ -13078,6 +13094,11 @@ snapshots:
   '@eslint/css-tree@3.6.9':
     dependencies:
       mdn-data: 2.23.0
+      source-map-js: 1.2.1
+
+  '@eslint/css-tree@4.0.2':
+    dependencies:
+      mdn-data: 2.27.1
       source-map-js: 1.2.1
 
   '@eslint/css@1.1.0':
@@ -15667,9 +15688,9 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
-  '@valibot/to-json-schema@1.5.0(valibot@1.2.0)':
+  '@valibot/to-json-schema@1.6.0(valibot@1.3.1)':
     dependencies:
-      valibot: 1.2.0(typescript@5.9.3)
+      valibot: 1.3.1(typescript@5.9.3)
 
   '@vitest/coverage-v8@4.0.18(vitest@4.0.18)':
     dependencies:
@@ -17101,7 +17122,7 @@ snapshots:
       graceful-fs: 4.2.11
       tapable: 2.3.0
 
-  enhanced-resolve@5.20.0:
+  enhanced-resolve@5.20.1:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.3.0
@@ -17511,20 +17532,21 @@ snapshots:
       eslint-barrel-file-utils: 0.0.11
       oxc-resolver: 1.12.0
 
-  eslint-plugin-better-tailwindcss@4.3.2(eslint@9.39.2)(tailwindcss@3.4.17)(typescript@5.9.3):
+  eslint-plugin-better-tailwindcss@4.4.1(@eslint/css@1.1.0)(eslint@9.39.2)(tailwindcss@3.4.17)(typescript@5.9.3):
     dependencies:
-      '@eslint/css-tree': 3.6.9
-      '@valibot/to-json-schema': 1.5.0(valibot@1.2.0)
-      enhanced-resolve: 5.20.0
+      '@eslint/css-tree': 4.0.2
+      '@valibot/to-json-schema': 1.6.0(valibot@1.3.1)
+      enhanced-resolve: 5.20.1
       jiti: 2.6.1
       synckit: 0.11.12
-      tailwind-csstree: 0.1.4
+      tailwind-csstree: 0.3.1(@eslint/css@1.1.0)
       tailwindcss: 3.4.17
       tsconfig-paths-webpack-plugin: 4.2.0
-      valibot: 1.2.0(typescript@5.9.3)
+      valibot: 1.3.1(typescript@5.9.3)
     optionalDependencies:
       eslint: 9.39.2(jiti@2.6.1)
     transitivePeerDependencies:
+      - '@eslint/css'
       - typescript
 
   eslint-plugin-boundaries@6.0.0(@typescript-eslint/parser@8.58.2)(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2):
@@ -20205,6 +20227,8 @@ snapshots:
 
   mdn-data@2.23.0: {}
 
+  mdn-data@2.27.1: {}
+
   mdurl@2.0.0: {}
 
   meow@12.1.1: {}
@@ -22361,6 +22385,10 @@ snapshots:
 
   tailwind-csstree@0.1.4: {}
 
+  tailwind-csstree@0.3.1(@eslint/css@1.1.0):
+    optionalDependencies:
+      '@eslint/css': 1.1.0
+
   tailwindcss@3.4.17:
     dependencies:
       '@alloc/quick-lru': 5.2.0
@@ -22910,7 +22938,7 @@ snapshots:
 
   uuid@11.1.0: {}
 
-  valibot@1.2.0(typescript@5.9.3):
+  valibot@1.3.1(typescript@5.9.3):
     optionalDependencies:
       typescript: 5.9.3
 

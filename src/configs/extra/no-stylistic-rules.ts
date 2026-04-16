@@ -178,6 +178,7 @@ const ALL_STYLISTIC_RULES = {
     'enforce-consistent-important-position': true,
     'enforce-consistent-line-wrapping': true,
     'enforce-consistent-variable-syntax': true,
+    'enforce-consistent-variant-order': true,
     'enforce-shorthand-classes': true,
     'no-duplicate-classes': true,
     'no-unnecessary-whitespace': true,
