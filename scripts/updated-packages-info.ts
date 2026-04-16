@@ -477,6 +477,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       },
       'sentences-per-line': {
         configs: ['markdown'],
+        gitTag: (version) => `eslint-plugin-sentences-per-line@v${version}`,
         ruleDocsUrl: (ruleName) =>
           `https://github.com/JoshuaKGoldberg/sentences-per-line/blob/HEAD/packages/eslint-plugin-sentences-per-line/docs/rules/${ruleName}.md`,
       },

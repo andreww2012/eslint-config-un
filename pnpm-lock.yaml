@@ -534,8 +534,8 @@ importers:
         specifier: 0.9.3
         version: 0.9.3(eslint@9.39.2)
       eslint-plugin-sentences-per-line:
-        specifier: 0.1.0
-        version: 0.1.0(jiti@2.6.1)
+        specifier: 0.1.2
+        version: 0.1.2(jiti@2.6.1)
       eslint-plugin-solid:
         specifier: 0.14.5
         version: 0.14.5(eslint@9.39.2)(typescript@5.9.3)
@@ -6882,8 +6882,8 @@ packages:
     resolution: {integrity: sha512-tfuQT8K/Li1ZxhFzyD8wPIKtlzZxqBcPr9q0jFMQ77wWAbKBVEhaMPVQRTMTvCMUDhwBe5vPVqQPwAGk/ASfxQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  eslint-plugin-sentences-per-line@0.1.0:
-    resolution: {integrity: sha512-Lr5IUUkj+p9G5YyLijxYFM/c2prBn29uXtxx0zAEqY8zwTYEHh+93P5uf6VZSt2p0K2XinP+WQQzYRx9DVDrJQ==}
+  eslint-plugin-sentences-per-line@0.1.2:
+    resolution: {integrity: sha512-gZiQAJHEqk20XnvQFEcH9OaVWqB8x2Bj3Ez7VnOz3k75ut3X1PiYZ4uZOgO6lRFLp2HYM90QKqTwBtTaq+WXWg==}
 
   eslint-plugin-solid@0.14.5:
     resolution: {integrity: sha512-nfuYK09ah5aJG/oEN6P1qziy1zLgW4PDWe75VNPi4CEFYk1x2AEqwFeQfEPR7gNn0F2jOeqKhx2E+5oNCOBYWQ==}
@@ -9903,8 +9903,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  sentences-per-line@0.4.0:
-    resolution: {integrity: sha512-KHlNwB0prYEmhs6yxPPrZZmq0O+tauB04lMY7vTirbFHSwaZmffsShCRH4dNThbhVQ1kVfpD+Omb8EOzKv7XcQ==}
+  sentences-per-line@0.5.2:
+    resolution: {integrity: sha512-Ch7cTyoP+nEo5+iZozSAeJ4c8R3jglpFwQMoQ98dn7wOa0QhXJjgO1wrjZgQJahSDB30BXfJ2PEBrlfhx8vK8A==}
     engines: {node: '>=22.14.0'}
 
   set-cookie-parser@2.7.2:
@@ -18288,11 +18288,11 @@ snapshots:
     dependencies:
       safe-regex: 2.1.1
 
-  eslint-plugin-sentences-per-line@0.1.0(jiti@2.6.1):
+  eslint-plugin-sentences-per-line@0.1.2(jiti@2.6.1):
     dependencies:
       '@eslint/markdown': 7.5.1
       eslint: 9.39.2(jiti@2.6.1)
-      sentences-per-line: 0.4.0
+      sentences-per-line: 0.5.2
     transitivePeerDependencies:
       - jiti
       - supports-color
@@ -21959,7 +21959,7 @@ snapshots:
 
   semver@7.7.4: {}
 
-  sentences-per-line@0.4.0: {}
+  sentences-per-line@0.5.2: {}
 
   set-cookie-parser@2.7.2: {}
 
