@@ -1,4 +1,4 @@
-// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo israwjson rawjson
+// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo israwjson rawjson plaindate plaindatetime plainmonthday plaintime plainyearmonth zoneddatetime
 import {ERROR, OFF} from '../constants';
 import type {Prettify} from '../types';
 import {memoize} from '../utils';
@@ -13,6 +13,7 @@ interface EcmaFeatures {
   2026:
     | 'arrayFromAsync'
     | 'asyncDisposableStack'
+    | 'datePrototypeToTemporalInstant'
     | 'disposableStack'
     | 'errorIsError'
     | 'mathSumPrecise'
@@ -40,6 +41,7 @@ interface EcmaFeatures {
     | 'jsonRawJson'
     | 'mapPrototypeGetOrInsert'
     | 'mapPrototypeGetOrInsertComputed'
+    | 'temporal'
     | 'weakMapPrototypeGetOrInsert'
     | 'weakMapPrototypeGetOrInsertComputed';
   2025:
@@ -376,6 +378,10 @@ export default ((context, optionsRaw, customConfig) => {
       ?.markCategory('ES2026')
       .addRule('no-array-fromasync', grs(2026, 'arrayFromAsync')) /** @since 8.7.0 */
       .addRule('no-asyncdisposablestack', grs(2026, 'asyncDisposableStack')) /** @since 8.7.0 */
+      .addRule(
+        'no-date-prototype-totemporalinstant', // cspell:disable-line
+        grs(2026, 'datePrototypeToTemporalInstant'),
+      ) /** @since 9.6.0 */
       .addRule('no-disposablestack', grs(2026, 'disposableStack')) /** @since 8.7.0 */
       .addRule('no-error-iserror', grs(2026, 'errorIsError')) /** @since 8.7.0 */
       .addRule('no-json-israwjson', grs(2026, 'jsonIsRawJson')) /** @since 9.3.0 */
@@ -449,6 +455,7 @@ export default ((context, optionsRaw, customConfig) => {
         'no-map-prototype-getorinsertcomputed', // cspell:disable-line
         grs(2026, 'mapPrototypeGetOrInsertComputed'),
       ) /** @since 9.4.0 */
+      .addRule('no-temporal', grs(2026, 'temporal')) /** @since 9.6.0 */
       .addRule(
         'no-weakmap-prototype-getorinsert', // cspell:disable-line
         grs(2026, 'weakMapPrototypeGetOrInsert'),
@@ -1030,6 +1037,25 @@ export default ((context, optionsRaw, customConfig) => {
     .addRule('no-nonstandard-string-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-symbol-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-symbol-prototype-properties', OFF) /** @since 8.2.0 */
+    .addRule('no-nonstandard-temporal-duration-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-duration-prototype-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-instant-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-instant-prototype-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-now-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-plaindate-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-plaindate-prototype-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-plaindatetime-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-plaindatetime-prototype-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-plainmonthday-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-plainmonthday-prototype-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-plaintime-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-plaintime-prototype-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-plainyearmonth-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-plainyearmonth-prototype-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-zoneddatetime-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-zoneddatetime-prototype-properties', OFF) /** @since 9.6.0 */
+    .addRule('no-nonstandard-temporal-instant-prototype-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-typed-array-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-typed-array-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-weakmap-properties', OFF) /** @since 8.4.0 */

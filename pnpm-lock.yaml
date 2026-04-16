@@ -453,8 +453,8 @@ importers:
         specifier: 0.4.0
         version: 0.4.0(@typescript-eslint/parser@8.58.2)(eslint@9.39.2)(typescript@5.9.3)
       eslint-plugin-es-x:
-        specifier: 9.5.0
-        version: 9.5.0(eslint@9.39.2)
+        specifier: 9.6.0
+        version: 9.6.0(eslint@9.39.2)
       eslint-plugin-eslint-plugin:
         specifier: 7.3.2
         version: 7.3.2(eslint@9.39.2)
@@ -6449,8 +6449,8 @@ packages:
     peerDependencies:
       eslint: '>=8'
 
-  eslint-plugin-es-x@9.5.0:
-    resolution: {integrity: sha512-9mZTiQQn7hQeNNFFFFJcEnbLt8WIMGhHEYJ59GI96Cv86U3rTcQ8YKu5huKLrTZ7JiLuNU+qZD8VBGCLVFIKVQ==}
+  eslint-plugin-es-x@9.6.0:
+    resolution: {integrity: sha512-F74Ceu0n+EuANGyZyt9jFsawVC88rhyXXqVkKr/+9S54n5omZvUqe5yTCuAUhBk37yRCOKS45Os9IuxJpiVYGw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       eslint: '>=9.29.0'
@@ -6985,6 +6985,12 @@ packages:
 
   eslint-type-tracer@0.4.1:
     resolution: {integrity: sha512-7kDovYNNitAxahP/qQ9UrHssUk8d6V5Y9MQaDiHPKsJrk1g6STDqVHjJPu8ycn1+qE4D0jwQRN7waRrxrX9k+Q==}
+    engines: {node: ^18 || >=20}
+    peerDependencies:
+      eslint: '>=8'
+
+  eslint-type-tracer@0.5.2:
+    resolution: {integrity: sha512-YiJmgk6OD1suPB4UC3M/PB+oxahf145jQQ5gFXFk9F9Y7puWwnqGYC2BtTB+FoHqdOohImeTt0rNk0lhhECNaQ==}
     engines: {node: ^18 || >=20}
     peerDependencies:
       eslint: '>=8'
@@ -17532,12 +17538,12 @@ snapshots:
       eslint: 9.39.2(jiti@2.6.1)
       eslint-compat-utils: 0.5.1(eslint@9.39.2)
 
-  eslint-plugin-es-x@9.5.0(eslint@9.39.2):
+  eslint-plugin-es-x@9.6.0(eslint@9.39.2):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       '@eslint-community/regexpp': 4.12.2
       eslint: 9.39.2(jiti@2.6.1)
-      eslint-type-tracer: 0.4.1(eslint@9.39.2)
+      eslint-type-tracer: 0.5.2(eslint@9.39.2)
 
   eslint-plugin-eslint-plugin@7.3.2(eslint@9.39.2):
     dependencies:
@@ -18383,6 +18389,11 @@ snapshots:
       estraverse: 5.3.0
 
   eslint-type-tracer@0.4.1(eslint@9.39.2):
+    dependencies:
+      '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
+      eslint: 9.39.2(jiti@2.6.1)
+
+  eslint-type-tracer@0.5.2(eslint@9.39.2):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       eslint: 9.39.2(jiti@2.6.1)

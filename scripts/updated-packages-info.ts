@@ -308,6 +308,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   console.log(styleText('underline', 'For changelog:'));
   console.log(
     `${mainUnConfigNames}: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${getCompareDiffUrl(dependency, repoUrl, oldVersion, newVersion)}):
+
 - 🟢 enabled [\`\`]() rule and added it to the \`noStylisticRules\` config
 - 🟡 enabled [\`\`]() rule (warning) with the following default options:
 - ❓ enabled conditionally [\`\`]() rule in ⚙️ \`\` sub-config
