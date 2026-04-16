@@ -182,6 +182,13 @@ async function run({
   globalThis.__dirname = globalThis.__filename = '';
   globalThis.require = createRequire(import.meta.url);
 
+  const toStdout = process.stdout.write.bind(process.stdout);
+
+  process.stdout.write = (chunk, encodingOrCallback, callback) => {
+    typeof encodingOrCallback === 'function' ? encodingOrCallback() : callback?.();
+    return true;
+  }
+
   (async () => {
   const modules = await Promise.all([${versionsSorted.map(({version}) => `['${packageName}-${version}', '${version}']`).join(',\n')}].map(([name, version]) =>
     interopDefault<EslintPlugin>(import(name))
@@ -189,7 +196,7 @@ async function run({
       .catch((error: unknown) => ({error: JSON.stringify(error, Object.getOwnPropertyNames(error)), version})),
   ));
 
-  process.stdout.write(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
+  toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
   })();`;
 
   await Promise.all([
