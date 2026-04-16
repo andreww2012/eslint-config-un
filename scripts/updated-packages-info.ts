@@ -599,22 +599,22 @@ const PACKAGES_META: Record<string, PackageMeta> = {
   // Additional packages that are not eslint plugins but are tracked as dependencies
   '@html-eslint/parser': {
     configs: ['html'],
-    ruleDocsUrl: (ruleName) => ``,
+    ruleDocsUrl: null,
   },
   '@sveltejs/kit': {
     configs: ['svelte'],
     gitTag: (version) => `@sveltejs/kit@${version}`,
-    ruleDocsUrl: (ruleName) => ``,
+    ruleDocsUrl: null,
   },
   'ember-eslint-parser': {
     configs: ['ember'],
     gitTag: (version) => `v${version}-ember-eslint-parser`,
-    ruleDocsUrl: (ruleName) => ``,
+    ruleDocsUrl: null,
   },
   'tailwind-csstree': {
     configs: ['tailwind'],
     gitTag: (version) => `tailwind-csstree-v${version}`,
-    ruleDocsUrl: (ruleName) => ``,
+    ruleDocsUrl: null,
   },
 };
 
@@ -752,7 +752,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 
   const packageMeta = PACKAGES_META[dependency];
 
-  const mainUnConfigNames = packageMeta?.configs?.join(', ') || '';
+  const mainUnConfigNames = packageMeta?.configs.join(', ') || '';
 
   console.log(`${styleText('underline', 'Repo:')} ${styleText('cyan', repoUrl)}`);
   console.log(`${styleText('underline', 'Releases:')} ${styleText('cyan', `${repoUrl}/releases`)}`);
