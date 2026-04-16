@@ -302,6 +302,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       },
       lit: {
         configs: ['lit'],
+        gitTag: versionAsIs,
         ruleDocsUrl: (ruleName) =>
           `https://github.com/43081j/eslint-plugin-lit/blob/HEAD/docs/rules/${ruleName}.md`,
       },
