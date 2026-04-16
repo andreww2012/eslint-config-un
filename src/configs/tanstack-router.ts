@@ -24,6 +24,7 @@ export default ((context, optionsRaw) => {
   configBuilder
     ?.addConfig(['tanstack-router', {includeDefaultFilesAndIgnores: true}])
     .addRule('create-route-property-order', ERROR) /** @since 1.20.3-alpha.1 */ // 🟢
+    .addRule('route-param-names', ERROR) /** @since 1.155.0 */ // 🟢
     .enableConfigTesterForPlugin('@tanstack/router')
     .addOverrides();
 

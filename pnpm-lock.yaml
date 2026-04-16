@@ -327,8 +327,8 @@ importers:
         specifier: 5.99.0
         version: 5.99.0(eslint@9.39.2)(typescript@5.9.3)
       '@tanstack/eslint-plugin-router':
-        specifier: 1.141.0
-        version: 1.141.0(eslint@9.39.2)(typescript@5.9.3)
+        specifier: 1.161.6
+        version: 1.161.6(eslint@9.39.2)(typescript@5.9.3)
       '@types/eslint-plugin-security':
         specifier: 3.0.1
         version: 3.0.1
@@ -4062,10 +4062,10 @@ packages:
       typescript:
         optional: true
 
-  '@tanstack/eslint-plugin-router@1.141.0':
-    resolution: {integrity: sha512-E5QSLvoS8By2UajtUE64CNp22LVyzdqNyR/ponVV+yxONWHC3IzDUUHKBnPxW1yVwRT88qQoJYV0RJL6noW25A==}
+  '@tanstack/eslint-plugin-router@1.161.6':
+    resolution: {integrity: sha512-aHln6x6mhtQmrbwMI0lmnMh7t9nEvrJrFOl1vGtQknEKdgKEEqSh9a9/MZKNm3kENaHotoqpRcfbE/or9aAYfQ==}
     peerDependencies:
-      eslint: ^8.57.0 || ^9.0.0
+      eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
 
   '@testing-library/dom@10.4.1':
     resolution: {integrity: sha512-o4PXJQidqJl82ckFaXUeoAW+XysPLauYI43Abki5hABd853iMhitooc6znOnczgbTYmEP6U6/y1ZyKAIsvMKGg==}
@@ -14816,9 +14816,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@tanstack/eslint-plugin-router@1.141.0(eslint@9.39.2)(typescript@5.9.3)':
+  '@tanstack/eslint-plugin-router@1.161.6(eslint@9.39.2)(typescript@5.9.3)':
     dependencies:
-      '@typescript-eslint/utils': 8.56.0(eslint@9.39.2)(typescript@5.9.3)
+      '@typescript-eslint/utils': 8.58.2(eslint@9.39.2)(typescript@5.9.3)
       eslint: 9.39.2(jiti@2.6.1)
     transitivePeerDependencies:
       - supports-color

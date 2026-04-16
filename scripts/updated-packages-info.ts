@@ -37,7 +37,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       '@next/next': {configs: ['nextJs']}, // eslint-disable-line case-police/string-check
       '@stylistic': {configs: ['stylistic']},
       '@tanstack/query': {configs: ['tanstackQuery'], gitTag: versionUnknown},
-      '@tanstack/router': {configs: ['tanstackRouter']},
+      '@tanstack/router': {configs: ['tanstackRouter'], gitTag: versionUnknown},
       '@unocss': {configs: ['unocss']},
       antfu: {configs: ['antfu']},
       astro: {configs: ['astro']},
