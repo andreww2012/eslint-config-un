@@ -42,6 +42,7 @@ export default ((context, optionsRaw) => {
     ]) /** @since 0.22.0 */ // 🟣
     .addRule('jsx-no-script-url', ERROR) /** @since 0.22.0 */ // 🟣
     .addRule('loader-location', ERROR, routesDir == null ? [] : [{routesDir}]) /** @since 0.17.0 */ // 🟣
+    .addRule('no-async-prevent-default', ERROR) /** @since 1.19.1 */ // 🟢🟣 (warns)
     .addRule('no-react-props', ERROR) /** @since 0.22.0 */ // 🟢🟣
     .addRule('no-use-visible-task', ERROR) /** @since 1.3.0 */ // 🟣
     .addRule('prefer-classlist', ERROR) /** @since 0.22.0 */ // 🟣

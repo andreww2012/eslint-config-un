@@ -440,6 +440,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       },
       qwik: {
         configs: ['qwik'],
+        gitTag: (version) => `eslint-plugin-qwik@${version}`,
         ruleDocsUrl: (ruleName) => `https://qwik.dev/docs/advanced/eslint/#${ruleName}`,
       },
       react: {
