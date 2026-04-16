@@ -213,7 +213,7 @@ const ALL_STYLISTIC_RULES = {
     'property-casing': true,
   },
   cypress: {
-    // None
+    'no-and': true,
   },
   'de-morgan': {
     'no-negated-conjunction': true,

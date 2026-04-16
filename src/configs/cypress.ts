@@ -42,6 +42,7 @@ export default ((context, optionsRaw) => {
       },
     ])
     .addRule('assertion-before-screenshot', WARNING) /** @since 2.2.0 */
+    .addRule('no-and', ERROR) /** @since 6.3.0 */
     .addRule('no-assigning-return-values', ERROR) /** @since 2.1.0 */ // 🟢
     .addRule('no-async-before', ERROR) /** @since 2.15.2 */
     .addRule('no-async-tests', ERROR) /** @since 2.11.0 */ // 🟢
