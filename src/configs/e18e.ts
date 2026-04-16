@@ -142,6 +142,7 @@ export default ((context, optionsRaw) => {
   // Legend:
   // 🔴 - NOT in recommended
   // 💭 - requires type information
+  // 💭? - optionally requires type information
 
   const configBuilderModernization = context.createConfigBuilder(configModernization, 'e18e');
 
@@ -155,8 +156,8 @@ export default ((context, optionsRaw) => {
       ])
       .addRule('prefer-array-at', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-fill', ERROR) /** @since 0.0.1 */
-      .addRule('prefer-array-to-reversed', ERROR) /** @since 0.0.1 */
-      .addRule('prefer-array-to-sorted', ERROR) /** @since 0.0.1 */
+      .addRule('prefer-array-to-reversed', ERROR) /** @since 0.0.1 */ // 💭?
+      .addRule('prefer-array-to-sorted', ERROR) /** @since 0.0.1 */ // 💭?
       .addRule('prefer-array-to-spliced', ERROR) /** @since 0.0.1 */
       .addRule('prefer-exponentiation-operator', ERROR) /** @since 0.0.1 */
       .addRule('prefer-includes', ERROR) /** @since 0.0.1 */
@@ -221,8 +222,8 @@ export default ((context, optionsRaw) => {
       .addRule('prefer-array-from-map', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-some', ERROR) /** @since 0.1.4 */
       .addRule('prefer-date-now', ERROR) /** @since 0.1.3 */
-      .addRule('prefer-inline-equality', ERROR) /** @since 0.2.0 */ // 💭(optional)
-      .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */ // 💭(optional)
+      .addRule('prefer-inline-equality', ERROR) /** @since 0.2.0 */ // 💭?
+      .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */ // 💭?
       .addRule('prefer-static-regex', ERROR) /** @since 0.2.0 */
       .addRule('prefer-timer-args', ERROR) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
@@ -257,8 +258,8 @@ export default ((context, optionsRaw) => {
         },
       ])
       .addRule('no-indexof-equality', ERROR) /** @since 0.0.1 */ // 🔴💭
-      .addRule('prefer-inline-equality', ERROR) /** @since 0.2.0 */ // 💭(optional)
-      .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */ // 💭(optional)
+      .addRule('prefer-inline-equality', ERROR) /** @since 0.2.0 */ // 💭?
+      .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */ // 💭?
       .enableConfigTesterForPlugin('e18e', {
         /* v8 ignore next */
         rulesToSkipInConfig: (ruleName) =>

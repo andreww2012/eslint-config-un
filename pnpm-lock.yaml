@@ -279,8 +279,8 @@ importers:
         specifier: 3.10.0
         version: 3.10.0(eslint@9.39.2)(typescript@5.9.3)
       '@e18e/eslint-plugin':
-        specifier: 0.2.0
-        version: 0.2.0(eslint@9.39.2)
+        specifier: 0.3.0
+        version: 0.3.0(eslint@9.39.2)
       '@effect/language-service':
         specifier: 0.67.0
         version: 0.67.0
@@ -1863,11 +1863,11 @@ packages:
   '@dprint/toml@0.7.0':
     resolution: {integrity: sha512-eFaQTcfxKHB+YyTh83x7GEv+gDPuj9q5NFOTaoj5rZmQTbj6OgjjMxUicmS1R8zYcx8YAq5oA9J3YFa5U6x2gA==}
 
-  '@e18e/eslint-plugin@0.2.0':
-    resolution: {integrity: sha512-mXgODVwhuDjTJ+UT+XSvmMmCidtGKfrV5nMIv1UtpWex2pYLsIM3RSpT8HWIMAebS9qANbXPKlSX4BE7ZvuCgA==}
+  '@e18e/eslint-plugin@0.3.0':
+    resolution: {integrity: sha512-hHgfpxsrZ2UYHcicA+tGZnmk19uJTaye9VH79O+XS8R4ona2Hx3xjhXghclNW58uXMk3xXlbYEOMr8thsoBmWg==}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
-      oxlint: ^1.41.0
+      oxlint: ^1.55.0
     peerDependenciesMeta:
       eslint:
         optional: true
@@ -12625,7 +12625,7 @@ snapshots:
 
   '@dprint/toml@0.7.0': {}
 
-  '@e18e/eslint-plugin@0.2.0(eslint@9.39.2)':
+  '@e18e/eslint-plugin@0.3.0(eslint@9.39.2)':
     dependencies:
       eslint-plugin-depend: 1.5.0(eslint@9.39.2)
     optionalDependencies:
