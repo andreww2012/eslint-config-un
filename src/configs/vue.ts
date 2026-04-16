@@ -1213,6 +1213,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('no-unknown-locale', ERROR) /** @since 1.3.0 */
     .addRule('no-unused-keys', ERROR) /** @since 0.1.0 */
     .addRule('prefer-sfc-lang-attr', ERROR) /** @since 1.2.0 */
+    .addRule('valid-plural-forms', ERROR) /** @since 4.2.0 */
     .markCategory('Stylistic Issues')
     .addRule('prefer-linked-key-with-paren', WARNING) /** @since 0.10.0 */
     .addRule('sfc-locale-attr', ERROR) /** @since 1.3.0 */
