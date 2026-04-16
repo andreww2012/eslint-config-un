@@ -1,8 +1,5 @@
-// @ts-check
+import type {CSpellSettings} from 'cspell';
 
-/**
- * @type {import('cspell').CSpellSettings}
- */
 export default {
   useGitignore: true,
   enableGlobDot: true,
@@ -18,6 +15,7 @@ export default {
     '**/temp/**', // TODO why gitignore doesn't work?
     'data/eslint-plugins-db.json',
   ],
+  dictionaries: ['npm', 'node', 'typescript', 'fullstack'],
   words: [
     // Names
     'qwik',
@@ -116,4 +114,4 @@ export default {
     'dups',
     'strikethrough',
   ],
-};
+} satisfies CSpellSettings;

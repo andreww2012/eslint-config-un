@@ -1055,7 +1055,6 @@ export default ((context, optionsRaw, customConfig) => {
     .addRule('no-nonstandard-temporal-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-temporal-zoneddatetime-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-temporal-zoneddatetime-prototype-properties', OFF) /** @since 9.6.0 */
-    .addRule('no-nonstandard-temporal-instant-prototype-properties', OFF) /** @since 9.6.0 */
     .addRule('no-nonstandard-typed-array-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-typed-array-prototype-properties', OFF) /** @since 8.2.0 */
     .addRule('no-nonstandard-weakmap-properties', OFF) /** @since 8.4.0 */

@@ -116,6 +116,7 @@ export default (async (context, optionsRaw) => {
     .addRule('no-deprecated-astro-resolve', ERROR) /** @since 0.12.0 */ // 🟢
     .addRule('no-deprecated-getentrybyslug', ERROR) /** @since 0.28.0 */ // 🟢
     .addRule('no-exports-from-components', ERROR) /** @since 1.1.0 */
+    .addRule('no-prerender-export-outside-pages', ERROR) /** @since 1.7.0 */
     .addRule('no-unused-define-vars-in-style', ERROR) /** @since 0.6.0 */ // 🟢
     .addRule('valid-compile', ERROR) /** @since 0.21.0 */ // 🟢
     .markCategory('Security Vulnerability')
