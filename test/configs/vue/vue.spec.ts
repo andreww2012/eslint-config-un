@@ -84,7 +84,7 @@ describe('basic tests', () => {
     it('does not throw if Vue version cannot be determined', async () => {
       await expect(
         testEslintConfig('vue', FIXTURES.templateWithUselessMustache, import.meta.dirname),
-      ).resolves.not.toThrowError();
+      ).resolves.not.toThrow();
     });
 
     it('prints a warning if Vue version cannot be determined', async () => {

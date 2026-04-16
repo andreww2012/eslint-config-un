@@ -1,4 +1,3 @@
-// cspell:ignore idential
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {pluginsLoaders} from '../loaders';
 import type {Prettify} from '../types';
@@ -75,7 +74,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
         ExtraPlugins,
         Pick<
           UnRulesConfigPartial<'vitest'>,
-          `vitest/${(typeof VITEST_TYPESCRIPT_RELATED_RULES)[number]}`
+          `vitest/${(typeof VITEST_RULES_REQUIRING_TYPE_INFORMATION)[number]}`
         >
       >;
 
@@ -122,11 +121,14 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   vitestGlobalsImporting?: 'disallow' | 'enforce' | 'any';
 }
 
-const VITEST_TYPESCRIPT_RELATED_RULES = [
+const VITEST_RULES_REQUIRING_TYPE_INFORMATION = [
   'prefer-vi-mocked',
+  'unbound-method',
 ] satisfies GetRuleNamesInPlugin<'vitest'>[];
 
-const VITEST_TYPESCRIPT_RELATED_RULES_SET = new Set<string>(VITEST_TYPESCRIPT_RELATED_RULES);
+const VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET = new Set<string>(
+  VITEST_RULES_REQUIRING_TYPE_INFORMATION,
+);
 
 export default (async (context, optionsRaw) => {
   const eslintPluginVitest = await pluginsLoaders.vitest(context).then(({module}) => module);
@@ -188,6 +190,7 @@ export default (async (context, optionsRaw) => {
   // Legend:
   // 🟢 - in recommended
   // 🟡 - in recommended (warns)
+  // 💭 - requires type information
 
   // TODO sync settings with `jest` config?
   configBuilder
@@ -250,7 +253,7 @@ export default (async (context, optionsRaw) => {
     .addRule('no-duplicate-hooks', ERROR) /** @since 0.0.49 */ // (warns in all)
     .addRule('no-focused-tests', ERROR, [{fixable: false}]) /** @since 0.0.13 */ // 🟢(since 1.5.0)
     .addRule('no-hooks', OFF) /** @since 0.0.35 */ // (warns in all)
-    .addRule('no-identical-title', ERROR) /** @since 0.0.8 */ /** @aka no-idential-title */ // 🟢
+    .addRule('no-identical-title', ERROR) /** @since 0.0.8 */ /** @aka no-idential-title */ // 🟢 cspell:disable-line
     .addRule('no-import-node-test', ERROR) /** @since 0.3.14 */ // 🟢
     .addRule(
       'no-importing-vitest-globals',
@@ -373,7 +376,7 @@ export default (async (context, optionsRaw) => {
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('vitest', {
       /* v8 ignore next */
-      rulesToSkipInConfig: (ruleName) => VITEST_TYPESCRIPT_RELATED_RULES_SET.has(ruleName),
+      rulesToSkipInConfig: (ruleName) => VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET.has(ruleName),
     })
     .addOverrides();
 
@@ -392,12 +395,13 @@ export default (async (context, optionsRaw) => {
       ],
       defaultVitestEslintConfig,
     )
-    // Requires type checking
-    .addRule('prefer-vi-mocked', OFF) /** @since 1.1.6 */ // (warns in all)
+    .addRule('prefer-vi-mocked', OFF) /** @since 1.1.6 */ // 💭 (warns in all)
+    .addRule('unbound-method', ERROR) /** @since 1.6.13 */ // 💭 (warns in all)
+    .disableAnyRule('ts', 'unbound-method')
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('vitest', {
       /* v8 ignore next */
-      rulesToSkipInConfig: (ruleName) => !VITEST_TYPESCRIPT_RELATED_RULES_SET.has(ruleName),
+      rulesToSkipInConfig: (ruleName) => !VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET.has(ruleName),
     })
     .addOverrides();
 
