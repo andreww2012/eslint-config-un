@@ -11,6 +11,7 @@ import {type LoadablePluginPrefix, pluginsLoaders} from '../src/loaders';
 import {fetchPackageInfo, objectEntriesUnsafe} from '../src/utils';
 
 const versionAsIs = (version: string) => version;
+const versionUnknown = () => '';
 
 type GitTagResult = string | {url: string};
 
@@ -35,7 +36,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       '@intlify/vue-i18n': {configs: ['vue']},
       '@next/next': {configs: ['nextJs']}, // eslint-disable-line case-police/string-check
       '@stylistic': {configs: ['stylistic']},
-      '@tanstack/query': {configs: ['tanstackQuery']},
+      '@tanstack/query': {configs: ['tanstackQuery'], gitTag: versionUnknown},
       '@tanstack/router': {configs: ['tanstackRouter']},
       '@unocss': {configs: ['unocss']},
       antfu: {configs: ['antfu']},

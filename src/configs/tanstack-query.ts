@@ -1,4 +1,4 @@
-import {ERROR} from '../constants';
+import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -17,6 +17,7 @@ export default ((context, optionsRaw) => {
 
   // Legend:
   // 🟢 - in recommended
+  // 🟢! - in recommended (strict)
   // 🟡 - in recommended (warns)
 
   configBuilder
@@ -27,6 +28,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-rest-destructuring', ERROR) /** @since 5.6.0 */ // 🟡
     .addRule('no-unstable-deps', ERROR) /** @since 5.52.0 */ // 🟢
     .addRule('no-void-query-fn', ERROR) /** @since 5.72.0 */ // 🟢
+    .addRule('prefer-query-options', OFF) /** @since 5.96.0 */ // 🟢!
     .addRule('stable-query-client', ERROR) /** @since 4.36.0 */ // 🟢
     .enableConfigTesterForPlugin('@tanstack/query')
     .addOverrides();
