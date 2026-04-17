@@ -31,37 +31,21 @@ describe('react: sub config `hooks`', () => {
     });
   });
 
-  describe('rules', async () => {
-    const configResult = await computeEslintConfig('react');
+  describe('rules', () => {
+    it('correctly sets severities by default', async () => {
+      const configResult = await computeEslintConfig('react');
 
-    it('enables `react-hooks/exhaustive-deps` rule by default', () => {
-      expect(configResult.getRuleEntrySeverity('react/hooks', 'react-hooks/exhaustive-deps')).toBe(
-        2,
-      );
-    });
+      expect(configResult.getRuleSeverities('react/hooks')).toMatchObject({
+        // Non-React compiler rules
+        'react-hooks/exhaustive-deps': 2,
+        'react-hooks/rules-of-hooks': 2,
 
-    it('enables `react-hooks/rules-of-hooks` rule by default', () => {
-      expect(configResult.getRuleEntrySeverity('react/hooks', 'react-hooks/rules-of-hooks')).toBe(
-        2,
-      );
-    });
+        // React compiler rule
+        'react-hooks/memo-dependencies': 2,
 
-    it('enables `react-hooks/automatic-effect-dependencies` (react compiler rule) by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'react/hooks',
-          'react-hooks/automatic-effect-dependencies',
-        ),
-      ).toBe(2);
-    });
-
-    it('enables `@eslint-react/hooks-extra/no-direct-set-state-in-use-effect` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'react/hooks',
-          '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect',
-        ),
-      ).toBe(1);
+        // Non-`react-hooks` plugin rules
+        '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect': 1,
+      });
     });
 
     it('`react-hooks/exhaustive-deps` rule fires on a component with missing hook dependencies', async () => {
@@ -134,7 +118,7 @@ describe('react: sub config `hooks`', () => {
         expect(
           configResult.getRuleEntrySeverity(
             'react/hooks',
-            'react-hooks/automatic-effect-dependencies',
+            'react-hooks/exhaustive-effect-dependencies',
           ),
         ).toBe(2);
       });
@@ -147,7 +131,7 @@ describe('react: sub config `hooks`', () => {
         expect(
           configResult.getRuleEntrySeverity(
             'react/hooks',
-            'react-hooks/automatic-effect-dependencies',
+            'react-hooks/exhaustive-effect-dependencies',
           ),
         ).toBe(2);
       });
@@ -160,7 +144,7 @@ describe('react: sub config `hooks`', () => {
         expect(
           configResult.getRuleEntrySeverity(
             'react/hooks',
-            'react-hooks/automatic-effect-dependencies',
+            'react-hooks/exhaustive-effect-dependencies',
           ),
         ).toBe(0);
       });

@@ -943,15 +943,13 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
         },
       },
     ])
-    // Severity of react compiler rules correspond to the recommended ones from https://github.com/facebook/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L715
-    .addRule('automatic-effect-dependencies', reactCompilerRulesSeverity) /** @since 6.1.0 */
+    // Severity of react compiler rules correspond to the recommended ones from https://github.com/facebook/react/blob/bf45a68dd35ed08860b6a70fed641dfe6d7d290d/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L777
     .addRule('capitalized-calls', reactCompilerRulesSeverity) /** @since 6.1.0 */
-    .addRule('component-hook-factories', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('config', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('error-boundaries', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('exhaustive-deps', ERROR) /** @since 1.1.0-rc.0 */ // 🟡
+    .addRule('exhaustive-effect-dependencies', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('fbt', reactCompilerRulesSeverity) /** @since 6.1.0 */
-    .addRule('fire', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('gating', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('globals', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     // Almost the same as `rules-of-hooks`, see https://github.com/facebook/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L840
@@ -959,6 +957,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     .addRule('immutability', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('incompatible-library', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟡
     .addRule('invariant', reactCompilerRulesSeverity) /** @since 6.1.0 */
+    .addRule('memo-dependencies', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('memoized-effect-dependencies', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('no-deriving-state-in-effects', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('preserve-manual-memoization', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢

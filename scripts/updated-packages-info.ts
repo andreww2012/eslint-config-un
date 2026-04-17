@@ -18,7 +18,7 @@ type GitTagResult = string | {url: string};
 interface PackageMeta {
   configs: (keyof UnConfigs)[];
   ruleDocsUrl: ((ruleName: string) => string) | null;
-  gitTag?: (version: string) => GitTagResult;
+  gitTag?: string | ((version: string) => GitTagResult);
 }
 
 const PACKAGES_META: Record<string, PackageMeta> = {
@@ -451,6 +451,8 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       },
       'react-hooks': {
         configs: ['react'],
+        gitTag:
+          'https://github.com/facebook/react/blob/HEAD/packages/eslint-plugin-react-hooks/CHANGELOG.md',
         ruleDocsUrl: null, // No docs
       },
       'react-refresh': {
@@ -641,6 +643,9 @@ const getCompareDiffUrl = (
   const gitTag = PACKAGES_META[dependency]?.gitTag;
   if (!gitTag) {
     return `${repoUrl}/compare/v${oldVersion}...v${newVersion}`;
+  }
+  if (typeof gitTag === 'string') {
+    return gitTag;
   }
   const newTagResult = gitTag(newVersion);
   const oldTagResult = gitTag(oldVersion);
