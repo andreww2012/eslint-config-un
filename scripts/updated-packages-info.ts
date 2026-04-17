@@ -622,6 +622,10 @@ const PACKAGES_META: Record<string, PackageMeta> = {
     gitTag: (version) => `v${version}-ember-eslint-parser`,
     ruleDocsUrl: null,
   },
+  'svelte-eslint-parser': {
+    configs: ['svelte'],
+    ruleDocsUrl: null,
+  },
   'tailwind-csstree': {
     configs: ['tailwind'],
     gitTag: (version) => `tailwind-csstree-v${version}`,
