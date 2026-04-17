@@ -612,6 +612,10 @@ const PACKAGES_META: Record<string, PackageMeta> = {
     gitTag: (version) => `@sveltejs/kit@${version}`,
     ruleDocsUrl: null,
   },
+  'astro-eslint-parser': {
+    configs: ['astro'],
+    ruleDocsUrl: null,
+  },
   'ember-eslint-parser': {
     configs: ['ember'],
     gitTag: (version) => `v${version}-ember-eslint-parser`,
