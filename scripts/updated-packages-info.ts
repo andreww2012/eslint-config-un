@@ -508,6 +508,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       },
       svelte: {
         configs: ['svelte'],
+        gitTag: (version) => `eslint-plugin-svelte@${version}`,
         ruleDocsUrl: (ruleName) =>
           `https://sveltejs.github.io/eslint-plugin-svelte/rules/${ruleName}`,
       },

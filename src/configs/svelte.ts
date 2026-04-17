@@ -281,6 +281,7 @@ export default (async (context, optionsRaw) => {
     ]) /** @since 2.5.0 */ // 💅
     .addRule('indent', OFF) /** @since 0.3.0 */ // 💅
     .addRule('max-attributes-per-line', OFF) /** @since 0.2.0 */ // 💅
+    .addRule('max-lines-per-block', OFF) /** @since 3.16.0 */
     .addRule('mustache-spacing', ERROR) /** @since 0.15.0 */ // 💅
     .addRule('no-extra-reactive-curlies', ERROR) /** @since 2.4.0 */
     .addRule(
