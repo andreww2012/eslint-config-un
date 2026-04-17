@@ -128,8 +128,8 @@ importers:
         specifier: 0.1.1
         version: 0.1.1(eslint@9.39.2)
       eslint-plugin-markdown-links:
-        specifier: 0.8.1
-        version: 0.8.1(@eslint/markdown@8.0.1)(eslint@9.39.2)
+        specifier: 0.9.0
+        version: 0.9.0(@eslint/markdown@8.0.1)(eslint@9.39.2)
       eslint-plugin-markdown-preferences:
         specifier: 0.41.1
         version: 0.41.1(@eslint/markdown@8.0.1)(eslint@9.39.2)
@@ -6801,8 +6801,8 @@ packages:
     peerDependencies:
       eslint: ^9.39.2
 
-  eslint-plugin-markdown-links@0.8.1:
-    resolution: {integrity: sha512-6+yYVCoC+0yC9a0f7OR9HIbNZHq6eVTJAQdJJFDbn1muEVAUXYXAoARuPtVQpI1US5oGd9D+Q034/o94iy1nog==}
+  eslint-plugin-markdown-links@0.9.0:
+    resolution: {integrity: sha512-4LW0SQiI38CrJmvM9kCJeRDA4HGo/QetdYHJtO06EaTmcUVu9g620WNtt2LjXGBEHpKkDbq87sWugxJn26GB8g==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
       '@eslint/markdown': ^7.1.0 || ^8.0.0
@@ -18126,7 +18126,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-markdown-links@0.8.1(@eslint/markdown@8.0.1)(eslint@9.39.2):
+  eslint-plugin-markdown-links@0.9.0(@eslint/markdown@8.0.1)(eslint@9.39.2):
     dependencies:
       '@eslint/markdown': 8.0.1
       '@mdit-vue/shared': 3.0.2
