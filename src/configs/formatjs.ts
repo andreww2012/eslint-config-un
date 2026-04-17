@@ -154,6 +154,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-offset', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule('no-useless-message', ERROR) /** @since 4.4.0 */ // 🟢
     .addRule('prefer-formatted-message', OFF) /** @since 4.7.0 */
+    .addRule('prefer-full-sentence', ERROR) /** @since 6.2.0 */ // 🟢
     .addRule('prefer-pound-in-plural', ERROR) /** @since 4.7.0 */ // 🟢
     .enableConfigTesterForPlugin('formatjs')
     .addOverrides();
