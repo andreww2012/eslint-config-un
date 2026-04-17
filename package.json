@@ -306,7 +306,7 @@
     "unstorage": "1.17.4",
     "validate-npm-package-name": "7.0.2",
     "vitest": "4.0.18",
-    "vue-eslint-parser": "10.2.0",
+    "vue-eslint-parser": "10.4.0",
     "zod": "4.3.5",
     "zod-package-json": "2.1.0"
   },
@@ -393,7 +393,7 @@
     "eslint-plugin-zod": "^3.5.4",
     "eslint-processor-vue-blocks": "^2.0.0",
     "svelte-eslint-parser": "^1.4.1",
-    "vue-eslint-parser": "^10.2.0"
+    "vue-eslint-parser": "^10.4.0"
   },
   "peerDependenciesMeta": {
     "@angular-eslint/eslint-plugin": {

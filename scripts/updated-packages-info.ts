@@ -620,6 +620,10 @@ const PACKAGES_META: Record<string, PackageMeta> = {
     gitTag: (version) => `tailwind-csstree-v${version}`,
     ruleDocsUrl: null,
   },
+  'vue-eslint-parser': {
+    configs: ['vue'],
+    ruleDocsUrl: null,
+  },
 };
 
 /* eslint-disable perfectionist/sort-objects */
