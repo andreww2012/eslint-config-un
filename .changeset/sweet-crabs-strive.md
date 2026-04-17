@@ -1,5 +1,8 @@
 ---
-'eslint-config-un': patch
+'eslint-config-un': minor
 ---
 
-sonar: updated [`eslint-plugin-sonarjs` from v4.0.0 to v4.0.2](https://github.com/SonarSource/SonarJS/blob/4359d0332af29465e80450dd8268e02a62d3380e/packages/jsts/src/rules/CHANGELOG.md#2026-03-10-version-402)
+sonar: updated [`eslint-plugin-sonarjs` from v4.0.0 to v4.0.3](https://github.com/SonarSource/SonarJS/blob/02bce2e6b6c75bac9e1bcf6c8641994dcb9df2d4/packages/analysis/src/jsts/rules/CHANGELOG.md):
+
+- 🟢 enabled [`dompurify-unsafe-config`](https://sonarsource.github.io/rspec/#/rspec/S5850/javascript) rule
+- ⚠️ [\`no-unsafe-unzip\`](https://sonarsource.github.io/rspec/#/rspec/S5042/javascript) rule was disabled because got deprecated

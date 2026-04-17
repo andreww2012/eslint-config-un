@@ -55,6 +55,7 @@ export default (async (context, optionsRaw) => {
   // 🟢 - in recommended
   // 🔴 - deprecated
   // 💭 - requires type information
+  // 💭? - optionally requires type information
   // 🔤 - rule for regular expressions
   // 🧪 - rule for testing frameworks
   // 📦 - rule for specific package(s) or node module(s)
@@ -138,6 +139,7 @@ export default (async (context, optionsRaw) => {
     .addRule('disabled-auto-escaping', ERROR) /** @since 1.0.4-alpha.0 */ // [S5247] 🟢💭 📦 `mustache`, `handlebars`, `markdown-it`, `marked`, `kramed`
     .addRule('disabled-resource-integrity', ERROR) /** @since 1.0.4-alpha.0 */ // [S5725] 🟢💭
     .addRule('disabled-timeout', testsRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S6080] 🟢🧪 📦 `chai`
+    .addRule('dompurify-unsafe-config', ERROR) /** @since 4.0.3 */ // [S8479] 🟢💭? 📦 `dompurify`, `isomorphic-dompurify`
     // ⚠️ `regexp/no-dupe-characters-character-class`
     .addRule('duplicates-in-character-class', OFF) /** @since 1.0.4-alpha.0 */ // [S5869] 🟢💭🔤
     .addRule('dynamically-constructed-templates', ERROR) /** @since 3.0.6 */ // [S7790] 🟢📦 `pug`, `ejs`
@@ -324,7 +326,6 @@ export default (async (context, optionsRaw) => {
     // ⚠️ `curly` and Prettier
     .addRule('no-unenclosed-multiline-block', OFF) /** @since 1.0.4-alpha.0 */ // [S2681] 🟢
     .addRule('no-uniq-key', ERROR) /** @since 1.0.4-alpha.0 */ // [S6486] 🟢🔵
-    .addRule('no-unsafe-unzip', ERROR) /** @since 1.0.4-alpha.0 */ // [S5042] 🟢 📦 `tar`, `adm-zip`, `jszip`, `yauzl`, `extract-zip`
     // ⚠️ `no-new`
     .addRule('no-unthrown-error', OFF) /** @since 1.0.4-alpha.0 */ // [S3984] 🟢
     .addRule('no-unused-collection', ERROR) /** @since 0.5.0 */ // [S4030] 🟢
