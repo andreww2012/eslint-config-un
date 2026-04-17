@@ -124,6 +124,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-optional-and-default-together', ERROR) /** @since 1.6.0 */ // 🟢
     .addRule('no-string-schema-with-uuid', ERROR) /** @since 3.2.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 0.0.1 */ // 🟢
+    .addRule('no-transform-in-record-key', ERROR) /** @since 3.6.0 */
     .addRule('no-unknown-schema', OFF) /** @since 1.12.0 */
     .addRule('prefer-enum-over-literal-union', ERROR) /** @since 3.0.0 */ // 🟢
     // `.meta()` added in v4
