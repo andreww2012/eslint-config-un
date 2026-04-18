@@ -558,8 +558,8 @@ importers:
         specifier: 1.12.2
         version: 1.12.2
       eslint-plugin-turbo:
-        specifier: 2.8.17
-        version: 2.8.17(eslint@9.39.2)(turbo@2.5.4)
+        specifier: 2.9.6
+        version: 2.9.6(eslint@9.39.2)(turbo@2.5.4)
       eslint-plugin-unused-imports:
         specifier: 4.4.1
         version: 4.4.1(@typescript-eslint/eslint-plugin@8.58.2)(eslint@9.39.2)
@@ -7081,8 +7081,8 @@ packages:
     resolution: {integrity: sha512-D3MBKjH9EaGZg1gxqezGmjCeWzHs/O0jRFajpuXLYKeOCh3ycgoXeZ1ceKaD2QnK+v18ly+XjNDUCgss4vKbWg==}
     engines: {node: '>=6.0.0'}
 
-  eslint-plugin-turbo@2.8.17:
-    resolution: {integrity: sha512-ueZdnMyqZ6Q8dntbG98Ylyu6dqYt3MgoRELKGfDQDhPmwtxWwtimas0BDx8x/Ex4nnfg1pvr9HKxew/rHdvHIw==}
+  eslint-plugin-turbo@2.9.6:
+    resolution: {integrity: sha512-mntEkRe71izva2mJHZGxH2ccOdySqXiNJf5tdzRabaxhudLCeonPUdTE6aNGOhgVeL1lclxg5/ibp3C/cpe+kQ==}
     peerDependencies:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
@@ -18611,7 +18611,7 @@ snapshots:
 
   eslint-plugin-tree-shaking@1.12.2: {}
 
-  eslint-plugin-turbo@2.8.17(eslint@9.39.2)(turbo@2.5.4):
+  eslint-plugin-turbo@2.9.6(eslint@9.39.2)(turbo@2.5.4):
     dependencies:
       dotenv: 16.0.3
       eslint: 9.39.2(jiti@2.6.1)
