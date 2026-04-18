@@ -414,8 +414,8 @@ importers:
         specifier: 1.7.0
         version: 1.7.0(eslint@9.39.2)
       eslint-plugin-ava:
-        specifier: 16.0.0
-        version: 16.0.0(eslint@9.39.2)
+        specifier: 16.0.1
+        version: 16.0.1(eslint@9.39.2)
       eslint-plugin-barrel-files:
         specifier: 3.0.1
         version: 3.0.1(eslint@9.39.2)
@@ -6529,8 +6529,8 @@ packages:
     peerDependencies:
       eslint: '>=8.57.0'
 
-  eslint-plugin-ava@16.0.0:
-    resolution: {integrity: sha512-UufFU8AxaneI28Z0SMaoOldpee8q0Knba3QdFwQyrnHvbKsKe90gwafPtBeA6qYoGeVcFSolgaN3qHZxxdW1jA==}
+  eslint-plugin-ava@16.0.1:
+    resolution: {integrity: sha512-1QsYwUulr9m9o6EFndkI0J10wZyVimmrQ1epB8zEowulW0o8fW/ahIHrPwTMT53AWbObD+8S78Uz9aKM3zS9+A==}
     engines: {node: '>=20.19'}
     peerDependencies:
       eslint: '>=10'
@@ -7240,10 +7240,6 @@ packages:
   espree@10.4.0:
     resolution: {integrity: sha512-j6PAQ2uUr79PZhBjP5C5fhl8e39FmRnOjsD5lGnWrFU8i2G776tBK7+nP8KuQUTTyAZUwfQqXAgrVH5MbH9CYQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  espree@11.1.0:
-    resolution: {integrity: sha512-WFWYhO1fV4iYkqOOvq8FbqIhr2pYfoDY0kCotMkDeNtGpiGGkZ1iov2u8ydjtgM8yF8rzK7oaTbw2NAzbAbehw==}
-    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
   espree@11.2.0:
     resolution: {integrity: sha512-7p3DrVEIopW1B1avAGLuCSh1jubc01H2JHc8B4qqGblmg5gI9yumBgACjWo4JlIc04ufug4xJ3SQI8HkS/Rgzw==}
@@ -13257,7 +13253,7 @@ snapshots:
 
   '@eslint/json@1.1.0':
     dependencies:
-      '@eslint/core': 1.1.1
+      '@eslint/core': 1.2.1
       '@eslint/plugin-kit': 0.6.1
       '@humanwhocodes/momoa': 3.3.10
       natural-compare: 1.4.0
@@ -17699,13 +17695,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-ava@16.0.0(eslint@9.39.2):
+  eslint-plugin-ava@16.0.1(eslint@9.39.2):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       '@eslint/json': 1.1.0
       enhance-visitors: 1.0.0
       eslint: 9.39.2(jiti@2.6.1)
-      espree: 11.1.0
+      espree: 11.2.0
       espurify: 3.2.0
       micro-spelling-correcter: 1.1.1
       resolve-from: 5.0.0
@@ -18779,12 +18775,6 @@ snapshots:
       acorn: 8.15.0
       acorn-jsx: 5.3.2(acorn@8.15.0)
       eslint-visitor-keys: 4.2.1
-
-  espree@11.1.0:
-    dependencies:
-      acorn: 8.15.0
-      acorn-jsx: 5.3.2(acorn@8.15.0)
-      eslint-visitor-keys: 5.0.0
 
   espree@11.2.0:
     dependencies:
