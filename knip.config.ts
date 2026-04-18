@@ -1,16 +1,11 @@
-// cspell:ignore ncurc
 import type {KnipConfig} from 'knip';
-import packageJson from './package.json' with {type: 'json'};
 
 const config: KnipConfig = {
   ignore: ['test/**/fixtures/**'],
-  entry: ['.ncurc.cjs'],
-  ignoreDependencies: [
-    '@eslint/core',
-    ...Object.entries(packageJson.peerDependenciesMeta)
-      .filter(([, meta]) => meta.optional)
-      .map(([name]) => name),
+  entry: [
+    '.ncurc.cjs', //cspell:disable-line
   ],
+  ignoreDependencies: ['@eslint/core'],
   tags: ['-knipignore'],
   treatConfigHintsAsErrors: true,
 };

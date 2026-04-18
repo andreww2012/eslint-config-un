@@ -290,7 +290,7 @@
     "json-schema-to-typescript-lite": "15.0.0",
     "json-stringify-pretty-compact": "4.0.0",
     "jsonc-eslint-parser": "3.1.0",
-    "knip": "5.81.0",
+    "knip": "6.4.1",
     "lefthook": "2.0.15",
     "npm-check-updates": "19.3.1",
     "npm-package-arg": "13.0.2",
