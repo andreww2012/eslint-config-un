@@ -227,8 +227,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1
       tailwind-csstree:
-        specifier: 0.1.4
-        version: 0.1.4
+        specifier: 0.3.1
+        version: 0.3.1(@eslint/css@1.1.0)
       tinyexec:
         specifier: 1.1.1
         version: 1.1.1
@@ -296,6 +296,9 @@ importers:
       '@eslint/config-inspector':
         specifier: 1.4.2
         version: 1.4.2(eslint@9.39.2)
+      '@eslint/css-tree':
+        specifier: 4.0.2
+        version: 4.0.2
       '@graphql-eslint/eslint-plugin':
         specifier: 4.4.0
         version: 4.4.0(@types/node@20.19.1)(crossws@0.3.5)(eslint@9.39.2)(graphql@16.11.0)(json-schema-to-ts@3.1.1)(typescript@5.9.3)
@@ -10346,10 +10349,6 @@ packages:
     resolution: {integrity: sha512-KpzUHkH1ug1sq4394SLJX38ZtpeTiqQ1RVyFTTSY2XuHsNSTWUkRo108KmyyrMWdDbQrLYkSHaNKj/a3bmA4sQ==}
     peerDependencies:
       tailwindcss: ^3.3.0 || ^4.0.0 || ^4.0.0-beta
-
-  tailwind-csstree@0.1.4:
-    resolution: {integrity: sha512-FzD187HuFIZEyeR7Xy6sJbJll2d4SybS90satC8SKIuaNRC05CxMvdzN7BUsfDQffcnabckRM5OIcfArjsZ0mg==}
-    engines: {node: '>=18.18'}
 
   tailwind-csstree@0.3.1:
     resolution: {integrity: sha512-v147gLOR+E+9H4dNaP9rBeS/S/CTQJMRItlX9jLOXjdBGfSRauLwiz7LBCViaQmn6URXIlOdN6iMzSzOaeoUUw==}
@@ -22533,8 +22532,6 @@ snapshots:
       jiti: 2.6.1
       local-pkg: 1.1.2
       tailwindcss: 3.4.17
-
-  tailwind-csstree@0.1.4: {}
 
   tailwind-csstree@0.3.1(@eslint/css@1.1.0):
     optionalDependencies:

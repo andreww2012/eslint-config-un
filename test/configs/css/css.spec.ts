@@ -1,4 +1,5 @@
 import {GLOB_CSS} from '../../../src/constants';
+import {packagesLoaders} from '../../../src/loaders';
 
 const FIXTURES = {
   cssEmptyBlock: 'css-empty-block.css',
@@ -262,6 +263,26 @@ describe('options', () => {
         },
         node: {TailwindThemeKey: {}, TailwindUtilityClass: {}},
       });
+    });
+
+    it('does not request `@eslint/css-tree` when `customSyntax` is a plain object', async () => {
+      using spy = vi.spyOn(packagesLoaders, 'eslintCssTreeSyntax');
+
+      await computeEslintConfig({
+        css: {customSyntax: {atrules: {apply: {prelude: '<custom-selector>'}}}},
+      });
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('requests `@eslint/css-tree` when `customSyntax` is a function', async () => {
+      using spy = vi.spyOn(packagesLoaders, 'eslintCssTreeSyntax');
+
+      await computeEslintConfig({
+        css: {customSyntax: ({defaultSyntax}) => defaultSyntax},
+      });
+
+      expect(spy).toHaveBeenCalledOnce();
     });
   });
 

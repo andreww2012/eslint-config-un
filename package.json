@@ -159,7 +159,7 @@
     "remeda": "2.33.7",
     "semver": "7.7.4",
     "string-ts": "2.3.1",
-    "tailwind-csstree": "0.1.4",
+    "tailwind-csstree": "0.3.1",
     "tinyexec": "1.1.1",
     "type-fest": "5.5.0",
     "typescript-eslint": "8.58.2"
@@ -184,6 +184,7 @@
     "@effect/platform-node": "0.104.0",
     "@eslint-react/eslint-plugin": "2.7.1",
     "@eslint/config-inspector": "1.4.2",
+    "@eslint/css-tree": "4.0.2",
     "@graphql-eslint/eslint-plugin": "4.4.0",
     "@intlify/eslint-plugin-vue-i18n": "4.3.0",
     "@jest/environment": "30.3.0",
@@ -320,6 +321,7 @@
     "@docusaurus/eslint-plugin": "^3.10.0",
     "@e18e/eslint-plugin": "^0.3.0",
     "@eslint-react/eslint-plugin": "^2.7.1",
+    "@eslint/css-tree": "^4.0.2",
     "@graphql-eslint/eslint-plugin": "^4.4.0",
     "@intlify/eslint-plugin-vue-i18n": "^4.3.0",
     "@next/eslint-plugin-next": "^16.2.4",
@@ -421,6 +423,9 @@
       "optional": true
     },
     "@eslint-react/eslint-plugin": {
+      "optional": true
+    },
+    "@eslint/css-tree": {
       "optional": true
     },
     "@graphql-eslint/eslint-plugin": {

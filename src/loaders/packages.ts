@@ -29,6 +29,9 @@ export const packagesLoaders = {
       (m) => m.processors['eslint-processor-check-file'],
     ),
   ),
+  eslintCssTreeSyntax: genModuleLoader('eslintCssTree', '@eslint/css-tree', () =>
+    interopDefault(import('@eslint/css-tree/definition-syntax-data')),
+  ),
   eslintMergeProcessors: genModuleLoader('eslintMergeProcessors', 'eslint-merge-processors', () =>
     interopDefault(import('eslint-merge-processors')),
   ),
