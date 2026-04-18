@@ -84,7 +84,7 @@ export function getIsConfigEnabled(
         return (
           !packageInfo ||
           (versionRangeToSatisfy &&
-            !semver.satisfies(packageInfo.info.version, versionRangeToSatisfy))
+            !semver.satisfies(packageInfo.info.version || '', versionRangeToSatisfy))
         );
       });
       enabledBySystem ??= notInstalledPackages.length === 0;

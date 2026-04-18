@@ -67,13 +67,14 @@
     "knip": "knip --no-progress",
     "build:code": "tsdown --clean",
     "build:code:test": "tsdown --out-dir temp/dist",
+    "check:dts:no-devdeps-imports": "tsx scripts/check-dts-no-devdeps-imports.ts",
     "build": "nr typegen && nr build:code",
     "test:config": "tsx scripts/config-tester.ts",
     "t": "vitest",
     "t:ui": "vitest --ui",
     "t:cov": "vitest --coverage",
     "test:vitest": "nr t",
-    "test:common": "nr typegen && nr knip && nr spellcheck && nr test:config && nr test:vitest run && nr lint && nr build:code:test",
+    "test:common": "nr typegen && nr knip && nr spellcheck && nr test:config && nr test:vitest run && nr lint && nr build:code:test && nr check:dts:no-devdeps-imports",
     "test": "nr deps:audit && nr test:common",
     "test:quick": "nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
     "lint:public-types": "attw --pack . --profile esm-only",
@@ -325,11 +326,13 @@
     "@nuxt/eslint-plugin": "^1.15.2",
     "@nx/eslint-plugin": "^22.5.0",
     "@smarttools/eslint-plugin-rxjs": "^1.0.22",
+    "@sveltejs/kit": "^2.49.5",
     "@tanstack/eslint-plugin-query": "^5.99.0",
     "@tanstack/eslint-plugin-router": "^1.161.6",
     "@unocss/eslint-plugin": "^66.6.0",
     "@vitest/eslint-plugin": "^1.6.16",
     "astro-eslint-parser": "^1.4.0",
+    "browserslist": "^4.28.1",
     "ember-eslint-parser": "^0.9.0",
     "eslint": "^9.15.0",
     "eslint-parser-plain": "^0.1.1",
@@ -438,6 +441,9 @@
     "@smarttools/eslint-plugin-rxjs": {
       "optional": true
     },
+    "@sveltejs/kit": {
+      "optional": true
+    },
     "@tanstack/eslint-plugin-query": {
       "optional": true
     },
@@ -451,6 +457,9 @@
       "optional": true
     },
     "astro-eslint-parser": {
+      "optional": true
+    },
+    "browserslist": {
       "optional": true
     },
     "ember-eslint-parser": {

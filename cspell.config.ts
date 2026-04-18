@@ -18,6 +18,7 @@ export default {
   dictionaries: ['npm', 'node', 'typescript', 'fullstack'],
   words: [
     // Names
+    'devdeps',
     'qwik',
     'sonarjs',
     'klona',

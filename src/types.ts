@@ -35,7 +35,7 @@ export type {
   UnionToIntersection,
 } from 'type-fest';
 
-export type {PackageJson} from 'zod-package-json';
+export type {PackageJson} from 'type-fest';
 
 export type IsAnyUnionMemberAssignableTo<Union, Target> = [Extract<Union, Target>] extends [never]
   ? false

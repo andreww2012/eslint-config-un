@@ -3,7 +3,21 @@ import {defineConfig} from 'tsdown';
 export default defineConfig({
   entry: ['src/index.ts', 'src/snippets.ts', 'src/globs.ts'],
   format: 'esm',
-  dts: true,
+  dts: {
+    resolve: [
+      '@jest/environment', // dev dependency: types used in jest config options
+      '@jest/expect', // dev dependency: types used in jest config options
+      'is-in-editor', // patched: already bundled in JS via noExternal, types must match
+      'shiki', // dev dependency: types used in markdown config options
+
+      // Intentionally excluded:
+      // - `browserslist`: its `export = browserslist` CJS pattern causes a `MISSING_EXPORT` build warning
+      //   when resolving named exports. It's already a peerDependency, so the bare-specifier
+      //   import in dist is fine — consumers using compat config will have it installed.
+      // - `@sveltejs/kit`: resolving it triggers "Export 'AcceptedPlugin' is not defined" because a
+      //   transitive dependency has a broken re-export.
+    ],
+  },
   external: ['eslint-plugin-no-type-assertion', 'eslint-plugin-prettier'],
   noExternal: [
     /^(import-meta-resolve|is-in-editor)(?:\/.+)?$/, // Patched

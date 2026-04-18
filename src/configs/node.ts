@@ -212,7 +212,7 @@ export default (async (context, optionsRaw) => {
 
   const {settings: pluginSettings, preferGlobal, noUnsupportedFeaturesIgnores} = optionsResolved;
 
-  const userNodeVersion = new Range(closestPackageJson?.engines?.['node'] || '');
+  const userNodeVersion = new Range(closestPackageJson?.engines?.node || '');
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'node');
 

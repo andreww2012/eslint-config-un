@@ -68,7 +68,7 @@ for (const {packageName, isDev, packageInfo} of packageJsonsResult) {
           : isOptional
             ? peerDependencyName
             : styleText(isDev ? 'yellow' : 'red', peerDependencyName),
-        styleText('gray', peerDependencyRange),
+        styleText('gray', peerDependencyRange || ''),
         styleText('greenBright', isOptional ? '[optional]' : ''),
       );
     }
