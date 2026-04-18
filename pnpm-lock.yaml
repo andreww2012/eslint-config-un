@@ -354,8 +354,8 @@ importers:
         specifier: 7.0.0-dev.20260120.1
         version: 7.0.0-dev.20260120.1
       '@unocss/eslint-plugin':
-        specifier: 66.6.0
-        version: 66.6.0(eslint@9.39.2)(typescript@5.9.3)
+        specifier: 66.6.8
+        version: 66.6.8(eslint@9.39.2)(typescript@5.9.3)
       '@vitest/coverage-v8':
         specifier: 4.0.18
         version: 4.0.18(vitest@4.0.18)
@@ -4724,19 +4724,19 @@ packages:
   '@unicode/unicode-17.0.0@1.6.16':
     resolution: {integrity: sha512-advq5p36zZ+PDRUpDkWcHHR++R19kx0LYB5iG3bj0KB8mYVKg0ywS996e2bXeXxDb8XdOF7KTivcx7VkYie1pg==}
 
-  '@unocss/config@66.6.0':
-    resolution: {integrity: sha512-YvNk/b9jGmT1TQGDbHR+0VALnTsPLzSTzw90t09ggny9YxeF0XnsP06M5+H0EJPwpmdigBC++KEIMaK8SYDsaQ==}
+  '@unocss/config@66.6.8':
+    resolution: {integrity: sha512-f+a8OyhD7ZoK8Pa1b3Cbx1RQc3n5x+Qht/cHg3wh/g4DNQIjBI2EqwSLfBigWhdO96zIqFAdyTlO3onmrJwUOw==}
     engines: {node: '>=14'}
 
-  '@unocss/core@66.6.0':
-    resolution: {integrity: sha512-Sxm7HmhsPIIzxbPnWembPyobuCeA5j9KxL+jIOW2c+kZiTFjHeju7vuVWX9jmAMMC+UyDuuCQ4yE+kBo3Y7SWQ==}
+  '@unocss/core@66.6.8':
+    resolution: {integrity: sha512-P9IlQfgms+8/nka7fBhiiWU4SPwrTNKbTdK0z1SLnttXMHHjsB2zpG+Vi1JQDpICfY9Y1/2pWtguPE+zeOVu9Q==}
 
-  '@unocss/eslint-plugin@66.6.0':
-    resolution: {integrity: sha512-6i+kNVVGb5I+XOCUgLDHol6sxb28ahbJrmLL/eiAWflT850MUqtAlFeyHDYHzScnOFcPy1AcmeY0yM77GgERmg==}
+  '@unocss/eslint-plugin@66.6.8':
+    resolution: {integrity: sha512-w51M8EwQZL7klOX+ZYS2zxxrj4AjfAtVenSCk+fXE+fSkC8aKNCpQpsV61Af/r9rIAy8GnbBL+QkcTOqkoKLrQ==}
     engines: {node: '>=14'}
 
-  '@unocss/rule-utils@66.6.0':
-    resolution: {integrity: sha512-v16l6p5VrefDx8P/gzWnp0p6/hCA0vZ4UMUN6SxHGVE6V+IBpX6I6Du3Egk9TdkhZ7o+Pe1NHxksHcjT0V/tww==}
+  '@unocss/rule-utils@66.6.8':
+    resolution: {integrity: sha512-WR35L07mLP6PElD4hlUHo5KbQ48uz2HT/XCuJyAsHP+15Gv6539hPWA5SresPuva9r8rl+PeGIgMSIKf4A5Ihw==}
     engines: {node: '>=14'}
 
   '@unrs/resolver-binding-android-arm-eabi@1.11.1':
@@ -5589,6 +5589,9 @@ packages:
 
   colord@2.9.3:
     resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
+
+  colorette@2.0.20:
+    resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
 
   columnify@1.6.0:
     resolution: {integrity: sha512-lomjuFZKfM6MSAnV9aCZC9sc0qGbmZdfygNv+nCpqVkSKdCxCklLtd16O0EILGkImHw9ZpHkAnHaB+8Zxq5W6Q==}
@@ -15709,19 +15712,21 @@ snapshots:
 
   '@unicode/unicode-17.0.0@1.6.16': {}
 
-  '@unocss/config@66.6.0':
+  '@unocss/config@66.6.8':
     dependencies:
-      '@unocss/core': 66.6.0
+      '@unocss/core': 66.6.8
+      colorette: 2.0.20
+      consola: 3.4.2
       unconfig: 7.5.0
 
-  '@unocss/core@66.6.0': {}
+  '@unocss/core@66.6.8': {}
 
-  '@unocss/eslint-plugin@66.6.0(eslint@9.39.2)(typescript@5.9.3)':
+  '@unocss/eslint-plugin@66.6.8(eslint@9.39.2)(typescript@5.9.3)':
     dependencies:
-      '@typescript-eslint/utils': 8.56.0(eslint@9.39.2)(typescript@5.9.3)
-      '@unocss/config': 66.6.0
-      '@unocss/core': 66.6.0
-      '@unocss/rule-utils': 66.6.0
+      '@typescript-eslint/utils': 8.58.2(eslint@9.39.2)(typescript@5.9.3)
+      '@unocss/config': 66.6.8
+      '@unocss/core': 66.6.8
+      '@unocss/rule-utils': 66.6.8
       magic-string: 0.30.21
       synckit: 0.11.12
     transitivePeerDependencies:
@@ -15729,9 +15734,9 @@ snapshots:
       - supports-color
       - typescript
 
-  '@unocss/rule-utils@66.6.0':
+  '@unocss/rule-utils@66.6.8':
     dependencies:
-      '@unocss/core': 66.6.0
+      '@unocss/core': 66.6.8
       magic-string: 0.30.21
 
   '@unrs/resolver-binding-android-arm-eabi@1.11.1':
@@ -16632,6 +16637,8 @@ snapshots:
   color-name@1.1.4: {}
 
   colord@2.9.3: {}
+
+  colorette@2.0.20: {}
 
   columnify@1.6.0:
     dependencies:
