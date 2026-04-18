@@ -396,8 +396,8 @@ importers:
         specifier: 4.1.0
         version: 4.1.0
       diff:
-        specifier: 8.0.3
-        version: 8.0.3
+        specifier: 9.0.0
+        version: 9.0.0
       effect:
         specifier: 3.19.14
         version: 3.19.14
@@ -5880,8 +5880,8 @@ packages:
     resolution: {integrity: sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
-  diff@8.0.3:
-    resolution: {integrity: sha512-qejHi7bcSD4hQAZE0tNAawRK1ZtafHDmMTMkrrIGgSLl7hTnQHmKCeB45xAcbfTqK2zowkM3j3bHt/4b/ARbYQ==}
+  diff@9.0.0:
+    resolution: {integrity: sha512-svtcdpS8CgJyqAjEQIXdb3OjhFVVYjzGAPO8WGCmRbrml64SPw/jJD4GoE98aR7r25A0XcgrK3F02yw9R/vhQw==}
     engines: {node: '>=0.3.1'}
 
   dir-glob@3.0.1:
@@ -16789,7 +16789,7 @@ snapshots:
 
   diff-sequences@29.6.3: {}
 
-  diff@8.0.3: {}
+  diff@9.0.0: {}
 
   dir-glob@3.0.1:
     dependencies:

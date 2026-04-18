@@ -217,7 +217,7 @@
     "cleye": "2.2.1",
     "cspell": "10.0.0",
     "date-fns": "4.1.0",
-    "diff": "8.0.3",
+    "diff": "9.0.0",
     "effect": "3.19.14",
     "ember-eslint-parser": "0.9.0",
     "eslint": "9.39.2",
