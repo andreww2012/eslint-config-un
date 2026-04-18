@@ -32,8 +32,8 @@ importers:
         specifier: 4.7.1
         version: 4.7.1(eslint@9.39.2)
       '@eslint/compat':
-        specifier: 2.0.1
-        version: 2.0.1(eslint@9.39.2)
+        specifier: 2.0.5
+        version: 2.0.5(eslint@9.39.2)
       '@eslint/core0':
         specifier: npm:@eslint/core@^0.17.0
         version: '@eslint/core@0.17.0'
@@ -2250,11 +2250,11 @@ packages:
       eslint:
         optional: true
 
-  '@eslint/compat@2.0.1':
-    resolution: {integrity: sha512-yl/JsgplclzuvGFNqwNYV4XNPhP3l62ZOP9w/47atNAdmDtIFCx6X7CSk/SlWUuBGkT4Et/5+UD+WyvX2iiIWA==}
+  '@eslint/compat@2.0.5':
+    resolution: {integrity: sha512-IbHDbHJfkVNv6xjlET8AIVo/K1NQt7YT4Rp6ok/clyBGcpRx1l6gv0Rq3vBvYfPJIZt6ODf66Zq08FJNDpnzgg==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
     peerDependencies:
-      eslint: ^8.40 || 9
+      eslint: ^8.40 || 9 || 10
     peerDependenciesMeta:
       eslint:
         optional: true
@@ -13168,7 +13168,7 @@ snapshots:
     optionalDependencies:
       eslint: 9.39.2(jiti@2.6.1)
 
-  '@eslint/compat@2.0.1(eslint@9.39.2)':
+  '@eslint/compat@2.0.5(eslint@9.39.2)':
     dependencies:
       '@eslint/core': 1.2.1
     optionalDependencies:
@@ -13295,12 +13295,12 @@ snapshots:
 
   '@eslint/plugin-kit@0.6.0':
     dependencies:
-      '@eslint/core': 1.1.0
+      '@eslint/core': 1.2.1
       levn: 0.4.1
 
   '@eslint/plugin-kit@0.6.1':
     dependencies:
-      '@eslint/core': 1.1.1
+      '@eslint/core': 1.2.1
       levn: 0.4.1
 
   '@fastify/busboy@3.2.0': {}

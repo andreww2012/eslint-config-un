@@ -94,7 +94,7 @@
   "dependencies": {
     "@antfu/utils": "9.3.0",
     "@eslint-community/eslint-plugin-eslint-comments": "4.7.1",
-    "@eslint/compat": "2.0.1",
+    "@eslint/compat": "2.0.5",
     "@eslint/core0": "npm:@eslint/core@^0.17.0",
     "@eslint/css": "1.1.0",
     "@eslint/markdown": "8.0.1",
