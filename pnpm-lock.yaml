@@ -98,8 +98,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(eslint@9.39.2)
       eslint-no-restricted:
-        specifier: 0.0.10
-        version: 0.0.10(eslint@9.39.2)(typescript@5.9.3)
+        specifier: 0.1.1
+        version: 0.1.1(eslint@9.39.2)(typescript@5.9.3)
       eslint-plugin-css:
         specifier: 0.12.0
         version: 0.12.0(eslint@9.39.2)
@@ -6477,11 +6477,11 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
 
-  eslint-no-restricted@0.0.10:
-    resolution: {integrity: sha512-e6Y1oOyF6xUriwzx2iCCYxCIvDEE0c7N9K3QtkjSJsORpLKyLAG1GYds0E0WdxGY78Mrn548jFV1ulRG03XwqQ==}
+  eslint-no-restricted@0.1.1:
+    resolution: {integrity: sha512-wm0bxiG2q3dG+JTGvAHjx/e+blO+K5vN9yDzITq75VLzXAjQd7/iPHfDP7OLXCr5VOB/8pZ+aVCgAx1b/rR1mw==}
     engines: {node: ^20.9.0 || >=22.0.0}
     peerDependencies:
-      eslint: ^8.57.0 || ^9
+      eslint: ^8.57.0 || ^9 || ^10
 
   eslint-parser-plain@0.1.1:
     resolution: {integrity: sha512-KRgd6wuxH4U8kczqPp+Oyk4irThIhHWxgFgLDtpgjUGVIS3wGrJntvZW/p6hHq1T4FOwnOtCNkvAI4Kr+mQ/Hw==}
@@ -17603,7 +17603,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-no-restricted@0.0.10(eslint@9.39.2)(typescript@5.9.3):
+  eslint-no-restricted@0.1.1(eslint@9.39.2)(typescript@5.9.3):
     dependencies:
       '@typescript-eslint/utils': 8.58.2(eslint@9.39.2)(typescript@5.9.3)
       eslint: 9.39.2(jiti@2.6.1)

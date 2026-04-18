@@ -622,6 +622,11 @@ const PACKAGES_META: Record<string, PackageMeta> = {
     gitTag: (version) => `v${version}-ember-eslint-parser`,
     ruleDocsUrl: null,
   },
+  'eslint-no-restricted': {
+    configs: [],
+    gitTag: versionAsIs,
+    ruleDocsUrl: null,
+  },
   'svelte-eslint-parser': {
     configs: ['svelte'],
     ruleDocsUrl: null,
