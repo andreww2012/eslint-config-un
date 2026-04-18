@@ -774,7 +774,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 
   const packageMeta = PACKAGES_META[dependency];
 
-  const mainUnConfigNames = packageMeta?.configs.join(', ') || '';
+  const mainUnConfigNames = packageMeta?.configs.join(', ') || 'deps';
 
   console.log(`${styleText('underline', 'Repo:')} ${styleText('cyan', repoUrl)}`);
   console.log(`${styleText('underline', 'Releases:')} ${styleText('cyan', `${repoUrl}/releases`)}`);
