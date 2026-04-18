@@ -200,8 +200,8 @@ importers:
         specifier: 0.3.0
         version: 0.3.0
       globals:
-        specifier: 17.0.0
-        version: 17.0.0
+        specifier: 17.5.0
+        version: 17.5.0
       klona:
         specifier: 2.0.6
         version: 2.0.6
@@ -571,7 +571,7 @@ importers:
         version: 3.0.0(eslint@9.39.2)(postcss-scss@4.0.9)(postcss-styl@0.12.3)(vue-eslint-parser@10.4.0)
       eslint-plugin-vuejs-accessibility:
         specifier: 2.5.0
-        version: 2.5.0(eslint@9.39.2)(globals@17.0.0)
+        version: 2.5.0(eslint@9.39.2)(globals@17.5.0)
       eslint-plugin-wc:
         specifier: 3.1.0
         version: 3.1.0(eslint@9.39.2)
@@ -7602,10 +7602,6 @@ packages:
 
   globals@16.5.0:
     resolution: {integrity: sha512-c/c15i26VrJ4IRt5Z89DnIzCGDn9EcebibhAOjw5ibqEHsE1wLUgkPn9RDmNcUKyU87GeaL633nyJ+pplFR2ZQ==}
-    engines: {node: '>=18'}
-
-  globals@17.0.0:
-    resolution: {integrity: sha512-gv5BeD2EssA793rlFWVPMMCqefTlpusw6/2TbAVMy0FzcG8wKJn4O+NqJ4+XWmmwrayJgw5TzrmWjFgmz1XPqw==}
     engines: {node: '>=18'}
 
   globals@17.5.0:
@@ -18558,11 +18554,11 @@ snapshots:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.2)
       '@typescript-eslint/parser': 8.58.2(eslint@9.39.2)(typescript@5.9.3)
 
-  eslint-plugin-vuejs-accessibility@2.5.0(eslint@9.39.2)(globals@17.0.0):
+  eslint-plugin-vuejs-accessibility@2.5.0(eslint@9.39.2)(globals@17.5.0):
     dependencies:
       aria-query: 5.3.2
       eslint: 9.39.2(jiti@2.6.1)
-      globals: 17.0.0
+      globals: 17.5.0
       vue-eslint-parser: 10.4.0(eslint@9.39.2)
     transitivePeerDependencies:
       - supports-color
@@ -19125,8 +19121,6 @@ snapshots:
   globals@15.15.0: {}
 
   globals@16.5.0: {}
-
-  globals@17.0.0: {}
 
   globals@17.5.0: {}
 
