@@ -215,7 +215,7 @@
     "astro-eslint-parser": "1.4.0",
     "browserslist": "4.28.1",
     "cleye": "2.2.1",
-    "cspell": "9.6.0",
+    "cspell": "10.0.0",
     "date-fns": "4.1.0",
     "diff": "8.0.3",
     "effect": "3.19.14",
