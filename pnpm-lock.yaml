@@ -588,8 +588,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0(@vue/compiler-sfc@3.5.22)(eslint@9.39.2)
       eslint-typegen:
-        specifier: 2.3.0
-        version: 2.3.0(eslint@9.39.2)
+        specifier: 2.3.1
+        version: 2.3.1(eslint@9.39.2)
       import-meta-resolve:
         specifier: 4.2.0
         version: 4.2.0(patch_hash=13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba)
@@ -7036,10 +7036,10 @@ packages:
     peerDependencies:
       eslint: '>=8'
 
-  eslint-typegen@2.3.0:
-    resolution: {integrity: sha512-azYgAvhlz1AyTpeLfVSKcrNJInuIsRrcUrOcHmEl8T9oMKesePVUPrF8gRgE6azV8CAlFzxJDTyaXAAbA/BYiA==}
+  eslint-typegen@2.3.1:
+    resolution: {integrity: sha512-zVdh8rThBvv2o5T/K524Fr5iy1Jo0q09rHL7y7FbOhgMB177T2gw+shxfC4ChCEqdq6/y6LJA4j8Fbr/Xls9aw==}
     peerDependencies:
-      eslint: ^9.0.0
+      eslint: ^9.0.0 || ^10.0.0
 
   eslint-utils@3.0.0:
     resolution: {integrity: sha512-uuQC43IGctw68pJA1RgbQS8/NP7rch6Cwd4j3ZBtgo4/8Flj4eGE7ZYSZRN3iq5pVUv6GPdW5Z1RFleo84uLDA==}
@@ -18312,7 +18312,7 @@ snapshots:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       eslint: 9.39.2(jiti@2.6.1)
 
-  eslint-typegen@2.3.0(eslint@9.39.2):
+  eslint-typegen@2.3.1(eslint@9.39.2):
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
       json-schema-to-typescript-lite: 15.0.0

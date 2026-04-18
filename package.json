@@ -281,7 +281,7 @@
     "eslint-plugin-you-dont-need-lodash-underscore": "6.14.0",
     "eslint-plugin-zod": "3.6.0",
     "eslint-processor-vue-blocks": "2.0.0",
-    "eslint-typegen": "2.3.0",
+    "eslint-typegen": "2.3.1",
     "import-meta-resolve": "4.2.0",
     "is-in-editor": "0.3.0",
     "jest-extended": "7.0.0",
