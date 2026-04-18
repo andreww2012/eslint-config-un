@@ -4,6 +4,8 @@ src/**/*.gen.ts
 TODO.md
 temp/
 .nx/
+# @eslint/config-inspector temporarily generated file
+eslint.config.bundled_*.mjs
 
 ### Node.JS gitignore: https://github.com/github/gitignore/blob/c677dd99d46da587a70362d6df5cf57787aa5210/Node.gitignore
 
