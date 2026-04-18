@@ -133,7 +133,6 @@ export default eslintConfig({
     jestDom: false,
     nx: false,
     react: false,
-    rxjs: false,
     svelte: false,
     testingLibrary: false,
     turbo: false,
