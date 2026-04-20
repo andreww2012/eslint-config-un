@@ -294,7 +294,7 @@
     "lefthook": "2.1.6",
     "npm-check-updates": "21.0.2",
     "npm-package-arg": "13.0.2",
-    "p-queue": "9.1.0",
+    "p-queue": "9.1.2",
     "package-json": "10.0.1",
     "pathe": "2.0.3",
     "prettier": "3.8.0",
