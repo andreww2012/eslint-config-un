@@ -1,0 +1,71 @@
+---
+'eslint-config-un': minor
+---
+
+[**BREAKING**] react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v2.7.1 to v4.2.3](https://github.com/Rel1cx/eslint-react/compare/v2.7.1...v4.2.3):
+
+- All rules except for the debug ones were consolidated into `@eslint-react` namespace, so `@eslint-react/*` plugins are no longer available. The full rule names from those sub-plugins, though, now have `-` instead of `/` in their name, so `@eslint-react/dom/no-missing-button-type` now becomes `@eslint-react/dom-no-missing-button-type`
+- ⚙️ `hooks` sub-config now does not include the rules from `@eslint-react/eslint-plugin`
+- The following rules were removed (🔤-> was renamed to; 🔄-> has the replacement of):
+  - `jsx-dollar`
+  - `jsx-no-duplicate-props` 🔄->`react/jsx-no-duplicate-props`
+  - `jsx-no-undef` 🔄->`react/jsx-no-undef`
+  - `jsx-shorthand-boolean`
+  - `jsx-shorthand-fragment`
+  - `jsx-uses-react` 🔄->`react/jsx-uses-react`
+  - `jsx-uses-vars` 🔄->`react/jsx-uses-vars`
+  - `no-direct-set-state-in-use-effect` to [`set-state-in-effect`](https://eslint-react.xyz/docs/rules/set-state-in-effect)
+  - `no-unnecessary-key`
+  - `no-unnecessary-use-ref`
+  - `prefer-read-only-props` 🔄->`react/prefer-read-only-props`
+  - `unstable-rules-of-props`
+  - `unstable-rules-of-state`
+- 🔄 renamed the following rules:
+  - `dom/no-dangerously-set-innerhtml-with-children` to [`dom-no-dangerously-set-innerhtml-with-children`](https://eslint-react.xyz/docs/rules/dom-no-dangerously-set-innerhtml-with-children)
+  - `dom/no-dangerously-set-innerhtml` to [`dom-no-dangerously-set-innerhtml`](https://eslint-react.xyz/docs/rules/dom-no-dangerously-set-innerhtml)
+  - `dom/no-find-dom-node` to [`dom-no-find-dom-node`](https://eslint-react.xyz/docs/rules/dom-no-find-dom-node)
+  - `dom/no-flush-sync` to [`dom-no-flush-sync`](https://eslint-react.xyz/docs/rules/dom-no-flush-sync)
+  - `dom/no-hydrate` to [`dom-no-hydrate`](https://eslint-react.xyz/docs/rules/dom-no-hydrate)
+  - `dom/no-missing-button-type` to [`dom-no-missing-button-type`](https://eslint-react.xyz/docs/rules/dom-no-missing-button-type)
+  - `dom/no-missing-iframe-sandbox` to [`dom-no-missing-iframe-sandbox`](https://eslint-react.xyz/docs/rules/dom-no-missing-iframe-sandbox)
+  - `dom/no-namespace` to [`jsx-no-namespace`](https://eslint-react.xyz/docs/rules/jsx-no-namespace)
+  - `dom/no-render-return-value` to [`dom-no-render-return-value`](https://eslint-react.xyz/docs/rules/dom-no-render-return-value)
+  - `dom/no-render` to [`dom-no-render`](https://eslint-react.xyz/docs/rules/dom-no-render)
+  - `dom/no-script-url` to [`dom-no-script-url`](https://eslint-react.xyz/docs/rules/dom-no-script-url)
+  - `dom/no-string-style-prop` to [`dom-no-string-style-prop`](https://eslint-react.xyz/docs/rules/dom-no-string-style-prop)
+  - `dom/no-unknown-property` to [`dom-no-unknown-property`](https://eslint-react.xyz/docs/rules/dom-no-unknown-property)
+  - `dom/no-unsafe-iframe-sandbox` to [`dom-no-unsafe-iframe-sandbox`](https://eslint-react.xyz/docs/rules/dom-no-unsafe-iframe-sandbox)
+  - `dom/no-unsafe-target-blank` to [`dom-no-unsafe-target-blank`](https://eslint-react.xyz/docs/rules/dom-no-unsafe-target-blank)
+  - `dom/no-use-form-state` to [`dom-no-use-form-state`](https://eslint-react.xyz/docs/rules/dom-no-use-form-state)
+  - `dom/no-void-elements-with-children` to [`dom-no-void-elements-with-children`](https://eslint-react.xyz/docs/rules/dom-no-void-elements-with-children)
+  - `dom/prefer-namespace-import` to [`dom-prefer-namespace-import`](https://eslint-react.xyz/docs/rules/dom-prefer-namespace-import)
+  - `jsx-key-before-spread` to [`jsx-no-children-prop-with-children`](https://eslint-react.xyz/docs/rules/jsx-no-children-prop-with-children)
+  - `naming-convention/context-name` to [`naming-convention-context-name`](https://eslint-react.xyz/docs/rules/naming-convention-context-name)
+  - `naming-convention/id-name` to [`naming-convention-id-name`](https://eslint-react.xyz/docs/rules/naming-convention-id-name)
+  - `naming-convention/ref-name` to [`naming-convention-ref-name`](https://eslint-react.xyz/docs/rules/naming-convention-ref-name)
+  - `no-children-prop` to [`jsx-no-children-prop`](https://eslint-react.xyz/docs/rules/jsx-no-children-prop)
+  - `no-useless-forward-ref` to [`no-forward-ref`](https://eslint-react.xyz/docs/rules/no-forward-ref)
+  - `no-useless-fragment` to [`jsx-no-useless-fragment`](https://eslint-react.xyz/docs/rules/jsx-no-key-after-spread)
+  - `prefer-use-state-lazy-initialization` to [`use-state`](https://eslint-react.xyz/docs/rules/use-state)
+  - `web-api/no-leaked-event-listener` to [`web-api-no-leaked-event-listener`](https://eslint-react.xyz/docs/rules/web-api-no-leaked-event-listener)
+  - `web-api/no-leaked-interval` to [`web-api-no-leaked-interval`](https://eslint-react.xyz/docs/rules/web-api-no-leaked-interval)
+  - `web-api/no-leaked-resize-observer` to [`web-api-no-leaked-resize-observer`](https://eslint-react.xyz/docs/rules/web-api-no-leaked-resize-observer)
+  - `web-api/no-leaked-timeout` to [`web-api-no-leaked-timeout`](https://eslint-react.xyz/docs/rules/web-api-no-leaked-timeout)
+- 🟢 enabled the following rules:
+  - [`component-hook-factories`](https://eslint-react.xyz/docs/rules/component-hook-factories)
+  - [`error-boundaries`](https://eslint-react.xyz/docs/rules/error-boundaries)
+  - [`exhaustive-deps`](https://eslint-react.xyz/docs/rules/exhaustive-deps)
+  - [`immutability`](https://eslint-react.xyz/docs/rules/immutability)
+  - [`jsx-no-key-after-spread`](https://eslint-react.xyz/docs/rules/jsx-no-key-after-spread)
+  - [`jsx-no-leaked-dollar`](https://eslint-react.xyz/docs/rules/jsx-no-leaked-dollar)
+  - [`jsx-no-leaked-semicolon`](https://eslint-react.xyz/docs/rules/jsx-no-leaked-semicolon)
+  - [`no-implicit-children`](https://eslint-react.xyz/docs/rules/no-implicit-children) in ⚙️ `reactXTypeAwareRules` sub-config
+  - [`no-implicit-key`](https://eslint-react.xyz/docs/rules/no-implicit-key) in ⚙️ `reactXTypeAwareRules` sub-config
+  - [`no-implicit-ref`](https://eslint-react.xyz/docs/rules/no-implicit-ref) in ⚙️ `reactXTypeAwareRules` sub-config
+  - [`purity`](https://eslint-react.xyz/docs/rules/purity)
+  - [`refs`](https://eslint-react.xyz/docs/rules/refs)
+  - [`rsc-function-definition`](https://eslint-react.xyz/docs/rules/rsc-function-definition)
+  - [`rules-of-hooks`](https://eslint-react.xyz/docs/rules/rules-of-hooks)
+  - [`set-state-in-render`](https://eslint-react.xyz/docs/rules/set-state-in-render)
+  - [`unsupported-syntax`](https://eslint-react.xyz/docs/rules/unsupported-syntax)
+  - [`use-memo`](https://eslint-react.xyz/docs/rules/use-memo)

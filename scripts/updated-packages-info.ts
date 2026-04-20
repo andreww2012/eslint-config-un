@@ -42,26 +42,6 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         configs: ['react'],
         ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
       },
-      '@eslint-react/debug': {
-        configs: ['react'],
-        ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
-      },
-      '@eslint-react/dom': {
-        configs: ['react'],
-        ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
-      },
-      '@eslint-react/hooks-extra': {
-        configs: ['react'],
-        ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
-      },
-      '@eslint-react/naming-convention': {
-        configs: ['react'],
-        ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
-      },
-      '@eslint-react/web-api': {
-        configs: ['react'],
-        ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
-      },
       '@html-eslint': {
         configs: ['html'],
         ruleDocsUrl: (ruleName) => `https://html-eslint.org/docs/rules/${ruleName}`,
@@ -448,6 +428,10 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         configs: ['react'],
         ruleDocsUrl: (ruleName) =>
           `https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/${ruleName}.md`,
+      },
+      'react-debug': {
+        configs: ['react'],
+        ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
       },
       'react-hooks': {
         configs: ['react'],

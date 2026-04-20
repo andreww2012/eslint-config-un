@@ -100,36 +100,8 @@ const ALL_STYLISTIC_RULES = {
     // None
   },
   '@eslint-react': {
-    'jsx-shorthand-boolean': true,
-    'jsx-shorthand-fragment': true,
-    'no-forbidden-props': true,
     'prefer-destructuring-assignment': true,
     'prefer-namespace-import': true,
-    'prefer-read-only-props': true,
-  },
-  '@eslint-react/debug': {
-    'class-component': true,
-    'function-component': true,
-    hook: true,
-    'is-from-react': true,
-    jsx: true,
-  },
-  '@eslint-react/dom': {
-    'no-string-style-prop': true,
-    'prefer-namespace-import': true,
-  },
-  '@eslint-react/hooks-extra': {
-    // None
-  },
-  '@eslint-react/naming-convention': {
-    'component-name': true,
-    'context-name': true,
-    filename: true,
-    'filename-extension': true,
-    'use-state': true,
-  },
-  '@eslint-react/web-api': {
-    // None
   },
   '@html-eslint': {
     quotes: true,
@@ -580,6 +552,13 @@ const ALL_STYLISTIC_RULES = {
     'state-in-constructor': true,
     'static-property-placement': true,
     'style-prop-object': true,
+  },
+  'react-debug': {
+    'class-component': true,
+    'function-component': true,
+    hook: true,
+    'is-from-react': true,
+    jsx: true,
   },
   'react-hooks': {
     // None

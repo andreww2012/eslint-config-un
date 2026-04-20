@@ -64,29 +64,6 @@ export const pluginsLoaders = {
   '@eslint-react': genModuleLoader('@eslint-react', '@eslint-react/eslint-plugin', () =>
     loadEslintReactPlugin('@eslint-react'),
   ),
-  '@eslint-react/debug': genModuleLoader(
-    '@eslint-react/debug',
-    '@eslint-react/eslint-plugin',
-    () => interopDefault(import('eslint-plugin-react-debug')) as Promise<EslintPlugin>,
-  ),
-  '@eslint-react/dom': genModuleLoader('@eslint-react/dom', '@eslint-react/eslint-plugin', () =>
-    loadEslintReactPlugin('@eslint-react/dom'),
-  ),
-  '@eslint-react/hooks-extra': genModuleLoader(
-    '@eslint-react/hooks-extra',
-    '@eslint-react/eslint-plugin',
-    () => loadEslintReactPlugin('@eslint-react/hooks-extra'),
-  ),
-  '@eslint-react/naming-convention': genModuleLoader(
-    '@eslint-react/naming-convention',
-    '@eslint-react/eslint-plugin',
-    () => loadEslintReactPlugin('@eslint-react/naming-convention'),
-  ),
-  '@eslint-react/web-api': genModuleLoader(
-    '@eslint-react/web-api',
-    '@eslint-react/eslint-plugin',
-    () => loadEslintReactPlugin('@eslint-react/web-api'),
-  ),
   '@html-eslint': genModuleLoader(
     '@html-eslint',
     '@html-eslint/eslint-plugin',
@@ -497,6 +474,11 @@ export const pluginsLoaders = {
   ),
   react: genModuleLoader('react', 'eslint-plugin-react', () =>
     interopDefault(import('eslint-plugin-react')),
+  ),
+  'react-debug': genModuleLoader(
+    'react-debug',
+    'eslint-plugin-react-debug',
+    () => interopDefault(import('eslint-plugin-react-debug')) as Promise<EslintPlugin>,
   ),
   'react-hooks': genModuleLoader(
     'react-hooks',

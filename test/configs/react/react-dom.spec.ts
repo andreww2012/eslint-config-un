@@ -44,34 +44,17 @@ describe('react: sub config `dom`', () => {
   });
 
   describe('rules', () => {
-    it('enables `@eslint-react/dom/no-dangerously-set-innerhtml` by default (with default `pluginX: prefer`)', async () => {
+    it('correctly sets severities by default', async () => {
       const configResult = await computeEslintConfig('react');
 
-      expect(
-        configResult.getRuleEntrySeverity(
-          'react/dom',
-          '@eslint-react/dom/no-dangerously-set-innerhtml',
-        ),
-      ).toBe(2);
-    });
+      const severities = configResult.getRuleSeverities('react/dom');
 
-    it('enables `@eslint-react/dom/no-missing-button-type` by default', async () => {
-      const configResult = await computeEslintConfig('react');
-
-      expect(
-        configResult.getRuleEntrySeverity('react/dom', '@eslint-react/dom/no-missing-button-type'),
-      ).toBe(2);
-    });
-
-    it('enables `@eslint-react/web-api/no-leaked-event-listener` by default', async () => {
-      const configResult = await computeEslintConfig('react');
-
-      expect(
-        configResult.getRuleEntrySeverity(
-          'react/dom',
-          '@eslint-react/web-api/no-leaked-event-listener',
-        ),
-      ).toBe(2);
+      expect(severities).toMatchObject({
+        '@eslint-react/dom-no-dangerously-set-innerhtml': 2,
+        '@eslint-react/dom-no-missing-button-type': 2,
+        '@eslint-react/web-api-no-leaked-event-listener': 2,
+      });
+      expect(severities).not.toHaveProperty('react/danger');
     });
 
     it('enables `react/no-danger` when `pluginX` is `never`', async () => {
@@ -90,7 +73,7 @@ describe('react: sub config `dom`', () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.dangerouslySetInnerHtml,
-        '@eslint-react/dom/no-dangerously-set-innerhtml',
+        '@eslint-react/dom-no-dangerously-set-innerhtml',
       );
 
       expect(error?.message).toMatchInlineSnapshot(
@@ -137,13 +120,13 @@ describe('react: sub config `dom`', () => {
 
     it('respects `overrides` in `react/dom` eslint config', async () => {
       const configResult = await computeEslintConfig({
-        react: {configDom: {overrides: {'@eslint-react/dom/no-dangerously-set-innerhtml': 0}}},
+        react: {configDom: {overrides: {'@eslint-react/dom-no-dangerously-set-innerhtml': 0}}},
       });
 
       expect(
         configResult.getRuleEntrySeverity(
           'react/dom',
-          '@eslint-react/dom/no-dangerously-set-innerhtml',
+          '@eslint-react/dom-no-dangerously-set-innerhtml',
         ),
       ).toBe(0);
     });

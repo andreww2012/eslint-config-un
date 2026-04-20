@@ -42,9 +42,6 @@ describe('react: sub config `hooks`', () => {
 
         // React compiler rule
         'react-hooks/memo-dependencies': 2,
-
-        // Non-`react-hooks` plugin rules
-        '@eslint-react/hooks-extra/no-direct-set-state-in-use-effect': 1,
       });
     });
 
