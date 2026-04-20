@@ -1,5 +1,4 @@
 // TODO: treat version from our package.json as latest
-// TODO: handle importing too many modules
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
@@ -7,7 +6,12 @@ import {cli} from 'cleye';
 import consola from 'consola';
 import {destr as jsonParse} from 'destr';
 import prettier from 'prettier';
-import {parse as parseSemver, satisfies as rangeSatisfies, validRange} from 'semver';
+import {
+  compare as compareVersions,
+  parse as parseSemver,
+  satisfies as rangeSatisfies,
+  validRange,
+} from 'semver';
 import {exec} from 'tinyexec';
 import * as z from 'zod';
 import type {PackageJson} from 'zod-package-json';
@@ -16,7 +20,8 @@ import type {generateEslintPluginsRulesPresence} from './shared';
 
 const NPM_PACKAGE_NAME_REGEX = /^(?:@[*\-0-9a-z~][*\-.0-9_a-z~]*\/)?[*\-0-9a-z~][*\-.0-9_a-z~]*$/;
 
-const TOO_MANY_VERSIONS_THRESHOLD = 300;
+const DEFAULT_BATCH_SIZE = 100;
+const DEFAULT_CONCURRENCY = 100;
 
 const NpmPackageInfoZod = z.union([
   z.object({
@@ -38,6 +43,7 @@ const KNOWN_NPM_PACKAGES_REQUIRING_OVERRIDE: readonly (
   ),
   ['@typescript-eslint/experimental-utils@4.33.0', 'latest'],
   ['@graphql-eslint/parser@>=0.0.1 <0.0.2-0', '0.1.0'],
+  '@local/eff', // Not found, dependency of @eslint-react/eslint-plugin@3.0.0-next.74
 ];
 const DEFAULT_NPM_PACKAGE_OVERRIDE = 'npm:-';
 
@@ -60,6 +66,36 @@ const isStringRegexpValid = (regexp: string) => {
   }
 };
 
+const mergeRulesPresenceResults = (
+  results: ReturnType<typeof generateEslintPluginsRulesPresence>[],
+): ReturnType<typeof generateEslintPluginsRulesPresence> => {
+  const ruleMap = new Map<string, {versions: string[]; deprecatedVersions: string[]}>();
+
+  for (const {rules} of results) {
+    for (const {ruleName, versions, deprecatedVersions} of rules) {
+      const existing = ruleMap.get(ruleName) || {versions: [], deprecatedVersions: []};
+      existing.versions.push(...versions);
+      existing.deprecatedVersions.push(...deprecatedVersions);
+      ruleMap.set(ruleName, existing);
+    }
+  }
+
+  return {
+    rules: Array.from(ruleMap, ([ruleName, {versions, deprecatedVersions}]) => {
+      const versionsSorted = versions.toSorted((a, b) => compareVersions(a, b));
+      return {
+        ruleName,
+        minVersion: versionsSorted[0],
+        maxVersion: versionsSorted.at(-1),
+        totalVersions: versionsSorted.length,
+        versions: versionsSorted,
+        deprecatedVersions,
+      };
+    }),
+    errors: results.flatMap(({errors}) => errors),
+  };
+};
+
 const logger = consola.withTag('rules-finder');
 
 const mainResult = main();
@@ -80,9 +116,10 @@ async function run({
   overwriteIfExists,
   ignoreVersions,
   overridePackages,
-  allowManyVersions,
   skipInstallation,
   ignorePrereleaseRegexes,
+  concurrency,
+  batchSize,
 }: ReturnType<typeof main> & {}) {
   const projectDir = path.join(import.meta.dirname, 'temp', packageName);
   const generatePathInProject = (...paths: string[]) => path.join(projectDir, ...paths);
@@ -93,7 +130,7 @@ async function run({
 
   if ((await fileExists(packageJsonPath)) && !overwriteIfExists) {
     logger.error(
-      `Project's package.json already exists at ${packageJsonPath}. Use --overwrite to overwrite it.`,
+      `Project's package.json already exists at ${packageJsonPath}. Use --no-overwrite to skip overwriting it.`,
     );
     return false;
   }
@@ -133,13 +170,6 @@ async function run({
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .filter(({version}) => !packageVersionsRange || rangeSatisfies(version, packageVersionsRange));
 
-  if (versionsSorted.length >= TOO_MANY_VERSIONS_THRESHOLD && !allowManyVersions) {
-    logger.error(
-      `This package has too many versions (${versionsSorted.length}). Use --allow-many-versions flag to skip this check.`,
-    );
-    return false;
-  }
-
   const ignoredVersionsCount = allVersions.length - versionsSorted.length;
   logger.log(
     `${allVersions.length} version${allVersions.length === 1 ? '' : 's'} found${ignoredVersionsCount > 0 ? `, ${ignoredVersionsCount} ignored (${versionsIgnoredByRange.length} by range, ${versionsIgnoredByPrereleaseRegexes.length} by prerelease regexes)` : ''}`,
@@ -148,12 +178,16 @@ async function run({
   const generatedPackageJson: PackageJson = {
     name: `${packageName}--rules-finder`,
     version: '',
-    dependencies: Object.fromEntries(
-      versionsSorted.map(({version}) => [
-        `${packageName}-${version}`,
-        `npm:${packageName}@${version}`,
-      ]),
-    ),
+    type: 'module',
+    dependencies: {
+      'p-queue': '9.1.2',
+      ...Object.fromEntries(
+        versionsSorted.map(({version}) => [
+          `${packageName}-${version}`,
+          `npm:${packageName}@${version}`,
+        ]),
+      ),
+    },
     pnpm: {
       overrides: {
         ...Object.fromEntries(
@@ -175,38 +209,71 @@ async function run({
 
   const runnerScriptPath = generatePathInProject('run.ts');
   const extraDepth = [...packageName.matchAll(/\//g)].length;
-  const runnerScriptSource = `import {createRequire} from 'module';
-  import {interopDefault} from '${'../'.repeat(3 + extraDepth)}src/utils';
-  import {generateEslintPluginsRulesPresence} from '${'../'.repeat(2 + extraDepth)}shared';
 
-  globalThis.__dirname = globalThis.__filename = '';
-  globalThis.require = createRequire(import.meta.url);
+  const generateRunnerScriptSource = (allBatches: (typeof versionsSorted)[]) => `
+import {createRequire} from 'module';
+import PQueue from 'p-queue';
+import {interopDefault} from '${'../'.repeat(3 + extraDepth)}src/utils';
+import {generateEslintPluginsRulesPresence} from '${'../'.repeat(2 + extraDepth)}shared';
+import {EslintPlugin} from '${'../'.repeat(3 + extraDepth)}src/eslint/eslint-types';
 
-  const toStdout = process.stdout.write.bind(process.stdout);
+globalThis.__dirname = globalThis.__filename = '';
+globalThis.require = createRequire(import.meta.url);
 
-  process.stdout.write = (chunk, encodingOrCallback, callback) => {
-    typeof encodingOrCallback === 'function' ? encodingOrCallback() : callback?.();
-    return true;
+const toStdout = process.stdout.write.bind(process.stdout);
+
+/** @ts-expect-error - pick ups the wrong overload */
+process.stdout.write = (chunk, encodingOrCallback, callback) => {
+  typeof encodingOrCallback === 'function' /** @ts-expect-error - same reason as above */
+    ? encodingOrCallback()
+    : callback?.();
+  return true;
+};
+
+const batches: [string, string][][] = [
+  ${allBatches.map((batch) => `[${batch.map(({version}) => `['${packageName}-${version}', '${version}']`).join(', ')}]`).join(',\n')}
+];
+
+const batchIndex = Number(process.argv[process.argv.indexOf('--batch') + 1]);
+const batchVersions = batches[batchIndex]!;
+
+const queue = new PQueue({concurrency: ${concurrency}});
+
+const modules = await Promise.all(
+  batchVersions.map(([name, version]) =>
+    queue.add(() =>
+      interopDefault<EslintPlugin>(import(name))
+        .then((plugin) => ({plugin, version}))
+        .catch((error: unknown) => ({error: JSON.stringify(error, Object.getOwnPropertyNames(error)), version})),
+    ),
+  ),
+);
+
+toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
+`;
+
+  await fs.writeFile(packageJsonPath, JSON.stringify(generatedPackageJson, null, 2), 'utf8');
+
+  const nodeModulesPath = generatePathInProject('node_modules');
+  const depsInstalled = await Promise.all(
+    Object.keys(generatedPackageJson.dependencies ?? {}).map((name) =>
+      fs
+        .access(path.join(nodeModulesPath, name))
+        .then(() => true)
+        .catch(() => false),
+    ),
+  ).then((results) => results.every(Boolean));
+
+  if (skipInstallation === true && !depsInstalled) {
+    logger.error(
+      '--skip-installation was set but dependencies are not installed. Remove the flag to install them.',
+    );
+    return false;
   }
 
-  (async () => {
-  const modules = await Promise.all([${versionsSorted.map(({version}) => `['${packageName}-${version}', '${version}']`).join(',\n')}].map(([name, version]) =>
-    interopDefault<EslintPlugin>(import(name))
-      .then((plugin) => ({plugin, version}))
-      .catch((error: unknown) => ({error: JSON.stringify(error, Object.getOwnPropertyNames(error)), version})),
-  ));
-
-  toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
-  })();`;
-
-  await Promise.all([
-    fs.writeFile(packageJsonPath, JSON.stringify(generatedPackageJson, null, 2), 'utf8'),
-    prettier
-      .format(runnerScriptSource, {parser: 'typescript', ...prettierConfig})
-      .then((source) => fs.writeFile(runnerScriptPath, source, 'utf8')),
-  ]);
-
-  if (!skipInstallation) {
+  if (depsInstalled) {
+    logger.log('Dependencies already installed, skipping installation.');
+  } else {
     logger.log('Installing dependencies...');
 
     const {stdout: dependencyInstallationOutput, exitCode: dependencyInstallationErrorCode} =
@@ -225,21 +292,41 @@ async function run({
     }
   }
 
-  logger.log('Running the rules finder...');
+  const batches = versionsSorted.flatMap((_, i) =>
+    i % batchSize === 0 ? [versionsSorted.slice(i, i + batchSize)] : [],
+  );
 
-  const {
-    stdout: rulesInfoString,
-    stderr: rulesInfoError,
-    exitCode: rulesInfoExitCode,
-  } = await exec('npx', ['tsx', runnerScriptPath]);
+  const batchResults: ReturnType<typeof generateEslintPluginsRulesPresence>[] = [];
 
-  if (rulesInfoExitCode) {
-    logger.error(rulesInfoError);
-    return false;
+  await prettier
+    .format(generateRunnerScriptSource(batches), {
+      parser: 'typescript',
+      ...prettierConfig,
+    })
+    .then((source) => fs.writeFile(runnerScriptPath, source, 'utf8'));
+
+  for (const [batchIndex, batchVersions] of batches.entries()) {
+    logger.log(
+      `Running batch ${batchIndex + 1}/${batches.length} (${batchIndex * batchSize + batchVersions.length} versions)...`,
+    );
+
+    const {
+      stdout: batchStdout,
+      stderr: batchStderr,
+      exitCode: batchExitCode,
+    } = await exec('npx', ['tsx', runnerScriptPath, '--batch', String(batchIndex)]);
+
+    if (batchExitCode) {
+      logger.error(`Batch ${batchIndex + 1}/${batches.length} failed:\n${batchStderr}`);
+      return false;
+    }
+
+    batchResults.push(
+      jsonParse<ReturnType<typeof generateEslintPluginsRulesPresence>>(batchStdout),
+    );
   }
 
-  const {rules: rulesInfo, errors: pluginLoadingErrors} =
-    jsonParse<ReturnType<typeof generateEslintPluginsRulesPresence>>(rulesInfoString);
+  const {rules: rulesInfo, errors: pluginLoadingErrors} = mergeRulesPresenceResults(batchResults);
 
   if (pluginLoadingErrors.length > 0) {
     console.warn(
@@ -260,21 +347,27 @@ async function run({
         ? rulesInfo
         : rulesInfo.toSorted(({ruleName: a}, {ruleName: b}) => a.localeCompare(b));
 
-    const table: string[][] = [
-      ['Rule name', 'Min version', 'Max version'],
-      ...sortedRules.map(({ruleName, minVersion, maxVersion, deprecatedVersions}) => [
-        `${deprecatedVersions.includes(latestVersion) ? '⛔ ' : ''}${ruleName}`,
-        minVersion || '',
-        `${
-          maxVersion === latestVersion
-            ? '✅(latest)'
-            : new Date(npmPackageInfo.time[maxVersion || ''] || '').getTime() >=
-                new Date(npmPackageInfo.time[latestVersion] || '').getTime()
-              ? '✅(future)'
-              : '⚠️'
-        } ${maxVersion}`,
-      ]),
-    ];
+    const hasDeprecated = sortedRules.some(({deprecatedVersions}) =>
+      deprecatedVersions.includes(latestVersion),
+    );
+
+    const dataRows = sortedRules.map(({ruleName, minVersion, maxVersion, deprecatedVersions}) => [
+      ...(hasDeprecated ? [deprecatedVersions.includes(latestVersion) ? '⛔' : '  '] : []),
+      ruleName,
+      minVersion || '',
+      `${
+        maxVersion === latestVersion
+          ? '✅(latest)'
+          : new Date(npmPackageInfo.time[maxVersion || ''] || '').getTime() >=
+              new Date(npmPackageInfo.time[latestVersion] || '').getTime()
+            ? '✅(future)'
+            : '⚠️'
+      } ${maxVersion}`,
+    ]);
+
+    const headerRow = [...(hasDeprecated ? ['  '] : []), 'Rule name', 'Min version', 'Max version'];
+
+    const table: string[][] = [headerRow, ...dataRows];
 
     const maxColumnWidths = table.map((_, rowIndex) =>
       Math.max(...table.map((row) => row[rowIndex]?.length || 0)),
@@ -284,7 +377,11 @@ async function run({
       .flatMap((row, rowIndex) => [
         row
           .map((cell, colIndex, allColumns) =>
-            cell.padEnd(colIndex === allColumns.length - 1 ? 0 : maxColumnWidths[colIndex] || 0),
+            cell.padEnd(
+              colIndex === allColumns.length - 1 || (hasDeprecated && colIndex === 0)
+                ? 0
+                : maxColumnWidths[colIndex] || 0,
+            ),
           )
           .join(' | '),
         ...(rowIndex === 0
@@ -295,49 +392,65 @@ async function run({
   };
 
   const rulesInfoPath = generatePathInProject('rules-info.json');
-  const rulesOverviewPath = generatePathInProject('rules-overview.md');
+  const rulesOverviewSortingNamePath = generatePathInProject('rules-overview-sorting-name.md');
+  const rulesOverviewSortingVersionPath = generatePathInProject(
+    'rules-overview-sorting-version.md',
+  );
+  const issuesPath = generatePathInProject('issues.md');
 
-  const rulesOverviewContents: string = [
-    ...(versionsIgnoredByRange.length > 0
-      ? [
-          '### ⚠️ Versions that were ignored by range\n',
-          ...versionsIgnoredByRange.map(
-            (version) =>
-              `- [\`${version}\`](https://socket.dev/npm/package/${packageName}/diff/${version})`,
-          ),
-          '',
-        ]
-      : []),
-    ...(versionsIgnoredByPrereleaseRegexes.length > 0
-      ? [
-          '### ⚠️ Versions that were ignored by prerelease regexes\n',
-          ...versionsIgnoredByPrereleaseRegexes.map((version) => `- \`${version}\``),
-          '',
-        ]
-      : []),
-    ...(pluginLoadingErrors.length > 0
-      ? [
-          '### ❌ Versions that failed to load\n',
-          ...pluginLoadingErrors.flatMap(({version, error}) => [
-            `#### [\`${version}\`](https://socket.dev/npm/package/${packageName}/diff/${version})\n`,
-            `\`\`\`json\n${JSON.stringify(error, null, 2)}\n\`\`\``,
-          ]),
-        ]
-      : []),
-    '### Sorted by rule name\n',
-    generateOverview('ruleName'),
-    '',
-    '### Sorted by version\n',
-    generateOverview('version'),
-  ].join('\n');
+  const hasIssues =
+    versionsIgnoredByRange.length > 0 ||
+    versionsIgnoredByPrereleaseRegexes.length > 0 ||
+    pluginLoadingErrors.length > 0;
+
+  const issuesContents: string = hasIssues
+    ? [
+        ...(versionsIgnoredByRange.length > 0
+          ? [
+              '### ⚠️ Versions that were ignored by range\n',
+              ...versionsIgnoredByRange.map(
+                (version) =>
+                  `- [\`${version}\`](https://socket.dev/npm/package/${packageName}/diff/${version})`,
+              ),
+              '',
+            ]
+          : []),
+        ...(versionsIgnoredByPrereleaseRegexes.length > 0
+          ? [
+              '### ⚠️ Versions that were ignored by prerelease regexes\n',
+              ...versionsIgnoredByPrereleaseRegexes.map((version) => `- \`${version}\``),
+              '',
+            ]
+          : []),
+        ...(pluginLoadingErrors.length > 0
+          ? [
+              '### ❌ Versions that failed to load\n',
+              ...pluginLoadingErrors.flatMap(({version, error}) => [
+                `#### [\`${version}\`](https://socket.dev/npm/package/${packageName}/diff/${version})\n`,
+                `\`\`\`json\n${JSON.stringify(error, null, 2)}\n\`\`\``,
+              ]),
+            ]
+          : []),
+      ].join('\n')
+    : 'No issues found 🎉\n';
+
+  const mdHeading = `# Plugin \`${packageName}\`\n\n`;
 
   await Promise.all([
-    fs.writeFile(rulesInfoPath, rulesInfoString, 'utf8'),
-    fs.writeFile(rulesOverviewPath, rulesOverviewContents, 'utf8'),
+    fs.writeFile(
+      rulesInfoPath,
+      JSON.stringify({plugin: packageName, rules: rulesInfo, errors: pluginLoadingErrors}, null, 2),
+      'utf8',
+    ),
+    fs.writeFile(rulesOverviewSortingNamePath, mdHeading + generateOverview('ruleName'), 'utf8'),
+    fs.writeFile(rulesOverviewSortingVersionPath, mdHeading + generateOverview('version'), 'utf8'),
+    fs.writeFile(issuesPath, mdHeading + issuesContents, 'utf8'),
   ]);
 
+  logger.log(`📃 Rules overview (by name) saved to ${rulesOverviewSortingNamePath}`);
+  logger.log(`📃 Rules overview (by version) saved to ${rulesOverviewSortingVersionPath}`);
   logger.log(`✅ Rules info saved to ${rulesInfoPath}`);
-  logger.log(`📃 Rules overview saved to ${rulesOverviewPath}`);
+  logger.log(`${hasIssues ? '⚠️' : '✅'} Issues saved to ${issuesPath}`);
 
   return true;
 }
@@ -354,6 +467,8 @@ async function getNpmPackageInfo(packageName: string) {
 function main() {
   const argv = cli({
     parameters: ['<package>'],
+    strictFlags: true,
+    booleanFlagNegation: true,
     flags: {
       range: {
         type: String,
@@ -362,6 +477,7 @@ function main() {
       overwrite: {
         type: Boolean,
         description: 'Overwrite project package.json if it exists',
+        default: true,
       },
       override: {
         type: [String],
@@ -374,14 +490,21 @@ function main() {
         description: 'Package version semver range(s) to skip the installation of',
         alias: 'i',
       },
-      allowManyVersions: {
-        type: Boolean,
-        description: `Allow packages with many versions (>=${TOO_MANY_VERSIONS_THRESHOLD})`,
-      },
       skipInstallation: {
         type: Boolean,
         description:
-          'Skip dependency installation step (for example, if it gets stuck for some reason)',
+          'Skip dependency installation step even if dependencies appear to be missing (auto-skipped when already installed)',
+      },
+      concurrency: {
+        type: Number,
+        description: 'Maximum number of plugin versions to import concurrently within a batch',
+        default: DEFAULT_CONCURRENCY,
+      },
+      batchSize: {
+        type: Number,
+        description:
+          'Number of plugin versions per runner process invocation (limits peak memory usage)',
+        default: DEFAULT_BATCH_SIZE,
       },
       ignorePrerelease: {
         type: [String],
@@ -401,8 +524,9 @@ function main() {
     overwrite: overwriteIfExists,
     ignore: ignoreVersions,
     override: overridePackagesRaw,
-    allowManyVersions,
     skipInstallation,
+    concurrency,
+    batchSize,
     ignorePrerelease: ignorePrereleaseRegexStrings,
     unescapeRegexes,
   } = argv.flags;
@@ -476,8 +600,9 @@ function main() {
     overwriteIfExists,
     ignoreVersions,
     overridePackages,
-    allowManyVersions,
     skipInstallation,
     ignorePrereleaseRegexes,
+    concurrency,
+    batchSize,
   };
 }
