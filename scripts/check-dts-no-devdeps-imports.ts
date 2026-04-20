@@ -11,6 +11,7 @@ interface PackageJson {
   peerDependencies?: Record<string, string>;
 }
 
+// eslint-disable-next-line jsdoc/require-yields
 /** Walk all `.d.mts` files under `dir`, skipping `skipDir`. */
 function* walkDeclarations(dir: string, skipDir: string): Generator<string> {
   for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {

@@ -71,6 +71,10 @@ export default eslintConfig({
     jsxA11y: false,
     casePolice: true,
     import: {
+      overrides: {
+        'import/default': 0, // TODO started to produce many false reports, investigate why
+      },
+
       extraneousDependenciesWhitelist: [
         'import-meta-resolve', // Bundled (patched)
         'is-in-editor', // Bundled (patched)
