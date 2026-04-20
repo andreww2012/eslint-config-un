@@ -27,6 +27,7 @@ const argv = cli({
   flags: {
     sort: {
       type: (value) => SortingZod.parse(value),
+      // eslint-disable-next-line ts/no-unnecessary-type-assertion -- wrong
       default: 'score' satisfies Sorting as Sorting,
     },
     sortInverse: {

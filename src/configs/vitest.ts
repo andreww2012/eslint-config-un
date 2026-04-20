@@ -220,7 +220,7 @@ export default (async (context, optionsRaw) => {
                   ? enforceEachOrFor
                   : (enforceEachOrFor[fnName] ?? enforceEachOrFor.default),
               ]),
-            ) as Required<ConsistentEachForRuleOptions>,
+            ),
           ],
     ) /** @since 1.4.4 */ // (warns in all)
     .addRule('consistent-test-filename', OFF) /** @since 0.0.47 */

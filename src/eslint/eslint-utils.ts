@@ -45,7 +45,7 @@ const getPluginPrefixByFullRuleName = <ExtraPlugins extends ExtraPluginsType>(
       (PLUGIN_PREFIXES_LIST.includes(possiblePrefix as PluginPrefix) ||
         (context.rootOptions.extraPlugins && possiblePrefix in context.rootOptions.extraPlugins))
     ) {
-      return possiblePrefix as PluginPrefix | keyof ExtraPlugins;
+      return possiblePrefix;
     }
   }
   return '';

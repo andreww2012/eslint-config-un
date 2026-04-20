@@ -77,6 +77,7 @@ export default ((context, optionsRaw) => {
     const isCheckInfoObject = typeof checkInfo === 'object';
     return [
       checkInfo === false ? OFF : isCheckInfoObject && checkInfo.severityWarn ? WARNING : ERROR,
+      // eslint-disable-next-line ts/no-unnecessary-type-assertion -- wrong
       (isCheckInfoObject && checkInfo.options != null ? [checkInfo.options] : []) as [
         RuleOptions,
       ] extends [never]
