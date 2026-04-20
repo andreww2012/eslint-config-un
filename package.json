@@ -169,7 +169,7 @@
     "@angular-eslint/eslint-plugin": "21.3.1",
     "@angular-eslint/eslint-plugin-template": "21.3.1",
     "@angular-eslint/template-parser": "21.3.1",
-    "@antfu/ni": "28.2.0",
+    "@antfu/ni": "30.0.0",
     "@arethetypeswrong/cli": "0.18.2",
     "@changesets/cli": "2.29.8",
     "@commitlint/cli": "20.5.0",

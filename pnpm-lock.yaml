@@ -252,8 +252,8 @@ importers:
         specifier: 21.3.1
         version: 21.3.1(eslint@9.39.2)(typescript@5.9.3)
       '@antfu/ni':
-        specifier: 28.2.0
-        version: 28.2.0
+        specifier: 30.0.0
+        version: 30.0.0
       '@arethetypeswrong/cli':
         specifier: 0.18.2
         version: 0.18.2
@@ -779,9 +779,9 @@ packages:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: '*'
 
-  '@antfu/ni@28.2.0':
-    resolution: {integrity: sha512-+pnatqUMTpi1g/VxbaTsX9UxibTp5oWCMbfUAQPV91UL9lTIMmlU2uvG8bDETDJ0kJdsZT8zLBctKLJOeL5jmg==}
-    engines: {node: '>=20'}
+  '@antfu/ni@30.0.0':
+    resolution: {integrity: sha512-DqBVB3XqXH4VsDpER7iLlEtayMC98iXrY7kwBzp1v6LGc/6U6+qnN3+X0bcPK63LMXJCRG2D/XDq7dvtKDGogg==}
+    engines: {node: '>=20.19.0'}
     hasBin: true
 
   '@antfu/utils@9.3.0':
@@ -11404,9 +11404,8 @@ snapshots:
       eslint: 9.39.2(jiti@2.6.1)
       typescript: 5.9.3
 
-  '@antfu/ni@28.2.0':
+  '@antfu/ni@30.0.0':
     dependencies:
-      ansis: 4.2.0
       fzf: 0.5.2
       package-manager-detector: 1.6.0
       tinyexec: 1.1.1
