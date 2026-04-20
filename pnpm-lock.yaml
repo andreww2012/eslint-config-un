@@ -583,7 +583,7 @@ importers:
         version: 6.14.0
       eslint-plugin-zod:
         specifier: 3.7.0
-        version: 3.7.0(eslint@9.39.2)(typescript@5.9.3)(zod@4.3.5)
+        version: 3.7.0(eslint@9.39.2)(typescript@5.9.3)(zod@4.3.6)
       eslint-processor-vue-blocks:
         specifier: 2.0.0
         version: 2.0.0(@vue/compiler-sfc@3.5.22)(eslint@9.39.2)
@@ -672,11 +672,11 @@ importers:
         specifier: 10.4.0
         version: 10.4.0(eslint@9.39.2)
       zod:
-        specifier: 4.3.5
-        version: 4.3.5
+        specifier: 4.3.6
+        version: 4.3.6
       zod-package-json:
         specifier: 2.1.0
-        version: 2.1.0(zod@4.3.5)
+        version: 2.1.0(zod@4.3.6)
 
 packages:
 
@@ -11245,8 +11245,8 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
-  zod@4.3.5:
-    resolution: {integrity: sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==}
+  zod@4.3.6:
+    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -13067,7 +13067,7 @@ snapshots:
       eslint: 9.39.2(jiti@2.6.1)
       ts-pattern: 5.9.0
       typescript: 5.9.3
-      zod: 4.3.5
+      zod: 4.3.6
     transitivePeerDependencies:
       - supports-color
 
@@ -17734,7 +17734,7 @@ snapshots:
       eslint: 9.39.2(jiti@2.6.1)
       ignore: 7.0.5
       oxc-parser: 0.106.0
-      zod: 4.3.5
+      zod: 4.3.6
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -18196,8 +18196,8 @@ snapshots:
       '@babel/parser': 7.29.0
       eslint: 9.39.2(jiti@2.6.1)
       hermes-parser: 0.25.1
-      zod: 4.3.5
-      zod-validation-error: 4.0.2(zod@4.3.5)
+      zod: 4.3.6
+      zod-validation-error: 4.0.2(zod@4.3.6)
     transitivePeerDependencies:
       - supports-color
 
@@ -18506,13 +18506,13 @@ snapshots:
     dependencies:
       kebab-case: 1.0.2
 
-  eslint-plugin-zod@3.7.0(eslint@9.39.2)(typescript@5.9.3)(zod@4.3.5):
+  eslint-plugin-zod@3.7.0(eslint@9.39.2)(typescript@5.9.3)(zod@4.3.6):
     dependencies:
       '@typescript-eslint/utils': 8.58.2(eslint@9.39.2)(typescript@5.9.3)
       esquery: 1.7.0
     optionalDependencies:
       eslint: 9.39.2(jiti@2.6.1)
-      zod: 4.3.5
+      zod: 4.3.6
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -19841,7 +19841,7 @@ snapshots:
       tinyglobby: 0.2.16
       unbash: 2.2.0
       yaml: 2.8.3
-      zod: 4.3.5
+      zod: 4.3.6
 
   known-css-properties@0.30.0: {}
 
@@ -23376,16 +23376,16 @@ snapshots:
 
   zimmerframe@1.1.4: {}
 
-  zod-package-json@2.1.0(zod@4.3.5):
+  zod-package-json@2.1.0(zod@4.3.6):
     dependencies:
-      zod: 4.3.5
+      zod: 4.3.6
 
-  zod-validation-error@4.0.2(zod@4.3.5):
+  zod-validation-error@4.0.2(zod@4.3.6):
     dependencies:
-      zod: 4.3.5
+      zod: 4.3.6
 
   zod@3.25.76: {}
 
-  zod@4.3.5: {}
+  zod@4.3.6: {}
 
   zwitch@2.0.4: {}

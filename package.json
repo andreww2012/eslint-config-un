@@ -309,7 +309,7 @@
     "validate-npm-package-name": "7.0.2",
     "vitest": "4.1.4",
     "vue-eslint-parser": "10.4.0",
-    "zod": "4.3.5",
+    "zod": "4.3.6",
     "zod-package-json": "2.1.0"
   },
   "peerDependencies": {
