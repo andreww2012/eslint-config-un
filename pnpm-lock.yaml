@@ -387,8 +387,8 @@ importers:
         specifier: 4.28.2
         version: 4.28.2
       cleye:
-        specifier: 2.2.1
-        version: 2.2.1
+        specifier: 2.6.0
+        version: 2.6.0
       cspell:
         specifier: 10.0.0
         version: 10.0.0
@@ -5588,8 +5588,8 @@ packages:
     resolution: {integrity: sha512-GfisEZEJvzKrmGWkvfhgzcz/BllN1USeqD2V6tg14OAOgaCD2Z/PUEuxnAZ/nPvmaHRG7a8y77p1T/IRQ4D1Hw==}
     engines: {node: '>=4'}
 
-  cleye@2.2.1:
-    resolution: {integrity: sha512-eZzJGlG3N6+IsKV+297HIRS2fyRsLMOrx62hGUmmcyOtP/I+L7JVeSKZH49WZUdVB8NoaZOUvq01363I/PHJiA==}
+  cleye@2.6.0:
+    resolution: {integrity: sha512-u0SQCsega/ox+2GSuUlG6wvA9c2FtH8sPmv9G9Q3JRTs7FK6+LtaziRAQgx7lrJ1J7bOd3palhwgZKMg8R6JbQ==}
 
   cli-cursor@3.1.0:
     resolution: {integrity: sha512-I/zHAwsKf9FqGoXM4WWRACob9+SNukZTd94DWF57E4toouRulbCxcUh6RKUEOQlYTHJnzkPMySvPNaaSLNfLZw==}
@@ -10661,8 +10661,8 @@ packages:
     resolution: {integrity: sha512-8ZiHFm91orbSAe2PSAiSVBVko18pbhbiB3U9GglSzF/zCGkR+rxpHx6sEMCUm4kxY4LjDIUGgCfUMtwfZfjfUA==}
     engines: {node: '>=20'}
 
-  type-flag@4.0.3:
-    resolution: {integrity: sha512-YA09cL07U7hSV+/doSfKl+RkIZ2olCnevZsVgAuyBUG3h2ROf9Oh2vmbq5Rf26aA9/qu9RtStuc7ap5PC6k/vw==}
+  type-flag@4.2.0:
+    resolution: {integrity: sha512-6h6QpSh5glA+BrMCq8FINo4o/BqSHNQdfIPpeSBt0s/6mynPaQWWZL+RHaYm95htTbid/spUbJer1yOCsA6ezQ==}
 
   typed-array-buffer@1.0.3:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
@@ -16552,10 +16552,10 @@ snapshots:
     dependencies:
       escape-string-regexp: 1.0.5
 
-  cleye@2.2.1:
+  cleye@2.6.0:
     dependencies:
       terminal-columns: 2.0.0
-      type-flag: 4.0.3
+      type-flag: 4.2.0
 
   cli-cursor@3.1.0:
     dependencies:
@@ -22823,7 +22823,7 @@ snapshots:
     dependencies:
       tagged-tag: 1.0.0
 
-  type-flag@4.0.3: {}
+  type-flag@4.2.0: {}
 
   typed-array-buffer@1.0.3:
     dependencies:
