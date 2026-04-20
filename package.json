@@ -279,7 +279,7 @@
     "eslint-plugin-vuejs-accessibility": "2.5.0",
     "eslint-plugin-wc": "3.1.0",
     "eslint-plugin-you-dont-need-lodash-underscore": "6.14.0",
-    "eslint-plugin-zod": "3.6.0",
+    "eslint-plugin-zod": "3.7.0",
     "eslint-processor-vue-blocks": "2.0.0",
     "eslint-typegen": "2.3.1",
     "import-meta-resolve": "4.2.0",
@@ -395,7 +395,7 @@
     "eslint-plugin-vuejs-accessibility": "^2.5.0",
     "eslint-plugin-wc": "^3.1.0",
     "eslint-plugin-you-dont-need-lodash-underscore": "^6.14.0",
-    "eslint-plugin-zod": "^3.6.0",
+    "eslint-plugin-zod": "^3.7.0",
     "eslint-processor-vue-blocks": "^2.0.0",
     "svelte-eslint-parser": "^1.6.0",
     "vue-eslint-parser": "^10.4.0"
