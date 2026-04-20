@@ -78,7 +78,7 @@
     "test": "nr deps:audit && nr test:common",
     "test:quick": "nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
     "lint:public-types": "attw --pack . --profile esm-only",
-    "ch": "npx changeset add",
+    "ch": "npx changeset add --message \"___REPLACE_ME___\"",
     "release": "changeset publish",
     "prepublishOnly": "nr deps:dedupe-check && nr deps:audit || true && nr test:common && nr build && nr lint:public-types",
     "prepack": "nr build"
@@ -171,7 +171,7 @@
     "@angular-eslint/template-parser": "21.3.1",
     "@antfu/ni": "30.0.0",
     "@arethetypeswrong/cli": "0.18.2",
-    "@changesets/cli": "2.29.8",
+    "@changesets/cli": "2.31.0",
     "@commitlint/cli": "20.5.0",
     "@commitlint/config-conventional": "20.5.0",
     "@commitlint/types": "20.5.0",
