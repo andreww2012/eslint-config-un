@@ -1,7 +1,7 @@
 import type {CSSLanguageOptions} from '@eslint/css';
 import {ERROR, GLOB_CSS, OFF, WARNING} from '../constants';
 import {generatePackageToLoadProperty, packagesLoaders} from '../loaders';
-import {type MaybeFn, getKeysOfTruthyValues, maybeCall} from '../utils';
+import {type MaybeFn, getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -117,7 +117,7 @@ export default (async (context, optionsRaw) => {
           ...(tailwindPackageInfo && (tailwindMajorVersion === 3 || tailwindMajorVersion === 4)
             ? generatePackageToLoadProperty(
                 'customSyntax',
-                ['tailwindCsstree', 'eslintCssTreeSyntax'],
+                ['tailwindCsstree', 'eslintCssTreeSyntax', '_utils'],
                 {
                   valueTransformFn: {
                     fn(
@@ -125,7 +125,7 @@ export default (async (context, optionsRaw) => {
                         tailwindMajorVersion: typeof tailwindMajorVersion;
                         customSyntax: typeof customSyntax;
                       },
-                      {tailwindCsstree, eslintCssTreeSyntax: defaultSyntax},
+                      {tailwindCsstree, eslintCssTreeSyntax: defaultSyntax, _utils: utils},
                     ) {
                       const tailwindSyntaxFn =
                         tailwindCsstree[`tailwind${this.tailwindMajorVersion}`];
@@ -133,7 +133,7 @@ export default (async (context, optionsRaw) => {
                         // @ts-expect-error This is fine - the type is too strict. In real code, only `types` property is expected to exists which already does (see `tailwindX.js` files at https://github.com/humanwhocodes/tailwind-csstree/tree/907ea0a7e2820c1e29cf26f6f716da002cf0c6bc/src)
                         defaultSyntax,
                       );
-                      return maybeCall(this.customSyntax || tailwindSyntax, {
+                      return utils.maybeCall(this.customSyntax || tailwindSyntax, {
                         defaultSyntax,
                         extraSyntax: tailwindSyntax,
                       });

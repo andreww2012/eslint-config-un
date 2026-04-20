@@ -4,6 +4,8 @@ import {type MaybeArray, cloneDeep, interopDefault} from '../utils';
 import {type EslintParser, type EslintProcessor, genModuleLoader} from './shared';
 
 export const packagesLoaders = {
+  _utils: genModuleLoader('_utils', '_utils', () => interopDefault(import('../utils'))),
+
   angularExtractInlineHtmlProcessor: genModuleLoader(
     'angularExtractInlineHtmlProcessor',
     '@angular-eslint/eslint-plugin-template',
