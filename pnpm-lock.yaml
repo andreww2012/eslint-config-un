@@ -621,8 +621,8 @@ importers:
         specifier: 2.1.6
         version: 2.1.6
       npm-check-updates:
-        specifier: 19.3.1
-        version: 19.3.1
+        specifier: 21.0.2
+        version: 21.0.2
       npm-package-arg:
         specifier: 13.0.2
         version: 13.0.2
@@ -9141,9 +9141,9 @@ packages:
     resolution: {integrity: sha512-JLSpbzh6UUXIEoqPsYBvVNVmyrjVZ1fzEFbqxKkTJQkWBO3xFzFT+KDnSKQWwOQNbuWRwt5LSD6HOTLGIWzfrw==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  npm-check-updates@19.3.1:
-    resolution: {integrity: sha512-v92fHH8fmf9VVmQwwL5JWpX8GDEe8BDyrz4w3GF6D6JBUZKpQNcTfBBgxVkCcAPzVUjCHSZEXYmZAAKfLTsDBA==}
-    engines: {node: '>=20.0.0', npm: '>=8.12.1'}
+  npm-check-updates@21.0.2:
+    resolution: {integrity: sha512-b4o+4hbTOZW1gDPcM3wRpIgaB+Vyn/c6MFG2aw70Mo84f0toUulXUJtA1cncBv5BEZqUyotHFv6FR7aIN3Sq1w==}
+    engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0, npm: '>=10.0.0'}
     hasBin: true
 
   npm-install-checks@6.3.0:
@@ -20883,7 +20883,7 @@ snapshots:
     dependencies:
       npm-normalize-package-bin: 5.0.0
 
-  npm-check-updates@19.3.1: {}
+  npm-check-updates@21.0.2: {}
 
   npm-install-checks@6.3.0:
     dependencies:
