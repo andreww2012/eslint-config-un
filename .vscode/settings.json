@@ -31,6 +31,6 @@
   "typescript.experimental.useTsgo": true,
   "chat.tools.terminal.autoApprove": {
     "nr t": true,
-    "nr t:cov": true,
+    "nr build": true,
   },
 }

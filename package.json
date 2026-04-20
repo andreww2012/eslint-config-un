@@ -302,7 +302,7 @@
     "release-it": "20.0.0",
     "shiki": "4.0.2",
     "svelte-eslint-parser": "1.6.0",
-    "tsdown": "0.19.0",
+    "tsdown": "0.21.9",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
     "unstorage": "1.17.4",
