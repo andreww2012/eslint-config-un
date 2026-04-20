@@ -305,7 +305,7 @@
     "tsdown": "0.21.9",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "unstorage": "1.17.4",
+    "unstorage": "1.17.5",
     "validate-npm-package-name": "7.0.2",
     "vitest": "4.1.4",
     "vue-eslint-parser": "10.4.0",
