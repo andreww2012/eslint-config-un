@@ -619,7 +619,6 @@ const PACKAGES_META: Record<string, PackageMeta> = {
   },
   'ember-eslint-parser': {
     configs: ['ember'],
-    gitTag: (version) => `v${version}-ember-eslint-parser`,
     ruleDocsUrl: null,
   },
   'eslint-no-restricted': {
