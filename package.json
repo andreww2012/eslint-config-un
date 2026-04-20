@@ -39,9 +39,11 @@
   ],
   "scripts": {
     "u:after": "nr u:info && nr lint:eslint:fix package.json && nr typegen && nr u:test",
+    "u:after:dev": "nr u:info && nr knip && nr spellcheck && nr u:test",
     "u:info": "tsx scripts/updated-packages-info.ts",
     "u:test": "nr lint:types:go && nr build:code:test --logLevel warn",
     "u": "ncu && nr u:after",
+    "u:d": "ncu && nr u:after:dev",
     "u:m": "ncu -t minor && nr u:after",
     "u:pm": "ncu --dep packageManager",
     "deps:audit": "pnpm audit --audit-level high",
