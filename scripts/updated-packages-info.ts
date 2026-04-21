@@ -294,6 +294,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       },
       lockfile: {
         configs: ['lockfile'],
+        gitTag: (tag) => `eslint-plugin-lockfile@${tag}`,
         ruleDocsUrl: (ruleName) =>
           `https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/${ruleName}.md`,
       },

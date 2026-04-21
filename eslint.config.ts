@@ -232,6 +232,7 @@ export default eslintConfig({
       rules: {
         'markdown-preferences/prefer-link-reference-definitions': 0,
         'markdown-preferences/emphasis-delimiters-style': 0, // Changes *italic* to _italic_
+        'markdown-links/no-dead-urls': 0,
       },
     },
     {
