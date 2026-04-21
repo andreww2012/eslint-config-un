@@ -1,11 +1,27 @@
 import type Eslint from 'eslint';
-// @ts-expect-error no typings
-import ruleComposer from 'eslint-rule-composer';
 import type {ExtraPluginsType, UnConfigContext} from '../config-un/shared';
 import {ERROR, OFF, type RuleSeverity, WARNING} from '../constants';
 import {PLUGIN_PREFIXES_LIST, type PluginPrefix} from '../loaders';
 import {cloneDeep} from '../utils';
 import type {EslintFlatConfigEntry, EslintPlugin, EslintSeverity} from './eslint-types';
+
+function disableRuleAutofix(rule: Eslint.Rule.RuleModule): Eslint.Rule.RuleModule {
+  return {
+    ...rule,
+    create: (context: Eslint.Rule.RuleContext): Eslint.Rule.RuleListener => {
+      const patchedContext = Object.create(context, {
+        report: {
+          enumerable: true,
+          value: (descriptor: Eslint.Rule.ReportDescriptor): void => {
+            delete (descriptor as {fix?: unknown}).fix;
+            context.report(descriptor);
+          },
+        },
+      }) as Eslint.Rule.RuleContext;
+      return rule.create(patchedContext);
+    },
+  };
+}
 
 const STRING_SEVERITY_TO_NUMERIC: Record<EslintSeverity & string, RuleSeverity> = {
   off: OFF,
@@ -104,31 +120,23 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
 ): Plugin['rules'] & {} =>
   Object.fromEntries(
     Object.entries(cloneDeep(plugin.rules || {}))
-      .map(([ruleId, ruleImplementation]) => {
+      .map(([ruleId, ruleImplementation]): [string, Eslint.Rule.RuleModule] | null => {
         const fullRuleName = `${pluginNamespace ? `${pluginNamespace}/` : ''}${ruleId}`;
         const isFixable = ruleImplementation.meta?.fixable;
         if (
           includeRulesWithoutAutofix &&
           (!isFixable || invertOnlyRules === onlyRules?.includes(fullRuleName))
         ) {
-          return [fullRuleName, ruleImplementation] as const;
+          return [fullRuleName, ruleImplementation];
         }
+
         if (!isFixable && !includeRulesWithoutAutofix) {
           return null;
         }
-        // eslint-disable-next-line ts/no-unsafe-call, ts/no-unsafe-member-access
-        const ruleImplementationWithAutofixDisabled = ruleComposer.mapReports(
-          ruleImplementation,
-          // eslint-disable-next-line ts/no-explicit-any
-          (problem: any) => {
-            // eslint-disable-next-line ts/no-unsafe-member-access
-            delete problem.fix;
-            // eslint-disable-next-line ts/no-unsafe-return
-            return problem;
-          },
-        ) as typeof ruleImplementation;
+
+        const ruleImplementationWithAutofixDisabled = disableRuleAutofix(ruleImplementation);
         delete ruleImplementationWithAutofixDisabled.meta?.fixable;
-        return [fullRuleName, ruleImplementationWithAutofixDisabled] as const;
+        return [fullRuleName, ruleImplementationWithAutofixDisabled];
       })
       .filter((v) => v != null),
   );

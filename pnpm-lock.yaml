@@ -196,9 +196,6 @@ importers:
       eslint-plugin-yml:
         specifier: 3.3.1
         version: 3.3.1(eslint@9.39.2)
-      eslint-rule-composer:
-        specifier: 0.3.0
-        version: 0.3.0
       globals:
         specifier: 17.5.0
         version: 17.5.0
@@ -7031,10 +7028,6 @@ packages:
     peerDependencies:
       '@vue/compiler-sfc': ^3.3.0
       eslint: '>=9.0.0'
-
-  eslint-rule-composer@0.3.0:
-    resolution: {integrity: sha512-bt+Sh8CtDmn2OajxvNO+BX7Wn4CIWMpTRm3MaiKPCQcnnlm0CS2mhui6QaoeQugs+3Kj2ESKEEGJUdVafwhiCg==}
-    engines: {node: '>=4.0.0'}
 
   eslint-rule-extender@0.0.1:
     resolution: {integrity: sha512-F0j1Twve3lamL3J0rRSVAynlp58sDPG39JFcQrM+u9Na7PmCgiPHNODh6YE9mduaGcsn3NBqbf6LZRj0cLr8Ng==}
@@ -18239,8 +18232,6 @@ snapshots:
     dependencies:
       '@vue/compiler-sfc': 3.5.22
       eslint: 9.39.2(jiti@2.6.1)
-
-  eslint-rule-composer@0.3.0: {}
 
   eslint-rule-extender@0.0.1: {}
 
