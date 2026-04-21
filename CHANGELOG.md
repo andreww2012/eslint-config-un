@@ -1,5 +1,539 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.8
+
+### Minor Changes
+
+- d4690dc: packageJson: updated [`eslint-plugin-package-json` from v0.88.3 to v0.91.0](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v0.88.3...v0.91.0):
+  - 🔴 not enabled [`require-bin`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-bin.md) rule
+  - 🔴 not enabled [`require-contributors`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-contributors.md) rule
+  - 🔴 not enabled [`require-cpu`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-cpu.md) rule
+  - 🔴 not enabled [`require-devEngines`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-devEngines.md) rule
+  - 🔴 not enabled [`require-directories`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-directories.md) rule
+  - 🔴 not enabled [`require-funding`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-funding.md) rule
+  - 🔴 not enabled [`require-main`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-main.md) rule
+  - 🔴 not enabled [`require-man`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-man.md) rule
+  - 🔴 not enabled [`require-module`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-module.md) rule
+  - 🔴 not enabled [`require-os`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-os.md) rule
+  - 🔴 not enabled [`require-packageManager`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-packageManager.md) rule
+  - 🔴 not enabled [`require-private`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-private.md) rule
+  - 🔴 not enabled [`require-publishConfig`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/require-publishConfig.md) rule
+  - 🟢 enabled [`valid-bugs`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-bugs.md) rule
+  - 🟢 enabled [`valid-devEngines`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-devEngines.md) rule
+  - 🟢 enabled [`valid-funding`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-funding.md) rule
+  - 🟢 enabled [`valid-packageManager`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-packageManager.md) rule
+
+- 5394ed5: html: updated [`@html-eslint/parser` from v0.54.0 to v0.57.1](https://github.com/yeonjuan/html-eslint/compare/v0.54.0...v0.57.1):
+  - 🟢 enabled [`head-order`](https://html-eslint.org/docs/rules/head-order) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`no-invalid-attr-value`](https://html-eslint.org/docs/rules/no-invalid-attr-value) rule
+  - 🟢 enabled [`no-redundant-role`](https://html-eslint.org/docs/rules/no-redundant-role) rule
+
+- 5d1f779: zod: updated [`eslint-plugin-zod` from v3.5.4 to v3.7.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.5.4...v3.7.0):
+  - 🟢 enabled [`no-transform-in-record-key`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-transform-in-record-key.md) rule
+
+- eeb0310: html: updated [`@html-eslint/*` from v0.57.1 to v0.58.1](https://github.com/yeonjuan/html-eslint/compare/v0.57.1...v0.58.1):
+  - 🟢 enabled [`require-details-summary`](https://html-eslint.org/docs/rules/require-details-summary) rule
+
+- 672ebd2: perfectionist:
+  - Updated [`eslint-plugin-perfectionist` from v5.3.1 to v5.4.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v5.3.1...v5.4.0)
+  - Moved `eslint-plugin-perfectionist` to direct dependencies as the plugin is gaining popularity
+  - Explained how to enable all `perfectionist` rules by default in README
+
+- fefa6de: vue: updated [`@nuxt/eslint-plugin` from v1.12.1 to v1.15.1](https://github.com/nuxt/eslint/compare/v1.12.1...v1.15.1):
+  - 🟢 enabled [`no-page-meta-runtime-values`](https://github.com/nuxt/eslint/blob/89618070025b4373e90b227eb478b33a13b34c8f/packages/eslint-plugin/src/rules/no-page-meta-runtime-values/no-page-meta-runtime-values.ts#L66) rule in ⚙️ `nuxt` sub-config
+
+- 4644112: [**BREAKING**] react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v2.7.1 to v4.2.3](https://github.com/Rel1cx/eslint-react/compare/v2.7.1...v4.2.3):
+  - All rules except for the debug ones were consolidated into `@eslint-react` namespace, so `@eslint-react/*` plugins are no longer available. The full rule names from those sub-plugins, though, now have `-` instead of `/` in their name, so `@eslint-react/dom/no-missing-button-type` now becomes `@eslint-react/dom-no-missing-button-type`
+  - ⚙️ `hooks` sub-config now does not include the rules from `@eslint-react/eslint-plugin`
+  - The following rules were removed (🔤-> was renamed to; 🔄-> has the replacement of):
+    - `jsx-dollar`
+    - `jsx-no-duplicate-props` 🔄->`react/jsx-no-duplicate-props`
+    - `jsx-no-undef` 🔄->`react/jsx-no-undef`
+    - `jsx-shorthand-boolean`
+    - `jsx-shorthand-fragment`
+    - `jsx-uses-react` 🔄->`react/jsx-uses-react`
+    - `jsx-uses-vars` 🔄->`react/jsx-uses-vars`
+    - `no-direct-set-state-in-use-effect` to [`set-state-in-effect`](https://eslint-react.xyz/docs/rules/set-state-in-effect)
+    - `no-unnecessary-key`
+    - `no-unnecessary-use-ref`
+    - `prefer-read-only-props` 🔄->`react/prefer-read-only-props`
+    - `unstable-rules-of-props`
+    - `unstable-rules-of-state`
+  - 🔄 renamed the following rules:
+    - `dom/no-dangerously-set-innerhtml-with-children` to [`dom-no-dangerously-set-innerhtml-with-children`](https://eslint-react.xyz/docs/rules/dom-no-dangerously-set-innerhtml-with-children)
+    - `dom/no-dangerously-set-innerhtml` to [`dom-no-dangerously-set-innerhtml`](https://eslint-react.xyz/docs/rules/dom-no-dangerously-set-innerhtml)
+    - `dom/no-find-dom-node` to [`dom-no-find-dom-node`](https://eslint-react.xyz/docs/rules/dom-no-find-dom-node)
+    - `dom/no-flush-sync` to [`dom-no-flush-sync`](https://eslint-react.xyz/docs/rules/dom-no-flush-sync)
+    - `dom/no-hydrate` to [`dom-no-hydrate`](https://eslint-react.xyz/docs/rules/dom-no-hydrate)
+    - `dom/no-missing-button-type` to [`dom-no-missing-button-type`](https://eslint-react.xyz/docs/rules/dom-no-missing-button-type)
+    - `dom/no-missing-iframe-sandbox` to [`dom-no-missing-iframe-sandbox`](https://eslint-react.xyz/docs/rules/dom-no-missing-iframe-sandbox)
+    - `dom/no-namespace` to [`jsx-no-namespace`](https://eslint-react.xyz/docs/rules/jsx-no-namespace)
+    - `dom/no-render-return-value` to [`dom-no-render-return-value`](https://eslint-react.xyz/docs/rules/dom-no-render-return-value)
+    - `dom/no-render` to [`dom-no-render`](https://eslint-react.xyz/docs/rules/dom-no-render)
+    - `dom/no-script-url` to [`dom-no-script-url`](https://eslint-react.xyz/docs/rules/dom-no-script-url)
+    - `dom/no-string-style-prop` to [`dom-no-string-style-prop`](https://eslint-react.xyz/docs/rules/dom-no-string-style-prop)
+    - `dom/no-unknown-property` to [`dom-no-unknown-property`](https://eslint-react.xyz/docs/rules/dom-no-unknown-property)
+    - `dom/no-unsafe-iframe-sandbox` to [`dom-no-unsafe-iframe-sandbox`](https://eslint-react.xyz/docs/rules/dom-no-unsafe-iframe-sandbox)
+    - `dom/no-unsafe-target-blank` to [`dom-no-unsafe-target-blank`](https://eslint-react.xyz/docs/rules/dom-no-unsafe-target-blank)
+    - `dom/no-use-form-state` to [`dom-no-use-form-state`](https://eslint-react.xyz/docs/rules/dom-no-use-form-state)
+    - `dom/no-void-elements-with-children` to [`dom-no-void-elements-with-children`](https://eslint-react.xyz/docs/rules/dom-no-void-elements-with-children)
+    - `dom/prefer-namespace-import` to [`dom-prefer-namespace-import`](https://eslint-react.xyz/docs/rules/dom-prefer-namespace-import)
+    - `jsx-key-before-spread` to [`jsx-no-children-prop-with-children`](https://eslint-react.xyz/docs/rules/jsx-no-children-prop-with-children)
+    - `naming-convention/context-name` to [`naming-convention-context-name`](https://eslint-react.xyz/docs/rules/naming-convention-context-name)
+    - `naming-convention/id-name` to [`naming-convention-id-name`](https://eslint-react.xyz/docs/rules/naming-convention-id-name)
+    - `naming-convention/ref-name` to [`naming-convention-ref-name`](https://eslint-react.xyz/docs/rules/naming-convention-ref-name)
+    - `no-children-prop` to [`jsx-no-children-prop`](https://eslint-react.xyz/docs/rules/jsx-no-children-prop)
+    - `no-useless-forward-ref` to [`no-forward-ref`](https://eslint-react.xyz/docs/rules/no-forward-ref)
+    - `no-useless-fragment` to [`jsx-no-useless-fragment`](https://eslint-react.xyz/docs/rules/jsx-no-key-after-spread)
+    - `prefer-use-state-lazy-initialization` to [`use-state`](https://eslint-react.xyz/docs/rules/use-state)
+    - `web-api/no-leaked-event-listener` to [`web-api-no-leaked-event-listener`](https://eslint-react.xyz/docs/rules/web-api-no-leaked-event-listener)
+    - `web-api/no-leaked-interval` to [`web-api-no-leaked-interval`](https://eslint-react.xyz/docs/rules/web-api-no-leaked-interval)
+    - `web-api/no-leaked-resize-observer` to [`web-api-no-leaked-resize-observer`](https://eslint-react.xyz/docs/rules/web-api-no-leaked-resize-observer)
+    - `web-api/no-leaked-timeout` to [`web-api-no-leaked-timeout`](https://eslint-react.xyz/docs/rules/web-api-no-leaked-timeout)
+  - 🟢 enabled the following rules:
+    - [`component-hook-factories`](https://eslint-react.xyz/docs/rules/component-hook-factories)
+    - [`error-boundaries`](https://eslint-react.xyz/docs/rules/error-boundaries)
+    - [`exhaustive-deps`](https://eslint-react.xyz/docs/rules/exhaustive-deps)
+    - [`immutability`](https://eslint-react.xyz/docs/rules/immutability)
+    - [`jsx-no-key-after-spread`](https://eslint-react.xyz/docs/rules/jsx-no-key-after-spread)
+    - [`jsx-no-leaked-dollar`](https://eslint-react.xyz/docs/rules/jsx-no-leaked-dollar)
+    - [`jsx-no-leaked-semicolon`](https://eslint-react.xyz/docs/rules/jsx-no-leaked-semicolon)
+    - [`no-implicit-children`](https://eslint-react.xyz/docs/rules/no-implicit-children) in ⚙️ `reactXTypeAwareRules` sub-config
+    - [`no-implicit-key`](https://eslint-react.xyz/docs/rules/no-implicit-key) in ⚙️ `reactXTypeAwareRules` sub-config
+    - [`no-implicit-ref`](https://eslint-react.xyz/docs/rules/no-implicit-ref) in ⚙️ `reactXTypeAwareRules` sub-config
+    - [`purity`](https://eslint-react.xyz/docs/rules/purity)
+    - [`refs`](https://eslint-react.xyz/docs/rules/refs)
+    - [`rsc-function-definition`](https://eslint-react.xyz/docs/rules/rsc-function-definition)
+    - [`rules-of-hooks`](https://eslint-react.xyz/docs/rules/rules-of-hooks)
+    - [`set-state-in-render`](https://eslint-react.xyz/docs/rules/set-state-in-render)
+    - [`unsupported-syntax`](https://eslint-react.xyz/docs/rules/unsupported-syntax)
+    - [`use-memo`](https://eslint-react.xyz/docs/rules/use-memo)
+
+- 05910ab: toml: updated [`eslint-plugin-toml` from v1.0.3 to v1.3.1](https://github.com/ota-meshi/eslint-plugin-toml/compare/v1.0.3...v1.3.1):
+  - 🟢 enabled [`inline-table-curly-newline`](https://ota-meshi.github.io/eslint-plugin-toml/rules/inline-table-curly-newline.html) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`inline-table-key-value-newline`](https://ota-meshi.github.io/eslint-plugin-toml/rules/inline-table-key-value-newline.html) rule and added it to the `noStylisticRules` config
+
+- 5e3aa32: unicorn: updated [`eslint-plugin-unicorn` from v63.0.0 to v64.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v63.0.0...v64.0.0):
+  - 🟢 enabled [`consistent-template-literal-escape`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-template-literal-escape.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`no-useless-iterator-to-array`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-iterator-to-array.md) rule
+  - 🟢 enabled [`prefer-simple-condition-first`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-simple-condition-first.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`switch-case-break-position`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/switch-case-break-position.md) rule
+
+- fa584d4: <!-- cspell:ignore totemporalinstant plaindate plaindatetime plainmonthday plaintime plainyearmonth zoneddatetime -->
+
+  es: updated [`eslint-plugin-es-x` from v9.5.0 to v9.6.0](https://github.com/eslint-community/eslint-plugin-es-x/compare/v9.5.0...v9.6.0):
+  - ❓ enabled conditionally [`no-date-prototype-totemporalinstant`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-date-prototype-totemporalinstant.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-duration-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-duration-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-duration-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-duration-prototype-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-instant-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-instant-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-instant-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-instant-prototype-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-now-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-now-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-plaindate-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-plaindate-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-plaindate-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-plaindate-prototype-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-plaindatetime-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-plaindatetime-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-plaindatetime-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-plaindatetime-prototype-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-plainmonthday-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-plainmonthday-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-plainmonthday-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-plainmonthday-prototype-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-plaintime-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-plaintime-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-plaintime-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-plaintime-prototype-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-plainyearmonth-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-plainyearmonth-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-plainyearmonth-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-plainyearmonth-prototype-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-zoneddatetime-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-zoneddatetime-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-zoneddatetime-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-zoneddatetime-prototype-properties.html) rule
+  - 🔴 not enabled [`no-nonstandard-temporal-instant-prototype-properties`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-nonstandard-temporal-instant-prototype-properties.html) rule
+  - ❓ enabled conditionally [`no-temporal`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-temporal.html) rule
+
+- 5ce60a9: node: updated [`eslint-plugin-n` from v17.23.2 to v17.24.0](https://github.com/eslint-community/eslint-plugin-n/compare/v17.23.2...v17.24.0):
+  - 🟢 enabled [`node/prefer-global/crypto`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/crypto.md) rule and added the corresponding `preferGlobal.crypto` setting
+  - 🟢 enabled [`node/prefer-global/timers`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/timers.md) rule and added the corresponding `preferGlobal.timers` setting
+
+- 7a7c955: astro: updated [`eslint-plugin-astro` from v1.6.0 to v1.7.0](https://github.com/ota-meshi/eslint-plugin-astro/compare/v1.6.0...v1.7.0):
+  - 🟢 enabled [`no-prerender-export-outside-pages`](https://ota-meshi.github.io/eslint-plugin-astro/rules/no-prerender-export-outside-pages) rule
+
+- cade667: [**BREAKING**] css: `customSyntax` option now supports object and function form. Previously, the object form was shallow-merged with the custom syntax implicitly set by us (to support TailwindCSS). Now, it fully take precedence; if one needs to merge it, use the function form which receives "our" syntax as a parameter
+- 94d25e2: regexp: added `settings` option to specify `eslint-plugin-regexp` shared settings
+- c6a6ff0: sonar: updated [`eslint-plugin-sonarjs` from v3.0.5 to v3.0.6](https://github.com/SonarSource/SonarJS/blob/77e1a2725158e2825b24911a8f36515426214e35/packages/jsts/src/rules/CHANGELOG.md#2026-01-27-version-306):
+  - 🟢 enabled [`dynamically-constructed-templates`](https://sonarsource.github.io/rspec/#/rspec/S7790/javascript) rule
+  - 🟢 enabled [`hardcoded-secret-signatures`](https://sonarsource.github.io/rspec/#/rspec/S6437/javascript) rule
+  - 🟢 enabled [`review-blockchain-mnemonic`](https://sonarsource.github.io/rspec/#/rspec/S7639/javascript) rule
+
+- cc5df77: angular: updated [`@angular-eslint/*` from v21.2.0 to v21.3.1](https://github.com/angular-eslint/angular-eslint/compare/v21.2.0...v21.3.1):
+  - 🟢 enabled [`computed-must-return`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/computed-must-return.md) rule
+  - 🔴 not enable [`template/no-non-null-assertion`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/no-non-null-assertion.md) rule
+
+- 29fe191: e18e: updated [`@e18e/eslint-plugin` from v0.1.4 to v0.2.0](https://github.com/e18e/eslint-plugin/compare/0.1.4...0.2.0):
+  - 🟢 enabled [`prefer-inline-equality`](https://github.com/e18e/eslint-plugin/blob/9a2eaa871de039b5c2932ab2707a0d01d3fe1519/src/rules/prefer-inline-equality.ts#L198) rule in ⚙️ `performanceImprovementsTypescript` and `performanceImprovements` sub-configs
+  - 🟢 enabled [`prefer-static-regex`](https://github.com/e18e/eslint-plugin/blob/9a2eaa871de039b5c2932ab2707a0d01d3fe1519/src/rules/prefer-static-regex.ts#L24) rule in ⚙️ `performanceImprovements` and `performanceImprovements` sub-configs
+
+- a4c2420: Updated [`eslint-plugin-jsonc` from v2.21.0 to v3.1.1](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v2.21.0...v3.1.1) and starting using [plugin languages](https://ota-meshi.github.io/eslint-plugin-jsonc/user-guide/#languages) instead of [`jsonc-eslint-parser`](https://npmjs.com/jsonc-eslint-parser) whenever JSON(5,C) parsing is required
+- f30428c: playwright: updated [`eslint-plugin-playwright` from v2.5.0 to v2.10.2](https://github.com/mskelton/eslint-plugin-playwright/compare/v2.5.0...v2.10.2):
+  - 🟢 enabled [`no-duplicate-slow`](https://github.com/mskelton/eslint-plugin-playwright/tree/HEAD/docs/rules/no-duplicate-slow.md) rule
+  - 🔴 not enabled [`no-restricted-roles`](https://github.com/mskelton/eslint-plugin-playwright/tree/HEAD/docs/rules/no-restricted-roles.md) rule
+  - 🔴 not enabled [`require-tags`](https://github.com/mskelton/eslint-plugin-playwright/tree/HEAD/docs/rules/require-tags.md) rule
+  - 🔴 not enabled [`require-to-pass-timeout`](https://github.com/mskelton/eslint-plugin-playwright/tree/HEAD/docs/rules/require-to-pass-timeout.md) rule
+
+- 7b601ee: betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v4.0.1 to v4.1.1](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v4.0.1...v4.1.1):
+  - The plugin now supports linting CSS files. Following this, we now add `files` and `ignores` from `css` config to the corresponding fields of `betterTailwind` config, unless `cssLinting` option is set to `false`.
+
+- 8706076: cypress: updated [`eslint-plugin-cypress` from v6.2.0 to v6.3.1](https://github.com/cypress-io/eslint-plugin-cypress/compare/v6.2.0...v6.3.1):
+  - 🟢 enabled [`no-and`](https://github.com/cypress-io/eslint-plugin-cypress/blob/HEAD/docs/rules/no-and.md) rule and added it to the `noStylisticRules` config
+
+- 54a3235: formatJs: updated [`eslint-plugin-formatjs` from v6.1.0 to v6.4.5](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@6.1.0...eslint-plugin-formatjs@6.4.5):
+  - 🟢 enabled [`prefer-full-sentence`](https://formatjs.github.io/docs/tooling/linter/#prefer-full-sentence) rule
+
+- 23c6674: sonar: updated [`eslint-plugin-sonarjs` from v3.0.6 to v4.0.0](https://github.com/SonarSource/SonarJS/blob/5cb55cfc15548a31ca0061eccb533ce8b409eb1c/packages/jsts/src/rules/CHANGELOG.md#2026-02-18-version-400#2026-02-18-version-400):
+  - 🟢 enabled [`no-session-cookies-on-static-assets`](https://sonarsource.github.io/rspec/#/rspec/S8441/javascript) rule
+  - ❌ `code-eval` rule was removed
+  - ❌ `enforce-trailing-comma` rule was removed
+
+- 024a011: nodeDependencies: updated [`eslint-plugin-node-dependencies` from v1.3.0 to v2.2.0](https://github.com/ota-meshi/eslint-plugin-node-dependencies/compare/v1.3.0...v2.2.0):
+  - [`compat-engines`](https://github.com/ota-meshi/eslint-plugin-node-dependencies/blob/HEAD/docs/rules/compat-engines.md) rule: set `devDependencies: true`
+
+- e696acc: angular: updated [`@angular-eslint/*` from v21.1.0 to v21.2.0](https://github.com/angular-eslint/angular-eslint/compare/v21.1.0...v21.2.0):
+  - 🟢 enabled [`no-implicit-take-until-destroyed`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-implicit-take-until-destroyed.md) rule
+  - 🟢 enabled [`template/prefer-class-binding`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-class-binding.md) rule
+
+- 0bdd66e: ts: introduced `setup` and `typeAware/setup` sub-configs, allowing separately configuring on which files `typescript-eslint` plugin will be operating. These configs do not inherit `files` and `ignores` from their parents, but `typeAware/setup` config do inherit `files` and `ignores` from `setup` sub-config, unless the respective property is specified or `typeAware` config is disabled.
+- d7c8d71: vue: updated [`@intlify/eslint-plugin-vue-i18n` from v4.1.1 to v4.3.0](https://github.com/intlify/eslint-plugin-vue-i18n/compare/v4.1.1...v4.3.0):
+  - 🟢 enabled [`valid-plural-forms`](https://eslint-plugin-vue-i18n.intlify.dev/rules/valid-plural-forms.html#intlify-vue-i18n-valid-plural-forms) rule
+
+- 62f84c1: ava: updated [`eslint-plugin-ava` from v15.1.0 to v16.0.1](https://github.com/avajs/eslint-plugin-ava/compare/v15.1.0...v16.0.1):
+  - 🔴 not enabled [`failing-test-url`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/failing-test-url.md) rule
+  - 🔴 not enabled [`no-ava-in-dependencies`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/no-ava-in-dependencies.md) rule
+  - 🟡 enabled [`no-commented-tests`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/no-commented-tests.md) rule (warning)
+  - 🟢 enabled [`no-conditional-assertion`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/no-conditional-assertion.md) rule
+  - 🟢 enabled [`no-duplicate-hooks`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/no-duplicate-hooks.md) rule
+  - ⚠️ [`no-duplicate-modifiers`](https://github.com/avajs/eslint-plugin-ava/blob/v16.0.1/docs/rules/no-duplicate-modifiers.md) rule was disabled because got deprecated
+  - 🟢 enabled [`no-invalid-modifier-chain`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/no-invalid-modifier-chain.md) rule
+  - 🟢 enabled [`no-negated-assertion`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/no-negated-assertion.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`no-nested-assertions`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/no-nested-assertions.md) rule
+  - ⚠️ [`no-unknown-modifiers`](https://github.com/avajs/eslint-plugin-ava/blob/v16.0.1/docs/rules/no-unknown-modifiers.md) rule was disabled because got deprecated
+  - 🟢 enabled [`no-useless-t-pass`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/no-useless-t-pass.md) rule
+  - 🟢 enabled [`prefer-t-throws`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/prefer-t-throws.md) rule and added it to the `noStylisticRules` config
+  - added [`prefer-t-regex`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/prefer-t-regex.md) to the `noStylisticRules` config
+  - 🟢 enabled [`require-assertion`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/require-assertion.md) rule
+
+- b2e0e49: header: added types for the single `eslint-plugin-header` rule, `header`
+- 643d6e3: vitest: updated [`@vitest/eslint-plugin` from v1.6.9 to v1.6.16](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.6.9...v1.6.16):
+  - 🟢 enabled [`unbound-method`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/unbound-method.md) rule in ⚙️ `typescript` sub-config
+
+- 9f21ebe: sonar: updated [`eslint-plugin-sonarjs` from v4.0.0 to v4.0.3](https://github.com/SonarSource/SonarJS/blob/02bce2e6b6c75bac9e1bcf6c8641994dcb9df2d4/packages/analysis/src/jsts/rules/CHANGELOG.md):
+  - 🟢 enabled [`dompurify-unsafe-config`](https://sonarsource.github.io/rspec/#/rspec/S5850/javascript) rule
+  - ⚠️ [\`no-unsafe-unzip\`](https://sonarsource.github.io/rspec/#/rspec/S5042/javascript) rule was disabled because got deprecated
+
+- 1d26b3e: stylistic: updated [`@stylistic/eslint-plugin` from v5.8.0 to v5.9.0](https://github.com/eslint-stylistic/eslint-stylistic/compare/v5.8.0...v5.9.0)
+  - [`padding-line-between-statements`] rule is now configured by eslint-config-un to allow empty lines between normal and side-effects only imports (`import 'some-module'`).
+
+- 24855cb: qwik: updated [`eslint-plugin-qwik` from v1.18.0 to v1.19.2](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik@1.18.0...eslint-plugin-qwik@1.19.2):
+  - 🟢 enabled [`no-async-prevent-default`](https://qwik.dev/docs/core/events/#preventdefault--stoppropagation) rule
+
+- a855d6f: html: updated [`@html-eslint/*` from v0.58.1 to v0.59.0](https://github.com/yeonjuan/html-eslint/compare/v0.58.1...v0.59.0):
+  - 🟢 enabled [`require-content`](https://html-eslint.org/docs/rules/require-content) rule
+  - 🟢 enabled [`svg-require-viewbox`](https://html-eslint.org/docs/rules/svg-require-viewbox) rule
+
+- 752ff97: <!-- cspell:ignore subexpression linkto quoteless -->
+
+  ember: updated [`eslint-plugin-ember` from v12.7.5 to v13.0.0](https://github.com/ember-cli/eslint-plugin-ember/compare/v12.7.5-eslint-plugin-ember...v13.0.0):
+  - 🟢 enabled [`no-modifier-argument-destructuring`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-modifier-argument-destructuring.md) rule
+  - 🟢 enabled [`no-tracked-built-ins`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-tracked-built-ins.md) rule
+  - 🔴 not enabled [`template-attribute-indentation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-attribute-indentation.md) rule, but added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-attribute-order`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-attribute-order.md) rule and added it to the `noStylisticRules` config
+  - 🔴 not enabled [`template-block-indentation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-block-indentation.md) rule, but added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-builtin-component-arguments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-builtin-component-arguments.md) rule
+  - 🟢 enabled [`template-deprecated-inline-view-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-deprecated-inline-view-helper.md) rule
+  - 🟢 enabled [`template-deprecated-render-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-deprecated-render-helper.md) rule
+  - 🔴 not enabled [`template-eol-last`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-eol-last.md) rule, but added it to the `noStylisticRules` config
+  - 🔴 not enabled [`template-linebreak-style`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-linebreak-style.md) rule, but added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-link-href-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-link-href-attributes.md) rule
+  - 🟢 enabled [`template-link-rel-noopener`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-link-rel-noopener.md) rule
+  - 🟢 enabled [`template-modifier-name-case`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-modifier-name-case.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-no-abstract-roles`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-abstract-roles.md) rule
+  - 🟢 enabled [`template-no-accesskey-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-accesskey-attribute.md) rule
+  - 🟢 enabled [`template-no-action-modifiers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-action-modifiers.md) rule
+  - 🔴 not enabled [`template-no-action-on-submit-button`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-action-on-submit-button.md) rule
+  - 🟢 enabled [`template-no-action`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-action.md) rule
+  - 🟢 enabled [`template-no-args-paths`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-args-paths.md) rule
+  - 🟢 enabled [`template-no-arguments-for-html-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-arguments-for-html-elements.md) rule
+  - 🟢 enabled [`template-no-aria-hidden-body`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-aria-hidden-body.md) rule
+  - 🟢 enabled [`template-no-aria-unsupported-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-aria-unsupported-elements.md) rule
+  - 🟢 enabled [`template-no-array-prototype-extensions`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-array-prototype-extensions.md) rule
+  - 🟢 enabled [`template-no-at-ember-render-modifiers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-at-ember-render-modifiers.md) rule
+  - 🟢 enabled [`template-no-attrs-in-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-attrs-in-components.md) rule
+  - 🟢 enabled [`template-no-autofocus-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-autofocus-attribute.md) rule
+  - 🔴 not enabled [`template-no-bare-strings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-bare-strings.md) rule
+  - 🟢 enabled [`template-no-bare-yield`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-bare-yield.md) rule
+  - 🟢 enabled [`template-no-block-params-for-html-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-block-params-for-html-elements.md) rule
+  - 🟢 enabled [`template-no-builtin-form-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-builtin-form-components.md) rule
+  - 🟢 enabled [`template-no-capital-arguments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-capital-arguments.md) rule
+  - 🟢 enabled [`template-no-chained-this`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-chained-this.md) rule
+  - 🟢 enabled [`template-no-class-bindings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-class-bindings.md) rule
+  - 🟢 enabled [`template-no-curly-component-invocation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-curly-component-invocation.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-no-debugger`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-debugger.md) rule
+  - 🟢 enabled [`template-no-deprecated`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-deprecated.md) rule
+  - 🟢 enabled [`template-no-duplicate-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-duplicate-attributes.md) rule
+  - 🟢 enabled [`template-no-duplicate-id`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-duplicate-id.md) rule
+  - 🟢 enabled [`template-no-duplicate-landmark-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-duplicate-landmark-elements.md) rule
+  - 🟢 enabled [`template-no-dynamic-subexpression-invocations`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-dynamic-subexpression-invocations.md) rule
+  - 🟢 enabled [`template-no-element-event-actions`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-element-event-actions.md) rule
+  - 🟢 enabled [`template-no-empty-headings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-empty-headings.md) rule
+  - 🟢 enabled [`template-no-extra-mut-helper-argument`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-extra-mut-helper-argument.md) rule
+  - 🟢 enabled [`template-no-forbidden-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-forbidden-elements.md) rule
+  - 🟢 enabled [`template-no-heading-inside-button`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-heading-inside-button.md) rule
+  - 🔴 not enabled [`template-no-html-comments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-html-comments.md) rule
+  - 🟢 enabled [`template-no-implicit-this`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-implicit-this.md) rule
+  - 🟢 enabled [`template-no-index-component-invocation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-index-component-invocation.md) rule
+  - 🟢 enabled [`template-no-inline-event-handlers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-inline-event-handlers.md) rule
+  - 🟢 enabled [`template-no-inline-linkto`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-inline-linkto.md) rule
+  - 🟢 enabled [`template-no-inline-styles`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-inline-styles.md) rule
+  - 🟢 enabled [`template-no-input-block`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-input-block.md) rule
+  - 🟢 enabled [`template-no-input-tagname`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-input-tagname.md) rule
+  - 🟢 enabled [`template-no-invalid-aria-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-aria-attributes.md) rule
+  - 🟢 enabled [`template-no-invalid-interactive`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-interactive.md) rule
+  - 🔴 not enabled [`template-no-invalid-link-text`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-link-text.md) rule
+  - 🟢 enabled [`template-no-invalid-link-title`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-link-title.md) rule
+  - 🟢 enabled [`template-no-invalid-meta`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-meta.md) rule
+  - 🟢 enabled [`template-no-invalid-role`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-role.md) rule
+  - 🟢 enabled [`template-no-jsx-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-jsx-attributes.md) rule
+  - 🟢 enabled [`template-no-link-to-positional-params`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-link-to-positional-params.md) rule
+  - 🟢 enabled [`template-no-link-to-tagname`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-link-to-tagname.md) rule
+  - 🟢 enabled [`template-no-log`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-log.md) rule
+  - 🟢 enabled [`template-no-model-argument-in-route-templates`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-model-argument-in-route-templates.md) rule
+  - 🟢 enabled [`template-no-multiple-empty-lines`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-multiple-empty-lines.md) rule
+  - 🟢 enabled [`template-no-mut-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-mut-helper.md) rule
+  - 🟢 enabled [`template-no-negated-condition`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-negated-condition.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-no-nested-interactive`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-nested-interactive.md) rule
+  - 🟢 enabled [`template-no-nested-landmark`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-nested-landmark.md) rule
+  - 🟢 enabled [`template-no-nested-splattributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-nested-splattributes.md) rule
+  - 🟢 enabled [`template-no-obscure-array-access`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-obscure-array-access.md) rule
+  - 🟢 enabled [`template-no-obsolete-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-obsolete-elements.md) rule
+  - 🟢 enabled [`template-no-only-default-slot`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-only-default-slot.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-no-outlet-outside-routes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-outlet-outside-routes.md) rule
+  - 🟢 enabled [`template-no-page-title-component`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-page-title-component.md) rule
+  - 🟢 enabled [`template-no-passed-in-event-handlers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-passed-in-event-handlers.md) rule
+  - 🟢 enabled [`template-no-pointer-down-event-binding`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-pointer-down-event-binding.md) rule
+  - 🟢 enabled [`template-no-positional-data-test-selectors`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-positional-data-test-selectors.md) rule
+  - 🟢 enabled [`template-no-positive-tabindex`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-positive-tabindex.md) rule
+  - 🟢 enabled [`template-no-potential-path-strings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-potential-path-strings.md) rule
+  - 🟢 enabled [`template-no-quoteless-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-quoteless-attributes.md) rule
+  - 🟢 enabled [`template-no-redundant-fn`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-redundant-fn.md) rule
+  - 🟢 enabled [`template-no-redundant-role`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-redundant-role.md) rule
+  - 🔴 not enabled [`template-require-form-method`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-form-method.md) rule
+  - 🔴 not enabled [`template-require-splattributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-splattributes.md) rule
+  - 🔴 not enabled [`template-require-strict-mode`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-strict-mode.md) rule
+  - 🟢 enabled [`template-no-restricted-invocations`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-restricted-invocations.md) rule
+  - 🟢 enabled [`template-no-route-action`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-route-action.md) rule
+  - 🟢 enabled [`template-no-scope-outside-table-headings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-scope-outside-table-headings.md) rule
+  - 🟢 enabled [`template-no-shadowed-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-shadowed-elements.md) rule
+  - 🟢 enabled [`template-no-splattributes-with-class`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-splattributes-with-class.md) rule
+  - 🟢 enabled [`template-no-this-in-template-only-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-this-in-template-only-components.md) rule
+  - 🟢 enabled [`template-no-trailing-spaces`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-trailing-spaces.md) rule
+  - 🟢 enabled [`template-no-triple-curlies`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-triple-curlies.md) rule
+  - 🟢 enabled [`template-no-unavailable-this`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unavailable-this.md) rule
+  - 🟢 enabled [`template-no-unbalanced-curlies`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unbalanced-curlies.md) rule
+  - 🟢 enabled [`template-no-unbound`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unbound.md) rule
+  - 🟢 enabled [`template-no-unknown-arguments-for-builtin-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unknown-arguments-for-builtin-components.md) rule
+  - 🟢 enabled [`template-no-unnecessary-component-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-component-helper.md) rule
+  - 🟢 enabled [`template-no-unnecessary-concat`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-concat.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-no-unnecessary-curly-parens`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-curly-parens.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-no-unnecessary-curly-strings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-curly-strings.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-no-unsupported-role-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unsupported-role-attributes.md) rule
+  - 🟢 enabled [`template-no-unused-block-params`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unused-block-params.md) rule
+  - 🟢 enabled [`template-no-valueless-arguments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-valueless-arguments.md) rule
+  - 🟢 enabled [`template-no-whitespace-for-layout`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-whitespace-for-layout.md) rule
+  - 🟡 enabled [`template-no-whitespace-within-word`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-whitespace-within-word.md) rule (warning)
+  - 🟢 enabled [`template-no-with`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-with.md) rule
+  - 🟢 enabled [`template-no-yield-block-params-to-else-inverse`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-yield-block-params-to-else-inverse.md) rule
+  - 🟢 enabled [`template-no-yield-only`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-yield-only.md) rule
+  - 🟢 enabled [`template-no-yield-to-default`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-yield-to-default.md) rule
+  - 🟢 enabled [`template-quotes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-quotes.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-require-aria-activedescendant-tabindex`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-aria-activedescendant-tabindex.md) rule
+  - 🟢 enabled [`template-require-button-type`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-button-type.md) rule
+  - 🟢 enabled [`template-require-context-role`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-context-role.md) rule
+  - 🟢 enabled [`template-require-each-key`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-each-key.md) rule
+  - 🟢 enabled [`template-require-has-block-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-has-block-helper.md) rule
+  - 🟢 enabled [`template-require-iframe-src-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-iframe-src-attribute.md) rule
+  - 🟢 enabled [`template-require-iframe-title`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-iframe-title.md) rule
+  - 🟢 enabled [`template-require-input-label`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-input-label.md) rule
+  - 🟢 enabled [`template-require-lang-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-lang-attribute.md) rule
+  - 🟢 enabled [`template-require-mandatory-role-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-mandatory-role-attributes.md) rule
+  - 🟢 enabled [`template-require-media-caption`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-media-caption.md) rule
+  - 🟢 enabled [`template-require-presentational-children`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-presentational-children.md) rule
+  - 🟢 enabled [`template-require-valid-alt-text`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-valid-alt-text.md) rule
+  - 🟢 enabled [`template-require-valid-form-groups`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-valid-form-groups.md) rule
+  - 🟢 enabled [`template-require-valid-named-block-naming-format`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-valid-named-block-naming-format.md) rule
+  - 🟢 enabled [`template-self-closing-void-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-self-closing-void-elements.md) rule
+  - 🟢 enabled [`template-simple-modifiers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-simple-modifiers.md) rule
+  - 🟢 enabled [`template-simple-unless`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-simple-unless.md) rule
+  - 🟢 enabled [`template-sort-invocations`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-sort-invocations.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`template-splat-attributes-only`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-splat-attributes-only.md) rule
+  - 🟢 enabled [`template-style-concatenation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-style-concatenation.md) rule
+  - 🟢 enabled [`template-table-groups`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-table-groups.md) rule
+  - 🔴 not enabled [`template-template-length`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-template-length.md) rule, but added it to the `noStylisticRules` config
+
+- 2b21521: zod: updated [`eslint-plugin-zod` from v3.0.2 to v3.5.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.0.2...v3.5.0):
+  - 🟢 enabled [`consistent-import`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-import.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`no-string-schema-with-uuid`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-string-schema-with-uuid.md) rule
+  - ⚠️ [`prefer-namespace-import`](https://github.com/marcalexiei/eslint-plugin-zod/blob/v3.5.0/docs/rules/prefer-namespace-import.md) rule was disabled because got deprecated
+  - - 🔴 not enabled [`prefer-string-schema-with-trim`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/prefer-string-schema-with-trim.md) rule
+
+- 024e641: e18e: updated [`@e18e/eslint-plugin` from v0.1.3 to v0.1.4](https://github.com/e18e/eslint-plugin/compare/0.1.3...0.1.4):
+  - 🟢 enabled [`prefer-array-some`](https://github.com/e18e/eslint-plugin/blob/1dc399be6eb9dcee207e5cd63ef184bd6c902492/src/rules/prefer-array-some.ts#L115) rule
+
+- 26ae481: [**BREAKING**] Dropped support for Node.js 20. While the config might continue to work in v20, the officially supported Node.js versions range is now `^22.18.0 || >=24`
+- d1a8b97: betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v4.3.2 to v4.4.1](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v4.3.2...v4.4.1):
+  - ❓ enabled conditionally [`enforce-consistent-variant-order`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-consistent-variant-order.md) rule (only for Tailwind 4) and added it to the `noStylisticRules` config
+  - 🔴 not enabled [`enforce-logical-properties`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-logical-properties.md) rule
+
+- edf78aa: css: `customSyntax` in the function form now receives `defaultSyntax` property in its first argument, containing the default CSS syntax used in `@eslint/css`. It is coming from `@eslint/css-tree` package so if it cannot be resolved, you will be prompted to install it if you use this function form.
+- 2d40b0e: lockfile: updated [`eslint-plugin-lockfile` from v1.0.0 to v1.1.0](https://github.com/ljharb/lockfile-tools/compare/eslint-plugin-lockfile@1.0.0...eslint-plugin-lockfile@1.1.0):
+  - 🟢 enabled [`shrinkwrap`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/shrinkwrap.md) rule
+
+- 6e033cc: react: updated [`eslint-plugin-react-hooks` from v7.0.1 to v7.1.1](https://github.com/facebook/react/blob/1ddff43c41147b880c22eb363e07aade5a71c5d9/packages/eslint-plugin-react-hooks/CHANGELOG.md):
+  - ❓ enabled conditionally `exhaustive-effect-dependencies` and `memo-dependencies` rules in ⚙️ `hooks` sub-config
+  - ❌ `automatic-effect-dependencies` and `fire` rule were removed
+  - ⚠️ `component-hook-factories` rule was disabled because got deprecated
+
+### Patch Changes
+
+- 693db19: jsonSchemaValidator: updated [`eslint-plugin-json-schema-validator` from v6.0.0 to v6.0.3](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v6.0.0...v6.0.3)
+- d43ac61: html: updated [`@html-eslint/*` from v0.53.0 to v0.54.2](https://github.com/yeonjuan/html-eslint/compare/v0.53.0...v0.54.0)
+- 87c3972: deMorgan: updated [`eslint-plugin-de-morgan` from v2.0.0 to v2.1.1](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v2.0.0...v2.1.1)
+- 78a2737: markdown: updated [`eslint-plugin-sentences-per-line` from v0.1.0 to v0.1.2](https://github.com/JoshuaKGoldberg/sentences-per-line/compare/eslint-plugin-sentences-per-line@v0.1.0...eslint-plugin-sentences-per-line@v0.1.2)
+- 3d6b7a7: clsx: updated [`eslint-plugin-clsx` from v0.0.12 to v0.1.0](https://github.com/temoncher/eslint-plugin-clsx/compare/v0.0.12...v0.1.0)
+- bc56d23: yaml: updated [`eslint-plugin-yml` from v3.0.0 to v3.3.1](https://github.com/ota-meshi/eslint-plugin-yml/compare/v3.0.0...v3.3.1)
+- e8a23bc: Set [`ignoreVBindObject: true`](https://eslint.vuejs.org/rules/attributes-order.html#ignorevbindobject-true) for [`attributes-order`](https://eslint.vuejs.org/rules/attributes-order.html) rule
+- 2a2d101: regexp: updated [`eslint-plugin-regexp` from v2.10.0 to v3.0.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v2.10.0...v3.0.0)
+- ad3a182: format: updated [`eslint-plugin-format` from v1.3.1 to v2.0.1](https://github.com/antfu/eslint-plugin-format/compare/v1.3.1...v2.0.1):
+  - ❓ enabled conditionally [`oxfmt`](https://github.com/antfu/eslint-plugin-format/tree/main#formatoxfmt) rule based on what formatter is specified in `formatter` config option
+
+- 857dd61: perfectionist: updated [`eslint-plugin-perfectionist` from v5.4.0 to v5.6.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v5.4.0...v5.6.0)
+- 139d417: mdx: updated [`eslint-plugin-mdx` from v3.6.2 to v3.7.0](https://github.com/mdx-js/eslint-mdx/compare/eslint-plugin-mdx@3.6.2...eslint-plugin-mdx@3.7.0)
+- de984e7: ts: updated [`typescript-eslint` from v8.56.1 to v8.59.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.56.1...v8.59.0)
+- 36715e6: [**BREAKING**] markdownPreferences: option `extendedMarkdownSyntax` is now set to `false` by default because
+  - It was causing all Markdown files parsed with `extended-syntax` language, likely overriding the language set in `markdown` config;
+  - The extension supported by the plugin are not widely used.
+
+  Now, if this option is enabled, ESLint config(s) produced by `markdownPreferences` plugin will be put after config(s) produced by `markdown` config, essentially overriding matching files' language. If this option is disabled, it will be put before `markdown` and therefore `markdown` config(s) will take precedence.
+
+- e13a4f7: markdownPreferences: updated [`eslint-plugin-markdown-preferences` from v0.40.3 to v0.41.1](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/compare/v0.40.3...v0.41.1)
+- 0dc3d30: fastImport: updated [`eslint-plugin-fast-import` from v2.0.0 to v2.2.1](https://github.com/nebrius/eslint-plugin-fast-import/compare/2.0.0...2.2.1)
+- 89256ff: cspell: updated [`@cspell/eslint-plugin` from v9.6.0 to v9.7.0](https://github.com/streetsidesoftware/cspell/compare/v9.6.0...v9.7.0)
+- 36d2ade: yaml, githubActions: move special GitHub Action files handling from `yaml` to `githubActions` config
+- b8c49f8: vue: fixed an issue resulting in `enforceTypescriptInScriptSection` sub config ended up not being used
+- af0b00f: <!-- cspell:ignore getorinsert getorinsertcomputed weakmap -->
+
+  es: updated [`eslint-plugin-es-x` from v9.3.0 to v9.5.0](https://github.com/eslint-community/eslint-plugin-es-x/compare/v9.3.0...v9.5.0):
+  - ❓ enabled conditionally [`no-map-prototype-getorinsert`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-map-prototype-getorinsert.html) rule
+  - ❓ enabled conditionally [`no-map-prototype-getorinsertcomputed`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-map-prototype-getorinsertcomputed.html) rule
+  - ❓ enabled conditionally [`no-weakmap-prototype-getorinsert`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-weakmap-prototype-getorinsert.html) rule
+  - ❓ enabled conditionally [`no-weakmap-prototype-getorinsertcomputed`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-weakmap-prototype-getorinsertcomputed.html) rule
+
+- 613b8e2: jsdoc: updated [`eslint-plugin-jsdoc` from v62.8.0 to v62.9.0](https://github.com/gajus/eslint-plugin-jsdoc/compare/v62.8.0...v62.9.0)
+- f323cc5: svelte: added a separate `setup` sub-config which configures parser for `.svelte` and `.svelte.{js,ts}` files and is completely independent from the main `svelte` config
+- 934dac6: vitest: updated [`@vitest/eslint-plugin` from v1.6.6 to v1.6.9](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.6.6...v1.6.9)
+- 7db9d81: packageJson: updated [`eslint-plugin-package-json` from v0.88.1 to v0.88.3](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.88.1...v0.88.3)
+- 17fefd4: json: updated [`eslint-plugin-jsonc` from v3.1.1 to v3.1.2](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v3.1.1...v3.1.2)
+- e5ae5a1: qunit: updated [`eslint-plugin-qunit` from v8.2.5 to v8.2.6](https://github.com/platinumazure/eslint-plugin-qunit/compare/v8.2.5...v8.2.6)
+- a3b7ec6: eslintComments: updated [`@eslint-community/eslint-plugin-eslint-comments` from v4.6.0 to v4.7.1](https://github.com/eslint-community/eslint-plugin-eslint-comments/compare/v4.6.0...v4.7.1)
+- df175e9: noUnsanitized: updated [`eslint-plugin-no-unsanitized` from v4.1.4 to v4.1.5](https://github.com/mozilla/eslint-plugin-no-unsanitized/compare/v4.1.4...v4.1.5)
+- 1935a7a: unicorn: updated [`eslint-plugin-unicorn` from v62.0.0 to v63.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v62.0.0...v63.0.0):
+  - 🔴 not enabled [`isolated-functions`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/isolated-functions.md) rule
+
+- bc3e063: ts: updated [`typescript-eslint` from v8.53.0 to v8.54.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.53.0...v8.54.0)
+- f8cc84b: boundaries: updated [`eslint-plugin-boundaries` from v5.3.1 to v6.0.2](https://github.com/javierbrea/eslint-plugin-boundaries/compare/v5.3.1...v6.0.2)
+- 7ae8f6b: [**BREAKING**] toml: removed `doNotMergeFilesWithDefault` option
+- 0fbb6db: vue: updated [`vue-eslint-parser` from v10.2.0 to v10.4.0](https://github.com/vuejs/vue-eslint-parser/compare/v10.2.0...v10.4.0)
+- c6b307e: markdownLinks: updated [`eslint-plugin-markdown-links` from v0.7.1 to v0.9.0](https://github.com/ota-meshi/eslint-plugin-markdown-links/compare/v0.7.1...v0.9.0)
+- dc13298: fastImport: updated [`eslint-plugin-fast-import` from v1.8.0 to v2.0.0](https://github.com/nebrius/eslint-plugin-fast-import/compare/1.8.0...2.0.0):
+  - 🔴 not enabled [`no-node-builtins`](https://github.com/nebrius/eslint-plugin-fast-import/blob/HEAD/src/rules/no-node-builtins/README.md) rule
+  - 🔴 not enabled [`prefer-alias-imports`](https://github.com/nebrius/eslint-plugin-fast-import/blob/HEAD/src/rules/prefer-alias-imports/README.md) rule and added it to the `noStylisticRules` config
+
+- 5510e35: githubActions: updated [`eslint-plugin-github-action` from v0.1.0 to v0.2.0](https://github.com/ntnyq/eslint-plugin-github-action/compare/v0.1.0...v0.2.0)
+- 7c44c70: testingLibrary: updated [`eslint-plugin-testing-library` from v7.15.4 to v7.16.2](https://github.com/testing-library/eslint-plugin-testing-library/compare/v7.15.4...v7.16.2)
+- 483f54f: svelte: updated [`eslint-plugin-svelte` from v3.14.0 to v3.17.0](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte@3.14.0...eslint-plugin-svelte@3.17.0):
+  - 🔴 not enabled [`max-lines-per-block`](https://sveltejs.github.io/eslint-plugin-svelte/rules/max-lines-per-block) rule
+
+- 966adac: antfu: updated [`eslint-plugin-antfu` from v3.1.3 to v3.2.2](https://github.com/antfu/eslint-plugin-antfu/compare/v3.1.3...v3.2.2)
+- b0300bc: webComponents: updated [`eslint-plugin-wc` from v3.0.2 to v3.1.0](https://github.com/43081j/eslint-plugin-wc/compare/3.0.2...3.1.0)
+- 69c8acb: vue: applying config with default parameters on .vue files no longer crashes if Vue version cannot be determined. Additionally, now a console warning is printed if this happens
+- 4bd61d8: vitest: set `fixable: false` for [`no-focused-tests`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-focused-tests.md) rule, which disables the autofix
+- e539a2d: astro: updated [`astro-eslint-parser` from v1.2.2 to v1.3.0](https://github.com/ota-meshi/astro-eslint-parser/compare/v1.2.2...v1.3.0)
+- c2ace14: fastImport: plugin settings are now correctly assigned to `fast-import`, not `fastImport` property
+- 8cd3211: stylistic: updated [`@stylistic/eslint-plugin` from v5.9.0 to v5.10.0](https://github.com/eslint-stylistic/eslint-stylistic/compare/v5.9.0...v5.10.0)
+- 87e5ad8: stylistic: updated [`@stylistic/eslint-plugin` from v5.7.0 to v5.8.0](https://github.com/eslint-stylistic/eslint-stylistic/compare/v5.7.0...v5.8.0):
+  - 🔴 not enabled [`exp-jsx-props-style`](https://github.com/eslint-stylistic/eslint-stylistic/blob/HEAD/packages/eslint-plugin/rules/jsx-props-style/README.md) rule
+
+- 3872780: eslintPlugin: updated [`eslint-plugin-eslint-plugin` from v7.3.0 to v7.3.2](https://github.com/eslint-community/eslint-plugin-eslint-plugin/compare/v7.3.0...v7.3.2)
+- 189a67a: storybook: updated [`eslint-plugin-storybook` from v10.1.11 to v10.3.5](https://github.com/storybookjs/storybook/compare/v10.1.11...v10.3.5)
+- 56a653f: unusedImports: updated [`eslint-plugin-unused-imports` from v4.3.0 to v4.4.1](https://github.com/sweepline/eslint-plugin-unused-imports/compare/v4.3.0...v4.4.1)
+- ba06fb3: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.1.14 to v7.1.18](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.1.14...v7.1.18)
+- afca3eb: nx: updated [`@nx/eslint-plugin` from v22.3.3 to v22.6.5](https://github.com/nrwl/nx/compare/22.3.3...22.6.5)
+- cec647d: depend: updated [`eslint-plugin-depend` from v1.4.0 to v1.5.0](https://github.com/es-tooling/eslint-plugin-depend/compare/1.4.0...1.5.0)
+- 0ffa044: betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v4.1.1 to v4.3.2](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v4.1.1...v4.3.2)
+- e2422ff: regexp: updated [`eslint-plugin-regexp` from v3.0.0 to v3.1.0](https://github.com/ota-meshi/eslint-plugin-regexp/compare/v3.0.0...v3.1.0)
+- c690ce5: noSecrets: updated [`eslint-plugin-no-secrets` from v2.2.1 to v2.3.3](https://github.com/nickdeis/eslint-plugin-no-secrets/compare/46a916ac4970582bd1cd1ed334896368bc232514..fe95b10ac26be814327bb58ab97935c392adc4a1)
+- e8ded39: jest: updated [`eslint-plugin-jest` from v29.12.1 to v29.15.2](https://github.com/jest-community/eslint-plugin-jest/compare/v29.12.1...v29.15.2)
+- 7682215: jsInline: updated [`eslint-plugin-html` from v8.1.3 to v8.1.4](https://github.com/BenoitZugmeyer/eslint-plugin-html/compare/v8.1.3...v8.1.4)
+- a42d1e3: e18e: updated [`@e18e/eslint-plugin` from v0.2.0 to v0.3.0](https://github.com/e18e/eslint-plugin/compare/0.2.0...0.3.0)
+- 8bb885d: css: updated [`@eslint/css` from v0.14.1 to v1.0.0](https://github.com/eslint/css/compare/css-v0.14.1...css-v1.0.0)
+- 446a14d: vue: updated [`@nuxt/eslint-plugin` from v1.15.1 to v1.15.2](https://github.com/nuxt/eslint/compare/v1.15.1...v1.15.2)
+- e549518: import: updated [`eslint-plugin-import-x` from v4.16.1 to v4.16.2](https://github.com/un-ts/eslint-plugin-import-x/compare/v4.16.1...v4.16.2)
+- 85e9d1d: security: updated [`eslint-plugin-security` from v3.0.1 to v4.0.0](https://github.com/eslint-community/eslint-plugin-security/compare/v3.0.1...eslint-plugin-security-v4.0.0)
+- ad310f8: jsdoc: updated [`eslint-plugin-jsdoc` from v62.7.1 to v62.8.0](https://github.com/gajus/eslint-plugin-jsdoc/compare/v62.7.1...v62.8.0)
+- 5be848d: css: updated [`@eslint/css` from v1.0.0 to v1.1.0](https://github.com/eslint/css/compare/css-v1.0.0...css-v1.1.0)
+- 16b66ea: fileProgress: updated [`eslint-plugin-file-progress` from v3.0.2 to v4.0.0](https://github.com/sibiraj-s/eslint-plugin-file-progress/compare/v3.0.2...v4.0.0)
+- 9ba9875: ts: updated [`typescript-eslint` from v8.54.0 to v8.56.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.54.0...v8.56.1)
+- 23d9b1c: svelte: updated [`svelte-eslint-parser` from v1.4.1 to v1.6.0](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.4.1...v1.6.0)
+- 9714f19: astro: updated [`eslint-plugin-astro` from v1.5.0 to v1.6.0](https://github.com/ota-meshi/eslint-plugin-astro/compare/v1.5.0...v1.6.0)
+- 31ccf61: packageJson: updated [`eslint-plugin-package-json` from v0.91.0 to v0.91.1](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v0.91.0...v0.91.1)
+- c91b8ca: tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.91.2 to v5.99.2](https://github.com/TanStack/query/compare/%40tanstack/eslint-plugin-query%405.91.2...release-2026-04-19-1059):
+  - 🔴 not enabled [`prefer-query-options`](https://tanstack.com/query/latest/docs/eslint/prefer-query-options) rule
+
+- e7f0493: lit: updated [`eslint-plugin-lit` from v2.1.1 to v2.2.1](https://github.com/43081j/eslint-plugin-lit/compare/2.1.1...2.2.1)
+- 248fdef: tailwind: updated [`eslint-plugin-tailwindcss` from v3.18.2 to v3.18.3](https://github.com/francoismassart/eslint-plugin-tailwindcss/compare/v3.18.2...v3.18.3)
+- 4924ffb: cssInJs: made sure that plugin settings are assigned to `css.target`, not just `css` property
+- 8e5506f: cspell: updated [`@cspell/eslint-plugin` from v9.7.0 to v10.0.0](https://github.com/streetsidesoftware/cspell/compare/v9.7.0...v10.0.0)
+- e4956ea: [**BREAKING**] yaml: removed `doNotMergeFilesWithDefault` option
+- 8e0f4b3: perfectionist: updated [`eslint-plugin-perfectionist` from v5.6.0 to v5.9.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v5.6.0...v5.9.0):
+  - 🔴 not enabled [`sort-arrays`](https://perfectionist.dev/rules/sort-arrays) rule, added corresponding `configSortArrays` sub-config
+
+- 550ffc3: jsonSchemaValidator: updated [`eslint-plugin-json-schema-validator` from v6.0.3 to v6.2.0](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v6.0.3...v6.2.0)
+- bfda3af: command: updated [`eslint-plugin-command` from v3.4.0 to v3.5.2](https://github.com/antfu/eslint-plugin-command/compare/v3.4.0...v3.5.2)
+- 473ef30: cssInJs: updated [`eslint-plugin-css` from v0.11.1 to v0.12.0](https://github.com/ota-meshi/eslint-plugin-css/compare/v0.11.1...v0.12.0)
+- a126159: markdownPreferences: updated [`eslint-plugin-markdown-preferences` from v0.40.2 to v0.40.3](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/compare/v0.40.2...v0.40.3)
+- d838874: astro: updated [`astro-eslint-parser` from v1.3.0 to v1.4.0](https://github.com/ota-meshi/astro-eslint-parser/compare/v1.3.0...v1.4.0)
+- 5903d3e: tanstackRouter: updated [`@tanstack/eslint-plugin-router` from v1.141.0 to v1.161.6](https://github.com/TanStack/router/compare/7593e30a1d49f4f11f7833ca7c9a0d93d2da7f4a...release-2026-03-15-2243):
+  - 🟢 enabled [`route-param-names`](https://github.com/TanStack/router/blob/0166fe8ba0f3492f26d32eeb50548beae6641a07/packages/eslint-plugin-router/src/rules/route-param-names/route-param-names.rule.ts) rule
+
+- c103cb4: pnpm: updated [`eslint-plugin-pnpm` from v1.5.0 to v1.6.0](https://github.com/antfu/pnpm-workspace-utils/compare/v1.5.0...v1.6.0)
+- 3562674: zod: updated [`eslint-plugin-zod` from v3.5.0 to v3.5.4](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.5.0...v3.5.4)
+- 6515548: [**BREAKING**] rxjs: if array is passed to `banOperators`, it will now override default values (previously merged with the default values)
+- 9da5c91: [**BREAKING**] json: removed `doNotMergeFilesWithDefault` option
+- fd5e263: react: updated [`eslint-plugin-react-you-might-not-need-an-effect` from v0.8.5 to v0.9.3](https://github.com/NickvanDyke/eslint-plugin-react-you-might-not-need-an-effect/compare/v0.8.5...v0.9.3):
+  - ❌ `no-pass-ref-to-parent` rule was removed
+
+- 3178d97: react: updated [`eslint-plugin-react-refresh` from v0.4.26 to v0.5.0](https://github.com/ArnaudBarre/eslint-plugin-react-refresh/compare/v0.4.26...v0.5.0)
+- 9238649: astro: added a separate `setup` sub-config which configures parser for `.astro` files and is completely independent from the main `astro` config
+- 7856a72: unocss: updated [`@unocss/eslint-plugin` from v66.6.0 to v66.6.8](https://github.com/unocss/unocss/compare/v66.6.0...v66.6.8)
+- 42a6e26: nextJs: updated [`@next/eslint-plugin-next` from v16.1.3 to v16.2.4](https://github.com/vercel/next.js/compare/v16.1.3...v16.2.4)
+- 91141fe: cypress: updated [`eslint-plugin-cypress` from v5.2.1 to v6.2.0](https://github.com/cypress-io/eslint-plugin-cypress/compare/v5.2.1...v6.2.0)
+- 42a222e: react: updated [`eslint-plugin-react-refresh` from v0.5.0 to v0.5.2](https://github.com/ArnaudBarre/eslint-plugin-react-refresh/compare/v0.5.0...v0.5.2)
+- 8297f1d: markdown: updated [`@eslint/markdown` from v7.5.1 to v8.0.1](https://github.com/eslint/markdown/compare/v7.5.1...v8.0.1):
+  - 🔴 not enabled [`fenced-code-meta`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/fenced-code-meta.md) rule
+
+- 64d4fef: headers: updated [`eslint-plugin-headers` from v1.3.3 to v1.3.4](https://github.com/robmisasi/eslint-plugin-headers/compare/v1.3.3...v1.3.4)
+- 1721e57: turbo: updated [`eslint-plugin-turbo` from v2.7.4 to v2.9.6](https://github.com/vercel/turborepo/compare/v2.7.4...v2.9.6)
+- 37e6b99: jsdoc: updated [`eslint-plugin-jsdoc` from v62.3.0 to v62.7.1](https://github.com/gajus/eslint-plugin-jsdoc/compare/v62.3.0...v62.7.1)
+- 38c9ec1: docusaurus: updated [`@docusaurus/eslint-plugin` from v3.9.2 to v3.10.0](https://github.com/facebook/docusaurus/compare/v3.9.2...v3.10.0)
+- f97d4c9: vue: updated [`eslint-plugin-vuejs-accessibility` from v2.4.1 to v2.5.0](https://github.com/vue-a11y/eslint-plugin-vuejs-accessibility/compare/v2.4.1...v2.5.0)
+- 0aee777: compat: updated [`eslint-plugin-compat` from v6.1.0 to v7.0.1](https://github.com/amilajack/eslint-plugin-compat/compare/v6.1.0...v7.0.1)
+- 9d3f564: casePolice: updated [`eslint-plugin-case-police` from v2.1.1 to v2.2.1](https://github.com/antfu/case-police/compare/v2.1.1...v2.2.1)
+- d78add9: compat: updated [`eslint-plugin-compat` from v6.0.2 to v6.1.0](https://github.com/amilajack/eslint-plugin-compat/compare/v6.0.2...v6.1.0)
+- d762d27: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.1.18 to v7.1.30](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.1.18...v7.1.30)
+- ce7ad17: ember: updated [`ember-eslint-parser` from v0.5.13 to v0.10.0](https://github.com/ember-tooling/ember-eslint-parser/compare/v0.5.13-ember-eslint-parser...v0.10.0)
+- 5c57bd8: vue: updated [`eslint-plugin-vue-scoped-css` from v2.12.0 to v3.0.0](https://github.com/future-architect/eslint-plugin-vue-scoped-css/compare/v2.12.0...v3.0.0)
+
 ## 1.0.0-beta.7
 
 ### Minor Changes
