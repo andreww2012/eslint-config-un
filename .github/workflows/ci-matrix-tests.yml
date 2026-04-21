@@ -1,0 +1,32 @@
+name: CI matrix tests
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: true
+        type: number
+      eslint-version:
+        required: true
+        type: number
+
+jobs:
+  test-config:
+    name: Test config (Node ${{ inputs.node-version }}, ESLint ${{ inputs.eslint-version }})
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/prepare
+        with:
+          node-version: ${{ inputs.node-version }}
+      - run: pnpm add eslint@${{ inputs.eslint-version }}
+      - run: pnpm test:config
+  test-vitest:
+    name: Test (Vitest) (Node ${{ inputs.node-version }}, ESLint ${{ inputs.eslint-version }})
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5.0.0
+      - uses: ./.github/actions/prepare
+        with:
+          node-version: ${{ inputs.node-version }}
+      - run: pnpm add eslint@${{ inputs.eslint-version }}
+      - run: pnpm test:vitest
