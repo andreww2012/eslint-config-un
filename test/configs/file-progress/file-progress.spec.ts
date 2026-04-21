@@ -5,6 +5,7 @@ vi.mock(import('is-in-editor'));
 
 beforeEach(() => {
   vi.mocked(isInEditor).mockReturnValue(false);
+  vi.spyOn(utils, 'isInCi', 'get').mockReturnValue(false);
 });
 
 describe('basic tests', async () => {
@@ -121,9 +122,7 @@ describe('options', () => {
     it('merges default settings with user-provided ones and assignes to `file-progress` settings property', async () => {
       const SETTINGS = {hideFileName: true};
 
-      const configResult = await computeEslintConfig({
-        fileProgress: {settings: SETTINGS},
-      });
+      const configResult = await computeEslintConfig({fileProgress: {settings: SETTINGS}});
 
       expect(
         configResult.getConfigByUnPostfix('file-progress')?.settings?.['progress'],
