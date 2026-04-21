@@ -1,3 +1,4 @@
+// cspell:ignore mathml
 import {fixupPluginRules} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
 import type {EslintPlugin} from '../eslint/eslint-types';
@@ -72,11 +73,17 @@ export const pluginsLoaders = {
   '@intlify/vue-i18n': genModuleLoader(
     '@intlify/vue-i18n',
     '@intlify/eslint-plugin-vue-i18n',
-    () =>
-      interopDefault(
+    async () => {
+      // Pre-load `jsonc-eslint-parser` (ESM) before loading `@intlify/eslint-plugin-vue-i18n` (CJS).
+      // The CJS plugin uses `require()` on `jsonc-eslint-parser`; on Node 24, `require(esm)` fails if
+      // that module is concurrently being loaded via `import()` elsewhere (race condition).
+      // eslint-disable-next-line import/no-extraneous-dependencies
+      await import('jsonc-eslint-parser').catch(() => null);
+      return await (interopDefault(
         import('@intlify/eslint-plugin-vue-i18n'),
         // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>);
+    },
   ),
   '@next/next': genModuleLoader('@next/next', '@next/eslint-plugin-next', () =>
     interopDefault(import('@next/eslint-plugin-next')),
@@ -121,7 +128,6 @@ export const pluginsLoaders = {
   ava: genModuleLoader(
     'ava',
     'eslint-plugin-ava',
-    // eslint-disable-next-line ts/no-unnecessary-type-assertion
     () => interopDefault(import('eslint-plugin-ava')) as Promise<EslintPlugin>,
   ),
   'barrel-files': genModuleLoader('barrel-files', 'eslint-plugin-barrel-files', () =>
@@ -203,9 +209,18 @@ export const pluginsLoaders = {
     '@e18e/eslint-plugin',
     () => interopDefault(import('@e18e/eslint-plugin')) as Promise<EslintPlugin>,
   ),
-  ember: genModuleLoader('ember', 'eslint-plugin-ember', () =>
-    interopDefault(import('eslint-plugin-ember')),
-  ),
+  ember: genModuleLoader('ember', 'eslint-plugin-ember', async () => {
+    // Pre-load `ember-eslint-parser` fully before loading `eslint-plugin-ember` (CJS)
+    // to avoid a race condition:
+    // - both packages share ESM dependencies (`noop.js`,
+    // `eslint-scope`, `mathml-tag-names`, `html-tags`, `svg-tags`, etc.).
+    // - `eslint-plugin-ember`'s CJS code uses `require()` on these ESM deps
+    // - Node 22's `require(esm)` fails if those deps are concurrently being loaded via `import()`
+    // (e.g. via the `ember-eslint-parser` parser loader).
+    // Pre-loading `ember-eslint-parser` ensures all shared ESM deps are cached first.
+    await import('ember-eslint-parser').catch(() => null);
+    return await interopDefault(import('eslint-plugin-ember'));
+  }),
   'erasable-syntax-only': genModuleLoader(
     'erasable-syntax-only',
     'eslint-plugin-erasable-syntax-only',
