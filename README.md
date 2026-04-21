@@ -1037,6 +1037,32 @@ If you would like not to wait until the dependencies of `eslint-config-un` are u
 | [`eslint-plugin-no-type-assertion`](https://npmjs.com/eslint-plugin-no-type-assertion) | Has outdated requirements of peer dependencies                                   |
 | [`eslint-plugin-prettier`](https://npmjs.com/eslint-plugin-prettier)                   | Patched by us to enable formatting of "fenced code blocks" inside Markdown files |
 
+## Versioning policy
+
+`eslint-config-un` wraps 100+ ESLint plugins and updates them continuously.
+To keep major version bumps meaningful and rare, we follow standard SemVer with the following clarifications specific to this package.
+
+**Breaking changes (major bump):**
+
+- Incompatible changes to `EslintConfigUnOptions` — removing/renaming an option, narrowing its type, changing its default value, or adding a required option
+- Removing or renaming a named export or entry point (`.`, `./snippets`, `./globs`)
+- Changing the default prefix of any built-in plugin (e.g. `yml` → `yaml`)
+- Raising the minimum ESLint or Node.js version
+- A config that was enabled by default becoming disabled by default
+- A plugin moving from a direct dependency to an optional peer dependency
+- Removing/renaming a `plugin-un` rule, or incompatibly changing its default options or schema
+
+**Not breaking:**
+
+- Changes in lint output (more or fewer errors/warnings) — because `eslint-config-un` continuously updates 100+ plugins and many are optional peer dependencies whose installed version is controlled by the user, lint output is not a stable contract
+- Third-party plugin updates (rule additions, removals, schema changes, etc.) absorbed in the same release
+- Changes to the generated ESLint flat config shape (entry names, rule/config order) — these are internal details
+- Additive API changes: widening a type, new optional options, new named exports, new `plugin-un` rules
+- Changes to the `RuleOptions` exported type — it is best-effort/informational and not a stable contract
+
+Major versions are released as accumulated breaking changes warrant — there is no fixed cadence.
+Non-breaking improvements ship continuously as minor and patch releases on the current stable major.
+
 [Astro]: ./assets/devicon-astro.svg
 [@eslint-react/eslint-plugin]: https://npmjs.com/@eslint-react/eslint-plugin
 [Angular]: ./assets/devicon-angular.svg
