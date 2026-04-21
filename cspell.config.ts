@@ -55,6 +55,7 @@ export default {
     'darraghor',
     'arkregex',
     'oxfmt',
+    'splattributes', // Ember
 
     // Technical words/terms
     'arraify',
