@@ -11,7 +11,7 @@ runs:
   using: composite
   steps:
     - name: Setup pnpm
-      uses: pnpm/action-setup@v4.2.0
+      uses: pnpm/action-setup@v5.0.0
     - name: Setup Node.js
       uses: actions/setup-node@v6.0.0
       with:
@@ -26,7 +26,7 @@ runs:
       run: pnpm deps:audit
     - name: Cache typegen output
       id: cache-typegen
-      uses: actions/cache@v4.3.0
+      uses: actions/cache@v5.0.5
       with:
         key: ${{ runner.os }}-${{ inputs.node-version }}-${{ hashFiles('pnpm-lock.yaml') }}
         path: |
