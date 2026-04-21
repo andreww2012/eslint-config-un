@@ -73,6 +73,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5.0.0
       - uses: ./.github/actions/prepare
-        with:
-          install-npm: 'true'
-      - run: pnpm build && pnpm lint:public-types
+      - run: |
+          # `pnpm lint:public-types` uses `attw --pack` which internally calls `npm pack`.
+          # The runner's bundled npm may have broken internal deps, causing `npm pack` to fail.
+          # Pack via pnpm instead and pass the tarball directly to attw.
+          pnpm pack --pack-destination /tmp
+          pnpm exec attw /tmp/eslint-config-un-*.tgz --profile esm-only
