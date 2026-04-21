@@ -314,7 +314,13 @@ toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
       stdout: batchStdout,
       stderr: batchStderr,
       exitCode: batchExitCode,
-    } = await exec('npx', ['tsx', runnerScriptPath, '--batch', String(batchIndex)]);
+    } = await exec('node', [
+      '--import',
+      'tsx/esm',
+      runnerScriptPath,
+      '--batch',
+      String(batchIndex),
+    ]);
 
     if (batchExitCode) {
       logger.error(`Batch ${batchIndex + 1}/${batches.length} failed:\n${batchStderr}`);
