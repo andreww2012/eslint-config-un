@@ -8,6 +8,7 @@ import {
   getAllRulesSeverities as getAllRulesSeveritiesImpl,
   getRuleSeverityFromEslintRuleEntry as getRuleSeverityFromEslintRuleEntryImpl,
 } from './helpers/eslint-config';
+import {isEslint10OrLater as isEslint10OrLaterImpl} from './helpers/eslint-version';
 import {
   computeEslintConfig as computeEslintConfigImpl,
   testEslintConfig as testEslintConfigImpl,
@@ -95,6 +96,7 @@ declare global {
   var getAllRulesSeverities: typeof getAllRulesSeveritiesImpl;
   var setInstalledPackages: typeof setInstalledPackagesImpl;
   var addInstalledPackages: typeof addInstalledPackagesImpl;
+  var isEslint10OrLater: typeof isEslint10OrLaterImpl;
 }
 /* eslint-enable vars-on-top */
 
@@ -106,3 +108,4 @@ globalThis.getRuleSeverityFromEslintRuleEntry = getRuleSeverityFromEslintRuleEnt
 globalThis.getAllRulesSeverities = getAllRulesSeveritiesImpl;
 globalThis.setInstalledPackages = setInstalledPackagesImpl;
 globalThis.addInstalledPackages = addInstalledPackagesImpl;
+globalThis.isEslint10OrLater = isEslint10OrLaterImpl;

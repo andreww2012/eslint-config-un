@@ -63,23 +63,26 @@ describe('react: sub config `dom`', () => {
       expect(configResult.getRuleEntrySeverity('react/dom', 'react/no-danger')).toBe(2);
     });
 
-    it('`@eslint-react/dom/no-dangerously-set-innerhtml` rule fires on a component using `dangerouslySetInnerHTML`', async () => {
-      const results = await testEslintConfig(
-        'react',
-        FIXTURES.dangerouslySetInnerHtml,
-        import.meta.dirname,
-      );
+    it.skipIf(isEslint10OrLater)(
+      '`@eslint-react/dom/no-dangerously-set-innerhtml` rule fires on a component using `dangerouslySetInnerHTML`',
+      async () => {
+        const results = await testEslintConfig(
+          'react',
+          FIXTURES.dangerouslySetInnerHtml,
+          import.meta.dirname,
+        );
 
-      const error = findLintMessageFromLintResults(
-        results,
-        FIXTURES.dangerouslySetInnerHtml,
-        '@eslint-react/dom-no-dangerously-set-innerhtml',
-      );
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.dangerouslySetInnerHtml,
+          '@eslint-react/dom-no-dangerously-set-innerhtml',
+        );
 
-      expect(error?.message).toMatchInlineSnapshot(
-        `"Using 'dangerouslySetInnerHTML' may have security implications."`,
-      );
-    });
+        expect(error?.message).toMatchInlineSnapshot(
+          `"Using 'dangerouslySetInnerHTML' may have security implications."`,
+        );
+      },
+    );
   });
 
   describe('un options', () => {

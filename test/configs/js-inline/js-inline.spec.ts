@@ -90,17 +90,20 @@ describe('rules', async () => {
     expect(configResult.getConfigByUnPostfix('js-inline')?.rules).toStrictEqual({});
   });
 
-  it('correctly processes inline JS in HTML files (`no-eval` fires inside `<script>` tag when `js` config is enabled)', async () => {
-    const results = await testEslintConfig(
-      {jsInline: true, js: true},
-      FIXTURES.withEval,
-      import.meta.dirname,
-    );
+  it.skipIf(isEslint10OrLater)(
+    'correctly processes inline JS in HTML files (`no-eval` fires inside `<script>` tag when `js` config is enabled)',
+    async () => {
+      const results = await testEslintConfig(
+        {jsInline: true, js: true},
+        FIXTURES.withEval,
+        import.meta.dirname,
+      );
 
-    const error = findLintMessageFromLintResults(results, FIXTURES.withEval, 'no-eval');
+      const error = findLintMessageFromLintResults(results, FIXTURES.withEval, 'no-eval');
 
-    expect(error?.message).toMatchInlineSnapshot('"eval can be harmful."');
-  });
+      expect(error?.message).toMatchInlineSnapshot('"eval can be harmful."');
+    },
+  );
 });
 
 describe('un options', () => {

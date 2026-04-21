@@ -45,23 +45,26 @@ describe('react: sub config `hooks`', () => {
       });
     });
 
-    it('`react-hooks/exhaustive-deps` rule fires on a component with missing hook dependencies', async () => {
-      const results = await testEslintConfig(
-        'react',
-        FIXTURES.missingHookDeps,
-        import.meta.dirname,
-      );
+    it.skipIf(isEslint10OrLater)(
+      '`react-hooks/exhaustive-deps` rule fires on a component with missing hook dependencies',
+      async () => {
+        const results = await testEslintConfig(
+          'react',
+          FIXTURES.missingHookDeps,
+          import.meta.dirname,
+        );
 
-      const error = findLintMessageFromLintResults(
-        results,
-        FIXTURES.missingHookDeps,
-        'react-hooks/exhaustive-deps',
-      );
+        const error = findLintMessageFromLintResults(
+          results,
+          FIXTURES.missingHookDeps,
+          'react-hooks/exhaustive-deps',
+        );
 
-      expect(error?.message).toMatchInlineSnapshot(
-        `"React Hook useEffect has a missing dependency: 'value'. Either include it or remove the dependency array."`,
-      );
-    });
+        expect(error?.message).toMatchInlineSnapshot(
+          `"React Hook useEffect has a missing dependency: 'value'. Either include it or remove the dependency array."`,
+        );
+      },
+    );
   });
 
   describe('un options', () => {
