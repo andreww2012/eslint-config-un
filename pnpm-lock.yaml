@@ -435,8 +435,8 @@ importers:
         specifier: 3.3.1
         version: 3.3.1(eslint@9.39.2)
       eslint-plugin-clsx:
-        specifier: 0.0.12
-        version: 0.0.12(eslint@9.39.2)(typescript@6.0.3)
+        specifier: 0.1.0
+        version: 0.1.0(eslint@9.39.2)(typescript@6.0.3)
       eslint-plugin-command:
         specifier: 3.5.2
         version: 3.5.2(@typescript-eslint/rule-tester@8.57.0)(@typescript-eslint/typescript-estree@8.59.0)(@typescript-eslint/utils@8.59.0)(eslint@9.39.2)
@@ -6432,10 +6432,10 @@ packages:
     peerDependencies:
       eslint: '>=9.0.0'
 
-  eslint-plugin-clsx@0.0.12:
-    resolution: {integrity: sha512-uQEZF9AAi8nqHrN/S9uRZYJhZGxMPrUkwjg6BXxIf9nobndI4zm7UQi6WlNATMLZ90E7oNSXLpJTAVZVAXXqKQ==}
+  eslint-plugin-clsx@0.1.0:
+    resolution: {integrity: sha512-g4Q3ybgXqFbyculk7OlkpSlP4ODSCwrZtEogWN49MMC3HcMYubl9b7L2Q3w3++43tMZAkQvQMzGkONDu1haJJg==}
     peerDependencies:
-      eslint: ^8 || ^9
+      eslint: ^8 || ^9 || ^10
 
   eslint-plugin-command@3.5.2:
     resolution: {integrity: sha512-PA59QAkQDwvcCMEt5lYLJLI3zDGVKJeC4id/pcRY2XdRYhSGW7iyYT1VC1N3bmpuvu6Qb/9QptiS3GJMjeGTJg==}
@@ -17311,7 +17311,7 @@ snapshots:
       is-glob: 4.0.3
       micromatch: 4.0.8
 
-  eslint-plugin-clsx@0.0.12(eslint@9.39.2)(typescript@6.0.3):
+  eslint-plugin-clsx@0.1.0(eslint@9.39.2)(typescript@6.0.3):
     dependencies:
       '@typescript-eslint/types': 8.59.0
       '@typescript-eslint/utils': 8.59.0(eslint@9.39.2)(typescript@6.0.3)
