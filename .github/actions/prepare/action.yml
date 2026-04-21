@@ -6,6 +6,10 @@ inputs:
     description: Node.js version to use
     required: false
     default: '22'
+  install-npm:
+    description: Install a working npm
+    required: false
+    default: 'false'
 
 runs:
   using: composite
@@ -36,3 +40,14 @@ runs:
       shell: bash
       if: steps.cache-typegen.outputs.cache-hit != 'true'
       run: pnpm typegen
+    - name: Install a working npm
+      shell: bash
+      if: inputs.install-npm == 'true'
+      run: |
+        # The npm bundled with the runner's Node.js may have missing internal
+        # dependencies (e.g. `promise-retry`), making `npm install` itself crash.
+        # Bootstrap by downloading the npm tarball directly and using that fresh
+        # copy to perform the global install.
+        NPM_VER=$(curl -fsSL https://registry.npmjs.org/-/package/npm/dist-tags | jq -r '.latest')
+        curl -fsSL "https://registry.npmjs.org/npm/-/npm-${NPM_VER}.tgz" | tar -xzC /tmp/
+        node /tmp/package/bin/npm-cli.js install --global "npm@${NPM_VER}"

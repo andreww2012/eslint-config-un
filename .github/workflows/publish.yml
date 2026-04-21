@@ -22,15 +22,8 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/actions/prepare
-      - name: Install npm version supporting Trusted Publishing
-        run: |
-          # The npm bundled with the runner's Node.js may have missing internal
-          # dependencies (e.g. `promise-retry`), making `npm install` itself crash.
-          # Bootstrap by downloading the npm tarball directly and using that fresh
-          # copy to perform the global install.
-          NPM_VER=$(curl -fsSL https://registry.npmjs.org/-/package/npm/dist-tags | jq -r '.latest')
-          curl -fsSL "https://registry.npmjs.org/npm/-/npm-${NPM_VER}.tgz" | tar -xzC /tmp/
-          node /tmp/package/bin/npm-cli.js install --global "npm@${NPM_VER}"
+        with:
+          install-npm: 'true'
       - name: Enter pre-release mode
         if: github.ref == 'refs/heads/dev-v1'
         # Should ignore an error happening if already in pre mode

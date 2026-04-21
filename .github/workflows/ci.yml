@@ -73,4 +73,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5.0.0
       - uses: ./.github/actions/prepare
+        with:
+          install-npm: 'true'
       - run: pnpm build && pnpm lint:public-types
