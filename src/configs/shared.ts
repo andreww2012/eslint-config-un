@@ -281,6 +281,10 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'eslint-plugin/no-property-in-node', // [type-aware]
   // Conflicts with `markdown-preferences/canonical-code-block-language` by default, can also be handled by that rule and it's confusing for users to see the word "extension" in the lint message
   'yaml/file-extension',
+
+  // @tanstack/start — whole-program analysis rules that are meaningless in isolated code snippets
+  '@tanstack/start/no-async-client-component', // [runtime-only]
+  '@tanstack/start/no-client-code-in-server-component', // [runtime-only]
 ] satisfies UnAllRuleNames[];
 
 export type RulesDisabledInEmbeddedCodeBlocksByDefault =

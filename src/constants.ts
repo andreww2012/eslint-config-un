@@ -204,6 +204,8 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   '@tanstack/query-core',
   '@tanstack/react-router',
   '@tanstack/solid-router',
+  '@tanstack/react-start',
+  '@tanstack/solid-start',
   'storybook',
   'tailwindcss',
   'stylelint',

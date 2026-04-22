@@ -398,6 +398,12 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
         '@tanstack/solid-router',
       ]),
     },
+    tanstackStart: {
+      enabled: getIsConfigEnabled('tanstackStart', [
+        '@tanstack/react-start',
+        '@tanstack/solid-start',
+      ]),
+    },
     testingLibrary: {enabled: getIsConfigEnabled('testingLibrary', '@testing-library/dom')},
     toml: {enabled: getIsConfigEnabled('toml', false)},
     treeShaking: {enabled: getIsConfigEnabled('treeShaking', false)},
@@ -672,6 +678,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('e18e', () => import('../configs/e18e')),
     loadUnConfig('lockfile', () => import('../configs/lockfile')),
     loadUnConfig('tanstackRouter', () => import('../configs/tanstack-router')),
+    loadUnConfig('tanstackStart', () => import('../configs/tanstack-start')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),

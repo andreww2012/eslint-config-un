@@ -214,7 +214,7 @@ export const resolveConfigAsyncData = async (
         .join(' and ');
 
       const generateInstallationCommand = (names: string[]): string =>
-        `${context.meta.usedPackageManager?.name || '<your package manager>'} i ${names.join(' ')}`;
+        `${context.meta.usedPackageManager?.name || '<your package manager>'} i --save-dev ${names.join(' ')}`;
 
       context.logger[isUpdates ? 'warn' : 'fatal'](
         `${capitalize(packageTypes)} that listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${isUpdates ? 'does not satisfy the supported version range' : 'not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} by yourself or disable corresponding config${packages.length === 1 ? '' : 's'} in order for this error to disappear:

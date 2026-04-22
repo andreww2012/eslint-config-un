@@ -119,6 +119,9 @@ const ALL_STYLISTIC_RULES = {
   '@tanstack/router': {
     // None
   },
+  '@tanstack/start': {
+    // None
+  },
   '@unocss': {
     order: true,
     'order-attributify': true,

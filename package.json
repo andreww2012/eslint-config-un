@@ -197,6 +197,7 @@
     "@sveltejs/kit": "2.57.1",
     "@tanstack/eslint-plugin-query": "5.99.2",
     "@tanstack/eslint-plugin-router": "1.161.6",
+    "@tanstack/eslint-plugin-start": "0.0.1",
     "@types/eslint-plugin-security": "3.0.1",
     "@types/eslint-plugin-tailwindcss": "3.17.0",
     "@types/estree": "1.0.8",
@@ -332,6 +333,7 @@
     "@sveltejs/kit": "^2.57.1",
     "@tanstack/eslint-plugin-query": "^5.99.2",
     "@tanstack/eslint-plugin-router": "^1.161.6",
+    "@tanstack/eslint-plugin-start": "^0.0.1",
     "@unocss/eslint-plugin": "^66.6.8",
     "@vitest/eslint-plugin": "^1.6.16",
     "astro-eslint-parser": "^1.4.0",
@@ -454,6 +456,9 @@
       "optional": true
     },
     "@tanstack/eslint-plugin-router": {
+      "optional": true
+    },
+    "@tanstack/eslint-plugin-start": {
       "optional": true
     },
     "@unocss/eslint-plugin": {

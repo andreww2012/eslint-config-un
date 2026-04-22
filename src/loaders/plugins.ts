@@ -110,6 +110,15 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
+  '@tanstack/start': genModuleLoader(
+    '@tanstack/start',
+    '@tanstack/eslint-plugin-start',
+    () =>
+      interopDefault(
+        import('@tanstack/eslint-plugin-start'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   '@unocss': genModuleLoader(
     '@unocss',
     '@unocss/eslint-plugin',

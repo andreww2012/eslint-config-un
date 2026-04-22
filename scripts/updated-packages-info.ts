@@ -71,6 +71,12 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         gitTag: versionUnknown,
         ruleDocsUrl: (ruleName) => `https://tanstack.com/router/latest/docs/eslint/${ruleName}`,
       },
+      '@tanstack/start': {
+        configs: ['tanstackStart'],
+        gitTag: versionUnknown,
+        ruleDocsUrl: (ruleName) =>
+          `https://github.com/TanStack/router/blob/HEAD/packages/eslint-plugin-start/${ruleName}.md`,
+      },
       '@unocss': {
         configs: ['unocss'],
         ruleDocsUrl: (ruleName) =>
