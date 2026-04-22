@@ -1,6 +1,6 @@
 # eslint-config-un [![npm](https://img.shields.io/npm/v/eslint-config-un)](https://npmjs.com/eslint-config-un)
 
-Grown out of the personal collection of rules, an ESLint config aspiring to cover as many rules as possible, be reasonably strict and easily configurable.
+Grown out of a personal collection of rules, this ESLint config aspires to cover as many rules as possible, be reasonably strict, and be easily configurable.
 
 ## Features
 
@@ -23,11 +23,11 @@ Grown out of the personal collection of rules, an ESLint config aspiring to cove
 - **Zero configuration by default:** exporting `eslintConfig()` from `eslint.config.ts` is enough to get started;
 - **Strictly typed:** all the options and rule names exist in TypeScript types;
 - **Well documented:** every single config, sub-config and their options are documented in JSDoc format;
-- **Respects your root `.gitignore`**: specified files are not linted by default.
-- Provides the ability **to disable autofix** on a per-rule basis.
-- **Works great with Prettier**: conflicting rules are disabled if you use Prettier.
-- **Rename plugin prefixes** easily if you would like to.
-- **Bring your own plugins** and their rules will also be typed as much as it's possible to.
+- **Respects your root `.gitignore`**: files listed in `.gitignore` are excluded from linting by default;
+- Provides the ability **to disable autofix** on a per-rule basis;
+- **Works great with Prettier**: conflicting rules are disabled if you use Prettier;
+- **Rename plugin prefixes** easily if you would like to;
+- **Bring your own plugins** and their rules will also be typed as much as possible.
 
 ## Installation
 
@@ -42,7 +42,7 @@ pnpm i -D eslint-config-un eslint@latest
 yarn add -D eslint-config-un eslint@latest # Yarn Berry only (v2+)
 ```
 
-Commonly used plugins are direct dependencies of this package, you don't need to install them separately.
+Commonly used plugins are direct dependencies of this package; you don't need to install them separately.
 We aim to update the dependencies within 1 month after their release.
 You can always override plugins' implementation with [`pluginOverrides` option](#pluginoverrides) or using your package manager's overrides functionality.
 
@@ -166,16 +166,16 @@ export default eslintConfig({
 <!-- eslint-disable-next-line markdown-preferences/heading-casing -->
 ## Configs and Sub-configs
 
-eslint-config-un has a concept of Configs and Sub-configs, further referred to as Configs.
+eslint-config-un has a concept of Configs and Sub-configs (collectively referred to as Configs in this section).
 They are similar to ESLint flat config objects, but with some useful extensions.
-Every Config is *usually* tied to a one or more ESLint plugins produces one or more ESLint flat config items.
+Every Config is *usually* tied to one or more ESLint plugins and produces one or more ESLint flat config items.
 
 You can enable any Config by setting it to `true` or an object with the Config's options.
 Passing `false` disables the Config.
-Passing an empty array to `files` disables the Config, but not its' Sub-configs.
+Passing an empty array to `files` disables the Config, but not its Sub-configs.
 
 Sub-config is a Config located within Config's options.
-If the parent config is disabled by passing `false`, all its' Sub-configs are disabled too.
+If the parent config is disabled by passing `false`, all its Sub-configs are disabled too.
 
 After evaluating all the flat configs, eslint-config-un will **load only those plugins that were actually used**, unless `loadPluginsOnDemand` option is set to `false`.
 
@@ -227,7 +227,7 @@ type UnConfig =
 
 They have exactly the same meaning as the corresponding ESLint flat config item properties, with the only difference being an empty array `[]` handling:
 
-- If you specify an empty array for `files`, the Config **will be disabled**, but of its' Sub-configs remain unaffected.
+- If you specify an empty array for `files`, the Config **will be disabled**, but its Sub-configs remain unaffected.
 - If you specify an empty array for `ignores`, the default ignore list won't be used.
 
 #### `overrides` and `overridesAny`
@@ -635,7 +635,7 @@ The final rule is going to be given a name `disable-autofix/<rule-name>` which w
 ### TypeScript
 
 Rules [requiring type information](https://typescript-eslint.io/rules/?=typeInformation), which are [known to be performance-demanding](https://typescript-eslint.io/getting-started/typed-linting/#performance), are *enabled* by default, and will be applied to the same files as `ts` config is applied to.
-It's just a little heads up; you should make your own decision whether to keep them enabled.
+This is just a heads-up; you should make your own decision whether to keep them enabled.
 Use `configTypeAware` to control to which files such rules will be applied to, if any.
 
 ### Frontend frameworks
@@ -646,15 +646,14 @@ Consult JSDoc of each config for more details.
 
 #### Vue
 
-By default, TypeScript rules will be enabled in `.vue` files if `enforceTypescriptInScriptSection` is set to `true` in vue's config options which in turn is *automatically* set to `true` if `ts` config is enabled.
+By default, TypeScript rules will be enabled in `.vue` files if `enforceTypescriptInScriptSection` is set to `true` in vue's config options, which in turn is *automatically* set to `true` if `ts` config is enabled.
 If you have `.vue` files authored in both TypeScript and JavaScript, use `enforceTypescriptInScriptSection.{files,ignores}` to manually specify TS & JS Vue components respectively.
 It is not currently possible to apply different ESLint rules depending on the value of `lang` attribute of `<script>` SFC section.
 
 #### Angular
 
 We support Angular versions from 13 to 20, all at once.
-You are expected to install `@angular-eslint/eslint-plugin` and `@angular-eslint/eslint-plugin-template` packages of the same major version as your Angular version, but installing a greater version would also likely work.
-With the latter, you can use the rules added in newer versions of `@angular-eslint/eslint-plugin*` on older Angular codebases.
+You are expected to install `@angular-eslint/eslint-plugin` and `@angular-eslint/eslint-plugin-template` packages of the same major version as your Angular version, but installing a higher version would also likely work, letting you use rules introduced in newer versions of `@angular-eslint/eslint-plugin*` on older Angular codebases.
 
 #### React
 
@@ -686,8 +685,7 @@ In addition, if you don't like the verbosity of the default prefix, you can use 
 ### Perfectionist
 
 In the `perfectionist` config, even if it's enabled, all rules and Sub-Configs (there is a Sub-Config corresponding to each rule) are turned *off* by default.
-If you want all rules to be on by default, you can manually set every single Sub-Config to `true` or use the simpler method.
-Just set this in the `perfectionist` config:
+If you want all rules to be on by default, you can manually set every single Sub-Config to `true`, or use the following shorthand — just set this in the `perfectionist` config:
 
 <!-- eslint-skip -->
 
@@ -751,7 +749,7 @@ This can be useful when this config is used to lint a repository of one of the b
 
 ### `loadPluginsOnDemand`
 
-This option allows to decide whether whether ESLint plugins will be loaded if they are actually used (`true` by default).
+This option controls whether ESLint plugins will be loaded if they are actually used (`true` by default).
 
 Using object notation, you can also specify concrete plugins that will be loaded.
 This can be useful if you enable certain plugin rules only be using [configuration comments](https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments).
@@ -784,7 +782,7 @@ Allows to override certain [`eslint-plugin-import-x`] plugin rules with implemen
 
 ### `gitignore`
 
-By default files from `.gitignore` (read from [the current working directory](https://nodejs.org/api/process.html#processcwd)) in the will be automatically added to the global [`ignores`](#ignores) list.
+By default, files from `.gitignore` (read from [the current working directory](https://nodejs.org/api/process.html#processcwd)) will be automatically added to the global [`ignores`](#ignores) list.
 Set this option to `false` to disable this behavior.
 You may also provide an object which configures [eslint-config-flat-gitignore](https://npmjs.com/eslint-config-flat-gitignore), which actually provides this functionality.
 
@@ -817,7 +815,7 @@ The cache, regardless of the storage, is considered fresh for 1 hour, unless one
 ## Environment variables
 
 All environment variables affecting eslint-config-un behavior start with `ESLINT_CONFIG_UN_`.
-Boolean values are transformed via `Boolean` constructor, meaning that if the value is `'0'`, is will be treated as `true`.
+Boolean values are transformed via `Boolean` constructor, meaning that if the value is `'0'`, it will be treated as `true`.
 
 ### `ESLINT_CONFIG_UN_CACHE_CONFIGS`
 
@@ -855,7 +853,7 @@ Info provided by [`is-in-editor` package](https://npmjs.com/is-in-editor).
 Use case: disable or enable certain rules or features in editor, likely to improve performance.
 
 > [!WARNING]
-> Use this option sparingly as disabling certain rules only in editor might cause false positive reports on unused directives, which are subject to removal with autofix.
+> Use this sparingly, as disabling certain rules only in the editor might cause false positive reports on unused directives, which are subject to removal with autofix.
 > We recommend also setting [`linterOptions.reportUnusedDisableDirectives`](https://eslint.org/docs/latest/use/configure/configuration-files#:~:text=reportUnusedDisableDirectives) to `!isInEditor()` for files affected by this option.
 
 #### `DEFAULT_GLOBAL_IGNORES`
@@ -871,7 +869,7 @@ All built-in plugins' options type generated by [`eslint-typegen` package](https
 
 #### Rule options generators
 
-Some useful rule options snippet generators are provided which can be aggravating to write manually:
+Some useful rule options snippet generators are provided which can be tedious to write manually:
 
 - `forbidImportingFromUtilityLibraries` for [`no-restricted-imports`](https://eslint.org/docs/latest/rules/no-restricted-imports)
 - `forbid$slotsInsideVueTemplates` for [`vue/no-restricted-syntax`](https://eslint.vuejs.org/rules/no-restricted-syntax.html)
@@ -899,7 +897,7 @@ Alternatively, you can `await` the `eslintConfig()` function and then add your o
 
 ### Do I have to install any of the used plugins?
 
-Many plugins are direct dependencies on this package, but the rest (the majority) are optional peer dependencies which means you're responsible for making sure they're installed. eslint-config-un will refuse to work if a plugin is used but not installed.
+Many plugins are direct dependencies of this package, but the rest (the majority) are optional peer dependencies which means you're responsible for making sure they're installed. eslint-config-un will refuse to work if a plugin is used but not installed.
 Please run ESLint with our config once to get the list of dependencies to be installed manually.
 
 ### How do I know how eslint-config-un configures rules?
@@ -948,8 +946,8 @@ Before committing, please do also run tests, formatter, other linters and tools 
       This ensures correct versions of plugins will be resolved by eslint-config-un and saves you from other weird and hard to debug problems.
    2. Install `eslint-config-un` following [the installation instructions](#installation).
 2. If you're using `.js` config file, we highly recommend that you migrate to `.ts` one, or at least add `@ts-check` TypeScript directive to the former.
-   Please don't forget to install [`jiti`](https://npmjs.com/jiti) for ESLint to able be to read your TypeScript config file.
-3. Following your intuition or/and configs' options JSDoc documentation, migrate the existing config to the closest eslint-config-un equivalent.
+   Please don't forget to install [`jiti`](https://npmjs.com/jiti) for ESLint to be able to read your TypeScript config file.
+3. Following your intuition and/or configs' options JSDoc documentation, migrate the existing config to the closest eslint-config-un equivalent.
    1. Run ESLint for the first time (without `--fix`!).
       The list of dependencies to be installed might be shown to you.
       Please review whether those plugins are actually used/needed and act accordingly: install necessary plugins and disable configs which require packages you do not wish to install.
@@ -999,7 +997,7 @@ Please specify `files`, `ignores` or disable `node` config altogether to avoid f
 
 ### I'm getting `The inferred type of 'default' cannot be named without a reference to './node_modules/eslint-config-un/dist/eslint.mjs'. This is likely not portable. A type annotation is necessary` kind of error when exporting the value returned by `eslintConfig()` in ESLint config file
 
-This error means this file is compiled by TypeScript with [`declaration: true` flag](https://www.typescriptlang.org/tsconfig/#declaration), but some file required to infer type type of the returned value cannot be accessed by the compiler.
+This error means this file is compiled by TypeScript with [`declaration: true` flag](https://www.typescriptlang.org/tsconfig/#declaration), but some file required to infer the type of the returned value cannot be accessed by the compiler.
 
 Possible fixes are:
 
