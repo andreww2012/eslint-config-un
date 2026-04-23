@@ -461,6 +461,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       },
       ripple: {
         configs: ['ripple'],
+        gitTag: (version) => `@tsrx/eslint-plugin@${version}`,
         ruleDocsUrl: null, // No docs
       },
       rxjs: {

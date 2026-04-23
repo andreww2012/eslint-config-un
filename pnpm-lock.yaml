@@ -333,11 +333,11 @@ importers:
         specifier: 0.0.1
         version: 0.0.1(eslint@9.39.2)(typescript@6.0.3)
       '@tsrx/eslint-parser':
-        specifier: 0.3.29
-        version: 0.3.29(@typescript-eslint/types@8.59.0)(eslint@9.39.2)(ripple@1.0.1)
+        specifier: 0.3.30
+        version: 0.3.30(@typescript-eslint/types@8.59.0)(eslint@9.39.2)(ripple@1.0.1)
       '@tsrx/eslint-plugin':
-        specifier: 0.3.29
-        version: 0.3.29(@tsrx/eslint-parser@0.3.29)(@typescript-eslint/parser@8.59.0)(eslint@9.39.2)
+        specifier: 0.3.30
+        version: 0.3.30(@tsrx/eslint-parser@0.3.30)(@typescript-eslint/parser@8.59.0)(eslint@9.39.2)
       '@types/eslint-plugin-security':
         specifier: 3.0.1
         version: 3.0.1
@@ -2818,6 +2818,10 @@ packages:
   '@next/eslint-plugin-next@16.2.4':
     resolution: {integrity: sha512-tOX826JJ96gYK/go18sPUgMq9FK1tqxBFfUCEufJb5XIkWFFmpgU7mahJANKGkHs7F41ir3tReJ3Lv5La0RvhA==}
 
+  '@noble/hashes@2.2.0':
+    resolution: {integrity: sha512-IYqDGiTXab6FniAgnSdZwgWbomxpy9FtYvLKs7wCUs2a8RkITG+DFGO1DM9cr+E3/RgADRpFjrKVaJ1z6sjtEg==}
+    engines: {node: '>= 20.19.0'}
+
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -4288,29 +4292,29 @@ packages:
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
 
+  '@tsrx/core@0.0.10':
+    resolution: {integrity: sha512-uLzEOUglmV7+2a8Lo6H6dRcR2Zt1oXvdCHuM/P2d6494JBLzveXx6kv0kuqVUs41WpAS0TPKpX8EJ2J85PJ9tg==}
+
   '@tsrx/core@0.0.6':
     resolution: {integrity: sha512-gTeJt/jibb4y+t/bmeUj7WSYDnDlfC057sZKrcsLgpoCoJxlGPmR8jS1lJzT5+iaWKZcSn/HOWq0LuCS0irx7w==}
 
-  '@tsrx/core@0.0.9':
-    resolution: {integrity: sha512-9cThAhYHEjoOlaSlTr6Oixuz7hJFgoWtqRNQETonNeoPe4UxpCH1tVOEdEgAi6aGldi9WIF/dXtb2kguvDsORQ==}
-
-  '@tsrx/eslint-parser@0.3.29':
-    resolution: {integrity: sha512-dnheOtxveGnn7M4BeEeZaw+bAzr48neoKkJnUkVWnA+hfBeZvuNPl7recJzTAXjBtdMGIz06O9SdFNkfiON74Q==}
+  '@tsrx/eslint-parser@0.3.30':
+    resolution: {integrity: sha512-pN1onzdkG1HYwndyrBytp+nPOpFfJFgOTLOhwixh7zcxkD28oIgC3Te8joAJuLurOYWEzIoPjlrs/L1D85/lng==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       eslint: '>=9.0.0'
       ripple: '*'
 
-  '@tsrx/eslint-plugin@0.3.29':
-    resolution: {integrity: sha512-ubN/HAqva9SMpB/7qzNp/rc8+V2t2bJXFgP+vkQgoEK1cqufMIwyKts6PnE0J1ARzYfEKF+wWfqFRvCtBY3lTg==}
+  '@tsrx/eslint-plugin@0.3.30':
+    resolution: {integrity: sha512-TgG9kykRmSGH48Mx9Fu7I7PwpFEV4JdcPJQQOVxs0g6tngoA9Cgiht23DX837EKCiz2sLuP6FBjWUPhGQQbgeQ==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@tsrx/eslint-parser': 0.3.29
+      '@tsrx/eslint-parser': 0.3.30
       '@typescript-eslint/parser': ^8.56.1
       eslint: '>=9.0.0'
 
-  '@tsrx/ripple@0.0.11':
-    resolution: {integrity: sha512-tYVh+gYlJH6/t3fZ8SXvSQugqjnZCcB0N/r4MSub3u6giOD26uOSFE8TPiZXu+LqV5j3AbanBtjm+0rW9Be0FQ==}
+  '@tsrx/ripple@0.0.12':
+    resolution: {integrity: sha512-iBo95NKjx+5ZakCPpc0L6XRYBMT0pxWqurGcdYdW0l35K1ZrsI7KJKIcPy6d0Djw4ajqBDrDdjdfGOV0rzwFfA==}
 
   '@tsrx/ripple@0.0.8':
     resolution: {integrity: sha512-XtMSRqB4/5fgKbtSWgcHBAMGSORPYPWT6TrUZTdw94ilTkcdguFCrE/rsxSTCFdfyip2n/fsgJkk9JxATvaMgQ==}
@@ -13881,6 +13885,8 @@ snapshots:
     dependencies:
       fast-glob: 3.3.1
 
+  '@noble/hashes@2.2.0': {}
+
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -15073,6 +15079,21 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
+  '@tsrx/core@0.0.10(@typescript-eslint/types@8.59.0)':
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.5
+      '@noble/hashes': 2.2.0
+      '@sveltejs/acorn-typescript': 1.0.9(acorn@8.16.0)
+      '@types/estree': 1.0.8
+      '@types/estree-jsx': 1.0.5
+      acorn: 8.16.0
+      esrap: 2.2.5(@typescript-eslint/types@8.59.0)
+      is-reference: 3.0.3
+      magic-string: 0.30.21
+      zimmerframe: 1.1.4
+    transitivePeerDependencies:
+      - '@typescript-eslint/types'
+
   '@tsrx/core@0.0.6(@typescript-eslint/types@8.59.0)':
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
@@ -15087,37 +15108,23 @@ snapshots:
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/core@0.0.9(@typescript-eslint/types@8.59.0)':
+  '@tsrx/eslint-parser@0.3.30(@typescript-eslint/types@8.59.0)(eslint@9.39.2)(ripple@1.0.1)':
     dependencies:
-      '@jridgewell/sourcemap-codec': 1.5.5
-      '@sveltejs/acorn-typescript': 1.0.9(acorn@8.16.0)
-      '@types/estree': 1.0.8
-      '@types/estree-jsx': 1.0.5
-      acorn: 8.16.0
-      esrap: 2.2.5(@typescript-eslint/types@8.59.0)
-      is-reference: 3.0.3
-      magic-string: 0.30.21
-      zimmerframe: 1.1.4
-    transitivePeerDependencies:
-      - '@typescript-eslint/types'
-
-  '@tsrx/eslint-parser@0.3.29(@typescript-eslint/types@8.59.0)(eslint@9.39.2)(ripple@1.0.1)':
-    dependencies:
-      '@tsrx/ripple': 0.0.11(@typescript-eslint/types@8.59.0)
+      '@tsrx/ripple': 0.0.12(@typescript-eslint/types@8.59.0)
       eslint: 9.39.2(jiti@2.6.1)
       ripple: 1.0.1(@typescript-eslint/types@8.59.0)
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/eslint-plugin@0.3.29(@tsrx/eslint-parser@0.3.29)(@typescript-eslint/parser@8.59.0)(eslint@9.39.2)':
+  '@tsrx/eslint-plugin@0.3.30(@tsrx/eslint-parser@0.3.30)(@typescript-eslint/parser@8.59.0)(eslint@9.39.2)':
     dependencies:
-      '@tsrx/eslint-parser': 0.3.29(@typescript-eslint/types@8.59.0)(eslint@9.39.2)(ripple@1.0.1)
+      '@tsrx/eslint-parser': 0.3.30(@typescript-eslint/types@8.59.0)(eslint@9.39.2)(ripple@1.0.1)
       '@typescript-eslint/parser': 8.59.0(eslint@9.39.2)(typescript@6.0.3)
       eslint: 9.39.2(jiti@2.6.1)
 
-  '@tsrx/ripple@0.0.11(@typescript-eslint/types@8.59.0)':
+  '@tsrx/ripple@0.0.12(@typescript-eslint/types@8.59.0)':
     dependencies:
-      '@tsrx/core': 0.0.9(@typescript-eslint/types@8.59.0)
+      '@tsrx/core': 0.0.10(@typescript-eslint/types@8.59.0)
       esrap: 2.2.5(@typescript-eslint/types@8.59.0)
       is-reference: 3.0.3
       zimmerframe: 1.1.4
