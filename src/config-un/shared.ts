@@ -49,7 +49,7 @@ type ValueOrEslintConfigWithValue<T> =
   | T
   | MaybeArray<Prettify<UnFlatConfigEntryFilesAndIgnores & {value?: T}>>;
 
-// NOTE: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs
+// ⚠️ IMPORTANT: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs (below)
 export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
   object)['rules'] = {
   // TODO add missing reasons for disabling autofixes
@@ -68,6 +68,9 @@ export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOption
   'vitest/prefer-lowercase-title': true, // Strings/symbols shouldn't be changed by autofix
 
   'github-actions/action-name-casing': true, // May break the name
+
+  'markdown-preferences/heading-casing': true, // Both *-casing rules may change the meaning of the text
+  'markdown-preferences/table-header-casing': true,
 };
 
 type UnConfigsSupportingArrays = keyof Pick<UnConfigs, 'format' | 'packageJson'>;
@@ -231,6 +234,8 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    * ```ts
    * {
    *   'case-police/string-check': true,
+   *   'markdown-preferences/heading-casing': true,
+   *   'markdown-preferences/table-header-casing': true,
    *   'ts/method-signature-style': true,
    *   'ts/no-unnecessary-type-arguments': true,
    *   'unicorn/catch-error-name': true,
