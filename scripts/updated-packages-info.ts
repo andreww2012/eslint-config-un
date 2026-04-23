@@ -459,6 +459,10 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         ruleDocsUrl: (ruleName) =>
           `https://ota-meshi.github.io/eslint-plugin-regexp/rules/${ruleName}.html`,
       },
+      ripple: {
+        configs: ['ripple'],
+        ruleDocsUrl: null, // No docs
+      },
       rxjs: {
         configs: ['rxjs'],
         ruleDocsUrl: (ruleName) =>
@@ -602,6 +606,10 @@ const PACKAGES_META: Record<string, PackageMeta> = {
   '@sveltejs/kit': {
     configs: ['svelte'],
     gitTag: (version) => `@sveltejs/kit@${version}`,
+    ruleDocsUrl: null,
+  },
+  '@tsrx/eslint-parser': {
+    configs: ['ripple'],
     ruleDocsUrl: null,
   },
   'astro-eslint-parser': {

@@ -11,6 +11,11 @@ export const parsersLoaders = {
     '@html-eslint/parser',
     () => import('@html-eslint/parser'),
   ),
+  '@tsrx/eslint-parser': genModuleLoader(
+    '@tsrx/eslint-parser',
+    '@tsrx/eslint-parser',
+    () => import('@tsrx/eslint-parser'),
+  ),
   'astro-eslint-parser': genModuleLoader(
     'astro-eslint-parser',
     'astro-eslint-parser',

@@ -285,6 +285,10 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   // @tanstack/start — whole-program analysis rules that are meaningless in isolated code snippets
   '@tanstack/start/no-async-client-component', // [runtime-only]
   '@tanstack/start/no-client-code-in-server-component', // [runtime-only]
+
+  // ripple — module-scope rules that don't make sense in isolated embedded code snippets
+  'ripple/no-module-scope-track', // [runtime-only]
+  'ripple/no-lazy-destructuring-in-modules', // [runtime-only]
 ] satisfies UnAllRuleNames[];
 
 export type RulesDisabledInEmbeddedCodeBlocksByDefault =

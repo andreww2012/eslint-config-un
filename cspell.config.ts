@@ -56,6 +56,7 @@ export default {
     'arkregex',
     'oxfmt',
     'splattributes', // Ember
+    'tsrx',
 
     // Technical words/terms
     'arraify',

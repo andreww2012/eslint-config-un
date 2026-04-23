@@ -529,6 +529,9 @@ export const pluginsLoaders = {
     'eslint-plugin-regexp',
     () => interopDefault(import('eslint-plugin-regexp')) as Promise<EslintPlugin>,
   ),
+  ripple: genModuleLoader('ripple', '@tsrx/eslint-plugin', () =>
+    interopDefault(import('@tsrx/eslint-plugin')),
+  ),
   rxjs: genModuleLoader(
     'rxjs',
     '@smarttools/eslint-plugin-rxjs',

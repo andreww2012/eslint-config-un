@@ -74,6 +74,7 @@ import type {QunitEslintConfigOptions} from './qunit';
 import type {QwikEslintConfigOptions} from './qwik';
 import type {ReactEslintConfigOptions} from './react';
 import type {RegexpEslintConfigOptions} from './regexp';
+import type {RippleEslintConfigOptions} from './ripple';
 import type {RxjsEslintConfigOptions} from './rxjs';
 import type {SecurityEslintConfigOptions} from './security';
 import type {SolidEslintConfigOptions} from './solid';
@@ -1038,6 +1039,21 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true
    */
   regexp: RegexpEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [Ripple](https://github.com/Ripple-TS/ripple) specific rules.
+   *
+   * 📁 Default `files`:
+   * - <code>**&#47;*.tsrx</code>
+   * - <code>**&#47;*.ripple</code>
+   * - <code>**&#47;*.?([cm])[jt]s</code>
+   *
+   * 🧩 Main plugin: [`@tsrx/eslint-plugin`](https://npmjs.com/@tsrx/eslint-plugin) ([docs](https://github.com/Ripple-TS/ripple/blob/HEAD/packages/eslint-plugin/README.md))
+   *
+   * ⚙️ Sub config(s): `setup`
+   * @default true <=> [`ripple`](https://npmjs.com/ripple) package is installed
+   */
+  ripple: RippleEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [RxJS](https://rxjs.dev) specific rules.

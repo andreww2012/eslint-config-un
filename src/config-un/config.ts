@@ -374,6 +374,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     qwik: {enabled: getIsConfigEnabled('qwik', ['@builder.io/qwik', '@qwik.dev/core'])},
     react: {enabled: getIsConfigEnabled('react', 'react')},
     regexp: {enabled: getIsConfigEnabled('regexp')},
+    ripple: {enabled: getIsConfigEnabled('ripple', 'ripple')},
     rxjs: {enabled: getIsConfigEnabled('rxjs', 'rxjs')},
     security: {enabled: getIsConfigEnabled('security', false)},
     solid: {enabled: getIsConfigEnabled('solid', 'solid-js')},
@@ -637,6 +638,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     // eslint-disable-next-line case-police/string-check
     loadUnConfig('nextJs', () => import('../configs/nextjs')),
     loadUnConfig('solid', () => import('../configs/solid')),
+    loadUnConfig('ripple', () => import('../configs/ripple')),
     loadUnConfig('jsInline', () => import('../configs/js-inline')),
     loadUnConfig('html', () => import('../configs/html')),
     loadUnConfig('math', () => import('../configs/math')),

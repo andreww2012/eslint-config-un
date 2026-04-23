@@ -115,6 +115,10 @@ export const GLOB_FLOW = '**/*.flow' as const;
 
 export const GLOB_EMBER_GLIMMER = '**/*.{gjs,gts}' as const;
 
+export const GLOB_TSRX = '**/*.tsrx' as const;
+
+export const GLOB_RIPPLE = '**/*.ripple' as const;
+
 /* Globs - misc */
 
 export const GLOB_PACKAGE_JSON = '**/package.json' as const;
@@ -244,4 +248,5 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'ember-source',
   'lit',
   '@nestjs/core',
+  'ripple',
 ] as const;

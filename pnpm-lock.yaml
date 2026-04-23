@@ -332,6 +332,12 @@ importers:
       '@tanstack/eslint-plugin-start':
         specifier: 0.0.1
         version: 0.0.1(eslint@9.39.2)(typescript@6.0.3)
+      '@tsrx/eslint-parser':
+        specifier: 0.3.29
+        version: 0.3.29(@typescript-eslint/types@8.59.0)(eslint@9.39.2)(ripple@1.0.1)
+      '@tsrx/eslint-plugin':
+        specifier: 0.3.29
+        version: 0.3.29(@tsrx/eslint-parser@0.3.29)(@typescript-eslint/parser@8.59.0)(eslint@9.39.2)
       '@types/eslint-plugin-security':
         specifier: 3.0.1
         version: 3.0.1
@@ -4279,6 +4285,33 @@ packages:
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
 
+  '@tsrx/core@0.0.6':
+    resolution: {integrity: sha512-gTeJt/jibb4y+t/bmeUj7WSYDnDlfC057sZKrcsLgpoCoJxlGPmR8jS1lJzT5+iaWKZcSn/HOWq0LuCS0irx7w==}
+
+  '@tsrx/core@0.0.9':
+    resolution: {integrity: sha512-9cThAhYHEjoOlaSlTr6Oixuz7hJFgoWtqRNQETonNeoPe4UxpCH1tVOEdEgAi6aGldi9WIF/dXtb2kguvDsORQ==}
+
+  '@tsrx/eslint-parser@0.3.29':
+    resolution: {integrity: sha512-dnheOtxveGnn7M4BeEeZaw+bAzr48neoKkJnUkVWnA+hfBeZvuNPl7recJzTAXjBtdMGIz06O9SdFNkfiON74Q==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      eslint: '>=9.0.0'
+      ripple: '*'
+
+  '@tsrx/eslint-plugin@0.3.29':
+    resolution: {integrity: sha512-ubN/HAqva9SMpB/7qzNp/rc8+V2t2bJXFgP+vkQgoEK1cqufMIwyKts6PnE0J1ARzYfEKF+wWfqFRvCtBY3lTg==}
+    engines: {node: '>=22.0.0'}
+    peerDependencies:
+      '@tsrx/eslint-parser': 0.3.29
+      '@typescript-eslint/parser': ^8.56.1
+      eslint: '>=9.0.0'
+
+  '@tsrx/ripple@0.0.11':
+    resolution: {integrity: sha512-tYVh+gYlJH6/t3fZ8SXvSQugqjnZCcB0N/r4MSub3u6giOD26uOSFE8TPiZXu+LqV5j3AbanBtjm+0rW9Be0FQ==}
+
+  '@tsrx/ripple@0.0.8':
+    resolution: {integrity: sha512-XtMSRqB4/5fgKbtSWgcHBAMGSORPYPWT6TrUZTdw94ilTkcdguFCrE/rsxSTCFdfyip2n/fsgJkk9JxATvaMgQ==}
+
   '@tufjs/canonical-json@2.0.0':
     resolution: {integrity: sha512-yVtV8zsdo8qFHe+/3kw81dSLyF7D576A5cCFCi4X7B39tWT7SekaEFUnvnWJHz+9qO7qJTah1JbrDjWKqFtdWA==}
     engines: {node: ^16.14.0 || >=18.0.0}
@@ -7133,6 +7166,14 @@ packages:
   esrap@1.4.9:
     resolution: {integrity: sha512-3OMlcd0a03UGuZpPeUC1HxR3nA23l+HEyCiZw3b3FumJIN9KphoGzDJKMXI1S72jVS1dsenDyQC0kJlO1U9E1g==}
 
+  esrap@2.2.5:
+    resolution: {integrity: sha512-/yLB1538mag+dn0wsePTe8C0rDIjUOaJpMs2McodSzmM2msWcZsBSdRtg6HOBt0A/r82BN+Md3pgwSc/uWt2Ig==}
+    peerDependencies:
+      '@typescript-eslint/types': ^8.2.0
+    peerDependenciesMeta:
+      '@typescript-eslint/types':
+        optional: true
+
   esrecurse@4.3.0:
     resolution: {integrity: sha512-KmfKL3b6G+RXvP8N1vr3Tq1kL/oCFgn2NYXEtqP8/L3pKapUA4G8cFVaoF3SU323CD4XypR/ffioHmkti6/Tag==}
     engines: {node: '>=4.0'}
@@ -9772,6 +9813,10 @@ packages:
   reusify@1.1.0:
     resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
+
+  ripple@1.0.1:
+    resolution: {integrity: sha512-8tqt1GIq0gofYrxa76Tbm57k+GoX8n1okIChP/sDkIIaY+PGoWS/zXmQXBylM+gMqixQL+oJxEzAaxSGEUhPow==}
+    deprecated: accidental publish
 
   rolldown-plugin-dts@0.23.2:
     resolution: {integrity: sha512-PbSqLawLgZBGcOGT3yqWBGn4cX+wh2nt5FuBGdcMHyOhoukmjbhYAl8NT9sE4U38Cm9tqLOIQeOrvzeayM0DLQ==}
@@ -14924,6 +14969,66 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
+  '@tsrx/core@0.0.6(@typescript-eslint/types@8.59.0)':
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.5
+      '@sveltejs/acorn-typescript': 1.0.9(acorn@8.16.0)
+      '@types/estree': 1.0.8
+      '@types/estree-jsx': 1.0.5
+      acorn: 8.16.0
+      esrap: 2.2.5(@typescript-eslint/types@8.59.0)
+      is-reference: 3.0.3
+      magic-string: 0.30.21
+      zimmerframe: 1.1.4
+    transitivePeerDependencies:
+      - '@typescript-eslint/types'
+
+  '@tsrx/core@0.0.9(@typescript-eslint/types@8.59.0)':
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.5
+      '@sveltejs/acorn-typescript': 1.0.9(acorn@8.16.0)
+      '@types/estree': 1.0.8
+      '@types/estree-jsx': 1.0.5
+      acorn: 8.16.0
+      esrap: 2.2.5(@typescript-eslint/types@8.59.0)
+      is-reference: 3.0.3
+      magic-string: 0.30.21
+      zimmerframe: 1.1.4
+    transitivePeerDependencies:
+      - '@typescript-eslint/types'
+
+  '@tsrx/eslint-parser@0.3.29(@typescript-eslint/types@8.59.0)(eslint@9.39.2)(ripple@1.0.1)':
+    dependencies:
+      '@tsrx/ripple': 0.0.11(@typescript-eslint/types@8.59.0)
+      eslint: 9.39.2(jiti@2.6.1)
+      ripple: 1.0.1(@typescript-eslint/types@8.59.0)
+    transitivePeerDependencies:
+      - '@typescript-eslint/types'
+
+  '@tsrx/eslint-plugin@0.3.29(@tsrx/eslint-parser@0.3.29)(@typescript-eslint/parser@8.59.0)(eslint@9.39.2)':
+    dependencies:
+      '@tsrx/eslint-parser': 0.3.29(@typescript-eslint/types@8.59.0)(eslint@9.39.2)(ripple@1.0.1)
+      '@typescript-eslint/parser': 8.59.0(eslint@9.39.2)(typescript@6.0.3)
+      eslint: 9.39.2(jiti@2.6.1)
+
+  '@tsrx/ripple@0.0.11(@typescript-eslint/types@8.59.0)':
+    dependencies:
+      '@tsrx/core': 0.0.9(@typescript-eslint/types@8.59.0)
+      esrap: 2.2.5(@typescript-eslint/types@8.59.0)
+      is-reference: 3.0.3
+      zimmerframe: 1.1.4
+    transitivePeerDependencies:
+      - '@typescript-eslint/types'
+
+  '@tsrx/ripple@0.0.8(@typescript-eslint/types@8.59.0)':
+    dependencies:
+      '@tsrx/core': 0.0.6(@typescript-eslint/types@8.59.0)
+      esrap: 2.2.5(@typescript-eslint/types@8.59.0)
+      is-reference: 3.0.3
+      zimmerframe: 1.1.4
+    transitivePeerDependencies:
+      - '@typescript-eslint/types'
+
   '@tufjs/canonical-json@2.0.0': {}
 
   '@tufjs/models@4.1.0':
@@ -18372,6 +18477,12 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
 
+  esrap@2.2.5(@typescript-eslint/types@8.59.0):
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.5
+    optionalDependencies:
+      '@typescript-eslint/types': 8.59.0
+
   esrecurse@4.3.0:
     dependencies:
       estraverse: 5.3.0
@@ -21623,6 +21734,17 @@ snapshots:
   retry@0.13.1: {}
 
   reusify@1.1.0: {}
+
+  ripple@1.0.1(@typescript-eslint/types@8.59.0):
+    dependencies:
+      '@tsrx/ripple': 0.0.8(@typescript-eslint/types@8.59.0)
+      '@types/estree': 1.0.8
+      '@types/estree-jsx': 1.0.5
+      clsx: 2.1.1
+      devalue: 5.7.1
+      esm-env: 1.2.2
+    transitivePeerDependencies:
+      - '@typescript-eslint/types'
 
   rolldown-plugin-dts@0.23.2(@typescript/native-preview@7.0.0-dev.20260420.1)(oxc-resolver@11.19.1)(rolldown@1.0.0-rc.16)(typescript@6.0.3):
     dependencies:

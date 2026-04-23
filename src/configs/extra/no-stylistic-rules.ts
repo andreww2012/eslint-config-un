@@ -612,6 +612,9 @@ const ALL_STYLISTIC_RULES = {
     'unicode-escape': true,
     'use-ignore-case': true,
   },
+  ripple: {
+    // None
+  },
   rxjs: {
     finnish: true,
     'no-finnish': true,

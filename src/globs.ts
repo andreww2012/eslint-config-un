@@ -67,6 +67,8 @@ export {
   GLOB_GRAPHQL,
   GLOB_FLOW,
   GLOB_EMBER_GLIMMER,
+  GLOB_TSRX,
+  GLOB_RIPPLE,
   // --
   GLOB_PACKAGE_JSON,
   // --
