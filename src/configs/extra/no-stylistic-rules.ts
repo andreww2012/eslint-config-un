@@ -950,6 +950,7 @@ const ALL_STYLISTIC_RULES = {
   zod: {
     'array-style': true,
     'consistent-import': true,
+    'consistent-schema-output-type-style': true,
     'no-number-schema-with-int': true,
     'prefer-namespace-import': true,
     'require-schema-suffix': true,
