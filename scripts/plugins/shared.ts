@@ -96,7 +96,7 @@ export const isLikelyEslintPlugin = (packageName: string, db: EslintPluginsDb) =
 export const ExecuteAnyEslintPluginWorkerInitialDataZod = z.strictObject({
   packageName: z.string(),
 });
-export type ExecuteAnyEslintPluginWorkerInitialData = z.infer<
+export type ExecuteAnyEslintPluginWorkerInitialData = z.output<
   typeof ExecuteAnyEslintPluginWorkerInitialDataZod
 >;
 

@@ -32,7 +32,7 @@ const EslintPluginsDbZod = z.record(
     .nullable(),
 );
 
-export type EslintPluginsDb = z.infer<typeof EslintPluginsDbZod>;
+export type EslintPluginsDb = z.output<typeof EslintPluginsDbZod>;
 
 const knownEslintPluginsPath = path.join(import.meta.dirname, '../../data/eslint-plugins-db.json');
 
