@@ -1067,6 +1067,24 @@ To keep major version bumps meaningful and rare, we follow standard SemVer with 
 Major versions are released as accumulated breaking changes warrant — there is no fixed cadence.
 Non-breaking improvements ship continuously as minor and patch releases on the current stable major.
 
+## Contributors
+
+<!-- eslint-disable markdown-preferences/padding-line-between-blocks -->
+<!-- cspell:disable -->
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+<!-- eslint-enable markdown-preferences/padding-line-between-blocks -->
+
+<!-- cspell:enable -->
+
 [TanStack]: ./assets/tanstack.png
 [Astro]: ./assets/devicon-astro.svg
 [@eslint-react/eslint-plugin]: https://npmx.dev/@eslint-react/eslint-plugin

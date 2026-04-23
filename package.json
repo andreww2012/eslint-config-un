@@ -38,6 +38,8 @@
     "deps"
   ],
   "scripts": {
+    "contrib:add": "all-contributors add",
+    "contrib:gen": "all-contributors generate",
     "u:after": "nr u:info && nr lint:eslint:fix package.json && nr typegen && nr u:test",
     "u:after:dev": "nr u:info && nr knip && nr spellcheck && nr u:test",
     "u:info": "node --import tsx/esm scripts/updated-packages-info.ts",
@@ -212,6 +214,7 @@
     "@vitest/coverage-v8": "4.1.4",
     "@vitest/eslint-plugin": "1.6.16",
     "@vitest/ui": "4.1.4",
+    "all-contributors-cli": "6.26.1",
     "angular-eslint-plugin-template15": "npm:@angular-eslint/eslint-plugin-template@15.2.1",
     "angular-eslint-plugin-template17": "npm:@angular-eslint/eslint-plugin-template@17.5.3",
     "angular-eslint-plugin18": "npm:@angular-eslint/eslint-plugin@18.4.3",

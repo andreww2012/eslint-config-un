@@ -14,6 +14,7 @@ export default {
     'patches/**',
     '**/temp/**', // TODO why gitignore doesn't work?
     'data/eslint-plugins-db.json',
+    '.all-contributorsrc',
   ],
   dictionaries: ['npm', 'node', 'typescript', 'fullstack'],
   words: [
