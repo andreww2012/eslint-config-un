@@ -816,8 +816,10 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('prefer-define-options', isMin3_3 ? ERROR : OFF) /** @since 9.13.0 */
     .addRule('prefer-prop-type-boolean-first', ERROR) /** @since 8.6.0 */
     .addRule('prefer-separate-static-class', ERROR) /** @since 8.2.0 */
+    .addRule('prefer-single-event-payload', ERROR) /** @since 10.9.0 */
     .addRule('prefer-true-attribute-shorthand', ERROR) /** @since 8.5.0 */
     .addRule('prefer-use-template-ref', preferUseTemplateRef ? ERROR : OFF) /** @since 9.31.0 */
+    .addRule('prefer-v-model', ERROR) /** @since 10.9.0 */
     .addRule('require-default-export', ERROR) /** @since 9.28.0 */
     .addRule('require-direct-export', ERROR) /** @since 9.28.0 */
     .addRule('require-emit-validator', OFF) /** @since 7.10.0 */
