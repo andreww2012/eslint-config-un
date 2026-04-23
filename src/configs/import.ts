@@ -19,7 +19,7 @@ export interface ImportEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'import'> {
   /**
-   * [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) plugin
+   * [`eslint-plugin-import-x`](https://npmx.dev/eslint-plugin-import-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned directly to `settings` flat config option with keys transformed to
    * `import-x/<original property name in kebab case>`
@@ -48,7 +48,7 @@ export interface ImportEslintConfigOptions<
   /**
    * Recognized automatically and normally should not be set manually.
    *
-   * When enabled, creates a [`eslint-import-resolver-typescript`](https://npmjs.com/eslint-import-resolver-typescript) resolver, which settings can be overridden
+   * When enabled, creates a [`eslint-import-resolver-typescript`](https://npmx.dev/eslint-import-resolver-typescript) resolver, which settings can be overridden
    * using `tsResolverOptions` option.
    */
   isTypescriptEnabled?: boolean;

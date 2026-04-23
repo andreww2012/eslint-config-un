@@ -34,7 +34,7 @@ export interface TailwindEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'tailwindcss'> {
   /**
-   * [`eslint-plugin-tailwindcss`](https://npmjs.com/eslint-plugin-tailwindcss) plugin
+   * [`eslint-plugin-tailwindcss`](https://npmx.dev/eslint-plugin-tailwindcss) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `tailwindcss` property
    * and applied to the resolved `files` and `ignores` of this config.

@@ -132,7 +132,7 @@ interface ReactXSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, UnRulesConfigPartial<'@eslint-react'>> {
   /**
-   * [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) plugin
+   * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `react-x` property
    * and applied to the resolved `files` and `ignores` of this config.
@@ -193,7 +193,7 @@ interface HooksSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'react-hooks'> {
   /**
-   * [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks) plugin
+   * [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `react-hooks` property
    * and applied to the resolved `files` and `ignores` of this config.
@@ -241,7 +241,7 @@ export interface ReactEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'react'> {
   /**
-   * [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react) plugin
+   * [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `react` property
    * and applied to the resolved `files` and `ignores` of this config.
@@ -254,7 +254,7 @@ export interface ReactEslintConfigOptions<
 
   /**
    * Enables or specifies the configuration for
-   * [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) plugin.
+   * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) plugin.
    *
    * Only includes
    * [runtime agnostic ("X")](https://eslint-react.xyz/docs/rules/overview#x-rules) and
@@ -272,7 +272,7 @@ export interface ReactEslintConfigOptions<
 
   /**
    * Enables or specifies the configuration for
-   * [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks) plugin,
+   * [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks) plugin,
    * as well as `no-direct-set-state-in-use-effect` rule from `@eslint-react/eslint-plugin`
    * (unless `pluginX` option is set to `never` on `react` config).
    *
@@ -283,8 +283,8 @@ export interface ReactEslintConfigOptions<
 
   /**
    * Enables or specifies the configuration for DOM specific rules from
-   * [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin) and
-   * [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react) plugins.
+   * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) and
+   * [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) plugins.
    *
    * To avoid including the rules from any of these plugins, set `pluginX` option to
    * `never` or `avoid` to completely ignore `@eslint-react/eslint-plugin` or
@@ -302,7 +302,7 @@ export interface ReactEslintConfigOptions<
 
   /**
    * Enables or specifies the configuration for
-   * [`eslint-plugin-react-refresh`](https://npmjs.com/eslint-plugin-react-refresh) plugin.
+   * [`eslint-plugin-react-refresh`](https://npmx.dev/eslint-plugin-react-refresh) plugin.
    *
    * - By default will be applied to JSX files only, as per the plugin recommendation.
    * - Will set `allowConstantExport: true` if `vite` package is installed.
@@ -323,7 +323,7 @@ export interface ReactEslintConfigOptions<
 
   /**
    * Enables or specifies the configuration for
-   * [`eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme`](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme)
+   * [`eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme`](https://npmx.dev/eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme)
    * plugin.
    *
    * By default will use the same `files` and `ignores` as the parent config.
@@ -334,7 +334,7 @@ export interface ReactEslintConfigOptions<
     | UnFlatConfigEntryBase<ExtraPlugins, 'react-you-might-not-need-an-effect'>;
 
   /**
-   * Controls how rules from [@eslint-react/eslint-plugin](https://npmjs.com/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react) are used.
+   * Controls how rules from [@eslint-react/eslint-plugin](https://npmx.dev/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) are used.
    * - `prefer`: if the same(-ish) rule exists both in `@eslint-react/eslint-plugin`
    * and `eslint-plugin-react` (the full list is below), use the one from
    * `@eslint-react/eslint-plugin`. Use all the other unique rules from both of these plugins.

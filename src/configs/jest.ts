@@ -53,7 +53,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     UnFlatConfigEntryBase<ExtraPlugins, 'jest'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
-   * [`eslint-plugin-jest`](https://npmjs.com/eslint-plugin-jest) plugin
+   * [`eslint-plugin-jest`](https://npmx.dev/eslint-plugin-jest) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `jest` property
    * and applied to the resolved `files` and `ignores` of this config,
@@ -81,7 +81,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   };
 
   /**
-   * Enables or specifies the configuration for the [`eslint-plugin-jest-extended`](https://npmjs.com/eslint-plugin-jest-extended) plugin.
+   * Enables or specifies the configuration for the [`eslint-plugin-jest-extended`](https://npmx.dev/eslint-plugin-jest-extended) plugin.
    * @default true <=> `jest-extended` package is installed
    */
   configJestExtended?: boolean | JestExtendedSubConfigOptions<ExtraPlugins>;
@@ -170,7 +170,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   /**
    * Enforces the minimum and maximum number of arguments that `expect` can take, and is required to take.
    *
-   * This is useful when you're using libraries that increase the number of arguments supported by expect, such as [jest-expect-message](https://npmjs.com/jest-expect-message).
+   * This is useful when you're using libraries that increase the number of arguments supported by expect, such as [jest-expect-message](https://npmx.dev/jest-expect-message).
    *
    * *(from Jest docs)*
    *
@@ -468,7 +468,7 @@ export default (async (context, optionsRaw) => {
     .enableConfigTesterForPlugin('jest-extended')
     .addOverrides();
 
-  // TODO https://npmjs.com/eslint-plugin-jest-dom ?
+  // TODO https://npmx.dev/eslint-plugin-jest-dom ?
   // Other plugins: eslint-plugin-jest-async, eslint-plugin-jest-formatting, eslint-plugin-jest-mock-config, eslint-plugin-jest-playwright, eslint-plugin-jest-react, eslint-plugin-jest-test-each-formatting
 
   return {

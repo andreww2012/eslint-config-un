@@ -65,7 +65,7 @@ interface RequireFieldsOption {
 export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnFlatConfigEntryBase<ExtraPlugins, 'package-json'>, RequireFieldsOption {
   /**
-   * [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json) plugin
+   * [`eslint-plugin-package-json`](https://npmx.dev/eslint-plugin-package-json) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `packageJson` property
    * and applied to the resolved `files` and `ignores` of this config.
@@ -94,7 +94,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * The provided value will be **MERGED** with the default list.
    * @default {devDependencies: true, dependencies: true, peerDependencies: true, peerDependenciesMeta: true, optionalDependencies: true, overrides: true, resolutions: true, dependenciesMeta: true, 'pnpm.allowedDeprecatedVersions': true, 'pnpm.overrides': true, 'pnpm.packageExtensions': true, 'pnpm.patchedDependencies': true, 'pnpm.peerDependencyRules.allowedVersions': true}
    * @see https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/sort-collections.md
-   * @see https://docs.npmjs.com/cli/configuring-npm/package-json
+   * @see https://docs.npmx.dev/cli/configuring-npm/package-json
    */
   collectionsToSort?: PackageJsonCollectionsToSort;
 
@@ -104,7 +104,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * - `false`: do not enforce anything.
    *
    * Affected rules:
-   * - [`node-dependencies/absolute-version`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/absolute-version.html) (yes, it will use the rule from another plugin, [`eslint-plugin-node-dependencies`](https://npmjs.com/eslint-plugin-node-dependencies), for simplicity)
+   * - [`node-dependencies/absolute-version`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/absolute-version.html) (yes, it will use the rule from another plugin, [`eslint-plugin-node-dependencies`](https://npmx.dev/eslint-plugin-node-dependencies), for simplicity)
    * @default false
    */
   enforceAbsoluteVersion?:

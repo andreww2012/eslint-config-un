@@ -15,7 +15,7 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     UnFlatConfigEntryBase<ExtraPlugins, '@html-eslint'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
-   * [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin) plugin
+   * [`@html-eslint/eslint-plugin`](https://npmx.dev/@html-eslint/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `html` property
    * and applied to the resolved `files` and `ignores` of this config.

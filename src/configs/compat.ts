@@ -12,7 +12,7 @@ export interface CompatEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'compat'> {
   /**
-   * [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat) plugin
+   * [`eslint-plugin-compat`](https://npmx.dev/eslint-plugin-compat) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned directly to `settings` flat config option
    * and applied to the resolved `files` and `ignores` of this config.

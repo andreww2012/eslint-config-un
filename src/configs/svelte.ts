@@ -19,7 +19,7 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
     UnFlatConfigEntryBase<ExtraPlugins, 'svelte'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
-   * [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte) plugin
+   * [`eslint-plugin-svelte`](https://npmx.dev/eslint-plugin-svelte) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `svelte` property
    * and applied to the resolved `files` and `ignores` of this config.
@@ -109,7 +109,7 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   svelteVersion?: number;
 
   /**
-   * Whether [`prettier-plugin-svelte`](https://npmjs.com/prettier-plugin-svelte)
+   * Whether [`prettier-plugin-svelte`](https://npmx.dev/prettier-plugin-svelte)
    * is used. If `true`, will disable
    * [a number of stylistic rules](https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts).
    * @default detected automatically

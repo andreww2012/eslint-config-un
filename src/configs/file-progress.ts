@@ -11,7 +11,7 @@ export interface FileProgressEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'file-progress'> {
   /**
-   * [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress) plugin
+   * [`eslint-plugin-file-progress`](https://npmx.dev/eslint-plugin-file-progress) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `progress` property
    * and applied to the resolved `files` and `ignores` of this config.

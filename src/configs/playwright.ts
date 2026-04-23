@@ -18,7 +18,7 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
     UnFlatConfigEntryBase<ExtraPlugins, 'playwright'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
-   * [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright) plugin
+   * [`eslint-plugin-playwright`](https://npmx.dev/eslint-plugin-playwright) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `playwright` property
    * and applied to the resolved `files` and `ignores` of this config.

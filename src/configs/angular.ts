@@ -91,7 +91,7 @@ export interface AngularEslintConfigOptions<
    *
    * 📁 Default `files`: <code>**&#47;*.html</code>
    *
-   * 🧩 Main plugin: [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template)
+   * 🧩 Main plugin: [`@angular-eslint/eslint-plugin-template`](https://npmx.dev/@angular-eslint/eslint-plugin-template)
    * ([docs](https://github.com/angular-eslint/angular-eslint/tree/main/packages/eslint-plugin-template#readme))
    * @default true
    */
@@ -103,8 +103,8 @@ export interface AngularEslintConfigOptions<
    *
    * Used to determine which rules will be available based on its availability
    * in the same major version of
-   * [`@angular-eslint/eslint-plugin`](https://npmjs.com/@angular-eslint/eslint-plugin) and
-   * [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template)
+   * [`@angular-eslint/eslint-plugin`](https://npmx.dev/@angular-eslint/eslint-plugin) and
+   * [`@angular-eslint/eslint-plugin-template`](https://npmx.dev/@angular-eslint/eslint-plugin-template)
    * packages.
    *
    * Unavailable rules can be ported by specifying them in `portRules` option.

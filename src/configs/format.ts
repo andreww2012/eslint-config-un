@@ -35,7 +35,7 @@ export interface FormatEslintConfigOptions<
   /**
    * If the file format you're trying to format is not parsed by any ESLint parser,
    * make sure to set this option to `true` for such files.
-   * This will use [`eslint-parser-plain`](https://npmjs.com/eslint-parser-plain) for them.
+   * This will use [`eslint-parser-plain`](https://npmx.dev/eslint-parser-plain) for them.
    */
   usePlainParser?: boolean;
 }

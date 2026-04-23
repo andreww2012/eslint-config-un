@@ -18,7 +18,7 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
     UnFlatConfigEntryBase<ExtraPlugins, 'mocha'>,
     NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
   /**
-   * [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha) plugin
+   * [`eslint-plugin-mocha`](https://npmx.dev/eslint-plugin-mocha) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `settings` object with keys transformed to
    * `mocha/<property>` and applied to the resolved `files` and `ignores` of this config.

@@ -246,7 +246,7 @@ export const analyze = Effect.gen(function* () {
 
         return {
           // TODO rendering of `\n` is broken
-          'Plugin name': `${statusMeta.emoji}${statusId === 'declined' ? `\n(${plugin.status.reason})` : ''}${statusId === 'accepted' ? `(${plugin.status.priority})` : ''} https://npmjs.com/${styleText('blueBright', plugin.name)}`,
+          'Plugin name': `${statusMeta.emoji}${statusId === 'declined' ? `\n(${plugin.status.reason})` : ''}${statusId === 'accepted' ? `(${plugin.status.priority})` : ''} https://npmx.dev/${styleText('blueBright', plugin.name)}`,
 
           'Rules count':
             pluginInfo == null

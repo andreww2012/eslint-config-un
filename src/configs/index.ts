@@ -145,10 +145,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`@angular-eslint/eslint-plugin`](https://npmjs.com/@angular-eslint/eslint-plugin) ([docs](https://github.com/angular-eslint/angular-eslint/tree/main/packages/eslint-plugin#readme))
+   * 🧩 Main plugin: [`@angular-eslint/eslint-plugin`](https://npmx.dev/@angular-eslint/eslint-plugin) ([docs](https://github.com/angular-eslint/angular-eslint/tree/main/packages/eslint-plugin#readme))
    *
    * ⚙️ Sub config(s): `template`
-   * @default true <=> [`@angular/core`](https://npmjs.com/@angular/core) package is installed
+   * @default true <=> [`@angular/core`](https://npmx.dev/@angular/core) package is installed
    */
   angular: AngularEslintConfigOptions<ExtraPlugins>;
 
@@ -159,7 +159,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-antfu`](https://npmjs.com/eslint-plugin-antfu) ([docs](https://github.com/antfu/eslint-plugin-antfu#readme))
+   * 🧩 Main plugin: [`eslint-plugin-antfu`](https://npmx.dev/eslint-plugin-antfu) ([docs](https://github.com/antfu/eslint-plugin-antfu#readme))
    * @default false
    */
   antfu: AntfuEslintConfigOptions<ExtraPlugins>;
@@ -169,10 +169,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.astro</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-astro`](https://npmjs.com/eslint-plugin-astro) ([docs](https://ota-meshi.github.io/eslint-plugin-astro))
+   * 🧩 Main plugin: [`eslint-plugin-astro`](https://npmx.dev/eslint-plugin-astro) ([docs](https://ota-meshi.github.io/eslint-plugin-astro))
    *
    * ⚙️ Sub config(s): `jsxA11y`
-   * @default true <=> [`astro`](https://npmjs.com/astro) package is installed
+   * @default true <=> [`astro`](https://npmx.dev/astro) package is installed
    */
   astro: AstroEslintConfigOptions<ExtraPlugins>;
 
@@ -183,10 +183,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
    * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-ava`](https://npmjs.com/eslint-plugin-ava) ([docs](https://github.com/avajs/eslint-plugin-ava))
+   * 🧩 Main plugin: [`eslint-plugin-ava`](https://npmx.dev/eslint-plugin-ava) ([docs](https://github.com/avajs/eslint-plugin-ava))
    *
    * ⚙️ Sub config(s): `noOnlyTests`
-   * @default true <=> [`ava`](https://npmjs.com/ava) package is installed
+   * @default true <=> [`ava`](https://npmx.dev/ava) package is installed
    */
   ava: AvaEslintConfigOptions<ExtraPlugins>;
 
@@ -195,7 +195,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-barrel-files`](https://npmjs.com/eslint-plugin-barrel-files)
+   * 🧩 Main plugin: [`eslint-plugin-barrel-files`](https://npmx.dev/eslint-plugin-barrel-files)
    * ([docs](https://github.com/thepassle/eslint-plugin-barrel-files#readme))
    * @default false
    */
@@ -206,8 +206,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss) ([docs](https://github.com/schoero/eslint-plugin-better-tailwindcss))
-   * @default true <=> [`tailwindcss`](https://npmjs.com/tailwindcss) package is installed
+   * 🧩 Main plugin: [`eslint-plugin-better-tailwindcss`](https://npmx.dev/eslint-plugin-better-tailwindcss) ([docs](https://github.com/schoero/eslint-plugin-better-tailwindcss))
+   * @default true <=> [`tailwindcss`](https://npmx.dev/tailwindcss) package is installed
    */
   betterTailwind: BetterTailwindEslintConfigOptions<ExtraPlugins>;
 
@@ -216,7 +216,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-boundaries`](https://npmjs.com/eslint-plugin-boundaries) ([docs](https://www.jsboundaries.dev))
+   * 🧩 Main plugin: [`eslint-plugin-boundaries`](https://npmx.dev/eslint-plugin-boundaries) ([docs](https://www.jsboundaries.dev))
    * @default false
    */
   boundaries: BoundariesEslintConfigOptions<ExtraPlugins>;
@@ -227,7 +227,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-case-police`](https://npmjs.com/eslint-plugin-case-police) ([docs](https://github.com/antfu/case-police))
+   * 🧩 Main plugin: [`eslint-plugin-case-police`](https://npmx.dev/eslint-plugin-case-police) ([docs](https://github.com/antfu/case-police))
    * @default false
    */
   casePolice: CasePoliceEslintConfigOptions<ExtraPlugins>;
@@ -239,7 +239,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-check-file`](https://npmjs.com/eslint-plugin-check-file) ([docs](https://github.com/dukeluo/eslint-plugin-check-file#readme))
+   * 🧩 Main plugin: [`eslint-plugin-check-file`](https://npmx.dev/eslint-plugin-check-file) ([docs](https://github.com/dukeluo/eslint-plugin-check-file#readme))
    *
    * ⚙️ Sub config(s): `enableCheckFileProcessor`
    * @default false
@@ -274,9 +274,9 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-clsx`](https://npmjs.com/eslint-plugin-clsx)
+   * 🧩 Main plugin: [`eslint-plugin-clsx`](https://npmx.dev/eslint-plugin-clsx)
    * ([docs](https://github.com/temoncher/eslint-plugin-clsx#readme))
-   * @default true <=> [`clsx`](https://npmjs.com/clsx) package is installed
+   * @default true <=> [`clsx`](https://npmx.dev/clsx) package is installed
    */
   clsx: ClsxEslintConfigOptions<ExtraPlugins>;
 
@@ -285,7 +285,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-command`](https://npmjs.com/eslint-plugin-command) ([docs](https://eslint-plugin-command.antfu.me))
+   * 🧩 Main plugin: [`eslint-plugin-command`](https://npmx.dev/eslint-plugin-command) ([docs](https://eslint-plugin-command.antfu.me))
    * @default false
    */
   command: CommandEslintConfigOptions<ExtraPlugins>;
@@ -295,7 +295,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat) ([docs](https://github.com/amilajack/eslint-plugin-compat))
+   * 🧩 Main plugin: [`eslint-plugin-compat`](https://npmx.dev/eslint-plugin-compat) ([docs](https://github.com/amilajack/eslint-plugin-compat))
    * @default false
    */
   compat: CompatEslintConfigOptions<ExtraPlugins>;
@@ -305,7 +305,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`@cspell/eslint-plugin`](https://npmjs.com/package/@cspell/eslint-plugin) ([docs](https://github.com/streetsidesoftware/cspell/tree/HEAD/packages/cspell-eslint-plugin#readme))
+   * 🧩 Main plugin: [`@cspell/eslint-plugin`](https://npmx.dev/@cspell/eslint-plugin) ([docs](https://github.com/streetsidesoftware/cspell/tree/HEAD/packages/cspell-eslint-plugin#readme))
    * @default false
    */
   cspell: CspellEslintConfigOptions<ExtraPlugins>;
@@ -315,8 +315,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.css</code>
    *
-   * 🧩 Main plugin: [`@eslint/css`](https://npmjs.com/@eslint/css) ([docs](https://github.com/eslint/css))
-   * @default true <=> [`stylelint`](https://npmjs.com/stylelint) package is NOT installed
+   * 🧩 Main plugin: [`@eslint/css`](https://npmx.dev/@eslint/css) ([docs](https://github.com/eslint/css))
+   * @default true <=> [`stylelint`](https://npmx.dev/stylelint) package is NOT installed
    */
   css: CssEslintConfigOptions<ExtraPlugins>;
 
@@ -325,7 +325,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css) ([docs](https://ota-meshi.github.io/eslint-plugin-css))
+   * 🧩 Main plugin: [`eslint-plugin-css`](https://npmx.dev/eslint-plugin-css) ([docs](https://ota-meshi.github.io/eslint-plugin-css))
    * @default true
    */
   cssInJs: CssInJsEslintConfigOptions<ExtraPlugins>;
@@ -337,10 +337,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
    * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-cypress`](https://npmjs.com/eslint-plugin-cypress) ([docs](https://github.com/cypress-io/eslint-plugin-cypress))
+   * 🧩 Main plugin: [`eslint-plugin-cypress`](https://npmx.dev/eslint-plugin-cypress) ([docs](https://github.com/cypress-io/eslint-plugin-cypress))
    *
    * ⚙️ Sub config(s): `noOnlyTests`
-   * @default true <=> [`cypress`](https://npmjs.com/cypress) package is installed
+   * @default true <=> [`cypress`](https://npmx.dev/cypress) package is installed
    */
   cypress: CypressEslintConfigOptions<ExtraPlugins>;
 
@@ -349,7 +349,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-de-morgan`](https://npmjs.com/eslint-plugin-de-morgan) ([docs](https://github.com/azat-io/eslint-plugin-de-morgan))
+   * 🧩 Main plugin: [`eslint-plugin-de-morgan`](https://npmx.dev/eslint-plugin-de-morgan) ([docs](https://github.com/azat-io/eslint-plugin-de-morgan))
    * @default false
    */
   deMorgan: DeMorganEslintConfigOptions<ExtraPlugins>;
@@ -363,7 +363,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;package.json</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-depend`](https://npmjs.com/eslint-plugin-depend) ([docs](https://github.com/es-tooling/eslint-plugin-depend))
+   * 🧩 Main plugin: [`eslint-plugin-depend`](https://npmx.dev/eslint-plugin-depend) ([docs](https://github.com/es-tooling/eslint-plugin-depend))
    * @default false
    */
   depend: DependEslintConfigOptions<ExtraPlugins>;
@@ -373,8 +373,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]sx</code>
    *
-   * 🧩 Main plugin: [`@docusaurus/eslint-plugin`](https://npmjs.com/@docusaurus/eslint-plugin) ([docs](https://docusaurus.io/docs/api/misc/@docusaurus/eslint-plugin))
-   * @default true <=> [`@docusaurus/core`](https://npmjs.com/@docusaurus/core) package is installed
+   * 🧩 Main plugin: [`@docusaurus/eslint-plugin`](https://npmx.dev/@docusaurus/eslint-plugin) ([docs](https://docusaurus.io/docs/api/misc/@docusaurus/eslint-plugin))
+   * @default true <=> [`@docusaurus/core`](https://npmx.dev/@docusaurus/core) package is installed
    */
   docusaurus: DocusaurusEslintConfigOptions<ExtraPlugins>;
 
@@ -384,7 +384,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: ❌ none, sub configs are used instead
    *
-   * 🧩 Main plugin: [`@e18e/eslint-plugin`](https://npmjs.com/@e18e/eslint-plugin)
+   * 🧩 Main plugin: [`@e18e/eslint-plugin`](https://npmx.dev/@e18e/eslint-plugin)
    * ([docs](https://github.com/e18e/eslint-plugin#readme))
    *
    * ⚙️ Sub config(s): `modernization`, `moduleReplacements`, `performanceImprovements`
@@ -399,10 +399,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*.?([cm])[jt]s</code>
    * - <code>**&#47;*.{gjs,gts}</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-ember`](https://npmjs.com/eslint-plugin-ember) ([docs](https://github.com/ember-cli/eslint-plugin-ember))
+   * 🧩 Main plugin: [`eslint-plugin-ember`](https://npmx.dev/eslint-plugin-ember) ([docs](https://github.com/ember-cli/eslint-plugin-ember))
    *
    * ⚙️ Sub config(s): `testFiles`
-   * @default true <=> [`ember-source`](https://npmjs.com/ember-source) package is installed
+   * @default true <=> [`ember-source`](https://npmx.dev/ember-source) package is installed
    */
   ember: EmberEslintConfigOptions<ExtraPlugins>;
 
@@ -411,7 +411,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-erasable-syntax-only`](https://npmjs.com/eslint-plugin-erasable-syntax-only) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only))
+   * 🧩 Main plugin: [`eslint-plugin-erasable-syntax-only`](https://npmx.dev/eslint-plugin-erasable-syntax-only) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only))
    * @default false
    */
   erasableSyntaxOnly: ErasableSyntaxOnlyEslintConfigOptions<ExtraPlugins>;
@@ -421,7 +421,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-es-x`](https://npmjs.com/eslint-plugin-es-x) ([docs](https://eslint-community.github.io/eslint-plugin-es-x))
+   * 🧩 Main plugin: [`eslint-plugin-es-x`](https://npmx.dev/eslint-plugin-es-x) ([docs](https://eslint-community.github.io/eslint-plugin-es-x))
    * @default false
    */
   es: EsEslintConfigOptions<ExtraPlugins>;
@@ -432,7 +432,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`@eslint-community/eslint-plugin-eslint-comments`](https://npmjs.com/@eslint-community/eslint-plugin-eslint-comments) ([docs](https://eslint-community.github.io/eslint-plugin-eslint-comments))
+   * 🧩 Main plugin: [`@eslint-community/eslint-plugin-eslint-comments`](https://npmx.dev/@eslint-community/eslint-plugin-eslint-comments) ([docs](https://eslint-community.github.io/eslint-plugin-eslint-comments))
    * @default true
    */
   eslintComments: EslintCommentsEslintConfigOptions<ExtraPlugins>;
@@ -442,7 +442,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-eslint-plugin`](https://npmjs.com/eslint-plugin-eslint-plugin) ([docs](https://github.com/eslint-community/eslint-plugin-eslint-plugin))
+   * 🧩 Main plugin: [`eslint-plugin-eslint-plugin`](https://npmx.dev/eslint-plugin-eslint-plugin) ([docs](https://github.com/eslint-community/eslint-plugin-eslint-plugin))
    *
    * ⚙️ Sub config(s): `ruleTests`
    * @default false
@@ -460,7 +460,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-expect-type`](https://npmjs.com/eslint-plugin-expect-type) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-expect-type#readme))
+   * 🧩 Main plugin: [`eslint-plugin-expect-type`](https://npmx.dev/eslint-plugin-expect-type) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-expect-type#readme))
    * @default false
    */
   expectType: ExpectTypeEslintConfigOptions<ExtraPlugins>;
@@ -474,7 +474,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import) ([docs](https://github.com/nebrius/eslint-plugin-fast-import#readme))
+   * 🧩 Main plugin: [`eslint-plugin-fast-import`](https://npmx.dev/eslint-plugin-fast-import) ([docs](https://github.com/nebrius/eslint-plugin-fast-import#readme))
    * @default false
    */
   fastImport: FastImportEslintConfigOptions<ExtraPlugins>;
@@ -487,7 +487,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress) ([docs](https://github.com/sibiraj-s/eslint-plugin-file-progress))
+   * 🧩 Main plugin: [`eslint-plugin-file-progress`](https://npmx.dev/eslint-plugin-file-progress) ([docs](https://github.com/sibiraj-s/eslint-plugin-file-progress))
    * @default false
    */
   fileProgress: FileProgressEslintConfigOptions<ExtraPlugins>;
@@ -498,7 +498,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-format`](https://npmjs.com/eslint-plugin-format)
+   * 🧩 Main plugin: [`eslint-plugin-format`](https://npmx.dev/eslint-plugin-format)
    * ([docs](https://github.com/antfu/eslint-plugin-format#readme))
    *
    * 📚 Supports multiple configs (array notation)
@@ -511,8 +511,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-formatjs`](https://npmjs.com/eslint-plugin-formatjs) ([docs](https://formatjs.github.io/docs/tooling/linter))
-   * @default true <=> [`@formatjs/icu-messageformat-parser`](https://npmjs.com/@formatjs/icu-messageformat-parser) package is installed
+   * 🧩 Main plugin: [`eslint-plugin-formatjs`](https://npmx.dev/eslint-plugin-formatjs) ([docs](https://formatjs.github.io/docs/tooling/linter))
+   * @default true <=> [`@formatjs/icu-messageformat-parser`](https://npmx.dev/@formatjs/icu-messageformat-parser) package is installed
    */
   formatJs: FormatjsEslintConfigOptions<ExtraPlugins>;
 
@@ -521,7 +521,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>.github/workflows/*.y?(a)ml</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-github-actions`](https://npmjs.com/eslint-plugin-github-actions)
+   * 🧩 Main plugin: [`eslint-plugin-github-actions`](https://npmx.dev/eslint-plugin-github-actions)
    * ([docs](https://eslint-plugin-github-action.ntnyq.com))
    * @default true <=> `.github/workflows` directory exists
    */
@@ -532,21 +532,21 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.{graphql,gql}</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-graphql`](https://npmjs.com/@graphql-eslint/eslint-plugin) ([docs](https://the-guild.dev/graphql/eslint))
+   * 🧩 Main plugin: [`eslint-plugin-graphql`](https://npmx.dev/@graphql-eslint/eslint-plugin) ([docs](https://the-guild.dev/graphql/eslint))
    *
    * ⚙️ Sub config(s): `jsProcessor`
-   * @default true <=> [`graphql`](https://npmjs.com/graphql) package is installed
+   * @default true <=> [`graphql`](https://npmx.dev/graphql) package is installed
    */
   graphql: GraphqlEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin to ensure that files begin with the given comment.
    *
-   * There is also an alternative config, `headers`, which is powered by [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers).
+   * There is also an alternative config, `headers`, which is powered by [`eslint-plugin-headers`](https://npmx.dev/eslint-plugin-headers).
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header) ([docs](https://github.com/Stuk/eslint-plugin-header))
+   * 🧩 Main plugin: [`eslint-plugin-header`](https://npmx.dev/eslint-plugin-header) ([docs](https://github.com/Stuk/eslint-plugin-header))
    * @default false
    */
   header: HeaderEslintConfigOptions<ExtraPlugins>;
@@ -554,11 +554,11 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * An ESLint plugin to ensure that files begin with the given comment.
    *
-   * There is also an alternative config, `header`, which is powered by [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header).
+   * There is also an alternative config, `header`, which is powered by [`eslint-plugin-header`](https://npmx.dev/eslint-plugin-header).
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers) ([docs](https://github.com/robmisasi/eslint-plugin-headers))
+   * 🧩 Main plugin: [`eslint-plugin-headers`](https://npmx.dev/eslint-plugin-headers) ([docs](https://github.com/robmisasi/eslint-plugin-headers))
    * @default false
    */
   headers: HeadersEslintConfigOptions<ExtraPlugins>;
@@ -568,7 +568,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.{htm,html}</code>
    *
-   * 🧩 Main plugin: [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin) ([docs](https://html-eslint.org/docs/getting-started))
+   * 🧩 Main plugin: [`@html-eslint/eslint-plugin`](https://npmx.dev/@html-eslint/eslint-plugin) ([docs](https://html-eslint.org/docs/getting-started))
    * @default true <=> `angular` config is **disabled**
    */
   html: HtmlEslintConfigOptions<ExtraPlugins>;
@@ -578,7 +578,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) ([docs](https://github.com/un-ts/eslint-plugin-import-x))
+   * 🧩 Main plugin: [`eslint-plugin-import-x`](https://npmx.dev/eslint-plugin-import-x) ([docs](https://github.com/un-ts/eslint-plugin-import-x))
    * @default true
    */
   import: ImportEslintConfigOptions<ExtraPlugins>;
@@ -592,7 +592,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-import-zod`](https://npmjs.com/eslint-plugin-import-zod) ([docs](https://github.com/samchungy/eslint-plugin-import-zod))
+   * 🧩 Main plugin: [`eslint-plugin-import-zod`](https://npmx.dev/eslint-plugin-import-zod) ([docs](https://github.com/samchungy/eslint-plugin-import-zod))
    * @default false
    */
   importZod: ImportZodEslintConfigOptions<ExtraPlugins>;
@@ -604,10 +604,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
    * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-jest`](https://npmjs.com/eslint-plugin-jest) ([docs](https://github.com/jest-community/eslint-plugin-jest))
+   * 🧩 Main plugin: [`eslint-plugin-jest`](https://npmx.dev/eslint-plugin-jest) ([docs](https://github.com/jest-community/eslint-plugin-jest))
    *
    * ⚙️ Sub config(s): `jestExtended`, `noOnlyTests`, `typescript`
-   * @default true <=> [`jest`](https://npmjs.com/jest) package is installed
+   * @default true <=> [`jest`](https://npmx.dev/jest) package is installed
    */
   jest: JestEslintConfigOptions<ExtraPlugins>;
 
@@ -620,8 +620,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
    * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-jest-dom`](https://npmjs.com/eslint-plugin-jest-dom) ([docs](https://github.com/testing-library/eslint-plugin-jest-dom#readme))
-   * @default true <=> [`@testing-library/jest-dom`](https://npmjs.com/@testing-library/jest-dom) package is installed
+   * 🧩 Main plugin: [`eslint-plugin-jest-dom`](https://npmx.dev/eslint-plugin-jest-dom) ([docs](https://github.com/testing-library/eslint-plugin-jest-dom#readme))
+   * @default true <=> [`@testing-library/jest-dom`](https://npmx.dev/@testing-library/jest-dom) package is installed
    */
   jestDom: JestDomEslintConfigOptions<ExtraPlugins>;
 
@@ -638,7 +638,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-jsdoc`](https://npmjs.com/eslint-plugin-jsdoc) ([docs](https://github.com/gajus/eslint-plugin-jsdoc))
+   * 🧩 Main plugin: [`eslint-plugin-jsdoc`](https://npmx.dev/eslint-plugin-jsdoc) ([docs](https://github.com/gajus/eslint-plugin-jsdoc))
    *
    * ⚙️ Sub config(s): `typescript`
    * @default true
@@ -651,7 +651,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.{htm,html}</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html) ([docs](https://github.com/BenoitZugmeyer/eslint-plugin-html))
+   * 🧩 Main plugin: [`eslint-plugin-html`](https://npmx.dev/eslint-plugin-html) ([docs](https://github.com/BenoitZugmeyer/eslint-plugin-html))
    * @default true
    */
   jsInline: JsInlineEslintConfigOptions<ExtraPlugins>;
@@ -661,7 +661,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.{json,jsonc,json5}</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-jsonc`](https://npmjs.com/eslint-plugin-jsonc) ([docs](https://ota-meshi.github.io/eslint-plugin-jsonc))
+   * 🧩 Main plugin: [`eslint-plugin-jsonc`](https://npmx.dev/eslint-plugin-jsonc) ([docs](https://ota-meshi.github.io/eslint-plugin-jsonc))
    *
    * ⚙️ Sub config(s): `json5`, `json`, `jsonc`
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
@@ -673,7 +673,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-json-schema-validator`](https://npmjs.com/eslint-plugin-json-schema-validator)
+   * 🧩 Main plugin: [`eslint-plugin-json-schema-validator`](https://npmx.dev/eslint-plugin-json-schema-validator)
    * ([the single rule docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/HEAD/docs/rules/no-invalid.md))
    *
    * ⚙️ Sub config(s): `json`, `yaml`, `toml`
@@ -688,7 +688,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]sx</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y)
+   * 🧩 Main plugin: [`eslint-plugin-jsx-a11y`](https://npmx.dev/eslint-plugin-jsx-a11y)
    * @default true
    */
   jsxA11y: JsxA11yEslintConfigOptions<ExtraPlugins>;
@@ -698,8 +698,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit) ([docs](https://github.com/43081j/eslint-plugin-lit))
-   * @default true <=> [`lit`](https://npmjs.com/lit) package is installed
+   * 🧩 Main plugin: [`eslint-plugin-lit`](https://npmx.dev/eslint-plugin-lit) ([docs](https://github.com/43081j/eslint-plugin-lit))
+   * @default true <=> [`lit`](https://npmx.dev/lit) package is installed
    */
   lit: LitEslintConfigOptions<ExtraPlugins>;
 
@@ -713,7 +713,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * ⚠️ Note: specified `files` will be naively analyzed for lockfile types and corresponding
    * parser configs (named `lockfile/parser/{json,yaml}`) will be created for matched entries.
    *
-   * 🧩 Main plugin: [`eslint-plugin-lockfile`](https://npmjs.com/eslint-plugin-lockfile)
+   * 🧩 Main plugin: [`eslint-plugin-lockfile`](https://npmx.dev/eslint-plugin-lockfile)
    * ([docs](https://github.com/ljharb/lockfile-tools/tree/main/packages/eslint-plugin#readme))
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
@@ -724,7 +724,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.md</code>
    *
-   * 🧩 Main plugin: [`@eslint/markdown`](https://npmjs.com/@eslint/markdown) ([docs](https://github.com/eslint/markdown))
+   * 🧩 Main plugin: [`@eslint/markdown`](https://npmx.dev/@eslint/markdown) ([docs](https://github.com/eslint/markdown))
    *
    * ⚙️ Sub config(s): `formatFencedCodeBlocks`, `sentencesPerLine`
    * @default true
@@ -736,7 +736,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.md</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-markdown-links`](https://npmjs.com/eslint-plugin-markdown-links) ([docs](https://ota-meshi.github.io/eslint-plugin-markdown-links))
+   * 🧩 Main plugin: [`eslint-plugin-markdown-links`](https://npmx.dev/eslint-plugin-markdown-links) ([docs](https://ota-meshi.github.io/eslint-plugin-markdown-links))
    * @default true
    */
   markdownLinks: MarkdownLinksEslintConfigOptions<ExtraPlugins>;
@@ -746,7 +746,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.md</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-markdown-preferences`](https://npmjs.com/eslint-plugin-markdown-preferences) ([docs](https://ota-meshi.github.io/eslint-plugin-markdown-preferences))
+   * 🧩 Main plugin: [`eslint-plugin-markdown-preferences`](https://npmx.dev/eslint-plugin-markdown-preferences) ([docs](https://ota-meshi.github.io/eslint-plugin-markdown-preferences))
    * @default true
    */
   markdownPreferences: MarkdownPreferencesEslintConfigOptions<ExtraPlugins>;
@@ -756,7 +756,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-math`](https://npmjs.com/eslint-plugin-math) ([docs](https://ota-meshi.github.io/eslint-plugin-math))
+   * 🧩 Main plugin: [`eslint-plugin-math`](https://npmx.dev/eslint-plugin-math) ([docs](https://ota-meshi.github.io/eslint-plugin-math))
    * @default true
    */
   math: MathEslintConfigOptions<ExtraPlugins>;
@@ -766,7 +766,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.mdx</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-mdx`](https://npmjs.com/eslint-plugin-mdx) ([docs](https://github.com/mdx-js/eslint-mdx))
+   * 🧩 Main plugin: [`eslint-plugin-mdx`](https://npmx.dev/eslint-plugin-mdx) ([docs](https://github.com/mdx-js/eslint-mdx))
    *
    * ⚙️ Sub config(s): `formatFencedCodeBlocks`
    * @default true
@@ -780,7 +780,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
    * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha) ([docs](https://github.com/lo1tuma/eslint-plugin-mocha))
+   * 🧩 Main plugin: [`eslint-plugin-mocha`](https://npmx.dev/eslint-plugin-mocha) ([docs](https://github.com/lo1tuma/eslint-plugin-mocha))
    *
    * ⚙️ Sub config(s): `noOnlyTests`
    * @default true
@@ -792,7 +792,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-module-interop`](https://npmjs.com/eslint-plugin-module-interop) ([docs](https://ota-meshi.github.io/eslint-plugin-module-interop))
+   * 🧩 Main plugin: [`eslint-plugin-module-interop`](https://npmx.dev/eslint-plugin-module-interop) ([docs](https://ota-meshi.github.io/eslint-plugin-module-interop))
    * @default true
    */
   moduleInterop: ModuleInteropEslintConfigOptions<ExtraPlugins>;
@@ -806,8 +806,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47*.?([cm])ts</code>
    *
-   * 🧩 Main plugin: [`@darraghor/eslint-plugin-nestjs-typed`](https://npmjs.com/@darraghor/eslint-plugin-nestjs-typed) ([docs](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed#readme))
-   * @default true <=> [`@nestjs/core`](https://npmjs.com/@nestjs/core) package is installed
+   * 🧩 Main plugin: [`@darraghor/eslint-plugin-nestjs-typed`](https://npmx.dev/@darraghor/eslint-plugin-nestjs-typed) ([docs](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed#readme))
+   * @default true <=> [`@nestjs/core`](https://npmx.dev/@nestjs/core) package is installed
    */
   nestJs: NestJsEslintConfigOptions<ExtraPlugins>;
 
@@ -816,8 +816,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`@next/eslint-plugin-next`](https://npmjs.com/@next/eslint-plugin-next) ([docs](https://nextjs.org/docs/app/api-reference/config/eslint))
-   * @default true <=> [`next`](https://npmjs.com/next) package is installed
+   * 🧩 Main plugin: [`@next/eslint-plugin-next`](https://npmx.dev/@next/eslint-plugin-next) ([docs](https://nextjs.org/docs/app/api-reference/config/eslint))
+   * @default true <=> [`next`](https://npmx.dev/next) package is installed
    */
   nextJs: NextJsEslintConfigOptions<ExtraPlugins>;
 
@@ -826,7 +826,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-n`](https://npmjs.com/eslint-plugin-n) ([docs](https://github.com/eslint-community/eslint-plugin-n))
+   * 🧩 Main plugin: [`eslint-plugin-n`](https://npmx.dev/eslint-plugin-n) ([docs](https://github.com/eslint-community/eslint-plugin-n))
    * @default true
    */
   node: NodeEslintConfigOptions<ExtraPlugins>;
@@ -838,7 +838,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;package.json</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-node-dependencies`](https://npmjs.com/eslint-plugin-node-dependencies) ([docs](https://ota-meshi.github.io/eslint-plugin-node-dependencies))
+   * 🧩 Main plugin: [`eslint-plugin-node-dependencies`](https://npmx.dev/eslint-plugin-node-dependencies) ([docs](https://ota-meshi.github.io/eslint-plugin-node-dependencies))
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   nodeDependencies: NodeDependenciesEslintConfigOptions<ExtraPlugins>;
@@ -851,7 +851,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
    * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-no-only-tests`](https://npmjs.com/eslint-plugin-no-only-tests) ([docs](https://github.com/levibuzolic/no-only-tests))
+   * 🧩 Main plugin: [`eslint-plugin-no-only-tests`](https://npmx.dev/eslint-plugin-no-only-tests) ([docs](https://github.com/levibuzolic/no-only-tests))
    * @default false
    */
   noOnlyTests: NoOnlyTestsEslintConfigOptions<ExtraPlugins>;
@@ -862,7 +862,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-no-secrets`](https://npmjs.com/eslint-plugin-no-secrets) ([docs](https://github.com/nickdeis/eslint-plugin-no-secrets#readme))
+   * 🧩 Main plugin: [`eslint-plugin-no-secrets`](https://npmx.dev/eslint-plugin-no-secrets) ([docs](https://github.com/nickdeis/eslint-plugin-no-secrets#readme))
    *
    * ⚙️ Sub config(s): `json`
    * @default true
@@ -887,7 +887,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-no-unsanitized`](https://npmjs.com/eslint-plugin-no-unsanitized) ([docs](https://github.com/mozilla/eslint-plugin-no-unsanitized))
+   * 🧩 Main plugin: [`eslint-plugin-no-unsanitized`](https://npmx.dev/eslint-plugin-no-unsanitized) ([docs](https://github.com/mozilla/eslint-plugin-no-unsanitized))
    * @default true
    */
   noUnsanitized: NoUnsanitizedEslintConfigOptions<ExtraPlugins>;
@@ -897,8 +897,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
    *
-   * 🧩 Main plugin: [`@nx/eslint-plugin`](https://npmjs.com/@nx/eslint-plugin) ([docs](https://nx.dev/technologies/eslint/eslint-plugin))
-   * @default true <=> [`nx`](https://npmjs.com/nx) package is installed
+   * 🧩 Main plugin: [`@nx/eslint-plugin`](https://npmx.dev/@nx/eslint-plugin) ([docs](https://nx.dev/technologies/eslint/eslint-plugin))
+   * @default true <=> [`nx`](https://npmx.dev/nx) package is installed
    */
   nx: NxEslintConfigOptions<ExtraPlugins>;
 
@@ -908,8 +908,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * 📁 Default `files`: <code>**&#47;package.json</code>
    *
    * 🧩 Main plugins:
-   * - [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json))
-   * - (if `enforceAbsoluteVersion` option is used) [`eslint-plugin-node-dependencies`](https://npmjs.com/eslint-plugin-node-dependencies) ([docs](https://ota-meshi.github.io/eslint-plugin-node-dependencies))
+   * - [`eslint-plugin-package-json`](https://npmx.dev/eslint-plugin-package-json) ([docs](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json))
+   * - (if `enforceAbsoluteVersion` option is used) [`eslint-plugin-node-dependencies`](https://npmx.dev/eslint-plugin-node-dependencies) ([docs](https://ota-meshi.github.io/eslint-plugin-node-dependencies))
    *
    * 📚 Supports multiple configs (array notation)
    * @default true
@@ -924,7 +924,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-perfectionist`](https://npmjs.com/eslint-plugin-perfectionist) ([docs](https://perfectionist.dev))
+   * 🧩 Main plugin: [`eslint-plugin-perfectionist`](https://npmx.dev/eslint-plugin-perfectionist) ([docs](https://perfectionist.dev))
    *
    * ⚙️ Sub config(s): `sort*` (config for every `sort-` rule from the plugin)
    * @default false
@@ -938,10 +938,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
    * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright) ([docs](https://github.com/playwright-community/eslint-plugin-playwright))
+   * 🧩 Main plugin: [`eslint-plugin-playwright`](https://npmx.dev/eslint-plugin-playwright) ([docs](https://github.com/playwright-community/eslint-plugin-playwright))
    *
    * ⚙️ Sub config(s): `noOnlyTests`
-   * @default true <=> [`playwright`](https://npmjs.com/playwright) package is installed
+   * @default true <=> [`playwright`](https://npmx.dev/playwright) package is installed
    */
   playwright: PlaywrightEslintConfigOptions<ExtraPlugins>;
 
@@ -950,10 +950,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: ❌ none, sub configs are used instead
    *
-   * 🧩 Main plugin: [`eslint-plugin-pnpm`](https://npmjs.com/eslint-plugin-pnpm)
+   * 🧩 Main plugin: [`eslint-plugin-pnpm`](https://npmx.dev/eslint-plugin-pnpm)
    *
    * ⚙️ Sub config(s): `packageJson`, `pnpmWorkspace`
-   * @default true <=> pnpm is detected as a used package manager by [`package-manager-detector`](https://npmjs.com/package-manager-detector)
+   * @default true <=> pnpm is detected as a used package manager by [`package-manager-detector`](https://npmx.dev/package-manager-detector)
    */
   pnpm: PnpmEslintConfigOptions<ExtraPlugins>;
 
@@ -963,7 +963,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-prefer-arrow-functions`](https://npmjs.com/eslint-plugin-prefer-arrow-functions) ([docs](https://github.com/JamieMason/eslint-plugin-prefer-arrow-functions))
+   * 🧩 Main plugin: [`eslint-plugin-prefer-arrow-functions`](https://npmx.dev/eslint-plugin-prefer-arrow-functions) ([docs](https://github.com/JamieMason/eslint-plugin-prefer-arrow-functions))
    * @default false
    */
   preferArrowFunctions: PreferArrowFunctionsEslintConfigOptions<ExtraPlugins>;
@@ -973,7 +973,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-promise`](https://npmjs.com/eslint-plugin-promise) ([docs](https://github.com/eslint-community/eslint-plugin-promise))
+   * 🧩 Main plugin: [`eslint-plugin-promise`](https://npmx.dev/eslint-plugin-promise) ([docs](https://github.com/eslint-community/eslint-plugin-promise))
    * @default true
    */
   promise: PromiseEslintConfigOptions<ExtraPlugins>;
@@ -985,10 +985,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
    * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-qunit`](https://npmjs.com/eslint-plugin-qunit) ([docs](https://github.com/platinumazure/eslint-plugin-qunit))
+   * 🧩 Main plugin: [`eslint-plugin-qunit`](https://npmx.dev/eslint-plugin-qunit) ([docs](https://github.com/platinumazure/eslint-plugin-qunit))
    *
    * ⚙️ Sub config(s): `noOnlyTests`
-   * @default true <=> [`qunit`](https://npmjs.com/qunit) package is installed
+   * @default true <=> [`qunit`](https://npmx.dev/qunit) package is installed
    */
   qunit: QunitEslintConfigOptions<ExtraPlugins>;
 
@@ -997,8 +997,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-qwik`](https://npmjs.com/eslint-plugin-qwik) ([docs](https://qwik.dev/docs/advanced/eslint))
-   * @default true <=> [`@builder.io/qwik`](https://npmjs.com/@builder.io/qwik) or [`@qwik.dev/core`](https://npmjs.com/@qwik.dev/core) package is installed
+   * 🧩 Main plugin: [`eslint-plugin-qwik`](https://npmx.dev/eslint-plugin-qwik) ([docs](https://qwik.dev/docs/advanced/eslint))
+   * @default true <=> [`@builder.io/qwik`](https://npmx.dev/@builder.io/qwik) or [`@qwik.dev/core`](https://npmx.dev/@qwik.dev/core) package is installed
    */
   qwik: QwikEslintConfigOptions<ExtraPlugins>;
 
@@ -1008,10 +1008,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
    *
    * 🧩 Plugin(s):
-   * - [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react)
-   * - [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin)
+   * - [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react)
+   * - [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin)
    * **with `@eslint-react` prefix**
-   * - [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks)
+   * - [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks)
    *
    * Since `eslint-plugin-react` and `@eslint-react/eslint-plugin` have some overlapping rules,
    * and `eslint-plugin-react` has some rules that are not relevant in modern codebases,
@@ -1026,7 +1026,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and `eslint-plugin-react`.
    * - `refresh`: rules from `eslint-plugin-react-refresh`.
    * - `youMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
-   * @default true <=> [`react`](https://npmjs.com/react) package is installed
+   * @default true <=> [`react`](https://npmx.dev/react) package is installed
    */
   react: ReactEslintConfigOptions<ExtraPlugins>;
 
@@ -1035,7 +1035,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-regexp`](https://npmjs.com/eslint-plugin-regexp) ([docs](https://ota-meshi.github.io/eslint-plugin-regexp))
+   * 🧩 Main plugin: [`eslint-plugin-regexp`](https://npmx.dev/eslint-plugin-regexp) ([docs](https://ota-meshi.github.io/eslint-plugin-regexp))
    * @default true
    */
   regexp: RegexpEslintConfigOptions<ExtraPlugins>;
@@ -1048,10 +1048,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*.ripple</code>
    * - <code>**&#47;*.?([cm])[jt]s</code>
    *
-   * 🧩 Main plugin: [`@tsrx/eslint-plugin`](https://npmjs.com/@tsrx/eslint-plugin) ([docs](https://github.com/Ripple-TS/ripple/blob/HEAD/packages/eslint-plugin/README.md))
+   * 🧩 Main plugin: [`@tsrx/eslint-plugin`](https://npmx.dev/@tsrx/eslint-plugin) ([docs](https://github.com/Ripple-TS/ripple/blob/HEAD/packages/eslint-plugin/README.md))
    *
    * ⚙️ Sub config(s): `setup`
-   * @default true <=> [`ripple`](https://npmjs.com/ripple) package is installed
+   * @default true <=> [`ripple`](https://npmx.dev/ripple) package is installed
    */
   ripple: RippleEslintConfigOptions<ExtraPlugins>;
 
@@ -1060,8 +1060,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`@smarttools/eslint-plugin-rxjs`](https://npmjs.com/@smarttools/eslint-plugin-rxjs) ([docs](https://github.com/DaveMBush/eslint-plugin-rxjs))
-   * @default true <=> [`rxjs`](https://npmjs.com/rxjs) package is installed
+   * 🧩 Main plugin: [`@smarttools/eslint-plugin-rxjs`](https://npmx.dev/@smarttools/eslint-plugin-rxjs) ([docs](https://github.com/DaveMBush/eslint-plugin-rxjs))
+   * @default true <=> [`rxjs`](https://npmx.dev/rxjs) package is installed
    */
   rxjs: RxjsEslintConfigOptions<ExtraPlugins>;
 
@@ -1071,7 +1071,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-security`](https://npmjs.com/eslint-plugin-security) ([docs](https://github.com/eslint-community/eslint-plugin-security))
+   * 🧩 Main plugin: [`eslint-plugin-security`](https://npmx.dev/eslint-plugin-security) ([docs](https://github.com/eslint-community/eslint-plugin-security))
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   security: SecurityEslintConfigOptions<ExtraPlugins>;
@@ -1081,8 +1081,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-solid`](https://npmjs.com/eslint-plugin-solid) ([docs](https://github.com/solidjs-community/eslint-plugin-solid))
-   * @default true <=> [`solid-js`](https://npmjs.com/solid-js) package is installed
+   * 🧩 Main plugin: [`eslint-plugin-solid`](https://npmx.dev/eslint-plugin-solid) ([docs](https://github.com/solidjs-community/eslint-plugin-solid))
+   * @default true <=> [`solid-js`](https://npmx.dev/solid-js) package is installed
    */
   solid: SolidEslintConfigOptions<ExtraPlugins>;
 
@@ -1092,7 +1092,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-sonarjs`](https://npmjs.com/eslint-plugin-sonarjs) ([docs](https://github.com/SonarSource/SonarJS/tree/master/packages/jsts/src/rules#eslint-plugin-sonarjs-))
+   * 🧩 Main plugin: [`eslint-plugin-sonarjs`](https://npmx.dev/eslint-plugin-sonarjs) ([docs](https://github.com/SonarSource/SonarJS/tree/master/packages/jsts/src/rules#eslint-plugin-sonarjs-))
    * @default true
    */
   sonar: SonarEslintConfigOptions<ExtraPlugins>;
@@ -1102,7 +1102,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-sql`](https://npmjs.com/eslint-plugin-sql)
+   * 🧩 Main plugin: [`eslint-plugin-sql`](https://npmx.dev/eslint-plugin-sql)
    * ([docs](https://github.com/gajus/eslint-plugin-sql#readme))
    * @default false
    */
@@ -1113,8 +1113,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.{stories,story}.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-storybook`](https://npmjs.com/eslint-plugin-storybook) ([docs](https://storybook.js.org/docs/configure/integration/eslint-plugin))
-   * @default true <=> [`storybook`](https://npmjs.com/storybook) package is installed
+   * 🧩 Main plugin: [`eslint-plugin-storybook`](https://npmx.dev/eslint-plugin-storybook) ([docs](https://storybook.js.org/docs/configure/integration/eslint-plugin))
+   * @default true <=> [`storybook`](https://npmx.dev/storybook) package is installed
    */
   storybook: StorybookEslintConfigOptions<ExtraPlugins>;
 
@@ -1124,7 +1124,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`@stylistic/eslint-plugin`](https://npmjs.com/@stylistic/eslint-plugin) ([docs](https://eslint.style))
+   * 🧩 Main plugin: [`@stylistic/eslint-plugin`](https://npmx.dev/@stylistic/eslint-plugin) ([docs](https://eslint.style))
    * @default true
    */
   stylistic: StylisticEslintConfigOptions<ExtraPlugins>;
@@ -1134,8 +1134,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.svelte</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte) ([docs](https://sveltejs.github.io/eslint-plugin-svelte))
-   * @default true <=> [`svelte`](https://npmjs.com/svelte) package is installed
+   * 🧩 Main plugin: [`eslint-plugin-svelte`](https://npmx.dev/eslint-plugin-svelte) ([docs](https://sveltejs.github.io/eslint-plugin-svelte))
+   * @default true <=> [`svelte`](https://npmx.dev/svelte) package is installed
    */
   svelte: SvelteEslintConfigOptions<ExtraPlugins>;
 
@@ -1146,7 +1146,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-tailwindcss`](https://npmjs.com/eslint-plugin-tailwindcss) ([docs](https://github.com/francoismassart/eslint-plugin-tailwindcss))
+   * 🧩 Main plugin: [`eslint-plugin-tailwindcss`](https://npmx.dev/eslint-plugin-tailwindcss) ([docs](https://github.com/francoismassart/eslint-plugin-tailwindcss))
    * @default false
    */
   tailwind: TailwindEslintConfigOptions<ExtraPlugins>;
@@ -1156,8 +1156,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`@tanstack/eslint-plugin-query`](https://npmjs.com/@tanstack/eslint-plugin-query) ([docs](https://tanstack.com/query/v5/docs/eslint/eslint-plugin-query))
-   * @default true <=> [`@tanstack/query-core`](https://npmjs.com/@tanstack/query-core) package is installed (dependency of all `@tanstack/*-query` packages)
+   * 🧩 Main plugin: [`@tanstack/eslint-plugin-query`](https://npmx.dev/@tanstack/eslint-plugin-query) ([docs](https://tanstack.com/query/v5/docs/eslint/eslint-plugin-query))
+   * @default true <=> [`@tanstack/query-core`](https://npmx.dev/@tanstack/query-core) package is installed (dependency of all `@tanstack/*-query` packages)
    */
   tanstackQuery: TanstackQueryEslintConfigOptions<ExtraPlugins>;
 
@@ -1166,9 +1166,9 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-tanstack-router`](https://npmjs.com/eslint-plugin-tanstack-router)
+   * 🧩 Main plugin: [`eslint-plugin-tanstack-router`](https://npmx.dev/eslint-plugin-tanstack-router)
    * ([docs](https://tanstack.com/router/latest/docs/eslint/eslint-plugin-router))
-   * @default true <=> [`foo`](https://npmjs.com/foo) package is installed
+   * @default true <=> [`foo`](https://npmx.dev/foo) package is installed
    */
   tanstackRouter: TanstackRouterEslintConfigOptions<ExtraPlugins>;
 
@@ -1177,8 +1177,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
    *
-   * 🧩 Main plugin: [`@tanstack/eslint-plugin-start`](https://npmjs.com/@tanstack/eslint-plugin-start) ([docs (not plugin-specific)](https://tanstack.com/start))
-   * @default true <=> [`@tanstack/react-start`](https://npmjs.com/@tanstack/react-start) or [`@tanstack/solid-start`](https://npmjs.com/@tanstack/solid-start) package is installed
+   * 🧩 Main plugin: [`@tanstack/eslint-plugin-start`](https://npmx.dev/@tanstack/eslint-plugin-start) ([docs (not plugin-specific)](https://tanstack.com/start))
+   * @default true <=> [`@tanstack/react-start`](https://npmx.dev/@tanstack/react-start) or [`@tanstack/solid-start`](https://npmx.dev/@tanstack/solid-start) package is installed
    */
   tanstackStart: TanstackStartEslintConfigOptions<ExtraPlugins>;
 
@@ -1189,10 +1189,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*.{spec,test}.?([cm])[jt]s?(x)</code>
    * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-testing-library`](https://npmjs.com/eslint-plugin-testing-library) ([docs](https://github.com/testing-library/eslint-plugin-testing-library))
+   * 🧩 Main plugin: [`eslint-plugin-testing-library`](https://npmx.dev/eslint-plugin-testing-library) ([docs](https://github.com/testing-library/eslint-plugin-testing-library))
    *
    * ⚙️ Sub config(s): `angular`, `marko`, `react`, `svelte`, `vue`
-   * @default true <=> [`@testing-library/dom`](https://npmjs.com/@testing-library/dom) package is installed
+   * @default true <=> [`@testing-library/dom`](https://npmx.dev/@testing-library/dom) package is installed
    */
   testingLibrary: TestingLibraryEslintConfigOptions<ExtraPlugins>;
 
@@ -1206,7 +1206,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * The default ignore list: <code>**&#47;Cargo.lock</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-toml`](https://npmjs.com/eslint-plugin-toml) ([docs](https://ota-meshi.github.io/eslint-plugin-toml))
+   * 🧩 Main plugin: [`eslint-plugin-toml`](https://npmx.dev/eslint-plugin-toml) ([docs](https://ota-meshi.github.io/eslint-plugin-toml))
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   toml: TomlEslintConfigOptions<ExtraPlugins>;
@@ -1217,7 +1217,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-tree-shaking`](https://npmjs.com/eslint-plugin-tree-shaking) ([docs](https://github.com/lukastaegert/eslint-plugin-tree-shaking#readme))
+   * 🧩 Main plugin: [`eslint-plugin-tree-shaking`](https://npmx.dev/eslint-plugin-tree-shaking) ([docs](https://github.com/lukastaegert/eslint-plugin-tree-shaking#readme))
    * @default false
    */
   treeShaking: TreeShakingEslintConfigOptions<ExtraPlugins>;
@@ -1230,7 +1230,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
    *
-   * 🧩 Main plugin: [`typescript-eslint`](https://npmjs.com/typescript-eslint) ([docs](https://typescript-eslint.io))
+   * 🧩 Main plugin: [`typescript-eslint`](https://npmx.dev/typescript-eslint) ([docs](https://typescript-eslint.io))
    *
    * ⚙️ Sub config(s): `noTypeAssertion`, `sortTsconfigKeys`, `typeAware`
    * @default true
@@ -1242,8 +1242,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-turbo`](https://npmjs.com/eslint-plugin-turbo) ([docs](https://turborepo.com/docs/reference/eslint-plugin-turbo))
-   * @default true <=> [`turbo`](https://npmjs.com/turbo) package is installed
+   * 🧩 Main plugin: [`eslint-plugin-turbo`](https://npmx.dev/eslint-plugin-turbo) ([docs](https://turborepo.com/docs/reference/eslint-plugin-turbo))
+   * @default true <=> [`turbo`](https://npmx.dev/turbo) package is installed
    */
   turbo: TurboEslintConfigOptions<ExtraPlugins>;
 
@@ -1262,7 +1262,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-unicorn`](https://npmjs.com/eslint-plugin-unicorn) ([docs](https://github.com/sindresorhus/eslint-plugin-unicorn))
+   * 🧩 Main plugin: [`eslint-plugin-unicorn`](https://npmx.dev/eslint-plugin-unicorn) ([docs](https://github.com/sindresorhus/eslint-plugin-unicorn))
    * @default true
    */
   unicorn: UnicornEslintConfigOptions<ExtraPlugins>;
@@ -1272,7 +1272,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-unnecessary-abstractions`](https://npmjs.com/eslint-plugin-unnecessary-abstractions) ([docs](https://github.com/personalyisus/eslint-plugin-unnecessary-abstractions#readme))
+   * 🧩 Main plugin: [`eslint-plugin-unnecessary-abstractions`](https://npmx.dev/eslint-plugin-unnecessary-abstractions) ([docs](https://github.com/personalyisus/eslint-plugin-unnecessary-abstractions#readme))
    * @default true
    */
   unnecessaryAbstractions: UnnecessaryAbstractionsEslintConfigOptions<ExtraPlugins>;
@@ -1282,8 +1282,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`@unocss/eslint-plugin`](https://npmjs.com/@unocss/eslint-plugin) ([docs](https://unocss.dev/integrations/eslint))
-   * @default true <=> [`unocss`](https://npmjs.com/unocss) package is installed
+   * 🧩 Main plugin: [`@unocss/eslint-plugin`](https://npmx.dev/@unocss/eslint-plugin) ([docs](https://unocss.dev/integrations/eslint))
+   * @default true <=> [`unocss`](https://npmx.dev/unocss) package is installed
    */
   unocss: UnocssEslintConfigOptions<ExtraPlugins>;
 
@@ -1296,7 +1296,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-unused-imports`](https://npmjs.com/eslint-plugin-unused-imports)
+   * 🧩 Main plugin: [`eslint-plugin-unused-imports`](https://npmx.dev/eslint-plugin-unused-imports)
    *
    * ⚙️ Sub config(s): `noUnusedVars`
    * @default false
@@ -1310,10 +1310,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * - <code>**&#47;*.{test,spec}.?([cm])[jt]s?(x)</code>
    * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-vitest`](https://npmjs.com/eslint-plugin-vitest) ([docs](https://github.com/veritem/eslint-plugin-vitest))
+   * 🧩 Main plugin: [`eslint-plugin-vitest`](https://npmx.dev/eslint-plugin-vitest) ([docs](https://github.com/veritem/eslint-plugin-vitest))
    *
    * ⚙️ Sub config(s): `noOnlyTests`, `typescript`
-   * @default true <=> [`vitest`](https://npmjs.com/vitest) package is installed
+   * @default true <=> [`vitest`](https://npmx.dev/vitest) package is installed
    */
   vitest: VitestEslintConfigOptions<ExtraPlugins>;
 
@@ -1322,10 +1322,10 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: <code>**&#47;*.vue</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-vue`](https://npmjs.com/eslint-plugin-vue) ([docs](https://eslint.vuejs.org))
+   * 🧩 Main plugin: [`eslint-plugin-vue`](https://npmx.dev/eslint-plugin-vue) ([docs](https://eslint.vuejs.org))
    *
    * ⚙️ Sub config(s): `a11y`, `i18n`, `nuxt`, `pinia`, `scopedCss`
-   * @default true <=> [`vue`](https://npmjs.com/vue) package is installed
+   * @default true <=> [`vue`](https://npmx.dev/vue) package is installed
    */
   vue: VueEslintConfigOptions<ExtraPlugins>;
 
@@ -1334,7 +1334,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc) ([docs](https://github.com/43081j/eslint-plugin-wc))
+   * 🧩 Main plugin: [`eslint-plugin-wc`](https://npmx.dev/eslint-plugin-wc) ([docs](https://github.com/43081j/eslint-plugin-wc))
    * @default false
    */
   webComponents: WebComponentsEslintConfigOptions<ExtraPlugins>;
@@ -1349,7 +1349,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * The default ignore list: <code>**&#47;{pnpm-lock.yaml,yarn.lock}</code>
    *
-   * 🧩 Main plugin: [`eslint-plugin-yml`](https://npmjs.com/eslint-plugin-yml) ([docs](https://ota-meshi.github.io/eslint-plugin-yml))
+   * 🧩 Main plugin: [`eslint-plugin-yml`](https://npmx.dev/eslint-plugin-yml) ([docs](https://ota-meshi.github.io/eslint-plugin-yml))
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   yaml: YamlEslintConfigOptions<ExtraPlugins>;
@@ -1359,8 +1359,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-you-dont-need-lodash-underscore`](https://npmjs.com/eslint-plugin-you-dont-need-lodash-underscore) ([docs](https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore))
-   * @default true <=> Any of the following packages are installed: [`lodash`](https://npmjs.com/lodash), [`lodash-es`](https://npmjs.com/lodash-es), `lodash.{assign,bind,capitalize,concat,contains,defaults,drop,every,fill,filter,find,first,flatten,get,head,includes,join,keys,last,map,omit,pairs,reduce,repeat,replace,reverse,size,slice,some,split,throttle,trim,uniq,values}`
+   * 🧩 Main plugin: [`eslint-plugin-you-dont-need-lodash-underscore`](https://npmx.dev/eslint-plugin-you-dont-need-lodash-underscore) ([docs](https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore))
+   * @default true <=> Any of the following packages are installed: [`lodash`](https://npmx.dev/lodash), [`lodash-es`](https://npmx.dev/lodash-es), `lodash.{assign,bind,capitalize,concat,contains,defaults,drop,every,fill,filter,find,first,flatten,get,head,includes,join,keys,last,map,omit,pairs,reduce,repeat,replace,reverse,size,slice,some,split,throttle,trim,uniq,values}`
    */
   youDontNeedLodashUnderscore: YouDontNeedLodashUnderscoreEslintConfigOptions<ExtraPlugins>;
 
@@ -1371,8 +1371,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-zod`](https://npmjs.com/eslint-plugin-zod) ([docs](https://github.com/marcalexiei/eslint-plugin-zod#readme))
-   * @default true <=> [`zod`](https://npmjs.com/zod) package is installed and its version is >=4
+   * 🧩 Main plugin: [`eslint-plugin-zod`](https://npmx.dev/eslint-plugin-zod) ([docs](https://github.com/marcalexiei/eslint-plugin-zod#readme))
+   * @default true <=> [`zod`](https://npmx.dev/zod) package is installed and its version is >=4
    */
   zod: ZodEslintConfigOptions<ExtraPlugins>;
 }

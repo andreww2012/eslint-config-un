@@ -13,7 +13,7 @@ export interface BoundariesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'boundaries'> {
   /**
-   * [`eslint-plugin-boundaries`](https://npmjs.com/eslint-plugin-boundaries) plugin
+   * [`eslint-plugin-boundaries`](https://npmx.dev/eslint-plugin-boundaries) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `settings` object with keys transformed to
    * `boundaries/<original property name in kebab case>`

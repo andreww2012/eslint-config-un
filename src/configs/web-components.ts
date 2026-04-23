@@ -11,7 +11,7 @@ export interface WebComponentsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'wc'> {
   /**
-   * [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc) plugin
+   * [`eslint-plugin-wc`](https://npmx.dev/eslint-plugin-wc) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `wc` property
    * and applied to the resolved `files` and `ignores` of this config.

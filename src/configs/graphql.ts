@@ -52,7 +52,7 @@ export interface GraphqlEslintConfigOptions<
   disableRulesRequiringSchema?: boolean;
 
   /**
-   * Provides [GraphQL Config](https://npmjs.com/graphql-config). Normally is not required
+   * Provides [GraphQL Config](https://npmx.dev/graphql-config). Normally is not required
    * as it should be automatically found by the plugin. Will be assigned to
    * `languageOptions.parserOptions.graphQLConfig`.
    */

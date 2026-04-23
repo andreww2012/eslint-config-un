@@ -268,7 +268,7 @@ const fetchPackageInfo = (packageName: string) =>
       if (isEslintPlugin) {
         const newCount = yield* Ref.updateAndGet(newEslintPluginsCountRef, (n) => n + 1);
         logger.info(
-          `👀 Potentially new ESLint plugin found: https://npmjs.com/${styleText('green', dependencyPackageName)} (dependency of ${styleText('gray', packageName)}) (new in total: ${newCount})`,
+          `👀 Potentially new ESLint plugin found: https://npmx.dev/${styleText('green', dependencyPackageName)} (dependency of ${styleText('gray', packageName)}) (new in total: ${newCount})`,
         );
       }
     }

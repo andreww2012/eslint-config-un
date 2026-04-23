@@ -59,7 +59,7 @@ interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
   '@intlify/vue-i18n'
 > {
   /**
-   * [`@intlify/eslint-plugin-vue-i18n`](https://npmjs.com/@intlify/eslint-plugin-vue-i18n) plugin
+   * [`@intlify/eslint-plugin-vue-i18n`](https://npmx.dev/@intlify/eslint-plugin-vue-i18n) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `vue-i18n` property
    * and applied to the resolved `files` and `ignores` of this config.
@@ -214,7 +214,7 @@ export interface VueEslintConfigOptions<
     | EnforceTypescriptInScriptionSectionConfigOptions<ExtraPlugins>;
 
   /**
-   * [`vue-i18n`](https://npmjs.com/vue-i18n) specific rules.
+   * [`vue-i18n`](https://npmx.dev/vue-i18n) specific rules.
    *
    * By default, uses `files` and `ignores` from the parent config.
    * @default true <=> `vue-i18n` package is installed

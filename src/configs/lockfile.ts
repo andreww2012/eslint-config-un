@@ -58,7 +58,7 @@ export interface LockfileEslintConfigOptions<
     | GetRuleOptions<'lockfile', 'non-registry-specifiers'>;
 
   /**
-   * Valid [`npm-package-arg` registry specifiers](https://www.npmjs.com/package/npm-package-arg)
+   * Valid [`npm-package-arg` registry specifiers](https://www.npmx.dev/npm-package-arg)
    * to ignore packages that will be allowed to be installed with their own lockfiles
    * (aka shrinkwrap files).
    *

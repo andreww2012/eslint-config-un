@@ -296,7 +296,7 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
   };
 
   /**
-   * Replaces the implementation of certain [`import`](https://npmjs.com/eslint-plugin-import-x) plugin rules with implementations from [`fast-import`](https://npmjs.com/eslint-plugin-fast-import).
+   * Replaces the implementation of certain [`import`](https://npmx.dev/eslint-plugin-import-x) plugin rules with implementations from [`fast-import`](https://npmx.dev/eslint-plugin-fast-import).
    *
    * ⚠️ The latter plugin doesn't support the rule options from the former plugin.
    * It'll be made by us that they will be silently ignored.
@@ -340,7 +340,7 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    * - `package.json`, lockfile contents or package manager
    * - ESLint config file contents
    * - Node.JS version
-   * @default true <=> running in editor (detected by [`is-in-editor`](https://npmjs.com/is-in-editor))
+   * @default true <=> running in editor (detected by [`is-in-editor`](https://npmx.dev/is-in-editor))
    */
   cacheConfigs?: boolean;
 

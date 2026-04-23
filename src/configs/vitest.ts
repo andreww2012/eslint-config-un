@@ -47,7 +47,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
     >,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
-   * [`@vitest/eslint-plugin`](https://npmjs.com/@vitest/eslint-plugin) plugin
+   * [`@vitest/eslint-plugin`](https://npmx.dev/@vitest/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `vitest` property
    * and applied to the resolved `files` and `ignores` of this config,

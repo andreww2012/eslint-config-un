@@ -10,7 +10,7 @@ export interface SqlEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'sql'> {
   /**
-   * [`eslint-plugin-sql`](https://npmjs.com/eslint-plugin-sql) plugin
+   * [`eslint-plugin-sql`](https://npmx.dev/eslint-plugin-sql) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `sql` property
    * and applied to the resolved `files` and `ignores` of this config.

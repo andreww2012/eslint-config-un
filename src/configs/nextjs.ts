@@ -11,7 +11,7 @@ export interface NextJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, '@next/next'> {
   /**
-   * [`@next/eslint-plugin-next`](https://npmjs.com/@next/eslint-plugin-next) plugin
+   * [`@next/eslint-plugin-next`](https://npmx.dev/@next/eslint-plugin-next) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `next` property
    * and applied to the resolved `files` and `ignores` of this config.

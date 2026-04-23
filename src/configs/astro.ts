@@ -22,7 +22,7 @@ export interface AstroEslintConfigOptions<
    * A11Y (accessibility) specific rules for Astro components.
    * By default, uses `files` and `ignores` from the parent config.
    *
-   * Since it uses [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y)
+   * Since it uses [`eslint-plugin-jsx-a11y`](https://npmx.dev/eslint-plugin-jsx-a11y)
    * under the hood, this config also accepts the same options as `jsxA11y` config.
    * @default true
    */

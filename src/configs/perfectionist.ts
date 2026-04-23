@@ -27,7 +27,7 @@ export interface PerfectionistEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'perfectionist'> {
   /**
-   * [`eslint-plugin-perfectionist`](https://npmjs.com/eslint-plugin-perfectionist) plugin
+   * [`eslint-plugin-perfectionist`](https://npmx.dev/eslint-plugin-perfectionist) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `perfectionist` property
    * and applied to the resolved `files` and `ignores` of this config.

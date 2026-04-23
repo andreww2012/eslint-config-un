@@ -17,7 +17,7 @@ export interface FastImportEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'fast-import'> {
   /**
-   * [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import) plugin
+   * [`eslint-plugin-fast-import`](https://npmx.dev/eslint-plugin-fast-import) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `fast-import` property
    * and applied to the resolved `files` and `ignores` of this config.

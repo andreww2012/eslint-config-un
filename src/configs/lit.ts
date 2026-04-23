@@ -22,13 +22,13 @@ interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
       | 'tabbableRoles'
     > {
   /**
-   * [`eslint-plugin-lit-a11y`](https://npmjs.com/eslint-plugin-lit-a11y) plugin
+   * [`eslint-plugin-lit-a11y`](https://npmx.dev/eslint-plugin-lit-a11y) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `settings` object as-is and applied to the specified `files` and `ignores`.
    */
   settings?: {
     /**
-     * Set to `true` to make sure only [`lit-html`](https://npmjs.com/lit-html)
+     * Set to `true` to make sure only [`lit-html`](https://npmx.dev/lit-html)
      * tagged template literals are linted.
      *
      * If you're importing `lit-html` from a package that re-exports `lit-html`,
@@ -54,7 +54,7 @@ export interface LitEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'lit'> {
   /**
-   * [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit) plugin
+   * [`eslint-plugin-lit`](https://npmx.dev/eslint-plugin-lit) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `lit` property
    * and applied to the resolved `files` and `ignores` of this config.
@@ -71,7 +71,7 @@ export interface LitEslintConfigOptions<
    * By default, uses `files` and `ignores` from the parent config.
    *
    * Since most of the rules are ported from
-   * [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y),
+   * [`eslint-plugin-jsx-a11y`](https://npmx.dev/eslint-plugin-jsx-a11y),
    * this config also accepts the same options as `jsxA11y` config.
    * @default true
    */

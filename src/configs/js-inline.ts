@@ -32,7 +32,7 @@ export interface JsInlineEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends OmitStrict<UnFlatConfigEntryBase<ExtraPlugins, 'html'>, 'overrides' | 'forceSeverity'> {
   /**
-   * [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html) plugin
+   * [`eslint-plugin-html`](https://npmx.dev/eslint-plugin-html) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `html` property
    * and applied to the resolved `files` and `ignores` of this config.

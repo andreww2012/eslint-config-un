@@ -11,7 +11,7 @@ export interface CssInJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'css-in-js'> {
   /**
-   * [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css) plugin
+   * [`eslint-plugin-css`](https://npmx.dev/eslint-plugin-css) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `css.target` property
    * and applied to the resolved `files` and `ignores` of this config.

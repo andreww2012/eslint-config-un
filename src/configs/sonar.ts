@@ -12,13 +12,13 @@ export interface SonarEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'sonarjs'> {
   /**
-   * Enables rules that are specific to [aws-cdk-lib](https://npmjs.com/aws-cdk-lib)
+   * Enables rules that are specific to [aws-cdk-lib](https://npmx.dev/aws-cdk-lib)
    * @default true <=> `aws-cdk-lib` package is installed
    */
   enableAwsRules?: boolean;
 
   /**
-   * Enables rules that are specific to [helmet](https://npmjs.com/helmet)
+   * Enables rules that are specific to [helmet](https://npmx.dev/helmet)
    * @default true <=> `helmet` package is installed
    */
   enableHelmetRules?: boolean;

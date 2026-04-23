@@ -105,7 +105,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * to potentially override the language for Markdown files. If not enabled,
    * it will be put BEFORE the `markdown` config, and the resolved `files`
    * will be associated with `markdown/commonmark` language (provided by
-   * [`@eslint/markdown` plugin](https://npmjs.com/@eslint/markdown)), meaning that
+   * [`@eslint/markdown` plugin](https://npmx.dev/@eslint/markdown)), meaning that
    * if some file matches both of the flat configs, its final language may be overridden
    * by `markdown` config.
    *

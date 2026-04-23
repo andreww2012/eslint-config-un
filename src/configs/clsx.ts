@@ -10,7 +10,7 @@ export interface ClsxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'clsx'> {
   /**
-   * [`eslint-plugin-clsx`](https://npmjs.com/eslint-plugin-clsx) plugin
+   * [`eslint-plugin-clsx`](https://npmx.dev/eslint-plugin-clsx) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `clsxOptions` property
    * and applied to the resolved `files` and `ignores` of this config.

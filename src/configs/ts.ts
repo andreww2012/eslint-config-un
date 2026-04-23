@@ -484,7 +484,7 @@ export interface TsEslintConfigOptions<
       >;
 
   /**
-   * Disallows any type assertions via [`eslint-plugin-no-type-assertion`](https://npmjs.com/eslint-plugin-no-type-assertion) plugin.
+   * Disallows any type assertions via [`eslint-plugin-no-type-assertion`](https://npmx.dev/eslint-plugin-no-type-assertion) plugin.
    *
    * If you'd like to disallow only unsafe type assertions, enable [`no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule instead.
    * @default false

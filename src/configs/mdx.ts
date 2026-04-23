@@ -22,7 +22,7 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
       | 'overridesCodeBlocks'
     > {
   /**
-   * [`eslint-plugin-mdx`](https://npmjs.com/eslint-plugin-mdx) plugin
+   * [`eslint-plugin-mdx`](https://npmx.dev/eslint-plugin-mdx) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `mdx` property
    * and applied to the resolved `files` and `ignores` of this config.

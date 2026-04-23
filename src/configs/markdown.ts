@@ -66,7 +66,7 @@ export interface MarkdownEslintConfigOptions<
    *
    * The default ignore list: `LICENSE.md`.
    *
-   * 🧩 Main plugin: [`eslint-plugin-sentences-per-line`](https://npmjs.com/eslint-plugin-sentences-per-line) ([docs](https://github.com/JoshuaKGoldberg/sentences-per-line/tree/main/packages/eslint-plugin-sentences-per-line#readme))
+   * 🧩 Main plugin: [`eslint-plugin-sentences-per-line`](https://npmx.dev/eslint-plugin-sentences-per-line) ([docs](https://github.com/JoshuaKGoldberg/sentences-per-line/tree/main/packages/eslint-plugin-sentences-per-line#readme))
    * @default false
    */
   configSentencesPerLine?:
