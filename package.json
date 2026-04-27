@@ -84,7 +84,7 @@
     "lint:public-types": "attw --pack . --profile esm-only",
     "ch": "npx changeset add --message \"___REPLACE_ME___\"",
     "release": "changeset publish",
-    "prepublishOnly": "nr deps:dedupe-check && nr deps:audit || true && nr test:common && nr build && nr lint:public-types",
+    "prepublishOnly": "nr deps:dedupe-check && nr deps:audit && nr test:common && nr build && nr lint:public-types",
     "prepack": "nr build"
   },
   "overrides": {
