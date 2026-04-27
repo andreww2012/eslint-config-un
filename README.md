@@ -33,8 +33,8 @@ Grown out of a personal collection of rules, this ESLint config aspires to cover
 
 Minimum supported versions:
 
-- NodeJS: ^20.19 or ^22.16.0 or >=24
-- ESLint: ^9.15.0 (peer dependency)
+- NodeJS: ^22.18.0 or >=24
+- ESLint: ^9.15.0 or ^10 (peer dependency)
 
 ```sh
 npm i -D eslint-config-un eslint@latest
