@@ -242,6 +242,7 @@
     "eslint-plugin-compat": "7.0.1",
     "eslint-plugin-cypress": "6.3.1",
     "eslint-plugin-de-morgan": "2.1.1",
+    "eslint-plugin-drizzle": "0.2.3",
     "eslint-plugin-ember": "13.1.0",
     "eslint-plugin-erasable-syntax-only": "0.4.0",
     "eslint-plugin-es-x": "9.6.0",
@@ -361,6 +362,7 @@
     "eslint-plugin-compat": "^7.0.1",
     "eslint-plugin-cypress": "^6.3.1",
     "eslint-plugin-de-morgan": "^2.1.1",
+    "eslint-plugin-drizzle": "^0.2.3",
     "eslint-plugin-ember": "^13.1.0",
     "eslint-plugin-erasable-syntax-only": "^0.4.0",
     "eslint-plugin-es-x": "^9.6.0",
@@ -529,6 +531,9 @@
       "optional": true
     },
     "eslint-plugin-de-morgan": {
+      "optional": true
+    },
+    "eslint-plugin-drizzle": {
       "optional": true
     },
     "eslint-plugin-ember": {

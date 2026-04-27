@@ -231,6 +231,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'unocss',
   '@formatjs/icu-messageformat-parser',
   '@docusaurus/core',
+  'drizzle-orm',
   '@testing-library/jest-dom',
   'clsx',
 

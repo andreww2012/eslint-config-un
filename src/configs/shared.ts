@@ -289,6 +289,10 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   // ripple — module-scope rules that don't make sense in isolated embedded code snippets
   'ripple/no-module-scope-track', // [runtime-only]
   'ripple/no-lazy-destructuring-in-modules', // [runtime-only]
+
+  // drizzle — database-specific operation rules that would false-positive on API usage examples
+  'drizzle/enforce-delete-with-where', // [runtime-only]
+  'drizzle/enforce-update-with-where', // [runtime-only]
 ] satisfies UnAllRuleNames[];
 
 export type RulesDisabledInEmbeddedCodeBlocksByDefault =

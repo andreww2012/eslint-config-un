@@ -309,6 +309,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     deMorgan: {enabled: getIsConfigEnabled('deMorgan', false)},
     depend: {enabled: getIsConfigEnabled('depend', false)},
     docusaurus: {enabled: getIsConfigEnabled('docusaurus', '@docusaurus/core')},
+    drizzle: {enabled: getIsConfigEnabled('drizzle', 'drizzle-orm')},
     fastImport: {enabled: getIsConfigEnabled('fastImport', false)},
     format: {enabled: getIsConfigEnabled('format', false)},
     formatJs: {
@@ -671,6 +672,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('markdownLinks', () => import('../configs/markdown-links')),
     loadUnConfig('zod', () => import('../configs/zod')),
     loadUnConfig('docusaurus', () => import('../configs/docusaurus')),
+    loadUnConfig('drizzle', () => import('../configs/drizzle')),
     loadUnConfig('moduleInterop', () => import('../configs/module-interop')),
     loadUnConfig('noSecrets', () => import('../configs/no-secrets')),
     // eslint-disable-next-line case-police/string-check
