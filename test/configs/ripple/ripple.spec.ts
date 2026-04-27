@@ -9,7 +9,7 @@ beforeEach(() => {
 });
 
 describe('basic tests', () => {
-  it('creates `ripple` eslint configs and loads `ripple` plugin if set to `true`', async () => {
+  it('creates `ripple` eslint config and loads `ripple` plugin if set to `true`', async () => {
     const configResult = await computeEslintConfig('ripple');
 
     const config = configResult.getConfigByUnPostfix('ripple');

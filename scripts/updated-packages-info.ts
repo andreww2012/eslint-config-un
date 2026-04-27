@@ -167,6 +167,11 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         ruleDocsUrl: (ruleName) =>
           `https://docusaurus.io/docs/api/misc/@docusaurus/eslint-plugin/${ruleName}`,
       },
+      drizzle: {
+        configs: ['drizzle'],
+        ruleDocsUrl: (ruleName) =>
+          `https://github.com/drizzle-team/drizzle-orm/blob/main/eslint-plugin-drizzle/readme.md#:~:text=${ruleName}:`,
+      },
       e18e: {
         configs: ['e18e'],
         gitTag: versionAsIs,

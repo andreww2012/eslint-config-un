@@ -100,6 +100,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-compat`                             | `compat`                             |
 | `eslint-plugin-cypress`                            | `cypress`                            |
 | `eslint-plugin-de-morgan`                          | `de-morgan`                          |
+| `eslint-plugin-drizzle`                            | `drizzle`                            |
 | `eslint-plugin-ember`                              | `ember`                              |
 | `eslint-plugin-erasable-syntax-only`               | `erasable-syntax-only`               |
 | `eslint-plugin-es-x`                               | `es`                                 |
@@ -446,6 +447,7 @@ In the following table, Sub-configs have `/` in their names.
 | ![Zod](./assets/logos-zod.svg) `zod`                                                | ✅ (`zod@>=4` is installed)                                            | [eslint-plugin-zod](https://npmx.dev/eslint-plugin-zod) (`zod`)                                                                                     | Since v1.0.0                                                                                        |
 | ![FormatJS](./assets/logos-formatjs.svg) `formatJs`                                 | ✅ (`@formatjs/icu-messageformat-parser` is installed)                 | [eslint-plugin-formatjs](https://npmx.dev/eslint-plugin-formatjs) (`formatjs`)                                                                      | Since v1.0.0                                                                                        |
 | ![Docusaurus](./assets/vscode-icons-file-type-docusaurus.svg) `docusaurus`          | ✅ (`@docusaurus/core` is installed)                                   | [@docusaurus/eslint-plugin](https://npmx.dev/@docusaurus/eslint-plugin) (`docusaurus`)                                                              | Since v1.0.0                                                                                        |
+| `drizzle`                                                                           | ✅ (`drizzle-orm` is installed)                                        | [eslint-plugin-drizzle](https://npmx.dev/eslint-plugin-drizzle) (`drizzle`)                                                                         | Since v1.0.0                                                                                        |
 | `clsx`                                                                              | ✅ (`clsx` is installed)                                               | [eslint-plugin-clsx](https://npmx.dev/eslint-plugin-clsx) (`clsx`)                                                                                  | Since v1.0.0                                                                                        |
 
 ### Miscellaneous

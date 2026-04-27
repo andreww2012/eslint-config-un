@@ -18,6 +18,7 @@ import type {CypressEslintConfigOptions} from './cypress';
 import type {DeMorganEslintConfigOptions} from './de-morgan';
 import type {DependEslintConfigOptions} from './depend';
 import type {DocusaurusEslintConfigOptions} from './docusaurus';
+import type {DrizzleEslintConfigOptions} from './drizzle';
 import type {E18eEslintConfigOptions} from './e18e';
 import type {EmberEslintConfigOptions} from './ember';
 import type {ErasableSyntaxOnlyEslintConfigOptions} from './erasable-syntax-only';
@@ -377,6 +378,16 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> [`@docusaurus/core`](https://npmx.dev/@docusaurus/core) package is installed
    */
   docusaurus: DocusaurusEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [Drizzle ORM](https://orm.drizzle.team) specific rules.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-drizzle`](https://npmx.dev/eslint-plugin-drizzle) ([docs](https://github.com/drizzle-team/drizzle-orm/blob/main/eslint-plugin-drizzle/readme.md))
+   * @default true <=> [`drizzle-orm`](https://npmx.dev/drizzle-orm) package is installed
+   */
+  drizzle: DrizzleEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin from the [e18e community](https://e18e.dev) focusing on applying

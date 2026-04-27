@@ -200,6 +200,9 @@ const ALL_STYLISTIC_RULES = {
   docusaurus: {
     // None
   },
+  drizzle: {
+    // None
+  },
   e18e: {
     'no-indexof-equality': true,
     'prefer-array-at': true,

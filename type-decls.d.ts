@@ -4,6 +4,12 @@ declare module 'eslint-plugin-jest-extended' {
   export = value;
 }
 
+declare module 'eslint-plugin-drizzle' {
+  import type {Plugin as EslintPlugin} from '@eslint/core';
+  declare const value: EslintPlugin;
+  export = value;
+}
+
 declare module 'eslint-plugin-no-type-assertion' {
   import type {Plugin as EslintPlugin} from '@eslint/core';
   declare const value: EslintPlugin;
