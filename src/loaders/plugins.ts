@@ -213,6 +213,9 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
+  drizzle: genModuleLoader('drizzle', 'eslint-plugin-drizzle', () =>
+    interopDefault(import('eslint-plugin-drizzle')),
+  ),
   e18e: genModuleLoader(
     'e18e',
     '@e18e/eslint-plugin',
