@@ -12,10 +12,12 @@ export default defineConfig({
   },
   dts: {
     resolve: [
-      '@jest/environment', // dev dependency: types used in jest config options
-      '@jest/expect', // dev dependency: types used in jest config options
+      '@jest/environment', // dev dependency: types used in `jest` config options
+      '@jest/expect', // dev dependency: types used in `jest` config options
       'is-in-editor', // patched: already bundled in JS via noExternal, types must match
-      'shiki', // dev dependency: types used in markdown config options
+      'shiki', // dev dependency: types used in `markdown` config options
+      'is-immutable-type', // dev dependency: types used in `functional` config options
+
       // Intentionally excluded:
       // - `browserslist`: its `export = browserslist` CJS pattern causes a `MISSING_EXPORT` build warning
       //   when resolving named exports. It's already a peerDependency, so the bare-specifier

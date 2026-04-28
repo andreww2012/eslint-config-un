@@ -226,6 +226,11 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         gitTag: (tag) => `eslint-plugin-formatjs@${tag}`,
         ruleDocsUrl: (ruleName) => `https://formatjs.github.io/docs/tooling/linter/#${ruleName}`,
       },
+      functional: {
+        configs: ['functional'],
+        ruleDocsUrl: (ruleName) =>
+          `https://github.com/eslint-functional/eslint-plugin-functional/blob/HEAD/docs/rules/${ruleName}.md`,
+      },
       'github-actions': {
         configs: ['githubActions'],
         ruleDocsUrl: null, // No docs

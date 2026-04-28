@@ -32,5 +32,6 @@
   "chat.tools.terminal.autoApprove": {
     "nr t": true,
     "nr build": true,
+    "nr test:quick": true,
   },
 }

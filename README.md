@@ -109,6 +109,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-fast-import`                        | `fast-import`                        |
 | `eslint-plugin-format`                             | `format`                             |
 | `eslint-plugin-formatjs`                           | `formatjs`                           |
+| `eslint-plugin-functional`                         | `functional`                         |
 | `eslint-plugin-github-action`                      | `github-actions`                     |
 | `eslint-plugin-header`                             | `header`                             |
 | `eslint-plugin-headers`                            | `headers`                            |
@@ -475,6 +476,7 @@ In the following table, Sub-configs have `/` in their names.
 | `format`                                                       | ❌                                          | [eslint-plugin-format](https://npmx.dev/eslint-plugin-format) (`format`)                         | Since v1.0.0<br>📚 Supports multiple configs                                                                                             |
 | `lockfile`                                                     | ❌                                          | [eslint-plugin-lockfile](https://npmx.dev/eslint-plugin-lockfile) (`lockfile`)                   | Since v1.0.0                                                                                                                             |
 | ![GitHub](./assets/devicon-github.svg) `githubActions`         | ✅ (`.github/workflows` directory exists)   | [eslint-plugin-github-action](https://npmx.dev/eslint-plugin-github-action) (`github-actions`)   | Since v1.0.0                                                                                                                             |
+| `functional`                                                   | ❌                                          | [eslint-plugin-functional](https://npmx.dev/eslint-plugin-functional) (`functional`)             | Since v1.0.0<br>Rules enforcing functional programming patterns                                                                          |
 
 ## How to use
 

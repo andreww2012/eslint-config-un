@@ -315,6 +315,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     formatJs: {
       enabled: getIsConfigEnabled('formatJs', '@formatjs/icu-messageformat-parser'),
     },
+    functional: {enabled: getIsConfigEnabled('functional', false)},
     e18e: {enabled: getIsConfigEnabled('e18e', false)},
     ember: {enabled: getIsConfigEnabled('ember', 'ember-source')},
     erasableSyntaxOnly: {enabled: getIsConfigEnabled('erasableSyntaxOnly', false)},
@@ -715,6 +716,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('barrelFiles', () => import('../configs/barrel-files')),
     loadUnConfig('sql', () => import('../configs/sql')),
     loadUnConfig('format', () => import('../configs/format')),
+    loadUnConfig('functional', () => import('../configs/functional')),
 
     /* Other configs */
     loadUnConfig('githubActions', () => import('../configs/github-actions')), // Must come after `yaml`

@@ -33,6 +33,7 @@ import type {FastImportEslintConfigOptions} from './fast-import';
 import type {FileProgressEslintConfigOptions} from './file-progress';
 import type {FormatEslintConfigOptions} from './format';
 import type {FormatjsEslintConfigOptions} from './formatjs';
+import type {FunctionalEslintConfigOptions} from './functional';
 import type {GithubActionsEslintConfigOptions} from './github-actions';
 import type {GraphqlEslintConfigOptions} from './graphql';
 import type {HeaderEslintConfigOptions} from './header';
@@ -526,6 +527,20 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> [`@formatjs/icu-messageformat-parser`](https://npmx.dev/@formatjs/icu-messageformat-parser) package is installed
    */
   formatJs: FormatjsEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * Rules enforcing functional programming patterns.
+   *
+   * ⚠️ WARNING: make sure that the linted files are provided with type information, or all the rules requiring it are disabled.
+   * For the former, they must be included in `files` array of `ts/configTypeAware` config
+   * (they are by default).
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-functional`](https://npmx.dev/eslint-plugin-functional) ([docs](https://github.com/eslint-functional/eslint-plugin-functional#readme))
+   * @default false
+   */
+  functional: FunctionalEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin with rules for consistent, readable and valid GitHub Actions files.
