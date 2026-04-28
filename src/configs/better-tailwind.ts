@@ -30,14 +30,6 @@ export interface BetterTailwindEslintConfigOptions<
    */
   settings: RequireExactlyOne<{
     /**
-     * "The working directory used to resolve `tailwindcss` and related config files.
-     * This is useful for monorepos where linting runs from the repository root
-     * but each project has its own `node_modules` and Tailwind setup."
-     * - [plugin docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#cwd)
-     */
-    cwd?: string;
-
-    /**
      * [Tailwind 4 only] The path to the entry file of the css based Tailwind config
      */
     entryPoint?: string;
@@ -47,6 +39,14 @@ export interface BetterTailwindEslintConfigOptions<
      */
     tailwindConfig?: string;
   }> & {
+    /**
+     * "The working directory used to resolve `tailwindcss` and related config files.
+     * This is useful for monorepos where linting runs from the repository root
+     * but each project has its own `node_modules` and Tailwind setup."
+     * - [plugin docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#cwd)
+     */
+    cwd?: string;
+
     /**
      * From plugin docs:
      * The path to the `tsconfig.json` file. If not specified, the plugin will try to find it automatically.
