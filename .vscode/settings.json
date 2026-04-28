@@ -33,5 +33,6 @@
     "nr t": true,
     "nr build": true,
     "nr test:quick": true,
+    "nr typegen": true,
   },
 }

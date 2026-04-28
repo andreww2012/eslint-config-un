@@ -282,6 +282,7 @@
     "eslint-plugin-tailwindcss": "3.18.3",
     "eslint-plugin-testing-library": "7.16.2",
     "eslint-plugin-tree-shaking": "1.12.2",
+    "eslint-plugin-tsdoc": "0.5.2",
     "eslint-plugin-turbo": "2.9.6",
     "eslint-plugin-unused-imports": "4.4.1",
     "eslint-plugin-vue": "10.9.0",
@@ -404,6 +405,7 @@
     "eslint-plugin-tailwindcss": "^3.18.3",
     "eslint-plugin-testing-library": "^7.16.2",
     "eslint-plugin-tree-shaking": "^1.12.2",
+    "eslint-plugin-tsdoc": "^0.5.2",
     "eslint-plugin-turbo": "^2.9.6",
     "eslint-plugin-unused-imports": "^4.4.1",
     "eslint-plugin-vue": "^10.9.0",
@@ -652,6 +654,9 @@
       "optional": true
     },
     "eslint-plugin-tree-shaking": {
+      "optional": true
+    },
+    "eslint-plugin-tsdoc": {
       "optional": true
     },
     "eslint-plugin-turbo": {

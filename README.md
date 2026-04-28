@@ -140,6 +140,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-tailwindcss`                        | `tailwindcss`                        |
 | `eslint-plugin-testing-library`                    | `testing-library`                    |
 | `eslint-plugin-tree-shaking`                       | `tree-shaking`                       |
+| `eslint-plugin-tsdoc`                              | `tsdoc`                              |
 | `eslint-plugin-turbo`                              | `turbo`                              |
 | `eslint-plugin-unused-imports`                     | `unused-imports`                     |
 | `eslint-plugin-vue`                                | `vue`                                |
@@ -305,6 +306,7 @@ In the following table, Sub-configs have `/` in their names.
 | `eslintComments`                                    | ✅                                          | [@eslint-community/eslint-plugin-eslint-comments](https://npmx.dev/@eslint-community/eslint-plugin-eslint-comments) (`eslint-comments`) | Since v0.1.3                                                            |
 | `jsdoc`                                             | ✅                                          | [eslint-plugin-jsdoc](https://npmx.dev/eslint-plugin-jsdoc) (`jsdoc`)                                                                   | Since v0.3.1                                                            |
 | `jsdoc/typescript`                                  | ✅ (`ts` config is enabled)                 | -                                                                                                                                       | Config for disabling or disabling certain rules for TypeScript files    |
+| `tsdoc`                                             | ❌                                          | [eslint-plugin-tsdoc](https://npmx.dev/eslint-plugin-tsdoc) (`tsdoc`)                                                                   | -                                                                       |
 
 ### Web frameworks & related
 

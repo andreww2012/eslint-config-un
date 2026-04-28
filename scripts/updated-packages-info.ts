@@ -542,6 +542,11 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         configs: ['ts'],
         ruleDocsUrl: (ruleName) => `https://typescript-eslint.io/rules/${ruleName}`,
       },
+      tsdoc: {
+        configs: ['tsdoc'],
+        gitTag: (version) => `eslint-plugin-tsdoc_v${version}`,
+        ruleDocsUrl: null, // Single rule
+      },
       turbo: {
         configs: ['turbo'],
         ruleDocsUrl: (ruleName) =>

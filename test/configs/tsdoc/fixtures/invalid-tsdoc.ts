@@ -1,0 +1,2 @@
+/** @badTag */
+export function foo() {}
