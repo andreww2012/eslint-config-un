@@ -276,8 +276,8 @@ importers:
         specifier: 3.10.0
         version: 3.10.0(eslint@9.39.2)(typescript@6.0.3)
       '@e18e/eslint-plugin':
-        specifier: 0.3.0
-        version: 0.3.0(eslint@9.39.2)
+        specifier: 0.4.1
+        version: 0.4.1(eslint@9.39.2)
       '@effect/language-service':
         specifier: 0.85.1
         version: 0.85.1
@@ -1874,11 +1874,11 @@ packages:
   '@dprint/toml@0.7.0':
     resolution: {integrity: sha512-eFaQTcfxKHB+YyTh83x7GEv+gDPuj9q5NFOTaoj5rZmQTbj6OgjjMxUicmS1R8zYcx8YAq5oA9J3YFa5U6x2gA==}
 
-  '@e18e/eslint-plugin@0.3.0':
-    resolution: {integrity: sha512-hHgfpxsrZ2UYHcicA+tGZnmk19uJTaye9VH79O+XS8R4ona2Hx3xjhXghclNW58uXMk3xXlbYEOMr8thsoBmWg==}
+  '@e18e/eslint-plugin@0.4.1':
+    resolution: {integrity: sha512-Re00N8ad1HsNrzpuIX7Bhdr8RSaFWp6VgwJUEJF+47+D1CMcXoS7VNRkIG23e46pddhgxWU0cWk4wYiQIuMHqQ==}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
-      oxlint: ^1.55.0
+      oxlint: ^1.61.0
     peerDependenciesMeta:
       eslint:
         optional: true
@@ -8973,6 +8973,9 @@ packages:
   module-replacements@2.11.0:
     resolution: {integrity: sha512-j5sNQm3VCpQQ7nTqGeOZtoJtV3uKERgCBm9QRhmGRiXiqkf7iRFOkfxdJRZWLkqYY8PNf4cDQF/WfXUYLENrRA==}
 
+  module-replacements@3.0.0-beta.7:
+    resolution: {integrity: sha512-n1F9l3gF1wNh13xmnXS2JU7P9c3DlzCgVEyLKrVN0U37RwrXyYoePMMvYvs/6aUONAxbnscphzESZTCorXFh7Q==}
+
   moo@0.5.3:
     resolution: {integrity: sha512-m2fmM2dDm7GZQsY7KK2cme8agi+AAljILjQnof7p1ZMDe6dQ4bdnSMx0cPppudoeNv5hEFQirN6u+O4fDE0IWA==}
 
@@ -12841,9 +12844,11 @@ snapshots:
 
   '@dprint/toml@0.7.0': {}
 
-  '@e18e/eslint-plugin@0.3.0(eslint@9.39.2)':
+  '@e18e/eslint-plugin@0.4.1(eslint@9.39.2)':
     dependencies:
-      eslint-plugin-depend: 1.5.0(eslint@9.39.2)
+      empathic: 2.0.0
+      module-replacements: 3.0.0-beta.7
+      semver: 7.7.4
     optionalDependencies:
       eslint: 9.39.2(jiti@2.6.1)
 
@@ -20829,6 +20834,8 @@ snapshots:
       ufo: 1.6.3
 
   module-replacements@2.11.0: {}
+
+  module-replacements@3.0.0-beta.7: {}
 
   moo@0.5.3: {}
 
