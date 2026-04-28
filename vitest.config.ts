@@ -29,5 +29,10 @@ export default defineConfig({
     },
     ui: true,
     open: false,
+    typecheck: {
+      enabled: true,
+      tsconfig: './test/tsconfig.json',
+      ignoreSourceErrors: true,
+    },
   },
 });
