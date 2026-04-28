@@ -93,9 +93,9 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
         Pick<UnRulesConfigPartial<'e18e'>, `e18e/${E18eModuleReplacementsRules}`>
       > & {
         /**
-         * Options of [the only rule, `ban-dependencies`](https://github.com/es-tooling/eslint-plugin-depend/blob/HEAD/docs/rules/ban-dependencies.md).
+         * Options of the only rule in this sub-config, `e18e/ban-dependencies`,
          */
-        options?: GetRuleOptions<'depend', 'ban-dependencies'>;
+        options?: GetRuleOptions<'e18e', 'ban-dependencies'>;
       });
 
   /**
