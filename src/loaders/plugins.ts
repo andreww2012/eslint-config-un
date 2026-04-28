@@ -625,6 +625,11 @@ export const pluginsLoaders = {
     () =>
       interopDefault(import('typescript-eslint')).then((m) => m.plugin) as Promise<EslintPlugin>,
   ),
+  tsdoc: genModuleLoader(
+    'tsdoc',
+    'eslint-plugin-tsdoc',
+    () => interopDefault(import('eslint-plugin-tsdoc')) as Promise<EslintPlugin>,
+  ),
   turbo: genModuleLoader(
     'turbo',
     'eslint-plugin-turbo',

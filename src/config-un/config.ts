@@ -411,6 +411,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     toml: {enabled: getIsConfigEnabled('toml', false)},
     treeShaking: {enabled: getIsConfigEnabled('treeShaking', false)},
     ts: {enabled: getIsConfigEnabled('ts', 'typescript')},
+    tsdoc: {enabled: getIsConfigEnabled('tsdoc', false)},
     turbo: {enabled: getIsConfigEnabled('turbo', 'turbo')},
     unicorn: {enabled: getIsConfigEnabled('unicorn')},
     unnecessaryAbstractions: {enabled: getIsConfigEnabled('unnecessaryAbstractions')},
@@ -715,6 +716,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('treeShaking', () => import('../configs/tree-shaking')),
     loadUnConfig('barrelFiles', () => import('../configs/barrel-files')),
     loadUnConfig('sql', () => import('../configs/sql')),
+    loadUnConfig('tsdoc', () => import('../configs/tsdoc')),
     loadUnConfig('format', () => import('../configs/format')),
     loadUnConfig('functional', () => import('../configs/functional')),
 

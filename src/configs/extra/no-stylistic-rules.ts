@@ -759,6 +759,9 @@ const ALL_STYLISTIC_RULES = {
     'unified-signatures': true,
     'use-unknown-in-catch-callback-variable': true,
   },
+  tsdoc: {
+    // None
+  },
   turbo: {
     // None
   },

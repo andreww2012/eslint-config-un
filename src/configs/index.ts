@@ -93,6 +93,7 @@ import type {TestingLibraryEslintConfigOptions} from './testing-library';
 import type {TomlEslintConfigOptions} from './toml';
 import type {TreeShakingEslintConfigOptions} from './tree-shaking';
 import type {TsEslintConfigOptions} from './ts';
+import type {TsdocEslintConfigOptions} from './tsdoc';
 import type {TurboEslintConfigOptions} from './turbo';
 import type {UnEslintConfigOptions} from './un';
 import type {UnicornEslintConfigOptions} from './unicorn';
@@ -1262,6 +1263,16 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true
    */
   ts: TsEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [TSDoc](https://tsdoc.org) specific rules.
+   *
+   * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
+   *
+   * 🧩 Main plugin: [`eslint-plugin-tsdoc`](https://npmx.dev/eslint-plugin-tsdoc) ([docs](https://tsdoc.org/pages/packages/eslint-plugin-tsdoc))
+   * @default false
+   */
+  tsdoc: TsdocEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Turborepo](https://turborepo.com) specific rules.
