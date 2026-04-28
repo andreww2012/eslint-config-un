@@ -112,6 +112,7 @@ Unless the value set is big or infinite, test **every possible value** (includin
 For example, for a boolean option you should test `true`, `false` and unset values.
 The test name for an unset value should end with `when option is not set`.
 The test name for primitive values should end with `when option is \`value\`\`.
+BUT: if the tested value is the default value, the test name should end with `by default` instead of `when option is <...>`.
 
 ---
 

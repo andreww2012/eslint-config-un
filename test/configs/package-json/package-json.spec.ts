@@ -367,4 +367,106 @@ describe('options', () => {
       ).toStrictEqual([{blockedProperties: PROPERTIES}]);
     });
   });
+
+  describe('option: `banTopLevelProperties`', () => {
+    it('disables `package-json/restrict-top-level-properties` rule by default', async () => {
+      const configResult = await computeEslintConfig('packageJson');
+
+      expect(
+        configResult.getRuleEntrySeverity(
+          'package-json',
+          'package-json/restrict-top-level-properties',
+        ),
+      ).toBe(0);
+    });
+
+    it("enables `package-json/restrict-top-level-properties` rule with all popular tools when set to `'popularTools'`", async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {banTopLevelProperties: 'popularTools'},
+      });
+
+      expect(
+        configResult.getRuleEntry('package-json', 'package-json/restrict-top-level-properties'),
+      ).toMatchInlineSnapshot(
+        '[2, {"ban": [{"message": "Configure Babel in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "babel"}, {"message": "Configure Browserslist in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "browserslist"}, {"message": "Configure commitlint in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "commitlint"}, {"message": "Configure ESLint in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "eslintConfig"}, {"message": "Configure Jest in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "jest"}, {"message": "Configure lint-staged in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "lint-staged"}, {"message": "Configure pnpm in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "pnpm"}, {"message": "Configure Prettier in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "prettier"}, {"message": "Configure release-it in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "release-it"}, {"message": "Configure Renovate in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "renovate"}, {"message": "Configure Stylelint in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "stylelint"}, {"message": "Configure TypeDoc in a dedicated config file to avoid bloating package.json and mixing concerns.", "property": "typedoc"}]}]',
+      );
+    });
+
+    it('enables `package-json/restrict-top-level-properties` rule when set to an array of strings', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {banTopLevelProperties: ['prettier', 'babel']},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions(
+          'package-json',
+          'package-json/restrict-top-level-properties',
+        ),
+      ).toStrictEqual([{ban: [{property: 'prettier'}, {property: 'babel'}]}]);
+    });
+
+    it('enables `package-json/restrict-top-level-properties` rule when set to an object with `true` values', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {banTopLevelProperties: {prettier: true, babel: true}},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions(
+          'package-json',
+          'package-json/restrict-top-level-properties',
+        ),
+      ).toStrictEqual([{ban: [{property: 'prettier'}, {property: 'babel'}]}]);
+    });
+
+    it('enables `package-json/restrict-top-level-properties` rule with custom messages when set to an object with string values', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {
+          banTopLevelProperties: {
+            prettier: 'Use .prettierrc instead',
+            babel: 'Use babel.config.js instead',
+          },
+        },
+      });
+
+      expect(
+        configResult.getRuleEntryOptions(
+          'package-json',
+          'package-json/restrict-top-level-properties',
+        ),
+      ).toStrictEqual([
+        {
+          ban: [
+            {property: 'prettier', message: 'Use .prettierrc instead'},
+            {property: 'babel', message: 'Use babel.config.js instead'},
+          ],
+        },
+      ]);
+    });
+
+    it('excludes `false` entries when set to an object with mixed `true`/`false` values', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {banTopLevelProperties: {prettier: true, babel: false}},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions(
+          'package-json',
+          'package-json/restrict-top-level-properties',
+        ),
+      ).toStrictEqual([{ban: [{property: 'prettier'}]}]);
+    });
+
+    it('disables `package-json/restrict-top-level-properties` rule when set to an object with all `false` values', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {banTopLevelProperties: {prettier: false}},
+      });
+
+      expect(
+        configResult.getRuleEntrySeverity(
+          'package-json',
+          'package-json/restrict-top-level-properties',
+        ),
+      ).toBe(0);
+    });
+  });
 });
