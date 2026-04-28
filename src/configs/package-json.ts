@@ -2,6 +2,7 @@ import type {PackageJsonPluginSettings} from 'eslint-plugin-package-json';
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {getKeysOfTruthyValues} from '../utils';
 import {
+  type ArrayOrBooleanRecord,
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
   type GetRuleOptions,
@@ -61,6 +62,21 @@ interface RequireFieldsOption {
    */
   requireFields?: Partial<Record<PackageJsonRequirableFields, boolean>>;
 }
+
+const POPULAR_TOOLS_TOP_LEVEL_PACKAGE_JSON_PROPERTIES = {
+  babel: 'Babel',
+  browserslist: 'Browserslist',
+  commitlint: 'commitlint',
+  eslintConfig: 'ESLint',
+  jest: 'Jest',
+  'lint-staged': 'lint-staged',
+  pnpm: 'pnpm',
+  prettier: 'Prettier',
+  'release-it': 'release-it',
+  renovate: 'Renovate',
+  stylelint: 'Stylelint',
+  typedoc: 'TypeDoc',
+};
 
 export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnFlatConfigEntryBase<ExtraPlugins, 'package-json'>, RequireFieldsOption {
@@ -145,6 +161,20 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * @default false
    */
   disallowUnnecessaryPropertiesInPrivatePackages?: boolean | string[];
+
+  /**
+   * Disallow certain top-level properties in package.json.
+   * This is useful, for example, when you want to keep package.json minimal
+   * and enforce that certain tool configurations live in their own dedicated files.
+   *
+   * You can set this to a special value `'popularTools'` to bulk disallow
+   * top-level properties for popular tools (`prettier`, `eslintConfig`, `stylelint`,
+   * `pnpm`, `babel`, etc).
+   *
+   * Affected rule:
+   * - [`restrict-top-level-properties`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-top-level-properties.md)
+   */
+  banTopLevelProperties?: ArrayOrBooleanRecord<string, 'booleanOrMessage'> | 'popularTools';
 }
 
 export default ((context, optionsRaw) => {
@@ -164,7 +194,25 @@ export default ((context, optionsRaw) => {
     propertiesAllowedToBeEmpty,
     disallowUnnecessaryPropertiesInPrivatePackages,
     publishable,
+    banTopLevelProperties: banTopLevelPropertiesRaw,
   } = optionsResolved;
+
+  const banTopLevelProperties = banTopLevelPropertiesRaw
+    ? banTopLevelPropertiesRaw === 'popularTools'
+      ? Object.entries(POPULAR_TOOLS_TOP_LEVEL_PACKAGE_JSON_PROPERTIES).map(
+          ([property, toolName]) => ({
+            property,
+            message: `Configure ${toolName} in a dedicated config file to avoid bloating package.json and mixing concerns.`,
+          }),
+        )
+      : Object.entries(getKeysOfTruthyValues(banTopLevelPropertiesRaw, 'object')).map(
+          ([property, maybeMessage]) => ({
+            property,
+            ...(typeof maybeMessage === 'string' && {message: maybeMessage}),
+          }),
+        )
+    : [];
+  const hasBannedTopLevelProperties = Object.keys(banTopLevelProperties).length > 0;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'package-json');
 
@@ -248,6 +296,11 @@ export default ((context, optionsRaw) => {
         ? [{blockedProperties: disallowUnnecessaryPropertiesInPrivatePackages}]
         : [],
     ) /** @since 0.63.0 */
+    .addRule(
+      'restrict-top-level-properties',
+      hasBannedTopLevelProperties ? ERROR : OFF,
+      hasBannedTopLevelProperties ? [{ban: banTopLevelProperties}] : [],
+    ) /** @since 0.91.2 */
     .addRule('scripts-name-casing', ERROR) /** @since 0.62.0 */ // 🎨
     .addRule('sort-collections', ERROR, [
       getKeysOfTruthyValues({
