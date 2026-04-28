@@ -77,8 +77,9 @@
     "t": "vitest",
     "t:ui": "vitest --ui",
     "t:cov": "vitest --coverage",
-    "test:vitest": "nr t",
-    "test:common": "nr typegen && nr knip && nr spellcheck && nr test:config && nr test:vitest run && nr lint && nr build:code:test && nr check:dts:no-devdeps-imports",
+    "test:vitest": "nr t run",
+    "test:vitest:cov": "nr t:cov run",
+    "test:common": "nr typegen && nr knip && nr spellcheck && nr test:config && nr test:vitest:cov && nr lint && nr build:code:test && nr check:dts:no-devdeps-imports",
     "test": "nr deps:audit && nr test:common",
     "test:quick": "nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
     "lint:public-types": "attw --pack . --profile esm-only",
@@ -251,6 +252,7 @@
     "eslint-plugin-fast-import": "2.2.1",
     "eslint-plugin-format": "2.0.1",
     "eslint-plugin-formatjs": "6.4.5",
+    "eslint-plugin-functional": "9.0.4",
     "eslint-plugin-github-action": "0.2.0",
     "eslint-plugin-header": "3.1.1",
     "eslint-plugin-headers": "1.3.4",
@@ -291,6 +293,7 @@
     "eslint-processor-vue-blocks": "2.0.0",
     "eslint-typegen": "2.3.1",
     "import-meta-resolve": "4.2.0",
+    "is-immutable-type": "5.0.1",
     "is-in-editor": "0.3.0",
     "jest-extended": "7.0.0",
     "json-schema": "0.4.0",
@@ -371,6 +374,7 @@
     "eslint-plugin-fast-import": "^2.2.1",
     "eslint-plugin-format": "^2.0.1",
     "eslint-plugin-formatjs": "^6.4.5",
+    "eslint-plugin-functional": "^9.0.4",
     "eslint-plugin-github-action": "^0.2.0",
     "eslint-plugin-header": "^3.1.1",
     "eslint-plugin-headers": "^1.3.4",
@@ -558,6 +562,9 @@
       "optional": true
     },
     "eslint-plugin-formatjs": {
+      "optional": true
+    },
+    "eslint-plugin-functional": {
       "optional": true
     },
     "eslint-plugin-github-action": {

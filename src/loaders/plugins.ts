@@ -280,6 +280,11 @@ export const pluginsLoaders = {
   formatjs: genModuleLoader('formatjs', 'eslint-plugin-formatjs', () =>
     interopDefault(import('eslint-plugin-formatjs')),
   ),
+  functional: genModuleLoader(
+    'functional',
+    'eslint-plugin-functional',
+    () => interopDefault(import('eslint-plugin-functional')) as Promise<EslintPlugin>,
+  ),
   'github-actions': genModuleLoader(
     'github-actions',
     'eslint-plugin-github-action',

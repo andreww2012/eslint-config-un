@@ -111,6 +111,7 @@ After every `addRule` statement, we annotate the rule with:
 - Emojis like `🟢`, `🟡`, etc.
   They signify if the rule is included in one of the main rule pre-sets, usually named "recommended", "strict", "stylistic", etc.
   You can find more information on presets in the plugin docs and/or by directly inspecting the plugin object, specifically `configs` property.
+  There should be no spaces between consecutive emojis.
   Most often used emojis:
   - 🟢 - in recommended
   - 🟡 - in recommended (warns)
