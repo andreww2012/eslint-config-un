@@ -305,6 +305,7 @@ const ALL_STYLISTIC_RULES = {
     indent: true,
     lowercase: true,
     'no-extra-spacing-attrs': true,
+    'no-extra-spacing-tags': true,
     'no-multiple-empty-lines': true,
     'no-trailing-spaces': true,
     quotes: true,

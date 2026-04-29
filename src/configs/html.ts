@@ -60,7 +60,8 @@ export default ((context, optionsRaw) => {
 
   // Legend:
   // 🟢 - in recommended
-  // 💅 - conflicts with Prettier
+  // TODO actually check that and maybe disable those rules if prettier is installed?
+  // 💅 - may conflict with Prettier
   // 🎨 - CSS related
 
   configBuilder
@@ -155,7 +156,9 @@ export default ((context, optionsRaw) => {
     .addRule('id-naming-convention', OFF) /** @since 0.6.0 */
     .addRule('indent', OFF) /** @since 0.4.0 */ // 🟢
     .addRule('lowercase', ERROR) /** @since 0.21.0 */
-    .addRule('no-extra-spacing-attrs', OFF) /** @since 0.2.0 */ // 🟢💅
+    .addRule('no-extra-spacing-tags', ERROR, [
+      {disallowMissing: true, disallowInAssignment: true},
+    ]) /** @since 0.60.0 */ // 🟢💅
     .addRule('no-extra-spacing-text', WARNING, [{skip: ['pre']}]) /** @since 0.27.0 */
     .addRule('no-multiple-empty-lines', WARNING) /** @since 0.11.0 */
     .addRule('no-trailing-spaces', WARNING) /** @since 0.15.0 */
