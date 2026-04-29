@@ -60,6 +60,7 @@ import type {MochaEslintConfigOptions} from './mocha';
 import type {ModuleInteropEslintConfigOptions} from './module-interop';
 import type {NestJsEslintConfigOptions} from './nest-js';
 import type {NextJsEslintConfigOptions} from './nextjs';
+import type {NgrxEslintConfigOptions} from './ngrx';
 import type {NoOnlyTestsEslintConfigOptions} from './no-only-tests';
 import type {NoSecretsEslintConfigOptions} from './no-secrets';
 import type {NoUnsanitizedEslintConfigOptions} from './no-unsanitized';
@@ -847,6 +848,16 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> [`next`](https://npmx.dev/next) package is installed
    */
   nextJs: NextJsEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [NgRx](https://ngrx.io) specific rules.
+   *
+   * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+   *
+   * 🧩 Main plugin: [`@ngrx/eslint-plugin`](https://npmx.dev/@ngrx/eslint-plugin) ([docs](https://ngrx.io/guide/eslint-plugin))
+   * @default true <=> [`@ngrx/store`](https://npmx.dev/@ngrx/store) package is installed
+   */
+  ngrx: NgrxEslintConfigOptions<ExtraPlugins>;
 
   /**
    * Node.js code specific rules.

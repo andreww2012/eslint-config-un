@@ -53,9 +53,9 @@ export default ((context, optionsRaw) => {
   // 🔵 - in `strict` only
   // 🎨 - in `stylistic`
   // 🪶 - in `lite`
-  // 📋 - in other presets
   // 💭 - requires type information
   // 💭? - optionally requires type information
+  // 📋 - in the specified domain specific preset(s)
 
   configBuilder
     ?.addConfig([

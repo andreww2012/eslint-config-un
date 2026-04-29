@@ -242,6 +242,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'svelte',
   'solid-js',
   '@angular/core',
+  '@ngrx/store',
   // We don't need to check for the presence of `@builder.io/qwik-city` because
   // it requires `@builder.io/qwik` to be installed anyway
   '@builder.io/qwik',
