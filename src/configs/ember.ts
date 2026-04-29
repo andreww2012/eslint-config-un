@@ -196,6 +196,7 @@ export default ((context, optionsRaw) => {
     .addRule('template-require-form-method', OFF) /** @since 13.0.0 */
     .addRule('template-require-has-block-helper', ERROR) /** @since 13.0.0 */
     .addRule('template-require-iframe-src-attribute', ERROR) /** @since 13.0.0 */
+    .addRule('template-require-input-type', ERROR) /** @since 13.2.0 */
     .addRule('template-require-splattributes', OFF) /** @since 13.0.0 */
     .addRule('template-require-strict-mode', OFF) /** @since 13.0.0 */
     .addRule('template-require-valid-named-block-naming-format', ERROR) /** @since 13.0.0 */
