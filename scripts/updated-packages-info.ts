@@ -632,6 +632,14 @@ const PACKAGES_META: Record<string, PackageMeta> = {
     configs: ['ripple'],
     ruleDocsUrl: null,
   },
+  '@typescript-eslint/eslint-plugin': {
+    configs: ['ts'],
+    ruleDocsUrl: null,
+  },
+  '@typescript-eslint/parser': {
+    configs: ['ts'],
+    ruleDocsUrl: null,
+  },
   'astro-eslint-parser': {
     configs: ['astro'],
     ruleDocsUrl: null,
