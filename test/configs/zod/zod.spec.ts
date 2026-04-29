@@ -122,7 +122,7 @@ describe('rules', async () => {
     expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-meta')).toBe(2);
   });
 
-  it('`zod/require-schema-suffix` rule fires when schema variable lacks configured suffix', async () => {
+  it('`zod/consistent-schema-var-name` rule fires when schema variable lacks configured suffix', async () => {
     const results = await testEslintConfig(
       'zod',
       FIXTURES.zodSchemaWithoutSpecificSuffix,
@@ -132,12 +132,10 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.zodSchemaWithoutSpecificSuffix,
-      'zod/require-schema-suffix',
+      'zod/consistent-schema-var-name',
     );
 
-    expect(error?.message).toMatchInlineSnapshot(
-      '"Use the "Zod" suffix for Zod schemas. Rename this to "userZod""',
-    );
+    expect(error?.message).toMatchInlineSnapshot('"Rename this Zod schema to "userZod""');
   });
 });
 
@@ -229,27 +227,53 @@ describe('options', () => {
     });
   });
 
-  describe('option: `schemaSuffix`', () => {
-    it("enforces suffix `'Zod'` by default", async () => {
+  describe('option: `schemaVariableName`', () => {
+    it("enforces `'Zod'` suffix by default", async () => {
       const configResult = await computeEslintConfig('zod');
 
-      expect(configResult.getRuleEntry('zod', 'zod/require-schema-suffix')).toMatchInlineSnapshot(
-        '[2, {"suffix": "Zod"}]',
-      );
+      expect(
+        configResult.getRuleEntry('zod', 'zod/consistent-schema-var-name'),
+      ).toMatchInlineSnapshot('[2, {"after": "Zod"}]');
     });
 
-    it('enforces custom suffix when provided', async () => {
-      const configResult = await computeEslintConfig({zod: {schemaSuffix: 'Schema'}});
+    it("enforces `'Zod'` suffix when option is `true`", async () => {
+      const configResult = await computeEslintConfig({zod: {schemaVariableName: true}});
 
-      expect(configResult.getRuleEntry('zod', 'zod/require-schema-suffix')).toMatchInlineSnapshot(
-        '[2, {"suffix": "Schema"}]',
-      );
+      expect(
+        configResult.getRuleEntry('zod', 'zod/consistent-schema-var-name'),
+      ).toMatchInlineSnapshot('[2, {"after": "Zod"}]');
     });
 
-    it('disables `require-schema-suffix` when set to `false`', async () => {
-      const configResult = await computeEslintConfig({zod: {schemaSuffix: false}});
+    it("enforces custom suffix when option is `'Schema'`", async () => {
+      const configResult = await computeEslintConfig({zod: {schemaVariableName: 'Schema'}});
 
-      expect(configResult.getRuleEntrySeverity('zod', 'zod/require-schema-suffix')).toBe(0);
+      expect(
+        configResult.getRuleEntry('zod', 'zod/consistent-schema-var-name'),
+      ).toMatchInlineSnapshot('[2, {"after": "Schema"}]');
+    });
+
+    it('uses provided object options when option is an object', async () => {
+      const SCHEMA_VAR_NAME_OPTIONS = {after: 'Schema'};
+
+      const configResult = await computeEslintConfig({
+        zod: {schemaVariableName: SCHEMA_VAR_NAME_OPTIONS},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('zod', 'zod/consistent-schema-var-name'),
+      ).toStrictEqual([SCHEMA_VAR_NAME_OPTIONS]);
+    });
+
+    it('disables `zod/consistent-schema-var-name` when option is `false`', async () => {
+      const configResult = await computeEslintConfig({zod: {schemaVariableName: false}});
+
+      expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-schema-var-name')).toBe(0);
+    });
+
+    it('disables `zod/consistent-schema-var-name` when option is empty string', async () => {
+      const configResult = await computeEslintConfig({zod: {schemaVariableName: ''}});
+
+      expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-schema-var-name')).toBe(0);
     });
   });
 

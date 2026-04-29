@@ -54,27 +54,33 @@ export interface ZodEslintConfigOptions<
 
   /**
    * Enforces a consistent naming convention for Zod schema variables by requiring them
-   * to end with a specified suffix. Pass `false` or an empty string to not enforce.
+   * to start and/or end with a specified string.
+   *
+   * Possible values:
+   * - Not provided or `true`: enforces that schema variable names end with "Zod";
+   * - string: enforces that schema variable names end with the provided string;
+   * - object: enforces that schema variable names follow the provided naming convention;
+   * - `false`: does not enforce anything.
    *
    * Affected rule:
-   * - [`require-schema-suffix`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/require-schema-suffix.md)
+   * - [`consistent-schema-var-name`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-schema-var-name.md)
    * @default 'Zod'
    */
-  schemaSuffix?: string | false;
+  schemaVariableName?: string | boolean | GetRuleOptions<'zod', 'consistent-schema-var-name'>;
 }
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     arrayStyle: 'method',
     enforceNamespaceImport: true,
-    schemaSuffix: 'Zod',
+    schemaVariableName: 'Zod',
   } satisfies ZodEslintConfigOptions);
 
   const {
     allowedObjectSchemaTypes: allowedObjectSchemaTypesRaw,
     arrayStyle,
     enforceNamespaceImport,
-    schemaSuffix,
+    schemaVariableName,
   } = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'zod');
@@ -118,10 +124,26 @@ export default ((context, optionsRaw) => {
         : [{allow: allowedObjectSchemaTypes}],
     ) /** @since 1.11.0 */
     .addRule('consistent-schema-output-type-style', ERROR) /** @since 3.8.0 */
+    .addRule(
+      'consistent-schema-var-name',
+      schemaVariableName ? ERROR : OFF,
+      schemaVariableName
+        ? [
+            typeof schemaVariableName === 'object'
+              ? schemaVariableName
+              : {after: typeof schemaVariableName === 'string' ? schemaVariableName : 'Zod'},
+          ]
+        : [],
+    ) /** @since 3.11.0 */ // 🟢
     .addRule('no-any-schema', WARNING) /** @since 0.0.1 */ /** @aka no-any (before 2.0.0) */ // 🟢
     .addRule('no-empty-custom-schema', ERROR) /** @since 1.1.0 */ // 🟢
     // `.int()` added in v4
+    .addRule('no-number-schema-with-finite', severityForRulesOnlyForV4) /** @since 3.9.0 */ // 🟢
     .addRule('no-number-schema-with-int', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
+    .addRule('no-number-schema-with-is-int', severityForRulesOnlyForV4) /** @since 3.9.0 */ // 🟢
+    .addRule('no-number-schema-with-is-finite', severityForRulesOnlyForV4) /** @since 3.9.0 */ // 🟢
+    .addRule('no-number-schema-with-safe', severityForRulesOnlyForV4) /** @since 3.9.0 */ // 🟢
+    .addRule('no-number-schema-with-step', severityForRulesOnlyForV4) /** @since 3.9.0 */ // 🟢
     .addRule('no-optional-and-default-together', ERROR) /** @since 1.6.0 */ // 🟢
     .addRule('no-string-schema-with-uuid', ERROR) /** @since 3.2.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 0.0.1 */ // 🟢
@@ -134,11 +156,6 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-string-schema-with-trim', OFF) /** @since 3.3.0 */ // 🟢
     .addRule('require-brand-type-parameter', ERROR) /** @since 1.8.0 */ // 🟢
     .addRule('require-error-message', ERROR) /** @since 1.4.0 */ // 🟢
-    .addRule(
-      'require-schema-suffix',
-      schemaSuffix ? ERROR : OFF,
-      schemaSuffix ? [{suffix: schemaSuffix}] : [],
-    ) /** @since 1.3.0 */ // 🟢
     .addRule('schema-error-property-style', OFF) /** @since 1.8.0 */
     .enableConfigTesterForPlugin('zod')
     .addOverrides();
