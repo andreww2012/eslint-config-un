@@ -133,6 +133,7 @@ export const RULES_TO_DISABLE_IN_TEST_FILES: UnAllRuleNames[] = [
   'ts/no-extraneous-class',
   'ts/no-empty-function',
   'unicorn/template-indent', // triggered on inline snapshots
+  'e18e/prefer-static-regex',
 ];
 
 export const generateConsistentTestItOptions = ({
