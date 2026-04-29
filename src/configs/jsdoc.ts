@@ -356,7 +356,7 @@ export default ((context, optionsRaw) => {
     .addRule('ts-no-unnecessary-template-expression', ERROR) /** @since 61.1.0 */
     .addRule('ts-prefer-function-type', ERROR) /** @since 61.1.0 */
     .addRule('type-formatting', formatTypeValues ? ERROR : OFF, [
-      {stringQuotes: 'single', methodQuotes: 'single'},
+      {stringQuotes: 'single', methodQuotes: 'single', objectFieldSeparator: 'semicolon'},
     ]) /** @since 55.3.0 */
     .addRule('valid-types', ERROR) /** @since 3.6.0 */ // 🟢2️⃣
     .markCategory('Deprecated')
