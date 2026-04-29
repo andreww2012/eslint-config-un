@@ -5,7 +5,10 @@ const config: KnipConfig = {
   entry: [
     '.ncurc.cjs', // cspell:disable-line
   ],
-  ignoreDependencies: ['@eslint/core'],
+  ignoreDependencies: [
+    '@eslint/core',
+    'yaml-eslint-parser', // Pre-loaded in src/loaders/plugins.ts
+  ],
   tags: ['-knipignore'],
   treatConfigHintsAsErrors: true,
 };

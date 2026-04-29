@@ -74,11 +74,15 @@ export const pluginsLoaders = {
     '@intlify/vue-i18n',
     '@intlify/eslint-plugin-vue-i18n',
     async () => {
-      // Pre-load `jsonc-eslint-parser` (ESM) before loading `@intlify/eslint-plugin-vue-i18n` (CJS).
-      // The CJS plugin uses `require()` on `jsonc-eslint-parser`; on Node 24, `require(esm)` fails if
-      // that module is concurrently being loaded via `import()` elsewhere (race condition).
-      // eslint-disable-next-line import/no-extraneous-dependencies
+      // Pre-load `{jsonc,yaml}-eslint-parser` (ESM) before loading
+      // `@intlify/eslint-plugin-vue-i18n` (CJS).
+      // The CJS plugin uses `require()` on `jsonc-eslint-parser`;
+      // on Node 24, `require(esm)` fails if that module is concurrently being loaded
+      // via `import()` elsewhere (race condition).
+      /* eslint-disable import/no-extraneous-dependencies */
       await import('jsonc-eslint-parser').catch(() => null);
+      await import('yaml-eslint-parser').catch(() => null);
+      /* eslint-enable import/no-extraneous-dependencies */
       return await (interopDefault(
         import('@intlify/eslint-plugin-vue-i18n'),
         // @ts-expect-error types mismatch
