@@ -270,8 +270,8 @@ importers:
         specifier: 10.0.0
         version: 10.0.0(eslint@9.39.2)
       '@darraghor/eslint-plugin-nestjs-typed':
-        specifier: 7.1.30
-        version: 7.1.30(@typescript-eslint/parser@8.59.1)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2)(typescript@6.0.3)
+        specifier: 7.1.31
+        version: 7.1.31(@typescript-eslint/parser@8.59.1)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2)(typescript@6.0.3)
       '@docusaurus/eslint-plugin':
         specifier: 3.10.0
         version: 3.10.0(eslint@9.39.2)(typescript@6.0.3)
@@ -1854,8 +1854,8 @@ packages:
     resolution: {integrity: sha512-q+0pHQ8DbqjemyaOn/mTtBRbCuKDqhnsVbZ6J9zkTsxPgMpccjy0s5oLXwomfrrxMRBH+UcbERwtUmE+SbnoIQ==}
     engines: {node: '>=22.18.0'}
 
-  '@darraghor/eslint-plugin-nestjs-typed@7.1.30':
-    resolution: {integrity: sha512-sB6I04e1LWtkq2ZH6cMXg4sw3oMYN0KKS7zP8fywP9pvVc4M4fhXOT+8Io4ZVHcmA4RmsWHk46VTdAh1qU45Eg==}
+  '@darraghor/eslint-plugin-nestjs-typed@7.1.31':
+    resolution: {integrity: sha512-38NnwQfbN44Z1/bty71DLgLcZJ4sOENwTE6NKDQTzWT7smMHiC0OjnmBBRa3nlAnf22blL06B50ZM6twaEiOBw==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       '@typescript-eslint/parser': ^7.0.0 || ^8.0.0
@@ -12855,12 +12855,12 @@ snapshots:
 
   '@cspell/url@10.0.0': {}
 
-  '@darraghor/eslint-plugin-nestjs-typed@7.1.30(@typescript-eslint/parser@8.59.1)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2)(typescript@6.0.3)':
+  '@darraghor/eslint-plugin-nestjs-typed@7.1.31(@typescript-eslint/parser@8.59.1)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/parser': 8.59.1(eslint@9.39.2)(typescript@6.0.3)
-      '@typescript-eslint/scope-manager': 8.59.0
-      '@typescript-eslint/type-utils': 8.59.0(eslint@9.39.2)(typescript@6.0.3)
-      '@typescript-eslint/utils': 8.59.0(eslint@9.39.2)(typescript@6.0.3)
+      '@typescript-eslint/scope-manager': 8.59.1
+      '@typescript-eslint/type-utils': 8.59.1(eslint@9.39.2)(typescript@6.0.3)
+      '@typescript-eslint/utils': 8.59.1(eslint@9.39.2)(typescript@6.0.3)
       class-validator: 0.14.3
       eslint: 9.39.2(jiti@2.6.1)
       eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.59.1)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2)
