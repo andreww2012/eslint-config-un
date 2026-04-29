@@ -1,5 +1,43 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.9
+
+### Minor Changes
+
+- 9a94baf: Disabled autofix for `markdown-preferences/{heading,table-header}-casing` rules as they may change the meaning of the sentence by transforming the casing
+- 30f37a2: Added a new config `functional` which uses [`eslint-plugin-functional`](https://github.com/eslint-functional/eslint-plugin-functional#readme), ❌ disabled by default
+- b001da0: Added a new config `tanstackStart` which uses [`@tanstack/eslint-plugin-start`](https://npmx.dev/@tanstack/eslint-plugin-start), ❓ enabled if `@tanstack/react-start` or `@tanstack/solid-start` package is installed
+- e4bac38: Added a new config `ripple` which uses [`@tsrx/eslint-plugin`](https://npmx.dev/@tsrx/eslint-plugin), ❓ enabled if `ripple` package is installed
+- 4d3e0ef: zod: updated [`eslint-plugin-zod` from v3.7.0 to v3.8.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.7.0...v3.8.0):
+  - 🟢 enabled [`consistent-schema-output-type-style`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-schema-output-type-style.md) rule and added it to the `noStylisticRules` config
+
+- 3be385e: zod: updated [`eslint-plugin-zod` from v3.8.0 to v3.11.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.8.0...v3.11.0):
+  - `schemaSuffix` option was renamed to `schemaVariableName` and now supports specifying schema prefix, following the ⚠️ deprecation of `require-schema-suffix` rule in favor of a new [`consistent-schema-var-name`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-schema-var-name.md) rule
+  - Enabled the following rules if the resolved zod major version is >=4:
+    - [`no-number-schema-with-finite`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-finite.md)
+    - [`no-number-schema-with-is-int`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-is-int.md)
+    - [`no-number-schema-with-is-finite`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-is-finite.md)
+    - [`no-number-schema-with-safe`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-safe.md)
+    - [`no-number-schema-with-step`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-step.md)
+
+- 7d1eee7: vue: updated [`eslint-plugin-vue` from v10.8.0 to v10.9.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.8.0...v10.9.0):
+  - 🟢 enabled [`prefer-single-event-payload`](https://eslint.vuejs.org/rules/prefer-single-event-payload.html) rule
+  - 🟢 enabled [`prefer-v-model`](https://eslint.vuejs.org/rules/prefer-v-model.html) rule
+
+- 6c82336: packageJson: updated [`eslint-plugin-package-json` from v0.91.1 to v0.91.2](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v0.91.1...v0.91.2):
+  - ❓ enabled conditionally [`restrict-top-level-properties`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-top-level-properties.md) rule based on how a new option `banTopLevelProperties` is configured
+
+- c4aef9b: Added a new config `ngrx` which uses [`@ngrx/eslint-plugin`](https://npmx.dev/@ngrx/eslint-plugin), ❓ enabled if `@ngrx/store` package is installed
+- 907750e: Added a new config `drizzle` which uses [`eslint-plugin-drizzle`](https://npmx.dev/eslint-plugin-drizzle), ❓ enabled if `drizzle-orm` package is installed
+
+### Patch Changes
+
+- 8b7f844: e18e: updated [`@e18e/eslint-plugin` from v0.3.0 to v0.4.1](https://github.com/e18e/eslint-plugin/compare/0.3.0...0.4.1)
+- 0686254: promise: updated [`eslint-plugin-promise` from v7.2.1 to v7.3.0](https://github.com/eslint-community/eslint-plugin-promise/compare/v7.2.1...v7.3.0)
+- d468cf9: tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.99.2 to v5.100.1](https://github.com/TanStack/query/compare/release-2026-04-19-1059...release-2026-04-23-1319):
+- 275eb4d: ember: updated [`eslint-plugin-ember` from v13.0.0 to v13.1.0](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.0.0...v13.1.0)
+- 4205068: ripple: updated [`@tsrx/eslint-plugin` from v0.3.29 to v0.3.30](https://github.com/Ripple-TS/ripple/compare/@tsrx/eslint-plugin0.3.29...@tsrx/eslint-plugin0.3.30)
+
 ## 1.0.0-beta.8
 
 ### Minor Changes
