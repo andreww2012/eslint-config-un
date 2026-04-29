@@ -468,8 +468,8 @@ importers:
         specifier: 13.2.0
         version: 13.2.0(@emnapi/core@1.10.0)(@emnapi/runtime@1.10.0)(@typescript-eslint/parser@8.59.1)(eslint@9.39.2)(typescript@6.0.3)
       eslint-plugin-erasable-syntax-only:
-        specifier: 0.4.0
-        version: 0.4.0(@typescript-eslint/parser@8.59.1)(eslint@9.39.2)(typescript@6.0.3)
+        specifier: 0.4.1
+        version: 0.4.1(@typescript-eslint/parser@8.59.1)(eslint@9.39.2)(typescript@6.0.3)
       eslint-plugin-es-x:
         specifier: 9.6.0
         version: 9.6.0(eslint@9.39.2)
@@ -5516,8 +5516,8 @@ packages:
     resolution: {integrity: sha512-M3Lab8NPYlZU2exsL3bMVvMrMqgwCnMWfdZbK28bn3pK6APT/Te/I8hjRPNu1uwORY9a1eEQoifXbKPQMfMTOA==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  cached-factory@0.1.0:
-    resolution: {integrity: sha512-IGOSWu+NuED5UzCRmBeqQPZ8z7SkgrD/nN67W2iY1Qv83CVhevyMexkGclJ86saXisIqxoOnbeiTWvsCHRqJBw==}
+  cached-factory@0.2.0:
+    resolution: {integrity: sha512-6XGkilRVhace8gARfWVvkjyWoazCp21VUQXdDyWEcAz3sHSwXji76srbLfJ6BcHRAZveW9ICYprhqsdoRYZ+YQ==}
     engines: {node: '>=18'}
 
   call-bind-apply-helpers@1.0.2:
@@ -6675,8 +6675,8 @@ packages:
       '@typescript-eslint/parser':
         optional: true
 
-  eslint-plugin-erasable-syntax-only@0.4.0:
-    resolution: {integrity: sha512-7dx2gpfVn0FFEGukLqsF/izW4hGvSaySNOkcuSCO4q6Khh0ecOGYlRhW9hhDUtNryuKc+cXd1WFiQdpae3xzaQ==}
+  eslint-plugin-erasable-syntax-only@0.4.1:
+    resolution: {integrity: sha512-6KWtNpFe/d5vU/gx5mdvARr0W1ADIwGkbgIo+6xUPmNVin1rAKcWjKMAy5soDJurRB8fj0PrrC7Em0xRua4yNg==}
     engines: {node: '>=20.18.0'}
     peerDependencies:
       '@typescript-eslint/parser': '>=8'
@@ -16644,7 +16644,7 @@ snapshots:
       p-map: 7.0.4
       ssri: 13.0.1
 
-  cached-factory@0.1.0: {}
+  cached-factory@0.2.0: {}
 
   call-bind-apply-helpers@1.0.2:
     dependencies:
@@ -17910,11 +17910,11 @@ snapshots:
       - '@emnapi/runtime'
       - typescript
 
-  eslint-plugin-erasable-syntax-only@0.4.0(@typescript-eslint/parser@8.59.1)(eslint@9.39.2)(typescript@6.0.3):
+  eslint-plugin-erasable-syntax-only@0.4.1(@typescript-eslint/parser@8.59.1)(eslint@9.39.2)(typescript@6.0.3):
     dependencies:
       '@typescript-eslint/parser': 8.59.1(eslint@9.39.2)(typescript@6.0.3)
-      '@typescript-eslint/utils': 8.59.0(eslint@9.39.2)(typescript@6.0.3)
-      cached-factory: 0.1.0
+      '@typescript-eslint/utils': 8.59.1(eslint@9.39.2)(typescript@6.0.3)
+      cached-factory: 0.2.0
       eslint: 9.39.2(jiti@2.6.1)
       typescript: 6.0.3
     transitivePeerDependencies:

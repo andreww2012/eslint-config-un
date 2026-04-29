@@ -188,6 +188,7 @@ const PACKAGES_META: Record<string, PackageMeta> = {
       },
       'erasable-syntax-only': {
         configs: ['erasableSyntaxOnly'],
+        gitTag: versionAsIs,
         ruleDocsUrl: (ruleName) =>
           `https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/blob/HEAD/docs/rules/${ruleName}.md`,
       },
