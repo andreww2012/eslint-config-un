@@ -339,8 +339,8 @@ importers:
         specifier: 0.3.30
         version: 0.3.30(@typescript-eslint/types@8.59.1)(eslint@9.39.2)(ripple@1.0.1)
       '@tsrx/eslint-plugin':
-        specifier: 0.3.30
-        version: 0.3.30(@tsrx/eslint-parser@0.3.30)(@typescript-eslint/parser@8.59.1)(eslint@9.39.2)
+        specifier: 0.3.39
+        version: 0.3.39(@tsrx/eslint-parser@0.3.30)(@typescript-eslint/parser@8.59.1)(eslint@9.39.2)
       '@types/eslint-plugin-security':
         specifier: 3.0.1
         version: 3.0.1
@@ -4328,11 +4328,11 @@ packages:
       eslint: '>=9.0.0'
       ripple: '*'
 
-  '@tsrx/eslint-plugin@0.3.30':
-    resolution: {integrity: sha512-TgG9kykRmSGH48Mx9Fu7I7PwpFEV4JdcPJQQOVxs0g6tngoA9Cgiht23DX837EKCiz2sLuP6FBjWUPhGQQbgeQ==}
+  '@tsrx/eslint-plugin@0.3.39':
+    resolution: {integrity: sha512-7t1Zx6ZTU8TEYUDbPwH7mnc8yT8R5ewO7hi8lkoKkUCxK4Bvhq2AnZxXekr4bQ+CmEMhES+ybPB9NfBStjt4Ow==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@tsrx/eslint-parser': 0.3.30
+      '@tsrx/eslint-parser': 0.3.39
       '@typescript-eslint/parser': ^8.56.1
       eslint: '>=9.0.0'
 
@@ -15249,7 +15249,7 @@ snapshots:
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/eslint-plugin@0.3.30(@tsrx/eslint-parser@0.3.30)(@typescript-eslint/parser@8.59.1)(eslint@9.39.2)':
+  '@tsrx/eslint-plugin@0.3.39(@tsrx/eslint-parser@0.3.30)(@typescript-eslint/parser@8.59.1)(eslint@9.39.2)':
     dependencies:
       '@tsrx/eslint-parser': 0.3.30(@typescript-eslint/types@8.59.1)(eslint@9.39.2)(ripple@1.0.1)
       '@typescript-eslint/parser': 8.59.1(eslint@9.39.2)(typescript@6.0.3)
