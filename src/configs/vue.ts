@@ -1072,9 +1072,8 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       files: [
         ...DEFAULT_VUE_FILES,
         configNuxt && [
-          ...['plugins', 'server'].map((dir) =>
-            resolvePathInVueOrNuxtProjectDir(`${nuxtV4DirectoryStructure ? '../' : ''}${dir}/**/*`),
-          ),
+          resolvePathInVueOrNuxtProjectDir('plugins/**/*'),
+          resolvePathInVueOrNuxtProjectDir(`${nuxtV4DirectoryStructure ? '../' : ''}server/**/*`),
           resolvePathInVueOrNuxtProjectDir(
             `${nuxtV4DirectoryStructure ? '' : 'app/'}router.options.${GLOB_JS_TS_EXTENSION}`,
           ),
