@@ -567,8 +567,8 @@ importers:
         specifier: 10.3.6
         version: 10.3.6(eslint@9.39.2)(storybook@10.3.5)(typescript@6.0.3)
       eslint-plugin-svelte:
-        specifier: 3.17.0
-        version: 3.17.0(eslint@9.39.2)(svelte@5.34.3)
+        specifier: 3.17.1
+        version: 3.17.1(eslint@9.39.2)(svelte@5.34.3)
       eslint-plugin-tailwindcss:
         specifier: 3.18.3
         version: 3.18.3(tailwindcss@3.4.17)
@@ -7124,8 +7124,8 @@ packages:
       eslint: '>=8'
       storybook: ^10.3.6
 
-  eslint-plugin-svelte@3.17.0:
-    resolution: {integrity: sha512-sF6wgd5FLS2P8CCaOy2HdYYYEcZ6TwL251dLHUkNmtLnWECk1Dwc+j6VeulmmnFxr7Xs0WNtjweOA+bJ0PnaFw==}
+  eslint-plugin-svelte@3.17.1:
+    resolution: {integrity: sha512-NyiXHtS3Ni7e532RBwS9OXlMKDIrENg3gY+/+ODjZzQx2xhU3NlJ+nIl1a93iUUQeiJL3lS8KLmY+W8hklzweQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       eslint: ^8.57.1 || ^9.0.0 || ^10.0.0
@@ -18662,7 +18662,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-svelte@3.17.0(eslint@9.39.2)(svelte@5.34.3):
+  eslint-plugin-svelte@3.17.1(eslint@9.39.2)(svelte@5.34.3):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       '@jridgewell/sourcemap-codec': 1.5.5
