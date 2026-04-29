@@ -112,6 +112,9 @@ const ALL_STYLISTIC_RULES = {
   '@next/next': {
     // None
   },
+  '@ngrx': {
+    'select-style': true,
+  },
   '@stylistic': markAllPluginRulesAsStylistic('@stylistic'),
   '@tanstack/query': {
     // None

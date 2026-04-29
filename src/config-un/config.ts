@@ -355,6 +355,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     moduleInterop: {enabled: getIsConfigEnabled('moduleInterop')},
     // eslint-disable-next-line case-police/string-check
     nestJs: {enabled: getIsConfigEnabled('nestJs', '@nestjs/core')},
+    ngrx: {enabled: getIsConfigEnabled('ngrx', '@ngrx/store')},
     nextJs: {
       // eslint-disable-next-line case-police/string-check
       enabled: getIsConfigEnabled('nextJs', 'next'),
@@ -679,6 +680,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('noSecrets', () => import('../configs/no-secrets')),
     // eslint-disable-next-line case-police/string-check
     loadUnConfig('nestJs', () => import('../configs/nest-js')),
+    loadUnConfig('ngrx', () => import('../configs/ngrx')),
     loadUnConfig('jestDom', () => import('../configs/jest-dom')),
     loadUnConfig('clsx', () => import('../configs/clsx')),
     loadUnConfig('e18e', () => import('../configs/e18e')),

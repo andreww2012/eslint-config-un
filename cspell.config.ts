@@ -58,6 +58,7 @@ export default {
     'oxfmt',
     'splattributes', // Ember
     'tsrx',
+    'npmx',
 
     // Technical words/terms
     'arraify',

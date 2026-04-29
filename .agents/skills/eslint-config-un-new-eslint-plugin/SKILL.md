@@ -42,7 +42,7 @@ Common documentation locations are:
 - Repo likely specified in `repository` field of the plugin's `package.json`;
 - Website specified in `homepage` field.
 
-ONLY IF the plugin type does not satisfy the expected plugin type (check TS errors in this file), add `satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>` after the `interopDefault(...)` expression.
+ONLY IF the plugin type does not satisfy the expected plugin type (check TS errors in this file), add `satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>` after the `interopDefault(...)` expression, and add `// @ts-expect-error types mismatch` directive before the line on which the error occurs.
 
 ONLY IF this type cast was not required, run `nr build:code:test` script.
 This command verifies that our package still compiles with the new plugin.
@@ -118,9 +118,11 @@ After every `addRule` statement, we annotate the rule with:
   - 🎨 - in stylistic
   - 💭 - requires type information
   - 💭? - optionally requires type information
-  - 🔴 - NOT in recommended \[usually used when most of the rules are in recommended]
+  - 🔴 - NOT in recommended
     This is not strict and may vary from plugin to plugin.
     See the examples at `src/configs/package-json.ts`, `src/configs/jsdoc.ts`, `src/configs/e18e.ts`, etc, if needed.
+  IMPORTANT: `🟢`/`🟡` and `🔴` are mutually exclusive — pick one system based on which is the minority.
+  Every emoji used in annotations must appear in the legend section.
 
 #### Step 4.3: Stylistic rules
 
@@ -142,7 +144,7 @@ Define a new Config in `src/configs/index.ts`, maintaining the alphabetical orde
 The JSdoc comment for the Config should include the following sections:
 
 - Short config description;
-- Default Config `files`;
+- Default Config `files` (must match the `filesDefault` passed to `addConfig` in the config file);
 - Main plugin(s) with *plugin* docs URL;
 - Sub-config names without the `config` prefix;
 - `@default` condition.
@@ -154,6 +156,7 @@ Then make sure the config is actually loaded by adding it to `src/config-un/conf
 ### Step 6: Documentation
 
 Document the addition of a new Config and plugin in `README.md`.
+Do NOT add a config logo if it doesn't exists.
 
 Document plugin metadata in `PACKAGES_META` in `scripts/updated-packages-info.ts`.
 Don't blindly copy URL patterns from other entries - you need to actually figure them out.
@@ -175,9 +178,9 @@ Create a new changelog entry by running `nr ch`, selecting `minor` and confirmin
 Use the following template for the description:
 
 ```md
-Added a new config `<configName>` which uses [`<pluginName>`](pluginNameLink),
+Added a new config `<configName>` which uses [`<pluginName>`](<plugin npmx.dev link>),
 
-<!-- Use one of the options below (without actually creating a line break): -->
+<!-- Use one of the options below (without actually creating any line breaks!): -->
 
 ✅ enabled by default
 ❓ enabled if `<package-name-1>` or `<package-name-2>` package is installed

@@ -88,6 +88,15 @@ export const pluginsLoaders = {
   '@next/next': genModuleLoader('@next/next', '@next/eslint-plugin-next', () =>
     interopDefault(import('@next/eslint-plugin-next')),
   ),
+  '@ngrx': genModuleLoader(
+    '@ngrx',
+    '@ngrx/eslint-plugin',
+    () =>
+      interopDefault(
+        import('@ngrx/eslint-plugin'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   // We can't `import()` `@stylistic/eslint-plugin` because it's `require()`d by eslint-plugin-vue: https://github.com/vuejs/eslint-plugin-vue/blob/1b634549a9e91231e5ea79313763c69f93e678c1/lib/utils/index.js#L113 and `import()`ing after `require()`ing causes `ERR_INTERNAL_ASSERTION` error, see https://github.com/nodejs/node/issues/54577
   '@stylistic': genModuleLoader('@stylistic', '@stylistic/eslint-plugin', () =>
     Promise.resolve(stylistic),

@@ -57,6 +57,10 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         ],
         ruleDocsUrl: (ruleName) => `https://nextjs.org/docs/messages/${ruleName}`,
       },
+      '@ngrx': {
+        configs: ['ngrx'],
+        ruleDocsUrl: (ruleName) => `https://ngrx.io/guide/eslint-plugin/rules/${ruleName}`,
+      },
       '@stylistic': {
         configs: ['stylistic'],
         ruleDocsUrl: (ruleName) => `https://eslint.style/rules/${ruleName}`,
