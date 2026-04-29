@@ -25,7 +25,7 @@ export interface GithubActionsEslintConfigOptions<
 
   /**
    * Enforces `<job>.steps.uses` style.
-   * @default 'release'
+   * @default 'commit'
    */
   usesStyle?: false | GetRuleOptions<'github-actions', 'prefer-step-uses-style'>;
 }
@@ -33,7 +33,7 @@ export interface GithubActionsEslintConfigOptions<
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     usesStyle: {
-      release: true,
+      commit: true,
       allowRepository: true,
     },
   } satisfies Partial<GithubActionsEslintConfigOptions>);

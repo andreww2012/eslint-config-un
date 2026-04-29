@@ -269,7 +269,7 @@ describe('options', async () => {
     it('enables `github-actions/prefer-step-uses-style` rule with default options by default', () => {
       expect(
         configResult.getRuleEntry('github-actions', 'github-actions/prefer-step-uses-style'),
-      ).toMatchInlineSnapshot('[2, {"allowRepository": true, "release": true}]');
+      ).toMatchInlineSnapshot('[2, {"allowRepository": true, "commit": true}]');
     });
 
     it('disables `github-actions/prefer-step-uses-style` rule when set to `false`', async () => {
@@ -290,7 +290,7 @@ describe('options', async () => {
 
       expect(
         customConfigResult.getRuleEntry('github-actions', 'github-actions/prefer-step-uses-style'),
-      ).toMatchInlineSnapshot('[2, {"allowRepository": true, "release": false}]');
+      ).toMatchInlineSnapshot('[2, {"allowRepository": true, "commit": true, "release": false}]');
     });
   });
 });
