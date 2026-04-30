@@ -234,6 +234,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'drizzle-orm',
   '@testing-library/jest-dom',
   'clsx',
+  'mobx',
 
   'astro',
   'vue',

@@ -121,6 +121,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-lit`                                | `lit`                                |
 | `eslint-plugin-lit-a11y`                           | `lit-a11y`                           |
 | `eslint-plugin-lockfile`                           | `lockfile`                           |
+| `eslint-plugin-mobx`                               | `mobx`                               |
 | `eslint-plugin-mocha`                              | `mocha`                              |
 | `eslint-plugin-pinia`                              | `pinia`                              |
 | `eslint-plugin-playwright`                         | `playwright`                         |
@@ -453,6 +454,7 @@ In the following table, Sub-configs have `/` in their names.
 | ![FormatJS](./assets/logos-formatjs.svg) `formatJs`                                 | ✅ (`@formatjs/icu-messageformat-parser` is installed)                 | [eslint-plugin-formatjs](https://npmx.dev/eslint-plugin-formatjs) (`formatjs`)                                                                      | Since v1.0.0                                                                                        |
 | ![Docusaurus](./assets/vscode-icons-file-type-docusaurus.svg) `docusaurus`          | ✅ (`@docusaurus/core` is installed)                                   | [@docusaurus/eslint-plugin](https://npmx.dev/@docusaurus/eslint-plugin) (`docusaurus`)                                                              | Since v1.0.0                                                                                        |
 | `drizzle`                                                                           | ✅ (`drizzle-orm` is installed)                                        | [eslint-plugin-drizzle](https://npmx.dev/eslint-plugin-drizzle) (`drizzle`)                                                                         | Since v1.0.0                                                                                        |
+| `mobx`                                                                              | ✅ (`mobx` is installed)                                               | [eslint-plugin-mobx](https://npmx.dev/eslint-plugin-mobx) (`mobx`)                                                                                  | Since v1.0.0                                                                                        |
 | `clsx`                                                                              | ✅ (`clsx` is installed)                                               | [eslint-plugin-clsx](https://npmx.dev/eslint-plugin-clsx) (`clsx`)                                                                                  | Since v1.0.0                                                                                        |
 
 ### Miscellaneous

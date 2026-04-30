@@ -56,6 +56,7 @@ import type {MarkdownLinksEslintConfigOptions} from './markdown-links';
 import type {MarkdownPreferencesEslintConfigOptions} from './markdown-preferences';
 import type {MathEslintConfigOptions} from './math';
 import type {MdxEslintConfigOptions} from './mdx';
+import type {MobxEslintConfigOptions} from './mobx';
 import type {MochaEslintConfigOptions} from './mocha';
 import type {ModuleInteropEslintConfigOptions} from './module-interop';
 import type {NestJsEslintConfigOptions} from './nest-js';
@@ -800,6 +801,16 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true
    */
   mdx: MdxEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [MobX](https://mobx.js.org) specific rules.
+   *
+   * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+   *
+   * 🧩 Main plugin: [`eslint-plugin-mobx`](https://npmx.dev/eslint-plugin-mobx) ([docs](https://github.com/mobxjs/mobx/blob/main/packages/eslint-plugin-mobx/README.md))
+   * @default true <=> [`mobx`](https://npmx.dev/mobx) package is installed
+   */
+  mobx: MobxEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Mocha](https://mochajs.org) specific rules.

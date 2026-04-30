@@ -294,6 +294,12 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   // drizzle — database-specific operation rules that would false-positive on API usage examples
   'drizzle/enforce-delete-with-where', // [runtime-only]
   'drizzle/enforce-update-with-where', // [runtime-only]
+
+  // mobx — observable state management rules that would false-positive on partial code snippets
+  'mobx/exhaustive-make-observable', // [runtime-only]
+  'mobx/unconditional-make-observable', // [runtime-only]
+  'mobx/missing-make-observable', // [runtime-only]
+  'mobx/missing-observer', // [runtime-only]
 ] satisfies UnAllRuleNames[];
 
 export type RulesDisabledInEmbeddedCodeBlocksByDefault =

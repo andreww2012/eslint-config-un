@@ -351,6 +351,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     markdownPreferences: {enabled: getIsConfigEnabled('markdownPreferences')},
     math: {enabled: getIsConfigEnabled('math')},
     mdx: {enabled: getIsConfigEnabled('mdx')},
+    mobx: {enabled: getIsConfigEnabled('mobx', 'mobx')},
     mocha: {enabled: getIsConfigEnabled('mocha', 'mocha')},
     moduleInterop: {enabled: getIsConfigEnabled('moduleInterop')},
     // eslint-disable-next-line case-police/string-check
@@ -676,6 +677,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('zod', () => import('../configs/zod')),
     loadUnConfig('docusaurus', () => import('../configs/docusaurus')),
     loadUnConfig('drizzle', () => import('../configs/drizzle')),
+    loadUnConfig('mobx', () => import('../configs/mobx')),
     loadUnConfig('moduleInterop', () => import('../configs/module-interop')),
     loadUnConfig('noSecrets', () => import('../configs/no-secrets')),
     // eslint-disable-next-line case-police/string-check

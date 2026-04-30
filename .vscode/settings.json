@@ -34,5 +34,6 @@
     "nr build": true,
     "nr test:quick": true,
     "nr typegen": true,
+    "nr rules-finder": true,
   },
 }

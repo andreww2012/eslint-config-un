@@ -204,6 +204,7 @@
     "@tanstack/eslint-plugin-start": "0.0.1",
     "@tsrx/eslint-parser": "0.3.39",
     "@tsrx/eslint-plugin": "0.3.39",
+    "@types/eslint-plugin-mobx": "0.0.0",
     "@types/eslint-plugin-security": "3.0.1",
     "@types/eslint-plugin-tailwindcss": "3.17.0",
     "@types/estree": "1.0.8",
@@ -264,6 +265,7 @@
     "eslint-plugin-lit": "2.2.1",
     "eslint-plugin-lit-a11y": "5.1.1",
     "eslint-plugin-lockfile": "1.1.0",
+    "eslint-plugin-mobx": "0.0.14",
     "eslint-plugin-mocha": "11.2.0",
     "eslint-plugin-pinia": "0.4.2",
     "eslint-plugin-playwright": "2.10.2",
@@ -388,6 +390,7 @@
     "eslint-plugin-lit": "^2.2.1",
     "eslint-plugin-lit-a11y": "^5.1.1",
     "eslint-plugin-lockfile": "^1.1.0",
+    "eslint-plugin-mobx": "^0.0.14",
     "eslint-plugin-mocha": "^11.2.0",
     "eslint-plugin-pinia": "^0.4.2",
     "eslint-plugin-playwright": "^2.10.2",
@@ -602,6 +605,9 @@
       "optional": true
     },
     "eslint-plugin-lockfile": {
+      "optional": true
+    },
+    "eslint-plugin-mobx": {
       "optional": true
     },
     "eslint-plugin-mocha": {

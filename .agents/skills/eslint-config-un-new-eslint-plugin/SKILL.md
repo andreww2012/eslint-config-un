@@ -113,12 +113,12 @@ After every `addRule` statement, we annotate the rule with:
   You can find more information on presets in the plugin docs and/or by directly inspecting the plugin object, specifically `configs` property.
   There should be no spaces between consecutive emojis.
   Most often used emojis:
-  - 🟢 - in recommended
-  - 🟡 - in recommended (warns)
-  - 🎨 - in stylistic
+  - 🟢 - in `recommended`
+  - 🟡 - in `recommended` (warns)
+  - 🎨 - in `stylistic`
   - 💭 - requires type information
   - 💭? - optionally requires type information
-  - 🔴 - NOT in recommended
+  - 🔴 - NOT in `recommended`
 
   This is not strict and may vary from plugin to plugin.
   See the examples at `src/configs/package-json.ts`, `src/configs/jsdoc.ts`, `src/configs/e18e.ts`, etc, if needed.
@@ -181,7 +181,7 @@ Use the following template for the description:
 ```md
 Added a new config `<configName>` which uses [`<pluginName>`](<plugin npmx.dev link>),
 
-<!-- Use one of the options below (without actually creating any line breaks!): -->
+<!-- Use one of the options below (without actually creating any line breaks! don't forget emojis!): -->
 
 ✅ enabled by default
 ❓ enabled if `<package-name-1>` or `<package-name-2>` package is installed

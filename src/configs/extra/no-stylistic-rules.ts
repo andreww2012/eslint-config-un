@@ -460,6 +460,9 @@ const ALL_STYLISTIC_RULES = {
   mdx: {
     // None
   },
+  mobx: {
+    // None
+  },
   mocha: {
     'consistent-spacing-between-blocks': true,
   },

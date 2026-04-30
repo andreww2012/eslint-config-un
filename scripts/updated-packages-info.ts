@@ -344,6 +344,12 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         gitTag: (tag) => `eslint-plugin-mdx@${tag}`,
         ruleDocsUrl: null, // Single rule
       },
+      mobx: {
+        configs: ['mobx'],
+        gitTag: (tag) => `eslint-plugin-mobx@${tag}`,
+        ruleDocsUrl: (ruleName) =>
+          `https://github.com/mobxjs/mobx/tree/HEAD/packages/eslint-plugin-mobx/README.md#mobx${ruleName}`,
+      },
       mocha: {
         configs: ['mocha'],
         ruleDocsUrl: (ruleName) =>
