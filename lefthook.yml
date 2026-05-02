@@ -2,7 +2,7 @@ pre-push:
   parallel: true
   commands:
     eslint:
-      run: pnpm eslint {push_files}
+      run: pnpm eslint --no-warn-ignored {push_files}
     prettier:
       run: pnpm prettier --check --ignore-unknown {push_files}
     spellcheck:
