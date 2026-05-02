@@ -1013,6 +1013,7 @@ async function main() {
       const oldVersion = dependenciesBeforeChanges[dependency]!;
       const codeDiffResult = await exec('npm', [
         'diff',
+        '--force',
         `--diff=${dependency}@${oldVersion}`,
         `--diff=${dependency}@${newVersion}`,
       ]);
