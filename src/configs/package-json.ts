@@ -115,20 +115,6 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   collectionsToSort?: PackageJsonCollectionsToSort;
 
   /**
-   * - `true`: enforces to use the absolute version only on `dependencies` and `devDependencies`.
-   * - `'never'`: enforces not to use the absolute version.
-   * - `false`: do not enforce anything.
-   *
-   * Affected rules:
-   * - [`node-dependencies/absolute-version`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/absolute-version.html) (yes, it will use the rule from another plugin, [`eslint-plugin-node-dependencies`](https://npmx.dev/eslint-plugin-node-dependencies), for simplicity)
-   * @default false
-   */
-  enforceAbsoluteVersion?:
-    | boolean
-    | 'never'
-    | (GetRuleOptions<'node-dependencies', 'absolute-version'> & object);
-
-  /**
    * The list of top-level properties that won't be reported by `no-empty-fields` rule if empty.
    *
    * Affected rule:
@@ -179,7 +165,6 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    enforceAbsoluteVersion: false,
     order: 'sort-package-json',
     repositoryShorthand: 'object',
     propertiesAllowedToBeEmpty: ['browserslist'],
@@ -188,7 +173,6 @@ export default ((context, optionsRaw) => {
 
   const {
     settings: pluginSettings,
-    enforceAbsoluteVersion,
     order,
     repositoryShorthand,
     propertiesAllowedToBeEmpty,
@@ -346,21 +330,6 @@ export default ((context, optionsRaw) => {
     .addRule('valid-type', ERROR) /** @since 0.41.0 */ // 🟢
     .addRule('valid-version', ERROR) /** @since 0.10.0 */ // 🟢
     .addRule('valid-workspaces', ERROR) /** @since 0.75.0 */ // 🟢
-    .addAnyRule(
-      'node-dependencies',
-      'absolute-version',
-      enforceAbsoluteVersion ? ERROR : OFF,
-      enforceAbsoluteVersion
-        ? [
-            enforceAbsoluteVersion === true
-              ? {
-                  optionalDependencies: 'ignore',
-                  peerDependencies: 'ignore',
-                }
-              : enforceAbsoluteVersion,
-          ]
-        : [],
-    )
     .enableConfigTesterForPlugin('package-json')
     .addOverrides();
 

@@ -228,60 +228,6 @@ describe('options', () => {
     });
   });
 
-  describe('`enforceAbsoluteVersion`', () => {
-    it('disables `node-dependencies/absolute-version` rule by default', async () => {
-      const configResult = await computeEslintConfig('packageJson');
-
-      expect(
-        configResult.getRuleEntrySeverity('package-json', 'node-dependencies/absolute-version'),
-      ).toBe(0);
-    });
-
-    it('enables `node-dependencies/absolute-version` rule with default options when `enforceAbsoluteVersion` is `true`', async () => {
-      const configResult = await computeEslintConfig({
-        packageJson: {enforceAbsoluteVersion: true},
-      });
-
-      expect(
-        configResult.getRuleEntry('package-json', 'node-dependencies/absolute-version'),
-      ).toMatchInlineSnapshot(
-        '[2, {"optionalDependencies": "ignore", "peerDependencies": "ignore"}]',
-      );
-    });
-
-    it('disables `node-dependencies/absolute-version` rule when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        packageJson: {enforceAbsoluteVersion: false},
-      });
-
-      expect(
-        configResult.getRuleEntrySeverity('package-json', 'node-dependencies/absolute-version'),
-      ).toBe(0);
-    });
-
-    it("enables `node-dependencies/absolute-version` rule when `enforceAbsoluteVersion` is `'never'`", async () => {
-      const configResult = await computeEslintConfig({
-        packageJson: {enforceAbsoluteVersion: 'never'},
-      });
-
-      expect(
-        configResult.getRuleEntry('package-json', 'node-dependencies/absolute-version'),
-      ).toMatchInlineSnapshot('[2, "never"]');
-    });
-
-    it('enables `node-dependencies/absolute-version` rule with custom options when `enforceAbsoluteVersion` is object', async () => {
-      const OPTIONS = {optionalDependencies: 'ignore', peerDependencies: 'always'} as const;
-
-      const configResult = await computeEslintConfig({
-        packageJson: {enforceAbsoluteVersion: OPTIONS},
-      });
-
-      expect(
-        configResult.getRuleEntryOptions('package-json', 'node-dependencies/absolute-version'),
-      ).toStrictEqual([OPTIONS]);
-    });
-  });
-
   describe('`propertiesAllowedToBeEmpty`', () => {
     it('ignores `browserslist` property by default in `package-json/no-empty-fields` rule by default', async () => {
       const configResult = await computeEslintConfig('packageJson');
