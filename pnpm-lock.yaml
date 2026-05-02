@@ -374,6 +374,9 @@ importers:
       '@vitest/ui':
         specifier: 4.1.5
         version: 4.1.5(vitest@4.1.5)
+      actions-up:
+        specifier: 1.14.1
+        version: 1.14.1
       all-contributors-cli:
         specifier: 6.26.1
         version: 6.26.1
@@ -5106,6 +5109,11 @@ packages:
   acorn@8.16.0:
     resolution: {integrity: sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==}
     engines: {node: '>=0.4.0'}
+    hasBin: true
+
+  actions-up@1.14.1:
+    resolution: {integrity: sha512-x/AfoJqpumNNEfFLLnzOZ/OxOuiiaEI8xDmNSEwCLJUZFkRZGHkS8OU91WztUh3jp50gvIN74PJDMEJZI4i4xQ==}
+    engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
 
   address@1.2.2:
@@ -16185,6 +16193,15 @@ snapshots:
       acorn: 8.16.0
 
   acorn@8.16.0: {}
+
+  actions-up@1.14.1:
+    dependencies:
+      cac: 7.0.0
+      enquirer: 2.4.1
+      nanospinner: 1.2.2
+      picocolors: 1.1.1
+      semver: 7.7.4
+      yaml: 2.8.3
 
   address@1.2.2: {}
 
