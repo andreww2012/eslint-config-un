@@ -24,7 +24,7 @@ runs:
         registry-url: https://registry.npmjs.org # Required for Trusted Publishing
     - name: Install dependencies
       shell: bash
-      run: pnpm install --frozen-lockfile
+      run: pnpm -v && pnpm ci
     - name: Check deps for vulnerabilities
       shell: bash
       run: pnpm deps:audit
