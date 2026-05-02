@@ -134,6 +134,7 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-react-hooks`                        | `react-hooks`                        |
 | `eslint-plugin-react-refresh`                      | `react-refresh`                      |
 | `eslint-plugin-react-you-might-not-need-an-effect` | `react-you-might-not-need-an-effect` |
+| `eslint-plugin-remeda`                             | `remeda`                             |
 | `eslint-plugin-sentences-per-line`                 | `sentences-per-line`                 |
 | `eslint-plugin-solid`                              | `solid`                              |
 | `eslint-plugin-sql`                                | `sql`                                |
@@ -455,6 +456,7 @@ In the following table, Sub-configs have `/` in their names.
 | ![Docusaurus](./assets/vscode-icons-file-type-docusaurus.svg) `docusaurus`          | ✅ (`@docusaurus/core` is installed)                                   | [@docusaurus/eslint-plugin](https://npmx.dev/@docusaurus/eslint-plugin) (`docusaurus`)                                                              | Since v1.0.0                                                                                        |
 | `drizzle`                                                                           | ✅ (`drizzle-orm` is installed)                                        | [eslint-plugin-drizzle](https://npmx.dev/eslint-plugin-drizzle) (`drizzle`)                                                                         | Since v1.0.0                                                                                        |
 | `mobx`                                                                              | ✅ (`mobx` is installed)                                               | [eslint-plugin-mobx](https://npmx.dev/eslint-plugin-mobx) (`mobx`)                                                                                  | Since v1.0.0                                                                                        |
+| `remeda`                                                                            | ✅ (`remeda` is installed)                                             | [eslint-plugin-remeda](https://npmx.dev/eslint-plugin-remeda) (`remeda`)                                                                            | Since v1.1.0                                                                                        |
 | `clsx`                                                                              | ✅ (`clsx` is installed)                                               | [eslint-plugin-clsx](https://npmx.dev/eslint-plugin-clsx) (`clsx`)                                                                                  | Since v1.0.0                                                                                        |
 
 ### Miscellaneous

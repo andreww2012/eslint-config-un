@@ -560,6 +560,9 @@ importers:
       eslint-plugin-react-you-might-not-need-an-effect:
         specifier: 0.9.3
         version: 0.9.3(eslint@9.39.2)
+      eslint-plugin-remeda:
+        specifier: 2.1.0
+        version: 2.1.0(eslint@9.39.2)
       eslint-plugin-sentences-per-line:
         specifier: 0.1.2
         version: 0.1.2(jiti@2.6.1)
@@ -7107,6 +7110,12 @@ packages:
     peerDependencies:
       eslint: '>=9.38.0'
 
+  eslint-plugin-remeda@2.1.0:
+    resolution: {integrity: sha512-gWOlc1TbfHotomle0/QyRdIy+VU5cNn0HqtsAUjRshv3TKavptXPscLojVJJG20s6tF0hkuLmUbIpuVZ4xo6EA==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      eslint: '>=9.0.0'
+
   eslint-plugin-security@4.0.0:
     resolution: {integrity: sha512-tfuQT8K/Li1ZxhFzyD8wPIKtlzZxqBcPr9q0jFMQ77wWAbKBVEhaMPVQRTMTvCMUDhwBe5vPVqQPwAGk/ASfxQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -8632,6 +8641,9 @@ packages:
   lockfile-tools@1.0.2:
     resolution: {integrity: sha512-O/r+FAd208gv5Q3APJ1mrlE7mZLzP4G6jm2BxV2M4aME7lrSKYWV6QYHoXB3KuMKVE3Wyhy09RSyCS75yiIeGQ==}
     engines: {node: ^22.21.1 || ^24.12 || >= 25.2.1}
+
+  lodash-es@4.18.1:
+    resolution: {integrity: sha512-J8xewKD/Gk22OZbhpOVSwcs60zhd95ESDwezOFuA3/099925PdHJ7OFHNTGtajL3AlZkykD32HykiMo+BIBI8A==}
 
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
@@ -18623,6 +18635,11 @@ snapshots:
       regexp-ast-analysis: 0.7.1
       scslre: 0.3.0
 
+  eslint-plugin-remeda@2.1.0(eslint@9.39.2):
+    dependencies:
+      eslint: 9.39.2(jiti@2.6.1)
+      lodash-es: 4.18.1
+
   eslint-plugin-security@4.0.0:
     dependencies:
       safe-regex: 2.1.1
@@ -20294,6 +20311,8 @@ snapshots:
       '@npmcli/arborist': 9.4.2
     transitivePeerDependencies:
       - supports-color
+
+  lodash-es@4.18.1: {}
 
   lodash.camelcase@4.3.0: {}
 

@@ -553,6 +553,15 @@ export const pluginsLoaders = {
     'eslint-plugin-regexp',
     () => interopDefault(import('eslint-plugin-regexp')) as Promise<EslintPlugin>,
   ),
+  remeda: genModuleLoader(
+    'remeda',
+    'eslint-plugin-remeda',
+    () =>
+      interopDefault(
+        import('eslint-plugin-remeda'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   ripple: genModuleLoader('ripple', '@tsrx/eslint-plugin', () =>
     interopDefault(import('@tsrx/eslint-plugin')),
   ),

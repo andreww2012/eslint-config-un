@@ -625,6 +625,19 @@ const ALL_STYLISTIC_RULES = {
     'unicode-escape': true,
     'use-ignore-case': true,
   },
+  remeda: {
+    'prefer-constant': true,
+    'prefer-do-nothing': true,
+    'prefer-find': true,
+    'prefer-flat-map': true,
+    'prefer-has-atleast': true, // cspell:disable-line
+    'prefer-is-empty': true,
+    'prefer-is-nullish': true,
+    'prefer-nullish-coalescing': true,
+    'prefer-remeda-typecheck': true,
+    'prefer-some': true,
+    'prefer-times': true,
+  },
   ripple: {
     // None
   },

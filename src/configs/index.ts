@@ -78,6 +78,7 @@ import type {QunitEslintConfigOptions} from './qunit';
 import type {QwikEslintConfigOptions} from './qwik';
 import type {ReactEslintConfigOptions} from './react';
 import type {RegexpEslintConfigOptions} from './regexp';
+import type {RemedaEslintConfigOptions} from './remeda';
 import type {RippleEslintConfigOptions} from './ripple';
 import type {RxjsEslintConfigOptions} from './rxjs';
 import type {SecurityEslintConfigOptions} from './security';
@@ -1088,6 +1089,16 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true
    */
   regexp: RegexpEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [Remeda](https://remedajs.com) specific rules.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-remeda`](https://npmx.dev/eslint-plugin-remeda) ([docs](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/README.md))
+   * @default true <=> [`remeda`](https://npmx.dev/remeda) package is installed
+   */
+  remeda: RemedaEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Ripple](https://github.com/Ripple-TS/ripple) specific rules.

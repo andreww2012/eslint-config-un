@@ -480,6 +480,11 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         ruleDocsUrl: (ruleName) =>
           `https://ota-meshi.github.io/eslint-plugin-regexp/rules/${ruleName}.html`,
       },
+      remeda: {
+        configs: ['remeda'],
+        ruleDocsUrl: (ruleName) =>
+          `https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/${ruleName}.md`,
+      },
       ripple: {
         configs: ['ripple'],
         gitTag: (version) => `@tsrx/eslint-plugin@${version}`,
