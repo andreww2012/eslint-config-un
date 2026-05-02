@@ -1,23 +1,34 @@
 packages:
   - ./
 
-allowBuilds:
-  esbuild: true
-  lefthook: true
-  puppeteer: true
-  unrs-resolver: true
-
-blockExoticSubdeps: true
-
 nodeLinker: hoisted
+packageImportMethod: clone-or-copy
+shamefullyHoist: true
+saveExact: true
+
+minimumReleaseAge: 960 # 16 hours in minutes
+# minimumReleaseAgeExclude: []
+
+trustPolicy: no-downgrade
+trustPolicyIgnoreAfter: 43200 # 30 days in minutes
+
+allowBuilds:
+  '@parcel/watcher@2.5.6': false
+  esbuild@0.27.7: true
+  lefthook@2.1.6: true
+  msgpackr-extract@3.0.3: false
+  multiline-ts@4.0.1: false
+  nx@22.7.1: false
+  puppeteer@24.42.0: true
+  unrs-resolver@1.11.1: true
+
 dedupePeers: true
+strictPeerDependencies: false
 
 overrides:
   '@eslint/config-inspector>h3@<=1.15.4': ^1.15.5
   '@isaacs/brace-expansion@<=5.0.0': '>=5.0.1'
   tar@<7.5.7: ^7.5.7
-
-packageImportMethod: clone-or-copy
 
 patchedDependencies:
   eslint-plugin-prettier: patches/eslint-plugin-prettier.patch
@@ -31,15 +42,33 @@ peerDependencyRules:
     '@angular-eslint/eslint-plugin-template@15>eslint': '*'
     '@angular-eslint/utils@15>eslint': '*'
     '@angular-eslint/utils@17>eslint': '*'
+
     '@typescript-eslint/project-service@8.38>typescript': '*'
     '@typescript-eslint/tsconfig-utils@8.38>typescript': '*'
     '@typescript-eslint/type-utils@7>eslint': '*'
     '@typescript-eslint/typescript-estree@8.38>typescript': '*'
-    '@typescript-eslint/utils@5>eslint': '*'
     '@typescript-eslint/utils@7>eslint': '*'
     '@typescript-eslint/utils@8.38>typescript': '*'
+    '@typescript-eslint/parser@8.57.0>typescript': '>=5'
+
     eslint-plugin-no-type-assertion@1.3>eslint: '*'
+    '@intlify/eslint-plugin-vue-i18n@4.3.0>yaml-eslint-parser': ^2.0.0
 
-trustPolicy: no-downgrade
+    '@eslint-react/eslint-plugin@4.2.3>eslint': '>=9'
+    '@eslint-react/shared@4.2.3>eslint': '>=9'
+    eslint-plugin-react-dom@4.2.3>eslint: '>=9'
+    '@eslint-react/ast@4.2.3>eslint': '>=9'
+    '@eslint-react/core@4.2.3>eslint': '>=9'
+    '@eslint-react/jsx@4.2.3>eslint': '>=9'
+    '@eslint-react/var@4.2.3>eslint': '>=9'
+    eslint-plugin-react-jsx@4.2.3>eslint: '>=9'
+    eslint-plugin-react-naming-convention@4.2.3>eslint: '>=9'
+    eslint-plugin-react-rsc@4.2.3>eslint: '>=9'
+    eslint-plugin-react-web-api@4.2.3>eslint: '>=9'
+    eslint-plugin-react-x@4.2.3>eslint: '>=9'
+    eslint-plugin-react-debug@4.2.3>eslint: '>=9'
+    eslint-plugin-file-progress@4.2.3>eslint: '>=9'
+    eslint-plugin-ava@16.0.1>eslint: '>=9'
 
-trustPolicyIgnoreAfter: 43200
+    '@phenomnomnominal/tsquery@6.1.4>typescript': '>=5'
+    '@sveltejs/vite-plugin-svelte@7.0.0>vite': '>=7'

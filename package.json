@@ -50,6 +50,9 @@
     "u:pm": "ncu --dep packageManager",
     "deps:audit": "pnpm audit --audit-level high",
     "deps:dedupe-check": "pnpm dedupe --check",
+    "deps:peers-check": "pnpm peers check",
+    "deps:check": "nr deps:peers-check && nr deps:audit",
+    "deps:check:strict": "nr deps:dedupe-check && nr deps:check",
     "print-peer-deps": "node --import tsx/esm scripts/print-peer-deps.ts",
     "rules-finder": "node --import tsx/esm scripts/rules-finder.ts",
     "plugins:analyze": "node --import tsx/esm scripts/plugins-analyzer.ts",
@@ -64,7 +67,6 @@
     "lint:eslint:fix": "nr lint:eslint --fix",
     "lint:types": "tsc --noEmit",
     "lint:types:go": "tsgo --noEmit",
-    "lint:deps": "pnpm dedupe --check",
     "lint": "nr lint:types:go && nr format:check && nr lint:eslint",
     "lint:fix": "nr lint:eslint:fix && nr format:fix",
     "typegen": "node --import tsx/esm scripts/typegen.ts",
@@ -80,12 +82,12 @@
     "test:vitest": "nr t run",
     "test:vitest:cov": "nr t:cov run",
     "test:common": "nr typegen && nr knip && nr spellcheck && nr test:config && nr test:vitest:cov && nr lint && nr build:code:test && nr check:dts:no-devdeps-imports",
-    "test": "nr deps:audit && nr test:common",
+    "test": "nr deps:check && nr test:common",
     "test:quick": "nr knip && nr spellcheck && nr test:config && nr lint && nr build:code:test",
     "lint:public-types": "attw --pack . --profile esm-only",
     "ch": "npx changeset add --message \"___REPLACE_ME___\"",
     "release": "changeset publish",
-    "prepublishOnly": "nr deps:dedupe-check && nr deps:audit && nr test:common && nr build && nr lint:public-types",
+    "prepublishOnly": "nr deps:check:strict && nr test:common && nr build && nr lint:public-types",
     "prepack": "nr build"
   },
   "overrides": {
@@ -713,8 +715,13 @@
     "eslint-plugin-prettier",
     "eslint-plugin-no-type-assertion"
   ],
-  "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": "^22.18.0 || >=24"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.0.3"
+    }
   }
 }
