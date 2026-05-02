@@ -717,6 +717,7 @@
     "eslint-plugin-prettier",
     "eslint-plugin-no-type-assertion"
   ],
+  "packageManager": "pnpm@11.0.3",
   "engines": {
     "node": "^22.18.0 || >=24"
   },
