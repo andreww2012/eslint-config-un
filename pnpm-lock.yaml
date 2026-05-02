@@ -12,6 +12,7 @@ overrides:
 
 patchedDependencies:
   eslint-plugin-prettier: ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495
+  eslint-plugin-remeda@2.1.0: b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08
   import-meta-resolve: 13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba
   is-in-editor: ac57231e92db3a074f89b4c3f2ce951468853ecc52a96978083635819db9df0e
 
@@ -559,7 +560,7 @@ importers:
         version: 0.9.3(eslint@9.39.2)
       eslint-plugin-remeda:
         specifier: 2.1.0
-        version: 2.1.0(eslint@9.39.2)
+        version: 2.1.0(patch_hash=b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08)(eslint@9.39.2)
       eslint-plugin-sentences-per-line:
         specifier: 0.1.2
         version: 0.1.2(jiti@2.6.1)
@@ -18590,7 +18591,7 @@ snapshots:
       regexp-ast-analysis: 0.7.1
       scslre: 0.3.0
 
-  eslint-plugin-remeda@2.1.0(eslint@9.39.2):
+  eslint-plugin-remeda@2.1.0(patch_hash=b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08)(eslint@9.39.2):
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
       lodash-es: 4.18.1

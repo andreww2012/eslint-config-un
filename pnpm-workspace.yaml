@@ -34,6 +34,7 @@ overrides:
 
 patchedDependencies:
   eslint-plugin-prettier: patches/eslint-plugin-prettier.patch
+  eslint-plugin-remeda@2.1.0: patches/eslint-plugin-remeda@2.1.0.patch
   import-meta-resolve: patches/import-meta-resolve.patch
   is-in-editor: patches/is-in-editor.patch
 
