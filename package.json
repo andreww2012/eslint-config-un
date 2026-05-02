@@ -157,7 +157,7 @@
     "eslint-plugin-unicorn": "64.0.0",
     "eslint-plugin-unnecessary-abstractions": "1.0.0",
     "eslint-plugin-yml": "3.3.2",
-    "globals": "17.5.0",
+    "globals": "17.6.0",
     "klona": "2.0.6",
     "ms-ts": "1.0.0",
     "neotraverse": "0.6.18",
