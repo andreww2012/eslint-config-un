@@ -66,6 +66,9 @@ module.exports = {
   cacheExpiration: 30,
   cacheFile: path.join(CACHE_DIRECTORY, 'cache.json'),
 
+  // Fixes https://github.com/raineorshine/npm-check-updates/blob/55ee69bc7a9d7a786537b3359924af9784a112ae/CHANGELOG.md#how-to-opt-out-of-the-new-behavior
+  target: '@latest',
+
   filterResults: (
     packageName,
     {currentVersion: currentVersionRaw, upgradedVersion: upgradedVersionRaw},
