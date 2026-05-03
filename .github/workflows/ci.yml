@@ -1,18 +1,26 @@
-name: Check code
+# cspell:ignore EBADDEVENGINES
+name: Check code (+ Publish)
 on:
   pull_request:
   push:
     branches:
       - main
-      - dev-v1 # TODO: remove after v1 is released
+      - dev-v1
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write # Required for Trusted Publishing
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   install:
     name: Install dependencies
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: ./.github/actions/prepare
 
   knip:
@@ -23,6 +31,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: ./.github/actions/prepare
       - run: pnpm knip
+
   spellcheck:
     name: Spellcheck (cspell)
     needs: install
@@ -31,6 +40,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: ./.github/actions/prepare
       - run: pnpm spellcheck
+
   formatting:
     name: Formatting check (prettier)
     needs: install
@@ -39,6 +49,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: ./.github/actions/prepare
       - run: pnpm format:check
+
   typecheck:
     name: Typecheck (tsgo)
     needs: install
@@ -47,6 +58,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: ./.github/actions/prepare
       - run: pnpm lint:types:go
+
   eslint:
     name: ESLint
     needs: install
@@ -57,6 +69,7 @@ jobs:
       - run: pnpm lint:eslint
         env:
           NODE_OPTIONS: --max-old-space-size=4096
+
   test:
     name: Test (Node ${{ matrix.node-version }}, ESLint ${{ matrix.eslint-version }})
     needs: install
@@ -68,6 +81,7 @@ jobs:
     with:
       node-version: ${{ matrix.node-version }}
       eslint-version: ${{ matrix.eslint-version }}
+
   build:
     name: Build (tsdown) & lint public types (attw)
     needs: install
@@ -81,3 +95,37 @@ jobs:
           # Pack via pnpm instead and pass the tarball directly to attw.
           pnpm pack --pack-destination /tmp
           pnpm exec attw /tmp/eslint-config-un-*.tgz --profile esm-only
+
+  release-main:
+    name: Create release PR _OR_ Publish on merge
+    needs: [knip, spellcheck, formatting, typecheck, eslint, test, build]
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/prepare
+        with:
+          install-npm: 'true'
+      - name: Enter pre-release mode
+        if: github.ref == 'refs/heads/dev-v1'
+        # Should ignore an error happening if already in pre mode
+        run: pnpm changeset pre enter beta || true
+      # Based on https://github.com/changesets/action/issues/303#issuecomment-1888167265
+      - name: Capture new release version
+        run: |
+          pnpm changeset version
+          echo "NEW_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+          git restore .
+      - name: Create release / Publish
+        id: changesets
+        uses: changesets/action@6a0a831ff30acef54f2c6aa1cbbc1096b066edaf # v1.7.0
+        with:
+          publish: pnpm release
+          commitMode: github-api
+          title: 'chore: release v${{ env.NEW_VERSION }}'
+          commit: 'chore: release v${{ env.NEW_VERSION }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_FORCE: true # To prevent potential EBADDEVENGINES npm fatal error

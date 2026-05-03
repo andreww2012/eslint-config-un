@@ -88,7 +88,7 @@
     "lint:public-types": "attw --pack . --profile esm-only",
     "ch": "changeset add --message \"___REPLACE_ME___\"",
     "release": "changeset publish",
-    "prepublishOnly": "nr deps:check:strict && nr test:common && nr build && nr lint:public-types",
+    "prepublishOnly": "nr build && nr lint:public-types",
     "prepack": "nr build"
   },
   "overrides": {
