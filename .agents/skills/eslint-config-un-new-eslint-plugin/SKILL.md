@@ -179,6 +179,7 @@ Create a new changelog entry by running `nr ch`, selecting `minor` and confirmin
 Use the following template for the description:
 
 ```md
+<!-- eslint-disable-next-line markdown-links/no-missing-path -->
 Added a new config `<configName>` which uses [`<pluginName>`](<plugin npmx.dev link>),
 
 <!-- Use one of the options below (without actually creating any line breaks! don't forget emojis!): -->
