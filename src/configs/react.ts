@@ -1306,7 +1306,6 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     .addRule('no-adjust-state-on-prop-change', ERROR) /** @since 0.5.0 */ // 🟡 (renamed, original rules added in 0.4.5)
     .addRule('no-chain-state-updates', ERROR) /** @since 0.3.0 */ // 🟡
     .addRule('no-derived-state', ERROR) /** @since 0.3.0 */ // 🟡
-    .addRule('no-empty-effect', ERROR) /** @since 0.3.0 */ // 🟡
     .addRule('no-event-handler', ERROR) /** @since 0.3.0 */ // 🟡
     .addRule('no-initialize-state', ERROR) /** @since 0.3.0 */ // 🟡
     .addRule('no-pass-data-to-parent', ERROR) /** @since 0.4.0 */ // 🟡
