@@ -1,5 +1,74 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.9
+
+### Minor Changes
+
+- 9a94baf: Disabled autofix for `markdown-preferences/{heading,table-header}-casing` rules as they may change the meaning of the sentence by transforming the casing
+- 5300c01: Added a new config `functional` which uses [`eslint-plugin-functional`](https://github.com/eslint-functional/eslint-plugin-functional#readme), ❌ disabled by default
+- b001da0: Added a new config `tanstackStart` which uses [`@tanstack/eslint-plugin-start`](https://npmx.dev/@tanstack/eslint-plugin-start), ❓ enabled if `@tanstack/react-start` or `@tanstack/solid-start` package is installed
+- e4bac38: Added a new config `ripple` which uses [`@tsrx/eslint-plugin`](https://npmx.dev/@tsrx/eslint-plugin), ❓ enabled if `ripple` package is installed
+- 63a0b5a: zod: updated [`eslint-plugin-zod` from v3.7.0 to v3.8.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.7.0...v3.8.0):
+  - 🟢 enabled [`consistent-schema-output-type-style`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-schema-output-type-style.md) rule and added it to the `noStylisticRules` config
+
+- 0070206: Added a new config `remeda` which uses [`eslint-plugin-remeda`](https://npmx.dev/eslint-plugin-remeda), ❓ enabled if `remeda` package is installed
+- f2ca7a0: zod: updated [`eslint-plugin-zod` from v3.8.0 to v3.11.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.8.0...v3.11.0):
+  - `schemaSuffix` option was renamed to `schemaVariableName` and now supports specifying schema prefix, following the ⚠️ deprecation of `require-schema-suffix` rule in favor of a new [`consistent-schema-var-name`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-schema-var-name.md) rule
+  - Enabled the following rules if the resolved zod major version is >=4:
+    - [`no-number-schema-with-finite`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-finite.md)
+    - [`no-number-schema-with-is-int`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-is-int.md)
+    - [`no-number-schema-with-is-finite`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-is-finite.md)
+    - [`no-number-schema-with-safe`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-safe.md)
+    - [`no-number-schema-with-step`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-step.md)
+
+- ceaa157: ember: updated [`eslint-plugin-ember` from v13.1.0 to v13.2.0](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.1.0...v13.2.0):
+  - 🟢 enabled [`template-require-input-type`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-input-type.md) rule
+
+- 503de15: vue: updated [`eslint-plugin-vue` from v10.8.0 to v10.9.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.8.0...v10.9.0):
+  - 🟢 enabled [`prefer-single-event-payload`](https://eslint.vuejs.org/rules/prefer-single-event-payload.html) rule
+  - 🟢 enabled [`prefer-v-model`](https://eslint.vuejs.org/rules/prefer-v-model.html) rule
+
+- 958d0b0: html: updated [`html-eslint/*` from v0.59.0 to v0.60.0](https://github.com/yeonjuan/html-eslint/compare/v0.59.0...v0.60.0):
+  - ⚠️ [`no-extra-spacing-attrs`](https://html-eslint.org/docs/rules/no-extra-spacing-attrs) rule was disabled because got deprecated
+  - Instead, 🟢 enabled [`no-extra-spacing-tags`](https://html-eslint.org/docs/rules/no-extra-spacing-tags) rule and added it to the `noStylisticRules` config
+
+- 332b54a: packageJson: updated [`eslint-plugin-package-json` from v0.91.1 to v0.91.2](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v0.91.1...v0.91.2):
+  - ❓ enabled conditionally [`restrict-top-level-properties`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-top-level-properties.md) rule based on how a new option `banTopLevelProperties` is configured
+
+- c3d7c5c: Added a new config `ngrx` which uses [`@ngrx/eslint-plugin`](https://npmx.dev/@ngrx/eslint-plugin), ❓ enabled if `@ngrx/store` package is installed
+- ad0f9a6: Added a new config `mobx` which uses [`eslint-plugin-mobx`](https://npmx.dev/eslint-plugin-mobx), ❓ enabled if `mobx` package is installed
+- bc179e4: Added a new config `drizzle` which uses [`eslint-plugin-drizzle`](https://npmx.dev/eslint-plugin-drizzle), ❓ enabled if `drizzle-orm` package is installed
+
+### Patch Changes
+
+- ae19a46: storybook: updated [`eslint-plugin-storybook` from v10.3.5 to v10.3.6](https://github.com/storybookjs/storybook/compare/v10.3.5...v10.3.6)
+- a4c9bfe: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.1.30 to v7.1.31](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.1.30...v7.1.31)
+- e170ab9: cypress: updated [`eslint-plugin-cypress` from v6.3.1 to v6.4.0](https://github.com/cypress-io/eslint-plugin-cypress/compare/v6.3.1...v6.4.0)
+- c579c0f: e18e: updated [`@e18e/eslint-plugin` from v0.3.0 to v0.4.1](https://github.com/e18e/eslint-plugin/compare/0.3.0...0.4.1)
+- b553e0d: jsdoc: set [`objectFieldSeparator: 'semicolon'`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/type-formatting.md#objectfieldseparator) for [`type-formatting`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/type-formatting.md) rule
+- ad49825: compat: updated [`eslint-plugin-compat` from v7.0.1 to v7.0.2](https://github.com/amilajack/eslint-plugin-compat/compare/v7.0.1...v7.0.2)
+- c9b933a: promise: updated [`eslint-plugin-promise` from v7.2.1 to v7.3.0](https://github.com/eslint-community/eslint-plugin-promise/compare/v7.2.1...v7.3.0)
+- 6e5f460: yaml: updated [`eslint-plugin-yml` from v3.3.1 to v3.3.2](https://github.com/ota-meshi/eslint-plugin-yml/compare/v3.3.1...v3.3.2)
+- 98e904f: githubActions: default `<job>.steps.uses` style was changed from less secure `'release'` to `'commit'` (affects [`prefer-step-uses-style`](https://eslint-plugin-github-action.ntnyq.com/rules/prefer-step-uses-style) rule)
+- b7c73e5: react: updated [`eslint-plugin-react-you-might-not-need-an-effect` from v0.9.3 to v0.10.0](https://github.com/nickjvandyke/eslint-plugin-react-you-might-not-need-an-effect/compare/v0.9.3...v0.10.0):
+  - ❌ `no-empty-effect` rule was removed
+
+- d497933: ember: updated [`ember-eslint-parser` from v0.10.0 to v0.11.3](https://github.com/ember-tooling/ember-eslint-parser/compare/v0.10.0...v0.11.3)
+- caeaef6: e18e: `prefer-static-regex` rule is now disabled in all tests-related configs
+- 350745a: formatJs: updated [`eslint-plugin-formatjs` from v6.4.5 to v6.4.7](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@6.4.5...eslint-plugin-formatjs@6.4.7)
+- fbf2bf0: betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v4.4.1 to v4.5.0](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v4.4.1...v4.5.0)
+- 41ae9f8: tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.99.2 to v5.100.6](https://github.com/TanStack/query/compare/release-2026-04-19-1059...release-2026-04-28-1641)
+- 9e301de: packageJson: removed `enforceAbsoluteVersion` option in favor of the equivalent option in `nodeDependencies` config
+- 7a3ec94: noOnlyTests: updated [`eslint-plugin-no-only-tests` from v3.3.0 to v3.4.0](https://github.com/levibuzolic/eslint-plugin-no-only-tests/compare/v3.3.0...v3.4.0)
+- 6e7ea7e: css: updated [`@eslint/css` from v1.1.0 to v1.2.0](https://github.com/eslint/css/compare/css-v1.1.0...css-v1.2.0)
+- 0746dbd: ember: updated [`eslint-plugin-ember` from v13.2.0 to v13.2.1](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.2.0...v13.2.1)
+- 274cd24: ember: updated [`eslint-plugin-ember` from v13.0.0 to v13.1.0](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.0.0...v13.1.0)
+- f9d6a5b: erasableSyntaxOnly: updated [`eslint-plugin-erasable-syntax-only` from v0.4.0 to v0.4.1](https://github.com/JoshuaKGoldberg/eslint-plugin-erasable-syntax-only/compare/0.4.0...0.4.1)
+- 6ce99e6: ts: updated [`typescript-eslint` from v8.59.0 to v8.59.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.59.0...v8.59.1)
+- daab422: svelte: updated [`eslint-plugin-svelte` from v3.17.0 to v3.17.1](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte@3.17.0...eslint-plugin-svelte@3.17.1)
+- 6a547a3: nx: updated [`@nx/eslint-plugin` from v22.6.5 to v22.7.1](https://github.com/nrwl/nx/compare/22.6.5...22.7.1)
+- 3921ec8: docusaurus: updated [`@docusaurus/eslint-plugin` from v3.10.0 to v3.10.1](https://github.com/facebook/docusaurus/compare/v3.10.0...v3.10.1)
+
 ## 1.0.0-beta.8
 
 ### Minor Changes
