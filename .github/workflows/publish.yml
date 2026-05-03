@@ -45,4 +45,4 @@ jobs:
           commit: 'chore: release v${{ env.NEW_VERSION }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          npm_config_force: true # To prevent potential EBADDEVENGINES npm fatal error
+          NPM_CONFIG_FORCE: true # To prevent potential EBADDEVENGINES npm fatal error
