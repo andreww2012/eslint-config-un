@@ -1,3 +1,4 @@
+# cspell:ignore EBADDEVENGINES
 name: Create release PR/Publish
 on:
   push:
@@ -27,7 +28,7 @@ jobs:
       - name: Enter pre-release mode
         if: github.ref == 'refs/heads/dev-v1'
         # Should ignore an error happening if already in pre mode
-        run: npx changeset pre enter beta || true
+        run: pnpm changeset pre enter beta || true
       # Based on https://github.com/changesets/action/issues/303#issuecomment-1888167265
       - name: Capture new release version
         run: |
@@ -44,3 +45,4 @@ jobs:
           commit: 'chore: release v${{ env.NEW_VERSION }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          npm_config_force: true # To prevent potential EBADDEVENGINES npm fatal error
