@@ -11,8 +11,7 @@ minimumReleaseAge: 960 # 16 hours in minutes
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
-trustPolicyExclude:
-  - pnpm@11.0.3
+# trustPolicyExclude: []
 
 allowBuilds:
   '@parcel/watcher@2.5.6': false
