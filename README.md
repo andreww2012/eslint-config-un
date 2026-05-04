@@ -1044,7 +1044,7 @@ For more info, [refer to the TypeScript docs](https://www.typescriptlang.org/tsc
 
 Install `globals` package as a dev dependency.
 
-### Some dependencies are [bundled with `bundleDependencies` feature](https://docs.npmx.dev/cli/v11/configuring-npm/package-json#bundledependencies)
+### Some dependencies are [bundled with `bundleDependencies` feature](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#bundledependencies)
 
 If you would like not to wait until the dependencies of `eslint-config-un` are updated or by whatever other reason you need to install a different version of a dependency, you can do that using your package manager's settings for all but the following packages:
 
