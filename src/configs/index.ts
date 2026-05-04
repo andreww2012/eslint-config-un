@@ -63,6 +63,7 @@ import type {NestJsEslintConfigOptions} from './nest-js';
 import type {NextJsEslintConfigOptions} from './nextjs';
 import type {NgrxEslintConfigOptions} from './ngrx';
 import type {NoOnlyTestsEslintConfigOptions} from './no-only-tests';
+import type {NoRelativeImportPathsEslintConfigOptions} from './no-relative-import-paths';
 import type {NoSecretsEslintConfigOptions} from './no-secrets';
 import type {NoUnsanitizedEslintConfigOptions} from './no-unsanitized';
 import type {NodeEslintConfigOptions} from './node';
@@ -905,6 +906,18 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default false
    */
   noOnlyTests: NoOnlyTestsEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin to disallow relative import paths.
+   *
+   * ⚠️ WARNING: requires your project to support absolute imports (e.g. via `tsconfig.json`'s `baseUrl`).
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-no-relative-import-paths`](https://npmx.dev/eslint-plugin-no-relative-import-paths) ([docs](https://github.com/MelvinVermeer/eslint-plugin-no-relative-import-paths/blob/HEAD/README.md))
+   * @default false
+   */
+  noRelativeImportPaths: NoRelativeImportPathsEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin that offers a rule that searches for potential secrets/keys in code

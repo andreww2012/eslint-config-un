@@ -475,6 +475,9 @@ const ALL_STYLISTIC_RULES = {
   'no-only-tests': {
     // None
   },
+  'no-relative-import-paths': {
+    // None
+  },
   'no-secrets': {
     // None
   },

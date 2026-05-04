@@ -434,6 +434,11 @@ export const pluginsLoaders = {
   'no-only-tests': genModuleLoader('no-only-tests', 'eslint-plugin-no-only-tests', () =>
     interopDefault(import('eslint-plugin-no-only-tests')),
   ),
+  'no-relative-import-paths': genModuleLoader(
+    'no-relative-import-paths',
+    'eslint-plugin-no-relative-import-paths',
+    () => interopDefault(import('eslint-plugin-no-relative-import-paths')),
+  ),
   'no-secrets': genModuleLoader(
     'no-secrets',
     'eslint-plugin-no-secrets',

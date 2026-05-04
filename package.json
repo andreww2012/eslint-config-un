@@ -270,6 +270,7 @@
     "eslint-plugin-lockfile": "1.1.0",
     "eslint-plugin-mobx": "0.0.14",
     "eslint-plugin-mocha": "11.2.0",
+    "eslint-plugin-no-relative-import-paths": "1.6.1",
     "eslint-plugin-pinia": "0.4.2",
     "eslint-plugin-playwright": "2.10.2",
     "eslint-plugin-prefer-arrow-functions": "3.9.1",
@@ -397,6 +398,7 @@
     "eslint-plugin-lockfile": "^1.1.0",
     "eslint-plugin-mobx": "^0.0.14",
     "eslint-plugin-mocha": "^11.2.0",
+    "eslint-plugin-no-relative-import-paths": "^1.6.1",
     "eslint-plugin-pinia": "^0.4.2",
     "eslint-plugin-playwright": "^2.10.2",
     "eslint-plugin-prefer-arrow-functions": "^3.9.1",
@@ -617,6 +619,9 @@
       "optional": true
     },
     "eslint-plugin-mocha": {
+      "optional": true
+    },
+    "eslint-plugin-no-relative-import-paths": {
       "optional": true
     },
     "eslint-plugin-pinia": {

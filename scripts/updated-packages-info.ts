@@ -371,6 +371,10 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         configs: ['noOnlyTests'],
         ruleDocsUrl: null, // Single rule
       },
+      'no-relative-import-paths': {
+        configs: ['noRelativeImportPaths'],
+        ruleDocsUrl: null, // Single rule
+      },
       'no-secrets': {
         configs: ['noSecrets'],
         ruleDocsUrl: null, // Single rule

@@ -525,6 +525,9 @@ importers:
       eslint-plugin-mocha:
         specifier: 11.2.0
         version: 11.2.0(eslint@9.39.2)
+      eslint-plugin-no-relative-import-paths:
+        specifier: 1.6.1
+        version: 1.6.1
       eslint-plugin-pinia:
         specifier: 0.4.2
         version: 0.4.2(@typescript-eslint/utils@8.59.1)(eslint@9.39.2)
@@ -6890,6 +6893,9 @@ packages:
   eslint-plugin-no-only-tests@3.4.0:
     resolution: {integrity: sha512-4S3/9Nb7A2tiMcpzEQE9bQSlpeOz6WJkgryBuou/SA8W2x2c8Zf4j0NvTKBjv6qNhF9T79tmkecm/0CHqV0UGg==}
     engines: {node: '>=5.0.0'}
+
+  eslint-plugin-no-relative-import-paths@1.6.1:
+    resolution: {integrity: sha512-YZNeOnsOrJcwhFw0X29MXjIzu2P/f5X2BZDPWw1R3VUYBRFxNIh77lyoL/XrMU9ewZNQPcEvAgL/cBOT1P330A==}
 
   eslint-plugin-no-secrets@2.3.3:
     resolution: {integrity: sha512-sroCsCscpwQxZ/O9Ml69w5qt/2nvHhXDeyUnSqSC5dMANGxt4rQgUn7xbPvDmhbMPmUCAc2Y3SRU0cXet7kNWQ==}
@@ -18199,6 +18205,8 @@ snapshots:
       - typescript
 
   eslint-plugin-no-only-tests@3.4.0: {}
+
+  eslint-plugin-no-relative-import-paths@1.6.1: {}
 
   eslint-plugin-no-secrets@2.3.3(eslint@9.39.2):
     dependencies:

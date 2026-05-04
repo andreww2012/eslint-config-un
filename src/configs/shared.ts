@@ -300,6 +300,9 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'mobx/unconditional-make-observable', // [runtime-only]
   'mobx/missing-make-observable', // [runtime-only]
   'mobx/missing-observer', // [runtime-only]
+
+  // no-relative-import-paths — relative imports are common in code snippets
+  'no-relative-import-paths/no-relative-import-paths', // [imports]
 ] satisfies UnAllRuleNames[];
 
 export type RulesDisabledInEmbeddedCodeBlocksByDefault =
