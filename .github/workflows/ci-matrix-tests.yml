@@ -18,7 +18,7 @@ jobs:
       - uses: ./.github/actions/prepare
         with:
           node-version: ${{ inputs.node-version }}
-      - run: pnpm add eslint@${{ inputs.eslint-version }}
+      - run: pnpm i eslint@${{ inputs.eslint-version }}
       - run: pnpm test:config
   test-vitest:
     name: Test (Vitest) (Node ${{ inputs.node-version }}, ESLint ${{ inputs.eslint-version }})
@@ -28,5 +28,5 @@ jobs:
       - uses: ./.github/actions/prepare
         with:
           node-version: ${{ inputs.node-version }}
-      - run: pnpm add eslint@${{ inputs.eslint-version }}
+      - run: pnpm i eslint@${{ inputs.eslint-version }}
       - run: pnpm test:vitest
