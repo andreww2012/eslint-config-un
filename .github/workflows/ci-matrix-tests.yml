@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
       - run: pnpm i eslint@${{ inputs.eslint-version }}
+        if: inputs.eslint-version != 9 # TODO temp, already installed and installation gets stuck on node 22
       - run: pnpm test:config
   test-vitest:
     name: Test (Vitest) (Node ${{ inputs.node-version }}, ESLint ${{ inputs.eslint-version }})
@@ -29,4 +30,5 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
       - run: pnpm i eslint@${{ inputs.eslint-version }}
+        if: inputs.eslint-version != 9 # TODO temp, already installed and installation gets stuck on node 22
       - run: pnpm test:vitest
