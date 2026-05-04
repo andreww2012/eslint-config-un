@@ -75,10 +75,8 @@ export default eslintConfig({
         'import/default': 0, // TODO started to produce many false reports, investigate why
       },
 
-      extraneousDependenciesWhitelist: [
-        'import-meta-resolve', // Bundled (patched)
-        'is-in-editor', // Bundled (patched)
-      ],
+      // Must be in sync with `tsdown.config.ts`'s `deps.alwaysBundle`:
+      extraneousDependenciesWhitelist: ['import-meta-resolve', 'is-in-editor', 'remeda'],
     },
     perfectionist: {
       configSortInterfaces: {

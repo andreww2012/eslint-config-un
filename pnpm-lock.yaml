@@ -209,9 +209,6 @@ importers:
       package-manager-detector:
         specifier: 1.6.0
         version: 1.6.0
-      remeda:
-        specifier: 2.34.0
-        version: 2.34.0
       semver:
         specifier: 7.7.4
         version: 7.7.4
@@ -675,6 +672,9 @@ importers:
       release-it:
         specifier: 20.0.1
         version: 20.0.1(@types/node@20.19.1)(magicast@0.5.2)
+      remeda:
+        specifier: 2.34.0
+        version: 2.34.0
       shiki:
         specifier: 4.0.2
         version: 4.0.2

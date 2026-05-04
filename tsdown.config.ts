@@ -6,8 +6,10 @@ export default defineConfig({
   unbundle: true,
   deps: {
     neverBundle: ['eslint-plugin-no-type-assertion', 'eslint-plugin-prettier'],
+    // Must be in sync with `eslint.config.ts`'s `extraneousDependenciesWhitelist`:
     alwaysBundle: [
       /^(import-meta-resolve|is-in-editor)(?:\/.+)?$/, // Patched
+      /^(remeda)(?:\/.+)?$/, // Inlined to avoid always considered installed
     ],
   },
   dts: {
