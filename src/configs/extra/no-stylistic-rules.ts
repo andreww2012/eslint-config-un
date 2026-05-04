@@ -604,6 +604,7 @@ const ALL_STYLISTIC_RULES = {
     'hexadecimal-escape': true,
     'letter-case': true,
     'match-any': true,
+    negation: true,
     'no-useless-character-class': true,
     'prefer-character-class': true,
     'prefer-d': true,
