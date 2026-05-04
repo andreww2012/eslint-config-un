@@ -154,6 +154,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-meta', severityForRulesOnlyForV4) /** @since 0.0.1 */ // 🟢
     .addRule('prefer-meta-last', ERROR) /** @since 0.0.1 */ // 🟢
     .addRule('prefer-string-schema-with-trim', OFF) /** @since 3.3.0 */ // 🟢
+    .addRule('prefer-trim-before-string-length-checks', ERROR) /** @since 3.12.0 */ // 🟢
     .addRule('require-brand-type-parameter', ERROR) /** @since 1.8.0 */ // 🟢
     .addRule('require-error-message', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule('schema-error-property-style', OFF) /** @since 1.8.0 */

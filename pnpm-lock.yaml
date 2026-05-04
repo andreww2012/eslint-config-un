@@ -607,8 +607,8 @@ importers:
         specifier: 6.14.0
         version: 6.14.0
       eslint-plugin-zod:
-        specifier: 3.11.0
-        version: 3.11.0(eslint@9.39.2)(typescript@6.0.3)(zod@4.3.6)
+        specifier: 3.12.0
+        version: 3.12.0(eslint@9.39.2)(typescript@6.0.3)(zod@4.3.6)
       eslint-processor-vue-blocks:
         specifier: 2.0.0
         version: 2.0.0(@vue/compiler-sfc@3.5.22)(eslint@9.39.2)
@@ -7212,8 +7212,8 @@ packages:
     resolution: {integrity: sha512-3zkkU/O1agczP7szJGHmisZJS/AknfVl6mb0Zqoc95dvFsdmfK+cbhrn+Ffy0UWB1pgDJwQr7kIO3rPstWs3Dw==}
     engines: {node: '>=4.0'}
 
-  eslint-plugin-zod@3.11.0:
-    resolution: {integrity: sha512-e8m/T6W3T7McRMdauMBJhLEQG3LTPLAQHHVV/b9Gg1+TZ0jg10+AgeCbL13+jxHARHm1ZKxZOgtNy8G8hLlgFw==}
+  eslint-plugin-zod@3.12.0:
+    resolution: {integrity: sha512-dt/+k34AQJuCBjoEVXQ7rDVRubBrEPQ51fB1I+gI8PBXW9fM6bORr7m5BTcoBaME1O0cf11D3TR4vYLwdiAXFQ==}
     engines: {node: ^20 || ^22 || >=24}
     peerDependencies:
       eslint: ^9 || ^10
@@ -18702,7 +18702,7 @@ snapshots:
     dependencies:
       kebab-case: 1.0.2
 
-  eslint-plugin-zod@3.11.0(eslint@9.39.2)(typescript@6.0.3)(zod@4.3.6):
+  eslint-plugin-zod@3.12.0(eslint@9.39.2)(typescript@6.0.3)(zod@4.3.6):
     dependencies:
       '@typescript-eslint/utils': 8.59.1(eslint@9.39.2)(typescript@6.0.3)
       esquery: 1.7.0
