@@ -88,6 +88,7 @@ describe('rules', async () => {
               {type: 'component', pattern: 'components/*', mode: 'file'},
               {type: 'page', pattern: 'pages/*', mode: 'file'},
             ],
+            // eslint-disable-next-line node/no-path-concat -- doesn't matter in tests
             rootPath: `${import.meta.dirname}/fixtures`,
           },
         },
