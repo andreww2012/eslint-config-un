@@ -1,5 +1,21 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.10
+
+### Minor Changes
+
+- dbebd34: zod: updated [`eslint-plugin-zod` from v3.11.0 to v3.12.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.11.0...v3.12.0):
+  - 🟢 enabled [`prefer-trim-before-string-length-checks`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/prefer-trim-before-string-length-checks.md) rule
+
+- c5cdb14: regexp: added [`regexp/negation`](https://ota-meshi.github.io/eslint-plugin-regexp/rules/negation.html) rule to the `noStylisticRules` config
+- 40b311a: Added a new config `command` which uses [`eslint-plugin-no-relative-import-paths`](https://npmx.dev/eslint-plugin-no-relative-import-paths), ❌ disabled by default
+
+### Patch Changes
+
+- 98afe72: sonar: changed the default value of `testsRules` option to `false` because some rules enabled by this option produced non-high quality reports compared to the respective testing libraries' plugins
+- f57ee74: ts: updated [`typescript-eslint` from v8.59.1 to v8.59.2](https://github.com/typescript-eslint/typescript-eslint/compare/v8.59.1...v8.59.2)
+- eecead4: node: updated [`eslint-plugin-n` from v17.24.0 to v18.0.1](https://github.com/eslint-community/eslint-plugin-n/compare/v17.24.0...v18.0.1)
+
 ## 1.0.0-beta.9
 
 ### Minor Changes
