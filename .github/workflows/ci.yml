@@ -68,7 +68,7 @@ jobs:
       - uses: ./.github/actions/prepare
       - run: pnpm lint:eslint
         env:
-          NODE_OPTIONS: --max-old-space-size=4096
+          NODE_OPTIONS: --max-old-space-size=6144 # TODO investigate why high memory is needed
 
   test:
     name: Test (Node ${{ matrix.node-version }}, ESLint ${{ matrix.eslint-version }})
