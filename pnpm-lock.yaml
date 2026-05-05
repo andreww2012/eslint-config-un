@@ -329,11 +329,11 @@ importers:
         specifier: 0.0.1
         version: 0.0.1(eslint@9.39.2)(typescript@6.0.3)
       '@tsrx/eslint-parser':
-        specifier: 0.3.39
-        version: 0.3.39(@typescript-eslint/types@8.59.2)(eslint@9.39.2)(ripple@1.0.1)
+        specifier: 0.3.48
+        version: 0.3.48(@typescript-eslint/types@8.59.2)(eslint@9.39.2)(ripple@1.0.1)
       '@tsrx/eslint-plugin':
-        specifier: 0.3.39
-        version: 0.3.39(@tsrx/eslint-parser@0.3.39)(@typescript-eslint/parser@8.59.2)(eslint@9.39.2)
+        specifier: 0.3.48
+        version: 0.3.48(@tsrx/eslint-parser@0.3.48)(@typescript-eslint/parser@8.59.2)(eslint@9.39.2)
       '@types/eslint-plugin-mobx':
         specifier: 0.0.0
         version: 0.0.0(jiti@2.6.1)
@@ -4341,29 +4341,29 @@ packages:
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
 
-  '@tsrx/core@0.0.19':
-    resolution: {integrity: sha512-d+F/ZrGCryfO1ByS4RWw6QkTpbi5S29cztf6aXW4z43jhynughAM7j/c2T8i5n6tK2FzmN86Usj2VdIYFYbtFw==}
+  '@tsrx/core@0.0.27':
+    resolution: {integrity: sha512-+218KqgUI+YIREijfe4BPr7EfLMvYZE925JWlHR8ldEkfMdQnm4DcgEMDKC64FRYGvPE9QYacGwnJZ16KPpaUQ==}
 
   '@tsrx/core@0.0.6':
     resolution: {integrity: sha512-gTeJt/jibb4y+t/bmeUj7WSYDnDlfC057sZKrcsLgpoCoJxlGPmR8jS1lJzT5+iaWKZcSn/HOWq0LuCS0irx7w==}
 
-  '@tsrx/eslint-parser@0.3.39':
-    resolution: {integrity: sha512-y9NVglmJ9qgTAOMZCGo3ZT6IEdzVjCD/JnbaAlWZKPVxy0S0s2bjcL92XE5lo33r24QjdDAvsY6WEOY+sMQQdA==}
+  '@tsrx/eslint-parser@0.3.48':
+    resolution: {integrity: sha512-1seUiWd4WZ/9CHkLb4E3ZUsEesQ8R7iqz3P9iq00apLloqkMFXBX6km/EfKhCo5bp6olYipU0aPIOuiIh+ciMA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       eslint: '>=9.0.0'
       ripple: '*'
 
-  '@tsrx/eslint-plugin@0.3.39':
-    resolution: {integrity: sha512-7t1Zx6ZTU8TEYUDbPwH7mnc8yT8R5ewO7hi8lkoKkUCxK4Bvhq2AnZxXekr4bQ+CmEMhES+ybPB9NfBStjt4Ow==}
+  '@tsrx/eslint-plugin@0.3.48':
+    resolution: {integrity: sha512-neUXTKP52LeNUq2V1yNIGjdUumTXJPTod9DJBxg4iWCgAtXWSSELQDkQJ170vcCllFsWoZFkyX2o50lSnHaq5g==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@tsrx/eslint-parser': 0.3.39
+      '@tsrx/eslint-parser': 0.3.48
       '@typescript-eslint/parser': ^8.56.1
       eslint: '>=9.0.0'
 
-  '@tsrx/ripple@0.0.21':
-    resolution: {integrity: sha512-IAa+v4WykHkHOv0R7I52daYau2U2moGhIuX2jLmEZMyrhIE1Zal/VKJkrFb/kImHZ9mx/oErPWR6bYOwbgblhg==}
+  '@tsrx/ripple@0.0.29':
+    resolution: {integrity: sha512-+peD2TOgh28MWQk4d0QZ+c/XkeD6xgU/RMwW28KV3jg4SMVFHUU+KZpEYagqrxsnsgIu19xz/q6XRLG0CS+3wg==}
 
   '@tsrx/ripple@0.0.8':
     resolution: {integrity: sha512-XtMSRqB4/5fgKbtSWgcHBAMGSORPYPWT6TrUZTdw94ilTkcdguFCrE/rsxSTCFdfyip2n/fsgJkk9JxATvaMgQ==}
@@ -15263,7 +15263,7 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
-  '@tsrx/core@0.0.19(@typescript-eslint/types@8.59.2)':
+  '@tsrx/core@0.0.27(@typescript-eslint/types@8.59.2)':
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
       '@noble/hashes': 2.2.0
@@ -15292,23 +15292,23 @@ snapshots:
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/eslint-parser@0.3.39(@typescript-eslint/types@8.59.2)(eslint@9.39.2)(ripple@1.0.1)':
+  '@tsrx/eslint-parser@0.3.48(@typescript-eslint/types@8.59.2)(eslint@9.39.2)(ripple@1.0.1)':
     dependencies:
-      '@tsrx/ripple': 0.0.21(@typescript-eslint/types@8.59.2)
+      '@tsrx/ripple': 0.0.29(@typescript-eslint/types@8.59.2)
       eslint: 9.39.2(jiti@2.6.1)
       ripple: 1.0.1(@typescript-eslint/types@8.59.2)
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/eslint-plugin@0.3.39(@tsrx/eslint-parser@0.3.39)(@typescript-eslint/parser@8.59.2)(eslint@9.39.2)':
+  '@tsrx/eslint-plugin@0.3.48(@tsrx/eslint-parser@0.3.48)(@typescript-eslint/parser@8.59.2)(eslint@9.39.2)':
     dependencies:
-      '@tsrx/eslint-parser': 0.3.39(@typescript-eslint/types@8.59.2)(eslint@9.39.2)(ripple@1.0.1)
+      '@tsrx/eslint-parser': 0.3.48(@typescript-eslint/types@8.59.2)(eslint@9.39.2)(ripple@1.0.1)
       '@typescript-eslint/parser': 8.59.2(eslint@9.39.2)(typescript@6.0.3)
       eslint: 9.39.2(jiti@2.6.1)
 
-  '@tsrx/ripple@0.0.21(@typescript-eslint/types@8.59.2)':
+  '@tsrx/ripple@0.0.29(@typescript-eslint/types@8.59.2)':
     dependencies:
-      '@tsrx/core': 0.0.19(@typescript-eslint/types@8.59.2)
+      '@tsrx/core': 0.0.27(@typescript-eslint/types@8.59.2)
       esrap: 2.2.5(@typescript-eslint/types@8.59.2)
       is-reference: 3.0.3
       zimmerframe: 1.1.4
