@@ -12,6 +12,7 @@ overrides:
   axios@>=1.0.0 <1.15.2: ^1.15.2
 
 patchedDependencies:
+  eslint-plugin-node-dependencies: 0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4
   eslint-plugin-prettier: ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495
   eslint-plugin-remeda@2.1.0: b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08
   import-meta-resolve: 13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba
@@ -155,7 +156,7 @@ importers:
         version: 4.1.5(eslint@9.39.2)
       eslint-plugin-node-dependencies:
         specifier: 2.2.0
-        version: 2.2.0(eslint@9.39.2)
+        version: 2.2.0(patch_hash=0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4)(eslint@9.39.2)
       eslint-plugin-package-json:
         specifier: 0.91.2
         version: 0.91.2(@types/estree@1.0.8)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)
@@ -18344,7 +18345,7 @@ snapshots:
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
 
-  eslint-plugin-node-dependencies@2.2.0(eslint@9.39.2):
+  eslint-plugin-node-dependencies@2.2.0(patch_hash=0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4)(eslint@9.39.2):
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
       eslint-json-compat-utils: 0.2.3(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)

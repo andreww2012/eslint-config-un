@@ -1,0 +1,22 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 4204d90c275c06b24ae8b80ee964d7b63f5eaccc..0b0f123d7b194a12564dd3430a3e480830389cc0 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -165,12 +165,16 @@ function normalizeSemverRange(...values) {
+ 	return getSemverRange([...map].sort(([, a], [, b]) => {
+ 		const aVer = getMinVer(a.comparators);
+ 		const bVer = getMinVer(b.comparators);
++		if (!aVer || !bVer) return 0;
+ 		return aVer.compare(bVer);
+ 	}).map(([v]) => v).join("||"));
+ 	/** Get min version */
+ 	function getMinVer(comparators) {
+ 		let min = null;
+-		for (const comp of comparators) if (!min || comp.semver.compare(min) < 0) min = comp.semver;
++		for (const comp of comparators) {
++			if (typeof comp.semver === "symbol") continue;
++			if (!min || comp.semver.compare(min) < 0) min = comp.semver;
++		}
+ 		return min;
+ 	}
+ }
