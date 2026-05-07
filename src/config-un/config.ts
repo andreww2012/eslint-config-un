@@ -292,6 +292,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     antfu: {enabled: getIsConfigEnabled('antfu', false)},
     astro: {enabled: getIsConfigEnabled('astro', 'astro')},
     ava: {enabled: getIsConfigEnabled('ava', 'ava')},
+    awsCdk: {enabled: getIsConfigEnabled('awsCdk', 'aws-cdk-lib')},
     barrelFiles: {enabled: getIsConfigEnabled('barrelFiles', false)},
     betterTailwind: {enabled: getIsConfigEnabled('betterTailwind', 'tailwindcss')},
     boundaries: {enabled: getIsConfigEnabled('boundaries', false)},
@@ -681,6 +682,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     loadUnConfig('docusaurus', () => import('../configs/docusaurus')),
     loadUnConfig('drizzle', () => import('../configs/drizzle')),
     loadUnConfig('mobx', () => import('../configs/mobx')),
+    loadUnConfig('awsCdk', () => import('../configs/aws-cdk')),
     loadUnConfig('moduleInterop', () => import('../configs/module-interop')),
     loadUnConfig('noSecrets', () => import('../configs/no-secrets')),
     // eslint-disable-next-line case-police/string-check

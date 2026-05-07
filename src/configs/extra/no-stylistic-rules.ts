@@ -147,6 +147,9 @@ const ALL_STYLISTIC_RULES = {
     'no-negated-assertion': true,
     'prefer-t-throws': true,
   },
+  awscdk: {
+    // None
+  },
   'barrel-files': {
     // None
   },

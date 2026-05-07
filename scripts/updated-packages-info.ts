@@ -101,6 +101,10 @@ const PACKAGES_META: Record<string, PackageMeta> = {
         ruleDocsUrl: (ruleName) =>
           `https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/${ruleName}.md`,
       },
+      awscdk: {
+        configs: ['awsCdk'],
+        ruleDocsUrl: (ruleName) => `https://eslint-plugin-awscdk.dev/rules/${ruleName}.html`,
+      },
       'barrel-files': {
         configs: ['barrelFiles'],
         ruleDocsUrl: (ruleName) =>

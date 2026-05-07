@@ -235,6 +235,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   '@testing-library/jest-dom',
   'clsx',
   'mobx',
+  'aws-cdk-lib',
   'remeda',
 
   'astro',

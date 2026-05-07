@@ -2061,7 +2061,7 @@
   "eslint-plugin-awesome-fsd-imports": {"status": "fetched"},
   "eslint-plugin-awesome-lint": {"status": "fetched"},
   "eslint-plugin-awkmia-plugin": null,
-  "eslint-plugin-awscdk": {"status": "accepted", "priority": 2},
+  "eslint-plugin-awscdk": {"status": "added"},
   "eslint-plugin-azat-plugin": {"status": "fetched"},
   "eslint-plugin-azumuta": {"status": "fetched"},
   "eslint-plugin-babel": {"status": "declined", "reason": "Superseded by `@babel/eslint-plugin`"},

@@ -431,6 +431,9 @@ importers:
       eslint-plugin-ava:
         specifier: 16.0.1
         version: 16.0.1(eslint@9.39.2)
+      eslint-plugin-awscdk:
+        specifier: 4.3.2
+        version: 4.3.2(eslint@9.39.2)(typescript@6.0.3)
       eslint-plugin-barrel-files:
         specifier: 3.0.1
         version: 3.0.1(eslint@9.39.2)
@@ -6612,6 +6615,13 @@ packages:
     engines: {node: '>=20.19'}
     peerDependencies:
       eslint: '>=10'
+
+  eslint-plugin-awscdk@4.3.2:
+    resolution: {integrity: sha512-y+nLP0LND8NLsg2iDh59sUmZkz5B/OgX8nXMWvmx9w+n8UpsuOr4ReiKsmeOpwZxn7jx59O6ns7FmLWI4FVVbg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
+      typescript: '>=4.8.4 <6.1.0'
 
   eslint-plugin-barrel-files@3.0.1:
     resolution: {integrity: sha512-/baBXDqkfW8x0UlqfYAfRCkmVWiH8qFZ4uhT6yLVBLssiypDTbe78W6lNBse7huBFv1ipR5PG9evkxEnIXDxjA==}
@@ -17828,6 +17838,11 @@ snapshots:
       espurify: 3.2.0
       micro-spelling-correcter: 1.1.1
       resolve-from: 5.0.0
+
+  eslint-plugin-awscdk@4.3.2(eslint@9.39.2)(typescript@6.0.3):
+    dependencies:
+      eslint: 9.39.2(jiti@2.6.1)
+      typescript: 6.0.3
 
   eslint-plugin-barrel-files@3.0.1(eslint@9.39.2):
     dependencies:

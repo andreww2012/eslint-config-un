@@ -3,6 +3,7 @@ import type {AngularEslintConfigOptions} from './angular';
 import type {AntfuEslintConfigOptions} from './antfu';
 import type {AstroEslintConfigOptions} from './astro';
 import type {AvaEslintConfigOptions} from './ava';
+import type {AwsCdkEslintConfigOptions} from './aws-cdk';
 import type {BarrelFilesEslintConfigOptions} from './barrel-files';
 import type {BetterTailwindEslintConfigOptions} from './better-tailwind';
 import type {BoundariesEslintConfigOptions} from './boundaries';
@@ -196,6 +197,16 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> [`ava`](https://npmx.dev/ava) package is installed
    */
   ava: AvaEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [AWS CDK](https://aws.amazon.com/cdk) specific rules.
+   *
+   * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
+   *
+   * 🧩 Main plugin: [`eslint-plugin-awscdk`](https://npmx.dev/eslint-plugin-awscdk) ([docs](https://eslint-plugin-awscdk.dev))
+   * @default true <=> [`aws-cdk-lib`](https://npmx.dev/aws-cdk-lib) package is installed
+   */
+  awsCdk: AwsCdkEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin related to "barrel files" usage.

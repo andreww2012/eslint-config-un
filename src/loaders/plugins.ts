@@ -152,6 +152,15 @@ export const pluginsLoaders = {
     'eslint-plugin-ava',
     () => interopDefault(import('eslint-plugin-ava')) as Promise<EslintPlugin>,
   ),
+  awscdk: genModuleLoader(
+    'awscdk',
+    'eslint-plugin-awscdk',
+    () =>
+      interopDefault(
+        import('eslint-plugin-awscdk'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   'barrel-files': genModuleLoader('barrel-files', 'eslint-plugin-barrel-files', () =>
     interopDefault(import('eslint-plugin-barrel-files')),
   ),
