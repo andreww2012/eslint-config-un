@@ -118,6 +118,11 @@ jobs:
           pnpm changeset version
           echo "NEW_VERSION=$(jq -r '.version' package.json)" >> $GITHUB_ENV
           git restore .
+      # pnpm v11 has a bug with bundleDependencies (does not actually bundle them); use v10 only for publishing
+      - name: Install pnpm 10 for publish
+        run: |
+          npm i --global pnpm@^10 --prefix /tmp/pnpm10
+          echo "/tmp/pnpm10/bin" >> $GITHUB_PATH
       - name: Create release / Publish
         id: changesets
         uses: changesets/action@6a0a831ff30acef54f2c6aa1cbbc1096b066edaf # v1.7.0
