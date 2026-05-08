@@ -1,5 +1,17 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.11
+
+### Minor Changes
+
+- a151166: Added a new config `awsCdk` which uses [`eslint-plugin-awscdk`](https://npmx.dev/eslint-plugin-awscdk), ❓ enabled if `aws-cdk-lib` package is installed
+
+### Patch Changes
+
+- 471589c: vue: updated [`eslint-plugin-vue` from v10.9.0 to v10.9.1](https://github.com/vuejs/eslint-plugin-vue/compare/v10.9.0...v10.9.1)
+- 50c79dc: ripple: updated [`@tsrx/eslint-plugin` from v0.3.39 to v0.3.48](https://github.com/Ripple-TS/ripple/compare/@tsrx/eslint-plugin@0.3.39...@tsrx/eslint-plugin@0.3.47)
+- 9bda7b5: react: updated [`eslint-plugin-react-you-might-not-need-an-effect` from v0.10.0 to v0.10.1](https://github.com/nickjvandyke/eslint-plugin-react-you-might-not-need-an-effect/compare/v0.10.0...v0.10.1)
+
 ## 1.0.0-beta.10
 
 ### Minor Changes
