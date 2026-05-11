@@ -359,8 +359,12 @@ export class ConfigEntryBuilder<
     });
 
     let currentCategory = '';
-    const addedRules: Partial<Record<PluginPrefix, Record<string, string /* Category */>>> = {};
-    const duplicateRules: Partial<Record<PluginPrefix, Set<string>>> = {};
+    const addedRules: Partial<Record<PluginPrefix, Record<string, string /* Category */>>> | null =
+      this.context.isTestMode ? null : {};
+    const duplicateRules: Partial<Record<PluginPrefix, Set<string>>> | null = this.context
+      .isTestMode
+      ? null
+      : {};
 
     const addRule = <P extends PluginPrefix, N extends GetRuleNamesInPlugin<P>>(
       prefix: P,
@@ -385,6 +389,7 @@ export class ConfigEntryBuilder<
       const ruleNameFinal = ruleNameWithResolvedPrefix;
       configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
 
+      if (addedRules && duplicateRules) {
       if (addedRules[prefix] && ruleNameUnprefixed in addedRules[prefix]) {
         (duplicateRules[prefix] ||= new Set()).add(ruleNameUnprefixed);
       }
@@ -392,6 +397,7 @@ export class ConfigEntryBuilder<
         ...addedRules[prefix],
         [ruleNameUnprefixed]: currentCategory,
       };
+      }
 
       // If the rule is disabled, disable its autofix counterpart rule as well
       if (severityFinal === OFF && !ruleNameFinal.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {
@@ -545,7 +551,7 @@ export class ConfigEntryBuilder<
 
             const addedRulesForPlugin = Object.entries(
               // eslint-disable-next-line ts/no-non-null-assertion, ts/no-unnecessary-condition
-              addedRules[pluginPrefixToTest]! || {},
+              addedRules![pluginPrefixToTest]! || {},
             );
             const addedRulesForPluginNamesSet = new Set(
               addedRulesForPlugin.map(([ruleName]) => ruleName),
@@ -600,7 +606,8 @@ export class ConfigEntryBuilder<
               );
             }
 
-            const duplicateRulesForPlugin = duplicateRules[pluginPrefixToTest] || new Set();
+            // eslint-disable-next-line ts/no-non-null-assertion
+            const duplicateRulesForPlugin = duplicateRules![pluginPrefixToTest] || new Set();
             if (duplicateRulesForPlugin.size > 0) {
               errorMessages.push(
                 `⚠️ Duplicate rules: ${styleRuleNames([...duplicateRulesForPlugin])}`,
