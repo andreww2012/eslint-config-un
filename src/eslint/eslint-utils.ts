@@ -94,6 +94,18 @@ export const getRuleNameAndPluginPrefixByFullName = (
   };
 };
 
+export const resolveFullRuleName = (
+  context: UnConfigContext,
+  pluginPrefix: PluginPrefix,
+  ruleNameUnprefixed: string,
+) => {
+  const pluginPrefixResolved =
+    context.rootOptions.pluginRenames?.[pluginPrefix as Exclude<PluginPrefix, ''>] || pluginPrefix;
+  return pluginPrefixResolved
+    ? `${pluginPrefixResolved}/${ruleNameUnprefixed}`
+    : ruleNameUnprefixed;
+};
+
 export const eslintToUnRuleSeverity = (
   maybeEslintSeverity: EslintSeverity | undefined,
   defaultSeverity: RuleSeverity = OFF,

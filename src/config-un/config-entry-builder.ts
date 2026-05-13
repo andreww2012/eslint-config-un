@@ -19,7 +19,11 @@ import type {
   UnFlatConfigEntryBase,
   UnRulesConfig,
 } from '../eslint/eslint-types';
-import {genFlatConfigEntryName, getRuleNameAndPluginPrefixByFullName} from '../eslint/eslint-utils';
+import {
+  genFlatConfigEntryName,
+  getRuleNameAndPluginPrefixByFullName,
+  resolveFullRuleName,
+} from '../eslint/eslint-utils';
 import {
   type PackageToLoadInfo,
   type ParserPrefix,
@@ -367,7 +371,7 @@ export class ConfigEntryBuilder<
       : {};
 
     const addRule = <P extends PluginPrefix, N extends GetRuleNamesInPlugin<P>>(
-      prefix: P,
+      plugin: P,
       ruleNameUnprefixed: N,
       severity: RuleSeverity | null,
       ruleOptions?: GetRuleOptions<P, N, 'all'>,
@@ -379,33 +383,31 @@ export class ConfigEntryBuilder<
         return result;
       }
 
-      const severityFinal: RuleSeverity =
+      const severityResolved: RuleSeverity =
         ((configOptions.forceSeverity ?? this.context.rootOptions.forceSeverity) as
           | RuleSeverity
           | undefined) ?? severity;
+      const ruleNameResolved = resolveFullRuleName(this.context, plugin, ruleNameUnprefixed);
 
-      // eslint-disable-next-line ts/no-unnecessary-type-assertion
-      const ruleNameWithResolvedPrefix = `${prefix === '' ? '' : `${(prefix === '' ? '' : this.context.rootOptions.pluginRenames?.[prefix as Exclude<PluginPrefix, ''>] || null) || prefix}/`}${ruleNameUnprefixed}`;
-      const ruleNameFinal = ruleNameWithResolvedPrefix;
-      configFinal.rules[ruleNameFinal] = [severityFinal, ...(ruleOptions || [])];
+      configFinal.rules[ruleNameResolved] = [severityResolved, ...(ruleOptions || [])];
 
       if (addedRules && duplicateRules) {
-      if (addedRules[prefix] && ruleNameUnprefixed in addedRules[prefix]) {
-        (duplicateRules[prefix] ||= new Set()).add(ruleNameUnprefixed);
-      }
-      addedRules[prefix] = {
-        ...addedRules[prefix],
-        [ruleNameUnprefixed]: currentCategory,
-      };
+        if (addedRules[plugin] && ruleNameUnprefixed in addedRules[plugin]) {
+          (duplicateRules[plugin] ||= new Set()).add(ruleNameUnprefixed);
+        }
+        addedRules[plugin] = {
+          ...addedRules[plugin],
+          [ruleNameUnprefixed]: currentCategory,
+        };
       }
 
       // If the rule is disabled, disable its autofix counterpart rule as well
-      if (severityFinal === OFF && !ruleNameFinal.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {
-        configFinal.rules[`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameFinal}`] = OFF;
+      if (severityResolved === OFF && !ruleNameResolved.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {
+        configFinal.rules[`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameResolved}`] = OFF;
       }
 
-      if (severityFinal !== OFF) {
-        this.context.usedPlugins.add(prefix);
+      if (severityResolved !== OFF) {
+        this.context.usedPlugins.add(plugin);
       }
 
       // eslint-disable-next-line ts/no-use-before-define
@@ -439,18 +441,17 @@ export class ConfigEntryBuilder<
         options?: AddRuleInternalOptions,
       ) => addRule(prefix, ruleName, severity, ruleOptions, options),
 
-      disableAnyRule: <P extends PluginPrefix>(prefix: P, ruleName: GetRuleNamesInPlugin<P>) => {
-        const prefixFinal =
-          prefix === ''
-            ? ''
-            : // eslint-disable-next-line ts/no-unnecessary-type-assertion
-              this.context.rootOptions.pluginRenames?.[prefix as Exclude<PluginPrefix, ''>] ||
-              prefix;
-        const ruleNameFinal = prefixFinal ? `${prefixFinal}/${ruleName}` : ruleName;
+      disableAnyRule: <P extends PluginPrefix>(
+        plugin: P,
+        ruleNameUnprefixed: GetRuleNamesInPlugin<P>,
+      ) => {
+        const ruleNameResolved = resolveFullRuleName(this.context, plugin, ruleNameUnprefixed);
+
         Object.assign(configFinal.rules, {
-          [ruleNameFinal]: 0,
-          [`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameFinal}`]: 0,
+          [ruleNameResolved]: 0,
+          [`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameResolved}`]: 0,
         });
+
         return result;
       },
 
