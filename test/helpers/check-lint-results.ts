@@ -27,5 +27,5 @@ export function findLintMessageFromLintResults(
   if (options?.all) {
     return fileResult?.messages.filter((m) => m.ruleId === ruleId) || [];
   }
-  return fileResult?.messages.find((m) => m.ruleId === ruleId);
+  return fileResult?.messages.find((m) => m.ruleId === ruleId || (m.ruleId == null && m.fatal));
 }

@@ -101,10 +101,7 @@ describe('rules', async () => {
       'erasable-syntax-only/enums',
     );
 
-    expect(error).toBeUndefined();
-    expect(results[0]?.messages.find((m) => m.ruleId == null)?.message).toMatchInlineSnapshot(
-      `"Parsing error: The keyword 'enum' is reserved"`,
-    );
+    expect(error?.message).toMatchInlineSnapshot(`"Parsing error: The keyword 'enum' is reserved"`);
   });
 
   it('`erasable-syntax-only/enums` rule fires on a file with a TypeScript enum', async () => {
