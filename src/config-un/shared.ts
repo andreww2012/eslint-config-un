@@ -433,6 +433,18 @@ export type UnConfigFn<
     } & ExtraReturnedData)
 >;
 
+export const intersectParentConfigFilesWithProvidedFiles = (
+  parentConfigFiles: EslintFlatConfigEntry['files'] & {},
+  files: string[],
+) =>
+  parentConfigFiles.flatMap((configFilesEntry) =>
+    Array.from(files, (ourFileEntry) =>
+      typeof configFilesEntry === 'string'
+        ? [configFilesEntry, ourFileEntry]
+        : [...configFilesEntry, ourFileEntry],
+    ),
+  );
+
 export const processUnOrFlatConfig = (
   context: UnConfigContext,
   config: EslintFlatConfigEntry | UnFlagConfigEntry,
@@ -522,7 +534,7 @@ export const processUnOrFlatConfig = (
           ...((ruleEntryRaw.files?.length || config.files?.length) && {
             files:
               ruleEntryRaw.files?.length && config.files?.length
-                ? [ruleEntryRaw.files, config.files.flat()]
+                ? intersectParentConfigFilesWithProvidedFiles(config.files, ruleEntryRaw.files)
                 : ruleEntryRaw.files || config.files,
           }),
           ...((ruleEntryRaw.ignores?.length || config.ignores?.length) && {
