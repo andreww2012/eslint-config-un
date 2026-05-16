@@ -82,7 +82,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
   // 🟠 - in recommended-gjs
   // 🔵 - in recommended-gts
-  // 💭 - optionally requires type information
+  // 💭? - optionally requires type information
 
   configBuilder
     ?.addConfig([

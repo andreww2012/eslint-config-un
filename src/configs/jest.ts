@@ -402,6 +402,7 @@ export default (async (context, optionsRaw) => {
           settings: {
             jest: pluginSettings,
           },
+          preventCreationOfConfigForRulesWithTypeInformation: true,
         },
       ],
       defaultJestEslintConfig,

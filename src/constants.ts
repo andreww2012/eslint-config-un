@@ -1,4 +1,6 @@
 import ourPackageJson from '../package.json' with {type: 'json'};
+import type {GetRuleNamesInPlugin} from './eslint/eslint-types';
+import type {PluginPrefix} from './loaders';
 // See https://github.com/typescript-eslint/typescript-eslint/issues/8721
 import type {Tagged} from './types';
 import {omit} from './utils';
@@ -255,3 +257,255 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   '@nestjs/core',
   'ripple',
 ] as const;
+
+export const TS_PLUGIN_TYPE_AWARE_RULES = [
+  'await-thenable',
+  'consistent-return',
+  'consistent-type-exports',
+  'dot-notation',
+  'naming-convention',
+  'no-array-delete',
+  'no-base-to-string',
+  'no-confusing-void-expression',
+  'no-deprecated',
+  'no-duplicate-type-constituents',
+  'no-floating-promises',
+  'no-for-in-array',
+  'no-implied-eval',
+  'no-meaningless-void-operator',
+  'no-misused-promises',
+  'no-misused-spread',
+  'no-mixed-enums',
+  'no-redundant-type-constituents',
+  'no-unnecessary-boolean-literal-compare',
+  'no-unnecessary-condition',
+  'no-unnecessary-qualifier',
+  'no-unnecessary-template-expression',
+  'no-unnecessary-type-arguments',
+  'no-unnecessary-type-assertion',
+  'no-unnecessary-type-conversion',
+  'no-unnecessary-type-parameters',
+  'no-unsafe-argument',
+  'no-unsafe-assignment',
+  'no-unsafe-call',
+  'no-unsafe-enum-comparison',
+  'no-unsafe-member-access',
+  'no-unsafe-return',
+  'no-unsafe-type-assertion',
+  'no-unsafe-unary-minus',
+  'no-useless-default-assignment',
+  'non-nullable-type-assertion-style',
+  'only-throw-error',
+  'prefer-destructuring',
+  'prefer-find',
+  'prefer-includes',
+  'prefer-nullish-coalescing',
+  'prefer-optional-chain',
+  'prefer-promise-reject-errors',
+  'prefer-readonly',
+  'prefer-readonly-parameter-types',
+  'prefer-reduce-type-parameter',
+  'prefer-regexp-exec',
+  'prefer-return-this-type',
+  'prefer-string-starts-ends-with',
+  'promise-function-async',
+  'related-getter-setter-pairs',
+  'require-array-sort-compare',
+  'require-await',
+  'restrict-plus-operands',
+  'restrict-template-expressions',
+  'return-await',
+  'strict-boolean-expressions',
+  'strict-void-return',
+  'switch-exhaustiveness-check',
+  'unbound-method',
+  'use-unknown-in-catch-callback-variable',
+] satisfies GetRuleNamesInPlugin<'ts'>[];
+
+export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
+  Record<
+    PluginPrefix,
+    {
+      rules: Partial<Record<string, true | 'optional'>>;
+      extraPatterns?: string[];
+      extraFileExtensions?: `.${string}`[];
+    }
+  >
+> = {
+  awscdk: {
+    rules: {
+      'construct-constructor-property': true,
+      'no-construct-in-interface': true,
+      'no-construct-in-public-property-of-construct': true,
+      'no-construct-stack-suffix': true,
+      'no-mutable-public-property-of-construct': true,
+      'no-parent-name-construct-id-match': true,
+      'no-unused-props': true,
+      'no-variable-construct-id': true,
+      'pascal-case-construct-id': true,
+      'prefer-grants-property': true,
+      'prevent-construct-id-collision': true,
+      'props-name-convention': true,
+      'require-jsdoc': true,
+      'require-passing-this': true,
+    },
+  },
+  e18e: {
+    rules: {
+      'prefer-array-to-reversed': 'optional',
+      'prefer-array-to-sorted': 'optional',
+      'no-indexof-equality': true,
+      'prefer-inline-equality': 'optional',
+      'prefer-regex-test': 'optional',
+    },
+  },
+  ember: {
+    rules: {
+      'template-no-deprecated': 'optional',
+    },
+  },
+  'eslint-plugin': {
+    rules: {
+      'no-property-in-node': true,
+    },
+  },
+  'expect-type': {
+    rules: {
+      expect: true,
+    },
+  },
+  functional: {
+    rules: {
+      'functional-parameters': 'optional',
+      'immutable-data': true,
+      'no-conditional-statements': true,
+      'no-expression-statements': 'optional',
+      'no-mixed-types': true,
+      'no-return-void': true,
+      'no-throw-statements': 'optional',
+      'prefer-immutable-types': true,
+      'prefer-property-signatures': true,
+      'prefer-tacit': true,
+      'readonly-type': true,
+      'type-declaration-immutability': true,
+    },
+  },
+  jest: {
+    rules: {
+      'no-error-equal': true,
+      'no-unnecessary-assertion': true,
+      'unbound-method': true,
+      'valid-expect-with-promise': true,
+    },
+  },
+  nestjs: {
+    rules: {
+      'api-enum-property-best-practices': true,
+      'all-properties-have-explicit-defined': true,
+      'validated-non-primitive-property-needs-type-decorator': true,
+    },
+  },
+  '@ngrx': {
+    rules: {
+      'avoid-cyclic-effects': true,
+      'no-multiple-actions-in-effects': true,
+      'signal-state-no-arrays-at-root-level': true,
+      'with-state-no-arrays-at-root-level': true,
+    },
+  },
+  '@eslint-react': {
+    rules: {
+      'no-implicit-children': true,
+      'no-implicit-key': true,
+      'no-implicit-ref': true,
+      'no-leaked-conditional-rendering': true,
+      'no-unused-props': true,
+    },
+  },
+  sonarjs: {
+    rules: {
+      'anchor-precedence': true,
+      'argument-type': true,
+      'arguments-order': true,
+      'array-callback-without-return': true,
+      'class-prototype': true,
+      'concise-regex': true,
+      deprecation: true,
+      'different-types-comparison': true,
+      'disabled-auto-escaping': true,
+      'disabled-resource-integrity': true,
+      'dompurify-unsafe-config': 'optional',
+      'duplicates-in-character-class': true,
+      'empty-string-repetition': true,
+      'existing-groups': true,
+      'function-return-type': true,
+      'in-operator-type-error': true,
+      'index-of-compare-to-positive-number': true,
+      'jsx-no-leaked-render': true,
+      'new-operator-misuse': true,
+      'no-alphabetical-sort': true,
+      'no-array-delete': true,
+      'no-associative-arrays': true,
+      'no-collection-size-mischeck': true,
+      'no-control-regex': true,
+      'no-empty-after-reluctant': true,
+      'no-empty-alternatives': true,
+      'no-empty-character-class': true,
+      'no-empty-group': true,
+      'no-for-in-iterable': true,
+      'no-ignored-return': true,
+      'no-in-misuse': true,
+      'no-incorrect-string-concat': true,
+      'no-invalid-regexp': true,
+      'no-misleading-array-reverse': true,
+      'no-misleading-character-class': true,
+      'no-redundant-optional': true,
+      'no-regex-spaces': true,
+      'no-require-or-define': true,
+      'no-return-type-any': true,
+      'no-selector-parameter': true,
+      'no-try-promise': true,
+      'no-undefined-argument': true,
+      'no-useless-intersection': true,
+      'non-number-in-arithmetic-expression': true,
+      'null-dereference': true,
+      'operation-returning-nan': true,
+      'post-message': true,
+      'prefer-read-only-props': true,
+      'prefer-regexp-exec': true,
+      'reduce-initial-value': true,
+      'regex-complexity': true,
+      'single-char-in-character-classes': true,
+      'single-character-alternation': true,
+      'slow-regex': true,
+      'strings-comparison': true,
+      'unicode-aware-regex': true,
+      'unused-import': true,
+      'unused-named-groups': true,
+      'values-not-convertible-to-numbers': true,
+      'void-use': true,
+    },
+  },
+  svelte: {
+    rules: {
+      'no-unused-props': 'optional',
+    },
+    extraPatterns: [GLOB_SVELTE],
+    extraFileExtensions: ['.svelte'],
+  },
+  ts: {
+    rules: Object.fromEntries(TS_PLUGIN_TYPE_AWARE_RULES.map((ruleName) => [ruleName, true])),
+  },
+  vitest: {
+    rules: {
+      'prefer-vi-mocked': true,
+      'unbound-method': true,
+    },
+  },
+} satisfies {
+  [Plugin in PluginPrefix]?: {
+    rules: Partial<Record<GetRuleNamesInPlugin<Plugin>, true | 'optional'>>;
+    extraPatterns?: string[];
+    extraFileExtensions?: `.${string}`[];
+  };
+};

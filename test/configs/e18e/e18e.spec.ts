@@ -8,7 +8,7 @@ describe('basic tests', () => {
         .getConfigsByUnPostfix((config) => config.startsWith('e18e/'))
         .map(({name}) => name),
     ).toMatchInlineSnapshot(
-      '["e18e/modernization", "e18e/module-replacements", "e18e/performance-improvements/non-type-aware"]',
+      '["e18e/modernization", "e18e/module-replacements", "e18e/performance-improvements"]',
     );
   });
 

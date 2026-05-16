@@ -1,33 +1,7 @@
-import {ERROR, OFF, type RuleSeverity, WARNING} from '../../src/constants';
-import type {EslintFlatConfigEntry, EslintRuleEntry} from '../../src/eslint/eslint-types';
+import type {EslintFlatConfigEntry} from '../../src/eslint/eslint-types';
 import type {Nullable} from '../../src/types';
 
-export const getRuleSeverityFromEslintRuleEntry = (
-  entry: Nullable<EslintRuleEntry>,
-): RuleSeverity => {
-  const severityRaw = Array.isArray(entry) ? entry[0] : (entry ?? OFF);
-
-  if (typeof severityRaw === 'number') {
-    return severityRaw as RuleSeverity;
-  }
-
-  switch (severityRaw) {
-    case 'off': {
-      return OFF;
-    }
-    case 'warn': {
-      return WARNING;
-    }
-    case 'error': {
-      return ERROR;
-    }
-    default: {
-      severityRaw satisfies never;
-    }
-  }
-
-  return OFF;
-};
+export {getRuleSeverityFromEslintRuleEntry} from '../../src/eslint/eslint-utils';
 
 export const getAllRulesSeverities = (
   config: Nullable<EslintFlatConfigEntry>,

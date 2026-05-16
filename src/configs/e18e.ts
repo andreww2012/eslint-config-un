@@ -1,5 +1,5 @@
 // cspell:ignore canparse
-import {ERROR, GLOB_MD_X_CODE_BLOCKS, GLOB_PACKAGE_JSON, GLOB_TS_X} from '../constants';
+import {ERROR, GLOB_PACKAGE_JSON} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -32,7 +32,8 @@ const E18E_RULES_MODULE_REPLACEMENTS = [
 const E18E_RULES_MODULE_REPLACEMENTS_SET = new Set<string>(E18E_RULES_MODULE_REPLACEMENTS);
 type E18eModuleReplacementsRules = (typeof E18E_RULES_MODULE_REPLACEMENTS)[number];
 
-const E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS = [
+const E18E_RULES_PERFORMANCE_IMPROVEMENTS = [
+  'no-indexof-equality',
   'prefer-array-from-map',
   'prefer-array-some',
   'prefer-date-now',
@@ -41,27 +42,16 @@ const E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS = [
   'prefer-static-regex',
   'prefer-timer-args',
 ] as const satisfies GetRuleNamesInPlugin<'e18e'>[];
-const E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS_SET = new Set<string>(
-  E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS,
+const E18E_RULES_PERFORMANCE_IMPROVEMENTS_SET = new Set<string>(
+  E18E_RULES_PERFORMANCE_IMPROVEMENTS,
 );
-type E18ePerformanceImprovementsNonTsRules =
-  (typeof E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS)[number];
-
-const E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS = [
-  'no-indexof-equality',
-  'prefer-inline-equality',
-  'prefer-regex-test',
-] as const satisfies GetRuleNamesInPlugin<'e18e'>[];
-const E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS_SET = new Set<string>(
-  E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS,
-);
-type E18ePerformanceImprovementsTsRules = (typeof E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS)[number];
+type E18ePerformanceImprovementsRules = (typeof E18E_RULES_PERFORMANCE_IMPROVEMENTS)[number];
 
 type AllE18eRules = keyof UnRulesConfigPartial<'e18e'>;
 
 '' as Exclude<
   AllE18eRules,
-  `e18e/${E18eModernizationRules | E18eModuleReplacementsRules | E18ePerformanceImprovementsNonTsRules | E18ePerformanceImprovementsTsRules}`
+  `e18e/${E18eModernizationRules | E18eModuleReplacementsRules | E18ePerformanceImprovementsRules}`
 > satisfies never;
 
 export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never> {
@@ -104,29 +94,15 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    *
    * 📁 Default `files`: all files
    *
-   * ⚙️ Sub config(s): `typescript`
+   * 💭
    * @default true
    */
   configPerformanceImprovements?:
     | boolean
-    | (UnFlatConfigEntryBase<
+    | UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<UnRulesConfigPartial<'e18e'>, `e18e/${E18ePerformanceImprovementsNonTsRules}`>
-      > & {
-        /**
-         * Same as parent config, but only rules (potentially optionally)
-         * requiring type information
-         *
-         * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
-         * @default true <=> `ts` config is enabled
-         */
-        configTypescript?:
-          | boolean
-          | UnFlatConfigEntryBase<
-              ExtraPlugins,
-              Pick<UnRulesConfigPartial<'e18e'>, `e18e/${E18ePerformanceImprovementsTsRules}`>
-            >;
-      });
+        Pick<UnRulesConfigPartial<'e18e'>, `e18e/${E18ePerformanceImprovementsRules}`>
+      >;
 }
 
 export default ((context, optionsRaw) => {
@@ -214,11 +190,12 @@ export default ((context, optionsRaw) => {
   if (configPerformanceImprovements) {
     configBuilderPerformanceImprovements
       ?.addConfig([
-        'e18e/performance-improvements/non-type-aware',
+        'e18e/performance-improvements',
         {
           includeDefaultFilesAndIgnores: true,
         },
       ])
+      .addRule('no-indexof-equality', ERROR) /** @since 0.0.1 */ // 🔴💭
       .addRule('prefer-array-from-map', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-some', ERROR) /** @since 0.1.4 */
       .addRule('prefer-date-now', ERROR) /** @since 0.1.3 */
@@ -228,42 +205,7 @@ export default ((context, optionsRaw) => {
       .addRule('prefer-timer-args', ERROR) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
         /* v8 ignore next */
-        rulesToSkipInConfig: (ruleName) =>
-          !E18E_RULES_PERFORMANCE_IMPROVEMENTS_NON_TS_SET.has(ruleName),
-      })
-      .addOverrides();
-  }
-
-  const configPerformanceImprovementsOptions = assignDefaults(configPerformanceImprovements, {
-    configTypescript: context.configsMeta.ts.enabled,
-  } satisfies Partial<E18eEslintConfigOptions['configPerformanceImprovements'] & object>);
-
-  const {configTypescript: configPerformanceImprovementsTypescript} =
-    configPerformanceImprovementsOptions;
-
-  const configBuilderPerformanceImprovementsTypescript = context.createConfigBuilder(
-    configPerformanceImprovementsTypescript,
-    'e18e',
-  );
-
-  if (configPerformanceImprovementsTypescript) {
-    configBuilderPerformanceImprovementsTypescript
-      ?.addConfig([
-        'e18e/performance-improvements/type-aware',
-        {
-          includeDefaultFilesAndIgnores: true,
-          filesDefault: [GLOB_TS_X],
-          ignoresDefault: [GLOB_MD_X_CODE_BLOCKS], // otherwise `no-indexof-equality` crashes
-          ignoresDefaultMergedWithUserIgnores: true,
-        },
-      ])
-      .addRule('no-indexof-equality', ERROR) /** @since 0.0.1 */ // 🔴💭
-      .addRule('prefer-inline-equality', ERROR) /** @since 0.2.0 */ // 💭?
-      .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */ // 💭?
-      .enableConfigTesterForPlugin('e18e', {
-        /* v8 ignore next */
-        rulesToSkipInConfig: (ruleName) =>
-          !E18E_RULES_PERFORMANCE_IMPROVEMENTS_TS_SET.has(ruleName),
+        rulesToSkipInConfig: (ruleName) => !E18E_RULES_PERFORMANCE_IMPROVEMENTS_SET.has(ruleName),
       })
       .addOverrides();
   }
@@ -273,7 +215,6 @@ export default ((context, optionsRaw) => {
       configBuilderModernization,
       configBuilderModuleReplacements,
       configBuilderPerformanceImprovements,
-      configBuilderPerformanceImprovementsTypescript,
     ],
     optionsResolved,
   };

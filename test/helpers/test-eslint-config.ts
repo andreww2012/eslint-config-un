@@ -3,7 +3,10 @@ import path from 'node:path';
 import {ESLint} from 'eslint';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import pathe from 'pathe';
-import type {EslintConfigUnOptions} from '../../src/config-un/shared';
+import type {
+  EslintConfigUnInternalOptions,
+  EslintConfigUnOptions,
+} from '../../src/config-un/shared';
 import type {PluginPrefix} from '../../src/loaders';
 import type {NonEmptyTuple, OmitStrict} from '../../src/types';
 import {arraify} from '../../src/utils';
@@ -21,27 +24,33 @@ export const computeEslintConfig = async (
      */
     reset?: boolean;
     un?: OmitStrict<EslintConfigUnOptions, 'configs'>;
+    internalOptions?: EslintConfigUnInternalOptions;
   },
 ) => {
   // Dynamic import is required so that vi.mock() calls in spec files can intercept
   // the modules loaded transitively by `src/index.ts` (e.g. `package-manager-detector/detect`).
   // A static top-level import would be resolved via setupFiles before vi.mock() registers,
   // binding the real implementations regardless of any mocks defined in the spec file.
-  const {eslintConfig} = await import('../../src');
+  const {eslintConfigInternal: eslintConfig} = await import('../../src/config-un/config');
 
   const unOptions = options?.un;
 
-  const config = await eslintConfig({
-    ...(!options?.reset && {defaultConfigsStatus: 'all-disabled'}),
-    ...unOptions,
-    cacheConfigs: false,
-    configs:
-      typeof configsOrSingleConfigName === 'string'
-        ? {
-            [configsOrSingleConfigName]: true,
-          }
-        : configsOrSingleConfigName,
-  });
+  const config = await eslintConfig(
+    {
+      ...(!options?.reset && {defaultConfigsStatus: 'all-disabled'}),
+      ...unOptions,
+      cacheConfigs: false,
+      configs:
+        typeof configsOrSingleConfigName === 'string'
+          ? {
+              [configsOrSingleConfigName]: true,
+            }
+          : configsOrSingleConfigName,
+    },
+    options?.internalOptions || {
+      preventCreationOfConfigForRulesWithTypeInformation: true,
+    },
+  );
 
   const eslintConfigsByName = Object.fromEntries(
     config
@@ -130,8 +139,9 @@ export const testEslintConfig = async <
   optionsOrFixtureSearchRelativeToPath?:
     | string
     | {
-        un?: OmitStrict<EslintConfigUnOptions, 'configs'>;
         searchFixturesRelativeToPath?: string;
+        un?: OmitStrict<EslintConfigUnOptions, 'configs'>;
+        internalOptions?: EslintConfigUnInternalOptions;
       },
 ): Promise<
   FixturePaths extends string
@@ -141,20 +151,26 @@ export const testEslintConfig = async <
       }
 > => {
   // See the comment in `computeEslintConfig` for why this is a dynamic import.
-  const {eslintConfig} = await import('../../src');
+  const {eslintConfigInternal: eslintConfig} = await import('../../src/config-un/config');
 
-  const config = await eslintConfig({
-    defaultConfigsStatus: 'all-disabled',
-    ...(typeof optionsOrFixtureSearchRelativeToPath === 'object' &&
-      optionsOrFixtureSearchRelativeToPath.un),
-    cacheConfigs: false,
-    configs:
-      typeof configsOrSingleConfigName === 'string'
-        ? {
-            [configsOrSingleConfigName]: true,
-          }
-        : configsOrSingleConfigName,
-  });
+  const config = await eslintConfig(
+    {
+      defaultConfigsStatus: 'all-disabled',
+      ...(typeof optionsOrFixtureSearchRelativeToPath === 'object' &&
+        optionsOrFixtureSearchRelativeToPath.un),
+      cacheConfigs: false,
+      configs:
+        typeof configsOrSingleConfigName === 'string'
+          ? {
+              [configsOrSingleConfigName]: true,
+            }
+          : configsOrSingleConfigName,
+    },
+    (typeof optionsOrFixtureSearchRelativeToPath === 'object' &&
+      optionsOrFixtureSearchRelativeToPath.internalOptions) || {
+      preventCreationOfConfigForRulesWithTypeInformation: true,
+    },
+  );
 
   const eslint = new ESLint({
     overrideConfigFile: true,

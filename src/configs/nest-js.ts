@@ -36,7 +36,7 @@ export default ((context, optionsRaw) => {
     .addRule('use-dependency-injection', OFF) /** @since 6.17.0 */ // 🔴
     .addRule('use-injectable-provided-token', ERROR) /** @since 6.10.0 */
     .markCategory('Nest Swagger')
-    .addRule('api-enum-property-best-practices', ERROR) /** @since 1.7.0 */
+    .addRule('api-enum-property-best-practices', ERROR) /** @since 1.7.0 */ // 💭
     .addRule('api-method-should-specify-api-operation', ERROR) /** @since 1.6.0 */
     .addRule('api-method-should-specify-api-response', ERROR) /** @since 2.0.0 */
     .addRule('api-operation-summary-description-capitalized', ERROR) /** @since 6.2.0 */
@@ -46,11 +46,11 @@ export default ((context, optionsRaw) => {
     .addRule('controllers-should-supply-api-tags', ERROR) /** @since 1.6.0 */
     .markCategory('Preventing bugs')
     .addRule('all-properties-are-whitelisted', ERROR) /** @since 3.8.0 */
-    .addRule('all-properties-have-explicit-defined', ERROR) /** @since 3.15.0 */
+    .addRule('all-properties-have-explicit-defined', ERROR) /** @since 3.15.0 */ // 💭
     .addRule('no-duplicate-decorators', ERROR) /** @since 4.3.0 */
     .addRule('param-decorator-name-matches-route-param', ERROR) /** @since 3.3.0 */
     .addRule('validate-nested-of-array-should-set-each', ERROR) /** @since 3.5.0 */
-    .addRule('validated-non-primitive-property-needs-type-decorator', ERROR) /** @since 3.5.0 */
+    .addRule('validated-non-primitive-property-needs-type-decorator', ERROR) /** @since 3.5.0 */ // 💭
     .addRule('validation-pipe-should-use-forbid-unknown', ERROR) /** @since 3.2.0 */ // Renamed from `should-specify-forbid-unknown-values` in v7.0.0
     .markCategory('Security')
     .addRule('api-methods-should-be-guarded', OFF) /** @since 3.19.0 */ // 🔴

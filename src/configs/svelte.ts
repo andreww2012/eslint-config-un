@@ -203,9 +203,15 @@ export default (async (context, optionsRaw) => {
   // 🟢 - in recommended
   // 4️⃣ - not relevant in Svelte >=5, unless legacy features are used
   // 💅 - included in Prettier config: https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts
+  // 💭? - optionally requires type information
 
   configBuilder
-    ?.addConfig(['svelte', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig([
+      'svelte',
+      {
+        includeDefaultFilesAndIgnores: true,
+      },
+    ])
     .markCategory('Possible Errors')
     .addRule('infinite-reactive-loop', ERROR) /** @since 2.16.0 */ // 🟢4️⃣
     .addRule('no-dom-manipulating', ERROR) /** @since 2.13.0 */ // 🟢
@@ -244,7 +250,7 @@ export default (async (context, optionsRaw) => {
     .addRule('no-svelte-internal', ERROR) /** @since 2.39.0 */ // 🟢
     .addRule('no-unnecessary-state-wrap', ERROR) /** @since 3.2.0 */ // 🟢
     .addRule('no-unused-class-name', OFF) /** @since 2.31.0 */
-    .addRule('no-unused-props', ERROR) /** @since 3.2.0 */ // 🟢💭
+    .addRule('no-unused-props', ERROR) /** @since 3.2.0 */ // 🟢💭?
     .addRule('no-unused-svelte-ignore', ERROR) /** @since 0.19.0 */ // 🟢
     .addRule('no-useless-children-snippet', ERROR) /** @since 3.0.0-next.9 */ // 🟢
     .addRule('no-useless-mustaches', ERROR, [

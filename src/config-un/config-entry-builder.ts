@@ -4,14 +4,18 @@ import {
   GLOB_HTM_HTML,
   GLOB_MARKDOWN,
   GLOB_MDX,
+  GLOB_MD_X_CODE_BLOCKS,
   GLOB_TOML,
+  GLOB_TS_X,
   GLOB_YML_YAML,
   OFF,
+  RULES_REQUIRING_TYPE_INFORMATION,
   type RuleSeverity,
 } from '../constants';
 import {eslintPluginVanillaRules} from '../eslint/eslint-shared';
 import type {
   EslintFlatConfigEntry,
+  EslintRuleEntry,
   EslintTypedRulesConfig,
   GetRuleNamesInPlugin,
   GetRuleOptions,
@@ -19,11 +23,7 @@ import type {
   UnFlatConfigEntryBase,
   UnRulesConfig,
 } from '../eslint/eslint-types';
-import {
-  genFlatConfigEntryName,
-  getRuleNameAndPluginPrefixByFullName,
-  resolveFullRuleName,
-} from '../eslint/eslint-utils';
+import {genFlatConfigEntryName, resolveFullRuleName} from '../eslint/eslint-utils';
 import {
   type PackageToLoadInfo,
   type ParserPrefix,
@@ -42,7 +42,6 @@ import type {
   SetRequired,
 } from '../types';
 import {
-  type MaybeArray,
   arraify,
   arrayMap,
   createTraverser,
@@ -54,7 +53,12 @@ import {
   styleRuleName,
   styleText,
 } from '../utils';
-import {type ExtraPluginsType, type UnConfigContext, processUnOrFlatConfig} from './shared';
+import {
+  type ExtraPluginsType,
+  type UnConfigContext,
+  intersectParentConfigFilesWithProvidedFiles,
+  processUnOrFlatConfig,
+} from './shared';
 
 export type FlatConfigEntryForBuilder = OmitStrict<
   EslintFlatConfigEntry,
@@ -108,6 +112,19 @@ const styleRuleNames = (ruleNames: string[]) => ruleNames.map(styleRuleName).joi
 
 export const configIndexProperty = Symbol('ConfigIndex');
 
+interface FlatConfigMetadata {
+  /**
+   * Should include full resolved rule names (i.e. with possible plugin prefix and rename)
+   */
+  rulesRequiringTypeInfo?: Map<string, PluginPrefix>;
+
+  /**
+   * If `noParser`, the config *will still be created* without a parser and parser settings.
+   * Only if set to true, the config won't be created altogether.
+   */
+  preventCreationOfConfigForRulesWithTypeInformation?: boolean | 'noParser';
+}
+
 export class ConfigEntryBuilder<
   ExtraPlugins extends ExtraPluginsType = never,
   // eslint-disable-next-line ts/no-explicit-any
@@ -133,14 +150,53 @@ export class ConfigEntryBuilder<
     this.context = context;
   }
 
-  private readonly configs: EslintFlatConfigEntry[] = [];
-  private readonly configsDict = new Map<string, EslintFlatConfigEntry>();
+  private readonly configs = new Map<
+    string,
+    [config: EslintFlatConfigEntry, metadata: FlatConfigMetadata]
+  >();
 
-  private addFlatConfig(configs: MaybeArray<SetRequired<EslintFlatConfigEntry, 'name'>>) {
-    arraify(configs).forEach((config) => {
-      this.configs.push(config);
-      this.configsDict.set(config.name, config);
-    });
+  addFlatConfig(config: SetRequired<EslintFlatConfigEntry, 'name'>) {
+    /* v8 ignore start */
+    if (this.configs.has(config.name)) {
+      throw new Error(`Config with name '${config.name}' already exists`);
+    }
+    /* v8 ignore stop */
+    const metadata: FlatConfigMetadata = {};
+    this.configs.set(config.name, [config, metadata]);
+    return metadata;
+  }
+
+  setConfigMetadataForRule(
+    configNameOrMetadata: string | FlatConfigMetadata,
+    {
+      plugin,
+      ruleName,
+      ruleEntryName,
+      severity,
+      hasEnabledDisableAutofixCounterpart,
+    }: {
+      plugin: PluginPrefix;
+      ruleName: string;
+      ruleEntryName: string;
+      severity: RuleSeverity;
+      hasEnabledDisableAutofixCounterpart?: boolean;
+    },
+  ) {
+    const configMetadata =
+      typeof configNameOrMetadata === 'string'
+        ? this.configs.get(configNameOrMetadata)?.[1]
+        : configNameOrMetadata;
+    if (!configMetadata) {
+      return;
+    }
+
+    if (severity === OFF) {
+      if (!hasEnabledDisableAutofixCounterpart) {
+        configMetadata.rulesRequiringTypeInfo?.delete(ruleEntryName);
+      }
+    } else if (RULES_REQUIRING_TYPE_INFORMATION[plugin]?.rules[ruleName]) {
+      (configMetadata.rulesRequiringTypeInfo ||= new Map()).set(ruleEntryName, plugin);
+    }
   }
 
   /**
@@ -227,6 +283,8 @@ export class ConfigEntryBuilder<
              * use an empty string as a property name.
              */
             settings?: Record<string, Nullable<Record<string, unknown>>>;
+
+            preventCreationOfConfigForRulesWithTypeInformation?: boolean;
           },
         ],
     config?: FlatConfigEntryForBuilder,
@@ -325,15 +383,21 @@ export class ConfigEntryBuilder<
       })(),
     };
 
-    this.addFlatConfig(configFinal);
+    const configMetadata = this.addFlatConfig(configFinal);
 
-    // TODO copy-pasted from `processUnOrFlatConfig`
-    if (configFinal.language) {
-      this.context.usedPlugins.add(
-        getRuleNameAndPluginPrefixByFullName(this.context, configFinal.language)
-          .pluginPrefixCanonical,
-      );
+    if (
+      internalOptions.preventCreationOfConfigForRulesWithTypeInformation ||
+      this.context.rootOptions.preventCreationOfConfigForRulesWithTypeInformation === 'full'
+    ) {
+      configMetadata.preventCreationOfConfigForRulesWithTypeInformation = true;
+    } else if (
+      this.context.rootOptions.preventCreationOfConfigForRulesWithTypeInformation ||
+      this.context.internalOptions.preventCreationOfConfigForRulesWithTypeInformation
+    ) {
+      configMetadata.preventCreationOfConfigForRulesWithTypeInformation = 'noParser';
     }
+
+    processUnOrFlatConfig(this.context, configFinal, undefined);
 
     const {parser} = internalOptions;
     if (parser != null) {
@@ -362,13 +426,15 @@ export class ConfigEntryBuilder<
       });
     });
 
+    /* v8 ignore start */
     let currentCategory = '';
     const addedRules: Partial<Record<PluginPrefix, Record<string, string /* Category */>>> | null =
-      this.context.isTestMode ? null : {};
+      this.context.isTestMode ? {} : null;
     const duplicateRules: Partial<Record<PluginPrefix, Set<string>>> | null = this.context
       .isTestMode
-      ? null
-      : {};
+      ? {}
+      : null;
+    /* v8 ignore stop */
 
     const addRule = <P extends PluginPrefix, N extends GetRuleNamesInPlugin<P>>(
       plugin: P,
@@ -391,6 +457,7 @@ export class ConfigEntryBuilder<
 
       configFinal.rules[ruleNameResolved] = [severityResolved, ...(ruleOptions || [])];
 
+      /* v8 ignore start */
       if (addedRules && duplicateRules) {
         if (addedRules[plugin] && ruleNameUnprefixed in addedRules[plugin]) {
           (duplicateRules[plugin] ||= new Set()).add(ruleNameUnprefixed);
@@ -400,15 +467,24 @@ export class ConfigEntryBuilder<
           [ruleNameUnprefixed]: currentCategory,
         };
       }
+      /* v8 ignore stop */
 
-      // If the rule is disabled, disable its autofix counterpart rule as well
-      if (severityResolved === OFF && !ruleNameResolved.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {
-        configFinal.rules[`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameResolved}`] = OFF;
-      }
-
-      if (severityResolved !== OFF) {
+      if (severityResolved === OFF) {
+        // TODO is it possible to encounter disable-autofix rule here?
+        // If the rule is disabled, disable its autofix counterpart rule as well
+        if (!ruleNameResolved.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {
+          configFinal.rules[`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameResolved}`] = OFF;
+        }
+      } else {
         this.context.usedPlugins.add(plugin);
       }
+
+      this.setConfigMetadataForRule(configMetadata, {
+        plugin,
+        ruleName: ruleNameUnprefixed,
+        ruleEntryName: ruleNameResolved,
+        severity: severityResolved,
+      });
 
       // eslint-disable-next-line ts/no-use-before-define
       return result;
@@ -423,9 +499,11 @@ export class ConfigEntryBuilder<
         ruleOptions?: NoInfer<GetRuleOptions<DefaultPrefix & PluginPrefix, N, 'all'>>,
         options?: AddRuleInternalOptions,
       ) => {
+        /* v8 ignore start */
         if (this.pluginPrefix == null) {
           throw new Error('Cannot use `addRule` when `pluginPrefix` is `null`');
         }
+        /* v8 ignore end */
         return addRule(this.pluginPrefix, ruleName, severity, ruleOptions, options);
       },
 
@@ -456,49 +534,23 @@ export class ConfigEntryBuilder<
       },
 
       addOverrides: ({onlyAny = false}: {onlyAny?: boolean} = {}) => {
-        const ourRules = configFinal.rules;
-
-        const overridesResolveResult = processUnOrFlatConfig(
+        processUnOrFlatConfig(
           this.context,
           configFinal,
           onlyAny ? {} : this.options.overrides,
-          ourRules,
+          this,
         );
-        const overridesAnyResolveResult = processUnOrFlatConfig(
-          this.context,
-          configFinal,
-          this.options.overridesAny,
-          ourRules,
-        );
-
-        Object.assign(ourRules, overridesResolveResult.rules, overridesAnyResolveResult.rules);
-        this.addFlatConfig([
-          ...overridesResolveResult.extraConfigs,
-          ...overridesAnyResolveResult.extraConfigs,
-        ]);
-        [...overridesResolveResult.removedRules, ...overridesAnyResolveResult.removedRules].forEach(
-          (ruleName) => {
-            Reflect.deleteProperty(ourRules, ruleName);
-          },
-        );
-
+        processUnOrFlatConfig(this.context, configFinal, this.options.overridesAny, this);
         return result;
       },
 
       addBulkRules: (rules: Prettify<UnRulesConfig> | FalsyValue) => {
-        const configResolveResult = processUnOrFlatConfig(this.context, configFinal, rules || {});
-
-        Object.assign(configFinal.rules, configResolveResult.rules);
-        this.addFlatConfig(configResolveResult.extraConfigs);
-        [...configResolveResult.removedRules].forEach((ruleName) => {
-          Reflect.deleteProperty(configFinal.rules, ruleName);
-        });
-
+        processUnOrFlatConfig(this.context, configFinal, rules || {}, this);
         return result;
       },
 
       disableBulkRules: (rules: (UnAllRuleNames | (string & {}))[] | FalsyValue) => {
-        const configResolveResult = processUnOrFlatConfig(
+        processUnOrFlatConfig(
           this.context,
           configFinal,
           Object.fromEntries(
@@ -510,14 +562,8 @@ export class ConfigEntryBuilder<
                 ] as const,
             ),
           ),
+          this,
         );
-
-        Object.assign(configFinal.rules, configResolveResult.rules);
-        this.addFlatConfig(configResolveResult.extraConfigs);
-        [...configResolveResult.removedRules].forEach((ruleName) => {
-          Reflect.deleteProperty(configFinal.rules, ruleName);
-        });
-
         return result;
       },
 
@@ -671,10 +717,82 @@ export class ConfigEntryBuilder<
   }
 
   getConfig(name: string) {
-    return this.configsDict.get(name);
+    return this.configs.get(name);
   }
 
   getAllConfigs() {
-    return this.configs;
+    return Array.from(this.configs.values(), ([config]) => config);
+  }
+
+  resolveAllConfigs() {
+    return [...this.configs.values()].flatMap(([config, metadata]) => {
+      const {rulesRequiringTypeInfo, preventCreationOfConfigForRulesWithTypeInformation} = metadata;
+
+      if (
+        rulesRequiringTypeInfo &&
+        rulesRequiringTypeInfo.size > 0 &&
+        preventCreationOfConfigForRulesWithTypeInformation !== true
+      ) {
+        const possibleFiles = new Set<string>([GLOB_TS_X]);
+        let extraFileExtensions: Set<string> | undefined;
+        const rulesEntries = Array.from(
+          rulesRequiringTypeInfo.entries(),
+          ([ruleEntryName, plugin]) => {
+            const entry = config.rules?.[ruleEntryName];
+            Reflect.deleteProperty(config.rules || {}, ruleEntryName);
+
+            const pluginInfo = RULES_REQUIRING_TYPE_INFORMATION[plugin];
+            pluginInfo?.extraPatterns?.forEach((pattern) => {
+              possibleFiles.add(pattern);
+            });
+            pluginInfo?.extraFileExtensions?.forEach((extraExtension) => {
+              (extraFileExtensions ||= new Set()).add(extraExtension);
+            });
+
+            return [ruleEntryName, entry];
+          },
+        );
+
+        const originalParserOptions = config.languageOptions?.['parserOptions'];
+        const configForTypeInformation: SetRequired<EslintFlatConfigEntry, 'name'> = {
+          ...config,
+          name: `${config.name}/@type-information`,
+          files: config.files?.length
+            ? intersectParentConfigFilesWithProvidedFiles(config.files, [...possibleFiles])
+            : [...possibleFiles],
+          ignores: [...(config.ignores || []), GLOB_MD_X_CODE_BLOCKS],
+          languageOptions: {
+            ...config.languageOptions,
+            parserOptions: {
+              ...(typeof originalParserOptions === 'object' &&
+                originalParserOptions !== null &&
+                originalParserOptions),
+              ...(preventCreationOfConfigForRulesWithTypeInformation !== 'noParser' && {
+                ...(extraFileExtensions?.size && {extraFileExtensions: [...extraFileExtensions]}),
+                projectService: true,
+              }),
+            },
+          },
+          rules: Object.fromEntries(rulesEntries) as Record<string, EslintRuleEntry>,
+        };
+
+        this.addFlatConfig(configForTypeInformation);
+
+        if (preventCreationOfConfigForRulesWithTypeInformation !== 'noParser') {
+          this.context.usedPackages.set('typescriptEslintParser', [
+            ...(this.context.usedPackages.get('typescriptEslintParser') || []),
+            {
+              config: configForTypeInformation,
+              path: 'languageOptions',
+              info: {package: 'typescriptEslintParser', property: 'parser'},
+            },
+          ]);
+        }
+
+        return [config, configForTypeInformation];
+      }
+
+      return config;
+    });
   }
 }

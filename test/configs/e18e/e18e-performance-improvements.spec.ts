@@ -1,24 +1,20 @@
 describe('e18e: sub config `performanceImprovements`', () => {
   describe('basic tests', () => {
-    it('creates `e18e/performance-improvements/non-type-aware` eslint config by default', async () => {
+    it('creates `e18e/performance-improvements` eslint config by default', async () => {
       const configResult = await computeEslintConfig('e18e');
 
-      const config = configResult.getConfigByUnPostfix(
-        'e18e/performance-improvements/non-type-aware',
-      );
+      const config = configResult.getConfigByUnPostfix('e18e/performance-improvements');
 
       expect(config).toBeDefined();
       expect(config?.files).toBeUndefined();
     });
 
-    it('does not create `e18e/performance-improvements/non-type-aware` eslint config when disabled', async () => {
+    it('does not create `e18e/performance-improvements` eslint config when disabled', async () => {
       const configResult = await computeEslintConfig({
         e18e: {configPerformanceImprovements: false},
       });
 
-      expect(
-        configResult.getConfigByUnPostfix('e18e/performance-improvements/non-type-aware'),
-      ).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('e18e/performance-improvements')).toBeUndefined();
     });
   });
 
@@ -26,9 +22,7 @@ describe('e18e: sub config `performanceImprovements`', () => {
     it('correctly sets severities by default', async () => {
       const configResult = await computeEslintConfig('e18e');
 
-      expect(
-        configResult.getRuleSeverities('e18e/performance-improvements/non-type-aware'),
-      ).toMatchObject({
+      expect(configResult.getRuleSeverities('e18e/performance-improvements')).toMatchObject({
         'e18e/prefer-array-from-map': 2,
         'e18e/prefer-date-now': 2,
       });
@@ -39,7 +33,7 @@ describe('e18e: sub config `performanceImprovements`', () => {
 
   describe('un options', () => {
     describe('option: `files`', () => {
-      it('uses user-provided `files` in `e18e/performance-improvements/non-type-aware` eslint config', async () => {
+      it('uses user-provided `files` in `e18e/performance-improvements` eslint config', async () => {
         const FILES = ['src/**/*.js'];
 
         const configResult = await computeEslintConfig({
@@ -47,32 +41,28 @@ describe('e18e: sub config `performanceImprovements`', () => {
         });
 
         expect(
-          configResult.getConfigByUnPostfix('e18e/performance-improvements/non-type-aware')?.files,
+          configResult.getConfigByUnPostfix('e18e/performance-improvements')?.files,
         ).toStrictEqual(FILES);
       });
 
-      it('disables `e18e/performance-improvements/non-type-aware` eslint config when set to empty array', async () => {
+      it('disables `e18e/performance-improvements` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
           e18e: {configPerformanceImprovements: {files: []}},
         });
 
-        expect(
-          configResult.getConfigByUnPostfix('e18e/performance-improvements/non-type-aware'),
-        ).toBeUndefined();
+        expect(configResult.getConfigByUnPostfix('e18e/performance-improvements')).toBeUndefined();
       });
     });
 
     describe('option: `ignores`', () => {
-      it('uses user-provided `ignores` in `e18e/performance-improvements/non-type-aware` eslint config and merges them with defaults', async () => {
+      it('uses user-provided `ignores` in `e18e/performance-improvements` eslint config and merges them with defaults', async () => {
         const IGNORES = ['**/fixtures/**'];
 
         const configResult = await computeEslintConfig({
           e18e: {configPerformanceImprovements: {ignores: IGNORES}},
         });
 
-        const ignores = configResult.getConfigByUnPostfix(
-          'e18e/performance-improvements/non-type-aware',
-        )?.ignores;
+        const ignores = configResult.getConfigByUnPostfix('e18e/performance-improvements')?.ignores;
 
         expect(ignores).toIncludeAllMembers(IGNORES);
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
@@ -89,9 +79,7 @@ describe('e18e: sub config `performanceImprovements`', () => {
         },
       });
 
-      expect(
-        configResult.getRuleSeverities('e18e/performance-improvements/non-type-aware'),
-      ).toMatchObject({
+      expect(configResult.getRuleSeverities('e18e/performance-improvements')).toMatchObject({
         'e18e/prefer-array-from-map': 0,
         'no-console': 0,
       });

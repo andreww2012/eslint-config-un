@@ -391,6 +391,7 @@ export default (async (context, optionsRaw) => {
           settings: {
             vitest: pluginSettings,
           },
+          preventCreationOfConfigForRulesWithTypeInformation: true,
         },
       ],
       defaultVitestEslintConfig,

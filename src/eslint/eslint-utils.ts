@@ -2,8 +2,14 @@ import type Eslint from 'eslint';
 import type {ExtraPluginsType, UnConfigContext} from '../config-un/shared';
 import {ERROR, OFF, type RuleSeverity, WARNING} from '../constants';
 import {PLUGIN_PREFIXES_LIST, type PluginPrefix} from '../loaders';
+import type {Nullable} from '../types';
 import {cloneDeep} from '../utils';
-import type {EslintFlatConfigEntry, EslintPlugin, EslintSeverity} from './eslint-types';
+import type {
+  EslintFlatConfigEntry,
+  EslintPlugin,
+  EslintRuleEntry,
+  EslintSeverity,
+} from './eslint-types';
 
 function disableRuleAutofix(rule: Eslint.Rule.RuleModule): Eslint.Rule.RuleModule {
   return {
@@ -115,6 +121,10 @@ export const eslintToUnRuleSeverity = (
     : maybeEslintSeverity == null
       ? defaultSeverity
       : (maybeEslintSeverity as RuleSeverity);
+
+export const getRuleSeverityFromEslintRuleEntry = (
+  entry: Nullable<EslintRuleEntry>,
+): RuleSeverity => eslintToUnRuleSeverity(Array.isArray(entry) ? entry[0] : (entry ?? OFF));
 
 const FLAT_CONFIG_UN_NAME_PREFIX = 'eslint-config-un/';
 export const genFlatConfigEntryName = (name: string) => `${FLAT_CONFIG_UN_NAME_PREFIX}${name}`;

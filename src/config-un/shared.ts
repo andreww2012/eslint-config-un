@@ -11,7 +11,6 @@ import type {
   EslintPlugin,
   EslintRuleEntry,
   EslintSeverity,
-  EslintTypedRulesConfig,
   UnAllRuleNames,
   UnExtraPluginsRules,
   UnExtraPluginsRulesConfig,
@@ -21,7 +20,11 @@ import type {
   UnFlatConfigEntryOverridesType,
   UnRulesConfig,
 } from '../eslint/eslint-types';
-import {eslintToUnRuleSeverity, getRuleNameAndPluginPrefixByFullName} from '../eslint/eslint-utils';
+import {
+  eslintToUnRuleSeverity,
+  getRuleNameAndPluginPrefixByFullName,
+  getRuleSeverityFromEslintRuleEntry,
+} from '../eslint/eslint-utils';
 import type {
   LoadablePackagePrefix,
   LoadablePluginPrefix,
@@ -314,6 +317,37 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
         replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>;
       };
 
+  /**
+   * With a few exceptions mentioned below, all rules from all configs that are known to require
+   * type information, will be *automatically **moved*** to a separate ESLint config.
+   * Unless `ts/setupTypeAware` config is enabled, that config will have `typescript-eslint`
+   * parser configured for typed linting.
+   *
+   * It will inherit all properties from the original config except for a few listed below:
+   * - Will have `files` set to <code>**&#47;*.?([cm])[jt]s?(x)</code> AND
+   * [intersected](https://eslint.org/docs/latest/use/configure/configuration-files#specify-files-with-an-and-operation)
+   * with the original config's `files`;
+   * - All .md(x) code blocks pattern will be appended to `ignores`;
+   * - Optionally will have `languageOptions.parser` set to the `typescript-eslint` parser;
+   * - Will have
+   * [`languageOptions.parserOptions.projectService`](https://typescript-eslint.io/packages/parser#projectservice)
+   * set to `true`;
+   * - If there are any rules coming from plugin(s) that are known to be applied to custom
+   * file extensions, like `.svelte`, they will be added to
+   * [`languageOptions.parserOptions.extraFileExtensions`](https://typescript-eslint.io/packages/parser#extrafileextensions)
+   * array;
+   * - Of course, `rules` will consist of the moved entries coming from the original config as-is.
+   *
+   * Using this option, you can explicitly opt-in or opt-out of this behavior.
+   * Set to `full` to avoid creating such extra configs altogether.
+   *
+   * ⚠️ EXCEPTIONS: the following Configs are not subject to the moving behavior
+   * even if this option is explicitly set to `false`:
+   * - `ts` and `tsTypeAware`;
+   * - `{jest,vitest}/typescript`.
+   */
+  preventCreationOfConfigForRulesWithTypeInformation?: boolean | 'full';
+
   // #endregion
 
   // #region 🟠 OTHER OPTIONS
@@ -355,6 +389,8 @@ export interface EslintConfigUnInternalOptions {
    * - Disables console warnings
    */
   testMode?: boolean;
+
+  preventCreationOfConfigForRulesWithTypeInformation?: boolean;
 }
 
 export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPluginsType> {
@@ -447,9 +483,9 @@ export const intersectParentConfigFilesWithProvidedFiles = (
 
 export const processUnOrFlatConfig = (
   context: UnConfigContext,
-  config: EslintFlatConfigEntry | UnFlagConfigEntry,
+  config: SetRequired<EslintFlatConfigEntry | UnFlagConfigEntry, 'name'>,
   overrides: Record<string, UnFlatConfigEntryOverridesEntry | undefined> | undefined,
-  existingRules?: Partial<EslintTypedRulesConfig>,
+  configBuilderToModify?: ConfigEntryBuilder,
 ) => {
   const extraConfigs: SetRequired<EslintFlatConfigEntry, 'name'>[] = [];
   const removedRules: string[] = [];
@@ -460,7 +496,7 @@ export const processUnOrFlatConfig = (
     );
   }
 
-  const rules: Record<string, EslintRuleEntry> = Object.fromEntries(
+  const overridesResolved: Record<string, EslintRuleEntry> = Object.fromEntries(
     Object.entries(overrides || {}).flatMap(([ruleNameRaw, ruleOptions]) => {
       if (ruleOptions == null) {
         return [];
@@ -468,17 +504,17 @@ export const processUnOrFlatConfig = (
 
       const {
         pluginPrefixCanonical,
-        ruleNameUnprefixed,
-        fullRuleNameWithResolvedPrefix: ruleNameInitial,
+        ruleNameUnprefixed: ruleName,
+        fullRuleNameWithResolvedPrefix: ruleEntryName,
       } = getRuleNameAndPluginPrefixByFullName(context, ruleNameRaw);
 
-      let ruleName = ruleNameInitial;
-
-      const existingRuleRecord = existingRules?.[ruleName];
+      const existingRuleRecord = (config as EslintFlatConfigEntry).rules?.[ruleEntryName];
 
       const rawSeverityInitial = Array.isArray(existingRuleRecord)
         ? existingRuleRecord[0]
-        : existingRuleRecord;
+        : typeof existingRuleRecord === 'string' || typeof existingRuleRecord === 'number'
+          ? existingRuleRecord
+          : undefined;
       const severityInitial = eslintToUnRuleSeverity(rawSeverityInitial);
 
       const options = Array.isArray(existingRuleRecord) ? existingRuleRecord.slice(1) : undefined;
@@ -488,49 +524,69 @@ export const processUnOrFlatConfig = (
         typeof ruleEntryRaw === 'object' &&
         'severity' in ruleEntryRaw; /* `!Array.isArray(...)` doesn't work */
 
-      const result: [ruleName: string, EslintRuleEntry][] = [];
-      const ruleEntry: EslintRuleEntry = isRuleEntryRawObject
+      const newRuleEntries: [ruleEntryName: string, EslintRuleEntry][] = [];
+
+      const ruleEntryPrimary: EslintRuleEntry = isRuleEntryRawObject
         ? ruleEntryRaw.options == null
           ? ruleEntryRaw.severity
           : [ruleEntryRaw.severity, ...ruleEntryRaw.options]
         : (ruleEntryRaw as EslintRuleEntry);
-      let disableAutofix = false;
+      const ruleSeverity = getRuleSeverityFromEslintRuleEntry(ruleEntryPrimary);
 
-      if (isRuleEntryRawObject && ruleEntryRaw.disableAutofix != null) {
-        disableAutofix = ruleEntryRaw.disableAutofix;
-        const ruleNameWithDisableAutofixPrefix = `${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`;
-        if (disableAutofix) {
-          result.push([ruleName, OFF]);
-          ruleName = ruleNameWithDisableAutofixPrefix;
-        } else {
-          result.push([ruleNameWithDisableAutofixPrefix, OFF]);
-        }
+      const disableAutofix = isRuleEntryRawObject ? ruleEntryRaw.disableAutofix : null;
+
+      let configNameToInsertMetadataTo = config.name;
+      const insertMetadataFns: (() => void)[] = [];
+
+      if (disableAutofix !== false) {
+        newRuleEntries.push([ruleEntryName, disableAutofix ? OFF : ruleEntryPrimary]);
+
+        insertMetadataFns.push(() => {
+          configBuilderToModify?.setConfigMetadataForRule(configNameToInsertMetadataTo, {
+            plugin: pluginPrefixCanonical as PluginPrefix,
+            ruleName,
+            ruleEntryName,
+            severity: disableAutofix ? OFF : ruleSeverity,
+            hasEnabledDisableAutofixCounterpart: disableAutofix === true && ruleSeverity !== OFF,
+          });
+        });
       }
 
-      result.push([ruleName, ruleEntry]);
+      if (disableAutofix != null) {
+        const ruleNameWithDisableAutofixPrefix =
+          `${DISABLE_AUTOFIX_WITH_SLASH}${ruleEntryName}` as const;
 
-      if (
-        ruleEntry !== 0 &&
-        ruleEntry !== 'off' &&
-        !(Array.isArray(ruleEntry) && (ruleEntry[0] === 0 || ruleEntry[0] === 'off'))
-      ) {
+        newRuleEntries.push([
+          ruleNameWithDisableAutofixPrefix,
+          disableAutofix ? ruleEntryPrimary : OFF,
+        ]);
+
+        insertMetadataFns.push(() => {
+          configBuilderToModify?.setConfigMetadataForRule(configNameToInsertMetadataTo, {
+            plugin: pluginPrefixCanonical as PluginPrefix,
+            ruleName,
+            ruleEntryName: ruleNameWithDisableAutofixPrefix,
+            severity: disableAutofix ? ruleSeverity : OFF,
+          });
+        });
+      }
+
+      if (ruleSeverity !== OFF && !disableAutofix) {
         context.usedPlugins.add(pluginPrefixCanonical);
 
-        if (disableAutofix) {
-          context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] = [
-            ...(context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] || []),
-            ruleNameUnprefixed,
-          ];
-        }
+        context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] = [
+          ...(context.disabledAutofixes[pluginPrefixCanonical as PluginPrefix] || []),
+          ruleName,
+        ];
       }
 
-      if (
+      const shouldCreateDistinctConfigForRule =
         isRuleEntryRawObject &&
         (ruleEntryRaw.files?.length || ruleEntryRaw.ignores?.length) &&
-        config.files?.length !== 0
-      ) {
-        extraConfigs.push({
-          name: `${config.name || ''}/@rule/${ruleNameInitial}`,
+        config.files?.length !== 0;
+      if (shouldCreateDistinctConfigForRule) {
+        const extraConfig: SetRequired<EslintFlatConfigEntry, 'name'> = {
+          name: `${config.name || ''}/@rule/${ruleEntryName}`,
           ...((ruleEntryRaw.files?.length || config.files?.length) && {
             files:
               ruleEntryRaw.files?.length && config.files?.length
@@ -540,18 +596,40 @@ export const processUnOrFlatConfig = (
           ...((ruleEntryRaw.ignores?.length || config.ignores?.length) && {
             ignores: ruleEntryRaw.ignores?.length ? ruleEntryRaw.ignores : config.ignores,
           }),
-          rules: Object.fromEntries(result),
-        });
-        removedRules.push(...result.map(([ruleNameToRemove]) => ruleNameToRemove));
-        return [];
+          rules: Object.fromEntries(newRuleEntries),
+        };
+
+        configNameToInsertMetadataTo = extraConfig.name;
+        const extraConfigMetadata = configBuilderToModify?.addFlatConfig(extraConfig);
+        if (
+          extraConfigMetadata &&
+          configBuilderToModify?.getConfig(config.name)?.[1]
+            .preventCreationOfConfigForRulesWithTypeInformation
+        ) {
+          extraConfigMetadata.preventCreationOfConfigForRulesWithTypeInformation = true;
+        }
+
+        extraConfigs.push(extraConfig);
+        removedRules.push(...newRuleEntries.map(([ruleNameToRemove]) => ruleNameToRemove));
       }
 
-      return result;
+      insertMetadataFns.forEach((fn) => {
+        fn();
+      });
+
+      return shouldCreateDistinctConfigForRule ? [] : newRuleEntries;
     }),
   );
 
+  if (configBuilderToModify) {
+    Object.assign((config.rules ||= {}), overridesResolved);
+    removedRules.forEach((removedRule) => {
+      config.rules && Reflect.deleteProperty(config.rules, removedRule);
+    });
+  }
+
   return {
-    rules,
+    rules: overridesResolved,
     extraConfigs,
     removedRules,
   };

@@ -510,6 +510,10 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
       : null,
   });
 
+  optionsResolved.preventCreationOfConfigForRulesWithTypeInformation ??= Boolean(
+    tsEslintConfigResult?.setupTypeAwareConfigCreated,
+  );
+
   const shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs =
     markdownPreferencesConfigResult?.optionsResolved.extendedMarkdownSyntax === true;
 
@@ -790,9 +794,9 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
     .map((unConfigOrEntryBuilders) =>
       arraify(unConfigOrEntryBuilders).map((configOrBuilder) =>
         configOrBuilder instanceof ConfigEntryBuilder
-          ? configOrBuilder.getAllConfigs()
+          ? configOrBuilder.resolveAllConfigs()
           : configOrBuilder && 'configs' in configOrBuilder
-            ? configOrBuilder.configs.map((unConfig) => unConfig?.getAllConfigs())
+            ? configOrBuilder.configs.map((unConfig) => unConfig?.resolveAllConfigs())
             : configOrBuilder,
       ),
     )

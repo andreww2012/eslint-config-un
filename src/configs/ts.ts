@@ -6,6 +6,7 @@ import {
   GLOB_TS_X,
   GLOB_TS_X_EXTENSION,
   OFF,
+  TS_PLUGIN_TYPE_AWARE_RULES,
   WARNING,
 } from '../constants';
 import type {
@@ -20,7 +21,6 @@ import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
-  type GetRuleNamesInPlugin,
   type GetRuleOptions,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
@@ -28,71 +28,6 @@ import {
   assignDefaults,
   getRuleUnSeverityAndOptionsFromEntry,
 } from './index';
-
-// TODO generate automatically?
-const TS_PLUGIN_TYPE_AWARE_RULES = [
-  'await-thenable',
-  'consistent-return',
-  'consistent-type-exports',
-  'dot-notation',
-  'naming-convention',
-  'no-array-delete',
-  'no-base-to-string',
-  'no-confusing-void-expression',
-  'no-deprecated',
-  'no-duplicate-type-constituents',
-  'no-floating-promises',
-  'no-for-in-array',
-  'no-implied-eval',
-  'no-meaningless-void-operator',
-  'no-misused-promises',
-  'no-misused-spread',
-  'no-mixed-enums',
-  'no-redundant-type-constituents',
-  'no-unnecessary-boolean-literal-compare',
-  'no-unnecessary-condition',
-  'no-unnecessary-qualifier',
-  'no-unnecessary-template-expression',
-  'no-unnecessary-type-arguments',
-  'no-unnecessary-type-assertion',
-  'no-unnecessary-type-conversion',
-  'no-unnecessary-type-parameters',
-  'no-unsafe-argument',
-  'no-unsafe-assignment',
-  'no-unsafe-call',
-  'no-unsafe-enum-comparison',
-  'no-unsafe-member-access',
-  'no-unsafe-return',
-  'no-unsafe-type-assertion',
-  'no-unsafe-unary-minus',
-  'no-useless-default-assignment',
-  'non-nullable-type-assertion-style',
-  'only-throw-error',
-  'prefer-destructuring',
-  'prefer-find',
-  'prefer-includes',
-  'prefer-nullish-coalescing',
-  'prefer-optional-chain',
-  'prefer-promise-reject-errors',
-  'prefer-readonly',
-  'prefer-readonly-parameter-types',
-  'prefer-reduce-type-parameter',
-  'prefer-regexp-exec',
-  'prefer-return-this-type',
-  'prefer-string-starts-ends-with',
-  'promise-function-async',
-  'related-getter-setter-pairs',
-  'require-array-sort-compare',
-  'require-await',
-  'restrict-plus-operands',
-  'restrict-template-expressions',
-  'return-await',
-  'strict-boolean-expressions',
-  'strict-void-return',
-  'switch-exhaustiveness-check',
-  'unbound-method',
-  'use-unknown-in-catch-callback-variable',
-] satisfies GetRuleNamesInPlugin<'ts'>[];
 
 const TS_PLUGIN_TYPE_AWARE_RULES_SET = new Set<string>(TS_PLUGIN_TYPE_AWARE_RULES);
 
@@ -823,7 +758,13 @@ export default ((
 
   // TODO add rules
   configBuilderNONTypeAware
-    ?.addConfig(['ts/non-type-aware/rules', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig([
+      'ts/non-type-aware/rules',
+      {
+        includeDefaultFilesAndIgnores: true,
+        preventCreationOfConfigForRulesWithTypeInformation: true,
+      },
+    ])
     .markCategory('Strict')
     .addRule('ban-ts-comment', ERROR) /** @since 2.18.0 */ // 🟣
     .addRule('no-duplicate-enum-values', ERROR) /** @since 5.22.0 */ // 🟣
@@ -1037,6 +978,7 @@ export default ((
       {
         filesDefault: filesTypeAware,
         ignoresDefault: ignoresTypeAware,
+        preventCreationOfConfigForRulesWithTypeInformation: true,
       },
     ])
     .markCategory('Strict')
@@ -1347,6 +1289,7 @@ export default ((
     optionsResolved,
     filesTypeAware,
     ignoresTypeAware,
+    setupTypeAwareConfigCreated: configBuilderTypeAwareSetup != null,
   };
 }) satisfies TsConfig as TsConfig;
 
@@ -1361,5 +1304,6 @@ type TsConfig = UnConfigFn<
   {
     filesTypeAware: string[];
     ignoresTypeAware: string[];
+    setupTypeAwareConfigCreated: boolean;
   }
 >;
