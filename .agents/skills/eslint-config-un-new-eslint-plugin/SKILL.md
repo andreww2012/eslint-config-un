@@ -159,7 +159,7 @@ Then make sure the config is actually loaded by adding it to `src/config-un/conf
 Document the addition of a new Config and plugin in `README.md`.
 Do NOT add a config logo if it doesn't exists.
 
-Document plugin metadata in `PACKAGES_META` in `scripts/updated-packages-info.ts`.
+Document plugin metadata in `PACKAGES_META` in `scripts/shared/packages-meta.ts`.
 Don't blindly copy URL patterns from other entries - you need to actually figure them out.
 
 ### Step 7: Testing
