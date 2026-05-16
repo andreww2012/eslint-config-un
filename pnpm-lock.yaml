@@ -689,6 +689,9 @@ importers:
       svelte-eslint-parser:
         specifier: 1.6.0
         version: 1.6.0(svelte@5.55.5)
+      ts-extras:
+        specifier: 1.0.0
+        version: 1.0.0
       tsdown:
         specifier: 0.21.10
         version: 0.21.10(@arethetypeswrong/core@0.18.2)(@typescript/native-preview@7.0.0-dev.20260420.1)(oxc-resolver@11.19.1)(synckit@0.11.12)(typescript@6.0.3)
@@ -10657,6 +10660,10 @@ packages:
     resolution: {integrity: sha512-EDyGAwH1gO0Ausm9gV6T2nUvBgXT5kGoCMJPllOaooZ+4VvJiKBdZE7wK18N1deEowhcUptS+5GXZK8U/fvpwA==}
     peerDependencies:
       typescript: '>=4.0.0'
+
+  ts-extras@1.0.0:
+    resolution: {integrity: sha512-+TLxs47RxPDBowI0hwO2D92VeWkAsUygu6bdzGpWTkbOtEEZgyVRoLQbgJT0CO0QegviEN12RbT820xbmUaV4Q==}
+    engines: {node: '>=20'}
 
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
@@ -23081,6 +23088,10 @@ snapshots:
     dependencies:
       picomatch: 4.0.4
       typescript: 6.0.3
+
+  ts-extras@1.0.0:
+    dependencies:
+      type-fest: 5.6.0
 
   ts-interface-checker@0.1.13: {}
 

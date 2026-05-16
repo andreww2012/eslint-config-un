@@ -41,7 +41,7 @@ const generateStyleFn = (color: Parameters<typeof styleText>[0]) => (string: str
   styleText(color, string);
 
 export {styleText};
-export const styleConfigName = generateStyleFn('yellow');
+export const styleConfigName = generateStyleFn('magenta');
 export const stylePackageName = generateStyleFn('yellow');
 export const stylePluginPrefix = generateStyleFn('blue');
 export const styleRuleName = generateStyleFn('green');

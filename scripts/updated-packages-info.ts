@@ -357,5 +357,3 @@ async function main() {
 
   return result;
 }
-
-/* eslint-enable perfectionist/sort-objects */

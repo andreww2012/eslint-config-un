@@ -5,7 +5,7 @@ import {type MaybeArray, arraify, styleConfigName, stylePackageName, styleText} 
 import type {UnConfigContext} from './shared';
 
 // NOTE: do not forget to sync this list with `defaultConfigsStatus` option JSDoc
-const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
+export const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
   'e18e',
   'json',
   'jsonSchemaValidator',

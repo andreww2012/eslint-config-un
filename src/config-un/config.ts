@@ -119,10 +119,23 @@ const RULES_TO_DISABLE_IN_OFFLINE_MODE = [
 
 const PLUGINS_CONFIG_NAME = genFlatConfigEntryName('global-setup/plugins');
 
-export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPluginsType>(
+interface TestError {
+  message: MaybeArray<string>;
+  severity: 'error' | 'warn';
+}
+
+export function eslintConfigInternal<const ExtraPlugins extends ExtraPluginsType>(
+  options?: EslintConfigUnOptions<ExtraPlugins>,
+  internalOptions?: EslintConfigUnInternalOptions & {testMode?: false},
+): Promise<EslintFlatConfigEntry[]>;
+export function eslintConfigInternal<const ExtraPlugins extends ExtraPluginsType>(
+  options?: EslintConfigUnOptions<ExtraPlugins>,
+  internalOptions?: EslintConfigUnInternalOptions & {testMode: true},
+): Promise<{configs: EslintFlatConfigEntry[]; errors: TestError[]}>;
+export async function eslintConfigInternal<const ExtraPlugins extends ExtraPluginsType>(
   options: EslintConfigUnOptions<ExtraPlugins> = {},
   internalOptions: EslintConfigUnInternalOptions = {},
-): Promise<EslintFlatConfigEntry[]> => {
+): Promise<EslintFlatConfigEntry[] | {configs: EslintFlatConfigEntry[]; errors: TestError[]}> {
   const logger = consola.withTag('eslint-config-un');
   logger.addReporter({
     log(logObj) {
@@ -848,6 +861,7 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
   /* Testing */
 
   /* v8 ignore start */
+  let testErrors: TestError[] | undefined;
   if (context.isTestMode) {
     const duplicateConfigNames: string[] = [];
     const uniqueConfigNames = new Set<string>();
@@ -870,31 +884,16 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
 
     const errorMessages = context.tests
       .flatMap((testFn) => maybeCall(testFn, {plugins: loadedPlugins}))
-      .filter((v) => v != null)
-      .filter(Boolean);
+      .filter((v) => v != null);
 
-    let errorsCount = 0;
-    let warningsCount = 0;
     errorMessages.forEach((errorMessage) => {
       if (typeof errorMessage === 'string') {
-        context.logger.error(errorMessage);
-        errorsCount += 1;
+        (testErrors ||= []).push({message: errorMessage, severity: 'error'});
       } else {
         const {message, severity} = errorMessage;
-        context.logger.error(`${severity === 'warn' ? '[warn] ' : ''}${message}`);
-        if (severity === 'error') {
-          errorsCount += 1;
-        } else {
-          warningsCount += 1;
-        }
+        (testErrors ||= []).push({message, severity});
       }
     });
-
-    if (errorsCount > 0 || warningsCount > 0) {
-      context.logger[errorsCount > 0 ? 'fatal' : 'error'](
-        `Test failed with ${[errorsCount > 0 && `${errorsCount} error${errorsCount === 1 ? '' : 's'}`, warningsCount > 0 && `${warningsCount} warning${warningsCount === 1 ? '' : 's'}`].filter(Boolean).join(' and ')}`,
-      );
-    }
   }
   /* v8 ignore stop */
 
@@ -951,5 +950,12 @@ export const eslintConfigInternal = async <const ExtraPlugins extends ExtraPlugi
   // Must be called after cache is written
   modifyConfigs();
 
+  if (internalOptions.testMode) {
+    return {
+      configs: resolvedConfigs,
+      errors: testErrors || [],
+    };
+  }
+
   return resolvedConfigs;
-};
+}
