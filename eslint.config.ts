@@ -14,6 +14,17 @@ export default eslintConfig({
     }),
   },
   defaultConfigsStatus: 'misc-enabled',
+  loadPluginsOnDemand: {
+    alwaysLoad: [
+      'markdown-links', // Disabled in non-CI below, so need to load rules to avoid errors
+    ],
+  },
+  linterOptionsReportUnusedDisableDirectives: {
+    ignores: [
+      // Some rules are disabled in non-CI for this file
+      isInCi ? null : '.agents/skills/eslint-config-un-new-eslint-plugin/SKILL.md',
+    ].filter((v) => v != null),
+  },
 
   configs: {
     js: {
