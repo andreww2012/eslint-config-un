@@ -114,20 +114,33 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
   // #region 🟠 ESLINT FLAT CONFIG OPTIONS
 
   /**
-   * Sets [`linterOptions.noInlineConfig`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=noInlineConfig) globally or more granularly.
-   * @default false
+   * Sets
+   * [`linterOptions.noInlineConfig`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=noInlineConfig)
+   * globally or more granularly.
+   *
+   * If `files` are not specified or an empty array, `ignores` is a non-empty array,
+   * and the value is not specified, it will implicitly set the value to `false`.
    */
   linterOptionsNoInlineConfig?: ValueOrEslintConfigWithValue<boolean>;
 
   /**
-   * Sets [`linterOptions.reportUnusedDisableDirectives`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=reportUnusedDisableDirectives) globally or more granularly.
+   * Sets
+   * [`linterOptions.reportUnusedDisableDirectives`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=reportUnusedDisableDirectives)
+   * globally or more granularly.
+   *
+   * If `files` are not specified or an empty array, `ignores` is a non-empty array,
+   * and the value is not specified, it will implicitly set the value to `off`.
    * @default 'warn'
    */
   linterOptionsReportUnusedDisableDirectives?: ValueOrEslintConfigWithValue<EslintSeverity>;
 
   /**
-   * Sets [`linterOptions.reportUnusedInlineConfigs`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=reportUnusedInlineConfigs) globally or more granularly.
-   * @default 'off'
+   * Sets
+   * [`linterOptions.reportUnusedInlineConfigs`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=reportUnusedInlineConfigs)
+   * globally or more granularly.
+   *
+   * If `files` are not specified or an empty array, `ignores` is a non-empty array,
+   * and the value is not specified, it will implicitly set the value to `off`.
    */
   linterOptionsReportUnusedInlineConfigs?: ValueOrEslintConfigWithValue<EslintSeverity>;
 

@@ -264,9 +264,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     disablePrettierIncompatibleRules,
     offlineMode,
     useFastImport,
-    linterOptionsNoInlineConfig = false,
-    linterOptionsReportUnusedDisableDirectives = 'warn',
-    linterOptionsReportUnusedInlineConfigs = 'off',
+    linterOptionsNoInlineConfig,
+    linterOptionsReportUnusedDisableDirectives,
+    linterOptionsReportUnusedInlineConfigs,
   } = optionsResolved;
 
   if (useFastImport) {
@@ -585,17 +585,28 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     ).flatMap(([linterOptionConfigs, linterOptionName]) =>
       (typeof linterOptionConfigs === 'object'
         ? arraify(linterOptionConfigs)
-        : [{value: linterOptionConfigs}]
-      ).map((linterOptionConfig, linterOptionConfigIndex, resolvedLinterOptionConfigs) => ({
-        name: genFlatConfigEntryName(
-          `global-setup/linter-options/${linterOptionName}${resolvedLinterOptionConfigs.length > 1 ? `/${linterOptionConfigIndex}` : ''}`,
-        ),
-        ...(linterOptionConfig.files?.length && {files: linterOptionConfig.files}),
-        ...(linterOptionConfig.ignores?.length && {ignores: linterOptionConfig.ignores}),
-        ...(linterOptionConfig.value != null && {
-          linterOptions: {[linterOptionName]: linterOptionConfig.value},
-        }),
-      })),
+        : linterOptionConfigs == null
+          ? []
+          : [{value: linterOptionConfigs}]
+      ).flatMap((linterOptionConfig, linterOptionConfigIndex, resolvedLinterOptionConfigs) => {
+        const hasFiles = (linterOptionConfig.files?.length || 0) > 0;
+        const hasIgnores = (linterOptionConfig.ignores?.length || 0) > 0;
+        let valueFinal = linterOptionConfig.value;
+        if (!hasFiles && hasIgnores && valueFinal == null) {
+          valueFinal = linterOptionName === 'noInlineConfig' ? false : 'off';
+        }
+        return {
+          name: genFlatConfigEntryName(
+            `global-setup/linter-options/${linterOptionName}${resolvedLinterOptionConfigs.length > 1 ? `/${linterOptionConfigIndex}` : ''}`,
+          ),
+          ...(linterOptionConfig.files?.length && {files: linterOptionConfig.files}),
+          ...(linterOptionConfig.ignores?.length && {ignores: linterOptionConfig.ignores}),
+          // Always add `linterOptions` to avoid creating global ignore config
+          linterOptions: {
+            ...(valueFinal != null && {[linterOptionName]: valueFinal}),
+          },
+        };
+      }),
     ),
     {
       name: genFlatConfigEntryName('global-setup/language-options'),
