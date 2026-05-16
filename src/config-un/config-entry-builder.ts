@@ -387,13 +387,11 @@ export class ConfigEntryBuilder<
 
     if (
       internalOptions.preventCreationOfConfigForRulesWithTypeInformation ||
-      this.context.rootOptions.preventCreationOfConfigForRulesWithTypeInformation === 'full'
-    ) {
-      configMetadata.preventCreationOfConfigForRulesWithTypeInformation = true;
-    } else if (
-      this.context.rootOptions.preventCreationOfConfigForRulesWithTypeInformation ||
+      this.context.rootOptions.preventCreationOfConfigForRulesWithTypeInformation === 'full' ||
       this.context.internalOptions.preventCreationOfConfigForRulesWithTypeInformation
     ) {
+      configMetadata.preventCreationOfConfigForRulesWithTypeInformation = true;
+    } else if (this.context.rootOptions.preventCreationOfConfigForRulesWithTypeInformation) {
       configMetadata.preventCreationOfConfigForRulesWithTypeInformation = 'noParser';
     }
 
