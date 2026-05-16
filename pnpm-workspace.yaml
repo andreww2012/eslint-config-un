@@ -14,6 +14,11 @@ trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
 # trustPolicyExclude: []
 
+auditConfig:
+  ignoreGhsas:
+    # Sets vulnerable versions of `@tanstack/eslint-plugin-start` to >=0, but actually vulnerable versions are not installed
+    - GHSA-8hwj-wqhq-3xw2
+
 allowBuilds:
   '@parcel/watcher@2.5.6': false
   esbuild@0.27.7: true
