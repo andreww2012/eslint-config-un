@@ -74,7 +74,6 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `@cspell/eslint-plugin`                            | `@cspell`                            |
 | `@darraghor/eslint-plugin-nestjs-typed`            | `nestjs`                             |
 | `@docusaurus/eslint-plugin`                        | `docusaurus`                         |
-| `@e18e/eslint-plugin`                              | `e18e`                               |
 | `@eslint-react/eslint-plugin`                      | `@eslint-react`                      |
 | `@graphql-eslint/eslint-plugin`                    | `graphql`                            |
 | `@intlify/eslint-plugin-vue-i18n`                  | `@intlify/vue-i18n`                  |
@@ -121,7 +120,6 @@ Note that if you're using custom registry, the URL should be changed accordingly
 | `eslint-plugin-jest-extended`                      | `jest-extended`                      |
 | `eslint-plugin-lit`                                | `lit`                                |
 | `eslint-plugin-lit-a11y`                           | `lit-a11y`                           |
-| `eslint-plugin-lockfile`                           | `lockfile`                           |
 | `eslint-plugin-mobx`                               | `mobx`                               |
 | `eslint-plugin-mocha`                              | `mocha`                              |
 | `eslint-plugin-no-relative-import-paths`           | `no-relative-import-paths`           |
