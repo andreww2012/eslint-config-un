@@ -1,5 +1,5 @@
 // cspell:ignore canparse
-import {ERROR, GLOB_PACKAGE_JSON} from '../constants';
+import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -33,13 +33,18 @@ const E18E_RULES_MODULE_REPLACEMENTS_SET = new Set<string>(E18E_RULES_MODULE_REP
 type E18eModuleReplacementsRules = (typeof E18E_RULES_MODULE_REPLACEMENTS)[number];
 
 const E18E_RULES_PERFORMANCE_IMPROVEMENTS = [
+  'no-delete-property',
   'no-indexof-equality',
+  'no-spread-in-reduce',
   'prefer-array-from-map',
   'prefer-array-some',
   'prefer-date-now',
+  'prefer-includes-over-regex-test',
   'prefer-inline-equality',
   'prefer-regex-test',
+  'prefer-static-collator',
   'prefer-static-regex',
+  'prefer-string-fromcharcode',
   'prefer-timer-args',
 ] as const satisfies GetRuleNamesInPlugin<'e18e'>[];
 const E18E_RULES_PERFORMANCE_IMPROVEMENTS_SET = new Set<string>(
@@ -195,13 +200,18 @@ export default ((context, optionsRaw) => {
           includeDefaultFilesAndIgnores: true,
         },
       ])
+      .addRule('no-delete-property', OFF) /** @since 0.5.0 */ // 🔴
       .addRule('no-indexof-equality', ERROR) /** @since 0.0.1 */ // 🔴💭
+      .addRule('no-spread-in-reduce', ERROR) /** @since 0.5.0 */ // 🔴
       .addRule('prefer-array-from-map', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-some', ERROR) /** @since 0.1.4 */
       .addRule('prefer-date-now', ERROR) /** @since 0.1.3 */
+      .addRule('prefer-includes-over-regex-test', ERROR) /** @since 0.5.0 */ // 🔴
       .addRule('prefer-inline-equality', ERROR) /** @since 0.2.0 */ // 💭?
       .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */ // 💭?
+      .addRule('prefer-static-collator', ERROR) /** @since 0.5.0 */ // 🔴
       .addRule('prefer-static-regex', ERROR) /** @since 0.2.0 */
+      .addRule('prefer-string-fromcharcode', ERROR) /** @since 0.5.0 */
       .addRule('prefer-timer-args', ERROR) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
         /* v8 ignore next */

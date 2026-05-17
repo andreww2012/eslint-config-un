@@ -159,6 +159,7 @@ export default eslintConfig({
       rules: {
         'max-classes-per-file': 0,
         'e18e/prefer-static-regex': 0,
+        'e18e/prefer-static-collator': 0,
       },
     },
     {

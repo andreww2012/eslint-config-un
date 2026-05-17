@@ -194,6 +194,7 @@ export const resolveConfigAsyncData = async (
   });
 
   if (packagesToManuallyInstallOrUpdate.size > 0) {
+    const collator = new Intl.Collator();
     partition(
       Array.from(packagesToManuallyInstallOrUpdate.entries(), ([name, item]) => ({...item, name})),
       (item) => item.installedVersion != null,
@@ -220,7 +221,7 @@ export const resolveConfigAsyncData = async (
         `${capitalize(packageTypes)} that listed in optional peer dependencies ${packages.length === 1 ? 'was' : 'were'} used, but ${isUpdates ? 'does not satisfy the supported version range' : 'not installed'}. Please ${isUpdates ? 'update' : 'install'} ${packages.length === 1 ? 'it' : 'them'} by yourself or disable corresponding config${packages.length === 1 ? '' : 's'} in order for this error to disappear:
 ${renderTable(
   packages
-    .toSorted((a, b) => a.name.localeCompare(b.name))
+    .toSorted((a, b) => collator.compare(a.name, b.name))
     .map(({name, versionRange}) => {
       const pluginPrefixes = packagesToManuallyInstallPluginPrefixes.get(name);
       return {
