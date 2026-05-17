@@ -190,7 +190,7 @@
     "@effect/platform": "0.96.1",
     "@effect/platform-node": "0.106.0",
     "@eslint-react/eslint-plugin": "4.2.3",
-    "@eslint/config-inspector": "2.0.0",
+    "@eslint/config-inspector": "3.0.2",
     "@eslint/css-tree": "4.0.2",
     "@graphql-eslint/eslint-plugin": "4.4.0",
     "@intlify/eslint-plugin-vue-i18n": "4.3.0",
