@@ -334,11 +334,11 @@ importers:
         specifier: 0.1.0
         version: 0.1.0(eslint@9.39.2)(typescript@6.0.3)
       '@tsrx/eslint-parser':
-        specifier: 0.3.48
-        version: 0.3.48(@typescript-eslint/types@8.59.3)(eslint@9.39.2)(ripple@1.0.1)
+        specifier: 0.3.61
+        version: 0.3.61(@typescript-eslint/types@8.59.3)(eslint@9.39.2)
       '@tsrx/eslint-plugin':
-        specifier: 0.3.48
-        version: 0.3.48(@tsrx/eslint-parser@0.3.48)(@typescript-eslint/parser@8.59.3)(eslint@9.39.2)
+        specifier: 0.3.61
+        version: 0.3.61(@tsrx/eslint-parser@0.3.61)(@typescript-eslint/parser@8.59.3)(eslint@9.39.2)
       '@types/eslint-plugin-mobx':
         specifier: 0.0.0
         version: 0.0.0(jiti@2.7.0)
@@ -4357,32 +4357,22 @@ packages:
   '@tootallnate/quickjs-emscripten@0.23.0':
     resolution: {integrity: sha512-C5Mc6rdnsaJDjO3UpGW/CQTHtCKaYlScZTly4JIu97Jxo/odCiH0ITnDXSJPTOrEKk/ycSZ0AOgTmkDtkOsvIA==}
 
-  '@tsrx/core@0.0.27':
-    resolution: {integrity: sha512-+218KqgUI+YIREijfe4BPr7EfLMvYZE925JWlHR8ldEkfMdQnm4DcgEMDKC64FRYGvPE9QYacGwnJZ16KPpaUQ==}
+  '@tsrx/core@0.1.11':
+    resolution: {integrity: sha512-xKAIWZOI+0rLjMz0AuVoDXdwy5b+INDzQHIYHUQNkUGXuRFKaEcgl5Y6gatRY4z5zAvGjj/F45RQyFBv/9pBPw==}
 
-  '@tsrx/core@0.0.6':
-    resolution: {integrity: sha512-gTeJt/jibb4y+t/bmeUj7WSYDnDlfC057sZKrcsLgpoCoJxlGPmR8jS1lJzT5+iaWKZcSn/HOWq0LuCS0irx7w==}
-
-  '@tsrx/eslint-parser@0.3.48':
-    resolution: {integrity: sha512-1seUiWd4WZ/9CHkLb4E3ZUsEesQ8R7iqz3P9iq00apLloqkMFXBX6km/EfKhCo5bp6olYipU0aPIOuiIh+ciMA==}
+  '@tsrx/eslint-parser@0.3.61':
+    resolution: {integrity: sha512-l2JHZoCzoLtUt0ysz8ju8hWHVKs0Qbb7v+WLynrT8NuHG9kxC15O3tuuQ2ANRGVSULte3LQcnEe2SQ/Er+S/WA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       eslint: '>=9.0.0'
-      ripple: '*'
 
-  '@tsrx/eslint-plugin@0.3.48':
-    resolution: {integrity: sha512-neUXTKP52LeNUq2V1yNIGjdUumTXJPTod9DJBxg4iWCgAtXWSSELQDkQJ170vcCllFsWoZFkyX2o50lSnHaq5g==}
+  '@tsrx/eslint-plugin@0.3.61':
+    resolution: {integrity: sha512-PhsRPCqZUdUExk+3a0lBBL2wu6ZSyILDwTQYR/3fCrbG6iz5ox0CYRazhrovQ1ORausC23o2XFEY7+nAIx0OCQ==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@tsrx/eslint-parser': 0.3.48
+      '@tsrx/eslint-parser': 0.3.61
       '@typescript-eslint/parser': ^8.56.1
       eslint: '>=9.0.0'
-
-  '@tsrx/ripple@0.0.29':
-    resolution: {integrity: sha512-+peD2TOgh28MWQk4d0QZ+c/XkeD6xgU/RMwW28KV3jg4SMVFHUU+KZpEYagqrxsnsgIu19xz/q6XRLG0CS+3wg==}
-
-  '@tsrx/ripple@0.0.8':
-    resolution: {integrity: sha512-XtMSRqB4/5fgKbtSWgcHBAMGSORPYPWT6TrUZTdw94ilTkcdguFCrE/rsxSTCFdfyip2n/fsgJkk9JxATvaMgQ==}
 
   '@tufjs/canonical-json@2.0.0':
     resolution: {integrity: sha512-yVtV8zsdo8qFHe+/3kw81dSLyF7D576A5cCFCi4X7B39tWT7SekaEFUnvnWJHz+9qO7qJTah1JbrDjWKqFtdWA==}
@@ -10071,10 +10061,6 @@ packages:
     resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
 
-  ripple@1.0.1:
-    resolution: {integrity: sha512-8tqt1GIq0gofYrxa76Tbm57k+GoX8n1okIChP/sDkIIaY+PGoWS/zXmQXBylM+gMqixQL+oJxEzAaxSGEUhPow==}
-    deprecated: accidental publish
-
   rolldown-plugin-dts@0.23.2:
     resolution: {integrity: sha512-PbSqLawLgZBGcOGT3yqWBGn4cX+wh2nt5FuBGdcMHyOhoukmjbhYAl8NT9sE4U38Cm9tqLOIQeOrvzeayM0DLQ==}
     engines: {node: '>=20.19.0'}
@@ -15292,7 +15278,7 @@ snapshots:
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
-  '@tsrx/core@0.0.27(@typescript-eslint/types@8.59.3)':
+  '@tsrx/core@0.1.11(@typescript-eslint/types@8.59.3)':
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
       '@noble/hashes': 2.2.0
@@ -15307,51 +15293,18 @@ snapshots:
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/core@0.0.6(@typescript-eslint/types@8.59.3)':
+  '@tsrx/eslint-parser@0.3.61(@typescript-eslint/types@8.59.3)(eslint@9.39.2)':
     dependencies:
-      '@jridgewell/sourcemap-codec': 1.5.5
-      '@sveltejs/acorn-typescript': 1.0.9(acorn@8.16.0)
-      '@types/estree': 1.0.8
-      '@types/estree-jsx': 1.0.5
-      acorn: 8.16.0
-      esrap: 2.2.9(@typescript-eslint/types@8.59.3)
-      is-reference: 3.0.3
-      magic-string: 0.30.21
-      zimmerframe: 1.1.4
-    transitivePeerDependencies:
-      - '@typescript-eslint/types'
-
-  '@tsrx/eslint-parser@0.3.48(@typescript-eslint/types@8.59.3)(eslint@9.39.2)(ripple@1.0.1)':
-    dependencies:
-      '@tsrx/ripple': 0.0.29(@typescript-eslint/types@8.59.3)
+      '@tsrx/core': 0.1.11(@typescript-eslint/types@8.59.3)
       eslint: 9.39.2(jiti@2.7.0)
-      ripple: 1.0.1(@typescript-eslint/types@8.59.3)
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/eslint-plugin@0.3.48(@tsrx/eslint-parser@0.3.48)(@typescript-eslint/parser@8.59.3)(eslint@9.39.2)':
+  '@tsrx/eslint-plugin@0.3.61(@tsrx/eslint-parser@0.3.61)(@typescript-eslint/parser@8.59.3)(eslint@9.39.2)':
     dependencies:
-      '@tsrx/eslint-parser': 0.3.48(@typescript-eslint/types@8.59.3)(eslint@9.39.2)(ripple@1.0.1)
+      '@tsrx/eslint-parser': 0.3.61(@typescript-eslint/types@8.59.3)(eslint@9.39.2)
       '@typescript-eslint/parser': 8.59.3(eslint@9.39.2)(typescript@6.0.3)
       eslint: 9.39.2(jiti@2.7.0)
-
-  '@tsrx/ripple@0.0.29(@typescript-eslint/types@8.59.3)':
-    dependencies:
-      '@tsrx/core': 0.0.27(@typescript-eslint/types@8.59.3)
-      esrap: 2.2.9(@typescript-eslint/types@8.59.3)
-      is-reference: 3.0.3
-      zimmerframe: 1.1.4
-    transitivePeerDependencies:
-      - '@typescript-eslint/types'
-
-  '@tsrx/ripple@0.0.8(@typescript-eslint/types@8.59.3)':
-    dependencies:
-      '@tsrx/core': 0.0.6(@typescript-eslint/types@8.59.3)
-      esrap: 2.2.9(@typescript-eslint/types@8.59.3)
-      is-reference: 3.0.3
-      zimmerframe: 1.1.4
-    transitivePeerDependencies:
-      - '@typescript-eslint/types'
 
   '@tufjs/canonical-json@2.0.0': {}
 
@@ -22319,17 +22272,6 @@ snapshots:
   retry@0.13.1: {}
 
   reusify@1.1.0: {}
-
-  ripple@1.0.1(@typescript-eslint/types@8.59.3):
-    dependencies:
-      '@tsrx/ripple': 0.0.8(@typescript-eslint/types@8.59.3)
-      '@types/estree': 1.0.8
-      '@types/estree-jsx': 1.0.5
-      clsx: 2.1.1
-      devalue: 5.8.1
-      esm-env: 1.2.2
-    transitivePeerDependencies:
-      - '@typescript-eslint/types'
 
   rolldown-plugin-dts@0.23.2(@typescript/native-preview@7.0.0-dev.20260420.1)(oxc-resolver@11.19.1)(rolldown@1.0.0-rc.17)(typescript@6.0.3):
     dependencies:

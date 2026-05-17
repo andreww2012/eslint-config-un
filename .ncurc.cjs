@@ -40,6 +40,7 @@ const PACKAGE_GROUPS = Object.entries({
   '@jest': {packages: []},
   '@html-eslint': {packages: []},
   '@sveltejs': {packages: ['eslint-plugin-svelte', 'svelte-eslint-parser']},
+  '@tsrx': {packages: []},
   'eslint-plugin-vue': {packages: ['vue-eslint-parser']},
   'eslint-plugin-astro': {packages: ['astro-eslint-parser']},
   'eslint-plugin-ember': {packages: ['ember-eslint-parser']},
