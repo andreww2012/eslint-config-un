@@ -12,6 +12,7 @@ overrides:
   axios@>=1.0.0 <1.15.2: ^1.15.2
 
 patchedDependencies:
+  '@arethetypeswrong/core': 87be43edb37128ac8ff9ccb11fa6266f9bbd680216e82a41d1a7388242c9e1bf
   eslint-plugin-node-dependencies: 0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4
   eslint-plugin-prettier: ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495
   eslint-plugin-remeda@2.1.0: b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08
@@ -11567,7 +11568,7 @@ snapshots:
 
   '@arethetypeswrong/cli@0.18.2':
     dependencies:
-      '@arethetypeswrong/core': 0.18.2
+      '@arethetypeswrong/core': 0.18.2(patch_hash=87be43edb37128ac8ff9ccb11fa6266f9bbd680216e82a41d1a7388242c9e1bf)
       chalk: 4.1.2
       cli-table3: 0.6.5
       commander: 10.0.1
@@ -11575,7 +11576,7 @@ snapshots:
       marked-terminal: 7.3.0(marked@9.1.6)
       semver: 7.7.4
 
-  '@arethetypeswrong/core@0.18.2':
+  '@arethetypeswrong/core@0.18.2(patch_hash=87be43edb37128ac8ff9ccb11fa6266f9bbd680216e82a41d1a7388242c9e1bf)':
     dependencies:
       '@andrewbranch/untar.js': 1.0.3
       '@loaderkit/resolve': 1.0.5
@@ -23115,7 +23116,7 @@ snapshots:
       unconfig-core: 7.5.0
       unrun: 0.2.39(synckit@0.11.12)
     optionalDependencies:
-      '@arethetypeswrong/core': 0.18.2
+      '@arethetypeswrong/core': 0.18.2(patch_hash=87be43edb37128ac8ff9ccb11fa6266f9bbd680216e82a41d1a7388242c9e1bf)
       typescript: 6.0.3
     transitivePeerDependencies:
       - '@ts-macro/tsc'
