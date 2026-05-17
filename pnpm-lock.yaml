@@ -129,8 +129,8 @@ importers:
         specifier: 0.1.1
         version: 0.1.1(eslint@9.39.2)
       eslint-plugin-lockfile:
-        specifier: 1.1.0
-        version: 1.1.0(eslint@9.39.2)
+        specifier: 1.3.0
+        version: 1.3.0(eslint@9.39.2)
       eslint-plugin-markdown-links:
         specifier: 0.9.0
         version: 0.9.0(@eslint/markdown@8.0.1)(eslint@9.39.2)
@@ -6872,11 +6872,11 @@ packages:
     peerDependencies:
       eslint: '>= 8'
 
-  eslint-plugin-lockfile@1.1.0:
-    resolution: {integrity: sha512-sentK/8/2XLD2yLD4NVH93g89wXgLyk8OzsOrJAGi9zTeyJhN3O2j66R0m0WLsVrMRAWOSN5Bg5PA+/9HuxRzA==}
+  eslint-plugin-lockfile@1.3.0:
+    resolution: {integrity: sha512-6iZdcx/BICCOwqPuORvUYJNZrc8vX4JsnlegagMnY0n+YAEEDB8YIPkwfPTGnejMmMGp0ig08wooOZE2wPgNiQ==}
     engines: {node: ^22.21 || ^24.11 || >= 25.2}
     peerDependencies:
-      eslint: ^9.39.2
+      eslint: ^8.8.0 || ^9.39.2 || ^10.3.0
 
   eslint-plugin-markdown-links@0.9.0:
     resolution: {integrity: sha512-4LW0SQiI38CrJmvM9kCJeRDA4HGo/QetdYHJtO06EaTmcUVu9g620WNtt2LjXGBEHpKkDbq87sWugxJn26GB8g==}
@@ -18210,14 +18210,14 @@ snapshots:
       parse5: 6.0.1
       parse5-htmlparser2-tree-adapter: 6.0.1
 
-  eslint-plugin-lockfile@1.1.0(eslint@9.39.2):
+  eslint-plugin-lockfile@1.3.0(eslint@9.39.2):
     dependencies:
       eslint: 9.39.2(jiti@2.7.0)
       lockfile-tools: 1.3.0
       minimatch: 10.2.5
       npm-package-arg: 13.0.2
       pacote: 21.5.0
-      semver: 7.7.4
+      semver: 7.8.0
     transitivePeerDependencies:
       - supports-color
 
