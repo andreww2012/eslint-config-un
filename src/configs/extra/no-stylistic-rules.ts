@@ -988,8 +988,6 @@ const ALL_STYLISTIC_RULES = {
     'consistent-import': true,
     'consistent-schema-output-type-style': true,
     'no-number-schema-with-int': true,
-    'prefer-namespace-import': true,
-    'require-schema-suffix': true,
     'schema-error-property-style': true,
   },
 } as const satisfies {

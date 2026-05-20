@@ -28,7 +28,7 @@ export interface ZodEslintConfigOptions<
    * - Disallowing all methods will not ignored.
    *
    * Affected rule:
-   * - [`consistent-object-schema-type`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-object-schema-type.md)
+   * - [`consistent-object-schema-type`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-object-schema-type.md)
    * @default {object: true, looseObject: true, strictObject: true}
    */
   allowedObjectSchemaTypes?: ArrayOrBooleanRecord<ZodObjectSchemaType>;
@@ -40,14 +40,14 @@ export interface ZodEslintConfigOptions<
    * - `false`: not enforced
    *
    * Affected rule:
-   * - [`array-style`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/array-style.md)
+   * - [`array-style`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/array-style.md)
    * @default 'method'
    */
   arrayStyle?: GetRuleOptions<'zod', 'array-style'>['style'] | false;
 
   /**
    * Affected rule:
-   * - [`consistent-import`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-import.md)
+   * - [`consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-import.md)
    * @default true
    */
   enforceNamespaceImport?: boolean;
@@ -63,7 +63,7 @@ export interface ZodEslintConfigOptions<
    * - `false`: does not enforce anything.
    *
    * Affected rule:
-   * - [`consistent-schema-var-name`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-schema-var-name.md)
+   * - [`consistent-schema-var-name`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-schema-var-name.md)
    * @default 'Zod'
    */
   schemaVariableName?: string | boolean | GetRuleOptions<'zod', 'consistent-schema-var-name'>;
@@ -137,6 +137,7 @@ export default ((context, optionsRaw) => {
     ) /** @since 3.11.0 */ // 🟢
     .addRule('no-any-schema', WARNING) /** @since 0.0.1 */ /** @aka no-any (before 2.0.0) */ // 🟢
     .addRule('no-empty-custom-schema', ERROR) /** @since 1.1.0 */ // 🟢
+    .addRule('no-native-enum', severityForRulesOnlyForV4) /** @since 4.2.0 */ // 🟢
     // `.int()` added in v4
     .addRule('no-number-schema-with-finite', severityForRulesOnlyForV4) /** @since 3.9.0 */ // 🟢
     .addRule('no-number-schema-with-int', severityForRulesOnlyForV4) /** @since 1.7.0 */ // 🟢
@@ -145,15 +146,20 @@ export default ((context, optionsRaw) => {
     .addRule('no-number-schema-with-safe', severityForRulesOnlyForV4) /** @since 3.9.0 */ // 🟢
     .addRule('no-number-schema-with-step', severityForRulesOnlyForV4) /** @since 3.9.0 */ // 🟢
     .addRule('no-optional-and-default-together', ERROR) /** @since 1.6.0 */ // 🟢
-    .addRule('no-string-schema-with-uuid', ERROR) /** @since 3.2.0 */ // 🟢
+    .addRule('no-promise-schema', severityForRulesOnlyForV4) /** @since 4.5.0 */ // 🟢
+    .addRule('no-schema-with-is-nullable', severityForRulesOnlyForV4) /** @since 4.4.0 */ // 🟢
+    .addRule('no-schema-with-is-optional', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 0.0.1 */ // 🟢
     .addRule('no-transform-in-record-key', ERROR) /** @since 3.6.0 */
     .addRule('no-unknown-schema', OFF) /** @since 1.12.0 */
     .addRule('prefer-enum-over-literal-union', ERROR) /** @since 3.0.0 */ // 🟢
+    .addRule('prefer-loose-object', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🟢
     // `.meta()` added in v4
     .addRule('prefer-meta', severityForRulesOnlyForV4) /** @since 0.0.1 */ // 🟢
     .addRule('prefer-meta-last', ERROR) /** @since 0.0.1 */ // 🟢
+    .addRule('prefer-strict-object', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🟢
     .addRule('prefer-string-schema-with-trim', OFF) /** @since 3.3.0 */ // 🟢
+    .addRule('prefer-top-level-string-formats', severityForRulesOnlyForV4) /** @since 4.1.0 */ // 🟢
     .addRule('prefer-trim-before-string-length-checks', ERROR) /** @since 3.12.0 */ // 🟢
     .addRule('require-brand-type-parameter', ERROR) /** @since 1.8.0 */ // 🟢
     .addRule('require-error-message', ERROR) /** @since 1.4.0 */ // 🟢

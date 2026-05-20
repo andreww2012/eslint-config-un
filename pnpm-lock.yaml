@@ -619,8 +619,8 @@ importers:
         specifier: 6.14.0
         version: 6.14.0
       eslint-plugin-zod:
-        specifier: 3.12.0
-        version: 3.12.0(eslint@9.39.2)(typescript@6.0.3)(zod@4.3.6)
+        specifier: 4.5.1
+        version: 4.5.1(eslint@9.39.2)(typescript@6.0.3)(zod@4.3.6)
       eslint-processor-vue-blocks:
         specifier: 2.0.0
         version: 2.0.0(@vue/compiler-sfc@3.5.22)(eslint@9.39.2)
@@ -2267,6 +2267,10 @@ packages:
     peerDependencies:
       eslint: ^10.0.0
       typescript: '*'
+
+  '@eslint-zod/utils@2.0.0':
+    resolution: {integrity: sha512-LNJ2DHOot9NynkFJuiRuigh3GvMByqI83MnbJaHTdVmRFiZC531gX/UxyRo8QwYaUEaTSQ69j87RggaVt32O5Q==}
+    engines: {node: ^20 || ^22 || >=24}
 
   '@eslint/compat@2.0.5':
     resolution: {integrity: sha512-IbHDbHJfkVNv6xjlET8AIVo/K1NQt7YT4Rp6ok/clyBGcpRx1l6gv0Rq3vBvYfPJIZt6ODf66Zq08FJNDpnzgg==}
@@ -7425,8 +7429,8 @@ packages:
     resolution: {integrity: sha512-3zkkU/O1agczP7szJGHmisZJS/AknfVl6mb0Zqoc95dvFsdmfK+cbhrn+Ffy0UWB1pgDJwQr7kIO3rPstWs3Dw==}
     engines: {node: '>=4.0'}
 
-  eslint-plugin-zod@3.12.0:
-    resolution: {integrity: sha512-dt/+k34AQJuCBjoEVXQ7rDVRubBrEPQ51fB1I+gI8PBXW9fM6bORr7m5BTcoBaME1O0cf11D3TR4vYLwdiAXFQ==}
+  eslint-plugin-zod@4.5.1:
+    resolution: {integrity: sha512-pMQJFB09nAx2d3Xf0BLXf41RvggBt3ey1YbfYSArQAXXRYadsTnHQ8abbHzLInEhB8eix4PcbUBUOtE/lZ6gcg==}
     engines: {node: ^20 || ^22 || >=24}
     peerDependencies:
       eslint: ^9 || ^10
@@ -13492,6 +13496,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@eslint-zod/utils@2.0.0(eslint@9.39.2)(typescript@6.0.3)':
+    dependencies:
+      '@typescript-eslint/utils': 8.59.3(eslint@9.39.2)(typescript@6.0.3)
+      esquery: 1.7.0
+    transitivePeerDependencies:
+      - eslint
+      - supports-color
+      - typescript
+
   '@eslint/compat@2.0.5(eslint@9.39.2)':
     dependencies:
       '@eslint/core': 1.2.1
@@ -19102,10 +19115,10 @@ snapshots:
     dependencies:
       kebab-case: 1.0.2
 
-  eslint-plugin-zod@3.12.0(eslint@9.39.2)(typescript@6.0.3)(zod@4.3.6):
+  eslint-plugin-zod@4.5.1(eslint@9.39.2)(typescript@6.0.3)(zod@4.3.6):
     dependencies:
+      '@eslint-zod/utils': 2.0.0(eslint@9.39.2)(typescript@6.0.3)
       '@typescript-eslint/utils': 8.59.3(eslint@9.39.2)(typescript@6.0.3)
-      esquery: 1.7.0
     optionalDependencies:
       eslint: 9.39.2(jiti@2.7.0)
       zod: 4.3.6
