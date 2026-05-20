@@ -277,9 +277,17 @@ toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
     logger.log('Installing dependencies...');
 
     const {stdout: dependencyInstallationOutput, exitCode: dependencyInstallationErrorCode} =
-      await exec('pnpm', ['i', '--ignore-workspace', '--shamefully-hoist', 'true'], {
-        nodeOptions: {cwd: projectDir},
-      });
+      await exec(
+        'pnpm',
+        [
+          'i',
+          '--ignore-workspace',
+          '--shamefully-hoist',
+          'true',
+          '--config.confirmModulesPurge=false', // In case modules directory format changes, do not require interactive confirmation as it is unavailable
+        ],
+        {nodeOptions: {cwd: projectDir}},
+      );
 
     if (dependencyInstallationErrorCode) {
       logger.error(
