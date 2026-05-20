@@ -124,7 +124,7 @@ export interface UnFlatConfigEntryBase<
 > extends UnFlatConfigEntryFilesAndIgnores {
   overrides?: UnFlatConfigEntryOverridesType<UnionToIntersection<UnRulesConfigPartial<T>>>;
 
-  overridesAny?: UnFlatConfigEntryOverridesType<UnionToIntersection<UnRulesConfigPartial>> &
+  overridesAny?: UnFlatConfigEntryOverridesType<UnRulesConfig> &
     UnExtraPluginsRulesConfig<ExtraPlugins>;
 
   /**
