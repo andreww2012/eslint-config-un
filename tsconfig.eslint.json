@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig.json",
+  "extends": "./tsconfig.json",
+  "include": [
+    "src",
+    "scripts",
+    "eslint-local-rules",
+    "test",
+    "*.ts",
+    ".*.ts",
+  ],
+  "compilerOptions": {
+    "types": ["vitest/globals"]
+  }
+}
