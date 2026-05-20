@@ -5,6 +5,8 @@ import * as diff from 'diff';
 import {capitalize} from 'es-toolkit';
 import {flatConfigsToRulesDTS, pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
+import prettier from 'prettier';
+import prettierConfig from '../.prettierrc.json' with {type: 'json'};
 import {eslintConfigInternal} from '../src/config-un/config';
 import {DISABLE_AUTOFIX} from '../src/constants';
 import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
@@ -20,8 +22,34 @@ const {allRuleTypesCode, perPluginCode, fixableRulesOnlyCode, allRulesCode} =
 
 await printDiffBetweenMostRecentAndCurrentRuleTypes(allRuleTypesCode);
 
+const derivedAllRuleTypesCode = `/* eslint-disable */
+/* prettier-ignore */
+// Derived from \`eslint-types-per-plugin.gen.d.ts\` to avoid loading two copies
+// of every rule's option type into the TypeScript program
+import type {Linter} from 'eslint';
+import {UnionToIntersection} from 'type-fest';
+import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin.gen';
+
+type _RuleOptionsRaw = UnionToIntersection<
+  {
+    [P in keyof RuleOptionsPerPlugin]: {
+      [R in keyof RuleOptionsPerPlugin[P] & string as P extends '' ? R : \`\${P & string}/\${R}\`]: RuleOptionsPerPlugin[P][R]
+    }
+  }[keyof RuleOptionsPerPlugin]
+>
+
+export type RuleOptions = {
+  [K in keyof _RuleOptionsRaw]?: _RuleOptionsRaw[K] extends readonly unknown[]
+    ? Linter.RuleEntry<_RuleOptionsRaw[K]>
+    : never
+}`;
+
 await Promise.all([
-  fs.writeFile(path.join(__dirname, '../src/eslint-types.gen.d.ts'), allRuleTypesCode),
+  prettier
+    .format(derivedAllRuleTypesCode, {parser: 'typescript', ...prettierConfig})
+    .then((formattedCode) =>
+      fs.writeFile(path.join(__dirname, '../src/eslint-types.gen.d.ts'), formattedCode),
+    ),
   fs.writeFile(path.join(__dirname, '../src/eslint-types-per-plugin.gen.d.ts'), perPluginCode),
   fs.writeFile(
     path.join(__dirname, '../src/eslint-types-fixable-only.gen.d.ts'),
