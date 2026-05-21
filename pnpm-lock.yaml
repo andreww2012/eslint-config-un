@@ -507,8 +507,8 @@ importers:
         specifier: 30.4.1
         version: 30.4.1
       '@next/eslint-plugin-next':
-        specifier: 16.2.4
-        version: 16.2.4
+        specifier: 16.2.6
+        version: 16.2.6
       '@ngrx/eslint-plugin':
         specifier: 21.1.0
         version: 21.1.0(@typescript-eslint/utils@8.59.4)(eslint@9.39.2)(typescript-eslint@8.59.4)(typescript@6.0.3)
@@ -3266,8 +3266,8 @@ packages:
       '@emnapi/core': ^1.7.1
       '@emnapi/runtime': ^1.7.1
 
-  '@next/eslint-plugin-next@16.2.4':
-    resolution: {integrity: sha512-tOX826JJ96gYK/go18sPUgMq9FK1tqxBFfUCEufJb5XIkWFFmpgU7mahJANKGkHs7F41ir3tReJ3Lv5La0RvhA==}
+  '@next/eslint-plugin-next@16.2.6':
+    resolution: {integrity: sha512-Z8l6o4JWKUl755x4R+wogD86KPeU+Ckw4K+SYG4kHeOJtRenDeK+OSbGcqZpDtbwn9DsJVdir2UxmwXuinUbUw==}
 
   '@ngrx/eslint-plugin@21.1.0':
     resolution: {integrity: sha512-L9B1v/7rcEyk5UHjlpLHfI1YnEWXQ8ucGk9DMI0VNDPpZ5izWOTFR39nN0ZZGM1slY89UHOczDdFIRq1CsBYVw==}
@@ -14691,7 +14691,7 @@ snapshots:
       '@tybys/wasm-util': 0.10.2
     optional: true
 
-  '@next/eslint-plugin-next@16.2.4':
+  '@next/eslint-plugin-next@16.2.6':
     dependencies:
       fast-glob: 3.3.1
 
