@@ -323,7 +323,7 @@
     "puppeteer": "25.0.4",
     "release-it": "20.0.1",
     "remeda": "2.34.0",
-    "shiki": "4.0.2",
+    "shiki": "4.1.0",
     "svelte-eslint-parser": "1.6.1",
     "ts-extras": "1.0.0",
     "tsdown": "0.22.0",
