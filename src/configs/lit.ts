@@ -124,6 +124,7 @@ export default (async (context, optionsRaw) => {
     .addRule('no-useless-template-literals', ERROR) /** @since 0.1.0 */
     .addRule('no-value-attribute', ERROR) /** @since 0.6.0 */
     .addRule('prefer-nothing', ERROR) /** @since 1.7.0 */
+    .addRule('prefer-query-decorators', ERROR) /** @since 2.3.1 */
     .addRule('prefer-static-styles', ERROR) /** @since 1.5.0 */
     .addRule('quoted-expressions', ERROR, ['never']) /** @since 1.4.0 */
     .addRule('value-after-constraints', ERROR) /** @since 1.7.0 */
