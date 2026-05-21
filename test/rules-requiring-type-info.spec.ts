@@ -73,7 +73,7 @@ describe('rules requiring type information', () => {
         'aws-cdk/@rule/awscdk/no-unused-props/@type-information',
       );
 
-      expect(ruleOverrideConfigForTypedRules?.files).toMatchInlineSnapshot([
+      expect(ruleOverrideConfigForTypedRules?.files).toStrictEqual([
         [BASE_FILES[0], RULE_OVERRIDE_FILES[0], GLOB_TS_X],
       ]);
       expect(ruleOverrideConfigForTypedRules?.rules).toStrictEqual({'awscdk/no-unused-props': 2});
