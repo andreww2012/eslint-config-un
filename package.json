@@ -320,7 +320,7 @@
     "package-json": "10.0.1",
     "pathe": "2.0.3",
     "prettier": "3.8.3",
-    "puppeteer": "24.42.0",
+    "puppeteer": "25.0.4",
     "release-it": "20.0.1",
     "remeda": "2.34.0",
     "shiki": "4.0.2",

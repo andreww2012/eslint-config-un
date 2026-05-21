@@ -27,7 +27,7 @@ allowBuilds:
   msgpackr-extract@3.0.3: false
   multiline-ts@4.0.1: false
   nx@22.7.1: false
-  puppeteer@24.42.0: true
+  puppeteer@25.0.4: true
   unrs-resolver@1.11.1: true
 
 dedupePeers: true
