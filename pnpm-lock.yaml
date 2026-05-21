@@ -620,7 +620,7 @@ importers:
         version: 6.14.0
       eslint-plugin-zod:
         specifier: 4.5.1
-        version: 4.5.1(eslint@9.39.2)(typescript@6.0.3)(zod@4.3.6)
+        version: 4.5.1(eslint@9.39.2)(typescript@6.0.3)(zod@4.4.3)
       eslint-processor-vue-blocks:
         specifier: 2.0.0
         version: 2.0.0(@vue/compiler-sfc@3.5.22)(eslint@9.39.2)
@@ -718,11 +718,11 @@ importers:
         specifier: 10.4.0
         version: 10.4.0(eslint@9.39.2)
       zod:
-        specifier: 4.3.6
-        version: 4.3.6
+        specifier: 4.4.3
+        version: 4.4.3
       zod-package-json:
         specifier: 2.1.0
-        version: 2.1.0(zod@4.3.6)
+        version: 2.1.0(zod@4.4.3)
 
 packages:
 
@@ -11670,6 +11670,9 @@ packages:
   zod@4.3.6:
     resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
 
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -19206,13 +19209,13 @@ snapshots:
     dependencies:
       kebab-case: 1.0.2
 
-  eslint-plugin-zod@4.5.1(eslint@9.39.2)(typescript@6.0.3)(zod@4.3.6):
+  eslint-plugin-zod@4.5.1(eslint@9.39.2)(typescript@6.0.3)(zod@4.4.3):
     dependencies:
       '@eslint-zod/utils': 2.0.0(eslint@9.39.2)(typescript@6.0.3)
       '@typescript-eslint/utils': 8.59.3(eslint@9.39.2)(typescript@6.0.3)
     optionalDependencies:
       eslint: 9.39.2(jiti@2.7.0)
-      zod: 4.3.6
+      zod: 4.4.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -24229,9 +24232,9 @@ snapshots:
 
   zimmerframe@1.1.4: {}
 
-  zod-package-json@2.1.0(zod@4.3.6):
+  zod-package-json@2.1.0(zod@4.4.3):
     dependencies:
-      zod: 4.3.6
+      zod: 4.4.3
 
   zod-validation-error@4.0.2(zod@4.3.6):
     dependencies:
@@ -24240,5 +24243,7 @@ snapshots:
   zod@3.25.76: {}
 
   zod@4.3.6: {}
+
+  zod@4.4.3: {}
 
   zwitch@2.0.4: {}
