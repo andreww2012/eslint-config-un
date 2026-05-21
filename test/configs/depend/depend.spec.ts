@@ -133,7 +133,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('depend');
 
       expect(configResult.getRuleEntry('depend', 'depend/ban-dependencies')).toMatchInlineSnapshot(
-        '[2]',
+        '2',
       );
     });
 

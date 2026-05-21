@@ -185,7 +185,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('drizzle', 'drizzle/enforce-delete-with-where'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('passes the set string to both delete and update rules', async () => {

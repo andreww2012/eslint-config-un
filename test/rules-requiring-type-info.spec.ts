@@ -17,7 +17,7 @@ describe('rules requiring type information', () => {
 
       expect(configForTypedRules?.files).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
       expect(configForTypedRules?.rules).toStrictEqual({
-        'eslint-plugin/no-property-in-node': [2],
+        'eslint-plugin/no-property-in-node': 2,
       });
       expect(configForTypedRules?.languageOptions).toMatchObject({
         parserOptions: {projectService: true},

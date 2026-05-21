@@ -210,13 +210,13 @@ describe('options', () => {
     it('does not add ignored unsupported features to `node/no-unsupported-features/<group>` rule if `noUnsupportedFeaturesIgnores.<group>` is not set', () => {
       expect(
         configResult.getRuleEntry('node', 'node/no-unsupported-features/es-syntax'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('does not add ignored unsupported features to `node/no-unsupported-features/<group>` rule if `noUnsupportedFeaturesIgnores.<group>` is empty array', () => {
       expect(
         configResult.getRuleEntry('node', 'node/no-unsupported-features/node-builtins'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('adds ignored unsupported features to `node/no-unsupported-features/es-syntax` rule if `noUnsupportedFeaturesIgnores.esSyntax` is non-empty array', async () => {

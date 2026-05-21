@@ -90,7 +90,7 @@ describe('e18e: sub config `moduleReplacements`', () => {
 
         expect(
           configResult.getRuleEntry('e18e/module-replacements', 'e18e/ban-dependencies'),
-        ).toMatchInlineSnapshot('[2]');
+        ).toMatchInlineSnapshot('2');
       });
 
       it('passes custom `options` to `e18e/ban-dependencies` rule when provided', async () => {

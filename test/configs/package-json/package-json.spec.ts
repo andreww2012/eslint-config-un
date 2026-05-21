@@ -254,7 +254,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('package-json', 'package-json/no-empty-fields'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
   });
 
@@ -295,7 +295,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('package-json', 'package-json/restrict-private-properties'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('enables `package-json/restrict-private-properties` rule with custom blocked properties when set to a string array', async () => {

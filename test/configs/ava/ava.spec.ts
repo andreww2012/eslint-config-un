@@ -170,7 +170,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('ava');
 
       expect(configResult.getRuleEntry('ava', 'ava/assertion-arguments')).toMatchInlineSnapshot(
-        '[2]',
+        '2',
       );
     });
 

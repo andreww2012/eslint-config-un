@@ -166,7 +166,7 @@ describe('options', () => {
         'no-relative-import-paths/no-relative-import-paths',
       );
 
-      expect(rule).toMatchInlineSnapshot('[2]');
+      expect(rule).toMatchInlineSnapshot('2');
     });
 
     it('sets rule options when set to provided', async () => {

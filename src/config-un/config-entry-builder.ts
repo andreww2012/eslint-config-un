@@ -453,7 +453,9 @@ export class ConfigEntryBuilder<
           | undefined) ?? severity;
       const ruleNameResolved = resolveFullRuleName(this.context, plugin, ruleNameUnprefixed);
 
-      configFinal.rules[ruleNameResolved] = [severityResolved, ...(ruleOptions || [])];
+      configFinal.rules[ruleNameResolved] = ruleOptions?.length
+        ? [severityResolved, ...ruleOptions]
+        : severityResolved;
 
       /* v8 ignore start */
       if (addedRules && duplicateRules) {

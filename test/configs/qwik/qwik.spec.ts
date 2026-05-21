@@ -170,9 +170,7 @@ describe('options', () => {
     it('does not set `routesDir` in `qwik/loader-location` rule options by default', async () => {
       const configResult = await computeEslintConfig('qwik');
 
-      expect(configResult.getRuleEntry('qwik', 'qwik/loader-location')).toMatchInlineSnapshot(
-        '[2]',
-      );
+      expect(configResult.getRuleEntry('qwik', 'qwik/loader-location')).toMatchInlineSnapshot('2');
     });
 
     it('sets `routesDir` in `qwik/loader-location` rule options when provided', async () => {

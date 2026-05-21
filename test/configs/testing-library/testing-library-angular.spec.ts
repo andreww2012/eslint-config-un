@@ -166,7 +166,7 @@ describe('testing-library: sub config `angular`', () => {
             'testing-library/angular',
             'testing-library/no-render-in-lifecycle',
           ),
-        ).toMatchInlineSnapshot('[2]');
+        ).toMatchInlineSnapshot('2');
       });
 
       it('adds `allowTestingFrameworkSetupHook` option to `testing-library/no-render-in-lifecycle` when provided', async () => {

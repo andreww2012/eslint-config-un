@@ -688,7 +688,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('angular/general', '@angular-eslint/pipe-prefix'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('uses custom `pipePrefixes`', async () => {

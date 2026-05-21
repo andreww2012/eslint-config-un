@@ -235,7 +235,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('jest');
 
       expect(configResult.getRuleEntry('jest', 'jest/max-nested-describe')).toMatchInlineSnapshot(
-        '[0]',
+        '0',
       );
     });
 

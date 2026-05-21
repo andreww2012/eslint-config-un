@@ -130,7 +130,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('headers');
 
       expect(configResult.getRuleEntry('headers', 'headers/header-format')).toMatchInlineSnapshot(
-        '[2]',
+        '2',
       );
     });
 

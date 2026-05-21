@@ -159,7 +159,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('turbo', 'turbo/no-undeclared-env-vars'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('passes provided options to `turbo/no-undeclared-env-vars` rule when `undeclaredEnvVarsOptions` is set', async () => {

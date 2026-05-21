@@ -147,7 +147,7 @@ describe('unused-imports: sub config `noUnusedVars`', () => {
             'unused-imports/no-unused-vars',
             'unused-imports/no-unused-vars',
           ),
-        ).toMatchInlineSnapshot('[2]');
+        ).toMatchInlineSnapshot('2');
       });
 
       it('adds options to `unused-imports/no-unused-vars` rule when `ruleOptions` is provided', async () => {

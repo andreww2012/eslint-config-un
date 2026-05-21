@@ -199,10 +199,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-once'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-times'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
     });
 
     it('enforces `times` style when set to `times`', async () => {
@@ -212,10 +212,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-once'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-times'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('disables both called-style rules when set to `false`', async () => {
@@ -225,10 +225,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-once'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-called-times'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
     });
   });
 
@@ -238,10 +238,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
     });
 
     it('enforces importing vitest globals when set to `enforce`', async () => {
@@ -251,10 +251,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('allows both styles when set to `any`', async () => {
@@ -264,10 +264,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/prefer-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
     });
   });
 
@@ -297,7 +297,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/max-nested-describe'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
     });
 
     it('enables `max-nested-describe` with provided max value', async () => {
@@ -317,7 +317,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-restricted-vi-methods'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
     });
 
     it('enables `no-restricted-vi-methods` with provided restrictions', async () => {
@@ -339,7 +339,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/no-restricted-matchers'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
     });
 
     it('enables `no-restricted-matchers` with provided restrictions', async () => {
@@ -371,7 +371,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/consistent-test-it'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
     });
   });
 
@@ -381,7 +381,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/padding-around-test-blocks'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('disables all padding-around rules when set to `false`', async () => {
@@ -391,10 +391,10 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('vitest', 'vitest/padding-around-test-blocks'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
       expect(
         configResult.getRuleEntry('vitest', 'vitest/padding-around-describe-blocks'),
-      ).toMatchInlineSnapshot('[0]');
+      ).toMatchInlineSnapshot('0');
     });
 
     it('supports object form to disable only selected groups', async () => {

@@ -85,7 +85,7 @@ describe('rules', async () => {
 
   it('enables only `format/prettier` rule by default', () => {
     expect(configResult.getConfigByUnPostfix('format/prettier')?.rules).toMatchInlineSnapshot(
-      '{"format/prettier": [2]}',
+      '{"format/prettier": 2}',
     );
   });
 

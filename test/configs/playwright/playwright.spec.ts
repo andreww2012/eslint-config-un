@@ -192,7 +192,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('playwright', 'playwright/expect-expect'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('adds custom assert function names to `playwright/expect-expect` rule options when provided', async () => {
@@ -244,7 +244,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('playwright', 'playwright/missing-playwright-await'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('adds custom async matchers to `playwright/missing-playwright-await` rule options when provided', async () => {

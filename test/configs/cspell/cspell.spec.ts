@@ -125,7 +125,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig('cspell');
       const rule = configResult.getRuleEntry('cspell', '@cspell/spellchecker');
 
-      expect(rule).toMatchInlineSnapshot('[2]');
+      expect(rule).toMatchInlineSnapshot('2');
     });
 
     it('sets rule options when set to provided', async () => {

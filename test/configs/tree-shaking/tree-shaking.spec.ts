@@ -158,7 +158,7 @@ describe('options', () => {
 
       expect(
         configResult.getRuleEntry('tree-shaking', 'tree-shaking/no-side-effects-in-initialization'),
-      ).toMatchInlineSnapshot('[2]');
+      ).toMatchInlineSnapshot('2');
     });
 
     it('passes provided options to `tree-shaking/no-side-effects-in-initialization` rule when `options` is set', async () => {
