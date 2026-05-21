@@ -41,6 +41,7 @@ const PACKAGE_GROUPS = Object.entries({
   '@html-eslint': {packages: []},
   '@sveltejs': {packages: ['eslint-plugin-svelte', 'svelte-eslint-parser']},
   '@tsrx': {packages: []},
+  '@vitest': {packages: ['vitest'], excludePackages: ['eslint-plugin']},
   'eslint-plugin-vue': {packages: ['vue-eslint-parser']},
   'eslint-plugin-astro': {packages: ['astro-eslint-parser']},
   'eslint-plugin-ember': {packages: ['ember-eslint-parser']},
@@ -104,7 +105,11 @@ module.exports = {
   interactive: true,
   groupFunction: (fullName) => {
     const [nameScope, nameWithoutScope = ''] = fullName.split('/');
-    const knownGroup = PACKAGE_GROUPS[fullName] || PACKAGE_GROUPS[`${nameScope}/*`];
+
+    let knownGroup = PACKAGE_GROUPS[fullName] || PACKAGE_GROUPS[`${nameScope}/*`];
+    if (knownGroup?.excludePackages?.includes(nameWithoutScope)) {
+      knownGroup = null;
+    }
 
     if (knownGroup) {
       if (knownGroup.special) {
