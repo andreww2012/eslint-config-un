@@ -436,8 +436,8 @@ importers:
         specifier: 1.7.0
         version: 1.7.0(eslint@9.39.2)
       eslint-plugin-ava:
-        specifier: 16.0.1
-        version: 16.0.1(eslint@9.39.2)
+        specifier: 17.0.0
+        version: 17.0.0(eslint@9.39.2)
       eslint-plugin-awscdk:
         specifier: 4.3.2
         version: 4.3.2(eslint@9.39.2)(typescript@6.0.3)
@@ -6418,10 +6418,6 @@ packages:
   end-of-stream@1.4.5:
     resolution: {integrity: sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==}
 
-  enhance-visitors@1.0.0:
-    resolution: {integrity: sha512-+29eJLiUixTEDRaZ35Vu8jP3gPLNcQQkQkOQjLp2X+6cZGGPDD/uasbFzvLsJKnGZnvmyZ0srxudwOtskHeIDA==}
-    engines: {node: '>=4.0.0'}
-
   enhanced-resolve@5.21.0:
     resolution: {integrity: sha512-otxSQPw4lkOZWkHpB3zaEQs6gWYEsmX4xQF68ElXC/TWvGxGMSGOvoNbaLXm6/cS/fSfHtsEdw90y20PCd+sCA==}
     engines: {node: '>=10.13.0'}
@@ -6758,9 +6754,9 @@ packages:
     peerDependencies:
       eslint: '>=8.57.0'
 
-  eslint-plugin-ava@16.0.1:
-    resolution: {integrity: sha512-1QsYwUulr9m9o6EFndkI0J10wZyVimmrQ1epB8zEowulW0o8fW/ahIHrPwTMT53AWbObD+8S78Uz9aKM3zS9+A==}
-    engines: {node: '>=20.19'}
+  eslint-plugin-ava@17.0.0:
+    resolution: {integrity: sha512-aGDUiSA2cCLiIQzWTxsOaGLoNmjhjyjRbDZauVFhPAcVr8dX4eUUppC5yX/Ecrrmcc8SEr0xojzQ/c7t7DJpmA==}
+    engines: {node: '>=22'}
     peerDependencies:
       eslint: '>=10'
 
@@ -17707,10 +17703,6 @@ snapshots:
     dependencies:
       once: 1.4.0
 
-  enhance-visitors@1.0.0:
-    dependencies:
-      lodash: 4.18.1
-
   enhanced-resolve@5.21.0:
     dependencies:
       graceful-fs: 4.2.11
@@ -18096,11 +18088,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-ava@16.0.1(eslint@9.39.2):
+  eslint-plugin-ava@17.0.0(eslint@9.39.2):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       '@eslint/json': 1.2.0
-      enhance-visitors: 1.0.0
       eslint: 9.39.2(jiti@2.7.0)
       espree: 11.2.0
       espurify: 3.2.0
