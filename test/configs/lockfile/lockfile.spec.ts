@@ -110,7 +110,7 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      '"Package "node_modules/some-pkg" in lockfile "package-lock.json" uses GitHub shorthand: github:some-org/some-pkg#abcdef1234567890"',
+      '"Package "some-pkg" in lockfile "package-lock.json" uses GitHub shorthand: github:some-org/some-pkg#abcdef1234567890"',
     );
   });
 });
