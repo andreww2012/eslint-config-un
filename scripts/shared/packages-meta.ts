@@ -408,8 +408,7 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
       },
       'package-json': {
         configs: ['packageJson'],
-        ruleDocsUrl: (ruleName) =>
-          `https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/${ruleName}.md`,
+        ruleDocsUrl: (ruleName) => `https://eslint-plugin-package-json.dev/rules/${ruleName}`,
       },
       perfectionist: {
         configs: ['perfectionist'],
