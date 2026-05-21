@@ -142,7 +142,7 @@ export const resolveConfigAsyncData = async (
           packagesToManuallyInstallOrUpdate.set(packageToInstall.name, packageToInstall);
         }
 
-        const parser = parserResult.module;
+        const parser = parserResult.module as unknown;
         if (!parser) {
           return;
         }
@@ -425,13 +425,13 @@ ${styleText(
                     const functionBody = `return (${isStartsWithPropertyName ? 'function ' : ''}${functionBodyRaw})${isRegularFunction ? '.call(this, ' : '('}...args)`;
                     return {
                       valueTransformFn: {
-                        // eslint-disable-next-line no-new-func
+                        // eslint-disable-next-line no-new-func, ts/no-implied-eval
                         fn: new Function('...args', functionBody) as ValueTransformFn['fn'],
                         ...('1' in valueTransformFn && {scope: valueTransformFn[1]}),
                       },
                     };
                   })()),
-              } satisfies PackageToLoadInfo as PackageToLoadInfo,
+              } satisfies PackageToLoadInfo,
             };
           })
           .filter((v) => v != null),

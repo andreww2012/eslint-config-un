@@ -69,8 +69,6 @@ export default eslintConfig({
     },
     fileProgress: true,
     ts: {
-      // TODO remove when this is fixed: https://github.com/typescript-eslint/typescript-eslint/issues/12068
-      ignores: ['src/config-un/resolve-config-async-data.ts'],
       parserOptions: (isTypeAware) =>
         isTypeAware
           ? {
