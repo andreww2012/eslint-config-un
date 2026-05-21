@@ -298,8 +298,8 @@ importers:
         specifier: 4.4.0
         version: 4.4.0(@types/node@20.19.1)(eslint@9.39.2)(graphql@16.11.0)(json-schema-to-ts@3.1.1)(typescript@6.0.3)
       '@intlify/eslint-plugin-vue-i18n':
-        specifier: 4.3.0
-        version: 4.3.0(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)(vue-eslint-parser@10.4.0)(yaml-eslint-parser@2.0.0)
+        specifier: 4.4.0
+        version: 4.4.0(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)(vue-eslint-parser@10.4.0)(yaml-eslint-parser@2.0.0)
       '@jest/environment':
         specifier: 30.3.0
         version: 30.3.0
@@ -2736,14 +2736,14 @@ packages:
     resolution: {integrity: sha512-3u8EN1kB6EMSi96KXs5k7a8y2X2g4+h3X6iwVZU47cP4n+mTuq//WMjG588BzSp/2XQ/dTXo2BLUXX+XS+PNfA==}
     engines: {node: '>= 16'}
 
-  '@intlify/eslint-plugin-vue-i18n@4.3.0':
-    resolution: {integrity: sha512-CxUltFVnxoKpPQYITqx94/Vsni8VoVeVc5rltl82ctU8Yl2KCGcexn8mYlkRSozazNpJTmLuutixfwrOpW7Nkw==}
+  '@intlify/eslint-plugin-vue-i18n@4.4.0':
+    resolution: {integrity: sha512-j3ANu+AFaPjnFt087p72w3yyl7sigNszhQu9pI7FGsaofoBWeNV5MCtD0tVx4c6aRybMrXgztHmiJOmEfEeL3w==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       eslint: ^8.0.0 || ^9.0.0-0 || ^10.0.0
       jsonc-eslint-parser: ^2.3.0 || ^3.0.0
       vue-eslint-parser: ^10.0.0
-      yaml-eslint-parser: ^1.2.2
+      yaml-eslint-parser: ^1.2.2 || ^2.0.0
 
   '@intlify/message-compiler@11.4.2':
     resolution: {integrity: sha512-a6CDSGSMTGrg0BjD97x8TBYPf7qQMDlZipJ6UDfv/pd4OIym8TMlHu3MsH0bTNnRdAG2D6EFEykIgiQPqvtTkA==}
@@ -14096,7 +14096,7 @@ snapshots:
       '@intlify/core-base': 11.4.2
       '@intlify/shared': 11.4.2
 
-  '@intlify/eslint-plugin-vue-i18n@4.3.0(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)(vue-eslint-parser@10.4.0)(yaml-eslint-parser@2.0.0)':
+  '@intlify/eslint-plugin-vue-i18n@4.4.0(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)(vue-eslint-parser@10.4.0)(yaml-eslint-parser@2.0.0)':
     dependencies:
       '@eslint/eslintrc': 3.3.5
       '@intlify/core-base': 11.4.2
