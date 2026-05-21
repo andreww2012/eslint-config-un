@@ -675,7 +675,7 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
     ruleDocsUrl: null,
   },
   'tailwind-csstree': {
-    configs: ['tailwind'],
+    configs: ['css'],
     gitTag: (version) => `tailwind-csstree-v${version}`,
     ruleDocsUrl: null,
   },

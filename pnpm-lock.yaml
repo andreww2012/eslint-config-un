@@ -425,8 +425,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1
       tailwind-csstree:
-        specifier: 0.3.1
-        version: 0.3.1(@eslint/css@1.2.0)
+        specifier: 0.3.2
+        version: 0.3.2(@eslint/css@1.2.0)
       tinyexec:
         specifier: 1.1.2
         version: 1.1.2
@@ -11070,6 +11070,15 @@ packages:
 
   tailwind-csstree@0.3.1:
     resolution: {integrity: sha512-v147gLOR+E+9H4dNaP9rBeS/S/CTQJMRItlX9jLOXjdBGfSRauLwiz7LBCViaQmn6URXIlOdN6iMzSzOaeoUUw==}
+    engines: {node: '>=18.18'}
+    peerDependencies:
+      '@eslint/css': '>=1.0.0'
+    peerDependenciesMeta:
+      '@eslint/css':
+        optional: true
+
+  tailwind-csstree@0.3.2:
+    resolution: {integrity: sha512-0iVbtKbzPZG+wcBELC7vK2z1I3n+hUQG3OzyhmMXoJTCm8j5tI+ek2Ch3X/lf/VaTf/yag9mLngoKIaehH6X0g==}
     engines: {node: '>=18.18'}
     peerDependencies:
       '@eslint/css': '>=1.0.0'
@@ -23708,6 +23717,10 @@ snapshots:
       tailwindcss: 3.4.17
 
   tailwind-csstree@0.3.1(@eslint/css@1.2.0):
+    optionalDependencies:
+      '@eslint/css': 1.2.0
+
+  tailwind-csstree@0.3.2(@eslint/css@1.2.0):
     optionalDependencies:
       '@eslint/css': 1.2.0
 
