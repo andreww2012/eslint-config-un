@@ -327,7 +327,7 @@
     "svelte-eslint-parser": "1.6.0",
     "ts-extras": "1.0.0",
     "tsdown": "0.22.0",
-    "tsx": "4.21.0",
+    "tsx": "4.22.3",
     "typescript": "6.0.3",
     "unstorage": "1.17.5",
     "validate-npm-package-name": "7.0.2",
