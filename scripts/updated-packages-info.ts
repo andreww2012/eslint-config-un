@@ -155,22 +155,27 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     `feat(${mainUnConfigNames}): update ${dependency} to v${newVersion} and enable ___INSERT-CHANGES___`,
   );
 
+  const SAMPLE_RULE_NAME = 'SAMPLE-RULE-NAME';
+  const ruleDocsUrl = packageMeta?.ruleDocsUrl?.(SAMPLE_RULE_NAME);
+  const ruleDocsUrlForMd = `[\`${SAMPLE_RULE_NAME}\`](${ruleDocsUrl || ''})`;
+
   console.log(styleText('underline', 'For changelog:'));
   console.log(
     `${mainUnConfigNames}: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${getCompareDiffUrl(dependency, repoUrl, oldVersion, newVersion)}):
 
-- 🟢 enabled [\`\`]() rule and added it to the \`noStylisticRules\` config
-- 🟡 enabled [\`\`]() rule (warning) with the following default options:
-- ❓ enabled conditionally [\`\`]() rule in ⚙️ \`\` sub-config
-- 🔴 not enabled [\`\`]() rule
+- 🟢 enabled ${ruleDocsUrlForMd} rule
+- 🟢 enabled ${ruleDocsUrlForMd} rule and added it to the \`noStylisticRules\` config
+- 🟡 enabled ${ruleDocsUrlForMd} rule (warning) with the following default options:
+- ❓ enabled conditionally ${ruleDocsUrlForMd} rule in ⚙️ \`\` sub-config
+- 🔴 not enabled ${ruleDocsUrlForMd} rule
 - ❌ \`\` rule was removed
-- ⚠️ [\`\`]() rule was disabled because got deprecated
-- 🔄 \`\` was renamed to [\`\`]()`,
+- ⚠️ ${ruleDocsUrlForMd} rule was disabled because got deprecated
+- 🔄 \`\` was renamed to ${ruleDocsUrlForMd}`,
   );
 
-  if (packageMeta?.ruleDocsUrl) {
+  if (ruleDocsUrl) {
     console.log(styleText('underline', 'Rule docs URLs:'));
-    console.log(packageMeta.ruleDocsUrl('INSERT-RULE-NAME'));
+    console.log(ruleDocsUrl);
   }
 }
 
