@@ -477,8 +477,8 @@ importers:
         specifier: 3.10.1
         version: 3.10.1(eslint@9.39.2)(typescript@6.0.3)
       '@effect/language-service':
-        specifier: 0.85.1
-        version: 0.85.1
+        specifier: 0.86.2
+        version: 0.86.2
       '@effect/platform':
         specifier: 0.96.1
         version: 0.96.1(effect@3.21.2)
@@ -2144,8 +2144,8 @@ packages:
       lmdb:
         optional: true
 
-  '@effect/language-service@0.85.1':
-    resolution: {integrity: sha512-EXnJjIy6zQ3nUO/MZ+ynWUb8B895KZPotd1++oTs9JjDkplwM7cb6zo8Zq2zU6piwq+KflO7amXbEfj1UMpHkw==}
+  '@effect/language-service@0.86.2':
+    resolution: {integrity: sha512-SaPln+8srOqDJDUwNTDmP5e+IYpEDr9+1epGznnsLqu8xvo6VnxyWARdeLpqvZJlb0Pgy9ca7ppqvvdWbHPXAg==}
     hasBin: true
 
   '@effect/platform-node-shared@0.59.0':
@@ -13447,7 +13447,7 @@ snapshots:
       effect: 3.21.2
       uuid: 11.1.1
 
-  '@effect/language-service@0.85.1': {}
+  '@effect/language-service@0.86.2': {}
 
   '@effect/platform-node-shared@0.59.0(@effect/cluster@0.58.2)(@effect/platform@0.96.1)(@effect/rpc@0.75.1)(@effect/sql@0.51.1)(effect@3.21.2)':
     dependencies:

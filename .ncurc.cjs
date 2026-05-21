@@ -37,6 +37,7 @@ const PACKAGE_GROUPS = Object.entries({
 
   '@typescript-eslint': {packages: ['typescript-eslint']},
   '@angular-eslint': {packages: []},
+  '@effect': {packages: ['effect']},
   '@jest': {packages: []},
   '@html-eslint': {packages: []},
   '@sveltejs': {packages: ['eslint-plugin-svelte', 'svelte-eslint-parser']},
