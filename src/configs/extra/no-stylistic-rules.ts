@@ -100,8 +100,7 @@ const ALL_STYLISTIC_RULES = {
     // None
   },
   '@eslint-react': {
-    'prefer-destructuring-assignment': true,
-    'prefer-namespace-import': true,
+    // None
   },
   '@html-eslint': {
     quotes: true,
@@ -590,7 +589,6 @@ const ALL_STYLISTIC_RULES = {
     'style-prop-object': true,
   },
   'react-debug': {
-    'class-component': true,
     'function-component': true,
     hook: true,
     'is-from-react': true,

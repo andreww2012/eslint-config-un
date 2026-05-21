@@ -451,7 +451,6 @@ const NO_DUPLICATE_OR_MISSING_KEY_SEVERITY = ERROR;
 const NO_LEAKED_CONDITIONAL_RENDERING_SEVERITY = ERROR;
 const NO_MISSING_COMPONENT_OR_CONTEXT_DISPLAY_NAME_SEVERITY = WARNING;
 const NO_NESTED_COMPONENT_DEFINITIONS_SEVERITY = ERROR;
-const NO_REDUNDANT_SHOULD_COMPONENT_UPDATE_SEVERITY = ERROR;
 const NO_SET_STATE_IN_COMPONENT_DID_MOUNT_SEVERITY = WARNING;
 const NO_SET_STATE_IN_COMPONENT_DID_UPDATE_SEVERITY = WARNING;
 const NO_SET_STATE_IN_COMPONENT_WILL_UPDATE_SEVERITY = WARNING;
@@ -460,7 +459,6 @@ const NO_UNSTABLE_DEFAULT_PROPS_SEVERITY = WARNING;
 const NO_UNUSED_CLASS_COMPONENT_MEMBERS_SEVERITY = WARNING;
 const NO_UNUSED_STATE_SEVERITY = WARNING;
 const NO_USELESS_FRAGMENT_SEVERITY = WARNING;
-const PREFER_DESTRUCTURING_ASSIGNMENT_SEVERITY = OFF;
 
 const REMIX_PACKAGES: readonly string[] = ['react', 'node', 'serve', 'dev'].map(
   (packageName) => `@remix-run/${packageName}`,
@@ -655,10 +653,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     )
     .addRule('boolean-prop-naming', OFF) /** @since 7.2.0 */
     .addRule('default-props-match-prop-types', ERROR) /** @since 7.1.0 */
-    .addRule(
-      'destructuring-assignment',
-      getDoubleRuleSeverity(PREFER_DESTRUCTURING_ASSIGNMENT_SEVERITY, false),
-    ) /** @since 7.5.0 */
+    .addRule('destructuring-assignment', OFF) /** @since 7.5.0 */
     .addRule(
       'display-name',
       getDoubleRuleSeverity(NO_MISSING_COMPONENT_OR_CONTEXT_DISPLAY_NAME_SEVERITY, false),
@@ -813,10 +808,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'no-object-type-as-default-prop',
       getDoubleRuleSeverity(NO_UNSTABLE_DEFAULT_PROPS_SEVERITY, false),
     ) /** @since 7.32.0 */
-    .addRule(
-      'no-redundant-should-component-update',
-      getDoubleRuleSeverity(NO_REDUNDANT_SHOULD_COMPONENT_UPDATE_SEVERITY, false),
-    ) /** @since 7.1.0 */
+    .addRule('no-redundant-should-component-update', ERROR) /** @since 7.1.0 */
     .addRule('no-set-state', OFF) /** @since 3.3.0 */
     .addRule('no-string-refs', ERROR, [{noTemplateLiterals: true}]) /** @since 3.13.0 */ // 🟢
     .addRule('no-this-in-sfc', ERROR) /** @since 7.6.0 */
@@ -966,9 +958,9 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       },
     ])
     .markCategory('X')
-    .addRule('component-hook-factories', ERROR) /** @since 3.0.0-beta.0 */ // 🟢
     .addRule('error-boundaries', ERROR) /** @since 3.0.0-beta.0 */ // 🟢
     .addRule('exhaustive-deps', ERROR) /** @since 3.0.0-beta.0 */ // 🟡
+    .addRule('globals', ERROR) /** @since 5.3.1-beta.0 */
     .addRule('immutability', ERROR) /** @since 3.0.0-beta.31 */
     .addRule(
       'jsx-no-children-prop',
@@ -1047,10 +1039,6 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     ) /** @since 0.3.3 */ /** @aka no-nested-components */ /** @aka no-unstable-nested-components */ // 🟢 🔄️`no-unstable-nested-components`
     .addRule('no-nested-lazy-component-declarations', ERROR) /** @since 1.45.0 */ // 🟢
     .addRule(
-      'no-redundant-should-component-update',
-      getDoubleRuleSeverity(NO_REDUNDANT_SHOULD_COMPONENT_UPDATE_SEVERITY, true),
-    ) /** @since 0.9.0 */ // 🟢 🔄️
-    .addRule(
       'no-set-state-in-component-did-mount',
       getDoubleRuleSeverity(NO_SET_STATE_IN_COMPONENT_DID_MOUNT_SEVERITY, true),
     ) /** @since 0.9.2 */ // 🟡 🔄️`no-did-mount-set-state`
@@ -1062,14 +1050,6 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       'no-set-state-in-component-will-update',
       getDoubleRuleSeverity(NO_SET_STATE_IN_COMPONENT_WILL_UPDATE_SEVERITY, true),
     ) /** @since 0.9.2 */ // 🟡 🔄️`no-will-update-set-state`
-    .addRule(
-      'no-unnecessary-use-callback',
-      getXRuleSeverity(ERROR),
-    ) /** @since 0.8.6-beta.6 */ /** @aka ensure-use-callback-has-non-empty-deps */
-    .addRule(
-      'no-unnecessary-use-memo',
-      getXRuleSeverity(ERROR),
-    ) /** @since 0.8.6-beta.6 */ /** @aka ensure-use-memo-has-non-empty-deps */
     .addRule(
       'no-unnecessary-use-prefix',
       getXRuleSeverity(OFF),
@@ -1103,15 +1083,6 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       getDoubleRuleSeverity(NO_UNUSED_STATE_SEVERITY, true),
     ) /** @since 0.10.7 */ // 🟡 🔄️
     .addRule('no-use-context', WARNING) /** @since 1.26.0 */ // 🟡 🔢19.0.0
-    .addRule(
-      'prefer-destructuring-assignment',
-      getDoubleRuleSeverity(PREFER_DESTRUCTURING_ASSIGNMENT_SEVERITY, true),
-    ) /** @since 0.5.5 */ // 🔄️`destructuring-assignment`
-    // TODO why?
-    .addRule(
-      'prefer-namespace-import',
-      OFF,
-    ) /** @since 2.0.0 */ /** @aka prefer-react-namespace-import */
     .addRule('purity', ERROR) /** @since 3.0.0-beta.1 */ // 🟡
     .addRule('refs', ERROR) /** @since 3.0.0-beta.12 */
     .addRule('rsc-function-definition', ERROR) /** @since 4.0.0-beta.1 */ // 🟢
@@ -1121,6 +1092,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       getXRuleSeverity(WARNING),
     ) /** @since 1.5.26 */ /** @aka no-direct-set-state-in-use-layout-effect (until 2.0.0) */ /** @aka no-direct-set-state-in-use-effect (until 3.0.0) */ // 🟡
     .addRule('set-state-in-render', ERROR) /** @since 3.0.0-beta.0 */ // 🟢
+    .addRule('static-components', ERROR) /** @since 3.0.0-beta.29 */ // 🟢
     .addRule('unsupported-syntax', ERROR) /** @since 1.51.0 */ // 🟢
     .addRule('use-memo', ERROR) /** @since 3.0.0-beta.20 */ // 🟢
     .addRule('use-state', getXRuleSeverity(WARNING)) /** @since 0.9.6 */ // 🟡
@@ -1129,7 +1101,6 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     .addRule('naming-convention-id-name', WARNING) /** @since 4.0.0-beta.1 */ // 🟡
     .addRule('naming-convention-ref-name', ERROR) /** @since 2.5.0 */ // 🟡
     .markCategory('Debug')
-    .addAnyRule('react-debug', 'class-component', OFF) /** @since 0.3.3 */
     .addAnyRule('react-debug', 'function-component', OFF) /** @since 0.3.0 */
     .addAnyRule('react-debug', 'hook', OFF) /** @since 1.13.0 */
     .addAnyRule('react-debug', 'is-from-react', OFF) /** @since 1.10.0 */
@@ -1250,10 +1221,9 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       ...getDoubleRuleName('dom-no-void-elements-with-children', 'void-dom-elements-no-children'),
       getDoubleRuleSeverity(ERROR),
     ) /** @since 1.22.0 */ /** @aka no-children-in-void-dom-elements */ /** @since 6.10.0 */ // 🟢 🔄️`void-dom-elements-no-children`
-    // TODO why?
-    .addRule('dom-prefer-namespace-import', OFF) /** @since 2.0.0 */
     .markCategory('Web API')
-    .addRule('web-api-no-leaked-event-listener', getXRuleSeverity(ERROR)) /** @since 1.11.0 */ // 🟡
+    .addRule('web-api-no-leaked-event-listener', getXRuleSeverity(ERROR)) /** @since 4.0.0-beta.1 */ // 🟡
+    .addRule('web-api-no-leaked-fetch', getXRuleSeverity(ERROR)) /** @since 1.11.0 */ // 🟡
     .addRule('web-api-no-leaked-interval', getXRuleSeverity(ERROR)) /** @since 1.11.0 */ // 🟡
     .addRule('web-api-no-leaked-resize-observer', getXRuleSeverity(ERROR)) /** @since 1.13.0 */ // 🟡
     .addRule('web-api-no-leaked-timeout', getXRuleSeverity(ERROR)) /** @since 1.11.0 */ // 🟡
