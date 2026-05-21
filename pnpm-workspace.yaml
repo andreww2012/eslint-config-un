@@ -23,7 +23,7 @@ allowBuilds:
   '@parcel/watcher@2.5.6': false
   esbuild@0.27.7: true
   esbuild@0.28.0: true
-  lefthook@2.1.6: true
+  lefthook@2.1.8: true
   msgpackr-extract@3.0.3: false
   multiline-ts@4.0.1: false
   nx@22.7.1: false
