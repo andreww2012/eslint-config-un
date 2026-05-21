@@ -699,8 +699,8 @@ importers:
         specifier: 6.4.7
         version: 6.4.7(eslint@9.39.2)
       eslint-plugin-functional:
-        specifier: 9.0.4
-        version: 9.0.4(eslint@9.39.2)(typescript@6.0.3)
+        specifier: 9.0.5
+        version: 9.0.5(eslint@9.39.2)(typescript@6.0.3)
       eslint-plugin-github-action:
         specifier: 0.2.0
         version: 0.2.0(eslint@9.39.2)
@@ -7166,6 +7166,7 @@ packages:
 
   eslint-plugin-fast-import@2.2.1:
     resolution: {integrity: sha512-1Vlut0jLShvhR/md5gtbYiIz0pvRGSnyGrUj2+r4tVlO5H0sivjaqsd/zanEMZHsTdvTWRkMGWwJAEIrOvvf/w==}
+    deprecated: 'This package is deprecated. Use import-integrity-lint instead: https://github.com/nebrius/import-integrity-lint'
     peerDependencies:
       eslint: '>=9.0.0'
 
@@ -7185,8 +7186,8 @@ packages:
     peerDependencies:
       eslint: 9 || 10
 
-  eslint-plugin-functional@9.0.4:
-    resolution: {integrity: sha512-zm4qaoqb2r50V4WXxt0Mj92buXGMECYvMxGQ6sSb+XeJ+Eec6zCHuMY2+AWK1mqiApvUz2tCtp1P3zcEPU0huw==}
+  eslint-plugin-functional@9.0.5:
+    resolution: {integrity: sha512-RYbNpGkGu5mSN7xlezyeE7TE3S9rsliAS5FOorZoxn7126UTslcQnoVOIAOA6fMOlz6dNG3x3cd3tuzrHM6mRA==}
     engines: {node: '>=v18.18.0'}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
@@ -18699,9 +18700,9 @@ snapshots:
     transitivePeerDependencies:
       - ts-jest
 
-  eslint-plugin-functional@9.0.4(eslint@9.39.2)(typescript@6.0.3):
+  eslint-plugin-functional@9.0.5(eslint@9.39.2)(typescript@6.0.3):
     dependencies:
-      '@typescript-eslint/utils': 8.59.3(eslint@9.39.2)(typescript@6.0.3)
+      '@typescript-eslint/utils': 8.59.4(eslint@9.39.2)(typescript@6.0.3)
       deepmerge-ts: 7.1.5
       escape-string-regexp: 5.0.0
       eslint: 9.39.2(jiti@2.7.0)
