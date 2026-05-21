@@ -18,6 +18,7 @@ patchedDependencies:
   eslint-plugin-remeda@2.1.0: b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08
   import-meta-resolve: 13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba
   is-in-editor: ac57231e92db3a074f89b4c3f2ce951468853ecc52a96978083635819db9df0e
+  npm-check-updates@22.2.0: 8f54c854fe07273a7a47c39134d83dab377b204e968707c45c53521644f11cb0
 
 importers:
 
@@ -662,7 +663,7 @@ importers:
         version: 2.1.6
       npm-check-updates:
         specifier: 22.2.0
-        version: 22.2.0
+        version: 22.2.0(patch_hash=8f54c854fe07273a7a47c39134d83dab377b204e968707c45c53521644f11cb0)
       npm-package-arg:
         specifier: 13.0.2
         version: 13.0.2
@@ -21537,7 +21538,7 @@ snapshots:
     dependencies:
       npm-normalize-package-bin: 5.0.0
 
-  npm-check-updates@22.2.0: {}
+  npm-check-updates@22.2.0(patch_hash=8f54c854fe07273a7a47c39134d83dab377b204e968707c45c53521644f11cb0): {}
 
   npm-install-checks@6.3.0:
     dependencies:

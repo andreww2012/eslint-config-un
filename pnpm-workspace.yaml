@@ -45,6 +45,7 @@ patchedDependencies:
   eslint-plugin-remeda@2.1.0: patches/eslint-plugin-remeda@2.1.0.patch
   import-meta-resolve: patches/import-meta-resolve.patch
   is-in-editor: patches/is-in-editor.patch
+  npm-check-updates@22.2.0: patches/npm-check-updates@22.2.0.patch
 
 peerDependencyRules:
   allowedVersions:
