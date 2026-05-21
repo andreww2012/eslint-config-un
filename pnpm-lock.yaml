@@ -917,6 +917,9 @@ importers:
       vue-eslint-parser:
         specifier: 10.4.0
         version: 10.4.0(eslint@9.39.2)
+      yaml:
+        specifier: 2.9.0
+        version: 2.9.0
       zod:
         specifier: 4.4.3
         version: 4.4.3

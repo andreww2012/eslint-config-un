@@ -13,6 +13,7 @@ import {
   validRange,
 } from 'semver';
 import {exec} from 'tinyexec';
+import {stringify as yamlStringify} from 'yaml';
 import * as z from 'zod';
 import type {PackageJson} from 'zod-package-json';
 import prettierConfig from '../.prettierrc.json' with {type: 'json'};
@@ -188,24 +189,31 @@ async function run({
         ]),
       ),
     },
-    pnpm: {
-      overrides: {
-        ...Object.fromEntries(
-          KNOWN_NPM_PACKAGES_REQUIRING_OVERRIDE.map((missingPackage) =>
-            Array.isArray(missingPackage)
-              ? missingPackage
-              : [missingPackage, DEFAULT_NPM_PACKAGE_OVERRIDE],
-          ),
-        ),
-        ...Object.fromEntries(
-          overridePackages.map(({packageName: missingPackageName, override}) => [
-            missingPackageName,
-            override || DEFAULT_NPM_PACKAGE_OVERRIDE,
-          ]),
-        ),
-      },
-    },
   };
+
+  const pnpmOverrides: Record<string, string> = {
+    ...Object.fromEntries(
+      KNOWN_NPM_PACKAGES_REQUIRING_OVERRIDE.map((missingPackage) =>
+        Array.isArray(missingPackage)
+          ? missingPackage
+          : [missingPackage, DEFAULT_NPM_PACKAGE_OVERRIDE],
+      ),
+    ),
+    ...Object.fromEntries(
+      overridePackages.map(({packageName: missingPackageName, override}) => [
+        missingPackageName,
+        override || DEFAULT_NPM_PACKAGE_OVERRIDE,
+      ]),
+    ),
+  };
+
+  // pnpm-workspace.yaml is written even when no overrides are needed so that it anchors the
+  // workspace root for the temp project. Without it, pnpm would walk up and pick up the parent
+  // eslint-config-un workspace settings.
+  const pnpmWorkspaceYamlContent = yamlStringify(
+    Object.keys(pnpmOverrides).length > 0 ? {overrides: pnpmOverrides} : {},
+  );
+  const pnpmWorkspaceYamlPath = generatePathInProject('pnpm-workspace.yaml');
 
   const runnerScriptPath = generatePathInProject('run.ts');
   const extraDepth = [...packageName.matchAll(/\//g)].length;
@@ -252,7 +260,10 @@ const modules = await Promise.all(
 toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
 `;
 
-  await fs.writeFile(packageJsonPath, JSON.stringify(generatedPackageJson, null, 2), 'utf8');
+  await Promise.all([
+    fs.writeFile(packageJsonPath, JSON.stringify(generatedPackageJson, null, 2), 'utf8'),
+    fs.writeFile(pnpmWorkspaceYamlPath, pnpmWorkspaceYamlContent, 'utf8'),
+  ]);
 
   const nodeModulesPath = generatePathInProject('node_modules');
   const depsInstalled = await Promise.all(
@@ -281,7 +292,6 @@ toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
         'pnpm',
         [
           'i',
-          '--ignore-workspace',
           '--shamefully-hoist',
           'true',
           '--config.confirmModulesPurge=false', // In case modules directory format changes, do not require interactive confirmation as it is unavailable
