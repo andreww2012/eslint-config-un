@@ -349,6 +349,7 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
       },
       mocha: {
         configs: ['mocha'],
+        gitTag: versionAsIs,
         ruleDocsUrl: (ruleName) =>
           `https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/docs/rules/${ruleName}.md`,
       },
