@@ -76,8 +76,8 @@ importers:
         specifier: 2.0.5
         version: 2.0.5
       empathic:
-        specifier: 2.0.0
-        version: 2.0.0
+        specifier: 2.0.1
+        version: 2.0.1
       enhanced-resolve:
         specifier: 5.21.0
         version: 5.21.0
@@ -6443,10 +6443,6 @@ packages:
 
   emojilib@2.4.0:
     resolution: {integrity: sha512-5U0rVMU5Y2n2+ykNLQqMoqklN9ICBT/KsvC1Gz6vqHbz2AXXGkG+Pm5rMWk/8Vjrr/mY9985Hi8DYzn1F09Nyw==}
-
-  empathic@2.0.0:
-    resolution: {integrity: sha512-i6UzDscO/XfAcNYD75CfICkmfLedpyPDdozrLMmQc5ORaQcdMoc21OnlEylMIqI7U8eniKrPMxxtj8k0vhmJhA==}
-    engines: {node: '>=14'}
 
   empathic@2.0.1:
     resolution: {integrity: sha512-YGRs8knHhKHVShLkFET/rWAU8kmHbOV5LwN938RHI0pljAJ1Gf6SzXsSmRaEzcXTtOOmVqJ5+WtQPL5uigY50Q==}
@@ -17795,8 +17791,6 @@ snapshots:
 
   emojilib@2.4.0: {}
 
-  empathic@2.0.0: {}
-
   empathic@2.0.1: {}
 
   end-of-stream@1.4.5:
@@ -18309,7 +18303,7 @@ snapshots:
 
   eslint-plugin-depend@1.5.0(eslint@9.39.2):
     dependencies:
-      empathic: 2.0.0
+      empathic: 2.0.1
       eslint: 9.39.2(jiti@2.7.0)
       module-replacements: 2.11.0
       semver: 7.8.0
@@ -23528,7 +23522,7 @@ snapshots:
       ansis: 4.3.0
       cac: 7.0.0
       defu: 6.1.7
-      empathic: 2.0.0
+      empathic: 2.0.1
       hookable: 6.1.1
       import-without-cache: 0.4.0
       obug: 2.1.1
