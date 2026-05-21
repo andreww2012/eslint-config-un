@@ -179,6 +179,7 @@ export default ((context, optionsRaw) => {
     .addRule('template-no-redundant-fn', ERROR) /** @since 13.0.0 */
     .addRule('template-no-restricted-invocations', OFF) /** @since 13.0.0 */
     .addRule('template-no-splattributes-with-class', ERROR) /** @since 13.0.0 */
+    .addRule('template-no-template-lint-directives', OFF) /** @since 13.3.0 */
     .addRule('template-no-this-in-template-only-components', ERROR) /** @since 13.0.0 */
     .addRule('template-no-trailing-spaces', ERROR) /** @since 13.0.0 */
     .addRule('template-no-unavailable-this', ERROR) /** @since 13.0.0 */
