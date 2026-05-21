@@ -1,7 +1,7 @@
 import type {SupportedEslintPluginLanguages} from '../config-un/config-entry-builder';
 import {ERROR, OFF} from '../constants';
 import type {ParserPrefix} from '../loaders';
-import {getKeysOfTruthyValues, groupBy, objectEntriesUnsafe} from '../utils';
+import {getKeysOfTruthyValues, objectEntriesUnsafe} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -147,7 +147,7 @@ export default ((context, optionsRaw) => {
     .addOverrides().config;
 
   objectEntriesUnsafe(
-    groupBy(lockfileEslintConfig?.files?.flat() || [], (fileGlob) => {
+    Object.groupBy(lockfileEslintConfig?.files?.flat() || [], (fileGlob) => {
       for (const [, [parserConfigName, lockfileNames]] of LOCKFILES_INFO) {
         if (lockfileNames.some((lockfile) => fileGlob.includes(lockfile))) {
           return parserConfigName;
@@ -155,7 +155,7 @@ export default ((context, optionsRaw) => {
       }
       return '';
     }),
-  ).forEach(([parserConfigName, globs]) => {
+  ).forEach(([parserConfigName, globs = []]) => {
     if (!parserConfigName) {
       context.logger.warn(
         `The following file globs in the \`lockfile\` config could not be associated with a known package manager and may not be parsed correctly: ${globs.join(

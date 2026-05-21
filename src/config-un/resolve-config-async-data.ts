@@ -20,7 +20,6 @@ import {
   arraify,
   capitalize,
   getValueByPath,
-  groupBy,
   isIn,
   maybeCall,
   objectEntriesUnsafe,
@@ -275,7 +274,7 @@ ${styleText(
             },
           };
 
-  const disableAutofixPluginsWithUnprefixedMethod = groupBy(
+  const disableAutofixPluginsWithUnprefixedMethod = Object.groupBy(
     Object.entries(
       typeof autofixDisabledGloballyFor === 'object' ? autofixDisabledGloballyFor.rules || {} : {},
     ).map(([ruleName, isAutofixDisabled]) => ({

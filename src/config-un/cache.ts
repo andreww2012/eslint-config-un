@@ -11,7 +11,6 @@ import type {LoadablePackagePrefix, PackageToLoadInfo, ParserPrefix} from '../lo
 import type {SetFieldType} from '../types';
 import {
   createTraverser,
-  groupBy,
   isObject,
   isPlainObject,
   omit,
@@ -30,7 +29,7 @@ const sha256 = (input: string | Buffer) => {
   return hashInstance.digest('hex');
 };
 
-const LOCKFILES_PER_PACKAGE_MANAGER = groupBy(
+const LOCKFILES_PER_PACKAGE_MANAGER = Object.groupBy(
   Object.entries(packageManagerLockfilesReversed),
   ([, packageManager]) => packageManager,
 );
@@ -57,7 +56,9 @@ const computeCacheKey = async (context: UnConfigContext) => {
 
   const lockfilePaths = (
     packageManagerInfo
-      ? LOCKFILES_PER_PACKAGE_MANAGER[packageManagerInfo.name].map(([lockfileName]) => lockfileName)
+      ? (LOCKFILES_PER_PACKAGE_MANAGER[packageManagerInfo.name] || []).map(
+          ([lockfileName]) => lockfileName,
+        )
       : []
   ).map((lockfileName) => findUp.file(lockfileName));
 
@@ -196,11 +197,11 @@ export const saveCacheToFs = async (
   if (unserializablePaths.length > 0) {
     const unserializablePathsGrouped = Object.entries(
       // eslint-disable-next-line ts/no-non-null-assertion
-      groupBy(unserializablePaths, (v) => v[0][0]!),
+      Object.groupBy(unserializablePaths, (v) => v[0][0]!),
     ).map((values) => ({
       configIndex: Number(values[0]),
       configName: dataToStore.configs.at(Number(values[0]))?.name,
-      valuePaths: values[1].map(([valuePath]) => valuePath),
+      valuePaths: (values[1] || []).map(([valuePath]) => valuePath),
     }));
     context.logger.warn(
       `Could not serialize configs to store in cache because they contain unserializable data at paths:\n${unserializablePathsGrouped

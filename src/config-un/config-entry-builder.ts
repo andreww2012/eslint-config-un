@@ -46,7 +46,6 @@ import {
   arrayMap,
   createTraverser,
   findArrayInversions,
-  groupBy,
   objectEntriesUnsafe,
   partition,
   styleConfigName,
@@ -672,8 +671,8 @@ export class ConfigEntryBuilder<
 
             if (!allowUnsorted) {
               Object.entries(
-                groupBy(addedRulesForPlugin, ([, categoryName]) => categoryName),
-              ).forEach(([groupName, rulesGroup]) => {
+                Object.groupBy(addedRulesForPlugin, ([, categoryName]) => categoryName),
+              ).forEach(([groupName, rulesGroup = []]) => {
                 const rulesToSwapPositionsOf = findArrayInversions(
                   rulesGroup.map(([ruleName]) => ruleName),
                   (a, b) => a.localeCompare(b),
@@ -683,7 +682,7 @@ export class ConfigEntryBuilder<
                   return;
                 }
                 const rulesToSwapNormalized = Object.entries(
-                  groupBy(
+                  Object.groupBy(
                     Array.from(rulesToSwapPositionsOf, ([left, right]) => ({
                       left,
                       right: right.at(-1) || '',
@@ -691,7 +690,7 @@ export class ConfigEntryBuilder<
                     (v) => v.right,
                   ),
                 ).map(
-                  ([right, rules]) =>
+                  ([right, rules = []]) =>
                     [rules.at(-1)?.left || '', right] satisfies NonEmptyTuple<string>,
                 );
                 errorMessages.push(
