@@ -8,6 +8,7 @@ import type {UnConfigs} from '../configs';
 import {
   CHECKED_LODASH_METHODS,
   DEFAULT_GLOBAL_IGNORES,
+  DISABLE_AUTOFIX,
   GLOB_CONFIG_FILES,
   GLOB_JS_TS_X_EXTENSION,
   PACKAGES_TO_GET_INFO_FOR,
@@ -46,7 +47,9 @@ import {
   omit,
   readFileSafe,
   styleConfigName,
+  stylePluginPrefix,
   styleRuleName,
+  styleText,
 } from '../utils';
 import {
   restoreCacheFromFs,
@@ -275,13 +278,19 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   const renamedPlugins = objectKeysUnsafe(pluginRenames);
   const pluginRenamesList = Object.values(pluginRenames);
-  const pluginPrefixesAfterRenames = [
-    ...PLUGIN_PREFIXES_LIST.filter((prefix) => prefix === '' || !renamedPlugins.includes(prefix)),
-    ...pluginRenamesList,
-  ];
-  if (new Set(pluginPrefixesAfterRenames).size !== pluginPrefixesAfterRenames.length) {
+  const occupiedPluginPrefixes = new Set<string>(
+    PLUGIN_PREFIXES_LIST.filter((prefix) => prefix === '' || !renamedPlugins.includes(prefix)),
+  );
+  const badPluginRenames = new Set<string>();
+  for (const newName of pluginRenamesList) {
+    if (newName === DISABLE_AUTOFIX || occupiedPluginPrefixes.has(newName)) {
+      badPluginRenames.add(newName);
+    }
+    occupiedPluginPrefixes.add(newName);
+  }
+  if (badPluginRenames.size > 0) {
     logger.fatal(
-      'Invalid plugin renames: new names must not clash with the default plugin prefixes, have duplicates or be empty. If you happen to have a duplicate new prefix, please choose a different name. If you happen to rename some plugin to one of the default prefixes, you must also rename the plugin corresponding to that prefix.',
+      `Invalid plugin renames: ${Array.from(badPluginRenames, (name) => styleText('red', name || styleText('italic', '<empty string>'))).join(', ')}. New names must not clash with the default plugin prefixes, have duplicates, be empty, or equal the reserved ${stylePluginPrefix(DISABLE_AUTOFIX)} prefix. If you happen to have a duplicate new prefix, please choose a different name. If you happen to rename some plugin to one of the default prefixes, you must also rename the plugin corresponding to that prefix.`,
     );
   }
 
