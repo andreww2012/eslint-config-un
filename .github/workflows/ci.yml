@@ -69,14 +69,24 @@ jobs:
       - run: pnpm lint:eslint
 
   test:
-    name: Test (Node ${{ matrix.node-version }}, ESLint ${{ matrix.eslint-version }})
+    name: Test (${{ matrix.os }}, Node ${{ matrix.node-version }}, ESLint ${{ matrix.eslint-version }})
     needs: install
     strategy:
       matrix:
-        node-version: [22, 24]
+        os: [ubuntu-24.04]
+        node-version: [22, 24, 26]
         eslint-version: [9, 10]
+        # Only run Windows tests on the latest Node version
+        include:
+          - os: windows-2025
+            node-version: 26
+            eslint-version: 9
+          - os: windows-2025
+            node-version: 26
+            eslint-version: 10
     uses: ./.github/workflows/ci-matrix-tests.yml
     with:
+      os: ${{ matrix.os }}
       node-version: ${{ matrix.node-version }}
       eslint-version: ${{ matrix.eslint-version }}
 

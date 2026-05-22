@@ -2,6 +2,9 @@ name: CI matrix tests
 on:
   workflow_call:
     inputs:
+      os:
+        required: true
+        type: string
       node-version:
         required: true
         type: number
@@ -11,8 +14,8 @@ on:
 
 jobs:
   test-config:
-    name: Test config (Node ${{ inputs.node-version }}, ESLint ${{ inputs.eslint-version }})
-    runs-on: ubuntu-24.04
+    name: Test config (${{ inputs.os }}, Node ${{ inputs.node-version }}, ESLint ${{ inputs.eslint-version }})
+    runs-on: ${{ inputs.os }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: ./.github/actions/prepare
@@ -22,8 +25,8 @@ jobs:
         if: inputs.eslint-version != 9 # TODO temp, already installed and installation gets stuck on node 22
       - run: pnpm test:config
   test-vitest:
-    name: Test (Vitest) (Node ${{ inputs.node-version }}, ESLint ${{ inputs.eslint-version }})
-    runs-on: ubuntu-24.04
+    name: Test (Vitest) (${{ inputs.os }}, Node ${{ inputs.node-version }}, ESLint ${{ inputs.eslint-version }})
+    runs-on: ${{ inputs.os }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: ./.github/actions/prepare
