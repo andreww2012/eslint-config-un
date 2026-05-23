@@ -722,14 +722,20 @@ perfectionist: {
 
 ### `extraConfigs`
 
+**Type**: `Record<string, boolean | object | [object, ...object][]>`
+
 See [Rules configuration](#rules-configuration-configs-and-extraconfigs-option).
 
 ### `ignores`
+
+**Type**: `string[] | {files: string[]; override?: boolean}`
 
 Specifies a list of globally ignored files.
 By default will be merged with our ignore patterns (also exported as [`DEFAULT_GLOBAL_IGNORES`](#default_global_ignores)), unless the object notation is used and the `override` property is set to `true`.
 
 ### `extraPlugins`
+
+**Type**: `Record<string, MaybeFn<MaybePromise<EslintPlugin>>>`
 
 Allows to provide additional ESLint plugins.
 Their prefixes and possibly rule names will appear in configs' `rules` property type.
@@ -739,11 +745,31 @@ Note that their prefixes must not match the built-it/known ones (like `ts` or `u
 
 ### `linterOptions{NoInlineConfig,ReportUnusedDisableDirectives,ReportUnusedInlineConfigs}`
 
+**Type**:
+
+```ts
+interface RootOptions {
+  linterOptionsNoInlineConfig?: ValueOrEslintConfigWithValue<boolean>;
+  linterOptionsReportUnusedDisableDirectives?: ValueOrEslintConfigWithValue<EslintSeverity>;
+  linterOptionsReportUnusedInlineConfigs?: ValueOrEslintConfigWithValue<EslintSeverity>;
+}
+
+type ValueOrEslintConfigWithValue<T> =
+  | T
+  | MaybeArray<{
+      ignores?: string[] | undefined;
+      files?: string[] | undefined;
+      value?: T | undefined;
+    }>;
+```
+
 Sets [`linterOptions.{noInlineConfig,reportUnusedDisableDirectives,reportUnusedInlineConfigs}`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=linterOptions) globally or more granularly.
 
 ### `defaultConfigsStatus`
 
-Quickly enable multiple configs at once.
+**Type**: `'all-disabled' | 'misc-enabled'`
+
+Quickly enable/disable multiple configs at once.
 Possible options:
 
 - `all-disabled`: consider all top level configs disabled unless explicitly enabled.
@@ -751,24 +777,34 @@ Possible options:
 
 ### `mode`
 
+**Type**: `'app' | 'lib'`
+
 Type of your project, either application (`app`, default) or library (`lib`).
 Will affect certain rules, actual list of which is written in JSDoc of this option.
 
 ### `forceSeverity`
+
+**Type**: `Exclude<EslintSeverity, 0 | 'off'>`
 
 Globally forces non-zero severity of all the rules configured by eslint-config-un (i.e. not within `overrides`, `overridesAny` or [`extraConfigs`](#extraconfigs)).
 This can also be configured per-config.
 
 ### `pluginRenames`
 
+**Type**: `Partial<Record<Exclude<PluginPrefix, ''>, string>>`
+
 See [Plugin prefixes](#plugin-prefixes-pluginrenames-option).
 
 ### `pluginOverrides`
+
+**Type**: `Partial<Record<Exclude<PluginPrefix, ''>, EslintPlugin>>`
 
 Override implementation of some of the plugins.
 This can be useful when this config is used to lint a repository of one of the built-in plugins to provide development version of that plugin.
 
 ### `loadPluginsOnDemand`
+
+**Type**: `boolean | {alwaysLoad: LoadablePluginPrefix[]}`
 
 This option controls whether ESLint plugins will be loaded if they are actually used (`true` by default).
 
@@ -777,31 +813,45 @@ This can be useful if you enable certain plugin rules only be using [configurati
 
 ### `autofixDisabledGloballyFor`
 
+**Type**: `boolean | {plugins?: Partial<Record<PluginPrefix, boolean>>; rules?: Partial<Record<FixableRuleNames, boolean>>}`
+
 See [Globally disabling rule autofix](#globally-disabling-rule-autofix).
 
 ### `disablePrettierIncompatibleRules`
+
+**Type**: `boolean`
 
 Disables rules that are potentially conflicting with Prettier. [`eslint-config-prettier`](https://npmx.dev/eslint-config-prettier) is used under the hood, with a few exceptions.
 Defaults to `true` if `prettier` package is installed.
 
 ### `markdownCodeBlocksRules`
 
+**Type**: `object` (see properties below)
+
 eslint-config-un disables a number of rules in all embedded code blocks (AKA "fenced code blocks") inside Markdown and MDX files.
 This option gives you more control over which rules are disabled/enabled.
 
 #### `markdownCodeBlocksRules.additionalDisabledRules`
 
+**Type**: `Partial<Record<Exclude<UnExtraPluginsRules<ExtraPlugins> | UnAllRuleNames, RulesDisabledInEmbeddedCodeBlocksByDefault>, boolean>>`
+
 Allows to specify more rules to disable in embedded code blocks.
 
 #### `markdownCodeBlocksRules.doNotDisable`
+
+**Type**: `Partial<Record<RulesDisabledInEmbeddedCodeBlocksByDefault, boolean>>`
 
 Allows to specify which rules should not be disabled by default in embedded code blocks.
 
 ### `useFastImport`
 
+**Type**: `boolean | {pluginSettings?: Partial<FastImportPluginSettings>; replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>}`
+
 Allows to override certain [`eslint-plugin-import-x`] plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmx.dev/eslint-plugin-fast-import).
 
 ### `preventCreationOfConfigForRulesWithTypeInformation`
+
+**Type**: `boolean | 'full'`
 
 All rules from all configs that are known *to us* to require type information, will be *automatically **moved*** to separate ESLint configs.
 Unless `ts/setupTypeAware` config is enabled, those configs will have `typescript-eslint` parser configured for typed linting.
@@ -812,17 +862,23 @@ For more information on how it is generated, read the corresponding JSDoc.
 
 ### `gitignore`
 
+**Type**: `boolean | EslintConfigFlatGitignoreOptions`
+
 By default, files from `.gitignore` (read from [the current working directory](https://nodejs.org/api/process.html#processcwd)) will be automatically added to the global [`ignores`](#ignores) list.
 Set this option to `false` to disable this behavior.
 You may also provide an object which configures [eslint-config-flat-gitignore](https://npmx.dev/eslint-config-flat-gitignore), which actually provides this functionality.
 
 ### `offlineMode`
 
+**Type**: `boolean`
+
 Enables "Offline mode" which can be useful to (temporarily) disable rules performing network requests, such as [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html).
 
 It can also be enabled by setting `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable to non-empty string, but the explicitly passed value takes precedence.
 
 ### `cacheConfigs`
+
+**Type**: `boolean`
 
 Enables flat config caching.
 This option is enabled by default when running in editor (detected by [`is-in-editor`](https://npmx.dev/is-in-editor)).
