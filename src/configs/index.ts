@@ -1465,7 +1465,9 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-zod`](https://npmx.dev/eslint-plugin-zod) ([docs](https://github.com/marcalexiei/eslint-plugin-zod#readme))
+   * 🧩 Main plugin: [`eslint-plugin-zod`](https://npmx.dev/eslint-plugin-zod) ([docs](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/README.md))
+   *
+   * ⚙️ Sub config(s): `core`, `mini`
    * @default true <=> [`zod`](https://npmx.dev/zod) package is installed and its version is >=4
    */
   zod: ZodEslintConfigOptions<ExtraPlugins>;

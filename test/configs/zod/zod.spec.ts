@@ -207,23 +207,33 @@ describe('options', () => {
     });
   });
 
-  describe('option: `enforceNamespaceImport`', () => {
+  describe('option: `enforceConsistentImport`', () => {
     it('enables `zod/consistent-import` rule by default', async () => {
       const configResult = await computeEslintConfig('zod');
 
       expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-import')).toBe(2);
     });
 
-    it('enables `consistent-import` when set to `true`', async () => {
-      const configResult = await computeEslintConfig({zod: {enforceNamespaceImport: true}});
+    it('enables `zod/consistent-import` when set to `true`', async () => {
+      const configResult = await computeEslintConfig({zod: {enforceConsistentImport: true}});
 
       expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-import')).toBe(2);
     });
 
-    it('disables `consistent-import` when set to `false`', async () => {
-      const configResult = await computeEslintConfig({zod: {enforceNamespaceImport: false}});
+    it('disables `zod/consistent-import` when set to `false`', async () => {
+      const configResult = await computeEslintConfig({zod: {enforceConsistentImport: false}});
 
       expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-import')).toBe(0);
+    });
+
+    it("sets `zod/consistent-import` rule options respectively when set to `'namespace'`", async () => {
+      const configResult = await computeEslintConfig({
+        zod: {enforceConsistentImport: 'namespace'},
+      });
+
+      expect(configResult.getRuleEntry('zod', 'zod/consistent-import')).toMatchInlineSnapshot(
+        '[2, {"syntax": "namespace"}]',
+      );
     });
   });
 

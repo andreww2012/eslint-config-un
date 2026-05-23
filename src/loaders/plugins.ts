@@ -733,6 +733,22 @@ export const pluginsLoaders = {
         import('eslint-plugin-zod'),
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
+  'zod-core': genModuleLoader(
+    'zod-core',
+    'eslint-plugin-zod-core',
+    () =>
+      interopDefault(
+        import('eslint-plugin-zod-core'),
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
+  'zod-mini': genModuleLoader(
+    'zod-mini',
+    'eslint-plugin-zod-mini',
+    () =>
+      interopDefault(
+        import('eslint-plugin-zod-mini'),
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
 } satisfies Record<string, ModuleLoader<EslintPlugin | null, string, boolean>>;
 
 export type LoadablePluginPrefix = keyof typeof pluginsLoaders;

@@ -626,6 +626,16 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
         ruleDocsUrl: (ruleName) =>
           `https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/${ruleName}.md`,
       },
+      'zod-core': {
+        configs: ['zod'],
+        ruleDocsUrl: (ruleName) =>
+          `https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-core/docs/rules/${ruleName}.md`,
+      },
+      'zod-mini': {
+        configs: ['zod'],
+        ruleDocsUrl: (ruleName) =>
+          `https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/${ruleName}.md`,
+      },
     } satisfies Record<LoadablePluginPrefix, PackageMeta>).map(([pluginPrefix, meta]) => {
       const {packageName} = pluginsLoaders[pluginPrefix];
       return [packageName, meta];

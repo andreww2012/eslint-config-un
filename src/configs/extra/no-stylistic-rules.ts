@@ -988,6 +988,15 @@ const ALL_STYLISTIC_RULES = {
     'no-number-schema-with-int': true,
     'schema-error-property-style': true,
   },
+  'zod-core': {
+    'consistent-import': true,
+    'consistent-schema-output-type-style': true,
+  },
+  'zod-mini': {
+    'consistent-import': true,
+    'consistent-schema-output-type-style': true,
+    'schema-error-property-style': true,
+  },
 } as const satisfies {
   [Plugin in PluginPrefix]: Partial<Record<GetRuleNamesInPlugin<Plugin>, true>>;
 };

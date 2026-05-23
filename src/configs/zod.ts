@@ -1,4 +1,5 @@
 import {ERROR, OFF, WARNING} from '../constants';
+import type {SetRequired} from '../types';
 import {allUnionMembers, getKeysOfTruthyValues} from '../utils';
 import {
   type ArrayOrBooleanRecord,
@@ -19,13 +20,62 @@ const ALL_ZOD_OBJECT_SCHEMA_TYPES = allUnionMembers<ZodObjectSchemaType>()([
   'strictObject',
 ]);
 
+interface MiniSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<
+  ExtraPlugins,
+  'zod-mini'
+> {
+  /**
+   * Same as the respective option of the parent config.
+   *
+   * Affected rule:
+   * - [`zod-mini/consistent-object-schema-type`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/consistent-object-schema-type.md)
+   * @default inherited from the respective option of the parent config
+   */
+  allowedObjectSchemaTypes?: ArrayOrBooleanRecord<ZodObjectSchemaType>;
+
+  /**
+   * Same as the respective option of the parent config.
+   *
+   * Affected rule:
+   * - [`zod-mini/consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/consistent-import.md)
+   * @default inherited from the respective option of the parent config
+   */
+  enforceConsistentImport?: boolean | GetRuleOptions<'zod-mini', 'consistent-import'>['syntax'];
+
+  /**
+   * Same as the respective option of the parent config.
+   *
+   * Affected rule:
+   * - [`zod-mini/consistent-schema-var-name`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/consistent-schema-var-name.md)
+   * @default inherited from the respective option of the parent config
+   */
+  schemaVariableName?: boolean | string | GetRuleOptions<'zod-mini', 'consistent-schema-var-name'>;
+}
+
+interface CoreSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<
+  ExtraPlugins,
+  'zod-core'
+> {
+  /**
+   * Same as the respective option of the parent config.
+   *
+   * Affected rule:
+   * - [`zod-core/consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-core/docs/rules/consistent-import.md)
+   * @default inherited from the respective option of the parent config
+   */
+  enforceConsistentImport?: boolean | GetRuleOptions<'zod-core', 'consistent-import'>['syntax'];
+}
+
 export interface ZodEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'zod'> {
   /**
    * Specify which object schema types will be allowed.
    * - If object is used, it will be merged with the default value.
-   * - Disallowing all methods will not ignored.
+   * - Disallowing all methods will be ignored.
+   *
+   * ⚠️ The option value will propagate to the option of the same name in `mini`
+   * sub-config, unless explicitly overridden there.
    *
    * Affected rule:
    * - [`consistent-object-schema-type`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-object-schema-type.md)
@@ -46,47 +96,89 @@ export interface ZodEslintConfigOptions<
   arrayStyle?: GetRuleOptions<'zod', 'array-style'>['style'] | false;
 
   /**
+   * Rules for [`zod/v4/core`](https://zod.dev/packages/core).
+   *
+   * 📁 Default `files` and `ignores`: inherited from the parent config unless any of these
+   * properties is specified
+   *
+   * 🧩 Main plugin: [`eslint-plugin-zod-core`](https://npmx.dev/eslint-plugin-zod-core)
+   * ([docs](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-core/README.md))
+   *
+   * Inherits `enforceNamespaceImport` from the parent config; pass an object
+   * to override.
+   * @default true
+   */
+  configCore?: boolean | CoreSubConfigOptions<ExtraPlugins>;
+
+  /**
+   * Rules for [`zod/mini`](https://zod.dev/packages/mini).
+   *
+   * 📁 Default `files` and `ignores`: inherited from the parent config unless any of these
+   * properties is specified
+   *
+   * 🧩 Main plugin: [`eslint-plugin-zod-mini`](https://npmx.dev/eslint-plugin-zod-mini)
+   * ([docs](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/README.md))
+   *
+   * Inherits `allowedObjectSchemaTypes`, `enforceNamespaceImport` and
+   * `schemaVariableName` from the parent config; pass an object to override.
+   * @default true
+   */
+  configMini?: boolean | MiniSubConfigOptions<ExtraPlugins>;
+
+  /**
+   * Enforces either namespace import of zod (`import * as z from 'zod'`) or named import
+   * (`import { z } from 'zod'`).
+   *
+   * By default, namespace import is enforced.
+   *
+   * ⚠️ The option value will propagate to the option of the same name in `core` and `mini`
+   * sub-configs, unless explicitly overridden there.
+   *
    * Affected rule:
    * - [`consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-import.md)
    * @default true
    */
-  enforceNamespaceImport?: boolean;
+  enforceConsistentImport?: boolean | GetRuleOptions<'zod', 'consistent-import'>['syntax'];
 
   /**
    * Enforces a consistent naming convention for Zod schema variables by requiring them
    * to start and/or end with a specified string.
    *
    * Possible values:
-   * - Not provided or `true`: enforces that schema variable names end with "Zod";
+   * - Not provided or `true`: enforces that schema variable names end with `Zod`;
    * - string: enforces that schema variable names end with the provided string;
    * - object: enforces that schema variable names follow the provided naming convention;
    * - `false`: does not enforce anything.
+   *
+   * ⚠️ The option value will propagate to the option of the same name in `mini`
+   * sub-config, unless explicitly overridden there.
    *
    * Affected rule:
    * - [`consistent-schema-var-name`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-schema-var-name.md)
    * @default 'Zod'
    */
-  schemaVariableName?: string | boolean | GetRuleOptions<'zod', 'consistent-schema-var-name'>;
+  schemaVariableName?: boolean | string | GetRuleOptions<'zod', 'consistent-schema-var-name'>;
 }
 
-export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {
-    arrayStyle: 'method',
-    enforceNamespaceImport: true,
-    schemaVariableName: 'Zod',
-  } satisfies ZodEslintConfigOptions);
+const resolveConsistentImportOptions = (
+  userOptions: Pick<
+    SetRequired<ZodEslintConfigOptions, 'enforceConsistentImport'>,
+    'enforceConsistentImport'
+  >,
+) => {
+  const {enforceConsistentImport} = userOptions;
 
-  const {
-    allowedObjectSchemaTypes: allowedObjectSchemaTypesRaw,
-    arrayStyle,
-    enforceNamespaceImport,
-    schemaVariableName,
-  } = optionsResolved;
+  const severity = enforceConsistentImport === false ? OFF : ERROR;
+  const options: GetRuleOptions<'zod', 'consistent-import', 'all'> =
+    typeof enforceConsistentImport === 'string' ? [{syntax: enforceConsistentImport}] : [];
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'zod');
+  return [severity, options] as const;
+};
 
-  const zodMajorVersion = context.packagesInfo.zod?.versions.major ?? 4;
-  const severityForRulesOnlyForV4 = zodMajorVersion >= 4 ? ERROR : OFF;
+const resolveConsistentObjectSchemaTypeOptions = (
+  userOptions: Pick<ZodEslintConfigOptions, 'allowedObjectSchemaTypes'>,
+) => {
+  const {allowedObjectSchemaTypes: allowedObjectSchemaTypesRaw} = userOptions;
 
   const allowedObjectSchemaTypes = getKeysOfTruthyValues(
     Array.isArray(allowedObjectSchemaTypesRaw)
@@ -100,6 +192,60 @@ export default ((context, optionsRaw) => {
     'nonEmptyArray',
   );
 
+  const isAllowedObjectSchemaTypesUnrestricted =
+    !allowedObjectSchemaTypes?.length ||
+    allowedObjectSchemaTypes.length === ALL_ZOD_OBJECT_SCHEMA_TYPES.length;
+
+  const severity = isAllowedObjectSchemaTypesUnrestricted ? OFF : ERROR;
+  const options: GetRuleOptions<'zod', 'consistent-object-schema-type', 'all'> =
+    isAllowedObjectSchemaTypesUnrestricted ? [] : [{allow: allowedObjectSchemaTypes}];
+
+  return [severity, options] as const;
+};
+
+const DEFAULT_SCHEMA_VARIABLE_NAME = 'Zod';
+
+const resolveConsistentSchemaVarNameOptions = (
+  userOptions: Pick<
+    SetRequired<ZodEslintConfigOptions, 'schemaVariableName'>,
+    'schemaVariableName'
+  >,
+) => {
+  const {schemaVariableName} = userOptions;
+
+  const severity = schemaVariableName ? ERROR : OFF;
+  const options: GetRuleOptions<'zod', 'consistent-schema-var-name', 'all'> = schemaVariableName
+    ? [
+        typeof schemaVariableName === 'object'
+          ? schemaVariableName
+          : {
+              after:
+                typeof schemaVariableName === 'string'
+                  ? schemaVariableName
+                  : DEFAULT_SCHEMA_VARIABLE_NAME,
+            },
+      ]
+    : [];
+
+  return [severity, options] as const;
+};
+
+export default ((context, optionsRaw) => {
+  const optionsResolved = assignDefaults(optionsRaw, {
+    arrayStyle: 'method',
+    configCore: true,
+    configMini: true,
+    enforceConsistentImport: true,
+    schemaVariableName: DEFAULT_SCHEMA_VARIABLE_NAME,
+  } satisfies ZodEslintConfigOptions);
+
+  const {arrayStyle, configCore, configMini} = optionsResolved;
+
+  const zodMajorVersion = context.packagesInfo.zod?.versions.major ?? 4;
+  const severityForRulesOnlyForV4 = zodMajorVersion >= 4 ? ERROR : OFF;
+
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'zod');
+
   // Legend:
   // 🟢 - in recommended
 
@@ -110,30 +256,19 @@ export default ((context, optionsRaw) => {
       arrayStyle === false ? OFF : ERROR,
       arrayStyle === false ? [] : [{style: arrayStyle}],
     ) /** @since 0.0.1 */ // 🟢
-    .addRule('consistent-import', enforceNamespaceImport ? ERROR : OFF) /** @since 3.1.0 */ // 🟢
+    .addRule(
+      'consistent-import',
+      ...resolveConsistentImportOptions(optionsResolved),
+    ) /** @since 3.1.0 */ // 🟢
     .addRule('consistent-import-source', OFF) /** @since 1.2.0 */
     .addRule(
       'consistent-object-schema-type',
-      !allowedObjectSchemaTypes?.length ||
-        allowedObjectSchemaTypes.length === ALL_ZOD_OBJECT_SCHEMA_TYPES.length
-        ? OFF
-        : ERROR,
-      !allowedObjectSchemaTypes?.length ||
-        allowedObjectSchemaTypes.length === ALL_ZOD_OBJECT_SCHEMA_TYPES.length
-        ? []
-        : [{allow: allowedObjectSchemaTypes}],
+      ...resolveConsistentObjectSchemaTypeOptions(optionsResolved),
     ) /** @since 1.11.0 */
     .addRule('consistent-schema-output-type-style', ERROR) /** @since 3.8.0 */
     .addRule(
       'consistent-schema-var-name',
-      schemaVariableName ? ERROR : OFF,
-      schemaVariableName
-        ? [
-            typeof schemaVariableName === 'object'
-              ? schemaVariableName
-              : {after: typeof schemaVariableName === 'string' ? schemaVariableName : 'Zod'},
-          ]
-        : [],
+      ...resolveConsistentSchemaVarNameOptions(optionsResolved),
     ) /** @since 3.11.0 */ // 🟢
     .addRule('no-any-schema', WARNING) /** @since 0.0.1 */ /** @aka no-any (before 2.0.0) */ // 🟢
     .addRule('no-empty-custom-schema', ERROR) /** @since 1.1.0 */ // 🟢
@@ -167,8 +302,72 @@ export default ((context, optionsRaw) => {
     .enableConfigTesterForPlugin('zod')
     .addOverrides();
 
+  const optionsMiniResolved = assignDefaults(configMini, {
+    enforceConsistentImport: optionsResolved.enforceConsistentImport,
+  } satisfies MiniSubConfigOptions<never>);
+  optionsMiniResolved.allowedObjectSchemaTypes ??= optionsResolved.allowedObjectSchemaTypes;
+  const miniSchemaVariableName =
+    optionsMiniResolved.schemaVariableName ?? optionsResolved.schemaVariableName;
+
+  const configBuilderMini = context.createConfigBuilder(configMini, 'zod-mini');
+
+  configBuilderMini
+    ?.addConfig([
+      'zod/mini',
+      {
+        includeDefaultFilesAndIgnores: true,
+        inheritFilesAndIgnoresFrom: optionsResolved,
+      },
+    ])
+    .addRule(
+      'consistent-import',
+      ...resolveConsistentImportOptions(optionsMiniResolved),
+    ) /** @since 0.1.0 */ // 🟢
+    .addRule('consistent-import-source', OFF) /** @since 0.1.0 */
+    .addRule(
+      'consistent-object-schema-type',
+      ...resolveConsistentObjectSchemaTypeOptions(optionsMiniResolved),
+    ) /** @since 0.1.0 */
+    .addRule('consistent-schema-output-type-style', ERROR) /** @since 0.1.0 */
+    .addRule(
+      'consistent-schema-var-name',
+      ...resolveConsistentSchemaVarNameOptions({schemaVariableName: miniSchemaVariableName}),
+    ) /** @since 0.1.0 */ // 🟢
+    .addRule('no-any-schema', WARNING) /** @since 0.1.0 */ // 🟢
+    .addRule('no-empty-custom-schema', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-unknown-schema', OFF) /** @since 0.1.0 */
+    .addRule('prefer-enum-over-literal-union', ERROR) /** @since 1.1.0 */ // 🟢
+    .addRule('prefer-meta', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('require-brand-type-parameter', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('require-error-message', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('schema-error-property-style', OFF) /** @since 0.1.0 */
+    .enableConfigTesterForPlugin('zod-mini')
+    .addOverrides();
+
+  const optionsCoreResolved = assignDefaults(configCore, {
+    enforceConsistentImport: optionsResolved.enforceConsistentImport,
+  } satisfies CoreSubConfigOptions<never>);
+
+  const configBuilderCore = context.createConfigBuilder(configCore, 'zod-core');
+
+  configBuilderCore
+    ?.addConfig([
+      'zod/core',
+      {
+        includeDefaultFilesAndIgnores: true,
+        inheritFilesAndIgnoresFrom: optionsResolved,
+      },
+    ])
+    .addRule(
+      'consistent-import',
+      ...resolveConsistentImportOptions(optionsCoreResolved),
+    ) /** @since 1.0.0 */ // 🟢
+    .addRule('consistent-schema-output-type-style', ERROR) /** @since 1.0.0 */
+    .enableConfigTesterForPlugin('zod-core')
+    .addOverrides();
+
   return {
-    configs: [configBuilder],
+    configs: [configBuilder, configBuilderMini, configBuilderCore],
     optionsResolved,
   };
 }) satisfies UnConfigFn<'zod'>;

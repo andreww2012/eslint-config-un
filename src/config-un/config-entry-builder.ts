@@ -21,6 +21,7 @@ import type {
   GetRuleOptions,
   UnAllRuleNames,
   UnFlatConfigEntryBase,
+  UnFlatConfigEntryFilesAndIgnores,
   UnRulesConfig,
 } from '../eslint/eslint-types';
 import {genFlatConfigEntryName, resolveFullRuleName} from '../eslint/eslint-utils';
@@ -228,6 +229,8 @@ export class ConfigEntryBuilder<
             ignoresDefault?: string[];
             ignoresDefaultMergedWithUserIgnores?: boolean;
 
+            inheritFilesAndIgnoresFrom?: UnFlatConfigEntryFilesAndIgnores;
+
             parser?: ParserPrefix;
 
             /**
@@ -292,10 +295,17 @@ export class ConfigEntryBuilder<
       typeof nameAndMaybeOptions === 'string' ? [nameAndMaybeOptions, {}] : nameAndMaybeOptions;
     const {options: configOptions} = this;
 
-    const filesFromUser = configOptions.files || [];
+    const configFilesAndIgnoresNotSpecified =
+      configOptions.files == null && configOptions.ignores == null;
+
+    const filesFromUser =
+      configOptions.files ||
+      (configFilesAndIgnoresNotSpecified
+        ? internalOptions.inheritFilesAndIgnoresFrom?.files
+        : undefined);
     const filesDefault = internalOptions.filesDefault || [];
     const files =
-      filesFromUser.length > 0 && internalOptions.includeDefaultFilesAndIgnores
+      filesFromUser?.length && internalOptions.includeDefaultFilesAndIgnores
         ? internalOptions.filesDefaultMergedWithUserFiles
           ? [...filesDefault, ...filesFromUser]
           : filesFromUser
@@ -304,7 +314,11 @@ export class ConfigEntryBuilder<
       files.push(...internalOptions.filesMerged);
     }
 
-    const ignoresFromUser = configOptions.ignores;
+    const ignoresFromUser =
+      configOptions.ignores ||
+      (configFilesAndIgnoresNotSpecified
+        ? internalOptions.inheritFilesAndIgnoresFrom?.ignores
+        : undefined);
     const ignoresInternal = objectEntriesUnsafe(
       FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS,
     ).flatMap(([fileType, globs]) =>
