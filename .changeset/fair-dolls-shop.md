@@ -4,8 +4,8 @@
 
 es: updated [`eslint-plugin-es-x` from v9.2.0 to v9.3.0](https://github.com/eslint-community/eslint-plugin-es-x/compare/v9.2.0...v9.3.0):
 
-- ❓ enabled conditionally [`no-json-israwjson`](https://eslint-community.github.io/eslint-plugin-rules/no-json-israwjson.html) rule
-- ❓ enabled conditionally [`no-json-parse-reviver-context-parameter`](https://eslint-communithub.io/eslint-plugin-es-x/rules/no-json-parse-reviver-context-parameter.html) rule
-- ❓ enabled conditionally [`no-json-rawjson`](https://eslint-communithub.io/eslint-plugin-es-x/rules/no-json-rawjson.html) rule
+- ❓ enabled conditionally [`no-json-israwjson`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-json-israwjson.html) rule
+- ❓ enabled conditionally [`no-json-parse-reviver-context-parameter`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-json-parse-reviver-context-parameter.html) rule
+- ❓ enabled conditionally [`no-json-rawjson`](https://eslint-community.github.io/eslint-plugin-es-x/rules/no-json-rawjson.html) rule
 
 <!-- cspell:ignore no-json-israwjson rawjson -->

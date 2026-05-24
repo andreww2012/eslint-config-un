@@ -2,7 +2,7 @@
 'eslint-config-un': minor
 ---
 
-zod: updated [`eslint-plugin-zod` from v3.12.0 to v4.5.1](https://github.com/marcalexiei/eslint-zod/compare/v3.12.0...v4.5.1):
+zod: updated [`eslint-plugin-zod` from v3.12.0 to v4.5.1](https://github.com/marcalexiei/eslint-zod/compare/v3.12.0...eslint-plugin-zod%404.5.1):
 
 - ❓ enabled the following rules if the resolved zod major version is >=4:
   - [`no-native-enum`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/no-native-enum.md)
