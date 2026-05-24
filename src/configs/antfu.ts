@@ -11,10 +11,7 @@ export interface AntfuEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'antfu'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies Partial<AntfuEslintConfigOptions>,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'antfu');
 

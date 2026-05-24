@@ -17,10 +17,7 @@ export interface ExpectTypeEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies Partial<ExpectTypeEslintConfigOptions>,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {options: expectRuleOptions} = optionsResolved;
 

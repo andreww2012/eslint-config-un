@@ -11,10 +11,7 @@ export interface CommandEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'command'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies Partial<CommandEslintConfigOptions>,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'command');
 

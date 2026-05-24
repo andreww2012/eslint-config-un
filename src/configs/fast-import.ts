@@ -38,7 +38,7 @@ export interface FastImportEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies FastImportEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings, enforceFileExtensions, restrictImports} = optionsResolved;
 

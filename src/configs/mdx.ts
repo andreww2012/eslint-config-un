@@ -47,7 +47,7 @@ export default ((context, optionsRaw) => {
     lintCodeBlocks: true,
     codeBlocksImpliedStrictMode: true,
     configFormatFencedCodeBlocks: context.packagesInfo.prettier != null,
-  } satisfies MdxEslintConfigOptions);
+  });
 
   const {
     settings: pluginSettings,

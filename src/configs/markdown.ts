@@ -154,7 +154,7 @@ export default ((context, optionsRaw) => {
     lintCodeBlocks: true,
     parseFrontmatter: 'yaml',
     codeBlocksImpliedStrictMode: true,
-  } satisfies MarkdownEslintConfigOptions);
+  });
 
   const {
     files: parentConfigFiles,

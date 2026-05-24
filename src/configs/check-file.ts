@@ -48,7 +48,7 @@ export interface CheckFileEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies CheckFileEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {configEnableCheckFileProcessor, fileNamingConventions, folderNamingConventions} =
     optionsResolved;

@@ -85,7 +85,7 @@ export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceDefaultMessage: 'anything',
     enforceDescription: 'anything',
-  } satisfies FormatjsEslintConfigOptions);
+  });
 
   const {
     settings: pluginSettings,

@@ -17,10 +17,7 @@ export interface TreeShakingEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies Partial<TreeShakingEslintConfigOptions>,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {options: noSideEffectsInInitializationOptions} = optionsResolved;
 

@@ -545,7 +545,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     shorthandBoolean: 'prefer',
     shorthandFragment: 'prefer',
     reactVersion: reactPackageInfo?.versions.major ?? LATEST_REACT_VERSION,
-  } satisfies ReactEslintConfigOptions);
+  });
 
   const {
     files: parentConfigFiles,

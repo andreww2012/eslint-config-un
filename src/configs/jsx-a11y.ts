@@ -301,9 +301,9 @@ export default ((
   const optionsResolved = assignDefaults(optionsRaw, {
     ambiguousWordsForAnchorText: {
       words: DEFAULT_AMBIGUOUS_WORDS,
-    } as JsxA11yEslintConfigOptions['ambiguousWordsForAnchorText'] & {},
-    customComponents: {} as JsxA11yEslintConfigOptions['customComponents'] & {},
-  } satisfies JsxA11yEslintConfigOptions);
+    },
+    customComponents: {},
+  });
 
   const {
     settings: pluginSettings,

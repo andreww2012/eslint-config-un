@@ -54,7 +54,7 @@ export interface CompatEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies CompatEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
 

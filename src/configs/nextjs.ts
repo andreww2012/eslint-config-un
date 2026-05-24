@@ -27,7 +27,7 @@ export interface NextJsEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies NextJsEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
 

@@ -37,7 +37,7 @@ export interface NoSecretsEslintConfigOptions<
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configJson: true,
-  } satisfies Partial<NoSecretsEslintConfigOptions>);
+  });
 
   const {configJson, noSecretsOptions: noSecretsOptionsProvided} = optionsResolved;
 

@@ -88,7 +88,7 @@ export default ((context, optionsRaw) => {
 
   const optionsResolved = assignDefaults(optionsRaw, {
     noNonRegistryDependencySpecifiers: true,
-  } satisfies Partial<LockfileEslintConfigOptions>);
+  });
 
   const {
     enforceAllowedRegistries,

@@ -24,10 +24,7 @@ const getAllowedImports = (isV2 = true): string[] =>
   ['querystring', 'crypto', isV2 && 'cloudfront'].filter((v) => typeof v === 'string');
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies CloudfrontFunctionsEslintConfigOptions,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configs = (
     [

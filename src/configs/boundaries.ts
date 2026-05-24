@@ -30,10 +30,7 @@ export interface BoundariesEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies Partial<BoundariesEslintConfigOptions>,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
 

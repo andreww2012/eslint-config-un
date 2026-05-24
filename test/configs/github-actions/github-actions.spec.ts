@@ -290,7 +290,7 @@ describe('options', async () => {
 
       expect(
         customConfigResult.getRuleEntry('github-actions', 'github-actions/prefer-step-uses-style'),
-      ).toMatchInlineSnapshot('[2, {"allowRepository": true, "commit": true, "release": false}]');
+      ).toMatchInlineSnapshot('[2, {"release": false}]');
     });
   });
 });

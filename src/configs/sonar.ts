@@ -50,7 +50,7 @@ export default (async (context, optionsRaw) => {
     enableAwsRules: awsCdkLibInstalled,
     enableHelmetRules: helmetInstalled,
     testsRules: false,
-  } satisfies SonarEslintConfigOptions);
+  });
 
   const {enableAwsRules, enableHelmetRules, testsRules} = optionsResolved;
 

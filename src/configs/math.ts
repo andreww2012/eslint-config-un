@@ -20,7 +20,7 @@ export interface MathEslintConfigOptions<
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     absoluteValuesConversionMethod: 'Math.abs',
-  } satisfies MathEslintConfigOptions);
+  });
 
   const {absoluteValuesConversionMethod} = optionsResolved;
 

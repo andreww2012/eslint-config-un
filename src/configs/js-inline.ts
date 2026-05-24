@@ -115,7 +115,7 @@ export interface JsInlineEslintConfigOptions<
 export default (async (context, optionsRaw) => {
   const eslintPluginHtml = await pluginsLoaders.html(context).then(({module}) => module);
 
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsInlineEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings, languageOptions} = optionsResolved;
 

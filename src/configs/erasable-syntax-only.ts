@@ -23,10 +23,7 @@ export interface ErasableSyntaxOnlyEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies ErasableSyntaxOnlyEslintConfigOptions,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {allowedSyntax = {}} = optionsResolved;
 

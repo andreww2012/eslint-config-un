@@ -39,7 +39,7 @@ export interface HeaderEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies HeaderEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {options} = optionsResolved;
 

@@ -165,7 +165,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     extraConfigs: [],
     loadPluginsOnDemand: true,
     offlineMode: Boolean(process.env['ESLINT_CONFIG_UN_OFFLINE_MODE']),
-  } satisfies EslintConfigUnOptions<ExtraPlugins>);
+  });
 
   optionsResolved.cacheConfigs =
     options.cacheConfigs ??

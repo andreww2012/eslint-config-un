@@ -17,7 +17,7 @@ export interface CspellEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies CspellEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {options} = optionsResolved;
 

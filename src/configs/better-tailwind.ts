@@ -146,7 +146,7 @@ export interface BetterTailwindEslintConfigOptions<
 export default ((context, optionsRaw, {cssResolvedOptions}) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     classOrder: 'official',
-  } satisfies Partial<BetterTailwindEslintConfigOptions>);
+  });
 
   const {
     settings: pluginSettings,

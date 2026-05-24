@@ -519,7 +519,7 @@ export default ((
       context.configsMeta.vue.enabled && 'vue',
     ].filter((v) => v !== false),
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
-  } satisfies TsEslintConfigOptions);
+  });
   optionsResolved.typescriptVersion ??= typescriptPackageInfo?.versions.majorAndMinor ?? undefined;
   const {
     configSetup,
@@ -1209,7 +1209,7 @@ export default ((
     const configSortTsconfigKeysOptions = assignDefaults(configSortTsconfigKeys, {
       orderTopLevel: true,
       orderCompilerOptions: true,
-    } satisfies TsEslintConfigOptions['configSortTsconfigKeys'] & {});
+    });
 
     const {orderTopLevel, orderCompilerOptions, extraSortKeysConfigs} =
       configSortTsconfigKeysOptions;

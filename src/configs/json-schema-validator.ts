@@ -45,10 +45,7 @@ export interface JsonSchemaValidatorEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies JsonSchemaValidatorEslintConfigOptions,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {
     settings: pluginSettings,

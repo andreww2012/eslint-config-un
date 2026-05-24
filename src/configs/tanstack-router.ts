@@ -11,10 +11,7 @@ export interface TanstackRouterEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, '@tanstack/router'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies Partial<TanstackRouterEslintConfigOptions>,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '@tanstack/router');
 

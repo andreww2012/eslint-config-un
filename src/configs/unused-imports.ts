@@ -31,7 +31,7 @@ export interface UnusedImportsEslintConfigOptions<
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoUnusedVars: false,
-  } satisfies UnusedImportsEslintConfigOptions);
+  });
 
   const {configNoUnusedVars} = optionsResolved;
 

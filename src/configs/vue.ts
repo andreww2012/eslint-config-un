@@ -185,6 +185,9 @@ type SupportedVueMajorVersion = 2 | 3;
 const SUPPORTED_VUE_MAJOR_VERSIONS = new Set<number>(
   allUnionMembers<SupportedVueMajorVersion>()([2, 3]),
 );
+const isSupportedVueMajorVersion = (
+  value: number | null | undefined,
+): value is SupportedVueMajorVersion => value != null && SUPPORTED_VUE_MAJOR_VERSIONS.has(value);
 const DEFAULT_VUE_MAJOR_VERSION = 3 satisfies SupportedVueMajorVersion;
 
 export interface VueEslintConfigOptions<
@@ -388,14 +391,13 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
 
   const vuePackageInfo = context.packagesInfo.vue;
   const vuePackageMajorVersion = vuePackageInfo?.versions.major;
-  const isVuePackageMajorVersionSupported =
-    vuePackageMajorVersion != null && SUPPORTED_VUE_MAJOR_VERSIONS.has(vuePackageMajorVersion);
+  const isVuePackageMajorVersionSupported = isSupportedVueMajorVersion(vuePackageMajorVersion);
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configEnforceTypescriptInScriptSection: isTypescriptEnabled,
     files: DEFAULT_VUE_FILES, // Must be assigned to options for `ts` config
     majorVersion: isVuePackageMajorVersionSupported
-      ? (vuePackageMajorVersion as SupportedVueMajorVersion)
+      ? vuePackageMajorVersion
       : DEFAULT_VUE_MAJOR_VERSION,
     configA11y: true,
     configI18n: vueI18nPackageInfo != null,
@@ -406,7 +408,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     reportUnusedDisableDirectives: true,
     enforcePropsDeclarationStyle: 'runtime',
     inheritBaseRuleSeverityAndOptionsForExtensionRules: true,
-  } satisfies VueEslintConfigOptions);
+  });
   if (optionsResolved.configEnforceTypescriptInScriptSection === true) {
     optionsResolved.configEnforceTypescriptInScriptSection = {
       files: optionsResolved.files,
@@ -458,7 +460,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   const optionsNuxtResolved = assignDefaults(configNuxt, {
     configNuxtConfig: true,
     nuxtMajorVersion: nuxtPackageMajorVersion === 4 ? 4 : 3,
-  } satisfies VueEslintConfigOptions['configNuxt'] & object);
+  });
   optionsNuxtResolved.v4DirectoryStructure ??= optionsNuxtResolved.nuxtMajorVersion === 4;
   const {v4DirectoryStructure: nuxtV4DirectoryStructure} = optionsNuxtResolved;
   optionsResolved.vueOrNuxtProjectDir ??= nuxtV4DirectoryStructure ? 'app' : '';
@@ -1155,10 +1157,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .enableConfigTesterForPlugin('pinia')
     .addOverrides();
 
-  const optionsI18nResolved = assignDefaults(
-    configI18n,
-    {} satisfies VueEslintConfigOptions['configI18n'] & object,
-  );
+  const optionsI18nResolved = assignDefaults(configI18n, {});
 
   const {settings: pluginI18nSettings} = optionsI18nResolved;
 
@@ -1221,10 +1220,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .enableConfigTesterForPlugin('@intlify/vue-i18n')
     .addOverrides();
 
-  const optionsScopedCssResolved = assignDefaults(
-    configScopedCss,
-    {} satisfies VueEslintConfigOptions['configScopedCss'] & object,
-  );
+  const optionsScopedCssResolved = assignDefaults(configScopedCss, {});
 
   const configBuilderScopedCss = context.createConfigBuilder(configScopedCss, 'vue-scoped-css');
 

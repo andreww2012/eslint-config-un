@@ -211,7 +211,7 @@ export default (async (context, optionsRaw) => {
     configNoOnlyTests: false,
     configTypescript: context.configsMeta.ts.enabled,
     paddingAround: true,
-  } satisfies JestEslintConfigOptions);
+  });
 
   const {
     settings: pluginSettings,

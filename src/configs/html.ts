@@ -52,7 +52,7 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies HtmlEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings, parserOptions} = optionsResolved;
 

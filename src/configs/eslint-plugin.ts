@@ -77,7 +77,7 @@ export interface EslintPluginEslintConfigOptions<
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configRuleTests: false,
-  } satisfies EslintPluginEslintConfigOptions);
+  });
 
   const {configRuleTests, metaProperties = {}} = optionsResolved;
 

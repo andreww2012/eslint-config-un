@@ -60,7 +60,7 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false,
-  } satisfies PlaywrightEslintConfigOptions);
+  });
 
   const {
     settings: pluginSettings,

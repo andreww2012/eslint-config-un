@@ -43,7 +43,7 @@ export default ((context, optionsRaw) => {
     configJson: false,
     configJsonc: false,
     configJson5: false,
-  } satisfies JsoncEslintConfigOptions);
+  });
   const {configJson, configJsonc, configJson5} = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'jsonc');

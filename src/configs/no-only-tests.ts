@@ -12,7 +12,7 @@ export interface NoOnlyTestsEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'no-only-tests'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies NoOnlyTestsEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'no-only-tests');
 

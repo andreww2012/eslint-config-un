@@ -29,7 +29,7 @@ export interface RemedaEslintConfigOptions<
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     suggestJsCodeReplacements: false,
-  } satisfies RemedaEslintConfigOptions);
+  });
 
   const {suggestJsCodeReplacements} = optionsResolved;
 

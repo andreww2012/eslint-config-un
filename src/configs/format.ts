@@ -43,7 +43,7 @@ export interface FormatEslintConfigOptions<
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     formatter: 'prettier',
-  } satisfies Partial<FormatEslintConfigOptions>);
+  });
 
   // TODO remove after this is fixed: https://github.com/unjs/defu/issues/145
   if (optionsRaw && typeof optionsRaw === 'object') {

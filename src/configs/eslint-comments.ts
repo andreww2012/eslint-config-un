@@ -11,10 +11,7 @@ export interface EslintCommentsEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'eslint-comments'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies EslintCommentsEslintConfigOptions,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'eslint-comments');
 

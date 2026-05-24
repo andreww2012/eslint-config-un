@@ -33,7 +33,7 @@ export interface StylisticEslintConfigOptions<
 const SIDE_EFFECTS_ONLY_IMPORT_ESLINT_SELECTOR = 'ImportDeclaration[specifiers.length=0]';
 
 export default (async (context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies StylisticEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {customizeOptions} = optionsResolved;
 

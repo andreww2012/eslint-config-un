@@ -127,7 +127,7 @@ export default (async (context, optionsRaw) => {
     configSvelte: context.configsMeta.svelte.enabled,
     configVue: context.configsMeta.vue.enabled,
     disableRootConfigIfFrameworkConfigIsEnabled: true,
-  } satisfies TestingLibraryEslintConfigOptions);
+  });
 
   const {
     configAngular,
@@ -156,7 +156,7 @@ export default (async (context, optionsRaw) => {
       configNoOnlyTests: true,
       allowContainerFirstChild: true,
       preferUserEventOverFireEvent: true,
-    } satisfies AllPossibleOptions);
+    });
 
     const {
       configNoOnlyTests,

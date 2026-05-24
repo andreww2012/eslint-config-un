@@ -11,7 +11,7 @@ export interface PromiseEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'promise'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies PromiseEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'promise');
 

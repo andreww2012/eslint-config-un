@@ -11,10 +11,7 @@ export interface BarrelFilesEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'barrel-files'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies Partial<BarrelFilesEslintConfigOptions>,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'barrel-files');
 

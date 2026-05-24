@@ -330,7 +330,7 @@ export interface EsEslintConfigOptions<
 export default ((context, optionsRaw, customConfig) => {
   const optionsResolved = assignDefaults(customConfig?.options ?? optionsRaw, {
     ecmaVersion: 'latest',
-  } satisfies EsEslintConfigOptions);
+  });
 
   const {settings: pluginSettings, ecmaVersion, ecmaFeatures = {}} = optionsResolved;
 

@@ -11,7 +11,7 @@ export interface SecurityEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'security'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies SecurityEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'security');
 

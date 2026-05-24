@@ -36,7 +36,7 @@ export default ((context, optionsRaw) => {
       commit: true,
       allowRepository: true,
     },
-  } satisfies Partial<GithubActionsEslintConfigOptions>);
+  });
 
   const {maxJobsPerAction, usesStyle} = optionsResolved;
   const require: GithubActionsEslintConfigOptions['require'] & {} = {

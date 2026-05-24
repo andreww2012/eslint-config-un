@@ -11,7 +11,7 @@ export interface AwsCdkEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'awscdk'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies AwsCdkEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'awscdk');
 

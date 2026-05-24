@@ -11,7 +11,7 @@ export interface TsdocEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'tsdoc'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies TsdocEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'tsdoc');
 

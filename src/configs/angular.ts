@@ -239,7 +239,7 @@ export default (async (context, optionsRaw) => {
     disallowedInputPrefixes: ['on'],
     disallowAttributeDecorator: false,
     disallowForwardRef: false,
-  } satisfies AngularEslintConfigOptions);
+  });
 
   const angularVersion: SupportedAngularVersion =
     optionsResolved.angularVersion ??
@@ -543,7 +543,7 @@ export default (async (context, optionsRaw) => {
     preferControlFlow: angularVersion >= 19,
     preferNgSrc: false,
     requireLoopIndexes: false,
-  } satisfies typeof configTemplate & object);
+  });
   const {a11yRules, preferControlFlow, preferNgSrc, requireLoopIndexes} = configTemplateOptions;
 
   const a11yRulesSeverity = a11yRules === true ? ERROR : a11yRules === 'warn' ? WARNING : OFF;

@@ -26,7 +26,7 @@ export interface UnicornEslintConfigOptions<
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceTextEncodingCaseAndNotation: 'no-dash',
-  } satisfies UnicornEslintConfigOptions);
+  });
 
   const {enforceTextEncodingCaseAndNotation} = optionsResolved;
 

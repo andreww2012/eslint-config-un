@@ -79,7 +79,7 @@ export interface LitEslintConfigOptions<
 }
 
 export default (async (context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies LitEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'lit');
 

@@ -17,7 +17,7 @@ export interface DependEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies DependEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {options: badDependencyOptions} = optionsResolved;
 

@@ -174,10 +174,7 @@ export interface YouDontNeedLodashUnderscoreEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies YouDontNeedLodashUnderscoreEslintConfigOptions,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const ignoredMethods = {
     capitalize: true,

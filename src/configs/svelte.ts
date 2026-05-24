@@ -137,7 +137,7 @@ export default (async (context, optionsRaw) => {
     svelteVersion:
       context.packagesInfo.svelte?.versions.majorAndMinor ?? LATEST_SVELTE_MAJOR_VERSION,
     isPrettierPluginSvelteUsed: isPrettierPluginSvelteInstalled,
-  } satisfies SvelteEslintConfigOptions);
+  });
   if (optionsResolved.configEnforceTypescriptInScriptSection === true) {
     optionsResolved.configEnforceTypescriptInScriptSection = {
       files: optionsResolved.files,

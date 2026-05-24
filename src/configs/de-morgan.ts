@@ -11,7 +11,7 @@ export interface DeMorganEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'de-morgan'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies DeMorganEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'de-morgan');
 

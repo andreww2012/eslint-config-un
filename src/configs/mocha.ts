@@ -51,7 +51,7 @@ export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: true,
     maxTopLevelSuites: 1,
-  } satisfies MochaEslintConfigOptions);
+  });
 
   const {
     settings: pluginSettings,

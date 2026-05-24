@@ -11,7 +11,7 @@ export interface CasePoliceEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'case-police'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies CasePoliceEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'case-police');
 

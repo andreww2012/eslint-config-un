@@ -13,7 +13,7 @@ export interface QwikEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies QwikEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {routesDir} = optionsResolved;
 

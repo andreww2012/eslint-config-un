@@ -40,7 +40,7 @@ const RULES_DISABLED_BY_DEFAULT = [
 ] as const satisfies UnAllRuleNames[];
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies CliEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {disabledRules, onlyTopLevelDirs} = optionsResolved;
 

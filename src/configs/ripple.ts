@@ -23,7 +23,7 @@ export interface RippleEslintConfigOptions<
 const DEFAULT_RIPPLE_FILES: string[] = [GLOB_TSRX, GLOB_RIPPLE];
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies RippleEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {configSetup: configSetupOptions = {}} = optionsResolved;
 

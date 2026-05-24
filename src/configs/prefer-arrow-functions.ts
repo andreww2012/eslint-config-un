@@ -11,10 +11,7 @@ export interface PreferArrowFunctionsEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'prefer-arrow-functions'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies PreferArrowFunctionsEslintConfigOptions,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'prefer-arrow-functions');
 

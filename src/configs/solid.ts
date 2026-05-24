@@ -11,7 +11,7 @@ export interface SolidEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'solid'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies SolidEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'solid');
 

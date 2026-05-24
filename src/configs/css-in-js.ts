@@ -62,7 +62,7 @@ export default ((context, optionsRaw) => {
     hexColorsStyle: 'long',
     avoidLeadingZero: false,
     propertyCasing: 'camelCase',
-  } satisfies CssInJsEslintConfigOptions);
+  });
 
   const {
     settings: pluginSettings,

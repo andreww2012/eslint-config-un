@@ -38,7 +38,7 @@ export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false, // has `no-only-test` rule
-  } satisfies AvaEslintConfigOptions);
+  });
 
   const {configNoOnlyTests, enforceAssertionMessage, enforceMaxAssertions} = optionsResolved;
 

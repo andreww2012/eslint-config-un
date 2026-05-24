@@ -23,7 +23,7 @@ export interface DrizzleEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies DrizzleEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {drizzleObjectName} = optionsResolved;
 

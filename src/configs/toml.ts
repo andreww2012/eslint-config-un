@@ -48,7 +48,7 @@ export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     maxPrecisionOfFractionalSeconds: 3,
     maxIntegerPrecisionBits: 64,
-  } satisfies TomlEslintConfigOptions);
+  });
 
   const {maxPrecisionOfFractionalSeconds, maxIntegerPrecisionBits} = optionsResolved;
 

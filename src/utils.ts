@@ -3,7 +3,6 @@ import path from 'node:path';
 import url from 'node:url';
 import {styleText} from 'node:util';
 import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
-import {createDefu, type defu} from 'defu';
 import {destr as jsonParse} from 'destr';
 import {resolve as resolvePackage} from 'import-meta-resolve';
 import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
@@ -48,14 +47,8 @@ export const styleRuleName = generateStyleFn('green');
 export const isObject = (value: unknown): value is object =>
   typeof value === 'object' && value != null && !Array.isArray(value);
 
-export const assignDefaults = createDefu((object, key, value) => {
-  if (Array.isArray(object[key]) && Array.isArray(value)) {
-    // @ts-expect-error this is fine
-    object[key] = [...value];
-    return true;
-  }
-  return false;
-}) as typeof defu;
+// eslint-disable-next-line import/no-cycle
+export {assignDefaults} from './utils/assign-defaults';
 
 export type MaybeArray<T> = T | T[];
 export const arraify = <T>(value?: T | readonly T[] | null): T[] =>

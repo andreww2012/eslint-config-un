@@ -115,7 +115,7 @@ export default ((context, optionsRaw) => {
     configModernization: true,
     configModuleReplacements: true,
     configPerformanceImprovements: true,
-  } satisfies Partial<E18eEslintConfigOptions>);
+  });
 
   const {configModernization, configModuleReplacements, configPerformanceImprovements} =
     optionsResolved;
@@ -159,10 +159,7 @@ export default ((context, optionsRaw) => {
   );
 
   if (configModuleReplacements) {
-    const configModuleReplacementsOptions = assignDefaults(
-      configModuleReplacements,
-      {} satisfies Partial<E18eEslintConfigOptions['configModuleReplacements'] & object>,
-    );
+    const configModuleReplacementsOptions = assignDefaults(configModuleReplacements, {});
 
     const {options: badDependencyOptions} = configModuleReplacementsOptions;
 

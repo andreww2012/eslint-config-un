@@ -89,14 +89,14 @@ export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configPackageJson: true,
     configPnpmWorkspace: true,
-  } satisfies PnpmEslintConfigOptions);
+  });
 
   const {settings: pluginSettings, configPackageJson, configPnpmWorkspace} = optionsResolved;
 
   const configPackageJsonOptions = assignDefaults(configPackageJson, {
     enforceCatalog: false,
     preferSettingsInPnpmWorkspaceYaml: false,
-  } satisfies typeof configPackageJson & object);
+  });
   const {enforceCatalog, preferSettingsInPnpmWorkspaceYaml} = configPackageJsonOptions;
 
   const configBuilderPackageJson = context.createConfigBuilder(configPackageJson, 'pnpm');
@@ -127,10 +127,7 @@ export default ((context, optionsRaw) => {
     })
     .addOverrides();
 
-  const configPnpmWorkspaceOptions = assignDefaults(
-    configPnpmWorkspace,
-    {} satisfies typeof configPnpmWorkspace & object,
-  );
+  const configPnpmWorkspaceOptions = assignDefaults(configPnpmWorkspace, {});
   const {enforcePnpmWorkspaceSettings} = configPnpmWorkspaceOptions;
 
   const configBuilderPnpmWorkspace = context.createConfigBuilder(configPnpmWorkspace, 'pnpm');

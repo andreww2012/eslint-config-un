@@ -83,7 +83,7 @@ export default (async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     isTypescriptEnabled: context.configsMeta.ts.enabled,
     allowDevDependencies: context.rootOptions.mode !== 'lib',
-  } satisfies ImportEslintConfigOptions);
+  });
 
   const {
     settings: pluginSettings,

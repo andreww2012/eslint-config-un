@@ -11,7 +11,7 @@ export interface UnocssEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, '@unocss'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies UnocssEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '@unocss');
 

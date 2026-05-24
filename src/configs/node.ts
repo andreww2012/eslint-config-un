@@ -205,10 +205,9 @@ export default (async (context, optionsRaw) => {
     .then((packageJsonPath) => readAndParseJson<PackageJson>(packageJsonPath));
 
   const optionsResolved = assignDefaults(optionsRaw, {
-    preferGlobal: {} as NodeEslintConfigOptions['preferGlobal'] & {},
-    noUnsupportedFeaturesIgnores:
-      {} as NodeEslintConfigOptions['noUnsupportedFeaturesIgnores'] & {},
-  } satisfies NodeEslintConfigOptions);
+    preferGlobal: {},
+    noUnsupportedFeaturesIgnores: {},
+  });
 
   const {settings: pluginSettings, preferGlobal, noUnsupportedFeaturesIgnores} = optionsResolved;
 

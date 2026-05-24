@@ -19,7 +19,7 @@ export interface JsEslintConfigOptions<
 }
 
 export default (async (context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies JsEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '');
 

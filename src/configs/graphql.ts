@@ -74,7 +74,7 @@ export default (async (context, optionsRaw) => {
     configJsProcessor: true,
     disableRulesRequiringOperations: false,
     disableRulesRequiringSchema: false,
-  } satisfies GraphqlEslintConfigOptions);
+  });
 
   const {
     configJsProcessor,

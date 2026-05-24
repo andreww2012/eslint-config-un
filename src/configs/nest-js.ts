@@ -11,10 +11,7 @@ export interface NestJsEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'nestjs'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies Partial<NestJsEslintConfigOptions>,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'nestjs');
 

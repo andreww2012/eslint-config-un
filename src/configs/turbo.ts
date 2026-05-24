@@ -18,7 +18,7 @@ export interface TurboEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies TurboEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {undeclaredEnvVarsOptions} = optionsResolved;
 

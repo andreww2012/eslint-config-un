@@ -237,7 +237,7 @@ export default ((context, optionsRaw) => {
     configMini: true,
     enforceConsistentImport: true,
     schemaVariableName: DEFAULT_SCHEMA_VARIABLE_NAME,
-  } satisfies ZodEslintConfigOptions);
+  });
 
   const {arrayStyle, configCore, configMini} = optionsResolved;
 
@@ -304,7 +304,7 @@ export default ((context, optionsRaw) => {
 
   const optionsMiniResolved = assignDefaults(configMini, {
     enforceConsistentImport: optionsResolved.enforceConsistentImport,
-  } satisfies MiniSubConfigOptions<never>);
+  });
   optionsMiniResolved.allowedObjectSchemaTypes ??= optionsResolved.allowedObjectSchemaTypes;
   const miniSchemaVariableName =
     optionsMiniResolved.schemaVariableName ?? optionsResolved.schemaVariableName;
@@ -346,7 +346,7 @@ export default ((context, optionsRaw) => {
 
   const optionsCoreResolved = assignDefaults(configCore, {
     enforceConsistentImport: optionsResolved.enforceConsistentImport,
-  } satisfies CoreSubConfigOptions<never>);
+  });
 
   const configBuilderCore = context.createConfigBuilder(configCore, 'zod-core');
 

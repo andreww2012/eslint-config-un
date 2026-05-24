@@ -11,7 +11,7 @@ export interface MobxEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'mobx'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies MobxEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'mobx');
 

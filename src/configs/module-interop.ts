@@ -11,7 +11,7 @@ export interface ModuleInteropEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'module-interop'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies ModuleInteropEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'module-interop');
 

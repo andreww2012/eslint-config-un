@@ -17,10 +17,7 @@ export interface NoRelativeImportPathsEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies NoRelativeImportPathsEslintConfigOptions,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {options} = optionsResolved;
 

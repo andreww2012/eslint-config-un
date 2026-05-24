@@ -63,7 +63,7 @@ export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTestFiles: true,
     enforceGlimmerComponents: true,
-  } satisfies EmberEslintConfigOptions);
+  });
 
   const {configTestFiles, enforceGettersInComputedProperties, enforceGlimmerComponents} =
     optionsResolved;

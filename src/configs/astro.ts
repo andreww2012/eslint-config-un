@@ -52,7 +52,7 @@ export default (async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     files: DEFAULT_ASTRO_FILES, // Must be assigned to options for `ts` config
     configJsxA11y: true,
-  } satisfies AstroEslintConfigOptions);
+  });
 
   const {
     files: parentConfigFiles,

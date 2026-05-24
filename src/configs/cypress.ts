@@ -20,7 +20,7 @@ export interface CypressEslintConfigOptions<ExtraPlugins extends ExtraPluginsTyp
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: true,
-  } satisfies CypressEslintConfigOptions);
+  });
 
   const {configNoOnlyTests} = optionsResolved;
 

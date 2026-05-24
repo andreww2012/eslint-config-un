@@ -11,7 +11,7 @@ export interface TanstackQueryEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, '@tanstack/query'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies TanstackQueryEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '@tanstack/query');
 

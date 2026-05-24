@@ -11,10 +11,7 @@ export interface UnnecessaryAbstractionsEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'unnecessary-abstractions'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies UnnecessaryAbstractionsEslintConfigOptions,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'unnecessary-abstractions');
 

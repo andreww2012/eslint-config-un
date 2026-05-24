@@ -64,7 +64,7 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceExtension: 'yml',
-  } satisfies YamlEslintConfigOptions);
+  });
 
   const {enforceExtension, parserOptions} = optionsResolved;
 

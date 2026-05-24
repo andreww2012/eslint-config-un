@@ -86,7 +86,7 @@ export default (async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     files: [GLOB_CSS], // Need to resolve `files` early
     tolerantMode: false,
-  } satisfies CssEslintConfigOptions);
+  });
 
   const {tolerantMode, customSyntax, allowedFontUnits, allowedFeatures} = optionsResolved;
 

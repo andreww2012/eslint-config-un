@@ -12,10 +12,7 @@ export interface JestDomEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'jest-dom'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies Partial<JestDomEslintConfigOptions>,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const defaultJestDomFiles = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
 

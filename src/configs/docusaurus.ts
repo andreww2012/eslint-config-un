@@ -11,7 +11,7 @@ export interface DocusaurusEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'docusaurus'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies DocusaurusEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'docusaurus');
 

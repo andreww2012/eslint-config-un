@@ -149,7 +149,7 @@ export default (async (context, optionsRaw) => {
     enforceToBeCalledStyle: 'once',
     vitestGlobalsImporting: 'disallow',
     paddingAround: true,
-  } satisfies VitestEslintConfigOptions);
+  });
 
   const {
     settings: pluginSettings,

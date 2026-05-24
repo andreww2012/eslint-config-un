@@ -208,7 +208,7 @@ export default (async (context, optionsRaw) => {
 
   const optionsResolved = assignDefaults(optionsRaw, {
     extendedMarkdownSyntax: false,
-  } satisfies MarkdownPreferencesEslintConfigOptions);
+  });
 
   const {
     delimitersStyle,

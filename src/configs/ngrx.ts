@@ -11,7 +11,7 @@ export interface NgrxEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, '@ngrx'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies NgrxEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '@ngrx');
 

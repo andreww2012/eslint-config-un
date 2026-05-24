@@ -28,7 +28,7 @@ export interface NodeDependenciesEslintConfigOptions<
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceAbsoluteVersion: false,
-  } satisfies NodeDependenciesEslintConfigOptions);
+  });
 
   const {enforceAbsoluteVersion} = optionsResolved;
 

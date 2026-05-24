@@ -227,7 +227,7 @@ export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypescript: context.configsMeta.ts.enabled,
     formatTypeValues: true,
-  } satisfies JsdocEslintConfigOptions);
+  });
 
   const {
     settings: pluginSettings,

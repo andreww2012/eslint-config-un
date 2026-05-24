@@ -64,7 +64,7 @@
       "${TM_FILENAME_BASE/(.*)/${1:/camelcase}/}: ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}EslintConfigOptions<ExtraPlugins>;",
       "*/",
       "",
-      "\tconst optionsResolved = assignDefaults(optionsRaw, {} satisfies Partial<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}EslintConfigOptions>);",
+      "\tconst optionsResolved = assignDefaults(optionsRaw, {});",
       "",
       "\tconst {settings: pluginSettings} = optionsResolved;",
       "",

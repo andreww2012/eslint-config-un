@@ -11,7 +11,7 @@ export interface UnEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'un'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies UnEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'un');
 

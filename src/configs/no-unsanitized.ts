@@ -11,7 +11,7 @@ export interface NoUnsanitizedEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'no-unsanitized'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies NoUnsanitizedEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'no-unsanitized');
 

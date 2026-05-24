@@ -19,7 +19,7 @@ export interface NxEslintConfigOptions<
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceModuleBoundaries: false,
-  } satisfies NxEslintConfigOptions);
+  });
 
   const {enforceModuleBoundaries} = optionsResolved;
 

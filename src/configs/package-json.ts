@@ -169,7 +169,7 @@ export default ((context, optionsRaw) => {
     repositoryShorthand: 'object',
     propertiesAllowedToBeEmpty: ['browserslist'],
     publishable: false,
-  } satisfies PackageJsonEslintConfigOptions);
+  });
 
   const {
     settings: pluginSettings,

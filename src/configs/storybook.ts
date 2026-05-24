@@ -11,7 +11,7 @@ export interface StorybookEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'storybook'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies StorybookEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const typescriptVersion = context.packagesInfo.typescript?.versions.majorAndMinor || 0;
 

@@ -1036,10 +1036,7 @@ export interface NoStylisticRulesEslintConfigOptions<
 }
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(
-    optionsRaw,
-    {} satisfies NoStylisticRulesEslintConfigOptions,
-  );
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {
     enableRules: {disableAllOtherRules = false, rules: enabledRules} = {rules: false},

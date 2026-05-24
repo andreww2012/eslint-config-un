@@ -49,7 +49,7 @@ export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceFinnishNotation: isAngularCoreInstalled,
     enforceJustInsteadOfOf: false,
-  } satisfies RxjsEslintConfigOptions);
+  });
 
   const {
     banObservables: banObservablesRaw,

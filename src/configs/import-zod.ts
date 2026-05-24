@@ -11,7 +11,7 @@ export interface ImportZodEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'import-zod'> {}
 
 export default ((context, optionsRaw) => {
-  const optionsResolved = assignDefaults(optionsRaw, {} satisfies ImportZodEslintConfigOptions);
+  const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'import-zod');
 
