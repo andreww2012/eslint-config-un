@@ -823,8 +823,8 @@ importers:
         specifier: 4.5.1
         version: 4.5.1(eslint@9.39.2)(typescript@6.0.3)(zod@4.4.3)
       eslint-plugin-zod-core:
-        specifier: 1.0.2
-        version: 1.0.2(eslint@9.39.2)(typescript@6.0.3)(zod@4.4.3)
+        specifier: 1.0.3
+        version: 1.0.3(eslint@9.39.2)(typescript@6.0.3)(zod@4.4.3)
       eslint-plugin-zod-mini:
         specifier: 1.2.0
         version: 1.2.0(eslint@9.39.2)(typescript@6.0.3)(zod@4.4.3)
@@ -7561,8 +7561,8 @@ packages:
     resolution: {integrity: sha512-3zkkU/O1agczP7szJGHmisZJS/AknfVl6mb0Zqoc95dvFsdmfK+cbhrn+Ffy0UWB1pgDJwQr7kIO3rPstWs3Dw==}
     engines: {node: '>=4.0'}
 
-  eslint-plugin-zod-core@1.0.2:
-    resolution: {integrity: sha512-mS49fIkR9i2hrqnYoyBRwPtmlwUU2XHu7nxIsGRukLwA8oqFPNYs8D6QUJqGcQF+I3sDzd5ERn2JTa6WMTOY5Q==}
+  eslint-plugin-zod-core@1.0.3:
+    resolution: {integrity: sha512-awgCbMXZutKLGWLPd+LdMnEbN8Hmey1cT9GtVde3jsfXCYfC8LbgoRZlafsypD63T5FGSPNsWxIDlaZQTcLtBg==}
     engines: {node: ^20 || ^22 || >=24}
     peerDependencies:
       eslint: ^9 || ^10
@@ -19215,9 +19215,9 @@ snapshots:
     dependencies:
       kebab-case: 1.0.2
 
-  eslint-plugin-zod-core@1.0.2(eslint@9.39.2)(typescript@6.0.3)(zod@4.4.3):
+  eslint-plugin-zod-core@1.0.3(eslint@9.39.2)(typescript@6.0.3)(zod@4.4.3):
     dependencies:
-      '@eslint-zod/utils': 2.0.0(eslint@9.39.2)(typescript@6.0.3)
+      '@eslint-zod/utils': 2.1.0(eslint@9.39.2)(typescript@6.0.3)
       '@typescript-eslint/utils': 8.59.4(eslint@9.39.2)(typescript@6.0.3)
     optionalDependencies:
       eslint: 9.39.2(jiti@2.7.0)
