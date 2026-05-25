@@ -498,7 +498,6 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
   },
   vitest: {
     rules: {
-      'prefer-vi-mocked': true,
       'unbound-method': true,
     },
   },

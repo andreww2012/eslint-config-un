@@ -65,7 +65,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   /**
    * Explicitly specify or ignore files written in TypeScript.
    * Will be used to enable TypeScript-specific rules like
-   * [`prefer-vi-mocked`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-vi-mocked.md).
+   * [`unbound-method`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/unbound-method.md).
    * @default true <=> `ts` config is enabled
    */
   configTypescript?:
@@ -122,7 +122,6 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
 }
 
 const VITEST_RULES_REQUIRING_TYPE_INFORMATION = [
-  'prefer-vi-mocked',
   'unbound-method',
 ] satisfies GetRuleNamesInPlugin<'vitest'>[];
 
@@ -348,6 +347,7 @@ export default (async (context, optionsRaw) => {
     .addRule('prefer-to-have-been-called-times', ERROR) /** @since 1.6.1 */ // (warns in all)
     .addRule('prefer-to-have-length', ERROR) /** @since 0.0.57 */ // (warns in all)
     .addRule('prefer-todo', WARNING) /** @since 0.1.0 */ // (warns in all)
+    .addRule('prefer-vi-mocked', OFF) /** @since 1.1.6 */ // 💭 (warns in all)
     .addRule('require-awaited-expect-poll', WARNING) /** @since 1.4.2 */ // (warns in all)
     .addRule('require-hook', WARNING) /** @since 0.1.0 */ // (warns in all)
     .addRule('require-local-test-context-for-concurrent-snapshots', ERROR) /** @since 0.3.13 */ // 🟢
@@ -396,7 +396,6 @@ export default (async (context, optionsRaw) => {
       ],
       defaultVitestEslintConfig,
     )
-    .addRule('prefer-vi-mocked', OFF) /** @since 1.1.6 */ // 💭 (warns in all)
     .addRule('unbound-method', ERROR) /** @since 1.6.13 */ // 💭 (warns in all)
     .disableAnyRule('ts', 'unbound-method')
     .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
