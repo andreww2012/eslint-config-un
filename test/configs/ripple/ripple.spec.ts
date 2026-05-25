@@ -1,7 +1,7 @@
 const FIXTURES = {
-  moduleScopeTrack: 'module-scope-track.ts',
-  moduleScopeTrackTsrx: 'module-scope-track.tsrx',
-  moduleScopeTrackRipple: 'module-scope-track.ripple',
+  topLevelTrackCall: 'top-level-track-call.ts',
+  topLevelTrackCallTsrx: 'top-level-track-call.tsrx',
+  topLevelTrackCallRipple: 'top-level-track-call.ripple',
 } as const;
 
 beforeEach(() => {
@@ -138,13 +138,13 @@ describe('rules', () => {
   it('`ripple/no-module-scope-track` rule fires on `track()` called at module scope', async () => {
     const results = await testEslintConfig(
       'ripple',
-      FIXTURES.moduleScopeTrack,
+      FIXTURES.topLevelTrackCall,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.moduleScopeTrack,
+      FIXTURES.topLevelTrackCall,
       'ripple/no-module-scope-track',
     );
 
@@ -156,13 +156,13 @@ describe('rules', () => {
   it('`ripple/no-module-scope-track` rule fires on `track()` called at module scope in a `.tsrx` file', async () => {
     const results = await testEslintConfig(
       'ripple',
-      FIXTURES.moduleScopeTrackTsrx,
+      FIXTURES.topLevelTrackCallTsrx,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.moduleScopeTrackTsrx,
+      FIXTURES.topLevelTrackCallTsrx,
       'ripple/no-module-scope-track',
     );
 
@@ -174,13 +174,13 @@ describe('rules', () => {
   it('`ripple/no-module-scope-track` rule fires on `track()` called at module scope in a `.ripple` file', async () => {
     const results = await testEslintConfig(
       'ripple',
-      FIXTURES.moduleScopeTrackRipple,
+      FIXTURES.topLevelTrackCallRipple,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.moduleScopeTrackRipple,
+      FIXTURES.topLevelTrackCallRipple,
       'ripple/no-module-scope-track',
     );
 

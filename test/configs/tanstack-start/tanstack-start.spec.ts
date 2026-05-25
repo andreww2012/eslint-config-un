@@ -1,5 +1,5 @@
 const FIXTURES = {
-  asyncClientComponent: 'async-client-component.ts',
+  useClientAsyncComponent: 'use-client-async-component.ts',
 } as const;
 
 beforeEach(() => {
@@ -115,13 +115,13 @@ describe('rules', () => {
   it('`@tanstack/start/no-async-client-component` rule fires on an async component in a client file', async () => {
     const results = await testEslintConfig(
       {tanstackStart: true, ts: true},
-      FIXTURES.asyncClientComponent,
+      FIXTURES.useClientAsyncComponent,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.asyncClientComponent,
+      FIXTURES.useClientAsyncComponent,
       '@tanstack/start/no-async-client-component',
     );
 

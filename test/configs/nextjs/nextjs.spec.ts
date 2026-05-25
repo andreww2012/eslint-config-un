@@ -3,7 +3,7 @@
 import pathe from 'pathe';
 
 const FIXTURES = {
-  imgElement: 'img-element/img-element.tsx',
+  jsxWithImgTag: 'jsx-with-img-tag/jsx-with-img-tag.tsx',
 } as const;
 
 describe('basic tests', async () => {
@@ -104,17 +104,17 @@ describe('rules', async () => {
         nextJs: {
           settings: {
             // To prevent warning printed in the console about `pages` directory not found
-            rootDir: pathe.join(import.meta.dirname, 'fixtures/img-element'),
+            rootDir: pathe.join(import.meta.dirname, 'fixtures/jsx-with-img-tag'),
           },
         },
       },
-      FIXTURES.imgElement,
+      FIXTURES.jsxWithImgTag,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.imgElement,
+      FIXTURES.jsxWithImgTag,
       '@next/next/no-img-element',
     );
 

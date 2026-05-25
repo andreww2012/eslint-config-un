@@ -1,7 +1,7 @@
 import {GLOB_VUE} from '../../../src/constants';
 
 const FIXTURES = {
-  templateWithUselessMustache: 'template-with-useless-mustache.vue',
+  stringLiteralInTemplateMustache: 'string-literal-in-template-mustache.vue',
 } as const;
 
 beforeEach(() => {
@@ -83,14 +83,14 @@ describe('basic tests', () => {
 
     it('does not throw if Vue version cannot be determined', async () => {
       await expect(
-        testEslintConfig('vue', FIXTURES.templateWithUselessMustache, import.meta.dirname),
+        testEslintConfig('vue', FIXTURES.stringLiteralInTemplateMustache, import.meta.dirname),
       ).resolves.not.toThrow();
     });
 
     it('prints a warning if Vue version cannot be determined', async () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write');
 
-      await testEslintConfig('vue', FIXTURES.templateWithUselessMustache, import.meta.dirname);
+      await testEslintConfig('vue', FIXTURES.stringLiteralInTemplateMustache, import.meta.dirname);
 
       expect(
         String(stderrSpy.mock.calls[0]?.[0]).startsWith(
@@ -104,7 +104,7 @@ describe('basic tests', () => {
 
       await testEslintConfig(
         {vue: {majorVersion: 3}},
-        FIXTURES.templateWithUselessMustache,
+        FIXTURES.stringLiteralInTemplateMustache,
         import.meta.dirname,
       );
 
@@ -126,13 +126,13 @@ describe('rules', () => {
   it('`vue/no-useless-mustaches` rule fires on string literals in mustaches', async () => {
     const results = await testEslintConfig(
       {vue: {majorVersion: 3}},
-      FIXTURES.templateWithUselessMustache,
+      FIXTURES.stringLiteralInTemplateMustache,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.templateWithUselessMustache,
+      FIXTURES.stringLiteralInTemplateMustache,
       'vue/no-useless-mustaches',
     );
 

@@ -1,5 +1,5 @@
 const FIXTURES = {
-  awaitAsyncQueries: 'await-async-queries/test.spec.js',
+  unawaitedFindByQuery: 'unawaited-findby-query/test.spec.js',
 } as const;
 
 beforeEach(() => {
@@ -133,13 +133,13 @@ describe('rules', async () => {
   it('`testing-library/await-async-queries` rule fires on a test missing `await` on a `findBy` query', async () => {
     const results = await testEslintConfig(
       'testingLibrary',
-      FIXTURES.awaitAsyncQueries,
+      FIXTURES.unawaitedFindByQuery,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.awaitAsyncQueries,
+      FIXTURES.unawaitedFindByQuery,
       'testing-library/await-async-queries',
     );
 

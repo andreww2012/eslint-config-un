@@ -1,8 +1,8 @@
 import type {NonEmptyTuple} from '../../../src/types';
 
 const FIXTURES = {
-  fileNamingConvention: 'filename-naming-convention/MyBadFile.js',
-  folderNamingConvention: 'folder-naming-convention/MyBadFolder/index.js',
+  pascalCasedFilename: 'pascal-cased-filename/MyBadFile.js',
+  pascalCasedFolder: 'pascal-cased-folder/MyBadFolder/index.js',
 } as const;
 
 describe('basic tests', async () => {
@@ -92,13 +92,13 @@ describe('rules', async () => {
   it('`check-file/filename-naming-convention` rule fires on a file that violates naming convention', async () => {
     const results = await testEslintConfig(
       {checkFile: {fileNamingConventions: {'**/*': 'KEBAB_CASE'}}},
-      FIXTURES.fileNamingConvention,
+      FIXTURES.pascalCasedFilename,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.fileNamingConvention,
+      FIXTURES.pascalCasedFilename,
       'check-file/filename-naming-convention',
     );
 

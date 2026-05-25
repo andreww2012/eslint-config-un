@@ -1,5 +1,5 @@
 const FIXTURES = {
-  noAssertEqual: 'no-assert-equal/test.spec.js',
+  assertEqualCall: 'assert-equal-call/test.spec.js',
 } as const;
 
 beforeEach(() => {
@@ -96,11 +96,11 @@ describe('rules', async () => {
   });
 
   it('`qunit/no-assert-equal` rule fires on a test with `assert.equal()`', async () => {
-    const results = await testEslintConfig('qunit', FIXTURES.noAssertEqual, import.meta.dirname);
+    const results = await testEslintConfig('qunit', FIXTURES.assertEqualCall, import.meta.dirname);
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.noAssertEqual,
+      FIXTURES.assertEqualCall,
       'qunit/no-assert-equal',
     );
 

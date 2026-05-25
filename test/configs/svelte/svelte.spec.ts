@@ -1,7 +1,7 @@
 import {GLOB_SVELTE} from '../../../src/constants';
 
 const FIXTURES = {
-  svelteWithUselessMustache: 'svelte-with-useless-mustache.svelte',
+  stringLiteralInSvelteExpression: 'string-literal-in-svelte-expression.svelte',
 } as const;
 
 beforeEach(() => {
@@ -144,13 +144,13 @@ describe('rules', async () => {
   it('`svelte/no-useless-mustaches` rule fires on a mustache with a string literal', async () => {
     const results = await testEslintConfig(
       'svelte',
-      FIXTURES.svelteWithUselessMustache,
+      FIXTURES.stringLiteralInSvelteExpression,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.svelteWithUselessMustache,
+      FIXTURES.stringLiteralInSvelteExpression,
       'svelte/no-useless-mustaches',
     );
 

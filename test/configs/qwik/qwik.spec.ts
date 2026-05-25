@@ -1,5 +1,5 @@
 const FIXTURES = {
-  noReactProps: 'no-react-props.tsx',
+  jsxWithClassnameProp: 'jsx-with-classname-prop.tsx',
 } as const;
 
 beforeEach(() => {
@@ -109,13 +109,13 @@ describe('rules', async () => {
     const results = await testEslintConfig(
       // valid-lexical-scope requires TypeScript type information which is not available in lintText
       {qwik: {overrides: {'qwik/valid-lexical-scope': 0}}},
-      FIXTURES.noReactProps,
+      FIXTURES.jsxWithClassnameProp,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.noReactProps,
+      FIXTURES.jsxWithClassnameProp,
       'qwik/no-react-props',
     );
 

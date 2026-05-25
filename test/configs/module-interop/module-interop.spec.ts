@@ -1,5 +1,5 @@
 const FIXTURES = {
-  preferJsonModules: 'prefer-json-modules.mjs',
+  jsonImportWithoutTypeAttribute: 'json-import-without-type-attribute.mjs',
 } as const;
 
 describe('basic tests', async () => {
@@ -88,13 +88,13 @@ describe('rules', async () => {
   it('`prefer-json-modules` reports an error for a JSON import missing `with {type: "json"}`', async () => {
     const results = await testEslintConfig(
       'moduleInterop',
-      FIXTURES.preferJsonModules,
+      FIXTURES.jsonImportWithoutTypeAttribute,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.preferJsonModules,
+      FIXTURES.jsonImportWithoutTypeAttribute,
       'module-interop/prefer-json-modules',
     );
 

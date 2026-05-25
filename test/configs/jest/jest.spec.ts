@@ -1,5 +1,5 @@
 const FIXTURES = {
-  noFocusedTests: 'focused-test/test.spec.js',
+  testWithOnlyModifier: 'only-modifier/test.spec.js',
 } as const;
 
 beforeEach(() => {
@@ -110,13 +110,13 @@ describe('rules', async () => {
   it('`jest/no-focused-tests` rule fires on a test with `.only` modifier', async () => {
     const results = await testEslintConfig(
       {jest: {settings: {version: 29}}},
-      FIXTURES.noFocusedTests,
+      FIXTURES.testWithOnlyModifier,
       {searchFixturesRelativeToPath: import.meta.dirname},
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.noFocusedTests,
+      FIXTURES.testWithOnlyModifier,
       'jest/no-focused-tests',
     );
 

@@ -1,5 +1,5 @@
 const FIXTURES = {
-  innerHtml: 'innerhtml.js',
+  jsxWithInnerHtmlProp: 'jsx-with-inner-html-prop.js',
 } as const;
 
 beforeEach(() => {
@@ -154,9 +154,17 @@ describe('rules', async () => {
   });
 
   it('`solid/no-innerhtml` rule fires on JSX element with `innerHTML` prop', async () => {
-    const results = await testEslintConfig('solid', FIXTURES.innerHtml, import.meta.dirname);
+    const results = await testEslintConfig(
+      'solid',
+      FIXTURES.jsxWithInnerHtmlProp,
+      import.meta.dirname,
+    );
 
-    const error = findLintMessageFromLintResults(results, FIXTURES.innerHtml, 'solid/no-innerhtml');
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.jsxWithInnerHtmlProp,
+      'solid/no-innerhtml',
+    );
 
     expect(error?.message).toMatchInlineSnapshot(
       '"The innerHTML attribute is dangerous; passing unsanitized input can lead to security vulnerabilities."',

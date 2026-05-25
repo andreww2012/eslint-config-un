@@ -1,5 +1,5 @@
 const FIXTURES = {
-  noHtmlLinks: 'no-html-links.tsx',
+  jsxWithAnchorTag: 'jsx-with-anchor-tag.tsx',
 } as const;
 
 beforeEach(() => {
@@ -105,11 +105,15 @@ describe('rules', async () => {
   });
 
   it('`docusaurus/no-html-links` rule fires on JSX with `<a>` tag', async () => {
-    const results = await testEslintConfig('docusaurus', FIXTURES.noHtmlLinks, import.meta.dirname);
+    const results = await testEslintConfig(
+      'docusaurus',
+      FIXTURES.jsxWithAnchorTag,
+      import.meta.dirname,
+    );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.noHtmlLinks,
+      FIXTURES.jsxWithAnchorTag,
       'docusaurus/no-html-links',
     );
 

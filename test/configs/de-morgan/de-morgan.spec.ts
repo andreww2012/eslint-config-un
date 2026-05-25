@@ -1,5 +1,5 @@
 const FIXTURES = {
-  negatedConjunction: 'negated-conjunction.js',
+  notOfLogicalAndExpression: 'not-of-logical-and-expression.js',
 } as const;
 
 describe('basic tests', async () => {
@@ -72,13 +72,13 @@ describe('rules', async () => {
   it('`de-morgan/no-negated-conjunction` rule fires on a file with a negated conjunction', async () => {
     const results = await testEslintConfig(
       'deMorgan',
-      FIXTURES.negatedConjunction,
+      FIXTURES.notOfLogicalAndExpression,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.negatedConjunction,
+      FIXTURES.notOfLogicalAndExpression,
       'de-morgan/no-negated-conjunction',
     );
 

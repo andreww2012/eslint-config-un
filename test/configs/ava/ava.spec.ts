@@ -1,5 +1,5 @@
 const FIXTURES = {
-  noSkipTest: 'no-skip-test/test.spec.js',
+  testWithSkipModifier: 'skip-modifier/test.spec.js',
 } as const;
 
 beforeEach(() => {
@@ -116,9 +116,17 @@ describe('rules', async () => {
   });
 
   it('`ava/no-skip-test` rule fires on a skipped test', async () => {
-    const results = await testEslintConfig('ava', FIXTURES.noSkipTest, import.meta.dirname);
+    const results = await testEslintConfig(
+      'ava',
+      FIXTURES.testWithSkipModifier,
+      import.meta.dirname,
+    );
 
-    const error = findLintMessageFromLintResults(results, FIXTURES.noSkipTest, 'ava/no-skip-test');
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.testWithSkipModifier,
+      'ava/no-skip-test',
+    );
 
     expect(error?.message).toMatchInlineSnapshot('"No tests should be skipped."');
   });

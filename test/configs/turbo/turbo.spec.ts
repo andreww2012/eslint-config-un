@@ -1,7 +1,7 @@
 import path from 'node:path';
 
 const FIXTURES = {
-  undeclaredEnvVar: 'undeclared-env-var.js',
+  processEnvAccess: 'process-env-access.js',
 } as const;
 
 beforeEach(() => {
@@ -96,13 +96,13 @@ describe('rules', async () => {
   it('`turbo/no-undeclared-env-vars` rule fires on a file with an undeclared env var', async () => {
     const results = await testEslintConfig(
       {turbo: {undeclaredEnvVarsOptions: {cwd: FIXTURES_DIR}}},
-      FIXTURES.undeclaredEnvVar,
+      FIXTURES.processEnvAccess,
       {searchFixturesRelativeToPath: import.meta.dirname},
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.undeclaredEnvVar,
+      FIXTURES.processEnvAccess,
       'turbo/no-undeclared-env-vars',
     );
 

@@ -1,5 +1,5 @@
 const FIXTURES = {
-  onlyTest: 'only-test/test.spec.js',
+  testWithOnlyModifier: 'only-modifier/test.spec.js',
 } as const;
 
 describe('mocha: sub config `noOnlyTests`', () => {
@@ -47,13 +47,13 @@ describe('mocha: sub config `noOnlyTests`', () => {
     it('`no-only-tests/no-only-tests` rule fires when `it.only` is used', async () => {
       const results = await testEslintConfig(
         {mocha: {configNoOnlyTests: true}},
-        FIXTURES.onlyTest,
+        FIXTURES.testWithOnlyModifier,
         import.meta.dirname,
       );
 
       const error = findLintMessageFromLintResults(
         results,
-        FIXTURES.onlyTest,
+        FIXTURES.testWithOnlyModifier,
         'no-only-tests/no-only-tests',
       );
 

@@ -2,7 +2,7 @@ import type {IGraphQLConfig} from '@graphql-eslint/eslint-plugin';
 import {GLOB_GRAPHQL} from '../../../src/constants';
 
 const FIXTURES = {
-  hashtagDescription: 'hashtag-description.graphql',
+  typeWithCommentDescription: 'type-with-comment-description.graphql',
 } as const;
 
 const GRAPHQL_JS_VALIDATION_RULES = [
@@ -146,13 +146,13 @@ describe('rules', async () => {
             ),
           },
         },
-        FIXTURES.hashtagDescription,
+        FIXTURES.typeWithCommentDescription,
         {searchFixturesRelativeToPath: import.meta.dirname},
       );
 
       const error = findLintMessageFromLintResults(
         results,
-        FIXTURES.hashtagDescription,
+        FIXTURES.typeWithCommentDescription,
         'graphql/no-hashtag-description',
       );
 

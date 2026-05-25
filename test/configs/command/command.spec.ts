@@ -1,5 +1,5 @@
 const FIXTURES = {
-  toFunction: 'to-function.js',
+  arrowWithToFunctionDirective: 'arrow-with-to-function-directive.js',
 } as const;
 
 describe('basic tests', async () => {
@@ -68,10 +68,18 @@ describe('rules', async () => {
   });
 
   it('`command/command` rule fires on a file with a `/// to-function` command comment', async () => {
-    const results = await testEslintConfig('command', FIXTURES.toFunction, import.meta.dirname);
+    const results = await testEslintConfig(
+      'command',
+      FIXTURES.arrowWithToFunctionDirective,
+      import.meta.dirname,
+    );
 
     expect(
-      findLintMessageFromLintResults(results, FIXTURES.toFunction, 'command/command')?.message,
+      findLintMessageFromLintResults(
+        results,
+        FIXTURES.arrowWithToFunctionDirective,
+        'command/command',
+      )?.message,
     ).toMatchInlineSnapshot('"[to-function] fix: Convert to function"');
   });
 });

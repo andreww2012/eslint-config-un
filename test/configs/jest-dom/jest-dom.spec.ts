@@ -1,5 +1,5 @@
 const FIXTURES = {
-  preferChecked: 'prefer-checked/test.spec.js',
+  checkboxHaveAttributeChecked: 'checkbox-have-attribute-checked/test.spec.js',
 } as const;
 
 beforeEach(() => {
@@ -96,13 +96,13 @@ describe('rules', async () => {
   });
 
   it('`jest-dom/prefer-checked` rule fires when using `toHaveAttribute` for checked state', async () => {
-    const results = await testEslintConfig('jestDom', FIXTURES.preferChecked, {
+    const results = await testEslintConfig('jestDom', FIXTURES.checkboxHaveAttributeChecked, {
       searchFixturesRelativeToPath: import.meta.dirname,
     });
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.preferChecked,
+      FIXTURES.checkboxHaveAttributeChecked,
       'jest-dom/prefer-checked',
     );
 

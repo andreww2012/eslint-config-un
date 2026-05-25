@@ -1,5 +1,5 @@
 const FIXTURES = {
-  noOnlyTest: 'no-only-test/test.spec.js',
+  testWithOnlyModifier: 'only-modifier/test.spec.js',
 } as const;
 
 describe('ava: sub config `noOnlyTests`', () => {
@@ -47,13 +47,13 @@ describe('ava: sub config `noOnlyTests`', () => {
     it('`no-only-tests/no-only-tests` rule fires on focused test', async () => {
       const results = await testEslintConfig(
         {ava: {configNoOnlyTests: true}},
-        FIXTURES.noOnlyTest,
+        FIXTURES.testWithOnlyModifier,
         import.meta.dirname,
       );
 
       const error = findLintMessageFromLintResults(
         results,
-        FIXTURES.noOnlyTest,
+        FIXTURES.testWithOnlyModifier,
         'no-only-tests/no-only-tests',
       );
 

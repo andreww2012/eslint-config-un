@@ -1,6 +1,6 @@
 const FIXTURES = {
-  enforceDeleteWithWhere: 'enforce-delete-with-where.js',
-  enforceUpdateWithWhere: 'enforce-update-with-where.js',
+  deleteWithoutWhereClause: 'delete-without-where-clause.js',
+  updateWithoutWhereClause: 'update-without-where-clause.js',
 } as const;
 
 beforeEach(() => {
@@ -99,13 +99,13 @@ describe('rules', () => {
   it('`drizzle/enforce-delete-with-where` rule fires on a `delete` call without `.where()`', async () => {
     const results = await testEslintConfig(
       'drizzle',
-      FIXTURES.enforceDeleteWithWhere,
+      FIXTURES.deleteWithoutWhereClause,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.enforceDeleteWithWhere,
+      FIXTURES.deleteWithoutWhereClause,
       'drizzle/enforce-delete-with-where',
     );
 
@@ -117,13 +117,13 @@ describe('rules', () => {
   it('`drizzle/enforce-update-with-where` rule fires on an `update` call without `.where()`', async () => {
     const results = await testEslintConfig(
       'drizzle',
-      FIXTURES.enforceUpdateWithWhere,
+      FIXTURES.updateWithoutWhereClause,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.enforceUpdateWithWhere,
+      FIXTURES.updateWithoutWhereClause,
       'drizzle/enforce-update-with-where',
     );
 

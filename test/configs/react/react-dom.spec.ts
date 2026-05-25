@@ -1,5 +1,5 @@
 const FIXTURES = {
-  dangerouslySetInnerHtml: 'dangerously-set-inner-html.jsx',
+  jsxWithDangerouslySetInnerHtmlProp: 'jsx-with-dangerously-set-inner-html-prop.jsx',
 } as const;
 
 describe('react: sub config `dom`', () => {
@@ -68,13 +68,13 @@ describe('react: sub config `dom`', () => {
       async () => {
         const results = await testEslintConfig(
           'react',
-          FIXTURES.dangerouslySetInnerHtml,
+          FIXTURES.jsxWithDangerouslySetInnerHtmlProp,
           import.meta.dirname,
         );
 
         const error = findLintMessageFromLintResults(
           results,
-          FIXTURES.dangerouslySetInnerHtml,
+          FIXTURES.jsxWithDangerouslySetInnerHtmlProp,
           '@eslint-react/dom-no-dangerously-set-innerhtml',
         );
 

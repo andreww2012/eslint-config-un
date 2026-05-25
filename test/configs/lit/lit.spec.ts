@@ -1,5 +1,5 @@
 const FIXTURES = {
-  quotedExpression: 'quoted-expression.ts',
+  htmlAttributeWithQuotedTemplateExpression: 'html-attribute-with-quoted-template-expression.ts',
 } as const;
 
 beforeEach(() => {
@@ -121,15 +121,19 @@ describe('rules', async () => {
   });
 
   it('`lit/quoted-expressions` rule fires on a template with a quoted expression', async () => {
-    const results = await testEslintConfig('lit', FIXTURES.quotedExpression, {
-      // `.ts` files are not matched by any other config, so we need to add an extra config to match them
-      un: {extraConfigs: [{files: ['**/*.ts']}]},
-      searchFixturesRelativeToPath: import.meta.dirname,
-    });
+    const results = await testEslintConfig(
+      'lit',
+      FIXTURES.htmlAttributeWithQuotedTemplateExpression,
+      {
+        // `.ts` files are not matched by any other config, so we need to add an extra config to match them
+        un: {extraConfigs: [{files: ['**/*.ts']}]},
+        searchFixturesRelativeToPath: import.meta.dirname,
+      },
+    );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.quotedExpression,
+      FIXTURES.htmlAttributeWithQuotedTemplateExpression,
       'lit/quoted-expressions',
     );
 

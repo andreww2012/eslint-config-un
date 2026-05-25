@@ -1,5 +1,5 @@
 const FIXTURES = {
-  onlyTest: 'only-test.spec.ts',
+  testWithOnlyModifier: 'only-modifier.spec.ts',
 } as const;
 
 describe('basic tests', async () => {
@@ -82,11 +82,15 @@ describe('rules', async () => {
   });
 
   it('`no-only-tests/no-only-tests` rule fires on a test file with `.only`', async () => {
-    const results = await testEslintConfig('noOnlyTests', FIXTURES.onlyTest, import.meta.dirname);
+    const results = await testEslintConfig(
+      'noOnlyTests',
+      FIXTURES.testWithOnlyModifier,
+      import.meta.dirname,
+    );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.onlyTest,
+      FIXTURES.testWithOnlyModifier,
       'no-only-tests/no-only-tests',
     );
 

@@ -1,5 +1,5 @@
 const FIXTURES = {
-  migrateDisableComments: 'migrate-disable-comments.ts',
+  oldStyleCdkDisableComment: 'old-style-cdk-disable-comment.ts',
 } as const;
 
 beforeEach(() => {
@@ -109,14 +109,14 @@ describe('rules', () => {
   });
 
   it('`awscdk/migrate-disable-comments` rule fires on old-style cdk disable comments', async () => {
-    const results = await testEslintConfig('awsCdk', FIXTURES.migrateDisableComments, {
+    const results = await testEslintConfig('awsCdk', FIXTURES.oldStyleCdkDisableComment, {
       searchFixturesRelativeToPath: import.meta.dirname,
       internalOptions: {preventCreationOfConfigForRulesWithTypeInformation: false},
     });
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.migrateDisableComments,
+      FIXTURES.oldStyleCdkDisableComment,
       'awscdk/migrate-disable-comments',
     );
 

@@ -1,5 +1,5 @@
 const FIXTURES = {
-  noUnnecessaryWaiting: 'unnecessary-waiting/test.cy.js',
+  cyWaitWithNumber: 'cy-wait-with-number/test.cy.js',
 } as const;
 
 beforeEach(() => {
@@ -100,13 +100,13 @@ describe('rules', async () => {
   it('`cypress/no-unnecessary-waiting` rule fires on a test with `cy.wait(number)`', async () => {
     const results = await testEslintConfig(
       'cypress',
-      FIXTURES.noUnnecessaryWaiting,
+      FIXTURES.cyWaitWithNumber,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.noUnnecessaryWaiting,
+      FIXTURES.cyWaitWithNumber,
       'cypress/no-unnecessary-waiting',
     );
 

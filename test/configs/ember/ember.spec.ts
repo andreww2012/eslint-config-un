@@ -1,6 +1,6 @@
 const FIXTURES = {
-  thisGet: 'this-get/test.js',
-  letReferenceInTemplate: 'let-reference-in-template/test.gjs',
+  thisGetCall: 'this-get-call/test.js',
+  templateReferencesLetVariable: 'template-references-let-variable/test.gjs',
 } as const;
 
 beforeEach(() => {
@@ -104,11 +104,11 @@ describe('rules', async () => {
   });
 
   it('`ember/no-get` rule fires on `this.get()` usage', async () => {
-    const results = await testEslintConfig('ember', FIXTURES.thisGet, {
+    const results = await testEslintConfig('ember', FIXTURES.thisGetCall, {
       searchFixturesRelativeToPath: import.meta.dirname,
     });
 
-    const error = findLintMessageFromLintResults(results, FIXTURES.thisGet, 'ember/no-get');
+    const error = findLintMessageFromLintResults(results, FIXTURES.thisGetCall, 'ember/no-get');
 
     expect(error?.message).toMatchInlineSnapshot(
       `"Use ES5 getters (\`this.property\`) instead of Ember's \`get\` function"`,
@@ -116,13 +116,13 @@ describe('rules', async () => {
   });
 
   it('`ember/template-no-let-reference` rule fires on a `let` variable referenced inside `{{}}` in a `.gjs` file', async () => {
-    const results = await testEslintConfig('ember', FIXTURES.letReferenceInTemplate, {
+    const results = await testEslintConfig('ember', FIXTURES.templateReferencesLetVariable, {
       searchFixturesRelativeToPath: import.meta.dirname,
     });
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.letReferenceInTemplate,
+      FIXTURES.templateReferencesLetVariable,
       'ember/template-no-let-reference',
     );
 

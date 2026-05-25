@@ -2,7 +2,7 @@ const FIXTURES = {
   // `ember/no-pause-test` uses emberUtils.isTestFile() which only matches
   // Ember-style names ending in -test.js or _test.js; the file must also match
   // the ember/tests config files pattern (e.g. **/__tests__/**/*.js)
-  pauseTest: 'pause-test/__tests__/pause-test.js',
+  awaitPauseTestCall: 'await-pause-test/__tests__/calls-pause-test.js',
 } as const;
 
 describe('ember: sub config `testFiles`', () => {
@@ -64,13 +64,13 @@ describe('ember: sub config `testFiles`', () => {
     });
 
     it('`ember/no-pause-test` rule fires on `pauseTest()` usage', async () => {
-      const results = await testEslintConfig('ember', FIXTURES.pauseTest, {
+      const results = await testEslintConfig('ember', FIXTURES.awaitPauseTestCall, {
         searchFixturesRelativeToPath: import.meta.dirname,
       });
 
       const error = findLintMessageFromLintResults(
         results,
-        FIXTURES.pauseTest,
+        FIXTURES.awaitPauseTestCall,
         'ember/no-pause-test',
       );
 

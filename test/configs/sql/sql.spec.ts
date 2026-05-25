@@ -1,5 +1,5 @@
 const FIXTURES = {
-  unsafeQuery: 'no-unsafe-query/test.js',
+  sqlTemplateWithInterpolation: 'sql-template-with-interpolation/test.js',
 } as const;
 
 describe('basic tests', async () => {
@@ -72,11 +72,15 @@ describe('rules', async () => {
   });
 
   it('`sql/no-unsafe-query` rule fires on a template literal with an expression', async () => {
-    const results = await testEslintConfig('sql', FIXTURES.unsafeQuery, import.meta.dirname);
+    const results = await testEslintConfig(
+      'sql',
+      FIXTURES.sqlTemplateWithInterpolation,
+      import.meta.dirname,
+    );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.unsafeQuery,
+      FIXTURES.sqlTemplateWithInterpolation,
       'sql/no-unsafe-query',
     );
 

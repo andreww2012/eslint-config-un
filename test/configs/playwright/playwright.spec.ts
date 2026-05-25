@@ -1,6 +1,6 @@
 const FIXTURES = {
-  noFocusedTest: 'no-focused-test/test.spec.ts',
-  expectExpect: 'expect-expect/test.spec.ts',
+  testWithOnlyModifier: 'only-modifier/test.spec.ts',
+  testWithoutExpectCall: 'test-without-expect-call/test.spec.ts',
 } as const;
 
 beforeEach(() => {
@@ -109,13 +109,13 @@ describe('rules', async () => {
   it('`playwright/no-focused-test` rule fires on a test file that uses `test.only`', async () => {
     const results = await testEslintConfig(
       'playwright',
-      FIXTURES.noFocusedTest,
+      FIXTURES.testWithOnlyModifier,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.noFocusedTest,
+      FIXTURES.testWithOnlyModifier,
       'playwright/no-focused-test',
     );
 
@@ -208,13 +208,13 @@ describe('options', () => {
     it('`playwright/expect-expect` rule fires when test only calls a custom assert function not listed in `customAssertFunctionNames`', async () => {
       const results = await testEslintConfig(
         'playwright',
-        FIXTURES.expectExpect,
+        FIXTURES.testWithoutExpectCall,
         import.meta.dirname,
       );
 
       const error = findLintMessageFromLintResults(
         results,
-        FIXTURES.expectExpect,
+        FIXTURES.testWithoutExpectCall,
         'playwright/expect-expect',
       );
 
@@ -224,13 +224,13 @@ describe('options', () => {
     it('`playwright/expect-expect` rule does not fire when test only calls a custom assert function listed in `customAssertFunctionNames`', async () => {
       const results = await testEslintConfig(
         {playwright: {customAssertFunctionNames: ['myCustomAssert']}},
-        FIXTURES.expectExpect,
+        FIXTURES.testWithoutExpectCall,
         import.meta.dirname,
       );
 
       const error = findLintMessageFromLintResults(
         results,
-        FIXTURES.expectExpect,
+        FIXTURES.testWithoutExpectCall,
         'playwright/expect-expect',
       );
 
