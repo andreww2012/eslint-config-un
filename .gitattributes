@@ -1,0 +1,2 @@
+# Force LF so Windows CI doesn't break fixture-based snapshot tests via autocrlf
+* text=auto eol=lf
