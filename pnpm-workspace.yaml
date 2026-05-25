@@ -28,7 +28,7 @@ allowBuilds:
   multiline-ts@4.0.1: false
   nx@22.7.2: false
   puppeteer@25.0.4: true
-  unrs-resolver@1.11.1: true
+  unrs-resolver@1.12.2: true
 
 dedupePeers: true
 strictPeerDependencies: false
