@@ -41,6 +41,7 @@ overrides:
 
 patchedDependencies:
   '@arethetypeswrong/core': patches/@arethetypeswrong__core.patch
+  '@typescript-eslint/utils@8.39.0': patches/@typescript-eslint__utils@8.39.0.patch
   eslint-plugin-node-dependencies: patches/eslint-plugin-node-dependencies.patch
   eslint-plugin-prettier: patches/eslint-plugin-prettier.patch
   eslint-plugin-remeda@2.1.0: patches/eslint-plugin-remeda@2.1.0.patch

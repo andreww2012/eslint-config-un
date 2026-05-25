@@ -212,6 +212,7 @@ overrides:
 
 patchedDependencies:
   '@arethetypeswrong/core': 87be43edb37128ac8ff9ccb11fa6266f9bbd680216e82a41d1a7388242c9e1bf
+  '@typescript-eslint/utils@8.39.0': 8558861ed747f80c83079bf76d1d469e7f0cd4be9810fd88dcfee3597dce21e8
   eslint-plugin-node-dependencies: 0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4
   eslint-plugin-prettier: ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495
   eslint-plugin-remeda@2.1.0: b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08
@@ -16202,7 +16203,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@typescript-eslint/utils@8.39.0(eslint@9.39.2)(typescript@6.0.3)':
+  '@typescript-eslint/utils@8.39.0(patch_hash=8558861ed747f80c83079bf76d1d469e7f0cd4be9810fd88dcfee3597dce21e8)(eslint@9.39.2)(typescript@6.0.3)':
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       '@typescript-eslint/scope-manager': 8.39.0
@@ -18174,7 +18175,7 @@ snapshots:
 
   eslint-plugin-arrow-return-style-x@1.2.6(eslint@9.39.2)(prettier@3.8.3)(typescript@6.0.3):
     dependencies:
-      '@typescript-eslint/utils': 8.39.0(eslint@9.39.2)(typescript@6.0.3)
+      '@typescript-eslint/utils': 8.39.0(patch_hash=8558861ed747f80c83079bf76d1d469e7f0cd4be9810fd88dcfee3597dce21e8)(eslint@9.39.2)(typescript@6.0.3)
       detect-indent: 7.0.1
       eslint: 9.39.2(jiti@2.7.0)
       synckit: 0.11.11
