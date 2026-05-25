@@ -66,7 +66,7 @@ export default eslintConfig({
           options: {
             ignoreUrls: [
               // Removed rules still linked from the .changeset files
-              String.raw`/https:\/\/www\.eslint-react\.xyz\/docs\/rules\/(?:no-unnecessary-use-ref|dom-prefer-namespace-import|component-hook-factories|naming-convention-use-state|no-unnecessary-use-callback|no-unnecessary-use-memo|prefer-use-state-lazy-initialization)\\/?/`,
+              String.raw`/https:\/\/www\.eslint-react\.xyz\/docs\/rules\/(?:no-unnecessary-use-ref|dom-prefer-namespace-import|component-hook-factories|naming-convention-use-state|no-unnecessary-use-callback|no-unnecessary-use-memo|prefer-use-state-lazy-initialization)\/?/`,
               // Site just responds with 404
               String.raw`/https:\/\/eslint-plugin-github-action.ntnyq.com\/rules\/[\w-]+/`, // cspell:disable-line
             ],
