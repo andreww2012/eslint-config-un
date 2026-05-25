@@ -12,7 +12,9 @@ minimumReleaseAgeExclude:
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
-# trustPolicyExclude: []
+trustPolicyExclude:
+  # []
+  - tinyexec@1.2.2 # Uses staged publishing instead of trusted publishing
 
 auditConfig:
   ignoreGhsas:
@@ -47,7 +49,7 @@ patchedDependencies:
   eslint-plugin-remeda@2.1.0: patches/eslint-plugin-remeda@2.1.0.patch
   import-meta-resolve: patches/import-meta-resolve.patch
   is-in-editor: patches/is-in-editor.patch
-  npm-check-updates@22.2.0: patches/npm-check-updates@22.2.0.patch
+  npm-check-updates: patches/npm-check-updates.patch
 
 peerDependencyRules:
   allowedVersions:
