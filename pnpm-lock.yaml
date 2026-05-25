@@ -472,8 +472,8 @@ importers:
         specifier: 10.0.0
         version: 10.0.0(eslint@9.39.2)
       '@darraghor/eslint-plugin-nestjs-typed':
-        specifier: 7.1.33
-        version: 7.1.33(@typescript-eslint/parser@8.59.4)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2)(typescript@6.0.3)
+        specifier: 7.2.1
+        version: 7.2.1(@typescript-eslint/parser@8.59.4)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2)(typescript@6.0.3)
       '@docusaurus/eslint-plugin':
         specifier: 3.10.1
         version: 3.10.1(eslint@9.39.2)(typescript@6.0.3)
@@ -2093,8 +2093,8 @@ packages:
     resolution: {integrity: sha512-q+0pHQ8DbqjemyaOn/mTtBRbCuKDqhnsVbZ6J9zkTsxPgMpccjy0s5oLXwomfrrxMRBH+UcbERwtUmE+SbnoIQ==}
     engines: {node: '>=22.18.0'}
 
-  '@darraghor/eslint-plugin-nestjs-typed@7.1.33':
-    resolution: {integrity: sha512-QMF7CAzCmG6sy4fJakBZRS93XZy2u5h+0BmCIe6RJ384x/rxDB+LEDB/HY7SuidK9I0pOZkEmdeua4tG/7aBsA==}
+  '@darraghor/eslint-plugin-nestjs-typed@7.2.1':
+    resolution: {integrity: sha512-Nib4KalNiXLHuCPrl2RAEbM1uqJFSLKTeizHU9MkqLzYC+9OXuJEUutWrZHa+3Tn3rAfGtbH3n+Z6iyHwPjKyA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       '@typescript-eslint/parser': ^7.0.0 || ^8.0.0
@@ -13250,7 +13250,7 @@ snapshots:
 
   '@cspell/url@10.0.0': {}
 
-  '@darraghor/eslint-plugin-nestjs-typed@7.1.33(@typescript-eslint/parser@8.59.4)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2)(typescript@6.0.3)':
+  '@darraghor/eslint-plugin-nestjs-typed@7.2.1(@typescript-eslint/parser@8.59.4)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.4)(eslint@9.39.2)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/parser': 8.59.4(eslint@9.39.2)(typescript@6.0.3)
       '@typescript-eslint/scope-manager': 8.59.4
