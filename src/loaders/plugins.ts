@@ -144,6 +144,15 @@ export const pluginsLoaders = {
   antfu: genModuleLoader('antfu', 'eslint-plugin-antfu', () =>
     interopDefault(import('eslint-plugin-antfu')),
   ),
+  'arrow-return-style': genModuleLoader(
+    'arrow-return-style',
+    'eslint-plugin-arrow-return-style-x',
+    () =>
+      interopDefault(
+        import('eslint-plugin-arrow-return-style-x'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   astro: genModuleLoader('astro', 'eslint-plugin-astro', () =>
     interopDefault(import('eslint-plugin-astro')),
   ),

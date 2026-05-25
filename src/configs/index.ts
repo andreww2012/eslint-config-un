@@ -1,6 +1,7 @@
 import type {ExtraPluginsType} from '../config-un/shared';
 import type {AngularEslintConfigOptions} from './angular';
 import type {AntfuEslintConfigOptions} from './antfu';
+import type {ArrowReturnStyleEslintConfigOptions} from './arrow-return-style';
 import type {AstroEslintConfigOptions} from './astro';
 import type {AvaEslintConfigOptions} from './ava';
 import type {AwsCdkEslintConfigOptions} from './aws-cdk';
@@ -171,6 +172,17 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default false
    */
   antfu: AntfuEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * Enforces arrow function return style.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-arrow-return-style-x`](https://npmx.dev/eslint-plugin-arrow-return-style-x)
+   * ([docs](https://github.com/christopher-buss/eslint-plugin-arrow-return-style-x/blob/HEAD/README.md))
+   * @default true
+   */
+  arrowReturnStyle: ArrowReturnStyleEslintConfigOptions<ExtraPlugins>;
 
   /**
    * [Astro](https://astro.build) specific rules.

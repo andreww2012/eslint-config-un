@@ -84,6 +84,11 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
         ruleDocsUrl: (ruleName) =>
           `https://github.com/antfu/eslint-plugin-antfu/blob/HEAD/src/rules/${ruleName}.md`,
       },
+      'arrow-return-style': {
+        configs: ['arrowReturnStyle'],
+        ruleDocsUrl: (ruleName) =>
+          `https://github.com/christopher-buss/eslint-plugin-arrow-return-style-x/blob/HEAD/src/rules/${ruleName}/documentation.md`,
+      },
       astro: {
         configs: ['astro'],
         ruleDocsUrl: (ruleName) =>

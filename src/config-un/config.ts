@@ -312,6 +312,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   Object.assign(context.configsMeta, {
     angular: {enabled: isAngularEnabled},
     antfu: {enabled: getIsConfigEnabled('antfu', false)},
+    arrowReturnStyle: {enabled: getIsConfigEnabled('arrowReturnStyle')},
     astro: {enabled: getIsConfigEnabled('astro', 'astro')},
     ava: {enabled: getIsConfigEnabled('ava', 'ava')},
     awsCdk: {enabled: getIsConfigEnabled('awsCdk', 'aws-cdk-lib')},
@@ -731,6 +732,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     loadUnConfig('lockfile', () => import('../configs/lockfile')),
     loadUnConfig('tanstackRouter', () => import('../configs/tanstack-router')),
     loadUnConfig('tanstackStart', () => import('../configs/tanstack-start')),
+    loadUnConfig('arrowReturnStyle', () => import('../configs/arrow-return-style')),
 
     /* Disabled by default */
     loadUnConfig('security', () => import('../configs/security')),

@@ -134,6 +134,9 @@ const ALL_STYLISTIC_RULES = {
     curly: true,
     'if-newline': true,
   },
+  'arrow-return-style': {
+    'arrow-return-style': true,
+  },
   astro: {
     'prefer-class-list-directive': true,
     'prefer-object-class-list': true,

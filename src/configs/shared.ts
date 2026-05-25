@@ -303,6 +303,10 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
 
   // no-relative-import-paths — relative imports are common in code snippets
   'no-relative-import-paths/no-relative-import-paths', // [imports]
+
+  // arrow-return-style — anonymous default-exported arrows are common in docs examples;
+  // the fix derives the function name from the filename, which is meaningless for markdown files
+  'arrow-return-style/no-export-default-arrow',
 ] satisfies UnAllRuleNames[];
 
 export type RulesDisabledInEmbeddedCodeBlocksByDefault =
