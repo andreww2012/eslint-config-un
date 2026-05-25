@@ -2,7 +2,7 @@
 'eslint-config-un': minor
 ---
 
-react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v4.2.3 to v5.8.3](https://github.com/Rel1cx/eslint-react/compare/v4.2.3...v5.8.3):
+react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v4.2.3 to v5.8.5](https://github.com/Rel1cx/eslint-react/compare/v4.2.3...v5.8.5):
 
 - 🟢 enabled [`@eslint-react/globals`](https://eslint-react.xyz/docs/rules/globals) rule
 - 🟢 enabled [`@eslint-react/static-components`](https://eslint-react.xyz/docs/rules/static-components) rule
