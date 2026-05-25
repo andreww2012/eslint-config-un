@@ -335,6 +335,8 @@ export default ((context, optionsRaw) => {
     ) /** @since 0.1.0 */ // 🟢
     .addRule('no-any-schema', WARNING) /** @since 0.1.0 */ // 🟢
     .addRule('no-empty-custom-schema', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('no-throw-in-refine', ERROR) /** @since 1.2.0 */ // 🟢
+    .addRule('no-transform-in-record-key', ERROR) /** @since 1.2.0 */
     .addRule('no-unknown-schema', OFF) /** @since 0.1.0 */
     .addRule('prefer-enum-over-literal-union', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule('prefer-meta', ERROR) /** @since 0.1.0 */ // 🟢

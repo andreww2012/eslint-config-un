@@ -628,16 +628,19 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
       },
       zod: {
         configs: ['zod'],
+        gitTag: (version) => `eslint-plugin-zod@${version}`,
         ruleDocsUrl: (ruleName) =>
           `https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/${ruleName}.md`,
       },
       'zod-core': {
         configs: ['zod'],
+        gitTag: (version) => `eslint-plugin-zod-core@${version}`,
         ruleDocsUrl: (ruleName) =>
           `https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-core/docs/rules/${ruleName}.md`,
       },
       'zod-mini': {
         configs: ['zod'],
+        gitTag: (version) => `eslint-plugin-zod-mini@${version}`,
         ruleDocsUrl: (ruleName) =>
           `https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/${ruleName}.md`,
       },
