@@ -107,7 +107,7 @@ After every `addRule` statement, we annotate the rule with:
 
 - `@since` custom JSDoc tag.
   It signifies the first version of the plugin in which this rule first appeared.
-  You can find this out by inspecting the results of `nr rules-finder <plugin-name>` script output.
+  You can find this out by inspecting the results of `nr rules-finder <full plugin package name>` script output.
 - Emojis like `🟢`, `🟡`, etc.
   They signify if the rule is included in one of the main rule pre-sets, usually named "recommended", "strict", "stylistic", etc.
   You can find more information on presets in the plugin docs and/or by directly inspecting the plugin object, specifically `configs` property.
@@ -122,7 +122,7 @@ After every `addRule` statement, we annotate the rule with:
 
   This is not strict and may vary from plugin to plugin.
   See the examples at `src/configs/package-json.ts`, `src/configs/jsdoc.ts`, `src/configs/e18e.ts`, etc, if needed.
-  IMPORTANT: `🟢`/`🟡` and `🔴` are mutually exclusive — pick one system based on which is the minority.
+  IMPORTANT: `🟢`/`🟡` and `🔴` are **mutually exclusive** — pick one system based on which is the minority.
   Every emoji used in annotations must appear in the legend section.
 
 #### Step 4.3: Stylistic rules
@@ -162,6 +162,8 @@ Do NOT add a config logo if it doesn't exists.
 Document plugin metadata in `PACKAGES_META` in `scripts/shared/packages-meta.ts`.
 Don't blindly copy URL patterns from other entries - you need to actually figure them out.
 
+Update `Default renames` section if the chosen plugin prefix differs from what the plugin docs suggests.
+
 ### Step 7: Testing
 
 Ensure there are no TypeScript/ESLint/prettier/knip/... errors by running `nr test:quick`.
@@ -174,9 +176,17 @@ IMPORTANT: code without `enableConfigTesterForPlugin` options should be skipped 
 
 ### Step 8: Changelog
 
-Create a new changelog entry by running `nr ch`, selecting `minor` and confirming your choice.
+Create a new changelog entry in `.changeset` directory.
+It should be named following `human-id` naming convention: <https://raw.githubusercontent.com/RienNeVaPlus/human-id/3cd6519a9b0acf35ce8d9ce0d0e7231708381598/index.ts>
+Add this to the start of the file:
 
-Use the following template for the description:
+```md
+---
+'eslint-config-un': minor
+---
+```
+
+Then use the following template for the description (put a blank line after the frontmatter and IGNORE ALL THE COMMENTS in the following snippet for the actual description):
 
 ```md
 <!-- eslint-disable-next-line markdown-links/no-missing-path -->
