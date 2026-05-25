@@ -4,7 +4,8 @@
   "description": "A universal-ish ESLint config aiming to be reasonably strict and easily configurable.",
   "keywords": [
     "eslint",
-    "eslint-config"
+    "eslint-config",
+    "eslintconfig"
   ],
   "homepage": "https://github.com/andreww2012/eslint-config-un",
   "bugs": {
