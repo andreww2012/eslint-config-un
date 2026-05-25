@@ -230,6 +230,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'rxjs',
   'nx',
   'zod',
+  'zod-openapi',
   'unocss',
   '@formatjs/icu-messageformat-parser',
   '@docusaurus/core',
@@ -499,6 +500,15 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
   vitest: {
     rules: {
       'unbound-method': true,
+    },
+  },
+  'zod-openapi': {
+    rules: {
+      'prefer-meta-last': true,
+      'prefer-zod-default': true,
+      'require-comment': true,
+      'require-example': true,
+      'require-meta': true,
     },
   },
 } satisfies {

@@ -307,6 +307,14 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   // arrow-return-style — anonymous default-exported arrows are common in docs examples;
   // the fix derives the function name from the filename, which is meaningless for markdown files
   'arrow-return-style/no-export-default-arrow',
+
+  // zod-openapi — rules assume all Zod schemas in the file are zod-openapi schemas,
+  // which is rarely true for isolated snippets in docs
+  'zod-openapi/prefer-meta-last', // [too-strict]
+  'zod-openapi/prefer-zod-default', // [too-strict]
+  'zod-openapi/require-comment', // [too-strict]
+  'zod-openapi/require-example', // [too-strict]
+  'zod-openapi/require-meta', // [too-strict]
 ] satisfies UnAllRuleNames[];
 
 export type RulesDisabledInEmbeddedCodeBlocksByDefault =

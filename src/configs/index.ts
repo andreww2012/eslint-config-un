@@ -112,6 +112,7 @@ import type {WebComponentsEslintConfigOptions} from './web-components';
 import type {YamlEslintConfigOptions} from './yaml';
 import type {YouDontNeedLodashUnderscoreEslintConfigOptions} from './you-dont-need-lodash-underscore';
 import type {ZodEslintConfigOptions} from './zod';
+import type {ZodOpenapiEslintConfigOptions} from './zod-openapi';
 
 export {eslintToUnRuleSeverity, getRuleUnSeverityAndOptionsFromEntry} from '../eslint/eslint-utils';
 export type {
@@ -1483,4 +1484,18 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true <=> [`zod`](https://npmx.dev/zod) package is installed and its version is >=4
    */
   zod: ZodEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * An ESLint plugin for [`zod-openapi`](https://github.com/samchungy/zod-openapi).
+   *
+   * Note that the plugin assumes that all Zod schemas in the matched files are
+   * meant to be used with `zod-openapi`, so prefer scoping this config to your
+   * API schema files via `files`/`ignores`.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-zod-openapi`](https://npmx.dev/eslint-plugin-zod-openapi) ([docs](https://github.com/samchungy/eslint-plugin-zod-openapi))
+   * @default true <=> [`zod-openapi`](https://npmx.dev/zod-openapi) package is installed
+   */
+  zodOpenapi: ZodOpenapiEslintConfigOptions<ExtraPlugins>;
 }

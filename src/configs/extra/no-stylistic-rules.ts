@@ -1000,6 +1000,9 @@ const ALL_STYLISTIC_RULES = {
     'consistent-schema-output-type-style': true,
     'schema-error-property-style': true,
   },
+  'zod-openapi': {
+    // None
+  },
 } as const satisfies {
   [Plugin in PluginPrefix]: Partial<Record<GetRuleNamesInPlugin<Plugin>, true>>;
 };

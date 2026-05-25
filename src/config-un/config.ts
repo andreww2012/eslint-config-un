@@ -458,6 +458,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       ]),
     },
     zod: {enabled: getIsConfigEnabled('zod', 'zod|^4')},
+    zodOpenapi: {enabled: getIsConfigEnabled('zodOpenapi', 'zod-openapi')},
   } satisfies UnConfigContext['configsMeta']);
 
   // TODO try to move to `config-utils`
@@ -717,6 +718,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     !shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs && markdownPreferencesConfigResult,
     loadUnConfig('markdownLinks', () => import('../configs/markdown-links')),
     loadUnConfig('zod', () => import('../configs/zod')),
+    loadUnConfig('zodOpenapi', () => import('../configs/zod-openapi')),
     loadUnConfig('docusaurus', () => import('../configs/docusaurus')),
     loadUnConfig('drizzle', () => import('../configs/drizzle')),
     loadUnConfig('mobx', () => import('../configs/mobx')),

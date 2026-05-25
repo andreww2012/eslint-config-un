@@ -758,6 +758,15 @@ export const pluginsLoaders = {
         import('eslint-plugin-zod-mini'),
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
+  'zod-openapi': genModuleLoader(
+    'zod-openapi',
+    'eslint-plugin-zod-openapi',
+    () =>
+      interopDefault(
+        import('eslint-plugin-zod-openapi'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
 } satisfies Record<string, ModuleLoader<EslintPlugin | null, string, boolean>>;
 
 export type LoadablePluginPrefix = keyof typeof pluginsLoaders;
