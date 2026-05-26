@@ -697,8 +697,8 @@ importers:
         specifier: 2.0.1
         version: 2.0.1(eslint@9.39.2)
       eslint-plugin-formatjs:
-        specifier: 6.4.10
-        version: 6.4.10(eslint@9.39.2)
+        specifier: 6.4.12
+        version: 6.4.12(eslint@9.39.2)
       eslint-plugin-functional:
         specifier: 9.0.5
         version: 9.0.5(eslint@9.39.2)(typescript@6.0.3)
@@ -2558,14 +2558,14 @@ packages:
   '@fastify/busboy@3.2.0':
     resolution: {integrity: sha512-m9FVDXU3GT2ITSe0UaMA5rU3QkfC/UXtCU8y0gSN/GugTqtVldOBWIB5V6V3sbmenVZUIpU6f+mPEO2+m5iTaA==}
 
-  '@formatjs/icu-messageformat-parser@3.5.9':
-    resolution: {integrity: sha512-PZm6O9JI/gUPtQV9r2eaMuLb4yWqV2vz+ot03ORHWTKO343LSpZi0TqeXLB2ZZGDXLCw2SbfgsQ0GxoxXMl79g==}
+  '@formatjs/icu-messageformat-parser@3.5.10':
+    resolution: {integrity: sha512-XeJihYLy1lCe19xfK1KWKG/betBOK2rB0luL8lSkjfvJj0zP+LTJvkC+RKd0jsFI8mWxN71LrarHSrEXE8xxOQ==}
 
   '@formatjs/icu-skeleton-parser@2.1.9':
     resolution: {integrity: sha512-rsxswgHMfU1zUgB2byc08fesf83wLGjFnzLCEtuf00mx2doiqc6pYrf67raI37XqdRcGUviQepk2UKGqpng74Q==}
 
-  '@formatjs/ts-transformer@4.4.9':
-    resolution: {integrity: sha512-AOiNZHLc9cI71AJuRo1FrHIHyISNDXBov7L+aPThKyp7d545s8ZcNhLpVC3Neu3IZZBR2xWXzjgd/QoUX8O6jw==}
+  '@formatjs/ts-transformer@4.4.10':
+    resolution: {integrity: sha512-q8DoDvuyKhL2+vpYJnNFkJqlQBAwp2O4OmD/GTd91oslRs1jYRVI8qETd6NvUs2N/WrZ6FDi3spOySfSBLX/sA==}
     engines: {node: '>= 20.12.0'}
     peerDependencies:
       ts-jest: ^29
@@ -7112,8 +7112,8 @@ packages:
     peerDependencies:
       eslint: ^8.40.0 || ^9.0.0 || ^10.0.0
 
-  eslint-plugin-formatjs@6.4.10:
-    resolution: {integrity: sha512-ABLgeLNu2E0Vrx3bGmZVUizW2q8YRaPOB5iv33Rz7KOxxybVSc11OdPLJKHDvn6IKAPRyYcZ8fWROuayTcSiEg==}
+  eslint-plugin-formatjs@6.4.12:
+    resolution: {integrity: sha512-ZZ8fQ4zhjUubnmJ3jtc6AetR1GU22nPgldgoUOaOBJSsEcue8ivT9eEqkRNvxi6FhIzTq7t4o3xRiMPoEkLLOA==}
     peerDependencies:
       eslint: 9 || 10
 
@@ -13887,15 +13887,15 @@ snapshots:
 
   '@fastify/busboy@3.2.0': {}
 
-  '@formatjs/icu-messageformat-parser@3.5.9':
+  '@formatjs/icu-messageformat-parser@3.5.10':
     dependencies:
       '@formatjs/icu-skeleton-parser': 2.1.9
 
   '@formatjs/icu-skeleton-parser@2.1.9': {}
 
-  '@formatjs/ts-transformer@4.4.9':
+  '@formatjs/ts-transformer@4.4.10':
     dependencies:
-      '@formatjs/icu-messageformat-parser': 3.5.9
+      '@formatjs/icu-messageformat-parser': 3.5.10
       '@types/node': 24.12.4
       json-stable-stringify: 1.3.0
       typescript: 6.0.3
@@ -18639,10 +18639,10 @@ snapshots:
       prettier: 3.8.3
       synckit: 0.11.12
 
-  eslint-plugin-formatjs@6.4.10(eslint@9.39.2):
+  eslint-plugin-formatjs@6.4.12(eslint@9.39.2):
     dependencies:
-      '@formatjs/icu-messageformat-parser': 3.5.9
-      '@formatjs/ts-transformer': 4.4.9
+      '@formatjs/icu-messageformat-parser': 3.5.10
+      '@formatjs/ts-transformer': 4.4.10
       '@types/picomatch': 4.0.3
       '@unicode/unicode-17.0.0': 1.6.16
       eslint: 9.39.2(jiti@2.7.0)
