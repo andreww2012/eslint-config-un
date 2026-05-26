@@ -895,8 +895,8 @@ importers:
         specifier: 20.0.1
         version: 20.0.1(@types/node@20.19.1)(magicast@0.5.3)
       remeda:
-        specifier: 2.34.1
-        version: 2.34.1
+        specifier: 2.35.0
+        version: 2.35.0
       shiki:
         specifier: 4.1.0
         version: 4.1.0
@@ -10461,6 +10461,9 @@ packages:
 
   remeda@2.34.1:
     resolution: {integrity: sha512-k5iIF3lHm2NQ+2bNGDvZTD5jZl/JZkCS6AQOfGjYBd7V4rbb3K5whHvab0/O7CqPI43vYzbnIVCQXQJqmOyI6w==}
+
+  remeda@2.35.0:
+    resolution: {integrity: sha512-77gMzbGcFDFhhFPzhD3wrtXNsF1bYkJ4NSX8u3whKq5N3eNwj4cIeifbJXIjyTbulGJhJtqZW/gw10oX85aKLg==}
 
   remove-trailing-separator@1.1.0:
     resolution: {integrity: sha512-/hS+Y0u3aOfIETiaiirUFwDBDzmXPvO+jAfKTitUngIPzdKc6Z0LoFjM/CK5PL4C+eKwHohlHAb6H0VFfmmUsw==}
@@ -22936,6 +22939,8 @@ snapshots:
       unified: 11.0.5
 
   remeda@2.34.1: {}
+
+  remeda@2.35.0: {}
 
   remove-trailing-separator@1.1.0: {}
 
