@@ -1,5 +1,7 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+<!-- cspell:disable - changesets are already checked file-by-file and commit hashes (like cafcbca) may cause false positives -->
+
 ## 1.0.0-beta.12
 
 ### Minor Changes
@@ -1133,6 +1135,8 @@
 ### Patch Changes
 
 - 12a4466: Setup changesets & GH action to publish new versions
+
+<!-- cspell:enable -->
 
 ## 1.0.0
 
