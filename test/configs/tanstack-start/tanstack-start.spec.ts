@@ -112,23 +112,28 @@ describe('rules', () => {
     });
   });
 
-  it('`@tanstack/start/no-async-client-component` rule fires on an async component in a client file', async () => {
-    const results = await testEslintConfig(
-      {tanstackStart: true, ts: true},
-      FIXTURES.useClientAsyncComponent,
-      import.meta.dirname,
-    );
+  // Upstream `@tanstack/eslint-plugin-start` mismatches Node `path.resolve` output
+  // against TypeScript's normalized `sourceFile.fileName`, so the rule never fires on Windows.
+  it.skipIf(process.platform === 'win32')(
+    '`@tanstack/start/no-async-client-component` rule fires on an async component in a client file',
+    async () => {
+      const results = await testEslintConfig(
+        {tanstackStart: true, ts: true},
+        FIXTURES.useClientAsyncComponent,
+        import.meta.dirname,
+      );
 
-    const error = findLintMessageFromLintResults(
-      results,
-      FIXTURES.useClientAsyncComponent,
-      '@tanstack/start/no-async-client-component',
-    );
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.useClientAsyncComponent,
+        '@tanstack/start/no-async-client-component',
+      );
 
-    expect(error?.message).toMatchInlineSnapshot(
-      '"Async component "AsyncClientComponent" cannot be used in client context. Async components are only valid inside server components. Either remove "async" or ensure this component is only rendered within server components. File has "use client" directive."',
-    );
-  });
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Async component "AsyncClientComponent" cannot be used in client context. Async components are only valid inside server components. Either remove "async" or ensure this component is only rendered within server components. File has "use client" directive."',
+      );
+    },
+  );
 });
 
 describe('un options', () => {
