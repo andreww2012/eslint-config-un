@@ -526,8 +526,8 @@ importers:
         specifier: 2.61.1
         version: 2.61.1(@sveltejs/vite-plugin-svelte@7.1.2)(svelte@5.55.9)(typescript@6.0.3)(vite@8.0.14)
       '@tanstack/eslint-plugin-query':
-        specifier: 5.100.11
-        version: 5.100.11(eslint@9.39.2)(typescript@6.0.3)
+        specifier: 5.100.14
+        version: 5.100.14(eslint@9.39.2)(typescript@6.0.3)
       '@tanstack/eslint-plugin-router':
         specifier: 1.162.0
         version: 1.162.0(eslint@9.39.2)(typescript@6.0.3)
@@ -4547,8 +4547,8 @@ packages:
       svelte: ^5.46.4
       vite: ^8.0.0-beta.7 || ^8.0.0
 
-  '@tanstack/eslint-plugin-query@5.100.11':
-    resolution: {integrity: sha512-4JfaSf6/ql9AFAsRWaWulz40gS86bDgSr15pWCI3o+oX3sdZ0ZR8AOeNrCEqyIrV6wFxnCfhFi1kWjOlZ+66Ew==}
+  '@tanstack/eslint-plugin-query@5.100.14':
+    resolution: {integrity: sha512-NbpiBCmeHTRuVHeV5+U+1bzmxyTW5Dzp2sCeE6Hx+ZJTJWFK9dsm8VZmRc7LQP9/ZORsF620PvgUk67AwiBo4A==}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: ^5.4.0 || ^6.0.0
@@ -15723,9 +15723,9 @@ snapshots:
       vite: 8.0.14(@types/node@20.19.1)(esbuild@0.27.7)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)
       vitefu: 1.1.3(vite@8.0.14)
 
-  '@tanstack/eslint-plugin-query@5.100.11(eslint@9.39.2)(typescript@6.0.3)':
+  '@tanstack/eslint-plugin-query@5.100.14(eslint@9.39.2)(typescript@6.0.3)':
     dependencies:
-      '@typescript-eslint/utils': 8.59.4(eslint@9.39.2)(typescript@6.0.3)
+      '@typescript-eslint/utils': 8.60.0(eslint@9.39.2)(typescript@6.0.3)
       eslint: 9.39.2(jiti@2.7.0)
     optionalDependencies:
       typescript: 6.0.3
