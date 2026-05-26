@@ -3,7 +3,6 @@ packages:
 
 nodeLinker: hoisted
 packageImportMethod: clone-or-copy
-shamefullyHoist: true
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
