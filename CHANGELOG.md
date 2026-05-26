@@ -1,5 +1,113 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.12
+
+### Minor Changes
+
+- fbe72a7: react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v4.2.3 to v5.8.5](https://github.com/Rel1cx/eslint-react/compare/v4.2.3...v5.8.5):
+  - 🟢 enabled [`@eslint-react/globals`](https://eslint-react.xyz/docs/rules/globals) rule
+  - 🟢 enabled [`@eslint-react/static-components`](https://eslint-react.xyz/docs/rules/static-components) rule
+  - 🟢 enabled [`@eslint-react/web-api-no-leaked-fetch`](https://eslint-react.xyz/docs/rules/web-api-no-leaked-fetch) rule
+  - ❌ `@eslint-react/no-redundant-should-component-update` rule was removed
+  - ❌ `@eslint-react/no-unnecessary-use-callback` rule was removed
+  - ❌ `@eslint-react/no-unnecessary-use-memo` rule was removed
+  - ❌ `@eslint-react/prefer-destructuring-assignment` rule was removed
+  - ❌ `@eslint-react/prefer-namespace-import` rule was removed
+  - ❌ `react-debug/class-component` rule was removed
+  - ❌ `@eslint-react/dom-prefer-namespace-import` rule was removed
+
+- fee3efb: Now, unless `ts/setupTypeAware` config is enabled or a new `preventCreationOfConfigForRulesWithTypeInformation` option set to `true`, rules which are known to require type information will be moved to a separate config with the `typescript-eslint` parser
+- 2fafabd: zod: updated [`eslint-plugin-zod` from v3.12.0 to v4.5.2](https://github.com/marcalexiei/eslint-zod/compare/v3.12.0...eslint-plugin-zod%404.5.2):
+  - ❓ enabled the following rules if the resolved zod major version is >=4:
+    - [`no-native-enum`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/no-native-enum.md)
+    - [`no-promise-schema`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/no-promise-schema.md)
+    - [`no-schema-with-is-nullable`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/no-schema-with-is-nullable.md)
+    - [`no-schema-with-is-optional`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/no-schema-with-is-optional.md)
+    - [`prefer-loose-object`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/prefer-loose-object.md)
+    - [`prefer-strict-object`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/prefer-strict-object.md)
+    - [`prefer-top-level-string-formats`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/prefer-top-level-string-formats.md)
+  - ❌ `no-string-schema-with-uuid` rule was removed
+
+- f26548c: Added a new config `zodOpenapi` which uses [`eslint-plugin-zod-openapi`](https://npmx.dev/eslint-plugin-zod-openapi), ❓ enabled if `zod-openapi` package is installed
+- 6f14ff9: Added a new config `arrowReturnStyle` which uses [`eslint-plugin-arrow-return-style-x`](https://npmx.dev/eslint-plugin-arrow-return-style-x), ✅ enabled by default
+- e747b61: packageJson: updated [`eslint-plugin-package-json` from v0.91.2 to v1.1.0](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v0.91.2...v1.1.0):
+  - 🔴 not enabled the following rules:
+    - [`require-browser`](https://eslint-plugin-package-json.dev/rules/require-properties/require-browser)
+    - [`require-config`](https://eslint-plugin-package-json.dev/rules/require-properties/require-config)
+    - [`require-gypfile`](https://eslint-plugin-package-json.dev/rules/require-properties/require-gypfile)
+    - [`require-libc`](https://eslint-plugin-package-json.dev/rules/require-properties/require-libc)
+    - [`require-peerDependenciesMeta`](https://eslint-plugin-package-json.dev/rules/require-properties/require-peerDependenciesMeta)
+  - 🟢 enabled the following rules:
+    - [`valid-browser`](https://eslint-plugin-package-json.dev/rules/valid-properties/valid-browser)
+    - [`valid-gypfile`](https://eslint-plugin-package-json.dev/rules/valid-properties/valid-gypfile)
+    - [`valid-libc`](https://eslint-plugin-package-json.dev/rules/valid-properties/valid-libc)
+    - [`valid-peerDependenciesMeta`](https://eslint-plugin-package-json.dev/rules/valid-properties/valid-peerDependenciesMeta)
+    - [`valid-peerDependenciesMeta-relationship`](https://eslint-plugin-package-json.dev/rules/valid-peerDependenciesMeta-relationship)
+
+- f7ef1cc: un: added a new rule `un/no-empty-object-ternary-spread` that disallows spreading a conditional expression where one branch is an empty object literal, enabled by default:
+  - `...(condition ? {foo: 'bar'} : {})` -> `...(condition && {foo: 'bar})`
+  - `...(condition ? {} : {foo: 'bar'})` -> `...(!condition && {foo: 'bar})`
+
+- 7964d8b: e18e: updated [`@e18e/eslint-plugin` from v0.4.1 to v0.5.0](https://github.com/e18e/eslint-plugin/compare/0.4.1...0.5.0):
+  - 🔴 not enabled [`no-delete-property`](https://github.com/e18e/eslint-plugin/blob/main/src/rules/no-delete-property.ts) rule
+  - 🟢 enabled [`no-spread-in-reduce`](https://github.com/e18e/eslint-plugin/blob/main/src/rules/no-spread-in-reduce.ts) rule
+  - 🟢 enabled [`prefer-includes-over-regex-test`](https://github.com/e18e/eslint-plugin/blob/main/src/rules/prefer-includes-over-regex-test.ts) rule
+  - 🟢 enabled [`prefer-static-collator`](https://github.com/e18e/eslint-plugin/blob/main/src/rules/prefer-static-collator.ts) rule
+  - 🟢 enabled [`prefer-string-fromcharcode`](https://github.com/e18e/eslint-plugin/blob/main/src/rules/prefer-string-fromcharcode.ts) rule
+
+- 8290156: zod:
+  - [**BREAKING**] renamed `enforceNamespaceImport` option to `enforceConsistentImport` and start accepting any options [`consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-import.md) accepts
+  - Added a new sub-config `mini`, which uses [`eslint-plugin-zod-mini`](https://npmx.dev/eslint-plugin-zod-mini), ✅ enabled by default
+  - Added a new sub-config `core`, which uses [`eslint-plugin-zod-core`](https://npmx.dev/eslint-plugin-zod-core), ✅ enabled by default
+
+### Patch Changes
+
+- 0244a05: ts: updated [`typescript-eslint` from v8.59.2 to v8.60.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.59.2...v8.60.0)
+- 4dbbb73: ember: updated [`ember-eslint-parser` from v0.11.3 to v0.12.0](https://github.com/ember-tooling/ember-eslint-parser/compare/v0.11.3...v0.12.0)
+- f6c61da: html: updated [`@html-eslint/{eslint-plugin,parser}` from v0.60.0 to v0.61.0](https://github.com/yeonjuan/html-eslint/compare/v0.60.0...v0.61.0)
+- 95e96ad: deMorgan: updated [`eslint-plugin-de-morgan` from v2.1.1 to v2.1.2](https://github.com/azat-io/eslint-plugin-de-morgan/compare/v2.1.1...v2.1.2)
+- c61c8dd: pnpm: updated [`eslint-plugin-pnpm` from v1.6.0 to v1.6.1](https://github.com/antfu/pnpm-workspace-utils/compare/v1.6.0...v1.6.1)
+- 7c1c882: markdown: updated [`@eslint/markdown` from v8.0.1 to v8.0.2](https://github.com/eslint/markdown/compare/v8.0.1...v8.0.2)
+- ab9e15c: vitest: updated [`@vitest/eslint-plugin` from v1.6.17 to v1.6.18](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.6.17...v1.6.18):
+  - `vitest/prefer-vi-mocked` rule does not actually require type information; hence it was moved from `vitest/typescript` sub-config and no longer marked as such
+
+- f836c29: turbo: updated [`eslint-plugin-turbo` from v2.9.6 to v2.9.14](https://github.com/vercel/turborepo/compare/v2.9.6...v2.9.14)
+- 95c47a3: ripple: updated [`@tsrx/eslint-{plugin,parser}` from v0.3.48 to v0.3.61](https://github.com/Ripple-TS/ripple/compare/%40tsrx/eslint-plugin%400.3.49...%40tsrx/eslint-plugin%400.3.61)
+- 011ae89: ember: updated [`eslint-plugin-ember` from v13.2.1 to v13.3.0](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.2.1...v13.3.0):
+  - 🔴 not enabled [`template-no-template-lint-directives`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-template-lint-directives.md) rule
+
+- d19b33d: playwright: updated [`eslint-plugin-playwright` from v2.10.2 to v2.10.4](https://github.com/mskelton/eslint-plugin-playwright/compare/v2.10.2...v2.10.4)
+- fd5b0d1: mocha: updated [`eslint-plugin-mocha` from v11.2.0 to v11.3.0](https://github.com/lo1tuma/eslint-plugin-mocha/compare/11.2.0...11.3.0)
+- e8dc646: Config options are now merged with defaults shallowly, not deeply like it was before (erroneously)
+- cafcbca: vue: updated [`eslint-plugin-vue-scoped-css` from v3.0.0 to v3.1.0](https://github.com/future-architect/eslint-plugin-vue-scoped-css/compare/v3.0.0...v3.1.0)
+- b9e35c1: eslintPlugin: updated [`eslint-plugin-eslint-plugin` from v7.3.2 to v7.3.3](https://github.com/eslint-community/eslint-plugin-eslint-plugin/compare/v7.3.2...v7.3.3)
+- f7bbddb: storybook: updated [`eslint-plugin-storybook` from v10.3.6 to v10.4.0](https://github.com/storybookjs/storybook/compare/v10.3.6...v10.4.0)
+- 7d76c4e: lockfile: updated [`eslint-plugin-lockfile` from v1.1.0 to v1.3.0](https://github.com/ljharb/lockfile-tools/compare/eslint-plugin-lockfile@1.1.0...eslint-plugin-lockfile@1.3.0)
+- 89e98ae: nx: updated [`@nx/eslint-plugin` from v22.7.1 to v22.7.2](https://github.com/nrwl/nx/compare/22.7.1...22.7.2)
+- 0964387: deps: updated [`@angular-eslint/*` from v21.3.1 to v21.4.0](https://github.com/angular-eslint/angular-eslint/compare/v21.3.1...v21.4.0)
+- 1893cf0: formatJs: updated [`eslint-plugin-formatjs` from v6.4.7 to v6.4.12](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@6.4.7...eslint-plugin-formatjs@6.4.12)
+- 0ba0890: react: updated [`eslint-plugin-react-you-might-not-need-an-effect` from v0.10.1 to v0.10.2](https://github.com/nickjvandyke/eslint-plugin-react-you-might-not-need-an-effect/compare/v0.10.1...v0.10.2)
+- 849a15f: ava: updated [`eslint-plugin-ava` from v16.0.1 to v17.0.0](https://github.com/avajs/eslint-plugin-ava/compare/v16.0.1...v17.0.0)
+- 769689a: tanstackStart: updated [`@tanstack/eslint-plugin-start` from v0.0.1 to v0.1.0](https://github.com/TanStack/router/compare/release-2026-04-11-0121...%40tanstack/eslint-plugin-start%400.1.0)
+- 1223470: functional: updated [`eslint-plugin-functional` from v9.0.4 to v9.0.5](https://github.com/eslint-functional/eslint-plugin-functional/compare/v9.0.4...v9.0.5)
+- fb26b62: zod: updated [`eslint-plugin-zod-core` from v1.0.2 to v1.0.3](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-core@1.0.2...eslint-plugin-zod-core@1.0.3)
+- a66abbd: tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.100.6 to v5.100.14](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.100.6...@tanstack/eslint-plugin-query@5.100.14)
+- cd1924c: nextJs: updated [`@next/eslint-plugin-next` from v16.2.4 to v16.2.6](https://github.com/vercel/next.js/compare/v16.2.4...v16.2.6)
+- cb382b5: lit: updated [`eslint-plugin-lit` from v2.2.1 to v2.3.1](https://github.com/43081j/eslint-plugin-lit/compare/2.2.1...2.3.1):
+  - 🟢 enabled [`prefer-query-decorators`](https://github.com/43081j/eslint-plugin-lit/blob/HEAD/docs/rules/prefer-query-decorators.md) rule
+
+- d2eed4b: awsCdk: updated [`eslint-plugin-awscdk` from v4.3.2 to v4.3.3](https://github.com/ren-yamanashi/eslint-plugin-awscdk/compare/v4.3.2...v4.3.3)
+- 1d52a21: cypress: updated [`eslint-plugin-cypress` from v6.4.0 to v6.4.1](https://github.com/cypress-io/eslint-plugin-cypress/compare/v6.4.0...v6.4.1)
+- 5355029: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.1.31 to v7.2.1](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.1.31...v7.2.1)
+- 5a74cd2: unocss: updated [`@unocss/eslint-plugin` from v66.6.8 to v66.7.0](https://github.com/unocss/unocss/compare/v66.6.8...v66.7.0)
+- 8f74d61: vitest: updated [`@vitest/eslint-plugin` from v1.6.16 to v1.6.17](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.6.16...v1.6.17)
+- 8d8042a: qwik: updated [`eslint-plugin-qwik` from v1.19.2 to v1.20.0](https://github.com/QwikDev/qwik/compare/eslint-plugin-qwik@1.19.2...eslint-plugin-qwik@1.20.0)
+- 1a8f0b6: antfu: updated [`eslint-plugin-antfu` from v3.2.2 to v3.2.3](https://github.com/antfu/eslint-plugin-antfu/compare/v3.2.2...v3.2.3)
+- cec95da: jsxA11y: updated [`eslint-plugin-jsx-a11y-x` from v0.1.1 to v0.2.0](https://github.com/es-tooling/eslint-plugin-jsx-a11y-x/compare/v0.1.1...v0.2.0)
+- 160940d: vue: updated [`@intlify/eslint-plugin-vue-i18n` from v4.3.0 to v4.4.0](https://github.com/intlify/eslint-plugin-vue-i18n/compare/v4.3.0...v4.4.0)
+- 97b6789: jsdoc: updated [`eslint-plugin-jsdoc` from v62.9.0 to v63.0.0](https://github.com/gajus/eslint-plugin-jsdoc/compare/v62.9.0...v63.0.0)
+- 2a49c29: tanstackRouter: updated [`@tanstack/eslint-plugin-router` from v1.161.6 to v1.162.0](https://github.com/TanStack/router/compare/%40tanstack/eslint-plugin-router%401.161.6...%40tanstack/eslint-plugin-router%401.162.0)
+
 ## 1.0.0-beta.11
 
 ### Minor Changes
