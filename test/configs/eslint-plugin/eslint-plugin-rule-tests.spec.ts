@@ -13,7 +13,7 @@ describe('eslint-plugin: sub config `ruleTests`', () => {
 
       expect(config).toBeDefined();
       expect(config?.files).toMatchInlineSnapshot(
-        '["**/*.spec.?([cm])[jt]s", "**/*-spec.?([cm])[jt]s", "**/*_spec.?([cm])[jt]s", "**/*.test.?([cm])[jt]s", "**/__tests__/**/*.?([cm])[jt]s", "**/__test__/**/*.?([cm])[jt]s"]',
+        '["**/*[.-_]spec.?([cm])[jt]s", "**/*.test.?([cm])[jt]s", "**/__test?(s)__/**/*.?([cm])[jt]s"]',
       );
     });
   });
@@ -24,7 +24,7 @@ describe('eslint-plugin: sub config `ruleTests`', () => {
 
       expect(configResult.getRuleSeverities('eslint-plugin/rule-tests')).toMatchObject({
         'eslint-plugin/consistent-output': 2,
-        'no-empty-function': 0,
+        'eslint-plugin/no-only-tests': 2,
       });
     });
 

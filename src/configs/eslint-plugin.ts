@@ -1,6 +1,6 @@
 import {ERROR, GLOB_JS_TS_EXTENSION, OFF} from '../constants';
 import type {ConditionalKeys} from '../types';
-import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
+import {generateDefaultTestFiles} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -193,7 +193,6 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-output-null', ERROR) /** @since 0.8.0 */ // 🟢
     .addRule('test-case-property-ordering', ERROR) /** @since 0.8.0 */
     .addRule('test-case-shorthand-strings', ERROR) /** @since 0.4.0 */
-    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('eslint-plugin', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !ESLINT_PLUGIN_TESTING_RELATED_RULES_SET.has(ruleName),

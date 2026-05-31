@@ -24,7 +24,7 @@ describe('testing-library: sub config `marko`', () => {
       expect(
         configResult.getConfigByUnPostfix('testing-library/marko')?.files,
       ).toMatchInlineSnapshot(
-        '["**/*.spec.?([cm])[jt]s?(x)", "**/*-spec.?([cm])[jt]s?(x)", "**/*_spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__tests__/**/*.?([cm])[jt]s?(x)", "**/__test__/**/*.?([cm])[jt]s?(x)"]',
+        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
       );
     });
 
@@ -277,7 +277,7 @@ describe('testing-library: sub config `marko`', () => {
       expect(
         configResult.getConfigByUnPostfix('testing-library/marko/no-only-tests')?.files,
       ).toMatchInlineSnapshot(
-        '["**/*.spec.?([cm])[jt]s?(x)", "**/*-spec.?([cm])[jt]s?(x)", "**/*_spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__tests__/**/*.?([cm])[jt]s?(x)", "**/__test__/**/*.?([cm])[jt]s?(x)"]',
+        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
       );
     });
   });

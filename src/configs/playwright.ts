@@ -2,7 +2,6 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
-  RULES_TO_DISABLE_IN_TEST_FILES,
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
@@ -156,7 +155,6 @@ export default ((context, optionsRaw) => {
     .addRule('valid-expect-in-promise', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule('valid-test-tags', ERROR) /** @since 2.2.1 */ // 🟢
     .addRule('valid-title', ERROR) /** @since 0.19.0 */ // 🟢
-    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('playwright')
     .addOverrides();
 

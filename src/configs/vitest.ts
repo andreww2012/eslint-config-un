@@ -5,7 +5,6 @@ import {allUnionMembers} from '../utils';
 import type {JestEslintConfigOptions} from './jest';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
-  RULES_TO_DISABLE_IN_TEST_FILES,
   generateConfigNoOnlyTestsBuilder,
   generateConsistentTestItOptions,
   generateDefaultTestFiles,
@@ -175,8 +174,12 @@ export default (async (context, optionsRaw) => {
     },
   };
 
-  const defaultVitestFiles = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION);
-  const defaultVitestTypescriptFiles = generateDefaultTestFiles(GLOB_TS_X_EXTENSION);
+  const defaultVitestFiles = generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
+    includeVitestBenchmarkFiles: true,
+  });
+  const defaultVitestTypescriptFiles = generateDefaultTestFiles(GLOB_TS_X_EXTENSION, {
+    includeVitestBenchmarkFiles: true,
+  });
 
   const hasRestrictedMethods = Object.keys(restrictedMethods || {}).length > 0;
   const hasRestrictedMatchers = Object.keys(restrictedMatchers || {}).length > 0;
@@ -373,7 +376,6 @@ export default (async (context, optionsRaw) => {
     .addRule('valid-expect-in-promise', ERROR) /** @since 1.1.9 */ // 🟢(since 1.5.0)
     .addRule('valid-title', ERROR) /** @since 0.0.54 */ // 🟢
     .addRule('warn-todo', WARNING) /** @since 1.3.3 */
-    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('vitest', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET.has(ruleName),
@@ -398,7 +400,6 @@ export default (async (context, optionsRaw) => {
     )
     .addRule('unbound-method', ERROR) /** @since 1.6.13 */ // 💭 (warns in all)
     .disableAnyRule('ts', 'unbound-method')
-    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('vitest', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET.has(ruleName),

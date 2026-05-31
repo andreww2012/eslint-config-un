@@ -3,7 +3,6 @@ import type {ObjectValues, OmitStrict, PickKeysStartingWith, PrettifyDeep} from 
 import {doesPackageExist, objectEntriesUnsafe} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
-  RULES_TO_DISABLE_IN_TEST_FILES,
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
@@ -274,7 +273,6 @@ export default (async (context, optionsRaw) => {
         'render-result-naming-convention',
         isForFramework ? ERROR : OFF,
       ) /** @since 4.0.0-alpha.0 */ // 💚
-      .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
       .enableConfigTesterForPlugin('testing-library')
       .addOverrides();
 

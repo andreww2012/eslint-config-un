@@ -36,7 +36,7 @@ describe('ember: sub config `noOnlyTests`', () => {
       const configResult = await computeEslintConfig('ember');
 
       expect(configResult.getConfigByUnPostfix('ember/no-only-tests')?.files).toMatchInlineSnapshot(
-        '["**/*.spec.?([cm])[jt]s", "**/*-spec.?([cm])[jt]s", "**/*_spec.?([cm])[jt]s", "**/*.test.?([cm])[jt]s", "**/__tests__/**/*.?([cm])[jt]s", "**/__test__/**/*.?([cm])[jt]s"]',
+        '["**/*[.-_]spec.?([cm])[jt]s", "**/*.test.?([cm])[jt]s", "**/__test?(s)__/**/*.?([cm])[jt]s"]',
       );
     });
 

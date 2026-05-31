@@ -1,7 +1,6 @@
 import {ERROR, GLOB_JS_TS, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
-  RULES_TO_DISABLE_IN_TEST_FILES,
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
@@ -395,7 +394,6 @@ export default ((context, optionsRaw) => {
     .addRule('no-test-this-render', ERROR) /** @since 8.4.0 */ // 🟢
     .addRule('prefer-ember-test-helpers', ERROR) /** @since 8.4.0 */ // 🟢
     .addRule('require-valid-css-selector-in-test-helpers', ERROR) /** @since 9.4.0 */ // 🟢
-    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('ember', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !EMBER_TESTING_RELATED_RULES.has(ruleName),

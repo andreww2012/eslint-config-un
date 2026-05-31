@@ -157,9 +157,9 @@ describe('rules', async () => {
       );
 
       expect(error?.message).toMatchInlineSnapshot(`
-      "Unexpected GraphQL descriptions as hashtag \`#\` for type "User".
-      Prefer using \`"""\` for multiline, or \`"\` for a single line description."
-    `);
+        "Unexpected GraphQL descriptions as hashtag \`#\` for type "User".
+        Prefer using \`"""\` for multiline, or \`"\` for a single line description."
+      `);
     },
   );
 });

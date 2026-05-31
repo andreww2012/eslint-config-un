@@ -1,5 +1,5 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION} from '../constants';
-import {RULES_TO_DISABLE_IN_TEST_FILES, generateDefaultTestFiles} from './shared';
+import {generateDefaultTestFiles} from './shared';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -40,7 +40,6 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-to-have-style', ERROR) /** @since 3.2.0 */ // 🟢
     .addRule('prefer-to-have-text-content', ERROR) /** @since 2.1.0 */ // 🟢
     .addRule('prefer-to-have-value', ERROR) /** @since 3.5.0 */ // 🟢
-    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest-dom')
     .addOverrides();
 

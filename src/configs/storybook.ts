@@ -1,4 +1,5 @@
 import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
+import {generateDefaultTestFiles} from './shared';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -29,7 +30,10 @@ export default ((context, optionsRaw) => {
       'storybook',
       {
         includeDefaultFilesAndIgnores: true,
-        filesDefault: [`**/*.{stories,story}.${GLOB_JS_TS_X_EXTENSION}`],
+        filesDefault: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
+          includeRegularSpecFiles: false,
+          includeStorybookStories: true,
+        }),
       },
     ])
     .addRule('await-interactions', ERROR) /** @since 0.0.1-alpha.1 */ // 🟢🤝

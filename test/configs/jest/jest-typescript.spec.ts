@@ -20,7 +20,7 @@ describe('jest: sub config `typescript`', () => {
 
     it('creates `jest/ts` eslint config with default TypeScript files', () => {
       expect(configResult.getConfigByUnPostfix('jest/ts')?.files).toMatchInlineSnapshot(
-        '["**/*.spec.?([cm])ts?(x)", "**/*-spec.?([cm])ts?(x)", "**/*_spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__tests__/**/*.?([cm])ts?(x)", "**/__test__/**/*.?([cm])ts?(x)"]',
+        '["**/*[.-_]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)"]',
       );
     });
 
@@ -34,7 +34,7 @@ describe('jest: sub config `typescript`', () => {
       const configResult = await computeEslintConfig({jest: {files: FILES}, ts: true});
 
       expect(configResult.getConfigByUnPostfix('jest/ts')?.files).toMatchInlineSnapshot(
-        '["**/*.spec.?([cm])ts?(x)", "**/*-spec.?([cm])ts?(x)", "**/*_spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__tests__/**/*.?([cm])ts?(x)", "**/__test__/**/*.?([cm])ts?(x)"]',
+        '["**/*[.-_]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)"]',
       );
     });
   });

@@ -6,7 +6,6 @@ import type {ObjectValues, Prettify} from '../types';
 import {allUnionMembers, doesPackageExist} from '../utils';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
-  RULES_TO_DISABLE_IN_TEST_FILES,
   generateConfigNoOnlyTestsBuilder,
   generateConsistentTestItOptions,
   generateDefaultTestFiles,
@@ -376,7 +375,6 @@ export default (async (context, optionsRaw) => {
     .addRule('valid-expect-in-promise', ERROR) /** @since 21.7.0 */ // 🟢
     .addRule('valid-mock-module-path', ERROR) /** @since 29.2.0 */
     .addRule('valid-title', ERROR) /** @since 22.20.0 */ // 🟢
-    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => JEST_RULES_FOR_TYPESCRIPT_FILES_SET.has(ruleName),
@@ -415,7 +413,6 @@ export default (async (context, optionsRaw) => {
     .addRule('unbound-method', ERROR) /** @since 24.3.0 */ // 💭
     .disableAnyRule('ts', 'unbound-method')
     .addRule('valid-expect-with-promise', ERROR) /** @since 29.8.0 */ // 💭
-    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !JEST_RULES_FOR_TYPESCRIPT_FILES_SET.has(ruleName),
@@ -465,7 +462,6 @@ export default (async (context, optionsRaw) => {
       'prefer-to-have-been-called-once',
       getSuggestUsingJestExtendedMatcherSeverity('toHaveBeenCalledOnce'),
     ) /** @since 1.1.0 */
-    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .enableConfigTesterForPlugin('jest-extended')
     .addOverrides();
 

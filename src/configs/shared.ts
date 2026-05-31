@@ -51,18 +51,30 @@ export const generateIgnoresWithAdditional =
 
 export const generateDefaultTestFiles = <T extends string>(
   extensions: T,
-  {includeCypressTests}: {includeCypressTests?: boolean} = {},
+  {
+    includeRegularSpecFiles = true,
+    includeCypressTests,
+    includeVitestBenchmarkFiles,
+    includeStorybookStories,
+  }: {
+    includeRegularSpecFiles?: boolean;
+    includeCypressTests?: boolean;
+    includeStorybookStories?: boolean;
+    includeVitestBenchmarkFiles?: boolean;
+  } = {},
 ) => [
-  `**/*.spec.${extensions}` as const, // GitHub: 2.3M .ts files as of 2024-12-08 (https://github.com/search?q=path%3A**%2F*.spec.ts&type=code&query=path%3A%2F**%2F__tests__%2F**%2F*.ts)
-  `**/*-spec.${extensions}` as const, // 165k
-  `**/*_spec.${extensions}` as const, // 40k
-
-  `**/*.test.${extensions}` as const, // 1.9M
-
-  `**/__tests__/**/*.${extensions}` as const, // 155k
-  `**/__test__/**/*.${extensions}` as const, // 14k
-
-  ...(includeCypressTests ? [`**/*.cy.${extensions}` as const] : []),
+  ...(includeRegularSpecFiles
+    ? [
+        // Popularity of separators (using GitHub global code source https://github.com/search?q=path%3A**%2F*.spec.ts&type=code&query=path%3A%2F**%2F__tests__%2F**%2F*.ts as of 2026-05-30):
+        // `.`: 4.9M, `-`: 221k, `_`: 42.7k
+        `**/*[.-_]spec.${extensions}` as const,
+        `**/*.test.${extensions}` as const, // 6.3M
+        `**/__test?(s)__/**/*.${extensions}` as const, // tests: 513k, test: 26.6k
+      ]
+    : []),
+  ...(includeVitestBenchmarkFiles ? [`**/*.{bench,benchmark}.${extensions}` as const] : []), // 10.9k (1k)
+  ...(includeCypressTests ? [`**/*.cy.${extensions}` as const] : []), // 107k
+  ...(includeStorybookStories ? [`**/*.{stories,story}.${extensions}` as const] : []), // 115k, 2.2k
 ];
 
 type ConfigNoOnlyTests<ExtraPlugins extends ExtraPluginsType = never> =
@@ -123,18 +135,6 @@ export const generateConfigNoOnlyTestsBuilder = <ExtraPlugins extends ExtraPlugi
     .addOverrides();
   return configBuilderNoOnlyTests;
 };
-
-export const RULES_TO_DISABLE_IN_TEST_FILES: UnAllRuleNames[] = [
-  'no-empty-function',
-  'sonarjs/no-hardcoded-ip',
-  'sonarjs/no-hardcoded-passwords',
-  'sonarjs/no-hardcoded-secrets',
-  'sonarjs/no-clear-text-protocols',
-  'ts/no-extraneous-class',
-  'ts/no-empty-function',
-  'unicorn/template-indent', // triggered on inline snapshots
-  'e18e/prefer-static-regex',
-];
 
 export const generateConsistentTestItOptions = ({
   testDefinitionKeyword,

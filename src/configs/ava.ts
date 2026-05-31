@@ -1,7 +1,6 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
-  RULES_TO_DISABLE_IN_TEST_FILES,
   generateConfigNoOnlyTestsBuilder,
   generateDefaultTestFiles,
 } from './shared';
@@ -105,7 +104,6 @@ export default ((context, optionsRaw) => {
     .addRule('use-t-well', ERROR) /** @since 2.2.0 */ // 🟢
     .addRule('use-test', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('use-true-false', ERROR) /** @since 2.2.0 */ // 🟢
-    .disableBulkRules(RULES_TO_DISABLE_IN_TEST_FILES)
     .addOverrides();
 
   const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(

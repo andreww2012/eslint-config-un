@@ -436,6 +436,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       ]),
     },
     testingLibrary: {enabled: getIsConfigEnabled('testingLibrary', '@testing-library/dom')},
+    tests: {enabled: getIsConfigEnabled('tests')},
     toml: {enabled: getIsConfigEnabled('toml', false)},
     treeShaking: {enabled: getIsConfigEnabled('treeShaking', false)},
     ts: {enabled: getIsConfigEnabled('ts', 'typescript')},
@@ -653,6 +654,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     },
 
     /* Enabled by default or conditionally */
+    loadUnConfig('tests', () => import('../configs/common/tests')),
     jsEslintConfigResult,
     loadUnConfig('stylistic', () => import('../configs/stylistic')),
     loadUnConfig('unicorn', () => import('../configs/unicorn')),
