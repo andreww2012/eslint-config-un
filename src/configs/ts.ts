@@ -411,8 +411,8 @@ export interface TsEslintConfigOptions<
            * plus extra files coming from `astro`, `svelte` and `vue` configs.
            * If different files are specified, those extra files will still be appended.
            *
-           * To configure the setup config for type-aware rules, use `configSetup` option
-           * on the root config.
+           * To configure the setup config for non-type-aware rules,
+           * use `configSetup` option on the root config.
            */
           configSetup?: UnFlatConfigEntryFilesAndIgnores;
         } & UnFlatConfigEntryBase<ExtraPlugins, TypeAwareRulesWithPrefixes>
@@ -976,6 +976,8 @@ export default ((
     ?.addConfig([
       'ts/type-aware/rules',
       {
+        // Please note: `{files,ignores}Default` must NOT be overridden by user's
+        // files and ignores
         filesDefault: filesTypeAware,
         ignoresDefault: ignoresTypeAware,
         preventCreationOfConfigForRulesWithTypeInformation: true,
