@@ -854,16 +854,44 @@ Allows to specify which rules should not be disabled by default in embedded code
 
 Allows to override certain [`eslint-plugin-import-x`] plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmx.dev/eslint-plugin-fast-import).
 
-### `preventCreationOfConfigForRulesWithTypeInformation`
+### `typeInfoRules`
 
-**Type**: `boolean | 'full'`
+**Type**: `'standalone' | 'splitOnly' | 'asIs' | 'disabled' | { mode?, ignores?: string[] } & ({ allowDefaultProject?: string[] } | { parserOptions? })`
 
-All rules from all configs that are known *to us* to require type information, will be *automatically **moved*** to separate ESLint configs.
-Unless `ts/setupTypeAware` config is enabled, those configs will have `typescript-eslint` parser configured for typed linting.
-They will also inherit most of the copied config's properties.
-Using this option, you can explicitly opt-in or opt-out of this behavior.
+Controls how rules that are known *to us* to require type information are handled.
+By default, every such rule is *automatically **moved*** into a separate ESLint config restricted to TypeScript files, where the `typescript-eslint` parser is set up for typed linting.
 
-For more information on how it is generated, read the corresponding JSDoc.
+The mode (string value or the `mode` property) chooses the strategy:
+
+- `standalone`: the split happens and the parser, including [`projectService`](https://typescript-eslint.io/packages/parser#projectservice), is configured in the generated config.
+  The default when the `ts/setupTypeAware` config is **disabled**.
+- `splitOnly`: the split happens, but no parser is configured — the project service is expected to be set up by the `ts/setupTypeAware` config.
+  The default when that config is **enabled** (the most common case).
+- `asIs`: no split happens; rules are left untouched in their original configs.
+  You are responsible for making type information available to them.
+- `disabled`: no split happens, and every rule that *throws* without type information is turned off everywhere.
+  Rules that merely degrade without type information stay enabled.
+
+> [!NOTE]
+> The following configs are never split (they set up type-aware linting themselves), so for them every mode except `disabled` behaves like `asIs`:
+>
+> - `ts/type-aware/*`;
+> - `vitest/ts`;
+> - `jest/ts`.
+
+The object notation additionally accepts:
+
+- `ignores`: glob patterns excluded from type-aware linting, appended to the `ignores` of every generated config and of the never-split configs above.
+  Useful for TypeScript files that are not part of any `tsconfig.json`.
+- `allowDefaultProject` / `parserOptions` (cannot have both at the same time): the default parser options for the type-aware linting we set up — the `standalone` split configs and, as a default, the `ts` type-aware config.
+  `allowDefaultProject` is a shortcut for `parserOptions.projectService.allowDefaultProject`.
+  These mirror the same-named `ts` config options, which take precedence over them for the `ts` type-aware config (`allowDefaultProject` > `parserOptions` > global).
+
+  > [!NOTE]
+  > These options only take effect where a type-aware parser is actually set up: the `standalone` split configs (so only when the resolved `mode` is `standalone`), and the `ts` type-aware config's parser whenever that config is enabled (independently of `mode`).
+  > So in `asIs`/`disabled` modes they only matter if the `ts` type-aware config is enabled — and in `disabled` that combination is contradictory (it both turns off throwing rules and configures type information).
+
+For more details, read the corresponding JSDoc.
 
 ### `gitignore`
 

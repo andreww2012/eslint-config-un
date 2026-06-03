@@ -109,8 +109,8 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   enforceToBeCalledStyle?: false | 'once' | 'times';
 
   /**
-   * Enforces whether importing [Vitest globals](https://vitest.dev/config/#globals) is required
-   * or disallowed.
+   * Enforces whether importing [Vitest globals](https://vitest.dev/config/#globals)
+   * is required or disallowed.
    *
    * Affected rules:
    * - [`no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
@@ -393,7 +393,7 @@ export default (async (context, optionsRaw) => {
           settings: {
             vitest: pluginSettings,
           },
-          preventCreationOfConfigForRulesWithTypeInformation: true,
+          skipTypeInfoSplit: true,
         },
       ],
       defaultVitestEslintConfig,

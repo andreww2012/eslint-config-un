@@ -1,3 +1,4 @@
+import type {ParserOptions as TsEslintParserOptions} from '@typescript-eslint/parser';
 import type {ConsolaInstance} from 'consola';
 import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {Debugger} from 'obug';
@@ -77,6 +78,8 @@ export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOption
 };
 
 type UnConfigsSupportingArrays = keyof Pick<UnConfigs, 'format' | 'packageJson'>;
+
+type TypeInfoMode = 'standalone' | 'splitOnly' | 'asIs' | 'disabled';
 
 export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = never> {
   // #region 🟠 FREQUENTLY USED OPTIONS
@@ -331,35 +334,74 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
       };
 
   /**
-   * With a few exceptions mentioned below, all rules from all configs that are known to require
-   * type information, will be *automatically **moved*** to a separate ESLint config.
-   * Unless `ts/setupTypeAware` config is enabled, that config will have `typescript-eslint`
-   * parser configured for typed linting.
+   * Controls how rules that require type information are handled.
    *
-   * It will inherit all properties from the original config except for a few listed below:
-   * - Will have `files` set to <code>**&#47;*.?([cm])[jt]s?(x)</code> AND
+   * `eslint-config-un` knows which rules from all the plugins require type information
+   * (most come from `typescript-eslint`, but a good portion come from other plugins,
+   * like `eslint-plugin-vitest`). Such rules fall into two groups:
+   * - those that **throw** when type information is not available;
+   * - those that silently do nothing (or only partially work) without it.
+   *
+   * To minimize the chance of crashes due to missing type information, by default we move
+   * every such rule into a separate ESLint config restricted to TypeScript files, and set up
+   * the `typescript-eslint` parser there for typed linting. The generated config inherits all
+   * properties from the original one, except:
+   * - `files` is set to <code>**&#47;*.?([cm])[jt]s?(x)</code>
    * [intersected](https://eslint.org/docs/latest/use/configure/configuration-files#specify-files-with-an-and-operation)
    * with the original config's `files`;
-   * - All .md(x) code blocks pattern will be appended to `ignores`;
-   * - Optionally will have `languageOptions.parser` set to the `typescript-eslint` parser;
-   * - Will have
-   * [`languageOptions.parserOptions.projectService`](https://typescript-eslint.io/packages/parser#projectservice)
-   * set to `true`;
-   * - If there are any rules coming from plugin(s) that are known to be applied to custom
-   * file extensions, like `.svelte`, they will be added to
-   * [`languageOptions.parserOptions.extraFileExtensions`](https://typescript-eslint.io/packages/parser#extrafileextensions)
-   * array;
-   * - Of course, `rules` will consist of the moved entries coming from the original config as-is.
+   * - all `.md(x)` code block patterns are appended to `ignores`;
+   * - [`languageOptions.parserOptions.projectService`](https://typescript-eslint.io/packages/parser#projectservice)
+   * is set to `true` (only in `standalone` mode);
+   * - any custom file extensions required by the moved rules (like `.svelte`) are added to
+   * [`extraFileExtensions`](https://typescript-eslint.io/packages/parser#extrafileextensions);
+   * - `rules` consists solely of the moved entries.
    *
-   * Using this option, you can explicitly opt-in or opt-out of this behavior.
-   * Set to `full` to avoid creating such extra configs altogether.
+   * The string value (or the `mode` property) chooses the strategy:
+   * - `standalone`: the split happens and the `typescript-eslint` parser, including
+   * `projectService`, is configured in the generated config. This is the default when the
+   * `ts/setupTypeAware` config is **disabled**.
+   * - `splitOnly`: the split happens, but no parser is configured — the project service is
+   * expected to be set up by the `ts/setupTypeAware` config. This is the default when that
+   * config is **enabled**, and is the most commonly used mode.
+   * - `asIs`: no split happens; rules are left untouched in their original configs. You are
+   * responsible for making type information available to them.
+   * - `disabled`: no split happens, and every rule that *throws* without type information is
+   * turned off everywhere. Rules that merely degrade without type information are left enabled.
    *
-   * ⚠️ EXCEPTIONS: the following Configs are not subject to the moving behavior
-   * even if this option is explicitly set to `false`:
-   * - `ts` and `tsTypeAware`;
-   * - `{jest,vitest}/typescript`.
+   * ⚠️ The following configs are never split (they manage type-aware linting themselves), so for
+   * them every mode except `disabled` behaves like `asIs`:
+   * - `ts/type-aware/*`;
+   * - `vitest/ts`;
+   * - `jest/ts`.
+   *
+   * The object notation additionally accepts:
+   * - `ignores`: glob patterns excluded from type-aware linting. They are appended to the
+   * `ignores` of every generated config, as well as of the never-split configs listed above.
+   * Useful for TypeScript files that are not part of any `tsconfig.json` (which would otherwise
+   * make `projectService` throw).
+   * - `allowDefaultProject` / `parserOptions` (mutually exclusive): the default parser options for
+   * the type-aware linting `eslint-config-un` sets up — the `standalone` split configs and, as a
+   * default, the `ts` type-aware config. `allowDefaultProject` is a shortcut for
+   * `parserOptions.projectService.allowDefaultProject` (the most common need, e.g. test files not
+   * part of any `tsconfig.json`); `parserOptions` is the full escape hatch. These mirror the
+   * same-named `ts` config options, which take precedence over them for the `ts` type-aware config.
+   *
+   * NOTE: these are accepted regardless of `mode` (they are orthogonal to it), but they only take
+   * effect where a type-aware parser is actually set up:
+   * - the `standalone` split configs (i.e. only when the resolved `mode` is `standalone`);
+   * - the `ts` type-aware config's parser, whenever that config is enabled — independently of `mode`.
+   *
+   * Consequently, in `asIs`/`disabled` modes they have an effect only if the `ts` type-aware config
+   * is enabled (and in `disabled` mode that combination is contradictory, since it both turns off
+   * throwing rules and configures type information).
+   * @default 'splitOnly' if `ts/setupTypeAware` config is enabled, otherwise 'standalone'
    */
-  preventCreationOfConfigForRulesWithTypeInformation?: boolean | 'full';
+  typeInfoRules?:
+    | TypeInfoMode
+    | ({mode?: TypeInfoMode; ignores?: string[]} & (
+        | {allowDefaultProject?: string[]}
+        | {parserOptions?: TsEslintParserOptions}
+      ));
 
   // #endregion
 
@@ -403,7 +445,11 @@ export interface EslintConfigUnInternalOptions {
    */
   testMode?: boolean;
 
-  preventCreationOfConfigForRulesWithTypeInformation?: boolean;
+  /**
+   * Forces every config to skip the type-information split (as if it had `skipTypeInfoSplit`),
+   * keeping generated configs stable in tests. Does not prevent `disabled` mode from acting.
+   */
+  skipTypeInfoSplit?: boolean;
 }
 
 export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPluginsType> {
@@ -415,6 +461,22 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   >;
   configsMeta: Record<keyof UnConfigs<ExtraPlugins>, {enabled: boolean}>;
   resolvedConfigs?: Partial<UnConfigs<ExtraPlugins>>;
+
+  /**
+   * Resolved form of the `typeInfoRules` option. `mode` is finalized after the `ts` config is
+   * loaded (it may depend on whether the `ts/setupTypeAware` config was created). NOTE: mutable.
+   */
+  typeInfoRulesResolved: {
+    mode: TypeInfoMode;
+    ignores?: string[];
+
+    /**
+     * Normalized global parser options (the `allowDefaultProject` shortcut is folded into
+     * `projectService.allowDefaultProject`). Used for `standalone` split configs and as the
+     * default for the `ts` type-aware config.
+     */
+    parserOptions?: TsEslintParserOptions;
+  };
 
   /**
    * NOTE: mutable. Rule names must be UNprefixed
@@ -616,10 +678,9 @@ export const processUnOrFlatConfig = (
         const extraConfigMetadata = configBuilderToModify?.addFlatConfig(extraConfig);
         if (
           extraConfigMetadata &&
-          configBuilderToModify?.getConfig(config.name)?.[1]
-            .preventCreationOfConfigForRulesWithTypeInformation
+          configBuilderToModify?.getConfig(config.name)?.[1].skipTypeInfoSplit
         ) {
-          extraConfigMetadata.preventCreationOfConfigForRulesWithTypeInformation = true;
+          extraConfigMetadata.skipTypeInfoSplit = true;
         }
 
         extraConfigs.push(extraConfig);

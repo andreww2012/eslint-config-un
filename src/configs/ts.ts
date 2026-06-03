@@ -502,6 +502,35 @@ export interface TsEslintConfigOptions<
 const TS_FILES_DEFAULT = [GLOB_TS_X];
 const DEFAULT_IGNORES_TYPE_AWARE = [GLOB_MD_X_CODE_BLOCKS];
 
+const isProjectServiceObject = (
+  value: TsEslintParserOptions['projectService'],
+): value is Exclude<TsEslintParserOptions['projectService'], boolean | undefined> =>
+  typeof value === 'object';
+
+const mergeParserOptions = (
+  lower: TsEslintParserOptions,
+  higher: TsEslintParserOptions,
+): TsEslintParserOptions => {
+  const merged: TsEslintParserOptions = {...lower, ...higher};
+
+  if (
+    isProjectServiceObject(lower.projectService) &&
+    isProjectServiceObject(higher.projectService)
+  ) {
+    merged.projectService = {...lower.projectService, ...higher.projectService};
+  }
+
+  const mergedExtraFileExtensions = [
+    ...(lower.extraFileExtensions || []),
+    ...(higher.extraFileExtensions || []),
+  ];
+  if (mergedExtraFileExtensions.length > 0) {
+    merged.extraFileExtensions = [...new Set(mergedExtraFileExtensions)];
+  }
+
+  return merged;
+};
+
 export default ((
   context,
   optionsRaw,
@@ -588,6 +617,49 @@ export default ((
     ...extraIgnoresTypeAware,
   ];
 
+  const buildSetupParserOptions = (
+    isTypeAware: boolean,
+    userParserOptions: TsEslintParserOptions | undefined,
+  ): TsEslintParserOptions => {
+    const merged = [
+      isTypeAware ? context.typeInfoRulesResolved.parserOptions : undefined,
+      userParserOptions,
+    ].reduce<TsEslintParserOptions>(
+      (accumulated, layer) => (layer ? mergeParserOptions(accumulated, layer) : accumulated),
+      {sourceType: 'module'},
+    );
+
+    const withExtensions: TsEslintParserOptions =
+      extraFileExtensions.length === 0
+        ? merged
+        : {
+            ...merged,
+            extraFileExtensions: [
+              ...new Set([
+                ...(merged.extraFileExtensions || []),
+                ...extraFileExtensions.map((extension) => `.${extension}`),
+              ]),
+            ],
+          };
+
+    if (!isTypeAware) {
+      return withExtensions;
+    }
+
+    const withAllowDefaultProject: TsEslintParserOptions = allowDefaultProject?.length
+      ? {
+          ...withExtensions,
+          projectService: isProjectServiceObject(withExtensions.projectService)
+            ? {...withExtensions.projectService, allowDefaultProject}
+            : {allowDefaultProject},
+        }
+      : withExtensions;
+
+    return withAllowDefaultProject.projectService === undefined
+      ? {...withAllowDefaultProject, projectService: {}}
+      : withAllowDefaultProject;
+  };
+
   const generateSetupConfigBuilder = (isTypeAware: boolean) => {
     const optionsNonTypeAwareForSetup = configSetup || {};
     const optionsTypeAwareForSetup = configTypeAwareOptions.configSetup || {};
@@ -597,6 +669,8 @@ export default ((
       options.files ||= optionsNonTypeAwareForSetup.files;
       options.ignores ||= optionsNonTypeAwareForSetup.ignores;
     }
+
+    const userParserOptions = maybeCall(optionsResolved.parserOptions, isTypeAware);
 
     const configBuilderSetup = context.createConfigBuilder(options, 'ts');
     configBuilderSetup
@@ -616,18 +690,7 @@ export default ((
         {
           languageOptions: {
             ...generatePackageToLoadProperty('parser', 'typescriptEslintParser'),
-            parserOptions: {
-              sourceType: 'module',
-              ...(extraFileExtensions.length > 0 && {
-                extraFileExtensions: extraFileExtensions.map((ext) => `.${ext}`),
-              }),
-              ...(isTypeAware && {
-                projectService: {
-                  ...(allowDefaultProject?.length && {allowDefaultProject}),
-                },
-              }),
-              ...maybeCall(optionsResolved.parserOptions, isTypeAware),
-            } satisfies TsEslintParserOptions,
+            parserOptions: buildSetupParserOptions(isTypeAware, userParserOptions),
           },
         },
       )
@@ -762,7 +825,6 @@ export default ((
       'ts/non-type-aware/rules',
       {
         includeDefaultFilesAndIgnores: true,
-        preventCreationOfConfigForRulesWithTypeInformation: true,
       },
     ])
     .markCategory('Strict')
@@ -980,7 +1042,7 @@ export default ((
         // files and ignores
         filesDefault: filesTypeAware,
         ignoresDefault: ignoresTypeAware,
-        preventCreationOfConfigForRulesWithTypeInformation: true,
+        skipTypeInfoSplit: true,
       },
     ])
     .markCategory('Strict')

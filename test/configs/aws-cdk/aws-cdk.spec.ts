@@ -111,7 +111,7 @@ describe('rules', () => {
   it('`awscdk/migrate-disable-comments` rule fires on old-style cdk disable comments', async () => {
     const results = await testEslintConfig('awsCdk', FIXTURES.oldStyleCdkDisableComment, {
       searchFixturesRelativeToPath: import.meta.dirname,
-      internalOptions: {preventCreationOfConfigForRulesWithTypeInformation: false},
+      internalOptions: {skipTypeInfoSplit: false},
     });
 
     const error = findLintMessageFromLintResults(

@@ -444,6 +444,65 @@ describe('options', () => {
     });
   });
 
+  describe('option interaction: global `typeInfoRules` parser options', () => {
+    it('uses the global `allowDefaultProject` shortcut as the default for the type-aware setup', async () => {
+      const configResult = await computeEslintConfig('ts', {
+        un: {typeInfoRules: {allowDefaultProject: ['*.js']}},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('ts/type-aware/setup')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toMatchObject({projectService: {allowDefaultProject: ['*.js']}});
+    });
+
+    it('uses the global `parserOptions` escape hatch as the default for the type-aware setup', async () => {
+      const configResult = await computeEslintConfig('ts', {
+        un: {typeInfoRules: {parserOptions: {tsconfigRootDir: '/global/root'}}},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('ts/type-aware/setup')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toMatchObject({tsconfigRootDir: '/global/root'});
+    });
+
+    it('lets `ts.parserOptions.projectService` take precedence over the global value, merging objects', async () => {
+      const configResult = await computeEslintConfig(
+        {ts: {parserOptions: {projectService: {defaultProject: 'tsconfig.json'}}}},
+        {un: {typeInfoRules: {allowDefaultProject: ['*.js']}}},
+      );
+
+      expect(
+        configResult.getConfigByUnPostfix('ts/type-aware/setup')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toMatchObject({
+        projectService: {allowDefaultProject: ['*.js'], defaultProject: 'tsconfig.json'},
+      });
+    });
+
+    it('lets `ts.allowDefaultProject` take precedence over both `ts.parserOptions` and the global value', async () => {
+      const configResult = await computeEslintConfig(
+        {
+          ts: {
+            allowDefaultProject: ['*.ts'],
+            parserOptions: {projectService: {allowDefaultProject: ['*.jsx']}},
+          },
+        },
+        {un: {typeInfoRules: {allowDefaultProject: ['*.js']}}},
+      );
+
+      expect(
+        configResult.getConfigByUnPostfix('ts/type-aware/setup')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toMatchObject({projectService: {allowDefaultProject: ['*.ts']}});
+    });
+  });
+
   describe('option: `extraFileExtensions`', () => {
     it('does not set `extraFileExtensions` in parser options when set to empty array', async () => {
       const configResult = await computeEslintConfig({ts: {extraFileExtensions: []}});

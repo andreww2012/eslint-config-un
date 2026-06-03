@@ -119,7 +119,7 @@ describe('rules requiring type information', () => {
       ).toBeUndefined();
     });
 
-    it('does not create a separate config for `ts/non-type-aware/rules` config (with `overrides` including "typed" rules)', async () => {
+    it('creates a separate config for `ts/non-type-aware/rules` config with `overrides` including "typed" rules', async () => {
       const configResult = await computeEslintConfig(
         {ts: {overridesAny: {'ts/no-floating-promises': 2}}},
         {internalOptions: {}},
@@ -128,7 +128,9 @@ describe('rules requiring type information', () => {
       expect(configResult.getConfigByUnPostfix('ts/non-type-aware/rules')).toBeDefined();
       expect(
         configResult.getConfigByUnPostfix('ts/non-type-aware/rules/@type-information'),
-      ).toBeUndefined();
+      ).toMatchObject({
+        rules: {'ts/no-floating-promises': 2},
+      });
     });
 
     it('does not create a separate config for `vitest/ts` config', async () => {
@@ -241,10 +243,10 @@ describe('rules requiring type information', () => {
     });
   });
 
-  describe('`ts/setupTypeAware` config is disabled, but `preventCreationOfConfigForRulesWithTypeInformation` is set to `true`', () => {
+  describe('`typeInfoRules` is set to `splitOnly`', () => {
     it('creates a separate config with "typed" rules w/o parser', async () => {
       const configResult = await computeEslintConfig('eslintPlugin', {
-        un: {preventCreationOfConfigForRulesWithTypeInformation: true},
+        un: {typeInfoRules: 'splitOnly'},
         internalOptions: {},
       });
 
@@ -260,27 +262,141 @@ describe('rules requiring type information', () => {
     });
   });
 
-  describe('`ts/setupTypeAware` config is disabled, but `preventCreationOfConfigForRulesWithTypeInformation` is set to `full`', () => {
-    it('does not create a separate config with "typed" rules w/o parser', async () => {
+  describe('`typeInfoRules` is set to `standalone`', () => {
+    it('creates a separate config with "typed" rules and a parser even when `ts/setupTypeAware` is enabled', async () => {
+      const configResult = await computeEslintConfig(
+        {eslintPlugin: true, ts: true},
+        {un: {typeInfoRules: 'standalone'}, internalOptions: {}},
+      );
+
+      const configForTypedRules = configResult.getConfigByUnPostfix(
+        'eslint-plugin/@type-information',
+      );
+
+      expect(configForTypedRules).toBeDefined();
+      expect(configForTypedRules?.languageOptions?.['parserOptions']).toMatchObject({
+        projectService: true,
+      });
+    });
+
+    it('applies the global `allowDefaultProject` shortcut to the split config', async () => {
       const configResult = await computeEslintConfig('eslintPlugin', {
-        un: {preventCreationOfConfigForRulesWithTypeInformation: 'full'},
+        un: {typeInfoRules: {mode: 'standalone', allowDefaultProject: ['*.ts']}},
         internalOptions: {},
       });
 
-      expect(configResult.getConfigByUnPostfix('eslint-plugin')).toBeDefined();
+      expect(
+        configResult.getConfigByUnPostfix('eslint-plugin/@type-information')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toMatchObject({projectService: {allowDefaultProject: ['*.ts']}});
+    });
 
+    it('applies the global `parserOptions` escape hatch to the split config', async () => {
+      const configResult = await computeEslintConfig('eslintPlugin', {
+        un: {typeInfoRules: {mode: 'standalone', parserOptions: {tsconfigRootDir: '/global/root'}}},
+        internalOptions: {},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('eslint-plugin/@type-information')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toMatchObject({tsconfigRootDir: '/global/root', projectService: true});
+    });
+  });
+
+  describe('`typeInfoRules` is set to `asIs`', () => {
+    it('leaves rules requiring type information in the original config and creates no separate config', async () => {
+      const configResult = await computeEslintConfig('eslintPlugin', {
+        un: {typeInfoRules: 'asIs'},
+        internalOptions: {},
+      });
+
+      expect(configResult.getConfigByUnPostfix('eslint-plugin')?.rules).toHaveProperty(
+        'eslint-plugin/no-property-in-node',
+      );
       expect(configResult.getConfigByUnPostfix('eslint-plugin/@type-information')).toBeUndefined();
     });
   });
 
-  describe('`ts/setupTypeAware` config is enabled, but `preventCreationOfConfigForRulesWithTypeInformation` is set to `false`', () => {
-    it('creates a separate config with "typed" rules when overall `ts` config is enabled', async () => {
+  describe('`typeInfoRules` is set to `disabled`', () => {
+    it('turns off throwing rules in place and creates no separate config', async () => {
+      const configResult = await computeEslintConfig('eslintPlugin', {
+        un: {typeInfoRules: 'disabled'},
+        internalOptions: {},
+      });
+
+      expect(configResult.getConfigByUnPostfix('eslint-plugin/@type-information')).toBeUndefined();
+      expect(
+        configResult.getRuleEntrySeverity('eslint-plugin', 'eslint-plugin/no-property-in-node'),
+      ).toBe(0);
+    });
+
+    it('only disables throwing rules, leaving "optional" ones enabled', async () => {
       const configResult = await computeEslintConfig(
-        {eslintPlugin: true, ts: true},
-        {un: {preventCreationOfConfigForRulesWithTypeInformation: false}, internalOptions: {}},
+        {
+          functional: {
+            overrides: {
+              'functional/immutable-data': 2,
+              'functional/functional-parameters': 1,
+            },
+          },
+        },
+        {un: {typeInfoRules: 'disabled'}, internalOptions: {}},
       );
 
-      expect(configResult.getConfigByUnPostfix('eslint-plugin/@type-information')).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('functional/@type-information')).toBeUndefined();
+      expect(configResult.getRuleEntrySeverity('functional', 'functional/immutable-data')).toBe(0);
+      expect(
+        configResult.getRuleEntrySeverity('functional', 'functional/functional-parameters'),
+      ).toBe(1);
+    });
+
+    it('disables throwing rules even in never-split configs like `vitest/ts`', async () => {
+      const configResult = await computeEslintConfig(
+        {vitest: {configTypescript: true}},
+        {un: {typeInfoRules: 'disabled'}, internalOptions: {}},
+      );
+
+      expect(configResult.getRuleEntrySeverity('vitest/ts', 'vitest/unbound-method')).toBe(0);
+    });
+  });
+
+  describe('`typeInfoRules.ignores`', () => {
+    it('appends ignores to generated split configs and to never-split configs', async () => {
+      const IGNORES = ['vendor/**'];
+
+      const configResult = await computeEslintConfig(
+        {eslintPlugin: true, vitest: {configTypescript: true}},
+        {un: {typeInfoRules: {mode: 'standalone', ignores: IGNORES}}, internalOptions: {}},
+      );
+
+      expect(
+        configResult.getConfigByUnPostfix('eslint-plugin/@type-information')?.ignores,
+      ).toStrictEqual(expect.arrayContaining(IGNORES));
+      expect(configResult.getConfigByUnPostfix('vitest/ts')?.ignores).toStrictEqual(
+        expect.arrayContaining(IGNORES),
+      );
+    });
+
+    it('appends ignores to the `ts/type-aware/setup` config so excluded files do not request type info', async () => {
+      const IGNORES = ['vendor/**'];
+
+      const configResult = await computeEslintConfig('ts', {
+        un: {typeInfoRules: {ignores: IGNORES}},
+        internalOptions: {},
+      });
+
+      expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')?.ignores).toStrictEqual(
+        expect.arrayContaining(IGNORES),
+      );
+      expect(
+        configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.ignores,
+      ).not.toStrictEqual(expect.arrayContaining(IGNORES));
+      expect(
+        configResult.getConfigByUnPostfix('ts/non-type-aware/rules')?.ignores,
+      ).not.toStrictEqual(expect.arrayContaining(IGNORES));
     });
   });
 });

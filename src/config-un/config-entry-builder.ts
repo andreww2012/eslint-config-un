@@ -114,15 +114,16 @@ export const configIndexProperty = Symbol('ConfigIndex');
 
 interface FlatConfigMetadata {
   /**
-   * Should include full resolved rule names (i.e. with possible plugin prefix and rename)
+   * Keys are full resolved rule names (i.e. with possible plugin prefix and rename).
    */
-  rulesRequiringTypeInfo?: Map<string, PluginPrefix>;
+  rulesRequiringTypeInfo?: Map<string, {plugin: PluginPrefix; ruleName: string}>;
 
   /**
-   * If `noParser`, the config *will still be created* without a parser and parser settings.
-   * Only if set to true, the config won't be created altogether.
+   * When `true`, this config opts out of the type-information split: its typed rules are left
+   * in place (treated as `asIs`) regardless of the global `standalone`/`splitOnly` mode. The
+   * `disabled` mode still turns off throwing rules here.
    */
-  preventCreationOfConfigForRulesWithTypeInformation?: boolean | 'noParser';
+  skipTypeInfoSplit?: boolean;
 }
 
 export class ConfigEntryBuilder<
@@ -194,8 +195,14 @@ export class ConfigEntryBuilder<
       if (!hasEnabledDisableAutofixCounterpart) {
         configMetadata.rulesRequiringTypeInfo?.delete(ruleEntryName);
       }
-    } else if (RULES_REQUIRING_TYPE_INFORMATION[plugin]?.rules[ruleName]) {
-      (configMetadata.rulesRequiringTypeInfo ||= new Map()).set(ruleEntryName, plugin);
+    } else {
+      const typeInfoRequirement = RULES_REQUIRING_TYPE_INFORMATION[plugin]?.rules[ruleName];
+      if (typeInfoRequirement != null) {
+        (configMetadata.rulesRequiringTypeInfo ||= new Map()).set(ruleEntryName, {
+          plugin,
+          ruleName,
+        });
+      }
     }
   }
 
@@ -286,7 +293,7 @@ export class ConfigEntryBuilder<
              */
             settings?: Record<string, Nullable<Record<string, unknown>>>;
 
-            preventCreationOfConfigForRulesWithTypeInformation?: boolean;
+            skipTypeInfoSplit?: boolean;
           },
         ],
     config?: FlatConfigEntryForBuilder,
@@ -398,14 +405,8 @@ export class ConfigEntryBuilder<
 
     const configMetadata = this.addFlatConfig(configFinal);
 
-    if (
-      internalOptions.preventCreationOfConfigForRulesWithTypeInformation ||
-      this.context.rootOptions.preventCreationOfConfigForRulesWithTypeInformation === 'full' ||
-      this.context.internalOptions.preventCreationOfConfigForRulesWithTypeInformation
-    ) {
-      configMetadata.preventCreationOfConfigForRulesWithTypeInformation = true;
-    } else if (this.context.rootOptions.preventCreationOfConfigForRulesWithTypeInformation) {
-      configMetadata.preventCreationOfConfigForRulesWithTypeInformation = 'noParser';
+    if (internalOptions.skipTypeInfoSplit || this.context.internalOptions.skipTypeInfoSplit) {
+      configMetadata.skipTypeInfoSplit = true;
     }
 
     processUnOrFlatConfig(this.context, configFinal, undefined);
@@ -738,19 +739,56 @@ export class ConfigEntryBuilder<
   }
 
   resolveAllConfigs() {
-    return [...this.configs.values()].flatMap(([config, metadata]) => {
-      const {rulesRequiringTypeInfo, preventCreationOfConfigForRulesWithTypeInformation} = metadata;
+    const {
+      mode,
+      ignores: typeInfoIgnores,
+      parserOptions: globalParserOptions,
+    } = this.context.typeInfoRulesResolved;
 
-      if (
-        rulesRequiringTypeInfo &&
-        rulesRequiringTypeInfo.size > 0 &&
-        preventCreationOfConfigForRulesWithTypeInformation !== true
-      ) {
+    return [...this.configs.values()].flatMap(
+      ([config, {rulesRequiringTypeInfo, skipTypeInfoSplit}]) => {
+        if (typeInfoIgnores?.length) {
+          const parserOptions = config.languageOptions?.['parserOptions'];
+
+          if (
+            (skipTypeInfoSplit && rulesRequiringTypeInfo?.size) ||
+            (typeof parserOptions === 'object' &&
+              parserOptions &&
+              ('projectService' in parserOptions || 'project' in parserOptions))
+          ) {
+            config.ignores = [...(config.ignores || []), ...typeInfoIgnores];
+          }
+        }
+
+        if (!rulesRequiringTypeInfo?.size) {
+          return config;
+        }
+
+        const effectiveMode = mode === 'disabled' ? 'disabled' : skipTypeInfoSplit ? 'asIs' : mode;
+
+        if (effectiveMode === 'asIs') {
+          return config;
+        }
+
+        if (effectiveMode === 'disabled') {
+          rulesRequiringTypeInfo.forEach(({plugin, ruleName}, ruleEntryName) => {
+            const throwsWithoutTypeInfo =
+              RULES_REQUIRING_TYPE_INFORMATION[plugin]?.rules[ruleName] === true;
+            if (throwsWithoutTypeInfo && config.rules) {
+              config.rules[ruleEntryName] = OFF;
+            }
+          });
+
+          return config;
+        }
+
+        const shouldConfigureParser = effectiveMode === 'standalone';
+
         const possibleFiles = new Set<string>([GLOB_TS_X]);
         let extraFileExtensions: Set<string> | undefined;
         const rulesEntries = Array.from(
           rulesRequiringTypeInfo.entries(),
-          ([ruleEntryName, plugin]) => {
+          ([ruleEntryName, {plugin}]) => {
             const entry = config.rules?.[ruleEntryName];
             Reflect.deleteProperty(config.rules || {}, ruleEntryName);
 
@@ -767,22 +805,33 @@ export class ConfigEntryBuilder<
         );
 
         const originalParserOptions = config.languageOptions?.['parserOptions'];
+
+        const splitExtraFileExtensions = [
+          ...(globalParserOptions?.extraFileExtensions || []),
+          ...(extraFileExtensions || []),
+        ];
+        const globalSetsUpProjectService =
+          globalParserOptions?.projectService != null || globalParserOptions?.project != null;
+
         const configForTypeInformation: SetRequired<EslintFlatConfigEntry, 'name'> = {
           ...config,
           name: `${config.name}/@type-information`,
           files: config.files?.length
             ? intersectParentConfigFilesWithProvidedFiles(config.files, [...possibleFiles])
             : [...possibleFiles],
-          ignores: [...(config.ignores || []), GLOB_MD_X_CODE_BLOCKS],
+          ignores: [...(config.ignores || []), GLOB_MD_X_CODE_BLOCKS, ...(typeInfoIgnores || [])],
           languageOptions: {
             ...config.languageOptions,
             parserOptions: {
               ...(typeof originalParserOptions === 'object' &&
                 originalParserOptions !== null &&
                 originalParserOptions),
-              ...(preventCreationOfConfigForRulesWithTypeInformation !== 'noParser' && {
-                ...(extraFileExtensions?.size && {extraFileExtensions: [...extraFileExtensions]}),
-                projectService: true,
+              ...(shouldConfigureParser && {
+                ...globalParserOptions,
+                ...(splitExtraFileExtensions.length > 0 && {
+                  extraFileExtensions: [...new Set(splitExtraFileExtensions)],
+                }),
+                ...(!globalSetsUpProjectService && {projectService: true}),
               }),
             },
           },
@@ -791,7 +840,7 @@ export class ConfigEntryBuilder<
 
         this.addFlatConfig(configForTypeInformation);
 
-        if (preventCreationOfConfigForRulesWithTypeInformation !== 'noParser') {
+        if (shouldConfigureParser) {
           this.context.usedPackages.set('typescriptEslintParser', [
             ...(this.context.usedPackages.get('typescriptEslintParser') || []),
             {
@@ -803,9 +852,7 @@ export class ConfigEntryBuilder<
         }
 
         return [config, configForTypeInformation];
-      }
-
-      return config;
-    });
+      },
+    );
   }
 }

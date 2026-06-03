@@ -176,11 +176,35 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   const usedPackageManager = await detectPackageManager();
   debug(`Detected package manager: ${usedPackageManager?.name ?? '<not detected>'}`);
 
+  const typeInfoRulesRaw = optionsResolved.typeInfoRules;
+  const typeInfoRulesObject = typeof typeInfoRulesRaw === 'object' ? typeInfoRulesRaw : undefined;
+  const typeInfoRulesUserMode =
+    typeof typeInfoRulesRaw === 'string' ? typeInfoRulesRaw : typeInfoRulesObject?.mode;
+  const typeInfoRulesResolved: UnConfigContext['typeInfoRulesResolved'] = {
+    // `mode` is finalized later, after the `ts` config is loaded (see below)
+    mode: typeInfoRulesUserMode ?? 'standalone',
+  };
+  if (typeInfoRulesObject?.ignores?.length) {
+    typeInfoRulesResolved.ignores = typeInfoRulesObject.ignores;
+  }
+  if (typeInfoRulesObject && 'allowDefaultProject' in typeInfoRulesObject) {
+    if (typeInfoRulesObject.allowDefaultProject?.length) {
+      typeInfoRulesResolved.parserOptions = {
+        projectService: {
+          allowDefaultProject: typeInfoRulesObject.allowDefaultProject,
+        },
+      };
+    }
+  } else if (typeInfoRulesObject && 'parserOptions' in typeInfoRulesObject) {
+    typeInfoRulesResolved.parserOptions = typeInfoRulesObject.parserOptions;
+  }
+
   const context = Object.freeze({
     packagesInfo: {},
     rootOptions: optionsResolved,
     internalOptions,
     configsMeta: {},
+    typeInfoRulesResolved,
     disabledAutofixes: {},
     usedPlugins: new Set(),
     usedParsers: new Map(),
@@ -535,9 +559,11 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       : null,
   });
 
-  optionsResolved.preventCreationOfConfigForRulesWithTypeInformation ??= Boolean(
-    tsEslintConfigResult?.setupTypeAwareConfigCreated,
-  );
+  if (typeInfoRulesUserMode == null) {
+    context.typeInfoRulesResolved.mode = tsEslintConfigResult?.setupTypeAwareConfigCreated
+      ? 'splitOnly'
+      : 'standalone';
+  }
 
   const shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs =
     markdownPreferencesConfigResult?.optionsResolved.extendedMarkdownSyntax === true;

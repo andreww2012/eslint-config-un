@@ -400,7 +400,7 @@ export default (async (context, optionsRaw) => {
           settings: {
             jest: pluginSettings,
           },
-          preventCreationOfConfigForRulesWithTypeInformation: true,
+          skipTypeInfoSplit: true,
         },
       ],
       defaultJestEslintConfig,

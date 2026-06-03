@@ -48,7 +48,7 @@ export const computeEslintConfig = async (
           : configsOrSingleConfigName,
     },
     options?.internalOptions || {
-      preventCreationOfConfigForRulesWithTypeInformation: true,
+      skipTypeInfoSplit: true,
     },
   );
 
@@ -168,7 +168,7 @@ export const testEslintConfig = async <
     },
     (typeof optionsOrFixtureSearchRelativeToPath === 'object' &&
       optionsOrFixtureSearchRelativeToPath.internalOptions) || {
-      preventCreationOfConfigForRulesWithTypeInformation: true,
+      skipTypeInfoSplit: true,
     },
   );
 
