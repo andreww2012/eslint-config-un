@@ -794,6 +794,18 @@ Will affect certain rules, actual list of which is written in JSDoc of this opti
 Globally forces non-zero severity of all the rules configured by eslint-config-un (i.e. not within `overrides`, `overridesAny` or [`extraConfigs`](#extraconfigs)).
 This can also be configured per-config.
 
+### `noWarnings`
+
+**Type**: `boolean`
+
+"Zero warnings tolerance" mode.
+Disabled by default.
+When enabled:
+
+- the `warning` (`1`/`'warn'`) severity becomes **unexpressible at the type level** across all severity-typed options: [`forceSeverity`](#forceseverity) (both root and per-config), `overrides`/`overridesAny`, `extraConfigs` rules and the `linterOptions*` options.
+  Trying to use it results in a type error;
+- every `warning` severity eslint-config-un would otherwise set by default is **rewritten to `error` at runtime**, including the implicit [`linterOptions.reportUnusedDisableDirectives`](#linteroptionsnoinlineconfigreportunuseddisabledirectivesreportunusedinlineconfigs) default (which ESLint sets to `'warn'`).
+
 ### `pluginRenames`
 
 **Type**: `Partial<Record<Exclude<PluginPrefix, ''>, string>>`

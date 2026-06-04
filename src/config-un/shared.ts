@@ -42,6 +42,74 @@ import type {ImportPluginReplaceableRules} from './fast-import';
 
 export type ExtraPluginsType = Record<string, MaybeFn<MaybePromise<EslintPlugin>>>;
 
+/**
+ * A bag of options whose values influence the *types* of other options (currently only
+ * `noWarnings`). Passed as the second type parameter of `EslintConfigUnOptions` so the
+ * severity-typed surfaces can react to them.
+ */
+interface TypeAffectingOptionsType {
+  noWarnings?: boolean;
+}
+
+// `StripWarnFromConfig` removes the `warning` (`1`/`'warn'`) severity from every severity-typed
+// surface of a config option object: `forceSeverity`, `overrides`/`overridesAny` entries and the
+// `rules` of raw flat configs (`extraConfigs`). Severity surfaces only live at the top level of a
+// config and inside nested sub-configs (which all follow the `config*` key naming convention), so
+// recursion is restricted to those keys — descending into every property (huge rule-option/settings
+// objects) would be prohibitively expensive for the type checker.
+type EslintSeverityNoWarn = Exclude<EslintSeverity, 1 | 'warn'>;
+
+type StripWarnSeverity<Severity> = Exclude<Severity, 1 | 'warn'>;
+
+type StripWarnRuleEntry<Entry> = Entry extends readonly [infer Severity, ...infer Rest]
+  ? [StripWarnSeverity<Severity>, ...Rest]
+  : StripWarnSeverity<Entry>;
+
+type StripWarnOverrideEntryValue<Value> = Value extends {severity: EslintSeverity}
+  ? OmitStrict<Value, 'severity'> & {severity: StripWarnSeverity<Value['severity']>}
+  : StripWarnRuleEntry<Value>;
+
+type StripWarnOverrideEntry<Entry> = Entry extends (...args: infer Args) => infer Return
+  ? (...args: StripWarnRuleEntry<Args>) => StripWarnOverrideEntryValue<Return>
+  : StripWarnOverrideEntryValue<Entry>;
+
+type StripWarnRulesRecord<RulesRecord> = RulesRecord extends object
+  ? {[RuleName in keyof RulesRecord]: StripWarnOverrideEntry<RulesRecord[RuleName]>}
+  : RulesRecord;
+
+type StripWarnConfigDepth = [never, 0, 1, 2, 3, 4];
+
+type StripWarnFromConfig<Config, Depth extends number = 4> = Config extends (
+  ...args: never[]
+) => unknown
+  ? Config
+  : Config extends object
+    ? {
+        [Key in keyof Config]: Key extends 'forceSeverity'
+          ? StripWarnSeverity<Config[Key]>
+          : Key extends 'overrides' | 'overridesAny' | 'rules'
+            ? StripWarnRulesRecord<Config[Key]>
+            : Key extends `config${string}`
+              ? Depth extends 0
+                ? Config[Key]
+                : StripWarnFromConfig<Config[Key], StripWarnConfigDepth[Depth]>
+              : Config[Key];
+      }
+    : Config;
+
+type NoWarningsEnabled<TypeAffectingOptions extends TypeAffectingOptionsType> =
+  TypeAffectingOptions extends {
+    noWarnings: true;
+  }
+    ? true
+    : false;
+
+type EslintSeverityWithTypeAffectingOptions<TypeAffectingOptions extends TypeAffectingOptionsType> =
+  NoWarningsEnabled<TypeAffectingOptions> extends true ? EslintSeverityNoWarn : EslintSeverity;
+
+type MaybeStripWarningSeverity<Config, TypeAffectingOptions extends TypeAffectingOptionsType> =
+  NoWarningsEnabled<TypeAffectingOptions> extends true ? StripWarnFromConfig<Config> : Config;
+
 type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = OmitStrict<
   EslintFlatConfigEntry,
   'rules'
@@ -81,15 +149,21 @@ type UnConfigsSupportingArrays = keyof Pick<UnConfigs, 'format' | 'packageJson'>
 
 type TypeInfoMode = 'standalone' | 'splitOnly' | 'asIs' | 'disabled';
 
-export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = never> {
+export interface EslintConfigUnOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+  TypeAffectingOptions extends TypeAffectingOptionsType = TypeAffectingOptionsType,
+> {
   // #region 🟠 FREQUENTLY USED OPTIONS
 
   configs?: {
     [Key in keyof UnConfigs<ExtraPlugins>]?:
       | boolean
-      | UnConfigs<ExtraPlugins>[Key]
+      | MaybeStripWarningSeverity<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>
       | (Key extends UnConfigsSupportingArrays
-          ? [UnConfigs<ExtraPlugins>[Key], ...UnConfigs<ExtraPlugins>[Key][]]
+          ? [
+              MaybeStripWarningSeverity<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>,
+              ...MaybeStripWarningSeverity<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>[],
+            ]
           : never);
   };
 
@@ -133,9 +207,11 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    *
    * If `files` are not specified or an empty array, `ignores` is a non-empty array,
    * and the value is not specified, it will implicitly set the value to `off`.
-   * @default 'warn'
+   * @default 'warn'; 'error' when `noWarnings` is `true`
    */
-  linterOptionsReportUnusedDisableDirectives?: ValueOrEslintConfigWithValue<EslintSeverity>;
+  linterOptionsReportUnusedDisableDirectives?: ValueOrEslintConfigWithValue<
+    EslintSeverityWithTypeAffectingOptions<TypeAffectingOptions>
+  >;
 
   /**
    * Sets
@@ -145,7 +221,9 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    * If `files` are not specified or an empty array, `ignores` is a non-empty array,
    * and the value is not specified, it will implicitly set the value to `off`.
    */
-  linterOptionsReportUnusedInlineConfigs?: ValueOrEslintConfigWithValue<EslintSeverity>;
+  linterOptionsReportUnusedInlineConfigs?: ValueOrEslintConfigWithValue<
+    EslintSeverityWithTypeAffectingOptions<TypeAffectingOptions>
+  >;
 
   // #endregion
 
@@ -156,7 +234,7 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
    * will be put as-is after all the eslint-config-un's configs,
    * and before the config which disables Prettier incompatible rules for all files.
    */
-  extraConfigs?: UnFlagConfigEntry<ExtraPlugins>[];
+  extraConfigs?: MaybeStripWarningSeverity<UnFlagConfigEntry<ExtraPlugins>, TypeAffectingOptions>[];
 
   /**
    * This option overrides if certain configs are enabled or disabled by default.
@@ -183,8 +261,25 @@ export interface EslintConfigUnOptions<ExtraPlugins extends ExtraPluginsType = n
   /**
    * Force non-zero severity of all the rules to be `error` or `warning`.
    * This can also be configured per-config.
+   *
+   * When `noWarnings` is enabled, `warning` is no longer accepted here.
    */
-  forceSeverity?: Exclude<EslintSeverity, 0 | 'off'>;
+  forceSeverity?: Exclude<EslintSeverityWithTypeAffectingOptions<TypeAffectingOptions>, 0 | 'off'>;
+
+  /**
+   * "Zero warnings tolerance" mode. When enabled:
+   * - the `warning` (`1`/`'warn'`) severity becomes unexpressible at the type level across all
+   *   severity-typed options (`forceSeverity`, `overrides`/`overridesAny`, `extraConfigs` rules and
+   *   the `linterOptions*` options);
+   * - every `warning` severity `eslint-config-un` would otherwise set by default is rewritten to
+   *   `error` at runtime (including the implicit `linterOptions.reportUnusedDisableDirectives`
+   *   default).
+   *
+   * Note that rules that are turned `off` stay `off` —
+   * this only promotes warnings to errors.
+   * @default false
+   */
+  noWarnings?: boolean;
 
   // #endregion
 

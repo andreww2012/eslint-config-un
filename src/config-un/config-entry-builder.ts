@@ -1,5 +1,6 @@
 import {
   DISABLE_AUTOFIX_WITH_SLASH,
+  ERROR,
   GLOB_CSS,
   GLOB_HTM_HTML,
   GLOB_MARKDOWN,
@@ -11,6 +12,7 @@ import {
   OFF,
   RULES_REQUIRING_TYPE_INFORMATION,
   type RuleSeverity,
+  WARNING,
 } from '../constants';
 import {eslintPluginVanillaRules} from '../eslint/eslint-shared';
 import type {
@@ -24,7 +26,11 @@ import type {
   UnFlatConfigEntryFilesAndIgnores,
   UnRulesConfig,
 } from '../eslint/eslint-types';
-import {genFlatConfigEntryName, resolveFullRuleName} from '../eslint/eslint-utils';
+import {
+  eslintToUnRuleSeverity,
+  genFlatConfigEntryName,
+  resolveFullRuleName,
+} from '../eslint/eslint-utils';
 import {
   type PackageToLoadInfo,
   type ParserPrefix,
@@ -461,10 +467,15 @@ export class ConfigEntryBuilder<
         return result;
       }
 
-      const severityResolved: RuleSeverity =
-        ((configOptions.forceSeverity ?? this.context.rootOptions.forceSeverity) as
-          | RuleSeverity
-          | undefined) ?? severity;
+      const severityRaw =
+        configOptions.forceSeverity ?? this.context.rootOptions.forceSeverity ?? severity;
+      const severityResolved = this.context.rootOptions.noWarnings
+        ? severityRaw === WARNING
+          ? ERROR
+          : severityRaw === 'warn'
+            ? 'error'
+            : severityRaw
+        : severityRaw;
       const ruleNameResolved = resolveFullRuleName(this.context, plugin, ruleNameUnprefixed);
 
       configFinal.rules[ruleNameResolved] = ruleOptions?.length
@@ -497,7 +508,7 @@ export class ConfigEntryBuilder<
         plugin,
         ruleName: ruleNameUnprefixed,
         ruleEntryName: ruleNameResolved,
-        severity: severityResolved,
+        severity: eslintToUnRuleSeverity(severityResolved),
       });
 
       // eslint-disable-next-line ts/no-use-before-define

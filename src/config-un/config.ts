@@ -9,9 +9,11 @@ import {
   CHECKED_LODASH_METHODS,
   DEFAULT_GLOBAL_IGNORES,
   DISABLE_AUTOFIX,
+  ERROR,
   GLOB_CONFIG_FILES,
   GLOB_JS_TS_X_EXTENSION,
   PACKAGES_TO_GET_INFO_FOR,
+  WARNING,
 } from '../constants';
 import type {
   EslintFlatConfigEntry,
@@ -295,6 +297,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     linterOptionsNoInlineConfig,
     linterOptionsReportUnusedDisableDirectives,
     linterOptionsReportUnusedInlineConfigs,
+    noWarnings,
   } = optionsResolved;
 
   if (useFastImport) {
@@ -618,7 +621,11 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     ...(
       [
         [linterOptionsNoInlineConfig, 'noInlineConfig'],
-        [linterOptionsReportUnusedDisableDirectives, 'reportUnusedDisableDirectives'],
+        // Override ESLint's default value of `warn`
+        [
+          linterOptionsReportUnusedDisableDirectives ?? (noWarnings ? ERROR : null),
+          'reportUnusedDisableDirectives',
+        ],
         [linterOptionsReportUnusedInlineConfigs, 'reportUnusedInlineConfigs'],
       ] as const
     ).flatMap(([linterOptionConfigs, linterOptionName]) =>
@@ -633,6 +640,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         let valueFinal = linterOptionConfig.value;
         if (!hasFiles && hasIgnores && valueFinal == null) {
           valueFinal = linterOptionName === 'noInlineConfig' ? false : 'off';
+        }
+        if (noWarnings && (valueFinal === 'warn' || valueFinal === WARNING)) {
+          valueFinal = valueFinal === 'warn' ? 'error' : ERROR;
         }
         return {
           name: genFlatConfigEntryName(

@@ -121,5 +121,6 @@ export default {
     'uncapitalize', // TS utility type
     'dups',
     'strikethrough',
+    'unexpressible',
   ],
 } satisfies CSpellSettings;
