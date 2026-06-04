@@ -118,6 +118,7 @@ const RULES_TO_DISABLE_IN_OFFLINE_MODE = [
   'node-dependencies/require-provenance-deps',
   'lockfile/binary-conflicts',
   'lockfile/integrity',
+  'lockfile/minimum-release-age',
 ] satisfies UnAllRuleNames[];
 
 const PLUGINS_CONFIG_NAME = genFlatConfigEntryName('global-setup/plugins');

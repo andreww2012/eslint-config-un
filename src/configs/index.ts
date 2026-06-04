@@ -771,6 +771,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 🧩 Main plugin: [`eslint-plugin-lockfile`](https://npmx.dev/eslint-plugin-lockfile)
    * ([docs](https://github.com/ljharb/lockfile-tools/tree/main/packages/eslint-plugin#readme))
+   *
+   * ⚙️ Sub config: `packageJson`
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
   lockfile: LockfileEslintConfigOptions<ExtraPlugins>;

@@ -330,8 +330,8 @@ importers:
         specifier: 0.2.0
         version: 0.2.0(eslint@9.39.2)
       eslint-plugin-lockfile:
-        specifier: 1.3.0
-        version: 1.3.0(eslint@9.39.2)
+        specifier: 2.1.0
+        version: 2.1.0(eslint@9.39.2)
       eslint-plugin-markdown-links:
         specifier: 0.9.0
         version: 0.9.0(@eslint/markdown@8.0.2)(eslint@9.39.2)
@@ -7235,8 +7235,8 @@ packages:
     peerDependencies:
       eslint: '>= 8'
 
-  eslint-plugin-lockfile@1.3.0:
-    resolution: {integrity: sha512-6iZdcx/BICCOwqPuORvUYJNZrc8vX4JsnlegagMnY0n+YAEEDB8YIPkwfPTGnejMmMGp0ig08wooOZE2wPgNiQ==}
+  eslint-plugin-lockfile@2.1.0:
+    resolution: {integrity: sha512-s+I1Sy5vDyEczEU4gxRTpEQr+Agqj491zUHLRrUVeUEBSY8sPy/1hu8Cp8pBHw+LrRJoRTQN3XNunR+quQ19gg==}
     engines: {node: ^22.21 || ^24.11 || >= 25.2}
     peerDependencies:
       eslint: ^8.8.0 || ^9.39.2 || ^10.3.0
@@ -13078,7 +13078,7 @@ snapshots:
   '@commitlint/is-ignored@21.0.1':
     dependencies:
       '@commitlint/types': 21.0.1
-      semver: 7.8.0
+      semver: 7.8.1
 
   '@commitlint/lint@21.0.1':
     dependencies:
@@ -14656,7 +14656,7 @@ snapshots:
       proggy: 4.0.0
       promise-all-reject-late: 1.0.1
       promise-call-limit: 3.0.2
-      semver: 7.8.0
+      semver: 7.8.1
       ssri: 13.0.1
       treeverse: 3.0.0
       walk-up-path: 4.0.0
@@ -14702,7 +14702,7 @@ snapshots:
       lru-cache: 11.5.0
       npm-pick-manifest: 11.0.3
       proc-log: 6.1.0
-      semver: 7.8.0
+      semver: 7.8.1
       which: 6.0.1
 
   '@npmcli/installed-package-contents@4.0.0':
@@ -14759,7 +14759,7 @@ snapshots:
       hosted-git-info: 9.0.3
       json-parse-even-better-errors: 5.0.0
       proc-log: 6.1.0
-      semver: 7.8.0
+      semver: 7.8.1
       spdx-expression-parse: 4.0.0
 
   '@npmcli/promise-spawn@7.0.2':
@@ -14907,7 +14907,7 @@ snapshots:
       enquirer: 2.3.6
       nx: 22.7.2
       picomatch: 4.0.4
-      semver: 7.8.0
+      semver: 7.8.1
       tslib: 2.8.1
       yargs-parser: 21.1.1
     transitivePeerDependencies:
@@ -16227,7 +16227,7 @@ snapshots:
       debug: 4.4.3
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.8.0
+      semver: 7.8.1
       tsutils: 3.21.0(typescript@6.0.3)
     optionalDependencies:
       typescript: 6.0.3
@@ -16335,7 +16335,7 @@ snapshots:
       eslint: 9.39.2(jiti@2.7.0)
       eslint-scope: 5.1.1
       eslint-utils: 3.0.0(eslint@9.39.2)
-      semver: 7.8.0
+      semver: 7.8.1
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -18271,7 +18271,7 @@ snapshots:
   eslint-compat-utils@0.5.1(eslint@9.39.2):
     dependencies:
       eslint: 9.39.2(jiti@2.7.0)
-      semver: 7.8.0
+      semver: 7.8.1
 
   eslint-compat-utils@0.6.5(eslint@9.39.2):
     dependencies:
@@ -18820,14 +18820,15 @@ snapshots:
       parse5: 8.0.1
       parse5-htmlparser2-tree-adapter: 8.0.1
 
-  eslint-plugin-lockfile@1.3.0(eslint@9.39.2):
+  eslint-plugin-lockfile@2.1.0(eslint@9.39.2):
     dependencies:
       eslint: 9.39.2(jiti@2.7.0)
+      ignore: 7.0.5
       lockfile-tools: 1.3.0
       minimatch: 10.2.5
       npm-package-arg: 13.0.2
       pacote: 21.5.0
-      semver: 7.8.0
+      semver: 7.8.1
     transitivePeerDependencies:
       - supports-color
 
@@ -21022,7 +21023,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.8.0
+      semver: 7.8.1
 
   make-fetch-happen@15.0.5:
     dependencies:
@@ -21843,7 +21844,7 @@ snapshots:
       npm-install-checks: 8.0.0
       npm-normalize-package-bin: 5.0.0
       npm-package-arg: 13.0.2
-      semver: 7.8.0
+      semver: 7.8.1
 
   npm-pick-manifest@9.1.0:
     dependencies:
