@@ -41,7 +41,7 @@
   "scripts": {
     "contrib:add": "all-contributors add",
     "contrib:gen": "all-contributors generate",
-    "u:after": "nr u:info && nr lint:eslint:fix package.json && nr typegen && nr u:test",
+    "u:after": "nr u:info && cross-env ESLINT_CONFIG_UN_OFFLINE_MODE=1 nr lint:eslint:fix package.json && nr typegen && nr u:test",
     "u:after:dev": "nr u:info && nr knip && nr spellcheck && nr u:test",
     "u:info": "node --import tsx/esm scripts/updated-packages-info.ts",
     "u:test": "nr lint:types:go && nr build:code:test --logLevel warn",
