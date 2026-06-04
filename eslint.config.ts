@@ -106,6 +106,11 @@ export default eslintConfig({
       // Must be in sync with `tsdown.config.ts`'s `deps.alwaysBundle`:
       extraneousDependenciesWhitelist: ['import-meta-resolve', 'is-in-editor', 'remeda'],
     },
+    packageJson: {
+      overrides: {
+        'package-json/no-local-dependencies': 0, // Local deps are bundled
+      },
+    },
     perfectionist: {
       configSortInterfaces: {
         files: ['src/configs/index.ts'],

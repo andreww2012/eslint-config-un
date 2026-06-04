@@ -231,6 +231,7 @@ export default ((context, optionsRaw) => {
           ]
         : [],
     ) /** @since 0.21.0 */ // 🟢
+    .addRule('no-local-dependencies', ERROR) /** @since 1.3.0 */
     .addRule('no-redundant-files', ERROR) /** @since 0.20.0 */ // 🟢
     .addRule('no-redundant-publishConfig', ERROR) /** @since 0.65.0 */ // 🟢
     .addRule('order-properties', ERROR, [{order}]) /** @since 0.1.0 */ // 🟢
