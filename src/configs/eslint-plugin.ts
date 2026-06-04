@@ -1,4 +1,4 @@
-import {ERROR, GLOB_JS_TS_EXTENSION, OFF} from '../constants';
+import {ERROR, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
 import type {ConditionalKeys} from '../types';
 import {generateDefaultTestFiles} from './shared';
 import {
@@ -15,6 +15,7 @@ const ESLINT_PLUGIN_TESTING_RELATED_RULES = [
   'no-identical-tests',
   'no-only-tests',
   'prefer-output-null',
+  'require-test-error-positions',
   'test-case-property-ordering',
   'test-case-shorthand-strings',
 ] satisfies GetRuleNamesInPlugin<'eslint-plugin'>[];
@@ -191,6 +192,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-identical-tests', ERROR) /** @since 0.7.4 */ // 🟢
     .addRule('no-only-tests', ERROR) /** @since 3.3.0 */ // 🟢
     .addRule('prefer-output-null', ERROR) /** @since 0.8.0 */ // 🟢
+    .addRule('require-test-error-positions', WARNING) /** @since 7.4.0 */
     .addRule('test-case-property-ordering', ERROR) /** @since 0.8.0 */
     .addRule('test-case-shorthand-strings', ERROR) /** @since 0.4.0 */
     .enableConfigTesterForPlugin('eslint-plugin', {
