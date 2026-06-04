@@ -35,7 +35,7 @@ allowBuilds:
   esbuild@0.27.7: true
   esbuild@0.28.0: true
   lefthook@2.1.8: true
-  msgpackr-extract@3.0.3: false
+  msgpackr-extract@3.0.4: false
   multiline-ts@4.0.1: false
   nx@22.7.5: false
   puppeteer@25.0.4: true
