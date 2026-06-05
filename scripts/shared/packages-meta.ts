@@ -60,7 +60,7 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
       },
       '@tanstack/query': {
         configs: ['tanstackQuery'],
-        gitTag: versionUnknown,
+        gitTag: (version) => `@tanstack/eslint-plugin-query@${version}`,
         ruleDocsUrl: (ruleName) => `https://tanstack.com/query/latest/docs/eslint/${ruleName}`,
       },
       '@tanstack/router': {
