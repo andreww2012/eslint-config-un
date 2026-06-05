@@ -21,6 +21,8 @@ const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Se
   'eslint-plugin-formatjs',
 ]);
 
+const ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES = new Set(['eslint-mdx']);
+
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set();
 
 const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
@@ -32,21 +34,21 @@ const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
 ]);
 
 const PACKAGE_GROUPS = Object.entries({
-  'Package manager': {packages: ['pnpm'], special: true},
-  tsgo: {packages: ['@typescript/native-preview'], special: true},
+  'Package manager': {packages: ['pnpm'], nonEslint: true},
+  tsgo: {packages: ['@typescript/native-preview'], nonEslint: true},
+  '@effect': {packages: ['effect'], nonEslint: true},
+  '@vitest': {packages: ['vitest'], excludePackages: ['eslint-plugin'], nonEslint: true},
 
   '@typescript-eslint': {packages: ['typescript-eslint']},
   '@angular-eslint': {packages: []},
-  '@effect': {packages: ['effect']},
-  '@jest': {packages: []},
+  '@eslint-react': {packages: ['eslint-plugin-react-debug']},
   '@html-eslint': {packages: []},
+  '@jest': {packages: []},
   '@sveltejs': {packages: ['eslint-plugin-svelte', 'svelte-eslint-parser']},
   '@tsrx': {packages: []},
-  '@vitest': {packages: ['vitest'], excludePackages: ['eslint-plugin']},
   'eslint-plugin-vue': {packages: ['vue-eslint-parser']},
   'eslint-plugin-astro': {packages: ['astro-eslint-parser']},
   'eslint-plugin-ember': {packages: ['ember-eslint-parser']},
-  '@eslint-react': {packages: ['eslint-plugin-react-debug']},
 }).reduce((result, [groupName, {packages: packagesInGroup, ...groupMeta}]) => {
   const groupInfo = {
     groupName,
@@ -113,21 +115,22 @@ module.exports = {
     }
 
     if (knownGroup) {
-      if (knownGroup.special) {
+      if (knownGroup.nonEslint) {
         return `✨ ${knownGroup.groupName}`;
       }
-      return `3. ${knownGroup.groupName} (🟢🟡 plugins and/or non-plugins)`;
+      return `3. ${knownGroup.groupName} (🟡 ESLint-related)`;
     }
 
     const isPlugin =
       fullName.startsWith('eslint-plugin-') ||
       nameWithoutScope.startsWith('eslint-plugin') ||
-      (nameScope === '@eslint' && !SCOPED_ESLINT_PACKAGES_NOT_PLUGINS.has(nameWithoutScope));
+      (nameScope === '@eslint' && !SCOPED_ESLINT_PACKAGES_NOT_PLUGINS.has(nameWithoutScope)) ||
+      ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES.has(fullName);
     const isParser = fullName.endsWith('-eslint-parser') || fullName.endsWith('-eslint/parser');
     const isPublishedFromMonorepoWithPackagesUnrelatedToEslint =
       PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT.has(fullName);
 
-    const groupNamePluginSuffix = `${isPlugin ? '(🟢 plugin(s))' : isParser ? '(🟢 parser(s))' : '(🟡 non-plugin/parser(s))'}${isPublishedFromMonorepoWithPackagesUnrelatedToEslint ? ' (🔴 updates might be fake)' : ''}`;
+    const groupNamePluginSuffix = `${isPlugin || isParser ? '(🟢 ESLint plugins/parsers)' : fullName.includes('eslint') ? '🔵 (ESLint related)' : '(⚪️ non-ESLint)'}${isPublishedFromMonorepoWithPackagesUnrelatedToEslint ? ' (⚠️ monorepo release)' : ''}`;
 
     /**
      * @param {number} base Base group number
