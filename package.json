@@ -122,7 +122,7 @@
     "es-toolkit": "1.47.0",
     "eslint-config-flat-gitignore": "2.3.0",
     "eslint-config-prettier": "10.1.8",
-    "eslint-import-resolver-typescript": "4.4.4",
+    "eslint-import-resolver-typescript": "4.4.5",
     "eslint-mdx": "3.8.1",
     "eslint-merge-processors": "2.0.0",
     "eslint-no-restricted": "0.1.1",

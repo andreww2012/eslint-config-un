@@ -688,6 +688,10 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
     configs: ['ember'],
     ruleDocsUrl: null,
   },
+  'eslint-import-resolver-typescript': {
+    configs: ['import'],
+    ruleDocsUrl: null,
+  },
   'eslint-mdx': {
     configs: ['mdx'],
     gitTag: (tag) => `eslint-mdx@${tag}`,
