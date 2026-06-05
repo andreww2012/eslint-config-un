@@ -219,6 +219,7 @@ export default (async (context, optionsRaw) => {
     .addRule('no-dupe-on-directives', ERROR) /** @since 2.14.0 */ // 🟢4️⃣
     .addRule('no-dupe-style-properties', ERROR) /** @since 0.31.0 */ // 🟢
     .addRule('no-dupe-use-directives', ERROR) /** @since 2.14.0 */ // 🟢
+    .addRule('no-nested-style-tag', ERROR) /** @since 3.18.0 */
     .addRule('no-not-function-handler', ERROR) /** @since 0.5.0 */ // 🟢
     .addRule('no-object-in-text-mustaches', ERROR) /** @since 0.5.0 */ // 🟢
     .addRule('no-raw-special-elements', ERROR) /** @since 3.0.0-next.1 */ // 🟢
@@ -261,6 +262,7 @@ export default (async (context, optionsRaw) => {
       {destructuring: 'all', ignoreReadBeforeAssign: true},
     ]) /** @since 3.0.0-next.6 */
     .disableAnyRule('', 'prefer-const')
+    .addRule('prefer-derived-over-derived-by', ERROR) /** @since 3.18.0 */
     .addRule('prefer-destructured-store-props', OFF) /** @since 2.10.0 */
     .addRule('prefer-writable-derived', ERROR) /** @since 3.6.0 */
     .addRule('require-each-key', ERROR) /** @since 2.28.0 */ // 🟢
