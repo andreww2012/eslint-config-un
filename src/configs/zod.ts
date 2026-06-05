@@ -271,6 +271,7 @@ export default ((context, optionsRaw) => {
       ...resolveConsistentSchemaVarNameOptions(optionsResolved),
     ) /** @since 3.11.0 */ // 🟢
     .addRule('no-any-schema', WARNING) /** @since 0.0.1 */ /** @aka no-any (before 2.0.0) */ // 🟢
+    .addRule('no-duplicate-schema-methods', ERROR) /** @since 4.6.0 */ // 🟢
     .addRule('no-empty-custom-schema', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule('no-native-enum', severityForRulesOnlyForV4) /** @since 4.2.0 */ // 🟢
     // `.int()` added in v4
