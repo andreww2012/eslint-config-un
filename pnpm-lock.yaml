@@ -500,7 +500,7 @@ importers:
         version: 4.4.0(@types/node@20.19.1)(eslint@9.39.2)(graphql@16.11.0)(json-schema-to-ts@3.1.1)(typescript@6.0.3)
       '@intlify/eslint-plugin-vue-i18n':
         specifier: 4.5.1
-        version: 4.5.1(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)(vue-eslint-parser@10.4.0)(yaml-eslint-parser@2.0.0)
+        version: 4.5.1(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)(vue-eslint-parser@10.4.1)(yaml-eslint-parser@2.0.0)
       '@jest/environment':
         specifier: 30.4.1
         version: 30.4.1
@@ -805,11 +805,11 @@ importers:
         specifier: 4.4.1
         version: 4.4.1(@typescript-eslint/eslint-plugin@8.60.1)(eslint@9.39.2)
       eslint-plugin-vue:
-        specifier: 10.9.1
-        version: 10.9.1(@stylistic/eslint-plugin@5.10.0)(@typescript-eslint/parser@8.60.1)(eslint@9.39.2)(vue-eslint-parser@10.4.0)
+        specifier: 10.9.2
+        version: 10.9.2(@stylistic/eslint-plugin@5.10.0)(@typescript-eslint/parser@8.60.1)(eslint@9.39.2)(vue-eslint-parser@10.4.1)
       eslint-plugin-vue-scoped-css:
         specifier: 3.1.1
-        version: 3.1.1(eslint@9.39.2)(postcss-scss@4.0.9)(vue-eslint-parser@10.4.0)
+        version: 3.1.1(eslint@9.39.2)(postcss-scss@4.0.9)(vue-eslint-parser@10.4.1)
       eslint-plugin-vuejs-accessibility:
         specifier: 2.5.0
         version: 2.5.0(eslint@9.39.2)(globals@17.6.0)
@@ -925,8 +925,8 @@ importers:
         specifier: 4.1.7
         version: 4.1.7(@types/node@20.19.1)(@vitest/coverage-v8@4.1.7)(@vitest/ui@4.1.7)(vite@8.0.14)
       vue-eslint-parser:
-        specifier: 10.4.0
-        version: 10.4.0(eslint@9.39.2)
+        specifier: 10.4.1
+        version: 10.4.1(eslint@9.39.2)
       yaml:
         specifier: 2.9.0
         version: 2.9.0
@@ -7625,8 +7625,8 @@ packages:
       postcss-styl:
         optional: true
 
-  eslint-plugin-vue@10.9.1:
-    resolution: {integrity: sha512-cHB0Tf4Duvzwecwd/AqWzZvF/QszE13BhjVUpVXWCy9AeMR5GjkAjP3i85vqgLgOuTmkHR1OJ5oMeqLHtuw8zg==}
+  eslint-plugin-vue@10.9.2:
+    resolution: {integrity: sha512-4g7ZP3pYcuqd7Zp0pzUKcos0W+RkjBz4EGdhJ92FcYk6v03Ti/GK5NwjgsjxHK+98eXDbHeK7VtX1az7/8doZA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       '@stylistic/eslint-plugin': ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
@@ -11653,6 +11653,12 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
 
+  vue-eslint-parser@10.4.1:
+    resolution: {integrity: sha512-Gk6gRDj0n/fkRa3C3l0bBheoBckUq/Rs0F/TvMWIS6nzzx67amAViMe9CkNgsP2tXyQONvGiHQESHwFtZ3aYDA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
+
   walk-up-path@3.0.1:
     resolution: {integrity: sha512-9YlCL/ynK3CTlrSRrDxZvUauLzAswPCrsaCgilqFevUYpeEW0/3ScEjaa3kbW/T0ghhkEr7mv+fpjqn1Y1YuTA==}
 
@@ -14329,7 +14335,7 @@ snapshots:
       '@intlify/core-base': 11.4.4
       '@intlify/shared': 11.4.4
 
-  '@intlify/eslint-plugin-vue-i18n@4.5.1(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)(vue-eslint-parser@10.4.0)(yaml-eslint-parser@2.0.0)':
+  '@intlify/eslint-plugin-vue-i18n@4.5.1(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)(vue-eslint-parser@10.4.1)(yaml-eslint-parser@2.0.0)':
     dependencies:
       '@eslint/eslintrc': 3.3.5
       '@intlify/core-base': 11.4.4
@@ -14348,7 +14354,7 @@ snapshots:
       parse5: 7.3.0
       semver: 7.8.1
       synckit: 0.11.13
-      vue-eslint-parser: 10.4.0(eslint@9.39.2)
+      vue-eslint-parser: 10.4.1(eslint@9.39.2)
       yaml-eslint-parser: 2.0.0
     transitivePeerDependencies:
       - supports-color
@@ -19314,7 +19320,7 @@ snapshots:
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 8.60.1(@typescript-eslint/parser@8.60.1)(eslint@9.39.2)(typescript@6.0.3)
 
-  eslint-plugin-vue-scoped-css@3.1.1(eslint@9.39.2)(postcss-scss@4.0.9)(vue-eslint-parser@10.4.0):
+  eslint-plugin-vue-scoped-css@3.1.1(eslint@9.39.2)(postcss-scss@4.0.9)(vue-eslint-parser@10.4.1):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       es-toolkit: 1.47.0
@@ -19322,11 +19328,11 @@ snapshots:
       postcss: 8.5.15
       postcss-safe-parser: 7.0.1(postcss@8.5.15)
       postcss-selector-parser: 7.1.1
-      vue-eslint-parser: 10.4.0(eslint@9.39.2)
+      vue-eslint-parser: 10.4.1(eslint@9.39.2)
     optionalDependencies:
       postcss-scss: 4.0.9(postcss@8.5.15)
 
-  eslint-plugin-vue@10.9.1(@stylistic/eslint-plugin@5.10.0)(@typescript-eslint/parser@8.60.1)(eslint@9.39.2)(vue-eslint-parser@10.4.0):
+  eslint-plugin-vue@10.9.2(@stylistic/eslint-plugin@5.10.0)(@typescript-eslint/parser@8.60.1)(eslint@9.39.2)(vue-eslint-parser@10.4.1):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       eslint: 9.39.2(jiti@2.7.0)
@@ -19334,7 +19340,7 @@ snapshots:
       nth-check: 2.1.1
       postcss-selector-parser: 7.1.1
       semver: 7.8.1
-      vue-eslint-parser: 10.4.0(eslint@9.39.2)
+      vue-eslint-parser: 10.4.1(eslint@9.39.2)
       xml-name-validator: 4.0.0
     optionalDependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.2)
@@ -24117,6 +24123,18 @@ snapshots:
   vscode-uri@3.1.0: {}
 
   vue-eslint-parser@10.4.0(eslint@9.39.2):
+    dependencies:
+      debug: 4.4.3
+      eslint: 9.39.2(jiti@2.7.0)
+      eslint-scope: 9.1.2
+      eslint-visitor-keys: 5.0.1
+      espree: 11.2.0
+      esquery: 1.7.0
+      semver: 7.8.1
+    transitivePeerDependencies:
+      - supports-color
+
+  vue-eslint-parser@10.4.1(eslint@9.39.2):
     dependencies:
       debug: 4.4.3
       eslint: 9.39.2(jiti@2.7.0)
