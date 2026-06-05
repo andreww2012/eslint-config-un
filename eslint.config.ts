@@ -104,7 +104,7 @@ export default eslintConfig({
       },
 
       // Must be in sync with `tsdown.config.ts`'s `deps.alwaysBundle`:
-      extraneousDependenciesWhitelist: ['import-meta-resolve', 'is-in-editor', 'remeda'],
+      extraneousDependenciesWhitelist: ['import-meta-resolve', 'remeda'],
     },
     packageJson: {
       overrides: {

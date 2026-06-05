@@ -6,6 +6,7 @@ import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
 import {destr as jsonParse} from 'destr';
 import {resolve as resolvePackage} from 'import-meta-resolve';
 import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
+import {isInEditor as isInEditorOriginal} from 'is-in-editor';
 import {Traverse, type TraverseOptions} from 'neotraverse/modern';
 import * as R from 'remeda';
 import type {FalsyValue, MaybePromise, Nullable, PackageJson, StripReadonly} from './types';
@@ -32,7 +33,8 @@ export {kebabCase} from 'string-ts';
 
 export {destr as jsonParse} from 'destr';
 
-export {isInEditor} from 'is-in-editor';
+export const isInEditor = () => isInEditorOriginal({mode: 'strict'});
+
 export {isCI as isInCi} from 'ci-info';
 
 const generateStyleFn = (color: Parameters<typeof styleText>[0]) => (string: string) =>

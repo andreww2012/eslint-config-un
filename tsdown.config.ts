@@ -8,8 +8,10 @@ export default defineConfig({
     neverBundle: ['eslint-plugin-no-type-assertion', 'eslint-plugin-prettier'],
     // Must be in sync with `eslint.config.ts`'s `extraneousDependenciesWhitelist`:
     alwaysBundle: [
-      /^(import-meta-resolve|is-in-editor)(?:\/.+)?$/, // Patched
-      /^(remeda)(?:\/.+)?$/, // Inlined to avoid always considered installed
+      // eslint-disable-next-line regexp/no-useless-non-capturing-group
+      /^(?:import-meta-resolve)(?:\/.+)?$/, // Patched
+      // eslint-disable-next-line regexp/no-useless-non-capturing-group
+      /^(?:remeda)(?:\/.+)?$/, // Inlined to avoid always considered installed
     ],
   },
   dts: {

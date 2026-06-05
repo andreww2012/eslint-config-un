@@ -217,7 +217,6 @@ patchedDependencies:
   eslint-plugin-prettier: ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495
   eslint-plugin-remeda@2.1.0: b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08
   import-meta-resolve: 13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba
-  is-in-editor: ac57231e92db3a074f89b4c3f2ce951468853ecc52a96978083635819db9df0e
   npm-check-updates: 34b296a4d31cf7f4bc4990ef62529665978e07f46f2d0f14ea0dbc8f2a7a1e2f
 
 importers:
@@ -404,6 +403,9 @@ importers:
       globals:
         specifier: 17.6.0
         version: 17.6.0
+      is-in-editor:
+        specifier: 0.4.0
+        version: 0.4.0
       klona:
         specifier: 2.0.6
         version: 2.0.6
@@ -843,9 +845,6 @@ importers:
       is-immutable-type:
         specifier: 5.0.2
         version: 5.0.2(eslint@9.39.2)(typescript@6.0.3)
-      is-in-editor:
-        specifier: 0.3.0
-        version: 0.3.0(patch_hash=ac57231e92db3a074f89b4c3f2ce951468853ecc52a96978083635819db9df0e)
       jest-extended:
         specifier: 7.0.0
         version: 7.0.0(typescript@6.0.3)
@@ -8558,8 +8557,8 @@ packages:
       eslint: '*'
       typescript: '>=4.7.4'
 
-  is-in-editor@0.3.0:
-    resolution: {integrity: sha512-shdcng+s+60DD1sEnG0IqWqXZsNwinvd/U9UG6C9Uysc4gcxT0RB86kXxicftdx2nmaPm7DTx74mKpb68ToUKw==}
+  is-in-editor@0.4.0:
+    resolution: {integrity: sha512-PVjW5406p2wAbT6NzSj3mPBbvRQuVNoAI0K7RJhzp4h0Uf4vzxVvZ2huVnQCUBTSFDt0CmoDH5Ho/KJocP1rqQ==}
 
   is-in-ssh@1.0.0:
     resolution: {integrity: sha512-jYa6Q9rH90kR1vKB6NM7qqd1mge3Fx4Dhw5TVlK1MUBqhEOuCagrEHMevNuCcbECmXZ0ThXkRm+Ymr51HwEPAw==}
@@ -20299,7 +20298,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  is-in-editor@0.3.0(patch_hash=ac57231e92db3a074f89b4c3f2ce951468853ecc52a96978083635819db9df0e): {}
+  is-in-editor@0.4.0: {}
 
   is-in-ssh@1.0.0: {}
 
