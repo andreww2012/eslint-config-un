@@ -290,8 +290,8 @@ importers:
         specifier: 4.4.4
         version: 4.4.4(eslint-plugin-import-x@4.16.2)(eslint@9.39.2)
       eslint-mdx:
-        specifier: 3.7.0
-        version: 3.7.0(eslint@9.39.2)
+        specifier: 3.8.1
+        version: 3.8.1(eslint@9.39.2)
       eslint-merge-processors:
         specifier: 2.0.0
         version: 2.0.0(eslint@9.39.2)
@@ -6998,16 +6998,6 @@ packages:
       jsonc-eslint-parser: ^2.4.0 || ^3.0.0
     peerDependenciesMeta:
       '@eslint/json':
-        optional: true
-
-  eslint-mdx@3.7.0:
-    resolution: {integrity: sha512-QpPdJ6EeFthHuIrfgnWneZgwwFNOLFj/nf2jg/tOTBoiUnqNTxUUpTGAn0ZFHYEh5htVVoe5kjvD02oKtxZGeA==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      eslint: '>=8.0.0'
-      remark-lint-file-extension: '*'
-    peerDependenciesMeta:
-      remark-lint-file-extension:
         optional: true
 
   eslint-mdx@3.8.1:
@@ -18536,25 +18526,6 @@ snapshots:
       jsonc-eslint-parser: 3.1.0
     optionalDependencies:
       '@eslint/json': 1.2.0
-
-  eslint-mdx@3.7.0(eslint@9.39.2):
-    dependencies:
-      acorn: 8.16.0
-      acorn-jsx: 5.3.2(acorn@8.16.0)
-      eslint: 9.39.2(jiti@2.7.0)
-      espree: 10.4.0
-      estree-util-visit: 2.0.0
-      remark-mdx: 3.1.1
-      remark-parse: 11.0.0
-      remark-stringify: 11.0.0
-      synckit: 0.11.13
-      unified: 11.0.5
-      unified-engine: 11.2.2
-      unist-util-visit: 5.1.0
-      vfile: 6.0.3
-    transitivePeerDependencies:
-      - bluebird
-      - supports-color
 
   eslint-mdx@3.8.1(eslint@9.39.2):
     dependencies:

@@ -688,6 +688,11 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
     configs: ['ember'],
     ruleDocsUrl: null,
   },
+  'eslint-mdx': {
+    configs: ['mdx'],
+    gitTag: (tag) => `eslint-mdx@${tag}`,
+    ruleDocsUrl: null,
+  },
   'eslint-no-restricted': {
     configs: [],
     gitTag: versionAsIs,
