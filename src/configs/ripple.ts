@@ -50,7 +50,6 @@ export default ((context, optionsRaw) => {
     .addRule('control-flow-jsx', ERROR) /** @since 0.3.25 */
     .addRule('no-lazy-destructuring-in-modules', ERROR) /** @since 0.3.25 */
     .addRule('no-module-scope-track', ERROR) /** @since 0.3.25 */
-    .addRule('no-return-in-component', ERROR) /** @since 0.3.25 */
     .addRule('prefer-oninput', WARNING) /** @since 0.3.25 */
     .addRule('valid-for-of-key', ERROR) /** @since 0.3.25 */
     .addOverrides();

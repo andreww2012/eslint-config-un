@@ -535,11 +535,11 @@ importers:
         specifier: 0.1.0
         version: 0.1.0(eslint@9.39.2)(typescript@6.0.3)
       '@tsrx/eslint-parser':
-        specifier: 0.3.65
-        version: 0.3.65(@typescript-eslint/types@8.60.1)(eslint@9.39.2)
+        specifier: 0.3.72
+        version: 0.3.72(@typescript-eslint/types@8.60.1)(eslint@9.39.2)
       '@tsrx/eslint-plugin':
-        specifier: 0.3.65
-        version: 0.3.65(@tsrx/eslint-parser@0.3.65)(@typescript-eslint/parser@8.60.0)(eslint@9.39.2)
+        specifier: 0.3.72
+        version: 0.3.72(@tsrx/eslint-parser@0.3.72)(@typescript-eslint/parser@8.60.0)(eslint@9.39.2)
       '@types/eslint-plugin-mobx':
         specifier: 0.0.0
         version: 0.0.0(jiti@2.7.0)
@@ -4685,20 +4685,20 @@ packages:
   '@thepassle/axobject-query@4.0.0':
     resolution: {integrity: sha512-/LHo+2jOdxs2WtbGocr3/lDSzsnjgCV6DSoBf4Y1Q0D24Hu67NPWuneoJimfHu5auqqSWi1fAvtln2013VxVqg==}
 
-  '@tsrx/core@0.1.13':
-    resolution: {integrity: sha512-CpachOxyUIbf+0q6zWJfI1RFpHdo6ZIy0v62qzW72WfW+tPtg8w0f9wFrA0AwhgpO8AFJtT5oNerXpScVMagOQ==}
+  '@tsrx/core@0.1.20':
+    resolution: {integrity: sha512-3SjpoFlEv4it4NFwF3bNuYupqKmpAdyRVOAY6/AGF/TAomL3cJVOmURyykaUrINFrcHXe2hksYdrUw9QcliheQ==}
 
-  '@tsrx/eslint-parser@0.3.65':
-    resolution: {integrity: sha512-6hbOqX4EOw0OuUrCDhMrETBcTiDSaA2e5pMprQGFtEJ+PtbP7rx4+ssJ2/KX0NsfsB/EEh2Gkfh4qxhYz21fAg==}
+  '@tsrx/eslint-parser@0.3.72':
+    resolution: {integrity: sha512-I+ExQMff4lIL8zX0P1OTUE/Nk9DtMdXhwOjKlSL5o16ADGgzJFd4o4xWCnPZRgnJhSk5vykF3yTBECneo+F3AA==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       eslint: '>=9.0.0'
 
-  '@tsrx/eslint-plugin@0.3.65':
-    resolution: {integrity: sha512-D8++1XG9iv8RO8WFqicRwKZupsUfQRZ8xcYI5vUob8QOVv1ZMGfarWx3+d/TAYkO1nzBu7jLANCL854hjblr1A==}
+  '@tsrx/eslint-plugin@0.3.72':
+    resolution: {integrity: sha512-ee5w1c97EQYjykoceJqT43JBB96jVhU4G8uVd5XAbYA91LWoVh0y5uPIhStldVC2qQ154B381JCjtRWmpAu5Ug==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@tsrx/eslint-parser': 0.3.65
+      '@tsrx/eslint-parser': 0.3.72
       '@typescript-eslint/parser': ^8.56.1
       eslint: '>=9.0.0'
 
@@ -15849,7 +15849,7 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  '@tsrx/core@0.1.13(@typescript-eslint/types@8.60.1)':
+  '@tsrx/core@0.1.20(@typescript-eslint/types@8.60.1)':
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
       '@noble/hashes': 2.2.0
@@ -15864,16 +15864,16 @@ snapshots:
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/eslint-parser@0.3.65(@typescript-eslint/types@8.60.1)(eslint@9.39.2)':
+  '@tsrx/eslint-parser@0.3.72(@typescript-eslint/types@8.60.1)(eslint@9.39.2)':
     dependencies:
-      '@tsrx/core': 0.1.13(@typescript-eslint/types@8.60.1)
+      '@tsrx/core': 0.1.20(@typescript-eslint/types@8.60.1)
       eslint: 9.39.2(jiti@2.7.0)
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/eslint-plugin@0.3.65(@tsrx/eslint-parser@0.3.65)(@typescript-eslint/parser@8.60.0)(eslint@9.39.2)':
+  '@tsrx/eslint-plugin@0.3.72(@tsrx/eslint-parser@0.3.72)(@typescript-eslint/parser@8.60.0)(eslint@9.39.2)':
     dependencies:
-      '@tsrx/eslint-parser': 0.3.65(@typescript-eslint/types@8.60.1)(eslint@9.39.2)
+      '@tsrx/eslint-parser': 0.3.72(@typescript-eslint/types@8.60.1)(eslint@9.39.2)
       '@typescript-eslint/parser': 8.60.0(eslint@9.39.2)(typescript@6.0.3)
       eslint: 9.39.2(jiti@2.7.0)
 

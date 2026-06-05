@@ -149,7 +149,7 @@ describe('rules', () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      '"track() cannot be called at module scope. It must be called within a component context."',
+      '"track() cannot be called at module scope. Move it into a function body."',
     );
   });
 
@@ -167,7 +167,7 @@ describe('rules', () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      '"track() cannot be called at module scope. It must be called within a component context."',
+      '"track() cannot be called at module scope. Move it into a function body."',
     );
   });
 
@@ -185,7 +185,7 @@ describe('rules', () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      '"track() cannot be called at module scope. It must be called within a component context."',
+      '"track() cannot be called at module scope. Move it into a function body."',
     );
   });
 });
