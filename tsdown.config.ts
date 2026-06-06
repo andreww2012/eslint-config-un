@@ -1,18 +1,18 @@
 import {defineConfig} from 'tsdown';
+import ourPackageJson from './package.json' with {type: 'json'};
+
+export const ALWAYS_BUNDLED_DEPENDENCIES: string[] = [
+  'import-meta-resolve', // Patched
+  'remeda', // Inlined to avoid always considered installed
+];
 
 export default defineConfig({
   entry: ['src/index.ts', 'src/snippets.ts', 'src/globs.ts'],
   format: 'esm',
   unbundle: true,
   deps: {
-    neverBundle: ['eslint-plugin-no-type-assertion', 'eslint-plugin-prettier'],
-    // Must be in sync with `eslint.config.ts`'s `extraneousDependenciesWhitelist`:
-    alwaysBundle: [
-      // eslint-disable-next-line regexp/no-useless-non-capturing-group
-      /^(?:import-meta-resolve)(?:\/.+)?$/, // Patched
-      // eslint-disable-next-line regexp/no-useless-non-capturing-group
-      /^(?:remeda)(?:\/.+)?$/, // Inlined to avoid always considered installed
-    ],
+    neverBundle: ourPackageJson.bundleDependencies,
+    alwaysBundle: [new RegExp(String.raw`^(?:${ALWAYS_BUNDLED_DEPENDENCIES.join('|')})(?:\/.+)?$`)],
   },
   dts: {
     resolve: [

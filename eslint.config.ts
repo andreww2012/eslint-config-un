@@ -1,6 +1,7 @@
 import {optionalPeerDependencyVersionShouldMatchInstalledVersion} from './eslint-local-rules/optional-peer-dependency-version-should-match-installed-version';
 import {eslintConfig, isInCi} from './src';
 import {forbidImportingFromUtilityLibraries} from './src/snippets';
+import {ALWAYS_BUNDLED_DEPENDENCIES} from './tsdown.config';
 
 export default eslintConfig({
   ignores: ['test/**/fixtures/**'],
@@ -102,9 +103,7 @@ export default eslintConfig({
       overrides: {
         'import/default': 0, // TODO started to produce many false reports, investigate why
       },
-
-      // Must be in sync with `tsdown.config.ts`'s `deps.alwaysBundle`:
-      extraneousDependenciesWhitelist: ['import-meta-resolve', 'remeda'],
+      extraneousDependenciesWhitelist: ALWAYS_BUNDLED_DEPENDENCIES,
     },
     packageJson: {
       overrides: {

@@ -126,7 +126,6 @@
     "eslint-mdx": "3.8.1",
     "eslint-merge-processors": "2.0.0",
     "eslint-no-restricted": "0.1.1",
-    "eslint-plugin-arrow-return-style-x": "1.2.6",
     "eslint-plugin-css": "0.12.0",
     "eslint-plugin-depend": "1.5.0",
     "eslint-plugin-file-progress": "4.0.0",
@@ -240,6 +239,7 @@
     "eslint": "9.39.2",
     "eslint-parser-plain": "0.1.1",
     "eslint-plugin-antfu": "3.2.3",
+    "eslint-plugin-arrow-return-style-x": "1.2.6",
     "eslint-plugin-astro": "1.7.0",
     "eslint-plugin-ava": "17.0.0",
     "eslint-plugin-awscdk": "4.3.3",
@@ -736,7 +736,8 @@
   },
   "bundleDependencies": [
     "eslint-plugin-prettier",
-    "eslint-plugin-no-type-assertion"
+    "eslint-plugin-no-type-assertion",
+    "eslint-plugin-arrow-return-style-x"
   ],
   "engines": {
     "node": "^22.18.0 || >=24"
