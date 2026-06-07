@@ -213,7 +213,7 @@ overrides:
 
 patchedDependencies:
   eslint-plugin-node-dependencies: 0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4
-  eslint-plugin-prettier: ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495
+  eslint-plugin-prettier@5.5.6: f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087
   eslint-plugin-remeda@2.1.0: b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08
   import-meta-resolve: 13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba
   npm-check-updates: 1f4558c8d7e70491d4a213c5ffae24a66a1edf45efd6f171096d275469667ad8
@@ -366,9 +366,6 @@ importers:
       eslint-plugin-pnpm:
         specifier: 1.6.1
         version: 1.6.1(eslint@9.39.2)
-      eslint-plugin-prettier:
-        specifier: file:deps/eslint-plugin-prettier-5.5.0.tgz
-        version: file:deps/eslint-plugin-prettier-5.5.0.tgz(patch_hash=ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8)(eslint@9.39.2)(prettier@3.8.3)
       eslint-plugin-promise:
         specifier: 7.3.0
         version: 7.3.0(eslint@9.39.2)
@@ -748,6 +745,9 @@ importers:
       eslint-plugin-prefer-arrow-functions:
         specifier: 3.9.1
         version: 3.9.1(eslint@9.39.2)(typescript@6.0.3)
+      eslint-plugin-prettier:
+        specifier: 5.5.6
+        version: 5.5.6(patch_hash=f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8)(eslint@9.39.2)(prettier@3.8.3)
       eslint-plugin-qunit:
         specifier: 8.2.6
         version: 8.2.6(eslint@9.39.2)
@@ -7472,9 +7472,8 @@ packages:
     peerDependencies:
       eslint: '>=9.17.0'
 
-  eslint-plugin-prettier@file:deps/eslint-plugin-prettier-5.5.0.tgz:
-    resolution: {integrity: sha512-5Xj58rV3To8ewMwFoK3WErxeSWjeRS0wwJs2U2fILF0ZzJsgEHzqvT5gF+SrmZRAGYQHiPbyfeNcMmF3f+Eveg==, tarball: file:deps/eslint-plugin-prettier-5.5.0.tgz}
-    version: 5.5.0
+  eslint-plugin-prettier@5.5.6:
+    resolution: {integrity: sha512-ifetmTcxWfz+4qRW3pH/ujdTq2jQIj59AxJMIN26K5avYgU8dxycUETQonWiW+wPrYXA0j3Try0l1CnwVQtDqQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       '@types/eslint': '>=8.0.0'
@@ -19050,7 +19049,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-prettier@file:deps/eslint-plugin-prettier-5.5.0.tgz(patch_hash=ada31312b3c2ea47a1549fe585b058e953150b298e93d6299c6862a35a697495)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8)(eslint@9.39.2)(prettier@3.8.3):
+  eslint-plugin-prettier@5.5.6(patch_hash=f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8)(eslint@9.39.2)(prettier@3.8.3):
     dependencies:
       eslint: 9.39.2(jiti@2.7.0)
       prettier: 3.8.3

@@ -12,7 +12,7 @@ export default defineConfig({
   format: 'esm',
   unbundle: true,
   deps: {
-    neverBundle: ourPackageJson.bundleDependencies,
+    neverBundle: [...ourPackageJson.bundleDependencies],
     alwaysBundle: [new RegExp(String.raw`^(?:${ALWAYS_BUNDLED_DEPENDENCIES.join('|')})(?:\/.+)?$`)],
   },
   dts: {

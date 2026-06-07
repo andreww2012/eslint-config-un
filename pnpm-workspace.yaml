@@ -53,7 +53,7 @@ overrides:
 
 patchedDependencies:
   eslint-plugin-node-dependencies: patches/eslint-plugin-node-dependencies.patch
-  eslint-plugin-prettier: patches/eslint-plugin-prettier.patch
+  eslint-plugin-prettier@5.5.6: patches/eslint-plugin-prettier@5.5.6.patch
   eslint-plugin-remeda@2.1.0: patches/eslint-plugin-remeda@2.1.0.patch
   import-meta-resolve: patches/import-meta-resolve.patch
   npm-check-updates: patches/npm-check-updates.patch

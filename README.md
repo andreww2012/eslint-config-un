@@ -50,21 +50,6 @@ Certain plugins (usually framework/library specific ones) are optional peer depe
 You need to run ESLint with our config once to find out which plugins should be installed manually.
 
 <details>
-<summary>Installation with Yarn Classic (v1)</summary>
-
-Yarn Classic (v1) does not support installing packages by npm name that have dependencies referenced by `file:` protocol - which we're using in this package.
-It fails with "Tarball is not in network and can not be located in cache" error.
-Installing directly from the tarball does work:
-
-```sh
-yarn add -D https://registry.npmjs.org/eslint-config-un/-/eslint-config-un-<VERSION>.tgz eslint@latest
-```
-
-Note that if you're using custom registry, the URL should be changed accordingly.
-
-</details>
-
-<details>
 <summary>List of optional peer dependencies</summary>
 
 | Package name                                       | Default plugin prefix                |
@@ -194,6 +179,8 @@ After evaluating all the flat configs, eslint-config-un will **load only those p
 
 The Config has the following interface (exact types are simplified for docs):
 
+<!-- eslint-disable ts/consistent-type-definitions, ts/no-empty-object-type -->
+
 ```ts
 type Severity = 0 | 1 | 2 | 'off' | 'warn' | 'error';
 
@@ -233,6 +220,8 @@ type UnConfig =
       [customOptions: string]: unknown; // Custom options, individual for each Config
     };
 ```
+
+<!-- eslint-enable ts/consistent-type-definitions, ts/no-empty-object-type -->
 
 #### `files` and `ignores`
 
