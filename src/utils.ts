@@ -40,7 +40,8 @@ export {isCI as isInCi} from 'ci-info';
 const generateStyleFn = (color: Parameters<typeof styleText>[0]) => (string: string) =>
   styleText(color, string);
 
-export {styleText};
+export {styleText} from 'node:util';
+
 export const styleConfigName = generateStyleFn('magenta');
 export const stylePackageName = generateStyleFn('yellow');
 export const stylePluginPrefix = generateStyleFn('blue');

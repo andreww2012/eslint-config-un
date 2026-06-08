@@ -63,7 +63,7 @@ function extractBareImports(filePath: string, content: string): string[] {
 function toPkgName(specifier: string): string {
   return specifier.startsWith('@')
     ? specifier.split('/').slice(0, 2).join('/')
-    : (specifier.split('/')[0] ?? specifier);
+    : (specifier.split('/', 1)[0] ?? specifier);
 }
 
 /**

@@ -149,6 +149,7 @@ export default (async (context, optionsRaw) => {
     }
 
     const isForFramework = module !== 'dom';
+    // eslint-disable-next-line unicorn/prefer-includes-over-repeated-comparisons
     const isFireEventAsync = module === 'marko' || module === 'svelte' || module === 'vue';
 
     const moduleOptionsResolved = assignDefaults(options, {
@@ -229,6 +230,7 @@ export default (async (context, optionsRaw) => {
       .addRule('no-global-regexp-flag-in-query', ERROR) /** @since 5.2.0 */ // 🩷
       .addRule(
         'no-manual-cleanup',
+        // eslint-disable-next-line unicorn/prefer-includes-over-repeated-comparisons
         module === 'react' || module === 'svelte' || module === 'vue' ? ERROR : OFF,
       ) /** @since 2.1.0 */ // 🔵🟠🟢
       .addRule('no-node-access', ERROR, [{allowContainerFirstChild}]) /** @since 4.0.0-alpha.0 */ // 🩷

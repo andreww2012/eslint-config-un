@@ -1,4 +1,5 @@
-import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+import {GLOB_HTM_HTML} from '../../../src/constants';
+import type {NonEmptyTuple} from '../../../src/types';
 
 const FIXTURES = {
   nestedIfWithoutElse: 'nested-if-without-else.js',
@@ -60,11 +61,11 @@ describe('basic tests', async () => {
     expect(configResult.getConfigByUnPostfix('unicorn')?.files).toBeUndefined();
   });
 
-  it('has default `ignores` in `unicorn` eslint config (does not ignore HTML files)', () => {
+  it('has default `ignores` in `unicorn` eslint config (ignores HTML files)', () => {
     const ignores = configResult.getConfigByUnPostfix('unicorn')?.ignores;
 
     expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+    expect(ignores).toIncludeAllMembers([GLOB_HTM_HTML]);
   });
 });
 
@@ -250,6 +251,156 @@ describe('options', () => {
       );
 
       expect(error).toBeUndefined();
+    });
+  });
+
+  describe('option: `compoundWordsSuggestedReplacements`', () => {
+    it('enables `unicorn/consistent-compound-words` without options by default', async () => {
+      const configResult = await computeEslintConfig('unicorn');
+
+      expect(
+        configResult.getRuleEntry('unicorn', 'unicorn/consistent-compound-words'),
+      ).toMatchInlineSnapshot('2');
+    });
+
+    it('enables `unicorn/consistent-compound-words` without options when set to `true`', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {compoundWordsSuggestedReplacements: true},
+      });
+
+      expect(
+        configResult.getRuleEntry('unicorn', 'unicorn/consistent-compound-words'),
+      ).toMatchInlineSnapshot('2');
+    });
+
+    it('disables `unicorn/consistent-compound-words` when set to `false`', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {compoundWordsSuggestedReplacements: false},
+      });
+
+      expect(
+        configResult.getRuleEntrySeverity('unicorn', 'unicorn/consistent-compound-words'),
+      ).toBe(0);
+    });
+
+    it('splits a record into `replacements` and `allowList` rule options', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {
+          compoundWordsSuggestedReplacements: {
+            passWord: 'password',
+            spellLevel: '',
+            userName: false,
+          },
+        },
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('unicorn', 'unicorn/consistent-compound-words'),
+      ).toStrictEqual([
+        {
+          replacements: {passWord: 'password', spellLevel: false},
+          allowList: {userName: true},
+        },
+      ]);
+    });
+
+    it('passes the array form directly as rule options', async () => {
+      const OPTIONS = [{replacements: {fooBar: 'foobar'}} as const] satisfies NonEmptyTuple;
+
+      const configResult = await computeEslintConfig({
+        unicorn: {compoundWordsSuggestedReplacements: OPTIONS},
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('unicorn', 'unicorn/consistent-compound-words'),
+      ).toStrictEqual(OPTIONS);
+    });
+  });
+
+  describe('option: `domDataAttributesStyle`', () => {
+    it('enforces the `.dataset` API by default', async () => {
+      const configResult = await computeEslintConfig('unicorn');
+
+      expect(
+        configResult.getRuleEntry('unicorn', 'unicorn/dom-node-dataset'),
+      ).toMatchInlineSnapshot('[2, {"preferAttributes": false}]');
+    });
+
+    it('enforces `{get,set,remove,has}Attribute` when set to `attributes`', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {domDataAttributesStyle: 'attributes'},
+      });
+
+      expect(
+        configResult.getRuleEntry('unicorn', 'unicorn/dom-node-dataset'),
+      ).toMatchInlineSnapshot('[2, {"preferAttributes": true}]');
+    });
+
+    it('disables `unicorn/dom-node-dataset` when set to `false`', async () => {
+      const configResult = await computeEslintConfig({unicorn: {domDataAttributesStyle: false}});
+
+      expect(configResult.getRuleEntrySeverity('unicorn', 'unicorn/dom-node-dataset')).toBe(0);
+    });
+  });
+
+  describe('option: `minimumComparisonsToPreferArrayIncludes`', () => {
+    it('enables `unicorn/prefer-includes-over-repeated-comparisons` with `minimumComparisons: 3` by default', async () => {
+      const configResult = await computeEslintConfig('unicorn');
+
+      expect(
+        configResult.getRuleEntry('unicorn', 'unicorn/prefer-includes-over-repeated-comparisons'),
+      ).toMatchInlineSnapshot('[2, {"minimumComparisons": 3}]');
+    });
+
+    it('passes the provided value as `minimumComparisons` when set to `2`', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {minimumComparisonsToPreferArrayIncludes: 2},
+      });
+
+      expect(
+        configResult.getRuleEntry('unicorn', 'unicorn/prefer-includes-over-repeated-comparisons'),
+      ).toMatchInlineSnapshot('[2, {"minimumComparisons": 2}]');
+    });
+
+    it('disables `unicorn/prefer-includes-over-repeated-comparisons` when set to `1`', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {minimumComparisonsToPreferArrayIncludes: 1},
+      });
+
+      expect(
+        configResult.getRuleEntrySeverity(
+          'unicorn',
+          'unicorn/prefer-includes-over-repeated-comparisons',
+        ),
+      ).toBe(0);
+    });
+  });
+
+  describe('option: `minimumWhitespaceRepetitionsToPreferStringRepeat`', () => {
+    it('enables `unicorn/prefer-string-repeat` with `minimumRepetitions: 3` by default', async () => {
+      const configResult = await computeEslintConfig('unicorn');
+
+      expect(
+        configResult.getRuleEntry('unicorn', 'unicorn/prefer-string-repeat'),
+      ).toMatchInlineSnapshot('[2, {"minimumRepetitions": 3}]');
+    });
+
+    it('passes the provided value as `minimumRepetitions` when set to `2`', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {minimumWhitespaceRepetitionsToPreferStringRepeat: 2},
+      });
+
+      expect(
+        configResult.getRuleEntry('unicorn', 'unicorn/prefer-string-repeat'),
+      ).toMatchInlineSnapshot('[2, {"minimumRepetitions": 2}]');
+    });
+
+    it('disables `unicorn/prefer-string-repeat` when set to `1`', async () => {
+      const configResult = await computeEslintConfig({
+        unicorn: {minimumWhitespaceRepetitionsToPreferStringRepeat: 1},
+      });
+
+      expect(configResult.getRuleEntrySeverity('unicorn', 'unicorn/prefer-string-repeat')).toBe(0);
     });
   });
 });

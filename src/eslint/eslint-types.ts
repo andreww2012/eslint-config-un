@@ -14,6 +14,7 @@ import type {
   ObjectValues,
   OmitIndexSignature,
   PickKeysNotStartingWith,
+  Prettify,
   ReadonlyDeep,
   UnionToIntersection,
 } from '../types';
@@ -21,6 +22,8 @@ import type {MaybeFn} from '../utils';
 
 // #region 🟠 eslint-config-un specific types
 
+// TODO report false positive
+// eslint-disable-next-line unicorn/prefer-export-from
 export type {UnRulesConfig, UnRuleOptionsByPlugin, UnFixableRuleNames};
 
 export type UnAllRuleNames = keyof UnRulesConfig;
@@ -150,6 +153,8 @@ export type EslintRuleEntry<Options extends readonly unknown[] = readonly unknow
   Eslint.Linter.RuleEntry<// @ts-expect-error "The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type 'any[]'" - this is fine, options are not mutated by ESLint
   Options>;
 
+// TODO report false positive
+// eslint-disable-next-line unicorn/prefer-export-from
 export type {EslintPlugin, EslintSeverity};
 
 // #endregion
@@ -159,16 +164,22 @@ export type {EslintPlugin, EslintSeverity};
 export type GetRuleOptions<
   Prefix extends PluginPrefix,
   RuleName extends keyof UnRuleOptionsByPlugin[Prefix] = keyof UnRuleOptionsByPlugin[Prefix],
-  Index extends (keyof UnRuleOptionsByPlugin[Prefix][RuleName] & number) | 0 | 'all' = 0,
+  Index extends
+    | (keyof UnRuleOptionsByPlugin[Prefix][RuleName] & number)
+    | 0
+    | 'all'
+    | 'allUnwrapped' = 0,
   _AllOptions = UnRuleOptionsByPlugin[Prefix][RuleName],
 > = Exclude<
   Index extends 'all'
     ? _AllOptions & unknown[]
-    : _AllOptions extends readonly unknown[]
-      ? Index extends keyof _AllOptions & number
-        ? _AllOptions[Index]
-        : never
-      : _AllOptions,
+    : Index extends 'allUnwrapped'
+      ? Prettify<_AllOptions & unknown[]>
+      : _AllOptions extends readonly unknown[]
+        ? Index extends keyof _AllOptions & number
+          ? _AllOptions[Index]
+          : never
+        : _AllOptions,
   undefined
 >;
 
