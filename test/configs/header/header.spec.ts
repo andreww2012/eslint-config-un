@@ -69,20 +69,17 @@ describe('rules', async () => {
     expect(configResult.getRuleEntrySeverity('header', 'header/header')).toBe(2);
   });
 
-  it.skipIf(isEslint10OrLater)(
-    '`header/header` rule fires on a file missing the required header',
-    async () => {
-      const results = await testEslintConfig(
-        {header: {options: {comment: 'Copyright'}}},
-        FIXTURES.noHeader,
-        import.meta.dirname,
-      );
+  it('`header/header` rule fires on a file missing the required header', async () => {
+    const results = await testEslintConfig(
+      {header: {options: {comment: 'Copyright'}}},
+      FIXTURES.noHeader,
+      import.meta.dirname,
+    );
 
-      const error = findLintMessageFromLintResults(results, FIXTURES.noHeader, 'header/header');
+    const error = findLintMessageFromLintResults(results, FIXTURES.noHeader, 'header/header');
 
-      expect(error?.message).toMatchInlineSnapshot('"missing header"');
-    },
-  );
+    expect(error?.message).toMatchInlineSnapshot('"missing header"');
+  });
 });
 
 describe('un options', () => {

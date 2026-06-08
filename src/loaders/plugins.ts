@@ -1,5 +1,5 @@
 // cspell:ignore mathml
-import {fixupPluginRules} from '@eslint/compat';
+import {fixupPluginRules as fixupPluginRulesOriginal} from '@eslint/compat';
 import stylistic from '@stylistic/eslint-plugin';
 import type {EslintPlugin} from '../eslint/eslint-types';
 import {interopDefault, objectKeysUnsafe} from '../utils';
@@ -10,6 +10,10 @@ import {
   type ModuleLoader,
   genModuleLoader,
 } from './shared';
+
+// A tiny wrapper just to preserve the plugin type
+const fixupPluginRules = <Plugin extends EslintPlugin>(plugin: Plugin) =>
+  fixupPluginRulesOriginal(plugin) as Plugin;
 
 const setPluginRuleSchemas = <Plugin extends EslintPlugin>(m: Plugin): Plugin => ({
   ...m,
@@ -171,7 +175,7 @@ export const pluginsLoaders = {
       ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
   'barrel-files': genModuleLoader('barrel-files', 'eslint-plugin-barrel-files', () =>
-    interopDefault(import('eslint-plugin-barrel-files')),
+    interopDefault(import('eslint-plugin-barrel-files')).then(fixupPluginRules),
   ),
   'better-tailwindcss': genModuleLoader(
     'better-tailwindcss',
@@ -321,19 +325,20 @@ export const pluginsLoaders = {
     'eslint-plugin-github-action',
     () => interopDefault(import('eslint-plugin-github-action')) as Promise<EslintPlugin>,
   ),
-  graphql: genModuleLoader(
-    'graphql',
-    '@graphql-eslint/eslint-plugin',
-    () =>
+  graphql: genModuleLoader('graphql', '@graphql-eslint/eslint-plugin', () =>
+    (
       interopDefault(import('@graphql-eslint/eslint-plugin')) as Promise<
         EslintPlugin & {
           processor: EslintProcessor;
           parser: EslintParser;
         }
-      >,
+      >
+    ).then(fixupPluginRules),
   ),
   header: genModuleLoader('header', 'eslint-plugin-header', () =>
-    interopDefault(import('eslint-plugin-header')).then(setPluginRuleSchemas),
+    interopDefault(import('eslint-plugin-header'))
+      .then(setPluginRuleSchemas)
+      .then(fixupPluginRules),
   ),
   headers: genModuleLoader('headers', 'eslint-plugin-headers', () =>
     interopDefault(import('eslint-plugin-headers')),
@@ -353,7 +358,7 @@ export const pluginsLoaders = {
     interopDefault(import('eslint-plugin-jest')),
   ),
   'jest-dom': genModuleLoader('jest-dom', 'eslint-plugin-jest-dom', () =>
-    interopDefault(import('eslint-plugin-jest-dom')),
+    interopDefault(import('eslint-plugin-jest-dom')).then(fixupPluginRules),
   ),
   'jest-extended': genModuleLoader('jest-extended', 'eslint-plugin-jest-extended', () =>
     interopDefault(import('eslint-plugin-jest-extended')),
@@ -455,7 +460,7 @@ export const pluginsLoaders = {
   'no-relative-import-paths': genModuleLoader(
     'no-relative-import-paths',
     'eslint-plugin-no-relative-import-paths',
-    () => interopDefault(import('eslint-plugin-no-relative-import-paths')),
+    () => interopDefault(import('eslint-plugin-no-relative-import-paths')).then(fixupPluginRules),
   ),
   'no-secrets': genModuleLoader(
     'no-secrets',
@@ -537,14 +542,11 @@ export const pluginsLoaders = {
     'eslint-plugin-qunit',
     () => interopDefault(import('eslint-plugin-qunit')) as Promise<EslintPlugin>,
   ),
-  qwik: genModuleLoader(
-    'qwik',
-    'eslint-plugin-qwik',
-    () =>
-      interopDefault(import('eslint-plugin-qwik')).then(fixupPluginRules) as Promise<EslintPlugin>,
+  qwik: genModuleLoader('qwik', 'eslint-plugin-qwik', () =>
+    interopDefault(import('eslint-plugin-qwik')).then(fixupPluginRules),
   ),
   react: genModuleLoader('react', 'eslint-plugin-react', () =>
-    interopDefault(import('eslint-plugin-react')),
+    interopDefault(import('eslint-plugin-react')).then(fixupPluginRules),
   ),
   'react-debug': genModuleLoader(
     'react-debug',
@@ -659,13 +661,8 @@ export const pluginsLoaders = {
     'eslint-plugin-toml',
     () => interopDefault(import('eslint-plugin-toml')) as Promise<EslintPlugin>,
   ),
-  'tree-shaking': genModuleLoader(
-    'tree-shaking',
-    'eslint-plugin-tree-shaking',
-    () =>
-      interopDefault(import('eslint-plugin-tree-shaking')).then(
-        fixupPluginRules,
-      ) as Promise<EslintPlugin>,
+  'tree-shaking': genModuleLoader('tree-shaking', 'eslint-plugin-tree-shaking', () =>
+    interopDefault(import('eslint-plugin-tree-shaking')).then(fixupPluginRules),
   ),
   ts: genModuleLoader(
     'ts',
@@ -758,14 +755,13 @@ export const pluginsLoaders = {
         import('eslint-plugin-zod-mini'),
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
-  'zod-openapi': genModuleLoader(
-    'zod-openapi',
-    'eslint-plugin-zod-openapi',
-    () =>
+  'zod-openapi': genModuleLoader('zod-openapi', 'eslint-plugin-zod-openapi', () =>
+    (
       interopDefault(
         import('eslint-plugin-zod-openapi'),
         // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>
+    ).then(fixupPluginRules),
   ),
 } satisfies Record<string, ModuleLoader<EslintPlugin | null, string, boolean>>;
 

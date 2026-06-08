@@ -52,6 +52,7 @@ overrides:
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
 
 patchedDependencies:
+  '@eslint/compat@2.1.0': patches/@eslint__compat@2.1.0.patch
   eslint-plugin-node-dependencies: patches/eslint-plugin-node-dependencies.patch
   eslint-plugin-prettier@5.5.6: patches/eslint-plugin-prettier@5.5.6.patch
   eslint-plugin-remeda@2.1.0: patches/eslint-plugin-remeda@2.1.0.patch

@@ -65,26 +65,19 @@ describe('react: sub config `reactX`', () => {
       ).not.toBe(0);
     });
 
-    it.skipIf(isEslint10OrLater)(
-      '`@eslint-react/no-class-component` rule fires on a class component',
-      async () => {
-        const results = await testEslintConfig(
-          'react',
-          FIXTURES.classComponent,
-          import.meta.dirname,
-        );
+    it('`@eslint-react/no-class-component` rule fires on a class component', async () => {
+      const results = await testEslintConfig('react', FIXTURES.classComponent, import.meta.dirname);
 
-        const error = findLintMessageFromLintResults(
-          results,
-          FIXTURES.classComponent,
-          '@eslint-react/no-class-component',
-        );
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.classComponent,
+        '@eslint-react/no-class-component',
+      );
 
-        expect(error?.message).toMatchInlineSnapshot(
-          '"Avoid using class components. Use function components instead."',
-        );
-      },
-    );
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Avoid using class components. Use function components instead."',
+      );
+    });
   });
 
   describe('un options', () => {

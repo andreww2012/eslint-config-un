@@ -117,24 +117,21 @@ describe('rules', async () => {
     ).toBe(0);
   });
 
-  it.skipIf(isEslint10OrLater)(
-    '`react/no-multi-comp` rule fires on a file with multiple components',
-    async () => {
-      const results = await testEslintConfig(
-        'react',
-        FIXTURES.multipleComponents,
-        import.meta.dirname,
-      );
+  it('`react/no-multi-comp` rule fires on a file with multiple components', async () => {
+    const results = await testEslintConfig(
+      'react',
+      FIXTURES.multipleComponents,
+      import.meta.dirname,
+    );
 
-      const error = findLintMessageFromLintResults(
-        results,
-        FIXTURES.multipleComponents,
-        'react/no-multi-comp',
-      );
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.multipleComponents,
+      'react/no-multi-comp',
+    );
 
-      expect(error?.message).toMatchInlineSnapshot('"Declare only one React component per file"');
-    },
-  );
+    expect(error?.message).toMatchInlineSnapshot('"Declare only one React component per file"');
+  });
 });
 
 describe('un options', () => {

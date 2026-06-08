@@ -5,6 +5,7 @@ export const ALWAYS_BUNDLED_DEPENDENCIES: string[] = [
   'import-meta-resolve', // Patched
   'remeda', // Inlined to avoid always considered installed
   'eslint-plugin-no-type-assertion', // Inlined to avoid installation warnings about incompatibility with ESLint 9/10
+  '@eslint/compat', // Patched
 ];
 
 export default defineConfig({

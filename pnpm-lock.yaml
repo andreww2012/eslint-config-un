@@ -212,6 +212,7 @@ overrides:
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
 
 patchedDependencies:
+  '@eslint/compat@2.1.0': 377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931
   eslint-plugin-node-dependencies: 0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4
   eslint-plugin-prettier@5.5.6: f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087
   eslint-plugin-remeda@2.1.0: b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08
@@ -231,9 +232,6 @@ importers:
       '@eslint-community/eslint-plugin-eslint-comments':
         specifier: 4.7.2
         version: 4.7.2(eslint@9.39.2)
-      '@eslint/compat':
-        specifier: 2.1.0
-        version: 2.1.0(eslint@9.39.2)
       '@eslint/core0':
         specifier: npm:@eslint/core@^0.17.0
         version: '@eslint/core@0.17.0'
@@ -481,6 +479,9 @@ importers:
       '@eslint-react/eslint-plugin':
         specifier: 5.8.12
         version: 5.8.12(eslint@9.39.2)(typescript@6.0.3)
+      '@eslint/compat':
+        specifier: 2.1.0
+        version: 2.1.0(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@9.39.2)
       '@eslint/config-inspector':
         specifier: 3.0.4
         version: 3.0.4(eslint@9.39.2)(typescript@6.0.3)
@@ -13882,7 +13883,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@eslint/compat@2.1.0(eslint@9.39.2)':
+  '@eslint/compat@2.1.0(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@9.39.2)':
     dependencies:
       '@eslint/core': 1.2.1
     optionalDependencies:
@@ -18318,7 +18319,7 @@ snapshots:
 
   eslint-config-flat-gitignore@2.3.0(eslint@9.39.2):
     dependencies:
-      '@eslint/compat': 2.1.0(eslint@9.39.2)
+      '@eslint/compat': 2.1.0(patch_hash=377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931)(eslint@9.39.2)
       eslint: 9.39.2(jiti@2.7.0)
 
   eslint-config-prettier@10.1.8(eslint@9.39.2):

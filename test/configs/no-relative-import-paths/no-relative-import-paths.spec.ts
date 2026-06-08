@@ -88,26 +88,23 @@ describe('rules', () => {
     ).toBe(2);
   });
 
-  it.skipIf(isEslint10OrLater)(
-    '`no-relative-import-paths/no-relative-import-paths` rule fires on a relative import',
-    async () => {
-      const results = await testEslintConfig(
-        'noRelativeImportPaths',
-        FIXTURES.relativeImport,
-        import.meta.dirname,
-      );
+  it('`no-relative-import-paths/no-relative-import-paths` rule fires on a relative import', async () => {
+    const results = await testEslintConfig(
+      'noRelativeImportPaths',
+      FIXTURES.relativeImport,
+      import.meta.dirname,
+    );
 
-      const error = findLintMessageFromLintResults(
-        results,
-        FIXTURES.relativeImport,
-        'no-relative-import-paths/no-relative-import-paths',
-      );
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.relativeImport,
+      'no-relative-import-paths/no-relative-import-paths',
+    );
 
-      expect(error?.message).toMatchInlineSnapshot(
-        '"import statements should have an absolute path"',
-      );
-    },
-  );
+    expect(error?.message).toMatchInlineSnapshot(
+      '"import statements should have an absolute path"',
+    );
+  });
 });
 
 describe('un options', () => {

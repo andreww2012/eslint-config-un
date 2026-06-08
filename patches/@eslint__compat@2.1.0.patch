@@ -1,0 +1,42 @@
+diff --git a/dist/cjs/index.cjs b/dist/cjs/index.cjs
+index ffb5b1745e38a7de0cd86daecc1870c1e305a15c..e50dafe0a729dda72fc69bf72fcece1193cbedff 100644
+--- a/dist/cjs/index.cjs
++++ b/dist/cjs/index.cjs
+@@ -331,8 +331,14 @@ function fixupRule(ruleDefinition) {
+ 			contextMethodName,
+ 			sourceCodeMethodName,
+ 		] of removedMethodNames) {
+-			compatContext[contextMethodName] =
+-				compatSourceCode[sourceCodeMethodName].bind(compatSourceCode);
++			const sourceCodeMethod = compatSourceCode[sourceCodeMethodName];
++
++			// Non-JS source code (JSON/YAML/…) lacks these JS-only `SourceCode` methods; skip them
++			// instead of throwing during setup so the rule can still run on such files.
++			if (typeof sourceCodeMethod === "function") {
++				compatContext[contextMethodName] =
++					sourceCodeMethod.bind(compatSourceCode);
++			}
+ 		}
+ 
+ 		// freeze just like the original context
+diff --git a/dist/esm/index.js b/dist/esm/index.js
+index 5e5eb0cdb0ce215b7a8471882cc9c91e11335792..81e6dfec9722666d9b975a47c51582c2dbc2ba34 100644
+--- a/dist/esm/index.js
++++ b/dist/esm/index.js
+@@ -330,8 +330,14 @@ function fixupRule(ruleDefinition) {
+ 			contextMethodName,
+ 			sourceCodeMethodName,
+ 		] of removedMethodNames) {
+-			compatContext[contextMethodName] =
+-				compatSourceCode[sourceCodeMethodName].bind(compatSourceCode);
++			const sourceCodeMethod = compatSourceCode[sourceCodeMethodName];
++
++			// Non-JS source code (JSON/YAML/…) lacks these JS-only `SourceCode` methods; skip them
++			// instead of throwing during setup so the rule can still run on such files.
++			if (typeof sourceCodeMethod === "function") {
++				compatContext[contextMethodName] =
++					sourceCodeMethod.bind(compatSourceCode);
++			}
+ 		}
+ 
+ 		// freeze just like the original context

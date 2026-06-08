@@ -131,37 +131,34 @@ describe('rules', async () => {
     expect(configResult.getRuleEntrySeverity('graphql', 'graphql/alphabetize')).toBe(0);
   });
 
-  it.skipIf(isEslint10OrLater)(
-    '`graphql/no-hashtag-description` rule fires on a type with hashtag description',
-    async () => {
-      // TODO possible to test without these constraints?
-      const results = await testEslintConfig(
-        {
-          graphql: {
-            disableRulesRequiringSchema: true,
-            disableRulesRequiringOperations: true,
-            // All 📦 (graphql-js validation wrapper) rules call `requireGraphQLSchema` and crash without schema
-            overrides: Object.fromEntries(
-              GRAPHQL_JS_VALIDATION_RULES.map((rule) => [`graphql/${rule}`, 0]),
-            ),
-          },
+  it('`graphql/no-hashtag-description` rule fires on a type with hashtag description', async () => {
+    // TODO possible to test without these constraints?
+    const results = await testEslintConfig(
+      {
+        graphql: {
+          disableRulesRequiringSchema: true,
+          disableRulesRequiringOperations: true,
+          // All 📦 (graphql-js validation wrapper) rules call `requireGraphQLSchema` and crash without schema
+          overrides: Object.fromEntries(
+            GRAPHQL_JS_VALIDATION_RULES.map((rule) => [`graphql/${rule}`, 0]),
+          ),
         },
-        FIXTURES.typeWithCommentDescription,
-        {searchFixturesRelativeToPath: import.meta.dirname},
-      );
+      },
+      FIXTURES.typeWithCommentDescription,
+      {searchFixturesRelativeToPath: import.meta.dirname},
+    );
 
-      const error = findLintMessageFromLintResults(
-        results,
-        FIXTURES.typeWithCommentDescription,
-        'graphql/no-hashtag-description',
-      );
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.typeWithCommentDescription,
+      'graphql/no-hashtag-description',
+    );
 
-      expect(error?.message).toMatchInlineSnapshot(`
-        "Unexpected GraphQL descriptions as hashtag \`#\` for type "User".
-        Prefer using \`"""\` for multiline, or \`"\` for a single line description."
-      `);
-    },
-  );
+    expect(error?.message).toMatchInlineSnapshot(`
+      "Unexpected GraphQL descriptions as hashtag \`#\` for type "User".
+      Prefer using \`"""\` for multiline, or \`"\` for a single line description."
+    `);
+  });
 });
 
 describe('un options', () => {

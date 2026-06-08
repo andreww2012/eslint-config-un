@@ -8,45 +8,39 @@ beforeEach(() => {
 });
 
 describe('react: sub config `refresh`', () => {
-  it.skipIf(isEslint10OrLater)(
-    'should trigger react-refresh/only-export-components on mixed exports',
-    async () => {
-      const result = await testEslintConfig(
-        'react',
-        FIXTURES.reactComponentFileMixedExports,
-        import.meta.dirname,
-      );
+  it('should trigger react-refresh/only-export-components on mixed exports', async () => {
+    const result = await testEslintConfig(
+      'react',
+      FIXTURES.reactComponentFileMixedExports,
+      import.meta.dirname,
+    );
 
-      const error = findLintMessageFromLintResults(
-        result,
-        FIXTURES.reactComponentFileMixedExports,
-        'react-refresh/only-export-components',
-      );
+    const error = findLintMessageFromLintResults(
+      result,
+      FIXTURES.reactComponentFileMixedExports,
+      'react-refresh/only-export-components',
+    );
 
-      expect(error?.message).toMatchInlineSnapshot(
-        '"Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components."',
-      );
-    },
-  );
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components."',
+    );
+  });
 
-  it.skipIf(isEslint10OrLater)(
-    'should not trigger react-refresh/only-export-components on component-only exports',
-    async () => {
-      const result = await testEslintConfig(
-        {react: {configRefresh: true}},
-        FIXTURES.reactComponentFileSingleExport,
-        import.meta.dirname,
-      );
+  it('should not trigger react-refresh/only-export-components on component-only exports', async () => {
+    const result = await testEslintConfig(
+      {react: {configRefresh: true}},
+      FIXTURES.reactComponentFileSingleExport,
+      import.meta.dirname,
+    );
 
-      const error = findLintMessageFromLintResults(
-        result,
-        FIXTURES.reactComponentFileSingleExport,
-        'react-refresh/only-export-components',
-      );
+    const error = findLintMessageFromLintResults(
+      result,
+      FIXTURES.reactComponentFileSingleExport,
+      'react-refresh/only-export-components',
+    );
 
-      expect(error).toBeUndefined();
-    },
-  );
+    expect(error).toBeUndefined();
+  });
 
   describe('options', () => {
     describe('option: `allowExportNames`', () => {
