@@ -271,6 +271,7 @@ export default ((context, optionsRaw) => {
       ...resolveConsistentSchemaVarNameOptions(optionsResolved),
     ) /** @since 3.11.0 */ // 🟢
     .addRule('no-any-schema', WARNING) /** @since 0.0.1 */ /** @aka no-any (before 2.0.0) */ // 🟢
+    .addRule('no-coerce-boolean', ERROR) /** @since 4.7.0 */ // 🟢
     .addRule('no-duplicate-schema-methods', ERROR) /** @since 4.6.0 */ // 🟢
     .addRule('no-empty-custom-schema', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule('no-native-enum', severityForRulesOnlyForV4) /** @since 4.2.0 */ // 🟢
@@ -335,6 +336,7 @@ export default ((context, optionsRaw) => {
       ...resolveConsistentSchemaVarNameOptions({schemaVariableName: miniSchemaVariableName}),
     ) /** @since 0.1.0 */ // 🟢
     .addRule('no-any-schema', WARNING) /** @since 0.1.0 */ // 🟢
+    .addRule('no-coerce-boolean', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule('no-duplicate-schema-methods', ERROR) /** @since 1.3.0 */ // 🟢
     .addRule('no-empty-custom-schema', ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('no-throw-in-refine', ERROR) /** @since 1.2.0 */ // 🟢
