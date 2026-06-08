@@ -14,7 +14,7 @@ import {
 type PartialObjectsOnly<T> = T extends readonly unknown[] ? T : Partial<T>;
 
 // Please keep ascending order
-const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20, 21] as const;
+const SUPPORTED_ANGULAR_VERSIONS = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22] as const;
 type SupportedAngularVersion = (typeof SUPPORTED_ANGULAR_VERSIONS)[number];
 type LatestSupportedAngularVersion = (typeof SUPPORTED_ANGULAR_VERSIONS)[Subtract<
   (typeof SUPPORTED_ANGULAR_VERSIONS)['length'],

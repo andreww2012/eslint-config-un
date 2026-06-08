@@ -654,6 +654,10 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
       return [packageName, meta];
     }),
   ),
+  '@angular-eslint/template-parser': {
+    configs: ['angular'],
+    ruleDocsUrl: null,
+  },
   '@eslint/css-tree': {
     configs: ['css'],
     ruleDocsUrl: null,
