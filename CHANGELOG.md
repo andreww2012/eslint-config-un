@@ -1,5 +1,126 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.13
+
+### Minor Changes
+
+- 9536db6: tests: added a new config, enabled by default, which targets as much tests files as possible and disables a number of far less relevant rules. This config replaces the previous approach which involved disabling all such rules at the end of all configs related to testing (`ava`, `cypress`, `ember`, `eslintPlugin`, `jestDom`, `jest`, `playwright`, `storybook`, `testingLibrary`, `vitest`)
+- f15c7b7: react: updated [`eslint-plugin-react-you-might-not-need-an-effect` from v0.10.2 to v1.0.0](https://github.com/nickjvandyke/eslint-plugin-react-you-might-not-need-an-effect/compare/v0.10.2...v1.0.0):
+  - 🟢 enabled [`no-external-store-subscription`](https://react.dev/learn/you-might-not-need-an-effect#subscribing-to-an-external-store) rule
+
+- 9d97a48: lockfile: updated [`eslint-plugin-lockfile` from v1.3.0 to v2.1.0](https://github.com/ljharb/lockfile-tools/compare/eslint-plugin-lockfile@1.3.0...eslint-plugin-lockfile@2.1.0):
+  - New rules:
+    - 🟢 enabled [`manifest-sync`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/manifest-sync.md) rule
+    - 🔴 not enabled [`minimum-release-age`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/minimum-release-age.md) rule; added to the list of rules disabled in Offline mode
+    - 🟢 enabled [`name-matches-resolved`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/name-matches-resolved.md) rule
+    - 🟢 enabled [`no-install-scripts`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/no-install-scripts.md) rule
+  - Added a new sub config ⚙️ `packageJson` targeting `package.json` files with the following new rules:
+    - 🟢 enabled [`no-weakening-config`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/no-weakening-config.md) rule
+    - 🟢 enabled [`tracked`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/tracked.md) rule
+
+- 15b61bf: packageJson: updated [`eslint-plugin-package-json` from v1.1.0 to v1.3.0](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v1.1.0...v1.3.0):
+  - 🟢 enabled [`no-local-dependencies`](https://eslint-plugin-package-json.dev/rules/no-local-dependencies) rule
+
+- b13a900: eslintPlugin: updated [`eslint-plugin-eslint-plugin` from v7.3.3 to v7.4.0](https://github.com/eslint-community/eslint-plugin-eslint-plugin/compare/v7.3.3...v7.4.0):
+  - 🟢 enabled [`require-test-error-positions`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-test-error-positions.md) rule
+
+- 3ae93ca: unicorn: updated [`eslint-plugin-unicorn` from v64.0.0 to v65.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v64.0.0...v65.0.0):
+  - 🟢 enabled [`better-dom-traversing`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/better-dom-traversing.md) rule
+  - Added a new option `compoundWordsSuggestedReplacements` controlling 🟢 enabled by default [`consistent-compound-words`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-compound-words.md) rule
+  - 🟢 enabled [`consistent-json-file-read`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-json-file-read.md) rule
+  - Added a new option `domDataAttributesStyle` controlling 🟢 enabled by default [`dom-node-dataset`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/dom-node-dataset.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`no-array-fill-with-reference-type`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-array-fill-with-reference-type.md) rule
+  - 🟢 enabled [`no-array-from-fill`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-array-from-fill.md) rule
+  - 🟢 enabled [`no-blob-to-file`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-blob-to-file.md) rule
+  - 🟢 enabled [`no-canvas-to-image`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-canvas-to-image.md) rule
+  - 🟢 enabled [`no-confusing-array-splice`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-confusing-array-splice.md) rule
+  - 🟢 enabled [`no-duplicate-set-values`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-duplicate-set-values.md) rule
+  - 🟢 enabled [`no-exports-in-scripts`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-exports-in-scripts.md) rule
+  - 🟢 enabled [`no-incorrect-query-selector`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-incorrect-query-selector.md) rule
+  - 🟢 enabled [`no-invalid-file-input-accept`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-file-input-accept.md) rule
+  - 🟢 enabled [`no-late-current-target-access`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-late-current-target-access.md) rule
+  - 🔴 not enabled [`no-manually-wrapped-comments`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-manually-wrapped-comments.md) rule
+  - 🔴 not enabled [`no-this-outside-of-class`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-this-outside-of-class.md) rule
+  - 🟢 enabled [`no-unnecessary-nested-ternary`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-nested-ternary.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`no-unused-array-method-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unused-array-method-return.md) rule
+  - 🟢 enabled [`prefer-array-last-methods`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-array-last-methods.md) rule
+  - 🟢 enabled [`prefer-get-or-insert-computed`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-get-or-insert-computed.md) rule
+  - 🔴 not enabled [`prefer-https`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-https.md) rule
+  - Added a new option `minimumComparisonsToPreferArrayIncludes` controlling 🟢 enabled by default [`prefer-includes-over-repeated-comparisons`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-includes-over-repeated-comparisons.md) rule and added it to the `noStylisticRules` config
+  - 🔴 not enabled [`prefer-iterator-concat`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-iterator-concat.md) rule
+  - 🟢 enabled [`prefer-iterator-to-array-at-end`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-iterator-to-array-at-end.md) rule
+  - 🟢 enabled [`prefer-math-abs`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-math-abs.md) rule
+  - 🟢 enabled [`prefer-queue-microtask`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-queue-microtask.md) rule
+  - 🟢 enabled [`prefer-split-limit`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-split-limit.md) rule
+  - 🟢 enabled [`prefer-string-match-all`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-match-all.md) rule
+  - 🟢 enabled [`prefer-string-pad-start-end`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-pad-start-end.md) rule
+  - Added a new option `minimumWhitespaceRepetitionsToPreferStringRepeat` controlling 🟢 enabled by default [`prefer-string-repeat`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-repeat.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`require-css-escape`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-css-escape.md) rule
+  - 🟢 enabled [`require-passive-events`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-passive-events.md) rule
+  - 🔴 not enabled [`try-complexity`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/try-complexity.md) rule
+  - ⚠️ [`better-regex`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v64.0.0/docs/rules/better-regex.md) rule got deprecated
+  - ⚠️ [`prefer-dom-node-dataset`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v64.0.0/docs/rules/prefer-dom-node-dataset.md) rule got deprecated
+  - ⚠️ [`prefer-json-parse-buffer`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v64.0.0/docs/rules/prefer-json-parse-buffer.md) rule got deprecated
+
+- aabd508: Added a new root option `noWarnings` that forbid specifying the warning severity (`'warn'` or `1`) at type level and promote all warnings set by us to errors
+- 22b037b: Added a new root option `typeInfoRules`, which completely replaced `preventCreationOfConfigForRulesWithTypeInformation`. It allows to:
+  - Precisely control how rules requiring type information are handled;
+  - Specify which files should not request type information;
+  - Configure `typescript-eslint` parser, namely its most useful option `allowDefaultProject` or all `parserOptions`.
+
+- f9d7428: Improved plugins compatibility with ESLint 10 by passing them to `fixupPluginRules` from `@eslint/compat` upon loading
+- 3be2148: zod:
+  - updated [`eslint-plugin-zod` from v4.5.2 to v4.7.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod@4.5.2...eslint-plugin-zod@4.7.0):
+    - 🟢 enabled [`no-coerce-boolean`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/no-coerce-boolean.md) rule
+    - 🟢 enabled [`no-duplicate-schema-methods`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/no-duplicate-schema-methods.md) rule
+  - updated [`eslint-plugin-zod-mini` from v1.2.0 to v1.4.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-mini@1.2.0...eslint-plugin-zod-mini@1.4.0):
+    - 🟢 enabled [`no-coerce-boolean`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/no-coerce-boolean.md) rule
+    - 🟢 enabled [`no-duplicate-schema-methods`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/no-duplicate-schema-methods.md) rule
+  - updated [`eslint-plugin-zod-core` from v1.0.3 to v1.0.7](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-core@1.0.3...eslint-plugin-zod-core@1.0.7)
+
+- 0cc875f: svelte:
+  - updated [`eslint-plugin-svelte` from v3.17.1 to v3.19.0](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte@3.17.1...eslint-plugin-svelte@3.19.0)
+    - 🟢 enabled [`no-nested-style-tag`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-nested-style-tag) rule
+    - 🟢 enabled [`prefer-derived-over-derived-by`](https://sveltejs.github.io/eslint-plugin-svelte/rules/prefer-derived-over-derived-by) rule
+  - updated [`svelte-eslint-parser` from v1.6.1 to v1.8.0](https://github.com/sveltejs/svelte-eslint-parser/compare/v1.6.1...v1.8.0)
+
+### Patch Changes
+
+- be65eb8: functional: updated [`eslint-plugin-functional` from v9.0.5 to v10.0.0](https://github.com/eslint-functional/eslint-plugin-functional/compare/v9.0.5...v10.0.0)
+- 4ea0a29: import: updated [`eslint-import-resolver-typescript` from v4.4.4 to v4.4.5](https://github.com/import-js/eslint-import-resolver-typescript/compare/v4.4.4...v4.4.5)
+- 1bd1946: angular: updated [`@angular-eslint/*` from v21.4.0 to v22.0.0](https://github.com/angular-eslint/angular-eslint/compare/v21.4.0...v22.0.0)
+- b51d78c: css: updated [`@eslint/css` from v1.2.0 to v1.3.0](https://github.com/eslint/css/compare/css-v1.2.0...css-v1.3.0)
+- 13e5d72: toml: updated [`eslint-plugin-toml` from v1.3.1 to v1.4.0](https://github.com/ota-meshi/eslint-plugin-toml/compare/v1.3.1...v1.4.0)
+- f2572b3: nx: updated [`@nx/eslint-plugin` from v22.7.2 to v22.7.5](https://github.com/nrwl/nx/compare/22.7.2...22.7.5)
+- 8ffe56b: cspell: updated [`@cspell/eslint-plugin` from v10.0.0 to v10.0.1](https://github.com/streetsidesoftware/cspell/compare/v10.0.0...v10.0.1)
+  nextJs: updated [`@next/eslint-plugin-next` from v16.2.6 to v16.2.7](https://github.com/vercel/next.js/compare/v16.2.6...v16.2.7)
+  formatJs: updated [`eslint-plugin-formatjs` from v6.4.12 to v6.4.15](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@6.4.12...eslint-plugin-formatjs@6.4.15)
+  storybook: updated [`eslint-plugin-storybook` from v10.4.0 to v10.4.2](https://github.com/storybookjs/storybook/compare/v10.4.0...v10.4.2)
+  turbo: updated [`eslint-plugin-turbo` from v2.9.14 to v2.9.16](https://github.com/vercel/turborepo/compare/v2.9.14...v2.9.16)
+- 086a6f3: json: updated [`eslint-plugin-jsonc` from v3.1.2 to v3.2.0](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v3.1.2...v3.2.0)
+- 5cec104: vue:
+  - updated [`eslint-plugin-vue` from v10.9.1 to v10.9.2](https://github.com/vuejs/eslint-plugin-vue/compare/v10.9.1...v10.9.2)
+  - updated [`vue-eslint-parser` from v10.4.0 to v10.4.1](https://github.com/vuejs/vue-eslint-parser/compare/v10.4.0...v10.4.1)
+
+- a5e0432: mdx: updated [`eslint-plugin-mdx` from v3.7.0 to v3.8.1](https://github.com/mdx-js/eslint-mdx/compare/eslint-plugin-mdx@3.7.0...eslint-plugin-mdx@3.8.1)
+- 853566f: eslintComments: updated [`@eslint-community/eslint-plugin-eslint-comments` from v4.7.1 to v4.7.2](https://github.com/eslint-community/eslint-plugin-eslint-comments/compare/v4.7.1...v4.7.2)
+- 1d41805: vue: updated [`@intlify/eslint-plugin-vue-i18n` from v4.4.0 to v4.5.1](https://github.com/intlify/eslint-plugin-vue-i18n/compare/v4.4.0...v4.5.1)
+- a349010: vitest: updated [`@vitest/eslint-plugin` from v1.6.18 to v1.6.19](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.6.18...v1.6.19)
+- 2833088: tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.100.14 to v5.101.0](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.100.14...@tanstack/eslint-plugin-query@5.101.0):
+- 70a4f57: yaml: updated [`eslint-plugin-yml` from v3.3.2 to v3.4.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v3.3.2...v3.4.0)
+- e5459ae: mdx: updated [`eslint-mdx` from v3.7.0 to v3.8.1](https://github.com/mdx-js/eslint-mdx/compare/eslint-mdx@3.7.0...eslint-mdx@3.8.1)
+- 9323322: ts: updated [`@typescript-eslint/parser` from v8.60.0 to v8.60.1](https://github.com/typescript-eslint/typescript-eslint/compare/v8.60.0...v8.60.1)
+- 7813e6c: jsdoc: updated [`eslint-plugin-jsdoc` from v63.0.0 to v63.0.1](https://github.com/gajus/eslint-plugin-jsdoc/compare/v63.0.0...v63.0.1)
+- 9104f38: react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.8.5 to v5.8.16](https://github.com/Rel1cx/eslint-react/compare/v5.8.5...v5.8.16)
+- b85f6ba: ember:
+  - updated [`eslint-plugin-ember` from v13.3.0 to v13.3.2](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.3.0...v13.3.2)
+  - updated [`ember-eslint-parser` from v0.12.0 to v0.13.0](https://github.com/ember-tooling/ember-eslint-parser/compare/v0.12.0...v0.13.0)
+
+- 90040d5: ripple: updated [`@tsrx/eslint-{plugin,parser}` from v0.3.61 to v0.3.72](https://github.com/Ripple-TS/ripple/compare/%40tsrx/eslint-plugin%400.3.61...%40tsrx/eslint-plugin%400.3.72):
+  - ⚠️ [`no-return-in-component`](https://github.com/Ripple-TS/ripple/blob/d2bc54fcdac5b41ca3413b37c6479736d6e22d6a/packages/eslint-plugin/src/rules/no-return-in-component.ts) rule was disabled because got deprecated
+
+- e83d9c9: vue: updated [`eslint-plugin-vue-scoped-css` from v3.1.0 to v3.1.1](https://github.com/future-architect/eslint-plugin-vue-scoped-css/compare/v3.1.0...v3.1.1)
+
 <!-- cspell:disable - changesets are already checked file-by-file and commit hashes (like cafcbca) may cause false positives -->
 
 ## 1.0.0-beta.12
