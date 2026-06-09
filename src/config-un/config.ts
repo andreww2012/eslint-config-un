@@ -289,6 +289,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     extraConfigs,
     extraPlugins,
     ignores,
+    files,
     pluginRenames = {},
     loadPluginsOnDemand,
     disablePrettierIncompatibleRules,
@@ -605,6 +606,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   /* eslint-disable ts/await-thenable */
   const unresolvedConfigs = Promise.all([
+    (files?.length || 0) > 0 && {
+      name: genFlatConfigEntryName('files/global'),
+      files,
+    },
     globalIgnores.length > 0 && {
       name: genFlatConfigEntryName('ignores/global'),
       ignores: globalIgnores,

@@ -178,6 +178,15 @@ export interface EslintConfigUnOptions<
       };
 
   /**
+   * **Global** files patterns. When non-empty, a dedicated flat config entry is created with
+   * only these `files` (no rules, no other keys), which tells ESLint that the matched files are
+   * meant to be linted. This is useful to prevent the
+   * `File ignored because no matching configuration was supplied` error for files with extensions
+   * that none of the enabled configs target.
+   */
+  files?: EslintFlatConfigEntry['files'];
+
+  /**
    * Allows to provide additional ESLint plugins. Their prefixes and possibly rule names
    * will appear in configs' `rules` property type. They will be lazy-loaded only if used.
    *

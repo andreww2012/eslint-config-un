@@ -720,6 +720,14 @@ perfectionist: {
 
 See [Rules configuration](#rules-configuration-configs-and-extraconfigs-option).
 
+### `files`
+
+**Type**: `(string | string[])[]`
+
+Specifies a list of global `files` patterns.
+When non-empty, a dedicated flat config entry is created with only these `files` (no rules or other keys except for `name`), which tells ESLint that the matched files are meant to be linted.
+This is useful to prevent the `File ignored because no matching configuration was supplied` error for files with extensions that none of the enabled configs target.
+
 ### `ignores`
 
 **Type**: `string[] | {files: string[]; override?: boolean}`
