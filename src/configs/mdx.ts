@@ -2,6 +2,7 @@ import {ERROR, GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../const
 import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
+import {kebabCase, objectEntriesUnsafe} from '../utils';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import {determineRulesDisabledInEmbeddedCodeBlocks} from './shared';
 import {
@@ -24,10 +25,36 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
   /**
    * [`eslint-plugin-mdx`](https://npmx.dev/eslint-plugin-mdx) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
-   * that will be assigned to `mdx` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `settings` object with keys transformed to
+   * `mdx/<property>` and applied to the resolved `files` and `ignores` of this config.
    */
-  settings?: Record<string, unknown>;
+  settings?: {
+    /**
+     * Whether to lint code blocks inside MDX files.
+     * @default false
+     */
+    codeBlocks?: boolean;
+
+    /**
+     * Maps a code block language to another one for the purpose of linting,
+     * e.g. `{js: 'jsx'}` will treat ` ```js ` blocks as `jsx`.
+     *
+     * Set to `false` to disable the default mapping.
+     */
+    languageMapper?: Record<string, string> | false;
+
+    /**
+     * Whether to ignore the `remark` configuration files when resolving the
+     * config for the [`remark`](https://npmx.dev/eslint-plugin-mdx#remark) rule.
+     */
+    ignoreRemarkConfig?: boolean;
+
+    /**
+     * Path to a `remark` configuration file to use for the
+     * [`remark`](https://npmx.dev/eslint-plugin-mdx#remark) rule.
+     */
+    remarkConfigPath?: string;
+  };
 
   /**
    * Lint fenced code blocks (\```lang ... ```) inside MDX files
@@ -73,9 +100,13 @@ export default ((context, optionsRaw) => {
           ignoresInternal: {
             mdx: false,
           },
-          // TODO
           settings: {
-            mdx: pluginSettings,
+            '': Object.fromEntries(
+              objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
+                `mdx/${kebabCase(settingName)}`,
+                settingValue,
+              ]),
+            ),
           },
         },
       ],

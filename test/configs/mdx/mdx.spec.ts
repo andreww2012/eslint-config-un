@@ -130,19 +130,30 @@ describe('options', () => {
       const configResult = await computeEslintConfig('mdx');
       const config = configResult.getConfigByUnPostfix('mdx/mdx');
 
-      expect(config?.settings?.['mdx']).toBeUndefined();
+      expect(config?.settings?.['mdx/code-blocks']).toBeUndefined();
+      expect(config?.settings?.['mdx/language-mapper']).toBeUndefined();
     });
 
-    it('sets mdx settings when provided', async () => {
-      const SETTINGS = {unusedExpressions: true} as const;
-
+    it('sets mdx settings when provided, transforming keys to `mdx/<kebab-case>`', async () => {
       const configResult = await computeEslintConfig({
-        mdx: {settings: SETTINGS},
+        mdx: {
+          settings: {
+            codeBlocks: true,
+            languageMapper: {js: 'jsx'},
+            ignoreRemarkConfig: true,
+            remarkConfigPath: './.remarkrc.js',
+          },
+        },
       });
 
       const config = configResult.getConfigByUnPostfix('mdx/mdx');
 
-      expect(config?.settings?.['mdx']).toStrictEqual(SETTINGS);
+      expect(config?.settings).toStrictEqual({
+        'mdx/code-blocks': true,
+        'mdx/language-mapper': {js: 'jsx'},
+        'mdx/ignore-remark-config': true,
+        'mdx/remark-config-path': './.remarkrc.js',
+      });
     });
   });
 
