@@ -7,7 +7,7 @@ beforeEach(() => {
 });
 
 describe('basic tests', () => {
-  it('creates `tanstack-start` eslint config and loads `@tanstack/start` plugin when set to `true`', async () => {
+  it('creates `tanstack-start` eslint config and loads `tanstack-start` plugin when set to `true`', async () => {
     const configResult = await computeEslintConfig('tanstackStart');
 
     const config = configResult.getConfigByUnPostfix('tanstack-start');
@@ -17,7 +17,7 @@ describe('basic tests', () => {
 
     expect(config?.ignores?.length).toBeGreaterThan(0);
 
-    expect(configResult.getLoadedPlugin('@tanstack/start')).toBeDefined();
+    expect(configResult.getLoadedPlugin('tanstack-start')).toBeDefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -107,15 +107,15 @@ describe('rules', () => {
     const configResult = await computeEslintConfig('tanstackStart');
 
     expect(configResult.getRuleSeverities('tanstack-start')).toMatchObject({
-      '@tanstack/start/no-async-client-component': 2,
-      '@tanstack/start/no-client-code-in-server-component': 2,
+      'tanstack-start/no-async-client-component': 2,
+      'tanstack-start/no-client-code-in-server-component': 2,
     });
   });
 
   // Upstream `@tanstack/eslint-plugin-start` mismatches Node `path.resolve` output
   // against TypeScript's normalized `sourceFile.fileName`, so the rule never fires on Windows.
   it.skipIf(process.platform === 'win32')(
-    '`@tanstack/start/no-async-client-component` rule fires on an async component in a client file',
+    '`tanstack-start/no-async-client-component` rule fires on an async component in a client file',
     async () => {
       const results = await testEslintConfig(
         {tanstackStart: true, ts: true},
@@ -126,7 +126,7 @@ describe('rules', () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.useClientAsyncComponent,
-        '@tanstack/start/no-async-client-component',
+        'tanstack-start/no-async-client-component',
       );
 
       expect(error?.message).toMatchInlineSnapshot(
@@ -169,7 +169,7 @@ describe('un options', () => {
   it('respects `overrides` and `overridesAny` in `tanstack-start` eslint config', async () => {
     const configResult = await computeEslintConfig({
       tanstackStart: {
-        overrides: {'@tanstack/start/no-async-client-component': 0},
+        overrides: {'tanstack-start/no-async-client-component': 0},
         overridesAny: {'no-console': 0},
       },
     });
@@ -177,7 +177,7 @@ describe('un options', () => {
     expect(
       configResult.getRuleEntrySeverity(
         'tanstack-start',
-        '@tanstack/start/no-async-client-component',
+        'tanstack-start/no-async-client-component',
       ),
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('tanstack-start', 'no-console')).toBe(0);

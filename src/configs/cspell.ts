@@ -9,11 +9,11 @@ import {
 
 export interface CspellEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, '@cspell'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'cspell'> {
   /**
    * The single rule (`spellchecker`) options.
    */
-  options?: GetRuleOptions<'@cspell', 'spellchecker'>;
+  options?: GetRuleOptions<'cspell', 'spellchecker'>;
 }
 
 export default ((context, optionsRaw) => {
@@ -21,7 +21,7 @@ export default ((context, optionsRaw) => {
 
   const {options} = optionsResolved;
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, '@cspell');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'cspell');
 
   // Legend:
   // 🟢 - in recommended
@@ -33,7 +33,7 @@ export default ((context, optionsRaw) => {
       ERROR,
       options ? [options] : [],
     ) /** @since 5.18.5 */ /** @aka cspell */ // 🟢
-    .enableConfigTesterForPlugin('@cspell')
+    .enableConfigTesterForPlugin('cspell')
     .addOverrides();
 
   return {

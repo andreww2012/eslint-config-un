@@ -9,8 +9,8 @@ beforeEach(() => {
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('tanstackQuery');
 
-  it('loads `@tanstack/query` plugin if used', () => {
-    expect(configResult.getLoadedPlugin('@tanstack/query')).toBeDefined();
+  it('loads `tanstack-query` plugin if used', () => {
+    expect(configResult.getLoadedPlugin('tanstack-query')).toBeDefined();
   });
 
   it('creates `tanstack-query` eslint config', () => {
@@ -100,19 +100,19 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('tanstackQuery');
 
-  it('enables `@tanstack/query/exhaustive-deps` rule by default', () => {
+  it('enables `tanstack-query/exhaustive-deps` rule by default', () => {
     expect(
-      configResult.getRuleEntrySeverity('tanstack-query', '@tanstack/query/exhaustive-deps'),
+      configResult.getRuleEntrySeverity('tanstack-query', 'tanstack-query/exhaustive-deps'),
     ).toBe(2);
   });
 
-  it('enables `@tanstack/query/no-rest-destructuring` rule as error (overriding recommended warn)', () => {
+  it('enables `tanstack-query/no-rest-destructuring` rule as error (overriding recommended warn)', () => {
     expect(
-      configResult.getRuleEntrySeverity('tanstack-query', '@tanstack/query/no-rest-destructuring'),
+      configResult.getRuleEntrySeverity('tanstack-query', 'tanstack-query/no-rest-destructuring'),
     ).toBe(2);
   });
 
-  it('`@tanstack/query/mutation-property-order` rule fires when mutation properties are in wrong order', async () => {
+  it('`tanstack-query/mutation-property-order` rule fires when mutation properties are in wrong order', async () => {
     const results = await testEslintConfig(
       'tanstackQuery',
       FIXTURES.mutationWrongOrder,
@@ -122,7 +122,7 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.mutationWrongOrder,
-      '@tanstack/query/mutation-property-order',
+      'tanstack-query/mutation-property-order',
     );
 
     expect(error?.message).toMatchInlineSnapshot(
@@ -164,13 +164,13 @@ describe('un options', () => {
   it('respects `overrides` and `overridesAny` in `tanstack-query` eslint config', async () => {
     const configResult = await computeEslintConfig({
       tanstackQuery: {
-        overrides: {'@tanstack/query/exhaustive-deps': 0},
+        overrides: {'tanstack-query/exhaustive-deps': 0},
         overridesAny: {'no-console': 0},
       },
     });
 
     expect(
-      configResult.getRuleEntrySeverity('tanstack-query', '@tanstack/query/exhaustive-deps'),
+      configResult.getRuleEntrySeverity('tanstack-query', 'tanstack-query/exhaustive-deps'),
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('tanstack-query', 'no-console')).toBe(0);
   });

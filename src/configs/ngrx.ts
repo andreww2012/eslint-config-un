@@ -8,12 +8,12 @@ import {
 
 export interface NgrxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, '@ngrx'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'ngrx'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, '@ngrx');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'ngrx');
 
   // Legend:
   // 💭 - requires type information
@@ -60,7 +60,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefix-selectors-with-select', ERROR) /** @since 14.0.0 */
     .addRule('select-style', ERROR) /** @since 14.0.0 */
     .addRule('use-consistent-global-store-name', ERROR) /** @since 14.0.0 */
-    .enableConfigTesterForPlugin('@ngrx')
+    .enableConfigTesterForPlugin('ngrx')
     .addOverrides();
 
   return {

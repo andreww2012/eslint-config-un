@@ -8,12 +8,12 @@ import {
 
 export interface UnocssEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, '@unocss'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'unocss'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, '@unocss');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'unocss');
 
   // Legend:
   // 🟢 - in recommended
@@ -26,7 +26,7 @@ export default ((context, optionsRaw) => {
     .addRule('order', ERROR) /** @since 0.49.3 */ // 🟡
     // cspell:disable-next-line
     .addRule('order-attributify', ERROR) /** @since 0.49.3 */ // 🟡
-    .enableConfigTesterForPlugin('@unocss')
+    .enableConfigTesterForPlugin('unocss')
     .addOverrides();
 
   return {

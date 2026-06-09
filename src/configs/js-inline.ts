@@ -30,7 +30,10 @@ const DEFAULT_XML_EXTENSIONS = ['.xhtml', '.xml'];
 
 export interface JsInlineEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends OmitStrict<UnFlatConfigEntryBase<ExtraPlugins, 'html'>, 'overrides' | 'forceSeverity'> {
+> extends OmitStrict<
+  UnFlatConfigEntryBase<ExtraPlugins, 'html-processor'>,
+  'overrides' | 'forceSeverity'
+> {
   /**
    * [`eslint-plugin-html`](https://npmx.dev/eslint-plugin-html) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -113,13 +116,15 @@ export interface JsInlineEslintConfigOptions<
 }
 
 export default (async (context, optionsRaw) => {
-  const eslintPluginHtml = await pluginsLoaders.html(context).then(({module}) => module);
+  const eslintPluginHtml = await pluginsLoaders['html-processor'](context).then(
+    ({module}) => module,
+  );
 
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings, languageOptions} = optionsResolved;
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, 'html');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'html-processor');
 
   configBuilder
     ?.addConfig(
@@ -156,7 +161,7 @@ export default (async (context, optionsRaw) => {
       ],
       {
         plugins: {
-          html: eslintPluginHtml,
+          'html-processor': eslintPluginHtml,
         },
         languageOptions: {
           globals: {

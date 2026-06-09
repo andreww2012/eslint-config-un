@@ -26,9 +26,9 @@ const LATEST_SUPPORTED_ANGULAR_VERSION = SUPPORTED_ANGULAR_VERSIONS.at(
 
 interface ConfigTemplateSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, '@angular-eslint/template'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'angular-template'> {
   /**
-   * Enables all a11y (accessibility) rules (all are prefixed with `@angular-eslint/template`):
+   * Enables all a11y (accessibility) rules (all are prefixed with `angular-template`):
    * - [`alt-text`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/alt-text.md)
    * ([`accessibility-alt-text`](https://github.com/angular-eslint/angular-eslint/blob/v15.2.1/packages/eslint-plugin-template/docs/rules/accessibility-alt-text.md) before Angular 16)
    * - [`click-events-have-key-events`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/click-events-have-key-events.md)
@@ -53,7 +53,7 @@ interface ConfigTemplateSubConfigOptions<
 
   /**
    * Affected rule:
-   * - [`@angular-eslint/template/prefer-control-flow`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-control-flow.md) rule.
+   * - [`angular-template/prefer-control-flow`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-control-flow.md) rule.
    * @default true <=> Angular version >=19
    * @see https://angular.dev/guide/templates/control-flow
    */
@@ -68,7 +68,7 @@ interface ConfigTemplateSubConfigOptions<
    * ["Optimizing images"](https://angular.dev/tutorials/learn-angular/11-optimizing-images) lesson.
    *
    * Affected rule:
-   * - [`@angular-eslint/template/prefer-ngsrc`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-ngsrc.md) rule.
+   * - [`angular-template/prefer-ngsrc`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/prefer-ngsrc.md) rule.
    * @default false
    */
   preferNgSrc?: boolean;
@@ -77,7 +77,7 @@ interface ConfigTemplateSubConfigOptions<
    * Requires [`trackBy` function](https://angular.dev/api/core/TrackByFunction) to be used with [`*ngFor` loops](https://angular.dev/api/common/NgFor).
    *
    * Affected rule:
-   * - [`@angular-eslint/template/use-track-by-function`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/use-track-by-function.md) rule.
+   * - [`angular-template/use-track-by-function`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/use-track-by-function.md) rule.
    * @default false
    */
   requireLoopIndexes?: boolean;
@@ -85,7 +85,7 @@ interface ConfigTemplateSubConfigOptions<
 
 export interface AngularEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, '@angular-eslint'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'angular'> {
   /**
    * Config with template-specific rules.
    *
@@ -122,7 +122,7 @@ export interface AngularEslintConfigOptions<
    * Passing empty array disables the check.
    *
    * Affected rule:
-   * - [`@angular-eslint/component-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-class-suffix.md)
+   * - [`angular/component-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-class-suffix.md)
    * @default ['Component']
    */
   componentClassSuffixes?: string[];
@@ -133,12 +133,12 @@ export interface AngularEslintConfigOptions<
    * Pass `false` to disable the check.
    *
    * Affected rule:
-   * - [`@angular-eslint/component-selector`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-selector.md)
+   * - [`angular/component-selector`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/component-selector.md)
    * @default true
    */
   componentSelector?:
     | boolean
-    | Prettify<PartialObjectsOnly<GetRuleOptions<'@angular-eslint', 'component-selector'>>>;
+    | Prettify<PartialObjectsOnly<GetRuleOptions<'angular', 'component-selector'>>>;
 
   /**
    * Ensures consistent usage of `styles`/`styleUrls`/`styleUrl` within `Component` metadata.
@@ -146,17 +146,17 @@ export interface AngularEslintConfigOptions<
    * Pass `false` to disable the check.
    *
    * Affected rule:
-   * - [`@angular-eslint/consistent-component-styles`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/consistent-component-styles.md)
+   * - [`angular/consistent-component-styles`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/consistent-component-styles.md)
    * @default true
    */
-  componentStylesStyle?: boolean | GetRuleOptions<'@angular-eslint', 'consistent-component-styles'>;
+  componentStylesStyle?: boolean | GetRuleOptions<'angular', 'consistent-component-styles'>;
 
   /**
    * Valid class name suffixes for classes decorated with `@Directive`.
    * Passing empty array disables the check.
    *
    * Affected rule:
-   * - [`@angular-eslint/directive-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/directive-class-suffix.md)
+   * - [`angular/directive-class-suffix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/directive-class-suffix.md)
    * @default ['Component']
    */
   directiveClassSuffixes?: string[];
@@ -167,21 +167,21 @@ export interface AngularEslintConfigOptions<
    * Pass `false` to disable the check.
    *
    * Affected rule:
-   * - [`@angular-eslint/directive-selector`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/directive-selector.md)
+   * - [`angular/directive-selector`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/directive-selector.md)
    * @default true
    */
   directiveSelector?:
     | boolean
-    | Prettify<PartialObjectsOnly<GetRuleOptions<'@angular-eslint', 'directive-selector'>>>;
+    | Prettify<PartialObjectsOnly<GetRuleOptions<'angular', 'directive-selector'>>>;
 
   /**
    * Forbids the use of certain metadata properties. Will be merged with the default value.
    *
    * Affected rules:
-   * - [`@angular-eslint/no-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/v18.4.3/packages/eslint-plugin/docs/rules/no-host-metadata-property.md)
-   * - [`@angular-eslint/no-inputs-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-inputs-metadata-property.md)
-   * - [`@angular-eslint/no-outputs-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-outputs-metadata-property.md)
-   * - [`@angular-eslint/no-queries-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-queries-metadata-property.md)(available until Angular 18, deprecated in Angular 18)
+   * - [`angular/no-host-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/v18.4.3/packages/eslint-plugin/docs/rules/no-host-metadata-property.md)
+   * - [`angular/no-inputs-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-inputs-metadata-property.md)
+   * - [`angular/no-outputs-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-outputs-metadata-property.md)
+   * - [`angular/no-queries-metadata-property`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-queries-metadata-property.md)(available until Angular 18, deprecated in Angular 18)
    * @default {inputs: true, outputs: true, queries: true}
    */
   forbiddenMetadataProperties?: Partial<Record<'host' | 'inputs' | 'outputs' | 'queries', boolean>>;
@@ -190,21 +190,21 @@ export interface AngularEslintConfigOptions<
    * Disallow the following prefixes for input bindings, including aliases.
    *
    * Affected rule:
-   * - [`@angular-eslint/no-input-prefix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-input-prefix.md)
+   * - [`angular/no-input-prefix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-input-prefix.md)
    * @default ['on']
    */
   disallowedInputPrefixes?: string[];
 
   /**
    * Affected rule:
-   * - [`@angular-eslint/no-attribute-decorator`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-attribute-decorator.md)
+   * - [`angular/no-attribute-decorator`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-attribute-decorator.md)
    * @default false
    */
   disallowAttributeDecorator?: boolean;
 
   /**
    * Affected rule:
-   * - [`@angular-eslint/no-forward-ref`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-forward-ref.md)
+   * - [`angular/no-forward-ref`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-forward-ref.md)
    * @default false
    */
   disallowForwardRef?: boolean;
@@ -213,15 +213,15 @@ export interface AngularEslintConfigOptions<
    * Enforce specified prefixes for pipes.
    *
    * Affected rule:
-   * - [`@angular-eslint/pipe-prefix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/pipe-prefix.md)
+   * - [`angular/pipe-prefix`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/pipe-prefix.md)
    * @default []
    */
   pipePrefixes?: string[];
 
   /**
    * Affected rule:
-   * - Since Angular 17: [`@angular-eslint/prefer-standalone`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-standalone.md)
-   * - For Angular 16: [`@angular-eslint/prefer-standalone-component`](https://github.com/angular-eslint/angular-eslint/blob/v16.3.1/packages/eslint-plugin/docs/rules/prefer-standalone-component.md)
+   * - Since Angular 17: [`angular/prefer-standalone`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-standalone.md)
+   * - For Angular 16: [`angular/prefer-standalone-component`](https://github.com/angular-eslint/angular-eslint/blob/v16.3.1/packages/eslint-plugin/docs/rules/prefer-standalone-component.md)
    * @default true <=> Angular version >=19
    */
   preferStandaloneComponents?: boolean;
@@ -278,7 +278,7 @@ export default (async (context, optionsRaw) => {
     ...optionsResolved.forbiddenMetadataProperties,
   };
 
-  const configBuilderGeneral = context.createConfigBuilder(optionsResolved, '@angular-eslint');
+  const configBuilderGeneral = context.createConfigBuilder(optionsResolved, 'angular');
 
   // Legend:
   // 🟢 - in recommended (latest version)
@@ -295,9 +295,9 @@ export default (async (context, optionsRaw) => {
     angularTemplateEslintPluginPackageInfo,
     angularTemplateParserPackageInfo,
   ] = await Promise.all([
-    pluginsLoaders['@angular-eslint'](context).then(({module}) => module),
+    pluginsLoaders.angular(context).then(({module}) => module),
     fetchPackageInfo('@angular-eslint/eslint-plugin'),
-    pluginsLoaders['@angular-eslint/template'](context).then(({module}) => module),
+    pluginsLoaders['angular-template'](context).then(({module}) => module),
     fetchPackageInfo('@angular-eslint/eslint-plugin-template'),
     fetchPackageInfo('@angular-eslint/template-parser'),
   ]);
@@ -322,7 +322,7 @@ export default (async (context, optionsRaw) => {
   );
 
   const getPluginRuleSeverity = <
-    RuleName extends GetRuleNamesInPlugin<'@angular-eslint'>, // prettier-ignore
+    RuleName extends GetRuleNamesInPlugin<'angular'>, // prettier-ignore
   >(
     ruleName: RuleName,
     severity: RuleSeverity,
@@ -515,7 +515,7 @@ export default (async (context, optionsRaw) => {
     .addRule(
       ...getPluginRuleSeverity('use-pipe-transform-interface', ERROR),
     ) /** @since 0.0.1-alpha.12 */ // 🟢
-    .enableConfigTesterForPlugin('@angular-eslint', {includeDeprecated: true})
+    .enableConfigTesterForPlugin('angular', {includeDeprecated: true})
     .addOverrides();
 
   // TEMPLATE CONFIG
@@ -525,9 +525,7 @@ export default (async (context, optionsRaw) => {
     /* v8 ignore start */ angularTemplateEslintPlugin?.rules || {} /* v8 ignore stop */,
   );
 
-  const getTemplatePluginRuleSeverity = <
-    RuleName extends GetRuleNamesInPlugin<'@angular-eslint/template'>,
-  >(
+  const getTemplatePluginRuleSeverity = <RuleName extends GetRuleNamesInPlugin<'angular-template'>>(
     ruleName: RuleName,
     severity: RuleSeverity,
   ) =>
@@ -548,10 +546,7 @@ export default (async (context, optionsRaw) => {
 
   const a11yRulesSeverity = a11yRules === true ? ERROR : a11yRules === 'warn' ? WARNING : OFF;
 
-  const configBuilderTemplate = context.createConfigBuilder(
-    configTemplate,
-    '@angular-eslint/template',
-  );
+  const configBuilderTemplate = context.createConfigBuilder(configTemplate, 'angular-template');
 
   configBuilderTemplate
     ?.addConfig([
@@ -684,7 +679,7 @@ export default (async (context, optionsRaw) => {
     .addRule(
       ...getTemplatePluginRuleSeverity('valid-aria', a11yRulesSeverity),
     ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-valid-aria */ // ♿
-    .enableConfigTesterForPlugin('@angular-eslint/template', {includeDeprecated: true})
+    .enableConfigTesterForPlugin('angular-template', {includeDeprecated: true})
     .addOverrides();
 
   return {

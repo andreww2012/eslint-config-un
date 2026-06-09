@@ -9,8 +9,8 @@ beforeEach(() => {
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('tanstackRouter');
 
-  it('loads `@tanstack/router` plugin if used', () => {
-    expect(configResult.getLoadedPlugin('@tanstack/router')).toBeDefined();
+  it('loads `tanstack-router` plugin if used', () => {
+    expect(configResult.getLoadedPlugin('tanstack-router')).toBeDefined();
   });
 
   it('creates `tanstack-router` eslint config', () => {
@@ -112,16 +112,16 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('tanstackRouter');
 
-  it('enables `@tanstack/router/create-route-property-order` rule by default', () => {
+  it('enables `tanstack-router/create-route-property-order` rule by default', () => {
     expect(
       configResult.getRuleEntrySeverity(
         'tanstack-router',
-        '@tanstack/router/create-route-property-order',
+        'tanstack-router/create-route-property-order',
       ),
     ).toBe(2);
   });
 
-  it('`@tanstack/router/create-route-property-order` rule fires on a file with wrong property order', async () => {
+  it('`tanstack-router/create-route-property-order` rule fires on a file with wrong property order', async () => {
     const results = await testEslintConfig(
       {tanstackRouter: true, ts: true},
       FIXTURES.routeWithWrongPropertyOrder,
@@ -131,7 +131,7 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.routeWithWrongPropertyOrder,
-      '@tanstack/router/create-route-property-order',
+      'tanstack-router/create-route-property-order',
     );
 
     expect(error?.message).toMatchInlineSnapshot(
@@ -173,7 +173,7 @@ describe('un options', () => {
   it('respects `overrides` and `overridesAny` in `tanstack-router` eslint config', async () => {
     const configResult = await computeEslintConfig({
       tanstackRouter: {
-        overrides: {'@tanstack/router/create-route-property-order': 0},
+        overrides: {'tanstack-router/create-route-property-order': 0},
         overridesAny: {'no-console': 0},
       },
     });
@@ -181,7 +181,7 @@ describe('un options', () => {
     expect(
       configResult.getRuleEntrySeverity(
         'tanstack-router',
-        '@tanstack/router/create-route-property-order',
+        'tanstack-router/create-route-property-order',
       ),
     ).toBe(0);
     expect(configResult.getRuleEntrySeverity('tanstack-router', 'no-console')).toBe(0);

@@ -17,67 +17,15 @@ interface PackageMeta {
 export const PACKAGES_META: Record<string, PackageMeta> = {
   ...Object.fromEntries(
     objectEntriesUnsafe({
-      '@angular-eslint': {
+      angular: {
         configs: ['angular'],
         ruleDocsUrl: (ruleName) =>
           `https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/${ruleName}.md`,
       },
-      '@angular-eslint/template': {
+      'angular-template': {
         configs: ['angular'],
         ruleDocsUrl: (ruleName) =>
           `https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/${ruleName}.md`,
-      },
-      '@cspell': {
-        configs: ['cspell'],
-        ruleDocsUrl: null, // Single rule
-      },
-      '@eslint-react': {
-        configs: ['react'],
-        ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
-      },
-      '@html-eslint': {
-        configs: ['html'],
-        ruleDocsUrl: (ruleName) => `https://html-eslint.org/docs/rules/${ruleName}`,
-      },
-      '@intlify/vue-i18n': {
-        configs: ['vue'],
-        ruleDocsUrl: (ruleName) =>
-          `https://eslint-plugin-vue-i18n.intlify.dev/rules/${ruleName}.html`,
-      },
-      '@next/next': {
-        configs: [
-          'nextJs', // eslint-disable-line case-police/string-check
-        ],
-        ruleDocsUrl: (ruleName) => `https://nextjs.org/docs/messages/${ruleName}`,
-      },
-      '@ngrx': {
-        configs: ['ngrx'],
-        ruleDocsUrl: (ruleName) => `https://ngrx.io/guide/eslint-plugin/rules/${ruleName}`,
-      },
-      '@stylistic': {
-        configs: ['stylistic'],
-        ruleDocsUrl: (ruleName) => `https://eslint.style/rules/${ruleName}`,
-      },
-      '@tanstack/query': {
-        configs: ['tanstackQuery'],
-        gitTag: (version) => `@tanstack/eslint-plugin-query@${version}`,
-        ruleDocsUrl: (ruleName) => `https://tanstack.com/query/latest/docs/eslint/${ruleName}`,
-      },
-      '@tanstack/router': {
-        configs: ['tanstackRouter'],
-        gitTag: versionUnknown,
-        ruleDocsUrl: (ruleName) => `https://tanstack.com/router/latest/docs/eslint/${ruleName}`,
-      },
-      '@tanstack/start': {
-        configs: ['tanstackStart'],
-        gitTag: versionUnknown,
-        ruleDocsUrl: (ruleName) =>
-          `https://github.com/TanStack/router/blob/HEAD/packages/eslint-plugin-start/${ruleName}.md`,
-      },
-      '@unocss': {
-        configs: ['unocss'],
-        ruleDocsUrl: (ruleName) =>
-          `https://github.com/Gastonite/eslint-plugin-better-unocss/blob/HEAD/docs/rules/${ruleName}.md`,
       },
       antfu: {
         configs: ['antfu'],
@@ -140,6 +88,10 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
         configs: ['compat'],
         ruleDocsUrl: (ruleName) =>
           `https://github.com/amilajack/eslint-plugin-compat/blob/HEAD/docs/rules/${ruleName}.md`,
+      },
+      cspell: {
+        configs: ['cspell'],
+        ruleDocsUrl: null, // Single rule
       },
       css: {
         configs: ['css'],
@@ -209,6 +161,10 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
         ruleDocsUrl: (ruleName) =>
           `https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/${ruleName}.md`,
       },
+      'eslint-react': {
+        configs: ['react'],
+        ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
+      },
       'expect-type': {
         configs: ['expectType'],
         ruleDocsUrl: (ruleName) =>
@@ -256,6 +212,10 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
           `https://github.com/robmisasi/eslint-plugin-headers/blob/HEAD/docs/rules/${ruleName}.md`,
       },
       html: {
+        configs: ['html'],
+        ruleDocsUrl: (ruleName) => `https://html-eslint.org/docs/rules/${ruleName}`,
+      },
+      'html-processor': {
         configs: ['jsInline'],
         ruleDocsUrl: null, // No rules
       },
@@ -369,6 +329,16 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
         ],
         ruleDocsUrl: (ruleName) =>
           `https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/blob/HEAD/src/docs/rules/${ruleName}.md`,
+      },
+      nextjs: {
+        configs: [
+          'nextJs', // eslint-disable-line case-police/string-check
+        ],
+        ruleDocsUrl: (ruleName) => `https://nextjs.org/docs/messages/${ruleName}`,
+      },
+      ngrx: {
+        configs: ['ngrx'],
+        ruleDocsUrl: (ruleName) => `https://ngrx.io/guide/eslint-plugin/rules/${ruleName}`,
       },
       'no-only-tests': {
         configs: ['noOnlyTests'],
@@ -534,6 +504,10 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
         ruleDocsUrl: (ruleName) =>
           `https://github.com/storybookjs/storybook/blob/HEAD/code/lib/eslint-plugin/docs/rules/${ruleName}.md`,
       },
+      stylistic: {
+        configs: ['stylistic'],
+        ruleDocsUrl: (ruleName) => `https://eslint.style/rules/${ruleName}`,
+      },
       svelte: {
         configs: ['svelte'],
         gitTag: (version) => `eslint-plugin-svelte@${version}`,
@@ -544,6 +518,22 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
         configs: ['tailwind'],
         ruleDocsUrl: (ruleName) =>
           `https://github.com/francoismassart/eslint-plugin-tailwindcss/blob/HEAD/docs/rules/${ruleName}.md`,
+      },
+      'tanstack-query': {
+        configs: ['tanstackQuery'],
+        gitTag: (version) => `@tanstack/eslint-plugin-query@${version}`,
+        ruleDocsUrl: (ruleName) => `https://tanstack.com/query/latest/docs/eslint/${ruleName}`,
+      },
+      'tanstack-router': {
+        configs: ['tanstackRouter'],
+        gitTag: versionUnknown,
+        ruleDocsUrl: (ruleName) => `https://tanstack.com/router/latest/docs/eslint/${ruleName}`,
+      },
+      'tanstack-start': {
+        configs: ['tanstackStart'],
+        gitTag: versionUnknown,
+        ruleDocsUrl: (ruleName) =>
+          `https://github.com/TanStack/router/blob/HEAD/packages/eslint-plugin-start/${ruleName}.md`,
       },
       'testing-library': {
         configs: ['testingLibrary'],
@@ -587,6 +577,11 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
         configs: ['unnecessaryAbstractions'],
         ruleDocsUrl: null, // No docs
       },
+      unocss: {
+        configs: ['unocss'],
+        ruleDocsUrl: (ruleName) =>
+          `https://github.com/Gastonite/eslint-plugin-better-unocss/blob/HEAD/docs/rules/${ruleName}.md`,
+      },
       'unused-imports': {
         configs: ['unusedImports'],
         ruleDocsUrl: (ruleName) =>
@@ -600,6 +595,11 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
       vue: {
         configs: ['vue'],
         ruleDocsUrl: (ruleName) => `https://eslint.vuejs.org/rules/${ruleName}.html`,
+      },
+      'vue-i18n': {
+        configs: ['vue'],
+        ruleDocsUrl: (ruleName) =>
+          `https://eslint-plugin-vue-i18n.intlify.dev/rules/${ruleName}.html`,
       },
       'vue-scoped-css': {
         configs: ['vue'],

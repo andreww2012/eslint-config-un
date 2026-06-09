@@ -50,9 +50,9 @@ describe('react: sub config `dom`', () => {
       const severities = configResult.getRuleSeverities('react/dom');
 
       expect(severities).toMatchObject({
-        '@eslint-react/dom-no-dangerously-set-innerhtml': 2,
-        '@eslint-react/dom-no-missing-button-type': 2,
-        '@eslint-react/web-api-no-leaked-event-listener': 2,
+        'eslint-react/dom-no-dangerously-set-innerhtml': 2,
+        'eslint-react/dom-no-missing-button-type': 2,
+        'eslint-react/web-api-no-leaked-event-listener': 2,
       });
       expect(severities).not.toHaveProperty('react/danger');
     });
@@ -63,7 +63,7 @@ describe('react: sub config `dom`', () => {
       expect(configResult.getRuleEntrySeverity('react/dom', 'react/no-danger')).toBe(2);
     });
 
-    it('`@eslint-react/dom/no-dangerously-set-innerhtml` rule fires on a component using `dangerouslySetInnerHTML`', async () => {
+    it('`eslint-react/dom/no-dangerously-set-innerhtml` rule fires on a component using `dangerouslySetInnerHTML`', async () => {
       const results = await testEslintConfig(
         'react',
         FIXTURES.jsxWithDangerouslySetInnerHtmlProp,
@@ -73,7 +73,7 @@ describe('react: sub config `dom`', () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.jsxWithDangerouslySetInnerHtmlProp,
-        '@eslint-react/dom-no-dangerously-set-innerhtml',
+        'eslint-react/dom-no-dangerously-set-innerhtml',
       );
 
       expect(error?.message).toMatchInlineSnapshot(
@@ -120,13 +120,13 @@ describe('react: sub config `dom`', () => {
 
     it('respects `overrides` in `react/dom` eslint config', async () => {
       const configResult = await computeEslintConfig({
-        react: {configDom: {overrides: {'@eslint-react/dom-no-dangerously-set-innerhtml': 0}}},
+        react: {configDom: {overrides: {'eslint-react/dom-no-dangerously-set-innerhtml': 0}}},
       });
 
       expect(
         configResult.getRuleEntrySeverity(
           'react/dom',
-          '@eslint-react/dom-no-dangerously-set-innerhtml',
+          'eslint-react/dom-no-dangerously-set-innerhtml',
         ),
       ).toBe(0);
     });

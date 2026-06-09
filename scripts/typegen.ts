@@ -82,8 +82,8 @@ async function generateRuleTypes() {
     allPlugins,
     {
       '': eslintPluginVanillaRules,
-      '@angular-eslint': pluginAngular,
-      '@angular-eslint/template': pluginAngularTemplate,
+      angular: pluginAngular,
+      'angular-template': pluginAngularTemplate,
     },
     pluginsWithAddedRuleOptionSchemas,
   );

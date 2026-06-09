@@ -8,8 +8,10 @@ const FIXTURES = {
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('jsInline');
 
-  it('loads `html` plugin if used', () => {
-    expect(configResult.getConfigByUnPostfix('js-inline')?.plugins?.['html']).toBeDefined();
+  it('loads `html-processor` plugin if used', () => {
+    expect(
+      configResult.getConfigByUnPostfix('js-inline')?.plugins?.['html-processor'],
+    ).toBeDefined();
   });
 
   it('creates `js-inline` and `js-inline/js-inside-html-inside-markdown` eslint configs', () => {

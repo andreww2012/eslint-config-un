@@ -11,9 +11,9 @@ beforeEach(() => {
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('react');
 
-  it('loads `react`, `@eslint-react` and `react-hooks` plugins', () => {
+  it('loads `react`, `eslint-react` and `react-hooks` plugins', () => {
     expect(configResult.getLoadedPlugin('react')).toBeDefined();
-    expect(configResult.getLoadedPlugin('@eslint-react')).toBeDefined();
+    expect(configResult.getLoadedPlugin('eslint-react')).toBeDefined();
     expect(configResult.getLoadedPlugin('react-hooks')).toBeDefined();
   });
 

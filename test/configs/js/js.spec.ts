@@ -7,9 +7,9 @@ const FIXTURES = {
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('js');
 
-  it('creates `js` and `js/@stylistic_spaced-comment` eslint configs', () => {
+  it('creates `js` and `js/stylistic_spaced-comment` eslint configs', () => {
     expect(configResult.getConfigByUnPostfix('js')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('js/@stylistic_spaced-comment')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')).toBeDefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -61,8 +61,8 @@ describe('basic tests', async () => {
     expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 
-  it('has default `ignores` in `js/@stylistic_spaced-comment` eslint config including YAML and HTML', () => {
-    const ignores = configResult.getConfigByUnPostfix('js/@stylistic_spaced-comment')?.ignores;
+  it('has default `ignores` in `js/stylistic_spaced-comment` eslint config including YAML and HTML', () => {
+    const ignores = configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')?.ignores;
 
     expect(ignores).toIncludeAllMembers(['**/*.y?(a)ml', '**/*.html']);
   });
@@ -92,15 +92,15 @@ describe('rules', async () => {
 
 describe('un options', () => {
   describe('option: `files`', () => {
-    it('uses user-provided `files` in `js` and `js/@stylistic_spaced-comment` eslint configs', async () => {
+    it('uses user-provided `files` in `js` and `js/stylistic_spaced-comment` eslint configs', async () => {
       const FILES = ['src/**/*.js'];
 
       const configResult = await computeEslintConfig({js: {files: FILES}});
 
       expect(configResult.getConfigByUnPostfix('js')?.files).toStrictEqual(FILES);
-      expect(
-        configResult.getConfigByUnPostfix('js/@stylistic_spaced-comment')?.files,
-      ).toStrictEqual(FILES);
+      expect(configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')?.files).toStrictEqual(
+        FILES,
+      );
     });
 
     it('disables `js` eslint config when set to empty array', async () => {
@@ -111,7 +111,7 @@ describe('un options', () => {
   });
 
   describe('option: `ignores`', () => {
-    it('uses user-provided `ignores` in `js` and `js/@stylistic_spaced-comment` eslint configs and merges them with defaults', async () => {
+    it('uses user-provided `ignores` in `js` and `js/stylistic_spaced-comment` eslint configs and merges them with defaults', async () => {
       const IGNORES = ['**/fixtures/**'];
 
       const configResult = await computeEslintConfig({js: {ignores: IGNORES}});
@@ -122,7 +122,7 @@ describe('un options', () => {
       expect(ignoresFromJs?.length).toBeGreaterThan(IGNORES.length);
 
       const ignoresFromStylisticNoSpacedComment = configResult.getConfigByUnPostfix(
-        'js/@stylistic_spaced-comment',
+        'js/stylistic_spaced-comment',
       )?.ignores;
 
       expect(ignoresFromStylisticNoSpacedComment).toIncludeAllMembers(IGNORES);

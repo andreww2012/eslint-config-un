@@ -7,7 +7,7 @@ beforeEach(() => {
 });
 
 describe('basic tests', () => {
-  it('creates `ngrx` eslint config and loads `@ngrx` plugin if set to `true`', async () => {
+  it('creates `ngrx` eslint config and loads `ngrx` plugin if set to `true`', async () => {
     const configResult = await computeEslintConfig('ngrx');
 
     const config = configResult.getConfigByUnPostfix('ngrx');
@@ -16,14 +16,14 @@ describe('basic tests', () => {
     expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
     expect(config?.ignores?.length).toBeGreaterThan(0);
 
-    expect(configResult.getLoadedPlugin('@ngrx')).toBeDefined();
+    expect(configResult.getLoadedPlugin('ngrx')).toBeDefined();
   });
 
-  it('does not create `ngrx` eslint config and does not load `@ngrx` plugin if set to `false`', async () => {
+  it('does not create `ngrx` eslint config and does not load `ngrx` plugin if set to `false`', async () => {
     const configResult = await computeEslintConfig({ngrx: false});
 
     expect(configResult.getConfigByUnPostfix('ngrx')).toBeUndefined();
-    expect(configResult.getLoadedPlugin('@ngrx')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('ngrx')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -90,12 +90,12 @@ describe('rules', () => {
     const configResult = await computeEslintConfig('ngrx');
 
     expect(configResult.getRuleSeverities('ngrx')).toMatchObject({
-      '@ngrx/use-effects-lifecycle-interface': 2,
-      '@ngrx/with-state-no-arrays-at-root-level': 2,
+      'ngrx/use-effects-lifecycle-interface': 2,
+      'ngrx/with-state-no-arrays-at-root-level': 2,
     });
   });
 
-  it('`@ngrx/good-action-hygiene` rule fires on an action type string not following `[Feature] Event` convention', async () => {
+  it('`ngrx/good-action-hygiene` rule fires on an action type string not following `[Feature] Event` convention', async () => {
     const results = await testEslintConfig(
       'ngrx',
       FIXTURES.actionWithoutNamespace,
@@ -105,7 +105,7 @@ describe('rules', () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.actionWithoutNamespace,
-      '@ngrx/good-action-hygiene',
+      'ngrx/good-action-hygiene',
     );
 
     expect(error?.message).toMatchInlineSnapshot(
@@ -147,13 +147,13 @@ describe('un options', () => {
   it('respects `overrides` and `overridesAny` in `ngrx` eslint config', async () => {
     const configResult = await computeEslintConfig({
       ngrx: {
-        overrides: {'@ngrx/avoid-combining-selectors': 0},
+        overrides: {'ngrx/avoid-combining-selectors': 0},
         overridesAny: {'no-console': 0},
       },
     });
 
     expect(configResult.getRuleSeverities('ngrx')).toMatchObject({
-      '@ngrx/avoid-combining-selectors': 0,
+      'ngrx/avoid-combining-selectors': 0,
       'no-console': 0,
     });
   });

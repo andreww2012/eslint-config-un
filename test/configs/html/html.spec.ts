@@ -3,8 +3,8 @@ import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('html');
 
-  it('loads `@html-eslint` plugin if used', () => {
-    expect(configResult.getLoadedPlugin('@html-eslint')).toBeDefined();
+  it('loads `html` plugin if used', () => {
+    expect(configResult.getLoadedPlugin('html')).toBeDefined();
   });
 
   it('creates `html` eslint config', () => {
@@ -66,12 +66,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('html');
 
-  it('enables `@html-eslint/no-duplicate-attrs` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('html', '@html-eslint/no-duplicate-attrs')).toBe(2);
+  it('enables `html/no-duplicate-attrs` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('html', 'html/no-duplicate-attrs')).toBe(2);
   });
 
-  it('disables `@html-eslint/no-inline-styles` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('html', '@html-eslint/no-inline-styles')).toBe(0);
+  it('disables `html/no-inline-styles` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('html', 'html/no-inline-styles')).toBe(0);
   });
 });
 
@@ -107,10 +107,10 @@ describe('un options', () => {
 
   it('respects `overrides` and `overridesAny` in `html` eslint config', async () => {
     const configResult = await computeEslintConfig({
-      html: {overrides: {'@html-eslint/no-duplicate-attrs': 0}, overridesAny: {'no-console': 0}},
+      html: {overrides: {'html/no-duplicate-attrs': 0}, overridesAny: {'no-console': 0}},
     });
 
-    expect(configResult.getRuleEntrySeverity('html', '@html-eslint/no-duplicate-attrs')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('html', 'html/no-duplicate-attrs')).toBe(0);
     expect(configResult.getRuleEntrySeverity('html', 'no-console')).toBe(0);
   });
 });
@@ -159,18 +159,18 @@ describe('options', () => {
   describe('option: `disallowedHtmlTags`', () => {
     it('restricts default invalid html tags in `no-restricted-tags` by default', async () => {
       const configResult = await computeEslintConfig('html');
-      const ruleEntry = configResult.getRuleEntry('html', '@html-eslint/no-restricted-tags');
+      const ruleEntry = configResult.getRuleEntry('html', 'html/no-restricted-tags');
 
       expect(ruleEntry).toMatchInlineSnapshot(
         '[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^font$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$"]}]',
       );
     });
 
-    it('adds custom disallowed tags to `@html-eslint/no-restricted-tags` rule', async () => {
+    it('adds custom disallowed tags to `html/no-restricted-tags` rule', async () => {
       const configResult = await computeEslintConfig({
         html: {disallowedHtmlTags: {iframe: true}},
       });
-      const ruleEntry = configResult.getRuleEntry('html', '@html-eslint/no-restricted-tags');
+      const ruleEntry = configResult.getRuleEntry('html', 'html/no-restricted-tags');
 
       expect(ruleEntry).toMatchInlineSnapshot(
         '[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^font$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$", "^iframe$"]}]',
@@ -181,7 +181,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig({
         html: {disallowedHtmlTags: {font: false}},
       });
-      const ruleEntry = configResult.getRuleEntry('html', '@html-eslint/no-restricted-tags');
+      const ruleEntry = configResult.getRuleEntry('html', 'html/no-restricted-tags');
 
       expect(ruleEntry).toMatchInlineSnapshot(
         '[2, {"tagPatterns": ["^acronym$", "^big$", "^center$", "^content$", "^dir$", "^frame$", "^frameset$", "^image$", "^marquee$", "^menuitem$", "^nobr$", "^noembed$", "^noframes$", "^param$", "^plaintext$", "^rb$", "^rtc$", "^shadow$", "^strike$", "^tt$", "^xmp$", "^applet$", "^bgsound$", "^blink$", "^isindex$", "^keygen$", "^multicol$", "^nextid$", "^spacer$", "^basefont$", "^listing$", "^command$", "^element$"]}]',

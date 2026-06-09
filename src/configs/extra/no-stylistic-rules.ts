@@ -81,7 +81,7 @@ const ALL_STYLISTIC_RULES = {
     'sort-vars': true,
     yoda: true,
   },
-  '@angular-eslint': {
+  angular: {
     'component-class-suffix': true,
     'component-max-inline-declarations': true,
     'component-selector': true,
@@ -91,42 +91,10 @@ const ALL_STYLISTIC_RULES = {
     'sort-keys-in-type-decorator': true,
     'sort-lifecycle-methods': true,
   },
-  '@angular-eslint/template': {
+  'angular-template': {
     'attributes-order': true,
     'prefer-contextual-for-variables': true,
     'prefer-self-closing-tags': true,
-  },
-  '@cspell': {
-    // None
-  },
-  '@eslint-react': {
-    // None
-  },
-  '@html-eslint': {
-    quotes: true,
-  },
-  '@intlify/vue-i18n': {
-    'prefer-linked-key-with-paren': true,
-  },
-  '@next/next': {
-    // None
-  },
-  '@ngrx': {
-    'select-style': true,
-  },
-  '@stylistic': markAllPluginRulesAsStylistic('@stylistic'),
-  '@tanstack/query': {
-    // None
-  },
-  '@tanstack/router': {
-    // None
-  },
-  '@tanstack/start': {
-    // None
-  },
-  '@unocss': {
-    order: true,
-    'order-attributify': true,
   },
   antfu: {
     'consistent-chaining': true,
@@ -185,6 +153,9 @@ const ALL_STYLISTIC_RULES = {
     // None
   },
   compat: {
+    // None
+  },
+  cspell: {
     // None
   },
   css: {
@@ -262,6 +233,9 @@ const ALL_STYLISTIC_RULES = {
     'meta-property-ordering': true,
     'test-case-property-ordering': true,
   },
+  'eslint-react': {
+    // None
+  },
   'expect-type': {
     // None
   },
@@ -315,6 +289,9 @@ const ALL_STYLISTIC_RULES = {
     'no-trailing-spaces': true,
     quotes: true,
     'sort-attrs': true,
+  },
+  'html-processor': {
+    // None
   },
   import: {
     'consistent-type-specifier-style': true,
@@ -476,6 +453,12 @@ const ALL_STYLISTIC_RULES = {
   },
   nestjs: {
     'sort-module-metadata-arrays': true,
+  },
+  nextjs: {
+    // None
+  },
+  ngrx: {
+    'select-style': true,
   },
   'no-only-tests': {
     // None
@@ -699,6 +682,7 @@ const ALL_STYLISTIC_RULES = {
   storybook: {
     // None
   },
+  stylistic: markAllPluginRulesAsStylistic('stylistic'),
   svelte: {
     'consistent-selector-style': true,
     'derived-has-same-inputs-outputs': true,
@@ -724,6 +708,15 @@ const ALL_STYLISTIC_RULES = {
   tailwindcss: {
     'classnames-order': true,
     'enforces-shorthand': true,
+  },
+  'tanstack-query': {
+    // None
+  },
+  'tanstack-router': {
+    // None
+  },
+  'tanstack-start': {
+    // None
   },
   'testing-library': {
     // None
@@ -883,6 +876,10 @@ const ALL_STYLISTIC_RULES = {
   'unnecessary-abstractions': {
     // None
   },
+  unocss: {
+    order: true,
+    'order-attributify': true,
+  },
   'unused-imports': {
     // None
   },
@@ -950,6 +947,9 @@ const ALL_STYLISTIC_RULES = {
     'v-for-delimiter-style': true,
     'v-on-handler-style': true,
     'v-slot-style': true,
+  },
+  'vue-i18n': {
+    'prefer-linked-key-with-paren': true,
   },
   'vue-scoped-css': {
     'v-deep-pseudo-style': true,

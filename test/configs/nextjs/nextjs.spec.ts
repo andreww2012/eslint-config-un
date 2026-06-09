@@ -9,8 +9,8 @@ const FIXTURES = {
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('nextJs');
 
-  it('loads `@next/next` plugin if used', () => {
-    expect(configResult.getLoadedPlugin('@next/next')).toBeDefined();
+  it('loads `nextjs` plugin if used', () => {
+    expect(configResult.getLoadedPlugin('nextjs')).toBeDefined();
   });
 
   it('creates `nextjs` eslint config', () => {
@@ -90,15 +90,15 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('nextJs');
 
-  it('enables `@next/next/inline-script-id` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('nextjs', '@next/next/inline-script-id')).toBe(2);
+  it('enables `nextjs/inline-script-id` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('nextjs', 'nextjs/inline-script-id')).toBe(2);
   });
 
-  it('enables `@next/next/no-css-tags` rule as a warning by default', () => {
-    expect(configResult.getRuleEntrySeverity('nextjs', '@next/next/no-css-tags')).toBe(1);
+  it('enables `nextjs/no-css-tags` rule as a warning by default', () => {
+    expect(configResult.getRuleEntrySeverity('nextjs', 'nextjs/no-css-tags')).toBe(1);
   });
 
-  it('`@next/next/no-img-element` rule fires on a tsx file with an <img> element', async () => {
+  it('`nextjs/no-img-element` rule fires on a tsx file with an <img> element', async () => {
     const results = await testEslintConfig(
       {
         nextJs: {
@@ -115,7 +115,7 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.jsxWithImgTag,
-      '@next/next/no-img-element',
+      'nextjs/no-img-element',
     );
 
     expect(error?.message).toMatchInlineSnapshot(
@@ -157,12 +157,12 @@ describe('un options', () => {
   it('respects `overrides` and `overridesAny` in `nextjs` eslint config', async () => {
     const configResult = await computeEslintConfig({
       nextJs: {
-        overrides: {'@next/next/inline-script-id': 0},
+        overrides: {'nextjs/inline-script-id': 0},
         overridesAny: {'no-console': 0},
       },
     });
 
-    expect(configResult.getRuleEntrySeverity('nextjs', '@next/next/inline-script-id')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('nextjs', 'nextjs/inline-script-id')).toBe(0);
     expect(configResult.getRuleEntrySeverity('nextjs', 'no-console')).toBe(0);
   });
 });

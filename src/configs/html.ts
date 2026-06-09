@@ -12,7 +12,7 @@ import {
 
 export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
-    UnFlatConfigEntryBase<ExtraPlugins, '@html-eslint'>,
+    UnFlatConfigEntryBase<ExtraPlugins, 'html'>,
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
    * [`@html-eslint/eslint-plugin`](https://npmx.dev/@html-eslint/eslint-plugin) plugin
@@ -24,7 +24,7 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     // TODO
 
     /**
-     * This plugin allows you to lint not only HTML files but also HTML written in JavaScript Template Literal. You can set the \@html-eslint rules in your settings to lint JavaScript code without any additional configuration.
+     * This plugin allows you to lint not only HTML files but also HTML written in JavaScript Template Literal. You can set the `html` rules in your settings to lint JavaScript code without any additional configuration.
      *
      * Not all template literals are recognized as HTML. There are two ways to make the plugin recognize them as HTML.
      *
@@ -56,7 +56,7 @@ export default ((context, optionsRaw) => {
 
   const {settings: pluginSettings, parserOptions} = optionsResolved;
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, '@html-eslint');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'html');
 
   // Legend:
   // 🟢 - in recommended
@@ -164,7 +164,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-trailing-spaces', WARNING) /** @since 0.15.0 */
     .addRule('quotes', ERROR, ['double', {enforceTemplatedAttrValue: true}]) /** @since 0.5.0 */ // 🟢
     .addRule('sort-attrs', OFF) /** @since 0.21.0 */ // TODO find and enforce a good sorting order?
-    .enableConfigTesterForPlugin('@html-eslint')
+    .enableConfigTesterForPlugin('html')
     .addOverrides();
 
   return {

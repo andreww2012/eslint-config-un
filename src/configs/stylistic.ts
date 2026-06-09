@@ -15,7 +15,7 @@ import {
 
 export interface StylisticEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, '@stylistic'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'stylistic'> {
   /**
    * Customization function directly coming from [the plugin](https://eslint.style/guide/config-presets#configuration-factory).
    *
@@ -37,13 +37,11 @@ export default (async (context, optionsRaw) => {
 
   const {customizeOptions} = optionsResolved;
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, '@stylistic');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'stylistic');
 
   let configProducedByCustomize: EslintFlatConfigEntry['rules'] | undefined;
   if (customizeOptions) {
-    const {customize} = await pluginsLoaders['@stylistic'](context).then(
-      ({module}) => module.configs,
-    );
+    const {customize} = await pluginsLoaders.stylistic(context).then(({module}) => module.configs);
     configProducedByCustomize = mapKeys(
       customize(customizeOptions).rules ||
         /* v8 ignore start */
@@ -54,8 +52,8 @@ export default (async (context, optionsRaw) => {
   }
 
   const setupRule = <
-    RuleName extends GetRuleNamesInPlugin<'@stylistic'>,
-    _RuleOptions = GetRuleOptions<'@stylistic', RuleName, 'all'>,
+    RuleName extends GetRuleNamesInPlugin<'stylistic'>,
+    _RuleOptions = GetRuleOptions<'stylistic', RuleName, 'all'>,
   >(
     ruleName: RuleName,
     severity: RuleSeverity = OFF,
@@ -197,7 +195,7 @@ export default (async (context, optionsRaw) => {
     .addRule(...setupRule('wrap-iife', OFF)) /** @since 0.0.6 */ // 🟢
     .addRule(...setupRule('wrap-regex', OFF)) /** @since 0.0.6 */
     .addRule(...setupRule('yield-star-spacing', OFF)) /** @since 0.0.4 */ // 🟢
-    .enableConfigTesterForPlugin('@stylistic')
+    .enableConfigTesterForPlugin('stylistic')
     .addOverrides();
 
   // TODO possible to do anything with this?

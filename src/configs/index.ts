@@ -1100,7 +1100,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * 🧩 Plugin(s):
    * - [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react)
    * - [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin)
-   * **with `@eslint-react` prefix**
+   * **with `eslint-react` prefix**
    * - [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks)
    *
    * Since `eslint-plugin-react` and `@eslint-react/eslint-plugin` have some overlapping rules,

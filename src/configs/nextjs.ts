@@ -9,7 +9,7 @@ import {
 
 export interface NextJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, '@next/next'> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'nextjs'> {
   /**
    * [`@next/eslint-plugin-next`](https://npmx.dev/@next/eslint-plugin-next) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -31,7 +31,7 @@ export default ((context, optionsRaw) => {
 
   const {settings: pluginSettings} = optionsResolved;
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, '@next/next');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'nextjs');
 
   // Legend:
   // 🟢 - in recommended
@@ -71,7 +71,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-title-in-document-head', ERROR) /** @since 10.2.1-canary.3 */ // 🟡
     .addRule('no-typos', ERROR) /** @since 11.0.2-canary.22 */ // 🟡
     .addRule('no-unwanted-polyfillio', ERROR) /** @since 9.4.5-canary.38 */ // 🟡
-    .enableConfigTesterForPlugin('@next/next')
+    .enableConfigTesterForPlugin('nextjs')
     .addOverrides();
 
   return {

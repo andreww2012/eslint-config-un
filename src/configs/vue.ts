@@ -56,7 +56,7 @@ interface EnforceTypescriptInScriptionSectionConfigOptions<
 
 interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<
   ExtraPlugins,
-  '@intlify/vue-i18n'
+  'vue-i18n'
 > {
   /**
    * [`@intlify/eslint-plugin-vue-i18n`](https://npmx.dev/@intlify/eslint-plugin-vue-i18n) plugin
@@ -1161,7 +1161,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
 
   const {settings: pluginI18nSettings} = optionsI18nResolved;
 
-  const configBuilderI18n = context.createConfigBuilder(configI18n, '@intlify/vue-i18n');
+  const configBuilderI18n = context.createConfigBuilder(configI18n, 'vue-i18n');
 
   // Legend:
   // 🟢 - in recommended
@@ -1217,7 +1217,7 @@ export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .markCategory('Stylistic Issues')
     .addRule('prefer-linked-key-with-paren', WARNING) /** @since 0.10.0 */
     .addRule('sfc-locale-attr', ERROR) /** @since 1.3.0 */
-    .enableConfigTesterForPlugin('@intlify/vue-i18n')
+    .enableConfigTesterForPlugin('vue-i18n')
     .addOverrides();
 
   const optionsScopedCssResolved = assignDefaults(configScopedCss, {});

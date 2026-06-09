@@ -9,8 +9,8 @@ const FIXTURES = {
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('stylistic');
 
-  it('loads `@stylistic` plugin if used', () => {
-    expect(configResult.getLoadedPlugin('@stylistic')).toBeDefined();
+  it('loads `stylistic` plugin if used', () => {
+    expect(configResult.getLoadedPlugin('stylistic')).toBeDefined();
   });
 
   it('creates `stylistic` and `stylistic/spaced-comment` eslint configs', () => {
@@ -100,29 +100,29 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('stylistic');
 
-  it('enables `@stylistic/padding-line-between-statements` rule by default', () => {
+  it('enables `stylistic/padding-line-between-statements` rule by default', () => {
     expect(
-      configResult.getRuleEntry('stylistic', '@stylistic/padding-line-between-statements'),
+      configResult.getRuleEntry('stylistic', 'stylistic/padding-line-between-statements'),
     ).toMatchInlineSnapshot(
       '[2, {"blankLine": "never", "next": "import", "prev": "import"}, {"blankLine": "any", "next": {"selector": "ImportDeclaration[specifiers.length=0]"}, "prev": "import"}, {"blankLine": "any", "next": "import", "prev": {"selector": "ImportDeclaration[specifiers.length=0]"}}]',
     );
   });
 
-  it('disables `@stylistic/indent` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('stylistic', '@stylistic/indent')).toBe(0);
+  it('disables `stylistic/indent` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('stylistic', 'stylistic/indent')).toBe(0);
   });
 
-  it('enables `@stylistic/spaced-comment` in `stylistic/spaced-comment` eslint config', () => {
+  it('enables `stylistic/spaced-comment` in `stylistic/spaced-comment` eslint config', () => {
     expect(
-      configResult.getRuleEntrySeverity('stylistic/spaced-comment', '@stylistic/spaced-comment'),
+      configResult.getRuleEntrySeverity('stylistic/spaced-comment', 'stylistic/spaced-comment'),
     ).toBe(2);
   });
 
-  it('disables `@stylistic/spaced-comment` in main `stylistic` eslint config', () => {
-    expect(configResult.getRuleEntrySeverity('stylistic', '@stylistic/spaced-comment')).toBe(0);
+  it('disables `stylistic/spaced-comment` in main `stylistic` eslint config', () => {
+    expect(configResult.getRuleEntrySeverity('stylistic', 'stylistic/spaced-comment')).toBe(0);
   });
 
-  describe('`@stylistic/padding-line-between-statements` rule behavior', () => {
+  describe('`stylistic/padding-line-between-statements` rule behavior', () => {
     it('reports an error for a blank line between two normal imports', async () => {
       const results = await testEslintConfig(
         'stylistic',
@@ -133,7 +133,7 @@ describe('rules', async () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.normalImportBlankLineNormalImport,
-        '@stylistic/padding-line-between-statements',
+        'stylistic/padding-line-between-statements',
       );
 
       expect(error?.message).toMatchInlineSnapshot(
@@ -151,7 +151,7 @@ describe('rules', async () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.sideEffectImportBlankLineNormalImport,
-        '@stylistic/padding-line-between-statements',
+        'stylistic/padding-line-between-statements',
       );
 
       expect(error).toBeUndefined();
@@ -167,7 +167,7 @@ describe('rules', async () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.normalImportBlankLineSideEffectImport,
-        '@stylistic/padding-line-between-statements',
+        'stylistic/padding-line-between-statements',
       );
 
       expect(error).toBeUndefined();
@@ -219,30 +219,30 @@ describe('un options', () => {
   it('respects `overrides` and `overridesAny` in `stylistic` eslint config', async () => {
     const configResult = await computeEslintConfig({
       stylistic: {
-        overrides: {'@stylistic/quotes': 0},
+        overrides: {'stylistic/quotes': 0},
         overridesAny: {'no-console': 0},
       },
     });
 
-    expect(configResult.getRuleEntrySeverity('stylistic', '@stylistic/quotes')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('stylistic', 'stylistic/quotes')).toBe(0);
     expect(configResult.getRuleEntrySeverity('stylistic', 'no-console')).toBe(0);
   });
 });
 
 describe('options', () => {
   describe('option: `customizeOptions`', () => {
-    it('`@stylistic/quotes` rule entry uses our custom options with `ignoreStringLiterals: true` by default (no `customizeOptions`)', async () => {
+    it('`stylistic/quotes` rule entry uses our custom options with `ignoreStringLiterals: true` by default (no `customizeOptions`)', async () => {
       const configResult = await computeEslintConfig('stylistic');
 
-      expect(configResult.getRuleEntry('stylistic', '@stylistic/quotes')).toMatchInlineSnapshot(
+      expect(configResult.getRuleEntry('stylistic', 'stylistic/quotes')).toMatchInlineSnapshot(
         '[2, "single", {"allowTemplateLiterals": "avoidEscape", "avoidEscape": true, "ignoreStringLiterals": true}]',
       );
     });
 
-    it('`@stylistic/quotes` rule entry uses plugin-provided options when `customizeOptions` is set', async () => {
+    it('`stylistic/quotes` rule entry uses plugin-provided options when `customizeOptions` is set', async () => {
       const configResult = await computeEslintConfig({stylistic: {customizeOptions: {}}});
 
-      expect(configResult.getRuleEntry('stylistic', '@stylistic/quotes')).toMatchInlineSnapshot(
+      expect(configResult.getRuleEntry('stylistic', 'stylistic/quotes')).toMatchInlineSnapshot(
         '["error", "single", {"allowTemplateLiterals": "always", "avoidEscape": false}]',
       );
     });

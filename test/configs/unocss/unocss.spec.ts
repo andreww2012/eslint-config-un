@@ -9,8 +9,8 @@ beforeEach(() => {
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('unocss');
 
-  it('loads `@unocss` plugin if used', () => {
-    expect(configResult.getLoadedPlugin('@unocss')).toBeDefined();
+  it('loads `unocss` plugin if used', () => {
+    expect(configResult.getLoadedPlugin('unocss')).toBeDefined();
   });
 
   it('creates `unocss` eslint config', () => {
@@ -85,15 +85,15 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('unocss');
 
-  it('enables `@unocss/blocklist` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('unocss', '@unocss/blocklist')).toBe(2);
+  it('enables `unocss/blocklist` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('unocss', 'unocss/blocklist')).toBe(2);
   });
 
-  it('disables `@unocss/enforce-class-compile` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('unocss', '@unocss/enforce-class-compile')).toBe(0);
+  it('disables `unocss/enforce-class-compile` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('unocss', 'unocss/enforce-class-compile')).toBe(0);
   });
 
-  it('`@unocss/order` rule fires on a file with unordered UnoCSS classes', async () => {
+  it('`unocss/order` rule fires on a file with unordered UnoCSS classes', async () => {
     const results = await testEslintConfig(
       {unocss: {files: ['**']}},
       FIXTURES.unorderedClasses,
@@ -103,7 +103,7 @@ describe('rules', async () => {
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.unorderedClasses,
-      '@unocss/order',
+      'unocss/order',
     );
 
     expect(error?.message).toMatchInlineSnapshot('"UnoCSS utilities are not ordered"');
@@ -143,12 +143,12 @@ describe('un options', () => {
   it('respects `overrides` and `overridesAny` in `unocss` eslint config', async () => {
     const configResult = await computeEslintConfig({
       unocss: {
-        overrides: {'@unocss/blocklist': 0},
+        overrides: {'unocss/blocklist': 0},
         overridesAny: {'no-console': 0},
       },
     });
 
-    expect(configResult.getRuleEntrySeverity('unocss', '@unocss/blocklist')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('unocss', 'unocss/blocklist')).toBe(0);
     expect(configResult.getRuleEntrySeverity('unocss', 'no-console')).toBe(0);
   });
 });

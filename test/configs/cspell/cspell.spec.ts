@@ -5,8 +5,8 @@ const FIXTURES = {
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('cspell');
 
-  it('loads `@cspell` plugin if used', () => {
-    expect(configResult.getLoadedPlugin('@cspell')).toBeDefined();
+  it('loads `cspell` plugin if used', () => {
+    expect(configResult.getLoadedPlugin('cspell')).toBeDefined();
   });
 
   it('creates `cspell` eslint config', () => {
@@ -63,17 +63,17 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('cspell');
 
-  it('enables `@cspell/spellchecker` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('cspell', '@cspell/spellchecker')).toBe(2);
+  it('enables `cspell/spellchecker` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('cspell', 'cspell/spellchecker')).toBe(2);
   });
 
-  it('`@cspell/spellchecker` rule fires on a file with a misspelled word', async () => {
+  it('`cspell/spellchecker` rule fires on a file with a misspelled word', async () => {
     const results = await testEslintConfig('cspell', FIXTURES.withMisspelling, import.meta.dirname);
 
     const error = findLintMessageFromLintResults(
       results,
       FIXTURES.withMisspelling,
-      '@cspell/spellchecker',
+      'cspell/spellchecker',
     );
 
     expect(error?.message).toMatchInlineSnapshot('"Misspelled word: "reccomend" (recommend)"');
@@ -111,10 +111,10 @@ describe('un options', () => {
 
   it('respects `overrides` and `overridesAny` in `cspell` eslint config', async () => {
     const configResult = await computeEslintConfig({
-      cspell: {overrides: {'@cspell/spellchecker': 0}, overridesAny: {'no-console': 0}},
+      cspell: {overrides: {'cspell/spellchecker': 0}, overridesAny: {'no-console': 0}},
     });
 
-    expect(configResult.getRuleEntrySeverity('cspell', '@cspell/spellchecker')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('cspell', 'cspell/spellchecker')).toBe(0);
     expect(configResult.getRuleEntrySeverity('cspell', 'no-console')).toBe(0);
   });
 });
@@ -123,7 +123,7 @@ describe('options', () => {
   describe('option: `options`', () => {
     it('does not set rule options by default', async () => {
       const configResult = await computeEslintConfig('cspell');
-      const rule = configResult.getRuleEntry('cspell', '@cspell/spellchecker');
+      const rule = configResult.getRuleEntry('cspell', 'cspell/spellchecker');
 
       expect(rule).toMatchInlineSnapshot('2');
     });
@@ -135,7 +135,7 @@ describe('options', () => {
         cspell: {options: OPTIONS},
       });
 
-      expect(configResult.getRuleEntryOptions('cspell', '@cspell/spellchecker')).toStrictEqual([
+      expect(configResult.getRuleEntryOptions('cspell', 'cspell/spellchecker')).toStrictEqual([
         OPTIONS,
       ]);
     });

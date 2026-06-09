@@ -8,12 +8,12 @@ import {
 
 export interface TanstackQueryEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, '@tanstack/query'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'tanstack-query'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, '@tanstack/query');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'tanstack-query');
 
   // Legend:
   // 🟢 - in recommended
@@ -30,7 +30,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-void-query-fn', ERROR) /** @since 5.72.0 */ // 🟢
     .addRule('prefer-query-options', OFF) /** @since 5.96.0 */ // 🟢!
     .addRule('stable-query-client', ERROR) /** @since 4.36.0 */ // 🟢
-    .enableConfigTesterForPlugin('@tanstack/query')
+    .enableConfigTesterForPlugin('tanstack-query')
     .addOverrides();
 
   return {

@@ -130,7 +130,7 @@ type ReactXTypeAwareRules =
 
 interface ReactXSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, UnRulesConfigPartial<'@eslint-react'>> {
+> extends UnFlatConfigEntryBase<ExtraPlugins, UnRulesConfigPartial<'eslint-react'>> {
   /**
    * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
@@ -150,7 +150,7 @@ interface ReactXSubConfigOptions<
    * The default severity is `error`, with the only exception of `classComponent`, which
    * is `warn`.
    *
-   * Affects the following rules (`@eslint-react` prefix is implied):
+   * Affects the following rules (`eslint-react` prefix is implied):
    * - `Children`: [`no-children-count`](https://eslint-react.xyz/docs/rules/no-children-count), [`no-children-for-each`](https://eslint-react.xyz/docs/rules/no-children-for-each), [`no-children-map`](https://eslint-react.xyz/docs/rules/no-children-map), [`no-children-only`](https://eslint-react.xyz/docs/rules/no-children-only), [`no-children-to-array`](https://eslint-react.xyz/docs/rules/no-children-to-array)
    * - `cloneElement`: [`no-clone-element`](https://eslint-react.xyz/docs/rules/no-clone-element)
    * - `classComponent`: [`no-class-component`](https://eslint-react.xyz/docs/rules/no-class-component)
@@ -185,7 +185,7 @@ interface ReactXSubConfigOptions<
     | boolean
     | UnFlatConfigEntryBase<
         ExtraPlugins,
-        Pick<UnRulesConfigPartial<'@eslint-react'>, `@eslint-react/${ReactXTypeAwareRules}`>
+        Pick<UnRulesConfigPartial<'eslint-react'>, `eslint-react/${ReactXTypeAwareRules}`>
       >;
 }
 
@@ -297,7 +297,7 @@ export interface ReactEslintConfigOptions<
     | boolean
     | UnFlatConfigEntryBase<
         ExtraPlugins,
-        '@eslint-react' | Pick<UnRulesConfigPartial<'react'>, `react/${EslintPluginReactDomRules}`>
+        'eslint-react' | Pick<UnRulesConfigPartial<'react'>, `react/${EslintPluginReactDomRules}`>
       >;
 
   /**
@@ -414,8 +414,8 @@ export interface ReactEslintConfigOptions<
    * - `off`: allow both syntaxes.
    *
    * Affected rules:
-   * - [`@eslint-react/prefer-shorthand-boolean`](https://eslint-react.xyz/docs/rules/prefer-shorthand-boolean)
-   * - [`@eslint-react/avoid-shorthand-boolean`](https://eslint-react.xyz/docs/rules/avoid-shorthand-boolean)
+   * - [`eslint-react/prefer-shorthand-boolean`](https://eslint-react.xyz/docs/rules/prefer-shorthand-boolean)
+   * - [`eslint-react/avoid-shorthand-boolean`](https://eslint-react.xyz/docs/rules/avoid-shorthand-boolean)
    * - [`jsx-boolean-value`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-boolean-value.md)
    * @default 'prefer'
    */
@@ -428,8 +428,8 @@ export interface ReactEslintConfigOptions<
    * - `off`: allow both syntaxes.
    *
    * Affected rules:
-   * - [`@eslint-react/prefer-shorthand-fragment`](https://eslint-react.xyz/docs/rules/prefer-shorthand-fragment)
-   * - [`@eslint-react/avoid-shorthand-fragment`](https://eslint-react.xyz/docs/rules/avoid-shorthand-fragment)
+   * - [`eslint-react/prefer-shorthand-fragment`](https://eslint-react.xyz/docs/rules/prefer-shorthand-fragment)
+   * - [`eslint-react/avoid-shorthand-fragment`](https://eslint-react.xyz/docs/rules/avoid-shorthand-fragment)
    * - [`jsx-fragments`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-fragments.md)
    * @default true
    */
@@ -518,7 +518,7 @@ const REACT_X_TYPE_AWARE_RULES = new Set<string>(
     'no-implicit-ref',
     'no-leaked-conditional-rendering',
     'no-unused-props',
-  ] satisfies GetRuleNamesInPlugin<'@eslint-react'>[]),
+  ] satisfies GetRuleNamesInPlugin<'eslint-react'>[]),
 );
 
 const DEFAULT_FILES = [GLOB_JS_TS_X];
@@ -582,13 +582,13 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
   const isReactXPreferred = pluginX === 'prefer' || pluginX === 'only';
 
   const getDoubleRuleName = <
-    A extends GetRuleNamesInPlugin<'@eslint-react'>,
+    A extends GetRuleNamesInPlugin<'eslint-react'>,
     B extends GetRuleNamesInPlugin<'react'> = A & GetRuleNamesInPlugin<'react'>,
   >(
     nameXUnprefixed: A,
     nameOriginal?: B,
   ) => {
-    const prefix = isReactXPreferred ? '@eslint-react' : 'react';
+    const prefix = isReactXPreferred ? 'eslint-react' : 'react';
     const name = isReactXPreferred ? nameXUnprefixed : (nameOriginal ?? nameXUnprefixed);
     return [prefix, name] as const;
   };
@@ -936,7 +936,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     configTypeAwareRules: configReactXTypeAwareRules = context.configsMeta.ts.enabled,
   } = configReactXOptions;
 
-  const configBuilderReactX = context.createConfigBuilder(configReactX, '@eslint-react');
+  const configBuilderReactX = context.createConfigBuilder(configReactX, 'eslint-react');
 
   // Legend:
   // 🟢 - in recommended, severity is `error`
@@ -1105,7 +1105,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
     .addAnyRule('react-debug', 'hook', OFF) /** @since 1.13.0 */
     .addAnyRule('react-debug', 'is-from-react', OFF) /** @since 1.10.0 */
     .addAnyRule('react-debug', 'jsx', OFF) /** @since 1.41.0 */
-    .enableConfigTesterForPlugin('@eslint-react', {
+    .enableConfigTesterForPlugin('eslint-react', {
       /* v8 ignore start */
       rulesToSkipInConfig: (ruleName) =>
         REACT_X_TYPE_AWARE_RULES.has(ruleName) ||
@@ -1117,7 +1117,7 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
 
   const configBuilderReactXTypeAware = context.createConfigBuilder(
     tsFilesTypeAware.length === 0 ? false : configReactXTypeAwareRules,
-    '@eslint-react',
+    'eslint-react',
   );
   configBuilderReactXTypeAware
     ?.addConfig([
@@ -1136,13 +1136,13 @@ export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAwar
       getDoubleRuleSeverity(NO_LEAKED_CONDITIONAL_RENDERING_SEVERITY, true),
     ) /** @since 0.3.0 */ // 🟡💭 🔄️`jsx-no-leaked-render` (worse)
     .addRule('no-unused-props', WARNING) /** @since 2.0.0 */ // 💭
-    .enableConfigTesterForPlugin('@eslint-react', {
+    .enableConfigTesterForPlugin('eslint-react', {
       /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => !REACT_X_TYPE_AWARE_RULES.has(ruleName),
     })
     .addOverrides();
 
-  const configBuilderDom = context.createConfigBuilder(configDom, '@eslint-react');
+  const configBuilderDom = context.createConfigBuilder(configDom, 'eslint-react');
   configBuilderDom
     ?.addConfig(
       [

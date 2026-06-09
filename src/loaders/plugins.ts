@@ -43,8 +43,8 @@ const loadEslintReactPlugin = (pluginName: string) =>
   );
 
 export const pluginsLoaders = {
-  '@angular-eslint': genModuleLoader(
-    '@angular-eslint',
+  angular: genModuleLoader(
+    'angular',
     '@angular-eslint/eslint-plugin',
     () =>
       interopDefault(
@@ -52,96 +52,12 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
-  '@angular-eslint/template': genModuleLoader(
-    '@angular-eslint/template',
+  'angular-template': genModuleLoader(
+    'angular-template',
     '@angular-eslint/eslint-plugin-template',
     () =>
       interopDefault(
         import('@angular-eslint/eslint-plugin-template'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
-  ),
-  '@cspell': genModuleLoader(
-    '@cspell',
-    '@cspell/eslint-plugin',
-    () => interopDefault(import('@cspell/eslint-plugin')) as Promise<EslintPlugin>,
-  ),
-  '@eslint-react': genModuleLoader('@eslint-react', '@eslint-react/eslint-plugin', () =>
-    loadEslintReactPlugin('@eslint-react'),
-  ),
-  '@html-eslint': genModuleLoader(
-    '@html-eslint',
-    '@html-eslint/eslint-plugin',
-    () => interopDefault(import('@html-eslint/eslint-plugin')) as Promise<EslintPlugin>,
-  ),
-  '@intlify/vue-i18n': genModuleLoader(
-    '@intlify/vue-i18n',
-    '@intlify/eslint-plugin-vue-i18n',
-    async () => {
-      // Pre-load `{jsonc,yaml}-eslint-parser` (ESM) before loading
-      // `@intlify/eslint-plugin-vue-i18n` (CJS).
-      // The CJS plugin uses `require()` on `jsonc-eslint-parser`;
-      // on Node 24, `require(esm)` fails if that module is concurrently being loaded
-      // via `import()` elsewhere (race condition).
-      /* eslint-disable import/no-extraneous-dependencies */
-      await import('jsonc-eslint-parser').catch(() => null);
-      await import('yaml-eslint-parser').catch(() => null);
-      /* eslint-enable import/no-extraneous-dependencies */
-      return await (interopDefault(
-        import('@intlify/eslint-plugin-vue-i18n'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>);
-    },
-  ),
-  '@next/next': genModuleLoader('@next/next', '@next/eslint-plugin-next', () =>
-    interopDefault(import('@next/eslint-plugin-next')),
-  ),
-  '@ngrx': genModuleLoader(
-    '@ngrx',
-    '@ngrx/eslint-plugin',
-    () =>
-      interopDefault(
-        import('@ngrx/eslint-plugin'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
-  ),
-  // We can't `import()` `@stylistic/eslint-plugin` because it's `require()`d by eslint-plugin-vue: https://github.com/vuejs/eslint-plugin-vue/blob/1b634549a9e91231e5ea79313763c69f93e678c1/lib/utils/index.js#L113 and `import()`ing after `require()`ing causes `ERR_INTERNAL_ASSERTION` error, see https://github.com/nodejs/node/issues/54577
-  '@stylistic': genModuleLoader('@stylistic', '@stylistic/eslint-plugin', () =>
-    Promise.resolve(stylistic),
-  ),
-  '@tanstack/query': genModuleLoader(
-    '@tanstack/query',
-    '@tanstack/eslint-plugin-query',
-    () =>
-      interopDefault(
-        import('@tanstack/eslint-plugin-query'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
-  ),
-  '@tanstack/router': genModuleLoader(
-    '@tanstack/router',
-    '@tanstack/eslint-plugin-router',
-    () =>
-      interopDefault(
-        import('@tanstack/eslint-plugin-router'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
-  ),
-  '@tanstack/start': genModuleLoader(
-    '@tanstack/start',
-    '@tanstack/eslint-plugin-start',
-    () =>
-      interopDefault(
-        import('@tanstack/eslint-plugin-start'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
-  ),
-  '@unocss': genModuleLoader(
-    '@unocss',
-    '@unocss/eslint-plugin',
-    () =>
-      interopDefault(
-        import('@unocss/eslint-plugin'),
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
@@ -209,6 +125,11 @@ export const pluginsLoaders = {
   ),
   compat: genModuleLoader('compat', 'eslint-plugin-compat', () =>
     interopDefault(import('eslint-plugin-compat')),
+  ),
+  cspell: genModuleLoader(
+    'cspell',
+    '@cspell/eslint-plugin',
+    () => interopDefault(import('@cspell/eslint-plugin')) as Promise<EslintPlugin>,
   ),
   css: genModuleLoader(
     'css',
@@ -288,6 +209,9 @@ export const pluginsLoaders = {
   'eslint-plugin': genModuleLoader('eslint-plugin', 'eslint-plugin-eslint-plugin', () =>
     interopDefault(import('eslint-plugin-eslint-plugin')),
   ),
+  'eslint-react': genModuleLoader('eslint-react', '@eslint-react/eslint-plugin', () =>
+    loadEslintReactPlugin('@eslint-react'),
+  ),
   'expect-type': genModuleLoader(
     'expect-type',
     'eslint-plugin-expect-type',
@@ -343,7 +267,12 @@ export const pluginsLoaders = {
   headers: genModuleLoader('headers', 'eslint-plugin-headers', () =>
     interopDefault(import('eslint-plugin-headers')),
   ),
-  html: genModuleLoader('html', 'eslint-plugin-html', () =>
+  html: genModuleLoader(
+    'html',
+    '@html-eslint/eslint-plugin',
+    () => interopDefault(import('@html-eslint/eslint-plugin')) as Promise<EslintPlugin>,
+  ),
+  'html-processor': genModuleLoader('html-processor', 'eslint-plugin-html', () =>
     interopDefault(import('eslint-plugin-html')),
   ),
   import: genModuleLoader(
@@ -453,6 +382,18 @@ export const pluginsLoaders = {
         (m) => m.plugin,
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  ),
+  nextjs: genModuleLoader('nextjs', '@next/eslint-plugin-next', () =>
+    interopDefault(import('@next/eslint-plugin-next')),
+  ),
+  ngrx: genModuleLoader(
+    'ngrx',
+    '@ngrx/eslint-plugin',
+    () =>
+      interopDefault(
+        import('@ngrx/eslint-plugin'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
   'no-only-tests': genModuleLoader('no-only-tests', 'eslint-plugin-no-only-tests', () =>
     interopDefault(import('eslint-plugin-no-only-tests')),
@@ -639,6 +580,10 @@ export const pluginsLoaders = {
     // @ts-expect-error types mismatch
     () => interopDefault(import('eslint-plugin-storybook')) as Promise<EslintPlugin>,
   ),
+  // We can't `import()` `@stylistic/eslint-plugin` because it's `require()`d by eslint-plugin-vue: https://github.com/vuejs/eslint-plugin-vue/blob/1b634549a9e91231e5ea79313763c69f93e678c1/lib/utils/index.js#L113 and `import()`ing after `require()`ing causes `ERR_INTERNAL_ASSERTION` error, see https://github.com/nodejs/node/issues/54577
+  stylistic: genModuleLoader('stylistic', '@stylistic/eslint-plugin', () =>
+    Promise.resolve(stylistic),
+  ),
   svelte: genModuleLoader(
     'svelte',
     'eslint-plugin-svelte',
@@ -652,6 +597,33 @@ export const pluginsLoaders = {
     () => interopDefault(import('eslint-plugin-tailwindcss')) as Promise<EslintPlugin>,
     // Tries to import `tailwindcss/resolveConfig` which doesn't exist anymore in v4
     ['ERR_PACKAGE_PATH_NOT_EXPORTED', ...MODULE_NOT_FOUND_ERROR_CODES],
+  ),
+  'tanstack-query': genModuleLoader(
+    'tanstack-query',
+    '@tanstack/eslint-plugin-query',
+    () =>
+      interopDefault(
+        import('@tanstack/eslint-plugin-query'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
+  'tanstack-router': genModuleLoader(
+    'tanstack-router',
+    '@tanstack/eslint-plugin-router',
+    () =>
+      interopDefault(
+        import('@tanstack/eslint-plugin-router'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
+  'tanstack-start': genModuleLoader(
+    'tanstack-start',
+    '@tanstack/eslint-plugin-start',
+    () =>
+      interopDefault(
+        import('@tanstack/eslint-plugin-start'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
   'testing-library': genModuleLoader('testing-library', 'eslint-plugin-testing-library', () =>
     interopDefault(import('eslint-plugin-testing-library')),
@@ -691,6 +663,15 @@ export const pluginsLoaders = {
     'eslint-plugin-unnecessary-abstractions',
     () => interopDefault(import('eslint-plugin-unnecessary-abstractions')),
   ),
+  unocss: genModuleLoader(
+    'unocss',
+    '@unocss/eslint-plugin',
+    () =>
+      interopDefault(
+        import('@unocss/eslint-plugin'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   'unused-imports': genModuleLoader(
     'unused-imports',
     'eslint-plugin-unused-imports',
@@ -702,6 +683,21 @@ export const pluginsLoaders = {
   vue: genModuleLoader('vue', 'eslint-plugin-vue', () =>
     interopDefault(import('eslint-plugin-vue')),
   ),
+  'vue-i18n': genModuleLoader('vue-i18n', '@intlify/eslint-plugin-vue-i18n', async () => {
+    // Pre-load `{jsonc,yaml}-eslint-parser` (ESM) before loading
+    // `@intlify/eslint-plugin-vue-i18n` (CJS).
+    // The CJS plugin uses `require()` on `jsonc-eslint-parser`;
+    // on Node 24, `require(esm)` fails if that module is concurrently being loaded
+    // via `import()` elsewhere (race condition).
+    /* eslint-disable import/no-extraneous-dependencies */
+    await import('jsonc-eslint-parser').catch(() => null);
+    await import('yaml-eslint-parser').catch(() => null);
+    /* eslint-enable import/no-extraneous-dependencies */
+    return await (interopDefault(
+      import('@intlify/eslint-plugin-vue-i18n'),
+      // @ts-expect-error types mismatch
+    ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>);
+  }),
   'vue-scoped-css': genModuleLoader(
     'vue-scoped-css',
     'eslint-plugin-vue-scoped-css',

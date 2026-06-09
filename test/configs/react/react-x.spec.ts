@@ -53,25 +53,25 @@ describe('react: sub config `reactX`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('react');
 
-    it('enables `@eslint-react/no-class-component` rule by default', () => {
+    it('enables `eslint-react/no-class-component` rule by default', () => {
       expect(
-        configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-class-component'),
+        configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-class-component'),
       ).not.toBe(0);
     });
 
-    it('enables `@eslint-react/no-context-provider` rule by default (react >= 19)', () => {
+    it('enables `eslint-react/no-context-provider` rule by default (react >= 19)', () => {
       expect(
-        configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-context-provider'),
+        configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-context-provider'),
       ).not.toBe(0);
     });
 
-    it('`@eslint-react/no-class-component` rule fires on a class component', async () => {
+    it('`eslint-react/no-class-component` rule fires on a class component', async () => {
       const results = await testEslintConfig('react', FIXTURES.classComponent, import.meta.dirname);
 
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.classComponent,
-        '@eslint-react/no-class-component',
+        'eslint-react/no-class-component',
       );
 
       expect(error?.message).toMatchInlineSnapshot(
@@ -112,10 +112,10 @@ describe('react: sub config `reactX`', () => {
 
     it('respects `overrides` in `react/x` eslint config', async () => {
       const configResult = await computeEslintConfig({
-        react: {configReactX: {overrides: {'@eslint-react/no-class-component': 2}}},
+        react: {configReactX: {overrides: {'eslint-react/no-class-component': 2}}},
       });
 
-      expect(configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-class-component')).toBe(
+      expect(configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-class-component')).toBe(
         2,
       );
     });
@@ -124,51 +124,51 @@ describe('react: sub config `reactX`', () => {
   describe('options', () => {
     describe('option: `noLegacyApis`', () => {
       describe('`classComponent`', () => {
-        it('enables `@eslint-react/no-class-component` with warning severity by default', async () => {
+        it('enables `eslint-react/no-class-component` with warning severity by default', async () => {
           const configResult = await computeEslintConfig('react');
 
           expect(
-            configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-class-component'),
+            configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-class-component'),
           ).toBe(1);
         });
 
-        it('enables `@eslint-react/no-class-component` with error severity when set to `true`', async () => {
+        it('enables `eslint-react/no-class-component` with error severity when set to `true`', async () => {
           const configResult = await computeEslintConfig({
             react: {configReactX: {noLegacyApis: {classComponent: true}}},
           });
 
           expect(
-            configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-class-component'),
+            configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-class-component'),
           ).toBe(2);
         });
 
-        it('disables `@eslint-react/no-class-component` when set to `false`', async () => {
+        it('disables `eslint-react/no-class-component` when set to `false`', async () => {
           const configResult = await computeEslintConfig({
             react: {configReactX: {noLegacyApis: {classComponent: false}}},
           });
 
           expect(
-            configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-class-component'),
+            configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-class-component'),
           ).toBe(0);
         });
 
-        it('enables `@eslint-react/no-class-component` with warning severity when set to `warn`', async () => {
+        it('enables `eslint-react/no-class-component` with warning severity when set to `warn`', async () => {
           const configResult = await computeEslintConfig({
             react: {configReactX: {noLegacyApis: {classComponent: 'warn'}}},
           });
 
           expect(
-            configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-class-component'),
+            configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-class-component'),
           ).not.toBe(0);
         });
       });
 
       describe('`Children`', () => {
-        it('enables `@eslint-react/no-children-count` with error severity by default', async () => {
+        it('enables `eslint-react/no-children-count` with error severity by default', async () => {
           const configResult = await computeEslintConfig('react');
 
           expect(
-            configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-children-count'),
+            configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-children-count'),
           ).toBe(2);
         });
 
@@ -178,36 +178,36 @@ describe('react: sub config `reactX`', () => {
           });
 
           expect(
-            configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-children-count'),
+            configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-children-count'),
           ).toBe(0);
         });
 
-        it('enables `@eslint-react/no-children-count` with warning severity when set to `warn`', async () => {
+        it('enables `eslint-react/no-children-count` with warning severity when set to `warn`', async () => {
           const configResult = await computeEslintConfig({
             react: {configReactX: {noLegacyApis: {Children: 'warn'}}},
           });
 
           expect(
-            configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-children-count'),
+            configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-children-count'),
           ).toBe(1);
         });
       });
 
       describe('`forwardRef`', () => {
-        it('enables `@eslint-react/no-forward-ref` with error severity by default (react 19)', async () => {
+        it('enables `eslint-react/no-forward-ref` with error severity by default (react 19)', async () => {
           const configResult = await computeEslintConfig('react');
 
-          expect(configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-forward-ref')).toBe(
+          expect(configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-forward-ref')).toBe(
             2,
           );
         });
 
-        it('disables `@eslint-react/no-forward-ref` when set to `false`', async () => {
+        it('disables `eslint-react/no-forward-ref` when set to `false`', async () => {
           const configResult = await computeEslintConfig({
             react: {configReactX: {noLegacyApis: {forwardRef: false}}},
           });
 
-          expect(configResult.getRuleEntrySeverity('react/x', '@eslint-react/no-forward-ref')).toBe(
+          expect(configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-forward-ref')).toBe(
             0,
           );
         });

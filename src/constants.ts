@@ -406,7 +406,7 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'validated-non-primitive-property-needs-type-decorator': true,
     },
   },
-  '@ngrx': {
+  ngrx: {
     rules: {
       'avoid-cyclic-effects': true,
       'no-multiple-actions-in-effects': true,
@@ -414,7 +414,7 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'with-state-no-arrays-at-root-level': true,
     },
   },
-  '@eslint-react': {
+  'eslint-react': {
     rules: {
       'no-implicit-children': true,
       'no-implicit-key': true,

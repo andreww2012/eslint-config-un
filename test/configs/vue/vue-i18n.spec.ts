@@ -45,12 +45,12 @@ describe('vue: sub config `i18n`', () => {
       const configResult = await computeEslintConfig('vue');
 
       expect(configResult.getRuleSeverities('vue/i18n')).toMatchObject({
-        '@intlify/vue-i18n/no-html-messages': 2,
-        '@intlify/vue-i18n/key-format-style': 1,
+        'vue-i18n/no-html-messages': 2,
+        'vue-i18n/key-format-style': 1,
       });
     });
 
-    it('`@intlify/vue-i18n/no-raw-text` rule fires on raw text in Vue templates', async () => {
+    it('`vue-i18n/no-raw-text` rule fires on raw text in Vue templates', async () => {
       const results = await testEslintConfig(
         'vue',
         FIXTURES.templateWithRawText,
@@ -60,7 +60,7 @@ describe('vue: sub config `i18n`', () => {
       const error = findLintMessageFromLintResults(
         results,
         FIXTURES.templateWithRawText,
-        '@intlify/vue-i18n/no-raw-text',
+        'vue-i18n/no-raw-text',
       );
 
       expect(error?.message).toMatchInlineSnapshot(`"raw text 'Hello World' is used"`);
@@ -101,14 +101,14 @@ describe('vue: sub config `i18n`', () => {
       const configResult = await computeEslintConfig({
         vue: {
           configI18n: {
-            overrides: {'@intlify/vue-i18n/no-html-messages': 0},
+            overrides: {'vue-i18n/no-html-messages': 0},
             overridesAny: {'no-console': 0},
           },
         },
       });
 
       expect(configResult.getRuleSeverities('vue/i18n')).toMatchObject({
-        '@intlify/vue-i18n/no-html-messages': 0,
+        'vue-i18n/no-html-messages': 0,
         'no-console': 0,
       });
     });
@@ -138,23 +138,23 @@ describe('vue: sub config `i18n`', () => {
     });
 
     describe('option: `vue-i18n` version', () => {
-      it('enables `@intlify/vue-i18n/no-deprecated-tc` and `@intlify/vue-i18n/no-deprecated-v-t` rules when vue-i18n>=10 is installed', async () => {
+      it('enables `vue-i18n/no-deprecated-tc` and `vue-i18n/no-deprecated-v-t` rules when vue-i18n>=10 is installed', async () => {
         setInstalledPackages({vue: '3.5.0', 'vue-i18n': '10.0.0'});
 
         const configResult = await computeEslintConfig('vue');
 
         expect(configResult.getRuleSeverities('vue/i18n')).toMatchObject({
-          '@intlify/vue-i18n/no-deprecated-tc': 2,
-          '@intlify/vue-i18n/no-deprecated-v-t': 2,
+          'vue-i18n/no-deprecated-tc': 2,
+          'vue-i18n/no-deprecated-v-t': 2,
         });
       });
 
-      it('disables `@intlify/vue-i18n/no-deprecated-tc` and `@intlify/vue-i18n/no-deprecated-v-t` rules when vue-i18n<10 is installed', async () => {
+      it('disables `vue-i18n/no-deprecated-tc` and `vue-i18n/no-deprecated-v-t` rules when vue-i18n<10 is installed', async () => {
         const configResult = await computeEslintConfig('vue');
 
         expect(configResult.getRuleSeverities('vue/i18n')).toMatchObject({
-          '@intlify/vue-i18n/no-deprecated-tc': 0,
-          '@intlify/vue-i18n/no-deprecated-v-t': 0,
+          'vue-i18n/no-deprecated-tc': 0,
+          'vue-i18n/no-deprecated-v-t': 0,
         });
       });
     });

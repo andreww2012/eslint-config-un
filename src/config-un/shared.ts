@@ -300,9 +300,9 @@ export interface EslintConfigUnOptions<
    *
    * You have to still use **OLD** prefixes in `overrides`, and they will be automatically renamed.
    * @example
-   * To make all the rules from `@eslint-react` plugin have `react-x` prefix:
+   * To make all the rules from `eslint-react` plugin have `react-x` prefix:
    * ```ts
-   * {'@eslint-react': 'react-x'}
+   * {'eslint-react': 'react-x'}
    * ```
    */
   pluginRenames?: Partial<Record<Exclude<PluginPrefix, ''>, string>>;

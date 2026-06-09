@@ -8,12 +8,12 @@ import {
 
 export interface TanstackRouterEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, '@tanstack/router'> {}
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'tanstack-router'> {}
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const configBuilder = context.createConfigBuilder(optionsResolved, '@tanstack/router');
+  const configBuilder = context.createConfigBuilder(optionsResolved, 'tanstack-router');
 
   // Legend:
   // 🟢 - in recommended
@@ -22,7 +22,7 @@ export default ((context, optionsRaw) => {
     ?.addConfig(['tanstack-router', {includeDefaultFilesAndIgnores: true}])
     .addRule('create-route-property-order', ERROR) /** @since 1.20.3-alpha.1 */ // 🟢
     .addRule('route-param-names', ERROR) /** @since 1.155.0 */ // 🟢
-    .enableConfigTesterForPlugin('@tanstack/router')
+    .enableConfigTesterForPlugin('tanstack-router')
     .addOverrides();
 
   return {
