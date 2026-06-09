@@ -512,6 +512,23 @@ export interface EslintConfigUnOptions<
   // #region 🟠 OTHER OPTIONS
 
   /**
+   * `eslint-config-un` checks the presence and versions of certain packages (like `vue`,
+   * `typescript` or `prettier`) to decide whether certain configs, sub-configs or rules
+   * should be enabled by default.
+   *
+   * By default, the packages are looked up by their canonical npm names. If you install
+   * some of them under a different name using
+   * [npm aliases](https://docs.npmjs.com/cli/v11/using-npm/package-spec#aliases),
+   * for example `"vue3": "npm:vue@^3.5.0"`, use this option to specify the names to look
+   * for instead of the canonical ones.
+   *
+   * Note that this option is not applicable to ESLint plugins: they are loaded by their
+   * canonical names; use `pluginOverrides` to provide a plugin installed under an alias.
+   * @example {vue: 'vue3'}
+   */
+  packageAliases?: Partial<Record<(typeof PACKAGES_TO_GET_INFO_FOR)[number], string>>;
+
+  /**
    * Automatically add gitignore'd files to the global `ignores` array.
    * @default true <=> `.gitignore` exists in [the current working directory](https://nodejs.org/api/process.html#processcwd)
    */

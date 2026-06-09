@@ -2,7 +2,7 @@ import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
 import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
-import {doesPackageExist, getKeysOfTruthyValues} from '../utils';
+import {getKeysOfTruthyValues} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import {
@@ -126,8 +126,8 @@ const SVELTE_SYSTEM_RULES = new Set<string>([
   'system',
 ] satisfies GetRuleNamesInPlugin<'svelte'>[]);
 
-export default (async (context, optionsRaw) => {
-  const isPrettierPluginSvelteInstalled = await doesPackageExist('prettier-plugin-svelte');
+export default ((context, optionsRaw) => {
+  const isPrettierPluginSvelteInstalled = context.packagesInfo['prettier-plugin-svelte'] != null;
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
 

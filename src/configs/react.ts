@@ -1,7 +1,16 @@
-import {ERROR, GLOB_JSX_TSX, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
+import {
+  ERROR,
+  GLOB_JSX_TSX,
+  GLOB_JS_TS_X,
+  OFF,
+  REACT_ROUTER_PACKAGES,
+  REMIX_PACKAGES,
+  type RuleSeverity,
+  WARNING,
+} from '../constants';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import type {DistributedPick, OmitStrict, Prettify} from '../types';
-import {allUnionMembers, doesPackageExist} from '../utils';
+import {allUnionMembers} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import {
   type ExtraPluginsType,
@@ -460,13 +469,6 @@ const NO_UNUSED_CLASS_COMPONENT_MEMBERS_SEVERITY = WARNING;
 const NO_UNUSED_STATE_SEVERITY = WARNING;
 const NO_USELESS_FRAGMENT_SEVERITY = WARNING;
 
-const REMIX_PACKAGES: readonly string[] = ['react', 'node', 'serve', 'dev'].map(
-  (packageName) => `@remix-run/${packageName}`,
-);
-const REACT_ROUTER_PACKAGES: readonly string[] = ['react', 'node', 'serve', 'dev'].map(
-  (packageName) => `@react-router/${packageName}`,
-);
-
 const REMIX_AND_REACT_ROUTER_EXPORTS: readonly string[] = [
   'action',
   'headers',
@@ -523,14 +525,12 @@ const REACT_X_TYPE_AWARE_RULES = new Set<string>(
 
 const DEFAULT_FILES = [GLOB_JS_TS_X];
 
-export default (async (context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) => {
-  const [isReactDomInstalled, isRemixOrReactRouterInstalled, isViteInstalled] = await Promise.all([
-    doesPackageExist('react-dom'),
-    Promise.all(
-      [...REMIX_PACKAGES, ...REACT_ROUTER_PACKAGES].map((module) => doesPackageExist(module)),
-    ).then((results) => results.some(Boolean)),
-    doesPackageExist('vite'),
-  ]);
+export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) => {
+  const isReactDomInstalled = context.packagesInfo['react-dom'] != null;
+  const isRemixOrReactRouterInstalled = [...REMIX_PACKAGES, ...REACT_ROUTER_PACKAGES].some(
+    (packageName) => context.packagesInfo[packageName] != null,
+  );
+  const isViteInstalled = context.packagesInfo.vite != null;
 
   const reactPackageInfo = context.packagesInfo.react;
 

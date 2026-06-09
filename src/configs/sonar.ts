@@ -1,6 +1,5 @@
 // cspell:disable viem tronweb
 import {ERROR, OFF, WARNING} from '../constants';
-import {doesPackageExist} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -40,15 +39,10 @@ export interface SonarEslintConfigOptions<
   testsRules?: boolean;
 }
 
-export default (async (context, optionsRaw) => {
-  const [awsCdkLibInstalled, helmetInstalled] = await Promise.all([
-    doesPackageExist('aws-cdk-lib'),
-    doesPackageExist('helmet'),
-  ]);
-
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    enableAwsRules: awsCdkLibInstalled,
-    enableHelmetRules: helmetInstalled,
+    enableAwsRules: context.packagesInfo['aws-cdk-lib'] != null,
+    enableHelmetRules: context.packagesInfo.helmet != null,
     testsRules: false,
   });
 

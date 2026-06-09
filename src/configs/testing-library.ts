@@ -1,6 +1,6 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import type {ObjectValues, OmitStrict, PickKeysStartingWith, PrettifyDeep} from '../types';
-import {doesPackageExist, objectEntriesUnsafe} from '../utils';
+import {objectEntriesUnsafe} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   generateConfigNoOnlyTestsBuilder,
@@ -118,10 +118,10 @@ type SupportedModules = keyof {
     : never]: unknown;
 };
 
-export default (async (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configAngular: context.configsMeta.angular.enabled,
-    configMarko: await doesPackageExist('marko'),
+    configMarko: context.packagesInfo.marko != null,
     configReact: context.configsMeta.react.enabled,
     configSvelte: context.configsMeta.svelte.enabled,
     configVue: context.configsMeta.vue.enabled,

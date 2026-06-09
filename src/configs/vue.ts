@@ -13,14 +13,7 @@ import {
 import type {EslintTypedRulesConfig} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {OmitStrict} from '../types';
-import {
-  type MaybeArray,
-  allUnionMembers,
-  doesPackageExist,
-  fetchPackageInfo,
-  getKeysOfTruthyValues,
-  joinPaths,
-} from '../utils';
+import {type MaybeArray, allUnionMembers, getKeysOfTruthyValues, joinPaths} from '../utils';
 import {type ValidAndInvalidHtmlTags, noRestrictedHtmlElementsDefault} from './shared';
 import {
   type ExtraPluginsType,
@@ -380,12 +373,10 @@ const NUXT_CONFIG_RULES = new Set<string>(
   >()(['no-nuxt-config-test-key', 'nuxt-config-keys-order']),
 );
 
-export default (async (context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
-  const [isPiniaPackageInstalled, vueI18nPackageInfo, nuxtPackageInfo] = await Promise.all([
-    doesPackageExist('pinia'),
-    fetchPackageInfo('vue-i18n'),
-    fetchPackageInfo('nuxt'),
-  ]);
+export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
+  const isPiniaPackageInstalled = context.packagesInfo.pinia != null;
+  const vueI18nPackageInfo = context.packagesInfo['vue-i18n'];
+  const nuxtPackageInfo = context.packagesInfo.nuxt;
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
 

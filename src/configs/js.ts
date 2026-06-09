@@ -1,6 +1,6 @@
 import {ERROR, GLOB_HTML, GLOB_YML_YAML, OFF, WARNING} from '../constants';
 import type {BuiltinEslintRules} from '../eslint/eslint-types';
-import {fetchPackageInfo, getKeysOfTruthyValues} from '../utils';
+import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -18,12 +18,12 @@ export interface JsEslintConfigOptions<
   allowedConsoleMethods?: Partial<Record<keyof Console | (string & {}), boolean>>;
 }
 
-export default (async (context, optionsRaw) => {
+export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '');
 
-  const eslintVersion = (await fetchPackageInfo('eslint'))?.versions.majorAndMinor || 0;
+  const eslintVersion = context.packagesInfo.eslint?.versions.majorAndMinor || 0;
 
   const allowedConsoleMethods = getKeysOfTruthyValues(
     {

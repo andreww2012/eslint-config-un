@@ -3,7 +3,7 @@ import type {AsymmetricMatchers, JestExpect} from '@jest/expect';
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
 import {pluginsLoaders} from '../loaders';
 import type {ObjectValues, Prettify} from '../types';
-import {allUnionMembers, doesPackageExist} from '../utils';
+import {allUnionMembers} from '../utils';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
   generateConfigNoOnlyTestsBuilder,
@@ -200,10 +200,8 @@ const JEST_RULES_FOR_TYPESCRIPT_FILES_SET = new Set<string>(
 );
 
 export default (async (context, optionsRaw) => {
-  const [eslintPluginJest, isJestExtendedInstalled] = await Promise.all([
-    pluginsLoaders.jest(context).then(({module}) => module),
-    doesPackageExist('jest-extended'),
-  ]);
+  const eslintPluginJest = await pluginsLoaders.jest(context).then(({module}) => module);
+  const isJestExtendedInstalled = context.packagesInfo['jest-extended'] != null;
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configJestExtended: isJestExtendedInstalled,

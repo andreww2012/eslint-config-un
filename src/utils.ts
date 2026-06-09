@@ -195,16 +195,6 @@ export const fetchPackageInfo = async (
   };
 };
 
-export const doesPackageExist = (packageName: string): Promise<boolean> => {
-  let exists = true;
-  try {
-    resolvePackage(packageName, import.meta.url);
-  } catch {
-    exists = false;
-  }
-  return Promise.resolve(exists);
-};
-
 export const interopDefault = async <T>(module: MaybePromise<T | {default: T}>): Promise<T> => {
   const resolvedModule = await module;
   // TODO report?

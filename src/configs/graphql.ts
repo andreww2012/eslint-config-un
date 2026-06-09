@@ -13,7 +13,7 @@ import {
 } from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
-import {doesPackageExist, getKeysOfTruthyValues, pickBy} from '../utils';
+import {getKeysOfTruthyValues, pickBy} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -67,8 +67,8 @@ export interface GraphqlEslintConfigOptions<
   >;
 }
 
-export default (async (context, optionsRaw) => {
-  const isRelayInstalled = await doesPackageExist('relay-runtime');
+export default ((context, optionsRaw) => {
+  const isRelayInstalled = context.packagesInfo['relay-runtime'] != null;
 
   const optionsResolved = assignDefaults(optionsRaw, {
     configJsProcessor: true,

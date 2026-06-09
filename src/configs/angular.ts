@@ -1,7 +1,7 @@
 import {ERROR, GLOB_HTML, GLOB_JS_TS_X, OFF, type RuleSeverity, WARNING} from '../constants';
 import {generatePackageToLoadProperty, pluginsLoaders} from '../loaders';
 import type {NonEmptyTuple, Prettify, Subtract} from '../types';
-import {fetchPackageInfo} from '../utils';
+import type {fetchPackageInfo} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -288,25 +288,19 @@ export default (async (context, optionsRaw) => {
   // eslint-disable-next-line no-secrets/no-secrets
   // Check rule usage: https://github.com/search?q=%22%40angular-eslint%2Fno-input-prefix%22+path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F&type=code&p=1
 
-  const [
-    angularEslintPlugin,
-    angularEslintPluginPackageInfo,
-    angularTemplateEslintPlugin,
-    angularTemplateEslintPluginPackageInfo,
-    angularTemplateParserPackageInfo,
-  ] = await Promise.all([
+  const [angularEslintPlugin, angularTemplateEslintPlugin] = await Promise.all([
     pluginsLoaders.angular(context).then(({module}) => module),
-    fetchPackageInfo('@angular-eslint/eslint-plugin'),
     pluginsLoaders['angular-template'](context).then(({module}) => module),
-    fetchPackageInfo('@angular-eslint/eslint-plugin-template'),
-    fetchPackageInfo('@angular-eslint/template-parser'),
   ]);
 
   (
     [
-      [angularEslintPluginPackageInfo, '@angular-eslint/eslint-plugin'],
-      [angularTemplateEslintPluginPackageInfo, '@angular-eslint/eslint-plugin-template'],
-      [angularTemplateParserPackageInfo, '@angular-eslint/template-parser'],
+      [context.packagesInfo['@angular-eslint/eslint-plugin'], '@angular-eslint/eslint-plugin'],
+      [
+        context.packagesInfo['@angular-eslint/eslint-plugin-template'],
+        '@angular-eslint/eslint-plugin-template',
+      ],
+      [context.packagesInfo['@angular-eslint/template-parser'], '@angular-eslint/template-parser'],
     ] satisfies [Awaited<ReturnType<typeof fetchPackageInfo>>, string][]
   ).forEach(([packageInfo, packageName]) => {
     if (packageInfo?.versions.major != null && packageInfo.versions.major !== angularVersion) {

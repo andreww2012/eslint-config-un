@@ -916,6 +916,20 @@ The object notation additionally accepts:
 
 For more details, read the corresponding JSDoc.
 
+### `packageAliases`
+
+**Type**: `Partial<Record<(typeof PACKAGES_TO_GET_INFO_FOR)[number], string>>`
+
+eslint-config-un checks the presence and versions of certain packages (like `vue`, `typescript` or `prettier`; the full list is in the `PACKAGES_TO_GET_INFO_FOR` constant in `src/constants.ts`) to decide whether certain configs, sub-configs or rules should be enabled by default.
+
+By default, the packages are looked up by their canonical npm names.
+If you install some of them under a different name using [npm aliases](https://docs.npmjs.com/cli/v11/using-npm/package-spec#aliases), for example `"vue3": "npm:vue@^3.5.0"`, use this option to specify the names to look for instead of the canonical ones.
+Keys are the canonical package names, values are the names the packages are actually installed under.
+
+> [!NOTE]
+> This option is not applicable to ESLint plugins: they are loaded by their canonical names.
+> Use [`pluginOverrides`](#pluginoverrides) to provide a plugin installed under an alias.
+
 ### `gitignore`
 
 **Type**: `boolean | EslintConfigFlatGitignoreOptions`

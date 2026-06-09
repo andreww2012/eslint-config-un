@@ -40,7 +40,6 @@ const createFetchPackageInfoMock = vi.hoisted(
           versions: {full: version, major: majorVersion, majorAndMinor: majorAndMinorVersion},
         });
       },
-      doesPackageExist: (packageName) => Promise.resolve(installedPackages[packageName] != null),
     }),
 );
 

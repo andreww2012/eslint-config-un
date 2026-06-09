@@ -203,6 +203,14 @@ export const CHECKED_LODASH_METHODS = [
   'values',
 ] as const;
 
+const REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES = ['react', 'node', 'serve', 'dev'] as const;
+export const REMIX_PACKAGES = REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES.map(
+  (packageName) => `@remix-run/${packageName}` as const,
+);
+export const REACT_ROUTER_PACKAGES = REMIX_AND_REACT_ROUTER_PACKAGES_SUFFIXES.map(
+  (packageName) => `@react-router/${packageName}` as const,
+);
+
 export const PACKAGES_TO_GET_INFO_FOR = [
   'prettier',
   'typescript',
@@ -257,6 +265,24 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'lit',
   '@nestjs/core',
   'ripple',
+
+  // Used in various configs to determine the default values of their options
+  'eslint',
+  '@angular-eslint/eslint-plugin',
+  '@angular-eslint/eslint-plugin-template',
+  '@angular-eslint/template-parser',
+  'helmet',
+  'jest-extended',
+  'marko',
+  'nuxt',
+  'pinia',
+  'prettier-plugin-svelte',
+  'react-dom',
+  ...REMIX_PACKAGES,
+  ...REACT_ROUTER_PACKAGES,
+  'relay-runtime',
+  'vite',
+  'vue-i18n',
 ] as const;
 
 export const TS_PLUGIN_TYPE_AWARE_RULES = [

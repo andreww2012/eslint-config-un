@@ -271,7 +271,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   const [packagesInfoRaw, gitignoreFile, eslintPluginTailwind, eslintPluginSvelte] =
     await Promise.all([
       Promise.all(
-        PACKAGES_TO_GET_INFO_FOR.map(async (name) => [name, await fetchPackageInfo(name)] as const),
+        PACKAGES_TO_GET_INFO_FOR.map(
+          async (name) =>
+            [name, await fetchPackageInfo(optionsResolved.packageAliases?.[name] || name)] as const,
+        ),
       ),
       readFileSafe('.gitignore'),
       pluginsLoaders.tailwindcss(context).then(({module}) => module),
