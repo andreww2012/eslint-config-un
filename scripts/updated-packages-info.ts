@@ -157,11 +157,13 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 
   const SAMPLE_RULE_NAME = 'SAMPLE-RULE-NAME';
   const ruleDocsUrl = packageMeta?.ruleDocsUrl?.(SAMPLE_RULE_NAME);
-  const ruleDocsUrlForMd = `[\`${SAMPLE_RULE_NAME}\`](${ruleDocsUrl || ''})`;
 
-  console.log(styleText('underline', 'For changelog:'));
-  console.log(
-    `${mainUnConfigNames}: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${getCompareDiffUrl(dependency, repoUrl, oldVersion, newVersion)}):
+  if (ruleDocsUrl) {
+    const ruleDocsUrlForMd = `[\`${SAMPLE_RULE_NAME}\`](${ruleDocsUrl})`;
+
+    console.log(styleText('underline', 'For changelog:'));
+    console.log(
+      `${mainUnConfigNames}: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${getCompareDiffUrl(dependency, repoUrl, oldVersion, newVersion)}):
 
 - 🟢 enabled ${ruleDocsUrlForMd} rule
 - 🟢 enabled ${ruleDocsUrlForMd} rule and added it to the \`noStylisticRules\` config
@@ -171,7 +173,8 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 - ❌ \`\` rule was removed
 - ⚠️ ${ruleDocsUrlForMd} rule was disabled because got deprecated
 - 🔄 \`\` was renamed to ${ruleDocsUrlForMd}`,
-  );
+    );
+  }
 
   if (ruleDocsUrl) {
     console.log(styleText('underline', 'Rule docs URLs:'));
