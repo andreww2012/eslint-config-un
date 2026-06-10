@@ -38,6 +38,10 @@ export const computeEslintConfig = async (
   const config = await eslintConfig(
     {
       ...(!options?.reset && {defaultConfigsStatus: 'all-disabled'}),
+      // Decouple tests from `ESLINT_CONFIG_UN_OFFLINE_MODE` env var, which would
+      // otherwise disable network-accessing rules, making rule-firing assertions fail
+      // Specs can still opt in via `un.offlineMode`
+      offlineMode: false,
       ...unOptions,
       cacheConfigs: false,
       configs:
@@ -156,6 +160,8 @@ export const testEslintConfig = async <
   const config = await eslintConfig(
     {
       defaultConfigsStatus: 'all-disabled',
+      // See the comment in `computeEslintConfig` for why offline mode is forced off here.
+      offlineMode: false,
       ...(typeof optionsOrFixtureSearchRelativeToPath === 'object' &&
         optionsOrFixtureSearchRelativeToPath.un),
       cacheConfigs: false,
