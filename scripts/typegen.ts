@@ -125,6 +125,13 @@ async function generateRuleTypes() {
           new RegExp(String.raw`'${pluginName ? `${pluginName}/` : ''}([^']*)'\?:`, 'g'),
           "'$1':",
         );
+
+        // This forces the per-rule option type aliases to be exported.
+        // When a config's emitted `.d.ts` references one of these by name
+        // `rolldown-plugin-dts` needs a matching export
+        // to import — otherwise it warns with `IMPORT_IS_UNDEFINED` during build
+        code = code.replaceAll(/^type /gm, 'export type ');
+
         return {
           code,
           exportTypeName,
