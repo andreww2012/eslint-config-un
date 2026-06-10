@@ -13,7 +13,7 @@ export interface RxjsEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'rxjs'> {
   /**
    * Affected rule:
-   * - [`ban-observables`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-observables.md)
+   * - [`rxjs/ban-observables`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-observables.md)
    */
   banObservables?: ArrayOrBooleanRecord<string, 'booleanOrMessage'>;
 
@@ -22,7 +22,7 @@ export interface RxjsEslintConfigOptions<
    * otherwise all array elements will be mapped to `value: true` object properties.
    *
    * Affected rule:
-   * - [`ban-operators`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-operators.md)
+   * - [`rxjs/ban-operators`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-operators.md)
    * @default {tap: true}
    */
   banOperators?: ArrayOrBooleanRecord<string, 'booleanOrMessage'>;
@@ -37,7 +37,7 @@ export interface RxjsEslintConfigOptions<
 
   /**
    * Affected rule:
-   * - [`just`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/just.md)
+   * - [`rxjs/just`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/just.md)
    * @default false
    */
   enforceJustInsteadOfOf?: boolean;

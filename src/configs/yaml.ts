@@ -24,7 +24,7 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * Set to `false` to not enforce the extension.
    *
    * Affected rule:
-   * - [`file-extension`](https://ota-meshi.github.io/eslint-plugin-yml/rules/file-extension.html)
+   * - [`yaml/file-extension`](https://ota-meshi.github.io/eslint-plugin-yml/rules/file-extension.html)
    * @default 'yml'
    */
   enforceExtension?: 'yml' | 'yaml' | false;
@@ -36,7 +36,7 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * If present, `ignores` values will be merged with `<<`.
    *
    * Affected rule:
-   * - [`key-name-casing`](https://ota-meshi.github.io/eslint-plugin-yml/rules/key-name-casing.html)
+   * - [`yaml/key-name-casing`](https://ota-meshi.github.io/eslint-plugin-yml/rules/key-name-casing.html)
    */
   casing?: GetRuleOptions<'yaml', 'key-name-casing'>;
 
@@ -44,7 +44,7 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
    * `false` to not enforce quotes style
    *
    * Affected rule:
-   * - [`quotes`](https://ota-meshi.github.io/eslint-plugin-yml/rules/quotes.html)
+   * - [`yaml/quotes`](https://ota-meshi.github.io/eslint-plugin-yml/rules/quotes.html)
    * @default 'single'
    */
   quotes?: 'single' | 'double' | false;

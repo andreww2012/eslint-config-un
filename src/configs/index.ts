@@ -1430,7 +1430,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * Provides an autofix to remove unused imports.
    *
    * Note: `typescript-eslint` since v8.53.0 has built-in ability for
-   * [`no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) rule
+   * [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) rule
    * to [automatically remove unused imports](https://typescript-eslint.io/rules/no-unused-vars/#enableautofixremovalimports).
    *
    * 📁 Default `files`: all files

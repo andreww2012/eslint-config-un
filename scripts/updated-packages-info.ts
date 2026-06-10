@@ -7,7 +7,7 @@ import {exec} from 'tinyexec';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import ourPackageJson from '../package.json' with {type: 'json'};
 import {fetchPackageInfo} from '../src/utils';
-import {PACKAGES_META} from './shared/packages-meta';
+import {PACKAGES_META, PLUGIN_PACKAGES_META} from './shared/packages-meta';
 
 // =============================================================================
 
@@ -155,11 +155,12 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     `feat(${mainUnConfigNames}): update ${dependency} to v${newVersion} and enable ___INSERT-CHANGES___`,
   );
 
-  const SAMPLE_RULE_NAME = 'SAMPLE-RULE-NAME';
-  const ruleDocsUrl = packageMeta?.ruleDocsUrl?.(SAMPLE_RULE_NAME);
+  const pluginPrefix = PLUGIN_PACKAGES_META[dependency]?.pluginPrefix;
+  const sampleRuleName = [pluginPrefix, 'SAMPLE-RULE-NAME'].filter(Boolean).join('/');
+  const ruleDocsUrl = packageMeta?.ruleDocsUrl?.(sampleRuleName);
 
   if (ruleDocsUrl) {
-    const ruleDocsUrlForMd = `[\`${SAMPLE_RULE_NAME}\`](${ruleDocsUrl})`;
+    const ruleDocsUrlForMd = `[\`${sampleRuleName}\`](${ruleDocsUrl})`;
 
     console.log(styleText('underline', 'For changelog:'));
     console.log(

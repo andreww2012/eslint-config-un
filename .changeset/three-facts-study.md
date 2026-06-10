@@ -6,138 +6,138 @@
 
 ember: updated [`eslint-plugin-ember` from v12.7.5 to v13.0.0](https://github.com/ember-cli/eslint-plugin-ember/compare/v12.7.5-eslint-plugin-ember...v13.0.0):
 
-- 🟢 enabled [`no-modifier-argument-destructuring`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-modifier-argument-destructuring.md) rule
-- 🟢 enabled [`no-tracked-built-ins`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-tracked-built-ins.md) rule
-- 🔴 not enabled [`template-attribute-indentation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-attribute-indentation.md) rule, but added it to the `noStylisticRules` config
-- 🟢 enabled [`template-attribute-order`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-attribute-order.md) rule and added it to the `noStylisticRules` config
-- 🔴 not enabled [`template-block-indentation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-block-indentation.md) rule, but added it to the `noStylisticRules` config
-- 🟢 enabled [`template-builtin-component-arguments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-builtin-component-arguments.md) rule
-- 🟢 enabled [`template-deprecated-inline-view-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-deprecated-inline-view-helper.md) rule
-- 🟢 enabled [`template-deprecated-render-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-deprecated-render-helper.md) rule
-- 🔴 not enabled [`template-eol-last`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-eol-last.md) rule, but added it to the `noStylisticRules` config
-- 🔴 not enabled [`template-linebreak-style`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-linebreak-style.md) rule, but added it to the `noStylisticRules` config
-- 🟢 enabled [`template-link-href-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-link-href-attributes.md) rule
-- 🟢 enabled [`template-link-rel-noopener`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-link-rel-noopener.md) rule
-- 🟢 enabled [`template-modifier-name-case`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-modifier-name-case.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`template-no-abstract-roles`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-abstract-roles.md) rule
-- 🟢 enabled [`template-no-accesskey-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-accesskey-attribute.md) rule
-- 🟢 enabled [`template-no-action-modifiers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-action-modifiers.md) rule
-- 🔴 not enabled [`template-no-action-on-submit-button`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-action-on-submit-button.md) rule
-- 🟢 enabled [`template-no-action`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-action.md) rule
-- 🟢 enabled [`template-no-args-paths`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-args-paths.md) rule
-- 🟢 enabled [`template-no-arguments-for-html-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-arguments-for-html-elements.md) rule
-- 🟢 enabled [`template-no-aria-hidden-body`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-aria-hidden-body.md) rule
-- 🟢 enabled [`template-no-aria-unsupported-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-aria-unsupported-elements.md) rule
-- 🟢 enabled [`template-no-array-prototype-extensions`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-array-prototype-extensions.md) rule
-- 🟢 enabled [`template-no-at-ember-render-modifiers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-at-ember-render-modifiers.md) rule
-- 🟢 enabled [`template-no-attrs-in-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-attrs-in-components.md) rule
-- 🟢 enabled [`template-no-autofocus-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-autofocus-attribute.md) rule
-- 🔴 not enabled [`template-no-bare-strings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-bare-strings.md) rule
-- 🟢 enabled [`template-no-bare-yield`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-bare-yield.md) rule
-- 🟢 enabled [`template-no-block-params-for-html-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-block-params-for-html-elements.md) rule
-- 🟢 enabled [`template-no-builtin-form-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-builtin-form-components.md) rule
-- 🟢 enabled [`template-no-capital-arguments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-capital-arguments.md) rule
-- 🟢 enabled [`template-no-chained-this`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-chained-this.md) rule
-- 🟢 enabled [`template-no-class-bindings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-class-bindings.md) rule
-- 🟢 enabled [`template-no-curly-component-invocation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-curly-component-invocation.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`template-no-debugger`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-debugger.md) rule
-- 🟢 enabled [`template-no-deprecated`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-deprecated.md) rule
-- 🟢 enabled [`template-no-duplicate-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-duplicate-attributes.md) rule
-- 🟢 enabled [`template-no-duplicate-id`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-duplicate-id.md) rule
-- 🟢 enabled [`template-no-duplicate-landmark-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-duplicate-landmark-elements.md) rule
-- 🟢 enabled [`template-no-dynamic-subexpression-invocations`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-dynamic-subexpression-invocations.md) rule
-- 🟢 enabled [`template-no-element-event-actions`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-element-event-actions.md) rule
-- 🟢 enabled [`template-no-empty-headings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-empty-headings.md) rule
-- 🟢 enabled [`template-no-extra-mut-helper-argument`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-extra-mut-helper-argument.md) rule
-- 🟢 enabled [`template-no-forbidden-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-forbidden-elements.md) rule
-- 🟢 enabled [`template-no-heading-inside-button`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-heading-inside-button.md) rule
-- 🔴 not enabled [`template-no-html-comments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-html-comments.md) rule
-- 🟢 enabled [`template-no-implicit-this`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-implicit-this.md) rule
-- 🟢 enabled [`template-no-index-component-invocation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-index-component-invocation.md) rule
-- 🟢 enabled [`template-no-inline-event-handlers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-inline-event-handlers.md) rule
-- 🟢 enabled [`template-no-inline-linkto`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-inline-linkto.md) rule
-- 🟢 enabled [`template-no-inline-styles`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-inline-styles.md) rule
-- 🟢 enabled [`template-no-input-block`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-input-block.md) rule
-- 🟢 enabled [`template-no-input-tagname`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-input-tagname.md) rule
-- 🟢 enabled [`template-no-invalid-aria-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-aria-attributes.md) rule
-- 🟢 enabled [`template-no-invalid-interactive`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-interactive.md) rule
-- 🔴 not enabled [`template-no-invalid-link-text`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-link-text.md) rule
-- 🟢 enabled [`template-no-invalid-link-title`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-link-title.md) rule
-- 🟢 enabled [`template-no-invalid-meta`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-meta.md) rule
-- 🟢 enabled [`template-no-invalid-role`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-role.md) rule
-- 🟢 enabled [`template-no-jsx-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-jsx-attributes.md) rule
-- 🟢 enabled [`template-no-link-to-positional-params`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-link-to-positional-params.md) rule
-- 🟢 enabled [`template-no-link-to-tagname`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-link-to-tagname.md) rule
-- 🟢 enabled [`template-no-log`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-log.md) rule
-- 🟢 enabled [`template-no-model-argument-in-route-templates`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-model-argument-in-route-templates.md) rule
-- 🟢 enabled [`template-no-multiple-empty-lines`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-multiple-empty-lines.md) rule
-- 🟢 enabled [`template-no-mut-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-mut-helper.md) rule
-- 🟢 enabled [`template-no-negated-condition`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-negated-condition.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`template-no-nested-interactive`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-nested-interactive.md) rule
-- 🟢 enabled [`template-no-nested-landmark`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-nested-landmark.md) rule
-- 🟢 enabled [`template-no-nested-splattributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-nested-splattributes.md) rule
-- 🟢 enabled [`template-no-obscure-array-access`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-obscure-array-access.md) rule
-- 🟢 enabled [`template-no-obsolete-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-obsolete-elements.md) rule
-- 🟢 enabled [`template-no-only-default-slot`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-only-default-slot.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`template-no-outlet-outside-routes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-outlet-outside-routes.md) rule
-- 🟢 enabled [`template-no-page-title-component`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-page-title-component.md) rule
-- 🟢 enabled [`template-no-passed-in-event-handlers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-passed-in-event-handlers.md) rule
-- 🟢 enabled [`template-no-pointer-down-event-binding`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-pointer-down-event-binding.md) rule
-- 🟢 enabled [`template-no-positional-data-test-selectors`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-positional-data-test-selectors.md) rule
-- 🟢 enabled [`template-no-positive-tabindex`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-positive-tabindex.md) rule
-- 🟢 enabled [`template-no-potential-path-strings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-potential-path-strings.md) rule
-- 🟢 enabled [`template-no-quoteless-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-quoteless-attributes.md) rule
-- 🟢 enabled [`template-no-redundant-fn`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-redundant-fn.md) rule
-- 🟢 enabled [`template-no-redundant-role`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-redundant-role.md) rule
-- 🔴 not enabled [`template-require-form-method`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-form-method.md) rule
-- 🔴 not enabled [`template-require-splattributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-splattributes.md) rule
-- 🔴 not enabled [`template-require-strict-mode`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-strict-mode.md) rule
-- 🟢 enabled [`template-no-restricted-invocations`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-restricted-invocations.md) rule
-- 🟢 enabled [`template-no-route-action`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-route-action.md) rule
-- 🟢 enabled [`template-no-scope-outside-table-headings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-scope-outside-table-headings.md) rule
-- 🟢 enabled [`template-no-shadowed-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-shadowed-elements.md) rule
-- 🟢 enabled [`template-no-splattributes-with-class`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-splattributes-with-class.md) rule
-- 🟢 enabled [`template-no-this-in-template-only-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-this-in-template-only-components.md) rule
-- 🟢 enabled [`template-no-trailing-spaces`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-trailing-spaces.md) rule
-- 🟢 enabled [`template-no-triple-curlies`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-triple-curlies.md) rule
-- 🟢 enabled [`template-no-unavailable-this`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unavailable-this.md) rule
-- 🟢 enabled [`template-no-unbalanced-curlies`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unbalanced-curlies.md) rule
-- 🟢 enabled [`template-no-unbound`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unbound.md) rule
-- 🟢 enabled [`template-no-unknown-arguments-for-builtin-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unknown-arguments-for-builtin-components.md) rule
-- 🟢 enabled [`template-no-unnecessary-component-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-component-helper.md) rule
-- 🟢 enabled [`template-no-unnecessary-concat`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-concat.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`template-no-unnecessary-curly-parens`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-curly-parens.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`template-no-unnecessary-curly-strings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-curly-strings.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`template-no-unsupported-role-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unsupported-role-attributes.md) rule
-- 🟢 enabled [`template-no-unused-block-params`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unused-block-params.md) rule
-- 🟢 enabled [`template-no-valueless-arguments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-valueless-arguments.md) rule
-- 🟢 enabled [`template-no-whitespace-for-layout`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-whitespace-for-layout.md) rule
-- 🟡 enabled [`template-no-whitespace-within-word`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-whitespace-within-word.md) rule (warning)
-- 🟢 enabled [`template-no-with`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-with.md) rule
-- 🟢 enabled [`template-no-yield-block-params-to-else-inverse`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-yield-block-params-to-else-inverse.md) rule
-- 🟢 enabled [`template-no-yield-only`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-yield-only.md) rule
-- 🟢 enabled [`template-no-yield-to-default`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-yield-to-default.md) rule
-- 🟢 enabled [`template-quotes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-quotes.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`template-require-aria-activedescendant-tabindex`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-aria-activedescendant-tabindex.md) rule
-- 🟢 enabled [`template-require-button-type`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-button-type.md) rule
-- 🟢 enabled [`template-require-context-role`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-context-role.md) rule
-- 🟢 enabled [`template-require-each-key`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-each-key.md) rule
-- 🟢 enabled [`template-require-has-block-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-has-block-helper.md) rule
-- 🟢 enabled [`template-require-iframe-src-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-iframe-src-attribute.md) rule
-- 🟢 enabled [`template-require-iframe-title`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-iframe-title.md) rule
-- 🟢 enabled [`template-require-input-label`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-input-label.md) rule
-- 🟢 enabled [`template-require-lang-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-lang-attribute.md) rule
-- 🟢 enabled [`template-require-mandatory-role-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-mandatory-role-attributes.md) rule
-- 🟢 enabled [`template-require-media-caption`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-media-caption.md) rule
-- 🟢 enabled [`template-require-presentational-children`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-presentational-children.md) rule
-- 🟢 enabled [`template-require-valid-alt-text`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-valid-alt-text.md) rule
-- 🟢 enabled [`template-require-valid-form-groups`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-valid-form-groups.md) rule
-- 🟢 enabled [`template-require-valid-named-block-naming-format`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-valid-named-block-naming-format.md) rule
-- 🟢 enabled [`template-self-closing-void-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-self-closing-void-elements.md) rule
-- 🟢 enabled [`template-simple-modifiers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-simple-modifiers.md) rule
-- 🟢 enabled [`template-simple-unless`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-simple-unless.md) rule
-- 🟢 enabled [`template-sort-invocations`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-sort-invocations.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`template-splat-attributes-only`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-splat-attributes-only.md) rule
-- 🟢 enabled [`template-style-concatenation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-style-concatenation.md) rule
-- 🟢 enabled [`template-table-groups`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-table-groups.md) rule
-- 🔴 not enabled [`template-template-length`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-template-length.md) rule, but added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/no-modifier-argument-destructuring`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-modifier-argument-destructuring.md) rule
+- 🟢 enabled [`ember/no-tracked-built-ins`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-tracked-built-ins.md) rule
+- 🔴 not enabled [`ember/template-attribute-indentation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-attribute-indentation.md) rule, but added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-attribute-order`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-attribute-order.md) rule and added it to the `noStylisticRules` config
+- 🔴 not enabled [`ember/template-block-indentation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-block-indentation.md) rule, but added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-builtin-component-arguments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-builtin-component-arguments.md) rule
+- 🟢 enabled [`ember/template-deprecated-inline-view-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-deprecated-inline-view-helper.md) rule
+- 🟢 enabled [`ember/template-deprecated-render-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-deprecated-render-helper.md) rule
+- 🔴 not enabled [`ember/template-eol-last`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-eol-last.md) rule, but added it to the `noStylisticRules` config
+- 🔴 not enabled [`ember/template-linebreak-style`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-linebreak-style.md) rule, but added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-link-href-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-link-href-attributes.md) rule
+- 🟢 enabled [`ember/template-link-rel-noopener`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-link-rel-noopener.md) rule
+- 🟢 enabled [`ember/template-modifier-name-case`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-modifier-name-case.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-no-abstract-roles`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-abstract-roles.md) rule
+- 🟢 enabled [`ember/template-no-accesskey-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-accesskey-attribute.md) rule
+- 🟢 enabled [`ember/template-no-action-modifiers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-action-modifiers.md) rule
+- 🔴 not enabled [`ember/template-no-action-on-submit-button`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-action-on-submit-button.md) rule
+- 🟢 enabled [`ember/template-no-action`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-action.md) rule
+- 🟢 enabled [`ember/template-no-args-paths`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-args-paths.md) rule
+- 🟢 enabled [`ember/template-no-arguments-for-html-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-arguments-for-html-elements.md) rule
+- 🟢 enabled [`ember/template-no-aria-hidden-body`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-aria-hidden-body.md) rule
+- 🟢 enabled [`ember/template-no-aria-unsupported-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-aria-unsupported-elements.md) rule
+- 🟢 enabled [`ember/template-no-array-prototype-extensions`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-array-prototype-extensions.md) rule
+- 🟢 enabled [`ember/template-no-at-ember-render-modifiers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-at-ember-render-modifiers.md) rule
+- 🟢 enabled [`ember/template-no-attrs-in-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-attrs-in-components.md) rule
+- 🟢 enabled [`ember/template-no-autofocus-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-autofocus-attribute.md) rule
+- 🔴 not enabled [`ember/template-no-bare-strings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-bare-strings.md) rule
+- 🟢 enabled [`ember/template-no-bare-yield`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-bare-yield.md) rule
+- 🟢 enabled [`ember/template-no-block-params-for-html-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-block-params-for-html-elements.md) rule
+- 🟢 enabled [`ember/template-no-builtin-form-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-builtin-form-components.md) rule
+- 🟢 enabled [`ember/template-no-capital-arguments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-capital-arguments.md) rule
+- 🟢 enabled [`ember/template-no-chained-this`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-chained-this.md) rule
+- 🟢 enabled [`ember/template-no-class-bindings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-class-bindings.md) rule
+- 🟢 enabled [`ember/template-no-curly-component-invocation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-curly-component-invocation.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-no-debugger`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-debugger.md) rule
+- 🟢 enabled [`ember/template-no-deprecated`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-deprecated.md) rule
+- 🟢 enabled [`ember/template-no-duplicate-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-duplicate-attributes.md) rule
+- 🟢 enabled [`ember/template-no-duplicate-id`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-duplicate-id.md) rule
+- 🟢 enabled [`ember/template-no-duplicate-landmark-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-duplicate-landmark-elements.md) rule
+- 🟢 enabled [`ember/template-no-dynamic-subexpression-invocations`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-dynamic-subexpression-invocations.md) rule
+- 🟢 enabled [`ember/template-no-element-event-actions`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-element-event-actions.md) rule
+- 🟢 enabled [`ember/template-no-empty-headings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-empty-headings.md) rule
+- 🟢 enabled [`ember/template-no-extra-mut-helper-argument`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-extra-mut-helper-argument.md) rule
+- 🟢 enabled [`ember/template-no-forbidden-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-forbidden-elements.md) rule
+- 🟢 enabled [`ember/template-no-heading-inside-button`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-heading-inside-button.md) rule
+- 🔴 not enabled [`ember/template-no-html-comments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-html-comments.md) rule
+- 🟢 enabled [`ember/template-no-implicit-this`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-implicit-this.md) rule
+- 🟢 enabled [`ember/template-no-index-component-invocation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-index-component-invocation.md) rule
+- 🟢 enabled [`ember/template-no-inline-event-handlers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-inline-event-handlers.md) rule
+- 🟢 enabled [`ember/template-no-inline-linkto`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-inline-linkto.md) rule
+- 🟢 enabled [`ember/template-no-inline-styles`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-inline-styles.md) rule
+- 🟢 enabled [`ember/template-no-input-block`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-input-block.md) rule
+- 🟢 enabled [`ember/template-no-input-tagname`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-input-tagname.md) rule
+- 🟢 enabled [`ember/template-no-invalid-aria-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-aria-attributes.md) rule
+- 🟢 enabled [`ember/template-no-invalid-interactive`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-interactive.md) rule
+- 🔴 not enabled [`ember/template-no-invalid-link-text`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-link-text.md) rule
+- 🟢 enabled [`ember/template-no-invalid-link-title`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-link-title.md) rule
+- 🟢 enabled [`ember/template-no-invalid-meta`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-meta.md) rule
+- 🟢 enabled [`ember/template-no-invalid-role`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-invalid-role.md) rule
+- 🟢 enabled [`ember/template-no-jsx-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-jsx-attributes.md) rule
+- 🟢 enabled [`ember/template-no-link-to-positional-params`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-link-to-positional-params.md) rule
+- 🟢 enabled [`ember/template-no-link-to-tagname`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-link-to-tagname.md) rule
+- 🟢 enabled [`ember/template-no-log`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-log.md) rule
+- 🟢 enabled [`ember/template-no-model-argument-in-route-templates`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-model-argument-in-route-templates.md) rule
+- 🟢 enabled [`ember/template-no-multiple-empty-lines`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-multiple-empty-lines.md) rule
+- 🟢 enabled [`ember/template-no-mut-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-mut-helper.md) rule
+- 🟢 enabled [`ember/template-no-negated-condition`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-negated-condition.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-no-nested-interactive`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-nested-interactive.md) rule
+- 🟢 enabled [`ember/template-no-nested-landmark`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-nested-landmark.md) rule
+- 🟢 enabled [`ember/template-no-nested-splattributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-nested-splattributes.md) rule
+- 🟢 enabled [`ember/template-no-obscure-array-access`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-obscure-array-access.md) rule
+- 🟢 enabled [`ember/template-no-obsolete-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-obsolete-elements.md) rule
+- 🟢 enabled [`ember/template-no-only-default-slot`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-only-default-slot.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-no-outlet-outside-routes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-outlet-outside-routes.md) rule
+- 🟢 enabled [`ember/template-no-page-title-component`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-page-title-component.md) rule
+- 🟢 enabled [`ember/template-no-passed-in-event-handlers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-passed-in-event-handlers.md) rule
+- 🟢 enabled [`ember/template-no-pointer-down-event-binding`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-pointer-down-event-binding.md) rule
+- 🟢 enabled [`ember/template-no-positional-data-test-selectors`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-positional-data-test-selectors.md) rule
+- 🟢 enabled [`ember/template-no-positive-tabindex`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-positive-tabindex.md) rule
+- 🟢 enabled [`ember/template-no-potential-path-strings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-potential-path-strings.md) rule
+- 🟢 enabled [`ember/template-no-quoteless-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-quoteless-attributes.md) rule
+- 🟢 enabled [`ember/template-no-redundant-fn`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-redundant-fn.md) rule
+- 🟢 enabled [`ember/template-no-redundant-role`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-redundant-role.md) rule
+- 🔴 not enabled [`ember/template-require-form-method`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-form-method.md) rule
+- 🔴 not enabled [`ember/template-require-splattributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-splattributes.md) rule
+- 🔴 not enabled [`ember/template-require-strict-mode`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-strict-mode.md) rule
+- 🟢 enabled [`ember/template-no-restricted-invocations`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-restricted-invocations.md) rule
+- 🟢 enabled [`ember/template-no-route-action`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-route-action.md) rule
+- 🟢 enabled [`ember/template-no-scope-outside-table-headings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-scope-outside-table-headings.md) rule
+- 🟢 enabled [`ember/template-no-shadowed-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-shadowed-elements.md) rule
+- 🟢 enabled [`ember/template-no-splattributes-with-class`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-splattributes-with-class.md) rule
+- 🟢 enabled [`ember/template-no-this-in-template-only-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-this-in-template-only-components.md) rule
+- 🟢 enabled [`ember/template-no-trailing-spaces`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-trailing-spaces.md) rule
+- 🟢 enabled [`ember/template-no-triple-curlies`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-triple-curlies.md) rule
+- 🟢 enabled [`ember/template-no-unavailable-this`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unavailable-this.md) rule
+- 🟢 enabled [`ember/template-no-unbalanced-curlies`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unbalanced-curlies.md) rule
+- 🟢 enabled [`ember/template-no-unbound`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unbound.md) rule
+- 🟢 enabled [`ember/template-no-unknown-arguments-for-builtin-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unknown-arguments-for-builtin-components.md) rule
+- 🟢 enabled [`ember/template-no-unnecessary-component-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-component-helper.md) rule
+- 🟢 enabled [`ember/template-no-unnecessary-concat`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-concat.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-no-unnecessary-curly-parens`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-curly-parens.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-no-unnecessary-curly-strings`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unnecessary-curly-strings.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-no-unsupported-role-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unsupported-role-attributes.md) rule
+- 🟢 enabled [`ember/template-no-unused-block-params`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-unused-block-params.md) rule
+- 🟢 enabled [`ember/template-no-valueless-arguments`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-valueless-arguments.md) rule
+- 🟢 enabled [`ember/template-no-whitespace-for-layout`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-whitespace-for-layout.md) rule
+- 🟡 enabled [`ember/template-no-whitespace-within-word`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-whitespace-within-word.md) rule (warning)
+- 🟢 enabled [`ember/template-no-with`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-with.md) rule
+- 🟢 enabled [`ember/template-no-yield-block-params-to-else-inverse`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-yield-block-params-to-else-inverse.md) rule
+- 🟢 enabled [`ember/template-no-yield-only`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-yield-only.md) rule
+- 🟢 enabled [`ember/template-no-yield-to-default`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-no-yield-to-default.md) rule
+- 🟢 enabled [`ember/template-quotes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-quotes.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-require-aria-activedescendant-tabindex`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-aria-activedescendant-tabindex.md) rule
+- 🟢 enabled [`ember/template-require-button-type`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-button-type.md) rule
+- 🟢 enabled [`ember/template-require-context-role`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-context-role.md) rule
+- 🟢 enabled [`ember/template-require-each-key`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-each-key.md) rule
+- 🟢 enabled [`ember/template-require-has-block-helper`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-has-block-helper.md) rule
+- 🟢 enabled [`ember/template-require-iframe-src-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-iframe-src-attribute.md) rule
+- 🟢 enabled [`ember/template-require-iframe-title`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-iframe-title.md) rule
+- 🟢 enabled [`ember/template-require-input-label`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-input-label.md) rule
+- 🟢 enabled [`ember/template-require-lang-attribute`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-lang-attribute.md) rule
+- 🟢 enabled [`ember/template-require-mandatory-role-attributes`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-mandatory-role-attributes.md) rule
+- 🟢 enabled [`ember/template-require-media-caption`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-media-caption.md) rule
+- 🟢 enabled [`ember/template-require-presentational-children`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-presentational-children.md) rule
+- 🟢 enabled [`ember/template-require-valid-alt-text`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-valid-alt-text.md) rule
+- 🟢 enabled [`ember/template-require-valid-form-groups`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-valid-form-groups.md) rule
+- 🟢 enabled [`ember/template-require-valid-named-block-naming-format`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-valid-named-block-naming-format.md) rule
+- 🟢 enabled [`ember/template-self-closing-void-elements`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-self-closing-void-elements.md) rule
+- 🟢 enabled [`ember/template-simple-modifiers`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-simple-modifiers.md) rule
+- 🟢 enabled [`ember/template-simple-unless`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-simple-unless.md) rule
+- 🟢 enabled [`ember/template-sort-invocations`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-sort-invocations.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`ember/template-splat-attributes-only`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-splat-attributes-only.md) rule
+- 🟢 enabled [`ember/template-style-concatenation`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-style-concatenation.md) rule
+- 🟢 enabled [`ember/template-table-groups`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-table-groups.md) rule
+- 🔴 not enabled [`ember/template-template-length`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-template-length.md) rule, but added it to the `noStylisticRules` config

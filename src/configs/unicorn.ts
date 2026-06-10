@@ -37,7 +37,7 @@ export interface UnicornEslintConfigOptions<
    * rule options directly. Is an array to distinguish from the object form.
    *
    * Affected rule:
-   * - [`consistent-compound-words`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-compound-words.md)
+   * - [`unicorn/consistent-compound-words`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-compound-words.md)
    * @default true
    */
   compoundWordsSuggestedReplacements?:
@@ -53,7 +53,7 @@ export interface UnicornEslintConfigOptions<
    * - `false`: do not enforce the style.
    *
    * Affected rule:
-   * - [`dom-node-dataset`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/dom-node-dataset.md)
+   * - [`unicorn/dom-node-dataset`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/dom-node-dataset.md)
    * @default 'dataset'
    */
   domDataAttributesStyle?: false | 'dataset' | 'attributes';
@@ -66,7 +66,7 @@ export interface UnicornEslintConfigOptions<
    * - `false`: do not enforce anything.
    *
    * Affected rule:
-   * - [`text-encoding-identifier-case`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/text-encoding-identifier-case.md)
+   * - [`unicorn/text-encoding-identifier-case`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/text-encoding-identifier-case.md)
    * @default 'no-dash'
    */
   enforceTextEncodingCaseAndNotation?: 'no-dash' | 'dash' | false;
@@ -80,7 +80,7 @@ export interface UnicornEslintConfigOptions<
    * Specifying values below 2 *disables* the affected rule.
    *
    * Affected rule:
-   * - [`prefer-includes-over-repeated-comparisons`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-includes-over-repeated-comparisons.md)
+   * - [`unicorn/prefer-includes-over-repeated-comparisons`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-includes-over-repeated-comparisons.md)
    * @default 3
    */
   minimumComparisonsToPreferArrayIncludes?: number;
@@ -94,7 +94,7 @@ export interface UnicornEslintConfigOptions<
    * Specifying values below 2 *disables* the affected rule.
    *
    * Affected rule:
-   * - [`prefer-string-repeat`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-repeat.md)
+   * - [`unicorn/prefer-string-repeat`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-repeat.md)
    * @default 3
    */
   minimumWhitespaceRepetitionsToPreferStringRepeat?: number;

@@ -83,8 +83,8 @@ interface EslintPluginJsdocSettings {
   implementsReplacesDocs?: boolean;
 
   /**
-   * Configures [`check-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/check-types.md)
-   * and [`no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md) rules.
+   * Configures [`jsdoc/check-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/check-types.md)
+   * and [`jsdoc/no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md) rules.
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#settings-to-configure-check-types-and-no-undefined-types
    */
   preferredTypes?: Partial<
@@ -115,7 +115,7 @@ interface EslintPluginJsdocSettings {
   /**
    * Set to `true` to allow JSDoc blocks to be found across invocations such
    * as call expressions and `new` expressions. Used by
-   * [`require-jsdoc`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-jsdoc.md).
+   * [`jsdoc/require-jsdoc`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-jsdoc.md).
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/main/.README/settings.md#skipinvokedexpressionsforcommentfinding
    */
   skipInvokedExpressionsForCommentFinding?: boolean;
@@ -170,8 +170,8 @@ interface EslintPluginJsdocSettings {
   )[];
 
   /**
-   * Configures [`require-param-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-type.md)
-   * and [`require-param-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-description.md) rules.
+   * Configures [`jsdoc/require-param-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-type.md)
+   * and [`jsdoc/require-param-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-description.md) rules.
    */
   // Note: undocumented on the settings readme, only on rule-specific docs:
   // https://github.com/gajus/eslint-plugin-jsdoc/blob/d2c60403bb55a14eadbf49fc9937caad14a29cde/docs/rules/require-param-type.md?plain=1#L17
@@ -190,7 +190,7 @@ export interface JsdocEslintConfigOptions<
   settings?: EslintPluginJsdocSettings;
 
   /**
-   * Explicitly specify or ignore files written in TypeScript. Will be used to disable certain rules like [`no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md) or [`require-param-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-type.md), and enable some rules like [`no-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-types.md).
+   * Explicitly specify or ignore files written in TypeScript. Will be used to disable certain rules like [`jsdoc/no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md) or [`jsdoc/require-param-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-type.md), and enable some rules like [`jsdoc/no-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-types.md).
    *
    * Will create a separate ESLint config which by default will use `settings` from the root `jsdoc` config, if specified, and will only be applied to TypeScript files.
    * @default true <=> `ts` config is enabled
@@ -203,7 +203,7 @@ export interface JsdocEslintConfigOptions<
    * Recognize the specified tags as valid JSDoc tags.
    *
    * Affected rule:
-   * - [`check-tag-names`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/check-tag-names.md)
+   * - [`jsdoc/check-tag-names`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/check-tag-names.md)
    */
   customTags?: string[];
 
@@ -211,13 +211,13 @@ export interface JsdocEslintConfigOptions<
    * With be merged with the default list: `['ts-check', 'ts-expect-error', 'ts-ignore', 'ts-nocheck', '__PURE__', '__NO_SIDE_EFFECTS__', 'vite-ignore]`.
    *
    * Affected rule:
-   * - [`no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md)
+   * - [`jsdoc/no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md)
    */
   extraMultilineCommentsStartingWithToIgnore?: string[];
 
   /**
    * Affected rule:
-   * - [`type-formatting`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/type-formatting.md)
+   * - [`jsdoc/type-formatting`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/type-formatting.md)
    * @default true
    */
   formatTypeValues?: boolean;

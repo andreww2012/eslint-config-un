@@ -19,7 +19,7 @@ export interface QunitEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    configNoOnlyTests: false, // has `no-only` rule
+    configNoOnlyTests: false, // has `qunit/no-only` rule
   });
 
   const {configNoOnlyTests} = optionsResolved;

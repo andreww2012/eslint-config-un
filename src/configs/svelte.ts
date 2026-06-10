@@ -72,7 +72,7 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * them explicitly here will *override* the respective property of the parent config.
    *
    * Affected rule:
-   * - [`block-lang`](https://sveltejs.github.io/eslint-plugin-svelte/rules/block-lang)
+   * - [`svelte/block-lang`](https://sveltejs.github.io/eslint-plugin-svelte/rules/block-lang)
    * @default true <=> `ts` config is enabled
    */
   configEnforceTypescriptInScriptSection?:
@@ -93,7 +93,7 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
 
   /**
    * Used by some rules like
-   * [`valid-compile`](https://sveltejs.github.io/eslint-plugin-svelte/rules/valid-compile).
+   * [`svelte/valid-compile`](https://sveltejs.github.io/eslint-plugin-svelte/rules/valid-compile).
    * Will be assigned to `languageOptions.parserOptions.svelteConfig` is specified
    * (but only if TypeScript config, `ts`, is enabled).
    *

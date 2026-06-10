@@ -12,7 +12,7 @@ export interface TurboEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'turbo'> {
   /**
    * Affected rule:
-   * - [`no-undeclared-env-vars`](https://github.com/vercel/turborepo/blob/HEAD/packages/eslint-plugin-turbo/docs/rules/no-undeclared-env-vars.md)
+   * - [`turbo/no-undeclared-env-vars`](https://github.com/vercel/turborepo/blob/HEAD/packages/eslint-plugin-turbo/docs/rules/no-undeclared-env-vars.md)
    */
   undeclaredEnvVarsOptions?: GetRuleOptions<'turbo', 'no-undeclared-env-vars'>;
 }

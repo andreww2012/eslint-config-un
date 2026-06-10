@@ -38,8 +38,8 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * Sets the style for emphasized, strong, emphasized strong and strikethrough text.
    *
    * Affected rules:
-   * - [`emphasis-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emphasis-delimiters-style.html)
-   * - [`strikethrough-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/strikethrough-delimiters-style.html)
+   * - [`markdown-preferences/emphasis-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emphasis-delimiters-style.html)
+   * - [`markdown-preferences/strikethrough-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/strikethrough-delimiters-style.html)
    */
   delimitersStyle?:
     | false
@@ -55,7 +55,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
          * from the emphasis and strong styles. See rules documentation for more info.
          *
          * Affected rule:
-         * - [`emphasis-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emphasis-delimiters-style.html)
+         * - [`markdown-preferences/emphasis-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emphasis-delimiters-style.html)
          * @default '*'
          */
         emphasis?:
@@ -68,7 +68,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
          * Choose the style of emphasized for strikethrough. Set `false` to not enforce.
          *
          * Affected rule:
-         * - [`strikethrough-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/strikethrough-delimiters-style.html)
+         * - [`markdown-preferences/strikethrough-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/strikethrough-delimiters-style.html)
          * @default '~~'
          */
         strikethrough?:
@@ -84,8 +84,8 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * - When an object syntax is used and some preferences are not specified, they will be set to the default value.
    *
    * Affected rules:
-   * - [`heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
-   * - [`table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
+   * - [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
+   * - [`markdown-preferences/table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
    * @default 'Sentence case';
    */
   enforceCasing?:
@@ -110,17 +110,17 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * by `markdown` config.
    *
    * This option is required for some rules, such as
-   * [`custom-container-marker-spacing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/custom-container-marker-spacing.html),
+   * [`markdown-preferences/custom-container-marker-spacing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/custom-container-marker-spacing.html),
    * to work, and for some rules, such as
-   * [`no-implicit-block-closing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/no-implicit-block-closing.html),
+   * [`markdown-preferences/no-implicit-block-closing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/no-implicit-block-closing.html),
    * to handle this custom syntax.
    *
    * Affected rules:
-   * - [`emoji-notation`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emoji-notation.html)
-   * - [`no-implicit-block-closing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/no-implicit-block-closing.html)
-   * - [`custom-container-marker-spacing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/custom-container-marker-spacing.html)
-   * - [`padded-custom-containers`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/padded-custom-containers.html)
-   * - [`padding-line-between-blocks`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/padding-line-between-blocks.html)
+   * - [`markdown-preferences/emoji-notation`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emoji-notation.html)
+   * - [`markdown-preferences/no-implicit-block-closing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/no-implicit-block-closing.html)
+   * - [`markdown-preferences/custom-container-marker-spacing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/custom-container-marker-spacing.html)
+   * - [`markdown-preferences/padded-custom-containers`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/padded-custom-containers.html)
+   * - [`markdown-preferences/padding-line-between-blocks`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/padding-line-between-blocks.html)
    * @default false
    */
   extendedMarkdownSyntax?: boolean;
@@ -134,8 +134,8 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * You can use the array or the object syntax. The difference is that the object syntax allows to exclude some words from the default list by setting the value to `false`.
    *
    * Affected rules:
-   * - [`heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
-   * - [`table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
+   * - [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
+   * - [`markdown-preferences/table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
    */
   casingEnforcementIgnorePatterns?: ArrayOrBooleanRecord<`/${string}/${string}`>;
 
@@ -143,9 +143,9 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * Enforces ordered lists numbering style and start number.
    *
    * Affected rules:
-   * - [`ordered-list-marker-sequence`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-sequence.html)
-   * - [`ordered-list-marker-start`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-start.html)
-   * - [`ordered-list-marker-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-style.html)
+   * - [`markdown-preferences/ordered-list-marker-sequence`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-sequence.html)
+   * - [`markdown-preferences/ordered-list-marker-start`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-start.html)
+   * - [`markdown-preferences/ordered-list-marker-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-style.html)
    */
   orderedLists?:
     | false
@@ -157,7 +157,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
          * - `false`: does not enforce the numbering style.
          *
          * Affected rule:
-         * - [`ordered-list-marker-sequence`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-sequence.html)
+         * - [`markdown-preferences/ordered-list-marker-sequence`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-sequence.html)
          * @default 'sequential'
          */
         numbering?: false | 'sequential' | 'fixed';
@@ -166,7 +166,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
          * Enforces that ordered lists in start with a specific number (1 or 0).
          *
          * Affected rule:
-         * - [`ordered-list-marker-start`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-start.html)
+         * - [`markdown-preferences/ordered-list-marker-start`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-start.html)
          * @default 1
          */
         start?:
@@ -177,7 +177,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
          * Enforces ordered lists style.
          *
          * Affected rule:
-         * - [`ordered-list-marker-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-style.html)
+         * - [`markdown-preferences/ordered-list-marker-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/ordered-list-marker-style.html)
          * @default 'n.''
          */
         style?:
@@ -195,8 +195,8 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * You can use the array or the object syntax. The difference is that the object syntax allows to exclude some words from the default list by setting the value to `false`.
    *
    * Affected rules:
-   * - [`heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
-   * - [`table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
+   * - [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
+   * - [`markdown-preferences/table-header-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/table-header-casing.html)
    */
   wordsToPreserveCasingOf?: ArrayOrBooleanRecord;
 }

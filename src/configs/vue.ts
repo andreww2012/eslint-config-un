@@ -120,7 +120,7 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
    * Configures rules specific to Nuxt config file.
    *
    * Currently includes the single rule,
-   * [`nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/index.ts),
+   * [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/index.ts),
    * and applies it to all `nuxt.config.?([cm])[jt]s?(x)` files.
    * @default true
    */
@@ -227,7 +227,7 @@ export interface VueEslintConfigOptions<
    * will be exempted from being checked by
    * [`vue/allow-single-word-component-names`](https://eslint.vuejs.org/rules/allow-single-word-component-names.html);
    * - Layout files will also not be subject of
-   * [`allow-implicit-slots`](https://eslint.vuejs.org/rules/allow-implicit-slots.html) check;
+   * [`vue/allow-implicit-slots`](https://eslint.vuejs.org/rules/allow-implicit-slots.html) check;
    * - [Plugins](https://nuxt.com/docs/4.x/directory-structure/app/plugins) and
    * [server](https://nuxt.com/docs/4.x/directory-structure/server) files will be allowed
    * to do `export default` ([`import/no-default-export`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-default-export.md) will be turned off);
@@ -236,7 +236,7 @@ export interface VueEslintConfigOptions<
    * will be applied to the specified `files` and `ignores`, defaulting to all files inside
    * `vueOrNuxtProjectDir` directory;
    * - Another sub-config, `configNuxtConfig`, will control whether
-   * [`nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/index.ts)
+   * [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/index.ts)
    * rule will be applied to Nuxt config file (`true` by default).
    * @default true <=> `nuxt` package is installed
    */
@@ -267,9 +267,9 @@ export interface VueEslintConfigOptions<
    * set this option to `false`.
    *
    * ### Exceptions
-   * - [`no-console`](https://eslint.vuejs.org/rules/no-console.html): all `console` calls
+   * - [`vue/no-console`](https://eslint.vuejs.org/rules/no-console.html): all `console` calls
    * are forbidden within the template.
-   * - [`dot-notation`](https://eslint.vuejs.org/rules/dot-notation.html) will inherit
+   * - [`vue/dot-notation`](https://eslint.vuejs.org/rules/dot-notation.html) will inherit
    * severity and options unless `noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles`
    * is set to `true`, in which case the rule will be turned off.
    * - All "stylistic" rules are always turned off:

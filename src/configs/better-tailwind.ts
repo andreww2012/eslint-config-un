@@ -133,7 +133,7 @@ export interface BetterTailwindEslintConfigOptions<
    * Enforces consistent Tailwind class order. `false` disables the corresponding rule.
    *
    * Affected rules:
-   * - [`enforce-consistent-class-order`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-consistent-class-order.md)
+   * - [`better-tailwindcss/enforce-consistent-class-order`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-consistent-class-order.md)
    * @default 'official'
    */
   classOrder?:

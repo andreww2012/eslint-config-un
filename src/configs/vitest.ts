@@ -64,7 +64,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   /**
    * Explicitly specify or ignore files written in TypeScript.
    * Will be used to enable TypeScript-specific rules like
-   * [`unbound-method`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/unbound-method.md).
+   * [`vitest/unbound-method`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/unbound-method.md).
    * @default true <=> `ts` config is enabled
    */
   configTypescript?:
@@ -87,7 +87,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * - `false`: no enforcement.
    *
    * Affected rule:
-   * - [`consistent-each-for`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/consistent-each-for.md)
+   * - [`vitest/consistent-each-for`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/consistent-each-for.md)
    * @default 'each'
    */
   enforceEachOrFor?:
@@ -102,8 +102,8 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * - `false`: do not enforce any style.
    *
    * Affected rules:
-   * - [`prefer-called-once`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-once.md)
-   * - [`prefer-called-times`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-times.md)
+   * - [`vitest/prefer-called-once`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-once.md)
+   * - [`vitest/prefer-called-times`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-called-times.md)
    * @default 'once'
    */
   enforceToBeCalledStyle?: false | 'once' | 'times';
@@ -113,8 +113,8 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * is required or disallowed.
    *
    * Affected rules:
-   * - [`no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
-   * - [`prefer-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-importing-vitest-globals.md)
+   * - [`vitest/no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)
+   * - [`vitest/prefer-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/prefer-importing-vitest-globals.md)
    * @default 'disallow'
    */
   vitestGlobalsImporting?: 'disallow' | 'enforce' | 'any';

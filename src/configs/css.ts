@@ -72,7 +72,7 @@ export interface CssEslintConfigOptions<
 
   /**
    * CSS features that will be ignored by
-   * [`use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md).
+   * [`css/use-baseline`](https://github.com/eslint/css/blob/HEAD/docs/rules/use-baseline.md).
    * Must be unique.
    */
   allowedFeatures?: {

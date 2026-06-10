@@ -86,7 +86,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   configJestExtended?: boolean | JestExtendedSubConfigOptions<ExtraPlugins>;
 
   /**
-   * Explicitly specify or ignore files written in TypeScript. Will be used to enable TypeScript-specific rules like [`no-untyped-mock-factory`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-untyped-mock-factory.md) or [`unbound-method`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md).
+   * Explicitly specify or ignore files written in TypeScript. Will be used to enable TypeScript-specific rules like [`jest/no-untyped-mock-factory`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-untyped-mock-factory.md) or [`jest/unbound-method`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md).
    * @default true <=> `ts` config is enabled
    */
   configTypescript?:

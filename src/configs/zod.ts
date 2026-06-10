@@ -78,7 +78,7 @@ export interface ZodEslintConfigOptions<
    * sub-config, unless explicitly overridden there.
    *
    * Affected rule:
-   * - [`consistent-object-schema-type`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-object-schema-type.md)
+   * - [`zod/consistent-object-schema-type`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-object-schema-type.md)
    * @default {object: true, looseObject: true, strictObject: true}
    */
   allowedObjectSchemaTypes?: ArrayOrBooleanRecord<ZodObjectSchemaType>;
@@ -90,7 +90,7 @@ export interface ZodEslintConfigOptions<
    * - `false`: not enforced
    *
    * Affected rule:
-   * - [`array-style`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/array-style.md)
+   * - [`zod/array-style`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/array-style.md)
    * @default 'method'
    */
   arrayStyle?: GetRuleOptions<'zod', 'array-style'>['style'] | false;
@@ -135,7 +135,7 @@ export interface ZodEslintConfigOptions<
    * sub-configs, unless explicitly overridden there.
    *
    * Affected rule:
-   * - [`consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-import.md)
+   * - [`zod/consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-import.md)
    * @default true
    */
   enforceConsistentImport?: boolean | GetRuleOptions<'zod', 'consistent-import'>['syntax'];
@@ -154,7 +154,7 @@ export interface ZodEslintConfigOptions<
    * sub-config, unless explicitly overridden there.
    *
    * Affected rule:
-   * - [`consistent-schema-var-name`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-schema-var-name.md)
+   * - [`zod/consistent-schema-var-name`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-schema-var-name.md)
    * @default 'Zod'
    */
   schemaVariableName?: boolean | string | GetRuleOptions<'zod', 'consistent-schema-var-name'>;

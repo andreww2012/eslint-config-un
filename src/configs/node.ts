@@ -15,68 +15,68 @@ import {
 interface EslintPluginNSettings {
   /**
    * Might be read by the following rules:
-   * - [`no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
-   * - [`no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
-   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
-   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
-   * - [`no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-import.md)
-   * - [`no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-require.md)
+   * - [`node/no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
+   * - [`node/no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
+   * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
+   * - [`node/no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
+   * - [`node/no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-import.md)
+   * - [`node/no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-require.md)
    */
   allowModules?: GetRuleOptions<'node', 'no-extraneous-import'>['allowModules'];
 
   /**
    * Might be read by the following rules:
-   * - [`hashbang`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/hashbang.md)
-   * - [`no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
-   * - [`no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
-   * - [`no-unpublished-bin`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-bin.md)
-   * - [`no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-import.md)
-   * - [`no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-require.md)
+   * - [`node/hashbang`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/hashbang.md)
+   * - [`node/no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
+   * - [`node/no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
+   * - [`node/no-unpublished-bin`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-bin.md)
+   * - [`node/no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-import.md)
+   * - [`node/no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-require.md)
    */
   convertPath?: GetRuleOptions<'node', 'hashbang'>['convertPath'];
 
   /**
    * Might be read by the following rules:
-   * - [`no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
-   * - [`no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
-   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
-   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
-   * - [`no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-import.md)
-   * - [`no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-require.md)
+   * - [`node/no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
+   * - [`node/no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
+   * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
+   * - [`node/no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
+   * - [`node/no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-import.md)
+   * - [`node/no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-require.md)
    */
   resolvePaths?: GetRuleOptions<'node', 'no-extraneous-import'>['resolvePaths'];
 
   /**
    * Might be read by the following rules:
-   * - [`no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
-   * - [`no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
-   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
-   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
-   * - [`no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-import.md)
-   * - [`no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-require.md)
+   * - [`node/no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
+   * - [`node/no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
+   * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
+   * - [`node/no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
+   * - [`node/no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-import.md)
+   * - [`node/no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-require.md)
    */
   resolverConfig?: EnhancedResolveResolveOptions;
 
   /**
    * Might be read by the following rules:
-   * - [`no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
-   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
-   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
-   * - [`no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-require.md)
+   * - [`node/no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
+   * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
+   * - [`node/no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
+   * - [`node/no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-require.md)
    */
   tryExtensions?: GetRuleOptions<'node', 'no-extraneous-require'>['tryExtensions'];
 
   /**
    * Might be read by the following rules:
-   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
-   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
+   * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
+   * - [`node/no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
    */
   tsconfigPath?: GetRuleOptions<'node', 'no-missing-import'>['tsconfigPath'];
 
   /**
    * Might be read by the following rules:
-   * - [`no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
-   * - [`no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
+   * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
+   * - [`node/no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
    */
   typescriptExtensionMap?:
     | Exclude<GetRuleOptions<'node', 'no-missing-import'>['typescriptExtensionMap'], unknown[]>
@@ -89,11 +89,11 @@ interface EslintPluginNSettings {
    * `package.json`'s `engines.node` field, or ⚠️ fall back to `>=16.0.0`.
    *
    * Might be read by the following rules:
-   * - [`no-deprecated-api`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-deprecated-api.md)
-   * - [`no-unsupported-features/es-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/es-builtins.md)
-   * - [`no-unsupported-features/es-syntax`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/es-syntax.md)
-   * - [`no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/node-builtins.md)
-   * - [`prefer-node-protocol`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-node-protocol.md)
+   * - [`node/no-deprecated-api`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-deprecated-api.md)
+   * - [`node/no-unsupported-features/es-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/es-builtins.md)
+   * - [`node/no-unsupported-features/es-syntax`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/es-syntax.md)
+   * - [`node/no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/node-builtins.md)
+   * - [`node/prefer-node-protocol`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-node-protocol.md)
    */
   version?: string;
 }

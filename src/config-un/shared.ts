@@ -425,9 +425,9 @@ export interface EslintConfigUnOptions<
    * It'll be made by us that they will be silently ignored.
    *
    * The replaced rules' list (their name will actually be preserved):
-   * - `no-cycle`
-   * - `no-named-as-default`
-   * - `no-unresolved` (replaced with `no-unresolved-imports`)
+   * - `import/no-cycle`
+   * - `import/no-named-as-default`
+   * - `import/no-unresolved` (replaced with `fast-import/no-unresolved-imports`)
    * @default false
    */
   useFastImport?:

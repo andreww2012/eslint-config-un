@@ -36,7 +36,7 @@ export interface FormatjsEslintConfigOptions<
    * Enforce `defaultMessage` in the message descriptor.
    *
    * Affected rule:
-   * - [`enforce-default-message`](https://formatjs.github.io/docs/tooling/linter#enforce-default-message)
+   * - [`formatjs/enforce-default-message`](https://formatjs.github.io/docs/tooling/linter#enforce-default-message)
    * @default 'anything'
    */
   enforceDefaultMessage?: GetRuleOptions<'formatjs', 'enforce-default-message'> | false;
@@ -45,7 +45,7 @@ export interface FormatjsEslintConfigOptions<
    * Enforce `description` in the message descriptor.
    *
    * Affected rule:
-   * - [`enforce-description`](https://formatjs.github.io/docs/tooling/linter#enforce-description)
+   * - [`formatjs/enforce-description`](https://formatjs.github.io/docs/tooling/linter#enforce-description)
    * @default 'anything'
    */
   enforceDescription?: GetRuleOptions<'formatjs', 'enforce-description'> | false;
@@ -54,8 +54,8 @@ export interface FormatjsEslintConfigOptions<
    * Enforce or ban explicit ID in `MessageDescriptor`. Not enforced by default.
    *
    * Affected rule:
-   * - [`enforce-id`](https://formatjs.github.io/docs/tooling/linter#enforce-id)
-   * - [`no-id`](https://formatjs.github.io/docs/tooling/linter#no-id)
+   * - [`formatjs/enforce-id`](https://formatjs.github.io/docs/tooling/linter#enforce-id)
+   * - [`formatjs/no-id`](https://formatjs.github.io/docs/tooling/linter#no-id)
    */
   enforceId?: 'always' | 'never';
 
@@ -64,7 +64,7 @@ export interface FormatjsEslintConfigOptions<
    * Will be merged with the default value.
    *
    * Affected rule:
-   * - [`enforce-plural-rules`](https://formatjs.github.io/docs/tooling/linter#enforce-plural-rules)
+   * - [`formatjs/enforce-plural-rules`](https://formatjs.github.io/docs/tooling/linter#enforce-plural-rules)
    * @default {other: true}
    */
   enforcePluralRules?: GetRuleOptions<'formatjs', 'enforce-plural-rules'>;
@@ -73,7 +73,7 @@ export interface FormatjsEslintConfigOptions<
    * Block usage of specific elements in ICU message.
    *
    * Affected rule:
-   * - [`blocklist-elements`](https://formatjs.github.io/docs/tooling/linter#blocklist-elements)
+   * - [`formatjs/blocklist-elements`](https://formatjs.github.io/docs/tooling/linter#blocklist-elements)
    * @default {}
    */
   icuElementsBlocklist?: Partial<

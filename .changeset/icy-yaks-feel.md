@@ -4,39 +4,39 @@
 
 unicorn: updated [`eslint-plugin-unicorn` from v64.0.0 to v65.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v64.0.0...v65.0.0):
 
-- 🟢 enabled [`better-dom-traversing`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/better-dom-traversing.md) rule
-- Added a new option `compoundWordsSuggestedReplacements` controlling 🟢 enabled by default [`consistent-compound-words`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-compound-words.md) rule
-- 🟢 enabled [`consistent-json-file-read`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-json-file-read.md) rule
-- Added a new option `domDataAttributesStyle` controlling 🟢 enabled by default [`dom-node-dataset`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/dom-node-dataset.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`no-array-fill-with-reference-type`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-array-fill-with-reference-type.md) rule
-- 🟢 enabled [`no-array-from-fill`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-array-from-fill.md) rule
-- 🟢 enabled [`no-blob-to-file`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-blob-to-file.md) rule
-- 🟢 enabled [`no-canvas-to-image`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-canvas-to-image.md) rule
-- 🟢 enabled [`no-confusing-array-splice`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-confusing-array-splice.md) rule
-- 🟢 enabled [`no-duplicate-set-values`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-duplicate-set-values.md) rule
-- 🟢 enabled [`no-exports-in-scripts`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-exports-in-scripts.md) rule
-- 🟢 enabled [`no-incorrect-query-selector`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-incorrect-query-selector.md) rule
-- 🟢 enabled [`no-invalid-file-input-accept`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-file-input-accept.md) rule
-- 🟢 enabled [`no-late-current-target-access`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-late-current-target-access.md) rule
-- 🔴 not enabled [`no-manually-wrapped-comments`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-manually-wrapped-comments.md) rule
-- 🔴 not enabled [`no-this-outside-of-class`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-this-outside-of-class.md) rule
-- 🟢 enabled [`no-unnecessary-nested-ternary`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-nested-ternary.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`no-unused-array-method-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unused-array-method-return.md) rule
-- 🟢 enabled [`prefer-array-last-methods`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-array-last-methods.md) rule
-- 🟢 enabled [`prefer-get-or-insert-computed`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-get-or-insert-computed.md) rule
-- 🔴 not enabled [`prefer-https`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-https.md) rule
-- Added a new option `minimumComparisonsToPreferArrayIncludes` controlling 🟢 enabled by default [`prefer-includes-over-repeated-comparisons`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-includes-over-repeated-comparisons.md) rule and added it to the `noStylisticRules` config
-- 🔴 not enabled [`prefer-iterator-concat`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-iterator-concat.md) rule
-- 🟢 enabled [`prefer-iterator-to-array-at-end`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-iterator-to-array-at-end.md) rule
-- 🟢 enabled [`prefer-math-abs`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-math-abs.md) rule
-- 🟢 enabled [`prefer-queue-microtask`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-queue-microtask.md) rule
-- 🟢 enabled [`prefer-split-limit`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-split-limit.md) rule
-- 🟢 enabled [`prefer-string-match-all`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-match-all.md) rule
-- 🟢 enabled [`prefer-string-pad-start-end`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-pad-start-end.md) rule
-- Added a new option `minimumWhitespaceRepetitionsToPreferStringRepeat` controlling 🟢 enabled by default [`prefer-string-repeat`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-repeat.md) rule and added it to the `noStylisticRules` config
-- 🟢 enabled [`require-css-escape`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-css-escape.md) rule
-- 🟢 enabled [`require-passive-events`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-passive-events.md) rule
-- 🔴 not enabled [`try-complexity`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/try-complexity.md) rule
-- ⚠️ [`better-regex`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v64.0.0/docs/rules/better-regex.md) rule got deprecated
-- ⚠️ [`prefer-dom-node-dataset`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v64.0.0/docs/rules/prefer-dom-node-dataset.md) rule got deprecated
-- ⚠️ [`prefer-json-parse-buffer`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v64.0.0/docs/rules/prefer-json-parse-buffer.md) rule got deprecated
+- 🟢 enabled [`unicorn/better-dom-traversing`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/better-dom-traversing.md) rule
+- Added a new option `compoundWordsSuggestedReplacements` controlling 🟢 enabled by default [`unicorn/consistent-compound-words`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-compound-words.md) rule
+- 🟢 enabled [`unicorn/consistent-json-file-read`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-json-file-read.md) rule
+- Added a new option `domDataAttributesStyle` controlling 🟢 enabled by default [`unicorn/dom-node-dataset`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/dom-node-dataset.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/no-array-fill-with-reference-type`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-array-fill-with-reference-type.md) rule
+- 🟢 enabled [`unicorn/no-array-from-fill`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-array-from-fill.md) rule
+- 🟢 enabled [`unicorn/no-blob-to-file`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-blob-to-file.md) rule
+- 🟢 enabled [`unicorn/no-canvas-to-image`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-canvas-to-image.md) rule
+- 🟢 enabled [`unicorn/no-confusing-array-splice`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-confusing-array-splice.md) rule
+- 🟢 enabled [`unicorn/no-duplicate-set-values`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-duplicate-set-values.md) rule
+- 🟢 enabled [`unicorn/no-exports-in-scripts`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-exports-in-scripts.md) rule
+- 🟢 enabled [`unicorn/no-incorrect-query-selector`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-incorrect-query-selector.md) rule
+- 🟢 enabled [`unicorn/no-invalid-file-input-accept`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-file-input-accept.md) rule
+- 🟢 enabled [`unicorn/no-late-current-target-access`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-late-current-target-access.md) rule
+- 🔴 not enabled [`unicorn/no-manually-wrapped-comments`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-manually-wrapped-comments.md) rule
+- 🔴 not enabled [`unicorn/no-this-outside-of-class`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-this-outside-of-class.md) rule
+- 🟢 enabled [`unicorn/no-unnecessary-nested-ternary`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-nested-ternary.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/no-unused-array-method-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unused-array-method-return.md) rule
+- 🟢 enabled [`unicorn/prefer-array-last-methods`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-array-last-methods.md) rule
+- 🟢 enabled [`unicorn/prefer-get-or-insert-computed`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-get-or-insert-computed.md) rule
+- 🔴 not enabled [`unicorn/prefer-https`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-https.md) rule
+- Added a new option `minimumComparisonsToPreferArrayIncludes` controlling 🟢 enabled by default [`unicorn/prefer-includes-over-repeated-comparisons`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-includes-over-repeated-comparisons.md) rule and added it to the `noStylisticRules` config
+- 🔴 not enabled [`unicorn/prefer-iterator-concat`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-iterator-concat.md) rule
+- 🟢 enabled [`unicorn/prefer-iterator-to-array-at-end`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-iterator-to-array-at-end.md) rule
+- 🟢 enabled [`unicorn/prefer-math-abs`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-math-abs.md) rule
+- 🟢 enabled [`unicorn/prefer-queue-microtask`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-queue-microtask.md) rule
+- 🟢 enabled [`unicorn/prefer-split-limit`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-split-limit.md) rule
+- 🟢 enabled [`unicorn/prefer-string-match-all`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-match-all.md) rule
+- 🟢 enabled [`unicorn/prefer-string-pad-start-end`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-pad-start-end.md) rule
+- Added a new option `minimumWhitespaceRepetitionsToPreferStringRepeat` controlling 🟢 enabled by default [`unicorn/prefer-string-repeat`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-string-repeat.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/require-css-escape`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-css-escape.md) rule
+- 🟢 enabled [`unicorn/require-passive-events`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-passive-events.md) rule
+- 🔴 not enabled [`unicorn/try-complexity`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/try-complexity.md) rule
+- ⚠️ [`unicorn/better-regex`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v64.0.0/docs/rules/better-regex.md) rule got deprecated
+- ⚠️ [`unicorn/prefer-dom-node-dataset`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v64.0.0/docs/rules/prefer-dom-node-dataset.md) rule got deprecated
+- ⚠️ [`unicorn/prefer-json-parse-buffer`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v64.0.0/docs/rules/prefer-json-parse-buffer.md) rule got deprecated

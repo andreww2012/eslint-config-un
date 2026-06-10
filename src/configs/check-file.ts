@@ -34,7 +34,7 @@ export interface CheckFileEslintConfigOptions<
    * Enforce file naming conventions.
    *
    * Affected rule:
-   * - [`filename-naming-convention`](https://github.com/dukeluo/eslint-plugin-check-file/blob/HEAD/docs/rules/filename-naming-convention.md)
+   * - [`check-file/filename-naming-convention`](https://github.com/dukeluo/eslint-plugin-check-file/blob/HEAD/docs/rules/filename-naming-convention.md)
    */
   fileNamingConventions?: FilenameNamingConventionOptions[0] | FilenameNamingConventionOptions;
 
@@ -42,7 +42,7 @@ export interface CheckFileEslintConfigOptions<
    * Enforce folder naming conventions.
    *
    * Affected rule:
-   * - [`folder-naming-convention`](https://github.com/dukeluo/eslint-plugin-check-file/blob/HEAD/docs/rules/folder-naming-convention.md)
+   * - [`check-file/folder-naming-convention`](https://github.com/dukeluo/eslint-plugin-check-file/blob/HEAD/docs/rules/folder-naming-convention.md)
    */
   folderNamingConventions?: FolderNamingConventionOptions[0] | FolderNamingConventionOptions;
 }

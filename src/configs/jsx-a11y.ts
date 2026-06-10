@@ -97,7 +97,7 @@ export interface JsxA11yEslintConfigOptions<
   };
 
   /**
-   * Elements to check for `alt` attribute on by [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md) rule.
+   * Elements to check for `alt` attribute on by [`jsx-a11y/alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md) rule.
    *
    * By default, `<img>`, `<area>`, `<input type="image">`, and `<object>` elements are checked.
    * Using the object syntax, you can disable the default checks or specify additional elements.
@@ -108,7 +108,7 @@ export interface JsxA11yEslintConfigOptions<
     | Partial<Record<AltTextCheckDefaultElements | (string & {}), boolean>>;
 
   /**
-   * Anchor aspects to check by [`anchor-is-valid`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md) rule.
+   * Anchor aspects to check by [`jsx-a11y/anchor-is-valid`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md) rule.
    *
    * By default, `noHref` and `invalidHref` aspects are checked.
    * Using the object syntax, you can disable the default checks or specify additional aspects.
@@ -118,7 +118,7 @@ export interface JsxA11yEslintConfigOptions<
 
   /**
    * List of words that will be considered ambiguous and will be flagged by
-   * [`anchor-ambiguous-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-ambiguous-text.md) rule.
+   * [`jsx-a11y/anchor-ambiguous-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-ambiguous-text.md) rule.
    *
    * Can be either an array or a function to which the default words will be passed
    * as the only argument. Setting to `false` will disable the rule.
@@ -152,7 +152,7 @@ export interface JsxA11yEslintConfigOptions<
 
   /**
    * List of words like "image", "picture" or "photo" that will be flagged by
-   * [`img-redundant-alt`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/img-redundant-alt.md) rule.
+   * [`jsx-a11y/img-redundant-alt`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/img-redundant-alt.md) rule.
    * if contained in the image alt text.
    *
    * Will be merged with the default words listed in the rule docs, and this behavior
@@ -168,13 +168,13 @@ export interface JsxA11yEslintConfigOptions<
    * Will be merged with the built-ins `['alt', 'aria-label', 'aria-labelledby']`.
    *
    * Used in rules:
-   * - [`control-has-associated-label`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/control-has-associated-label.md)
-   * - [`label-has-associated-control`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/label-has-associated-control.md)
+   * - [`jsx-a11y/control-has-associated-label`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/control-has-associated-label.md)
+   * - [`jsx-a11y/label-has-associated-control`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/label-has-associated-control.md)
    */
   labelAttributes?: string[];
 
   /**
-   * The list of roles that will be checked by [`interactive-supports-focus`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/interactive-supports-focus.md) rule.
+   * The list of roles that will be checked by [`jsx-a11y/interactive-supports-focus`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/interactive-supports-focus.md) rule.
    *
    * The default list of roles is `['button', 'checkbox', 'link', 'searchbox', 'spinbutton', 'switch', 'textbox']`.
    *
@@ -191,7 +191,7 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render an `<area>` element.
      *
      * Used in rules:
-     * - [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
+     * - [`jsx-a11y/alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
      */
     areaElements?: string[];
 
@@ -199,7 +199,7 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render an `<audio>` element.
      *
      * Used in rules:
-     * - [`media-has-caption`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/media-has-caption.md)
+     * - [`jsx-a11y/media-has-caption`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/media-has-caption.md)
      */
     audioElements?: string[];
 
@@ -207,8 +207,8 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render a control (an interactive element).
      *
      * Used in rules:
-     * - [`control-has-associated-label`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/control-has-associated-label.md)
-     * - [`label-has-associated-control`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/label-has-associated-control.md)
+     * - [`jsx-a11y/control-has-associated-label`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/control-has-associated-label.md)
+     * - [`jsx-a11y/label-has-associated-control`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/label-has-associated-control.md)
      */
     controls?: string[];
 
@@ -216,7 +216,7 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render a heading (`<h1>`, `<h2>`, etc.).
      *
      * Used in rules:
-     * - [`heading-has-content`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/heading-has-content.md)
+     * - [`jsx-a11y/heading-has-content`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/heading-has-content.md)
      */
     headings?: string[];
 
@@ -224,8 +224,8 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render an `<img>` element.
      *
      * Used in rules:
-     * - [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
-     * - [`img-redundant-alt`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/img-redundant-alt.md)
+     * - [`jsx-a11y/alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
+     * - [`jsx-a11y/img-redundant-alt`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/img-redundant-alt.md)
      */
     imgElements?: string[];
 
@@ -233,7 +233,7 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render an `<input>` element with `type="image"`.
      *
      * Used in rules:
-     * - [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
+     * - [`jsx-a11y/alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
      */
     inputTypeImageElements?: string[];
 
@@ -241,7 +241,7 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render an `<input>` element which accepts text input.
      *
      * Used in rules:
-     * - [`autocomplete-valid`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/autocomplete-valid.md)
+     * - [`jsx-a11y/autocomplete-valid`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/autocomplete-valid.md)
      */
     inputs?: string[];
 
@@ -249,7 +249,7 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render a `<label>` element.
      *
      * Used in rules:
-     * - [`label-has-associated-control`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/label-has-associated-control.md)
+     * - [`jsx-a11y/label-has-associated-control`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/label-has-associated-control.md)
      */
     labels?: string[];
 
@@ -257,8 +257,8 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render a link.
      *
      * Used in rules:
-     * - [`anchor-is-valid`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md)
-     * - [`anchor-has-content`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-has-content.md)
+     * - [`jsx-a11y/anchor-is-valid`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md)
+     * - [`jsx-a11y/anchor-has-content`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-has-content.md)
      */
     links?: string[];
 
@@ -266,7 +266,7 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render an `<object>` element.
      *
      * Used in rules:
-     * - [`alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
+     * - [`jsx-a11y/alt-text`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/alt-text.md)
      */
     objectElements?: string[];
 
@@ -274,7 +274,7 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render a `<track>` element.
      *
      * Used in rules:
-     * - [`media-has-caption`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/media-has-caption.md)
+     * - [`jsx-a11y/media-has-caption`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/media-has-caption.md)
      */
     trackElements?: string[];
 
@@ -282,7 +282,7 @@ export interface JsxA11yEslintConfigOptions<
      * List of components that render a `<video>` element.
      *
      * Used in rules:
-     * - [`media-has-caption`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/media-has-caption.md)
+     * - [`jsx-a11y/media-has-caption`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/media-has-caption.md)
      */
     videoElements?: string[];
   };
@@ -481,7 +481,7 @@ export default ((
       ]),
     ) /** @since 1.5.0 */
     .addRule('heading-hidden', isForLit ? ERROR : null)
-    // Disabled because "This rule is largely superseded by the `lang` rule"
+    // Disabled because "This rule is largely superseded by the `jsx-a11y/lang` rule"
     .addRule(rn('html-has-lang'), isForLit ? null : OFF) /** @since 1.5.0 */
     .addRule(isForLit ? 'iframe-title' : rn('iframe-has-title'), ERROR) /** @since 4.0.0 */
     .addRule(

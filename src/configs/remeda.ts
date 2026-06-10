@@ -14,13 +14,13 @@ export interface RemedaEslintConfigOptions<
    * Enable rules suggesting replacing vanilla JS with Remeda expressions.
    *
    * Affected rules:
-   * - [`prefer-constant`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-constant.md)
-   * - [`prefer-do-nothing`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-do-nothing.md)
-   * - [`prefer-has-atleast`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-has-atleast.md)
-   * - [`prefer-is-empty`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-is-empty.md)
-   * - [`prefer-is-nullish`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-is-nullish.md)
-   * - [`prefer-nullish-coalescing`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-nullish-coalescing.md)
-   * - [`prefer-remeda-typecheck`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-remeda-typecheck.md)
+   * - [`remeda/prefer-constant`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-constant.md)
+   * - [`remeda/prefer-do-nothing`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-do-nothing.md)
+   * - [`remeda/prefer-has-atleast`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-has-atleast.md)
+   * - [`remeda/prefer-is-empty`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-is-empty.md)
+   * - [`remeda/prefer-is-nullish`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-is-nullish.md)
+   * - [`remeda/prefer-nullish-coalescing`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-nullish-coalescing.md)
+   * - [`remeda/prefer-remeda-typecheck`](https://github.com/AndreaPontrandolfo/eslint-plugin-remeda/blob/HEAD/docs/rules/prefer-remeda-typecheck.md)
    * @default false
    */
   suggestJsCodeReplacements?: boolean;

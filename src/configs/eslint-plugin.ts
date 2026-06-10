@@ -45,17 +45,17 @@ export interface EslintPluginEslintConfigOptions<
    * Will be merged with the default value.
    *
    * Used rules:
-   * - `replacedBy`: [`no-meta-replaced-by`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-meta-replaced-by.md)
-   * - `schemaDefaultProperties`: [`no-meta-schema-default`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-meta-schema-default.md)
-   * - `defaultOptions`: [`require-meta-default-options`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-default-options.md)
-   * - `docsDescription`: [`require-meta-docs-description`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-description.md)
-   * - `docsRecommended`: [`require-meta-docs-recommended`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-recommended.md)
-   * - `docsUrl`: [`require-meta-docs-url`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-url.md)
-   * - `fixable`: [`require-meta-fixable`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-fixable.md)
-   * - `hasSuggestions`: [`require-meta-has-suggestions`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-has-suggestions.md)
-   * - `schema`: [`require-meta-schema`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-schema.md)
-   * - `schemaDescriptions`: [`require-meta-schema-description`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-schema-description.md)
-   * - `type`: [`require-meta-type`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-type.md)
+   * - `replacedBy`: [`eslint-plugin/no-meta-replaced-by`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-meta-replaced-by.md)
+   * - `schemaDefaultProperties`: [`eslint-plugin/no-meta-schema-default`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-meta-schema-default.md)
+   * - `defaultOptions`: [`eslint-plugin/require-meta-default-options`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-default-options.md)
+   * - `docsDescription`: [`eslint-plugin/require-meta-docs-description`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-description.md)
+   * - `docsRecommended`: [`eslint-plugin/require-meta-docs-recommended`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-recommended.md)
+   * - `docsUrl`: [`eslint-plugin/require-meta-docs-url`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-url.md)
+   * - `fixable`: [`eslint-plugin/require-meta-fixable`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-fixable.md)
+   * - `hasSuggestions`: [`eslint-plugin/require-meta-has-suggestions`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-has-suggestions.md)
+   * - `schema`: [`eslint-plugin/require-meta-schema`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-schema.md)
+   * - `schemaDescriptions`: [`eslint-plugin/require-meta-schema-description`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-schema-description.md)
+   * - `type`: [`eslint-plugin/require-meta-type`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-type.md)
    * @default {fixable: 'enforce', hasSuggestions: 'enforce', schema: 'enforce', type: 'enforce'}
    */
   metaProperties?: Partial<

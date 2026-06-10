@@ -84,7 +84,7 @@ export interface MarkdownEslintConfigOptions<
    * Choose a Markdown language dialect globally or per specific files. For each array item,
    * a separate config entry will be created. `gfm` stands for [GitHub Flavored Markdown](https://github.github.com/gfm).
    *
-   * If `gfm` syntax is used, [`no-missing-label-refs`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-label-refs.md) rule will be enabled and have `allowLabels` option set to [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts).
+   * If `gfm` syntax is used, [`markdown/no-missing-label-refs`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-label-refs.md) rule will be enabled and have `allowLabels` option set to [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts).
    * @default 'gfm'
    */
   language?:

@@ -160,14 +160,14 @@ interface ReactXSubConfigOptions<
    * is `warn`.
    *
    * Affects the following rules (`eslint-react` prefix is implied):
-   * - `Children`: [`no-children-count`](https://eslint-react.xyz/docs/rules/no-children-count), [`no-children-for-each`](https://eslint-react.xyz/docs/rules/no-children-for-each), [`no-children-map`](https://eslint-react.xyz/docs/rules/no-children-map), [`no-children-only`](https://eslint-react.xyz/docs/rules/no-children-only), [`no-children-to-array`](https://eslint-react.xyz/docs/rules/no-children-to-array)
-   * - `cloneElement`: [`no-clone-element`](https://eslint-react.xyz/docs/rules/no-clone-element)
-   * - `classComponent`: [`no-class-component`](https://eslint-react.xyz/docs/rules/no-class-component)
-   * - `createRef`: [`no-create-ref`](https://eslint-react.xyz/docs/rules/no-create-ref)
-   * - `forwardRef`: [`no-forward-ref`](https://eslint-react.xyz/docs/rules/no-forward-ref)
-   * - `componentWillMount`: [`no-component-will-mount`](https://eslint-react.xyz/docs/rules/no-component-will-mount)
-   * - `componentWillReceiveProps`: [`no-component-will-receive-props`](https://eslint-react.xyz/docs/rules/no-component-will-receive-props)
-   * - `componentWillUpdate`: [`no-component-will-update`](https://eslint-react.xyz/docs/rules/no-component-will-update)
+   * - `Children`: [`eslint-react/no-children-count`](https://eslint-react.xyz/docs/rules/no-children-count), [`eslint-react/no-children-for-each`](https://eslint-react.xyz/docs/rules/no-children-for-each), [`eslint-react/no-children-map`](https://eslint-react.xyz/docs/rules/no-children-map), [`eslint-react/no-children-only`](https://eslint-react.xyz/docs/rules/no-children-only), [`eslint-react/no-children-to-array`](https://eslint-react.xyz/docs/rules/no-children-to-array)
+   * - `cloneElement`: [`eslint-react/no-clone-element`](https://eslint-react.xyz/docs/rules/no-clone-element)
+   * - `classComponent`: [`eslint-react/no-class-component`](https://eslint-react.xyz/docs/rules/no-class-component)
+   * - `createRef`: [`eslint-react/no-create-ref`](https://eslint-react.xyz/docs/rules/no-create-ref)
+   * - `forwardRef`: [`eslint-react/no-forward-ref`](https://eslint-react.xyz/docs/rules/no-forward-ref)
+   * - `componentWillMount`: [`eslint-react/no-component-will-mount`](https://eslint-react.xyz/docs/rules/no-component-will-mount)
+   * - `componentWillReceiveProps`: [`eslint-react/no-component-will-receive-props`](https://eslint-react.xyz/docs/rules/no-component-will-receive-props)
+   * - `componentWillUpdate`: [`eslint-react/no-component-will-update`](https://eslint-react.xyz/docs/rules/no-component-will-update)
    */
   noLegacyApis?: Partial<
     Record<
@@ -282,7 +282,7 @@ export interface ReactEslintConfigOptions<
   /**
    * Enables or specifies the configuration for
    * [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks) plugin,
-   * as well as `no-direct-set-state-in-use-effect` rule from `@eslint-react/eslint-plugin`
+   * as well as `eslint-react/no-direct-set-state-in-use-effect` rule from `@eslint-react/eslint-plugin`
    * (unless `pluginX` option is set to `never` on `react` config).
    *
    * By default will use the same `files` and `ignores` as the parent config.
@@ -425,7 +425,7 @@ export interface ReactEslintConfigOptions<
    * Affected rules:
    * - [`eslint-react/prefer-shorthand-boolean`](https://eslint-react.xyz/docs/rules/prefer-shorthand-boolean)
    * - [`eslint-react/avoid-shorthand-boolean`](https://eslint-react.xyz/docs/rules/avoid-shorthand-boolean)
-   * - [`jsx-boolean-value`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-boolean-value.md)
+   * - [`react/jsx-boolean-value`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-boolean-value.md)
    * @default 'prefer'
    */
   shorthandBoolean?: 'prefer' | 'prefer-error' | 'avoid' | 'avoid-error' | 'off';
@@ -439,7 +439,7 @@ export interface ReactEslintConfigOptions<
    * Affected rules:
    * - [`eslint-react/prefer-shorthand-fragment`](https://eslint-react.xyz/docs/rules/prefer-shorthand-fragment)
    * - [`eslint-react/avoid-shorthand-fragment`](https://eslint-react.xyz/docs/rules/avoid-shorthand-fragment)
-   * - [`jsx-fragments`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-fragments.md)
+   * - [`react/jsx-fragments`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-fragments.md)
    * @default true
    */
   shorthandFragment?: 'prefer' | 'prefer-error' | 'avoid' | 'avoid-error' | 'off';

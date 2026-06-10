@@ -26,13 +26,13 @@ export interface EmberEslintConfigOptions<
 
   /**
    * Affected rules:
-   * - [`computed-property-getters`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/computed-property-getters.md)
+   * - [`ember/computed-property-getters`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/computed-property-getters.md)
    */
   enforceGettersInComputedProperties?: GetRuleOptions<'ember', 'computed-property-getters'>;
 
   /**
    * Affected rules:
-   * - [`no-classic-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-classic-components.md)
+   * - [`ember/no-classic-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-classic-components.md)
    * @default true
    */
   enforceGlimmerComponents?: boolean;

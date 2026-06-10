@@ -26,13 +26,13 @@ export interface FastImportEslintConfigOptions<
 
   /**
    * Affected rule:
-   * - [`consistent-file-extensions`](https://github.com/nebrius/eslint-plugin-fast-import/blob/HEAD/src/rules/extension/README.md)
+   * - [`fast-import/consistent-file-extensions`](https://github.com/nebrius/eslint-plugin-fast-import/blob/HEAD/src/rules/extension/README.md)
    */
   enforceFileExtensions?: GetRuleOptions<'fast-import', 'consistent-file-extensions'>;
 
   /**
    * Affected rule:
-   * - [`no-restricted-imports`](https://github.com/nebrius/eslint-plugin-fast-import/blob/HEAD/src/rules/restricted/README.md)
+   * - [`fast-import/no-restricted-imports`](https://github.com/nebrius/eslint-plugin-fast-import/blob/HEAD/src/rules/restricted/README.md)
    */
   restrictImports?: GetRuleOptions<'fast-import', 'no-restricted-imports'>;
 }

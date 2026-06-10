@@ -115,10 +115,10 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   collectionsToSort?: PackageJsonCollectionsToSort;
 
   /**
-   * The list of top-level properties that won't be reported by `no-empty-fields` rule if empty.
+   * The list of top-level properties that won't be reported by `package-json/no-empty-fields` rule if empty.
    *
    * Affected rule:
-   * - [`no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md)
+   * - [`package-json/no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md)
    * @default `['browserslist']`
    */
   propertiesAllowedToBeEmpty?: string[];
@@ -143,7 +143,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * - `string[]`: custom list of disallowed properties.
    *
    * Affected rule:
-   * - [`restrict-private-properties`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-private-properties.md)
+   * - [`package-json/restrict-private-properties`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-private-properties.md)
    * @default false
    */
   disallowUnnecessaryPropertiesInPrivatePackages?: boolean | string[];
@@ -158,7 +158,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * `pnpm`, `babel`, etc).
    *
    * Affected rule:
-   * - [`restrict-top-level-properties`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-top-level-properties.md)
+   * - [`package-json/restrict-top-level-properties`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-top-level-properties.md)
    */
   banTopLevelProperties?: ArrayOrBooleanRecord<string, 'booleanOrMessage'> | 'popularTools';
 }

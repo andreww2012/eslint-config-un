@@ -19,7 +19,7 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
   'testing-library'
 > {
   /**
-   * By default, [`no-node-access` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-node-access.md) is enabled,
+   * By default, [`testing-library/no-node-access` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-node-access.md) is enabled,
    * which disallows DOM traversal using native HTML methods and properties.
    * This option allows the use of `firstChild` property
    * [to get the root element of the rendered element](https://testing-library.com/docs/react-testing-library/api/#container-1).
@@ -29,7 +29,7 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
 
   /**
    * Affected rule:
-   * - [`no-render-in-lifecycle`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-render-in-lifecycle.md)
+   * - [`testing-library/no-render-in-lifecycle`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-render-in-lifecycle.md)
    */
   allowTestingFrameworkSetupHook?: GetRuleOptions<
     'testing-library',
@@ -37,8 +37,8 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
   >['allowTestingFrameworkSetupHook'];
 
   /**
-   * - `explicit`: enables [`prefer-explicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-explicit-assert.md).
-   * - `implicit`: enables [`prefer-implicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-implicit-assert.md).
+   * - `explicit`: enables [`testing-library/prefer-explicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-explicit-assert.md).
+   * - `implicit`: enables [`testing-library/prefer-implicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-implicit-assert.md).
    *
    * By default, assert style is not enforced.
    */
@@ -46,7 +46,7 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
 
   /**
    * Affected rule:
-   * - [`prefer-query-matchers`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-query-matchers.md)
+   * - [`testing-library/prefer-query-matchers`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-query-matchers.md)
    */
   preferQueryMatchers?: PrettifyDeep<
     (GetRuleOptions<'testing-library', 'prefer-query-matchers'>['validEntries'] & {})[number][]
@@ -54,7 +54,7 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
 
   /**
    * Affected rule:
-   * - [`prefer-user-event`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-user-event.md)
+   * - [`testing-library/prefer-user-event`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-user-event.md)
    * @default true
    */
   preferUserEventOverFireEvent?: boolean | GetRuleOptions<'testing-library', 'prefer-user-event'>;
@@ -64,7 +64,7 @@ interface ReactSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends SharedConfigOptions<ExtraPlugins>, NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
   /**
    * Affected rule:
-   * - [`consistent-data-testid`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/consistent-data-testid.md)
+   * - [`testing-library/consistent-data-testid`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/consistent-data-testid.md)
    */
   consistentDataTestId?: GetRuleOptions<'testing-library', 'consistent-data-testid'>;
 }

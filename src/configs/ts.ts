@@ -421,7 +421,7 @@ export interface TsEslintConfigOptions<
   /**
    * Disallows any type assertions via [`eslint-plugin-no-type-assertion`](https://npmx.dev/eslint-plugin-no-type-assertion) plugin.
    *
-   * If you'd like to disallow only unsafe type assertions, enable [`no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule instead.
+   * If you'd like to disallow only unsafe type assertions, enable [`ts/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule instead.
    * @default false
    */
   configNoTypeAssertion?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'no-type-assertion'>;
@@ -473,20 +473,20 @@ export interface TsEslintConfigOptions<
 
   /**
    * If you have too many `no-unsafe-*` reports, you can disable them all using this option. All the rules disabled by this option are:
-   * - [`no-unsafe-argument`](https://typescript-eslint.io/rules/no-unsafe-argument)
-   * - [`no-unsafe-assignment`](https://typescript-eslint.io/rules/no-unsafe-assignment)
-   * - [`no-unsafe-call`](https://typescript-eslint.io/rules/no-unsafe-call)
-   * - [`no-unsafe-enum-comparison`](https://typescript-eslint.io/rules/no-unsafe-enum-comparison)
-   * - [`no-unsafe-member-access`](https://typescript-eslint.io/rules/no-unsafe-member-access)
-   * - [`no-unsafe-return`](https://typescript-eslint.io/rules/no-unsafe-return)
+   * - [`ts/no-unsafe-argument`](https://typescript-eslint.io/rules/no-unsafe-argument)
+   * - [`ts/no-unsafe-assignment`](https://typescript-eslint.io/rules/no-unsafe-assignment)
+   * - [`ts/no-unsafe-call`](https://typescript-eslint.io/rules/no-unsafe-call)
+   * - [`ts/no-unsafe-enum-comparison`](https://typescript-eslint.io/rules/no-unsafe-enum-comparison)
+   * - [`ts/no-unsafe-member-access`](https://typescript-eslint.io/rules/no-unsafe-member-access)
+   * - [`ts/no-unsafe-return`](https://typescript-eslint.io/rules/no-unsafe-return)
    *
-   * Note: this option does not affect [`no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule, which is disabled by default.
+   * Note: this option does not affect [`ts/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule, which is disabled by default.
    */
   disableNoUnsafeRules?: boolean;
 
   /**
    * Which special variable types should be subject to removal by
-   * [`no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) (if unused).
+   * [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) (if unused).
    *
    * Will be merged with the default value.
    * @default {imports: true}

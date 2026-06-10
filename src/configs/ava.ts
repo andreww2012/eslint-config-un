@@ -21,7 +21,7 @@ export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
    * If omitted, no reports about the assertion message will be made.
    *
    * Affected rules:
-   * - [`assertion-arguments`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/assertion-arguments.md)
+   * - [`ava/assertion-arguments`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/assertion-arguments.md)
    */
   enforceAssertionMessage?: boolean;
 
@@ -29,14 +29,14 @@ export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
    * Enforce a limit on the number of assertions in a test.
    *
    * Affected rules:
-   * - [`max-asserts`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/max-asserts.md)
+   * - [`ava/max-asserts`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/max-asserts.md)
    */
   enforceMaxAssertions?: number;
 }
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
-    configNoOnlyTests: false, // has `no-only-test` rule
+    configNoOnlyTests: false, // has `ava/no-only-test` rule
   });
 
   const {configNoOnlyTests, enforceAssertionMessage, enforceMaxAssertions} = optionsResolved;

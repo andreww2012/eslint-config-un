@@ -33,7 +33,7 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
 
   /**
    * Affected rules:
-   * - [`consistent-interface`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/docs/rules/consistent-interface.md)
+   * - [`mocha/consistent-interface`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/docs/rules/consistent-interface.md)
    */
   enforceInterface?: GetRuleOptions<'mocha', 'consistent-interface'>['interface'];
 
@@ -41,7 +41,7 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
    * Enforce the max number of top-level suites in a single file.
    *
    * Affected rules:
-   * - [`max-top-level-suites`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/max-top-level-suites.md)
+   * - [`vitest/max-top-level-suites`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/max-top-level-suites.md)
    * @default 1
    */
   maxTopLevelSuites?: number;

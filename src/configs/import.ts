@@ -32,14 +32,14 @@ export interface ImportEslintConfigOptions<
 
   /**
    * Whether the use of dependencies from `devDependencies` is not going to be reported by
-   * the [`no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md) rule. You can specify glob patterns or allow
+   * the [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md) rule. You can specify glob patterns or allow
    * universally by setting this option to `true`.
    * @default false <=> `mode` root option is set to `lib`
    */
   allowDevDependencies?: string[] | boolean;
 
   /**
-   * Package names that will be not be reported by [`no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md) rule.
+   * Package names that will be not be reported by [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md) rule.
    *
    * Use case: you're linting library code and some packages are bundled.
    */
