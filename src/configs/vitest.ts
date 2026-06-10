@@ -62,6 +62,16 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   };
 
   /**
+   * Names that will be treated as assertions in addition to the rule defaults
+   * (`expect`, `assert`), a shortcut for setting the `assertFunctionNames` option
+   * of the affected rule.
+   *
+   * Affected rule:
+   * - [`vitest/expect-expect`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/expect-expect.md)
+   */
+  additionalAssertions?: string[];
+
+  /**
    * Explicitly specify or ignore files written in TypeScript.
    * Will be used to enable TypeScript-specific rules like
    * [`vitest/unbound-method`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/unbound-method.md).
@@ -120,6 +130,11 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   vitestGlobalsImporting?: 'disallow' | 'enforce' | 'any';
 }
 
+// Mirrors `defaultOptions` of `vitest/expect-expect`. The `typecheck`-conditional
+// `expectTypeOf`/`assertType` are appended by the rule itself based on settings.
+// Source: https://github.com/vitest-dev/eslint-plugin-vitest/blob/9cca3c31e355d41e615964dcf7ffd7a9df338ab6/src/rules/expect-expect.ts
+const EXPECT_EXPECT_DEFAULT_ASSERT_FUNCTION_NAMES = ['expect', 'assert'];
+
 const VITEST_RULES_REQUIRING_TYPE_INFORMATION = [
   'unbound-method',
 ] satisfies GetRuleNamesInPlugin<'vitest'>[];
@@ -153,6 +168,7 @@ export default (async (context, optionsRaw) => {
     settings: pluginSettings,
     configNoOnlyTests,
     configTypescript,
+    additionalAssertions,
     enforceEachOrFor,
     enforceToBeCalledStyle,
     maxAssertionCalls,
@@ -234,7 +250,20 @@ export default (async (context, optionsRaw) => {
         : generateConsistentTestItOptions(optionsResolved),
     ) /** @since 0.0.29 */
     .addRule('consistent-vitest-vi', ERROR) /** @since 1.2.5 */ // (warns in all)
-    .addRule('expect-expect', ERROR) /** @since 0.0.17 */ // 🟢
+    .addRule(
+      'expect-expect',
+      ERROR,
+      additionalAssertions?.length
+        ? [
+            {
+              assertFunctionNames: [
+                ...EXPECT_EXPECT_DEFAULT_ASSERT_FUNCTION_NAMES,
+                ...additionalAssertions,
+              ],
+            },
+          ]
+        : [],
+    ) /** @since 0.0.17 */ // 🟢
     .addRule('hoisted-apis-on-top', ERROR) /** @since 1.3.7 */ // (warns in all)
     .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [
       {max: maxAssertionCalls},

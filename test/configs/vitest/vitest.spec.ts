@@ -411,6 +411,36 @@ describe('options', () => {
     });
   });
 
+  describe('option: `additionalAssertions`', () => {
+    it('does not pass options to `expect-expect` by default', async () => {
+      const configResult = await computeEslintConfig('vitest');
+
+      expect(configResult.getRuleEntry('vitest', 'vitest/expect-expect')).toMatchInlineSnapshot(
+        '2',
+      );
+    });
+
+    it('sets `assertFunctionNames` preserving the rule defaults', async () => {
+      const configResult = await computeEslintConfig({
+        vitest: {additionalAssertions: ['assertThat', 'verify']},
+      });
+
+      expect(configResult.getRuleEntry('vitest', 'vitest/expect-expect')).toMatchInlineSnapshot(
+        '[2, {"assertFunctionNames": ["expect", "assert", "assertThat", "verify"]}]',
+      );
+    });
+
+    it('does not pass options to `expect-expect` when set to an empty array', async () => {
+      const configResult = await computeEslintConfig({
+        vitest: {additionalAssertions: []},
+      });
+
+      expect(configResult.getRuleEntry('vitest', 'vitest/expect-expect')).toMatchInlineSnapshot(
+        '2',
+      );
+    });
+  });
+
   describe('vitest version', () => {
     it('disables `vitest/prefer-called-exactly-once-with` rule for vitest 2', async () => {
       const configResult = await computeEslintConfig('vitest');
