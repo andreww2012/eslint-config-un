@@ -787,6 +787,7 @@ const ALL_STYLISTIC_RULES = {
     // None
   },
   un: {
+    'no-empty-object-ternary-spread': true,
     'prefer-early-return': true,
   },
   // Won't include: no-console-spaces, prefer-array-find, prefer-array-some, prefer-math-trunc, prefer-modern-math-apis, prefer-string-starts-ends-with
@@ -821,6 +822,7 @@ const ALL_STYLISTIC_RULES = {
     'no-unnecessary-nested-ternary': true,
     'no-unreadable-array-destructuring': true,
     'no-unreadable-iife': true,
+    'no-useless-collection-argument': true,
     'no-useless-fallback-in-spread': true,
     'no-zero-fractions': true,
     'number-literal-case': true,
