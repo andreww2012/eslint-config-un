@@ -183,7 +183,7 @@ describe('un options', () => {
 });
 
 describe('options', () => {
-  describe('option: `disableNoUnsafeRules`', () => {
+  describe('option: `configDisableNoUnsafe`', () => {
     const NO_UNSAFE_RULES = [
       'ts/no-unsafe-argument',
       'ts/no-unsafe-assignment',
@@ -193,28 +193,38 @@ describe('options', () => {
       'ts/no-unsafe-return',
     ] as const;
 
-    it('does not disable `ts/no-unsafe-*` rules by default', async () => {
+    it('enables `ts/no-unsafe-*` rules as warnings and does not create the `ts/disable-no-unsafe` config by default', async () => {
       const configResult = await computeEslintConfig('ts');
 
       expect(configResult.getRuleSeverities('ts/type-aware/rules')).toMatchObject(
         Object.fromEntries(NO_UNSAFE_RULES.map((rule) => [rule, 1])),
       );
+      expect(configResult.getConfigByUnPostfix('ts/disable-no-unsafe')).toBeUndefined();
     });
 
-    it('disables `ts/no-unsafe-*` rules when set to `true`', async () => {
-      const configResult = await computeEslintConfig({ts: {disableNoUnsafeRules: true}});
+    it('does not create the `ts/disable-no-unsafe` config when set to `false`', async () => {
+      const configResult = await computeEslintConfig({ts: {configDisableNoUnsafe: false}});
 
-      expect(configResult.getRuleSeverities('ts/type-aware/rules')).toMatchObject(
+      expect(configResult.getConfigByUnPostfix('ts/disable-no-unsafe')).toBeUndefined();
+    });
+
+    it('disables `ts/no-unsafe-*` rules in the `ts/disable-no-unsafe` config when set to `true`', async () => {
+      const configResult = await computeEslintConfig({ts: {configDisableNoUnsafe: true}});
+
+      expect(configResult.getRuleSeverities('ts/disable-no-unsafe')).toMatchObject(
         Object.fromEntries(NO_UNSAFE_RULES.map((rule) => [rule, 0])),
       );
     });
 
-    it('does not disable `ts/no-unsafe-*` rules when set to `false`', async () => {
-      const configResult = await computeEslintConfig({ts: {disableNoUnsafeRules: false}});
+    it('allows overriding `ts/no-unsafe-*` rules via the sub-config `overrides`', async () => {
+      const configResult = await computeEslintConfig({
+        ts: {configDisableNoUnsafe: {overrides: {'ts/no-unsafe-call': 'error'}}},
+      });
 
-      expect(configResult.getRuleSeverities('ts/type-aware/rules')).toMatchObject(
-        Object.fromEntries(NO_UNSAFE_RULES.map((rule) => [rule, 1])),
-      );
+      expect(configResult.getRuleSeverities('ts/disable-no-unsafe')).toMatchObject({
+        ...Object.fromEntries(NO_UNSAFE_RULES.map((rule) => [rule, 0])),
+        'ts/no-unsafe-call': 2,
+      });
     });
   });
 

@@ -11,11 +11,12 @@ import {
 } from '../constants';
 import type {
   EslintTypedRulesConfig,
+  GetRuleNamesInPlugin,
   UnFlatConfigEntryFilesAndIgnores,
 } from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Nullable, ObjectValues, OmitStrict, Prettify} from '../types';
-import {type MaybeFn, isIn, maybeCall, omit} from '../utils';
+import {type MaybeFn, allUnionMembers, isIn, maybeCall, omit} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
@@ -35,6 +36,29 @@ type TypeAwareRulesWithPrefixes = Pick<
   UnRulesConfigPartial<'ts'>,
   `ts/${(typeof TS_PLUGIN_TYPE_AWARE_RULES)[number]}`
 >;
+
+type TsPluginNoUnsafeRules =
+  | 'no-unsafe-argument'
+  | 'no-unsafe-assignment'
+  | 'no-unsafe-call'
+  | 'no-unsafe-enum-comparison'
+  | 'no-unsafe-member-access'
+  | 'no-unsafe-return'
+  | 'no-unsafe-type-assertion';
+
+const TS_PLUGIN_NO_UNSAFE_RULES_SET = new Set<string>(
+  allUnionMembers<TsPluginNoUnsafeRules>()([
+    'no-unsafe-argument',
+    'no-unsafe-assignment',
+    'no-unsafe-call',
+    'no-unsafe-enum-comparison',
+    'no-unsafe-member-access',
+    'no-unsafe-return',
+    'no-unsafe-type-assertion',
+  ] satisfies GetRuleNamesInPlugin<'ts'>[]),
+);
+
+type NoUnsafeRulesWithPrefixes = Pick<UnRulesConfigPartial<'ts'>, `ts/${TsPluginNoUnsafeRules}`>;
 
 type TsconfigTopLevelKeys =
   | 'files'
@@ -427,6 +451,20 @@ export interface TsEslintConfigOptions<
   configNoTypeAssertion?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'no-type-assertion'>;
 
   /**
+   * If you have too many `no-unsafe-*` reports, you can disable them all by enabling this config.
+   * The rules disabled by this config are:
+   * - [`ts/no-unsafe-argument`](https://typescript-eslint.io/rules/no-unsafe-argument)
+   * - [`ts/no-unsafe-assignment`](https://typescript-eslint.io/rules/no-unsafe-assignment)
+   * - [`ts/no-unsafe-call`](https://typescript-eslint.io/rules/no-unsafe-call)
+   * - [`ts/no-unsafe-enum-comparison`](https://typescript-eslint.io/rules/no-unsafe-enum-comparison)
+   * - [`ts/no-unsafe-member-access`](https://typescript-eslint.io/rules/no-unsafe-member-access)
+   * - [`ts/no-unsafe-return`](https://typescript-eslint.io/rules/no-unsafe-return)
+   * - [`ts/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion)
+   * @default false
+   */
+  configDisableNoUnsafe?: boolean | UnFlatConfigEntryBase<ExtraPlugins, NoUnsafeRulesWithPrefixes>;
+
+  /**
    * Sorts the keys of `tsconfig.json` files.
    * @default false
    */
@@ -470,19 +508,6 @@ export interface TsEslintConfigOptions<
    * @example ['vue']
    */
   extraFileExtensions?: string[];
-
-  /**
-   * If you have too many `no-unsafe-*` reports, you can disable them all using this option. All the rules disabled by this option are:
-   * - [`ts/no-unsafe-argument`](https://typescript-eslint.io/rules/no-unsafe-argument)
-   * - [`ts/no-unsafe-assignment`](https://typescript-eslint.io/rules/no-unsafe-assignment)
-   * - [`ts/no-unsafe-call`](https://typescript-eslint.io/rules/no-unsafe-call)
-   * - [`ts/no-unsafe-enum-comparison`](https://typescript-eslint.io/rules/no-unsafe-enum-comparison)
-   * - [`ts/no-unsafe-member-access`](https://typescript-eslint.io/rules/no-unsafe-member-access)
-   * - [`ts/no-unsafe-return`](https://typescript-eslint.io/rules/no-unsafe-return)
-   *
-   * Note: this option does not affect [`ts/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule, which is disabled by default.
-   */
-  disableNoUnsafeRules?: boolean;
 
   /**
    * Which special variable types should be subject to removal by
@@ -541,6 +566,7 @@ export default ((
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypeAware: true,
     configNoTypeAssertion: false,
+    configDisableNoUnsafe: false,
     configSortTsconfigKeys: false,
     extraFileExtensions: [
       context.configsMeta.astro.enabled && 'astro',
@@ -554,6 +580,7 @@ export default ((
     configSetup,
     configTypeAware,
     configNoTypeAssertion,
+    configDisableNoUnsafe,
     configSortTsconfigKeys,
     extraFileExtensions,
     inheritBaseRuleSeverityAndOptionsForExtensionRules: inheritFromBase,
@@ -732,8 +759,6 @@ export default ((
     },
     'ts',
   );
-
-  const noUnsafeRulesSeverity = optionsResolved.disableNoUnsafeRules ? OFF : WARNING;
 
   const classMethodUseThisOptions: GetRuleOptions<'ts', 'class-methods-use-this', 'all'> = [
     {
@@ -1081,12 +1106,12 @@ export default ((
     .addRule('no-unnecessary-type-assertion', ERROR) /** @since 1.2.0 */ // 🟣
     .addRule('no-unnecessary-type-conversion', ERROR) /** @since 8.32.0 */
     .addRule('no-unnecessary-type-parameters', ERROR) /** @since 7.16.0 */ // 🟣
-    .addRule('no-unsafe-argument', noUnsafeRulesSeverity) /** @since 4.21.0 */ // 🟣
-    .addRule('no-unsafe-assignment', noUnsafeRulesSeverity) /** @since 2.28.0 */ // 🟣
-    .addRule('no-unsafe-call', noUnsafeRulesSeverity) /** @since 2.23.0 */ // 🟣
-    .addRule('no-unsafe-enum-comparison', noUnsafeRulesSeverity) /** @since 5.58.0 */ // 🟣
-    .addRule('no-unsafe-member-access', noUnsafeRulesSeverity) /** @since 2.23.0 */ // 🟣
-    .addRule('no-unsafe-return', noUnsafeRulesSeverity) /** @since 2.23.0 */ // 🟣
+    .addRule('no-unsafe-argument', WARNING) /** @since 4.21.0 */ // 🟣
+    .addRule('no-unsafe-assignment', WARNING) /** @since 2.28.0 */ // 🟣
+    .addRule('no-unsafe-call', WARNING) /** @since 2.23.0 */ // 🟣
+    .addRule('no-unsafe-enum-comparison', WARNING) /** @since 5.58.0 */ // 🟣
+    .addRule('no-unsafe-member-access', WARNING) /** @since 2.23.0 */ // 🟣
+    .addRule('no-unsafe-return', WARNING) /** @since 2.23.0 */ // 🟣
     .addRule('no-unsafe-type-assertion', OFF) /** @since 8.15.0 */
     .addRule('no-unsafe-unary-minus', ERROR) /** @since 6.11.0 */ // 🟣
     .addRule('no-useless-default-assignment', ERROR) /** @since 8.50.0 */ // 🟣
@@ -1253,6 +1278,27 @@ export default ((
     // Allow `export {}` to be present to ensure the file is a module
     .disableAnyRule('unicorn', 'require-module-specifiers');
 
+  const configBuilderDisableNoUnsafe = context.createConfigBuilder(configDisableNoUnsafe, 'ts');
+  configBuilderDisableNoUnsafe
+    ?.addConfig([
+      'ts/disable-no-unsafe',
+      {
+        includeDefaultFilesAndIgnores: true,
+      },
+    ])
+    .addRule('no-unsafe-argument', OFF)
+    .addRule('no-unsafe-assignment', OFF)
+    .addRule('no-unsafe-call', OFF)
+    .addRule('no-unsafe-enum-comparison', OFF)
+    .addRule('no-unsafe-member-access', OFF)
+    .addRule('no-unsafe-return', OFF)
+    .addRule('no-unsafe-type-assertion', OFF)
+    .enableConfigTesterForPlugin('ts', {
+      /* v8 ignore next */
+      rulesToSkipInConfig: (ruleName) => !TS_PLUGIN_NO_UNSAFE_RULES_SET.has(ruleName),
+    })
+    .addOverrides();
+
   const configBuilderNoTypeAssertions = context.createConfigBuilder(
     configNoTypeAssertion,
     'no-type-assertion',
@@ -1345,6 +1391,7 @@ export default ((
 
       configBuilderTypeAwareSetup,
       configBuilderTypeAware,
+      configBuilderDisableNoUnsafe,
 
       configBuilderDts,
       configBuilderNoTypeAssertions,
