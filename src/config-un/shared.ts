@@ -605,6 +605,17 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   disabledAutofixes: Partial<Record<PluginPrefix, string[]>>;
 
   /**
+   * Maps canonical plugin prefix → unprefixed rule name → whether the rule supports autofix.
+   * Used to decide whether a disabled rule has a `disable-autofix/...` counterpart to disable
+   * too (the counterpart only exists for fixable rules).
+   *
+   * Loaded from the generated `eslint-types-fixable-only.gen` file via a dynamic import to avoid
+   * a static import cycle: that file is produced by the typegen script, which itself loads the
+   * core config functionality that consumes this data.
+   */
+  fixableRulesPerPlugin: Partial<Record<string, Partial<Record<string, boolean>>>>;
+
+  /**
    * NOTE: mutable
    */
   usedPlugins: Set<PluginPrefix | (string & {})>;

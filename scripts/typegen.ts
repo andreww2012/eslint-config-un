@@ -3,7 +3,7 @@ import path from 'node:path';
 import {styleText} from 'node:util';
 import * as diff from 'diff';
 import {capitalize} from 'es-toolkit';
-import {flatConfigsToRulesDTS, pluginsToRulesDTS} from 'eslint-typegen/core';
+import {pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
 import prettier from 'prettier';
 import prettierConfig from '../.prettierrc.json' with {type: 'json'};
@@ -51,10 +51,11 @@ await Promise.all([
       fs.writeFile(path.join(__dirname, '../src/eslint-types.gen.d.ts'), formattedCode),
     ),
   fs.writeFile(path.join(__dirname, '../src/eslint-types-per-plugin.gen.d.ts'), perPluginCode),
-  fs.writeFile(
-    path.join(__dirname, '../src/eslint-types-fixable-only.gen.d.ts'),
-    fixableRulesOnlyCode,
-  ),
+  prettier
+    .format(fixableRulesOnlyCode, {parser: 'typescript', ...prettierConfig})
+    .then((formattedCode) =>
+      fs.writeFile(path.join(__dirname, '../src/eslint-types-fixable-only.gen.ts'), formattedCode),
+    ),
   fs.writeFile(path.join(__dirname, '../src/eslint-rules.gen.ts'), allRulesCode),
   fs.writeFile(
     resolveInOutDir(`eslint-types.${new Date().toISOString().replaceAll(':', '')}.d.ts`),
@@ -68,7 +69,7 @@ async function generateRuleTypes() {
     {plugin: pluginAngular, pluginTemplate: pluginAngularTemplate},
     pluginsWithAddedRuleOptionSchemas,
   ] = await Promise.all([
-    eslintConfigInternal({loadPluginsOnDemand: false}),
+    eslintConfigInternal({loadPluginsOnDemand: false, autofixDisabledGloballyFor: false}),
     generateAngularPluginsWithOldRules(),
     addMissingRuleOptionsSchemas(),
   ]);
@@ -88,26 +89,10 @@ async function generateRuleTypes() {
     pluginsWithAddedRuleOptionSchemas,
   );
 
-  const [allRuleTypesCodeRaw, fixableRulesOnlyCodeRaw, perPluginCodeRaw] = await Promise.all([
+  const [allRuleTypesCodeRaw, perPluginCodeRaw] = await Promise.all([
     pluginsToRulesDTS(allPlugins, {
       includeAugmentation: false,
     }),
-
-    flatConfigsToRulesDTS(
-      [
-        ...(await eslintConfigInternal(
-          {
-            loadPluginsOnDemand: false,
-            configs: {
-              // If Angular is not found installed, plugin is not generated
-              angular: true,
-            },
-          },
-          {disableAutofixForAllFixableRulesOnly: true},
-        )),
-      ],
-      {includeAugmentation: false},
-    ),
 
     Promise.all(
       Object.entries(allPlugins).map(async ([pluginName, plugin]) => {
@@ -151,8 +136,36 @@ export type RuleOptionsPerPlugin = {
 ${perPluginCodeRaw.map((v) => `  '${v.pluginName}': ${v.exportTypeName};`).join('\n')}
 }\n`.replaceAll(/: Linter.RuleEntry<([^>]*)>/g, ': $1;');
 
+  const fixableRulesPerPluginEntries = perPluginCodeRaw
+    .map(({pluginName, plugin}) => {
+      const fixableRuleNames = Object.entries(plugin.rules || {})
+        .filter(([, ruleDefinition]) => ruleDefinition.meta?.fixable)
+        .map(([ruleName]) => ruleName);
+      return {pluginName, fixableRuleNames};
+    })
+    .filter(({fixableRuleNames}) => fixableRuleNames.length > 0);
+
   // eslint-disable-next-line ts/no-shadow
-  const fixableRulesOnlyCode = `export type FixableRuleNames = ${Array.from(fixableRulesOnlyCodeRaw.matchAll(/'disable-autofix\/([^']*)'/g), (match) => `'${match[1]}'`).join(' | ')};\n`;
+  const fixableRulesOnlyCode = `const FIXABLE_RULES_PER_PLUGIN_RAW = /* ${fixableRulesPerPluginEntries.length} plugin${fixableRulesPerPluginEntries.length === 1 ? '' : 's'} */ {
+${fixableRulesPerPluginEntries
+  .map(
+    ({pluginName, fixableRuleNames}) =>
+      `  '${pluginName}': /* ${fixableRuleNames.length} rule${fixableRuleNames.length === 1 ? '' : 's'} */ {
+${fixableRuleNames.map((ruleName) => `    '${ruleName}': true,`).join('\n')}
+  },`,
+  )
+  .join('\n')}
+};
+
+export const FIXABLE_RULES_PER_PLUGIN: Partial<Record<string, Partial<Record<string, boolean>>>> =
+  FIXABLE_RULES_PER_PLUGIN_RAW;
+
+export type FixableRuleNames = {
+  [P in keyof typeof FIXABLE_RULES_PER_PLUGIN_RAW]: P extends ''
+    ? keyof (typeof FIXABLE_RULES_PER_PLUGIN_RAW)[P] & string
+    : \`\${P & string}/\${keyof (typeof FIXABLE_RULES_PER_PLUGIN_RAW)[P] & string}\`;
+}[keyof typeof FIXABLE_RULES_PER_PLUGIN_RAW];
+`;
 
   // eslint-disable-next-line ts/no-shadow
   const allRulesCode = `export const ALL_RULES_PER_PLUGIN = /* ${perPluginCodeRaw.length} plugin${perPluginCodeRaw.length === 1 ? '' : 's'} */ {

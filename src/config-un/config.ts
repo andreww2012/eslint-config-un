@@ -176,7 +176,15 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   const {cacheConfigs} = optionsResolved;
   debug(`Is config caching enabled: ${cacheConfigs}`);
 
-  const usedPackageManager = await detectPackageManager();
+  const [usedPackageManager, fixableRulesPerPlugin] = await Promise.all([
+    detectPackageManager(),
+    // The file may be absent since it's generated, and its generator script
+    // executes this code
+    import('../eslint-types-fixable-only.gen')
+      .then((module) => module.FIXABLE_RULES_PER_PLUGIN)
+      .catch(() => ({})),
+  ]);
+
   debug(`Detected package manager: ${usedPackageManager?.name ?? '<not detected>'}`);
 
   const typeInfoRulesRaw = optionsResolved.typeInfoRules;
@@ -209,6 +217,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     configsMeta: {},
     typeInfoRulesResolved,
     disabledAutofixes: {},
+    fixableRulesPerPlugin,
     usedPlugins: new Set(),
     usedParsers: new Map(),
     usedPackages: new Map(),

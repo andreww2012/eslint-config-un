@@ -29,6 +29,7 @@ import type {
 import {
   eslintToUnRuleSeverity,
   genFlatConfigEntryName,
+  getRuleNameAndPluginPrefixByFullName,
   resolveFullRuleName,
 } from '../eslint/eslint-utils';
 import {
@@ -495,9 +496,12 @@ export class ConfigEntryBuilder<
       /* v8 ignore stop */
 
       if (severityResolved === OFF) {
-        // TODO is it possible to encounter disable-autofix rule here?
         // If the rule is disabled, disable its autofix counterpart rule as well
-        if (!ruleNameResolved.startsWith(DISABLE_AUTOFIX_WITH_SLASH)) {
+        if (
+          // TODO is it even possible to encounter disable-autofix rule here?
+          !ruleNameResolved.startsWith(DISABLE_AUTOFIX_WITH_SLASH) &&
+          this.context.fixableRulesPerPlugin[plugin]?.[ruleNameUnprefixed]
+        ) {
           configFinal.rules[`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameResolved}`] = OFF;
         }
       } else {
@@ -550,10 +554,10 @@ export class ConfigEntryBuilder<
       ) => {
         const ruleNameResolved = resolveFullRuleName(this.context, plugin, ruleNameUnprefixed);
 
-        Object.assign(configFinal.rules, {
-          [ruleNameResolved]: 0,
-          [`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameResolved}`]: 0,
-        });
+        configFinal.rules[ruleNameResolved] = OFF;
+        if (this.context.fixableRulesPerPlugin[plugin]?.[ruleNameUnprefixed]) {
+          configFinal.rules[`${DISABLE_AUTOFIX_WITH_SLASH}${ruleNameResolved}`] = OFF;
+        }
 
         return result;
       },
@@ -575,20 +579,22 @@ export class ConfigEntryBuilder<
       },
 
       disableBulkRules: (rules: (UnAllRuleNames | (string & {}))[] | FalsyValue) => {
-        processUnOrFlatConfig(
-          this.context,
-          configFinal,
-          Object.fromEntries(
-            (rules || []).flatMap(
-              (ruleName) =>
-                [
-                  [ruleName, OFF],
-                  [`${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`, OFF],
-                ] as const,
-            ),
-          ),
-          this,
-        );
+        if (rules && rules.length > 0) {
+          const newRuleEntries = Object.fromEntries(
+            rules.flatMap((ruleName) => {
+              const {pluginPrefixCanonical, ruleNameUnprefixed} =
+                getRuleNameAndPluginPrefixByFullName(this.context, ruleName);
+              const entries: [string, typeof OFF][] = [[ruleName, OFF]];
+              if (this.context.fixableRulesPerPlugin[pluginPrefixCanonical]?.[ruleNameUnprefixed]) {
+                entries.push([`${DISABLE_AUTOFIX_WITH_SLASH}${ruleName}`, OFF]);
+              }
+              return entries;
+            }),
+          );
+
+          processUnOrFlatConfig(this.context, configFinal, newRuleEntries, this);
+        }
+
         return result;
       },
 
