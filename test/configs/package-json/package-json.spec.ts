@@ -258,6 +258,36 @@ describe('options', () => {
         configResult.getRuleEntry('package-json', 'package-json/no-empty-fields'),
       ).toMatchInlineSnapshot('2');
     });
+
+    it('merges a record with the default list in `package-json/no-empty-fields` rule', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {propertiesAllowedToBeEmpty: {config: true}},
+      });
+
+      expect(
+        configResult.getRuleEntry('package-json', 'package-json/no-empty-fields'),
+      ).toMatchInlineSnapshot('[2, {"ignoreProperties": ["browserslist", "config"]}]');
+    });
+
+    it('disables a default property via the record form in `package-json/no-empty-fields` rule', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {propertiesAllowedToBeEmpty: {config: true, browserslist: false}},
+      });
+
+      expect(
+        configResult.getRuleEntry('package-json', 'package-json/no-empty-fields'),
+      ).toMatchInlineSnapshot('[2, {"ignoreProperties": ["config"]}]');
+    });
+
+    it('passes no options to `package-json/no-empty-fields` rule when the default is disabled via the record form', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {propertiesAllowedToBeEmpty: {browserslist: false}},
+      });
+
+      expect(
+        configResult.getRuleEntry('package-json', 'package-json/no-empty-fields'),
+      ).toMatchInlineSnapshot('2');
+    });
   });
 
   describe('`publishable`', () => {

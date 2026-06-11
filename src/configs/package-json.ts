@@ -51,6 +51,10 @@ const DEFAULT_COLLECTIONS_TO_SORT = {
   'pnpm.peerDependencyRules.allowedVersions': true,
 } satisfies PackageJsonCollectionsToSort;
 
+const DEFAULT_PROPERTIES_ALLOWED_TO_BE_EMPTY = {
+  browserslist: true,
+} satisfies Partial<Record<string, boolean>>;
+
 type IsRequireRule<RuleName extends string> = RuleName extends `require-${infer RequirableField}`
   ? RequirableField
   : never;
@@ -132,11 +136,15 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   /**
    * The list of top-level properties that won't be reported by `package-json/no-empty-fields` rule if empty.
    *
+   * When provided as an array, it *replaces* the default list. When provided as an object,
+   * it is *merged* with the default list, so you can disable a default entry
+   * by setting it to `false` (e.g. `{browserslist: false}`).
+   *
    * Affected rule:
    * - [`package-json/no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md)
-   * @default `['browserslist']`
+   * @default {browserslist: true}
    */
-  propertiesAllowedToBeEmpty?: string[];
+  propertiesAllowedToBeEmpty?: ArrayOrBooleanRecord;
 
   /**
    * Indicate that the linted files are for publishable packages.
@@ -182,7 +190,6 @@ export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     order: 'sort-package-json',
     repositoryShorthand: 'object',
-    propertiesAllowedToBeEmpty: ['browserslist'],
     publishable: false,
   });
 
@@ -195,6 +202,12 @@ export default ((context, optionsRaw) => {
     publishable,
     banTopLevelProperties: banTopLevelPropertiesRaw,
   } = optionsResolved;
+
+  const propertiesAllowedToBeEmptyList = getKeysOfTruthyValues(
+    Array.isArray(propertiesAllowedToBeEmpty)
+      ? propertiesAllowedToBeEmpty
+      : {...DEFAULT_PROPERTIES_ALLOWED_TO_BE_EMPTY, ...propertiesAllowedToBeEmpty},
+  );
 
   const banTopLevelProperties = banTopLevelPropertiesRaw
     ? banTopLevelPropertiesRaw === 'popularTools'
@@ -238,10 +251,10 @@ export default ((context, optionsRaw) => {
     .addRule(
       'no-empty-fields',
       ERROR,
-      propertiesAllowedToBeEmpty.length > 0
+      propertiesAllowedToBeEmptyList.length > 0
         ? [
             {
-              ignoreProperties: propertiesAllowedToBeEmpty /** @since 0.47.0 */,
+              ignoreProperties: propertiesAllowedToBeEmptyList /** @since 0.47.0 */,
             },
           ]
         : [],
