@@ -1,5 +1,7 @@
 import {ERROR, GLOB_TS_X, OFF, WARNING} from '../constants';
+import {getKeysOfTruthyValues} from '../utils';
 import {
+  type ArrayOrBooleanRecord,
   type ExtraPluginsType,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
@@ -205,15 +207,18 @@ export interface JsdocEslintConfigOptions<
    * Affected rule:
    * - [`jsdoc/check-tag-names`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/check-tag-names.md)
    */
-  customTags?: string[];
+  customTags?: ArrayOrBooleanRecord;
 
   /**
-   * With be merged with the default list: `['ts-check', 'ts-expect-error', 'ts-ignore', 'ts-nocheck', '__PURE__', '__NO_SIDE_EFFECTS__', 'vite-ignore]`.
+   * Will be merged with the default list. When object notation is used, a default entry
+   * can be disabled by setting it to `false` (e.g. `{'ts-nocheck': false}`); when array
+   * notation is used, all elements are added to the default list.
    *
    * Affected rule:
    * - [`jsdoc/no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md)
+   * @default {'ts-check': true, 'ts-expect-error': true, 'ts-ignore': true, 'ts-nocheck': true, '__PURE__': true, '__NO_SIDE_EFFECTS__': true, 'vite-ignore': true}
    */
-  extraMultilineCommentsStartingWithToIgnore?: string[];
+  extraMultilineCommentsStartingWithToIgnore?: ArrayOrBooleanRecord;
 
   /**
    * Affected rule:
@@ -222,6 +227,18 @@ export interface JsdocEslintConfigOptions<
    */
   formatTypeValues?: boolean;
 }
+
+const DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE = {
+  // TypeScript directives
+  'ts-check': true,
+  'ts-expect-error': true,
+  'ts-ignore': true,
+  'ts-nocheck': true,
+  // https://github.com/javascript-compiler-hints/compiler-notations-spec
+  __PURE__: true,
+  __NO_SIDE_EFFECTS__: true,
+  'vite-ignore': true,
+} satisfies Partial<Record<string, boolean>>;
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -236,6 +253,15 @@ export default ((context, optionsRaw) => {
     extraMultilineCommentsStartingWithToIgnore,
     formatTypeValues,
   } = optionsResolved;
+
+  const customTagsList = getKeysOfTruthyValues(customTags);
+
+  const multilineCommentsStartingWithToIgnore = getKeysOfTruthyValues({
+    ...DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE,
+    ...(Array.isArray(extraMultilineCommentsStartingWithToIgnore)
+      ? Object.fromEntries(extraMultilineCommentsStartingWithToIgnore.map((name) => [name, true]))
+      : extraMultilineCommentsStartingWithToIgnore),
+  });
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'jsdoc');
 
@@ -274,7 +300,7 @@ export default ((context, optionsRaw) => {
     .addRule(
       'check-tag-names',
       ERROR,
-      customTags?.length ? [{definedTags: customTags}] : [],
+      customTagsList.length > 0 ? [{definedTags: customTagsList}] : [],
     ) /** @since 2.0.1 */ // 🟢2️⃣
     .addRule('check-template-names', ERROR) /** @since 48.8.0 */ // 2️⃣
     .addRule('check-types', ERROR) /** @since 1.1.0 */ // 🟢2️⃣
@@ -289,22 +315,13 @@ export default ((context, optionsRaw) => {
     .addRule('match-description', OFF) /** @since 7.0.0 */ // 1️⃣
     .addRule('match-name', OFF) /** @since 35.3.0 */
     .addRule('multiline-blocks', ERROR) /** @since 34.5.0 */ // 🟢4️⃣
-    .addRule('no-bad-blocks', ERROR, [
-      {
-        ignore: [
-          // TypeScript directives
-          'ts-check',
-          'ts-expect-error',
-          'ts-ignore',
-          'ts-nocheck',
-          // https://github.com/javascript-compiler-hints/compiler-notations-spec
-          '__PURE__',
-          '__NO_SIDE_EFFECTS__',
-          'vite-ignore',
-          ...(extraMultilineCommentsStartingWithToIgnore || []),
-        ],
-      },
-    ]) /** @since 20.3.0 */ // 2️⃣
+    .addRule(
+      'no-bad-blocks',
+      ERROR,
+      multilineCommentsStartingWithToIgnore.length > 0
+        ? [{ignore: multilineCommentsStartingWithToIgnore}]
+        : [],
+    ) /** @since 20.3.0 */ // 2️⃣
     .addRule('no-blank-block-descriptions', ERROR) /** @since 40.3.0 */ // 1️⃣
     .addRule('no-blank-blocks', ERROR) /** @since 43.1.0 */ // 1️⃣
     .addRule('no-defaults', ERROR) /** @since 20.2.0 */ // TODO why is this recommended? 🟢2️⃣

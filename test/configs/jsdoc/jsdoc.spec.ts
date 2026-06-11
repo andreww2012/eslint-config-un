@@ -173,6 +173,16 @@ describe('options', () => {
         {definedTags: CUSTOM_TAGS},
       ]);
     });
+
+    it('sets `definedTags` from truthy keys when `customTags` is a record', async () => {
+      const configResult = await computeEslintConfig({
+        jsdoc: {customTags: {slot: true, component: false}},
+      });
+
+      expect(configResult.getRuleEntryOptions('jsdoc', 'jsdoc/check-tag-names')).toStrictEqual([
+        {definedTags: ['slot']},
+      ]);
+    });
   });
 
   describe('option: `extraMultilineCommentsStartingWithToIgnore`', () => {
@@ -193,6 +203,28 @@ describe('options', () => {
 
       expect(rule).toMatchInlineSnapshot(
         '[2, {"ignore": ["ts-check", "ts-expect-error", "ts-ignore", "ts-nocheck", "__PURE__", "__NO_SIDE_EFFECTS__", "vite-ignore", "eslint-disable", "webpack-magic"]}]',
+      );
+    });
+
+    it('merges a record with the default ignore list for `jsdoc/no-bad-blocks` rule', async () => {
+      const configResult = await computeEslintConfig({
+        jsdoc: {extraMultilineCommentsStartingWithToIgnore: {'eslint-disable': true}},
+      });
+      const rule = configResult.getRuleEntry('jsdoc', 'jsdoc/no-bad-blocks');
+
+      expect(rule).toMatchInlineSnapshot(
+        '[2, {"ignore": ["ts-check", "ts-expect-error", "ts-ignore", "ts-nocheck", "__PURE__", "__NO_SIDE_EFFECTS__", "vite-ignore", "eslint-disable"]}]',
+      );
+    });
+
+    it('disables a default entry via the record form for `jsdoc/no-bad-blocks` rule', async () => {
+      const configResult = await computeEslintConfig({
+        jsdoc: {extraMultilineCommentsStartingWithToIgnore: {'ts-nocheck': false}},
+      });
+      const rule = configResult.getRuleEntry('jsdoc', 'jsdoc/no-bad-blocks');
+
+      expect(rule).toMatchInlineSnapshot(
+        '[2, {"ignore": ["ts-check", "ts-expect-error", "ts-ignore", "__PURE__", "__NO_SIDE_EFFECTS__", "vite-ignore"]}]',
       );
     });
   });
