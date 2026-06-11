@@ -64,18 +64,33 @@ interface RequireFieldsOption {
 }
 
 const POPULAR_TOOLS_TOP_LEVEL_PACKAGE_JSON_PROPERTIES = {
+  ava: 'AVA',
   babel: 'Babel',
   browserslist: 'Browserslist',
+  c8: 'c8',
   commitlint: 'commitlint',
   eslintConfig: 'ESLint',
   jest: 'Jest',
   'lint-staged': 'lint-staged',
+  mocha: 'Mocha',
+  'nano-staged': 'nano-staged',
+  nodemonConfig: 'nodemon',
+  np: 'np',
+  nyc: 'nyc',
+  oclif: 'oclif',
   pnpm: 'pnpm',
   prettier: 'Prettier',
+  release: 'semantic-release',
   'release-it': 'release-it',
   renovate: 'Renovate',
+  'simple-git-hooks': 'simple-git-hooks',
+  'size-limit': 'Size Limit',
   stylelint: 'Stylelint',
+  tsd: 'tsd',
   typedoc: 'TypeDoc',
+  volta: 'Volta',
+  wireit: 'Wireit', // cspell:disable-line
+  xo: 'XO',
 };
 
 export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
