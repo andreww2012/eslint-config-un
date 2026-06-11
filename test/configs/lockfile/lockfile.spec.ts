@@ -233,11 +233,9 @@ describe('un options', () => {
 
       await computeEslintConfig({lockfile: {files: FILES}});
 
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          `[warn] [eslint-config-un] The following file globs in the \`lockfile\` config could not be associated with a known package manager and may not be parsed correctly: ${FILES[0]}, ${FILES[2]}`,
-        ),
-      ).toBe(true);
+      expect(String(stderrSpy.mock.calls[0]?.[0])).toStartWith(
+        `[warn] [eslint-config-un] The following file globs in the \`lockfile\` config could not be associated with a known package manager and may not be parsed correctly: ${FILES[0]}, ${FILES[2]}`,
+      );
     });
   });
 

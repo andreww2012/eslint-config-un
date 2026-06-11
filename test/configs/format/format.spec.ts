@@ -16,7 +16,7 @@ describe('basic tests', async () => {
       configResult.getConfigsByUnPostfix(
         (configName) => configName.startsWith('format/') && configName !== 'format/prettier',
       ),
-    ).toHaveLength(0);
+    ).toBeEmpty();
   });
 
   it('supports array notation to create multiple format eslint configs', async () => {

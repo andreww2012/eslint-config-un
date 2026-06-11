@@ -163,7 +163,7 @@ describe('options', () => {
         css: {tolerantMode: true},
       });
 
-      expect(configResult.getConfigByUnPostfix('css')?.languageOptions?.['tolerant']).toBe(true);
+      expect(configResult.getConfigByUnPostfix('css')?.languageOptions?.['tolerant']).toBeTrue();
     });
 
     it('does not set `tolerant` language option when set to `false`', async () => {

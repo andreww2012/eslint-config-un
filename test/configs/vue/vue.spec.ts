@@ -92,11 +92,9 @@ describe('basic tests', () => {
 
       await testEslintConfig('vue', FIXTURES.stringLiteralInTemplateMustache, import.meta.dirname);
 
-      expect(
-        String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-          '[warn] [eslint-config-un] [vue config] Vue major version could not be detected or not supported and was also not explicitly passed',
-        ),
-      ).toBe(true);
+      expect(String(stderrSpy.mock.calls[0]?.[0])).toStartWith(
+        '[warn] [eslint-config-un] [vue config] Vue major version could not be detected or not supported and was also not explicitly passed',
+      );
     });
 
     it('does not print a warning if Vue version can be determined (explicitly set)', async () => {

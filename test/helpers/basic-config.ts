@@ -59,15 +59,13 @@ export const expectConfigState = async (
   }
 
   if (typeof state === 'boolean') {
-    expect(stderrSpy.mock.calls).toHaveLength(0);
+    expect(stderrSpy.mock.calls).toBeEmpty();
   } else {
     const [configName, action] = state;
     const verb = action ? 'enable' : 'disable';
-    expect(
-      String(stderrSpy.mock.calls[0]?.[0]).startsWith(
-        `[warn] [eslint-config-un] There is no need to ${verb} \`${configName}\` config because this is the default`,
-      ),
-    ).toBe(true);
+    expect(String(stderrSpy.mock.calls[0]?.[0])).toStartWith(
+      `[warn] [eslint-config-un] There is no need to ${verb} \`${configName}\` config because this is the default`,
+    );
   }
 
   return configResult;
