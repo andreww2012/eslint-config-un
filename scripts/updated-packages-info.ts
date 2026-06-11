@@ -159,8 +159,10 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   const sampleRuleName = [pluginPrefix, 'SAMPLE-RULE-NAME'].filter(Boolean).join('/');
   const ruleDocsUrl = packageMeta?.ruleDocsUrl?.(sampleRuleName);
 
-  if (ruleDocsUrl) {
-    const ruleDocsUrlForMd = `[\`${sampleRuleName}\`](${ruleDocsUrl})`;
+  if (pluginPrefix) {
+    const ruleDocsUrlForMd = ruleDocsUrl
+      ? `[\`${sampleRuleName}\`](${ruleDocsUrl})`
+      : `\`${sampleRuleName}\``;
 
     console.log(styleText('underline', 'For changelog:'));
     console.log(
