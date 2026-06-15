@@ -17,6 +17,7 @@ const E18E_RULES_MODERNIZATION = [
   'prefer-array-to-sorted',
   'prefer-array-to-spliced',
   'prefer-exponentiation-operator',
+  'prefer-get-or-insert',
   'prefer-includes',
   'prefer-nullish-coalescing',
   'prefer-object-has-own',
@@ -39,6 +40,7 @@ const E18E_RULES_PERFORMANCE_IMPROVEMENTS = [
   'prefer-array-from-map',
   'prefer-array-some',
   'prefer-date-now',
+  'prefer-flatmap-over-map-flat',
   'prefer-includes-over-regex-test',
   'prefer-inline-equality',
   'prefer-regex-test',
@@ -141,6 +143,7 @@ export default ((context, optionsRaw) => {
       .addRule('prefer-array-to-sorted', ERROR) /** @since 0.0.1 */ // 💭?
       .addRule('prefer-array-to-spliced', ERROR) /** @since 0.0.1 */
       .addRule('prefer-exponentiation-operator', ERROR) /** @since 0.0.1 */
+      .addRule('prefer-get-or-insert', OFF) /** @since 0.5.1 */ // 🔴
       .addRule('prefer-includes', ERROR) /** @since 0.0.1 */
       .addRule('prefer-nullish-coalescing', ERROR) /** @since 0.0.1 */
       .addRule('prefer-object-has-own', ERROR) /** @since 0.0.1 */
@@ -203,6 +206,7 @@ export default ((context, optionsRaw) => {
       .addRule('prefer-array-from-map', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-some', ERROR) /** @since 0.1.4 */
       .addRule('prefer-date-now', ERROR) /** @since 0.1.3 */
+      .addRule('prefer-flatmap-over-map-flat', ERROR) /** @since 0.5.1 */ // 🔴
       .addRule('prefer-includes-over-regex-test', ERROR) /** @since 0.5.0 */ // 🔴
       .addRule('prefer-inline-equality', ERROR) /** @since 0.2.0 */ // 💭?
       .addRule('prefer-regex-test', ERROR) /** @since 0.1.3 */ // 💭?

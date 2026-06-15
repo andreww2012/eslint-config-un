@@ -188,6 +188,7 @@ const ALL_STYLISTIC_RULES = {
     'prefer-array-fill': true,
     'prefer-date-now': true,
     'prefer-exponentiation-operator': true,
+    'prefer-flatmap-over-map-flat': true,
     'prefer-includes': true,
     'prefer-nullish-coalescing': true,
     'prefer-spread-syntax': true,
