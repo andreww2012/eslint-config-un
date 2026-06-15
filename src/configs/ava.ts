@@ -1,4 +1,4 @@
-import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from '../constants';
+import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_PACKAGE_JSON, OFF, WARNING} from '../constants';
 import {
   type NoOnlyTestsSubConfigDisabledByDefault,
   generateConfigNoOnlyTestsBuilder,
@@ -8,6 +8,7 @@ import {
   type ExtraPluginsType,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
@@ -32,14 +33,30 @@ export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
    * - [`ava/max-asserts`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/max-asserts.md)
    */
   enforceMaxAssertions?: number;
+
+  /**
+   * Enables or specifies the configuration for the sub-config targeting `package.json` files,
+   * which requires a JSON parser. Currently only enables the
+   * [`ava/no-ava-in-dependencies`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/no-ava-in-dependencies.md)
+   * rule, which disallows AVA in `dependencies`.
+   * @default true
+   */
+  configPackageJson?:
+    | boolean
+    | UnFlatConfigEntryBase<
+        ExtraPlugins,
+        Pick<UnRulesConfigPartial<'ava'>, 'ava/no-ava-in-dependencies'>
+      >;
 }
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false, // has `ava/no-only-test` rule
+    configPackageJson: true,
   });
 
-  const {configNoOnlyTests, enforceAssertionMessage, enforceMaxAssertions} = optionsResolved;
+  const {configNoOnlyTests, configPackageJson, enforceAssertionMessage, enforceMaxAssertions} =
+    optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'ava');
 
@@ -72,8 +89,6 @@ export default ((context, optionsRaw) => {
       enforceMaxAssertions == null ? [] : [{max: enforceMaxAssertions}],
     ) // /** @since 1.0.0 */
     .addRule('no-async-fn-without-await', ERROR) /** @since 3.1.0 */ // 🟢
-    // TODO should create a sub config targeting `package.json`s only with this rule?
-    .addRule('no-ava-in-dependencies', OFF) /** @since 16.0.0 */ // 🟢
     .addRule('no-commented-tests', WARNING) /** @since 16.0.0 */ // 🟡
     .addRule('no-conditional-assertion', ERROR) /** @since 16.0.0 */ // 🟢
     .addRule('no-duplicate-hooks', ERROR) /** @since 16.0.0 */ // 🟢
@@ -104,6 +119,9 @@ export default ((context, optionsRaw) => {
     .addRule('use-t-well', ERROR) /** @since 2.2.0 */ // 🟢
     .addRule('use-test', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('use-true-false', ERROR) /** @since 2.2.0 */ // 🟢
+    .enableConfigTesterForPlugin('ava', {
+      rulesToSkipInConfig: (ruleName) => ruleName === 'no-ava-in-dependencies',
+    })
     .addOverrides();
 
   const configBuilderNoOnlyTests = generateConfigNoOnlyTestsBuilder(
@@ -114,8 +132,24 @@ export default ((context, optionsRaw) => {
     {filesDefault: configFilesFallback},
   );
 
+  const configBuilderPackageJson = context.createConfigBuilder(configPackageJson, 'ava');
+  configBuilderPackageJson
+    ?.addConfig([
+      'ava/package.json',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: [GLOB_PACKAGE_JSON],
+        language: ['json', 'json'],
+      },
+    ])
+    .addRule('no-ava-in-dependencies', ERROR) /** @since 16.0.0 */ // 🟢
+    .enableConfigTesterForPlugin('ava', {
+      rulesToSkipInConfig: (ruleName) => ruleName !== 'no-ava-in-dependencies',
+    })
+    .addOverrides();
+
   return {
-    configs: [configBuilder, configBuilderNoOnlyTests],
+    configs: [configBuilder, configBuilderNoOnlyTests, configBuilderPackageJson],
     optionsResolved,
   };
 }) satisfies UnConfigFn<'ava'>;

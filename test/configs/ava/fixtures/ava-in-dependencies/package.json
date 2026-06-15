@@ -1,0 +1,7 @@
+{
+  "name": "ava-in-dependencies-fixture",
+  "version": "1.0.0",
+  "dependencies": {
+    "ava": "6.2.0"
+  }
+}

@@ -1,5 +1,6 @@
 const FIXTURES = {
   testWithSkipModifier: 'skip-modifier/test.spec.js',
+  avaInDependencies: 'ava-in-dependencies/package.json',
 } as const;
 
 beforeEach(() => {
@@ -129,6 +130,66 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot('"No tests should be skipped."');
+  });
+});
+
+describe('sub config `package.json`', () => {
+  describe('basic tests', async () => {
+    const configResult = await computeEslintConfig('ava');
+
+    it('creates `ava/package.json` eslint config by default', () => {
+      expect(configResult.getConfigByUnPostfix('ava/package.json')).toBeDefined();
+    });
+
+    it('does not create `ava/package.json` eslint config when disabled', async () => {
+      const configResult = await computeEslintConfig({ava: {configPackageJson: false}});
+
+      expect(configResult.getConfigByUnPostfix('ava/package.json')).toBeUndefined();
+    });
+
+    it('still creates the main `ava` eslint config when sub config is disabled', async () => {
+      const configResult = await computeEslintConfig({ava: {configPackageJson: false}});
+
+      expect(configResult.getConfigByUnPostfix('ava')).toBeDefined();
+    });
+
+    it('targets `package.json` files in `ava/package.json` eslint config', () => {
+      expect(configResult.getConfigByUnPostfix('ava/package.json')?.files).toMatchInlineSnapshot(
+        '["**/package.json"]',
+      );
+    });
+  });
+
+  describe('rules', async () => {
+    const configResult = await computeEslintConfig('ava');
+
+    it('enables `ava/no-ava-in-dependencies` rule by default', () => {
+      expect(
+        configResult.getRuleEntrySeverity('ava/package.json', 'ava/no-ava-in-dependencies'),
+      ).toBe(2);
+    });
+
+    it('does not add `ava/no-ava-in-dependencies` rule to the main `ava` eslint config', () => {
+      expect(configResult.getRuleEntry('ava', 'ava/no-ava-in-dependencies')).toBeUndefined();
+    });
+
+    it('`ava/no-ava-in-dependencies` rule fires on a `package.json` with `ava` in `dependencies`', async () => {
+      const results = await testEslintConfig(
+        'ava',
+        FIXTURES.avaInDependencies,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.avaInDependencies,
+        'ava/no-ava-in-dependencies',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"`ava` should be in `devDependencies` instead of `dependencies`."',
+      );
+    });
   });
 });
 
