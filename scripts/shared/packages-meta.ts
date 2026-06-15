@@ -478,6 +478,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     },
     security: {
       configs: ['security'],
+      gitTag: (version) => `eslint-plugin-security-v${version}`,
       ruleDocsUrl: (ruleName) =>
         `https://github.com/eslint-community/eslint-plugin-security/blob/HEAD/docs/rules/${ruleName}.md`,
     },
