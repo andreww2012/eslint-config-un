@@ -157,4 +157,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderJson, configBuilderJsonc, configBuilderJson5],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'json'>;
+}) satisfies UnConfigFn<'jsonc'>;

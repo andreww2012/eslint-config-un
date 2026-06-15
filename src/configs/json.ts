@@ -1,0 +1,83 @@
+import type {PLUGINS_PROVIDING_LANGUAGES} from '../config-un/config-entry-builder';
+import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, OFF} from '../constants';
+import {objectEntriesUnsafe} from '../utils';
+import {
+  type ExtraPluginsType,
+  type UnConfigFn,
+  type UnFlatConfigEntryBase,
+  assignDefaults,
+} from './index';
+
+export interface JsonEslintConfigOptions<
+  ExtraPlugins extends ExtraPluginsType = never,
+> extends UnFlatConfigEntryBase<ExtraPlugins, 'json'> {
+  /**
+   * 📁 Default `files`: <code>**&#47;*.jsonc</code>
+   * @default true
+   */
+  configJsonc?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'json'>;
+
+  /**
+   * 📁 Default `files`: <code>**&#47;*.json5</code>
+   * @default true
+   */
+  configJson5?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'json'>;
+}
+
+const JSON_SUB_CONFIGS_FILES: Record<
+  (typeof PLUGINS_PROVIDING_LANGUAGES)['json'][number],
+  string[]
+> = {
+  json: [GLOB_JSON],
+  jsonc: [GLOB_JSONC],
+  json5: [GLOB_JSON5],
+};
+
+export default ((context, optionsRaw) => {
+  const optionsResolved = assignDefaults(optionsRaw, {
+    configJsonc: true,
+    configJson5: true,
+  });
+
+  const {configJsonc, configJson5} = optionsResolved;
+
+  const optionsPerLanguage = {
+    json: optionsResolved,
+    jsonc: configJsonc,
+    json5: configJson5,
+  };
+
+  // Legend:
+  // 🔴 - NOT in `recommended`
+
+  const configBuilders = objectEntriesUnsafe(JSON_SUB_CONFIGS_FILES).map(
+    ([languageName, filesDefault]) => {
+      const configBuilder = context.createConfigBuilder(optionsPerLanguage[languageName], 'json');
+
+      configBuilder
+        ?.addConfig([
+          `json/${languageName}`,
+          {
+            includeDefaultFilesAndIgnores: true,
+            filesDefault,
+            language: ['json', languageName],
+          },
+        ])
+        .addRule('no-duplicate-keys', ERROR) /** @since 0.1.0 */
+        .addRule('no-empty-keys', ERROR) /** @since 0.1.0 */
+        .addRule('no-unnormalized-keys', ERROR) /** @since 0.8.0 */
+        .addRule('no-unsafe-values', ERROR) /** @since 0.7.0 */
+        .addRule('sort-keys', OFF) /** @since 0.10.0 */ // 🔴
+        .addRule('top-level-interop', OFF) /** @since 0.9.0 */ // 🔴
+        .enableConfigTesterForPlugin('json')
+        .addOverrides();
+
+      return configBuilder;
+    },
+  );
+
+  return {
+    configs: configBuilders,
+    optionsResolved,
+  };
+}) satisfies UnConfigFn<'json'>;

@@ -297,6 +297,15 @@ export const pluginsLoaders = {
     'eslint-plugin-jsdoc',
     () => interopDefault(import('eslint-plugin-jsdoc')) as Promise<EslintPlugin>,
   ),
+  json: genModuleLoader(
+    'json',
+    '@eslint/json',
+    () =>
+      interopDefault(
+        import('@eslint/json'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
+  ),
   'json-schema-validator': genModuleLoader(
     'json-schema-validator',
     'eslint-plugin-json-schema-validator',

@@ -315,10 +315,10 @@ importers:
         version: 63.0.2(eslint@9.39.2)
       eslint-plugin-json-schema-validator:
         specifier: 6.2.0
-        version: 6.2.0(@eslint/json@1.2.0)(eslint@9.39.2)
+        version: 6.2.0(@eslint/json@2.0.0)(eslint@9.39.2)
       eslint-plugin-jsonc:
         specifier: 3.2.0
-        version: 3.2.0(@eslint/json@1.2.0)(eslint@9.39.2)
+        version: 3.2.0(@eslint/json@2.0.0)(eslint@9.39.2)
       eslint-plugin-jsx-a11y-x:
         specifier: 0.2.0
         version: 0.2.0(eslint@9.39.2)
@@ -354,10 +354,10 @@ importers:
         version: 4.1.5(eslint@9.39.2)
       eslint-plugin-node-dependencies:
         specifier: 2.2.0
-        version: 2.2.0(patch_hash=0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4)(@eslint/json@1.2.0)(eslint@9.39.2)
+        version: 2.2.0(patch_hash=0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4)(@eslint/json@2.0.0)(eslint@9.39.2)
       eslint-plugin-package-json:
         specifier: 1.3.0
-        version: 1.3.0(@eslint/json@1.2.0)(@types/estree@1.0.9)(eslint@9.39.2)
+        version: 1.3.0(@eslint/json@2.0.0)(@types/estree@1.0.9)(eslint@9.39.2)
       eslint-plugin-perfectionist:
         specifier: 5.9.0
         version: 5.9.0(eslint@9.39.2)(typescript@6.0.3)
@@ -488,6 +488,9 @@ importers:
       '@eslint/css-tree':
         specifier: 4.0.4
         version: 4.0.4
+      '@eslint/json':
+        specifier: 2.0.0
+        version: 2.0.0
       '@graphql-eslint/eslint-plugin':
         specifier: 4.4.0
         version: 4.4.0(@types/node@20.19.1)(eslint@9.39.2)(graphql@16.11.0)(json-schema-to-ts@3.1.1)(typescript@6.0.3)
@@ -2679,6 +2682,10 @@ packages:
 
   '@eslint/json@1.2.0':
     resolution: {integrity: sha512-CEFEyNgvzu8zn5QwVYDg3FaG+ZKUeUsNYitFpMYJAqoAlnw68EQgNbUfheSmexZr4n0wZPrAkPLuvsLaXO6wRw==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@eslint/json@2.0.0':
+    resolution: {integrity: sha512-P32ZJMIopNWQd1SFhd0tgjfA/hgzUuVSqHmMi2273QaLWHWimXq6V+qL4DNKnjGzO/aNECtYW+rEJ/pWB6uP+w==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
   '@eslint/markdown@7.5.1':
@@ -13999,6 +14006,13 @@ snapshots:
       '@humanwhocodes/momoa': 3.3.10
       natural-compare: 1.4.0
 
+  '@eslint/json@2.0.0':
+    dependencies:
+      '@eslint/core': 1.2.1
+      '@eslint/plugin-kit': 0.7.2
+      '@humanwhocodes/momoa': 3.3.10
+      natural-compare: 1.4.0
+
   '@eslint/markdown@7.5.1':
     dependencies:
       '@eslint/core': 0.17.0
@@ -18466,13 +18480,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-json-compat-utils@0.2.3(@eslint/json@1.2.0)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0):
+  eslint-json-compat-utils@0.2.3(@eslint/json@2.0.0)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0):
     dependencies:
       eslint: 9.39.2(jiti@2.7.0)
       esquery: 1.7.0
       jsonc-eslint-parser: 3.1.0
     optionalDependencies:
-      '@eslint/json': 1.2.0
+      '@eslint/json': 2.0.0
 
   eslint-mdx@3.8.1(eslint@9.39.2):
     dependencies:
@@ -18897,13 +18911,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-json-schema-validator@6.2.0(@eslint/json@1.2.0)(eslint@9.39.2):
+  eslint-plugin-json-schema-validator@6.2.0(@eslint/json@2.0.0)(eslint@9.39.2):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       ajv: 8.20.0
       debug: 4.4.3
       eslint: 9.39.2(jiti@2.7.0)
-      eslint-json-compat-utils: 0.2.3(@eslint/json@1.2.0)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)
+      eslint-json-compat-utils: 0.2.3(@eslint/json@2.0.0)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)
       json-schema-migrate-x: 2.1.0
       jsonc-eslint-parser: 3.1.0
       minimatch: 10.2.5
@@ -18915,7 +18929,7 @@ snapshots:
       - '@eslint/json'
       - supports-color
 
-  eslint-plugin-jsonc@3.2.0(@eslint/json@1.2.0)(eslint@9.39.2):
+  eslint-plugin-jsonc@3.2.0(@eslint/json@2.0.0)(eslint@9.39.2):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       '@eslint/core': 1.2.1
@@ -18923,7 +18937,7 @@ snapshots:
       '@ota-meshi/ast-token-store': 0.3.0
       diff-sequences: 29.6.3
       eslint: 9.39.2(jiti@2.7.0)
-      eslint-json-compat-utils: 0.2.3(@eslint/json@1.2.0)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)
+      eslint-json-compat-utils: 0.2.3(@eslint/json@2.0.0)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)
       jsonc-eslint-parser: 3.1.0
       natural-compare: 1.4.0
       synckit: 0.11.13
@@ -19077,10 +19091,10 @@ snapshots:
     dependencies:
       eslint: 9.39.2(jiti@2.7.0)
 
-  eslint-plugin-node-dependencies@2.2.0(patch_hash=0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4)(@eslint/json@1.2.0)(eslint@9.39.2):
+  eslint-plugin-node-dependencies@2.2.0(patch_hash=0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4)(@eslint/json@2.0.0)(eslint@9.39.2):
     dependencies:
       eslint: 9.39.2(jiti@2.7.0)
-      eslint-json-compat-utils: 0.2.3(@eslint/json@1.2.0)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)
+      eslint-json-compat-utils: 0.2.3(@eslint/json@2.0.0)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)
       jsonc-eslint-parser: 3.1.0
       npm-package-arg: 13.0.2
       package-json: 10.0.1
@@ -19090,7 +19104,7 @@ snapshots:
     transitivePeerDependencies:
       - '@eslint/json'
 
-  eslint-plugin-package-json@1.3.0(@eslint/json@1.2.0)(@types/estree@1.0.9)(eslint@9.39.2):
+  eslint-plugin-package-json@1.3.0(@eslint/json@2.0.0)(@types/estree@1.0.9)(eslint@9.39.2):
     dependencies:
       '@altano/repository-tools': 2.0.3
       change-case: 5.4.4
@@ -19098,14 +19112,14 @@ snapshots:
       detect-newline: 4.0.1
       eslint: 9.39.2(jiti@2.7.0)
       eslint-fix-utils: 0.4.2(@types/estree@1.0.9)(eslint@9.39.2)
-      eslint-json-compat-utils: 0.2.3(@eslint/json@1.2.0)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)
+      eslint-json-compat-utils: 0.2.3(@eslint/json@2.0.0)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)
       jsonc-eslint-parser: 3.1.0
       package-json-validator: 1.5.2
       semver: 7.8.1
       sort-object-keys: 2.1.0
       sort-package-json: 3.7.0
     optionalDependencies:
-      '@eslint/json': 1.2.0
+      '@eslint/json': 2.0.0
     transitivePeerDependencies:
       - '@types/estree'
 

@@ -1,6 +1,6 @@
 describe('jsonc: sub config `json5`', () => {
   describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('json');
+    const configResult = await computeEslintConfig('jsonc');
 
     it('does not create `jsonc/json5` eslint config when disabled (default)', () => {
       expect(configResult.getConfigByUnPostfix('jsonc/json5')).toBeUndefined();
@@ -8,7 +8,7 @@ describe('jsonc: sub config `json5`', () => {
 
     it('creates `jsonc/json5` eslint config when enabled', async () => {
       const configResult = await computeEslintConfig({
-        json: {configJson5: true},
+        jsonc: {configJson5: true},
       });
 
       expect(configResult.getConfigByUnPostfix('jsonc/json5')).toBeDefined();
@@ -16,7 +16,7 @@ describe('jsonc: sub config `json5`', () => {
 
     it('has default `files` in `jsonc/json5` eslint config', async () => {
       const configResult = await computeEslintConfig({
-        json: {configJson5: true},
+        jsonc: {configJson5: true},
       });
 
       expect(configResult.getConfigByUnPostfix('jsonc/json5')?.files).toMatchInlineSnapshot(
@@ -26,7 +26,7 @@ describe('jsonc: sub config `json5`', () => {
 
     it('has default `ignores` in `jsonc/json5` eslint config', async () => {
       const configResult = await computeEslintConfig({
-        json: {configJson5: true},
+        jsonc: {configJson5: true},
       });
 
       expect(configResult.getConfigByUnPostfix('jsonc/json5')?.ignores?.length).toBeGreaterThan(0);
@@ -35,7 +35,7 @@ describe('jsonc: sub config `json5`', () => {
 
   describe('rules', async () => {
     const configResult = await computeEslintConfig({
-      json: {configJson5: true},
+      jsonc: {configJson5: true},
     });
 
     it('has no rules by default', () => {
@@ -49,7 +49,7 @@ describe('jsonc: sub config `json5`', () => {
         const FILES = ['packages/**/*.json5'];
 
         const configResult = await computeEslintConfig({
-          json: {configJson5: {files: FILES}},
+          jsonc: {configJson5: {files: FILES}},
         });
 
         expect(configResult.getConfigByUnPostfix('jsonc/json5')?.files).toStrictEqual(FILES);
@@ -57,7 +57,7 @@ describe('jsonc: sub config `json5`', () => {
 
       it('disables `jsonc/json5` eslint config when set to empty array', async () => {
         const configResult = await computeEslintConfig({
-          json: {configJson5: {files: []}},
+          jsonc: {configJson5: {files: []}},
         });
 
         expect(configResult.getConfigByUnPostfix('jsonc/json5')).toBeUndefined();
@@ -69,7 +69,7 @@ describe('jsonc: sub config `json5`', () => {
         const IGNORES = ['**/fixtures/**'];
 
         const configResult = await computeEslintConfig({
-          json: {configJson5: {ignores: IGNORES}},
+          jsonc: {configJson5: {ignores: IGNORES}},
         });
 
         const ignores = configResult.getConfigByUnPostfix('jsonc/json5')?.ignores;
@@ -81,7 +81,7 @@ describe('jsonc: sub config `json5`', () => {
 
     it('respects `overrides` and `overridesAny` in `jsonc/json5` eslint config', async () => {
       const configResult = await computeEslintConfig({
-        json: {
+        jsonc: {
           configJson5: {overrides: {'jsonc/no-dupe-keys': 0}, overridesAny: {'no-console': 0}},
         },
       });

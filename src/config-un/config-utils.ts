@@ -7,7 +7,7 @@ import type {UnConfigContext} from './shared';
 // NOTE: do not forget to sync this list with `defaultConfigsStatus` option JSDoc
 export const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
   'e18e',
-  'json',
+  'jsonc',
   'jsonSchemaValidator',
   'lockfile',
   'nodeDependencies',

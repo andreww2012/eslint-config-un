@@ -248,13 +248,19 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
       ruleDocsUrl: (ruleName) =>
         `https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/${ruleName}.md`,
     },
+    json: {
+      configs: ['json'],
+      gitTag: (version) => `json-v${version}`,
+      ruleDocsUrl: (ruleName) =>
+        `https://github.com/eslint/json/blob/HEAD/docs/rules/${ruleName}.md`,
+    },
     'json-schema-validator': {
       configs: ['jsonSchemaValidator'],
       ruleDocsUrl: (ruleName) =>
         `https://ota-meshi.github.io/eslint-plugin-json-schema-validator/rules/${ruleName}.html`,
     },
     jsonc: {
-      configs: ['json'],
+      configs: ['jsonc'],
       ruleDocsUrl: (ruleName) =>
         `https://ota-meshi.github.io/eslint-plugin-jsonc/rules/${ruleName}.html`,
     },

@@ -49,6 +49,7 @@ import type {JestDomEslintConfigOptions} from './jest-dom';
 import type {JsEslintConfigOptions} from './js';
 import type {JsInlineEslintConfigOptions} from './js-inline';
 import type {JsdocEslintConfigOptions} from './jsdoc';
+import type {JsonEslintConfigOptions} from './json';
 import type {JsonSchemaValidatorEslintConfigOptions} from './json-schema-validator';
 import type {JsoncEslintConfigOptions} from './jsonc';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
@@ -713,7 +714,21 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   jsInline: JsInlineEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * JSON, JSONC and JSON5 related rules.
+   * JSON, JSONC and JSON5 related rules powered by the official
+   * [`@eslint/json`](https://npmx.dev/@eslint/json) language plugin.
+   *
+   * 📁 Default `files`: <code>**&#47;*.{json,jsonc,json5}</code>
+   *
+   * 🧩 Main plugin: [`@eslint/json`](https://npmx.dev/@eslint/json) ([docs](https://github.com/eslint/json))
+   *
+   * ⚙️ Sub config(s): `jsonc`, `json5`
+   * @default false
+   */
+  json: JsonEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * JSON, JSONC and JSON5 related rules powered by
+   * [`eslint-plugin-jsonc`](https://npmx.dev/eslint-plugin-jsonc).
    *
    * 📁 Default `files`: <code>**&#47;*.{json,jsonc,json5}</code>
    *
@@ -722,7 +737,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * ⚙️ Sub config(s): `json5`, `json`, `jsonc`
    * @default true <=> `defaultConfigsStatus` is set to `misc-enabled`
    */
-  json: JsoncEslintConfigOptions<ExtraPlugins>;
+  jsonc: JsoncEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin that validates data using JSON Schema Validator.

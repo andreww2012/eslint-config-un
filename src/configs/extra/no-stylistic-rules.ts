@@ -352,6 +352,9 @@ const ALL_STYLISTIC_RULES = {
     'tag-lines': true,
     'type-formatting': true,
   },
+  json: {
+    'sort-keys': true,
+  },
   'json-schema-validator': {
     // None
   },
