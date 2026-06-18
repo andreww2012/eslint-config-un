@@ -161,9 +161,9 @@ export const saveCacheToFs = async (
     date: new Date().toISOString(),
     key: cacheKey,
     ...cacheData,
-    usedParsers: Object.fromEntries(cacheData.usedParsers.entries()),
+    usedParsers: Object.fromEntries(cacheData.usedParsers),
     usedPackages: Object.fromEntries(
-      Array.from(cacheData.usedPackages.entries(), ([packageId, entries]) => [
+      Array.from(cacheData.usedPackages, ([packageId, entries]) => [
         packageId,
         entries.map((info) => ({
           ...omit(info, ['valueTransformFn', 'path']),

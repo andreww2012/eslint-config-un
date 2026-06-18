@@ -46,12 +46,12 @@ const rule: Eslint.Rule.RuleModule = {
 
         const matches = value.matchAll(MULTIPLE_CONSECUTIVE_SPACES_REGEXP);
         [...matches].forEach(({index: startIndex, 0: matchString}) => {
-          const reportStart = (node.range?.[0] || 0) + 1 /* Quote */ + startIndex;
-          const reportEnd = reportStart + matchString.length;
-
           if (options?.allowSpacesOnly && SPACES_ONLY_REGEXP.test(value)) {
             return;
           }
+
+          const reportStart = (node.range?.[0] || 0) + 1 /* Quote */ + startIndex;
+          const reportEnd = reportStart + matchString.length;
 
           context.report({
             node,

@@ -3,5 +3,5 @@ import type {EslintPlugin} from './eslint-types';
 
 export const eslintPluginVanillaRules: EslintPlugin = Object.freeze({
   // eslint-disable-next-line ts/no-deprecated
-  rules: Object.fromEntries(eslintBuiltinRules.entries()),
+  rules: Object.fromEntries(eslintBuiltinRules),
 });

@@ -380,8 +380,8 @@ importers:
         specifier: 1.4.0
         version: 1.4.0(eslint@9.39.2)
       eslint-plugin-unicorn:
-        specifier: 65.0.1
-        version: 65.0.1(eslint@9.39.2)
+        specifier: 67.0.0
+        version: 67.0.0(eslint@9.39.2)
       eslint-plugin-unnecessary-abstractions:
         specifier: 1.0.0
         version: 1.0.0
@@ -7708,11 +7708,11 @@ packages:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
 
-  eslint-plugin-unicorn@65.0.1:
-    resolution: {integrity: sha512-daCrQrgxOoOz2uMPWB3Y3vvv/5q+ncwICI8IjoebiwtW87CaY4tAN5EEiRXTYVnf7qi1v1BGBdHOSnZLV0rx6A==}
-    engines: {node: ^20.10.0 || >=21.0.0}
+  eslint-plugin-unicorn@67.0.0:
+    resolution: {integrity: sha512-XEYhNfAFFFYQLq++53iqpgIPFqvjasf5lsUJuCdmd/QvbRfcLbmPTjcTyVEXc5yBudWIg08SSEGgqJtEojk1ug==}
+    engines: {node: '>=22'}
     peerDependencies:
-      eslint: '>=9.38.0'
+      eslint: '>=10.4'
 
   eslint-plugin-unnecessary-abstractions@1.0.0:
     resolution: {integrity: sha512-Brd3EUWUl4CQxDLvFEWWDl5BblTHqd45Sf+xJsh7sBq/TzG25pQFX3e27OZJG5c5CnXGlNt7QlkHz/8JfsGNyA==}
@@ -10762,6 +10762,11 @@ packages:
 
   semver@7.8.2:
     resolution: {integrity: sha512-c8jsqUZm3omBOI66G90z1Dyw5z622G8oLG+omfsHBJf3CWQTlOcwOjvOG6wtiNfW6anKm/eA39LMwMtMez2TiQ==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  semver@7.8.4:
+    resolution: {integrity: sha512-rUCObTnP32Q08R2uuIrt7r9PlEonuTmtuXYcW6s5kjdlj3xbnwe+21yXptAUYcMAABLkYYTtnmzb3w3EDZfueA==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -19489,10 +19494,11 @@ snapshots:
       eslint: 9.39.2(jiti@2.7.0)
       turbo: 2.9.14
 
-  eslint-plugin-unicorn@65.0.1(eslint@9.39.2):
+  eslint-plugin-unicorn@67.0.0(eslint@9.39.2):
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
+      browserslist: 4.28.2
       change-case: 5.4.4
       ci-info: 4.4.0
       core-js-compat: 3.49.0
@@ -19505,7 +19511,7 @@ snapshots:
       jsesc: 3.1.0
       pluralize: 8.0.0
       regjsparser: 0.13.1
-      semver: 7.8.2
+      semver: 7.8.4
       strip-indent: 4.1.1
 
   eslint-plugin-unnecessary-abstractions@1.0.0: {}
@@ -23227,6 +23233,8 @@ snapshots:
   semver@7.8.1: {}
 
   semver@7.8.2: {}
+
+  semver@7.8.4: {}
 
   sentences-per-line@0.5.2: {}
 

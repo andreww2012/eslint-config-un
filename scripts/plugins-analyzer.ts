@@ -105,7 +105,7 @@ const scoreMetric = (
   return (value - bad) / (good - bad);
 };
 
-export const analyze = Effect.gen(function* () {
+const analyze = Effect.gen(function* () {
   const logger = yield* LoggerTag;
   const packagesInfoStorage = yield* PackagesInfoStorageTag;
   const dbRef = yield* EslintPluginsDbRefTag;

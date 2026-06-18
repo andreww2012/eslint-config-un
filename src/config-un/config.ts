@@ -915,7 +915,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     usedPluginPrefixes,
     usedParserPrefixes,
     usedPackagesPrefixes,
-    missingPackages: [...context.missingPackages.keys()],
+    missingPackages: [...context.missingPackages],
   });
 
   resolvedConfigs.unshift({
@@ -1003,13 +1003,13 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       configs: configsToCache,
       usedPlugins: usedPluginPrefixes,
       usedParsers: new Map(
-        Array.from(context.usedParsers.entries(), ([parserPrefix, configs]) => [
+        Array.from(context.usedParsers, ([parserPrefix, configs]) => [
           parserPrefix,
           configs.map((c) => c.name).filter((v) => typeof v === 'string'),
         ]),
       ),
       usedPackages: new Map(
-        Array.from(context.usedPackages.entries(), ([packagePrefix, usedPackagesInfo]) => [
+        Array.from(context.usedPackages, ([packagePrefix, usedPackagesInfo]) => [
           packagePrefix,
           usedPackagesInfo
             .map(({config, path, info}) => {

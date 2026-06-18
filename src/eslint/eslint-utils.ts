@@ -118,9 +118,7 @@ export const eslintToUnRuleSeverity = (
 ): RuleSeverity =>
   typeof maybeEslintSeverity === 'string'
     ? STRING_SEVERITY_TO_NUMERIC[maybeEslintSeverity]
-    : maybeEslintSeverity == null
-      ? defaultSeverity
-      : (maybeEslintSeverity as RuleSeverity);
+    : ((maybeEslintSeverity ?? defaultSeverity) as RuleSeverity);
 
 export const getRuleSeverityFromEslintRuleEntry = (
   entry: Nullable<EslintRuleEntry>,

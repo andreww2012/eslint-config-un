@@ -803,23 +803,20 @@ export class ConfigEntryBuilder<
 
         const possibleFiles = new Set<string>([GLOB_TS_X]);
         let extraFileExtensions: Set<string> | undefined;
-        const rulesEntries = Array.from(
-          rulesRequiringTypeInfo.entries(),
-          ([ruleEntryName, {plugin}]) => {
-            const entry = config.rules?.[ruleEntryName];
-            Reflect.deleteProperty(config.rules || {}, ruleEntryName);
+        const rulesEntries = Array.from(rulesRequiringTypeInfo, ([ruleEntryName, {plugin}]) => {
+          const entry = config.rules?.[ruleEntryName];
+          Reflect.deleteProperty(config.rules || {}, ruleEntryName);
 
-            const pluginInfo = RULES_REQUIRING_TYPE_INFORMATION[plugin];
-            pluginInfo?.extraPatterns?.forEach((pattern) => {
-              possibleFiles.add(pattern);
-            });
-            pluginInfo?.extraFileExtensions?.forEach((extraExtension) => {
-              (extraFileExtensions ||= new Set()).add(extraExtension);
-            });
+          const pluginInfo = RULES_REQUIRING_TYPE_INFORMATION[plugin];
+          pluginInfo?.extraPatterns?.forEach((pattern) => {
+            possibleFiles.add(pattern);
+          });
+          pluginInfo?.extraFileExtensions?.forEach((extraExtension) => {
+            (extraFileExtensions ||= new Set()).add(extraExtension);
+          });
 
-            return [ruleEntryName, entry];
-          },
-        );
+          return [ruleEntryName, entry];
+        });
 
         const originalParserOptions = config.languageOptions?.['parserOptions'];
 

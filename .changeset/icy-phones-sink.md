@@ -1,0 +1,99 @@
+---
+'eslint-config-un': minor
+---
+
+unicorn: updated [`eslint-plugin-unicorn` from v65.0.1 to v67.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v65.0.1...v67.0.0):
+
+- [**BREAKING**] Renamed `minimumComparisonsToPreferArrayIncludes` and `minimumWhitespaceRepetitionsToPreferStringRepeat` options to the same names with `minimum` shortened to `min`
+- Added a new option `classReferenceInStaticMethodsStyle` controlling 🟢 enabled by default [`unicorn/class-reference-in-static-methods`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/class-reference-in-static-methods.md) rule
+- 🔴 not enabled [`unicorn/comment-content`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/comment-content.md) rule
+- Added a new option `enforcePrefixForBooleanNames` controlling 🟢 enabled by default [`unicorn/consistent-boolean-name`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-boolean-name.md) rule
+- 🔴 not enabled [`unicorn/consistent-class-member-order`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-class-member-order.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/consistent-export-decorator-position`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-export-decorator-position.md) rule and added it to the `noStylisticRules` config
+- 🔴 not enabled [`unicorn/consistent-function-style`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-function-style.md) rule
+- 🟢 enabled [`unicorn/consistent-optional-chaining`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-optional-chaining.md) rule
+- 🟢 enabled [`unicorn/explicit-timer-delay`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/explicit-timer-delay.md) rule
+- Added a new option `explicitTimersDelay` controlling 🟢 enabled by default [`unicorn/explicit-timer-delay`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/explicit-timer-delay.md) rule
+- 🔴 not enabled [`unicorn/id-match`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/id-match.md) rule
+- 🔴 not enabled [`unicorn/logical-assignment-operators`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/logical-assignment-operators.md) rule
+- Added a new option `maxNestedCalls` controlling 🔴 not enabled by default [`unicorn/max-nested-calls`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/max-nested-calls.md) rule
+- 🔴 not enabled [`unicorn/no-asterisk-prefix-in-documentation-comments`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-asterisk-prefix-in-documentation-comments.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/no-break-in-nested-loop`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-break-in-nested-loop.md) rule
+- 🔴 not enabled [`unicorn/no-computed-property-existence-check`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-computed-property-existence-check.md) rule
+- 🟢 enabled [`unicorn/no-confusing-array-with`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-confusing-array-with.md) rule
+- 🟢 enabled [`unicorn/no-declarations-before-early-exit`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-declarations-before-early-exit.md) rule
+- 🟢 enabled [`unicorn/no-duplicate-loops`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-duplicate-loops.md) rule
+- 🟢 enabled [`unicorn/no-error-property-assignment`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-error-property-assignment.md) rule
+- 🔴 not enabled [`unicorn/no-global-object-property-assignment`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-global-object-property-assignment.md) rule
+- 🟢 enabled [`unicorn/no-incorrect-template-string-interpolation`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-incorrect-template-string-interpolation.md) rule
+- 🟢 enabled [`unicorn/no-invalid-argument-count`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-invalid-argument-count.md) rule
+- 🟢 enabled [`unicorn/no-mismatched-map-key`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-mismatched-map-key.md) rule
+- 🟢 enabled [`unicorn/no-negated-array-predicate`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-negated-array-predicate.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/no-negated-comparison`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-negated-comparison.md) rule and added it to the `noStylisticRules` config
+- Added a new option `functionPrefixesToDisallowForCallables` controlling 🟢 enabled by default [`unicorn/no-non-function-verb-prefix`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-non-function-verb-prefix.md) rule
+- 🟢 enabled [`unicorn/no-object-methods-with-collections`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-object-methods-with-collections.md) rule
+- 🟢 enabled [`unicorn/no-optional-chaining-on-undeclared-variable`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-optional-chaining-on-undeclared-variable.md) rule
+- 🟢 enabled [`unicorn/no-top-level-assignment-in-function`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-top-level-assignment-in-function.md) rule
+- 🟢 enabled [`unicorn/no-redundant-comparison`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-redundant-comparison.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/no-return-array-push`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-return-array-push.md) rule
+- 🟢 enabled [`unicorn/no-subtraction-comparison`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-subtraction-comparison.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/no-top-level-side-effects`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-top-level-side-effects.md) rule
+- 🟢 enabled [`unicorn/no-uncalled-method`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-uncalled-method.md) rule
+- 🟢 enabled [`unicorn/no-undeclared-class-members`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-undeclared-class-members.md) rule
+- 🟢 enabled [`unicorn/no-unnecessary-global-this`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-global-this.md) rule
+- 🟢 enabled [`unicorn/no-unnecessary-splice`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-splice.md) rule
+- 🔴 not enabled [`unicorn/no-unreadable-for-of-expression`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unreadable-for-of-expression.md) rule
+- 🔴 not enabled [`unicorn/no-unreadable-new-expression`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unreadable-new-expression.md) rule
+- 🔴 not enabled [`unicorn/no-unreadable-object-destructuring`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unreadable-object-destructuring.md) rule
+- 🟢 enabled [`unicorn/no-unsafe-buffer-conversion`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unsafe-buffer-conversion.md) rule
+- 🔴 not enabled [`unicorn/no-unsafe-dom-html`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unsafe-dom-html.md) rule
+- 🟢 enabled [`unicorn/no-unsafe-property-key`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unsafe-property-key.md) rule
+- 🟢 enabled [`unicorn/no-unsafe-string-replacement`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unsafe-string-replacement.md) rule
+- 🟢 enabled [`unicorn/no-useless-boolean-cast`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-boolean-cast.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/no-useless-coercion`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-coercion.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/no-useless-concat`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-concat.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/no-useless-continue`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-continue.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/no-useless-else`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-else.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/no-useless-override`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-override.md) rule
+- 🟢 enabled [`unicorn/no-useless-recursion`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-recursion.md) rule
+- 🟢 enabled [`unicorn/no-useless-template-literals`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-template-literals.md) rule and added it to the `noStylisticRules` config
+- 🔴 not enabled [`unicorn/operator-assignment`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/operator-assignment.md) rule
+- 🟢 enabled [`unicorn/prefer-add-event-listener-options`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-add-event-listener-options.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/prefer-array-from-map`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-array-from-map.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/prefer-array-slice`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-array-slice.md) rule
+- 🔴 not enabled [`unicorn/prefer-await`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-await.md) rule
+- 🟢 enabled [`unicorn/prefer-direct-iteration`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-direct-iteration.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/prefer-dispose`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-dispose.md) rule
+- 🔴 not enabled [`unicorn/prefer-dom-node-html-methods`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-dom-node-html-methods.md) rule
+- 🟢 enabled [`unicorn/prefer-early-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-early-return.md) rule and added it to the `noStylisticRules` config
+- 🔴 not enabled [`unicorn/prefer-else-if`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-else-if.md) rule
+- 🔴 not enabled [`unicorn/prefer-global-number-constants`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-global-number-constants.md) rule
+- 🟢 enabled [`unicorn/prefer-identifier-import-export-specifiers`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-identifier-import-export-specifiers.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/prefer-iterable-in-constructor`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-iterable-in-constructor.md) rule and added it to the `noStylisticRules` config
+- 🔴 not enabled [`unicorn/prefer-iterator-to-array`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-iterator-to-array.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/prefer-has-check`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-has-check.md) rule
+- 🟢 enabled [`unicorn/prefer-location-assign`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-location-assign.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/prefer-map-from-entries`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-map-from-entries.md) rule
+- 🟢 enabled [`unicorn/prefer-minimal-ternary`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-minimal-ternary.md) rule and added it to the `noStylisticRules` config
+- 🔴 not enabled [`unicorn/prefer-number-coercion`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-number-coercion.md) rule
+- 🟢 enabled [`unicorn/prefer-number-is-safe-integer`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-number-is-safe-integer.md) rule
+- 🟢 enabled [`unicorn/prefer-object-define-properties`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-object-define-properties.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/prefer-object-destructuring-defaults`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-object-destructuring-defaults.md) rule
+- 🟢 enabled [`unicorn/prefer-object-iterable-methods`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-object-iterable-methods.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/prefer-path2d`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-path2d.md) rule
+- 🟢 enabled [`unicorn/prefer-private-class-fields`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-private-class-fields.md) rule and ⚠️ disabled autofix for it
+- 🟢 enabled [`unicorn/prefer-scoped-selector`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-scoped-selector.md) rule
+- 🟢 enabled [`unicorn/prefer-short-arrow-method`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-short-arrow-method.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/prefer-simple-sort-comparator`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-simple-sort-comparator.md) rule
+- 🟢 enabled [`unicorn/prefer-single-array-predicate`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-single-array-predicate.md) rule
+- 🟢 enabled [`unicorn/prefer-single-object-destructuring`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-single-object-destructuring.md) rule
+- 🟢 enabled [`unicorn/prefer-smaller-scope`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-smaller-scope.md) rule
+- 🔴 not enabled [`unicorn/prefer-temporal`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-temporal.md) rule
+- 🔴 not enabled [`unicorn/prefer-type-literal-last`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-type-literal-last.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/prefer-uint8array-base64`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-uint8array-base64.md) rule
+- 🟢 enabled [`unicorn/prefer-unicode-code-point-escapes`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-unicode-code-point-escapes.md) rule and added it to the `noStylisticRules` config
+- 🟢 enabled [`unicorn/prefer-url-href`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-url-href.md) rule and added it to the `noStylisticRules` config
+- 🔴 not enabled [`unicorn/require-array-sort-compare`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-array-sort-compare.md) rule
+- 🟢 enabled [`unicorn/require-proxy-trap-boolean-return`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-proxy-trap-boolean-return.md) rule
+- 🔄 [`unicorn/no-array-for-each`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v65.0.1/docs/rules/no-array-for-each.md) was renamed to [`unicorn/no-for-each`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-for-each.md)
+- ⚠️ [`unicorn/no-hex-escape`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/v65.0.1/docs/rules/no-hex-escape.md) rule was disabled because got deprecated

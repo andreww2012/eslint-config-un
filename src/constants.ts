@@ -528,6 +528,58 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
   ts: {
     rules: Object.fromEntries(TS_PLUGIN_TYPE_AWARE_RULES.map((ruleName) => [ruleName, true])),
   },
+  unicorn: {
+    rules: {
+      'consistent-boolean-name': 'optional', // Indirect
+      'dom-node-dataset': 'optional', // Indirect
+      'no-array-callback-reference': 'optional',
+      'no-array-method-this-argument': 'optional', // Indirect
+      'no-array-reduce': 'optional', // Indirect
+      'no-array-splice': 'optional',
+      'no-for-each': 'optional', // Indirect
+      'no-for-loop': 'optional',
+      'no-mismatched-map-key': 'optional', // Indirect
+      'no-negated-array-predicate': 'optional', // Indirect
+      'no-non-function-verb-prefix': 'optional',
+      'no-object-methods-with-collections': 'optional',
+      'no-uncalled-method': 'optional', // Indirect
+      'no-unsafe-buffer-conversion': 'optional',
+      'no-unsafe-property-key': 'optional',
+      'no-useless-coercion': 'optional',
+      'no-useless-length-check': 'optional', // Indirect
+      'no-useless-override': 'optional',
+      'no-useless-spread': 'optional', // Indirect
+      'prefer-array-find': 'optional', // Indirect
+      'prefer-array-flat-map': 'optional', // Indirect
+      'prefer-array-from-map': 'optional', // Indirect
+      'prefer-array-slice': 'optional', // Indirect
+      'prefer-array-some': 'optional', // Indirect
+      'prefer-at': 'optional', // Indirect
+      'prefer-await': 'optional',
+      'prefer-direct-iteration': 'optional',
+      'prefer-dispose': 'optional',
+      'prefer-dom-node-text-content': 'optional', // Indirect
+      'prefer-else-if': 'optional', // Indirect
+      'prefer-has-check': 'optional',
+      'prefer-includes': 'optional', // Indirect
+      'prefer-keyboard-event-key': 'optional', // Indirect
+      'prefer-modern-dom-apis': 'optional',
+      'prefer-path2d': 'optional',
+      'prefer-regexp-test': 'optional',
+      'prefer-set-size': 'optional', // Indirect
+      'prefer-single-array-predicate': 'optional', // Indirect
+      'prefer-spread': 'optional',
+      'prefer-string-replace-all': 'optional', // Indirect
+      'prefer-string-slice': 'optional', // Indirect
+      'prefer-string-starts-ends-with': 'optional', // Indirect
+      'prefer-string-trim-start-end': 'optional', // Indirect
+      'prefer-temporal': 'optional',
+      'prefer-uint8array-base64': 'optional',
+      'prefer-url-href': 'optional',
+      'require-array-join-separator': 'optional', // Indirect
+      'require-array-sort-compare': 'optional', // Indirect
+    },
+  },
   vitest: {
     rules: {
       'unbound-method': true,

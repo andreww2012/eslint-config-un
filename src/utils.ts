@@ -82,8 +82,8 @@ export function findArrayInversions<T>(
       const aIndex = a.index;
       const bIndex = b.index;
 
-      const aForComparator = aIndex < bIndex ? a.value : b.value;
-      const bForComparator = aIndex < bIndex ? b.value : a.value;
+      const aForComparator = (aIndex < bIndex ? a : b).value;
+      const bForComparator = (aIndex < bIndex ? b : a).value;
       const comparatorResult = compareFn(aForComparator, bForComparator);
 
       if (comparatorResult === 1) {

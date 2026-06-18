@@ -168,7 +168,7 @@ export const executePackageAsEslintPlugin = (packageName: string) =>
         new Promise<ExecuteAnyEslintPluginWorkerOutput>((resolve, reject) => {
           const workerPath = new URL('./execute-any-eslint-plugin.worker.ts', import.meta.url);
           const worker = new Worker(
-            `import('tsx/esm/api').then((tsx) => {tsx.register(); return import('${workerPath.toString()}')});`,
+            `import('tsx/esm/api').then((tsx) => {tsx.register(); return import('${workerPath.href}')});`,
             {
               eval: true,
               workerData: {packageName} satisfies ExecuteAnyEslintPluginWorkerInitialData,

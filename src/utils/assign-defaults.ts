@@ -60,6 +60,7 @@ export const assignDefaults = <S, const D extends AssignDefaultsInput>(
   const result: Record<PropertyKey, unknown> = {...defaults};
 
   if (isObject(source)) {
+    // eslint-disable-next-line unicorn/prefer-object-iterable-methods -- see https://github.com/sindresorhus/eslint-plugin-unicorn/issues/3314
     for (const key of Object.keys(source)) {
       if (key === '__proto__' || key === 'constructor') {
         continue;

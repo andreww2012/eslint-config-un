@@ -34,7 +34,7 @@ const cliFlags = argv.flags;
 
 const {startPage} = cliFlags;
 
-if (!Number.isInteger(startPage) || startPage < 1) {
+if (!Number.isSafeInteger(startPage) || startPage < 1) {
   logger.fatal('Invalid start page number');
   process.exit(1);
 }
@@ -45,7 +45,7 @@ if (!captchaSolverApiKey) {
 }
 const captchaSolver = new CaptchaSolver(captchaSolverApiKey);
 
-// eslint-disable-next-line ts/no-unnecessary-type-conversion
+// eslint-disable-next-line ts/no-unnecessary-type-conversion, unicorn/no-useless-coercion
 const isValidJson = (value: unknown) => Boolean(isValidJsonInternal(value));
 
 const ResponseSchemaZod = z.looseObject({
@@ -57,19 +57,19 @@ const ResponseSchemaZod = z.looseObject({
     .array(),
 });
 
-export class BrowserLaunchError extends Data.TaggedError('BrowserLaunchError')<{
+class BrowserLaunchError extends Data.TaggedError('BrowserLaunchError')<{
   cause: unknown;
 }> {}
 
-export class PageNavigationError extends Data.TaggedError('PageNavigationError')<{
+class PageNavigationError extends Data.TaggedError('PageNavigationError')<{
   cause: unknown;
 }> {}
 
-export class UnexpectedResponseError extends Data.TaggedError('UnexpectedResponseError')<{
+class UnexpectedResponseError extends Data.TaggedError('UnexpectedResponseError')<{
   response: string;
 }> {}
 
-export class CaptchaSolveError extends Data.TaggedError('CaptchaSolveError')<{
+class CaptchaSolveError extends Data.TaggedError('CaptchaSolveError')<{
   cause: unknown;
 }> {}
 

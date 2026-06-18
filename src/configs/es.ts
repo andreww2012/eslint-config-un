@@ -345,7 +345,7 @@ export default ((context, optionsRaw, customConfig) => {
     const esFeatures = getEsVersionFeatures(version);
     return (
       (ecmaVersion === 'latest' || version <= ecmaVersion) &&
-      !Object.values(esFeatures).some((v) => !v)
+      Object.values(esFeatures).every(Boolean)
     );
   });
   // `grs` means "get rule severity"

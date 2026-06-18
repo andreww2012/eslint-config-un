@@ -136,6 +136,7 @@ export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOption
   'unicorn/no-useless-undefined': true,
   'unicorn/prefer-spread': true,
   'unicorn/prefer-string-raw': true, // Transforms strings to `String.raw` expressions, which may cause type errors
+  'unicorn/prefer-private-class-fields': true, // As per the rule description itself, it skips some patterns that could be used to access autofixed non-private fields
 
   'vitest/prefer-lowercase-title': true, // Strings/symbols shouldn't be changed by autofix
 
@@ -365,6 +366,7 @@ export interface EslintConfigUnOptions<
    *   'unicorn/consistent-existence-index-check': true,
    *   'unicorn/explicit-length-check': true,
    *   'unicorn/no-useless-undefined': true,
+   *   'unicorn/prefer-private-class-fields': true,
    *   'unicorn/prefer-spread': true,
    *   'unicorn/prefer-string-raw': true,
    *   'vitest/require-import-vi-mock': true,
@@ -801,7 +803,7 @@ export const processUnOrFlatConfig = (
                 : ruleEntryRaw.files || config.files,
           }),
           ...((ruleEntryRaw.ignores?.length || config.ignores?.length) && {
-            ignores: ruleEntryRaw.ignores?.length ? ruleEntryRaw.ignores : config.ignores,
+            ignores: (ruleEntryRaw.ignores?.length ? ruleEntryRaw : config).ignores,
           }),
           rules: Object.fromEntries(newRuleEntries),
         };

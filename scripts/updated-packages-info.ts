@@ -27,10 +27,10 @@ const getCompareDiffUrl = (
     return gitTag;
   }
   const newTagResult = gitTag(newVersion);
-  const oldTagResult = gitTag(oldVersion);
   if (typeof newTagResult === 'object') {
     return newTagResult.url;
   }
+  const oldTagResult = gitTag(oldVersion);
   if (typeof oldTagResult === 'object') {
     throw new TypeError(
       'gitTag function for new version returned a string, but for old version returned an object',
@@ -155,14 +155,16 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     `feat(${mainUnConfigNames}): update ${dependency} to v${newVersion} and enable ___INSERT-CHANGES___`,
   );
 
+  const SAMPLE_RULE_NAME = 'SAMPLE-RULE-NAME';
+
   const pluginPrefix = PLUGIN_PACKAGES_META[dependency]?.pluginPrefix;
-  const sampleRuleName = [pluginPrefix, 'SAMPLE-RULE-NAME'].filter(Boolean).join('/');
-  const ruleDocsUrl = packageMeta?.ruleDocsUrl?.(sampleRuleName);
+  const sampleRuleNameWithPrefix = [pluginPrefix, SAMPLE_RULE_NAME].filter(Boolean).join('/');
+  const ruleDocsUrl = packageMeta?.ruleDocsUrl?.(SAMPLE_RULE_NAME);
 
   if (pluginPrefix) {
     const ruleDocsUrlForMd = ruleDocsUrl
-      ? `[\`${sampleRuleName}\`](${ruleDocsUrl})`
-      : `\`${sampleRuleName}\``;
+      ? `[\`${sampleRuleNameWithPrefix}\`](${ruleDocsUrl})`
+      : `\`${sampleRuleNameWithPrefix}\``;
 
     console.log(styleText('underline', 'For changelog:'));
     console.log(
@@ -170,12 +172,13 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 
 - 🟢 enabled ${ruleDocsUrlForMd} rule
 - 🟢 enabled ${ruleDocsUrlForMd} rule and added it to the \`noStylisticRules\` config
+- 🟢 enabled ${ruleDocsUrlForMd} rule and ⚠️ disabled autofix for it
 - 🟡 enabled ${ruleDocsUrlForMd} rule (warning) with the following default options:
 - ❓ enabled conditionally ${ruleDocsUrlForMd} rule in ⚙️ \`\` sub-config
 - 🔴 not enabled ${ruleDocsUrlForMd} rule
-- ❌ \`\` rule was removed
+- ❌ \`${sampleRuleNameWithPrefix}\` rule was removed
 - ⚠️ ${ruleDocsUrlForMd} rule was disabled because got deprecated
-- 🔄 \`\` was renamed to ${ruleDocsUrlForMd}`,
+- 🔄 \`${sampleRuleNameWithPrefix}\` was renamed to ${ruleDocsUrlForMd}`,
     );
   }
 

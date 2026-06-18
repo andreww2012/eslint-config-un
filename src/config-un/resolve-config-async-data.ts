@@ -107,7 +107,6 @@ export const resolveConfigAsyncData = async (
                 module,
               }))
             : null;
-        const plugin = pluginResult?.module;
         if (pluginResult && 'packageName' in pluginResult) {
           const packageToInstall = await checkIfModuleCorrectlyLoaded(pluginResult);
           if (packageToInstall) {
@@ -128,6 +127,7 @@ export const resolveConfigAsyncData = async (
             `Plugin \`${stylePluginPrefix(pluginPrefix)}\` loaded${isProvided ? styleText('red', ' from `pluginOverrides`') : ''}, reason: ${loadPluginsOnDemand ? 'used in configs' : '`loadPluginsOnDemand` is set to `false`'}`,
           );
         }
+        const plugin = pluginResult?.module;
         return plugin ? ([pluginPrefix, plugin] as const) : null;
       }),
     ),
@@ -195,7 +195,7 @@ export const resolveConfigAsyncData = async (
   if (packagesToManuallyInstallOrUpdate.size > 0) {
     const collator = new Intl.Collator();
     partition(
-      Array.from(packagesToManuallyInstallOrUpdate.entries(), ([name, item]) => ({...item, name})),
+      Array.from(packagesToManuallyInstallOrUpdate, ([name, item]) => ({...item, name})),
       (item) => item.installedVersion != null,
     ).forEach((packages, index) => {
       if (packages.length === 0) {

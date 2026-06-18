@@ -148,6 +148,12 @@ export default eslintConfig({
         'security/detect-unsafe-regex': 0, // Many false positives
       },
     },
+    unicorn: {
+      overrides: {
+        // TODO enable once this gets changed: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/3316
+        'unicorn/consistent-boolean-name': 0,
+      },
+    },
     vitest: {
       overrides: {
         'vitest/expect-expect': [
