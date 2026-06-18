@@ -37,7 +37,7 @@ allowBuilds:
   lefthook@2.1.9: true
   msgpackr-extract@3.0.4: false
   multiline-ts@4.0.1: false
-  nx@22.7.5: false
+  nx@23.0.0: false
   puppeteer@25.1.0: true
   unrs-resolver@1.12.2: true
 
