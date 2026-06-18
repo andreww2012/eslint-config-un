@@ -792,7 +792,6 @@ const ALL_STYLISTIC_RULES = {
   },
   un: {
     'no-empty-object-ternary-spread': true,
-    'prefer-early-return': true,
   },
   // Won't include: no-console-spaces, prefer-array-find, prefer-array-some, prefer-math-trunc, prefer-modern-math-apis, prefer-string-starts-ends-with
   unicorn: {
