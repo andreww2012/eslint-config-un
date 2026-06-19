@@ -343,6 +343,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     },
     ngrx: {
       configs: ['ngrx'],
+      gitTag: versionAsIs,
       ruleDocsUrl: (ruleName) => `https://ngrx.io/guide/eslint-plugin/rules/${ruleName}`,
     },
     'no-only-tests': {

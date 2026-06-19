@@ -37,4 +37,5 @@
     "nr typegen": true,
     "nr rules-finder": true,
   },
+  "git.inputValidationSubjectLength": 120,
 }
