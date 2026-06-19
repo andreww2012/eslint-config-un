@@ -484,6 +484,7 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'no-for-in-iterable': 'optional',
       'no-ignored-return': 'optional',
       'no-in-misuse': 'optional',
+      'no-incompatible-assertion-types': 'optional',
       'no-inconsistent-returns': 'optional',
       'no-incorrect-string-concat': 'optional',
       'no-invalid-regexp': 'optional',

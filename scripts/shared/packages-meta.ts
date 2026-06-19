@@ -496,7 +496,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     sonarjs: {
       configs: ['sonar'],
       gitTag: (version) => ({
-        url: `https://github.com/SonarSource/SonarJS/blob/___INSERT-REF-HERE___/packages/jsts/src/rules/CHANGELOG.md#___INSERT-DATE-HERE___-version-${version.replaceAll(/\D/g, '')}`,
+        url: `https://github.com/SonarSource/SonarJS/blob/___INSERT-REF-HERE___/packages/analysis/src/jsts/rules/CHANGELOG.md#___INSERT-DATE-HERE___-version-${version.replaceAll(/\D/g, '')}`,
       }),
       ruleDocsUrl: null, // Custom URLs
     },
