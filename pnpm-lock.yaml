@@ -531,11 +531,11 @@ importers:
         specifier: 0.1.0
         version: 0.1.0(eslint@9.39.2)(typescript@6.0.3)
       '@tsrx/eslint-parser':
-        specifier: 0.3.72
-        version: 0.3.72(@typescript-eslint/types@8.60.1)(eslint@9.39.2)
+        specifier: 0.3.84
+        version: 0.3.84(@typescript-eslint/types@8.61.0)(eslint@9.39.2)
       '@tsrx/eslint-plugin':
-        specifier: 0.3.72
-        version: 0.3.72(@tsrx/eslint-parser@0.3.72)(@typescript-eslint/parser@8.61.0)(eslint@9.39.2)
+        specifier: 0.3.84
+        version: 0.3.84(@tsrx/eslint-parser@0.3.84)(@typescript-eslint/parser@8.61.0)(eslint@9.39.2)
       '@types/eslint-plugin-mobx':
         specifier: 0.0.0
         version: 0.0.0(jiti@2.7.0)
@@ -4849,20 +4849,20 @@ packages:
   '@thepassle/axobject-query@4.0.0':
     resolution: {integrity: sha512-/LHo+2jOdxs2WtbGocr3/lDSzsnjgCV6DSoBf4Y1Q0D24Hu67NPWuneoJimfHu5auqqSWi1fAvtln2013VxVqg==}
 
-  '@tsrx/core@0.1.20':
-    resolution: {integrity: sha512-3SjpoFlEv4it4NFwF3bNuYupqKmpAdyRVOAY6/AGF/TAomL3cJVOmURyykaUrINFrcHXe2hksYdrUw9QcliheQ==}
+  '@tsrx/core@0.1.32':
+    resolution: {integrity: sha512-1U9etl7El6rVZvSOLcA83qpzfYMHhUXteovUliYJcc68CCI5+g9gzsQNFNcNnTCcWF54udLaon+xNIzUSUyPQw==}
 
-  '@tsrx/eslint-parser@0.3.72':
-    resolution: {integrity: sha512-I+ExQMff4lIL8zX0P1OTUE/Nk9DtMdXhwOjKlSL5o16ADGgzJFd4o4xWCnPZRgnJhSk5vykF3yTBECneo+F3AA==}
+  '@tsrx/eslint-parser@0.3.84':
+    resolution: {integrity: sha512-ZyE8H+jWVvUi9PeUaRaoEMhpbG2EaWzqLHjzHqp4wMBKb8GRaSBWu4MVdNj+bCA2ndqa9z+QqJXuQp/FJe91lg==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       eslint: '>=9.0.0'
 
-  '@tsrx/eslint-plugin@0.3.72':
-    resolution: {integrity: sha512-ee5w1c97EQYjykoceJqT43JBB96jVhU4G8uVd5XAbYA91LWoVh0y5uPIhStldVC2qQ154B381JCjtRWmpAu5Ug==}
+  '@tsrx/eslint-plugin@0.3.84':
+    resolution: {integrity: sha512-6INr2Ho+j7wlZ/1GTOnYjrtFgLBETDM3a34muapj7oPpFcznUHh0e6BFlvF20WPW0pYzJVG5kd/i8rZ3B44fxw==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
-      '@tsrx/eslint-parser': 0.3.72
+      '@tsrx/eslint-parser': 0.3.84
       '@typescript-eslint/parser': ^8.56.1
       eslint: '>=9.0.0'
 
@@ -16024,7 +16024,7 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  '@tsrx/core@0.1.20(@typescript-eslint/types@8.60.1)':
+  '@tsrx/core@0.1.32(@typescript-eslint/types@8.61.0)':
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
       '@noble/hashes': 2.2.0
@@ -16032,23 +16032,23 @@ snapshots:
       '@types/estree': 1.0.9
       '@types/estree-jsx': 1.0.5
       acorn: 8.16.0
-      esrap: 2.2.11(@typescript-eslint/types@8.60.1)
+      esrap: 2.2.11(@typescript-eslint/types@8.61.0)
       is-reference: 3.0.3
       magic-string: 0.30.21
       zimmerframe: 1.1.4
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/eslint-parser@0.3.72(@typescript-eslint/types@8.60.1)(eslint@9.39.2)':
+  '@tsrx/eslint-parser@0.3.84(@typescript-eslint/types@8.61.0)(eslint@9.39.2)':
     dependencies:
-      '@tsrx/core': 0.1.20(@typescript-eslint/types@8.60.1)
+      '@tsrx/core': 0.1.32(@typescript-eslint/types@8.61.0)
       eslint: 9.39.2(jiti@2.7.0)
     transitivePeerDependencies:
       - '@typescript-eslint/types'
 
-  '@tsrx/eslint-plugin@0.3.72(@tsrx/eslint-parser@0.3.72)(@typescript-eslint/parser@8.61.0)(eslint@9.39.2)':
+  '@tsrx/eslint-plugin@0.3.84(@tsrx/eslint-parser@0.3.84)(@typescript-eslint/parser@8.61.0)(eslint@9.39.2)':
     dependencies:
-      '@tsrx/eslint-parser': 0.3.72(@typescript-eslint/types@8.60.1)(eslint@9.39.2)
+      '@tsrx/eslint-parser': 0.3.84(@typescript-eslint/types@8.61.0)(eslint@9.39.2)
       '@typescript-eslint/parser': 8.61.0(eslint@9.39.2)(typescript@6.0.3)
       eslint: 9.39.2(jiti@2.7.0)
 
@@ -19754,12 +19754,6 @@ snapshots:
   esquery@1.7.0:
     dependencies:
       estraverse: 5.3.0
-
-  esrap@2.2.11(@typescript-eslint/types@8.60.1):
-    dependencies:
-      '@jridgewell/sourcemap-codec': 1.5.5
-    optionalDependencies:
-      '@typescript-eslint/types': 8.60.1
 
   esrap@2.2.11(@typescript-eslint/types@8.61.0):
     dependencies:
