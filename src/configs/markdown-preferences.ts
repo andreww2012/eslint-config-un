@@ -388,6 +388,7 @@ export default (async (context, optionsRaw) => {
     .addRule('table-pipe-alignment', ERROR) /** @since 0.25.0 */ // 💅
     .addRule('thematic-break-length', ERROR) /** @since 0.17.0 */ // 💅
     .addRule('thematic-break-sequence-pattern', ERROR) /** @since 0.17.0 */ // 💅
+    .enableConfigTesterForPlugin('markdown-preferences')
     .addOverrides();
 
   return {
