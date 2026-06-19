@@ -195,7 +195,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     },
     'github-actions': {
       configs: ['githubActions'],
-      ruleDocsUrl: null, // No docs
+      ruleDocsUrl: (ruleName) => `https://eslint-plugin-github-action.ntnyq.com/rules/${ruleName}`,
     },
     graphql: {
       configs: ['graphql'],

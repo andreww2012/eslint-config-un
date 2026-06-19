@@ -702,8 +702,8 @@ importers:
         specifier: 10.0.0
         version: 10.0.0(eslint@9.39.2)(typescript@6.0.3)
       eslint-plugin-github-action:
-        specifier: 0.2.0
-        version: 0.2.0(eslint@9.39.2)
+        specifier: 0.3.0
+        version: 0.3.0(eslint@9.39.2)
       eslint-plugin-header:
         specifier: 3.1.1
         version: 3.1.1(eslint@9.39.2)
@@ -3380,9 +3380,9 @@ packages:
     resolution: {integrity: sha512-mGUWr1uMnf0le2TwfOZY4SFxZGXGfm4Jtay/nwAa2FLNAKXUoUwaGwBMNH36UHPtinWfTSJ3nqFQr0091CxVGg==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  '@ntnyq/utils@0.11.6':
-    resolution: {integrity: sha512-b3RPDTBi9xm/RsjUyQdE5LlN0+e+PwgpQotE28zSv01XQlXE79VrAKeGPCll0NpyiuXu626reJSdeqcjIjbsPw==}
-    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+  '@ntnyq/utils@0.15.0':
+    resolution: {integrity: sha512-/V+wlKysA73OD5R+KlA+C1GhzZst7HiRUCAm1l7ebNiG/rGZ0ysYHEO/qcidKvAQoJ5H/KgahKDfzcAGccQHCA==}
+    engines: {node: ^22.13.0 || >=24}
 
   '@nuxt/eslint-plugin@1.16.0':
     resolution: {integrity: sha512-vbX9EsJqTqIRwf3+sv9mJ/OtFKhH8o8NIbNF9Q6weQZY1MRf8jGEvLnjsyJa5VEEHl5TXSXsPcyrmIK58jsRpw==}
@@ -7283,9 +7283,9 @@ packages:
       typescript:
         optional: true
 
-  eslint-plugin-github-action@0.2.0:
-    resolution: {integrity: sha512-nUZTMBs5w5P/8ej8cf2BzgF2QLnYJH4c9um+1Vtua3ybQMqbMGWV66TlbqgMyZweRe1YMR2UbGRKsYf77gUA3A==}
-    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+  eslint-plugin-github-action@0.3.0:
+    resolution: {integrity: sha512-o61vth6qynHGFUu1xa2wxcSn9nxHT4HUBzv6BOze5m5mHuwJmq6C2kgMru4tW7FqVtCB2UvyciXRq2YfBaYGUA==}
+    engines: {node: ^22.13.0 || >=24}
     peerDependencies:
       eslint: ^9.5.0 || ^10.0.0
 
@@ -14992,7 +14992,7 @@ snapshots:
       node-gyp: 12.3.0
       proc-log: 6.1.0
 
-  '@ntnyq/utils@0.11.6': {}
+  '@ntnyq/utils@0.15.0': {}
 
   '@nuxt/eslint-plugin@1.16.0(eslint@9.39.2)(typescript@6.0.3)':
     dependencies:
@@ -18839,10 +18839,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-github-action@0.2.0(eslint@9.39.2):
+  eslint-plugin-github-action@0.3.0(eslint@9.39.2):
     dependencies:
       '@eslint/core': 1.2.1
-      '@ntnyq/utils': 0.11.6
+      '@ntnyq/utils': 0.15.0
       '@types/json-schema': 7.0.15
       eslint: 9.39.2(jiti@2.7.0)
       uncase: 0.2.0

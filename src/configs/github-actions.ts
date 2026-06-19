@@ -70,6 +70,8 @@ export default ((context, optionsRaw) => {
     .addRule('no-invalid-key', ERROR) /** @since 0.0.8 */ // 🟢
     .addRule('no-top-level-env', OFF) /** @since 0.0.6 */
     .addRule('no-top-level-permissions', OFF) /** @since 0.0.4 */
+    .addRule('no-unpinned-uses', OFF) /** @since 0.3.0 */
+    .addRule('prefer-cancel-in-progress', OFF) /** @since 0.3.0 */
     // Reason for disabling: extension should be controlled by `yaml/file-extension`
     .addRule('prefer-file-extension', OFF) /** @since 0.0.8 */ // 🟢
     .addRule(
@@ -79,6 +81,7 @@ export default ((context, optionsRaw) => {
     ) /** @since 0.0.7 */
     .addRule('require-action-name', require.actionName ? ERROR : OFF) /** @since 0.0.0 */ // 🟢
     .addRule('require-action-run-name', require.actionRunName ? ERROR : OFF) /** @since 0.0.9 */
+    .addRule('require-concurrency-group', OFF) /** @since 0.3.0 */
     .addRule('require-job-name', require.jobName ? ERROR : OFF) /** @since 0.0.6 */
     .addRule('require-job-step-name', require.jobStepName ? ERROR : OFF) /** @since 0.0.6 */
     .addRule('valid-timeout-minutes', ERROR) /** @since 0.0.16 */ // 🟢
