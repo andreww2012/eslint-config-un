@@ -215,7 +215,6 @@ patchedDependencies:
   '@eslint/compat@2.1.0': 377aa09bd23212c2eebfb84602b58d2a4263f34f31e4e4fd1c69e36c4b827931
   eslint-plugin-node-dependencies: 0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4
   eslint-plugin-prettier@5.5.6: f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087
-  eslint-plugin-remeda@2.1.0: b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08
   import-meta-resolve: 13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba
   npm-check-updates: 1f4558c8d7e70491d4a213c5ffae24a66a1edf45efd6f171096d275469667ad8
 
@@ -774,8 +773,8 @@ importers:
         specifier: 1.0.1
         version: 1.0.1(eslint@9.39.2)
       eslint-plugin-remeda:
-        specifier: 2.1.0
-        version: 2.1.0(patch_hash=b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08)(eslint@9.39.2)
+        specifier: 2.2.0
+        version: 2.2.0(eslint@9.39.2)(typescript@6.0.3)
       eslint-plugin-sentences-per-line:
         specifier: 0.1.2
         version: 0.1.2(jiti@2.7.0)
@@ -7531,8 +7530,8 @@ packages:
     peerDependencies:
       eslint: '>=9.38.0'
 
-  eslint-plugin-remeda@2.1.0:
-    resolution: {integrity: sha512-gWOlc1TbfHotomle0/QyRdIy+VU5cNn0HqtsAUjRshv3TKavptXPscLojVJJG20s6tF0hkuLmUbIpuVZ4xo6EA==}
+  eslint-plugin-remeda@2.2.0:
+    resolution: {integrity: sha512-e3AcYAV/rA3wjfhIxK++7aA1pd0JK2f3j9Y4WAy1jGQpWgnTdr1zJU2gxafXTfLvNPKLYjxptGs/JIJur57Ayw==}
     engines: {node: '>=22'}
     peerDependencies:
       eslint: '>=9.0.0'
@@ -9160,9 +9159,6 @@ packages:
   lockfile-tools@1.3.1:
     resolution: {integrity: sha512-N13mkln08v/ot92P9usMUzENXSvZWz8a4XXtEetEtn2vdnAzsk56T6QuicXvgB19brkEo5HoccqtkizW6vhyKg==}
     engines: {node: ^22.21.1 || ^24.12 || >= 25.2.1}
-
-  lodash-es@4.18.1:
-    resolution: {integrity: sha512-J8xewKD/Gk22OZbhpOVSwcs60zhd95ESDwezOFuA3/099925PdHJ7OFHNTGtajL3AlZkykD32HykiMo+BIBI8A==}
 
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
@@ -19226,10 +19222,13 @@ snapshots:
       regexp-ast-analysis: 0.7.1
       scslre: 0.3.0
 
-  eslint-plugin-remeda@2.1.0(patch_hash=b4f862cd10a64e69298ea547bb760c7613743b8412fac1eb7171f592d8172e08)(eslint@9.39.2):
+  eslint-plugin-remeda@2.2.0(eslint@9.39.2)(typescript@6.0.3):
     dependencies:
+      '@typescript-eslint/utils': 8.61.1(eslint@9.39.2)(typescript@6.0.3)
       eslint: 9.39.2(jiti@2.7.0)
-      lodash-es: 4.18.1
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   eslint-plugin-security@4.0.1:
     dependencies:
@@ -20952,8 +20951,6 @@ snapshots:
       '@npmcli/arborist': 9.7.0
     transitivePeerDependencies:
       - supports-color
-
-  lodash-es@4.18.1: {}
 
   lodash.camelcase@4.3.0: {}
 
