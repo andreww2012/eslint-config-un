@@ -646,6 +646,7 @@ export class ConfigEntryBuilder<
             > &
               unknown[] = [];
 
+            // eslint-disable-next-line unicorn/no-unnecessary-boolean-comparison
             if (includeDeprecated === false) {
               const includedDeprecatedRules = addedRulesForPlugin.filter(([addedRuleName]) =>
                 deprecatedPluginRules.has(addedRuleName),
@@ -665,7 +666,7 @@ export class ConfigEntryBuilder<
             }
 
             const notIncludedRules = (
-              includeDeprecated === true
+              includeDeprecated === true // eslint-disable-line unicorn/no-unnecessary-boolean-comparison
                 ? [...activePluginRules, ...deprecatedPluginRules]
                 : [...activePluginRules]
             ).filter(

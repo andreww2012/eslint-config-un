@@ -533,26 +533,38 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
     rules: {
       'consistent-boolean-name': 'optional', // Indirect
       'dom-node-dataset': 'optional', // Indirect
+      'explicit-length-check': 'optional', // Indirect
       'no-array-callback-reference': 'optional',
+      'no-array-front-mutation': 'optional', // Indirect
       'no-array-method-this-argument': 'optional', // Indirect
       'no-array-reduce': 'optional', // Indirect
+      'no-array-sort-for-min-max': 'optional', // Indirect
       'no-array-splice': 'optional',
+      'no-boolean-sort-comparator': 'optional', // Indirect
+      'no-chained-comparison': 'optional', // Indirect
+      'no-collection-bracket-access': 'optional', // Indirect
+      'no-computed-property-existence-check': 'optional', // Indirect
       'no-for-each': 'optional', // Indirect
       'no-for-loop': 'optional',
+      'no-invalid-character-comparison': 'optional', // Indirect
+      'no-loop-iterable-mutation': 'optional', // Indirect
       'no-mismatched-map-key': 'optional', // Indirect
       'no-negated-array-predicate': 'optional', // Indirect
       'no-non-function-verb-prefix': 'optional',
       'no-object-methods-with-collections': 'optional',
       'no-uncalled-method': 'optional', // Indirect
+      'no-unnecessary-boolean-comparison': 'optional', // Indirect
       'no-unsafe-buffer-conversion': 'optional',
       'no-unsafe-property-key': 'optional',
       'no-useless-coercion': 'optional',
       'no-useless-length-check': 'optional', // Indirect
+      'no-useless-logical-operand': 'optional', // Indirect
       'no-useless-override': 'optional',
       'no-useless-spread': 'optional', // Indirect
       'prefer-array-find': 'optional', // Indirect
       'prefer-array-flat-map': 'optional', // Indirect
       'prefer-array-from-map': 'optional', // Indirect
+      'prefer-array-iterable-methods': 'optional', // Indirect
       'prefer-array-slice': 'optional', // Indirect
       'prefer-array-some': 'optional', // Indirect
       'prefer-at': 'optional', // Indirect
@@ -566,6 +578,7 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'prefer-keyboard-event-key': 'optional', // Indirect
       'prefer-modern-dom-apis': 'optional',
       'prefer-path2d': 'optional',
+      'prefer-regexp-escape': 'optional', // Indirect
       'prefer-regexp-test': 'optional',
       'prefer-set-size': 'optional', // Indirect
       'prefer-single-array-predicate': 'optional', // Indirect

@@ -406,6 +406,7 @@ export default ((context, optionsRaw) => {
             })()
           : [],
     ) /** @since 65.0.0 */
+    .addRule('consistent-conditional-object-spread', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('consistent-date-clone', ERROR) /** @since 57.0.0 */
     .addRule('consistent-destructuring', OFF) /** @since 26.0.0 */ // 🔴
     .addRule('consistent-empty-array-spread', ERROR) /** @since 53.0.0 */ // 🟣
@@ -418,6 +419,7 @@ export default ((context, optionsRaw) => {
     .addRule('consistent-optional-chaining', ERROR) /** @since 66.0.0 */ // 🟡
     .addRule('consistent-template-literal-escape', ERROR) /** @since 64.0.0 */ // 🟣
     .addRule('custom-error-definition', ERROR) /** @since 2.0.0 */ // 🔴
+    .addRule('default-export-style', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule(
       'dom-node-dataset',
       domDataAttributesStyle ? ERROR : OFF,
@@ -427,7 +429,7 @@ export default ((context, optionsRaw) => {
     .addRule('error-message', ERROR) /** @since 4.0.0 */
     .addRule('escape-case', ERROR) /** @since 2.0.0 */
     .addRule('expiring-todo-comments', ERROR) /** @since 11.0.0 */
-    .addRule('explicit-length-check', ERROR) /** @since 1.0.0 */ // 🟣
+    .addRule('explicit-length-check', ERROR) /** @since 1.0.0 */ // 🟣💭?
     .addRule(
       'explicit-timer-delay',
       explicitTimersDelay === false ? OFF : ERROR,
@@ -443,33 +445,46 @@ export default ((context, optionsRaw) => {
       maxNestedCalls > 0 ? ERROR : OFF,
       maxNestedCalls > 0 ? [{max: maxNestedCalls}] : [],
     ) /** @since 66.0.0 */ // 🟣
+    // TODO consider enable and/or make configurable in future
+    .addRule('name-replacements', OFF) /** @since 8.0.0 */ // 🟣
     .addRule('new-for-builtins', ERROR) /** @since 3.0.0 */
     .addRule('no-abusive-eslint-disable', ERROR) /** @since 0.5.0 */
     .addRule('no-accessor-recursion', ERROR) /** @since 57.0.0 */
+    .addRule('no-accidental-bitwise-operator', ERROR) /** @since 68.0.0 */
     .addRule('no-anonymous-default-export', OFF) /** @since 52.0.0 */ // Note: there's the same rule in import plugin
     .addRule(
       'no-array-callback-reference',
       OFF,
     ) /** @since 3.0.0 */ /** @aka no-fn-reference-in-iterator */ // 🟣💭?
+    .addRule('no-array-concat-in-loop', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('no-array-fill-with-reference-type', ERROR) /** @since 65.0.0 */
     .addRule('no-array-from-fill', ERROR) /** @since 65.0.0 */
+    .addRule('no-array-front-mutation', OFF) /** @since 68.0.0 */ // 🔴💭?
     .addRule('no-array-method-this-argument', ERROR) /** @since 34.0.0 */ // 💭?
     .addRule('no-array-reduce', OFF) /** @since 20.0.0 */ /** @aka no-reduce */ // 🟣💭?
     .addRule('no-array-reverse', ERROR) /** @since 60.0.0 */
     .addRule('no-array-sort', ERROR) /** @since 61.0.0 */
+    .addRule('no-array-sort-for-min-max', ERROR) /** @since 68.0.0 */ // 💭?
     .addRule('no-array-splice', ERROR) /** @since 67.0.0 */ // 🟣💭?
     .addRule('no-asterisk-prefix-in-documentation-comments', OFF) /** @since 66.0.0 */ // 🔴
     .addRule('no-await-expression-member', OFF) /** @since 39.0.0 */ // 🟣
     .addRule('no-await-in-promise-methods', ERROR) /** @since 52.0.0 */
     .addRule('no-blob-to-file', ERROR) /** @since 65.0.0 */
+    .addRule('no-boolean-sort-comparator', ERROR) /** @since 68.0.0 */ // 💭?
     .addRule('no-break-in-nested-loop', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-canvas-to-image', ERROR) /** @since 65.0.0 */
-    .addRule('no-computed-property-existence-check', OFF) /** @since 66.0.0 */ // 🟣
+    .addRule('no-chained-comparison', ERROR) /** @since 68.0.0 */ // 💭?
+    .addRule('no-collection-bracket-access', ERROR) /** @since 68.0.0 */ // 💭?
+    .addRule('no-computed-property-existence-check', OFF) /** @since 66.0.0 */ // 🟣💭?
     .addRule('no-confusing-array-splice', ERROR) /** @since 65.0.0 */ // 🟣
     .addRule('no-confusing-array-with', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-console-spaces', ERROR) /** @since 7.0.0 */
+    .addRule('no-constant-zero-expression', ERROR) /** @since 68.0.0 */
     .addRule('no-declarations-before-early-exit', ERROR) /** @since 66.0.0 */
     .addRule('no-document-cookie', ERROR) /** @since 32.0.0 */
+    .addRule('no-double-comparison', ERROR) /** @since 68.0.0 */
+    .addRule('no-duplicate-if-branches', ERROR) /** @since 68.0.0 */ // 🟣
+    .addRule('no-duplicate-logical-operands', ERROR) /** @since 68.0.0 */
     .addRule('no-duplicate-loops', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-duplicate-set-values', ERROR) /** @since 65.0.0 */ // 🟣
     .addRule('no-empty-file', ERROR) /** @since 38.0.0 */
@@ -479,10 +494,12 @@ export default ((context, optionsRaw) => {
     .addRule('no-for-loop', OFF) /** @since 8.0.0 */ // 🟣💭?
     .addRule('no-global-object-property-assignment', OFF) /** @since 66.0.0 */ // 🟡
     .addRule('no-immediate-mutation', ERROR) /** @since 62.0.0 */
+    .addRule('no-impossible-length-comparison', ERROR) /** @since 68.0.0 */
     .addRule('no-incorrect-query-selector', ERROR) /** @since 65.0.0 */ // 🟣
     .addRule('no-incorrect-template-string-interpolation', ERROR) /** @since 66.0.0 */
     .addRule('no-instanceof-builtins', ERROR) /** @since 57.0.0 */
     .addRule('no-invalid-argument-count', ERROR) /** @since 67.0.0 */
+    .addRule('no-invalid-character-comparison', ERROR) /** @since 68.0.0 */ // 💭?
     .addRule('no-invalid-fetch-options', ERROR) /** @since 53.0.0 */
     // Note: also works on html
     .addRule('no-invalid-file-input-accept', ERROR) /** @since 65.0.0 */
@@ -490,10 +507,15 @@ export default ((context, optionsRaw) => {
     .addRule('no-keyword-prefix', OFF) /** @since 10.0.0 */ // 🔴
     .addRule('no-late-current-target-access', ERROR) /** @since 65.0.0 */ // 🟣
     .addRule('no-lonely-if', ERROR) /** @since 24.0.0 */
+    .addRule('no-loop-iterable-mutation', ERROR) /** @since 68.0.0 */ // 🟣💭?
     // Passing `Infinity` doesn't work great with TypeScript
     .addRule('no-magic-array-flat-depth', OFF) /** @since 53.0.0 */
     .addRule('no-manually-wrapped-comments', OFF) /** @since 65.0.0 */ // 🟣
     .addRule('no-mismatched-map-key', ERROR) /** @since 66.0.0 */ // 🟣💭?
+    .addRule(
+      'no-misrefactored-assignment', // cspell:disable-line
+      ERROR,
+    ) /** @since 68.0.0 */
     .addRule('no-named-default', ERROR) /** @since 57.0.0 */
     .addRule('no-negated-array-predicate', ERROR) /** @since 66.0.0 */ // 💭?
     .addRule('no-negated-comparison', ERROR) /** @since 66.0.0 */
@@ -511,6 +533,7 @@ export default ((context, optionsRaw) => {
         ? [{verbs: functionPrefixesToDisallowForCallables}]
         : [],
     ) /** @since 67.0.0 */ // 🟣💭?
+    .addRule('no-nonstandard-builtin-properties', ERROR) /** @since 68.0.0 */ // 🟡
     .addRule('no-null', OFF) /** @since 19.0.0 */ // 🟣
     .addRule('no-object-as-default-parameter', ERROR) /** @since 21.0.0 */
     .addRule('no-object-methods-with-collections', ERROR) /** @since 66.0.0 */ // 🟣💭?
@@ -518,6 +541,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-process-exit', OFF) /** @since 0.2.0 */ // Used in `node` config
     .addRule('no-redundant-comparison', ERROR) /** @since 66.0.0 */
     .addRule('no-return-array-push', ERROR) /** @since 66.0.0 */ // 🟣
+    .addRule('no-selector-as-dom-name', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('no-single-promise-in-promise-methods', ERROR) /** @since 52.0.0 */
     .addRule('no-static-only-class', ERROR) /** @since 29.0.0 */
     .addRule('no-subtraction-comparison', ERROR) /** @since 66.0.0 */
@@ -532,6 +556,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-unnecessary-array-flat-depth', ERROR) /** @since 59.0.0 */
     .addRule('no-unnecessary-array-splice-count', ERROR) /** @since 59.0.0 */
     .addRule('no-unnecessary-await', ERROR) /** @since 44.0.0 */
+    .addRule('no-unnecessary-boolean-comparison', ERROR) /** @since 68.0.0 */ // 🟣💭?
     .addRule('no-unnecessary-global-this', ERROR) /** @since 66.0.0 */
     .addRule('no-unnecessary-nested-ternary', ERROR) /** @since 65.0.0 */
     .addRule('no-unnecessary-polyfills', ERROR) /** @since 50.0.0 */
@@ -554,13 +579,16 @@ export default ((context, optionsRaw) => {
     .addRule('no-useless-boolean-cast', ERROR) /** @since 66.0.0 */
     .addRule('no-useless-coercion', ERROR) /** @since 67.0.0 */ // 💭?
     .addRule('no-useless-collection-argument', ERROR) /** @since 62.0.0 */
+    .addRule('no-useless-compound-assignment', ERROR) /** @since 68.0.0 */
     .addRule('no-useless-concat', ERROR) /** @since 66.0.0 */
     .addRule('no-useless-continue', ERROR) /** @since 67.0.0 */
+    .addRule('no-useless-delete-check', ERROR) /** @since 68.0.0 */
     .addRule('no-useless-else', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-useless-error-capture-stack-trace', ERROR) /** @since 60.0.0 */
     .addRule('no-useless-fallback-in-spread', ERROR) /** @since 36.0.0 */
     .addRule('no-useless-iterator-to-array', ERROR) /** @since 64.0.0 */
     .addRule('no-useless-length-check', ERROR) /** @since 35.0.0 */ // 💭?
+    .addRule('no-useless-logical-operand', ERROR) /** @since 68.0.0 */ // 💭?
     .addRule('no-useless-override', ERROR) /** @since 67.0.0 */ // 💭?
     .addRule('no-useless-promise-resolve-reject', ERROR) /** @since 40.0.0 */
     .addRule('no-useless-recursion', ERROR) /** @since 66.0.0 */ // 🟣
@@ -570,6 +598,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-useless-undefined', ERROR, [
       {checkArguments: false, checkArrowFunctionBody: false},
     ]) /** @since 20.0.0 */
+    .addRule('no-xor-as-exponentiation', ERROR) /** @since 68.0.0 */
     .addRule('no-zero-fractions', ERROR) /** @since 8.0.0 */
     .addRule('number-literal-case', OFF) /** @since 2.0.0 */ // 🟠
     .addRule('numeric-separators-style', ERROR, [
@@ -581,8 +610,10 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-array-find', ERROR) /** @since 21.0.0 */ // 💭?
     .addRule('prefer-array-flat', ERROR) /** @since 29.0.0 */
     .addRule('prefer-array-flat-map', ERROR) /** @since 9.0.0 */ /** @aka prefer-flat-map */ // 💭?
+    .addRule('prefer-array-from-async', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('prefer-array-from-map', ERROR) /** @since 66.0.0 */ // 💭?
     .addRule('prefer-array-index-of', ERROR) /** @since 26.0.0 */
+    .addRule('prefer-array-iterable-methods', ERROR) /** @since 68.0.0 */ // 🟣💭?
     .addRule('prefer-array-last-methods', ERROR) /** @since 65.0.0 */
     .addRule('prefer-array-slice', ERROR) /** @since 67.0.0 */ // 🟣💭?
     .addRule('prefer-array-some', ERROR) /** @since 25.0.0 */ // 💭?
@@ -590,9 +621,11 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-await', OFF) /** @since 66.0.0 */ // 💭?
     .addRule('prefer-bigint-literals', ERROR) /** @since 61.0.0 */
     .addRule('prefer-blob-reading-methods', ERROR) /** @since 47.0.0 */
+    .addRule('prefer-boolean-return', ERROR) /** @since 68.0.0 */
     .addRule('prefer-class-fields', ERROR) /** @since 60.0.0 */
     .addRule('prefer-classlist-toggle', ERROR) /** @since 61.0.0 */
     .addRule('prefer-code-point', ERROR) /** @since 39.0.0 */
+    .addRule('prefer-continue', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('prefer-date-now', ERROR) /** @since 24.0.0 */
     .addRule('prefer-default-parameters', ERROR) /** @since 25.0.0 */
     .addRule('prefer-direct-iteration', ERROR) /** @since 66.0.0 */ // 💭?
@@ -608,6 +641,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-else-if', OFF) /** @since 67.0.0 */ // 🟣💭?
     .addRule('prefer-event-target', ERROR) /** @since 43.0.0 */
     .addRule('prefer-export-from', ERROR, [{}]) /** @since 38.0.0 */ // 🟣
+    .addRule('prefer-flat-math-min-max', ERROR) /** @since 68.0.0 */
     .addRule('prefer-get-or-insert-computed', ERROR) /** @since 65.0.0 */ // 🟣
     .addRule(
       'prefer-global-number-constants',
@@ -617,6 +651,7 @@ export default ((context, optionsRaw) => {
     ) /** @since 66.0.0 */
     .addRule('prefer-global-this', OFF) /** @since 56.0.0 */
     .addRule('prefer-has-check', ERROR) /** @since 67.0.0 */ // 💭?
+    .addRule('prefer-hoisting-branch-code', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('prefer-https', OFF) /** @since 65.0.0 */ // 🟣
     .addRule('prefer-identifier-import-export-specifiers', ERROR) /** @since 66.0.0 */
     .addRule('prefer-import-meta-properties', OFF) /** @since 59.0.0 */ // 🔴 used in `node` config
@@ -639,6 +674,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-logical-operator-over-ternary', ERROR) /** @since 43.0.0 */
     .addRule('prefer-map-from-entries', ERROR) /** @since 67.0.0 */
     .addRule('prefer-math-abs', ERROR) /** @since 65.0.0 */
+    .addRule('prefer-math-constants', ERROR) /** @since 68.0.0 */
     .addRule('prefer-math-min-max', ERROR) /** @since 56.0.0 */
     .addRule('prefer-math-trunc', ERROR) /** @since 23.0.0 */
     .addRule('prefer-minimal-ternary', ERROR) /** @since 66.0.0 */
@@ -689,10 +725,13 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-optional-catch-binding', ERROR) /** @since 20.0.0 */
     .addRule('prefer-path2d', ERROR) /** @since 66.0.0 */ // 💭?
     .addRule('prefer-private-class-fields', ERROR) /** @since 66.0.0 */ // 🟣
+    .addRule('prefer-promise-with-resolvers', ERROR) /** @since 68.0.0 */
     .addRule('prefer-prototype-methods', ERROR) /** @since 33.0.0 */
     .addRule('prefer-query-selector', OFF) /** @since 7.0.0 */ // 🟣
     .addRule('prefer-queue-microtask', ERROR) /** @since 65.0.0 */
     .addRule('prefer-reflect-apply', ERROR) /** @since 11.0.0 */
+    // TODO enable when becomes baseline widely available or close to that
+    .addRule('prefer-regexp-escape', OFF) /** @since 68.0.0 */ // 🔴💭?
     // TODO disable when regexp is enabled?
     .addRule('prefer-regexp-test', ERROR) /** @since 26.0.0 */ // 💭?
     .addRule('prefer-response-static-json', ERROR) /** @since 62.0.0 */
@@ -705,6 +744,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-single-array-predicate', ERROR) /** @since 66.0.0 */ // 💭?
     .addRule('prefer-single-call', ERROR) /** @since 27.0.0 */ /** @aka no-array-push-push */
     .addRule('prefer-single-object-destructuring', ERROR) /** @since 66.0.0 */ // 🟣
+    .addRule('prefer-single-replace', ERROR) /** @since 68.0.0 */
     .addRule('prefer-smaller-scope', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-split-limit', ERROR) /** @since 65.0.0 */
     .addRule('prefer-spread', ERROR) /** @since 4.0.0 */ // 🟣💭?
@@ -738,9 +778,11 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-type-error', ERROR) /** @since 2.0.0 */
     .addRule('prefer-type-literal-last', OFF) /** @since 66.0.0 */
     .addRule('prefer-uint8array-base64', ERROR) /** @since 66.0.0 */ // 💭?
+    .addRule('prefer-unary-minus', ERROR) /** @since 68.0.0 */
     .addRule('prefer-unicode-code-point-escapes', ERROR) /** @since 66.0.0 */
+    .addRule('prefer-url-can-parse', ERROR) /** @since 68.0.0 */
     .addRule('prefer-url-href', ERROR) /** @since 66.0.0 */ // 💭?
-    .addRule('prevent-abbreviations', OFF) /** @since 8.0.0 */ // 🟣
+    .addRule('prefer-while-loop-condition', ERROR) /** @since 68.0.0 */
     .addRule('relative-url-style', ERROR, ['always']) /** @since 40.0.0 */
     .addRule('require-array-join-separator', ERROR) /** @since 33.0.0 */ // 💭?
     .addRule('require-array-sort-compare', OFF) /** @since 66.0.0 */ // 💭?
