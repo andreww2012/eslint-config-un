@@ -17,7 +17,6 @@ export default ((context, optionsRaw) => {
 
   configBuilder
     ?.addConfig(['un', {includeDefaultFilesAndIgnores: true}])
-    .addRule('no-empty-object-ternary-spread', ERROR) /** @since 1.0.0 */
     .addRule('no-multiple-consecutive-spaces', ERROR) /** @since 1.0.0 */
     .addRule('no-typeof-like-comparisons', WARNING) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('un')

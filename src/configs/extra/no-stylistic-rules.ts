@@ -791,7 +791,7 @@ const ALL_STYLISTIC_RULES = {
     // None
   },
   un: {
-    'no-empty-object-ternary-spread': true,
+    // None
   },
   // Won't include: no-console-spaces, prefer-array-find, prefer-array-some, prefer-math-trunc, prefer-modern-math-apis, prefer-string-starts-ends-with
   unicorn: {
