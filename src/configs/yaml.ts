@@ -128,6 +128,7 @@ export default ((context, optionsRaw) => {
     .addRule('key-spacing', ERROR) /** @since 0.3.0 */ // 🟣
     .addRule('no-irregular-whitespace', ERROR) /** @since 0.1.0 */ // 🟣
     .addRule('no-multiple-empty-lines', ERROR) /** @since 0.12.0 */
+    .addRule('no-trailing-spaces', ERROR) /** @since 3.5.0 */ // 🟣
     .addRule('spaced-comment', ERROR) /** @since 0.1.0 */ // 🟣
     .disableAnyRule('', 'no-irregular-whitespace') // 🟣
     .disableAnyRule('', 'no-unused-vars') // 🟣

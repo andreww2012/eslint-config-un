@@ -1025,6 +1025,7 @@ const ALL_STYLISTIC_RULES = {
     indent: true,
     'key-spacing': true,
     'no-multiple-empty-lines': true,
+    'no-trailing-spaces': true,
     'no-trailing-zeros': true,
     'plain-scalar': true,
     quotes: true,
