@@ -1,4 +1,4 @@
-// cspell:ignore findlast findlastindex toreversed tosorted tospliced waitasync getfloat setfloat formatrange displaynames durationformat formatrangetoparts selectrange supportedvaluesof toarray groupby finalizationregistry weakref maxsafeinteger minsafeinteger fromentries withresolvers isdisjointfrom issubsetof issupersetof symmetricdifference iswellformed towellformed replaceall trimstart trimend subclassing weakrefs fromasync asyncdisposablestack disposablestack suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo israwjson rawjson plaindate plaindatetime plainmonthday plaintime plainyearmonth zoneddatetime
+// cspell:ignore findlast formatrange displaynames durationformat groupby finalizationregistry weakref subclassing asyncdisposablestack disposablestack plaindate plaindatetime plainmonthday plaintime plainyearmonth zoneddatetime
 import {ERROR, OFF} from '../constants';
 import type {Prettify} from '../types';
 import {memoize} from '../utils';
@@ -392,7 +392,10 @@ export default ((context, optionsRaw, customConfig) => {
         'no-iterator-zipkeyed', // cspell:disable-line
         grs(2027, 'iteratorZipKeyed'),
       ) /** @since 8.7.0 */
-      .addRule('no-suppressederror', grs(2027, 'suppressedError')) /** @since 8.7.0 */
+      .addRule(
+        'no-suppressederror', // cspell:disable-line
+        grs(2027, 'suppressedError'),
+      ) /** @since 8.7.0 */
       .addRule('no-symbol-asyncdispose', grs(2027, 'symbolAsyncDispose')) /** @since 9.0.0 */
       .addRule('no-symbol-dispose', grs(2027, 'symbolDispose')) /** @since 9.0.0 */
       .addRule('no-temporal', grs(2027, 'temporal')) /** @since 9.0.0 */
@@ -402,64 +405,82 @@ export default ((context, optionsRaw, customConfig) => {
   if (!isEsVersionFullySupported(2026)) {
     mainConfig
       ?.markCategory('ES2026')
-      .addRule('no-array-fromasync', grs(2026, 'arrayFromAsync')) /** @since 8.7.0 */
+      .addRule(
+        'no-array-fromasync', // cspell:disable-line
+        grs(2026, 'arrayFromAsync'),
+      ) /** @since 8.7.0 */
       .addRule('no-error-iserror', grs(2026, 'errorIsError')) /** @since 8.7.0 */
-      .addRule('no-json-israwjson', grs(2026, 'jsonIsRawJson')) /** @since 9.3.0 */
+      .addRule(
+        'no-json-israwjson', // cspell:disable-line
+        grs(2026, 'jsonIsRawJson'),
+      ) /** @since 9.3.0 */
       .addRule(
         'no-json-parse-reviver-context-parameter',
         grs(2026, 'jsonParseReviverContextParameter'),
       ) /** @since 9.3.0 */
-      .addRule('no-json-rawjson', grs(2026, 'jsonRawJson')) /** @since 9.3.0 */
-      .addRule('no-math-sumprecise', grs(2026, 'mathSumPrecise')) /** @since 9.1.0 */
-      .addRule('no-uint8array-frombase64', grs(2026, 'uint8ArrayFromBase64')) /** @since 9.1.0 */
-      .addRule('no-uint8array-fromhex', grs(2026, 'uint8ArrayFromHex')) /** @since 9.1.0 */
       .addRule(
-        'no-uint8array-prototype-setfrombase64',
+        'no-json-rawjson', // cspell:disable-line
+        grs(2026, 'jsonRawJson'),
+      ) /** @since 9.3.0 */
+      .addRule(
+        'no-math-sumprecise', // cspell:disable-line
+        grs(2026, 'mathSumPrecise'),
+      ) /** @since 9.1.0 */
+      .addRule(
+        'no-uint8array-frombase64', // cspell:disable-line
+        grs(2026, 'uint8ArrayFromBase64'),
+      ) /** @since 9.1.0 */
+      .addRule(
+        'no-uint8array-fromhex', // cspell:disable-line
+        grs(2026, 'uint8ArrayFromHex'),
+      ) /** @since 9.1.0 */
+      .addRule(
+        'no-uint8array-prototype-setfrombase64', // cspell:disable-line
         grs(2026, 'uint8ArrayPrototypeSetFromBase64'),
       ) /** @since 9.1.0 */
       .addRule(
-        'no-uint8array-prototype-setfromhex',
+        'no-uint8array-prototype-setfromhex', // cspell:disable-line
         grs(2026, 'uint8ArrayPrototypeSetFromHex'),
       ) /** @since 9.1.0 */
       .addRule(
-        'no-uint8array-prototype-tobase64',
+        'no-uint8array-prototype-tobase64', // cspell:disable-line
         grs(2026, 'uint8ArrayPrototypeToBase64'),
       ) /** @since 9.1.0 */
       .addRule(
-        'no-uint8array-prototype-tohex',
+        'no-uint8array-prototype-tohex', // cspell:disable-line
         grs(2026, 'uint8ArrayPrototypeToHex'),
       ) /** @since 9.1.0 */
       .markCategory('2026-intl')
       .addRule(
-        'no-intl-locale-prototype-firstdayofweek',
+        'no-intl-locale-prototype-firstdayofweek', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeFirstDayOfWeek'),
       ) /** @since 9.2.0 */
       .addRule(
-        'no-intl-locale-prototype-getcalendars',
+        'no-intl-locale-prototype-getcalendars', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetCalendars'),
       ) /** @since 9.2.0 */
       .addRule(
-        'no-intl-locale-prototype-getcollations',
+        'no-intl-locale-prototype-getcollations', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetCollations'),
       ) /** @since 9.2.0 */
       .addRule(
-        'no-intl-locale-prototype-gethourcycles',
+        'no-intl-locale-prototype-gethourcycles', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetHourCycles'),
       ) /** @since 9.2.0 */
       .addRule(
-        'no-intl-locale-prototype-getnumberingsystems',
+        'no-intl-locale-prototype-getnumberingsystems', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetNumberingSystems'),
       ) /** @since 9.2.0 */
       .addRule(
-        'no-intl-locale-prototype-gettextinfo',
+        'no-intl-locale-prototype-gettextinfo', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetTextInfo'),
       ) /** @since 9.2.0 */
       .addRule(
-        'no-intl-locale-prototype-gettimezones',
+        'no-intl-locale-prototype-gettimezones', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetTimeZones'),
       ) /** @since 9.2.0 */
       .addRule(
-        'no-intl-locale-prototype-getweekinfo',
+        'no-intl-locale-prototype-getweekinfo', // cspell:disable-line
         grs(2026, 'intlLocalePrototypeGetWeekInfo'),
       ) /** @since 9.2.0 */
       .addRule('no-iterator-concat', grs(2026, 'iteratorConcat')) /** @since 9.2.0 */
@@ -485,7 +506,7 @@ export default ((context, optionsRaw, customConfig) => {
     mainConfig
       ?.markCategory('ES2025')
       .addRule(
-        'no-dataview-prototype-getfloat16-setfloat16',
+        'no-dataview-prototype-getfloat16-setfloat16', // cspell:disable-line
         grs(2025, 'dataviewPrototypeGetFloat16SetFloat16'),
       ) /** @since 8.5.0 */
       .addRule('no-dynamic-import-options', grs(2025, 'dynamicImportOptions')) /** @since 8.1.0 */
@@ -518,7 +539,7 @@ export default ((context, optionsRaw, customConfig) => {
       .addRule('no-iterator-prototype-some', grs(2025, 'iteratorPrototypeSome')) /** @since 8.1.0 */
       .addRule('no-iterator-prototype-take', grs(2025, 'iteratorPrototypeTake')) /** @since 8.1.0 */
       .addRule(
-        'no-iterator-prototype-toarray',
+        'no-iterator-prototype-toarray', // cspell:disable-line
         grs(2025, 'iteratorPrototypeToArray'),
       ) /** @since 8.1.0 */
       .addRule('no-json-modules', grs(2025, 'jsonModules')) /** @since 8.1.0 */
@@ -539,19 +560,19 @@ export default ((context, optionsRaw, customConfig) => {
         grs(2025, 'setPrototypeIntersection'),
       ) /** @since 7.7.0 */
       .addRule(
-        'no-set-prototype-isdisjointfrom',
+        'no-set-prototype-isdisjointfrom', // cspell:disable-line
         grs(2025, 'setPrototypeIsDisjointFrom'),
       ) /** @since 7.7.0 */
       .addRule(
-        'no-set-prototype-issubsetof',
+        'no-set-prototype-issubsetof', // cspell:disable-line
         grs(2025, 'setPrototypeIsSubsetOf'),
       ) /** @since 7.7.0 */
       .addRule(
-        'no-set-prototype-issupersetof',
+        'no-set-prototype-issupersetof', // cspell:disable-line
         grs(2025, 'setPrototypeIsSupersetOf'),
       ) /** @since 7.7.0 */
       .addRule(
-        'no-set-prototype-symmetricdifference',
+        'no-set-prototype-symmetricdifference', // cspell:disable-line
         grs(2025, 'setPrototypeSymmetricDifference'),
       ) /** @since 7.7.0 */
       .addRule('no-set-prototype-union', grs(2025, 'setPrototypeUnion')) /** @since 7.7.0 */
@@ -570,21 +591,27 @@ export default ((context, optionsRaw, customConfig) => {
         'no-arraybuffer-prototype-transfer',
         grs(2024, 'arrayBufferPrototypeTransfer'),
       ) /** @since 7.6.0 */
-      .addRule('no-atomics-waitasync', grs(2024, 'atomicsWaitAsync')) /** @since 7.1.0 */
+      .addRule(
+        'no-atomics-waitasync', // cspell:disable-line
+        grs(2024, 'atomicsWaitAsync'),
+      ) /** @since 7.1.0 */
       .addRule('no-map-groupby', grs(2024, 'mapGroupBy')) /** @since 8.0.0 */
       .addRule('no-object-groupby', grs(2024, 'objectGroupBy')) /** @since 8.0.0 */
-      .addRule('no-promise-withresolvers', grs(2024, 'promiseWithResolvers')) /** @since 7.5.0 */
+      .addRule(
+        'no-promise-withresolvers', // cspell:disable-line
+        grs(2024, 'promiseWithResolvers'),
+      ) /** @since 7.5.0 */
       .addRule('no-regexp-v-flag', grs(2024, 'regexpVFlag')) /** @since 7.2.0 */
       .addRule(
         'no-resizable-and-growable-arraybuffers',
         grs(2024, 'resizableAndGrowableArrayBuffers'),
       ) /** @since 7.3.0 */
       .addRule(
-        'no-string-prototype-iswellformed',
+        'no-string-prototype-iswellformed', // cspell:disable-line
         grs(2024, 'stringPrototypeIsWellFormed'),
       ) /** @since 8.0.0 */
       .addRule(
-        'no-string-prototype-towellformed',
+        'no-string-prototype-towellformed', // cspell:disable-line
         grs(2024, 'stringPrototypeToWellFormed'),
       ); /** @since 8.0.0 */
   }
@@ -593,19 +620,19 @@ export default ((context, optionsRaw, customConfig) => {
     mainConfig
       ?.markCategory('ES2023')
       .addRule(
-        'no-array-prototype-findlast-findlastindex',
+        'no-array-prototype-findlast-findlastindex', // cspell:disable-line
         grs(2023, 'arrayPrototypeFindlastFindLastIndex'),
       ) /** @since 5.3.0 */
       .addRule(
-        'no-array-prototype-toreversed',
+        'no-array-prototype-toreversed', // cspell:disable-line
         grs(2023, 'arrayPrototypeToReversed'),
       ) /** @since 6.0.0 */
       .addRule(
-        'no-array-prototype-tosorted',
+        'no-array-prototype-tosorted', // cspell:disable-line
         grs(2023, 'arrayPrototypeToSorted'),
       ) /** @since 6.0.0 */
       .addRule(
-        'no-array-prototype-tospliced',
+        'no-array-prototype-tospliced', // cspell:disable-line
         grs(2023, 'arrayPrototypeToSpliced'),
       ) /** @since 6.0.0 */
       .addRule('no-array-prototype-with', grs(2023, 'arrayPrototypeWith')) /** @since 6.0.0 */
@@ -620,11 +647,11 @@ export default ((context, optionsRaw, customConfig) => {
         grs(2023, 'intlNumberFormatPrototypeFormatRange'),
       ) /** @since 6.0.0 */
       .addRule(
-        'no-intl-numberformat-prototype-formatrangetoparts',
+        'no-intl-numberformat-prototype-formatrangetoparts', // cspell:disable-line
         grs(2023, 'intlNumberFormatPrototypeFormatRangeToParts'),
       ) /** @since 6.0.0 */
       .addRule(
-        'no-intl-pluralrules-prototype-selectrange',
+        'no-intl-pluralrules-prototype-selectrange', // cspell:disable-line
         grs(2023, 'intlPluralRulesPrototypeSelectRange'),
       ); /** @since 6.0.0 */
   }
@@ -654,7 +681,10 @@ export default ((context, optionsRaw, customConfig) => {
       .addRule('no-top-level-await', grs(2022, 'topLevelAwait')) /** @since 5.0.0 */
       .markCategory('2022-intl')
       .addRule('no-intl-segmenter', grs(2022, 'intlSegmenter')) /** @since 6.0.0 */
-      .addRule('no-intl-supportedvaluesof', grs(2022, 'intlSupportedValuesOf')); /** @since 6.0.0 */
+      .addRule(
+        'no-intl-supportedvaluesof', // cspell:disable-line
+        grs(2022, 'intlSupportedValuesOf'),
+      ); /** @since 6.0.0 */
   }
 
   if (!isEsVersionFullySupported(2021)) {
@@ -671,10 +701,13 @@ export default ((context, optionsRaw, customConfig) => {
         grs(2021, 'regexpUnicodePropertyEscapes2021'),
       ) /** @since 6.0.0 */
       .addRule(
-        'no-string-prototype-replaceall',
+        'no-string-prototype-replaceall', // cspell:disable-line
         grs(2021, 'stringPrototypeReplaceAll'),
       ) /** @since 5.0.0 */
-      .addRule('no-weakrefs', grs(2021, 'weakRefs')) /** @since 4.0.0 */
+      .addRule(
+        'no-weakrefs', // cspell:disable-line
+        grs(2021, 'weakRefs'),
+      ) /** @since 4.0.0 */
       .markCategory('2021-intl')
       .addRule(
         'no-intl-datetimeformat-prototype-formatrange',
@@ -720,14 +753,17 @@ export default ((context, optionsRaw, customConfig) => {
       ?.markCategory('ES2019')
       .addRule('no-array-prototype-flat', grs(2019, 'arrayPrototypeFlat')) /** @since 5.0.0 */
       .addRule('no-json-superset', grs(2019, 'jsonSuperset')) /** @since 1.3.0 */
-      .addRule('no-object-fromentries', grs(2019, 'objectFromEntries')) /** @since 4.0.0 */
+      .addRule(
+        'no-object-fromentries', // cspell:disable-line
+        grs(2019, 'objectFromEntries'),
+      ) /** @since 4.0.0 */
       .addRule('no-optional-catch-binding', grs(2019, 'optionalCatchBinding')) /** @since 1.3.0 */
       .addRule(
         'no-regexp-unicode-property-escapes-2019',
         grs(2019, 'regexpUnicodePropertyEscapes2019'),
       ) /** @since 2.0.0 */
       .addRule(
-        'no-string-prototype-trimstart-trimend',
+        'no-string-prototype-trimstart-trimend', // cspell:disable-line
         grs(2019, 'stringPrototypeTrimStartTrimEnd'),
       ) /** @since 5.0.0 */
       .addRule(
@@ -865,8 +901,14 @@ export default ((context, optionsRaw, customConfig) => {
       .addRule('no-number-isinteger', grs(2015, 'numberIsInteger')) /** @since 1.2.0 */
       .addRule('no-number-isnan', grs(2015, 'numberIsNan')) /** @since 1.2.0 */
       .addRule('no-number-issafeinteger', grs(2015, 'numberIsSafeInteger')) /** @since 1.2.0 */
-      .addRule('no-number-maxsafeinteger', grs(2015, 'numberMaxSafeInteger')) /** @since 1.2.0 */
-      .addRule('no-number-minsafeinteger', grs(2015, 'numberMinSafeInteger')) /** @since 1.2.0 */
+      .addRule(
+        'no-number-maxsafeinteger', // cspell:disable-line
+        grs(2015, 'numberMaxSafeInteger'),
+      ) /** @since 1.2.0 */
+      .addRule(
+        'no-number-minsafeinteger', // cspell:disable-line
+        grs(2015, 'numberMinSafeInteger'),
+      ) /** @since 1.2.0 */
       .addRule('no-number-parsefloat', grs(2015, 'numberParseFloat')) /** @since 1.2.0 */
       .addRule('no-number-parseint', grs(2015, 'numberParseInt')) /** @since 1.2.0 */
       .addRule('no-object-assign', grs(2015, 'objectAssign')) /** @since 1.2.0 */
