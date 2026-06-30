@@ -221,15 +221,6 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
-  'fast-import': genModuleLoader(
-    'fast-import',
-    'eslint-plugin-fast-import',
-    () =>
-      interopDefault(
-        import('eslint-plugin-fast-import'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
-  ),
   'file-progress': genModuleLoader('file-progress', 'eslint-plugin-file-progress', () =>
     interopDefault(import('eslint-plugin-file-progress')),
   ),
@@ -279,6 +270,15 @@ export const pluginsLoaders = {
     'import',
     'eslint-plugin-import-x',
     () => interopDefault(import('eslint-plugin-import-x')) as Promise<EslintPlugin>,
+  ),
+  'import-integrity': genModuleLoader(
+    'import-integrity',
+    'import-integrity-lint',
+    () =>
+      interopDefault(
+        import('import-integrity-lint'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
   'import-zod': genModuleLoader('import-zod', 'eslint-plugin-import-zod', () =>
     interopDefault(import('eslint-plugin-import-zod')),

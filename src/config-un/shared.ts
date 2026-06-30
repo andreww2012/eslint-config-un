@@ -4,7 +4,7 @@ import type {FlatGitignoreOptions} from 'eslint-config-flat-gitignore';
 import type {Debugger} from 'obug';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
-import type {FastImportPluginSettings} from '../configs/fast-import';
+import type {ImportIntegrityPluginSettings} from '../configs/import-integrity';
 import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../configs/shared';
 import {DISABLE_AUTOFIX_WITH_SLASH, OFF, type PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {
@@ -38,7 +38,7 @@ import type {MaybePromise, OmitStrict, Prettify, SetRequired} from '../types';
 import {type MaybeArray, type MaybeFn, type fetchPackageInfo, maybeCall} from '../utils';
 import type {createConfigBuilder} from './config';
 import type {ConfigEntryBuilder} from './config-entry-builder';
-import type {ImportPluginReplaceableRules} from './fast-import';
+import type {ImportPluginReplaceableRules} from './import-integrity';
 
 export type ExtraPluginsType = Record<string, MaybeFn<MaybePromise<EslintPlugin>>>;
 
@@ -421,7 +421,9 @@ export interface EslintConfigUnOptions<
   };
 
   /**
-   * Replaces the implementation of certain [`import`](https://npmx.dev/eslint-plugin-import-x) plugin rules with implementations from [`fast-import`](https://npmx.dev/eslint-plugin-fast-import).
+   * Replaces the implementation of certain [`import`](https://npmx.dev/eslint-plugin-import-x)
+   * plugin rules with implementations from
+   * [`import-integrity-lint`](https://npmx.dev/import-integrity-lint).
    *
    * ⚠️ The latter plugin doesn't support the rule options from the former plugin.
    * It'll be made by us that they will be silently ignored.
@@ -429,13 +431,13 @@ export interface EslintConfigUnOptions<
    * The replaced rules' list (their name will actually be preserved):
    * - `import/no-cycle`
    * - `import/no-named-as-default`
-   * - `import/no-unresolved` (replaced with `fast-import/no-unresolved-imports`)
+   * - `import/no-unresolved` (replaced with `import-integrity/no-unresolved-imports`)
    * @default false
    */
-  useFastImport?:
+  useImportIntegrity?:
     | boolean
     | {
-        pluginSettings?: Partial<FastImportPluginSettings>;
+        pluginSettings?: Partial<ImportIntegrityPluginSettings>;
         replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>;
       };
 

@@ -240,11 +240,6 @@ const ALL_STYLISTIC_RULES = {
   'expect-type': {
     // None
   },
-  'fast-import': {
-    'consistent-file-extensions': true,
-    'prefer-alias-imports': true,
-    'require-node-prefix': true,
-  },
   'file-progress': {
     // None
   },
@@ -304,6 +299,10 @@ const ALL_STYLISTIC_RULES = {
     'no-duplicates': true,
     'no-useless-path-segments': true,
     order: true,
+  },
+  'import-integrity': {
+    'prefer-alias-imports': true,
+    'require-node-prefix': true,
   },
   'import-zod': {
     // None

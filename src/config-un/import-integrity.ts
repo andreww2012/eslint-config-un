@@ -4,29 +4,31 @@ import type {NonEmptyTuple} from '../types';
 import {objectEntriesUnsafe} from '../utils';
 import type {UnConfigContext} from './shared';
 
-export type {FastImportPluginSettings} from '../configs/fast-import';
+export type {ImportIntegrityPluginSettings} from '../configs/import-integrity';
 
-// TODO: move to configs/fast-import
+// TODO: move to configs/import-integrity
 
 const IMPORT_RULES_TO_REPLACE = {
   'no-cycle': 'no-cycle',
   'no-named-as-default': 'no-named-as-default',
   'no-unresolved': 'no-unresolved-imports',
-} satisfies Partial<Record<GetRuleNamesInPlugin<'import'>, GetRuleNamesInPlugin<'fast-import'>>>;
+} satisfies Partial<
+  Record<GetRuleNamesInPlugin<'import'>, GetRuleNamesInPlugin<'import-integrity'>>
+>;
 
 export type ImportPluginReplaceableRules = keyof typeof IMPORT_RULES_TO_REPLACE;
 
-export const replaceImportRulesImplementationWithFastPlugin = (
+export const replaceImportRulesImplementationWithIntegrityPlugin = (
   context: UnConfigContext,
   loadedPlugins: Partial<Record<PluginPrefix, EslintPlugin>>,
 ): void => {
-  const {useFastImport} = context.rootOptions;
-  const {import: originalPlugin, 'fast-import': fastPlugin} = loadedPlugins;
-  if (!useFastImport || !originalPlugin || !fastPlugin) {
+  const {useImportIntegrity} = context.rootOptions;
+  const {import: originalPlugin, 'import-integrity': fastPlugin} = loadedPlugins;
+  if (!useImportIntegrity || !originalPlugin || !fastPlugin) {
     return;
   }
 
-  const {replaceRules} = typeof useFastImport === 'object' ? useFastImport : {};
+  const {replaceRules} = typeof useImportIntegrity === 'object' ? useImportIntegrity : {};
 
   const originalPluginPatched: EslintPlugin = {
     ...originalPlugin,

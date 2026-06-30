@@ -62,6 +62,7 @@ export default {
     'npmx',
     'gypfile', // package.json field
     'libc', // package.json field
+    'oxlint',
 
     // Technical words/terms
     'arraify',

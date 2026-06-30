@@ -32,7 +32,6 @@ import type {ExpectTypeEslintConfigOptions} from './expect-type';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-functions';
 import type {NoStylisticRulesEslintConfigOptions} from './extra/no-stylistic-rules';
-import type {FastImportEslintConfigOptions} from './fast-import';
 import type {FileProgressEslintConfigOptions} from './file-progress';
 import type {FormatEslintConfigOptions} from './format';
 import type {FormatjsEslintConfigOptions} from './formatjs';
@@ -43,6 +42,7 @@ import type {HeaderEslintConfigOptions} from './header';
 import type {HeadersEslintConfigOptions} from './headers';
 import type {HtmlEslintConfigOptions} from './html';
 import type {ImportEslintConfigOptions} from './import';
+import type {ImportIntegrityEslintConfigOptions} from './import-integrity';
 import type {ImportZodEslintConfigOptions} from './import-zod';
 import type {JestEslintConfigOptions} from './jest';
 import type {JestDomEslintConfigOptions} from './jest-dom';
@@ -509,20 +509,6 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   expectType: ExpectTypeEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * A faster alternative to `eslint-plugin-import(-x)` plugins. From the docs, it
-   * "uses a novel algorithm combined with the OXC Rust based parser that is significantly more performant than other import plugins".
-   *
-   * Does not implement all the rules from the original plugins
-   * and might require some additional setup.
-   *
-   * 📁 Default `files`: all files
-   *
-   * 🧩 Main plugin: [`eslint-plugin-fast-import`](https://npmx.dev/eslint-plugin-fast-import) ([docs](https://github.com/nebrius/eslint-plugin-fast-import#readme))
-   * @default false
-   */
-  fastImport: FastImportEslintConfigOptions<ExtraPlugins>;
-
-  /**
    * An ESlint plugin to print file progress.
    *
    * Even if enabled, it will be disabled by default when it's detected ESLint running
@@ -639,6 +625,21 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true
    */
   import: ImportEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * A faster alternative to `eslint-plugin-import(-x)` plugins. From the docs, it is
+   * "A high-performance ESLint and Oxlint plugin for analyzing import and export
+   * relationships across your codebase".
+   *
+   * ⚠️ Does not implement all the rules from the original plugins, does not support
+   * non-JS file extensions and might require some additional setup.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`import-integrity-lint`](https://npmx.dev/import-integrity-lint) ([docs](https://github.com/nebrius/import-integrity-lint/blob/HEAD/README.md))
+   * @default false
+   */
+  importIntegrity: ImportIntegrityEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin to enforce namespace imports for zod.

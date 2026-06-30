@@ -61,7 +61,7 @@ import {
 } from './cache';
 import {ConfigEntryBuilder, configIndexProperty} from './config-entry-builder';
 import {getIsConfigEnabled as getIsConfigEnabledContextless} from './config-utils';
-import type {FastImportPluginSettings} from './fast-import';
+import type {ImportIntegrityPluginSettings} from './import-integrity';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
 import {
   type EslintConfigUnInternalOptions,
@@ -306,15 +306,15 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     loadPluginsOnDemand,
     disablePrettierIncompatibleRules,
     offlineMode,
-    useFastImport,
+    useImportIntegrity,
     linterOptionsNoInlineConfig,
     linterOptionsReportUnusedDisableDirectives,
     linterOptionsReportUnusedInlineConfigs,
     noWarnings,
   } = optionsResolved;
 
-  if (useFastImport) {
-    context.usedPlugins.add('fast-import');
+  if (useImportIntegrity) {
+    context.usedPlugins.add('import-integrity');
   }
 
   const renamedPlugins = objectKeysUnsafe(pluginRenames);
@@ -375,7 +375,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     depend: {enabled: getIsConfigEnabled('depend', false)},
     docusaurus: {enabled: getIsConfigEnabled('docusaurus', '@docusaurus/core')},
     drizzle: {enabled: getIsConfigEnabled('drizzle', 'drizzle-orm')},
-    fastImport: {enabled: getIsConfigEnabled('fastImport', false)},
     format: {enabled: getIsConfigEnabled('format', false)},
     formatJs: {
       enabled: getIsConfigEnabled('formatJs', '@formatjs/icu-messageformat-parser'),
@@ -400,6 +399,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       enabled: getIsConfigEnabled('html', !isAngularEnabled),
     },
     import: {enabled: getIsConfigEnabled('import')},
+    importIntegrity: {enabled: getIsConfigEnabled('importIntegrity', false)},
     importZod: {enabled: getIsConfigEnabled('importZod', false)},
     jest: {enabled: getIsConfigEnabled('jest', 'jest')},
     jestDom: {enabled: getIsConfigEnabled('jestDom', '@testing-library/jest-dom')},
@@ -698,13 +698,13 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         },
       },
     },
-    useFastImport && {
-      name: genFlatConfigEntryName('global-setup/fast-import'),
+    useImportIntegrity && {
+      name: genFlatConfigEntryName('global-setup/import-integrity'),
       settings: {
-        'fast-import': {
-          rootDir: import.meta.dirname,
-          ...(typeof useFastImport === 'object' && useFastImport.pluginSettings),
-        } satisfies FastImportPluginSettings,
+        'import-integrity': {
+          packageRootDir: import.meta.dirname,
+          ...(typeof useImportIntegrity === 'object' && useImportIntegrity.pluginSettings),
+        } satisfies ImportIntegrityPluginSettings,
       },
     },
 
@@ -817,7 +817,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     loadUnConfig('webComponents', () => import('../configs/web-components')),
     loadUnConfig('header', () => import('../configs/header')),
     loadUnConfig('headers', () => import('../configs/headers')),
-    loadUnConfig('fastImport', () => import('../configs/fast-import')),
+    loadUnConfig('importIntegrity', () => import('../configs/import-integrity')),
     loadUnConfig('boundaries', () => import('../configs/boundaries')),
     loadUnConfig('expectType', () => import('../configs/expect-type')),
     loadUnConfig('command', () => import('../configs/command')),

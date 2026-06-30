@@ -94,7 +94,6 @@ You need to run ESLint with our config once to find out which plugins should be 
 | `eslint-plugin-es-x`                               | `es`                                 |
 | `eslint-plugin-eslint-plugin`                      | `eslint-plugin`                      |
 | `eslint-plugin-expect-type`                        | `expect-type`                        |
-| `eslint-plugin-fast-import`                        | `fast-import`                        |
 | `eslint-plugin-format`                             | `format`                             |
 | `eslint-plugin-formatjs`                           | `formatjs`                           |
 | `eslint-plugin-functional`                         | `functional`                         |
@@ -142,6 +141,7 @@ You need to run ESLint with our config once to find out which plugins should be 
 | `eslint-plugin-zod-core`                           | `zod-core`                           |
 | `eslint-plugin-zod-mini`                           | `zod-mini`                           |
 | `eslint-plugin-zod-openapi`                        | `zod-openapi`                        |
+| `import-integrity-lint`                            | `import-integrity`                   |
 
 </details>
 
@@ -407,7 +407,7 @@ In the following table, Sub-configs have `/` in their names.
 | `math`                         | ✅                                          | [eslint-plugin-math](https://npmx.dev/eslint-plugin-math) (`math`)                                                             | Since v1.0.0                                                                                                                                                                                                                                                                                              |
 | `erasableSyntaxOnly`           | ❌                                          | [eslint-plugin-erasable-syntax-only](https://npmx.dev/eslint-plugin-erasable-syntax-only) (`erasable-syntax-only`)             | Since v1.0.0                                                                                                                                                                                                                                                                                              |
 | `noUnnecessaryAbstractions`    | ✅                                          | [eslint-plugin-unnecessary-abstractions](https://npmx.dev/eslint-plugin-unnecessary-abstractions) (`unnecessary-abstractions`) | Since v1.0.0                                                                                                                                                                                                                                                                                              |
-| `fastImport`                   | ❌                                          | [eslint-plugin-fast-import](https://npmx.dev/eslint-plugin-fast-import) (`fast-import`)                                        | Since v1.0.0<br>Faster `eslint-plugin-import(-x)` alternative                                                                                                                                                                                                                                             |
+| `importIntegrity`              | ❌                                          | [import-integrity-lint](https://npmx.dev/import-integrity-lint) (`import-integrity`)                                           | Since v1.0.0<br>Faster `eslint-plugin-import(-x)` semi-alternative                                                                                                                                                                                                                                        |
 | `moduleInterop`                | ✅                                          | [eslint-plugin-module-interop](https://npmx.dev/eslint-plugin-module-interop) (`module-interop`)                               | Since v1.0.0                                                                                                                                                                                                                                                                                              |
 | `treeShaking`                  | ❌                                          | [eslint-plugin-tree-shaking](https://npmx.dev/eslint-plugin-tree-shaking) (`tree-shaking`)                                     | Since v1.0.0                                                                                                                                                                                                                                                                                              |
 | `e18e`                         | ❌                                          | [@e18e/eslint-plugin](https://npmx.dev/@e18e/eslint-plugin)                                                                    | Since v1.0.0                                                                                                                                                                                                                                                                                              |
@@ -885,11 +885,11 @@ Allows to specify more rules to disable in embedded code blocks.
 
 Allows to specify which rules should not be disabled by default in embedded code blocks.
 
-### `useFastImport`
+### `useImportIntegrity`
 
-**Type**: `boolean | {pluginSettings?: Partial<FastImportPluginSettings>; replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>}`
+**Type**: `boolean | {pluginSettings?: Partial<ImportIntegrityPluginSettings>; replaceRules?: Partial<Record<ImportPluginReplaceableRules, boolean>>}`
 
-Allows to override certain [`eslint-plugin-import-x`] plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmx.dev/eslint-plugin-fast-import).
+Allows to override certain [`eslint-plugin-import-x`] plugin rules with implementations from [`import-integrity-lint`](https://npmx.dev/import-integrity-lint).
 
 ### `typeInfoRules`
 

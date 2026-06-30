@@ -169,12 +169,6 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
       ruleDocsUrl: (ruleName) =>
         `https://github.com/JoshuaKGoldberg/eslint-plugin-expect-type/blob/HEAD/docs/rules/${ruleName}.md`,
     },
-    'fast-import': {
-      configs: ['fastImport'],
-      gitTag: versionAsIs,
-      // Has custom URLs: https://github.com/nebrius/eslint-plugin-fast-import/blob/HEAD/src/rules/testInProd/README.md
-      ruleDocsUrl: null,
-    },
     'file-progress': {
       configs: ['fileProgress'],
       ruleDocsUrl: null, // Single rule
@@ -222,6 +216,12 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
       configs: ['import'],
       ruleDocsUrl: (ruleName) =>
         `https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/${ruleName}.md`,
+    },
+    'import-integrity': {
+      configs: ['importIntegrity'],
+      gitTag: versionAsIs,
+      ruleDocsUrl: (ruleName) =>
+        `https://nebrius.github.io/import-integrity-lint/rules/${ruleName}`,
     },
     'import-zod': {
       configs: ['importZod'],

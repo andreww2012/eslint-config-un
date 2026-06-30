@@ -31,7 +31,7 @@ import {
   styleText,
 } from '../utils';
 import type {CacheDataInFs} from './cache';
-import {replaceImportRulesImplementationWithFastPlugin} from './fast-import';
+import {replaceImportRulesImplementationWithIntegrityPlugin} from './import-integrity';
 import {checkIfModuleCorrectlyLoaded} from './is-module-loaded';
 import {
   type EslintConfigUnOptions,
@@ -294,7 +294,7 @@ ${styleText(
   const loadedPlugins = Object.fromEntries(loadedPluginsRaw.filter((v) => v != null)) as Partial<
     Record<PluginPrefix, EslintPlugin>
   >;
-  replaceImportRulesImplementationWithFastPlugin(context, loadedPlugins);
+  replaceImportRulesImplementationWithIntegrityPlugin(context, loadedPlugins);
 
   const disableAutofixPlugin: EslintPlugin = {
     meta: {
