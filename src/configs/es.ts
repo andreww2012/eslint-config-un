@@ -10,23 +10,28 @@ import {
 } from './index';
 
 interface EcmaFeatures {
-  2026:
-    | 'arrayFromAsync'
+  2027:
     | 'asyncDisposableStack'
+    | 'atomicsPause'
     | 'datePrototypeToTemporalInstant'
     | 'disposableStack'
-    | 'errorIsError'
-    | 'mathSumPrecise'
+    | 'iteratorZip'
+    | 'iteratorZipKeyed'
     | 'suppressedError'
     | 'symbolAsyncDispose'
     | 'symbolDispose'
+    | 'temporal'
+    | 'using';
+  2026:
+    | 'arrayFromAsync'
+    | 'errorIsError'
+    | 'mathSumPrecise'
     | 'uint8ArrayFromBase64'
     | 'uint8ArrayFromHex'
     | 'uint8ArrayPrototypeSetFromBase64'
     | 'uint8ArrayPrototypeSetFromHex'
     | 'uint8ArrayPrototypeToBase64'
     | 'uint8ArrayPrototypeToHex'
-    | 'usingDeclarations'
     | 'intlLocalePrototypeFirstDayOfWeek'
     | 'intlLocalePrototypeGetCalendars'
     | 'intlLocalePrototypeGetCollations'
@@ -41,7 +46,6 @@ interface EcmaFeatures {
     | 'jsonRawJson'
     | 'mapPrototypeGetOrInsert'
     | 'mapPrototypeGetOrInsertComputed'
-    | 'temporal'
     | 'weakMapPrototypeGetOrInsert'
     | 'weakMapPrototypeGetOrInsertComputed';
   2025:
@@ -373,16 +377,32 @@ export default ((context, optionsRaw, customConfig) => {
     },
   ]);
 
+  if (!isEsVersionFullySupported(2027)) {
+    mainConfig
+      ?.markCategory('ES2027')
+      .addRule('no-asyncdisposablestack', grs(2027, 'asyncDisposableStack')) /** @since 8.7.0 */
+      .addRule('no-atomics-pause', grs(2027, 'atomicsPause')) /** @since 9.7.0 */
+      .addRule(
+        'no-date-prototype-totemporalinstant', // cspell:disable-line
+        grs(2027, 'datePrototypeToTemporalInstant'),
+      ) /** @since 9.6.0 */
+      .addRule('no-disposablestack', grs(2027, 'disposableStack')) /** @since 8.7.0 */
+      .addRule('no-iterator-zip', grs(2027, 'iteratorZip')) /** @since 8.7.0 */
+      .addRule(
+        'no-iterator-zipkeyed', // cspell:disable-line
+        grs(2027, 'iteratorZipKeyed'),
+      ) /** @since 8.7.0 */
+      .addRule('no-suppressederror', grs(2027, 'suppressedError')) /** @since 8.7.0 */
+      .addRule('no-symbol-asyncdispose', grs(2027, 'symbolAsyncDispose')) /** @since 9.0.0 */
+      .addRule('no-symbol-dispose', grs(2027, 'symbolDispose')) /** @since 9.0.0 */
+      .addRule('no-temporal', grs(2027, 'temporal')) /** @since 9.0.0 */
+      .addRule('no-using-declarations', grs(2027, 'using')); /** @since 9.0.0 */
+  }
+
   if (!isEsVersionFullySupported(2026)) {
     mainConfig
       ?.markCategory('ES2026')
       .addRule('no-array-fromasync', grs(2026, 'arrayFromAsync')) /** @since 8.7.0 */
-      .addRule('no-asyncdisposablestack', grs(2026, 'asyncDisposableStack')) /** @since 8.7.0 */
-      .addRule(
-        'no-date-prototype-totemporalinstant', // cspell:disable-line
-        grs(2026, 'datePrototypeToTemporalInstant'),
-      ) /** @since 9.6.0 */
-      .addRule('no-disposablestack', grs(2026, 'disposableStack')) /** @since 8.7.0 */
       .addRule('no-error-iserror', grs(2026, 'errorIsError')) /** @since 8.7.0 */
       .addRule('no-json-israwjson', grs(2026, 'jsonIsRawJson')) /** @since 9.3.0 */
       .addRule(
@@ -391,9 +411,6 @@ export default ((context, optionsRaw, customConfig) => {
       ) /** @since 9.3.0 */
       .addRule('no-json-rawjson', grs(2026, 'jsonRawJson')) /** @since 9.3.0 */
       .addRule('no-math-sumprecise', grs(2026, 'mathSumPrecise')) /** @since 9.1.0 */
-      .addRule('no-suppressederror', grs(2026, 'suppressedError')) /** @since 8.7.0 */
-      .addRule('no-symbol-asyncdispose', grs(2026, 'symbolAsyncDispose')) /** @since 9.0.0 */
-      .addRule('no-symbol-dispose', grs(2026, 'symbolDispose')) /** @since 9.0.0 */
       .addRule('no-uint8array-frombase64', grs(2026, 'uint8ArrayFromBase64')) /** @since 9.1.0 */
       .addRule('no-uint8array-fromhex', grs(2026, 'uint8ArrayFromHex')) /** @since 9.1.0 */
       .addRule(
@@ -412,7 +429,6 @@ export default ((context, optionsRaw, customConfig) => {
         'no-uint8array-prototype-tohex',
         grs(2026, 'uint8ArrayPrototypeToHex'),
       ) /** @since 9.1.0 */
-      .addRule('no-using-declarations', grs(2026, 'usingDeclarations')) /** @since 8.7.0 */
       .markCategory('2026-intl')
       .addRule(
         'no-intl-locale-prototype-firstdayofweek',
@@ -455,7 +471,6 @@ export default ((context, optionsRaw, customConfig) => {
         'no-map-prototype-getorinsertcomputed', // cspell:disable-line
         grs(2026, 'mapPrototypeGetOrInsertComputed'),
       ) /** @since 9.4.0 */
-      .addRule('no-temporal', grs(2026, 'temporal')) /** @since 9.6.0 */
       .addRule(
         'no-weakmap-prototype-getorinsert', // cspell:disable-line
         grs(2026, 'weakMapPrototypeGetOrInsert'),
@@ -465,6 +480,7 @@ export default ((context, optionsRaw, customConfig) => {
         grs(2026, 'weakMapPrototypeGetOrInsertComputed'),
       ) /** @since 9.4.0 */;
   }
+
   if (!isEsVersionFullySupported(2025)) {
     mainConfig
       ?.markCategory('ES2025')
