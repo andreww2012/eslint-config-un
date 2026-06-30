@@ -1616,7 +1616,9 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * An ESLint plugin to enforce best practices when using Zod.
    *
-   * **Claims to only support zod v4.**
+   * **Officially only supports zod v4**, but a good portion of its rules also
+   * apply to zod v3. The rules that only make sense for zod v4 are automatically
+   * disabled when zod v3 is detected.
    *
    * 📁 Default `files`: all files
    *
@@ -1624,7 +1626,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * ([docs](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/README.md))
    *
    * ⚙️ Sub config(s): `core`, `mini`
-   * @default true <=> [`zod`](https://npmx.dev/zod) package is installed and its version is >=4
+   * @default true <=> [`zod`](https://npmx.dev/zod) package is installed and its major version is 3 or 4
    */
   zod: ZodEslintConfigOptions<ExtraPlugins>;
 

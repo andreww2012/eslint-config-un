@@ -25,7 +25,7 @@ export function getIsConfigEnabled(
   configName: keyof UnConfigs,
   defaultConditionOrPackageInstalled:
     | boolean
-    | MaybeArray<`${(typeof PACKAGES_TO_GET_INFO_FOR)[number]}${'' | `|${string}`}`> = true,
+    | MaybeArray<`${(typeof PACKAGES_TO_GET_INFO_FOR)[number]}${'' | `@${string}`}`> = true,
   {
     preCondition,
     requireAllListedPackagesToBeInstalled,
@@ -70,11 +70,16 @@ export function getIsConfigEnabled(
   ) {
     const packagesList = arraify(defaultConditionOrPackageInstalled).map(
       (packageNameAndMaybeVersionRange) => {
-        const [packageName = '', versionRangeToSatisfy] =
-          packageNameAndMaybeVersionRange.split('|');
+        const versionDelimiterIndex = packageNameAndMaybeVersionRange.lastIndexOf('@');
+        const hasVersionRange = versionDelimiterIndex > 0;
+
         return {
-          packageName: packageName as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
-          versionRangeToSatisfy,
+          packageName: (hasVersionRange
+            ? packageNameAndMaybeVersionRange.slice(0, versionDelimiterIndex)
+            : packageNameAndMaybeVersionRange) as (typeof PACKAGES_TO_GET_INFO_FOR)[number],
+          versionRangeToSatisfy: hasVersionRange
+            ? packageNameAndMaybeVersionRange.slice(versionDelimiterIndex + 1)
+            : undefined,
         };
       },
     );
@@ -94,8 +99,12 @@ export function getIsConfigEnabled(
           : `the following package${notInstalledPackages.length === 1 ? ' is' : 's are'} not installed`
       }: ${(enabledBySystem ? packagesList : notInstalledPackages).map(({packageName}) => stylePackageName(packageName)).join(', ')}`;
     } else {
-      enabledBySystem ??= packagesList.some(({packageName}) => {
-        const isInstalled = Boolean(this.packagesInfo[packageName]);
+      enabledBySystem ??= packagesList.some(({packageName, versionRangeToSatisfy}) => {
+        const packageInfo = this.packagesInfo[packageName];
+        const isInstalled =
+          packageInfo != null &&
+          (!versionRangeToSatisfy ||
+            semver.satisfies(packageInfo.info.version || '', versionRangeToSatisfy));
         if (isInstalled) {
           reason ??= `package ${stylePackageName(packageName)} is installed`;
         }

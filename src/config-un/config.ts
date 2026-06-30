@@ -500,7 +500,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         ...CHECKED_LODASH_METHODS.map((method) => `lodash.${method}` as const),
       ]),
     },
-    zod: {enabled: getIsConfigEnabled('zod', 'zod|^4')},
+    zod: {enabled: getIsConfigEnabled('zod', 'zod@^3||^4')},
     zodOpenapi: {enabled: getIsConfigEnabled('zodOpenapi', 'zod-openapi')},
   } satisfies UnConfigContext['configsMeta']);
 

@@ -63,6 +63,18 @@ describe('basic tests', async () => {
 
       await expectConfigState({}, 'zod', true, 'default');
     });
+
+    it('does not create `zod` eslint config when an older unsupported `zod` version is installed', async () => {
+      setInstalledPackages({zod: '2.0.0'});
+
+      await expectConfigState({}, 'zod', false, 'default');
+    });
+
+    it('does not create `zod` eslint config when a newer unsupported `zod` version is installed', async () => {
+      setInstalledPackages({zod: '5.0.0'});
+
+      await expectConfigState({}, 'zod', false, 'default');
+    });
   });
 
   describe('mode: misc configs are enabled', () => {
