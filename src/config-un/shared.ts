@@ -733,7 +733,7 @@ export const processUnOrFlatConfig = (
         typeof ruleEntryRaw === 'object' &&
         'severity' in ruleEntryRaw; /* `!Array.isArray(...)` doesn't work */
 
-      const newRuleEntries: [ruleEntryName: string, EslintRuleEntry][] = [];
+      const newRuleEntries: [ruleEntryName: string, ruleEntry: EslintRuleEntry][] = [];
 
       const ruleEntryPrimary: EslintRuleEntry = isRuleEntryRawObject
         ? ruleEntryRaw.options == null

@@ -322,9 +322,7 @@ export default ((context, optionsRaw) => {
         ])
       : {
           ...DEFAULT_ALLOWED_BOOLEAN_PREFIXES,
-          ...(enforcePrefixForBooleanNamesInitial === true
-            ? null
-            : enforcePrefixForBooleanNamesInitial),
+          ...(enforcePrefixForBooleanNamesInitial !== true && enforcePrefixForBooleanNamesInitial),
         }
     : null;
 
@@ -418,6 +416,7 @@ export default ((context, optionsRaw) => {
     .addRule('consistent-json-file-read', ERROR) /** @since 65.0.0 */ // 🟣
     .addRule('consistent-optional-chaining', ERROR) /** @since 66.0.0 */ // 🟡
     .addRule('consistent-template-literal-escape', ERROR) /** @since 64.0.0 */ // 🟣
+    .addRule('consistent-tuple-labels', ERROR) /** @since 69.0.0 */ // 🟣
     .addRule('custom-error-definition', ERROR) /** @since 2.0.0 */ // 🔴
     .addRule('default-export-style', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule(
@@ -504,8 +503,10 @@ export default ((context, optionsRaw) => {
     // Note: also works on html
     .addRule('no-invalid-file-input-accept', ERROR) /** @since 65.0.0 */
     .addRule('no-invalid-remove-event-listener', ERROR) /** @since 36.0.0 */
+    .addRule('no-invalid-well-known-symbol-methods', ERROR) /** @since 69.0.0 */ // 💭?
     .addRule('no-keyword-prefix', OFF) /** @since 10.0.0 */ // 🔴
     .addRule('no-late-current-target-access', ERROR) /** @since 65.0.0 */ // 🟣
+    .addRule('no-late-event-control', ERROR) /** @since 69.0.0 */ // 🟣💭?
     .addRule('no-lonely-if', ERROR) /** @since 24.0.0 */
     .addRule('no-loop-iterable-mutation', ERROR) /** @since 68.0.0 */ // 🟣💭?
     // Passing `Infinity` doesn't work great with TypeScript
@@ -605,8 +606,10 @@ export default ((context, optionsRaw) => {
       {onlyIfContainsSeparator: true},
     ]) /** @since 23.0.0 */
     .addRule('operator-assignment', OFF) /** @since 67.0.0 */ // 🟣
+    .addRule('prefer-abort-signal-timeout', ERROR) /** @since 69.0.0 */ // 🟣
     .addRule('prefer-add-event-listener', ERROR) /** @since 4.0.0 */
     .addRule('prefer-add-event-listener-options', ERROR) /** @since 66.0.0 */
+    .addRule('prefer-aggregate-error', ERROR) /** @since 69.0.0 */ // 💭?
     .addRule('prefer-array-find', ERROR) /** @since 21.0.0 */ // 💭?
     .addRule('prefer-array-flat', ERROR) /** @since 29.0.0 */
     .addRule('prefer-array-flat-map', ERROR) /** @since 9.0.0 */ /** @aka prefer-flat-map */ // 💭?
@@ -633,12 +636,15 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-dom-node-append', ERROR) /** @since 7.0.0 */ /** @aka prefer-node-append */
     .addRule('prefer-dom-node-html-methods', OFF) /** @since 66.0.0 */ // 🔴
     .addRule('prefer-dom-node-remove', ERROR) /** @since 8.0.0 */ /** @aka prefer-node-remove */
+    .addRule('prefer-dom-node-replace-children', ERROR) /** @since 69.0.0 */ // 💭?
     .addRule(
       'prefer-dom-node-text-content',
       OFF,
     ) /** @since 8.0.0 */ /** @aka prefer-text-content */ // 💭?
     .addRule('prefer-early-return', ERROR) /** @since 66.0.0 */
     .addRule('prefer-else-if', OFF) /** @since 67.0.0 */ // 🟣💭?
+    // TODO should consider enabling by default when `Iterator#toArray` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError
+    .addRule('prefer-error-is-error', OFF) /** @since 69.0.0 */ // 🔴
     .addRule('prefer-event-target', ERROR) /** @since 43.0.0 */
     .addRule('prefer-export-from', ERROR, [{}]) /** @since 38.0.0 */ // 🟣
     .addRule('prefer-flat-math-min-max', ERROR) /** @since 68.0.0 */
@@ -666,7 +672,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-iterable-in-constructor', ERROR) /** @since 66.0.0 */
     // Reason for disabling: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2565
     .addRule('prefer-iterator-concat', OFF) /** @since 65.0.0 */ // 🔴
-    // TODO should consider enable by default when `Iterator#toArray` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/toArray
+    // TODO should consider enabling by default when `Iterator#toArray` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/toArray
     .addRule('prefer-iterator-to-array', OFF) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-iterator-to-array-at-end', ERROR) /** @since 65.0.0 */
     .addRule('prefer-keyboard-event-key', ERROR) /** @since 9.0.0 */ /** @aka prefer-event-key */ // 💭?
@@ -722,21 +728,25 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-object-destructuring-defaults', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-object-from-entries', ERROR) /** @since 35.0.0 */
     .addRule('prefer-object-iterable-methods', ERROR) /** @since 66.0.0 */
+    .addRule('prefer-observer-apis', ERROR) /** @since 69.0.0 */ // 🟣💭?
     .addRule('prefer-optional-catch-binding', ERROR) /** @since 20.0.0 */
     .addRule('prefer-path2d', ERROR) /** @since 66.0.0 */ // 💭?
     .addRule('prefer-private-class-fields', ERROR) /** @since 66.0.0 */ // 🟣
+    // TODO enable when becomes baseline widely available or close to that: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/try
+    .addRule('prefer-promise-try', OFF) /** @since 69.0.0 */ // 🟣
     .addRule('prefer-promise-with-resolvers', ERROR) /** @since 68.0.0 */
     .addRule('prefer-prototype-methods', ERROR) /** @since 33.0.0 */
     .addRule('prefer-query-selector', OFF) /** @since 7.0.0 */ // 🟣
     .addRule('prefer-queue-microtask', ERROR) /** @since 65.0.0 */
     .addRule('prefer-reflect-apply', ERROR) /** @since 11.0.0 */
-    // TODO enable when becomes baseline widely available or close to that
+    // TODO enable when becomes baseline widely available or close to that: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/escape
     .addRule('prefer-regexp-escape', OFF) /** @since 68.0.0 */ // 🔴💭?
     // TODO disable when regexp is enabled?
     .addRule('prefer-regexp-test', ERROR) /** @since 26.0.0 */ // 💭?
     .addRule('prefer-response-static-json', ERROR) /** @since 62.0.0 */
     .addRule('prefer-scoped-selector', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-set-has', ERROR) /** @since 18.0.0 */
+    .addRule('prefer-set-methods', ERROR) /** @since 69.0.0 */ // 🟣💭?
     .addRule('prefer-set-size', ERROR) /** @since 45.0.0 */ // 💭?
     .addRule('prefer-short-arrow-method', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-simple-condition-first', ERROR) /** @since 64.0.0 */
@@ -774,6 +784,7 @@ export default ((context, optionsRaw) => {
     ]) /** @since 30.0.0 */
     .addRule('prefer-temporal', OFF) /** @since 66.0.0 */ // 🔴💭?
     .addRule('prefer-ternary', ERROR) /** @since 23.0.0 */
+    .addRule('prefer-toggle-attribute', OFF) /** @since 69.0.0 */ // 💭?
     .addRule('prefer-top-level-await', OFF) /** @since 34.0.0 */
     .addRule('prefer-type-error', ERROR) /** @since 2.0.0 */
     .addRule('prefer-type-literal-last', OFF) /** @since 66.0.0 */
@@ -782,6 +793,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-unicode-code-point-escapes', ERROR) /** @since 66.0.0 */
     .addRule('prefer-url-can-parse', ERROR) /** @since 68.0.0 */
     .addRule('prefer-url-href', ERROR) /** @since 66.0.0 */ // 💭?
+    .addRule('prefer-url-search-parameters', ERROR) /** @since 69.0.0 */ // 💭?
     .addRule('prefer-while-loop-condition', ERROR) /** @since 68.0.0 */
     .addRule('relative-url-style', ERROR, ['always']) /** @since 40.0.0 */
     .addRule('require-array-join-separator', ERROR) /** @since 33.0.0 */ // 💭?

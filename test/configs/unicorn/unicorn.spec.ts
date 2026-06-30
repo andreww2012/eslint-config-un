@@ -535,7 +535,7 @@ describe('options', () => {
       );
 
       expect(error?.message).toMatchInlineSnapshot(
-        '"Boolean name `ready` should start with `is`, `has`, `can`, `should`, `was`, `did`, `will`, `are`, `were`, `had`, `must`, `may`, `does`, `do`, `needs`, `requires`, `allows`, `supports`, `contains`, `includes`."',
+        '"Boolean name `ready` should start with `is`, `are`, `has`, `have`, `can`, `should`, `was`, `were`, `did`, `will`, `had`, `must`, `may`, `does`, `do`, `needs`, `requires`, `allows`, `supports`, `contains`, `includes`."',
       );
     });
 

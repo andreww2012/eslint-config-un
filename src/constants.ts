@@ -547,6 +547,8 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'no-for-each': 'optional', // Indirect
       'no-for-loop': 'optional',
       'no-invalid-character-comparison': 'optional', // Indirect
+      'no-invalid-well-known-symbol-methods': 'optional',
+      'no-late-event-control': 'optional', // Indirect
       'no-loop-iterable-mutation': 'optional', // Indirect
       'no-mismatched-map-key': 'optional', // Indirect
       'no-negated-array-predicate': 'optional', // Indirect
@@ -561,6 +563,7 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'no-useless-logical-operand': 'optional', // Indirect
       'no-useless-override': 'optional',
       'no-useless-spread': 'optional', // Indirect
+      'prefer-aggregate-error': 'optional',
       'prefer-array-find': 'optional', // Indirect
       'prefer-array-flat-map': 'optional', // Indirect
       'prefer-array-from-map': 'optional', // Indirect
@@ -571,15 +574,18 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'prefer-await': 'optional',
       'prefer-direct-iteration': 'optional',
       'prefer-dispose': 'optional',
+      'prefer-dom-node-replace-children': 'optional', // Indirect
       'prefer-dom-node-text-content': 'optional', // Indirect
       'prefer-else-if': 'optional', // Indirect
       'prefer-has-check': 'optional',
       'prefer-includes': 'optional', // Indirect
       'prefer-keyboard-event-key': 'optional', // Indirect
       'prefer-modern-dom-apis': 'optional',
+      'prefer-observer-apis': 'optional',
       'prefer-path2d': 'optional',
       'prefer-regexp-escape': 'optional', // Indirect
       'prefer-regexp-test': 'optional',
+      'prefer-set-methods': 'optional', // Indirect
       'prefer-set-size': 'optional', // Indirect
       'prefer-single-array-predicate': 'optional', // Indirect
       'prefer-spread': 'optional',
@@ -588,8 +594,10 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'prefer-string-starts-ends-with': 'optional', // Indirect
       'prefer-string-trim-start-end': 'optional', // Indirect
       'prefer-temporal': 'optional',
+      'prefer-toggle-attribute': 'optional', // Indirect
       'prefer-uint8array-base64': 'optional',
       'prefer-url-href': 'optional',
+      'prefer-url-search-parameters': 'optional', // Indirect
       'require-array-join-separator': 'optional', // Indirect
       'require-array-sort-compare': 'optional', // Indirect
     },
