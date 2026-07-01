@@ -603,9 +603,11 @@ export const pluginsLoaders = {
   tailwindcss: genModuleLoader(
     'tailwindcss',
     'eslint-plugin-tailwindcss',
-    () => interopDefault(import('eslint-plugin-tailwindcss')) as Promise<EslintPlugin>,
-    // Tries to import `tailwindcss/resolveConfig` which doesn't exist anymore in v4
-    ['ERR_PACKAGE_PATH_NOT_EXPORTED', ...MODULE_NOT_FOUND_ERROR_CODES],
+    () =>
+      interopDefault(
+        import('eslint-plugin-tailwindcss'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
   'tanstack-query': genModuleLoader(
     'tanstack-query',

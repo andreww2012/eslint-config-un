@@ -10,7 +10,7 @@ beforeEach(() => {
 });
 
 const DEFAULT_SETTINGS = {
-  entryPoint: path.posix.resolve(import.meta.dirname, 'fixtures', 'tailwind-entry.css'),
+  entryPoint: path.resolve(import.meta.dirname, 'fixtures', 'tailwind-entry.css'),
 };
 
 describe('basic tests', async () => {
@@ -133,11 +133,7 @@ describe('rules', async () => {
         betterTailwind: {
           files: ['**'],
           settings: {
-            tailwindConfig: path.posix.resolve(
-              import.meta.dirname,
-              'fixtures',
-              'tailwind.config.js',
-            ),
+            tailwindConfig: path.resolve(import.meta.dirname, 'fixtures', 'tailwind.config.js'),
           },
         },
       },
@@ -332,11 +328,7 @@ describe('options', () => {
           css: true,
           betterTailwind: {
             settings: {
-              tailwindConfig: path.posix.resolve(
-                import.meta.dirname,
-                'fixtures',
-                'tailwind.config.js',
-              ),
+              tailwindConfig: path.resolve(import.meta.dirname, 'fixtures', 'tailwind.config.js'),
             },
           },
         },

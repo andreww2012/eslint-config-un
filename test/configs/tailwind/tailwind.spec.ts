@@ -1,6 +1,10 @@
+import path from 'node:path';
+
 const FIXTURES = {
   contradictingClassnames: 'contradicting-classnames.jsx',
 } as const;
+
+const CSS_CONFIG_PATH = path.resolve(import.meta.dirname, 'fixtures', 'tailwind.css');
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('tailwind');
@@ -77,7 +81,7 @@ describe('rules', async () => {
 
   it('`tailwindcss/no-contradicting-classname` rule fires on a file with contradicting class names', async () => {
     const results = await testEslintConfig(
-      {tailwind: {files: ['**']}},
+      {tailwind: {files: ['**'], settings: {cssConfigPath: CSS_CONFIG_PATH}}},
       FIXTURES.contradictingClassnames,
       import.meta.dirname,
     );
@@ -88,7 +92,7 @@ describe('rules', async () => {
       'tailwindcss/no-contradicting-classname',
     );
 
-    expect(error?.message).toMatchInlineSnapshot('"Classnames flex, block are conflicting!"');
+    expect(error?.message).toMatchInlineSnapshot(`"'flex' conflicts with 'block'"`);
   });
 });
 
@@ -148,7 +152,7 @@ describe('options', () => {
     });
 
     it('passes plain settings directly to `tailwindcss` settings property', async () => {
-      const SETTINGS = {config: 'tailwind.config.js'};
+      const SETTINGS = {cssConfigPath: 'src/style.css'};
 
       const configResult = await computeEslintConfig({
         tailwind: {settings: SETTINGS},
@@ -159,27 +163,27 @@ describe('options', () => {
       ).toStrictEqual(SETTINGS);
     });
 
-    describe('`callees` setting', () => {
-      it('overwrites default `callees` when provided as array', async () => {
-        const CALLEES = ['cn', 'clsx'];
+    describe('`functions` setting', () => {
+      it('overwrites default `functions` when provided as array', async () => {
+        const FUNCTIONS = ['cn', 'clsx'];
 
         const configResult = await computeEslintConfig({
-          tailwind: {settings: {callees: CALLEES}},
+          tailwind: {settings: {functions: FUNCTIONS}},
         });
 
         expect(
           configResult.getConfigByUnPostfix('tailwind')?.settings?.['tailwindcss'],
-        ).toStrictEqual({callees: CALLEES});
+        ).toStrictEqual({functions: FUNCTIONS});
       });
 
-      it('derives `callees` from defaults when provided as a function', async () => {
-        let finalCallees: string[] = [];
+      it('derives `functions` from defaults when provided as a function', async () => {
+        let finalFunctions: string[] = [];
         const configResult = await computeEslintConfig({
           tailwind: {
             settings: {
-              callees: (defaults) => {
+              functions: (defaults) => {
                 const result = [...defaults, 'cn'];
-                finalCallees = [...result];
+                finalFunctions = [...result];
                 return result;
               },
             },
@@ -188,7 +192,7 @@ describe('options', () => {
 
         expect(
           configResult.getConfigByUnPostfix('tailwind')?.settings?.['tailwindcss'],
-        ).toStrictEqual({callees: finalCallees});
+        ).toStrictEqual({functions: finalFunctions});
       });
     });
 
@@ -225,27 +229,27 @@ describe('options', () => {
       });
     });
 
-    describe('`cssFiles` setting', () => {
-      it('overwrites default `cssFiles` when provided as array', async () => {
-        const CSS_FILES = ['src/**/*.css'];
+    describe('`attributes` setting', () => {
+      it('overwrites default `attributes` when provided as array', async () => {
+        const ATTRIBUTES = ['class', 'className'];
 
         const configResult = await computeEslintConfig({
-          tailwind: {settings: {cssFiles: CSS_FILES}},
+          tailwind: {settings: {attributes: ATTRIBUTES}},
         });
 
         expect(
           configResult.getConfigByUnPostfix('tailwind')?.settings?.['tailwindcss'],
-        ).toStrictEqual({cssFiles: CSS_FILES});
+        ).toStrictEqual({attributes: ATTRIBUTES});
       });
 
-      it('derives `cssFiles` from defaults when provided as a function', async () => {
-        let finalCssFiles: string[] = [];
+      it('derives `attributes` from defaults when provided as a function', async () => {
+        let finalAttributes: string[] = [];
         const configResult = await computeEslintConfig({
           tailwind: {
             settings: {
-              cssFiles: (defaults) => {
-                const result = [...defaults, '!**/temp'];
-                finalCssFiles = [...result];
+              attributes: (defaults) => {
+                const result = [...defaults, 'tw'];
+                finalAttributes = [...result];
                 return result;
               },
             },
@@ -254,7 +258,7 @@ describe('options', () => {
 
         expect(
           configResult.getConfigByUnPostfix('tailwind')?.settings?.['tailwindcss'],
-        ).toStrictEqual({cssFiles: finalCssFiles});
+        ).toStrictEqual({attributes: finalAttributes});
       });
     });
   });
