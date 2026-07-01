@@ -770,8 +770,8 @@ importers:
         specifier: 2.2.0
         version: 2.2.0(eslint@9.39.2)(typescript@6.0.3)
       eslint-plugin-sentences-per-line:
-        specifier: 0.1.2
-        version: 0.1.2(jiti@2.7.0)
+        specifier: 0.1.3
+        version: 0.1.3(jiti@2.7.0)
       eslint-plugin-solid:
         specifier: 0.14.5
         version: 0.14.5(eslint@9.39.2)(typescript@6.0.3)
@@ -2519,10 +2519,6 @@ packages:
   '@eslint/json@2.0.0':
     resolution: {integrity: sha512-P32ZJMIopNWQd1SFhd0tgjfA/hgzUuVSqHmMi2273QaLWHWimXq6V+qL4DNKnjGzO/aNECtYW+rEJ/pWB6uP+w==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
-
-  '@eslint/markdown@7.5.1':
-    resolution: {integrity: sha512-R8uZemG9dKTbru/DQRPblbJyXpObwKzo8rv1KYGGuPUPtjM4LXBYM9q5CIZAComzZupws3tWbDwam5AFpPLyJQ==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/markdown@8.0.2':
     resolution: {integrity: sha512-W+/0qHp0WbvFEljUvvECNpSWrUHpBWIWwp7F3QqEwQKmaRCmfEWvk6VfUia9pTQ0th6HyBGBsPfg/kG3/aQxLA==}
@@ -7505,8 +7501,8 @@ packages:
     resolution: {integrity: sha512-/lZCkOxPOWaf1jXAqgICrS8St3BMBccIPvhOSUYuV6VCr1o5nFVG998FnTLt6w2Nxb8Uo0nM8fzmnhp+GY/aEg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  eslint-plugin-sentences-per-line@0.1.2:
-    resolution: {integrity: sha512-gZiQAJHEqk20XnvQFEcH9OaVWqB8x2Bj3Ez7VnOz3k75ut3X1PiYZ4uZOgO6lRFLp2HYM90QKqTwBtTaq+WXWg==}
+  eslint-plugin-sentences-per-line@0.1.3:
+    resolution: {integrity: sha512-VjCDI8+r2WBLgVUeHp/3YQBFgreLTFij6V+ZoOHX9uuPAT00knDt/oX4fDw+cXfsPYloGqJW7jnZ0PUUQ3k0Tw==}
 
   eslint-plugin-solid@0.14.5:
     resolution: {integrity: sha512-nfuYK09ah5aJG/oEN6P1qziy1zLgW4PDWe75VNPi4CEFYk1x2AEqwFeQfEPR7gNn0F2jOeqKhx2E+5oNCOBYWQ==}
@@ -10595,8 +10591,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  sentences-per-line@0.5.2:
-    resolution: {integrity: sha512-Ch7cTyoP+nEo5+iZozSAeJ4c8R3jglpFwQMoQ98dn7wOa0QhXJjgO1wrjZgQJahSDB30BXfJ2PEBrlfhx8vK8A==}
+  sentences-per-line@0.5.3:
+    resolution: {integrity: sha512-pXuRJ4bKjxEaRVi7ZbwJBF2THPShuLHvWjw9yCtyn5qNqgAfZ/sqPHJu9HS72TffLQwIFX+aSP61HuGGz+7Aww==}
     engines: {node: '>=22.14.0'}
 
   set-cookie-parser@3.1.0:
@@ -13750,20 +13746,6 @@ snapshots:
       '@eslint/plugin-kit': 0.7.2
       '@humanwhocodes/momoa': 3.3.10
       natural-compare: 1.4.0
-
-  '@eslint/markdown@7.5.1':
-    dependencies:
-      '@eslint/core': 0.17.0
-      '@eslint/plugin-kit': 0.4.1
-      github-slugger: 2.0.0
-      mdast-util-from-markdown: 2.0.3
-      mdast-util-frontmatter: 2.0.1
-      mdast-util-gfm: 3.1.0
-      micromark-extension-frontmatter: 2.0.0
-      micromark-extension-gfm: 3.0.0
-      micromark-util-normalize-identifier: 2.0.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@eslint/markdown@8.0.2':
     dependencies:
@@ -19114,11 +19096,11 @@ snapshots:
     dependencies:
       safe-regex: 2.1.1
 
-  eslint-plugin-sentences-per-line@0.1.2(jiti@2.7.0):
+  eslint-plugin-sentences-per-line@0.1.3(jiti@2.7.0):
     dependencies:
-      '@eslint/markdown': 7.5.1
+      '@eslint/markdown': 8.0.2
       eslint: 9.39.2(jiti@2.7.0)
-      sentences-per-line: 0.5.2
+      sentences-per-line: 0.5.3
     transitivePeerDependencies:
       - jiti
       - supports-color
@@ -22963,7 +22945,7 @@ snapshots:
 
   semver@7.8.4: {}
 
-  sentences-per-line@0.5.2: {}
+  sentences-per-line@0.5.3: {}
 
   set-cookie-parser@3.1.0: {}
 
