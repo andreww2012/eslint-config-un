@@ -560,7 +560,11 @@ export const pluginsLoaders = {
   'sentences-per-line': genModuleLoader(
     'sentences-per-line',
     'eslint-plugin-sentences-per-line',
-    () => interopDefault(import('eslint-plugin-sentences-per-line')) as Promise<EslintPlugin>,
+    () =>
+      interopDefault(
+        import('eslint-plugin-sentences-per-line'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>,
   ),
   solid: genModuleLoader(
     'solid',
