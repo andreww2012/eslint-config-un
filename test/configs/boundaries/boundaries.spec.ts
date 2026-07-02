@@ -3,7 +3,7 @@ const FIXTURES = {
 } as const;
 
 describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('boundaries');
+  const configResult = await computeEslintConfig({boundaries: {settings: {elements: []}}});
 
   it('loads `boundaries` plugin if used', () => {
     expect(configResult.getLoadedPlugin('boundaries')).toBeDefined();
@@ -19,7 +19,7 @@ describe('basic tests', async () => {
     });
 
     it('creates `boundaries` eslint config if explicitly enabled', async () => {
-      await expectConfigState('boundaries', 'boundaries', true);
+      await expectConfigState({boundaries: {settings: {elements: []}}}, 'boundaries', true);
     });
   });
 
@@ -29,7 +29,12 @@ describe('basic tests', async () => {
     });
 
     it('creates `boundaries` eslint config if explicitly enabled', async () => {
-      await expectConfigState('boundaries', 'boundaries', true, 'default');
+      await expectConfigState(
+        {boundaries: {settings: {elements: []}}},
+        'boundaries',
+        true,
+        'default',
+      );
     });
 
     it('does not create `boundaries` eslint config and prints a warning if explicitly disabled', async () => {
@@ -43,7 +48,12 @@ describe('basic tests', async () => {
     });
 
     it('creates `boundaries` eslint config if explicitly enabled', async () => {
-      await expectConfigState({boundaries: true}, 'boundaries', true, 'misc-enabled');
+      await expectConfigState(
+        {boundaries: {settings: {elements: []}}},
+        'boundaries',
+        true,
+        'misc-enabled',
+      );
     });
 
     it('does not create `boundaries` eslint config and prints a warning if explicitly disabled', async () => {
@@ -66,7 +76,7 @@ describe('basic tests', async () => {
 });
 
 describe('rules', async () => {
-  const configResult = await computeEslintConfig('boundaries');
+  const configResult = await computeEslintConfig({boundaries: {settings: {elements: []}}});
 
   it('enables `boundaries/dependencies` rule by default', () => {
     expect(configResult.getRuleEntrySeverity('boundaries', 'boundaries/dependencies')).toBe(2);
@@ -161,11 +171,24 @@ describe('un options', () => {
 
 describe('options', () => {
   describe('option: `settings`', () => {
-    it('does not set `boundaries` ESLint config settings when no settings are provided', async () => {
+    it('does not set `boundaries` ESLint config settings when no settings are provided, and warns', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
       const configResult = await computeEslintConfig('boundaries');
       const config = configResult.getConfigByUnPostfix('boundaries');
 
       expect(config?.settings).toBeUndefined();
+      expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
+        "[boundaries] You haven't specified `settings.elements`",
+      );
+    });
+
+    it('does not warn when `settings.elements` is provided', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+      await computeEslintConfig({boundaries: {settings: {elements: []}}});
+
+      expect(stderrSpy.mock.calls).toBeEmpty();
     });
 
     it('sets `boundaries/elements` in ESLint config settings when `elements` is provided', async () => {

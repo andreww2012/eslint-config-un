@@ -1,6 +1,6 @@
 import type {Settings as EslintPluginBoundariesSettingsWithPrefixes} from 'eslint-plugin-boundaries';
 import {ERROR, OFF} from '../constants';
-import type {CamelCase, SetRequired} from '../types';
+import type {CamelCase} from '../types';
 import {kebabCase, objectEntriesUnsafe} from '../utils';
 import {
   type ExtraPluginsType,
@@ -18,21 +18,27 @@ export interface BoundariesEslintConfigOptions<
    * that will be assigned to `settings` object with keys transformed to
    * `boundaries/<original property name in kebab case>`
    * and applied to the resolved `files` and `ignores` of this config.
+   *
+   * Strongly recommended: specify at least `elements` — `eslint-plugin-boundaries` needs it
+   * to work properly, and its absence is reported at runtime.
    */
-  settings: SetRequired<
-    {
-      [K in keyof EslintPluginBoundariesSettingsWithPrefixes as K extends `boundaries/${infer Name}`
-        ? CamelCase<Name>
-        : never]?: EslintPluginBoundariesSettingsWithPrefixes[K];
-    },
-    'elements'
-  >;
+  settings?: {
+    [K in keyof EslintPluginBoundariesSettingsWithPrefixes as K extends `boundaries/${infer Name}`
+      ? CamelCase<Name>
+      : never]?: EslintPluginBoundariesSettingsWithPrefixes[K];
+  };
 }
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
+
+  if (pluginSettings?.elements == null) {
+    context.logger.warn(
+      "[boundaries] You haven't specified `settings.elements` option which is required for `eslint-plugin-boundaries` to work properly",
+    );
+  }
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'boundaries');
 
@@ -46,7 +52,6 @@ export default ((context, optionsRaw) => {
         includeDefaultFilesAndIgnores: true,
         settings: {
           '': Object.fromEntries(
-            // eslint-disable-next-line ts/no-unnecessary-condition -- settings not provided in config tester
             objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
               `boundaries/${kebabCase(settingName)}`,
               settingValue,
