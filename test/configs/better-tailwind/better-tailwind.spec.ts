@@ -9,7 +9,11 @@ beforeEach(() => {
   addInstalledPackages({tailwindcss: '3.4.17'});
 });
 
-const DEFAULT_SETTINGS = {
+const TW3_SETTINGS = {
+  tailwindConfig: path.resolve(import.meta.dirname, 'fixtures', 'tailwind.config.js'),
+};
+
+const TW4_SETTINGS = {
   entryPoint: path.resolve(import.meta.dirname, 'fixtures', 'tailwind-entry.css'),
 };
 
@@ -30,13 +34,24 @@ describe('basic tests', async () => {
     });
 
     it('creates `better-tailwindcss` eslint config if explicitly enabled', async () => {
-      await expectConfigState('betterTailwind', 'better-tailwindcss', true);
+      await expectConfigState(
+        {betterTailwind: {settings: TW3_SETTINGS}},
+        'better-tailwindcss',
+        true,
+      );
     });
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    it('creates `better-tailwindcss` eslint config by default (tailwindcss is installed)', async () => {
-      await expectConfigState({}, 'better-tailwindcss', true, 'default');
+    it('creates `better-tailwindcss` eslint config by default (tailwindcss is installed) and warns about missing settings', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+      const configResult = await computeEslintConfig({}, {reset: true});
+
+      expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeDefined();
+      expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
+        "[betterTailwind] You haven't specified `settings.tailwindConfig`",
+      );
     });
 
     it('creates `better-tailwindcss` eslint config and prints a warning if explicitly enabled', async () => {
@@ -77,8 +92,18 @@ describe('basic tests', async () => {
   });
 
   describe('mode: misc configs are enabled', () => {
-    it('creates `better-tailwindcss` eslint config', async () => {
-      await expectConfigState({}, 'better-tailwindcss', true, 'misc-enabled');
+    it('creates `better-tailwindcss` eslint config and warns about missing settings', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+      const configResult = await computeEslintConfig(
+        {},
+        {reset: true, un: {defaultConfigsStatus: 'misc-enabled'}},
+      );
+
+      expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeDefined();
+      expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
+        "[betterTailwind] You haven't specified `settings.tailwindConfig`",
+      );
     });
 
     it('creates `better-tailwindcss` eslint config and prints a warning if explicitly enabled', async () => {
@@ -107,24 +132,13 @@ describe('basic tests', async () => {
 });
 
 describe('rules', async () => {
-  const configResult = await computeEslintConfig('betterTailwind');
+  const configResult = await computeEslintConfig({betterTailwind: {settings: TW3_SETTINGS}});
 
-  it('enables `better-tailwindcss/no-conflicting-classes` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'better-tailwindcss',
-        'better-tailwindcss/no-conflicting-classes',
-      ),
-    ).toBe(2);
-  });
-
-  it('disables `better-tailwindcss/no-unknown-classes` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'better-tailwindcss',
-        'better-tailwindcss/no-unknown-classes',
-      ),
-    ).toBe(0);
+  it('enables `better-tailwindcss/no-conflicting-classes` and disables `better-tailwindcss/no-unknown-classes` by default', () => {
+    expect(configResult.getRuleSeverities('better-tailwindcss')).toMatchObject({
+      'better-tailwindcss/no-conflicting-classes': 2,
+      'better-tailwindcss/no-unknown-classes': 0,
+    });
   });
 
   it('`better-tailwindcss/no-duplicate-classes` rule reports duplicate classes in JSX', async () => {
@@ -157,7 +171,7 @@ describe('un options', () => {
       const FILES = ['**/*.jsx'];
 
       const configResult = await computeEslintConfig({
-        betterTailwind: {files: FILES, settings: DEFAULT_SETTINGS},
+        betterTailwind: {files: FILES, settings: TW3_SETTINGS},
       });
 
       expect(configResult.getConfigByUnPostfix('better-tailwindcss')?.files).toStrictEqual(FILES);
@@ -165,7 +179,7 @@ describe('un options', () => {
 
     it('disables `better-tailwindcss` eslint config when set to empty array', async () => {
       const configResult = await computeEslintConfig({
-        betterTailwind: {files: [], settings: DEFAULT_SETTINGS},
+        betterTailwind: {files: [], settings: TW3_SETTINGS},
       });
 
       expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeUndefined();
@@ -177,7 +191,7 @@ describe('un options', () => {
       const IGNORES = ['**/fixtures/**'];
 
       const configResult = await computeEslintConfig({
-        betterTailwind: {ignores: IGNORES, settings: DEFAULT_SETTINGS},
+        betterTailwind: {ignores: IGNORES, settings: TW3_SETTINGS},
       });
 
       const ignores = configResult.getConfigByUnPostfix('better-tailwindcss')?.ignores;
@@ -192,7 +206,7 @@ describe('un options', () => {
       betterTailwind: {
         overrides: {'better-tailwindcss/no-conflicting-classes': 0},
         overridesAny: {'no-console': 0},
-        settings: DEFAULT_SETTINGS,
+        settings: TW3_SETTINGS,
       },
     });
 
@@ -218,12 +232,48 @@ describe('options', () => {
 
     it('assigns settings to `better-tailwindcss` settings property', async () => {
       const configResult = await computeEslintConfig({
-        betterTailwind: {settings: DEFAULT_SETTINGS},
+        betterTailwind: {settings: TW3_SETTINGS},
       });
 
       expect(
         configResult.getConfigByUnPostfix('better-tailwindcss')?.settings?.['better-tailwindcss'],
-      ).toStrictEqual(DEFAULT_SETTINGS);
+      ).toStrictEqual(TW3_SETTINGS);
+    });
+
+    it('warns when enabled without `settings` (Tailwind 3 needs `tailwindConfig`)', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+      await computeEslintConfig('betterTailwind');
+
+      expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
+        "[betterTailwind] You haven't specified `settings.tailwindConfig`",
+      );
+    });
+
+    it('warns when enabled without `settings` (Tailwind 4 needs `entryPoint`)', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+      await computeEslintConfig({betterTailwind: {tailwindVersion: 4}});
+
+      expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
+        "[betterTailwind] You haven't specified `settings.entryPoint`",
+      );
+    });
+
+    it('does not warn when `settings.tailwindConfig` is provided (Tailwind 3)', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+      await computeEslintConfig({betterTailwind: {settings: TW3_SETTINGS}});
+
+      expect(stderrSpy.mock.calls).toBeEmpty();
+    });
+
+    it('does not warn when `settings.entryPoint` is provided (Tailwind 4)', async () => {
+      using stderrSpy = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
+
+      await computeEslintConfig({betterTailwind: {tailwindVersion: 4, settings: TW4_SETTINGS}});
+
+      expect(stderrSpy.mock.calls).toBeEmpty();
     });
   });
 
@@ -241,7 +291,7 @@ describe('options', () => {
 
     it('enables `better-tailwindcss/enforce-consistent-class-order` rule with custom order when set to string', async () => {
       const configResult = await computeEslintConfig({
-        betterTailwind: {classOrder: 'asc', settings: DEFAULT_SETTINGS},
+        betterTailwind: {classOrder: 'asc', settings: TW3_SETTINGS},
       });
 
       expect(
@@ -254,7 +304,7 @@ describe('options', () => {
 
     it('disables `better-tailwindcss/enforce-consistent-class-order` rule when set to `false`', async () => {
       const configResult = await computeEslintConfig({
-        betterTailwind: {classOrder: false, settings: DEFAULT_SETTINGS},
+        betterTailwind: {classOrder: false, settings: TW3_SETTINGS},
       });
 
       expect(
@@ -282,7 +332,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig({
         betterTailwind: {
           restrictedClasses: ['flex', 'block'],
-          settings: DEFAULT_SETTINGS,
+          settings: TW3_SETTINGS,
         },
       });
 
@@ -308,7 +358,7 @@ describe('options', () => {
       const configResult = await computeEslintConfig({
         betterTailwind: {
           breakUpClassesIntoMultipleLines: {printWidth: 80},
-          settings: DEFAULT_SETTINGS,
+          settings: TW3_SETTINGS,
         },
       });
 
@@ -349,7 +399,7 @@ describe('options', () => {
       const result = await testEslintConfig(
         {
           css: true,
-          betterTailwind: {cssLinting: false, settings: DEFAULT_SETTINGS},
+          betterTailwind: {cssLinting: false, settings: TW3_SETTINGS},
         },
         FIXTURES.tailwindInCssDuplicateClasses,
         import.meta.dirname,
@@ -366,9 +416,18 @@ describe('options', () => {
   });
 
   describe('option: `tailwindVersion`', () => {
+    it('uses the detected Tailwind version (`tailwindcss@3` is installed) when option is not set', async () => {
+      const configResult = await computeEslintConfig({betterTailwind: {settings: TW3_SETTINGS}});
+
+      expect(configResult.getRuleSeverities('better-tailwindcss')).toMatchObject({
+        'better-tailwindcss/enforce-shorthand-classes': 2,
+        'better-tailwindcss/enforce-canonical-classes': 0,
+      });
+    });
+
     it('applies Tailwind v4-specific rules when set to 4', async () => {
       const configResult = await computeEslintConfig({
-        betterTailwind: {tailwindVersion: 4, settings: DEFAULT_SETTINGS},
+        betterTailwind: {tailwindVersion: 4, settings: TW4_SETTINGS},
       });
 
       expect(
@@ -393,7 +452,7 @@ describe('options', () => {
 
     it('does not apply Tailwind v4-specific rules when set to 3', async () => {
       const configResult = await computeEslintConfig({
-        betterTailwind: {tailwindVersion: 3, settings: DEFAULT_SETTINGS},
+        betterTailwind: {tailwindVersion: 3, settings: TW3_SETTINGS},
       });
 
       expect(
@@ -435,7 +494,7 @@ describe('options', () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write');
 
       await computeEslintConfig({
-        betterTailwind: {tailwindVersion: 2 as 4, settings: DEFAULT_SETTINGS},
+        betterTailwind: {tailwindVersion: 2 as 4, settings: TW3_SETTINGS},
       });
 
       expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(
@@ -447,7 +506,7 @@ describe('options', () => {
       using stderrSpy = vi.spyOn(process.stderr, 'write');
 
       await computeEslintConfig({
-        betterTailwind: {tailwindVersion: 5 as 4, settings: DEFAULT_SETTINGS},
+        betterTailwind: {tailwindVersion: 5 as 4, settings: TW3_SETTINGS},
       });
 
       expect(String(stderrSpy.mock.calls[0]?.[0])).toContain(

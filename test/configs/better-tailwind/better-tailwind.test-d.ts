@@ -22,8 +22,8 @@ describe('option: `settings`', () => {
   it('does not allow using `entryPoint` and `tailwindConfig` properties at the same time', () => {
     ({
       entryPoint: 'src/index.css',
-      tailwindConfig: 'tailwind.config.js',
       // @ts-expect-error - assertion
+      tailwindConfig: 'tailwind.config.js',
     }) satisfies Settings;
   });
 

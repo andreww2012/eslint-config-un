@@ -26,9 +26,12 @@ export interface BetterTailwindEslintConfigOptions<
    * that will be assigned to `better-tailwindcss` property
    * and applied to the resolved `files` and `ignores` of this config.
    *
-   * Note: you MUST specify either `entryPoint` (for Tailwind 4) or `tailwindConfig` (for Tailwind 3).
+   * Strongly recommended: specify exactly one of `entryPoint` (for Tailwind 4) or
+   * `tailwindConfig` (for Tailwind 3) — `eslint-plugin-better-tailwindcss` needs it to work
+   * properly, and its absence is reported at runtime. If specified, you must provide exactly
+   * one of them.
    */
-  settings: RequireExactlyOne<{
+  settings?: RequireExactlyOne<{
     /**
      * [Tailwind 4 only] The path to the entry file of the css based Tailwind config
      */
@@ -159,9 +162,16 @@ export default ((context, optionsRaw, {cssResolvedOptions}) => {
   const tailwindMajorVersion =
     optionsResolved.tailwindVersion ?? tailwindPackageInfo?.versions.major;
 
-  if (tailwindMajorVersion === 4 && !pluginSettings.entryPoint) {
+  const requiredSettingsKey =
+    tailwindMajorVersion === 4
+      ? 'entryPoint'
+      : tailwindMajorVersion === 3
+        ? 'tailwindConfig'
+        : null;
+
+  if (requiredSettingsKey != null && !pluginSettings?.[requiredSettingsKey]) {
     context.logger.warn(
-      "[betterTailwind] You haven't specified `settings.entryPoint` option which is required for `eslint-plugin-better-tailwindcss` to work properly with Tailwind 4",
+      `[betterTailwind] You haven't specified \`settings.${requiredSettingsKey}\` option which is required for \`eslint-plugin-better-tailwindcss\` to work properly with Tailwind ${tailwindMajorVersion}`,
     );
   }
   if (tailwindMajorVersion != null && !SUPPORTED_TAILWIND_VERSIONS.has(tailwindMajorVersion)) {

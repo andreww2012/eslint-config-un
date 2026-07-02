@@ -17,6 +17,8 @@ type NullishOrVoid = null | undefined | void;
 
 type SourceObjectShape<S> = Extract<Exclude<S, readonly unknown[]>, AssignDefaultsInput>;
 
+type SourceMaybeAbsent<S> = [Exclude<S, AssignDefaultsInput>] extends [never] ? false : true;
+
 type MutableShallow<T> = T extends readonly (infer U)[] ? U[] : T;
 
 type ValidateDefaults<S, D> = [SourceObjectShape<S>] extends [never]
@@ -76,6 +78,11 @@ export const assignDefaults = <S, const D extends AssignDefaultsInput>(
   }
 
   return result as Prettify<
-    [SourceObjectShape<S>] extends [never] ? D : MergeShallow<SourceObjectShape<S>, D>
+    [SourceObjectShape<S>] extends [never]
+      ? D
+      : MergeShallow<
+          SourceMaybeAbsent<S> extends true ? Partial<SourceObjectShape<S>> : SourceObjectShape<S>,
+          D
+        >
   >;
 };
