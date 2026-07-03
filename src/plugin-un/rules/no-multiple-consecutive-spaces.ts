@@ -44,30 +44,31 @@ const rule: Eslint.Rule.RuleModule = {
           return;
         }
 
-        const matches = value.matchAll(MULTIPLE_CONSECUTIVE_SPACES_REGEXP);
-        [...matches].forEach(({index: startIndex, 0: matchString}) => {
-          if (options?.allowSpacesOnly && SPACES_ONLY_REGEXP.test(value)) {
-            return;
-          }
+        value
+          .matchAll(MULTIPLE_CONSECUTIVE_SPACES_REGEXP)
+          .forEach(({index: startIndex, 0: matchString}) => {
+            if (options?.allowSpacesOnly && SPACES_ONLY_REGEXP.test(value)) {
+              return;
+            }
 
-          const reportStart = (node.range?.[0] || 0) + 1 /* Quote */ + startIndex;
-          const reportEnd = reportStart + matchString.length;
+            const reportStart = (node.range?.[0] || 0) + 1 /* Quote */ + startIndex;
+            const reportEnd = reportStart + matchString.length;
 
-          context.report({
-            node,
-            loc: {
-              start: sourceCode.getLocFromIndex(reportStart),
-              end: sourceCode.getLocFromIndex(reportEnd),
-            },
-            messageId: 'noMultipleConsecutiveSpaces',
-            suggest: [
-              {
-                messageId: 'replaceMultipleSpacesWithSingle',
-                fix: (fixer) => fixer.replaceTextRange([reportStart, reportEnd], ' '),
+            context.report({
+              node,
+              loc: {
+                start: sourceCode.getLocFromIndex(reportStart),
+                end: sourceCode.getLocFromIndex(reportEnd),
               },
-            ],
+              messageId: 'noMultipleConsecutiveSpaces',
+              suggest: [
+                {
+                  messageId: 'replaceMultipleSpacesWithSingle',
+                  fix: (fixer) => fixer.replaceTextRange([reportStart, reportEnd], ' '),
+                },
+              ],
+            });
           });
-        });
       },
     };
   },

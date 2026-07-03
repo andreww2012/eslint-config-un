@@ -36,9 +36,8 @@
     // "lib": ["es2022", "dom", "dom.iterable"],
 
     /* If your code doesn't run in the DOM: */
-    "lib": [
-      "es2024",
-    ],
+    // Source: https://github.com/tsconfig/bases/blob/12474cd696ec17c6ac4ccc19261860bf3c7fdc56/bases/node22.json
+    "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator"],
 
     /* If you're building for a library: */
     // "declaration": true,
