@@ -571,6 +571,11 @@ export interface EslintConfigUnInternalOptions {
   testMode?: boolean;
 
   /**
+   * Disables console warnings without enabling the rest of {@link testMode}.
+   */
+  disableWarnings?: boolean;
+
+  /**
    * Forces every config to skip the type-information split (as if it had `skipTypeInfoSplit`),
    * keeping generated configs stable in tests. Does not prevent `disabled` mode from acting.
    */

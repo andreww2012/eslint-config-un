@@ -71,7 +71,10 @@ async function generateRuleTypes() {
     {plugin: pluginAngular, pluginTemplate: pluginAngularTemplate},
     pluginsWithAddedRuleOptionSchemas,
   ] = await Promise.all([
-    eslintConfigInternal({loadPluginsOnDemand: false, autofixDisabledGloballyFor: false}),
+    eslintConfigInternal(
+      {loadPluginsOnDemand: false, autofixDisabledGloballyFor: false},
+      {disableWarnings: true},
+    ),
     generateAngularPluginsWithOldRules(),
     addMissingRuleOptionsSchemas(),
   ]);

@@ -234,7 +234,11 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       'packagesInfo' | 'configsMeta'
     > as unknown as UnConfigContext<ExtraPlugins>);
 
-  if (context.isTestMode || Boolean(process.env['ESLINT_CONFIG_UN_DISABLE_WARNINGS'])) {
+  if (
+    context.isTestMode ||
+    internalOptions.disableWarnings ||
+    Boolean(process.env['ESLINT_CONFIG_UN_DISABLE_WARNINGS'])
+  ) {
     debug('Warnings will not be printed');
     logger.level = 0; // Fatal and Error only
   }
