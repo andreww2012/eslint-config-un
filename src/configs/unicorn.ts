@@ -466,6 +466,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-array-sort-for-min-max', ERROR) /** @since 68.0.0 */ // 💭?
     .addRule('no-array-splice', ERROR) /** @since 67.0.0 */ // 🟣💭?
     .addRule('no-asterisk-prefix-in-documentation-comments', OFF) /** @since 66.0.0 */ // 🔴
+    .addRule('no-async-promise-finally', ERROR) /** @since 70.0.0 */ // 💭?
     .addRule('no-await-expression-member', OFF) /** @since 39.0.0 */ // 🟣
     .addRule('no-await-in-promise-methods', ERROR) /** @since 52.0.0 */
     .addRule('no-blob-to-file', ERROR) /** @since 65.0.0 */
@@ -555,9 +556,11 @@ export default ((context, optionsRaw) => {
     .addRule('no-uncalled-method', ERROR) /** @since 67.0.0 */ // 🟣💭?
     .addRule('no-undeclared-class-members', ERROR) /** @since 65.0.0 */ // 🟣🟡
     .addRule('no-unnecessary-array-flat-depth', ERROR) /** @since 59.0.0 */
+    .addRule('no-unnecessary-array-flat-map', ERROR) /** @since 70.0.0 */ // 🟣💭?
     .addRule('no-unnecessary-array-splice-count', ERROR) /** @since 59.0.0 */
     .addRule('no-unnecessary-await', ERROR) /** @since 44.0.0 */
     .addRule('no-unnecessary-boolean-comparison', ERROR) /** @since 68.0.0 */ // 🟣💭?
+    .addRule('no-unnecessary-fetch-options', ERROR) /** @since 70.0.0 */ // 💭?
     .addRule('no-unnecessary-global-this', ERROR) /** @since 66.0.0 */
     .addRule('no-unnecessary-nested-ternary', ERROR) /** @since 65.0.0 */
     .addRule('no-unnecessary-polyfills', ERROR) /** @since 50.0.0 */
@@ -573,6 +576,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-unreadable-object-destructuring', OFF) /** @since 42.0.0 */
     .addRule('no-unsafe-buffer-conversion', ERROR) /** @since 66.0.0 */ // 💭?
     .addRule('no-unsafe-dom-html', OFF) /** @since 66.0.0 */ // 🔴
+    .addRule('no-unsafe-promise-all-settled-values', ERROR) /** @since 70.0.0 */ // 💭?
     .addRule('no-unsafe-property-key', ERROR) /** @since 66.0.0 */ // 🟣🟡💭?
     .addRule('no-unsafe-string-replacement', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-unused-array-method-return', ERROR) /** @since 65.0.0 */
@@ -606,6 +610,7 @@ export default ((context, optionsRaw) => {
       {onlyIfContainsSeparator: true},
     ]) /** @since 23.0.0 */
     .addRule('operator-assignment', OFF) /** @since 67.0.0 */ // 🟣
+    .addRule('prefer-abort-signal-any', ERROR) /** @since 70.0.0 */ // 🟣💭?
     .addRule('prefer-abort-signal-timeout', ERROR) /** @since 69.0.0 */ // 🟣
     .addRule('prefer-add-event-listener', ERROR) /** @since 4.0.0 */
     .addRule('prefer-add-event-listener-options', ERROR) /** @since 66.0.0 */
@@ -615,6 +620,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-array-flat-map', ERROR) /** @since 9.0.0 */ /** @aka prefer-flat-map */ // 💭?
     .addRule('prefer-array-from-async', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('prefer-array-from-map', ERROR) /** @since 66.0.0 */ // 💭?
+    .addRule('prefer-array-from-range', ERROR) /** @since 70.0.0 */
     .addRule('prefer-array-index-of', ERROR) /** @since 26.0.0 */
     .addRule('prefer-array-iterable-methods', ERROR) /** @since 68.0.0 */ // 🟣💭?
     .addRule('prefer-array-last-methods', ERROR) /** @since 65.0.0 */
@@ -624,6 +630,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-await', OFF) /** @since 66.0.0 */ // 💭?
     .addRule('prefer-bigint-literals', ERROR) /** @since 61.0.0 */
     .addRule('prefer-blob-reading-methods', ERROR) /** @since 47.0.0 */
+    .addRule('prefer-block-statement-over-iife', ERROR) /** @since 70.0.0 */
     .addRule('prefer-boolean-return', ERROR) /** @since 68.0.0 */
     .addRule('prefer-class-fields', ERROR) /** @since 60.0.0 */
     .addRule('prefer-classlist-toggle', ERROR) /** @since 61.0.0 */
@@ -656,6 +663,7 @@ export default ((context, optionsRaw) => {
         : OFF,
     ) /** @since 66.0.0 */
     .addRule('prefer-global-this', OFF) /** @since 56.0.0 */
+    .addRule('prefer-group-by', OFF) /** @since 70.0.0 */ // 💭?
     .addRule('prefer-has-check', ERROR) /** @since 67.0.0 */ // 💭?
     .addRule('prefer-hoisting-branch-code', ERROR) /** @since 68.0.0 */ // 🟣
     .addRule('prefer-https', OFF) /** @since 65.0.0 */ // 🟣
@@ -672,6 +680,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-iterable-in-constructor', ERROR) /** @since 66.0.0 */
     // Reason for disabling: https://github.com/sindresorhus/eslint-plugin-unicorn/issues/2565
     .addRule('prefer-iterator-concat', OFF) /** @since 65.0.0 */ // 🔴
+    .addRule('prefer-iterator-helpers', ERROR) /** @since 70.0.0 */ // 💭?
     // TODO should consider enabling by default when `Iterator#toArray` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator/toArray
     .addRule('prefer-iterator-to-array', OFF) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-iterator-to-array-at-end', ERROR) /** @since 65.0.0 */
@@ -751,6 +760,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-short-arrow-method', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('prefer-simple-condition-first', ERROR) /** @since 64.0.0 */
     .addRule('prefer-simple-sort-comparator', ERROR) /** @since 64.0.0 */
+    .addRule('prefer-simplified-conditions', ERROR) /** @since 70.0.0 */ // 💭?
     .addRule('prefer-single-array-predicate', ERROR) /** @since 66.0.0 */ // 💭?
     .addRule('prefer-single-call', ERROR) /** @since 27.0.0 */ /** @aka no-array-push-push */
     .addRule('prefer-single-object-destructuring', ERROR) /** @since 66.0.0 */ // 🟣

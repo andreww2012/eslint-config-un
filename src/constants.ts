@@ -540,6 +540,7 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'no-array-reduce': 'optional', // Indirect
       'no-array-sort-for-min-max': 'optional', // Indirect
       'no-array-splice': 'optional',
+      'no-async-promise-finally': 'optional',
       'no-boolean-sort-comparator': 'optional', // Indirect
       'no-chained-comparison': 'optional', // Indirect
       'no-collection-bracket-access': 'optional', // Indirect
@@ -555,14 +556,18 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'no-non-function-verb-prefix': 'optional',
       'no-object-methods-with-collections': 'optional',
       'no-uncalled-method': 'optional', // Indirect
+      'no-unnecessary-array-flat-map': 'optional', // Indirect
       'no-unnecessary-boolean-comparison': 'optional', // Indirect
+      'no-unnecessary-fetch-options': 'optional',
       'no-unsafe-buffer-conversion': 'optional',
+      'no-unsafe-promise-all-settled-values': 'optional',
       'no-unsafe-property-key': 'optional',
       'no-useless-coercion': 'optional',
       'no-useless-length-check': 'optional', // Indirect
       'no-useless-logical-operand': 'optional', // Indirect
       'no-useless-override': 'optional',
       'no-useless-spread': 'optional', // Indirect
+      'prefer-abort-signal-any': 'optional',
       'prefer-aggregate-error': 'optional',
       'prefer-array-find': 'optional', // Indirect
       'prefer-array-flat-map': 'optional', // Indirect
@@ -577,8 +582,10 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'prefer-dom-node-replace-children': 'optional', // Indirect
       'prefer-dom-node-text-content': 'optional', // Indirect
       'prefer-else-if': 'optional', // Indirect
+      'prefer-group-by': 'optional', // Indirect
       'prefer-has-check': 'optional',
       'prefer-includes': 'optional', // Indirect
+      'prefer-iterator-helpers': 'optional', // Indirect
       'prefer-keyboard-event-key': 'optional', // Indirect
       'prefer-modern-dom-apis': 'optional',
       'prefer-observer-apis': 'optional',
@@ -587,6 +594,7 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'prefer-regexp-test': 'optional',
       'prefer-set-methods': 'optional', // Indirect
       'prefer-set-size': 'optional', // Indirect
+      'prefer-simplified-conditions': 'optional', // Indirect
       'prefer-single-array-predicate': 'optional', // Indirect
       'prefer-spread': 'optional',
       'prefer-string-replace-all': 'optional', // Indirect

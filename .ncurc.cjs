@@ -85,22 +85,20 @@ module.exports = {
       (v) => semver.parse(v),
     );
     return (
-      !(
-        IGNORED_MAJOR_VERSION_TRANSITIONS.has(packageName) &&
-        currentVersionSemver?.major !== upgradedVersionSemver?.major
-      ) &&
-      !(
-        IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS /* eslint-disable-line sonarjs/no-empty-collection */.has(
-          packageName,
-        ) &&
-        currentVersionSemver &&
-        upgradedVersionSemver &&
-        currentVersionSemver.major === upgradedVersionSemver.major &&
-        currentVersionSemver.minor === upgradedVersionSemver.minor &&
-        currentVersionSemver.patch === upgradedVersionSemver.patch &&
-        JSON.stringify(currentVersionSemver.prerelease) !==
-          JSON.stringify(upgradedVersionSemver.prerelease)
-      )
+      (!IGNORED_MAJOR_VERSION_TRANSITIONS.has(packageName) ||
+        currentVersionSemver?.major === upgradedVersionSemver?.major) &&
+      (!IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS /* eslint-disable-line sonarjs/no-empty-collection */.has(
+        packageName,
+      ) ||
+        !(
+          currentVersionSemver &&
+          upgradedVersionSemver &&
+          currentVersionSemver.major === upgradedVersionSemver.major &&
+          currentVersionSemver.minor === upgradedVersionSemver.minor &&
+          currentVersionSemver.patch === upgradedVersionSemver.patch
+        ) ||
+        JSON.stringify(currentVersionSemver.prerelease) ===
+          JSON.stringify(upgradedVersionSemver.prerelease))
     );
   },
 
