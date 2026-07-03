@@ -329,15 +329,8 @@ export const pluginsLoaders = {
   lockfile: genModuleLoader('lockfile', 'eslint-plugin-lockfile', () =>
     interopDefault(import('eslint-plugin-lockfile')),
   ),
-  markdown: genModuleLoader(
-    'markdown',
-    '@eslint/markdown',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('@eslint/markdown'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  markdown: genModuleLoader('markdown', '@eslint/markdown', () =>
+    interopDefault(import('@eslint/markdown')),
   ),
   'markdown-links': genModuleLoader(
     'markdown-links',
