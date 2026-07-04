@@ -415,8 +415,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1
       tailwind-csstree:
-        specifier: 0.3.2
-        version: 0.3.2(@eslint/css@1.4.0)
+        specifier: 0.3.3
+        version: 0.3.3(@eslint/css@1.4.0)
       tinyexec:
         specifier: 1.2.4
         version: 1.2.4
@@ -10977,8 +10977,8 @@ packages:
     peerDependencies:
       tailwindcss: ^3.3.0 || ^4.0.0 || ^4.0.0-beta
 
-  tailwind-csstree@0.3.2:
-    resolution: {integrity: sha512-0iVbtKbzPZG+wcBELC7vK2z1I3n+hUQG3OzyhmMXoJTCm8j5tI+ek2Ch3X/lf/VaTf/yag9mLngoKIaehH6X0g==}
+  tailwind-csstree@0.3.3:
+    resolution: {integrity: sha512-je9J5UYRsTJqAjYrIBMMlge8T/rreRd44pJxgG5Zx/zeo4kAC/liUKqzztRZrGlYRJLvIf2Cb1DVJMTXSzEShA==}
     engines: {node: '>=18.18'}
     peerDependencies:
       '@eslint/css': '>=1.0.0'
@@ -18431,7 +18431,7 @@ snapshots:
       enhanced-resolve: 5.22.0
       jiti: 2.7.0
       synckit: 0.11.13
-      tailwind-csstree: 0.3.2(@eslint/css@1.4.0)
+      tailwind-csstree: 0.3.3(@eslint/css@1.4.0)
       tailwindcss: 4.3.2
       tsconfig-paths-webpack-plugin: 4.2.0
       valibot: 1.4.1(typescript@6.0.3)
@@ -23462,7 +23462,7 @@ snapshots:
       local-pkg: 1.2.1
       tailwindcss: 4.3.2
 
-  tailwind-csstree@0.3.2(@eslint/css@1.4.0):
+  tailwind-csstree@0.3.3(@eslint/css@1.4.0):
     optionalDependencies:
       '@eslint/css': 1.4.0
 

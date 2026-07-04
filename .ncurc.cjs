@@ -21,7 +21,9 @@ const PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT = new Se
   'eslint-plugin-formatjs',
 ]);
 
-const ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES = new Set(['eslint-mdx']);
+const ESLINT_PLUGINS_WITH_UNCONVENTIONAL_NAMES = new Set(['eslint-mdx', 'import-integrity-lint']);
+
+const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set(['tailwind-csstree']);
 
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set();
 
@@ -116,7 +118,7 @@ module.exports = {
       if (knownGroup.nonEslint) {
         return `✨ ${knownGroup.groupName}`;
       }
-      return `3. ${knownGroup.groupName} (🟡 ESLint-related)`;
+      return `3. ${knownGroup.groupName} (🟡 ESLint related)`;
     }
 
     const isPlugin =
@@ -128,7 +130,7 @@ module.exports = {
     const isPublishedFromMonorepoWithPackagesUnrelatedToEslint =
       PLUGINS_PUBLISHED_FROM_MONOREPO_WITH_PACKAGES_UNRELATED_TO_ESLINT.has(fullName);
 
-    const groupNamePluginSuffix = `${isPlugin || isParser ? '(🟢 ESLint plugins/parsers)' : fullName.includes('eslint') ? '🔵 (ESLint related)' : '(⚪️ non-ESLint)'}${isPublishedFromMonorepoWithPackagesUnrelatedToEslint ? ' (⚠️ monorepo release)' : ''}`;
+    const groupNamePluginSuffix = `${isPlugin || isParser ? '(🟢 ESLint plugins/parsers)' : fullName.includes('eslint') || ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES.has(fullName) ? '🔵 (ESLint related)' : '(⚪️ non-ESLint related)'}${isPublishedFromMonorepoWithPackagesUnrelatedToEslint ? ' (⚠️ monorepo release)' : ''}`;
 
     /**
      * @param {number} base Base group number
