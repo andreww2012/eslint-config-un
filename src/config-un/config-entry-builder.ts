@@ -52,13 +52,13 @@ import type {
 import {
   arraify,
   arrayMap,
-  createTraverser,
   findArrayInversions,
   objectEntriesUnsafe,
   partition,
   styleConfigName,
   styleRuleName,
   styleText,
+  traverseForEach,
 } from '../utils';
 import {
   type ExtraPluginsType,
@@ -426,24 +426,27 @@ export class ConfigEntryBuilder<
       ]);
     }
 
-    const configTraverser = createTraverser(configFinal, {includeSymbols: true});
-    configTraverser.forEach((traverseContext, value) => {
-      if (traverseContext.key !== packageToLoadSymbol) {
-        return;
-      }
+    traverseForEach(
+      configFinal,
+      (traverseContext, value) => {
+        if (traverseContext.key !== packageToLoadSymbol) {
+          return;
+        }
 
-      const info = value as PackageToLoadInfo;
-      arraify(info.package).forEach((packageId) => {
-        this.context.usedPackages.set(packageId, [
-          ...(this.context.usedPackages.get(packageId) || []),
-          {
-            config: configFinal,
-            path: traverseContext.path.slice(0, -1).join('.'),
-            info,
-          },
-        ]);
-      });
-    });
+        const info = value as PackageToLoadInfo;
+        arraify(info.package).forEach((packageId) => {
+          this.context.usedPackages.set(packageId, [
+            ...(this.context.usedPackages.get(packageId) || []),
+            {
+              config: configFinal,
+              path: traverseContext.path.slice(0, -1).join('.'),
+              info,
+            },
+          ]);
+        });
+      },
+      {includeSymbols: true},
+    );
 
     /* v8 ignore start */
     let currentCategory = '';

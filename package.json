@@ -160,7 +160,7 @@
     "is-in-editor": "0.4.0",
     "klona": "2.0.6",
     "ms-ts": "1.0.0",
-    "neotraverse": "0.6.18",
+    "neotraverse": "1.0.1",
     "obug": "2.1.2",
     "package-manager-detector": "1.6.0",
     "semver": "7.8.2",

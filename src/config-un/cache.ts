@@ -10,12 +10,12 @@ import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
 import type {LoadablePackagePrefix, PackageToLoadInfo, ParserPrefix} from '../loaders';
 import type {SetFieldType} from '../types';
 import {
-  createTraverser,
   isObject,
   isPlainObject,
   omit,
   readAndParseJson,
   readFileSafe,
+  traverseForEach,
 } from '../utils';
 import type {UnConfigContext} from './shared';
 
@@ -185,8 +185,7 @@ export const saveCacheToFs = async (
   }
 
   const unserializablePaths: [path: PropertyKey[], value: unknown][] = [];
-  const traverser = createTraverser(dataToStore.configs);
-  traverser.forEach(({path: valuePath}, value: unknown) => {
+  traverseForEach(dataToStore.configs, ({path: valuePath}, value: unknown) => {
     const isUnserializable =
       // eslint-disable-next-line ts/no-unnecessary-condition
       typeof value === 'function' || (isObject(value) && !isPlainObject(value));

@@ -7,11 +7,11 @@ import {destr as jsonParse} from 'destr';
 import {resolve as resolvePackage} from 'import-meta-resolve';
 import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
 import {isInEditor as isInEditorOriginal} from 'is-in-editor';
-import {Traverse, type TraverseOptions} from 'neotraverse/modern';
 import * as R from 'remeda';
 import type {FalsyValue, MaybePromise, Nullable, PackageJson, StripReadonly} from './types';
 
 export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
+export {forEach as traverseForEach} from 'neotraverse';
 
 export {klona as cloneDeep} from 'klona';
 
@@ -245,9 +245,6 @@ export function getKeysOfTruthyValues<
 
 export const isIn = <T extends object>(key: PropertyKey, object: T): key is keyof T =>
   key in object;
-
-export const createTraverser = (object: unknown, options?: TraverseOptions) =>
-  new Traverse(object, options);
 
 type FindDuplicate<T extends readonly unknown[]> = T extends readonly [infer First, ...infer Rest]
   ? First extends Rest[number]
