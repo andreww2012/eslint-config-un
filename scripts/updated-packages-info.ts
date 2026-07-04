@@ -161,14 +161,17 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   const sampleRuleNameWithPrefix = [pluginPrefix, SAMPLE_RULE_NAME].filter(Boolean).join('/');
   const ruleDocsUrl = packageMeta?.ruleDocsUrl?.(SAMPLE_RULE_NAME);
 
-  if (pluginPrefix) {
-    const ruleDocsUrlForMd = ruleDocsUrl
-      ? `[\`${sampleRuleNameWithPrefix}\`](${ruleDocsUrl})`
-      : `\`${sampleRuleNameWithPrefix}\``;
+  const ruleDocsUrlForMd = ruleDocsUrl
+    ? `[\`${sampleRuleNameWithPrefix}\`](${ruleDocsUrl})`
+    : `\`${sampleRuleNameWithPrefix}\``;
 
-    console.log(styleText('underline', 'For changelog:'));
-    console.log(
-      `${mainUnConfigNames}: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${getCompareDiffUrl(dependency, repoUrl, oldVersion, newVersion)}):
+  console.log(styleText('underline', 'For changelog:'));
+  console.log(
+    `${mainUnConfigNames}: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${getCompareDiffUrl(dependency, repoUrl, oldVersion, newVersion)})`,
+  );
+
+  if (pluginPrefix != null) {
+    console.log(`:
 
 - 🟢 enabled ${ruleDocsUrlForMd} rule
 - 🟢 enabled ${ruleDocsUrlForMd} rule and added it to the \`noStylisticRules\` config
@@ -178,8 +181,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 - 🔴 not enabled ${ruleDocsUrlForMd} rule
 - ❌ \`${sampleRuleNameWithPrefix}\` rule was removed
 - ⚠️ ${ruleDocsUrlForMd} rule was disabled because got deprecated
-- 🔄 \`${sampleRuleNameWithPrefix}\` was renamed to ${ruleDocsUrlForMd}`,
-    );
+- 🔄 \`${sampleRuleNameWithPrefix}\` was renamed to ${ruleDocsUrlForMd}`);
   }
 
   if (ruleDocsUrl) {
