@@ -241,6 +241,7 @@ export default ((context, optionsRaw) => {
     .addRule('block-lang', OFF) /** @since 2.18.0 */
     .addRule('button-has-type', ERROR) /** @since 0.0.4 */
     .addRule('no-add-event-listener', ERROR) /** @since 3.6.0 */
+    .addRule('no-at-const-tags', ERROR) /** @since 3.20.0 */
     .addRule('no-at-debug-tags', ERROR) /** @since 0.0.1 */ // 🟢
     .addRule('no-ignored-unsubscribe', ERROR) /** @since 2.34.0 */
     .addRule('no-immutable-reactive-statements', ERROR) /** @since 2.27.0 */ // 🟢
