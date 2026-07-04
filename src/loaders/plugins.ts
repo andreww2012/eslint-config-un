@@ -461,11 +461,7 @@ export const pluginsLoaders = {
   'prefer-arrow-functions': genModuleLoader(
     'prefer-arrow-functions',
     'eslint-plugin-prefer-arrow-functions',
-    () =>
-      interopDefault(
-        import('eslint-plugin-prefer-arrow-functions'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+    () => interopDefault(import('eslint-plugin-prefer-arrow-functions')) as Promise<EslintPlugin>,
   ),
   prettier: genModuleLoader(
     'prettier',

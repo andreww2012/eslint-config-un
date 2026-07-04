@@ -740,8 +740,8 @@ importers:
         specifier: 2.10.4
         version: 2.10.4(eslint@9.39.2)
       eslint-plugin-prefer-arrow-functions:
-        specifier: 3.9.1
-        version: 3.9.1(eslint@9.39.2)(typescript@6.0.3)
+        specifier: 3.10.1
+        version: 3.10.1(eslint@9.39.2)(typescript@6.0.3)
       eslint-plugin-prettier:
         specifier: 5.5.6
         version: 5.5.6(patch_hash=f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8)(eslint@9.39.2)(prettier@3.8.3)
@@ -7419,11 +7419,11 @@ packages:
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
 
-  eslint-plugin-prefer-arrow-functions@3.9.1:
-    resolution: {integrity: sha512-Mr9Ia8i5ohfCMcZBRedXXWdDJIo30gdKdPfRQ5DtO62yzogB5ErVGwQWPz+ycRlQPKpCAlBHpJdp1TCeCtt+YA==}
-    engines: {node: '>=18.0.0'}
+  eslint-plugin-prefer-arrow-functions@3.10.1:
+    resolution: {integrity: sha512-wutwnNG0S/wqNhqryS7ee2yX01dkvgFMDvdaXcdEfSGcxz37FRfJUCD0YL2Jur0ANCKocgplF7n6GBPhe+DNNg==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24.0.0}
     peerDependencies:
-      eslint: '>=9.17.0'
+      eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
 
   eslint-plugin-prettier@5.5.6:
     resolution: {integrity: sha512-ifetmTcxWfz+4qRW3pH/ujdTq2jQIj59AxJMIN26K5avYgU8dxycUETQonWiW+wPrYXA0j3Try0l1CnwVQtDqQ==}
@@ -13699,7 +13699,7 @@ snapshots:
       '@eslint-react/eslint': 5.8.16(eslint@9.39.2)(typescript@6.0.3)
       '@typescript-eslint/scope-manager': 8.61.1
       '@typescript-eslint/types': 8.62.1
-      '@typescript-eslint/utils': 8.61.1(eslint@9.39.2)(typescript@6.0.3)
+      '@typescript-eslint/utils': 8.62.1(eslint@9.39.2)(typescript@6.0.3)
       eslint: 9.39.2(jiti@2.7.0)
       ts-pattern: 5.9.0
       typescript: 6.0.3
@@ -18979,10 +18979,10 @@ snapshots:
       yaml: 2.9.0
       yaml-eslint-parser: 2.0.0
 
-  eslint-plugin-prefer-arrow-functions@3.9.1(eslint@9.39.2)(typescript@6.0.3):
+  eslint-plugin-prefer-arrow-functions@3.10.1(eslint@9.39.2)(typescript@6.0.3):
     dependencies:
-      '@typescript-eslint/types': 8.60.1
-      '@typescript-eslint/utils': 8.60.1(eslint@9.39.2)(typescript@6.0.3)
+      '@typescript-eslint/types': 8.62.1
+      '@typescript-eslint/utils': 8.62.1(eslint@9.39.2)(typescript@6.0.3)
       eslint: 9.39.2(jiti@2.7.0)
     transitivePeerDependencies:
       - supports-color
