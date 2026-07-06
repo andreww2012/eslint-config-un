@@ -33,7 +33,7 @@ Grown out of a personal collection of rules, this ESLint config aspires to cover
 
 Minimum supported versions:
 
-- NodeJS: ^22.18.0 or >=24
+- NodeJS: ^22.23.1 or >=24
 - ESLint: ^9.15.0 or ^10 (peer dependency)
 
 ```sh
