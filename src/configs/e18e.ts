@@ -164,7 +164,7 @@ export default ((context, optionsRaw) => {
   if (configModuleReplacements) {
     const configModuleReplacementsOptions = assignDefaults(configModuleReplacements, {});
 
-    const {options: badDependencyOptions} = configModuleReplacementsOptions;
+    const {options: banDependenciesOptions} = configModuleReplacementsOptions;
 
     configBuilderModuleReplacements
       ?.addConfig([
@@ -178,7 +178,7 @@ export default ((context, optionsRaw) => {
       .addRule(
         'ban-dependencies',
         ERROR,
-        badDependencyOptions ? [badDependencyOptions] : [],
+        banDependenciesOptions ? [banDependenciesOptions] : [],
       ) /** @since 0.0.1 */
       .enableConfigTesterForPlugin('e18e', {
         /* v8 ignore next */
