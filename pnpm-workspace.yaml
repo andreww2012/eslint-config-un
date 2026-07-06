@@ -8,6 +8,7 @@ saveExact: true
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
   - eslint-plugin-unicorn@71.0.0
+  - eslint-plugin-es-x@10.0.0
 # - '@typescript-eslint/eslint-plugin@X.Y.Z'
 # - '@typescript-eslint/parser@X.Y.Z'
 # - '@typescript-eslint/project-service@X.Y.Z'
@@ -99,6 +100,7 @@ peerDependencyRules:
     eslint-plugin-ava@16.0.1>eslint: '>=9'
     eslint-plugin-unicorn>eslint: '>=9'
     eslint-plugin-astro@^2>eslint: '>=9'
+    eslint-plugin-es-x@^10>eslint: '>=9'
 
     '@phenomnomnominal/tsquery@6.1.4>typescript': '>=5'
     '@sveltejs/vite-plugin-svelte@7.0.0>vite': '>=7'
