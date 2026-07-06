@@ -44,6 +44,13 @@ export default eslintConfig({
       },
     },
     barrelFiles: true,
+    e18e: {
+      configModuleReplacements: {
+        options: {
+          allowed: ['eslint-plugin-react', 'eslint-plugin-jest-dom'],
+        },
+      },
+    },
     expectType: true,
     command: true,
     checkFile: {
@@ -128,13 +135,6 @@ export default eslintConfig({
         dependencies: 'always',
         devDependencies: 'always',
         peerDependencies: 'never',
-      },
-    },
-    e18e: {
-      configModuleReplacements: {
-        options: {
-          allowed: ['eslint-plugin-react'],
-        },
       },
     },
     jsdoc: {
