@@ -326,8 +326,7 @@ export interface EsEslintConfigOptions<
    */
   ecmaFeatures?: Partial<{
     [Version in EcmaVersion]:
-      | boolean
-      | Prettify<{default?: boolean} & Partial<Record<EcmaFeatures[Version], boolean>>>;
+      boolean | Prettify<{default?: boolean} & Partial<Record<EcmaFeatures[Version], boolean>>>;
   }>;
 }
 
@@ -499,7 +498,7 @@ export default ((context, optionsRaw, customConfig) => {
       .addRule(
         'no-weakmap-prototype-getorinsertcomputed', // cspell:disable-line
         grs(2026, 'weakMapPrototypeGetOrInsertComputed'),
-      ) /** @since 9.4.0 */;
+      ); /** @since 9.4.0 */
   }
 
   if (!isEsVersionFullySupported(2025)) {

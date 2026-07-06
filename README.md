@@ -185,9 +185,7 @@ The Config has the following interface (exact types are simplified for docs):
 ```ts
 type Severity = 0 | 1 | 2 | 'off' | 'warn' | 'error';
 
-type RuleOptions = {
-  /* ... pre-generated all rules' options */
-};
+type RuleOptions = {/* ... pre-generated all rules' options */};
 
 type UnRuleEntry<RuleName extends string> =
   | Severity
@@ -548,9 +546,7 @@ Example:
 import {eslintConfig} from 'eslint-config-un';
 
 export default eslintConfig({
-  configs: {
-    /* ... */
-  },
+  configs: {/* ... */},
 
   extraConfigs: [
     {

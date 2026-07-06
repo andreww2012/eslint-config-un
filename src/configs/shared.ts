@@ -78,8 +78,7 @@ export const generateDefaultTestFiles = <T extends string>(
 ];
 
 type ConfigNoOnlyTests<ExtraPlugins extends ExtraPluginsType = never> =
-  | boolean
-  | UnFlatConfigEntryBase<ExtraPlugins, 'no-only-tests'>;
+  boolean | UnFlatConfigEntryBase<ExtraPlugins, 'no-only-tests'>;
 
 export interface NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins extends ExtraPluginsType> {
   /**

@@ -24,9 +24,11 @@ export interface BoundariesEslintConfigOptions<
    * @see https://jsboundaries.dev/docs/settings
    */
   settings?: {
-    [K in keyof EslintPluginBoundariesSettingsWithPrefixes as K extends `boundaries/${infer Name}`
-      ? CamelCase<Name>
-      : never]?: EslintPluginBoundariesSettingsWithPrefixes[K];
+    [
+      K in keyof EslintPluginBoundariesSettingsWithPrefixes as K extends `boundaries/${infer Name}`
+        ? CamelCase<Name>
+        : never
+    ]?: EslintPluginBoundariesSettingsWithPrefixes[K];
   };
 }
 

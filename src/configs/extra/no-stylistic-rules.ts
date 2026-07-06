@@ -1070,7 +1070,9 @@ const ALL_STYLISTIC_RULES = {
 /* eslint-disable perfectionist/sort-objects */
 
 type AllStylisticRules = ObjectValues<{
-  [Plugin in keyof typeof ALL_STYLISTIC_RULES]: `${Plugin extends '' ? '' : `${Plugin}/`}${keyof (typeof ALL_STYLISTIC_RULES)[Plugin] & string}`;
+  [
+    Plugin in keyof typeof ALL_STYLISTIC_RULES
+  ]: `${Plugin extends '' ? '' : `${Plugin}/`}${keyof (typeof ALL_STYLISTIC_RULES)[Plugin] & string}`;
 }>;
 
 export interface NoStylisticRulesEslintConfigOptions<

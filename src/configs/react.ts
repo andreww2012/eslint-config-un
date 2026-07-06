@@ -339,8 +339,7 @@ export interface ReactEslintConfigOptions<
    * @default true
    */
   configYouMightNotNeedAnEffect?:
-    | boolean
-    | UnFlatConfigEntryBase<ExtraPlugins, 'react-you-might-not-need-an-effect'>;
+    boolean | UnFlatConfigEntryBase<ExtraPlugins, 'react-you-might-not-need-an-effect'>;
 
   /**
    * Controls how rules from [@eslint-react/eslint-plugin](https://npmx.dev/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) are used.

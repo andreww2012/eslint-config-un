@@ -302,8 +302,7 @@ describe('options', () => {
       expect(
         (
           configResult.getConfigByUnPostfix('svelte/setup')?.languageOptions?.['parserOptions'] as
-            | Record<string, unknown>
-            | undefined
+            Record<string, unknown> | undefined
         )?.['svelteConfig'],
       ).toBeUndefined();
     });
@@ -317,8 +316,7 @@ describe('options', () => {
       expect(
         (
           configResult.getConfigByUnPostfix('svelte/setup')?.languageOptions?.['parserOptions'] as
-            | Record<string, unknown>
-            | undefined
+            Record<string, unknown> | undefined
         )?.['svelteConfig'],
       ).toBe(SVELTE_KIT_CONFIG);
     });

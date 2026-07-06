@@ -104,8 +104,7 @@ export interface JsxA11yEslintConfigOptions<
    * Setting to `false` will disable the rule.
    */
   altTextCheckForElements?:
-    | false
-    | Partial<Record<AltTextCheckDefaultElements | (string & {}), boolean>>;
+    false | Partial<Record<AltTextCheckDefaultElements | (string & {}), boolean>>;
 
   /**
    * Anchor aspects to check by [`jsx-a11y/anchor-is-valid`](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md) rule.

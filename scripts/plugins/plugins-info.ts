@@ -46,9 +46,7 @@ class PackageFetchUnknownError extends Data.TaggedError('PackageFetchUnknownErro
 }> {}
 
 type PackageFetchError =
-  | PackageMissingError
-  | PackageVersionNotFoundError
-  | PackageFetchUnknownError;
+  PackageMissingError | PackageVersionNotFoundError | PackageFetchUnknownError;
 
 export const fetchPackageMetadata = (packageName: string) =>
   Effect.gen(function* () {

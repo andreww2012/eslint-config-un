@@ -24,8 +24,7 @@ export function getIsConfigEnabled(
   this: UnConfigContext,
   configName: keyof UnConfigs,
   defaultConditionOrPackageInstalled:
-    | boolean
-    | MaybeArray<`${(typeof PACKAGES_TO_GET_INFO_FOR)[number]}${'' | `@${string}`}`> = true,
+    boolean | MaybeArray<`${(typeof PACKAGES_TO_GET_INFO_FOR)[number]}${'' | `@${string}`}`> = true,
   {
     preCondition,
     requireAllListedPackagesToBeInstalled,

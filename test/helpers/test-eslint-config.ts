@@ -15,8 +15,7 @@ const UN_ESLINT_CONFIGS_PREFIX = 'eslint-config-un/';
 
 export const computeEslintConfig = async (
   configsOrSingleConfigName:
-    | EslintConfigUnOptions['configs']
-    | keyof (EslintConfigUnOptions['configs'] & {}),
+    EslintConfigUnOptions['configs'] | keyof (EslintConfigUnOptions['configs'] & {}),
   options?: {
     /**
      * Do not set implicit default options
@@ -137,8 +136,7 @@ export const testEslintConfig = async <
   const FixturePaths extends string | readonly [string, ...string[]],
 >(
   configsOrSingleConfigName:
-    | EslintConfigUnOptions['configs']
-    | keyof (EslintConfigUnOptions['configs'] & {}),
+    EslintConfigUnOptions['configs'] | keyof (EslintConfigUnOptions['configs'] & {}),
   fixturePaths: FixturePaths,
   optionsOrFixtureSearchRelativeToPath?:
     | string

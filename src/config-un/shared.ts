@@ -118,8 +118,7 @@ type UnFlagConfigEntry<ExtraPlugins extends ExtraPluginsType = never> = OmitStri
 };
 
 type ValueOrEslintConfigWithValue<T> =
-  | T
-  | MaybeArray<Prettify<UnFlatConfigEntryFilesAndIgnores & {value?: T}>>;
+  T | MaybeArray<Prettify<UnFlatConfigEntryFilesAndIgnores & {value?: T}>>;
 
 // ⚠️ IMPORTANT: please don't forget to sync this list with `autofixDisabledGloballyFor` option docs (below)
 export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOptions['autofixDisabledGloballyFor'] &
@@ -507,8 +506,7 @@ export interface EslintConfigUnOptions<
   typeInfoRules?:
     | TypeInfoMode
     | ({mode?: TypeInfoMode; ignores?: string[]} & (
-        | {allowDefaultProject?: string[]}
-        | {parserOptions?: TsEslintParserOptions}
+        {allowDefaultProject?: string[]} | {parserOptions?: TsEslintParserOptions}
       ));
 
   // #endregion

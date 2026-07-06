@@ -36,8 +36,7 @@ const NpmPackageInfoZod = z.union([
 ]);
 
 const KNOWN_NPM_PACKAGES_REQUIRING_OVERRIDE: readonly (
-  | string
-  | [override: string, version: string]
+  string | [override: string, version: string]
 )[] = [
   ...['debug', 'jsx', 'hooks', 'react-hooks', 'react', 'react-dom', 'naming-convention'].map(
     (suffix) => `@eslint-react/eslint-plugin-${suffix}`,

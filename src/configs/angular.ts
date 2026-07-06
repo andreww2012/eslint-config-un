@@ -137,8 +137,7 @@ export interface AngularEslintConfigOptions<
    * @default true
    */
   componentSelector?:
-    | boolean
-    | Prettify<PartialObjectsOnly<GetRuleOptions<'angular', 'component-selector'>>>;
+    boolean | Prettify<PartialObjectsOnly<GetRuleOptions<'angular', 'component-selector'>>>;
 
   /**
    * Ensures consistent usage of `styles`/`styleUrls`/`styleUrl` within `Component` metadata.
@@ -171,8 +170,7 @@ export interface AngularEslintConfigOptions<
    * @default true
    */
   directiveSelector?:
-    | boolean
-    | Prettify<PartialObjectsOnly<GetRuleOptions<'angular', 'directive-selector'>>>;
+    boolean | Prettify<PartialObjectsOnly<GetRuleOptions<'angular', 'directive-selector'>>>;
 
   /**
    * Forbids the use of certain metadata properties. Will be merged with the default value.

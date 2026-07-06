@@ -182,8 +182,7 @@ describe('options', () => {
       expect(
         (
           configResult.getConfigByUnPostfix('js-inline')?.settings?.['html'] as
-            | Record<string, unknown>
-            | undefined
+            Record<string, unknown> | undefined
         )?.['html-extensions'],
       ).toMatchInlineSnapshot(
         '[".erb", ".handlebars", ".hbs", ".htm", ".html", ".mustache", ".nunjucks", ".php", ".tag", ".riot", ".twig", ".we"]',
@@ -223,8 +222,7 @@ describe('options', () => {
       expect(
         (
           configResult.getConfigByUnPostfix('js-inline')?.settings?.['html'] as
-            | Record<string, unknown>
-            | undefined
+            Record<string, unknown> | undefined
         )?.['xml-extensions'],
       ).toMatchInlineSnapshot('[".xhtml", ".xml"]');
     });

@@ -206,8 +206,7 @@ export interface VueEslintConfigOptions<
    * @default true <=> `ts` config is enabled
    */
   configEnforceTypescriptInScriptSection?:
-    | boolean
-    | EnforceTypescriptInScriptionSectionConfigOptions<ExtraPlugins>;
+    boolean | EnforceTypescriptInScriptionSectionConfigOptions<ExtraPlugins>;
 
   /**
    * [`vue-i18n`](https://npmx.dev/vue-i18n) specific rules.

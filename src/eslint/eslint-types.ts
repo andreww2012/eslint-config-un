@@ -107,10 +107,12 @@ export type UnRulesConfigPartial<
   P extends null | PluginPrefix | EslintTypedRulesConfig = PluginPrefix,
 > = P extends PluginPrefix
   ? {
-      [N in keyof OmitIndexSignature<UnRuleOptionsByPlugin[P]> as PluginAndPrefixToFullRuleName<
-        P,
-        N
-      >]?: UnRuleOptionsByPlugin[P][N] extends unknown[]
+      [
+        N in keyof OmitIndexSignature<UnRuleOptionsByPlugin[P]> as PluginAndPrefixToFullRuleName<
+          P,
+          N
+        >
+      ]?: UnRuleOptionsByPlugin[P][N] extends unknown[]
         ? EslintRuleEntry<UnRuleOptionsByPlugin[P][N]>
         : never;
     }
@@ -150,8 +152,10 @@ export type EslintFlatConfigEntry<T extends EslintTypedRulesConfig = EslintTyped
   EslintConfigObject<T>;
 
 export type EslintRuleEntry<Options extends readonly unknown[] = readonly unknown[]> =
-  Eslint.Linter.RuleEntry<// @ts-expect-error "The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type 'any[]'" - this is fine, options are not mutated by ESLint
-  Options>;
+  Eslint.Linter.RuleEntry<
+    // @ts-expect-error "The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type 'any[]'" - this is fine, options are not mutated by ESLint
+    Options
+  >;
 
 // TODO report false positive
 // eslint-disable-next-line unicorn/prefer-export-from
@@ -165,10 +169,7 @@ export type GetRuleOptions<
   Prefix extends PluginPrefix,
   RuleName extends keyof UnRuleOptionsByPlugin[Prefix] = keyof UnRuleOptionsByPlugin[Prefix],
   Index extends
-    | (keyof UnRuleOptionsByPlugin[Prefix][RuleName] & number)
-    | 0
-    | 'all'
-    | 'allUnwrapped' = 0,
+    (keyof UnRuleOptionsByPlugin[Prefix][RuleName] & number) | 0 | 'all' | 'allUnwrapped' = 0,
   _AllOptions = UnRuleOptionsByPlugin[Prefix][RuleName],
 > = Exclude<
   Index extends 'all'

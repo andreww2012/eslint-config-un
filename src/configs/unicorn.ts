@@ -67,9 +67,7 @@ export interface UnicornEslintConfigOptions<
    * @default true
    */
   compoundWordsSuggestedReplacements?:
-    | boolean
-    | Record<string, string | false>
-    | ConsistentCompoundWordsOptions;
+    boolean | Record<string, string | false> | ConsistentCompoundWordsOptions;
 
   /**
    * What DOM API to enforce when working with `data-` attributes:

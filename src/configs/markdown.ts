@@ -88,8 +88,7 @@ export interface MarkdownEslintConfigOptions<
    * @default 'gfm'
    */
   language?:
-    | MarkdownDialect
-    | Prettify<UnFlatConfigEntryFilesAndIgnores & {language: MarkdownDialect}>[];
+    MarkdownDialect | Prettify<UnFlatConfigEntryFilesAndIgnores & {language: MarkdownDialect}>[];
 
   /**
    * If array, only those tags will be allowed. If `false`, no tags are allowed. If `true`, all tags are allowed (default)

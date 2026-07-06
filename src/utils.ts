@@ -115,8 +115,7 @@ export const joinPaths = (...paths: (string | FalsyValue)[]) =>
   path.posix.join(...arraify(paths).filter((v): v is string => Boolean(v)));
 
 export type MaybeFn<Return, Params extends readonly unknown[] = []> =
-  | ((...args: Params) => Return)
-  | Return;
+  ((...args: Params) => Return) | Return;
 
 export const maybeCall = <
   T extends MaybeFn<unknown>,

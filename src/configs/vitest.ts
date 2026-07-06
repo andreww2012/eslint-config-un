@@ -101,9 +101,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * @default 'each'
    */
   enforceEachOrFor?:
-    | false
-    | EachOrFor
-    | Prettify<ConsistentEachForRuleOptions & {default?: EachOrFor}>;
+    false | EachOrFor | Prettify<ConsistentEachForRuleOptions & {default?: EachOrFor}>;
 
   /**
    * - `once`: prefer `toBeCalledOnce()` or `toHaveBeenCalledOnce()` over `toBeCalledTimes(1)`

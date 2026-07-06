@@ -140,8 +140,7 @@ export interface BetterTailwindEslintConfigOptions<
    * @default 'official'
    */
   classOrder?:
-    | GetRuleOptions<'better-tailwindcss', 'enforce-consistent-class-order'>['order']
-    | false;
+    GetRuleOptions<'better-tailwindcss', 'enforce-consistent-class-order'>['order'] | false;
 
   restrictedClasses?: string[];
 }

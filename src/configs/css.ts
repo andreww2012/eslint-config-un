@@ -76,9 +76,11 @@ export interface CssEslintConfigOptions<
    * Must be unique.
    */
   allowedFeatures?: {
-    [K in keyof GetRuleOptions<'css', 'use-baseline'> as K extends `allow${infer T}`
-      ? Uncapitalize<T>
-      : never]: GetRuleOptions<'css', 'use-baseline'>[K];
+    [
+      K in keyof GetRuleOptions<'css', 'use-baseline'> as K extends `allow${infer T}`
+        ? Uncapitalize<T>
+        : never
+    ]: GetRuleOptions<'css', 'use-baseline'>[K];
   };
 }
 

@@ -113,9 +113,11 @@ export interface TestingLibraryEslintConfigOptions<
 }
 
 type SupportedModules = keyof {
-  [K in keyof TestingLibraryEslintConfigOptions as K extends `config${infer ModuleName}`
-    ? Lowercase<ModuleName>
-    : never]: unknown;
+  [
+    K in keyof TestingLibraryEslintConfigOptions as K extends `config${infer ModuleName}`
+      ? Lowercase<ModuleName>
+      : never
+  ]: unknown;
 };
 
 export default ((context, optionsRaw) => {
