@@ -2,7 +2,7 @@
 'eslint-config-un': minor
 ---
 
-unicorn: updated [`eslint-plugin-unicorn` from v65.0.1 to v70.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v65.0.1...v70.0.0):
+unicorn: updated [`eslint-plugin-unicorn` from v65.0.1 to v71.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v65.0.1...v71.0.0):
 
 - [**BREAKING**] Renamed `minimumComparisonsToPreferArrayIncludes` and `minimumWhitespaceRepetitionsToPreferStringRepeat` options to the same names with `minimum` shortened to `min`
 - Added a new option `classReferenceInStaticMethodsStyle` controlling 🟢 enabled by default [`unicorn/class-reference-in-static-methods`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/class-reference-in-static-methods.md) rule
