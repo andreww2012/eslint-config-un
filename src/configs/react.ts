@@ -1224,6 +1224,7 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     .markCategory('Web API')
     .addRule('web-api-no-leaked-event-listener', getXRuleSeverity(ERROR)) /** @since 4.0.0-beta.1 */ // 🟡
     .addRule('web-api-no-leaked-fetch', getXRuleSeverity(ERROR)) /** @since 1.11.0 */ // 🟡
+    .addRule('web-api-no-leaked-intersection-observer', getXRuleSeverity(ERROR)) /** @since 5.9.0 */ // 🟡
     .addRule('web-api-no-leaked-interval', getXRuleSeverity(ERROR)) /** @since 1.11.0 */ // 🟡
     .addRule('web-api-no-leaked-resize-observer', getXRuleSeverity(ERROR)) /** @since 1.13.0 */ // 🟡
     .addRule('web-api-no-leaked-timeout', getXRuleSeverity(ERROR)) /** @since 1.11.0 */ // 🟡
