@@ -50,6 +50,9 @@ overrides:
   '@isaacs/brace-expansion@<=5.0.0': '>=5.0.1'
   tar@<7.5.7: ^7.5.7
   axios@>=1.0.0 <1.15.2: ^1.15.2
+  # GHSA-fx2h-pf6j-xcff
+  # Can't use range like `^8.0.16` as pnpm won't re-resolve the already-locked vite for a range replacement, only for an exact one
+  vite@>=8.0.0 <8.0.16: 8.0.16
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
 
 patchedDependencies:
