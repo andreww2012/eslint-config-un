@@ -201,8 +201,10 @@ export const pluginsLoaders = {
     '@eslint-community/eslint-plugin-eslint-comments',
     () => interopDefault(import('@eslint-community/eslint-plugin-eslint-comments')),
   ),
-  'eslint-plugin': genModuleLoader('eslint-plugin', 'eslint-plugin-eslint-plugin', () =>
-    interopDefault(import('eslint-plugin-eslint-plugin')),
+  'eslint-plugin': genModuleLoader(
+    'eslint-plugin',
+    'eslint-plugin-eslint-plugin',
+    () => interopDefault(import('eslint-plugin-eslint-plugin')) as Promise<EslintPlugin>,
   ),
   'eslint-react': genModuleLoader('eslint-react', '@eslint-react/eslint-plugin', () =>
     loadEslintReactPlugin('@eslint-react'),

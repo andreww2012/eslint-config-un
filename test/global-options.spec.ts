@@ -18,7 +18,11 @@ describe('option: `files`', () => {
 
     const config = configResult.getConfigByUnPostfix('files/global');
 
-    expect(config).toStrictEqual({name: expect.any(String) as unknown, files: FILES});
+    expect(config).toStrictEqual({
+      // eslint-disable-next-line vitest/valid-expect
+      name: expect.any(String) as unknown,
+      files: FILES,
+    });
   });
 
   it('passes nested array `files` patterns as-is', async () => {

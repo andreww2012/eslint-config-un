@@ -23,6 +23,7 @@ describe('rules requiring type information', () => {
         parserOptions: {projectService: true},
         parser: {
           meta: {name: 'typescript-eslint/parser'},
+          // eslint-disable-next-line vitest/valid-expect
           parseForESLint: expect.any(Function) as unknown,
         },
       });
