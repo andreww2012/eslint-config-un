@@ -114,7 +114,7 @@ describe('rules', async () => {
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      '"There is no rule allowing dependencies from elements of type "page" to elements of type "component""',
+      '"There is no policy allowing dependencies from elements of type "page" to elements of type "component""',
     );
   });
 });

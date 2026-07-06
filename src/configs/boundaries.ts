@@ -19,8 +19,9 @@ export interface BoundariesEslintConfigOptions<
    * `boundaries/<original property name in kebab case>`
    * and applied to the resolved `files` and `ignores` of this config.
    *
-   * Strongly recommended: specify at least `elements` — `eslint-plugin-boundaries` needs it
+   * Strongly recommended: specify at least `elements` — the plugin needs it
    * to work properly, and its absence is reported at runtime.
+   * @see https://jsboundaries.dev/docs/settings
    */
   settings?: {
     [K in keyof EslintPluginBoundariesSettingsWithPrefixes as K extends `boundaries/${infer Name}`
@@ -61,17 +62,10 @@ export default ((context, optionsRaw) => {
       },
     ])
     .addRule('dependencies', ERROR) /** @since 2.0.0-beta.1 */ /** @aka element-types */ // 🟢
-    .addRule('entry-point', ERROR) /** @since 1.0.0-beta.1 */ // 🟢
-    .addRule('external', ERROR) /** @since 2.0.0-beta.1 */ // 🟢
-    .addRule('no-ignored', OFF) /** @since 2.0.0-beta.1 */
-    .addRule('no-private', ERROR) /** @since 1.0.0-beta.1 */ // 🟢
-    .addRule('no-unknown', OFF) /** @since 2.0.0-beta.1 */
+    .addRule('no-ignored-dependencies', OFF) /** @since 2.0.0-beta.1 */ /** @aka no-ignored */
+    .addRule('no-unknown-dependencies', OFF) /** @since 2.0.0-beta.1 */ /** @aka no-unknown */
     .addRule('no-unknown-files', OFF) /** @since 2.0.0-beta.1 */
-    .enableConfigTesterForPlugin('boundaries', {
-      // `element-types` was not properly marked as deprecated: https://www.jsboundaries.dev/docs/releases/migration-guides/v5-to-v6/#rule-element-types-renamed-to-dependencies
-      /* v8 ignore next */
-      rulesToSkipInConfig: (ruleName) => ruleName === 'element-types',
-    })
+    .enableConfigTesterForPlugin('boundaries')
     .addOverrides();
 
   return {

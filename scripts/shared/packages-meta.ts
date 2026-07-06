@@ -62,8 +62,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     },
     boundaries: {
       configs: ['boundaries'],
-      ruleDocsUrl: (ruleName) =>
-        `https://github.com/javierbrea/eslint-plugin-boundaries/blob/HEAD/docs/rules/${ruleName}.md`,
+      ruleDocsUrl: (ruleName) => `https://jsboundaries.dev/docs/rules/${ruleName}`,
     },
     'case-police': {
       configs: ['casePolice'],
