@@ -123,5 +123,6 @@ export default {
     'dups',
     'strikethrough',
     'unexpressible',
+    'cooldown',
   ],
 } satisfies CSpellSettings;
