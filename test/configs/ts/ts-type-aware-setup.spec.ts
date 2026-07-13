@@ -1,4 +1,4 @@
-import {difference} from '../../../src/utils';
+import {arrayDifference} from '../../../src/utils';
 
 describe('ts: sub config `typeAware.setup`', () => {
   describe('basic tests', () => {
@@ -75,7 +75,7 @@ describe('ts: sub config `typeAware.setup`', () => {
         const typeAwareSetupFiles = configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files;
 
         expect(typeAwareSetupFiles).toIncludeAllMembers(FILES_TS);
-        expect(difference(typeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
+        expect(arrayDifference(typeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
           '["**/*.astro"]',
         );
       });
@@ -91,7 +91,7 @@ describe('ts: sub config `typeAware.setup`', () => {
         const typeAwareSetupFiles = configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files;
 
         expect(typeAwareSetupFiles).toIncludeAllMembers(FILES_TS);
-        expect(difference(typeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
+        expect(arrayDifference(typeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
           '["**/*.svelte"]',
         );
       });
@@ -107,7 +107,7 @@ describe('ts: sub config `typeAware.setup`', () => {
         const typeAwareSetupFiles = configResult.getConfigByUnPostfix('ts/type-aware/setup')?.files;
 
         expect(typeAwareSetupFiles).toIncludeAllMembers(FILES_TS);
-        expect(difference(typeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
+        expect(arrayDifference(typeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
           '["**/*.vue"]',
         );
       });

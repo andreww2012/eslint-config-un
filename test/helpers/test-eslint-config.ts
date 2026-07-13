@@ -9,7 +9,7 @@ import type {
 } from '../../src/config-un/shared';
 import type {PluginPrefix} from '../../src/loaders';
 import type {NonEmptyTuple, OmitStrict} from '../../src/types';
-import {arraify} from '../../src/utils';
+import {arrayify} from '../../src/utils';
 
 const UN_ESLINT_CONFIGS_PREFIX = 'eslint-config-un/';
 
@@ -188,7 +188,7 @@ export const testEslintConfig = async <
     path.join(import.meta.dirname, '..');
 
   const fixtures = await Promise.all(
-    arraify(fixturePaths).map(async (fixturePath) => ({
+    arrayify(fixturePaths).map(async (fixturePath) => ({
       contents: await fs.readFile(path.resolve(fixturesRootPath, 'fixtures', fixturePath), 'utf8'),
       filePath: pathe.join(fixturesRootPath, 'fixtures', fixturePath),
     })),

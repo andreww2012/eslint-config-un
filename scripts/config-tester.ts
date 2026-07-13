@@ -2,7 +2,7 @@ import consola from 'consola';
 import ourPackageJson from '../package.json' with {type: 'json'};
 import {eslintConfigInternal} from '../src/config-un/config';
 import {CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT} from '../src/config-un/config-utils';
-import {arraify, styleConfigName, stylePackageName} from '../src/utils';
+import {arrayify, styleConfigName, stylePackageName} from '../src/utils';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {CONFIGS_META} from './shared/packages-meta';
 
@@ -64,7 +64,7 @@ errors.forEach(({severity, message}) => {
   isError ? (errorsCount += 1) : (warningsCount += 1);
   logger[isError ? 'error' : 'warn'](
     // @ts-expect-error This will work
-    ...arraify(message),
+    ...arrayify(message),
   );
 });
 

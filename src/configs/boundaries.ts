@@ -1,7 +1,7 @@
 import type {Settings as EslintPluginBoundariesSettingsWithPrefixes} from 'eslint-plugin-boundaries';
 import {ERROR, OFF} from '../constants';
-import type {CamelCase} from '../types';
-import {kebabCase, objectEntriesUnsafe} from '../utils';
+import type {ToCamelCase} from '../types';
+import {objectEntriesUnsafe, toKebabCase} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -26,7 +26,7 @@ export interface BoundariesEslintConfigOptions<
   settings?: {
     [
       K in keyof EslintPluginBoundariesSettingsWithPrefixes as K extends `boundaries/${infer Name}`
-        ? CamelCase<Name>
+        ? ToCamelCase<Name>
         : never
     ]?: EslintPluginBoundariesSettingsWithPrefixes[K];
   };
@@ -56,7 +56,7 @@ export default ((context, optionsRaw) => {
         settings: {
           '': Object.fromEntries(
             objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
-              `boundaries/${kebabCase(settingName)}`,
+              `boundaries/${toKebabCase(settingName)}`,
               settingValue,
             ]),
           ),

@@ -1,8 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
+import {jsonParseSafe} from '@andreww2012/unutils';
 import {regex} from 'arkregex';
-import {destr} from 'destr';
 import {exec} from 'tinyexec';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import ourPackageJson from '../package.json' with {type: 'json'};
@@ -219,7 +219,7 @@ if (updatedProdDependencies.length + updatedOptionalPeerDependencies.length > 0)
 // =============================================================================
 
 function parsePackageJson(packageJsonText: string) {
-  return PackageJsonZod.safeParse(destr(packageJsonText));
+  return PackageJsonZod.safeParse(jsonParseSafe(packageJsonText));
 }
 
 async function readRootPackageJson() {

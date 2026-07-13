@@ -13,7 +13,7 @@ import {
 } from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
-import {getKeysOfTruthyValues, pickBy} from '../utils';
+import {getKeysOfTruthyValues, pick} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -159,7 +159,7 @@ export default ((context, optionsRaw) => {
       {
         // @ts-expect-error too strict type
         ignore: getKeysOfTruthyValues(
-          pickBy(requireSeparateFilesFor, (v) => !v),
+          pick(requireSeparateFilesFor, (v) => !v),
           'nonEmptyArray',
         ),
       },

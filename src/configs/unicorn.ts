@@ -1,6 +1,6 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import type {Prettify} from '../types';
-import {partition} from '../utils';
+import {arrayPartition} from '../utils';
 import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
@@ -383,7 +383,7 @@ export default ((context, optionsRaw) => {
         ? compoundWordsSuggestedReplacements
         : typeof compoundWordsSuggestedReplacements === 'object'
           ? ((): ConsistentCompoundWordsOptions => {
-              const [replacementsArray, allowListArray] = partition(
+              const [replacementsArray, allowListArray] = arrayPartition(
                 Object.entries(compoundWordsSuggestedReplacements),
                 ([, value]) => value !== false,
               );

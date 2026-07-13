@@ -3,7 +3,7 @@ import type {UnExtraPluginsRules} from '../../eslint/eslint-types';
 import {ALL_RULES_PER_PLUGIN} from '../../eslint-rules.gen';
 import type {PluginPrefix} from '../../loaders';
 import type {ObjectValues} from '../../types';
-import {isIn, objectEntriesUnsafe} from '../../utils';
+import {isKeyIn, objectEntriesUnsafe} from '../../utils';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -1158,7 +1158,7 @@ export default ((context, optionsRaw) => {
               return ruleName in ALL_STYLISTIC_RULES[pluginName] &&
                 !(
                   additionalRules &&
-                  isIn(ruleNameWithPluginPrefix, additionalRules) &&
+                  isKeyIn(ruleNameWithPluginPrefix, additionalRules) &&
                   additionalRules[ruleNameWithPluginPrefix] === true
                 )
                 ? null

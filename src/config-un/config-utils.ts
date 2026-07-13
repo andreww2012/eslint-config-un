@@ -1,7 +1,7 @@
 import semver from 'semver';
 import type {UnConfigs} from '../configs';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
-import {type MaybeArray, arraify, styleConfigName, stylePackageName, styleText} from '../utils';
+import {type MaybeArray, arrayify, styleConfigName, stylePackageName, styleText} from '../utils';
 import type {UnConfigContext} from './shared';
 
 // NOTE: do not forget to sync this list with `defaultConfigsStatus` option JSDoc
@@ -67,7 +67,7 @@ export function getIsConfigEnabled(
     (Array.isArray(defaultConditionOrPackageInstalled) &&
       defaultConditionOrPackageInstalled.length > 0)
   ) {
-    const packagesList = arraify(defaultConditionOrPackageInstalled).map(
+    const packagesList = arrayify(defaultConditionOrPackageInstalled).map(
       (packageNameAndMaybeVersionRange) => {
         const versionDelimiterIndex = packageNameAndMaybeVersionRange.lastIndexOf('@');
         const hasVersionRange = versionDelimiterIndex > 0;

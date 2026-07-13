@@ -29,9 +29,9 @@ import {
   pluginsLoaders,
 } from '../loaders';
 import type {
-  FalsyValue,
+  Falsy,
+  IncludesUndefined,
   IsAnyUnionMemberAssignableTo,
-  IsOptional,
   IsUnknown,
   OmitIndexSignature,
   OmitStrict,
@@ -39,7 +39,7 @@ import type {
 } from '../types';
 import {
   type MaybeArray,
-  arraify,
+  arrayify,
   assignDefaults,
   fetchPackageInfo,
   interopDefault,
@@ -518,7 +518,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     importer: () => Promise<{default: T}>,
     ...args: IsUnknown<ExtraArgument> extends true
       ? []
-      : IsOptional<ExtraArgument> extends true
+      : IncludesUndefined<ExtraArgument> extends true
         ? [extraArgument?: ExtraArgument]
         : [extraArgument: ExtraArgument]
   ): Promise<
@@ -618,7 +618,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   debug(`Globally ignored files: ${JSON.stringify(globalIgnores)}`);
 
   type UnresolvedConfigType =
-    | MaybeArray<EslintFlatConfigEntry | ConfigEntryBuilder<ExtraPlugins> | FalsyValue>
+    | MaybeArray<EslintFlatConfigEntry | ConfigEntryBuilder<ExtraPlugins> | Falsy>
     | {configs: (ConfigEntryBuilder<ExtraPlugins> | null)[]};
 
   /* eslint-disable ts/await-thenable */
@@ -652,7 +652,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       ] as const
     ).flatMap(([linterOptionConfigs, linterOptionName]) =>
       (typeof linterOptionConfigs === 'object'
-        ? arraify(linterOptionConfigs)
+        ? arrayify(linterOptionConfigs)
         : linterOptionConfigs == null
           ? []
           : [{value: linterOptionConfigs}]
@@ -891,7 +891,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   const resolvedConfigs: EslintFlatConfigEntry[] = (await unresolvedConfigs)
     .map((unConfigOrEntryBuilders) =>
-      arraify(unConfigOrEntryBuilders).map((configOrBuilder) =>
+      arrayify(unConfigOrEntryBuilders).map((configOrBuilder) =>
         configOrBuilder instanceof ConfigEntryBuilder
           ? configOrBuilder.resolveAllConfigs()
           : configOrBuilder && 'configs' in configOrBuilder

@@ -6,7 +6,7 @@ import type {
 } from 'eslint-plugin-import-x';
 import {ERROR, GLOB_MARKDOWN_ALL_CODE_BLOCKS, OFF, WARNING} from '../constants';
 import {generatePackageToLoadProperty} from '../loaders';
-import {arraify, isNonEmptyArray, kebabCase, objectEntriesUnsafe} from '../utils';
+import {arrayify, isNonEmptyArray, objectEntriesUnsafe, toKebabCase} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
@@ -94,7 +94,7 @@ export default (async (context, optionsRaw) => {
     requireModuleExtensions,
     tsResolverOptions,
   } = optionsResolved;
-  const noUnresolvedIgnores = arraify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve);
+  const noUnresolvedIgnores = arrayify(optionsResolved.importPatternsToIgnoreWhenTryingToResolve);
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'import');
 
@@ -151,7 +151,7 @@ export default (async (context, optionsRaw) => {
             }),
             ...Object.fromEntries(
               objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
-                `import-x/${kebabCase(settingName)}` satisfies keyof PluginSettingsWithPrefixes,
+                `import-x/${toKebabCase(settingName)}` satisfies keyof PluginSettingsWithPrefixes,
                 settingValue,
               ]),
             ),

@@ -5,7 +5,7 @@ import type {AST as JsonAST} from 'jsonc-eslint-parser';
 import {minVersion as minSemverVersion, eq as semverVersionsEqual} from 'semver';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
-import {jsonParse} from '../src/utils';
+import {jsonParseSafe} from '../src/utils';
 
 const RULE_OPTIONS_SCHEMA = {
   type: 'object',
@@ -35,7 +35,7 @@ const rule: Eslint.Rule.RuleModule = {
   },
   // @ts-expect-error small type mismatch after updating eslint to 9.39.0
   create: (context) => {
-    const packageJsonParseResult = PackageJsonZod.safeParse(jsonParse(context.sourceCode.text));
+    const packageJsonParseResult = PackageJsonZod.safeParse(jsonParseSafe(context.sourceCode.text));
     const packageJson = packageJsonParseResult.data;
     if (!packageJsonParseResult.success || !packageJson) {
       return {};

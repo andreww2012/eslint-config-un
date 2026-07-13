@@ -16,7 +16,7 @@ import type {
 } from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Nullable, ObjectValues, OmitStrict, Prettify} from '../types';
-import {type MaybeFn, allUnionMembers, isIn, maybeCall, omit} from '../utils';
+import {type MaybeFn, allUnionMembers, isKeyIn, maybeCall, omit} from '../utils';
 import type {AstroEslintConfigOptions} from './astro';
 import type {SvelteEslintConfigOptions} from './svelte';
 import type {VueEslintConfigOptions} from './vue';
@@ -1342,14 +1342,14 @@ export default ((
                   orderCompilerOptions.orderWithinGroup &&
                   group in orderCompilerOptions.orderWithinGroup
                     ? orderCompilerOptions.orderWithinGroup[group] === 'alphabetical'
-                      ? isIn(group, TSCONFIG_COMPILER_OPTIONS_KEYS)
+                      ? isKeyIn(group, TSCONFIG_COMPILER_OPTIONS_KEYS)
                         ? TSCONFIG_COMPILER_OPTIONS_KEYS[group]
                         : []
                       : orderCompilerOptions.orderWithinGroup[
                           group
                         ] /* v8 ignore start - guaranteed to exist in runtime, but not during type checking */ ||
                         [] /* v8 ignore stop */
-                    : isIn(group, TSCONFIG_COMPILER_OPTIONS_KEYS)
+                    : isKeyIn(group, TSCONFIG_COMPILER_OPTIONS_KEYS)
                       ? TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS.antfu.filter((v) =>
                           TSCONFIG_COMPILER_OPTIONS_KEYS[group].includes(v as never),
                         )

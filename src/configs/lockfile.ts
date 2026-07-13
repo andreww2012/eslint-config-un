@@ -2,7 +2,13 @@ import type {SupportedEslintPluginLanguages} from '../config-un/config-entry-bui
 import {ERROR, GLOB_PACKAGE_JSON, OFF} from '../constants';
 import type {ParserPrefix} from '../loaders';
 import type {OmitStrict, Prettify} from '../types';
-import {type MaybeArray, arraify, getKeysOfTruthyValues, isIn, objectEntriesUnsafe} from '../utils';
+import {
+  type MaybeArray,
+  arrayify,
+  getKeysOfTruthyValues,
+  isKeyIn,
+  objectEntriesUnsafe,
+} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
@@ -245,9 +251,9 @@ export default ((context, optionsRaw) => {
   });
 
   const packageManagerDetected = context.meta.usedPackageManager?.name;
-  const packageManagerFinal = arraify(
+  const packageManagerFinal = arrayify(
     packageManager ??
-      (packageManagerDetected != null && isIn(packageManagerDetected, LOCKFILES_INFO_MAP)
+      (packageManagerDetected != null && isKeyIn(packageManagerDetected, LOCKFILES_INFO_MAP)
         ? packageManagerDetected
         : null),
   );

@@ -17,14 +17,14 @@ import {
 } from '../loaders';
 import type {NonEmptyTuple} from '../types';
 import {
-  arraify,
+  arrayPartition,
+  arrayify,
   capitalize,
-  getValueByPath,
-  isIn,
+  getByPath,
+  isKeyIn,
   maybeCall,
   objectEntriesUnsafe,
-  partition,
-  setValueByPath,
+  setByPath,
   stylePackageName,
   stylePluginPrefix,
   styleRuleName,
@@ -100,7 +100,7 @@ export const resolveConfigAsyncData = async (
   const [loadedPluginsRaw, , loadedPackages] = await Promise.all([
     Promise.all(
       usedPluginPrefixes.map(async (pluginPrefix) => {
-        const pluginResult = isIn(pluginPrefix, pluginsLoaders)
+        const pluginResult = isKeyIn(pluginPrefix, pluginsLoaders)
           ? await pluginsLoaders[pluginPrefix](context)
           : extraPlugins[pluginPrefix]
             ? await Promise.resolve(maybeCall(extraPlugins[pluginPrefix])).then((module) => ({
@@ -194,7 +194,7 @@ export const resolveConfigAsyncData = async (
 
   if (packagesToManuallyInstallOrUpdate.size > 0) {
     const collator = new Intl.Collator();
-    partition(
+    arrayPartition(
       Array.from(packagesToManuallyInstallOrUpdate, ([name, item]) => ({...item, name})),
       (item) => item.installedVersion != null,
     ).forEach((packages, index) => {
@@ -202,7 +202,7 @@ export const resolveConfigAsyncData = async (
         return;
       }
       const isUpdates = index === 0;
-      const packageTypes = partition(packages, (item) =>
+      const packageTypes = arrayPartition(packages, (item) =>
         packagesToManuallyInstallPluginPrefixes.has(item.name),
       )
         .map(
@@ -446,10 +446,10 @@ ${styleText(
     allPackageUses.forEach(
       ({config, path: fullPath, info: {valueTransformFn, package: packagesToLoad}}) => {
         const loadedPackagesForConfig = Object.fromEntries(
-          arraify(packagesToLoad).map((packageId) => [packageId, loadedPackagesMap[packageId]]),
+          arrayify(packagesToLoad).map((packageId) => [packageId, loadedPackagesMap[packageId]]),
         );
 
-        setValueByPath(
+        setByPath(
           config,
           fullPath,
           valueTransformFn
@@ -457,7 +457,7 @@ ${styleText(
                 valueTransformFn.scope,
                 // @ts-expect-error keys type is lost
                 loadedPackagesForConfig,
-                getValueByPath(config, fullPath),
+                getByPath(config, fullPath),
               )
             : Object.keys(loadedPackagesForConfig).length === 1
               ? Object.values(loadedPackagesForConfig)[0]

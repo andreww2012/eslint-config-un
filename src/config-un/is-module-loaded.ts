@@ -1,12 +1,12 @@
 import semver from 'semver';
 import {OPTIONAL_PEER_DEPENDENCIES} from '../constants';
-import {fetchPackageInfo, isIn} from '../utils';
+import {fetchPackageInfo, isKeyIn} from '../utils';
 
 export const checkIfModuleCorrectlyLoaded = async (
   moduleResult: {packageName: string; module: unknown} | null,
 ) => {
   const plugin = moduleResult?.module;
-  if (moduleResult && isIn(moduleResult.packageName, OPTIONAL_PEER_DEPENDENCIES)) {
+  if (moduleResult && isKeyIn(moduleResult.packageName, OPTIONAL_PEER_DEPENDENCIES)) {
     const installedPluginVersion = plugin
       ? (await fetchPackageInfo(moduleResult.packageName))?.versions.full
       : null;

@@ -4,7 +4,7 @@ import {ERROR, GLOB_MARKDOWN, GLOB_MARKDOWN_SUPPORTED_CODE_BLOCKS, OFF} from '..
 import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
-import {capitalize, unique} from '../utils';
+import {arrayUnique, capitalize} from '../utils';
 import {
   type IgnoresAdditionalOptions,
   determineRulesDisabledInEmbeddedCodeBlocks,
@@ -210,7 +210,7 @@ export default ((context, optionsRaw) => {
         [
           {
             ...(allowedFencedCodeBlocksLanguages && {
-              required: unique(codeBlocksAllowedLanguages satisfies string[]),
+              required: arrayUnique(codeBlocksAllowedLanguages satisfies string[]),
             }),
           },
         ],
@@ -227,7 +227,7 @@ export default ((context, optionsRaw) => {
         {
           ...(Array.isArray(allowHtmlTags) &&
             allowHtmlTags.length > 0 && {
-              allowed: unique(allowHtmlTags),
+              allowed: arrayUnique(allowHtmlTags),
             }),
         },
       ]) /** @since 6.0.0 */

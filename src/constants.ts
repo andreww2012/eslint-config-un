@@ -2,16 +2,16 @@ import ourPackageJson from '../package.json' with {type: 'json'};
 import type {GetRuleNamesInPlugin} from './eslint/eslint-types';
 import type {PluginPrefix} from './loaders';
 // See https://github.com/typescript-eslint/typescript-eslint/issues/8721
-import type {Tagged} from './types';
+import type {Branded} from './types';
 import {omit} from './utils';
 
 export const OPTIONAL_PEER_DEPENDENCIES = omit(ourPackageJson.peerDependencies, ['eslint']);
 
 /* Error levels */
 
-export const ERROR = 2 as Tagged<2, 'error'>;
-export const WARNING = 1 as Tagged<1, 'warning'>;
-export const OFF = 0 as Tagged<0, 'off'>;
+export const ERROR = 2 as Branded<2, 'error'>;
+export const WARNING = 1 as Branded<1, 'warning'>;
+export const OFF = 0 as Branded<0, 'off'>;
 
 export type RuleSeverity = typeof ERROR | typeof WARNING | typeof OFF;
 

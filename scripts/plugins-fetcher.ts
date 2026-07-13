@@ -1,11 +1,11 @@
 import path from 'node:path';
 import {styleText} from 'node:util';
+import type {ObjectValues} from '@andreww2012/unutils';
 import {NodeFileSystem, NodeHttpClient} from '@effect/platform-node';
 import {cli} from 'cleye';
 import {Context, Effect, Layer, Ref} from 'effect';
 import type {Ms} from 'ms-ts';
 import PQueue from 'p-queue';
-import type {ValueOf as ObjectValues} from 'type-fest';
 import {type Storage as UnStorage, createStorage} from 'unstorage';
 import unstorageFsDriver from 'unstorage/drivers/fs';
 import ourPackageJson from '../package.json' with {type: 'json'};

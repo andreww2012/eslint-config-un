@@ -2,36 +2,40 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import url from 'node:url';
 import {styleText} from 'node:util';
+import {arrayHasMinElements, arrayify, jsonParseSafe} from '@andreww2012/unutils';
 import {objectEntries as objectEntriesUnsafe} from '@antfu/utils';
-import {destr as jsonParse} from 'destr';
 import {resolve as resolvePackage} from 'import-meta-resolve';
 import {getLastResolvedPackageJsonUrl} from 'import-meta-resolve/resolve';
 import {isInEditor as isInEditorOriginal} from 'is-in-editor';
-import * as R from 'remeda';
-import type {FalsyValue, MaybePromise, Nullable, PackageJson, StripReadonly} from './types';
-
-export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
-export {forEach as traverseForEach} from 'neotraverse';
-
-export {klona as cloneDeep} from 'klona';
+import type {Falsy, MaybePromise, Nullable, PackageJson} from './types';
 
 export {
+  allUnionMembers,
+  type AllUnionMembers,
+  arrayDifference,
+  arrayify,
+  arrayMap,
+  arrayPartition,
+  arrayUnique,
   capitalize,
-  difference,
+  cloneDeep,
+  getByPath,
+  isKeyIn,
   isPlainObject,
+  jsonParseSafe,
   mapKeys,
+  type MaybeArray,
+  type MaybeFn,
+  maybeCall,
   memoize,
   omit,
-  partition,
   pick,
-  pickBy,
-  uniq as unique,
-} from 'es-toolkit';
-export {get as getValueByPath, set as setValueByPath} from 'es-toolkit/compat';
+  setByPath,
+  toKebabCase,
+  traverseForEach,
+} from '@andreww2012/unutils';
 
-export {kebabCase} from 'string-ts';
-
-export {destr as jsonParse} from 'destr';
+export {objectEntries as objectEntriesUnsafe, objectKeys as objectKeysUnsafe} from '@antfu/utils';
 
 export const isInEditor = () => isInEditorOriginal({mode: 'strict'});
 
@@ -53,14 +57,8 @@ export const isObject = (value: unknown): value is object =>
 // eslint-disable-next-line import/no-cycle
 export {assignDefaults} from './utils/assign-defaults';
 
-export type MaybeArray<T> = T | T[];
-export const arraify = <T>(value?: T | readonly T[] | null): T[] =>
-  Array.isArray(value) ? value : value == null ? [] : [value as T];
-
 export const isNonEmptyArray = <T>(value?: T[] | null): value is [T, ...T[]] =>
-  Array.isArray(value) && value.length > 0;
-
-export const arrayMap = R.map;
+  arrayHasMinElements(value || [], 1);
 
 export function findArrayInversions<T>(array: T[], compareFn: (a: T, b: T) => number): [T, T][];
 export function findArrayInversions<T>(
@@ -110,24 +108,9 @@ export function findArrayInversions<T>(
 }
 
 // eslint-disable-next-line ts/no-redundant-type-constituents
-export const joinPaths = (...paths: (string | FalsyValue)[]) =>
+export const joinPaths = (...paths: (string | Falsy)[]) =>
   // eslint-disable-next-line unicorn/prefer-native-coercion-functions
-  path.posix.join(...arraify(paths).filter((v): v is string => Boolean(v)));
-
-export type MaybeFn<Return, Params extends readonly unknown[] = []> =
-  ((...args: Params) => Return) | Return;
-
-export const maybeCall = <
-  T extends MaybeFn<unknown>,
-  A extends readonly unknown[] = T extends (...args: infer P) => unknown ? P : never,
->(
-  fnOrValue: T,
-  ...args: NoInfer<A>
-) =>
-  // eslint-disable-next-line ts/no-unsafe-call
-  (typeof fnOrValue === 'function' ? fnOrValue(...args) : fnOrValue) as T extends MaybeFn<infer R>
-    ? R
-    : never;
+  path.posix.join(...arrayify(paths).filter((v): v is string => Boolean(v)));
 
 export function readFileSafe(filePath: string, asBinary?: false): Promise<string | null>;
 export function readFileSafe(filePath: string, asBinary: true): Promise<Buffer | null>;
@@ -145,7 +128,7 @@ export async function readFileSafe(
 
 export const readAndParseJson = async <T>(filePath: string | URL | undefined): Promise<T | null> =>
   filePath
-    ? jsonParse<T | null>(
+    ? jsonParseSafe<T | null>(
         await readFileSafe(typeof filePath === 'string' ? filePath : url.fileURLToPath(filePath)),
       )
     : null;
@@ -241,34 +224,3 @@ export function getKeysOfTruthyValues<
   }
   return result.map(([key]) => key);
 }
-
-export const isIn = <T extends object>(key: PropertyKey, object: T): key is keyof T =>
-  key in object;
-
-type FindDuplicate<T extends readonly unknown[]> = T extends readonly [infer First, ...infer Rest]
-  ? First extends Rest[number]
-    ? First
-    : FindDuplicate<Rest extends readonly unknown[] ? Rest : never>
-  : never;
-
-type MissingMembers<U, A extends readonly unknown[]> = Exclude<U, A[number]>;
-
-type ExtraMembers<U, A extends readonly unknown[]> = Exclude<A[number], U>;
-
-export type AllUnionMembers<T, A extends readonly T[]> = A &
-  ([ExtraMembers<T, A>] extends [never]
-    ? [MissingMembers<T, A>] extends [never]
-      ? [FindDuplicate<A>] extends [never]
-        ? unknown
-        : never
-      : never
-    : never);
-
-export const allUnionMembers =
-  <
-    ArrayType,
-    // eslint-disable-next-line ts/no-unnecessary-type-parameters
-    Options extends {readonly?: boolean} = {readonly: false},
-  >() =>
-  <const A extends readonly ArrayType[]>(array: AllUnionMembers<ArrayType, A>) =>
-    array as Options['readonly'] extends true ? A : StripReadonly<A>;

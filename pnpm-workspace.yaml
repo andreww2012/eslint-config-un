@@ -6,11 +6,8 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
-minimumReleaseAgeExclude:
-  # []
-  - eslint-plugin-unicorn@71.0.0
-  - eslint-plugin-es-x@10.0.0
-  - eslint-plugin-jsdoc@63.0.12
+minimumReleaseAgeExclude: # []
+  - '@andreww2012/unutils@0.1.0'
 # - '@typescript-eslint/eslint-plugin@X.Y.Z'
 # - '@typescript-eslint/parser@X.Y.Z'
 # - '@typescript-eslint/project-service@X.Y.Z'

@@ -46,7 +46,7 @@ export default {
     'tsgo',
     'tinyexec',
     'cleye',
-    'neotraverse',
+    'unutils',
     'knip',
     'tsdown',
     'commitlint',
@@ -65,7 +65,7 @@ export default {
     'oxlint',
 
     // Technical words/terms
-    'arraify',
+    'arrayify',
     'renamer',
     'nonconstructor',
     'nonoctal',

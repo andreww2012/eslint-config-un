@@ -1,5 +1,5 @@
 import type {UnConfigs} from '../../src/configs';
-import {type MaybeArray, arraify} from '../../src/utils';
+import {type MaybeArray, arrayify} from '../../src/utils';
 import {computeEslintConfig} from './test-eslint-config';
 
 type ConfigResultType = Awaited<ReturnType<typeof computeEslintConfig>>;
@@ -50,7 +50,7 @@ export const expectConfigState = async (
 
   const enabled = typeof state === 'boolean' ? state : state[1];
 
-  for (const postfix of arraify(postfixOrPostfixes)) {
+  for (const postfix of arrayify(postfixOrPostfixes)) {
     if (enabled) {
       expect(configResult.getConfigByUnPostfix(postfix)).toBeDefined();
     } else {

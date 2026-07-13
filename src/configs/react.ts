@@ -9,7 +9,7 @@ import {
   WARNING,
 } from '../constants';
 import type {EslintFlatConfigEntry} from '../eslint/eslint-types';
-import type {DistributedPick, OmitStrict, Prettify} from '../types';
+import type {OmitStrict, PickDistributed, Prettify} from '../types';
 import {allUnionMembers} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import {
@@ -327,7 +327,7 @@ export interface ReactEslintConfigOptions<
     | boolean
     | UnFlatConfigEntryBase<
         ExtraPlugins,
-        DistributedPick<UnRulesConfigPartial, 'import/no-default-export'>
+        PickDistributed<UnRulesConfigPartial, 'import/no-default-export'>
       >;
 
   /**

@@ -1,4 +1,4 @@
-import {difference} from '../../../src/utils';
+import {arrayDifference} from '../../../src/utils';
 
 describe('ts: sub config `setup`', () => {
   describe('basic tests', () => {
@@ -74,7 +74,7 @@ describe('ts: sub config `setup`', () => {
           configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files;
 
         expect(nonTypeAwareSetupFiles).toIncludeAllMembers(FILES_TS);
-        expect(difference(nonTypeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
+        expect(arrayDifference(nonTypeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
           '["**/*.astro"]',
         );
       });
@@ -91,7 +91,7 @@ describe('ts: sub config `setup`', () => {
           configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files;
 
         expect(nonTypeAwareSetupFiles).toIncludeAllMembers(FILES_TS);
-        expect(difference(nonTypeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
+        expect(arrayDifference(nonTypeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
           '["**/*.svelte"]',
         );
       });
@@ -108,7 +108,7 @@ describe('ts: sub config `setup`', () => {
           configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.files;
 
         expect(nonTypeAwareSetupFiles).toIncludeAllMembers(FILES_TS);
-        expect(difference(nonTypeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
+        expect(arrayDifference(nonTypeAwareSetupFiles || [], FILES_TS)).toMatchInlineSnapshot(
           '["**/*.vue"]',
         );
       });

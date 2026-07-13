@@ -1,8 +1,8 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
+import {capitalize} from '@andreww2012/unutils';
 import * as diff from 'diff';
-import {capitalize} from 'es-toolkit';
 import {pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
 import prettier from 'prettier';
@@ -27,8 +27,8 @@ const derivedAllRuleTypesCode = `/* eslint-disable */
 /* prettier-ignore */
 // Derived from \`eslint-types-per-plugin.gen.d.ts\` to avoid loading two copies
 // of every rule's option type into the TypeScript program
+import type {UnionToIntersection} from '@andreww2012/unutils';
 import type {Linter} from 'eslint';
-import {UnionToIntersection} from 'type-fest';
 import type {RuleOptionsPerPlugin} from './eslint-types-per-plugin.gen';
 
 type _RuleOptionsRaw = UnionToIntersection<

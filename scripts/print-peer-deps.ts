@@ -1,13 +1,13 @@
 // cspell:ignore jsons
 import {styleText} from 'node:util';
-import {uniqBy} from 'es-toolkit';
+import {arrayUnique} from '@andreww2012/unutils';
 import packageJson from '../package.json' with {type: 'json'};
 import {fetchPackageInfo} from '../src/utils';
 
 const dependenciesUnique: {
   packageName: string;
   isDev?: boolean;
-}[] = uniqBy(
+}[] = arrayUnique(
   [
     ...Object.keys(packageJson.dependencies).map((packageName) => ({packageName, isDev: false})),
     ...Object.keys(packageJson.devDependencies).map((packageName) => ({packageName, isDev: true})),

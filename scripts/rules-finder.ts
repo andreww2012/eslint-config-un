@@ -2,9 +2,9 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
+import {jsonParseSafe as jsonParse} from '@andreww2012/unutils';
 import {cli} from 'cleye';
 import consola from 'consola';
-import {destr as jsonParse} from 'destr';
 import prettier from 'prettier';
 import {
   compare as compareVersions,

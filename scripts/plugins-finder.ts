@@ -1,11 +1,11 @@
 // cspell:ignore headful millis
 import {styleText} from 'node:util';
 import {Solver as CaptchaSolver} from '@2captcha/captcha-solver';
+import {isJson as isValidJsonInternal} from '@andreww2012/unutils';
 import {NodeFileSystem} from '@effect/platform-node';
 import {cli} from 'cleye';
 import consola from 'consola';
 import {Data, Effect, Ref} from 'effect';
-import {isJSON as isValidJsonInternal} from 'es-toolkit';
 import puppeteer, {type Browser, type Page} from 'puppeteer';
 import checkNpmPackageNameValidity from 'validate-npm-package-name';
 import * as z from 'zod';

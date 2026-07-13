@@ -2,7 +2,7 @@ import {ERROR, GLOB_MDX, GLOB_MDX_SUPPORTED_CODE_BLOCKS, WARNING} from '../const
 import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
-import {kebabCase, objectEntriesUnsafe} from '../utils';
+import {objectEntriesUnsafe, toKebabCase} from '../utils';
 import type {MarkdownEslintConfigOptions} from './markdown';
 import {determineRulesDisabledInEmbeddedCodeBlocks} from './shared';
 import {
@@ -103,7 +103,7 @@ export default ((context, optionsRaw) => {
           settings: {
             '': Object.fromEntries(
               objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [
-                `mdx/${kebabCase(settingName)}`,
+                `mdx/${toKebabCase(settingName)}`,
                 settingValue,
               ]),
             ),

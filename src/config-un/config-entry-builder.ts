@@ -40,7 +40,7 @@ import {
 } from '../loaders';
 import type {
   EmptyObject,
-  FalsyValue,
+  Falsy,
   NonEmptyString,
   NonEmptyTuple,
   Nullable,
@@ -50,11 +50,11 @@ import type {
   SetRequired,
 } from '../types';
 import {
-  arraify,
   arrayMap,
+  arrayPartition,
+  arrayify,
   findArrayInversions,
   objectEntriesUnsafe,
-  partition,
   styleConfigName,
   styleRuleName,
   styleText,
@@ -434,7 +434,7 @@ export class ConfigEntryBuilder<
         }
 
         const info = value as PackageToLoadInfo;
-        arraify(info.package).forEach((packageId) => {
+        arrayify(info.package).forEach((packageId) => {
           this.context.usedPackages.set(packageId, [
             ...(this.context.usedPackages.get(packageId) || []),
             {
@@ -576,12 +576,12 @@ export class ConfigEntryBuilder<
         return result;
       },
 
-      addBulkRules: (rules: Prettify<UnRulesConfig> | FalsyValue) => {
+      addBulkRules: (rules: Prettify<UnRulesConfig> | Falsy) => {
         processUnOrFlatConfig(this.context, configFinal, rules || {}, this);
         return result;
       },
 
-      disableBulkRules: (rules: (UnAllRuleNames | (string & {}))[] | FalsyValue) => {
+      disableBulkRules: (rules: (UnAllRuleNames | (string & {}))[] | Falsy) => {
         if (rules && rules.length > 0) {
           const newRuleEntries = Object.fromEntries(
             rules.flatMap((ruleName) => {
@@ -639,7 +639,7 @@ export class ConfigEntryBuilder<
             );
 
             const [activePluginRules, deprecatedPluginRules] = arrayMap(
-              partition(Object.entries(plugin.rules || {}), ([, {meta}]) => !meta?.deprecated),
+              arrayPartition(Object.entries(plugin.rules || {}), ([, {meta}]) => !meta?.deprecated),
               (rules) => new Set(rules.map(([ruleName]) => ruleName)),
             );
 
