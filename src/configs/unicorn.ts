@@ -651,7 +651,7 @@ export default ((context, optionsRaw) => {
     // TODO should consider enabling by default when `Iterator#toArray` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError
     .addRule('prefer-error-is-error', OFF) /** @since 69.0.0 */ // 🔴
     .addRule('prefer-event-target', ERROR) /** @since 43.0.0 */
-    .addRule('prefer-export-from', ERROR, [{}]) /** @since 38.0.0 */ // 🟣
+    .addRule('prefer-export-from', ERROR) /** @since 38.0.0 */ // 🟣
     .addRule('prefer-flat-math-min-max', ERROR) /** @since 68.0.0 */
     .addRule('prefer-get-or-insert-computed', ERROR) /** @since 65.0.0 */ // 🟣
     .addRule(
