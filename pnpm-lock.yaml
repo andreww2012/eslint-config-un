@@ -377,8 +377,8 @@ importers:
         specifier: 1.4.0
         version: 1.4.0(eslint@9.39.2)
       eslint-plugin-unicorn:
-        specifier: 71.0.0
-        version: 71.0.0(eslint@9.39.2)
+        specifier: 71.1.0
+        version: 71.1.0(eslint@9.39.2)
       eslint-plugin-unnecessary-abstractions:
         specifier: 1.0.0
         version: 1.0.0
@@ -7649,8 +7649,8 @@ packages:
       eslint: '>6.6.0'
       turbo: '>2.0.0'
 
-  eslint-plugin-unicorn@71.0.0:
-    resolution: {integrity: sha512-9LAN/lIeEY8x1PsP10wOe1bFhNVJ4s3GWfy2FGiiZiKUd2JXVFKbjFaSVSWMKaVyKx1ulj3g5LMPKjWtvQntwg==}
+  eslint-plugin-unicorn@71.1.0:
+    resolution: {integrity: sha512-dn3YmR3qLLUeYyo/os3ubZ7UHQJ1WbBAgC9cIhnLTyMj9J6kivuc2U1fCmYetLexUlTDVYtBqhjSj/VaebTe6Q==}
     engines: {node: '>=22'}
     peerDependencies:
       eslint: '>=10.4'
@@ -19357,7 +19357,7 @@ snapshots:
       eslint: 9.39.2(jiti@2.7.0)
       turbo: 2.9.14
 
-  eslint-plugin-unicorn@71.0.0(eslint@9.39.2):
+  eslint-plugin-unicorn@71.1.0(eslint@9.39.2):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       browserslist: 4.28.4
