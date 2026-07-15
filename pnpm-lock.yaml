@@ -311,8 +311,8 @@ importers:
         specifier: 63.0.13
         version: 63.0.13(eslint@9.39.2)
       eslint-plugin-json-schema-validator:
-        specifier: 6.2.0
-        version: 6.2.0(@eslint/json@2.0.1)(eslint@9.39.2)
+        specifier: 6.3.0
+        version: 6.3.0(@eslint/json@2.0.1)(eslint@9.39.2)
       eslint-plugin-jsonc:
         specifier: 3.2.0
         version: 3.2.0(@eslint/json@2.0.1)(eslint@9.39.2)
@@ -5625,6 +5625,14 @@ packages:
     resolution: {integrity: sha512-QT8i0hCz6C/KQ+KTAbSNwCHDGdmUJl2tp2ZpNlGSWCfhUNVbYG2WLE3MdZGBAgXPV4GAvjGMxo+C1hroyxmZEg==}
     engines: {node: '>= 14'}
 
+  ajv-formats@3.0.1:
+    resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
+    peerDependencies:
+      ajv: ^8.0.0
+    peerDependenciesMeta:
+      ajv:
+        optional: true
+
   ajv@6.15.0:
     resolution: {integrity: sha512-fgFx7Hfoq60ytK2c7DhnF8jIvzYgOMxfugjLOSMHjLIPgenqa7S7oaagATUq99mV6IYvN2tRmC0wnTYX6iPbMw==}
 
@@ -7293,8 +7301,8 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
 
-  eslint-plugin-json-schema-validator@6.2.0:
-    resolution: {integrity: sha512-jHdo7MwJm94Z0lhlBtwa2dtRKBgiJNk3d5HGeyjhHszmlnCXsEu3blTjGWO0tzWg04UANoygB10CaRYcTBZCsg==}
+  eslint-plugin-json-schema-validator@6.3.0:
+    resolution: {integrity: sha512-W+ChYeoikcWBbBdkn5LjWiepQDx1y4ODTgFIFP7GLTQOjphTWkhMVvsP7+iItJSoOr0evuOnKPpz855KMF8Xmg==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
     peerDependencies:
       eslint: '>=9.38.0'
@@ -11856,6 +11864,10 @@ packages:
 
   yaml-eslint-parser@2.0.0:
     resolution: {integrity: sha512-h0uDm97wvT2bokfwwTmY6kJ1hp6YDFL0nRHwNKz8s/VD1FH/vvZjAKoMUE+un0eaYBSG7/c6h+lJTP+31tjgTw==}
+    engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  yaml-eslint-parser@2.1.0:
+    resolution: {integrity: sha512-1zo9KRfp6vIAXBEhWAz09ex3hUwh3T+/6dGbGteHvNseA0Uk4FgQnPES55klZ6cDzSy9FpgKS0D/CoLUvCCj4w==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
   yaml@1.10.3:
@@ -16876,6 +16888,10 @@ snapshots:
 
   agent-base@8.0.0: {}
 
+  ajv-formats@3.0.1(ajv@8.20.0):
+    optionalDependencies:
+      ajv: 8.20.0
+
   ajv@6.15.0:
     dependencies:
       fast-deep-equal: 3.1.3
@@ -18768,10 +18784,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-json-schema-validator@6.2.0(@eslint/json@2.0.1)(eslint@9.39.2):
+  eslint-plugin-json-schema-validator@6.3.0(@eslint/json@2.0.1)(eslint@9.39.2):
     dependencies:
       '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
       ajv: 8.20.0
+      ajv-formats: 3.0.1(ajv@8.20.0)
       debug: 4.4.3
       eslint: 9.39.2(jiti@2.7.0)
       eslint-json-compat-utils: 0.2.3(@eslint/json@2.0.1)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)
@@ -18781,7 +18798,7 @@ snapshots:
       synckit: 0.11.13
       toml-eslint-parser: 1.0.3
       tunnel-agent: 0.6.0
-      yaml-eslint-parser: 2.0.0
+      yaml-eslint-parser: 2.1.0
     transitivePeerDependencies:
       - '@eslint/json'
       - supports-color
@@ -24304,6 +24321,11 @@ snapshots:
   yallist@5.0.0: {}
 
   yaml-eslint-parser@2.0.0:
+    dependencies:
+      eslint-visitor-keys: 5.0.1
+      yaml: 2.9.0
+
+  yaml-eslint-parser@2.1.0:
     dependencies:
       eslint-visitor-keys: 5.0.1
       yaml: 2.9.0

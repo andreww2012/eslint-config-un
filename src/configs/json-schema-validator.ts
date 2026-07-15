@@ -16,9 +16,14 @@ export interface JsonSchemaValidatorEslintConfigOptions<
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
    * that will be assigned to `json-schema-validator` property
    * and applied to the resolved `files` and `ignores` of this config.
-   * @see [Docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/tree/main#settings)
+   * @see [Docs](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/blob/main/README.md#settings)
    */
   settings?: {
+    cache?: {
+      path?: string;
+      ttl?: number | string;
+    };
+
     http?: {
       getModulePath?: string;
       requestOptions?: RequestOptions;
