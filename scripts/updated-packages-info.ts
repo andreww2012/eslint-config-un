@@ -137,7 +137,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     if (isDiffHeader || !diffForLastFileSkipped) {
       console.log(`  ${formattedLine}`);
     }
-    if (line.startsWith('+++ ') && diffForLastFileSkipped) {
+    if (diffForLastFileSkipped && line.startsWith('+++ ')) {
       console.log(`  ${styleText('yellow', 'Diff for this file is not shown')}`);
     }
   }

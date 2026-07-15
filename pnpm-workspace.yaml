@@ -7,7 +7,7 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
-  - '@andreww2012/unutils@0.1.0'
+  - eslint-plugin-unicorn@72.0.0
 # - '@typescript-eslint/eslint-plugin@X.Y.Z'
 # - '@typescript-eslint/parser@X.Y.Z'
 # - '@typescript-eslint/project-service@X.Y.Z'

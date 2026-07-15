@@ -341,8 +341,8 @@ ${styleText(
           if (
             !plugin ||
             !(
-              Object.keys(pluginRulesAutofixDisabledStatuses).length > 0 ||
-              autofixDisabledGloballyFor === true
+              autofixDisabledGloballyFor === true ||
+              Object.keys(pluginRulesAutofixDisabledStatuses).length > 0
             )
           ) {
             return [pluginPrefix, plugin];

@@ -516,6 +516,8 @@ export default ((context, optionsRaw) => {
       'no-misrefactored-assignment', // cspell:disable-line
       ERROR,
     ) /** @since 68.0.0 */
+    .addRule('no-missing-local-resource', OFF) /** @since 72.0.0 */ // 🔴
+    .addRule('no-multiple-promise-resolver-calls', ERROR) /** @since 72.0.0 */
     .addRule('no-named-default', ERROR) /** @since 57.0.0 */
     .addRule('no-negated-array-predicate', ERROR) /** @since 66.0.0 */ // 💭?
     .addRule('no-negated-comparison', ERROR) /** @since 66.0.0 */
@@ -542,6 +544,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-redundant-comparison', ERROR) /** @since 66.0.0 */
     .addRule('no-return-array-push', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-selector-as-dom-name', ERROR) /** @since 68.0.0 */ // 🟣
+    .addRule('no-shorthand-property-overrides', ERROR) /** @since 72.0.0 */
     .addRule('no-single-promise-in-promise-methods', ERROR) /** @since 52.0.0 */
     .addRule('no-static-only-class', ERROR) /** @since 29.0.0 */
     .addRule('no-subtraction-comparison', ERROR) /** @since 66.0.0 */
@@ -550,6 +553,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-this-outside-of-class', OFF) /** @since 65.0.0 */ // 🟣
     .addRule('no-top-level-assignment-in-function', OFF) /** @since 67.0.0 */ // 🟣
     .addRule('no-top-level-side-effects', ERROR) /** @since 66.0.0 */
+    .addRule('no-transition-all', ERROR) /** @since 72.0.0 */ // 💭?
     .addRule('no-typeof-undefined', ERROR) /** @since 45.0.0 */
     .addRule('no-uncalled-method', ERROR) /** @since 67.0.0 */ // 🟣💭?
     .addRule('no-undeclared-class-members', ERROR) /** @since 65.0.0 */ // 🟣🟡
@@ -567,6 +571,7 @@ export default ((context, optionsRaw) => {
       ERROR,
     ) /** @since 55.0.0 */ /** @aka no-length-as-slice-end */
     .addRule('no-unnecessary-splice', ERROR) /** @since 66.0.0 */ // 🟣
+    .addRule('no-unnecessary-string-trim', ERROR) /** @since 72.0.0 */ // 💭?
     .addRule('no-unreadable-array-destructuring', OFF) /** @since 7.0.0 */
     .addRule('no-unreadable-for-of-expression', OFF) /** @since 67.0.0 */ // 🟣
     .addRule('no-unreadable-iife', ERROR) /** @since 42.0.0 */
@@ -594,6 +599,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-useless-logical-operand', ERROR) /** @since 68.0.0 */ // 💭?
     .addRule('no-useless-override', ERROR) /** @since 67.0.0 */ // 💭?
     .addRule('no-useless-promise-resolve-reject', ERROR) /** @since 40.0.0 */
+    .addRule('no-useless-re-export', ERROR) /** @since 72.0.0 */
     .addRule('no-useless-recursion', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-useless-spread', ERROR) /** @since 35.0.0 */ // 💭?
     .addRule('no-useless-switch-case', ERROR) /** @since 42.0.0 */
@@ -651,6 +657,7 @@ export default ((context, optionsRaw) => {
     // TODO should consider enabling by default when `Iterator#toArray` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError
     .addRule('prefer-error-is-error', OFF) /** @since 69.0.0 */ // 🔴
     .addRule('prefer-event-target', ERROR) /** @since 43.0.0 */
+    .addRule('prefer-explicit-viewport-units', OFF) /** @since 72.0.0 */ // 🔴
     .addRule('prefer-export-from', ERROR) /** @since 38.0.0 */ // 🟣
     .addRule('prefer-flat-math-min-max', ERROR) /** @since 68.0.0 */
     .addRule('prefer-get-or-insert-computed', ERROR) /** @since 65.0.0 */ // 🟣
@@ -792,6 +799,7 @@ export default ((context, optionsRaw) => {
     ]) /** @since 30.0.0 */
     .addRule('prefer-temporal', OFF) /** @since 66.0.0 */ // 🔴💭?
     .addRule('prefer-ternary', ERROR) /** @since 23.0.0 */
+    .addRule('prefer-then-catch', ERROR) /** @since 72.0.0 */ // 🟣💭?
     .addRule('prefer-toggle-attribute', OFF) /** @since 69.0.0 */ // 💭?
     .addRule('prefer-top-level-await', OFF) /** @since 34.0.0 */
     .addRule('prefer-type-error', ERROR) /** @since 2.0.0 */
@@ -807,6 +815,7 @@ export default ((context, optionsRaw) => {
     .addRule('require-array-join-separator', ERROR) /** @since 33.0.0 */ // 💭?
     .addRule('require-array-sort-compare', OFF) /** @since 66.0.0 */ // 💭?
     .addRule('require-css-escape', ERROR) /** @since 65.0.0 */
+    .addRule('require-frontmatter-fields', ERROR) /** @since 72.0.0 */ // 🔴
     .addRule('require-module-attributes', ERROR) /** @since 61.0.0 */
     .addRule('require-module-specifiers', ERROR) /** @since 60.0.0 */
     .addRule('require-number-to-fixed-digits-argument', ERROR) /** @since 33.0.0 */

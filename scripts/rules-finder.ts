@@ -128,7 +128,7 @@ async function run({
 
   const packageJsonPath = generatePathInProject('package.json');
 
-  if ((await fileExists(packageJsonPath)) && !overwriteIfExists) {
+  if (!overwriteIfExists && (await fileExists(packageJsonPath))) {
     logger.error(
       `Project's package.json already exists at ${packageJsonPath}. Use --no-overwrite to skip overwriting it.`,
     );

@@ -90,9 +90,9 @@ export function createConfigBuilder<
   const optionsResolved = typeof options === 'object' ? options : {};
   if (
     !options ||
-    (Array.isArray(optionsResolved.files) &&
-      optionsResolved.files.length === 0 &&
-      disabledIfEmptyFiles)
+    (disabledIfEmptyFiles &&
+      Array.isArray(optionsResolved.files) &&
+      optionsResolved.files.length === 0)
   ) {
     return null;
   }

@@ -107,7 +107,7 @@ module.exports = {
   format: ['group'],
   interactive: true,
   groupFunction: (fullName) => {
-    const [nameScope, nameWithoutScope = ''] = fullName.split('/');
+    const [nameScope, nameWithoutScope = ''] = fullName.split('/', 2);
 
     let knownGroup = PACKAGE_GROUPS[fullName] || PACKAGE_GROUPS[`${nameScope}/*`];
     if (knownGroup?.excludePackages?.includes(nameWithoutScope)) {

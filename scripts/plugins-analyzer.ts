@@ -168,7 +168,7 @@ const analyze = Effect.gen(function* () {
       if (downloadsPerDayAverage <= 10) {
         score *= 0.75;
       }
-      if (pluginInfo && !('error' in pluginInfo) && rulesCount === 0) {
+      if (rulesCount === 0 && pluginInfo && !('error' in pluginInfo)) {
         score = 0;
       }
 

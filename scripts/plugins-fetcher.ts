@@ -248,10 +248,10 @@ const fetchPackageInfo = (packageName: string) =>
       );
 
       if (
+        isMissingDependency ||
         currentNewPackages.has(dependencyPackageName) ||
         dependencyPackageName in db ||
-        (!flags.deep && !isEslintPlugin) ||
-        isMissingDependency
+        (!isEslintPlugin && !flags.deep)
       ) {
         continue;
       }
@@ -335,7 +335,7 @@ const fetchPackageInfo = (packageName: string) =>
     const newPackagesToCheck = yield* Ref.get(newPackagesToCheckRef);
 
     if (
-      (newPackagesToCheck.has(packageName) && isPackageLikelyEslintPlugin) ||
+      (isPackageLikelyEslintPlugin && newPackagesToCheck.has(packageName)) ||
       db[packageName] === null
     ) {
       yield* updateEslintPluginsDbSafe(

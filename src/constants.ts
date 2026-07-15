@@ -555,10 +555,12 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'no-negated-array-predicate': 'optional', // Indirect
       'no-non-function-verb-prefix': 'optional',
       'no-object-methods-with-collections': 'optional',
+      'no-transition-all': 'optional',
       'no-uncalled-method': 'optional', // Indirect
       'no-unnecessary-array-flat-map': 'optional', // Indirect
       'no-unnecessary-boolean-comparison': 'optional', // Indirect
       'no-unnecessary-fetch-options': 'optional',
+      'no-unnecessary-string-trim': 'optional', // Indirect
       'no-unsafe-buffer-conversion': 'optional',
       'no-unsafe-promise-all-settled-values': 'optional',
       'no-unsafe-property-key': 'optional',
@@ -602,6 +604,7 @@ export const RULES_REQUIRING_TYPE_INFORMATION: Partial<
       'prefer-string-starts-ends-with': 'optional', // Indirect
       'prefer-string-trim-start-end': 'optional', // Indirect
       'prefer-temporal': 'optional',
+      'prefer-then-catch': 'optional',
       'prefer-toggle-attribute': 'optional', // Indirect
       'prefer-uint8array-base64': 'optional',
       'prefer-url-href': 'optional',

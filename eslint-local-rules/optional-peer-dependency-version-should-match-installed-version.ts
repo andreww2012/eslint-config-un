@@ -37,7 +37,7 @@ const rule: Eslint.Rule.RuleModule = {
   create: (context) => {
     const packageJsonParseResult = PackageJsonZod.safeParse(jsonParseSafe(context.sourceCode.text));
     const packageJson = packageJsonParseResult.data;
-    if (!packageJsonParseResult.success || !packageJson) {
+    if (!packageJson) {
       return {};
     }
 

@@ -351,7 +351,7 @@ export class ConfigEntryBuilder<
       ...ignoresInternal,
       ...(internalOptions.includeDefaultFilesAndIgnores
         ? [
-            ...(internalOptions.ignoresDefaultMergedWithUserIgnores || !ignoresFromUser
+            ...(!ignoresFromUser || internalOptions.ignoresDefaultMergedWithUserIgnores
               ? ignoresDefault
               : []),
             ...(ignoresFromUser || []),
