@@ -353,8 +353,8 @@ importers:
         specifier: 2.2.0
         version: 2.2.0(patch_hash=0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4)(@eslint/json@2.0.1)(eslint@9.39.2)
       eslint-plugin-package-json:
-        specifier: 1.5.0
-        version: 1.5.0(@eslint/json@2.0.1)(@types/estree@1.0.9)(eslint@9.39.2)
+        specifier: 1.6.0
+        version: 1.6.0(@eslint/json@2.0.1)(@types/estree@1.0.9)(eslint@9.39.2)
       eslint-plugin-perfectionist:
         specifier: 5.10.0
         version: 5.10.0(eslint@9.39.2)(typescript@6.0.3)
@@ -6908,8 +6908,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-fix-utils@0.4.2:
-    resolution: {integrity: sha512-n7ZTcwwkP5scedlhvWMcqxED+O1NzXcj5Rxn/0kJQMP88k02vRcBfQ1qsk/JHb6Aw8bajFoetFCCBiNIcNCsvA==}
+  eslint-fix-utils@0.4.3:
+    resolution: {integrity: sha512-EKzNhsNavV5DdkHVltHBM9TqfsonCmiUhOm1Ra97zo03M9IAx3wtM1eC27eWGMj/D3LrALmHHNe1QlQH1P7Nxw==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
       '@types/estree': '>=1'
@@ -7421,8 +7421,8 @@ packages:
     peerDependencies:
       eslint: '>=9.38.0'
 
-  eslint-plugin-package-json@1.5.0:
-    resolution: {integrity: sha512-KQkAdn+7I4vn1W4Va+V8M94RhcgZBvgrxMglDqgEhJgQDRUJ9RdtrEiHoe/84oVTIlp0jiPttLYwkExdvHYhZQ==}
+  eslint-plugin-package-json@1.6.0:
+    resolution: {integrity: sha512-pROaDdg6qRV7RF6qebqoXIuPBagHI1jNklZBKP0IPikfL2hW25JZnBp4Q0tmdNJZx2LIh3rgdmcqqz4CIkSuCg==}
     engines: {node: ^22.22.2 || >=24.15.0}
     peerDependencies:
       '@eslint/json': '>=1.0.0'
@@ -18314,7 +18314,7 @@ snapshots:
     dependencies:
       eslint: 9.39.2(jiti@2.7.0)
 
-  eslint-fix-utils@0.4.2(@types/estree@1.0.9)(eslint@9.39.2):
+  eslint-fix-utils@0.4.3(@types/estree@1.0.9)(eslint@9.39.2):
     dependencies:
       eslint: 9.39.2(jiti@2.7.0)
     optionalDependencies:
@@ -18979,14 +18979,14 @@ snapshots:
     transitivePeerDependencies:
       - '@eslint/json'
 
-  eslint-plugin-package-json@1.5.0(@eslint/json@2.0.1)(@types/estree@1.0.9)(eslint@9.39.2):
+  eslint-plugin-package-json@1.6.0(@eslint/json@2.0.1)(@types/estree@1.0.9)(eslint@9.39.2):
     dependencies:
       '@altano/repository-tools': 2.0.3
       change-case: 5.4.4
       detect-indent: 7.0.2
       detect-newline: 4.0.1
       eslint: 9.39.2(jiti@2.7.0)
-      eslint-fix-utils: 0.4.2(@types/estree@1.0.9)(eslint@9.39.2)
+      eslint-fix-utils: 0.4.3(@types/estree@1.0.9)(eslint@9.39.2)
       eslint-json-compat-utils: 0.2.3(@eslint/json@2.0.1)(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)
       jsonc-eslint-parser: 3.1.0
       package-json-validator: 1.5.2
