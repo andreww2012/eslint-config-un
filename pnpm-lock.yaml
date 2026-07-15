@@ -326,8 +326,8 @@ importers:
         specifier: 0.9.1
         version: 0.9.1(@eslint/markdown@8.0.3)(eslint@9.39.2)
       eslint-plugin-markdown-preferences:
-        specifier: 0.41.1
-        version: 0.41.1(@eslint/markdown@8.0.3)(eslint@9.39.2)
+        specifier: 0.42.0
+        version: 0.42.0(@eslint/markdown@8.0.3)(eslint@9.39.2)
       eslint-plugin-math:
         specifier: 0.13.1
         version: 0.13.1(eslint@9.39.2)
@@ -7343,8 +7343,8 @@ packages:
       '@eslint/markdown': ^7.1.0 || ^8.0.0
       eslint: '>=9.0.0'
 
-  eslint-plugin-markdown-preferences@0.41.1:
-    resolution: {integrity: sha512-Xi4rlT7oBZ8PMGDl7J9khgO2vF9X0F/6ag05/25Vyq7r3llaK95x9D6DpzXidxC2Gagl/e8bp2Hw47r4I3wWSA==}
+  eslint-plugin-markdown-preferences@0.42.0:
+    resolution: {integrity: sha512-LVoGwsRDeLFooaj9OndJrof5OslnQQnZKStP+GX0DMnAt6Nt2tgJzP+URRNXqS54lYnIa0m6pBo7CO1n/utTsw==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
     peerDependencies:
       '@eslint/markdown': ^7.4.0 || ^8.0.0
@@ -18873,7 +18873,7 @@ snapshots:
       synckit: 0.11.13
       undici: 7.28.0
 
-  eslint-plugin-markdown-preferences@0.41.1(@eslint/markdown@8.0.3)(eslint@9.39.2):
+  eslint-plugin-markdown-preferences@0.42.0(@eslint/markdown@8.0.3)(eslint@9.39.2):
     dependencies:
       '@eslint/markdown': 8.0.3
       diff-sequences: 29.6.3
@@ -18888,6 +18888,7 @@ snapshots:
       micromark-extension-math: 3.1.0
       micromark-factory-space: 2.0.1
       micromark-util-character: 2.1.1
+      micromark-util-normalize-identifier: 2.0.1
       micromark-util-symbol: 2.0.1
       string-width: 8.2.1
     transitivePeerDependencies:
