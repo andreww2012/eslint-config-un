@@ -255,10 +255,8 @@ export const pluginsLoaders = {
   headers: genModuleLoader('headers', 'eslint-plugin-headers', () =>
     interopDefault(import('eslint-plugin-headers')),
   ),
-  html: genModuleLoader(
-    'html',
-    '@html-eslint/eslint-plugin',
-    () => interopDefault(import('@html-eslint/eslint-plugin')) as Promise<EslintPlugin>,
+  html: genModuleLoader('html', '@html-eslint/eslint-plugin', () =>
+    interopDefault(import('@html-eslint/eslint-plugin')),
   ),
   'html-processor': genModuleLoader('html-processor', 'eslint-plugin-html', () =>
     interopDefault(import('eslint-plugin-html')),
