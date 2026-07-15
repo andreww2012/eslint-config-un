@@ -729,7 +729,6 @@ export default ((
       .disableAnyRule('', 'no-dupe-class-members') // 🟣
       .disableAnyRule('', 'no-empty-function') // 💅
       .disableAnyRule('', 'no-invalid-this')
-      .disableAnyRule('', 'no-loop-func')
       .disableAnyRule('', 'no-magic-numbers')
       .disableAnyRule('', 'no-redeclare')
       .disableAnyRule('', 'no-restricted-imports')
@@ -961,13 +960,6 @@ export default ((
         inheritFromBase ? undefined : [OFF],
       ),
     ) /** @since 2.31.0 */ // 👍
-    .addRule(
-      'no-loop-func',
-      ...getRuleUnSeverityAndOptionsFromEntry(
-        vanillaFinalFlatConfigRules['no-loop-func'] ?? ERROR,
-        inheritFromBase ? undefined : [ERROR],
-      ),
-    ) /** @since 4.1.0 */
     .addRule(
       'no-magic-numbers',
       ...getRuleUnSeverityAndOptionsFromEntry(
