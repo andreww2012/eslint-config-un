@@ -90,6 +90,7 @@ export default ((context, optionsRaw) => {
     .addRule('array-constructor', OFF) /** @since 1.0.4-alpha.0 */ // [S1528]
     // ⚠️ Prettier
     .addRule('arrow-function-convention', OFF) /** @since 1.0.4-alpha.0 */ // [S3524]
+    .addRule('assertions-in-test-cases', testRulesSeverity) /** @since 4.2.0 */ // [S8784] 🟢🧪 📦 `mocha`, `jest`, `vitest`, `jasmine`, `@playwright/test`, `cypress`, `supertest`, `chai`, `sinon`, `node:assert`
     .addRule('assertions-in-tests', testRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S2699] 🟢🧪 📦 `chai`, `sinon`, `supertest`, `vitest`
     // Packages list: https://github.com/SonarSource/SonarJS/blob/9c68f4924a8054fbaded7bec02cc9be4a40a7e50/packages/analysis/src/jsts/rules/S8780/rule.ts#L31
     .addRule('async-test-assertions', testRulesSeverity) /** @since 4.1.0 */ // [S8780] 🟢🧪 📦 `jest`, `@jest/globals`, `vitest`, `jasmine`, `jasmine-core`, `jasmine-node`, `karma-jasmine`, `@playwright/test`
@@ -155,6 +156,8 @@ export default ((context, optionsRaw) => {
     .addRule('encryption-secure-mode', ERROR) /** @since 1.0.4-alpha.0 */ // [S5542] 🟢 📦 `node:crypto`
     // Not disabling because, despite being mostly covered by `regexp/no-useless-dollar-replacements` rule, finds more problems
     .addRule('existing-groups', ERROR) /** @since 1.0.4-alpha.0 */ // [S6328] 🟢💭?🔤
+    // Note: `jest`, `jasmine`, `ava` and `qunit` are explicitly unsupported (they have no in-body `this.skip()`-style skip)
+    .addRule('explicit-test-skip', testRulesSeverity) /** @since 4.2.0 */ // [S8968] 🟢🧪 📦 `@playwright/test`, `node:test`, `bun:test`, `vitest`, `mocha`
     .addRule('expression-complexity', OFF) /** @since 1.0.4-alpha.0 */ // [S1067]
     .addRule('file-header', OFF) /** @since 1.0.4-alpha.0 */ // [S1451]
     .addRule('file-name-differ-from-class', OFF) /** @since 1.0.4-alpha.0 */ // [S3317]
@@ -193,6 +196,7 @@ export default ((context, optionsRaw) => {
     // ⚠️ Not for every project
     .addRule('max-switch-cases', OFF) /** @since 0.2.0 */ // [S1479] 🟢
     .addRule('max-union-size', OFF) /** @since 1.0.4-alpha.0 */ // [S4622]
+    .addRule('memoize-cache-key', ERROR) /** @since 4.2.0 */ // [S8932] 🟢 📦 `lodash`, `lodash-es`, `underscore`
     .addRule('misplaced-loop-counter', WARNING) /** @since 1.0.4-alpha.0 */ // [S1994] 🟢
     .addRule('nested-control-flow', OFF) /** @since 1.0.4-alpha.0 */ // [S134]
     // ⚠️ Handled by TypeScript
@@ -221,6 +225,8 @@ export default ((context, optionsRaw) => {
     .addRule('no-control-regex', OFF) /** @since 3.0.0 */ // [S6324] 🟢💭?🔤
     // ⚠️ `no-useless-assignment`
     .addRule('no-dead-store', OFF) /** @since 1.0.4-alpha.0 */ // [S1854] 🟢
+    .addRule('no-debug-commands-in-ui-tests', testRulesSeverity) /** @since 4.2.0 */ // [S8959] 🟢🧪 📦 `cypress`, `@playwright/test` (only `cy`/`page` patterns are checked, not package imports)
+    .addRule('no-default-utility-imports', ERROR) /** @since 4.2.0 */ // [S8927] 🟢 📦 `lodash`, `lodash-es`, `rxjs`, `rambda`, `validator`
     .addRule('no-delete-var', ERROR) /** @since 1.0.4-alpha.0 */ // [S3001] 🟢
     // ⚠️ ts/no-duplicate-type-constituents`
     .addRule('no-duplicate-in-composite', OFF) /** @since 1.0.4-alpha.0 */ // [S4621] 🟢
@@ -246,6 +252,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-extra-arguments', ERROR) /** @since 0.1.0-0 */ // [S930] 🟢
     // ⚠️ `no-fallthrough`
     .addRule('no-fallthrough', OFF) /** @since 3.0.0 */ // [S128] 🟢
+    .addRule('no-fixed-wait-in-tests', testRulesSeverity) /** @since 4.2.0 */ // [S2925] 🟢🧪 📦 `cypress` (only `cy` patterns are checked, not package imports)
     .addRule('no-floating-point-equality', ERROR) /** @since 4.1.0 */ // [S1244]
     .addRule('no-for-in-iterable', ERROR) /** @since 1.0.4-alpha.0 */ // [S4139] 💭?
     .addRule('no-forced-browser-interaction', testRulesSeverity) /** @since 4.1.0 */ // [S8783] 📦 `@playwright/test`, `cypress`
@@ -278,6 +285,7 @@ export default ((context, optionsRaw) => {
     // ⚠️ ts/restrict-plus-operands`
     .addRule('no-incorrect-string-concat', OFF) /** @since 1.0.4-alpha.0 */ // [S3402] 💭?
     .addRule('no-internal-api-use', ERROR) /** @since 2.0.3 */ // [S6627] 🟢
+    .addRule('no-interpolation-in-inline-snapshots', testRulesSeverity) /** @since 4.2.0 */ // [S8967] 🟢🧪 📦 `jest`, `@jest/globals`, `vitest`
     // ⚠️ `regexp/no-invalid-regexp`
     .addRule('no-invalid-regexp', OFF) /** @since 3.0.0 */ // [S5856] 🟢💭?🔤
     .addRule('no-invariant-returns', ERROR) /** @since 1.0.4-alpha.0 */ // [S3516] 🟢
@@ -290,6 +298,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-misleading-array-reverse', ERROR) /** @since 1.0.4-alpha.0 */ // [S4043] 🟢💭?
     // ⚠️ `regexp/no-misleading-unicode-character`
     .addRule('no-misleading-character-class', OFF) /** @since 3.0.0 */ // [S5868] 🟢💭?🔤
+    .addRule('no-mixed-completion-style', testRulesSeverity) /** @since 4.2.0 */ // [S8960] 🟢🧪 📦 `jest`, `@jest/globals`, `mocha`, `jasmine`, `jasmine-core`, `jasmine-node`, `karma-jasmine`
     // ⚠️ Too noisy in practice
     .addRule('no-nested-assignment', OFF) /** @since 1.0.4-alpha.0 */ // [S1121] 🟢
     // ⚠️ Too noisy in practice
@@ -360,10 +369,12 @@ export default ((context, optionsRaw) => {
     .addRule('object-alt-content', ERROR) /** @since 1.0.4-alpha.0 */ // [S5264] 🟢🔵
     // ⚠️ TypeScript
     .addRule('operation-returning-nan', OFF) /** @since 1.0.4-alpha.0 */ // [S3757] 💭?
+    .addRule('parameterized-tests', testRulesSeverity) /** @since 4.2.0 */ // [S5976] 🟢🧪 📦 `jest`, `@jest/globals`, `vitest`, `@playwright/test`
     .addRule('post-message', ERROR) /** @since 1.0.4-alpha.0 */ // [S2819] 🟢💭?
     // ⚠️ `default-case-last`
     .addRule('prefer-default-last', OFF) /** @since 1.0.4-alpha.0 */ // [S4524] 🟢
     .addRule('prefer-immediate-return', OFF) /** @since 0.1.0-0 */ // [S1488]
+    .addRule('prefer-native-lodash-alternative', ERROR) /** @since 4.2.0 */ // [S8907] 🟢 📦 `lodash`, `lodash-es`, `underscore`
     .addRule('prefer-object-literal', ERROR) /** @since 0.2.0 */ // [S2428]
     .addRule('prefer-promise-shorthand', ERROR) /** @since 1.0.4-alpha.0 */ // [S4634] 🟢
     // ⚠️ IMHO this is not a common practice
@@ -398,6 +409,7 @@ export default ((context, optionsRaw) => {
     .addRule('strict-transport-security', helmetRulesSeverity) /** @since 1.0.4-alpha.0 */ // [S5739] 🟢 📦 `helmet`
     .addRule('strings-comparison', WARNING) /** @since 1.0.4-alpha.0 */ // [S3003] 💭?
     .addRule('super-linear-regex', ERROR) /** @since 4.1.0 */ // [S8786] 🟢
+    .addRule('synchronous-suite-callback', testRulesSeverity) /** @since 4.2.0 */ // [S8785] 🟢🧪 📦 `jest`, `@jest/globals`, `mocha`, `cypress`
     .addRule('table-header', WARNING) /** @since 1.0.4-alpha.0 */ // [S5256] 🟢🔵
     .addRule('table-header-reference', WARNING) /** @since 1.0.4-alpha.0 */ // [S5260] 🟢🔵
     .addRule('test-check-exception', ERROR) /** @since 1.0.4-alpha.0 */ // [S5958] 🟢🧪 (only patterns are checked, not package imports)
