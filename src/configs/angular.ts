@@ -398,6 +398,7 @@ export default (async (context, optionsRaw) => {
             },
       ],
     ) /** @since 0.0.1-alpha.18 */
+    .addRule(...getPluginRuleSeverity('inject-at-top', ERROR)) /** @since 22.1.0 */
     .addRule(...getPluginRuleSeverity('no-async-lifecycle-method', ERROR)) /** @since 17.2.0 */
     .addRule(
       ...getPluginRuleSeverity('no-attribute-decorator', disallowAttributeDecorator ? ERROR : OFF),
@@ -469,6 +470,9 @@ export default (async (context, optionsRaw) => {
     ) /** @since 0.0.1-alpha.17 */
     .addRule(...getPluginRuleSeverity('prefer-output-emitter-ref', ERROR)) /** @since 19.4.0 */
     .addRule(...getPluginRuleSeverity('prefer-output-readonly', ERROR)) /** @since 0.0.1-alpha.19 */
+    .addRule(
+      ...getPluginRuleSeverity('prefer-service-decorator', angularVersion >= 22 ? ERROR : OFF),
+    ) /** @since 22.1.0 */
     .addRule(
       ...getPluginRuleSeverity('prefer-signal-model', angularVersion >= 19 ? ERROR : OFF),
     ) /** @since 21.1.0 */
@@ -637,6 +641,12 @@ export default (async (context, optionsRaw) => {
     .addRule(...getTemplatePluginRuleSeverity('no-nested-tags', ERROR)) /** @since 19.5.0 */
     .addRule(...getTemplatePluginRuleSeverity('no-non-null-assertion', OFF)) /** @since 21.3.0 */
     .addRule(
+      ...getTemplatePluginRuleSeverity(
+        'no-outerhtml', // cspell:disable-line
+        ERROR,
+      ),
+    ) /** @since 22.1.0 */
+    .addRule(
       ...getTemplatePluginRuleSeverity('no-positive-tabindex', ERROR),
     ) /** @since 0.4.0-beta.1 */
     .addRule(...getTemplatePluginRuleSeverity('prefer-at-else', ERROR)) /** @since 20.4.0 */
@@ -659,6 +669,7 @@ export default (async (context, optionsRaw) => {
     .addRule(
       ...getTemplatePluginRuleSeverity('prefer-template-literal', ERROR),
     ) /** @since 19.4.0 */
+    .addRule(...getTemplatePluginRuleSeverity('require-switch-default', ERROR)) /** @since 22.1.0 */
     .addRule(
       ...getTemplatePluginRuleSeverity('role-has-required-aria', a11yRulesSeverity),
     ) /** @since 16.0.0-alpha.0 */ /** @aka accessibility-role-has-required-aria */ // ♿
