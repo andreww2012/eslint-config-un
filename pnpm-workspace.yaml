@@ -6,8 +6,7 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
-minimumReleaseAgeExclude: # []
-  - eslint-plugin-unicorn@72.0.0
+minimumReleaseAgeExclude: []
 # - '@typescript-eslint/eslint-plugin@X.Y.Z'
 # - '@typescript-eslint/parser@X.Y.Z'
 # - '@typescript-eslint/project-service@X.Y.Z'
@@ -22,9 +21,7 @@ minimumReleaseAgeExclude: # []
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
-trustPolicyExclude:
-  # []
-  - tinyexec@1.2.2 # Uses staged publishing instead of trusted publishing
+trustPolicyExclude: []
 
 auditConfig:
   ignoreGhsas:
@@ -35,10 +32,10 @@ allowBuilds:
   '@parcel/watcher@2.5.6': false
   esbuild@0.28.1: true
   esbuild@0.28.0: true
-  lefthook@2.1.9: true
+  lefthook@2.1.10: true
   msgpackr-extract@3.0.4: false
   multiline-ts@4.0.1: false
-  nx@23.0.1: false
+  nx@23.1.0: false
   puppeteer@25.3.0: true
   unrs-resolver@1.12.2: true
 
@@ -103,3 +100,6 @@ peerDependencyRules:
 
     '@phenomnomnominal/tsquery@6.1.4>typescript': '>=5'
     '@sveltejs/vite-plugin-svelte@7.0.0>vite': '>=7'
+
+    # Optional peer, unused here; crossws@0.4 comes in via h3@2 (wants ^0.4.1)
+    graphql-ws@6>crossws: ^0.4
