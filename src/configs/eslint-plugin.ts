@@ -53,6 +53,7 @@ export interface EslintPluginEslintConfigOptions<
    * - `docsUrl`: [`eslint-plugin/require-meta-docs-url`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-url.md)
    * - `fixable`: [`eslint-plugin/require-meta-fixable`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-fixable.md)
    * - `hasSuggestions`: [`eslint-plugin/require-meta-has-suggestions`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-has-suggestions.md)
+   * - `languages`: [`eslint-plugin/require-meta-languages`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-languages.md)
    * - `schema`: [`eslint-plugin/require-meta-schema`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-schema.md)
    * - `schemaDescriptions`: [`eslint-plugin/require-meta-schema-description`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-schema-description.md)
    * - `type`: [`eslint-plugin/require-meta-type`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-type.md)
@@ -67,6 +68,7 @@ export interface EslintPluginEslintConfigOptions<
         | 'docsUrl'
         | 'fixable'
         | 'hasSuggestions'
+        | 'languages'
         | 'schema'
         | 'schemaDescriptions'
         | 'type',
@@ -156,6 +158,10 @@ export default ((context, optionsRaw) => {
       'require-meta-has-suggestions',
       getRuleEnforcingMetaPropertySeverity('hasSuggestions', 'enforce'),
     ) /** @since 3.1.0 */ // 🟢
+    .addRule(
+      'require-meta-languages',
+      getRuleEnforcingMetaPropertySeverity('languages', 'not-enforce'),
+    ) /** @since 7.5.0 */
     .addRule(
       'require-meta-schema',
       getRuleEnforcingMetaPropertySeverity('schema', 'enforce'),
