@@ -39,7 +39,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     astro: {
       configs: ['astro'],
       ruleDocsUrl: (ruleName) =>
-        `https://ota-meshi.github.io/eslint-plugin-astro/rules/${ruleName}/`,
+        `https://ota-meshi.github.io/eslint-plugin-astro/rules/${ruleName}`,
     },
     ava: {
       configs: ['ava'],

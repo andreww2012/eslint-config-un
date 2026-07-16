@@ -118,7 +118,6 @@ export default (async (context, optionsRaw) => {
     .addRule('no-exports-from-components', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule('no-prerender-export-outside-pages', ERROR) /** @since 1.7.0 */ // 🟢
     .addRule('no-unused-define-vars-in-style', ERROR) /** @since 0.6.0 */ // 🟢
-    .addRule('valid-compile', ERROR) /** @since 0.21.0 */ // 🟢
     .markCategory('Security Vulnerability')
     .addRule('no-set-html-directive', ERROR) /** @since 0.2.0 */
     .addRule('no-unsafe-inline-scripts', ERROR) /** @since 1.4.0 */
@@ -126,7 +125,6 @@ export default (async (context, optionsRaw) => {
     .addRule('no-set-text-directive', OFF) /** @since 0.2.0 */
     .addRule('no-unused-css-selector', WARNING) /** @since 0.10.0 */
     .markCategory('Stylistic Issues')
-    .addRule('no-omitted-end-tags', ERROR) /** @since 2.1.0 */ // 🟢
     .addRule('prefer-class-list-directive', ERROR) /** @since 0.4.0 */
     .addRule('prefer-object-class-list', ERROR) /** @since 0.4.0 */
     .addRule('prefer-split-class-list', ERROR) /** @since 0.4.0 */
