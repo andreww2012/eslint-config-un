@@ -6,7 +6,8 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
-minimumReleaseAgeExclude: []
+minimumReleaseAgeExclude: # []
+  - eslint-plugin-vue@10.10.0
 # - '@typescript-eslint/eslint-plugin@X.Y.Z'
 # - '@typescript-eslint/parser@X.Y.Z'
 # - '@typescript-eslint/project-service@X.Y.Z'
