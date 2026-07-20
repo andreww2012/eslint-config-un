@@ -572,9 +572,6 @@ importers:
       angular-eslint-plugin18:
         specifier: npm:@angular-eslint/eslint-plugin@18.4.3
         version: '@angular-eslint/eslint-plugin@18.4.3(@typescript-eslint/utils@8.64.0)(@typescript/typescript6@6.0.2)(eslint@9.39.2)'
-      arkregex:
-        specifier: 0.0.8
-        version: 0.0.8
       astro-eslint-parser:
         specifier: 3.0.0
         version: 3.0.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(supports-color@7.2.0)
@@ -1040,9 +1037,6 @@ packages:
   '@arethetypeswrong/core@0.18.5':
     resolution: {integrity: sha512-9ytjzGwxjm9Uz7I9avfbt5vlQt6uk9uRRESzJjqrznl6WKvI6dwYTo+vJ3U02Wrq/mR3iql/PzhvHhKdJIAjDQ==}
     engines: {node: '>=20'}
-
-  '@ark/util@0.56.2':
-    resolution: {integrity: sha512-9kU2sUE38FZEGG7l3hamYMBieLYEJh2L1mrYD2eXpT+78EnQSV1bhjxJhnxGBMSTbtwpBSDNSK+K60WvaI/DTQ==}
 
   '@astrojs/compiler-binding-darwin-arm64@0.3.1':
     resolution: {integrity: sha512-IEmEF2fUIlTHtpeE/isyEGVOB14cEyh/LZOFYt6wn3jNyVpdC8aR5OZ+RzFUR/f+8ZDM1LaMwZKvoA7eMyJeFw==}
@@ -5763,9 +5757,6 @@ packages:
   aria-query@5.3.2:
     resolution: {integrity: sha512-COROpnaoap1E2F000S62r6A60uHZnmlvomhfyT2DlTcrY1OrBKn2UhH7qn5wTC9zMvD0AY7csdPSNwKP+7WiQw==}
     engines: {node: '>= 0.4'}
-
-  arkregex@0.0.8:
-    resolution: {integrity: sha512-PJcx6G1kQTgLKPUbeYlYecDRaKq15AMSGVajlKFYWlPeJRQL+j3dKE6tyMs40HZ99djS1l9Vhl3ezAHy9JBIqQ==}
 
   array-buffer-byte-length@1.0.2:
     resolution: {integrity: sha512-LHE+8BuR7RYGDKvnrmcuSq3tDcKv9OFEXQt/HpbZhY7V6h0zlUXutnAD82GiFx9rdieCMjkvtcsPqBwgUl1Iiw==}
@@ -12090,8 +12081,6 @@ snapshots:
       typescript: 5.6.1-rc
       validate-npm-package-name: 5.0.1
 
-  '@ark/util@0.56.2': {}
-
   '@astrojs/compiler-binding-darwin-arm64@0.3.1':
     optional: true
 
@@ -16993,10 +16982,6 @@ snapshots:
   aria-query@5.3.1: {}
 
   aria-query@5.3.2: {}
-
-  arkregex@0.0.8:
-    dependencies:
-      '@ark/util': 0.56.2
 
   array-buffer-byte-length@1.0.2:
     dependencies:

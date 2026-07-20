@@ -1,8 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
-import {jsonParseSafe} from '@andreww2012/unutils';
-import {regex} from 'arkregex';
+import {jsonParseSafe, regexTyped} from '@andreww2012/unutils';
 import {exec} from 'tinyexec';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import ourPackageJson from '../package.json' with {type: 'json'};
@@ -46,9 +45,9 @@ const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Record<string, stri
   cts: ['ts', 'mts'],
 };
 
-const FILE_HEADER_IN_DIFF_REGEXP = regex('^diff --git a/(.+) b/(.+)$');
+const FILE_HEADER_IN_DIFF_REGEXP = regexTyped('^diff --git a/(.+) b/(.+)$');
 // eslint-disable-next-line unicorn/prefer-string-raw
-const FILE_OR_PATH_WITH_EXTENSION_REGEXP = regex('^(?<path>.*)\\.(?<extension>[a-z\\d]+)$');
+const FILE_OR_PATH_WITH_EXTENSION_REGEXP = regexTyped('^(?<path>.*)\\.(?<extension>[a-z\\d]+)$');
 
 for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   // eslint-disable-next-line ts/no-non-null-assertion

@@ -55,7 +55,6 @@ export default {
     'messageformat',
     'obug',
     'darraghor',
-    'arkregex',
     'oxfmt',
     'splattributes', // Ember
     'tsrx',
