@@ -8,17 +8,17 @@ saveExact: true
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
   - eslint-plugin-vue@10.10.0
-# - '@typescript-eslint/eslint-plugin@X.Y.Z'
-# - '@typescript-eslint/parser@X.Y.Z'
-# - '@typescript-eslint/project-service@X.Y.Z'
-# - '@typescript-eslint/scope-manager@X.Y.Z'
-# - '@typescript-eslint/tsconfig-utils@X.Y.Z'
-# - '@typescript-eslint/type-utils@X.Y.Z'
-# - '@typescript-eslint/types@X.Y.Z'
-# - '@typescript-eslint/typescript-estree@X.Y.Z'
-# - '@typescript-eslint/utils@X.Y.Z'
-# - '@typescript-eslint/visitor-keys@X.Y.Z'
-# - typescript-eslint@X.Y.Z
+  - '@typescript-eslint/eslint-plugin@8.65.0'
+  - '@typescript-eslint/parser@8.65.0'
+  - '@typescript-eslint/project-service@8.65.0'
+  - '@typescript-eslint/scope-manager@8.65.0'
+  - '@typescript-eslint/tsconfig-utils@8.65.0'
+  - '@typescript-eslint/type-utils@8.65.0'
+  - '@typescript-eslint/types@8.65.0'
+  - '@typescript-eslint/typescript-estree@8.65.0'
+  - '@typescript-eslint/utils@8.65.0'
+  - '@typescript-eslint/visitor-keys@8.65.0'
+  - typescript-eslint@8.65.0
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes

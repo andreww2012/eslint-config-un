@@ -731,7 +731,6 @@ export default ((
       .disableAnyRule('', 'no-invalid-this')
       .disableAnyRule('', 'no-magic-numbers')
       .disableAnyRule('', 'no-redeclare')
-      .disableAnyRule('', 'no-restricted-imports')
       .disableAnyRule('', 'no-shadow')
       .disableAnyRule('', 'no-unused-expressions') // 🟣
       .disableAnyRule('', 'no-unused-vars') // 🟣
@@ -974,13 +973,6 @@ export default ((
         inheritFromBase ? undefined : [OFF],
       ),
     ) /** @since 4.0.0 */ // 👍
-    .addRule(
-      'no-restricted-imports',
-      ...getRuleUnSeverityAndOptionsFromEntry(
-        vanillaFinalFlatConfigRules['no-restricted-imports'] ?? OFF,
-        inheritFromBase ? undefined : [OFF],
-      ),
-    ) /** @since 4.32.0 */
     .addRule(
       'no-shadow',
       ...getRuleUnSeverityAndOptionsFromEntry(
