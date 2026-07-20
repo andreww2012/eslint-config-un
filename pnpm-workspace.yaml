@@ -11,6 +11,7 @@ minimumReleaseAgeExclude: # []
   - '@tanstack/eslint-plugin-query@5.101.3'
   - eslint-plugin-boundaries@7.1.0
   - '@boundaries/elements@3.1.0'
+  - import-integrity-lint@1.2.0
   - '@typescript-eslint/eslint-plugin@8.65.0'
   - '@typescript-eslint/parser@8.65.0'
   - '@typescript-eslint/project-service@8.65.0'

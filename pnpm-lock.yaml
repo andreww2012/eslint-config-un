@@ -819,8 +819,8 @@ importers:
         specifier: 2.3.1
         version: 2.3.1(eslint@9.39.2)
       import-integrity-lint:
-        specifier: 1.1.4
-        version: 1.1.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@typescript/typescript6@6.0.2)(eslint@9.39.2)(supports-color@7.2.0)
+        specifier: 1.2.0
+        version: 1.2.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@typescript/typescript6@6.0.2)(eslint@9.39.2)(supports-color@7.2.0)
       import-meta-resolve:
         specifier: 4.2.0
         version: 4.2.0(patch_hash=13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba)
@@ -8580,8 +8580,8 @@ packages:
     resolution: {integrity: sha512-Fpi660c7VPDM3fPKYovStd9IP1CPOikf6v/dGxJJMmHPcwYQIMJ4W7kO1avBYEpMqkCh+Dx3Ln6H7VYqgztLjw==}
     engines: {node: '>=22.15'}
 
-  import-integrity-lint@1.1.4:
-    resolution: {integrity: sha512-rnVFKOWZz4rEe9oAK+g4DPPNxFHlKF7bEB1+GhqLbke06luZNNWB84rQPcPbjbHGJ8Pn9RJHG10rN3I2nIkblQ==}
+  import-integrity-lint@1.2.0:
+    resolution: {integrity: sha512-zmPiOCG2VEFxnENJM7dzKLtxbIZn3wxc1kCf/P6FVynfI6EetgJ+E0roGg6VoMNl+IlIiaHeXPCXwht3Nlo+oQ==}
     peerDependencies:
       eslint: '>=9.0.0'
 
@@ -15424,9 +15424,9 @@ snapshots:
   '@oxc-parser/binding-openharmony-arm64@0.137.0':
     optional: true
 
-  '@oxc-parser/binding-wasm32-wasi@0.106.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)':
+  '@oxc-parser/binding-wasm32-wasi@0.106.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)':
     dependencies:
-      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      '@napi-rs/wasm-runtime': 1.1.6(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
     transitivePeerDependencies:
       - '@emnapi/core'
       - '@emnapi/runtime'
@@ -16316,7 +16316,7 @@ snapshots:
 
   '@typescript-eslint/project-service@8.56.1(@typescript/typescript6@6.0.2)(supports-color@7.2.0)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.64.0(@typescript/typescript6@6.0.2)
+      '@typescript-eslint/tsconfig-utils': 8.65.0(@typescript/typescript6@6.0.2)
       '@typescript-eslint/types': 8.65.0
       debug: 4.4.3(supports-color@7.2.0)
       typescript: '@typescript/typescript6@6.0.2'
@@ -16325,7 +16325,7 @@ snapshots:
 
   '@typescript-eslint/project-service@8.62.1(@typescript/typescript6@6.0.2)(supports-color@7.2.0)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.64.0(@typescript/typescript6@6.0.2)
+      '@typescript-eslint/tsconfig-utils': 8.65.0(@typescript/typescript6@6.0.2)
       '@typescript-eslint/types': 8.65.0
       debug: 4.4.3(supports-color@7.2.0)
       typescript: '@typescript/typescript6@6.0.2'
@@ -16334,8 +16334,8 @@ snapshots:
 
   '@typescript-eslint/project-service@8.64.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.64.0(@typescript/typescript6@6.0.2)
-      '@typescript-eslint/types': 8.64.0
+      '@typescript-eslint/tsconfig-utils': 8.65.0(@typescript/typescript6@6.0.2)
+      '@typescript-eslint/types': 8.65.0
       debug: 4.4.3(supports-color@7.2.0)
       typescript: '@typescript/typescript6@6.0.2'
     transitivePeerDependencies:
@@ -20457,15 +20457,15 @@ snapshots:
 
   import-fresh@4.0.0: {}
 
-  import-integrity-lint@1.1.4(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(@typescript/typescript6@6.0.2)(eslint@9.39.2)(supports-color@7.2.0):
+  import-integrity-lint@1.2.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)(@typescript/typescript6@6.0.2)(eslint@9.39.2)(supports-color@7.2.0):
     dependencies:
       '@manypkg/get-packages': 3.1.0
-      '@typescript-eslint/typescript-estree': 8.64.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
-      '@typescript-eslint/utils': 8.64.0(@typescript/typescript6@6.0.2)(eslint@9.39.2)(supports-color@7.2.0)
+      '@typescript-eslint/typescript-estree': 8.65.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
+      '@typescript-eslint/utils': 8.65.0(@typescript/typescript6@6.0.2)(eslint@9.39.2)(supports-color@7.2.0)
       eslint: 9.39.2(jiti@2.7.0)(supports-color@7.2.0)
       ignore: 7.0.5
       jsonc-parser: 3.3.1
-      oxc-parser: 0.106.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      oxc-parser: 0.106.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
       zod: 4.4.3
     transitivePeerDependencies:
       - '@emnapi/core'
@@ -22414,7 +22414,7 @@ snapshots:
       object-keys: 1.1.1
       safe-push-apply: 1.0.0
 
-  oxc-parser@0.106.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1):
+  oxc-parser@0.106.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2):
     dependencies:
       '@oxc-project/types': 0.106.0
     optionalDependencies:
@@ -22434,7 +22434,7 @@ snapshots:
       '@oxc-parser/binding-linux-x64-gnu': 0.106.0
       '@oxc-parser/binding-linux-x64-musl': 0.106.0
       '@oxc-parser/binding-openharmony-arm64': 0.106.0
-      '@oxc-parser/binding-wasm32-wasi': 0.106.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      '@oxc-parser/binding-wasm32-wasi': 0.106.0(@emnapi/core@1.11.2)(@emnapi/runtime@1.11.2)
       '@oxc-parser/binding-win32-arm64-msvc': 0.106.0
       '@oxc-parser/binding-win32-ia32-msvc': 0.106.0
       '@oxc-parser/binding-win32-x64-msvc': 0.106.0

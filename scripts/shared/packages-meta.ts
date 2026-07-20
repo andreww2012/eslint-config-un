@@ -218,7 +218,6 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     },
     'import-integrity': {
       configs: ['importIntegrity'],
-      gitTag: versionAsIs,
       ruleDocsUrl: (ruleName) =>
         `https://nebrius.github.io/import-integrity-lint/rules/${ruleName}`,
     },
