@@ -248,4 +248,44 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('jsdoc', 'jsdoc/type-formatting')).toBe(0);
     });
   });
+
+  describe('option: `normalizeSeeLinks`', () => {
+    it('disables `jsdoc/normalize-see-links` rule by default', async () => {
+      const configResult = await computeEslintConfig('jsdoc');
+
+      expect(configResult.getRuleEntrySeverity('jsdoc', 'jsdoc/normalize-see-links')).toBe(0);
+    });
+
+    it('disables `jsdoc/normalize-see-links` rule when set to `false`', async () => {
+      const configResult = await computeEslintConfig({jsdoc: {normalizeSeeLinks: false}});
+
+      expect(configResult.getRuleEntrySeverity('jsdoc', 'jsdoc/normalize-see-links')).toBe(0);
+    });
+
+    it('enables `jsdoc/normalize-see-links` rule with its default options when set to `true`', async () => {
+      const configResult = await computeEslintConfig({jsdoc: {normalizeSeeLinks: true}});
+
+      expect(configResult.getRuleEntry('jsdoc', 'jsdoc/normalize-see-links')).toMatchInlineSnapshot(
+        '[2, {"canonicalForm": "pipe"}]',
+      );
+    });
+
+    it('sets `canonicalForm` from a string shortcut in `jsdoc/normalize-see-links` rule', async () => {
+      const configResult = await computeEslintConfig({jsdoc: {normalizeSeeLinks: 'prefix'}});
+
+      expect(configResult.getRuleEntry('jsdoc', 'jsdoc/normalize-see-links')).toMatchInlineSnapshot(
+        '[2, {"canonicalForm": "prefix"}]',
+      );
+    });
+
+    it('passes an object as `jsdoc/normalize-see-links` rule options as-is', async () => {
+      const OPTIONS = {canonicalForm: 'pipe', enableFixer: false, wrapBareUrls: true} as const;
+
+      const configResult = await computeEslintConfig({jsdoc: {normalizeSeeLinks: OPTIONS}});
+
+      expect(configResult.getRuleEntryOptions('jsdoc', 'jsdoc/normalize-see-links')).toStrictEqual([
+        OPTIONS,
+      ]);
+    });
+  });
 });

@@ -3,10 +3,13 @@ import {getKeysOfTruthyValues} from '../utils';
 import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
+  type GetRuleOptions,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
 } from './index';
+
+type NormalizeSeeLinksRuleOptions = GetRuleOptions<'jsdoc', 'normalize-see-links'>;
 
 interface EslintPluginJsdocSettings {
   /**
@@ -226,6 +229,32 @@ export interface JsdocEslintConfigOptions<
    * @default true
    */
   formatTypeValues?: boolean;
+
+  /**
+   * Rewrites labeled links inside `@see` tags to a single canonical `@link` form,
+   * so different styles don't get mixed within a codebase.
+   * Only two forms [officially supported by plain JSDoc](https://jsdoc.app/tags-inline-link)
+   * are supported:
+   *
+   * - The "prefix" one, where the label goes first, in square brackets:
+   *   <code>[label]&#123;@link url}</code>.
+   * - The "pipe" one, where the label goes last, after a pipe:
+   *   <code>&#123;@link url|label}</code>.
+   *
+   * Note that neither of them is a Markdown link (`[label](url)`), and the rule provides
+   * no way to enforce that form.
+   *
+   * Accepted values:
+   * - A string (`'prefix'` or `'pipe'`) is a shortcut for picking the canonical form.
+   * - A boolean enables or disables the rule with its default options, i.e. the pipe form.
+   * - An object is passed to the rule as its options as-is.
+   *
+   * Affected rule:
+   * - [`jsdoc/normalize-see-links`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/normalize-see-links.md)
+   * @default false
+   */
+  normalizeSeeLinks?:
+    boolean | NormalizeSeeLinksRuleOptions['canonicalForm'] | NormalizeSeeLinksRuleOptions;
 }
 
 const DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE = {
@@ -244,6 +273,7 @@ export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypescript: context.configsMeta.ts.enabled,
     formatTypeValues: true,
+    normalizeSeeLinks: false,
   });
 
   const {
@@ -252,6 +282,7 @@ export default ((context, optionsRaw) => {
     customTags,
     extraMultilineCommentsStartingWithToIgnore,
     formatTypeValues,
+    normalizeSeeLinks,
   } = optionsResolved;
 
   const customTagsList = getKeysOfTruthyValues(customTags);
@@ -330,6 +361,11 @@ export default ((context, optionsRaw) => {
     .addRule('no-restricted-syntax', OFF) /** @since 33.1.0 */
     .addRule('no-types', OFF) /** @since 7.0.0 */ // 2️⃣
     .addRule('no-undefined-types', ERROR) /** @since 3.6.0 */ // 🟢2️⃣
+    .addRule('normalize-see-links', normalizeSeeLinks === false ? OFF : ERROR, [
+      typeof normalizeSeeLinks === 'object'
+        ? normalizeSeeLinks
+        : {canonicalForm: typeof normalizeSeeLinks === 'string' ? normalizeSeeLinks : 'pipe'},
+    ]) /** @since 63.1.0 */
     .addRule('prefer-import-tag', OFF) /** @since 60.2.0 */
     .addRule('reject-any-type', OFF) /** @since 58.0.0 */ // 🟢
     .addRule('reject-function-type', OFF) /** @since 58.0.0 */ // 🟢
