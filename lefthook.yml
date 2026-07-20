@@ -10,7 +10,7 @@ pre-push:
     knip:
       run: nr knip
     types:
-      run: nr lint:types:go
+      run: nr lint:types
     build:
       run: nr build:code:test
 commit-msg:
