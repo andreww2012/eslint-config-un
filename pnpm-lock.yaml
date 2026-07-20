@@ -630,8 +630,8 @@ importers:
         specifier: 3.0.1
         version: 3.0.1(eslint@9.39.2)
       eslint-plugin-better-tailwindcss:
-        specifier: 4.6.1
-        version: 4.6.1(@eslint/css@1.4.0)(eslint@9.39.2)(tailwindcss@4.3.2)(typescript@6.0.3)
+        specifier: 4.7.0
+        version: 4.7.0(@eslint/css@1.4.0)(eslint@9.39.2)(tailwindcss@4.3.2)(typescript@6.0.3)
       eslint-plugin-boundaries:
         specifier: 7.0.2
         version: 7.0.2(@typescript-eslint/parser@8.64.0)(eslint-import-resolver-typescript@4.4.5)(eslint@9.39.2)(supports-color@7.2.0)
@@ -6991,8 +6991,8 @@ packages:
       eslint: '>= 5'
     bundledDependencies: []
 
-  eslint-plugin-better-tailwindcss@4.6.1:
-    resolution: {integrity: sha512-Lr8mPyuaZ+dS6ATuJaPwcOFOpOUsRBs5TXyOPqiTzLy0SvK4+0G6usbklCuQn4QabwFtNKdSXwl2WxOIPvu0lQ==}
+  eslint-plugin-better-tailwindcss@4.7.0:
+    resolution: {integrity: sha512-lrdlVW4pzLPj/zX5HRqMhKPesGijDfRhnSRJMlNcsrCyJHsndmHCLKTiRNa1eREUZ6G3D3QjdLc+G4tlfGrmkw==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=23.0.0}
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
@@ -18284,7 +18284,7 @@ snapshots:
       eslint-barrel-file-utils: 0.0.11
       oxc-resolver: 1.12.0
 
-  eslint-plugin-better-tailwindcss@4.6.1(@eslint/css@1.4.0)(eslint@9.39.2)(tailwindcss@4.3.2)(typescript@6.0.3):
+  eslint-plugin-better-tailwindcss@4.7.0(@eslint/css@1.4.0)(eslint@9.39.2)(tailwindcss@4.3.2)(typescript@6.0.3):
     dependencies:
       '@eslint/css-tree': 4.0.4
       '@valibot/to-json-schema': 1.7.1(valibot@1.4.2)

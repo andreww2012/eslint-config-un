@@ -237,6 +237,7 @@ export default ((context, optionsRaw, {cssResolvedOptions}) => {
     .addRule('no-duplicate-classes', WARNING) /** @since 3.0.0 */ // 🟢
     .addRule('no-unnecessary-whitespace', WARNING) /** @since 3.0.0 */ // 🟢
     .markCategory('Correctness rules')
+    .addRule('no-concatenated-classes', ERROR) /** @since 4.7.0 */ // 🟢
     .addRule('no-conflicting-classes', ERROR) /** @since 3.0.0 */ // 🟢
     .addRule(
       'no-restricted-classes',
