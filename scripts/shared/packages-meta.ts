@@ -1,4 +1,4 @@
-import {objectFromEntries as objectFromEntriesUnsafe} from 'ts-extras';
+import {objectFromEntriesUnsafe} from '@andreww2012/unutils';
 import type {UnConfigs} from '../../src/configs';
 import {type LoadablePluginPrefix, pluginsLoaders} from '../../src/loaders';
 import {objectEntriesUnsafe} from '../../src/utils';

@@ -323,7 +323,6 @@
     "release-it": "20.2.1",
     "shiki": "4.3.1",
     "svelte-eslint-parser": "1.8.0",
-    "ts-extras": "1.2.0",
     "tsdown": "0.22.3",
     "tsx": "4.23.1",
     "typescript": "npm:@typescript/typescript6@6.0.2",
