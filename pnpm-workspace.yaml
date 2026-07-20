@@ -15,6 +15,7 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-storybook@10.5.3
   - storybook@10.5.3
   - eslint-plugin-svelte@3.22.0
+  - eslint-plugin-jest@29.15.5
   - '@typescript-eslint/eslint-plugin@8.65.0'
   - '@typescript-eslint/parser@8.65.0'
   - '@typescript-eslint/project-service@8.65.0'
