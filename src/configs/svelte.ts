@@ -214,6 +214,8 @@ export default ((context, optionsRaw) => {
     ])
     .markCategory('Possible Errors')
     .addRule('infinite-reactive-loop', ERROR) /** @since 2.16.0 */ // 🟢4️⃣
+    .addRule('no-bind-value-on-checkable-inputs', ERROR) /** @since 3.21.0 */
+    .addRule('no-conflicting-module-names', ERROR) /** @since 3.22.0 */
     .addRule('no-dom-manipulating', ERROR) /** @since 2.13.0 */ // 🟢
     .addRule('no-dupe-else-if-blocks', ERROR) /** @since 0.0.1 */ // 🟢
     .addRule('no-dupe-on-directives', ERROR) /** @since 2.14.0 */ // 🟢4️⃣
