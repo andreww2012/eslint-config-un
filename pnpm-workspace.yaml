@@ -8,6 +8,7 @@ saveExact: true
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
   - eslint-plugin-vue@10.10.0
+  - '@tanstack/eslint-plugin-query@5.101.3'
   - '@typescript-eslint/eslint-plugin@8.65.0'
   - '@typescript-eslint/parser@8.65.0'
   - '@typescript-eslint/project-service@8.65.0'
