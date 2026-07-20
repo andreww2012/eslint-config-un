@@ -481,7 +481,7 @@ importers:
         version: 2.0.1
       '@graphql-eslint/eslint-plugin':
         specifier: 4.4.0
-        version: 4.4.0(@types/node@20.19.1)(crossws@0.4.9)(eslint@9.39.2)(graphql@16.14.2)(json-schema-to-ts@3.1.1)(typescript@6.0.3)
+        version: 4.4.0(@types/node@20.19.1)(crossws@0.4.9)(eslint@9.39.2)(graphql@16.14.2)(json-schema-to-ts@3.1.1)(supports-color@7.2.0)(typescript@6.0.3)
       '@intlify/eslint-plugin-vue-i18n':
         specifier: 4.5.1
         version: 4.5.1(eslint@9.39.2)(jsonc-eslint-parser@3.1.0)(supports-color@7.2.0)(vue-eslint-parser@10.4.1)(yaml-eslint-parser@2.0.0)
@@ -774,8 +774,8 @@ importers:
         specifier: 3.20.0
         version: 3.20.0(eslint@9.39.2)(svelte@5.55.9)
       eslint-plugin-tailwindcss:
-        specifier: 4.0.6
-        version: 4.0.6(eslint@9.39.2)(tailwindcss@4.3.2)(typescript@6.0.3)
+        specifier: 4.2.0
+        version: 4.2.0(eslint@9.39.2)(tailwindcss@4.3.2)(typescript@6.0.3)
       eslint-plugin-testing-library:
         specifier: 7.16.2
         version: 7.16.2(eslint@9.39.2)(typescript@6.0.3)
@@ -7543,8 +7543,8 @@ packages:
       svelte:
         optional: true
 
-  eslint-plugin-tailwindcss@4.0.6:
-    resolution: {integrity: sha512-87x/KWOSWSveCbfiGVWW5dNpU/oLfK/McHD9qwIzrfkJwF0LlWFI6ngEwgFpj4M3WYTHFngO07qBvaM1IDBKHA==}
+  eslint-plugin-tailwindcss@4.2.0:
+    resolution: {integrity: sha512-TSygSjEL54Iks7K29FjvM9Lp03cpsYtbh3LJHnj/84FxCOYfLFuvQ+GioHOxgq19WGN5NbHPuvFDz/igIOEtbg==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
@@ -13896,7 +13896,7 @@ snapshots:
     dependencies:
       '@glimmer/interfaces': 0.94.6
 
-  '@graphql-eslint/eslint-plugin@4.4.0(@types/node@20.19.1)(crossws@0.4.9)(eslint@9.39.2)(graphql@16.14.2)(json-schema-to-ts@3.1.1)(typescript@6.0.3)':
+  '@graphql-eslint/eslint-plugin@4.4.0(@types/node@20.19.1)(crossws@0.4.9)(eslint@9.39.2)(graphql@16.14.2)(json-schema-to-ts@3.1.1)(supports-color@7.2.0)(typescript@6.0.3)':
     dependencies:
       '@graphql-tools/code-file-loader': 8.1.34(graphql@16.14.2)
       '@graphql-tools/graphql-tag-pluck': 8.3.33(graphql@16.14.2)
@@ -19145,9 +19145,9 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  eslint-plugin-tailwindcss@4.0.6(eslint@9.39.2)(tailwindcss@4.3.2)(typescript@6.0.3):
+  eslint-plugin-tailwindcss@4.2.0(eslint@9.39.2)(tailwindcss@4.3.2)(typescript@6.0.3):
     dependencies:
-      '@typescript-eslint/utils': 8.62.1(eslint@9.39.2)(typescript@6.0.3)
+      '@typescript-eslint/utils': 8.64.0(eslint@9.39.2)(typescript@6.0.3)
       eslint: 9.39.2(jiti@2.7.0)(supports-color@7.2.0)
       postcss: 8.5.16
       postcss-nested: 7.0.2(postcss@8.5.16)

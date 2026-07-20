@@ -93,6 +93,7 @@ export default ((context, optionsRaw) => {
     .addRule('classnames-order', WARNING) /** @since 1.0.1 */ // 🟡
     .addRule('enforces-negative-arbitrary-values', WARNING) /** @since 3.4.0 */ // 🟡
     .addRule('enforces-shorthand', WARNING) /** @since 3.1.0 */ // 🟡
+    .addRule('important-modifier-suffix', ERROR) /** @since 4.2.0-beta.0 */ // 🟡
     .addRule('no-arbitrary-value', OFF) /** @since 3.2.0 */
     .addRule('no-contradicting-classname', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('no-custom-classname', OFF) /** @since 1.1.0 */ // 🟡
