@@ -1,20 +1,31 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
-import {type ObjectValues, capitalize, isKeyIn, objectValuesUnsafe} from '@andreww2012/unutils';
+import {
+  type NonEmptyTuple,
+  type ObjectValues,
+  capitalize,
+  isKeyIn,
+  objectValuesUnsafe,
+} from '@andreww2012/unutils';
 import * as diff from 'diff';
 import {pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
 import prettier from 'prettier';
 import prettierConfig from '../.prettierrc.json' with {type: 'json'};
-import {eslintConfigInternal} from '../src/config-un/config';
-import {DISABLE_AUTOFIX} from '../src/constants';
 import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
-import type {EslintRuleMetaWithLanguages} from '../src/eslint/eslint-types';
+import type {EslintPlugin, EslintRuleMetaWithLanguages} from '../src/eslint/eslint-types';
+import {pluginsLoaders} from '../src/loaders/plugins';
+import type {ModuleLoaderContext} from '../src/loaders/shared';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {addMissingRuleOptionsSchemas} from './src/set-missing-rule-options-schemas';
 
 const __dirname = import.meta.dirname;
+
+const PLUGIN_LOADER_CONTEXT: ModuleLoaderContext = {
+  rootOptions: {},
+  missingPackages: new Set(),
+};
 
 interface RuleCategorization<CategoryId extends string> {
   /**
@@ -133,23 +144,25 @@ await Promise.all([
 
 async function generateRuleTypes() {
   const [
-    unFlatConfigs,
+    loadedPlugins,
     {plugin: pluginAngular, pluginTemplate: pluginAngularTemplate},
     pluginsWithAddedRuleOptionSchemas,
   ] = await Promise.all([
-    eslintConfigInternal(
-      {loadPluginsOnDemand: false, autofixDisabledGloballyFor: false},
-      {disableWarnings: true, keepRuleMetaLanguages: true},
+    Promise.all(
+      Object.entries(pluginsLoaders).map(
+        async ([pluginPrefix, loadPlugin]) =>
+          [pluginPrefix, (await loadPlugin(PLUGIN_LOADER_CONTEXT)).module] satisfies NonEmptyTuple,
+      ),
     ),
     generateAngularPluginsWithOldRules(),
     addMissingRuleOptionsSchemas(),
   ]);
 
-  const allPlugins = Object.fromEntries(
-    unFlatConfigs.flatMap((v) => Object.entries(v.plugins || {})),
+  const allPlugins: Record<string, EslintPlugin> = Object.fromEntries(
+    loadedPlugins.flatMap(([pluginPrefix, plugin]) =>
+      plugin ? [[pluginPrefix, plugin] satisfies NonEmptyTuple] : [],
+    ),
   );
-  // eslint-disable-next-line ts/no-dynamic-delete
-  delete allPlugins[DISABLE_AUTOFIX];
   Object.assign(
     allPlugins,
     {

@@ -9,8 +9,10 @@ export type EslintParser = Eslint.Linter.Parser;
 
 export const MODULE_NOT_FOUND_ERROR_CODES = ['ERR_MODULE_NOT_FOUND', 'MODULE_NOT_FOUND'];
 
+export type ModuleLoaderContext = Pick<UnConfigContext, 'rootOptions' | 'missingPackages'>;
+
 export type ModuleLoader<T, N extends string = string, PackageNullable extends boolean = true> = ((
-  context: UnConfigContext,
+  context: ModuleLoaderContext,
   options?: {
     throwIfNotFound?: boolean;
   },
