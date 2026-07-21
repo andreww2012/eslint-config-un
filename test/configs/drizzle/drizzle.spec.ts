@@ -184,32 +184,40 @@ describe('options', () => {
       const configResult = await computeEslintConfig('drizzle');
 
       expect(
-        configResult.getRuleEntry('drizzle', 'drizzle/enforce-delete-with-where'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntryOptions('drizzle', 'drizzle/enforce-delete-with-where'),
+      ).toStrictEqual([]);
     });
 
     it('passes the set string to both delete and update rules', async () => {
-      const configResult = await computeEslintConfig({drizzle: {drizzleObjectName: 'db'}});
+      const DRIZZLE_OBJECT_NAME = 'db';
+
+      const configResult = await computeEslintConfig({
+        drizzle: {drizzleObjectName: DRIZZLE_OBJECT_NAME},
+      });
 
       expect(
-        configResult.getRuleEntry('drizzle', 'drizzle/enforce-delete-with-where'),
-      ).toMatchInlineSnapshot('[2, {"drizzleObjectName": "db"}]');
+        configResult.getRuleEntryOptions('drizzle', 'drizzle/enforce-delete-with-where'),
+      ).toStrictEqual([{drizzleObjectName: DRIZZLE_OBJECT_NAME}]);
 
       expect(
-        configResult.getRuleEntry('drizzle', 'drizzle/enforce-update-with-where'),
-      ).toMatchInlineSnapshot('[2, {"drizzleObjectName": "db"}]');
+        configResult.getRuleEntryOptions('drizzle', 'drizzle/enforce-update-with-where'),
+      ).toStrictEqual([{drizzleObjectName: DRIZZLE_OBJECT_NAME}]);
     });
 
     it('passes the set array to both delete and update rules', async () => {
-      const configResult = await computeEslintConfig({drizzle: {drizzleObjectName: ['db', 'db2']}});
+      const DRIZZLE_OBJECT_NAME = ['db', 'db2'];
+
+      const configResult = await computeEslintConfig({
+        drizzle: {drizzleObjectName: DRIZZLE_OBJECT_NAME},
+      });
 
       expect(
-        configResult.getRuleEntry('drizzle', 'drizzle/enforce-delete-with-where'),
-      ).toMatchInlineSnapshot('[2, {"drizzleObjectName": ["db", "db2"]}]');
+        configResult.getRuleEntryOptions('drizzle', 'drizzle/enforce-delete-with-where'),
+      ).toStrictEqual([{drizzleObjectName: DRIZZLE_OBJECT_NAME}]);
 
       expect(
-        configResult.getRuleEntry('drizzle', 'drizzle/enforce-update-with-where'),
-      ).toMatchInlineSnapshot('[2, {"drizzleObjectName": ["db", "db2"]}]');
+        configResult.getRuleEntryOptions('drizzle', 'drizzle/enforce-update-with-where'),
+      ).toStrictEqual([{drizzleObjectName: DRIZZLE_OBJECT_NAME}]);
     });
   });
 });

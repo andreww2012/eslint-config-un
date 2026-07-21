@@ -7,10 +7,6 @@ description: Adding support for a new ESLint plugin for eslint-config-un
 
 ## Intro
 
-`eslint-config-un` is an ESLint configuration generator, wrapping 100+ ESLint plugins.
-
-For the terminology, refer to `README.md`.
-
 CRITICAL: when you're uncertain when making a decision, it's always better to ask than make a questionable assumption.
 
 ## Guide

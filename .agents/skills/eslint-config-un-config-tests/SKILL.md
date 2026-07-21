@@ -3,7 +3,6 @@ name: eslint-config-un-config-tests
 description: Guide on how to write Vitest tests for `eslint-config-un` Configs
 ---
 
-`eslint-config-un` is an ESLint configuration generator, wrapping 100+ ESLint plugins.
 Tests must live in the `/test` directory and have `.spec.ts` extension.
 
 ## Terminology
@@ -44,7 +43,7 @@ The main Config test file must **not** test Sub-config rules or options.
 
 You can use, for example, the following test files as a reference for structure and style:
 
-- `ts/*.spec.ts` or `drizzle/drizzle.spec.ts` - the most up-to-date structure, USE AS A PRIMARY REFERENCE
+- `ts/*.spec.ts` or `drizzle/drizzle.spec.ts` - the most up-to-date structure (not all specs have been up-to-date with it), **USE AS A PRIMARY REFERENCE**
 - `jsdoc/jsdoc.spec.ts` - testing `jsdoc`, a config that is enabled by default and has sub-configs
 - `test/angular/*.spec.ts` - for `angular`, config enabled <=> `@angular/core` package is installed and has sub-configs
 - `lockfile/lockfile.spec.ts` - for `lockfile`, config from `misc-enabled` group
