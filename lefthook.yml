@@ -4,7 +4,7 @@ pre-push:
     eslint:
       run: pnpm eslint --no-warn-ignored {push_files}
     prettier:
-      run: pnpm prettier --check --ignore-unknown {push_files}
+      run: pnpm prettier --check --ignore-unknown --no-error-on-unmatched-pattern {push_files}
     spellcheck:
       run: pnpm cspell --exclude '**/.*' --no-must-find-files {push_files}
     knip:
