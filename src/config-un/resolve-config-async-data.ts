@@ -5,6 +5,7 @@ import type {EslintFlatConfigEntry, EslintPlugin} from '../eslint/eslint-types';
 import {
   disableAutofixForAllRulesInPlugin,
   getRuleNameAndPluginPrefixByFullName,
+  removeRuleLanguagesFromPlugin,
 } from '../eslint/eslint-utils';
 import {
   type LoadablePackagePrefix,
@@ -291,9 +292,14 @@ ${styleText(
     ruleNames,
   }));
 
-  const loadedPlugins = Object.fromEntries(loadedPluginsRaw.filter((v) => v != null)) as Partial<
-    Record<PluginPrefix, EslintPlugin>
-  >;
+  const loadedPlugins = Object.fromEntries(
+    loadedPluginsRaw
+      .filter((v) => v != null)
+      .map(([pluginPrefix, plugin]) => [
+        pluginPrefix,
+        internalOptions.keepRuleMetaLanguages ? plugin : removeRuleLanguagesFromPlugin(plugin),
+      ]),
+  ) as Partial<Record<PluginPrefix, EslintPlugin>>;
   replaceImportRulesImplementationWithIntegrityPlugin(context, loadedPlugins);
 
   const disableAutofixPlugin: EslintPlugin = {

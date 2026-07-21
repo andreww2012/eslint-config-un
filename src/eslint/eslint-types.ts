@@ -103,8 +103,10 @@ type PluginAndPrefixToFullRuleName<P extends PluginPrefix, N extends string> = P
   ? N
   : `${P}/${N}`;
 
+type UnRulesConfigRelaxed = Record<string, EslintRuleEntry> & UnRulesConfig;
+
 export type UnRulesConfigPartial<
-  P extends null | PluginPrefix | EslintTypedRulesConfig = PluginPrefix,
+  P extends null | PluginPrefix | UnRulesConfigRelaxed = PluginPrefix,
 > = P extends PluginPrefix
   ? {
       [
@@ -116,7 +118,7 @@ export type UnRulesConfigPartial<
         ? EslintRuleEntry<UnRuleOptionsByPlugin[P][N]>
         : never;
     }
-  : P extends EslintTypedRulesConfig
+  : P extends UnRulesConfigRelaxed
     ? OmitIndexSignature<EslintFlatConfigEntry<P>['rules'] & {}>
     : never;
 
@@ -125,7 +127,7 @@ export type UnRulesConfigPartial<
  */
 export interface UnFlatConfigEntryBase<
   ExtraPlugins extends ExtraPluginsType = never,
-  T extends null | PluginPrefix | EslintTypedRulesConfig = EslintTypedRulesConfig,
+  T extends null | PluginPrefix | UnRulesConfig = UnRulesConfig,
 > extends UnFlatConfigEntryFilesAndIgnores {
   overrides?: UnFlatConfigEntryOverridesType<UnionToIntersection<UnRulesConfigPartial<T>>>;
 
@@ -143,12 +145,10 @@ export interface UnFlatConfigEntryBase<
 
 // #region 🟠 Vanilla ESLint types
 
-export type EslintTypedRulesConfig = Record<string, EslintRuleEntry> & UnRulesConfig;
-
 /**
  * A convenient alias of `ConfigObject` from `@eslint/core`
  */
-export type EslintFlatConfigEntry<T extends EslintTypedRulesConfig = EslintTypedRulesConfig> =
+export type EslintFlatConfigEntry<T extends UnRulesConfigRelaxed = UnRulesConfigRelaxed> =
   EslintConfigObject<T>;
 
 export type EslintRuleEntry<Options extends readonly unknown[] = readonly unknown[]> =
@@ -156,6 +156,10 @@ export type EslintRuleEntry<Options extends readonly unknown[] = readonly unknow
     // @ts-expect-error "The type 'readonly unknown[]' is 'readonly' and cannot be assigned to the mutable type 'any[]'" - this is fine, options are not mutated by ESLint
     Options
   >;
+
+export type EslintRuleMetaWithLanguages = NonNullable<
+  NonNullable<EslintPlugin['rules']>[string]['meta']
+> & {languages?: string[]};
 
 // TODO report false positive
 // eslint-disable-next-line unicorn/prefer-export-from

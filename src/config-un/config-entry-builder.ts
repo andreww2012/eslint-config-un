@@ -3,6 +3,9 @@ import {
   ERROR,
   GLOB_CSS,
   GLOB_HTM_HTML,
+  GLOB_JSON,
+  GLOB_JSON5,
+  GLOB_JSONC,
   GLOB_MARKDOWN,
   GLOB_MDX,
   GLOB_MD_X_CODE_BLOCKS,
@@ -18,7 +21,6 @@ import {eslintPluginVanillaRules} from '../eslint/eslint-shared';
 import type {
   EslintFlatConfigEntry,
   EslintRuleEntry,
-  EslintTypedRulesConfig,
   GetRuleNamesInPlugin,
   GetRuleOptions,
   UnAllRuleNames,
@@ -50,6 +52,7 @@ import type {
   SetRequired,
 } from '../types';
 import {
+  type MaybeArray,
   arrayMap,
   arrayPartition,
   arrayify,
@@ -91,6 +94,9 @@ export type SupportedEslintPluginLanguages = ObjectValues<{
 
 const FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS = {
   css: [GLOB_CSS],
+  json: [GLOB_JSON],
+  jsonc: [GLOB_JSONC],
+  json5: [GLOB_JSON5],
   md: [GLOB_MARKDOWN],
   mdx: [GLOB_MDX],
   html: [GLOB_HTM_HTML],
@@ -102,11 +108,13 @@ const PLUGIN_LANGUAGES_TO_NOT_IGNORED_FILES: {
   [PluginKey in keyof typeof PLUGINS_PROVIDING_LANGUAGES]?: Partial<
     Record<
       (typeof PLUGINS_PROVIDING_LANGUAGES)[PluginKey][number],
-      keyof typeof FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS
+      MaybeArray<keyof typeof FILE_EXTENSIONS_IMPLICITLY_IGNORED_BY_DEFAULT_IN_UN_CONFIGS_GLOBS>
     >
   >;
 } = {
   css: {css: 'css'},
+  json: {json: 'json', jsonc: 'jsonc', json5: 'json5'},
+  jsonc: {x: ['json', 'jsonc', 'json5'], json: 'json', jsonc: 'jsonc', json5: 'json5'},
   'markdown-preferences': {'extended-syntax': 'md'},
   markdown: {gfm: 'md', commonmark: 'md'},
   toml: {toml: 'toml'},
@@ -141,7 +149,7 @@ export class ConfigEntryBuilder<
   private readonly pluginPrefix: DefaultPrefix;
   private readonly options: UnFlatConfigEntryBase<
     ExtraPlugins,
-    DefaultPrefix extends null ? EslintTypedRulesConfig : DefaultPrefix
+    DefaultPrefix extends null ? UnRulesConfig : DefaultPrefix
   > & {[configIndexProperty]?: number};
   private readonly context: UnConfigContext;
 
@@ -149,7 +157,7 @@ export class ConfigEntryBuilder<
     rulesPrefix: DefaultPrefix,
     options: UnFlatConfigEntryBase<
       ExtraPlugins,
-      DefaultPrefix extends null ? EslintTypedRulesConfig : DefaultPrefix
+      DefaultPrefix extends null ? UnRulesConfig : DefaultPrefix
     >,
     context: UnConfigContext,
   ) {
@@ -252,7 +260,8 @@ export class ConfigEntryBuilder<
              * This usually happens on unexpected for the rule file types when
              * `files` are not restricted. For example:
              * - [`no-irregular-whitespace`](https://eslint.org/docs/latest/rules/no-irregular-whitespace)
-             * crashes on `.css` files
+             * crashes on `.css` files or on `.json`, `.jsonc` and `.json5` files
+             * parsed by [`@eslint/json`](https://github.com/eslint/json)
              * - [`regexp/no-legacy-features`](https://ota-meshi.github.io/eslint-plugin-regexp/rules/no-legacy-features.html)
              * crashes on `.md` files (only if `language` option is specified
              * in the markdown config)
@@ -265,7 +274,11 @@ export class ConfigEntryBuilder<
              * or a parser for YAML files, embedded code blocks might get linted by
              * other rules and produce weird errors. For example,
              * [`no-labels`](https://eslint.org/docs/latest/rules/no-labels)
-             * gets triggered on YAML maps (`a: b`).
+             * gets triggered on YAML maps (`a: b`)
+             * - On top of all of that, ESLint 10 refuses to lint a file at all if any enabled rule
+             * declares a [`meta.languages`](https://github.com/eslint/eslint/issues/20999)
+             * not matching the language the file is parsed with, which, for example, every
+             * `eslint-plugin-unicorn` rule does.
              *
              * That's why globs corresponding to such files are implicitly/internally added
              * to the final `ignores` array.
@@ -339,10 +352,12 @@ export class ConfigEntryBuilder<
       internalOptions.ignoresInternal === false ||
       (internalOptions.ignoresInternal !== true &&
         (internalOptions.ignoresInternal?.[fileType] === false ||
-          (internalOptions.language &&
-            PLUGIN_LANGUAGES_TO_NOT_IGNORED_FILES[internalOptions.language[0]]?.[
-              internalOptions.language[1]
-            ] === fileType)))
+          (internalOptions.language != null &&
+            arrayify(
+              PLUGIN_LANGUAGES_TO_NOT_IGNORED_FILES[internalOptions.language[0]]?.[
+                internalOptions.language[1]
+              ],
+            ).includes(fileType))))
         ? []
         : globs,
     );

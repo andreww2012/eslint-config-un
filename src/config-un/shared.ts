@@ -578,6 +578,13 @@ export interface EslintConfigUnInternalOptions {
    * keeping generated configs stable in tests. Does not prevent `disabled` mode from acting.
    */
   skipTypeInfoSplit?: boolean;
+
+  /**
+   * Keeps `meta.languages` on the registered plugins' rules, which is otherwise removed
+   * (see `removeRuleLanguagesFromPlugin`). Only meant for tooling that needs to read the
+   * property, such as the rule categories generation in the typegen script.
+   */
+  keepRuleMetaLanguages?: boolean;
 }
 
 export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPluginsType> {

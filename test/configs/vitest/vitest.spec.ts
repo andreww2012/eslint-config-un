@@ -120,7 +120,7 @@ describe('un options', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('vitest')?.ignores).toMatchInlineSnapshot(
-        '["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.y?(a)ml", "**/fixtures/**"]',
+        '["**/*.css", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.y?(a)ml", "**/fixtures/**"]',
       );
     });
   });

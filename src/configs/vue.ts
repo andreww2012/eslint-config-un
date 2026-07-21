@@ -10,7 +10,7 @@ import {
   type RuleSeverity,
   WARNING,
 } from '../constants';
-import type {EslintTypedRulesConfig} from '../eslint/eslint-types';
+import type {UnRulesConfig} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {OmitStrict} from '../types';
 import {type MaybeArray, allUnionMembers, getKeysOfTruthyValues, joinPaths} from '../utils';
@@ -1271,4 +1271,4 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     ],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'vue', {vanillaFinalFlatConfigRules: Partial<EslintTypedRulesConfig>}>;
+}) satisfies UnConfigFn<'vue', {vanillaFinalFlatConfigRules: Partial<UnRulesConfig>}>;

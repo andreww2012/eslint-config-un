@@ -1,5 +1,18 @@
-import {ERROR, OFF, WARNING} from '../constants';
-import type {Prettify} from '../types';
+import {arrayIncludes, objectKeysUnsafe} from '@andreww2012/unutils';
+import {
+  ERROR,
+  GLOB_CSS,
+  GLOB_HTM_HTML,
+  GLOB_JSON,
+  GLOB_JSON5,
+  GLOB_JSONC,
+  GLOB_MARKDOWN,
+  GLOB_MDX,
+  OFF,
+  WARNING,
+} from '../constants';
+import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
+import type {OmitStrict, Prettify} from '../types';
 import {arrayPartition} from '../utils';
 import {
   type ArrayOrBooleanRecord,
@@ -7,8 +20,24 @@ import {
   type GetRuleOptions,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
+  type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
+
+const RULE_CATEGORIES_PER_LANGUAGE = RULE_CATEGORIES_PER_PLUGIN.unicorn;
+
+type LanguageSubConfig<
+  ExtraPlugins extends ExtraPluginsType,
+  LanguageCategory extends keyof typeof RULE_CATEGORIES_PER_LANGUAGE,
+> =
+  | boolean
+  | UnFlatConfigEntryBase<
+      ExtraPlugins,
+      Pick<
+        UnRulesConfigPartial<'unicorn'>,
+        `unicorn/${(typeof RULE_CATEGORIES_PER_LANGUAGE)[LanguageCategory][number]}`
+      >
+    >;
 
 type ConsistentCompoundWordsOptions = GetRuleOptions<
   'unicorn',
@@ -20,7 +49,72 @@ type NumberPropertiesStyle = 'global' | 'namespace';
 
 export interface UnicornEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins, 'unicorn'> {
+> extends UnFlatConfigEntryBase<
+  ExtraPlugins,
+  OmitStrict<
+    UnRulesConfigPartial<'unicorn'>,
+    `unicorn/${(typeof RULE_CATEGORIES_PER_LANGUAGE.anyLanguage)[number]}`
+  >
+> {
+  /**
+   * A handful of rules are not limited to JavaScript and declare that they also understand
+   * *any* file type. This Sub-config applies them everywhere, and is not restricted to any
+   * file type as a result.
+   *
+   * Affected rules:
+   * - [`unicorn/comment-content`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/comment-content.md)
+   * - [`unicorn/filename-case`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/filename-case.md)
+   * - [`unicorn/no-abusive-eslint-disable`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-abusive-eslint-disable.md)
+   * - [`unicorn/prefer-https`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-https.md)
+   * @default true
+   */
+  configAnyLanguage?: LanguageSubConfig<ExtraPlugins, 'anyLanguage'>;
+
+  /**
+   * Applies the rules declaring support for CSS to CSS files.
+   *
+   * ⚠️ Enabled by default only if the `css` Config is enabled, because something must teach
+   * ESLint how to parse these files. Force-enabling it otherwise will make ESLint fail to
+   * parse every CSS file.
+   *
+   * 📁 Default `files`: <code>**&#47;*.css</code>
+   * @default true // if `css` config is enabled
+   */
+  configCss?: LanguageSubConfig<ExtraPlugins, 'css'>;
+
+  /**
+   * Applies the rules declaring support for HTML to HTML files.
+   *
+   * ⚠️ Enabled by default only if the `html` Config is enabled — see the warning
+   * in `configCss`.
+   *
+   * 📁 Default `files`: <code>**&#47;*.htm(l)</code>
+   * @default true // if `html` config is enabled
+   */
+  configHtml?: LanguageSubConfig<ExtraPlugins, 'html'>;
+
+  /**
+   * Applies the rules declaring support for JSON to JSON files.
+   *
+   * ⚠️ Enabled by default only if the `json` or the `jsonc` Config is enabled — see the
+   * warning in `configCss`.
+   *
+   * 📁 Default `files`: <code>**&#47;*.json</code>, <code>**&#47;*.jsonc</code>, <code>**&#47;*.json5</code>
+   * @default true // if `json` or `jsonc` config is enabled
+   */
+  configJson?: LanguageSubConfig<ExtraPlugins, 'json'>;
+
+  /**
+   * Applies the rules declaring support for Markdown to Markdown files.
+   *
+   * ⚠️ Enabled by default only if the `markdown`, `markdownLinks` or `markdownPreferences`
+   * Config is enabled — see the warning in `configCss`.
+   *
+   * 📁 Default `files`: <code>**&#47;*.md</code>, <code>**&#47;*.mdx</code>
+   * @default true // if any of the following configs are enabled: `markdown`, `markdownLinks`, `markdownPreferences`
+   */
+  configMarkdown?: LanguageSubConfig<ExtraPlugins, 'markdown'>;
+
   /**
    * Current and extended class references in class static methods can be either
    * accessed with `this` and `super` respectively, or using direct class references.
@@ -277,7 +371,17 @@ const DEFAULT_CALLABLE_OR_CONSTRUCTABLE_PREFIXES = {
 const DEFAULT_NUMBER_PROPERTIES: UnicornEslintConfigOptions['numberProperties'] = 'namespace';
 
 export default ((context, optionsRaw) => {
+  const {configsMeta} = context;
+
   const optionsResolved = assignDefaults(optionsRaw, {
+    configAnyLanguage: true,
+    configCss: configsMeta.css.enabled,
+    configHtml: configsMeta.html.enabled,
+    configJson: configsMeta.json.enabled || configsMeta.jsonc.enabled,
+    configMarkdown:
+      configsMeta.markdown.enabled ||
+      configsMeta.markdownLinks.enabled ||
+      configsMeta.markdownPreferences.enabled,
     classReferenceInStaticMethodsStyle: 'thisAndSuper',
     compoundWordsSuggestedReplacements: true,
     domDataAttributesStyle: 'dataset',
@@ -292,6 +396,11 @@ export default ((context, optionsRaw) => {
   });
 
   const {
+    configAnyLanguage,
+    configCss,
+    configHtml,
+    configJson,
+    configMarkdown,
     classReferenceInStaticMethodsStyle,
     compoundWordsSuggestedReplacements,
     domDataAttributesStyle,
@@ -336,6 +445,12 @@ export default ((context, optionsRaw) => {
           .map(([prefix]) => prefix)
     : null;
 
+  const textEncodingSeverity = enforceTextEncodingCaseAndNotation ? ERROR : OFF;
+  const textEncodingOptions: GetRuleOptions<'unicorn', 'text-encoding-identifier-case', 'all'> =
+    enforceTextEncodingCaseAndNotation
+      ? [{withDash: enforceTextEncodingCaseAndNotation === 'dash'}]
+      : [];
+
   const configBuilder = context.createConfigBuilder(optionsResolved, 'unicorn');
 
   // Legend:
@@ -368,7 +483,6 @@ export default ((context, optionsRaw) => {
           ]
         : [],
     ) /** @since 66.0.0 */ // 🟣
-    .addRule('comment-content', OFF) /** @since 66.0.0 */ // 🔴
     .addRule('consistent-assert', WARNING) /** @since 57.0.0 */ // 🟣
     .addRule(
       'consistent-boolean-name',
@@ -432,7 +546,6 @@ export default ((context, optionsRaw) => {
       explicitTimersDelay === false ? OFF : ERROR,
       explicitTimersDelay === false ? [] : [explicitTimersDelay === 'never' ? 'never' : 'always'],
     ) /** @since 66.0.0 */
-    .addRule('filename-case', OFF) /** @since 0.3.0 */ // 🟣
     .addRule('id-match', OFF) /** @since 66.0.0 */ // 🔴
     .addRule('import-style', ERROR) /** @since 22.0.0 */
     .addRule('isolated-functions', OFF) /** @since 63.0.0 */
@@ -445,7 +558,6 @@ export default ((context, optionsRaw) => {
     // TODO consider enable and/or make configurable in future
     .addRule('name-replacements', OFF) /** @since 8.0.0 */ // 🟣
     .addRule('new-for-builtins', ERROR) /** @since 3.0.0 */
-    .addRule('no-abusive-eslint-disable', ERROR) /** @since 0.5.0 */
     .addRule('no-accessor-recursion', ERROR) /** @since 57.0.0 */
     .addRule('no-accidental-bitwise-operator', ERROR) /** @since 68.0.0 */
     .addRule('no-anonymous-default-export', OFF) /** @since 52.0.0 */ // Note: there's the same rule in import plugin
@@ -499,7 +611,6 @@ export default ((context, optionsRaw) => {
     .addRule('no-invalid-argument-count', ERROR) /** @since 67.0.0 */
     .addRule('no-invalid-character-comparison', ERROR) /** @since 68.0.0 */ // 💭?
     .addRule('no-invalid-fetch-options', ERROR) /** @since 53.0.0 */
-    // Note: also works on html
     .addRule('no-invalid-file-input-accept', ERROR) /** @since 65.0.0 */
     .addRule('no-invalid-remove-event-listener', ERROR) /** @since 36.0.0 */
     .addRule('no-invalid-well-known-symbol-methods', ERROR) /** @since 69.0.0 */ // 💭?
@@ -657,7 +768,6 @@ export default ((context, optionsRaw) => {
     // TODO should consider enabling by default when `Iterator#toArray` becomes Baseline widely available: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/isError
     .addRule('prefer-error-is-error', OFF) /** @since 69.0.0 */ // 🔴
     .addRule('prefer-event-target', ERROR) /** @since 43.0.0 */
-    .addRule('prefer-explicit-viewport-units', OFF) /** @since 72.0.0 */ // 🔴
     .addRule('prefer-export-from', ERROR) /** @since 38.0.0 */ // 🟣
     .addRule('prefer-flat-math-min-max', ERROR) /** @since 68.0.0 */
     .addRule('prefer-get-or-insert-computed', ERROR) /** @since 65.0.0 */ // 🟣
@@ -671,7 +781,6 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-group-by', OFF) /** @since 70.0.0 */ // 💭?
     .addRule('prefer-has-check', ERROR) /** @since 67.0.0 */ // 💭?
     .addRule('prefer-hoisting-branch-code', ERROR) /** @since 68.0.0 */ // 🟣
-    .addRule('prefer-https', OFF) /** @since 65.0.0 */ // 🟣
     .addRule('prefer-identifier-import-export-specifiers', ERROR) /** @since 66.0.0 */
     .addRule('prefer-import-meta-properties', OFF) /** @since 59.0.0 */ // 🔴 used in `node` config
     .addRule('prefer-includes', ERROR) /** @since 8.0.0 */ // 💭?
@@ -828,18 +937,153 @@ export default ((context, optionsRaw) => {
     .addRule('template-indent', ERROR) /** @since 37.0.0 */ // 🟣🟠
     .addRule(
       'text-encoding-identifier-case',
-      enforceTextEncodingCaseAndNotation ? ERROR : OFF,
-      enforceTextEncodingCaseAndNotation
-        ? [{withDash: enforceTextEncodingCaseAndNotation === 'dash'}]
-        : [],
+      textEncodingSeverity,
+      textEncodingOptions,
     ) /** @since 41.0.0 */
     .addRule('throw-new-error', ERROR) /** @since 0.1.0 */
     .addRule('try-complexity', OFF) /** @since 65.0.0 */ // 🔴
-    .enableConfigTesterForPlugin('unicorn')
+    .enableConfigTesterForPlugin('unicorn', {
+      /* v8 ignore start */
+      rulesToSkipInConfig: (ruleName) =>
+        objectKeysUnsafe(RULE_CATEGORIES_PER_LANGUAGE).some(
+          (languageId) =>
+            languageId !== 'js' &&
+            arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE[languageId], ruleName),
+        ),
+      /* v8 ignore stop */
+    })
+    .addOverrides();
+
+  const configBuilderAnyLanguage = context.createConfigBuilder(configAnyLanguage, 'unicorn');
+  configBuilderAnyLanguage
+    ?.addConfig([
+      'unicorn/any-language',
+      {
+        includeDefaultFilesAndIgnores: true,
+        ignoresInternal: false,
+      },
+    ])
+    .addRule('comment-content', OFF) /** @since 66.0.0 */ // 🔴
+    .addRule('filename-case', OFF) /** @since 0.3.0 */ // 🟣
+    .addRule('no-abusive-eslint-disable', ERROR) /** @since 0.5.0 */
+    .addRule('prefer-https', OFF) /** @since 65.0.0 */ // 🟣
+    .enableConfigTesterForPlugin('unicorn', {
+      /* v8 ignore start */
+      rulesToSkipInConfig: (ruleName) =>
+        !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.anyLanguage, ruleName),
+      /* v8 ignore stop */
+    })
+    .addOverrides();
+
+  const configBuilderCss = context.createConfigBuilder(configCss, 'unicorn');
+  configBuilderCss
+    ?.addConfig([
+      'unicorn/css',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: [GLOB_CSS],
+        ignoresInternal: {css: false},
+        // `no-transition-all` optionally uses type information; letting it be split off into a
+        // `**/*.ts` config would defeat the whole point of this Sub-config
+        skipTypeInfoSplit: true,
+      },
+    ])
+    .addRule('expiring-todo-comments', ERROR)
+    .addRule('no-empty-file', ERROR)
+    .addRule('no-missing-local-resource', OFF)
+    .addRule('no-shorthand-property-overrides', ERROR)
+    .addRule('no-transition-all', ERROR)
+    .addRule('prefer-explicit-viewport-units', OFF) /** @since 72.0.0 */ // 🔴
+    .addRule(
+      'text-encoding-identifier-case',
+      textEncodingSeverity,
+      textEncodingOptions,
+    ) /** @since 41.0.0 */
+    .enableConfigTesterForPlugin('unicorn', {
+      /* v8 ignore next */
+      rulesToSkipInConfig: (ruleName) => !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.css, ruleName),
+    })
+    .addOverrides();
+
+  const configBuilderHtml = context.createConfigBuilder(configHtml, 'unicorn');
+  configBuilderHtml
+    ?.addConfig([
+      'unicorn/html',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: [GLOB_HTM_HTML],
+        ignoresInternal: {html: false},
+      },
+    ])
+    .addRule('expiring-todo-comments', ERROR)
+    .addRule('no-empty-file', ERROR)
+    .addRule('no-invalid-file-input-accept', ERROR)
+    .addRule('no-missing-local-resource', OFF)
+    .addRule(
+      'text-encoding-identifier-case',
+      textEncodingSeverity,
+      textEncodingOptions,
+    ) /** @since 41.0.0 */
+    .enableConfigTesterForPlugin('unicorn', {
+      /* v8 ignore start */
+      rulesToSkipInConfig: (ruleName) =>
+        !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.html, ruleName),
+      /* v8 ignore stop */
+    })
+    .addOverrides();
+
+  const configBuilderJson = context.createConfigBuilder(configJson, 'unicorn');
+  configBuilderJson
+    ?.addConfig([
+      'unicorn/json',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: [GLOB_JSON, GLOB_JSONC, GLOB_JSON5],
+        ignoresInternal: {json: false, jsonc: false, json5: false},
+      },
+    ])
+    .addRule('expiring-todo-comments', ERROR)
+    .addRule('no-empty-file', ERROR)
+    .addRule('no-manually-wrapped-comments', OFF)
+    .enableConfigTesterForPlugin('unicorn', {
+      /* v8 ignore start */
+      rulesToSkipInConfig: (ruleName) =>
+        !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.json, ruleName),
+      /* v8 ignore stop */
+    })
+    .addOverrides();
+
+  const configBuilderMarkdown = context.createConfigBuilder(configMarkdown, 'unicorn');
+  configBuilderMarkdown
+    ?.addConfig([
+      'unicorn/markdown',
+      {
+        includeDefaultFilesAndIgnores: true,
+        filesDefault: [GLOB_MARKDOWN, GLOB_MDX],
+        ignoresInternal: {md: false, mdx: false},
+      },
+    ])
+    .addRule('expiring-todo-comments', ERROR)
+    .addRule('no-empty-file', ERROR)
+    .addRule('no-missing-local-resource', OFF)
+    .addRule('require-frontmatter-fields', ERROR)
+    .enableConfigTesterForPlugin('unicorn', {
+      /* v8 ignore start */
+      rulesToSkipInConfig: (ruleName) =>
+        !arrayIncludes(RULE_CATEGORIES_PER_LANGUAGE.markdown, ruleName),
+      /* v8 ignore stop */
+    })
     .addOverrides();
 
   return {
-    configs: [configBuilder],
+    configs: [
+      configBuilder,
+      configBuilderAnyLanguage,
+      configBuilderCss,
+      configBuilderHtml,
+      configBuilderJson,
+      configBuilderMarkdown,
+    ],
     optionsResolved,
   };
 }) satisfies UnConfigFn<'unicorn'>;

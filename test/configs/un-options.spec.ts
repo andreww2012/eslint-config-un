@@ -120,7 +120,7 @@ describe('option: `overrides` and `overridesAny`', () => {
       expect(
         configResult.getConfigByUnPostfix('vitest/@rule/vitest/no-focused-tests'),
       ).toMatchInlineSnapshot(
-        '{"files": [["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.test.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.{bench,benchmark}.?([cm])[jt]s?(x)", "**/*.test.ts"]], "ignores": ["**/*.css", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.y?(a)ml"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}',
+        '{"files": [["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.test.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.test.ts"], ["**/*.{bench,benchmark}.?([cm])[jt]s?(x)", "**/*.test.ts"]], "ignores": ["**/*.css", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.y?(a)ml"], "name": "eslint-config-un/vitest/@rule/vitest/no-focused-tests", "rules": {"vitest/no-focused-tests": [2, {"fixable": true}]}}',
       );
     });
 

@@ -17,7 +17,6 @@ type RuleSubConfig<
   | boolean
   | (UnFlatConfigEntryBase<
       ExtraPlugins,
-      // @ts-expect-error typescript is bad
       Pick<UnRulesConfigPartial<'perfectionist'>, `perfectionist/${T}`>
     > & {
       options?: GetRuleOptions<'perfectionist', T>;

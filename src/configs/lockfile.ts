@@ -173,6 +173,7 @@ export default ((context, optionsRaw) => {
           lockfiles.map((lockfile) => `**/${lockfile}`),
         ) satisfies string[],
         ignoresInternal: {
+          json: false,
           yaml: false,
         },
       },

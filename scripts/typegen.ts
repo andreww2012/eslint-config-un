@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
-import {capitalize} from '@andreww2012/unutils';
+import {type ObjectValues, capitalize, isKeyIn, objectValuesUnsafe} from '@andreww2012/unutils';
 import * as diff from 'diff';
 import {pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
@@ -10,14 +10,75 @@ import prettierConfig from '../.prettierrc.json' with {type: 'json'};
 import {eslintConfigInternal} from '../src/config-un/config';
 import {DISABLE_AUTOFIX} from '../src/constants';
 import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
+import type {EslintRuleMetaWithLanguages} from '../src/eslint/eslint-types';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {addMissingRuleOptionsSchemas} from './src/set-missing-rule-options-schemas';
 
 const __dirname = import.meta.dirname;
 
+interface RuleCategorization<CategoryId extends string> {
+  /**
+   * Categories to emit, in output order. A rule may belong to several of them
+   */
+  categories: readonly CategoryId[];
+
+  /**
+   * Categorizes a single rule into zero or more categories.
+   *
+   * Whatever stands in the way of categorizing a rule must be described in `errors` instead of
+   * being ignored: the generation then fails, listing them, rather than silently emitting an
+   * incomplete list. Each message is shown after the rule name, so it should read as a reason.
+   */
+  categorizeRule: (rule: {meta?: EslintRuleMetaWithLanguages}) => {
+    categories: CategoryId[];
+    errors: string[];
+  };
+}
+
+const UNICORN_LANGUAGES_TO_CATEGORIES = {
+  '*': 'anyLanguage',
+  'js/js': 'js',
+  'css/css': 'css',
+  'html/html': 'html',
+  'json/json': 'json',
+  'json/jsonc': 'json',
+  'json/json5': 'json',
+  'markdown/commonmark': 'markdown',
+  'markdown/gfm': 'markdown',
+} as const;
+
+const RULE_CATEGORIZATIONS: Record<string, RuleCategorization<string>> = {
+  unicorn: {
+    categories: objectValuesUnsafe(UNICORN_LANGUAGES_TO_CATEGORIES),
+    categorizeRule: (rule) => {
+      const {languages} = rule.meta || {};
+      if (!Array.isArray(languages)) {
+        return {categories: [], errors: ['does not declare `meta.languages`']};
+      }
+
+      const errors: string[] = [];
+      const categories = [
+        ...new Set(
+          languages
+            .map((language) => {
+              if (isKeyIn(language, UNICORN_LANGUAGES_TO_CATEGORIES)) {
+                return UNICORN_LANGUAGES_TO_CATEGORIES[language];
+              }
+              errors.push(`unknown language \`${language}\``);
+              return null;
+            })
+            .filter((v) => v != null),
+        ),
+      ];
+
+      return {categories, errors};
+    },
+  } satisfies RuleCategorization<ObjectValues<typeof UNICORN_LANGUAGES_TO_CATEGORIES>>,
+};
+
 await fs.mkdir(resolveInOutDir(), {recursive: true});
 
-const {allRuleTypesCode, perPluginCode, fixableRulesOnlyCode, allRulesCode} =
+const {allRuleTypesCode, perPluginCode, fixableRulesOnlyCode, allRulesCode, ruleCategoriesCode} =
   await generateRuleTypes();
 
 await printDiffBetweenMostRecentAndCurrentRuleTypes(allRuleTypesCode);
@@ -59,6 +120,11 @@ await Promise.all([
       fs.writeFile(path.join(__dirname, '../src/eslint-types-fixable-only.gen.ts'), formattedCode),
     ),
   fs.writeFile(path.join(__dirname, '../src/eslint-rules.gen.ts'), allRulesCode),
+  prettier
+    .format(ruleCategoriesCode, {parser: 'typescript', ...prettierConfig})
+    .then((formattedCode) =>
+      fs.writeFile(path.join(__dirname, '../src/eslint-rule-categories.gen.ts'), formattedCode),
+    ),
   fs.writeFile(
     resolveInOutDir(`eslint-types.${new Date().toISOString().replaceAll(':', '')}.d.ts`),
     allRuleTypesCode,
@@ -73,7 +139,7 @@ async function generateRuleTypes() {
   ] = await Promise.all([
     eslintConfigInternal(
       {loadPluginsOnDemand: false, autofixDisabledGloballyFor: false},
-      {disableWarnings: true},
+      {disableWarnings: true, keepRuleMetaLanguages: true},
     ),
     generateAngularPluginsWithOldRules(),
     addMissingRuleOptionsSchemas(),
@@ -211,11 +277,66 @@ ${perPluginCodeRaw
 } as const;
 `;
 
+  const categorizationErrors: string[] = [];
+  const categorizedRulesPerPlugin = Object.entries(RULE_CATEGORIZATIONS).map(
+    ([pluginName, {categories: categoriesDeclared, categorizeRule}]) => {
+      const plugin = allPlugins[pluginName];
+      if (!plugin) {
+        throw new Error(`Cannot categorize the rules of the not loaded \`${pluginName}\` plugin`);
+      }
+
+      const rulesPerCategory = new Map(
+        categoriesDeclared.map((category): [typeof category, string[]] => [category, []]),
+      );
+
+      Object.entries(plugin.rules || {})
+        // eslint-disable-next-line unicorn/no-array-sort
+        .sort(([ruleNameA], [ruleNameB]) => ruleNameA.localeCompare(ruleNameB))
+        .filter(([, {meta}]) => !meta?.deprecated)
+        .forEach(([ruleName, rule]) => {
+          const {categories: categoriesFound, errors} = categorizeRule(rule);
+          if (errors.length > 0) {
+            categorizationErrors.push(
+              `  ${styleText('yellow', `${pluginName}/${ruleName}`)}: ${errors.join(', ')}`,
+            );
+          }
+          categoriesFound.forEach((category) => {
+            rulesPerCategory.get(category)?.push(ruleName);
+          });
+        });
+
+      return {pluginName, rulesPerCategory};
+    },
+  );
+
+  if (categorizationErrors.length > 0) {
+    throw new Error(
+      `The following rules could not be sorted into a category. Update the corresponding categorization in \`scripts/typegen.ts\`, creating a new category (and, most likely, a new Sub-config) if needed:\n${categorizationErrors.join('\n')}`,
+    );
+  }
+
+  const ruleCategoriesCodeRaw = `export const RULE_CATEGORIES_PER_PLUGIN = {
+${categorizedRulesPerPlugin
+  .map(
+    ({pluginName, rulesPerCategory}) =>
+      `  '${pluginName}': {
+${Array.from(
+  rulesPerCategory,
+  ([category, ruleNames]) =>
+    `    ${category}: /* ${ruleNames.length} rule${ruleNames.length === 1 ? '' : 's'} */ [\n${ruleNames.map((ruleName) => `      '${ruleName}',`).join('\n')}\n    ],`,
+).join('\n')}
+  },`,
+  )
+  .join('\n')}
+} as const;
+`;
+
   return {
     allRuleTypesCode: allRuleTypesCodeRaw,
     perPluginCode,
     fixableRulesOnlyCode,
     allRulesCode,
+    ruleCategoriesCode: ruleCategoriesCodeRaw,
   };
 }
 

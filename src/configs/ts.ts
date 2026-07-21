@@ -10,9 +10,9 @@ import {
   WARNING,
 } from '../constants';
 import type {
-  EslintTypedRulesConfig,
   GetRuleNamesInPlugin,
   UnFlatConfigEntryFilesAndIgnores,
+  UnRulesConfig,
 } from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Nullable, ObjectValues, OmitStrict, Prettify} from '../types';
@@ -1391,7 +1391,7 @@ export default ((
 type TsConfig = UnConfigFn<
   'ts',
   {
-    vanillaFinalFlatConfigRules: Partial<EslintTypedRulesConfig>;
+    vanillaFinalFlatConfigRules: Partial<UnRulesConfig>;
     astroResolvedOptions: AstroEslintConfigOptions | null;
     vueResolvedOptions: VueEslintConfigOptions | null;
     svelteResolvedOptions: SvelteEslintConfigOptions | null;

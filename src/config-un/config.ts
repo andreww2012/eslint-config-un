@@ -17,9 +17,9 @@ import {
 } from '../constants';
 import type {
   EslintFlatConfigEntry,
-  EslintTypedRulesConfig,
   UnAllRuleNames,
   UnFlatConfigEntryBase,
+  UnRulesConfig,
 } from '../eslint/eslint-types';
 import {genFlatConfigEntryName, isUnFlatConfigEntry} from '../eslint/eslint-utils';
 import {
@@ -78,10 +78,7 @@ export function createConfigBuilder<
 >(
   this: UnConfigContext<ExtraPlugins>,
   options: NoInfer<
-    | UnFlatConfigEntryBase<
-        ExtraPlugins,
-        P extends null ? OmitIndexSignature<EslintTypedRulesConfig> : P
-      >
+    | UnFlatConfigEntryBase<ExtraPlugins, P extends null ? OmitIndexSignature<UnRulesConfig> : P>
     | boolean
   >,
   rulesPrefix: P,

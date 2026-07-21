@@ -1505,6 +1505,8 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    *
    * 🧩 Main plugin: [`eslint-plugin-unicorn`](https://npmx.dev/eslint-plugin-unicorn)
    * ([docs](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/readme.md))
+   *
+   * ⚙️ Sub config(s): `anyLanguage`, `css`, `html`, `json`, `markdown`
    * @default true
    */
   unicorn: UnicornEslintConfigOptions<ExtraPlugins>;

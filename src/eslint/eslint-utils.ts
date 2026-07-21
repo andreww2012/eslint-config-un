@@ -8,6 +8,7 @@ import type {
   EslintFlatConfigEntry,
   EslintPlugin,
   EslintRuleEntry,
+  EslintRuleMetaWithLanguages,
   EslintSeverity,
 } from './eslint-types';
 
@@ -128,6 +129,32 @@ const FLAT_CONFIG_UN_NAME_PREFIX = 'eslint-config-un/';
 export const genFlatConfigEntryName = (name: string) => `${FLAT_CONFIG_UN_NAME_PREFIX}${name}`;
 export const isUnFlatConfigEntry = (flatConfigEntry: EslintFlatConfigEntry) =>
   (flatConfigEntry.name || '').startsWith(FLAT_CONFIG_UN_NAME_PREFIX);
+
+export const removeRuleLanguagesFromPlugin = <Plugin extends EslintPlugin>(
+  plugin: Plugin,
+): Plugin => {
+  const rulesWithLanguages = Object.entries(plugin.rules || {}).filter(
+    ([, {meta}]) => meta != null && 'languages' in meta,
+  );
+
+  if (rulesWithLanguages.length === 0) {
+    return plugin;
+  }
+
+  return {
+    ...plugin,
+    rules: {
+      ...plugin.rules,
+      ...Object.fromEntries(
+        rulesWithLanguages.map(([ruleName, rule]) => {
+          const meta: EslintRuleMetaWithLanguages = {...rule.meta};
+          delete meta.languages;
+          return [ruleName, {...rule, meta}];
+        }),
+      ),
+    },
+  };
+};
 
 export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
   pluginNamespace: string,
