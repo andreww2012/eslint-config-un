@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-un",
-  "version": "1.0.0-beta.14",
+  "version": "1.0.0-beta.15",
   "description": "A universal-ish ESLint config aiming to be reasonably strict and easily configurable.",
   "keywords": [
     "eslint",
@@ -34,7 +34,9 @@
   },
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "contrib:add": "all-contributors add",
     "contrib:gen": "all-contributors generate",
