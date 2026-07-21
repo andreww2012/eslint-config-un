@@ -34,10 +34,7 @@
   },
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
-  "files": [
-    "dist",
-    "deps"
-  ],
+  "files": ["dist"],
   "scripts": {
     "contrib:add": "all-contributors add",
     "contrib:gen": "all-contributors generate",
