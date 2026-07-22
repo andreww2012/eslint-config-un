@@ -187,7 +187,7 @@ export default (async (context, optionsRaw) => {
     .addRule('no-amd', OFF) /** @since 0.13.0 */
     .addRule('no-anonymous-default-export', OFF) /** @since 2.3.0 */
     .addRule('no-commonjs', OFF) /** @since 0.13.0 */
-    .addRule('no-cycle', WARNING) /** @since 2.10.0 */
+    .addRule('no-cycle', OFF) /** @since 2.10.0 */
     .addRule('no-default-export', ERROR) /** @since 2.9.0 */
     // Disabled when `typescript` config is enabled because it has a similar rule which works better (for example, is not triggered on `rxjs` operators)
     .addRule('no-deprecated', isTypescriptEnabled ? OFF : WARNING) /** @since 1.0.0 */

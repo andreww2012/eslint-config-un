@@ -8,6 +8,9 @@ const config: KnipConfig = {
   ignoreDependencies: ['@eslint/core'],
   tags: ['-knipignore'],
   treatConfigHintsAsErrors: true,
+  cycles: {
+    allow: [['src/utils.ts', 'src/utils/assign-defaults.ts']],
+  },
 };
 
 export default config;

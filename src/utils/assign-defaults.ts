@@ -1,5 +1,4 @@
 import type {Prettify} from '../types';
-// eslint-disable-next-line import/no-cycle
 import {isObject} from '../utils';
 
 // `any` (not `unknown`) is intentional here: only `Record<PropertyKey, any>` is

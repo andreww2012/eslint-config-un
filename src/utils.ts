@@ -54,7 +54,6 @@ export const styleRuleName = generateStyleFn('green');
 export const isObject = (value: unknown): value is object =>
   typeof value === 'object' && value != null && !Array.isArray(value);
 
-// eslint-disable-next-line import/no-cycle
 export {assignDefaults} from './utils/assign-defaults';
 
 export const isNonEmptyArray = <T>(value?: T[] | null): value is [T, ...T[]] =>
