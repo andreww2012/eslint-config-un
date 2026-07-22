@@ -6,52 +6,15 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
-minimumReleaseAgeExclude:
-  # []
-  - eslint-plugin-vue@10.10.0
-  - '@tanstack/eslint-plugin-query@5.101.3'
-  - eslint-plugin-boundaries@7.1.0
-  - '@boundaries/elements@3.1.0'
-  - import-integrity-lint@1.2.0
-  - eslint-plugin-storybook@10.5.3
-  - storybook@10.5.3
-  - eslint-plugin-svelte@3.22.0
-  - eslint-plugin-jest@29.15.5
-  - '@tsrx/eslint-parser@0.3.104'
-  - '@tsrx/eslint-plugin@0.3.104'
-  - enhanced-resolve@5.24.3
-  - '@typescript-eslint/eslint-plugin@8.65.0'
-  - '@typescript-eslint/parser@8.65.0'
-  - '@typescript-eslint/project-service@8.65.0'
-  - '@typescript-eslint/scope-manager@8.65.0'
-  - '@typescript-eslint/tsconfig-utils@8.65.0'
-  - '@typescript-eslint/type-utils@8.65.0'
-  - '@typescript-eslint/types@8.65.0'
-  - '@typescript-eslint/typescript-estree@8.65.0'
-  - '@typescript-eslint/utils@8.65.0'
-  - '@typescript-eslint/visitor-keys@8.65.0'
-  - typescript-eslint@8.65.0
-  - '@eslint-react/ast@5.17.3'
-  - '@eslint-react/core@5.17.3'
-  - '@eslint-react/eslint-plugin@5.17.3'
-  - '@eslint-react/eslint@5.17.3'
-  - '@eslint-react/jsx@5.17.3'
-  - '@eslint-react/shared@5.17.3'
-  - '@eslint-react/var@5.17.3'
-  - eslint-plugin-react-debug@5.17.3
-  - eslint-plugin-react-dom@5.17.3
-  - eslint-plugin-react-jsx@5.17.3
-  - eslint-plugin-react-naming-convention@5.17.3
-  - eslint-plugin-react-rsc@5.17.3
-  - eslint-plugin-react-web-api@5.17.3
-  - eslint-plugin-react-x@5.17.3
+minimumReleaseAgeExclude: []
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
 trustPolicyExclude: []
 
-auditConfig:
-  ignoreGhsas:
+# eslint-disable-next-line json-schema-validator/no-invalid -- new property since pnpm@11.16.0
+audit:
+  ignore:
     # Sets vulnerable versions of `@tanstack/eslint-plugin-start` to >=0, but actually vulnerable versions are not installed
     - GHSA-8hwj-wqhq-3xw2
 
