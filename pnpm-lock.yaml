@@ -360,8 +360,8 @@ importers:
         specifier: 5.10.0
         version: 5.10.0(@typescript/typescript6@6.0.2)(eslint@9.39.2)(supports-color@7.2.0)
       eslint-plugin-pnpm:
-        specifier: 1.6.1
-        version: 1.6.1(eslint@9.39.2)
+        specifier: 1.7.0
+        version: 1.7.0(eslint@9.39.2)
       eslint-plugin-promise:
         specifier: 7.3.0
         version: 7.3.0(eslint@9.39.2)
@@ -7494,8 +7494,8 @@ packages:
     peerDependencies:
       eslint: '>=8.40.0'
 
-  eslint-plugin-pnpm@1.6.1:
-    resolution: {integrity: sha512-pgcaJclu3YxZ/WMsiKMF58bHQasbGVARSMqCJvFaETYxSc7KcR2H74UVWV6exuGv9nNv9c0KKqn4PVHQlzMSEg==}
+  eslint-plugin-pnpm@1.7.0:
+    resolution: {integrity: sha512-SZaPARN1+NMqAjQOlQjHu59SnN/o299N5Z4HTyhwWYnfkQkjdiydayHBegwXER3VecRF/Rf7eHw3sGcTF+uLOQ==}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
 
@@ -10227,8 +10227,8 @@ packages:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
     engines: {node: '>=4'}
 
-  pnpm-workspace-yaml@1.6.1:
-    resolution: {integrity: sha512-yTeZntGWi8m9WNuhoVsP0DpFc4sC1U0+rr/qR6Zi9n2g3sxXY+JfccjXjjruNz96tM8I09yaJUA86doRnNLkbg==}
+  pnpm-workspace-yaml@1.7.0:
+    resolution: {integrity: sha512-cgjaozHkjWL4H8oKZydEWE4mg31XydK3/1cLKjHvwnFAXutp45yAlMKljpOdZEq4TtLuzYAMvy9j05wRm3aoPw==}
 
   possible-typed-array-names@1.1.0:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
@@ -18975,13 +18975,13 @@ snapshots:
       eslint: 9.39.2(jiti@2.7.0)(supports-color@7.2.0)
       globals: 17.7.0
 
-  eslint-plugin-pnpm@1.6.1(eslint@9.39.2):
+  eslint-plugin-pnpm@1.7.0(eslint@9.39.2):
     dependencies:
       empathic: 2.0.1
       eslint: 9.39.2(jiti@2.7.0)(supports-color@7.2.0)
       jsonc-eslint-parser: 3.1.0
       pathe: 2.0.3
-      pnpm-workspace-yaml: 1.6.1
+      pnpm-workspace-yaml: 1.7.0
       tinyglobby: 0.2.17
       yaml: 2.9.0
       yaml-eslint-parser: 2.1.0
@@ -22527,7 +22527,7 @@ snapshots:
 
   pluralize@8.0.0: {}
 
-  pnpm-workspace-yaml@1.6.1:
+  pnpm-workspace-yaml@1.7.0:
     dependencies:
       yaml: 2.9.0
 

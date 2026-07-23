@@ -40,7 +40,10 @@ interface RuleCategorization<CategoryId extends string> {
    * being ignored: the generation then fails, listing them, rather than silently emitting an
    * incomplete list. Each message is shown after the rule name, so it should read as a reason.
    */
-  categorizeRule: (rule: {meta?: EslintRuleMetaWithLanguages}) => {
+  categorizeRule: (
+    rule: {meta?: EslintRuleMetaWithLanguages},
+    ruleName: string,
+  ) => {
     categories: CategoryId[];
     errors: string[];
   };
@@ -58,7 +61,27 @@ const UNICORN_LANGUAGES_TO_CATEGORIES = {
   'markdown/gfm': 'markdown',
 } as const;
 
+const PNPM_RULE_NAME_PREFIXES = ['json', 'yaml'] as const;
+
 const RULE_CATEGORIZATIONS: Record<string, RuleCategorization<string>> = {
+  pnpm: {
+    categories: PNPM_RULE_NAME_PREFIXES,
+    categorizeRule: (_rule, ruleName) => {
+      const prefix = PNPM_RULE_NAME_PREFIXES.find((candidate) =>
+        ruleName.startsWith(`${candidate}-`),
+      );
+
+      return prefix
+        ? {categories: [prefix], errors: []}
+        : {
+            categories: [],
+            errors: [
+              `does not start with any of the known file type prefixes: ${PNPM_RULE_NAME_PREFIXES.map((v) => `\`${v}-\``).join(', ')}`,
+            ],
+          };
+    },
+  } satisfies RuleCategorization<(typeof PNPM_RULE_NAME_PREFIXES)[number]>,
+
   unicorn: {
     categories: objectValuesUnsafe(UNICORN_LANGUAGES_TO_CATEGORIES),
     categorizeRule: (rule) => {
@@ -307,7 +330,7 @@ ${perPluginCodeRaw
         .sort(([ruleNameA], [ruleNameB]) => ruleNameA.localeCompare(ruleNameB))
         .filter(([, {meta}]) => !meta?.deprecated)
         .forEach(([ruleName, rule]) => {
-          const {categories: categoriesFound, errors} = categorizeRule(rule);
+          const {categories: categoriesFound, errors} = categorizeRule(rule, ruleName);
           if (errors.length > 0) {
             categorizationErrors.push(
               `  ${styleText('yellow', `${pluginName}/${ruleName}`)}: ${errors.join(', ')}`,
