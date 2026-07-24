@@ -28,40 +28,40 @@ describe('basic tests', async () => {
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    it('creates `markdown-links` eslint config by default', async () => {
-      await expectConfigState({}, 'markdown-links', true, 'default');
+    it('does not create `markdown-links` eslint config by default', async () => {
+      await expectConfigState({}, 'markdown-links', false, 'default');
     });
 
-    it('creates `markdown-links` eslint config and prints a warning if explicitly enabled', async () => {
+    it('creates `markdown-links` eslint config if explicitly enabled', async () => {
+      await expectConfigState('markdownLinks', 'markdown-links', true, 'default');
+    });
+
+    it('does not create `markdown-links` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState(
-        'markdownLinks',
+        {markdownLinks: false},
         'markdown-links',
-        ['markdownLinks', true],
+        ['markdownLinks', false],
         'default',
       );
-    });
-
-    it('does not create `markdown-links` eslint config if explicitly disabled', async () => {
-      await expectConfigState({markdownLinks: false}, 'markdown-links', false, 'default');
     });
   });
 
   describe('mode: misc configs are enabled', () => {
-    it('creates `markdown-links` eslint config', async () => {
-      await expectConfigState({}, 'markdown-links', true, 'misc-enabled');
+    it('does not create `markdown-links` eslint config (not in the misc group)', async () => {
+      await expectConfigState({}, 'markdown-links', false, 'misc-enabled');
     });
 
-    it('creates `markdown-links` eslint config and prints a warning if explicitly enabled', async () => {
+    it('creates `markdown-links` eslint config if explicitly enabled', async () => {
+      await expectConfigState('markdownLinks', 'markdown-links', true, 'misc-enabled');
+    });
+
+    it('does not create `markdown-links` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState(
-        'markdownLinks',
+        {markdownLinks: false},
         'markdown-links',
-        ['markdownLinks', true],
+        ['markdownLinks', false],
         'misc-enabled',
       );
-    });
-
-    it('does not create `markdown-links` eslint config if explicitly disabled', async () => {
-      await expectConfigState({markdownLinks: false}, 'markdown-links', false, 'misc-enabled');
     });
   });
 

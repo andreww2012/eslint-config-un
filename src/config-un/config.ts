@@ -414,7 +414,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     lit: {enabled: getIsConfigEnabled('lit', 'lit')},
     lockfile: {enabled: getIsConfigEnabled('lockfile', false)},
     markdown: {enabled: getIsConfigEnabled('markdown')},
-    markdownLinks: {enabled: getIsConfigEnabled('markdownLinks')},
+    markdownLinks: {enabled: getIsConfigEnabled('markdownLinks', false)},
     markdownPreferences: {enabled: getIsConfigEnabled('markdownPreferences')},
     math: {enabled: getIsConfigEnabled('math')},
     mdx: {enabled: getIsConfigEnabled('mdx')},

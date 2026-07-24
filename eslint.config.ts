@@ -17,7 +17,9 @@ export default eslintConfig({
   defaultConfigsStatus: 'misc-enabled',
   loadPluginsOnDemand: {
     alwaysLoad: [
-      'markdown-links', // Disabled in non-CI below, so need to load rules to avoid errors
+      // `markdownLinks` config is disabled by default, but SKILL.md and the
+      // CHANGELOG.md override below reference its rules, so load them anyway
+      'markdown-links',
     ],
   },
   linterOptionsReportUnusedDisableDirectives: {
@@ -67,7 +69,6 @@ export default eslintConfig({
         ],
       },
     },
-    markdownLinks: false,
     markdownPreferences: {
       ignores: ['LICENSE.md'],
       wordsToPreserveCasingOf: ['eslint-config-un', 'Description/Notes', 'Tailwind', 'JSDoc'],

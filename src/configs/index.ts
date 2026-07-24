@@ -851,13 +851,18 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   markdown: MarkdownEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * An ESLint plugin that provides rules for checking the validity of links and URLs in Markdown files.
+   * An ESLint plugin that provides rules for checking the validity of links and URLs
+   * in Markdown files.
+   *
+   * Since it's scoped only to Markdown files, the checker itself isn't perfect
+   * and it may significantly slow down linting, the config is disabled by default.
+   * We recommend that you use [`lychee` link checker](https://lychee.cli.rs) instead.
    *
    * 📁 Default `files`: <code>**&#47;*.md</code>
    *
    * 🧩 Main plugin: [`eslint-plugin-markdown-links`](https://npmx.dev/eslint-plugin-markdown-links)
    * ([docs](https://ota-meshi.github.io/eslint-plugin-markdown-links))
-   * @default true
+   * @default false
    */
   markdownLinks: MarkdownLinksEslintConfigOptions<ExtraPlugins>;
 
