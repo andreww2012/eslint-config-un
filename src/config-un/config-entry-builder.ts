@@ -223,7 +223,7 @@ export class ConfigEntryBuilder<
 
   /**
    * Note: `rules` will **always** be added to the resulting config, meaning that this method
-   * is not able to create a ["global ignores" config](https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores).
+   * is not able to create a ["global ignores" config](https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores).
    *
    * `rules` and `name` keys cannot be overridden.
    */
@@ -267,7 +267,7 @@ export class ConfigEntryBuilder<
              * in the markdown config)
              * - [`strict`](https://eslint.org/docs/latest/rules/strict)
              * crashes on `.html` files
-             * - [`sonarjs/assertions-in-tests`](https://sonarsource.github.io/rspec/#/rspec/S2699/javascript)
+             * - `sonarjs/assertions-in-tests`
              * or [`node/no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/node-builtins.md)
              * crash on `.toml` files
              * - `.yaml` files are excluded because when no config specifies the language
@@ -376,7 +376,7 @@ export class ConfigEntryBuilder<
 
     // We require the presence of `rules`:
     // - to avoid likely adding it anyway later on
-    // - to avoid (mostly likely accidental) "global ignores" configs (https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignoring-files-with-ignores)
+    // - to avoid (mostly likely accidental) "global ignores" configs (https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores)
     const configFinal: SetRequired<EslintFlatConfigEntry, 'rules' | 'name'> = {
       ...(files.length > 0 && {files}),
       ...(ignores.length > 0 && {ignores}),

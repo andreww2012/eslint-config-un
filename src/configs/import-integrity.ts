@@ -96,7 +96,7 @@ export interface ImportIntegrityEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'import-integrity'> {
   /**
    * [`import-integrity-lint`](https://npmx.dev/import-integrity-lint) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `import-integrity` property
    * and applied to the resolved `files` and `ignores` of this config.
    *

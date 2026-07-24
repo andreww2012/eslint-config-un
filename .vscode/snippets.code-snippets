@@ -29,7 +29,7 @@
       "export interface ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}EslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never> extends UnFlatConfigEntryBase<ExtraPlugins, '$TM_FILENAME_BASE'> {",
       "\t/**",
       "\t * [`eslint-plugin-$TM_FILENAME_BASE`](https://npmx.dev/eslint-plugin-$TM_FILENAME_BASE) plugin",
-      "\t * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)",
+      "\t * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)",
       "\t * that will be assigned to `${TM_FILENAME_BASE/(.*)/${1:/camelcase}/}` property",
       "\t * and applied to the resolved `files` and `ignores` of this config.",
       "\t */",

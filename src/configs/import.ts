@@ -20,7 +20,7 @@ export interface ImportEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'import'> {
   /**
    * [`eslint-plugin-import-x`](https://npmx.dev/eslint-plugin-import-x) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned directly to `settings` flat config option with keys transformed to
    * `import-x/<original property name in kebab case>`
    * and applied to the resolved `files` and `ignores` of this config.

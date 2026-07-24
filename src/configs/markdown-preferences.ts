@@ -91,7 +91,7 @@ export interface MarkdownPreferencesEslintConfigOptions<
   /**
    * Enable experimental support of some extended Markdown syntax:
    * - [Custom Containers](https://vitepress.dev/guide/markdown#custom-containers)
-   * - [Mathematical Expressions](https://docs.github.com/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)
+   * - [Mathematical Expressions](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)
    * - [Import Code Snippets](https://vitepress.dev/guide/markdown#import-code-snippets)
    *
    * ⚠️ If enabled, will set `language: 'markdown-preferences/extended-syntax'`

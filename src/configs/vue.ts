@@ -53,7 +53,7 @@ interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
 > {
   /**
    * [`@intlify/eslint-plugin-vue-i18n`](https://npmx.dev/@intlify/eslint-plugin-vue-i18n) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `vue-i18n` property
    * and applied to the resolved `files` and `ignores` of this config.
    */
@@ -120,7 +120,7 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
    * Configures rules specific to Nuxt config file.
    *
    * Currently includes the single rule,
-   * [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/index.ts),
+   * [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/nuxt-config-keys-order.ts),
    * and applies it to all `nuxt.config.?([cm])[jt]s?(x)` files.
    * @default true
    */
@@ -224,9 +224,9 @@ export interface VueEslintConfigOptions<
    * [`error.vue`](https://nuxt.com/docs/4.x/directory-structure/app/error) and
    * [layout files](https://nuxt.com/docs/4.x/directory-structure/app/layouts)
    * will be exempted from being checked by
-   * [`vue/allow-single-word-component-names`](https://eslint.vuejs.org/rules/allow-single-word-component-names.html);
+   * [`vue/multi-word-component-names`](https://eslint.vuejs.org/rules/multi-word-component-names.html);
    * - Layout files will also not be subject of
-   * [`vue/allow-implicit-slots`](https://eslint.vuejs.org/rules/allow-implicit-slots.html) check;
+   * [`vue/require-explicit-slots`](https://eslint.vuejs.org/rules/require-explicit-slots.html) check;
    * - [Plugins](https://nuxt.com/docs/4.x/directory-structure/app/plugins) and
    * [server](https://nuxt.com/docs/4.x/directory-structure/server) files will be allowed
    * to do `export default` ([`import/no-default-export`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-default-export.md) will be turned off);
@@ -235,7 +235,7 @@ export interface VueEslintConfigOptions<
    * will be applied to the specified `files` and `ignores`, defaulting to all files inside
    * `vueOrNuxtProjectDir` directory;
    * - Another sub-config, `configNuxtConfig`, will control whether
-   * [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/index.ts)
+   * [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/nuxt-config-keys-order.ts)
    * rule will be applied to Nuxt config file (`true` by default).
    * @default true <=> `nuxt` package is installed
    */
@@ -707,9 +707,9 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('define-macros-order', ERROR, [
       {
         order: [
-          'definePage', // unplugin-vue-router: https://uvr.esm.is/guide/extending-routes.html#definepage
-          'definePageMeta', // Nuxt 3: https://nuxt.com/docs/api/utils/define-page-meta
-          'defineRouteRules', // Nuxt 3: https://nuxt.com/docs/api/utils/define-route-rules
+          'definePage', // unplugin-vue-router: https://uvr.esm.is/guide/extending-routes#definepage
+          'definePageMeta', // Nuxt 3+: https://nuxt.com/docs/4.x/api/utils/define-page-meta
+          'defineRouteRules', // Nuxt 3+: https://nuxt.com/docs/4.x/api/utils/define-route-rules
 
           'defineOptions',
           'defineModel',

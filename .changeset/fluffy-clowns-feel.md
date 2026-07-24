@@ -2,4 +2,4 @@
 'eslint-config-un': patch
 ---
 
-zod: updated [`eslint-plugin-zod-x` from v1.12.0 to v1.13.0](https://github.com/marcalexiei/eslint-plugin-zod-x/compare/v1.12.0...v1.13.0)
+zod: updated [`eslint-plugin-zod-x` from v1.12.0 to v1.13.0](https://github.com/marcalexiei/eslint-zod/compare/v1.12.0...v1.13.0)

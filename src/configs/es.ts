@@ -292,7 +292,7 @@ export interface EsEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'es'> {
   /**
    * [`eslint-plugin-es-x`](https://npmx.dev/eslint-plugin-es-x) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `es-x` property
    * and applied to the resolved `files` and `ignores` of this config.
    */

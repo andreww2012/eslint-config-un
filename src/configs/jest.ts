@@ -53,7 +53,7 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-jest`](https://npmx.dev/eslint-plugin-jest) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `jest` property
    * and applied to the resolved `files` and `ignores` of this config,
    * as well as for `ts` and `jestExtended` sub-configs.

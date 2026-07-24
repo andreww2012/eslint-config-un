@@ -852,6 +852,9 @@ importers:
       lefthook:
         specifier: 2.1.10
         version: 2.1.10
+      lychee-config-nick2bad4u:
+        specifier: 2.0.0
+        version: 2.0.0
       npm-check-updates:
         specifier: 22.2.9
         version: 22.2.9(patch_hash=fb14f5eb0f369bebcd67c776435f11860e476ba257697afd4305f7d05c7109d5)
@@ -9314,6 +9317,10 @@ packages:
   lru-cache@7.18.3:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
+
+  lychee-config-nick2bad4u@2.0.0:
+    resolution: {integrity: sha512-FTB0GDa0qksBskm5MAbXimvDMhucxrS2g2m467XFqImyVhheCHBjdQLWnK7rSjd16JhuOlJtAHUE6kZGUeow4Q==}
+    engines: {node: ^22.22.3 || ^24.16.0 || >=26.3.0}
 
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
@@ -20988,6 +20995,8 @@ snapshots:
       yallist: 3.1.1
 
   lru-cache@7.18.3: {}
+
+  lychee-config-nick2bad4u@2.0.0: {}
 
   lz-string@1.5.0: {}
 

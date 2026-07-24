@@ -101,7 +101,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   extends UnFlatConfigEntryBase<ExtraPlugins, 'package-json'>, RequireFieldsOption {
   /**
    * [`eslint-plugin-package-json`](https://npmx.dev/eslint-plugin-package-json) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `packageJson` property
    * and applied to the resolved `files` and `ignores` of this config.
    */
@@ -110,14 +110,14 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   /**
    * The sorting order of package properties
    * @default 'sort-package-json'
-   * @see https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/order-properties.md
+   * @see https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/order-properties.md
    */
   order?: GetRuleOptions<'package-json', 'order-properties'>['order'];
 
   /**
    * Enforces that repository entries in a package.json use either object or shorthand notation to refer to GitHub repositories when possible.
    * @default 'object'
-   * @see https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/repository-shorthand.md
+   * @see https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/repository-shorthand.md
    */
   repositoryShorthand?: GetRuleOptions<'package-json', 'repository-shorthand'>['form'];
 
@@ -128,8 +128,8 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    *
    * The provided value will be **MERGED** with the default list.
    * @default {devDependencies: true, dependencies: true, peerDependencies: true, peerDependenciesMeta: true, optionalDependencies: true, overrides: true, resolutions: true, dependenciesMeta: true, 'pnpm.allowedDeprecatedVersions': true, 'pnpm.overrides': true, 'pnpm.packageExtensions': true, 'pnpm.patchedDependencies': true, 'pnpm.peerDependencyRules.allowedVersions': true}
-   * @see https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/sort-collections.md
-   * @see https://docs.npmx.dev/cli/configuring-npm/package-json
+   * @see https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/sort-collections.md
+   * @see https://docs.npmjs.com/cli/v12/configuring-npm/package-json/
    */
   collectionsToSort?: PackageJsonCollectionsToSort;
 
@@ -141,7 +141,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * by setting it to `false` (e.g. `{browserslist: false}`).
    *
    * Affected rule:
-   * - [`package-json/no-empty-fields`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md)
+   * - [`package-json/no-empty-fields`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md)
    * @default {browserslist: true}
    */
   propertiesAllowedToBeEmpty?: ArrayOrBooleanRecord;
@@ -149,7 +149,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   /**
    * Indicate that the linted files are for publishable packages.
    * This enables *at least* all rules enabled in the official
-   * [`recommended-publishable` config](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json#supported-rules).
+   * [`recommended-publishable` config](https://github.com/michaelfaith/eslint-plugin-package-json#supported-rules).
    *
    * If you want to have different configs for publishable and non-publishable `package.json`s,
    * create multiple `packageJson` configs using array notation.
@@ -166,7 +166,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * - `string[]`: custom list of disallowed properties.
    *
    * Affected rule:
-   * - [`package-json/restrict-private-properties`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-private-properties.md)
+   * - [`package-json/restrict-private-properties`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-private-properties.md)
    * @default false
    */
   disallowUnnecessaryPropertiesInPrivatePackages?: boolean | string[];
@@ -181,7 +181,7 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
    * `pnpm`, `babel`, etc).
    *
    * Affected rule:
-   * - [`package-json/restrict-top-level-properties`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-top-level-properties.md)
+   * - [`package-json/restrict-top-level-properties`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-top-level-properties.md)
    */
   banTopLevelProperties?: ArrayOrBooleanRecord<string, 'booleanOrMessage'> | 'popularTools';
 }

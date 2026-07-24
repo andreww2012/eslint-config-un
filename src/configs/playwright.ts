@@ -18,7 +18,7 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-playwright`](https://npmx.dev/eslint-plugin-playwright) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `playwright` property
    * and applied to the resolved `files` and `ignores` of this config.
    */
@@ -45,13 +45,13 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
    * Names of functions that should be considered to be asserting functions.
    *
    * Affected rule:
-   * - [`playwright/expect-expect`](https://github.com/playwright-community/eslint-plugin-playwright/blob/HEAD/docs/rules/expect-expect.md)
+   * - [`playwright/expect-expect`](https://github.com/mskelton/eslint-plugin-playwright/blob/HEAD/docs/rules/expect-expect.md)
    */
   customAssertFunctionNames?: string[];
 
   /**
    * Affected rule:
-   * - [`playwright/missing-playwright-await`](https://github.com/playwright-community/eslint-plugin-playwright/blob/HEAD/docs/rules/missing-playwright-await.md)
+   * - [`playwright/missing-playwright-await`](https://github.com/mskelton/eslint-plugin-playwright/blob/HEAD/docs/rules/missing-playwright-await.md)
    */
   customAsyncExpectMatches?: string[];
 }

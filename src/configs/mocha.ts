@@ -19,7 +19,7 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
     NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {
   /**
    * [`eslint-plugin-mocha`](https://npmx.dev/eslint-plugin-mocha) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `settings` object with keys transformed to
    * `mocha/<property>` and applied to the resolved `files` and `ignores` of this config.
    */
@@ -32,16 +32,16 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
   };
 
   /**
-   * Affected rules:
-   * - [`mocha/consistent-interface`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/docs/rules/consistent-interface.md)
+   * Affected rule:
+   * - [`mocha/consistent-interface`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/consistent-interface.md)
    */
   enforceInterface?: GetRuleOptions<'mocha', 'consistent-interface'>['interface'];
 
   /**
    * Enforce the max number of top-level suites in a single file.
    *
-   * Affected rules:
-   * - [`vitest/max-top-level-suites`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/max-top-level-suites.md)
+   * Affected rule:
+   * - [`vitest/max-top-level-suites`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/max-top-level-suites.md)
    * @default 1
    */
   maxTopLevelSuites?: number;

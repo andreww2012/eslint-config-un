@@ -26,16 +26,16 @@ export interface SonarEslintConfigOptions<
    * Enables rules that are specific to test or assertion libraries
    *
    * Affected rules:
-   * - [`sonarjs/assertions-in-tests`](https://sonarsource.github.io/rspec/#/rspec/S5850/javascript)
-   * - [`sonarjs/async-test-assertions`](https://sonarsource.github.io/rspec/#/rspec/S8780/javascript)
-   * - [`sonarjs/chai-determinate-assertion`](https://sonarsource.github.io/rspec/#/rspec/S6092/javascript)
-   * - [`sonarjs/disabled-timeout`](https://sonarsource.github.io/rspec/#/rspec/S6080/javascript)
-   * - [`sonarjs/hooks-before-test-cases`](https://sonarsource.github.io/rspec/#/rspec/S8782/javascript)
-   * - [`sonarjs/inverted-assertion-arguments`](https://sonarsource.github.io/rspec/#/rspec/S3415/javascript)
-   * - [`sonarjs/no-code-after-done`](https://sonarsource.github.io/rspec/#/rspec/S6079/javascript)
-   * - [`sonarjs/no-incomplete-assertions`](https://sonarsource.github.io/rspec/#/rspec/S2970/javascript)
-   * - [`sonarjs/no-same-argument-assert`](https://sonarsource.github.io/rspec/#/rspec/S5863/javascript)
-   * - [`sonarjs/stable-tests`](https://sonarsource.github.io/rspec/#/rspec/S5973/javascript)
+   * - `sonarjs/assertions-in-tests`
+   * - `sonarjs/async-test-assertions`
+   * - `sonarjs/chai-determinate-assertion`
+   * - `sonarjs/disabled-timeout`
+   * - `sonarjs/hooks-before-test-cases`
+   * - `sonarjs/inverted-assertion-arguments`
+   * - `sonarjs/no-code-after-done`
+   * - `sonarjs/no-incomplete-assertions`
+   * - `sonarjs/no-same-argument-assert`
+   * - `sonarjs/stable-tests`
    * @default false
    */
   testsRules?: boolean;

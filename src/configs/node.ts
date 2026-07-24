@@ -103,7 +103,7 @@ export interface NodeEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'node'> {
   /**
    * [`eslint-plugin-n`](https://github.com/eslint-community/eslint-plugin-n) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `node` property
    * and applied to the resolved `files` and `ignores` of this config.
    *
@@ -128,7 +128,7 @@ export interface NodeEslintConfigOptions<
   }>;
 
   /**
-   * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global
+   * @see https://github.com/eslint-community/eslint-plugin-n/tree/HEAD/docs/rules/prefer-global
    */
   preferGlobal?: {
     /**
@@ -318,7 +318,7 @@ export default (async (context, optionsRaw) => {
     .addRule('prefer-node-protocol', ERROR) /** @since 17.0.0-2 */ // ✖️
     .addRule('prefer-promises/dns', OFF) /** @since 9.0.0 */ // TODO enable?
     .addRule('prefer-promises/fs', OFF) /** @since 9.0.0 */ // TODO enable?
-    .addRule('process-exit-as-throw', ERROR) /** @since 1.2.0 */ // 🟢 Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-node/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
+    .addRule('process-exit-as-throw', ERROR) /** @since 1.2.0 */ // 🟢 Does not report anything, makes ESLint treat `process.exit()` calls as a stop: https://github.com/eslint-community/eslint-plugin-n/blob/c092cd893010f8da894f87da567c07d69be6cc0d/docs/rules/process-exit-as-throw.md
     .addAnyRule(
       'unicorn',
       'prefer-import-meta-properties',

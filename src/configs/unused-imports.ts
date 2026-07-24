@@ -22,7 +22,10 @@ export interface UnusedImportsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'unused-imports'> {
   /**
-   * Disable [`no-unused-vars`](https://eslint.org/docs/latest/rules/no-unused-vars), [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) and [`sonarjs/no-unused-vars`](https://sonarsource.github.io/rspec/#/rspec/S1481/javascript) rules in favor of `unused-imports/no-unused-vars` rule.
+   * Disable
+   * [`no-unused-vars`](https://eslint.org/docs/latest/rules/no-unused-vars),
+   * [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) and
+   * `sonarjs/no-unused-vars` rules in favor of `unused-imports/no-unused-vars` rule.
    * @default false
    */
   configNoUnusedVars?: boolean | NoUnusedVarsSubConfigOptions<ExtraPlugins>;

@@ -114,7 +114,7 @@ export interface LockfileEslintConfigOptions<
   packageManager?: MaybeArray<SupportedPackageManagers>;
 
   /**
-   * Valid [`npm-package-arg` registry specifiers](https://www.npmx.dev/npm-package-arg)
+   * Valid [`npm-package-arg` registry specifiers](https://npmx.dev/npm-package-arg)
    * to ignore packages that will be allowed to be installed with their own lockfiles
    * (aka shrinkwrap files).
    *

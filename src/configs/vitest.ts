@@ -47,7 +47,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * [`@vitest/eslint-plugin`](https://npmx.dev/@vitest/eslint-plugin) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `vitest` property
    * and applied to the resolved `files` and `ignores` of this config,
    * as well as for `ts` sub-config.
@@ -88,7 +88,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
       >;
 
   /**
-   * Prefer [`.each`](https://vitest.dev/api/#test-each) or [`.for`](https://vitest.dev/api/#test-for). Note these are not the same. Possible options:
+   * Prefer [`.each`](https://vitest.dev/api/test#test-each) or [`.for`](https://vitest.dev/api/test#test-for). Note these are not the same. Possible options:
    * - `each` or `for`: prefer the specified method in all cases.
    * - object: configure which method to prefer for different test function types
    * (`test`, `it`, `describe`, `suite`). You may also set the `default` property
@@ -117,7 +117,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   enforceToBeCalledStyle?: false | 'once' | 'times';
 
   /**
-   * Enforces whether importing [Vitest globals](https://vitest.dev/config/#globals)
+   * Enforces whether importing [Vitest globals](https://vitest.dev/config/globals)
    * is required or disallowed.
    *
    * Affected rules:

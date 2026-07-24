@@ -67,21 +67,7 @@ export default eslintConfig({
         ],
       },
     },
-    markdownLinks: {
-      ...(!isInCi && {files: []}),
-      check: {
-        deadUrls: {
-          options: {
-            ignoreUrls: [
-              // Removed rules still linked from the .changeset files
-              String.raw`/https:\/\/www\.eslint-react\.xyz\/docs\/rules\/(?:no-unnecessary-use-ref|dom-prefer-namespace-import|component-hook-factories|naming-convention-use-state|no-unnecessary-use-callback|no-unnecessary-use-memo|prefer-use-state-lazy-initialization)\/?/`,
-              // Site just responds with 404
-              String.raw`/https:\/\/eslint-plugin-github-action.ntnyq.com\/rules\/[\w-]+/`, // cspell:disable-line
-            ],
-          },
-        },
-      },
-    },
+    markdownLinks: false,
     markdownPreferences: {
       ignores: ['LICENSE.md'],
       wordsToPreserveCasingOf: ['eslint-config-un', 'Description/Notes', 'Tailwind', 'JSDoc'],
@@ -279,6 +265,16 @@ export default eslintConfig({
       rules: {
         'ts/consistent-type-definitions': 0,
         'ts/no-empty-object-type': 0,
+      },
+    },
+    {
+      files: ['lychee.toml'],
+      rules: {
+        // Reports TOML `#` comments as malformed `/* */` blocks, and its autofix
+        // corrupts them by inserting padding before the last character
+        'stylistic/spaced-comment': 0,
+        // The `#:schema` directive must not have a space after `#`
+        'toml/spaced-comment': 0,
       },
     },
   ],

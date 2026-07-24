@@ -23,7 +23,7 @@ interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
     > {
   /**
    * [`eslint-plugin-lit-a11y`](https://npmx.dev/eslint-plugin-lit-a11y) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `settings` object as-is and applied to the specified `files` and `ignores`.
    */
   settings?: {
@@ -55,7 +55,7 @@ export interface LitEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'lit'> {
   /**
    * [`eslint-plugin-lit`](https://npmx.dev/eslint-plugin-lit) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `lit` property
    * and applied to the resolved `files` and `ignores` of this config.
    */

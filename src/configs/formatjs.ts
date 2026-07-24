@@ -14,7 +14,7 @@ export interface FormatjsEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'formatjs'> {
   /**
    * [`eslint-plugin-formatjs`](https://npmx.dev/eslint-plugin-formatjs) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `formatjs` property
    * and applied to the resolved `files` and `ignores` of this config.
    * @see https://formatjs.github.io/docs/tooling/linter#shared-settings

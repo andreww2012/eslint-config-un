@@ -18,10 +18,10 @@ export interface FunctionalEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'functional'> {
   /**
    * [`eslint-plugin-functional`](https://npmx.dev/eslint-plugin-functional) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `immutability` property
    * and applied to the resolved `files` and `ignores` of this config.
-   * @see https://github.com/eslint-functional/eslint-plugin-functional/blob/HEAD/docs/rules/settings
+   * @see https://github.com/eslint-functional/eslint-plugin-functional/tree/HEAD/docs/rules/settings
    */
   settings?: {
     /**

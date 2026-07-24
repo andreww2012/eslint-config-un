@@ -7,6 +7,9 @@ temp/
 # @eslint/config-inspector's temporarily generated file
 eslint.config.bundled_*.mjs
 
+.lycheecache
+.lychee.report.md
+
 ### Node.JS gitignore: https://github.com/github/gitignore/blob/3780fff86c705155792fb3e1787cebd6281ba8cf/Node.gitignore
 
 # Logs

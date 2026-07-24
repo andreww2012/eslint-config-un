@@ -588,8 +588,8 @@
 
 ### Minor Changes
 
-- dbebd34: zod: updated [`eslint-plugin-zod` from v3.11.0 to v3.12.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.11.0...v3.12.0):
-  - 🟢 enabled [`prefer-trim-before-string-length-checks`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/prefer-trim-before-string-length-checks.md) rule
+- dbebd34: zod: updated [`eslint-plugin-zod` from v3.11.0 to v3.12.0](https://github.com/marcalexiei/eslint-zod/compare/v3.11.0...v3.12.0):
+  - 🟢 enabled [`prefer-trim-before-string-length-checks`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/prefer-trim-before-string-length-checks.md) rule
 
 - c5cdb14: regexp: added [`regexp/negation`](https://ota-meshi.github.io/eslint-plugin-regexp/rules/negation.html) rule to the `noStylisticRules` config
 - 40b311a: Added a new config `command` which uses [`eslint-plugin-no-relative-import-paths`](https://npmx.dev/eslint-plugin-no-relative-import-paths), ❌ disabled by default
@@ -608,18 +608,18 @@
 - 5300c01: Added a new config `functional` which uses [`eslint-plugin-functional`](https://github.com/eslint-functional/eslint-plugin-functional#readme), ❌ disabled by default
 - b001da0: Added a new config `tanstackStart` which uses [`@tanstack/eslint-plugin-start`](https://npmx.dev/@tanstack/eslint-plugin-start), ❓ enabled if `@tanstack/react-start` or `@tanstack/solid-start` package is installed
 - e4bac38: Added a new config `ripple` which uses [`@tsrx/eslint-plugin`](https://npmx.dev/@tsrx/eslint-plugin), ❓ enabled if `ripple` package is installed
-- 63a0b5a: zod: updated [`eslint-plugin-zod` from v3.7.0 to v3.8.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.7.0...v3.8.0):
-  - 🟢 enabled [`consistent-schema-output-type-style`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-schema-output-type-style.md) rule and added it to the `noStylisticRules` config
+- 63a0b5a: zod: updated [`eslint-plugin-zod` from v3.7.0 to v3.8.0](https://github.com/marcalexiei/eslint-zod/compare/v3.7.0...v3.8.0):
+  - 🟢 enabled [`consistent-schema-output-type-style`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/consistent-schema-output-type-style.md) rule and added it to the `noStylisticRules` config
 
 - 0070206: Added a new config `remeda` which uses [`eslint-plugin-remeda`](https://npmx.dev/eslint-plugin-remeda), ❓ enabled if `remeda` package is installed
-- f2ca7a0: zod: updated [`eslint-plugin-zod` from v3.8.0 to v3.11.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.8.0...v3.11.0):
-  - `schemaSuffix` option was renamed to `schemaVariableName` and now supports specifying schema prefix, following the ⚠️ deprecation of `require-schema-suffix` rule in favor of a new [`consistent-schema-var-name`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-schema-var-name.md) rule
+- f2ca7a0: zod: updated [`eslint-plugin-zod` from v3.8.0 to v3.11.0](https://github.com/marcalexiei/eslint-zod/compare/v3.8.0...v3.11.0):
+  - `schemaSuffix` option was renamed to `schemaVariableName` and now supports specifying schema prefix, following the ⚠️ deprecation of `require-schema-suffix` rule in favor of a new [`consistent-schema-var-name`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/consistent-schema-var-name.md) rule
   - Enabled the following rules if the resolved zod major version is >=4:
-    - [`no-number-schema-with-finite`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-finite.md)
-    - [`no-number-schema-with-is-int`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-is-int.md)
-    - [`no-number-schema-with-is-finite`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-is-finite.md)
-    - [`no-number-schema-with-safe`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-safe.md)
-    - [`no-number-schema-with-step`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-number-schema-with-step.md)
+    - [`no-number-schema-with-finite`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/no-number-schema-with-finite.md)
+    - [`no-number-schema-with-is-int`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/no-number-schema-with-is-int.md)
+    - [`no-number-schema-with-is-finite`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/no-number-schema-with-is-finite.md)
+    - [`no-number-schema-with-safe`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/no-number-schema-with-safe.md)
+    - [`no-number-schema-with-step`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/no-number-schema-with-step.md)
 
 - ceaa157: ember: updated [`eslint-plugin-ember` from v13.1.0 to v13.2.0](https://github.com/ember-cli/eslint-plugin-ember/compare/v13.1.0...v13.2.0):
   - 🟢 enabled [`template-require-input-type`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-require-input-type.md) rule
@@ -697,8 +697,8 @@
   - 🟢 enabled [`no-invalid-attr-value`](https://html-eslint.org/docs/rules/no-invalid-attr-value) rule
   - 🟢 enabled [`no-redundant-role`](https://html-eslint.org/docs/rules/no-redundant-role) rule
 
-- 5d1f779: zod: updated [`eslint-plugin-zod` from v3.5.4 to v3.7.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.5.4...v3.7.0):
-  - 🟢 enabled [`no-transform-in-record-key`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-transform-in-record-key.md) rule
+- 5d1f779: zod: updated [`eslint-plugin-zod` from v3.5.4 to v3.7.0](https://github.com/marcalexiei/eslint-zod/compare/v3.5.4...v3.7.0):
+  - 🟢 enabled [`no-transform-in-record-key`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/no-transform-in-record-key.md) rule
 
 - eeb0310: html: updated [`@html-eslint/*` from v0.57.1 to v0.58.1](https://github.com/yeonjuan/html-eslint/compare/v0.57.1...v0.58.1):
   - 🟢 enabled [`require-details-summary`](https://html-eslint.org/docs/rules/require-details-summary) rule
@@ -835,7 +835,7 @@
   - 🟢 enabled [`prefer-inline-equality`](https://github.com/e18e/eslint-plugin/blob/9a2eaa871de039b5c2932ab2707a0d01d3fe1519/src/rules/prefer-inline-equality.ts#L198) rule in ⚙️ `performanceImprovementsTypescript` and `performanceImprovements` sub-configs
   - 🟢 enabled [`prefer-static-regex`](https://github.com/e18e/eslint-plugin/blob/9a2eaa871de039b5c2932ab2707a0d01d3fe1519/src/rules/prefer-static-regex.ts#L24) rule in ⚙️ `performanceImprovements` and `performanceImprovements` sub-configs
 
-- a4c2420: Updated [`eslint-plugin-jsonc` from v2.21.0 to v3.1.1](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v2.21.0...v3.1.1) and starting using [plugin languages](https://ota-meshi.github.io/eslint-plugin-jsonc/user-guide/#languages) instead of [`jsonc-eslint-parser`](https://npmjs.com/jsonc-eslint-parser) whenever JSON(5,C) parsing is required
+- a4c2420: Updated [`eslint-plugin-jsonc` from v2.21.0 to v3.1.1](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v2.21.0...v3.1.1) and starting using [plugin languages](https://ota-meshi.github.io/eslint-plugin-jsonc/user-guide/#languages) instead of [`jsonc-eslint-parser`](https://npmx.dev/jsonc-eslint-parser) whenever JSON(5,C) parsing is required
 - f30428c: playwright: updated [`eslint-plugin-playwright` from v2.5.0 to v2.10.2](https://github.com/mskelton/eslint-plugin-playwright/compare/v2.5.0...v2.10.2):
   - 🟢 enabled [`no-duplicate-slow`](https://github.com/mskelton/eslint-plugin-playwright/tree/HEAD/docs/rules/no-duplicate-slow.md) rule
   - 🔴 not enabled [`no-restricted-roles`](https://github.com/mskelton/eslint-plugin-playwright/tree/HEAD/docs/rules/no-restricted-roles.md) rule
@@ -1040,11 +1040,11 @@
   - 🟢 enabled [`template-table-groups`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-table-groups.md) rule
   - 🔴 not enabled [`template-template-length`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/template-template-length.md) rule, but added it to the `noStylisticRules` config
 
-- 2b21521: zod: updated [`eslint-plugin-zod` from v3.0.2 to v3.5.0](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.0.2...v3.5.0):
-  - 🟢 enabled [`consistent-import`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/consistent-import.md) rule and added it to the `noStylisticRules` config
-  - 🟢 enabled [`no-string-schema-with-uuid`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/no-string-schema-with-uuid.md) rule
-  - ⚠️ [`prefer-namespace-import`](https://github.com/marcalexiei/eslint-plugin-zod/blob/v3.5.0/docs/rules/prefer-namespace-import.md) rule was disabled because got deprecated
-  - - 🔴 not enabled [`prefer-string-schema-with-trim`](https://github.com/marcalexiei/eslint-plugin-zod/blob/HEAD/docs/rules/prefer-string-schema-with-trim.md) rule
+- 2b21521: zod: updated [`eslint-plugin-zod` from v3.0.2 to v3.5.0](https://github.com/marcalexiei/eslint-zod/compare/v3.0.2...v3.5.0):
+  - 🟢 enabled [`consistent-import`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/consistent-import.md) rule and added it to the `noStylisticRules` config
+  - 🟢 enabled [`no-string-schema-with-uuid`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/no-string-schema-with-uuid.md) rule
+  - ⚠️ [`prefer-namespace-import`](https://github.com/marcalexiei/eslint-zod/blob/v3.5.0/docs/rules/prefer-namespace-import.md) rule was disabled because got deprecated
+  - - 🔴 not enabled [`prefer-string-schema-with-trim`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/docs/rules/prefer-string-schema-with-trim.md) rule
 
 - 024e641: e18e: updated [`@e18e/eslint-plugin` from v0.1.3 to v0.1.4](https://github.com/e18e/eslint-plugin/compare/0.1.3...0.1.4):
   - 🟢 enabled [`prefer-array-some`](https://github.com/e18e/eslint-plugin/blob/1dc399be6eb9dcee207e5cd63ef184bd6c902492/src/rules/prefer-array-some.ts#L115) rule
@@ -1176,7 +1176,7 @@
   - 🟢 enabled [`route-param-names`](https://github.com/TanStack/router/blob/0166fe8ba0f3492f26d32eeb50548beae6641a07/packages/eslint-plugin-router/src/rules/route-param-names/route-param-names.rule.ts) rule
 
 - c103cb4: pnpm: updated [`eslint-plugin-pnpm` from v1.5.0 to v1.6.0](https://github.com/antfu/pnpm-workspace-utils/compare/v1.5.0...v1.6.0)
-- 3562674: zod: updated [`eslint-plugin-zod` from v3.5.0 to v3.5.4](https://github.com/marcalexiei/eslint-plugin-zod/compare/v3.5.0...v3.5.4)
+- 3562674: zod: updated [`eslint-plugin-zod` from v3.5.0 to v3.5.4](https://github.com/marcalexiei/eslint-zod/compare/v3.5.0...v3.5.4)
 - 6515548: [**BREAKING**] rxjs: if array is passed to `banOperators`, it will now override default values (previously merged with the default values)
 - 9da5c91: [**BREAKING**] json: removed `doNotMergeFilesWithDefault` option
 - fd5e263: react: updated [`eslint-plugin-react-you-might-not-need-an-effect` from v0.8.5 to v0.9.3](https://github.com/NickvanDyke/eslint-plugin-react-you-might-not-need-an-effect/compare/v0.8.5...v0.9.3):
@@ -1228,7 +1228,7 @@
   - [`no-aria-slot`](https://github.com/open-wc/open-wc/blob/HEAD/packages/eslint-plugin-lit-a11y/docs/rules/no-aria-slot.md)
   - [`obj-alt`](https://github.com/open-wc/open-wc/blob/HEAD/packages/eslint-plugin-lit-a11y/docs/rules/obj-alt.md)
 
-- e0b0148: zod: `eslint-plugin-zod-x` was renamed to `eslint-plugin-zod` and updated [from v2.0.1 to v3.0.2](https://github.com/marcalexiei/eslint-plugin-zod/compare/v2.0.1...v3.0.2)
+- e0b0148: zod: `eslint-plugin-zod-x` was renamed to `eslint-plugin-zod` and updated [from v2.0.1 to v3.0.2](https://github.com/marcalexiei/eslint-zod/compare/v2.0.1...v3.0.2)
   - 🟢 enabled [`prefer-enum-over-literal-union`](https://github.com/marcalexiei/eslint-plugin-zod-x/blob/HEAD/docs/rules/prefer-enum-over-literal-union.md) rule
 
 - ce2d79c: [**BREAKING**] betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v3.8.0 to v4.0.1](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v3.8.0...v4.0.1):
@@ -1345,32 +1345,32 @@
   - 🟢 enabled [`class-spacing`](https://github.com/yeonjuan/html-eslint/blob/HEAD/docs/rules/class-spacing.md) rule
   - 🟢 enabled [`no-obsolete-attrs`](https://github.com/yeonjuan/html-eslint/blob/HEAD/docs/rules/no-obsolete-attrs.md) rule
 
-- 227d727: Added a new config `e18e` which uses [`@e18e/eslint-plugin`](https://npmjs.com/@e18e/eslint-plugin), ❓ enabled if `defaultConfigsStatus` is set to `misc-enabled`
+- 227d727: Added a new config `e18e` which uses [`@e18e/eslint-plugin`](https://npmx.dev/@e18e/eslint-plugin), ❓ enabled if `defaultConfigsStatus` is set to `misc-enabled`
 - 54e7eed: packageJson: added a new option, `publishable`, to control whether additional rules meant for publishable `package.json`s should be turned on.
   You can also now specify multiple `packageJson` configs
 - 7fcd33f: packageJson: updated [`eslint-plugin-package-json` from v0.85.0 to v0.87.1](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/compare/v0.85.0...v0.87.1):
   - 🟢 enabled [`valid-module`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/valid-module.md) rule
   - 🔴 not enabled [`require-homepage`](https://github.com/JoshuaKGoldberg/eslint-plugin-package-json/blob/HEAD/docs/rules/require-homepage.md) rule
 
-- 7048892: Added a new config `tanstackRouter` which uses [`@tanstack/eslint-plugin-router`](https://npmjs.com/@tanstack/eslint-plugin-router), ❓ enabled automatically if `@tanstack/react-router` or `@tanstack/solid-router` package is installed
-- 375da69: Added a new config `githubActions` which uses [`eslint-plugin-github-action`](https://npmjs.com/eslint-plugin-github-action), ❓ enabled if `.github/workflows` directory exists
+- 7048892: Added a new config `tanstackRouter` which uses [`@tanstack/eslint-plugin-router`](https://npmx.dev/@tanstack/eslint-plugin-router), ❓ enabled automatically if `@tanstack/react-router` or `@tanstack/solid-router` package is installed
+- 375da69: Added a new config `githubActions` which uses [`eslint-plugin-github-action`](https://npmx.dev/eslint-plugin-github-action), ❓ enabled if `.github/workflows` directory exists
 - 4afcfdf: jest: updated [`eslint-plugin-jest` from v29.5.0 to v29.11.2](https://github.com/jest-community/eslint-plugin-jest/compare/v29.5.0...v29.11.2):
   - 🟢 enabled [`no-error-equal`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-error-equal.md) rule in ⚙️ `typescript` sub-config
   - 🟢 enabled [`no-unnecessary-assertion`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-unnecessary-assertion.md) rule in ⚙️ `typescript` sub-config
   - 🟢 enabled [`prefer-mock-return-shorthand`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/prefer-mock-return-shorthand.md)
   - 🟢 enabled [`valid-expect-with-promise`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect-with-promise.md) rule in ⚙️ `typescript` sub-config
 
-- 2b6d4ed: Added a new config `sql` which uses [`eslint-plugin-sql`](https://npmjs.com/eslint-plugin-sql), ❌ disabled by default
+- 2b6d4ed: Added a new config `sql` which uses [`eslint-plugin-sql`](https://npmx.dev/eslint-plugin-sql), ❌ disabled by default
 - 0a1390d: [**BREAKING**] yaml: changed the default prefix of `eslint-plugin-yml` to `yaml` instead of `yml`
 - 251afbb: Added a new package entrypoint, `globs`, which exports various globs that can be useful for specifying `files` or `ignores` ESLint config options
 - 3411e57: [**BREAKING**] svelte, vue: renamed `enforceTypescriptInScriptSection` option to `configEnforceTypescriptInScriptSection` and made it a proper sub-config
-- 4080234: Added a new config `lockfile` which uses [`eslint-plugin-lockfile`](https://npmjs.com/eslint-plugin-lockfile), ❓ enabled if `defaultConfigsStatus` is set to `misc-enabled`
-- d8c0709: Added a new config `barrelFiles` which uses [`eslint-plugin-barrel-files`](https://npmjs.com/eslint-plugin-barrel-files), ❌ disabled by default
-- 2b2beb4: Added a new config `format` which uses [`eslint-plugin-format`](https://npmjs.com/eslint-plugin-format), ❌ disabled by default, and supporting multiple configs
+- 4080234: Added a new config `lockfile` which uses [`eslint-plugin-lockfile`](https://npmx.dev/eslint-plugin-lockfile), ❓ enabled if `defaultConfigsStatus` is set to `misc-enabled`
+- d8c0709: Added a new config `barrelFiles` which uses [`eslint-plugin-barrel-files`](https://npmx.dev/eslint-plugin-barrel-files), ❌ disabled by default
+- 2b2beb4: Added a new config `format` which uses [`eslint-plugin-format`](https://npmx.dev/eslint-plugin-format), ❌ disabled by default, and supporting multiple configs
 - 9ec9343: [**BREAKING**] zod: updated [`eslint-plugin-zod-x` from v1.13.2 to v2.0.0](https://github.com/marcalexiei/eslint-plugin-zod-x/compare/v1.13.2...v2.0.0):
   - 🔄 `no-any` rule was renamed to [`no-any-schema`](https://github.com/marcalexiei/eslint-plugin-zod-x/blob/HEAD/docs/rules/no-any-schema.md)
 
-- c7da75e: Added a new config `clsx` which uses [`eslint-plugin-clsx`](https://npmjs.com/eslint-plugin-clsx), ❌ disabled by default
+- c7da75e: Added a new config `clsx` which uses [`eslint-plugin-clsx`](https://npmx.dev/eslint-plugin-clsx), ❌ disabled by default
 
 ### Patch Changes
 
@@ -1407,7 +1407,7 @@
 ### Patch Changes
 
 - c628635: boundaries: updated [`eslint-plugin-boundaries` from v5.3.0 to v5.3.1](https://github.com/javierbrea/eslint-plugin-boundaries/compare/v5.3.0...v5.3.1)
-- f86a47f: noStylisticRules: added missing stylistic rules from [`eslint-plugin-regexp`](https://npmjs.com/eslint-plugin-regexp)
+- f86a47f: noStylisticRules: added missing stylistic rules from [`eslint-plugin-regexp`](https://npmx.dev/eslint-plugin-regexp)
 - 0314235: react: updated [`eslint-plugin-react-refresh` from v0.4.24 to v0.4.26](https://github.com/rnaudBarre/eslint-plugin-react-refresh/compare/v0.4.24...v0.4.26)
 - 01b5db3: testingLibrary: updated [`eslint-plugin-testing-library` from v7.13.5 to v7.15.1](https://github.com/testing-library/eslint-plugin-testing-library/compare/v7.13.5...v7.15.1):
   - 🟢 enabled [`prefer-user-event-setup`](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-user-event-setup.md) rule
@@ -1427,7 +1427,7 @@
 - 69658da: noSecrets: `json` sub config: ensure `**/package-lock.json` files are always ignored
 - 4aa858b: storybook: updated [`eslint-plugin-storybook` from v10.1.4 to v10.1.10](https://github.com/storybookjs/storybook/compare/v10.1.4...v10.1.10)
 - 483aeb0: css: do not assign `customSyntax` property if it is undefined, otherwise it will lead to config validation error
-- 222e8ff: noStylisticRules: added missing stylistic rules from [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin)
+- 222e8ff: noStylisticRules: added missing stylistic rules from [`@html-eslint/eslint-plugin`](https://npmx.dev/@html-eslint/eslint-plugin)
 - 87c9992: toml: updated [`toml-eslint-parser` from v0.10.0 to v0.10.1](https://github.com/ota-meshi/toml-eslint-parser/compare/v0.10.0...v0.10.1)
 - 1f20326: vitest: updated [`@vitest/eslint-plugin` from v1.5.1 to v1.5.2](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.5.1...v1.5.2):
 - 62f2d6d: markdownPreferences: updated [`eslint-plugin-markdown-preferences` from v0.40.1 to v0.40.2](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/compare/v0.40.1...v0.40.2)
@@ -1504,16 +1504,16 @@
 
 ### Minor Changes
 
-- 9c235e1: Added a new config `command` which uses [`eslint-plugin-command`](https://npmjs.com/eslint-plugin-command), ❌ disabled by default
-- 72532ee: Added a new config `expectType` which uses [`eslint-plugin-expect-type`](https://npmjs.com/eslint-plugin-expect-type), ❌ disabled by default
-- 0982fe0: Added a new config `treeShaking` which uses [`eslint-plugin-tree-shaking`](https://npmjs.com/eslint-plugin-tree-shaking), ❌ disabled by default
-- 6cd4569: Added a new config `antfu` which uses [`eslint-plugin-antfu`](https://npmjs.com/eslint-plugin-antfu), ❌ disabled by default
-- fb934f4: Added a new config `moduleInterop` which uses [`eslint-plugin-module-interop`](https://npmjs.com/eslint-plugin-module-interop), ✅ enabled by default
-- 92a1901: Added a new config `noSecrets` which uses [`eslint-plugin-no-secrets`](https://npmjs.com/eslint-plugin-no-secrets), ✅ enabled by default
-- 177c056: Added a new config `docusaurus` which uses [`@docusaurus/eslint-plugin`](https://npmjs.com/@docusaurus/eslint-plugin), ❓ enabled automatically if `@docusaurus/core` package is installed
-- 9d46740: Added a new config `boundaries` which uses [`eslint-plugin-boundaries`](https://npmjs.com/eslint-plugin-boundaries), ❌ disabled by default
-- 91b7041: Added a new config `nestJs` which uses [`@darraghor/eslint-plugin-nestjs-typed`](https://npmjs.com/@darraghor/eslint-plugin-nestjs-typed), ❓ enabled automatically if `@nestjs/core` package is installed
-- a1e1589: Added a new config `jestDom` which uses [`eslint-plugin-jest-dom`](https://npmjs.com/eslint-plugin-jest-dom), ❓ enabled automatically if `@testing-library/jest-dom` package is installed
+- 9c235e1: Added a new config `command` which uses [`eslint-plugin-command`](https://npmx.dev/eslint-plugin-command), ❌ disabled by default
+- 72532ee: Added a new config `expectType` which uses [`eslint-plugin-expect-type`](https://npmx.dev/eslint-plugin-expect-type), ❌ disabled by default
+- 0982fe0: Added a new config `treeShaking` which uses [`eslint-plugin-tree-shaking`](https://npmx.dev/eslint-plugin-tree-shaking), ❌ disabled by default
+- 6cd4569: Added a new config `antfu` which uses [`eslint-plugin-antfu`](https://npmx.dev/eslint-plugin-antfu), ❌ disabled by default
+- fb934f4: Added a new config `moduleInterop` which uses [`eslint-plugin-module-interop`](https://npmx.dev/eslint-plugin-module-interop), ✅ enabled by default
+- 92a1901: Added a new config `noSecrets` which uses [`eslint-plugin-no-secrets`](https://npmx.dev/eslint-plugin-no-secrets), ✅ enabled by default
+- 177c056: Added a new config `docusaurus` which uses [`@docusaurus/eslint-plugin`](https://npmx.dev/@docusaurus/eslint-plugin), ❓ enabled automatically if `@docusaurus/core` package is installed
+- 9d46740: Added a new config `boundaries` which uses [`eslint-plugin-boundaries`](https://npmx.dev/eslint-plugin-boundaries), ❌ disabled by default
+- 91b7041: Added a new config `nestJs` which uses [`@darraghor/eslint-plugin-nestjs-typed`](https://npmx.dev/@darraghor/eslint-plugin-nestjs-typed), ❓ enabled automatically if `@nestjs/core` package is installed
+- a1e1589: Added a new config `jestDom` which uses [`eslint-plugin-jest-dom`](https://npmx.dev/eslint-plugin-jest-dom), ❓ enabled automatically if `@testing-library/jest-dom` package is installed
 
 ### Patch Changes
 
@@ -1606,44 +1606,44 @@
 
 - `noStylisticRules` which allows to (temporarily) disable most of the stylistic rules, which can be handy if this config is added to an existing project with big codebase.
 - `un` with some unique rules provided by us, enabled by default.
-- `graphql` via [`@graphql-eslint/eslint-plugin`](https://npmjs.com/@graphql-eslint/eslint-plugin), enabled automatically if `graphql` package is installed.
-- `depend` via [`eslint-plugin-depend`](https://npmjs.com/eslint-plugin-depend), **<u>disabled</u>** by default.
-- `math` via [`eslint-plugin-math`](https://npmjs.com/eslint-plugin-math), enabled by default.
-- `erasableSyntaxOnly` via [`eslint-plugin-erasable-syntax-only`](https://npmjs.com/eslint-plugin-erasable-syntax-only), **<u>disabled</u>** by default.
-- `tanstackQuery` via [`@tanstack/eslint-plugin-query`](https://npmjs.com/@tanstack/eslint-plugin-query), enabled automatically if `@tanstack/query-core` package is installed.
-- `storybook` via [`eslint-plugin-storybook`](https://npmjs.com/eslint-plugin-storybook), enabled automatically if `storybook` package is installed.
-- `ava` via [`eslint-plugin-ava`](https://npmjs.com/eslint-plugin-ava), enabled automatically if `ava` package is installed.
-- `testingLibrary` via [`eslint-plugin-testing-library`](https://npmjs.com/eslint-plugin-testing-library), enabled automatically if `@testing-library/dom` package is installed.
-- `ember` via [`eslint-plugin-ember`](https://npmjs.com/eslint-plugin-ember), enabled automatically if `ember-source` package is installed.
-- `cypress` via [`eslint-plugin-cypress`](https://npmjs.com/eslint-plugin-cypress), enabled automatically if `cypress` package is installed.
-- `turbo` via [`eslint-plugin-turbo`](https://npmjs.com/eslint-plugin-turbo), enabled automatically if `turbo` package is installed.
-- `noUnsanitized` via [`eslint-plugin-no-unsanitized`](https://npmjs.com/eslint-plugin-no-unsanitized), enabled by default.
-- [**BREAKING**] `betterTailwind` via [`eslint-plugin-better-tailwindcss`](https://npmjs.com/eslint-plugin-better-tailwindcss), enabled automatically if `tailwindcss` package is installed, which replaces the old `tailwind` config (via `eslint-plugin-tailwindcss`), which is now **disabled** by default.
-- `cspell` via [`@cspell/eslint-plugin`](https://npmjs.com/package/@cspell/eslint-plugin), **<u>disabled</u>** by default.
-- `eslintPlugin` via [`eslint-plugin-eslint-plugin`](https://npmjs.com/eslint-plugin-eslint-plugin), **<u>disabled</u>** by default.
-- `mdx` via [`eslint-plugin-mdx`](https://npmjs.com/eslint-plugin-mdx), enabled by default.
-- `fileProgress` via [`eslint-plugin-file-progress`](https://npmjs.com/eslint-plugin-file-progress), **<u>disabled</u>** by default.
-- `playwright` via [`eslint-plugin-playwright`](https://npmjs.com/eslint-plugin-playwright), enabled automatically if `playwright` package is installed.
-- `youDontNeedLodashUnderscore` via [`eslint-plugin-you-dont-need-lodash-underscore`](https://npmjs.com/eslint-plugin-you-dont-need-lodash-underscore), enabled automatically if `lodash`, `lodash-es` or `lodash.*` package is installed.
-- `lit` via [`eslint-plugin-lit`](https://npmjs.com/eslint-plugin-lit), enabled automatically if `lit` package is installed. Also, a new sub-config `lit/a11y` via [`eslint-plugin-lit-a11y`](https://npmjs.com/eslint-plugin-lit-a11y) is enabled by default.
-- `noOnlyTests` via [`eslint-plugin-no-only-tests`](https://npmjs.com/eslint-plugin-no-only-tests), **<u>disabled</u>** by default. Also, the following sub-configs were added: `{ava,cypress,ember,jest,playwright,testingLibrary/{dom,angular,marko,react,svelte,vue},vitest}/noOnlyTests`.
-- `compat` via [`eslint-plugin-compat`](https://npmjs.com/eslint-plugin-compat), **<u>disabled</u>** by default.
-- `mocha` via [`eslint-plugin-mocha`](https://npmjs.com/eslint-plugin-mocha), enabled automatically if `mocha` package is installed.
-- `qunit` via [`eslint-plugin-qunit`](https://npmjs.com/eslint-plugin-qunit), enabled automatically if `qunit` package is installed.
-- `webComponents` via [`eslint-plugin-wc`](https://npmjs.com/eslint-plugin-wc), **<u>disabled</u>** by default.
-- `header` via [`eslint-plugin-header`](https://npmjs.com/eslint-plugin-header), **<u>disabled</u>** by default.
-- `headers` via [`eslint-plugin-headers`](https://npmjs.com/eslint-plugin-headers), **<u>disabled</u>** by default.
-- `rxjs` via [`@smarttools/eslint-plugin-rxjs`](https://npmjs.com/@smarttools/eslint-plugin-rxjs), enabled automatically if `rxjs` package is installed.
-- `nx` via [`@nx/eslint-plugin`](https://npmjs.com/@nx/eslint-plugin), enabled automatically if `nx` package is installed.
-- `importZod` via [`eslint-plugin-import-zod`](https://npmjs.com/eslint-plugin-import-zod), **<u>disabled</u>** by default.
-- `unocss` via [`@unocss/eslint-plugin`](https://npmjs.com/@unocss/eslint-plugin), enabled automatically if `unocss` package is installed.
-- `unnecessaryAbstractions` via [`eslint-plugin-unnecessary-abstractions`](https://npmjs.com/eslint-plugin-unnecessary-abstractions), enabled by default.
-- `markdownPreferences` via [`eslint-plugin-markdown-preferences`](https://npmjs.com/eslint-plugin-markdown-preferences), enabled by default.
-- `markdownLinks` via [`eslint-plugin-markdown-links`](https://npmjs.com/eslint-plugin-markdown-links), enabled by default.
-- `zod` via [`eslint-plugin-zod-x`](https://npmjs.com/eslint-plugin-zod-x), enabled automatically if `zod@>=4` package is installed.
-- `fast-import` via [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import), **<u>disabled</u>** by default.
-- `checkFile` via [`eslint-plugin-check-file`](https://npmjs.com/eslint-plugin-check-file), **<u>disabled</u>** by default.
-- `formatJs` via [`eslint-plugin-formatjs`](https://npmjs.com/eslint-plugin-formatjs), enabled automatically if `@formatjs/icu-messageformat-parser` package is installed.
+- `graphql` via [`@graphql-eslint/eslint-plugin`](https://npmx.dev/@graphql-eslint/eslint-plugin), enabled automatically if `graphql` package is installed.
+- `depend` via [`eslint-plugin-depend`](https://npmx.dev/eslint-plugin-depend), **<u>disabled</u>** by default.
+- `math` via [`eslint-plugin-math`](https://npmx.dev/eslint-plugin-math), enabled by default.
+- `erasableSyntaxOnly` via [`eslint-plugin-erasable-syntax-only`](https://npmx.dev/eslint-plugin-erasable-syntax-only), **<u>disabled</u>** by default.
+- `tanstackQuery` via [`@tanstack/eslint-plugin-query`](https://npmx.dev/@tanstack/eslint-plugin-query), enabled automatically if `@tanstack/query-core` package is installed.
+- `storybook` via [`eslint-plugin-storybook`](https://npmx.dev/eslint-plugin-storybook), enabled automatically if `storybook` package is installed.
+- `ava` via [`eslint-plugin-ava`](https://npmx.dev/eslint-plugin-ava), enabled automatically if `ava` package is installed.
+- `testingLibrary` via [`eslint-plugin-testing-library`](https://npmx.dev/eslint-plugin-testing-library), enabled automatically if `@testing-library/dom` package is installed.
+- `ember` via [`eslint-plugin-ember`](https://npmx.dev/eslint-plugin-ember), enabled automatically if `ember-source` package is installed.
+- `cypress` via [`eslint-plugin-cypress`](https://npmx.dev/eslint-plugin-cypress), enabled automatically if `cypress` package is installed.
+- `turbo` via [`eslint-plugin-turbo`](https://npmx.dev/eslint-plugin-turbo), enabled automatically if `turbo` package is installed.
+- `noUnsanitized` via [`eslint-plugin-no-unsanitized`](https://npmx.dev/eslint-plugin-no-unsanitized), enabled by default.
+- [**BREAKING**] `betterTailwind` via [`eslint-plugin-better-tailwindcss`](https://npmx.dev/eslint-plugin-better-tailwindcss), enabled automatically if `tailwindcss` package is installed, which replaces the old `tailwind` config (via `eslint-plugin-tailwindcss`), which is now **disabled** by default.
+- `cspell` via [`@cspell/eslint-plugin`](https://npmx.dev/@cspell/eslint-plugin), **<u>disabled</u>** by default.
+- `eslintPlugin` via [`eslint-plugin-eslint-plugin`](https://npmx.dev/eslint-plugin-eslint-plugin), **<u>disabled</u>** by default.
+- `mdx` via [`eslint-plugin-mdx`](https://npmx.dev/eslint-plugin-mdx), enabled by default.
+- `fileProgress` via [`eslint-plugin-file-progress`](https://npmx.dev/eslint-plugin-file-progress), **<u>disabled</u>** by default.
+- `playwright` via [`eslint-plugin-playwright`](https://npmx.dev/eslint-plugin-playwright), enabled automatically if `playwright` package is installed.
+- `youDontNeedLodashUnderscore` via [`eslint-plugin-you-dont-need-lodash-underscore`](https://npmx.dev/eslint-plugin-you-dont-need-lodash-underscore), enabled automatically if `lodash`, `lodash-es` or `lodash.*` package is installed.
+- `lit` via [`eslint-plugin-lit`](https://npmx.dev/eslint-plugin-lit), enabled automatically if `lit` package is installed. Also, a new sub-config `lit/a11y` via [`eslint-plugin-lit-a11y`](https://npmx.dev/eslint-plugin-lit-a11y) is enabled by default.
+- `noOnlyTests` via [`eslint-plugin-no-only-tests`](https://npmx.dev/eslint-plugin-no-only-tests), **<u>disabled</u>** by default. Also, the following sub-configs were added: `{ava,cypress,ember,jest,playwright,testingLibrary/{dom,angular,marko,react,svelte,vue},vitest}/noOnlyTests`.
+- `compat` via [`eslint-plugin-compat`](https://npmx.dev/eslint-plugin-compat), **<u>disabled</u>** by default.
+- `mocha` via [`eslint-plugin-mocha`](https://npmx.dev/eslint-plugin-mocha), enabled automatically if `mocha` package is installed.
+- `qunit` via [`eslint-plugin-qunit`](https://npmx.dev/eslint-plugin-qunit), enabled automatically if `qunit` package is installed.
+- `webComponents` via [`eslint-plugin-wc`](https://npmx.dev/eslint-plugin-wc), **<u>disabled</u>** by default.
+- `header` via [`eslint-plugin-header`](https://npmx.dev/eslint-plugin-header), **<u>disabled</u>** by default.
+- `headers` via [`eslint-plugin-headers`](https://npmx.dev/eslint-plugin-headers), **<u>disabled</u>** by default.
+- `rxjs` via [`@smarttools/eslint-plugin-rxjs`](https://npmx.dev/@smarttools/eslint-plugin-rxjs), enabled automatically if `rxjs` package is installed.
+- `nx` via [`@nx/eslint-plugin`](https://npmx.dev/@nx/eslint-plugin), enabled automatically if `nx` package is installed.
+- `importZod` via [`eslint-plugin-import-zod`](https://npmx.dev/eslint-plugin-import-zod), **<u>disabled</u>** by default.
+- `unocss` via [`@unocss/eslint-plugin`](https://npmx.dev/@unocss/eslint-plugin), enabled automatically if `unocss` package is installed.
+- `unnecessaryAbstractions` via [`eslint-plugin-unnecessary-abstractions`](https://npmx.dev/eslint-plugin-unnecessary-abstractions), enabled by default.
+- `markdownPreferences` via [`eslint-plugin-markdown-preferences`](https://npmx.dev/eslint-plugin-markdown-preferences), enabled by default.
+- `markdownLinks` via [`eslint-plugin-markdown-links`](https://npmx.dev/eslint-plugin-markdown-links), enabled by default.
+- `zod` via [`eslint-plugin-zod-x`](https://npmx.dev/eslint-plugin-zod-x), enabled automatically if `zod@>=4` package is installed.
+- `fast-import` via [`eslint-plugin-fast-import`](https://npmx.dev/eslint-plugin-fast-import), **<u>disabled</u>** by default.
+- `checkFile` via [`eslint-plugin-check-file`](https://npmx.dev/eslint-plugin-check-file), **<u>disabled</u>** by default.
+- `formatJs` via [`eslint-plugin-formatjs`](https://npmx.dev/eslint-plugin-formatjs), enabled automatically if `@formatjs/icu-messageformat-parser` package is installed.
 
 ### Changes
 
@@ -1653,16 +1653,16 @@
 - [**BREAKING**] You can now specify the method of disabling autofix: `prefixed` would create a plugin named `disable-autofix` and copy the rules for which the autofix is disabled. `unprefixed` would copy an entire plugin and replace the origin plugin with the copy. The default method is now `unprefixed`, which leaves full rule names unchanged. You can control the overall or per-plugin autofix disabling method via the `disableAutofixMethod` option.
 - [**BREAKING**] Removed the ability to disable rule autofix by enabling `disable-autofix/*` rules. Instead, when configuring a rule, you can now return an object and set `disableAutofix: true` in it.
 - [**BREAKING**] Removed the `errorsInsteadOfWarnings` root option in favor of `forceSeverity` that can now be set globally.
-- [**BREAKING**] Changed the prefix of [`typescript-eslint` plugin](https://npmjs.com/typescript-eslint) from `@typescript-eslint` to `ts`.
+- [**BREAKING**] Changed the prefix of [`typescript-eslint` plugin](https://npmx.dev/typescript-eslint) from `@typescript-eslint` to `ts`.
 - [**BREAKING**] **unicorn, cli** configs: [`prefer-top-level-await`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-top-level-await.md) rule is now off by default and enabled in `cli` config.
-- [**BREAKING**] Start using [`eslint-plugin-jsx-a11y-x`](https://npmjs.com/eslint-plugin-jsx-a11y-x) plugin instead of [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y) for `jsx-a11y` config as it has much less dependencies.
+- [**BREAKING**] Start using [`eslint-plugin-jsx-a11y-x`](https://npmx.dev/eslint-plugin-jsx-a11y-x) plugin instead of [`eslint-plugin-jsx-a11y`](https://npmx.dev/eslint-plugin-jsx-a11y) for `jsx-a11y` config as it has much less dependencies.
 - [**BREAKING**] `overrideIgnores` root option removed in favor of `ignores.override`.
-- [**BREAKING**] [`@stylistic/eslint-plugin`](https://npmjs.com/@stylistic/eslint-plugin) rules have moved to a separate `stylistic` config.
+- [**BREAKING**] [`@stylistic/eslint-plugin`](https://npmx.dev/@stylistic/eslint-plugin) rules have moved to a separate `stylistic` config.
 - Added a new root option, `defaultConfigsStatus`, to control what configs are enabled or disabled by default. As a result, shared settings prefix has been changed from `jsx-a11y` to `jsx-a11y-x`.
 - Added the ability to override any of the used plugins via `pluginOverrides` option.
 - Exported `isInCi` helper from `ci-info` package.
 - Introduced "Offline mode" which can be useful to (temporarily) disable rules performing network requests, such as [`markdown-links/no-dead-urls`](https://ota-meshi.github.io/eslint-plugin-markdown-links/rules/no-dead-urls.html). It can be enabled via `offlineMode` root option or by setting `ESLINT_CONFIG_UN_OFFLINE_MODE` environment variable to non-empty string.
-- Added a new root option, `useFastImports`, to override certain [`eslint-plugin-import-x`](https://npmjs.com/eslint-plugin-import-x) plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmjs.com/eslint-plugin-fast-import).
+- Added a new root option, `useFastImports`, to override certain [`eslint-plugin-import-x`](https://npmx.dev/eslint-plugin-import-x) plugin rules with implementations from [`eslint-plugin-fast-import`](https://npmx.dev/eslint-plugin-fast-import).
 - Added a new root option, `cacheConfigs`, to enable flat config caching, which might improve performance when ESLint is running in editor (for example, from an ESLint extension).
 - Added a new root option, `extraPlugins`, which allows to provide additional ESLint plugins.
 - Added a new export, `/snippets`, which currently provides utilities to work with `no-restricted-*` rules.
@@ -1696,7 +1696,7 @@
 - **casePolice** config: autofix is now disabled by default.
 - **react** config:
   - `configTypeAwareRules` now uses `files` and `ignores` from `ts` config by default.
-  - Added a new sub-config, `youMightNotNeedAnEffect` via [`eslint-plugin-react-you-might-not-need-an-effect`](https://npmjs.com/eslint-plugin-react-you-might-not-need-an-effect), enabled by default.
+  - Added a new sub-config, `youMightNotNeedAnEffect` via [`eslint-plugin-react-you-might-not-need-an-effect`](https://npmx.dev/eslint-plugin-react-you-might-not-need-an-effect), enabled by default.
   - [**BREAKING**] Some `@eslint-react/eslint-plugin` rules have been renamed and removed. Please refer to [v2 migration guide](https://github.com/Rel1cx/eslint-react/releases/tag/v2.0.0) for more details.
   - [**BREAKING**] `eslint-plugin-react-compiler` have been replaced with [new "Compiler" rules from `eslint-plugin-react-hooks`](https://react.dev/blog/2025/10/01/react-19-2#eslint-plugin-react-hooks).
 - **yaml** config:
@@ -1704,8 +1704,8 @@
   - Added an option to not enforce the file extension.
 - **vue** config:
   - Support Nuxt 4 new directory structure.
-  - Added a new sub-config, `scopedCss` with the rules related to scoped CSS, via [`eslint-plugin-vue-scoped-css`](https://npmjs.com/eslint-plugin-vue-scoped-css) and enabled by default.
-  - Enhanced the `nuxt` sub-config to support `files` and `ignores`, on which rules from [`@nuxt/eslint-config`](https://npmjs.com/@nuxt/eslint-config) will be applied. Additionally, added a `nuxt`'s sub-config called `nuxtConfig`, which targets specifically Nuxt config files.
+  - Added a new sub-config, `scopedCss` with the rules related to scoped CSS, via [`eslint-plugin-vue-scoped-css`](https://npmx.dev/eslint-plugin-vue-scoped-css) and enabled by default.
+  - Enhanced the `nuxt` sub-config to support `files` and `ignores`, on which rules from [`@nuxt/eslint-config`](https://npmx.dev/@nuxt/eslint-config) will be applied. Additionally, added a `nuxt`'s sub-config called `nuxtConfig`, which targets specifically Nuxt config files.
   - Set `ignoreIncludesComment: true` and `ignoreStringEscape: true` for [`no-useless-v-bind`](https://eslint.vuejs.org/rules/no-useless-v-bind.html).
   - **a11y** sub-config: enabled [`no-aria-hidden-on-focusable`](https://vue-a11y.github.io/eslint-plugin-vuejs-accessibility/rules/no-aria-hidden-on-focusable.html) and [`no-role-presentation-on-focusable`](https://vue-a11y.github.io/eslint-plugin-vuejs-accessibility/rules/no-role-presentation-on-focusable.html) rules.
 - **perfectionist** config: added a bunch of new sub-configs, corresponding to each rule of the plugin. Plugin shared settings are now also configurable via `settings` option.
@@ -1761,7 +1761,7 @@
   - 🟢 (enabled) [`no-unused-private-class-members`](https://typescript-eslint.io/rules/no-unused-private-class-members)
 - `@eslint-react/eslint-plugin`: [1.49.0 → 2.3.7](https://github.com/Rel1cx/eslint-react/compare/v1.49.0...v2.3.7)
   - [**BREAKING**] Some rules have been renamed and removed. Please refer to [v2 migration guide](https://github.com/Rel1cx/eslint-react/releases/tag/v2.0.0) for more details.
-  - [**BREAKING**] Debug rules have been moved to a separate [`eslint-plugin-react-debug`](https://npmjs.com/eslint-plugin-react-debug) package.
+  - [**BREAKING**] Debug rules have been moved to a separate [`eslint-plugin-react-debug`](https://npmx.dev/eslint-plugin-react-debug) package.
   - 🔴 (not enabled) [`jsx-no-iife`](https://eslint-react.xyz/docs/rules/jsx-no-iife)
   - 🟢 (enabled) [`no-unnecessary-key`](https://eslint-react.xyz/docs/rules/no-unnecessary-key)
   - 🟡 (enabled, warns) [`no-forbidden-props`](https://eslint-react.xyz/docs/rules/no-forbidden-props)
@@ -1994,13 +1994,13 @@
 
 ## 0.10.0
 
-- New config: `svelte` via [`eslint-plugin-svelte`](https://npmjs.com/eslint-plugin-svelte), enabled automatically if `svelte` package is installed.
-- New config: `es` via [`eslint-plugin-es-x`](https://npmjs.com/eslint-plugin-es-x), **<u>disabled</u>** by default.
+- New config: `svelte` via [`eslint-plugin-svelte`](https://npmx.dev/eslint-plugin-svelte), enabled automatically if `svelte` package is installed.
+- New config: `es` via [`eslint-plugin-es-x`](https://npmx.dev/eslint-plugin-es-x), **<u>disabled</u>** by default.
 - New config: `cloudfrontFunctions` for [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html), **<u>disabled</u>** by default.
-- New config: `solid` via [`eslint-plugin-solid`](https://npmjs.com/eslint-plugin-solid), enabled automatically if `solid-js` package is installed.
-- New config: `nodeDependencies` via [`eslint-plugin-node-dependencies`](https://npmjs.com/eslint-plugin-node-dependencies), **<u>disabled</u>** by default.
-- New config: `jsInline` via [`eslint-plugin-html`](https://npmjs.com/eslint-plugin-html), enabled by default.
-- New config: `html` via [`@html-eslint/eslint-plugin`](https://npmjs.com/@html-eslint/eslint-plugin), enabled by default unless `angular` config is enabled.
+- New config: `solid` via [`eslint-plugin-solid`](https://npmx.dev/eslint-plugin-solid), enabled automatically if `solid-js` package is installed.
+- New config: `nodeDependencies` via [`eslint-plugin-node-dependencies`](https://npmx.dev/eslint-plugin-node-dependencies), **<u>disabled</u>** by default.
+- New config: `jsInline` via [`eslint-plugin-html`](https://npmx.dev/eslint-plugin-html), enabled by default.
+- New config: `html` via [`@html-eslint/eslint-plugin`](https://npmx.dev/@html-eslint/eslint-plugin), enabled by default unless `angular` config is enabled.
 - [**BREAKING**] Minimum supported ESLint version is now `^9.15.0` as support for `meta.defaultOptions` is necessary for some rules to work.
 - [**BREAKING**] Set the minimum supported Node.js version to 20.
 - ESLint plugins are now loaded on demand, i.e. only if they are actually used anywhere in the config. You can opt out of this behavior by setting `loadPluginsOnDemand` option to `false`.
@@ -2034,9 +2034,9 @@
 
 ## 0.9.0
 
-- New config: `nextJs` via [`@next/eslint-plugin-next`](https://npmjs.com/@next/eslint-plugin-next), enabled automatically if `next` package is installed.
-- New config: `casePolice` via [`eslint-plugin-case-police`](https://npmjs.com/eslint-plugin-case-police), **<u>disabled</u>** by default.
-- New config: `astro` via [`eslint-plugin-astro`](https://npmjs.com/eslint-plugin-astro), enabled automatically if `astro` package is installed.
+- New config: `nextJs` via [`@next/eslint-plugin-next`](https://npmx.dev/@next/eslint-plugin-next), enabled automatically if `next` package is installed.
+- New config: `casePolice` via [`eslint-plugin-case-police`](https://npmx.dev/eslint-plugin-case-police), **<u>disabled</u>** by default.
+- New config: `astro` via [`eslint-plugin-astro`](https://npmx.dev/eslint-plugin-astro), enabled automatically if `astro` package is installed.
 - `packageJson` config: added `requireFields` option to require the specified fields to be present in the package.json file.
 
 ### Dependencies
@@ -2070,9 +2070,9 @@
 
 ## 0.8.0
 
-- New config: `react` via [`@eslint-react/eslint-plugin`](https://npmjs.com/@eslint-react/eslint-plugin), [`eslint-plugin-react`](https://npmjs.com/eslint-plugin-react), [`eslint-plugin-react-hooks`](https://npmjs.com/eslint-plugin-react-hooks), [`eslint-plugin-react-refresh`](https://npmjs.com/eslint-plugin-react-refresh) and [`eslint-plugin-react-compiler`](https://npmjs.com/eslint-plugin-react-compiler), enabled automatically if `react` package is installed.
-- New config: `jsx-a11y` via [`eslint-plugin-jsx-a11y`](https://npmjs.com/eslint-plugin-jsx-a11y), enabled by default.
-- New config: `pnpm` via [`eslint-plugin-pnpm`](https://npmjs.com/eslint-plugin-pnpm), enabled automatically if `pnpm` is detected as a used package manager by [`package-manager-detector`](https://npmjs.com/package-manager-detector).
+- New config: `react` via [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin), [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react), [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks), [`eslint-plugin-react-refresh`](https://npmx.dev/eslint-plugin-react-refresh) and [`eslint-plugin-react-compiler`](https://npmx.dev/eslint-plugin-react-compiler), enabled automatically if `react` package is installed.
+- New config: `jsx-a11y` via [`eslint-plugin-jsx-a11y`](https://npmx.dev/eslint-plugin-jsx-a11y), enabled by default.
+- New config: `pnpm` via [`eslint-plugin-pnpm`](https://npmx.dev/eslint-plugin-pnpm), enabled automatically if `pnpm` is detected as a used package manager by [`package-manager-detector`](https://npmx.dev/package-manager-detector).
 - Set new options `ignoreOverrideMethods: true` and `ignoreClassesWithImplements: 'all'` to the base [`class-methods-use-this` rule](https://eslint.org/docs/latest/rules/class-methods-use-this).
 - `overrides` can now accept a function that receives the severity and options possibly set by our config.
 
@@ -2107,8 +2107,8 @@
 
 ## 0.7.0
 
-- New config: `angular` via [`@angular-eslint/eslint-plugin`](https://npmjs.com/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://npmjs.com/@angular-eslint/eslint-plugin-template), enabled automatically if `@angular/core` package is installed and is within the supported version range (from 13 to 19).
-- New config: `css` via [`@eslint/css`](https://npmjs.com/@eslint/css), enabled by default unless `stylelint` package is installed.
+- New config: `angular` via [`@angular-eslint/eslint-plugin`](https://npmx.dev/@angular-eslint/eslint-plugin) and [`@angular-eslint/eslint-plugin-template`](https://npmx.dev/@angular-eslint/eslint-plugin-template), enabled automatically if `@angular/core` package is installed and is within the supported version range (from 13 to 19).
+- New config: `css` via [`@eslint/css`](https://npmx.dev/@eslint/css), enabled by default unless `stylelint` package is installed.
 - Set `allowWithDecorator: true` for [`@typescript-eslint/no-extraneous-class`](https://typescript-eslint.io/rules/no-extraneous-class) rule, mostly to avoid unfixable reports in Angular projects.
 - If TypeScript config (`ts`) is enabled, [`import/no-deprecated`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-deprecated.md) is now disabled because [the corresponding `@typescript-eslint` rule](https://typescript-eslint.io/rules/no-deprecated) works better (in particular, it accounts for function overloads).
 - Override `@typescript-eslint/eslint-plugin` peer dependency of `eslint-plugin-jest` and `eslint-plugin-unused-imports` to avoid loading a wrong version of it.
@@ -2170,13 +2170,13 @@
 
 ## 0.6.0
 
-- New config: `qwik` via [`eslint-plugin-qwik`](https://npmjs.com/eslint-plugin-qwik), enabled automatically if `@builder.io/qwik` or `@qwik.dev/core` package is installed.
-- New config: `jsonSchemaValidator` via [`eslint-plugin-json-schema-validator`](https://npmjs.com/eslint-plugin-json-schema-validator), **<u>disabled</u>** by default.
+- New config: `qwik` via [`eslint-plugin-qwik`](https://npmx.dev/eslint-plugin-qwik), enabled automatically if `@builder.io/qwik` or `@qwik.dev/core` package is installed.
+- New config: `jsonSchemaValidator` via [`eslint-plugin-json-schema-validator`](https://npmx.dev/eslint-plugin-json-schema-validator), **<u>disabled</u>** by default.
 - [**BREAKING**] Disabled `vitest/prefer-to-be-{falsy,truthy}` rules since their fixes don't result in the equivalent code and therefore cannot be suitable for most projects.
 - [**BREAKING**] Set [`enforceForIfStatements: false`](https://eslint.org/docs/latest/rules/logical-assignment-operators#enforceforifstatements) for `logical-assignment-operators` since code enforced by this option might be harder to read and understand.
 - Added a fully typed `node` config option to specify `eslint-plugin-n` plugin settings.
 - For `jest` and `vitest` configs, an option `testDefinitionKeyword` now accepts a string that is used to set [all the properties of the object](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/consistent-test-it.md#options).
-- For Vue files virtual files for `<style>` blocks are now created via [`eslint-processor-vue-blocks`](https://npmjs.com/eslint-processor-vue-blocks). Added an option to disable or customize this behavior.
+- For Vue files virtual files for `<style>` blocks are now created via [`eslint-processor-vue-blocks`](https://npmx.dev/eslint-processor-vue-blocks). Added an option to disable or customize this behavior.
 - `<config>.overrides` type now includes `disable-autofix/*` rules.
 
 ### Dependencies
@@ -2191,9 +2191,9 @@
 ## 0.5.0
 
 - [**BREAKING**] All used ESLint plugins are now loaded unconditionally, allowing the use of any of their rules without requiring that the corresponding config is enabled.
-- Abandon [`eslint-plugin-disable-autofix`](https://npmjs.com/eslint-plugin-disable-autofix) in favor of manually adding the same functionality.
+- Abandon [`eslint-plugin-disable-autofix`](https://npmx.dev/eslint-plugin-disable-autofix) in favor of manually adding the same functionality.
 - [**BREAKING**] Disabled autofix for [`no-unnecessary-type-assertion`](https://typescript-eslint.io/rules/no-unnecessary-type-assertion) due to [this bug](https://github.com/typescript-eslint/typescript-eslint/issues/8721).
-- New config: `deMorgan` via [`eslint-plugin-de-morgan`](https://npmjs.com/eslint-plugin-de-morgan), **<u>disabled</u>** by default.
+- New config: `deMorgan` via [`eslint-plugin-de-morgan`](https://npmx.dev/eslint-plugin-de-morgan), **<u>disabled</u>** by default.
 
 ### Dependencies
 
@@ -2267,7 +2267,7 @@
 
 ## 0.4.0
 
-- New config: `perfectionist` via [`eslint-plugin-perfectionist`](https://npmjs.com/eslint-plugin-perfectionist), **<u>disabled</u>** by default.
+- New config: `perfectionist` via [`eslint-plugin-perfectionist`](https://npmx.dev/eslint-plugin-perfectionist), **<u>disabled</u>** by default.
 - All dependency versions are now pinned (removed `^`).
 
 ### Dependencies
@@ -2279,7 +2279,7 @@
 
 ## 0.3.1
 
-- New config: `jsdoc` via [`eslint-plugin-jsdoc`](https://npmjs.com/eslint-plugin-jsdoc), enabled by default.
+- New config: `jsdoc` via [`eslint-plugin-jsdoc`](https://npmx.dev/eslint-plugin-jsdoc), enabled by default.
 - Changed the severity of all the `eslint-plugin-vue`'s recommended rules to `error` (which turned out to be `warn` by default).
 - Disabled `import/no-default-export` rule for files starting with a dot and Storybook files (files inside `.storybook` directory and story files).
 
@@ -2293,9 +2293,9 @@
 
 - [**BREAKING**] [`prefer-inline` option of `import/no-duplicates` rule](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-duplicates.md#inline-type-imports) is now set to `true`. Added an new option `noDuplicatesOptions` in `import` config to override this behavior.
 - [**BREAKING**] Removed `overridesPinia` option from `vue` config in favor of adding the ability to pass more usual config options in `pinia` option.
-- New config: `jest` via [`eslint-plugin-jest`](https://npmjs.com/eslint-plugin-jest), enabled automatically if `jest` package is installed.
-- New config: `jest-extended` via [`eslint-plugin-jest-extended`](https://npmjs.com/eslint-plugin-jest-extended), enabled automatically if **both** `jest` and `jest-extended` packages are installed.
-- New config: `vitest` via [`@vitest/eslint-plugin`](https://npmjs.com/@vitest/eslint-plugin), enabled automatically if `vitest` package is installed.
+- New config: `jest` via [`eslint-plugin-jest`](https://npmx.dev/eslint-plugin-jest), enabled automatically if `jest` package is installed.
+- New config: `jest-extended` via [`eslint-plugin-jest-extended`](https://npmx.dev/eslint-plugin-jest-extended), enabled automatically if **both** `jest` and `jest-extended` packages are installed.
+- New config: `vitest` via [`@vitest/eslint-plugin`](https://npmx.dev/@vitest/eslint-plugin), enabled automatically if `vitest` package is installed.
 
 ### Dependencies
 
@@ -2341,8 +2341,8 @@
 
 ## 0.2.0
 
-- New config: `markdown` via [`@eslint/markdown`](https://npmjs.com/@eslint/markdown), enabled by default.
-- New config: `cssInJs` via [`eslint-plugin-css`](https://npmjs.com/eslint-plugin-css), enabled by default.
+- New config: `markdown` via [`@eslint/markdown`](https://npmx.dev/@eslint/markdown), enabled by default.
+- New config: `cssInJs` via [`eslint-plugin-css`](https://npmx.dev/eslint-plugin-css), enabled by default.
 - Added a boolean option `overrideIgnores` to completely override global `ignores` provided by our config.
 - Added a `node` config option to configure [`prefer-global`](https://github.com/eslint-community/eslint-plugin-n/tree/master/docs/rules/prefer-global) rule for each feature.
 - Fixed an issue in `vue` config where Nuxt's `app.vue` and `error.vue` files in a custom project directory were not recognized.
@@ -2357,14 +2357,14 @@
 
 ## 0.1.5
 
-- New config: `packageJson` via [`eslint-plugin-package-json`](https://npmjs.com/eslint-plugin-package-json).
+- New config: `packageJson` via [`eslint-plugin-package-json`](https://npmx.dev/eslint-plugin-package-json).
 - Dependencies:
   - `eslint-plugin-import-x`@4.4.0
     - Enable `checkTypeImports` option for [`import/extensions`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/extensions.md) rule.
 
 ## 0.1.4
 
-- New config: `json` (for linting .json, .jsonc, .json5 files) via [`eslint-plugin-jsonc`](https://npmjs.com/eslint-plugin-jsonc).
+- New config: `json` (for linting .json, .jsonc, .json5 files) via [`eslint-plugin-jsonc`](https://npmx.dev/eslint-plugin-jsonc).
 - Support for merging default files with user-specified files via `doNotMergeFilesWithDefault` option for `yaml`, `toml` and `json` configs.
 - Dependencies:
   - `typescript-eslint`@8.10.0
@@ -2372,8 +2372,8 @@
 
 ## 0.1.3
 
-- New config: `eslintComments` via [`@eslint-community/eslint-plugin-eslint-comments`](https://npmjs.com/@eslint-community/eslint-plugin-eslint-comments).
-- New config: `toml` via [`eslint-plugin-toml`](https://npmjs.com/eslint-plugin-toml).
+- New config: `eslintComments` via [`@eslint-community/eslint-plugin-eslint-comments`](https://npmx.dev/@eslint-community/eslint-plugin-eslint-comments).
+- New config: `toml` via [`eslint-plugin-toml`](https://npmx.dev/eslint-plugin-toml).
 - Dependencies:
   - `eslint-plugin-unicorn`@56.0.0
     - Enable [`unicorn/consistent-existence-index-check`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-existence-index-check.md) and [`unicorn/prefer-math-min-max`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-math-min-max.md) rules.

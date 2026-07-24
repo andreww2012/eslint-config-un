@@ -34,7 +34,9 @@
   },
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "contrib:add": "all-contributors add",
     "contrib:gen": "all-contributors generate",
@@ -312,6 +314,7 @@
     "jsonc-eslint-parser": "3.1.0",
     "knip": "6.27.0",
     "lefthook": "2.1.10",
+    "lychee-config-nick2bad4u": "2.0.0",
     "npm-check-updates": "22.2.9",
     "npm-package-arg": "14.0.0",
     "p-queue": "9.3.1",

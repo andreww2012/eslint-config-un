@@ -5,7 +5,7 @@ const config: KnipConfig = {
   entry: [
     '.ncurc.cjs', // cspell:disable-line
   ],
-  ignoreDependencies: ['@eslint/core'],
+  ignoreDependencies: ['@eslint/core', 'lychee-config-nick2bad4u'],
   tags: ['-knipignore'],
   treatConfigHintsAsErrors: true,
   cycles: {

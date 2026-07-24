@@ -20,7 +20,7 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
     Pick<VueEslintConfigOptions, 'disallowedHtmlTags'> {
   /**
    * [`eslint-plugin-svelte`](https://npmx.dev/eslint-plugin-svelte) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `svelte` property
    * and applied to the resolved `files` and `ignores` of this config.
    * @see [settings docs](https://sveltejs.github.io/eslint-plugin-svelte/user-guide/#settings-svelte)

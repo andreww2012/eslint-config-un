@@ -71,7 +71,7 @@ export interface JsxA11yEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'jsx-a11y'> {
   /**
    * [`eslint-plugin-jsx-a11y-x`](https://npmx.dev/eslint-plugin-jsx-a11y-x) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `jsx-a11y-x` property
    * and applied to the resolved `files` and `ignores` of this config.
    */

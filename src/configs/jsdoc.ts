@@ -188,7 +188,7 @@ export interface JsdocEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'jsdoc'> {
   /**
    * [`eslint-plugin-jsdoc`](https://npmx.dev/eslint-plugin-jsdoc) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `jsdoc` property
    * and applied to the resolved `files` and `ignores` of this config.
    */

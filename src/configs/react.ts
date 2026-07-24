@@ -101,7 +101,7 @@ interface EslintPluginReactSettings {
 interface EslintPluginReactXSettings {
   /**
    * Regex pattern matching custom hooks treated as state hooks
-   * @see https://www.eslint-react.xyz/docs/configuration/configure-analyzer#additionalstatehooks
+   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#additionalstatehooks
    */
   additionalStateHooks?: string;
 
@@ -142,7 +142,7 @@ interface ReactXSubConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, UnRulesConfigPartial<'eslint-react'>> {
   /**
    * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `react-x` property
    * and applied to the resolved `files` and `ignores` of this config.
    *
@@ -203,7 +203,7 @@ interface HooksSubConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'react-hooks'> {
   /**
    * [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `react-hooks` property
    * and applied to the resolved `files` and `ignores` of this config.
    */
@@ -228,7 +228,7 @@ interface RefreshSubConfigOptions<
    *
    * Note that we detect some frameworks and add their exports to this list automatically.
    * Names specified here will be added to the final list, not overwrite it.
-   * - **Remix**: see [supported exports](https://remix.run/docs/en/main/discussion/hot-module-replacement#supported-exports).
+   * - **Remix**: see [supported exports](https://v2.remix.run/docs/discussion/hot-module-replacement#supported-exports).
    * Detected by checking if *any* of the following packages are installed:
    * `@remix-run/{react,node,serve,dev}`.
    * - **React router**: see [supported exports](https://reactrouter.com/explanation/hot-module-replacement#supported-exports).
@@ -251,7 +251,7 @@ export interface ReactEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'react'> {
   /**
    * [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `react` property
    * and applied to the resolved `files` and `ignores` of this config.
    *
@@ -266,8 +266,8 @@ export interface ReactEslintConfigOptions<
    * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) plugin.
    *
    * Only includes
-   * [runtime agnostic ("X")](https://eslint-react.xyz/docs/rules/overview#x-rules) and
-   * ["Naming Convention"](https://eslint-react.xyz/docs/rules/overview#naming-convention-rules)
+   * [runtime agnostic ("X")](https://eslint-react.xyz/docs/rules#x-rules) and
+   * ["Naming Convention"](https://eslint-react.xyz/docs/rules#naming-convention-rules)
    * rules.
    *
    * Disabling this sub-config does not stop all the rules from `@eslint-react/eslint-plugin`
@@ -421,9 +421,7 @@ export interface ReactEslintConfigOptions<
    * - `prefer-error`/`avoid-error`: prefer/avoid boolean shorthand syntax, use `error` severity.
    * - `off`: allow both syntaxes.
    *
-   * Affected rules:
-   * - [`eslint-react/prefer-shorthand-boolean`](https://eslint-react.xyz/docs/rules/prefer-shorthand-boolean)
-   * - [`eslint-react/avoid-shorthand-boolean`](https://eslint-react.xyz/docs/rules/avoid-shorthand-boolean)
+   * Affected rule:
    * - [`react/jsx-boolean-value`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-boolean-value.md)
    * @default 'prefer'
    */
@@ -435,9 +433,7 @@ export interface ReactEslintConfigOptions<
    * - `prefer-error`/`avoid-error`: prefer/avoid Fragment shorthand syntax, use `error` severity.
    * - `off`: allow both syntaxes.
    *
-   * Affected rules:
-   * - [`eslint-react/prefer-shorthand-fragment`](https://eslint-react.xyz/docs/rules/prefer-shorthand-fragment)
-   * - [`eslint-react/avoid-shorthand-fragment`](https://eslint-react.xyz/docs/rules/avoid-shorthand-fragment)
+   * Affected rule:
    * - [`react/jsx-fragments`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/jsx-fragments.md)
    * @default true
    */
@@ -477,20 +473,20 @@ const REMIX_AND_REACT_ROUTER_EXPORTS: readonly string[] = [
 ];
 const NEXT_EXPORTS: readonly string[] = [
   'config', // https://nextjs.org/docs/pages/building-your-application/routing/api-routes#custom-config
-  'dynamic', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
-  'dynamicParams', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamicparams
-  'experimental_ppr', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#experimental_ppr
-  'fetchCache', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#fetchcache
+  'dynamic', // https://nextjs.org/docs/app/guides/migrating-to-cache-components#dynamic--force-dynamic
+  'dynamicParams', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/dynamicParams
+  'experimental_ppr', // https://nextjs.org/docs/app/guides/migrating-to-cache-components#experimental_ppr
+  'fetchCache', // https://nextjs.org/docs/app/guides/caching-without-cache-components#fetchcache
   'generateMetadata', // https://nextjs.org/docs/app/api-reference/functions/generate-metadata
   'generateImageMetadata', // https://nextjs.org/docs/app/api-reference/functions/generate-image-metadata
   'generateSitemaps', // https://nextjs.org/docs/app/api-reference/functions/generate-sitemaps
-  'generateStaticParams', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#generatestaticparams
+  'generateStaticParams', // https://nextjs.org/docs/app/api-reference/functions/generate-static-params
   'generateViewport', // https://nextjs.org/docs/app/api-reference/functions/generate-viewport#generateviewport-function
-  'maxDuration', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#maxduration
-  'metadata', // https://nextjs.org/docs/app/building-your-application/optimizing/metadata
-  'preferredRegion', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#preferredregion
-  'revalidate', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
-  'runtime', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#runtime
+  'maxDuration', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/maxDuration
+  'metadata', // https://nextjs.org/docs/app/getting-started/metadata-and-og-images#static-metadata
+  'preferredRegion', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/preferredRegion
+  'revalidate', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#version-history
+  'runtime', // https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config/runtime
   'viewport', // https://nextjs.org/docs/app/api-reference/functions/generate-viewport
 ];
 
@@ -711,7 +707,7 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     .addRule('jsx-first-prop-new-line', OFF) /** @since 5.0.0 */ // 🟠
     .addRule(
       'jsx-fragments',
-      shorthandBoolean === 'prefer-error' || shorthandFragment === 'avoid-error'
+      shorthandFragment === 'prefer-error' || shorthandFragment === 'avoid-error'
         ? ERROR
         : shorthandFragment === 'prefer' || shorthandFragment === 'avoid'
           ? WARNING
@@ -897,7 +893,7 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
         },
       },
     ])
-    // Severity of react compiler rules correspond to the recommended ones from https://github.com/facebook/react/blob/bf45a68dd35ed08860b6a70fed641dfe6d7d290d/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L777
+    // Severity of react compiler rules correspond to the recommended ones from https://github.com/react/react/blob/bf45a68dd35ed08860b6a70fed641dfe6d7d290d/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L777
     .addRule('capitalized-calls', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('config', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('error-boundaries', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
@@ -906,7 +902,7 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     .addRule('fbt', reactCompilerRulesSeverity) /** @since 6.1.0 */
     .addRule('gating', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('globals', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
-    // Almost the same as `rules-of-hooks`, see https://github.com/facebook/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L840
+    // Almost the same as `rules-of-hooks`, see https://github.com/react/react/blob/614a945d9d1031fadcf211a632cb2d7fda495a4f/compiler/packages/babel-plugin-react-compiler/src/CompilerError.ts#L840
     .addRule('hooks', OFF) /** @since 6.1.0 */
     .addRule('immutability', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟢
     .addRule('incompatible-library', reactCompilerRulesSeverity) /** @since 6.1.0 */ // 🟡

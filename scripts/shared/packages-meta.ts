@@ -48,7 +48,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     },
     awscdk: {
       configs: ['awsCdk'],
-      ruleDocsUrl: (ruleName) => `https://eslint-plugin-awscdk.dev/rules/${ruleName}.html`,
+      ruleDocsUrl: (ruleName) => `https://awscdk-lint.dev/rules/${ruleName}.html`,
     },
     'barrel-files': {
       configs: ['barrelFiles'],
@@ -313,7 +313,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
       configs: ['mobx'],
       gitTag: (tag) => `eslint-plugin-mobx@${tag}`,
       ruleDocsUrl: (ruleName) =>
-        `https://github.com/mobxjs/mobx/tree/HEAD/packages/eslint-plugin-mobx/README.md#mobx${ruleName}`,
+        `https://github.com/mobxjs/mobx/blob/HEAD/packages/eslint-plugin-mobx/README.md#mobx${ruleName}`,
     },
     mocha: {
       configs: ['mocha'],
@@ -402,7 +402,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     playwright: {
       configs: ['playwright'],
       ruleDocsUrl: (ruleName) =>
-        `https://github.com/playwright-community/eslint-plugin-playwright/blob/HEAD/docs/rules/${ruleName}.md`,
+        `https://github.com/mskelton/eslint-plugin-playwright/blob/HEAD/docs/rules/${ruleName}.md`,
     },
     pnpm: {
       configs: ['pnpm'],
@@ -444,7 +444,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     'react-hooks': {
       configs: ['react'],
       gitTag:
-        'https://github.com/facebook/react/blob/HEAD/packages/eslint-plugin-react-hooks/CHANGELOG.md',
+        'https://github.com/react/react/blob/HEAD/packages/eslint-plugin-react-hooks/CHANGELOG.md',
       ruleDocsUrl: null, // No docs
     },
     'react-refresh': {

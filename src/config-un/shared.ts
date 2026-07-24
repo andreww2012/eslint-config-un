@@ -335,7 +335,7 @@ export interface EslintConfigUnOptions<
         /**
          * These plugins will always be loaded. This can be useful if you enable certain
          * plugin rules only be using
-         * [configuration comments](https://eslint.org/docs/latest/use/configure/rules#using-configuration-comments).
+         * [configuration comments](https://eslint.org/docs/latest/use/configure/rules#use-configuration-comments).
          */
         alwaysLoad: LoadablePluginPrefix[];
       };
@@ -457,10 +457,10 @@ export interface EslintConfigUnOptions<
    * [intersected](https://eslint.org/docs/latest/use/configure/configuration-files#specify-files-with-an-and-operation)
    * with the original config's `files`;
    * - all `.md(x)` code block patterns are appended to `ignores`;
-   * - [`languageOptions.parserOptions.projectService`](https://typescript-eslint.io/packages/parser#projectservice)
+   * - [`languageOptions.parserOptions.projectService`](https://typescript-eslint.io/packages/parser/#projectservice)
    * is set to `true` (only in `standalone` mode);
    * - any custom file extensions required by the moved rules (like `.svelte`) are added to
-   * [`extraFileExtensions`](https://typescript-eslint.io/packages/parser#extrafileextensions);
+   * [`extraFileExtensions`](https://typescript-eslint.io/packages/parser/#extrafileextensions);
    * - `rules` consists solely of the moved entries.
    *
    * The string value (or the `mode` property) chooses the strategy:

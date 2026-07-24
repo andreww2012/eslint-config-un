@@ -82,7 +82,7 @@ type ConfigNoOnlyTests<ExtraPlugins extends ExtraPluginsType = never> =
 
 export interface NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins extends ExtraPluginsType> {
   /**
-   * Enables [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/no-only-tests) rule
+   * Enables [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/eslint-plugin-no-only-tests) rule
    * on the test files.
    *
    * By default will be applied to the same `files` and `ignores` as the parent config.
@@ -93,7 +93,7 @@ export interface NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins extends Extra
 
 export interface NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins extends ExtraPluginsType> {
   /**
-   * Enables [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/no-only-tests) rule
+   * Enables [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/eslint-plugin-no-only-tests) rule
    * on the test files.
    *
    * By default will be applied to the same `files` and `ignores` as the parent config.
@@ -156,7 +156,7 @@ export const generateConsistentTestItOptions = ({
 
 // prettier-ignore
 const INVALID_HTML_TAGS = [
-  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element#obsolete_and_deprecated_elements
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements#obsolete_and_deprecated_elements
   'acronym', 'big', 'center', 'content', 'dir', 'font', 'frame', 'frameset', 'image', 'marquee', 'menuitem', 'nobr', 'noembed', 'noframes', 'param', 'plaintext', 'rb', 'rtc', 'shadow', 'strike', 'tt', 'xmp',
   // https://html.spec.whatwg.org/multipage/dom.html#htmlunknownelement
   'applet', 'bgsound', 'blink', 'isindex', 'keygen', 'multicol', 'nextid', 'spacer',

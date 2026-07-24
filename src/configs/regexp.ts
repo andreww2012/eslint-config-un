@@ -12,7 +12,7 @@ export interface RegexpEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'regexp'> {
   /**
    * [`eslint-plugin-regexp`](https://npmx.dev/eslint-plugin-regexp) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `regexp` property
    * and applied to the resolved `files` and `ignores` of this config.
    */

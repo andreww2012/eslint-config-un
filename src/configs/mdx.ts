@@ -24,7 +24,7 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
     > {
   /**
    * [`eslint-plugin-mdx`](https://npmx.dev/eslint-plugin-mdx) plugin
-   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configuring-shared-settings)
+   * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `settings` object with keys transformed to
    * `mdx/<property>` and applied to the resolved `files` and `ignores` of this config.
    */
@@ -45,13 +45,13 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
 
     /**
      * Whether to ignore the `remark` configuration files when resolving the
-     * config for the [`remark`](https://npmx.dev/eslint-plugin-mdx#remark) rule.
+     * config for the [`remark`](https://github.com/mdx-js/eslint-mdx/blob/HEAD/README.md#mdxremark) rule.
      */
     ignoreRemarkConfig?: boolean;
 
     /**
      * Path to a `remark` configuration file to use for the
-     * [`remark`](https://npmx.dev/eslint-plugin-mdx#remark) rule.
+     * [`remark`](https://github.com/mdx-js/eslint-mdx/blob/HEAD/README.md#mdxremark) rule.
      */
     remarkConfigPath?: string;
   };

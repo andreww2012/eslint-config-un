@@ -38,7 +38,7 @@
   - `eslint-react/dom/no-unsafe-target-blank` to [`eslint-react/dom-no-unsafe-target-blank`](https://eslint-react.xyz/docs/rules/dom-no-unsafe-target-blank)
   - `eslint-react/dom/no-use-form-state` to [`eslint-react/dom-no-use-form-state`](https://eslint-react.xyz/docs/rules/dom-no-use-form-state)
   - `eslint-react/dom/no-void-elements-with-children` to [`eslint-react/dom-no-void-elements-with-children`](https://eslint-react.xyz/docs/rules/dom-no-void-elements-with-children)
-  - `eslint-react/dom/prefer-namespace-import` to [`eslint-react/dom-prefer-namespace-import`](https://eslint-react.xyz/docs/rules/dom-prefer-namespace-import)
+  - `eslint-react/dom/prefer-namespace-import` to [`eslint-react/dom-prefer-namespace-import`](https://github.com/Rel1cx/eslint-react/blob/v4.2.3/packages/plugins/eslint-plugin-react-dom/src/rules/prefer-namespace-import/prefer-namespace-import.mdx)
   - `eslint-react/jsx-key-before-spread` to [`eslint-react/jsx-no-children-prop-with-children`](https://eslint-react.xyz/docs/rules/jsx-no-children-prop-with-children)
   - `eslint-react/naming-convention/context-name` to [`eslint-react/naming-convention-context-name`](https://eslint-react.xyz/docs/rules/naming-convention-context-name)
   - `eslint-react/naming-convention/id-name` to [`eslint-react/naming-convention-id-name`](https://eslint-react.xyz/docs/rules/naming-convention-id-name)
@@ -52,7 +52,7 @@
   - `eslint-react/web-api/no-leaked-resize-observer` to [`eslint-react/web-api-no-leaked-resize-observer`](https://eslint-react.xyz/docs/rules/web-api-no-leaked-resize-observer)
   - `eslint-react/web-api/no-leaked-timeout` to [`eslint-react/web-api-no-leaked-timeout`](https://eslint-react.xyz/docs/rules/web-api-no-leaked-timeout)
 - 🟢 enabled the following rules:
-  - [`eslint-react/component-hook-factories`](https://eslint-react.xyz/docs/rules/component-hook-factories)
+  - [`eslint-react/component-hook-factories`](https://github.com/Rel1cx/eslint-react/blob/v4.2.3/packages/plugins/eslint-plugin-react-x/src/rules/component-hook-factories/component-hook-factories.mdx)
   - [`eslint-react/error-boundaries`](https://eslint-react.xyz/docs/rules/error-boundaries)
   - [`eslint-react/exhaustive-deps`](https://eslint-react.xyz/docs/rules/exhaustive-deps)
   - [`eslint-react/immutability`](https://eslint-react.xyz/docs/rules/immutability)

@@ -107,6 +107,7 @@ export default {
     'matchall',
     'typegen',
     'viewbox',
+    'lychee',
 
     // Actual-ish English words
     'uncategorized',

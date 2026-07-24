@@ -203,7 +203,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   astro: AstroEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * [Ava test runner](https://avajs.dev) specific rules.
+   * [Ava test runner](https://github.com/avajs/ava) specific rules.
    *
    * 📁 Default `files`:
    * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
@@ -223,7 +223,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
    *
    * 🧩 Main plugin: [`eslint-plugin-awscdk`](https://npmx.dev/eslint-plugin-awscdk)
-   * ([docs](https://eslint-plugin-awscdk.dev))
+   * ([docs](https://awscdk-lint.dev))
    * @default true <=> [`aws-cdk-lib`](https://npmx.dev/aws-cdk-lib) package is installed
    */
   awsCdk: AwsCdkEslintConfigOptions<ExtraPlugins>;
@@ -604,7 +604,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * 📁 Default `files`: <code>**&#47;*.{graphql,gql}</code>
    *
    * 🧩 Main plugin: [`eslint-plugin-graphql`](https://npmx.dev/@graphql-eslint/eslint-plugin)
-   * ([docs](https://the-guild.dev/graphql/eslint))
+   * ([docs](https://the-guild.dev/graphql/eslint/docs))
    *
    * ⚙️ Sub config(s): `jsProcessor`
    * @default true <=> [`graphql`](https://npmx.dev/graphql) package is installed
@@ -677,7 +677,9 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
 
   /**
    * An ESLint plugin to enforce namespace imports for zod.
-   * See [this Zod issue comment](https://github.com/colinhacks/zod/issues/4433#issuecomment-2921500831) why this might be needed.
+   * See
+   * [this Zod issue comment](https://github.com/colinhacks/zod/issues/4433#issuecomment-2921500831)
+   * why this might be needed.
    *
    * **Note:** you should probably use `zod` config instead, which includes the similar rule
    * and bunch of others zod rules.
@@ -706,7 +708,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   jest: JestEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom#readme)
+   * [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom/blob/HEAD/README.md)
    * specific rules. Note that, contrary to its name, this package can be used with
    * other testing libraries, for example `vitest`, so it doesn't belong to any top-level config.
    *
@@ -1063,7 +1065,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
    *
    * 🧩 Main plugin: [`@nx/eslint-plugin`](https://npmx.dev/@nx/eslint-plugin)
-   * ([docs](https://nx.dev/technologies/eslint/eslint-plugin))
+   * ([docs](https://nx.dev/docs/technologies/eslint/eslint-plugin))
    * @default true <=> [`nx`](https://npmx.dev/nx) package is installed
    */
   nx: NxEslintConfigOptions<ExtraPlugins>;
@@ -1283,7 +1285,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * 📁 Default `files`: all files
    *
    * 🧩 Main plugin: [`eslint-plugin-sonarjs`](https://npmx.dev/eslint-plugin-sonarjs)
-   * ([docs](https://github.com/SonarSource/SonarJS/blob/HEAD/packages/analysis/src/jsts/rules/README.md#eslint-plugin-sonarjs-))
+   * ([docs](https://github.com/SonarSource/SonarJS/blob/HEAD/packages/analysis/src/jsts/rules/README.md))
    * @default true
    */
   sonar: SonarEslintConfigOptions<ExtraPlugins>;
@@ -1347,7 +1349,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   tailwind: TailwindEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * [TanStack Query](https://tanstack.com/query) specific rules.
+   * [TanStack Query](https://tanstack.com/query/latest) specific rules.
    *
    * 📁 Default `files`: all files
    *
@@ -1358,22 +1360,25 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   tanstackQuery: TanstackQueryEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * [TanStack Router](https://tanstack.com/router) specific rules.
+   * [TanStack Router](https://tanstack.com/router/latest) specific rules.
    *
    * 📁 Default `files`: all files
    *
-   * 🧩 Main plugin: [`eslint-plugin-tanstack-router`](https://npmx.dev/eslint-plugin-tanstack-router)
+   * 🧩 Main plugin:
+   * [`eslint-plugin-tanstack-router`](https://npmx.dev/@tanstack/eslint-plugin-router)
    * ([docs](https://tanstack.com/router/latest/docs/eslint/eslint-plugin-router))
    * @default true <=> [`foo`](https://npmx.dev/foo) package is installed
    */
   tanstackRouter: TanstackRouterEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * [TanStack Start](https://tanstack.com/start) specific rules.
+   * [TanStack Start](https://tanstack.com/start/latest) specific rules.
    *
    * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
    *
-   * 🧩 Main plugin: [`@tanstack/eslint-plugin-start`](https://npmx.dev/@tanstack/eslint-plugin-start) ([docs (not plugin-specific)](https://tanstack.com/start))
+   * 🧩 Main plugin:
+   * [`@tanstack/eslint-plugin-start`](https://npmx.dev/@tanstack/eslint-plugin-start)
+   * ([docs (not plugin-specific)](https://tanstack.com/start/latest))
    * @default true <=> [`@tanstack/react-start`](https://npmx.dev/@tanstack/react-start) or [`@tanstack/solid-start`](https://npmx.dev/@tanstack/solid-start) package is installed
    */
   tanstackStart: TanstackStartEslintConfigOptions<ExtraPlugins>;
@@ -1478,12 +1483,12 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
   tsdoc: TsdocEslintConfigOptions<ExtraPlugins>;
 
   /**
-   * [Turborepo](https://turborepo.com) specific rules.
+   * [Turborepo](https://turborepo.dev) specific rules.
    *
    * 📁 Default `files`: all files
    *
    * 🧩 Main plugin: [`eslint-plugin-turbo`](https://npmx.dev/eslint-plugin-turbo)
-   * ([docs](https://turborepo.com/docs/reference/eslint-plugin-turbo))
+   * ([docs](https://turborepo.dev/docs/reference/eslint-plugin-turbo))
    * @default true <=> [`turbo`](https://npmx.dev/turbo) package is installed
    */
   turbo: TurboEslintConfigOptions<ExtraPlugins>;
