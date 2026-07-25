@@ -1,5 +1,142 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.15
+
+### Minor Changes
+
+- 97da8f0: tailwind: updated [`eslint-plugin-tailwindcss` from v4.0.6 to v4.2.0](https://github.com/francoismassart/eslint-plugin-tailwindcss/compare/v4.0.6...v4.2.0):
+
+  - 🟢 enabled [`tailwindcss/important-modifier-suffix`](https://github.com/francoismassart/eslint-plugin-tailwindcss/blob/HEAD/docs/rules/important-modifier-suffix.md) rule
+
+- 10173a4: pnpm: updated [`eslint-plugin-pnpm` from v1.6.1 to v1.7.0](https://github.com/antfu/pnpm-workspace-utils/compare/v1.6.1...v1.7.0):
+
+  - 🟢 enabled `pnpm/yaml-no-anonymous-catalog` rule in ⚙️ `pnpmWorkspace` sub-config
+
+- 12a688e: eslintPlugin: updated [`eslint-plugin-eslint-plugin` from v7.4.1 to v7.5.0](https://github.com/eslint-community/eslint-plugin-eslint-plugin/compare/v7.4.1...v7.5.0):
+
+  - ❓ enabled [`eslint-plugin/require-meta-languages`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-languages.md) rule depending on `metaProperties` option
+
+- 286f934: zod:
+
+  - updated [`eslint-plugin-zod` from v4.7.1 to v4.8.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod@4.7.1...eslint-plugin-zod@4.8.0):
+    - 🟢 enabled [`zod/no-conflicting-checks`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/no-conflicting-checks.md) rule
+    - 🟢 enabled [`zod/no-unnecessary-readonly`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/no-unnecessary-readonly.md) rule
+    - 🟢 enabled [`zod/prefer-tuple-over-array-length`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/prefer-tuple-over-array-length.md) rule
+  - updated [`eslint-plugin-zod-mini` from v1.4.0 to v1.5.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-mini@1.4.0...eslint-plugin-zod-mini@1.5.0):
+    - 🟢 enabled [`zod-mini/no-conflicting-checks`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/no-conflicting-checks.md) rule
+    - 🟢 enabled [`zod-mini/no-unnecessary-readonly`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/no-unnecessary-readonly.md) rule
+    - 🟢 enabled [`zod-mini/prefer-tuple-over-array-length`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/prefer-tuple-over-array-length.md) rule
+
+- 35d02f5: svelte:
+
+  - updated [`eslint-plugin-svelte` from v3.20.0 to v3.22.0](https://github.com/sveltejs/eslint-plugin-svelte/compare/eslint-plugin-svelte@3.20.0...eslint-plugin-svelte@3.22.0):
+    - 🟢 enabled [`svelte/no-bind-value-on-checkable-inputs`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-bind-value-on-checkable-inputs) rule
+    - 🟢 enabled [`svelte/no-conflicting-module-names`](https://sveltejs.github.io/eslint-plugin-svelte/rules/no-conflicting-module-names) rule
+  - updated [`@sveltejs/kit` from v2.69.3 to v2.70.1](https://github.com/sveltejs/kit/compare/%40sveltejs/kit%402.69.3...%40sveltejs/kit%402.70.1)
+
+- 4c54a27: <!-- cspell:ignore outerhtml -->
+
+  angular: updated [`@angular-eslint/*` from v22.0.0 to v22.1.0](https://github.com/angular-eslint/angular-eslint/compare/v22.0.0...v22.1.0):
+
+  - 🟢 enabled the following rules:
+    - [`angular/inject-at-top`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/inject-at-top.md)
+    - [`angular-template/no-outerhtml`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/no-outerhtml.md)
+    - [`angular-template/require-switch-default`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin-template/docs/rules/require-switch-default.md)
+  - ❓ enabled [`angular/prefer-service-decorator`](https://github.com/angular-eslint/angular-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/prefer-service-decorator.md) rule when the resolved Angular version is at least 22 and added this rule to the `noStylisticRules` config
+
+- a5bd6d7: betterTailwind: updated [`eslint-plugin-better-tailwindcss` from v4.6.1 to v4.7.0](https://github.com/schoero/eslint-plugin-better-tailwindcss/compare/v4.6.1...v4.7.0):
+
+  - 🟢 enabled [`better-tailwindcss/no-conflicting-classes`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/no-conflicting-classes.md) rule
+
+- 6d4be56: sonar: updated [`eslint-plugin-sonarjs` from v4.1.0 to v4.2.0](https://github.com/SonarSource/SonarJS/blob/eb1c78a263caa3ad283959f56ae31c11d3a38b88/packages/analysis/src/jsts/rules/CHANGELOG.md#2026-07-14-version-420):
+
+  - The following rules were 🟢 enabled:
+    - `sonarjs/memoize-cache-key`
+    - `sonarjs/no-default-utility-imports`
+    - `sonarjs/prefer-native-lodash-alternative`
+  - The following rules were enabled ❓ if `testsRules` option is set to `true`:
+    - `sonarjs/assertions-in-test-cases`
+    - `sonarjs/explicit-test-skip`
+    - `sonarjs/no-debug-commands-in-ui-tests`
+    - `sonarjs/no-fixed-wait-in-tests`
+    - `sonarjs/no-interpolation-in-inline-snapshots`
+    - `sonarjs/no-mixed-completion-style`
+    - `sonarjs/parameterized-tests`
+    - `sonarjs/synchronous-suite-callback`
+
+- 575800e: jsdoc: updated [`eslint-plugin-jsdoc` from v63.0.13 to v63.2.0](https://github.com/gajus/eslint-plugin-jsdoc/compare/v63.0.13...v63.2.0) and added a new option `normalizeSeeLinks` controlling the new [`jsdoc/normalize-see-links`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/normalize-see-links.md) rule, disabled by default
+- f2c69c8: unicorn: updated [`eslint-plugin-unicorn` from v71.1.0 to v72.0.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v71.1.0...v72.0.0):
+
+  - 🟢 enabled the following rules:
+    - [`unicorn/no-multiple-promise-resolver-calls`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-multiple-promise-resolver-calls.md)
+    - [`unicorn/no-shorthand-property-overrides`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-shorthand-property-overrides.md)
+    - [`unicorn/no-transition-all`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-transition-all.md)
+    - [`unicorn/no-unnecessary-string-trim`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-string-trim.md)
+    - [`unicorn/no-useless-re-export`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-useless-re-export.md)
+    - [`unicorn/prefer-then-catch`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-then-catch.md)
+  - 🔴 not enabled the following rules:
+    - [`unicorn/no-missing-local-resource`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-missing-local-resource.md)
+    - [`unicorn/prefer-explicit-viewport-units`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-explicit-viewport-units.md)
+    - [`unicorn/require-frontmatter-fields`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/require-frontmatter-fields.md)
+
+- f7bdf79: <!-- cspell:ignore charcode -->
+
+  e18e: updated [`@e18e/eslint-plugin` from v0.5.1 to v0.6.0](https://github.com/e18e/eslint-plugin/compare/0.5.1...0.6.0):
+
+  - 🟢 enabled the following rules in the ⚙️ `performanceImprovements` sub-config:
+    - `e18e/prefer-charcode-at-in-loop`
+    - `e18e/prefer-throw-if-no-entry`
+  - 🔴 not enabled `e18e/prefer-slice-over-split-index` rule
+
+- effc3d2: astro:
+
+  - updated [`eslint-plugin-astro` from v2.1.1 to v3.0.1](https://github.com/ota-meshi/eslint-plugin-astro/compare/v2.1.1...v3.0.1):
+    - ⚠️ [`astro/no-omitted-end-tags`](https://ota-meshi.github.io/eslint-plugin-astro/rules/no-omitted-end-tags) rule was disabled because got deprecated
+    - ⚠️ [`astro/valid-compile`](https://ota-meshi.github.io/eslint-plugin-astro/rules/valid-compile) rule was disabled because got deprecated
+  - updated [`astro-eslint-parser` from v2.1.0 to v3.0.0](https://github.com/ota-meshi/astro-eslint-parser/compare/v2.1.0...v3.0.0)
+
+- e0a93c6: [**BREAKING**] markdownLinks: the config is now disabled by default as the link checker is only limited to Markdown files, may be unstable and significantly slows down linting. We recommend that you use [`lychee` link checker](https://lychee.cli.rs) instead.
+- 49246d3: [`meta.languages` rule property](https://eslint.org/docs/latest/extend/languages) is now removed after plugin loading because [it causes difficult problems with shared configs](https://github.com/eslint/eslint/issues/20999)
+
+  Additionally, `eslint-plugin-unicorn` rules targeting specific languages are now only available in the new corresponding sub-configs:
+
+  - `anyLanguage` (enabled by default)
+  - `css` (enabled if `css` config is enabled)
+  - `html` (enabled if `html` config is enabled)
+  - `json` (enabled if `json` or `json` config is enabled)
+  - `markdown` (enabled if any of the `markdown*` configs are enabled)
+
+### Patch Changes
+
+- af33848: storybook: updated [`eslint-plugin-storybook` from v10.4.6 to v10.5.3](https://github.com/storybookjs/storybook/compare/v10.4.6...v10.5.3)
+- 52825ff: vue: updated [`eslint-plugin-vue` from v10.9.2 to v10.10.0](https://github.com/vuejs/eslint-plugin-vue/compare/v10.9.2...v10.10.0)
+- 0685305: node: updated [`eslint-plugin-n` from v18.2.1 to v18.2.2](https://github.com/eslint-community/eslint-plugin-n/compare/v18.2.1...v18.2.2)
+- 9efc3d1: html: updated [`@html-eslint/{eslint-plugin,parser}` from v0.63.0 to v0.64.0](https://github.com/yeonjuan/html-eslint/compare/v0.63.0...v0.64.0)
+- 829895c: jsonSchemaValidator: updated [`eslint-plugin-json-schema-validator` from v6.2.0 to v6.3.0](https://github.com/ota-meshi/eslint-plugin-json-schema-validator/compare/v6.2.0...v6.3.0)
+- af48a0d: jest: updated [`eslint-plugin-jest` from v29.15.4 to v29.15.5](https://github.com/jest-community/eslint-plugin-jest/compare/v29.15.4...v29.15.5)
+- b131bdf: tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.101.2 to v5.101.3](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.101.2...@tanstack/eslint-plugin-query@5.101.3)
+- 8c20204: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.2.5 to v7.2.8](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.2.5...v7.2.8)
+- 065a0e3: checkFile: updated [`eslint-plugin-check-file` from v3.3.1 to v3.3.2](https://github.com/dukeluo/eslint-plugin-check-file/compare/v3.3.1...v3.3.2)
+- 9b8b18d: unicorn: updated [`eslint-plugin-unicorn` from v71.0.0 to v71.1.0](https://github.com/sindresorhus/eslint-plugin-unicorn/compare/v71.0.0...v71.1.0)
+- 9222470: Disabled [`import/no-cycle` rule](https://github.com/un-ts/eslint-plugin-import-x/blob/v4.17.1/docs/rules/no-cycle.md) by default. It has always been one of the slowest rules among really all rules - and can now be replaced by [knip's `cycles` check](https://knip.dev/reference/issue-types): `knip --no-progress --cycles --reporter cycles`. You can ignore cycles by setting [`cycles.allow`](https://knip.dev/reference/configuration#cycles) in the knip config file
+- 6141000: packageJson: updated [`eslint-plugin-package-json` from v1.5.0 to v1.6.0](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v1.5.0...v1.6.0)
+- e98e94a: importIntegrity: updated [`import-integrity-lint` from v1.1.4 to v1.2.0](https://github.com/nebrius/import-integrity-lint/compare/v1.1.4...v1.2.0)
+- 7cc7256: ts: updated [`typescript-eslint` from v8.62.1 to v8.64.0](https://github.com/typescript-eslint/typescript-eslint/compare/v8.62.1...v8.64.0):
+
+  - ⚠️ [`ts/no-loop-func`](https://typescript-eslint.io/rules/no-loop-func) rule was disabled because got deprecated
+  - ⚠️ [`ts/no-restricted-imports`](https://typescript-eslint.io/rules/no-restricted-imports) rule was disabled because got deprecated
+
+- 8245b86: react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.11.2 to v5.17.3](https://github.com/Rel1cx/eslint-react/compare/v5.11.2...v5.17.3)
+- b5fac86: yaml: updated [`eslint-plugin-yml` from v3.5.0 to v3.6.0](https://github.com/ota-meshi/eslint-plugin-yml/compare/v3.5.0...v3.6.0)
+- c92b96a: ripple: updated [`@tsrx/eslint-{plugin,parser}` from v0.3.97 to v0.3.104](https://github.com/Ripple-TS/ripple/compare/@tsrx/eslint-plugin@0.3.97...@tsrx/eslint-plugin@0.3.104)
+- 3e7ef39: jsdoc: updated [`eslint-plugin-jsdoc` from v63.0.12 to v63.0.13](https://github.com/gajus/eslint-plugin-jsdoc/compare/v63.0.12...v63.0.13)
+- c22b1b1: jsdoc: updated [`eslint-plugin-jsdoc` from v63.2.0 to v63.2.2](https://github.com/gajus/eslint-plugin-jsdoc/compare/v63.2.0...v63.2.2)
+- ec9190b: markdownPreferences: updated [`eslint-plugin-markdown-preferences` from v0.41.1 to v0.42.0](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/compare/v0.41.1...v0.42.0)
+- 0a6fb6d: boundaries: updated [`eslint-plugin-boundaries` from v7.0.2 to v7.1.0](https://github.com/javierbrea/eslint-plugin-boundaries/compare/v7.0.2...v7.1.0)
+- 760d839: jsonc: updated [`eslint-plugin-jsonc` from v3.2.0 to v3.3.0](https://github.com/ota-meshi/eslint-plugin-jsonc/compare/v3.2.0...v3.3.0)
+- 99b257d: toml: updated [`eslint-plugin-toml` from v1.4.0 to v1.5.0](https://github.com/ota-meshi/eslint-plugin-toml/compare/v1.4.0...v1.5.0)
+- ff4e22c: perfectionist: updated [`eslint-plugin-perfectionist` from v5.9.1 to v5.10.0](https://github.com/azat-io/eslint-plugin-perfectionist/compare/v5.9.1...v5.10.0)
+
 ## 1.0.0-beta.14
 
 ### Minor Changes
