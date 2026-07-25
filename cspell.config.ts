@@ -108,6 +108,7 @@ export default {
     'typegen',
     'viewbox',
     'lychee',
+    'smol',
 
     // Actual-ish English words
     'uncategorized',

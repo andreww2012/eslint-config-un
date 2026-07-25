@@ -68,6 +68,11 @@ jobs:
       - uses: ./.github/actions/prepare
       - run: pnpm lint:eslint
 
+  check-links:
+    name: Check links
+    needs: install
+    uses: ./.github/workflows/check-links.yml
+
   test:
     name: Test (${{ matrix.os }}, Node ${{ matrix.node-version }}, ESLint ${{ matrix.eslint-version }})
     needs: install
@@ -106,7 +111,7 @@ jobs:
 
   release-main:
     name: Create release PR _OR_ Publish on merge
-    needs: [knip, spellcheck, formatting, typecheck, eslint, test, build]
+    needs: [knip, spellcheck, formatting, typecheck, eslint, check-links, test, build]
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
