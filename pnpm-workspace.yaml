@@ -16,8 +16,8 @@ trustPolicyExclude: []
 # eslint-disable-next-line json-schema-validator/no-invalid -- new property since pnpm@11.16.0
 audit:
   ignore:
-    # Sets vulnerable versions of `@tanstack/eslint-plugin-start` to >=0, but actually vulnerable versions are not installed
-    - GHSA-8hwj-wqhq-3xw2
+    # Affects ALL `brace-expansion` versions until the specified one - and we can't override them all due to them being of different major versions
+    - GHSA-mh99-v99m-4gvg
 
 allowBuilds:
   '@parcel/watcher@2.6.0': false
@@ -41,7 +41,7 @@ overrides:
   # Can't use range like `^8.0.16` as pnpm won't re-resolve the already-locked vite for a range replacement, only for an exact one
   vite@>=8.0.0 <8.0.16: 8.0.16
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
-  brace-expansion@>=5.0.0 <5.0.7: ^5.0.7
+  brace-expansion@>=5.0.0 <5.0.8: ^5.0.8
   axios@>=1.15.2 <1.18.0: ^1.18.0
 
 patchedDependencies:
