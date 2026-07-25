@@ -1,4 +1,4 @@
-import {arrayIncludes, objectKeysUnsafe} from '@andreww2012/unutils';
+import {objectKeysUnsafe} from '@andreww2012/unutils';
 import {
   ERROR,
   GLOB_CSS,
@@ -13,7 +13,7 @@ import {
 } from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {OmitStrict, Prettify} from '../types';
-import {arrayPartition} from '../utils';
+import {arrayIncludes, arrayPartition} from '../utils';
 import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,

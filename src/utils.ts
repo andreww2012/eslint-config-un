@@ -14,6 +14,7 @@ export {
   type AllUnionMembers,
   arrayDifference,
   arrayify,
+  arrayIncludes,
   arrayMap,
   arrayPartition,
   arrayUnique,

@@ -6,7 +6,8 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
-minimumReleaseAgeExclude: []
+minimumReleaseAgeExclude: # []
+  - '@e18e/eslint-plugin@0.6.0'
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes

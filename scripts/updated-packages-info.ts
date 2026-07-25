@@ -176,7 +176,7 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 - 🟢 enabled ${ruleDocsUrlForMd} rule and added it to the \`noStylisticRules\` config
 - 🟢 enabled ${ruleDocsUrlForMd} rule and ⚠️ disabled autofix for it
 - 🟡 enabled ${ruleDocsUrlForMd} rule (warning) with the following default options:
-- ❓ enabled conditionally ${ruleDocsUrlForMd} rule in ⚙️ \`\` sub-config
+- ❓ enabled conditionally ${ruleDocsUrlForMd} rule in the ⚙️ \`\` sub-config
 - 🔴 not enabled ${ruleDocsUrlForMd} rule
 - ❌ \`${sampleRuleNameWithPrefix}\` rule was removed
 - ⚠️ ${ruleDocsUrlForMd} rule was disabled because got deprecated

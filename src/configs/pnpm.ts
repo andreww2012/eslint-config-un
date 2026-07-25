@@ -1,7 +1,7 @@
-import {arrayIncludes} from '@andreww2012/unutils';
 import {ERROR, OFF} from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {PickKeysStartingWith} from '../types';
+import {arrayIncludes} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,

@@ -1,23 +1,18 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
-import {
-  type NonEmptyTuple,
-  type ObjectValues,
-  capitalize,
-  isKeyIn,
-  objectValuesUnsafe,
-} from '@andreww2012/unutils';
+import {type NonEmptyTuple, capitalize} from '@andreww2012/unutils';
 import * as diff from 'diff';
 import {pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
 import prettier from 'prettier';
 import prettierConfig from '../.prettierrc.json' with {type: 'json'};
 import {eslintPluginVanillaRules} from '../src/eslint/eslint-shared';
-import type {EslintPlugin, EslintRuleMetaWithLanguages} from '../src/eslint/eslint-types';
+import type {EslintPlugin} from '../src/eslint/eslint-types';
 import {pluginsLoaders} from '../src/loaders/plugins';
 import type {ModuleLoaderContext} from '../src/loaders/shared';
 import {generateAngularPluginsWithOldRules} from './shared';
+import {RULE_CATEGORIZATIONS} from './src/rule-categorizations';
 import {addMissingRuleOptionsSchemas} from './src/set-missing-rule-options-schemas';
 
 const __dirname = import.meta.dirname;
@@ -25,89 +20,6 @@ const __dirname = import.meta.dirname;
 const PLUGIN_LOADER_CONTEXT: ModuleLoaderContext = {
   rootOptions: {},
   missingPackages: new Set(),
-};
-
-interface RuleCategorization<CategoryId extends string> {
-  /**
-   * Categories to emit, in output order. A rule may belong to several of them
-   */
-  categories: readonly CategoryId[];
-
-  /**
-   * Categorizes a single rule into zero or more categories.
-   *
-   * Whatever stands in the way of categorizing a rule must be described in `errors` instead of
-   * being ignored: the generation then fails, listing them, rather than silently emitting an
-   * incomplete list. Each message is shown after the rule name, so it should read as a reason.
-   */
-  categorizeRule: (
-    rule: {meta?: EslintRuleMetaWithLanguages},
-    ruleName: string,
-  ) => {
-    categories: CategoryId[];
-    errors: string[];
-  };
-}
-
-const UNICORN_LANGUAGES_TO_CATEGORIES = {
-  '*': 'anyLanguage',
-  'js/js': 'js',
-  'css/css': 'css',
-  'html/html': 'html',
-  'json/json': 'json',
-  'json/jsonc': 'json',
-  'json/json5': 'json',
-  'markdown/commonmark': 'markdown',
-  'markdown/gfm': 'markdown',
-} as const;
-
-const PNPM_RULE_NAME_PREFIXES = ['json', 'yaml'] as const;
-
-const RULE_CATEGORIZATIONS: Record<string, RuleCategorization<string>> = {
-  pnpm: {
-    categories: PNPM_RULE_NAME_PREFIXES,
-    categorizeRule: (_rule, ruleName) => {
-      const prefix = PNPM_RULE_NAME_PREFIXES.find((candidate) =>
-        ruleName.startsWith(`${candidate}-`),
-      );
-
-      return prefix
-        ? {categories: [prefix], errors: []}
-        : {
-            categories: [],
-            errors: [
-              `does not start with any of the known file type prefixes: ${PNPM_RULE_NAME_PREFIXES.map((v) => `\`${v}-\``).join(', ')}`,
-            ],
-          };
-    },
-  } satisfies RuleCategorization<(typeof PNPM_RULE_NAME_PREFIXES)[number]>,
-
-  unicorn: {
-    categories: objectValuesUnsafe(UNICORN_LANGUAGES_TO_CATEGORIES),
-    categorizeRule: (rule) => {
-      const {languages} = rule.meta || {};
-      if (!Array.isArray(languages)) {
-        return {categories: [], errors: ['does not declare `meta.languages`']};
-      }
-
-      const errors: string[] = [];
-      const categories = [
-        ...new Set(
-          languages
-            .map((language) => {
-              if (isKeyIn(language, UNICORN_LANGUAGES_TO_CATEGORIES)) {
-                return UNICORN_LANGUAGES_TO_CATEGORIES[language];
-              }
-              errors.push(`unknown language \`${language}\``);
-              return null;
-            })
-            .filter((v) => v != null),
-        ),
-      ];
-
-      return {categories, errors};
-    },
-  } satisfies RuleCategorization<ObjectValues<typeof UNICORN_LANGUAGES_TO_CATEGORIES>>,
 };
 
 await fs.mkdir(resolveInOutDir(), {recursive: true});
@@ -313,41 +225,50 @@ ${perPluginCodeRaw
 } as const;
 `;
 
-  const categorizationErrors: string[] = [];
-  const categorizedRulesPerPlugin = Object.entries(RULE_CATEGORIZATIONS).map(
-    ([pluginName, {categories: categoriesDeclared, categorizeRule}]) => {
-      const plugin = allPlugins[pluginName];
-      if (!plugin) {
-        throw new Error(`Cannot categorize the rules of the not loaded \`${pluginName}\` plugin`);
-      }
+  const categorizedRulesPerPlugin = await Promise.all(
+    Object.entries(RULE_CATEGORIZATIONS).map(
+      async ([pluginName, {categories: categoriesDeclared, createRuleCategorizer}]) => {
+        const plugin = allPlugins[pluginName];
+        if (!plugin) {
+          throw new Error(`Cannot categorize the rules of the not loaded \`${pluginName}\` plugin`);
+        }
 
-      const rulesPerCategory = new Map(
-        categoriesDeclared.map((category): [typeof category, string[]] => [category, []]),
-      );
+        const categorizeRule = await createRuleCategorizer(plugin);
 
-      Object.entries(plugin.rules || {})
-        // eslint-disable-next-line unicorn/no-array-sort
-        .sort(([ruleNameA], [ruleNameB]) => ruleNameA.localeCompare(ruleNameB))
-        .filter(([, {meta}]) => !meta?.deprecated)
-        .forEach(([ruleName, rule]) => {
-          const {categories: categoriesFound, errors} = categorizeRule(rule, ruleName);
-          if (errors.length > 0) {
-            categorizationErrors.push(
-              `  ${styleText('yellow', `${pluginName}/${ruleName}`)}: ${errors.join(', ')}`,
-            );
-          }
-          categoriesFound.forEach((category) => {
-            rulesPerCategory.get(category)?.push(ruleName);
+        const errors: string[] = [];
+        const rulesPerCategory = new Map(
+          categoriesDeclared.map((category): [typeof category, string[]] => [category, []]),
+        );
+
+        Object.entries(plugin.rules || {})
+          // eslint-disable-next-line unicorn/no-array-sort
+          .sort(([ruleNameA], [ruleNameB]) => ruleNameA.localeCompare(ruleNameB))
+          .filter(([, {meta}]) => !meta?.deprecated)
+          .forEach(([ruleName, rule]) => {
+            const {categories: categoriesFound, errors: ruleErrors} = categorizeRule({
+              rule,
+              ruleName,
+            });
+            if (ruleErrors.length > 0) {
+              errors.push(
+                `  ${styleText('yellow', `${pluginName}/${ruleName}`)}: ${ruleErrors.join(', ')}`,
+              );
+            }
+            categoriesFound.forEach((category) => {
+              rulesPerCategory.get(category)?.push(ruleName);
+            });
           });
-        });
 
-      return {pluginName, rulesPerCategory};
-    },
+        return {pluginName, rulesPerCategory, errors};
+      },
+    ),
   );
+
+  const categorizationErrors = categorizedRulesPerPlugin.flatMap(({errors}) => errors);
 
   if (categorizationErrors.length > 0) {
     throw new Error(
-      `The following rules could not be sorted into a category. Update the corresponding categorization in \`scripts/typegen.ts\`, creating a new category (and, most likely, a new Sub-config) if needed:\n${categorizationErrors.join('\n')}`,
+      `The following rules could not be sorted into a category. Update the corresponding categorization in \`scripts/src/rule-categorizations\`, creating a new category (and, most likely, a new Sub-config) if needed:\n${categorizationErrors.join('\n')}`,
     );
   }
 
