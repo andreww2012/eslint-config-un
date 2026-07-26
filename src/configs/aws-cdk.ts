@@ -28,7 +28,6 @@ export default ((context, optionsRaw) => {
       },
     ])
     .addRule('construct-constructor-property', ERROR) /** @since 4.0.0 */ // 💭
-    .addRule('migrate-disable-comments', ERROR) /** @since 4.0.1 */
     .addRule('no-construct-in-interface', ERROR) /** @since 4.0.0 */ // 💭
     .addRule('no-construct-in-public-property-of-construct', ERROR) /** @since 4.0.0 */ // 💭
     .addRule('no-construct-stack-suffix', ERROR) /** @since 4.0.0 */ // 💭

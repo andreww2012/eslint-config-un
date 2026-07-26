@@ -1,5 +1,5 @@
 const FIXTURES = {
-  oldStyleCdkDisableComment: 'old-style-cdk-disable-comment.ts',
+  propsInterfaceWithMutableProperty: 'props-interface-with-mutable-property.ts',
 } as const;
 
 beforeEach(() => {
@@ -108,20 +108,20 @@ describe('rules', () => {
     });
   });
 
-  it('`awscdk/migrate-disable-comments` rule fires on old-style cdk disable comments', async () => {
-    const results = await testEslintConfig('awsCdk', FIXTURES.oldStyleCdkDisableComment, {
+  it('`awscdk/no-mutable-property-of-props-interface` rule fires on a mutable property of a props interface', async () => {
+    const results = await testEslintConfig('awsCdk', FIXTURES.propsInterfaceWithMutableProperty, {
       searchFixturesRelativeToPath: import.meta.dirname,
       internalOptions: {skipTypeInfoSplit: false},
     });
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.oldStyleCdkDisableComment,
-      'awscdk/migrate-disable-comments',
+      FIXTURES.propsInterfaceWithMutableProperty,
+      'awscdk/no-mutable-property-of-props-interface',
     );
 
     expect(error?.message).toMatchInlineSnapshot(
-      "\"Replace 'cdk/' with 'awscdk/' in ESLint disable comments.\"",
+      `"Property 'bucketName' of Construct Props should be readonly."`,
     );
   });
 });
@@ -159,13 +159,13 @@ describe('un options', () => {
   it('respects `overrides` and `overridesAny` in `awscdk` eslint config', async () => {
     const configResult = await computeEslintConfig({
       awsCdk: {
-        overrides: {'awscdk/migrate-disable-comments': 0},
+        overrides: {'awscdk/no-mutable-property-of-props-interface': 0},
         overridesAny: {'no-console': 0},
       },
     });
 
     expect(configResult.getRuleSeverities('aws-cdk')).toMatchObject({
-      'awscdk/migrate-disable-comments': 0,
+      'awscdk/no-mutable-property-of-props-interface': 0,
       'no-console': 0,
     });
   });

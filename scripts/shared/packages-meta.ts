@@ -48,6 +48,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     },
     awscdk: {
       configs: ['awsCdk'],
+      gitTag: (version) => `eslint-plugin-awscdk${version}`,
       ruleDocsUrl: (ruleName) => `https://awscdk-lint.dev/rules/${ruleName}.html`,
     },
     'barrel-files': {
