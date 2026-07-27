@@ -208,7 +208,7 @@
     "@types/eslint-plugin-mobx": "0.0.0",
     "@types/eslint-plugin-security": "3.0.1",
     "@types/estree": "1.0.9",
-    "@types/node": "20.19.1",
+    "@types/node": "20.19.43",
     "@types/npm-package-arg": "6.1.4",
     "@types/semver": "7.7.1",
     "@types/validate-npm-package-name": "4.0.2",
