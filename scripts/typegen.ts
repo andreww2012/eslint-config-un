@@ -225,13 +225,16 @@ ${perPluginCodeRaw
 
   const categorizedRulesPerPlugin = await Promise.all(
     Object.entries(RULE_CATEGORIZATIONS).map(
-      async ([pluginName, {categories: categoriesDeclared, createRuleCategorizer}]) => {
+      async ([
+        pluginName,
+        {categories: categoriesDeclared, includeDeprecated = false, createRuleCategorizer},
+      ]) => {
         const plugin = allPlugins[pluginName];
         if (!plugin) {
           throw new Error(`Cannot categorize the rules of the not loaded \`${pluginName}\` plugin`);
         }
 
-        const categorizeRule = await createRuleCategorizer(plugin);
+        const categorizeRule = await createRuleCategorizer(plugin, pluginName);
 
         const errors: string[] = [];
         const rulesPerCategory = new Map(
@@ -241,7 +244,7 @@ ${perPluginCodeRaw
         Object.entries(plugin.rules || {})
           // eslint-disable-next-line unicorn/no-array-sort
           .sort(([ruleNameA], [ruleNameB]) => ruleNameA.localeCompare(ruleNameB))
-          .filter(([, {meta}]) => !meta?.deprecated)
+          .filter(([, {meta}]) => includeDeprecated || !meta?.deprecated)
           .forEach(([ruleName, rule]) => {
             const {categories: categoriesFound, errors: ruleErrors} = categorizeRule({
               rule,

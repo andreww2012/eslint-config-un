@@ -6,7 +6,6 @@ import {
   GLOB_TS_X,
   GLOB_TS_X_EXTENSION,
   OFF,
-  TS_PLUGIN_TYPE_AWARE_RULES,
   WARNING,
 } from '../constants';
 import type {
@@ -14,6 +13,7 @@ import type {
   UnFlatConfigEntryFilesAndIgnores,
   UnRulesConfig,
 } from '../eslint/eslint-types';
+import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Nullable, ObjectValues, OmitStrict, Prettify} from '../types';
 import {type MaybeFn, allUnionMembers, isKeyIn, maybeCall, omit} from '../utils';
@@ -30,6 +30,7 @@ import {
   getRuleUnSeverityAndOptionsFromEntry,
 } from './index';
 
+const TS_PLUGIN_TYPE_AWARE_RULES = RULE_CATEGORIES_PER_PLUGIN.ts.typeAware;
 const TS_PLUGIN_TYPE_AWARE_RULES_SET = new Set<string>(TS_PLUGIN_TYPE_AWARE_RULES);
 
 type TypeAwareRulesWithPrefixes = Pick<

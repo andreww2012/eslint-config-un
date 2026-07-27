@@ -13,7 +13,6 @@ import {
   GLOB_TS_X,
   GLOB_YML_YAML,
   OFF,
-  RULES_REQUIRING_TYPE_INFORMATION,
   type RuleSeverity,
   WARNING,
 } from '../constants';
@@ -40,6 +39,7 @@ import {
   type PluginPrefix,
   packageToLoadSymbol,
 } from '../loaders';
+import {RULES_REQUIRING_TYPE_INFORMATION} from '../type-aware-rules';
 import type {
   EmptyObject,
   Falsy,

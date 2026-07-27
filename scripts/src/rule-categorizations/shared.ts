@@ -21,9 +21,14 @@ export interface RuleCategorization<CategoryId extends string> {
    */
   categories: readonly CategoryId[];
 
+  includeDeprecated?: boolean;
+
   /**
    * Creates the rule categorizer, first possibly collecting whatever
    * the categorizer function depends onto, if it does not come from the rule itself
    */
-  createRuleCategorizer: (plugin: EslintPlugin) => MaybePromise<CategorizeRule<CategoryId>>;
+  createRuleCategorizer: (
+    plugin: EslintPlugin,
+    pluginPrefix: string,
+  ) => MaybePromise<CategorizeRule<CategoryId>>;
 }

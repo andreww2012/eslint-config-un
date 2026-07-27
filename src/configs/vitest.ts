@@ -1,4 +1,5 @@
 import {ERROR, GLOB_JS_TS_X_EXTENSION, GLOB_TS_X_EXTENSION, OFF, WARNING} from '../constants';
+import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {pluginsLoaders} from '../loaders';
 import type {Prettify} from '../types';
 import {allUnionMembers} from '../utils';
@@ -12,7 +13,6 @@ import {
 import {
   type ExtraPluginsType,
   type FlatConfigEntryForBuilder,
-  type GetRuleNamesInPlugin,
   type GetRuleOptions,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
@@ -133,9 +133,7 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
 // Source: https://github.com/vitest-dev/eslint-plugin-vitest/blob/9cca3c31e355d41e615964dcf7ffd7a9df338ab6/src/rules/expect-expect.ts
 const EXPECT_EXPECT_DEFAULT_ASSERT_FUNCTION_NAMES = ['expect', 'assert'];
 
-const VITEST_RULES_REQUIRING_TYPE_INFORMATION = [
-  'unbound-method',
-] satisfies GetRuleNamesInPlugin<'vitest'>[];
+const VITEST_RULES_REQUIRING_TYPE_INFORMATION = RULE_CATEGORIES_PER_PLUGIN.vitest.typeAware;
 
 const VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET = new Set<string>(
   VITEST_RULES_REQUIRING_TYPE_INFORMATION,
