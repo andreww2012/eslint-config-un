@@ -100,7 +100,19 @@ interface EslintPluginReactSettings {
 
 interface EslintPluginReactXSettings {
   /**
-   * Regex pattern matching custom hooks treated as state hooks
+   * A regex pattern matching custom hooks treated as effect hooks.
+   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#additionaleffecthooks
+   */
+  additionalEffectHooks?: string;
+
+  /**
+   * A regex pattern matching custom hooks treated as ref hooks.
+   * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#additionalrefhooks
+   */
+  additionalRefHooks?: string;
+
+  /**
+   * A regex pattern matching custom hooks treated as state hooks
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#additionalstatehooks
    */
   additionalStateHooks?: string;
