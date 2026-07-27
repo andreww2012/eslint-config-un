@@ -58,7 +58,7 @@
     "print-peer-deps": "node --import tsx/esm scripts/print-peer-deps.ts",
     "rules-finder": "node --import tsx/esm scripts/rules-finder.ts",
     "plugins:analyze": "node --import tsx/esm scripts/plugins-analyzer.ts",
-    "plugins:find": "node --import tsx/esm scripts/plugins-finder.ts",
+    "plugins:find": "puppeteer browsers install chrome && node --import tsx/esm scripts/plugins-finder.ts",
     "plugins:fetch": "node --import tsx/esm scripts/plugins-fetcher.ts",
     "checked-deps-finder": "node --import tsx/esm scripts/check-detected-packages-in-prod-dependencies.ts",
     "spellcheck": "cspell --no-progress --no-summary .",
