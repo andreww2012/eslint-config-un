@@ -698,6 +698,11 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
     configs: ['astro'],
     ruleDocsUrl: null,
   },
+  browserslist: {
+    configs: ['compat'],
+    gitTag: versionAsIs,
+    ruleDocsUrl: null,
+  },
   'ember-eslint-parser': {
     configs: ['ember'],
     ruleDocsUrl: null,
