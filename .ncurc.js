@@ -33,6 +33,7 @@ const PACKAGES_WITH_PINNED_MAJOR_VERSION = new Set([
   'angular-eslint-plugin-template15',
   'angular-eslint-plugin-template17',
   'angular-eslint-plugin18',
+  'eslint',
 ]);
 
 const PACKAGES_ON_PRERELEASE_CHANNEL = new Set(['all-contributors-cli']);
