@@ -653,22 +653,34 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
         : linterOptionConfigs == null
           ? []
           : [{value: linterOptionConfigs}]
-      ).flatMap((linterOptionConfig, linterOptionConfigIndex, resolvedLinterOptionConfigs) => {
+      ).map((linterOptionConfig, linterOptionConfigIndex, resolvedLinterOptionConfigs) => {
+        const valueInitial = linterOptionConfig.value;
         const hasFiles = (linterOptionConfig.files?.length || 0) > 0;
         const hasIgnores = (linterOptionConfig.ignores?.length || 0) > 0;
-        let valueFinal = linterOptionConfig.value;
-        if (!hasFiles && hasIgnores && valueFinal == null) {
-          valueFinal = linterOptionName === 'noInlineConfig' ? false : 'off';
-        }
-        if (noWarnings && (valueFinal === 'warn' || valueFinal === WARNING)) {
-          valueFinal = valueFinal === 'warn' ? 'error' : ERROR;
-        }
+        // An `ignores`-only entry reads as "turn this option off for these paths", so they should become `files`
+        const disableForIgnoredPaths = !hasFiles && hasIgnores && valueInitial == null;
+
+        const valueFinal = (() => {
+          let result = valueInitial;
+          if (disableForIgnoredPaths) {
+            result = linterOptionName === 'noInlineConfig' ? false : 'off';
+          }
+          if (noWarnings && (result === 'warn' || result === WARNING)) {
+            result = result === 'warn' ? 'error' : ERROR;
+          }
+          return result;
+        })();
+        const filesFinal = disableForIgnoredPaths
+          ? linterOptionConfig.ignores
+          : linterOptionConfig.files;
+
         return {
           name: genFlatConfigEntryName(
             `global-setup/linter-options/${linterOptionName}${resolvedLinterOptionConfigs.length > 1 ? `/${linterOptionConfigIndex}` : ''}`,
           ),
-          ...(linterOptionConfig.files?.length && {files: linterOptionConfig.files}),
-          ...(linterOptionConfig.ignores?.length && {ignores: linterOptionConfig.ignores}),
+          ...(filesFinal?.length && {files: filesFinal}),
+          ...(!disableForIgnoredPaths &&
+            linterOptionConfig.ignores?.length && {ignores: linterOptionConfig.ignores}),
           // Always add `linterOptions` to avoid creating global ignore config
           linterOptions: {
             ...(valueFinal != null && {[linterOptionName]: valueFinal}),

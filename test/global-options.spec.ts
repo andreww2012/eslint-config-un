@@ -19,7 +19,6 @@ describe('option: `files`', () => {
     const config = configResult.getConfigByUnPostfix('files/global');
 
     expect(config).toStrictEqual({
-      // eslint-disable-next-line vitest/valid-expect
       name: expect.any(String) as unknown,
       files: FILES,
     });
@@ -72,7 +71,7 @@ describe('option: `linterOptionsNoInlineConfig`', () => {
     ).toMatchObject({files: FILES, linterOptions: {noInlineConfig: true}});
   });
 
-  it('creates a respective config with only `ignores` and no `value` which implicitly sets it to `false`', async () => {
+  it('creates a respective config with only `ignores` and no `value` which implicitly sets it to `false` for those paths', async () => {
     const IGNOGES = ['**/*.test.ts'];
 
     const configResult = await computeEslintConfig(
@@ -82,15 +81,28 @@ describe('option: `linterOptionsNoInlineConfig`', () => {
 
     expect(
       configResult.getConfigByUnPostfix('global-setup/linter-options/noInlineConfig'),
-    ).toMatchObject({ignores: IGNOGES, linterOptions: {noInlineConfig: false}});
+    ).toMatchObject({files: IGNOGES, linterOptions: {noInlineConfig: false}});
   });
 
-  it('creates a respective config with `ignores`, empty `files` and no `value` which implicitly sets it to `false`', async () => {
+  it('creates a respective config with `ignores`, empty `files` and no `value` which implicitly sets it to `false` for those paths', async () => {
     const IGNOGES = ['**/*.test.ts'];
 
     const configResult = await computeEslintConfig(
       {},
       {un: {linterOptionsNoInlineConfig: {files: [], ignores: IGNOGES}}},
+    );
+
+    expect(
+      configResult.getConfigByUnPostfix('global-setup/linter-options/noInlineConfig'),
+    ).toMatchObject({files: IGNOGES, linterOptions: {noInlineConfig: false}});
+  });
+
+  it('keeps `ignores` as-is when `value` is specified', async () => {
+    const IGNOGES = ['**/*.test.ts'];
+
+    const configResult = await computeEslintConfig(
+      {},
+      {un: {linterOptionsNoInlineConfig: {ignores: IGNOGES, value: false}}},
     );
 
     expect(
@@ -226,22 +238,35 @@ describe.each([
     ).toMatchObject({files: FILES, linterOptions: {reportUnusedDisableDirectives: 0}});
   });
 
-  it('creates a respective config with only `ignores` and no `value` which implicitly sets it to `off`', async () => {
+  it('creates a respective config with only `ignores` and no `value` which implicitly sets it to `off` for those paths', async () => {
     const IGNOGES = ['**/*.test.ts'];
 
     const configResult = await computeEslintConfig({}, {un: {[unOptionName]: {ignores: IGNOGES}}});
 
     expect(
       configResult.getConfigByUnPostfix(`global-setup/linter-options/${eslintOptionName}`),
-    ).toMatchObject({ignores: IGNOGES, linterOptions: {reportUnusedDisableDirectives: 'off'}});
+    ).toMatchObject({files: IGNOGES, linterOptions: {reportUnusedDisableDirectives: 'off'}});
   });
 
-  it('creates a respective config with `ignores`, empty `files` and no `value` which implicitly sets it to `off`', async () => {
+  it('creates a respective config with `ignores`, empty `files` and no `value` which implicitly sets it to `off` for those paths', async () => {
     const IGNOGES = ['**/*.test.ts'];
 
     const configResult = await computeEslintConfig(
       {},
       {un: {[unOptionName]: {files: [], ignores: IGNOGES}}},
+    );
+
+    expect(
+      configResult.getConfigByUnPostfix(`global-setup/linter-options/${eslintOptionName}`),
+    ).toMatchObject({files: IGNOGES, linterOptions: {reportUnusedDisableDirectives: 'off'}});
+  });
+
+  it('keeps `ignores` as-is when `value` is specified', async () => {
+    const IGNOGES = ['**/*.test.ts'];
+
+    const configResult = await computeEslintConfig(
+      {},
+      {un: {[unOptionName]: {ignores: IGNOGES, value: 'off'}}},
     );
 
     expect(

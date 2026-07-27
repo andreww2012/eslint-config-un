@@ -204,8 +204,9 @@ export interface EslintConfigUnOptions<
    * [`linterOptions.noInlineConfig`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=noInlineConfig)
    * globally or more granularly.
    *
-   * If `files` are not specified or an empty array, `ignores` is a non-empty array,
-   * and the value is not specified, it will implicitly set the value to `false`.
+   * ⚠️ Special case:
+   * If only non-empty `ignores` is specified, the option will be set to `false` *for the ignored
+   * paths*, i.e. `{ignores: [...]}` is actually a shorthand for `{files: [...], value: false}`.
    */
   linterOptionsNoInlineConfig?: ValueOrEslintConfigWithValue<boolean>;
 
@@ -214,8 +215,9 @@ export interface EslintConfigUnOptions<
    * [`linterOptions.reportUnusedDisableDirectives`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=reportUnusedDisableDirectives)
    * globally or more granularly.
    *
-   * If `files` are not specified or an empty array, `ignores` is a non-empty array,
-   * and the value is not specified, it will implicitly set the value to `off`.
+   * ⚠️ Special case:
+   * If only non-empty `ignores` is specified, the option will be set to `off` *for the ignored
+   * paths*, i.e. `{ignores: [...]}` is actually a shorthand for `{files: [...], value: 'off}`.
    * @default 'warn'; 'error' when `noWarnings` is `true`
    */
   linterOptionsReportUnusedDisableDirectives?: ValueOrEslintConfigWithValue<
@@ -227,8 +229,9 @@ export interface EslintConfigUnOptions<
    * [`linterOptions.reportUnusedInlineConfigs`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=reportUnusedInlineConfigs)
    * globally or more granularly.
    *
-   * If `files` are not specified or an empty array, `ignores` is a non-empty array,
-   * and the value is not specified, it will implicitly set the value to `off`.
+   * ⚠️ Special case:
+   * If only non-empty `ignores` is specified, the option will be set to `off` *for the ignored
+   * paths*, i.e. `{ignores: [...]}` is actually a shorthand for `{files: [...], value: 'off}`.
    */
   linterOptionsReportUnusedInlineConfigs?: ValueOrEslintConfigWithValue<
     EslintSeverityWithTypeAffectingOptions<TypeAffectingOptions>
