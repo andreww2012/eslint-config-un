@@ -4,7 +4,10 @@ import {forbidImportingFromUtilityLibraries} from './src/snippets';
 import {ALWAYS_BUNDLED_DEPENDENCIES} from './tsdown.config';
 
 export default eslintConfig({
-  ignores: ['test/**/fixtures/**'],
+  ignores: [
+    'test/**/fixtures/**',
+    '.agents/style-guide.md', // Copied from an external source
+  ],
   mode: 'lib',
   extraPlugins: {
     'local-rules': () => ({

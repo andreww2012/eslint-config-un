@@ -5,8 +5,7 @@ For usage examples, understanding concepts and API documentation [`README.md`](.
 
 ## Style guide
 
-Follow the guide at <https://raw.githubusercontent.com/andreww2012/agents/2c703918197781799bb42b0d06c8061f0d5ba18a/.agents/skills/style-guide.md>.
-**DO NOT HESITATE TO FETCH IT!**
+Follow [this guide](./.agents/style-guide.md).
 
 <!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -->
 ## When you're asked to...
