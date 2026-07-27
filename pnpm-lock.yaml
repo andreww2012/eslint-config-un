@@ -460,8 +460,8 @@ importers:
         specifier: 3.10.2
         version: 3.10.2(@typescript/typescript6@6.0.2)(eslint@9.39.5)(supports-color@7.2.0)
       '@effect/language-service':
-        specifier: 0.87.0
-        version: 0.87.0
+        specifier: 0.87.1
+        version: 0.87.1
       '@effect/platform':
         specifier: 0.97.0
         version: 0.97.0(effect@3.22.0)
@@ -2177,8 +2177,8 @@ packages:
       lmdb:
         optional: true
 
-  '@effect/language-service@0.87.0':
-    resolution: {integrity: sha512-GwZtEwBaOMyKea6YAtN0T0OGBtzJ8/y0KUIfyg29u3hnMRiXKlR2BRDqJmi+SbgaODJNNB3YOd6KuRB/vsxnWw==}
+  '@effect/language-service@0.87.1':
+    resolution: {integrity: sha512-kcljlJmEgqg5mFAM6UShJYJjMqJb3TbHHxrK8Qoubvwugc0aVWpRkbdgQvK5b17puOt3BKXXKOmcV+oQt0oQqQ==}
     hasBin: true
 
   '@effect/platform-node-shared@0.61.0':
@@ -13491,7 +13491,7 @@ snapshots:
       effect: 3.22.0
       uuid: 11.1.1
 
-  '@effect/language-service@0.87.0': {}
+  '@effect/language-service@0.87.1': {}
 
   '@effect/platform-node-shared@0.61.0(@effect/cluster@0.60.0)(@effect/platform@0.97.0)(@effect/rpc@0.76.0)(@effect/sql@0.52.0)(effect@3.22.0)':
     dependencies:

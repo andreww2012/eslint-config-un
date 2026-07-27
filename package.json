@@ -182,7 +182,7 @@
     "@cspell/eslint-plugin": "10.0.1",
     "@darraghor/eslint-plugin-nestjs-typed": "7.2.9",
     "@docusaurus/eslint-plugin": "3.10.2",
-    "@effect/language-service": "0.87.0",
+    "@effect/language-service": "0.87.1",
     "@effect/platform": "0.97.0",
     "@effect/platform-node": "0.108.0",
     "@eslint-react/eslint-plugin": "5.18.0",
