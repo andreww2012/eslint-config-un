@@ -8,6 +8,8 @@ saveExact: true
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
   - eslint-plugin-jsdoc@63.3.1
+  - puppeteer@25.4.0
+  - puppeteer-core@25.4.0
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
@@ -34,7 +36,7 @@ allowBuilds:
   # Not relevant for us - present transitively via `@nx/eslint-plugin`
   nx@23.1.0: false
   # The Chrome is only downloaded upon launching script(s) that actually use them to saving disk space
-  puppeteer@25.3.0: false
+  puppeteer@25.4.0: false
   # Runs `napi-postinstall`, which is optional deps checker for legacy npm versions
   unrs-resolver@1.12.2: false
 
