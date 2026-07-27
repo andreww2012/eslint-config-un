@@ -7,7 +7,7 @@ saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
-  - '@e18e/eslint-plugin@0.6.0'
+  - eslint-plugin-jsdoc@63.3.1
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
