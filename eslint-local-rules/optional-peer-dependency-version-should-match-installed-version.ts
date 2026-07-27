@@ -33,7 +33,6 @@ const rule: Eslint.Rule.RuleModule = {
         'Optional peer dependency {{name}} version must exactly match the installed version of the same dependency ({{installedVersion}}) and also be prepended with a caret (^)',
     },
   },
-  // @ts-expect-error small type mismatch after updating eslint to 9.39.0
   create: (context) => {
     const packageJsonParseResult = PackageJsonZod.safeParse(jsonParseSafe(context.sourceCode.text));
     const packageJson = packageJsonParseResult.data;
