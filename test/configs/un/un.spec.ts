@@ -1,5 +1,6 @@
 const FIXTURES = {
   consecutiveSpaces: 'consecutive-spaces.js',
+  typeofComparisons: 'typeof-comparisons.js',
 } as const;
 
 describe('basic tests', async () => {
@@ -82,6 +83,22 @@ describe('rules', async () => {
 
     expect(error?.message).toMatchInlineSnapshot(
       '"Multiple consecutive spaces in string literal are not allowed."',
+    );
+  });
+
+  it('`un/no-typeof-like-comparisons` only fires on operands not holding a `typeof` result', async () => {
+    const results = await testEslintConfig('un', FIXTURES.typeofComparisons, import.meta.dirname);
+
+    const errors = findLintMessageFromLintResults(
+      results,
+      FIXTURES.typeofComparisons,
+      'un/no-typeof-like-comparisons',
+      {all: true},
+    );
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0]?.message).toMatchInlineSnapshot(
+      '"This comparison is likely missing `typeof` operator before the left operand and therefore is forbidden. If this is intentional, you may need to suppress this report."',
     );
   });
 });
