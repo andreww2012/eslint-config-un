@@ -12,7 +12,19 @@ pre-push:
     types:
       run: nr lint:ts
     build:
-      run: nr build:code:test
+      run: nr build:code:test && nr check:dts:no-devdeps-imports
+    config:
+      run: nr check:config
+    peers:
+      glob: '{package.json,pnpm-lock.yaml,pnpm-workspace.yaml}'
+      run: nr deps:peers:check
+
+post-merge: &install-on-lockfile-change
+  commands:
+    install:
+      glob: '{pnpm-lock.yaml,pnpm-workspace.yaml,patches/*}'
+      run: ni
+post-checkout: *install-on-lockfile-change
 
 pre-commit:
   parallel: true
