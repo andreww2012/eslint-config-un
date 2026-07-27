@@ -1050,6 +1050,7 @@ const ALL_STYLISTIC_RULES = {
     'consistent-import': true,
     'consistent-schema-output-type-style': true,
     'no-number-schema-with-int': true,
+    'prefer-nullish': true,
     'schema-error-property-style': true,
   },
   'zod-core': {
@@ -1059,6 +1060,7 @@ const ALL_STYLISTIC_RULES = {
   'zod-mini': {
     'consistent-import': true,
     'consistent-schema-output-type-style': true,
+    'prefer-nullish': true,
     'schema-error-property-style': true,
   },
   'zod-openapi': {

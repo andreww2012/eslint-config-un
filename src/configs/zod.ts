@@ -296,6 +296,7 @@ export default ((context, optionsRaw) => {
     // `.meta()` added in v4
     .addRule('prefer-meta', severityForRulesOnlyForV4) /** @since 0.0.1 */ // 🟢
     .addRule('prefer-meta-last', ERROR) /** @since 0.0.1 */ // 🟢
+    .addRule('prefer-nullish', ERROR) /** @since 4.9.0 */ // 🟢
     .addRule('prefer-strict-object', severityForRulesOnlyForV4) /** @since 4.3.0 */ // 🟢
     .addRule('prefer-string-schema-with-trim', OFF) /** @since 3.3.0 */ // 🟢
     .addRule('prefer-top-level-string-formats', severityForRulesOnlyForV4) /** @since 4.1.0 */ // 🟢
@@ -350,6 +351,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-unnecessary-readonly', ERROR) /** @since 1.5.0 */
     .addRule('prefer-enum-over-literal-union', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule('prefer-meta', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule('prefer-nullish', ERROR) /** @since 1.6.0 */ // 🟢
     // Note: not considered stylistic because may change types
     .addRule('prefer-tuple-over-array-length', ERROR) /** @since 1.5.0 */
     .addRule('require-brand-type-parameter', ERROR) /** @since 0.1.0 */ // 🟢
