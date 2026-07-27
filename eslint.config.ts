@@ -15,13 +15,6 @@ export default eslintConfig({
     }),
   },
   defaultConfigsStatus: 'misc-enabled',
-  loadPluginsOnDemand: {
-    alwaysLoad: [
-      // `markdownLinks` config is disabled by default, but SKILL.md and the
-      // CHANGELOG.md override below reference its rules, so load them anyway
-      'markdown-links',
-    ],
-  },
   linterOptionsReportUnusedDisableDirectives: {
     ignores: [
       // Some rules are disabled in non-CI for this file
@@ -262,10 +255,11 @@ export default eslintConfig({
       },
     },
     {
-      files: ['README.md/3_3.ts'],
+      files: ['README.md/2_2.ts'],
       rules: {
         'ts/consistent-type-definitions': 0,
         'ts/no-empty-object-type': 0,
+        'unicorn/no-accidental-bitwise-operator': 0,
       },
     },
     {

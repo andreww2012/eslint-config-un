@@ -180,8 +180,6 @@ After evaluating all the flat configs, eslint-config-un will **load only those p
 
 The Config has the following interface (exact types are simplified for docs):
 
-<!-- eslint-disable ts/consistent-type-definitions, ts/no-empty-object-type, unicorn/no-accidental-bitwise-operator -->
-
 ```ts
 type Severity = 0 | 1 | 2 | 'off' | 'warn' | 'error';
 
@@ -219,8 +217,6 @@ type UnConfig =
       [customOptions: string]: unknown; // Custom options, individual for each Config
     };
 ```
-
-<!-- eslint-enable ts/consistent-type-definitions, ts/no-empty-object-type, unicorn/no-accidental-bitwise-operator -->
 
 #### `files` and `ignores`
 

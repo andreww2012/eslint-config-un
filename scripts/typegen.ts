@@ -29,7 +29,6 @@ const {allRuleTypesCode, perPluginCode, fixableRulesOnlyCode, allRulesCode, rule
 
 await printDiffBetweenMostRecentAndCurrentRuleTypes(allRuleTypesCode);
 
-/* eslint-disable unicorn/no-incorrect-template-string-interpolation */
 const derivedAllRuleTypesCode = `/* eslint-disable */
 /* prettier-ignore */
 // Derived from \`eslint-types-per-plugin.gen.d.ts\` to avoid loading two copies
@@ -51,7 +50,6 @@ export type RuleOptions = {
     ? Linter.RuleEntry<_RuleOptionsRaw[K]>
     : never
 }`;
-/* eslint-enable unicorn/no-incorrect-template-string-interpolation */
 
 await Promise.all([
   prettier

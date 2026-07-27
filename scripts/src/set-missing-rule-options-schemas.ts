@@ -69,7 +69,7 @@ export const addMissingRuleOptionsSchemas = async () => {
     plugins[pluginPrefix] = {
       ...plugin,
       rules: Object.fromEntries(
-        Object.entries(cloneDeep(plugin.rules || {})).map(([ruleId, ruleImplementation]) => {
+        objectEntriesUnsafe(cloneDeep(plugin.rules || {})).map(([ruleId, ruleImplementation]) => {
           const suggestedSchema = PLUGIN_OPTIONS_SCHEMAS[pluginPrefix]?.[ruleId];
           if (suggestedSchema) {
             if (ruleImplementation.meta?.schema) {

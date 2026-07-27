@@ -217,7 +217,6 @@ async function run({
   const runnerScriptPath = generatePathInProject('run.ts');
   const extraDepth = [...packageName.matchAll(/\//g)].length;
 
-  /* eslint-disable unicorn/no-incorrect-template-string-interpolation */
   const generateRunnerScriptSource = (allBatches: (typeof versionsSorted)[]) => `
 import {createRequire} from 'module';
 import PQueue from 'p-queue';
@@ -259,7 +258,6 @@ const modules = await Promise.all(
 
 toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
 `;
-  /* eslint-enable unicorn/no-incorrect-template-string-interpolation */
 
   await Promise.all([
     fs.writeFile(packageJsonPath, JSON.stringify(generatedPackageJson, null, 2), 'utf8'),

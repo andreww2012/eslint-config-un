@@ -109,7 +109,6 @@ export function findArrayInversions<T>(
 
 // eslint-disable-next-line ts/no-redundant-type-constituents
 export const joinPaths = (...paths: (string | Falsy)[]) =>
-  // eslint-disable-next-line unicorn/prefer-native-coercion-functions
   path.posix.join(...arrayify(paths).filter((v): v is string => Boolean(v)));
 
 export function readFileSafe(filePath: string, asBinary?: false): Promise<string | null>;

@@ -259,7 +259,6 @@ describe('options', () => {
       ).toMatchObject({
         atrules: {
           utility: {prelude: '<ident>'},
-          // eslint-disable-next-line vitest/valid-expect
           theme: expect.any(Object) as unknown,
         },
         node: {TailwindThemeKey: {}, TailwindUtilityClass: {}},

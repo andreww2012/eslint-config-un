@@ -185,7 +185,6 @@ Add this to the start of the file:
 Then use the following template for the description (put a blank line after the frontmatter and IGNORE ALL THE COMMENTS in the following snippet for the actual description):
 
 ```md
-<!-- eslint-disable-next-line markdown-links/no-missing-path -->
 Added a new config `<configName>` which uses [`<pluginName>`](<plugin npmx.dev link>),
 
 <!-- Use one of the options below (without actually creating any line breaks! don't forget emojis!): -->
