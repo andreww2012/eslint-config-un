@@ -23,7 +23,7 @@ jobs:
           node-version: ${{ inputs.node-version }}
       - run: pnpm i eslint@${{ inputs.eslint-version }}
         if: inputs.eslint-version != 9 # TODO temp, already installed and installation gets stuck on node 22
-      - run: pnpm test:config
+      - run: pnpm check:config
   test-vitest:
     name: Vitest
     runs-on: ${{ inputs.os }}

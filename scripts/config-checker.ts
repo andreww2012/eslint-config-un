@@ -55,7 +55,7 @@ if (packagesToMoveToDirectDependencies.length > 0) {
   });
 }
 
-const logger = consola.withTag('config-tester');
+const logger = consola.withTag('config-checker');
 
 let errorsCount = 0;
 let warningsCount = 0;

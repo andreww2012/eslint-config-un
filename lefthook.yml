@@ -10,7 +10,7 @@ pre-push:
     knip:
       run: nr knip
     types:
-      run: nr lint:types
+      run: nr lint:ts
     build:
       run: nr build:code:test
 
