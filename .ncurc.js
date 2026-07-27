@@ -1,12 +1,12 @@
 // @ts-check
-const fs = require('node:fs');
-const path = require('node:path');
-const semver = require('semver');
-const packageJson = require('./package.json');
+import fs from 'node:fs';
+import path from 'node:path';
+import {defineConfig} from 'npm-check-updates';
+import semver from 'semver';
+import packageJson from './package.json' with {type: 'json'};
 
-// TODO mark `eslint-plugin-storybook` as requiring full reinstallation to avoid missing peer dependency warning
-
-const CACHE_DIRECTORY = path.join(__dirname, 'node_modules/.cache/npm-check-updates');
+const CACHE_DIRECTORY = path.join(import.meta.dirname, 'node_modules/.cache/npm-check-updates');
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 fs.mkdirSync(CACHE_DIRECTORY, {recursive: true});
 
 const SCOPED_ESLINT_PACKAGES_NOT_PLUGINS = new Set(['config-inspector', 'compat']);
@@ -27,13 +27,15 @@ const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set(['tailwind-css
 
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set();
 
-const IGNORED_MAJOR_VERSION_TRANSITIONS = new Set([
+const PACKAGES_WITH_PINNED_MAJOR_VERSION = new Set([
   '@eslint/core0',
   '@types/node',
   'angular-eslint-plugin-template15',
   'angular-eslint-plugin-template17',
   'angular-eslint-plugin18',
 ]);
+
+const PACKAGES_ON_PRERELEASE_CHANNEL = new Set(['all-contributors-cli']);
 
 const PACKAGE_GROUPS = Object.entries({
   'Package manager': {packages: ['pnpm'], nonEslint: true},
@@ -65,16 +67,19 @@ const PACKAGE_GROUPS = Object.entries({
   return Object.assign(result, packagesInCurrentGroup);
 }, {});
 
-/**
- * @type {import('npm-check-updates').RunOptions}
- */
-module.exports = {
+export default defineConfig({
   cache: true,
   cacheExpiration: 30,
   cacheFile: path.join(CACHE_DIRECTORY, 'cache.json'),
 
-  // Fixes https://github.com/raineorshine/npm-check-updates/blob/55ee69bc7a9d7a786537b3359924af9784a112ae/CHANGELOG.md#how-to-opt-out-of-the-new-behavior
-  target: '@latest',
+  target: (packageName) => {
+    if (PACKAGES_WITH_PINNED_MAJOR_VERSION.has(packageName)) {
+      return 'minor';
+    }
+
+    // `@latest` fixes https://github.com/raineorshine/npm-check-updates/blob/55ee69bc7a9d7a786537b3359924af9784a112ae/CHANGELOG.md#how-to-opt-out-of-the-new-behavior
+    return PACKAGES_ON_PRERELEASE_CHANNEL.has(packageName) ? 'greatest' : '@latest';
+  },
 
   filterResults: (
     packageName,
@@ -87,7 +92,7 @@ module.exports = {
       (v) => semver.parse(v),
     );
     return (
-      (!IGNORED_MAJOR_VERSION_TRANSITIONS.has(packageName) ||
+      (!PACKAGES_WITH_PINNED_MAJOR_VERSION.has(packageName) ||
         currentVersionSemver?.major === upgradedVersionSemver?.major) &&
       (!IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS /* eslint-disable-line sonarjs/no-empty-collection */.has(
         packageName,
@@ -145,4 +150,4 @@ module.exports = {
         ? generateGroupName(2, 'Peer dependencies')
         : generateGroupName(1, 'Direct dependencies');
   },
-};
+});

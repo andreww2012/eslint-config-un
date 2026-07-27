@@ -1,16 +1,16 @@
 diff --git a/build/index.js b/build/index.js
-index 80dab55963f957f18f2c301175ca8d60eff650ce..70a9546a71b625141499ce574c5160c12fcd4853 100644
+index 318619895e40774a8bfaff81821f8c0580dfb252..557a8e1f45dadd238d4f4c02b9ece15c16d71393 100644
 --- a/build/index.js
 +++ b/build/index.js
-@@ -30762,9 +30762,9 @@ async function zh(e, t = {}) {
- 		let o = Ir(e[r]), [s, c] = o || [r, e[r]];
- 		if (qn(c)) return a?.tick(), { version: null };
- 		let l = t.target || "latest", u = typeof l == "string" ? l : l(s, (0, tr.parseRange)(c)), [d, f] = u.startsWith("@") ? ["distTag", u.slice(1)] : [u, "latest"];
+@@ -19373,9 +19373,9 @@ async function op(e, t = {}) {
+ 		let o = jr(e[r]), [s, c] = o || [r, e[r]];
+ 		if (Un(c)) return a?.tick(), { version: null };
+ 		let l = t.target || "latest", u = typeof l == "string" ? l : l(s, (0, me.parseRange)(c)), [d, f] = u.startsWith("@") ? ["distTag", u.slice(1)] : [u, "latest"];
 -		if (!t.cooldown) {
 +		{
  			let e = t.cacher?.get(s, d);
 -			if (e?.version && (e?.time || !t.format?.includes("time"))) return a?.tick(), e;
 +			if (e?.version && (e?.time || !t.format?.includes("time")) && (!t.cooldown || e?.time)) return a?.tick(), e;
  		}
- 		let p, m = zr(e[r]), h = m ? mh.gitTags : i, g = m ? "github urls" : t.packageManager || "npm", _ = h[d];
+ 		let p, m = Pr(e[r]), h = m ? Lf.gitTags : i, g = m ? "github urls" : t.packageManager || "npm", _ = h[d];
  		if (!_) {
