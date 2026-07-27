@@ -454,8 +454,8 @@ importers:
         specifier: 10.0.1
         version: 10.0.1(eslint@9.39.2)
       '@darraghor/eslint-plugin-nestjs-typed':
-        specifier: 7.2.8
-        version: 7.2.8(@typescript-eslint/parser@8.65.0)(@typescript/typescript6@6.0.2)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5)(eslint@9.39.2)(supports-color@7.2.0)
+        specifier: 7.2.9
+        version: 7.2.9(@typescript-eslint/parser@8.65.0)(@typescript/typescript6@6.0.2)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5)(eslint@9.39.2)(supports-color@7.2.0)
       '@docusaurus/eslint-plugin':
         specifier: 3.10.2
         version: 3.10.2(@typescript/typescript6@6.0.2)(eslint@9.39.2)(supports-color@7.2.0)
@@ -2121,8 +2121,8 @@ packages:
     resolution: {integrity: sha512-abYYgI29wJhWIfWTYrYuzRYDcHQUQ1N5ylnhxYn1NJnIQMqUWGLbDmt12JABtZ+R6h6UNatQrS7rhP86etvJyQ==}
     engines: {node: '>=22.18.0'}
 
-  '@darraghor/eslint-plugin-nestjs-typed@7.2.8':
-    resolution: {integrity: sha512-kN3Cpr+4BSIU5fZCLB+cDIo+tBM7ogsyvyTGT+KFX4ap4ehZrnoU7MgKFN5lGRMB/L3AtLNzo7BpcA2w6nd4Jw==}
+  '@darraghor/eslint-plugin-nestjs-typed@7.2.9':
+    resolution: {integrity: sha512-/l3/RCb8ik2CbIIAOOdsva7fOlfMvojIfyVyHAdLXZJ3yuSJEBdRoRWCBdbcr38IT9p/CmiZMjLsFiTBOr1GJg==}
     engines: {node: '>=24.0.0'}
     peerDependencies:
       '@typescript-eslint/parser': ^7.0.0 || ^8.0.0
@@ -2452,12 +2452,6 @@ packages:
 
   '@eslint-community/eslint-utils@4.10.1':
     resolution: {integrity: sha512-cuadcxVFE8sDK6iWJbs8Sn0av2Nrh2QSGQhVlBW9AaAHqHwjWsZHT8LJ4hFGPh7ASBV2deFdM7H/DPjulmh8rg==}
-    engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-    peerDependencies:
-      eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
-
-  '@eslint-community/eslint-utils@4.9.1':
-    resolution: {integrity: sha512-phrYmNiYppR7znFEdqgfWHXR6NCkZEK7hwWDHZUjit/2/U0r6XvkDl0SYnoM51Hq7FhCGdLDT6zxCCOY1hexsQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
@@ -13440,7 +13434,7 @@ snapshots:
 
   '@cspell/url@10.0.1': {}
 
-  '@darraghor/eslint-plugin-nestjs-typed@7.2.8(@typescript-eslint/parser@8.65.0)(@typescript/typescript6@6.0.2)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5)(eslint@9.39.2)(supports-color@7.2.0)':
+  '@darraghor/eslint-plugin-nestjs-typed@7.2.9(@typescript-eslint/parser@8.65.0)(@typescript/typescript6@6.0.2)(class-validator@0.14.3)(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@4.4.5)(eslint@9.39.2)(supports-color@7.2.0)':
     dependencies:
       '@typescript-eslint/parser': 8.65.0(@typescript/typescript6@6.0.2)(eslint@9.39.2)(supports-color@7.2.0)
       '@typescript-eslint/scope-manager': 8.65.0
@@ -13732,11 +13726,6 @@ snapshots:
       ignore: 7.0.6
 
   '@eslint-community/eslint-utils@4.10.1(eslint@9.39.2)':
-    dependencies:
-      eslint: 9.39.2(jiti@2.7.0)(supports-color@7.2.0)
-      eslint-visitor-keys: 3.4.3
-
-  '@eslint-community/eslint-utils@4.9.1(eslint@9.39.2)':
     dependencies:
       eslint: 9.39.2(jiti@2.7.0)(supports-color@7.2.0)
       eslint-visitor-keys: 3.4.3
@@ -16360,7 +16349,7 @@ snapshots:
 
   '@typescript-eslint/utils@8.65.0(@typescript/typescript6@6.0.2)(eslint@9.39.2)(supports-color@7.2.0)':
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2)
+      '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.2)
       '@typescript-eslint/scope-manager': 8.65.0
       '@typescript-eslint/types': 8.65.0
       '@typescript-eslint/typescript-estree': 8.65.0(@typescript/typescript6@6.0.2)(supports-color@7.2.0)
