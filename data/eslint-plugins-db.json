@@ -1622,6 +1622,7 @@
   "@ubccpsc310/eslint-plugin-descriptive": {"status": "fetched"},
   "@ubiquity-os/eslint-plugin-no-empty-strings": {"status": "fetched"},
   "@umpire/eslint-plugin": null,
+  "@unhead/eslint-plugin": {"status": "added"},
   "@uniqorg/eslint-plugin": {"status": "declined", "reason": "Meta-plugin"},
   "@unlomtrois2/eslint-plugin-nestjs-typed": {"status": "fetched"},
   "@unocss/eslint-plugin": {"status": "added"},

@@ -574,6 +574,10 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
       configs: ['un'],
       ruleDocsUrl: null, // No docs
     },
+    unhead: {
+      configs: ['unhead'],
+      ruleDocsUrl: null, // No docs
+    },
     unicorn: {
       configs: ['unicorn'],
       ruleDocsUrl: (ruleName) =>

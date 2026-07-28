@@ -104,6 +104,7 @@ import type {TsEslintConfigOptions} from './ts';
 import type {TsdocEslintConfigOptions} from './tsdoc';
 import type {TurboEslintConfigOptions} from './turbo';
 import type {UnEslintConfigOptions} from './un';
+import type {UnheadEslintConfigOptions} from './unhead';
 import type {UnicornEslintConfigOptions} from './unicorn';
 import type {UnnecessaryAbstractionsEslintConfigOptions} from './unnecessary-abstractions';
 import type {UnocssEslintConfigOptions} from './unocss';
@@ -1507,6 +1508,18 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default true
    */
   un: UnEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * [[Unhead](https://unhead.unjs.io) specific rules, catching library misuse, type-narrowing issues
+   * and v2-to-v3 migration problems.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`@unhead/eslint-plugin`](https://npmx.dev/@unhead/eslint-plugin)
+   * ([docs](https://github.com/unjs/unhead/blob/HEAD/packages/eslint-plugin/README.md))
+   * @default true <=> [`unhead`](https://npmx.dev/unhead) package is installed
+   */
+  unhead: UnheadEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin with various rules.

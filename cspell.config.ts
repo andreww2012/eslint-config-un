@@ -44,6 +44,7 @@ export default {
     'smarttools',
     'destr',
     'unocss',
+    'unhead',
     'attw',
     'tsgo',
     'tinyexec',

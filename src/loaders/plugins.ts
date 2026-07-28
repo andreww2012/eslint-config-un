@@ -656,6 +656,11 @@ export const pluginsLoaders = {
     () => interopDefault(import('eslint-plugin-turbo')) as Promise<EslintPlugin>,
   ),
   un: genModuleLoader('un', '', () => interopDefault(import('../plugin-un'))),
+  unhead: genModuleLoader(
+    'unhead',
+    '@unhead/eslint-plugin',
+    () => interopDefault(import('@unhead/eslint-plugin')) as Promise<EslintPlugin>,
+  ),
   unicorn: genModuleLoader(
     'unicorn',
     'eslint-plugin-unicorn',

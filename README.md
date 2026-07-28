@@ -71,6 +71,7 @@ You need to run ESLint with our config once to find out which plugins should be 
 | `@tanstack/eslint-plugin-query`                    | `@tanstack/query`                    |
 | `@tanstack/eslint-plugin-router`                   | `@tanstack/router`                   |
 | `@tanstack/eslint-plugin-start`                    | `@tanstack/start`                    |
+| `@unhead/eslint-plugin`                            | `@unhead`                            |
 | `@unocss/eslint-plugin`                            | `@unocss`                            |
 | `@vitest/eslint-plugin`                            | `vitest`                             |
 | `eslint-plugin-antfu`                              | `antfu`                              |
@@ -466,6 +467,7 @@ In the following table, Sub-configs have `/` in their names.
 | `mobx`                                                                              | ✅ (`mobx` is installed)                                               | [eslint-plugin-mobx](https://npmx.dev/eslint-plugin-mobx) (`mobx`)                                                                                  | Since v1.0.0                                                                                        |
 | `remeda`                                                                            | ✅ (`remeda` is installed)                                             | [eslint-plugin-remeda](https://npmx.dev/eslint-plugin-remeda) (`remeda`)                                                                            | Since v1.1.0                                                                                        |
 | `clsx`                                                                              | ✅ (`clsx` is installed)                                               | [eslint-plugin-clsx](https://npmx.dev/eslint-plugin-clsx) (`clsx`)                                                                                  | Since v1.0.0                                                                                        |
+| `unhead`                                                                            | ✅ (`unhead` is installed)                                             | [@unhead/eslint-plugin](https://npmx.dev/@unhead/eslint-plugin) (`unhead`)                                                                          | Since v1.0.0                                                                                        |
 
 ### Miscellaneous
 
@@ -589,6 +591,7 @@ If you would like to rename them back or rename some other plugins, you can use 
 | [`@tanstack/eslint-plugin-query`](https://npmx.dev/@tanstack/eslint-plugin-query)                                     | `@tanstack/query`                   | `tanstack-query`     | Similar reason ^                                                                                                    |
 | [`@tanstack/eslint-plugin-router`](https://npmx.dev/@tanstack/eslint-plugin-router)                                   | `@tanstack/router`                  | `tanstack-router`    | Similar reason ^                                                                                                    |
 | [`@tanstack/eslint-plugin-start`](https://npmx.dev/@tanstack/eslint-plugin-start)                                     | `@tanstack/start`                   | `tanstack-start`     | Similar reason ^                                                                                                    |
+| [`@unhead/eslint-plugin`](https://npmx.dev/@unhead/eslint-plugin)                                                     | `@unhead`                           | `unhead`             | Similar reason ^                                                                                                    |
 | [`@unocss/eslint-plugin`](https://npmx.dev/@unocss/eslint-plugin)                                                     | `@unocss`                           | `unocss`             | Similar reason ^                                                                                                    |
 | [`@intlify/eslint-plugin-vue-i18n`](https://npmx.dev/@intlify/eslint-plugin-vue-i18n)                                 | `@intlify/vue-i18n`                 | `vue-i18n`           | Similar reason ^                                                                                                    |
 | [`eslint-plugin-import-x`]                                                                                            | `import-x`                          | `import`             | This plugin is a fork and is meant to replace the original plugin with `import` prefix                              |

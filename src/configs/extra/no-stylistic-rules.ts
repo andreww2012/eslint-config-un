@@ -793,6 +793,12 @@ const ALL_STYLISTIC_RULES = {
   un: {
     // None
   },
+  // Won't include: numeric-tag-priority, since the suggested aliases resolve to different priorities
+  unhead: {
+    'defer-on-module-script': true,
+    // `defineLink`/`defineScript` are identity functions, they only narrow the type
+    'prefer-define-helpers': true,
+  },
   // Won't include: no-console-spaces, prefer-array-find, prefer-array-some, prefer-math-trunc, prefer-modern-math-apis, prefer-string-starts-ends-with
   unicorn: {
     'better-regex': true,

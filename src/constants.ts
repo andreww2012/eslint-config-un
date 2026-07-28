@@ -238,6 +238,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'zod',
   'zod-openapi',
   'unocss',
+  'unhead',
   '@formatjs/icu-messageformat-parser',
   '@docusaurus/core',
   'drizzle-orm',

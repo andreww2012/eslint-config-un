@@ -212,6 +212,7 @@
     "@types/npm-package-arg": "6.1.4",
     "@types/semver": "7.7.1",
     "@types/validate-npm-package-name": "4.0.2",
+    "@unhead/eslint-plugin": "3.2.3",
     "@unocss/eslint-plugin": "66.7.5",
     "@vitest/coverage-v8": "4.1.10",
     "@vitest/eslint-plugin": "1.6.24",
@@ -361,6 +362,7 @@
     "@tanstack/eslint-plugin-start": "^0.1.0",
     "@tsrx/eslint-parser": "^0.3.112",
     "@tsrx/eslint-plugin": "^0.3.112",
+    "@unhead/eslint-plugin": "^3.2.3",
     "@unocss/eslint-plugin": "^66.7.5",
     "@vitest/eslint-plugin": "^1.6.24",
     "astro-eslint-parser": "^3.0.0",
@@ -504,6 +506,9 @@
       "optional": true
     },
     "@tsrx/eslint-plugin": {
+      "optional": true
+    },
+    "@unhead/eslint-plugin": {
       "optional": true
     },
     "@unocss/eslint-plugin": {
