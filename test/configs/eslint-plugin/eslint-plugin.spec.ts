@@ -410,4 +410,136 @@ describe('options', () => {
       });
     });
   });
+
+  describe('option: `schemaCompletenessChecks`', () => {
+    const RULE_NAME = 'eslint-plugin/no-incomplete-meta-schema';
+
+    it('enables `eslint-plugin/no-incomplete-meta-schema` rule with the default checks by default', async () => {
+      const configResult = await computeEslintConfig('eslintPlugin');
+
+      expect(configResult.getRuleEntryParsed('eslint-plugin', RULE_NAME)).toStrictEqual({
+        options: [
+          {
+            checks: {
+              boundedTuples: false,
+              explicitAdditionalProperties: true,
+              explicitItems: false,
+              typedItems: false,
+            },
+          },
+        ],
+        severity: 2,
+      });
+    });
+
+    it('enables `eslint-plugin/no-incomplete-meta-schema` rule with the default checks when option is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        eslintPlugin: {schemaCompletenessChecks: true},
+      });
+
+      expect(configResult.getRuleEntryOptions('eslint-plugin', RULE_NAME)).toStrictEqual([
+        {
+          checks: {
+            boundedTuples: false,
+            explicitAdditionalProperties: true,
+            explicitItems: false,
+            typedItems: false,
+          },
+        },
+      ]);
+    });
+
+    it('disables `eslint-plugin/no-incomplete-meta-schema` rule when option is `false`', async () => {
+      const configResult = await computeEslintConfig({
+        eslintPlugin: {schemaCompletenessChecks: false},
+      });
+
+      expect(configResult.getRuleEntryParsed('eslint-plugin', RULE_NAME)).toStrictEqual({
+        severity: 0,
+        options: [],
+      });
+    });
+
+    it('enables all the checks when option is `all`', async () => {
+      const configResult = await computeEslintConfig({
+        eslintPlugin: {schemaCompletenessChecks: 'all'},
+      });
+
+      expect(configResult.getRuleEntryParsed('eslint-plugin', RULE_NAME)).toStrictEqual({
+        options: [
+          {
+            checks: {
+              boundedTuples: true,
+              explicitAdditionalProperties: true,
+              explicitItems: true,
+              typedItems: true,
+            },
+          },
+        ],
+        severity: 2,
+      });
+    });
+
+    it('overrides the default checks when option is an array', async () => {
+      const configResult = await computeEslintConfig({
+        eslintPlugin: {schemaCompletenessChecks: ['explicitItems', 'typedItems']},
+      });
+
+      expect(configResult.getRuleEntryParsed('eslint-plugin', RULE_NAME)).toStrictEqual({
+        options: [
+          {
+            checks: {
+              boundedTuples: false,
+              explicitAdditionalProperties: false,
+              explicitItems: true,
+              typedItems: true,
+            },
+          },
+        ],
+        severity: 2,
+      });
+    });
+
+    it('disables `eslint-plugin/no-incomplete-meta-schema` rule when option is an empty array', async () => {
+      const configResult = await computeEslintConfig({
+        eslintPlugin: {schemaCompletenessChecks: []},
+      });
+
+      expect(configResult.getRuleEntryParsed('eslint-plugin', RULE_NAME)).toStrictEqual({
+        severity: 0,
+        options: [],
+      });
+    });
+
+    it('merges with the default checks when option is an object', async () => {
+      const configResult = await computeEslintConfig({
+        eslintPlugin: {schemaCompletenessChecks: {explicitItems: true}},
+      });
+
+      expect(configResult.getRuleEntryParsed('eslint-plugin', RULE_NAME)).toStrictEqual({
+        severity: 2,
+        options: [
+          {
+            checks: {
+              boundedTuples: false,
+              explicitAdditionalProperties: true,
+              explicitItems: true,
+              typedItems: false,
+            },
+          },
+        ],
+      });
+    });
+
+    it('disables `eslint-plugin/no-incomplete-meta-schema` rule when the only default check is disabled by an object', async () => {
+      const configResult = await computeEslintConfig({
+        eslintPlugin: {schemaCompletenessChecks: {explicitAdditionalProperties: false}},
+      });
+
+      expect(configResult.getRuleEntryParsed('eslint-plugin', RULE_NAME)).toStrictEqual({
+        severity: 0,
+        options: [],
+      });
+    });
+  });
 });

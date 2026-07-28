@@ -1,10 +1,12 @@
 import {ERROR, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {ConditionalKeys} from '../types';
-import {arrayIncludes} from '../utils';
+import {allUnionMembers, arrayIncludes, getKeysOfTruthyValues} from '../utils';
 import {generateDefaultTestFiles} from './shared';
 import {
+  type ArrayOrBooleanRecord,
   type ExtraPluginsType,
+  type GetRuleOptions,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
@@ -12,6 +14,23 @@ import {
 } from './index';
 
 const ESLINT_PLUGIN_TESTING_RELATED_RULES = RULE_CATEGORIES_PER_PLUGIN['eslint-plugin'].tests;
+
+type SchemaCompletenessCheck = keyof (GetRuleOptions<
+  'eslint-plugin',
+  'no-incomplete-meta-schema'
+>['checks'] & {});
+
+const SCHEMA_COMPLETENESS_CHECKS = allUnionMembers<SchemaCompletenessCheck>()([
+  'boundedTuples',
+  'explicitAdditionalProperties',
+  'explicitItems',
+  'typedItems',
+]);
+
+// ⚠️ DO NOT FORGET to sync this list with the corresponding option's jsdoc
+const DEFAULT_SCHEMA_COMPLETENESS_CHECKS = {
+  explicitAdditionalProperties: true,
+} satisfies Partial<Record<SchemaCompletenessCheck, boolean>>;
 
 export interface EslintPluginEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -65,14 +84,47 @@ export interface EslintPluginEslintConfigOptions<
         'enforce' | 'not-enforce'
       >
   >;
+
+  /**
+   * Which completeness checks to enforce for rule options schemas, i.e. which policies
+   * a schema must state explicitly instead of relying on JSON Schema defaults.
+   *
+   * Possible values:
+   * - `true`: enforce the default list of checks;
+   * - `false`: do not enforce any check, effectively disabling the rule;
+   * - `'all'`: enforce all the checks (the rule's own default);
+   * - array form completely overrides the default list;
+   * - object form will be merged with the default list.
+   *
+   * Affected rule:
+   * - [`eslint-plugin/no-incomplete-meta-schema`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-incomplete-meta-schema.md)
+   * @default {explicitAdditionalProperties: true}
+   */
+  schemaCompletenessChecks?: boolean | 'all' | ArrayOrBooleanRecord<SchemaCompletenessCheck>;
 }
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configRuleTests: false,
+    schemaCompletenessChecks: true,
   });
 
-  const {configRuleTests, metaProperties = {}} = optionsResolved;
+  const {configRuleTests, metaProperties = {}, schemaCompletenessChecks} = optionsResolved;
+
+  const schemaCompletenessChecksEnabled = new Set<string>(
+    schemaCompletenessChecks === 'all'
+      ? SCHEMA_COMPLETENESS_CHECKS
+      : schemaCompletenessChecks
+        ? getKeysOfTruthyValues(
+            Array.isArray(schemaCompletenessChecks)
+              ? schemaCompletenessChecks
+              : {
+                  ...DEFAULT_SCHEMA_COMPLETENESS_CHECKS,
+                  ...(schemaCompletenessChecks !== true && schemaCompletenessChecks),
+                },
+          )
+        : [],
+  );
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'eslint-plugin');
 
@@ -101,6 +153,23 @@ export default ((context, optionsRaw) => {
     .addRule('meta-property-ordering', ERROR) /** @since 2.1.0 */
     .addRule('no-deprecated-context-methods', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('no-deprecated-report-api', ERROR) /** @since 0.1.0 */ // 🟢
+    .addRule(
+      'no-incomplete-meta-schema',
+      schemaCompletenessChecksEnabled.size > 0 ? ERROR : OFF,
+      schemaCompletenessChecksEnabled.size > 0
+        ? [
+            {
+              checks: Object.fromEntries(
+                SCHEMA_COMPLETENESS_CHECKS.map((check) => [
+                  check,
+                  schemaCompletenessChecksEnabled.has(check),
+                ]),
+              ),
+            },
+          ]
+        : [],
+    ) /** @since 7.6.0 */
+    .addRule('no-incorrect-meta-schema', ERROR) /** @since 7.6.0 */
     .addRule('no-matching-violation-suggest-message-ids', ERROR) /** @since 7.3.0 */
     // `meta.deprecated` supported since ESLint 9.21.0
     .addRule(
