@@ -451,6 +451,7 @@ const ALL_STYLISTIC_RULES = {
   },
   mocha: {
     'consistent-spacing-between-blocks': true,
+    'consistent-structure': true,
   },
   'module-interop': {
     // None

@@ -8,6 +8,7 @@ saveExact: true
 minimumReleaseAge: 960 # 16 hours in minutes
 minimumReleaseAgeExclude: # []
   - eslint-plugin-jsdoc@63.3.2
+  - eslint-plugin-mocha@12.0.1
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes

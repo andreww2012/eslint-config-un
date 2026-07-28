@@ -715,8 +715,8 @@ importers:
         specifier: 0.0.14
         version: 0.0.14(eslint@9.39.5)
       eslint-plugin-mocha:
-        specifier: 11.3.0
-        version: 11.3.0(eslint@9.39.5)
+        specifier: 12.0.1
+        version: 12.0.1(eslint@9.39.5)
       eslint-plugin-no-relative-import-paths:
         specifier: 1.6.1
         version: 1.6.1
@@ -7400,10 +7400,11 @@ packages:
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
 
-  eslint-plugin-mocha@11.3.0:
-    resolution: {integrity: sha512-anENwrIwmdvunmmssjMn5a4nTd+mYMkqBlwjksxOECcIThLNhefWJIiTWY7pY/arMQFjNwHQjVOZb6pQ9PrLjg==}
+  eslint-plugin-mocha@12.0.1:
+    resolution: {integrity: sha512-oBHxSHxkIKV4L+iFM6BSyVRUID5JiX85KV6omqRed6aGDa4jk2hkhgi9uDrdPjwu1qzJ4T/5WXucsJOES4aUEQ==}
+    engines: {node: '>=22.0.0'}
     peerDependencies:
-      eslint: '>=9.0.0'
+      eslint: '>=10.2.0'
 
   eslint-plugin-module-interop@0.3.1:
     resolution: {integrity: sha512-2d2nmqaBKnnZ6pOovSPltXNw9gZFcOdhSy/xULJ83r97clyww5JMiauhBcnBFXqY0AoN0RGAs8w2oyQkq/EL2A==}
@@ -8256,6 +8257,10 @@ packages:
 
   globals@16.5.0:
     resolution: {integrity: sha512-c/c15i26VrJ4IRt5Z89DnIzCGDn9EcebibhAOjw5ibqEHsE1wLUgkPn9RDmNcUKyU87GeaL633nyJ+pplFR2ZQ==}
+    engines: {node: '>=18'}
+
+  globals@17.7.0:
+    resolution: {integrity: sha512-Czmyns5dUsq4seFBR/Kdydhmo8y9kC79hiSkPn0YcGtNnYWnrgt0vjrSjx9tspoDGWm2CMarffRuLjM4xUz8xg==}
     engines: {node: '>=18'}
 
   globals@17.8.0:
@@ -18874,11 +18879,12 @@ snapshots:
     dependencies:
       eslint: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
 
-  eslint-plugin-mocha@11.3.0(eslint@9.39.5):
+  eslint-plugin-mocha@12.0.1(eslint@9.39.5):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5)
+      '@eslint/core': 1.2.1
       eslint: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
-      globals: 15.15.0
+      globals: 17.7.0
 
   eslint-plugin-module-interop@0.3.1(eslint@9.39.5):
     dependencies:
@@ -19927,6 +19933,8 @@ snapshots:
   globals@15.15.0: {}
 
   globals@16.5.0: {}
+
+  globals@17.7.0: {}
 
   globals@17.8.0: {}
 

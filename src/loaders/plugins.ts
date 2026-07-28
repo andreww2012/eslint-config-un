@@ -363,8 +363,10 @@ export const pluginsLoaders = {
   mobx: genModuleLoader('mobx', 'eslint-plugin-mobx', () =>
     interopDefault(import('eslint-plugin-mobx')),
   ),
-  mocha: genModuleLoader('mocha', 'eslint-plugin-mocha', () =>
-    interopDefault(import('eslint-plugin-mocha')),
+  mocha: genModuleLoader(
+    'mocha',
+    'eslint-plugin-mocha',
+    () => interopDefault(import('eslint-plugin-mocha')) as Promise<EslintPlugin>,
   ),
   'module-interop': genModuleLoader(
     'moduleInterop',

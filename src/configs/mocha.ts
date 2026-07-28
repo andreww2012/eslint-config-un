@@ -99,25 +99,37 @@ export default ((context, optionsRaw) => {
       enforceInterface == null ? [] : [{interface: enforceInterface}],
     ) /** @since 11.0.0 */
     .addRule('consistent-spacing-between-blocks', OFF) /** @since 10.3.0 */ // 🟢
+    .addRule('consistent-structure', ERROR) /** @since 12.0.0 */ // 🟢
     .addRule('handle-done-callback', ERROR) /** @since 0.3.0 */ // 🟢
+    .addRule('limit-retries', OFF) /** @since 12.0.0 */
+    .addRule('limit-slow', OFF) /** @since 12.0.0 */
+    .addRule('limit-timeout', OFF) /** @since 12.0.0 */
     .addRule('max-top-level-suites', ERROR, [{limit: maxTopLevelSuites}]) /** @since 4.6.0 */
+    .addRule('no-async-and-done', ERROR) /** @since 12.0.0 */ // 🟢
+    .addRule('no-async-in-sync-tests', ERROR) /** @since 12.0.0 */ // 🟢
     .addRule('no-async-suite', ERROR) /** @since 11.0.0 */ // 🟢
+    .addRule('no-code-after-done', ERROR) /** @since 12.0.0 */ // 🟢
+    .addRule('no-conditional-tests', ERROR) /** @since 12.0.0 */ // 🟢
+    .addRule('no-done-twice', ERROR) /** @since 12.0.0 */ // 🟢
     .addRule('no-empty-title', ERROR) /** @since 11.0.0 */ // 🟢
     .addRule('no-exclusive-tests', ERROR) /** @since 0.1.0 */ // 🟡
     .addRule('no-exports', ERROR) /** @since 8.0.0 */ // 🟢
-    .addRule('no-global-tests', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule('no-hooks', OFF) /** @since 4.3.0 */
-    .addRule('no-hooks-for-single-case', WARNING) /** @since 4.4.0 */
+    .addRule(
+      'no-hooks-for-single-child',
+      WARNING,
+    ) /** @since 4.4.0 */ /** @aka no-hooks-for-single-case */
     .addRule('no-identical-title', ERROR) /** @since 4.5.0 */ // 🟢
     .addRule('no-mocha-arrows', ERROR) /** @since 4.1.0 */ // 🟢
+    .addRule('no-nested-suites', OFF) /** @since 12.0.0 */
     .addRule('no-nested-tests', ERROR) /** @since 4.7.0 */ // 🟢
     .addRule('no-pending-tests', ERROR) /** @since 2.2.0 */ // 🟡
-    .addRule('no-return-and-callback', ERROR) /** @since 4.4.0 */ // 🟢
+    .addRule('no-return-and-done', ERROR) /** @since 4.4.0 */ /** @aka no-return-and-callback */ // 🟢
     .addRule('no-return-from-async', ERROR) /** @since 6.0.0 */
-    .addRule('no-setup-in-describe', ERROR) /** @since 4.12.0 */ // 🟢
-    .addRule('no-sibling-hooks', ERROR) /** @since 4.3.0 */ // 🟢
+    .addRule('no-root-hooks', ERROR) /** @since 4.4.0 */ /** @aka no-top-level-hooks */ // 🟡
+    .addRule('no-setup-in-suite', ERROR) /** @since 4.12.0 */ /** @aka no-setup-in-describe */ // 🟢
     .addRule('no-synchronous-tests', OFF) /** @since 0.5.1 */
-    .addRule('no-top-level-hooks', ERROR) /** @since 4.4.0 */ // 🟡
+    .addRule('no-top-level-tests', ERROR) /** @since 1.1.0 */ /** @aka no-global-tests */ // 🟢
     .addRule('prefer-arrow-callback', OFF) /** @since 5.1.0 */
     .addRule('valid-suite-title', OFF) /** @since 11.0.0 */
     .addRule('valid-test-title', OFF) /** @since 11.0.0 */

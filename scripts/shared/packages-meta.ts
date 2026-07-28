@@ -318,9 +318,9 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     },
     mocha: {
       configs: ['mocha'],
-      gitTag: versionAsIs,
+      gitTag: (tag) => `eslint-plugin-mocha@${tag}`,
       ruleDocsUrl: (ruleName) =>
-        `https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/docs/rules/${ruleName}.md`,
+        `https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/${ruleName}.md`,
     },
     'module-interop': {
       configs: ['moduleInterop'],
