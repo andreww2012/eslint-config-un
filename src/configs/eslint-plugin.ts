@@ -164,10 +164,6 @@ export default ((context, optionsRaw) => {
       'require-meta-type',
       getRuleEnforcingMetaPropertySeverity('type', 'enforce'),
     ) /** @since 2.0.0 */ // 🟢
-    .addRule('require-test-case-name', ERROR, [
-      {require: 'objects-with-config'} /** Default: objects-with-config */,
-    ]) /** @since 7.1.0 */
-    .addRule('unique-test-case-names', ERROR) /** @since 7.2.0 */
     .enableConfigTesterForPlugin('eslint-plugin', {
       /* v8 ignore start */
       rulesToSkipInConfig: (ruleName) =>
@@ -190,9 +186,13 @@ export default ((context, optionsRaw) => {
     .addRule('no-identical-tests', ERROR) /** @since 0.7.4 */ // 🟢
     .addRule('no-only-tests', ERROR) /** @since 3.3.0 */ // 🟢
     .addRule('prefer-output-null', ERROR) /** @since 0.8.0 */ // 🟢
+    .addRule('require-test-case-name', ERROR, [
+      {require: 'objects-with-config'} /** Default: objects-with-config */,
+    ]) /** @since 7.1.0 */
     .addRule('require-test-error-positions', WARNING) /** @since 7.4.0 */
     .addRule('test-case-property-ordering', ERROR) /** @since 0.8.0 */
     .addRule('test-case-shorthand-strings', ERROR) /** @since 0.4.0 */
+    .addRule('unique-test-case-names', ERROR) /** @since 7.2.0 */
     .enableConfigTesterForPlugin('eslint-plugin', {
       /* v8 ignore start */
       rulesToSkipInConfig: (ruleName) =>
