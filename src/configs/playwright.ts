@@ -124,6 +124,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-skipped-test', ERROR) /** @since 0.9.0 */ // 🟡
     .addRule('no-slowed-test', OFF) /** @since 2.2.0 */
     .addRule('no-standalone-expect', ERROR) /** @since 1.2.0 */ // 🟢
+    .addRule('no-unnecessary-assertions', ERROR) /** @since 2.11.0 */ // 🟢
     .addRule('no-unsafe-references', ERROR) /** @since 1.1.0 */ // 🟢
     .addRule('no-unused-locators', ERROR) /** @since 2.3.0 */ // 🟢
     .addRule('no-useless-await', ERROR) /** @since 0.14.0 */ // 🟡
