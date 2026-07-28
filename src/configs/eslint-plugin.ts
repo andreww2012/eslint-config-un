@@ -1,27 +1,17 @@
 import {ERROR, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
+import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import type {ConditionalKeys} from '../types';
+import {arrayIncludes} from '../utils';
 import {generateDefaultTestFiles} from './shared';
 import {
   type ExtraPluginsType,
-  type GetRuleNamesInPlugin,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
 } from './index';
 
-const ESLINT_PLUGIN_TESTING_RELATED_RULES = [
-  'consistent-output',
-  'no-identical-tests',
-  'no-only-tests',
-  'prefer-output-null',
-  'require-test-error-positions',
-  'test-case-property-ordering',
-  'test-case-shorthand-strings',
-] satisfies GetRuleNamesInPlugin<'eslint-plugin'>[];
-const ESLINT_PLUGIN_TESTING_RELATED_RULES_SET = new Set<string>(
-  ESLINT_PLUGIN_TESTING_RELATED_RULES,
-);
+const ESLINT_PLUGIN_TESTING_RELATED_RULES = RULE_CATEGORIES_PER_PLUGIN['eslint-plugin'].tests;
 
 export interface EslintPluginEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -179,8 +169,10 @@ export default ((context, optionsRaw) => {
     ]) /** @since 7.1.0 */
     .addRule('unique-test-case-names', ERROR) /** @since 7.2.0 */
     .enableConfigTesterForPlugin('eslint-plugin', {
-      /* v8 ignore next */
-      rulesToSkipInConfig: (ruleName) => ESLINT_PLUGIN_TESTING_RELATED_RULES_SET.has(ruleName),
+      /* v8 ignore start */
+      rulesToSkipInConfig: (ruleName) =>
+        arrayIncludes(ESLINT_PLUGIN_TESTING_RELATED_RULES, ruleName),
+      /* v8 ignore stop */
     })
     .addOverrides();
 
@@ -202,8 +194,10 @@ export default ((context, optionsRaw) => {
     .addRule('test-case-property-ordering', ERROR) /** @since 0.8.0 */
     .addRule('test-case-shorthand-strings', ERROR) /** @since 0.4.0 */
     .enableConfigTesterForPlugin('eslint-plugin', {
-      /* v8 ignore next */
-      rulesToSkipInConfig: (ruleName) => !ESLINT_PLUGIN_TESTING_RELATED_RULES_SET.has(ruleName),
+      /* v8 ignore start */
+      rulesToSkipInConfig: (ruleName) =>
+        !arrayIncludes(ESLINT_PLUGIN_TESTING_RELATED_RULES, ruleName),
+      /* v8 ignore stop */
     })
     .addOverrides();
 

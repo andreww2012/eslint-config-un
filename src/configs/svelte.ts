@@ -1,13 +1,13 @@
 import type {Config as SvelteKitConfig} from '@sveltejs/kit';
 import {ERROR, GLOB_SVELTE, OFF, WARNING} from '../constants';
 import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
+import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {generatePackageToLoadProperty} from '../loaders';
-import {getKeysOfTruthyValues} from '../utils';
+import {arrayIncludes, getKeysOfTruthyValues} from '../utils';
 import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
-  type GetRuleNamesInPlugin,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
@@ -121,10 +121,7 @@ const LATEST_SVELTE_MAJOR_VERSION = 5;
 const DEFAULT_SVELTE_FILES = [GLOB_SVELTE];
 const DEFAULT_SVELTE_SCRIPT_FILES = ['**/*.svelte.{js,ts}' as const];
 
-const SVELTE_SYSTEM_RULES = new Set<string>([
-  'comment-directive',
-  'system',
-] satisfies GetRuleNamesInPlugin<'svelte'>[]);
+const SVELTE_SYSTEM_RULES = RULE_CATEGORIES_PER_PLUGIN.svelte.system;
 
 export default ((context, optionsRaw) => {
   const isPrettierPluginSvelteInstalled = context.packagesInfo['prettier-plugin-svelte'] != null;
@@ -194,7 +191,7 @@ export default ((context, optionsRaw) => {
     .disableAnyRule('sonarjs', 'no-unused-collection')
     .enableConfigTesterForPlugin('svelte', {
       /* v8 ignore next */
-      rulesToSkipInConfig: (ruleName) => !SVELTE_SYSTEM_RULES.has(ruleName),
+      rulesToSkipInConfig: (ruleName) => !arrayIncludes(SVELTE_SYSTEM_RULES, ruleName),
     });
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'svelte');
@@ -330,7 +327,7 @@ export default ((context, optionsRaw) => {
     // Added in the setup config
     .enableConfigTesterForPlugin('svelte', {
       /* v8 ignore next */
-      rulesToSkipInConfig: (ruleName) => SVELTE_SYSTEM_RULES.has(ruleName),
+      rulesToSkipInConfig: (ruleName) => arrayIncludes(SVELTE_SYSTEM_RULES, ruleName),
     })
     .addOverrides();
 

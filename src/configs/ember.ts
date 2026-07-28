@@ -1,4 +1,6 @@
 import {ERROR, GLOB_JS_TS, GLOB_JS_TS_EXTENSION, OFF, WARNING} from '../constants';
+import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
+import {arrayIncludes} from '../utils';
 import {
   type NoOnlyTestsSubConfigEnabledByDefault,
   generateConfigNoOnlyTestsBuilder,
@@ -6,7 +8,6 @@ import {
 } from './shared';
 import {
   type ExtraPluginsType,
-  type GetRuleNamesInPlugin,
   type GetRuleOptions,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
@@ -40,23 +41,7 @@ export interface EmberEslintConfigOptions<
 
 const GLIMMER_TEMPLATES_FILES = ['**/*.{gjs,gts}'] as const;
 
-const EMBER_TESTING_RELATED_RULES = new Set<string>([
-  'no-current-route-name',
-  'no-ember-testing-in-module-scope',
-  'no-invalid-test-waiters',
-  'no-legacy-test-waiters',
-  'no-noop-setup-on-error-in-before',
-  'no-pause-test',
-  'no-replace-test-comments',
-  'no-restricted-resolver-tests',
-  'no-settled-after-test-helper',
-  'no-test-and-then',
-  'no-test-import-export',
-  'no-test-module-for',
-  'no-test-this-render',
-  'prefer-ember-test-helpers',
-  'require-valid-css-selector-in-test-helpers',
-] satisfies GetRuleNamesInPlugin<'ember'>[]);
+const EMBER_TESTING_RELATED_RULES = RULE_CATEGORIES_PER_PLUGIN.ember.testing;
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -362,7 +347,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-test-support-import', ERROR) /** @since 9.2.0 */ // 🟢
     .enableConfigTesterForPlugin('ember', {
       /* v8 ignore next */
-      rulesToSkipInConfig: (ruleName) => EMBER_TESTING_RELATED_RULES.has(ruleName),
+      rulesToSkipInConfig: (ruleName) => arrayIncludes(EMBER_TESTING_RELATED_RULES, ruleName),
     })
     .addOverrides();
 
@@ -396,7 +381,7 @@ export default ((context, optionsRaw) => {
     .addRule('require-valid-css-selector-in-test-helpers', ERROR) /** @since 9.4.0 */ // 🟢
     .enableConfigTesterForPlugin('ember', {
       /* v8 ignore next */
-      rulesToSkipInConfig: (ruleName) => !EMBER_TESTING_RELATED_RULES.has(ruleName),
+      rulesToSkipInConfig: (ruleName) => !arrayIncludes(EMBER_TESTING_RELATED_RULES, ruleName),
     })
     .addOverrides();
 

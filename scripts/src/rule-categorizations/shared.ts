@@ -1,4 +1,4 @@
-import type {MaybePromise} from '@andreww2012/unutils';
+import type {MaybeArray, MaybePromise} from '@andreww2012/unutils';
 import type {EslintPlugin, EslintRuleMetaWithLanguages} from '../../../src/eslint/eslint-types';
 
 /**
@@ -14,6 +14,8 @@ export type CategorizeRule<CategoryId extends string> = (ruleToCategorize: {
   categories: CategoryId[];
   errors: string[];
 };
+
+export type PluginRuleCategorizations = MaybeArray<RuleCategorization<string>>;
 
 export interface RuleCategorization<CategoryId extends string> {
   /**

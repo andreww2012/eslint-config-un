@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {styleText} from 'node:util';
-import {type NonEmptyTuple, capitalize} from '@andreww2012/unutils';
+import {type NonEmptyTuple, arrayify, capitalize, forEachAsync} from '@andreww2012/unutils';
 import * as diff from 'diff';
 import {pluginsToRulesDTS} from 'eslint-typegen/core';
 import {normalizeIdentifier} from 'json-schema-to-typescript-lite';
@@ -224,45 +224,52 @@ ${perPluginCodeRaw
 `;
 
   const categorizedRulesPerPlugin = await Promise.all(
-    Object.entries(RULE_CATEGORIZATIONS).map(
-      async ([
-        pluginName,
-        {categories: categoriesDeclared, includeDeprecated = false, createRuleCategorizer},
-      ]) => {
-        const plugin = allPlugins[pluginName];
-        if (!plugin) {
-          throw new Error(`Cannot categorize the rules of the not loaded \`${pluginName}\` plugin`);
-        }
+    Object.entries(RULE_CATEGORIZATIONS).map(async ([pluginName, categorizations]) => {
+      const plugin = allPlugins[pluginName];
+      if (!plugin) {
+        throw new Error(`Cannot categorize the rules of the not loaded \`${pluginName}\` plugin`);
+      }
 
-        const categorizeRule = await createRuleCategorizer(plugin, pluginName);
+      const errors: string[] = [];
+      const rulesPerCategory = new Map<string, string[]>();
+      const rulesSorted = Object.entries(plugin.rules || {})
+        // eslint-disable-next-line unicorn/no-array-sort
+        .sort(([ruleNameA], [ruleNameB]) => ruleNameA.localeCompare(ruleNameB));
 
-        const errors: string[] = [];
-        const rulesPerCategory = new Map(
-          categoriesDeclared.map((category): [typeof category, string[]] => [category, []]),
-        );
-
-        Object.entries(plugin.rules || {})
-          // eslint-disable-next-line unicorn/no-array-sort
-          .sort(([ruleNameA], [ruleNameB]) => ruleNameA.localeCompare(ruleNameB))
-          .filter(([, {meta}]) => includeDeprecated || !meta?.deprecated)
-          .forEach(([ruleName, rule]) => {
-            const {categories: categoriesFound, errors: ruleErrors} = categorizeRule({
-              rule,
-              ruleName,
-            });
-            if (ruleErrors.length > 0) {
-              errors.push(
-                `  ${styleText('yellow', `${pluginName}/${ruleName}`)}: ${ruleErrors.join(', ')}`,
-              );
-            }
-            categoriesFound.forEach((category) => {
-              rulesPerCategory.get(category)?.push(ruleName);
-            });
+      await forEachAsync(
+        arrayify(categorizations),
+        async ({
+          categories: categoriesDeclared,
+          includeDeprecated = false,
+          createRuleCategorizer,
+        }) => {
+          categoriesDeclared.forEach((category) => {
+            rulesPerCategory.set(category, []);
           });
 
-        return {pluginName, rulesPerCategory, errors};
-      },
-    ),
+          const categorizeRule = await createRuleCategorizer(plugin, pluginName);
+
+          rulesSorted
+            .filter(([, {meta}]) => includeDeprecated || !meta?.deprecated)
+            .forEach(([ruleName, rule]) => {
+              const {categories: categoriesFound, errors: ruleErrors} = categorizeRule({
+                rule,
+                ruleName,
+              });
+              if (ruleErrors.length > 0) {
+                errors.push(
+                  `  ${styleText('yellow', `${pluginName}/${ruleName}`)}: ${ruleErrors.join(', ')}`,
+                );
+              }
+              categoriesFound.forEach((category) => {
+                rulesPerCategory.get(category)?.push(ruleName);
+              });
+            });
+        },
+      );
+
+      return {pluginName, rulesPerCategory, errors};
+    }),
   );
 
   const categorizationErrors = categorizedRulesPerPlugin.flatMap(({errors}) => errors);
