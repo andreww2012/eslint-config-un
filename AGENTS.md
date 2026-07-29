@@ -7,6 +7,8 @@ For usage examples, understanding concepts and API documentation [`README.md`](.
 
 Follow [this guide](./.agents/style-guide.md).
 
+Don't run the full test suite unless absolutely needed to verify the work - it takes a lot of resources (memory and time) to complete.
+
 <!-- eslint-disable-next-line markdown-preferences/no-heading-trailing-punctuation -->
 ## When you're asked to...
 
