@@ -101,6 +101,7 @@ peerDependencyRules:
     eslint-plugin-unicorn>eslint: '>=9'
     eslint-plugin-astro@^2>eslint: '>=9'
     eslint-plugin-es-x@^10>eslint: '>=9'
+    eslint-plugin-mocha@^12>eslint: '>=9'
 
     '@phenomnomnominal/tsquery@6.1.4>typescript': '>=5'
     '@sveltejs/vite-plugin-svelte@7.0.0>vite': '>=7'
