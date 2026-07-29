@@ -238,6 +238,9 @@ const ALL_STYLISTIC_RULES = {
   'eslint-react': {
     // None
   },
+  'exception-handling': {
+    // None
+  },
   'expect-type': {
     // None
   },

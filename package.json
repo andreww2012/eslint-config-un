@@ -253,6 +253,7 @@
     "eslint-plugin-erasable-syntax-only": "0.4.2",
     "eslint-plugin-es-x": "10.0.0",
     "eslint-plugin-eslint-plugin": "7.6.0",
+    "eslint-plugin-exception-handling": "1.8.0",
     "eslint-plugin-expect-type": "0.6.2",
     "eslint-plugin-format": "2.0.1",
     "eslint-plugin-formatjs": "6.4.19",
@@ -389,6 +390,7 @@
     "eslint-plugin-erasable-syntax-only": "^0.4.2",
     "eslint-plugin-es-x": "^10.0.0",
     "eslint-plugin-eslint-plugin": "^7.6.0",
+    "eslint-plugin-exception-handling": "^1.8.0",
     "eslint-plugin-expect-type": "^0.6.2",
     "eslint-plugin-format": "^2.0.1",
     "eslint-plugin-formatjs": "^6.4.19",
@@ -584,6 +586,9 @@
       "optional": true
     },
     "eslint-plugin-eslint-plugin": {
+      "optional": true
+    },
+    "eslint-plugin-exception-handling": {
       "optional": true
     },
     "eslint-plugin-expect-type": {

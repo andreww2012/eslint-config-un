@@ -387,6 +387,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     es: {enabled: getIsConfigEnabled('es', false)},
     eslintComments: {enabled: getIsConfigEnabled('eslintComments')},
     eslintPlugin: {enabled: getIsConfigEnabled('eslintPlugin', false)},
+    exceptionHandling: {enabled: getIsConfigEnabled('exceptionHandling', false)},
     expectType: {enabled: getIsConfigEnabled('expectType', false)},
     fileProgress: {enabled: getIsConfigEnabled('fileProgress', false)},
     githubActions: {
@@ -843,6 +844,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     loadUnConfig('tsdoc', () => import('../configs/tsdoc')),
     loadUnConfig('format', () => import('../configs/format')),
     loadUnConfig('functional', () => import('../configs/functional')),
+    loadUnConfig('exceptionHandling', () => import('../configs/exception-handling')),
 
     /* Other configs */
     loadUnConfig('githubActions', () => import('../configs/github-actions')), // Must come after `yaml`

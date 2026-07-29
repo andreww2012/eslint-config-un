@@ -2994,7 +2994,7 @@
   "eslint-plugin-example-dema-xiya": null,
   "eslint-plugin-exapmle": {"status": "fetched"},
   "eslint-plugin-exati": {"status": "fetched"},
-  "eslint-plugin-exception-handling": {"status": "accepted", "priority": 3},
+  "eslint-plugin-exception-handling": {"status": "added"},
   "eslint-plugin-exceptions": {"status": "fetched"},
   "eslint-plugin-exclude-nunjuck-tags": {"status": "fetched"},
   "eslint-plugin-exclude-php-tags": {"status": "fetched"},

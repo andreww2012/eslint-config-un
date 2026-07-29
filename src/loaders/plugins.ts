@@ -209,6 +209,14 @@ export const pluginsLoaders = {
   'eslint-react': genModuleLoader('eslint-react', '@eslint-react/eslint-plugin', () =>
     loadEslintReactPlugin('@eslint-react'),
   ),
+  'exception-handling': genModuleLoader(
+    'exception-handling',
+    'eslint-plugin-exception-handling',
+    () =>
+      import('eslint-plugin-exception-handling').then(
+        ({plugin}) => plugin,
+      ) as Promise<EslintPlugin>,
+  ),
   'expect-type': genModuleLoader(
     'expect-type',
     'eslint-plugin-expect-type',

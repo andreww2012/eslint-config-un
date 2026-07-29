@@ -1,0 +1,95 @@
+diff --git a/dist/src/utils/get-call-expr-id.js b/dist/src/utils/get-call-expr-id.js
+index 69c854a157f6f3b0645cb4e9266a6536744379e0..3faf80d9923a26c7a5d3242802c7599f218d5fe7 100644
+--- a/dist/src/utils/get-call-expr-id.js
++++ b/dist/src/utils/get-call-expr-id.js
+@@ -9,7 +9,10 @@ export function getCallExprId(called) {
+             return called.callee.property;
+         }
+         else {
+-            throw new Error(`Cannot handle non-identifier member expression property ${called.callee.property}`);
++            // A computed member callee (`logger[isError ? 'error' : 'warn']()`, `handlers[0]()`)
++            // is ordinary JS, not an unsupported edge case. Upstream throws here, crashing the
++            // whole run; both call sites already treat `undefined` as "cannot resolve".
++            return undefined;
+         }
+     }
+ }
+diff --git a/dist/src/utils/get-import-declaration.js b/dist/src/utils/get-import-declaration.js
+index bf7b00c0fd21fc5dfafabc29e714dd3477f4d2bd..4045794fe4719bdb38136e17368bb62a787ecb1e 100644
+--- a/dist/src/utils/get-import-declaration.js
++++ b/dist/src/utils/get-import-declaration.js
+@@ -47,7 +47,18 @@ const extAlts = {
+ function endsWithAny(str, arr) {
+     return arr.some((ext) => str.endsWith(ext));
+ }
++// Resolution is best-effort: `lstatSync`/`readFileSync`/`JSON.parse` on the tsconfig and the
++// "could not resolved" throw below all escape into the rule and crash the lint run. Callers
++// already handle a missing `path` by giving up on the import, so degrade to that instead.
+ export function getImportDeclaration(context, impt) {
++    try {
++        return getImportDeclarationUnsafe(context, impt);
++    }
++    catch {
++        return { module: impt.source.value };
++    }
++}
++function getImportDeclarationUnsafe(context, impt) {
+     const from = context.physicalFilename;
+     let to = impt.source.value;
+     let res = null;
+diff --git a/dist/src/utils/parse.js b/dist/src/utils/parse.js
+index de7839cd164217fb35a83951c79cbc3cd279c3e9..4af85a683ab8f1a2869bce972da70a1b2d94dd31 100644
+--- a/dist/src/utils/parse.js
++++ b/dist/src/utils/parse.js
+@@ -1,18 +1,37 @@
++import { parse as parseEstree } from "@typescript-eslint/typescript-estree";
+ import { exploreChildren } from "./explore-children.js";
+-function omitNullish(obj) {
+-    return Object.fromEntries(Object.entries(obj).filter(([, value]) => value != null));
+-}
+-export function parse(source, context) {
+-    const opts = context.languageOptions;
+-    const parsed = opts.parser.parseForESLint(source.text, omitNullish({
+-        parser: opts.parserOptions,
+-        filePath: source.fileName,
+-        loc: true,
+-        range: true,
+-        tokens: true,
+-        comment: true,
+-    }));
+-    const ast = parsed.ast;
++// Upstream parses resolved files with the *host* parser taken from `context.languageOptions`,
++// which breaks in two ways:
++// - espree (the parser for every file no config assigns one to) implements `parse`, not
++//   `parseForESLint`, so the unconditional `parseForESLint` call is a guaranteed TypeError;
++// - re-entering `@typescript-eslint/parser` mid-rule pollutes typescript-estree's program
++//   caches, so a *later* file in the same run dies inside the TypeScript compiler.
++// `typescript-estree`'s AST-only `parse` avoids both: no host parser, no Program, no project
++// service, and it understands TS, so a `.js` file importing a `.ts` one no longer throws.
++const EMPTY_PROGRAM = () => ({
++    type: "Program",
++    body: [],
++    comments: [],
++    tokens: [],
++    range: [0, 0],
++    loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 0 } },
++});
++export function parse(source, _context) {
++    let ast;
++    try {
++        ast = parseEstree(source.text, {
++            loc: true,
++            range: true,
++            tokens: true,
++            comment: true,
++            jsx: true,
++            filePath: source.fileName,
++        });
++    }
++    catch {
++        // Unparseable - treat as "resolved nothing" rather than crashing the run
++        return EMPTY_PROGRAM();
++    }
+     exploreChildren(ast, (node, parent) => {
+         node.parent = parent;
+     });

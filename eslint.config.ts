@@ -26,6 +26,7 @@ export default eslintConfig({
   },
 
   configs: {
+    exceptionHandling: true,
     js: {
       overrides: {
         'arrow-body-style': 2,

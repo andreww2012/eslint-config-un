@@ -28,6 +28,7 @@ import type {ErasableSyntaxOnlyEslintConfigOptions} from './erasable-syntax-only
 import type {EsEslintConfigOptions} from './es';
 import type {EslintCommentsEslintConfigOptions} from './eslint-comments';
 import type {EslintPluginEslintConfigOptions} from './eslint-plugin';
+import type {ExceptionHandlingEslintConfigOptions} from './exception-handling';
 import type {ExpectTypeEslintConfigOptions} from './expect-type';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-functions';
@@ -516,6 +517,19 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default false
    */
   eslintPlugin: EslintPluginEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * Lints function calls that might throw unhandled exceptions
+   * and enforces preserving the original error via
+   * [`cause`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) on re-throw.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-exception-handling`](https://npmx.dev/eslint-plugin-exception-handling)
+   * ([docs](https://github.com/Akronae/eslint-plugin-exception-handling/blob/HEAD/README.md))
+   * @default false
+   */
+  exceptionHandling: ExceptionHandlingEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin that provides a rule that enforces that types indicated

@@ -164,6 +164,12 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
       configs: ['react'],
       ruleDocsUrl: (ruleName) => `https://eslint-react.xyz/docs/rules/${ruleName}`,
     },
+    'exception-handling': {
+      configs: ['exceptionHandling'],
+      gitTag: versionAsIs,
+      ruleDocsUrl: (ruleName) =>
+        `https://github.com/Akronae/eslint-plugin-exception-handling/blob/HEAD/docs/rules/${ruleName}.md`,
+    },
     'expect-type': {
       configs: ['expectType'],
       ruleDocsUrl: (ruleName) =>

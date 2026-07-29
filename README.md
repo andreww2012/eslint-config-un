@@ -94,6 +94,7 @@ You need to run ESLint with our config once to find out which plugins should be 
 | `eslint-plugin-erasable-syntax-only`               | `erasable-syntax-only`               |
 | `eslint-plugin-es-x`                               | `es`                                 |
 | `eslint-plugin-eslint-plugin`                      | `eslint-plugin`                      |
+| `eslint-plugin-exception-handling`                 | `exception-handling`                 |
 | `eslint-plugin-expect-type`                        | `expect-type`                        |
 | `eslint-plugin-format`                             | `format`                             |
 | `eslint-plugin-formatjs`                           | `formatjs`                           |
@@ -498,6 +499,7 @@ In the following table, Sub-configs have `/` in their names.
 | `lockfile`                                                      | ❌                                          | [eslint-plugin-lockfile](https://npmx.dev/eslint-plugin-lockfile) (`lockfile`)                                                 | Since v1.0.0                                                                                                                             |
 | ![GitHub](./assets/devicon-github.svg) `githubActions`          | ✅ (`.github/workflows` directory exists)   | [eslint-plugin-github-action](https://npmx.dev/eslint-plugin-github-action) (`github-actions`)                                 | Since v1.0.0                                                                                                                             |
 | `functional`                                                    | ❌                                          | [eslint-plugin-functional](https://npmx.dev/eslint-plugin-functional) (`functional`)                                           | Since v1.0.0<br>Rules enforcing functional programming patterns                                                                          |
+| `exceptionHandling`                                             | ❌                                          | [eslint-plugin-exception-handling](https://npmx.dev/eslint-plugin-exception-handling) (`exception-handling`)                   | Since v1.0.0<br>Reports calls that might throw unhandled exceptions                                                                      |
 
 ## How to use
 
@@ -598,6 +600,7 @@ If you would like to rename them back or rename some other plugins, you can use 
 | [`eslint-plugin-arrow-return-style-x`](https://npmx.dev/eslint-plugin-arrow-return-style-x)                           | `arrow-return-style-x`              | `arrow-return-style` | Similar reason ^                                                                                                    |
 | [`eslint-plugin-jsx-a11y-x`](https://npmx.dev/eslint-plugin-jsx-a11y-x)                                               | `jsx-a11y-x`                        | `jsx-a11y`           | Similar reason ^                                                                                                    |
 | [`eslint-plugin-n`](https://npmx.dev/eslint-plugin-n)                                                                 | `n`                                 | `node`               | Similar reason ^                                                                                                    |
+| [`eslint-plugin-exception-handling`](https://npmx.dev/eslint-plugin-exception-handling)                               | `ex`                                | `exception-handling` | `ex` is too cryptic and is prone to clashing with other plugins                                                     |
 | [`@next/eslint-plugin-next`](https://npmx.dev/@next/eslint-plugin-next)                                               | `@next/next`                        | `nextjs`             | `@next/next` is redundant; consistent with the framework name                                                       |
 | [`@darraghor/eslint-plugin-nestjs-typed`](https://npmx.dev/@darraghor/eslint-plugin-nestjs-typed)                     | `@darraghor/nestjs-typed`           | `nestjs`             | Similar reason ^                                                                                                    |
 | [`eslint-plugin-css`](https://npmx.dev/eslint-plugin-css)                                                             | `css`                               | `css-in-js`          | Conflicts with [`@eslint/css`](https://npmx.dev/@eslint/css) and our name better captures the essence of the plugin |

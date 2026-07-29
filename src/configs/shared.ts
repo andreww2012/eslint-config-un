@@ -300,6 +300,10 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'mobx/missing-make-observable', // [runtime-only]
   'mobx/missing-observer', // [runtime-only]
 
+  // exception-handling — cross-file "can this throw?" analysis is meaningless for isolated snippets
+  'exception-handling/might-throw', // [runtime-only]
+  'exception-handling/no-unhandled', // [runtime-only]
+
   // no-relative-import-paths — relative imports are common in code snippets
   'no-relative-import-paths/no-relative-import-paths', // [imports]
 
