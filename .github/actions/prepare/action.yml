@@ -32,9 +32,9 @@ runs:
     - name: Install dependencies
       shell: bash
       run: pnpm ci
-    - name: Check deps for vulnerabilities
+    - name: Check deps for vulnerabilities & peer deps issues
       shell: bash
-      run: pnpm deps:audit
+      run: pnpm check:deps
     - name: Cache typegen output
       id: cache-typegen
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
