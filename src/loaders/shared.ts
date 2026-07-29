@@ -25,19 +25,7 @@ export type ModuleLoader<T, N extends string = string, PackageNullable extends b
 
 const MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP = /^Cannot find module '([^']+)'/;
 
-export function genModuleLoader<T, N extends string>(
-  property: string,
-  packageName: N,
-  module: () => MaybePromise<T | {default: T}>,
-  ignoreErrors?: undefined,
-): ModuleLoader<T, N, N extends keyof typeof OPTIONAL_PEER_DEPENDENCIES ? true : false>;
-export function genModuleLoader<T, N extends string>(
-  property: string,
-  packageName: N,
-  module: () => MaybePromise<T | {default: T}>,
-  ignoreErrors: MaybeArray<string>,
-): ModuleLoader<T, N>;
-export function genModuleLoader<T, N extends string>(
+function createModuleLoader<T, N extends string>(
   property: string,
   packageName: N,
   module: () => MaybePromise<T | {default: T}>,
@@ -88,3 +76,27 @@ export function genModuleLoader<T, N extends string>(
   result.packageName = packageName;
   return result;
 }
+
+type ResolvesToNull<N extends string, IgnoredErrors> = IgnoredErrors extends undefined
+  ? N extends keyof typeof OPTIONAL_PEER_DEPENDENCIES
+    ? true
+    : false
+  : true;
+
+type ModuleLoaderFactory<EraseModuleType extends boolean> = <
+  T,
+  N extends string,
+  IgnoredErrors extends MaybeArray<string> | undefined = undefined,
+>(
+  property: string,
+  packageName: N,
+  module: () => MaybePromise<
+    | (EraseModuleType extends true ? NoInfer<T> : T)
+    | {default: EraseModuleType extends true ? NoInfer<T> : T}
+  >,
+  ignoreErrors?: IgnoredErrors,
+) => ModuleLoader<T, N, ResolvesToNull<N, IgnoredErrors>>;
+
+export const genModuleLoader = createModuleLoader as ModuleLoaderFactory<true>;
+
+export const genInferredModuleLoader = createModuleLoader as ModuleLoaderFactory<false>;

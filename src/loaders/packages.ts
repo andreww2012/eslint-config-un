@@ -1,12 +1,12 @@
 import type {EslintPlugin} from '../eslint/eslint-types';
 import type {OmitStrict} from '../types';
 import {type MaybeArray, cloneDeep, interopDefault} from '../utils';
-import {type EslintParser, type EslintProcessor, genModuleLoader} from './shared';
+import {type EslintParser, type EslintProcessor, genInferredModuleLoader} from './shared';
 
 export const packagesLoaders = {
-  _utils: genModuleLoader('_utils', '_utils', () => interopDefault(import('../utils'))),
+  _utils: genInferredModuleLoader('_utils', '_utils', () => interopDefault(import('../utils'))),
 
-  angularExtractInlineHtmlProcessor: genModuleLoader(
+  angularExtractInlineHtmlProcessor: genInferredModuleLoader(
     'angularExtractInlineHtmlProcessor',
     '@angular-eslint/eslint-plugin-template',
     () =>
@@ -18,7 +18,7 @@ export const packagesLoaders = {
         return fixedProcessor;
       }),
   ),
-  astroClientSideTsProcessor: genModuleLoader(
+  astroClientSideTsProcessor: genInferredModuleLoader(
     'astroClientSideTsProcessor',
     'eslint-plugin-astro',
     () =>
@@ -26,18 +26,23 @@ export const packagesLoaders = {
         (module) => module.processors['client-side-ts'] as EslintProcessor,
       ),
   ),
-  checkFileProcessor: genModuleLoader('checkFileProcessor', 'eslint-plugin-check-file', () =>
-    interopDefault(import('eslint-plugin-check-file')).then(
-      (m) => m.processors['eslint-processor-check-file'],
-    ),
+  checkFileProcessor: genInferredModuleLoader(
+    'checkFileProcessor',
+    'eslint-plugin-check-file',
+    () =>
+      interopDefault(import('eslint-plugin-check-file')).then(
+        (m) => m.processors['eslint-processor-check-file'],
+      ),
   ),
-  eslintCssTreeSyntax: genModuleLoader('eslintCssTree', '@eslint/css-tree', () =>
+  eslintCssTreeSyntax: genInferredModuleLoader('eslintCssTree', '@eslint/css-tree', () =>
     interopDefault(import('@eslint/css-tree/definition-syntax-data')),
   ),
-  eslintMergeProcessors: genModuleLoader('eslintMergeProcessors', 'eslint-merge-processors', () =>
-    interopDefault(import('eslint-merge-processors')),
+  eslintMergeProcessors: genInferredModuleLoader(
+    'eslintMergeProcessors',
+    'eslint-merge-processors',
+    () => interopDefault(import('eslint-merge-processors')),
   ),
-  eslintPluginGraphql: genModuleLoader(
+  eslintPluginGraphql: genInferredModuleLoader(
     'eslintPluginGraphql',
     '@graphql-eslint/eslint-plugin',
     () =>
@@ -48,7 +53,7 @@ export const packagesLoaders = {
         }
       >,
   ),
-  eslintPluginImportX: genModuleLoader(
+  eslintPluginImportX: genInferredModuleLoader(
     'eslintPluginImportX',
     'eslint-plugin-import-x',
     () =>
@@ -56,35 +61,40 @@ export const packagesLoaders = {
         Pick<typeof import('eslint-plugin-import-x'), 'createNodeResolver'>
       >,
   ),
-  eslintPluginMarkdown: genModuleLoader('eslintPluginMarkdown', '@eslint/markdown', () =>
+  eslintPluginMarkdown: genInferredModuleLoader('eslintPluginMarkdown', '@eslint/markdown', () =>
     interopDefault(import('@eslint/markdown')),
   ),
-  eslintPluginMdx: genModuleLoader('eslintPluginMdx', 'eslint-plugin-mdx', () =>
+  eslintPluginMdx: genInferredModuleLoader('eslintPluginMdx', 'eslint-plugin-mdx', () =>
     interopDefault(import('eslint-plugin-mdx')),
   ),
-  importResolverTypescript: genModuleLoader(
+  importResolverTypescript: genInferredModuleLoader(
     'importResolverTypescript',
     'eslint-import-resolver-typescript',
     () => interopDefault(import('eslint-import-resolver-typescript')),
   ),
-  mergeProcessors: genModuleLoader('mergeProcessors', 'eslint-merge-processors', () =>
+  mergeProcessors: genInferredModuleLoader('mergeProcessors', 'eslint-merge-processors', () =>
     interopDefault(import('eslint-merge-processors')),
   ),
-  svelteProcessor: genModuleLoader('svelteProcessor', 'eslint-plugin-svelte', () =>
+  svelteProcessor: genInferredModuleLoader('svelteProcessor', 'eslint-plugin-svelte', () =>
     interopDefault(import('eslint-plugin-svelte')).then((m) => m.processors.svelte),
   ),
-  tailwindCsstree: genModuleLoader('tailwindCsstree', 'tailwind-csstree', () =>
+  tailwindCsstree: genInferredModuleLoader('tailwindCsstree', 'tailwind-csstree', () =>
     interopDefault(import('tailwind-csstree')),
   ),
-  typescriptEslintParser: genModuleLoader('typescriptEslintParser', 'typescript-eslint', () =>
-    interopDefault(import('typescript-eslint')).then(
-      (m) => m.parser as {parseForESLint: (...args: unknown[]) => unknown},
-    ),
+  typescriptEslintParser: genInferredModuleLoader(
+    'typescriptEslintParser',
+    'typescript-eslint',
+    () =>
+      interopDefault(import('typescript-eslint')).then(
+        (m) => m.parser as {parseForESLint: (...args: unknown[]) => unknown},
+      ),
   ),
-  vueBlocksProcessor: genModuleLoader('vueBlocksProcessor', 'eslint-processor-vue-blocks', () =>
-    interopDefault(import('eslint-processor-vue-blocks')),
+  vueBlocksProcessor: genInferredModuleLoader(
+    'vueBlocksProcessor',
+    'eslint-processor-vue-blocks',
+    () => interopDefault(import('eslint-processor-vue-blocks')),
   ),
-  vueProcessor: genModuleLoader('vueProcessor', 'eslint-plugin-vue', () =>
+  vueProcessor: genInferredModuleLoader('vueProcessor', 'eslint-plugin-vue', () =>
     interopDefault(import('eslint-plugin-vue')).then(
       (module) => module.processors['.vue'] as EslintProcessor,
     ),
