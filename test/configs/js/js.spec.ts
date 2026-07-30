@@ -75,8 +75,8 @@ describe('rules', async () => {
     expect(configResult.getRuleEntrySeverity('js', 'no-console')).toBe(2);
   });
 
-  it('disables `arrow-body-style` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('js', 'arrow-body-style')).toBe(0);
+  it('disables `no-magic-numbers` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('js', 'no-magic-numbers')).toBe(0);
   });
 
   it('`no-console` rule fires on a file with console.log', async () => {
@@ -179,6 +179,62 @@ describe('options', () => {
       });
 
       expect(configResult.getRuleEntry('js', 'no-console')).toMatchInlineSnapshot('[2, {}]');
+    });
+  });
+
+  describe('option: `arrowFunctionBodyStyle`', () => {
+    it('disables `arrow-body-style` rule when option is not set', async () => {
+      const configResult = await computeEslintConfig('js');
+
+      expect(configResult.getRuleEntrySeverity('js', 'arrow-body-style')).toBe(0);
+    });
+
+    it('disables `arrow-body-style` rule by default', async () => {
+      const configResult = await computeEslintConfig({js: {arrowFunctionBodyStyle: false}});
+
+      expect(configResult.getRuleEntrySeverity('js', 'arrow-body-style')).toBe(0);
+    });
+
+    it('enables `arrow-body-style` rule with the default rule options when option is `true`', async () => {
+      const configResult = await computeEslintConfig({js: {arrowFunctionBodyStyle: true}});
+
+      expect(configResult.getRuleEntry('js', 'arrow-body-style')).toMatchInlineSnapshot(
+        '[2, "as-needed"]',
+      );
+    });
+
+    it('enables `arrow-body-style` rule when option is `always`', async () => {
+      const configResult = await computeEslintConfig({js: {arrowFunctionBodyStyle: 'always'}});
+
+      expect(configResult.getRuleEntry('js', 'arrow-body-style')).toMatchInlineSnapshot(
+        '[2, "always"]',
+      );
+    });
+
+    it('enables `arrow-body-style` rule when option is `as-needed`', async () => {
+      const configResult = await computeEslintConfig({js: {arrowFunctionBodyStyle: 'as-needed'}});
+
+      expect(configResult.getRuleEntry('js', 'arrow-body-style')).toMatchInlineSnapshot(
+        '[2, "as-needed"]',
+      );
+    });
+
+    it('enables `arrow-body-style` rule when option is `never`', async () => {
+      const configResult = await computeEslintConfig({js: {arrowFunctionBodyStyle: 'never'}});
+
+      expect(configResult.getRuleEntry('js', 'arrow-body-style')).toMatchInlineSnapshot(
+        '[2, "never"]',
+      );
+    });
+
+    it('passes all the rule options when option is an array', async () => {
+      const configResult = await computeEslintConfig({
+        js: {arrowFunctionBodyStyle: ['as-needed', {requireReturnForObjectLiteral: true}]},
+      });
+
+      expect(configResult.getRuleEntry('js', 'arrow-body-style')).toMatchInlineSnapshot(
+        '[2, "as-needed", {"requireReturnForObjectLiteral": true}]',
+      );
     });
   });
 });

@@ -3,6 +3,7 @@ import type {BuiltinEslintRules} from '../eslint/eslint-types';
 import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
+  type GetRuleOptions,
   type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
@@ -16,10 +17,33 @@ export interface JsEslintConfigOptions<
    * @default {warn: true, error: true}
    */
   allowedConsoleMethods?: Partial<Record<keyof Console | (string & {}), boolean>>;
+
+  /**
+   * Enforces a consistent style of braces around arrow function bodies:
+   * - `as-needed` (default) enforces no braces where they can be omitted;
+   * - `always` enforces braces around the function body;
+   * - `never` enforces no braces around the function body.
+   *
+   * Setting to `true` is equivalent of the default value.
+   *
+   * Use the array form to also pass the rule's second option,
+   * for example `['as-needed', {requireReturnForObjectLiteral: true}]`.
+   * Pass `false` to not enforce.
+   *
+   * Affected rule:
+   * - [`arrow-body-style`](https://eslint.org/docs/latest/rules/arrow-body-style)
+   * @default false
+   */
+  arrowFunctionBodyStyle?:
+    | boolean
+    | GetRuleOptions<'', 'arrow-body-style'>
+    | GetRuleOptions<'', 'arrow-body-style', 'all'>;
 }
 
 export default ((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
+
+  const {arrowFunctionBodyStyle} = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '');
 
@@ -110,7 +134,17 @@ export default ((context, optionsRaw) => {
     .addRule('valid-typeof', ERROR) /** @since 0.5.0 */ // 🟢
     .markCategory('Suggestions')
     .addRule('accessor-pairs', ERROR) /** @since 0.22.0 */
-    .addRule('arrow-body-style', OFF) /** @since 1.8.0 */
+    .addRule(
+      'arrow-body-style',
+      arrowFunctionBodyStyle ? ERROR : OFF,
+      Array.isArray(arrowFunctionBodyStyle)
+        ? arrowFunctionBodyStyle
+        : arrowFunctionBodyStyle === true || arrowFunctionBodyStyle === 'as-needed'
+          ? ['as-needed']
+          : typeof arrowFunctionBodyStyle === 'string'
+            ? [arrowFunctionBodyStyle]
+            : [],
+    ) /** @since 1.8.0 */
     .addRule('block-scoped-var', ERROR) /** @since 0.1.0 */
     .addRule('camelcase', ERROR, [
       {
