@@ -1,7 +1,10 @@
-<!-- eslint-disable-next-line markdown-preferences/heading-casing -->
+<!-- eslint-disable markdown-preferences/heading-casing, markdown-preferences/padding-line-between-blocks -->
+<!-- prettier-ignore -->
+<!-- cspell:disable -->
+
 # Style Guide
 
-Copied from <https://github.com/andreww2012/agents/blob/7540adde2e43160e91ff9ecaf92330e15bbbe504/.agents/skills/style-guide.md>.
+Source: <https://github.com/andreww2012/agents/blob/13966c09b9782f9f0ae1a95b2df17f4a16818be4/.agents/style-guide.md>
 
 ## Code
 
@@ -13,6 +16,7 @@ Copied from <https://github.com/andreww2012/agents/blob/7540adde2e43160e91ff9eca
   Exception: they explain the actual non-obvious "why" behind the code.
   In other words, they must add *real* value.
   When composing them, avoid verbosity as much as possible but not sacrifice clarity.
+- Never put a full stop at the very end of a comment.
 - Never omit curly braces around blocks (like `if`, `else`, etc.)
 - Let the type system infer types whenever possible (always prefer implicit/inferred return types).
   Some important cases:
@@ -42,6 +46,9 @@ Copied from <https://github.com/andreww2012/agents/blob/7540adde2e43160e91ff9eca
   Exception: don't do that in `.changeset/*.md` files as they would be rendered differently in the changelog file that [changesets](https://github.com/changesets/changesets) are rendering.
 
 ## General
+
+Don't (un)stage or commit changes unless explicitly asked to.
+Prefer not to use a stash to find a root cause, test hypotheses and similar - it's better to use something like a git worktree, or completely avoid that.
 
 Use `kebab-case` for files and directory names, unless they are called differently by convention (like `README.md`, `AGENTS.md`, etc).
 
@@ -78,3 +85,7 @@ If a word to ignore only encountered in a single file:
 - Use top-level comment `cspell:ignore words to disable` if the word only occurs once in a file, or it's not possible to use the inline comment `cspell:disable-line`
 - Otherwise, use that inline comment.
   Warning: it does not accept the list of words to ignore on the line, so please minimize the line length that is going to be disabled by CSpell.
+
+## Meta
+
+Don't say (unless asked explicitly) you have been following this style guide; just follow it.
