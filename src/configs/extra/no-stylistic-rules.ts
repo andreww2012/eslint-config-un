@@ -801,10 +801,13 @@ const ALL_STYLISTIC_RULES = {
     'prefer-define-helpers': true,
   },
   // Won't include: no-console-spaces, prefer-array-find, prefer-array-some, prefer-math-trunc, prefer-modern-math-apis, prefer-string-starts-ends-with
+  // Won't include: no-unnecessary-splice, since it also reports no-op `splice()` calls, i.e. potentially broken code
   unicorn: {
+    'better-dom-traversing': true,
     'better-regex': true,
     'catch-error-name': true,
     'consistent-assert': true,
+    'consistent-boolean-name': true,
     'consistent-class-member-order': true,
     'consistent-conditional-object-spread': true,
     'consistent-date-clone': true,
@@ -825,6 +828,7 @@ const ALL_STYLISTIC_RULES = {
     'no-for-each': true,
     'no-for-loop': true,
     'no-hex-escape': true,
+    'no-immediate-mutation': true,
     'no-keyword-prefix': true,
     'no-lonely-if': true,
     'no-magic-array-flat-depth': true,
@@ -840,8 +844,10 @@ const ALL_STYLISTIC_RULES = {
     'no-this-assignment': true,
     'no-typeof-undefined': true,
     'no-unnecessary-array-flat-map': true,
+    'no-unnecessary-array-splice-count': true,
     'no-unnecessary-boolean-comparison': true,
     'no-unnecessary-fetch-options': true,
+    'no-unnecessary-global-this': true,
     'no-unnecessary-nested-ternary': true,
     'no-unreadable-array-destructuring': true,
     'no-unreadable-iife': true,
@@ -913,6 +919,7 @@ const ALL_STYLISTIC_RULES = {
     'prefer-simplified-conditions': true,
     'prefer-single-call': true,
     'prefer-single-replace': true,
+    'prefer-split-limit': true,
     'prefer-spread': true,
     'prefer-string-raw': true,
     'prefer-string-repeat': true,
@@ -946,6 +953,7 @@ const ALL_STYLISTIC_RULES = {
   'unused-imports': {
     // None
   },
+  // Won't include: `no-importing-vitest-globals`, since removing the imports may cause TypeScript errors
   vitest: {
     'consistent-test-it': true,
     'consistent-vitest-vi': true,
