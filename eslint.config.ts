@@ -106,6 +106,7 @@ export default eslintConfig({
       },
       configSortObjects: {
         files: [
+          'src/configs/extra/no-prettier-incompatible-rules.ts',
           'src/configs/extra/no-stylistic-rules.ts',
           'src/loaders/*.ts',
           'scripts/shared/packages-meta.ts',

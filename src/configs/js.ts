@@ -36,7 +36,6 @@ export default ((context, optionsRaw) => {
 
   // Legend:
   // 🟢 - in recommended
-  // 🟠 - rule from `eslint-config-prettier`
 
   const config = configBuilder
     ?.addConfig([
@@ -131,7 +130,7 @@ export default ((context, optionsRaw) => {
     .addRule('complexity', OFF) /** @since 0.0.9 */
     .addRule('consistent-return', ERROR) /** @since 0.4.0 */
     .addRule('consistent-this', ERROR, ['that']) /** @since 0.0.9 */
-    .addRule('curly', ERROR, ['all' /* default */]) /** @since 0.0.2 */ // 🟠
+    .addRule('curly', ERROR, ['all' /* default */]) /** @since 0.0.2 */
     .addRule('default-case', ERROR) /** @since 0.6.0 */
     .addRule('default-case-last', ERROR) /** @since 7.0.0-alpha.0 */
     .addRule('default-param-last', ERROR) /** @since 6.4.0 */

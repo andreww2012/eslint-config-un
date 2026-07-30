@@ -641,7 +641,6 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
 
   // Legend:
   // 🟢 - in recommended
-  // 🟠 - rule from `eslint-config-prettier`
   // Check rule usage: https://github.com/search?q=path%3A%2F.*eslint%5B%5E%5C%2F%5D*%24%2F+%22react%2Fboolean-prop-naming%22&type=code
 
   configBuilderReactOriginal
@@ -701,22 +700,22 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
           : OFF,
       [shorthandBoolean === 'prefer-error' || shorthandBoolean === 'prefer' ? 'never' : 'always'],
     ) /** @since 2.1.0 */
-    .addRule('jsx-child-element-spacing', OFF) /** @since 7.6.0 */ // 🟠
-    .addRule('jsx-closing-bracket-location', OFF) /** @since 3.3.0 */ // 🟠
-    .addRule('jsx-closing-tag-location', OFF) /** @since 7.1.0 */ // 🟠
+    .addRule('jsx-child-element-spacing', OFF) /** @since 7.6.0 */
+    .addRule('jsx-closing-bracket-location', OFF) /** @since 3.3.0 */
+    .addRule('jsx-closing-tag-location', OFF) /** @since 7.1.0 */
     .addRule('jsx-curly-brace-presence', WARNING, [
       {props: 'never', children: 'never', propElementValues: 'always'},
     ]) /** @since 7.4.0-rc.0 */
-    .addRule('jsx-curly-newline', OFF) /** @since 7.14.0 */ // 🟠
-    .addRule('jsx-curly-spacing', OFF) /** @since 2.7.0 */ // 🟠
-    .addRule('jsx-equals-spacing', OFF) /** @since 3.16.0 */ // 🟠
+    .addRule('jsx-curly-newline', OFF) /** @since 7.14.0 */
+    .addRule('jsx-curly-spacing', OFF) /** @since 2.7.0 */
+    .addRule('jsx-equals-spacing', OFF) /** @since 3.16.0 */
     .addRule('jsx-filename-extension', WARNING, [
       {
         extensions: JSX_FILE_EXTENSIONS,
         ignoreFilesWithoutCode: true,
       },
     ]) /** @since 5.2.0 */
-    .addRule('jsx-first-prop-new-line', OFF) /** @since 5.0.0 */ // 🟠
+    .addRule('jsx-first-prop-new-line', OFF) /** @since 5.0.0 */
     .addRule(
       'jsx-fragments',
       shorthandFragment === 'prefer-error' || shorthandFragment === 'avoid-error'
@@ -731,8 +730,8 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
       ],
     ) /** @since 7.12.0 */
     .addRule('jsx-handler-names', OFF) /** @since 3.11.0 */
-    .addRule('jsx-indent', OFF) /** @since 3.14.0 */ // 🟠
-    .addRule('jsx-indent-props', OFF) /** @since 3.3.0 */ // 🟠
+    .addRule('jsx-indent', OFF) /** @since 3.14.0 */
+    .addRule('jsx-indent-props', OFF) /** @since 3.3.0 */
     .addRule('jsx-key', getDoubleRuleSeverity(NO_DUPLICATE_OR_MISSING_KEY_SEVERITY, true), [
       {
         checkFragmentShorthand: true,
@@ -741,8 +740,8 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
       },
     ]) /** @since 3.9.0 */ // 🟢
     .addRule('jsx-max-depth', OFF) /** @since 7.7.0 */
-    .addRule('jsx-max-props-per-line', OFF) /** @since 3.2.0 */ // 🟠
-    .addRule('jsx-newline', OFF) /** @since 7.22.0 */ // 🟠
+    .addRule('jsx-max-props-per-line', OFF) /** @since 3.2.0 */
+    .addRule('jsx-newline', OFF) /** @since 7.22.0 */
     .addRule('jsx-no-bind', ERROR, [
       {allowArrowFunctions: true, ignoreRefs: true},
     ]) /** @since 3.7.0 */
@@ -770,18 +769,18 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
       getDoubleRuleSeverity(NO_USELESS_FRAGMENT_SEVERITY, false),
       [{allowExpressions: true}],
     ) /** @since 7.15.0 */
-    .addRule('jsx-one-expression-per-line', OFF) /** @since 7.5.0 */ // 🟠
+    .addRule('jsx-one-expression-per-line', OFF) /** @since 7.5.0 */
     .addRule('jsx-pascal-case', WARNING, [{allowNamespace: true}]) /** @since 3.10.0 */
-    .addRule('jsx-props-no-multi-spaces', OFF) /** @since 7.9.0 */ // 🟠
+    .addRule('jsx-props-no-multi-spaces', OFF) /** @since 7.9.0 */
     .addRule('jsx-props-no-spread-multi', ERROR) /** @since 7.35.0 */
     .addRule('jsx-props-no-spreading', ERROR, [
       {custom: 'ignore' /* Only enforced on HTML elements */},
     ]) /** @since 7.13.0 */
     .addRule('jsx-sort-props', OFF) /** @since 2.0.0 */
-    .addRule('jsx-tag-spacing', OFF) /** @since 6.7.0 */ // 🟠
+    .addRule('jsx-tag-spacing', OFF) /** @since 6.7.0 */
     .addRule('jsx-uses-react', newJsxTransform ? OFF : ERROR) /** @since 1.4.0 */ // 🟢
     .addRule('jsx-uses-vars', ERROR) /** @since 1.5.0 */ // 🟢
-    .addRule('jsx-wrap-multilines', OFF) /** @since 1.1.0 */ /** @aka wrap-multilines */ // 🟠
+    .addRule('jsx-wrap-multilines', OFF) /** @since 1.1.0 */ /** @aka wrap-multilines */
     .addRule(
       'no-access-state-in-setstate',
       getDoubleRuleSeverity(NO_ACCESS_STATE_IN_SETSTATE_SEVERITY, false),

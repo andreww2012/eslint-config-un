@@ -474,8 +474,9 @@ In the following table, Sub-configs have `/` in their names.
 | Un config name                                                  | Enabled by default?<br>(optional condition) | Primary plugin(s) (`default-prefix`)                                                                                           | Description/Notes                                                                                                                        |
 | --------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `casePolice`                                                    | ❌                                          | [eslint-plugin-case-police](https://npmx.dev/eslint-plugin-case-police) (`case-police`)                                        | Since v0.9.0                                                                                                                             |
+| `noPrettierIncompatibleRules`                                   | ✅ (`prettier` package is installed)         | -                                                                                                                              | Since v1.0.0<br>Disables rules unnecessary or conflicting with Prettier. Replaces `eslint-config-prettier`.                      |
 | `noStylisticRules`                                              | ❌                                          | -                                                                                                                              | Since v1.0.0<br>Config to disable most of the stylistic rules. Can be useful when integrating eslint-config-un into an existing project. |
-| `noRelativeImportPaths`                                         | ❌                                          | [eslint-plugin-no-relative-import-paths](https://npmx.dev/eslint-plugin-no-relative-import-paths) (`no-relative-import-paths`) | Since v1.0.0-beta.9                                                                                                                      |
+| `noRelativeImportPaths`                                         | ❌                                          | [eslint-plugin-no-relative-import-paths](https://npmx.dev/eslint-plugin-no-relative-import-paths) (`no-relative-import-paths`) | Since v1.0.0                                                                                                                      |
 | `noUnsanitized`                                                 | ✅                                          | [eslint-plugin-no-unsanitized](https://npmx.dev/eslint-plugin-no-unsanitized) (`no-unsanitized`)                               | Since v1.0.0                                                                                                                             |
 | ![CSpell](./assets/vscode-icons-file-type-cspell.svg) `cspell`  | ❌                                          | [@cspell/eslint-plugin](https://npmx.dev/@cspell/eslint-plugin) (`@cspell`)                                                    | Since v1.0.0                                                                                                                             |
 | ![ESLint](./assets/devicon-eslint.svg) `eslintPlugin`           | ❌                                          | [eslint-plugin-eslint-plugin](https://npmx.dev/eslint-plugin-eslint-plugin) (`eslint-plugin`)                                  | Since v1.0.0<br>For linting ESLint plugins                                                                                               |
@@ -738,6 +739,36 @@ perfectionist: {
 },
 ```
 
+### Disabling rules incompatible with Prettier
+
+The `noPrettierIncompatibleRules` config (enabled by default when `prettier` is installed) disables rules that are unnecessary or might conflict with [Prettier](https://prettier.io).
+It replaces the previously used [`eslint-config-prettier`](https://npmx.dev/eslint-config-prettier): the rule list is inlined, audited against the current state of Prettier, and [plugin prefix renames] are respected.
+
+Rules are grouped by the language Prettier formats. 
+Groups for languages Prettier can only format via an extra plugin are applied **only if that plugin is installed**:
+
+| Group    | Applied when                          |
+| -------- | ------------------------------------- |
+| `svelte` | `prettier-plugin-svelte` is installed |
+| `astro`  | `prettier-plugin-astro` is installed  |
+| `toml`   | `prettier-plugin-toml` is installed   |
+
+All other groups (`js`, `vue`, `json`, `yaml`, `markdown`, `html`) are always applied.
+You can force any group on or off via the `languages` option.
+
+<!-- eslint-skip -->
+
+```ts
+noPrettierIncompatibleRules: {
+  languages: {toml: true, markdown: false},
+  overrides: {
+    'stylistic/indent': 'error', // keep this rule enabled despite Prettier
+    curly: 'off', // disable one of the rules kept enabled by default
+  },
+  overridesAny: {'some-plugin/some-rule': 'off'},
+},
+```
+
 ## Root options
 
 ### `configs`
@@ -835,7 +866,7 @@ When enabled:
 
 **Type**: `Partial<Record<Exclude<PluginPrefix, ''>, string>>`
 
-See [Plugin prefixes](#plugin-prefixes-pluginrenames-option).
+See [Plugin prefixes][plugin prefix renames].
 
 ### `pluginOverrides`
 
@@ -858,13 +889,6 @@ This can be useful if you enable certain plugin rules only be using [configurati
 **Type**: `boolean | {plugins?: Partial<Record<PluginPrefix, boolean>>; rules?: Partial<Record<FixableRuleNames, boolean>>}`
 
 See [Globally disabling rule autofix](#globally-disabling-rule-autofix).
-
-### `disablePrettierIncompatibleRules`
-
-**Type**: `boolean`
-
-Disables rules that are potentially conflicting with Prettier. [`eslint-config-prettier`](https://npmx.dev/eslint-config-prettier) is used under the hood, with a few exceptions.
-Defaults to `true` if `prettier` package is installed.
 
 ### `markdownCodeBlocksRules`
 
@@ -1120,7 +1144,7 @@ Before committing, please do also run tests, formatter, other linters and tools 
    1. Run ESLint for the first time (without `--fix`!).
       The list of dependencies to be installed might be shown to you.
       Please review whether those plugins are actually used/needed and act accordingly: install necessary plugins and disable configs which require packages you do not wish to install.
-   2. Rename rules on existing [`eslint` configuration comments](https://eslint.org/docs/latest/use/configure/rules#use-configuration-comments) if they have different plugin prefixes (the most common case is that `typescript-eslint` plugin has `ts` prefix in eslint-config-un instead of `@typescript-eslint`) **OR** change prefixes using [`pluginRenames` option](#plugin-prefixes-pluginrenames-option).
+   2. Rename rules on existing [`eslint` configuration comments](https://eslint.org/docs/latest/use/configure/rules#use-configuration-comments) if they have different plugin prefixes (the most common case is that `typescript-eslint` plugin has `ts` prefix in eslint-config-un instead of `@typescript-eslint`) **OR** change prefixes using [`pluginRenames` option][plugin prefix renames].
       Look for `Definition for rule '<rule name>' was not found` comments
 4. Perform the following two steps in any order:
    1. Enable stylistic rules only and fix them automatically (if you wish to do so) by running ESLint with `--fix --fix-type problem,suggestion,layout` (the latter flag ensures auto removal of "unused" `eslint-disable` comments will not happen):
@@ -1256,6 +1280,8 @@ Non-breaking improvements ship continuously as minor and patch releases on the c
     </tr>
   </tfoot>
 </table>
+
+[plugin prefix renames]: #plugin-prefixes-pluginrenames-option
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->

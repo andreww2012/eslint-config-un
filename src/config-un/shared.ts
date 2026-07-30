@@ -389,13 +389,6 @@ export interface EslintConfigUnOptions<
       };
 
   /**
-   * Enables `eslint-config-prettier` at the end of the ruleset.
-   * @default true <=> `prettier` package is installed
-   * @see https://github.com/prettier/eslint-config-prettier
-   */
-  disablePrettierIncompatibleRules?: boolean;
-
-  /**
    * Decide which rules should be disabled/enabled in Markdown and MDX "fenced code blocks"
    * (like \```lang ... ```).
    */

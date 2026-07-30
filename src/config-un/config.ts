@@ -101,13 +101,6 @@ export function createConfigBuilder<
   );
 }
 
-const RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER = new Set<string>([
-  'curly',
-  'stylistic/quotes',
-  'unicorn/template-indent',
-  'vue/html-self-closing',
-] satisfies UnAllRuleNames[]);
-
 const RULES_TO_DISABLE_IN_OFFLINE_MODE = [
   'markdown-links/no-dead-urls',
   'json-schema-validator/no-invalid',
@@ -294,8 +287,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   const packagesInfo = Object.fromEntries(packagesInfoRaw) as UnConfigContext['packagesInfo'];
   Object.assign(context.packagesInfo, packagesInfo satisfies UnConfigContext['packagesInfo']);
 
-  optionsResolved.disablePrettierIncompatibleRules ??= packagesInfo.prettier != null;
-
   debug(`Found .gitignore file: ${gitignoreFile != null}`);
 
   const {
@@ -305,7 +296,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     files,
     pluginRenames = {},
     loadPluginsOnDemand,
-    disablePrettierIncompatibleRules,
     offlineMode,
     useImportIntegrity,
     linterOptionsNoInlineConfig,
@@ -431,6 +421,9 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     node: {enabled: getIsConfigEnabled('node')},
     nodeDependencies: {enabled: getIsConfigEnabled('nodeDependencies', false)},
     noOnlyTests: {enabled: getIsConfigEnabled('noOnlyTests', false)},
+    noPrettierIncompatibleRules: {
+      enabled: getIsConfigEnabled('noPrettierIncompatibleRules', 'prettier'),
+    },
     noRelativeImportPaths: {enabled: getIsConfigEnabled('noRelativeImportPaths', false)},
     noSecrets: {enabled: getIsConfigEnabled('noSecrets')},
     noStylisticRules: {enabled: getIsConfigEnabled('noStylisticRules', false)},
@@ -884,19 +877,12 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       return [extraConfigFinal, ...configResolveResult.extraConfigs];
     }),
 
-    // MUST be last
+    // MUST be last (thw following configs globally disable rules)
     loadUnConfig('noStylisticRules', () => import('../configs/extra/no-stylistic-rules')),
-    disablePrettierIncompatibleRules &&
-      interopDefault(import('eslint-config-prettier')).then((eslintConfigPrettier) => ({
-        name: genFlatConfigEntryName('eslint-config-prettier'),
-        rules: Object.fromEntries(
-          // eslint-disable-next-line ts/ban-ts-comment
-          // @ts-ignore "Expression produces a union type that is too complex to represent" only in tsgo, see https://github.com/microsoft/typescript-go/issues/1100
-          Object.entries(eslintConfigPrettier.rules).filter(
-            ([k]) => !RULES_NOT_TO_DISABLE_IN_CONFIG_PRETTIER.has(k),
-          ),
-        ),
-      })),
+    loadUnConfig(
+      'noPrettierIncompatibleRules',
+      () => import('../configs/extra/no-prettier-incompatible-rules'),
+    ),
   ]) as Promise<UnresolvedConfigType[]>;
   /* eslint-enable ts/await-thenable */
 

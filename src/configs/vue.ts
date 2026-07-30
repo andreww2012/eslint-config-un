@@ -520,7 +520,6 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   // Legend:
   // 3️⃣ = in recommended/vue-3
   // 2️⃣ = in recommended/vue-2
-  // 🟠 - rule from `eslint-config-prettier`
 
   configBuilder
     ?.addConfig(['vue', {includeDefaultFilesAndIgnores: true}])
@@ -618,11 +617,11 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('attribute-hyphenation', ERROR) /** @since 3.9.0 */ // 3️⃣2️⃣
     .addRule('component-definition-name-casing', ERROR) /** @since 7.0.0 */ // 3️⃣2️⃣
     .addRule('first-attribute-linebreak', ERROR) /** @since 8.0.0 */ // 3️⃣2️⃣
-    .addRule('html-closing-bracket-newline', OFF) /** @since 4.1.0 */ // 3️⃣2️⃣🟠
-    .addRule('html-closing-bracket-spacing', ERROR) /** @since 4.1.0 */ // 3️⃣2️⃣🟠
-    .addRule('html-end-tags', ERROR) /** @since 3.0.0 */ // 3️⃣2️⃣🟠
-    .addRule('html-indent', OFF) /** @since 3.14.0 */ // 3️⃣2️⃣🟠
-    .addRule('html-quotes', ERROR) /** @since 3.0.0 */ // 3️⃣2️⃣🟠
+    .addRule('html-closing-bracket-newline', OFF) /** @since 4.1.0 */ // 3️⃣2️⃣
+    .addRule('html-closing-bracket-spacing', ERROR) /** @since 4.1.0 */ // 3️⃣2️⃣
+    .addRule('html-end-tags', ERROR) /** @since 3.0.0 */ // 3️⃣2️⃣
+    .addRule('html-indent', OFF) /** @since 3.14.0 */ // 3️⃣2️⃣
+    .addRule('html-quotes', ERROR) /** @since 3.0.0 */ // 3️⃣2️⃣
     .addRule(
       'html-self-closing',
       ERROR,
@@ -636,19 +635,19 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
           },
         },
       ] /** @since 3.11.0 */,
-    ) // 3️⃣2️⃣🟠
-    .addRule('max-attributes-per-line', OFF) /** @since 3.12.0 */ // 3️⃣2️⃣🟠
-    .addRule('multiline-html-element-content-newline', OFF) /** @since 5.0.0 */ // 3️⃣2️⃣🟠
-    .addRule('mustache-interpolation-spacing', ERROR) /** @since 3.13.0 */ // 3️⃣2️⃣🟠
-    .addRule('no-multi-spaces', ERROR) /** @since 3.12.0 */ // 3️⃣2️⃣🟠
-    .addRule('no-spaces-around-equal-signs-in-attribute', ERROR) /** @since 5.0.0 */ // 3️⃣2️⃣🟠
+    ) // 3️⃣2️⃣
+    .addRule('max-attributes-per-line', OFF) /** @since 3.12.0 */ // 3️⃣2️⃣
+    .addRule('multiline-html-element-content-newline', OFF) /** @since 5.0.0 */ // 3️⃣2️⃣
+    .addRule('mustache-interpolation-spacing', ERROR) /** @since 3.13.0 */ // 3️⃣2️⃣
+    .addRule('no-multi-spaces', ERROR) /** @since 3.12.0 */ // 3️⃣2️⃣
+    .addRule('no-spaces-around-equal-signs-in-attribute', ERROR) /** @since 5.0.0 */ // 3️⃣2️⃣
     .addRule('no-template-shadow', ERROR) /** @since 5.0.0 */ // 3️⃣2️⃣
     .addRule('one-component-per-file', ERROR) /** @since 7.0.0 */ // 3️⃣2️⃣
     .addRule('prop-name-casing', ERROR) /** @since 4.3.0 */ // 3️⃣2️⃣
     .addRule('require-default-prop', OFF) /** @since 3.13.0 */ // 3️⃣2️⃣
     .addRule('require-explicit-emits', vue3Severity(ERROR)) /** @since 7.0.0 */ // 3️⃣
     .addRule('require-prop-types', ERROR) /** @since 3.9.0 */ // 3️⃣2️⃣
-    .addRule('singleline-html-element-content-newline', OFF) /** @since 5.0.0 */ // 3️⃣2️⃣🟠
+    .addRule('singleline-html-element-content-newline', OFF) /** @since 5.0.0 */ // 3️⃣2️⃣
     .addRule('v-bind-style', ERROR, [
       'shorthand',
       {
@@ -680,7 +679,7 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         ],
       },
     ]) /** @since 9.16.0 */ // 3️⃣2️⃣
-    .addRule('block-tag-newline', OFF) /** @since 7.1.0 */ // 🟠
+    .addRule('block-tag-newline', OFF) /** @since 7.1.0 */
     .addRule('component-api-style', enforceApiStyle == null ? OFF : ERROR, [
       [
         enforceApiStyle === 'setup' ? 'script-setup' : 'options',
@@ -823,7 +822,7 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('require-typed-object-prop', ERROR) /** @since 9.16.0 */
     .addRule('require-typed-ref', ERROR) /** @since 9.15.0 */
     .addRule('restricted-component-names', OFF) /** @since 9.32.0 */
-    .addRule('script-indent', OFF) /** @since 4.2.0 */ // 🟠
+    .addRule('script-indent', OFF) /** @since 4.2.0 */
     .addRule('slot-name-casing', ERROR /* `camelCase` is default */) /** @since 9.32.0 */
     .addRule('sort-keys', OFF) /** @since 6.2.0 */
     .addRule('static-class-names-order', OFF) /** @since 6.1.0 */
@@ -834,12 +833,12 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('v-on-handler-style', ERROR, ['inline']) /** @since 9.7.0 */
     .addRule('valid-define-options', isMin3_3 ? ERROR : OFF) /** @since 9.13.0 */ // 3️⃣
     .markCategory('Extension Rules')
-    .addRule('array-bracket-newline', OFF) /** @since 7.1.0 */ // 🟠
-    .addRule('array-bracket-spacing', OFF) /** @since 5.2.0 */ // 🟠
-    .addRule('array-element-newline', OFF) /** @since 9.9.0 */ // 🟠
-    .addRule('arrow-spacing', OFF) /** @since 5.2.0 */ // 🟠
-    .addRule('block-spacing', OFF) /** @since 5.2.0 */ // 🟠
-    .addRule('brace-style', OFF) /** @since 5.2.0 */ // 🟠
+    .addRule('array-bracket-newline', OFF) /** @since 7.1.0 */
+    .addRule('array-bracket-spacing', OFF) /** @since 5.2.0 */
+    .addRule('array-element-newline', OFF) /** @since 9.9.0 */
+    .addRule('arrow-spacing', OFF) /** @since 5.2.0 */
+    .addRule('block-spacing', OFF) /** @since 5.2.0 */
+    .addRule('brace-style', OFF) /** @since 5.2.0 */
     .addRule(
       'camelcase',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -847,10 +846,10 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 5.2.0 */
-    .addRule('comma-dangle', OFF) /** @since 5.2.0 */ // 🟠
-    .addRule('comma-spacing', OFF) /** @since 7.0.0 */ // 🟠
-    .addRule('comma-style', OFF) /** @since 7.0.0 */ // 🟠
-    .addRule('dot-location', OFF) /** @since 6.0.0 */ // 🟠
+    .addRule('comma-dangle', OFF) /** @since 5.2.0 */
+    .addRule('comma-spacing', OFF) /** @since 7.0.0 */
+    .addRule('comma-style', OFF) /** @since 7.0.0 */
+    .addRule('dot-location', OFF) /** @since 6.0.0 */
     .addRule(
       'dot-notation',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -868,11 +867,11 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 5.2.0 */
-    .addRule('func-call-spacing', OFF) /** @since 7.0.0 */ // 🟠
-    .addRule('key-spacing', OFF) /** @since 5.2.0 */ // 🟠
-    .addRule('keyword-spacing', OFF) /** @since 6.0.0 */ // 🟠
-    .addRule('max-len', OFF) /** @since 6.1.0 */ // 🟠
-    .addRule('multiline-ternary', OFF) /** @since 9.7.0 */ // 🟠
+    .addRule('func-call-spacing', OFF) /** @since 7.0.0 */
+    .addRule('key-spacing', OFF) /** @since 5.2.0 */
+    .addRule('keyword-spacing', OFF) /** @since 6.0.0 */
+    .addRule('max-len', OFF) /** @since 6.1.0 */
+    .addRule('multiline-ternary', OFF) /** @since 9.7.0 */
     .addRule('no-console', ERROR) /** @since 9.15.0 */ // Do not inherit severity and options
     .addRule(
       'no-constant-condition',
@@ -888,7 +887,7 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 6.0.0 */
-    .addRule('no-extra-parens', OFF) /** @since 7.0.0 */ // 🟠
+    .addRule('no-extra-parens', OFF) /** @since 7.0.0 */
     .addRule(
       'no-implicit-coercion',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -940,9 +939,9 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 7.0.0 */
-    .addRule('object-curly-newline', OFF) /** @since 7.0.0 */ // 🟠
-    .addRule('object-curly-spacing', OFF) /** @since 5.2.0 */ // 🟠
-    .addRule('object-property-newline', OFF) /** @since 7.0.0 */ // 🟠
+    .addRule('object-curly-newline', OFF) /** @since 7.0.0 */
+    .addRule('object-curly-spacing', OFF) /** @since 5.2.0 */
+    .addRule('object-property-newline', OFF) /** @since 7.0.0 */
     .addRule(
       'object-shorthand',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -950,7 +949,7 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 8.4.0 */
-    .addRule('operator-linebreak', OFF) /** @since 7.0.0 */ // 🟠
+    .addRule('operator-linebreak', OFF) /** @since 7.0.0 */
     .addRule(
       'prefer-template',
       ...getRuleUnSeverityAndOptionsFromEntry(
@@ -958,11 +957,11 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
         inheritFromBase ? undefined : [ERROR],
       ),
     ) /** @since 7.0.0 */
-    .addRule('quote-props', OFF) /** @since 8.4.0 */ // 🟠
-    .addRule('space-in-parens', OFF) /** @since 7.0.0 */ // 🟠
-    .addRule('space-infix-ops', OFF) /** @since 5.2.0 */ // 🟠
-    .addRule('space-unary-ops', OFF) /** @since 5.2.0 */ // 🟠
-    .addRule('template-curly-spacing', OFF) /** @since 7.0.0 */ // 🟠
+    .addRule('quote-props', OFF) /** @since 8.4.0 */
+    .addRule('space-in-parens', OFF) /** @since 7.0.0 */
+    .addRule('space-infix-ops', OFF) /** @since 5.2.0 */
+    .addRule('space-unary-ops', OFF) /** @since 5.2.0 */
+    .addRule('template-curly-spacing', OFF) /** @since 7.0.0 */
     // 🔵 Not working great in Vue files
     .disableAnyRule('ts', 'prefer-function-type')
     .disableAnyRule('ts', 'unified-signatures')

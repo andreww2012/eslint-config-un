@@ -457,7 +457,6 @@ export default ((context, optionsRaw) => {
   // 💭? - optionally requires type information
   // 🔴 - NOT in recommended & unopinionated
   // 🟣 - NOT in unopinionated
-  // 🟠 - rule from `eslint-config-prettier`
   // 🟡 - only making sense for plain JS (functionality ~fully covered by TS)
 
   configBuilder
@@ -536,7 +535,7 @@ export default ((context, optionsRaw) => {
       domDataAttributesStyle ? ERROR : OFF,
       domDataAttributesStyle ? [{preferAttributes: domDataAttributesStyle === 'attributes'}] : [],
     ) /** @since 65.0.0 */ // 💭?
-    .addRule('empty-brace-spaces', OFF) /** @since 24.0.0 */ // 🟣🟠
+    .addRule('empty-brace-spaces', OFF) /** @since 24.0.0 */ // 🟣
     .addRule('error-message', ERROR) /** @since 4.0.0 */
     .addRule('escape-case', ERROR) /** @since 2.0.0 */
     .addRule('expiring-todo-comments', ERROR) /** @since 11.0.0 */
@@ -636,7 +635,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-negated-condition', ERROR) /** @since 45.0.0 */
     .disableAnyRule('', 'no-negated-condition')
     .addRule('no-negation-in-equality-check', ERROR) /** @since 54.0.0 */
-    .addRule('no-nested-ternary', OFF) /** @since 11.0.0 */ // 🟣🟠
+    .addRule('no-nested-ternary', OFF) /** @since 11.0.0 */ // 🟣
     .addRule('no-new-array', ERROR) /** @since 26.0.0 */
     .addRule('no-new-buffer', ERROR) /** @since 2.0.0 */
     .addRule(
@@ -720,7 +719,7 @@ export default ((context, optionsRaw) => {
     ]) /** @since 20.0.0 */
     .addRule('no-xor-as-exponentiation', ERROR) /** @since 68.0.0 */
     .addRule('no-zero-fractions', ERROR) /** @since 8.0.0 */
-    .addRule('number-literal-case', OFF) /** @since 2.0.0 */ // 🟠
+    .addRule('number-literal-case', OFF) /** @since 2.0.0 */
     .addRule('numeric-separators-style', ERROR, [
       {onlyIfContainsSeparator: true},
     ]) /** @since 23.0.0 */
@@ -934,7 +933,7 @@ export default ((context, optionsRaw) => {
     .addRule('string-content', OFF) /** @since 17.0.0 */ // 🔴
     .addRule('switch-case-braces', ERROR) /** @since 44.0.0 */ // 🟣
     .addRule('switch-case-break-position', ERROR) /** @since 64.0.0 */ // 🟣
-    .addRule('template-indent', ERROR) /** @since 37.0.0 */ // 🟣🟠
+    .addRule('template-indent', ERROR) /** @since 37.0.0 */ // 🟣
     .addRule(
       'text-encoding-identifier-case',
       textEncodingSeverity,

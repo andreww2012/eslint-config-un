@@ -31,6 +31,7 @@ import type {EslintPluginEslintConfigOptions} from './eslint-plugin';
 import type {ExpectTypeEslintConfigOptions} from './expect-type';
 import type {CliEslintConfigOptions} from './extra/cli';
 import type {CloudfrontFunctionsEslintConfigOptions} from './extra/cloudfront-functions';
+import type {NoPrettierIncompatibleRulesEslintConfigOptions} from './extra/no-prettier-incompatible-rules';
 import type {NoStylisticRulesEslintConfigOptions} from './extra/no-stylistic-rules';
 import type {FileProgressEslintConfigOptions} from './file-progress';
 import type {FormatEslintConfigOptions} from './format';
@@ -1013,6 +1014,15 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * @default false
    */
   noOnlyTests: NoOnlyTestsEslintConfigOptions<ExtraPlugins>;
+
+  /**
+   * Disables rules that are unnecessary or might conflict with [Prettier](https://prettier.io).
+   * Successor to [`eslint-config-prettier`](https://npmx.dev/eslint-config-prettier).
+   *
+   * 📁 Default `files`: all files
+   * @default true <=> `prettier` package is installed
+   */
+  noPrettierIncompatibleRules: NoPrettierIncompatibleRulesEslintConfigOptions<ExtraPlugins>;
 
   /**
    * An ESLint plugin to disallow relative import paths.
