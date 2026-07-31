@@ -10,6 +10,7 @@ minimumReleaseAgeExclude: # []
   - '@es-joy/jsdoccomment@0.92.0'
   - eslint-plugin-command@4.0.0
   - jsdoc-type-pratt-parser@9.0.0
+  - eslint-plugin-jest-dom@5.7.0
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes

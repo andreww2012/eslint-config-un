@@ -1,4 +1,4 @@
-import {ERROR, GLOB_JS_TS_X_EXTENSION} from '../constants';
+import {ERROR, GLOB_JS_TS_X_EXTENSION, OFF} from '../constants';
 import {generateDefaultTestFiles} from './shared';
 import {
   type ExtraPluginsType,
@@ -34,6 +34,7 @@ export default ((context, optionsRaw) => {
     .addRule('prefer-enabled-disabled', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('prefer-focus', ERROR) /** @since 1.4.0 */ // 🟢
     .addRule('prefer-in-document', ERROR) /** @since 3.3.0 */ // 🟢
+    .addRule('prefer-pressed', OFF) /** @since 5.7.0 */
     .addRule('prefer-required', ERROR) /** @since 1.0.0 */ // 🟢
     .addRule('prefer-to-have-attribute', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('prefer-to-have-class', ERROR) /** @since 3.6.0 */ // 🟢
