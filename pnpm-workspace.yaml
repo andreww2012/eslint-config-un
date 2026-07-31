@@ -29,6 +29,7 @@ minimumReleaseAgeExclude: # []
   - '@nx/nx-win32-x64-msvc@23.1.1'
   - '@nx/workspace@23.1.1'
   - nx@23.1.1
+  - knip@6.30.0
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
