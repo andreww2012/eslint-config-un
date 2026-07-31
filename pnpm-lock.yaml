@@ -276,8 +276,8 @@ importers:
         specifier: 2.0.1
         version: 2.0.1
       enhanced-resolve:
-        specifier: 5.24.3
-        version: 5.24.3
+        specifier: 5.24.5
+        version: 5.24.5
       eslint-config-flat-gitignore:
         specifier: 2.3.0
         version: 2.3.0(eslint@9.39.5)
@@ -6709,8 +6709,8 @@ packages:
   end-of-stream@1.4.5:
     resolution: {integrity: sha512-ooEGc6HP26xXq/N+GCGOT0JKCLDGrq2bQUZrQ7gyrJiZANJ/8YDTxTpQBXGMn+WbIQXNVpyWymm7KYVICQnyOg==}
 
-  enhanced-resolve@5.24.3:
-    resolution: {integrity: sha512-PwKooW9JUzh5chmYfHM3IQl5OkK2u2Nm011MgeZrss3JmFraUx/fqrf78kk8GUMYoibx/14MdwTl/1WKkG7TpQ==}
+  enhanced-resolve@5.24.5:
+    resolution: {integrity: sha512-L1l8TNvomm6UVW5B253AGxQagSQr+vGwhMlrrfRS2qmhx46AMpMVJKQYLvWYbysTMY8VoicOvzHzoHMbyzB+4A==}
     engines: {node: '>=10.13.0'}
 
   enquirer@2.3.6:
@@ -17997,7 +17997,7 @@ snapshots:
     dependencies:
       once: 1.4.0
 
-  enhanced-resolve@5.24.3:
+  enhanced-resolve@5.24.5:
     dependencies:
       graceful-fs: 4.2.11
       tapable: 2.3.3
@@ -18451,7 +18451,7 @@ snapshots:
     dependencies:
       '@eslint/css-tree': 4.0.5
       '@valibot/to-json-schema': 1.7.1(valibot@1.4.2)
-      enhanced-resolve: 5.24.3
+      enhanced-resolve: 5.24.5
       jiti: 2.7.0
       synckit: 0.11.13
       tailwind-csstree: 0.3.3(@eslint/css@1.4.0)
@@ -18906,14 +18906,14 @@ snapshots:
   eslint-plugin-module-interop@0.3.1(eslint@9.39.5):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5)
-      enhanced-resolve: 5.24.3
+      enhanced-resolve: 5.24.5
       eslint: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
       get-tsconfig: 4.14.0
 
   eslint-plugin-n@18.2.2(@typescript/typescript6@6.0.2)(eslint@9.39.5)(ts-declaration-location@1.0.7):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5)
-      enhanced-resolve: 5.24.3
+      enhanced-resolve: 5.24.5
       eslint: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
       eslint-plugin-es-x: 7.8.0(eslint@9.39.5)
       get-tsconfig: 4.14.0
@@ -23508,7 +23508,7 @@ snapshots:
 
   tailwind-api-utils@1.0.3(tailwindcss@4.3.2):
     dependencies:
-      enhanced-resolve: 5.24.3
+      enhanced-resolve: 5.24.5
       jiti: 2.7.0
       local-pkg: 1.2.1
       tailwindcss: 4.3.2
@@ -23633,7 +23633,7 @@ snapshots:
   tsconfig-paths-webpack-plugin@4.2.0:
     dependencies:
       chalk: 4.1.2
-      enhanced-resolve: 5.24.3
+      enhanced-resolve: 5.24.5
       tapable: 2.3.3
       tsconfig-paths: 4.2.0
 
