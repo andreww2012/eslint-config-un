@@ -508,8 +508,8 @@ importers:
         specifier: 1.0.22
         version: 1.0.22(@typescript/typescript6@6.0.2)(eslint@9.39.5)(supports-color@7.2.0)
       '@sveltejs/kit':
-        specifier: 2.70.1
-        version: 2.70.1(@sveltejs/vite-plugin-svelte@7.1.2)(@typescript/typescript6@6.0.2)(svelte@5.55.9)(vite@8.0.16)
+        specifier: 2.70.2
+        version: 2.70.2(@sveltejs/vite-plugin-svelte@7.1.2)(@typescript/typescript6@6.0.2)(svelte@5.55.9)(vite@8.0.16)
       '@tanstack/eslint-plugin-query':
         specifier: 5.101.4
         version: 5.101.4(@typescript/typescript6@6.0.2)(eslint@9.39.5)(supports-color@7.2.0)
@@ -4658,8 +4658,8 @@ packages:
     peerDependencies:
       acorn: ^8.9.0
 
-  '@sveltejs/kit@2.70.1':
-    resolution: {integrity: sha512-nY9SPHGOZro3doud9vZXDBwl9tCZIouuJztjgSHs6PAIrv9M/z5O7eOhPV5xU7CgVHA976Jwu3BA1hIFvXztkA==}
+  '@sveltejs/kit@2.70.2':
+    resolution: {integrity: sha512-RzRoRpuR2KXqc5yMO0akQHDZeT4AslOlznGITURsqHaVbtyYP4Wn3eE3gxj9JcDyNYO0crkxhdwFHc+2vkVm6w==}
     engines: {node: '>=18.13'}
     hasBin: true
     peerDependencies:
@@ -15862,7 +15862,7 @@ snapshots:
     dependencies:
       acorn: 8.17.0
 
-  '@sveltejs/kit@2.70.1(@sveltejs/vite-plugin-svelte@7.1.2)(@typescript/typescript6@6.0.2)(svelte@5.55.9)(vite@8.0.16)':
+  '@sveltejs/kit@2.70.2(@sveltejs/vite-plugin-svelte@7.1.2)(@typescript/typescript6@6.0.2)(svelte@5.55.9)(vite@8.0.16)':
     dependencies:
       '@standard-schema/spec': 1.1.0
       '@sveltejs/acorn-typescript': 1.0.11(acorn@8.17.0)
