@@ -267,20 +267,13 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'unicorn/no-process-exit', // [runtime-only]
   'unicorn/prefer-top-level-await', // [runtime-only]
   'unicorn/no-static-only-class', // [too-strict]
+  'unicorn/no-top-level-side-effects', // [runtime-only]
 
   // regexp
   'regexp/no-unused-capturing-group', // [runtime-only]
   'regexp/no-useless-flag', // [runtime-only]
   'regexp/no-super-linear-backtracking', // [runtime-only]
   'regexp/optimal-quantifier-concatenation', // [runtime-only]
-
-  // misc
-  // won't disable: yaml/file-extension, sonarjs/no-identical-functions, eslint-comments/no-unlimited-disable
-  'unused-imports/no-unused-imports', // [too-strict]
-  'turbo/no-undeclared-env-vars', // [runtime-only]
-  'eslint-plugin/no-property-in-node', // [type-aware]
-  // Conflicts with `markdown-preferences/canonical-code-block-language` by default, can also be handled by that rule and it's confusing for users to see the word "extension" in the lint message
-  'yaml/file-extension',
 
   // tanstack-start — whole-program analysis rules that are meaningless in isolated code snippets
   'tanstack-start/no-async-client-component', // [runtime-only]
@@ -314,6 +307,25 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'zod-openapi/require-comment', // [too-strict]
   'zod-openapi/require-example', // [too-strict]
   'zod-openapi/require-meta', // [too-strict]
+
+  // sonar — Express/passport wiring rules that judge safety by what the whole program does or does
+  // not set up around the app instance, which an isolated snippet never contains
+  // won't disable: sonarjs/no-identical-functions
+  'sonarjs/content-length', // [runtime-only]
+  'sonarjs/cors', // [runtime-only]
+  'sonarjs/file-uploads', // [runtime-only]
+  'sonarjs/no-session-cookies-on-static-assets', // [runtime-only]
+  'sonarjs/production-debug', // [runtime-only]
+  'sonarjs/session-regeneration', // [runtime-only]
+  'sonarjs/x-powered-by', // [runtime-only]
+
+  // misc
+  // won't disable: yaml/file-extension, eslint-comments/no-unlimited-disable
+  'unused-imports/no-unused-imports', // [too-strict]
+  'turbo/no-undeclared-env-vars', // [runtime-only]
+  'eslint-plugin/no-property-in-node', // [type-aware]
+  // Conflicts with `markdown-preferences/canonical-code-block-language` by default, can also be handled by that rule and it's confusing for users to see the word "extension" in the lint message
+  'yaml/file-extension',
 ] satisfies UnAllRuleNames[];
 
 export type RulesDisabledInEmbeddedCodeBlocksByDefault =
