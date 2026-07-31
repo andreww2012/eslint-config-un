@@ -1,5 +1,115 @@
 <!-- cspell:ignore fromasync asyncdisposablestack disposablestack iserror suppressederror sumprecise frombase fromhex setfrombase setfromhex tobase tohex classlist subpaths firstdayofweek getcalendars getcollations gethourcycles getnumberingsystems gettextinfo gettimezones getweekinfo -->
 
+## 1.0.0-beta.16
+
+### Minor Changes
+
+- 8e9f8e7: Our own `un/no-typeof-like-comparisons` rule now tracks detached `typeof` assignments, and does not flag the comparisons with variables holding such assignments:
+
+  ```ts
+  const type = typeof value;
+
+  // Not flagged anymore:
+  if (type === 'number' || type === 'string') {
+    /* ... */
+  }
+  ```
+
+- e6d64e8: playwright: updated [`eslint-plugin-playwright` from v2.10.5 to v2.11.0](https://github.com/mskelton/eslint-plugin-playwright/compare/v2.10.5...v2.11.0):
+
+  - 🟢 enabled [`playwright/no-unnecessary-assertions`](https://github.com/mskelton/eslint-plugin-playwright/blob/HEAD/docs/rules/no-unnecessary-assertions.md) rule
+
+- daa7236: mocha: updated [`eslint-plugin-mocha` from v11.3.0 to v12.0.1](https://github.com/lo1tuma/eslint-plugin-mocha/compare/11.3.0...eslint-plugin-mocha%4012.0.1):
+
+  - 🔄 `mocha/no-return-and-callback` was renamed to [`mocha/no-return-and-done`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-return-and-done.md)
+  - 🔄 `mocha/no-setup-in-describe` was renamed to [`mocha/no-setup-in-suite`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-setup-in-suite.md)
+  - 🔄 `mocha/no-hooks-for-single-case` was renamed to [`mocha/no-hooks-for-single-child`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-hooks-for-single-child.md)
+  - 🔄 `mocha/no-global-tests` was renamed to [`mocha/no-top-level-tests`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-top-level-tests.md)
+  - 🔄 `mocha/no-top-level-hooks` was renamed to [`mocha/no-root-hooks`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-root-hooks.md)
+  - ❌ `mocha/no-sibling-hooks` rule was removed
+  - 🟢 enabled the following rules:
+    - [`mocha/consistent-structure`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/consistent-structure.md) (also added it to the `noStylisticRules` config)
+    - [`mocha/no-async-and-done`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-async-and-done.md)
+    - [`mocha/no-async-in-sync-tests`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-async-in-sync-tests.md)
+    - [`mocha/no-code-after-done`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-code-after-done.md)
+    - [`mocha/no-conditional-tests`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-conditional-tests.md)
+    - [`mocha/no-done-twice`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-done-twice.md)
+  - 🔴 not enabled the following rules:
+    - [`mocha/limit-retries`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/limit-retries.md) rule
+    - [`mocha/limit-slow`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/limit-slow.md) rule
+    - [`mocha/limit-timeout`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/limit-timeout.md) rule
+    - [`mocha/no-nested-suites`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-nested-suites.md) rule
+
+- 1404cae: zod:
+
+  - updated [`eslint-plugin-zod` from v4.8.0 to v4.9.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod@4.8.0...eslint-plugin-zod@4.9.0):
+    - 🟢 enabled [`zod/prefer-nullish`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/prefer-nullish.md) rule and added it to the `noStylisticRules` config
+  - updated [`eslint-plugin-zod-mini` from v1.5.0 to v1.6.0](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-mini@1.5.0...eslint-plugin-zod-mini@1.6.0):
+    - 🟢 enabled [`zod-mini/prefer-nullish`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/docs/rules/prefer-nullish.md) rule and added it to the `noStylisticRules` config
+  - updated [`eslint-plugin-zod-core` from v1.0.8 to v1.0.9](https://github.com/marcalexiei/eslint-zod/compare/eslint-plugin-zod-core@1.0.8...eslint-plugin-zod-core@1.0.9)
+
+- 2efd67d: [**BREAKING**] Added a new config `disablePrettierIncompatibleRules` which is ❓ enabled if `prettier` package is installed and completely replaces the removed `disablePrettierIncompatibleRules` root option
+- c17a8d0: js: added a new option `arrowFunctionBodyStyle` for controlling [`arrow-body-style`](https://eslint.org/docs/latest/rules/arrow-body-style) rule
+- f26e7b2: Added a new config `unhead` which uses [`@unhead/eslint-plugin`](https://npmx.dev/@unhead/eslint-plugin), ❓ enabled if `unhead` package is installed
+- bdad734: eslintPlugin: updated [`eslint-plugin-eslint-plugin` from v7.5.0 to v7.6.0](https://github.com/eslint-community/eslint-plugin-eslint-plugin/compare/v7.5.0...v7.6.0):
+
+  - Added a new option `schemaCompletenessChecks` controlling 🟢 enabled by default [`eslint-plugin/no-incomplete-meta-schema`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-incomplete-meta-schema.md) rule, with default options being `{explicitAdditionalProperties: true}`
+  - 🟢 enabled [`eslint-plugin/no-incorrect-meta-schema`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-incorrect-meta-schema.md) rule
+
+### Patch Changes
+
+- 5e99f67: jestDom: updated [`eslint-plugin-jest-dom` from v5.5.0 to v5.6.0](https://github.com/testing-library/eslint-plugin-jest-dom/compare/v5.5.0...v5.6.0)
+- fecd8ae: markdown, mdx: the following rules are now disabled in embedded code blocks:
+
+  - `sonarjs/content-length`
+  - `sonarjs/cors`
+  - `sonarjs/file-uploads`
+  - `sonarjs/no-session-cookies-on-static-assets`
+  - `sonarjs/production-debug`
+  - `sonarjs/session-regeneration`
+  - `sonarjs/x-powered-by`
+  - [`unicorn/no-top-level-side-effects`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-top-level-side-effects.md)
+
+- 9a2194f: tanstackQuery: updated [`@tanstack/eslint-plugin-query` from v5.101.3 to v5.101.4](https://github.com/TanStack/query/compare/@tanstack/eslint-plugin-query@5.101.3...@tanstack/eslint-plugin-query@5.101.4)
+- b571c24: Fixed a bug occurring when you set `linterOptions*` config with only the `ignores` option, which implicitly set the value to `off` or `false` and disabled the linter option for all files except listed in that option, which wrongly reflects the intention. Instead, this option is renamed to `files` for such configurations
+- fd0caae: nestJs: updated [`@darraghor/eslint-plugin-nestjs-typed` from v7.2.8 to v7.2.9](https://github.com/darraghoriordan/eslint-plugin-nestjs-typed/compare/v7.2.8...v7.2.9)
+- 993992d: storybook: updated [`eslint-plugin-storybook` from v10.5.3 to v10.5.5](https://github.com/storybookjs/storybook/compare/v10.5.3...v10.5.5)
+- cb808d1: ripple: updated [`@tsrx/eslint-{plugin,parser}` from v0.3.104 to v0.3.118](https://github.com/Ripple-TS/ripple/compare/@tsrx/eslint-plugin@0.3.104...@tsrx/eslint-plugin@0.3.118)
+- 52a764b: noStylisticRules: added the following rules:
+
+  - [`unicorn/better-dom-traversing`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/better-dom-traversing.md)
+  - [`unicorn/consistent-boolean-name`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-boolean-name.md)
+  - [`unicorn/no-immediate-mutation`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-immediate-mutation.md)
+  - [`unicorn/no-unnecessary-array-splice-count`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-array-splice-count.md)
+  - [`unicorn/no-unnecessary-global-this`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-unnecessary-global-this.md)
+  - [`unicorn/prefer-split-limit`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-split-limit.md)
+
+- 66ead92: compat: updated [`browserslist` from v4.28.6 to v4.28.7](https://github.com/browserslist/browserslist/compare/4.28.6...4.28.7)
+- 0dde8d2: react: updated [`@eslint-react/eslint-plugin` and `eslint-plugin-react-debug` from v5.17.3 to v5.18.1](https://github.com/Rel1cx/eslint-react/compare/v5.17.3...v5.18.1)
+- 409f8ce: formatJs: updated [`eslint-plugin-formatjs` from v6.4.19 to v6.4.20](https://github.com/formatjs/formatjs/compare/eslint-plugin-formatjs@6.4.19...eslint-plugin-formatjs@6.4.20)
+- 2d69784: vitest: updated [`@vitest/eslint-plugin` from v1.6.23 to v1.6.24](https://github.com/vitest-dev/eslint-plugin-vitest/compare/v1.6.23...v1.6.24)
+- b653b71: packageJson: updated [`eslint-plugin-package-json` from v1.6.0 to v1.6.2](https://github.com/michaelfaith/eslint-plugin-package-json/compare/v1.6.0...v1.6.2)
+- 444d371: awsCdk: updated [`eslint-plugin-awscdk` from v4.3.3 to v4.4.0](https://github.com/ren-yamanashi/awscdk-lint/compare/v4.3.3...eslint-plugin-awscdk%404.4.0):
+
+  - ❌ `awscdk/migrate-disable-comments` rule was removed
+
+- 2d69784: jest: updated [`eslint-plugin-jest` from v29.15.5 to v29.16.0](https://github.com/jest-community/eslint-plugin-jest/compare/v29.15.5...v29.16.0)
+- c9e2596: css: updated [`@eslint/css-tree` from v4.0.4 to v4.0.5](https://github.com/eslint/csstree/compare/css-tree-v4.0.4...css-tree-v4.0.5)
+- 07ffda6: jsdoc: updated [`eslint-plugin-jsdoc` from v63.2.2 to v63.3.2](https://github.com/gajus/eslint-plugin-jsdoc/compare/v63.2.2...v63.3.2)
+- 3afd3b5: nextJs: updated [`@next/eslint-plugin-next` from v16.2.10 to v16.2.12](https://github.com/vercel/next.js/compare/v16.2.10...v16.2.12)
+- f3aacfa: jestDom: updated [`eslint-plugin-jest-dom` from v5.6.0 to v5.7.0](https://github.com/testing-library/eslint-plugin-jest-dom/compare/v5.6.0...v5.7.0):
+
+  - 🔴 not enabled [`jest-dom/prefer-pressed`](https://github.com/testing-library/eslint-plugin-jest-dom/blob/HEAD/docs/rules/prefer-pressed.md) rule
+
+- 733eccd: nx: updated [`@nx/eslint-plugin` from v23.1.0 to v23.1.1](https://github.com/nrwl/nx/compare/23.1.0...23.1.1)
+- f2f7b00: turbo: updated [`eslint-plugin-turbo` from v2.10.5 to v2.10.7](https://github.com/vercel/turborepo/compare/v2.10.5...v2.10.7-canary.1)
+- a334dc9: eslintPlugin: the following rules were moved from the main config to the ⚙️ `ruleTests` sub-config:
+
+  - [`eslint-plugin/require-test-case-name`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-test-case-name.md)
+  - [`eslint-plugin/unique-test-case-names`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/unique-test-case-names.md)
+
+- a3c7a21: command: updated [`eslint-plugin-command` from v3.5.3 to v4.0.0](https://github.com/antfu/eslint-plugin-command/compare/v3.5.3...v4.0.0)
+
 ## 1.0.0-beta.15
 
 ### Minor Changes
