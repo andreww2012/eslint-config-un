@@ -55,7 +55,7 @@ interface EslintPluginNSettings {
    * - [`node/no-unpublished-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-import.md)
    * - [`node/no-unpublished-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unpublished-require.md)
    */
-  resolverConfig?: EnhancedResolveResolveOptions;
+  resolverConfig?: Partial<EnhancedResolveResolveOptions>;
 
   /**
    * Might be read by the following rules:
