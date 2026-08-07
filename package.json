@@ -155,7 +155,7 @@
     "eslint-plugin-toml": "1.5.0",
     "eslint-plugin-unicorn": "72.0.0",
     "eslint-plugin-unnecessary-abstractions": "1.0.0",
-    "eslint-plugin-yml": "3.6.0",
+    "eslint-plugin-yml": "3.8.1",
     "globals": "17.8.0",
     "is-in-editor": "0.4.0",
     "ms-ts": "1.0.0",

@@ -105,6 +105,7 @@ export default ((context, optionsRaw) => {
     .addRule('key-name-casing', optionsResolved.casing == null ? OFF : ERROR, [
       {...optionsResolved.casing, ignores: ['<<', ...(optionsResolved.casing?.ignores || [])]},
     ]) /** @since 0.2.0 */
+    .addRule('no-boolean-key', OFF) /** @since 3.7.0 */
     .addRule('no-empty-document', ERROR) /** @since 0.6.0 */ // 🟣
     .addRule('no-empty-key', ERROR) /** @since 0.3.0 */ // 🟣
     .addRule('no-empty-mapping-value', ERROR) /** @since 0.3.0 */ // 🟣
