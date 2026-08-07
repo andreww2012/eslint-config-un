@@ -9,6 +9,7 @@ import {exec} from 'tinyexec';
 import * as z from 'zod';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import ourPackageJson from '../package.json' with {type: 'json'};
+import type {PackageJson} from '../src/types';
 import {fetchPackageInfo, readAndParseJson} from '../src/utils';
 import {PACKAGES_META, PLUGIN_PACKAGES_META} from './shared/packages-meta';
 
@@ -39,13 +40,26 @@ const SSH_LIKE_REPO_URL_REGEXP = /^git@github.com:([\w-]+\/[\w\-.]+)\.git?$/;
 const GIT_URL_PROTOCOL_PREFIX_REGEXP = /^git\+/;
 const GIT_URL_SUFFIX_REGEXP = /\.git$/;
 
-const getDependencyRepoUrl = async (dependency: string) => {
+// `fetchPackageInfo` locates package.json by resolving the package as a module, which fails for
+// bin-only like `@eslint/config-inspector`
+const readDependencyPackageJson = async (dependency: string) => {
   const info = await fetchPackageInfo(dependency);
-  if (!info?.info) {
+  return (
+    info?.info ||
+    (await readAndParseJson<PackageJson>(
+      path.join(REPO_ROOT_PATH, 'node_modules', dependency, 'package.json'),
+    ))
+  );
+};
+
+const getDependencyRepoUrl = async (dependency: string) => {
+  const dependencyPackageJson = await readDependencyPackageJson(dependency);
+  if (!dependencyPackageJson) {
+    console.warn(`Failed to read package.json of ${dependency}`);
     return '';
   }
 
-  const packageJson = structuredClone(info.info);
+  const packageJson = structuredClone(dependencyPackageJson);
   const {repository} = packageJson;
   if (typeof repository === 'object') {
     // https://github.com/vercel/next.js/blob/v15.4.6/packages/eslint-plugin-next/package.json
@@ -353,9 +367,6 @@ const formatAddedOrRemovedDiffLine = (line: string, fileExtension: string | unde
 for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   // eslint-disable-next-line ts/no-non-null-assertion
   const {dependency, repoUrl, oldVersion, newVersion, codeDiffResult} = updatedDependenciesInfo[i]!;
-  if (repoUrl == null) {
-    continue;
-  }
 
   if (i > 0) {
     console.log();
@@ -446,8 +457,14 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 
   const mainUnConfigNames = packageMeta?.configs.join(', ') || 'deps';
 
-  console.log(`${styleText('underline', 'Repo:')} ${styleText('cyan', repoUrl)}`);
-  console.log(`${styleText('underline', 'Releases:')} ${styleText('cyan', `${repoUrl}/releases`)}`);
+  if (repoUrl == null) {
+    console.log(styleText('yellow', 'Failed to determine the repository URL'));
+  } else {
+    console.log(`${styleText('underline', 'Repo:')} ${styleText('cyan', repoUrl)}`);
+    console.log(
+      `${styleText('underline', 'Releases:')} ${styleText('cyan', `${repoUrl}/releases`)}`,
+    );
+  }
 
   console.log(styleText('underline', 'For commit message:'));
   console.log(`chore(${mainUnConfigNames}): update ${dependency} to v${newVersion}`);
@@ -463,7 +480,9 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     ? `[\`${sampleRuleNameWithPrefix}\`](${ruleDocsUrl})`
     : `\`${sampleRuleNameWithPrefix}\``;
 
-  const changelogEntry = `${mainUnConfigNames}: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${getCompareDiffUrl(dependency, repoUrl, oldVersion, newVersion)})`;
+  const updateDescription = `\`${dependency}\` from v${oldVersion} to v${newVersion}`;
+  const compareDiffUrl = repoUrl && getCompareDiffUrl(dependency, repoUrl, oldVersion, newVersion);
+  const changelogEntry = `${mainUnConfigNames}: updated ${compareDiffUrl ? `[${updateDescription}](${compareDiffUrl})` : updateDescription}`;
 
   const changelogEntryOptions =
     pluginPrefix == null
