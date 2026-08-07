@@ -119,10 +119,10 @@ const analyze = Effect.gen(function* () {
       const name = key.replace(':', '/');
       const status = eslintPluginsDb[name];
       if (
+        status == null ||
         // eslint-disable-next-line ts/no-unnecessary-condition -- types are lying, `value` can be `null`
         info == null ||
-        'error' in info ||
-        status == null
+        'error' in info
       ) {
         return null;
       }

@@ -482,6 +482,7 @@ export default ((context, optionsRaw) => {
           ]
         : [],
     ) /** @since 66.0.0 */ // 🟣
+    .addRule('consistent-arrow-return-style', OFF) /** @since 73.0.0 */ // 🔴
     .addRule('consistent-assert', WARNING) /** @since 57.0.0 */ // 🟣
     .addRule(
       'consistent-boolean-name',
@@ -548,6 +549,7 @@ export default ((context, optionsRaw) => {
     .addRule('id-match', OFF) /** @since 66.0.0 */ // 🔴
     .addRule('import-style', ERROR) /** @since 22.0.0 */
     .addRule('isolated-functions', OFF) /** @since 63.0.0 */
+    .addRule('iteration-fallback-style', OFF) /** @since 73.0.0 */ // 🔴
     .addRule('logical-assignment-operators', OFF) /** @since 67.0.0 */ // 🟣
     .addRule(
       'max-nested-calls',
@@ -578,6 +580,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-async-promise-finally', ERROR) /** @since 70.0.0 */ // 💭?
     .addRule('no-await-expression-member', OFF) /** @since 39.0.0 */ // 🟣
     .addRule('no-await-in-promise-methods', ERROR) /** @since 52.0.0 */
+    .addRule('no-barrel-files', OFF) /** @since 73.0.0 */ // 🔴
     .addRule('no-blob-to-file', ERROR) /** @since 65.0.0 */
     .addRule('no-boolean-sort-comparator', ERROR) /** @since 68.0.0 */ // 💭?
     .addRule('no-break-in-nested-loop', ERROR) /** @since 66.0.0 */ // 🟣
@@ -691,6 +694,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-unsafe-dom-html', OFF) /** @since 66.0.0 */ // 🔴
     .addRule('no-unsafe-promise-all-settled-values', ERROR) /** @since 70.0.0 */ // 💭?
     .addRule('no-unsafe-property-key', ERROR) /** @since 66.0.0 */ // 🟣🟡💭?
+    .addRule('no-unsafe-sqlite-interpolation', ERROR) /** @since 73.0.0 */
     .addRule('no-unsafe-string-replacement', ERROR) /** @since 66.0.0 */ // 🟣
     .addRule('no-unused-array-method-return', ERROR) /** @since 65.0.0 */
     .addRule('no-unused-properties', OFF) /** @since 7.0.0 */ // 🔴
@@ -930,6 +934,7 @@ export default ((context, optionsRaw) => {
     .addRule('require-passive-events', ERROR) /** @since 65.0.0 */
     .addRule('require-post-message-target-origin', OFF) /** @since 34.0.0 */ // 🔴
     .addRule('require-proxy-trap-boolean-return', ERROR) /** @since 66.0.0 */
+    .addRule('single-line-block-comment-style', OFF) /** @since 73.0.0 */ // 🔴
     .addRule('string-content', OFF) /** @since 17.0.0 */ // 🔴
     .addRule('switch-case-braces', ERROR) /** @since 44.0.0 */ // 🟣
     .addRule('switch-case-break-position', ERROR) /** @since 64.0.0 */ // 🟣
