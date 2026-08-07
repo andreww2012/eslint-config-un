@@ -324,7 +324,7 @@
     "package-json": "10.0.1",
     "pathe": "2.0.3",
     "prettier": "3.9.6",
-    "puppeteer": "25.4.0",
+    "puppeteer": "25.5.0",
     "release-it": "21.0.0",
     "shiki": "4.3.1",
     "smol-toml": "1.7.1",
