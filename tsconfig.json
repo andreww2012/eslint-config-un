@@ -1,7 +1,7 @@
 {
   "files": ["type-decls.d.ts"],
   "include": ["src", "scripts", "eslint-local-rules"],
-  "exclude": ["node_modules", "scripts/temp/**"],
+  "exclude": ["node_modules", "scripts/temp", ".claude/worktrees"],
 
   // Based on https://www.totaltypescript.com/tsconfig-cheat-sheet
   "compilerOptions": {

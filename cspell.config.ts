@@ -84,6 +84,7 @@ export default {
     'multilines',
     'greppability',
     'codemod',
+    'worktrees',
 
     // Misc
     'multicol',
