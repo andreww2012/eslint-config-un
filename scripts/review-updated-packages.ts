@@ -325,6 +325,31 @@ const FILE_HEADER_IN_DIFF_REGEXP = regexTyped('^diff --git a/(.+) b/(.+)$');
 // eslint-disable-next-line unicorn/prefer-string-raw
 const FILE_OR_PATH_WITH_EXTENSION_REGEXP = regexTyped('^(?<path>.*)\\.(?<extension>[a-z\\d]+)$');
 
+// CSS, which wraps the comment into `/* */` instead of using `//`
+const EXTENSION_WITH_INLINE_SOURCE_MAPS_REGEXP = /^(?:[cm]?[jt]sx?|css)$/;
+const INLINE_SOURCE_MAP_LINE_REGEXP = regexTyped(
+  // eslint-disable-next-line unicorn/prefer-string-raw
+  '^(?<before>[-+]\\s*(?://|/\\*)[#@]\\s*sourceMappingURL=)data:\\S+?(?<after>\\s*(?:\\*/)?\\s*)$',
+);
+
+const formatAddedOrRemovedDiffLine = (line: string, fileExtension: string | undefined) => {
+  const isAddition = line.startsWith('+');
+  const color = isAddition ? 'green' : 'red';
+
+  const inlineSourceMapMatch =
+    fileExtension != null && EXTENSION_WITH_INLINE_SOURCE_MAPS_REGEXP.test(fileExtension)
+      ? INLINE_SOURCE_MAP_LINE_REGEXP.exec(line)
+      : null;
+  if (!inlineSourceMapMatch) {
+    return styleText(color, line);
+  }
+
+  // Inline source maps are enormous single-line blobs that drown out the rest of the diff
+  const {before, after} = inlineSourceMapMatch.groups;
+  const redactedSourceMap = styleText(isAddition ? 'bgGreen' : 'bgRed', '...');
+  return `${styleText(color, before)}${redactedSourceMap}${after && styleText(color, after)}`;
+};
+
 for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   // eslint-disable-next-line ts/no-non-null-assertion
   const {dependency, repoUrl, oldVersion, newVersion, codeDiffResult} = updatedDependenciesInfo[i]!;
@@ -368,26 +393,26 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     .filter((v) => v != null);
 
   let diffForLastFileSkipped = false;
+  let lastFileExtension: string | undefined;
   for (const line of lines) {
     let isDiffHeader = line.startsWith('--- ') || line.startsWith('+++ ');
     const formattedLine = line.startsWith('@')
       ? styleText('cyan', line)
       : isDiffHeader
         ? styleText('magentaBright', line)
-        : line.startsWith('+')
-          ? styleText('green', line)
-          : line.startsWith('-')
-            ? styleText('red', line)
-            : line.startsWith('\\') // Example: "\ No newline at end of file"
-              ? styleText('gray', line)
-              : line.startsWith(' ')
-                ? line
-                : ((isDiffHeader = true), styleText('magentaBright', line));
+        : line.startsWith('+') || line.startsWith('-')
+          ? formatAddedOrRemovedDiffLine(line, lastFileExtension)
+          : line.startsWith('\\') // Example: "\ No newline at end of file"
+            ? styleText('gray', line)
+            : line.startsWith(' ')
+              ? line
+              : ((isDiffHeader = true), styleText('magentaBright', line));
     const fileHeaderMatch = FILE_HEADER_IN_DIFF_REGEXP.exec(line);
     if (fileHeaderMatch) {
       // eslint-disable-next-line sonarjs/no-redundant-assignments
       isDiffHeader = true;
       const extensionMatch = FILE_OR_PATH_WITH_EXTENSION_REGEXP.exec(fileHeaderMatch[1]);
+      lastFileExtension = extensionMatch?.groups.extension;
       if (extensionMatch) {
         const {extension, path: filePathExtensionLess} = extensionMatch.groups;
         const counterpartExtensions =
