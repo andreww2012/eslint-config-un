@@ -22,6 +22,7 @@ export default ((context, optionsRaw) => {
     ?.addConfig(['unhead', {includeDefaultFilesAndIgnores: true}])
     .addRule('defer-on-module-script', ERROR) /** @since 3.0.5 */
     .addRule('empty-meta-content', ERROR) /** @since 3.0.5 */
+    .addRule('invalid-input-shape', ERROR) /** @since 3.3.0 */
     .addRule('no-deprecated-props', ERROR) /** @since 3.0.5 */
     .addRule('no-html-in-title', ERROR) /** @since 3.0.5 */
     .addRule('no-unknown-meta', ERROR) /** @since 3.0.5 */
