@@ -231,8 +231,8 @@ importers:
         specifier: 9.3.0
         version: 9.3.0
       '@e18e/eslint-plugin':
-        specifier: 0.6.0
-        version: 0.6.0(eslint@9.39.5)
+        specifier: 0.8.0
+        version: 0.8.0(eslint@9.39.5)
       '@eslint-community/eslint-plugin-eslint-comments':
         specifier: 4.7.2
         version: 4.7.2(eslint@9.39.5)
@@ -2154,8 +2154,8 @@ packages:
   '@dprint/toml@0.7.0':
     resolution: {integrity: sha512-eFaQTcfxKHB+YyTh83x7GEv+gDPuj9q5NFOTaoj5rZmQTbj6OgjjMxUicmS1R8zYcx8YAq5oA9J3YFa5U6x2gA==}
 
-  '@e18e/eslint-plugin@0.6.0':
-    resolution: {integrity: sha512-JQkeXoZA12f9WM2H4t4IobIRqlPvYLeNAjZF6raFu2vmD5YoyuzKmwsLZNJ4g/39c3v1Se2ad3o+oq4y2et/RA==}
+  '@e18e/eslint-plugin@0.8.0':
+    resolution: {integrity: sha512-js/TeM+XJyoJ2Zk4if5uTEchv3MEbqugc9gLgq8YdB6Dy+LvwGACpQiAwcul0r4LUl0TvhuzAKUeIUPtGp2cew==}
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
       oxlint: ^1.72.0
@@ -9692,8 +9692,8 @@ packages:
   module-replacements@2.11.0:
     resolution: {integrity: sha512-j5sNQm3VCpQQ7nTqGeOZtoJtV3uKERgCBm9QRhmGRiXiqkf7iRFOkfxdJRZWLkqYY8PNf4cDQF/WfXUYLENrRA==}
 
-  module-replacements@3.0.0:
-    resolution: {integrity: sha512-tHIZqde+RlyNRobAIjfcH5UIgIrEbZbDGRL6J/x+HERX/g8O9mrm0p6knJbsTXmQtDvZ+eFP+xfOP3/9jHk6YA==}
+  module-replacements@3.1.0:
+    resolution: {integrity: sha512-MSTNGqlp2q0seRlrAA/FK3SUkGnmPeexeKWuCjeJ7HobD2RCjk4f8ry8lJ+nUQFDVBAHSdC4TdjyJSaocnR7Uw==}
 
   moo@0.5.3:
     resolution: {integrity: sha512-m2fmM2dDm7GZQsY7KK2cme8agi+AAljILjQnof7p1ZMDe6dQ4bdnSMx0cPppudoeNv5hEFQirN6u+O4fDE0IWA==}
@@ -13572,10 +13572,10 @@ snapshots:
 
   '@dprint/toml@0.7.0': {}
 
-  '@e18e/eslint-plugin@0.6.0(eslint@9.39.5)':
+  '@e18e/eslint-plugin@0.8.0(eslint@9.39.5)':
     dependencies:
       empathic: 2.0.1
-      module-replacements: 3.0.0
+      module-replacements: 3.1.0
       semver: 7.8.5
     optionalDependencies:
       eslint: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
@@ -21703,7 +21703,7 @@ snapshots:
 
   module-replacements@2.11.0: {}
 
-  module-replacements@3.0.0: {}
+  module-replacements@3.1.0: {}
 
   moo@0.5.3: {}
 
