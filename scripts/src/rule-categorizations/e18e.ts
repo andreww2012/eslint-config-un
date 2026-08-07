@@ -63,6 +63,8 @@ const parseE18eRuleCategoriesFromReadme = async () => {
   return categoriesPerRule;
 };
 
+const E18E_RULE_NAME_PREFIX_REGEX = /^e18e\//;
+
 export const e18eRuleCategorization = {
   categories: objectValuesUnsafe(E18E_README_HEADINGS_TO_CATEGORIES),
   createRuleCategorizer: async (plugin) => {
@@ -83,7 +85,8 @@ export const e18eRuleCategorization = {
         const config = plugin.configs?.[category];
         const rules = (config && !Array.isArray(config) && config.rules) || {};
         return objectKeysUnsafe(rules).map(
-          (ruleName) => [ruleName.replace(/^e18e\//, ''), category] satisfies NonEmptyTuple,
+          (ruleName) =>
+            [ruleName.replace(E18E_RULE_NAME_PREFIX_REGEX, ''), category] satisfies NonEmptyTuple,
         );
       }),
     );

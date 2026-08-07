@@ -21,6 +21,8 @@ import type {generateEslintPluginsRulesPresence} from './shared';
 
 const NPM_PACKAGE_NAME_REGEX = /^(?:@[*\-0-9a-z~][*\-.0-9_a-z~]*\/)?[*\-0-9a-z~][*\-.0-9_a-z~]*$/;
 
+const PNPM_INSTALL_NOISE_LINE_REGEX = /^(?:Progress: |\s+WARN\s+)/;
+
 const DEFAULT_BATCH_SIZE = 100;
 const DEFAULT_CONCURRENCY = 100;
 
@@ -302,7 +304,7 @@ toStdout(JSON.stringify(generateEslintPluginsRulesPresence(modules), null, 2));
       logger.error(
         dependencyInstallationOutput
           .split('\n')
-          .filter((str) => str && !/^(?:Progress: |\s+WARN\s+)/.test(str))
+          .filter((str) => str && !PNPM_INSTALL_NOISE_LINE_REGEX.test(str))
           .join('\n'),
       );
       return false;

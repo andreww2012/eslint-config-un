@@ -66,6 +66,8 @@ function toPkgName(specifier: string): string {
     : (specifier.split('/', 1)[0] ?? specifier);
 }
 
+const NPM_ALIAS_REGEX = /^npm:(@?[^@]+)@/;
+
 /**
  * Collect allowed package names from `dependencies` + `peerDependencies`.
  * Handles npm aliases: `"alias": "npm:actual-pkg@version"` → adds both the
@@ -76,7 +78,7 @@ function resolveAllowedPackages(pkg: PackageJson): Set<string> {
   for (const section of ['dependencies', 'peerDependencies'] as const) {
     for (const [name, version] of Object.entries(pkg[section] ?? {})) {
       allowed.add(name);
-      const resolvedAlias = version.match(/^npm:(@?[^@]+)@/)?.[1];
+      const resolvedAlias = version.match(NPM_ALIAS_REGEX)?.[1];
       if (resolvedAlias) {
         allowed.add(resolvedAlias);
       }
