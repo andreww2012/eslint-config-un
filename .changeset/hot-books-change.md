@@ -2,7 +2,7 @@
 'eslint-config-un': minor
 ---
 
-mocha: updated [`eslint-plugin-mocha` from v11.3.0 to v12.0.1](https://github.com/lo1tuma/eslint-plugin-mocha/compare/11.3.0...eslint-plugin-mocha%4012.0.1):
+mocha: updated [`eslint-plugin-mocha` from v11.3.0 to v12.0.2](https://github.com/lo1tuma/eslint-plugin-mocha/compare/11.3.0...eslint-plugin-mocha%4012.0.2):
 
 - 🔄 `mocha/no-return-and-callback` was renamed to [`mocha/no-return-and-done`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-return-and-done.md)
 - 🔄 `mocha/no-setup-in-describe` was renamed to [`mocha/no-setup-in-suite`](https://github.com/lo1tuma/eslint-plugin-mocha/blob/HEAD/documentation/rules/no-setup-in-suite.md)
