@@ -6,35 +6,7 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
-minimumReleaseAgeExclude: # []
-  - '@es-joy/jsdoccomment@0.92.0'
-  - eslint-plugin-command@4.0.0
-  - jsdoc-type-pratt-parser@9.0.0
-  - eslint-plugin-jest-dom@5.7.0
-  - '@formatjs/icu-messageformat-parser@3.5.16'
-  - '@formatjs/ts-transformer@4.4.18'
-  - eslint-plugin-formatjs@6.4.20
-  - '@nx/devkit@23.1.1'
-  - '@nx/eslint-plugin@23.1.1'
-  - '@nx/js@23.1.1'
-  - '@nx/nx-darwin-arm64@23.1.1'
-  - '@nx/nx-darwin-x64@23.1.1'
-  - '@nx/nx-freebsd-x64@23.1.1'
-  - '@nx/nx-linux-arm-gnueabihf@23.1.1'
-  - '@nx/nx-linux-arm64-gnu@23.1.1'
-  - '@nx/nx-linux-arm64-musl@23.1.1'
-  - '@nx/nx-linux-x64-gnu@23.1.1'
-  - '@nx/nx-linux-x64-musl@23.1.1'
-  - '@nx/nx-win32-arm64-msvc@23.1.1'
-  - '@nx/nx-win32-x64-msvc@23.1.1'
-  - '@nx/workspace@23.1.1'
-  - nx@23.1.1
-  - knip@6.30.0
-  - '@eslint/config-inspector@3.1.1'
-  - '@effect/cluster@0.60.2'
-  - '@effect/platform-node@0.108.1'
-  - '@effect/rpc@0.76.2'
-  - '@effect/workflow@0.19.1'
+minimumReleaseAgeExclude: []
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
@@ -76,8 +48,9 @@ overrides:
   # Can't use range like `^8.0.16` as pnpm won't re-resolve the already-locked vite for a range replacement, only for an exact one
   vite@>=8.0.0 <8.0.16: 8.0.16
   eslint-plugin-arrow-return-style-x>@typescript-eslint/utils: ^8.56.0
-  brace-expansion@>=5.0.0 <5.0.8: ^5.0.8
+  brace-expansion@>=5.0.0 <5.0.9: 5.0.9
   axios@>=1.15.2 <1.18.0: ^1.18.0
+  ip-address@>10.0.0 <=10.3.0: 10.4.0
 
 patchedDependencies:
   '@eslint/compat@2.1.0': patches/@eslint__compat@2.1.0.patch
