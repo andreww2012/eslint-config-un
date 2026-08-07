@@ -1,16 +1,42 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import {styleText} from 'node:util';
+import matter from '@11ty/gray-matter';
 import {jsonParseSafe, regexTyped} from '@andreww2012/unutils';
+import {styleText} from '@andreww2012/unutils/server';
+import writeChangeset from '@changesets/write';
+import {cli} from 'cleye';
 import {exec} from 'tinyexec';
+import * as z from 'zod';
 import {PackageJson as PackageJsonZod} from 'zod-package-json/mini';
 import ourPackageJson from '../package.json' with {type: 'json'};
-import {fetchPackageInfo} from '../src/utils';
+import {fetchPackageInfo, readAndParseJson} from '../src/utils';
 import {PACKAGES_META, PLUGIN_PACKAGES_META} from './shared/packages-meta';
 
 // =============================================================================
 
+const REPO_ROOT_PATH = path.resolve(import.meta.dirname, '..');
+const CHANGESETS_DIR_PATH = path.join(REPO_ROOT_PATH, '.changeset');
+
+const PreStateZod = z.object({mode: z.literal('pre'), changesets: z.string().array()});
+const ChangesetFrontmatterZod = z
+  .record(z.string(), z.enum(['major', 'minor', 'patch', 'none']))
+  .refine((releases) => Object.keys(releases).length > 0, 'At least one package must be listed');
+
+const {write: shouldWriteChangesets} = cli({
+  strictFlags: true,
+  booleanFlagNegation: true,
+  flags: {
+    write: {
+      type: Boolean,
+      description:
+        'Create a patch changeset for every updated dependency belonging to a config that has no unreleased changeset yet',
+      default: true,
+    },
+  },
+}).flags;
+
 const updatedDependenciesInfo = await main();
+const unreleasedChangesets = await readUnreleasedChangesets();
 
 const getCompareDiffUrl = (
   dependency: string,
@@ -48,6 +74,12 @@ const EXTENSIONS_TO_SKIP_IN_DIFF_IF_COUNTERPART_FILE_EXISTS: Record<string, stri
 const FILE_HEADER_IN_DIFF_REGEXP = regexTyped('^diff --git a/(.+) b/(.+)$');
 // eslint-disable-next-line unicorn/prefer-string-raw
 const FILE_OR_PATH_WITH_EXTENSION_REGEXP = regexTyped('^(?<path>.*)\\.(?<extension>[a-z\\d]+)$');
+
+const SAMPLE_RULE_NAME = 'SAMPLE-RULE-NAME';
+
+const INLINE_CODE_SPANS_REGEXP = /`[^\n`]+`/g;
+const REGEXP_SPECIAL_CHARS_REGEXP = /[$()*+.?[\\\]^{|}]/g;
+const ESCAPED_BRACES_REGEXP = /\\\{([^{}]+)\\\}/g;
 
 for (let i = 0; i < updatedDependenciesInfo.length; i++) {
   // eslint-disable-next-line ts/no-non-null-assertion
@@ -154,8 +186,6 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     `feat(${mainUnConfigNames}): update ${dependency} to v${newVersion} and enable ___INSERT-CHANGES___`,
   );
 
-  const SAMPLE_RULE_NAME = 'SAMPLE-RULE-NAME';
-
   const pluginPrefix = PLUGIN_PACKAGES_META[dependency]?.pluginPrefix;
   const sampleRuleNameWithPrefix = [pluginPrefix, SAMPLE_RULE_NAME].filter(Boolean).join('/');
   const ruleDocsUrl = packageMeta?.ruleDocsUrl?.(SAMPLE_RULE_NAME);
@@ -164,13 +194,12 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
     ? `[\`${sampleRuleNameWithPrefix}\`](${ruleDocsUrl})`
     : `\`${sampleRuleNameWithPrefix}\``;
 
-  console.log(styleText('underline', 'For changelog:'));
-  console.log(
-    `${mainUnConfigNames}: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${getCompareDiffUrl(dependency, repoUrl, oldVersion, newVersion)})`,
-  );
+  const changelogEntry = `${mainUnConfigNames}: updated [\`${dependency}\` from v${oldVersion} to v${newVersion}](${getCompareDiffUrl(dependency, repoUrl, oldVersion, newVersion)})`;
 
-  if (pluginPrefix != null) {
-    console.log(`:
+  const changelogEntryOptions =
+    pluginPrefix == null
+      ? ''
+      : `:
 
 - 🟢 enabled ${ruleDocsUrlForMd} rule
 - 🟢 enabled ${ruleDocsUrlForMd} rule and added it to the \`noStylisticRules\` config
@@ -180,12 +209,67 @@ for (let i = 0; i < updatedDependenciesInfo.length; i++) {
 - 🔴 not enabled ${ruleDocsUrlForMd} rule
 - ❌ \`${sampleRuleNameWithPrefix}\` rule was removed
 - ⚠️ ${ruleDocsUrlForMd} rule was disabled because got deprecated
-- 🔄 \`${sampleRuleNameWithPrefix}\` was renamed to ${ruleDocsUrlForMd}`);
+- 🔄 \`${sampleRuleNameWithPrefix}\` was renamed to ${ruleDocsUrlForMd}`;
+
+  console.log(styleText('underline', 'For changelog:'));
+  console.log(changelogEntry);
+
+  if (changelogEntryOptions) {
+    console.log(changelogEntryOptions);
   }
 
   if (ruleDocsUrl) {
     console.log(styleText('underline', 'Rule docs URLs:'));
     console.log(ruleDocsUrl);
+  }
+
+  if (packageMeta) {
+    const changesetCandidates = unreleasedChangesets.filter(({summary}) =>
+      isDependencyMentionedIn(summary, dependency),
+    );
+
+    if (changesetCandidates.length > 0) {
+      console.log(
+        styleText(
+          'black',
+          styleText(
+            'bgYellowBright',
+            ` ⚠ Possible changeset candidates mentioning ${dependency} - consider updating one of them instead of creating a new one: `,
+          ),
+        ),
+      );
+      for (const {id, summary} of changesetCandidates) {
+        console.log(`  ${styleText('yellow', `.changeset/${id}.md`)}`);
+        console.log(
+          summary
+            .split('\n')
+            .map((line) => `    ${line}`)
+            .join('\n'),
+        );
+      }
+    } else if (shouldWriteChangesets) {
+      const changesetSummary = `${changelogEntry}\n${changelogEntryOptions}`;
+      const changesetId = await writeChangeset(
+        {summary: changesetSummary, releases: [{name: ourPackageJson.name, type: 'patch'}]},
+        REPO_ROOT_PATH,
+      );
+
+      const changesetPath = path.join(CHANGESETS_DIR_PATH, `${changesetId}.md`);
+      await fs.writeFile(changesetPath, (await fs.readFile(changesetPath, 'utf8')).trimEnd());
+
+      unreleasedChangesets.push({id: changesetId, summary: changesetSummary});
+      console.log(
+        styleText(
+          'black',
+          styleText(
+            'bgGreenBright',
+            ` ✔ Created a new patch changeset: .changeset/${changesetId}.md `,
+          ),
+        ),
+      );
+
+      await checkLinksWithLychee(changesetPath);
+    }
   }
 }
 
@@ -222,8 +306,87 @@ function parsePackageJson(packageJsonText: string) {
 }
 
 async function readRootPackageJson() {
-  const packageJsonPath = path.resolve(import.meta.dirname, '../package.json');
-  return parsePackageJson(await fs.readFile(packageJsonPath, 'utf8'));
+  return parsePackageJson(await fs.readFile(path.join(REPO_ROOT_PATH, 'package.json'), 'utf8'));
+}
+
+async function readUnreleasedChangesets() {
+  const preState = PreStateZod.safeParse(
+    await readAndParseJson(path.join(CHANGESETS_DIR_PATH, 'pre.json')),
+  );
+  const releasedChangesetIds = new Set(preState.data?.changesets);
+
+  const candidateIds = (await fs.readdir(CHANGESETS_DIR_PATH))
+    .filter((fileName) => fileName.endsWith('.md'))
+    .map((fileName) => path.basename(fileName, '.md'))
+    .filter((id) => !releasedChangesetIds.has(id));
+
+  const changesets = await Promise.all(
+    candidateIds.map(async (id) => {
+      const {data, content} = matter(
+        await fs.readFile(path.join(CHANGESETS_DIR_PATH, `${id}.md`), 'utf8'),
+      );
+      return ChangesetFrontmatterZod.safeParse(data).success ? {id, summary: content.trim()} : null;
+    }),
+  );
+
+  return changesets.filter((changeset) => changeset != null);
+}
+
+// lychee is an optional external binary, and a broken link is never a reason to fail the whole run
+async function checkLinksWithLychee(changesetPath: string) {
+  try {
+    const {exitCode, stdout, stderr} = await exec(
+      'lychee',
+      [
+        '--config',
+        'node_modules/lychee-config-nick2bad4u/lychee.toml',
+        '--config',
+        'lychee.toml',
+        // Rule docs URLs in the not yet filled in changelog entry options are placeholders
+        '--exclude',
+        SAMPLE_RULE_NAME,
+        changesetPath,
+      ],
+      {nodeOptions: {cwd: REPO_ROOT_PATH}},
+    );
+
+    if (exitCode !== 0) {
+      console.log(`  ${styleText('red', 'Link check (lychee) failed:')}`);
+    }
+    const outputLines = `${stdout}${stderr}`
+      .trim()
+      .split('\n')
+      .filter((line) => line.trim() && !line.includes('[EXCLUDED]'));
+    if (outputLines.length > 0) {
+      console.log(outputLines.map((line) => `  ${line}`).join('\n'));
+    }
+  } catch (error) {
+    const isLycheeMissing =
+      error != null && typeof error === 'object' && 'code' in error && error.code === 'ENOENT';
+    if (isLycheeMissing) {
+      console.log(
+        `  ${styleText('yellow', 'Link check skipped: lychee (https://lychee.cli.rs) is not installed')}`,
+      );
+    } else {
+      console.log(`  ${styleText('red', 'Link check (lychee) could not be run:')}`, error);
+    }
+  }
+}
+
+// Package names are often "compressed" when several of them are updated at once:
+// `@angular-eslint/*`, `@tsrx/eslint-{plugin,parser}`
+function isDependencyMentionedIn(changesetSummary: string, dependency: string) {
+  return (changesetSummary.match(INLINE_CODE_SPANS_REGEXP) || []).some((codeSpan) => {
+    const pattern = codeSpan
+      .slice(1, -1)
+      .replaceAll(REGEXP_SPECIAL_CHARS_REGEXP, (specialChar) => `\\${specialChar}`)
+      .replaceAll(
+        ESCAPED_BRACES_REGEXP,
+        (_, alternatives: string) => `(?:${alternatives.replaceAll(',', '|')})`,
+      )
+      .replaceAll(String.raw`\*`, '[^/]*');
+    return new RegExp(`^${pattern}$`).test(dependency);
+  });
 }
 
 async function readRootPackageJsonBeforeUncommittedChanges() {
