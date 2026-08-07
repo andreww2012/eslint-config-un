@@ -216,6 +216,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-duplicate-dependent-keys', ERROR) /** @since 4.3.0 */ // 🟢
     .addRule('no-incorrect-computed-macros', ERROR) /** @since 7.11.0 */ // 🟢
     .addRule('no-invalid-dependent-keys', ERROR) /** @since 7.11.0 */ // 🟢
+    .addRule('no-legacy-computed', ERROR) /** @since 13.5.0 */
     .addRule('no-side-effects', ERROR) /** @since 2.0.0 */ // 🟢
     .addRule('no-volatile-computed-properties', ERROR) /** @since 6.7.0 */ // 🟢
     .addRule('require-computed-macros', ERROR) /** @since 6.6.0 */ // 🟢
@@ -236,6 +237,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-deprecated-router-transition-methods', ERROR) /** @since 11.4.0 */ // 🟢
     .addRule('no-function-prototype-extensions', ERROR) /** @since 2.0.0 */ // 🟢
     .addRule('no-implicit-injections', ERROR) /** @since 11.4.0 */ // 🟢
+    .addRule('no-legacy-helper-imports', ERROR) /** @since 13.5.0 */
     .addRule('no-mixins', ERROR) /** @since 7.10.0 */ // 🟢
     .addRule('no-new-mixins', ERROR) /** @since 5.3.0 */ // 🟢
     .addRule('no-observers', ERROR) /** @since 2.0.0 */ // 🟢
@@ -377,6 +379,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-test-import-export', ERROR) /** @since 5.3.0 */ // 🟢
     .addRule('no-test-module-for', ERROR) /** @since 7.4.0 */ // 🟢
     .addRule('no-test-this-render', ERROR) /** @since 8.4.0 */ // 🟢
+    .addRule('no-test-this-set-get', ERROR) /** @since 13.5.0 */
     .addRule('prefer-ember-test-helpers', ERROR) /** @since 8.4.0 */ // 🟢
     .addRule('require-valid-css-selector-in-test-helpers', ERROR) /** @since 9.4.0 */ // 🟢
     .enableConfigTesterForPlugin('ember', {
