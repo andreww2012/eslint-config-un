@@ -64,6 +64,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-head-import-in-document', ERROR) /** @since 10.2.1-canary.5 */ // 🟢
     .addRule('no-html-link-for-pages', WARNING) /** @since 9.4.3-canary.0 */ // 🟡🔵
     .addRule('no-img-element', WARNING) /** @since 10.2.1-canary.10 */ // 🟡
+    .addRule('no-location-assign-relative-destination', ERROR) /** @since 16.3.0-canary.3 */ // 🟡
     .addRule('no-page-custom-font', WARNING) /** @since 10.2.1-canary.5 */ // 🟡
     .addRule('no-script-component-in-head', ERROR) /** @since 12.0.11-canary.5 */ // 🟢
     .addRule('no-styled-jsx-in-document', ERROR) /** @since 12.1.7-canary.11 */ // 🟡
