@@ -886,8 +886,8 @@ importers:
         specifier: 25.5.0
         version: 25.5.0(proxy-agent@8.0.2)
       release-it:
-        specifier: 21.0.0
-        version: 21.0.0(@types/node@20.19.43)(magicast@0.5.3)(supports-color@7.2.0)
+        specifier: 21.0.1
+        version: 21.0.1(@types/node@20.19.43)(magicast@0.5.3)(supports-color@7.2.0)
       shiki:
         specifier: 4.3.1
         version: 4.3.1
@@ -10621,8 +10621,8 @@ packages:
     resolution: {integrity: sha512-NgRBy2Nx/bE+9F27nVHnqcN5HjyLmecqsqx2PJHu3/IEtADD4WuxuXIVExD5PoSDFVrl78dOonfcOe5O+5nbzQ==}
     hasBin: true
 
-  release-it@21.0.0:
-    resolution: {integrity: sha512-oAOiUcDpJEbLSOT0HqnHByDTomSvpwRktU2fnk7zbpJK9wOiXbHnP1mFy+80P6k5cJnMBx1PIuHmwXzd5R1jLw==}
+  release-it@21.0.1:
+    resolution: {integrity: sha512-xbPuv2tau3gb0Xw0NVqV3QjOhytFvbsBZDqzmURqlwtgNpFIlIbpDbuZG64ptytFOX4H/7k65bbPSLTwAL34/g==}
     engines: {node: ^22.21.0 || >=24.0.0}
     hasBin: true
 
@@ -23048,7 +23048,7 @@ snapshots:
     dependencies:
       jsesc: 3.1.0
 
-  release-it@21.0.0(@types/node@20.19.43)(magicast@0.5.3)(supports-color@7.2.0):
+  release-it@21.0.1(@types/node@20.19.43)(magicast@0.5.3)(supports-color@7.2.0):
     dependencies:
       '@inquirer/prompts': 8.5.2(@types/node@20.19.43)
       '@octokit/rest': 22.0.1
