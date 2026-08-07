@@ -193,6 +193,7 @@ export const PLUGIN_PACKAGES_META = Object.fromEntries(
     },
     graphql: {
       configs: ['graphql'],
+      gitTag: (tag) => `@graphql-eslint/eslint-plugin@${tag}`,
       ruleDocsUrl: (ruleName) => `https://the-guild.dev/graphql/eslint/rules/${ruleName}`,
     },
     header: {

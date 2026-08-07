@@ -237,7 +237,7 @@ export const pluginsLoaders = {
     '@graphql-eslint/eslint-plugin'
   >('graphql', '@graphql-eslint/eslint-plugin', () =>
     // @ts-expect-error types mismatch
-    interopDefault(import('@graphql-eslint/eslint-plugin')).then(fixupPluginRules),
+    interopDefault(import('@graphql-eslint/eslint-plugin')),
   ),
   header: genModuleLoader('header', 'eslint-plugin-header', () =>
     interopDefault(import('eslint-plugin-header'))
