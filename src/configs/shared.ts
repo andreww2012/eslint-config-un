@@ -258,6 +258,7 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'node/no-missing-require', // [imports]
   'node/no-missing-import', // [imports]
   'node/no-process-exit', // [runtime-only]
+  'node/no-top-level-await', // [runtime-only]
   'node/no-unsupported-features/es-builtins', // [runtime-only]
   'node/no-unsupported-features/es-syntax', // [runtime-only]
   'node/no-unsupported-features/node-builtins', // [runtime-only]
