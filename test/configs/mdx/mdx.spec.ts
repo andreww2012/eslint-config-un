@@ -1,7 +1,8 @@
 import {GLOB_MDX} from '../../../src/constants';
 
-// NOTE: no fixture needed yet — `mdx/remark` requires remark-lint plugins (not yet installed)
-// to produce messages; implement once the remark story in src/configs/mdx.ts is completed.
+const FIXTURES = {
+  unclosedJsxTag: 'unclosed-jsx-tag.mdx',
+} as const;
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('mdx');
@@ -78,8 +79,17 @@ describe('rules', async () => {
     expect(configResult.getRuleEntrySeverity('mdx/mdx', 'mdx/remark')).toBe(1);
   });
 
-  // TODO: figure out how to trigger
-  it.todo('`mdx/remark` rule fires on MDX file with remark warnings');
+  // `mdx/remark` itself only reports when remark-lint plugins are configured in a remark config,
+  // so what is verifiable here is that MDX files really go through the mdx parser.
+  it('reports MDX syntax errors, proving the mdx parser is applied to `.mdx` files', async () => {
+    const results = await testEslintConfig('mdx', FIXTURES.unclosedJsxTag, import.meta.dirname);
+
+    expect(
+      results.flatMap(({messages}) => messages.map(({message}) => message)),
+    ).toMatchInlineSnapshot(
+      '["Preprocessing error: Expected a closing tag for `<p>` (3:1-3:4) before the end of `paragraph`"]',
+    );
+  });
 });
 
 describe('un options', () => {

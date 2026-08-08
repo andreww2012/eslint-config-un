@@ -1,5 +1,9 @@
 import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
 
+const FIXTURES = {
+  elementWithRepeatedAttribute: 'element-with-repeated-attribute.html',
+} as const;
+
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('html');
 
@@ -90,6 +94,22 @@ describe('rules', async () => {
 
   it('disables `html/no-inline-styles` rule by default', () => {
     expect(configResult.getRuleEntrySeverity('html', 'html/no-inline-styles')).toBe(0);
+  });
+
+  it('`html/no-duplicate-attrs` rule fires on an element with a repeated attribute', async () => {
+    const results = await testEslintConfig(
+      'html',
+      FIXTURES.elementWithRepeatedAttribute,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.elementWithRepeatedAttribute,
+      'html/no-duplicate-attrs',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(`"The attribute 'id' is duplicated."`);
   });
 });
 

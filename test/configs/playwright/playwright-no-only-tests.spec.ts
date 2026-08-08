@@ -1,3 +1,7 @@
+const FIXTURES = {
+  testWithOnlyModifier: 'only-modifier/test.spec.js',
+} as const;
+
 describe('playwright: sub config `noOnlyTests`', () => {
   describe('basic tests', () => {
     it('does not create `playwright/no-only-tests` eslint config by default (`configNoOnlyTests` is disabled by default)', async () => {
@@ -51,6 +55,22 @@ describe('playwright: sub config `noOnlyTests`', () => {
           'no-only-tests/no-only-tests',
         ),
       ).toBe(2);
+    });
+
+    it('`no-only-tests/no-only-tests` rule fires on a test with the `.only` modifier', async () => {
+      const results = await testEslintConfig(
+        {playwright: {configNoOnlyTests: true}},
+        FIXTURES.testWithOnlyModifier,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.testWithOnlyModifier,
+        'no-only-tests/no-only-tests',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot('"describe.only not permitted"');
     });
   });
 

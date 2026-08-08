@@ -1,3 +1,7 @@
+const FIXTURES = {
+  unlimitedEslintDisableComment: 'unlimited-eslint-disable-comment.js',
+} as const;
+
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('eslintComments');
 
@@ -77,6 +81,24 @@ describe('rules', async () => {
 
   it('disables `eslint-comments/no-use` rule by default', () => {
     expect(configResult.getRuleEntrySeverity('eslint-comments', 'eslint-comments/no-use')).toBe(0);
+  });
+
+  it('`eslint-comments/no-unlimited-disable` rule fires on a rule-less `eslint-disable` comment', async () => {
+    const results = await testEslintConfig(
+      'eslintComments',
+      FIXTURES.unlimitedEslintDisableComment,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.unlimitedEslintDisableComment,
+      'eslint-comments/no-unlimited-disable',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      `"Unexpected unlimited 'eslint-disable' comment. Specify some rule names to disable."`,
+    );
   });
 });
 

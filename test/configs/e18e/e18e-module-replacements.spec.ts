@@ -1,3 +1,7 @@
+const FIXTURES = {
+  packageJsonWithLodash: 'package-json-with-lodash/package.json',
+} as const;
+
 describe('e18e: sub config `moduleReplacements`', () => {
   describe('basic tests', () => {
     it('creates `e18e/module-replacements` eslint config by default', async () => {
@@ -25,7 +29,23 @@ describe('e18e: sub config `moduleReplacements`', () => {
       });
     });
 
-    // TODO rule in action test
+    it('`e18e/ban-dependencies` rule fires on a `package.json` depending on a replaceable package', async () => {
+      const results = await testEslintConfig(
+        'e18e',
+        FIXTURES.packageJsonWithLodash,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.packageJsonWithLodash,
+        'e18e/ban-dependencies',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '""lodash" is flagged as no longer needed. lodash and Underscore can be replaced with native JavaScript APIs"',
+      );
+    });
   });
 
   describe('un options', () => {

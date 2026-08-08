@@ -1,3 +1,7 @@
+const FIXTURES = {
+  zodMiniNamedImport: 'zod-mini-named-import.js',
+} as const;
+
 beforeEach(() => {
   addInstalledPackages({zod: '4.3.5'});
 });
@@ -36,6 +40,22 @@ describe('zod: sub config `mini`', () => {
         'zod-mini/consistent-import': 2,
         'zod-mini/consistent-import-source': 0,
       });
+    });
+
+    it('`zod-mini/consistent-import` rule fires on a named import from Zod Mini', async () => {
+      const results = await testEslintConfig(
+        'zod',
+        FIXTURES.zodMiniNamedImport,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.zodMiniNamedImport,
+        'zod-mini/consistent-import',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot('"Use a namespace import for Zod Mini."');
     });
   });
 

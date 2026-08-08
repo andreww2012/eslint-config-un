@@ -1,3 +1,7 @@
+const FIXTURES = {
+  testWithOnlyModifier: 'only-modifier/test.spec.js',
+} as const;
+
 describe('cypress: sub config `noOnlyTests`', () => {
   describe('basic tests', () => {
     it('creates `cypress/no-only-tests` eslint config by default (`configNoOnlyTests` is enabled by default)', async () => {
@@ -42,6 +46,22 @@ describe('cypress: sub config `noOnlyTests`', () => {
       expect(
         configResult.getRuleEntrySeverity('cypress/no-only-tests', 'no-only-tests/no-only-tests'),
       ).toBe(2);
+    });
+
+    it('`no-only-tests/no-only-tests` rule fires on a test with the `.only` modifier', async () => {
+      const results = await testEslintConfig(
+        'cypress',
+        FIXTURES.testWithOnlyModifier,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.testWithOnlyModifier,
+        'no-only-tests/no-only-tests',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot('"describe.only not permitted"');
     });
   });
 

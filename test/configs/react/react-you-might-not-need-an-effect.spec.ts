@@ -1,3 +1,7 @@
+const FIXTURES = {
+  effectCopyingPropIntoState: 'effect-copying-prop-into-state.jsx',
+} as const;
+
 beforeEach(() => {
   addInstalledPackages({react: '19.0.0'});
 });
@@ -52,6 +56,24 @@ describe('react: sub config `youMightNotNeedAnEffect`', () => {
           'react-you-might-not-need-an-effect/no-pass-ref-to-parent',
         ),
       ).toBe(0);
+    });
+
+    it('`react-you-might-not-need-an-effect/no-derived-state` rule fires on an effect copying a prop into state', async () => {
+      const results = await testEslintConfig(
+        'react',
+        FIXTURES.effectCopyingPropIntoState,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.effectCopyingPropIntoState,
+        'react-you-might-not-need-an-effect/no-derived-state',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Avoid storing derived state. Instead, compute "derivedTitle" directly during render."',
+      );
     });
   });
 

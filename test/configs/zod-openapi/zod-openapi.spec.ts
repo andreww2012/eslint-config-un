@@ -1,3 +1,7 @@
+const FIXTURES = {
+  zodSchemaWithMetaDefault: 'zod-schema-with-meta-default.ts',
+} as const;
+
 beforeEach(() => {
   addInstalledPackages({'zod-openapi': '5.4.1'});
 });
@@ -98,6 +102,22 @@ describe('rules', () => {
       'zod-openapi/prefer-meta-last': 2,
       'zod-openapi/require-comment': 0,
     });
+  });
+
+  it('`zod-openapi/prefer-zod-default` rule fires on a schema passing `default` to `.meta()`', async () => {
+    const results = await testEslintConfig(
+      {zodOpenapi: true, ts: true},
+      FIXTURES.zodSchemaWithMetaDefault,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.zodSchemaWithMetaDefault,
+      'zod-openapi/prefer-zod-default',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot('"use .default() instead of .meta() default"');
   });
 });
 

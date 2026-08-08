@@ -1,3 +1,7 @@
+const FIXTURES = {
+  newDateGetTime: 'new-date-get-time.ts',
+} as const;
+
 describe('e18e: sub config `performanceImprovements`', () => {
   describe('basic tests', () => {
     it('creates `e18e/performance-improvements` eslint config by default', async () => {
@@ -28,7 +32,23 @@ describe('e18e: sub config `performanceImprovements`', () => {
       });
     });
 
-    // TODO rule in action test
+    it('`e18e/prefer-date-now` rule fires on a `new Date().getTime()` call', async () => {
+      const results = await testEslintConfig(
+        {e18e: true, ts: true},
+        FIXTURES.newDateGetTime,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.newDateGetTime,
+        'e18e/prefer-date-now',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Use Date.now() to avoid allocating a new Date object."',
+      );
+    });
   });
 
   describe('un options', () => {

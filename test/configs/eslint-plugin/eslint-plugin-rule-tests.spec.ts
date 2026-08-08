@@ -1,3 +1,7 @@
+const FIXTURES = {
+  ruleTestWithOnlyModifier: 'rule-test-with-only-modifier.spec.js',
+} as const;
+
 describe('eslint-plugin: sub config `ruleTests`', () => {
   describe('basic tests', () => {
     it('does not create `eslint-plugin/rule-tests` eslint config by default', async () => {
@@ -28,7 +32,23 @@ describe('eslint-plugin: sub config `ruleTests`', () => {
       });
     });
 
-    // TODO test rule in action
+    it('`eslint-plugin/no-only-tests` rule fires on a rule test case with an `only` property', async () => {
+      const results = await testEslintConfig(
+        {eslintPlugin: {configRuleTests: true}},
+        FIXTURES.ruleTestWithOnlyModifier,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.ruleTestWithOnlyModifier,
+        'eslint-plugin/no-only-tests',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"The test case property `only` can be used during development, but should not be checked-in, since it prevents all the tests from running."',
+      );
+    });
   });
 
   describe('un options', () => {

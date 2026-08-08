@@ -1,3 +1,7 @@
+const FIXTURES = {
+  hasOwnPropertyCall: 'has-own-property-call.ts',
+} as const;
+
 describe('e18e: sub config `modernization`', () => {
   describe('basic tests', () => {
     it('creates `e18e/modernization` eslint config by default', async () => {
@@ -26,7 +30,23 @@ describe('e18e: sub config `modernization`', () => {
       });
     });
 
-    // TODO rule in action test
+    it('`e18e/prefer-object-has-own` rule fires on a `Object.prototype.hasOwnProperty` call', async () => {
+      const results = await testEslintConfig(
+        {e18e: true, ts: true},
+        FIXTURES.hasOwnPropertyCall,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.hasOwnPropertyCall,
+        'e18e/prefer-object-has-own',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Use Object.hasOwn() instead of hasOwnProperty"',
+      );
+    });
   });
 
   describe('un options', () => {

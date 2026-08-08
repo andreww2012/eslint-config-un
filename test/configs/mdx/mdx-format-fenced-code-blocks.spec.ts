@@ -1,3 +1,7 @@
+const FIXTURES = {
+  unformattedCodeBlock: 'unformatted-code-block.mdx',
+} as const;
+
 beforeEach(() => {
   addInstalledPackages({prettier: '3.8.0'});
 });
@@ -66,6 +70,22 @@ describe('mdx: sub config `formatFencedCodeBlocks`', () => {
       expect(
         configResult.getRuleEntrySeverity('mdx/format-fenced-code-blocks', 'prettier/prettier'),
       ).toBe(2);
+    });
+
+    it('`prettier/prettier` rule fires on an mdx file with an unformatted fenced code block', async () => {
+      const results = await testEslintConfig(
+        {mdx: {configFormatFencedCodeBlocks: true}},
+        FIXTURES.unformattedCodeBlock,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.unformattedCodeBlock,
+        'prettier/prettier',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(`"Replace \`"hello"\` with \`'hello'\`"`);
     });
   });
 

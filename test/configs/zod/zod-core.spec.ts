@@ -1,3 +1,7 @@
+const FIXTURES = {
+  zodCoreNamedImport: 'zod-core-named-import.js',
+} as const;
+
 beforeEach(() => {
   addInstalledPackages({zod: '4.3.5'});
 });
@@ -36,6 +40,22 @@ describe('zod: sub config `core`', () => {
         'zod-core/consistent-import': 2,
         'zod-core/consistent-schema-output-type-style': 2,
       });
+    });
+
+    it('`zod-core/consistent-import` rule fires on a named import from Zod core', async () => {
+      const results = await testEslintConfig(
+        'zod',
+        FIXTURES.zodCoreNamedImport,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.zodCoreNamedImport,
+        'zod-core/consistent-import',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot('"Use a namespace import for Zod core."');
     });
   });
 

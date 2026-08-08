@@ -1,3 +1,7 @@
+const FIXTURES = {
+  testWithOnlyModifier: 'only-modifier/test.spec.js',
+} as const;
+
 describe('testing-library: sub config `marko.noOnlyTests`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig({testingLibrary: {configMarko: true}});
@@ -63,6 +67,22 @@ describe('testing-library: sub config `marko.noOnlyTests`', () => {
           'no-only-tests/no-only-tests',
         ),
       ).toBe(2);
+    });
+
+    it('`no-only-tests/no-only-tests` rule fires on a test with the `.only` modifier', async () => {
+      const results = await testEslintConfig(
+        {testingLibrary: {configMarko: true}},
+        FIXTURES.testWithOnlyModifier,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        results,
+        FIXTURES.testWithOnlyModifier,
+        'no-only-tests/no-only-tests',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot('"describe.only not permitted"');
     });
   });
 
