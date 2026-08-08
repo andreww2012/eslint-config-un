@@ -384,6 +384,20 @@ describe('options', () => {
       );
     });
 
+    it('deduplicates `extraFileExtensions` merged from several layers', async () => {
+      const configResult = await computeEslintConfig({
+        ts: {parserOptions: {extraFileExtensions: ['.vue', '.svelte', '.vue']}},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('ts/non-type-aware/setup')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toMatchInlineSnapshot(
+        '{"extraFileExtensions": [".vue", ".svelte"], "sourceType": "module"}',
+      );
+    });
+
     it('merges user-provided parser options (function) with default parser options, receiving `isForTypeAwareConfig` flag', async () => {
       const configResult = await computeEslintConfig({
         ts: {

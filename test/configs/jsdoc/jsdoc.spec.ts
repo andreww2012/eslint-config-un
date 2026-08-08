@@ -1,4 +1,6 @@
+import {DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE} from '../../../src/configs/jsdoc';
 import {GLOB_HTM, GLOB_HTML, GLOB_HTM_HTML} from '../../../src/constants';
+import {objectKeysUnsafe} from '../../../src/utils';
 
 const FIXTURES = {
   wrongParamNames: 'wrong-param-names.js',
@@ -226,6 +228,20 @@ describe('options', () => {
       expect(rule).toMatchInlineSnapshot(
         '[2, {"ignore": ["ts-check", "ts-expect-error", "ts-ignore", "__PURE__", "__NO_SIDE_EFFECTS__", "vite-ignore"]}]',
       );
+    });
+
+    it('passes no options to `jsdoc/no-bad-blocks` rule when every default entry is disabled', async () => {
+      const configResult = await computeEslintConfig({
+        jsdoc: {
+          extraMultilineCommentsStartingWithToIgnore: Object.fromEntries(
+            objectKeysUnsafe(DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE).map(
+              (entry) => [entry, false] as const,
+            ),
+          ),
+        },
+      });
+
+      expect(configResult.getRuleEntryOptions('jsdoc', 'jsdoc/no-bad-blocks')).toStrictEqual([]);
     });
   });
 

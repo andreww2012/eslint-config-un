@@ -120,6 +120,7 @@ export default ((context, optionsRaw) => {
     .addRule('use-test', ERROR) /** @since 1.2.0 */ // 🟢
     .addRule('use-true-false', ERROR) /** @since 2.2.0 */ // 🟢
     .enableConfigTesterForPlugin('ava', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => ruleName === 'no-ava-in-dependencies',
     })
     .addOverrides();
@@ -144,6 +145,7 @@ export default ((context, optionsRaw) => {
     ])
     .addRule('no-ava-in-dependencies', ERROR) /** @since 16.0.0 */ // 🟢
     .enableConfigTesterForPlugin('ava', {
+      /* v8 ignore next */
       rulesToSkipInConfig: (ruleName) => ruleName !== 'no-ava-in-dependencies',
     })
     .addOverrides();

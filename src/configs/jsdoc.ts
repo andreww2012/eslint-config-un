@@ -257,7 +257,7 @@ export interface JsdocEslintConfigOptions<
     boolean | NormalizeSeeLinksRuleOptions['canonicalForm'] | NormalizeSeeLinksRuleOptions;
 }
 
-const DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE = {
+export const DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE = {
   // TypeScript directives
   'ts-check': true,
   'ts-expect-error': true,

@@ -284,6 +284,21 @@ describe('options', () => {
 
       expect(spy).toHaveBeenCalledOnce();
     });
+
+    it('passes an empty `defaultSyntax` to the `customSyntax` function when `@eslint/css-tree` cannot be loaded', async () => {
+      using spy = vi
+        .spyOn(packagesLoaders, 'eslintCssTreeSyntax')
+        .mockResolvedValue({module: undefined, packageName: '@eslint/css-tree'});
+
+      const configResult = await computeEslintConfig({
+        css: {customSyntax: ({defaultSyntax}) => defaultSyntax},
+      });
+
+      expect(spy).toHaveBeenCalledOnce();
+      expect(
+        configResult.getConfigByUnPostfix('css')?.languageOptions?.['customSyntax'],
+      ).toStrictEqual({});
+    });
   });
 
   describe('option: `allowedFontUnits`', () => {

@@ -295,5 +295,13 @@ describe('options', () => {
 
       expect(configResult.getRuleEntrySeverity('mdx/code-blocks', 'no-shadow')).toBe(0);
     });
+
+    it('ignores a rule of `markdownCodeBlocksRules.additionalDisabledRules` set to `false`', async () => {
+      const configResult = await computeEslintConfig('mdx', {
+        un: {markdownCodeBlocksRules: {additionalDisabledRules: {'no-shadow': false}}},
+      });
+
+      expect(configResult.getRuleEntry('mdx/code-blocks', 'no-shadow')).toBeUndefined();
+    });
   });
 });
