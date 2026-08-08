@@ -308,6 +308,47 @@ describe('options', () => {
     });
   });
 
+  describe('option: `requireFields`', () => {
+    it('disables `package-json/require-author` rule when option is not set', async () => {
+      const configResult = await computeEslintConfig('packageJson');
+
+      expect(configResult.getRuleEntrySeverity('package-json', 'package-json/require-author')).toBe(
+        0,
+      );
+    });
+
+    it('enables the rule of every field set to `true`', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {requireFields: {author: true, keywords: true}},
+      });
+
+      expect(configResult.getRuleSeverities('package-json')).toMatchObject({
+        'package-json/require-author': 2,
+        'package-json/require-keywords': 2,
+      });
+    });
+
+    it('disables the rule of a field set to `false` even if it is enabled by default', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {requireFields: {name: false}},
+      });
+
+      expect(configResult.getRuleEntrySeverity('package-json', 'package-json/require-name')).toBe(
+        0,
+      );
+    });
+
+    it('takes precedence over `publishable`', async () => {
+      const configResult = await computeEslintConfig({
+        packageJson: {publishable: true, requireFields: {description: false}},
+      });
+
+      expect(
+        configResult.getRuleEntrySeverity('package-json', 'package-json/require-description'),
+      ).toBe(0);
+    });
+  });
+
   describe('option: `disallowUnnecessaryPropertiesInPrivatePackages`', () => {
     it('disables `package-json/restrict-private-properties` rule by default', async () => {
       const configResult = await computeEslintConfig('packageJson');

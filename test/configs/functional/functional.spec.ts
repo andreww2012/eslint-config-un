@@ -140,3 +140,25 @@ describe('un options', () => {
     });
   });
 });
+
+describe('options', () => {
+  describe('option: `settings`', () => {
+    it('does not set `immutability` settings on `functional` eslint config when option is not set', async () => {
+      const configResult = await computeEslintConfig('functional');
+
+      expect(
+        configResult.getConfigByUnPostfix('functional')?.settings?.['immutability'],
+      ).toBeUndefined();
+    });
+
+    it('sets user-provided `immutability` settings on `functional` eslint config', async () => {
+      const PLUGIN_SETTINGS = {overrides: [{type: 'ReadonlyDeep', to: 'Immutable'} as const]};
+
+      const configResult = await computeEslintConfig({functional: {settings: PLUGIN_SETTINGS}});
+
+      expect(
+        configResult.getConfigByUnPostfix('functional')?.settings?.['immutability'],
+      ).toStrictEqual(PLUGIN_SETTINGS);
+    });
+  });
+});

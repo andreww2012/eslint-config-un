@@ -201,6 +201,7 @@ export default ((context, optionsRaw) => {
     disallowUnnecessaryPropertiesInPrivatePackages,
     publishable,
     banTopLevelProperties: banTopLevelPropertiesRaw,
+    requireFields,
   } = optionsResolved;
 
   const propertiesAllowedToBeEmptyList = getKeysOfTruthyValues(
@@ -370,6 +371,15 @@ export default ((context, optionsRaw) => {
     .addRule('valid-version', ERROR) /** @since 0.10.0 */ // 🟢
     .addRule('valid-workspaces', ERROR) /** @since 0.75.0 */ // 🟢
     .enableConfigTesterForPlugin('package-json')
+    .addBulkRules(
+      requireFields &&
+        Object.fromEntries(
+          Object.entries(requireFields).map(([field, isRequired]) => [
+            `package-json/require-${field}`,
+            isRequired ? ERROR : OFF,
+          ]),
+        ),
+    )
     .addOverrides();
 
   return {

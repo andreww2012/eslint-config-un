@@ -1383,7 +1383,7 @@ export interface UnConfigs<ExtraPlugins extends ExtraPluginsType = never> {
    * 🧩 Main plugin:
    * [`eslint-plugin-tanstack-router`](https://npmx.dev/@tanstack/eslint-plugin-router)
    * ([docs](https://tanstack.com/router/latest/docs/eslint/eslint-plugin-router))
-   * @default true <=> [`@tanstack/eslint-plugin-router`](https://npmx.dev/@tanstack/eslint-plugin-router) package is installed
+   * @default true <=> [`@tanstack/react-router`](https://npmx.dev/@tanstack/react-router) or [`@tanstack/solid-router`](https://npmx.dev/@tanstack/solid-router) package is installed
    */
   tanstackRouter: TanstackRouterEslintConfigOptions<ExtraPlugins>;
 

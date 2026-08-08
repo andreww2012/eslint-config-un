@@ -1,9 +1,22 @@
+import {createTypeScriptImportResolver} from 'eslint-import-resolver-typescript';
 import {GLOB_MARKDOWN_ALL_CODE_BLOCKS} from '../../../src/constants';
 
 const FIXTURES = {
   defaultExport: 'default-export.js',
   tsImportValid: 'ts-import-valid.ts',
 } as const;
+
+// Keeps the real resolver, but lets us see the options it was built with.
+vi.mock(import('eslint-import-resolver-typescript'), async (importOriginal) => {
+  const original = await importOriginal();
+
+  return {
+    ...original,
+    createTypeScriptImportResolver: vi.fn<typeof createTypeScriptImportResolver>(
+      original.createTypeScriptImportResolver,
+    ),
+  };
+});
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('import');
@@ -348,6 +361,39 @@ describe('options', () => {
       expect(configResult.getRuleEntryOptions('import', 'import/no-duplicates')).toStrictEqual([
         {...OPTIONS, 'prefer-inline': true},
       ]);
+    });
+  });
+
+  describe('option: `tsResolverOptions`', () => {
+    it('builds the typescript resolver without options when option is not set', async () => {
+      vi.mocked(createTypeScriptImportResolver).mockClear();
+
+      await computeEslintConfig({import: true, ts: true});
+
+      expect(vi.mocked(createTypeScriptImportResolver)).toHaveBeenLastCalledWith(undefined);
+    });
+
+    it('passes user-provided options to the typescript resolver', async () => {
+      const TS_RESOLVER_OPTIONS = {alwaysTryTypes: false} as const;
+
+      vi.mocked(createTypeScriptImportResolver).mockClear();
+
+      await computeEslintConfig({
+        import: {tsResolverOptions: TS_RESOLVER_OPTIONS},
+        ts: true,
+      });
+
+      expect(vi.mocked(createTypeScriptImportResolver)).toHaveBeenLastCalledWith(
+        TS_RESOLVER_OPTIONS,
+      );
+    });
+
+    it('does not build the typescript resolver when the `ts` config is disabled', async () => {
+      vi.mocked(createTypeScriptImportResolver).mockClear();
+
+      await computeEslintConfig({import: true, ts: false});
+
+      expect(vi.mocked(createTypeScriptImportResolver)).not.toHaveBeenCalled();
     });
   });
 
