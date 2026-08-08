@@ -294,32 +294,49 @@ describe('options', () => {
   });
 
   describe('option: `requireSeparateFilesFor`', () => {
-    it('uses default `graphql/lone-executable-definition` rule settings by default', async () => {
+    it('does not set `ignore` in `graphql/lone-executable-definition` rule options by default', async () => {
       const configResult = await computeEslintConfig('graphql');
 
       expect(
-        configResult.getRuleEntry('graphql', 'graphql/lone-executable-definition'),
-      ).toMatchInlineSnapshot('[2, {"ignore": undefined}]');
+        configResult.getRuleEntryOptions('graphql', 'graphql/lone-executable-definition'),
+      ).toStrictEqual([]);
     });
 
-    it('sets `ignore` for `graphql/lone-executable-definition` rule when operation type is set to `false`', async () => {
+    it('adds a definition kind to `ignore` in `graphql/lone-executable-definition` rule options when it is set to `false`', async () => {
       const configResult = await computeEslintConfig({
         graphql: {requireSeparateFilesFor: {mutation: false}},
       });
 
       expect(
-        configResult.getRuleEntry('graphql', 'graphql/lone-executable-definition'),
-      ).toMatchInlineSnapshot('[2, {"ignore": undefined}]');
+        configResult.getRuleEntryOptions('graphql', 'graphql/lone-executable-definition'),
+      ).toStrictEqual([{ignore: ['mutation']}]);
     });
 
-    it('does not add to `ignore` list when operation type is set to `true`', async () => {
+    it('adds every definition kind set to `false` to `ignore` in `graphql/lone-executable-definition` rule options', async () => {
+      const IGNORED_DEFINITION_KINDS = ['fragment', 'mutation'] as const;
+
+      const configResult = await computeEslintConfig({
+        graphql: {
+          requireSeparateFilesFor: {
+            ...Object.fromEntries(IGNORED_DEFINITION_KINDS.map((kind) => [kind, false] as const)),
+            query: true,
+          },
+        },
+      });
+
+      expect(
+        configResult.getRuleEntryOptions('graphql', 'graphql/lone-executable-definition'),
+      ).toStrictEqual([{ignore: IGNORED_DEFINITION_KINDS}]);
+    });
+
+    it('does not add a definition kind to `ignore` in `graphql/lone-executable-definition` rule options when it is set to `true`', async () => {
       const configResult = await computeEslintConfig({
         graphql: {requireSeparateFilesFor: {mutation: true}},
       });
 
       expect(
-        configResult.getRuleEntry('graphql', 'graphql/lone-executable-definition'),
-      ).toMatchInlineSnapshot('[2, {"ignore": undefined}]');
+        configResult.getRuleEntryOptions('graphql', 'graphql/lone-executable-definition'),
+      ).toStrictEqual([]);
     });
   });
 
@@ -335,6 +352,7 @@ describe('options', () => {
 
     it('enables relay rules when `relay-runtime` is installed', async () => {
       addInstalledPackages({'relay-runtime': '18.0.0'});
+
       const configResult = await computeEslintConfig('graphql');
 
       expect(configResult.getRuleEntrySeverity('graphql', 'graphql/relay-arguments')).toBe(2);
@@ -345,8 +363,9 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('graphql', 'graphql/relay-page-info')).toBe(2);
     });
 
-    it('disables relay-edge-types and relay-page-info when schema rules are disabled even if `relay-runtime` is installed', async () => {
+    it('disables `graphql/relay-edge-types` and `graphql/relay-page-info` when schema rules are disabled even if `relay-runtime` is installed', async () => {
       addInstalledPackages({'relay-runtime': '18.0.0'});
+
       const configResult = await computeEslintConfig({
         graphql: {disableRulesRequiringSchema: true},
       });

@@ -11,9 +11,10 @@ import {
   type RuleSeverity,
   WARNING,
 } from '../constants';
+import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Prettify} from '../types';
-import {getKeysOfTruthyValues, pick} from '../utils';
+import {isNonEmptyArray, objectKeysUnsafe, pick} from '../utils';
 import {
   type ExtraPluginsType,
   type UnConfigFn,
@@ -30,15 +31,30 @@ export interface GraphqlEslintConfigOptions<
    * and treats them as virtual GraphQL documents with .graphql extensions"
    * - [plugin docs](https://the-guild.dev/graphql/eslint/docs/usage/js)
    *
-   * By default, the processor will be used on **all** files.
+   * 📁 Default `files`:
+   * - <code>**&#47;*.?([cm])ts?(x)</code>
+   * - <code>**&#47;*.flow</code>
+   * - <code>**&#47;*.svelte</code>
+   * - <code>**&#47;*.astro</code>
+   * - <code>**&#47;*.{gjs,gts}</code>
    * @default true
    */
-  configJsProcessor?: boolean | Prettify<Pick<UnFlatConfigEntryBase, 'files' | 'ignores'>>;
+  configJsProcessor?: boolean | Prettify<UnFlatConfigEntryFilesAndIgnores>;
 
   /**
    * Disable all the rules requiring GraphQL Operations specified in GraphQL config
    * (via `documents` option) in order to work:
-   * [`graphql/known-fragment-names`](https://the-guild.dev/graphql/eslint/rules/known-fragment-names), [`graphql/no-one-place-fragments`](https://the-guild.dev/graphql/eslint/rules/no-one-place-fragments), [`graphql/no-undefined-variables`](https://the-guild.dev/graphql/eslint/rules/no-undefined-variables), [`graphql/no-unused-fields`](https://the-guild.dev/graphql/eslint/rules/no-unused-fields), [`graphql/no-unused-fragments`](https://the-guild.dev/graphql/eslint/rules/no-unused-fragments), [`graphql/no-unused-variables`](https://the-guild.dev/graphql/eslint/rules/no-unused-variables), [`graphql/require-import-fragment`](https://the-guild.dev/graphql/eslint/rules/require-import-fragment), [`graphql/require-selections`](https://the-guild.dev/graphql/eslint/rules/require-selections), [`graphql/selection-set-depth`](https://the-guild.dev/graphql/eslint/rules/selection-set-depth), [`graphql/unique-fragment-name`](https://the-guild.dev/graphql/eslint/rules/unique-fragment-name), [`graphql/unique-operation-name`](https://the-guild.dev/graphql/eslint/rules/unique-operation-name)
+   * - [`graphql/known-fragment-names`](https://the-guild.dev/graphql/eslint/rules/known-fragment-names)
+   * - [`graphql/no-one-place-fragments`](https://the-guild.dev/graphql/eslint/rules/no-one-place-fragments)
+   * - [`graphql/no-undefined-variables`](https://the-guild.dev/graphql/eslint/rules/no-undefined-variables)
+   * - [`graphql/no-unused-fields`](https://the-guild.dev/graphql/eslint/rules/no-unused-fields)
+   * - [`graphql/no-unused-fragments`](https://the-guild.dev/graphql/eslint/rules/no-unused-fragments)
+   * - [`graphql/no-unused-variables`](https://the-guild.dev/graphql/eslint/rules/no-unused-variables)
+   * - [`graphql/require-import-fragment`](https://the-guild.dev/graphql/eslint/rules/require-import-fragment)
+   * - [`graphql/require-selections`](https://the-guild.dev/graphql/eslint/rules/require-selections)
+   * - [`graphql/selection-set-depth`](https://the-guild.dev/graphql/eslint/rules/selection-set-depth)
+   * - [`graphql/unique-fragment-name`](https://the-guild.dev/graphql/eslint/rules/unique-fragment-name)
+   * - [`graphql/unique-operation-name`](https://the-guild.dev/graphql/eslint/rules/unique-operation-name)
    * @default false
    */
   disableRulesRequiringOperations?: boolean;
@@ -46,21 +62,40 @@ export interface GraphqlEslintConfigOptions<
   /**
    * Disable all the rules requiring GraphQL Schema specified in GraphQL config
    * (via `schema` option) in order to work:
-   * [`graphql/no-deprecated`](https://the-guild.dev/graphql/eslint/rules/no-deprecated), [`graphql/no-root-type`](https://the-guild.dev/graphql/eslint/rules/no-root-type), [`graphql/no-scalar-result-type-on-mutation`](https://the-guild.dev/graphql/eslint/rules/no-scalar-result-type-on-mutation), [`graphql/no-unreachable-types`](https://the-guild.dev/graphql/eslint/rules/no-unreachable-types), [`graphql/no-unused-fields`](https://the-guild.dev/graphql/eslint/rules/no-unused-fields), [`graphql/relay-edge-types`](https://the-guild.dev/graphql/eslint/rules/relay-edge-types), [`graphql/relay-page-info`](https://the-guild.dev/graphql/eslint/rules/relay-page-info), [`graphql/require-field-of-type-query-in-mutation-result`](https://the-guild.dev/graphql/eslint/rules/require-field-of-type-query-in-mutation-result), [`graphql/require-nullable-result-in-root`](https://the-guild.dev/graphql/eslint/rules/require-nullable-result-in-root), [`graphql/require-selections`](https://the-guild.dev/graphql/eslint/rules/require-selections), [`graphql/strict-id-in-types`](https://the-guild.dev/graphql/eslint/rules/strict-id-in-types)
+   * - [`graphql/no-deprecated`](https://the-guild.dev/graphql/eslint/rules/no-deprecated)
+   * - [`graphql/no-root-type`](https://the-guild.dev/graphql/eslint/rules/no-root-type)
+   * - [`graphql/no-scalar-result-type-on-mutation`](https://the-guild.dev/graphql/eslint/rules/no-scalar-result-type-on-mutation)
+   * - [`graphql/no-unreachable-types`](https://the-guild.dev/graphql/eslint/rules/no-unreachable-types)
+   * - [`graphql/no-unused-fields`](https://the-guild.dev/graphql/eslint/rules/no-unused-fields)
+   * - [`graphql/relay-edge-types`](https://the-guild.dev/graphql/eslint/rules/relay-edge-types)
+   * - [`graphql/relay-page-info`](https://the-guild.dev/graphql/eslint/rules/relay-page-info)
+   * - [`graphql/require-field-of-type-query-in-mutation-result`](https://the-guild.dev/graphql/eslint/rules/require-field-of-type-query-in-mutation-result)
+   * - [`graphql/require-nullable-result-in-root`](https://the-guild.dev/graphql/eslint/rules/require-nullable-result-in-root)
+   * - [`graphql/require-selections`](https://the-guild.dev/graphql/eslint/rules/require-selections)
+   * - [`graphql/strict-id-in-types`](https://the-guild.dev/graphql/eslint/rules/strict-id-in-types)
    * @default false
    */
   disableRulesRequiringSchema?: boolean;
 
   /**
    * Provides [GraphQL Config](https://npmx.dev/graphql-config). Normally is not required
-   * as it should be automatically found by the plugin. Will be assigned to
-   * `languageOptions.parserOptions.graphQLConfig`.
+   * as it should be automatically found by the plugin.
+   *
+   * Will be assigned to `languageOptions.parserOptions.graphQLConfig`.
    */
   graphqlConfig?: IGraphQLConfig;
 
   /**
    * Require queries, mutations, subscriptions or fragments to be located in separate files.
-   * By default, all of them are required to be in separate files.
+   *
+   * By default, all of them are required to be in separate files (equivalent of setting
+   * all the properties to `true`).
+   *
+   * Affected rule:
+   * - [`graphql/lone-executable-definition`](https://the-guild.dev/graphql/eslint/rules/lone-executable-definition)
+   *
+   * ⚠️ You can only set up to 3 types to `false`
+   * ([hard rule restriction](https://github.com/graphql-hive/graphql-eslint/blob/d891c64ae0be4fcf97560a085bcfecc846ad2eac/packages/plugin/src/rules/lone-executable-definition/index.ts#L24)).
    */
   requireSeparateFilesFor?: Partial<
     Record<'fragment' | 'query' | 'mutation' | 'subscription', boolean>
@@ -83,6 +118,10 @@ export default ((context, optionsRaw) => {
     disableRulesRequiringOperations,
     disableRulesRequiringSchema,
   } = optionsResolved;
+
+  const doNotRequireSeparateFilesFor = objectKeysUnsafe(
+    pick(requireSeparateFilesFor, (value) => value === false),
+  );
 
   const configBuilderProcessor = context.createConfigBuilder(configJsProcessor, null);
   configBuilderProcessor?.addConfig(
@@ -155,15 +194,12 @@ export default ((context, optionsRaw) => {
     .addRule('known-fragment-names', getRuleRequiresOperationsSeverity(ERROR)) /** @since 0.6.0 */ // 🔵📦🖥️
     .addRule('known-type-names', ERROR) /** @since 0.6.0 */ // 🟢🔵📦
     .addRule('lone-anonymous-operation', ERROR) /** @since 0.6.0 */ // 🔵📦
-    .addRule('lone-executable-definition', ERROR, [
-      {
-        // @ts-expect-error too strict type
-        ignore: getKeysOfTruthyValues(
-          pick(requireSeparateFilesFor, (v) => !v),
-          'nonEmptyArray',
-        ),
-      },
-    ]) /** @since 3.14.0 */
+    .addRule(
+      'lone-executable-definition',
+      ERROR,
+      // @ts-expect-error too strict type: `ignore` can only have so much elements, which the assigned variable cannot express
+      isNonEmptyArray(doNotRequireSeparateFilesFor) ? [{ignore: doNotRequireSeparateFilesFor}] : [],
+    ) /** @since 3.14.0 */
     .addRule('lone-schema-definition', ERROR) /** @since 0.6.0 */ // 🟢📦
     .addRule('match-document-filename', OFF) /** @since 2.1.0 */
     .addRule('naming-convention', ERROR, [
