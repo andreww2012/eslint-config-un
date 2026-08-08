@@ -40,14 +40,14 @@ describe('markdown: sub config `fentencesPerLine`', () => {
   });
 
   describe('rules', () => {
-    it('enables `sentences-per-line/one` rule by default', async () => {
+    it('correctly sets severities by default', async () => {
       const configResult = await computeEslintConfig({
         markdown: {configSentencesPerLine: true},
       });
 
-      expect(
-        configResult.getRuleEntrySeverity('markdown/sentences-per-line', 'sentences-per-line/one'),
-      ).toBe(2);
+      expect(configResult.getRuleSeverities('markdown/sentences-per-line')).toMatchObject({
+        'sentences-per-line/one': 2,
+      });
     });
 
     it('`sentences-per-line/one` rule fires on a markdown file with two sentences on one line', async () => {

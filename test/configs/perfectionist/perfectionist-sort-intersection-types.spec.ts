@@ -52,13 +52,12 @@ describe('perfectionist: sub config `sortIntersectionTypes`', () => {
       perfectionist: {configSortIntersectionTypes: true},
     });
 
-    it('enables `perfectionist/sort-intersection-types` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-intersection-types',
-          'perfectionist/sort-intersection-types',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-intersection-types')).toMatchObject(
+        {
+          'perfectionist/sort-intersection-types': 2,
+        },
+      );
     });
 
     it('keeps `perfectionist/sort-intersection-types` rule disabled in the main `perfectionist` eslint config', () => {

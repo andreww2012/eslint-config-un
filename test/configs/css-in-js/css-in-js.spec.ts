@@ -77,6 +77,7 @@ describe('rules', () => {
 
     expect(configResult.getRuleSeverities('css-in-js')).toMatchObject({
       'css-in-js/no-dupe-properties': 2,
+      'css-in-js/color-hex-style': 2,
     });
   });
 

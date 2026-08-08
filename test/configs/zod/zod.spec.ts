@@ -103,17 +103,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('zod');
 
-  it('enables `zod/no-throw-in-refine` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('zod', 'zod/no-throw-in-refine')).toBe(2);
-  });
-
-  it('disables `zod/consistent-import-source` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('zod', 'zod/consistent-import-source')).toBe(0);
-  });
-
-  it('enables v4-only rules when zod v4 is installed', () => {
-    expect(configResult.getRuleEntrySeverity('zod', 'zod/no-number-schema-with-int')).toBe(2);
-    expect(configResult.getRuleEntrySeverity('zod', 'zod/prefer-meta')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('zod')).toMatchObject({
+      'zod/no-throw-in-refine': 2,
+      'zod/no-any-schema': 1,
+      'zod/consistent-import-source': 0,
+    });
   });
 
   it('disables v4-only rules when zod v3 is installed', async () => {

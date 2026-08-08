@@ -48,13 +48,10 @@ describe('perfectionist: sub config `sortArrayIncludes`', () => {
       perfectionist: {configSortArrayIncludes: true},
     });
 
-    it('enables `perfectionist/sort-array-includes` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-array-includes',
-          'perfectionist/sort-array-includes',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-array-includes')).toMatchObject({
+        'perfectionist/sort-array-includes': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-array-includes` rule disabled in the main `perfectionist` eslint config', () => {

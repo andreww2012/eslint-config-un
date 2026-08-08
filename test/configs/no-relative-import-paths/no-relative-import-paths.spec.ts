@@ -77,15 +77,12 @@ describe('basic tests', () => {
 });
 
 describe('rules', () => {
-  it('enables `no-relative-import-paths/no-relative-import-paths` rule by default', async () => {
+  it('correctly sets severities by default', async () => {
     const configResult = await computeEslintConfig('noRelativeImportPaths');
 
-    expect(
-      configResult.getRuleEntrySeverity(
-        'no-relative-import-paths',
-        'no-relative-import-paths/no-relative-import-paths',
-      ),
-    ).toBe(2);
+    expect(configResult.getRuleSeverities('no-relative-import-paths')).toMatchObject({
+      'no-relative-import-paths/no-relative-import-paths': 2,
+    });
   });
 
   it('`no-relative-import-paths/no-relative-import-paths` rule fires on a relative import', async () => {

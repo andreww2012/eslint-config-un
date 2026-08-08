@@ -44,14 +44,11 @@ describe('cloudfront functions: sub config `v1`', () => {
       cloudfrontFunctions: {configV1: {files: V1_FILES}},
     });
 
-    it('enables `no-restricted-globals` rule in `cloudfront-functions/v1` eslint config', () => {
-      expect(
-        configResult.getRuleEntrySeverity('cloudfront-functions/v1', 'no-restricted-globals'),
-      ).toBe(2);
-    });
-
-    it('disables `no-var` rule in `cloudfront-functions/v1` eslint config (v1 does not support let/const)', () => {
-      expect(configResult.getRuleEntrySeverity('cloudfront-functions/v1', 'no-var')).toBe(0);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('cloudfront-functions/v1')).toMatchObject({
+        'no-restricted-globals': 2,
+        'no-var': 0,
+      });
     });
 
     it("`no-restricted-syntax` rule fires when `require('cloudfront')` is used (not allowed in v1)", async () => {

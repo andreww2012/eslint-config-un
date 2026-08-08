@@ -36,12 +36,9 @@ describe('react: sub config `hooks`', () => {
       const configResult = await computeEslintConfig('react');
 
       expect(configResult.getRuleSeverities('react/hooks')).toMatchObject({
-        // Non-React compiler rules
         'react-hooks/exhaustive-deps': 2,
-        'react-hooks/rules-of-hooks': 2,
-
-        // React compiler rule
-        'react-hooks/memo-dependencies': 2,
+        'react-hooks/unsupported-syntax': 1,
+        'react-hooks/hooks': 0,
       });
     });
 

@@ -42,10 +42,10 @@ describe('perfectionist: sub config `sortArrays`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({perfectionist: {configSortArrays: true}});
 
-    it('enables `perfectionist/sort-arrays` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity('perfectionist/sort-arrays', 'perfectionist/sort-arrays'),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-arrays')).toMatchObject({
+        'perfectionist/sort-arrays': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-arrays` rule disabled in the main `perfectionist` eslint config', () => {

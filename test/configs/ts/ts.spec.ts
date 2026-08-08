@@ -88,6 +88,7 @@ describe('rules', () => {
 
     expect(configResult.getRuleSeverities('ts/non-type-aware/rules')).toMatchObject({
       'ts/ban-ts-comment': 2,
+      'ts/no-dynamic-delete': 1,
       'ts/explicit-function-return-type': 0,
     });
   });

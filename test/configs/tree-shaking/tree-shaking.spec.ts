@@ -75,13 +75,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('treeShaking');
 
-  it('enables `tree-shaking/no-side-effects-in-initialization` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'tree-shaking',
-        'tree-shaking/no-side-effects-in-initialization',
-      ),
-    ).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('tree-shaking')).toMatchObject({
+      'tree-shaking/no-side-effects-in-initialization': 2,
+    });
   });
 
   it('`tree-shaking/no-side-effects-in-initialization` rule fires on a file with module-level side effects', async () => {

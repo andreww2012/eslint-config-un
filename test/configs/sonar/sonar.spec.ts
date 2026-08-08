@@ -63,12 +63,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('sonar');
 
-  it('enables `sonarjs/arguments-order` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/arguments-order')).toBe(2);
-  });
-
-  it('does not enable `sonarjs/file-header` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('sonar', 'sonarjs/file-header')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('sonar')).toMatchObject({
+      'sonarjs/arguments-order': 2,
+      'sonarjs/misplaced-loop-counter': 1,
+      'sonarjs/file-header': 0,
+    });
   });
 
   it('`sonarjs/no-empty-collection` rule works', async () => {

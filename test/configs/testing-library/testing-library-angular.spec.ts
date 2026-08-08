@@ -38,22 +38,12 @@ describe('testing-library: sub config `angular`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({testingLibrary: {configAngular: true}});
 
-    it('enables `testing-library/no-container` rule (framework-only)', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'testing-library/angular',
-          'testing-library/no-container',
-        ),
-      ).toBe(2);
-    });
-
-    it('enables `testing-library/no-render-in-lifecycle` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'testing-library/angular',
-          'testing-library/no-render-in-lifecycle',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('testing-library/angular')).toMatchObject({
+        'testing-library/no-container': 2,
+        'testing-library/no-test-id-queries': 1,
+        'testing-library/consistent-data-testid': 0,
+      });
     });
 
     it('enables `testing-library/no-dom-import` rule with `angular` module option', () => {

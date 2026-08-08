@@ -67,16 +67,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('tailwind');
 
-  it('enables `tailwindcss/no-contradicting-classname` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('tailwind', 'tailwindcss/no-contradicting-classname'),
-    ).toBe(2);
-  });
-
-  it('disables `tailwindcss/no-custom-classname` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('tailwind', 'tailwindcss/no-custom-classname')).toBe(
-      0,
-    );
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('tailwind')).toMatchObject({
+      'tailwindcss/no-contradicting-classname': 2,
+      'tailwindcss/classnames-order': 1,
+      'tailwindcss/no-custom-classname': 0,
+    });
   });
 
   it('`tailwindcss/no-contradicting-classname` rule fires on a file with contradicting class names', async () => {

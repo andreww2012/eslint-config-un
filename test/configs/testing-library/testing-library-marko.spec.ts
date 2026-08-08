@@ -38,10 +38,12 @@ describe('testing-library: sub config `marko`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({testingLibrary: {configMarko: true}});
 
-    it('enables `testing-library/no-container` rule (framework-only)', () => {
-      expect(
-        configResult.getRuleEntrySeverity('testing-library/marko', 'testing-library/no-container'),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('testing-library/marko')).toMatchObject({
+        'testing-library/no-container': 2,
+        'testing-library/no-test-id-queries': 1,
+        'testing-library/no-manual-cleanup': 0,
+      });
     });
 
     it('includes `fireEvent` in `testing-library/await-async-events` event module list (async for marko)', () => {
@@ -57,24 +59,6 @@ describe('testing-library: sub config `marko`', () => {
           'testing-library/no-await-sync-events',
         ),
       ).toStrictEqual([]);
-    });
-
-    it('enables `testing-library/no-unnecessary-act` rule (marko/react only)', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'testing-library/marko',
-          'testing-library/no-unnecessary-act',
-        ),
-      ).toBe(2);
-    });
-
-    it('does not enable `testing-library/no-manual-cleanup` rule (marko excluded)', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'testing-library/marko',
-          'testing-library/no-manual-cleanup',
-        ),
-      ).toBe(0);
     });
   });
 

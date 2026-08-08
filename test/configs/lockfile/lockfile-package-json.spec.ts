@@ -53,7 +53,7 @@ describe('lockfile: sub config `package.json`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('lockfile');
 
-    it('enables `lockfile/tracked` and `lockfile/no-weakening-config` rules by default', () => {
+    it('correctly sets severities by default', () => {
       expect(configResult.getRuleSeverities('lockfile/package.json')).toMatchObject({
         'lockfile/tracked': 2,
         'lockfile/no-weakening-config': 2,

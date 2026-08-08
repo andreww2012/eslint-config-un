@@ -110,16 +110,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('githubActions');
 
-  it('enables `github-actions/job-id-casing` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('github-actions', 'github-actions/job-id-casing'),
-    ).toBe(2);
-  });
-
-  it('disables `github-actions/action-name-casing` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('github-actions', 'github-actions/action-name-casing'),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('github-actions')).toMatchObject({
+      'github-actions/job-id-casing': 2,
+      'github-actions/action-name-casing': 0,
+    });
   });
 
   it('`github-actions/require-action-name` rule fires on a workflow file without a top-level name', async () => {

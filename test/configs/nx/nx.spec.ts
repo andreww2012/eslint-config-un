@@ -192,8 +192,11 @@ describe('rules', async () => {
     delete globalThis.projectFileMap;
   });
 
-  it('enables `nx/dependency-checks` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('nx/json', 'nx/dependency-checks')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('nx/json')).toMatchObject({
+      'nx/dependency-checks': 2,
+      'nx/enforce-module-boundaries': 0,
+    });
   });
 
   it('does not enable `nx/enforce-module-boundaries` rule by default', () => {

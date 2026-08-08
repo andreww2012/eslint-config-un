@@ -42,10 +42,10 @@ describe('cypress: sub config `noOnlyTests`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('cypress');
 
-    it('enables `no-only-tests/no-only-tests` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity('cypress/no-only-tests', 'no-only-tests/no-only-tests'),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('cypress/no-only-tests')).toMatchObject({
+        'no-only-tests/no-only-tests': 2,
+      });
     });
 
     it('`no-only-tests/no-only-tests` rule fires on a test with the `.only` modifier', async () => {

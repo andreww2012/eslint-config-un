@@ -73,16 +73,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('barrelFiles');
 
-  it('enables `barrel-files/avoid-re-export-all` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('barrel-files', 'barrel-files/avoid-re-export-all'),
-    ).toBe(2);
-  });
-
-  it('disables `barrel-files/avoid-barrel-files` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('barrel-files', 'barrel-files/avoid-barrel-files'),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('barrel-files')).toMatchObject({
+      'barrel-files/avoid-re-export-all': 2,
+      'barrel-files/avoid-barrel-files': 0,
+    });
   });
 
   it('`barrel-files/avoid-re-export-all` rule fires on a file with a wildcard re-export', async () => {

@@ -75,10 +75,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('noOnlyTests');
 
-  it('enables `no-only-tests/no-only-tests` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('no-only-tests', 'no-only-tests/no-only-tests')).toBe(
-      2,
-    );
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('no-only-tests')).toMatchObject({
+      'no-only-tests/no-only-tests': 2,
+    });
   });
 
   it('`no-only-tests/no-only-tests` rule fires on a test file with `.only`', async () => {

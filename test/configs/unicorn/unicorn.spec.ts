@@ -73,12 +73,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('unicorn');
 
-  it('enables `unicorn/no-lonely-if` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('unicorn', 'unicorn/no-lonely-if')).toBe(2);
-  });
-
-  it('does not enable `unicorn/no-nested-ternary` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('unicorn', 'unicorn/no-nested-ternary')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('unicorn')).toMatchObject({
+      'unicorn/no-lonely-if': 2,
+      'unicorn/catch-error-name': 1,
+      'unicorn/no-nested-ternary': 0,
+    });
   });
 
   it('triggers `unicorn/no-lonely-if` for a lonely if inside another if', async () => {

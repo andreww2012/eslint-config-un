@@ -34,8 +34,10 @@ describe('no-secrets: sub config `json`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('noSecrets');
 
-    it('enables `no-secrets/no-secrets` rule by default', () => {
-      expect(configResult.getRuleEntrySeverity('no-secrets/json', 'no-secrets/no-secrets')).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('no-secrets/json')).toMatchObject({
+        'no-secrets/no-secrets': 2,
+      });
     });
 
     it('`no-secrets/no-secrets` rule fires on a JSON file with a high-entropy string', async () => {

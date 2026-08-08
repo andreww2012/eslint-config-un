@@ -98,14 +98,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('storybook');
 
-  it('enables `storybook/default-exports` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('storybook', 'storybook/default-exports')).toBe(2);
-  });
-
-  it('disables `storybook/no-uninstalled-addons` rule by default in `storybook` eslint config', () => {
-    expect(configResult.getRuleEntrySeverity('storybook', 'storybook/no-uninstalled-addons')).toBe(
-      0,
-    );
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('storybook')).toMatchObject({
+      'storybook/default-exports': 2,
+      'storybook/meta-inline-properties': 1,
+      'storybook/no-uninstalled-addons': 0,
+    });
   });
 
   it('enables `storybook/no-uninstalled-addons` rule in `storybook/main` eslint config', () => {

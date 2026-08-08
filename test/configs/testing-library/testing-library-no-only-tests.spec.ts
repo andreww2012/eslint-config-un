@@ -54,13 +54,10 @@ describe('testing-library: sub config `noOnlyTests`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('testingLibrary');
 
-    it('enables `no-only-tests/no-only-tests` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'testing-library/dom/no-only-tests',
-          'no-only-tests/no-only-tests',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('testing-library/dom/no-only-tests')).toMatchObject({
+        'no-only-tests/no-only-tests': 2,
+      });
     });
 
     it('`no-only-tests/no-only-tests` rule fires on a test with the `.only` modifier', async () => {

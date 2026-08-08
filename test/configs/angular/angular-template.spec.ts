@@ -46,19 +46,12 @@ describe('angular: sub config `template`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('angular');
 
-    it('enables `angular-template/banana-in-box` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity('angular/template', 'angular-template/banana-in-box'),
-      ).toBe(2);
-    });
-
-    it('disables `angular-template/no-call-expression` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'angular/template',
-          'angular-template/no-call-expression',
-        ),
-      ).toBe(0);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('angular/template')).toMatchObject({
+        'angular-template/banana-in-box': 2,
+        'angular-template/no-any': 1,
+        'angular-template/no-call-expression': 0,
+      });
     });
 
     it('triggers `angular-template/banana-in-box` on wrong two-way binding syntax', async () => {

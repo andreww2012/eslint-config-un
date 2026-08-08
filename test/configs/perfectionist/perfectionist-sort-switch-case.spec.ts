@@ -40,13 +40,10 @@ describe('perfectionist: sub config `sortSwitchCase`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({perfectionist: {configSortSwitchCase: true}});
 
-    it('enables `perfectionist/sort-switch-case` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-switch-case',
-          'perfectionist/sort-switch-case',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-switch-case')).toMatchObject({
+        'perfectionist/sort-switch-case': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-switch-case` rule disabled in the main `perfectionist` eslint config', () => {

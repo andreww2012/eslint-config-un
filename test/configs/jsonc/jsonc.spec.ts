@@ -70,12 +70,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('jsonc');
 
-  it('enables `jsonc/no-dupe-keys` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('jsonc/all', 'jsonc/no-dupe-keys')).toBe(2);
-  });
-
-  it('disables `jsonc/sort-keys` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('jsonc/all', 'jsonc/sort-keys')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('jsonc/all')).toMatchObject({
+      'jsonc/no-dupe-keys': 2,
+      'jsonc/sort-keys': 0,
+    });
   });
 
   it('`jsonc/no-dupe-keys` rule fires on a .json file with duplicate keys', async () => {

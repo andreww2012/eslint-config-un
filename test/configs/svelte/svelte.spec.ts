@@ -90,12 +90,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('svelte');
 
-  it('enables `svelte/no-at-html-tags` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('svelte', 'svelte/no-at-html-tags')).toBe(2);
-  });
-
-  it('disables `svelte/no-target-blank` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('svelte', 'svelte/no-target-blank')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('svelte')).toMatchObject({
+      'svelte/no-at-html-tags': 2,
+      'svelte/derived-has-same-inputs-outputs': 1,
+      'svelte/no-target-blank': 0,
+    });
   });
 
   it('`svelte/no-useless-mustaches` rule fires on a mustache with a string literal', async () => {

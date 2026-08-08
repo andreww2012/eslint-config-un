@@ -87,6 +87,13 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('tests');
 
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('tests')).toMatchObject({
+      'sonarjs/no-hardcoded-ip': 0,
+      'sonarjs/no-hardcoded-passwords': 0,
+    });
+  });
+
   it('disables every rule that is noisy in test files', () => {
     expect(configResult.getRuleSeverities('tests')).toStrictEqual(
       Object.fromEntries(DISABLED_RULES.map((rule) => [rule, 0])),

@@ -64,8 +64,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('compat');
 
-  it('enables `compat/compat` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('compat', 'compat/compat')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('compat')).toMatchObject({
+      'compat/compat': 2,
+    });
   });
 
   it('`compat/compat` rule fires on fetch API with old browser target', async () => {

@@ -63,10 +63,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('deMorgan');
 
-  it('enables `de-morgan/no-negated-conjunction` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('de-morgan', 'de-morgan/no-negated-conjunction')).toBe(
-      2,
-    );
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('de-morgan')).toMatchObject({
+      'de-morgan/no-negated-conjunction': 2,
+      'de-morgan/no-negated-disjunction': 2,
+    });
   });
 
   it('`de-morgan/no-negated-conjunction` rule fires on a file with a negated conjunction', async () => {

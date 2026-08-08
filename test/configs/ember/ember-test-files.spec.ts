@@ -49,18 +49,11 @@ describe('ember: sub config `testFiles`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('ember');
 
-    it('enables `ember/no-pause-test` rule by default', () => {
-      expect(configResult.getRuleEntrySeverity('ember/tests', 'ember/no-pause-test')).toBe(2);
-    });
-
-    it('sets `ember/no-replace-test-comments` to warning severity', () => {
-      expect(
-        configResult.getRuleEntrySeverity('ember/tests', 'ember/no-replace-test-comments'),
-      ).toBe(1);
-    });
-
-    it('disables `ts/no-empty-function` rule in test files', () => {
-      expect(configResult.getRuleEntrySeverity('ember/tests', 'ts/no-empty-function')).toBe(0);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('ember/tests')).toMatchObject({
+        'ember/no-pause-test': 2,
+        'ember/no-replace-test-comments': 1,
+      });
     });
 
     it('`ember/no-pause-test` rule fires on `pauseTest()` usage', async () => {

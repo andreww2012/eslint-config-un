@@ -64,12 +64,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('un');
 
-  it('enables `un/no-multiple-consecutive-spaces` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('un', 'un/no-multiple-consecutive-spaces')).toBe(2);
-  });
-
-  it('enables `un/no-typeof-like-comparisons` rule at warning severity by default', () => {
-    expect(configResult.getRuleEntrySeverity('un', 'un/no-typeof-like-comparisons')).toBe(1);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('un')).toMatchObject({
+      'un/no-multiple-consecutive-spaces': 2,
+      'un/no-typeof-like-comparisons': 1,
+    });
   });
 
   it('`un/no-multiple-consecutive-spaces` fires on a file with consecutive spaces in a string', async () => {

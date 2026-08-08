@@ -89,8 +89,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('turbo');
 
-  it('enables `turbo/no-undeclared-env-vars` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('turbo', 'turbo/no-undeclared-env-vars')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('turbo')).toMatchObject({
+      'turbo/no-undeclared-env-vars': 2,
+    });
   });
 
   it('`turbo/no-undeclared-env-vars` rule fires on a file with an undeclared env var', async () => {

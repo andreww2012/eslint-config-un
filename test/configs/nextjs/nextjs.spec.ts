@@ -90,12 +90,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('nextJs');
 
-  it('enables `nextjs/inline-script-id` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('nextjs', 'nextjs/inline-script-id')).toBe(2);
-  });
-
-  it('enables `nextjs/no-css-tags` rule as a warning by default', () => {
-    expect(configResult.getRuleEntrySeverity('nextjs', 'nextjs/no-css-tags')).toBe(1);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('nextjs')).toMatchObject({
+      'nextjs/inline-script-id': 2,
+      'nextjs/no-css-tags': 1,
+    });
   });
 
   it('`nextjs/no-img-element` rule fires on a tsx file with an <img> element', async () => {

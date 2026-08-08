@@ -48,12 +48,11 @@ describe('vitest: sub config `typescript`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({vitest: true, ts: true});
 
-    it('enables `vitest/unbound-method` rule', () => {
-      expect(configResult.getRuleEntrySeverity('vitest/ts', 'vitest/unbound-method')).toBe(2);
-    });
-
-    it('disables `ts/unbound-method` rule in favor of the `vitest` one', () => {
-      expect(configResult.getRuleEntrySeverity('vitest/ts', 'ts/unbound-method')).toBe(0);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('vitest/ts')).toMatchObject({
+        'vitest/unbound-method': 2,
+        'ts/unbound-method': 0,
+      });
     });
 
     it('does not add `vitest/unbound-method` rule to the main `vitest` eslint config', () => {

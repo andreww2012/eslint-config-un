@@ -53,16 +53,12 @@ describe('react: sub config `reactX`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('react');
 
-    it('enables `eslint-react/no-class-component` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-class-component'),
-      ).not.toBe(0);
-    });
-
-    it('enables `eslint-react/no-context-provider` rule by default (react >= 19)', () => {
-      expect(
-        configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-context-provider'),
-      ).not.toBe(0);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('react/x')).toMatchObject({
+        'eslint-react/no-context-provider': 2,
+        'eslint-react/no-class-component': 1,
+        'eslint-react/no-unnecessary-use-prefix': 0,
+      });
     });
 
     it('`eslint-react/no-class-component` rule fires on a class component', async () => {

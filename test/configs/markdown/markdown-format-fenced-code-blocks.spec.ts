@@ -66,17 +66,14 @@ describe('markdown: sub config `formatFencedCodeBlocks`', () => {
   });
 
   describe('rules', () => {
-    it('enables `prettier/prettier` rule in `markdown/format-fenced-code-blocks` eslint config', async () => {
+    it('correctly sets severities by default', async () => {
       const configResult = await computeEslintConfig({
         markdown: {configFormatFencedCodeBlocks: true},
       });
 
-      expect(
-        configResult.getRuleEntrySeverity(
-          'markdown/format-fenced-code-blocks',
-          'prettier/prettier',
-        ),
-      ).toBe(2);
+      expect(configResult.getRuleSeverities('markdown/format-fenced-code-blocks')).toMatchObject({
+        'prettier/prettier': 2,
+      });
     });
 
     it('`prettier/prettier` rule fires on a markdown file with an unformatted fenced code block', async () => {

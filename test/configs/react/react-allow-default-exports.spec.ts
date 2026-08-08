@@ -39,13 +39,12 @@ describe('react: sub config `allowDefaultExportsInJsxFiles`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('react');
 
-    it('disables `import/no-default-export` rule', () => {
+    it('correctly sets severities by default', () => {
       expect(
-        configResult.getRuleEntrySeverity(
-          'react/allow-default-export-in-jsx-files',
-          'import/no-default-export',
-        ),
-      ).toBe(0);
+        configResult.getRuleSeverities('react/allow-default-export-in-jsx-files'),
+      ).toMatchObject({
+        'import/no-default-export': 0,
+      });
     });
   });
 

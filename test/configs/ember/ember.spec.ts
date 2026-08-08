@@ -95,12 +95,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('ember');
 
-  it('enables `ember/no-get` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('ember', 'ember/no-get')).toBe(2);
-  });
-
-  it('disables `ember/template-indent` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('ember', 'ember/template-indent')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('ember')).toMatchObject({
+      'ember/no-get': 2,
+      'ember/template-no-whitespace-within-word': 1,
+      'ember/template-no-invalid-link-text': 0,
+    });
   });
 
   it('`ember/no-get` rule fires on `this.get()` usage', async () => {

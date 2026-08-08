@@ -112,13 +112,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('tanstackRouter');
 
-  it('enables `tanstack-router/create-route-property-order` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'tanstack-router',
-        'tanstack-router/create-route-property-order',
-      ),
-    ).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('tanstack-router')).toMatchObject({
+      'tanstack-router/create-route-property-order': 2,
+      'tanstack-router/route-param-names': 2,
+    });
   });
 
   it('`tanstack-router/create-route-property-order` rule fires on a file with wrong property order', async () => {

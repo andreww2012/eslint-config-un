@@ -63,12 +63,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('math');
 
-  it('enables `math/prefer-math-cbrt` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('math', 'math/prefer-math-cbrt')).toBe(2);
-  });
-
-  it('disables `math/prefer-math-sum-precise` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('math', 'math/prefer-math-sum-precise')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('math')).toMatchObject({
+      'math/prefer-math-cbrt': 2,
+      'math/prefer-math-sum-precise': 0,
+    });
   });
 
   it('`math/no-static-nan-calculations` rule fires on a file with a static NaN calculation', async () => {

@@ -26,7 +26,7 @@ describe('e18e: sub config `modernization`', () => {
 
       expect(configResult.getRuleSeverities('e18e/modernization')).toMatchObject({
         'e18e/prefer-array-at': 2,
-        'e18e/prefer-object-has-own': 2,
+        'e18e/prefer-get-or-insert': 0,
       });
     });
 

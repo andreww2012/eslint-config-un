@@ -82,13 +82,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('unusedImports');
 
-  it('enables `unused-imports/no-unused-imports` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'unused-imports/no-unused-imports',
-        'unused-imports/no-unused-imports',
-      ),
-    ).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('unused-imports/no-unused-imports')).toMatchObject({
+      'unused-imports/no-unused-imports': 2,
+    });
   });
 
   it('`unused-imports/no-unused-imports` rule fires on a file with an unused import', async () => {

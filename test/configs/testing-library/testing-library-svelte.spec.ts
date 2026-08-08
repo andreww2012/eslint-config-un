@@ -38,10 +38,12 @@ describe('testing-library: sub config `svelte`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({testingLibrary: {configSvelte: true}});
 
-    it('enables `testing-library/no-container` rule (framework-only)', () => {
-      expect(
-        configResult.getRuleEntrySeverity('testing-library/svelte', 'testing-library/no-container'),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('testing-library/svelte')).toMatchObject({
+        'testing-library/no-container': 2,
+        'testing-library/no-test-id-queries': 1,
+        'testing-library/no-unnecessary-act': 0,
+      });
     });
 
     it('includes `fireEvent` in `testing-library/await-async-events` event module list (async for svelte)', () => {
@@ -57,24 +59,6 @@ describe('testing-library: sub config `svelte`', () => {
           'testing-library/no-await-sync-events',
         ),
       ).toStrictEqual([]);
-    });
-
-    it('enables `testing-library/no-manual-cleanup` rule (svelte/react/vue only)', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'testing-library/svelte',
-          'testing-library/no-manual-cleanup',
-        ),
-      ).toBe(2);
-    });
-
-    it('does not enable `testing-library/no-unnecessary-act` rule (svelte excluded)', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'testing-library/svelte',
-          'testing-library/no-unnecessary-act',
-        ),
-      ).toBe(0);
     });
   });
 

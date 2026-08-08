@@ -87,12 +87,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('css');
 
-  it('enables `css/no-empty-blocks` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('css', 'css/no-empty-blocks')).toBe(2);
-  });
-
-  it('disables `css/prefer-logical-properties` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('css', 'css/prefer-logical-properties')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('css')).toMatchObject({
+      'css/no-empty-blocks': 2,
+      'css/font-family-fallbacks': 1,
+      'css/prefer-logical-properties': 0,
+    });
   });
 
   it('`css/no-empty-blocks` rule fires on a .css file with an empty block', async () => {

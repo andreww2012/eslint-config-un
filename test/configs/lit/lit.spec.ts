@@ -112,12 +112,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('lit');
 
-  it('enables `lit/attribute-names` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('lit', 'lit/attribute-names')).toBe(2);
-  });
-
-  it('disables `lit/ban-attributes` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('lit', 'lit/ban-attributes')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('lit')).toMatchObject({
+      'lit/attribute-names': 2,
+      'lit/ban-attributes': 0,
+    });
   });
 
   it('`lit/quoted-expressions` rule fires on a template with a quoted expression', async () => {

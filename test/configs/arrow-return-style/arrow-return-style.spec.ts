@@ -81,8 +81,8 @@ describe('rules', () => {
     const configResult = await computeEslintConfig('arrowReturnStyle');
 
     expect(configResult.getRuleSeverities('arrow-return-style')).toMatchObject({
-      'arrow-return-style/arrow-return-style': 0,
       'arrow-return-style/no-export-default-arrow': 2,
+      'arrow-return-style/arrow-return-style': 0,
     });
   });
 

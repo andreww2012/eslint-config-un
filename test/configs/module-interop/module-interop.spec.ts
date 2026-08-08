@@ -73,16 +73,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('moduleInterop');
 
-  it('enables `module-interop/prefer-json-modules` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('module-interop', 'module-interop/prefer-json-modules'),
-    ).toBe(2);
-  });
-
-  it('disables `module-interop/no-import-cjs` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('module-interop', 'module-interop/no-import-cjs'),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('module-interop')).toMatchObject({
+      'module-interop/prefer-json-modules': 2,
+      'module-interop/no-import-cjs': 0,
+    });
   });
 
   it('`prefer-json-modules` reports an error for a JSON import missing `with {type: "json"}`', async () => {

@@ -105,16 +105,11 @@ describe('rules', async () => {
     cloudfrontFunctions: {files: V2_FILES},
   });
 
-  it('enables `no-restricted-globals` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('cloudfront-functions/v2', 'no-restricted-globals'),
-    ).toBe(2);
-  });
-
-  it('disables `prefer-object-has-own` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('cloudfront-functions/v2', 'prefer-object-has-own'),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('cloudfront-functions/v2')).toMatchObject({
+      'no-restricted-globals': 2,
+      'prefer-object-has-own': 0,
+    });
   });
 
   it('does not override `no-var` rule in v2 (let/const is allowed in v2)', () => {

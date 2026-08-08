@@ -39,12 +39,11 @@ describe('jsdoc: sub config `typescript`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({jsdoc: true, ts: true});
 
-    it('enables `jsdoc/no-types` rule by default', () => {
-      expect(configResult.getRuleEntrySeverity('jsdoc/ts', 'jsdoc/no-types')).toBe(2);
-    });
-
-    it('disables `jsdoc/no-undefined-types` rule by default', () => {
-      expect(configResult.getRuleEntrySeverity('jsdoc/ts', 'jsdoc/no-undefined-types')).toBe(0);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('jsdoc/ts')).toMatchObject({
+        'jsdoc/no-types': 2,
+        'jsdoc/no-undefined-types': 0,
+      });
     });
 
     it('`jsdoc/no-types` rule fires on type annotations in TypeScript JSDoc comments', async () => {

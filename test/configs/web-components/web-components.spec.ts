@@ -73,16 +73,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('webComponents');
 
-  it('enables `wc/no-constructor-attributes` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('web-components', 'wc/no-constructor-attributes'),
-    ).toBe(2);
-  });
-
-  it('disables `wc/define-tag-after-class-definition` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('web-components', 'wc/define-tag-after-class-definition'),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('web-components')).toMatchObject({
+      'wc/no-constructor-attributes': 2,
+      'wc/no-constructor': 1,
+      'wc/define-tag-after-class-definition': 0,
+    });
   });
 
   it('`wc/no-invalid-element-name` rule fires on a file with an invalid custom element name', async () => {

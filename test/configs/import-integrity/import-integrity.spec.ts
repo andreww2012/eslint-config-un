@@ -75,19 +75,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('importIntegrity');
 
-  it('enables `import-integrity/no-cycle` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('import-integrity', 'import-integrity/no-cycle')).toBe(
-      2,
-    );
-  });
-
-  it('disables `import-integrity/no-unused-package-exports` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'import-integrity',
-        'import-integrity/no-unused-package-exports',
-      ),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('import-integrity')).toMatchObject({
+      'import-integrity/no-cycle': 2,
+      'import-integrity/no-unused-package-exports': 0,
+    });
   });
 
   it('`import-integrity/require-node-prefix` rule fires on a file that imports a Node.js built-in without the `node:` prefix', async () => {

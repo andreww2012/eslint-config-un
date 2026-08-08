@@ -44,19 +44,12 @@ describe('astro: sub config `jsxA11y`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('astro');
 
-    it('enables `astro/jsx-a11y/alt-text` rule by default', () => {
-      expect(configResult.getRuleEntrySeverity('jsx-a11y/astro', 'astro/jsx-a11y/alt-text')).toBe(
-        2,
-      );
-    });
-
-    it('disables `astro/jsx-a11y/mouse-events-have-key-events` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'jsx-a11y/astro',
-          'astro/jsx-a11y/mouse-events-have-key-events',
-        ),
-      ).toBe(0);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('jsx-a11y/astro')).toMatchObject({
+        'astro/jsx-a11y/alt-text': 2,
+        'astro/jsx-a11y/anchor-ambiguous-text': 1,
+        'astro/jsx-a11y/mouse-events-have-key-events': 0,
+      });
     });
 
     it('`astro/jsx-a11y/alt-text` rule fires on an image without alt text', async () => {

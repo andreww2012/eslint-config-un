@@ -69,8 +69,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('fileProgress');
 
-  it('enables `file-progress/activate` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('file-progress', 'file-progress/activate')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('file-progress')).toMatchObject({
+      'file-progress/activate': 2,
+    });
   });
 });
 

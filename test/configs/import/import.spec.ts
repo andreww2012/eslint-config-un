@@ -82,12 +82,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('import');
 
-  it('enables `import/no-default-export` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('import', 'import/no-default-export')).toBe(2);
-  });
-
-  it('disables `import/no-amd` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('import', 'import/no-amd')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('import')).toMatchObject({
+      'import/no-default-export': 2,
+      'import/no-deprecated': 1,
+      'import/no-amd': 0,
+    });
   });
 
   it('`import/no-default-export` rule fires on a file with a default export', async () => {

@@ -50,13 +50,10 @@ describe('perfectionist: sub config `sortExportAttributes`', () => {
       perfectionist: {configSortExportAttributes: true},
     });
 
-    it('enables `perfectionist/sort-export-attributes` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-export-attributes',
-          'perfectionist/sort-export-attributes',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-export-attributes')).toMatchObject({
+        'perfectionist/sort-export-attributes': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-export-attributes` rule disabled in the main `perfectionist` eslint config', () => {

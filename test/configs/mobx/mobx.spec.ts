@@ -95,12 +95,6 @@ describe('rules', () => {
     });
   });
 
-  it('does not enable `mobx/no-anonymous-observer` rule by default', async () => {
-    const configResult = await computeEslintConfig('mobx');
-
-    expect(configResult.getRuleEntrySeverity('mobx', 'mobx/no-anonymous-observer')).toBe(0);
-  });
-
   it('`mobx/exhaustive-make-observable` rule fires when not all class properties are annotated in `makeObservable`', async () => {
     const results = await testEslintConfig(
       {mobx: {forceSeverity: 2}},

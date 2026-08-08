@@ -100,16 +100,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('tanstackQuery');
 
-  it('enables `tanstack-query/exhaustive-deps` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('tanstack-query', 'tanstack-query/exhaustive-deps'),
-    ).toBe(2);
-  });
-
-  it('enables `tanstack-query/no-rest-destructuring` rule as error (overriding recommended warn)', () => {
-    expect(
-      configResult.getRuleEntrySeverity('tanstack-query', 'tanstack-query/no-rest-destructuring'),
-    ).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('tanstack-query')).toMatchObject({
+      'tanstack-query/exhaustive-deps': 2,
+      'tanstack-query/prefer-query-options': 0,
+    });
   });
 
   it('`tanstack-query/mutation-property-order` rule fires when mutation properties are in wrong order', async () => {

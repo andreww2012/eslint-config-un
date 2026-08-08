@@ -28,7 +28,7 @@ describe('e18e: sub config `performanceImprovements`', () => {
 
       expect(configResult.getRuleSeverities('e18e/performance-improvements')).toMatchObject({
         'e18e/prefer-array-from-map': 2,
-        'e18e/prefer-date-now': 2,
+        'e18e/no-delete-property': 0,
       });
     });
 

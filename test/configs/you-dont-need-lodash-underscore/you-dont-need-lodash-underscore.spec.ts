@@ -152,22 +152,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('youDontNeedLodashUnderscore');
 
-  it('enables `you-dont-need-lodash-underscore/map` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'you-dont-need-lodash-underscore',
-        'you-dont-need-lodash-underscore/map',
-      ),
-    ).toBe(2);
-  });
-
-  it('disables `you-dont-need-lodash-underscore/capitalize` rule by default (default ignored method)', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'you-dont-need-lodash-underscore',
-        'you-dont-need-lodash-underscore/capitalize',
-      ),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('you-dont-need-lodash-underscore')).toMatchObject({
+      'you-dont-need-lodash-underscore/map': 2,
+      'you-dont-need-lodash-underscore/capitalize': 0,
+    });
   });
 
   it('`you-dont-need-lodash-underscore/map` rule fires on a file using lodash map', async () => {

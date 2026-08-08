@@ -94,22 +94,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('markdownPreferences');
 
-  it('enables `markdown-preferences/canonical-code-block-language` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'markdown-preferences',
-        'markdown-preferences/canonical-code-block-language',
-      ),
-    ).toBe(2);
-  });
-
-  it('disables `markdown-preferences/emoji-notation` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'markdown-preferences',
-        'markdown-preferences/emoji-notation',
-      ),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('markdown-preferences')).toMatchObject({
+      'markdown-preferences/canonical-code-block-language': 2,
+      'markdown-preferences/emoji-notation': 0,
+    });
   });
 
   it('`markdown-preferences/canonical-code-block-language` rule fires on a markdown file with a non-canonical code block language', async () => {

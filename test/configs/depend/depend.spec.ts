@@ -65,8 +65,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('depend');
 
-  it('enables `depend/ban-dependencies` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('depend', 'depend/ban-dependencies')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('depend')).toMatchObject({
+      'depend/ban-dependencies': 2,
+    });
   });
 
   it('`depend/ban-dependencies` rule fires on a package.json with a banned dependency', async () => {

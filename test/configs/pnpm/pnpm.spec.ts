@@ -141,16 +141,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('pnpm');
 
-  it('enables `pnpm/json-valid-catalog` rule by default in `pnpm/package.json` eslint config', () => {
-    expect(configResult.getRuleEntrySeverity('pnpm/package.json', 'pnpm/json-valid-catalog')).toBe(
-      2,
-    );
-  });
-
-  it('disables `pnpm/json-enforce-catalog` rule by default in `pnpm/package.json` eslint config', () => {
-    expect(
-      configResult.getRuleEntrySeverity('pnpm/package.json', 'pnpm/json-enforce-catalog'),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('pnpm/package.json')).toMatchObject({
+      'pnpm/json-valid-catalog': 2,
+      'pnpm/json-enforce-catalog': 0,
+    });
   });
 
   it('`pnpm/json-valid-catalog` rule fires on a `package.json` with an invalid catalog reference', async () => {

@@ -65,16 +65,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('packageJson');
 
-  it('enables `package-json/no-redundant-files` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('package-json', 'package-json/no-redundant-files'),
-    ).toBe(2);
-  });
-
-  it('does not enable `package-json/require-author` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('package-json', 'package-json/require-author')).toBe(
-      0,
-    );
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('package-json')).toMatchObject({
+      'package-json/no-redundant-files': 2,
+      'package-json/require-author': 0,
+    });
   });
 
   it('`package-json/no-redundant-files` rule works', async () => {

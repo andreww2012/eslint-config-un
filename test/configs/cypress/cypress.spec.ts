@@ -87,14 +87,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('cypress');
 
-  it('enables `cypress/no-assigning-return-values` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('cypress', 'cypress/no-assigning-return-values')).toBe(
-      2,
-    );
-  });
-
-  it('disables `cypress/no-xpath` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('cypress', 'cypress/no-xpath')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('cypress')).toMatchObject({
+      'cypress/no-assigning-return-values': 2,
+      'cypress/assertion-before-screenshot': 1,
+      'cypress/require-data-selectors': 0,
+    });
   });
 
   it('`cypress/no-unnecessary-waiting` rule fires on a test with `cy.wait(number)`', async () => {

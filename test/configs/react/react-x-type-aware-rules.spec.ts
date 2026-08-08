@@ -44,8 +44,6 @@ describe('react: sub config `reactX.typeAwareRules`', () => {
     it('correctly sets severities by default', () => {
       expect(configResult.getRuleSeverities('react/x/rules-type-aware')).toMatchObject({
         'eslint-react/no-implicit-children': 2,
-        'eslint-react/no-implicit-key': 2,
-        'eslint-react/no-implicit-ref': 2,
         'eslint-react/no-unused-props': 1,
       });
     });

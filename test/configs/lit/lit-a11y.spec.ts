@@ -40,16 +40,15 @@ describe('lit: sub config `a11y`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('lit');
 
-    it('enables `lit-a11y/accessible-name` rule by default', () => {
-      expect(configResult.getRuleEntrySeverity('lit-a11y', 'lit-a11y/accessible-name')).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('lit-a11y')).toMatchObject({
+        'lit-a11y/accessible-name': 2,
+        'lit-a11y/img-redundant-alt': 1,
+      });
     });
 
     it('does not add `lit-a11y/anchor-has-content` rule (not applicable to Lit)', () => {
       expect(configResult.getRuleEntry('lit-a11y', 'lit-a11y/anchor-has-content')).toBeUndefined();
-    });
-
-    it('enables `lit-a11y/alt-text` rule by default', () => {
-      expect(configResult.getRuleEntrySeverity('lit-a11y', 'lit-a11y/alt-text')).toBe(2);
     });
 
     it('`lit-a11y/alt-text` rule fires on image without alt text', async () => {

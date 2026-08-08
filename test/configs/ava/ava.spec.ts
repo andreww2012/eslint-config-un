@@ -107,12 +107,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('ava');
 
-  it('enables `ava/hooks-order` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('ava', 'ava/hooks-order')).toBe(2);
-  });
-
-  it('disables `ava/prefer-power-assert` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('ava', 'ava/prefer-power-assert')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('ava')).toMatchObject({
+      'ava/hooks-order': 2,
+      'ava/no-commented-tests': 1,
+      'ava/prefer-power-assert': 0,
+    });
   });
 
   it('`ava/no-skip-test` rule fires on a skipped test', async () => {

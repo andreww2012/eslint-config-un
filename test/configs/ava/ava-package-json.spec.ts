@@ -42,10 +42,10 @@ describe('ava: sub config `packageJson`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('ava');
 
-    it('enables `ava/no-ava-in-dependencies` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity('ava/package.json', 'ava/no-ava-in-dependencies'),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('ava/package.json')).toMatchObject({
+        'ava/no-ava-in-dependencies': 2,
+      });
     });
 
     it('does not add `ava/no-ava-in-dependencies` rule to the main `ava` eslint config', () => {

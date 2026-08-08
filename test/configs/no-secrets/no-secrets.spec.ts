@@ -65,12 +65,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('noSecrets');
 
-  it('enables `no-secrets/no-secrets` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('no-secrets', 'no-secrets/no-secrets')).toBe(2);
-  });
-
-  it('disables `no-secrets/no-pattern-match` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('no-secrets', 'no-secrets/no-pattern-match')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('no-secrets')).toMatchObject({
+      'no-secrets/no-secrets': 2,
+      'no-secrets/no-pattern-match': 0,
+    });
   });
 
   it('`no-secrets/no-secrets` rule fires on a file with a high-entropy string', async () => {

@@ -61,12 +61,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('json');
 
-  it('enables `json/no-duplicate-keys` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('json/json', 'json/no-duplicate-keys')).toBe(2);
-  });
-
-  it('disables `json/sort-keys` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('json/json', 'json/sort-keys')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('json/json')).toMatchObject({
+      'json/no-duplicate-keys': 2,
+      'json/sort-keys': 0,
+    });
   });
 
   it('`json/no-duplicate-keys` rule fires on a .json file with duplicate keys', async () => {

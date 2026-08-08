@@ -62,14 +62,14 @@ describe('mdx: sub config `formatFencedCodeBlocks`', () => {
   });
 
   describe('rules', () => {
-    it('enables `prettier/prettier` rule in `mdx/format-fenced-code-blocks` eslint config', async () => {
+    it('correctly sets severities by default', async () => {
       const configResult = await computeEslintConfig({
         mdx: {configFormatFencedCodeBlocks: true},
       });
 
-      expect(
-        configResult.getRuleEntrySeverity('mdx/format-fenced-code-blocks', 'prettier/prettier'),
-      ).toBe(2);
+      expect(configResult.getRuleSeverities('mdx/format-fenced-code-blocks')).toMatchObject({
+        'prettier/prettier': 2,
+      });
     });
 
     it('`prettier/prettier` rule fires on an mdx file with an unformatted fenced code block', async () => {

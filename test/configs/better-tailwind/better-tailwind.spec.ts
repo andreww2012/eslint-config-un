@@ -134,9 +134,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig({betterTailwind: {settings: TW3_SETTINGS}});
 
-  it('enables `better-tailwindcss/no-conflicting-classes` and disables `better-tailwindcss/no-unknown-classes` by default', () => {
+  it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('better-tailwindcss')).toMatchObject({
       'better-tailwindcss/no-conflicting-classes': 2,
+      'better-tailwindcss/enforce-consistent-class-order': 1,
       'better-tailwindcss/no-unknown-classes': 0,
     });
   });

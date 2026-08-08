@@ -73,19 +73,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('eslintPlugin');
 
-  it('enables `eslint-plugin/fixer-return` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('eslint-plugin', 'eslint-plugin/fixer-return')).toBe(
-      2,
-    );
-  });
-
-  it('disables `eslint-plugin/require-meta-docs-description` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'eslint-plugin',
-        'eslint-plugin/require-meta-docs-description',
-      ),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('eslint-plugin')).toMatchObject({
+      'eslint-plugin/fixer-return': 2,
+      'eslint-plugin/require-meta-docs-description': 0,
+    });
   });
 
   it('`eslint-plugin/prefer-message-ids` rule fires on a rule using a message string', async () => {

@@ -38,13 +38,10 @@ describe('perfectionist: sub config `sortJsxProps`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({perfectionist: {configSortJsxProps: true}});
 
-    it('enables `perfectionist/sort-jsx-props` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-jsx-props',
-          'perfectionist/sort-jsx-props',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-jsx-props')).toMatchObject({
+        'perfectionist/sort-jsx-props': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-jsx-props` rule disabled in the main `perfectionist` eslint config', () => {

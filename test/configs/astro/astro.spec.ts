@@ -87,14 +87,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('astro');
 
-  it('enables `astro/missing-client-only-directive-value` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('astro', 'astro/missing-client-only-directive-value'),
-    ).toBe(2);
-  });
-
-  it('disables `astro/no-set-text-directive` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('astro', 'astro/no-set-text-directive')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('astro')).toMatchObject({
+      'astro/missing-client-only-directive-value': 2,
+      'astro/no-unused-css-selector': 1,
+      'astro/no-set-text-directive': 0,
+    });
   });
 
   it('`astro/no-set-html-directive` rule fires on a file using `set:html`', async () => {

@@ -123,12 +123,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('graphql');
 
-  it('enables `graphql/no-anonymous-operations` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('graphql', 'graphql/no-anonymous-operations')).toBe(2);
-  });
-
-  it('disables `graphql/alphabetize` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('graphql', 'graphql/alphabetize')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('graphql')).toMatchObject({
+      'graphql/no-anonymous-operations': 2,
+      'graphql/no-deprecated': 1,
+      'graphql/alphabetize': 0,
+    });
   });
 
   it('`graphql/no-hashtag-description` rule fires on a type with hashtag description', async () => {

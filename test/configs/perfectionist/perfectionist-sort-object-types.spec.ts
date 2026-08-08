@@ -46,13 +46,10 @@ describe('perfectionist: sub config `sortObjectTypes`', () => {
       perfectionist: {configSortObjectTypes: true},
     });
 
-    it('enables `perfectionist/sort-object-types` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-object-types',
-          'perfectionist/sort-object-types',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-object-types')).toMatchObject({
+        'perfectionist/sort-object-types': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-object-types` rule disabled in the main `perfectionist` eslint config', () => {

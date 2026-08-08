@@ -98,12 +98,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('playwright');
 
-  it('enables `playwright/no-focused-test` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('playwright', 'playwright/no-focused-test')).toBe(2);
-  });
-
-  it('disables `playwright/max-expects` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('playwright', 'playwright/max-expects')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('playwright')).toMatchObject({
+      'playwright/no-focused-test': 2,
+      'playwright/max-nested-describe': 1,
+      'playwright/max-expects': 0,
+    });
   });
 
   it('`playwright/no-focused-test` rule fires on a test file that uses `test.only`', async () => {

@@ -63,8 +63,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('command');
 
-  it('enables `command/command` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('command', 'command/command')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('command')).toMatchObject({
+      'command/command': 2,
+    });
   });
 
   it('`command/command` rule fires on a file with a `/// to-function` command comment', async () => {

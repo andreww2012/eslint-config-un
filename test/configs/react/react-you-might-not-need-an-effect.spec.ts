@@ -40,22 +40,11 @@ describe('react: sub config `youMightNotNeedAnEffect`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('react');
 
-    it('enables `react-you-might-not-need-an-effect/no-adjust-state-on-prop-change` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'react/you-might-not-need-an-effect',
-          'react-you-might-not-need-an-effect/no-adjust-state-on-prop-change',
-        ),
-      ).toBe(2);
-    });
-
-    it('disables `react-you-might-not-need-an-effect/no-pass-ref-to-parent` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'react/you-might-not-need-an-effect',
-          'react-you-might-not-need-an-effect/no-pass-ref-to-parent',
-        ),
-      ).toBe(0);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('react/you-might-not-need-an-effect')).toMatchObject({
+        'react-you-might-not-need-an-effect/no-adjust-state-on-prop-change': 2,
+        'react-you-might-not-need-an-effect/no-chain-state-updates': 2,
+      });
     });
 
     it('`react-you-might-not-need-an-effect/no-derived-state` rule fires on an effect copying a prop into state', async () => {

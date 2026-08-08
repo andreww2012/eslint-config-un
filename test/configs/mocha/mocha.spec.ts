@@ -95,12 +95,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('mocha');
 
-  it('enables `mocha/handle-done-callback` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('mocha', 'mocha/handle-done-callback')).toBe(2);
-  });
-
-  it('disables `mocha/no-hooks` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('mocha', 'mocha/no-hooks')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('mocha')).toMatchObject({
+      'mocha/handle-done-callback': 2,
+      'mocha/no-hooks-for-single-child': 1,
+      'mocha/no-hooks': 0,
+    });
   });
 
   it('`mocha/no-mocha-arrows` rule fires on arrow functions in mocha tests', async () => {

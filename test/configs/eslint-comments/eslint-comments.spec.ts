@@ -73,14 +73,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('eslintComments');
 
-  it('enables `eslint-comments/disable-enable-pair` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('eslint-comments', 'eslint-comments/disable-enable-pair'),
-    ).toBe(2);
-  });
-
-  it('disables `eslint-comments/no-use` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('eslint-comments', 'eslint-comments/no-use')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('eslint-comments')).toMatchObject({
+      'eslint-comments/disable-enable-pair': 2,
+      'eslint-comments/no-use': 0,
+    });
   });
 
   it('`eslint-comments/no-unlimited-disable` rule fires on a rule-less `eslint-disable` comment', async () => {

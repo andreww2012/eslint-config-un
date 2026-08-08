@@ -100,7 +100,14 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('stylistic');
 
-  it('enables `stylistic/padding-line-between-statements` rule by default', () => {
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('stylistic')).toMatchObject({
+      'stylistic/padding-line-between-statements': 2,
+      'stylistic/indent': 0,
+    });
+  });
+
+  it('sets `stylistic/padding-line-between-statements` rule options by default', () => {
     expect(
       configResult.getRuleEntry('stylistic', 'stylistic/padding-line-between-statements'),
     ).toMatchInlineSnapshot(
@@ -108,18 +115,10 @@ describe('rules', async () => {
     );
   });
 
-  it('disables `stylistic/indent` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('stylistic', 'stylistic/indent')).toBe(0);
-  });
-
   it('enables `stylistic/spaced-comment` in `stylistic/spaced-comment` eslint config', () => {
     expect(
       configResult.getRuleEntrySeverity('stylistic/spaced-comment', 'stylistic/spaced-comment'),
     ).toBe(2);
-  });
-
-  it('disables `stylistic/spaced-comment` in main `stylistic` eslint config', () => {
-    expect(configResult.getRuleEntrySeverity('stylistic', 'stylistic/spaced-comment')).toBe(0);
   });
 
   describe('`stylistic/padding-line-between-statements` rule behavior', () => {

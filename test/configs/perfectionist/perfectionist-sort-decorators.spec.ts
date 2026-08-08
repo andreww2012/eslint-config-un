@@ -46,13 +46,10 @@ describe('perfectionist: sub config `sortDecorators`', () => {
       perfectionist: {configSortDecorators: true},
     });
 
-    it('enables `perfectionist/sort-decorators` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-decorators',
-          'perfectionist/sort-decorators',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-decorators')).toMatchObject({
+        'perfectionist/sort-decorators': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-decorators` rule disabled in the main `perfectionist` eslint config', () => {

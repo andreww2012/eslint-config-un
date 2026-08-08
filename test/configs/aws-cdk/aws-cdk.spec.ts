@@ -104,6 +104,7 @@ describe('rules', () => {
 
     expect(configResult.getRuleSeverities('aws-cdk')).toMatchObject({
       'awscdk/construct-constructor-property': 2,
+      'awscdk/no-mutable-property-of-props-interface': 1,
       'awscdk/require-props-default-doc': 0,
     });
   });

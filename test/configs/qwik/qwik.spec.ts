@@ -97,12 +97,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('qwik');
 
-  it('enables `qwik/valid-lexical-scope` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('qwik', 'qwik/valid-lexical-scope')).toBe(2);
-  });
-
-  it('disables `qwik/jsx-img` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('qwik', 'qwik/jsx-img')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('qwik')).toMatchObject({
+      'qwik/valid-lexical-scope': 2,
+      'qwik/jsx-img': 0,
+    });
   });
 
   it('`qwik/no-react-props` rule fires on JSX with `className` prop', async () => {

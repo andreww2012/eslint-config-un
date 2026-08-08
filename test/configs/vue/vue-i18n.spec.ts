@@ -47,6 +47,7 @@ describe('vue: sub config `i18n`', () => {
       expect(configResult.getRuleSeverities('vue/i18n')).toMatchObject({
         'vue-i18n/no-html-messages': 2,
         'vue-i18n/key-format-style': 1,
+        'vue-i18n/no-deprecated-tc': 0,
       });
     });
 

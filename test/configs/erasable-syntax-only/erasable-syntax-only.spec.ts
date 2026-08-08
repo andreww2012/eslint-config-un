@@ -82,10 +82,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('erasableSyntaxOnly');
 
-  it('enables `erasable-syntax-only/enums` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('erasable-syntax-only', 'erasable-syntax-only/enums'),
-    ).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('erasable-syntax-only')).toMatchObject({
+      'erasable-syntax-only/enums': 2,
+      'erasable-syntax-only/import-aliases': 2,
+    });
   });
 
   it('`erasable-syntax-only/enums` rule does not fire without `ts` config (file fails to parse)', async () => {

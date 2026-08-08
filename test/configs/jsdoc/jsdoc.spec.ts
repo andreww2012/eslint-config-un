@@ -72,12 +72,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('jsdoc');
 
-  it('enables `jsdoc/check-access` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('jsdoc', 'jsdoc/check-access')).toBe(2);
-  });
-
-  it('disables `jsdoc/convert-to-jsdoc-comments` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('jsdoc', 'jsdoc/convert-to-jsdoc-comments')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('jsdoc')).toMatchObject({
+      'jsdoc/check-access': 2,
+      'jsdoc/require-next-type': 1,
+      'jsdoc/convert-to-jsdoc-comments': 0,
+    });
   });
 
   it('`jsdoc/check-param-names` rule fires on mismatched param names', async () => {

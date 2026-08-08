@@ -92,16 +92,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('docusaurus');
 
-  it('enables `docusaurus/string-literal-i18n-messages` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('docusaurus', 'docusaurus/string-literal-i18n-messages'),
-    ).toBe(2);
-  });
-
-  it('disables `docusaurus/no-untranslated-text` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('docusaurus', 'docusaurus/no-untranslated-text')).toBe(
-      0,
-    );
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('docusaurus')).toMatchObject({
+      'docusaurus/string-literal-i18n-messages': 2,
+      'docusaurus/no-untranslated-text': 0,
+    });
   });
 
   it('`docusaurus/no-html-links` rule fires on JSX with `<a>` tag', async () => {

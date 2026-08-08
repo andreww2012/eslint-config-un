@@ -58,15 +58,16 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('perfectionist');
 
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('perfectionist')).toMatchObject({
+      'perfectionist/sort-objects': 0,
+      'perfectionist/sort-array-includes': 0,
+    });
+  });
+
   it('does not enable any rules by default (every sorting rule lives in a sub config)', () => {
     expect(getAllRulesSeverities(configResult.getConfigByUnPostfix('perfectionist'))).toStrictEqual(
       [0],
-    );
-  });
-
-  it('disables `perfectionist/sort-objects` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('perfectionist', 'perfectionist/sort-objects')).toBe(
-      0,
     );
   });
 });

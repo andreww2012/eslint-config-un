@@ -99,12 +99,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('jest');
 
-  it('enables `jest/no-focused-tests` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('jest', 'jest/no-focused-tests')).toBe(2);
-  });
-
-  it('disables `jest/no-hooks` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('jest', 'jest/no-hooks')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('jest')).toMatchObject({
+      'jest/no-focused-tests': 2,
+      'jest/no-commented-out-tests': 1,
+      'jest/no-hooks': 0,
+    });
   });
 
   it('`jest/no-focused-tests` rule fires on a test with `.only` modifier', async () => {

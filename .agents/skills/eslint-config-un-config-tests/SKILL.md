@@ -81,14 +81,18 @@ Test Config behavior when common options are set to non-default values.
 
 ##### `rules` block
 
-Verify that a single "main" rule is enabled by default and a different rule is disabled by default (if applicable) like this:
+The first test must be named `correctly sets severities by default` and test the most important non-`disable-autofix/` rules of the config (likely most often triggered) like this:
 
 ```ts
 expect(configResult.getRuleSeverities('<config name>')).toMatchObject({
-  'plugin/rule1': 2,
-  rule2: 0,
+  'unhead/no-deprecated-props': 2,
+  'unhead/prefer-define-helpers': 0,
 });
 ```
+
+- **Every** severity must be covered, with **exactly one** rule per severity;
+- Assert **at least two** rules, unless the config has fewer;
+- If the config only uses a single severity, list two rules of that severity.
 
 Then pick a "popular" rule and confirm it actually works: create a minimal fixture that triggers an error, lint it with `testEslintConfig`, use `findLintMessageFromLintResults` to locate the error, and assert with `expect(error?.message).toMatchInlineSnapshot()`.
 

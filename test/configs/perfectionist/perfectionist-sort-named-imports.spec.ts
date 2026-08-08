@@ -40,13 +40,10 @@ describe('perfectionist: sub config `sortNamedImports`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({perfectionist: {configSortNamedImports: true}});
 
-    it('enables `perfectionist/sort-named-imports` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-named-imports',
-          'perfectionist/sort-named-imports',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-named-imports')).toMatchObject({
+        'perfectionist/sort-named-imports': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-named-imports` rule disabled in the main `perfectionist` eslint config', () => {

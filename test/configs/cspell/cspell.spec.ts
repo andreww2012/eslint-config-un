@@ -63,8 +63,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('cspell');
 
-  it('enables `cspell/spellchecker` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('cspell', 'cspell/spellchecker')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('cspell')).toMatchObject({
+      'cspell/spellchecker': 2,
+    });
   });
 
   it('`cspell/spellchecker` rule fires on a file with a misspelled word', async () => {

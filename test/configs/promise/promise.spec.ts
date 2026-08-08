@@ -68,12 +68,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('promise');
 
-  it('enables `promise/param-names` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('promise', 'promise/param-names')).toBe(2);
-  });
-
-  it('disables `promise/avoid-new` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('promise', 'promise/avoid-new')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('promise')).toMatchObject({
+      'promise/param-names': 2,
+      'promise/no-multiple-resolved': 1,
+      'promise/avoid-new': 0,
+    });
   });
 
   it('`promise/param-names` rule fires on a promise with incorrectly named reject parameter', async () => {

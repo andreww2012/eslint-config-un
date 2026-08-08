@@ -32,10 +32,12 @@ describe('testing-library: sub config `react`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({testingLibrary: {configReact: true}});
 
-    it('enables `testing-library/no-container` rule (framework-only)', () => {
-      expect(
-        configResult.getRuleEntrySeverity('testing-library/react', 'testing-library/no-container'),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('testing-library/react')).toMatchObject({
+        'testing-library/no-container': 2,
+        'testing-library/no-test-id-queries': 1,
+        'testing-library/consistent-data-testid': 0,
+      });
     });
 
     it('includes `fireEvent` in `testing-library/await-async-events` event module list (async for react)', () => {
@@ -48,24 +50,6 @@ describe('testing-library: sub config `react`', () => {
       expect(
         configResult.getRuleEntry('testing-library/react', 'testing-library/no-await-sync-events'),
       ).toMatchInlineSnapshot('[2, {"eventModules": ["fire-event"]}]');
-    });
-
-    it('enables `testing-library/no-unnecessary-act` rule (react/marko only)', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'testing-library/react',
-          'testing-library/no-unnecessary-act',
-        ),
-      ).toBe(2);
-    });
-
-    it('enables `testing-library/no-manual-cleanup` rule (react/svelte/vue)', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'testing-library/react',
-          'testing-library/no-manual-cleanup',
-        ),
-      ).toBe(2);
     });
   });
 

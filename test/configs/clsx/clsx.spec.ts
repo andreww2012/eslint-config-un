@@ -87,12 +87,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('clsx');
 
-  it('enables `clsx/forbid-array-expressions` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('clsx', 'clsx/forbid-array-expressions')).toBe(2);
-  });
-
-  it('disables `clsx/prefer-logical-over-objects` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('clsx', 'clsx/prefer-logical-over-objects')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('clsx')).toMatchObject({
+      'clsx/forbid-array-expressions': 2,
+      'clsx/prefer-objects-over-logical': 1,
+      'clsx/prefer-logical-over-objects': 0,
+    });
   });
 
   it('`clsx/forbid-array-expressions` rule fires on a clsx call with array argument', async () => {

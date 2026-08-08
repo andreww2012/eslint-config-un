@@ -44,13 +44,10 @@ describe('perfectionist: sub config `sortModules`', () => {
       perfectionist: {configSortModules: true},
     });
 
-    it('enables `perfectionist/sort-modules` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-modules',
-          'perfectionist/sort-modules',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-modules')).toMatchObject({
+        'perfectionist/sort-modules': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-modules` rule disabled in the main `perfectionist` eslint config', () => {

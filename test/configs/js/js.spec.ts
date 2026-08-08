@@ -71,12 +71,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('js');
 
-  it('enables `no-console` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('js', 'no-console')).toBe(2);
-  });
-
-  it('disables `no-magic-numbers` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('js', 'no-magic-numbers')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('js')).toMatchObject({
+      'no-console': 2,
+      'no-await-in-loop': 1,
+      'no-magic-numbers': 0,
+    });
   });
 
   it('`no-console` rule fires on a file with console.log', async () => {

@@ -88,12 +88,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('html');
 
-  it('enables `html/no-duplicate-attrs` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('html', 'html/no-duplicate-attrs')).toBe(2);
-  });
-
-  it('disables `html/no-inline-styles` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('html', 'html/no-inline-styles')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('html')).toMatchObject({
+      'html/no-duplicate-attrs': 2,
+      'html/use-baseline': 1,
+      'html/no-inline-styles': 0,
+    });
   });
 
   it('`html/no-duplicate-attrs` rule fires on an element with a repeated attribute', async () => {

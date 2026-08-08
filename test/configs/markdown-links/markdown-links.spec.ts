@@ -82,16 +82,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('markdownLinks');
 
-  it('enables `markdown-links/no-missing-path` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('markdown-links', 'markdown-links/no-missing-path'),
-    ).toBe(2);
-  });
-
-  it('sets `markdown-links/no-dead-urls` rule to warning by default (not error)', () => {
-    expect(configResult.getRuleEntrySeverity('markdown-links', 'markdown-links/no-dead-urls')).toBe(
-      1,
-    );
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('markdown-links')).toMatchObject({
+      'markdown-links/no-missing-path': 2,
+      'markdown-links/no-dead-urls': 1,
+    });
   });
 
   it('`markdown-links/no-missing-path` rule fires on a markdown file with a link to a non-existent local path', async () => {

@@ -115,19 +115,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('testingLibrary');
 
-  it('enables `testing-library/await-async-queries` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'testing-library/dom',
-        'testing-library/await-async-queries',
-      ),
-    ).toBe(2);
-  });
-
-  it('disables `testing-library/no-container` rule by default (dom-only — not a framework)', () => {
-    expect(
-      configResult.getRuleEntrySeverity('testing-library/dom', 'testing-library/no-container'),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('testing-library/dom')).toMatchObject({
+      'testing-library/await-async-queries': 2,
+      'testing-library/no-test-id-queries': 1,
+      'testing-library/no-container': 0,
+    });
   });
 
   it('`testing-library/await-async-queries` rule fires on a test missing `await` on a `findBy` query', async () => {

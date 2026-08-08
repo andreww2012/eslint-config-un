@@ -73,14 +73,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('markdown');
 
-  it('enables `markdown/heading-increment` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('markdown/markdown', 'markdown/heading-increment'),
-    ).toBe(2);
-  });
-
-  it('disables `markdown/no-bare-urls` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('markdown/markdown', 'markdown/no-bare-urls')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('markdown/markdown')).toMatchObject({
+      'markdown/heading-increment': 2,
+      'markdown/no-bare-urls': 0,
+    });
   });
 
   it('`markdown/heading-increment` rule fires on a markdown file with a skipped heading level', async () => {

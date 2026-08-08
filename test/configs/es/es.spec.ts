@@ -68,8 +68,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('es');
 
-  it('disables `es/no-date-prototype-getyear-setyear` rule by default (legacy rules are always off)', () => {
-    expect(configResult.getRuleEntrySeverity('es', 'es/no-date-prototype-getyear-setyear')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('es')).toMatchObject({
+      'es/no-date-prototype-getyear-setyear': 0,
+      'es/no-date-prototype-togmtstring': 0,
+    });
   });
 
   it('does not add `es/no-optional-chaining` rule by default (ecmaVersion: latest → ES2020 is fully supported)', () => {

@@ -65,12 +65,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('cli');
 
-  it('enables `unicorn/prefer-top-level-await` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('cli', 'unicorn/prefer-top-level-await')).toBe(2);
-  });
-
-  it('disables `check-file/no-console` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('cli', 'no-console')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('cli')).toMatchObject({
+      'unicorn/prefer-top-level-await': 2,
+      'node/hashbang': 0,
+    });
   });
 
   it('`unicorn/prefer-top-level-await` rule fires on a file with a top-level async IIFE', async () => {

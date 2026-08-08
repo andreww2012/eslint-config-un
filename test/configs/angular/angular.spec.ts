@@ -128,16 +128,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('angular');
 
-  it('enables `angular/contextual-lifecycle` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('angular/general', 'angular/contextual-lifecycle'),
-    ).toBe(2);
-  });
-
-  it('disables `angular/sort-ngmodule-metadata-arrays` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('angular/general', 'angular/sort-ngmodule-metadata-arrays'),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('angular/general')).toMatchObject({
+      'angular/contextual-lifecycle': 2,
+      'angular/no-developer-preview': 1,
+      'angular/sort-ngmodule-metadata-arrays': 0,
+    });
   });
 
   it('`angular/no-empty-lifecycle-method` rule fires on empty lifecycle method', async () => {

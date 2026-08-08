@@ -106,12 +106,11 @@ describe('`yaml/pnpm-workspace.yaml` eslint config', () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('yaml');
 
-  it('enables `yaml/block-mapping` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('yaml', 'yaml/block-mapping')).toBe(2);
-  });
-
-  it('disables `yaml/sort-keys` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('yaml', 'yaml/sort-keys')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('yaml')).toMatchObject({
+      'yaml/block-mapping': 2,
+      'yaml/sort-keys': 0,
+    });
   });
 
   it('`yaml/no-empty-mapping-value` rule fires on a .yaml file with an empty mapping value', async () => {

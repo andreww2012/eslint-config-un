@@ -37,13 +37,10 @@ describe('json-schema-validator: sub config `toml`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('jsonSchemaValidator');
 
-    it('enables `json-schema-validator/no-invalid` rule by default in `json-schema-validator/toml`', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'json-schema-validator/toml',
-          'json-schema-validator/no-invalid',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('json-schema-validator/toml')).toMatchObject({
+        'json-schema-validator/no-invalid': 2,
+      });
     });
 
     it('`json-schema-validator/no-invalid` rule fires on a TOML file with a local-schema violation', async () => {

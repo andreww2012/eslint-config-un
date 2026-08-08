@@ -38,6 +38,7 @@ describe('zod: sub config `mini`', () => {
 
       expect(configResult.getRuleSeverities('zod/mini')).toMatchObject({
         'zod-mini/consistent-import': 2,
+        'zod-mini/no-any-schema': 1,
         'zod-mini/consistent-import-source': 0,
       });
     });

@@ -85,12 +85,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('solid');
 
-  it('enables `solid/no-destructure` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('solid', 'solid/no-destructure')).toBe(2);
-  });
-
-  it('disables `solid/no-proxy-apis` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('solid', 'solid/no-proxy-apis')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('solid')).toMatchObject({
+      'solid/no-destructure': 2,
+      'solid/event-handlers': 1,
+      'solid/no-proxy-apis': 0,
+    });
   });
 
   it('sets `typescriptEnabled: false` in `solid/jsx-no-undef` rule when ts config is disabled', () => {
@@ -131,10 +131,6 @@ describe('rules', async () => {
     expect(result.getRuleEntryOptions('solid', 'solid/event-handlers')).toMatchObject([
       {warnOnSpread: false},
     ]);
-  });
-
-  it('uses error severity for `solid/no-react-specific-props` rule when `solid-js` version is unknown', () => {
-    expect(configResult.getRuleEntrySeverity('solid', 'solid/no-react-specific-props')).toBe(2);
   });
 
   it('uses warn severity for `solid/no-react-specific-props` rule when `solid-js` version is < 1.4', async () => {

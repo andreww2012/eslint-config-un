@@ -87,12 +87,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('jestDom');
 
-  it('enables `jest-dom/prefer-checked` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('jest-dom', 'jest-dom/prefer-checked')).toBe(2);
-  });
-
-  it('disables `no-empty-function` rule in `jest-dom` eslint config', () => {
-    expect(configResult.getRuleEntrySeverity('jest-dom', 'no-empty-function')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('jest-dom')).toMatchObject({
+      'jest-dom/prefer-checked': 2,
+      'jest-dom/prefer-pressed': 0,
+    });
   });
 
   it('`jest-dom/prefer-checked` rule fires when using `toHaveAttribute` for checked state', async () => {

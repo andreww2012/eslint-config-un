@@ -46,13 +46,10 @@ describe('perfectionist: sub config `sortUnionTypes`', () => {
       perfectionist: {configSortUnionTypes: true},
     });
 
-    it('enables `perfectionist/sort-union-types` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-union-types',
-          'perfectionist/sort-union-types',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-union-types')).toMatchObject({
+        'perfectionist/sort-union-types': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-union-types` rule disabled in the main `perfectionist` eslint config', () => {

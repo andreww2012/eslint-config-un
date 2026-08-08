@@ -28,7 +28,7 @@ describe('eslint-plugin: sub config `ruleTests`', () => {
 
       expect(configResult.getRuleSeverities('eslint-plugin/rule-tests')).toMatchObject({
         'eslint-plugin/consistent-output': 2,
-        'eslint-plugin/no-only-tests': 2,
+        'eslint-plugin/require-test-error-positions': 1,
       });
     });
 

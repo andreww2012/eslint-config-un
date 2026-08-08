@@ -65,12 +65,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('jsxA11y');
 
-  it('enables `jsx-a11y/alt-text` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('jsx-a11y', 'jsx-a11y/alt-text')).toBe(2);
-  });
-
-  it('disables `jsx-a11y/html-has-lang` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('jsx-a11y', 'jsx-a11y/html-has-lang')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('jsx-a11y')).toMatchObject({
+      'jsx-a11y/alt-text': 2,
+      'jsx-a11y/anchor-ambiguous-text': 1,
+      'jsx-a11y/html-has-lang': 0,
+    });
   });
 
   it('`jsx-a11y/alt-text` rule fires on an image without alt text', async () => {

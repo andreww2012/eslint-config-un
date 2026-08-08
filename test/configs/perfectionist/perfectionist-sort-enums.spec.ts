@@ -42,10 +42,10 @@ describe('perfectionist: sub config `sortEnums`', () => {
       perfectionist: {configSortEnums: true},
     });
 
-    it('enables `perfectionist/sort-enums` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity('perfectionist/sort-enums', 'perfectionist/sort-enums'),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-enums')).toMatchObject({
+        'perfectionist/sort-enums': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-enums` rule disabled in the main `perfectionist` eslint config', () => {

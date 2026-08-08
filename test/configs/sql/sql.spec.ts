@@ -63,12 +63,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('sql');
 
-  it('enables `sql/format` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('sql', 'sql/format')).toBe(2);
-  });
-
-  it('enables `sql/no-unsafe-query` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('sql', 'sql/no-unsafe-query')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('sql')).toMatchObject({
+      'sql/format': 2,
+      'sql/no-unsafe-query': 2,
+    });
   });
 
   it('`sql/no-unsafe-query` rule fires on a template literal with an expression', async () => {

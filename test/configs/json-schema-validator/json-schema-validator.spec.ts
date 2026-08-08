@@ -87,13 +87,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('jsonSchemaValidator');
 
-  it('enables `json-schema-validator/no-invalid` rule by default in `json-schema-validator/js-ts`', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'json-schema-validator/js-ts',
-        'json-schema-validator/no-invalid',
-      ),
-    ).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('json-schema-validator/js-ts')).toMatchObject({
+      'json-schema-validator/no-invalid': 2,
+    });
   });
 
   it('`json-schema-validator/no-invalid` rule fires on a JSON file with a local-schema violation', async () => {

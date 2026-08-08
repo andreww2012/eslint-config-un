@@ -52,13 +52,10 @@ describe('perfectionist: sub config `sortHeritageClauses`', () => {
       perfectionist: {configSortHeritageClauses: true},
     });
 
-    it('enables `perfectionist/sort-heritage-clauses` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-heritage-clauses',
-          'perfectionist/sort-heritage-clauses',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-heritage-clauses')).toMatchObject({
+        'perfectionist/sort-heritage-clauses': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-heritage-clauses` rule disabled in the main `perfectionist` eslint config', () => {

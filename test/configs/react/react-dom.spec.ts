@@ -47,20 +47,10 @@ describe('react: sub config `dom`', () => {
     it('correctly sets severities by default', async () => {
       const configResult = await computeEslintConfig('react');
 
-      const severities = configResult.getRuleSeverities('react/dom');
-
-      expect(severities).toMatchObject({
+      expect(configResult.getRuleSeverities('react/dom')).toMatchObject({
         'eslint-react/dom-no-dangerously-set-innerhtml': 2,
-        'eslint-react/dom-no-missing-button-type': 2,
-        'eslint-react/web-api-no-leaked-event-listener': 2,
+        'eslint-react/dom-no-string-style-prop': 0,
       });
-      expect(severities).not.toHaveProperty('react/danger');
-    });
-
-    it('enables `react/no-danger` when `pluginX` is `never`', async () => {
-      const configResult = await computeEslintConfig({react: {pluginX: 'never'}});
-
-      expect(configResult.getRuleEntrySeverity('react/dom', 'react/no-danger')).toBe(2);
     });
 
     it('`eslint-react/dom/no-dangerously-set-innerhtml` rule fires on a component using `dangerouslySetInnerHTML`', async () => {

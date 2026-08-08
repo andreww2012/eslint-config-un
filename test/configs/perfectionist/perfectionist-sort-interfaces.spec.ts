@@ -46,13 +46,10 @@ describe('perfectionist: sub config `sortInterfaces`', () => {
       perfectionist: {configSortInterfaces: true},
     });
 
-    it('enables `perfectionist/sort-interfaces` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-interfaces',
-          'perfectionist/sort-interfaces',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-interfaces')).toMatchObject({
+        'perfectionist/sort-interfaces': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-interfaces` rule disabled in the main `perfectionist` eslint config', () => {

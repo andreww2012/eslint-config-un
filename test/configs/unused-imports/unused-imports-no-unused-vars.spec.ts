@@ -32,28 +32,11 @@ describe('unused-imports: sub config `noUnusedVars`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({unusedImports: {configNoUnusedVars: true}});
 
-    it('enables `unused-imports/no-unused-vars` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'unused-imports/no-unused-vars',
-          'unused-imports/no-unused-vars',
-        ),
-      ).toBe(2);
-    });
-
-    it('disables `no-unused-vars`, `sonarjs/no-unused-vars` and `ts/no-unused-vars` rules in `unused-imports/no-unused-vars` eslint config', () => {
-      expect(
-        configResult.getRuleEntrySeverity('unused-imports/no-unused-vars', 'no-unused-vars'),
-      ).toBe(0);
-      expect(
-        configResult.getRuleEntrySeverity(
-          'unused-imports/no-unused-vars',
-          'sonarjs/no-unused-vars',
-        ),
-      ).toBe(0);
-      expect(
-        configResult.getRuleEntrySeverity('unused-imports/no-unused-vars', 'ts/no-unused-vars'),
-      ).toBe(0);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('unused-imports/no-unused-vars')).toMatchObject({
+        'unused-imports/no-unused-vars': 2,
+        'no-unused-vars': 0,
+      });
     });
 
     it('`unused-imports/no-unused-vars` rule fires on a file with an unused variable', async () => {

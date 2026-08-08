@@ -89,12 +89,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('lockfile');
 
-  it('enables `lockfile/integrity` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('lockfile', 'lockfile/integrity')).toBe(2);
-  });
-
-  it('disables `lockfile/registry` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('lockfile', 'lockfile/registry')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('lockfile')).toMatchObject({
+      'lockfile/integrity': 2,
+      'lockfile/registry': 0,
+    });
   });
 
   it('`lockfile/non-registry-specifiers` rule fires on a lockfile with a github: specifier', async () => {

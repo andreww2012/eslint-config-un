@@ -83,16 +83,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('nodeDependencies');
 
-  it('enables `node-dependencies/compat-engines` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('node-dependencies', 'node-dependencies/compat-engines'),
-    ).toBe(1);
-  });
-
-  it('disables `node-dependencies/absolute-version` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('node-dependencies', 'node-dependencies/absolute-version'),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('node-dependencies')).toMatchObject({
+      'node-dependencies/no-dupe-deps': 2,
+      'node-dependencies/compat-engines': 1,
+      'node-dependencies/absolute-version': 0,
+    });
   });
 
   it('`node-dependencies/valid-semver` rule fires on a package.json with invalid semver', async () => {

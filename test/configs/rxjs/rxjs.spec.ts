@@ -85,12 +85,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('rxjs');
 
-  it('enables `rxjs/no-async-subscribe` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/no-async-subscribe')).toBe(2);
-  });
-
-  it('disables `rxjs/no-ignored-subscribe` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('rxjs', 'rxjs/no-ignored-subscribe')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('rxjs')).toMatchObject({
+      'rxjs/no-async-subscribe': 2,
+      'rxjs/no-ignored-subscribe': 0,
+    });
   });
 
   it('`rxjs/no-internal` rule fires on an import from `rxjs/internal`', async () => {

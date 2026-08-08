@@ -79,14 +79,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('checkFile');
 
-  it('disables `check-file/filename-blocklist` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('check-file', 'check-file/filename-blocklist')).toBe(
-      0,
-    );
-  });
-
-  it('disables `check-file/no-index` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('check-file', 'check-file/no-index')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('check-file')).toMatchObject({
+      'check-file/filename-blocklist': 0,
+      'check-file/no-index': 0,
+    });
   });
 
   it('`check-file/filename-naming-convention` rule fires on a file that violates naming convention', async () => {

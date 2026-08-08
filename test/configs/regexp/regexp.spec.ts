@@ -68,12 +68,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('regexp');
 
-  it('enables `regexp/no-dupe-disjunctions` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('regexp', 'regexp/no-dupe-disjunctions')).toBe(2);
-  });
-
-  it('disables `regexp/no-super-linear-move` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('regexp', 'regexp/no-super-linear-move')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('regexp')).toMatchObject({
+      'regexp/no-dupe-disjunctions': 2,
+      'regexp/no-potentially-useless-backreference': 1,
+      'regexp/no-super-linear-move': 0,
+    });
   });
 
   it('`regexp/no-dupe-disjunctions` rule fires on a file with duplicate regex disjunctions', async () => {

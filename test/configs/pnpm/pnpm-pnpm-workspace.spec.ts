@@ -33,34 +33,11 @@ describe('pnpm: sub config `pnpmWorkspace`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig('pnpm');
 
-    it('enables `pnpm/yaml-no-duplicate-catalog-item` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'pnpm/pnpm-workspace-yaml',
-          'pnpm/yaml-no-duplicate-catalog-item',
-        ),
-      ).toBe(2);
-    });
-
-    it('enables `pnpm/yaml-no-unused-catalog-item` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'pnpm/pnpm-workspace-yaml',
-          'pnpm/yaml-no-unused-catalog-item',
-        ),
-      ).toBe(2);
-    });
-
-    it('enables `pnpm/yaml-valid-packages` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity('pnpm/pnpm-workspace-yaml', 'pnpm/yaml-valid-packages'),
-      ).toBe(2);
-    });
-
-    it('disables `pnpm/yaml-enforce-settings` rule by default', () => {
-      expect(
-        configResult.getRuleEntrySeverity('pnpm/pnpm-workspace-yaml', 'pnpm/yaml-enforce-settings'),
-      ).toBe(0);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('pnpm/pnpm-workspace-yaml')).toMatchObject({
+        'pnpm/yaml-no-duplicate-catalog-item': 2,
+        'pnpm/yaml-enforce-settings': 0,
+      });
     });
 
     it('`pnpm/yaml-no-unused-catalog-item` rule fires on a `pnpm-workspace.yaml` with unused catalog items', async () => {

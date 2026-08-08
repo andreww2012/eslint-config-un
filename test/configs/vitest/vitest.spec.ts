@@ -89,12 +89,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('vitest');
 
-  it('enables `vitest/prefer-to-be` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-to-be')).toBe(2);
-  });
-
-  it('disables `vitest/no-hooks` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('vitest', 'vitest/no-hooks')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('vitest')).toMatchObject({
+      'vitest/prefer-to-be': 2,
+      'vitest/no-commented-out-tests': 1,
+      'vitest/no-hooks': 0,
+    });
   });
 
   it('`vitest/prefer-to-be` rule fires on an equality assertion against a primitive', async () => {

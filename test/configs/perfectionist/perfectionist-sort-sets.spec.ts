@@ -36,10 +36,10 @@ describe('perfectionist: sub config `sortSets`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({perfectionist: {configSortSets: true}});
 
-    it('enables `perfectionist/sort-sets` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity('perfectionist/sort-sets', 'perfectionist/sort-sets'),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-sets')).toMatchObject({
+        'perfectionist/sort-sets': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-sets` rule disabled in the main `perfectionist` eslint config', () => {

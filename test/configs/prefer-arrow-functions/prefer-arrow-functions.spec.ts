@@ -83,13 +83,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('preferArrowFunctions');
 
-  it('enables `prefer-arrow-functions/prefer-arrow-functions` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'prefer-arrow-functions',
-        'prefer-arrow-functions/prefer-arrow-functions',
-      ),
-    ).toBe(1);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('prefer-arrow-functions')).toMatchObject({
+      'prefer-arrow-functions/prefer-arrow-functions': 1,
+    });
   });
 
   it('`prefer-arrow-functions/prefer-arrow-functions` rule fires on a file with a plain function', async () => {

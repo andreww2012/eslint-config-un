@@ -38,13 +38,10 @@ describe('perfectionist: sub config `sortClasses`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({perfectionist: {configSortClasses: true}});
 
-    it('enables `perfectionist/sort-classes` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-classes',
-          'perfectionist/sort-classes',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-classes')).toMatchObject({
+        'perfectionist/sort-classes': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-classes` rule disabled in the main `perfectionist` eslint config', () => {

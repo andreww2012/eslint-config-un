@@ -115,6 +115,13 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('noPrettierIncompatibleRules');
 
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities(CONFIG_POSTFIX)).toMatchObject({
+      'stylistic/indent': 0,
+      indent: 0,
+    });
+  });
+
   it('disables `stylistic/indent` rule with the resolved (renamed) prefix, not the canonical `@stylistic/indent`', () => {
     expect(configResult.getRuleEntrySeverity(CONFIG_POSTFIX, 'stylistic/indent')).toBe(0);
     expect(configResult.getRuleEntry(CONFIG_POSTFIX, '@stylistic/indent')).toBeUndefined();
@@ -135,10 +142,6 @@ describe('rules', async () => {
     expect(
       configResult.getRuleEntrySeverity(CONFIG_POSTFIX, 'disable-autofix/stylistic/indent'),
     ).toBe(0);
-  });
-
-  it('disables the bare (core) `indent` rule', () => {
-    expect(configResult.getRuleEntrySeverity(CONFIG_POSTFIX, 'indent')).toBe(0);
   });
 
   it('respects `pluginRenames` when disabling rules', async () => {

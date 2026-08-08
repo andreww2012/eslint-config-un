@@ -83,6 +83,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('format');
 
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('format/prettier')).toMatchObject({
+      'format/prettier': 2,
+    });
+  });
+
   it('enables only `format/prettier` rule by default', () => {
     expect(configResult.getConfigByUnPostfix('format/prettier')?.rules).toMatchInlineSnapshot(
       '{"format/prettier": 2}',

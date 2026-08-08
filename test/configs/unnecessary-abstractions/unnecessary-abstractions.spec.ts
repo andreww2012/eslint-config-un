@@ -92,13 +92,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('unnecessaryAbstractions');
 
-  it('enables `unnecessary-abstractions/no-ternary-wrappers` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity(
-        'unnecessary-abstractions',
-        'unnecessary-abstractions/no-ternary-wrappers',
-      ),
-    ).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('unnecessary-abstractions')).toMatchObject({
+      'unnecessary-abstractions/no-ternary-wrappers': 2,
+    });
   });
 
   it('`unnecessary-abstractions/no-ternary-wrappers` rule fires on a function returning a ternary of its own parameters', async () => {

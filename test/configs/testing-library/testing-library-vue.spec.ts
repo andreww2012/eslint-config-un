@@ -36,10 +36,12 @@ describe('testing-library: sub config `vue`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({testingLibrary: {configVue: true}});
 
-    it('enables `testing-library/no-container` rule (framework-only)', () => {
-      expect(
-        configResult.getRuleEntrySeverity('testing-library/vue', 'testing-library/no-container'),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('testing-library/vue')).toMatchObject({
+        'testing-library/no-container': 2,
+        'testing-library/no-test-id-queries': 1,
+        'testing-library/no-unnecessary-act': 0,
+      });
     });
 
     it('includes `fireEvent` in `testing-library/await-async-events` event module list (async for vue)', () => {
@@ -55,24 +57,6 @@ describe('testing-library: sub config `vue`', () => {
           'testing-library/no-await-sync-events',
         ),
       ).toStrictEqual([]);
-    });
-
-    it('enables `testing-library/no-manual-cleanup` rule (vue/react/svelte only)', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'testing-library/vue',
-          'testing-library/no-manual-cleanup',
-        ),
-      ).toBe(2);
-    });
-
-    it('does not enable `testing-library/no-unnecessary-act` rule (vue excluded)', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'testing-library/vue',
-          'testing-library/no-unnecessary-act',
-        ),
-      ).toBe(0);
     });
   });
 

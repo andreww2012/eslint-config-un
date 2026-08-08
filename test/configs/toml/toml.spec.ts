@@ -71,12 +71,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('toml');
 
-  it('enables `toml/indent` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('toml', 'toml/indent')).toBe(2);
-  });
-
-  it('disables `toml/no-mixed-type-in-array` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('toml', 'toml/no-mixed-type-in-array')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('toml')).toMatchObject({
+      'toml/indent': 2,
+      'toml/no-mixed-type-in-array': 0,
+    });
   });
 
   it('`toml/indent` rule fires on a .toml file with wrong indentation', async () => {

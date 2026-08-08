@@ -51,13 +51,12 @@ describe('perfectionist: sub config `sortVariableDeclarations`', () => {
       perfectionist: {configSortVariableDeclarations: true},
     });
 
-    it('enables `perfectionist/sort-variable-declarations` rule', () => {
+    it('correctly sets severities by default', () => {
       expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-variable-declarations',
-          'perfectionist/sort-variable-declarations',
-        ),
-      ).toBe(2);
+        configResult.getRuleSeverities('perfectionist/sort-variable-declarations'),
+      ).toMatchObject({
+        'perfectionist/sort-variable-declarations': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-variable-declarations` rule disabled in the main `perfectionist` eslint config', () => {

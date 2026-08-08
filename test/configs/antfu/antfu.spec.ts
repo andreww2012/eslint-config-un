@@ -65,12 +65,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('antfu');
 
-  it('disables `antfu/consistent-chaining` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('antfu', 'antfu/consistent-chaining')).toBe(0);
-  });
-
-  it('disables `antfu/top-level-function` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('antfu', 'antfu/top-level-function')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('antfu')).toMatchObject({
+      'antfu/consistent-chaining': 0,
+      'antfu/top-level-function': 0,
+    });
   });
 
   it('`antfu/top-level-function` rule fires on a file with a top-level arrow function', async () => {

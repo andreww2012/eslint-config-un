@@ -68,8 +68,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('casePolice');
 
-  it('enables `case-police/string-check` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('case-police', 'case-police/string-check')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('case-police')).toMatchObject({
+      'case-police/string-check': 2,
+    });
   });
 
   it('`case-police/string-check` rule fires on a file with incorrect casing of a well-known term', async () => {

@@ -32,6 +32,7 @@ describe('ts: sub config `typeAware`', () => {
 
       expect(configResult.getRuleSeverities('ts/type-aware/rules')).toMatchObject({
         'ts/await-thenable': 2,
+        'ts/no-deprecated': 1,
         'ts/prefer-nullish-coalescing': 0,
       });
     });

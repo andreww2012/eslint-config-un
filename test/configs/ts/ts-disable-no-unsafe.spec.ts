@@ -43,12 +43,14 @@ describe('ts: sub config `disableNoUnsafe`', () => {
   });
 
   describe('rules', () => {
-    it('enables `ts/no-unsafe-*` rules as warnings when the sub config is not enabled', async () => {
+    it('correctly sets severities by default', async () => {
       const configResult = await computeEslintConfig('ts');
 
-      expect(configResult.getRuleSeverities('ts/type-aware/rules')).toMatchObject(
-        Object.fromEntries(NO_UNSAFE_RULES.map((rule) => [rule, 1])),
-      );
+      expect(configResult.getRuleSeverities('ts/type-aware/rules')).toMatchObject({
+        'ts/await-thenable': 2,
+        'ts/no-deprecated': 1,
+        'ts/no-unsafe-type-assertion': 0,
+      });
     });
 
     it('disables `ts/no-unsafe-*` rules in `ts/disable-no-unsafe` eslint config when set to `true`', async () => {

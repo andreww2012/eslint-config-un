@@ -85,14 +85,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('formatJs');
 
-  it('enables `formatjs/enforce-default-message` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('formatjs', 'formatjs/enforce-default-message')).toBe(
-      2,
-    );
-  });
-
-  it('disables `formatjs/no-camel-case` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('formatjs', 'formatjs/no-camel-case')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('formatjs')).toMatchObject({
+      'formatjs/enforce-default-message': 2,
+      'formatjs/no-camel-case': 0,
+    });
   });
 
   it('`formatjs/no-emoji` rule fires when a message contains an emoji', async () => {

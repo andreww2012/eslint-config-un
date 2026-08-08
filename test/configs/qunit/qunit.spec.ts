@@ -87,12 +87,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('qunit');
 
-  it('enables `qunit/assert-args` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('qunit', 'qunit/assert-args')).toBe(2);
-  });
-
-  it('disables `qunit/no-arrow-tests` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('qunit', 'qunit/no-arrow-tests')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('qunit')).toMatchObject({
+      'qunit/assert-args': 2,
+      'qunit/no-assert-ok': 1,
+      'qunit/no-arrow-tests': 0,
+    });
   });
 
   it('`qunit/no-assert-equal` rule fires on a test with `assert.equal()`', async () => {

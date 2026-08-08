@@ -78,12 +78,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig({boundaries: {settings: {elements: []}}});
 
-  it('enables `boundaries/dependencies` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('boundaries', 'boundaries/dependencies')).toBe(2);
-  });
-
-  it('disables `boundaries/no-ignored` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('boundaries', 'boundaries/no-ignored')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('boundaries')).toMatchObject({
+      'boundaries/dependencies': 2,
+      'boundaries/no-ignored-dependencies': 0,
+    });
   });
 
   it('`boundaries/dependencies` rule fires on a disallowed cross-element import', async () => {

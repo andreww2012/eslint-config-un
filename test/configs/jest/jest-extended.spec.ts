@@ -62,37 +62,11 @@ describe('jest: sub config `jestExtended`', () => {
       jest: {configJestExtended: {suggestUsing: true}},
     });
 
-    it('enables `jest-extended/prefer-to-be-array` rule by default when enabled', () => {
-      expect(
-        configResult.getRuleEntrySeverity('jest/extended', 'jest-extended/prefer-to-be-array'),
-      ).toBe(2);
-    });
-
-    it('enables `jest-extended/prefer-to-be-false` rule by default when enabled', () => {
-      expect(
-        configResult.getRuleEntrySeverity('jest/extended', 'jest-extended/prefer-to-be-false'),
-      ).toBe(2);
-    });
-
-    it('enables `jest-extended/prefer-to-be-object` rule by default when enabled', () => {
-      expect(
-        configResult.getRuleEntrySeverity('jest/extended', 'jest-extended/prefer-to-be-object'),
-      ).toBe(2);
-    });
-
-    it('enables `jest-extended/prefer-to-be-true` rule by default when enabled', () => {
-      expect(
-        configResult.getRuleEntrySeverity('jest/extended', 'jest-extended/prefer-to-be-true'),
-      ).toBe(2);
-    });
-
-    it('enables `jest-extended/prefer-to-have-been-called-once` rule by default when enabled', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'jest/extended',
-          'jest-extended/prefer-to-have-been-called-once',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('jest/extended')).toMatchObject({
+        'jest-extended/prefer-to-be-array': 2,
+        'jest-extended/prefer-to-be-false': 2,
+      });
     });
 
     it('`jest-extended/prefer-to-be-array` rule fires when `Array.isArray` is used in `expect`', async () => {

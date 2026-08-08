@@ -85,12 +85,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('unocss');
 
-  it('enables `unocss/blocklist` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('unocss', 'unocss/blocklist')).toBe(2);
-  });
-
-  it('disables `unocss/enforce-class-compile` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('unocss', 'unocss/enforce-class-compile')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('unocss')).toMatchObject({
+      'unocss/blocklist': 2,
+      'unocss/enforce-class-compile': 0,
+    });
   });
 
   it('`unocss/order` rule fires on a file with unordered UnoCSS classes', async () => {

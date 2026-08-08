@@ -38,13 +38,10 @@ describe('perfectionist: sub config `sortExports`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({perfectionist: {configSortExports: true}});
 
-    it('enables `perfectionist/sort-exports` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity(
-          'perfectionist/sort-exports',
-          'perfectionist/sort-exports',
-        ),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-exports')).toMatchObject({
+        'perfectionist/sort-exports': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-exports` rule disabled in the main `perfectionist` eslint config', () => {

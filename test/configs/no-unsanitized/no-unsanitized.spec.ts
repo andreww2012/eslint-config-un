@@ -73,12 +73,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('noUnsanitized');
 
-  it('enables `no-unsanitized/method` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('no-unsanitized', 'no-unsanitized/method')).toBe(2);
-  });
-
-  it('enables `no-unsanitized/property` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('no-unsanitized', 'no-unsanitized/property')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('no-unsanitized')).toMatchObject({
+      'no-unsanitized/method': 2,
+      'no-unsanitized/property': 2,
+    });
   });
 
   it('`no-unsanitized/property` rule fires on unsafe `innerHTML` assignment', async () => {

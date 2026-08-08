@@ -83,14 +83,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('nestJs');
 
-  it('enables `nestjs/injectable-should-be-provided` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('nest-js', 'nestjs/injectable-should-be-provided'),
-    ).toBe(2);
-  });
-
-  it('disables `nestjs/use-dependency-injection` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('nest-js', 'nestjs/use-dependency-injection')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('nest-js')).toMatchObject({
+      'nestjs/injectable-should-be-provided': 2,
+      'nestjs/use-dependency-injection': 0,
+    });
   });
 
   it('triggers `nestjs/no-duplicate-decorators` on a class with duplicate decorators', async () => {

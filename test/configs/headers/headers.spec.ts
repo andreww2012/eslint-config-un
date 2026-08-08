@@ -63,8 +63,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('headers');
 
-  it('enables `headers/header-format` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('headers', 'headers/header-format')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('headers')).toMatchObject({
+      'headers/header-format': 2,
+    });
   });
 
   it('`headers/header-format` rule fires on a file missing the required header', async () => {

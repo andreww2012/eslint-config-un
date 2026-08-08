@@ -36,10 +36,10 @@ describe('perfectionist: sub config `sortMaps`', () => {
   describe('rules', async () => {
     const configResult = await computeEslintConfig({perfectionist: {configSortMaps: true}});
 
-    it('enables `perfectionist/sort-maps` rule', () => {
-      expect(
-        configResult.getRuleEntrySeverity('perfectionist/sort-maps', 'perfectionist/sort-maps'),
-      ).toBe(2);
+    it('correctly sets severities by default', () => {
+      expect(configResult.getRuleSeverities('perfectionist/sort-maps')).toMatchObject({
+        'perfectionist/sort-maps': 2,
+      });
     });
 
     it('keeps `perfectionist/sort-maps` rule disabled in the main `perfectionist` eslint config', () => {

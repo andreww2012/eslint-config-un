@@ -105,16 +105,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('react');
 
-  it('enables `react/no-multi-comp` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('react/plugin-original', 'react/no-multi-comp')).toBe(
-      2,
-    );
-  });
-
-  it('disables `react/boolean-prop-naming` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('react/plugin-original', 'react/boolean-prop-naming'),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('react/plugin-original')).toMatchObject({
+      'react/no-multi-comp': 2,
+      'react/jsx-boolean-value': 1,
+      'react/boolean-prop-naming': 0,
+    });
   });
 
   it('`react/no-multi-comp` rule fires on a file with multiple components', async () => {

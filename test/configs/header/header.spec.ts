@@ -65,8 +65,10 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('header');
 
-  it('enables `header/header` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('header', 'header/header')).toBe(2);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('header')).toMatchObject({
+      'header/header': 2,
+    });
   });
 
   it('`header/header` rule fires on a file missing the required header', async () => {

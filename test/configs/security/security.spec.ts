@@ -68,16 +68,12 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('security');
 
-  it('enables `security/detect-bidi-characters` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('security', 'security/detect-bidi-characters')).toBe(
-      2,
-    );
-  });
-
-  it('disables `security/detect-non-literal-fs-filename` rule by default', () => {
-    expect(
-      configResult.getRuleEntrySeverity('security', 'security/detect-non-literal-fs-filename'),
-    ).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('security')).toMatchObject({
+      'security/detect-bidi-characters': 2,
+      'security/detect-child-process': 1,
+      'security/detect-non-literal-fs-filename': 0,
+    });
   });
 
   it('`security/detect-eval-with-expression` rule fires on a file using eval with a variable', async () => {

@@ -69,8 +69,11 @@ describe('basic tests', async () => {
 describe('rules', async () => {
   const configResult = await computeEslintConfig('noStylisticRules');
 
-  it('sets `prefer-template` rule to `off` in `no-stylistic-rules` eslint config', () => {
-    expect(configResult.getRuleEntrySeverity('no-stylistic-rules', 'prefer-template')).toBe(0);
+  it('correctly sets severities by default', () => {
+    expect(configResult.getRuleSeverities('no-stylistic-rules')).toMatchObject({
+      'unicorn/better-dom-traversing': 0,
+      'unicorn/better-regex': 0,
+    });
   });
 
   it('does not set `no-console` rule in `no-stylistic-rules` eslint config (not a stylistic rule)', () => {

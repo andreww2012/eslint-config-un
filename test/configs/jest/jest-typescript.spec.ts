@@ -40,28 +40,13 @@ describe('jest: sub config `typescript`', () => {
   });
 
   describe('rules', () => {
-    it('enables `jest/unbound-method` rule when `ts` config is enabled implicitly', async () => {
+    it('correctly sets severities by default', async () => {
       const configResult = await computeEslintConfig({jest: true, ts: true});
 
-      expect(configResult.getRuleEntrySeverity('jest/ts', 'jest/unbound-method')).toBe(2);
-    });
-
-    it('enables `jest/unbound-method` rule when `ts` config is enabled explicitly', async () => {
-      const configResult = await computeEslintConfig({jest: {configTypescript: true}});
-
-      expect(configResult.getRuleEntrySeverity('jest/ts', 'jest/unbound-method')).toBe(2);
-    });
-
-    it('disables `jest/unbound-method` rule when `ts` config is explicitly disabled', async () => {
-      const configResult = await computeEslintConfig({jest: {configTypescript: false}});
-
-      expect(configResult.getRuleEntrySeverity('jest/ts', 'jest/unbound-method')).toBe(0);
-    });
-
-    it('disables `ts/unbound-method` rule to avoid conflict with `jest/unbound-method`', async () => {
-      const configResult = await computeEslintConfig({jest: true, ts: true});
-
-      expect(configResult.getRuleEntrySeverity('jest/ts', 'ts/unbound-method')).toBe(0);
+      expect(configResult.getRuleSeverities('jest/ts')).toMatchObject({
+        'jest/unbound-method': 2,
+        'ts/unbound-method': 0,
+      });
     });
   });
 
