@@ -1,8 +1,10 @@
 import {configDefaults, defineConfig} from 'vitest/config';
 
+const exclude = [...configDefaults.exclude, 'test/**/fixtures/**', '.claude/**'];
+
 export default defineConfig({
   test: {
-    exclude: [...configDefaults.exclude, 'test/**/fixtures/**'],
+    exclude,
     globals: true,
     testTimeout: 60_000, // Generating ESLint config might not be very fast
     setupFiles: ['./test/setup.ts'],
@@ -33,6 +35,7 @@ export default defineConfig({
       enabled: true,
       tsconfig: './test/tsconfig.json',
       ignoreSourceErrors: true,
+      exclude, // typecheck exclude are separate from the main exclude
     },
   },
 });
