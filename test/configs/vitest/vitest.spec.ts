@@ -275,9 +275,7 @@ describe('options', () => {
     it('disables `max-expects` by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
-      expect(configResult.getRuleEntry('vitest', 'vitest/max-expects')).toMatchInlineSnapshot(
-        '[0, {"max": undefined}]',
-      );
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/max-expects')).toBe(0);
     });
 
     it('enables `max-expects` with provided max value', async () => {

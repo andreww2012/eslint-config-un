@@ -216,9 +216,7 @@ describe('options', () => {
     it('disables `jest/max-expects` by default', async () => {
       const configResult = await computeEslintConfig('jest');
 
-      expect(configResult.getRuleEntry('jest', 'jest/max-expects')).toMatchInlineSnapshot(
-        '[0, {"max": undefined}]',
-      );
+      expect(configResult.getRuleEntrySeverity('jest', 'jest/max-expects')).toBe(0);
     });
 
     it('enables `jest/max-expects` with option is set to number', async () => {

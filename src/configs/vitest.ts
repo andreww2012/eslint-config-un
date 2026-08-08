@@ -261,9 +261,11 @@ export default (async (context, optionsRaw) => {
         : [],
     ) /** @since 0.0.17 */ // 🟢
     .addRule('hoisted-apis-on-top', ERROR) /** @since 1.3.7 */ // (warns in all)
-    .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [
-      {max: maxAssertionCalls},
-    ]) /** @since 0.0.49 */
+    .addRule(
+      'max-expects',
+      maxAssertionCalls == null ? OFF : ERROR,
+      maxAssertionCalls == null ? [] : [{max: maxAssertionCalls}],
+    ) /** @since 0.0.49 */
     .addRule(
       'max-nested-describe',
       maxNestedDescribes == null ? OFF : ERROR,

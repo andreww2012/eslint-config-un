@@ -268,9 +268,11 @@ export default (async (context, optionsRaw) => {
       generateConsistentTestItOptions(optionsResolved),
     ) /** @since 21.9.0 */
     .addRule('expect-expect', ERROR) /** @since 21.20.1 */ // 🟡
-    .addRule('max-expects', maxAssertionCalls == null ? OFF : ERROR, [
-      {max: maxAssertionCalls},
-    ]) /** @since 26.6.0 */
+    .addRule(
+      'max-expects',
+      maxAssertionCalls == null ? OFF : ERROR,
+      maxAssertionCalls == null ? [] : [{max: maxAssertionCalls}],
+    ) /** @since 26.6.0 */
     .addRule(
       'max-nested-describe',
       maxNestedDescribes == null ? OFF : ERROR,
