@@ -978,6 +978,7 @@ const ALL_STYLISTIC_RULES = {
     'prefer-expect-resolves': true,
     'prefer-expect-type-of': true,
     'prefer-hooks-in-order': true,
+    'prefer-hooks-on-top': true,
     'prefer-importing-vitest-globals': true,
     'prefer-lowercase-title': true,
     'prefer-mock-return-shorthand': true,
