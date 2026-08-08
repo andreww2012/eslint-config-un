@@ -9,9 +9,9 @@ beforeEach(() => {
 });
 
 describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('angular');
-
   const MAIN_ESLINT_CONFIGS = ['angular/general', 'angular/template'];
+
+  const configResult = await computeEslintConfig('angular');
 
   it('loads `angular` and `angular-template` plugins', () => {
     expect(configResult.getLoadedPlugin('angular')).toBeDefined();
@@ -39,7 +39,7 @@ describe('basic tests', async () => {
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    describe('@angular/core is installed', () => {
+    describe('`@angular/core` is installed', () => {
       it('creates `angular/{general,template}` eslint configs by default', async () => {
         await expectConfigState({}, MAIN_ESLINT_CONFIGS, true, 'default');
       });
@@ -53,7 +53,7 @@ describe('basic tests', async () => {
       });
     });
 
-    describe('@angular/core is not installed', () => {
+    describe('`@angular/core` is not installed', () => {
       beforeEach(() => {
         setInstalledPackages({});
       });
@@ -78,7 +78,7 @@ describe('basic tests', async () => {
   });
 
   describe('mode: misc configs are enabled', () => {
-    describe('@angular/core is installed', () => {
+    describe('`@angular/core` is installed', () => {
       it('creates `angular/{general,template}` eslint configs', async () => {
         await expectConfigState({}, MAIN_ESLINT_CONFIGS, true, 'misc-enabled');
       });
@@ -92,7 +92,7 @@ describe('basic tests', async () => {
       });
     });
 
-    describe('@angular/core is not installed', () => {
+    describe('`@angular/core` is not installed', () => {
       beforeEach(() => {
         setInstalledPackages({});
       });
@@ -720,9 +720,10 @@ describe('options', () => {
     });
   });
 
-  describe('angular-eslint plugin version compatibility', () => {
+  describe('`angular-eslint` plugin version compatibility', () => {
     it('warns and still builds config when installed `angular` plugin major version does not match the detected Angular version', async () => {
       addInstalledPackages({'@angular-eslint/eslint-plugin': '18.0.0'});
+
       // @angular/core is '19.0.0' (from beforeEach) → angularVersion = 19, plugin major = 18 → mismatch
       const configResult = await computeEslintConfig('angular');
 

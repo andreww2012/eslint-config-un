@@ -8,7 +8,7 @@ beforeEach(() => {
 });
 
 describe('react: sub config `refresh`', () => {
-  it('should trigger react-refresh/only-export-components on mixed exports', async () => {
+  it('`react-refresh/only-export-components` rule fires on a file with mixed exports', async () => {
     const result = await testEslintConfig(
       'react',
       FIXTURES.reactComponentFileMixedExports,
@@ -26,7 +26,7 @@ describe('react: sub config `refresh`', () => {
     );
   });
 
-  it('should not trigger react-refresh/only-export-components on component-only exports', async () => {
+  it('`react-refresh/only-export-components` rule does not fire on a file with component-only exports', async () => {
     const result = await testEslintConfig(
       {react: {configRefresh: true}},
       FIXTURES.reactComponentFileSingleExport,
@@ -44,7 +44,7 @@ describe('react: sub config `refresh`', () => {
 
   describe('options', () => {
     describe('option: `allowExportNames`', () => {
-      it('includes remix exports in `allowExportNames` when a remix package is installed', async () => {
+      it('includes remix exports in `allowExportNames` when a `remix` package is installed', async () => {
         addInstalledPackages({'@remix-run/react': '2.0.0'});
 
         const configResult = await computeEslintConfig('react');
@@ -64,7 +64,7 @@ describe('react: sub config `refresh`', () => {
         ]);
       });
 
-      it('includes react-router exports in `allowExportNames` when a react-router package is installed', async () => {
+      it('includes react-router exports in `allowExportNames` when a `react-router` package is installed', async () => {
         addInstalledPackages({'@react-router/react': '1.0.0'});
 
         const configResult = await computeEslintConfig('react');

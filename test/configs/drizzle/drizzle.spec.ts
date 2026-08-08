@@ -38,7 +38,7 @@ describe('basic tests', () => {
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    describe('drizzle-orm is installed', () => {
+    describe('`drizzle-orm` is installed', () => {
       it('creates `drizzle` eslint config by default', async () => {
         await expectConfigState({}, 'drizzle', true, 'default');
       });
@@ -52,7 +52,7 @@ describe('basic tests', () => {
       });
     });
 
-    describe('drizzle-orm is not installed', () => {
+    describe('`drizzle-orm` is not installed', () => {
       beforeEach(() => {
         setInstalledPackages({});
       });

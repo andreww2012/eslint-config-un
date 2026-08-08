@@ -52,8 +52,11 @@ describe('testing-library: sub config `svelte`', () => {
 
     it('does not include options in `testing-library/no-await-sync-events` rule (fireEvent is async for svelte)', () => {
       expect(
-        configResult.getRuleEntry('testing-library/svelte', 'testing-library/no-await-sync-events'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntryOptions(
+          'testing-library/svelte',
+          'testing-library/no-await-sync-events',
+        ),
+      ).toStrictEqual([]);
     });
 
     it('enables `testing-library/no-manual-cleanup` rule (svelte/react/vue only)', () => {

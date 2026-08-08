@@ -143,11 +143,11 @@ describe('unused-imports: sub config `noUnusedVars`', () => {
         });
 
         expect(
-          configResult.getRuleEntry(
+          configResult.getRuleEntryOptions(
             'unused-imports/no-unused-vars',
             'unused-imports/no-unused-vars',
           ),
-        ).toMatchInlineSnapshot('2');
+        ).toStrictEqual([]);
       });
 
       it('adds options to `unused-imports/no-unused-vars` rule when `ruleOptions` is provided', async () => {

@@ -162,11 +162,11 @@ describe('testing-library: sub config `angular`', () => {
         const configResult = await computeEslintConfig({testingLibrary: {configAngular: true}});
 
         expect(
-          configResult.getRuleEntry(
+          configResult.getRuleEntryOptions(
             'testing-library/angular',
             'testing-library/no-render-in-lifecycle',
           ),
-        ).toMatchInlineSnapshot('2');
+        ).toStrictEqual([]);
       });
 
       it('adds `allowTestingFrameworkSetupHook` option to `testing-library/no-render-in-lifecycle` when provided', async () => {

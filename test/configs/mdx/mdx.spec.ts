@@ -264,8 +264,8 @@ describe('options', () => {
     it('disables default rules in `mdx/code-blocks` eslint config', async () => {
       const configResult = await computeEslintConfig('mdx');
 
-      expect(configResult.getRuleEntry('mdx/code-blocks', 'no-console')).toBe(0);
-      expect(configResult.getRuleEntry('mdx/code-blocks', 'prefer-const')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('mdx/code-blocks', 'no-console')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('mdx/code-blocks', 'prefer-const')).toBe(0);
     });
 
     it('does not disable a rule in `mdx/code-blocks` when excluded via `markdownCodeBlocksRules.doNotDisable`', async () => {
@@ -281,7 +281,7 @@ describe('options', () => {
         un: {markdownCodeBlocksRules: {additionalDisabledRules: {'no-shadow': true}}},
       });
 
-      expect(configResult.getRuleEntry('mdx/code-blocks', 'no-shadow')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('mdx/code-blocks', 'no-shadow')).toBe(0);
     });
   });
 });

@@ -188,6 +188,7 @@ describe('options', () => {
 
     it('sets plugin settings on `node` eslint config when set', async () => {
       const PLUGIN_SETTINGS = {tsconfigPath: 'foo/tsconfig.json'};
+
       const configResult = await computeEslintConfig({node: {settings: PLUGIN_SETTINGS}});
 
       expect(configResult.getConfigByUnPostfix('node')?.settings?.['node']).toStrictEqual(
@@ -209,14 +210,14 @@ describe('options', () => {
 
     it('does not add ignored unsupported features to `node/no-unsupported-features/<group>` rule if `noUnsupportedFeaturesIgnores.<group>` is not set', () => {
       expect(
-        configResult.getRuleEntry('node', 'node/no-unsupported-features/es-syntax'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntryOptions('node', 'node/no-unsupported-features/es-syntax'),
+      ).toStrictEqual([]);
     });
 
     it('does not add ignored unsupported features to `node/no-unsupported-features/<group>` rule if `noUnsupportedFeaturesIgnores.<group>` is empty array', () => {
       expect(
-        configResult.getRuleEntry('node', 'node/no-unsupported-features/node-builtins'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntryOptions('node', 'node/no-unsupported-features/node-builtins'),
+      ).toStrictEqual([]);
     });
 
     it('adds ignored unsupported features to `node/no-unsupported-features/es-syntax` rule if `noUnsupportedFeaturesIgnores.esSyntax` is non-empty array', async () => {

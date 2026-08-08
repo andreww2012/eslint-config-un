@@ -173,10 +173,11 @@ describe('options', () => {
     });
 
     it('sets jest settings when provided', async () => {
-      const settings = {version: 29};
-      const configResult = await computeEslintConfig({jest: {settings}});
+      const SETTINGS = {version: 29};
 
-      expect(configResult.getConfigByUnPostfix('jest')?.settings?.['jest']).toStrictEqual(settings);
+      const configResult = await computeEslintConfig({jest: {settings: SETTINGS}});
+
+      expect(configResult.getConfigByUnPostfix('jest')?.settings?.['jest']).toStrictEqual(SETTINGS);
     });
   });
 
@@ -232,9 +233,7 @@ describe('options', () => {
     it('disables `jest/max-nested-describe` by default', async () => {
       const configResult = await computeEslintConfig('jest');
 
-      expect(configResult.getRuleEntry('jest', 'jest/max-nested-describe')).toMatchInlineSnapshot(
-        '0',
-      );
+      expect(configResult.getRuleEntrySeverity('jest', 'jest/max-nested-describe')).toBe(0);
     });
 
     it('enables `jest/max-nested-describe` when set to number', async () => {
@@ -316,12 +315,10 @@ describe('options', () => {
     it('supports object form to disable only selected groups', async () => {
       const configResult = await computeEslintConfig({jest: {paddingAround: {test: false}}});
 
-      expect(
-        configResult.getRuleEntrySeverity('jest', 'jest/padding-around-test-blocks'),
-      ).toMatchInlineSnapshot('0');
-      expect(
-        configResult.getRuleEntrySeverity('jest', 'jest/padding-around-describe-blocks'),
-      ).toMatchInlineSnapshot('2');
+      expect(configResult.getRuleEntrySeverity('jest', 'jest/padding-around-test-blocks')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('jest', 'jest/padding-around-describe-blocks')).toBe(
+        2,
+      );
     });
   });
 

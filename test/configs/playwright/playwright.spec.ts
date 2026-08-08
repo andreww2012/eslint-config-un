@@ -191,8 +191,8 @@ describe('options', () => {
       const configResult = await computeEslintConfig('playwright');
 
       expect(
-        configResult.getRuleEntry('playwright', 'playwright/expect-expect'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntryOptions('playwright', 'playwright/expect-expect'),
+      ).toStrictEqual([]);
     });
 
     it('adds custom assert function names to `playwright/expect-expect` rule options when provided', async () => {
@@ -243,8 +243,8 @@ describe('options', () => {
       const configResult = await computeEslintConfig('playwright');
 
       expect(
-        configResult.getRuleEntry('playwright', 'playwright/missing-playwright-await'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntryOptions('playwright', 'playwright/missing-playwright-await'),
+      ).toStrictEqual([]);
     });
 
     it('adds custom async matchers to `playwright/missing-playwright-await` rule options when provided', async () => {

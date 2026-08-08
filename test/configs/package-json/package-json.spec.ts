@@ -255,8 +255,8 @@ describe('options', () => {
       });
 
       expect(
-        configResult.getRuleEntry('package-json', 'package-json/no-empty-fields'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntryOptions('package-json', 'package-json/no-empty-fields'),
+      ).toStrictEqual([]);
     });
 
     it('merges a record with the default list in `package-json/no-empty-fields` rule', async () => {
@@ -285,8 +285,8 @@ describe('options', () => {
       });
 
       expect(
-        configResult.getRuleEntry('package-json', 'package-json/no-empty-fields'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntryOptions('package-json', 'package-json/no-empty-fields'),
+      ).toStrictEqual([]);
     });
   });
 
@@ -326,8 +326,11 @@ describe('options', () => {
       });
 
       expect(
-        configResult.getRuleEntry('package-json', 'package-json/restrict-private-properties'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntrySeverity(
+          'package-json',
+          'package-json/restrict-private-properties',
+        ),
+      ).toBe(2);
     });
 
     it('enables `package-json/restrict-private-properties` rule with custom blocked properties when set to a string array', async () => {

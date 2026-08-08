@@ -158,8 +158,8 @@ describe('options', () => {
       const configResult = await computeEslintConfig('turbo');
 
       expect(
-        configResult.getRuleEntry('turbo', 'turbo/no-undeclared-env-vars'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntryOptions('turbo', 'turbo/no-undeclared-env-vars'),
+      ).toStrictEqual([]);
     });
 
     it('passes provided options to `turbo/no-undeclared-env-vars` rule when `undeclaredEnvVarsOptions` is set', async () => {

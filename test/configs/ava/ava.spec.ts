@@ -228,8 +228,8 @@ describe('un options', () => {
       ava: {overrides: {'ava/hooks-order': 0}, overridesAny: {'no-console': 0}},
     });
 
-    expect(configResult.getRuleEntry('ava', 'ava/hooks-order')).toBe(0);
-    expect(configResult.getRuleEntry('ava', 'no-console')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('ava', 'ava/hooks-order')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('ava', 'no-console')).toBe(0);
   });
 });
 
@@ -238,9 +238,7 @@ describe('options', () => {
     it('does not enforce assertion message by default', async () => {
       const configResult = await computeEslintConfig('ava');
 
-      expect(configResult.getRuleEntry('ava', 'ava/assertion-arguments')).toMatchInlineSnapshot(
-        '2',
-      );
+      expect(configResult.getRuleEntryOptions('ava', 'ava/assertion-arguments')).toStrictEqual([]);
     });
 
     it('enforces assertion message when set to `true`', async () => {

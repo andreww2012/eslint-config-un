@@ -1,9 +1,5 @@
 import type {NonEmptyTuple} from '../../../src/types';
 
-// eslint-disable-next-line unicorn/no-array-sort
-const ENABLED_PARSERS = ['json', 'jsonc', 'yaml'].sort();
-const PARSER_CONFIG_PREFIX = 'lockfile/parser/';
-
 const FIXTURES = {
   packageLockJson: 'npm/package-lock.json',
   packageLockNonRegistrySpecifier: 'npm-non-registry/package-lock.json',
@@ -12,6 +8,11 @@ const FIXTURES = {
   bunLock: 'bun/bun.lock',
   vltLockJson: 'vlt/vlt-lock.json',
 } as const;
+
+// eslint-disable-next-line unicorn/no-array-sort
+const ENABLED_PARSERS = ['json', 'jsonc', 'yaml'].sort();
+
+const PARSER_CONFIG_PREFIX = 'lockfile/parser/';
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('lockfile');
@@ -131,7 +132,7 @@ describe('un options', () => {
       expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
     });
 
-    it('only enables `json` parser config when `files` only match package-lock.json', async () => {
+    it('only enables `json` parser config when `files` only match `package-lock.json`', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {files: ['**/package-lock.json']},
       });
@@ -146,7 +147,7 @@ describe('un options', () => {
       ).toStrictEqual(['json']);
     });
 
-    it('only enables `json` parser config when `files` only match npm-shrinkwrap.json', async () => {
+    it('only enables `json` parser config when `files` only match `npm-shrinkwrap.json`', async () => {
       const configResult = await computeEslintConfig({
         lockfile: {files: ['**/npm-shrinkwrap.json']},
       });
@@ -174,7 +175,7 @@ describe('un options', () => {
       ).toStrictEqual(['yaml']);
     });
 
-    it('only enables `yaml` parser config when `files` only match pnpm-lock.yaml', async () => {
+    it('only enables `yaml` parser config when `files` only match `pnpm-lock.yaml`', async () => {
       const configResult = await computeEslintConfig({lockfile: {files: ['**/pnpm-lock.yaml']}});
 
       const allParserConfigs = configResult.getConfigsByUnPostfix((name) =>
@@ -200,7 +201,7 @@ describe('un options', () => {
       ).toStrictEqual(['jsonc']);
     });
 
-    it('only enables `json` parser config when `files` only match vlt-lock.json', async () => {
+    it('only enables `json` parser config when `files` only match `vlt-lock.json`', async () => {
       const configResult = await computeEslintConfig({lockfile: {files: ['**/vlt-lock.json']}});
 
       const allParserConfigs = configResult.getConfigsByUnPostfix((name) =>
@@ -354,6 +355,7 @@ describe('options', () => {
 
     it('enables `lockfile/non-registry-specifiers` rule with options when set to object', async () => {
       const IGNORE_ENTRY = {specifier: 'github:my-org/some-private-pkg', explanation: 'internal'};
+
       const configResult = await computeEslintConfig({
         lockfile: {noNonRegistryDependencySpecifiers: {ignore: [IGNORE_ENTRY]}},
       });
@@ -430,7 +432,7 @@ describe('linting lockfiles', () => {
   });
 
   describe('`lockfile/flavor` rule fires on disallowed lockfiles in the project', () => {
-    it('does not report a violation when pnpm is configured as the package manager and workspace has pnpm-lock.yaml', async () => {
+    it('does not report a violation when pnpm is configured as the package manager and workspace has `pnpm-lock.yaml`', async () => {
       const results = await testEslintConfig(
         {lockfile: {enforcePackageManager: 'pnpm'}},
         FIXTURES.pnpmLockYaml,
@@ -442,7 +444,7 @@ describe('linting lockfiles', () => {
       ).toBeUndefined();
     });
 
-    it('reports a violation when npm is enforced but workspace contains pnpm-lock.yaml', async () => {
+    it('reports a violation when npm is enforced but workspace contains `pnpm-lock.yaml`', async () => {
       const results = await testEslintConfig(
         {lockfile: {enforcePackageManager: 'npm'}},
         FIXTURES.pnpmLockYaml,

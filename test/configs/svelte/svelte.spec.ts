@@ -309,6 +309,7 @@ describe('options', () => {
 
     it('sets `svelteConfig` in parserOptions when `svelteKitConfig` is provided', async () => {
       const SVELTE_KIT_CONFIG = {};
+
       const configResult = await computeEslintConfig({
         svelte: {svelteKitConfig: SVELTE_KIT_CONFIG},
       });

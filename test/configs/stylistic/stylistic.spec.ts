@@ -88,12 +88,12 @@ describe('basic tests', async () => {
   });
 
   it('`stylistic/spaced-comment` eslint config ignores YAML and HTML files', () => {
-    const expectedIgnores = [GLOB_YML_YAML, GLOB_HTM_HTML];
+    const EXPECTED_IGNORES = [GLOB_YML_YAML, GLOB_HTM_HTML];
 
     const ignores = configResult.getConfigByUnPostfix('stylistic/spaced-comment')?.ignores;
 
-    expect(ignores).toIncludeAllMembers(expectedIgnores);
-    expect(ignores?.length).toBeGreaterThan(expectedIgnores.length);
+    expect(ignores).toIncludeAllMembers(EXPECTED_IGNORES);
+    expect(ignores?.length).toBeGreaterThan(EXPECTED_IGNORES.length);
   });
 });
 

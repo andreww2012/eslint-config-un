@@ -158,12 +158,13 @@ describe('options', () => {
   describe('option: `options`', () => {
     it('does not set rule options by default', async () => {
       const configResult = await computeEslintConfig('noRelativeImportPaths');
-      const rule = configResult.getRuleEntry(
-        'no-relative-import-paths',
-        'no-relative-import-paths/no-relative-import-paths',
-      );
 
-      expect(rule).toMatchInlineSnapshot('2');
+      expect(
+        configResult.getRuleEntryOptions(
+          'no-relative-import-paths',
+          'no-relative-import-paths/no-relative-import-paths',
+        ),
+      ).toStrictEqual([]);
     });
 
     it('sets rule options when set to provided', async () => {

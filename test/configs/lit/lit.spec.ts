@@ -194,6 +194,7 @@ describe('options', () => {
 
     it('assigns `elementBaseClasses` to `lit` settings property', async () => {
       const ELEMENT_BASE_CLASSES = {elementBaseClasses: ['MyBaseElement']};
+
       const configResult = await computeEslintConfig({
         lit: {settings: ELEMENT_BASE_CLASSES},
       });

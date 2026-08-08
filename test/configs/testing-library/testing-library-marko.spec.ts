@@ -52,8 +52,11 @@ describe('testing-library: sub config `marko`', () => {
 
     it('does not include options in `testing-library/no-await-sync-events` rule (fireEvent is async for marko)', () => {
       expect(
-        configResult.getRuleEntry('testing-library/marko', 'testing-library/no-await-sync-events'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntryOptions(
+          'testing-library/marko',
+          'testing-library/no-await-sync-events',
+        ),
+      ).toStrictEqual([]);
     });
 
     it('enables `testing-library/no-unnecessary-act` rule (marko/react only)', () => {

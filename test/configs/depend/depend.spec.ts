@@ -132,8 +132,8 @@ describe('options', () => {
     it('does not pass extra options to `depend/ban-dependencies` rule by default', async () => {
       const configResult = await computeEslintConfig('depend');
 
-      expect(configResult.getRuleEntry('depend', 'depend/ban-dependencies')).toMatchInlineSnapshot(
-        '2',
+      expect(configResult.getRuleEntryOptions('depend', 'depend/ban-dependencies')).toStrictEqual(
+        [],
       );
     });
 

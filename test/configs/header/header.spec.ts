@@ -127,7 +127,7 @@ describe('options', () => {
     it('does not pass extra args to `header/header` rule by default', async () => {
       const configResult = await computeEslintConfig('header');
 
-      expect(configResult.getRuleEntry('header', 'header/header')).toMatchInlineSnapshot('2');
+      expect(configResult.getRuleEntryOptions('header', 'header/header')).toStrictEqual([]);
     });
 
     it('passes array-style options to `header/header` rule as-is', async () => {

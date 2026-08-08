@@ -89,8 +89,8 @@ describe('e18e: sub config `moduleReplacements`', () => {
         const configResult = await computeEslintConfig('e18e');
 
         expect(
-          configResult.getRuleEntry('e18e/module-replacements', 'e18e/ban-dependencies'),
-        ).toMatchInlineSnapshot('2');
+          configResult.getRuleEntryOptions('e18e/module-replacements', 'e18e/ban-dependencies'),
+        ).toStrictEqual([]);
       });
 
       it('passes custom `options` to `e18e/ban-dependencies` rule when provided', async () => {

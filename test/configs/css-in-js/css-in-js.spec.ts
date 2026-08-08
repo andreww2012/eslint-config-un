@@ -1,11 +1,3 @@
-const JSX_EXTRA_CONFIGS: Parameters<typeof testEslintConfig>[2] = {
-  un: {
-    // If `.jsx` file is not matched by any other config, it'll be ignored and there is no way to avoid this behavior
-    extraConfigs: [{files: ['**/*.jsx']}],
-  },
-  searchFixturesRelativeToPath: import.meta.dirname,
-};
-
 const FIXTURES = {
   dupeStyleProperties: 'dupe-style-properties.jsx',
   noDupeStyleProperties: 'no-dupe-style-properties.jsx',
@@ -24,6 +16,14 @@ const FIXTURES = {
   defineFunctionDupe: 'define-function-dupe.js',
   defineFunctionNoDupe: 'define-function-no-dupe.js',
 } as const;
+
+const JSX_EXTRA_CONFIGS: Parameters<typeof testEslintConfig>[2] = {
+  un: {
+    // If `.jsx` file is not matched by any other config, it'll be ignored and there is no way to avoid this behavior
+    extraConfigs: [{files: ['**/*.jsx']}],
+  },
+  searchFixturesRelativeToPath: import.meta.dirname,
+};
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('cssInJs');
@@ -123,7 +123,7 @@ describe('rules', () => {
     });
   });
 
-  it('triggers css-in-js/no-dupe-properties for duplicate style properties', async () => {
+  it('triggers `css-in-js/no-dupe-properties` for duplicate style properties', async () => {
     const results = await testEslintConfig(
       'cssInJs',
       FIXTURES.dupeStyleProperties,
@@ -141,7 +141,7 @@ describe('rules', () => {
     );
   });
 
-  it('does not trigger css-in-js/no-dupe-properties for unique style properties', async () => {
+  it('does not trigger `css-in-js/no-dupe-properties` for unique style properties', async () => {
     const results = await testEslintConfig(
       'cssInJs',
       FIXTURES.noDupeStyleProperties,

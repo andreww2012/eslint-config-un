@@ -129,8 +129,8 @@ describe('options', () => {
     it('does not pass extra options to `headers/header-format` rule by default', async () => {
       const configResult = await computeEslintConfig('headers');
 
-      expect(configResult.getRuleEntry('headers', 'headers/header-format')).toMatchInlineSnapshot(
-        '2',
+      expect(configResult.getRuleEntryOptions('headers', 'headers/header-format')).toStrictEqual(
+        [],
       );
     });
 

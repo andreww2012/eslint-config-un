@@ -81,7 +81,7 @@ describe('rules', async () => {
     expect(configResult.getRuleEntrySeverity('unicorn', 'unicorn/no-nested-ternary')).toBe(0);
   });
 
-  it('triggers unicorn/no-lonely-if for a lonely if inside another if', async () => {
+  it('triggers `unicorn/no-lonely-if` for a lonely if inside another if', async () => {
     const results = await testEslintConfig(
       'unicorn',
       FIXTURES.nestedIfWithoutElse,
@@ -99,7 +99,7 @@ describe('rules', async () => {
     );
   });
 
-  it('does not trigger unicorn/no-lonely-if for a combined condition', async () => {
+  it('does not trigger `unicorn/no-lonely-if` for a combined condition', async () => {
     const results = await testEslintConfig(
       'unicorn',
       FIXTURES.combinedCondition,

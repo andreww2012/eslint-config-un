@@ -219,10 +219,10 @@ describe('jest: sub config `jestExtended`', () => {
 
         expect(
           configResult.getRuleEntrySeverity('jest/extended', 'jest-extended/prefer-to-be-array'),
-        ).toMatchInlineSnapshot('0');
+        ).toBe(0);
         expect(
           configResult.getRuleEntrySeverity('jest/extended', 'jest-extended/prefer-to-be-false'),
-        ).toMatchInlineSnapshot('2');
+        ).toBe(2);
       });
     });
   });

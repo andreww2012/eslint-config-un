@@ -157,8 +157,11 @@ describe('options', () => {
       const configResult = await computeEslintConfig('treeShaking');
 
       expect(
-        configResult.getRuleEntry('tree-shaking', 'tree-shaking/no-side-effects-in-initialization'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntryOptions(
+          'tree-shaking',
+          'tree-shaking/no-side-effects-in-initialization',
+        ),
+      ).toStrictEqual([]);
     });
 
     it('passes provided options to `tree-shaking/no-side-effects-in-initialization` rule when `options` is set', async () => {

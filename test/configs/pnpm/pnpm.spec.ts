@@ -182,7 +182,7 @@ describe('rules', async () => {
     ).toBe(0);
   });
 
-  it('does not crash when linting pnpm-workspace.yaml when `yaml` config is not enabled', async () => {
+  it('does not crash when linting `pnpm-workspace.yaml` when `yaml` config is not enabled', async () => {
     await expect(
       testEslintConfig('pnpm', FIXTURES.pnpmWorkspace, import.meta.dirname),
     ).resolves.toBeDefined();

@@ -94,9 +94,7 @@ describe('option: `overrides` and `overridesAny`', () => {
       },
     });
 
-    expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toMatchInlineSnapshot(
-      '0',
-    );
+    expect(configResult.getRuleEntrySeverity('vitest', 'vitest/no-focused-tests')).toBe(0);
     expect(
       configResult.getRuleEntry('vitest', 'disable-autofix/vitest/no-focused-tests'),
     ).toMatchInlineSnapshot('[1, {"fixable": true}]');

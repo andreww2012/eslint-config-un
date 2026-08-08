@@ -137,6 +137,6 @@ describe('un options', () => {
     });
 
     expect(configResult.getRuleEntrySeverity('no-unsanitized', 'no-unsanitized/method')).toBe(0);
-    expect(configResult.getRuleEntry('no-unsanitized', 'no-console')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('no-unsanitized', 'no-console')).toBe(0);
   });
 });

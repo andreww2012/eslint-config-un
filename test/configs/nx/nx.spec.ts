@@ -11,17 +11,17 @@ declare global {
 }
 /* eslint-enable vars-on-top */
 
-const PROJECT_B_ROOT = pathe.relative(
-  process.cwd(),
-  path.join(import.meta.dirname, 'fixtures/libs/b'),
-);
-
 const FIXTURES = {
   withUnusedDep: 'with-unused-dep/package.json',
   withoutDeps: 'without-deps/package.json',
   crossBoundaryImport: 'cross-boundary-import.ts',
   localImport: 'local-import.ts',
 } as const;
+
+const PROJECT_B_ROOT = pathe.relative(
+  process.cwd(),
+  path.join(import.meta.dirname, 'fixtures/libs/b'),
+);
 
 const MOCK_PROJECT_GRAPH = {
   nodes: {

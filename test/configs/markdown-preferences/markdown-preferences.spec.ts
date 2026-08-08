@@ -383,6 +383,7 @@ describe('options', () => {
 
     it("enforces title case in headings and table headers when set to `'Title Case'`", async () => {
       const CASING_STYLE = 'Title Case';
+
       const configResult = await computeEslintConfig({
         markdownPreferences: {enforceCasing: CASING_STYLE},
       });
@@ -422,6 +423,7 @@ describe('options', () => {
 
     it('enforces casing only in headings when object form `{headings: ...}` is used (tableHeaders omitted = disabled)', async () => {
       const CASING_STYLE = 'Sentence case';
+
       const configResult = await computeEslintConfig({
         markdownPreferences: {enforceCasing: {headings: CASING_STYLE}},
       });
@@ -442,6 +444,7 @@ describe('options', () => {
 
     it('enforces casing only in table headers when object form `{tableHeaders: ...}` is used (headings omitted = disabled)', async () => {
       const CASING_STYLE = 'Title Case';
+
       const configResult = await computeEslintConfig({
         markdownPreferences: {enforceCasing: {tableHeaders: CASING_STYLE}},
       });
@@ -705,6 +708,7 @@ describe('options', () => {
     it('merges object-provided words with plugin default preserve-words list, excluding falsy-valued entries', async () => {
       const ADDED_WORD = 'GitHub';
       const REMOVED_WORD = 'JavaScript';
+
       const configResult = await computeEslintConfig({
         markdownPreferences: {wordsToPreserveCasingOf: {[ADDED_WORD]: true, [REMOVED_WORD]: false}},
       });

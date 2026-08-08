@@ -1,8 +1,8 @@
-const V1_FILES = ['**/cloudfront-v1/**/*.js'];
-
 const FIXTURES = {
   cloudfrontImport: 'cloudfront-import.js',
 } as const;
+
+const V1_FILES = ['**/cloudfront-v1/**/*.js'];
 
 describe('cloudfront functions: sub config `v1`', () => {
   describe('basic tests', async () => {
@@ -132,8 +132,10 @@ describe('cloudfront functions: sub config `v1`', () => {
         },
       });
 
-      expect(configResult.getRuleEntry('cloudfront-functions/v1', 'no-restricted-globals')).toBe(0);
-      expect(configResult.getRuleEntry('cloudfront-functions/v1', 'no-console')).toBe(0);
+      expect(
+        configResult.getRuleEntrySeverity('cloudfront-functions/v1', 'no-restricted-globals'),
+      ).toBe(0);
+      expect(configResult.getRuleEntrySeverity('cloudfront-functions/v1', 'no-console')).toBe(0);
     });
   });
 });

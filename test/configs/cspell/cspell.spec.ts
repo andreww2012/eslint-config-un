@@ -123,9 +123,8 @@ describe('options', () => {
   describe('option: `options`', () => {
     it('does not set rule options by default', async () => {
       const configResult = await computeEslintConfig('cspell');
-      const rule = configResult.getRuleEntry('cspell', 'cspell/spellchecker');
 
-      expect(rule).toMatchInlineSnapshot('2');
+      expect(configResult.getRuleEntryOptions('cspell', 'cspell/spellchecker')).toStrictEqual([]);
     });
 
     it('sets rule options when set to provided', async () => {

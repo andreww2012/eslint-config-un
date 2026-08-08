@@ -138,7 +138,7 @@ describe('vue: sub config `i18n`', () => {
     });
 
     describe('option: `vue-i18n` version', () => {
-      it('enables `vue-i18n/no-deprecated-tc` and `vue-i18n/no-deprecated-v-t` rules when vue-i18n>=10 is installed', async () => {
+      it('enables `vue-i18n/no-deprecated-tc` and `vue-i18n/no-deprecated-v-t` rules when `vue-i18n` >=10 is installed', async () => {
         setInstalledPackages({vue: '3.5.0', 'vue-i18n': '10.0.0'});
 
         const configResult = await computeEslintConfig('vue');
@@ -149,7 +149,7 @@ describe('vue: sub config `i18n`', () => {
         });
       });
 
-      it('disables `vue-i18n/no-deprecated-tc` and `vue-i18n/no-deprecated-v-t` rules when vue-i18n<10 is installed', async () => {
+      it('disables `vue-i18n/no-deprecated-tc` and `vue-i18n/no-deprecated-v-t` rules when `vue-i18n` <10 is installed', async () => {
         const configResult = await computeEslintConfig('vue');
 
         expect(configResult.getRuleSeverities('vue/i18n')).toMatchObject({

@@ -3,7 +3,7 @@ beforeEach(() => {
 });
 
 describe('basic tests', () => {
-  it('creates `mdx/format-fenced-code-blocks` eslint config by default (prettier is detected)', async () => {
+  it('creates `mdx/format-fenced-code-blocks` eslint config by default (`prettier` is detected)', async () => {
     const configResult = await computeEslintConfig('mdx');
 
     expect(configResult.getConfigByUnPostfix('mdx/format-fenced-code-blocks')).toBeDefined();

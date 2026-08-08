@@ -37,7 +37,7 @@ describe('basic tests', () => {
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    describe('@ngrx/store is installed', () => {
+    describe('`@ngrx/store` is installed', () => {
       it('creates `ngrx` eslint config by default', async () => {
         await expectConfigState({}, 'ngrx', true, 'default');
       });
@@ -51,7 +51,7 @@ describe('basic tests', () => {
       });
     });
 
-    describe('@ngrx/store is not installed', () => {
+    describe('`@ngrx/store` is not installed', () => {
       beforeEach(() => {
         setInstalledPackages({});
       });

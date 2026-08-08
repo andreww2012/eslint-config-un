@@ -1,8 +1,8 @@
-const V2_FILES = ['**/cloudfront-v2/**/*.js'];
-
 const FIXTURES = {
   setTimeout: 'set-timeout.js',
 } as const;
+
+const V2_FILES = ['**/cloudfront-v2/**/*.js'];
 
 describe('basic tests', async () => {
   it('does not create `cloudfront-functions/v2` eslint config when neither `files` or `ignores` are provided', async () => {
@@ -186,7 +186,9 @@ describe('un options', () => {
       },
     });
 
-    expect(configResult.getRuleEntry('cloudfront-functions/v2', 'no-restricted-globals')).toBe(0);
-    expect(configResult.getRuleEntry('cloudfront-functions/v2', 'no-console')).toBe(0);
+    expect(
+      configResult.getRuleEntrySeverity('cloudfront-functions/v2', 'no-restricted-globals'),
+    ).toBe(0);
+    expect(configResult.getRuleEntrySeverity('cloudfront-functions/v2', 'no-console')).toBe(0);
   });
 });

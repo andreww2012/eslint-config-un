@@ -141,20 +141,20 @@ describe('un options', () => {
 describe('options', () => {
   describe('option: `settings`', () => {
     it('sets plugin settings on `vitest` and `vitest/ts` eslint configs', async () => {
-      const pluginSettings = {typecheck: true};
+      const PLUGIN_SETTINGS = {typecheck: true};
 
       const configResult = await computeEslintConfig({
         vitest: {
-          settings: pluginSettings,
+          settings: PLUGIN_SETTINGS,
         },
         ts: true,
       });
 
       expect(configResult.getConfigByUnPostfix('vitest')?.settings?.['vitest']).toStrictEqual(
-        pluginSettings,
+        PLUGIN_SETTINGS,
       );
       expect(configResult.getConfigByUnPostfix('vitest/ts')?.settings?.['vitest']).toStrictEqual(
-        pluginSettings,
+        PLUGIN_SETTINGS,
       );
     });
   });
@@ -163,9 +163,7 @@ describe('options', () => {
     it('uses `each` style by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
-      expect(
-        configResult.getRuleEntrySeverity('vitest', 'vitest/consistent-each-for'),
-      ).toMatchInlineSnapshot('2');
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/consistent-each-for')).toBe(2);
     });
 
     it('disables `consistent-each-for` when set to `false`', async () => {
@@ -173,9 +171,7 @@ describe('options', () => {
         vitest: {enforceEachOrFor: false},
       });
 
-      expect(
-        configResult.getRuleEntrySeverity('vitest', 'vitest/consistent-each-for'),
-      ).toMatchInlineSnapshot('0');
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/consistent-each-for')).toBe(0);
     });
 
     it('uses per-function mapping when object value is provided', async () => {
@@ -197,12 +193,8 @@ describe('options', () => {
     it('enforces `once` style by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-called-once'),
-      ).toMatchInlineSnapshot('2');
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-called-times'),
-      ).toMatchInlineSnapshot('0');
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-once')).toBe(2);
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-times')).toBe(0);
     });
 
     it('enforces `times` style when set to `times`', async () => {
@@ -210,12 +202,8 @@ describe('options', () => {
         vitest: {enforceToBeCalledStyle: 'times'},
       });
 
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-called-once'),
-      ).toMatchInlineSnapshot('0');
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-called-times'),
-      ).toMatchInlineSnapshot('2');
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-once')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-times')).toBe(2);
     });
 
     it('disables both called-style rules when set to `false`', async () => {
@@ -223,12 +211,8 @@ describe('options', () => {
         vitest: {enforceToBeCalledStyle: false},
       });
 
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-called-once'),
-      ).toMatchInlineSnapshot('0');
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-called-times'),
-      ).toMatchInlineSnapshot('0');
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-once')).toBe(0);
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-called-times')).toBe(0);
     });
   });
 
@@ -237,11 +221,11 @@ describe('options', () => {
       const configResult = await computeEslintConfig('vitest');
 
       expect(
-        configResult.getRuleEntry('vitest', 'vitest/no-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntrySeverity('vitest', 'vitest/no-importing-vitest-globals'),
+      ).toBe(2);
       expect(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('0');
+        configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-importing-vitest-globals'),
+      ).toBe(0);
     });
 
     it('enforces importing vitest globals when set to `enforce`', async () => {
@@ -250,11 +234,11 @@ describe('options', () => {
       });
 
       expect(
-        configResult.getRuleEntry('vitest', 'vitest/no-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('0');
+        configResult.getRuleEntrySeverity('vitest', 'vitest/no-importing-vitest-globals'),
+      ).toBe(0);
       expect(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('2');
+        configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-importing-vitest-globals'),
+      ).toBe(2);
     });
 
     it('allows both styles when set to `any`', async () => {
@@ -263,22 +247,22 @@ describe('options', () => {
       });
 
       expect(
-        configResult.getRuleEntry('vitest', 'vitest/no-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('0');
+        configResult.getRuleEntrySeverity('vitest', 'vitest/no-importing-vitest-globals'),
+      ).toBe(0);
       expect(
-        configResult.getRuleEntry('vitest', 'vitest/prefer-importing-vitest-globals'),
-      ).toMatchInlineSnapshot('0');
+        configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-importing-vitest-globals'),
+      ).toBe(0);
     });
   });
 
   describe('option: `maxAssertionCalls`', () => {
-    it('disables `max-expects` by default', async () => {
+    it('disables `vitest/max-expects` by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
       expect(configResult.getRuleEntrySeverity('vitest', 'vitest/max-expects')).toBe(0);
     });
 
-    it('enables `max-expects` with provided max value', async () => {
+    it('enables `vitest/max-expects` with provided max value', async () => {
       const configResult = await computeEslintConfig({
         vitest: {maxAssertionCalls: 3},
       });
@@ -293,9 +277,7 @@ describe('options', () => {
     it('disables `max-nested-describe` by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/max-nested-describe'),
-      ).toMatchInlineSnapshot('0');
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/max-nested-describe')).toBe(0);
     });
 
     it('enables `max-nested-describe` with provided max value', async () => {
@@ -313,9 +295,9 @@ describe('options', () => {
     it('disables `no-restricted-vi-methods` by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/no-restricted-vi-methods'),
-      ).toMatchInlineSnapshot('0');
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/no-restricted-vi-methods')).toBe(
+        0,
+      );
     });
 
     it('enables `no-restricted-vi-methods` with provided restrictions', async () => {
@@ -335,9 +317,7 @@ describe('options', () => {
     it('disables `no-restricted-matchers` by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/no-restricted-matchers'),
-      ).toMatchInlineSnapshot('0');
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/no-restricted-matchers')).toBe(0);
     });
 
     it('enables `no-restricted-matchers` with provided restrictions', async () => {
@@ -367,9 +347,7 @@ describe('options', () => {
         vitest: {testDefinitionKeyword: false},
       });
 
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/consistent-test-it'),
-      ).toMatchInlineSnapshot('0');
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/consistent-test-it')).toBe(0);
     });
   });
 
@@ -377,9 +355,9 @@ describe('options', () => {
     it('enables padding-around rules by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/padding-around-test-blocks'),
-      ).toMatchInlineSnapshot('2');
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/padding-around-test-blocks')).toBe(
+        2,
+      );
     });
 
     it('disables all padding-around rules when set to `false`', async () => {
@@ -387,12 +365,12 @@ describe('options', () => {
         vitest: {paddingAround: false},
       });
 
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/padding-around-test-blocks')).toBe(
+        0,
+      );
       expect(
-        configResult.getRuleEntry('vitest', 'vitest/padding-around-test-blocks'),
-      ).toMatchInlineSnapshot('0');
-      expect(
-        configResult.getRuleEntry('vitest', 'vitest/padding-around-describe-blocks'),
-      ).toMatchInlineSnapshot('0');
+        configResult.getRuleEntrySeverity('vitest', 'vitest/padding-around-describe-blocks'),
+      ).toBe(0);
     });
 
     it('supports object form to disable only selected groups', async () => {
@@ -400,12 +378,12 @@ describe('options', () => {
         vitest: {paddingAround: {test: false}},
       });
 
-      expect(
-        configResult.getRuleEntrySeverity('vitest', 'vitest/padding-around-test-blocks'),
-      ).toMatchInlineSnapshot('0');
+      expect(configResult.getRuleEntrySeverity('vitest', 'vitest/padding-around-test-blocks')).toBe(
+        0,
+      );
       expect(
         configResult.getRuleEntrySeverity('vitest', 'vitest/padding-around-describe-blocks'),
-      ).toMatchInlineSnapshot('2');
+      ).toBe(2);
     });
   });
 
@@ -413,9 +391,7 @@ describe('options', () => {
     it('does not pass options to `expect-expect` by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
-      expect(configResult.getRuleEntry('vitest', 'vitest/expect-expect')).toMatchInlineSnapshot(
-        '2',
-      );
+      expect(configResult.getRuleEntryOptions('vitest', 'vitest/expect-expect')).toStrictEqual([]);
     });
 
     it('sets `assertFunctionNames` preserving the rule defaults', async () => {
@@ -433,9 +409,7 @@ describe('options', () => {
         vitest: {additionalAssertions: []},
       });
 
-      expect(configResult.getRuleEntry('vitest', 'vitest/expect-expect')).toMatchInlineSnapshot(
-        '2',
-      );
+      expect(configResult.getRuleEntryOptions('vitest', 'vitest/expect-expect')).toStrictEqual([]);
     });
   });
 
@@ -460,15 +434,15 @@ describe('options', () => {
   });
 
   describe('option: `asyncMatchers` and `minAndMaxExpectArgs`', () => {
-    it('uses default `valid-expect` options by default', async () => {
+    it('uses default `vitest/valid-expect` rule options by default', async () => {
       const configResult = await computeEslintConfig('vitest');
 
-      expect(
-        configResult.getRuleEntrySeverity('vitest', 'vitest/valid-expect'),
-      ).toMatchInlineSnapshot('2');
+      expect(configResult.getRuleEntry('vitest', 'vitest/valid-expect')).toMatchInlineSnapshot(
+        '[2, {"alwaysAwait": true}]',
+      );
     });
 
-    it('passes `asyncMatchers` and min/max args to `valid-expect`', async () => {
+    it('passes `asyncMatchers` and min/max args to `vitest/valid-expect` rule', async () => {
       const configResult = await computeEslintConfig({
         vitest: {
           asyncMatchers: ['toResolveWith'],

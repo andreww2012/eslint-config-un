@@ -36,7 +36,7 @@ describe('basic tests', () => {
   });
 
   describe('mode: all configs are not explicitly enabled or disabled', () => {
-    describe('aws-cdk-lib is installed', () => {
+    describe('`aws-cdk-lib` is installed', () => {
       it('creates `aws-cdk` eslint config by default', async () => {
         await expectConfigState({}, 'aws-cdk', true, 'default');
       });
@@ -50,7 +50,7 @@ describe('basic tests', () => {
       });
     });
 
-    describe('aws-cdk-lib is not installed', () => {
+    describe('`aws-cdk-lib` is not installed', () => {
       beforeEach(() => {
         setInstalledPackages({});
       });
@@ -82,7 +82,7 @@ describe('basic tests', () => {
       await expectConfigState({awsCdk: false}, 'aws-cdk', false, 'misc-enabled');
     });
 
-    describe('aws-cdk-lib is not installed', () => {
+    describe('`aws-cdk-lib` is not installed', () => {
       beforeEach(() => {
         setInstalledPackages({});
       });
