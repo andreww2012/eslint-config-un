@@ -1,5 +1,5 @@
 const FIXTURES = {
-  invalidSemver: 'invalid-semver/package.json',
+  fourPartDependencyVersion: 'four-part-dependency-version/package.json',
   nonAbsoluteVersion: 'non-absolute-version/package.json',
 } as const;
 
@@ -98,13 +98,13 @@ describe('rules', async () => {
   it('`node-dependencies/valid-semver` rule fires on a package.json with invalid semver', async () => {
     const results = await testEslintConfig(
       'nodeDependencies',
-      FIXTURES.invalidSemver,
+      FIXTURES.fourPartDependencyVersion,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.invalidSemver,
+      FIXTURES.fourPartDependencyVersion,
       'node-dependencies/valid-semver',
     );
 

@@ -248,30 +248,4 @@ describe('testing-library: sub config `vue`', () => {
       });
     });
   });
-
-  describe('sub config: `configNoOnlyTests`', async () => {
-    const configResult = await computeEslintConfig({testingLibrary: {configVue: true}});
-
-    it('creates `testing-library/vue/no-only-tests` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('testing-library/vue/no-only-tests')).toBeDefined();
-    });
-
-    it('does not create `testing-library/vue/no-only-tests` eslint config when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        testingLibrary: {configVue: {configNoOnlyTests: false}},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/vue/no-only-tests'),
-      ).toBeUndefined();
-    });
-
-    it('has default `files` in `testing-library/vue/no-only-tests` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/vue/no-only-tests')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-  });
 });

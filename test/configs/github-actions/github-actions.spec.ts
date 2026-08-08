@@ -1,7 +1,18 @@
+import {dir as findUpDirectory} from 'empathic/find';
+
 const FIXTURES = {
   githubWorkflowEmptyMapping: 'github-workflow-empty-mapping.yml',
   workflowMissingName: 'workflow-missing-name.yml',
 } as const;
+
+vi.mock(import('empathic/find'), async (importOriginal) => ({
+  ...(await importOriginal()),
+  dir: vi.fn<typeof findUpDirectory>(),
+}));
+
+beforeEach(() => {
+  vi.mocked(findUpDirectory).mockReturnValue('.github/workflows');
+});
 
 describe('basic tests', async () => {
   const configResult = await computeEslintConfig('githubActions');
@@ -40,6 +51,29 @@ describe('basic tests', async () => {
 
     it('does not create `github-actions` eslint config if explicitly disabled', async () => {
       await expectConfigState({githubActions: false}, 'github-actions', false, 'default');
+    });
+
+    describe('`.github/workflows` directory does not exist', () => {
+      beforeEach(() => {
+        vi.mocked(findUpDirectory).mockReturnValue(undefined);
+      });
+
+      it('does not create `github-actions` eslint config', async () => {
+        await expectConfigState({}, 'github-actions', false, 'default');
+      });
+
+      it('creates `github-actions` eslint config if explicitly enabled', async () => {
+        await expectConfigState('githubActions', 'github-actions', true, 'default');
+      });
+
+      it('does not create `github-actions` eslint config and prints a warning if explicitly disabled', async () => {
+        await expectConfigState(
+          {githubActions: false},
+          'github-actions',
+          ['githubActions', false],
+          'default',
+        );
+      });
     });
   });
 

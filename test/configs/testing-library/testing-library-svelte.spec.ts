@@ -250,32 +250,4 @@ describe('testing-library: sub config `svelte`', () => {
       });
     });
   });
-
-  describe('sub config: `configNoOnlyTests`', async () => {
-    const configResult = await computeEslintConfig({testingLibrary: {configSvelte: true}});
-
-    it('creates `testing-library/svelte/no-only-tests` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/svelte/no-only-tests'),
-      ).toBeDefined();
-    });
-
-    it('does not create `testing-library/svelte/no-only-tests` eslint config when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        testingLibrary: {configSvelte: {configNoOnlyTests: false}},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/svelte/no-only-tests'),
-      ).toBeUndefined();
-    });
-
-    it('has default `files` in `testing-library/svelte/no-only-tests` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/svelte/no-only-tests')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-  });
 });

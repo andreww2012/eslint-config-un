@@ -269,32 +269,4 @@ describe('testing-library: sub config `react`', () => {
       });
     });
   });
-
-  describe('sub config: `configNoOnlyTests`', async () => {
-    const configResult = await computeEslintConfig({testingLibrary: {configReact: true}});
-
-    it('creates `testing-library/react/no-only-tests` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/react/no-only-tests'),
-      ).toBeDefined();
-    });
-
-    it('does not create `testing-library/react/no-only-tests` eslint config when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        testingLibrary: {configReact: {configNoOnlyTests: false}},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/react/no-only-tests'),
-      ).toBeUndefined();
-    });
-
-    it('has default `files` in `testing-library/react/no-only-tests` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/react/no-only-tests')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-  });
 });

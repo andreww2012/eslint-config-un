@@ -90,5 +90,23 @@ describe('react: sub config `allowDefaultExportsInJsxFiles`', () => {
         expect(ignores?.length).toBeGreaterThan(IGNORES.length);
       });
     });
+
+    it('respects `overrides` and `overridesAny` in `react/allow-default-export-in-jsx-files` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        react: {
+          configAllowDefaultExportsInJsxFiles: {
+            overrides: {'import/no-default-export': 2},
+            overridesAny: {'no-console': 0},
+          },
+        },
+      });
+
+      expect(
+        configResult.getRuleSeverities('react/allow-default-export-in-jsx-files'),
+      ).toMatchObject({
+        'import/no-default-export': 2,
+        'no-console': 0,
+      });
+    });
   });
 });

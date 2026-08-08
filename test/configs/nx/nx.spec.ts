@@ -158,46 +158,6 @@ describe('basic tests', async () => {
   });
 });
 
-describe('un options', () => {
-  describe('option: `files`', () => {
-    it('uses user-provided `files` in `nx` eslint config', async () => {
-      const FILES = ['src/**/*.ts'];
-
-      const configResult = await computeEslintConfig({nx: {files: FILES}});
-
-      expect(configResult.getConfigByUnPostfix('nx')?.files).toStrictEqual(FILES);
-    });
-
-    it('disables `nx` eslint config when set to empty array', async () => {
-      const configResult = await computeEslintConfig({nx: {files: []}});
-
-      expect(configResult.getConfigByUnPostfix('nx')).toBeUndefined();
-    });
-  });
-
-  describe('option: `ignores`', () => {
-    it('uses user-provided `ignores` in `nx` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
-
-      const configResult = await computeEslintConfig({nx: {ignores: IGNORES}});
-
-      const ignores = configResult.getConfigByUnPostfix('nx')?.ignores;
-
-      expect(ignores).toIncludeAllMembers(IGNORES);
-      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
-    });
-  });
-
-  it('respects `overrides` and `overridesAny` in `nx` eslint config', async () => {
-    const configResult = await computeEslintConfig({
-      nx: {overrides: {'nx/dependency-checks': 0}, overridesAny: {'no-console': 0}},
-    });
-
-    expect(configResult.getRuleEntrySeverity('nx', 'nx/dependency-checks')).toBe(0);
-    expect(configResult.getRuleEntrySeverity('nx', 'no-console')).toBe(0);
-  });
-});
-
 describe('rules', async () => {
   const configResult = await computeEslintConfig('nx');
 
@@ -264,6 +224,46 @@ describe('rules', async () => {
     );
 
     expect(error).toBeUndefined();
+  });
+});
+
+describe('un options', () => {
+  describe('option: `files`', () => {
+    it('uses user-provided `files` in `nx` eslint config', async () => {
+      const FILES = ['src/**/*.ts'];
+
+      const configResult = await computeEslintConfig({nx: {files: FILES}});
+
+      expect(configResult.getConfigByUnPostfix('nx')?.files).toStrictEqual(FILES);
+    });
+
+    it('disables `nx` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({nx: {files: []}});
+
+      expect(configResult.getConfigByUnPostfix('nx')).toBeUndefined();
+    });
+  });
+
+  describe('option: `ignores`', () => {
+    it('uses user-provided `ignores` in `nx` eslint config and merges them with defaults', async () => {
+      const IGNORES = ['**/fixtures/**'];
+
+      const configResult = await computeEslintConfig({nx: {ignores: IGNORES}});
+
+      const ignores = configResult.getConfigByUnPostfix('nx')?.ignores;
+
+      expect(ignores).toIncludeAllMembers(IGNORES);
+      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+    });
+  });
+
+  it('respects `overrides` and `overridesAny` in `nx` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      nx: {overrides: {'nx/dependency-checks': 0}, overridesAny: {'no-console': 0}},
+    });
+
+    expect(configResult.getRuleEntrySeverity('nx', 'nx/dependency-checks')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('nx', 'no-console')).toBe(0);
   });
 });
 

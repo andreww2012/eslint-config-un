@@ -6,12 +6,6 @@ describe('basic tests', async () => {
     expect(configResult.getLoadedPlugin('perfectionist')).toBeUndefined();
   });
 
-  it('does not enable any rules by default', () => {
-    expect(getAllRulesSeverities(configResult.getConfigByUnPostfix('perfectionist'))).toStrictEqual(
-      [0],
-    );
-  });
-
   describe('mode: all configs are disabled', () => {
     it('does not create `perfectionist` eslint config', async () => {
       await expectConfigState({}, 'perfectionist', false);
@@ -61,6 +55,22 @@ describe('basic tests', async () => {
   });
 });
 
+describe('rules', async () => {
+  const configResult = await computeEslintConfig('perfectionist');
+
+  it('does not enable any rules by default (every sorting rule lives in a sub config)', () => {
+    expect(getAllRulesSeverities(configResult.getConfigByUnPostfix('perfectionist'))).toStrictEqual(
+      [0],
+    );
+  });
+
+  it('disables `perfectionist/sort-objects` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('perfectionist', 'perfectionist/sort-objects')).toBe(
+      0,
+    );
+  });
+});
+
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `perfectionist` eslint config', async () => {
@@ -107,7 +117,7 @@ describe('un options', () => {
 });
 
 describe('options', () => {
-  describe('`settings`', async () => {
+  describe('option: `settings`', async () => {
     const PLUGIN_SETTINGS = {ignoreCase: false};
 
     const configResult = await computeEslintConfig({perfectionist: {settings: PLUGIN_SETTINGS}});

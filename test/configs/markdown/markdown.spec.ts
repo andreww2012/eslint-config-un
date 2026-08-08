@@ -2,7 +2,7 @@ import {GLOB_MARKDOWN} from '../../../src/constants';
 import type {NonEmptyTuple} from '../../../src/types';
 
 const FIXTURES = {
-  headingIncrementViolation: 'heading-increment-violation.md',
+  skippedHeadingLevel: 'skipped-heading-level.md',
 } as const;
 
 describe('basic tests', async () => {
@@ -86,13 +86,13 @@ describe('rules', async () => {
   it('`markdown/heading-increment` rule fires on a markdown file with a skipped heading level', async () => {
     const results = await testEslintConfig(
       'markdown',
-      FIXTURES.headingIncrementViolation,
+      FIXTURES.skippedHeadingLevel,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.headingIncrementViolation,
+      FIXTURES.skippedHeadingLevel,
       'markdown/heading-increment',
     );
 

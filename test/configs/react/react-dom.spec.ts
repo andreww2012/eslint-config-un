@@ -118,17 +118,20 @@ describe('react: sub config `dom`', () => {
       });
     });
 
-    it('respects `overrides` in `react/dom` eslint config', async () => {
+    it('respects `overrides` and `overridesAny` in `react/dom` eslint config', async () => {
       const configResult = await computeEslintConfig({
-        react: {configDom: {overrides: {'eslint-react/dom-no-dangerously-set-innerhtml': 0}}},
+        react: {
+          configDom: {
+            overrides: {'eslint-react/dom-no-dangerously-set-innerhtml': 0},
+            overridesAny: {'no-console': 0},
+          },
+        },
       });
 
-      expect(
-        configResult.getRuleEntrySeverity(
-          'react/dom',
-          'eslint-react/dom-no-dangerously-set-innerhtml',
-        ),
-      ).toBe(0);
+      expect(configResult.getRuleSeverities('react/dom')).toMatchObject({
+        'eslint-react/dom-no-dangerously-set-innerhtml': 0,
+        'no-console': 0,
+      });
     });
   });
 });

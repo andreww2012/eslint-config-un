@@ -110,14 +110,20 @@ describe('react: sub config `reactX`', () => {
       });
     });
 
-    it('respects `overrides` in `react/x` eslint config', async () => {
+    it('respects `overrides` and `overridesAny` in `react/x` eslint config', async () => {
       const configResult = await computeEslintConfig({
-        react: {configReactX: {overrides: {'eslint-react/no-class-component': 2}}},
+        react: {
+          configReactX: {
+            overrides: {'eslint-react/no-class-component': 2},
+            overridesAny: {'no-console': 0},
+          },
+        },
       });
 
-      expect(configResult.getRuleEntrySeverity('react/x', 'eslint-react/no-class-component')).toBe(
-        2,
-      );
+      expect(configResult.getRuleSeverities('react/x')).toMatchObject({
+        'eslint-react/no-class-component': 2,
+        'no-console': 0,
+      });
     });
   });
 

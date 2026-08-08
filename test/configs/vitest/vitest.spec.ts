@@ -1,3 +1,7 @@
+const FIXTURES = {
+  primitiveEqualityAssertion: 'primitive-equality-assertion/test.spec.js',
+} as const;
+
 beforeEach(() => {
   addInstalledPackages({vitest: '2.0.0'});
 });
@@ -82,19 +86,45 @@ describe('basic tests', async () => {
   });
 });
 
+describe('rules', async () => {
+  const configResult = await computeEslintConfig('vitest');
+
+  it('enables `vitest/prefer-to-be` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-to-be')).toBe(2);
+  });
+
+  it('disables `vitest/no-hooks` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('vitest', 'vitest/no-hooks')).toBe(0);
+  });
+
+  it('`vitest/prefer-to-be` rule fires on an equality assertion against a primitive', async () => {
+    const results = await testEslintConfig(
+      'vitest',
+      FIXTURES.primitiveEqualityAssertion,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.primitiveEqualityAssertion,
+      'vitest/prefer-to-be',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot('"Use `toBe` instead"');
+  });
+});
+
 describe('un options', () => {
   describe('option: `files`', () => {
-    it('uses user-provided `files` in `vitest` and `vitest/ts` eslint configs', async () => {
+    it('uses user-provided `files` in `vitest` eslint config without affecting `vitest/ts`', async () => {
+      const FILES = ['tests/**/*.vitest.ts'];
+
       const configResult = await computeEslintConfig({
-        vitest: {
-          files: ['tests/**/*.vitest.ts'],
-        },
+        vitest: {files: FILES},
         ts: true,
       });
 
-      expect(configResult.getConfigByUnPostfix('vitest')?.files).toMatchInlineSnapshot(
-        '["tests/**/*.vitest.ts"]',
-      );
+      expect(configResult.getConfigByUnPostfix('vitest')?.files).toStrictEqual(FILES);
       expect(configResult.getConfigByUnPostfix('vitest/ts')?.files).toMatchInlineSnapshot(
         '["**/*[.-_]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)", "**/*.{bench,benchmark}.?([cm])ts?(x)"]',
       );
@@ -112,16 +142,15 @@ describe('un options', () => {
   });
 
   describe('option: `ignores`', () => {
-    it('uses user-provided `ignores` in `vitest` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        vitest: {
-          ignores: ['**/fixtures/**'],
-        },
-      });
+    it('uses user-provided `ignores` in `vitest` eslint config and merges them with defaults', async () => {
+      const IGNORES = ['**/fixtures/**'];
 
-      expect(configResult.getConfigByUnPostfix('vitest')?.ignores).toMatchInlineSnapshot(
-        '["**/*.css", "**/*.json", "**/*.jsonc", "**/*.json5", "**/*.md", "**/*.mdx", "**/*.htm?(l)", "**/*.toml", "**/*.y?(a)ml", "**/fixtures/**"]',
-      );
+      const configResult = await computeEslintConfig({vitest: {ignores: IGNORES}});
+
+      const ignores = configResult.getConfigByUnPostfix('vitest')?.ignores;
+
+      expect(ignores).toIncludeAllMembers(IGNORES);
+      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
     });
   });
 

@@ -71,6 +71,17 @@ describe('basic tests', async () => {
   });
 });
 
+describe('rules', async () => {
+  const configResult = await computeEslintConfig('mdx');
+
+  it('enables `mdx/remark` rule by default with warning severity', () => {
+    expect(configResult.getRuleEntrySeverity('mdx/mdx', 'mdx/remark')).toBe(1);
+  });
+
+  // TODO: figure out how to trigger
+  it.todo('`mdx/remark` rule fires on MDX file with remark warnings');
+});
+
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `mdx/mdx` eslint config', async () => {
@@ -111,17 +122,6 @@ describe('un options', () => {
     expect(configResult.getRuleEntrySeverity('mdx/mdx', 'mdx/remark')).toBe(0);
     expect(configResult.getRuleEntrySeverity('mdx/mdx', 'no-console')).toBe(0);
   });
-});
-
-describe('rules', async () => {
-  const configResult = await computeEslintConfig('mdx');
-
-  it('enables `mdx/remark` rule by default with warning severity', () => {
-    expect(configResult.getRuleEntrySeverity('mdx/mdx', 'mdx/remark')).toBe(1);
-  });
-
-  // TODO: figure out how to trigger
-  it.todo('`mdx/remark` rule fires on MDX file with remark warnings');
 });
 
 describe('options', () => {

@@ -136,5 +136,21 @@ describe('markdown: sub config `formatFencedCodeBlocks`', () => {
         expect(ignores).toIncludeAllMembers(IGNORES);
       });
     });
+
+    it('respects `overrides` and `overridesAny` in `markdown/format-fenced-code-blocks` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        markdown: {
+          configFormatFencedCodeBlocks: {
+            overrides: {'prettier/prettier': 0},
+            overridesAny: {'no-console': 0},
+          },
+        },
+      });
+
+      expect(configResult.getRuleSeverities('markdown/format-fenced-code-blocks')).toMatchObject({
+        'prettier/prettier': 0,
+        'no-console': 0,
+      });
+    });
   });
 });

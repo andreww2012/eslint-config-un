@@ -71,49 +71,6 @@ describe('basic tests', async () => {
   });
 });
 
-describe('un options', () => {
-  describe('option: `files`', () => {
-    it('uses user-provided `files` in `css-in-js` eslint config', async () => {
-      const FILES = ['src/**/*.tsx'];
-
-      const configResult = await computeEslintConfig({cssInJs: {files: FILES}});
-
-      expect(configResult.getConfigByUnPostfix('css-in-js')?.files).toStrictEqual(FILES);
-    });
-
-    it('disables `css-in-js` eslint config when set to empty array', async () => {
-      const configResult = await computeEslintConfig({cssInJs: {files: []}});
-
-      expect(configResult.getConfigByUnPostfix('css-in-js')).toBeUndefined();
-    });
-  });
-
-  describe('option: `ignores`', () => {
-    it('uses user-provided `ignores` in `css-in-js` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
-
-      const configResult = await computeEslintConfig({cssInJs: {ignores: IGNORES}});
-
-      const ignores = configResult.getConfigByUnPostfix('css-in-js')?.ignores;
-
-      expect(ignores).toIncludeAllMembers(IGNORES);
-      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
-    });
-  });
-
-  it('respects `overrides` and `overridesAny` in `css-in-js` eslint config', async () => {
-    const configResult = await computeEslintConfig({
-      cssInJs: {
-        overrides: {'css-in-js/no-dupe-properties': 0},
-        overridesAny: {'no-console': 0},
-      },
-    });
-
-    expect(configResult.getRuleEntrySeverity('css-in-js', 'css-in-js/no-dupe-properties')).toBe(0);
-    expect(configResult.getRuleEntrySeverity('css-in-js', 'no-console')).toBe(0);
-  });
-});
-
 describe('rules', () => {
   it('correctly sets severities by default', async () => {
     const configResult = await computeEslintConfig('cssInJs');
@@ -155,6 +112,49 @@ describe('rules', () => {
     );
 
     expect(error).toBeUndefined();
+  });
+});
+
+describe('un options', () => {
+  describe('option: `files`', () => {
+    it('uses user-provided `files` in `css-in-js` eslint config', async () => {
+      const FILES = ['src/**/*.tsx'];
+
+      const configResult = await computeEslintConfig({cssInJs: {files: FILES}});
+
+      expect(configResult.getConfigByUnPostfix('css-in-js')?.files).toStrictEqual(FILES);
+    });
+
+    it('disables `css-in-js` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({cssInJs: {files: []}});
+
+      expect(configResult.getConfigByUnPostfix('css-in-js')).toBeUndefined();
+    });
+  });
+
+  describe('option: `ignores`', () => {
+    it('uses user-provided `ignores` in `css-in-js` eslint config and merges them with defaults', async () => {
+      const IGNORES = ['**/fixtures/**'];
+
+      const configResult = await computeEslintConfig({cssInJs: {ignores: IGNORES}});
+
+      const ignores = configResult.getConfigByUnPostfix('css-in-js')?.ignores;
+
+      expect(ignores).toIncludeAllMembers(IGNORES);
+      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+    });
+  });
+
+  it('respects `overrides` and `overridesAny` in `css-in-js` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      cssInJs: {
+        overrides: {'css-in-js/no-dupe-properties': 0},
+        overridesAny: {'no-console': 0},
+      },
+    });
+
+    expect(configResult.getRuleEntrySeverity('css-in-js', 'css-in-js/no-dupe-properties')).toBe(0);
+    expect(configResult.getRuleEntrySeverity('css-in-js', 'no-console')).toBe(0);
   });
 });
 

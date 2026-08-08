@@ -87,6 +87,36 @@ describe('basic tests', async () => {
   });
 });
 
+describe('rules', async () => {
+  const configResult = await computeEslintConfig('svelte');
+
+  it('enables `svelte/no-at-html-tags` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('svelte', 'svelte/no-at-html-tags')).toBe(2);
+  });
+
+  it('disables `svelte/no-target-blank` rule by default', () => {
+    expect(configResult.getRuleEntrySeverity('svelte', 'svelte/no-target-blank')).toBe(0);
+  });
+
+  it('`svelte/no-useless-mustaches` rule fires on a mustache with a string literal', async () => {
+    const results = await testEslintConfig(
+      'svelte',
+      FIXTURES.stringLiteralInSvelteExpression,
+      import.meta.dirname,
+    );
+
+    const error = findLintMessageFromLintResults(
+      results,
+      FIXTURES.stringLiteralInSvelteExpression,
+      'svelte/no-useless-mustaches',
+    );
+
+    expect(error?.message).toMatchInlineSnapshot(
+      '"Unexpected mustache interpolation with a string literal value."',
+    );
+  });
+});
+
 describe('un options', () => {
   describe('option: `files`', () => {
     it('uses user-provided `files` in `svelte` eslint config', async () => {
@@ -127,36 +157,6 @@ describe('un options', () => {
 
     expect(configResult.getRuleEntrySeverity('svelte', 'svelte/no-at-html-tags')).toBe(0);
     expect(configResult.getRuleEntrySeverity('svelte', 'no-console')).toBe(0);
-  });
-});
-
-describe('rules', async () => {
-  const configResult = await computeEslintConfig('svelte');
-
-  it('enables `svelte/no-at-html-tags` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('svelte', 'svelte/no-at-html-tags')).toBe(2);
-  });
-
-  it('disables `svelte/no-target-blank` rule by default', () => {
-    expect(configResult.getRuleEntrySeverity('svelte', 'svelte/no-target-blank')).toBe(0);
-  });
-
-  it('`svelte/no-useless-mustaches` rule fires on a mustache with a string literal', async () => {
-    const results = await testEslintConfig(
-      'svelte',
-      FIXTURES.stringLiteralInSvelteExpression,
-      import.meta.dirname,
-    );
-
-    const error = findLintMessageFromLintResults(
-      results,
-      FIXTURES.stringLiteralInSvelteExpression,
-      'svelte/no-useless-mustaches',
-    );
-
-    expect(error?.message).toMatchInlineSnapshot(
-      '"Unexpected mustache interpolation with a string literal value."',
-    );
   });
 });
 

@@ -348,7 +348,8 @@ export default ((context, optionsRaw) => {
         ignoresInternal: false,
       },
     ])
-    .addRule('prettier', ERROR, [{}, {eslintTakeoverMode: true}]);
+    .addRule('prettier', ERROR, [{}, {eslintTakeoverMode: true}])
+    .addOverrides();
 
   const configBuilderSentencesPerLine = context.createConfigBuilder(
     configSentencesPerLine,

@@ -1,10 +1,10 @@
 import {GLOB_TOML} from '../../../src/constants';
 
 const FIXTURES = {
-  invalidToml: 'invalid.toml',
+  objectWithoutName: 'object-without-name.toml',
 } as const;
 
-describe('json-schema-validator: sub-config `configToml`', () => {
+describe('json-schema-validator: sub config `toml`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig('jsonSchemaValidator');
 
@@ -49,13 +49,13 @@ describe('json-schema-validator: sub-config `configToml`', () => {
     it('`json-schema-validator/no-invalid` rule fires on a TOML file with a local-schema violation', async () => {
       const results = await testEslintConfig(
         'jsonSchemaValidator',
-        FIXTURES.invalidToml,
+        FIXTURES.objectWithoutName,
         import.meta.dirname,
       );
 
       const error = findLintMessageFromLintResults(
         results,
-        FIXTURES.invalidToml,
+        FIXTURES.objectWithoutName,
         'json-schema-validator/no-invalid',
       );
 

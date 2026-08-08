@@ -33,6 +33,24 @@ describe('basic tests', async () => {
     it('does not create `html` eslint config if explicitly disabled', async () => {
       await expectConfigState({html: false}, 'html', false, 'default');
     });
+
+    describe('`angular` config is enabled', () => {
+      beforeEach(() => {
+        addInstalledPackages({'@angular/core': '19.0.0'});
+      });
+
+      it('does not create `html` eslint config', async () => {
+        await expectConfigState({}, 'html', false, 'default');
+      });
+
+      it('creates `html` eslint config if explicitly enabled', async () => {
+        await expectConfigState('html', 'html', true, 'default');
+      });
+
+      it('does not create `html` eslint config and prints a warning if explicitly disabled', async () => {
+        await expectConfigState({html: false}, 'html', ['html', false], 'default');
+      });
+    });
   });
 
   describe('mode: misc configs are enabled', () => {

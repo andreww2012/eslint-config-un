@@ -1,5 +1,5 @@
 const FIXTURES = {
-  invalidElementName: 'invalid-element-name/index.js',
+  customElementNameWithoutDash: 'custom-element-name-without-dash/index.js',
 } as const;
 
 describe('basic tests', async () => {
@@ -88,13 +88,13 @@ describe('rules', async () => {
   it('`wc/no-invalid-element-name` rule fires on a file with an invalid custom element name', async () => {
     const results = await testEslintConfig(
       'webComponents',
-      FIXTURES.invalidElementName,
+      FIXTURES.customElementNameWithoutDash,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.invalidElementName,
+      FIXTURES.customElementNameWithoutDash,
       'wc/no-invalid-element-name',
     );
 

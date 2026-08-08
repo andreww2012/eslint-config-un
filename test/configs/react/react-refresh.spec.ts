@@ -8,38 +8,124 @@ beforeEach(() => {
 });
 
 describe('react: sub config `refresh`', () => {
-  it('`react-refresh/only-export-components` rule fires on a file with mixed exports', async () => {
-    const result = await testEslintConfig(
-      'react',
-      FIXTURES.reactComponentFileMixedExports,
-      import.meta.dirname,
-    );
+  describe('basic tests', async () => {
+    const configResult = await computeEslintConfig('react');
 
-    const error = findLintMessageFromLintResults(
-      result,
-      FIXTURES.reactComponentFileMixedExports,
-      'react-refresh/only-export-components',
-    );
+    it('creates `react/refresh` eslint config and loads `react-refresh` plugin by default', () => {
+      expect(configResult.getConfigByUnPostfix('react/refresh')).toBeDefined();
+      expect(configResult.getLoadedPlugin('react-refresh')).toBeDefined();
+    });
 
-    expect(error?.message).toMatchInlineSnapshot(
-      '"Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components."',
-    );
+    it('does not create `react/refresh` eslint config when set to `false`', async () => {
+      const configResult = await computeEslintConfig({react: {configRefresh: false}});
+
+      expect(configResult.getConfigByUnPostfix('react/refresh')).toBeUndefined();
+    });
+
+    it('has default `files` in `react/refresh` eslint config', () => {
+      expect(configResult.getConfigByUnPostfix('react/refresh')?.files).toMatchInlineSnapshot(
+        '["**/*.?([cm])[jt]sx"]',
+      );
+    });
+
+    it('has default `ignores` in `react/refresh` eslint config', () => {
+      expect(configResult.getConfigByUnPostfix('react/refresh')?.ignores?.length).toBeGreaterThan(
+        0,
+      );
+    });
   });
 
-  it('`react-refresh/only-export-components` rule does not fire on a file with component-only exports', async () => {
-    const result = await testEslintConfig(
-      {react: {configRefresh: true}},
-      FIXTURES.reactComponentFileSingleExport,
-      import.meta.dirname,
-    );
+  describe('rules', () => {
+    it('correctly sets severities by default', async () => {
+      const configResult = await computeEslintConfig('react');
 
-    const error = findLintMessageFromLintResults(
-      result,
-      FIXTURES.reactComponentFileSingleExport,
-      'react-refresh/only-export-components',
-    );
+      expect(configResult.getRuleSeverities('react/refresh')).toMatchObject({
+        'react-refresh/only-export-components': 2,
+      });
+    });
 
-    expect(error).toBeUndefined();
+    it('`react-refresh/only-export-components` rule fires on a file with mixed exports', async () => {
+      const result = await testEslintConfig(
+        'react',
+        FIXTURES.reactComponentFileMixedExports,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        result,
+        FIXTURES.reactComponentFileMixedExports,
+        'react-refresh/only-export-components',
+      );
+
+      expect(error?.message).toMatchInlineSnapshot(
+        '"Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components."',
+      );
+    });
+
+    it('`react-refresh/only-export-components` rule does not fire on a file with component-only exports', async () => {
+      const result = await testEslintConfig(
+        {react: {configRefresh: true}},
+        FIXTURES.reactComponentFileSingleExport,
+        import.meta.dirname,
+      );
+
+      const error = findLintMessageFromLintResults(
+        result,
+        FIXTURES.reactComponentFileSingleExport,
+        'react-refresh/only-export-components',
+      );
+
+      expect(error).toBeUndefined();
+    });
+  });
+
+  describe('un options', () => {
+    describe('option: `files`', () => {
+      it('uses user-provided `files` in `react/refresh` eslint config', async () => {
+        const FILES = ['src/**/*.jsx'];
+
+        const configResult = await computeEslintConfig({react: {configRefresh: {files: FILES}}});
+
+        expect(configResult.getConfigByUnPostfix('react/refresh')?.files).toStrictEqual(FILES);
+      });
+
+      it('disables `react/refresh` eslint config when set to empty array', async () => {
+        const configResult = await computeEslintConfig({react: {configRefresh: {files: []}}});
+
+        expect(configResult.getConfigByUnPostfix('react/refresh')).toBeUndefined();
+      });
+    });
+
+    describe('option: `ignores`', () => {
+      it('uses user-provided `ignores` in `react/refresh` eslint config and merges them with defaults', async () => {
+        const IGNORES = ['**/fixtures/**'];
+
+        const configResult = await computeEslintConfig({
+          react: {configRefresh: {ignores: IGNORES}},
+        });
+
+        const ignores = configResult.getConfigByUnPostfix('react/refresh')?.ignores;
+
+        expect(ignores).toIncludeAllMembers(IGNORES);
+        expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+      });
+    });
+
+    it('respects `overrides` and `overridesAny` in `react/refresh` eslint config', async () => {
+      const configResult = await computeEslintConfig({
+        react: {
+          configRefresh: {
+            overrides: {'react-refresh/only-export-components': 0},
+            overridesAny: {'no-console': 0},
+          },
+        },
+      });
+
+      expect(configResult.getRuleSeverities('react/refresh')).toMatchObject({
+        'react-refresh/only-export-components': 0,
+        'no-console': 0,
+      });
+    });
   });
 
   describe('options', () => {

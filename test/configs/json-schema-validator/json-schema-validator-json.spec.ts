@@ -1,8 +1,8 @@
 const FIXTURES = {
-  invalidJson: 'invalid.json',
+  objectWithoutName: 'object-without-name.json',
 } as const;
 
-describe('json-schema-validator: sub-config `configJson`', () => {
+describe('json-schema-validator: sub config `json`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig('jsonSchemaValidator');
 
@@ -46,13 +46,13 @@ describe('json-schema-validator: sub-config `configJson`', () => {
     it('`json-schema-validator/no-invalid` rule fires on a JSON file with a local-schema violation', async () => {
       const results = await testEslintConfig(
         'jsonSchemaValidator',
-        FIXTURES.invalidJson,
+        FIXTURES.objectWithoutName,
         import.meta.dirname,
       );
 
       const error = findLintMessageFromLintResults(
         results,
-        FIXTURES.invalidJson,
+        FIXTURES.objectWithoutName,
         'json-schema-validator/no-invalid',
       );
 

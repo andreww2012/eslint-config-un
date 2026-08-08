@@ -80,51 +80,6 @@ describe('basic tests', () => {
   });
 });
 
-describe('un options', () => {
-  describe('option: `files`', () => {
-    it('uses user-provided `files` in `ripple` eslint config', async () => {
-      const FILES = ['src/**/*.tsrx'];
-
-      const configResult = await computeEslintConfig({ripple: {files: FILES}});
-
-      expect(configResult.getConfigByUnPostfix('ripple')?.files).toStrictEqual(FILES);
-    });
-
-    it('disables `ripple` eslint config when set to empty array', async () => {
-      const configResult = await computeEslintConfig({ripple: {files: []}});
-
-      expect(configResult.getConfigByUnPostfix('ripple')).toBeUndefined();
-    });
-  });
-
-  describe('option: `ignores`', () => {
-    it('uses user-provided `ignores` in `ripple` eslint config and merges them with defaults', async () => {
-      const IGNORES = ['**/fixtures/**'];
-
-      const configResult = await computeEslintConfig({ripple: {ignores: IGNORES}});
-
-      const ignores = configResult.getConfigByUnPostfix('ripple')?.ignores;
-
-      expect(ignores).toIncludeAllMembers(IGNORES);
-      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
-    });
-  });
-
-  it('respects `overrides` and `overridesAny` in `ripple` eslint config', async () => {
-    const configResult = await computeEslintConfig({
-      ripple: {
-        overrides: {'ripple/control-flow-jsx': 0},
-        overridesAny: {'no-console': 0},
-      },
-    });
-
-    expect(configResult.getRuleSeverities('ripple')).toMatchObject({
-      'ripple/control-flow-jsx': 0,
-      'no-console': 0,
-    });
-  });
-});
-
 describe('rules', () => {
   it('correctly sets severities by default', async () => {
     const configResult = await computeEslintConfig('ripple');
@@ -187,5 +142,50 @@ describe('rules', () => {
     expect(error?.message).toMatchInlineSnapshot(
       '"track() cannot be called at module scope. Move it into a function body."',
     );
+  });
+});
+
+describe('un options', () => {
+  describe('option: `files`', () => {
+    it('uses user-provided `files` in `ripple` eslint config', async () => {
+      const FILES = ['src/**/*.tsrx'];
+
+      const configResult = await computeEslintConfig({ripple: {files: FILES}});
+
+      expect(configResult.getConfigByUnPostfix('ripple')?.files).toStrictEqual(FILES);
+    });
+
+    it('disables `ripple` eslint config when set to empty array', async () => {
+      const configResult = await computeEslintConfig({ripple: {files: []}});
+
+      expect(configResult.getConfigByUnPostfix('ripple')).toBeUndefined();
+    });
+  });
+
+  describe('option: `ignores`', () => {
+    it('uses user-provided `ignores` in `ripple` eslint config and merges them with defaults', async () => {
+      const IGNORES = ['**/fixtures/**'];
+
+      const configResult = await computeEslintConfig({ripple: {ignores: IGNORES}});
+
+      const ignores = configResult.getConfigByUnPostfix('ripple')?.ignores;
+
+      expect(ignores).toIncludeAllMembers(IGNORES);
+      expect(ignores?.length).toBeGreaterThan(IGNORES.length);
+    });
+  });
+
+  it('respects `overrides` and `overridesAny` in `ripple` eslint config', async () => {
+    const configResult = await computeEslintConfig({
+      ripple: {
+        overrides: {'ripple/control-flow-jsx': 0},
+        overridesAny: {'no-console': 0},
+      },
+    });
+
+    expect(configResult.getRuleSeverities('ripple')).toMatchObject({
+      'ripple/control-flow-jsx': 0,
+      'no-console': 0,
+    });
   });
 });

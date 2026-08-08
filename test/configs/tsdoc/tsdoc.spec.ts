@@ -1,5 +1,5 @@
 const FIXTURES = {
-  invalidTsdoc: 'invalid-tsdoc.ts',
+  unknownJsdocTag: 'unknown-jsdoc-tag.ts',
 } as const;
 
 describe('basic tests', () => {
@@ -73,11 +73,11 @@ describe('rules', () => {
   it('`tsdoc/syntax` rule fires on a file with an invalid TSDoc comment', async () => {
     const results = await testEslintConfig(
       {tsdoc: true, ts: true},
-      FIXTURES.invalidTsdoc,
+      FIXTURES.unknownJsdocTag,
       import.meta.dirname,
     );
 
-    const error = findLintMessageFromLintResults(results, FIXTURES.invalidTsdoc, 'tsdoc/syntax');
+    const error = findLintMessageFromLintResults(results, FIXTURES.unknownJsdocTag, 'tsdoc/syntax');
 
     expect(error?.message).toMatchInlineSnapshot(
       '"tsdoc-undefined-tag: The TSDoc tag "@badTag" is not defined in this configuration"',

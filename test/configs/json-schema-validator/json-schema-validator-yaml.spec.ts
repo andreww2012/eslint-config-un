@@ -1,10 +1,10 @@
 import {GLOB_YAML, GLOB_YML, GLOB_YML_YAML} from '../../../src/constants';
 
 const FIXTURES = {
-  invalidYaml: 'invalid.yaml',
+  objectWithoutName: 'object-without-name.yaml',
 } as const;
 
-describe('json-schema-validator: sub-config `configYaml`', () => {
+describe('json-schema-validator: sub config `yaml`', () => {
   describe('basic tests', async () => {
     const configResult = await computeEslintConfig('jsonSchemaValidator');
 
@@ -49,13 +49,13 @@ describe('json-schema-validator: sub-config `configYaml`', () => {
     it('`json-schema-validator/no-invalid` rule fires on a YAML file with a local-schema violation', async () => {
       const results = await testEslintConfig(
         'jsonSchemaValidator',
-        FIXTURES.invalidYaml,
+        FIXTURES.objectWithoutName,
         import.meta.dirname,
       );
 
       const error = findLintMessageFromLintResults(
         results,
-        FIXTURES.invalidYaml,
+        FIXTURES.objectWithoutName,
         'json-schema-validator/no-invalid',
       );
 

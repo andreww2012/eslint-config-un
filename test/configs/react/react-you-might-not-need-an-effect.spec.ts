@@ -97,21 +97,20 @@ describe('react: sub config `youMightNotNeedAnEffect`', () => {
       });
     });
 
-    it('respects `overrides` in `react/you-might-not-need-an-effect` eslint config', async () => {
+    it('respects `overrides` and `overridesAny` in `react/you-might-not-need-an-effect` eslint config', async () => {
       const configResult = await computeEslintConfig({
         react: {
           configYouMightNotNeedAnEffect: {
             overrides: {'react-you-might-not-need-an-effect/no-derived-state': 0},
+            overridesAny: {'no-console': 0},
           },
         },
       });
 
-      expect(
-        configResult.getRuleEntrySeverity(
-          'react/you-might-not-need-an-effect',
-          'react-you-might-not-need-an-effect/no-derived-state',
-        ),
-      ).toBe(0);
+      expect(configResult.getRuleSeverities('react/you-might-not-need-an-effect')).toMatchObject({
+        'react-you-might-not-need-an-effect/no-derived-state': 0,
+        'no-console': 0,
+      });
     });
   });
 });

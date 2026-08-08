@@ -142,7 +142,7 @@ describe('un options', () => {
 });
 
 describe('options', () => {
-  describe('`settings`', async () => {
+  describe('option: `settings`', async () => {
     const PLUGIN_SETTINGS = {enforceForPrivate: true};
 
     const configResult = await computeEslintConfig({packageJson: {settings: PLUGIN_SETTINGS}});
@@ -154,7 +154,7 @@ describe('options', () => {
     });
   });
 
-  describe('`order`', () => {
+  describe('option: `order`', () => {
     it('uses default order (`sort-package-json`) in `package-json/order-properties` rule', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
@@ -174,7 +174,7 @@ describe('options', () => {
     });
   });
 
-  describe('`repositoryShorthand`', () => {
+  describe('option: `repositoryShorthand`', () => {
     it('uses default form (`object`) in `package-json/repository-shorthand` rule', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
@@ -194,7 +194,7 @@ describe('options', () => {
     });
   });
 
-  describe('`collectionsToSort`', () => {
+  describe('option: `collectionsToSort`', () => {
     it('uses default collections in `package-json/sort-collections` rule', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
@@ -230,7 +230,7 @@ describe('options', () => {
     });
   });
 
-  describe('`propertiesAllowedToBeEmpty`', () => {
+  describe('option: `propertiesAllowedToBeEmpty`', () => {
     it('ignores `browserslist` property by default in `package-json/no-empty-fields` rule by default', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
@@ -290,7 +290,7 @@ describe('options', () => {
     });
   });
 
-  describe('`publishable`', () => {
+  describe('option: `publishable`', () => {
     it('disables publishable-specific rules by default', async () => {
       const configResult = await computeEslintConfig('packageJson');
 
@@ -308,7 +308,7 @@ describe('options', () => {
     });
   });
 
-  describe('`disallowUnnecessaryPropertiesInPrivatePackages`', () => {
+  describe('option: `disallowUnnecessaryPropertiesInPrivatePackages`', () => {
     it('disables `package-json/restrict-private-properties` rule by default', async () => {
       const configResult = await computeEslintConfig('packageJson');
 

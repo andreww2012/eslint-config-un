@@ -96,14 +96,20 @@ describe('react: sub config `hooks`', () => {
       });
     });
 
-    it('respects `overrides` in `react/hooks` eslint config', async () => {
+    it('respects `overrides` and `overridesAny` in `react/hooks` eslint config', async () => {
       const configResult = await computeEslintConfig({
-        react: {configHooks: {overrides: {'react-hooks/exhaustive-deps': 0}}},
+        react: {
+          configHooks: {
+            overrides: {'react-hooks/exhaustive-deps': 0},
+            overridesAny: {'no-console': 0},
+          },
+        },
       });
 
-      expect(configResult.getRuleEntrySeverity('react/hooks', 'react-hooks/exhaustive-deps')).toBe(
-        0,
-      );
+      expect(configResult.getRuleSeverities('react/hooks')).toMatchObject({
+        'react-hooks/exhaustive-deps': 0,
+        'no-console': 0,
+      });
     });
   });
 

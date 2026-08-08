@@ -1,5 +1,5 @@
 const FIXTURES = {
-  invalidJson: 'invalid.json',
+  objectWithoutName: 'object-without-name.json',
 } as const;
 
 describe('basic tests', async () => {
@@ -99,13 +99,13 @@ describe('rules', async () => {
   it('`json-schema-validator/no-invalid` rule fires on a JSON file with a local-schema violation', async () => {
     const results = await testEslintConfig(
       'jsonSchemaValidator',
-      FIXTURES.invalidJson,
+      FIXTURES.objectWithoutName,
       import.meta.dirname,
     );
 
     const error = findLintMessageFromLintResults(
       results,
-      FIXTURES.invalidJson,
+      FIXTURES.objectWithoutName,
       'json-schema-validator/no-invalid',
     );
 
