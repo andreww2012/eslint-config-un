@@ -590,13 +590,13 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
 
   const getDoubleRuleName = <
     A extends GetRuleNamesInPlugin<'eslint-react'>,
-    B extends GetRuleNamesInPlugin<'react'> = A & GetRuleNamesInPlugin<'react'>,
+    B extends GetRuleNamesInPlugin<'react'>,
   >(
     nameXUnprefixed: A,
-    nameOriginal?: B,
+    nameOriginal: B,
   ) => {
     const prefix = isReactXPreferred ? 'eslint-react' : 'react';
-    const name = isReactXPreferred ? nameXUnprefixed : (nameOriginal ?? nameXUnprefixed);
+    const name = isReactXPreferred ? nameXUnprefixed : nameOriginal;
     return [prefix, name] as const;
   };
   const getDoubleRuleSeverity = (severity: RuleSeverity, isXRule?: boolean) =>
@@ -1178,7 +1178,7 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     ) /** @since 0.3.0 */ /** @since 6.1.0 */ // 🟢 🔄️`no-danger-with-children`
     // Deprecated API, removed in v19
     .addAnyRule(
-      ...getDoubleRuleName('dom-no-find-dom-node'),
+      ...getDoubleRuleName('dom-no-find-dom-node', 'no-find-dom-node'),
       getDoubleRuleSeverity(ERROR),
     ) /** @since 0.8.11 */ /** @since 6.0.0-alpha.2 */ // 🟢 🔄️
     .addRule('dom-no-flush-sync', getXRuleSeverity(ERROR)) /** @since 1.28.0 */ // 🟢
@@ -1199,16 +1199,18 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     // Deprecated API, removed in v19
     .addRule('dom-no-render', getXRuleSeverity(ERROR)) /** @since 1.35.0 */ // 🟢 🔢18.0.0
     .addAnyRule(
-      ...getDoubleRuleName('dom-no-render-return-value'),
+      ...getDoubleRuleName('dom-no-render-return-value', 'no-render-return-value'),
       getDoubleRuleSeverity(ERROR),
     ) /** @since 0.8.12 */ /** @since 5.2.0 */ // 🟢 🔄️
     .addAnyRule(
       ...getDoubleRuleName('dom-no-script-url', 'jsx-no-script-url'),
       getDoubleRuleSeverity(ERROR),
     ) /** @since 0.3.8 */ /** @since 7.18.0 */ // 🟡 🔄️`jsx-no-script-url`
-    .addAnyRule(...getDoubleRuleName('dom-no-unknown-property'), getDoubleRuleSeverity(ERROR), [
-      {requireDataLowercase: true},
-    ]) /** @since 1.16.1 */ /** @since 2.0.0 */ // 🔄️
+    .addAnyRule(
+      ...getDoubleRuleName('dom-no-unknown-property', 'no-unknown-property'),
+      getDoubleRuleSeverity(ERROR),
+      [{requireDataLowercase: true}],
+    ) /** @since 1.16.1 */ /** @since 2.0.0 */ // 🔄️
     .addAnyRule(
       ...getDoubleRuleName('dom-no-unsafe-iframe-sandbox', 'iframe-missing-sandbox'),
       getDoubleRuleSeverity(ERROR),

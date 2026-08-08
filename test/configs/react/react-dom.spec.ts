@@ -124,4 +124,38 @@ describe('react: sub config `dom`', () => {
       });
     });
   });
+
+  describe('options', () => {
+    describe('option: `pluginX` of the parent config', () => {
+      it('uses `eslint-react` rule names by default', async () => {
+        const configResult = await computeEslintConfig('react');
+
+        expect(configResult.getRuleSeverities('react/dom')).toMatchObject({
+          'eslint-react/dom-no-dangerously-set-innerhtml': 2,
+          'eslint-react/dom-no-find-dom-node': 2,
+        });
+      });
+
+      it('uses the counterpart `react` rule names when set to `never`', async () => {
+        const configResult = await computeEslintConfig({react: {pluginX: 'never'}});
+
+        expect(configResult.getRuleSeverities('react/dom')).toMatchObject({
+          'react/no-danger': 2,
+          'react/no-find-dom-node': 2,
+        });
+      });
+
+      // Every `eslint-react` DOM rule must map to a rule that really exists in `eslint-plugin-react`,
+      // otherwise ESLint refuses to load the whole config.
+      it('produces a loadable eslint config when set to `never`', async () => {
+        await expect(
+          testEslintConfig(
+            {react: {pluginX: 'never'}},
+            FIXTURES.jsxWithDangerouslySetInnerHtmlProp,
+            import.meta.dirname,
+          ),
+        ).resolves.toBeDefined();
+      });
+    });
+  });
 });
