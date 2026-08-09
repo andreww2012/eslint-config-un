@@ -160,7 +160,7 @@ const rule: Eslint.Rule.RuleModule = {
     },
   },
 
-  create(context) {
+  create: (context) => {
     const options = context.options[0] as RuleOptions | undefined;
     const allowedLiteralValues = options?.allow
       ? new Set(

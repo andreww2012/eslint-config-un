@@ -1,5 +1,6 @@
 const FIXTURES = {
   consecutiveSpaces: 'consecutive-spaces.js',
+  neverConditionalTypes: 'never-conditional-types.ts',
   typeofComparisons: 'typeof-comparisons.js',
 } as const;
 
@@ -83,6 +84,26 @@ describe('rules', async () => {
 
     expect(error?.message).toMatchInlineSnapshot(
       '"Multiple consecutive spaces in string literal are not allowed."',
+    );
+  });
+
+  it('`un/no-distributive-never-check` only fires on type parameters not wrapped in a tuple', async () => {
+    const results = await testEslintConfig(
+      {ts: true, un: true},
+      FIXTURES.neverConditionalTypes,
+      import.meta.dirname,
+    );
+
+    const errors = findLintMessageFromLintResults(
+      results,
+      FIXTURES.neverConditionalTypes,
+      'un/no-distributive-never-check',
+      {all: true},
+    );
+
+    expect(errors).toHaveLength(1);
+    expect(errors[0]?.message).toMatchInlineSnapshot(
+      '"`Type extends never` can never take the true branch: a conditional type distributes over a naked type parameter, checking its union members one by one, and `never` is a union of no members at all, so the whole conditional resolves to `never` instead. Use `[Type] extends [never]`, which opts out of distribution and actually tests for `never`"',
     );
   });
 
