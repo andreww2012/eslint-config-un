@@ -569,8 +569,8 @@ importers:
         specifier: 4.1.10
         version: 4.1.10(vitest@4.1.10)
       actions-up:
-        specifier: 1.16.0
-        version: 1.16.0
+        specifier: 1.17.0
+        version: 1.17.0
       all-contributors-cli:
         specifier: 6.27.0-rc.1
         version: 6.27.0-rc.1(@types/node@20.19.43)
@@ -5687,8 +5687,8 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
 
-  actions-up@1.16.0:
-    resolution: {integrity: sha512-i/2cDk8Z5YUatx1atmxmZx5jCe0z6nwpDvBiqf4FB7cTuKXnEvpwLbwDGlvKkwA7n+SOHxlosGgOhBJXtHW3IA==}
+  actions-up@1.17.0:
+    resolution: {integrity: sha512-gdLr+nJY4v2/wwrxkUUsemfSl9VfmEraCOWSJDG24DDFJHCNWoC8GYRnL2aQEyM0G1gG5mTL71k4ZnI/8hxu1A==}
     engines: {node: ^18.3.0 || >=20.0.0}
     hasBin: true
 
@@ -16944,7 +16944,7 @@ snapshots:
 
   acorn@8.18.0: {}
 
-  actions-up@1.16.0:
+  actions-up@1.17.0:
     dependencies:
       enquirer: 2.4.1
       nanospinner: 1.2.2
