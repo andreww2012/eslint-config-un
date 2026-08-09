@@ -10,15 +10,24 @@ beforeEach(() => {
 
 const FIXTURES_DIR = path.join(import.meta.dirname, 'fixtures');
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('turbo');
+describe('basic tests', () => {
+  it('creates `turbo` eslint config and loads `turbo` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('turbo');
 
-  it('loads `turbo` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('turbo');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('turbo')).toBeDefined();
   });
 
-  it('creates `turbo` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('turbo')).toBeDefined();
+  it('does not create `turbo` eslint config and does not load `turbo` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({turbo: false});
+
+    expect(configResult.getConfigByUnPostfix('turbo')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('turbo')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -75,14 +84,6 @@ describe('basic tests', async () => {
     it('does not create `turbo` eslint config if explicitly disabled', async () => {
       await expectConfigState({turbo: false}, 'turbo', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `turbo` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('turbo')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `turbo` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('turbo')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

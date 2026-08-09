@@ -6,15 +6,28 @@ const FIXTURES = {
   wrongParamNames: 'wrong-param-names.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('jsdoc');
+describe('basic tests', () => {
+  it('creates `jsdoc` eslint config and loads `jsdoc` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('jsdoc');
 
-  it('loads `jsdoc` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('jsdoc');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+
     expect(configResult.getLoadedPlugin('jsdoc')).toBeDefined();
   });
 
-  it('creates `jsdoc` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jsdoc')).toBeDefined();
+  it('does not create `jsdoc` eslint config and does not load `jsdoc` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({jsdoc: false});
+
+    expect(configResult.getConfigByUnPostfix('jsdoc')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('jsdoc')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -57,17 +70,6 @@ describe('basic tests', async () => {
     it('does not create `jsdoc` eslint config if explicitly disabled', async () => {
       await expectConfigState({jsdoc: false}, 'jsdoc', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `jsdoc` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('jsdoc')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `jsdoc` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('jsdoc')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 

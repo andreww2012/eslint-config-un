@@ -4,15 +4,24 @@ const FIXTURES = {
   nodeImportWithoutNodeProtocolPrefix: 'node-import-without-node-protocol-prefix.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('importIntegrity');
+describe('basic tests', () => {
+  it('creates `import-integrity` eslint config and loads `import-integrity` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('importIntegrity');
 
-  it('loads `import-integrity` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('import-integrity');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('import-integrity')).toBeDefined();
   });
 
-  it('creates `import-integrity` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('import-integrity')).toBeDefined();
+  it('does not create `import-integrity` eslint config and does not load `import-integrity` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({importIntegrity: false});
+
+    expect(configResult.getConfigByUnPostfix('import-integrity')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('import-integrity')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -61,16 +70,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `import-integrity` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('import-integrity')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `import-integrity` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('import-integrity')?.ignores?.length).toBeGreaterThan(
-      0,
-    );
   });
 });
 

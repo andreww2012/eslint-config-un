@@ -3,11 +3,15 @@ const FIXTURES = {
 } as const;
 
 describe('jsdoc: sub config `typescript`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({jsdoc: true, ts: true});
+  describe('basic tests', () => {
+    it('creates `jsdoc/ts` eslint config when enabled (default when `ts` config is enabled)', async () => {
+      const configResult = await computeEslintConfig({jsdoc: true, ts: true});
 
-    it('creates `jsdoc/ts` eslint config when enabled (default when `ts` config is enabled)', () => {
-      expect(configResult.getConfigByUnPostfix('jsdoc/ts')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('jsdoc/ts');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `jsdoc/ts` eslint config when disabled', async () => {
@@ -23,16 +27,6 @@ describe('jsdoc: sub config `typescript`', () => {
       const configResult = await computeEslintConfig({jsdoc: true});
 
       expect(configResult.getConfigByUnPostfix('jsdoc/ts')).toBeUndefined();
-    });
-
-    it('creates `jsdoc/ts` eslint config with default TypeScript files', () => {
-      expect(configResult.getConfigByUnPostfix('jsdoc/ts')?.files).toMatchInlineSnapshot(
-        '["**/*.?([cm])ts?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `jsdoc/ts` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('jsdoc/ts')?.ignores?.length).toBeGreaterThan(0);
     });
   });
 

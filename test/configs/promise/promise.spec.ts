@@ -4,15 +4,28 @@ const FIXTURES = {
   promiseRejectParameterNamedDone: 'promise-reject-parameter-named-done.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('promise');
+describe('basic tests', () => {
+  it('creates `promise` eslint config and loads `promise` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('promise');
 
-  it('loads `promise` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('promise');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+
     expect(configResult.getLoadedPlugin('promise')).toBeDefined();
   });
 
-  it('creates `promise` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('promise')).toBeDefined();
+  it('does not create `promise` eslint config and does not load `promise` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({promise: false});
+
+    expect(configResult.getConfigByUnPostfix('promise')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('promise')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -51,17 +64,6 @@ describe('basic tests', async () => {
     it('does not create `promise` eslint config if explicitly disabled', async () => {
       await expectConfigState({promise: false}, 'promise', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `promise` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('promise')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `promise` eslint config (does not ignore HTML files)', () => {
-    const ignores = configResult.getConfigByUnPostfix('promise')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 

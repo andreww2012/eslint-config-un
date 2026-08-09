@@ -2,15 +2,24 @@ const FIXTURES = {
   reExportAll: 're-export-all.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('barrelFiles');
+describe('basic tests', () => {
+  it('creates `barrel-files` eslint config and loads `barrel-files` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('barrelFiles');
 
-  it('loads `barrel-files` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('barrel-files');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('barrel-files')).toBeDefined();
   });
 
-  it('creates `barrel-files` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('barrel-files')).toBeDefined();
+  it('does not create `barrel-files` eslint config and does not load `barrel-files` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({barrelFiles: false});
+
+    expect(configResult.getConfigByUnPostfix('barrel-files')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('barrel-files')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -59,14 +68,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `barrel-files` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('barrel-files')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `barrel-files` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('barrel-files')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

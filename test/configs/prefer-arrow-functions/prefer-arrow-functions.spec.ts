@@ -4,15 +4,28 @@ const FIXTURES = {
   plainFunction: 'plain-function.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('preferArrowFunctions');
+describe('basic tests', () => {
+  it('creates `prefer-arrow-functions` eslint config and loads `prefer-arrow-functions` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('preferArrowFunctions');
 
-  it('loads `prefer-arrow-functions` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('prefer-arrow-functions');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+
     expect(configResult.getLoadedPlugin('prefer-arrow-functions')).toBeDefined();
   });
 
-  it('creates `prefer-arrow-functions` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('prefer-arrow-functions')).toBeDefined();
+  it('does not create `prefer-arrow-functions` eslint config and does not load `prefer-arrow-functions` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({preferArrowFunctions: false});
+
+    expect(configResult.getConfigByUnPostfix('prefer-arrow-functions')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('prefer-arrow-functions')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -66,17 +79,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `prefer-arrow-functions` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('prefer-arrow-functions')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `prefer-arrow-functions` eslint config (does not ignore HTML files)', () => {
-    const ignores = configResult.getConfigByUnPostfix('prefer-arrow-functions')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 

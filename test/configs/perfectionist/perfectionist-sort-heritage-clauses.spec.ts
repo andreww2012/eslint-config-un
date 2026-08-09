@@ -3,16 +3,18 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortHeritageClauses`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({
-      ts: true,
-      perfectionist: {configSortHeritageClauses: true},
-    });
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-heritage-clauses` eslint config when `configSortHeritageClauses` is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        ts: true,
+        perfectionist: {configSortHeritageClauses: true},
+      });
 
-    it('creates `perfectionist/sort-heritage-clauses` eslint config when `configSortHeritageClauses` is `true`', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-heritage-clauses'),
-      ).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-heritage-clauses');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-heritage-clauses` eslint config by default', async () => {
@@ -31,18 +33,6 @@ describe('perfectionist: sub config `sortHeritageClauses`', () => {
       expect(
         configResult.getConfigByUnPostfix('perfectionist/sort-heritage-clauses'),
       ).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-heritage-clauses` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-heritage-clauses')?.files,
-      ).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-heritage-clauses` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-heritage-clauses')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

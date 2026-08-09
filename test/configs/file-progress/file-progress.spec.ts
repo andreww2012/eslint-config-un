@@ -8,15 +8,24 @@ beforeEach(() => {
   vi.spyOn(utils, 'isInCi', 'get').mockReturnValue(false);
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('fileProgress');
+describe('basic tests', () => {
+  it('creates `file-progress` eslint config and loads `file-progress` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('fileProgress');
 
-  it('loads `file-progress` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('file-progress');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('file-progress')).toBeDefined();
   });
 
-  it('creates `file-progress` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('file-progress')).toBeDefined();
+  it('does not create `file-progress` eslint config and does not load `file-progress` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({fileProgress: false});
+
+    expect(configResult.getConfigByUnPostfix('file-progress')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('file-progress')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -55,14 +64,6 @@ describe('basic tests', async () => {
     it('does not create `file-progress` eslint config if explicitly disabled', async () => {
       await expectConfigState({fileProgress: false}, 'file-progress', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `file-progress` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('file-progress')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `file-progress` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('file-progress')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

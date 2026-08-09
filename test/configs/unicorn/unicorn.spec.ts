@@ -9,15 +9,28 @@ const FIXTURES = {
   booleanWithoutPrefix: 'boolean-without-prefix.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('unicorn');
+describe('basic tests', () => {
+  it('creates `unicorn` eslint config and loads `unicorn` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('unicorn');
 
-  it('loads `unicorn` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('unicorn');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).toIncludeAllMembers([GLOB_HTM_HTML]);
+
     expect(configResult.getLoadedPlugin('unicorn')).toBeDefined();
   });
 
-  it('creates `unicorn` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('unicorn')).toBeDefined();
+  it('does not create `unicorn` eslint config and does not load `unicorn` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({unicorn: false});
+
+    expect(configResult.getConfigByUnPostfix('unicorn')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('unicorn')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -56,17 +69,6 @@ describe('basic tests', async () => {
     it('does not create `unicorn` eslint config if explicitly disabled', async () => {
       await expectConfigState({unicorn: false}, 'unicorn', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `unicorn` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('unicorn')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `unicorn` eslint config (ignores HTML files)', () => {
-    const ignores = configResult.getConfigByUnPostfix('unicorn')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).toIncludeAllMembers([GLOB_HTM_HTML]);
   });
 });
 

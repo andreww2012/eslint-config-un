@@ -3,15 +3,24 @@ const FIXTURES = {
   nonAbsoluteVersion: 'non-absolute-version/package.json',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('nodeDependencies');
+describe('basic tests', () => {
+  it('creates `node-dependencies` eslint config and loads `node-dependencies` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('nodeDependencies');
 
-  it('loads `node-dependencies` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('node-dependencies');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/package.json"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('node-dependencies')).toBeDefined();
   });
 
-  it('creates `node-dependencies` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('node-dependencies')).toBeDefined();
+  it('does not create `node-dependencies` eslint config and does not load `node-dependencies` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({nodeDependencies: false});
+
+    expect(configResult.getConfigByUnPostfix('node-dependencies')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('node-dependencies')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -65,18 +74,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has default `files` in `node-dependencies` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('node-dependencies')?.files).toMatchInlineSnapshot(
-      '["**/package.json"]',
-    );
-  });
-
-  it('has default `ignores` in `node-dependencies` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('node-dependencies')?.ignores?.length).toBeGreaterThan(
-      0,
-    );
   });
 });
 

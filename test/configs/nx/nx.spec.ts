@@ -89,16 +89,22 @@ afterAll(() => {
   delete globalThis.projectFileMap;
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('nx');
+describe('basic tests', () => {
+  it('creates `nx` and `nx/json` eslint configs and loads `nx` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('nx');
 
-  it('loads `nx` plugin', () => {
+    expect(configResult.getConfigByUnPostfix('nx')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('nx/json')).toBeDefined();
+
     expect(configResult.getLoadedPlugin('nx')).toBeDefined();
   });
 
-  it('creates `nx` and `nx/json` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('nx')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('nx/json')).toBeDefined();
+  it('does not create `nx` and `nx/json` eslint configs and does not load `nx` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({nx: false});
+
+    expect(configResult.getConfigByUnPostfix('nx')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('nx/json')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('nx')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {

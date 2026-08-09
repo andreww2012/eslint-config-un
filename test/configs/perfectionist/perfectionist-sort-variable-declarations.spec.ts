@@ -3,15 +3,17 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortVariableDeclarations`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({
-      perfectionist: {configSortVariableDeclarations: true},
-    });
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-variable-declarations` eslint config when `configSortVariableDeclarations` is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        perfectionist: {configSortVariableDeclarations: true},
+      });
 
-    it('creates `perfectionist/sort-variable-declarations` eslint config when `configSortVariableDeclarations` is `true`', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-variable-declarations'),
-      ).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-variable-declarations');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-variable-declarations` eslint config by default', async () => {
@@ -30,19 +32,6 @@ describe('perfectionist: sub config `sortVariableDeclarations`', () => {
       expect(
         configResult.getConfigByUnPostfix('perfectionist/sort-variable-declarations'),
       ).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-variable-declarations` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-variable-declarations')?.files,
-      ).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-variable-declarations` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-variable-declarations')?.ignores
-          ?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

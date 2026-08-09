@@ -38,16 +38,30 @@ beforeEach(() => {
   addInstalledPackages({graphql: '16.11.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('graphql');
+describe('basic tests', () => {
+  it('creates `graphql/processor` and `graphql` eslint configs and loads `graphql` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('graphql');
 
-  it('loads `graphql` plugin if used', () => {
+    expect(configResult.getConfigByUnPostfix('graphql/processor')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('graphql')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('graphql')?.files).toMatchInlineSnapshot(
+      '["**/*.{graphql,gql}"]',
+    );
+
+    const ignores = configResult.getConfigByUnPostfix('graphql')?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_GRAPHQL]);
+
     expect(configResult.getLoadedPlugin('graphql')).toBeDefined();
   });
 
-  it('creates `graphql/processor` and `graphql` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('graphql/processor')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('graphql')).toBeDefined();
+  it('does not create `graphql/processor` and `graphql` eslint configs and does not load `graphql` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({graphql: false});
+
+    expect(configResult.getConfigByUnPostfix('graphql/processor')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('graphql')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('graphql')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -104,19 +118,6 @@ describe('basic tests', async () => {
     it('does not create `graphql` eslint config if explicitly disabled', async () => {
       await expectConfigState({graphql: false}, 'graphql', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `graphql` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('graphql')?.files).toMatchInlineSnapshot(
-      '["**/*.{graphql,gql}"]',
-    );
-  });
-
-  it('has default `ignores` in `graphql` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('graphql')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_GRAPHQL]);
   });
 });
 

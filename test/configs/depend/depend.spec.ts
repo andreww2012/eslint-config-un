@@ -2,15 +2,24 @@ const FIXTURES = {
   bannedDependency: 'banned-dependency/package.json',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('depend');
+describe('basic tests', () => {
+  it('creates `depend` eslint config and loads `depend` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('depend');
 
-  it('loads `depend` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('depend');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/package.json"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('depend')).toBeDefined();
   });
 
-  it('creates `depend` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('depend')).toBeDefined();
+  it('does not create `depend` eslint config and does not load `depend` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({depend: false});
+
+    expect(configResult.getConfigByUnPostfix('depend')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('depend')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,16 +58,6 @@ describe('basic tests', async () => {
     it('does not create `depend` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({depend: false}, 'depend', ['depend', false], 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `depend` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('depend')?.files).toMatchInlineSnapshot(
-      '["**/package.json"]',
-    );
-  });
-
-  it('has default `ignores` in `depend` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('depend')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

@@ -15,17 +15,10 @@ describe('playwright: sub config `noOnlyTests`', () => {
         playwright: {configNoOnlyTests: true},
       });
 
-      expect(configResult.getConfigByUnPostfix('playwright/no-only-tests')).toBeDefined();
-    });
+      const config = configResult.getConfigByUnPostfix('playwright/no-only-tests');
 
-    it('has default `files` in `playwright/no-only-tests` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        playwright: {configNoOnlyTests: true},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('playwright/no-only-tests')?.files,
-      ).toMatchInlineSnapshot(
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
         '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
       );
     });

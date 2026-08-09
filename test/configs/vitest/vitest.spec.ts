@@ -6,27 +6,29 @@ beforeEach(() => {
   addInstalledPackages({vitest: '2.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('vitest');
+describe('basic tests', () => {
+  it('creates `vitest` eslint config and loads `vitest` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('vitest');
 
-  it('loads `vitest` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('vitest');
+
+    expect(config).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('vitest/ts')).toBeUndefined();
+
+    const eslintPluginVitest = await import('@vitest/eslint-plugin');
+
+    expect(config?.languageOptions?.['globals']).toStrictEqual(
+      eslintPluginVitest.default.environments.env.globals,
+    );
+
     expect(configResult.getLoadedPlugin('vitest')).toBeDefined();
   });
 
-  it('creates `vitest` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('vitest')).toBeDefined();
-  });
+  it('does not create `vitest` eslint config and does not load `vitest` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({vitest: false});
 
-  it('does not create `vitest/ts` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('vitest/ts')).toBeUndefined();
-  });
-
-  it('`vitest` eslint config includes vitest globals', async () => {
-    const eslintPluginVitest = await import('@vitest/eslint-plugin');
-
-    expect(configResult.getConfigByUnPostfix('vitest')?.languageOptions?.['globals']).toStrictEqual(
-      eslintPluginVitest.default.environments.env.globals,
-    );
+    expect(configResult.getConfigByUnPostfix('vitest')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('vitest')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {

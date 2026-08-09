@@ -24,21 +24,11 @@ describe('ts: sub config `disableNoUnsafe`', () => {
     it('creates `ts/disable-no-unsafe` eslint config when set to `true`', async () => {
       const configResult = await computeEslintConfig({ts: {configDisableNoUnsafe: true}});
 
-      expect(configResult.getConfigByUnPostfix('ts/disable-no-unsafe')).toBeDefined();
-    });
+      const config = configResult.getConfigByUnPostfix('ts/disable-no-unsafe');
 
-    it('has no explicit `files` restriction in `ts/disable-no-unsafe` eslint config by default', async () => {
-      const configResult = await computeEslintConfig({ts: {configDisableNoUnsafe: true}});
-
-      expect(configResult.getConfigByUnPostfix('ts/disable-no-unsafe')?.files).toBeUndefined();
-    });
-
-    it('has default `ignores` in `ts/disable-no-unsafe` eslint config', async () => {
-      const configResult = await computeEslintConfig({ts: {configDisableNoUnsafe: true}});
-
-      expect(
-        configResult.getConfigByUnPostfix('ts/disable-no-unsafe')?.ignores?.length,
-      ).toBeGreaterThan(0);
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
   });
 

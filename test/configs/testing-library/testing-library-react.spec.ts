@@ -1,9 +1,21 @@
 describe('testing-library: sub config `react`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({testingLibrary: {configReact: true}});
+  describe('basic tests', () => {
+    it('creates `testing-library/react` eslint config when enabled', async () => {
+      const configResult = await computeEslintConfig({testingLibrary: {configReact: true}});
 
-    it('creates `testing-library/react` eslint config when enabled', () => {
-      expect(configResult.getConfigByUnPostfix('testing-library/react')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('testing-library/react');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+      );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
+    });
+
+    it('does not create `testing-library/react` eslint config when `configReact` is disabled', async () => {
+      const configResult = await computeEslintConfig({testingLibrary: {configReact: false}});
+
+      expect(configResult.getConfigByUnPostfix('testing-library/react')).toBeUndefined();
     });
 
     it('creates `testing-library/react` eslint config when `react` package is installed', async () => {
@@ -12,20 +24,6 @@ describe('testing-library: sub config `react`', () => {
       const configResult = await computeEslintConfig({testingLibrary: true}, {reset: true});
 
       expect(configResult.getConfigByUnPostfix('testing-library/react')).toBeDefined();
-    });
-
-    it('has default `files` in `testing-library/react` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/react')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `testing-library/react` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/react')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

@@ -2,15 +2,24 @@ const FIXTURES = {
   objectWithoutName: 'object-without-name.json',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('jsonSchemaValidator');
+describe('basic tests', () => {
+  it('creates `json-schema-validator/js-ts` eslint config and loads `json-schema-validator` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('jsonSchemaValidator');
 
-  it('loads `json-schema-validator` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('json-schema-validator/js-ts');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('json-schema-validator')).toBeDefined();
   });
 
-  it('creates `json-schema-validator/js-ts` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('json-schema-validator/js-ts')).toBeDefined();
+  it('does not create `json-schema-validator/js-ts` eslint config and does not load `json-schema-validator` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({jsonSchemaValidator: false});
+
+    expect(configResult.getConfigByUnPostfix('json-schema-validator/js-ts')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('json-schema-validator')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -69,18 +78,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has default `files` in `json-schema-validator/js-ts` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('json-schema-validator/js-ts')?.files,
-    ).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
-  });
-
-  it('has default `ignores` in `json-schema-validator/js-ts` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('json-schema-validator/js-ts')?.ignores?.length,
-    ).toBeGreaterThan(0);
   });
 });
 

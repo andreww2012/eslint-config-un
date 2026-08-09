@@ -2,15 +2,24 @@ const FIXTURES = {
   sideEffects: 'side-effects/side-effects.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('treeShaking');
+describe('basic tests', () => {
+  it('creates `tree-shaking` eslint config and loads `tree-shaking` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('treeShaking');
 
-  it('loads `tree-shaking` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('tree-shaking');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('tree-shaking')).toBeDefined();
   });
 
-  it('creates `tree-shaking` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tree-shaking')).toBeDefined();
+  it('does not create `tree-shaking` eslint config and does not load `tree-shaking` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({treeShaking: false});
+
+    expect(configResult.getConfigByUnPostfix('tree-shaking')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('tree-shaking')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -59,16 +68,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has default `files` in `tree-shaking` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tree-shaking')?.files).toMatchInlineSnapshot(
-      '["**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `tree-shaking` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tree-shaking')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

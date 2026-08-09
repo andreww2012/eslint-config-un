@@ -2,15 +2,24 @@ const FIXTURES = {
   sqlTemplateWithInterpolation: 'sql-template-with-interpolation/test.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('sql');
+describe('basic tests', () => {
+  it('creates `sql` eslint config and loads `sql` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('sql');
 
-  it('loads `sql` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('sql');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('sql')).toBeDefined();
   });
 
-  it('creates `sql` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('sql')).toBeDefined();
+  it('does not create `sql` eslint config and does not load `sql` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({sql: false});
+
+    expect(configResult.getConfigByUnPostfix('sql')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('sql')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,14 +58,6 @@ describe('basic tests', async () => {
     it('does not create `sql` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({sql: false}, 'sql', ['sql', false], 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `sql` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('sql')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `sql` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('sql')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

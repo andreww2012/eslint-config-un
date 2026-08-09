@@ -1,9 +1,20 @@
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('perfectionist');
+describe('basic tests', () => {
+  it('creates `perfectionist` eslint config and does not load `perfectionist` plugin (all rules are `OFF`) when set to `true`', async () => {
+    const configResult = await computeEslintConfig('perfectionist');
 
-  it('creates `perfectionist` eslint config and does not load `perfectionist` plugin when set to `true`', () => {
-    expect(configResult.getConfigByUnPostfix('perfectionist')).toBeDefined();
+    const config = configResult.getConfigByUnPostfix('perfectionist');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('perfectionist')).toBeUndefined();
+  });
+
+  it('does not create `perfectionist` eslint config when set to `false`', async () => {
+    const configResult = await computeEslintConfig({perfectionist: false});
+
+    expect(configResult.getConfigByUnPostfix('perfectionist')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {

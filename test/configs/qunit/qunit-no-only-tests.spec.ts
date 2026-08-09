@@ -13,13 +13,10 @@ describe('qunit: sub config `noOnlyTests`', () => {
     it('creates `qunit/no-only-tests` eslint config when `configNoOnlyTests` is enabled', async () => {
       const configResult = await computeEslintConfig({qunit: {configNoOnlyTests: true}});
 
-      expect(configResult.getConfigByUnPostfix('qunit/no-only-tests')).toBeDefined();
-    });
+      const config = configResult.getConfigByUnPostfix('qunit/no-only-tests');
 
-    it('has default `files` in `qunit/no-only-tests` eslint config', async () => {
-      const configResult = await computeEslintConfig({qunit: {configNoOnlyTests: true}});
-
-      expect(configResult.getConfigByUnPostfix('qunit/no-only-tests')?.files).toMatchInlineSnapshot(
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
         '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
       );
     });

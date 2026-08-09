@@ -6,27 +6,33 @@ beforeEach(() => {
   addInstalledPackages({jest: '29.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('jest');
+describe('basic tests', () => {
+  it('creates `jest` eslint config and loads `jest` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('jest');
 
-  it('loads `jest` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('jest');
+
+    expect(config).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('jest/ts')).toBeUndefined();
+
+    const eslintPluginJest = await import('eslint-plugin-jest');
+
+    expect(config?.languageOptions?.['globals']).toStrictEqual(
+      eslintPluginJest.default.environments.globals.globals,
+    );
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+    );
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('jest')).toBeDefined();
   });
 
-  it('creates `jest` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jest')).toBeDefined();
-  });
+  it('does not create `jest` eslint config and does not load `jest` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({jest: false});
 
-  it('does not create `jest/ts` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('jest/ts')).toBeUndefined();
-  });
-
-  it('`jest` eslint config includes jest globals', async () => {
-    const eslintPluginJest = await import('eslint-plugin-jest');
-
-    expect(configResult.getConfigByUnPostfix('jest')?.languageOptions?.['globals']).toStrictEqual(
-      eslintPluginJest.default.environments.globals.globals,
-    );
+    expect(configResult.getConfigByUnPostfix('jest')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('jest')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -83,16 +89,6 @@ describe('basic tests', async () => {
     it('does not create `jest` eslint config if explicitly disabled', async () => {
       await expectConfigState({jest: false}, 'jest', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `jest` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jest')?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `jest` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jest')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

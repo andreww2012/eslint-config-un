@@ -3,14 +3,18 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortEnums`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({
-      ts: true,
-      perfectionist: {configSortEnums: true},
-    });
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-enums` eslint config when `configSortEnums` is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        ts: true,
+        perfectionist: {configSortEnums: true},
+      });
 
-    it('creates `perfectionist/sort-enums` eslint config when `configSortEnums` is `true`', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-enums')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-enums');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-enums` eslint config by default', async () => {
@@ -23,16 +27,6 @@ describe('perfectionist: sub config `sortEnums`', () => {
       const configResult = await computeEslintConfig({perfectionist: {configSortEnums: false}});
 
       expect(configResult.getConfigByUnPostfix('perfectionist/sort-enums')).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-enums` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-enums')?.files).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-enums` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-enums')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

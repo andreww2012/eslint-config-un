@@ -7,27 +7,21 @@ beforeEach(() => {
 });
 
 describe('react: sub config `hooks`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('react');
+  describe('basic tests', () => {
+    it('creates `react/hooks` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('react');
 
-    it('creates `react/hooks` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('react/hooks')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('react/hooks');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `react/hooks` eslint config when disabled', async () => {
       const configResult = await computeEslintConfig({react: {configHooks: false}});
 
       expect(configResult.getConfigByUnPostfix('react/hooks')).toBeUndefined();
-    });
-
-    it('has default `files` in `react/hooks` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('react/hooks')?.files).toMatchInlineSnapshot(
-        '["**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `react/hooks` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('react/hooks')?.ignores?.length).toBeGreaterThan(0);
     });
   });
 

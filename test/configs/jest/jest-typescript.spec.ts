@@ -1,9 +1,15 @@
 describe('jest: sub config `typescript`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({jest: true, ts: true});
+  describe('basic tests', () => {
+    it('creates `jest/ts` eslint config when `ts` config is enabled', async () => {
+      const configResult = await computeEslintConfig({jest: true, ts: true});
 
-    it('creates `jest/ts` eslint config when `ts` config is enabled', () => {
-      expect(configResult.getConfigByUnPostfix('jest/ts')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('jest/ts');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*[.-_]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)"]',
+      );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `jest/ts` eslint config when disabled', async () => {
@@ -16,16 +22,6 @@ describe('jest: sub config `typescript`', () => {
       const configResult = await computeEslintConfig('jest');
 
       expect(configResult.getConfigByUnPostfix('jest/ts')).toBeUndefined();
-    });
-
-    it('creates `jest/ts` eslint config with default TypeScript files', () => {
-      expect(configResult.getConfigByUnPostfix('jest/ts')?.files).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `jest/ts` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('jest/ts')?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('uses default TypeScript files even when parent `jest` config has explicit `files`', async () => {

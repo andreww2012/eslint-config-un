@@ -3,14 +3,18 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortInterfaces`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({
-      ts: true,
-      perfectionist: {configSortInterfaces: true},
-    });
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-interfaces` eslint config when `configSortInterfaces` is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        ts: true,
+        perfectionist: {configSortInterfaces: true},
+      });
 
-    it('creates `perfectionist/sort-interfaces` eslint config when `configSortInterfaces` is `true`', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-interfaces')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-interfaces');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-interfaces` eslint config by default', async () => {
@@ -25,18 +29,6 @@ describe('perfectionist: sub config `sortInterfaces`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('perfectionist/sort-interfaces')).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-interfaces` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-interfaces')?.files,
-      ).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-interfaces` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-interfaces')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

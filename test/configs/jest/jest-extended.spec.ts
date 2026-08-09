@@ -7,29 +7,24 @@ beforeEach(() => {
 });
 
 describe('jest: sub config `jestExtended`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({jest: {configJestExtended: true}});
+  describe('basic tests', () => {
+    it('creates `jest/extended` eslint config when `configJestExtended` is enabled', async () => {
+      const configResult = await computeEslintConfig({jest: {configJestExtended: true}});
 
-    it('creates `jest/extended` eslint config when `configJestExtended` is enabled', () => {
-      expect(configResult.getConfigByUnPostfix('jest/extended')).toBeDefined();
-    });
+      const config = configResult.getConfigByUnPostfix('jest/extended');
 
-    it('has default `files` in `jest/extended` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('jest/extended')?.files).toMatchInlineSnapshot(
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
         '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
       );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
+      expect(config?.files).toStrictEqual(configResult.getConfigByUnPostfix('jest')?.files);
     });
 
-    it('has default `ignores` in `jest/extended` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('jest/extended')?.ignores?.length).toBeGreaterThan(
-        0,
-      );
-    });
+    it('does not create `jest/extended` eslint config when `configJestExtended` is disabled', async () => {
+      const configResult = await computeEslintConfig({jest: {configJestExtended: false}});
 
-    it('inherits `files` from parent `jest` config when `configJestExtended` is enabled', () => {
-      expect(configResult.getConfigByUnPostfix('jest/extended')?.files).toStrictEqual(
-        configResult.getConfigByUnPostfix('jest')?.files,
-      );
+      expect(configResult.getConfigByUnPostfix('jest/extended')).toBeUndefined();
     });
 
     it('creates `jest/extended` eslint config when sub-config is not explicitly enabled but `jest-extended` package is installed', async () => {

@@ -7,31 +7,22 @@ beforeEach(() => {
 });
 
 describe('react: sub config `reactX`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('react');
+  describe('basic tests', () => {
+    it('creates `react/x` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('react');
 
-    it('creates `react/x` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('react/x')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('react/x');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
+      expect(configResult.getConfigByUnPostfix('react/x/rules-type-aware')).toBeUndefined();
     });
 
     it('does not create `react/x` eslint config when disabled', async () => {
       const configResult = await computeEslintConfig({react: {configReactX: false}});
 
       expect(configResult.getConfigByUnPostfix('react/x')).toBeUndefined();
-    });
-
-    it('has default `files` in `react/x` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('react/x')?.files).toMatchInlineSnapshot(
-        '["**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `react/x` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('react/x')?.ignores?.length).toBeGreaterThan(0);
-    });
-
-    it('does not create `react/x/rules-type-aware` eslint config when `ts` config is not enabled', () => {
-      expect(configResult.getConfigByUnPostfix('react/x/rules-type-aware')).toBeUndefined();
     });
 
     it('creates `react/x/rules-type-aware` eslint config when `ts` config is enabled', async () => {

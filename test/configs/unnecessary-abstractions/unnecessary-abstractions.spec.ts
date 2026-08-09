@@ -2,15 +2,24 @@ const FIXTURES = {
   ternaryOfParameters: 'ternary-of-parameters.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('unnecessaryAbstractions');
+describe('basic tests', () => {
+  it('creates `unnecessary-abstractions` eslint config and loads `unnecessary-abstractions` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('unnecessaryAbstractions');
 
-  it('loads `unnecessary-abstractions` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('unnecessary-abstractions');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('unnecessary-abstractions')).toBeDefined();
   });
 
-  it('creates `unnecessary-abstractions` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('unnecessary-abstractions')).toBeDefined();
+  it('does not create `unnecessary-abstractions` eslint config and does not load `unnecessary-abstractions` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({unnecessaryAbstractions: false});
+
+    expect(configResult.getConfigByUnPostfix('unnecessary-abstractions')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('unnecessary-abstractions')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -76,16 +85,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `unnecessary-abstractions` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('unnecessary-abstractions')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `unnecessary-abstractions` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('unnecessary-abstractions')?.ignores?.length,
-    ).toBeGreaterThan(0);
   });
 });
 

@@ -3,16 +3,18 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortIntersectionTypes`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({
-      ts: true,
-      perfectionist: {configSortIntersectionTypes: true},
-    });
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-intersection-types` eslint config when `configSortIntersectionTypes` is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        ts: true,
+        perfectionist: {configSortIntersectionTypes: true},
+      });
 
-    it('creates `perfectionist/sort-intersection-types` eslint config when `configSortIntersectionTypes` is `true`', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-intersection-types'),
-      ).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-intersection-types');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-intersection-types` eslint config by default', async () => {
@@ -31,18 +33,6 @@ describe('perfectionist: sub config `sortIntersectionTypes`', () => {
       expect(
         configResult.getConfigByUnPostfix('perfectionist/sort-intersection-types'),
       ).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-intersection-types` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-intersection-types')?.files,
-      ).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-intersection-types` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-intersection-types')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

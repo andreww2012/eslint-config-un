@@ -2,11 +2,21 @@ const FIXTURES = {
   stringConcatenation: 'string-concatenation.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('noStylisticRules');
+describe('basic tests', () => {
+  it('creates `no-stylistic-rules` eslint config if set to `true`', async () => {
+    const configResult = await computeEslintConfig('noStylisticRules');
 
-  it('creates `no-stylistic-rules` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('no-stylistic-rules')).toBeDefined();
+    const config = configResult.getConfigByUnPostfix('no-stylistic-rules');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores).toBeUndefined();
+  });
+
+  it('does not create `no-stylistic-rules` eslint config if set to `false`', async () => {
+    const configResult = await computeEslintConfig({noStylisticRules: false});
+
+    expect(configResult.getConfigByUnPostfix('no-stylistic-rules')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -55,14 +65,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `no-stylistic-rules` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('no-stylistic-rules')?.files).toBeUndefined();
-  });
-
-  it('has no default `ignores` in `no-stylistic-rules` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('no-stylistic-rules')?.ignores).toBeUndefined();
   });
 });
 

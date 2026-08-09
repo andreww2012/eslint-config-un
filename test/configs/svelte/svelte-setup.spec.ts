@@ -1,19 +1,19 @@
 describe('svelte: sub config `setup`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('svelte');
+  describe('basic tests', () => {
+    it('creates `svelte/setup` eslint config when svelte is enabled', async () => {
+      const configResult = await computeEslintConfig('svelte');
 
-    it('creates `svelte/setup` eslint config when svelte is enabled', () => {
-      expect(configResult.getConfigByUnPostfix('svelte/setup')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('svelte/setup');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.svelte", "**/*.svelte.{js,ts}"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
-    it('has default `files` in `svelte/setup` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('svelte/setup')?.files).toMatchInlineSnapshot(
-        '["**/*.svelte", "**/*.svelte.{js,ts}"]',
-      );
-    });
+    it('does not create `svelte/setup` eslint config when the `svelte` config is disabled', async () => {
+      const configResult = await computeEslintConfig({svelte: false});
 
-    it('has default `ignores` in `svelte/setup` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('svelte/setup')?.ignores?.length).toBeGreaterThan(0);
+      expect(configResult.getConfigByUnPostfix('svelte/setup')).toBeUndefined();
     });
   });
 

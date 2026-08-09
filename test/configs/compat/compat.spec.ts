@@ -3,15 +3,24 @@ const FIXTURES = {
   consoleApi: 'console-api.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('compat');
+describe('basic tests', () => {
+  it('creates `compat` eslint config and loads `compat` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('compat');
 
-  it('loads `compat` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('compat');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('compat')).toBeDefined();
   });
 
-  it('creates `compat` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('compat')).toBeDefined();
+  it('does not create `compat` eslint config and does not load `compat` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({compat: false});
+
+    expect(configResult.getConfigByUnPostfix('compat')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('compat')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -50,14 +59,6 @@ describe('basic tests', async () => {
     it('does not create `compat` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({compat: false}, 'compat', ['compat', false], 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `compat` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('compat')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `compat` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('compat')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

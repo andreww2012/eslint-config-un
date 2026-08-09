@@ -6,15 +6,28 @@ const FIXTURES = {
   jsxWithImgTag: 'jsx-with-img-tag/jsx-with-img-tag.tsx',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('nextJs');
+describe('basic tests', () => {
+  it('creates `nextjs` eslint config and loads `nextjs` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('nextJs');
 
-  it('loads `nextjs` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('nextjs');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers(['**/*.jsx']);
+
     expect(configResult.getLoadedPlugin('nextjs')).toBeDefined();
   });
 
-  it('creates `nextjs` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('nextjs')).toBeDefined();
+  it('does not create `nextjs` eslint config and does not load `nextjs` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({nextJs: false});
+
+    expect(configResult.getConfigByUnPostfix('nextjs')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('nextjs')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -71,19 +84,6 @@ describe('basic tests', async () => {
     it('does not create `nextjs` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({nextJs: false}, 'nextjs', ['nextJs', false], 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `nextjs` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('nextjs')?.files).toMatchInlineSnapshot(
-      '["**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `nextjs` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('nextjs')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers(['**/*.jsx']);
   });
 });
 

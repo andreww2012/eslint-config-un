@@ -3,11 +3,15 @@ const FIXTURES = {
 } as const;
 
 describe('json-schema-validator: sub config `json`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('jsonSchemaValidator');
+  describe('basic tests', () => {
+    it('creates `json-schema-validator/json` eslint config when enabled (default)', async () => {
+      const configResult = await computeEslintConfig('jsonSchemaValidator');
 
-    it('creates `json-schema-validator/json` eslint config when enabled (default)', () => {
-      expect(configResult.getConfigByUnPostfix('json-schema-validator/json')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('json-schema-validator/json');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.json", "**/*.jsonc", "**/*.json5"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `json-schema-validator/json` eslint config when disabled', async () => {
@@ -16,18 +20,6 @@ describe('json-schema-validator: sub config `json`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('json-schema-validator/json')).toBeUndefined();
-    });
-
-    it('has default `files` in `json-schema-validator/json` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('json-schema-validator/json')?.files,
-      ).toMatchInlineSnapshot('["**/*.json", "**/*.jsonc", "**/*.json5"]');
-    });
-
-    it('has default `ignores` in `json-schema-validator/json` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('json-schema-validator/json')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

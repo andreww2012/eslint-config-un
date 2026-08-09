@@ -7,23 +7,18 @@ describe('cypress: sub config `noOnlyTests`', () => {
     it('creates `cypress/no-only-tests` eslint config by default (`configNoOnlyTests` is enabled by default)', async () => {
       const configResult = await computeEslintConfig('cypress');
 
-      expect(configResult.getConfigByUnPostfix('cypress/no-only-tests')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('cypress/no-only-tests');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.cy.?([cm])[jt]s?(x)"]',
+      );
     });
 
     it('does not create `cypress/no-only-tests` eslint config when `configNoOnlyTests` is disabled', async () => {
       const configResult = await computeEslintConfig({cypress: {configNoOnlyTests: false}});
 
       expect(configResult.getConfigByUnPostfix('cypress/no-only-tests')).toBeUndefined();
-    });
-
-    it('has default `files` in `cypress/no-only-tests` eslint config', async () => {
-      const configResult = await computeEslintConfig('cypress');
-
-      expect(
-        configResult.getConfigByUnPostfix('cypress/no-only-tests')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.cy.?([cm])[jt]s?(x)"]',
-      );
     });
 
     it('inherits `files` from parent `cypress` config when `configNoOnlyTests` is enabled', async () => {

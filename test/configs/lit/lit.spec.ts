@@ -6,20 +6,28 @@ beforeEach(() => {
   addInstalledPackages({lit: '3.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('lit');
+describe('basic tests', () => {
+  it('creates `lit` and `lit-a11y` eslint configs and loads `lit` and `lit-a11y` plugins if set to `true`', async () => {
+    const configResult = await computeEslintConfig('lit');
 
-  it('loads `lit` plugin', () => {
+    const config = configResult.getConfigByUnPostfix('lit');
+
+    expect(config).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('lit-a11y')).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('lit')).toBeDefined();
-  });
-
-  it('loads `lit-a11y` plugin', () => {
     expect(configResult.getLoadedPlugin('lit-a11y')).toBeDefined();
   });
 
-  it('creates `lit` and `lit-a11y` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('lit')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('lit-a11y')).toBeDefined();
+  it('does not create `lit` and `lit-a11y` eslint configs and does not load `lit` and `lit-a11y` plugins if set to `false`', async () => {
+    const configResult = await computeEslintConfig({lit: false});
+
+    expect(configResult.getConfigByUnPostfix('lit')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('lit-a11y')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('lit')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('lit-a11y')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -98,14 +106,6 @@ describe('basic tests', async () => {
         await expectConfigState({lit: false}, 'lit', ['lit', false], 'misc-enabled');
       });
     });
-  });
-
-  it('has no explicit `files` restriction in `lit` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('lit')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `lit` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('lit')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

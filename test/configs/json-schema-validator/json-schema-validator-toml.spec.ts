@@ -5,11 +5,19 @@ const FIXTURES = {
 } as const;
 
 describe('json-schema-validator: sub config `toml`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('jsonSchemaValidator');
+  describe('basic tests', () => {
+    it('creates `json-schema-validator/toml` eslint config when enabled (default)', async () => {
+      const configResult = await computeEslintConfig('jsonSchemaValidator');
 
-    it('creates `json-schema-validator/toml` eslint config when enabled (default)', () => {
-      expect(configResult.getConfigByUnPostfix('json-schema-validator/toml')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('json-schema-validator/toml');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.toml"]');
+
+      const ignores = config?.ignores;
+
+      expect(ignores?.length).toBeGreaterThan(0);
+      expect(ignores).not.toIncludeAnyMembers([GLOB_TOML]);
     });
 
     it('does not create `json-schema-validator/toml` eslint config when disabled', async () => {
@@ -18,19 +26,6 @@ describe('json-schema-validator: sub config `toml`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('json-schema-validator/toml')).toBeUndefined();
-    });
-
-    it('has default `files` in `json-schema-validator/toml` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('json-schema-validator/toml')?.files,
-      ).toMatchInlineSnapshot('["**/*.toml"]');
-    });
-
-    it('has default `ignores` in `json-schema-validator/toml` eslint config', () => {
-      const ignores = configResult.getConfigByUnPostfix('json-schema-validator/toml')?.ignores;
-
-      expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.toIncludeAnyMembers([GLOB_TOML]);
     });
   });
 

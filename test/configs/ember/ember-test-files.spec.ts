@@ -10,7 +10,13 @@ describe('ember: sub config `testFiles`', () => {
     it('creates `ember/tests` eslint config by default', async () => {
       const configResult = await computeEslintConfig('ember');
 
-      expect(configResult.getConfigByUnPostfix('ember/tests')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('ember/tests');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*[.-_]spec.?([cm])[jt]s", "**/*.test.?([cm])[jt]s", "**/__test?(s)__/**/*.?([cm])[jt]s"]',
+      );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `ember/tests` eslint config when `configTestFiles` is `false`', async () => {
@@ -29,20 +35,6 @@ describe('ember: sub config `testFiles`', () => {
       const configResult = await computeEslintConfig({ember: {configTestFiles: {}}});
 
       expect(configResult.getConfigByUnPostfix('ember/tests')).toBeDefined();
-    });
-
-    it('has default `files` in `ember/tests` eslint config', async () => {
-      const configResult = await computeEslintConfig('ember');
-
-      expect(configResult.getConfigByUnPostfix('ember/tests')?.files).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s", "**/*.test.?([cm])[jt]s", "**/__test?(s)__/**/*.?([cm])[jt]s"]',
-      );
-    });
-
-    it('has default `ignores` in `ember/tests` eslint config', async () => {
-      const configResult = await computeEslintConfig('ember');
-
-      expect(configResult.getConfigByUnPostfix('ember/tests')?.ignores?.length).toBeGreaterThan(0);
     });
   });
 

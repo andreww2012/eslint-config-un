@@ -11,19 +11,32 @@ beforeEach(() => {
   vi.mocked(detectPackageManager).mockResolvedValue({name: 'pnpm', agent: 'pnpm'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('pnpm');
+describe('basic tests', () => {
+  it('creates `pnpm/package.json` eslint config and loads `pnpm` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('pnpm');
 
-  it('loads `pnpm` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('pnpm/package.json');
+
+    expect(config).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/package.json"]');
+    expect(
+      configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')?.files,
+    ).toMatchInlineSnapshot('["pnpm-workspace.yaml"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+    expect(
+      configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')?.ignores?.length,
+    ).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('pnpm')).toBeDefined();
   });
 
-  it('creates `pnpm/package.json` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('pnpm/package.json')).toBeDefined();
-  });
+  it('does not create `pnpm/package.json` eslint config and does not load `pnpm` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({pnpm: false});
 
-  it('creates `pnpm/pnpm-workspace-yaml` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('pnpm/package.json')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('pnpm')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -111,30 +124,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has default `files` in `pnpm/package.json` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('pnpm/package.json')?.files).toMatchInlineSnapshot(
-      '["**/package.json"]',
-    );
-  });
-
-  it('has default `files` in `pnpm/pnpm-workspace-yaml` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')?.files,
-    ).toMatchInlineSnapshot('["pnpm-workspace.yaml"]');
-  });
-
-  it('has default `ignores` in `pnpm/package.json` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('pnpm/package.json')?.ignores?.length).toBeGreaterThan(
-      0,
-    );
-  });
-
-  it('has default `ignores` in `pnpm/pnpm-workspace-yaml` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')?.ignores?.length,
-    ).toBeGreaterThan(0);
   });
 });
 

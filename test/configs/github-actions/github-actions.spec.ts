@@ -14,15 +14,24 @@ beforeEach(() => {
   vi.mocked(findUpDirectory).mockReturnValue('.github/workflows');
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('githubActions');
+describe('basic tests', () => {
+  it('creates `github-actions` eslint config and loads `github-actions` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('githubActions');
 
-  it('loads `github-actions` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('github-actions');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('[".github/workflows/*.y?(a)ml"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('github-actions')).toBeDefined();
   });
 
-  it('creates `github-actions` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('github-actions')).toBeDefined();
+  it('does not create `github-actions` eslint config and does not load `github-actions` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({githubActions: false});
+
+    expect(configResult.getConfigByUnPostfix('github-actions')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('github-actions')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -94,16 +103,6 @@ describe('basic tests', async () => {
     it('does not create `github-actions` eslint config if explicitly disabled', async () => {
       await expectConfigState({githubActions: false}, 'github-actions', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `github-actions` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('github-actions')?.files).toMatchInlineSnapshot(
-      '[".github/workflows/*.y?(a)ml"]',
-    );
-  });
-
-  it('has default `ignores` in `github-actions` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('github-actions')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

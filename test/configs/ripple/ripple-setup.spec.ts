@@ -3,21 +3,21 @@ describe('ripple: sub config `setup`', () => {
     addInstalledPackages({ripple: '0.1.0'});
   });
 
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('ripple');
+  describe('basic tests', () => {
+    it('creates `ripple/setup` eslint config when ripple is enabled', async () => {
+      const configResult = await computeEslintConfig('ripple');
 
-    it('creates `ripple/setup` eslint config when ripple is enabled', () => {
-      expect(configResult.getConfigByUnPostfix('ripple/setup')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('ripple/setup');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.tsrx", "**/*.ripple"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
-    it('has default `files` in `ripple/setup` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('ripple/setup')?.files).toMatchInlineSnapshot(
-        '["**/*.tsrx", "**/*.ripple"]',
-      );
-    });
+    it('does not create `ripple/setup` eslint config when the `ripple` config is disabled', async () => {
+      const configResult = await computeEslintConfig({ripple: false});
 
-    it('has default `ignores` in `ripple/setup` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('ripple/setup')?.ignores?.length).toBeGreaterThan(0);
+      expect(configResult.getConfigByUnPostfix('ripple/setup')).toBeUndefined();
     });
   });
 

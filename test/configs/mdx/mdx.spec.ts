@@ -4,20 +4,32 @@ const FIXTURES = {
   unclosedJsxTag: 'unclosed-jsx-tag.mdx',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('mdx');
+describe('basic tests', () => {
+  it('creates `mdx/mdx` eslint config and loads `mdx` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('mdx');
 
-  it('loads `mdx` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('mdx/mdx');
+
+    expect(config).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('mdx/setup/code-blocks-processor')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.mdx"]');
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_MDX]);
+
     expect(configResult.getLoadedPlugin('mdx')).toBeDefined();
   });
 
-  it('creates `mdx/mdx` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('mdx/mdx')).toBeDefined();
-  });
+  it('does not create `mdx/mdx` eslint config and does not load `mdx` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({mdx: false});
 
-  it('creates `mdx/setup/code-blocks-processor` and `mdx/code-blocks` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('mdx/setup/code-blocks-processor')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('mdx/mdx')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('mdx/setup/code-blocks-processor')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('mdx/code-blocks')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('mdx')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -56,19 +68,6 @@ describe('basic tests', async () => {
     it('does not create `mdx/mdx` eslint config if explicitly disabled', async () => {
       await expectConfigState({mdx: false}, 'mdx/mdx', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `mdx/mdx` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('mdx/mdx')?.files).toMatchInlineSnapshot(
-      '["**/*.mdx"]',
-    );
-  });
-
-  it('has default `ignores` in `mdx/mdx` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('mdx/mdx')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_MDX]);
   });
 });
 

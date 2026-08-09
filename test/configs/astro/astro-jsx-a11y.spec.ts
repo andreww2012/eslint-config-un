@@ -3,23 +3,21 @@ const FIXTURES = {
 } as const;
 
 describe('astro: sub config `jsxA11y`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('astro');
+  describe('basic tests', () => {
+    it('creates `jsx-a11y/astro` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('astro');
 
-    it('creates `jsx-a11y/astro` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('jsx-a11y/astro')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('jsx-a11y/astro');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.astro"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `jsx-a11y/astro` eslint config when set to `false`', async () => {
       const disabledConfigResult = await computeEslintConfig({astro: {configJsxA11y: false}});
 
       expect(disabledConfigResult.getConfigByUnPostfix('jsx-a11y/astro')).toBeUndefined();
-    });
-
-    it('has default `files` in `jsx-a11y/astro` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('jsx-a11y/astro')?.files).toMatchInlineSnapshot(
-        '["**/*.astro"]',
-      );
     });
 
     it('inherits `files` from parent `astro` config when `configJsxA11y` is enabled', async () => {
@@ -31,12 +29,6 @@ describe('astro: sub config `jsxA11y`', () => {
 
       expect(inheritedConfigResult.getConfigByUnPostfix('jsx-a11y/astro')?.files).toStrictEqual(
         FILES,
-      );
-    });
-
-    it('has default `ignores` in `jsx-a11y/astro` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('jsx-a11y/astro')?.ignores?.length).toBeGreaterThan(
-        0,
       );
     });
   });

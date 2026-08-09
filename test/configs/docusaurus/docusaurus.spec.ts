@@ -6,15 +6,24 @@ beforeEach(() => {
   addInstalledPackages({'@docusaurus/core': '3.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('docusaurus');
+describe('basic tests', () => {
+  it('creates `docusaurus` eslint config and loads `docusaurus` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('docusaurus');
 
-  it('loads `docusaurus` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('docusaurus');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]sx"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('docusaurus')).toBeDefined();
   });
 
-  it('creates `docusaurus` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('docusaurus')).toBeDefined();
+  it('does not create `docusaurus` eslint config and does not load `docusaurus` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({docusaurus: false});
+
+    expect(configResult.getConfigByUnPostfix('docusaurus')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('docusaurus')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -76,16 +85,6 @@ describe('basic tests', async () => {
     it('creates `docusaurus` eslint config and prints a warning if explicitly enabled', async () => {
       await expectConfigState('docusaurus', 'docusaurus', ['docusaurus', true], 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `docusaurus` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('docusaurus')?.files).toMatchInlineSnapshot(
-      '["**/*.?([cm])[jt]sx"]',
-    );
-  });
-
-  it('has default `ignores` in `docusaurus` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('docusaurus')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

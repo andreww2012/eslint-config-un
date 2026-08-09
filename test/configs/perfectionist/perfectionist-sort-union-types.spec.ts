@@ -3,14 +3,18 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortUnionTypes`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({
-      ts: true,
-      perfectionist: {configSortUnionTypes: true},
-    });
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-union-types` eslint config when `configSortUnionTypes` is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        ts: true,
+        perfectionist: {configSortUnionTypes: true},
+      });
 
-    it('creates `perfectionist/sort-union-types` eslint config when `configSortUnionTypes` is `true`', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-union-types')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-union-types');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-union-types` eslint config by default', async () => {
@@ -25,18 +29,6 @@ describe('perfectionist: sub config `sortUnionTypes`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('perfectionist/sort-union-types')).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-union-types` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-union-types')?.files,
-      ).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-union-types` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-union-types')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

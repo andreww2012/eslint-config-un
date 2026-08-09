@@ -6,16 +6,30 @@ beforeEach(() => {
   addInstalledPackages({storybook: '8.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('storybook');
+describe('basic tests', () => {
+  it('creates `storybook` and `storybook/main` eslint configs and loads `storybook` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('storybook');
 
-  it('loads `storybook` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('storybook');
+
+    expect(config).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('storybook/main')).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.{stories,story}.?([cm])[jt]s?(x)"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+    expect(configResult.getConfigByUnPostfix('storybook/main')?.files).toMatchInlineSnapshot(
+      '[".storybook/main.?([cm])[jt]s"]',
+    );
+    expect(configResult.getConfigByUnPostfix('storybook/main')?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('storybook')).toBeDefined();
   });
 
-  it('creates `storybook` and `storybook/main` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('storybook')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('storybook/main')).toBeDefined();
+  it('does not create `storybook` and `storybook/main` eslint configs and does not load `storybook` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({storybook: false});
+
+    expect(configResult.getConfigByUnPostfix('storybook')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('storybook/main')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('storybook')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -72,26 +86,6 @@ describe('basic tests', async () => {
     it('does not create `storybook` eslint config if explicitly disabled', async () => {
       await expectConfigState({storybook: false}, 'storybook', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `storybook` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('storybook')?.files).toMatchInlineSnapshot(
-      '["**/*.{stories,story}.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `storybook` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('storybook')?.ignores?.length).toBeGreaterThan(0);
-  });
-
-  it('has default `files` in `storybook/main` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('storybook/main')?.files).toMatchInlineSnapshot(
-      '[".storybook/main.?([cm])[jt]s"]',
-    );
-  });
-
-  it('has default `ignores` in `storybook/main` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('storybook/main')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

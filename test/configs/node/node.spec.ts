@@ -14,22 +14,26 @@ const mockUserPackageJsonPath = (fixtureDirectory: string) => {
   }));
 };
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('node');
+describe('basic tests', () => {
+  it('creates `node` eslint config and loads `node` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('node');
 
-  it('loads `node` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('node');
+
+    expect(config).toBeDefined();
+
+    const globals = await import('globals');
+
+    expect(config?.languageOptions?.['globals']).toStrictEqual(globals.node);
+
     expect(configResult.getLoadedPlugin('node')).toBeDefined();
   });
 
-  it('creates `node` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('node')).toBeDefined();
-  });
+  it('does not create `node` eslint config and does not load `node` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({node: false});
 
-  it('`node` eslint config includes node.js globals', async () => {
-    const globals = await import('globals');
-    const nodeConfig = configResult.getConfigByUnPostfix('node');
-
-    expect(nodeConfig?.languageOptions?.['globals']).toStrictEqual(globals.node);
+    expect(configResult.getConfigByUnPostfix('node')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('node')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {

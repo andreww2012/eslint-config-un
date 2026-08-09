@@ -4,12 +4,31 @@ const FIXTURES = {
   usedConsoleLog: 'used-console-log.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('js');
+describe('basic tests', () => {
+  it('creates `js` and `js/stylistic_spaced-comment` eslint configs if set to `true`', async () => {
+    const configResult = await computeEslintConfig('js');
 
-  it('creates `js` and `js/stylistic_spaced-comment` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('js')).toBeDefined();
+    const config = configResult.getConfigByUnPostfix('js');
+
+    expect(config).toBeDefined();
     expect(configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')).toBeDefined();
+    expect(config?.files).toBeUndefined();
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+
+    expect(
+      configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')?.ignores,
+    ).toIncludeAllMembers(['**/*.y?(a)ml', '**/*.html']);
+  });
+
+  it('does not create `js` and `js/stylistic_spaced-comment` eslint configs if set to `false`', async () => {
+    const configResult = await computeEslintConfig({js: false});
+
+    expect(configResult.getConfigByUnPostfix('js')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -48,23 +67,6 @@ describe('basic tests', async () => {
     it('does not create `js` eslint config if explicitly disabled', async () => {
       await expectConfigState({js: false}, 'js', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` in `js` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('js')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `js` eslint config (does not ignore HTML files)', () => {
-    const ignores = configResult.getConfigByUnPostfix('js')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
-  });
-
-  it('has default `ignores` in `js/stylistic_spaced-comment` eslint config including YAML and HTML', () => {
-    const ignores = configResult.getConfigByUnPostfix('js/stylistic_spaced-comment')?.ignores;
-
-    expect(ignores).toIncludeAllMembers(['**/*.y?(a)ml', '**/*.html']);
   });
 });
 

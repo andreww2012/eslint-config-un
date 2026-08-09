@@ -2,15 +2,24 @@ const FIXTURES = {
   withSecret: 'with-secret.ts',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('noSecrets');
+describe('basic tests', () => {
+  it('creates `no-secrets` eslint config and loads `no-secrets` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('noSecrets');
 
-  it('loads `no-secrets` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('no-secrets');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('no-secrets')).toBeDefined();
   });
 
-  it('creates `no-secrets` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('no-secrets')).toBeDefined();
+  it('does not create `no-secrets` eslint config and does not load `no-secrets` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({noSecrets: false});
+
+    expect(configResult.getConfigByUnPostfix('no-secrets')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('no-secrets')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,16 +58,6 @@ describe('basic tests', async () => {
     it('does not create `no-secrets` eslint config if explicitly disabled', async () => {
       await expectConfigState({noSecrets: false}, 'no-secrets', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `no-secrets` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('no-secrets')?.files).toMatchInlineSnapshot(
-      '["**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `no-secrets` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('no-secrets')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

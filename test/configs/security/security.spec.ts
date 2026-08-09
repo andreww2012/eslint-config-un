@@ -4,15 +4,28 @@ const FIXTURES = {
   evalWithExpression: 'eval-with-expression.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('security');
+describe('basic tests', () => {
+  it('creates `security` eslint config and loads `security` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('security');
 
-  it('loads `security` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('security');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+
     expect(configResult.getLoadedPlugin('security')).toBeDefined();
   });
 
-  it('creates `security` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('security')).toBeDefined();
+  it('does not create `security` eslint config and does not load `security` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({security: false});
+
+    expect(configResult.getConfigByUnPostfix('security')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('security')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -51,17 +64,6 @@ describe('basic tests', async () => {
     it('does not create `security` eslint config if explicitly disabled', async () => {
       await expectConfigState({security: false}, 'security', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `security` eslint config by default (applies to all files)', () => {
-    expect(configResult.getConfigByUnPostfix('security')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `security` eslint config (does not ignore HTML files)', () => {
-    const ignores = configResult.getConfigByUnPostfix('security')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 

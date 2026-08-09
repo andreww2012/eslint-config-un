@@ -6,15 +6,26 @@ beforeEach(() => {
   addInstalledPackages({cypress: '13.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('cypress');
+describe('basic tests', () => {
+  it('creates `cypress` eslint config and loads `cypress` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('cypress');
 
-  it('loads `cypress` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('cypress');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.cy.?([cm])[jt]s?(x)"]',
+    );
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('cypress')).toBeDefined();
   });
 
-  it('creates `cypress` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('cypress')).toBeDefined();
+  it('does not create `cypress` eslint config and does not load `cypress` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({cypress: false});
+
+    expect(configResult.getConfigByUnPostfix('cypress')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('cypress')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -71,16 +82,6 @@ describe('basic tests', async () => {
     it('does not create `cypress` eslint config if explicitly disabled', async () => {
       await expectConfigState({cypress: false}, 'cypress', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `cypress` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('cypress')?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.cy.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `cypress` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('cypress')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

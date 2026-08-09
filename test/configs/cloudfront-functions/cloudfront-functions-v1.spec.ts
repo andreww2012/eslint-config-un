@@ -5,37 +5,29 @@ const FIXTURES = {
 const V1_FILES = ['**/cloudfront-v1/**/*.js'];
 
 describe('cloudfront functions: sub config `v1`', () => {
-  describe('basic tests', async () => {
+  describe('basic tests', () => {
+    it('creates `cloudfront-functions/v1` and `cloudfront-functions/v1/es-features` eslint configs, but not `cloudfront-functions/v2` by default', async () => {
+      const configResult = await computeEslintConfig({
+        cloudfrontFunctions: {configV1: {files: V1_FILES}},
+      });
+
+      const config = configResult.getConfigByUnPostfix('cloudfront-functions/v1');
+
+      expect(config).toBeDefined();
+      expect(configResult.getConfigByUnPostfix('cloudfront-functions/v2')).toBeUndefined();
+      expect(
+        configResult.getConfigByUnPostfix('cloudfront-functions/v1/es-features'),
+      ).toBeDefined();
+      expect(config?.files).toStrictEqual(V1_FILES);
+      expect(config?.ignores?.length).toBeGreaterThan(0);
+    });
+
     it('does not create `cloudfront-functions/v1` eslint config when neither `files` or `ignores` are provided', async () => {
       const configResult = await computeEslintConfig({
         cloudfrontFunctions: {configV1: {}},
       });
 
       expect(configResult.getConfigByUnPostfix('cloudfront-functions/v1')).toBeUndefined();
-    });
-
-    const configResult = await computeEslintConfig({
-      cloudfrontFunctions: {configV1: {files: V1_FILES}},
-    });
-
-    it('creates `cloudfront-functions/v1` and `cloudfront-functions/v1/es-features` eslint configs, but not `cloudfront-functions/v2`', () => {
-      expect(configResult.getConfigByUnPostfix('cloudfront-functions/v1')).toBeDefined();
-      expect(configResult.getConfigByUnPostfix('cloudfront-functions/v2')).toBeUndefined();
-      expect(
-        configResult.getConfigByUnPostfix('cloudfront-functions/v1/es-features'),
-      ).toBeDefined();
-    });
-
-    it('has user-provided `files` in `cloudfront-functions/v1` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('cloudfront-functions/v1')?.files).toStrictEqual(
-        V1_FILES,
-      );
-    });
-
-    it('has default `ignores` in `cloudfront-functions/v1` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('cloudfront-functions/v1')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

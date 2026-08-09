@@ -2,15 +2,24 @@ const FIXTURES = {
   incorrectCasing: 'incorrect-casing.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('casePolice');
+describe('basic tests', () => {
+  it('creates `case-police` eslint config and loads `case-police` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('casePolice');
 
-  it('loads `case-police` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('case-police');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores).toBeUndefined();
+
     expect(configResult.getLoadedPlugin('case-police')).toBeDefined();
   });
 
-  it('creates `case-police` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('case-police')).toBeDefined();
+  it('does not create `case-police` eslint config and does not load `case-police` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({casePolice: false});
+
+    expect(configResult.getConfigByUnPostfix('case-police')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('case-police')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -54,14 +63,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `case-police` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('case-police')?.files).toBeUndefined();
-  });
-
-  it('has no default `ignores` in `case-police` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('case-police')?.ignores).toBeUndefined();
   });
 });
 

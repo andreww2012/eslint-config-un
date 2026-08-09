@@ -6,15 +6,26 @@ beforeEach(() => {
   addInstalledPackages({qunit: '2.20.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('qunit');
+describe('basic tests', () => {
+  it('creates `qunit` eslint config and loads `qunit` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('qunit');
 
-  it('loads `qunit` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('qunit');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+    );
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('qunit')).toBeDefined();
   });
 
-  it('creates `qunit` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('qunit')).toBeDefined();
+  it('does not create `qunit` eslint config and does not load `qunit` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({qunit: false});
+
+    expect(configResult.getConfigByUnPostfix('qunit')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('qunit')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -71,16 +82,6 @@ describe('basic tests', async () => {
     it('does not create `qunit` eslint config if explicitly disabled', async () => {
       await expectConfigState({qunit: false}, 'qunit', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `qunit` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('qunit')?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `qunit` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('qunit')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

@@ -6,15 +6,30 @@ beforeEach(() => {
   addInstalledPackages({mocha: '10.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('mocha');
+describe('basic tests', () => {
+  it('creates `mocha` eslint config and loads `mocha` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('mocha');
 
-  it('loads `mocha` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('mocha');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+    );
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
+    const globalsPackage = await import('globals');
+
+    expect(config?.languageOptions?.['globals']).toStrictEqual(globalsPackage.default.mocha);
+
     expect(configResult.getLoadedPlugin('mocha')).toBeDefined();
   });
 
-  it('creates `mocha` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('mocha')).toBeDefined();
+  it('does not create `mocha` eslint config and does not load `mocha` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({mocha: false});
+
+    expect(configResult.getConfigByUnPostfix('mocha')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('mocha')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -71,24 +86,6 @@ describe('basic tests', async () => {
     it('does not create `mocha` eslint config if explicitly disabled', async () => {
       await expectConfigState({mocha: false}, 'mocha', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `mocha` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('mocha')?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `mocha` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('mocha')?.ignores?.length).toBeGreaterThan(0);
-  });
-
-  it('includes mocha globals in `mocha` eslint config', async () => {
-    const globalsPackage = await import('globals');
-
-    expect(configResult.getConfigByUnPostfix('mocha')?.languageOptions?.['globals']).toStrictEqual(
-      globalsPackage.default.mocha,
-    );
   });
 });
 

@@ -3,15 +3,24 @@ const FIXTURES = {
   typeofComparisons: 'typeof-comparisons.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('un');
+describe('basic tests', () => {
+  it('creates `un` eslint config and loads `un` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('un');
 
-  it('loads `un` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('un');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('un')).toBeDefined();
   });
 
-  it('creates `un` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('un')).toBeDefined();
+  it('does not create `un` eslint config and does not load `un` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({un: false});
+
+    expect(configResult.getConfigByUnPostfix('un')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('un')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -50,14 +59,6 @@ describe('basic tests', async () => {
     it('does not create `un` eslint config if explicitly disabled', async () => {
       await expectConfigState({un: false}, 'un', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `un` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('un')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `un` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('un')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

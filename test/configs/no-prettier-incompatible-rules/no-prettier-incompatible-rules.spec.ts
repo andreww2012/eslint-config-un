@@ -8,11 +8,21 @@ beforeEach(() => {
   addInstalledPackages({prettier: '3.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('noPrettierIncompatibleRules');
+describe('basic tests', () => {
+  it('creates `no-prettier-incompatible-rules` eslint config if set to `true`', async () => {
+    const configResult = await computeEslintConfig('noPrettierIncompatibleRules');
 
-  it('creates `no-prettier-incompatible-rules` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix(CONFIG_POSTFIX)).toBeDefined();
+    const config = configResult.getConfigByUnPostfix(CONFIG_POSTFIX);
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores).toBeUndefined();
+  });
+
+  it('does not create `no-prettier-incompatible-rules` eslint config if set to `false`', async () => {
+    const configResult = await computeEslintConfig({noPrettierIncompatibleRules: false});
+
+    expect(configResult.getConfigByUnPostfix(CONFIG_POSTFIX)).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -101,14 +111,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `no-prettier-incompatible-rules` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix(CONFIG_POSTFIX)?.files).toBeUndefined();
-  });
-
-  it('has no default `ignores` in `no-prettier-incompatible-rules` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix(CONFIG_POSTFIX)?.ignores).toBeUndefined();
   });
 });
 

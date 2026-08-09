@@ -1,9 +1,15 @@
 describe('testing-library: sub config `marko`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({testingLibrary: {configMarko: true}});
+  describe('basic tests', () => {
+    it('creates `testing-library/marko` eslint config when enabled', async () => {
+      const configResult = await computeEslintConfig({testingLibrary: {configMarko: true}});
 
-    it('creates `testing-library/marko` eslint config when enabled', () => {
-      expect(configResult.getConfigByUnPostfix('testing-library/marko')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('testing-library/marko');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+      );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `testing-library/marko` eslint config by default (marko not installed)', async () => {
@@ -18,20 +24,6 @@ describe('testing-library: sub config `marko`', () => {
       const configResult = await computeEslintConfig('testingLibrary');
 
       expect(configResult.getConfigByUnPostfix('testing-library/marko')).toBeDefined();
-    });
-
-    it('has default `files` in `testing-library/marko` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/marko')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `testing-library/marko` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/marko')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

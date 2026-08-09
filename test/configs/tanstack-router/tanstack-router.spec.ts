@@ -6,15 +6,24 @@ beforeEach(() => {
   addInstalledPackages({'@tanstack/react-router': '1.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('tanstackRouter');
+describe('basic tests', () => {
+  it('creates `tanstack-router` eslint config and loads `tanstack-router` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('tanstackRouter');
 
-  it('loads `tanstack-router` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('tanstack-router');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('tanstack-router')).toBeDefined();
   });
 
-  it('creates `tanstack-router` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tanstack-router')).toBeDefined();
+  it('does not create `tanstack-router` eslint config and does not load `tanstack-router` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({tanstackRouter: false});
+
+    expect(configResult.getConfigByUnPostfix('tanstack-router')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('tanstack-router')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -96,16 +105,6 @@ describe('basic tests', async () => {
     it('does not create `tanstack-router` eslint config if explicitly disabled', async () => {
       await expectConfigState({tanstackRouter: false}, 'tanstack-router', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `tanstack-router` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('tanstack-router')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `tanstack-router` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tanstack-router')?.ignores?.length).toBeGreaterThan(
-      0,
-    );
   });
 });
 

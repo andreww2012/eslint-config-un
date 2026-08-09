@@ -8,30 +8,22 @@ beforeEach(() => {
 });
 
 describe('react: sub config `refresh`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('react');
+  describe('basic tests', () => {
+    it('creates `react/refresh` eslint config and loads `react-refresh` plugin by default', async () => {
+      const configResult = await computeEslintConfig('react');
 
-    it('creates `react/refresh` eslint config and loads `react-refresh` plugin by default', () => {
-      expect(configResult.getConfigByUnPostfix('react/refresh')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('react/refresh');
+
+      expect(config).toBeDefined();
       expect(configResult.getLoadedPlugin('react-refresh')).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]sx"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `react/refresh` eslint config when set to `false`', async () => {
       const configResult = await computeEslintConfig({react: {configRefresh: false}});
 
       expect(configResult.getConfigByUnPostfix('react/refresh')).toBeUndefined();
-    });
-
-    it('has default `files` in `react/refresh` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('react/refresh')?.files).toMatchInlineSnapshot(
-        '["**/*.?([cm])[jt]sx"]',
-      );
-    });
-
-    it('has default `ignores` in `react/refresh` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('react/refresh')?.ignores?.length).toBeGreaterThan(
-        0,
-      );
     });
   });
 

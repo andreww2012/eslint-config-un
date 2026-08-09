@@ -2,15 +2,24 @@ const FIXTURES = {
   usingIncludesOnEmptyArray: 'using-includes-on-empty-array.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('sonar');
+describe('basic tests', () => {
+  it('creates `sonar` eslint config and loads `sonarjs` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('sonar');
 
-  it('loads `sonarjs` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('sonar');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('sonarjs')).toBeDefined();
   });
 
-  it('creates `sonar` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('sonar')).toBeDefined();
+  it('does not create `sonar` eslint config and does not load `sonarjs` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({sonar: false});
+
+    expect(configResult.getConfigByUnPostfix('sonar')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('sonarjs')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,14 +58,6 @@ describe('basic tests', async () => {
     it('does not create `sonar` eslint config if explicitly disabled', async () => {
       await expectConfigState({sonar: false}, 'sonar', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `sonar` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('sonar')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `sonar` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('sonar')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

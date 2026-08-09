@@ -5,23 +5,31 @@ const FIXTURES = {
   pascalCasedFolder: 'pascal-cased-folder/MyBadFolder/index.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('checkFile');
+describe('basic tests', () => {
+  it('creates `check-file` eslint config and does not load `check-file` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('checkFile');
 
-  it('does not load `check-file` plugin by default', () => {
+    const config = configResult.getConfigByUnPostfix('check-file');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('check-file')).toBeUndefined();
   });
 
-  it('loads `check-file` plugin if used', async () => {
-    const configResultWithRules = await computeEslintConfig({
+  it('does not create `check-file` eslint config if set to `false`', async () => {
+    const configResult = await computeEslintConfig({checkFile: false});
+
+    expect(configResult.getConfigByUnPostfix('check-file')).toBeUndefined();
+  });
+
+  it('loads `check-file` plugin once a naming convention enables a rule', async () => {
+    const configResult = await computeEslintConfig({
       checkFile: {fileNamingConventions: {'**/*': 'KEBAB_CASE'}},
     });
 
-    expect(configResultWithRules.getLoadedPlugin('check-file')).toBeDefined();
-  });
-
-  it('creates `check-file` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('check-file')).toBeDefined();
+    expect(configResult.getLoadedPlugin('check-file')).toBeDefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -65,14 +73,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `check-file` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('check-file')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `check-file` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('check-file')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

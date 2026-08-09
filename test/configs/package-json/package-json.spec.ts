@@ -2,15 +2,24 @@ const FIXTURES = {
   redundantFiles: 'redundant-files/package.json',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('packageJson');
+describe('basic tests', () => {
+  it('creates `package-json` eslint config and loads `package-json` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('packageJson');
 
-  it('loads `package-json` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('package-json');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/package.json"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('package-json')).toBeDefined();
   });
 
-  it('creates `package-json` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('package-json')).toBeDefined();
+  it('does not create `package-json` eslint config and does not load `package-json` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({packageJson: false});
+
+    expect(configResult.getConfigByUnPostfix('package-json')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('package-json')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,16 +58,6 @@ describe('basic tests', async () => {
     it('does not create `package-json` eslint config if explicitly disabled', async () => {
       await expectConfigState({packageJson: false}, 'package-json', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `package-json` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('package-json')?.files).toMatchInlineSnapshot(
-      '["**/package.json"]',
-    );
-  });
-
-  it('has default `ignores` in `package-json` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('package-json')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

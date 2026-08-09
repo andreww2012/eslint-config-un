@@ -5,15 +5,28 @@ const FIXTURES = {
   cssEmptyBlock: 'css-empty-block.css',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('css');
+describe('basic tests', () => {
+  it('creates `css` eslint config and loads `css` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('css');
 
-  it('loads `css` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('css');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.css"]');
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_CSS]);
+
     expect(configResult.getLoadedPlugin('css')).toBeDefined();
   });
 
-  it('creates `css` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('css')).toBeDefined();
+  it('does not create `css` eslint config and does not load `css` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({css: false});
+
+    expect(configResult.getConfigByUnPostfix('css')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('css')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -70,17 +83,6 @@ describe('basic tests', async () => {
     it('does not create `css` eslint config if explicitly disabled', async () => {
       await expectConfigState({css: false}, 'css', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `css` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('css')?.files).toMatchInlineSnapshot('["**/*.css"]');
-  });
-
-  it('has default `ignores` in `css` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('css')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_CSS]);
   });
 });
 

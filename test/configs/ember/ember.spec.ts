@@ -7,16 +7,29 @@ beforeEach(() => {
   addInstalledPackages({'ember-source': '5.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('ember');
+describe('basic tests', () => {
+  it('creates `ember` and `ember/glimmer-templates` eslint configs and loads `ember` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('ember');
 
-  it('loads `ember` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('ember');
+
+    expect(config).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('ember/glimmer-templates')).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s", "**/*.{gjs,gts}"]');
+    expect(
+      configResult.getConfigByUnPostfix('ember/glimmer-templates')?.files,
+    ).toMatchInlineSnapshot('["**/*.{gjs,gts}"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('ember')).toBeDefined();
   });
 
-  it('creates `ember` and `ember/glimmer-templates` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('ember')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('ember/glimmer-templates')).toBeDefined();
+  it('does not create `ember` and `ember/glimmer-templates` eslint configs and does not load `ember` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({ember: false});
+
+    expect(configResult.getConfigByUnPostfix('ember')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('ember/glimmer-templates')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('ember')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -73,22 +86,6 @@ describe('basic tests', async () => {
     it('does not create `ember` eslint config if explicitly disabled', async () => {
       await expectConfigState({ember: false}, 'ember', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `ember` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('ember')?.files).toMatchInlineSnapshot(
-      '["**/*.?([cm])[jt]s", "**/*.{gjs,gts}"]',
-    );
-  });
-
-  it('has default `files` in `ember/glimmer-templates` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('ember/glimmer-templates')?.files,
-    ).toMatchInlineSnapshot('["**/*.{gjs,gts}"]');
-  });
-
-  it('has default `ignores` in `ember` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('ember')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

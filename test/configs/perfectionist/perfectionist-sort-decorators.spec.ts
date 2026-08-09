@@ -3,14 +3,18 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortDecorators`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({
-      ts: true,
-      perfectionist: {configSortDecorators: true},
-    });
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-decorators` eslint config when `configSortDecorators` is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        ts: true,
+        perfectionist: {configSortDecorators: true},
+      });
 
-    it('creates `perfectionist/sort-decorators` eslint config when `configSortDecorators` is `true`', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-decorators')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-decorators');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-decorators` eslint config by default', async () => {
@@ -25,18 +29,6 @@ describe('perfectionist: sub config `sortDecorators`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('perfectionist/sort-decorators')).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-decorators` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-decorators')?.files,
-      ).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-decorators` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-decorators')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

@@ -13,13 +13,10 @@ describe('ava: sub config `noOnlyTests`', () => {
     it('creates `ava/no-only-tests` eslint config when `configNoOnlyTests` is enabled', async () => {
       const configResult = await computeEslintConfig({ava: {configNoOnlyTests: true}});
 
-      expect(configResult.getConfigByUnPostfix('ava/no-only-tests')).toBeDefined();
-    });
+      const config = configResult.getConfigByUnPostfix('ava/no-only-tests');
 
-    it('has default `files` in `ava/no-only-tests` eslint config', async () => {
-      const configResult = await computeEslintConfig({ava: {configNoOnlyTests: true}});
-
-      expect(configResult.getConfigByUnPostfix('ava/no-only-tests')?.files).toMatchInlineSnapshot(
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
         '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
       );
     });

@@ -25,11 +25,21 @@ const JSX_EXTRA_CONFIGS: Parameters<typeof testEslintConfig>[2] = {
   searchFixturesRelativeToPath: import.meta.dirname,
 };
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('cssInJs');
+describe('basic tests', () => {
+  it('creates `css-in-js` eslint config if set to `true`', async () => {
+    const configResult = await computeEslintConfig('cssInJs');
 
-  it('creates `css-in-js` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('css-in-js')).toBeDefined();
+    const config = configResult.getConfigByUnPostfix('css-in-js');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+  });
+
+  it('does not create `css-in-js` eslint config if set to `false`', async () => {
+    const configResult = await computeEslintConfig({cssInJs: false});
+
+    expect(configResult.getConfigByUnPostfix('css-in-js')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {

@@ -4,15 +4,28 @@ const FIXTURES = {
   optionalChaining: 'optional-chaining.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig({es: {ecmaVersion: 2019}});
+describe('basic tests', () => {
+  it('creates `es` eslint config and loads `es` plugin by default', async () => {
+    const configResult = await computeEslintConfig({es: {ecmaVersion: 2019}});
 
-  it('loads `es` plugin', () => {
+    const config = configResult.getConfigByUnPostfix('es');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+
     expect(configResult.getLoadedPlugin('es')).toBeDefined();
   });
 
-  it('creates `es` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('es')).toBeDefined();
+  it('does not create `es` eslint config and does not load `es` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({es: false});
+
+    expect(configResult.getConfigByUnPostfix('es')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('es')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -51,17 +64,6 @@ describe('basic tests', async () => {
     it('does not create `es` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({es: false}, 'es', ['es', false], 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` in `es` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('es')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `es` eslint config (does not ignore HTML files)', () => {
-    const ignores = configResult.getConfigByUnPostfix('es')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 

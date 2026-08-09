@@ -2,15 +2,24 @@ const FIXTURES = {
   elementTypesViolation: 'pages/Home.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig({boundaries: {settings: {elements: []}}});
+describe('basic tests', () => {
+  it('creates `boundaries` eslint config and loads `boundaries` plugin by default', async () => {
+    const configResult = await computeEslintConfig({boundaries: {settings: {elements: []}}});
 
-  it('loads `boundaries` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('boundaries');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('boundaries')).toBeDefined();
   });
 
-  it('creates `boundaries` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('boundaries')).toBeDefined();
+  it('does not create `boundaries` eslint config and does not load `boundaries` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({boundaries: false});
+
+    expect(configResult.getConfigByUnPostfix('boundaries')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('boundaries')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -64,14 +73,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `boundaries` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('boundaries')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `boundaries` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('boundaries')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

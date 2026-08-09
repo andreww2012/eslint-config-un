@@ -3,13 +3,15 @@ beforeEach(() => {
 });
 
 describe('react: sub config `allowDefaultExportsInJsxFiles`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('react');
+  describe('basic tests', () => {
+    it('creates `react/allow-default-export-in-jsx-files` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('react');
 
-    it('creates `react/allow-default-export-in-jsx-files` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('react/allow-default-export-in-jsx-files'),
-      ).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('react/allow-default-export-in-jsx-files');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]sx"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `react/allow-default-export-in-jsx-files` eslint config when disabled', async () => {
@@ -20,19 +22,6 @@ describe('react: sub config `allowDefaultExportsInJsxFiles`', () => {
       expect(
         configResult.getConfigByUnPostfix('react/allow-default-export-in-jsx-files'),
       ).toBeUndefined();
-    });
-
-    it('targets jsx and tsx files by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('react/allow-default-export-in-jsx-files')?.files,
-      ).toMatchInlineSnapshot('["**/*.?([cm])[jt]sx"]');
-    });
-
-    it('has default `ignores` in `react/allow-default-export-in-jsx-files` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('react/allow-default-export-in-jsx-files')?.ignores
-          ?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

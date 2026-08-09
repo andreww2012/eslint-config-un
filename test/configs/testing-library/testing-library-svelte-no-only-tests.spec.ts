@@ -3,13 +3,17 @@ const FIXTURES = {
 } as const;
 
 describe('testing-library: sub config `svelte.noOnlyTests`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({testingLibrary: {configSvelte: true}});
+  describe('basic tests', () => {
+    it('creates `testing-library/svelte/no-only-tests` eslint config by default', async () => {
+      const configResult = await computeEslintConfig({testingLibrary: {configSvelte: true}});
 
-    it('creates `testing-library/svelte/no-only-tests` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/svelte/no-only-tests'),
-      ).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('testing-library/svelte/no-only-tests');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+      );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `testing-library/svelte/no-only-tests` eslint config when set to `false`', async () => {
@@ -20,20 +24,6 @@ describe('testing-library: sub config `svelte.noOnlyTests`', () => {
       expect(
         configResult.getConfigByUnPostfix('testing-library/svelte/no-only-tests'),
       ).toBeUndefined();
-    });
-
-    it('has default `files` in `testing-library/svelte/no-only-tests` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/svelte/no-only-tests')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `testing-library/svelte/no-only-tests` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/svelte/no-only-tests')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
 
     it('inherits `files` from the parent `testing-library/svelte` eslint config', async () => {

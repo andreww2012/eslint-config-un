@@ -3,11 +3,15 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortSwitchCase`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({perfectionist: {configSortSwitchCase: true}});
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-switch-case` eslint config when `configSortSwitchCase` is `true`', async () => {
+      const configResult = await computeEslintConfig({perfectionist: {configSortSwitchCase: true}});
 
-    it('creates `perfectionist/sort-switch-case` eslint config when `configSortSwitchCase` is `true`', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-switch-case')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-switch-case');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-switch-case` eslint config by default', async () => {
@@ -22,18 +26,6 @@ describe('perfectionist: sub config `sortSwitchCase`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('perfectionist/sort-switch-case')).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-switch-case` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-switch-case')?.files,
-      ).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-switch-case` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-switch-case')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

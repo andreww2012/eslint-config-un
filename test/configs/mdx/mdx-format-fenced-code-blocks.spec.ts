@@ -11,7 +11,13 @@ describe('mdx: sub config `formatFencedCodeBlocks`', () => {
     it('creates `mdx/format-fenced-code-blocks` eslint config by default (`prettier` is detected)', async () => {
       const configResult = await computeEslintConfig('mdx');
 
-      expect(configResult.getConfigByUnPostfix('mdx/format-fenced-code-blocks')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('mdx/format-fenced-code-blocks');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*.mdx/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,htm?(l),css,astro,svelte,graphql,gql,gjs,gts}"]',
+      );
+      expect(config?.ignores).toBeUndefined();
     });
 
     it('does not create `mdx/format-fenced-code-blocks` eslint config when `prettier` is not installed', async () => {
@@ -36,28 +42,6 @@ describe('mdx: sub config `formatFencedCodeBlocks`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('mdx/format-fenced-code-blocks')).toBeDefined();
-    });
-
-    it('has default `files` in `mdx/format-fenced-code-blocks` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        mdx: {configFormatFencedCodeBlocks: true},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('mdx/format-fenced-code-blocks')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*.mdx/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,htm?(l),css,astro,svelte,graphql,gql,gjs,gts}"]',
-      );
-    });
-
-    it('has no implicit `ignores` in `mdx/format-fenced-code-blocks` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        mdx: {configFormatFencedCodeBlocks: true},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('mdx/format-fenced-code-blocks')?.ignores,
-      ).toBeUndefined();
     });
   });
 

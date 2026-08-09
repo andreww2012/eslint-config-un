@@ -6,15 +6,19 @@ beforeEach(() => {
   addInstalledPackages({'@testing-library/dom': '10.4.1'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('testingLibrary');
+describe('basic tests', () => {
+  it('creates `testing-library/dom` eslint config and loads `testing-library` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('testingLibrary');
 
-  it('loads `testing-library` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('testing-library/dom');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+    );
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('testing-library')).toBeDefined();
-  });
-
-  it('creates `testing-library/dom` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('testing-library/dom')).toBeDefined();
   });
 
   it('does not create `testing-library/dom` when any framework sub-config is enabled', async () => {
@@ -97,18 +101,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has default `files` in `testing-library/dom` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('testing-library/dom')?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `testing-library/dom` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('testing-library/dom')?.ignores?.length,
-    ).toBeGreaterThan(0);
   });
 });
 

@@ -6,15 +6,24 @@ beforeEach(() => {
   addInstalledPackages({rxjs: '7.8.2'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('rxjs');
+describe('basic tests', () => {
+  it('creates `rxjs` eslint config and loads `rxjs` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('rxjs');
 
-  it('loads `rxjs` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('rxjs');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('rxjs')).toBeDefined();
   });
 
-  it('creates `rxjs` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('rxjs')).toBeDefined();
+  it('does not create `rxjs` eslint config and does not load `rxjs` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({rxjs: false});
+
+    expect(configResult.getConfigByUnPostfix('rxjs')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('rxjs')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -71,14 +80,6 @@ describe('basic tests', async () => {
     it('does not create `rxjs` eslint config if explicitly disabled', async () => {
       await expectConfigState({rxjs: false}, 'rxjs', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `rxjs` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('rxjs')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `rxjs` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('rxjs')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

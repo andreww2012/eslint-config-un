@@ -6,15 +6,24 @@ const FIXTURES = {
 
 const CSS_CONFIG_PATH = path.resolve(import.meta.dirname, 'fixtures', 'tailwind.css');
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('tailwind');
+describe('basic tests', () => {
+  it('creates `tailwind` eslint config and loads `tailwindcss` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('tailwind');
 
-  it('loads `tailwindcss` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('tailwind');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('tailwindcss')).toBeDefined();
   });
 
-  it('creates `tailwind` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tailwind')).toBeDefined();
+  it('does not create `tailwind` eslint config and does not load `tailwindcss` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({tailwind: false});
+
+    expect(configResult.getConfigByUnPostfix('tailwind')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('tailwindcss')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -53,14 +62,6 @@ describe('basic tests', async () => {
     it('does not create `tailwind` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({tailwind: false}, 'tailwind', ['tailwind', false], 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `tailwind` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tailwind')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `tailwind` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tailwind')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

@@ -2,15 +2,24 @@ const FIXTURES = {
   notOfLogicalAndExpression: 'not-of-logical-and-expression.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('deMorgan');
+describe('basic tests', () => {
+  it('creates `de-morgan` eslint config and loads `de-morgan` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('deMorgan');
 
-  it('loads `de-morgan` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('de-morgan');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('de-morgan')).toBeDefined();
   });
 
-  it('creates `de-morgan` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('de-morgan')).toBeDefined();
+  it('does not create `de-morgan` eslint config and does not load `de-morgan` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({deMorgan: false});
+
+    expect(configResult.getConfigByUnPostfix('de-morgan')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('de-morgan')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,14 +58,6 @@ describe('basic tests', async () => {
     it('does not create `de-morgan` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({deMorgan: false}, 'de-morgan', ['deMorgan', false], 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `de-morgan` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('de-morgan')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `de-morgan` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('de-morgan')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

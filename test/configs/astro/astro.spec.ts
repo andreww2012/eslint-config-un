@@ -8,16 +8,22 @@ beforeEach(() => {
   addInstalledPackages({astro: '5.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('astro');
+describe('basic tests', () => {
+  it('creates `astro/setup` and `astro` eslint configs and loads `astro` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('astro');
 
-  it('loads `astro` plugin if used', () => {
+    expect(configResult.getConfigByUnPostfix('astro/setup')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('astro')).toBeDefined();
+
     expect(configResult.getLoadedPlugin('astro')).toBeDefined();
   });
 
-  it('creates `astro/setup` and `astro` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('astro/setup')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('astro')).toBeDefined();
+  it('does not create `astro/setup` and `astro` eslint configs and does not load `astro` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({astro: false});
+
+    expect(configResult.getConfigByUnPostfix('astro/setup')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('astro')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('astro')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {

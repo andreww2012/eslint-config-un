@@ -6,15 +6,24 @@ beforeEach(() => {
   addInstalledPackages({zod: '4.3.5'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('zod');
+describe('basic tests', () => {
+  it('creates `zod` eslint config and loads `zod` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('zod');
 
-  it('loads `zod` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('zod');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('zod')).toBeDefined();
   });
 
-  it('creates `zod` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('zod')).toBeDefined();
+  it('does not create `zod` eslint config and does not load `zod` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({zod: false});
+
+    expect(configResult.getConfigByUnPostfix('zod')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('zod')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -89,14 +98,6 @@ describe('basic tests', async () => {
     it('does not create `zod` eslint config if explicitly disabled', async () => {
       await expectConfigState({zod: false}, 'zod', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `zod` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('zod')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `zod` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('zod')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

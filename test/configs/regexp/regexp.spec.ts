@@ -4,15 +4,28 @@ const FIXTURES = {
   duplicateDisjunctions: 'duplicate-disjunctions.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('regexp');
+describe('basic tests', () => {
+  it('creates `regexp` eslint config and loads `regexp` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('regexp');
 
-  it('loads `regexp` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('regexp');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+
     expect(configResult.getLoadedPlugin('regexp')).toBeDefined();
   });
 
-  it('creates `regexp` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('regexp')).toBeDefined();
+  it('does not create `regexp` eslint config and does not load `regexp` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({regexp: false});
+
+    expect(configResult.getConfigByUnPostfix('regexp')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('regexp')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -51,17 +64,6 @@ describe('basic tests', async () => {
     it('does not create `regexp` eslint config if explicitly disabled', async () => {
       await expectConfigState({regexp: false}, 'regexp', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `regexp` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('regexp')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `regexp` eslint config (does not ignore HTML files)', () => {
-    const ignores = configResult.getConfigByUnPostfix('regexp')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 

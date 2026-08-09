@@ -2,15 +2,26 @@ const FIXTURES = {
   testWithOnlyModifier: 'only-modifier.spec.ts',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('noOnlyTests');
+describe('basic tests', () => {
+  it('creates `no-only-tests` eslint config and loads `no-only-tests` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('noOnlyTests');
 
-  it('loads `no-only-tests` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('no-only-tests');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+    );
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('no-only-tests')).toBeDefined();
   });
 
-  it('creates `no-only-tests` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('no-only-tests')).toBeDefined();
+  it('does not create `no-only-tests` eslint config and does not load `no-only-tests` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({noOnlyTests: false});
+
+    expect(configResult.getConfigByUnPostfix('no-only-tests')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('no-only-tests')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -59,16 +70,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has default `files` in `no-only-tests` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('no-only-tests')?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `no-only-tests` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('no-only-tests')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

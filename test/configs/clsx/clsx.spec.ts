@@ -6,15 +6,24 @@ beforeEach(() => {
   addInstalledPackages({clsx: '2.1.1'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('clsx');
+describe('basic tests', () => {
+  it('creates `clsx` eslint config and loads `clsx` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('clsx');
 
-  it('loads `clsx` plugin', () => {
+    const config = configResult.getConfigByUnPostfix('clsx');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('clsx')).toBeDefined();
   });
 
-  it('creates `clsx` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('clsx')).toBeDefined();
+  it('does not create `clsx` eslint config and does not load `clsx` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({clsx: false});
+
+    expect(configResult.getConfigByUnPostfix('clsx')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('clsx')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -73,14 +82,6 @@ describe('basic tests', async () => {
     it('does not create `clsx` eslint config if explicitly disabled', async () => {
       await expectConfigState({clsx: false}, 'clsx', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `clsx` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('clsx')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `clsx` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('clsx')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

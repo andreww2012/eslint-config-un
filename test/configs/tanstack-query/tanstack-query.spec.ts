@@ -6,15 +6,24 @@ beforeEach(() => {
   addInstalledPackages({'@tanstack/query-core': '5.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('tanstackQuery');
+describe('basic tests', () => {
+  it('creates `tanstack-query` eslint config and loads `tanstack-query` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('tanstackQuery');
 
-  it('loads `tanstack-query` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('tanstack-query');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('tanstack-query')).toBeDefined();
   });
 
-  it('creates `tanstack-query` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tanstack-query')).toBeDefined();
+  it('does not create `tanstack-query` eslint config and does not load `tanstack-query` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({tanstackQuery: false});
+
+    expect(configResult.getConfigByUnPostfix('tanstack-query')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('tanstack-query')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -86,14 +95,6 @@ describe('basic tests', async () => {
     it('does not create `tanstack-query` eslint config if explicitly disabled', async () => {
       await expectConfigState({tanstackQuery: false}, 'tanstack-query', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `tanstack-query` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('tanstack-query')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `tanstack-query` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tanstack-query')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

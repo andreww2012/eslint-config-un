@@ -2,15 +2,24 @@ const FIXTURES = {
   eslintRuleUsingMessage: 'eslint-rule-using-message.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('eslintPlugin');
+describe('basic tests', () => {
+  it('creates `eslint-plugin` eslint config and loads `eslint-plugin` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('eslintPlugin');
 
-  it('loads `eslint-plugin` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('eslint-plugin');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('eslint-plugin')).toBeDefined();
   });
 
-  it('creates `eslint-plugin` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('eslint-plugin')).toBeDefined();
+  it('does not create `eslint-plugin` eslint config and does not load `eslint-plugin` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({eslintPlugin: false});
+
+    expect(configResult.getConfigByUnPostfix('eslint-plugin')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('eslint-plugin')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -59,14 +68,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `eslint-plugin` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('eslint-plugin')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `eslint-plugin` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('eslint-plugin')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

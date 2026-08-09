@@ -2,23 +2,24 @@ const FIXTURES = {
   unsafeProperty: 'unsafe-property.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('noUnsanitized');
+describe('basic tests', () => {
+  it('creates `no-unsanitized` eslint config and loads `no-unsanitized` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('noUnsanitized');
 
-  it('loads `no-unsanitized` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('no-unsanitized');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('no-unsanitized')).toBeDefined();
   });
 
-  it('creates `no-unsanitized` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('no-unsanitized')).toBeDefined();
-  });
+  it('does not create `no-unsanitized` eslint config and does not load `no-unsanitized` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({noUnsanitized: false});
 
-  it('has no explicit `files` restriction in `no-unsanitized` eslint config by default (applies to all files)', () => {
-    expect(configResult.getConfigByUnPostfix('no-unsanitized')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `no-unsanitized` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('no-unsanitized')?.ignores?.length).toBeGreaterThan(0);
+    expect(configResult.getConfigByUnPostfix('no-unsanitized')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('no-unsanitized')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {

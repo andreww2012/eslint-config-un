@@ -5,17 +5,35 @@ const FIXTURES = {
   withEval: 'with-eval.html',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('jsInline');
+describe('basic tests', () => {
+  it('creates `js-inline` and `js-inline/js-inside-html-inside-markdown` eslint configs if set to `true`', async () => {
+    const configResult = await computeEslintConfig('jsInline');
 
-  it('loads `html-processor` plugin if used', () => {
-    expect(
-      configResult.getConfigByUnPostfix('js-inline')?.plugins?.['html-processor'],
-    ).toBeDefined();
+    const config = configResult.getConfigByUnPostfix('js-inline');
+
+    const markdownConfig = configResult.getConfigByUnPostfix(
+      'js-inline/js-inside-html-inside-markdown',
+    );
+
+    expect(config).toBeDefined();
+    expect(config?.plugins?.['html-processor']).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.htm?(l)"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+    expect(config?.ignores).not.toIncludeAnyMembers(['**/*.htm?(l)']);
+
+    expect(markdownConfig).toBeDefined();
+    expect(markdownConfig?.files).toMatchInlineSnapshot('["**/*.md/**/*.htm?(l)"]');
+    expect(markdownConfig?.ignores?.length).toBeGreaterThan(0);
+    expect(markdownConfig?.ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 
-  it('creates `js-inline` and `js-inline/js-inside-html-inside-markdown` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('js-inline')).toBeDefined();
+  it('does not create `js-inline` and `js-inline/js-inside-html-inside-markdown` eslint configs if set to `false`', async () => {
+    const configResult = await computeEslintConfig({jsInline: false});
+
+    expect(configResult.getConfigByUnPostfix('js-inline')).toBeUndefined();
+    expect(
+      configResult.getConfigByUnPostfix('js-inline/js-inside-html-inside-markdown'),
+    ).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -54,34 +72,6 @@ describe('basic tests', async () => {
     it('does not create `js-inline` eslint config if explicitly disabled', async () => {
       await expectConfigState({jsInline: false}, 'js-inline', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `js-inline` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('js-inline')?.files).toMatchInlineSnapshot(
-      '["**/*.htm?(l)"]',
-    );
-  });
-
-  it('has default `ignores` in `js-inline` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('js-inline')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers(['**/*.htm?(l)']);
-  });
-
-  it('has default `files` in `js-inline/js-inside-html-inside-markdown` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('js-inline/js-inside-html-inside-markdown')?.files,
-    ).toMatchInlineSnapshot('["**/*.md/**/*.htm?(l)"]');
-  });
-
-  it('has default `ignores` in `js-inline/js-inside-html-inside-markdown` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix(
-      'js-inline/js-inside-html-inside-markdown',
-    )?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 

@@ -3,29 +3,21 @@ const FIXTURES = {
 } as const;
 
 describe('pnpm: sub config `packageJson`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('pnpm');
+  describe('basic tests', () => {
+    it('creates `pnpm/package.json` eslint config when enabled (default)', async () => {
+      const configResult = await computeEslintConfig('pnpm');
 
-    it('creates `pnpm/package.json` eslint config when enabled (default)', () => {
-      expect(configResult.getConfigByUnPostfix('pnpm/package.json')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('pnpm/package.json');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/package.json"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `pnpm/package.json` eslint config when disabled', async () => {
       const configResult = await computeEslintConfig({pnpm: {configPackageJson: false}});
 
       expect(configResult.getConfigByUnPostfix('pnpm/package.json')).toBeUndefined();
-    });
-
-    it('has default `files` in `pnpm/package.json` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('pnpm/package.json')?.files).toMatchInlineSnapshot(
-        '["**/package.json"]',
-      );
-    });
-
-    it('has default `ignores` in `pnpm/package.json` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('pnpm/package.json')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

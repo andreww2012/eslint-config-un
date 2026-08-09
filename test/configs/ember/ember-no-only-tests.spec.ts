@@ -7,7 +7,12 @@ describe('ember: sub config `noOnlyTests`', () => {
     it('creates `ember/no-only-tests` eslint config by default', async () => {
       const configResult = await computeEslintConfig('ember');
 
-      expect(configResult.getConfigByUnPostfix('ember/no-only-tests')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('ember/no-only-tests');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*[.-_]spec.?([cm])[jt]s", "**/*.test.?([cm])[jt]s", "**/__test?(s)__/**/*.?([cm])[jt]s"]',
+      );
     });
 
     it('does not create `ember/no-only-tests` eslint config when `configNoOnlyTests` is `false`', async () => {
@@ -30,14 +35,6 @@ describe('ember: sub config `noOnlyTests`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('ember/no-only-tests')).toBeDefined();
-    });
-
-    it('has default `files` in `ember/no-only-tests` eslint config', async () => {
-      const configResult = await computeEslintConfig('ember');
-
-      expect(configResult.getConfigByUnPostfix('ember/no-only-tests')?.files).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s", "**/*.test.?([cm])[jt]s", "**/__test?(s)__/**/*.?([cm])[jt]s"]',
-      );
     });
 
     it('inherits `files` from `configTestFiles` when provided', async () => {

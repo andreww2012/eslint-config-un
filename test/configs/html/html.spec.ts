@@ -4,15 +4,28 @@ const FIXTURES = {
   elementWithRepeatedAttribute: 'element-with-repeated-attribute.html',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('html');
+describe('basic tests', () => {
+  it('creates `html` eslint config and loads `html` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('html');
 
-  it('loads `html` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('html');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.htm?(l)"]');
+
+    const ignores = config?.ignores;
+
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
+
     expect(configResult.getLoadedPlugin('html')).toBeDefined();
   });
 
-  it('creates `html` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('html')).toBeDefined();
+  it('does not create `html` eslint config and does not load `html` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({html: false});
+
+    expect(configResult.getConfigByUnPostfix('html')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('html')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -69,19 +82,6 @@ describe('basic tests', async () => {
     it('does not create `html` eslint config if explicitly disabled', async () => {
       await expectConfigState({html: false}, 'html', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `html` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('html')?.files).toMatchInlineSnapshot(
-      '["**/*.htm?(l)"]',
-    );
-  });
-
-  it('has default `ignores` in `html` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('html')?.ignores;
-
-    expect(configResult.getConfigByUnPostfix('html')?.ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
   });
 });
 

@@ -2,15 +2,24 @@ const FIXTURES = {
   missingHeader: 'missing-header.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('headers');
+describe('basic tests', () => {
+  it('creates `headers` eslint config and loads `headers` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('headers');
 
-  it('loads `headers` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('headers');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('headers')).toBeDefined();
   });
 
-  it('creates `headers` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('headers')).toBeDefined();
+  it('does not create `headers` eslint config and does not load `headers` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({headers: false});
+
+    expect(configResult.getConfigByUnPostfix('headers')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('headers')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,14 +58,6 @@ describe('basic tests', async () => {
     it('does not create `headers` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({headers: false}, 'headers', ['headers', false], 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `headers` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('headers')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `headers` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('headers')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

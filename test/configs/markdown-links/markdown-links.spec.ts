@@ -6,15 +6,28 @@ const FIXTURES = {
     '../../markdown-preferences/fixtures/vitepress-custom-container-without-space-in-header.md',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('markdownLinks');
+describe('basic tests', () => {
+  it('creates `markdown-links` eslint config and loads `markdown-links` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('markdownLinks');
 
-  it('loads `markdown-links` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('markdown-links');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.md"]');
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN]);
+
     expect(configResult.getLoadedPlugin('markdown-links')).toBeDefined();
   });
 
-  it('creates `markdown-links` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('markdown-links')).toBeDefined();
+  it('does not create `markdown-links` eslint config and does not load `markdown-links` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({markdownLinks: false});
+
+    expect(configResult.getConfigByUnPostfix('markdown-links')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('markdown-links')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -63,19 +76,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has default `files` in `markdown-links` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('markdown-links')?.files).toMatchInlineSnapshot(
-      '["**/*.md"]',
-    );
-  });
-
-  it('has default `ignores` in `markdown-links` eslint config (does not ignore markdown files)', () => {
-    const ignores = configResult.getConfigByUnPostfix('markdown-links')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN]);
   });
 });
 

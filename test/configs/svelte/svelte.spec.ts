@@ -8,16 +8,26 @@ beforeEach(() => {
   addInstalledPackages({svelte: '5.34.3'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('svelte');
+describe('basic tests', () => {
+  it('creates `svelte` and `svelte/setup` eslint configs and loads `svelte` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('svelte');
 
-  it('loads `svelte` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('svelte');
+
+    expect(config).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('svelte/setup')).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.svelte"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('svelte')).toBeDefined();
   });
 
-  it('creates `svelte` and `svelte/setup` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('svelte')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('svelte/setup')).toBeDefined();
+  it('does not create `svelte` and `svelte/setup` eslint configs and does not load `svelte` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({svelte: false});
+
+    expect(configResult.getConfigByUnPostfix('svelte')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('svelte/setup')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('svelte')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -74,16 +84,6 @@ describe('basic tests', async () => {
     it('does not create `svelte` eslint config if explicitly disabled', async () => {
       await expectConfigState({svelte: false}, 'svelte', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `svelte` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('svelte')?.files).toMatchInlineSnapshot(
-      '["**/*.svelte"]',
-    );
-  });
-
-  it('has default `ignores` in `svelte` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('svelte')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

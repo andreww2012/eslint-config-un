@@ -2,15 +2,24 @@ const FIXTURES = {
   customElementNameWithoutDash: 'custom-element-name-without-dash/index.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('webComponents');
+describe('basic tests', () => {
+  it('creates `web-components` eslint config and loads `wc` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('webComponents');
 
-  it('loads `wc` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('web-components');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('wc')).toBeDefined();
   });
 
-  it('creates `web-components` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('web-components')).toBeDefined();
+  it('does not create `web-components` eslint config and does not load `wc` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({webComponents: false});
+
+    expect(configResult.getConfigByUnPostfix('web-components')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('wc')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -59,14 +68,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `web-components` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('web-components')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `web-components` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('web-components')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

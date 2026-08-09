@@ -2,15 +2,23 @@ const FIXTURES = {
   topLevelFunction: 'top-level-function.ts',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('antfu');
+describe('basic tests', () => {
+  it('creates `antfu` eslint config and does not load `antfu` plugin (all rules are `OFF`) if set to `true`', async () => {
+    const configResult = await computeEslintConfig('antfu');
 
-  it('does not load `antfu` plugin by default (all rules are `OFF`)', () => {
+    const config = configResult.getConfigByUnPostfix('antfu');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('antfu')).toBeUndefined();
   });
 
-  it('creates `antfu` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('antfu')).toBeDefined();
+  it('does not create `antfu` eslint config if set to `false`', async () => {
+    const configResult = await computeEslintConfig({antfu: false});
+
+    expect(configResult.getConfigByUnPostfix('antfu')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,16 +57,6 @@ describe('basic tests', async () => {
     it('does not create `antfu` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({antfu: false}, 'antfu', ['antfu', false], 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `antfu` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('antfu')?.files).toMatchInlineSnapshot(
-      '["**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `antfu` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('antfu')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

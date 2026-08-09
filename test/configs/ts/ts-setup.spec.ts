@@ -12,6 +12,12 @@ describe('ts: sub config `setup`', () => {
       expect(config?.ignores?.length).toBeGreaterThan(0);
       expect(config?.languageOptions?.['parserOptions']).toMatchObject({sourceType: 'module'});
     });
+
+    it('does not create `ts/non-type-aware/setup` eslint config when the `ts` config is disabled', async () => {
+      const configResult = await computeEslintConfig({ts: false});
+
+      expect(configResult.getConfigByUnPostfix('ts/non-type-aware/setup')).toBeUndefined();
+    });
   });
 
   describe('un options', () => {

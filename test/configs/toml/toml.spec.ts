@@ -6,15 +6,29 @@ const FIXTURES = {
   tooManyFractionalSeconds: 'too-many-fractional-seconds.toml',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('toml');
+describe('basic tests', () => {
+  it('creates `toml` eslint config and loads `toml` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('toml');
 
-  it('loads `toml` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('toml');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.toml"]');
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).toIncludeAllMembers(['**/Cargo.lock']);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_TOML]);
+
     expect(configResult.getLoadedPlugin('toml')).toBeDefined();
   });
 
-  it('creates `toml` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('toml')).toBeDefined();
+  it('does not create `toml` eslint config and does not load `toml` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({toml: false});
+
+    expect(configResult.getConfigByUnPostfix('toml')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('toml')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -53,18 +67,6 @@ describe('basic tests', async () => {
     it('does not create `toml` eslint config if explicitly disabled', async () => {
       await expectConfigState({toml: false}, 'toml', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `toml` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('toml')?.files).toMatchInlineSnapshot('["**/*.toml"]');
-  });
-
-  it('has default `ignores` in `toml` eslint config (ignores `**/Cargo.lock`)', () => {
-    const ignores = configResult.getConfigByUnPostfix('toml')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).toIncludeAllMembers(['**/Cargo.lock']);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_TOML]);
   });
 });
 

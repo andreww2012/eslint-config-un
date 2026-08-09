@@ -6,15 +6,24 @@ beforeEach(() => {
   addInstalledPackages({'@formatjs/icu-messageformat-parser': '6.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('formatJs');
+describe('basic tests', () => {
+  it('creates `formatjs` eslint config and loads `formatjs` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('formatJs');
 
-  it('loads `formatjs` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('formatjs');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('formatjs')).toBeDefined();
   });
 
-  it('creates `formatjs` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('formatjs')).toBeDefined();
+  it('does not create `formatjs` eslint config and does not load `formatjs` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({formatJs: false});
+
+    expect(configResult.getConfigByUnPostfix('formatjs')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('formatjs')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -71,14 +80,6 @@ describe('basic tests', async () => {
     it('does not create `formatjs` eslint config if explicitly disabled', async () => {
       await expectConfigState({formatJs: false}, 'formatjs', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `formatjs` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('formatjs')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `formatjs` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('formatjs')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

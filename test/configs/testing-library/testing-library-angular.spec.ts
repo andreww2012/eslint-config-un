@@ -1,9 +1,15 @@
 describe('testing-library: sub config `angular`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({testingLibrary: {configAngular: true}});
+  describe('basic tests', () => {
+    it('creates `testing-library/angular` eslint config when enabled', async () => {
+      const configResult = await computeEslintConfig({testingLibrary: {configAngular: true}});
 
-    it('creates `testing-library/angular` eslint config when enabled', () => {
-      expect(configResult.getConfigByUnPostfix('testing-library/angular')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('testing-library/angular');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+      );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `testing-library/angular` eslint config by default (angular config not enabled)', async () => {
@@ -18,20 +24,6 @@ describe('testing-library: sub config `angular`', () => {
       const configResult = await computeEslintConfig({testingLibrary: true}, {reset: true});
 
       expect(configResult.getConfigByUnPostfix('testing-library/angular')).toBeDefined();
-    });
-
-    it('has default `files` in `testing-library/angular` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/angular')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `testing-library/angular` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/angular')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

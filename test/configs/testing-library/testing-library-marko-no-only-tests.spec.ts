@@ -3,13 +3,17 @@ const FIXTURES = {
 } as const;
 
 describe('testing-library: sub config `marko.noOnlyTests`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({testingLibrary: {configMarko: true}});
+  describe('basic tests', () => {
+    it('creates `testing-library/marko/no-only-tests` eslint config by default', async () => {
+      const configResult = await computeEslintConfig({testingLibrary: {configMarko: true}});
 
-    it('creates `testing-library/marko/no-only-tests` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/marko/no-only-tests'),
-      ).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('testing-library/marko/no-only-tests');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+      );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `testing-library/marko/no-only-tests` eslint config when set to `false`', async () => {
@@ -20,20 +24,6 @@ describe('testing-library: sub config `marko.noOnlyTests`', () => {
       expect(
         configResult.getConfigByUnPostfix('testing-library/marko/no-only-tests'),
       ).toBeUndefined();
-    });
-
-    it('has default `files` in `testing-library/marko/no-only-tests` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/marko/no-only-tests')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `testing-library/marko/no-only-tests` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/marko/no-only-tests')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
 
     it('inherits `files` from the parent `testing-library/marko` eslint config', async () => {

@@ -23,6 +23,13 @@ describe('basic tests', () => {
     expect(configResult.getLoadedPlugin('ripple')).toBeDefined();
   });
 
+  it('does not create `ripple` eslint config and does not load `ripple` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({ripple: false});
+
+    expect(configResult.getConfigByUnPostfix('ripple')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('ripple')).toBeUndefined();
+  });
+
   describe('mode: all configs are disabled', () => {
     it('does not create `ripple` eslint config', async () => {
       await expectConfigState({}, 'ripple', false);

@@ -6,15 +6,24 @@ beforeEach(() => {
   addInstalledPackages({'solid-js': '1.8.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('solid');
+describe('basic tests', () => {
+  it('creates `solid` eslint config and loads `solid` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('solid');
 
-  it('loads `solid` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('solid');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('solid')).toBeDefined();
   });
 
-  it('creates `solid` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('solid')).toBeDefined();
+  it('does not create `solid` eslint config and does not load `solid` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({solid: false});
+
+    expect(configResult.getConfigByUnPostfix('solid')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('solid')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -71,14 +80,6 @@ describe('basic tests', async () => {
     it('does not create `solid` eslint config if explicitly disabled', async () => {
       await expectConfigState({solid: false}, 'solid', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `solid` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('solid')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `solid` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('solid')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

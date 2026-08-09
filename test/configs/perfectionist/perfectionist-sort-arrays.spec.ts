@@ -9,11 +9,15 @@ const FIXTURES = {
 const OPTIONS = {useConfigurationIf: {allNamesMatchPattern: '^[a-z]$'}} as const;
 
 describe('perfectionist: sub config `sortArrays`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({perfectionist: {configSortArrays: true}});
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-arrays` eslint config when `configSortArrays` is `true`', async () => {
+      const configResult = await computeEslintConfig({perfectionist: {configSortArrays: true}});
 
-    it('creates `perfectionist/sort-arrays` eslint config when `configSortArrays` is `true`', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-arrays')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-arrays');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-arrays` eslint config by default', async () => {
@@ -26,16 +30,6 @@ describe('perfectionist: sub config `sortArrays`', () => {
       const configResult = await computeEslintConfig({perfectionist: {configSortArrays: false}});
 
       expect(configResult.getConfigByUnPostfix('perfectionist/sort-arrays')).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-arrays` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-arrays')?.files).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-arrays` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-arrays')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

@@ -20,6 +20,13 @@ describe('basic tests', () => {
     expect(configResult.getLoadedPlugin('tanstack-start')).toBeDefined();
   });
 
+  it('does not create `tanstack-start` eslint config and does not load `tanstack-start` plugin when set to `false`', async () => {
+    const configResult = await computeEslintConfig({tanstackStart: false});
+
+    expect(configResult.getConfigByUnPostfix('tanstack-start')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('tanstack-start')).toBeUndefined();
+  });
+
   describe('mode: all configs are disabled', () => {
     it('does not create `tanstack-start` eslint config', async () => {
       await expectConfigState({}, 'tanstack-start', false);

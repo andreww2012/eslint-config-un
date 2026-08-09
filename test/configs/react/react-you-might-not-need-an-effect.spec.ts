@@ -7,11 +7,15 @@ beforeEach(() => {
 });
 
 describe('react: sub config `youMightNotNeedAnEffect`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('react');
+  describe('basic tests', () => {
+    it('creates `react/you-might-not-need-an-effect` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('react');
 
-    it('creates `react/you-might-not-need-an-effect` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('react/you-might-not-need-an-effect')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('react/you-might-not-need-an-effect');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `react/you-might-not-need-an-effect` eslint config when disabled', async () => {
@@ -22,18 +26,6 @@ describe('react: sub config `youMightNotNeedAnEffect`', () => {
       expect(
         configResult.getConfigByUnPostfix('react/you-might-not-need-an-effect'),
       ).toBeUndefined();
-    });
-
-    it('has default `files` in `react/you-might-not-need-an-effect` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('react/you-might-not-need-an-effect')?.files,
-      ).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
-    });
-
-    it('has default `ignores` in `react/you-might-not-need-an-effect` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('react/you-might-not-need-an-effect')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

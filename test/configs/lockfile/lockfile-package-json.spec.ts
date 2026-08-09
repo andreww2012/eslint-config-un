@@ -18,11 +18,15 @@ beforeEach(() => {
 });
 
 describe('lockfile: sub config `package.json`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('lockfile');
+  describe('basic tests', () => {
+    it('creates `lockfile/package.json` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('lockfile');
 
-    it('creates `lockfile/package.json` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('lockfile/package.json')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('lockfile/package.json');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/package.json"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `lockfile/package.json` eslint config when disabled', async () => {
@@ -35,18 +39,6 @@ describe('lockfile: sub config `package.json`', () => {
       const configResult = await computeEslintConfig({lockfile: {configPackageJson: false}});
 
       expect(configResult.getConfigByUnPostfix('lockfile')).toBeDefined();
-    });
-
-    it('has default `files` in `lockfile/package.json` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('lockfile/package.json')?.files,
-      ).toMatchInlineSnapshot('["**/package.json"]');
-    });
-
-    it('has default `ignores` in `lockfile/package.json` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('lockfile/package.json')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

@@ -13,21 +13,16 @@ describe('markdown: sub config `fentencesPerLine`', () => {
     it('creates `markdown/sentences-per-line` eslint config when `configSentencesPerLine` is `true`', async () => {
       const configResult = await computeEslintConfig({markdown: {configSentencesPerLine: true}});
 
-      expect(configResult.getConfigByUnPostfix('markdown/sentences-per-line')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('markdown/sentences-per-line');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.md"]');
     });
 
     it('creates `markdown/sentences-per-line` eslint config when `configSentencesPerLine` is object', async () => {
       const configResult = await computeEslintConfig({markdown: {configSentencesPerLine: {}}});
 
       expect(configResult.getConfigByUnPostfix('markdown/sentences-per-line')).toBeDefined();
-    });
-
-    it('has default `files` in `markdown/sentences-per-line` eslint config', async () => {
-      const configResult = await computeEslintConfig({markdown: {configSentencesPerLine: true}});
-
-      expect(
-        configResult.getConfigByUnPostfix('markdown/sentences-per-line')?.files,
-      ).toMatchInlineSnapshot('["**/*.md"]');
     });
 
     it('ignores `LICENSE.md` by default in `markdown/sentences-per-line` eslint config', async () => {

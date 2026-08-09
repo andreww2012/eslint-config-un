@@ -3,11 +3,15 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortImports`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({perfectionist: {configSortImports: true}});
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-imports` eslint config when `configSortImports` is `true`', async () => {
+      const configResult = await computeEslintConfig({perfectionist: {configSortImports: true}});
 
-    it('creates `perfectionist/sort-imports` eslint config when `configSortImports` is `true`', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-imports')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-imports');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-imports` eslint config by default', async () => {
@@ -20,18 +24,6 @@ describe('perfectionist: sub config `sortImports`', () => {
       const configResult = await computeEslintConfig({perfectionist: {configSortImports: false}});
 
       expect(configResult.getConfigByUnPostfix('perfectionist/sort-imports')).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-imports` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-imports')?.files,
-      ).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-imports` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-imports')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

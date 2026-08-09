@@ -53,10 +53,8 @@ You can use, for example, the following test files as a reference for structure 
 
 ##### `basic test` describe block
 
-There should be a test verifying what is produced by default.
-This includes ESLint configs, ESLint plugins, and, if the config is enabled, important defaults (eslint configs' `files` and more rarely used options like `parser` or `languageOptions`).
-If the config is disabled, the test should confirm that it produces none of this.
-There should always be at least one positive and one negative test: if config is enabled by default, the other test should explicitly disable it, and vice versa.
+There should be exactly two tests for everything the Config produces for one set of options — ESLint configs & plugins, `files`, `ignores`, `languageOptions`, `processor` and so on - a positive one (Config enabled) and a negative one (Config disabled).
+The test name should list what is created and ends with the condition: ``'creates `drizzle` eslint config and loads `drizzle` plugin if set to `true`'``.
 
 Determine the default-enable condition from `src/configs/index.ts` and/or `src/config-un/config.ts`.
 If it has one, make sure this condition is true by default for the *whole test suite* (the most common example: treating package(s) as installed)

@@ -2,15 +2,24 @@ const FIXTURES = {
   unusedImport: 'unused-import.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('unusedImports');
+describe('basic tests', () => {
+  it('creates `unused-imports/no-unused-imports` eslint config and loads `unused-imports` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('unusedImports');
 
-  it('loads `unused-imports` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('unused-imports/no-unused-imports');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('unused-imports')).toBeDefined();
   });
 
-  it('creates `unused-imports/no-unused-imports` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('unused-imports/no-unused-imports')).toBeDefined();
+  it('does not create `unused-imports/no-unused-imports` eslint config and does not load `unused-imports` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({unusedImports: false});
+
+    expect(configResult.getConfigByUnPostfix('unused-imports/no-unused-imports')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('unused-imports')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -64,18 +73,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `unused-imports/no-unused-imports` eslint config by default', () => {
-    expect(
-      configResult.getConfigByUnPostfix('unused-imports/no-unused-imports')?.files,
-    ).toBeUndefined();
-  });
-
-  it('has default `ignores` in `unused-imports/no-unused-imports` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('unused-imports/no-unused-imports')?.ignores?.length,
-    ).toBeGreaterThan(0);
   });
 });
 

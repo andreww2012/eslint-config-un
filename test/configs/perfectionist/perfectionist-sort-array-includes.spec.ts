@@ -3,13 +3,17 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortArrayIncludes`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({
-      perfectionist: {configSortArrayIncludes: true},
-    });
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-array-includes` eslint config when `configSortArrayIncludes` is `true`', async () => {
+      const configResult = await computeEslintConfig({
+        perfectionist: {configSortArrayIncludes: true},
+      });
 
-    it('creates `perfectionist/sort-array-includes` eslint config when `configSortArrayIncludes` is `true`', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-array-includes')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-array-includes');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-array-includes` eslint config by default', async () => {
@@ -28,18 +32,6 @@ describe('perfectionist: sub config `sortArrayIncludes`', () => {
       expect(
         configResult.getConfigByUnPostfix('perfectionist/sort-array-includes'),
       ).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-array-includes` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-array-includes')?.files,
-      ).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-array-includes` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-array-includes')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

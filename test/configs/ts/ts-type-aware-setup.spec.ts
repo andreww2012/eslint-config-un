@@ -15,6 +15,12 @@ describe('ts: sub config `typeAware.setup`', () => {
         sourceType: 'module',
       });
     });
+
+    it('does not create `ts/type-aware/setup` eslint config when the `ts` config is disabled', async () => {
+      const configResult = await computeEslintConfig({ts: false});
+
+      expect(configResult.getConfigByUnPostfix('ts/type-aware/setup')).toBeUndefined();
+    });
   });
 
   describe('un options', () => {

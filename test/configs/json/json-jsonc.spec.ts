@@ -3,11 +3,15 @@ const FIXTURES = {
 } as const;
 
 describe('json: sub config `jsonc`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('json');
+  describe('basic tests', () => {
+    it('creates `json/jsonc` eslint config by default when `json` is enabled', async () => {
+      const configResult = await computeEslintConfig('json');
 
-    it('creates `json/jsonc` eslint config by default when `json` is enabled', () => {
-      expect(configResult.getConfigByUnPostfix('json/jsonc')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('json/jsonc');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.jsonc"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `json/jsonc` eslint config when disabled', async () => {
@@ -16,16 +20,6 @@ describe('json: sub config `jsonc`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('json/jsonc')).toBeUndefined();
-    });
-
-    it('has default `files` in `json/jsonc` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('json/jsonc')?.files).toMatchInlineSnapshot(
-        '["**/*.jsonc"]',
-      );
-    });
-
-    it('has default `ignores` in `json/jsonc` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('json/jsonc')?.ignores?.length).toBeGreaterThan(0);
     });
   });
 

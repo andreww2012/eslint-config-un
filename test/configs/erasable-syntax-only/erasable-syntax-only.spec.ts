@@ -2,15 +2,24 @@ const FIXTURES = {
   enum: 'enum.ts',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('erasableSyntaxOnly');
+describe('basic tests', () => {
+  it('creates `erasable-syntax-only` eslint config and loads `erasable-syntax-only` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('erasableSyntaxOnly');
 
-  it('loads `erasable-syntax-only` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('erasable-syntax-only');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('erasable-syntax-only')).toBeDefined();
   });
 
-  it('creates `erasable-syntax-only` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('erasable-syntax-only')).toBeDefined();
+  it('does not create `erasable-syntax-only` eslint config and does not load `erasable-syntax-only` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({erasableSyntaxOnly: false});
+
+    expect(configResult.getConfigByUnPostfix('erasable-syntax-only')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('erasable-syntax-only')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -64,18 +73,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has default `files` in `erasable-syntax-only` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('erasable-syntax-only')?.files).toMatchInlineSnapshot(
-      '["**/*.?([cm])ts?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `erasable-syntax-only` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('erasable-syntax-only')?.ignores?.length,
-    ).toBeGreaterThan(0);
   });
 });
 

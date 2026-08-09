@@ -7,15 +7,26 @@ beforeEach(() => {
   addInstalledPackages({playwright: '1.45.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('playwright');
+describe('basic tests', () => {
+  it('creates `playwright` eslint config and loads `playwright` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('playwright');
 
-  it('loads `playwright` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('playwright');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+    );
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('playwright')).toBeDefined();
   });
 
-  it('creates `playwright` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('playwright')).toBeDefined();
+  it('does not create `playwright` eslint config and does not load `playwright` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({playwright: false});
+
+    expect(configResult.getConfigByUnPostfix('playwright')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('playwright')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -82,16 +93,6 @@ describe('basic tests', async () => {
     it('does not create `playwright` eslint config if explicitly disabled', async () => {
       await expectConfigState({playwright: false}, 'playwright', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `playwright` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('playwright')?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `playwright` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('playwright')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

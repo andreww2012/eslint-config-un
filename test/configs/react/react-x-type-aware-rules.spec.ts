@@ -3,11 +3,17 @@ beforeEach(() => {
 });
 
 describe('react: sub config `reactX.typeAwareRules`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({react: true, ts: true});
+  describe('basic tests', () => {
+    it('creates `react/x/rules-type-aware` eslint config when the `ts` config is enabled', async () => {
+      const configResult = await computeEslintConfig({react: true, ts: true});
 
-    it('creates `react/x/rules-type-aware` eslint config when the `ts` config is enabled', () => {
-      expect(configResult.getConfigByUnPostfix('react/x/rules-type-aware')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('react/x/rules-type-aware');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toStrictEqual(
+        configResult.getConfigByUnPostfix('ts/type-aware/rules')?.files,
+      );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `react/x/rules-type-aware` eslint config when the `ts` config is disabled', async () => {
@@ -23,18 +29,6 @@ describe('react: sub config `reactX.typeAwareRules`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('react/x/rules-type-aware')).toBeUndefined();
-    });
-
-    it('inherits `files` from the `ts` type-aware sub config', () => {
-      expect(configResult.getConfigByUnPostfix('react/x/rules-type-aware')?.files).toStrictEqual(
-        configResult.getConfigByUnPostfix('ts/type-aware/rules')?.files,
-      );
-    });
-
-    it('has default `ignores` in `react/x/rules-type-aware` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('react/x/rules-type-aware')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

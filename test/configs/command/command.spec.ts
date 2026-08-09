@@ -2,15 +2,24 @@ const FIXTURES = {
   arrowWithToFunctionDirective: 'arrow-with-to-function-directive.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('command');
+describe('basic tests', () => {
+  it('creates `command` eslint config and loads `command` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('command');
 
-  it('loads `command` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('command');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('command')).toBeDefined();
   });
 
-  it('creates `command` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('command')).toBeDefined();
+  it('does not create `command` eslint config and does not load `command` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({command: false});
+
+    expect(configResult.getConfigByUnPostfix('command')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('command')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,14 +58,6 @@ describe('basic tests', async () => {
     it('does not create `command` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({command: false}, 'command', ['command', false], 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `command` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('command')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `command` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('command')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

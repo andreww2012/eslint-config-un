@@ -11,7 +11,11 @@ describe('react: sub config `dom`', () => {
     it('creates `react/dom` eslint config when `react-dom` is installed', async () => {
       const configResult = await computeEslintConfig('react');
 
-      expect(configResult.getConfigByUnPostfix('react/dom')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('react/dom');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `react/dom` eslint config when disabled', async () => {
@@ -26,20 +30,6 @@ describe('react: sub config `dom`', () => {
       const configResult = await computeEslintConfig({react: {configDom: true}});
 
       expect(configResult.getConfigByUnPostfix('react/dom')).toBeDefined();
-    });
-
-    it('has default `files` in `react/dom` eslint config', async () => {
-      const configResult = await computeEslintConfig('react');
-
-      expect(configResult.getConfigByUnPostfix('react/dom')?.files).toMatchInlineSnapshot(
-        '["**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `react/dom` eslint config', async () => {
-      const configResult = await computeEslintConfig('react');
-
-      expect(configResult.getConfigByUnPostfix('react/dom')?.ignores?.length).toBeGreaterThan(0);
     });
   });
 

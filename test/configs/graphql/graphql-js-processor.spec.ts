@@ -1,9 +1,15 @@
 describe('graphql: sub config `jsProcessor`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('graphql');
+  describe('basic tests', () => {
+    it('creates `graphql/processor` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('graphql');
 
-    it('creates `graphql/processor` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('graphql/processor')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('graphql/processor');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*.?([cm])[jt]s?(x)", "**/*.flow", "**/*.svelte", "**/*.astro", "**/*.{gjs,gts}"]',
+      );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `graphql/processor` eslint config when `configJsProcessor` is `false`', async () => {
@@ -12,18 +18,6 @@ describe('graphql: sub config `jsProcessor`', () => {
       });
 
       expect(noProcessorConfigResult.getConfigByUnPostfix('graphql/processor')).toBeUndefined();
-    });
-
-    it('has default `files` in `graphql/processor` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('graphql/processor')?.files).toMatchInlineSnapshot(
-        '["**/*.?([cm])[jt]s?(x)", "**/*.flow", "**/*.svelte", "**/*.astro", "**/*.{gjs,gts}"]',
-      );
-    });
-
-    it('has default `ignores` in `graphql/processor` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('graphql/processor')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
 
     it('creates `graphql/processor` eslint config independently of main `graphql` config being disabled via `files: []`', async () => {

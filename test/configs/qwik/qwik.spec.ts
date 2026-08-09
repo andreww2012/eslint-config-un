@@ -6,15 +6,24 @@ beforeEach(() => {
   addInstalledPackages({'@builder.io/qwik': '1.9.1'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('qwik');
+describe('basic tests', () => {
+  it('creates `qwik` eslint config and loads `qwik` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('qwik');
 
-  it('loads `qwik` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('qwik');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('qwik')).toBeDefined();
   });
 
-  it('creates `qwik` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('qwik')).toBeDefined();
+  it('does not create `qwik` eslint config and does not load `qwik` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({qwik: false});
+
+    expect(configResult.getConfigByUnPostfix('qwik')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('qwik')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -81,16 +90,6 @@ describe('basic tests', async () => {
     it('does not create `qwik` eslint config if explicitly disabled', async () => {
       await expectConfigState({qwik: false}, 'qwik', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `qwik` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('qwik')?.files).toMatchInlineSnapshot(
-      '["**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `qwik` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('qwik')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

@@ -2,15 +2,24 @@ const FIXTURES = {
   jsonImportWithoutTypeAttribute: 'json-import-without-type-attribute.mjs',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('moduleInterop');
+describe('basic tests', () => {
+  it('creates `module-interop` eslint config and loads `module-interop` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('moduleInterop');
 
-  it('loads `module-interop` plugin', () => {
+    const config = configResult.getConfigByUnPostfix('module-interop');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('module-interop')).toBeDefined();
   });
 
-  it('creates `module-interop` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('module-interop')).toBeDefined();
+  it('does not create `module-interop` eslint config and does not load `module-interop` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({moduleInterop: false});
+
+    expect(configResult.getConfigByUnPostfix('module-interop')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('module-interop')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -59,14 +68,6 @@ describe('basic tests', async () => {
     it('does not create `module-interop` eslint config if explicitly disabled', async () => {
       await expectConfigState({moduleInterop: false}, 'module-interop', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `module-interop` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('module-interop')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `module-interop` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('module-interop')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

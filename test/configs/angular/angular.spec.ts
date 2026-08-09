@@ -8,20 +8,33 @@ beforeEach(() => {
   addInstalledPackages({'@angular/core': '19.0.0'});
 });
 
-describe('basic tests', async () => {
+describe('basic tests', () => {
   const MAIN_ESLINT_CONFIGS = ['angular/general', 'angular/template'];
 
-  const configResult = await computeEslintConfig('angular');
+  it('creates `angular/{general,template}` eslint configs and loads `angular` and `angular-template` plugins if set to `true`', async () => {
+    const configResult = await computeEslintConfig('angular');
 
-  it('loads `angular` and `angular-template` plugins', () => {
+    expect(configResult.getConfigsByUnPostfix(MAIN_ESLINT_CONFIGS)).toHaveLength(
+      MAIN_ESLINT_CONFIGS.length,
+    );
+    expect(configResult.getConfigByUnPostfix('angular/general')?.files).toMatchInlineSnapshot(
+      '["**/*.?([cm])[jt]s?(x)"]',
+    );
+    expect(configResult.getConfigByUnPostfix('angular/general')?.ignores?.length).toBeGreaterThan(
+      0,
+    );
+
     expect(configResult.getLoadedPlugin('angular')).toBeDefined();
     expect(configResult.getLoadedPlugin('angular-template')).toBeDefined();
   });
 
-  it('creates `angular/{general,template}` eslint configs', () => {
-    expect(configResult.getConfigsByUnPostfix(MAIN_ESLINT_CONFIGS)).toHaveLength(
-      MAIN_ESLINT_CONFIGS.length,
-    );
+  it('does not create `angular/{general,template}` eslint configs and does not load `angular` and `angular-template` plugins if set to `false`', async () => {
+    const configResult = await computeEslintConfig({angular: false});
+
+    expect(configResult.getConfigsByUnPostfix(MAIN_ESLINT_CONFIGS)).toBeEmpty();
+
+    expect(configResult.getLoadedPlugin('angular')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('angular-template')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -110,18 +123,6 @@ describe('basic tests', async () => {
         );
       });
     });
-  });
-
-  it('has default `files` in `angular/general` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('angular/general')?.files).toMatchInlineSnapshot(
-      '["**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `angular/general` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('angular/general')?.ignores?.length).toBeGreaterThan(
-      0,
-    );
   });
 });
 

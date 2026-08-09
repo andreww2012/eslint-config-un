@@ -6,15 +6,26 @@ beforeEach(() => {
   addInstalledPackages({ava: '6.2.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('ava');
+describe('basic tests', () => {
+  it('creates `ava` eslint config and loads `ava` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('ava');
 
-  it('loads `ava` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('ava');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+    );
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('ava')).toBeDefined();
   });
 
-  it('creates `ava` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('ava')).toBeDefined();
+  it('does not create `ava` eslint config and does not load `ava` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({ava: false});
+
+    expect(configResult.getConfigByUnPostfix('ava')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('ava')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -91,16 +102,6 @@ describe('basic tests', async () => {
         await expectConfigState({ava: true}, 'ava', true, 'misc-enabled');
       });
     });
-  });
-
-  it('has default `files` in `ava` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('ava')?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `ava` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('ava')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

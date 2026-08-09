@@ -2,15 +2,24 @@ const FIXTURES = {
   withMisspelling: 'with-misspelling.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('cspell');
+describe('basic tests', () => {
+  it('creates `cspell` eslint config and loads `cspell` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('cspell');
 
-  it('loads `cspell` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('cspell');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores).toBeUndefined();
+
     expect(configResult.getLoadedPlugin('cspell')).toBeDefined();
   });
 
-  it('creates `cspell` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('cspell')).toBeDefined();
+  it('does not create `cspell` eslint config and does not load `cspell` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({cspell: false});
+
+    expect(configResult.getConfigByUnPostfix('cspell')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('cspell')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,14 +58,6 @@ describe('basic tests', async () => {
     it('does not create `cspell` eslint config and prints a warning if explicitly disabled', async () => {
       await expectConfigState({cspell: false}, 'cspell', ['cspell', false], 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `cspell` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('cspell')?.files).toBeUndefined();
-  });
-
-  it('has no `ignores` in `cspell` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('cspell')?.ignores).toBeUndefined();
   });
 });
 

@@ -3,11 +3,18 @@ const FIXTURES = {
 } as const;
 
 describe('no-secrets: sub config `json`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('noSecrets');
+  describe('basic tests', () => {
+    it('creates `no-secrets/json` eslint config when enabled (default)', async () => {
+      const configResult = await computeEslintConfig('noSecrets');
 
-    it('creates `no-secrets/json` eslint config when enabled (default)', () => {
-      expect(configResult.getConfigByUnPostfix('no-secrets/json')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('no-secrets/json');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.json"]');
+
+      const ignores = config?.ignores;
+
+      expect(ignores).toIncludeAllMembers(['**/package-lock.json']);
     });
 
     it('does not create `no-secrets/json` eslint config when disabled', async () => {
@@ -16,18 +23,6 @@ describe('no-secrets: sub config `json`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('no-secrets/json')).toBeUndefined();
-    });
-
-    it('creates `no-secrets/json` eslint config with default JSON files', () => {
-      expect(configResult.getConfigByUnPostfix('no-secrets/json')?.files).toMatchInlineSnapshot(
-        '["**/*.json"]',
-      );
-    });
-
-    it('has default `ignores` in `no-secrets/json` eslint config that always includes `**/package-lock.json`', () => {
-      const ignores = configResult.getConfigByUnPostfix('no-secrets/json')?.ignores;
-
-      expect(ignores).toIncludeAllMembers(['**/package-lock.json']);
     });
   });
 

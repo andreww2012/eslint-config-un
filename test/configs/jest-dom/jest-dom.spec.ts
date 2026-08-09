@@ -6,15 +6,26 @@ beforeEach(() => {
   addInstalledPackages({'@testing-library/jest-dom': '6.9.1'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('jestDom');
+describe('basic tests', () => {
+  it('creates `jest-dom` eslint config and loads `jest-dom` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('jestDom');
 
-  it('loads `jest-dom` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('jest-dom');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+    );
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('jest-dom')).toBeDefined();
   });
 
-  it('creates `jest-dom` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jest-dom')).toBeDefined();
+  it('does not create `jest-dom` eslint config and does not load `jest-dom` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({jestDom: false});
+
+    expect(configResult.getConfigByUnPostfix('jest-dom')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('jest-dom')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -71,16 +82,6 @@ describe('basic tests', async () => {
     it('does not create `jest-dom` eslint config if explicitly disabled', async () => {
       await expectConfigState({jestDom: false}, 'jest-dom', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `jest-dom` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jest-dom')?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `jest-dom` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jest-dom')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

@@ -4,29 +4,21 @@ const FIXTURES = {
 } as const;
 
 describe('pnpm: sub config `pnpmWorkspace`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('pnpm');
+  describe('basic tests', () => {
+    it('creates `pnpm/pnpm-workspace-yaml` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('pnpm');
 
-    it('creates `pnpm/pnpm-workspace-yaml` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["pnpm-workspace.yaml"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `pnpm/pnpm-workspace-yaml` eslint config when disabled', async () => {
       const configResult = await computeEslintConfig({pnpm: {configPnpmWorkspace: false}});
 
       expect(configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')).toBeUndefined();
-    });
-
-    it('has default `files` in `pnpm/pnpm-workspace-yaml` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')?.files,
-      ).toMatchInlineSnapshot('["pnpm-workspace.yaml"]');
-    });
-
-    it('has default `ignores` in `pnpm/pnpm-workspace-yaml` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('pnpm/pnpm-workspace-yaml')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

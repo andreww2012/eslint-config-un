@@ -12,12 +12,20 @@ describe('basic tests', () => {
   it('creates `vue` eslint config and loads `vue` plugin by default', async () => {
     const configResult = await computeEslintConfig('vue');
 
+    const config = configResult.getConfigByUnPostfix('vue');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.vue"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('vue')).toBeDefined();
+  });
 
-    const vueConfig = configResult.getConfigByUnPostfix('vue');
+  it('does not create `vue` eslint config and does not load `vue` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({vue: false});
 
-    expect(vueConfig).toBeDefined();
-    expect(vueConfig?.files).toMatchInlineSnapshot('["**/*.vue"]');
+    expect(configResult.getConfigByUnPostfix('vue')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('vue')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {

@@ -3,29 +3,21 @@ const FIXTURES = {
 } as const;
 
 describe('unused-imports: sub config `noUnusedVars`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({unusedImports: {configNoUnusedVars: true}});
+  describe('basic tests', () => {
+    it('creates `unused-imports/no-unused-vars` eslint config when enabled', async () => {
+      const configResult = await computeEslintConfig({unusedImports: {configNoUnusedVars: true}});
 
-    it('creates `unused-imports/no-unused-vars` eslint config when enabled', () => {
-      expect(configResult.getConfigByUnPostfix('unused-imports/no-unused-vars')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('unused-imports/no-unused-vars');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `unused-imports/no-unused-vars` eslint config when disabled (default)', async () => {
       const configResult = await computeEslintConfig('unusedImports');
 
       expect(configResult.getConfigByUnPostfix('unused-imports/no-unused-vars')).toBeUndefined();
-    });
-
-    it('has no explicit `files` restriction in `unused-imports/no-unused-vars` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('unused-imports/no-unused-vars')?.files,
-      ).toBeUndefined();
-    });
-
-    it('has default `ignores` in `unused-imports/no-unused-vars` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('unused-imports/no-unused-vars')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

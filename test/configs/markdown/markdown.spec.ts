@@ -5,17 +5,34 @@ const FIXTURES = {
   skippedHeadingLevel: 'skipped-heading-level.md',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('markdown');
+describe('basic tests', () => {
+  it('creates `markdown/{markdown,setup/code-blocks-processor,code-blocks}` eslint configs and loads `markdown` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('markdown');
 
-  it('loads `markdown` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('markdown/markdown');
+
+    expect(config).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('markdown/setup/code-blocks-processor')).toBeDefined();
+    expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.md"]');
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN]);
+
     expect(configResult.getLoadedPlugin('markdown')).toBeDefined();
   });
 
-  it('creates `markdown/{markdown,setup/code-blocks-processor,code-blocks}` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('markdown/markdown')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('markdown/setup/code-blocks-processor')).toBeDefined();
-    expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeDefined();
+  it('does not create `markdown/{markdown,setup/code-blocks-processor,code-blocks}` eslint configs and does not load `markdown` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({markdown: false});
+
+    expect(configResult.getConfigByUnPostfix('markdown/markdown')).toBeUndefined();
+    expect(
+      configResult.getConfigByUnPostfix('markdown/setup/code-blocks-processor'),
+    ).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('markdown/code-blocks')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('markdown')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -54,19 +71,6 @@ describe('basic tests', async () => {
     it('does not create `markdown/markdown` eslint config if explicitly disabled', async () => {
       await expectConfigState({markdown: false}, 'markdown/markdown', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `markdown/markdown` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('markdown/markdown')?.files).toMatchInlineSnapshot(
-      '["**/*.md"]',
-    );
-  });
-
-  it('has default `ignores` in `markdown/markdown` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('markdown/markdown')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN]);
   });
 });
 

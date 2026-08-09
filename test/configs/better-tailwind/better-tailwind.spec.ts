@@ -17,15 +17,24 @@ const TW4_SETTINGS = {
   entryPoint: path.resolve(import.meta.dirname, 'fixtures', 'tailwind-entry.css'),
 };
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('betterTailwind');
+describe('basic tests', () => {
+  it('creates `better-tailwindcss` eslint config and loads `better-tailwindcss` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('betterTailwind');
 
-  it('loads `better-tailwindcss` plugin', () => {
+    const config = configResult.getConfigByUnPostfix('better-tailwindcss');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('better-tailwindcss')).toBeDefined();
   });
 
-  it('creates `better-tailwindcss` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeDefined();
+  it('does not create `better-tailwindcss` eslint config and does not load `better-tailwindcss` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({betterTailwind: false});
+
+    expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('better-tailwindcss')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -118,16 +127,6 @@ describe('basic tests', async () => {
     it('does not create `better-tailwindcss` eslint config if explicitly disabled', async () => {
       await expectConfigState({betterTailwind: false}, 'better-tailwindcss', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `better-tailwindcss` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('better-tailwindcss')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `better-tailwindcss` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('better-tailwindcss')?.ignores?.length,
-    ).toBeGreaterThan(0);
   });
 });
 

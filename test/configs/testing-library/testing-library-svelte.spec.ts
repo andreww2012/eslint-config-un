@@ -1,9 +1,15 @@
 describe('testing-library: sub config `svelte`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({testingLibrary: {configSvelte: true}});
+  describe('basic tests', () => {
+    it('creates `testing-library/svelte` eslint config when enabled', async () => {
+      const configResult = await computeEslintConfig({testingLibrary: {configSvelte: true}});
 
-    it('creates `testing-library/svelte` eslint config when enabled', () => {
-      expect(configResult.getConfigByUnPostfix('testing-library/svelte')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('testing-library/svelte');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
+      );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `testing-library/svelte` eslint config by default (svelte config not enabled)', async () => {
@@ -18,20 +24,6 @@ describe('testing-library: sub config `svelte`', () => {
       const configResult = await computeEslintConfig({testingLibrary: true}, {reset: true});
 
       expect(configResult.getConfigByUnPostfix('testing-library/svelte')).toBeDefined();
-    });
-
-    it('has default `files` in `testing-library/svelte` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/svelte')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `testing-library/svelte` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('testing-library/svelte')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

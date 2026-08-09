@@ -8,15 +8,28 @@ const FIXTURES = {
     'vitepress-custom-container-without-space-in-header.md',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('markdownPreferences');
+describe('basic tests', () => {
+  it('creates `markdown-preferences` eslint config and loads `markdown-preferences` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('markdownPreferences');
 
-  it('loads `markdown-preferences` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('markdown-preferences');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.md"]');
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN]);
+
     expect(configResult.getLoadedPlugin('markdown-preferences')).toBeDefined();
   });
 
-  it('creates `markdown-preferences` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('markdown-preferences')).toBeDefined();
+  it('does not create `markdown-preferences` eslint config and does not load `markdown-preferences` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({markdownPreferences: false});
+
+    expect(configResult.getConfigByUnPostfix('markdown-preferences')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('markdown-preferences')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -75,19 +88,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has default `files` in `markdown-preferences` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('markdown-preferences')?.files).toMatchInlineSnapshot(
-      '["**/*.md"]',
-    );
-  });
-
-  it('has default `ignores` in `markdown-preferences` eslint config (does not ignore .md files)', () => {
-    const ignores = configResult.getConfigByUnPostfix('markdown-preferences')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN]);
   });
 });
 

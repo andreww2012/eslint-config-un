@@ -1,35 +1,21 @@
 describe('jsonc: sub config `jsonc`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('jsonc');
-
-    it('does not create `jsonc/jsonc` eslint config when disabled (default)', () => {
-      expect(configResult.getConfigByUnPostfix('jsonc/jsonc')).toBeUndefined();
-    });
-
+  describe('basic tests', () => {
     it('creates `jsonc/jsonc` eslint config when enabled', async () => {
       const configResult = await computeEslintConfig({
         jsonc: {configJsonc: true},
       });
 
-      expect(configResult.getConfigByUnPostfix('jsonc/jsonc')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('jsonc/jsonc');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.jsonc"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
-    it('has default `files` in `jsonc/jsonc` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        jsonc: {configJsonc: true},
-      });
+    it('does not create `jsonc/jsonc` eslint config when disabled (default)', async () => {
+      const configResult = await computeEslintConfig('jsonc');
 
-      expect(configResult.getConfigByUnPostfix('jsonc/jsonc')?.files).toMatchInlineSnapshot(
-        '["**/*.jsonc"]',
-      );
-    });
-
-    it('has default `ignores` in `jsonc/jsonc` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        jsonc: {configJsonc: true},
-      });
-
-      expect(configResult.getConfigByUnPostfix('jsonc/jsonc')?.ignores?.length).toBeGreaterThan(0);
+      expect(configResult.getConfigByUnPostfix('jsonc/jsonc')).toBeUndefined();
     });
   });
 

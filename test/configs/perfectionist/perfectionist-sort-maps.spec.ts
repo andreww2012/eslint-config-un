@@ -3,11 +3,15 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortMaps`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({perfectionist: {configSortMaps: true}});
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-maps` eslint config when `configSortMaps` is `true`', async () => {
+      const configResult = await computeEslintConfig({perfectionist: {configSortMaps: true}});
 
-    it('creates `perfectionist/sort-maps` eslint config when `configSortMaps` is `true`', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-maps')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-maps');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-maps` eslint config by default', async () => {
@@ -20,16 +24,6 @@ describe('perfectionist: sub config `sortMaps`', () => {
       const configResult = await computeEslintConfig({perfectionist: {configSortMaps: false}});
 
       expect(configResult.getConfigByUnPostfix('perfectionist/sort-maps')).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-maps` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-maps')?.files).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-maps` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-maps')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

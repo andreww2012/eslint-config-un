@@ -6,15 +6,24 @@ beforeEach(() => {
   addInstalledPackages({unocss: '0.60.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('unocss');
+describe('basic tests', () => {
+  it('creates `unocss` eslint config and loads `unocss` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('unocss');
 
-  it('loads `unocss` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('unocss');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('unocss')).toBeDefined();
   });
 
-  it('creates `unocss` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('unocss')).toBeDefined();
+  it('does not create `unocss` eslint config and does not load `unocss` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({unocss: false});
+
+    expect(configResult.getConfigByUnPostfix('unocss')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('unocss')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -71,14 +80,6 @@ describe('basic tests', async () => {
     it('does not create `unocss` eslint config if explicitly disabled', async () => {
       await expectConfigState({unocss: false}, 'unocss', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `unocss` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('unocss')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `unocss` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('unocss')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

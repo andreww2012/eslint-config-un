@@ -14,15 +14,13 @@ const ENABLED_PARSERS = ['json', 'jsonc', 'yaml'].sort();
 
 const PARSER_CONFIG_PREFIX = 'lockfile/parser/';
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('lockfile');
+describe('basic tests', () => {
+  it('creates `lockfile` and `lockfile/parser/<package manager>` eslint configs and loads `lockfile` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('lockfile');
 
-  it('loads `lockfile` plugin if used', () => {
-    expect(configResult.getLoadedPlugin('lockfile')).toBeDefined();
-  });
+    const config = configResult.getConfigByUnPostfix('lockfile');
 
-  it('creates `lockfile` and `lockfile/parser/<package manager>` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('lockfile')).toBeDefined();
+    expect(config).toBeDefined();
 
     const allParserConfigs = configResult.getConfigsByUnPostfix((name) =>
       name.startsWith(PARSER_CONFIG_PREFIX),
@@ -32,6 +30,23 @@ describe('basic tests', async () => {
       // eslint-disable-next-line unicorn/no-array-sort
       allParserConfigs.map(({name}) => name.slice(PARSER_CONFIG_PREFIX.length)).sort(),
     ).toStrictEqual(ENABLED_PARSERS);
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/package-lock.json", "**/npm-shrinkwrap.json", "**/yarn.lock", "**/pnpm-lock.yaml", "**/bun.lock", "**/bun.lockb", "**/vlt-lock.json"]',
+    );
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers(['**/*.yaml']);
+
+    expect(configResult.getLoadedPlugin('lockfile')).toBeDefined();
+  });
+
+  it('does not create `lockfile` and `lockfile/parser/<package manager>` eslint configs and does not load `lockfile` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({lockfile: false});
+
+    expect(configResult.getConfigByUnPostfix('lockfile')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('lockfile')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -70,19 +85,6 @@ describe('basic tests', async () => {
     it('does not create `lockfile` eslint config if explicitly disabled', async () => {
       await expectConfigState({lockfile: false}, 'lockfile', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `lockfile` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('lockfile')?.files).toMatchInlineSnapshot(
-      '["**/package-lock.json", "**/npm-shrinkwrap.json", "**/yarn.lock", "**/pnpm-lock.yaml", "**/bun.lock", "**/bun.lockb", "**/vlt-lock.json"]',
-    );
-  });
-
-  it('has default `ignores` in `lockfile` eslint config (does not ignore YAML files)', () => {
-    const ignores = configResult.getConfigByUnPostfix('lockfile')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers(['**/*.yaml']);
   });
 });
 

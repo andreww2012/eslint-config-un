@@ -2,15 +2,24 @@ const FIXTURES = {
   fixture: 'fixture.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('math');
+describe('basic tests', () => {
+  it('creates `math` eslint config and loads `math` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('math');
 
-  it('loads `math` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('math');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('math')).toBeDefined();
   });
 
-  it('creates `math` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('math')).toBeDefined();
+  it('does not create `math` eslint config and does not load `math` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({math: false});
+
+    expect(configResult.getConfigByUnPostfix('math')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('math')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,14 +58,6 @@ describe('basic tests', async () => {
     it('does not create `math` eslint config if explicitly disabled', async () => {
       await expectConfigState({math: false}, 'math', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `math` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('math')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `math` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('math')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

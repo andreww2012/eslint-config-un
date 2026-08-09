@@ -3,20 +3,32 @@ const FIXTURES = {
   markdownListWithAsterisk: 'markdown-list-with-asterisk.md',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('format');
+describe('basic tests', () => {
+  it('creates only the `format/prettier` eslint config and loads `format` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('format');
 
-  it('loads `format` plugin if used', () => {
-    expect(configResult.getLoadedPlugin('format')).toBeDefined();
-  });
+    const config = configResult.getConfigByUnPostfix('format/prettier');
 
-  it('creates `format/prettier` eslint config and does not create other `format/*` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('format/prettier')).toBeDefined();
+    expect(config).toBeDefined();
     expect(
       configResult.getConfigsByUnPostfix(
         (configName) => configName.startsWith('format/') && configName !== 'format/prettier',
       ),
     ).toBeEmpty();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores).toBeUndefined();
+
+    expect(configResult.getLoadedPlugin('format')).toBeDefined();
+  });
+
+  it('does not create any `format/*` eslint config and does not load `format` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({format: false});
+
+    expect(
+      configResult.getConfigsByUnPostfix((configName) => configName.startsWith('format/')),
+    ).toBeEmpty();
+
+    expect(configResult.getLoadedPlugin('format')).toBeUndefined();
   });
 
   it('supports array notation to create multiple format eslint configs', async () => {
@@ -69,14 +81,6 @@ describe('basic tests', async () => {
         'misc-enabled',
       );
     });
-  });
-
-  it('has no explicit `files` restriction in `format/prettier` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('format/prettier')?.files).toBeUndefined();
-  });
-
-  it('has no `ignores` in `format/prettier` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('format/prettier')?.ignores).toBeUndefined();
   });
 });
 

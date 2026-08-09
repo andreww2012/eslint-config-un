@@ -2,15 +2,26 @@ const FIXTURES = {
   iifeAsync: 'bin/iife-async.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('cli');
+describe('basic tests', () => {
+  it('creates `cli` eslint config and loads `unicorn` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('cli');
 
-  it('loads `unicorn` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('cli');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/bin/**/*.?([cm])[jt]s", "**/scripts/**/*.?([cm])[jt]s", "**/cli/**/*.?([cm])[jt]s", "**/cli.?([cm])[jt]s"]',
+    );
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('unicorn')).toBeDefined();
   });
 
-  it('creates `cli` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('cli')).toBeDefined();
+  it('does not create `cli` eslint config and does not load `unicorn` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({cli: false});
+
+    expect(configResult.getConfigByUnPostfix('cli')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('unicorn')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,16 +60,6 @@ describe('basic tests', async () => {
     it('does not create `cli` eslint config if explicitly disabled', async () => {
       await expectConfigState({cli: false}, 'cli', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `cli` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('cli')?.files).toMatchInlineSnapshot(
-      '["**/bin/**/*.?([cm])[jt]s", "**/scripts/**/*.?([cm])[jt]s", "**/cli/**/*.?([cm])[jt]s", "**/cli.?([cm])[jt]s"]',
-    );
-  });
-
-  it('has default `ignores` in `cli` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('cli')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

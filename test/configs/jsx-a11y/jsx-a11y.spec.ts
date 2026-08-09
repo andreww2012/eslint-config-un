@@ -2,15 +2,24 @@ const FIXTURES = {
   imgWithoutAlt: 'img-without-alt.tsx',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('jsxA11y');
+describe('basic tests', () => {
+  it('creates `jsx-a11y` eslint config and loads `jsx-a11y` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('jsxA11y');
 
-  it('loads `jsx-a11y` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('jsx-a11y');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]sx"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('jsx-a11y')).toBeDefined();
   });
 
-  it('creates `jsx-a11y` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jsx-a11y')).toBeDefined();
+  it('does not create `jsx-a11y` eslint config and does not load `jsx-a11y` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({jsxA11y: false});
+
+    expect(configResult.getConfigByUnPostfix('jsx-a11y')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('jsx-a11y')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -49,16 +58,6 @@ describe('basic tests', async () => {
     it('does not create `jsx-a11y` eslint config if explicitly disabled', async () => {
       await expectConfigState({jsxA11y: false}, 'jsx-a11y', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `jsx-a11y` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jsx-a11y')?.files).toMatchInlineSnapshot(
-      '["**/*.?([cm])[jt]sx"]',
-    );
-  });
-
-  it('has default `ignores` in `jsx-a11y` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jsx-a11y')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

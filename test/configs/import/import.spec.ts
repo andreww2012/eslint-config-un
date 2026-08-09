@@ -18,15 +18,28 @@ vi.mock(import('eslint-import-resolver-typescript'), async (importOriginal) => {
   };
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('import');
+describe('basic tests', () => {
+  it('creates `import` eslint config and loads `import` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('import');
 
-  it('loads `import` plugin', () => {
+    const config = configResult.getConfigByUnPostfix('import');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(1);
+    expect(ignores).toIncludeAllMembers([GLOB_MARKDOWN_ALL_CODE_BLOCKS]);
+
     expect(configResult.getLoadedPlugin('import')).toBeDefined();
   });
 
-  it('creates `import` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('import')).toBeDefined();
+  it('does not create `import` eslint config and does not load `import` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({import: false});
+
+    expect(configResult.getConfigByUnPostfix('import')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('import')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -65,17 +78,6 @@ describe('basic tests', async () => {
     it('does not create `import` eslint config if explicitly disabled', async () => {
       await expectConfigState({import: false}, 'import', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `import` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('import')?.files).toBeUndefined();
-  });
-
-  it('has default `ignores` in `import` eslint config (includes markdown code blocks)', () => {
-    const ignores = configResult.getConfigByUnPostfix('import')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(1);
-    expect(ignores).toIncludeAllMembers([GLOB_MARKDOWN_ALL_CODE_BLOCKS]);
   });
 });
 

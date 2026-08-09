@@ -11,25 +11,11 @@ describe('check-file: sub config `enableCheckFileProcessor`', () => {
         checkFile: {configEnableCheckFileProcessor: {}},
       });
 
-      expect(configResult.getConfigByUnPostfix('check-file/processor')).toBeDefined();
-    });
+      const config = configResult.getConfigByUnPostfix('check-file/processor');
 
-    it('has no explicit `files` restriction in `check-file/processor` eslint config by default', async () => {
-      const configResult = await computeEslintConfig({
-        checkFile: {configEnableCheckFileProcessor: {}},
-      });
-
-      expect(configResult.getConfigByUnPostfix('check-file/processor')?.files).toBeUndefined();
-    });
-
-    it('has default `ignores` in `check-file/processor` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        checkFile: {configEnableCheckFileProcessor: {}},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('check-file/processor')?.ignores?.length,
-      ).toBeGreaterThan(0);
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('creates `check-file/processor` eslint config independently of `check-file` being disabled via `files: []`', async () => {

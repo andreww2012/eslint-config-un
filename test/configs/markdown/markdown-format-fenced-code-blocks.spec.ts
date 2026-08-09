@@ -11,7 +11,13 @@ describe('markdown: sub config `formatFencedCodeBlocks`', () => {
     it('creates `markdown/format-fenced-code-blocks` eslint config when `prettier` is installed', async () => {
       const configResult = await computeEslintConfig('markdown');
 
-      expect(configResult.getConfigByUnPostfix('markdown/format-fenced-code-blocks')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('markdown/format-fenced-code-blocks');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*.md/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,htm?(l),css,astro,svelte,graphql,gql,gjs,gts}"]',
+      );
+      expect(config?.ignores).toBeUndefined();
     });
 
     it('does not create `markdown/format-fenced-code-blocks` eslint config when `configFormatFencedCodeBlocks` is `false`', async () => {
@@ -30,28 +36,6 @@ describe('markdown: sub config `formatFencedCodeBlocks`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('markdown/format-fenced-code-blocks')).toBeDefined();
-    });
-
-    it('has default `files` in `markdown/format-fenced-code-blocks` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        markdown: {configFormatFencedCodeBlocks: true},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('markdown/format-fenced-code-blocks')?.files,
-      ).toMatchInlineSnapshot(
-        '["**/*.md/**/*.{?([cm])[jt]s?(x),vue,json,jsonc,json5,y?(a)ml,toml,htm?(l),css,astro,svelte,graphql,gql,gjs,gts}"]',
-      );
-    });
-
-    it('has no implicit `ignores` in `markdown/format-fenced-code-blocks` eslint config', async () => {
-      const configResult = await computeEslintConfig({
-        markdown: {configFormatFencedCodeBlocks: true},
-      });
-
-      expect(
-        configResult.getConfigByUnPostfix('markdown/format-fenced-code-blocks')?.ignores,
-      ).toBeUndefined();
     });
 
     it('does not create `markdown/format-fenced-code-blocks` eslint config when `prettier` is not installed', async () => {

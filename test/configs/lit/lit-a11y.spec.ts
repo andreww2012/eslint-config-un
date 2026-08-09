@@ -7,11 +7,15 @@ beforeEach(() => {
 });
 
 describe('lit: sub config `a11y`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('lit');
+  describe('basic tests', () => {
+    it('creates `lit-a11y` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('lit');
 
-    it('creates `lit-a11y` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('lit-a11y')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('lit-a11y');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]sx"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `lit-a11y` eslint config when `configA11y` is `false`', async () => {
@@ -24,16 +28,6 @@ describe('lit: sub config `a11y`', () => {
       const configResult = await computeEslintConfig({lit: {configA11y: true}});
 
       expect(configResult.getConfigByUnPostfix('lit-a11y')).toBeDefined();
-    });
-
-    it('has default `files` in `lit-a11y` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('lit-a11y')?.files).toMatchInlineSnapshot(
-        '["**/*.?([cm])[jt]sx"]',
-      );
-    });
-
-    it('has default `ignores` in `lit-a11y` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('lit-a11y')?.ignores?.length).toBeGreaterThan(0);
     });
   });
 

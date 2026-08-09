@@ -8,17 +8,13 @@ beforeEach(() => {
   addInstalledPackages({react: INSTALLED_REACT_VERSION});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('react');
+describe('basic tests', () => {
+  it('creates `react/{plugin-original,x,hooks,allow-default-export-in-jsx-files,refresh,you-might-not-need-an-effect}` eslint configs and loads `react` and `eslint-react` and `react-hooks` plugins if set to `true`', async () => {
+    const configResult = await computeEslintConfig('react');
 
-  it('loads `react`, `eslint-react` and `react-hooks` plugins', () => {
-    expect(configResult.getLoadedPlugin('react')).toBeDefined();
-    expect(configResult.getLoadedPlugin('eslint-react')).toBeDefined();
-    expect(configResult.getLoadedPlugin('react-hooks')).toBeDefined();
-  });
+    const config = configResult.getConfigByUnPostfix('react/plugin-original');
 
-  it('creates `react/{plugin-original,x,hooks,allow-default-export-in-jsx-files,refresh,you-might-not-need-an-effect}` eslint configs', () => {
-    expect(configResult.getConfigByUnPostfix('react/plugin-original')).toBeDefined();
+    expect(config).toBeDefined();
     expect(configResult.getConfigByUnPostfix('react/x')).toBeDefined();
     expect(configResult.getConfigByUnPostfix('react/hooks')).toBeDefined();
     expect(
@@ -26,6 +22,25 @@ describe('basic tests', async () => {
     ).toBeDefined();
     expect(configResult.getConfigByUnPostfix('react/refresh')).toBeDefined();
     expect(configResult.getConfigByUnPostfix('react/you-might-not-need-an-effect')).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])[jt]s?(x)"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
+    expect(configResult.getLoadedPlugin('react')).toBeDefined();
+    expect(configResult.getLoadedPlugin('eslint-react')).toBeDefined();
+    expect(configResult.getLoadedPlugin('react-hooks')).toBeDefined();
+  });
+
+  it('does not create `react/{plugin-original,x,hooks,allow-default-export-in-jsx-files,refresh,you-might-not-need-an-effect}` eslint configs and does not load `react` and `eslint-react` and `react-hooks` plugins if set to `false`', async () => {
+    const configResult = await computeEslintConfig({react: false});
+
+    expect(configResult.getConfigByUnPostfix('react/plugin-original')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('react/x')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('react/hooks')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('react/refresh')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('react/you-might-not-need-an-effect')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('react')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('eslint-react')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('react-hooks')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -87,18 +102,6 @@ describe('basic tests', async () => {
     it('does not create `react/plugin-original` eslint config if explicitly disabled', async () => {
       await expectConfigState({react: false}, 'react/plugin-original', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `react/plugin-original` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('react/plugin-original')?.files).toMatchInlineSnapshot(
-      '["**/*.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `react/plugin-original` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('react/plugin-original')?.ignores?.length,
-    ).toBeGreaterThan(0);
   });
 });
 

@@ -12,17 +12,27 @@ describe('basic tests', () => {
   it('creates `ts/non-type-aware/{setup,rules}` eslint configs, loads `ts` plugin when set to `true`', async () => {
     const configResult = await computeEslintConfig('ts');
 
-    expect(configResult.getLoadedPlugin('ts')).toBeDefined();
-
     const configSetup = configResult.getConfigByUnPostfix('ts/non-type-aware/setup');
+    const configRules = configResult.getConfigByUnPostfix('ts/non-type-aware/rules');
 
     expect(configSetup).toBeDefined();
     expect(configSetup?.files).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
-
-    const configRules = configResult.getConfigByUnPostfix('ts/non-type-aware/rules');
+    expect(configSetup?.ignores?.length).toBeGreaterThan(0);
 
     expect(configRules).toBeDefined();
     expect(configRules?.files).toMatchInlineSnapshot('["**/*.?([cm])ts?(x)"]');
+    expect(configRules?.ignores?.length).toBeGreaterThan(0);
+
+    expect(configResult.getLoadedPlugin('ts')).toBeDefined();
+  });
+
+  it('does not create `ts/non-type-aware/{setup,rules}` eslint configs, does not load `ts` plugin when set to `false`', async () => {
+    const configResult = await computeEslintConfig({ts: false});
+
+    expect(configResult.getConfigByUnPostfix('ts/non-type-aware/setup')).toBeUndefined();
+    expect(configResult.getConfigByUnPostfix('ts/non-type-aware/rules')).toBeUndefined();
+
+    expect(configResult.getLoadedPlugin('ts')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {

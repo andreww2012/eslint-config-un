@@ -3,11 +3,15 @@ const FIXTURES = {
 } as const;
 
 describe('perfectionist: sub config `sortJsxProps`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({perfectionist: {configSortJsxProps: true}});
+  describe('basic tests', () => {
+    it('creates `perfectionist/sort-jsx-props` eslint config when `configSortJsxProps` is `true`', async () => {
+      const configResult = await computeEslintConfig({perfectionist: {configSortJsxProps: true}});
 
-    it('creates `perfectionist/sort-jsx-props` eslint config when `configSortJsxProps` is `true`', () => {
-      expect(configResult.getConfigByUnPostfix('perfectionist/sort-jsx-props')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('perfectionist/sort-jsx-props');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toBeUndefined();
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `perfectionist/sort-jsx-props` eslint config by default', async () => {
@@ -20,18 +24,6 @@ describe('perfectionist: sub config `sortJsxProps`', () => {
       const configResult = await computeEslintConfig({perfectionist: {configSortJsxProps: false}});
 
       expect(configResult.getConfigByUnPostfix('perfectionist/sort-jsx-props')).toBeUndefined();
-    });
-
-    it('does not restrict `files` in `perfectionist/sort-jsx-props` eslint config by default', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-jsx-props')?.files,
-      ).toBeUndefined();
-    });
-
-    it('has default `ignores` in `perfectionist/sort-jsx-props` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('perfectionist/sort-jsx-props')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

@@ -2,15 +2,24 @@ const FIXTURES = {
   unlimitedEslintDisableComment: 'unlimited-eslint-disable-comment.js',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('eslintComments');
+describe('basic tests', () => {
+  it('creates `eslint-comments` eslint config and loads `eslint-comments` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('eslintComments');
 
-  it('loads `eslint-comments` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('eslint-comments');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores).toBeUndefined();
+
     expect(configResult.getLoadedPlugin('eslint-comments')).toBeDefined();
   });
 
-  it('creates `eslint-comments` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('eslint-comments')).toBeDefined();
+  it('does not create `eslint-comments` eslint config and does not load `eslint-comments` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({eslintComments: false});
+
+    expect(configResult.getConfigByUnPostfix('eslint-comments')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('eslint-comments')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -59,14 +68,6 @@ describe('basic tests', async () => {
     it('does not create `eslint-comments` eslint config if explicitly disabled', async () => {
       await expectConfigState({eslintComments: false}, 'eslint-comments', false, 'misc-enabled');
     });
-  });
-
-  it('has no explicit `files` restriction in `eslint-comments` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('eslint-comments')?.files).toBeUndefined();
-  });
-
-  it('has no `ignores` in `eslint-comments` eslint config by default', () => {
-    expect(configResult.getConfigByUnPostfix('eslint-comments')?.ignores).toBeUndefined();
   });
 });
 

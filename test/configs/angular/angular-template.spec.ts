@@ -10,11 +10,19 @@ beforeEach(() => {
 });
 
 describe('angular: sub config `template`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('angular');
+  describe('basic tests', () => {
+    it('creates `angular/template` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('angular');
 
-    it('creates `angular/template` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('angular/template')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('angular/template');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.html"]');
+
+      const ignores = config?.ignores;
+
+      expect(ignores?.length).toBeGreaterThan(0);
+      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
 
     it('does not create `angular/template` eslint config when set to `false`', async () => {
@@ -27,19 +35,6 @@ describe('angular: sub config `template`', () => {
       const explicitConfigResult = await computeEslintConfig({angular: {configTemplate: true}});
 
       expect(explicitConfigResult.getConfigByUnPostfix('angular/template')).toBeDefined();
-    });
-
-    it('has default `files` in `angular/template` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('angular/template')?.files).toMatchInlineSnapshot(
-        '["**/*.html"]',
-      );
-    });
-
-    it('has default `ignores` in `angular/template` eslint config', () => {
-      const ignores = configResult.getConfigByUnPostfix('angular/template')?.ignores;
-
-      expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.toIncludeAnyMembers([GLOB_HTML, GLOB_HTM, GLOB_HTM_HTML]);
     });
   });
 

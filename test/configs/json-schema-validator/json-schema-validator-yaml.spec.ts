@@ -5,11 +5,19 @@ const FIXTURES = {
 } as const;
 
 describe('json-schema-validator: sub config `yaml`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('jsonSchemaValidator');
+  describe('basic tests', () => {
+    it('creates `json-schema-validator/yaml` eslint config when enabled (default)', async () => {
+      const configResult = await computeEslintConfig('jsonSchemaValidator');
 
-    it('creates `json-schema-validator/yaml` eslint config when enabled (default)', () => {
-      expect(configResult.getConfigByUnPostfix('json-schema-validator/yaml')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('json-schema-validator/yaml');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.y?(a)ml"]');
+
+      const ignores = config?.ignores;
+
+      expect(ignores?.length).toBeGreaterThan(0);
+      expect(ignores).not.toIncludeAnyMembers([GLOB_YML_YAML, GLOB_YML, GLOB_YAML]);
     });
 
     it('does not create `json-schema-validator/yaml` eslint config when disabled', async () => {
@@ -18,19 +26,6 @@ describe('json-schema-validator: sub config `yaml`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('json-schema-validator/yaml')).toBeUndefined();
-    });
-
-    it('has default `files` in `json-schema-validator/yaml` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('json-schema-validator/yaml')?.files,
-      ).toMatchInlineSnapshot('["**/*.y?(a)ml"]');
-    });
-
-    it('has default `ignores` in `json-schema-validator/yaml` eslint config', () => {
-      const ignores = configResult.getConfigByUnPostfix('json-schema-validator/yaml')?.ignores;
-
-      expect(ignores?.length).toBeGreaterThan(0);
-      expect(ignores).not.toIncludeAnyMembers([GLOB_YML_YAML, GLOB_YML, GLOB_YAML]);
     });
   });
 

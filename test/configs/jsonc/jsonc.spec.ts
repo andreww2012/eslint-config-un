@@ -4,15 +4,28 @@ const FIXTURES = {
   dupKeysJson: 'dup-keys.json',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('jsonc');
+describe('basic tests', () => {
+  it('creates `jsonc/all` eslint config and loads `jsonc` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('jsonc');
 
-  it('loads `jsonc` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('jsonc/all');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.json", "**/*.jsonc", "**/*.json5"]');
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN, GLOB_MDX]);
+
     expect(configResult.getLoadedPlugin('jsonc')).toBeDefined();
   });
 
-  it('creates `jsonc/all` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jsonc/all')).toBeDefined();
+  it('does not create `jsonc/all` eslint config and does not load `jsonc` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({jsonc: false});
+
+    expect(configResult.getConfigByUnPostfix('jsonc/all')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('jsonc')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -51,19 +64,6 @@ describe('basic tests', async () => {
     it('does not create `jsonc/all` eslint config if explicitly disabled', async () => {
       await expectConfigState({jsonc: false}, 'jsonc/all', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `jsonc/all` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('jsonc/all')?.files).toMatchInlineSnapshot(
-      '["**/*.json", "**/*.jsonc", "**/*.json5"]',
-    );
-  });
-
-  it('has default `ignores` in `jsonc/all` eslint config (does not ignore .md and .mdx files)', () => {
-    const ignores = configResult.getConfigByUnPostfix('jsonc/all')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN, GLOB_MDX]);
   });
 });
 

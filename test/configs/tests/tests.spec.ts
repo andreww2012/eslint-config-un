@@ -14,11 +14,17 @@ const DISABLED_RULES = [
   'disable-autofix/unicorn/template-indent',
 ] as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('tests');
+describe('basic tests', () => {
+  it('creates `tests` eslint config if set to `true`', async () => {
+    const configResult = await computeEslintConfig('tests');
 
-  it('creates `tests` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tests')).toBeDefined();
+    const config = configResult.getConfigByUnPostfix('tests');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot(
+      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.{bench,benchmark}.?([cm])[jt]s?(x)", "**/*.cy.?([cm])[jt]s?(x)", "**/*.{stories,story}.?([cm])[jt]s?(x)"]',
+    );
+    expect(config?.ignores?.length).toBeGreaterThan(0);
   });
 
   it('does not create `tests` eslint config if set to `false`', async () => {
@@ -63,16 +69,6 @@ describe('basic tests', async () => {
     it('does not create `tests` eslint config if explicitly disabled', async () => {
       await expectConfigState({tests: false}, 'tests', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `tests` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tests')?.files).toMatchInlineSnapshot(
-      '["**/*[.-_]spec.?([cm])[jt]s?(x)", "**/*.test.?([cm])[jt]s?(x)", "**/__test?(s)__/**/*.?([cm])[jt]s?(x)", "**/*.{bench,benchmark}.?([cm])[jt]s?(x)", "**/*.cy.?([cm])[jt]s?(x)", "**/*.{stories,story}.?([cm])[jt]s?(x)"]',
-    );
-  });
-
-  it('has default `ignores` in `tests` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('tests')?.ignores?.length).toBeGreaterThan(0);
   });
 
   it('is placed before the `js` eslint config so that it can be overridden', async () => {

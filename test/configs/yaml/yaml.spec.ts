@@ -8,15 +8,29 @@ const FIXTURES = {
   emptyMappingYml: 'empty-mapping.yml',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('yaml');
+describe('basic tests', () => {
+  it('creates `yaml` eslint config and loads `yaml` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('yaml');
 
-  it('loads `yaml` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('yaml');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.y?(a)ml"]');
+
+    const ignores = config?.ignores;
+
+    expect(ignores?.length).toBeGreaterThan(0);
+    expect(ignores).toIncludeAllMembers(['**/yarn.lock', '**/pnpm-lock.yaml']);
+    expect(ignores).not.toIncludeAnyMembers([GLOB_YML_YAML, GLOB_YML, GLOB_YAML]);
+
     expect(configResult.getLoadedPlugin('yaml')).toBeDefined();
   });
 
-  it('creates `yaml` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('yaml')).toBeDefined();
+  it('does not create `yaml` eslint config and does not load `yaml` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({yaml: false});
+
+    expect(configResult.getConfigByUnPostfix('yaml')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('yaml')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -55,20 +69,6 @@ describe('basic tests', async () => {
     it('does not create `yaml` eslint config if explicitly disabled', async () => {
       await expectConfigState({yaml: false}, 'yaml', false, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in `yaml` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('yaml')?.files).toMatchInlineSnapshot(
-      '["**/*.y?(a)ml"]',
-    );
-  });
-
-  it('has default `ignores` in `yaml` eslint config', () => {
-    const ignores = configResult.getConfigByUnPostfix('yaml')?.ignores;
-
-    expect(ignores?.length).toBeGreaterThan(0);
-    expect(ignores).toIncludeAllMembers(['**/yarn.lock', '**/pnpm-lock.yaml']);
-    expect(ignores).not.toIncludeAnyMembers([GLOB_YML_YAML, GLOB_YML, GLOB_YAML]);
   });
 });
 

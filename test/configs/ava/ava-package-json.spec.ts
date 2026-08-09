@@ -7,11 +7,15 @@ beforeEach(() => {
 });
 
 describe('ava: sub config `packageJson`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('ava');
+  describe('basic tests', () => {
+    it('creates `ava/package.json` eslint config by default', async () => {
+      const configResult = await computeEslintConfig('ava');
 
-    it('creates `ava/package.json` eslint config by default', () => {
-      expect(configResult.getConfigByUnPostfix('ava/package.json')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('ava/package.json');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/package.json"]');
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `ava/package.json` eslint config when disabled', async () => {
@@ -24,18 +28,6 @@ describe('ava: sub config `packageJson`', () => {
       const configResult = await computeEslintConfig({ava: {configPackageJson: false}});
 
       expect(configResult.getConfigByUnPostfix('ava')).toBeDefined();
-    });
-
-    it('targets `package.json` files in `ava/package.json` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('ava/package.json')?.files).toMatchInlineSnapshot(
-        '["**/package.json"]',
-      );
-    });
-
-    it('has default `ignores` in `ava/package.json` eslint config', () => {
-      expect(
-        configResult.getConfigByUnPostfix('ava/package.json')?.ignores?.length,
-      ).toBeGreaterThan(0);
     });
   });
 

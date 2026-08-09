@@ -2,15 +2,24 @@ const FIXTURES = {
   dupKeysJson: 'dup-keys.json',
 } as const;
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('json');
+describe('basic tests', () => {
+  it('creates `json/json` eslint config and loads `json` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('json');
 
-  it('loads `json` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('json/json');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.json"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('json')).toBeDefined();
   });
 
-  it('creates `json/json` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('json/json')).toBeDefined();
+  it('does not create `json/json` eslint config and does not load `json` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({json: false});
+
+    expect(configResult.getConfigByUnPostfix('json/json')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('json')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -45,16 +54,6 @@ describe('basic tests', async () => {
     it('creates `json/json` eslint config if explicitly enabled', async () => {
       await expectConfigState({json: true}, 'json/json', true, 'misc-enabled');
     });
-  });
-
-  it('has default `files` in the `json/json` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('json/json')?.files).toMatchInlineSnapshot(
-      '["**/*.json"]',
-    );
-  });
-
-  it('has default `ignores` in the `json/json` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('json/json')?.ignores?.length).toBeGreaterThan(0);
   });
 });
 

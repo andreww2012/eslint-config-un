@@ -1,24 +1,25 @@
 import {GLOB_ASTRO, GLOB_MARKDOWN} from '../../../src/constants';
 
 describe('astro: sub config `setup`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig('astro');
+  describe('basic tests', () => {
+    it('creates `astro/setup` eslint config when astro is enabled', async () => {
+      const configResult = await computeEslintConfig('astro');
 
-    it('creates `astro/setup` eslint config when astro is enabled', () => {
-      expect(configResult.getConfigByUnPostfix('astro/setup')).toBeDefined();
-    });
+      const config = configResult.getConfigByUnPostfix('astro/setup');
 
-    it('has default `files` in `astro/setup` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('astro/setup')?.files).toMatchInlineSnapshot(
-        '["**/*.astro"]',
-      );
-    });
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot('["**/*.astro"]');
 
-    it('has default `ignores` in `astro/setup` eslint config', () => {
-      const ignores = configResult.getConfigByUnPostfix('astro/setup')?.ignores;
+      const ignores = config?.ignores;
 
       expect(ignores?.length).toBeGreaterThan(0);
       expect(ignores).not.toIncludeAnyMembers([GLOB_MARKDOWN, GLOB_ASTRO]);
+    });
+
+    it('does not create `astro/setup` eslint config when the `astro` config is disabled', async () => {
+      const configResult = await computeEslintConfig({astro: false});
+
+      expect(configResult.getConfigByUnPostfix('astro/setup')).toBeUndefined();
     });
   });
 

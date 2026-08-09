@@ -8,15 +8,24 @@ beforeEach(() => {
   addInstalledPackages({'@nestjs/core': '10.0.0'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('nestJs');
+describe('basic tests', () => {
+  it('creates `nest-js` eslint config and loads `nestjs` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('nestJs');
 
-  it('loads `nestjs` plugin if used', () => {
+    const config = configResult.getConfigByUnPostfix('nest-js');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toMatchInlineSnapshot('["**/*.?([cm])ts"]');
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('nestjs')).toBeDefined();
   });
 
-  it('creates `nest-js` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('nest-js')).toBeDefined();
+  it('does not create `nest-js` eslint config and does not load `nestjs` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({nestJs: false});
+
+    expect(configResult.getConfigByUnPostfix('nest-js')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('nestjs')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -74,10 +83,6 @@ describe('basic tests', async () => {
       await expectConfigState({nestJs: false}, 'nest-js', false, 'misc-enabled');
     });
   });
-
-  it('has default `ignores` in `nest-js` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('nest-js')?.ignores?.length).toBeGreaterThan(0);
-  });
 });
 
 describe('rules', async () => {
@@ -123,14 +128,6 @@ describe('un options', () => {
       const configResult = await computeEslintConfig({nestJs: {files: []}});
 
       expect(configResult.getConfigByUnPostfix('nest-js')).toBeUndefined();
-    });
-
-    it('has default `files` in `nest-js` eslint config', async () => {
-      const configResult = await computeEslintConfig('nestJs');
-
-      expect(configResult.getConfigByUnPostfix('nest-js')?.files).toMatchInlineSnapshot(
-        '["**/*.?([cm])ts"]',
-      );
     });
   });
 

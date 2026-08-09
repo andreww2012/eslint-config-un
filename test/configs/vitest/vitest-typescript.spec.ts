@@ -3,11 +3,17 @@ beforeEach(() => {
 });
 
 describe('vitest: sub config `typescript`', () => {
-  describe('basic tests', async () => {
-    const configResult = await computeEslintConfig({vitest: true, ts: true});
+  describe('basic tests', () => {
+    it('creates `vitest/ts` eslint config when the `ts` config is enabled', async () => {
+      const configResult = await computeEslintConfig({vitest: true, ts: true});
 
-    it('creates `vitest/ts` eslint config when the `ts` config is enabled', () => {
-      expect(configResult.getConfigByUnPostfix('vitest/ts')).toBeDefined();
+      const config = configResult.getConfigByUnPostfix('vitest/ts');
+
+      expect(config).toBeDefined();
+      expect(config?.files).toMatchInlineSnapshot(
+        '["**/*[.-_]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)", "**/*.{bench,benchmark}.?([cm])ts?(x)"]',
+      );
+      expect(config?.ignores?.length).toBeGreaterThan(0);
     });
 
     it('does not create `vitest/ts` eslint config when the `ts` config is disabled', async () => {
@@ -32,16 +38,6 @@ describe('vitest: sub config `typescript`', () => {
       });
 
       expect(configResult.getConfigByUnPostfix('vitest/ts')).toBeUndefined();
-    });
-
-    it('has default `files` in `vitest/ts` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('vitest/ts')?.files).toMatchInlineSnapshot(
-        '["**/*[.-_]spec.?([cm])ts?(x)", "**/*.test.?([cm])ts?(x)", "**/__test?(s)__/**/*.?([cm])ts?(x)", "**/*.{bench,benchmark}.?([cm])ts?(x)"]',
-      );
-    });
-
-    it('has default `ignores` in `vitest/ts` eslint config', () => {
-      expect(configResult.getConfigByUnPostfix('vitest/ts')?.ignores?.length).toBeGreaterThan(0);
     });
   });
 

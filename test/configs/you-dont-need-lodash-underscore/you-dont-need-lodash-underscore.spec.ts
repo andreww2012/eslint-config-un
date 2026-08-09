@@ -8,15 +8,24 @@ beforeEach(() => {
   addInstalledPackages({lodash: '4.17.21'});
 });
 
-describe('basic tests', async () => {
-  const configResult = await computeEslintConfig('youDontNeedLodashUnderscore');
+describe('basic tests', () => {
+  it('creates `you-dont-need-lodash-underscore` eslint config and loads `you-dont-need-lodash-underscore` plugin if set to `true`', async () => {
+    const configResult = await computeEslintConfig('youDontNeedLodashUnderscore');
 
-  it('loads `you-dont-need-lodash-underscore` plugin', () => {
+    const config = configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore');
+
+    expect(config).toBeDefined();
+    expect(config?.files).toBeUndefined();
+    expect(config?.ignores?.length).toBeGreaterThan(0);
+
     expect(configResult.getLoadedPlugin('you-dont-need-lodash-underscore')).toBeDefined();
   });
 
-  it('creates `you-dont-need-lodash-underscore` eslint config', () => {
-    expect(configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')).toBeDefined();
+  it('does not create `you-dont-need-lodash-underscore` eslint config and does not load `you-dont-need-lodash-underscore` plugin if set to `false`', async () => {
+    const configResult = await computeEslintConfig({youDontNeedLodashUnderscore: false});
+
+    expect(configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')).toBeUndefined();
+    expect(configResult.getLoadedPlugin('you-dont-need-lodash-underscore')).toBeUndefined();
   });
 
   describe('mode: all configs are disabled', () => {
@@ -134,18 +143,6 @@ describe('basic tests', async () => {
         expect(configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')).toBeDefined();
       },
     );
-  });
-
-  it('has no explicit `files` restriction in `you-dont-need-lodash-underscore` eslint config by default', () => {
-    expect(
-      configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')?.files,
-    ).toBeUndefined();
-  });
-
-  it('has default `ignores` in `you-dont-need-lodash-underscore` eslint config', () => {
-    expect(
-      configResult.getConfigByUnPostfix('you-dont-need-lodash-underscore')?.ignores?.length,
-    ).toBeGreaterThan(0);
   });
 });
 
