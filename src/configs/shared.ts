@@ -262,6 +262,8 @@ const RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS = [
   'node/no-unsupported-features/es-builtins', // [runtime-only]
   'node/no-unsupported-features/es-syntax', // [runtime-only]
   'node/no-unsupported-features/node-builtins', // [runtime-only]
+  'node/prefer-import/assert-strict', // [runtime-only]
+  'node/prefer-process-get-builtin-module', // [runtime-only]
 
   // unicorn
   // won't disable: unicorn/no-abusive-eslint-disable, unicorn/relative-url-style, unicorn/prefer-string-replace-all, unicorn/prefer-string-starts-ends-with, unicorn/prefer-code-point

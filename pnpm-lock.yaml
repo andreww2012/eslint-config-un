@@ -340,8 +340,8 @@ importers:
         specifier: 0.3.1
         version: 0.3.1(eslint@9.39.5)
       eslint-plugin-n:
-        specifier: 18.2.2
-        version: 18.2.2(@typescript/typescript6@6.0.2)(eslint@9.39.5)(ts-declaration-location@1.0.7)
+        specifier: 18.3.0
+        version: 18.3.0(@typescript/typescript6@6.0.2)(eslint@9.39.5)(ts-declaration-location@1.0.7)
       eslint-plugin-no-only-tests:
         specifier: 3.4.0
         version: 3.4.0
@@ -7460,8 +7460,8 @@ packages:
     peerDependencies:
       eslint: '>=9.0.0'
 
-  eslint-plugin-n@18.2.2:
-    resolution: {integrity: sha512-gOO0lIqwEjZ750kv9/SptCWArUoAZXJoBr0vYWTO2dCBxctHUXlBIigiC8xuxxr/NKqgIT6Ehz1xRcilj8a5cA==}
+  eslint-plugin-n@18.3.0:
+    resolution: {integrity: sha512-cPVguuDe6DrIPb/qUXHf8P89MaVTUmiYWwpt5gX5AILsvRIiZAxMFXcFR6QHYBksqKJpjfUBlL/RleCJUWcD7w==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
     peerDependencies:
       eslint: '>=8.57.1'
@@ -18991,7 +18991,7 @@ snapshots:
       eslint: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
       get-tsconfig: 4.14.1
 
-  eslint-plugin-n@18.2.2(@typescript/typescript6@6.0.2)(eslint@9.39.5)(ts-declaration-location@1.0.7):
+  eslint-plugin-n@18.3.0(@typescript/typescript6@6.0.2)(eslint@9.39.5)(ts-declaration-location@1.0.7):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@9.39.5)
       enhanced-resolve: 5.24.5
