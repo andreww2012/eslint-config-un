@@ -219,7 +219,7 @@ patchedDependencies:
   eslint-plugin-node-dependencies: 0ac711935f7dddd5966bc7738d2580c21bbb45de1fecafc486e0f7b05bc8bcf4
   eslint-plugin-prettier@5.5.6: f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087
   import-meta-resolve: 13c9a6b35fe192fdca3e993b55da01818449473e1adf27b912001a8c26bb99ba
-  npm-check-updates: cd67611b67e6deb7076fc8d87b700fa78963d943b3a29a0a9c2e72142b7aaf9a
+  npm-check-updates: 38ee39639140016f2b9a609c541bbde263a22f5ad0b4b53960ef9765cf8554aa
 
 importers:
 
@@ -866,8 +866,8 @@ importers:
         specifier: 2.0.0
         version: 2.0.0
       npm-check-updates:
-        specifier: 23.0.0
-        version: 23.0.0(patch_hash=cd67611b67e6deb7076fc8d87b700fa78963d943b3a29a0a9c2e72142b7aaf9a)
+        specifier: 23.0.2
+        version: 23.0.2(patch_hash=38ee39639140016f2b9a609c541bbde263a22f5ad0b4b53960ef9765cf8554aa)
       npm-package-arg:
         specifier: 14.0.0
         version: 14.0.0
@@ -9886,8 +9886,8 @@ packages:
     resolution: {integrity: sha512-JLSpbzh6UUXIEoqPsYBvVNVmyrjVZ1fzEFbqxKkTJQkWBO3xFzFT+KDnSKQWwOQNbuWRwt5LSD6HOTLGIWzfrw==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
-  npm-check-updates@23.0.0:
-    resolution: {integrity: sha512-B7dvnnS4Tm/4YQghXjBgGBDuHsk88hqCmr4ZuCr0nscsPzf/QVMls5mT8ZUcHrcrFRBP1afB2KNuJo8Px55DrA==}
+  npm-check-updates@23.0.2:
+    resolution: {integrity: sha512-t5tv+d4sP+WbSwcDAFBwDxSUJRomc+TJoURPu7q5B/19toUsR/7eshRxBdWdE7iYw80iE4O4D/7OvCvIcaG8ug==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0, npm: '>=10.0.0'}
     hasBin: true
 
@@ -21901,7 +21901,7 @@ snapshots:
     dependencies:
       npm-normalize-package-bin: 5.0.0
 
-  npm-check-updates@23.0.0(patch_hash=cd67611b67e6deb7076fc8d87b700fa78963d943b3a29a0a9c2e72142b7aaf9a): {}
+  npm-check-updates@23.0.2(patch_hash=38ee39639140016f2b9a609c541bbde263a22f5ad0b4b53960ef9765cf8554aa): {}
 
   npm-install-checks@6.3.0:
     dependencies:

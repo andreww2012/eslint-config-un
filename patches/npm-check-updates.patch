@@ -1,10 +1,10 @@
 diff --git a/build/index.js b/build/index.js
-index 318619895e40774a8bfaff81821f8c0580dfb252..557a8e1f45dadd238d4f4c02b9ece15c16d71393 100644
+index 2ec17f63255b41eeeb48a66bfb89a651ef1a7526..26fc396153a313e20e7626f6054c34d7ca6f9809 100644
 --- a/build/index.js
 +++ b/build/index.js
-@@ -19373,9 +19373,9 @@ async function op(e, t = {}) {
- 		let o = jr(e[r]), [s, c] = o || [r, e[r]];
- 		if (Un(c)) return a?.tick(), { version: null };
+@@ -19354,9 +19354,9 @@ async function rp(e, t = {}) {
+ 		let o = Or(e[r]), [s, c] = o || [r, e[r]];
+ 		if (Rn(c)) return a?.tick(), { version: null };
  		let l = t.target || "latest", u = typeof l == "string" ? l : l(s, (0, me.parseRange)(c)), [d, f] = u.startsWith("@") ? ["distTag", u.slice(1)] : [u, "latest"];
 -		if (!t.cooldown) {
 +		{
@@ -12,5 +12,5 @@ index 318619895e40774a8bfaff81821f8c0580dfb252..557a8e1f45dadd238d4f4c02b9ece15c
 -			if (e?.version && (e?.time || !t.format?.includes("time"))) return a?.tick(), e;
 +			if (e?.version && (e?.time || !t.format?.includes("time")) && (!t.cooldown || e?.time)) return a?.tick(), e;
  		}
- 		let p, m = Pr(e[r]), h = m ? Lf.gitTags : i, g = m ? "github urls" : t.packageManager || "npm", _ = h[d];
+ 		let p, m = jr(e[r]), h = m ? kf.gitTags : i, g = m ? "github urls" : t.packageManager || "npm", _ = h[d];
  		if (!_) {
