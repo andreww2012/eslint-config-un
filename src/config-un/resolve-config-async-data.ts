@@ -1,5 +1,6 @@
 import {renderTable} from 'console-table-printer';
-import type {DisableAutofixPrefix} from '../constants';
+import semver from 'semver';
+import {type DisableAutofixPrefix, OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import {eslintPluginVanillaRules} from '../eslint/eslint-shared';
 import type {EslintFlatConfigEntry, EslintPlugin} from '../eslint/eslint-types';
 import {
@@ -21,6 +22,7 @@ import {
   arrayPartition,
   arrayify,
   capitalize,
+  fetchPackageInfo,
   getByPath,
   isKeyIn,
   maybeCall,
@@ -33,12 +35,34 @@ import {
 } from '../utils';
 import type {CacheDataInFs} from './cache';
 import {replaceImportRulesImplementationWithIntegrityPlugin} from './import-integrity';
-import {checkIfModuleCorrectlyLoaded} from './is-module-loaded';
 import {
   type EslintConfigUnOptions,
   RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT,
   type UnConfigContext,
 } from './shared';
+
+const checkIfModuleCorrectlyLoaded = async (
+  moduleResult: {packageName: string; module: unknown} | null,
+) => {
+  const plugin = moduleResult?.module;
+  if (moduleResult && isKeyIn(moduleResult.packageName, OPTIONAL_PEER_DEPENDENCIES)) {
+    const installedPluginVersion = plugin
+      ? (await fetchPackageInfo(moduleResult.packageName))?.versions.full
+      : null;
+    const versionRange = OPTIONAL_PEER_DEPENDENCIES[moduleResult.packageName];
+    if (
+      !plugin ||
+      (installedPluginVersion && !semver.satisfies(installedPluginVersion, versionRange))
+    ) {
+      return {
+        name: moduleResult.packageName,
+        versionRange,
+        ...(installedPluginVersion && {installedVersion: installedPluginVersion}),
+      };
+    }
+  }
+  return null;
+};
 
 const VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX = /^(?:\^|~)/;
 
