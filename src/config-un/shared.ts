@@ -755,19 +755,18 @@ export const processUnOrFlatConfig = (
       let configNameToInsertMetadataTo = config.name;
       const insertMetadataFns: (() => void)[] = [];
 
-      if (disableAutofix !== false) {
-        newRuleEntries.push([ruleEntryName, disableAutofix ? OFF : ruleEntryPrimary]);
+      // The rule itself is only turned off when its autofix-disabled counterpart takes over
+      newRuleEntries.push([ruleEntryName, disableAutofix ? OFF : ruleEntryPrimary]);
 
-        insertMetadataFns.push(() => {
-          configBuilderToModify?.setConfigMetadataForRule(configNameToInsertMetadataTo, {
-            plugin: pluginPrefixCanonical as PluginPrefix,
-            ruleName,
-            ruleEntryName,
-            severity: disableAutofix ? OFF : ruleSeverity,
-            hasEnabledDisableAutofixCounterpart: disableAutofix === true && ruleSeverity !== OFF,
-          });
+      insertMetadataFns.push(() => {
+        configBuilderToModify?.setConfigMetadataForRule(configNameToInsertMetadataTo, {
+          plugin: pluginPrefixCanonical as PluginPrefix,
+          ruleName,
+          ruleEntryName,
+          severity: disableAutofix ? OFF : ruleSeverity,
+          hasEnabledDisableAutofixCounterpart: disableAutofix === true && ruleSeverity !== OFF,
         });
-      }
+      });
 
       if (disableAutofix != null) {
         const ruleNameWithDisableAutofixPrefix =

@@ -100,8 +100,7 @@ describe('option: `overrides` and `overridesAny`', () => {
     ).toMatchInlineSnapshot('[1, {"fixable": true}]');
   });
 
-  // TODO the override severity and options are currently dropped, which is likely unintended
-  it('only disables the `disable-autofix/*` version of the rule if `disableAutofix` is set to `false`', async () => {
+  it('keeps the original rule enabled and disables its `disable-autofix/*` version if `disableAutofix` is set to `false`', async () => {
     const configResult = await computeEslintConfig({
       vitest: {
         overrides: {
@@ -114,8 +113,8 @@ describe('option: `overrides` and `overridesAny`', () => {
       },
     });
 
-    expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toStrictEqual(
-      (await computeEslintConfig('vitest')).getRuleEntry('vitest', 'vitest/no-focused-tests'),
+    expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toMatchInlineSnapshot(
+      '[1, {"fixable": true}]',
     );
     expect(configResult.getRuleEntry('vitest', 'disable-autofix/vitest/no-focused-tests')).toBe(0);
   });
