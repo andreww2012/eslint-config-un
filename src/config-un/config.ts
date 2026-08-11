@@ -294,6 +294,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     extraPlugins,
     ignores,
     files,
+    gitignore,
     pluginRenames = {},
     loadPluginsOnDemand,
     offlineMode,
@@ -622,13 +623,10 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       name: genFlatConfigEntryName('ignores/global'),
       ignores: globalIgnores,
     },
-    (typeof optionsResolved.gitignore === 'object' || gitignoreFile) &&
+    gitignore !== false &&
+      (typeof gitignore === 'object' || gitignoreFile) &&
       interopDefault(import('eslint-config-flat-gitignore')).then((eslintGitignore) => ({
-        ...(typeof optionsResolved.gitignore === 'object'
-          ? eslintGitignore(optionsResolved.gitignore)
-          : gitignoreFile
-            ? eslintGitignore()
-            : null),
+        ...(typeof gitignore === 'object' ? eslintGitignore(gitignore) : eslintGitignore()),
         name: genFlatConfigEntryName('ignores/gitignore'),
       })),
     ...(

@@ -19,8 +19,7 @@ describe('option: `gitignore`', () => {
     );
   });
 
-  // TODO bug: the option is only consulted when it's an object, so an existing `.gitignore` file is picked up even when the option is explicitly disabled. Drop `.fails` once it is fixed
-  it.fails('does not create a respective config when set to `false`', async () => {
+  it('does not create a respective config when set to `false`', async () => {
     await expect(getGitignoreIgnores(false)).resolves.toBeUndefined();
   });
 
