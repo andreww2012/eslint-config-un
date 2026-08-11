@@ -70,7 +70,6 @@ interface ResolveConfigAsyncDataOptions {
   usedPluginPrefixes: string[];
   usedParserPrefixes: ParserPrefix[];
   usedPackagesPrefixes: LoadablePackagePrefix[];
-  missingPackages: string[];
 }
 
 export const resolveConfigAsyncData = async (
@@ -84,7 +83,7 @@ export const resolveConfigAsyncData = async (
     loadPluginsOnDemand,
   } = rootOptions;
 
-  const {usedPluginPrefixes, usedParserPrefixes, usedPackagesPrefixes, missingPackages} =
+  const {usedPluginPrefixes, usedParserPrefixes, usedPackagesPrefixes} =
     'cachedData' in options
       ? ({
           usedPluginPrefixes: options.cachedData.usedPlugins,
@@ -94,7 +93,6 @@ export const resolveConfigAsyncData = async (
           usedPackagesPrefixes: Object.keys(
             options.cachedData.usedPackages,
           ) as ResolveConfigAsyncDataOptions['usedPackagesPrefixes'],
-          missingPackages: [], // We don't cache if missing packages are found
         } satisfies ResolveConfigAsyncDataOptions)
       : options;
 
@@ -209,7 +207,9 @@ export const resolveConfigAsyncData = async (
     ),
   ]);
 
-  missingPackages.forEach((missingPackage) => {
+  // Must be read only after the modules above were loaded: any of them might have failed to
+  // resolve a dependency of its own. Nothing is cached when missing packages are found
+  (cacheData ? [] : context.missingPackages).forEach((missingPackage) => {
     if (!packagesToManuallyInstallOrUpdate.has(missingPackage)) {
       packagesToManuallyInstallOrUpdate.set(missingPackage, {
         versionRange: '',

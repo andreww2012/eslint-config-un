@@ -68,7 +68,7 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
     expect(output).toContain(`i --save-dev ${DE_MORGAN_PACKAGE}`);
   });
 
-  it('reports a dependency an eagerly loaded plugin itself failed to load', async () => {
+  it('additionally reports a dependency an eagerly loaded plugin failed to load', async () => {
     const MISSING_DEPENDENCY = 'some-uninstalled-dependency';
 
     mockUnresolvablePackage(SVELTE_PLUGIN_PACKAGE, MISSING_DEPENDENCY);
@@ -81,6 +81,21 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
     expect(output).toContain('Package that listed in optional peer dependencies was used');
     expect(output).toContain('Unknown');
     expect(output).toContain(`${MISSING_DEPENDENCY}@latest`);
+  });
+
+  it('additionally reports a dependency a lazily loaded plugin failed to load', async () => {
+    const MISSING_DEPENDENCY = 'some-uninstalled-dependency';
+
+    mockUnresolvablePackage(DE_MORGAN_PACKAGE, MISSING_DEPENDENCY);
+
+    await computeEslintConfig('deMorgan');
+
+    const output = stderrOutput();
+
+    expect(output).toContain(DE_MORGAN_PACKAGE);
+    expect(output).toContain(MISSING_DEPENDENCY);
+    // The two entries are of different kinds: one is a plugin, the other a plain package
+    expect(output).toContain('Plugin and package that listed in optional peer dependencies were');
   });
 
   it('reports a parser that cannot be loaded', async () => {

@@ -916,7 +916,6 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     usedPluginPrefixes,
     usedParserPrefixes,
     usedPackagesPrefixes,
-    missingPackages: [...context.missingPackages],
   });
 
   resolvedConfigs.unshift({
