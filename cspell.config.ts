@@ -64,6 +64,7 @@ export default {
     'gypfile', // package.json field
     'libc', // package.json field
     'oxlint',
+    'TSES', // `TSESTree` type from `@typescript-eslint/types`
 
     // Technical words/terms
     'arrayify',
