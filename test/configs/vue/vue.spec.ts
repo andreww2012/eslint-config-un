@@ -479,6 +479,15 @@ describe('options', () => {
       expect(configResult.getRuleEntrySeverity('vue', 'vue/camelcase')).toBe(1);
     });
 
+    it('inherits a base rule severity specified as a string', async () => {
+      const configResult = await computeEslintConfig({
+        js: {overrides: {camelcase: 'warn'}},
+        vue: true,
+      });
+
+      expect(configResult.getRuleEntrySeverity('vue', 'vue/camelcase')).toBe(1);
+    });
+
     it('does not inherit when set to `false`', async () => {
       const configResult = await computeEslintConfig({
         js: {overrides: {camelcase: 1}},

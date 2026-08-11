@@ -65,6 +65,18 @@ describe('react: sub config `reactX`', () => {
         '"Avoid using class components. Use function components instead."',
       );
     });
+
+    it('does not load `react-debug` plugin because all its rules are disabled by default', () => {
+      expect(configResult.getLoadedPlugin('react-debug')).toBeUndefined();
+    });
+
+    it('loads `react-debug` plugin if one of its rules is enabled', async () => {
+      const configResultWithDebugRule = await computeEslintConfig({
+        react: {configReactX: {overridesAny: {'react-debug/function-component': 2}}},
+      });
+
+      expect(configResultWithDebugRule.getLoadedPlugin('react-debug')).toBeDefined();
+    });
   });
 
   describe('un options', () => {

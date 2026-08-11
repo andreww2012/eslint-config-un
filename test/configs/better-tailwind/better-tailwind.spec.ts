@@ -184,6 +184,21 @@ describe('un options', () => {
 
       expect(configResult.getConfigByUnPostfix('better-tailwindcss')).toBeUndefined();
     });
+
+    it('appends `css` config files to the user-provided `files` when css linting is enabled', async () => {
+      const FILES = ['**/*.jsx'];
+      const CSS_FILES = ['src/**/*.css'];
+
+      const configResult = await computeEslintConfig({
+        css: {files: CSS_FILES},
+        betterTailwind: {files: FILES, settings: TW3_SETTINGS},
+      });
+
+      expect(configResult.getConfigByUnPostfix('better-tailwindcss')?.files).toStrictEqual([
+        ...FILES,
+        ...CSS_FILES,
+      ]);
+    });
   });
 
   describe('option: `ignores`', () => {
