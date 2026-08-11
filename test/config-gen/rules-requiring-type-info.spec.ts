@@ -1,5 +1,4 @@
-import {GLOB_SVELTE, GLOB_TS_X} from '../src/constants';
-import {computeEslintConfig} from './helpers/test-eslint-config';
+import {GLOB_SVELTE, GLOB_TS_X} from '../../src/constants';
 
 describe('rules requiring type information', () => {
   describe('`ts/setupTypeAware` config is disabled', () => {

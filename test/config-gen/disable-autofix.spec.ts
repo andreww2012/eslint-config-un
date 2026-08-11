@@ -1,4 +1,4 @@
-const GEN_MODULE_PATH = '../src/eslint-types-fixable-only.gen';
+const GEN_MODULE_PATH = '../../src/eslint-types-fixable-only.gen';
 
 describe('`disable-autofix` counterpart rule is added only for fixable rules', () => {
   describe('rule disabled via `addRule`', () => {
