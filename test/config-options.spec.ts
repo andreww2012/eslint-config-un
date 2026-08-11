@@ -100,6 +100,38 @@ describe('option: `overrides` and `overridesAny`', () => {
     ).toMatchInlineSnapshot('[1, {"fixable": true}]');
   });
 
+  // TODO the override severity and options are currently dropped, which is likely unintended
+  it('only disables the `disable-autofix/*` version of the rule if `disableAutofix` is set to `false`', async () => {
+    const configResult = await computeEslintConfig({
+      vitest: {
+        overrides: {
+          'vitest/no-focused-tests': {
+            severity: 1,
+            options: [{fixable: true}],
+            disableAutofix: false,
+          },
+        },
+      },
+    });
+
+    expect(configResult.getRuleEntry('vitest', 'vitest/no-focused-tests')).toStrictEqual(
+      (await computeEslintConfig('vitest')).getRuleEntry('vitest', 'vitest/no-focused-tests'),
+    );
+    expect(configResult.getRuleEntry('vitest', 'disable-autofix/vitest/no-focused-tests')).toBe(0);
+  });
+
+  it('ignores a rule whose override is set to `undefined`', async () => {
+    const configResult = await computeEslintConfig({
+      vitest: {
+        overrides: {'vitest/prefer-to-be': undefined},
+      },
+    });
+
+    expect(configResult.getRuleEntrySeverity('vitest', 'vitest/prefer-to-be')).toBe(
+      (await computeEslintConfig('vitest')).getRuleEntrySeverity('vitest', 'vitest/prefer-to-be'),
+    );
+  });
+
   describe('`files` and `ignores` options', () => {
     it('moves the rule to its own eslint config if `files` option is specified in override', async () => {
       const configResult = await computeEslintConfig({
