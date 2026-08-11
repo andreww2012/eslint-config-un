@@ -2,7 +2,7 @@ import type Eslint from 'eslint';
 import type {UnConfigContext} from '../config-un/shared';
 import {OPTIONAL_PEER_DEPENDENCIES} from '../constants';
 import type {MaybePromise} from '../types';
-import {type MaybeArray, arrayify, interopDefault, isKeyIn} from '../utils';
+import {type MaybeArray, arrayify, interopDefault, isKeyIn, maybeCall} from '../utils';
 
 export type {Processor as EslintProcessor} from '@eslint/core';
 export type EslintParser = Eslint.Linter.Parser;
@@ -37,7 +37,7 @@ function createModuleLoader<T, N extends string>(
       const {pluginOverrides} = context.rootOptions;
       const providedPlugin =
         pluginOverrides && isKeyIn(property, pluginOverrides)
-          ? await interopDefault(pluginOverrides[property] as T)
+          ? await interopDefault(maybeCall(pluginOverrides[property]) as T)
           : null;
       return {module: providedPlugin || (await interopDefault(module())), packageName};
     } catch (error: unknown) {

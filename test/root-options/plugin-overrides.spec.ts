@@ -32,10 +32,14 @@ describe('option: `pluginOverrides`', () => {
     expect(plugin?.meta?.version).toBe(DEV_PLUGIN.meta.version);
   });
 
-  // TODO bug: the option type accepts a function, but the value is never called, so the function
-  // itself is registered as the plugin. Drop `.fails` once it is fixed
-  it.fails('accepts a function returning the plugin', async () => {
+  it('accepts a function returning the plugin', async () => {
     const plugin = await getCasePolicePlugin({'case-police': () => DEV_PLUGIN});
+
+    expect(plugin?.meta?.version).toBe(DEV_PLUGIN.meta.version);
+  });
+
+  it('accepts a function returning a promise of the plugin', async () => {
+    const plugin = await getCasePolicePlugin({'case-police': () => Promise.resolve(DEV_PLUGIN)});
 
     expect(plugin?.meta?.version).toBe(DEV_PLUGIN.meta.version);
   });
