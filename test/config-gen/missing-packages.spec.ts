@@ -15,14 +15,9 @@ const mockUnresolvablePackage = (packageName: string, blamedPackageName = packag
   mockedPackageNames.push(packageName);
 };
 
-const spyOnProcessOutput = () => ({
-  exit: vi.spyOn(process, 'exit').mockImplementation((() => undefined) as never),
-  stderr: vi.spyOn(process.stderr, 'write').mockReturnValue(true),
-});
-
 let processOutput: ReturnType<typeof spyOnProcessOutput>;
 
-const stderrOutput = () => processOutput.stderr.mock.calls.map(([chunk]) => String(chunk)).join('');
+const stderrOutput = () => processOutput.getStderrOutput();
 
 beforeEach(() => {
   processOutput = spyOnProcessOutput();
@@ -34,7 +29,6 @@ afterEach(() => {
   });
   mockedPackageNames.length = 0;
   vi.resetModules();
-  vi.restoreAllMocks();
 });
 
 const DE_MORGAN_PACKAGE = 'eslint-plugin-de-morgan';
@@ -139,5 +133,11 @@ describe('an installed plugin does not satisfy the supported version range', () 
     await computeEslintConfig('deMorgan');
 
     expect(stderrOutput()).toContain('de-morgan');
+  });
+
+  it('prints nothing when the internal `disableWarnings` option is set', async () => {
+    await computeEslintConfig('deMorgan', {internalOptions: {disableWarnings: true}});
+
+    expect(stderrOutput()).toBe('');
   });
 });
