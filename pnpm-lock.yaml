@@ -737,8 +737,8 @@ importers:
         specifier: 2.11.0
         version: 2.11.0(eslint@9.39.5)
       eslint-plugin-prefer-arrow-functions:
-        specifier: 3.10.1
-        version: 3.10.1(@typescript/typescript6@6.0.2)(eslint@9.39.5)(supports-color@7.2.0)
+        specifier: 3.10.2
+        version: 3.10.2(@typescript/typescript6@6.0.2)(eslint@9.39.5)(supports-color@7.2.0)
       eslint-plugin-prettier:
         specifier: 5.5.6
         version: 5.5.6(patch_hash=f4026cb07287584f5bae42cb91db1c22c45003a59cc03bd8657fcc20afa3e087)(@types/eslint@9.6.1)(eslint-config-prettier@10.1.8)(eslint@9.39.5)(prettier@3.9.6)
@@ -7587,8 +7587,8 @@ packages:
     peerDependencies:
       eslint: ^9.0.0 || ^10.0.0
 
-  eslint-plugin-prefer-arrow-functions@3.10.1:
-    resolution: {integrity: sha512-wutwnNG0S/wqNhqryS7ee2yX01dkvgFMDvdaXcdEfSGcxz37FRfJUCD0YL2Jur0ANCKocgplF7n6GBPhe+DNNg==}
+  eslint-plugin-prefer-arrow-functions@3.10.2:
+    resolution: {integrity: sha512-vy4neIgDcqHNTEohqUXQH6WD7S4rJBDm9I1hoHYCc7ytMMCZ0+MgYcre+ZRP13W/1nYdL/ZtbrGKjhoz/UvhMg==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24.0.0}
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
@@ -19198,10 +19198,10 @@ snapshots:
       yaml: 2.9.0
       yaml-eslint-parser: 2.1.0
 
-  eslint-plugin-prefer-arrow-functions@3.10.1(@typescript/typescript6@6.0.2)(eslint@9.39.5)(supports-color@7.2.0):
+  eslint-plugin-prefer-arrow-functions@3.10.2(@typescript/typescript6@6.0.2)(eslint@9.39.5)(supports-color@7.2.0):
     dependencies:
       '@typescript-eslint/types': 8.67.0
-      '@typescript-eslint/utils': 8.66.0(@typescript/typescript6@6.0.2)(eslint@9.39.5)(supports-color@7.2.0)
+      '@typescript-eslint/utils': 8.67.0(@typescript/typescript6@6.0.2)(eslint@9.39.5)(supports-color@7.2.0)
       eslint: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
     transitivePeerDependencies:
       - supports-color
