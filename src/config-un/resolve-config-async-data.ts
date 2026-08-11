@@ -383,6 +383,7 @@ ${styleText(
             .map(([ruleName]) => ruleName);
 
           const autofixDisabledForAllPluginRulesByDefault =
+            autofixDisabledGloballyFor === true ||
             (typeof autofixDisabledGloballyFor === 'object' &&
               autofixDisabledGloballyFor.plugins?.[pluginPrefixCanonical]) ||
             false;

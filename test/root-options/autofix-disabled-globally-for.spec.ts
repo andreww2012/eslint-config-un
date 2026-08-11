@@ -15,14 +15,13 @@ describe('option: `autofixDisabledGloballyFor`', () => {
     expect(isAutofixable(configResult, NOT_DISABLED_BY_DEFAULT_RULE)).toBe(true);
   });
 
-  // TODO documented to disable autofix for every fixable rule of every plugin, but currently disables nothing at all — it even drops the rules disabled by default
-  it('disables no autofixes at all when set to `true`', async () => {
+  it('disables autofix for every fixable rule when set to `true`', async () => {
     const configResult = await computeEslintConfig('unicorn', {
       un: {autofixDisabledGloballyFor: true},
     });
 
-    expect(isAutofixable(configResult, DISABLED_BY_DEFAULT_RULE)).toBe(true);
-    expect(isAutofixable(configResult, NOT_DISABLED_BY_DEFAULT_RULE)).toBe(true);
+    expect(isAutofixable(configResult, DISABLED_BY_DEFAULT_RULE)).toBe(false);
+    expect(isAutofixable(configResult, NOT_DISABLED_BY_DEFAULT_RULE)).toBe(false);
   });
 
   it('disables no autofixes at all when set to `false`', async () => {
