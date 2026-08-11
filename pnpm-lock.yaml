@@ -806,8 +806,8 @@ importers:
         specifier: 3.1.3
         version: 3.1.3(eslint@9.39.5)(postcss-scss@4.0.9)(vue-eslint-parser@10.4.1)
       eslint-plugin-vuejs-accessibility:
-        specifier: 2.5.0
-        version: 2.5.0(eslint@9.39.5)(globals@17.9.0)(supports-color@7.2.0)
+        specifier: 2.6.0
+        version: 2.6.0(eslint@9.39.5)(globals@17.9.0)(supports-color@7.2.0)
       eslint-plugin-wc:
         specifier: 3.1.0
         version: 3.1.0(eslint@9.39.5)
@@ -7832,8 +7832,8 @@ packages:
       '@typescript-eslint/parser':
         optional: true
 
-  eslint-plugin-vuejs-accessibility@2.5.0:
-    resolution: {integrity: sha512-oZ2fL4tS91Cm/ezH3BueNP+FtpbbeS627OSqqgp9/lsN//glmoPcLBT6D53xwGocLtyBybaT99tX4ThBh8+ytA==}
+  eslint-plugin-vuejs-accessibility@2.6.0:
+    resolution: {integrity: sha512-QtJO3UdLH+aydue/im7aBsYKO99ouJ6hm4wEHL1Xm/BwDfYTAmXEPhTImNwlOHp2bbid7rNY7IrHz+IZzGApYA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       eslint: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
@@ -19604,7 +19604,7 @@ snapshots:
       '@stylistic/eslint-plugin': 5.10.0(eslint@9.39.5)
       '@typescript-eslint/parser': 8.67.0(@typescript/typescript6@6.0.2)(eslint@9.39.5)(supports-color@7.2.0)
 
-  eslint-plugin-vuejs-accessibility@2.5.0(eslint@9.39.5)(globals@17.9.0)(supports-color@7.2.0):
+  eslint-plugin-vuejs-accessibility@2.6.0(eslint@9.39.5)(globals@17.9.0)(supports-color@7.2.0):
     dependencies:
       aria-query: 5.3.2
       eslint: 9.39.5(jiti@2.7.0)(supports-color@7.2.0)
