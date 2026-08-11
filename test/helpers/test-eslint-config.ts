@@ -41,8 +41,10 @@ export const computeEslintConfig = async (
       // otherwise disable network-accessing rules, making rule-firing assertions fail
       // Specs can still opt in via `un.offlineMode`
       offlineMode: false,
-      ...unOptions,
+      // Caching is enabled by default when running in an editor, which could make specs reuse
+      // each other's configs. Specs can still opt in via `un.cacheConfigs`
       cacheConfigs: false,
+      ...unOptions,
       configs:
         typeof configsOrSingleConfigName === 'string'
           ? {
