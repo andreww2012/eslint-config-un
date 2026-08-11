@@ -604,7 +604,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   // According to ESLint docs: "If `ignores` is used without any other keys in the configuration object, then the patterns act as global ignores <...> Patterns are added after the default patterns, which are ["**/node_modules/", ".git/"]." - https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores
   const globalIgnores = [
     ...(!Array.isArray(ignores) && ignores?.override ? [] : DEFAULT_GLOBAL_IGNORES),
-    ...(Array.isArray(ignores) ? ignores : []),
+    ...(Array.isArray(ignores) ? ignores : ignores?.files || []),
   ];
   debug(`Globally ignored files: ${JSON.stringify(globalIgnores)}`);
 
