@@ -47,8 +47,6 @@ export default ((context, optionsRaw) => {
 
   const configBuilder = context.createConfigBuilder(optionsResolved, '');
 
-  const eslintVersion = context.packagesInfo.eslint?.versions.majorAndMinor || 0;
-
   const allowedConsoleMethods = getKeysOfTruthyValues(
     {
       warn: true,
@@ -115,7 +113,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-sparse-arrays', ERROR) /** @since 0.4.0 */ // 🟢
     .addRule('no-template-curly-in-string', ERROR) /** @since 3.3.0 */
     .addRule('no-this-before-super', ERROR) /** @since 0.24.0 */ // 🟢
-    .addRule('no-unassigned-vars', eslintVersion >= 9.27 ? ERROR : OFF) /** @since 9.27.0 */
+    .addRule('no-unassigned-vars', ERROR) /** @since 9.27.0 */
     .addRule('no-undef', ERROR) /** @since 0.0.9 */ // 🟢
     .addRule('no-unexpected-multiline', OFF) /** @since 0.24.0 */ // 🟢💅
     .addRule('no-unmodified-loop-condition', ERROR) /** @since 2.0.0-alpha-2 */
@@ -154,13 +152,9 @@ export default ((context, optionsRaw) => {
       },
     ]) /** @since 0.0.2 */
     .addRule('capitalized-comments', OFF) /** @since 3.11.0 */
-    .addRule(
-      'class-methods-use-this',
-      ERROR,
-      eslintVersion >= 9.24
-        ? [{ignoreOverrideMethods: true, ignoreClassesWithImplements: 'all'}]
-        : [],
-    ) /** @since 3.4.0 */
+    .addRule('class-methods-use-this', ERROR, [
+      {ignoreOverrideMethods: true, ignoreClassesWithImplements: 'all'},
+    ]) /** @since 3.4.0 */
     .addRule('complexity', OFF) /** @since 0.0.9 */
     .addRule('consistent-return', ERROR) /** @since 0.4.0 */
     .addRule('consistent-this', ERROR, ['that']) /** @since 0.0.9 */
@@ -257,11 +251,7 @@ export default ((context, optionsRaw) => {
     .addRule('no-script-url', ERROR) /** @since 0.0.9 */
     .addRule('no-sequences', ERROR) /** @since 0.5.1 */
     .addRule('no-shadow', ERROR) /** @since 0.0.9 */
-    .addRule(
-      'no-shadow-restricted-names',
-      ERROR,
-      eslintVersion >= 9.26 ? [{reportGlobalThis: true}] : [],
-    ) /** @since 0.1.4 */ // 🟢
+    .addRule('no-shadow-restricted-names', ERROR, [{reportGlobalThis: true}]) /** @since 0.1.4 */ // 🟢
     .addRule('no-ternary', OFF) /** @since 0.0.9 */
     .addRule('no-throw-literal', ERROR) /** @since 0.15.0 */
     .addRule('no-undef-init', ERROR) /** @since 0.0.6 */

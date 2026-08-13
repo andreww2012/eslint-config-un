@@ -12,7 +12,7 @@ const config: KnipConfig = {
     '.ncurc.js', // cspell:disable-line
     '.puppeteerrc.js', // cspell:disable-line
   ],
-  ignoreDependencies: ['@eslint/core', 'lychee-config-nick2bad4u'],
+  ignoreDependencies: ['lychee-config-nick2bad4u'],
   tags: ['-knipignore'],
   treatConfigHintsAsErrors: true,
   cycles: {

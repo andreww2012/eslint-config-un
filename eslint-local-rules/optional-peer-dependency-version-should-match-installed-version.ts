@@ -108,7 +108,8 @@ const rule: Eslint.Rule.RuleModule = {
             });
           });
         },
-    };
+      // ESLint types have no way of expressing a node type for a selector unknown to them
+    } as unknown as Eslint.Rule.RuleListener;
   },
 };
 

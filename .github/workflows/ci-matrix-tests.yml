@@ -8,9 +8,6 @@ on:
       node-version:
         required: true
         type: number
-      eslint-version:
-        required: true
-        type: number
 
 jobs:
   test-config:
@@ -21,8 +18,6 @@ jobs:
       - uses: ./.github/actions/prepare
         with:
           node-version: ${{ inputs.node-version }}
-      - run: pnpm i eslint@${{ inputs.eslint-version }}
-        if: inputs.eslint-version != 9 # TODO temp, already installed and installation gets stuck on node 22
       - run: pnpm check:config
   test-vitest:
     name: Vitest
@@ -32,6 +27,4 @@ jobs:
       - uses: ./.github/actions/prepare
         with:
           node-version: ${{ inputs.node-version }}
-      - run: pnpm i eslint@${{ inputs.eslint-version }}
-        if: inputs.eslint-version != 9 # TODO temp, already installed and installation gets stuck on node 22
       - run: pnpm test:vitest

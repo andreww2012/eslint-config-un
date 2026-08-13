@@ -282,30 +282,14 @@ export const pluginsLoaders = {
   jsdoc: genModuleLoader('jsdoc', 'eslint-plugin-jsdoc', () =>
     interopDefault(import('eslint-plugin-jsdoc')),
   ),
-  json: genModuleLoader(
-    'json',
-    '@eslint/json',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('@eslint/json'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
-  ),
+  json: genModuleLoader('json', '@eslint/json', () => interopDefault(import('@eslint/json'))),
   'json-schema-validator': genModuleLoader(
     'json-schema-validator',
     'eslint-plugin-json-schema-validator',
     () => interopDefault(import('eslint-plugin-json-schema-validator')),
   ),
-  jsonc: genModuleLoader(
-    'jsonc',
-    'eslint-plugin-jsonc',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('eslint-plugin-jsonc'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+  jsonc: genModuleLoader('jsonc', 'eslint-plugin-jsonc', () =>
+    interopDefault(import('eslint-plugin-jsonc')),
   ),
   'jsx-a11y': genModuleLoader('jsx-a11y', 'eslint-plugin-jsx-a11y-x', () =>
     interopDefault(import('eslint-plugin-jsx-a11y-x')),
@@ -503,12 +487,7 @@ export const pluginsLoaders = {
   'sentences-per-line': genModuleLoader(
     'sentences-per-line',
     'eslint-plugin-sentences-per-line',
-    () =>
-      // @ts-expect-error types mismatch
-      interopDefault(
-        import('eslint-plugin-sentences-per-line'),
-        // @ts-expect-error types mismatch
-      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
+    () => interopDefault(import('eslint-plugin-sentences-per-line')),
   ),
   solid: genModuleLoader(
     'solid',
@@ -655,6 +634,7 @@ export const pluginsLoaders = {
     /* v8 ignore next - The parser is installed, so the rejection never happens */
     await import('yaml-eslint-parser').catch(() => null);
     /* eslint-enable import/no-extraneous-dependencies */
+    // @ts-expect-error types mismatch
     return await (interopDefault(
       import('@intlify/eslint-plugin-vue-i18n'),
       // @ts-expect-error types mismatch

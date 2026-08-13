@@ -34,7 +34,7 @@ Grown out of a personal collection of rules, this ESLint config aspires to cover
 Minimum supported versions:
 
 - NodeJS: ^22.23.1 or >=24
-- ESLint: ^9.15.0 or ^10 (peer dependency)
+- ESLint: ^10 (peer dependency)
 
 ```sh
 npm i -D eslint-config-un eslint@latest
@@ -159,7 +159,7 @@ export default eslintConfig({
 ```
 
 > [!NOTE]
-> We highly recommend using TypeScript config file, which is supported since ESLint v9.18.0, or [`@ts-check` directive](https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#ts-check) at the start of the file otherwise.
+> We highly recommend using TypeScript config file, or [`@ts-check` directive](https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html#ts-check) at the start of the file otherwise.
 
 <!-- eslint-disable-next-line markdown-preferences/heading-casing -->
 ## Configs and Sub-configs
@@ -1126,7 +1126,7 @@ Alternatively, you can use [`@eslint/config-inspector`](https://npmx.dev/@eslint
 ### Prerequisites
 
 Node.JS and ESLint satisfy [minimum required versions](#installation).
-Please don't attempt to migrate to ESLint 9 and eslint-config-un at the same time.
+Please don't attempt to migrate to ESLint 10 and eslint-config-un at the same time.
 
 ### Migration guide
 

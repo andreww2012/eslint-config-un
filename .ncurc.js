@@ -28,7 +28,6 @@ const ESLINT_RELATED_PACKAGES_WITH_UNCONVENTIONAL_NAMES = new Set(['tailwind-css
 const IGNORED_RELEASE_ONLY_VERSION_TRANSITIONS = new Set();
 
 const PACKAGES_WITH_PINNED_MAJOR_VERSION = new Set([
-  '@eslint/core0',
   '@types/node',
   'angular-eslint-plugin-template15',
   'angular-eslint-plugin-template17',

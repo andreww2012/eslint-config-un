@@ -91,8 +91,7 @@ describe('rules', async () => {
 
     const error = findLintMessageFromLintResults(results, FIXTURES.withEval, 'no-eval');
 
-    // Asserting on the rule rather than the message text, which differs between ESLint 9 and 10
-    expect(error?.ruleId).toBe('no-eval');
+    expect(error?.message).toMatchInlineSnapshot('"`eval` can be harmful."');
   });
 });
 

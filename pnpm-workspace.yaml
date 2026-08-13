@@ -61,11 +61,13 @@ patchedDependencies:
 
 peerDependencyRules:
   allowedVersions:
-    '@angular-eslint/eslint-plugin-template>eslint': '*'
     '@angular-eslint/eslint-plugin-template@15>@typescript-eslint/utils': '*'
     '@angular-eslint/eslint-plugin-template@15>eslint': '*'
+    '@angular-eslint/eslint-plugin-template@17>eslint': '*'
+    '@angular-eslint/eslint-plugin@18>eslint': '*'
     '@angular-eslint/utils@15>eslint': '*'
     '@angular-eslint/utils@17>eslint': '*'
+    '@angular-eslint/utils@18>eslint': '*'
 
     '@typescript-eslint/project-service@8.38>typescript': '*'
     '@typescript-eslint/tsconfig-utils@8.38>typescript': '*'
@@ -78,27 +80,10 @@ peerDependencyRules:
     eslint-plugin-no-type-assertion@1.3>eslint: '*'
     '@intlify/eslint-plugin-vue-i18n@4.3.0>yaml-eslint-parser': ^2.0.0
 
-    '@eslint-react/eslint@^5>eslint': '>=9'
-    '@eslint-react/eslint-plugin@^5>eslint': '>=9'
-    '@eslint-react/shared@^5>eslint': '>=9'
-    eslint-plugin-react-dom@^5>eslint: '>=9'
-    '@eslint-react/ast@^5>eslint': '>=9'
-    '@eslint-react/core@^5>eslint': '>=9'
-    '@eslint-react/jsx@^5>eslint': '>=9'
-    '@eslint-react/var@^5>eslint': '>=9'
-    eslint-plugin-react-jsx@^5>eslint: '>=9'
-    eslint-plugin-react-naming-convention@^5>eslint: '>=9'
-    eslint-plugin-react-rsc@^5>eslint: '>=9'
-    eslint-plugin-react-web-api@^5>eslint: '>=9'
-    eslint-plugin-react-x@^5>eslint: '>=9'
-    eslint-plugin-react-debug@^5>eslint: '>=9'
-    eslint-plugin-file-progress@^5>eslint: '>=9'
-    eslint-plugin-ava@16.0.1>eslint: '>=9'
-    eslint-plugin-unicorn>eslint: '>=9'
-    eslint-plugin-astro@^2>eslint: '>=9'
-    eslint-plugin-es-x@^10>eslint: '>=9'
-    eslint-plugin-mocha@^12>eslint: '>=9'
-    eslint-plugin-cypress@^7>eslint: '>=9'
+    '@tanstack/eslint-plugin-start@^0.1>eslint': '>=10'
+    eslint-plugin-jest-extended@^3>eslint: '>=10'
+    eslint-plugin-react@^7>eslint: '>=10'
+    eslint-plugin-solid@^0.14>eslint: '>=10'
 
     '@phenomnomnominal/tsquery@6.1.4>typescript': '>=5'
     '@sveltejs/vite-plugin-svelte@7.0.0>vite': '>=7'
