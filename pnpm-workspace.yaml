@@ -31,6 +31,7 @@ minimumReleaseAgeExclude: # []
   - '@tsrx/core@0.1.58'
   - '@tsrx/eslint-parser@0.3.120'
   - '@tsrx/eslint-plugin@0.3.120'
+  - astro-eslint-parser@3.1.0
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
