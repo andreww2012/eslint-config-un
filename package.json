@@ -158,7 +158,7 @@
     "eslint-plugin-unicorn": "73.0.0",
     "eslint-plugin-unnecessary-abstractions": "1.0.0",
     "eslint-plugin-yml": "3.8.1",
-    "globals": "17.9.0",
+    "globals": "17.11.0",
     "is-in-editor": "0.4.0",
     "ms-ts": "1.0.0",
     "obug": "2.1.4",
