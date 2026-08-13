@@ -138,7 +138,24 @@ describe('rules', async () => {
   });
 
   it('`pnpm/json-valid-catalog` rule fires on a `package.json` with an invalid catalog reference', async () => {
-    const results = await testEslintConfig('pnpm', FIXTURES.packageJson, import.meta.dirname);
+    const results = await testEslintConfig(
+      {
+        pnpm: {
+          configPackageJson: {
+            // The rule's fixer inserts the missing entry into the fixture's
+            // `pnpm-workspace.yaml` on a timer, even when nothing is being fixed
+            overrides: {
+              'pnpm/json-valid-catalog': (severity) => ({
+                severity,
+                options: [{autoInsert: false}],
+              }),
+            },
+          },
+        },
+      },
+      FIXTURES.packageJson,
+      {searchFixturesRelativeToPath: import.meta.dirname},
+    );
 
     const error = findLintMessageFromLintResults(
       results,
