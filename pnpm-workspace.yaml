@@ -6,7 +6,8 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
-minimumReleaseAgeExclude: # []
+minimumReleaseAgeExclude:
+  # []
   - eslint-plugin-module-interop@0.3.2
   - eslint-plugin-pnpm@1.8.0
   - pnpm-workspace-yaml@1.8.0
@@ -32,12 +33,22 @@ minimumReleaseAgeExclude: # []
   - '@tsrx/eslint-parser@0.3.120'
   - '@tsrx/eslint-plugin@0.3.120'
   - astro-eslint-parser@3.1.0
+  - '@commitlint/cli@21.2.2'
+  - '@commitlint/config-conventional@21.2.2'
+  - '@commitlint/format@21.2.2'
+  - '@commitlint/is-ignored@21.2.2'
+  - '@commitlint/lint@21.2.2'
+  - '@commitlint/load@21.2.2'
+  - '@commitlint/parse@21.2.2'
+  - '@commitlint/resolve-extends@21.2.2'
+  - '@commitlint/rules@21.2.2'
+  - puppeteer-core@25.7.0
+  - puppeteer@25.7.0
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
 trustPolicyExclude: []
 
-# eslint-disable-next-line json-schema-validator/no-invalid -- new property since pnpm@11.16.0
 audit:
   ignore:
     # Affects ALL `brace-expansion` versions until the specified one - and we can't override them all due to them being of different major versions
@@ -49,7 +60,7 @@ allowBuilds:
   # Script body is guarded by `process.env.npm_config_build_from_source === 'true'`
   '@parcel/watcher@2.6.0': false
   # Replaces the shipped `esbuild` binary (which is a Node.js script) with a hardlink to the native executable - not strictly needed even if we actually used `esbuild` from cli
-  esbuild@0.28.1: true
+  esbuild@0.28.2: true
   # Runs an optional build-form-source compilation step using `node-gyp-build-optional-packages`
   # (uses the prebuilt `.node` instead)
   msgpackr-extract@3.0.4: false
@@ -58,7 +69,7 @@ allowBuilds:
   # Not relevant for us - present transitively via `@nx/eslint-plugin`
   nx@23.1.1: false
   # The Chrome is only downloaded upon launching script(s) that actually use them to saving disk space
-  puppeteer@25.5.0: false
+  puppeteer@25.7.0: false
   # Runs `napi-postinstall`, which is optional deps checker for legacy npm versions
   unrs-resolver@1.12.2: false
 
@@ -76,6 +87,7 @@ overrides:
   brace-expansion@>=5.0.0 <5.0.9: 5.0.9
   axios@>=1.15.2 <1.18.0: ^1.18.0
   ip-address@>10.0.0 <=10.3.0: 10.4.0
+  nanoid@>=3 <3.3.18: 3.3.18
 
 patchedDependencies:
   '@eslint/compat@2.1.0': patches/@eslint__compat@2.1.0.patch
