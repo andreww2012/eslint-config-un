@@ -329,8 +329,14 @@ export const pluginsLoaders = {
   mdx: genModuleLoader('mdx', 'eslint-plugin-mdx', () =>
     interopDefault(import('eslint-plugin-mdx')),
   ),
-  mobx: genModuleLoader('mobx', 'eslint-plugin-mobx', () =>
-    interopDefault(import('eslint-plugin-mobx')),
+  mobx: genModuleLoader(
+    'mobx',
+    'eslint-plugin-mobx',
+    () =>
+      interopDefault(
+        import('eslint-plugin-mobx'),
+        // @ts-expect-error types mismatch
+      ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
   mocha: genModuleLoader('mocha', 'eslint-plugin-mocha', () =>
     interopDefault(import('eslint-plugin-mocha')),
