@@ -11,6 +11,8 @@ minimumReleaseAgeExclude: # []
   - eslint-plugin-pnpm@1.8.0
   - pnpm-workspace-yaml@1.8.0
   - eslint-plugin-solid@0.15.0
+  - eslint-plugin-storybook@10.5.8
+  - storybook@10.5.8
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
