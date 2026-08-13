@@ -304,6 +304,7 @@ export default ((context, optionsRaw) => {
       ),
     ) /** @since 2.31.0 */
     .addRule('no-spaces-around-equal-signs-in-attribute', ERROR) /** @since 2.3.0 */ // 💅
+    .addRule('prefer-attribute-interpolation', ERROR) /** @since 3.23.0 */ // 💅
     .addRule('prefer-class-directive', ERROR) /** @since 0.0.1 */
     // "Style directive were added in Svelte v3.46"
     .addRule('prefer-style-directive', svelteVersion >= 3.46 ? WARNING : OFF) /** @since 0.22.0 */

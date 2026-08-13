@@ -702,6 +702,7 @@ const ALL_STYLISTIC_RULES = {
     'no-extra-reactive-curlies': true,
     'no-spaces-around-equal-signs-in-attribute': true,
     'no-trailing-spaces': true,
+    'prefer-attribute-interpolation': true,
     'prefer-class-directive': true,
     'prefer-style-directive': true,
     'require-event-prefix': true,
