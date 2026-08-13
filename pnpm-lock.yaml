@@ -704,8 +704,8 @@ importers:
         specifier: 1.2.1
         version: 1.2.1(@typescript-eslint/utils@8.67.0)(eslint@10.8.1)
       eslint-plugin-jest:
-        specifier: 29.16.0
-        version: 29.16.0(@typescript-eslint/eslint-plugin@8.67.0)(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
+        specifier: 29.16.1
+        version: 29.16.1(@typescript-eslint/eslint-plugin@8.67.0)(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
       eslint-plugin-jest-dom:
         specifier: 5.10.1
         version: 5.10.1(@testing-library/dom@10.4.1)(eslint@10.8.1)
@@ -7419,8 +7419,8 @@ packages:
     peerDependencies:
       eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
 
-  eslint-plugin-jest@29.16.0:
-    resolution: {integrity: sha512-0WFBxDHlT2ratGQfnFQEVIsgQJ5cfd+0IV8Kc6U3X2onB8ATLG23voD2Ch5G9fCkEpCPmCMuzW0tbS0kYb8biw==}
+  eslint-plugin-jest@29.16.1:
+    resolution: {integrity: sha512-tfxOIsjzaBud+f74aLbBMRcnrztt5eCIgnAdeoGdnzMAQ4IdAa/s/p8Ls55mk9MC79N3j2jbv4Qetz6Hclbcfw==}
     engines: {node: ^20.12.0 || ^22.0.0 || >=24.0.0}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^8.0.0
@@ -18957,9 +18957,9 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-jest@29.16.0(@typescript-eslint/eslint-plugin@8.67.0)(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0):
+  eslint-plugin-jest@29.16.1(@typescript-eslint/eslint-plugin@8.67.0)(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0):
     dependencies:
-      '@typescript-eslint/utils': 8.66.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
+      '@typescript-eslint/utils': 8.67.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
       eslint: 10.8.1(jiti@2.7.0)(supports-color@7.2.0)
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 8.67.0(@typescript-eslint/parser@8.67.0)(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
