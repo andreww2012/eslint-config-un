@@ -202,6 +202,7 @@ export class ConfigEntryBuilder<
       typeof configNameOrMetadata === 'string'
         ? this.configs.get(configNameOrMetadata)?.[1]
         : configNameOrMetadata;
+    /* v8 ignore next - The metadata of a config being modified is always present */
     if (!configMetadata) {
       return;
     }

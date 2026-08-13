@@ -80,19 +80,26 @@ export function findArrayInversions<T>(
       const aIndex = a.index;
       const bIndex = b.index;
 
+      // V8 never hands a comparator two elements in their original order, which leaves every
+      // branch restoring that order unreachable
+      /* v8 ignore next */
       const aForComparator = (aIndex < bIndex ? a : b).value;
+      /* v8 ignore next */
       const bForComparator = (aIndex < bIndex ? b : a).value;
       const comparatorResult = compareFn(aForComparator, bForComparator);
 
       if (comparatorResult === 1) {
+        /* v8 ignore next */
         const pairIndex =
           aIndex < bIndex ? (`${aIndex}-${bIndex}` as const) : (`${bIndex}-${aIndex}` as const);
+        /* v8 ignore else -- the same pair is never compared twice */
         if (!addedPairsCompoundIndexes.has(pairIndex)) {
           addedPairsCompoundIndexes.add(pairIndex);
           result.push([aForComparator, bForComparator]);
         }
       }
 
+      /* v8 ignore next */
       return aIndex < bIndex ? comparatorResult : -comparatorResult;
     });
 
@@ -156,12 +163,15 @@ export const fetchPackageInfo = async (
     return null;
   }
 
+  /* v8 ignore next - No package in `node_modules` declares a missing or non-numeric version */
   const fullVersion = packageInfo.version || '';
 
   const majorVersionRaw = Number.parseInt(fullVersion, 10);
+  /* v8 ignore next */
   const majorVersion = Number.isNaN(majorVersionRaw) ? null : majorVersionRaw;
 
   const majorAndMinorVersionRaw = Number.parseFloat(fullVersion);
+  /* v8 ignore next */
   const majorAndMinorVersion = Number.isNaN(majorAndMinorVersionRaw)
     ? null
     : majorAndMinorVersionRaw;

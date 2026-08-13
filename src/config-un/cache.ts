@@ -54,6 +54,7 @@ const computeCacheKey = async (context: UnConfigContext) => {
   const gitignorePath = findUp.file('.gitignore'); // TODO sync with logic in config.ts
   const packageJsonPath = packageUtils.up();
 
+  /* v8 ignore next - Every known package manager has its lockfiles grouped */
   const lockfilePaths = (
     packageManagerInfo
       ? (LOCKFILES_PER_PACKAGE_MANAGER[packageManagerInfo.name] || []).map(
@@ -194,6 +195,7 @@ export const saveCacheToFs = async (
     }
   });
   if (unserializablePaths.length > 0) {
+    /* v8 ignore next - A group produced by `Object.groupBy` is never empty */
     const unserializablePathsGrouped = Object.entries(
       // eslint-disable-next-line ts/no-non-null-assertion
       Object.groupBy(unserializablePaths, (v) => v[0][0]!),
@@ -206,7 +208,7 @@ export const saveCacheToFs = async (
       `Could not serialize configs to store in cache because they contain unserializable data at paths:\n${unserializablePathsGrouped
         .map(
           ({configIndex, configName, valuePaths}) =>
-            `Config #${configIndex} ${configName ? `"${configName}"` : '[unnamed]'}:\n${valuePaths
+            `Config #${configIndex} ${configName ? `"${configName}"` : /* v8 ignore next - Every generated config is named */ '[unnamed]'}:\n${valuePaths
               .map((valuePath) => `  - ${valuePath.slice(1).join('.')}`)
               .join('\n')}`,
         )

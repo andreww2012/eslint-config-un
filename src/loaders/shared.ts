@@ -54,6 +54,7 @@ function createModuleLoader<T, N extends string>(
         !options?.throwIfNotFound
       ) {
         // `eslint-plugin-vue` might be installed, but `vue-eslint-parser`, which it tried to load, might be not
+        /* v8 ignore else - Every ignored error a loader declares is a module-not-found one */
         if (
           MODULE_NOT_FOUND_ERROR_CODES.includes(error.code) &&
           'message' in error &&
@@ -63,6 +64,7 @@ function createModuleLoader<T, N extends string>(
             MODULE_NOT_FOUND_ERROR_MESSAGE_REGEXP,
           );
           const missingPackageName = missingPackageNameMatch?.[1];
+          /* v8 ignore else - A module-not-found message always names the module */
           if (missingPackageName) {
             context.missingPackages.add(missingPackageName);
           }

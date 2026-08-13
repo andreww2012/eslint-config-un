@@ -198,6 +198,21 @@ describe('option: `cacheConfigs`', () => {
       expect(configResult.getLoadedPlugin('unicorn')).toBeDefined();
     });
 
+    it('are restored even when they hold no config to put the plugins into', async () => {
+      await computeCachedConfig('unicorn');
+      const cacheFile = await readCacheFile();
+      await markStoredConfigs({
+        configs: cacheFile.configs.filter(
+          ({name}) => name !== 'eslint-config-un/global-setup/plugins',
+        ),
+      });
+
+      const configResult = await computeCachedConfig('unicorn');
+
+      expect(configResult.getConfigByUnPostfix('global-setup/plugins')).toBeUndefined();
+      expect(configResult.getConfigByUnPostfix('unicorn')).toBeDefined();
+    });
+
     it('ignores the stored configs when their key no longer matches', async () => {
       await computeCachedConfig('unicorn');
       await markStoredConfigs({key: 'a-key-of-a-different-environment'});

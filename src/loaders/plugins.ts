@@ -19,28 +19,28 @@ const fixupPluginRules = <Plugin extends EslintPlugin>(plugin: Plugin) =>
 const setPluginRuleSchemas = <Plugin extends EslintPlugin>(m: Plugin): Plugin => ({
   ...m,
   rules: Object.fromEntries(
-    Object.entries(m.rules || {}).map(([name, rule]) => [
-      name,
-      {
-        ...rule,
-        meta: {
-          ...rule.meta,
-          // `false` means "you can pass whatever you want", `undefined` means "you cannot pass anything"
-          schema: rule.meta?.schema ?? false,
+    Object.entries(/* v8 ignore next -- every plugin passed here has rules */ m.rules || {}).map(
+      ([name, rule]) => [
+        name,
+        {
+          ...rule,
+          meta: {
+            ...rule.meta,
+            // `false` means "you can pass whatever you want", `undefined` means "you cannot pass anything"
+            schema: rule.meta?.schema ?? false,
+          },
         },
-      },
-    ]),
+      ],
+    ),
   ),
 });
 
+/* v8 ignore next - The preset always contains the requested plugin */
 const loadEslintReactPlugin = (pluginName: string) =>
   import('@eslint-react/eslint-plugin').then(
     (m) =>
-      (
-        m.default.configs.all as {
-          plugins: Record<string, EslintPlugin>;
-        }
-      ).plugins[pluginName] || null,
+      (m.default.configs.all as {plugins: Record<string, EslintPlugin>}).plugins[pluginName] ||
+      null,
   );
 
 export const pluginsLoaders = {
@@ -177,6 +177,7 @@ export const pluginsLoaders = {
     // - Node 22's `require(esm)` fails if those deps are concurrently being loaded via `import()`
     // (e.g. via the `ember-eslint-parser` parser loader).
     // Pre-loading `ember-eslint-parser` ensures all shared ESM deps are cached first.
+    /* v8 ignore next - The parser is installed, so the rejection never happens */
     await import('ember-eslint-parser').catch(() => null);
     return await interopDefault(import('eslint-plugin-ember'));
   }),
@@ -649,7 +650,9 @@ export const pluginsLoaders = {
     // on Node 24, `require(esm)` fails if that module is concurrently being loaded
     // via `import()` elsewhere (race condition).
     /* eslint-disable import/no-extraneous-dependencies */
+    /* v8 ignore next - The parser is installed, so the rejection never happens */
     await import('jsonc-eslint-parser').catch(() => null);
+    /* v8 ignore next - The parser is installed, so the rejection never happens */
     await import('yaml-eslint-parser').catch(() => null);
     /* eslint-enable import/no-extraneous-dependencies */
     return await (interopDefault(

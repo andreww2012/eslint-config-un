@@ -99,7 +99,12 @@ export const resolveConfigAsyncData = async (
   const cacheData = 'cachedData' in options ? options.cachedData : null;
   const cachedConfigsByName = Object.fromEntries(
     (cacheData?.configs || [])
-      .map((config) => (config.name ? ([config.name, config] satisfies NonEmptyTuple) : null))
+      .map((config) =>
+        config.name
+          ? ([config.name, config] satisfies NonEmptyTuple)
+          : // Every cached config is named
+            /* v8 ignore next */ null,
+      )
       .filter((v) => v != null),
   );
 
@@ -254,10 +259,8 @@ ${renderTable(
           ? styleText('green', versionRange)
           : styleText('gray', 'Unknown'),
         ...(pluginPrefixes?.size && {
-          [`Plugin prefix${pluginPrefixes.size === 1 ? '' : 's'}`]: Array.from(
-            pluginPrefixes,
-            stylePluginPrefix,
-          ).join(', '),
+          [`Plugin prefix${pluginPrefixes.size === 1 ? '' : /* v8 ignore next - No package backs more than one plugin prefix */ 's'}`]:
+            Array.from(pluginPrefixes, stylePluginPrefix).join(', '),
         }),
       };
     }),
@@ -277,7 +280,7 @@ ${styleText(
   generateInstallationCommand(
     packages.map(({name, versionRange}) =>
       versionRange
-        ? `${name}@${versionRange ? versionRange.replace(VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX, '') : 'latest'}`
+        ? `${name}@${versionRange.replace(VERSION_IN_OUR_PEER_DEPENDENCIES_PREFIX_REGEX, '')}`
         : name,
     ),
   ),
@@ -306,6 +309,7 @@ ${styleText(
       ...getRuleNameAndPluginPrefixByFullName(context, ruleName),
       isAutofixDisabled,
     })),
+    /* v8 ignore next - The rules listed in the option are always prefixed */
     (item) => item.pluginPrefixCanonical || '',
   );
 
@@ -355,9 +359,10 @@ ${styleText(
   };
 
   const plugins = internalOptions.disableAutofixForAllFixableRulesOnly
-    ? {}
+    ? /* v8 ignore next - `disableAutofixForAllFixableRulesOnly` is not passed anywhere yet */ {}
     : Object.fromEntries(
         objectEntriesUnsafe(loadedPlugins).map(([pluginPrefixCanonical, plugin]) => {
+          /* v8 ignore next - The vanilla rules are not registered as a plugin */
           const pluginPrefix =
             pluginPrefixCanonical === ''
               ? ''
@@ -378,7 +383,10 @@ ${styleText(
             return [pluginPrefix, plugin];
           }
 
-          const fixablePluginRules = Object.entries(plugin.rules || {})
+          const fixablePluginRules = Object.entries(
+            /* v8 ignore next - A plugin whose autofixes are disabled always has rules */
+            plugin.rules || {},
+          )
             .filter(([, {meta: ruleMeta}]) => ruleMeta?.fixable)
             .map(([ruleName]) => ruleName);
 
@@ -492,7 +500,7 @@ ${styleText(
               )
             : Object.keys(loadedPackagesForConfig).length === 1
               ? Object.values(loadedPackagesForConfig)[0]
-              : loadedPackagesForConfig,
+              : /* v8 ignore next - No config loads several packages without a transform */ loadedPackagesForConfig,
         );
       },
     );

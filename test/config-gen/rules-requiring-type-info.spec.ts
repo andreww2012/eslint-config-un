@@ -291,6 +291,19 @@ describe('rules requiring type information', () => {
       ).toMatchObject({projectService: {allowDefaultProject: ['*.ts']}});
     });
 
+    it('keeps the default parser options when the global `allowDefaultProject` is empty', async () => {
+      const configResult = await computeEslintConfig('eslintPlugin', {
+        un: {typeInfoRules: {mode: 'standalone', allowDefaultProject: []}},
+        internalOptions: {},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('eslint-plugin/@type-information')?.languageOptions?.[
+          'parserOptions'
+        ],
+      ).toStrictEqual({projectService: true});
+    });
+
     it('applies the global `parserOptions` escape hatch to the split config', async () => {
       const configResult = await computeEslintConfig('eslintPlugin', {
         un: {typeInfoRules: {mode: 'standalone', parserOptions: {tsconfigRootDir: '/global/root'}}},

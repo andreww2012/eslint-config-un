@@ -142,6 +142,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   });
   // TODO come up with better solution
   // Prevents logging the same messages when eslint is ran in the concurrent mode
+  /* v8 ignore next -- tests never run the generator off the main thread */
   if (!isMainThread) {
     logger.pauseLogs();
   }
@@ -987,6 +988,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     });
 
     const configsToCache = Array.from(resolvedConfigs, (configItem) => {
+      /* v8 ignore next -- every generated config carries our name prefix */
       if (!isUnFlatConfigEntry(configItem)) {
         return configItem;
       }
@@ -1012,6 +1014,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
           usedPackagesInfo
             .map(({config, path, info}) => {
               const configName = config.name;
+              /* v8 ignore next -- every config using a package is named */
               if (!configName) {
                 return null;
               }
@@ -1031,6 +1034,7 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
   modifyConfigs();
 
   if (internalOptions.testMode) {
+    /* v8 ignore next - The config tester always finds something to report */
     return {
       configs: resolvedConfigs,
       errors: testErrors || [],

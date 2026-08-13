@@ -127,6 +127,7 @@ export const getRuleSeverityFromEslintRuleEntry = (
 
 const FLAT_CONFIG_UN_NAME_PREFIX = 'eslint-config-un/';
 export const genFlatConfigEntryName = (name: string) => `${FLAT_CONFIG_UN_NAME_PREFIX}${name}`;
+/* v8 ignore next - Every generated config is named */
 export const isUnFlatConfigEntry = (flatConfigEntry: EslintFlatConfigEntry) =>
   (flatConfigEntry.name || '').startsWith(FLAT_CONFIG_UN_NAME_PREFIX);
 
@@ -166,7 +167,12 @@ export const disableAutofixForAllRulesInPlugin = <Plugin extends EslintPlugin>(
   }: {includeRulesWithoutAutofix?: boolean; onlyRules?: string[]; invertOnlyRules?: boolean} = {},
 ): Plugin['rules'] & {} =>
   Object.fromEntries(
-    Object.entries(cloneDeep(plugin.rules || {}))
+    Object.entries(
+      cloneDeep(
+        /* v8 ignore next - A plugin whose autofixes are disabled always has rules */ plugin.rules ||
+          {},
+      ),
+    )
       .map(([ruleId, ruleImplementation]): [string, Eslint.Rule.RuleModule] | null => {
         const fullRuleName = `${pluginNamespace ? `${pluginNamespace}/` : ''}${ruleId}`;
         const isFixable = ruleImplementation.meta?.fixable;

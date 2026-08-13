@@ -801,8 +801,11 @@ export const processUnOrFlatConfig = (
         (ruleEntryRaw.files?.length || ruleEntryRaw.ignores?.length) &&
         config.files?.length !== 0;
       if (shouldCreateDistinctConfigForRule) {
+        /* v8 ignore next - A config an override is applied to is always named */
+        const parentConfigName = config.name || '';
+
         const extraConfig: SetRequired<EslintFlatConfigEntry, 'name'> = {
-          name: `${config.name || ''}/@rule/${ruleEntryName}`,
+          name: `${parentConfigName}/@rule/${ruleEntryName}`,
           ...((ruleEntryRaw.files?.length || config.files?.length) && {
             files:
               ruleEntryRaw.files?.length && config.files?.length

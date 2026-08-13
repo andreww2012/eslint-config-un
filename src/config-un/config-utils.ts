@@ -1,8 +1,11 @@
 import semver from 'semver';
 import type {UnConfigs} from '../configs';
 import type {PACKAGES_TO_GET_INFO_FOR} from '../constants';
-import {type MaybeArray, arrayify, styleConfigName, stylePackageName, styleText} from '../utils';
+import type {NonEmptyTuple} from '../types';
+import {arrayify, styleConfigName, stylePackageName, styleText} from '../utils';
 import type {UnConfigContext} from './shared';
+
+type PackageToCheck = `${(typeof PACKAGES_TO_GET_INFO_FOR)[number]}${'' | `@${string}`}`;
 
 // NOTE: do not forget to sync this list with `defaultConfigsStatus` option JSDoc
 export const CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT = new Set<keyof UnConfigs>([
@@ -24,7 +27,7 @@ export function getIsConfigEnabled(
   this: UnConfigContext,
   configName: keyof UnConfigs,
   defaultConditionOrPackageInstalled:
-    boolean | MaybeArray<`${(typeof PACKAGES_TO_GET_INFO_FOR)[number]}${'' | `@${string}`}`> = true,
+    boolean | PackageToCheck | NonEmptyTuple<PackageToCheck> = true,
   {
     preCondition,
     requireAllListedPackagesToBeInstalled,
@@ -62,11 +65,10 @@ export function getIsConfigEnabled(
     reason ??=
       '`defaultConfigsStatus` is set to `misc-enabled` and the config is in the misc group';
   }
-  if (
-    typeof defaultConditionOrPackageInstalled === 'string' ||
-    (Array.isArray(defaultConditionOrPackageInstalled) &&
-      defaultConditionOrPackageInstalled.length > 0)
-  ) {
+  if (typeof defaultConditionOrPackageInstalled === 'boolean') {
+    enabledBySystem ??= defaultConditionOrPackageInstalled;
+    reason ??= `config is ${defaultConditionOrPackageInstalled ? 'enabled' : 'disabled'} by default`;
+  } else {
     const packagesList = arrayify(defaultConditionOrPackageInstalled).map(
       (packageNameAndMaybeVersionRange) => {
         const versionDelimiterIndex = packageNameAndMaybeVersionRange.lastIndexOf('@');
@@ -82,6 +84,7 @@ export function getIsConfigEnabled(
         };
       },
     );
+    /* v8 ignore start - No config passes `requireAllListedPackagesToBeInstalled` yet */
     if (requireAllListedPackagesToBeInstalled && packagesList.length > 1) {
       const notInstalledPackages = packagesList.filter(({packageName, versionRangeToSatisfy}) => {
         const packageInfo = this.packagesInfo[packageName];
@@ -97,6 +100,7 @@ export function getIsConfigEnabled(
           ? 'all of these packages were installed'
           : `the following package${notInstalledPackages.length === 1 ? ' is' : 's are'} not installed`
       }: ${(enabledBySystem ? packagesList : notInstalledPackages).map(({packageName}) => stylePackageName(packageName)).join(', ')}`;
+      /* v8 ignore stop */
     } else {
       enabledBySystem ??= packagesList.some(({packageName, versionRangeToSatisfy}) => {
         const packageInfo = this.packagesInfo[packageName];
@@ -112,11 +116,8 @@ export function getIsConfigEnabled(
       reason ??=
         packagesList.length > 1
           ? `neither of these packages are installed: ${packagesList.map(({packageName}) => stylePackageName(packageName)).join(', ')}`
-          : `package ${stylePackageName(packagesList[0]?.packageName || '')} is not installed`;
+          : `package ${stylePackageName(/* v8 ignore next - The list is never empty here */ packagesList[0]?.packageName || '')} is not installed`;
     }
-  } else if (typeof defaultConditionOrPackageInstalled === 'boolean') {
-    enabledBySystem ??= defaultConditionOrPackageInstalled;
-    reason ??= `config is ${defaultConditionOrPackageInstalled ? 'enabled' : 'disabled'} by default`;
   }
 
   if (preCondition) {

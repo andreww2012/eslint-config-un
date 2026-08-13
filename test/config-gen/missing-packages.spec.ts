@@ -1,3 +1,10 @@
+import {detect as detectPackageManager} from 'package-manager-detector/detect';
+
+vi.mock(import('package-manager-detector/detect'), async (importOriginal) => {
+  const mod = await importOriginal();
+  return {...mod, detect: vi.fn<typeof mod.detect>(mod.detect)};
+});
+
 const mockedPackageNames: string[] = [];
 
 /**
@@ -32,6 +39,7 @@ afterEach(() => {
 });
 
 const DE_MORGAN_PACKAGE = 'eslint-plugin-de-morgan';
+const CASE_POLICE_PACKAGE = 'eslint-plugin-case-police';
 const VUE_PARSER_PACKAGE = 'vue-eslint-parser';
 const SVELTE_PLUGIN_PACKAGE = 'eslint-plugin-svelte';
 const MERGE_PROCESSORS_PACKAGE = 'eslint-merge-processors';
@@ -90,6 +98,38 @@ describe('a plugin listed in optional peer dependencies is not installed', () =>
     expect(output).toContain(MISSING_DEPENDENCY);
     // The two entries are of different kinds: one is a plugin, the other a plain package
     expect(output).toContain('Plugin and package that listed in optional peer dependencies were');
+  });
+
+  it('reports a package a config loads on its own besides the plugin', async () => {
+    mockUnresolvablePackage(SVELTE_PLUGIN_PACKAGE);
+
+    await computeEslintConfig('svelte');
+
+    expect(processOutput.exit).toHaveBeenCalledWith(1);
+    expect(stderrOutput()).toContain(SVELTE_PLUGIN_PACKAGE);
+  });
+
+  it('reports several missing plugins at once', async () => {
+    mockUnresolvablePackage(DE_MORGAN_PACKAGE);
+    mockUnresolvablePackage(CASE_POLICE_PACKAGE);
+
+    await computeEslintConfig({deMorgan: true, casePolice: true});
+
+    const output = stderrOutput();
+
+    expect(output).toContain(DE_MORGAN_PACKAGE);
+    expect(output).toContain(CASE_POLICE_PACKAGE);
+    expect(output).toContain('Plugins that listed in optional peer dependencies were used');
+    expect(output).toContain('disable corresponding configs');
+  });
+
+  it('falls back to a generic installation command when no package manager is detected', async () => {
+    vi.mocked(detectPackageManager).mockResolvedValueOnce(null);
+    mockUnresolvablePackage(DE_MORGAN_PACKAGE);
+
+    await computeEslintConfig('deMorgan');
+
+    expect(stderrOutput()).toContain('<your package manager> i --save-dev');
   });
 
   it('reports a parser that cannot be loaded', async () => {
