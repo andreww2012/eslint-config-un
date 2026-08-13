@@ -689,6 +689,7 @@ export const PACKAGES_META: Record<string, PackageMeta> = {
   },
   '@tsrx/eslint-parser': {
     configs: ['ripple'],
+    gitTag: (version) => `@tsrx/eslint-parser@${version}`,
     ruleDocsUrl: null,
   },
   '@typescript-eslint/eslint-plugin': {
