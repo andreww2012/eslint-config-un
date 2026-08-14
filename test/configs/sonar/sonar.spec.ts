@@ -67,7 +67,7 @@ describe('rules', async () => {
   it('correctly sets severities by default', () => {
     expect(configResult.getRuleSeverities('sonar')).toMatchObject({
       'sonarjs/arguments-order': 2,
-      'sonarjs/misplaced-loop-counter': 1,
+      'sonarjs/no-clear-text-protocols': 1,
       'sonarjs/file-header': 0,
     });
   });

@@ -196,7 +196,7 @@ export default ((context, optionsRaw) => {
     .addRule('max-switch-cases', OFF) /** @since 0.2.0 */ // [S1479] 🟢
     .addRule('max-union-size', OFF) /** @since 1.0.4-alpha.0 */ // [S4622]
     .addRule('memoize-cache-key', ERROR) /** @since 4.2.0 */ // [S8932] 🟢 📦 `lodash`, `lodash-es`, `underscore`
-    .addRule('misplaced-loop-counter', WARNING) /** @since 1.0.4-alpha.0 */ // [S1994] 🟢
+    .addRule('misplaced-loop-counter', ERROR) /** @since 1.0.4-alpha.0 */ // [S1994] 🟢
     .addRule('nested-control-flow', OFF) /** @since 1.0.4-alpha.0 */ // [S134]
     // ⚠️ Handled by TypeScript
     .addRule('new-operator-misuse', OFF) /** @since 1.0.4-alpha.0 */ // [S2999] 🟢💭?
