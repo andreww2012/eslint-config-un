@@ -80,19 +80,17 @@ export function findArrayInversions<T>(
       const aIndex = a.index;
       const bIndex = b.index;
 
-      // V8 never hands a comparator two elements in their original order, which leaves every
-      // branch restoring that order unreachable
-      /* v8 ignore next */
+      /* v8 ignore start - The comparator argument order is implementation-defined */
       const aForComparator = (aIndex < bIndex ? a : b).value;
-      /* v8 ignore next */
       const bForComparator = (aIndex < bIndex ? b : a).value;
+      /* v8 ignore stop */
       const comparatorResult = compareFn(aForComparator, bForComparator);
 
       if (comparatorResult === 1) {
         /* v8 ignore next */
         const pairIndex =
           aIndex < bIndex ? (`${aIndex}-${bIndex}` as const) : (`${bIndex}-${aIndex}` as const);
-        /* v8 ignore else -- the same pair is never compared twice */
+        /* v8 ignore else - Reachability depends on the engine's sort algorithm: V8's TimSort does compare the same pair twice, while a plain insertion sort never does */
         if (!addedPairsCompoundIndexes.has(pairIndex)) {
           addedPairsCompoundIndexes.add(pairIndex);
           result.push([aForComparator, bForComparator]);

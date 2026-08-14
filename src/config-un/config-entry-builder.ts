@@ -559,7 +559,7 @@ export class ConfigEntryBuilder<
         if (this.pluginPrefix == null) {
           throw new Error('Cannot use `addRule` when `pluginPrefix` is `null`');
         }
-        /* v8 ignore end */
+        /* v8 ignore stop */
         return addRule(this.pluginPrefix, ruleName, severity, ruleOptions, options);
       },
 

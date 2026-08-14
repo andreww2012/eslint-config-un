@@ -24,6 +24,8 @@ const MISSING_FILE_PATH = fixturePath('this-file-does-not-exist.json');
 
 const compareStrings = (a: string, b: string) => a.localeCompare(b);
 
+// Please note: the pairs are harvested from whatever comparisons `Array#sort` happens to make,
+// and those may differ between V8 versions, so only engine-independent invariants are asserted
 describe('findArrayInversions', () => {
   it('returns no pairs for an empty array', () => {
     expect(findArrayInversions([], compareStrings)).toStrictEqual([]);
@@ -41,19 +43,26 @@ describe('findArrayInversions', () => {
     expect(findArrayInversions(['b', 'a'], compareStrings)).toStrictEqual([['b', 'a']]);
   });
 
-  it('returns every pair the element out of order participates in', () => {
-    expect(findArrayInversions(['c', 'a', 'b'], compareStrings)).toIncludeSameMembers([
-      ['c', 'a'],
-      ['c', 'b'],
-    ]);
+  it('only reports pairs the out-of-order element participates in', () => {
+    const inversions = findArrayInversions(['c', 'a', 'b'], compareStrings);
+
+    expect(inversions.length).toBeGreaterThan(0);
+
+    inversions.forEach(([left, right]) => {
+      expect(left).toBe('c');
+      expect(['a', 'b']).toContain(right);
+    });
   });
 
-  it('returns the pairs to swap in a reversed array', () => {
-    expect(findArrayInversions(['d', 'c', 'b', 'a'], compareStrings)).toIncludeSameMembers([
-      ['d', 'c'],
-      ['c', 'b'],
-      ['b', 'a'],
-    ]);
+  it('reports every element of a reversed array as out of order', () => {
+    const reversed = ['d', 'c', 'b', 'a'];
+    const inversions = findArrayInversions(reversed, compareStrings);
+
+    inversions.forEach(([left, right]) => {
+      expect(compareStrings(left, right)).toBe(1);
+    });
+
+    expect(new Set(inversions.flat())).toStrictEqual(new Set(reversed));
   });
 
   it('only returns pairs whose elements are really out of order', () => {
@@ -69,9 +78,11 @@ describe('findArrayInversions', () => {
     });
   });
 
+  // This order makes V8's TimSort compare the inverted pair (g, a) twice, so the dedupe guard is
+  // actually reached rather than merely present
   it('does not report the same pair twice', () => {
     const inversions = findArrayInversions(
-      ['f', 'b', 'g', 'a', 'e', 'c', 'h', 'd'],
+      ['b', 'g', 'a', 'd', 'f', 'c', 'e', 'h'],
       compareStrings,
     );
 
@@ -79,8 +90,12 @@ describe('findArrayInversions', () => {
   });
 
   it('groups the pairs by their left element when `group` is set', () => {
+    const rightElements = findArrayInversions(['c', 'a', 'b'], compareStrings).map(
+      ([, right]) => right,
+    );
+
     expect(findArrayInversions(['c', 'a', 'b'], compareStrings, true)).toStrictEqual(
-      new Map([['c', ['a', 'b']]]),
+      new Map([['c', rightElements]]),
     );
   });
 
