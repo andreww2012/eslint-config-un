@@ -19,7 +19,7 @@ export default ((context, optionsRaw) => {
   // 🔴 - not in recommended
 
   configBuilder
-    ?.addConfig(['arrow-return-style', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('arrow-return-style')
     .addRule('arrow-return-style', OFF) /** @since 1.0.0 */
     .addRule('no-export-default-arrow', ERROR) /** @since 1.0.0 */
     .enableConfigTesterForPlugin('arrow-return-style')

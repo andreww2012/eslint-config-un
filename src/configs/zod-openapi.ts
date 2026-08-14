@@ -19,7 +19,7 @@ export default ((context, optionsRaw) => {
   // 💭 - requires type information
 
   configBuilder
-    ?.addConfig(['zod-openapi', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('zod-openapi')
     .addRule('prefer-meta-last', ERROR) /** @since 2.0.0-beta.0 */ // 💭
     .addRule('prefer-zod-default', ERROR) /** @since 0.0.1 */ // 💭
     .addRule('require-comment', OFF) /** @since 0.0.1 */ // 💭

@@ -19,7 +19,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'de-morgan',
       {
-        includeDefaultFilesAndIgnores: true,
         // TODO why?
         ignoresInternal: {
           html: false,

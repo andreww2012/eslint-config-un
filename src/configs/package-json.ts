@@ -238,7 +238,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'package-json',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_PACKAGE_JSON],
         language: ['jsonc', 'json'],
         settings: {

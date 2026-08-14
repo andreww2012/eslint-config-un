@@ -19,7 +19,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['module-interop', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('module-interop')
     .addRule('no-import-cjs', OFF) /** @since 0.1.0 */
     .addRule('no-require-esm', OFF) /** @since 0.1.0 */
     .addRule('prefer-json-modules', ERROR) /** @since 0.3.0 */ // 🟢

@@ -49,7 +49,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['header', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('header')
     .addRule(
       'header',
       ERROR,

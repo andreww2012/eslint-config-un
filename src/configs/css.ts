@@ -106,7 +106,6 @@ export default (async (context, optionsRaw) => {
       [
         'css',
         {
-          includeDefaultFilesAndIgnores: true,
           language: ['css', 'css'],
         },
       ],

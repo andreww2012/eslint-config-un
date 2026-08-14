@@ -20,7 +20,7 @@ export default ((context, optionsRaw) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(['unocss', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('unocss')
     .addRule('blocklist', ERROR) /** @since 0.55.7 */
     .addRule('enforce-class-compile', OFF) /** @since 0.58.6 */
     .addRule('order', ERROR) /** @since 0.49.3 */ // 🟡

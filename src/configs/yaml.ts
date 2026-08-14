@@ -78,7 +78,6 @@ export default ((context, optionsRaw) => {
       [
         'yaml',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: YAML_DEFAULT_FILES,
           ignoresDefault: CONFIG_DEFAULT_IGNORES,
           ignoresDefaultMergedWithUserIgnores: !optionsResolved.doNotMergeIgnoresWithDefault,
@@ -140,12 +139,7 @@ export default ((context, optionsRaw) => {
   if (context.meta.usedPackageManager?.name === 'pnpm') {
     configBuilder
       ?.addConfig(
-        [
-          'yaml/pnpm-workspace.yaml',
-          {
-            language: ['yaml', 'yaml'],
-          },
-        ],
+        ['yaml/pnpm-workspace.yaml', {applyUserFilesAndIgnores: false, language: ['yaml', 'yaml']}],
         {
           files: ['**/pnpm-workspace.yaml'],
         },

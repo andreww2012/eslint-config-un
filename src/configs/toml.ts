@@ -62,7 +62,6 @@ export default ((context, optionsRaw) => {
       [
         'toml',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: TOML_DEFAULT_FILES,
           language: ['toml', 'toml'],
         },

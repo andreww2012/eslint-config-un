@@ -35,7 +35,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'qunit',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: configFilesFallback,
       },
     ])

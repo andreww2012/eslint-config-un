@@ -19,7 +19,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'prefer-arrow-functions',
       {
-        includeDefaultFilesAndIgnores: true,
         // TODO why?
         ignoresInternal: {
           html: false,

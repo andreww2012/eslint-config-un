@@ -19,7 +19,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['unnecessary-abstractions', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('unnecessary-abstractions')
     .addRule('no-ternary-wrappers', ERROR) /** @since 0.1.0 */
     .enableConfigTesterForPlugin('unnecessary-abstractions')
     .addOverrides();

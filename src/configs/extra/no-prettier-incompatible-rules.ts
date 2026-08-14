@@ -443,7 +443,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'no-prettier-incompatible-rules',
       {
-        includeDefaultFilesAndIgnores: true,
         ignoresInternal: false,
       },
     ])

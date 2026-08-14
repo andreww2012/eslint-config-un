@@ -234,7 +234,14 @@ export class ConfigEntryBuilder<
       | [
           name: string,
           options: {
-            includeDefaultFilesAndIgnores?: boolean;
+            /**
+             * Whether the `files` and `ignores` provided by the user (or inherited via
+             * `inheritFilesAndIgnoresFrom`) are applied to this config, replacing
+             * (or, if `{files,ignores}Default*MergedWith*` options are set, merging with)
+             * `filesDefault` and `ignoresDefault`.
+             * @default true
+             */
+            applyUserFilesAndIgnores?: boolean;
 
             filesDefault?: string[];
             filesDefaultMergedWithUserFiles?: boolean;
@@ -322,6 +329,7 @@ export class ConfigEntryBuilder<
     const [configName, internalOptions] =
       typeof nameAndMaybeOptions === 'string' ? [nameAndMaybeOptions, {}] : nameAndMaybeOptions;
     const {options: configOptions} = this;
+    const applyUserFilesAndIgnores = internalOptions.applyUserFilesAndIgnores !== false;
 
     const configFilesAndIgnoresNotSpecified =
       configOptions.files == null && configOptions.ignores == null;
@@ -333,7 +341,7 @@ export class ConfigEntryBuilder<
         : undefined);
     const filesDefault = internalOptions.filesDefault || [];
     const files =
-      filesFromUser?.length && internalOptions.includeDefaultFilesAndIgnores
+      applyUserFilesAndIgnores && filesFromUser?.length
         ? internalOptions.filesDefaultMergedWithUserFiles
           ? [...filesDefault, ...filesFromUser]
           : filesFromUser
@@ -365,7 +373,7 @@ export class ConfigEntryBuilder<
     const ignoresDefault = internalOptions.ignoresDefault || [];
     const ignores = [
       ...ignoresInternal,
-      ...(internalOptions.includeDefaultFilesAndIgnores
+      ...(applyUserFilesAndIgnores
         ? [
             ...(!ignoresFromUser || internalOptions.ignoresDefaultMergedWithUserIgnores
               ? ignoresDefault

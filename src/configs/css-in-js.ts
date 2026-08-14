@@ -87,7 +87,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'css-in-js',
       {
-        includeDefaultFilesAndIgnores: true,
         settings: {
           css: pluginSettings ? {target: pluginSettings} : undefined,
         },

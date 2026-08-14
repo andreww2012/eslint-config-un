@@ -460,12 +460,7 @@ export default ((context, optionsRaw) => {
   // 🟡 - only making sense for plain JS (functionality ~fully covered by TS)
 
   configBuilder
-    ?.addConfig([
-      'unicorn',
-      {
-        includeDefaultFilesAndIgnores: true,
-      },
-    ])
+    ?.addConfig('unicorn')
     .addRule('better-dom-traversing', ERROR) /** @since 65.0.0 */
     .addRule('catch-error-name', WARNING) /** @since 0.4.0 */ // 🟣
     .addRule(
@@ -963,7 +958,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'unicorn/any-language',
       {
-        includeDefaultFilesAndIgnores: true,
         ignoresInternal: false,
       },
     ])
@@ -984,7 +978,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'unicorn/css',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_CSS],
         ignoresInternal: {css: false},
         // `no-transition-all` optionally uses type information; letting it be split off into a
@@ -1014,7 +1007,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'unicorn/html',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_HTM_HTML],
         ignoresInternal: {html: false},
       },
@@ -1041,7 +1033,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'unicorn/json',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSON, GLOB_JSONC, GLOB_JSON5],
         ignoresInternal: {json: false, jsonc: false, json5: false},
       },
@@ -1062,7 +1053,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'unicorn/markdown',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_MARKDOWN, GLOB_MDX],
         ignoresInternal: {md: false, mdx: false},
       },

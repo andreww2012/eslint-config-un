@@ -63,7 +63,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'js',
       {
-        includeDefaultFilesAndIgnores: true,
         // TODO why?
         ignoresInternal: {
           html: false,
@@ -332,7 +331,7 @@ export default ((context, optionsRaw) => {
     .addOverrides();
 
   configBuilder
-    ?.addConfig('js/stylistic_spaced-comment', {
+    ?.addConfig(['js/stylistic_spaced-comment', {applyUserFilesAndIgnores: false}], {
       ...(optionsResolved.files?.length && {files: optionsResolved.files}),
       // TODO possible to do anything with this?
       // Triggered on all YAML comments because they all are considered Block for whatever reason: https://github.com/ota-meshi/yaml-eslint-parser/blob/498dc41fbed52abd4e508bc903d98e3d1d62d555/src/convert.ts#L1581

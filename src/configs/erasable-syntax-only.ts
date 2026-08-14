@@ -33,10 +33,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig([
-      'erasable-syntax-only',
-      {includeDefaultFilesAndIgnores: true, filesDefault: [GLOB_TS_X]},
-    ])
+    ?.addConfig(['erasable-syntax-only', {filesDefault: [GLOB_TS_X]}])
     .addRule('enums', allowedSyntax.enums ? OFF : ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('import-aliases', allowedSyntax.importAliases ? OFF : ERROR) /** @since 0.1.0 */ // 🟢
     .addRule('namespaces', allowedSyntax.namespaces ? OFF : ERROR) /** @since 0.1.0 */ // 🟢

@@ -30,7 +30,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'depend',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_PACKAGE_JSON],
         language: ['jsonc', 'json'],
       },

@@ -75,7 +75,6 @@
       "",
       "\tconfigBuilder",
       "\t\t?.addConfig(['$TM_FILENAME_BASE', {",
-      "\t\t\t\tincludeDefaultFilesAndIgnores: true,",
       "\t\t\t\tsettings: {",
       "\t\t\t\t\t'${TM_FILENAME_BASE/(.*)/${1:/camelcase}/}': pluginSettings",
       "\t\t\t\t},",

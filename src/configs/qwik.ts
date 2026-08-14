@@ -27,7 +27,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'qwik',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JS_TS_X],
       },
     ])

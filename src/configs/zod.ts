@@ -250,7 +250,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['zod', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('zod')
     .addRule(
       'array-style',
       arrayStyle === false ? OFF : ERROR,
@@ -322,7 +322,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'zod/mini',
       {
-        includeDefaultFilesAndIgnores: true,
         inheritFilesAndIgnoresFrom: optionsResolved,
       },
     ])
@@ -370,7 +369,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'zod/core',
       {
-        includeDefaultFilesAndIgnores: true,
         inheritFilesAndIgnoresFrom: optionsResolved,
       },
     ])

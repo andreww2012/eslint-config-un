@@ -196,7 +196,6 @@ export default ((context, optionsRaw, {cssResolvedOptions}) => {
     ?.addConfig([
       'better-tailwindcss',
       {
-        includeDefaultFilesAndIgnores: true,
         ...(cssLinting && {
           filesMerged: cssResolvedOptions.files,
           ignoresDefault: cssResolvedOptions.ignores,

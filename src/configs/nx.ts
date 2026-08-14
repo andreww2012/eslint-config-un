@@ -29,7 +29,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'nx',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_TS_X],
       },
     ])
@@ -46,7 +45,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'nx/json',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSON],
         language: ['jsonc', 'x'],
       },

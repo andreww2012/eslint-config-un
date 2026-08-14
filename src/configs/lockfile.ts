@@ -168,7 +168,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'lockfile',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: LOCKFILES_INFO.flatMap(([, [, lockfiles]]) =>
           lockfiles.map((lockfile) => `**/${lockfile}`),
         ) satisfies string[],
@@ -241,6 +240,7 @@ export default ((context, optionsRaw) => {
     configBuilder?.addConfig([
       `lockfile/parser/${parserConfigName}`,
       {
+        applyUserFilesAndIgnores: false,
         filesDefault: globs,
         ignoresInternal: {
           yaml: false,
@@ -264,7 +264,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'lockfile/package.json',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_PACKAGE_JSON],
         language: ['jsonc', 'json'],
       },

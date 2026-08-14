@@ -36,7 +36,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'cypress',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: configFilesFallback,
       },
     ])

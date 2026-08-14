@@ -19,7 +19,7 @@ export default ((context, optionsRaw) => {
   // 🔴 - not in `recommended`
 
   configBuilder
-    ?.addConfig(['unhead', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('unhead')
     .addRule('defer-on-module-script', ERROR) /** @since 3.0.5 */
     .addRule('empty-meta-content', ERROR) /** @since 3.0.5 */
     .addRule('invalid-input-shape', ERROR) /** @since 3.3.0 */

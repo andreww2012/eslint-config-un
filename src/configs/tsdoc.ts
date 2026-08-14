@@ -19,7 +19,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'tsdoc',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_TS_X],
       },
     ])

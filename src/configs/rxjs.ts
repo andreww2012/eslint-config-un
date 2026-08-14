@@ -72,7 +72,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['rxjs', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('rxjs')
     .addRule(
       'ban-observables',
       hasBannedObservables ? ERROR : OFF,

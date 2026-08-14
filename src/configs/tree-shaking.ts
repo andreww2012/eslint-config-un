@@ -30,7 +30,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'tree-shaking',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JS_TS_X],
       },
     ])

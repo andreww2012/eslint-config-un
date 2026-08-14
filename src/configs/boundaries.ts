@@ -52,7 +52,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'boundaries',
       {
-        includeDefaultFilesAndIgnores: true,
         settings: {
           '': Object.fromEntries(
             objectEntriesUnsafe(pluginSettings || {}).map(([settingName, settingValue]) => [

@@ -224,7 +224,6 @@ export default (async (context, optionsRaw) => {
       [
         'node',
         {
-          includeDefaultFilesAndIgnores: true,
           settings: {
             // @ts-expect-error TS is crazy - if an interface is inlined, it won't error
             node: pluginSettings,

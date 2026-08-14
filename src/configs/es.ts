@@ -365,7 +365,6 @@ export default ((context, optionsRaw, customConfig) => {
   const mainConfig = configBuilder?.addConfig([
     customConfig?.prefix || 'es',
     {
-      includeDefaultFilesAndIgnores: true,
       // TODO why?
       ignoresInternal: {
         html: false,

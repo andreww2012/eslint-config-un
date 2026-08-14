@@ -126,7 +126,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'import-integrity',
       {
-        includeDefaultFilesAndIgnores: true,
         settings: {
           'import-integrity': {
             packageRootDir: import.meta.dirname,

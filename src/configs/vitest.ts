@@ -212,7 +212,6 @@ export default (async (context, optionsRaw) => {
       [
         'vitest',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: defaultVitestFiles,
           settings: {
             vitest: pluginSettings,
@@ -415,7 +414,6 @@ export default (async (context, optionsRaw) => {
       [
         'vitest/ts',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: defaultVitestTypescriptFiles,
           settings: {
             vitest: pluginSettings,

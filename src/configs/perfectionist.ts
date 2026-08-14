@@ -251,7 +251,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'perfectionist',
       {
-        includeDefaultFilesAndIgnores: true,
         // TODO why?
         ignoresInternal: {
           html: false,
@@ -316,12 +315,7 @@ export default ((context, optionsRaw) => {
   ).map(([ruleName, ruleSubConfig]) => {
     const configBuilderForRule = context.createConfigBuilder(ruleSubConfig, 'perfectionist');
     configBuilderForRule
-      ?.addConfig([
-        `perfectionist/${ruleName}`,
-        {
-          includeDefaultFilesAndIgnores: true,
-        },
-      ])
+      ?.addConfig(`perfectionist/${ruleName}`)
       .addRule(
         ruleName,
         ERROR,

@@ -42,7 +42,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'regexp',
       {
-        includeDefaultFilesAndIgnores: true,
         // TODO why?
         ignoresInternal: {
           html: false,

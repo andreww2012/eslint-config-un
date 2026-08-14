@@ -40,7 +40,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'clsx',
       {
-        includeDefaultFilesAndIgnores: true,
         settings: {
           clsxOptions: pluginSettings,
         },

@@ -158,7 +158,6 @@ export default ((context, optionsRaw) => {
       [
         'svelte/setup',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: [...DEFAULT_SVELTE_FILES, ...DEFAULT_SVELTE_SCRIPT_FILES],
           parser: 'svelte-eslint-parser',
           // TODO why?
@@ -203,12 +202,7 @@ export default ((context, optionsRaw) => {
   // 💭? - optionally requires type information
 
   configBuilder
-    ?.addConfig([
-      'svelte',
-      {
-        includeDefaultFilesAndIgnores: true,
-      },
-    ])
+    ?.addConfig('svelte')
     .markCategory('Possible Errors')
     .addRule('infinite-reactive-loop', ERROR) /** @since 2.16.0 */ // 🟢4️⃣
     .addRule('no-bind-value-on-checkable-inputs', ERROR) /** @since 3.21.0 */
@@ -338,10 +332,7 @@ export default ((context, optionsRaw) => {
     'svelte',
   );
   configBuilderEnforceTypescriptInScriptSection
-    ?.addConfig([
-      'svelte/enforce-typescript-in-script-section',
-      {includeDefaultFilesAndIgnores: true},
-    ])
+    ?.addConfig('svelte/enforce-typescript-in-script-section')
     .addRule('block-lang', ERROR, [
       {
         script: ['ts', ...(configEnforceTypescriptInScriptSection ? [] : [null])],
@@ -352,7 +343,7 @@ export default ((context, optionsRaw) => {
   if (isPrettierPluginSvelteUsed) {
     // From `prettier` config
     configBuilder
-      ?.addConfig('svelte/prettier')
+      ?.addConfig(['svelte/prettier', {applyUserFilesAndIgnores: false}])
       .addRule('first-attribute-linebreak', OFF)
       .addRule('html-closing-bracket-new-line', OFF)
       .addRule('html-closing-bracket-spacing', OFF)

@@ -42,7 +42,7 @@ export default ((context, optionsRaw) => {
   // 🟨 - suggests replacing vanilla JS with Remeda expressions
 
   configBuilder
-    ?.addConfig(['remeda', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('remeda')
     .addRule('collection-method-value', ERROR) /** @since 1.0.0 */
     .addRule('collection-return', ERROR) /** @since 1.0.0 */
     .addRule('prefer-constant', jsCodeReplacementRuleSeverity) /** @since 1.0.0 */ // 🟨

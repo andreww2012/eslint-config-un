@@ -20,7 +20,7 @@ export default ((context, optionsRaw) => {
   // 🟡 - in `recommended` (warns)
 
   configBuilder
-    ?.addConfig(['mobx', {includeDefaultFilesAndIgnores: true, filesDefault: [GLOB_JS_TS_X]}])
+    ?.addConfig(['mobx', {filesDefault: [GLOB_JS_TS_X]}])
     .addRule('exhaustive-make-observable', OFF) /** @since 0.0.2 */ // 🟡
     .addRule('missing-make-observable', ERROR) /** @since 0.0.2 */ // 🟢
     .addRule('missing-observer', OFF) /** @since 0.0.5 */ // 🟡

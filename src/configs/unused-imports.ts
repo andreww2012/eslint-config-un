@@ -44,7 +44,7 @@ export default ((context, optionsRaw) => {
   );
 
   configBuilderNoUnusedImports
-    ?.addConfig(['unused-imports/no-unused-imports', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('unused-imports/no-unused-imports')
     .addRule('no-unused-imports', ERROR) /** @since 0.0.2 */
     .enableConfigTesterForPlugin('unused-imports', {
       /* v8 ignore next 2 */
@@ -62,7 +62,7 @@ export default ((context, optionsRaw) => {
   const {ruleOptions} = configNoUnusedVarsOptions;
 
   configBuilderNoUnusedVars
-    ?.addConfig(['unused-imports/no-unused-vars', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('unused-imports/no-unused-vars')
     .addRule(
       'no-unused-vars',
       ERROR,

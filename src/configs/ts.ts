@@ -706,7 +706,6 @@ export default ((
         [
           `ts/${isTypeAware ? '' : 'non-'}type-aware/setup`,
           {
-            includeDefaultFilesAndIgnores: true,
             filesDefault: [
               ...(options.files?.length ? [] : TS_FILES_DEFAULT),
               ...(isTypeAware ? extraFilesTypeAware : extraFilesNONTypeAware),
@@ -844,12 +843,7 @@ export default ((
 
   // TODO add rules
   configBuilderNONTypeAware
-    ?.addConfig([
-      'ts/non-type-aware/rules',
-      {
-        includeDefaultFilesAndIgnores: true,
-      },
-    ])
+    ?.addConfig('ts/non-type-aware/rules')
     .markCategory('Strict')
     .addRule('ban-ts-comment', ERROR) /** @since 2.18.0 */ // 🟣
     .addRule('no-duplicate-enum-values', ERROR) /** @since 5.22.0 */ // 🟣
@@ -1049,6 +1043,7 @@ export default ((
       {
         // Please note: `{files,ignores}Default` must NOT be overridden by user's
         // files and ignores
+        applyUserFilesAndIgnores: false,
         filesDefault: filesTypeAware,
         ignoresDefault: ignoresTypeAware,
         skipTypeInfoSplit: true,
@@ -1197,7 +1192,7 @@ export default ((
 
   // TODO add rules
   configBuilderNONTypeAware
-    ?.addConfig('ts/disable-handled-by-ts-compiler-rules', {
+    ?.addConfig(['ts/disable-handled-by-ts-compiler-rules', {applyUserFilesAndIgnores: false}], {
       files: allTypescriptFiles,
     })
     .disableAnyRule('', 'constructor-super')
@@ -1235,14 +1230,14 @@ export default ((
   };
 
   configBuilderNONTypeAware
-    ?.addConfig('ts/overrides', {
+    ?.addConfig(['ts/overrides', {applyUserFilesAndIgnores: false}], {
       files: allTypescriptFiles,
     })
     .addAnyRule('', 'no-implicit-coercion', ...noImplicitCoercionBaseUnEntry);
 
   const configBuilderDts = context.createConfigBuilder({}, 'ts');
   configBuilderDts
-    ?.addConfig('ts/dts', {
+    ?.addConfig(['ts/dts', {applyUserFilesAndIgnores: false}], {
       files: [`**/*.d.${GLOB_TS_X_EXTENSION}`],
     })
     .addRule('consistent-indexed-object-style', OFF)
@@ -1264,12 +1259,7 @@ export default ((
 
   const configBuilderDisableNoUnsafe = context.createConfigBuilder(configDisableNoUnsafe, 'ts');
   configBuilderDisableNoUnsafe
-    ?.addConfig([
-      'ts/disable-no-unsafe',
-      {
-        includeDefaultFilesAndIgnores: true,
-      },
-    ])
+    ?.addConfig('ts/disable-no-unsafe')
     .addRule('no-unsafe-argument', OFF)
     .addRule('no-unsafe-assignment', OFF)
     .addRule('no-unsafe-call', OFF)
@@ -1288,12 +1278,7 @@ export default ((
     'no-type-assertion',
   );
   configBuilderNoTypeAssertions
-    ?.addConfig([
-      'no-type-assertion',
-      {
-        includeDefaultFilesAndIgnores: true,
-      },
-    ])
+    ?.addConfig('no-type-assertion')
     .addRule('no-type-assertion', ERROR) /** @since 1.0.1 */
     .enableConfigTesterForPlugin('no-type-assertion')
     .addOverrides();
@@ -1349,7 +1334,6 @@ export default ((
       ?.addConfig([
         'sort-tsconfig-keys',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: ['{tsconfig,*.tsconfig,tsconfig.*}.json'],
           language: ['jsonc', 'x'],
         },

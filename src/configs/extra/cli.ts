@@ -50,7 +50,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'cli',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [
           ...DEFAULT_CLI_DIRS.map(
             (dir) => `${onlyTopLevelDirs ? '' : '**/'}${dir}/**/*.${GLOB_JS_TS_EXTENSION}`,

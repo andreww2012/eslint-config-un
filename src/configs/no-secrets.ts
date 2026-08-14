@@ -56,7 +56,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'no-secrets',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JS_TS_X],
       },
     ])
@@ -73,7 +72,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'no-secrets/json',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSON],
         ignoresDefault: ['**/package-lock.json'],
         ignoresDefaultMergedWithUserIgnores: true,

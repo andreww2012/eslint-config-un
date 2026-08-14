@@ -61,7 +61,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'functional',
       {
-        includeDefaultFilesAndIgnores: true,
         settings: {
           immutability: pluginSettings,
         },

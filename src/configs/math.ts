@@ -30,7 +30,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['math', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('math')
     .addRule(
       'abs',
       absoluteValuesConversionMethod === false ? OFF : ERROR,

@@ -461,6 +461,7 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     [
       'vue/setup',
       {
+        applyUserFilesAndIgnores: false,
         parser: 'vue-eslint-parser',
         // TODO why?
         ignoresInternal: {
@@ -522,7 +523,7 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   // 2️⃣ = in recommended/vue-2
 
   configBuilder
-    ?.addConfig(['vue', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('vue')
     .markCategory('Base')
     .addRule('comment-directive', ERROR, [
       // false by default
@@ -977,7 +978,7 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     'vue',
   );
   configBuilderEnforceTypescriptInScriptSection
-    ?.addConfig(['vue/enforce-typescript-in-script-section', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('vue/enforce-typescript-in-script-section')
     .addRule('block-lang', ERROR, [
       {
         script: {
@@ -999,7 +1000,6 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       ?.addConfig([
         'vue/nuxt',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: [resolvePathInVueOrNuxtProjectDir('**/*.vue')],
         },
       ])
@@ -1020,7 +1020,6 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
       ?.addConfig([
         'vue/nuxt/nuxt-config',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: [`**/nuxt.config.${GLOB_JS_TS_X_EXTENSION}`],
         },
       ])
@@ -1036,7 +1035,7 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   const nuxtLayoutsFilesGlob = resolvePathInVueOrNuxtProjectDir('layouts/**/*.vue');
 
   configBuilder
-    ?.addConfig('vue/allow-single-word-component-names', {
+    ?.addConfig(['vue/allow-single-word-component-names', {applyUserFilesAndIgnores: false}], {
       files: [
         resolvePathInVueOrNuxtProjectDir('pages/**/*.vue'),
         resolvePathInVueOrNuxtProjectDir('views/**/*.vue'),
@@ -1053,13 +1052,13 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     .addRule('multi-word-component-names', OFF);
 
   configBuilder
-    ?.addConfig('vue/allow-implicit-slots', {
+    ?.addConfig(['vue/allow-implicit-slots', {applyUserFilesAndIgnores: false}], {
       files: [nuxtLayoutsFilesGlob],
     })
     .addRule('require-explicit-slots', configNuxt ? OFF : null);
 
   configBuilder
-    ?.addConfig('vue/allow-default-export', {
+    ?.addConfig(['vue/allow-default-export', {applyUserFilesAndIgnores: false}], {
       files: [
         ...DEFAULT_VUE_FILES,
         configNuxt && [
@@ -1084,7 +1083,6 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     ?.addConfig([
       'vue/a11y',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: optionsResolved.files,
         ignoresDefault: [GLOB_MD_X_CODE_BLOCKS, ...(optionsResolved.ignores || [])],
       },
@@ -1123,7 +1121,6 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     ?.addConfig([
       'pinia',
       {
-        includeDefaultFilesAndIgnores: true,
         ignoresDefault: [GLOB_MD_X_CODE_BLOCKS],
         ignoresDefaultMergedWithUserIgnores: true,
       },
@@ -1164,7 +1161,6 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     ?.addConfig([
       'vue/i18n',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: optionsResolved.files,
         ignoresDefault: optionsResolved.ignores,
         settings: {
@@ -1218,12 +1214,7 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
   // 2️⃣ = in recommended/vue-2
 
   configBuilderScopedCss
-    ?.addConfig([
-      'vue/scoped-css',
-      {
-        includeDefaultFilesAndIgnores: true,
-      },
-    ])
+    ?.addConfig('vue/scoped-css')
     .addRule(
       'enforce-style-type',
       typeof optionsScopedCssResolved.allowedStyleType === 'object' ? ERROR : OFF,

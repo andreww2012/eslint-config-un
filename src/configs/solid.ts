@@ -23,7 +23,7 @@ export default ((context, optionsRaw) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(['solid', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('solid')
     .addRule('components-return-once', ERROR) /** @since 0.6.0 */ // 🟡
     .addRule('event-handlers', WARNING, [
       {

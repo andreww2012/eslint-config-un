@@ -57,6 +57,7 @@ export default ((context, optionsRaw) => {
   configBuilder?.addConfig([
     'ember/glimmer-templates',
     {
+      applyUserFilesAndIgnores: false,
       filesDefault: [...GLIMMER_TEMPLATES_FILES],
       parser: 'ember-eslint-parser',
     },
@@ -72,7 +73,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'ember',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JS_TS, ...GLIMMER_TEMPLATES_FILES],
       },
     ])
@@ -361,7 +361,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'ember/tests',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: configTestsFilesFallback,
       },
     ])

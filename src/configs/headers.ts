@@ -55,7 +55,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['headers', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('headers')
     .addRule('header-format', ERROR, options ? [options] : []) /** @since 0.1.0 */
     .enableConfigTesterForPlugin('headers')
     .addOverrides();

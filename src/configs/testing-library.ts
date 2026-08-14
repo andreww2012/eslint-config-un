@@ -194,7 +194,6 @@ export default ((context, optionsRaw) => {
       ?.addConfig([
         `testing-library/${module}`,
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: configFilesFallback,
         },
       ])

@@ -76,7 +76,7 @@ export default (async (context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['stylistic', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('stylistic')
     .addRule(...setupRule('array-bracket-newline', OFF)) /** @since 0.0.4 */
     .addRule(...setupRule('array-bracket-spacing', OFF)) /** @since 0.0.4 */ // 🟢
     .addRule(...setupRule('array-element-newline', OFF)) /** @since 0.0.4 */
@@ -207,6 +207,7 @@ export default (async (context, optionsRaw) => {
     ?.addConfig([
       'stylistic/spaced-comment',
       {
+        applyUserFilesAndIgnores: false,
         filesDefault: optionsResolved.files,
         ignoresDefault: optionsResolved.ignores,
       },

@@ -1140,7 +1140,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'no-stylistic-rules',
       {
-        includeDefaultFilesAndIgnores: true,
         ignoresInternal: false,
       },
     ])
@@ -1169,7 +1168,6 @@ export default ((context, optionsRaw) => {
       ?.addConfig([
         'no-stylistic-rules/disable-all-non-stylistic-rules',
         {
-          includeDefaultFilesAndIgnores: true,
           ignoresInternal: false,
         },
       ])

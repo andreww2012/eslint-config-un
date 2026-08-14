@@ -25,7 +25,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'jest-dom',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: defaultJestDomFiles,
       },
     ])

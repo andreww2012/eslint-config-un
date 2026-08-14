@@ -33,7 +33,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['drizzle', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('drizzle')
     .addRule(
       'enforce-delete-with-where',
       ERROR,

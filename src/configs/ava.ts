@@ -70,7 +70,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'ava',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: configFilesFallback,
       },
     ])
@@ -138,7 +137,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'ava/package.json',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_PACKAGE_JSON],
         language: ['json', 'json'],
       },

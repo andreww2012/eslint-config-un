@@ -19,6 +19,7 @@ export default eslintConfig({
     ignores: [
       // Some rules are disabled in non-CI for this file
       isInCi ? null : '.agents/skills/eslint-config-un-new-eslint-plugin/SKILL.md',
+      'src/configs/extra/no-prettier-incompatible-rules.ts',
     ].filter((v) => v != null),
   },
 

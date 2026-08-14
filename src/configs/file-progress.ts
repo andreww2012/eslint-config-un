@@ -49,7 +49,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'file-progress',
       {
-        includeDefaultFilesAndIgnores: true,
         settings: {
           progress: {
             hide: isInCi || isInEditor(),

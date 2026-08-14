@@ -29,7 +29,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'storybook',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
           includeRegularSpecFiles: false,
           includeStorybookStories: true,
@@ -59,7 +58,7 @@ export default ((context, optionsRaw) => {
     .addOverrides();
 
   configBuilder
-    ?.addConfig('storybook/main', {
+    ?.addConfig(['storybook/main', {applyUserFilesAndIgnores: false}], {
       files: [`.storybook/main.${GLOB_JS_TS_EXTENSION}`],
     })
     .addRule('no-uninstalled-addons', ERROR); // 🟢

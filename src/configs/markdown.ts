@@ -192,7 +192,6 @@ export default ((context, optionsRaw) => {
         [
           'markdown/markdown',
           {
-            includeDefaultFilesAndIgnores: true,
             language: ['markdown', defaultDialect],
           },
         ],
@@ -258,6 +257,7 @@ export default ((context, optionsRaw) => {
           ?.addConfig([
             `markdown/language-override/${i}`,
             {
+              applyUserFilesAndIgnores: false,
               filesDefault: markdownLanguageSettings.files,
               ignoresDefault: markdownLanguageSettings.ignores,
               language: ['markdown', dialect],
@@ -273,6 +273,7 @@ export default ((context, optionsRaw) => {
       [
         'markdown/setup/code-blocks-processor',
         {
+          applyUserFilesAndIgnores: false,
           filesDefault: DEFAULT_FILES,
           ignoresInternal: {
             md: false,
@@ -309,6 +310,7 @@ export default ((context, optionsRaw) => {
         [
           'markdown/code-blocks',
           {
+            applyUserFilesAndIgnores: false,
             filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
             ignoresInternal: false,
           },
@@ -328,7 +330,7 @@ export default ((context, optionsRaw) => {
       .addBulkRules(optionsResolved.overridesCodeBlocks); // TODO
 
     if (codeBlocksIgnoredLanguages?.length) {
-      configBuilder?.addConfig('markdown/code-blocks/ignore', {
+      configBuilder?.addConfig(['markdown/code-blocks/ignore', {applyUserFilesAndIgnores: false}], {
         ignores: [`**/*.md/**/*.{${codeBlocksIgnoredLanguages.join(',')}}`],
       });
     }
@@ -343,7 +345,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'markdown/format-fenced-code-blocks',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
         ignoresInternal: false,
       },
@@ -361,7 +362,6 @@ export default ((context, optionsRaw) => {
         [
           'markdown/sentences-per-line',
           {
-            includeDefaultFilesAndIgnores: true,
             filesDefault: parentConfigFiles,
             ignoresInternal: {
               md: false,

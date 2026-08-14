@@ -67,7 +67,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       `format/${usedFormatter}`,
       {
-        includeDefaultFilesAndIgnores: true,
         ignoresInternal: false,
         ...(usePlainParser && {parser: 'eslint-parser-plain'}),
       },

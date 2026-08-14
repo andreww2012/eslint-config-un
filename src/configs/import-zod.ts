@@ -19,7 +19,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['import-zod', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('import-zod')
     .addRule('prefer-zod-namespace', ERROR) /** @since 0.1.0 */ // 🟢
     .enableConfigTesterForPlugin('import-zod')
     .addOverrides();

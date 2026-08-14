@@ -23,7 +23,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'no-only-tests',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION),
       },
     ])

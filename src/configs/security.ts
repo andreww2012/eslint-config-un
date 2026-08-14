@@ -22,7 +22,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'security',
       {
-        includeDefaultFilesAndIgnores: true,
         // TODO why?
         ignoresInternal: {
           html: false,

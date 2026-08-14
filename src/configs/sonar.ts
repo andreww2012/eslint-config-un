@@ -71,7 +71,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'sonar',
       {
-        includeDefaultFilesAndIgnores: true,
         // TODO why?
         ignoresInternal: {
           html: false,

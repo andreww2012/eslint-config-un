@@ -73,7 +73,6 @@ export default ((context, optionsRaw) => {
       [
         'mocha',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: configFilesFallback,
           settings: {
             '': {

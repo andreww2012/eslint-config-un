@@ -106,7 +106,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'pnpm/package.json',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: ['**/package.json'],
         language: ['jsonc', 'json'],
         settings: {
@@ -139,7 +138,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'pnpm/pnpm-workspace-yaml',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: ['pnpm-workspace.yaml'],
         language: ['yaml', 'yaml'],
       },

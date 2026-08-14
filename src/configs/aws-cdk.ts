@@ -23,7 +23,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'aws-cdk',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_TS_X],
       },
     ])

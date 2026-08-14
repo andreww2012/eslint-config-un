@@ -21,7 +21,6 @@ export default ((context, optionsRaw) => {
       [
         'tests',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: generateDefaultTestFiles(GLOB_JS_TS_X_EXTENSION, {
             includeCypressTests: true,
             includeStorybookStories: true,

@@ -68,7 +68,6 @@ export default (async (context, optionsRaw) => {
     [
       'astro/setup',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: DEFAULT_ASTRO_FILES,
         parser: 'astro-eslint-parser',
         // TODO why?
@@ -100,7 +99,6 @@ export default (async (context, optionsRaw) => {
     ?.addConfig([
       'astro',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: DEFAULT_ASTRO_FILES,
         // TODO why?
         ignoresInternal: {

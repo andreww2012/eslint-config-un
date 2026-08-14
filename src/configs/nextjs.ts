@@ -42,7 +42,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'nextjs',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JS_TS_X],
         settings: {
           next: pluginSettings,

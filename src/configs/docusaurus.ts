@@ -23,7 +23,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'docusaurus',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSX_TSX],
       },
     ])

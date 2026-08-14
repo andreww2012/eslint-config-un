@@ -97,7 +97,6 @@ export default (async (context, optionsRaw) => {
     ?.addConfig([
       'lit',
       {
-        includeDefaultFilesAndIgnores: true,
         settings: {
           lit: pluginSettings,
         },

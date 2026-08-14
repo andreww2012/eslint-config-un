@@ -93,7 +93,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'markdown-links',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_MARKDOWN],
         language: ['markdown', 'commonmark'],
       },

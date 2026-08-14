@@ -55,7 +55,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'jsonc/all',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: JSONC_DEFAULT_FILES,
         ignoresInternal: {md: false, mdx: false}, // TODO why?
         language: ['jsonc', 'x'],
@@ -119,7 +118,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'jsonc/json',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSON],
         ignoresInternal: {md: false, mdx: false}, // TODO why?
         language: ['jsonc', 'json'],
@@ -132,7 +130,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'jsonc/jsonc',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSONC],
         ignoresInternal: {md: false, mdx: false}, // TODO why?
         language: ['jsonc', 'jsonc'],
@@ -145,7 +142,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'jsonc/json5',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSON5],
         ignoresInternal: {md: false, mdx: false}, // TODO why?
         language: ['jsonc', 'json5'],

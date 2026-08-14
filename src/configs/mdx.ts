@@ -94,7 +94,6 @@ export default ((context, optionsRaw) => {
       [
         'mdx/mdx',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: DEFAULT_FILES,
           parser: 'mdx-eslint-parser',
           ignoresInternal: {
@@ -125,7 +124,7 @@ export default ((context, optionsRaw) => {
   configBuilder?.addConfig(
     [
       'mdx/setup/code-blocks-processor',
-      {filesDefault: DEFAULT_FILES, ignoresInternal: {mdx: false}},
+      {applyUserFilesAndIgnores: false, filesDefault: DEFAULT_FILES, ignoresInternal: {mdx: false}},
     ],
     {
       ...(typeof lintCodeBlocks === 'object' && lintCodeBlocks),
@@ -140,7 +139,14 @@ export default ((context, optionsRaw) => {
   if (lintCodeBlocks) {
     configBuilder
       ?.addConfig(
-        ['mdx/code-blocks', {filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS, ignoresInternal: false}],
+        [
+          'mdx/code-blocks',
+          {
+            applyUserFilesAndIgnores: false,
+            filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
+            ignoresInternal: false,
+          },
+        ],
         {
           languageOptions: {
             parserOptions: {
@@ -155,7 +161,7 @@ export default ((context, optionsRaw) => {
       .addBulkRules(optionsResolved.overridesCodeBlocks); // TODO
 
     if (codeBlocksIgnoredLanguages?.length) {
-      configBuilder?.addConfig('mdx/code-blocks/ignore', {
+      configBuilder?.addConfig(['mdx/code-blocks/ignore', {applyUserFilesAndIgnores: false}], {
         ignores: [`**/*.mdx/**/*.{${codeBlocksIgnoredLanguages.join(',')}}`],
       });
     }
@@ -170,7 +176,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'mdx/format-fenced-code-blocks',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: DEFAULT_FILES_FOR_CODE_BLOCKS,
         ignoresInternal: false,
       },

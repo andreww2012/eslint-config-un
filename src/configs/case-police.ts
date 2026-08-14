@@ -16,7 +16,7 @@ export default ((context, optionsRaw) => {
   const configBuilder = context.createConfigBuilder(optionsResolved, 'case-police');
 
   configBuilder
-    ?.addConfig(['case-police', {includeDefaultFilesAndIgnores: true, ignoresInternal: false}])
+    ?.addConfig(['case-police', {ignoresInternal: false}])
     .addRule('string-check', ERROR) /** @since 0.6.0 */
     .enableConfigTesterForPlugin('case-police')
     .addOverrides();

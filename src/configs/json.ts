@@ -58,7 +58,6 @@ export default ((context, optionsRaw) => {
         ?.addConfig([
           `json/${languageName}`,
           {
-            includeDefaultFilesAndIgnores: true,
             filesDefault,
             language: ['json', languageName],
           },

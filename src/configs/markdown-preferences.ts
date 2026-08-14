@@ -264,7 +264,6 @@ export default (async (context, optionsRaw) => {
     ?.addConfig([
       'markdown-preferences',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_MARKDOWN],
         language: extendedMarkdownSyntax
           ? ['markdown-preferences', 'extended-syntax']

@@ -69,7 +69,6 @@ export default ((context, optionsRaw) => {
       'json-schema-validator/js-ts',
       {
         filesDefault: [GLOB_JS_TS_X],
-        includeDefaultFilesAndIgnores: true,
         settings: {
           'json-schema-validator': pluginSettings,
         },
@@ -86,7 +85,6 @@ export default ((context, optionsRaw) => {
       'json-schema-validator/json',
       {
         filesDefault: JSONC_DEFAULT_FILES,
-        includeDefaultFilesAndIgnores: true,
         language: ['jsonc', 'x'],
         settings: {
           'json-schema-validator': pluginSettings,
@@ -103,7 +101,6 @@ export default ((context, optionsRaw) => {
       'json-schema-validator/yaml',
       {
         filesDefault: YAML_DEFAULT_FILES,
-        includeDefaultFilesAndIgnores: true,
         language: ['yaml', 'yaml'],
         settings: {
           'json-schema-validator': pluginSettings,
@@ -120,7 +117,6 @@ export default ((context, optionsRaw) => {
       'json-schema-validator/toml',
       {
         filesDefault: TOML_DEFAULT_FILES,
-        includeDefaultFilesAndIgnores: true,
         language: ['toml', 'toml'],
         settings: {
           'json-schema-validator': pluginSettings,

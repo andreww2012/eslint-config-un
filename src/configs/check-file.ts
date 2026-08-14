@@ -59,7 +59,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['check-file', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('check-file')
     .addRule('filename-blocklist', OFF) /** @since 2.0.0 */
     .addRule(
       'filename-naming-convention',
@@ -89,7 +89,7 @@ export default ((context, optionsRaw) => {
     : null;
 
   configBuilderEnableCheckFileProcessor?.addConfig(
-    ['check-file/processor', {includeDefaultFilesAndIgnores: true}],
+    'check-file/processor',
     // @ts-expect-error Type '{ [packageToLoadSymbol]: ...' has no properties in common with type 'FlatConfigEntryForBuilder'.
     {
       ...generatePackageToLoadProperty('processor', 'checkFileProcessor'),

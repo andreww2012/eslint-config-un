@@ -40,7 +40,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'sql',
       {
-        includeDefaultFilesAndIgnores: true,
         settings: {
           sql: pluginSettings,
         },

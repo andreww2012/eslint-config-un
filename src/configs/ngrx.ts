@@ -19,7 +19,7 @@ export default ((context, optionsRaw) => {
   // 💭 - requires type information
 
   configBuilder
-    ?.addConfig(['ngrx', {includeDefaultFilesAndIgnores: true, filesDefault: [GLOB_JS_TS_X]}])
+    ?.addConfig(['ngrx', {filesDefault: [GLOB_JS_TS_X]}])
     .markCategory('Component store')
     .addRule('avoid-combining-component-store-selectors', ERROR) /** @since 16.3.0 */
     .addRule('avoid-mapping-component-store-selectors', ERROR) /** @since 16.3.0 */

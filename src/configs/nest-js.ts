@@ -23,7 +23,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'nest-js',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_TS],
       },
     ])

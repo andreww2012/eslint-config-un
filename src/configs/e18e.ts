@@ -79,12 +79,7 @@ export default ((context, optionsRaw) => {
 
   if (configModernization) {
     configBuilderModernization
-      ?.addConfig([
-        'e18e/modernization',
-        {
-          includeDefaultFilesAndIgnores: true,
-        },
-      ])
+      ?.addConfig('e18e/modernization')
       .addRule('prefer-array-at', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-fill', ERROR) /** @since 0.0.1 */
       .addRule('prefer-array-to-reversed', ERROR) /** @since 0.0.1 */ // 💭?
@@ -118,7 +113,6 @@ export default ((context, optionsRaw) => {
       ?.addConfig([
         'e18e/module-replacements',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: [GLOB_PACKAGE_JSON],
           language: ['jsonc', 'json'],
         },
@@ -144,12 +138,7 @@ export default ((context, optionsRaw) => {
 
   if (configPerformanceImprovements) {
     configBuilderPerformanceImprovements
-      ?.addConfig([
-        'e18e/performance-improvements',
-        {
-          includeDefaultFilesAndIgnores: true,
-        },
-      ])
+      ?.addConfig('e18e/performance-improvements')
       .addRule('no-delete-property', OFF) /** @since 0.5.0 */ // 🔴
       .addRule('no-indexof-equality', ERROR) /** @since 0.0.1 */ // 🔴💭
       .addRule('no-spread-in-reduce', ERROR) /** @since 0.5.0 */ // 🔴

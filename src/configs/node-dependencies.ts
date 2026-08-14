@@ -39,7 +39,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'node-dependencies',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_PACKAGE_JSON],
         language: ['jsonc', 'json'],
       },

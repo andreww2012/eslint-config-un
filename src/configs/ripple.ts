@@ -31,7 +31,6 @@ export default ((context, optionsRaw) => {
   configBuilderSetup?.addConfig([
     'ripple/setup',
     {
-      includeDefaultFilesAndIgnores: true,
       filesDefault: DEFAULT_RIPPLE_FILES,
       parser: '@tsrx/eslint-parser',
     },
@@ -43,10 +42,7 @@ export default ((context, optionsRaw) => {
   // 🔴 - NOT in recommended
 
   configBuilder
-    ?.addConfig([
-      'ripple',
-      {includeDefaultFilesAndIgnores: true, filesDefault: [...DEFAULT_RIPPLE_FILES, GLOB_JS_TS]},
-    ])
+    ?.addConfig(['ripple', {filesDefault: [...DEFAULT_RIPPLE_FILES, GLOB_JS_TS]}])
     .addRule('control-flow-jsx', ERROR) /** @since 0.3.25 */
     .addRule('no-lazy-destructuring-in-modules', ERROR) /** @since 0.3.25 */
     .addRule('no-module-scope-track', ERROR) /** @since 0.3.25 */

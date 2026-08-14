@@ -70,7 +70,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'tailwind',
       {
-        includeDefaultFilesAndIgnores: true,
         settings: {
           tailwindcss: {
             ...pluginSettings,

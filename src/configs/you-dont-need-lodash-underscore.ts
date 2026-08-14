@@ -200,7 +200,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['you-dont-need-lodash-underscore', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('you-dont-need-lodash-underscore')
     .addRule(...getRuleSeverity('all')) /** @since 5.0.0 */
     .addRule(...getRuleSeverity('any')) /** @since 5.0.0 */
     .addRule(...getRuleSeverity('assign')) /** @since 5.0.0 */

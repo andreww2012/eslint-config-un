@@ -126,7 +126,6 @@ export const generateConfigNoOnlyTestsBuilder = <ExtraPlugins extends ExtraPlugi
     ?.addConfig([
       `${prefix}/no-only-tests`,
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault,
       },
     ])

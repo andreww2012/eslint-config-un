@@ -67,7 +67,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'compat',
       {
-        includeDefaultFilesAndIgnores: true,
         settings: {
           '': pluginSettings,
         },

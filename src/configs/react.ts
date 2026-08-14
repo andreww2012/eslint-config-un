@@ -648,7 +648,6 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
       [
         'react/plugin-original',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: DEFAULT_FILES,
           settings: {
             react: reactOriginalSettings,
@@ -873,7 +872,6 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     ?.addConfig([
       'react/allow-default-export-in-jsx-files',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSX_TSX],
       },
     ])
@@ -896,7 +894,6 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     ?.addConfig([
       'react/hooks',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: parentConfigFiles || DEFAULT_FILES,
         ignoresDefault: parentConfigIgnores,
         settings: {
@@ -955,7 +952,6 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     ?.addConfig([
       'react/x',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: parentConfigFiles || DEFAULT_FILES,
         ignoresDefault: parentConfigIgnores,
         settings: {
@@ -1129,7 +1125,6 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     ?.addConfig([
       'react/x/rules-type-aware',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: tsFilesTypeAware,
         ignoresDefault: tsIgnoresTypeAware,
       },
@@ -1154,7 +1149,6 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
       [
         'react/dom',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: parentConfigFiles || DEFAULT_FILES,
           ignoresDefault: parentConfigIgnores,
           settings: {
@@ -1251,7 +1245,6 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     ?.addConfig([
       'react/refresh',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_JSX_TSX],
       },
     ])
@@ -1277,7 +1270,6 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     ?.addConfig([
       'react/you-might-not-need-an-effect',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: parentConfigFiles || DEFAULT_FILES,
         ignoresDefault: parentConfigIgnores,
       },

@@ -21,7 +21,7 @@ export default ((context, optionsRaw) => {
   // 🟡 - in recommended (warns)
 
   configBuilder
-    ?.addConfig(['tanstack-query', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('tanstack-query')
     .addRule('exhaustive-deps', ERROR) /** @since 4.14.1 */ // 🟢
     .addRule('infinite-query-property-order', ERROR) /** @since 5.57.0 */ // 🟢
     .addRule('mutation-property-order', ERROR) /** @since 5.78.0 */ // 🟢

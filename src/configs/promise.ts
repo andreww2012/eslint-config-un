@@ -23,7 +23,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'promise',
       {
-        includeDefaultFilesAndIgnores: true,
         // TODO why?
         ignoresInternal: {
           html: false,

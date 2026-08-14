@@ -19,7 +19,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['barrel-files', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('barrel-files')
     .addRule('avoid-barrel-files', OFF) /** @since 1.0.0 */
     .addRule('avoid-importing-barrel-files', OFF) /** @since 2.0.0 */
     .addRule('avoid-namespace-import', OFF) /** @since 1.0.0 */

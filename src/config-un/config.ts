@@ -585,13 +585,13 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   const rootConfigBuilder = context.createConfigBuilder({}, '');
   rootConfigBuilder
-    ?.addConfig('config-files', {
+    ?.addConfig(['config-files', {applyUserFilesAndIgnores: false}], {
       files: GLOB_CONFIG_FILES,
     })
     .disableAnyRule('import', 'no-extraneous-dependencies')
     .disableAnyRule('node', 'no-unpublished-require');
   rootConfigBuilder
-    ?.addConfig('allow-default-export', {
+    ?.addConfig(['allow-default-export', {applyUserFilesAndIgnores: false}], {
       files: [
         ...GLOB_CONFIG_FILES,
         // Files starting with a dot

@@ -148,7 +148,7 @@ export default ((context, optionsRaw) => {
   // 💭 - requires type information
 
   configBuilder
-    ?.addConfig(['eslint-plugin', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('eslint-plugin')
     .addRule('fixer-return', ERROR) /** @since 0.8.0 */ // 🟢
     .addRule('meta-property-ordering', ERROR) /** @since 2.1.0 */
     .addRule('no-deprecated-context-methods', ERROR) /** @since 1.2.0 */ // 🟢
@@ -247,7 +247,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'eslint-plugin/rule-tests',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: generateDefaultTestFiles(GLOB_JS_TS_EXTENSION),
       },
     ])

@@ -143,10 +143,7 @@ export default ((context, optionsRaw) => {
     const configBuilder = context.createConfigBuilder(options, '');
 
     configBuilder
-      ?.addConfig([
-        `cloudfront-functions/v${runtimeVersion}`,
-        {includeDefaultFilesAndIgnores: true},
-      ])
+      ?.addConfig(`cloudfront-functions/v${runtimeVersion}`)
       .addAnyRule('', 'no-unused-vars', ERROR, [
         {
           varsIgnorePattern: '^handler$',

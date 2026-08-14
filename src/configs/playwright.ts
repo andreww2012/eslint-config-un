@@ -80,7 +80,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'playwright',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: configFilesFallback,
         settings: {
           playwright: pluginSettings,

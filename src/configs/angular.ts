@@ -329,7 +329,6 @@ export default (async (context, optionsRaw) => {
       [
         'angular/general',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: [GLOB_JS_TS_X],
         },
       ],
@@ -548,7 +547,6 @@ export default (async (context, optionsRaw) => {
     ?.addConfig([
       'angular/template',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_HTML],
         parser: '@angular-eslint/template-parser',
         ignoresInternal: {

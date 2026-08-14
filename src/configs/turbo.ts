@@ -28,7 +28,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['turbo', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('turbo')
     .addRule(
       'no-undeclared-env-vars',
       ERROR,

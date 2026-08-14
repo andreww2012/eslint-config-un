@@ -308,7 +308,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'jsdoc',
       {
-        includeDefaultFilesAndIgnores: true,
         // TODO why?
         ignoresInternal: {
           html: false,
@@ -425,7 +424,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'jsdoc/ts',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_TS_X],
         settings: {
           // @ts-expect-error TS is crazy - if an interface is inlined, it won't error

@@ -31,7 +31,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'expect-type',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [GLOB_TS_X],
       },
     ])

@@ -16,7 +16,7 @@ export default ((context, optionsRaw) => {
   const configBuilder = context.createConfigBuilder(optionsResolved, 'command');
 
   configBuilder
-    ?.addConfig(['command', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('command')
     .addRule('command', ERROR) /** @since 0.0.0 */
     .enableConfigTesterForPlugin('command')
     .addOverrides();

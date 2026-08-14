@@ -24,7 +24,7 @@ export default ((context, optionsRaw) => {
   const configBuilder = context.createConfigBuilder(optionsResolved, 'no-relative-import-paths');
 
   configBuilder
-    ?.addConfig(['no-relative-import-paths', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('no-relative-import-paths')
     .addRule('no-relative-import-paths', ERROR, options ? [options] : []) /** @since 1.0.3 */
     .enableConfigTesterForPlugin('no-relative-import-paths')
     .addOverrides();

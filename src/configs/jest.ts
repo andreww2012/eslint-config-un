@@ -253,7 +253,6 @@ export default (async (context, optionsRaw) => {
       [
         'jest',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: defaultJestFiles,
           settings: {
             jest: pluginSettings,
@@ -395,7 +394,6 @@ export default (async (context, optionsRaw) => {
       [
         'jest/ts',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: defaultJestTypescriptFiles,
           settings: {
             jest: pluginSettings,
@@ -433,7 +431,6 @@ export default (async (context, optionsRaw) => {
       [
         'jest/extended',
         {
-          includeDefaultFilesAndIgnores: true,
           filesDefault: defaultJestFiles,
           settings: {
             jest: pluginSettings,

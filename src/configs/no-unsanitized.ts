@@ -19,7 +19,7 @@ export default ((context, optionsRaw) => {
   // 🟢 - in recommended
 
   configBuilder
-    ?.addConfig(['no-unsanitized', {includeDefaultFilesAndIgnores: true}])
+    ?.addConfig('no-unsanitized')
     .addRule('method', ERROR) /** @since 1.1.0 */
     .addRule('property', ERROR) /** @since 1.1.0 */
     .enableConfigTesterForPlugin('no-unsanitized')

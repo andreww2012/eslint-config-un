@@ -54,7 +54,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'github-actions',
       {
-        includeDefaultFilesAndIgnores: true,
         filesDefault: [`.github/workflows/*.${GLOB_YML_YAML_EXTENSION}`],
         language: ['yaml', 'yaml'],
       },

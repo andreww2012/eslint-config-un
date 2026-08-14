@@ -39,7 +39,6 @@ export default ((context, optionsRaw) => {
     ?.addConfig([
       'web-components',
       {
-        includeDefaultFilesAndIgnores: true,
         settings: {
           wc: pluginSettings,
         },
