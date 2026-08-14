@@ -141,7 +141,7 @@
     "eslint-plugin-markdown-preferences": "0.42.0",
     "eslint-plugin-math": "0.13.1",
     "eslint-plugin-mdx": "3.8.1",
-    "eslint-plugin-module-interop": "0.3.2",
+    "eslint-plugin-module-interop": "0.4.0",
     "eslint-plugin-n": "18.3.0",
     "eslint-plugin-no-only-tests": "3.4.0",
     "eslint-plugin-no-secrets": "2.3.3",

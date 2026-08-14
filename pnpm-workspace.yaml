@@ -6,44 +6,7 @@ packageImportMethod: clone-or-copy
 saveExact: true
 
 minimumReleaseAge: 960 # 16 hours in minutes
-minimumReleaseAgeExclude:
-  # []
-  - eslint-plugin-module-interop@0.3.2
-  - eslint-plugin-pnpm@1.8.0
-  - pnpm-workspace-yaml@1.8.0
-  - eslint-plugin-solid@0.15.0
-  - eslint-plugin-storybook@10.5.8
-  - storybook@10.5.8
-  - '@eslint-react/ast@5.18.6'
-  - '@eslint-react/core@5.18.6'
-  - '@eslint-react/eslint-plugin@5.18.6'
-  - '@eslint-react/eslint@5.18.6'
-  - '@eslint-react/jsx@5.18.6'
-  - '@eslint-react/shared@5.18.6'
-  - '@eslint-react/var@5.18.6'
-  - eslint-plugin-react-debug@5.18.6
-  - eslint-plugin-react-dom@5.18.6
-  - eslint-plugin-react-jsx@5.18.6
-  - eslint-plugin-react-naming-convention@5.18.6
-  - eslint-plugin-react-rsc@5.18.6
-  - eslint-plugin-react-web-api@5.18.6
-  - eslint-plugin-react-x@5.18.6
-  - '@sveltejs/acorn-typescript@1.0.13'
-  - '@tsrx/core@0.1.58'
-  - '@tsrx/eslint-parser@0.3.120'
-  - '@tsrx/eslint-plugin@0.3.120'
-  - astro-eslint-parser@3.1.0
-  - '@commitlint/cli@21.2.2'
-  - '@commitlint/config-conventional@21.2.2'
-  - '@commitlint/format@21.2.2'
-  - '@commitlint/is-ignored@21.2.2'
-  - '@commitlint/lint@21.2.2'
-  - '@commitlint/load@21.2.2'
-  - '@commitlint/parse@21.2.2'
-  - '@commitlint/resolve-extends@21.2.2'
-  - '@commitlint/rules@21.2.2'
-  - puppeteer-core@25.7.0
-  - puppeteer@25.7.0
+minimumReleaseAgeExclude: []
 
 trustPolicy: no-downgrade
 trustPolicyIgnoreAfter: 43200 # 30 days in minutes
