@@ -2,4 +2,4 @@
 'eslint-config-un': patch
 ---
 
-jsdoc: updated [`eslint-plugin-jsdoc` from v63.3.3 to v64.1.0](https://github.com/gajus/eslint-plugin-jsdoc/compare/v63.3.3...v64.1.0)
+jsdoc: updated [`eslint-plugin-jsdoc` from v63.3.3 to v64.2.0](https://github.com/gajus/eslint-plugin-jsdoc/compare/v63.3.3...v64.2.0)
