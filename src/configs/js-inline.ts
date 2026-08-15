@@ -6,9 +6,9 @@ import type {OmitStrict} from '../types';
 import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 // These are copied from eslint-plugin-html's source code
@@ -28,6 +28,12 @@ const DEFAULT_HTML_EXTENSIONS = [
 ];
 const DEFAULT_XML_EXTENSIONS = ['.xhtml', '.xml'];
 
+/**
+ * Plugin for linting `<script>` blocks inside HTML files. It does not have any
+ * actual rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.{htm,html}</code>
+ */
 export interface JsInlineEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends OmitStrict<
@@ -115,7 +121,10 @@ export interface JsInlineEslintConfigOptions<
   languageOptions?: Eslint.Linter.LanguageOptions;
 }
 
-export default (async (context, optionsRaw) => {
+export default defineUnConfig<JsInlineEslintConfigOptions>(
+  'jsInline',
+  true,
+)(async (context, optionsRaw) => {
   const eslintPluginHtml = await pluginsLoaders['html-processor'](context).then(
     ({module}) => module,
   );
@@ -194,4 +203,4 @@ export default (async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'jsInline'>;
+});

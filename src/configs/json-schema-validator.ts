@@ -3,11 +3,16 @@ import {ERROR, GLOB_JS_TS_X} from '../constants';
 import {JSONC_DEFAULT_FILES, TOML_DEFAULT_FILES, YAML_DEFAULT_FILES} from './shared';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin that validates data using JSON Schema Validator.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+ */
 export interface JsonSchemaValidatorEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'json-schema-validator'> {
@@ -49,7 +54,9 @@ export interface JsonSchemaValidatorEslintConfigOptions<
   configToml?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'json-schema-validator'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<JsonSchemaValidatorEslintConfigOptions>('jsonSchemaValidator', {
+  enabledBy: {group: 'misc'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {
@@ -130,4 +137,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderJson, configBuilderYaml, configBuilderToml],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'jsonSchemaValidator'>;
+});

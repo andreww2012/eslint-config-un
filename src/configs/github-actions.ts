@@ -2,11 +2,16 @@ import {ERROR, GLOB_YML_YAML_EXTENSION, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin with rules for consistent, readable and valid GitHub Actions files.
+ *
+ * 📁 Default `files`: <code>.github/workflows/*.y?(a)ml</code>
+ */
 export interface GithubActionsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'github-actions'> {
@@ -30,7 +35,11 @@ export interface GithubActionsEslintConfigOptions<
   usesStyle?: false | GetRuleOptions<'github-actions', 'prefer-step-uses-style'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<GithubActionsEslintConfigOptions>('githubActions', {
+  enabledBy: {pathExists: '.github/workflows'},
+  phase: 'late',
+  after: ['yaml'],
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     usesStyle: {
       commit: true,
@@ -94,4 +103,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'githubActions'>;
+});

@@ -4,9 +4,9 @@ import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type NormalizeSeeLinksRuleOptions = GetRuleOptions<'jsdoc', 'normalize-see-links'>;
@@ -183,6 +183,11 @@ interface EslintPluginJsdocSettings {
   exemptDestructuredRootsFromChecks?: boolean;
 }
 
+/**
+ * [JSDoc](https://jsdoc.app) related rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface JsdocEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'jsdoc'> {
@@ -269,7 +274,10 @@ export const DEFAULT_MULTILINE_COMMENTS_STARTING_WITH_TO_IGNORE = {
   'vite-ignore': true,
 } satisfies Partial<Record<string, boolean>>;
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<JsdocEslintConfigOptions>(
+  'jsdoc',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTypescript: context.configsMeta.ts.enabled,
     formatTypeValues: true,
@@ -446,4 +454,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderTypescript],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'jsdoc'>;
+});

@@ -2,11 +2,16 @@ import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * CSS-in-JS specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface CssInJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'css-in-js'> {
@@ -57,7 +62,10 @@ export interface CssInJsEslintConfigOptions<
   propertyCasing?: GetRuleOptions<'css-in-js', 'property-casing'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<CssInJsEslintConfigOptions>(
+  'cssInJs',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     hexColorsStyle: 'long',
     avoidLeadingZero: false,
@@ -123,4 +131,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'cssInJs'>;
+});

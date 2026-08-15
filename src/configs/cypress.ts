@@ -6,17 +6,26 @@ import {
 } from './shared';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Cypress](https://www.cypress.io) specific rules.
+ *
+ * 📁 Default `files`:
+ * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
+ * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
+ */
 export interface CypressEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'cypress'>,
     NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<CypressEslintConfigOptions>('cypress', {
+  enabledBy: {package: 'cypress'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: true,
   });
@@ -66,4 +75,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'cypress'>;
+});

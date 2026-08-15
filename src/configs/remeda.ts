@@ -2,11 +2,16 @@
 import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Remeda](https://remedajs.com) specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface RemedaEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'remeda'> {
@@ -26,7 +31,9 @@ export interface RemedaEslintConfigOptions<
   suggestJsCodeReplacements?: boolean;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<RemedaEslintConfigOptions>('remeda', {
+  enabledBy: {package: 'remeda'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     suggestJsCodeReplacements: false,
   });
@@ -65,4 +72,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'remeda'>;
+});

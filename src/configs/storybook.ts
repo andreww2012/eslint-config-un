@@ -2,16 +2,23 @@ import {ERROR, GLOB_JS_TS_EXTENSION, GLOB_JS_TS_X_EXTENSION, OFF, WARNING} from 
 import {generateDefaultTestFiles} from './shared';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Storybook](https://storybook.js.org) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.{stories,story}.?([cm])[jt]s?(x)</code>
+ */
 export interface StorybookEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'storybook'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<StorybookEslintConfigOptions>('storybook', {
+  enabledBy: {package: 'storybook'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const typescriptVersion = context.packagesInfo.typescript?.versions.majorAndMinor || 0;
@@ -67,4 +74,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'storybook'>;
+});

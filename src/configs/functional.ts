@@ -2,9 +2,9 @@ import type {Immutability, TypeSpecifier} from 'is-immutable-type';
 import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 interface OverridesSetting {
@@ -13,6 +13,15 @@ interface OverridesSetting {
   from?: Immutability | keyof typeof Immutability;
 }
 
+/**
+ * Rules enforcing functional programming patterns.
+ *
+ * ⚠️ WARNING: make sure that the linted files are provided with type information, or all the rules requiring it are disabled.
+ * For the former, they must be included in `files` array of `ts/configTypeAware` config
+ * (they are by default).
+ *
+ * 📁 Default `files`: all files
+ */
 export interface FunctionalEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'functional'> {
@@ -41,7 +50,10 @@ export interface FunctionalEslintConfigOptions<
   };
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<FunctionalEslintConfigOptions>(
+  'functional',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
@@ -92,4 +104,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'functional'>;
+});

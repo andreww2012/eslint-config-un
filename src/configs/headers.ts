@@ -1,11 +1,18 @@
 import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin to ensure that files begin with the given comment.
+ *
+ * There is also an alternative config, `header`, which is powered by [`eslint-plugin-header`](https://npmx.dev/eslint-plugin-header).
+ *
+ * 📁 Default `files`: all files
+ */
 export interface HeadersEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'headers'> {
@@ -44,7 +51,10 @@ export interface HeadersEslintConfigOptions<
   };
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<HeadersEslintConfigOptions>(
+  'headers',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {options} = optionsResolved;
@@ -64,4 +74,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'headers'>;
+});

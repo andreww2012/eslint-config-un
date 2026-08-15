@@ -9,9 +9,9 @@ import {
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnFlatConfigEntryBase<
@@ -69,6 +69,13 @@ interface ReactSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   consistentDataTestId?: GetRuleOptions<'testing-library', 'consistent-data-testid'>;
 }
 
+/**
+ * [Testing Library](https://testing-library.com) specific rules.
+ *
+ * 📁 Default `files`:
+ * - <code>**&#47;*.{spec,test}.?([cm])[jt]s?(x)</code>
+ * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
+ */
 export interface TestingLibraryEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends OmitStrict<SharedConfigOptions<ExtraPlugins>, 'allowTestingFrameworkSetupHook'> {
@@ -120,7 +127,9 @@ type SupportedModules = keyof {
   ]: unknown;
 };
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<TestingLibraryEslintConfigOptions>('testingLibrary', {
+  enabledBy: {package: '@testing-library/dom'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configAngular: context.configsMeta.angular.enabled,
     configMarko: context.packagesInfo.marko != null,
@@ -314,4 +323,4 @@ export default ((context, optionsRaw) => {
     ],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'testingLibrary'>;
+});

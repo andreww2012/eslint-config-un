@@ -2,11 +2,19 @@ import {ERROR, GLOB_JS_TS, GLOB_RIPPLE, GLOB_TSRX, WARNING} from '../constants';
 import type {UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Ripple](https://github.com/Ripple-TS/ripple) specific rules.
+ *
+ * 📁 Default `files`:
+ * - <code>**&#47;*.tsrx</code>
+ * - <code>**&#47;*.ripple</code>
+ * - <code>**&#47;*.?([cm])[jt]s</code>
+ */
 export interface RippleEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'ripple'> {
@@ -22,7 +30,9 @@ export interface RippleEslintConfigOptions<
 
 const DEFAULT_RIPPLE_FILES: string[] = [GLOB_TSRX, GLOB_RIPPLE];
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<RippleEslintConfigOptions>('ripple', {
+  enabledBy: {package: 'ripple'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {configSetup: configSetupOptions = {}} = optionsResolved;
@@ -57,4 +67,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilderSetup, configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'ripple'>;
+});

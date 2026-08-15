@@ -4,9 +4,9 @@ import type {OmitStrict} from '../types';
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
@@ -50,6 +50,11 @@ interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   >;
 }
 
+/**
+ * [Lit](https://lit.dev) specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface LitEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'lit'> {
@@ -78,7 +83,10 @@ export interface LitEslintConfigOptions<
   configA11y?: boolean | A11YSubConfigOptions<ExtraPlugins>;
 }
 
-export default (async (context, optionsRaw) => {
+export default defineUnConfig<LitEslintConfigOptions>('lit', {enabledBy: {package: 'lit'}})(async (
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'lit');
@@ -136,9 +144,9 @@ export default (async (context, optionsRaw) => {
       ...(configA11y === false
         ? []
         : await (async () => {
-            const {default: jsxA11yUnConfig} = await import('./jsx-a11y');
+            const {buildJsxA11yConfigs} = await import('./jsx-a11y');
             const options = typeof configA11y === 'object' ? configA11y : {};
-            const result = jsxA11yUnConfig(context, undefined, {
+            const result = buildJsxA11yConfigs(context, undefined, {
               prefix: 'lit',
               options: {
                 files: parentConfigFiles,
@@ -153,4 +161,4 @@ export default (async (context, optionsRaw) => {
     ],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'lit'>;
+});

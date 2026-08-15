@@ -70,6 +70,12 @@ exclude = [
 
   # Location-dependent redirect
   '^https://aws\.amazon\.com/cdk$',
+
+  # JS interpolations
+  '^https?://.*\$%7[Bb]',
+
+  # Template links from scripts/shared/packages-meta.ts
+  '___INSERT-\w+-HERE___',
 ]
 exclude_path = [
   # This file: lychee mistakes the regexes above for URLs to check
@@ -80,6 +86,4 @@ exclude_path = [
   '(^|[/\\])test[/\\](.*[/\\])?fixtures[/\\]',
   # Diffs of third-party packages, whose links are not ours to fix
   '(^|[/\\])patches[/\\]',
-  # Internal scripts not exposed to public, with a number of false positives
-  '(^|[/\\])scripts[/\\]',
 ]

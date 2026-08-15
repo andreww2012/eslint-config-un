@@ -1,11 +1,16 @@
 import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin related to SQL queries written in `sql` template literal tag.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface SqlEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'sql'> {
@@ -26,7 +31,10 @@ export interface SqlEslintConfigOptions<
   };
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<SqlEslintConfigOptions>(
+  'sql',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
@@ -54,4 +62,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'sql'>;
+});

@@ -2,11 +2,16 @@ import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * ESLint rules related to `Math` and `Number` objects.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface MathEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'math'> {
@@ -17,7 +22,10 @@ export interface MathEslintConfigOptions<
   absoluteValuesConversionMethod?: false | GetRuleOptions<'math', 'abs'>['prefer'];
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<MathEslintConfigOptions>(
+  'math',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     absoluteValuesConversionMethod: 'Math.abs',
   });
@@ -71,4 +79,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'math'>;
+});

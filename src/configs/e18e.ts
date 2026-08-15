@@ -5,10 +5,10 @@ import {arrayIncludes} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 const RULE_CATEGORIES = RULE_CATEGORIES_PER_PLUGIN.e18e;
@@ -21,6 +21,12 @@ type SubConfigOptions<
   Pick<UnRulesConfigPartial<'e18e'>, `e18e/${(typeof RULE_CATEGORIES)[Category][number]}`>
 >;
 
+/**
+ * An ESLint plugin from the [e18e community](https://e18e.dev) focusing on applying
+ * the e18e community's best practices and advice to JavaScript/TypeScript codebases.
+ *
+ * 📁 Default `files`: ❌ none, sub configs are used instead
+ */
 export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * "New syntax and APIs which improve code readability and performance"
@@ -60,7 +66,10 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     boolean | SubConfigOptions<ExtraPlugins, 'performanceImprovements'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<E18eEslintConfigOptions>('e18e', {enabledBy: {group: 'misc'}})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configModernization: true,
     configModuleReplacements: true,
@@ -174,4 +183,4 @@ export default ((context, optionsRaw) => {
     ],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'e18e'> as UnConfigFn<'e18e'>;
+});

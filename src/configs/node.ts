@@ -7,9 +7,9 @@ import {interopDefault, readAndParseJson} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 interface EslintPluginNSettings {
@@ -98,6 +98,11 @@ interface EslintPluginNSettings {
   version?: string;
 }
 
+/**
+ * Node.js code specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface NodeEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'node'> {
@@ -199,7 +204,11 @@ export interface NodeEslintConfigOptions<
 
 const IMPORT_META_PROPERTIES_AVAILABLE_SINCE = '>=20.11';
 
-export default (async (context, optionsRaw) => {
+export default defineUnConfig<NodeEslintConfigOptions>('node', {
+  enabledBy: true,
+  // Re-enables `unicorn` rules that the `unicorn` config turns off expecting us to, so we must win
+  after: ['unicorn'],
+})(async (context, optionsRaw) => {
   const closestPackageJson = await interopDefault(import('empathic/package'))
     .then((m) => m.up())
     .then((packageJsonPath) => readAndParseJson<PackageJson>(packageJsonPath));
@@ -334,4 +343,4 @@ export default (async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'node'>;
+});

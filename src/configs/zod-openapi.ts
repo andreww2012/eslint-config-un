@@ -1,16 +1,27 @@
 import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin for [`zod-openapi`](https://github.com/samchungy/zod-openapi).
+ *
+ * Note that the plugin assumes that all Zod schemas in the matched files are
+ * meant to be used with `zod-openapi`, so prefer scoping this config to your
+ * API schema files via `files`/`ignores`.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface ZodOpenapiEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'zod-openapi'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<ZodOpenapiEslintConfigOptions>('zodOpenapi', {
+  enabledBy: {package: 'zod-openapi'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'zod-openapi');
@@ -32,4 +43,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'zodOpenapi'>;
+});

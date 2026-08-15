@@ -3,11 +3,17 @@ import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, OFF} from '../constants';
 import {objectEntriesUnsafe} from '../utils';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * JSON, JSONC and JSON5 related rules powered by the official
+ * [`@eslint/json`](https://npmx.dev/@eslint/json) language plugin.
+ *
+ * 📁 Default `files`: <code>**&#47;*.{json,jsonc,json5}</code>
+ */
 export interface JsonEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'json'> {
@@ -33,7 +39,10 @@ const JSON_SUB_CONFIGS_FILES: Record<
   json5: [GLOB_JSON5],
 };
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<JsonEslintConfigOptions>(
+  'json',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configJsonc: true,
     configJson5: true,
@@ -79,4 +88,4 @@ export default ((context, optionsRaw) => {
     configs: configBuilders,
     optionsResolved,
   };
-}) satisfies UnConfigFn<'json'>;
+});

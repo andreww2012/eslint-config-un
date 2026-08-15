@@ -1,16 +1,24 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin that help identify potential security issues, but ⚠️ finds
+ * a lot of false positives which need triage by a human.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface SecurityEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'security'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<SecurityEslintConfigOptions>('security', {
+  enabledBy: {group: 'misc'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'security');
@@ -49,4 +57,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'security'>;
+});

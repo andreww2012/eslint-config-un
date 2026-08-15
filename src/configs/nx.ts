@@ -2,11 +2,16 @@ import {ERROR, GLOB_JSON, GLOB_TS_X, OFF} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Nx](https://nx.dev) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
+ */
 export interface NxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'nx'> {
@@ -16,7 +21,10 @@ export interface NxEslintConfigOptions<
   enforceModuleBoundaries?: boolean | GetRuleOptions<'nx', 'enforce-module-boundaries'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<NxEslintConfigOptions>('nx', {enabledBy: {package: 'nx'}})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceModuleBoundaries: false,
   });
@@ -59,4 +67,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderJson],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'nx'>;
+});

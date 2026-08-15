@@ -1,16 +1,24 @@
 import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [[Unhead](https://unhead.unjs.io) specific rules, catching library misuse, type-narrowing issues
+ * and v2-to-v3 migration problems.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface UnheadEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'unhead'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<UnheadEslintConfigOptions>('unhead', {
+  enabledBy: {package: 'unhead'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'unhead');
@@ -43,4 +51,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'unhead'>;
+});

@@ -1,16 +1,24 @@
 import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * Enforce logical consistency by transforming negated boolean expressions according to De Morgan’s laws.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface DeMorganEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'de-morgan'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<DeMorganEslintConfigOptions>(
+  'deMorgan',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'de-morgan');
@@ -34,4 +42,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'deMorgan'>;
+});

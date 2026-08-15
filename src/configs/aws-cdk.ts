@@ -1,16 +1,23 @@
 import {ERROR, GLOB_TS_X, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [AWS CDK](https://aws.amazon.com/cdk) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
+ */
 export interface AwsCdkEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'awscdk'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<AwsCdkEslintConfigOptions>('awsCdk', {
+  enabledBy: {package: 'aws-cdk-lib'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'awscdk');
@@ -50,4 +57,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'awsCdk'>;
+});

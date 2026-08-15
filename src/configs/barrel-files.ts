@@ -1,16 +1,24 @@
 import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin related to "barrel files" usage.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+ */
 export interface BarrelFilesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'barrel-files'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<BarrelFilesEslintConfigOptions>(
+  'barrelFiles',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'barrel-files');
@@ -31,4 +39,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'barrelFiles'>;
+});

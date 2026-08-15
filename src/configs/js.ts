@@ -1,14 +1,19 @@
 import {ERROR, GLOB_HTML, GLOB_YML_YAML, OFF, WARNING} from '../constants';
-import type {BuiltinEslintRules} from '../eslint/eslint-types';
+import type {BuiltinEslintRules, UnRulesConfig} from '../eslint/eslint-types';
 import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * Built-in rules for linting JavaScript & TypeScript.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface JsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, BuiltinEslintRules> {
@@ -40,7 +45,14 @@ export interface JsEslintConfigOptions<
     | GetRuleOptions<'', 'arrow-body-style', 'all'>;
 }
 
-export default ((context, optionsRaw) => {
+export interface JsConfigResult {
+  finalFlatConfigRules: Partial<UnRulesConfig>;
+}
+
+export default defineUnConfig<JsEslintConfigOptions, [], JsConfigResult>(
+  'js',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {arrowFunctionBodyStyle} = optionsResolved;
@@ -352,4 +364,4 @@ export default ((context, optionsRaw) => {
     optionsResolved,
     finalFlatConfigRules: config?.config.rules || {},
   };
-}) satisfies UnConfigFn<'js'>;
+});

@@ -14,10 +14,10 @@ import {
   type ExtraPluginsType,
   type FlatConfigEntryForBuilder,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type ConsistentEachForRuleOptions = GetRuleOptions<'vitest', 'consistent-each-for'>;
@@ -29,6 +29,13 @@ const FUNCTIONS_WITH_EACH_OR_FOR = allUnionMembers<keyof ConsistentEachForRuleOp
   'test',
 ]);
 
+/**
+ * [Vitest](https://vitest.dev) specific rules.
+ *
+ * 📁 Default `files`:
+ * - <code>**&#47;*.{test,spec}.?([cm])[jt]s?(x)</code>
+ * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
+ */
 export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'vitest'>,
@@ -139,7 +146,9 @@ const VITEST_RULES_REQUIRING_TYPE_INFORMATION_SET = new Set<string>(
   VITEST_RULES_REQUIRING_TYPE_INFORMATION,
 );
 
-export default (async (context, optionsRaw) => {
+export default defineUnConfig<VitestEslintConfigOptions>('vitest', {
+  enabledBy: {package: 'vitest'},
+})(async (context, optionsRaw) => {
   const eslintPluginVitest = await pluginsLoaders.vitest(context).then(({module}) => module);
 
   context.usedPlugins.add('vitest');
@@ -443,4 +452,4 @@ export default (async (context, optionsRaw) => {
     configs: [configBuilder, configBuilderTypescript, configBuilderNoOnlyTests],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'vitest'> as UnConfigFn<'vitest'>;
+});

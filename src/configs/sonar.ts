@@ -2,11 +2,17 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin with multitude of different rules from
+ * [SonarSource](https://www.sonarsource.com).
+ *
+ * 📁 Default `files`: all files
+ */
 export interface SonarEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'sonarjs'> {
@@ -41,7 +47,10 @@ export interface SonarEslintConfigOptions<
   testsRules?: boolean;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<SonarEslintConfigOptions>(
+  'sonar',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enableAwsRules: context.packagesInfo['aws-cdk-lib'] != null,
     enableHelmetRules: context.packagesInfo.helmet != null,
@@ -445,4 +454,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'sonar'>;
+});

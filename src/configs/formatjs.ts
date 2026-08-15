@@ -4,11 +4,16 @@ import {getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [FormatJS](https://formatjs.github.io) specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface FormatjsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'formatjs'> {
@@ -81,7 +86,10 @@ export interface FormatjsEslintConfigOptions<
   >;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<FormatjsEslintConfigOptions>('formatJs', {
+  enabledBy: {package: '@formatjs/icu-messageformat-parser'},
+  phase: 'last',
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceDefaultMessage: 'anything',
     enforceDescription: 'anything',
@@ -162,4 +170,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'formatJs'>;
+});

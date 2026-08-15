@@ -1,16 +1,23 @@
 import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [UnoCSS](https://unocss.dev) specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface UnocssEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'unocss'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<UnocssEslintConfigOptions>('unocss', {
+  enabledBy: {package: 'unocss'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'unocss');
@@ -33,4 +40,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'unocss'>;
+});

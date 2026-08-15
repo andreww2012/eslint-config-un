@@ -2,11 +2,17 @@ import {ERROR, GLOB_JS_TS_X} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin providing a rule to identify patterns that will interfere with
+ * the tree-shaking algorithm of their module bundler.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+ */
 export interface TreeShakingEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'tree-shaking'> {
@@ -16,7 +22,10 @@ export interface TreeShakingEslintConfigOptions<
   options?: GetRuleOptions<'tree-shaking', 'no-side-effects-in-initialization'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<TreeShakingEslintConfigOptions>(
+  'treeShaking',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {options: noSideEffectsInInitializationOptions} = optionsResolved;
@@ -45,4 +54,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'treeShaking'>;
+});

@@ -3,15 +3,21 @@ import type {EslintSeverity} from '../eslint/eslint-types';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
   eslintToUnRuleSeverity,
 } from './index';
 
 // TODO all options should be optional, remove `Partial<>` wrapper and type casts when fixed
 type NoSecretsOptions = GetRuleOptions<'no-secrets', 'no-secrets'>;
 
+/**
+ * An ESLint plugin that offers a rule that searches for potential secrets/keys in code
+ * and JSON files.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+ */
 export interface NoSecretsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'no-secrets'> {
@@ -34,7 +40,10 @@ export interface NoSecretsEslintConfigOptions<
   noSecretsOptions?: Partial<NoSecretsOptions & {severity?: EslintSeverity}>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<NoSecretsEslintConfigOptions>(
+  'noSecrets',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configJson: true,
   });
@@ -85,4 +94,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderJson],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'noSecrets'>;
+});

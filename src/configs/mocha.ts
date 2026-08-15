@@ -8,11 +8,18 @@ import {
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Mocha](https://mochajs.org) specific rules.
+ *
+ * 📁 Default `files`:
+ * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
+ * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
+ */
 export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'mocha'>,
@@ -47,7 +54,9 @@ export interface MochaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType 
   maxTopLevelSuites?: number;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<MochaEslintConfigOptions>('mocha', {
+  enabledBy: {package: 'mocha'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: true,
     maxTopLevelSuites: 1,
@@ -147,4 +156,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'mocha'>;
+});

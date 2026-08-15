@@ -1,16 +1,24 @@
 import {ERROR, GLOB_JS_TS_X, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [MobX](https://mobx.js.org) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+ */
 export interface MobxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'mobx'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<MobxEslintConfigOptions>('mobx', {enabledBy: {package: 'mobx'}})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'mobx');
@@ -34,4 +42,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'mobx'>;
+});

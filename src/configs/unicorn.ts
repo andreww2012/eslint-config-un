@@ -18,10 +18,10 @@ import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 const RULE_CATEGORIES_PER_LANGUAGE = RULE_CATEGORIES_PER_PLUGIN.unicorn;
@@ -47,6 +47,11 @@ type ConsistentCompoundWordsOptions = GetRuleOptions<
 
 type NumberPropertiesStyle = 'global' | 'namespace';
 
+/**
+ * An ESLint plugin with various rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface UnicornEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<
@@ -370,7 +375,10 @@ const DEFAULT_CALLABLE_OR_CONSTRUCTABLE_PREFIXES = {
 
 const DEFAULT_NUMBER_PROPERTIES: UnicornEslintConfigOptions['numberProperties'] = 'namespace';
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<UnicornEslintConfigOptions>(
+  'unicorn',
+  true,
+)((context, optionsRaw) => {
   const {configsMeta} = context;
 
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -1080,4 +1088,4 @@ export default ((context, optionsRaw) => {
     ],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'unicorn'>;
+});

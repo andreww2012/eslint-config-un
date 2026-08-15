@@ -5,6 +5,7 @@ import type {Debugger} from 'obug';
 import type {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
 import type {ImportIntegrityPluginSettings} from '../configs/import-integrity';
+import type {UnConfigsSupportingArraysGenerated} from '../configs/index.gen';
 import type {RulesDisabledInEmbeddedCodeBlocksByDefault} from '../configs/shared';
 import {DISABLE_AUTOFIX_WITH_SLASH, OFF, type PACKAGES_TO_GET_INFO_FOR} from '../constants';
 import type {
@@ -145,8 +146,6 @@ export const RULES_TO_DISABLE_AUTOFIX_GLOBALLY_BY_DEFAULT: (EslintConfigUnOption
   'markdown-preferences/table-header-casing': true,
 };
 
-type UnConfigsSupportingArrays = keyof Pick<UnConfigs, 'format' | 'packageJson'>;
-
 type TypeInfoMode = 'standalone' | 'splitOnly' | 'asIs' | 'disabled';
 
 export interface EslintConfigUnOptions<
@@ -159,7 +158,7 @@ export interface EslintConfigUnOptions<
     [Key in keyof UnConfigs<ExtraPlugins>]?:
       | boolean
       | MaybeStripWarningSeverity<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>
-      | (Key extends UnConfigsSupportingArrays
+      | (Key extends UnConfigsSupportingArraysGenerated
           ? [
               MaybeStripWarningSeverity<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>,
               ...MaybeStripWarningSeverity<UnConfigs<ExtraPlugins>[Key], TypeAffectingOptions>[],
@@ -253,7 +252,7 @@ export interface EslintConfigUnOptions<
    * - `all-disabled`: consider all top level configs disabled unless explicitly enabled.
    * - `misc-enabled`: consider some configs disabled by default, conversely enabled:
    *   - `e18e`
-   *   - `json`
+   *   - `jsonc`
    *   - `jsonSchemaValidator`
    *   - `lockfile`
    *   - `nodeDependencies`
@@ -665,26 +664,6 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   >[];
   createConfigBuilder: typeof createConfigBuilder;
 }
-
-export type UnConfigFn<
-  ConfigKey extends keyof UnConfigs,
-  ExtraArgument = unknown,
-  ExtraReturnedData = unknown,
-> = <ExtraPlugins extends ExtraPluginsType>(
-  context: Readonly<UnConfigContext<ExtraPlugins>>,
-  configOptions:
-    | boolean
-    // eslint-disable-next-line ts/no-restricted-types -- some configs don't have the omitted properties
-    | Omit<UnConfigs<ExtraPlugins>[ConfigKey], 'overrides' | 'overridesAny'>
-    | undefined,
-  extraArgument: ExtraArgument,
-) => MaybePromise<
-  | null
-  | ({
-      configs: (ConfigEntryBuilder<ExtraPlugins> | null)[];
-      optionsResolved: Record<string, unknown>;
-    } & ExtraReturnedData)
->;
 
 export const intersectParentConfigFilesWithProvidedFiles = (
   parentConfigFiles: EslintFlatConfigEntry['files'] & {},

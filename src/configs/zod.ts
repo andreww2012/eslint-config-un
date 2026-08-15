@@ -5,9 +5,9 @@ import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type ZodObjectSchemaType = (GetRuleOptions<
@@ -66,6 +66,15 @@ interface CoreSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
   enforceConsistentImport?: boolean | GetRuleOptions<'zod-core', 'consistent-import'>['syntax'];
 }
 
+/**
+ * An ESLint plugin to enforce best practices when using Zod.
+ *
+ * **Officially only supports zod v4**, but a good portion of its rules also
+ * apply to zod v3. The rules that only make sense for zod v4 are automatically
+ * disabled when zod v3 is detected.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface ZodEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'zod'> {
@@ -230,7 +239,10 @@ const resolveConsistentSchemaVarNameOptions = (
   return [severity, options] as const;
 };
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<ZodEslintConfigOptions>('zod', {enabledBy: {package: 'zod@^3||^4'}})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     arrayStyle: 'method',
     configCore: true,
@@ -384,4 +396,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderMini, configBuilderCore],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'zod'>;
+});

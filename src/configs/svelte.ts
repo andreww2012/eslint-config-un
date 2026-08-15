@@ -8,12 +8,17 @@ import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Svelte](https://svelte.dev) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.svelte</code>
+ */
 export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'svelte'>,
@@ -123,7 +128,16 @@ const DEFAULT_SVELTE_SCRIPT_FILES = ['**/*.svelte.{js,ts}' as const];
 
 const SVELTE_SYSTEM_RULES = RULE_CATEGORIES_PER_PLUGIN.svelte.system;
 
-export default ((context, optionsRaw) => {
+export interface SvelteConfigResult {
+  optionsResolved: SvelteEslintConfigOptions;
+}
+
+export default defineUnConfig<SvelteEslintConfigOptions, [], SvelteConfigResult>('svelte', {
+  enabledBy: {package: 'svelte'},
+  requires: {pluginLoadable: 'svelte'},
+  phase: 'late',
+  after: ['ts'],
+})((context, optionsRaw) => {
   const isPrettierPluginSvelteInstalled = context.packagesInfo['prettier-plugin-svelte'] != null;
 
   const isTypescriptEnabled = context.configsMeta.ts.enabled;
@@ -362,4 +376,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilderSetup, configBuilder, configBuilderEnforceTypescriptInScriptSection],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'svelte'> as UnConfigFn<'svelte'>;
+});

@@ -11,6 +11,9 @@ const config: KnipConfig = {
   entry: [
     '.ncurc.js', // cspell:disable-line
     '.puppeteerrc.js', // cspell:disable-line
+    // Gitignored, so not discovered on their own, and they are what references every Config module
+    'src/configs/index.gen.d.ts',
+    'src/configs/manifests.gen.ts',
   ],
   ignoreDependencies: ['lychee-config-nick2bad4u'],
   tags: ['-knipignore'],

@@ -7,10 +7,10 @@ import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 const ESLINT_PLUGIN_TESTING_RELATED_RULES = RULE_CATEGORIES_PER_PLUGIN['eslint-plugin'].tests;
@@ -32,6 +32,11 @@ const DEFAULT_SCHEMA_COMPLETENESS_CHECKS = {
   explicitAdditionalProperties: true,
 } satisfies Partial<Record<SchemaCompletenessCheck, boolean>>;
 
+/**
+ * An ESLint plugin for linting ESLint plugins.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface EslintPluginEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'eslint-plugin'> {
@@ -103,7 +108,10 @@ export interface EslintPluginEslintConfigOptions<
   schemaCompletenessChecks?: boolean | 'all' | ArrayOrBooleanRecord<SchemaCompletenessCheck>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<EslintPluginEslintConfigOptions>(
+  'eslintPlugin',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configRuleTests: false,
     schemaCompletenessChecks: true,
@@ -273,4 +281,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderRuleTests],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'eslintPlugin'> as UnConfigFn<'eslintPlugin'>;
+});

@@ -2,11 +2,16 @@ import {ERROR, OFF, WARNING} from '../constants';
 import type {MaybeArray} from '../utils';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin that finds RegExp mistakes and stylistic issues.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface RegexpEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'regexp'> {
@@ -27,7 +32,11 @@ export interface RegexpEslintConfigOptions<
   };
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<RegexpEslintConfigOptions>('regexp', {
+  enabledBy: true,
+  // Replaces `unicorn/prefer-regexp-test` with our own rule, so we must win
+  after: ['unicorn'],
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
@@ -164,4 +173,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'regexp'>;
+});

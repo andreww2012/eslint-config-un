@@ -6,12 +6,19 @@ import {
 } from './shared';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Ava test runner](https://github.com/avajs/ava) specific rules.
+ *
+ * 📁 Default `files`:
+ * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
+ * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
+ */
 export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'ava'>,
@@ -49,7 +56,10 @@ export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
       >;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<AvaEslintConfigOptions>('ava', {enabledBy: {package: 'ava'}})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false, // has `ava/no-only-test` rule
     configPackageJson: true,
@@ -152,4 +162,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderNoOnlyTests, configBuilderPackageJson],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'ava'>;
+});

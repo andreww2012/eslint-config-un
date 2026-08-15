@@ -1,11 +1,16 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [clsx](https://github.com/lukeed/clsx) specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface ClsxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'clsx'> {
@@ -26,7 +31,10 @@ export interface ClsxEslintConfigOptions<
   };
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<ClsxEslintConfigOptions>('clsx', {enabledBy: {package: 'clsx'}})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
@@ -60,4 +68,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'clsx'>;
+});

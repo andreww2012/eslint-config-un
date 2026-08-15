@@ -2,11 +2,19 @@ import {ERROR} from '../constants';
 import {isInCi, isInEditor} from '../utils';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESlint plugin to print file progress.
+ *
+ * Even if enabled, it will be disabled by default when it's detected ESLint running
+ * in CI or in editor by `ci-info` and `is-in-editor` packages respectively.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface FileProgressEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'file-progress'> {
@@ -35,7 +43,10 @@ export interface FileProgressEslintConfigOptions<
   };
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<FileProgressEslintConfigOptions>(
+  'fileProgress',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
@@ -65,4 +76,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'fileProgress'>;
+});

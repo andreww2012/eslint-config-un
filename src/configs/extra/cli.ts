@@ -2,11 +2,16 @@ import {ERROR, GLOB_JS_TS_EXTENSION} from '../../constants';
 import {
   type ExtraPluginsType,
   type UnAllRuleNames,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from '../index';
 
+/**
+ * A config specific to files meant to be executed. By default, allows `process.exit()`
+ * and `console` methods in files placed in `bin`, `scripts` and `cli` directories
+ * (on any level).
+ */
 export interface CliEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins> {
@@ -39,7 +44,10 @@ const RULES_DISABLED_BY_DEFAULT = [
   'unicorn/no-process-exit',
 ] as const satisfies UnAllRuleNames[];
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<CliEslintConfigOptions>('cli', {phase: 'extra'})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {disabledRules, onlyTopLevelDirs} = optionsResolved;
@@ -70,4 +78,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'cli'>;
+});

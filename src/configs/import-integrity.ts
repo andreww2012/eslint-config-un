@@ -4,9 +4,9 @@ import {isInEditor} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 export interface ImportIntegrityPluginSettings {
@@ -91,6 +91,16 @@ export interface ImportIntegrityPluginSettings {
   testFilePatterns?: string[];
 }
 
+/**
+ * A faster alternative to `eslint-plugin-import(-x)` plugins. From the docs, it is
+ * "A high-performance ESLint and Oxlint plugin for analyzing import and export
+ * relationships across your codebase".
+ *
+ * ⚠️ Does not implement all the rules from the original plugins, does not support
+ * non-JS file extensions and might require some additional setup.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface ImportIntegrityEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'import-integrity'> {
@@ -111,7 +121,10 @@ export interface ImportIntegrityEslintConfigOptions<
   restrictImports?: GetRuleOptions<'import-integrity', 'no-restricted-imports'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<ImportIntegrityEslintConfigOptions>(
+  'importIntegrity',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings, restrictImports} = optionsResolved;
@@ -169,4 +182,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'importIntegrity'>;
+});

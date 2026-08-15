@@ -1,16 +1,23 @@
 import {ERROR, GLOB_JS_TS_X} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [NgRx](https://ngrx.io) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+ */
 export interface NgrxEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'ngrx'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<NgrxEslintConfigOptions>('ngrx', {
+  enabledBy: {package: '@ngrx/store'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'ngrx');
@@ -67,4 +74,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'ngrx'>;
+});

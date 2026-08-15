@@ -1,16 +1,26 @@
 import {ERROR, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * Rules not included in any other plugins, provided by us and collected under `un` prefix.
+ *
+ * 📁 Default `files`: all files
+ *
+ * 🧩 Plugin(s): Built-in eslint-plugin-un
+ */
 export interface UnEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'un'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<UnEslintConfigOptions>(
+  'un',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'un');
@@ -27,4 +37,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'un'>;
+});

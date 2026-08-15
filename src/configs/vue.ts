@@ -10,7 +10,6 @@ import {
   type RuleSeverity,
   WARNING,
 } from '../constants';
-import type {UnRulesConfig} from '../eslint/eslint-types';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {OmitStrict} from '../types';
 import {type MaybeArray, allUnionMembers, getKeysOfTruthyValues, joinPaths} from '../utils';
@@ -18,11 +17,11 @@ import {type ValidAndInvalidHtmlTags, noRestrictedHtmlElementsDefault} from './s
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRuleOptionsByPlugin,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
   getRuleUnSeverityAndOptionsFromEntry,
 } from './index';
 
@@ -183,6 +182,11 @@ const isSupportedVueMajorVersion = (
 ): value is SupportedVueMajorVersion => value != null && SUPPORTED_VUE_MAJOR_VERSIONS.has(value);
 const DEFAULT_VUE_MAJOR_VERSION = 3 satisfies SupportedVueMajorVersion;
 
+/**
+ * [Vue.js](https://vuejs.org) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.vue</code>
+ */
 export interface VueEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'vue'> {
@@ -372,7 +376,17 @@ const NUXT_CONFIG_RULES = new Set<string>(
   >()(['no-nuxt-config-test-key', 'nuxt-config-keys-order']),
 );
 
-export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
+export interface VueConfigResult {
+  optionsResolved: VueEslintConfigOptions;
+}
+
+export default defineUnConfig<VueEslintConfigOptions, ['js'], VueConfigResult>('vue', {
+  enabledBy: {package: 'vue'},
+  phase: 'late',
+  after: ['ts'],
+  needs: ['js'],
+})((context, optionsRaw, {js}) => {
+  const vanillaFinalFlatConfigRules = js?.finalFlatConfigRules || {};
   const isPiniaPackageInstalled = context.packagesInfo.pinia != null;
   const vueI18nPackageInfo = context.packagesInfo['vue-i18n'];
   const nuxtPackageInfo = context.packagesInfo.nuxt;
@@ -1261,4 +1275,4 @@ export default ((context, optionsRaw, {vanillaFinalFlatConfigRules}) => {
     ],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'vue', {vanillaFinalFlatConfigRules: Partial<UnRulesConfig>}>;
+});

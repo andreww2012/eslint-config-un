@@ -35,14 +35,8 @@ runs:
     - name: Check deps for vulnerabilities & peer deps issues
       shell: bash
       run: pnpm check:deps
-    - name: Cache typegen output
-      id: cache-typegen
-      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-      with:
-        key: ${{ runner.os }}-${{ inputs.node-version }}-${{ hashFiles('pnpm-lock.yaml') }}
-        path: |
-          src/*.gen.ts
-          src/*.gen.d.ts
+    # Don't cache the typegen output - it's derived not only from the lockfile, but also from any
+    # config module (`src/configs/**/*.ts`) and other files, which makes the cache hits rare
     - name: Run typegen
       shell: bash
       if: steps.cache-typegen.outputs.cache-hit != 'true'

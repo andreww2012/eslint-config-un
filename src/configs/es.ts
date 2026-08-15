@@ -1,12 +1,13 @@
 // cspell:ignore findlast formatrange displaynames durationformat groupby finalizationregistry weakref subclassing asyncdisposablestack disposablestack plaindate plaindatetime plainmonthday plaintime plainyearmonth zoneddatetime
+import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, OFF} from '../constants';
-import type {Prettify} from '../types';
+import type {OmitStrict, Prettify} from '../types';
 import {memoize} from '../utils';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 interface EcmaFeatures {
@@ -287,6 +288,11 @@ interface EcmaFeatures {
 
 type EcmaVersion = keyof EcmaFeatures;
 
+/**
+ * An ESLint plugin to forbid certain JS syntax.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface EsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'es'> {
@@ -330,8 +336,22 @@ export interface EsEslintConfigOptions<
   }>;
 }
 
-export default ((context, optionsRaw, customConfig) => {
-  const optionsResolved = assignDefaults(customConfig?.options ?? optionsRaw, {
+/**
+ * The `cloudfrontFunctions` Config reuses these rules under its own prefix, so the builder is
+ * exposed separately from the Config's own `setup`
+ */
+export const buildEsConfigs = <ExtraPlugins extends ExtraPluginsType>(
+  context: Readonly<UnConfigContext<ExtraPlugins>>,
+  optionsRawFromParameters:
+    | boolean
+    | OmitStrict<EsEslintConfigOptions<ExtraPlugins>, 'overrides' | 'overridesAny'>
+    | undefined,
+  customConfig?: {
+    prefix: string;
+    options: EsEslintConfigOptions;
+  },
+) => {
+  const optionsResolved = assignDefaults(customConfig?.options ?? optionsRawFromParameters, {
     ecmaVersion: 'latest',
   });
 
@@ -1126,11 +1146,10 @@ export default ((context, optionsRaw, customConfig) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<
-  'es',
-  | {
-      prefix: string;
-      options: EsEslintConfigOptions;
-    }
-  | undefined
->;
+};
+
+export default defineUnConfig<EsEslintConfigOptions>('es', {
+  enabledBy: false,
+  phase: 'late',
+  after: ['ts'],
+})((context, optionsRaw) => buildEsConfigs(context, optionsRaw));

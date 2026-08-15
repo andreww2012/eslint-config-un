@@ -5,11 +5,16 @@ import {noRestrictedHtmlElementsDefault} from './shared';
 import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * Rules for linting plain HTML files.
+ *
+ * 📁 Default `files`: <code>**&#47;*.{htm,html}</code>
+ */
 export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'html'>,
@@ -51,7 +56,10 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   parserOptions?: HtmlEslintParserOptions;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<HtmlEslintConfigOptions>('html', {
+  // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
+  enabledBy: {configDisabled: 'angular'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings, parserOptions} = optionsResolved;
@@ -170,4 +178,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'html'>;
+});

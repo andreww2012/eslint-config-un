@@ -3,11 +3,11 @@ import type {Prettify, SetRequired} from '../types';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRuleOptionsByPlugin,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type RuleSubConfig<
@@ -22,6 +22,14 @@ type RuleSubConfig<
       options?: GetRuleOptions<'perfectionist', T>;
     });
 
+/**
+ * An ESLint plugin that provides rules for sorting various data, such as
+ * objects, imports, TypeScript types, etc.
+ *
+ * ⚠️ WARNING: all rules are disabled by default.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface PerfectionistEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'perfectionist'> {
@@ -188,7 +196,10 @@ export interface PerfectionistEslintConfigOptions<
   configSortVariableDeclarations?: RuleSubConfig<ExtraPlugins, 'sort-variable-declarations'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<PerfectionistEslintConfigOptions>(
+  'perfectionist',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configSortArrayIncludes: false,
     configSortArrays: false,
@@ -330,4 +341,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, ...subConfigs],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'perfectionist'> as UnConfigFn<'perfectionist'>;
+});

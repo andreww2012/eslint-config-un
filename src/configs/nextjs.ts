@@ -2,11 +2,16 @@
 import {ERROR, GLOB_JS_TS_X, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Next.js](https://nextjs.org) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+ */
 export interface NextJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'nextjs'> {
@@ -26,7 +31,11 @@ export interface NextJsEslintConfigOptions<
   };
 }
 
-export default ((context, optionsRaw) => {
+// eslint-disable-next-line case-police/string-check
+export default defineUnConfig<NextJsEslintConfigOptions>('nextJs', {enabledBy: {package: 'next'}})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
@@ -78,5 +87,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-  // eslint-disable-next-line case-police/string-check
-}) satisfies UnConfigFn<'nextJs'>;
+});

@@ -4,9 +4,9 @@ import {generatePackageToLoadProperty} from '../loaders';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type FilenameNamingConventionOptions = GetRuleOptions<
@@ -20,6 +20,13 @@ type FolderNamingConventionOptions = GetRuleOptions<
   'all'
 >;
 
+/**
+ * An ESLint plugin that enforces consistent naming conventions for files and directories.
+ *
+ * ⚠️ WARNING: all rules are disabled by default.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface CheckFileEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'check-file'> {
@@ -47,7 +54,10 @@ export interface CheckFileEslintConfigOptions<
   folderNamingConventions?: FolderNamingConventionOptions[0] | FolderNamingConventionOptions;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<CheckFileEslintConfigOptions>('checkFile', {
+  enabledBy: false,
+  phase: 'last',
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {configEnableCheckFileProcessor, fileNamingConventions, folderNamingConventions} =
@@ -100,4 +110,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderEnableCheckFileProcessor],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'checkFile'>;
+});

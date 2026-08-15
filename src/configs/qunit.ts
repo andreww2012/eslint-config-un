@@ -7,17 +7,27 @@ import {
 } from './shared';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [QUnit](https://qunitjs.com) specific rules.
+ *
+ * 📁 Default `files`:
+ * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
+ * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
+ */
 export interface QunitEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'qunit'>,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<QunitEslintConfigOptions>('qunit', {enabledBy: {package: 'qunit'}})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false, // has `qunit/no-only` rule
   });
@@ -92,4 +102,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'qunit'>;
+});

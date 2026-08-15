@@ -1,17 +1,46 @@
 import {GLOB_JS_TS_X_EXTENSION} from '../../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from '../index';
 import {generateDefaultTestFiles} from '../shared';
 
+/**
+ * Disables mostly performance rules for most of the well known test file patterns.
+ *
+ * It is put before all the other Configs to allow for overrides.
+ *
+ * 📁 Default `files`:
+ * - <code>**&#47*[.-_]spec.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47*.test.?([cm])[jt]s?(x)</code>
+ * - <code>\*\*&#47__test?(s)__&#47**&#47*.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47*.{bench,benchmark}.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47*.cy.?([cm])[jt]s?(x)</code>
+ * - <code>**&#47*.{stories,story}.?([cm])[jt]s?(x)</code>
+ *
+ * Disabled rules:
+ * - `no-empty-function`
+ * - `e18e/no-delete-property`
+ * - `e18e/prefer-static-collator`
+ * - `e18e/prefer-static-regex`
+ * - `sonarjs/no-hardcoded-ip`
+ * - `sonarjs/no-hardcoded-passwords`
+ * - `sonarjs/no-hardcoded-secrets`
+ * - `sonarjs/no-clear-text-protocols`
+ * - `ts/no-extraneous-class`
+ * - `ts/no-empty-function`
+ * - `unicorn/template-indent`
+ */
 export interface TestsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<TestsEslintConfigOptions>('tests', {phase: 'first'})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, null);
@@ -49,4 +78,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'tests'>;
+});

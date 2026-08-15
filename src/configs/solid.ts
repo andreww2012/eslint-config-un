@@ -1,16 +1,23 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [SolidJS](https://www.solidjs.com) specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface SolidEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'solid'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<SolidEslintConfigOptions>('solid', {
+  enabledBy: {package: 'solid-js'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'solid');
@@ -70,4 +77,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'solid'>;
+});

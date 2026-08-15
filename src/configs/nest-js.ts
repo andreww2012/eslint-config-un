@@ -1,16 +1,28 @@
 import {ERROR, GLOB_TS, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [NestJS](https://nestjs.com) specific rules.
+ *
+ * ⚠️ WARNING: make sure that the linted files are provided with type information.
+ * For that, they must be included in `files` array of `ts/configTypeAware` config
+ * (they are by default).
+ *
+ * 📁 Default `files`: <code>**&#47*.?([cm])ts</code>
+ */
 export interface NestJsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'nestjs'> {}
 
-export default ((context, optionsRaw) => {
+// eslint-disable-next-line case-police/string-check
+export default defineUnConfig<NestJsEslintConfigOptions>('nestJs', {
+  enabledBy: {package: '@nestjs/core'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'nestjs');
@@ -60,5 +72,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-  // eslint-disable-next-line case-police/string-check
-}) satisfies UnConfigFn<'nestJs'>;
+});

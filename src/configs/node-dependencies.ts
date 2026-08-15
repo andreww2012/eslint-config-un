@@ -2,11 +2,18 @@ import {ERROR, GLOB_PACKAGE_JSON, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin to check Node.js dependencies.
+ *
+ * ⚠️ Note that this plugin is considered experimental.
+ *
+ * 📁 Default `files`: <code>**&#47;package.json</code>
+ */
 export interface NodeDependenciesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'node-dependencies'> {
@@ -23,7 +30,9 @@ export interface NodeDependenciesEslintConfigOptions<
     boolean | 'never' | (GetRuleOptions<'node-dependencies', 'absolute-version'> & object);
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<NodeDependenciesEslintConfigOptions>('nodeDependencies', {
+  enabledBy: {group: 'misc'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceAbsoluteVersion: false,
   });
@@ -76,4 +85,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'nodeDependencies'>;
+});

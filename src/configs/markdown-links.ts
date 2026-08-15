@@ -3,13 +3,23 @@ import type {NonEmptyTuple} from '../types';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type IssueType = 'deadUrls' | 'missingFragments' | 'missingLocalPath' | 'selfDestinationLinks';
 
+/**
+ * An ESLint plugin that provides rules for checking the validity of links and URLs
+ * in Markdown files.
+ *
+ * Since it's scoped only to Markdown files, the checker itself isn't perfect
+ * and it may significantly slow down linting, the config is disabled by default.
+ * We recommend that you use [`lychee` link checker](https://lychee.cli.rs) instead.
+ *
+ * 📁 Default `files`: <code>**&#47;*.md</code>
+ */
 export interface MarkdownLinksEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'markdown-links'> {
@@ -42,7 +52,10 @@ export interface MarkdownLinksEslintConfigOptions<
   };
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<MarkdownLinksEslintConfigOptions>(
+  'markdownLinks',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'markdown-links');
@@ -108,4 +121,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'markdownLinks'>;
+});

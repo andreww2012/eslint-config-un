@@ -1,16 +1,25 @@
 import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin with rules to disallow unsafe coding practices that may result
+ * in security vulnerabilities.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface NoUnsanitizedEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'no-unsanitized'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<NoUnsanitizedEslintConfigOptions>(
+  'noUnsanitized',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'no-unsanitized');
@@ -29,4 +38,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'noUnsanitized'>;
+});

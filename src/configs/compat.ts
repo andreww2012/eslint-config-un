@@ -3,11 +3,16 @@ import {ERROR} from '../constants';
 import type {OmitStrict} from '../types';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin to lint the browser compatibility of the code.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface CompatEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'compat'> {
@@ -53,7 +58,10 @@ export interface CompatEslintConfigOptions<
   };
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<CompatEslintConfigOptions>(
+  'compat',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
@@ -80,4 +88,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'compat'>;
+});

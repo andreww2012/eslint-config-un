@@ -1,13 +1,12 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import type {RequireExactlyOne} from '../types';
 import {allUnionMembers} from '../utils';
-import type {CssEslintConfigOptions} from './css';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type SupportedTailwindVersion = 3 | 4;
@@ -17,6 +16,11 @@ const SUPPORTED_TAILWIND_VERSIONS = new Set<number>(
 
 type AnyRuleOptions = GetRuleOptions<'better-tailwindcss', 'enforce-shorthand-classes'>;
 
+/**
+ * [TailwindCSS](https://tailwindcss.com) specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface BetterTailwindEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'better-tailwindcss'> {
@@ -145,7 +149,11 @@ export interface BetterTailwindEslintConfigOptions<
   restrictedClasses?: string[];
 }
 
-export default ((context, optionsRaw, {cssResolvedOptions}) => {
+export default defineUnConfig<BetterTailwindEslintConfigOptions, ['css']>('betterTailwind', {
+  enabledBy: {package: 'tailwindcss'},
+  needs: ['css'],
+})((context, optionsRaw, {css}) => {
+  const cssResolvedOptions = css?.optionsResolved;
   const optionsResolved = assignDefaults(optionsRaw, {
     classOrder: 'official',
   });
@@ -251,9 +259,4 @@ export default ((context, optionsRaw, {cssResolvedOptions}) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<
-  'betterTailwind',
-  {
-    cssResolvedOptions: CssEslintConfigOptions | undefined;
-  }
->;
+});

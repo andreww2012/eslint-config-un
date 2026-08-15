@@ -7,11 +7,16 @@ import type {MarkdownEslintConfigOptions} from './markdown';
 import {determineRulesDisabledInEmbeddedCodeBlocks} from './shared';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [MDX](https://mdxjs.com) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.mdx</code>
+ */
 export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'mdx'>,
@@ -69,7 +74,10 @@ export interface MdxEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
 const DEFAULT_FILES = [GLOB_MDX];
 const DEFAULT_FILES_FOR_CODE_BLOCKS = [GLOB_MDX_SUPPORTED_CODE_BLOCKS];
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<MdxEslintConfigOptions>('mdx', {phase: 'last'})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     lintCodeBlocks: true,
     codeBlocksImpliedStrictMode: true,
@@ -187,4 +195,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configFormatFencedCodeBlocksBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'mdx'>;
+});

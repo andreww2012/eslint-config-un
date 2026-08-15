@@ -2,11 +2,18 @@ import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin to disallow relative import paths.
+ *
+ * ⚠️ WARNING: requires your project to support absolute imports (e.g. via `tsconfig.json`'s `baseUrl`).
+ *
+ * 📁 Default `files`: all files
+ */
 export interface NoRelativeImportPathsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'no-relative-import-paths'> {
@@ -16,7 +23,10 @@ export interface NoRelativeImportPathsEslintConfigOptions<
   options?: GetRuleOptions<'no-relative-import-paths', 'no-relative-import-paths'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<NoRelativeImportPathsEslintConfigOptions>(
+  'noRelativeImportPaths',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {options} = optionsResolved;
@@ -33,4 +43,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'noRelativeImportPaths'>;
+});

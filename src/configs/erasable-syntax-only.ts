@@ -1,13 +1,18 @@
 import {ERROR, GLOB_TS_X, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type CheckedSyntax = 'enums' | 'importAliases' | 'namespaces' | 'parameterProperties';
 
+/**
+ * ESLint plugin to granularly enforce TypeScript's [`erasableSyntaxOnly`](https://devblogs.microsoft.com/typescript/announcing-typescript-5-8-rc/#the---erasablesyntaxonly-option) flag.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
+ */
 export interface ErasableSyntaxOnlyEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'erasable-syntax-only'> {
@@ -22,7 +27,10 @@ export interface ErasableSyntaxOnlyEslintConfigOptions<
   allowedSyntax?: Partial<Record<CheckedSyntax, boolean>>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<ErasableSyntaxOnlyEslintConfigOptions>(
+  'erasableSyntaxOnly',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {allowedSyntax = {}} = optionsResolved;
@@ -48,4 +56,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'erasableSyntaxOnly'>;
+});

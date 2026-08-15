@@ -5,10 +5,10 @@ import {arrayIncludes} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 const RULE_CATEGORIES_PER_FILE_TYPE = RULE_CATEGORIES_PER_PLUGIN.pnpm;
@@ -55,6 +55,11 @@ interface PnpmYamlSubConfigOptions<
   enforcePnpmWorkspaceSettings?: GetRuleOptions<'pnpm', 'yaml-enforce-settings'>;
 }
 
+/**
+ * Rules specific to pnpm package manager.
+ *
+ * 📁 Default `files`: ❌ none, sub configs are used instead
+ */
 export interface PnpmEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never> {
   /**
    * [`eslint-plugin-pnpm`](https://npmx.dev/eslint-plugin-pnpm) plugin
@@ -87,7 +92,9 @@ export interface PnpmEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   configPnpmWorkspace?: boolean | PnpmYamlSubConfigOptions<ExtraPlugins>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<PnpmEslintConfigOptions>('pnpm', {
+  enabledBy: {packageManager: 'pnpm'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configPackageJson: true,
     configPnpmWorkspace: true,
@@ -163,4 +170,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilderPackageJson, configBuilderPnpmWorkspace],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'pnpm'>;
+});

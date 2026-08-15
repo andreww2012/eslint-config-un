@@ -3,10 +3,10 @@ import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 interface NoUnusedVarsSubConfigOptions<
@@ -18,6 +18,15 @@ interface NoUnusedVarsSubConfigOptions<
   ruleOptions?: GetRuleOptions<'unused-imports', 'no-unused-vars'>;
 }
 
+/**
+ * Provides an autofix to remove unused imports.
+ *
+ * Note: `typescript-eslint` since v8.53.0 has built-in ability for
+ * [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) rule
+ * to [automatically remove unused imports](https://typescript-eslint.io/rules/no-unused-vars/#enableautofixremovalimports).
+ *
+ * 📁 Default `files`: all files
+ */
 export interface UnusedImportsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'unused-imports'> {
@@ -31,7 +40,10 @@ export interface UnusedImportsEslintConfigOptions<
   configNoUnusedVars?: boolean | NoUnusedVarsSubConfigOptions<ExtraPlugins>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<UnusedImportsEslintConfigOptions>(
+  'unusedImports',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoUnusedVars: false,
   });
@@ -82,4 +94,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilderNoUnusedImports, configBuilderNoUnusedVars],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'unusedImports'>;
+});

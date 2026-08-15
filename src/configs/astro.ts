@@ -6,12 +6,17 @@ import type {OmitStrict, PickKeysNotStartingWith, PickKeysStartingWith, Prettify
 import type {JsxA11yEslintConfigOptions} from './jsx-a11y';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Astro](https://astro.build) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.astro</code>
+ */
 export interface AstroEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<
@@ -46,7 +51,15 @@ export interface AstroEslintConfigOptions<
 
 const DEFAULT_ASTRO_FILES: string[] = [GLOB_ASTRO];
 
-export default (async (context, optionsRaw) => {
+export interface AstroConfigResult {
+  optionsResolved: AstroEslintConfigOptions;
+}
+
+export default defineUnConfig<AstroEslintConfigOptions, [], AstroConfigResult>('astro', {
+  enabledBy: {package: 'astro'},
+  phase: 'late',
+  after: ['ts'],
+})(async (context, optionsRaw) => {
   const eslintPluginAstro = await pluginsLoaders.astro(context).then(({module}) => module);
 
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -143,8 +156,8 @@ export default (async (context, optionsRaw) => {
       ...(configJsxA11y === false
         ? []
         : await (async () => {
-            const {default: jsxA11yUnConfig} = await import('./jsx-a11y');
-            const result = jsxA11yUnConfig(context, undefined, {
+            const {buildJsxA11yConfigs} = await import('./jsx-a11y');
+            const result = buildJsxA11yConfigs(context, undefined, {
               prefix: 'astro',
               options: {
                 files: parentConfigFiles,
@@ -157,4 +170,4 @@ export default (async (context, optionsRaw) => {
     ],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'astro'> as UnConfigFn<'astro'>;
+});

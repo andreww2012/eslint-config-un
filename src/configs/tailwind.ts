@@ -4,9 +4,9 @@ import type {Prettify} from '../types';
 import {maybeCall, objectKeysUnsafe} from '../utils';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 // ⚠️ Please keep up to date with the plugin's source code
@@ -36,6 +36,13 @@ type TailwindPluginSettings = {
     : EslintPluginTailwindcssSettings[Key];
 };
 
+/**
+ * [Tailwind CSS](https://tailwindcss.com) specific rules, the "original" plugin.
+ *
+ * ⚠️ WARNING: disabled by default, superseded by `betterTailwind` config
+ *
+ * 📁 Default `files`: all files
+ */
 export interface TailwindEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'tailwindcss'> {
@@ -55,7 +62,10 @@ export interface TailwindEslintConfigOptions<
   settings?: Prettify<TailwindPluginSettings>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<TailwindEslintConfigOptions>('tailwind', {
+  enabledBy: false,
+  requires: {pluginLoadable: 'tailwindcss'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
@@ -104,4 +114,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'tailwind'>;
+});

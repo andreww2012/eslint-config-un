@@ -3,9 +3,9 @@ import {ERROR} from '../constants';
 import type {OmitStrict, Prettify} from '../types';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 interface SupportedFormatters {
@@ -14,6 +14,14 @@ interface SupportedFormatters {
   prettier: Prettify<PrettierOptions>;
 }
 
+/**
+ * An ESLint plugin for formatting various languages by
+ * [Prettier](https://prettier.io) or [dprint](https://dprint.dev).
+ *
+ * 📁 Default `files`: all files
+ *
+ * 📚 Supports multiple configs (array notation)
+ */
 export interface FormatEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'format'> {
@@ -40,7 +48,10 @@ export interface FormatEslintConfigOptions<
   usePlainParser?: boolean;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<FormatEslintConfigOptions>('format', {
+  enabledBy: false,
+  supportsMultipleConfigs: true,
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     formatter: 'prettier',
   });
@@ -94,4 +105,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'format'> as UnConfigFn<'format'>;
+});

@@ -17,18 +17,18 @@ When you are asked to support a new ESLint plugin, you need to first check if it
 If not, you need to decide whether it should be strongly associated with:
 
 - A new Config like most of the existing plugins do.
-  Example: `eslint-plugin-jsdoc` is associated with `jsdoc` Config;
+  Example: `eslint-plugin-jsdoc` is associated with the `jsdoc` Config;
 - An existing Config, usually in the form of Sub-Config.
-  Example: `@intlify/eslint-plugin-vue-i18n` is associated with `vue` Config as `vue-i18n` Sub-Config;
+  Example: `@intlify/eslint-plugin-vue-i18n` is associated with the `vue` Config as the `vue-i18n` Sub-Config;
 - Something else entirely (rare and should be discussed further).
 
-The plugin likely needs to be added to `peerDependencies`, `peerDependenciesMeta` and `devDependencies` like most of the existing plugins.
+The plugin likely needs to be added to `peerDependencies`, `peerDependenciesMeta` and `devDependencies` of `package.json` like most of the existing plugins.
 The most important criterion of inclusion in regular `dependencies` is popularity: that plugin should be popular enough that it would create friction for most users if they had to install it themselves.
-But all the popular plugins are already supported.
+But we believe all the popular plugins are already supported.
 
 ### Step 1: Adding plugin loader and choosing prefix
 
-Add a plugin loader to `src/loaders/plugins.ts`, maintaining the alphabetical order.
+Add a plugin loader [here](../../../src/loaders/plugins.ts), maintaining the alphabetical order.
 The plugin prefix should be the one that the plugin developer recommends in the docs.
 
 Make sure to read the plugin docs.
@@ -38,27 +38,22 @@ Common documentation locations are:
 - Repo likely specified in `repository` field of the plugin's `package.json`;
 - Website specified in `homepage` field.
 
-ONLY IF the plugin type does not satisfy the expected plugin type (check TS errors in this file), add `satisfies Promise<EslintPlugin> as unknown as Promise<EslintPlugin>` after the `interopDefault(...)` expression, and add `// @ts-expect-error types mismatch` directive before the line on which the error occurs.
-
-ONLY IF this type cast was not required, run `nr build:code:test` script.
-This command verifies that our package still compiles with the new plugin.
-If you get a *new* error like
-
-```
-RolldownError: src/loaders/plugins.ts(41,14): error TS4023: Exported variable 'pluginsLoaders' has or is using name 'PluginGitHubAction' from external module "<...>/eslint-config-un/node_modules/eslint-plugin-github-action/dist/index" but cannot be named.
-```
-
-add `as Promise<EslintPlugin>` to the same position.
+ONLY IF the plugin type does not satisfy the expected plugin type (check TS errors in this file), add `satisfies Promise<EslintPlugin> (as unknown) as Promise<EslintPlugin>` and then put `// @ts-expect-error types mismatch` directive before the line on which the error occurs.
 
 ### Step 1*: Adding other loaders
 
 Sometimes the plugin requires parser/processor/etc. for its' rules to work.
 If you installed new packages for that, make sure to add them to `src/loaders/{parsers,packages}.ts`, following the same algorithm.
 
-### Step 2: Updating plugins rules' type
+### Step 2: Updating generated artifacts
 
-Update the generated plugin rules' types by running `nr typegen`.
-The output of this command gives you the exact rules that this plugin provides.
+Run `nr typegen`.
+It generates two kinds of artifacts:
+
+- The plugin rules' types — its output gives you the exact rules that this plugin provides;
+- Final Config types and JSDoc for them and other technical artifacts.
+
+You will run this command again after writing the Config file for the second item.
 
 ### Step 3: Config file
 
@@ -93,7 +88,20 @@ You may only *suggest* implementing some custom options at the end.
 
 DO NOT assign `files` or `ignores` to the options - this is needed in exceptional cases (for example, if the resolved `files` array is used in another config) and ruins `filesDefault` logic!
 
-#### Step 4.2: Rules
+The interface MUST carry a JSDoc comment, which will become the Config's public documentation.
+It should only include:
+
+- Short config description;
+- Default Config `files` (must match the `filesDefault` passed to the main `addConfig` call).
+
+#### Step 4.2: Config manifest
+
+The second argument of `defineUnConfig` describes everything the generator needs.
+The one most important required property is `enabledBy`, defining the optional conditions under which this Config is enabled by default, or declaring the enablement unconditionally using a boolean literal.
+All of its properties are optional except `enabledBy`.
+Every package named in `enabledBy` must be listed in `PACKAGES_TO_GET_INFO_FOR` in `src/constants.ts`, otherwise it will not type check.
+
+#### Step 4.3: Rules
 
 Initially, there will likely be a single config builder instance with a single ESLint config, which should include all the plugin *non-deprecated* rules.
 
@@ -121,7 +129,7 @@ After every `addRule` statement, we annotate the rule with:
   IMPORTANT: `🟢`/`🟡` and `🔴` are **mutually exclusive** — pick one system based on which is the minority.
   Every emoji used in annotations must appear in the legend section.
 
-#### Step 4.3: Stylistic rules
+#### Step 4.4: Stylistic rules
 
 Identify stylistic-only rules and add them to `ALL_STYLISTIC_RULES.<plugin-prefix>` in `src/configs/extra/no-stylistic-rules.ts`.
 If there are none, put a `// None` comment between the braces of the empty rules object.
@@ -129,48 +137,39 @@ The rule of thumb: after fixing the issue reported by the rule, the logic of the
 IMPORTANT semi-exception: rules dictating naming patterns should not be considered stylistic, as sometimes identifiers and other names may affect runtime.
 See the already added rules for example.
 
-#### Step 4.4: Rules not working in embedded code blocks
+#### Step 4.5: Rules not working in embedded code blocks
 
 Decide what rules don't make sense in Markdown/MDX embedded code blocks.
 Add them to `RULES_TO_DISABLE_IN_EMBEDDED_CODE_BLOCKS` in `src/configs/shared.ts`.
 Rules requiring type information are definite candidates for this because type information is not available there.
 
-### Step 5: Activating the Config
-
-Define a new Config in `src/configs/index.ts`, maintaining the alphabetical order.
-The JSdoc comment for the Config should include the following sections:
-
-- Short config description;
-- Default Config `files` (must match the `filesDefault` passed to `addConfig` in the config file);
-- Main plugin(s) with *plugin* docs URL;
-- Sub-config names without the `config` prefix;
-- `@default` condition.
-  Most optional peer dependency plugins are either disabled by default or enabled conditionally, usually based on the other packages' presence.
-  The package names from the condition should be added to `PACKAGES_TO_GET_INFO_FOR` in `src/constants.ts`.
-
-Then make sure the config is actually loaded by adding it to `src/config-un/config.ts`.
-
-### Step 6: Documentation
+### Step 5: Documentation
 
 Document the addition of a new Config and plugin in `README.md`.
 Do NOT add a config logo if it doesn't exists.
 
 Document plugin metadata in `PACKAGES_META` in `scripts/shared/packages-meta.ts`.
 Don't blindly copy URL patterns from other entries - you need to actually figure them out.
+If the Config is served by more than one plugin, mark exactly one of them with `isMainPlugin: true`.
 
 Update `Default renames` section if the chosen plugin prefix differs from what the plugin docs suggests.
 
-### Step 7: Testing
+### Step 6: Testing
 
-Ensure there are no TypeScript/ESLint/prettier/knip/... errors by running `nr test:quick`.
+Run `nr typegen` first: it validates the manifest and will name the exact problem if there is one.
+
+Then ensure there are no TypeScript/ESLint/prettier/knip/... errors.
+Run `nr check`, or run the individual commands separately if one of them prevents the chain from completing: `nr lint:ts6`, `nr lint:eslint <changed files>`, `nr format`, `nr knip`, `nr spellcheck`.
 IMPORTANT: ignore errors in files you haven't modified!
-If any errors are preventing for the chain of commands to complete, just run them separately.
 
 Write tests for the new Config following [`eslint-config-un-config-tests`](../eslint-config-un-config-tests/SKILL.md) instructions.
 Ensure the coverage of the new Config satisfies the numbers outlined in the aforementioned skill.
 IMPORTANT: code without `enableConfigTesterForPlugin` options should be skipped for coverage using `v8 ignore` comments; see `src/configs/svelte.ts` and `src/configs/react.ts` for examples.
 
-### Step 8: Changelog
+Adding a Config changes the resolved cascade order, so `test/config-gen/cascade-order.spec.ts` will fail.
+Confirm the new entries appear where you expect, then update the snapshot with `nr t run test/config-gen/cascade-order.spec.ts -u`.
+
+### Step 7: Changelog
 
 Create a new changelog entry in `.changeset` directory.
 It should be named following `human-id` naming convention: <https://raw.githubusercontent.com/RienNeVaPlus/human-id/3cd6519a9b0acf35ce8d9ce0d0e7231708381598/index.ts>

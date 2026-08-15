@@ -1,16 +1,24 @@
 import {ERROR, OFF, WARNING} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin enforcing best practices for promises handling.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface PromiseEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'promise'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<PromiseEslintConfigOptions>(
+  'promise',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'promise');
@@ -55,4 +63,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'promise'>;
+});

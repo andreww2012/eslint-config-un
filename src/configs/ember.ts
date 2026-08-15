@@ -9,11 +9,18 @@ import {
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Ember](https://emberjs.com) specific rules.
+ *
+ * 📁 Default `files`:
+ * - <code>**&#47;*.?([cm])[jt]s</code>
+ * - <code>**&#47;*.{gjs,gts}</code>
+ */
 export interface EmberEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'ember'> {
@@ -43,7 +50,9 @@ const GLIMMER_TEMPLATES_FILES = ['**/*.{gjs,gts}'] as const;
 
 const EMBER_TESTING_RELATED_RULES = RULE_CATEGORIES_PER_PLUGIN.ember.testing;
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<EmberEslintConfigOptions>('ember', {
+  enabledBy: {package: 'ember-source'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTestFiles: true,
     enforceGlimmerComponents: true,
@@ -399,4 +408,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderTests, configBuilderNoOnlyTests],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'ember'>;
+});

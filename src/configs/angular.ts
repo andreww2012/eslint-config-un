@@ -6,9 +6,9 @@ import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type PartialObjectsOnly<T> = T extends readonly unknown[] ? T : Partial<T>;
@@ -83,6 +83,17 @@ interface ConfigTemplateSubConfigOptions<
   requireLoopIndexes?: boolean;
 }
 
+/**
+ * [Angular](https://angular.dev) specific rules. Supported versions: 13 to 20 (inclusive).
+ *
+ * You are expected to install `@angular-eslint/eslint-plugin` and
+ * `@angular-eslint/eslint-plugin-template` packages of the same major version
+ * as your Angular version, but installing a greater version would also likely work.
+ *
+ * The list of available rules will depend on the installed version of the packages.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+ */
 export interface AngularEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'angular'> {
@@ -225,7 +236,11 @@ export interface AngularEslintConfigOptions<
   preferStandaloneComponents?: boolean;
 }
 
-export default (async (context, optionsRaw) => {
+export default defineUnConfig<AngularEslintConfigOptions>('angular', {
+  enabledBy: {package: '@angular/core'},
+  phase: 'late',
+  after: ['ts'],
+})(async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configTemplate: true,
     processInlineTemplates: true,
@@ -687,4 +702,4 @@ export default (async (context, optionsRaw) => {
     configs: [configBuilderGeneral, configBuilderTemplate],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'angular'>;
+});

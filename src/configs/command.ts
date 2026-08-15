@@ -1,16 +1,24 @@
 import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin serving as a codemod triggered by special comments.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface CommandEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'command'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<CommandEslintConfigOptions>(
+  'command',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'command');
@@ -25,4 +33,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'command'>;
+});

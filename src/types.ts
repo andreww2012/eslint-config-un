@@ -10,8 +10,6 @@ export type {
   ConditionalKeys,
   EmptyObject,
   Falsy,
-  IncludesUndefined,
-  IsUnknown,
   MaybePromise,
   NonEmptyString,
   NonEmptyTuple,
@@ -33,7 +31,3 @@ export type {
 } from '@andreww2012/unutils';
 
 export type {PackageJson} from 'type-fest';
-
-export type IsAnyUnionMemberAssignableTo<Union, Target> = [Extract<Union, Target>] extends [never]
-  ? false
-  : true;

@@ -12,10 +12,14 @@ import type {EslintPlugin} from '../src/eslint/eslint-types';
 import {pluginsLoaders} from '../src/loaders/plugins';
 import type {ModuleLoaderContext} from '../src/loaders/shared';
 import {generateAngularPluginsWithOldRules} from './shared';
+import {writeConfigArtifacts} from './src/generation/configs';
 import {RULE_CATEGORIZATIONS} from './src/rule-categorizations';
 import {addMissingRuleOptionsSchemas} from './src/set-missing-rule-options-schemas';
 
 const __dirname = import.meta.dirname;
+
+const formatTypescript = (code: string) =>
+  prettier.format(code, {parser: 'typescript', ...prettierConfig});
 
 const PLUGIN_LOADER_CONTEXT: ModuleLoaderContext = {
   rootOptions: {},
@@ -74,6 +78,11 @@ await Promise.all([
     allRuleTypesCode,
   ),
 ]);
+
+// MUST come last: generating the config artifacts imports every Config module, and several of them
+// may import the rule artifacts written above, which may not exist yet
+const {configsCount} = await writeConfigArtifacts(formatTypescript);
+console.log(`Generated the artifacts of ${configsCount} config(s)`);
 
 async function generateRuleTypes() {
   const [

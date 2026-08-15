@@ -1,12 +1,22 @@
 import {ERROR, OFF} from '../../constants';
-import esUnConfig from '../es';
+import {buildEsConfigs} from '../es';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from '../index';
 
+/**
+ * [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) specific rules.
+ *
+ * [JavaScript runtime 2.0](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-20.html) is assumed by default.
+ * For functions written for [JavaScript runtime 1.0](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-10.html),
+ * use `configV1` sub-config.
+ *
+ * Note that if neither `files` or `ignores` are specified or is an empty array in the main
+ * or a sub-config, the config won't be generated.
+ */
 export interface CloudfrontFunctionsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins> {
@@ -23,7 +33,10 @@ const genSyntaxNotAllowedErrorMessage = (syntax: string, isPlural = false) =>
 const getAllowedImports = (isV2 = true): string[] =>
   ['querystring', 'crypto', isV2 && 'cloudfront'].filter((v) => typeof v === 'string');
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<CloudfrontFunctionsEslintConfigOptions>('cloudfrontFunctions', {
+  enabledBy: false,
+  phase: 'extra',
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configs = (
@@ -39,7 +52,7 @@ export default ((context, optionsRaw) => {
       return [];
     }
 
-    const configsEs = esUnConfig(context, undefined, {
+    const configsEs = buildEsConfigs(context, undefined, {
       prefix: `cloudfront-functions/v${runtimeVersion}/es-features`,
       options: {
         files,
@@ -225,4 +238,4 @@ export default ((context, optionsRaw) => {
     configs,
     optionsResolved,
   };
-}) satisfies UnConfigFn<'cloudfrontFunctions'>;
+});

@@ -1,13 +1,14 @@
 // cspell:ignore spinbutton treegrid menuitemradio menuitemcheckbox
+import type {UnConfigContext} from '../config-un/shared';
 import {ERROR, GLOB_JSX_TSX, OFF, WARNING} from '../constants';
 import type {OmitIndexSignature, OmitStrict} from '../types';
 import {type MaybeFn, getKeysOfTruthyValues, maybeCall} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 const DEFAULT_AMBIGUOUS_WORDS = ['click here', 'here', 'link', 'a link', 'learn more'];
@@ -66,6 +67,13 @@ const defaultHoverOutHandlersRequiringOnBlur: Record<`on${string}`, true> = {
   onPointerLeave: true,
 };
 
+/**
+ * Provides accessibility rules for JSX. Applied to all JSX files by default.
+ *
+ * Note: you may want to disable this config if you're not using JSX for performance reasons.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]sx</code>
+ */
 export interface JsxA11yEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'jsx-a11y'> {
@@ -287,9 +295,16 @@ export interface JsxA11yEslintConfigOptions<
   };
 }
 
-export default ((
-  context,
-  optionsRawFromParameters,
+/**
+ * The `astro` and `lit` Configs reuse these rules under their own plugin prefix, so the builder
+ * is exposed separately from the Config's own `setup`
+ */
+export const buildJsxA11yConfigs = <ExtraPlugins extends ExtraPluginsType>(
+  context: Readonly<UnConfigContext<ExtraPlugins>>,
+  optionsRawFromParameters:
+    | boolean
+    | OmitStrict<JsxA11yEslintConfigOptions<ExtraPlugins>, 'overrides' | 'overridesAny'>
+    | undefined,
   customConfig?: {
     prefix: 'astro' | 'lit';
     options: JsxA11yEslintConfigOptions & UnFlatConfigEntryBase;
@@ -658,11 +673,9 @@ export default ((
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<
+};
+
+export default defineUnConfig<JsxA11yEslintConfigOptions>(
   'jsxA11y',
-  | {
-      prefix: 'astro' | 'lit';
-      options: JsxA11yEslintConfigOptions & UnFlatConfigEntryBase;
-    }
-  | undefined
->;
+  true,
+)((context, optionsRaw) => buildJsxA11yConfigs(context, optionsRaw));

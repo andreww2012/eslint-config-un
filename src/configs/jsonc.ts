@@ -2,11 +2,17 @@ import {ERROR, GLOB_JSON, GLOB_JSON5, GLOB_JSONC, OFF} from '../constants';
 import {JSONC_DEFAULT_FILES} from './shared';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * JSON, JSONC and JSON5 related rules powered by
+ * [`eslint-plugin-jsonc`](https://npmx.dev/eslint-plugin-jsonc).
+ *
+ * 📁 Default `files`: <code>**&#47;*.{json,jsonc,json5}</code>
+ */
 export interface JsoncEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'jsonc'> {
@@ -38,7 +44,10 @@ export interface JsoncEslintConfigOptions<
   configJson5?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'jsonc'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<JsoncEslintConfigOptions>('jsonc', {enabledBy: {group: 'misc'}})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configJson: false,
     configJsonc: false,
@@ -153,4 +162,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderJson, configBuilderJsonc, configBuilderJson5],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'jsonc'>;
+});

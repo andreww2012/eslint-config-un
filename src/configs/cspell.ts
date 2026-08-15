@@ -2,11 +2,16 @@ import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * CSpell spell checker.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface CspellEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'cspell'> {
@@ -16,7 +21,10 @@ export interface CspellEslintConfigOptions<
   options?: GetRuleOptions<'cspell', 'spellchecker'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<CspellEslintConfigOptions>(
+  'cspell',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {options} = optionsResolved;
@@ -40,4 +48,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'cspell'>;
+});

@@ -1,12 +1,12 @@
 // cspell:ignore foldl foldr
-import {ERROR, OFF} from '../constants';
+import {CHECKED_LODASH_METHODS, ERROR, OFF} from '../constants';
 import type {NonEmptyTuple} from '../types';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type LodashMethods =
@@ -163,6 +163,11 @@ const LODASH_METHODS_TO_RULE_NAMES: Record<
   values: 'values',
 };
 
+/**
+ * Helps in identifying places in your codebase where you don't (may not) need Lodash/Underscore.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface YouDontNeedLodashUnderscoreEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'you-dont-need-lodash-underscore'> {
@@ -173,7 +178,18 @@ export interface YouDontNeedLodashUnderscoreEslintConfigOptions<
   ignoredMethods?: Partial<Record<LodashMethods, boolean>>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<YouDontNeedLodashUnderscoreEslintConfigOptions>(
+  'youDontNeedLodashUnderscore',
+  {
+    enabledBy: {
+      packages: [
+        'lodash',
+        'lodash-es',
+        ...CHECKED_LODASH_METHODS.map((method) => `lodash.${method}` as const),
+      ],
+    },
+  },
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const ignoredMethods = {
@@ -281,4 +297,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'youDontNeedLodashUnderscore'>;
+});

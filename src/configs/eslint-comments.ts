@@ -1,16 +1,25 @@
 import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin with additional rules for ESLint directive comments
+ * (like `eslint-disable-next-line`).
+ *
+ * 📁 Default `files`: all files
+ */
 export interface EslintCommentsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'eslint-comments'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<EslintCommentsEslintConfigOptions>(
+  'eslintComments',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'eslint-comments');
@@ -43,4 +52,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'eslintComments'>;
+});

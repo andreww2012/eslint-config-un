@@ -1,16 +1,26 @@
 import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [TanStack Query](https://tanstack.com/query/latest) specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface TanstackQueryEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'tanstack-query'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<TanstackQueryEslintConfigOptions>('tanstackQuery', {
+  enabledBy: {
+    package: '@tanstack/query-core',
+    textAddendum: '(dependency of all `@tanstack/*-query` packages)',
+  },
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'tanstack-query');
@@ -37,4 +47,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'tanstackQuery'>;
+});

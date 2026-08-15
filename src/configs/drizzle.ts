@@ -2,11 +2,16 @@ import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Drizzle ORM](https://orm.drizzle.team) specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface DrizzleEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'drizzle'> {
@@ -22,7 +27,9 @@ export interface DrizzleEslintConfigOptions<
   drizzleObjectName?: GetRuleOptions<'drizzle', 'enforce-delete-with-where'>['drizzleObjectName'];
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<DrizzleEslintConfigOptions>('drizzle', {
+  enabledBy: {package: 'drizzle-orm'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {drizzleObjectName} = optionsResolved;
@@ -51,4 +58,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'drizzle'>;
+});

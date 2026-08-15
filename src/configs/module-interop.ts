@@ -1,16 +1,24 @@
 import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin with rules for module interoperability.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface ModuleInteropEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'module-interop'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<ModuleInteropEslintConfigOptions>(
+  'moduleInterop',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'module-interop');
@@ -30,4 +38,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'moduleInterop'>;
+});

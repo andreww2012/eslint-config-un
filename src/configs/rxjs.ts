@@ -3,11 +3,16 @@ import {getKeysOfTruthyValues} from '../utils';
 import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [RxJS](https://rxjs.dev) specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface RxjsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'rxjs'> {
@@ -43,7 +48,10 @@ export interface RxjsEslintConfigOptions<
   enforceJustInsteadOfOf?: boolean;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<RxjsEslintConfigOptions>('rxjs', {enabledBy: {package: 'rxjs'}})((
+  context,
+  optionsRaw,
+) => {
   const isAngularCoreInstalled = context.packagesInfo['@angular/core'] != null;
 
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -132,4 +140,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'rxjs'>;
+});

@@ -6,9 +6,9 @@ import {isKeyIn, objectEntriesUnsafe} from '../../utils';
 import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from '../index';
 
 // Value semantics:
@@ -401,6 +401,12 @@ type PrettierIncompatibleRuleName = ObjectValues<{
     : `${Plugin}/`}${keyof (typeof RULES_INCOMPATIBLE_WITH_PRETTIER)[Plugin] & string}`;
 }>;
 
+/**
+ * Disables rules that are unnecessary or might conflict with [Prettier](https://prettier.io).
+ * Successor to [`eslint-config-prettier`](https://npmx.dev/eslint-config-prettier).
+ *
+ * 📁 Default `files`: all files
+ */
 export interface NoPrettierIncompatibleRulesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, Pick<UnRulesConfig, PrettierIncompatibleRuleName>> {
@@ -420,7 +426,10 @@ export interface NoPrettierIncompatibleRulesEslintConfigOptions<
   languages?: Partial<Record<PrettierLanguage, boolean>>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<NoPrettierIncompatibleRulesEslintConfigOptions>(
+  'noPrettierIncompatibleRules',
+  {enabledBy: {package: 'prettier'}, phase: 'terminal'},
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {languages} = optionsResolved;
@@ -463,6 +472,6 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'noPrettierIncompatibleRules'>;
+});
 
 /* eslint-enable perfectionist/sort-objects */

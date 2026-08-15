@@ -8,9 +8,9 @@ import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
   type UnAllRuleNames,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from '../index';
 
 const markAllPluginRulesAsStylistic = <PluginName extends keyof typeof ALL_RULES_PER_PLUGIN>(
@@ -1098,6 +1098,15 @@ type AllStylisticRules = ObjectValues<{
   ]: `${Plugin extends '' ? '' : `${Plugin}/`}${keyof (typeof ALL_STYLISTIC_RULES)[Plugin] & string}`;
 }>;
 
+/**
+ * If you integrate eslint-config-un into an existing project, you might encounter a lot of
+ * reports from rules that are merely about stylistic and other choices, not the ones
+ * that can potentially find bugs and other kind of problems in your code.
+ * Use this config to globally disable all such rules, or conversely enable only them,
+ * or some of them.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface NoStylisticRulesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins> {
@@ -1126,7 +1135,10 @@ export interface NoStylisticRulesEslintConfigOptions<
   >;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<NoStylisticRulesEslintConfigOptions>('noStylisticRules', {
+  enabledBy: false,
+  phase: 'terminal',
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {
@@ -1194,6 +1206,6 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'noStylisticRules'>;
+});
 
 /* eslint-enable perfectionist/sort-objects */

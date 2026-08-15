@@ -1,7 +1,7 @@
 import consola from 'consola';
 import ourPackageJson from '../package.json' with {type: 'json'};
 import {eslintConfigInternal} from '../src/config-un/config';
-import {CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT} from '../src/config-un/config-utils';
+import {MISC_GROUP_CONFIGS} from '../src/configs/manifests.gen';
 import {arrayify, styleConfigName, stylePackageName} from '../src/utils';
 import {generateAngularPluginsWithOldRules} from './shared';
 import {CONFIGS_META} from './shared/packages-meta';
@@ -29,7 +29,7 @@ const {errors} = await eslintConfigInternal(
 
 const packagesToMoveToDirectDependencies = Array.from(
   Map.groupBy(
-    [...CONFIGS_MISC_GROUP_DISABLED_BY_DEFAULT].flatMap((config) => {
+    MISC_GROUP_CONFIGS.flatMap((config) => {
       const configPackages = CONFIGS_META[config]?.packages || [];
       return configPackages
         .map((packageName) =>

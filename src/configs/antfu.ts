@@ -1,16 +1,26 @@
 import {GLOB_JS_TS_X, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Anthony Fu](https://antfu.me)'s personal collection of rules.
+ *
+ * ⚠️ WARNING: all rules are disabled by default.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+ */
 export interface AntfuEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'antfu'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<AntfuEslintConfigOptions>(
+  'antfu',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'antfu');
@@ -43,4 +53,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'antfu'>;
+});

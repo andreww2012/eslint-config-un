@@ -1,16 +1,24 @@
 import {ERROR, GLOB_TS_X} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [TSDoc](https://tsdoc.org) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
+ */
 export interface TsdocEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'tsdoc'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<TsdocEslintConfigOptions>(
+  'tsdoc',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'tsdoc');
@@ -30,4 +38,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'tsdoc'>;
+});

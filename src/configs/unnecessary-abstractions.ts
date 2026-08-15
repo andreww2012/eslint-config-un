@@ -1,16 +1,24 @@
 import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin with rules to detect and prevent some unnecessary code abstractions.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface UnnecessaryAbstractionsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'unnecessary-abstractions'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<UnnecessaryAbstractionsEslintConfigOptions>(
+  'unnecessaryAbstractions',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'unnecessary-abstractions');
@@ -28,4 +36,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'unnecessaryAbstractions'>;
+});

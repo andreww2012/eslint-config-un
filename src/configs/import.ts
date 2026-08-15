@@ -10,11 +10,16 @@ import {arrayify, isNonEmptyArray, objectEntriesUnsafe, toKebabCase} from '../ut
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin to lint `import`/`export` statements.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface ImportEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'import'> {
@@ -79,7 +84,10 @@ export interface ImportEslintConfigOptions<
   noDuplicatesOptions?: GetRuleOptions<'import', 'no-duplicates'>;
 }
 
-export default (async (context, optionsRaw) => {
+export default defineUnConfig<ImportEslintConfigOptions>(
+  'import',
+  true,
+)(async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     isTypescriptEnabled: context.configsMeta.ts.enabled,
     allowDevDependencies: context.rootOptions.mode !== 'lib',
@@ -245,4 +253,4 @@ export default (async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'import'>;
+});

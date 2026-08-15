@@ -8,25 +8,18 @@ import {
   OFF,
   WARNING,
 } from '../constants';
-import type {
-  GetRuleNamesInPlugin,
-  UnFlatConfigEntryFilesAndIgnores,
-  UnRulesConfig,
-} from '../eslint/eslint-types';
+import type {GetRuleNamesInPlugin, UnFlatConfigEntryFilesAndIgnores} from '../eslint/eslint-types';
 import {RULE_CATEGORIES_PER_PLUGIN} from '../eslint-rule-categories.gen';
 import {generatePackageToLoadProperty} from '../loaders';
 import type {Nullable, ObjectValues, OmitStrict, Prettify} from '../types';
 import {type MaybeFn, allUnionMembers, isKeyIn, maybeCall, omit} from '../utils';
-import type {AstroEslintConfigOptions} from './astro';
-import type {SvelteEslintConfigOptions} from './svelte';
-import type {VueEslintConfigOptions} from './vue';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
   getRuleUnSeverityAndOptionsFromEntry,
 } from './index';
 
@@ -399,6 +392,14 @@ interface SortTsconfigKeysSubConfigOptions<
   extraSortKeysConfigs?: (GetRuleOptions<'jsonc', 'sort-keys'> & object)[];
 }
 
+/**
+ * [TypeScript](https://www.typescriptlang.org) specific rules.
+ *
+ * ⚠️ Note that if `files` is an empty array, `typeAware` sub-config will be disabled too,
+ * unless its `files` are explicitly specified.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
+ */
 export interface TsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<
@@ -557,11 +558,26 @@ const mergeParserOptions = (
   return merged;
 };
 
-export default ((
-  context,
-  optionsRaw,
-  {vanillaFinalFlatConfigRules, astroResolvedOptions, vueResolvedOptions, svelteResolvedOptions},
-) => {
+export interface TsConfigResult {
+  filesTypeAware: string[];
+  ignoresTypeAware: string[];
+  setupTypeAwareConfigCreated: boolean;
+}
+
+export default defineUnConfig<
+  TsEslintConfigOptions,
+  ['js', 'astro', 'vue', 'svelte'],
+  TsConfigResult
+>('ts', {
+  enabledBy: {package: 'typescript'},
+  phase: 'late',
+  needs: ['js', 'astro', 'vue', 'svelte'],
+})((context, optionsRaw, {js, astro, vue, svelte}) => {
+  const vanillaFinalFlatConfigRules = js?.finalFlatConfigRules || {};
+  const astroResolvedOptions = astro?.optionsResolved || null;
+  const vueResolvedOptions = vue?.optionsResolved || null;
+  const svelteResolvedOptions = svelte?.optionsResolved || null;
+
   const typescriptPackageInfo = context.packagesInfo.typescript;
 
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -1370,19 +1386,4 @@ export default ((
     ignoresTypeAware,
     setupTypeAwareConfigCreated: configBuilderTypeAwareSetup != null,
   };
-}) satisfies TsConfig as TsConfig;
-
-type TsConfig = UnConfigFn<
-  'ts',
-  {
-    vanillaFinalFlatConfigRules: Partial<UnRulesConfig>;
-    astroResolvedOptions: AstroEslintConfigOptions | null;
-    vueResolvedOptions: VueEslintConfigOptions | null;
-    svelteResolvedOptions: SvelteEslintConfigOptions | null;
-  },
-  {
-    filesTypeAware: string[];
-    ignoresTypeAware: string[];
-    setupTypeAwareConfigCreated: boolean;
-  }
->;
+});

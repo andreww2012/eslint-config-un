@@ -3,13 +3,23 @@ import {type IgnoresAdditionalOptions, YAML_DEFAULT_FILES} from './shared';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml'];
 
+/**
+ * YAML specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.y?(a)ml</code>
+ *
+ * If `ignores` is explicitly specified, it still be merged with the default ignore list,
+ * excluding items specified in `ignoresAdditional`.
+ *
+ * The default ignore list: <code>**&#47;{pnpm-lock.yaml,yarn.lock}</code>
+ */
 export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'yaml'>,
@@ -61,7 +71,9 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   };
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<YamlEslintConfigOptions>('yaml', {
+  enabledBy: {group: 'misc'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     enforceExtension: 'yml',
   });
@@ -151,4 +163,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'yaml'>;
+});

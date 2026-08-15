@@ -13,10 +13,10 @@ import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 const LOCKFILE_RULES_FOR_PACKAGE_JSON = [
@@ -28,6 +28,16 @@ const LOCKFILE_RULES_FOR_PACKAGE_JSON_SET = new Set<string>(LOCKFILE_RULES_FOR_P
 
 type SupportedPackageManagers = Extract<GetRuleOptions<'lockfile', 'flavor'>, string>;
 
+/**
+ * An ESLint plugin to lint npm ecosystem lockfiles for security and consistency issues.
+ *
+ * 📁 Default `files`: <code>**&#47;package-lock.json</code>, <code>**&#47;yarn.lock</code>,
+ * <code>**&#47;pnpm-lock.yaml</code>, <code>**&#47;bun.lock</code>,
+ * <code>**&#47;vlt-lock.json</code>
+ *
+ * ⚠️ Note: specified `files` will be naively analyzed for lockfile types and corresponding
+ * parser configs (named `lockfile/parser/{json,yaml}`) will be created for matched entries.
+ */
 export interface LockfileEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<
@@ -143,7 +153,9 @@ const LOCKFILES_INFO_MAP = {
 
 const LOCKFILES_INFO = objectEntriesUnsafe(LOCKFILES_INFO_MAP);
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<LockfileEslintConfigOptions>('lockfile', {
+  enabledBy: {group: 'misc'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configPackageJson: true,
     noNonRegistryDependencySpecifiers: true,
@@ -284,4 +296,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderPackageJson],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'lockfile'>;
+});

@@ -7,11 +7,18 @@ import {
 } from './shared';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Playwright](https://playwright.dev) specific rules.
+ *
+ * 📁 Default `files`:
+ * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>
+ * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s?(x)</code>
+ */
 export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'playwright'>,
@@ -56,7 +63,9 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
   customAsyncExpectMatches?: string[];
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<PlaywrightEslintConfigOptions>('playwright', {
+  enabledBy: {package: 'playwright'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configNoOnlyTests: false,
   });
@@ -170,4 +179,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configBuilderNoOnlyTests],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'playwright'>;
+});

@@ -8,11 +8,17 @@ import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * Stylistic/formatting only rules for JS/TS(X). Only small number of rules
+ * are enabled by default.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface StylisticEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'stylistic'> {
@@ -32,7 +38,10 @@ export interface StylisticEslintConfigOptions<
  */
 const SIDE_EFFECTS_ONLY_IMPORT_ESLINT_SELECTOR = 'ImportDeclaration[specifiers.length=0]';
 
-export default (async (context, optionsRaw) => {
+export default defineUnConfig<StylisticEslintConfigOptions>(
+  'stylistic',
+  true,
+)(async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {customizeOptions} = optionsResolved;
@@ -218,4 +227,4 @@ export default (async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'stylistic'>;
+});

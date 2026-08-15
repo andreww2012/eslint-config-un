@@ -4,11 +4,16 @@ import type {ToCamelCase} from '../types';
 import {objectEntriesUnsafe, toKebabCase} from '../utils';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * An ESLint plugin to enforce architectural boundaries in JS/TS projects.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface BoundariesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'boundaries'> {
@@ -32,7 +37,10 @@ export interface BoundariesEslintConfigOptions<
   };
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<BoundariesEslintConfigOptions>(
+  'boundaries',
+  false,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings} = optionsResolved;
@@ -73,4 +81,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'boundaries'>;
+});

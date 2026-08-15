@@ -2,11 +2,16 @@ import {ERROR} from '../constants';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Turborepo](https://turborepo.dev) specific rules.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface TurboEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'turbo'> {
@@ -17,7 +22,10 @@ export interface TurboEslintConfigOptions<
   undeclaredEnvVarsOptions?: GetRuleOptions<'turbo', 'no-undeclared-env-vars'>;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<TurboEslintConfigOptions>('turbo', {enabledBy: {package: 'turbo'}})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {undeclaredEnvVarsOptions} = optionsResolved;
@@ -41,4 +49,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'turbo'>;
+});

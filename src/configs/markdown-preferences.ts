@@ -6,9 +6,9 @@ import {
   type ArrayOrBooleanRecord,
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type EnforceableCasing = GetRuleOptions<'markdown-preferences', 'heading-casing'>['style'] & {};
@@ -31,6 +31,11 @@ const DEFAULT_IGNORE_PATTERNS = [
   /* eslint-enable case-police/string-check */
 ];
 
+/**
+ * An ESLint plugin that helps enforce consistent writing style and formatting conventions in Markdown files.
+ *
+ * 📁 Default `files`: <code>**&#47;*.md</code>
+ */
 export interface MarkdownPreferencesEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'markdown-preferences'> {
@@ -196,7 +201,18 @@ export interface MarkdownPreferencesEslintConfigOptions<
   wordsToPreserveCasingOf?: ArrayOrBooleanRecord;
 }
 
-export default (async (context, optionsRaw) => {
+export interface MarkdownPreferencesConfigResult {
+  optionsResolved: MarkdownPreferencesEslintConfigOptions;
+}
+
+export default defineUnConfig<
+  MarkdownPreferencesEslintConfigOptions,
+  [],
+  MarkdownPreferencesConfigResult
+>(
+  'markdownPreferences',
+  true,
+)(async (context, optionsRaw) => {
   const markdownPreferencesPlugin = await pluginsLoaders['markdown-preferences'](context).then(
     ({module}) => module,
   );
@@ -389,4 +405,4 @@ export default (async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'markdownPreferences'>;
+});

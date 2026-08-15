@@ -17,11 +17,16 @@ import type {Prettify} from '../types';
 import {isNonEmptyArray, objectKeysUnsafe, pick} from '../utils';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [GraphQL](https://graphql.org) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.{graphql,gql}</code>
+ */
 export interface GraphqlEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'graphql'> {
@@ -102,7 +107,10 @@ export interface GraphqlEslintConfigOptions<
   >;
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<GraphqlEslintConfigOptions>('graphql', {
+  enabledBy: {package: 'graphql'},
+  phase: 'late',
+})((context, optionsRaw) => {
   const isRelayInstalled = context.packagesInfo['relay-runtime'] != null;
 
   const optionsResolved = assignDefaults(optionsRaw, {
@@ -339,4 +347,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilderProcessor, configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'graphql'>;
+});

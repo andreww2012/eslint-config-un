@@ -16,10 +16,10 @@ import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 interface EslintPluginReactSettings {
@@ -258,6 +258,29 @@ interface RefreshSubConfigOptions<
   >;
 }
 
+/**
+ * [React](https://react.dev) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
+ *
+ * 🧩 Plugin(s):
+ * - [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react)
+ * - [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin)
+ * **with `eslint-react` prefix**
+ * - [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks)
+ *
+ * Since `eslint-plugin-react` and `@eslint-react/eslint-plugin` have some overlapping rules,
+ * and `eslint-plugin-react` has some rules that are not relevant in modern codebases,
+ * there exists an option to control which rules from which plugins, if any, will be used.
+ * Refer to `pluginX` option JSDoc for more details.
+ *
+ * - `allowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
+ * - `reactX`: runtime agnostic ("X") and "Name Convention" rules from `@eslint-react/eslint-plugin`.
+ * - `hooks`: rules from `eslint-plugin-react-hooks` as well as "Hooks Extra" rules from `@eslint-react/eslint-plugin`.
+ * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and `eslint-plugin-react`.
+ * - `refresh`: rules from `eslint-plugin-react-refresh`.
+ * - `youMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
+ */
 export interface ReactEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'react'> {
@@ -532,7 +555,13 @@ const REACT_X_TYPE_AWARE_RULES = new Set<string>(
 
 const DEFAULT_FILES = [GLOB_JS_TS_X];
 
-export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) => {
+export default defineUnConfig<ReactEslintConfigOptions, ['ts']>('react', {
+  enabledBy: {package: 'react'},
+  needs: ['ts'],
+})((context, optionsRaw, {ts: tsConfigResult}) => {
+  const tsFilesTypeAware = tsConfigResult?.filesTypeAware || [];
+  const tsIgnoresTypeAware = tsConfigResult?.ignoresTypeAware || [];
+
   const isReactDomInstalled = context.packagesInfo['react-dom'] != null;
   const isRemixOrReactRouterInstalled = [...REMIX_PACKAGES, ...REACT_ROUTER_PACKAGES].some(
     (packageName) => context.packagesInfo[packageName] != null,
@@ -1299,16 +1328,4 @@ export default ((context, optionsRaw, {tsFilesTypeAware, tsIgnoresTypeAware}) =>
     ],
     optionsResolved,
   };
-}) satisfies UnConfigFn<
-  'react',
-  {
-    tsFilesTypeAware: string[];
-    tsIgnoresTypeAware: string[];
-  }
-> as UnConfigFn<
-  'react',
-  {
-    tsFilesTypeAware: string[];
-    tsIgnoresTypeAware: string[];
-  }
->;
+});

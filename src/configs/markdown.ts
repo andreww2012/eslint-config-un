@@ -13,10 +13,10 @@ import {
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   type UnRulesConfigPartial,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type MarkdownDialect = 'commonmark' | 'gfm';
@@ -45,6 +45,11 @@ const generateNoMissingLabelRefsOptions = (
 
 const CONFIG_SENTENCES_PER_LINE_DEFAULT_IGNORES = ['LICENSE.md'] as const;
 
+/**
+ * Markdown related rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.md</code>
+ */
 export interface MarkdownEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'markdown'> {
@@ -142,7 +147,10 @@ export interface MarkdownEslintConfigOptions<
   parseFrontmatter?: MarkdownLanguageOptions['frontmatter'];
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<MarkdownEslintConfigOptions>('markdown', {phase: 'last'})((
+  context,
+  optionsRaw,
+) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     configFormatFencedCodeBlocks: context.packagesInfo.prettier != null,
     configSentencesPerLine: false,
@@ -384,4 +392,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder, configFormatFencedCodeBlocksBuilder, configBuilderSentencesPerLine],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'markdown'>;
+});

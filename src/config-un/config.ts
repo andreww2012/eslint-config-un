@@ -1,12 +1,12 @@
 import {isMainThread} from 'node:worker_threads';
 import consola from 'consola';
-import * as findUp from 'empathic/find';
 import globals from 'globals';
 import {createDebug} from 'obug';
 import {detect as detectPackageManager} from 'package-manager-detector/detect';
 import type {UnConfigs} from '../configs';
+import type {ManifestConfigKey, UnConfigResults} from '../configs/index.gen';
+import {CONFIG_MANIFESTS, CONFIG_ORDER} from '../configs/manifests.gen';
 import {
-  CHECKED_LODASH_METHODS,
   DEFAULT_GLOBAL_IGNORES,
   DISABLE_AUTOFIX,
   ERROR,
@@ -28,23 +28,17 @@ import {
   type PluginPrefix,
   pluginsLoaders,
 } from '../loaders';
-import type {
-  Falsy,
-  IncludesUndefined,
-  IsAnyUnionMemberAssignableTo,
-  IsUnknown,
-  OmitIndexSignature,
-  OmitStrict,
-  PartialDeep,
-} from '../types';
+import type {Falsy, MaybePromise, OmitIndexSignature, OmitStrict, PartialDeep} from '../types';
 import {
   type MaybeArray,
+  arrayIncludes,
   arrayify,
   assignDefaults,
   fetchPackageInfo,
   interopDefault,
   isInEditor,
   maybeCall,
+  objectEntriesUnsafe,
   objectKeysUnsafe,
   omit,
   readFileSafe,
@@ -60,7 +54,8 @@ import {
   saveCacheToMemory,
 } from './cache';
 import {ConfigEntryBuilder, configIndexProperty} from './config-entry-builder';
-import {getIsConfigEnabled as getIsConfigEnabledContextless} from './config-utils';
+import {getIsConfigEnabledByManifest as getIsConfigEnabledByManifestContextless} from './config-utils';
+import {CASCADE_ANCHORS, type CascadeAnchor} from './define-config';
 import type {ImportIntegrityPluginSettings} from './import-integrity';
 import {resolveConfigAsyncData} from './resolve-config-async-data';
 import {
@@ -68,7 +63,6 @@ import {
   type EslintConfigUnOptions,
   type ExtraPluginsType,
   type UnConfigContext,
-  type UnConfigFn,
   processUnOrFlatConfig,
 } from './shared';
 
@@ -272,18 +266,31 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     debug("Could not restore configs from cache - it's either stale or an error occurred");
   }
 
-  const [packagesInfoRaw, gitignoreFile, eslintPluginTailwind, eslintPluginSvelte] =
-    await Promise.all([
-      Promise.all(
-        PACKAGES_TO_GET_INFO_FOR.map(
-          async (name) =>
-            [name, await fetchPackageInfo(optionsResolved.packageAliases?.[name] || name)] as const,
-        ),
+  const requiredPluginPrefixes = [
+    ...new Set(
+      Object.values(CONFIG_MANIFESTS).flatMap(({requires}) =>
+        requires ? [requires.pluginLoadable] : [],
       ),
-      readFileSafe('.gitignore'),
-      pluginsLoaders.tailwindcss(context).then(({module}) => module),
-      pluginsLoaders.svelte(context).then(({module}) => module),
-    ]);
+    ),
+  ];
+
+  const [packagesInfoRaw, gitignoreFile, loadablePluginsRaw] = await Promise.all([
+    Promise.all(
+      PACKAGES_TO_GET_INFO_FOR.map(
+        async (name) =>
+          [name, await fetchPackageInfo(optionsResolved.packageAliases?.[name] || name)] as const,
+      ),
+    ),
+    readFileSafe('.gitignore'),
+    Promise.all(
+      requiredPluginPrefixes.map(async (pluginPrefix) => {
+        const {packageName, module} = await pluginsLoaders[pluginPrefix](context);
+        return [pluginPrefix, {packageName, isLoadable: module != null}] as const;
+      }),
+    ),
+  ]);
+
+  const loadablePlugins = new Map(loadablePluginsRaw);
 
   const packagesInfo = Object.fromEntries(packagesInfoRaw) as UnConfigContext['packagesInfo'];
   Object.assign(context.packagesInfo, packagesInfo satisfies UnConfigContext['packagesInfo']);
@@ -340,248 +347,92 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
     );
   }
 
-  const getIsConfigEnabled = getIsConfigEnabledContextless.bind(context);
+  const getIsConfigEnabledByManifest = getIsConfigEnabledByManifestContextless.bind(context);
 
-  const isAngularEnabled = getIsConfigEnabled('angular', '@angular/core');
-  Object.assign(context.configsMeta, {
-    angular: {enabled: isAngularEnabled},
-    antfu: {enabled: getIsConfigEnabled('antfu', false)},
-    arrowReturnStyle: {enabled: getIsConfigEnabled('arrowReturnStyle')},
-    astro: {enabled: getIsConfigEnabled('astro', 'astro')},
-    ava: {enabled: getIsConfigEnabled('ava', 'ava')},
-    awsCdk: {enabled: getIsConfigEnabled('awsCdk', 'aws-cdk-lib')},
-    barrelFiles: {enabled: getIsConfigEnabled('barrelFiles', false)},
-    betterTailwind: {enabled: getIsConfigEnabled('betterTailwind', 'tailwindcss')},
-    boundaries: {enabled: getIsConfigEnabled('boundaries', false)},
-    casePolice: {enabled: getIsConfigEnabled('casePolice', false)},
-    checkFile: {enabled: getIsConfigEnabled('checkFile', false)},
-    cli: {enabled: getIsConfigEnabled('cli')},
-    cloudfrontFunctions: {enabled: getIsConfigEnabled('cloudfrontFunctions', false)},
-    clsx: {enabled: getIsConfigEnabled('clsx', 'clsx')},
-    command: {enabled: getIsConfigEnabled('command', false)},
-    compat: {enabled: getIsConfigEnabled('compat', false)},
-    css: {enabled: getIsConfigEnabled('css', !packagesInfo.stylelint)},
-    cssInJs: {enabled: getIsConfigEnabled('cssInJs')},
-    cspell: {enabled: getIsConfigEnabled('cspell', false)},
-    cypress: {enabled: getIsConfigEnabled('cypress', 'cypress')},
-    deMorgan: {enabled: getIsConfigEnabled('deMorgan', false)},
-    depend: {enabled: getIsConfigEnabled('depend', false)},
-    docusaurus: {enabled: getIsConfigEnabled('docusaurus', '@docusaurus/core')},
-    drizzle: {enabled: getIsConfigEnabled('drizzle', 'drizzle-orm')},
-    format: {enabled: getIsConfigEnabled('format', false)},
-    formatJs: {
-      enabled: getIsConfigEnabled('formatJs', '@formatjs/icu-messageformat-parser'),
-    },
-    functional: {enabled: getIsConfigEnabled('functional', false)},
-    e18e: {enabled: getIsConfigEnabled('e18e', false)},
-    ember: {enabled: getIsConfigEnabled('ember', 'ember-source')},
-    erasableSyntaxOnly: {enabled: getIsConfigEnabled('erasableSyntaxOnly', false)},
-    es: {enabled: getIsConfigEnabled('es', false)},
-    eslintComments: {enabled: getIsConfigEnabled('eslintComments')},
-    eslintPlugin: {enabled: getIsConfigEnabled('eslintPlugin', false)},
-    expectType: {enabled: getIsConfigEnabled('expectType', false)},
-    fileProgress: {enabled: getIsConfigEnabled('fileProgress', false)},
-    githubActions: {
-      enabled: getIsConfigEnabled('githubActions', findUp.dir('.github/workflows') != null),
-    },
-    graphql: {enabled: getIsConfigEnabled('graphql', 'graphql')},
-    header: {enabled: getIsConfigEnabled('header', false)},
-    headers: {enabled: getIsConfigEnabled('headers', false)},
-    html: {
-      // Multiple parsers (in this case, angular and html) cannot be applied to the same file: https://github.com/eslint/eslint/issues/14286
-      enabled: getIsConfigEnabled('html', !isAngularEnabled),
-    },
-    import: {enabled: getIsConfigEnabled('import')},
-    importIntegrity: {enabled: getIsConfigEnabled('importIntegrity', false)},
-    importZod: {enabled: getIsConfigEnabled('importZod', false)},
-    jest: {enabled: getIsConfigEnabled('jest', 'jest')},
-    jestDom: {enabled: getIsConfigEnabled('jestDom', '@testing-library/jest-dom')},
-    js: {enabled: getIsConfigEnabled('js')},
-    jsInline: {enabled: getIsConfigEnabled('jsInline')},
-    jsdoc: {enabled: getIsConfigEnabled('jsdoc')},
-    json: {enabled: getIsConfigEnabled('json', false)},
-    jsonSchemaValidator: {enabled: getIsConfigEnabled('jsonSchemaValidator', false)},
-    jsonc: {enabled: getIsConfigEnabled('jsonc', false)},
-    jsxA11y: {enabled: getIsConfigEnabled('jsxA11y')},
-    lit: {enabled: getIsConfigEnabled('lit', 'lit')},
-    lockfile: {enabled: getIsConfigEnabled('lockfile', false)},
-    markdown: {enabled: getIsConfigEnabled('markdown')},
-    markdownLinks: {enabled: getIsConfigEnabled('markdownLinks', false)},
-    markdownPreferences: {enabled: getIsConfigEnabled('markdownPreferences')},
-    math: {enabled: getIsConfigEnabled('math')},
-    mdx: {enabled: getIsConfigEnabled('mdx')},
-    mobx: {enabled: getIsConfigEnabled('mobx', 'mobx')},
-    mocha: {enabled: getIsConfigEnabled('mocha', 'mocha')},
-    moduleInterop: {enabled: getIsConfigEnabled('moduleInterop')},
-    // eslint-disable-next-line case-police/string-check
-    nestJs: {enabled: getIsConfigEnabled('nestJs', '@nestjs/core')},
-    ngrx: {enabled: getIsConfigEnabled('ngrx', '@ngrx/store')},
-    nextJs: {
-      // eslint-disable-next-line case-police/string-check
-      enabled: getIsConfigEnabled('nextJs', 'next'),
-    },
-    node: {enabled: getIsConfigEnabled('node')},
-    nodeDependencies: {enabled: getIsConfigEnabled('nodeDependencies', false)},
-    noOnlyTests: {enabled: getIsConfigEnabled('noOnlyTests', false)},
-    noPrettierIncompatibleRules: {
-      enabled: getIsConfigEnabled('noPrettierIncompatibleRules', 'prettier'),
-    },
-    noRelativeImportPaths: {enabled: getIsConfigEnabled('noRelativeImportPaths', false)},
-    noSecrets: {enabled: getIsConfigEnabled('noSecrets')},
-    noStylisticRules: {enabled: getIsConfigEnabled('noStylisticRules', false)},
-    noUnsanitized: {enabled: getIsConfigEnabled('noUnsanitized')},
-    nx: {enabled: getIsConfigEnabled('nx', 'nx')},
-    packageJson: {enabled: getIsConfigEnabled('packageJson')},
-    perfectionist: {enabled: getIsConfigEnabled('perfectionist', false)},
-    playwright: {enabled: getIsConfigEnabled('playwright', 'playwright')},
-    pnpm: {enabled: getIsConfigEnabled('pnpm', usedPackageManager?.name === 'pnpm')},
-    preferArrowFunctions: {enabled: getIsConfigEnabled('preferArrowFunctions', false)},
-    promise: {enabled: getIsConfigEnabled('promise')},
-    qunit: {enabled: getIsConfigEnabled('qunit', 'qunit')},
-    qwik: {enabled: getIsConfigEnabled('qwik', ['@builder.io/qwik', '@qwik.dev/core'])},
-    react: {enabled: getIsConfigEnabled('react', 'react')},
-    regexp: {enabled: getIsConfigEnabled('regexp')},
-    remeda: {enabled: getIsConfigEnabled('remeda', 'remeda')},
-    ripple: {enabled: getIsConfigEnabled('ripple', 'ripple')},
-    rxjs: {enabled: getIsConfigEnabled('rxjs', 'rxjs')},
-    security: {enabled: getIsConfigEnabled('security', false)},
-    solid: {enabled: getIsConfigEnabled('solid', 'solid-js')},
-    sonar: {enabled: getIsConfigEnabled('sonar')},
-    sql: {enabled: getIsConfigEnabled('sql', false)},
-    storybook: {enabled: getIsConfigEnabled('storybook', 'storybook')},
-    stylistic: {enabled: getIsConfigEnabled('stylistic')},
-    svelte: {
-      enabled: getIsConfigEnabled('svelte', 'svelte', {
-        preCondition: [eslintPluginSvelte != null, '`eslint-plugin-svelte` can be loaded'],
-      }),
-    },
-    tailwind: {
-      enabled: getIsConfigEnabled('tailwind', false, {
-        preCondition: [eslintPluginTailwind != null, '`eslint-plugin-tailwindcss` can be loaded'],
-      }),
-    },
-    tanstackQuery: {enabled: getIsConfigEnabled('tanstackQuery', '@tanstack/query-core')},
-    tanstackRouter: {
-      enabled: getIsConfigEnabled('tanstackRouter', [
-        '@tanstack/react-router',
-        '@tanstack/solid-router',
-      ]),
-    },
-    tanstackStart: {
-      enabled: getIsConfigEnabled('tanstackStart', [
-        '@tanstack/react-start',
-        '@tanstack/solid-start',
-      ]),
-    },
-    testingLibrary: {enabled: getIsConfigEnabled('testingLibrary', '@testing-library/dom')},
-    tests: {enabled: getIsConfigEnabled('tests')},
-    toml: {enabled: getIsConfigEnabled('toml', false)},
-    treeShaking: {enabled: getIsConfigEnabled('treeShaking', false)},
-    ts: {enabled: getIsConfigEnabled('ts', 'typescript')},
-    tsdoc: {enabled: getIsConfigEnabled('tsdoc', false)},
-    turbo: {enabled: getIsConfigEnabled('turbo', 'turbo')},
-    unhead: {enabled: getIsConfigEnabled('unhead', 'unhead')},
-    unicorn: {enabled: getIsConfigEnabled('unicorn')},
-    unnecessaryAbstractions: {enabled: getIsConfigEnabled('unnecessaryAbstractions')},
-    unocss: {enabled: getIsConfigEnabled('unocss', 'unocss')},
-    un: {enabled: getIsConfigEnabled('un')},
-    unusedImports: {enabled: getIsConfigEnabled('unusedImports', false)},
-    vitest: {enabled: getIsConfigEnabled('vitest', 'vitest')},
-    vue: {enabled: getIsConfigEnabled('vue', 'vue')},
-    webComponents: {enabled: getIsConfigEnabled('webComponents', false)},
-    yaml: {enabled: getIsConfigEnabled('yaml', false)},
-    youDontNeedLodashUnderscore: {
-      enabled: getIsConfigEnabled('youDontNeedLodashUnderscore', [
-        'lodash',
-        'lodash-es',
-        ...CHECKED_LODASH_METHODS.map((method) => `lodash.${method}` as const),
-      ]),
-    },
-    zod: {enabled: getIsConfigEnabled('zod', 'zod@^3||^4')},
-    zodOpenapi: {enabled: getIsConfigEnabled('zodOpenapi', 'zod-openapi')},
-  } satisfies UnConfigContext['configsMeta']);
+  const resolveManifestConfigEnablement = (configKey: keyof UnConfigs) => {
+    const manifest = CONFIG_MANIFESTS[configKey];
+    if (!manifest || configKey in context.configsMeta) {
+      return;
+    }
 
-  // TODO try to move to `config-utils`
-  const loadUnConfig = async <
-    ConfigKey extends keyof UnConfigs,
-    ExtraArgument,
-    T extends UnConfigFn<ConfigKey, ExtraArgument>,
-  >(
-    configKey: ConfigKey,
-    importer: () => Promise<{default: T}>,
-    ...args: IsUnknown<ExtraArgument> extends true
-      ? []
-      : IncludesUndefined<ExtraArgument> extends true
-        ? [extraArgument?: ExtraArgument]
-        : [extraArgument: ExtraArgument]
-  ): Promise<
-    | (IsAnyUnionMemberAssignableTo<
-        (EslintConfigUnOptions['configs'] & {})[ConfigKey],
-        readonly unknown[]
-      > extends true
-        ? Awaited<ReturnType<T>>[]
-        : Awaited<ReturnType<T>>)
-    | null
-  > =>
-    context.configsMeta[configKey].enabled
-      ? // @ts-expect-error weird error
-        await Promise.resolve(importer()).then((m) => {
-          const configOptions = context.rootOptions.configs?.[configKey];
-          if (Array.isArray(configOptions)) {
-            return Promise.all(
-              // eslint-disable-next-line ts/await-thenable
-              configOptions.map((configOptionsItem, configIndex) =>
-                m.default(
-                  context,
-                  {...configOptionsItem, [configIndexProperty]: configIndex},
-                  // @ts-expect-error "A spread argument must either have a tuple type or be passed to a rest parameter."
-                  ...args,
-                ),
-              ),
-            );
-          }
-          return m.default(
-            context,
-            // @ts-expect-error "Expression produces a union type that is too complex to represent."
-            configOptions,
-            // @ts-expect-error "A spread argument must either have a tuple type or be passed to a rest parameter."
-            ...args,
-          );
-        })
-      : null;
+    const {enabledBy} = manifest;
+    if (typeof enabledBy === 'object' && 'configDisabled' in enabledBy) {
+      resolveManifestConfigEnablement(enabledBy.configDisabled);
+    }
+    context.configsMeta[configKey] = {
+      enabled: getIsConfigEnabledByManifest.call(context, configKey, manifest, loadablePlugins),
+    };
+  };
 
-  const jsEslintConfigResult = await loadUnConfig('js', () => import('../configs/js'));
-  const vanillaFinalFlatConfigRules = jsEslintConfigResult?.finalFlatConfigRules || {};
-  const [
-    astroEslintConfigResult,
-    vueEslintConfigResult,
-    svelteEslintConfigResult,
-    cssEslintConfigResult,
-    markdownPreferencesConfigResult,
-  ] = await Promise.all([
-    loadUnConfig('astro', () => import('../configs/astro')),
-    loadUnConfig('vue', () => import('../configs/vue'), {vanillaFinalFlatConfigRules}),
-    loadUnConfig('svelte', () => import('../configs/svelte')),
-    loadUnConfig('css', () => import('../configs/css')),
-    loadUnConfig('markdownPreferences', () => import('../configs/markdown-preferences')),
-  ]);
-  const tsEslintConfigResult = await loadUnConfig('ts', () => import('../configs/ts'), {
-    vanillaFinalFlatConfigRules,
-    astroResolvedOptions: astroEslintConfigResult ? astroEslintConfigResult.optionsResolved : null,
-    vueResolvedOptions: vueEslintConfigResult ? vueEslintConfigResult.optionsResolved : null,
-    svelteResolvedOptions: svelteEslintConfigResult
-      ? svelteEslintConfigResult.optionsResolved
-      : null,
+  objectEntriesUnsafe(CONFIG_MANIFESTS).forEach(([configKey]) => {
+    resolveManifestConfigEnablement(configKey);
   });
 
+  const configResults: UnConfigResults = {
+    astro: null,
+    css: null,
+    js: null,
+    markdownPreferences: null,
+    svelte: null,
+    ts: null,
+    vue: null,
+  };
+
+  const setupManifestConfig = async (configKey: ManifestConfigKey) => {
+    const manifest = CONFIG_MANIFESTS[configKey];
+    /* v8 ignore next 3 -- every manifest key comes from the generated table */
+    if (!manifest) {
+      return null;
+    }
+    if (!context.configsMeta[configKey].enabled) {
+      return null;
+    }
+
+    const {default: manifestWithSetup} = await manifest.load();
+    const configOptions = context.rootOptions.configs?.[configKey];
+    const result = Array.isArray(configOptions)
+      ? await Promise.all(
+          // eslint-disable-next-line ts/await-thenable -- a `setup` may well be synchronous
+          configOptions.map((configOptionsItem, configIndex) =>
+            manifestWithSetup.setup(
+              context,
+              {...configOptionsItem, [configIndexProperty]: configIndex},
+              configResults,
+            ),
+          ),
+        )
+      : await manifestWithSetup.setup(context, configOptions, configResults);
+    if (configKey in configResults && !Array.isArray(result)) {
+      Object.assign(configResults, {[configKey]: result});
+    }
+    return result;
+  };
+
+  const configSetups = new Map<ManifestConfigKey, ReturnType<typeof setupManifestConfig>>();
+  const loadManifestConfig = (configKey: ManifestConfigKey) => {
+    const setup = configSetups.get(configKey) ?? setupManifestConfig(configKey);
+    configSetups.set(configKey, setup);
+    return setup;
+  };
+
+  await loadManifestConfig('js');
+  await Promise.all([
+    loadManifestConfig('astro'),
+    loadManifestConfig('vue'),
+    loadManifestConfig('svelte'),
+    loadManifestConfig('css'),
+    loadManifestConfig('markdownPreferences'),
+  ]);
+  await loadManifestConfig('ts');
+
   if (typeInfoRulesUserMode == null) {
-    context.typeInfoRulesResolved.mode = tsEslintConfigResult?.setupTypeAwareConfigCreated
+    context.typeInfoRulesResolved.mode = configResults.ts?.setupTypeAwareConfigCreated
       ? 'splitOnly'
       : 'standalone';
   }
 
   const shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs =
-    markdownPreferencesConfigResult?.optionsResolved.extendedMarkdownSyntax === true;
+    configResults.markdownPreferences?.optionsResolved.extendedMarkdownSyntax === true;
 
   const rootConfigBuilder = context.createConfigBuilder({}, '');
   rootConfigBuilder
@@ -612,251 +463,110 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
 
   type UnresolvedConfigType =
     | MaybeArray<EslintFlatConfigEntry | ConfigEntryBuilder<ExtraPlugins> | Falsy>
-    | {configs: (ConfigEntryBuilder<ExtraPlugins> | null)[]};
+    | MaybeArray<{configs: (ConfigEntryBuilder<ExtraPlugins> | null)[]} | null>;
 
-  /* eslint-disable ts/await-thenable */
-  const unresolvedConfigs = Promise.all([
-    (files?.length || 0) > 0 && {
-      name: genFlatConfigEntryName('files/global'),
-      files,
-    },
-    globalIgnores.length > 0 && {
-      name: genFlatConfigEntryName('ignores/global'),
-      ignores: globalIgnores,
-    },
-    gitignore !== false &&
-      (typeof gitignore === 'object' || gitignoreFile) &&
-      interopDefault(import('eslint-config-flat-gitignore')).then((eslintGitignore) => ({
-        ...(typeof gitignore === 'object' ? eslintGitignore(gitignore) : eslintGitignore()),
-        name: genFlatConfigEntryName('ignores/gitignore'),
-      })),
-    ...(
-      [
-        [linterOptionsNoInlineConfig, 'noInlineConfig'],
-        // Override ESLint's default value of `warn`
+  const cascadeAnchorEntries: Record<CascadeAnchor, MaybePromise<UnresolvedConfigType>[]> = {
+    globalSetup: [
+      (files?.length || 0) > 0 && {
+        name: genFlatConfigEntryName('files/global'),
+        files,
+      },
+      globalIgnores.length > 0 && {
+        name: genFlatConfigEntryName('ignores/global'),
+        ignores: globalIgnores,
+      },
+      gitignore !== false &&
+        (typeof gitignore === 'object' || gitignoreFile) &&
+        interopDefault(import('eslint-config-flat-gitignore')).then((eslintGitignore) => ({
+          ...(typeof gitignore === 'object' ? eslintGitignore(gitignore) : eslintGitignore()),
+          name: genFlatConfigEntryName('ignores/gitignore'),
+        })),
+      ...(
         [
-          linterOptionsReportUnusedDisableDirectives ?? (noWarnings ? ERROR : null),
-          'reportUnusedDisableDirectives',
-        ],
-        [linterOptionsReportUnusedInlineConfigs, 'reportUnusedInlineConfigs'],
-      ] as const
-    ).flatMap(([linterOptionConfigs, linterOptionName]) =>
-      (typeof linterOptionConfigs === 'object'
-        ? arrayify(linterOptionConfigs)
-        : linterOptionConfigs == null
-          ? []
-          : [{value: linterOptionConfigs}]
-      ).map((linterOptionConfig, linterOptionConfigIndex, resolvedLinterOptionConfigs) => {
-        const valueInitial = linterOptionConfig.value;
-        const hasFiles = (linterOptionConfig.files?.length || 0) > 0;
-        const hasIgnores = (linterOptionConfig.ignores?.length || 0) > 0;
-        // An `ignores`-only entry reads as "turn this option off for these paths", so they should become `files`
-        const disableForIgnoredPaths = !hasFiles && hasIgnores && valueInitial == null;
+          [linterOptionsNoInlineConfig, 'noInlineConfig'],
+          // Override ESLint's default value of `warn`
+          [
+            linterOptionsReportUnusedDisableDirectives ?? (noWarnings ? ERROR : null),
+            'reportUnusedDisableDirectives',
+          ],
+          [linterOptionsReportUnusedInlineConfigs, 'reportUnusedInlineConfigs'],
+        ] as const
+      ).flatMap(([linterOptionConfigs, linterOptionName]) =>
+        (typeof linterOptionConfigs === 'object'
+          ? arrayify(linterOptionConfigs)
+          : linterOptionConfigs == null
+            ? []
+            : [{value: linterOptionConfigs}]
+        ).map((linterOptionConfig, linterOptionConfigIndex, resolvedLinterOptionConfigs) => {
+          const valueInitial = linterOptionConfig.value;
+          const hasFiles = (linterOptionConfig.files?.length || 0) > 0;
+          const hasIgnores = (linterOptionConfig.ignores?.length || 0) > 0;
+          // An `ignores`-only entry reads as "turn this option off for these paths", so they should become `files`
+          const disableForIgnoredPaths = !hasFiles && hasIgnores && valueInitial == null;
 
-        const valueFinal = (() => {
-          let result = valueInitial;
-          if (disableForIgnoredPaths) {
-            result = linterOptionName === 'noInlineConfig' ? false : 'off';
-          }
-          if (noWarnings && (result === 'warn' || result === WARNING)) {
-            result = result === 'warn' ? 'error' : ERROR;
-          }
-          return result;
-        })();
-        const filesFinal = disableForIgnoredPaths
-          ? linterOptionConfig.ignores
-          : linterOptionConfig.files;
+          const valueFinal = (() => {
+            let result = valueInitial;
+            if (disableForIgnoredPaths) {
+              result = linterOptionName === 'noInlineConfig' ? false : 'off';
+            }
+            if (noWarnings && (result === 'warn' || result === WARNING)) {
+              result = result === 'warn' ? 'error' : ERROR;
+            }
+            return result;
+          })();
+          const filesFinal = disableForIgnoredPaths
+            ? linterOptionConfig.ignores
+            : linterOptionConfig.files;
 
-        return {
-          name: genFlatConfigEntryName(
-            `global-setup/linter-options/${linterOptionName}${resolvedLinterOptionConfigs.length > 1 ? `/${linterOptionConfigIndex}` : ''}`,
-          ),
-          ...(filesFinal?.length && {files: filesFinal}),
-          ...(!disableForIgnoredPaths &&
-            linterOptionConfig.ignores?.length && {ignores: linterOptionConfig.ignores}),
-          // Always add `linterOptions` to avoid creating global ignore config
-          linterOptions: {
-            ...(valueFinal != null && {[linterOptionName]: valueFinal}),
-          },
-        };
-      }),
-    ),
-    {
-      name: genFlatConfigEntryName('global-setup/language-options'),
-      languageOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
-        parserOptions: {
+          return {
+            name: genFlatConfigEntryName(
+              `global-setup/linter-options/${linterOptionName}${resolvedLinterOptionConfigs.length > 1 ? `/${linterOptionConfigIndex}` : ''}`,
+            ),
+            ...(filesFinal?.length && {files: filesFinal}),
+            ...(!disableForIgnoredPaths &&
+              linterOptionConfig.ignores?.length && {ignores: linterOptionConfig.ignores}),
+            // Always add `linterOptions` to avoid creating global ignore config
+            linterOptions: {
+              ...(valueFinal != null && {[linterOptionName]: valueFinal}),
+            },
+          };
+        }),
+      ),
+      {
+        name: genFlatConfigEntryName('global-setup/language-options'),
+        languageOptions: {
           ecmaVersion: 'latest',
-          ecmaFeatures: {
-            jsx: true,
-          },
           sourceType: 'module',
-        },
-      } as const,
-    },
-    {
-      name: genFlatConfigEntryName('global-setup/language-options/commonjs'),
-      files: ['**/*.c[jt]s?(x)'],
-      languageOptions: {
-        globals: {
-          ...globals.commonjs,
+          parserOptions: {
+            ecmaVersion: 'latest',
+            ecmaFeatures: {
+              jsx: true,
+            },
+            sourceType: 'module',
+          },
+        } as const,
+      },
+      {
+        name: genFlatConfigEntryName('global-setup/language-options/commonjs'),
+        files: ['**/*.c[jt]s?(x)'],
+        languageOptions: {
+          globals: {
+            ...globals.commonjs,
+          },
         },
       },
-    },
-    useImportIntegrity && {
-      name: genFlatConfigEntryName('global-setup/import-integrity'),
-      settings: {
-        'import-integrity': {
-          packageRootDir: import.meta.dirname,
-          ...(typeof useImportIntegrity === 'object' && useImportIntegrity.pluginSettings),
-        } satisfies ImportIntegrityPluginSettings,
+      useImportIntegrity && {
+        name: genFlatConfigEntryName('global-setup/import-integrity'),
+        settings: {
+          'import-integrity': {
+            packageRootDir: import.meta.dirname,
+            ...(typeof useImportIntegrity === 'object' && useImportIntegrity.pluginSettings),
+          } satisfies ImportIntegrityPluginSettings,
+        },
       },
-    },
-
-    /* Enabled by default or conditionally */
-    loadUnConfig('tests', () => import('../configs/common/tests')),
-    jsEslintConfigResult,
-    loadUnConfig('stylistic', () => import('../configs/stylistic')),
-    loadUnConfig('unicorn', () => import('../configs/unicorn')),
-    loadUnConfig('import', () => import('../configs/import')),
-    loadUnConfig('node', () => import('../configs/node')),
-    loadUnConfig('promise', () => import('../configs/promise')),
-    loadUnConfig('sonar', () => import('../configs/sonar')),
-    loadUnConfig('tailwind', () => import('../configs/tailwind')),
-    loadUnConfig('regexp', () => import('../configs/regexp')),
-    loadUnConfig('eslintComments', () => import('../configs/eslint-comments')),
-    loadUnConfig('cssInJs', () => import('../configs/css-in-js')),
-    loadUnConfig('jest', () => import('../configs/jest')),
-    loadUnConfig('vitest', () => import('../configs/vitest')),
-    loadUnConfig('jsdoc', () => import('../configs/jsdoc')),
-    loadUnConfig('qwik', () => import('../configs/qwik')),
-    cssEslintConfigResult,
-    loadUnConfig('unusedImports', () => import('../configs/unused-imports')),
-    loadUnConfig('react', () => import('../configs/react'), {
-      tsFilesTypeAware:
-        typeof tsEslintConfigResult === 'object' && tsEslintConfigResult
-          ? tsEslintConfigResult.filesTypeAware
-          : [],
-      tsIgnoresTypeAware:
-        typeof tsEslintConfigResult === 'object' && tsEslintConfigResult
-          ? tsEslintConfigResult.ignoresTypeAware
-          : [],
-    }),
-    loadUnConfig('jsxA11y', () => import('../configs/jsx-a11y'), undefined),
-    loadUnConfig('pnpm', () => import('../configs/pnpm')),
-    // eslint-disable-next-line case-police/string-check
-    loadUnConfig('nextJs', () => import('../configs/nextjs')),
-    loadUnConfig('solid', () => import('../configs/solid')),
-    loadUnConfig('ripple', () => import('../configs/ripple')),
-    loadUnConfig('remeda', () => import('../configs/remeda')),
-    loadUnConfig('jsInline', () => import('../configs/js-inline')),
-    loadUnConfig('html', () => import('../configs/html')),
-    loadUnConfig('math', () => import('../configs/math')),
-    loadUnConfig('tanstackQuery', () => import('../configs/tanstack-query')),
-    loadUnConfig('ava', () => import('../configs/ava')),
-    loadUnConfig('testingLibrary', () => import('../configs/testing-library')),
-    loadUnConfig('storybook', () => import('../configs/storybook')),
-    loadUnConfig('ember', () => import('../configs/ember')),
-    loadUnConfig('cypress', () => import('../configs/cypress')),
-    loadUnConfig('turbo', () => import('../configs/turbo')),
-    loadUnConfig('noUnsanitized', () => import('../configs/no-unsanitized')),
-    loadUnConfig('betterTailwind', () => import('../configs/better-tailwind'), {
-      cssResolvedOptions: cssEslintConfigResult?.optionsResolved,
-    }),
-    loadUnConfig('playwright', () => import('../configs/playwright')),
-    loadUnConfig(
-      'youDontNeedLodashUnderscore',
-      () => import('../configs/you-dont-need-lodash-underscore'),
-    ),
-    loadUnConfig('lit', () => import('../configs/lit')),
-    loadUnConfig('mocha', () => import('../configs/mocha')),
-    loadUnConfig('qunit', () => import('../configs/qunit')),
-    loadUnConfig('rxjs', () => import('../configs/rxjs')),
-    loadUnConfig('nx', () => import('../configs/nx')),
-    loadUnConfig('un', () => import('../configs/un')),
-    loadUnConfig('importZod', () => import('../configs/import-zod')),
-    loadUnConfig('unocss', () => import('../configs/unocss')),
-    loadUnConfig('unhead', () => import('../configs/unhead')),
-    loadUnConfig('unnecessaryAbstractions', () => import('../configs/unnecessary-abstractions')),
-    !shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs && markdownPreferencesConfigResult,
-    loadUnConfig('markdownLinks', () => import('../configs/markdown-links')),
-    loadUnConfig('zod', () => import('../configs/zod')),
-    loadUnConfig('zodOpenapi', () => import('../configs/zod-openapi')),
-    loadUnConfig('docusaurus', () => import('../configs/docusaurus')),
-    loadUnConfig('drizzle', () => import('../configs/drizzle')),
-    loadUnConfig('mobx', () => import('../configs/mobx')),
-    loadUnConfig('awsCdk', () => import('../configs/aws-cdk')),
-    loadUnConfig('moduleInterop', () => import('../configs/module-interop')),
-    loadUnConfig('noSecrets', () => import('../configs/no-secrets')),
-    // eslint-disable-next-line case-police/string-check
-    loadUnConfig('nestJs', () => import('../configs/nest-js')),
-    loadUnConfig('ngrx', () => import('../configs/ngrx')),
-    loadUnConfig('jestDom', () => import('../configs/jest-dom')),
-    loadUnConfig('clsx', () => import('../configs/clsx')),
-    loadUnConfig('e18e', () => import('../configs/e18e')),
-    loadUnConfig('lockfile', () => import('../configs/lockfile')),
-    loadUnConfig('tanstackRouter', () => import('../configs/tanstack-router')),
-    loadUnConfig('tanstackStart', () => import('../configs/tanstack-start')),
-    loadUnConfig('arrowReturnStyle', () => import('../configs/arrow-return-style')),
-
-    /* Disabled by default */
-    loadUnConfig('security', () => import('../configs/security')),
-    loadUnConfig('preferArrowFunctions', () => import('../configs/prefer-arrow-functions')),
-    loadUnConfig('yaml', () => import('../configs/yaml')),
-    loadUnConfig('toml', () => import('../configs/toml')),
-    loadUnConfig('jsonc', () => import('../configs/jsonc')),
-    loadUnConfig('json', () => import('../configs/json')),
-    loadUnConfig('packageJson', () => import('../configs/package-json')),
-    loadUnConfig('perfectionist', () => import('../configs/perfectionist')),
-    loadUnConfig('deMorgan', () => import('../configs/de-morgan')),
-    loadUnConfig('jsonSchemaValidator', () => import('../configs/json-schema-validator')),
-    loadUnConfig('casePolice', () => import('../configs/case-police')),
-    loadUnConfig('nodeDependencies', () => import('../configs/node-dependencies')),
-    loadUnConfig('depend', () => import('../configs/depend')),
-    loadUnConfig('erasableSyntaxOnly', () => import('../configs/erasable-syntax-only')),
-    loadUnConfig('cspell', () => import('../configs/cspell')),
-    loadUnConfig('eslintPlugin', () => import('../configs/eslint-plugin')),
-    loadUnConfig('fileProgress', () => import('../configs/file-progress')),
-    loadUnConfig('noOnlyTests', () => import('../configs/no-only-tests')),
-    loadUnConfig('noRelativeImportPaths', () => import('../configs/no-relative-import-paths')),
-    loadUnConfig('compat', () => import('../configs/compat')),
-    loadUnConfig('webComponents', () => import('../configs/web-components')),
-    loadUnConfig('header', () => import('../configs/header')),
-    loadUnConfig('headers', () => import('../configs/headers')),
-    loadUnConfig('importIntegrity', () => import('../configs/import-integrity')),
-    loadUnConfig('boundaries', () => import('../configs/boundaries')),
-    loadUnConfig('expectType', () => import('../configs/expect-type')),
-    loadUnConfig('command', () => import('../configs/command')),
-    loadUnConfig('antfu', () => import('../configs/antfu')),
-    loadUnConfig('treeShaking', () => import('../configs/tree-shaking')),
-    loadUnConfig('barrelFiles', () => import('../configs/barrel-files')),
-    loadUnConfig('sql', () => import('../configs/sql')),
-    loadUnConfig('tsdoc', () => import('../configs/tsdoc')),
-    loadUnConfig('format', () => import('../configs/format')),
-    loadUnConfig('functional', () => import('../configs/functional')),
-
-    /* Other configs */
-    loadUnConfig('githubActions', () => import('../configs/github-actions')), // Must come after `yaml`
-    tsEslintConfigResult, // Must come after all rulesets for vanilla JS
-    loadUnConfig('es', () => import('../configs/es'), undefined), // Must come after ts
-    vueEslintConfigResult, // Must come after ts
-    astroEslintConfigResult, // Must come after ts
-    loadUnConfig('angular', () => import('../configs/angular')), // Must come after ts
-    svelteEslintConfigResult, // Must be after ts
-    loadUnConfig('graphql', () => import('../configs/graphql')),
-    loadUnConfig('checkFile', () => import('../configs/check-file')), // Likely should be last
-    loadUnConfig('formatJs', () => import('../configs/formatjs')), // Likely should be last
-    loadUnConfig('markdown', () => import('../configs/markdown')), // Must be last
-    shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs && markdownPreferencesConfigResult,
-    loadUnConfig('mdx', () => import('../configs/mdx')), // Must be last
-
-    rootConfigBuilder,
-
-    loadUnConfig('cli', () => import('../configs/extra/cli')),
-    loadUnConfig('cloudfrontFunctions', () => import('../configs/extra/cloudfront-functions')),
-
-    ...extraConfigs.flatMap((extraConfig, configIndex) => {
+    ],
+    rootConfig: [rootConfigBuilder],
+    userExtraConfigs: extraConfigs.flatMap((extraConfig, configIndex) => {
       const configName = genFlatConfigEntryName(
         `extra-config/${extraConfig.name || `unnamed${configIndex}`}`,
       );
@@ -875,17 +585,28 @@ export async function eslintConfigInternal<const ExtraPlugins extends ExtraPlugi
       });
       return [extraConfigFinal, ...configResolveResult.extraConfigs];
     }),
+  };
 
-    // MUST be last (thw following configs globally disable rules)
-    loadUnConfig('noStylisticRules', () => import('../configs/extra/no-stylistic-rules')),
-    loadUnConfig(
-      'noPrettierIncompatibleRules',
-      () => import('../configs/extra/no-prettier-incompatible-rules'),
+  const cascadeOrder = shouldMarkdownPreferencesConfigsGoAfterMarkdownConfigs
+    ? CONFIG_ORDER.flatMap((entry) =>
+        entry === 'markdownPreferences'
+          ? []
+          : entry === 'markdown'
+            ? ([entry, 'markdownPreferences'] as const)
+            : entry,
+      )
+    : CONFIG_ORDER;
+
+  const unresolvedConfigs: UnresolvedConfigType[] = await Promise.all(
+    // eslint-disable-next-line ts/await-thenable -- most of the anchors contribute plain entries
+    cascadeOrder.flatMap((entry) =>
+      arrayIncludes(CASCADE_ANCHORS, entry)
+        ? cascadeAnchorEntries[entry]
+        : loadManifestConfig(entry),
     ),
-  ]) as Promise<UnresolvedConfigType[]>;
-  /* eslint-enable ts/await-thenable */
+  );
 
-  const resolvedConfigs: EslintFlatConfigEntry[] = (await unresolvedConfigs)
+  const resolvedConfigs: EslintFlatConfigEntry[] = unresolvedConfigs
     .map((unConfigOrEntryBuilders) =>
       arrayify(unConfigOrEntryBuilders).map((configOrBuilder) =>
         configOrBuilder instanceof ConfigEntryBuilder

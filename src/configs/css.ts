@@ -5,13 +5,18 @@ import {type MaybeFn, getKeysOfTruthyValues} from '../utils';
 import {
   type ExtraPluginsType,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type CssCustomSyntax = Extract<CSSLanguageOptions['customSyntax'], Record<string, unknown>>;
 
+/**
+ * CSS specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.css</code>
+ */
 export interface CssEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'css'> {
@@ -84,7 +89,13 @@ export interface CssEslintConfigOptions<
   };
 }
 
-export default (async (context, optionsRaw) => {
+export interface CssConfigResult {
+  optionsResolved: CssEslintConfigOptions;
+}
+
+export default defineUnConfig<CssEslintConfigOptions, [], CssConfigResult>('css', {
+  enabledBy: {packageAbsent: 'stylelint'},
+})(async (context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     files: [GLOB_CSS], // Need to resolve `files` early
     tolerantMode: false,
@@ -198,4 +209,4 @@ export default (async (context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'css'>;
+});

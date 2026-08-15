@@ -1,16 +1,23 @@
 import {ERROR, GLOB_JSX_TSX, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * [Docusaurus](https://docusaurus.io) specific rules.
+ *
+ * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]sx</code>
+ */
 export interface DocusaurusEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'docusaurus'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<DocusaurusEslintConfigOptions>('docusaurus', {
+  enabledBy: {package: '@docusaurus/core'},
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'docusaurus');
@@ -37,4 +44,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'docusaurus'>;
+});

@@ -1,16 +1,24 @@
 import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
+/**
+ * Enforces arrow function return style.
+ *
+ * 📁 Default `files`: all files
+ */
 export interface ArrowReturnStyleEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'arrow-return-style'> {}
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<ArrowReturnStyleEslintConfigOptions>(
+  'arrowReturnStyle',
+  true,
+)((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'arrow-return-style');
@@ -29,4 +37,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'arrowReturnStyle'>;
+});

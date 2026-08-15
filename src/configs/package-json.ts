@@ -6,9 +6,9 @@ import {
   type ExtraPluginsType,
   type GetRuleNamesInPlugin,
   type GetRuleOptions,
-  type UnConfigFn,
   type UnFlatConfigEntryBase,
   assignDefaults,
+  defineUnConfig,
 } from './index';
 
 type PackageJsonCollection =
@@ -97,6 +97,17 @@ const POPULAR_TOOLS_TOP_LEVEL_PACKAGE_JSON_PROPERTIES = {
   xo: 'XO',
 };
 
+/**
+ * An ESLint plugin with rules for consistent, readable, and valid package.json files.
+ *
+ * 📁 Default `files`: <code>**&#47;package.json</code>
+ *
+ * If the `enforceAbsoluteVersion` option is used, also applies rules from
+ * [`eslint-plugin-node-dependencies`](https://npmx.dev/eslint-plugin-node-dependencies)
+ * ([docs](https://ota-meshi.github.io/eslint-plugin-node-dependencies)).
+ *
+ * 📚 Supports multiple configs (array notation)
+ */
 export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends UnFlatConfigEntryBase<ExtraPlugins, 'package-json'>, RequireFieldsOption {
   /**
@@ -186,7 +197,9 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   banTopLevelProperties?: ArrayOrBooleanRecord<string, 'booleanOrMessage'> | 'popularTools';
 }
 
-export default ((context, optionsRaw) => {
+export default defineUnConfig<PackageJsonEslintConfigOptions>('packageJson', {
+  supportsMultipleConfigs: true,
+})((context, optionsRaw) => {
   const optionsResolved = assignDefaults(optionsRaw, {
     order: 'sort-package-json',
     repositoryShorthand: 'object',
@@ -385,4 +398,4 @@ export default ((context, optionsRaw) => {
     configs: [configBuilder],
     optionsResolved,
   };
-}) satisfies UnConfigFn<'packageJson'>;
+});
