@@ -47,7 +47,7 @@ If you installed new packages for that, make sure to add them to `src/loaders/{p
 
 ### Step 2: Updating generated artifacts
 
-Run `nr typegen`.
+Run `nr prep`.
 It generates two kinds of artifacts:
 
 - The plugin rules' types — its output gives you the exact rules that this plugin provides;
@@ -156,7 +156,7 @@ Update `Default renames` section if the chosen plugin prefix differs from what t
 
 ### Step 6: Testing
 
-Run `nr typegen` first: it validates the manifest and will name the exact problem if there is one.
+Run `nr prep` first: it validates the manifest and will name the exact problem if there is one.
 
 Then ensure there are no TypeScript/ESLint/prettier/knip/... errors.
 Run `nr check`, or run the individual commands separately if one of them prevents the chain from completing: `nr lint:ts6`, `nr lint:eslint <changed files>`, `nr format`, `nr knip`, `nr spellcheck`.

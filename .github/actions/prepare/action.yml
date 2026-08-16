@@ -35,12 +35,11 @@ runs:
     - name: Check deps for vulnerabilities & peer deps issues
       shell: bash
       run: pnpm check:deps
-    # Don't cache the typegen output - it's derived not only from the lockfile, but also from any
-    # config module (`src/configs/**/*.ts`) and other files, which makes the cache hits rare
-    - name: Run typegen
+    # Don't cache the generated artifacts - they are derived not only from the lockfile, but also
+    # from any config module (`src/configs/**/*.ts`) and other files, which makes the cache hits rare
+    - name: Generate the artifacts
       shell: bash
-      if: steps.cache-typegen.outputs.cache-hit != 'true'
-      run: pnpm typegen
+      run: pnpm prep
     - name: Install a working npm
       shell: bash
       if: inputs.install-npm == 'true'

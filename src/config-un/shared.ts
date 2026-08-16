@@ -577,7 +577,7 @@ export interface EslintConfigUnInternalOptions {
   /**
    * Keeps `meta.languages` on the registered plugins' rules, which is otherwise removed
    * (see `removeRuleLanguagesFromPlugin`). Only meant for tooling that needs to read the
-   * property, such as the rule categories generation in the typegen script.
+   * property, such as the rule categories generation in the prep script.
    */
   keepRuleMetaLanguages?: boolean;
 }
@@ -619,7 +619,7 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
    * too (the counterpart only exists for fixable rules).
    *
    * Loaded from the generated `eslint-types-fixable-only.gen` file via a dynamic import to avoid
-   * a static import cycle: that file is produced by the typegen script, which itself loads the
+   * a static import cycle: that file is produced by the prep script, which itself loads the
    * core config functionality that consumes this data.
    */
   fixableRulesPerPlugin: Partial<Record<string, Partial<Record<string, boolean>>>>;
