@@ -252,6 +252,7 @@ export const PACKAGES_TO_GET_INFO_FOR = [
   'vue',
   'react',
   'next',
+  'expo',
   'svelte',
   'solid-js',
   '@angular/core',

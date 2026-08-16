@@ -215,6 +215,9 @@ export const pluginsLoaders = {
         // @ts-expect-error types mismatch
       ) satisfies Promise<EslintPlugin> as Promise<EslintPlugin>,
   ),
+  expo: genModuleLoader('expo', 'eslint-plugin-expo', () =>
+    interopDefault(import('eslint-plugin-expo')),
+  ),
   'file-progress': genModuleLoader('file-progress', 'eslint-plugin-file-progress', () =>
     interopDefault(import('eslint-plugin-file-progress')),
   ),

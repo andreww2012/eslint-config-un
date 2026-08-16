@@ -257,6 +257,7 @@
     "eslint-plugin-es-x": "10.0.0",
     "eslint-plugin-eslint-plugin": "7.6.1",
     "eslint-plugin-expect-type": "0.6.2",
+    "eslint-plugin-expo": "1.1.0",
     "eslint-plugin-format": "2.0.1",
     "eslint-plugin-formatjs": "6.4.20",
     "eslint-plugin-functional": "10.0.0",
@@ -393,6 +394,7 @@
     "eslint-plugin-es-x": "^10.0.0",
     "eslint-plugin-eslint-plugin": "^7.6.1",
     "eslint-plugin-expect-type": "^0.6.2",
+    "eslint-plugin-expo": "^1.1.0",
     "eslint-plugin-format": "^2.0.1",
     "eslint-plugin-formatjs": "^6.4.20",
     "eslint-plugin-functional": "^10.0.0",
@@ -590,6 +592,9 @@
       "optional": true
     },
     "eslint-plugin-expect-type": {
+      "optional": true
+    },
+    "eslint-plugin-expo": {
       "optional": true
     },
     "eslint-plugin-format": {

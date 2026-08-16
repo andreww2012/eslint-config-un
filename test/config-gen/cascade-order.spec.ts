@@ -60,6 +60,7 @@ describe('cascade order', () => {
       eslint-config-un/eslint-plugin/@type-information
       eslint-config-un/expect-type
       eslint-config-un/expect-type/@type-information
+      eslint-config-un/expo
       eslint-config-un/file-progress
       eslint-config-un/format/prettier
       eslint-config-un/functional

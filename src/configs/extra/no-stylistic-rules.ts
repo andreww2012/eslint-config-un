@@ -241,6 +241,9 @@ const ALL_STYLISTIC_RULES = {
   'expect-type': {
     // None
   },
+  expo: {
+    // None
+  },
   'file-progress': {
     // None
   },

@@ -225,6 +225,13 @@ export const PLUGIN_PACKAGES_META: Record<string, PluginPackageMeta> = Object.fr
       ruleDocsUrl: (ruleName) =>
         `https://github.com/JoshuaKGoldberg/eslint-plugin-expect-type/blob/HEAD/docs/rules/${ruleName}.md`,
     },
+    expo: {
+      configs: ['expo'],
+      gitTag: 'https://github.com/expo/expo/blob/HEAD/packages/eslint-plugin-expo/CHANGELOG.md',
+      pluginDocsUrl: 'https://github.com/expo/expo/blob/HEAD/packages/eslint-plugin-expo/README.md',
+      ruleDocsUrl: (ruleName) =>
+        `https://github.com/expo/expo/blob/HEAD/packages/eslint-plugin-expo/docs/rules/${ruleName}.md`,
+    },
     'file-progress': {
       configs: ['fileProgress'],
       pluginDocsUrl: 'https://github.com/sibiraj-s/eslint-plugin-file-progress/blob/HEAD/README.md',

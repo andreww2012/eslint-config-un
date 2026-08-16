@@ -683,6 +683,9 @@ importers:
       eslint-plugin-expect-type:
         specifier: 0.6.2
         version: 0.6.2(@typescript-eslint/parser@8.67.0)(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
+      eslint-plugin-expo:
+        specifier: 1.1.0
+        version: 1.1.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
       eslint-plugin-format:
         specifier: 2.0.1
         version: 2.0.1(eslint@10.8.1)
@@ -7293,6 +7296,12 @@ packages:
       '@typescript-eslint/parser': '>=6'
       eslint: '>=7'
       typescript: '>=4'
+
+  eslint-plugin-expo@1.1.0:
+    resolution: {integrity: sha512-vPP0EPx7IA7ZfP49dY4rq9RV5jqkFWG+Pih3/oGjzIRjMI+ogcOE8i6isYkLXAdw/yvFV2BRZkTaQaiOGQqn6Q==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      eslint: '>=8.10'
 
   eslint-plugin-file-progress@4.0.0:
     resolution: {integrity: sha512-a2+cwFrw7SNU08+rdcWDZ7zrwUcZVq3eruXwcGbjM2gJJYPjXgR7WZHtdgjHhiO2qz65ChM1jVDVZbz6oi4HXg==}
@@ -18750,6 +18759,15 @@ snapshots:
       typescript: '@typescript/typescript6@6.0.2'
     transitivePeerDependencies:
       - supports-color
+
+  eslint-plugin-expo@1.1.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0):
+    dependencies:
+      '@typescript-eslint/types': 8.67.0
+      '@typescript-eslint/utils': 8.67.0(@typescript/typescript6@6.0.2)(eslint@10.8.1)(supports-color@7.2.0)
+      eslint: 10.8.1(jiti@2.7.0)(supports-color@7.2.0)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   eslint-plugin-file-progress@4.0.0(eslint@10.8.1):
     dependencies:

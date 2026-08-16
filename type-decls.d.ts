@@ -129,3 +129,9 @@ declare module 'eslint-plugin-barrel-files' {
   declare const value: EslintPlugin;
   export = value;
 }
+
+declare module 'eslint-plugin-expo' {
+  import type {Plugin as EslintPlugin} from '@eslint/core';
+  declare const value: EslintPlugin;
+  export = value;
+}
