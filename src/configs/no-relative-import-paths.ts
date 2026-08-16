@@ -10,7 +10,8 @@ import {
 /**
  * An ESLint plugin to disallow relative import paths.
  *
- * ⚠️ WARNING: requires your project to support absolute imports (e.g. via `tsconfig.json`'s `baseUrl`).
+ * ⚠️ WARNING: requires your project to support absolute imports (e.g. via `tsconfig.json`'s
+ * `baseUrl`).
  *
  * 📁 Default `files`: all files
  */

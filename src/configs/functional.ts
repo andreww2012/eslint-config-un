@@ -16,9 +16,10 @@ interface OverridesSetting {
 /**
  * Rules enforcing functional programming patterns.
  *
- * ⚠️ WARNING: make sure that the linted files are provided with type information, or all the rules requiring it are disabled.
- * For the former, they must be included in `files` array of `ts/configTypeAware` config
- * (they are by default).
+ * ⚠️ WARNING: make sure that the linted files are provided with type information, or all the rules
+ * requiring it are disabled.
+ * For the former, they must be included in `files` array of `ts/configTypeAware` config (they are
+ * by default).
  *
  * 📁 Default `files`: all files
  */
@@ -28,8 +29,8 @@ export interface FunctionalEslintConfigOptions<
   /**
    * [`eslint-plugin-functional`](https://npmx.dev/eslint-plugin-functional) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `immutability` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `immutability` property and applied to the resolved `files` and
+   * `ignores` of this config.
    * @see https://github.com/eslint-functional/eslint-plugin-functional/tree/HEAD/docs/rules/settings
    */
   settings?: {
@@ -38,8 +39,8 @@ export interface FunctionalEslintConfigOptions<
      * [`is-immutable-type`](https://npmx.dev/is-immutable-type).
      *
      * Note: When providing custom overrides, the default ones (for `Map`, `Set`, `Date`, `URL`,
-     * `URLSearchParams`) will not be applied. Include them manually via `getDefaultOverrides()`
-     * from `is-immutable-type` if needed.
+     * `URLSearchParams`) will not be applied.
+     * Include them manually via `getDefaultOverrides()` from `is-immutable-type` if needed.
      */
     overrides?:
       | OverridesSetting[]

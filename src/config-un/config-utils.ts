@@ -160,8 +160,8 @@ const resolveEnabledByCondition = (
 };
 
 /**
- * Same as {@link getIsConfigEnabled}, but the condition and the precondition come from
- * the Config's manifest instead of being spelled out at the call site
+ * Same as {@link getIsConfigEnabled}, but the condition and the precondition come from the Config's
+ * manifest instead of being spelled out at the call site
  */
 export function getIsConfigEnabledByManifest(
   this: UnConfigContext,

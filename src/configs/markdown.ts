@@ -91,13 +91,18 @@ export interface MarkdownEslintConfigOptions<
 
   /**
    * Format fenced code blocks with Prettier.
+   *
+   * 📁 Default `files`: fenced code blocks of the supported languages inside
+   * <code>**&#47;*.md</code> files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-prettier`](https://npmx.dev/eslint-plugin-prettier)
    * @default true <=> `prettier` package is installed
    */
   configFormatFencedCodeBlocks?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'prettier'>;
 
   /**
-   * Config with the plugin that allows you to enforce that no line in your Markdown files
-   * contains more than one sentence.
+   * Config with the plugin that allows you to enforce that no line in your Markdown files contains
+   * more than one sentence.
    *
    * 📁 Default `files`: parent config's `files`
    *
@@ -107,7 +112,8 @@ export interface MarkdownEslintConfigOptions<
    *
    * The default ignore list: `LICENSE.md`.
    *
-   * 🧩 Main plugin: [`eslint-plugin-sentences-per-line`](https://npmx.dev/eslint-plugin-sentences-per-line) ([docs](https://github.com/JoshuaKGoldberg/sentences-per-line/tree/main/packages/eslint-plugin-sentences-per-line#readme))
+   * 🧩 Main plugin: [`eslint-plugin-sentences-per-line`](https://npmx.dev/eslint-plugin-sentences-per-line)
+   * ([docs](https://github.com/JoshuaKGoldberg/sentences-per-line/tree/main/packages/eslint-plugin-sentences-per-line#readme))
    * @default false
    */
   configSentencesPerLine?:
@@ -122,26 +128,35 @@ export interface MarkdownEslintConfigOptions<
   lintMarkdown?: boolean;
 
   /**
-   * Choose a Markdown language dialect globally or per specific files. For each array item,
-   * a separate config entry will be created. `gfm` stands for [GitHub Flavored Markdown](https://github.github.com/gfm).
+   * Choose a Markdown language dialect globally or per specific files.
+   * For each array item, a separate config entry will be created.
+   * `gfm` stands for [GitHub Flavored Markdown](https://github.github.com/gfm).
    *
-   * If `gfm` syntax is used, [`markdown/no-missing-label-refs`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-label-refs.md) rule will be enabled and have `allowLabels` option set to [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts).
+   * If `gfm` syntax is used,
+   * [`markdown/no-missing-label-refs`](https://github.com/eslint/markdown/blob/HEAD/docs/rules/no-missing-label-refs.md)
+   * rule will be enabled and have `allowLabels` option set to
+   * [GitHub alerts](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts).
    * @default 'gfm'
    */
   language?:
     MarkdownDialect | Prettify<UnFlatConfigEntryFilesAndIgnores & {language: MarkdownDialect}>[];
 
   /**
-   * If array, only those tags will be allowed. If `false`, no tags are allowed. If `true`, all tags are allowed (default)
+   * If array, only those tags will be allowed.
+   * If `false`, no tags are allowed.
+   * If `true`, all tags are allowed (default)
    * @default true
    */
   allowHtmlTags?: boolean | string[];
 
   /**
-   * Only these languages codes are allowed in fenced code blocks (\```lang ... ```)
-   * By default, all languages, including no language, are allowed. To require any language to be explicitly specified, specify `any-lang-required`.
+   * Only these languages codes are allowed in fenced code blocks (\```lang ... ```).
+   * By default, all languages, including no language, are allowed.
+   * To require any language to be explicitly specified, specify `any-lang-required`.
    *
-   * Since some language codes [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244) (`javascript` -> `js`), so specifying `javascript` instead of `js` won't have any effect.
+   * Since some language codes
+   * [get remapped](https://github.com/eslint/markdown/blob/e7e6f58f6a0181a0b6e61197d65ddd12ab32b443/src/processor.js#L244)
+   * (`javascript` -> `js`), so specifying `javascript` instead of `js` won't have any effect.
    *
    * There is no option to "allow only this set of languages or not specifying a language".
    * @default all languages are allowed, including no language

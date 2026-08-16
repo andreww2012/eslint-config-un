@@ -31,8 +31,8 @@ export interface JsEslintConfigOptions<
    *
    * Setting to `true` is equivalent of the default value.
    *
-   * Use the array form to also pass the rule's second option,
-   * for example `['as-needed', {requireReturnForObjectLiteral: true}]`.
+   * Use the array form to also pass the rule's second option, for example
+   * `['as-needed', {requireReturnForObjectLiteral: true}]`.
    * Pass `false` to not enforce.
    *
    * Affected rule:

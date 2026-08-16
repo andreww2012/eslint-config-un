@@ -22,7 +22,7 @@ export interface NodeDependenciesEslintConfigOptions<
    * - `'never'`: enforces not to use the absolute version.
    * - `false`: do not enforce anything.
    *
-   * Affected rules:
+   * Affected rule:
    * - [`node-dependencies/absolute-version`](https://ota-meshi.github.io/eslint-plugin-node-dependencies/rules/absolute-version.html)
    * @default false
    */

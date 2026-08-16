@@ -12,8 +12,8 @@ import {
  * [this Zod issue comment](https://github.com/colinhacks/zod/issues/4433#issuecomment-2921500831)
  * why this might be needed.
  *
- * **Note:** you should probably use `zod` config instead, which includes the similar rule
- * and bunch of others zod rules.
+ * **Note:** you should probably use `zod` config instead, which includes the similar rule and bunch
+ * of others zod rules.
  *
  * 📁 Default `files`: all files
  */

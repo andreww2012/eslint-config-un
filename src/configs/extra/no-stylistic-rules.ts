@@ -1102,11 +1102,11 @@ type AllStylisticRules = ObjectValues<{
 }>;
 
 /**
- * If you integrate eslint-config-un into an existing project, you might encounter a lot of
- * reports from rules that are merely about stylistic and other choices, not the ones
- * that can potentially find bugs and other kind of problems in your code.
- * Use this config to globally disable all such rules, or conversely enable only them,
- * or some of them.
+ * If you integrate eslint-config-un into an existing project, you might encounter a lot of reports
+ * from rules that are merely about stylistic and other choices, not the ones that can potentially
+ * find bugs and other kind of problems in your code.
+ * Use this config to globally disable all such rules, or conversely enable only them, or some of
+ * them.
  *
  * 📁 Default `files`: all files
  */
@@ -1116,8 +1116,9 @@ export interface NoStylisticRulesEslintConfigOptions<
   enableRules?: {
     /**
      * Specify which of the disabled by default stylistic rules will be enabled.
-     * `true` enables all rules. In combination with `enableRules.disableAllOtherRules`
-     * set to `true`, all the other rules will be disabled.
+     * `true` enables all rules.
+     * In combination with `enableRules.disableAllOtherRules` set to `true`, all the other rules
+     * will be disabled.
      * This allows to enable stylistic rules exclusively.
      * @default false
      */

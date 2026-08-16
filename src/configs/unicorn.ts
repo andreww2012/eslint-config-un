@@ -62,9 +62,11 @@ export interface UnicornEslintConfigOptions<
   >
 > {
   /**
-   * A handful of rules are not limited to JavaScript and declare that they also understand
-   * *any* file type. This Sub-config applies them everywhere, and is not restricted to any
-   * file type as a result.
+   * A handful of rules are not limited to JavaScript and declare that they also understand *any*
+   * file type.
+   * This Sub-config applies them everywhere, and is not restricted to any file type as a result.
+   *
+   * 📁 Default `files`: all files
    *
    * Affected rules:
    * - [`unicorn/comment-content`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/comment-content.md)
@@ -78,9 +80,9 @@ export interface UnicornEslintConfigOptions<
   /**
    * Applies the rules declaring support for CSS to CSS files.
    *
-   * ⚠️ Enabled by default only if the `css` Config is enabled, because something must teach
-   * ESLint how to parse these files. Force-enabling it otherwise will make ESLint fail to
-   * parse every CSS file.
+   * ⚠️ Enabled by default only if the `css` Config is enabled, because something must teach ESLint
+   * how to parse these files.
+   * Force-enabling it otherwise will make ESLint fail to parse every CSS file.
    *
    * 📁 Default `files`: <code>**&#47;*.css</code>
    * @default true // if `css` config is enabled
@@ -90,8 +92,7 @@ export interface UnicornEslintConfigOptions<
   /**
    * Applies the rules declaring support for HTML to HTML files.
    *
-   * ⚠️ Enabled by default only if the `html` Config is enabled — see the warning
-   * in `configCss`.
+   * ⚠️ Enabled by default only if the `html` Config is enabled — see the warning in `configCss`.
    *
    * 📁 Default `files`: <code>**&#47;*.htm(l)</code>
    * @default true // if `html` config is enabled
@@ -101,10 +102,11 @@ export interface UnicornEslintConfigOptions<
   /**
    * Applies the rules declaring support for JSON to JSON files.
    *
-   * ⚠️ Enabled by default only if the `json` or the `jsonc` Config is enabled — see the
-   * warning in `configCss`.
+   * ⚠️ Enabled by default only if the `json` or the `jsonc` Config is enabled — see the warning in
+   * `configCss`.
    *
-   * 📁 Default `files`: <code>**&#47;*.json</code>, <code>**&#47;*.jsonc</code>, <code>**&#47;*.json5</code>
+   * 📁 Default `files`: <code>**&#47;*.json</code>, <code>**&#47;*.jsonc</code>,
+   * <code>**&#47;*.json5</code>
    * @default true // if `json` or `jsonc` config is enabled
    */
   configJson?: LanguageSubConfig<ExtraPlugins, 'json'>;
@@ -112,8 +114,8 @@ export interface UnicornEslintConfigOptions<
   /**
    * Applies the rules declaring support for Markdown to Markdown files.
    *
-   * ⚠️ Enabled by default only if the `markdown`, `markdownLinks` or `markdownPreferences`
-   * Config is enabled — see the warning in `configCss`.
+   * ⚠️ Enabled by default only if the `markdown`, `markdownLinks` or `markdownPreferences` Config
+   * is enabled — see the warning in `configCss`.
    *
    * 📁 Default `files`: <code>**&#47;*.md</code>, <code>**&#47;*.mdx</code>
    * @default true // if any of the following configs are enabled: `markdown`, `markdownLinks`, `markdownPreferences`
@@ -121,16 +123,16 @@ export interface UnicornEslintConfigOptions<
   configMarkdown?: LanguageSubConfig<ExtraPlugins, 'markdown'>;
 
   /**
-   * Current and extended class references in class static methods can be either
-   * accessed with `this` and `super` respectively, or using direct class references.
+   * Current and extended class references in class static methods can be either accessed with
+   * `this` and `super` respectively, or using direct class references.
    *
    * This option enforce the accessing style:
    * - `thisAndSuper`: enforce `this` and `super`;
    * - `identifiers`: enforce identifies in both cases;
    * - `true`: use the default style;
    * - `false`: do not enforce any style;
-   * - object: configure rule options directly (allows to configure different styles for
-   * current and extended classes).
+   * - object: configure rule options directly (allows to configure different styles for current and
+   *   extended classes).
    *
    * Affected rule:
    * - [`unicorn/class-reference-in-static-methods`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/class-reference-in-static-methods.md)
@@ -143,23 +145,23 @@ export interface UnicornEslintConfigOptions<
     | GetRuleOptions<'unicorn', 'class-reference-in-static-methods'>;
 
   /**
-   * Forces compound words like `password` in identifier names (and possibly,
-   * in other places) to be treated as a single word:
+   * Forces compound words like `password` in identifier names (and possibly, in other places) to be
+   * treated as a single word:
    * - `true`: enables the corresponding rule with default options;
    * - `false`: disables it;
-   * - `Record<string, string | false>`:
-   * Keys are words in the form that should be reported, and values are either:
+   * - `Record<string, string | false>`: Keys are words in the form that should be reported, and
+   *   values are either:
    *   - *Non-empty string* representing the suggested replacement.
    *     For example, `passWord: 'password'`.
    *   - *Empty string* instructing to ignore this spelling at all.
    *     This might be used to override
    *     [the default replacements list](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/de64ab65b513dbdfe45b8f09d3b12f63f96fb0a3/rules/consistent-compound-words.js#L27).
-   *   - `false`: treats the key as a full identifier name and ignores
-   *     the corresponding identified completely.
+   *   - `false`: treats the key as a full identifier name and ignores the corresponding identified
+   *     completely.
    *     Corresponds to the
    *     [`allowList` rule option](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/main/docs/rules/consistent-compound-words.md#allowlist).
-   * - `array`: ESLint-like format of the options, allowing to specify
-   * rule options directly. Is an array to distinguish from the object form.
+   * - `array`: ESLint-like format of the options, allowing to specify rule options directly.
+   *   Is an array to distinguish from the object form.
    *
    * Affected rule:
    * - [`unicorn/consistent-compound-words`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/consistent-compound-words.md)
@@ -171,7 +173,7 @@ export interface UnicornEslintConfigOptions<
   /**
    * What DOM API to enforce when working with `data-` attributes:
    * - `dataset`: use
-   * [the `.dataset` API](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset);
+   *   [the `.dataset` API](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset);
    * - `attributes`: use `{get,set,remove,has}Attribute`;
    * - `false`: do not enforce the style.
    *
@@ -182,8 +184,8 @@ export interface UnicornEslintConfigOptions<
   domDataAttributesStyle?: false | 'dataset' | 'attributes';
 
   /**
-   * Enforce that boolean variables, parameters, functions, and optionally
-   * object properties have one of the allowed prefixes.
+   * Enforce that boolean variables, parameters, functions, and optionally object properties have
+   * one of the allowed prefixes.
    *
    * Possible options:
    * - `true`: use the default prefixes list;
@@ -198,8 +200,8 @@ export interface UnicornEslintConfigOptions<
   enforcePrefixForBooleanNames?: boolean | ArrayOrBooleanRecord;
 
   /**
-   * Enforces `utf8`/`utf-8` and `ascii` for UTF-8 and ASCII encodings respectively
-   * in function arguments, such as `fs.readFile(file, 'utf8')`.
+   * Enforces `utf8`/`utf-8` and `ascii` for UTF-8 and ASCII encodings respectively in function
+   * arguments, such as `fs.readFile(file, 'utf8')`.
    * - `'no-dash'`: enforce lower case and the dash-less variant for UTF-8 encoding.
    * - `'dash'`: enforce lower case and the variant with a dash for UTF-8 encoding.
    * - `false`: do not enforce anything.
@@ -211,8 +213,8 @@ export interface UnicornEslintConfigOptions<
   enforceTextEncodingCaseAndNotation?: 'no-dash' | 'dash' | false;
 
   /**
-   * Enforce or disallow explicit `setTimeout`/`setInterval` delay (the second parameter),
-   * even if it would be redundant (`0`).
+   * Enforce or disallow explicit `setTimeout`/`setInterval` delay (the second parameter), even if
+   * it would be redundant (`0`).
    *
    * Setting to `true` is equivalent of the default value.
    *
@@ -225,8 +227,7 @@ export interface UnicornEslintConfigOptions<
   explicitTimersDelay?: boolean | GetRuleOptions<'unicorn', 'explicit-timer-delay'>;
 
   /**
-   * Only allow variables with callable or constructable values to have
-   * the following prefixes.
+   * Only allow variables with callable or constructable values to have the following prefixes.
    *
    * Possible options:
    * - `true`: use the default prefixes list;
@@ -234,7 +235,7 @@ export interface UnicornEslintConfigOptions<
    * - object form will be merged with the default value;
    * - array form completely overrides the default value.
    *
-   * Affected rules:
+   * Affected rule:
    * - [`unicorn/no-non-function-verb-prefix`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/no-non-function-verb-prefix.md)
    * @default {get: true, set: true, unset: true, delete: true, add: true, remove: true, destroy: true, create: true}
    */
@@ -254,10 +255,8 @@ export interface UnicornEslintConfigOptions<
   maxNestedCalls?: number;
 
   /**
-   * Whether comparing the same expression to different values multiple times
-   * should be reported:
-   * - `value === 'a' || value === 'b' || value === 'c'` ->
-   * `['a', 'b', 'c'].includes(value)`.
+   * Whether comparing the same expression to different values multiple times should be reported:
+   * - `value === 'a' || value === 'b' || value === 'c'` -> `['a', 'b', 'c'].includes(value)`.
    *
    * Specifying values below 2 *disables* the affected rule.
    *
@@ -268,10 +267,9 @@ export interface UnicornEslintConfigOptions<
   minComparisonsToPreferArrayIncludes?: number;
 
   /**
-   * Whether multiple consecutive whitespace characters should be reported
-   * and autofixed to `'<character'.repeat(<times>)`:
-   * - `const indentation = '    ';` ->
-   * `const indentation = ' '.repeat(4);`.
+   * Whether multiple consecutive whitespace characters should be reported and autofixed to
+   * `'<character'.repeat(<times>)`:
+   * - `const indentation = ' ';` -> `const indentation = ' '.repeat(4);`.
    *
    * Specifying values below 2 *disables* the affected rule.
    *
@@ -282,12 +280,11 @@ export interface UnicornEslintConfigOptions<
   minWhitespaceRepetitionsToPreferStringRepeat?: number;
 
   /**
-   * Several `Number` methods and constants may be used directly as globals
-   * or from the `Number` object.
+   * Several `Number` methods and constants may be used directly as globals or from the `Number`
+   * object.
    *
    * This option enforces the single style of usage for all of them.
-   * The following table contains all such pairs, what style is enforced
-   * for any of them by default:
+   * The following table contains all such pairs, what style is enforced for any of them by default:
    * | Global | `Number` property | Behavior different? | Default style |
    * | - | - | - | - |
    * | `NaN` | `NaN` | 🟢 No | `namespace` |
@@ -303,12 +300,12 @@ export interface UnicornEslintConfigOptions<
    * `false` stops any enforcements.
    *
    * ⚠️ Note there are limitation of how the affected rules can be configured:
-   * - It is possible to enforce the `global` style only for `NaN` and both
-   * of the infinities;
+   * - It is possible to enforce the `global` style only for `NaN` and both of the infinities;
    * - It is not possible to enforce the namespace style for `NaN` and the infinities:
-   *    - Without also enforcing the same style for methods (though the opposite
-   * of the latter is unlikely what you want);
-   *    - Giving up the ability to enforce the `global` style for other constants if you only enforced the `namespace` style for some.
+   *    - Without also enforcing the same style for methods (though the opposite of the latter is
+   *      unlikely what you want);
+   *    - Giving up the ability to enforce the `global` style for other constants if you only
+   *      enforced the `namespace` style for some.
    *
    * Affected rules:
    * - [`unicorn/prefer-global-number-constants`](https://github.com/sindresorhus/eslint-plugin-unicorn/blob/HEAD/docs/rules/prefer-global-number-constants.md)

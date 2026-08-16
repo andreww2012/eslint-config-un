@@ -7,8 +7,8 @@ import {
 } from './index';
 
 /**
- * An ESLint plugin that help identify potential security issues, but ⚠️ finds
- * a lot of false positives which need triage by a human.
+ * An ESLint plugin that help identify potential security issues, but ⚠️ finds a lot of false
+ * positives which need triage by a human.
  *
  * 📁 Default `files`: all files
  */

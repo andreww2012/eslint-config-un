@@ -39,25 +39,12 @@ const FUNCTIONS_WITH_EACH_OR_FOR = allUnionMembers<keyof ConsistentEachForRuleOp
 export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   extends
     UnFlatConfigEntryBase<ExtraPlugins, 'vitest'>,
-    // TODO options jsdocs contain jest-related information
-    Pick<
-      JestEslintConfigOptions<ExtraPlugins>,
-      | 'testDefinitionKeyword'
-      | 'maxAssertionCalls'
-      | 'maxNestedDescribes'
-      | 'restrictedMethods'
-      | 'restrictedMatchers'
-      | 'asyncMatchers'
-      | 'minAndMaxExpectArgs'
-      | 'paddingAround'
-    >,
     NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins> {
   /**
    * [`@vitest/eslint-plugin`](https://npmx.dev/@vitest/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `vitest` property
-   * and applied to the resolved `files` and `ignores` of this config,
-   * as well as for `ts` sub-config.
+   * that will be assigned to `vitest` property and applied to the resolved `files` and `ignores` of
+   * this config, as well as for `ts` sub-config.
    */
   settings?: {
     /**
@@ -69,9 +56,8 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   };
 
   /**
-   * Names that will be treated as assertions in addition to the rule defaults
-   * (`expect`, `assert`), a shortcut for setting the `assertFunctionNames` option
-   * of the affected rule.
+   * Names that will be treated as assertions in addition to the rule defaults (`expect`, `assert`),
+   * a shortcut for setting the `assertFunctionNames` option of the affected rule.
    *
    * Affected rule:
    * - [`vitest/expect-expect`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/expect-expect.md)
@@ -79,9 +65,20 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   additionalAssertions?: string[];
 
   /**
+   * Allows specifying which matchers return promises, and so should be considered async when
+   * checking if an `expect` should be returned or awaited.
+   *
+   * Affected rule:
+   * - [`vitest/valid-expect`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/valid-expect.md)
+   */
+  asyncMatchers?: JestEslintConfigOptions<ExtraPlugins>['asyncMatchers'];
+
+  /**
    * Explicitly specify or ignore files written in TypeScript.
    * Will be used to enable TypeScript-specific rules like
    * [`vitest/unbound-method`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/unbound-method.md).
+   *
+   * 📁 Default `files`: the parent config's default `files`, restricted to TypeScript extensions
    * @default true <=> `ts` config is enabled
    */
   configTypescript?:
@@ -95,12 +92,15 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
       >;
 
   /**
-   * Prefer [`.each`](https://vitest.dev/api/test#test-each) or [`.for`](https://vitest.dev/api/test#test-for). Note these are not the same. Possible options:
+   * Prefer [`.each`](https://vitest.dev/api/test#test-each) or
+   * [`.for`](https://vitest.dev/api/test#test-for).
+   * Note these are not the same.
+   * Possible options:
    * - `each` or `for`: prefer the specified method in all cases.
-   * - object: configure which method to prefer for different test function types
-   * (`test`, `it`, `describe`, `suite`). You may also set the `default` property
-   * to specify the preferred by default method, otherwise if not explicitly specified,
-   * both will be allowed.
+   * - object: configure which method to prefer for different test function types (`test`, `it`,
+   *   `describe`, `suite`).
+   *   You may also set the `default` property to specify the preferred by default method, otherwise
+   *   if not explicitly specified, both will be allowed.
    * - `false`: no enforcement.
    *
    * Affected rule:
@@ -111,8 +111,8 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
     false | EachOrFor | Prettify<ConsistentEachForRuleOptions & {default?: EachOrFor}>;
 
   /**
-   * - `once`: prefer `toBeCalledOnce()` or `toHaveBeenCalledOnce()` over `toBeCalledTimes(1)`
-   * or `toHaveBeenCalledTimes(1)`.
+   * - `once`: prefer `toBeCalledOnce()` or `toHaveBeenCalledOnce()` over `toBeCalledTimes(1)` or
+   *   `toHaveBeenCalledTimes(1)`.
    * - `times`: prefer the opposite.
    * - `false`: do not enforce any style.
    *
@@ -124,8 +124,98 @@ export interface VitestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   enforceToBeCalledStyle?: false | 'once' | 'times';
 
   /**
-   * Enforces whether importing [Vitest globals](https://vitest.dev/config/globals)
-   * is required or disallowed.
+   * Enforces the maximum number of assertion calls a test may make.
+   *
+   * Affected rule:
+   * - [`vitest/max-expects`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/max-expects.md)
+   * @default not enforced
+   */
+  maxAssertionCalls?: number;
+
+  /**
+   * Enforces the maximum depth of nested `describe` blocks.
+   *
+   * Affected rule:
+   * - [`vitest/max-nested-describe`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/max-nested-describe.md)
+   * @default not enforced
+   */
+  maxNestedDescribes?: number;
+
+  /**
+   * Enforces the minimum and maximum number of arguments that `expect` can take, and is required to
+   * take.
+   * This is useful when you're using libraries that increase the number of arguments supported by
+   * `expect`.
+   *
+   * Values less than 0 will be ignored.
+   *
+   * Affected rule:
+   * - [`vitest/valid-expect`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/valid-expect.md)
+   * @default [1, 1]
+   */
+  minAndMaxExpectArgs?: JestEslintConfigOptions<ExtraPlugins>['minAndMaxExpectArgs'];
+
+  /**
+   * Enforces padding around Vitest functions.
+   *
+   * ⚠️ If specified as object, unspecified options will be treated as if they were enabled (set to
+   * `true`).
+   *
+   * Affected rules:
+   * - [`vitest/padding-around-after-all-blocks`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/padding-around-after-all-blocks.md)
+   *   (`afterAll`)
+   * - [`vitest/padding-around-after-each-blocks`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/padding-around-after-each-blocks.md)
+   *   (`afterEach`)
+   * - [`vitest/padding-around-before-all-blocks`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/padding-around-before-all-blocks.md)
+   *   (`beforeAll`)
+   * - [`vitest/padding-around-before-each-blocks`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/padding-around-before-each-blocks.md)
+   *   (`beforeEach`)
+   * - [`vitest/padding-around-describe-blocks`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/padding-around-describe-blocks.md)
+   *   (`describe`)
+   * - [`vitest/padding-around-expect-groups`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/padding-around-expect-groups.md)
+   *   (`expect`)
+   * - [`vitest/padding-around-test-blocks`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/padding-around-test-blocks.md)
+   *   (`test`)
+   * @default true
+   */
+  paddingAround?: JestEslintConfigOptions<ExtraPlugins>['paddingAround'];
+
+  /**
+   * Restricts the use of specific Vitest matchers.
+   * Bans are expressed in the form of a map, with the value being either a string message to be
+   * shown, or `null` if the default rule message should be used.
+   *
+   * Affected rule:
+   * - [`vitest/no-restricted-matchers`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-restricted-matchers.md)
+   */
+  restrictedMatchers?: JestEslintConfigOptions<ExtraPlugins>['restrictedMatchers'];
+
+  /**
+   * Restricts the use of specific `vi` methods.
+   * Restrictions are expressed in the form of a map, with the value being either a string message
+   * to be shown, or `null` if a generic default message should be used.
+   *
+   * Affected rule:
+   * - [`vitest/no-restricted-vi-methods`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-restricted-vi-methods.md)
+   */
+  restrictedMethods?: JestEslintConfigOptions<ExtraPlugins>['restrictedMethods'];
+
+  /**
+   * Enforces the keyword tests are defined with.
+   * Will be merged with the default value.
+   * `false` disables the rule.
+   *
+   * When string, will be set for the properties of the object.
+   *
+   * Affected rule:
+   * - [`vitest/consistent-test-it`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/consistent-test-it.md)
+   * @default {fn: 'it', withinDescribe: 'it'}
+   */
+  testDefinitionKeyword?: JestEslintConfigOptions<ExtraPlugins>['testDefinitionKeyword'];
+
+  /**
+   * Enforces whether importing [Vitest globals](https://vitest.dev/config/globals) is required or
+   * disallowed.
    *
    * Affected rules:
    * - [`vitest/no-importing-vitest-globals`](https://github.com/vitest-dev/eslint-plugin-vitest/blob/HEAD/docs/rules/no-importing-vitest-globals.md)

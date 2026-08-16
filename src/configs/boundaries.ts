@@ -21,11 +21,11 @@ export interface BoundariesEslintConfigOptions<
    * [`eslint-plugin-boundaries`](https://npmx.dev/eslint-plugin-boundaries) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned to `settings` object with keys transformed to
-   * `boundaries/<original property name in kebab case>`
-   * and applied to the resolved `files` and `ignores` of this config.
+   * `boundaries/<original property name in kebab case>` and applied to the resolved `files` and
+   * `ignores` of this config.
    *
-   * Strongly recommended: specify at least `elements` — the plugin needs it
-   * to work properly, and its absence is reported at runtime.
+   * Strongly recommended: specify at least `elements` — the plugin needs it to work properly, and
+   * its absence is reported at runtime.
    * @see https://jsboundaries.dev/docs/settings
    */
   settings?: {

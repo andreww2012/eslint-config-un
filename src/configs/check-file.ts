@@ -31,9 +31,12 @@ export interface CheckFileEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'check-file'> {
   /**
-   * Allows to which files should `eslint-processor-check-file` processor be applied.
-   * This might be necessary if some files are not processed by other processors
-   * but still require linting by this config's plugin.
+   * Specifies which files the `eslint-processor-check-file` processor is applied to.
+   * This might be necessary if some files are not processed by other processors but still require
+   * linting by this config's plugin.
+   *
+   * 📁 Default `files`: all files
+   * @default false
    */
   configEnableCheckFileProcessor?: UnFlatConfigEntryFilesAndIgnores;
 

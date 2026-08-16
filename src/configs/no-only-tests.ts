@@ -8,8 +8,8 @@ import {
 } from './index';
 
 /**
- * An ESLint plugin to prevent focused (`.only`) tests. Also included in
- * testing framework's configs as a sub-config.
+ * An ESLint plugin to prevent focused (`.only`) tests.
+ * Also included in testing framework's configs as a sub-config.
  *
  * 📁 Default `files`:
  * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>

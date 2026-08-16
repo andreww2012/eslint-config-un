@@ -27,24 +27,28 @@ export interface ImportEslintConfigOptions<
    * [`eslint-plugin-import-x`](https://npmx.dev/eslint-plugin-import-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
    * that will be assigned directly to `settings` flat config option with keys transformed to
-   * `import-x/<original property name in kebab case>`
-   * and applied to the resolved `files` and `ignores` of this config.
+   * `import-x/<original property name in kebab case>` and applied to the resolved `files` and
+   * `ignores` of this config.
    *
-   * Some settings are set by our config, and the settings you provide here will be merged with ours.
+   * Some settings are set by our config, and the settings you provide here will be merged with
+   * ours.
    * @see https://github.com/un-ts/eslint-plugin-import-x/tree/HEAD?tab=readme-ov-file#settings
    */
   settings?: PluginSettings;
 
   /**
-   * Whether the use of dependencies from `devDependencies` is not going to be reported by
-   * the [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md) rule. You can specify glob patterns or allow
-   * universally by setting this option to `true`.
+   * Whether the use of dependencies from `devDependencies` is not going to be reported by the
+   * [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md)
+   * rule.
+   * You can specify glob patterns or allow universally by setting this option to `true`.
    * @default false <=> `mode` root option is set to `lib`
    */
   allowDevDependencies?: string[] | boolean;
 
   /**
-   * Package names that will be not be reported by [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md) rule.
+   * Package names that will be not be reported by
+   * [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md)
+   * rule.
    *
    * Use case: you're linting library code and some packages are bundled.
    */
@@ -53,8 +57,9 @@ export interface ImportEslintConfigOptions<
   /**
    * Recognized automatically and normally should not be set manually.
    *
-   * When enabled, creates a [`eslint-import-resolver-typescript`](https://npmx.dev/eslint-import-resolver-typescript) resolver, which settings can be overridden
-   * using `tsResolverOptions` option.
+   * When enabled, creates a
+   * [`eslint-import-resolver-typescript`](https://npmx.dev/eslint-import-resolver-typescript)
+   * resolver, which settings can be overridden using `tsResolverOptions` option.
    */
   isTypescriptEnabled?: boolean;
 
@@ -64,22 +69,28 @@ export interface ImportEslintConfigOptions<
   tsResolverOptions?: TypeScriptResolverOptions;
 
   /**
-   * @see https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-unresolved.md#ignore
+   * Affected rule:
+   * - [`import/no-unresolved`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-unresolved.md)
    */
   importPatternsToIgnoreWhenTryingToResolve?: string | string[];
 
   /**
    * - `false` - never require extensions
    * - `true` - require extensions for JS/TS-like files
-   * - `object` - granular settings for specific packages, use `*` key for setting the default for all extensions
+   * - `object` - granular settings for specific packages, use `*` key for setting the default for
+   *   all extensions
    * @default false
    */
   requireModuleExtensions?: boolean | Record<string, 'always' | 'never' | 'ignorePackages'>;
 
   /**
-   * Will be merged with the default value. By default, type-only imports (`import type ...` from 'module') will be merged with the regular imports from the same module (`import ... from 'module'`)
+   * Will be merged with the default value.
+   * By default, type-only imports (`import type ...` from 'module') will be merged with the regular
+   * imports from the same module (`import ... from 'module'`)
+   *
+   * Affected rule:
+   * - [`import/no-duplicates`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-duplicates.md)
    * @default {'prefer-inline': true}
-   * @see https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-duplicates.md
    */
   noDuplicatesOptions?: GetRuleOptions<'import', 'no-duplicates'>;
 }

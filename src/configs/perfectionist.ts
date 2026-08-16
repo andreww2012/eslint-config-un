@@ -23,8 +23,8 @@ type RuleSubConfig<
     });
 
 /**
- * An ESLint plugin that provides rules for sorting various data, such as
- * objects, imports, TypeScript types, etc.
+ * An ESLint plugin that provides rules for sorting various data, such as objects, imports,
+ * TypeScript types, etc.
  *
  * ⚠️ WARNING: all rules are disabled by default.
  *
@@ -36,8 +36,8 @@ export interface PerfectionistEslintConfigOptions<
   /**
    * [`eslint-plugin-perfectionist`](https://npmx.dev/eslint-plugin-perfectionist) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `perfectionist` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `perfectionist` property and applied to the resolved `files` and
+   * `ignores` of this config.
    * @see https://perfectionist.dev/guide/getting-started#settings
    */
   settings?: Prettify<
@@ -58,140 +58,209 @@ export interface PerfectionistEslintConfigOptions<
   >;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-array-includes`](https://perfectionist.dev/rules/sort-array-includes)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-array-includes
    */
   configSortArrayIncludes?: RuleSubConfig<ExtraPlugins, 'sort-array-includes'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-arrays`](https://perfectionist.dev/rules/sort-arrays)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-arrays
    */
   configSortArrays?: RuleSubConfig<ExtraPlugins, 'sort-arrays'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-classes`](https://perfectionist.dev/rules/sort-classes)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-classes
    */
   configSortClasses?: RuleSubConfig<ExtraPlugins, 'sort-classes'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-decorators`](https://perfectionist.dev/rules/sort-decorators)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-decorators
    */
   configSortDecorators?: RuleSubConfig<ExtraPlugins, 'sort-decorators'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-enums`](https://perfectionist.dev/rules/sort-enums)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-enums
    */
   configSortEnums?: RuleSubConfig<ExtraPlugins, 'sort-enums'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-export-attributes`](https://perfectionist.dev/rules/sort-export-attributes)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-export-attributes
    */
   configSortExportAttributes?: RuleSubConfig<ExtraPlugins, 'sort-export-attributes'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-exports`](https://perfectionist.dev/rules/sort-exports)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-exports
    */
   configSortExports?: RuleSubConfig<ExtraPlugins, 'sort-exports'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-heritage-clauses`](https://perfectionist.dev/rules/sort-heritage-clauses)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-heritage-clauses
    */
   configSortHeritageClauses?: RuleSubConfig<ExtraPlugins, 'sort-heritage-clauses'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-imports`](https://perfectionist.dev/rules/sort-imports)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-imports
    */
   configSortImports?: RuleSubConfig<ExtraPlugins, 'sort-imports'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-import-attributes`](https://perfectionist.dev/rules/sort-import-attributes)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-import-attributes
    */
   configSortImportAttributes?: RuleSubConfig<ExtraPlugins, 'sort-import-attributes'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-interfaces`](https://perfectionist.dev/rules/sort-interfaces)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-interfaces
    */
   configSortInterfaces?: RuleSubConfig<ExtraPlugins, 'sort-interfaces'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-intersection-types`](https://perfectionist.dev/rules/sort-intersection-types)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-intersection-types
    */
   configSortIntersectionTypes?: RuleSubConfig<ExtraPlugins, 'sort-intersection-types'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-jsx-props`](https://perfectionist.dev/rules/sort-jsx-props)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-jsx-props
    */
   configSortJsxProps?: RuleSubConfig<ExtraPlugins, 'sort-jsx-props'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-maps`](https://perfectionist.dev/rules/sort-maps)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-maps
    */
   configSortMaps?: RuleSubConfig<ExtraPlugins, 'sort-maps'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-modules`](https://perfectionist.dev/rules/sort-modules)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-modules
    */
   configSortModules?: RuleSubConfig<ExtraPlugins, 'sort-modules'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-named-exports`](https://perfectionist.dev/rules/sort-named-exports)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-named-exports
    */
   configSortNamedExports?: RuleSubConfig<ExtraPlugins, 'sort-named-exports'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-named-imports`](https://perfectionist.dev/rules/sort-named-imports)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-named-imports
    */
   configSortNamedImports?: RuleSubConfig<ExtraPlugins, 'sort-named-imports'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-object-types`](https://perfectionist.dev/rules/sort-object-types)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-object-types
    */
   configSortObjectTypes?: RuleSubConfig<ExtraPlugins, 'sort-object-types'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-objects`](https://perfectionist.dev/rules/sort-objects)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-objects
    */
   configSortObjects?: RuleSubConfig<ExtraPlugins, 'sort-objects'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-sets`](https://perfectionist.dev/rules/sort-sets)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-sets
    */
   configSortSets?: RuleSubConfig<ExtraPlugins, 'sort-sets'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-switch-case`](https://perfectionist.dev/rules/sort-switch-case)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-switch-case
    */
   configSortSwitchCase?: RuleSubConfig<ExtraPlugins, 'sort-switch-case'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-union-types`](https://perfectionist.dev/rules/sort-union-types)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-union-types
    */
   configSortUnionTypes?: RuleSubConfig<ExtraPlugins, 'sort-union-types'>;
 
   /**
+   * 📁 Default `files`: all files
+   *
+   * Affected rule:
+   * - [`perfectionist/sort-variable-declarations`](https://perfectionist.dev/rules/sort-variable-declarations)
    * @default false
-   * @see https://perfectionist.dev/rules/sort-variable-declarations
    */
   configSortVariableDeclarations?: RuleSubConfig<ExtraPlugins, 'sort-variable-declarations'>;
 }

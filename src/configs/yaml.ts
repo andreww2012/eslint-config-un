@@ -15,8 +15,8 @@ const CONFIG_DEFAULT_IGNORES = ['**/yarn.lock', '**/pnpm-lock.yaml'];
  *
  * 📁 Default `files`: <code>**&#47;*.y?(a)ml</code>
  *
- * If `ignores` is explicitly specified, it still be merged with the default ignore list,
- * excluding items specified in `ignoresAdditional`.
+ * If `ignores` is explicitly specified, it still be merged with the default ignore list, excluding
+ * items specified in `ignoresAdditional`.
  *
  * The default ignore list: <code>**&#47;{pnpm-lock.yaml,yarn.lock}</code>
  */
@@ -26,7 +26,8 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     IgnoresAdditionalOptions<typeof CONFIG_DEFAULT_IGNORES> {
   /**
    * `ignores` specified in this config will be merged with the default of
-   * `['**\/yarn.lock', '**\/pnpm-lock.yaml']`. Set this to `true` to avoid that behavior
+   * `['**\/yarn.lock', '**\/pnpm-lock.yaml']`.
+   * Set this to `true` to avoid that behavior
    */
   doNotMergeIgnoresWithDefault?: boolean;
 
@@ -40,8 +41,8 @@ export interface YamlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   enforceExtension?: 'yml' | 'yaml' | false;
 
   /**
-   * Enforce a specific casing style for keys. It is not enforced by default,
-   * but passing an empty object here will enforce `camelCase` style
+   * Enforce a specific casing style for keys.
+   * It is not enforced by default, but passing an empty object here will enforce `camelCase` style
    * (default value for this rule).
    * If present, `ignores` values will be merged with `<<`.
    *

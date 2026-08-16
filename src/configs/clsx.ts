@@ -17,8 +17,8 @@ export interface ClsxEslintConfigOptions<
   /**
    * [`eslint-plugin-clsx`](https://npmx.dev/eslint-plugin-clsx) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `clsxOptions` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `clsxOptions` property and applied to the resolved `files` and
+   * `ignores` of this config.
    * @default {clsx: ['default', 'clsx']; classnames: 'default'}
    */
   settings?: {

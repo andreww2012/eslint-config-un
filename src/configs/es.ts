@@ -299,22 +299,23 @@ export interface EsEslintConfigOptions<
   /**
    * [`eslint-plugin-es-x`](https://npmx.dev/eslint-plugin-es-x) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `es-x` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `es-x` property and applied to the resolved `files` and `ignores` of
+   * this config.
    */
   settings?: {
     /**
-     * "This plugin never reports prototype methods by default. Because it's hard to know
-     * the type of objects, it will cause false positives. If you configured the `aggressive` mode,
-     * this plugin reports prototype methods even if the rules couldn't know the type of objects"
+     * "This plugin never reports prototype methods by default.
+     * Because it's hard to know the type of objects, it will cause false positives.
+     * If you configured the `aggressive` mode, this plugin reports prototype methods even if the
+     * rules couldn't know the type of objects"
      * - [plugin docs](https://eslint-community.github.io/eslint-plugin-es-x/#the-aggressive-mode)
      */
     aggressive?: boolean;
 
     /**
-     * "This plugin has rules to report forbidden property accesses. These rules report all
-     * forbidden property accesses by default, but if you want to allow existence-tested properties
-     * in your scripts, you can use the `allowTestedProperty` mode"
+     * "This plugin has rules to report forbidden property accesses.
+     * These rules report all forbidden property accesses by default, but if you want to allow
+     * existence-tested properties in your scripts, you can use the `allowTestedProperty` mode"
      * - [plugin docs](https://eslint-community.github.io/eslint-plugin-es-x/#the-allowtestedproperty-mode)
      */
     allowTestedProperty?: boolean;
@@ -327,8 +328,8 @@ export interface EsEslintConfigOptions<
   ecmaVersion?: EcmaVersion | 'latest';
 
   /**
-   * Specify more granularly than `ecmaVersion` which ECMAScript features
-   * are **supported** in the codebase.
+   * Specify more granularly than `ecmaVersion` which ECMAScript features are **supported** in the
+   * codebase.
    */
   ecmaFeatures?: Partial<{
     [Version in EcmaVersion]:

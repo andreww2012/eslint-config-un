@@ -26,6 +26,11 @@ export interface EmberEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'ember'> {
   /**
    * Rules specific to files with tests.
+   *
+   * 📁 Default `files`:
+   * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s</code>
+   * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s</code>
+   * @default true
    */
   configTestFiles?:
     | boolean
@@ -33,13 +38,13 @@ export interface EmberEslintConfigOptions<
         NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
-   * Affected rules:
+   * Affected rule:
    * - [`ember/computed-property-getters`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/computed-property-getters.md)
    */
   enforceGettersInComputedProperties?: GetRuleOptions<'ember', 'computed-property-getters'>;
 
   /**
-   * Affected rules:
+   * Affected rule:
    * - [`ember/no-classic-components`](https://github.com/ember-cli/eslint-plugin-ember/blob/HEAD/docs/rules/no-classic-components.md)
    * @default true
    */

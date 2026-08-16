@@ -32,8 +32,8 @@ export interface GraphqlEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'graphql'> {
   /**
    * Files for which GraphQL processor will be used.
-   * "Under the hood, the processor extracts schema and operation files from these files
-   * and treats them as virtual GraphQL documents with .graphql extensions"
+   * "Under the hood, the processor extracts schema and operation files from these files and treats
+   * them as virtual GraphQL documents with .graphql extensions"
    * - [plugin docs](https://the-guild.dev/graphql/eslint/docs/usage/js)
    *
    * 📁 Default `files`:
@@ -47,8 +47,8 @@ export interface GraphqlEslintConfigOptions<
   configJsProcessor?: boolean | Prettify<UnFlatConfigEntryFilesAndIgnores>;
 
   /**
-   * Disable all the rules requiring GraphQL Operations specified in GraphQL config
-   * (via `documents` option) in order to work:
+   * Disable all the rules requiring GraphQL Operations specified in GraphQL config (via `documents`
+   * option) in order to work:
    * - [`graphql/known-fragment-names`](https://the-guild.dev/graphql/eslint/rules/known-fragment-names)
    * - [`graphql/no-one-place-fragments`](https://the-guild.dev/graphql/eslint/rules/no-one-place-fragments)
    * - [`graphql/no-undefined-variables`](https://the-guild.dev/graphql/eslint/rules/no-undefined-variables)
@@ -65,8 +65,8 @@ export interface GraphqlEslintConfigOptions<
   disableRulesRequiringOperations?: boolean;
 
   /**
-   * Disable all the rules requiring GraphQL Schema specified in GraphQL config
-   * (via `schema` option) in order to work:
+   * Disable all the rules requiring GraphQL Schema specified in GraphQL config (via `schema`
+   * option) in order to work:
    * - [`graphql/no-deprecated`](https://the-guild.dev/graphql/eslint/rules/no-deprecated)
    * - [`graphql/no-root-type`](https://the-guild.dev/graphql/eslint/rules/no-root-type)
    * - [`graphql/no-scalar-result-type-on-mutation`](https://the-guild.dev/graphql/eslint/rules/no-scalar-result-type-on-mutation)
@@ -83,8 +83,8 @@ export interface GraphqlEslintConfigOptions<
   disableRulesRequiringSchema?: boolean;
 
   /**
-   * Provides [GraphQL Config](https://npmx.dev/graphql-config). Normally is not required
-   * as it should be automatically found by the plugin.
+   * Provides [GraphQL Config](https://npmx.dev/graphql-config).
+   * Normally is not required as it should be automatically found by the plugin.
    *
    * Will be assigned to `languageOptions.parserOptions.graphQLConfig`.
    */
@@ -93,8 +93,8 @@ export interface GraphqlEslintConfigOptions<
   /**
    * Require queries, mutations, subscriptions or fragments to be located in separate files.
    *
-   * By default, all of them are required to be in separate files (equivalent of setting
-   * all the properties to `true`).
+   * By default, all of them are required to be in separate files (equivalent of setting all the
+   * properties to `true`).
    *
    * Affected rule:
    * - [`graphql/lone-executable-definition`](https://the-guild.dev/graphql/eslint/rules/lone-executable-definition)

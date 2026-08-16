@@ -14,8 +14,8 @@ import {
 } from './index';
 
 /**
- * Stylistic/formatting only rules for JS/TS(X). Only small number of rules
- * are enabled by default.
+ * Stylistic/formatting only rules for JS/TS(X).
+ * Only small number of rules are enabled by default.
  *
  * 📁 Default `files`: all files
  */
@@ -23,7 +23,8 @@ export interface StylisticEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'stylistic'> {
   /**
-   * Customization function directly coming from [the plugin](https://eslint.style/guide/config-presets#configuration-factory).
+   * Customization function directly coming from
+   * [the plugin](https://eslint.style/guide/config-presets#configuration-factory).
    *
    * This, if used, will override severity and options set by us.
    */

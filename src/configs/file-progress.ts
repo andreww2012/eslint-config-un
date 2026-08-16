@@ -20,8 +20,8 @@ export interface FileProgressEslintConfigOptions<
   /**
    * [`eslint-plugin-file-progress`](https://npmx.dev/eslint-plugin-file-progress) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `progress` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `progress` property and applied to the resolved `files` and `ignores`
+   * of this config.
    *
    * Will be merged with the default value for `hide`.
    */

@@ -34,9 +34,9 @@ const UTILITY_PACKAGES = {
 
 /**
  * Provides a regex for the
- * [`no-restricted-imports`](https://eslint.org/docs/latest/rules/no-restricted-imports) rule
- * that forbids importing from (by default) most of the popular utility packages, such as `lodash`
- * (and its' modern alternatives) or `type-fest`.
+ * [`no-restricted-imports`](https://eslint.org/docs/latest/rules/no-restricted-imports) rule that
+ * forbids importing from (by default) most of the popular utility packages, such as `lodash` (and
+ * its' modern alternatives) or `type-fest`.
  * This could be useful to prevent ending up with multiple import statements, for utility renaming
  * or implementation tweaking.
  * For example, one could use a single or several files re-exporting utilities from different
@@ -89,11 +89,11 @@ type VueNoRestrictedSyntaxEntry = Extract<
 
 /**
  * Provides a selector for the
- * [`vue/no-restricted-syntax`](https://eslint.vuejs.org/rules/no-restricted-syntax.html) rule
- * that forbids usage of [`$slots`](https://vuejs.org/api/component-instance.html#slots) inside
- * Vue templates in favor of a variable holding
- * [`defineSlots` macro](https://vuejs.org/api/sfc-script-setup.html#defineslots) result
- * (only available in `<script setup lang="ts">` sections): `const slots = defineSlots<{...}>()`
+ * [`vue/no-restricted-syntax`](https://eslint.vuejs.org/rules/no-restricted-syntax.html) rule that
+ * forbids usage of [`$slots`](https://vuejs.org/api/component-instance.html#slots) inside Vue
+ * templates in favor of a variable holding
+ * [`defineSlots` macro](https://vuejs.org/api/sfc-script-setup.html#defineslots) result (only
+ * available in `<script setup lang="ts">` sections): `const slots = defineSlots<{...}>()`
  */
 export const forbid$slotsInsideVueTemplates = (
   message = 'Please use `const slots = defineSlots<{...}>()` instead because `$slots` is not typed',

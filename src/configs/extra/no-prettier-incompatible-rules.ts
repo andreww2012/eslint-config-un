@@ -420,8 +420,8 @@ export interface NoPrettierIncompatibleRulesEslintConfigOptions<
    *
    * are applied only if the corresponding plugin is detected as installed.
    *
-   * Set the corresponding key to `true` to force a group on regardless of the plugin,
-   * or to `false` to turn any group off.
+   * Set the corresponding key to `true` to force a group on regardless of the plugin, or to `false`
+   * to turn any group off.
    */
   languages?: Partial<Record<PrettierLanguage, boolean>>;
 }

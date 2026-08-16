@@ -29,11 +29,11 @@ export type UnAllRuleNames = keyof UnRulesConfig;
 
 interface UnFlatConfigEntryFilesOnly {
   /**
-   * If the config has "sub-configs", most of the time they WON'T disabled
-   * unless otherwise stated in the config docs.
-   * The good example of the config which doesn't follow this rule is `ts`,
-   * which disables type-aware sub-config too if `files` is empty array and no files
-   * are passed explicitly to the sub-config.
+   * If the config has "sub-configs", most of the time they WON'T disabled unless otherwise stated
+   * in the config docs.
+   * The good example of the config which doesn't follow this rule is `ts`, which disables
+   * type-aware sub-config too if `files` is empty array and no files are passed explicitly to the
+   * sub-config.
    *
    * Pass an empty array to disable the config, but keep sub-configs intact (if any).
    */
@@ -41,8 +41,7 @@ interface UnFlatConfigEntryFilesOnly {
 }
 
 /**
- * Similar to ESLint's flat config entry type, but with eslint-config-un specific
- * JSDoc comments.
+ * Similar to ESLint's flat config entry type, but with eslint-config-un specific JSDoc comments.
  */
 export interface UnFlatConfigEntryFilesAndIgnores extends UnFlatConfigEntryFilesOnly {
   ignores?: string[];
@@ -50,11 +49,11 @@ export interface UnFlatConfigEntryFilesAndIgnores extends UnFlatConfigEntryFiles
 
 interface DisabledAutofixOption {
   /**
-   * Disables autofix for this rule only for this config with a caveat
-   * that the rule name will be prepended with `disable-autofix/`.
+   * Disables autofix for this rule only for this config with a caveat that the rule name will be
+   * prepended with `disable-autofix/`.
    *
-   * If you'd like to disable autofix without changing the rule name,
-   * it's only currently possible to do so globally (for all configs at once).
+   * If you'd like to disable autofix without changing the rule name, it's only currently possible
+   * to do so globally (for all configs at once).
    * For that, please use `autofixDisabledGloballyFor` root option.
    */
   disableAutofix?: boolean;

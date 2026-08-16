@@ -28,9 +28,10 @@ const JS_DOC_CLOSING = '*/';
 export const isCascadeAnchor = (entry: string) => arrayIncludes(CASCADE_ANCHORS, entry);
 
 /**
- * The bands the cascade is emitted in, in order, with the anchors standing for the entries that
- * are not Configs. Listing them together is what lets an anchor be placed without naming any
- * Config: every anchor sits on a phase boundary
+ * The bands the cascade is emitted in, in order, with the anchors standing for the entries that are
+ * not Configs.
+ * Listing them together is what lets an anchor be placed without naming any Config: every anchor
+ * sits on a phase boundary
  */
 export const CASCADE_LAYOUT = allUnionMembers<CascadeAnchor | ConfigPhase | 'default'>()([
   'globalSetup',

@@ -22,8 +22,8 @@ interface NoUnusedVarsSubConfigOptions<
  * Provides an autofix to remove unused imports.
  *
  * Note: `typescript-eslint` since v8.53.0 has built-in ability for
- * [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) rule
- * to [automatically remove unused imports](https://typescript-eslint.io/rules/no-unused-vars/#enableautofixremovalimports).
+ * [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) rule to
+ * [automatically remove unused imports](https://typescript-eslint.io/rules/no-unused-vars/#enableautofixremovalimports).
  *
  * 📁 Default `files`: all files
  */
@@ -31,10 +31,11 @@ export interface UnusedImportsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'unused-imports'> {
   /**
-   * Disable
-   * [`no-unused-vars`](https://eslint.org/docs/latest/rules/no-unused-vars),
+   * Disable [`no-unused-vars`](https://eslint.org/docs/latest/rules/no-unused-vars),
    * [`ts/no-unused-vars`](https://typescript-eslint.io/rules/no-unused-vars) and
    * `sonarjs/no-unused-vars` rules in favor of `unused-imports/no-unused-vars` rule.
+   *
+   * 📁 Default `files`: all files
    * @default false
    */
   configNoUnusedVars?: boolean | NoUnusedVarsSubConfigOptions<ExtraPlugins>;

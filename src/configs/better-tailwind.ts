@@ -27,13 +27,13 @@ export interface BetterTailwindEslintConfigOptions<
   /**
    * [`eslint-plugin-better-tailwindcss`](https://npmx.dev/eslint-plugin-better-tailwindcss) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `better-tailwindcss` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `better-tailwindcss` property and applied to the resolved `files` and
+   * `ignores` of this config.
    *
-   * Strongly recommended: specify exactly one of `entryPoint` (for Tailwind 4) or
-   * `tailwindConfig` (for Tailwind 3) — `eslint-plugin-better-tailwindcss` needs it to work
-   * properly, and its absence is reported at runtime. If specified, you must provide exactly
-   * one of them.
+   * Strongly recommended: specify exactly one of `entryPoint` (for Tailwind 4) or `tailwindConfig`
+   * (for Tailwind 3) — `eslint-plugin-better-tailwindcss` needs it to work properly, and its
+   * absence is reported at runtime.
+   * If specified, you must provide exactly one of them.
    */
   settings?: RequireExactlyOne<{
     /**
@@ -48,15 +48,15 @@ export interface BetterTailwindEslintConfigOptions<
   }> & {
     /**
      * "The working directory used to resolve `tailwindcss` and related config files.
-     * This is useful for monorepos where linting runs from the repository root
-     * but each project has its own `node_modules` and Tailwind setup."
+     * This is useful for monorepos where linting runs from the repository root but each project has
+     * its own `node_modules` and Tailwind setup."
      * - [plugin docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/settings/settings.md#cwd)
      */
     cwd?: string;
 
     /**
-     * From plugin docs:
-     * The path to the `tsconfig.json` file. If not specified, the plugin will try to find it automatically.
+     * From plugin docs: The path to the `tsconfig.json` file.
+     * If not specified, the plugin will try to find it automatically.
      */
     tsconfig?: string;
 
@@ -111,8 +111,8 @@ export interface BetterTailwindEslintConfigOptions<
   };
 
   /**
-   * Detected automatically from a major version of the installed version of
-   * `tailwindcss` package, but can also be specified manually here.
+   * Detected automatically from a major version of the installed version of `tailwindcss` package,
+   * but can also be specified manually here.
    */
   tailwindVersion?: SupportedTailwindVersion;
 
@@ -125,21 +125,23 @@ export interface BetterTailwindEslintConfigOptions<
   >;
 
   /**
-   * If `css` config is enabled, its `files` and `ignores` will be merged with the same fields
-   * of this config to enable `.css` files linting. This is because CSS parsing in required
-   * in order for `eslint-plugin-better-tailwindcss` to work on CSS files.
+   * If `css` config is enabled, its `files` and `ignores` will be merged with the same fields of
+   * this config to enable `.css` files linting.
+   * This is because CSS parsing in required in order for `eslint-plugin-better-tailwindcss` to work
+   * on CSS files.
    * [Read more about CSS linting in the docs](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/parsers/css.md).
    *
-   * If you would like to avoid this behavior or would like to specify different
-   * `files` and `ignores`, set this option to `false` and configure the corresponding fields
-   * of this config manually.
+   * If you would like to avoid this behavior or would like to specify different `files` and
+   * `ignores`, set this option to `false` and configure the corresponding fields of this config
+   * manually.
    */
   cssLinting?: false;
 
   /**
-   * Enforces consistent Tailwind class order. `false` disables the corresponding rule.
+   * Enforces consistent Tailwind class order.
+   * `false` disables the corresponding rule.
    *
-   * Affected rules:
+   * Affected rule:
    * - [`better-tailwindcss/enforce-consistent-class-order`](https://github.com/schoero/eslint-plugin-better-tailwindcss/blob/HEAD/docs/rules/enforce-consistent-class-order.md)
    * @default 'official'
    */

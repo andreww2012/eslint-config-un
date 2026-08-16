@@ -11,7 +11,7 @@ import {
  *
  * 📁 Default `files`: all files
  *
- * 🧩 Plugin(s): Built-in eslint-plugin-un
+ * 🧩 Plugins: built-in `eslint-plugin-un`
  */
 export interface UnEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,

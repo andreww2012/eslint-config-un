@@ -11,11 +11,11 @@ import {
 type IssueType = 'deadUrls' | 'missingFragments' | 'missingLocalPath' | 'selfDestinationLinks';
 
 /**
- * An ESLint plugin that provides rules for checking the validity of links and URLs
- * in Markdown files.
+ * An ESLint plugin that provides rules for checking the validity of links and URLs in Markdown
+ * files.
  *
- * Since it's scoped only to Markdown files, the checker itself isn't perfect
- * and it may significantly slow down linting, the config is disabled by default.
+ * Since it's scoped only to Markdown files, the checker itself isn't perfect and it may
+ * significantly slow down linting, the config is disabled by default.
  * We recommend that you use [`lychee` link checker](https://lychee.cli.rs) instead.
  *
  * 📁 Default `files`: <code>**&#47;*.md</code>
@@ -24,10 +24,12 @@ export interface MarkdownLinksEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'markdown-links'> {
   /**
-   * What types of issues the links are checked for. By default, all issues are enabled.
+   * What types of issues the links are checked for.
+   * By default, all issues are enabled.
    * The value you provide here will be **deeply merged** with the default value.
    *
-   * You can also use this option to more conveniently control the options of the corresponding rules.
+   * You can also use this option to more conveniently control the options of the corresponding
+   * rules.
    * @default
    * ```ts
    * {deadUrls: {options: {checkAnchor: false}, severityWarn: true}, missingFragments: true, missingLocalPath: true, selfDestinationLinks: true}

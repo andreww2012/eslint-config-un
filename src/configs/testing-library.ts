@@ -19,8 +19,9 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
   'testing-library'
 > {
   /**
-   * By default, [`testing-library/no-node-access` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-node-access.md) is enabled,
-   * which disallows DOM traversal using native HTML methods and properties.
+   * By default,
+   * [`testing-library/no-node-access` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/no-node-access.md)
+   * is enabled, which disallows DOM traversal using native HTML methods and properties.
    * This option allows the use of `firstChild` property
    * [to get the root element of the rendered element](https://testing-library.com/docs/react-testing-library/api/#container-1).
    * @default true
@@ -37,8 +38,10 @@ interface SharedConfigOptions<ExtraPlugins extends ExtraPluginsType> extends UnF
   >['allowTestingFrameworkSetupHook'];
 
   /**
-   * - `explicit`: enables [`testing-library/prefer-explicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-explicit-assert.md).
-   * - `implicit`: enables [`testing-library/prefer-implicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-implicit-assert.md).
+   * - `explicit`: enables
+   *   [`testing-library/prefer-explicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-explicit-assert.md).
+   * - `implicit`: enables
+   *   [`testing-library/prefer-implicit-assert` rule](https://github.com/testing-library/eslint-plugin-testing-library/blob/HEAD/docs/rules/prefer-implicit-assert.md).
    *
    * By default, assert style is not enforced.
    */
@@ -80,33 +83,38 @@ export interface TestingLibraryEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends OmitStrict<SharedConfigOptions<ExtraPlugins>, 'allowTestingFrameworkSetupHook'> {
   /**
-   * @default <=> `angular` config is enabled
+   * 📁 Default `files`: same as the parent config's default `files`
+   * @default true <=> `angular` config is enabled
    */
   configAngular?:
     | boolean
     | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
-   * @default <=> `marko` package is installed
+   * 📁 Default `files`: same as the parent config's default `files`
+   * @default true <=> `marko` package is installed
    */
   configMarko?:
     | boolean
     | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
-   * @default <=> `react` config is enabled
+   * 📁 Default `files`: same as the parent config's default `files`
+   * @default true <=> `react` config is enabled
    */
   configReact?: boolean | ReactSubConfigOptions<ExtraPlugins>;
 
   /**
-   * @default <=> `svelte` config is enabled
+   * 📁 Default `files`: same as the parent config's default `files`
+   * @default true <=> `svelte` config is enabled
    */
   configSvelte?:
     | boolean
     | (SharedConfigOptions<ExtraPlugins> & NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins>);
 
   /**
-   * @default <=> `vue` config is enabled
+   * 📁 Default `files`: same as the parent config's default `files`
+   * @default true <=> `vue` config is enabled
    */
   configVue?:
     | boolean

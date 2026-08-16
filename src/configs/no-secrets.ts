@@ -13,8 +13,8 @@ import {
 type NoSecretsOptions = GetRuleOptions<'no-secrets', 'no-secrets'>;
 
 /**
- * An ESLint plugin that offers a rule that searches for potential secrets/keys in code
- * and JSON files.
+ * An ESLint plugin that offers a rule that searches for potential secrets/keys in code and JSON
+ * files.
  *
  * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
  */

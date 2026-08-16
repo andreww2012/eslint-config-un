@@ -360,8 +360,10 @@ interface SortTsconfigKeysSubConfigOptions<
     | 'alphabetical'
     | {
         /**
-         * - `antfu`: use [Anthony Fu's order](https://github.com/antfu/eslint-config/blob/56262ef7962ce310d29348060d8941d420f410fc/src/configs/sort.ts#L138).
-         * - `totalTypescript`: use the order from [Matt Pocock's TSConfig Cheat Sheet](https://www.totaltypescript.com/tsconfig-cheat-sheet).
+         * - `antfu`: use
+         *   [Anthony Fu's order](https://github.com/antfu/eslint-config/blob/56262ef7962ce310d29348060d8941d420f410fc/src/configs/sort.ts#L138).
+         * - `totalTypescript`: use the order from
+         *   [Matt Pocock's TSConfig Cheat Sheet](https://www.totaltypescript.com/tsconfig-cheat-sheet).
          */
         preset: keyof typeof TSCONFIG_COMPILER_OPTIONS_ORDER_PRESETS;
       }
@@ -386,7 +388,8 @@ interface SortTsconfigKeysSubConfigOptions<
       };
 
   /**
-   * Extra configs for [`jsonc/sort-keys`](https://ota-meshi.github.io/eslint-plugin-jsonc/rules/sort-keys.html) rule
+   * Extra configs for
+   * [`jsonc/sort-keys`](https://ota-meshi.github.io/eslint-plugin-jsonc/rules/sort-keys.html) rule
    * that will be appended to the resulting config array.
    */
   extraSortKeysConfigs?: (GetRuleOptions<'jsonc', 'sort-keys'> & object)[];
@@ -395,8 +398,8 @@ interface SortTsconfigKeysSubConfigOptions<
 /**
  * [TypeScript](https://www.typescriptlang.org) specific rules.
  *
- * ⚠️ Note that if `files` is an empty array, `typeAware` sub-config will be disabled too,
- * unless its `files` are explicitly specified.
+ * ⚠️ Note that if `files` is an empty array, `typeAware` sub-config will be disabled too, unless
+ * its `files` are explicitly specified.
  *
  * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
  */
@@ -407,21 +410,23 @@ export interface TsEslintConfigOptions<
   OmitStrict<UnRulesConfigPartial<'ts'>, keyof TypeAwareRulesWithPrefixes>
 > {
   /**
-   * Set ups `typescript-eslint` plugin: sets `language.{parser,parserOptions}`
-   * for NON-type-aware rules.
-   *
-   * By default, it will be applied to all TypeScript files (<code>**&#47;*.?([cm])ts?(x)</code>)
-   * plus extra files coming from `astro`, `svelte` and `vue` configs.
-   * If different files are specified, those extra files will still be appended.
+   * Set ups `typescript-eslint` plugin: sets `language.{parser,parserOptions}` for NON-type-aware
+   * rules.
+   * If different files are specified, the extra files will still be appended.
    *
    * To configure the setup config for type-aware rules, use `configTypeAware.configSetup` option.
+   *
+   * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code> plus extra files coming from `astro`,
+   * `svelte` and `vue` configs
+   * @default true
    */
   configSetup?: UnFlatConfigEntryFilesAndIgnores;
 
   /**
    * Applies rules requiring type information on the specified `files`.
    *
-   * By default uses `ignores` from the parent config.
+   * 📁 Default `files` and `ignores`: inherited from the parent config, plus the extra files coming
+   * from `astro`, `svelte` and `vue` configs
    * @default true
    */
   configTypeAware?:
@@ -429,31 +434,40 @@ export interface TsEslintConfigOptions<
     | Prettify<
         {
           /**
-           * Set ups `typescript-eslint` plugin: sets `language.{parser,parserOptions}`
-           * for type-aware rules.
+           * Set ups `typescript-eslint` plugin: sets `language.{parser,parserOptions}` for
+           * type-aware rules.
+           * If different files are specified, the extra files will still be appended.
            *
-           * By default, it will be applied to all TypeScript files
-           * (<code>**&#47;*.?([cm])ts?(x)</code>)
-           * plus extra files coming from `astro`, `svelte` and `vue` configs.
-           * If different files are specified, those extra files will still be appended.
+           * To configure the setup config for non-type-aware rules, use `configSetup` option on the
+           * root config.
            *
-           * To configure the setup config for non-type-aware rules,
-           * use `configSetup` option on the root config.
+           * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code> plus extra files coming from
+           * `astro`, `svelte` and `vue` configs
+           * @default true
            */
           configSetup?: UnFlatConfigEntryFilesAndIgnores;
         } & UnFlatConfigEntryBase<ExtraPlugins, TypeAwareRulesWithPrefixes>
       >;
 
   /**
-   * Disallows any type assertions via [`eslint-plugin-no-type-assertion`](https://npmx.dev/eslint-plugin-no-type-assertion) plugin.
+   * Disallows any type assertions.
    *
-   * If you'd like to disallow only unsafe type assertions, enable [`ts/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion) rule instead.
+   * If you'd like to disallow only unsafe type assertions, enable
+   * [`ts/no-unsafe-type-assertion`](https://typescript-eslint.io/rules/no-unsafe-type-assertion)
+   * rule instead.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-no-type-assertion`](https://npmx.dev/eslint-plugin-no-type-assertion)
    * @default false
    */
   configNoTypeAssertion?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'no-type-assertion'>;
 
   /**
    * If you have too many `no-unsafe-*` reports, you can disable them all by enabling this config.
+   *
+   * 📁 Default `files`: all files
+   *
    * The rules disabled by this config are:
    * - [`ts/no-unsafe-argument`](https://typescript-eslint.io/rules/no-unsafe-argument)
    * - [`ts/no-unsafe-assignment`](https://typescript-eslint.io/rules/no-unsafe-assignment)
@@ -468,6 +482,14 @@ export interface TsEslintConfigOptions<
 
   /**
    * Sorts the keys of `tsconfig.json` files.
+   *
+   * 📁 Default `files`: <code>{tsconfig,*.tsconfig,tsconfig.*}.json</code>
+   *
+   * 🧩 Main plugin: [`eslint-plugin-jsonc`](https://npmx.dev/eslint-plugin-jsonc)
+   * ([docs](https://ota-meshi.github.io/eslint-plugin-jsonc))
+   *
+   * Affected rule:
+   * - [`jsonc/sort-keys`](https://ota-meshi.github.io/eslint-plugin-jsonc/rules/sort-keys.html)
    * @default false
    */
   configSortTsconfigKeys?: boolean | SortTsconfigKeysSubConfigOptions<ExtraPlugins>;
@@ -481,26 +503,28 @@ export interface TsEslintConfigOptions<
 
   /**
    * By default it will be auto-detected from the installed `typescript` package.
-   * It will contain major and minor version numbers, e.g. even if you installed
-   * TypeScript 5.8.1, `typescriptVersion` will be `5.8`.
+   * It will contain major and minor version numbers, e.g. even if you installed TypeScript 5.8.1,
+   * `typescriptVersion` will be `5.8`.
    */
   typescriptVersion?: number;
 
   /**
-   * Globs of files to allow running with the default project compiler options
-   * despite not being matched by the project service.
+   * Globs of files to allow running with the default project compiler options despite not being
+   * matched by the project service.
    * @see https://typescript-eslint.io/packages/parser#allowdefaultproject
    */
   allowDefaultProject?: (TsEslintParserOptions['projectService'] & object)['allowDefaultProject'];
 
   /**
-   * Will be merged with the default parser options set by us. These options will be
-   * passed to two setup configs for applying non-type-aware and type-aware rules.
-   * If a function is provided, it will receive the flag telling to which config the
-   * options will be applied.
+   * Will be merged with the default parser options set by us.
+   * These options will be passed to two setup configs for applying non-type-aware and type-aware
+   * rules.
+   * If a function is provided, it will receive the flag telling to which config the options will be
+   * applied.
    *
-   * Note that if you only need to set [`projectService.allowDefaultProject`](https://typescript-eslint.io/packages/parser#allowdefaultproject), we recommend you using a separate
-   * `allowDefaultProject` option instead.
+   * Note that if you only need to set
+   * [`projectService.allowDefaultProject`](https://typescript-eslint.io/packages/parser#allowdefaultproject),
+   * we recommend you using a separate `allowDefaultProject` option instead.
    * @see https://typescript-eslint.io/packages/parser#configuration
    */
   parserOptions?: MaybeFn<TsEslintParserOptions, [isForTypeAwareConfig: boolean]>;

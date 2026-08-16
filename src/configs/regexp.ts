@@ -18,13 +18,13 @@ export interface RegexpEslintConfigOptions<
   /**
    * [`eslint-plugin-regexp`](https://npmx.dev/eslint-plugin-regexp) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `regexp` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `regexp` property and applied to the resolved `files` and `ignores` of
+   * this config.
    */
   settings?: {
     /**
-     * Defines a set of allowed character ranges. Rules will only allow, create, and fix
-     * character ranges defined here.
+     * Defines a set of allowed character ranges.
+     * Rules will only allow, create, and fix character ranges defined here.
      * @default 'alphanumeric'
      * @see https://ota-meshi.github.io/eslint-plugin-regexp/settings/#allowedcharacterranges
      */

@@ -64,8 +64,8 @@ export interface PnpmEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   /**
    * [`eslint-plugin-pnpm`](https://npmx.dev/eslint-plugin-pnpm) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `pnpm` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `pnpm` property and applied to the resolved `files` and `ignores` of
+   * this config.
    */
   settings?: {
     /**

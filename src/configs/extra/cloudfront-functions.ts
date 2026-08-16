@@ -8,21 +8,27 @@ import {
 } from '../index';
 
 /**
- * [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html) specific rules.
+ * [Amazon CloudFront Functions](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-functions.html)
+ * specific rules.
  *
- * [JavaScript runtime 2.0](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-20.html) is assumed by default.
- * For functions written for [JavaScript runtime 1.0](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-10.html),
+ * [JavaScript runtime 2.0](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-20.html)
+ * is assumed by default.
+ * For functions written for
+ * [JavaScript runtime 1.0](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-javascript-runtime-10.html),
  * use `configV1` sub-config.
  *
- * Note that if neither `files` or `ignores` are specified or is an empty array in the main
- * or a sub-config, the config won't be generated.
+ * Note that if neither `files` or `ignores` are specified or is an empty array in the main or a
+ * sub-config, the config won't be generated.
  */
 export interface CloudfrontFunctionsEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins> {
   /**
+   * A sub-config for functions written for the v1 runtime.
    * By default, the runtime version is assumed to be 2.
-   * This is a sub-config for functions written for the v1 runtime.
+   *
+   * 📁 Default `files`: none, must be specified explicitly
+   * @default false
    */
   configV1?: UnFlatConfigEntryBase<ExtraPlugins>;
 }

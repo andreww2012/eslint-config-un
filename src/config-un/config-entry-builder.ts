@@ -134,9 +134,9 @@ interface FlatConfigMetadata {
   rulesRequiringTypeInfo?: Map<string, {plugin: PluginPrefix; ruleName: string}>;
 
   /**
-   * When `true`, this config opts out of the type-information split: its typed rules are left
-   * in place (treated as `asIs`) regardless of the global `standalone`/`splitOnly` mode. The
-   * `disabled` mode still turns off throwing rules here.
+   * When `true`, this config opts out of the type-information split: its typed rules are left in
+   * place (treated as `asIs`) regardless of the global `standalone`/`splitOnly` mode.
+   * The `disabled` mode still turns off throwing rules here.
    */
   skipTypeInfoSplit?: boolean;
 }
@@ -223,8 +223,9 @@ export class ConfigEntryBuilder<
   }
 
   /**
-   * Note: `rules` will **always** be added to the resulting config, meaning that this method
-   * is not able to create a ["global ignores" config](https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores).
+   * Note: `rules` will **always** be added to the resulting config, meaning that this method is not
+   * able to create a
+   * ["global ignores" config](https://eslint.org/docs/latest/use/configure/configuration-files#globally-ignore-files-with-ignores).
    *
    * `rules` and `name` keys cannot be overridden.
    */
@@ -236,9 +237,9 @@ export class ConfigEntryBuilder<
           options: {
             /**
              * Whether the `files` and `ignores` provided by the user (or inherited via
-             * `inheritFilesAndIgnoresFrom`) are applied to this config, replacing
-             * (or, if `{files,ignores}Default*MergedWith*` options are set, merging with)
-             * `filesDefault` and `ignoresDefault`.
+             * `inheritFilesAndIgnoresFrom`) are applied to this config, replacing (or, if
+             * `{files,ignores}Default*MergedWith*` options are set, merging with) `filesDefault`
+             * and `ignoresDefault`.
              * @default true
              */
             applyUserFilesAndIgnores?: boolean;
@@ -247,14 +248,14 @@ export class ConfigEntryBuilder<
             filesDefaultMergedWithUserFiles?: boolean;
 
             /**
-             * Files to add to the resolved files list (user files + default files)
-             * IF that list is not empty
+             * Files to add to the resolved files list (user files + default files) IF that list is
+             * not empty
              */
             filesMerged?: string[];
 
             /**
-             * Will be merged with the internal `ignores`, and,
-             * if `ignoresDefaultMergedWithUserIgnores` set to `true`, with the user provided ones.
+             * Will be merged with the internal `ignores`, and, if
+             * `ignoresDefaultMergedWithUserIgnores` set to `true`, with the user provided ones.
              */
             ignoresDefault?: string[];
             ignoresDefaultMergedWithUserIgnores?: boolean;
@@ -265,34 +266,34 @@ export class ConfigEntryBuilder<
 
             /**
              * Some rules crash or behave unexpectedly when linting foreign file types.
-             * This usually happens on unexpected for the rule file types when
-             * `files` are not restricted. For example:
+             * This usually happens on unexpected for the rule file types when `files` are not
+             * restricted.
+             * For example:
              * - [`no-irregular-whitespace`](https://eslint.org/docs/latest/rules/no-irregular-whitespace)
-             * crashes on `.css` files or on `.json`, `.jsonc` and `.json5` files
-             * parsed by [`@eslint/json`](https://github.com/eslint/json)
+             *   crashes on `.css` files or on `.json`, `.jsonc` and `.json5` files parsed by
+             *   [`@eslint/json`](https://github.com/eslint/json)
              * - [`regexp/no-legacy-features`](https://ota-meshi.github.io/eslint-plugin-regexp/rules/no-legacy-features.html)
-             * crashes on `.md` files (only if `language` option is specified
-             * in the markdown config)
-             * - [`strict`](https://eslint.org/docs/latest/rules/strict)
-             * crashes on `.html` files
-             * - `sonarjs/assertions-in-tests`
-             * or [`node/no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/node-builtins.md)
-             * crash on `.toml` files
-             * - `.yaml` files are excluded because when no config specifies the language
-             * or a parser for YAML files, embedded code blocks might get linted by
-             * other rules and produce weird errors. For example,
-             * [`no-labels`](https://eslint.org/docs/latest/rules/no-labels)
-             * gets triggered on YAML maps (`a: b`)
+             *   crashes on `.md` files (only if `language` option is specified in the markdown
+             *   config)
+             * - [`strict`](https://eslint.org/docs/latest/rules/strict) crashes on `.html` files
+             * - `sonarjs/assertions-in-tests` or
+             *   [`node/no-unsupported-features/node-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/node-builtins.md)
+             *   crash on `.toml` files
+             * - `.yaml` files are excluded because when no config specifies the language or a
+             *   parser for YAML files, embedded code blocks might get linted by other rules and
+             *   produce weird errors.
+             *   For example, [`no-labels`](https://eslint.org/docs/latest/rules/no-labels) gets
+             *   triggered on YAML maps (`a: b`)
              * - On top of all of that, ESLint 10 refuses to lint a file at all if any enabled rule
-             * declares a [`meta.languages`](https://github.com/eslint/eslint/issues/20999)
-             * not matching the language the file is parsed with, which, for example, every
-             * `eslint-plugin-unicorn` rule does.
+             *   declares a [`meta.languages`](https://github.com/eslint/eslint/issues/20999) not
+             *   matching the language the file is parsed with, which, for example, every
+             *   `eslint-plugin-unicorn` rule does.
              *
-             * That's why globs corresponding to such files are implicitly/internally added
-             * to the final `ignores` array.
+             * That's why globs corresponding to such files are implicitly/internally added to the
+             * final `ignores` array.
              *
-             * Use this option if you don't want implicitly ignore certain file types
-             * (set the file type you wish not to be ignored to `false`).
+             * Use this option if you don't want implicitly ignore certain file types (set the file
+             * type you wish not to be ignored to `false`).
              * You can also set the whole option to `false` to not add anything to `ignores`.
              * @default true
              */
@@ -316,8 +317,8 @@ export class ConfigEntryBuilder<
             /**
              * Specifies plugin shared settings on the specified property.
              *
-             * To assign settings directly to the `settings` object,
-             * use an empty string as a property name.
+             * To assign settings directly to the `settings` object, use an empty string as a
+             * property name.
              */
             settings?: Record<string, Nullable<Record<string, unknown>>>;
 

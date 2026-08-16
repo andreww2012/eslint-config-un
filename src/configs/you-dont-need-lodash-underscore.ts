@@ -172,7 +172,8 @@ export interface YouDontNeedLodashUnderscoreEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'you-dont-need-lodash-underscore'> {
   /**
-   * Lodash methods that will be exempted from the check. Will be merged with the default value.
+   * Lodash methods that will be exempted from the check.
+   * Will be merged with the default value.
    * @example {capitalize: true, cloneDeep: true, get: true, omit: true, throttle: true}
    */
   ignoredMethods?: Partial<Record<LodashMethods, boolean>>;

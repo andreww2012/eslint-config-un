@@ -12,7 +12,8 @@ import {
 /**
  * An ESLint plugin to ensure that files begin with the given comment.
  *
- * There is also an alternative config, `headers`, which is powered by [`eslint-plugin-headers`](https://npmx.dev/eslint-plugin-headers).
+ * There is also an alternative config, `headers`, which is powered by
+ * [`eslint-plugin-headers`](https://npmx.dev/eslint-plugin-headers).
  *
  * 📁 Default `files`: all files
  */

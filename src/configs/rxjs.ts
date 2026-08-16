@@ -23,8 +23,8 @@ export interface RxjsEslintConfigOptions<
   banObservables?: ArrayOrBooleanRecord<string, 'booleanOrMessage'>;
 
   /**
-   * Will be merged with the default value ONLY IF object notation is used;
-   * otherwise all array elements will be mapped to `value: true` object properties.
+   * Will be merged with the default value ONLY IF object notation is used; otherwise all array
+   * elements will be mapped to `value: true` object properties.
    *
    * Affected rule:
    * - [`rxjs/ban-operators`](https://github.com/DaveMBush/eslint-plugin-rxjs/blob/HEAD/packages/eslint-plugin-rxjs/docs/rules/ban-operators.md)

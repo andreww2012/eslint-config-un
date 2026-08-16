@@ -31,8 +31,9 @@ export type EnabledBy =
     ));
 
 /**
- * Position of a Config in the resolved cascade. Configs of the same phase are ordered between
- * themselves by their `after` edges, and alphabetically where those say nothing
+ * Position of a Config in the resolved cascade.
+ * Configs of the same phase are ordered between themselves by their `after` edges, and
+ * alphabetically where those say nothing
  */
 export type ConfigPhase = 'first' | 'late' | 'last' | 'extra' | 'terminal';
 
@@ -40,8 +41,8 @@ export type CascadeAnchor = 'globalSetup' | 'rootConfig' | 'userExtraConfigs';
 
 /**
  * Named places in the cascade occupied by entries that are not Configs, and therefore cannot be
- * declared by a manifest: the global `files`/`ignores`/`linterOptions`/`languageOptions` setup,
- * the rule exceptions applied to the well known config files, and the `extraConfigs` root option.
+ * declared by a manifest: the global `files`/`ignores`/`linterOptions`/`languageOptions` setup, the
+ * rule exceptions applied to the well known config files, and the `extraConfigs` root option.
  * Each of them sits on a phase boundary of the cascade layout the artifact generator reads
  */
 export const CASCADE_ANCHORS = allUnionMembers<CascadeAnchor>()([
@@ -79,9 +80,9 @@ export interface ConfigManifest<Needs extends readonly ConfigKey[] = []> {
   after?: readonly ConfigKey[];
 
   /**
-   * Configs whose results this one reads. They are resolved before it, and their results are
-   * passed to `setup`. NOTE: unrelated to `after` - a Config may read the result of another
-   * Config it is placed before
+   * Configs whose results this one reads.
+   * They are resolved before it, and their results are passed to `setup`.
+   * NOTE: unrelated to `after` - a Config may read the result of another Config it is placed before
    */
   needs?: Needs;
 
@@ -110,9 +111,9 @@ export type UnConfigSetup<
 
 /**
  * The shape every Config module default export is narrowed to when the loader table is indexed
- * dynamically. `setup` intentionally uses the method syntax: its parameters must be related
- * bivariantly for the per-Config manifests, each with its own options and results types, to be
- * assignable here
+ * dynamically.
+ * `setup` intentionally uses the method syntax: its parameters must be related bivariantly for the
+ * per-Config manifests, each with its own options and results types, to be assignable here
  */
 export interface AnyConfigManifest extends ConfigManifest<readonly ConfigKey[]> {
   // eslint-disable-next-line ts/method-signature-style -- see the note above

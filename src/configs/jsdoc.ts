@@ -13,8 +13,8 @@ type NormalizeSeeLinksRuleOptions = GetRuleOptions<'jsdoc', 'normalize-see-links
 
 interface EslintPluginJsdocSettings {
   /**
-   * Disables all rules for the comment block on which a `@private` tag
-   * (or `@access private`) occurs.
+   * Disables all rules for the comment block on which a `@private` tag (or `@access private`)
+   * occurs.
    * @default false
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#allow-tags-private-or-internal-to-disable-rules-for-that-comment-block
    */
@@ -28,16 +28,16 @@ interface EslintPluginJsdocSettings {
   ignoreInternal?: boolean;
 
   /**
-   * Indicates how many line breaks (if any) will be checked to find a jsdoc comment block
-   * before the given code block.
+   * Indicates how many line breaks (if any) will be checked to find a jsdoc comment block before
+   * the given code block.
    * @default 0
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#maxlines-and-minlines
    */
   minLines?: number;
 
   /**
-   * Indicates how many line breaks (if any) will be checked to find a jsdoc comment block
-   * before the given code block.
+   * Indicates how many line breaks (if any) will be checked to find a jsdoc comment block before
+   * the given code block.
    * @default 1
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#maxlines-and-minlines
    */
@@ -51,8 +51,8 @@ interface EslintPluginJsdocSettings {
   mode?: 'typescript' | 'clojure' | 'jsdoc';
 
   /**
-   * Preferred alias name for a JSDoc tag. The format of the configuration is:
-   * `<primary tag name>`: `<preferred alias name>`
+   * Preferred alias name for a JSDoc tag.
+   * The format of the configuration is: `<primary tag name>`: `<preferred alias name>`
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#alias-preference
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#default-preferred-aliases for the default list of aliases
    */
@@ -73,8 +73,8 @@ interface EslintPluginJsdocSettings {
   overrideReplacesDocs?: boolean;
 
   /**
-   * Allows the omission of the tags corresponding to `require-*` rules if `@augments`
-   * or its alias `@extends` is present.
+   * Allows the omission of the tags corresponding to `require-*` rules if `@augments` or its alias
+   * `@extends` is present.
    * @default false
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#overrideaugmentsextendsimplementsignore-without-accompanying-paramdescriptionexamplereturnsthrowsyields
    */
@@ -88,8 +88,11 @@ interface EslintPluginJsdocSettings {
   implementsReplacesDocs?: boolean;
 
   /**
-   * Configures [`jsdoc/check-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/check-types.md)
-   * and [`jsdoc/no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md) rules.
+   * Configures
+   * [`jsdoc/check-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/check-types.md)
+   * and
+   * [`jsdoc/no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md)
+   * rules.
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/settings.md#settings-to-configure-check-types-and-no-undefined-types
    */
   preferredTypes?: Partial<
@@ -104,8 +107,9 @@ interface EslintPluginJsdocSettings {
           message: string;
 
           /**
-           * Use string to specify the type to be preferred in its place (and which fix mode
-           * can replace). Use `false` for forbidding the type
+           * Use string to specify the type to be preferred in its place (and which fix mode can
+           * replace).
+           * Use `false` for forbidding the type
            */
           replacement?: string | false;
 
@@ -118,8 +122,9 @@ interface EslintPluginJsdocSettings {
   >;
 
   /**
-   * Set to `true` to allow JSDoc blocks to be found across invocations such
-   * as call expressions and `new` expressions. Used by
+   * Set to `true` to allow JSDoc blocks to be found across invocations such as call expressions and
+   * `new` expressions.
+   * Used by
    * [`jsdoc/require-jsdoc`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-jsdoc.md).
    * @see https://github.com/gajus/eslint-plugin-jsdoc/blob/main/.README/settings.md#skipinvokedexpressionsforcommentfinding
    */
@@ -175,8 +180,11 @@ interface EslintPluginJsdocSettings {
   )[];
 
   /**
-   * Configures [`jsdoc/require-param-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-type.md)
-   * and [`jsdoc/require-param-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-description.md) rules.
+   * Configures
+   * [`jsdoc/require-param-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-type.md)
+   * and
+   * [`jsdoc/require-param-description`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-description.md)
+   * rules.
    */
   // Note: undocumented on the settings readme, only on rule-specific docs:
   // https://github.com/gajus/eslint-plugin-jsdoc/blob/d2c60403bb55a14eadbf49fc9937caad14a29cde/docs/rules/require-param-type.md?plain=1#L17
@@ -194,15 +202,24 @@ export interface JsdocEslintConfigOptions<
   /**
    * [`eslint-plugin-jsdoc`](https://npmx.dev/eslint-plugin-jsdoc) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `jsdoc` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `jsdoc` property and applied to the resolved `files` and `ignores` of
+   * this config.
    */
   settings?: EslintPluginJsdocSettings;
 
   /**
-   * Explicitly specify or ignore files written in TypeScript. Will be used to disable certain rules like [`jsdoc/no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md) or [`jsdoc/require-param-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-type.md), and enable some rules like [`jsdoc/no-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-types.md).
+   * Explicitly specify or ignore files written in TypeScript.
+   * Will be used to disable certain rules like
+   * [`jsdoc/no-undefined-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-undefined-types.md)
+   * or
+   * [`jsdoc/require-param-type`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/require-param-type.md),
+   * and enable some rules like
+   * [`jsdoc/no-types`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-types.md).
    *
-   * Will create a separate ESLint config which by default will use `settings` from the root `jsdoc` config, if specified, and will only be applied to TypeScript files.
+   * Will create a separate ESLint config which by default will use `settings` from the root `jsdoc`
+   * config, if specified.
+   *
+   * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
    * @default true <=> `ts` config is enabled
    */
   configTypescript?:
@@ -218,9 +235,10 @@ export interface JsdocEslintConfigOptions<
   customTags?: ArrayOrBooleanRecord;
 
   /**
-   * Will be merged with the default list. When object notation is used, a default entry
-   * can be disabled by setting it to `false` (e.g. `{'ts-nocheck': false}`); when array
-   * notation is used, all elements are added to the default list.
+   * Will be merged with the default list.
+   * When object notation is used, a default entry can be disabled by setting it to `false` (e.g.
+   * `{'ts-nocheck': false}`); when array notation is used, all elements are added to the default
+   * list.
    *
    * Affected rule:
    * - [`jsdoc/no-bad-blocks`](https://github.com/gajus/eslint-plugin-jsdoc/blob/HEAD/docs/rules/no-bad-blocks.md)
@@ -236,18 +254,18 @@ export interface JsdocEslintConfigOptions<
   formatTypeValues?: boolean;
 
   /**
-   * Rewrites labeled links inside `@see` tags to a single canonical `@link` form,
-   * so different styles don't get mixed within a codebase.
-   * Only two forms [officially supported by plain JSDoc](https://jsdoc.app/tags-inline-link)
-   * are supported:
+   * Rewrites labeled links inside `@see` tags to a single canonical `@link` form, so different
+   * styles don't get mixed within a codebase.
+   * Only two forms [officially supported by plain JSDoc](https://jsdoc.app/tags-inline-link) are
+   * supported:
    *
    * - The "prefix" one, where the label goes first, in square brackets:
    *   <code>[label]&#123;@link url}</code>.
    * - The "pipe" one, where the label goes last, after a pipe:
    *   <code>&#123;@link url|label}</code>.
    *
-   * Note that neither of them is a Markdown link (`[label](url)`), and the rule provides
-   * no way to enforce that form.
+   * Note that neither of them is a Markdown link (`[label](url)`), and the rule provides no way to
+   * enforce that form.
    *
    * Accepted values:
    * - A string (`'prefix'` or `'pipe'`) is a shortcut for picking the canonical form.

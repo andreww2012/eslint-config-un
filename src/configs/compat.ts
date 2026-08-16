@@ -19,8 +19,8 @@ export interface CompatEslintConfigOptions<
   /**
    * [`eslint-plugin-compat`](https://npmx.dev/eslint-plugin-compat) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned directly to `settings` flat config option
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned directly to `settings` flat config option and applied to the resolved
+   * `files` and `ignores` of this config.
    */
   // Must be in sync with https://github.com/amilajack/eslint-plugin-compat/blob/6388a9b65c0b7b110c94a1225403036c1d9b8428/src/types.ts#L77
   settings?: {
@@ -31,9 +31,8 @@ export interface CompatEslintConfigOptions<
     polyfills?: string[];
 
     /**
-     * "This plugin also supports linting the compatibility of ES APIs
-     * in addition to Web APIs. This is an experimental feature
-     * and is disabled by default" - plugin docs
+     * "This plugin also supports linting the compatibility of ES APIs in addition to Web APIs.
+     * This is an experimental feature and is disabled by default" - plugin docs
      * @see https://github.com/amilajack/eslint-plugin-compat#linting-es-apis-experimental
      */
     lintAllEsApis?: boolean;
@@ -44,8 +43,8 @@ export interface CompatEslintConfigOptions<
     browserslistOpts?: OmitStrict<DefaultBrowsersListOptions, 'path'>;
 
     /**
-     * "By default, feature detection like `if (fetch) { ... }` does not trigger a
-     * report. To lint these conditionals anyway, set this setting" - plugin docs
+     * "By default, feature detection like `if (fetch) { ... }` does not trigger a report.
+     * To lint these conditionals anyway, set this setting" - plugin docs
      * @see https://github.com/amilajack/eslint-plugin-compat#conditional-checks
      */
     ignoreConditionalChecks?: boolean;

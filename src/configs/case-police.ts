@@ -7,8 +7,8 @@ import {
 } from './index';
 
 /**
- * An ESLint plugin to enforce the spelling of certain words
- * (for example, `GitHub`, not `github` or `Github`).
+ * An ESLint plugin to enforce the spelling of certain words (for example, `GitHub`, not `github` or
+ * `Github`).
  *
  * 📁 Default `files`: all files
  */

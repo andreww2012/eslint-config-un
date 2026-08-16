@@ -19,8 +19,8 @@ const CONFIG_DEFAULT_IGNORES = ['**/Cargo.lock'] as const;
  *
  * 📁 Default `files`: <code>**&#47;*.toml</code>
  *
- * If `ignores` is explicitly specified, it still be merged with the default ignore list,
- * excluding items specified in `ignoresAdditional`.
+ * If `ignores` is explicitly specified, it still be merged with the default ignore list, excluding
+ * items specified in `ignoresAdditional`.
  *
  * The default ignore list: <code>**&#47;Cargo.lock</code>
  */
@@ -41,7 +41,8 @@ export interface TomlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   noNonDecimalIntegerExceptions?: GetRuleOptions<'toml', 'no-non-decimal-integer'>;
 
   /**
-   * "Millisecond precision is required. Further precision of fractional seconds is implementation-specific."
+   * "Millisecond precision is required.
+   * Further precision of fractional seconds is implementation-specific."
    * @default 3
    * @see https://toml.io/en/v1.0.0#local-time
    */

@@ -26,12 +26,14 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
   /**
    * [`eslint-plugin-playwright`](https://npmx.dev/eslint-plugin-playwright) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `playwright` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `playwright` property and applied to the resolved `files` and
+   * `ignores` of this config.
    */
   settings?: {
     /**
-     * "If you import Playwright globals (e.g. `test`, `expect`) with a custom name, you can configure this plugin to be aware of these additional names" - plugin docs
+     * "If you import Playwright globals (e.g.
+     * `test`, `expect`) with a custom name, you can configure this plugin to be aware of these
+     * additional names" - plugin docs
      */
     globalAliases?: {
       test?: string[];
@@ -40,10 +42,10 @@ export interface PlaywrightEslintConfigOptions<ExtraPlugins extends ExtraPlugins
 
     /**
      * "You can customize the error messages for rules using the `messages` property.
-     * This is useful if you would like to increase the verbosity of error messages
-     * or provide additional context. Only the message ids you define in this setting
-     * will be overridden, so any other messages will use the default message
-     * defined by the plugin" - plugin docs
+     * This is useful if you would like to increase the verbosity of error messages or provide
+     * additional context.
+     * Only the message ids you define in this setting will be overridden, so any other messages
+     * will use the default message defined by the plugin" - plugin docs
      */
     messages?: Record<string, string>;
   };

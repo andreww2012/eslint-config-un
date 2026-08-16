@@ -40,7 +40,9 @@ interface EnforceTypescriptInScriptionSectionConfigOptions<
   ExtraPlugins extends ExtraPluginsType,
 > extends UnFlatConfigEntryBase<ExtraPlugins, Pick<UnRulesConfigPartial<'vue'>, 'vue/block-lang'>> {
   /**
-   * What `ts` rules will be applied to the specified `files`. If you want more control over which TypeScript rules are applied to which Vue files, use `ts` config options for that.
+   * What `ts` rules will be applied to the specified `files`.
+   * If you want more control over which TypeScript rules are applied to which Vue files, use `ts`
+   * config options for that.
    * @default true
    */
   typescriptRules?: boolean | 'only-non-type-aware';
@@ -53,8 +55,8 @@ interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
   /**
    * [`@intlify/eslint-plugin-vue-i18n`](https://npmx.dev/@intlify/eslint-plugin-vue-i18n) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `vue-i18n` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `vue-i18n` property and applied to the resolved `files` and `ignores`
+   * of this config.
    */
   settings?: {
     /**
@@ -67,8 +69,14 @@ interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
       | ((
           | {
               /**
-               * - `file`: determine the locale name from the filename. The resource file should only contain messages for that locale. Use this option if you use `vue-cli-plugin-i18n`. This option is also used when String option is specified
-               * - `key`: determine the locale name from the root key name of the file contents. The value of that key should only contain messages for that locale. Used when the resource file is in the format given to the `messages` option of the `VueI18n` constructor option.
+               * - `file`: determine the locale name from the filename.
+               *   The resource file should only contain messages for that locale.
+               *   Use this option if you use `vue-cli-plugin-i18n`.
+               *   This option is also used when String option is specified
+               * - `key`: determine the locale name from the root key name of the file contents.
+               *   The value of that key should only contain messages for that locale.
+               *   Used when the resource file is in the format given to the `messages` option of
+               *   the `VueI18n` constructor option.
                *
                * Source: plugin docs
                */
@@ -76,14 +84,23 @@ interface I18nSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
             }
           | {
               /**
-               * Determine the locale name from the path. In this case, the locale must be had structured with your rule on the path. It can be captured with the regular expression named capture. The resource file should only contain messages for that locale.
+               * Determine the locale name from the path.
+               * In this case, the locale must be had structured with your rule on the path.
+               * It can be captured with the regular expression named capture.
+               * The resource file should only contain messages for that locale.
                *
                * Source: plugin docs
                */
               localeKey: 'path';
 
               /**
-               * Specifies how to determine pattern the locale for localization messages. This option means, when `localeKey` is `'path'`, you will need to capture the locale using a regular expression. You need to use the locale capture as a named capture `?<locale>`, so it’s be able to capture from the path of the locale resources. If you omit it, it will be captured from the resource path with the same regular expression pattern as `vue-cli-plugin-i18n`.
+               * Specifies how to determine pattern the locale for localization messages.
+               * This option means, when `localeKey` is `'path'`, you will need to capture the
+               * locale using a regular expression.
+               * You need to use the locale capture as a named capture `?<locale>`, so it’s be able
+               * to capture from the path of the locale resources.
+               * If you omit it, it will be captured from the resource path with the same regular
+               * expression pattern as `vue-cli-plugin-i18n`.
                *
                * Source: plugin docs
                */
@@ -118,9 +135,10 @@ interface NuxtSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
   /**
    * Configures rules specific to Nuxt config file.
    *
-   * Currently includes the single rule,
-   * [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/nuxt-config-keys-order.ts),
-   * and applies it to all `nuxt.config.?([cm])[jt]s?(x)` files.
+   * 📁 Default `files`: <code>**&#47;nuxt.config.?([cm])[jt]s?(x)</code>
+   *
+   * Affected rule:
+   * - [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/nuxt-config-keys-order.ts)
    * @default true
    */
   configNuxtConfig?:
@@ -150,8 +168,10 @@ interface PiniaSubConfigOptions<
   /**
    * Enforces pinia stores to be defined with the specified suffix.
    * Set to an empty string to not require any suffix.
+   *
+   * Affected rule:
+   * - [`pinia/prefer-use-store-naming-convention`](https://github.com/lisilinhart/eslint-plugin-pinia/blob/HEAD/docs/rules/prefer-use-store-naming-convention.md)
    * @default 'Store'
-   * @see https://github.com/lisilinhart/eslint-plugin-pinia/blob/HEAD/docs/rules/prefer-use-store-naming-convention.md
    */
   storesNameSuffix?: string;
 }
@@ -160,7 +180,8 @@ interface ScopedCssEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'vue-scoped-css'> {
   /**
-   * Will be merged with the default value. `true` does not restrict the style type.
+   * Will be merged with the default value.
+   * `true` does not restrict the style type.
    * @default {plain: true, scoped: true}
    */
   allowedStyleType?:
@@ -191,22 +212,26 @@ export interface VueEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'vue'> {
   /**
-   * Enables a11y (accessibility) rules for Vue SFC templates
+   * Enables a11y (accessibility) rules for Vue SFC templates.
    *
-   * By default, uses `files` and `ignores` from the parent config.
+   * 📁 Default `files` and `ignores`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`eslint-plugin-vuejs-accessibility`](https://npmx.dev/eslint-plugin-vuejs-accessibility)
    * @default true
    */
   configA11y?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'vuejs-accessibility'>;
 
   /**
-   * Enforces the presence of `lang="ts"` in `<script>` sections, see
-   * [vue/block-lang](https://eslint.vuejs.org/rules/block-lang.html) rule for more details.
+   * Enforces the presence of `lang="ts"` in `<script>` sections.
    *
-   * By default, will inherit `files` and `ignores` from the parent config, and specifying
-   * them explicitly here will *override* the respective property of the parent config.
+   * These files will be checked by all the `ts` config rules.
+   * You can control this behavior by using `typescriptRules` option.
    *
-   * These files will be checked by all the `ts` config rules. You can control this behavior
-   * by using `typescriptRules` option.
+   * 📁 Default `files` and `ignores`: inherited from the parent config.
+   * Specifying them explicitly here will *override* the respective property of the parent config.
+   *
+   * Affected rule:
+   * - [`vue/block-lang`](https://eslint.vuejs.org/rules/block-lang.html)
    * @default true <=> `ts` config is enabled
    */
   configEnforceTypescriptInScriptSection?:
@@ -215,44 +240,69 @@ export interface VueEslintConfigOptions<
   /**
    * [`vue-i18n`](https://npmx.dev/vue-i18n) specific rules.
    *
-   * By default, uses `files` and `ignores` from the parent config.
+   * 📁 Default `files` and `ignores`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`@intlify/eslint-plugin-vue-i18n`](https://npmx.dev/@intlify/eslint-plugin-vue-i18n)
+   * ([docs](https://eslint-plugin-vue-i18n.intlify.dev))
    * @default true <=> `vue-i18n` package is installed
    */
   configI18n?: boolean | I18nSubConfigOptions<ExtraPlugins>;
 
   /**
    * Nuxt-specific rules and tweaks:
-   * - Built-in Nuxt components ([`client-only`](https://nuxt.com/docs/4.x/api/components/client-only), [`dev-only`](https://nuxt.com/docs/4.x/api/components/dev-only) or any component starting with `nuxt`)
-   * will be ignored by [`vue/no-undef-components`](https://eslint.vuejs.org/rules/no-undef-components.html);
+   * - Built-in Nuxt components
+   *   ([`client-only`](https://nuxt.com/docs/4.x/api/components/client-only),
+   *   [`dev-only`](https://nuxt.com/docs/4.x/api/components/dev-only) or any component starting
+   *   with `nuxt`) will be ignored by
+   *   [`vue/no-undef-components`](https://eslint.vuejs.org/rules/no-undef-components.html);
    * - Nuxt's [`app.vue`](https://nuxt.com/docs/4.x/directory-structure/app/app),
-   * [`error.vue`](https://nuxt.com/docs/4.x/directory-structure/app/error) and
-   * [layout files](https://nuxt.com/docs/4.x/directory-structure/app/layouts)
-   * will be exempted from being checked by
-   * [`vue/multi-word-component-names`](https://eslint.vuejs.org/rules/multi-word-component-names.html);
+   *   [`error.vue`](https://nuxt.com/docs/4.x/directory-structure/app/error) and
+   *   [layout files](https://nuxt.com/docs/4.x/directory-structure/app/layouts) will be exempted
+   *   from being checked by
+   *   [`vue/multi-word-component-names`](https://eslint.vuejs.org/rules/multi-word-component-names.html);
    * - Layout files will also not be subject of
-   * [`vue/require-explicit-slots`](https://eslint.vuejs.org/rules/require-explicit-slots.html) check;
+   *   [`vue/require-explicit-slots`](https://eslint.vuejs.org/rules/require-explicit-slots.html)
+   *   check;
    * - [Plugins](https://nuxt.com/docs/4.x/directory-structure/app/plugins) and
-   * [server](https://nuxt.com/docs/4.x/directory-structure/server) files will be allowed
-   * to do `export default` ([`import/no-default-export`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-default-export.md) will be turned off);
+   *   [server](https://nuxt.com/docs/4.x/directory-structure/server) files will be allowed to do
+   *   `export default`
+   *   ([`import/no-default-export`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-default-export.md)
+   *   will be turned off);
    * - [`nuxt/no-page-meta-runtime-values`](https://github.com/nuxt/eslint/blob/89618070025b4373e90b227eb478b33a13b34c8f/packages/eslint-plugin/src/rules/no-page-meta-runtime-values/no-page-meta-runtime-values.ts#L66)
-   * and [`nuxt/prefer-import-meta`](https://eslint.nuxt.com/packages/plugin#nuxtprefer-import-meta)
-   * will be applied to the specified `files` and `ignores`, defaulting to all files inside
-   * `vueOrNuxtProjectDir` directory;
+   *   and
+   *   [`nuxt/prefer-import-meta`](https://eslint.nuxt.com/packages/plugin#nuxtprefer-import-meta)
+   *   will be applied to the specified `files` and `ignores`, defaulting to all files inside
+   *   `vueOrNuxtProjectDir` directory;
    * - Another sub-config, `configNuxtConfig`, will control whether
-   * [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/nuxt-config-keys-order.ts)
-   * rule will be applied to Nuxt config file (`true` by default).
+   *   [`nuxt/nuxt-config-keys-order`](https://github.com/nuxt/eslint/blob/main/packages/eslint-plugin/src/rules/nuxt-config-keys-order/nuxt-config-keys-order.ts)
+   *   rule will be applied to Nuxt config file (`true` by default).
+   *
+   * 📁 Default `files`: <code>**&#47;*.vue</code> inside the `vueOrNuxtProjectDir` directory
+   *
+   * 🧩 Main plugin: [`@nuxt/eslint-plugin`](https://npmx.dev/@nuxt/eslint-plugin)
+   * ([docs](https://eslint.nuxt.com/packages/plugin))
    * @default true <=> `nuxt` package is installed
    */
   configNuxt?: boolean | NuxtSubConfigOptions<ExtraPlugins>;
 
   /**
-   * Enabled automatically by checking if `pinia` package is installed (at any level). Pass a false value to disable pinia-specific rules.
+   * [Pinia](https://pinia.vuejs.org) specific rules.
+   * Pass a false value to disable them.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-pinia`](https://npmx.dev/eslint-plugin-pinia)
    * @default true <=> `pinia` package is installed
    */
   configPinia?: boolean | PiniaSubConfigOptions<ExtraPlugins>;
 
   /**
    * Scoped CSS in Vue.js related rules.
+   *
+   * 📁 Default `files`: all files
+   *
+   * 🧩 Main plugin: [`eslint-plugin-vue-scoped-css`](https://npmx.dev/eslint-plugin-vue-scoped-css)
+   * ([docs](https://future-architect.github.io/eslint-plugin-vue-scoped-css))
    * @default true
    */
   configScopedCss?: boolean | ScopedCssEslintConfigOptions<ExtraPlugins>;
@@ -264,55 +314,56 @@ export interface VueEslintConfigOptions<
   majorVersion?: SupportedVueMajorVersion;
 
   /**
-   * Almost all [extension rules](https://eslint.vuejs.org/rules/#extension-rules)
-   * (with the exceptions listed below) will smartly inherit the corresponding
-   * base rule's severity and options. If you want to disable this behavior,
-   * set this option to `false`.
+   * Almost all [extension rules](https://eslint.vuejs.org/rules/#extension-rules) (with the
+   * exceptions listed below) will smartly inherit the corresponding base rule's severity and
+   * options.
+   * If you want to disable this behavior, set this option to `false`.
    *
    * ### Exceptions
-   * - [`vue/no-console`](https://eslint.vuejs.org/rules/no-console.html): all `console` calls
-   * are forbidden within the template.
-   * - [`vue/dot-notation`](https://eslint.vuejs.org/rules/dot-notation.html) will inherit
-   * severity and options unless `noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles`
-   * is set to `true`, in which case the rule will be turned off.
+   * - [`vue/no-console`](https://eslint.vuejs.org/rules/no-console.html): all `console` calls are
+   *   forbidden within the template.
+   * - [`vue/dot-notation`](https://eslint.vuejs.org/rules/dot-notation.html) will inherit severity
+   *   and options unless `noPropertyAccessFromIndexSignatureSetInTsconfigForVueFiles` is set to
+   *   `true`, in which case the rule will be turned off.
    * - All "stylistic" rules are always turned off:
-   * [array-bracket-newline](https://eslint.vuejs.org/rules/array-bracket-newline.html),
-   * [array-bracket-spacing](https://eslint.vuejs.org/rules/array-bracket-spacing.html),
-   * [array-element-newline](https://eslint.vuejs.org/rules/array-element-newline.html),
-   * [arrow-spacing](https://eslint.vuejs.org/rules/arrow-spacing.html),
-   * [block-spacing](https://eslint.vuejs.org/rules/block-spacing.html),
-   * [brace-style](https://eslint.vuejs.org/rules/brace-style.html),
-   * [comma-dangle](https://eslint.vuejs.org/rules/comma-dangle.html),
-   * [comma-spacing](https://eslint.vuejs.org/rules/comma-spacing.html),
-   * [comma-style](https://eslint.vuejs.org/rules/comma-style.html),
-   * [dot-location](https://eslint.vuejs.org/rules/dot-location.html),
-   * [func-call-spacing](https://eslint.vuejs.org/rules/func-call-spacing.html),
-   * [key-spacing](https://eslint.vuejs.org/rules/key-spacing.html),
-   * [keyword-spacing](https://eslint.vuejs.org/rules/keyword-spacing.html),
-   * [max-len](https://eslint.vuejs.org/rules/max-len.html),
-   * [multiline-ternary](https://eslint.vuejs.org/rules/multiline-ternary.html),
-   * [no-extra-parens](https://eslint.vuejs.org/rules/no-extra-parens.html),
-   * [object-curly-newline](https://eslint.vuejs.org/rules/object-curly-newline.html),
-   * [object-curly-spacing](https://eslint.vuejs.org/rules/object-curly-spacing.html),
-   * [object-property-newline](https://eslint.vuejs.org/rules/object-property-newline.html),
-   * [operator-linebreak](https://eslint.vuejs.org/rules/operator-linebreak.html),
-   * [quote-props](https://eslint.vuejs.org/rules/quote-props.html),
-   * [space-in-parens](https://eslint.vuejs.org/rules/space-in-parens.html),
-   * [space-infix-ops](https://eslint.vuejs.org/rules/space-infix-ops.html),
-   * [space-unary-ops](https://eslint.vuejs.org/rules/space-unary-ops.html),
-   * [template-curly-spacing](https://eslint.vuejs.org/rules/template-curly-spacing.html)
+   *   [array-bracket-newline](https://eslint.vuejs.org/rules/array-bracket-newline.html),
+   *   [array-bracket-spacing](https://eslint.vuejs.org/rules/array-bracket-spacing.html),
+   *   [array-element-newline](https://eslint.vuejs.org/rules/array-element-newline.html),
+   *   [arrow-spacing](https://eslint.vuejs.org/rules/arrow-spacing.html),
+   *   [block-spacing](https://eslint.vuejs.org/rules/block-spacing.html),
+   *   [brace-style](https://eslint.vuejs.org/rules/brace-style.html),
+   *   [comma-dangle](https://eslint.vuejs.org/rules/comma-dangle.html),
+   *   [comma-spacing](https://eslint.vuejs.org/rules/comma-spacing.html),
+   *   [comma-style](https://eslint.vuejs.org/rules/comma-style.html),
+   *   [dot-location](https://eslint.vuejs.org/rules/dot-location.html),
+   *   [func-call-spacing](https://eslint.vuejs.org/rules/func-call-spacing.html),
+   *   [key-spacing](https://eslint.vuejs.org/rules/key-spacing.html),
+   *   [keyword-spacing](https://eslint.vuejs.org/rules/keyword-spacing.html),
+   *   [max-len](https://eslint.vuejs.org/rules/max-len.html),
+   *   [multiline-ternary](https://eslint.vuejs.org/rules/multiline-ternary.html),
+   *   [no-extra-parens](https://eslint.vuejs.org/rules/no-extra-parens.html),
+   *   [object-curly-newline](https://eslint.vuejs.org/rules/object-curly-newline.html),
+   *   [object-curly-spacing](https://eslint.vuejs.org/rules/object-curly-spacing.html),
+   *   [object-property-newline](https://eslint.vuejs.org/rules/object-property-newline.html),
+   *   [operator-linebreak](https://eslint.vuejs.org/rules/operator-linebreak.html),
+   *   [quote-props](https://eslint.vuejs.org/rules/quote-props.html),
+   *   [space-in-parens](https://eslint.vuejs.org/rules/space-in-parens.html),
+   *   [space-infix-ops](https://eslint.vuejs.org/rules/space-infix-ops.html),
+   *   [space-unary-ops](https://eslint.vuejs.org/rules/space-unary-ops.html),
+   *   [template-curly-spacing](https://eslint.vuejs.org/rules/template-curly-spacing.html)
    * @default true
    */
   inheritBaseRuleSeverityAndOptionsForExtensionRules?: boolean;
 
   /**
-   * @see https://eslint.vuejs.org/rules/comment-directive#options
+   * Affected rule:
+   * - [`vue/comment-directive`](https://eslint.vuejs.org/rules/comment-directive.html)
    */
   reportUnusedDisableDirectives?: boolean;
 
   /**
-   * Will be merged with `['^router-link$', '^router-view$']` and Nuxt-specific ones
-   * if `nuxt` sub-config is enabled
+   * Will be merged with `['^router-link$', '^router-view$']` and Nuxt-specific ones if `nuxt`
+   * sub-config is enabled
    */
   knownComponentNames?: string[];
 
@@ -323,14 +374,18 @@ export interface VueEslintConfigOptions<
   enforceApiStyle?: 'setup' | 'options';
 
   /**
+   * Affected rule:
+   * - [`vue/define-props-declaration`](https://eslint.vuejs.org/rules/define-props-declaration.html)
    * @default 'runtime'
    */
   enforcePropsDeclarationStyle?: 'runtime' | 'type-based';
 
   /**
    * Enforce <script> SFC section to go before <template> (<style> will still be the last)
+   *
+   * Affected rule:
+   * - [`vue/block-order`](https://eslint.vuejs.org/rules/block-order.html)
    * @default 'template-first'
-   * @see https://eslint.vuejs.org/rules/block-order.html
    */
   sfcBlockOrder?: 'template-first' | 'script-first' | (WellKnownSfcBlocks | (string & {}))[];
 
@@ -339,13 +394,16 @@ export interface VueEslintConfigOptions<
   doNotRequireComponentNamesToBeMultiWordForPatterns?: string | string[];
 
   /**
-   * By default, all deprecated or non-standard HTML tags are disallowed. Using the object syntax, you can re-allow any of them, or disallow other tags.
+   * By default, all deprecated or non-standard HTML tags are disallowed.
+   * Using the object syntax, you can re-allow any of them, or disallow other tags.
    * @example {marquee: false, pre: true}
    */
   disallowedHtmlTags?: Partial<Record<ValidAndInvalidHtmlTags | (string & {}), boolean>>;
 
   /**
-   * Whether to prefer Vue 3.5 [`useTemplateRef`](https://vuejs.org/api/composition-api-helpers.html#usetemplateref) instead of `ref` to obtain a template ref.
+   * Whether to prefer Vue 3.5
+   * [`useTemplateRef`](https://vuejs.org/api/composition-api-helpers.html#usetemplateref) instead
+   * of `ref` to obtain a template ref.
    * @default true <=> vue>=3.5 is installed
    */
   preferUseTemplateRef?: boolean;

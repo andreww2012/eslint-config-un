@@ -42,6 +42,10 @@ export interface EslintPluginEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'eslint-plugin'> {
   /**
    * Includes rules for ESLint rule test files.
+   *
+   * 📁 Default `files`:
+   * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s</code>
+   * - <code>\*\*&#47;_\_test?(s)__/*\*&#47;\*.?([cm])[jt]s</code>
    * @default false
    */
   configRuleTests?:
@@ -58,19 +62,31 @@ export interface EslintPluginEslintConfigOptions<
    * Enforce or disallow certain `meta` object properties.
    * Will be merged with the default value.
    *
-   * Used rules:
-   * - `replacedBy`: [`eslint-plugin/no-meta-replaced-by`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-meta-replaced-by.md)
-   * - `schemaDefaultProperties`: [`eslint-plugin/no-meta-schema-default`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-meta-schema-default.md)
-   * - `defaultOptions`: [`eslint-plugin/require-meta-default-options`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-default-options.md)
-   * - `docsDescription`: [`eslint-plugin/require-meta-docs-description`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-description.md)
-   * - `docsRecommended`: [`eslint-plugin/require-meta-docs-recommended`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-recommended.md)
-   * - `docsUrl`: [`eslint-plugin/require-meta-docs-url`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-url.md)
-   * - `fixable`: [`eslint-plugin/require-meta-fixable`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-fixable.md)
-   * - `hasSuggestions`: [`eslint-plugin/require-meta-has-suggestions`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-has-suggestions.md)
-   * - `languages`: [`eslint-plugin/require-meta-languages`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-languages.md)
-   * - `schema`: [`eslint-plugin/require-meta-schema`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-schema.md)
-   * - `schemaDescriptions`: [`eslint-plugin/require-meta-schema-description`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-schema-description.md)
-   * - `type`: [`eslint-plugin/require-meta-type`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-type.md)
+   * Affected rules:
+   * - `replacedBy`:
+   *   [`eslint-plugin/no-meta-replaced-by`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-meta-replaced-by.md)
+   * - `schemaDefaultProperties`:
+   *   [`eslint-plugin/no-meta-schema-default`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/no-meta-schema-default.md)
+   * - `defaultOptions`:
+   *   [`eslint-plugin/require-meta-default-options`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-default-options.md)
+   * - `docsDescription`:
+   *   [`eslint-plugin/require-meta-docs-description`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-description.md)
+   * - `docsRecommended`:
+   *   [`eslint-plugin/require-meta-docs-recommended`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-recommended.md)
+   * - `docsUrl`:
+   *   [`eslint-plugin/require-meta-docs-url`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-docs-url.md)
+   * - `fixable`:
+   *   [`eslint-plugin/require-meta-fixable`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-fixable.md)
+   * - `hasSuggestions`:
+   *   [`eslint-plugin/require-meta-has-suggestions`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-has-suggestions.md)
+   * - `languages`:
+   *   [`eslint-plugin/require-meta-languages`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-languages.md)
+   * - `schema`:
+   *   [`eslint-plugin/require-meta-schema`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-schema.md)
+   * - `schemaDescriptions`:
+   *   [`eslint-plugin/require-meta-schema-description`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-schema-description.md)
+   * - `type`:
+   *   [`eslint-plugin/require-meta-type`](https://github.com/eslint-community/eslint-plugin-eslint-plugin/blob/HEAD/docs/rules/require-meta-type.md)
    * @default {fixable: 'enforce', hasSuggestions: 'enforce', schema: 'enforce', type: 'enforce'}
    */
   metaProperties?: Partial<
@@ -91,8 +107,8 @@ export interface EslintPluginEslintConfigOptions<
   >;
 
   /**
-   * Which completeness checks to enforce for rule options schemas, i.e. which policies
-   * a schema must state explicitly instead of relying on JSON Schema defaults.
+   * Which completeness checks to enforce for rule options schemas, i.e. which policies a schema
+   * must state explicitly instead of relying on JSON Schema defaults.
    *
    * Possible values:
    * - `true`: enforce the default list of checks;

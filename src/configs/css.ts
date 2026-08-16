@@ -22,27 +22,36 @@ export interface CssEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'css'> {
   /**
    * From `@eslint/css` plugin docs:
-   * > By default, the CSS parser runs in strict mode, which reports all parsing errors. If you'd like to allow recoverable parsing errors (those that the browser automatically fixes on its own), you can set the `tolerant` option to `true`.
+   * > By default, the CSS parser runs in strict mode, which reports all parsing errors.
+   * > If you'd like to allow recoverable parsing errors (those that the browser automatically fixes
+   * > on its own), you can set the `tolerant` option to `true`.
    *
-   * > Setting `tolerant` to `true` is necessary if you are using custom syntax, such as PostCSS plugins, that aren't part of the standard CSS syntax.
+   * > Setting `tolerant` to `true` is necessary if you are using custom syntax, such as PostCSS
+   * > plugins, that aren't part of the standard CSS syntax.
    * @default false
    */
   tolerantMode?: CSSLanguageOptions['tolerant'];
 
   /**
    * From `@eslint/css` plugin docs:
-   * > The CSS lexer comes prebuilt with a set of known syntax for CSS that is used in rules like `no-invalid-properties` to validate CSS code. While this works for most cases, there may be cases when you want to define your own extensions to CSS, and this can be done using the `customSyntax` language option.
+   * > The CSS lexer comes prebuilt with a set of known syntax for CSS that is used in rules like
+   * > `no-invalid-properties` to validate CSS code.
+   * > While this works for most cases, there may be cases when you want to define your own
+   * > extensions to CSS, and this can be done using the `customSyntax` language option.
    *
-   * > The `customSyntax` option is an object that uses the `CSSTree` format for defining custom syntax, which allows you to specify at-rules, properties, and some types.
+   * > The `customSyntax` option is an object that uses the `CSSTree` format for defining custom
+   * > syntax, which allows you to specify at-rules, properties, and some types.
    *
-   * If `tailwindcss` is installed, `extraSyntax` will contain the built-in Tailwind syntax
-   * that can be used in a function to compose the final syntax. From the docs:
-   * > Note: The Tailwind syntax doesn't currently provide for the `theme()` function. This is a limitation of `CSSTree` that we hope will be resolved soon.
+   * If `tailwindcss` is installed, `extraSyntax` will contain the built-in Tailwind syntax that can
+   * be used in a function to compose the final syntax.
+   * From the docs:
+   * > Note: The Tailwind syntax doesn't currently provide for the `theme()` function.
+   * > This is a limitation of `CSSTree` that we hope will be resolved soon.
    *
    * NOTE: function passed to `customSyntax` is not the same as
    * [function supported by `@eslint/css`](https://github.com/eslint/css#configuring-custom-syntax).
-   * We don't support the latter because it is not cacheable, but that `defaultSyntax` parameter
-   * is coming from `@eslint/css-tree/definition-syntax-data`, which you can use manually.
+   * We don't support the latter because it is not cacheable, but that `defaultSyntax` parameter is
+   * coming from `@eslint/css-tree/definition-syntax-data`, which you can use manually.
    */
   customSyntax?: MaybeFn<
     CssCustomSyntax,
@@ -60,7 +69,8 @@ export interface CssEslintConfigOptions<
          * installed version of `tailwindcss` package.
          *
          * NOTE: it will already contain the merged default syntax, see
-         * [implementation](https://github.com/humanwhocodes/tailwind-csstree/tree/907ea0a7e2820c1e29cf26f6f716da002cf0c6bc/src) for details (`tailwindX.js` files specifically).
+         * [implementation](https://github.com/humanwhocodes/tailwind-csstree/tree/907ea0a7e2820c1e29cf26f6f716da002cf0c6bc/src)
+         * for details (`tailwindX.js` files specifically).
          */
         extraSyntax?: CssCustomSyntax;
       },

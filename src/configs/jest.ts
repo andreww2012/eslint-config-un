@@ -29,13 +29,21 @@ interface JestExtendedSubConfigOptions<
   /**
    * Suggests using various `jest-extended` methods instead of some assertion forms.
    *
-   * ⚠️ If specified as object, unspecified options will be treated as if they were enabled (set to `true`).
+   * ⚠️ If specified as object, unspecified options will be treated as if they were enabled (set to
+   * `true`).
+   *
+   * Affected rules:
+   * - [`jest-extended/prefer-to-be-array`](https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-array.md)
+   *   (`toBeArray`)
+   * - [`jest-extended/prefer-to-be-false`](https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-false.md)
+   *   (`toBeFalse`)
+   * - [`jest-extended/prefer-to-be-object`](https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-object.md)
+   *   (`toBeObject`)
+   * - [`jest-extended/prefer-to-be-true`](https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-true.md)
+   *   (`toBeTrue`)
+   * - [`jest-extended/prefer-to-have-been-called-once`](https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-have-been-called-once.md)
+   *   (`toHaveBeenCalledOnce`)
    * @default true
-   * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-array.md - `toBeArray`
-   * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-false.md - `toBeFalse`
-   * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-object.md - `toBeObject`
-   * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-be-true.md - `toBeTrue`
-   * @see https://github.com/jest-community/eslint-plugin-jest-extended/blob/HEAD/docs/rules/prefer-to-have-been-called-once.md - `toHaveBeenCalledOnce`
    */
   suggestUsing?:
     | boolean
@@ -61,9 +69,8 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   /**
    * [`eslint-plugin-jest`](https://npmx.dev/eslint-plugin-jest) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `jest` property
-   * and applied to the resolved `files` and `ignores` of this config,
-   * as well as for `ts` and `jestExtended` sub-configs.
+   * that will be assigned to `jest` property and applied to the resolved `files` and `ignores` of
+   * this config, as well as for `ts` and `jestExtended` sub-configs.
    */
   settings?: {
     /**
@@ -87,13 +94,23 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   };
 
   /**
-   * Enables or specifies the configuration for the [`eslint-plugin-jest-extended`](https://npmx.dev/eslint-plugin-jest-extended) plugin.
+   * Suggests using `jest-extended` matchers instead of some assertion forms.
+   *
+   * 📁 Default `files`: same as the parent config's default `files`
+   *
+   * 🧩 Main plugin: [`eslint-plugin-jest-extended`](https://npmx.dev/eslint-plugin-jest-extended)
    * @default true <=> `jest-extended` package is installed
    */
   configJestExtended?: boolean | JestExtendedSubConfigOptions<ExtraPlugins>;
 
   /**
-   * Explicitly specify or ignore files written in TypeScript. Will be used to enable TypeScript-specific rules like [`jest/no-untyped-mock-factory`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-untyped-mock-factory.md) or [`jest/unbound-method`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md).
+   * Explicitly specify or ignore files written in TypeScript.
+   * Will be used to enable TypeScript-specific rules like
+   * [`jest/no-untyped-mock-factory`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-untyped-mock-factory.md)
+   * or
+   * [`jest/unbound-method`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/unbound-method.md).
+   *
+   * 📁 Default `files`: the parent config's default `files`, restricted to TypeScript extensions
    * @default true <=> `ts` config is enabled
    */
   configTypescript?:
@@ -104,11 +121,14 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
       >;
 
   /**
-   * Will be merged with the default value. `false` disables the rule.
+   * Will be merged with the default value.
+   * `false` disables the rule.
    *
    * When string, will be set for the properties of the object.
+   *
+   * Affected rule:
+   * - [`jest/consistent-test-it`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/consistent-test-it.md)
    * @default {fn: 'it', withinDescribe: 'it'}
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/consistent-test-it.md
    */
   testDefinitionKeyword?:
     | GetRuleOptions<'jest', 'consistent-test-it'>
@@ -116,43 +136,62 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
     | false;
 
   /**
+   * Affected rule:
+   * - [`jest/max-expects`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/max-expects.md)
    * @default not enforced
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/max-expects.md
    */
   maxAssertionCalls?: number;
 
   /**
+   * Affected rule:
+   * - [`jest/max-nested-describe`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/max-nested-describe.md)
    * @default not enforced
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/max-nested-describe.md
    */
   maxNestedDescribes?: number;
 
   /**
    * Restricts the use of specific Jest methods.
-   * "Restrictions are expressed in the form of a map, with the value being either a string message to be shown, or `null` if a generic default message should be used." - from eslint-plugin-jest docs
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-restricted-jest-methods.md
+   * "Restrictions are expressed in the form of a map, with the value being either a string message
+   * to be shown, or `null` if a generic default message should be used." - from eslint-plugin-jest
+   * docs
+   *
+   * Affected rule:
+   * - [`jest/no-restricted-jest-methods`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-restricted-jest-methods.md)
    */
   restrictedMethods?: Partial<Record<keyof JestMethods | (string & {}), string | null>>;
 
   /**
    * Restricts the use of specific Jest matchers.
-   * "Bans are expressed in the form of a map, with the value being either a string message to be shown, or `null` if the default rule message should be used." - from eslint-plugin-jest docs
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-restricted-matchers.md
+   * "Bans are expressed in the form of a map, with the value being either a string message to be
+   * shown, or `null` if the default rule message should be used." - from eslint-plugin-jest docs
+   *
+   * Affected rule:
+   * - [`jest/no-restricted-matchers`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/no-restricted-matchers.md)
    */
   restrictedMatchers?: Partial<Record<AllJestMatchers | (string & {}), string | null>>;
 
   /**
    * Enforces padding around Jest functions.
    *
-   * ⚠️ If specified as object, unspecified options will be treated as if they were enabled (set to `true`).
+   * ⚠️ If specified as object, unspecified options will be treated as if they were enabled (set to
+   * `true`).
+   *
+   * Affected rules:
+   * - [`jest/padding-around-after-all-blocks`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-after-all-blocks.md)
+   *   (`afterAll`)
+   * - [`jest/padding-around-after-each-blocks`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-after-each-blocks.md)
+   *   (`afterEach`)
+   * - [`jest/padding-around-before-all-blocks`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-before-all-blocks.md)
+   *   (`beforeAll`)
+   * - [`jest/padding-around-before-each-blocks`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-before-each-blocks.md)
+   *   (`beforeEach`)
+   * - [`jest/padding-around-describe-blocks`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-describe-blocks.md)
+   *   (`describe`)
+   * - [`jest/padding-around-expect-groups`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-expect-groups.md)
+   *   (`expect`)
+   * - [`jest/padding-around-test-blocks`](https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-test-blocks.md)
+   *   (`test`)
    * @default true
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-after-all-blocks.md - `afterAll`
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-after-each-blocks.md - `afterEach`
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-before-all-blocks.md - `beforeAll`
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-before-each-blocks.md - `beforeEach`
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-describe-blocks.md - `describe`
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-expect-groups.md - `expect`
-   * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/padding-around-test-blocks.md - `test`
    */
   paddingAround?:
     | boolean
@@ -164,9 +203,11 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
       >;
 
   /**
-   * Allows specifying which matchers return promises, and so should be considered async when checking if an `expect` should be returned or awaited.
+   * Allows specifying which matchers return promises, and so should be considered async when
+   * checking if an `expect` should be returned or awaited.
    *
-   * By default, this has a list of all the async matchers provided by jest-extended (namely, toResolve and toReject).
+   * By default, this has a list of all the async matchers provided by jest-extended (namely,
+   * toResolve and toReject).
    *
    * *(from Jest docs)*
    * @see https://github.com/jest-community/eslint-plugin-jest/blob/HEAD/docs/rules/valid-expect.md#asyncmatchers
@@ -174,9 +215,11 @@ export interface JestEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   asyncMatchers?: string[];
 
   /**
-   * Enforces the minimum and maximum number of arguments that `expect` can take, and is required to take.
+   * Enforces the minimum and maximum number of arguments that `expect` can take, and is required to
+   * take.
    *
-   * This is useful when you're using libraries that increase the number of arguments supported by expect, such as [jest-expect-message](https://npmx.dev/jest-expect-message).
+   * This is useful when you're using libraries that increase the number of arguments supported by
+   * expect, such as [jest-expect-message](https://npmx.dev/jest-expect-message).
    *
    * *(from Jest docs)*
    *

@@ -25,8 +25,8 @@ const COMPARISON_OPERATORS_SET = new Set<string>([
 const DEFAULT_ALLOWED_LITERAL_VALUES_SET = new Set<string>(['undefined']);
 
 /**
- * TypeScript-only expression wrappers, which are absent from `ESTree` types because they are
- * erased at runtime and therefore never change the value of the expression they wrap.
+ * TypeScript-only expression wrappers, which are absent from `ESTree` types because they are erased
+ * at runtime and therefore never change the value of the expression they wrap.
  */
 interface TypeOnlyWrapperExpression {
   type:
@@ -39,8 +39,8 @@ interface TypeOnlyWrapperExpression {
 }
 
 /**
- * Tells whether `node` is guaranteed to evaluate to the result of a `typeof` operator,
- * resolving identifiers to the expressions they are written with.
+ * Tells whether `node` is guaranteed to evaluate to the result of a `typeof` operator, resolving
+ * identifiers to the expressions they are written with.
  */
 const isTypeofResultExpression = (
   node: ESTree.Node | TypeOnlyWrapperExpression,

@@ -7,8 +7,8 @@ import {
 } from './index';
 
 /**
- * An ESLint plugin with rules to disallow unsafe coding practices that may result
- * in security vulnerabilities.
+ * An ESLint plugin with rules to disallow unsafe coding practices that may result in security
+ * vulnerabilities.
  *
  * 📁 Default `files`: all files
  */

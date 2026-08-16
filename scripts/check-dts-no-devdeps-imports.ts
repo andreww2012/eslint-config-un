@@ -70,8 +70,8 @@ const NPM_ALIAS_REGEX = /^npm:(@?[^@]+)@/;
 
 /**
  * Collect allowed package names from `dependencies` + `peerDependencies`.
- * Handles npm aliases: `"alias": "npm:actual-pkg@version"` → adds both the
- * alias and the resolved package name, since TypeScript imports use the real name.
+ * Handles npm aliases: `"alias": "npm:actual-pkg@version"` → adds both the alias and the resolved
+ * package name, since TypeScript imports use the real name.
  */
 function resolveAllowedPackages(pkg: PackageJson): Set<string> {
   const allowed = new Set<string>();

@@ -113,8 +113,8 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   /**
    * [`eslint-plugin-package-json`](https://npmx.dev/eslint-plugin-package-json) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `packageJson` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `packageJson` property and applied to the resolved `files` and
+   * `ignores` of this config.
    */
   settings?: PackageJsonPluginSettings;
 
@@ -126,7 +126,8 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   order?: GetRuleOptions<'package-json', 'order-properties'>['order'];
 
   /**
-   * Enforces that repository entries in a package.json use either object or shorthand notation to refer to GitHub repositories when possible.
+   * Enforces that repository entries in a package.json use either object or shorthand notation to
+   * refer to GitHub repositories when possible.
    * @default 'object'
    * @see https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/repository-shorthand.md
    */
@@ -135,7 +136,9 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   /**
    * Sort lexically the properties of the specified package.json collections.
    *
-   * NOTE: "our" default value is not the same as the actual default value of the rule. Namely, we don't sort `scripts` and `configs` sections, but do sort `peerDependenciesMeta` and `optionalDependencies`.
+   * NOTE: "our" default value is not the same as the actual default value of the rule.
+   * Namely, we don't sort `scripts` and `configs` sections, but do sort `peerDependenciesMeta` and
+   * `optionalDependencies`.
    *
    * The provided value will be **MERGED** with the default list.
    * @default {devDependencies: true, dependencies: true, peerDependencies: true, peerDependenciesMeta: true, optionalDependencies: true, overrides: true, resolutions: true, dependenciesMeta: true, 'pnpm.allowedDeprecatedVersions': true, 'pnpm.overrides': true, 'pnpm.packageExtensions': true, 'pnpm.patchedDependencies': true, 'pnpm.peerDependencyRules.allowedVersions': true}
@@ -145,11 +148,13 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
   collectionsToSort?: PackageJsonCollectionsToSort;
 
   /**
-   * The list of top-level properties that won't be reported by `package-json/no-empty-fields` rule if empty.
+   * The list of top-level properties that won't be reported by `package-json/no-empty-fields` rule
+   * if empty.
    *
-   * When provided as an array, it *replaces* the default list. When provided as an object,
-   * it is *merged* with the default list, so you can disable a default entry
-   * by setting it to `false` (e.g. `{browserslist: false}`).
+   * When provided as an array, it *replaces* the default list.
+   * When provided as an object, it is *merged* with the default list, so you can disable a default
+   * entry by setting it to `false` (e.g.
+   * `{browserslist: false}`).
    *
    * Affected rule:
    * - [`package-json/no-empty-fields`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/no-empty-fields.md)
@@ -184,12 +189,11 @@ export interface PackageJsonEslintConfigOptions<ExtraPlugins extends ExtraPlugin
 
   /**
    * Disallow certain top-level properties in package.json.
-   * This is useful, for example, when you want to keep package.json minimal
-   * and enforce that certain tool configurations live in their own dedicated files.
+   * This is useful, for example, when you want to keep package.json minimal and enforce that
+   * certain tool configurations live in their own dedicated files.
    *
-   * You can set this to a special value `'popularTools'` to bulk disallow
-   * top-level properties for popular tools (`prettier`, `eslintConfig`, `stylelint`,
-   * `pnpm`, `babel`, etc).
+   * You can set this to a special value `'popularTools'` to bulk disallow top-level properties for
+   * popular tools (`prettier`, `eslintConfig`, `stylelint`, `pnpm`, `babel`, etc).
    *
    * Affected rule:
    * - [`package-json/restrict-top-level-properties`](https://github.com/michaelfaith/eslint-plugin-package-json/blob/HEAD/docs/rules/restrict-top-level-properties.md)

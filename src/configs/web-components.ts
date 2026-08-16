@@ -18,8 +18,8 @@ export interface WebComponentsEslintConfigOptions<
   /**
    * [`eslint-plugin-wc`](https://npmx.dev/eslint-plugin-wc) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `wc` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `wc` property and applied to the resolved `files` and `ignores` of
+   * this config.
    */
   settings?: {
     /**

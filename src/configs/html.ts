@@ -22,18 +22,23 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   /**
    * [`@html-eslint/eslint-plugin`](https://npmx.dev/@html-eslint/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `html` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `html` property and applied to the resolved `files` and `ignores` of
+   * this config.
    */
   settings?: {
     // TODO
 
     /**
-     * This plugin allows you to lint not only HTML files but also HTML written in JavaScript Template Literal. You can set the `html` rules in your settings to lint JavaScript code without any additional configuration.
+     * This plugin allows you to lint not only HTML files but also HTML written in JavaScript
+     * Template Literal.
+     * You can set the `html` rules in your settings to lint JavaScript code without any additional
+     * configuration.
      *
-     * Not all template literals are recognized as HTML. There are two ways to make the plugin recognize them as HTML.
+     * Not all template literals are recognized as HTML.
+     * There are two ways to make the plugin recognize them as HTML.
      *
-     * If you want to use keywords other than html for linting, you can configure the settings option.
+     * If you want to use keywords other than html for linting, you can configure the settings
+     * option.
      * @default {tags: ["^html$"], comments: ["^\\s*html\\s*$"]}
      */
     templateLiterals?: {
@@ -44,13 +49,13 @@ export interface HtmlEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
 
   /**
    * HTML parser options:
-   * - `templateEngineSyntax`: to configure template engine syntax to support different
-   * template engines (such as Twig or Handlebars).
+   * - `templateEngineSyntax`: to configure template engine syntax to support different template
+   *   engines (such as Twig or Handlebars).
    * - `frontmatter`: tells the parser to ignore the frontmatter part if you're using one.
    * - `rawContentTags`: the list of HTML tags for which contents should be treated as raw text.
    *
-   * Will be assigned to `languageOptions.parserOptions` in the resulting flat config
-   * and applied to the specified `files` and `ignores`.
+   * Will be assigned to `languageOptions.parserOptions` in the resulting flat config and applied to
+   * the specified `files` and `ignores`.
    * @see https://github.com/yeonjuan/html-eslint/blob/HEAD/docs/integrating-template-engine.md
    */
   parserOptions?: HtmlEslintParserOptions;

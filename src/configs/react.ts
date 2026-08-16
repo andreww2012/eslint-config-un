@@ -39,7 +39,8 @@ interface EslintPluginReactSettings {
   fragment?: string;
 
   /**
-   * React version. `detect` automatically picks the version you have installed.
+   * React version.
+   * `detect` automatically picks the version you have installed.
    * You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
    * Defaults to the `defaultVersion` setting and warns if missing, and to `detect` in the future
    */
@@ -57,7 +58,8 @@ interface EslintPluginReactSettings {
   flowVersion?: string;
 
   /**
-   * The names of any function used to wrap `propTypes`, e.g. `forbidExtraProps`. If this isn't set, any `propTypes` wrapped in a function will be skipped.
+   * The names of any function used to wrap `propTypes`, e.g. `forbidExtraProps`.
+   * If this isn't set, any `propTypes` wrapped in a function will be skipped.
    */
   propWrapperFunctions?: (
     | string
@@ -73,7 +75,8 @@ interface EslintPluginReactSettings {
   )[];
 
   /**
-   * The name of any function used to wrap components, e.g. Mobx `observer` function. If this isn't set, components wrapped by these functions will be skipped.
+   * The name of any function used to wrap components, e.g. Mobx `observer` function.
+   * If this isn't set, components wrapped by these functions will be skipped.
    */
   componentWrapperFunctions?: (
     | string
@@ -118,13 +121,15 @@ interface EslintPluginReactXSettings {
   additionalStateHooks?: string;
 
   /**
-   * React version. Automatically set by eslint-config-un if detected
+   * React version.
+   * Automatically set by eslint-config-un if detected
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#version
    */
   version?: string;
 
   /**
-   * Customizes the React module import source. Useful for non-standard distributions
+   * Customizes the React module import source.
+   * Useful for non-standard distributions
    * @see https://eslint-react.xyz/docs/configuration/configure-analyzer#importsource
    */
   importSource?: string;
@@ -155,8 +160,8 @@ interface ReactXSubConfigOptions<
   /**
    * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `react-x` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `react-x` property and applied to the resolved `files` and `ignores`
+   * of this config.
    *
    * Note that they will be merged with `{version: <detected by us React version>}`.
    */
@@ -164,22 +169,34 @@ interface ReactXSubConfigOptions<
 
   /**
    * By default, usage of [any of the legacy React APIs](https://react.dev/reference/react/legacy),
-   * including [deprecated lifecycle methods](https://react.dev/reference/react/Component#componentwillmount),
-   * will be reported. Using this option, you can allow some of them or change
-   * the severity of the problems.
+   * including
+   * [deprecated lifecycle methods](https://react.dev/reference/react/Component#componentwillmount),
+   * will be reported.
+   * Using this option, you can allow some of them or change the severity of the problems.
    *
-   * The default severity is `error`, with the only exception of `classComponent`, which
-   * is `warn`.
+   * The default severity is `error`, with the only exception of `classComponent`, which is `warn`.
    *
-   * Affects the following rules (`eslint-react` prefix is implied):
-   * - `Children`: [`eslint-react/no-children-count`](https://eslint-react.xyz/docs/rules/no-children-count), [`eslint-react/no-children-for-each`](https://eslint-react.xyz/docs/rules/no-children-for-each), [`eslint-react/no-children-map`](https://eslint-react.xyz/docs/rules/no-children-map), [`eslint-react/no-children-only`](https://eslint-react.xyz/docs/rules/no-children-only), [`eslint-react/no-children-to-array`](https://eslint-react.xyz/docs/rules/no-children-to-array)
-   * - `cloneElement`: [`eslint-react/no-clone-element`](https://eslint-react.xyz/docs/rules/no-clone-element)
-   * - `classComponent`: [`eslint-react/no-class-component`](https://eslint-react.xyz/docs/rules/no-class-component)
-   * - `createRef`: [`eslint-react/no-create-ref`](https://eslint-react.xyz/docs/rules/no-create-ref)
-   * - `forwardRef`: [`eslint-react/no-forward-ref`](https://eslint-react.xyz/docs/rules/no-forward-ref)
-   * - `componentWillMount`: [`eslint-react/no-component-will-mount`](https://eslint-react.xyz/docs/rules/no-component-will-mount)
-   * - `componentWillReceiveProps`: [`eslint-react/no-component-will-receive-props`](https://eslint-react.xyz/docs/rules/no-component-will-receive-props)
-   * - `componentWillUpdate`: [`eslint-react/no-component-will-update`](https://eslint-react.xyz/docs/rules/no-component-will-update)
+   * Affected rules:
+   * - `Children`:
+   *   [`eslint-react/no-children-count`](https://eslint-react.xyz/docs/rules/no-children-count),
+   *   [`eslint-react/no-children-for-each`](https://eslint-react.xyz/docs/rules/no-children-for-each),
+   *   [`eslint-react/no-children-map`](https://eslint-react.xyz/docs/rules/no-children-map),
+   *   [`eslint-react/no-children-only`](https://eslint-react.xyz/docs/rules/no-children-only),
+   *   [`eslint-react/no-children-to-array`](https://eslint-react.xyz/docs/rules/no-children-to-array)
+   * - `cloneElement`:
+   *   [`eslint-react/no-clone-element`](https://eslint-react.xyz/docs/rules/no-clone-element)
+   * - `classComponent`:
+   *   [`eslint-react/no-class-component`](https://eslint-react.xyz/docs/rules/no-class-component)
+   * - `createRef`:
+   *   [`eslint-react/no-create-ref`](https://eslint-react.xyz/docs/rules/no-create-ref)
+   * - `forwardRef`:
+   *   [`eslint-react/no-forward-ref`](https://eslint-react.xyz/docs/rules/no-forward-ref)
+   * - `componentWillMount`:
+   *   [`eslint-react/no-component-will-mount`](https://eslint-react.xyz/docs/rules/no-component-will-mount)
+   * - `componentWillReceiveProps`:
+   *   [`eslint-react/no-component-will-receive-props`](https://eslint-react.xyz/docs/rules/no-component-will-receive-props)
+   * - `componentWillUpdate`:
+   *   [`eslint-react/no-component-will-update`](https://eslint-react.xyz/docs/rules/no-component-will-update)
    */
   noLegacyApis?: Partial<
     Record<
@@ -199,7 +216,9 @@ interface ReactXSubConfigOptions<
   >;
 
   /**
-   * By default will be applied to same files specified in `ts/configTypeAware` sub-config.
+   * Applies the rules requiring type information.
+   *
+   * 📁 Default `files`: same files as the `ts` config's `configTypeAware` sub-config
    * @default true <=> `ts` config is enabled
    */
   configTypeAwareRules?:
@@ -216,8 +235,8 @@ interface HooksSubConfigOptions<
   /**
    * [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `react-hooks` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `react-hooks` property and applied to the resolved `files` and
+   * `ignores` of this config.
    */
   settings?: {
     /**
@@ -236,22 +255,26 @@ interface RefreshSubConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'react-refresh'> {
   /**
-   * "If you use a framework that handles HMR of some specific exports, you can use this option to avoid warning for them." - plugin docs
+   * "If you use a framework that handles HMR of some specific exports, you can use this option to
+   * avoid warning for them." - plugin docs
    *
    * Note that we detect some frameworks and add their exports to this list automatically.
    * Names specified here will be added to the final list, not overwrite it.
-   * - **Remix**: see [supported exports](https://v2.remix.run/docs/discussion/hot-module-replacement#supported-exports).
-   * Detected by checking if *any* of the following packages are installed:
-   * `@remix-run/{react,node,serve,dev}`.
-   * - **React router**: see [supported exports](https://reactrouter.com/explanation/hot-module-replacement#supported-exports).
-   * Detected packages: `@react-router/{react,node,serve,dev}`.
-   * - **NextJS**: adds various user exported functions and variables
-   * if `next` package is installed.
+   * - **Remix**: see
+   *   [supported exports](https://v2.remix.run/docs/discussion/hot-module-replacement#supported-exports).
+   *   Detected by checking if *any* of the following packages are installed:
+   *   `@remix-run/{react,node,serve,dev}`.
+   * - **React router**: see
+   *   [supported exports](https://reactrouter.com/explanation/hot-module-replacement#supported-exports).
+   *   Detected packages: `@react-router/{react,node,serve,dev}`.
+   * - **NextJS**: adds various user exported functions and variables if `next` package is
+   *   installed.
    */
   allowExportNames?: string[];
 
   /**
-   * Other rule's options. Will be merged with options generated by our config.
+   * Other rule's options.
+   * Will be merged with options generated by our config.
    */
   options?: Prettify<
     OmitStrict<GetRuleOptions<'react-refresh', 'only-export-components'>, 'allowExportNames'>
@@ -263,20 +286,22 @@ interface RefreshSubConfigOptions<
  *
  * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]s?(x)</code>
  *
- * 🧩 Plugin(s):
+ * 🧩 Plugins:
  * - [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react)
- * - [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin)
- * **with `eslint-react` prefix**
+ * - [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) **with
+ *   `eslint-react` prefix**
  * - [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks)
  *
- * Since `eslint-plugin-react` and `@eslint-react/eslint-plugin` have some overlapping rules,
- * and `eslint-plugin-react` has some rules that are not relevant in modern codebases,
- * there exists an option to control which rules from which plugins, if any, will be used.
+ * Since `eslint-plugin-react` and `@eslint-react/eslint-plugin` have some overlapping rules, and
+ * `eslint-plugin-react` has some rules that are not relevant in modern codebases, there exists an
+ * option to control which rules from which plugins, if any, will be used.
  * Refer to `pluginX` option JSDoc for more details.
  *
  * - `allowDefaultExportsInJsxFiles`: micro config to allow default exports in all JSX files.
- * - `reactX`: runtime agnostic ("X") and "Name Convention" rules from `@eslint-react/eslint-plugin`.
- * - `hooks`: rules from `eslint-plugin-react-hooks` as well as "Hooks Extra" rules from `@eslint-react/eslint-plugin`.
+ * - `reactX`: runtime agnostic ("X") and "Name Convention" rules from
+ *   `@eslint-react/eslint-plugin`.
+ * - `hooks`: rules from `eslint-plugin-react-hooks` as well as "Hooks Extra" rules from
+ *   `@eslint-react/eslint-plugin`.
  * - `dom`: DOM specific rules from both `@eslint-react/eslint-plugin` and `eslint-plugin-react`.
  * - `refresh`: rules from `eslint-plugin-react-refresh`.
  * - `youMightNotNeedAnEffect`: rules from `eslint-plugin-react-you-might-not-need-an-effect`.
@@ -287,12 +312,12 @@ export interface ReactEslintConfigOptions<
   /**
    * [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `react` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `react` property and applied to the resolved `files` and `ignores` of
+   * this config.
    *
    * Note that they will be merged with `{version: <detected by us React version>}` to avoid
-   * `Warning: React version not specified in eslint-plugin-react settings.` log message
-   * when running ESLint.
+   * `Warning: React version not specified in eslint-plugin-react settings.` log message when
+   * running ESLint.
    */
   settings?: EslintPluginReactSettings;
 
@@ -300,27 +325,29 @@ export interface ReactEslintConfigOptions<
    * Enables or specifies the configuration for
    * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) plugin.
    *
-   * Only includes
-   * [runtime agnostic ("X")](https://eslint-react.xyz/docs/rules#x-rules) and
-   * ["Naming Convention"](https://eslint-react.xyz/docs/rules#naming-convention-rules)
-   * rules.
+   * Only includes [runtime agnostic ("X")](https://eslint-react.xyz/docs/rules#x-rules) and
+   * ["Naming Convention"](https://eslint-react.xyz/docs/rules#naming-convention-rules) rules.
    *
-   * Disabling this sub-config does not stop all the rules from `@eslint-react/eslint-plugin`
-   * from being used in other sub-configs. If you for some reason do not want to use this plugin's
-   * rules altogether, set `pluginX` option to `never` on `react` config.
+   * Disabling this sub-config does not stop all the rules from `@eslint-react/eslint-plugin` from
+   * being used in other sub-configs.
+   * If you for some reason do not want to use this plugin's rules altogether, set `pluginX` option
+   * to `never` on `react` config.
    *
-   * By default will use the same `files` and `ignores` as the parent config.
+   * 📁 Default `files` and `ignores`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin)
    * @default true
    */
   configReactX?: boolean | ReactXSubConfigOptions<ExtraPlugins>;
 
   /**
-   * Enables or specifies the configuration for
-   * [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks) plugin,
-   * as well as `eslint-react/no-direct-set-state-in-use-effect` rule from `@eslint-react/eslint-plugin`
+   * Enables or specifies the configuration for the React Hooks rules, as well as
+   * `eslint-react/no-direct-set-state-in-use-effect` rule from `@eslint-react/eslint-plugin`
    * (unless `pluginX` option is set to `never` on `react` config).
    *
-   * By default will use the same `files` and `ignores` as the parent config.
+   * 📁 Default `files` and `ignores`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`eslint-plugin-react-hooks`](https://npmx.dev/eslint-plugin-react-hooks)
    * @default true
    */
   configHooks?: boolean | HooksSubConfigOptions<ExtraPlugins>;
@@ -330,11 +357,11 @@ export interface ReactEslintConfigOptions<
    * [`@eslint-react/eslint-plugin`](https://npmx.dev/@eslint-react/eslint-plugin) and
    * [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) plugins.
    *
-   * To avoid including the rules from any of these plugins, set `pluginX` option to
-   * `never` or `avoid` to completely ignore `@eslint-react/eslint-plugin` or
-   * `eslint-plugin-react` rules respectively.
+   * To avoid including the rules from any of these plugins, set `pluginX` option to `never` or
+   * `avoid` to completely ignore `@eslint-react/eslint-plugin` or `eslint-plugin-react` rules
+   * respectively.
    *
-   * By default will use the same `files` and `ignores` as the parent config.
+   * 📁 Default `files` and `ignores`: inherited from the parent config
    * @default true <=> `react-dom` package is installed
    */
   configDom?:
@@ -345,17 +372,25 @@ export interface ReactEslintConfigOptions<
       >;
 
   /**
-   * Enables or specifies the configuration for
-   * [`eslint-plugin-react-refresh`](https://npmx.dev/eslint-plugin-react-refresh) plugin.
+   * Enables or specifies the configuration for the React Fast Refresh rules.
    *
-   * - By default will be applied to JSX files only, as per the plugin recommendation.
-   * - Will set `allowConstantExport: true` if `vite` package is installed.
+   * Will set `allowConstantExport: true` if `vite` package is installed.
+   *
+   * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]sx</code> (JSX files only, as per the plugin
+   * recommendation)
+   *
+   * 🧩 Main plugin: [`eslint-plugin-react-refresh`](https://npmx.dev/eslint-plugin-react-refresh)
    * @default true
    */
   configRefresh?: boolean | RefreshSubConfigOptions<ExtraPlugins>;
 
   /**
-   * By default, default exports will be allowed in all JSX files
+   * Allows default exports in JSX files.
+   *
+   * 📁 Default `files`: <code>**&#47;*.?([cm])[jt]sx</code>
+   *
+   * Affected rule:
+   * - [`import/no-default-export`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-default-export.md)
    * @default true
    */
   configAllowDefaultExportsInJsxFiles?:
@@ -366,21 +401,24 @@ export interface ReactEslintConfigOptions<
       >;
 
   /**
-   * Enables or specifies the configuration for
-   * [`eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme`](https://npmx.dev/eslint-plugin-react-you-might-not-need-an-effect?activeTab=readme)
-   * plugin.
+   * Enables or specifies the configuration for the rules reporting the effects you might not need.
    *
-   * By default will use the same `files` and `ignores` as the parent config.
+   * 📁 Default `files` and `ignores`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`eslint-plugin-react-you-might-not-need-an-effect`](https://npmx.dev/eslint-plugin-react-you-might-not-need-an-effect)
    * @default true
    */
   configYouMightNotNeedAnEffect?:
     boolean | UnFlatConfigEntryBase<ExtraPlugins, 'react-you-might-not-need-an-effect'>;
 
   /**
-   * Controls how rules from [@eslint-react/eslint-plugin](https://npmx.dev/@eslint-react/eslint-plugin) and [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) are used.
-   * - `prefer`: if the same(-ish) rule exists both in `@eslint-react/eslint-plugin`
-   * and `eslint-plugin-react` (the full list is below), use the one from
-   * `@eslint-react/eslint-plugin`. Use all the other unique rules from both of these plugins.
+   * Controls how rules from
+   * [@eslint-react/eslint-plugin](https://npmx.dev/@eslint-react/eslint-plugin) and
+   * [`eslint-plugin-react`](https://npmx.dev/eslint-plugin-react) are used.
+   * - `prefer`: if the same(-ish) rule exists both in `@eslint-react/eslint-plugin` and
+   *   `eslint-plugin-react` (the full list is below), use the one from
+   *   `@eslint-react/eslint-plugin`.
+   *   Use all the other unique rules from both of these plugins.
    * - `avoid`: same as `prefer`, but `eslint-plugin-react`'s version is preferred.
    * - `only`: do not use `eslint-plugin-react` at all.
    * - `never`: do not use `@eslint-react/eslint-plugin` at all.
@@ -425,24 +463,26 @@ export interface ReactEslintConfigOptions<
   pluginX?: 'prefer' | 'avoid' | 'only' | 'never';
 
   /**
-   * Detected automatically from a major version of the installed version of
-   * `react` package, but can also be specified manually here.
+   * Detected automatically from a major version of the installed version of `react` package, but
+   * can also be specified manually here.
    */
   reactVersion?: number;
 
   /**
    * A flag indicating
    * [the new JSX Transform](https://legacy.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html)
-   * is used. Affects some rules only from `eslint-plugin-react` plugin.
+   * is used.
+   * Affects some rules only from `eslint-plugin-react` plugin.
    * @default true <=> React version is 17 or higher
    */
   newJsxTransform?: boolean;
 
   /**
-   * A list of disallowed React or HTML elements. Pass `true` to disallow or `string` to also
-   * provide a custom error message.
+   * A list of disallowed React or HTML elements.
+   * Pass `true` to disallow or `string` to also provide a custom error message.
    *
-   * By default, all deprecated or non-standard HTML tags are disallowed. Pass `false` to re-allow any of them.
+   * By default, all deprecated or non-standard HTML tags are disallowed.
+   * Pass `false` to re-allow any of them.
    *
    * Affected rule:
    * - [`react/forbid-elements`](https://github.com/jsx-eslint/eslint-plugin-react/blob/HEAD/docs/rules/forbid-elements.md)
@@ -451,7 +491,8 @@ export interface ReactEslintConfigOptions<
   disallowedElements?: Partial<Record<string, boolean | string>>;
 
   /**
-   * Whether to prefer or avoid boolean shorthand syntax in JSX (i.e. `<foo bar />` over `<foo bar={true} />`).
+   * Whether to prefer or avoid boolean shorthand syntax in JSX (i.e.
+   * `<foo bar />` over `<foo bar={true} />`).
    * - `prefer`/`avoid`: prefer/avoid boolean shorthand syntax, use `warn` severity.
    * - `prefer-error`/`avoid-error`: prefer/avoid boolean shorthand syntax, use `error` severity.
    * - `off`: allow both syntaxes.
@@ -463,7 +504,8 @@ export interface ReactEslintConfigOptions<
   shorthandBoolean?: 'prefer' | 'prefer-error' | 'avoid' | 'avoid-error' | 'off';
 
   /**
-   * Whether to prefer or avoid Fragment shorthand syntax in JSX (i.e. `<>...</>` over `<Fragment>...</Fragment>`).
+   * Whether to prefer or avoid Fragment shorthand syntax in JSX (i.e.
+   * `<>...</>` over `<Fragment>...</Fragment>`).
    * - `prefer`/`avoid`: prefer/avoid Fragment shorthand syntax, use `warn` severity.
    * - `prefer-error`/`avoid-error`: prefer/avoid Fragment shorthand syntax, use `error` severity.
    * - `off`: allow both syntaxes.

@@ -7,7 +7,8 @@ import {
 } from './index';
 
 /**
- * Enforce logical consistency by transforming negated boolean expressions according to De Morgan’s laws.
+ * Enforce logical consistency by transforming negated boolean expressions according to De Morgan’s
+ * laws.
  *
  * 📁 Default `files`: all files
  */

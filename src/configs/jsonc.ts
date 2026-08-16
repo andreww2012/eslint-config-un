@@ -17,28 +17,28 @@ export interface JsoncEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'jsonc'> {
   /**
-   * 📁 Default `files`: <code>**&#47;*.json</code>
+   * ⚠️ WARNING: no rules are configured by default, this sub-config only exists to provide a
+   * convenient way to override rules for JSON files.
    *
-   * ⚠️ WARNING: no rules are configured by default, this sub-config only exists
-   * to provide a convenient way to override rules for JSON files.
+   * 📁 Default `files`: <code>**&#47;*.json</code>
    * @default false
    */
   configJson?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'jsonc'>;
 
   /**
-   * 📁 Default `files`: <code>**&#47;*.jsonc</code>
+   * ⚠️ WARNING: no rules are configured by default, this sub-config only exists to provide a
+   * convenient way to override rules for JSONC files.
    *
-   * ⚠️ WARNING: no rules are configured by default, this sub-config only exists
-   * to provide a convenient way to override rules for JSONC files.
+   * 📁 Default `files`: <code>**&#47;*.jsonc</code>
    * @default false
    */
   configJsonc?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'jsonc'>;
 
   /**
-   * 📁 Default `files`: <code>**&#47;*.json5</code>
+   * ⚠️ WARNING: no rules are configured by default, this sub-config only exists to provide a
+   * convenient way to override rules for JSON5 files.
    *
-   * ⚠️ WARNING: no rules are configured by default, this sub-config only exists
-   * to provide a convenient way to override rules for JSON5 files.
+   * 📁 Default `files`: <code>**&#47;*.json5</code>
    * @default false
    */
   configJson5?: boolean | UnFlatConfigEntryBase<ExtraPlugins, 'jsonc'>;

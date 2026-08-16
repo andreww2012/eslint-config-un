@@ -26,27 +26,29 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   /**
    * [`eslint-plugin-svelte`](https://npmx.dev/eslint-plugin-svelte) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `svelte` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `svelte` property and applied to the resolved `files` and `ignores` of
+   * this config.
    * @see [settings docs](https://sveltejs.github.io/eslint-plugin-svelte/user-guide/#settings-svelte)
    */
   settings?: {
     /**
-     * "Specifies an array of rules to ignore reports within the template. For example,
-     * use this to disable rules in the template that may produce unavoidable false positives"
+     * "Specifies an array of rules to ignore reports within the template.
+     * For example, use this to disable rules in the template that may produce unavoidable false
+     * positives"
      * - plugin docs
      */
     ignoreWarnings?: string[];
 
     /**
-     * "Specifies options for Svelte compilation. This affects rules that rely on
-     * Svelte compilation, such as `svelte/valid-compile` and `svelte/no-unused-svelte-ignore`.
+     * "Specifies options for Svelte compilation.
+     * This affects rules that rely on Svelte compilation, such as `svelte/valid-compile` and
+     * `svelte/no-unused-svelte-ignore`.
      * Note that this setting does not impact ESLint’s custom parser" - plugin docs
      */
     compileOptions?: {
       /**
-       * "Specifies options related to PostCSS. You can disable the PostCSS processing
-       * by setting it to `false`" - plugin docs
+       * "Specifies options related to PostCSS.
+       * You can disable the PostCSS processing by setting it to `false`" - plugin docs
        */
       postcss?:
         | false
@@ -61,9 +63,11 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
 
     /**
      * "Even if `settings.svelte.kit` is not specified, the rules will attempt to load information
-     * from `svelte.config.js`. However, if the default behavior does not work as expected,
-     * you should specify `settings.svelte.kit` explicitly. If you are using SvelteKit
-     * with a non-default configuration, you need to set the following options.
+     * from `svelte.config.js`.
+     * However, if the default behavior does not work as expected, you should specify
+     * `settings.svelte.kit` explicitly.
+     * If you are using SvelteKit with a non-default configuration, you need to set the following
+     * options.
      * The schema is a subset of SvelteKit’s configuration, so refer to the SvelteKit documentation
      * for more details: https://svelte.dev/docs/kit/configuration" - plugin docs
      */
@@ -73,8 +77,8 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
   /**
    * Enforces the presence of `lang="ts"` in `<script>` blocks.
    *
-   * By default, will inherit `files` and `ignores` from the parent config, and specifying
-   * them explicitly here will *override* the respective property of the parent config.
+   * 📁 Default `files` and `ignores`: inherited from the parent config.
+   * Specifying them explicitly here will *override* the respective property of the parent config.
    *
    * Affected rule:
    * - [`svelte/block-lang`](https://sveltejs.github.io/eslint-plugin-svelte/rules/block-lang)
@@ -93,29 +97,31 @@ export interface SvelteEslintConfigOptions<ExtraPlugins extends ExtraPluginsType
    * 📁 Default `files`:
    * - <code>**&#47;*.svelte</code>
    * - <code>**&#47;*.svelte.{js,ts}</code>
+   * @default true
    */
   configSetup?: UnFlatConfigEntryFilesAndIgnores;
 
   /**
    * Used by some rules like
    * [`svelte/valid-compile`](https://sveltejs.github.io/eslint-plugin-svelte/rules/valid-compile).
-   * Will be assigned to `languageOptions.parserOptions.svelteConfig` is specified
-   * (but only if TypeScript config, `ts`, is enabled).
+   * Will be assigned to `languageOptions.parserOptions.svelteConfig` is specified (but only if
+   * TypeScript config, `ts`, is enabled).
    *
-   * The plugins docs [recommends that you specify this](https://sveltejs.github.io/eslint-plugin-svelte/user-guide/#type-script-project).
+   * The plugins docs
+   * [recommends that you specify this](https://sveltejs.github.io/eslint-plugin-svelte/user-guide/#type-script-project).
    */
   svelteKitConfig?: SvelteKitConfig;
 
   /**
-   * `svelte` package version, possibly including a minor version. Normally should not be
-   * set manually as it will be detected automatically.
+   * `svelte` package version, possibly including a minor version.
+   * Normally should not be set manually as it will be detected automatically.
    * @default auto-detected or `5` if cannot be detected
    */
   svelteVersion?: number;
 
   /**
-   * Whether [`prettier-plugin-svelte`](https://npmx.dev/prettier-plugin-svelte)
-   * is used. If `true`, will disable
+   * Whether [`prettier-plugin-svelte`](https://npmx.dev/prettier-plugin-svelte) is used.
+   * If `true`, will disable
    * [a number of stylistic rules](https://github.com/sveltejs/eslint-plugin-svelte/blob/HEAD/packages/eslint-plugin-svelte/src/configs/flat/prettier.ts).
    * @default detected automatically
    */

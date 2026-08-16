@@ -17,15 +17,14 @@ export interface SqlEslintConfigOptions<
   /**
    * [`eslint-plugin-sql`](https://npmx.dev/eslint-plugin-sql) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `sql` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `sql` property and applied to the resolved `files` and `ignores` of
+   * this config.
    * @see https://github.com/gajus/eslint-plugin-sql#settings
    */
   settings?: {
     /**
-     * "A regex used to ignore placeholders or other fragments of the query
-     * that'd make it invalid SQL query"
-     * \- [plugin docs](https://github.com/gajus/eslint-plugin-sql#placeholderrule)
+     * "A regex used to ignore placeholders or other fragments of the query that'd make it invalid
+     * SQL query" \- [plugin docs](https://github.com/gajus/eslint-plugin-sql#placeholderrule)
      */
     placeholderRule?: string;
   };

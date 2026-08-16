@@ -32,7 +32,8 @@ const DEFAULT_IGNORE_PATTERNS = [
 ];
 
 /**
- * An ESLint plugin that helps enforce consistent writing style and formatting conventions in Markdown files.
+ * An ESLint plugin that helps enforce consistent writing style and formatting conventions in
+ * Markdown files.
  *
  * 📁 Default `files`: <code>**&#47;*.md</code>
  */
@@ -50,14 +51,16 @@ export interface MarkdownPreferencesEslintConfigOptions<
     | false
     | {
         /**
-         * Choose the style of emphasized, strong, or emphasized strong text. Possible values:
+         * Choose the style of emphasized, strong, or emphasized strong text.
+         * Possible values:
          * - `'*'`: use `*text*` for emphasized text and `**text**` for strong text (default);
          * - `'_'`: same as above, but use `_` instead of `*`;
          * - `object`: directly configure the rule's options;
          * - `false`: style not enforced.
          *
-         * Note: style for emphasized strong text is automatically determined
-         * from the emphasis and strong styles. See rules documentation for more info.
+         * Note: style for emphasized strong text is automatically determined from the emphasis and
+         * strong styles.
+         * See rules documentation for more info.
          *
          * Affected rule:
          * - [`markdown-preferences/emphasis-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/emphasis-delimiters-style.html)
@@ -67,7 +70,8 @@ export interface MarkdownPreferencesEslintConfigOptions<
           false | '*' | '_' | GetRuleOptions<'markdown-preferences', 'emphasis-delimiters-style'>;
 
         /**
-         * Choose the style of emphasized for strikethrough. Set `false` to not enforce.
+         * Choose the style of emphasized for strikethrough.
+         * Set `false` to not enforce.
          *
          * Affected rule:
          * - [`markdown-preferences/strikethrough-delimiters-style`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/strikethrough-delimiters-style.html)
@@ -83,7 +87,8 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * - If casing is specified, it will be enforced.
    * - If `false` is specified, casing will not be enforced.
    * - If a literal value is used, it will apply to both headings and table headers.
-   * - When an object syntax is used and some preferences are not specified, they will be set to the default value.
+   * - When an object syntax is used and some preferences are not specified, they will be set to the
+   *   default value.
    *
    * Affected rules:
    * - [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
@@ -99,15 +104,14 @@ export interface MarkdownPreferencesEslintConfigOptions<
    * - [Mathematical Expressions](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)
    * - [Import Code Snippets](https://vitepress.dev/guide/markdown#import-code-snippets)
    *
-   * ⚠️ If enabled, will set `language: 'markdown-preferences/extended-syntax'`
-   * in the resulting flat config for the resolved `files` list and put it AFTER
-   * the flat config produced by `markdown` config (if the latter is enabled),
-   * to potentially override the language for Markdown files. If not enabled,
-   * it will be put BEFORE the `markdown` config, and the resolved `files`
-   * will be associated with `markdown/commonmark` language (provided by
-   * [`@eslint/markdown` plugin](https://npmx.dev/@eslint/markdown)), meaning that
-   * if some file matches both of the flat configs, its final language may be overridden
-   * by `markdown` config.
+   * ⚠️ If enabled, will set `language: 'markdown-preferences/extended-syntax'` in the resulting
+   * flat config for the resolved `files` list and put it AFTER the flat config produced by
+   * `markdown` config (if the latter is enabled), to potentially override the language for Markdown
+   * files.
+   * If not enabled, it will be put BEFORE the `markdown` config, and the resolved `files` will be
+   * associated with `markdown/commonmark` language (provided by
+   * [`@eslint/markdown` plugin](https://npmx.dev/@eslint/markdown)), meaning that if some file
+   * matches both of the flat configs, its final language may be overridden by `markdown` config.
    *
    * This option is required for some rules, such as
    * [`markdown-preferences/custom-container-marker-spacing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/custom-container-marker-spacing.html),
@@ -126,12 +130,15 @@ export interface MarkdownPreferencesEslintConfigOptions<
   extendedMarkdownSyntax?: boolean;
 
   /**
-   * Word regular expression patterns that should be ignored during casing checks
-   * in headings and table headers when capitalization is enforced.
+   * Word regular expression patterns that should be ignored during casing checks in headings and
+   * table headers when capitalization is enforced.
    *
-   * Will be merged with the plugin's [default patterns list](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/82e0c36a269a77719906b6a1cac454e9f4ec193d/src/rules/heading-casing.ts#L88-L99).
+   * Will be merged with the plugin's
+   * [default patterns list](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/82e0c36a269a77719906b6a1cac454e9f4ec193d/src/rules/heading-casing.ts#L88-L99).
    *
-   * You can use the array or the object syntax. The difference is that the object syntax allows to exclude some words from the default list by setting the value to `false`.
+   * You can use the array or the object syntax.
+   * The difference is that the object syntax allows to exclude some words from the default list by
+   * setting the value to `false`.
    *
    * Affected rules:
    * - [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)
@@ -187,12 +194,15 @@ export interface MarkdownPreferencesEslintConfigOptions<
       };
 
   /**
-   * Preserve the casing of the following words in headings and table headers
-   * when capitalization is enforced.
+   * Preserve the casing of the following words in headings and table headers when capitalization is
+   * enforced.
    *
-   * Will be merged with the plugin's [default words list](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/HEAD/src/resources/preserve-words.ts).
+   * Will be merged with the plugin's
+   * [default words list](https://github.com/ota-meshi/eslint-plugin-markdown-preferences/blob/HEAD/src/resources/preserve-words.ts).
    *
-   * You can use the array or the object syntax. The difference is that the object syntax allows to exclude some words from the default list by setting the value to `false`.
+   * You can use the array or the object syntax.
+   * The difference is that the object syntax allows to exclude some words from the default list by
+   * setting the value to `false`.
    *
    * Affected rules:
    * - [`markdown-preferences/heading-casing`](https://ota-meshi.github.io/eslint-plugin-markdown-preferences/rules/heading-casing.html)

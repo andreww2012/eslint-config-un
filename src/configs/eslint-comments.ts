@@ -7,8 +7,8 @@ import {
 } from './index';
 
 /**
- * An ESLint plugin with additional rules for ESLint directive comments
- * (like `eslint-disable-next-line`).
+ * An ESLint plugin with additional rules for ESLint directive comments (like
+ * `eslint-disable-next-line`).
  *
  * 📁 Default `files`: all files
  */

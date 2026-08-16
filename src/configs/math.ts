@@ -16,7 +16,8 @@ export interface MathEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'math'> {
   /**
-   * Enforces the method of conversion to absolute values. Set to `false` not not enforce it.
+   * Enforces the method of conversion to absolute values.
+   * Set to `false` not not enforce it.
    * @default 'Math.abs'
    */
   absoluteValuesConversionMethod?: false | GetRuleOptions<'math', 'abs'>['prefer'];

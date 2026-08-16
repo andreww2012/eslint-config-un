@@ -33,8 +33,8 @@ const renderPackageCondition = (packageNameAndMaybeRange: string) => {
 };
 
 /**
- * The part of the `@default` line that follows `<=>`. `null` means the Config is unconditionally
- * enabled or disabled
+ * The part of the `@default` line that follows `<=>`.
+ * `null` means the Config is unconditionally enabled or disabled
  */
 const deriveEnabledByCondition = (enabledBy: EnabledBy): string | null => {
   if (typeof enabledBy === 'boolean' || 'default' in enabledBy) {
@@ -87,8 +87,9 @@ const PLUGINS_BY_CONFIG_KEY = Map.groupBy(
 );
 
 /**
- * The plugin the `🧩 Main plugin` line of a Config names. A Config served by several plugins says
- * which of them is the main one in `packages-meta.ts`, since a manifest knows nothing about plugins
+ * The plugin the `🧩 Main plugin` line of a Config names.
+ * A Config served by several plugins says which of them is the main one in `packages-meta.ts`,
+ * since a manifest knows nothing about plugins
  */
 const resolveMainPlugin = (configKey: string) => {
   const plugins = PLUGINS_BY_CONFIG_KEY.get(configKey) || [];
@@ -359,8 +360,9 @@ const validate = (
 
 /**
  * Configs are laid out band by band, in the order the cascade layout lists them: inside a phase,
- * `after` edges decide the order and everything else is sorted by key. The anchors belong to no
- * phase, and so are emitted on the phase boundaries the layout puts them on
+ * `after` edges decide the order and everything else is sorted by key.
+ * The anchors belong to no phase, and so are emitted on the phase boundaries the layout puts them
+ * on
  */
 const resolveCascadeOrder = (configs: readonly DiscoveredConfig[]) => {
   const byKey = configs.toSorted((a, b) => a.key.localeCompare(b.key));
@@ -423,8 +425,8 @@ export type ManifestConfigKey =${configs.length > 0 ? `\n${configs.map(({key}) =
 export type UnConfigsSupportingArraysGenerated =${configsSupportingArrays.length > 0 ? `\n${configsSupportingArrays.map((key) => `  | ${key}`).join('\n')}` : ' never'};
 
 /**
- * What every Config that is read by another Config makes available to it. \`null\` means
- * the Config was disabled
+ * What every Config that is read by another Config makes available to it.
+ * \`null\` means the Config was disabled
  */
 export interface UnConfigResults {
 ${results.join('\n') || `${' '.repeat(2)}// no Config results yet`}

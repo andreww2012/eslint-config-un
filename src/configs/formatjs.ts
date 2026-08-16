@@ -20,14 +20,14 @@ export interface FormatjsEslintConfigOptions<
   /**
    * [`eslint-plugin-formatjs`](https://npmx.dev/eslint-plugin-formatjs) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `formatjs` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `formatjs` property and applied to the resolved `files` and `ignores`
+   * of this config.
    * @see https://formatjs.github.io/docs/tooling/linter#shared-settings
    */
   settings?: {
     /**
-     * Allows you to specify additional function names to check besides
-     * `formatMessage` & `$formatMessage`.
+     * Allows you to specify additional function names to check besides `formatMessage` &
+     * `$formatMessage`.
      */
     additionalFunctionNames?: string[];
 
@@ -56,9 +56,10 @@ export interface FormatjsEslintConfigOptions<
   enforceDescription?: GetRuleOptions<'formatjs', 'enforce-description'> | false;
 
   /**
-   * Enforce or ban explicit ID in `MessageDescriptor`. Not enforced by default.
+   * Enforce or ban explicit ID in `MessageDescriptor`.
+   * Not enforced by default.
    *
-   * Affected rule:
+   * Affected rules:
    * - [`formatjs/enforce-id`](https://formatjs.github.io/docs/tooling/linter#enforce-id)
    * - [`formatjs/no-id`](https://formatjs.github.io/docs/tooling/linter#no-id)
    */

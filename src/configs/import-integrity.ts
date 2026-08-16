@@ -17,8 +17,9 @@ export interface ImportIntegrityPluginSettings {
   packageRootDir?: string;
 
   /**
-   * The absolute path to the monorepo root. The plugin uses your monorepo's workspace
-   * configuration to discover packages underneath this directory.
+   * The absolute path to the monorepo root.
+   * The plugin uses your monorepo's workspace configuration to discover packages underneath this
+   * directory.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#monoreporootdir
    */
   monorepoRootDir?: string;
@@ -33,8 +34,7 @@ export interface ImportIntegrityPluginSettings {
   mode?: 'auto' | 'one-shot' | 'fix' | 'editor';
 
   /**
-   * Defines the rate in milliseconds at which `editor` mode file watching checks
-   * for file changes.
+   * Defines the rate in milliseconds at which `editor` mode file watching checks for file changes.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#editorupdaterate
    */
   editorUpdateRate?: number;
@@ -46,23 +46,22 @@ export interface ImportIntegrityPluginSettings {
   debugLogging?: boolean;
 
   /**
-   * Defines custom module aliases, like it is done in TypeScript config file
-   * (`tsconfig.json`).
+   * Defines custom module aliases, like it is done in TypeScript config file (`tsconfig.json`).
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#alias
    */
   alias?: Record<string, string>;
 
   /**
-   * Files representing your package's public API - the set of files whose exports
-   * are intended to be consumed by code outside the package.
+   * Files representing your package's public API - the set of files whose exports are intended to
+   * be consumed by code outside the package.
    * Defaults to `package.json`'s entry points under certain conditions.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#entrypointfiles
    */
   entryPointFiles?: Record<string, string>;
 
   /**
-   * The list of files whose exports are imported by external systems such as frameworks,
-   * not by code inside the codebase.
+   * The list of files whose exports are imported by external systems such as frameworks, not by
+   * code inside the codebase.
    *
    * Example: frontend frameworks' pages & layouts.
    *
@@ -72,32 +71,35 @@ export interface ImportIntegrityPluginSettings {
   externallyImportedFiles?: string[];
 
   /**
-   * A list of files to exclude from the analysis. Uses the format used by `.gitignore`.
+   * A list of files to exclude from the analysis.
+   * Uses the format used by `.gitignore`.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#ignorepatterns
    */
   ignorePatterns?: string[];
 
   /**
-   * A list of files to negate the `ignorePatterns`. Uses the format used by `.gitignore`.
+   * A list of files to negate the `ignorePatterns`.
+   * Uses the format used by `.gitignore`.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#ignorepatterns
    */
   ignoreOverridePatterns?: string[];
 
   /**
-   * A list of files that are considered "test" files. This information is used
-   * by several rules. Will be merged with the default list.
+   * A list of files that are considered "test" files.
+   * This information is used by several rules.
+   * Will be merged with the default list.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/package-level-options.html#testfilepatterns
    */
   testFilePatterns?: string[];
 }
 
 /**
- * A faster alternative to `eslint-plugin-import(-x)` plugins. From the docs, it is
- * "A high-performance ESLint and Oxlint plugin for analyzing import and export
+ * A faster alternative to `eslint-plugin-import(-x)` plugins.
+ * From the docs, it is "A high-performance ESLint and Oxlint plugin for analyzing import and export
  * relationships across your codebase".
  *
- * ⚠️ Does not implement all the rules from the original plugins, does not support
- * non-JS file extensions and might require some additional setup.
+ * ⚠️ Does not implement all the rules from the original plugins, does not support non-JS file
+ * extensions and might require some additional setup.
  *
  * 📁 Default `files`: all files
  */
@@ -107,8 +109,8 @@ export interface ImportIntegrityEslintConfigOptions<
   /**
    * [`import-integrity-lint`](https://npmx.dev/import-integrity-lint) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `import-integrity` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `import-integrity` property and applied to the resolved `files` and
+   * `ignores` of this config.
    *
    * It will be merged with `{packageRootDir: import.meta.dirname}`
    */

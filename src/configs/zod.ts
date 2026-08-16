@@ -69,9 +69,8 @@ interface CoreSubConfigOptions<ExtraPlugins extends ExtraPluginsType> extends Un
 /**
  * An ESLint plugin to enforce best practices when using Zod.
  *
- * **Officially only supports zod v4**, but a good portion of its rules also
- * apply to zod v3. The rules that only make sense for zod v4 are automatically
- * disabled when zod v3 is detected.
+ * **Officially only supports zod v4**, but a good portion of its rules also apply to zod v3.
+ * The rules that only make sense for zod v4 are automatically disabled when zod v3 is detected.
  *
  * 📁 Default `files`: all files
  */
@@ -83,8 +82,8 @@ export interface ZodEslintConfigOptions<
    * - If object is used, it will be merged with the default value.
    * - Disallowing all methods will be ignored.
    *
-   * ⚠️ The option value will propagate to the option of the same name in `mini`
-   * sub-config, unless explicitly overridden there.
+   * ⚠️ The option value will propagate to the option of the same name in `mini` sub-config, unless
+   * explicitly overridden there.
    *
    * Affected rule:
    * - [`zod/consistent-object-schema-type`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-object-schema-type.md)
@@ -113,8 +112,7 @@ export interface ZodEslintConfigOptions<
    * 🧩 Main plugin: [`eslint-plugin-zod-core`](https://npmx.dev/eslint-plugin-zod-core)
    * ([docs](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-core/README.md))
    *
-   * Inherits `enforceNamespaceImport` from the parent config; pass an object
-   * to override.
+   * Inherits `enforceNamespaceImport` from the parent config; pass an object to override.
    * @default true
    */
   configCore?: boolean | CoreSubConfigOptions<ExtraPlugins>;
@@ -128,8 +126,8 @@ export interface ZodEslintConfigOptions<
    * 🧩 Main plugin: [`eslint-plugin-zod-mini`](https://npmx.dev/eslint-plugin-zod-mini)
    * ([docs](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod-mini/README.md))
    *
-   * Inherits `allowedObjectSchemaTypes`, `enforceNamespaceImport` and
-   * `schemaVariableName` from the parent config; pass an object to override.
+   * Inherits `allowedObjectSchemaTypes`, `enforceNamespaceImport` and `schemaVariableName` from the
+   * parent config; pass an object to override.
    * @default true
    */
   configMini?: boolean | MiniSubConfigOptions<ExtraPlugins>;
@@ -150,8 +148,8 @@ export interface ZodEslintConfigOptions<
   enforceConsistentImport?: boolean | GetRuleOptions<'zod', 'consistent-import'>['syntax'];
 
   /**
-   * Enforces a consistent naming convention for Zod schema variables by requiring them
-   * to start and/or end with a specified string.
+   * Enforces a consistent naming convention for Zod schema variables by requiring them to start
+   * and/or end with a specified string.
    *
    * Possible values:
    * - Not provided or `true`: enforces that schema variable names end with `Zod`;
@@ -159,8 +157,8 @@ export interface ZodEslintConfigOptions<
    * - object: enforces that schema variable names follow the provided naming convention;
    * - `false`: does not enforce anything.
    *
-   * ⚠️ The option value will propagate to the option of the same name in `mini`
-   * sub-config, unless explicitly overridden there.
+   * ⚠️ The option value will propagate to the option of the same name in `mini` sub-config, unless
+   * explicitly overridden there.
    *
    * Affected rule:
    * - [`zod/consistent-schema-var-name`](https://github.com/marcalexiei/eslint-zod/blob/HEAD/plugins/eslint-plugin-zod/docs/rules/consistent-schema-var-name.md)

@@ -44,15 +44,13 @@ type MergeShallow<S extends AssignDefaultsInput, D extends AssignDefaultsInput> 
       };
 
 /**
- * Shallow-merge user-provided options with defaults: each defined top-level key
- * in `source` replaces the corresponding key in `defaults` outright (no
- * recursion into nested objects), `null`/`undefined` values in `source` fall
- * back to the default, and arrays from `source` are shallow-cloned to avoid
- * aliasing user input.
+ * Shallow-merge user-provided options with defaults: each defined top-level key in `source`
+ * replaces the corresponding key in `defaults` outright (no recursion into nested objects),
+ * `null`/`undefined` values in `source` fall back to the default, and arrays from `source` are
+ * shallow-cloned to avoid aliasing user input.
  *
- * `defaults` is constrained to be a partial of `source`'s object shape, so
- * call sites no longer need a `satisfies SomeOptions` annotation to type-check
- * the defaults object.
+ * `defaults` is constrained to be a partial of `source`'s object shape, so call sites no longer
+ * need a `satisfies SomeOptions` annotation to type-check the defaults object.
  */
 export const assignDefaults = <S, const D extends AssignDefaultsInput>(
   source: S,

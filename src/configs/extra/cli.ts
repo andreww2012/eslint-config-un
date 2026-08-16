@@ -59,15 +59,16 @@ type CliRuleName = ObjectValues<{
 }>;
 
 /**
- * A config specific to files meant to be executed. By default, allows `process.exit()`
- * and `console` methods in files placed in `bin`, `scripts` and `cli` directories
- * (on any level).
+ * A config specific to files meant to be executed.
+ * By default, allows `process.exit()` and `console` methods in files placed in `bin`, `scripts` and
+ * `cli` directories (on any level).
  */
 export interface CliEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, Pick<UnRulesConfig, CliRuleName>> {
   /**
-   * By default, files in directories on all levels are accounted for by this config. Set this to true to only account for files in the top-level directories.
+   * By default, files in directories on all levels are accounted for by this config.
+   * Set this to true to only account for files in the top-level directories.
    * @default false
    */
   onlyTopLevelDirs?: boolean;

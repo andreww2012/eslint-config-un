@@ -14,7 +14,7 @@ import {
 
 interface EslintPluginNSettings {
   /**
-   * Might be read by the following rules:
+   * Affected rules:
    * - [`node/no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
    * - [`node/no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
    * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
@@ -25,7 +25,7 @@ interface EslintPluginNSettings {
   allowModules?: GetRuleOptions<'node', 'no-extraneous-import'>['allowModules'];
 
   /**
-   * Might be read by the following rules:
+   * Affected rules:
    * - [`node/hashbang`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/hashbang.md)
    * - [`node/no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
    * - [`node/no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
@@ -36,7 +36,7 @@ interface EslintPluginNSettings {
   convertPath?: GetRuleOptions<'node', 'hashbang'>['convertPath'];
 
   /**
-   * Might be read by the following rules:
+   * Affected rules:
    * - [`node/no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
    * - [`node/no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
    * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
@@ -47,7 +47,7 @@ interface EslintPluginNSettings {
   resolvePaths?: GetRuleOptions<'node', 'no-extraneous-import'>['resolvePaths'];
 
   /**
-   * Might be read by the following rules:
+   * Affected rules:
    * - [`node/no-extraneous-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-import.md)
    * - [`node/no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
    * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
@@ -58,7 +58,7 @@ interface EslintPluginNSettings {
   resolverConfig?: Partial<EnhancedResolveResolveOptions>;
 
   /**
-   * Might be read by the following rules:
+   * Affected rules:
    * - [`node/no-extraneous-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-extraneous-require.md)
    * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
    * - [`node/no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
@@ -67,14 +67,14 @@ interface EslintPluginNSettings {
   tryExtensions?: GetRuleOptions<'node', 'no-extraneous-require'>['tryExtensions'];
 
   /**
-   * Might be read by the following rules:
+   * Affected rules:
    * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
    * - [`node/no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
    */
   tsconfigPath?: GetRuleOptions<'node', 'no-missing-import'>['tsconfigPath'];
 
   /**
-   * Might be read by the following rules:
+   * Affected rules:
    * - [`node/no-missing-import`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-import.md)
    * - [`node/no-missing-require`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-missing-require.md)
    */
@@ -88,7 +88,7 @@ interface EslintPluginNSettings {
    * If not explicitly specified, will be read from the closest to the currently linted file
    * `package.json`'s `engines.node` field, or ⚠️ fall back to `>=16.0.0`.
    *
-   * Might be read by the following rules:
+   * Affected rules:
    * - [`node/no-deprecated-api`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-deprecated-api.md)
    * - [`node/no-unsupported-features/es-builtins`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/es-builtins.md)
    * - [`node/no-unsupported-features/es-syntax`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/no-unsupported-features/es-syntax.md)
@@ -107,13 +107,14 @@ export interface NodeEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'node'> {
   /**
-   * [`eslint-plugin-n`](https://github.com/eslint-community/eslint-plugin-n) plugin
+   * [`eslint-plugin-n`](https://npmx.dev/eslint-plugin-n) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `node` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `node` property and applied to the resolved `files` and `ignores` of
+   * this config.
    *
    * Most of the settings are used to override options simultaneously for multiple rules.
-   * The plugin reads `option` value from multiple sources in the following order, and stops when it finds a valid value:
+   * The plugin reads `option` value from multiple sources in the following order, and stops when it
+   * finds a valid value:
    * - Corresponding rule `option`
    * - `settings.n.option`
    * - `settings.node.option`
@@ -123,8 +124,8 @@ export interface NodeEslintConfigOptions<
   settings?: EslintPluginNSettings;
 
   /**
-   * Specifies which features will not be reported if detected as supported
-   * by `no-unsupported-features/*` rules.
+   * Specifies which features will not be reported if detected as supported by
+   * `no-unsupported-features/*` rules.
    */
   noUnsupportedFeaturesIgnores?: Prettify<{
     esBuiltins?: GetRuleOptions<'node', 'no-unsupported-features/es-builtins'>['ignores'];
@@ -138,65 +139,83 @@ export interface NodeEslintConfigOptions<
   preferGlobal?: {
     /**
      * Enforces either `Buffer` or `require("buffer").Buffer`
+     *
+     * Affected rule:
+     * - [`node/prefer-global/buffer`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/buffer.md)
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/buffer.md
      */
     buffer?: boolean;
 
     /**
      * Enforce either `console` or `require("console")`
+     *
+     * Affected rule:
+     * - [`node/prefer-global/console`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/console.md)
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/console.md
      */
     console?: boolean;
 
     /**
      * Enforce either `crypto` or `require("node:crypto").webcrypto`
+     *
+     * Affected rule:
+     * - [`node/prefer-global/crypto`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/crypto.md)
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/crypto.md
      */
     crypto?: boolean;
 
     /**
      * Enforce either `process` or `require("process")`
+     *
+     * Affected rule:
+     * - [`node/prefer-global/process`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/process.md)
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/process.md
      */
     process?: boolean;
 
     /**
      * Enforce either `TextDecoder` or `require("util").TextDecoder`
+     *
+     * Affected rule:
+     * - [`node/prefer-global/text-decoder`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/text-decoder.md)
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/text-decoder.md
      */
     textDecoder?: boolean;
 
     /**
      * Enforce either `clearImmediate`, `clearInterval`, `clearTimeout`, `setImmediate`,
      * `setInterval`, and `setTimeout` or `require("timers").{setTimeout,...}`
+     *
+     * Affected rule:
+     * - [`node/prefer-global/timers`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/timers.md)
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/timers.md
      */
     timers?: boolean;
 
     /**
      * Enforce either `TextEncoder` or `require("util").TextEncoder`
+     *
+     * Affected rule:
+     * - [`node/prefer-global/text-encoder`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/text-encoder.md)
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/text-encoder.md
      */
     textEncoder?: boolean;
 
     /**
-     * Enforce either `URLSearchParams` or `require("url").URLSearchParams`
+     * Enforce either `URL` or `require("url").URL`
+     *
+     * Affected rule:
+     * - [`node/prefer-global/url`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/url.md)
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/url-search-params.md
      */
     url?: boolean;
 
     /**
-     * Enforce either `URL` or `require("url").URL`
+     * Enforce either `URLSearchParams` or `require("url").URLSearchParams`
+     *
+     * Affected rule:
+     * - [`node/prefer-global/url-search-params`](https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/url-search-params.md)
      * @default true
-     * @see https://github.com/eslint-community/eslint-plugin-n/blob/HEAD/docs/rules/prefer-global/url.md
      */
     urlSearchParams?: boolean;
   };

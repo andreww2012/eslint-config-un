@@ -45,8 +45,9 @@ export type ExtraPluginsType = Record<string, MaybeFn<MaybePromise<EslintPlugin>
 
 /**
  * A bag of options whose values influence the *types* of other options (currently only
- * `noWarnings`). Passed as the second type parameter of `EslintConfigUnOptions` so the
- * severity-typed surfaces can react to them.
+ * `noWarnings`).
+ * Passed as the second type parameter of `EslintConfigUnOptions` so the severity-typed surfaces can
+ * react to them.
  */
 interface TypeAffectingOptionsType {
   noWarnings?: boolean;
@@ -170,7 +171,9 @@ export interface EslintConfigUnOptions<
   };
 
   /**
-   * **Global** ignore patterns. By default will be merged with our ignore patterns, unless the object notation is used and `override` option is set to `true`
+   * **Global** ignore patterns.
+   * By default will be merged with our ignore patterns, unless the object notation is used and
+   * `override` option is set to `true`
    */
   ignores?:
     | EslintFlatConfigEntry['ignores']
@@ -180,20 +183,21 @@ export interface EslintConfigUnOptions<
       };
 
   /**
-   * **Global** files patterns. When non-empty, a dedicated flat config entry is created with
-   * only these `files` (no rules, no other keys), which tells ESLint that the matched files are
-   * meant to be linted. This is useful to prevent the
-   * `File ignored because no matching configuration was supplied` error for files with extensions
-   * that none of the enabled configs target.
+   * **Global** files patterns.
+   * When non-empty, a dedicated flat config entry is created with only these `files` (no rules, no
+   * other keys), which tells ESLint that the matched files are meant to be linted.
+   * This is useful to prevent the `File ignored because no matching configuration was supplied`
+   * error for files with extensions that none of the enabled configs target.
    */
   files?: EslintFlatConfigEntry['files'];
 
   /**
-   * Allows to provide additional ESLint plugins. Their prefixes and possibly rule names
-   * will appear in configs' `rules` property type. They will be lazy-loaded only if used.
+   * Allows to provide additional ESLint plugins.
+   * Their prefixes and possibly rule names will appear in configs' `rules` property type.
+   * They will be lazy-loaded only if used.
    *
-   * Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`)
-   * or even prefixes you've renamed via `pluginRenames`.
+   * Note that their prefixes must not match the built-it/known ones (like `ts` or `unicorn`) or
+   * even prefixes you've renamed via `pluginRenames`.
    */
   extraPlugins?: ExtraPlugins;
 
@@ -206,9 +210,9 @@ export interface EslintConfigUnOptions<
    * [`linterOptions.noInlineConfig`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=noInlineConfig)
    * globally or more granularly.
    *
-   * ⚠️ Special case:
-   * If only non-empty `ignores` is specified, the option will be set to `false` *for the ignored
-   * paths*, i.e. `{ignores: [...]}` is actually a shorthand for `{files: [...], value: false}`.
+   * ⚠️ Special case: If only non-empty `ignores` is specified, the option will be set to `false`
+   * *for the ignored paths*, i.e. `{ignores: [...]}` is actually a shorthand for
+   * `{files: [...], value: false}`.
    */
   linterOptionsNoInlineConfig?: ValueOrEslintConfigWithValue<boolean>;
 
@@ -217,9 +221,9 @@ export interface EslintConfigUnOptions<
    * [`linterOptions.reportUnusedDisableDirectives`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=reportUnusedDisableDirectives)
    * globally or more granularly.
    *
-   * ⚠️ Special case:
-   * If only non-empty `ignores` is specified, the option will be set to `off` *for the ignored
-   * paths*, i.e. `{ignores: [...]}` is actually a shorthand for `{files: [...], value: 'off}`.
+   * ⚠️ Special case: If only non-empty `ignores` is specified, the option will be set to `off` *for
+   * the ignored paths*, i.e. `{ignores: [...]}` is actually a shorthand for
+   * `{files: [...], value: 'off}`.
    * @default 'warn'; 'error' when `noWarnings` is `true`
    */
   linterOptionsReportUnusedDisableDirectives?: ValueOrEslintConfigWithValue<
@@ -231,9 +235,9 @@ export interface EslintConfigUnOptions<
    * [`linterOptions.reportUnusedInlineConfigs`](https://eslint.org/docs/latest/use/configure/configuration-files#configuration-objects:~:text=reportUnusedInlineConfigs)
    * globally or more granularly.
    *
-   * ⚠️ Special case:
-   * If only non-empty `ignores` is specified, the option will be set to `off` *for the ignored
-   * paths*, i.e. `{ignores: [...]}` is actually a shorthand for `{files: [...], value: 'off}`.
+   * ⚠️ Special case: If only non-empty `ignores` is specified, the option will be set to `off` *for
+   * the ignored paths*, i.e. `{ignores: [...]}` is actually a shorthand for
+   * `{files: [...], value: 'off}`.
    */
   linterOptionsReportUnusedInlineConfigs?: ValueOrEslintConfigWithValue<
     EslintSeverityWithTypeAffectingOptions<TypeAffectingOptions>
@@ -244,9 +248,10 @@ export interface EslintConfigUnOptions<
   // #region 🟠 CONFIGS RELATED OPTIONS
 
   /**
-   * User provided flat configs. They still support plugin renaming, but besides that,
-   * will be put as-is after all the eslint-config-un's configs,
-   * and before the config which disables Prettier incompatible rules for all files.
+   * User provided flat configs.
+   * They still support plugin renaming, but besides that, will be put as-is after all the
+   * eslint-config-un's configs, and before the config which disables Prettier incompatible rules
+   * for all files.
    */
   extraConfigs?: MaybeStripWarningSeverity<UnFlagConfigEntry<ExtraPlugins>, TypeAffectingOptions>[];
 
@@ -266,8 +271,10 @@ export interface EslintConfigUnOptions<
   defaultConfigsStatus?: 'all-disabled' | 'misc-enabled';
 
   /**
-   * Type of your project. Depending on the value, will affect the following rules:
-   * - [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md): importing from `devDependencies` will be forbidden in `lib` mode.
+   * Type of your project.
+   * Depending on the value, will affect the following rules:
+   * - [`import/no-extraneous-dependencies`](https://github.com/un-ts/eslint-plugin-import-x/blob/HEAD/docs/rules/no-extraneous-dependencies.md):
+   *   importing from `devDependencies` will be forbidden in `lib` mode.
    * @default 'app'
    */
   mode?: 'app' | 'lib';
@@ -281,7 +288,8 @@ export interface EslintConfigUnOptions<
   forceSeverity?: Exclude<EslintSeverityWithTypeAffectingOptions<TypeAffectingOptions>, 0 | 'off'>;
 
   /**
-   * "Zero warnings tolerance" mode. When enabled:
+   * "Zero warnings tolerance" mode.
+   * When enabled:
    * - the `warning` (`1`/`'warn'`) severity becomes unexpressible at the type level across all
    *   severity-typed options (`forceSeverity`, `overrides`/`overridesAny`, `extraConfigs` rules and
    *   the `linterOptions*` options);
@@ -289,8 +297,7 @@ export interface EslintConfigUnOptions<
    *   `error` at runtime (including the implicit `linterOptions.reportUnusedDisableDirectives`
    *   default).
    *
-   * Note that rules that are turned `off` stay `off` —
-   * this only promotes warnings to errors.
+   * Note that rules that are turned `off` stay `off` — this only promotes warnings to errors.
    * @default false
    */
   noWarnings?: boolean;
@@ -300,8 +307,8 @@ export interface EslintConfigUnOptions<
   // #region 🟠 PLUGINS RELATED OPTIONS
 
   /**
-   * Allows to change a plugin prefix. Keys are the default prefixes, value cannot be empty
-   * string (or it will be ignored anyway).
+   * Allows to change a plugin prefix.
+   * Keys are the default prefixes, value cannot be empty string (or it will be ignored anyway).
    *
    * You have to still use **OLD** prefixes in `overrides`, and they will be automatically renamed.
    * @example
@@ -313,8 +320,8 @@ export interface EslintConfigUnOptions<
   pluginRenames?: Partial<Record<Exclude<PluginPrefix, ''>, string>>;
 
   /**
-   * This option allows you to override any of the used plugins. This can be useful
-   * when this config is used to lint a repository of one of the built-in plugins
+   * This option allows you to override any of the used plugins.
+   * This can be useful when this config is used to lint a repository of one of the built-in plugins
    * to provide development version of that plugin.
    */
   pluginOverrides?: {
@@ -330,16 +337,16 @@ export interface EslintConfigUnOptions<
   /**
    * Whether ESLint plugins will be loaded if they are actually used.
    *
-   * If an object is used, all plugins except the ones specified in `alwaysLoad`
-   * will be lazy-loaded.
+   * If an object is used, all plugins except the ones specified in `alwaysLoad` will be
+   * lazy-loaded.
    * @default true
    */
   loadPluginsOnDemand?:
     | boolean
     | {
         /**
-         * These plugins will always be loaded. This can be useful if you enable certain
-         * plugin rules only be using
+         * These plugins will always be loaded.
+         * This can be useful if you enable certain plugin rules only be using
          * [configuration comments](https://eslint.org/docs/latest/use/configure/rules#use-configuration-comments).
          */
         alwaysLoad: LoadablePluginPrefix[];
@@ -355,8 +362,8 @@ export interface EslintConfigUnOptions<
    * If you set `plugins.<pluginName>: false` (default), all the fixable plugin's rules will remain
    * being autofixable, expect for the ones set to `true` in `rules`.
    *
-   * If you set `plugins.<pluginName>: true`, all the fixable plugin's rules will stop
-   * being autofixable, expect for the ones set to `false` in `rules`.
+   * If you set `plugins.<pluginName>: true`, all the fixable plugin's rules will stop being
+   * autofixable, expect for the ones set to `false` in `rules`.
    *
    * `rules` object will be merged with the following default value:
    * ```ts
@@ -391,8 +398,8 @@ export interface EslintConfigUnOptions<
       };
 
   /**
-   * Decide which rules should be disabled/enabled in Markdown and MDX "fenced code blocks"
-   * (like \```lang ... ```).
+   * Decide which rules should be disabled/enabled in Markdown and MDX "fenced code blocks" (like
+   * \```lang ... ```).
    */
   markdownCodeBlocksRules?: {
     /**
@@ -409,8 +416,9 @@ export interface EslintConfigUnOptions<
     >;
 
     /**
-     * All rules available for this option are disabled by default by eslint-config-un
-     * in embedded code blocks. Set necessary rules to `true` to avoid disabling them.
+     * All rules available for this option are disabled by default by eslint-config-un in embedded
+     * code blocks.
+     * Set necessary rules to `true` to avoid disabling them.
      *
      * ⚠️ Some rules are disabled in certain configs.
      */
@@ -441,37 +449,39 @@ export interface EslintConfigUnOptions<
   /**
    * Controls how rules that require type information are handled.
    *
-   * `eslint-config-un` knows which rules from all the plugins require type information
-   * (most come from `typescript-eslint`, but a good portion come from other plugins,
-   * like `eslint-plugin-vitest`). Such rules fall into two groups:
+   * `eslint-config-un` knows which rules from all the plugins require type information (most come
+   * from `typescript-eslint`, but a good portion come from other plugins, like
+   * `eslint-plugin-vitest`).
+   * Such rules fall into two groups:
    * - those that **throw** when type information is not available;
    * - those that silently do nothing (or only partially work) without it.
    *
-   * To minimize the chance of crashes due to missing type information, by default we move
-   * every such rule into a separate ESLint config restricted to TypeScript files, and set up
-   * the `typescript-eslint` parser there for typed linting. The generated config inherits all
-   * properties from the original one, except:
+   * To minimize the chance of crashes due to missing type information, by default we move every
+   * such rule into a separate ESLint config restricted to TypeScript files, and set up the
+   * `typescript-eslint` parser there for typed linting.
+   * The generated config inherits all properties from the original one, except:
    * - `files` is set to <code>**&#47;*.?([cm])[jt]s?(x)</code>
-   * [intersected](https://eslint.org/docs/latest/use/configure/configuration-files#specify-files-with-an-and-operation)
-   * with the original config's `files`;
+   *   [intersected](https://eslint.org/docs/latest/use/configure/configuration-files#specify-files-with-an-and-operation)
+   *   with the original config's `files`;
    * - all `.md(x)` code block patterns are appended to `ignores`;
    * - [`languageOptions.parserOptions.projectService`](https://typescript-eslint.io/packages/parser/#projectservice)
-   * is set to `true` (only in `standalone` mode);
+   *   is set to `true` (only in `standalone` mode);
    * - any custom file extensions required by the moved rules (like `.svelte`) are added to
-   * [`extraFileExtensions`](https://typescript-eslint.io/packages/parser/#extrafileextensions);
+   *   [`extraFileExtensions`](https://typescript-eslint.io/packages/parser/#extrafileextensions);
    * - `rules` consists solely of the moved entries.
    *
    * The string value (or the `mode` property) chooses the strategy:
    * - `standalone`: the split happens and the `typescript-eslint` parser, including
-   * `projectService`, is configured in the generated config. This is the default when the
-   * `ts/setupTypeAware` config is **disabled**.
-   * - `splitOnly`: the split happens, but no parser is configured — the project service is
-   * expected to be set up by the `ts/setupTypeAware` config. This is the default when that
-   * config is **enabled**, and is the most commonly used mode.
-   * - `asIs`: no split happens; rules are left untouched in their original configs. You are
-   * responsible for making type information available to them.
-   * - `disabled`: no split happens, and every rule that *throws* without type information is
-   * turned off everywhere. Rules that merely degrade without type information are left enabled.
+   *   `projectService`, is configured in the generated config.
+   *   This is the default when the `ts/setupTypeAware` config is **disabled**.
+   * - `splitOnly`: the split happens, but no parser is configured — the project service is expected
+   *   to be set up by the `ts/setupTypeAware` config.
+   *   This is the default when that config is **enabled**, and is the most commonly used mode.
+   * - `asIs`: no split happens; rules are left untouched in their original configs.
+   *   You are responsible for making type information available to them.
+   * - `disabled`: no split happens, and every rule that *throws* without type information is turned
+   *   off everywhere.
+   *   Rules that merely degrade without type information are left enabled.
    *
    * ⚠️ The following configs are never split (they manage type-aware linting themselves), so for
    * them every mode except `disabled` behaves like `asIs`:
@@ -480,21 +490,25 @@ export interface EslintConfigUnOptions<
    * - `jest/ts`.
    *
    * The object notation additionally accepts:
-   * - `ignores`: glob patterns excluded from type-aware linting. They are appended to the
-   * `ignores` of every generated config, as well as of the never-split configs listed above.
-   * Useful for TypeScript files that are not part of any `tsconfig.json` (which would otherwise
-   * make `projectService` throw).
+   * - `ignores`: glob patterns excluded from type-aware linting.
+   *   They are appended to the `ignores` of every generated config, as well as of the never-split
+   *   configs listed above.
+   *   Useful for TypeScript files that are not part of any `tsconfig.json` (which would otherwise
+   *   make `projectService` throw).
    * - `allowDefaultProject` / `parserOptions` (mutually exclusive): the default parser options for
-   * the type-aware linting `eslint-config-un` sets up — the `standalone` split configs and, as a
-   * default, the `ts` type-aware config. `allowDefaultProject` is a shortcut for
-   * `parserOptions.projectService.allowDefaultProject` (the most common need, e.g. test files not
-   * part of any `tsconfig.json`); `parserOptions` is the full escape hatch. These mirror the
-   * same-named `ts` config options, which take precedence over them for the `ts` type-aware config.
+   *   the type-aware linting `eslint-config-un` sets up — the `standalone` split configs and, as a
+   *   default, the `ts` type-aware config.
+   *   `allowDefaultProject` is a shortcut for `parserOptions.projectService.allowDefaultProject`
+   *   (the most common need, e.g. test files not part of any `tsconfig.json`); `parserOptions` is
+   *   the full escape hatch.
+   *   These mirror the same-named `ts` config options, which take precedence over them for the `ts`
+   *   type-aware config.
    *
    * NOTE: these are accepted regardless of `mode` (they are orthogonal to it), but they only take
    * effect where a type-aware parser is actually set up:
    * - the `standalone` split configs (i.e. only when the resolved `mode` is `standalone`);
-   * - the `ts` type-aware config's parser, whenever that config is enabled — independently of `mode`.
+   * - the `ts` type-aware config's parser, whenever that config is enabled — independently of
+   *   `mode`.
    *
    * Consequently, in `asIs`/`disabled` modes they have an effect only if the `ts` type-aware config
    * is enabled (and in `disabled` mode that combination is contradictory, since it both turns off
@@ -513,17 +527,17 @@ export interface EslintConfigUnOptions<
 
   /**
    * `eslint-config-un` checks the presence and versions of certain packages (like `vue`,
-   * `typescript` or `prettier`) to decide whether certain configs, sub-configs or rules
-   * should be enabled by default.
+   * `typescript` or `prettier`) to decide whether certain configs, sub-configs or rules should be
+   * enabled by default.
    *
-   * By default, the packages are looked up by their canonical npm names. If you install
-   * some of them under a different name using
-   * [npm aliases](https://docs.npmjs.com/cli/v11/using-npm/package-spec#aliases),
-   * for example `"vue3": "npm:vue@^3.5.0"`, use this option to specify the names to look
-   * for instead of the canonical ones.
+   * By default, the packages are looked up by their canonical npm names.
+   * If you install some of them under a different name using
+   * [npm aliases](https://docs.npmjs.com/cli/v11/using-npm/package-spec#aliases), for example
+   * `"vue3": "npm:vue@^3.5.0"`, use this option to specify the names to look for instead of the
+   * canonical ones.
    *
-   * Note that this option is not applicable to ESLint plugins: they are loaded by their
-   * canonical names; use `pluginOverrides` to provide a plugin installed under an alias.
+   * Note that this option is not applicable to ESLint plugins: they are loaded by their canonical
+   * names; use `pluginOverrides` to provide a plugin installed under an alias.
    * @example {vue: 'vue3'}
    */
   packageAliases?: Partial<Record<(typeof PACKAGES_TO_GET_INFO_FOR)[number], string>>;
@@ -562,11 +576,12 @@ export interface EslintConfigUnOptions<
   offlineMode?: boolean;
 
   /**
-   * Attempt to cache the resolved flat config. This might fail if it contains
-   * unserializable data, such as functions. Enabled by default when running in editor.
+   * Attempt to cache the resolved flat config.
+   * This might fail if it contains unserializable data, such as functions.
+   * Enabled by default when running in editor.
    *
-   * It will be stored in `node_modules/.cache/eslint-config-un/config.json` and considered
-   * fresh for 1 hour, unless one of the following is changed:
+   * It will be stored in `node_modules/.cache/eslint-config-un/config.json` and considered fresh
+   * for 1 hour, unless one of the following is changed:
    * - Current git revision (`git rev-parse HEAD`) or root `.gitignore` contents
    * - `package.json`, lockfile contents or package manager
    * - ESLint config file contents
@@ -595,14 +610,16 @@ export interface EslintConfigUnInternalOptions {
 
   /**
    * Forces every config to skip the type-information split (as if it had `skipTypeInfoSplit`),
-   * keeping generated configs stable in tests. Does not prevent `disabled` mode from acting.
+   * keeping generated configs stable in tests.
+   * Does not prevent `disabled` mode from acting.
    */
   skipTypeInfoSplit?: boolean;
 
   /**
-   * Keeps `meta.languages` on the registered plugins' rules, which is otherwise removed
-   * (see `removeRuleLanguagesFromPlugin`). Only meant for tooling that needs to read the
-   * property, such as the rule categories generation in the prep script.
+   * Keeps `meta.languages` on the registered plugins' rules, which is otherwise removed (see
+   * `removeRuleLanguagesFromPlugin`).
+   * Only meant for tooling that needs to read the property, such as the rule categories generation
+   * in the prep script.
    */
   keepRuleMetaLanguages?: boolean;
 }
@@ -618,8 +635,10 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
   resolvedConfigs?: Partial<UnConfigs<ExtraPlugins>>;
 
   /**
-   * Resolved form of the `typeInfoRules` option. `mode` is finalized after the `ts` config is
-   * loaded (it may depend on whether the `ts/setupTypeAware` config was created). NOTE: mutable.
+   * Resolved form of the `typeInfoRules` option.
+   * `mode` is finalized after the `ts` config is loaded (it may depend on whether the
+   * `ts/setupTypeAware` config was created).
+   * NOTE: mutable.
    */
   typeInfoRulesResolved: {
     mode: TypeInfoMode;
@@ -627,25 +646,26 @@ export interface UnConfigContext<ExtraPlugins extends ExtraPluginsType = ExtraPl
 
     /**
      * Normalized global parser options (the `allowDefaultProject` shortcut is folded into
-     * `projectService.allowDefaultProject`). Used for `standalone` split configs and as the
-     * default for the `ts` type-aware config.
+     * `projectService.allowDefaultProject`).
+     * Used for `standalone` split configs and as the default for the `ts` type-aware config.
      */
     parserOptions?: TsEslintParserOptions;
   };
 
   /**
-   * NOTE: mutable. Rule names must be UNprefixed
+   * NOTE: mutable.
+   * Rule names must be UNprefixed
    */
   disabledAutofixes: Partial<Record<PluginPrefix, string[]>>;
 
   /**
    * Maps canonical plugin prefix → unprefixed rule name → whether the rule supports autofix.
-   * Used to decide whether a disabled rule has a `disable-autofix/...` counterpart to disable
-   * too (the counterpart only exists for fixable rules).
+   * Used to decide whether a disabled rule has a `disable-autofix/...` counterpart to disable too
+   * (the counterpart only exists for fixable rules).
    *
-   * Loaded from the generated `eslint-types-fixable-only.gen` file via a dynamic import to avoid
-   * a static import cycle: that file is produced by the prep script, which itself loads the
-   * core config functionality that consumes this data.
+   * Loaded from the generated `eslint-types-fixable-only.gen` file via a dynamic import to avoid a
+   * static import cycle: that file is produced by the prep script, which itself loads the core
+   * config functionality that consumes this data.
    */
   fixableRulesPerPlugin: Partial<Record<string, Partial<Record<string, boolean>>>>;
 

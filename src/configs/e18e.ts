@@ -22,15 +22,15 @@ type SubConfigOptions<
 >;
 
 /**
- * An ESLint plugin from the [e18e community](https://e18e.dev) focusing on applying
- * the e18e community's best practices and advice to JavaScript/TypeScript codebases.
+ * An ESLint plugin from the [e18e community](https://e18e.dev) focusing on applying the e18e
+ * community's best practices and advice to JavaScript/TypeScript codebases.
  *
  * 📁 Default `files`: ❌ none, sub configs are used instead
  */
 export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = never> {
   /**
-   * "New syntax and APIs which improve code readability and performance"
-   * \- [plugin docs](https://github.com/e18e/eslint-plugin#overview)
+   * "New syntax and APIs which improve code readability and performance" -
+   * [plugin docs](https://github.com/e18e/eslint-plugin#overview)
    *
    * 📁 Default `files`: all files
    * @default true
@@ -38,8 +38,8 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
   configModernization?: boolean | SubConfigOptions<ExtraPlugins, 'modernization'>;
 
   /**
-   * "Community recommended alternatives to popular libraries, focused on performance and size"
-   * \- [plugin docs](https://github.com/e18e/eslint-plugin#overview)
+   * "Community recommended alternatives to popular libraries, focused on performance and size" -
+   * [plugin docs](https://github.com/e18e/eslint-plugin#overview)
    *
    * 📁 Default `files`: <code>**&#47;package.json</code>
    * @default true
@@ -54,8 +54,8 @@ export interface E18eEslintConfigOptions<ExtraPlugins extends ExtraPluginsType =
       });
 
   /**
-   * "Patterns that can be optimized for better runtime performance"
-   * \- [plugin docs](https://github.com/e18e/eslint-plugin#overview)
+   * "Patterns that can be optimized for better runtime performance" -
+   * [plugin docs](https://github.com/e18e/eslint-plugin#overview)
    *
    * 📁 Default `files`: all files
    *

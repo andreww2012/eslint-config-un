@@ -28,7 +28,7 @@ export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
    * If set to `false`, no assertion may have an assertion message.
    * If omitted, no reports about the assertion message will be made.
    *
-   * Affected rules:
+   * Affected rule:
    * - [`ava/assertion-arguments`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/assertion-arguments.md)
    */
   enforceAssertionMessage?: boolean;
@@ -36,16 +36,19 @@ export interface AvaEslintConfigOptions<ExtraPlugins extends ExtraPluginsType = 
   /**
    * Enforce a limit on the number of assertions in a test.
    *
-   * Affected rules:
+   * Affected rule:
    * - [`ava/max-asserts`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/max-asserts.md)
    */
   enforceMaxAssertions?: number;
 
   /**
-   * Enables or specifies the configuration for the sub-config targeting `package.json` files,
-   * which requires a JSON parser. Currently only enables the
-   * [`ava/no-ava-in-dependencies`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/no-ava-in-dependencies.md)
-   * rule, which disallows AVA in `dependencies`.
+   * Enables or specifies the configuration for the sub-config targeting `package.json` files, which
+   * requires a JSON parser.
+   *
+   * 📁 Default `files`: <code>**&#47;package.json</code>
+   *
+   * Affected rule:
+   * - [`ava/no-ava-in-dependencies`](https://github.com/avajs/eslint-plugin-ava/blob/HEAD/docs/rules/no-ava-in-dependencies.md)
    * @default true
    */
   configPackageJson?:

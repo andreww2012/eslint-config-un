@@ -9,7 +9,9 @@ import {
 type CheckedSyntax = 'enums' | 'importAliases' | 'namespaces' | 'parameterProperties';
 
 /**
- * ESLint plugin to granularly enforce TypeScript's [`erasableSyntaxOnly`](https://devblogs.microsoft.com/typescript/announcing-typescript-5-8-rc/#the---erasablesyntaxonly-option) flag.
+ * ESLint plugin to granularly enforce TypeScript's
+ * [`erasableSyntaxOnly`](https://devblogs.microsoft.com/typescript/announcing-typescript-5-8-rc/#the---erasablesyntaxonly-option)
+ * flag.
  *
  * 📁 Default `files`: <code>**&#47;*.?([cm])ts?(x)</code>
  */
@@ -17,8 +19,8 @@ export interface ErasableSyntaxOnlyEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'erasable-syntax-only'> {
   /**
-   * By default, all syntaxes are disallowed. You can enable specific syntaxes by setting
-   * their keys to `true` in this object.
+   * By default, all syntaxes are disallowed.
+   * You can enable specific syntaxes by setting their keys to `true` in this object.
    * - `enums`: allow using TypeScript's enums.
    * - `importAliases`: allow using TypeScript's import aliases.
    * - `namespaces`: allow using TypeScript's namespaces.

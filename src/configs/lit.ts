@@ -24,16 +24,16 @@ interface A11YSubConfigOptions<ExtraPlugins extends ExtraPluginsType = never>
   /**
    * [`eslint-plugin-lit-a11y`](https://npmx.dev/eslint-plugin-lit-a11y) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `settings` object as-is and applied to the specified `files` and `ignores`.
+   * that will be assigned to `settings` object as-is and applied to the resolved `files` and
+   * `ignores` of this config.
    */
   settings?: {
     /**
-     * Set to `true` to make sure only [`lit-html`](https://npmx.dev/lit-html)
-     * tagged template literals are linted.
+     * Set to `true` to make sure only [`lit-html`](https://npmx.dev/lit-html) tagged template
+     * literals are linted.
      *
-     * If you're importing `lit-html` from a package that re-exports `lit-html`,
-     * like for example `@apollo-elements/lit-apollo`, you can specify
-     * `@apollo-elements/lit-apollo` here.
+     * If you're importing `lit-html` from a package that re-exports `lit-html`, like for example
+     * `@apollo-elements/lit-apollo`, you can specify `@apollo-elements/lit-apollo` here.
      */
     litHtmlSources?: boolean | string[];
   };
@@ -61,8 +61,8 @@ export interface LitEslintConfigOptions<
   /**
    * [`eslint-plugin-lit`](https://npmx.dev/eslint-plugin-lit) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `lit` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `lit` property and applied to the resolved `files` and `ignores` of
+   * this config.
    */
   settings?: {
     /**
@@ -73,11 +73,14 @@ export interface LitEslintConfigOptions<
 
   /**
    * A11Y (accessibility) specific rules for Lit components.
-   * By default, uses `files` and `ignores` from the parent config.
    *
    * Since most of the rules are ported from
-   * [`eslint-plugin-jsx-a11y`](https://npmx.dev/eslint-plugin-jsx-a11y),
-   * this config also accepts the same options as `jsxA11y` config.
+   * [`eslint-plugin-jsx-a11y`](https://npmx.dev/eslint-plugin-jsx-a11y), this config also accepts
+   * the same options as `jsxA11y` config.
+   *
+   * 📁 Default `files` and `ignores`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`eslint-plugin-lit-a11y`](https://npmx.dev/eslint-plugin-lit-a11y)
    * @default true
    */
   configA11y?: boolean | A11YSubConfigOptions<ExtraPlugins>;

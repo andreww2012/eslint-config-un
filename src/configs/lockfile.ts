@@ -35,8 +35,8 @@ type SupportedPackageManagers = Extract<GetRuleOptions<'lockfile', 'flavor'>, st
  * <code>**&#47;pnpm-lock.yaml</code>, <code>**&#47;bun.lock</code>,
  * <code>**&#47;vlt-lock.json</code>
  *
- * ⚠️ Note: specified `files` will be naively analyzed for lockfile types and corresponding
- * parser configs (named `lockfile/parser/{json,yaml}`) will be created for matched entries.
+ * ⚠️ Note: specified `files` will be naively analyzed for lockfile types and corresponding parser
+ * configs (named `lockfile/parser/{json,yaml}`) will be created for matched entries.
  */
 export interface LockfileEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
@@ -70,8 +70,8 @@ export interface LockfileEslintConfigOptions<
   /**
    * Ensure that all packages in lockfiles are downloaded from trusted registries.
    *
-   * If set to `true`, only the official npm registry (`https://registry.npmjs.org`)
-   * will be allowed.
+   * If set to `true`, only the official npm registry (`https://registry.npmjs.org`) will be
+   * allowed.
    *
    * Affected rule:
    * - [`lockfile/registry`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/registry.md)
@@ -96,8 +96,8 @@ export interface LockfileEslintConfigOptions<
   enforcePackageManager?: GetRuleOptions<'lockfile', 'flavor'>;
 
   /**
-   * Warn when dependencies in lockfiles are pulled from non-registry sources
-   * such as GitHub URLs, tarball URLs, git URLs, or file paths rather than proper npm registries.
+   * Warn when dependencies in lockfiles are pulled from non-registry sources such as GitHub URLs,
+   * tarball URLs, git URLs, or file paths rather than proper npm registries.
    *
    * You may specify a boolean value to enable or disable the rule or an object to configure it.
    *
@@ -115,8 +115,8 @@ export interface LockfileEslintConfigOptions<
    * Detected automatically with
    * [`package-manager-detector`](https://npmx.dev/package-manager-detector).
    *
-   * If PM(s) neither specified here nor detected, the affected rules are disabled,
-   * since they would otherwise assume `npm` and may report incorrectly.
+   * If PM(s) neither specified here nor detected, the affected rules are disabled, since they would
+   * otherwise assume `npm` and may report incorrectly.
    *
    * Affected rule:
    * - [`lockfile/tracked`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/tracked.md)
@@ -124,9 +124,8 @@ export interface LockfileEslintConfigOptions<
   packageManager?: MaybeArray<SupportedPackageManagers>;
 
   /**
-   * Valid [`npm-package-arg` registry specifiers](https://npmx.dev/npm-package-arg)
-   * to ignore packages that will be allowed to be installed with their own lockfiles
-   * (aka shrinkwrap files).
+   * Valid [`npm-package-arg` registry specifiers](https://npmx.dev/npm-package-arg) to ignore
+   * packages that will be allowed to be installed with their own lockfiles (aka shrinkwrap files).
    *
    * Affected rule:
    * - [`lockfile/shrinkwrap`](https://github.com/ljharb/lockfile-tools/blob/HEAD/packages/eslint-plugin/docs/rules/shrinkwrap.md)

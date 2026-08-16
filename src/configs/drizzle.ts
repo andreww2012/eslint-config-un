@@ -17,7 +17,8 @@ export interface DrizzleEslintConfigOptions<
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'drizzle'> {
   /**
    * Optionally narrows down which object's `delete`/`update` method calls are checked.
-   * Accepts the name of the Drizzle database object(s) used in your codebase (e.g. `"db"`).
+   * Accepts the name of the Drizzle database object(s) used in your codebase (e.g.
+   * `"db"`).
    * When provided, only method calls on the specified object(s) will be flagged.
    *
    * Affected rules:

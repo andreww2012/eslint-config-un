@@ -49,11 +49,11 @@ export interface TailwindEslintConfigOptions<
   /**
    * [`eslint-plugin-tailwindcss`](https://npmx.dev/eslint-plugin-tailwindcss) plugin
    * [shared settings](https://eslint.org/docs/latest/use/configure/configuration-files#configure-shared-settings)
-   * that will be assigned to `tailwindcss` property
-   * and applied to the resolved `files` and `ignores` of this config.
+   * that will be assigned to `tailwindcss` property and applied to the resolved `files` and
+   * `ignores` of this config.
    *
-   * ⚠️ You likely want to set `cssConfigPath` to the path of your Tailwind CSS
-   * entry point so the plugin can resolve the theme.
+   * ⚠️ You likely want to set `cssConfigPath` to the path of your Tailwind CSS entry point so the
+   * plugin can resolve the theme.
    * It defaults to `src/style.css` when not provided.
    *
    * Will be merged with the default

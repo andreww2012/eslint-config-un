@@ -24,6 +24,7 @@ export interface RippleEslintConfigOptions<
    * 📁 Default `files`:
    * - <code>**&#47;*.tsrx</code>
    * - <code>**&#47;*.ripple</code>
+   * @default true
    */
   configSetup?: UnFlatConfigEntryFilesAndIgnores;
 }

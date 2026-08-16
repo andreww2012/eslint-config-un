@@ -9,8 +9,9 @@ import {
 
 /**
  * [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom/blob/HEAD/README.md)
- * specific rules. Note that, contrary to its name, this package can be used with
- * other testing libraries, for example `vitest`, so it doesn't belong to any top-level config.
+ * specific rules.
+ * Note that, contrary to its name, this package can be used with other testing libraries, for
+ * example `vitest`, so it doesn't belong to any top-level config.
  *
  * 📁 Default `files`:
  * - <code>**&#47;*{[._-]spec,.test}.?([cm])[jt]s?(x)</code>

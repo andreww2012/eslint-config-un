@@ -10,8 +10,8 @@ import {
  * [NestJS](https://nestjs.com) specific rules.
  *
  * ⚠️ WARNING: make sure that the linted files are provided with type information.
- * For that, they must be included in `files` array of `ts/configTypeAware` config
- * (they are by default).
+ * For that, they must be included in `files` array of `ts/configTypeAware` config (they are by
+ * default).
  *
  * 📁 Default `files`: <code>**&#47*.?([cm])ts</code>
  */

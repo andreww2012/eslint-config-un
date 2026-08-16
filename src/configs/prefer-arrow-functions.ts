@@ -7,8 +7,8 @@ import {
 } from './index';
 
 /**
- * An ESLint Plugin to lint and auto-fix plain functions into arrow functions,
- * in all cases where conversion would result in the same behavior.
+ * An ESLint Plugin to lint and auto-fix plain functions into arrow functions, in all cases where
+ * conversion would result in the same behavior.
  *
  * 📁 Default `files`: all files
  */

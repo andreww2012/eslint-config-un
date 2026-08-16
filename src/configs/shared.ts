@@ -8,7 +8,8 @@ import type {ExtraPluginsType, GetRuleOptions, UnFlatConfigEntryBase} from '.';
 export interface IgnoresAdditionalOptions<Patterns extends string | readonly string[]> {
   /**
    * All the keys of this object are merged with the resolved `ignores` by default.
-   * Set any of them to `false` to avoid that. Set `false` to avoid merging with any of them
+   * Set any of them to `false` to avoid that.
+   * Set `false` to avoid merging with any of them
    * @default true
    */
   ignoresAdditional?:
@@ -82,10 +83,14 @@ type ConfigNoOnlyTests<ExtraPlugins extends ExtraPluginsType = never> =
 
 export interface NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins extends ExtraPluginsType> {
   /**
-   * Enables [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/eslint-plugin-no-only-tests) rule
-   * on the test files.
+   * Forbids focused tests in the test files.
    *
-   * By default will be applied to the same `files` and `ignores` as the parent config.
+   * 📁 Default `files` and `ignores`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`eslint-plugin-no-only-tests`](https://npmx.dev/eslint-plugin-no-only-tests)
+   *
+   * Affected rule:
+   * - [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/eslint-plugin-no-only-tests)
    * @default true
    */
   configNoOnlyTests?: ConfigNoOnlyTests<ExtraPlugins>;
@@ -93,10 +98,14 @@ export interface NoOnlyTestsSubConfigEnabledByDefault<ExtraPlugins extends Extra
 
 export interface NoOnlyTestsSubConfigDisabledByDefault<ExtraPlugins extends ExtraPluginsType> {
   /**
-   * Enables [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/eslint-plugin-no-only-tests) rule
-   * on the test files.
+   * Forbids focused tests in the test files.
    *
-   * By default will be applied to the same `files` and `ignores` as the parent config.
+   * 📁 Default `files` and `ignores`: inherited from the parent config
+   *
+   * 🧩 Main plugin: [`eslint-plugin-no-only-tests`](https://npmx.dev/eslint-plugin-no-only-tests)
+   *
+   * Affected rule:
+   * - [`no-only-tests/no-only-tests`](https://github.com/levibuzolic/eslint-plugin-no-only-tests)
    * @default false
    */
   configNoOnlyTests?: ConfigNoOnlyTests<ExtraPlugins>;

@@ -9,7 +9,8 @@ import {
 /**
  * An ESLint plugin to ensure that files begin with the given comment.
  *
- * There is also an alternative config, `header`, which is powered by [`eslint-plugin-header`](https://npmx.dev/eslint-plugin-header).
+ * There is also an alternative config, `header`, which is powered by
+ * [`eslint-plugin-header`](https://npmx.dev/eslint-plugin-header).
  *
  * 📁 Default `files`: all files
  */

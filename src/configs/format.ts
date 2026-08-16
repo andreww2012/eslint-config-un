@@ -15,8 +15,8 @@ interface SupportedFormatters {
 }
 
 /**
- * An ESLint plugin for formatting various languages by
- * [Prettier](https://prettier.io) or [dprint](https://dprint.dev).
+ * An ESLint plugin for formatting various languages by [Prettier](https://prettier.io) or
+ * [dprint](https://dprint.dev).
  *
  * 📁 Default `files`: all files
  *
@@ -26,11 +26,11 @@ export interface FormatEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
 > extends UnFlatConfigEntryBase<ExtraPlugins, 'format'> {
   /**
-   * Choose a formatter from `prettier`, `oxfmt` and `dprint`. Use an array notation
-   * to pass formatter options.
+   * Choose a formatter from `prettier`, `oxfmt` and `dprint`.
+   * Use an array notation to pass formatter options.
    *
-   * ⚠️ `dprint` formatter requires specifying `language` which is a file path or URL
-   * to the WASM binary supporting this language.
+   * ⚠️ `dprint` formatter requires specifying `language` which is a file path or URL to the WASM
+   * binary supporting this language.
    * [Read more on this in dprint docs](https://dprint.dev/plugins).
    * @default 'prettier'
    */
@@ -41,8 +41,8 @@ export interface FormatEslintConfigOptions<
       }[keyof SupportedFormatters];
 
   /**
-   * If the file format you're trying to format is not parsed by any ESLint parser,
-   * make sure to set this option to `true` for such files.
+   * If the file format you're trying to format is not parsed by any ESLint parser, make sure to set
+   * this option to `true` for such files.
    * This will use [`eslint-parser-plain`](https://npmx.dev/eslint-parser-plain) for them.
    */
   usePlainParser?: boolean;
