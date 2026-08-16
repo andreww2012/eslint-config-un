@@ -59,7 +59,7 @@ export default eslintConfig({
         ignores: [
           'CHANGELOG.md',
           // Putting every sentence on its own line causes line wraps in the changelog
-          '.changeset/*.md',
+          '.changeset/**/*.md',
         ],
       },
     },

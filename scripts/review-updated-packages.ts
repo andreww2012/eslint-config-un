@@ -3,7 +3,7 @@ import path from 'node:path';
 import matter from '@11ty/gray-matter';
 import {jsonParseSafe, regexTyped} from '@andreww2012/unutils';
 import {styleText} from '@andreww2012/unutils/server';
-import writeChangeset from '@changesets/write';
+import {writeChangeset} from '@changesets/write';
 import {cli} from 'cleye';
 import {exec} from 'tinyexec';
 import * as z from 'zod';
@@ -192,25 +192,16 @@ const main = async () => {
   return result;
 };
 
-const PreStateZod = z.object({mode: z.literal('pre'), changesets: z.string().array()});
 const ChangesetFrontmatterZod = z
   .record(z.string(), z.enum(['major', 'minor', 'patch', 'none']))
   .refine((releases) => Object.keys(releases).length > 0, 'At least one package must be listed');
 
-// In pre mode changesets are not removed on `changeset version`, so already released ones are only
-// distinguishable by being listed in `pre.json`. Anywhere else every changeset file on disk is
-// unreleased: outside of pre mode `changeset version` removes the consumed ones, and in `exit` mode
-// everything left, including what `pre.json` lists, goes into the upcoming stable release
+// Every changeset lying directly in the changesets directory is unreleased: `changeset version`
+// removes the consumed ones, or, in pre mode, moves them to the `pre` subdirectory
 const readUnreleasedChangesets = async () => {
-  const preState = PreStateZod.safeParse(
-    await readAndParseJson(path.join(CHANGESETS_DIR_PATH, 'pre.json')),
-  );
-  const releasedChangesetIds = new Set(preState.data?.changesets);
-
   const candidateIds = (await fs.readdir(CHANGESETS_DIR_PATH))
     .filter((fileName) => fileName.endsWith('.md'))
-    .map((fileName) => path.basename(fileName, '.md'))
-    .filter((id) => !releasedChangesetIds.has(id));
+    .map((fileName) => path.basename(fileName, '.md'));
 
   const changesets = await Promise.all(
     candidateIds.map(async (id) => {
