@@ -319,7 +319,7 @@
     "jsonc-eslint-parser": "3.3.0",
     "knip": "6.32.2",
     "lefthook": "2.1.10",
-    "lychee-config-nick2bad4u": "2.0.0",
+    "lychee-config-nick2bad4u": "3.0.0",
     "npm-check-updates": "23.0.2",
     "npm-package-arg": "14.0.0",
     "p-queue": "9.3.3",

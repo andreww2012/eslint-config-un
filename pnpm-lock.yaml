@@ -870,8 +870,8 @@ importers:
         specifier: 2.1.10
         version: 2.1.10
       lychee-config-nick2bad4u:
-        specifier: 2.0.0
-        version: 2.0.0
+        specifier: 3.0.0
+        version: 3.0.0
       npm-check-updates:
         specifier: 23.0.2
         version: 23.0.2(patch_hash=38ee39639140016f2b9a609c541bbde263a22f5ad0b4b53960ef9765cf8554aa)
@@ -9410,8 +9410,8 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  lychee-config-nick2bad4u@2.0.0:
-    resolution: {integrity: sha512-FTB0GDa0qksBskm5MAbXimvDMhucxrS2g2m467XFqImyVhheCHBjdQLWnK7rSjd16JhuOlJtAHUE6kZGUeow4Q==}
+  lychee-config-nick2bad4u@3.0.0:
+    resolution: {integrity: sha512-cXd9y+Kdpf7diW1zMKcASQSFzYPIRZz3g6hbGxgzFs/V4ZlwlRNufZOZnM+Tl6Ewf868Q1os0LINdriw/f8ppw==}
     engines: {node: ^22.22.3 || ^24.16.0 || >=26.3.0}
 
   lz-string@1.5.0:
@@ -21213,7 +21213,7 @@ snapshots:
 
   lru-cache@7.18.3: {}
 
-  lychee-config-nick2bad4u@2.0.0: {}
+  lychee-config-nick2bad4u@3.0.0: {}
 
   lz-string@1.5.0: {}
 
