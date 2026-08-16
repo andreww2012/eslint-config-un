@@ -73,6 +73,30 @@ describe('rules', async () => {
     });
   });
 
+  it('disables the rest of the rules it is aware of by default', () => {
+    expect(configResult.getRuleSeverities('cli')).toMatchObject({
+      'no-await-in-loop': 0,
+      'no-console': 0,
+      'import/no-extraneous-dependencies': 0,
+      'node/no-process-exit': 0,
+      'node/no-top-level-await': 0,
+      'unicorn/no-process-exit': 0,
+    });
+  });
+
+  it('disables the `disable-autofix/` counterpart of a fixable disabled rule', () => {
+    expect(configResult.getRuleEntrySeverity('cli', 'disable-autofix/node/hashbang')).toBe(0);
+  });
+
+  it('respects `pluginRenames`', async () => {
+    const renamedConfigResult = await computeEslintConfig('cli', {
+      un: {pluginRenames: {node: 'nodejs'}},
+    });
+
+    expect(renamedConfigResult.getRuleEntrySeverity('cli', 'nodejs/hashbang')).toBe(0);
+    expect(renamedConfigResult.getRuleEntry('cli', 'node/hashbang')).toBeUndefined();
+  });
+
   it('`unicorn/prefer-top-level-await` rule fires on a file with a top-level async IIFE', async () => {
     const results = await testEslintConfig('cli', FIXTURES.iifeAsync, import.meta.dirname);
 
@@ -120,80 +144,16 @@ describe('un options', () => {
     const configResult = await computeEslintConfig({
       cli: {
         overrides: {'unicorn/prefer-top-level-await': 0},
-        overridesAny: {'no-console': 1},
+        overridesAny: {eqeqeq: 1},
       },
     });
 
     expect(configResult.getRuleEntrySeverity('cli', 'unicorn/prefer-top-level-await')).toBe(0);
-    expect(configResult.getRuleEntrySeverity('cli', 'no-console')).toBe(1);
+    expect(configResult.getRuleEntrySeverity('cli', 'eqeqeq')).toBe(1);
   });
 });
 
 describe('options', () => {
-  describe('option: `disabledRules`', () => {
-    it('disables `no-await-in-loop`, `no-console`, `node/hashbang` and other rules by default', async () => {
-      const configResult = await computeEslintConfig('cli');
-
-      expect(configResult.getRuleEntrySeverity('cli', 'no-await-in-loop')).toBe(0);
-      expect(configResult.getRuleEntrySeverity('cli', 'no-console')).toBe(0);
-      expect(configResult.getRuleEntrySeverity('cli', 'node/hashbang')).toBe(0);
-    });
-
-    it('does not disable `check-file/no-await-in-loop` rule when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        cli: {disabledRules: {'no-await-in-loop': false}},
-      });
-
-      expect(configResult.getRuleEntry('cli', 'no-await-in-loop')).toBeUndefined();
-    });
-
-    it('does not disable `check-file/no-console` rule when set to `false`', async () => {
-      const configResult = await computeEslintConfig({cli: {disabledRules: {'no-console': false}}});
-
-      expect(configResult.getRuleEntry('cli', 'no-console')).toBeUndefined();
-    });
-
-    it('does not disable `node/hashbang` rule when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        cli: {disabledRules: {'node/hashbang': false}},
-      });
-
-      expect(configResult.getRuleEntry('cli', 'node/hashbang')).toBeUndefined();
-    });
-
-    it('does not disable `node/no-process-exit` rule when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        cli: {disabledRules: {'node/no-process-exit': false}},
-      });
-
-      expect(configResult.getRuleEntry('cli', 'node/no-process-exit')).toBeUndefined();
-    });
-
-    it('does not disable `node/no-top-level-await` rule when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        cli: {disabledRules: {'node/no-top-level-await': false}},
-      });
-
-      expect(configResult.getRuleEntry('cli', 'node/no-top-level-await')).toBeUndefined();
-    });
-
-    it('does not disable `import/no-extraneous-dependencies` rule when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        cli: {disabledRules: {'import/no-extraneous-dependencies': false}},
-      });
-
-      expect(configResult.getRuleEntry('cli', 'import/no-extraneous-dependencies')).toBeUndefined();
-    });
-
-    it('does not disable `unicorn/no-process-exit` rule when set to `false`', async () => {
-      const configResult = await computeEslintConfig({
-        cli: {disabledRules: {'unicorn/no-process-exit': false}},
-      });
-
-      expect(configResult.getRuleEntry('cli', 'unicorn/no-process-exit')).toBeUndefined();
-    });
-  });
-
   describe('option: `onlyTopLevelDirs`', () => {
     it('includes nested directories in default `files` by default', async () => {
       const configResult = await computeEslintConfig('cli');

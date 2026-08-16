@@ -1,11 +1,62 @@
 import {ERROR, GLOB_JS_TS_EXTENSION} from '../../constants';
+import type {UnRulesConfig} from '../../eslint/eslint-types';
+import type {PluginPrefix} from '../../loaders';
+import type {ObjectValues} from '../../types';
 import {
   type ExtraPluginsType,
-  type UnAllRuleNames,
+  type GetRuleNamesInPlugin,
   type UnFlatConfigEntryBase,
   assignDefaults,
   defineUnConfig,
 } from '../index';
+
+// Value semantics:
+// - `true`: rule is disabled by default, as what it reports is expected in executable files.
+// - `false`: rule is enabled as an error by default instead
+const RULES_ADJUSTED_FOR_CLI_FILES = {
+  '': {
+    'no-await-in-loop': true,
+    'no-console': true,
+  },
+  import: {
+    'no-extraneous-dependencies': true,
+  },
+  node: {
+    hashbang: true,
+    'no-process-exit': true,
+    'no-top-level-await': true,
+  },
+  unicorn: {
+    'no-process-exit': true,
+    'prefer-top-level-await': false,
+  },
+} as const satisfies Partial<{
+  [Plugin in PluginPrefix]: Partial<Record<GetRuleNamesInPlugin<Plugin>, boolean>>;
+}>;
+
+const CLI_RULES_FLAT = Object.entries(RULES_ADJUSTED_FOR_CLI_FILES).flatMap(
+  ([pluginPrefix, rules]) =>
+    Object.entries(rules).map(
+      ([ruleName, isDisabledByDefault]) =>
+        [`${pluginPrefix ? `${pluginPrefix}/` : ''}${ruleName}`, isDisabledByDefault] as const,
+    ),
+);
+
+const RULES_ENABLED_BY_DEFAULT = Object.fromEntries(
+  CLI_RULES_FLAT.filter(([, isDisabledByDefault]) => !isDisabledByDefault).map(
+    ([ruleName]) => [ruleName, ERROR] as const,
+  ),
+);
+
+const RULE_NAMES_DISABLED_BY_DEFAULT = CLI_RULES_FLAT.filter(
+  ([, isDisabledByDefault]) => isDisabledByDefault,
+).map(([ruleName]) => ruleName);
+
+type CliRuleName = ObjectValues<{
+  [Plugin in keyof typeof RULES_ADJUSTED_FOR_CLI_FILES]: `${Plugin extends ''
+    ? ''
+    : `${Plugin}/`}${keyof (typeof RULES_ADJUSTED_FOR_CLI_FILES)[Plugin] & string}`;
+}>;
 
 /**
  * A config specific to files meant to be executed. By default, allows `process.exit()`
@@ -14,13 +65,7 @@ import {
  */
 export interface CliEslintConfigOptions<
   ExtraPlugins extends ExtraPluginsType = never,
-> extends UnFlatConfigEntryBase<ExtraPlugins> {
-  /**
-   * By default, all rules available in this list are *disabled*.
-   * To not disable certain rule, set `false` to the corresponding key.
-   */
-  disabledRules?: Partial<Record<(typeof RULES_DISABLED_BY_DEFAULT)[number], boolean>>;
-
+> extends UnFlatConfigEntryBase<ExtraPlugins, Pick<UnRulesConfig, CliRuleName>> {
   /**
    * By default, files in directories on all levels are accounted for by this config. Set this to true to only account for files in the top-level directories.
    * @default false
@@ -31,26 +76,13 @@ export interface CliEslintConfigOptions<
 const DEFAULT_CLI_DIRS = ['bin', 'scripts', 'cli'] as const;
 const DEFAULT_CLI_FILES = ['cli'] as const;
 
-const RULES_DISABLED_BY_DEFAULT = [
-  'no-await-in-loop',
-  'no-console',
-
-  'node/hashbang',
-  'node/no-process-exit',
-  'node/no-top-level-await',
-
-  'import/no-extraneous-dependencies',
-
-  'unicorn/no-process-exit',
-] as const satisfies UnAllRuleNames[];
-
 export default defineUnConfig<CliEslintConfigOptions>('cli', {phase: 'extra'})((
   context,
   optionsRaw,
 ) => {
   const optionsResolved = assignDefaults(optionsRaw, {});
 
-  const {disabledRules, onlyTopLevelDirs} = optionsResolved;
+  const {onlyTopLevelDirs} = optionsResolved;
 
   const configBuilder = context.createConfigBuilder(optionsResolved, null);
 
@@ -68,10 +100,8 @@ export default defineUnConfig<CliEslintConfigOptions>('cli', {phase: 'extra'})((
         ],
       },
     ])
-    .addAnyRule('unicorn', 'prefer-top-level-await', ERROR)
-    .disableBulkRules(
-      RULES_DISABLED_BY_DEFAULT.filter((ruleName) => disabledRules?.[ruleName] !== false),
-    )
+    .addBulkRules(RULES_ENABLED_BY_DEFAULT)
+    .disableBulkRules(RULE_NAMES_DISABLED_BY_DEFAULT)
     .addOverrides();
 
   return {
