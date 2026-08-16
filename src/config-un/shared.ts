@@ -546,7 +546,8 @@ export interface EslintConfigUnOptions<
    * The resolved environment affects the following:
    * - the default value of {@link cacheConfigs} (enabled in `editor`);
    * - the default value of `hide` setting of `fileProgress` config (enabled unless `default`);
-   * - `mode` setting of `importIntegrity` config (set to `editor` in `editor`);
+   * - `mode` setting of `importIntegrity` config (set to `editor` in `editor` and to `one-shot`
+   * in `ci`);
    * - the configs cache key, i.e. changing the environment invalidates the cache.
    *
    * It can also be set by assigning `ESLINT_CONFIG_UN_ENVIRONMENT` environment variable one of the

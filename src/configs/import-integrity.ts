@@ -1,4 +1,5 @@
 // import type importIntegrityLint from 'import-integrity-lint';
+import type {Environment} from '../config-un/shared';
 import {ERROR, OFF} from '../constants';
 import {
   type ExtraPluginsType,
@@ -25,7 +26,8 @@ export interface ImportIntegrityPluginSettings {
   /**
    * Set to `auto` by default by the plugin.
    *
-   * Set to `editor` by us if the resolved `environment` root option is `editor`.
+   * Set by us to `editor` or `one-shot` if the resolved `environment` root option
+   * is `editor` or `ci` respectively.
    * @see https://nebrius.github.io/import-integrity-lint/configuration/repo-level-options.html#mode
    */
   mode?: 'auto' | 'one-shot' | 'fix' | 'editor';
@@ -119,6 +121,14 @@ export interface ImportIntegrityEslintConfigOptions<
   restrictImports?: GetRuleOptions<'import-integrity', 'no-restricted-imports'>;
 }
 
+const MODE_PER_ENVIRONMENT: Record<
+  Exclude<Environment, 'default'>,
+  ImportIntegrityPluginSettings['mode']
+> = {
+  ci: 'one-shot',
+  editor: 'editor',
+};
+
 export default defineUnConfig<ImportIntegrityEslintConfigOptions>(
   'importIntegrity',
   false,
@@ -126,6 +136,9 @@ export default defineUnConfig<ImportIntegrityEslintConfigOptions>(
   const optionsResolved = assignDefaults(optionsRaw, {});
 
   const {settings: pluginSettings, restrictImports} = optionsResolved;
+
+  const {environment} = context.meta;
+  const modeFromEnvironment = environment !== 'default' && MODE_PER_ENVIRONMENT[environment];
 
   const configBuilder = context.createConfigBuilder(optionsResolved, 'import-integrity');
 
@@ -140,7 +153,7 @@ export default defineUnConfig<ImportIntegrityEslintConfigOptions>(
         settings: {
           'import-integrity': {
             packageRootDir: import.meta.dirname,
-            ...(context.meta.environment === 'editor' && {mode: 'editor'}),
+            ...(modeFromEnvironment && {mode: modeFromEnvironment}),
             ...pluginSettings,
           } satisfies ImportIntegrityPluginSettings,
         },

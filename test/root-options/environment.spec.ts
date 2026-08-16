@@ -11,7 +11,7 @@ const IMPORT_INTEGRITY_SETTINGS = {packageRootDir: expect.any(String) as unknown
  */
 const EXPECTED_SETTINGS_PER_ENVIRONMENT = {
   default: {progress: {hide: false}, importIntegrity: IMPORT_INTEGRITY_SETTINGS},
-  ci: {progress: {hide: true}, importIntegrity: IMPORT_INTEGRITY_SETTINGS},
+  ci: {progress: {hide: true}, importIntegrity: {...IMPORT_INTEGRITY_SETTINGS, mode: 'one-shot'}},
   editor: {progress: {hide: true}, importIntegrity: {...IMPORT_INTEGRITY_SETTINGS, mode: 'editor'}},
 } satisfies Record<Environment, unknown>;
 

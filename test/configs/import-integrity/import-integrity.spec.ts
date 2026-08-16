@@ -162,38 +162,39 @@ describe('options', () => {
       });
     });
 
-    it.each(['default', 'ci'] as const)(
-      'does not set `mode` when the resolved environment is `%s`',
-      async (environment) => {
+    it('does not set `mode` when the resolved environment is `default`', async () => {
+      const configResult = await computeEslintConfig('importIntegrity', {
+        un: {environment: 'default'},
+      });
+
+      expect(
+        configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'],
+      ).not.toHaveProperty('mode');
+    });
+
+    it.each([
+      {environment: 'editor', mode: 'editor'},
+      {environment: 'ci', mode: 'one-shot'},
+    ] as const)(
+      'sets `mode` to `$mode` when the resolved environment is `$environment`',
+      async ({environment, mode}) => {
         const configResult = await computeEslintConfig('importIntegrity', {un: {environment}});
 
         expect(
           configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'],
-        ).not.toHaveProperty('mode');
+        ).toMatchObject({mode});
       },
     );
 
-    describe('running in an editor', () => {
-      it('sets `mode` to `editor`', async () => {
-        const configResult = await computeEslintConfig('importIntegrity', {
-          un: {environment: 'editor'},
-        });
+    it('lets user-provided `settings` override the `mode` derived from the environment', async () => {
+      const configResult = await computeEslintConfig(
+        {importIntegrity: {settings: {mode: 'fix'}}},
+        {un: {environment: 'editor'}},
+      );
 
-        expect(
-          configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'],
-        ).toMatchObject({mode: 'editor'});
-      });
-
-      it('lets user-provided `settings` override the editor `mode`', async () => {
-        const configResult = await computeEslintConfig(
-          {importIntegrity: {settings: {mode: 'fix'}}},
-          {un: {environment: 'editor'}},
-        );
-
-        expect(
-          configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'],
-        ).toMatchObject({mode: 'fix'});
-      });
+      expect(
+        configResult.getConfigByUnPostfix('import-integrity')?.settings?.['import-integrity'],
+      ).toMatchObject({mode: 'fix'});
     });
 
     it('merges user-provided `settings` into `import-integrity` settings (e.g. overrides `packageRootDir`)', async () => {
